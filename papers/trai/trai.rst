@@ -52,12 +52,14 @@ Last years the evolution of deep neuronal networks also affected the way in whic
 The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain. The applications targeted are ranging from persond detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
 In the following parts the introduction to the specific ToF imaging, custom data processing and CNN based solutions are presented.
    
-.. image:: tof.png
+.. figure:: tof.png
   :width: 400
   :height: 400
-  :scale: 30%
+  :scale: 40%
   :align: center
-  :alt: ToF camera
+  :alt: Alternative text
+
+  Exemplification of ToF camera :label:`tof`
 
 
 ToF specific imaging
@@ -80,9 +82,14 @@ In ToFNest we are approximating surface normals from depth images, recorded with
 
 The main pipeline of the data was the following: first we read the images with opencv, then we prepare them with numpy. From a numpy array it is easy to convert it to a torch tensor on the GPU, that then creates the predictions about the surface normals. An example of the prediction can be seen in the next image, where the direction of the normal vectors are decoded with RGB images. The results were accurate relative to other techniques, but the time was much less.
 
-.. image:: ToFNest.png
+.. figure:: ToFNest.png
   :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
   :alt: Alternative text
+
+  Exemplification of ToF normal estimation :label:`tofnest`
 
 Furthermore, in order to get a real-time visualization about the predictions, we used rospy to read the images from ROS topics, and also to publish the normal estimation values to another ROS topic, that we could visualize using Rviz. This can be seen in the demo video.
 
@@ -106,12 +113,14 @@ This repository uses NVIDIA TensorRT for efficient implementation of neural netw
 
  |
 
-.. image:: DetectNetIR.PNG
+.. figure:: DetectNetIR.PNG
   :width: 400
   :height: 400
   :scale: 24%
   :align: center
   :alt: Alternative text
+
+  Exemplification of skeleton detection on infrared images based detection:label:`detection`
 
 The pre-trained model accepts 3 channel images – RGB, by modifying the existing model, we have managed to detect and track people on the infrared image – 1 channel. With the help of the OpenCV library and the 3.7 python programming language version, we have developed a script that modifies the contrast of the IR image; thus, we obtained a much better result than if we had not used this approach. This result can be seen in the figure below, where we can see that the people are detected on the IR image with high confidence.
 
@@ -168,7 +177,7 @@ with:
   :scale: 40%
   :align: center
   :alt: Alternative text
-
+  
   Exemplification of skeleton detection on infrared images :label:`skeleton`
 
 After making this conversion, we preprocessed the infrared image before 
@@ -243,12 +252,14 @@ The goal of this research is to estimate the volume of objects using only depth 
 
 The first algorithm iteratively finds the largest plane using RANSAC and uses euclidean extraction to remove it from the point cloud. Once the planes are determined and checked to see if they are perpendicular, the intersection lines of the planes are determined by projecting between them. The projections approximate a line and the points with the largest component difference determine the length of the line. This way iteratively the 3 intersecting line lengths can be determined once the planes are determined and checked for orthogonality.
 
-.. image:: RANSAC_volume.png
+.. figure:: RANSAC_volume.png
   :width: 400
   :height: 400
   :scale: 40%
   :align: center
   :alt: Alternative text
+  
+  Planar detection :label:`plamar`
 
 An important observation is that it can compute the volume using 2 planes instead of 3. This is due to the fact that if 2 planes are orthogonal, the common line between them will be determined by 2 points that are also corner points for the object. By selecting a corner point and the two perpendicular planes, a third plane can be determined that is perpendicular to the other two and it contains the chosen point. Once the virtual third plane has been computed, the algorithm resumes as in the case with 3 determined planes.
 
@@ -259,26 +270,22 @@ Due to these shortcomings, a new method for measuring the volume is studied, bas
 The point pair collections will approximate the orthogonal planes. By determining the points contained by each orthogonal plane, projections can be made that approximate the intersecting lines of the orthogonal planes. By selecting the 3 lines that have the edge points closest to each other, volume of a box can be computed.
 The advantage of this method is that it allow the computation of the volume for multiple box shaped objects and it 
 
-.. image:: ortho_volume.png
+.. figure:: ortho_volume.png
   :width: 400
   :height: 400
   :scale: 40%
   :align: center
   :alt: Alternative text
 
-Volume estimation using enhanced planar/corner detections
+  Corner detection :label:`corner`
 
-
-Use-cases
----------
-Short description of demos
-
-:cite:`hume48`
+Volume estimation using enhanced planar/corner detections was done using the training from :cite:`sommer2020`.
 
 
 Conclusion
 ----------
-Summary 
+In this report we provided some guidlines for the ToF specific image processing using python libraries. The demos are randing from 
+basic pointlcoud processing to people detection and enhanced volume estimation.
 
 
 
