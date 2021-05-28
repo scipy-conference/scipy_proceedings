@@ -1,0 +1,314 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: librsb e8e7b1e
+%%Title: matrix plot
+%%CreationDate: 
+%%DocumentData: Clean7Bit
+%%Origin: 0 0
+%%BoundingBox: -128 0 640 512
+%%LanguageLevel: 2 
+%%Pages: 1
+%%Page: 1 1
+
+/csquare {
+        newpath
+        0 0 moveto
+        0 -5.12 rlineto
+        5.12 0 rlineto
+        0 5.12 rlineto
+        closepath
+       setrgbcolor
+        fill
+} def
+
+0 0 moveto
+
+save /$LIBRSB_DICT 3 dict def $LIBRSB_DICT begin /M {moveto} bind def /Z {gsave currentpoint lineto 1 setlinewidth 1 setlinecap stroke grestore} bind def /D {M Z} bind def /K {0.5 0.5 setrgbcolor} bind def
+/R {rlineto} bind def
+/N {newpath} bind def
+/L {lineto} bind def
+/C {closepath} bind def
+/SLW {setlinewidth} bind def
+/SRGB {setrgbcolor} bind def
+/SCF {scalefont} bind def
+/SF {setfont} bind def
+% in plot coords:
+/BX { 512 } bind def % Matrix X width
+/EX { 128 } bind def % Extra X on each side (negative on left, positive on right)
+/BY { 512 } bind def % Matrix X height
+
+% in matrix coords:
+/L0A [0 ] def % LHS 
+/L1A [50 ] def % LHS 
+/R0A [0 ] def % RHS 
+/R1A [50 ] def % RHS 
+/NLR {100} bind def % LHS,RHS
+/NLRM1 { NLR 1 sub } bind def %% 
+/RN { NLR } bind def
+/LL { L0A length 1 sub } bind def
+
+%% in plot coords:
+/MY { BY 2 div } bind def %% half (middle) height
+/FS { BY 20 div } bind def %% font size
+/NRHS { 2 } bind def %% number of right hand sides (you change this)
+/SRW { 40 } bind def %% single right hand side width
+/HSRW { SRW 2 div } bind def %% half SRW
+/OPW { SRW NRHS mul } bind def %% operand width
+/XB { 1 } bind def %% X border
+/YB { 1 } bind def %% Y border
+/LX0 { EX -1.0 mul OPW add XB add } bind def %% LHS leftmost X
+/LX1 { LX0 OPW sub } bind def %% LHS
+/LXM { LX0 2 div FS 0.5 mul sub } bind def %% LHS operand X
+/RX0 { BX EX +1.0 mul add OPW sub } bind def %% RHS
+/RX1 { RX0 OPW add XB sub } bind def %% RHS
+/RXM { BX RX0 BX sub FS 2 div sub 2 div add } bind def %% RHS operand X
+
+%% colors:
+/LHSSC { 1.0 0.0 1.0 setrgbcolor } bind def
+/XHSSC { 0 0 0 setrgbcolor } bind def
+/RHSSC { 0.5 1.0 0.5 setrgbcolor } bind def
+%% colors for order lines:
+/CLDOL { 0.1 0.1 1.0 setrgbcolor } bind def %%       C Layout Dashed Order Line
+/CLDOLL{ 0.7 0.7 1.0 setrgbcolor } bind def %%       C Layout Dashed Order Line Light
+/FLDOL { 0.0 0.6 0.0 setrgbcolor } bind def %% Fortran Layout Dashed Order Line
+/FLDOLL{ 0.6 0.8 0.6 setrgbcolor } bind def %% Fortran Layout Dashed Order Line
+
+/SCATRA { %% matrix to plot Y coords
+1 -1 BY NLR div mul scale
+0 NLR -1 mul translate
+} bind def
+
+0 0 moveto %% bottom lower left
+
+0 1 LL {
+	0 index /LIDX exch def
+	gsave
+
+	/X0 { LX0 } bind def %% 
+	/X1 { LX1 } bind def %% 
+	/Y0 { L0A LIDX get } bind def %% 
+	/Y1 { L1A LIDX get } bind def %% 
+
+	SCATRA
+
+	newpath
+	X0 Y0 moveto
+	X1 Y0 lineto
+	X1 Y1 lineto
+	X0 Y1 lineto
+	closepath
+	LHSSC
+	1 setlinewidth
+	fill
+
+	/X0 { RX0 } bind def %% 
+	/X1 { RX1 } bind def %% 
+	/Y0 { R0A LIDX get } bind def %% 
+	/Y1 { R1A LIDX get } bind def %% 
+
+	newpath
+	X0 Y0 moveto
+	X1 Y0 lineto
+	X1 Y1 lineto
+	X0 Y1 lineto
+	closepath
+	RHSSC
+	1 setlinewidth
+	fill
+
+	grestore
+} for
+
+gsave
+SCATRA
+
+/IOPL { %% Intra-OPerand Lines
+	/FOCE { BY SRW div } bind def %% Fictional Operand Columns Elements
+	/DI { NLR FOCE div } bind def %% dash interval (matrix row heigth units)
+	/HDI { DI 2 div } bind def %% half DI
+
+	1 1 eq { %% set equal to enable Fortran dense order
+	0 1 NRHS 1 sub {
+		0 index /RHSI exch def %% pop RHS index RHSI
+		/X1 { TX1 RHSI SRW mul add HSRW add } bind def %% TX1 is this operand.s X1
+		/Y0 { HDI } bind def %%
+		/Y1 { NLRM1 HDI sub } bind def %%
+		FLDOL
+		newpath
+		X1 Y0 moveto
+		X1 Y1 lineto
+		1 setlinewidth
+		stroke
+		%%
+		RHSI NRHS 1 sub lt { %% if not last
+			[DI DI ] DI setdash
+			[] 0 setdash %% solid line
+			FLDOLL
+			newpath
+			X1 Y1 moveto
+			X1 SRW add Y0 lineto
+			stroke
+		} {} ifelse
+	%%
+	} for
+	} {} ifelse 
+
+	0 1 eq { %% set equal to enable C dense order
+	0 1 FOCE 1 sub {
+		0 index /FVI exch def %% pop fictional vertical index RHSI
+		/X0 { TX1 HSRW add } bind def %% TX1 is this operand.s X1
+		/X1 { X0 NRHS 1 sub SRW mul add } bind def %%
+		/Y0 { HDI FVI DI mul add } bind def %%
+
+		FVI FOCE 2 sub lt { %% if not last
+			CLDOLL
+			1 setlinewidth
+			%%
+			[HSRW HSRW] HSRW 2 div setdash
+			newpath
+			X1 Y0 moveto
+			X0 Y0 DI add lineto
+			stroke
+		} {} ifelse
+		%%
+		CLDOL
+		[] 0 setdash %% solid line
+		newpath
+		X0 Y0 moveto
+		X1 Y0 lineto
+		stroke
+	} for
+	} {} ifelse 
+
+	%% NRHS separator lines
+	1 1 NRHS 1 sub {
+		0 index /RHSI exch def %% pop RHS index RHSI
+		/X1 { TX1 RHSI SRW mul add } bind def %% TX1 is this operand's X1
+		/Y0 { 0 } bind def %%
+		/Y1 { NLRM1 } bind def %%
+		newpath
+		X1 Y0 moveto
+		X1 Y1 lineto
+		XHSSC
+		1 setlinewidth
+		stroke
+		[] 0 setdash %% solid line
+	} for
+} bind def %% Intra-OPerand Lines
+%%
+/TX1 { LX1 } bind def %% this X1
+IOPL
+/TX1 { RX0 } bind def %% this X1
+IOPL
+
+
+/X0 { LX0 } bind def %% 
+/X1 { LX1 } bind def %% 
+/Y0 { 0 } bind def %% 
+/Y1 { NLRM1 } bind def %% 
+newpath
+X0 Y0 moveto
+X1 Y0 lineto
+X1 Y1 lineto
+X0 Y1 lineto
+closepath
+XHSSC
+1 setlinewidth
+stroke
+
+/X0 { 0 } bind def %% 
+/X1 { BX } bind def %% 
+/Y0 { 0 } bind def %% 
+/Y1 { NLRM1 } bind def %% 
+newpath
+X0 Y0 moveto
+X1 Y0 lineto
+X1 Y1 lineto
+X0 Y1 lineto
+closepath
+XHSSC
+1 setlinewidth
+stroke
+
+/X0 { RX0 } bind def %% 
+/X1 { RX1 } bind def %% 
+/Y0 { 0 } bind def %% 
+/Y1 { NLRM1 } bind def %% 
+newpath
+X0 Y0 moveto
+X1 Y0 lineto
+X1 Y1 lineto
+X0 Y1 lineto
+closepath
+XHSSC
+1 setlinewidth
+stroke
+grestore
+
+LXM MY moveto
+/Courier-Bold findfont FS scalefont setfont (+=) 0 0 0 setrgbcolor show
+RXM MY moveto
+/Courier-Bold findfont FS scalefont setfont (*) 0 0 0 setrgbcolor show
+
+%% (100 x 100)[0x55996a49ac00]{D} @ (0(0..0),0(0..0)) (10000 nnz, 1e+02 nnz/r) flags 0x2046184 (coo:1, csr:1, hw:0, ic:1, fi:0), storage: 40, subm: 4, symflags:''
+%% ect: 0.00e+00  est: 0.00e+00  sat: 1.12e-04  eit: 4.72e-05  cpt: 0.00e+00
+%% RSB(@:5/4;50.0%diagnz;50.0%diagblk)-R/RowMajor/General/-HalfwordCsr:(0~4)-FullwordCsr:(4~4)-HalfwordCoo:(0~4)-FullwordCoo:(0~4)/double/cores:2/gcc-8.3//sizeof(nnz_idx_t):4,sizeof(coo_idx_t):4,sizeof(blk_idx_t):4/idx_storage:40816-idx_storage_in_csr:40404-idx_storage_in_coo:80000/version:e8e7b1e/memhinfo:[L2:4/64/5012K,L1:8/64/32K]/
+%% sparse blocks dump
+% matrix at 0 0, level 0
+% matrix at 0 0, level 1
+% terminal matrix at 0 0
+newpath
+0 512 M
+256 0 R
+0 -256 R
+-256 0 R
+0 0 R
+C
+0.0625 0.0625 0.0625 SRGB
+1 SLW
+stroke
+
+% matrix at 0 50, level 1
+% terminal matrix at 0 50
+newpath
+256 512 M
+256 0 R
+0 -256 R
+-256 0 R
+0 0 R
+C
+0.0625 0.0625 0.0625 SRGB
+1 SLW
+stroke
+
+% matrix at 50 0, level 1
+% terminal matrix at 50 0
+newpath
+0 256 M
+256 0 R
+0 -256 R
+-256 0 R
+0 0 R
+C
+0.0625 0.0625 0.0625 SRGB
+1 SLW
+stroke
+
+% matrix at 50 50, level 1
+% terminal matrix at 50 50
+newpath
+256 256 M
+256 0 R
+0 -256 R
+-256 0 R
+0 0 R
+C
+0.0625 0.0625 0.0625 SRGB
+1 SLW
+stroke
+
+% colored boxes dump
+N 0 512 M 256 0 R 0 -256 R -256 0 R C 0.7 0.7 0.7 SRGB 1 SLW fill % submatrix 0 square
+% lhs dump
+N 0 512 M 0 256 L C 1 0 1 SRGB 1 SLW 1 stroke % submatrix 0 lhs
+% rhs dump
+N 0 512 M 256 512 L C .5 1 .5 SRGB 1 SLW 1 stroke % submatrix 0 rhs
