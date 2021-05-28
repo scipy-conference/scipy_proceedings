@@ -32,7 +32,8 @@
               Berkeley, California, 94720
 :orcid: 0000-0002-4203-4079
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+..
+   :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 =====================================================
 Monitoring Scientific Python Usage on a Supercomputer
@@ -955,23 +956,25 @@ information we gather to be informative.
 The corresponding authors invite developers to contact them by email about
 monitoring usage of the software they have created.
 
-**FIXME Does it help to keep this in Methods**
-Finally, to understand the collected data, we use a PyData-centered workflow
-that enables exploration, interactivity, prototyping, and report generation:
-
-* **Jupyter Notebooks,** to interactively explore the data, iteratively
-  prototype data analysis and visualizations, and arrange the information for
-  reporting, all within a single document.
-* **cuDF** to accelerate tabular data analytics and I/O on a single GPU.
-* **Dask-cuDF and Dask-CUDA** to scale data transformations and analytics
-  to multiple GPUs, including I/O.
-* **Papermill,** to automate extraction and transformation of the data as well as
-  production runs of Notebooks in multiple-GPU batch jobs on Cori.
-* **Vaex,**, to enable a more responsive dashboard via fast data loading and
-  plotting operations.
-* **Voila** to create responsive, interactive dashboards
-  for both internal use
-  by NERSC staff and management, but also to external stakeholders.
+.. 
+   comment
+   **FIXME Does it help to keep this in Methods**
+   Finally, to understand the collected data, we use a PyData-centered workflow
+   that enables exploration, interactivity, prototyping, and report generation:
+   
+   * **Jupyter Notebooks,** to interactively explore the data, iteratively
+     prototype data analysis and visualizations, and arrange the information for
+     reporting, all within a single document.
+   * **cuDF** to accelerate tabular data analytics and I/O on a single GPU.
+   * **Dask-cuDF and Dask-CUDA** to scale data transformations and analytics
+     to multiple GPUs, including I/O.
+   * **Papermill,** to automate extraction and transformation of the data as well as
+     production runs of Notebooks in multiple-GPU batch jobs on Cori.
+   * **Vaex,**, to enable a more responsive dashboard via fast data loading and
+     plotting operations.
+   * **Voila** to create responsive, interactive dashboards
+     for both internal use
+     by NERSC staff and management, but also to external stakeholders.
 
 Acknowledgments
 ===============
@@ -980,9 +983,9 @@ This research used resources of the National Energy Research Scientific
 Computing Center (NERSC), a U.S. Department of Energy Office of Science User
 Facility located at Lawrence Berkeley National Laboratory, operated under
 Contract No. DE-AC02-05CH11231.
-We thank our colleagues Brian Austin, Colin MacLean, Tiffany Connors, and
-Aditya Kavalur for
-discussions on workload analysis, process monitoring, and Python.
+We thank our colleagues Brian Austin, Tiffany Connors, Aditya Kavalur, and
+Colin MacLean for discussions on workload analysis, process monitoring, and
+Python.
 The authors would like to thank the Vaex developers for their help and advice
 related to this work.
 The authors would also like to thank the Dask-cuDF and cuDF developers for their
@@ -994,85 +997,93 @@ about how they are using Python at NERSC.
 References
 ==========
 
-.. [Abb18] T. M. C. Abbott, et al., *Dark Energy Survey year 1 results:
-           Cosmological constraints from galaxy clustering and weak lensing*
-           Physical Review D, 98, 043526, 2018
+.. [Aba16] K. N. Abazajian, et al.,
+           *CMB-S4 Science Book, First Edition*, 2016.
+           <https://arxiv.org/abs/1610.02743>
+
+.. [Abb18] T. M. C. Abbott, et al.,
+           *Dark Energy Survey year 1 results: Cosmological constraints from
+           galaxy clustering and weak lensing*
+           Physical Review D, 98, 043526, 2018.
            <https://doi.org/10.1103/PhysRevD.98.043526>
 
-.. [Age14] A. Agelastos, B. Allan, J. Brandt, P. Cassella, J. Enos, J. Fullop,
-           A. Gentile, S. Monk, N. Naksinehaboon, J. Ogden, M. Rajan, M. Showerman,
-           J. Stevenson, N. Taerat, and T. Tucker
+.. [Age14] A. Agelastos, et al.,
            *Lightweight Distributed Metric Service: A Scalable Infrastructure for 
-           Continuous Monitoring of Large Scale Computing Systems and Applications*
+           Continuous Monitoring of Large Scale Computing Systems and
+           Applications,*
            Proc. IEEE/ACM International Conference for High Performance Storage,
            Networking, and Analysis, SC14, New Orleans, LA, 2014.
            <https://doi.org/10.1109/SC.2014.18>
 
-.. [Agr14] K. Agrawal, M. R. Fahey, R. McLay, and D. James.
-           *User Environment Tracking and Problem Detection with XALT*
+.. [Agr14] K. Agrawal, et al.,
+           *User Environment Tracking and Problem Detection with XALT,*
            Proceedings of the First International Workshop on HPC User Support
            Tools, Piscataway, NJ, 2014.
            <http://doi.org/10.1109/HUST.2014.6>
 
-.. [Bau19] E. Bautista, M. Romanus, T. Davis, C. Whitney, and T. Kubaska,
+.. [Bab19] Y. Babuji, et al.,
+           *Parsl: Pervasive Parallel Programming in Python,*
+           28th ACM International Symposium on High-Performance Parallel and
+           Distributed Computing (HPDC), Phoenix, AZ, 2019.
+           <https://doi.org/10.1145/3307681.3325400>
+
+.. [Bau19] E. Bautista, et al.,
            *Collecting, Monitoring, and Analyzing Facility and Systems Data at
            the National Energy Research Scientific Computing Center,*
            48th International Conference on Parallel Processing: Workshops
-           (ICPP 2019), Kyoto, Japan, 2019
+           (ICPP 2019), Kyoto, Japan, 2019.
            <https://doi.org/10.1145/3339186.3339213>
 
-.. [Aba16] K. N. Abazajian, et al., *CMB-S4 Science Book, First Edition*,
-           2016
-           <https://arxiv.org/abs/1610.02743>
-
-.. [DESC]  LSST Dark Energy Science Collaboration, *Large Synoptic Survey 
-           Telescope: Dark Energy Science Collaboration,*
-           White Paper, 2012
-           <https://arxiv.org/abs/1211.0310>
-
-.. [DESI]  The DESI Collaboration, *The DESI Experiment Part I: Science,
-           Targeting, and Survey Design,* Science Final Design Report,
+.. [DESI]  The DESI Collaboration,
+           *The DESI Experiment Part I: Science, Targeting, and Survey Design,*
+           Science Final Design Report,
            <https://arxiv.org/abs/1611.00036>
 
+.. [Eva15] T. Evans, A. Gomez-Iglesias, and C. Proctor,
+           *PyTACC: HPC Python at the Texas Advanced Computing Center,*
+           Proceedings of the 5th Workshop on Python for High-Performance and
+           Scientific Computing, SC15, Austin, TX, 2015
+           <https://doi.org/10.1145/2835857.2835861>
+
 .. [Fah10] M. Fahey, N Jones, and B. Hadri, 
-           *The Automatic Library Tracking Database*
-           Proceedings of the Cray User Group, Edinburgh, United Kingdom, 2010
+           *The Automatic Library Tracking Database,*
+           Proceedings of the Cray User Group, Edinburgh, United Kingdom, 2010.
 
-.. [Fur91] J. L. Furlani, *Modules: Providing a Flexible User Environment*
+.. [Fur91] J. L. Furlani,
+           *Modules: Providing a Flexible User Environment,*
            Proceedings of the Fifth Large Installation Systems Administration
-           Conference (LISA V), San Diego, CA, 1991
+           Conference (LISA V), San Diego, CA, 1991.
 
-.. [Gam15] T. Gamblin, M. P. LeGendre, M. R. Collette, G. L. Lee, A. Moody, B.
-           R. de Supinski, and W. S. Futral. *The Spack Package Manager:
-           Bringing Order to HPC Software Chaos.* In Supercomputing 2015 (SC15),
-           Austin, Texas, November 15-20 2015. LLNL-CONF-669890.
+.. [Gam15] T. Gamblin, et al.,
+           *The Spack Package Manager: Bringing Order to HPC Software Chaos,*
+           in Supercomputing 2015, SC15, Austin, TX, 2015.
            <https://doi.org/10.1145/2807591.2807623>
 
-.. [Jac16] D. M. Jacobsen and R. S. Canon, *Shifter: Containers for HPC,* in
-           Cray Users Group Conference (CUG16), London, United Kingdom, 2016
+.. [Jac16] D. M. Jacobsen and R. S. Canon,
+           *Shifter: Containers for HPC,*
+           in Cray Users Group Conference (CUG16), London, United Kingdom, 2016
+
+.. [Jai15] Jain, A., et al.,
+           *FireWorks: a dynamic workflow system designed for high-throughput
+           applications.*
+           Concurrency Computat.: Pract. Exper., 27: 5037–5059, 2015.
+           <https://doi.org/10.1002/cpe.3505>
+
+.. [DESC]  LSST Dark Energy Science Collaboration,
+           *Large Synoptic Survey Telescope: Dark Energy Science
+           Collaboration,*
+           White Paper, 2012.
+           <https://arxiv.org/abs/1211.0310>
 
 .. [Mac17] C. MacLean. *Python Usage Metrics on Blue Waters*
            Proceedings of the Cray User Group, Redmond, WA, 2017.
 
+.. [vaex]  A. Maarten. and J. V. Breddels, 
+           *Vaex: big data exploration in the era of Gaia,*
+           Astronomy & Astrophysics, 618, A13, 2018.
+           <https://arxiv.org/abs/1801.02638v1>
+
 .. [Mcl11] R. McLay, K. W. Schulz, W. L. Barth, and T. Minyard, 
            *Best practices for the deployment and management of production HPC clusters*
-           In State of the Practice Reports, SC11, Seattle, WA,
+           in State of the Practice Reports, SC11, Seattle, WA, 2011.
            <https://doi.acm.org/10.1145/2063348.2063360>
-
-.. [Eva15] T. Evans, A. Gomez-Iglesias, and C. Proctor. *PyTACC: HPC Python at the
-           Texas Advanced Computing Center* Proceedings of the 5th Workshop on Python
-           for High-Performance and Scientific Computing, SC15, Austin, TX,
-           <https://doi.org/10.1145/2835857.2835861>
-
-.. [Jai15] Jain, A., Ong, S. P., Chen, W., Medasani, B., Qu, X., Kocher, M.,
-           Brafman, M., Petretto, G., Rignanese, G.-M., Hautier, G., Gunter, D., and
-           Persson, K. A. (2015) FireWorks: a dynamic workflow system designed for
-           high-throughput applications. Concurrency Computat.: Pract. Exper., 27:
-           5037–5059. <https://doi.org/10.1002/cpe.3505>
-
-.. [Bab19] Babuji, Y et al. "Parsl: Pervasive Parallel Programming in
-           Python." 28th ACM International Symposium on High-Performance Parallel and
-           Distributed Computing (HPDC). 2019. <https://doi.org/10.1145/3307681.3325400>
-
-.. [vaex]  Maarten A. and Breddels, J. V. Vaex: big data exploration in the era of Gaia
-           A&A 618 A13 (2018). <https://arxiv.org/abs/1801.02638v1>
