@@ -82,7 +82,7 @@ Jetson based solutions
 
 Person detection from IR imaging
 ++++++++++++++++++++++++++++++++
-.. BK part
+
 
 Detectnet is a detection algorithm based on the jetson-inference repository. 
 This repository uses NVIDIA TensorRT for efficient implementation of neural networks on the Jetson platform, improving performance and energy efficiency through graphical optimizations, kernel fusion and FP16/INT8 accuracy.
