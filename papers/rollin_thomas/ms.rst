@@ -499,7 +499,7 @@ V100 GPUs on the Cori GPU cluster.
 Fig. :ref:`analyze-data` illustrates the workflow.
 
 .. figure:: mods-analyze-data.png
-   :scale: 10%
+   :scale: 9%
 
    This diagram summarizes the workflow for processing and analyzing Python
    data at NERSC. :label:`analyze-data`
@@ -551,11 +551,12 @@ reduction on the GPU cluster, and for running the Voilà dashboard in Spin, is
 managed using a single Docker image (Shifter runtime on GPU, Kubernetes in Spin).
 This ensures that the notebook behaves consistently in both contexts.
 
-.. figure:: mods-dashboard.png
-   :scale: 10%
-
-   This diagram summarizes the setup we use to provide our web-based,
-   interactive dashboards. :label:`mods-dashboard`
+..
+    .. figure:: mods-dashboard.png
+       :scale: 10%
+    
+       This diagram summarizes the setup we use to provide our web-based,
+       interactive dashboards. :label:`mods-dashboard`
 
 Results
 =======
