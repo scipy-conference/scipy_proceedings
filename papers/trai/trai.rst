@@ -84,13 +84,75 @@ Person detection from IR imaging
 ++++++++++++++++++++++++++++++++
 .. BK part
 
-Jetson detection with ToF node
+Detectnet is a detection algorithm based on the jetson-inference repository. 
+This repository uses NVIDIA TensorRT for efficient implementation of neural networks on the Jetson platform, improving performance and energy efficiency through graphical optimizations, kernel fusion and FP16/INT8 accuracy.
+
+ |
+
+.. image:: DetectNetIR.PNG
+  :width: 400
+  :height: 400
+  :scale: 24%
+  :align: center
+  :alt: Alternative text
+
+The pre-trained model accepts 3 channel images – RGB, by modifying the existing model, we have managed to detect and track people on the infrared image – 1 channel. With the help of the OpenCV library and the 3.7 python programming language version, we have developed a script that modifies the contrast of the IR image; thus, we obtained a much better result than if we had not used this approach. This result can be seen in the figure below, where we can see that the people are detected on the IR image with high confidence.
+
+To be able to run the algorithm in real-time we used the rospy client. With the help of this API, we have developed an efficient way to pass a ROS topic as input to our model. The algorithm was tested on a Jetson AGX, and the camera used was from Analog Devices (AD-96TOF1-EBZ). The result can be seen in the attached demo video.
+
 
 Action recognition from IR images
 +++++++++++++++++++++++++++++++++
 .. PM part
 
-DS demo with skeleton detection
+This is a small tutorial for detecting the skeleton of a person
+from an infrared image. In our setup we used one of the Analog Devices
+Time-of-Flight cameras, which provided us the infrared image, and an
+NVIDIA Jetson Xavier NX module.
+
+As a baseline architecture model, we used the pretrained model from one
+of the NVIDIA-AI-IOT's repositories: https://github.com/NVIDIA-AI-IOT/trt_pose .
+We used the TensorRT SDK for achieving a better performance in our model inference
+pipeline.
+
+We also used, some of the Robot Operating System's tools for retrieving
+the camera infrared images and by using the rospy client library API
+we managed to transfer our infrared images to the network model. While this
+would have been an easy step using the CvBridge, which provides an interface
+between ROS and OpenCV, this time wasn't the case, as we had some issues with
+this library. Because we are working on Jetson Xavier NX board, which comes with
+the latest OpenCV version, and CvBridge uses at its core an older version of
+OpenCV, we replaced the conversion from image message type to OpenCV image array
+made by CvBridge with a little numpy trick. So, we replaced:
+
+.. code-block:: python
+
+   ir_image = bridge.imgmsg_to_cv2(image_msg,-1)
+
+
+with:
+
+
+.. code-block:: python
+
+   ir_image = np.frombuffer(
+   image_msg.data,
+   dtype=np.uint8).reshape(
+                           image_msg.height,
+                           image_msg.width,
+                           -1)
+
+The results of the model on infrared images can be seen in Fig.
+
+ |
+
+.. image:: ir_skeleton_detection.png
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
+
 
 Volumetric estimates for depth images
 +++++++++++++++++++++++++++++++++++++
@@ -129,5 +191,3 @@ to this work.
 This work was financially supported by the Romanian National Authority 
 for Scientific Research, CNCS-UEFISCDI, project number PN-III-P2-2.1-PTE-2019-0367.
 The authors are thankful for the generous donation from NVIDIA corporation for supporting this research.
-
-
