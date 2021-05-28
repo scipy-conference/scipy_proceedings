@@ -65,21 +65,20 @@ Monitoring Scientific Python Usage on a Supercomputer
 Introduction
 ============
 
-The National Energy Research Scientific Computing Center
-`NERSC <https://www.nersc.gov/about/>`_ is the primary
-scientific computing facility for the US Department of Energy's Office of
-Science.
+The National Energy Research Scientific Computing Center (`NERSC
+<https://www.nersc.gov/about/>`_) is the primary scientific computing facility
+for the US Department of Energy's Office of Science.
 Some 8,000 scientists use NERSC to perform basic, non-classified research in
 predicting novel materials, modeling the Earth's climate, understanding the
 evolution of the Universe, analyzing experimental particle physics data,
-investigating protein structure, and much more.
+investigating protein structure, and more.
 NERSC procures and operates supercomputers and massive storage systems under a
 strategy of balanced, timely introduction of new hardware and software
 technologies to benefit the broadest possible subset of this workload.
 Since any research project aligned with the mission of the Office of Science may
 apply for access, NERSC's workload is diverse and demanding.
 While procuring new systems or supporting users of existing ones, NERSC relies
-on detailed analysis of its workload to help inform its strategy.
+on detailed analysis of its workload to help inform strategy.
 
 *Workload analysis* is the process of collecting and marshaling data to build a
 picture of how applications and users really interact with and utilize systems.
@@ -100,7 +99,7 @@ Understanding which software packages are most useful to our users helps us
 focus support, collaborate with key software developers and vendors, or at least
 advocate on our users' behalf to the right people.
 Detecting and analyzing trends in user behavior with software over time also
-helps us anticipate user needs and respond to those needs proactively.
+helps us anticipate user needs and prepare accordingly.
 Comprehensive, quantitative workload analysis is a critical tool in keeping
 NERSC a productive supercomputer center for science.
 
@@ -147,8 +146,7 @@ In the case of Python applications, this is problematic since users often
 invoke Python scripts directly instead of as an argument to the ``python``
 executable.
 This method also provides only a crude count of Python invocations and gives
-little insight into deeper questions about specific Python packages, libraries,
-or frameworks in use.
+little insight into deeper questions about specific Python packages.
 
 Software environment modules [Fur91]_ are a common way for HPC centers to
 deliver software to users.
@@ -166,11 +164,11 @@ loads through a
 Counting module loads as a way to track Python usage has the virtue of
 simplicity.
 However, users often include module load commands in their shell resource files
-(e.g., `.bashrc`), meaning that shell invocation or mere user login may trigger
-a detection even if the user never actually uses it.
-Capturing information at the package, library, or framework level using module
-load counts would also require that individual Python packages be installed as
-separate environment modules.
+(e.g., `.bashrc`), meaning that user login or shell invocation may trigger a
+detection even if the user never actually uses the trigger module.
+Capturing information at the package level using module load counts would also
+require that individual Python packages be installed as separate environment
+modules.
 Module load counts also miss Python usage that happens without loading modules,
 in particular user-installed Python environments or in containers.
 
@@ -187,10 +185,9 @@ On systems where all user applications are linked and launched with instrumented
 wrappers, this approach yields a great deal of actionable information to HPC
 center staff.
 However, popular Python distributions such as Anaconda Python arrive on systems
-fully built, and often are installed by users without assistance from center
+fully built, and can be installed by users without assistance from center
 staff.
-Later versions of XALT can address this through an ``LD_PRELOAD`` environment
-variable setting.
+Later versions of XALT can address this through an ``LD_PRELOAD`` setting.
 This enables XALT to identify compiled extensions that are imported in Python
 programs using a non-instrumented Python, but pure Python libraries currently
 are not detected.
@@ -219,10 +216,10 @@ Of course, much more information may be available through tools based on the
 extended
 `Berkeley Packet Filter <https://ebpf.io/>`_
 and the
-`BPF compiler collection <https://github.com/iovisor/bcc>`_
-for instance as with the ``pythoncalls`` utility that summarizes method calls in
-a running application.
-While eBPF overheads are reportedly very small, this approach requires special
+`BPF compiler collection <https://github.com/iovisor/bcc>`_,
+similar to the ``pythoncalls`` utility that summarizes method calls in a
+running application.
+While eBPF overheads are very small, this approach requires special
 compilation flags for Python and libraries.
 Effort would be needed to make the monitoring more transparent to users and to
 marshal the generated data for subsequent analysis.
@@ -254,8 +251,7 @@ desires.
 With a properly defined kernel-spec file, a user is able to use a Python
 environment based on any of the above options as a kernel in NERSC's Jupyter
 service.
-We need to be able to gather data for workload analysis across all of these
-options, in part to understand the relative importance of each.
+The goal is to gather data for workload analysis across all of these options.
 
 .. figure:: mods-save-data.png
    :scale: 10%
@@ -268,15 +264,15 @@ outlined in [Mac17]_ with certain changes.
 Fig. :ref:`save-data` illustrates the infrastructure we have configured.
 As in [Mac17]_ a ``sitecustomize`` that registers the ``atexit`` handler is
 installed in a directory included into all users' Python ``sys.path``.
-The file system where ``sitecustomize`` is installed should be local to the
-compute nodes that it runs on and not served over network, in order to avoid
-exacerbating poor performance of Python start-up at scale.
+The file system where ``sitecustomize`` is installed is physically on each node
+and not served over network, in order to avoid exacerbating poor performance of
+Python start-up at scale.
 We accomplish this by installing it and any associated Python modules into the
-compute node system images themselves, and configuring default user environments
-to include a ``PYTHONPATH`` setting that injects ``sitecustomize`` into
+node system images themselves, and configuring default user environments to
+include a ``PYTHONPATH`` setting that injects ``sitecustomize`` into
 ``sys.path``.
 Shifter containers include the monitoring packages from the system image via
-volume mount set at runtime.
+runtime volume mount.
 Users can opt out of monitoring simply by unsetting or overwriting
 ``PYTHONPATH``.
 We took the approach of provisioning a system-wide ``PYTHONPATH`` because it is
@@ -296,7 +292,7 @@ A **Check** is a simple object that represents a Python package by its name and
 a callable that is used to verify that the package (or even a specific module
 within a package) is present in a given dictionary.
 In production this dictionary should be ``sys.modules`` but during testing it
-can be mock ``sys.modules`` dictionary.
+can be a mock ``sys.modules`` dictionary.
 The **Inspector** is a container of Check objects, and is responsible for
 applying each Check to ``sys.modules`` (or mock) and returning the names of
 packages that are detected.
@@ -310,8 +306,8 @@ custom Customs Reporter.
 Customs provides an entry point to use in ``sitecustomize``, the function
 ``register_exit_hook``.
 This function takes two arguments.
-The first argument is a list of strings or (string, callable) tuples that are
-converted into Checks.
+The first is a list of strings or (string, callable) tuples that are converted
+into Checks.
 The second argument is the type of Reporter to be used.
 The exit hook can be registered multiple times with different package
 specification lists or Reporters if desired.
@@ -336,8 +332,8 @@ nerscjson.
 It is a simple Python package that consumes JSON messages and forwards them to
 an appropriate transport layer that connects to NERSC's Operations Monitoring
 and Notification Infrastructure, OMNI [Bau19]_.
-Currently this is achieved by using the ``SysLogHandler`` from Python's standard
-logging library with a minor modification to the time format to satisfy RFC 3339
+Currently this is done with Python's standard ``SysLogHandler`` from the
+logging library, modified to format time to satisfy RFC 3339.
 Downstream from these transport layers, a message key is used to identify the
 incoming messages, their JSON payloads are extracted, and then forwarded to the
 appropriate `Elasticsearch <https://elasticsearch-py.readthedocs.io/en/7.10.0/>`_
@@ -349,16 +345,16 @@ A random service node is chosen as the recipient in order to balance load.
 On other nodes besides compute nodes, such as login nodes or nodes running
 user-facing services, rsyslog is used for message transport.
 This abstraction layer allows us to maintain a stable interface for logging
-while using an appropraitely scalable transport layer for the system.
+while using an appropriately scalable transport layer for the system.
 For instance, future systems will rely on Apache Kafka or the Lightweight
 Distributed Metrics Service [Age14]_.
 
 Cori has 10,000 compute nodes running jobs at very high utilization, 24 hours
 day for more than 340 days in a typical year.
 The volume of messages arriving from Python processes completing could be quite
-high, so we have taken a cautious approach of monitoring only a sizeable list of
-key scientific Python packages instead of reporting the entire contents of each
-process's ``sys.modules``.
+high, so we have taken a cautious approach of monitoring a list of about 100
+Python packages instead of reporting the entire contents of each process's
+``sys.modules``.
 This introduces a potential source of bias that we return to in the Discussion,
 but we note here that Python 3.10 will include ``sys.stdlib_module_names``, a
 frozenset of strings containing the names of standard library modules, that
@@ -371,8 +367,8 @@ Python workflows like ``multiprocessing``.
 To reduce excessive duplication of messages from MPI-parallel Python
 applications, we prevent reporting from processes with nonzero MPI rank or
 ``SLURM_PROCID``.
-Other multi-process parallel applications using ``multiprocess`` for instance
-are harder to deduplicate.
+Other parallel applications using e.g. ``multiprocessing`` are harder to
+deduplicate.
 This moves deduplication downstream to the analysis phase.
 The key is to carry along enough additional information to enable the kinds of
 deduplication needed (e.g., by user, by job, by node, etc).
@@ -411,12 +407,11 @@ along with package names and versions.
 
 Fields that only make sense in a batch job context are set to a default
 (``num_nodes: 1``) or left empty (``repo: ""``).
-Much of the job information is discoverable from separate databases specifically
-for Slurm, identity, and banking.
 Basic job quantities like node count help capture the most salient features of
-jobs being monitored; a downstream join with those external databases is
-required for more details.
-Much of the information needed is also stored and accessible in OMNI.
+jobs being monitored.
+Downstream joins with other OMNI indexes or other databases containing Slurm
+job data (via ``job_id``), identity (``username``), or banking (``repo``)
+enables broader insights.
 
 In principle it is possible that messages may be dropped along the way to OMNI,
 since we are using UDP for transport.
@@ -432,9 +427,9 @@ failures.
 Prototyping, Production, and Publication
 ----------------------------------------
 
-OMNI includes a Kibana visualization interface that NERSC staff can use to
-visualize Elasticsearch-indexed data collected from NERSC systems, including
-data collected for MODS.
+OMNI has a Kibana visualization interface that NERSC staff use to visualize
+Elasticsearch-indexed data collected from NERSC systems, including data
+collected for MODS.
 The MODS team uses Kibana for creating plots of usage data, organizing these
 into attractive dashboard displays that communicate MODS high-level metrics.
 Kibana is very effective at providing a general picture of user behavior with
@@ -443,10 +438,13 @@ obtaining these through Kibana presented some difficulty.
 Given that the MODS team is fluent in Python, and that NERSC provides users
 (including staff) with a productive Python ecosystem for data analytics, using
 Python tools for understanding the data was a natural choice.
+Using the same environment and tools that users have access to provides us a way
+to test how well those tools actually work.
 
 Our first requirement was the ability to explore MODS Python data interactively
-to prototype new analyses, but we wanted to be able to record that process,
-document it, share it, and enable others to re-run or re-create the results.
+to prototype experimental analyses, but we wanted to be able to record that
+process, document it, share it, and enable others to re-run or re-create the
+results.
 Jupyter Notebooks specifically target this problem, and NERSC already runs a
 user-facing JupyterHub service that enables access to Cori.
 Members of the MODS team can manage notebooks in a Gitlab instance run by NERSC,
@@ -457,15 +455,15 @@ Iterative prototyping of data analysis pipelines often starts with testing
 hypotheses or algorithms against a small subset of the data and then scaling
 that analysis up to the entire data set.
 GPU-based tools with Python interfaces for filtering, analyzing, and distilling
-data can accelerate this scale-up using generally fewer compute nodes that
-CPU-based ones.
+data can accelerate this scale-up using generally fewer compute nodes than
+with CPU-based tools.
 The entire MODS Python data set is currently about 260 GB in size, and while
 this could fit into one of Cori's CPU-based large-memory nodes, the processing
 power available there is insufficient to make interactive analysis feasible.
 With only CPUs, the main recourse is to scale out to more nodes and distribute
 the data.
 This is certainly possible, but being able to interact with the entire data set
-using a few GPUs, far fewer processes, without inter-node communication is
+using a few GPUs, far fewer processes, and without inter-node communication is
 compelling.
 
 To do interactive analysis, prototyping, or data exploration we use
@@ -480,12 +478,12 @@ into GPU memory.
 These data are periodically gathered from OMNI using the
 Python Elasticsearch API and converted to Parquet.
 Reduced data products are stored in new Parquet files, again using direct GPU
-I/O in Dask-cuDF or cuDF.
+I/O.
 
 As prototype analysis code in notebooks evolves into something resembling a
 production analysis pipeline, data scientists face the choice of whether to
-convert their notebooks into scripts or try to push the notebook concept to
-serve as a production tool.
+convert their notebooks into scripts or try to stretch their notebook to serve
+as a production tool.
 The latter approach has the appeal that production notebooks can be re-run
 interactively when needed with all the familiar Jupyter notebook benefits.
 We decided to experiment with using
@@ -496,8 +494,8 @@ batch jobs.
 In each Jupyter notebook, a Dask-CUDA cluster is spun up and then shutdown at
 the end for memory/worker cleanup.
 Processing all data for all permutations currently takes about 1.5 hours on 4
-V100 GPUs on the NERSC Cori GPU cluster.
-We summarize this workflow in Fig. :ref:`analyze-data`.
+V100 GPUs on the Cori GPU cluster.
+Fig. :ref:`analyze-data` illustrates the workflow.
 
 .. figure:: mods-analyze-data.png
    :scale: 10%
@@ -509,17 +507,19 @@ Members of the MODS team can share Jupyter notebooks with one another, but this
 format may not make for the best way to present data to other stakeholders, in
 particular center management, DOE program managers, vendors, or users.
 `Voilà <https://voila.readthedocs.io/en/stable/index.html>`_ is a tool
-that uses a Jupyter notebook to power a standalone,
-interactive dashboard-style web application, so we decided to evaluate and
-experiment with Voilà for this project.
-To run our dashboards we use NERSC's Docker container-as-a-service platform
-external to its HPC systems called `Spin <https://www.nersc.gov/systems/spin/>`_
-where staff and users can run
-persistent web services.
-Spin currently has no nodes with GPUs.
+that uses a Jupyter notebook to power a standalone, interactive dashboard-style
+web application.
+We decided to experiment with Voilà for this project to evaluate best practices
+for its use at NERSC.
+To run our dashboards we use NERSC's Docker container-as-a-service platform,
+called 
+`Spin <https://www.nersc.gov/systems/spin/>`_,
+where staff and users can run persistent web services.
+Spin is external to NERSC's HPC resources and has no nodes with GPUs, but mounts
+the NERSC Global Filesystem.
 
-Creating a notebook using GPU cluster and then using the same notebook to power
-a dashboard running on a system without GPUs presented a few challenges.
+Creating a notebook using a GPU cluster and then using the same notebook to
+power a dashboard running on a system without GPUs presents a few challenges.
 We found ourselves adopting a pattern where the first part of the notebook used
 a Dask cluster and GPU-enabled tools for processing the data, and the second
 part of the notebook used reduced data using CPUs to power the dashboard
@@ -543,12 +543,11 @@ We did use some of Vaex's native plotting functionality (in particular
 ``viz.histogram``), but we primarily used Seaborn for plotting with Vaex objects
 "underneath" which we found to be a fast and friendly way to generate appealing
 visualizations.
-Sometimes Matplotlib was used when Seaborn could not provide functionality we
-needed.
+Sometimes Matplotlib was used when Seaborn could not meet our needs.
 
 Finally, we note that the Python environment used for both data exploration and
 reduction on the GPU cluster, and for running the Voilà dashboard in Spin, is
-managed using a single Docker image.
+managed using a single Docker image (Shifter runtime on GPU, Kubernetes in Spin).
 This ensures that the notebook behaves consistently in both contexts.
 
 .. figure:: mods-dashboard.png
@@ -569,17 +568,17 @@ staff (``is_staff==False``) and include only results collected from batch jobs
 (``is_compute==True``).
 All figures are extracted from the Jupyter notebook/Voilà dashboard.
 
-During the period of observation used here there were 2448 users running jobs
+During the period of observation there were 2448 users running jobs
 that used Python on Cori, equivalent to just over 30% of all NERSC users.
 84% of jobs using Python ran on Cori's Haswell-based partition, 14% used
 Cori-KNL, and 2% used Cori's GPU cluster.
 63% of Python users use the NERSC-provided Python module directly (including on
-login nodes and Jupyter nodes) but only 5% of jobs using Python use the module,
-most use a user-built Python environment, namely Conda environments.
+login nodes and Jupyter nodes) but only 5% of jobs using Python use the module:
+Most use a user-built Python environment, namely Conda environments.
 Anaconda Python provides scientific Python libraries linked against the Intel
 Math Kernel Library (MKL), but we observe that only about 17% of MKL-eligible
 jobs (ones using NumPy, SciPy, NumExpr, or scikit-learn) are using MKL.
-We consider these findings in Discussion.
+We consider this finding in more detail in the Discussion.
 
 .. figure:: library-barplot-2021.png
 
@@ -589,7 +588,7 @@ We consider these findings in Discussion.
 
 Fig. :ref:`lib-barplot` displays the top 20 Python packages in use determined
 from unique user imports (i.e. how many users ever use a given package) across
-the system, including login node and Jupyter node usage.
+the system, including login nodes and Jupyter nodes.
 These top libraries are similar to previous observations reported from Blue
 Waters and TACC [Mcl11]_ [Eva15]_, but the relative prominence of
 ``multiprocessing`` is striking.
@@ -632,7 +631,7 @@ Package popularity in this figure has a different meaning than in Fig.
 The data are deduplicated by ``job_id`` and package name to account for jobs
 where users invoke the same executable repeatedly or invoke multiple
 applications using the same libraries. The marginal axes summarize the
-total package counts and total jobsize counts as a function of
+total package counts and total job size counts as a function of
 ``job_id``.
 Most Python libraries we track do not appear to use more than 200 nodes.
 Perhaps predictably, ``mpi4py`` and NumPy are observed at the largest node
@@ -743,8 +742,8 @@ package use on Cori, tag the data with additional contextual metadata useful
 for filtering during analysis, and conduct exploratory analysis of the data that
 we can easily evolve to production and publication.
 The results themselves confirm many of our expectations about Python use on
-Cori, but also reveal some surprises that suggest next actions that various
-stakeholders can take.
+Cori, but also reveal some surprises that suggest next actions for various
+stakeholders.
 Such surprises suggest new opportunities for engagements between NERSC, users,
 and developers of scientific Python infrastructure.
 
@@ -761,8 +760,8 @@ environment.
 But rather than take that as a cue that we should be updating the NERSC-provided
 Python environment more often, we note that users manage their own environments
 in order to have control and not be at the mercy of NERSC's software upgrades.
-Finding new ways to empower users to manage their software environments better
-with existing tools becomes the priority.
+Finding new ways to empower users to manage their own software better with
+existing tools becomes the priority.
 
 Other results indicate that this may need to be done carefully.
 As mentioned in the Results, only about 17% of jobs that use NumPy, SciPy,
@@ -776,20 +775,20 @@ benefits of such libraries, whether they actually observe a performance boost in
 their own codes, and whether performance is as high a priority as other
 considerations.
 The surprising reliance of our users on ``multiprocessing`` and the tendency of
-users to use ``mpi4py`` for embarrassing parallelism suggest that they
+users to use ``mpi4py`` for embarrassing parallelism suggest that users find
 process-level parallelism easier to manage in Python.
 Eliciting good performance from optimized libraries like Intel MKL requires
-users to understand interfaces to scientific Python better and perhaps make
-major refactoring to their codes to "spend more time" using the underlying
-libraries.
+users to understand interfaces to scientific Python better and perhaps refactor
+codes to "spend more time" using the underlying libraries.
 Since the interface to OpenMP is "buried" beneath the Python interface, users
 working at the Python level work with tools they find within easy reach.
-It may also be a symptom of users tending to install packages using ``pip`` or
-from the conda-forge channel to get the latest versions of the packages they
-need.
+Setting aside MKL may also be a symptom of users tending to install packages
+using ``pip`` or from the conda-forge channel to get the latest versions of the
+packages they need.
 In any case, performance differences between the main library alternatives might
 not be noticeable to most users.
-In any case, this is another actionable insight.
+In any case, we have a chain of evidence to follow, and another actionable
+insight.
 Now that we have identified that MKL adoption is low, our goal is to try to
 ensure that users who can benefit from MKL make good choices about how they
 build their Python environments through documentation, training, and direct
@@ -828,8 +827,8 @@ undetected).
 One strategy may be to forward ``sys.modules`` to OMNI on a very small random
 subset of jobs (say 1%) and use that control data set to estimate bias in the
 tracked list.
-It also helps us to control a major concern, that of missing emergent new
-packages that we should be watching for.
+it also helps us control for a major concern, missing out on data on emerging
+new packages.
 
 Another source of bias is user opt-out.
 Sets of users who opt out tend to do so in groups, in particular collaborations
@@ -839,8 +838,8 @@ A common practice is for such collaborations to provide scripts that help a user
 "activate" their environment and may unset or rewrite ``PYTHONPATH``.
 This can cause undercounts in key packages, but we have very little enthusiasm
 for removing the opt-out capability.
-Rather, we believe we should make a positive case for users to remain opted into
-data collection, based on the benefits it delivers to Python users.
+Rather, we believe we should make a positive case for users to remain opted in
+to data collection, based on the benefits it delivers to them.
 Indeed, that is a major motivation for this paper.
 
 A different systematic undercount may occur for applications that habitually run
@@ -853,7 +852,7 @@ Counting the importance of a package by the number of jobs that use it is
 dubious; we favor understanding the impact of a package from the breadth of the
 user community that uses it.
 This further supports the idea that using multiple approaches to understanding
-Python package user are needed to build a complete picture; each has its own
+Python package use are needed to build a complete picture; each has its own
 shortcomings that may be complemented by others.
 
 Part of the power of scientific Python is that it enables its developers to
@@ -861,14 +860,13 @@ build upon the work of others, so when a user imports a package it may import
 several other dependencies.
 All of these libraries "matter" in some sense, but we find that often users are
 importing those packages without even being aware they are being used.
-For instance, we contacted users who appeared to be running Dask jobs at a node
-count of 100 or greater.
-The following quote is characteristic of several responses:
+For instance, when we contacted users who appeared to be running Dask jobs at a
+node count of 100 or greater, we received several responses like
 "I'm a bit curious as to why I got this email.
 I'm not aware to have used Dask in the past, but perhaps I did it without
 realizing it."
-Some large-scale jobs may use Python only incidentally for housekeeping
-operations.
+More generally, large-scale jobs may use Python only incidentally for
+housekeeping operations.
 Importing a package is not the same as actual use, and use of a package in a job
 running at scale is not the same as that package actually being used at scale.
 
@@ -879,16 +877,17 @@ Putting all the steps in the analysis (extraction, aggregation, indexing,
 selecting, plotting) into one narrative improves communication, reasoning,
 iteration, and reproducibility.
 One of our objectives was to manage as much of the data analysis as we could
-using one notebook and make the notebook functional both as a Jupyter document
-and as a Voilà dashboard.
+using one notebook for exploratory analysis with Jupyter, parameterized
+calculations in production with Papermill, and for shared visualization as
+a Voilà dashboard.
 Using cell metadata helped us to manage both the computationally-intensive
 "upstream" part of the notebook and the less expensive "downstream" dashboard
 within a single file.
 One disadvantage of this approach is that it is very easy to remove or forget to
 apply cell tags.
 This could be addressed by making cell metadata easier to apply and manage.
-The Voilà JupyterLab extension is a helps with this problem by providing a
-preview of a dashboard rendering before it is published to the web.
+The Voilà JupyterLab extension helps with this problem by providing a preview of
+a dashboard rendering before it is published to the web.
 Another issue with the single-notebook pattern is that some code, particularly
 package imports in one part of the notebook may need to be repeated in another.
 This is not a source of error necessarily, but it can cause confusion.
@@ -896,7 +895,8 @@ All of these issues disappear if the same hardware could be used to run the
 notebook in exploratory analysis, pipelined production, and dashboard phases,
 but these functions are simply not available in a single system at NERSC.
 
-**FIXME: NLTK?** `NLTK <https://www.nltk.org/>`_
+..
+   nltk comments?
 
 Conclusion
 ==========
@@ -906,18 +906,6 @@ NERSC in detail.
 Instrumenting Python to record how frequently key scientific Python packages are
 being imported in batch jobs on Cori confirmed many of our assumptions but
 yielded a few surprises.
-One surprise is the observation of strong affinity between the nominally
-unrelated packages AstroPy and ``mpi4py`` within batch jobs that use ``mpi4py``,
-probably driven by a few large cosmology collaborations using NERSC.
-This suggests that the AstroPy developer community may want to consider deeper
-engagement with these users on HPC systems.
-Another surprising observation concerns single-node parallelism, the popularity
-of process-level parallelism through ``multiprocessing`` and an apparent lack
-of interest in thread-level parallelism through hardware-optimized math
-libraries, in particular Intel MKL.
-These two factors may actually not be at odds, but the number of potential
-explanations suggests further insight from the data and engagement with users is
-needed.
 The next step is acting on the information we have gathered, and of course,
 monitoring the impact those actions have on the workload.
 
@@ -929,8 +917,8 @@ results through dashboards.
 We initiated this project not only to perform Python workload analysis but to
 test the supposition that users could assemble all the pieces they needed for a
 Python-based data science pipeline at NERSC.
-Along the way, we identified shortcomings in our data science ecosystem, and this
-motivated us to develop tools for users that fill those gaps, and gave us direct
+Along the way, we identified shortcomings in our ecosystem, and this motivated
+us to develop tools for users that fill those gaps, and gave us direct
 experience with the very same tools our users use to do real science.
 
 Future plans include expanding Python workload analysis to the new GPU-based
