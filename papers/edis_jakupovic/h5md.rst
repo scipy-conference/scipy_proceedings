@@ -1,12 +1,11 @@
 :author: Edis Jakupovic
 :email: ejakupov@asu.edu
 :institution: Arizona State University
-:corresponding:
 
 :author: Oliver Beckstein
 :email: obeckste@asu.edu
 :institution: Arizona State University
-:equal-contributor:
+:corresponding:
 
 .. definitions (like \newcommand)
 
@@ -27,7 +26,8 @@ MPI-parallel Molecular Dynamics Trajectory Analysis with the H5MD Format in the 
 ---------------------------------------------------------------------------------------------------------
 
 .. class:: abstract
-    Fill here
+
+   Fill here
 
 .. class:: keywords
 
@@ -120,24 +120,24 @@ Methods
 Results and Discussion
 ======================
 
+TODO
+
 
 
 
 Conclusions
 ===========
 
-
+TODO
 
 
 
 Acknowledgments
 ===============
 Funding was provided by the National Science Foundation for a REU supplement to award ACI1443054.
-The SDSC Comet computer at the San Diego Supercomputer Center was used under allocation #.
+The SDSC Comet computer at the San Diego Supercomputer Center was used under allocation TG-MCB130177.
+The authors acknowledge Research Computing at Arizona State University for providing HPC resources that have contributed to the research results reported within this paper.
+We would like to acknowledge [person’s name] from the Research Computing Core Facilities at Arizona State University for advice and consultation..
 
 
 
-References
-==========
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
