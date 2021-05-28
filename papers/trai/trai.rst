@@ -36,7 +36,7 @@ CNN Based ToF Image Processing
 
 .. class:: abstract
 
-   ...followed by a real life application using artificial intelligence to estimate the human body pose 
+   The current report focuses on ToF specific data processing followed by a real life application using artificial intelligence to estimate the human body pose 
    for applications such as gesture recognition, movement direction estimation or physical exercises monitoring. 
    The entire human pose estimation application implementation flow is described, from generating and training the pose estimation 
    AI model using Keras and TensorRT to deploying and running live on an Nvidia Xavier NX platform receiving data from an Analog Devices ToF camera.
@@ -48,8 +48,9 @@ CNN Based ToF Image Processing
 Introduction
 ------------
 
-Last years the evolution of CNN also affected the way in which the ToF specific images are processed...
-
+Last years the evolution of deep neuronal networks also affected the way in which the Time of Flight (ToF) specific images are processed. The images from the ToF cameras are usually obtained as synchronized depth and infrared (IR) image pairs.
+The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain. The applications targeted are ranging from persond detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
+In the following parts the introduction to the specific ToF imaging, custom data processing and CNN based solutions are presented.
 
 ToF specific imaging
 ++++++++++++++++++++
