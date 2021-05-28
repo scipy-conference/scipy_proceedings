@@ -123,8 +123,7 @@ between ROS and OpenCV, this time wasn't the case, as we had some issues with
 this library. Because we are working on Jetson Xavier NX board, which comes with
 the latest OpenCV version, and CvBridge uses at its core an older version of
 OpenCV, we replaced the conversion from image message type to OpenCV image array
-made by CvBridge with a very useful numpy functionality which allowed us to make 
-make this conversion flawlessly. So, we replaced:
+made by CvBridge with a little numpy trick. So, we replaced:
 
 .. code-block:: python
 
@@ -143,26 +142,48 @@ with:
                            image_msg.width,
                            -1)
 
+The results of the model on infrared images can be seen in Fig.
 
+ |
 
-.. figure:: ir_skeleton_detection.png
+.. image:: ir_skeleton_detection.png
   :width: 400
   :height: 400
   :scale: 40%
   :align: center
   :alt: Alternative text
 
-  Exemplification of skeleton detection on infrared images :label:`skeleton`
-
-After making this conversion, we preprocessed the infrared image before 
-feeding it to the neural network, using the OpenCv library. 
-After this step we supply the model input with this preprocessed image, and
-we obtained the results which can be seen in Figure :ref:`skeleton`.
-
 
 Volumetric estimates for depth images
 +++++++++++++++++++++++++++++++++++++
 .. PA part
+
+The goal of this research is to estimate the volume of objects using only depth images recorded with Time-of-Flight cameras. As a simplifying feature, we consider only box shaped objects, with clearly definable perpendicular planes. Two methods have been determined.The first method uses RANSAC algorithm to detect planes while the other one uses the ideas from Sommer et all. 
+
+The first algorithm iteratively finds the largest plane using RANSAC and uses euclidean extraction to remove it from the point cloud. Once the planes are determined and checked to see if they are perpendicular, the intersection lines of the planes are determined by projecting between them. The projections approximate a line and the points with the largest component difference determine the length of the line. This way iteratively the 3 intersecting line lengths can be determined once the planes are determined and checked for orthogonality.
+
+.. image:: RANSAC_volume.png
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
+
+An important observation is that it can compute the volume using 2 planes instead of 3. This is due to the fact that if 2 planes are orthogonal, the common line between them will be determined by 2 points that are also corner points for the object. By selecting a corner point and the two perpendicular planes, a third plane can be determined that is perpendicular to the other two and it contains the chosen point. Once the virtual third plane has been computed, the algorithm resumes as in the case with 3 determined planes.
+
+An advantage of this method is that it uses readily avaible and studied functions for processing pointclouds. For a simple case of a box and floor plane, the algorithm accuracy depends on the level of noise the pointcloud has.
+The downside of this method is that it can compute the volume only for one box. Noise and other objects in the scene can totaly disrupt the volumetric estimate.
+
+Due to these shortcomings, a new method for measuring the volume is studied, based on the work by Sommer et all. Their paper details an algorithm that uses pointclouds with normals computed in each point in order to determine collections of point pairs for which their normals satisfy the orthogonality constraint.  
+The point pair collections will approximate the orthogonal planes. By determining the points contained by each orthogonal plane, projections can be made that approximate the intersecting lines of the orthogonal planes. By selecting the 3 lines that have the edge points closest to each other, volume of a box can be computed.
+The advantage of this method is that it allow the computation of the volume for multiple box shaped objects and it 
+
+.. image:: ortho_volume.png
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
 
 Volume estimation using enhanced planar/corner detections
 
