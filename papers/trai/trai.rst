@@ -144,7 +144,6 @@ with:
                            -1)
 
 
-.. _skeleton:
 
 .. figure:: ir_skeleton_detection.png
   :width: 400
@@ -153,12 +152,12 @@ with:
   :align: center
   :alt: Alternative text
 
-  Exemplification of skeleton detection on infrared images
+  Exemplification of skeleton detection on infrared images :label:`skeleton`
 
 After making this conversion, we preprocessed the infrared image before 
 feeding it to the neural network, using the OpenCv library. 
 After this step we supply the model input with this preprocessed image, and
-we obtained the results which can be seen in the figure above.
+we obtained the results which can be seen in Figure :ref:`skeleton`.
 
 
 Volumetric estimates for depth images
