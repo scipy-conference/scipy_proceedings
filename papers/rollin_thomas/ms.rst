@@ -64,9 +64,6 @@ Monitoring Scientific Python Usage on a Supercomputer
 Introduction
 ============
 
-..
-   Why is the work important?
-
 The National Energy Research Scientific Computing Center
 `NERSC <https://www.nersc.gov/about/>`_ is the primary
 scientific computing facility for the US Department of Energy's Office of
@@ -142,9 +139,6 @@ Python packages we monitor at NERSC.
 
 Related Work
 ============
-
-..
-   What is the context for the work?
 
 The simplest approach used to get a sense of what applications run on a
 supercomputer is to scan submitted batch job scripts for executable names.
@@ -240,9 +234,6 @@ together from the data we gather as a starting point for conversation.
 
 Methods
 =======
-
-..
-   How was the work done?
 
 Users have a number of options when it comes to how they use Python at NERSC.
 NERSC provides a "default" Python to its users through a software environment
@@ -746,16 +737,6 @@ This kind of response from "Dask users" was not uncommon.
 Discussion
 ==========
 
-..
-   What do the results mean?  What are the implications and directions for future work?
-
-    Data scientists are involved with gathering data, massaging it into a
-    tractable form, making it tell its story, and presenting that story to
-    others.
-
-    -- Mike Loukides, `What is Data Science?
-    <https://www.oreilly.com/radar/what-is-data-science/>`_
-
 Our results demonstrate that we are able to collect useful data on Python
 package use on Cori, tag the data with additional contextual metadata useful
 for filtering during analysis, and conduct exploratory analysis of the data that
@@ -918,9 +899,6 @@ but these functions are simply not available in a single system at NERSC.
 
 Conclusion
 ==========
-
-..
-   Summarize what was done, learned, and where to go next.
 
 We have taken our first small steps in understanding the Python workload at
 NERSC in detail.
@@ -1098,4 +1076,3 @@ References
 
 .. [vaex]  Maarten A. and Breddels, J. V. Vaex: big data exploration in the era of Gaia
            A&A 618 A13 (2018). <https://arxiv.org/abs/1801.02638v1>
-
