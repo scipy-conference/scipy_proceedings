@@ -12,8 +12,8 @@
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
-.. |tinit_top| replace:: :math:`t^\text{initialize\_top}`
-.. |tinit_traj| replace:: :math:`t^\text{initialize\_traj}`
+.. |tinit_top| replace:: :math:`t^\text{init\_top}`
+.. |tinit_traj| replace:: :math:`t^\text{init\_traj}`
 .. |tcomp| replace:: :math:`t^{\text{compute}}`
 .. |tIO| replace:: :math:`t^\text{I/O}`
 .. |tcomm| replace:: :math:`t^\text{comm\_gather}`
@@ -62,18 +62,25 @@ We implemented a simple split-apply-combine parallelization algorithm that divid
 .. raw:: latex
 
    \begin{table}
-   \begin{tabular}{||c c c c||}
+   \begin{tabular}{||c | c | c ||}
     \hline
     \textbf{name} & \textbf{format} & \textbf{file size (GB)} \\ [0.5ex]
     \hline\hline
     H5MD\_default     & H5MD       & 113    \\
+    \hline
     H5MD\_chunked     & H5MD       & 113    \\
+    \hline
     H5MD\_contiguous  & H5MD       & 113    \\
+    \hline
     H5MD\_gzipx1      & H5MD       & 77     \\
+    \hline
     H5MD\_gzipx9      & H5MD       & 75     \\
+    \hline
     XTC              & XTC        & 35      \\
+    \hline
     DCD              & DCD        & 113     \\
-    TRR              & TRR        & 113     \\
+    \hline
+    TRR              & TRR        & 113     \\ [1ex]
     \hline
    \end{tabular}
    \caption{}
@@ -137,7 +144,8 @@ The ``timeit`` class was used as a context manager to record how long our benchm
        with timeit() as comm_gather:
            rmsd_buffer = None
            if rank == 0:
-               rmsd_buffer = np.empty(n_frames, dtype=float)
+               rmsd_buffer = np.empty(n_frames,
+                                      dtype=float)
            comm.Gatherv(sendbuf=rmsd_array,
                         recvbuf=(rmsd_buffer,
                                  sendcounts),
@@ -154,36 +162,44 @@ Performance was quantified by measuring the I/O timing returned from the benchma
 Results and Discussion
 ======================
 
-TODO
+Default Benchmark Results
+-------------------------
+
+We first ran benchmarks with the simplest parallelization scheme of splitting the frames of the trajectory evenly among all participating processes. The H5MD file involved in the benchmarks was written with ``pyh5md``, a python library that can easily read and write H5MD files. The datasets in the data file were chunked automatically by ``h5py``'s auto-chunking algorithm. File I/O remains the largest contributor to the total benchmark time, as shown by Figure 1 (A). Figure 1 (B, D-F) also shows the initialization times, computation, MPI communication are negligible with regards to overall the overall analysis time. |twait|, however, becomes increasingly relevant as the number of processes increases (Figure 1 C), indicating a growing variance in the iteration block time across all processes. Although the total benchmark time continues to decreases as the number of processes increases, the total speedup observed is 15x (Figure 2 A,B).
 
 .. figure:: figs/components_vanilla.pdf
 
-   caption
+   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD_default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
 
 
 .. figure:: figs/scaling_vanilla.pdf
 
-   caption
+   Strong scaling performance of the RMSD analysis task of the ``H5MD_default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
+
+
+Effects of Algorithmic Optimizations on File I/O
+------------------------------------------------
+
 
 
 .. figure:: figs/components_masked.pdf
 
-   caption
+   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters for the ``masked_array`` optimization technique. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD_default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
 
 
 .. figure:: figs/scaling_masked.pdf
 
-   caption
+   Strong scaling performance of the RMSD analysis task with the ``masked_array`` optimization technique. The benchmark used the ``H5MD_default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
 
 
 .. figure:: figs/components_mem.pdf
 
-   caption
+   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters for the loading-into-memory optimization technique. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD_default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
 
 
 .. figure:: figs/scaling_mem.pdf
 
-   caption
+   Strong scaling performance of the RMSD analysis task with the ``masked_array`` optimization technique. The benchmark used the ``H5MD_default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
 
 Conclusions
 ===========
