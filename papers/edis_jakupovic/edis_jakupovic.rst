@@ -57,7 +57,29 @@ BRIEFLY DISCUSS RESULTS AND CHUNKING
 Methods
 =======
 
-We implemented a simple split-apply-combine parallelization algorithm that divides the number of frames in the trajectory evenly among all available processes. Each process receives a unique start and stop for which to iterate through their section of the trajectory and compute the RMSD at each frame. The data files used in our benchmark included a topology file ``YiiP_system.pdb`` and a trajectory file ``YiiP_system_9ns_center100x.h5md`` with 90100 frames. The trajectory file was converted on the fly with MDAnalysis to several different file formats. Table 1 gives all of these formats with how they are identified in this paper as well as their corresponding file size. In order to obtain detailed timing information we instrumented code as follows:
+We implemented a simple split-apply-combine parallelization algorithm that divides the number of frames in the trajectory evenly among all available processes. Each process receives a unique start and stop for which to iterate through their section of the trajectory and compute the RMSD at each frame. The data files used in our benchmark included a topology file ``YiiP_system.pdb`` and a trajectory file ``YiiP_system_9ns_center100x.h5md`` with 90100 frames. The trajectory file was converted on the fly with MDAnalysis to several different file formats. Table 1 gives all of these formats with how they are identified in this paper as well as their corresponding file size.
+
+.. raw:: latex
+
+   \begin{table}
+   \begin{tabular}{||c c c c||}
+    \hline
+    \textbf{name} & \textbf{format} & \textbf{file size (GB)} \\ [0.5ex]
+    \hline\hline
+    H5MD\_default     & H5MD       & 113    \\
+    H5MD\_chunked     & H5MD       & 113    \\
+    H5MD\_contiguous  & H5MD       & 113    \\
+    H5MD\_gzipx1      & H5MD       & 77     \\
+    H5MD\_gzipx9      & H5MD       & 75     \\
+    XTC              & XTC        & 35      \\
+    DCD              & DCD        & 113     \\
+    TRR              & TRR        & 113     \\
+    \hline
+   \end{tabular}
+   \caption{}
+   \end{table}
+
+In order to obtain detailed timing information we instrumented code as follows:
 
 .. code-block:: python
    :linenos:
@@ -73,26 +95,7 @@ We implemented a simple split-apply-combine parallelization algorithm that divid
            # always propagate exceptions forward
            return False
 
-.. raw:: latex
-
-
-   \begin{tabular}{||c c c c||}
-    \hline
-    name & \textbf{format} & \textbf{file size (GB)} \\ [0.5ex]
-    \hline\hline
-    H5MD\_default     & H5MD       & 113          \tabularnewline
-    H5MD\_chunked     & H5MD       & 113          \tabularnewline
-    H5MD\_contiguous  & H5MD       & 113          \tabularnewline
-    H5MD\_gzipx1      & H5MD       & 77           \tabularnewline
-    H5MD\_gzipx9      & H5MD       & 75           \tabularnewline
-    XTC              & XTC        & 35           \tabularnewline
-    DCD              & DCD        & 113          \tabularnewline
-    TRR              & TRR        & 113          \tabularnewline
-    \hline
-   \end{tabular}
-
-The ``timeit`` class was used as a context manager to record how long our benchmark spent on particular lines of code.
-
+The ``timeit`` class was used as a context manager to record how long our benchmark spent on particular lines of code. Below, we give example code of how each benchmark was performed:
 
 .. code-block:: python
    :linenos:
@@ -122,7 +125,8 @@ The ``timeit`` class was used as a context manager to record how long our benchm
                ts = u.trajectory[frame]
            total_io += io.elapsed
            with timeit() as rms:
-               rmsd_array[i] = rmsd(CA.positions, x_ref,
+               rmsd_array[i] = rmsd(CA.positions,
+                                    x_ref,
                                     superposition=True)
            total_rmsd += rms.elapsed
 
@@ -135,14 +139,16 @@ The ``timeit`` class was used as a context manager to record how long our benchm
            if rank == 0:
                rmsd_buffer = np.empty(n_frames, dtype=float)
            comm.Gatherv(sendbuf=rmsd_array,
-                        recvbuf=(rmsd_buffer, sendcounts), root=0)
+                        recvbuf=(rmsd_buffer,
+                                 sendcounts),
+                        root=0)
        t_comm_gather = comm_gather.elapsed
 
 The time |tinit_top| records the time it takes to load a ``universe`` from the topology file. |tinit_traj| records the time it takes to open the trajectory file. The HDF5 file is opened with the ``mpio`` driver and the ``MPI.COMM_WORLD`` communicator to ensure the file is accessed in parallel via MPI I/O. It's important to separate the topology and trajectory initialization times, as the topology file is not opened in parallel and represents a fixed cost each process must pay to open the file.  |tIO| represents the time it takes to read the data for each frame into the corresponding ``MDAnalysis.Universe.trajectory.ts`` attribute. MDAnalysis reads data from MD trajectory files one frame, or "snapshot" at a time. Each time the ``u.trajectory[frame]`` is iterated through, MDAnalysis reads the file and fills in numpy arrays corresponding to that timestep. Each MPI process runs an identical copy of the script, but receives a unique ``start`` and ``stop`` variable such that the entire file is read in parallel. |tcomp| gives the total RMSD computation time. |twait| records how long each process waits before the results are gathered with ``comm.Gather()``. Gathering the results is done collectively by MPI, which means all processes must finish their iteration blocks before the results can be returned. Therefore, it's important to measure |twait| as it represents the existence of "straggling" processes. If one process takes substantially longer than the others to finish its iteration block, all processes are slowed down. |tcomm| measures the time MPI spends communicating the results from each process back to the root process.
 
-We applied this benchmark scheme to H5MD test files on Agave, Bridges, and Comet. We also tested 3 algorithmic optimizations: Lustre file striping, loading the entire trajectory into memory, and using ``Masked Arrays` to only load the alpha carbon coordinates required for the RMSD calculation. For striping, we ran the benchmark on Bridges and Comet with a file stripe count of 48 and 96. For the into memory optimization, we used ``MDAnalysis.Universe.transfer_to_memory()`` to read the entire file in one go and pass all file I/O to the HDF5 library. For the masked array optimization, we allowed ``u.load_new()`` to take a list or array of atom indices as an argument, ``sub``, so that the ``MDAnalysis.Universe.trajectory.ts`` arrays are instead initialized as ``ma.masked_array``'s and only the indices corresponding to ``sub`` are read from the file.
+We applied this benchmark scheme to H5MD test files on Agave, Bridges, and Comet. We also tested 3 algorithmic optimizations: Lustre file striping, loading the entire trajectory into memory, and using ``Masked Arrays`` to only load the alpha carbon coordinates required for the RMSD calculation. For striping, we ran the benchmark on Bridges and Comet with a file stripe count of 48 and 96. For the into memory optimization, we used ``MDAnalysis.Universe.transfer_to_memory()`` to read the entire file in one go and pass all file I/O to the HDF5 library. For the masked array optimization, we allowed ``u.load_new()`` to take a list or array of atom indices as an argument, ``sub``, so that the ``MDAnalysis.Universe.trajectory.ts`` arrays are instead initialized as ``ma.masked_array``'s and only the indices corresponding to ``sub`` are read from the file.
 
-Performance was quantified by measuring the I/O timing returned from the benchmarks, and strong scaling was assessed by calculating the speedup :math:`S(N) = t_(1)/t_{N}` and the efficiency :math:`E(N) = S(N)/N`.
+Performance was quantified by measuring the I/O timing returned from the benchmarks, and strong scaling was assessed by calculating the speedup :math:`S(N) = t_{1}/t_{N}` and the efficiency :math:`E(N) = S(N)/N`.
 
 
 Results and Discussion
@@ -150,8 +156,34 @@ Results and Discussion
 
 TODO
 
+.. figure:: figs/components_vanilla.pdf
+
+   caption
 
 
+.. figure:: figs/scaling_vanilla.pdf
+
+   caption
+
+
+.. figure:: figs/components_masked.pdf
+
+   caption
+
+
+.. figure:: figs/scaling_masked.pdf
+
+   caption
+
+
+.. figure:: figs/components_mem.pdf
+
+   caption
+
+
+.. figure:: figs/scaling_mem.pdf
+
+   caption
 
 Conclusions
 ===========
