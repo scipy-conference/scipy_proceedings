@@ -57,7 +57,7 @@ BRIEFLY DISCUSS RESULTS AND CHUNKING
 Methods
 =======
 
-We implemented a simple split-apply-combine parallelization algorithm that divides the number of frames in the trajectory evenly among all available processes. Each process receives a unique start and stop for which to iterate through their section of the trajectory and compute the RMSD at each frame. The data files used in our benchmark included a topology file ``YiiP_system.pdb`` and a trajectory file ``YiiP_system_9ns_center100x.h5md`` with 90100 frames. The trajectory file was converted on the fly with MDAnalysis to several different file formats. Table :ref:`tab:files` gives all of these formats with how they are identified in this paper as well as their corresponding file size. In order to obtain detailed timing information we instrumented code as follows:
+We implemented a simple split-apply-combine parallelization algorithm that divides the number of frames in the trajectory evenly among all available processes. Each process receives a unique start and stop for which to iterate through their section of the trajectory and compute the RMSD at each frame. The data files used in our benchmark included a topology file ``YiiP_system.pdb`` and a trajectory file ``YiiP_system_9ns_center100x.h5md`` with 90100 frames. The trajectory file was converted on the fly with MDAnalysis to several different file formats. Table 1 gives all of these formats with how they are identified in this paper as well as their corresponding file size. In order to obtain detailed timing information we instrumented code as follows:
 
 .. code-block:: python
    :linenos:
