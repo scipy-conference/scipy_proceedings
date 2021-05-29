@@ -198,7 +198,7 @@ exploiting a hierarchical data structure.
 The matrix is recursively subdivided in halves until the individual submatrices (also: *blocks*) occupy approximately the amount of memory contained in the CPU caches.
 Each submatrix is then assigned the most appropriate format: COO for very sparse, CSR otherwise.
 
-.. figure:: bayer02--D-N-1--base.eps
+.. figure:: bayer02--D-N-1--base.pdf
    :scale: 35%
 
    Rendering of an RSB instance of classical matrix ``bayer02``
@@ -314,7 +314,7 @@ Let's look at how to deal with this when using the RSB layout.
 As anticipated, the individual right hand sides may lay after each other, as columns of a rectangular dense matrix.
 See Fig. :ref:`forder`, where a broken line follows the two operands' layout in memory, also `by columns`.
 
-.. figure:: rsb-spmv-frame-0000-F2.eps
+.. figure:: rsb-spmv-frame-0000-F2.pdf
    :scale: 25%
    :alt: alternate text
 
@@ -345,7 +345,7 @@ SpMM with different Operands Layout
 The **by-columns** layout shown above appears to be the most logical one if one thinks of the columns as of **multiple arrays**.
 However, one may instead opt to choose a **by-rows** layout instead, shown in figure :ref:`corder`. 
 
-.. figure:: rsb-spmv-frame-0000-C2.eps
+.. figure:: rsb-spmv-frame-0000-C2.pdf
    :scale: 25%
    :alt: alternate text
 
