@@ -12,12 +12,12 @@
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
-.. |tinit_top| replace:: :math:`t^\text{initialize_top}`
-.. |tinit_traj| replace:: :math:`t^\text{initialize_traj}`
-.. |tcomp| replace:: :math:`t^{\text{compute}}_{k,t}`
-.. |tIO| replace:: :math:`t^\text{I/O}_{k,t}`
-.. |tcomm| replace:: :math:`t^\text{comm gather}_{k}`
-.. |twait| replace:: :math:`t^\text{wait}_{k}`
+.. |tinit_top| replace:: :math:`t^\text{initialize\_top}`
+.. |tinit_traj| replace:: :math:`t^\text{initialize\_traj}`
+.. |tcomp| replace:: :math:`t^{\text{compute}}`
+.. |tIO| replace:: :math:`t^\text{I/O}`
+.. |tcomm| replace:: :math:`t^\text{comm\_gather}`
+.. |twait| replace:: :math:`t^\text{wait}`
 .. |ttotal| replace:: :math:`t^\text{total}`
 .. |Ncores| replace:: :math:`M`
 .. |r(t)| replace:: :math:`\mathbf{r}(t)`
