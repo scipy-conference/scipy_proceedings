@@ -41,7 +41,7 @@ Natural Language Processing with Pandas DataFrames
     
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   natural language processing, Pandas, DataFrames
 
 Background and Motivation
 -------------------------
