@@ -400,8 +400,9 @@ globe. Figure :ref:`statsshiftfig` further shows engagement shift between 2019
 and 2020. The trend slopes downwards, picks up a little July onwards, which
 correlates with the time Europe lifted a lot of the travel restrictions. It can
 be seen however, people were still creating travel vlogs and commenting on such
-videos. Amidst a much-reduced travel, what were these videos, what content was
-getting created and what the commenters were talking about?
+videos. Between June and September 2020, amidst a much-reduced travel, what were
+these videos, what content was getting created, who was creating it and what were
+the commenters talking about?
 
 .. figure:: videos.png
 
@@ -412,6 +413,27 @@ Figure :ref:`videofig` shows a word cloud representation of what these videos
 were about. Travel that would entail easier implementation of social distance
 was seen popping up in 2020, such as hiking, beach trips and road traveling.
 Location names such as Italy, France and Spain were also seen showing up in the videos.
+
+YouTube influencer channels that drove high engagement during summer and fall of 2020
+include the following.
+
+1. 4K Walk [#]_ – YouTube channel creating videos about walking tours all over Europe
+and America.
+
+2. BeachTuber [#]_ – YouTube channel creating vlogs from different beaches all over Europe.
+
+3. Beach Walk [#]_ – YouTube channel posting about different beaches all over Europe and
+America. 
+
+4. DesiGirl Traveller [#]_ – YouTube channel creating videos about India travel.
+
+5. Euro Trotter [#]_ – YouTube channel creating videos about Europe travel.
+
+.. [#] https://youtube.com/c/4KWALK
+.. [#] https://youtube.com/c/BeachTuber
+.. [#] https://youtube.com/c/BeachWalk
+.. [#] https://youtube.com/c/DesiGirlTraveller
+.. [#] https://youtube.com/c/EuroTrotter
 
 .. figure:: locs.png
 
