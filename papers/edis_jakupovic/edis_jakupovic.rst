@@ -75,27 +75,21 @@ We implemented a simple split-apply-combine parallelization algorithm that divid
 
 .. raw:: latex
 
-  \begin{table}
-  \begin{longtable*}[c]{p{0.3\tablewidth}p{0.1\tablewidth}}
-   \toprule
-   \textbf{name} & \textbf{format} & \textbf{file size (GB)} & \textbf{file size}  \tabularnewline
-   \midrule
-   \endfirsthead
-   H5MD_default     & H5MD       & 113          \tabularnewline
-   H5MD_chunked     & H5MD       & 113          \tabularnewline
-   H5MD_contiguous  & H5MD       & 113          \tabularnewline
-   H5MD_gzipx1      & H5MD       & 77           \tabularnewline
-   H5MD_gzipx9      & H5MD       & 75           \tabularnewline
-   XTC              & XTC        & 35           \tabularnewline
-   DCD              & DCD        & 113          \tabularnewline
-   TRR              & TRR        & 113          \tabularnewline
-   \bottomrule
-   \end{longtable*}
-   \caption{Various trajectory files used in benchmarks.
-	   \textbf{format} is the corresponding file format of each file.
-	   \DUrole{label}{tab:files}
-	   }
-  \end{table}
+
+   \begin{tabular}{||c c c c||}
+    \hline
+    name & \textbf{format} & \textbf{file size (GB)} \\ [0.5ex]
+    \hline\hline
+    H5MD_default     & H5MD       & 113          \tabularnewline
+    H5MD_chunked     & H5MD       & 113          \tabularnewline
+    H5MD_contiguous  & H5MD       & 113          \tabularnewline
+    H5MD_gzipx1      & H5MD       & 77           \tabularnewline
+    H5MD_gzipx9      & H5MD       & 75           \tabularnewline
+    XTC              & XTC        & 35           \tabularnewline
+    DCD              & DCD        & 113          \tabularnewline
+    TRR              & TRR        & 113          \tabularnewline
+    \hline
+   \end{tabular}
 
 The ``timeit`` class was used as a context manager to record how long our benchmark spent on particular lines of code.
 
