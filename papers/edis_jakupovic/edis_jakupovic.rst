@@ -80,11 +80,11 @@ We implemented a simple split-apply-combine parallelization algorithm that divid
     \hline
     name & \textbf{format} & \textbf{file size (GB)} \\ [0.5ex]
     \hline\hline
-    H5MD_default     & H5MD       & 113          \tabularnewline
-    H5MD_chunked     & H5MD       & 113          \tabularnewline
-    H5MD_contiguous  & H5MD       & 113          \tabularnewline
-    H5MD_gzipx1      & H5MD       & 77           \tabularnewline
-    H5MD_gzipx9      & H5MD       & 75           \tabularnewline
+    H5MD\_default     & H5MD       & 113          \tabularnewline
+    H5MD\_chunked     & H5MD       & 113          \tabularnewline
+    H5MD\_contiguous  & H5MD       & 113          \tabularnewline
+    H5MD\_gzipx1      & H5MD       & 77           \tabularnewline
+    H5MD\_gzipx9      & H5MD       & 75           \tabularnewline
     XTC              & XTC        & 35           \tabularnewline
     DCD              & DCD        & 113          \tabularnewline
     TRR              & TRR        & 113          \tabularnewline
