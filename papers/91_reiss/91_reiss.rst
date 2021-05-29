@@ -331,6 +331,7 @@ the corpus in DocBin format with spaCy.
 
 
 .. figure:: figures/read_times.pdf
+
    Comparison of the amount of time required to read the training fold of the
    CoNLL-2003 named entity recognition corpus into memory, when the corpus is
    stored in three different file formats. Binary I/O with Pandas and the
@@ -707,7 +708,6 @@ ten years of revenue information broken down by geography.
    enrichment to DataFrames; then cleaning and deduplicating the resulting data
    using Pandas. The code that produced this result can be found at `<https://github.com/CODAIT/text-extensions-for-pandas/blob/master/notebooks/Understand_Tables.ipynb>`_.
    :label:`revenue`
-
 
 
 Usage in Natural Language Processing Research
