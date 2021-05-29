@@ -323,11 +323,11 @@ efficient storage and transfer.
 Efficient binary I/O can make reading and writing NLP corpora orders of
 magnitude faster.  Figure :ref:`readtimes` compares the amount of time required
 to read the training fold of the CoNLL-2003 corpus
-:cite:`tjong-kim-sang-de-meulder-2003-introduction` from a local filesystem when
-the corpus is stored in three different formats.  Reading the corpus with
-Pandas and the Apache Parquet binary file format is 60 times faster than reading the
-original CoNLL-format text file with ``nltk`` and 800 times faster than reading
-the corpus in DocBin format with spaCy.
+:cite:`tjong-kim-sang-de-meulder-2003-introduction` from a local filesystem
+when the corpus is stored in three different formats.  Reading the corpus with
+Pandas and the Apache Parquet binary file format is 60 times faster than
+reading the original CoNLL-format text file with ``nltk`` and 800 times faster
+than reading the corpus in DocBin format with spaCy.
 
 
 .. figure:: figures/read_times.pdf
