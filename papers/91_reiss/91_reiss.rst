@@ -337,8 +337,9 @@ Specifically, we have NLP-specific *join* operations (sometimes referred to as
 spans in a matching pair have an overlap, containment, or adjacency
 relationship.  These join operations are crucial for combining the results of
 multiple NLP models, and they also play a role in rule-based business logic.
-For example, a domain expert might need to filter out matches of one model that
+For example, a domain expert might need to find out matches of one model that
 overlap with matches of a different model.
+
 
 TODO: Example code for the above use case
 
@@ -376,55 +377,71 @@ Jupyter Notebook Integration
 
 Jupyter notebooks have built-in facilities for displaying Pandas DataFrames.
 Our extensions to Pandas also work with these facilities.
-
 If the last line of a notebook cell returns a DataFrame containing span and
-tensor data, then Jupyter will display an HTML representation of the DataFrame
-with the 
+tensor data, then Jupyter will display an HTML representation of the DataFrame,
+including cells that contain our extension types.
 
-TODO: Example of displaying a DataFrame with Span and Tensor data
-(maybe share this figure with another section)
+*TODO: Example of displaying a DataFrame with Span and Tensor data
+(maybe share this figure with another section)*
 
 Other Python development tools, including Visual Studio Code, PyCharm, and
 Google Colab, use extended versions of the Jupyter DataFrame display facilities
 to show DataFrames in their own user interfaces. Our extension types also work
 with these interfaces.
 
-TODO: Example of displaying a DataFrame in PyCharm
-
 There is also an ecosystem of interactive libraries for exploring and
-visualizaing Pandas DataFrames.  These libraries also work with our extension
-types.
+visualizing Pandas DataFrames.  These libraries also work with our extension
+types. Figure :ref:`dtale` shows an example of using Text Extensions for Pandas
+to display span data with the *D-Tale* interactive data analysis tool.
 
-TODO: Screenshot of displaying a DataFrame of span information with D-tale
+.. figure:: figures/dtale.png
+
+   Displaying a DataFrame containing span data in the *D-Tale* interactive
+   visualizer. Our extension types for NLP work with third-party libraries 
+   without requiring any changes to those libraries.
+   *TODO: Citation of D-Tale.*
+   :label:`dtale`
 
 Because our extension types for tensors use Numpy's `ndarray` type for
-individual cell values, 
+individual cell values, these extension types work with many tools that accept
+Numpy arrays.  Figure :ref:`matplotlib` shows an example of storing time series
+in the cells of a DataFrame and plotting those time series directly out of the
+DataFrame using the graphics library ``matplotlib`` in a Jupyter notebook.
 
-TODO: Example of using matplotlib to render time series from a Pandas Series of
-tensors in a Jupyter notebook
+*TODO: Citation for matplotlib*
 
-The 
+.. figure:: figures/matplotlib.png
 
-TODO: Word cloud from the `text` attribute
+   Example of using our tensor data type to store a time series while
+   visualizing those time series with the Matplotlib graphics library in a
+   Jupyter notebook. In the top half of the window is a DataFrame where each
+   cell of the rightmost four columns contains an entire time series of
+   COVID-19 case data as a tensor.  The bottom half of the screen shows the results of
+   plotting these tensors directly out of the DataFrame.
+   This example notebook is available at `<https://github.com/CODAIT/covid-notebooks/blob/master/notebooks/analyze_fit_us_data.ipynb>`_.
+   :label:`matplotlib`
 
-It is often useful to visualize spans in the context of the source text.
 
-We use Jupyter's built-in application programming interface (API) for HTML
-rendering to 
+It is often useful to visualize spans in the context of the source text.  We
+use Jupyter's built-in application programming interface (API) for HTML
+rendering to facilitate this kind of visualization.  If the last expression in
+a notebook cell returns a `SpanArray` or `TokenSpanArray` object, then Jupyter
+will automatically display the spans in the context of the target text, as
+shown in Figure :ref:`spandisplay`.
 
-If the last expression in a notebook cell returns a `SpanArray` or
-`TokenSpanArray` object, then Jupyter will automatically display the spans in
-the context of the target text.  
+.. figure:: figures/spandisplay.png
 
-TODO: Example of asking a series of spans to display itself 
+   Displaying the contents of a Pandas series of span data in the context of
+   the target document, using the integration between Text Extensions for
+   Pandas and Jupyter's APIs for HTML display.  The spans shown in this example
+   represent all pronouns in sentences that contain the name "Arthur". We
+   generated this set by cross-referencing the outputs of two models using Pandas operations.
+   This notebook can be found at `<https://github.com/CODAIT/text-extensions-for-pandas/blob/master/notebooks/Analyze_Text.ipynb>`_.
+   :label:`spandisplay`
 
 Taken together with JupyterLab's ability to display multiple widgets and views
 of the same notebook, these facilities allow users to visualize NLP data from
-several perspectives at once.
-
-for example, this UI for flagging and examining potentially incorrect labeling
-
-TODO: Screenshot of relabeling 
+several perspectives at once, as shown in Figure :ref:`labeling`.
 
 
 NLP Library Integrations
@@ -439,49 +456,108 @@ SpaCy
 +++++
 
 Our SpaCy integration converts the output of a SpaCy language model into a
-DataFrame of token information.
+DataFrame of token information. Figure shows an example of using this
+integration to process the first paragraph of the Wikipedia article for the
+film *Monty Python and the Holy Grail*.
 
-TODO: Citation of SpaCy
+.. figure:: figures/spacy.png
+
+   Example of converting the output of a SpaCy language model.
+   Each row of the DataFrame holds information about a single token, including
+   the span of the token and the span of the containing sentence. The code for
+   this example is available at `<https://github.com/CODAIT/text-extensions-for-pandas/blob/master/notebooks/Integrate_NLP_Libraries.ipynb>`_.
+
+*TODO: Citation of SpaCy*
 
 Converting from SpaCy's internal representation to DataFrames allows users to
 use Pandas operations to analyze and transform the outputs of the language
-model.
+model.  For example, users can use Pandas' filtering, grouping, and aggregation
+to count the number of nouns in each sentence:
 
-For example, users can use Pandas' grouping and aggregation to count the number
-of nouns in each sentence:
+.. -----------------------------------------------------|
+.. code-block:: python
 
-TODO: Code example
+    # Filter tokens to those that are tagged as nouns
+    nouns = tokens[tokens["pos"] == "NOUN"]
+
+    # Compute the number of nouns in each sentence
+    nouns.groupby("sentence").size() \
+        .to_frame(name="num_nouns")
+
+.. .. figure:: figures/nouns_wide.png
+..   :figclass: h
+
 
 Or they could use our span-specific join operations and the Pandas `merge`
 function to match all pronouns in the document with the person entities that
 are in the same sentence:
 
-TODO: Code snippet
+.. code-block:: python
+
+    # Find person names
+    entities = tp.io.conll.iob_to_spans(tokens)
+    person_names = entities[
+        entities["ent_type"] == "PERSON"]["span"]
+
+    # Find all pronouns
+    pronouns = tokens[tokens["tag"] == "PRP"] \
+        [["span", "sentence"]]
+
+    # Find all sentences
+    sentences = tokens[["sentence"]].drop_duplicates() \
+        ["sentence"]
+
+    # Match names and pronouns in the same sentence
+    pronoun_person_pairs = (
+        pronouns.rename(columns={"span": "prounoun"})
+            .merge(tp.spanner.contain_join(
+                sentences, person_names, 
+                "sentence", "person")))
 
 We also support using SpaCy's `DisplaCy` visualization library to display
 dependency parse trees stored in DataFrames.  Users can filter the output of
 the language model using Pandas operations, then display the resulting subgraph
-of the parse tree in a Jupyter notebook:
-
-TODO: Picture of visualizing a partial parse tree, with code
-
-This display facility will work with any DataFrame that encodes a dependency
-parse as Pandas Series of token spans, token IDs, and head IDs.
+of the parse tree in a Jupyter notebook.  This display facility will work with
+any DataFrame that encodes a dependency parse as Pandas Series of token spans,
+token IDs, and head IDs.
 
 
 `transformers`
 ++++++++++++++
 
-Our integration with the `transformers` library for transformer-based masked
-language models
+Text Extensions for Pandas can transform two types of output from the
+``transformers`` library for masked language models into Pandas DataFrames.
+``transformers`` includes special tokenizers that produce the subword tokens
+that language models such as BERT require.  We can convert the output of these
+tokenizers into DataFrames of token metadata, including spans marking the
+locations of each token.
 
-TODO: Citation of `transformers`
+Our tensor data type can also represent embeddings from the encoder stage of a
+``transformers`` language model.  Since the language models in ``transformers``
+have a limited sequence lengh, we also include utility functions for dividing
+large DataFrames of token information into token into fixed-size windows,
+generating embeddings for each window, and concatenating the resulting
+embeddings to produce a new column for the original DataFrame.
+Figure :ref:`bert` shows a DataFrame of token 
 
-tokenize text using the subword tokenizations commonly used for models such as
-BERT and convert 
+.. figure:: figures/bert.png
 
+   Slice of a DataFrame of information about tokens constructed with our
+   library's integration with the ``transformers`` library for masked language
+   models.  Each row of the DataFrame represents a token in the document. The
+   leftmost column uses our span extension type to store the position of the
+   token.  The rightmost column stores a BERT embedding at that token position.
+   The columns in between hold token metadata that was created by aligning the
+   corpus's original tokenization with the language model's tokenization, then
+   propagating the corpus labels between pairs of aligned tokens.  The notebook
+   in which this example appears (available at
+   `<https://github.com/CODAIT/text-extensions-for-pandas/blob/master/notebooks/Model_Training_with_BERT.ipynb>`_)
+   shows how to use this DataFrame as the input for training a named entity
+   recognition model with the ``sklearn`` libraray.
+   :label:`bert`
 
-TODO: Example for transformers
+*TODO: Citation of ``transformers``*
+
 
 
 IBM Watson Natural Languague Understanding
@@ -505,32 +581,105 @@ extraction models into Pandas DataFrames. The supported models are:
   towards each keyword.
 * `semantic_roles`, which performs *semantic role labeling*, extracting
   subject-verb-object triples that describe events that occurred in the text.
-* `relations`, which identifies relationships betwen pairs of named entities
+* `relations`, which identifies relationships betwen pairs of named entities.
 
-TODO: Example for Watson NLU 
+Converting the outputs of these models to DataFrames makes building notebooks
+adn applications that analyze these outputs much easier.  For example, two
+lines of Python code, users can produce a DataFrame with information about all
+person names that a document mentions:
+
+.. -----------------------------------------------------|
+.. code-block:: python
+
+    # The variable "response" holds the JSON output 
+    # of the Natural Language Understanding service.
+    # Convert to DataFrames and retrieve the DataFrame
+    # of entity mentions.
+    entities = tp.io.watson.nlu.parse_response(response) \
+               ["entity_mentions"]
+
+    # Filter entity mentions down to just mentions of
+    # persons by name.
+    persons = entities[entities["type"] == "Person"]
+    
+Figure :ref:`nluperson` shows the DataFrame that this code produces when
+run over an IBM press release.
+
+.. figure:: figures/nlu_person.png
+
+   DataFrame of person names in a document created by converting the output of
+   the Watson Natural Language Understanding's ``entities`` model to a
+   DataFrame of entity mentions. We then used Pandas filtering operations to
+   select the entity mentions of type "Person". The first column holds spans
+   that tell where in the document each mention occurred.
+   :label:`nluperson`
+
+
+With a few additional steps, users can combine the results of multiple models
+to produce sophisticated document analysis pipelines.  Figure :ref:`nlu` 
+shows a DataFrame with the names of 301 executives extracted from 191 IBM press
+releases by cross-referencing the outputs Watson Natural Language
+Understanding's ``entities`` and ``semantic_roles`` models.
+All of the analysis steps that went into producing this result were done with
+high-level operations from Pandas and Text Extensions for Pandas. Source code 
+for this example is available on our blog post about this use case :cite:`marketintel`.
+
+.. figure:: figures/nlu.png
+
+   Excerpt from DataFrame containing the names of 301 executives extracted
+   from 191 IBM press releases. To generate this table, we first converted the 
+   outputs of Watson Natural Language Understanding's ``entities`` model, which 
+   finds mentions of person names, and the product's ``semantic_roles`` model,
+   which extracts information about the context in which words occur.
+   Then we used a series of standard Pandas operations, plus operations from
+   spanner algebra, to cross-reference the outputs of the two models. Code and
+   a full explanation of this use case can be found in the article "Market
+   Intelligence with Pandas and IBM Watson on the IBM Data and AI blog 
+   :cite:`marketintel`.
+   :label:`nlu`
+
 
 IBM Watson Discovery
 ++++++++++++++++++++
 
-One of the key features of the IBM Watson Discovery product is *Table
-Understanding*, a document enrichment model that identifies and parses
-human-readable tables of data in PDF and HTML documents.
+IBM Watson Discovery is a document management platform that uses intelligent
+search and text analytics to eliminate data silos and retrieve information
+buried inside enterprise data.  One of the key features of the IBM Watson
+Discovery product is *Table Understanding*, a document enrichment model that
+identifies and parses human-readable tables of data in PDF and HTML documents.
 
 Text Extensions for Pandas can convert the output of Watson Discovery's Table
-Understanding enrichment into Pandas DataFrames.
+Understanding enrichment into Pandas DataFrames.  This facility allows users to
+reconstruct the contents and layout of the original table as a DataFrame, which
+is useful for debugging and analysis of these outputs. Figure
+:ref:`tabletodf` shows an example DataFrame from this process next to the
+original table in the source PDF document.
 
-This facility allows users to reconstruct the contents and layout of the
-original table as a DataFrame, which is useful for debugging and analysis of
-these outputs.
+.. figure:: figures/table_to_df.png
 
-TODO: Before and after picture of a table
+   An example table from a PDF document in its original, human-readable form
+   (left) and after using Text Extensions for Pandas to convert the output of
+   Watson Discovery's Table Understanding enrichment into a Pandas DataFrame.
+   :label:`tabletodf`
 
 Our conversion also produces a the "shredded" representation of the table as a
 DataFrame with one line for each cell of the original table. This data format
-facilitates data integration and cleaning of the extracted information.  Pandas'
-facilities for data cleaning, filtering, and aggregation are extremely useful
-for turning raw information about extracted tables into clean, deduplicated
-data suitable to insert into a database.
+facilitates data integration and cleaning of the extracted information.
+Pandas' facilities for data cleaning, filtering, and aggregation are extremely
+useful for turning raw information about extracted tables into clean,
+deduplicated data suitable to insert into a database. Figure :ref:`revenue`
+shows how, by cleaning and merging this shredded representation of a revenue
+table across multiple IBM annual reports, one can construct a DataFrame with
+ten years of revenue information broken down by geography.
+
+.. figure:: figures/revenue_table.png
+
+   DataFrame containing ten years of IBM revenue broken down by geography,
+   obtained by loading ten years of IBM annual reports int IBM Watson
+   Discovery; converting the outputs of Watson Discovery's Table Understanding
+   enrichment to DataFrames; then cleaning and deduplicating the resulting data
+   using Pandas. The code that produced this result can be found at `<https://github.com/CODAIT/text-extensions-for-pandas/blob/master/notebooks/Understand_Tables.ipynb>`_.
+   :label:`revenue`
 
 TODO: Table extracted from 10 years of IBM annual reports
 
@@ -539,38 +688,87 @@ TODO: Table extracted from 10 years of IBM annual reports
 Usage in NLP Research
 ---------------------
 
-we are using Text Extensions for Pandas in ongoing research on semisupervised
+We are using Text Extensions for Pandas in ongoing research on semisupervised
 identification of errors in NLP corpora.
-
 Pandas' data analysis facilities for provide a powerful substrate
 for cross-referencing and analyzing the outputs of NLP models in order to
-pinpoint 
+pinpoint potentially-incorrect labels. 
 
-one example of this type of application is work that we and several other
+One example of this type of application is work that we and several other
 coauthors recently published on correcting errors in the highly-cited
-CoNLL-2003 corpus for named entity recognition.
+CoNLL-2003 corpus for named entity recognition :cite:`reiss-etal-2020-identifying`.
+We identified over 1300 errors in the corpus and published a corrected version
+of the corpus. We also revisited recent results in named entity recognition
+using the corrected corpus.
 
-TODO: Is there space to include a detailed description of the application?
+Nearly every step of our analyis used Text Extensions for Pandas.  We started
+by using our library's input format support to read the model results from the
+16 teams in the data set's original 2003 competition.  Then we used Text
+Extensions for Pandas to pivot convert these outputs from labeled tokens to
+DataFrames <entity span, label> pairs. Using spanner algebra, we
+cross-referenced these entity mentions with the entity mentions to find cases
+where there was strong agreement among the teams' models coupled with
+*disagreement* with the corpus labels.  A large fraction of these cases
+involved incorrect corpus labels. 
 
-our paper in CoNLL 2020 describes the corrections in detail, as well as results
-from revisiting key results
+Since we did not have model outputs for the training fold of the corpus, we
+used our library's integration with the ``transformers`` library to retokenize
+this part of the corpus with the BERT tokenizer. Then we used spanner algebra
+to match the corpus's token labels with the corresponding subword tokens from
+the BERT tokenizer. We again used our library's integration with
+``transformers`` to add a column to our DataFrame of tokens containing BERT
+embeddings at each token position as tensors.  Then we used scikit-learn to
+train an ensemble of 17 token classification models over multiple different
+Gaussian random projections. By cross-referencing the outputs of these models,
+again using Pandas and spanner algebra, we were able to identify a large number
+of additional incorrect labels in the test fold.
 
-TODO: Citation of CoNLL-2003 dataset
-TODO: Citation of CoNLL paper
+We also used Text Extensions for Pandas' integration with Jupyter to build an
+interface for human review of the suspicious labels that our analysis of model
+outputs had flagged. Figure :ref:`labeling` shows this interface in action.
+
+.. figure:: figures/labeling.png
+
+   Example of using our extensions to Pandas and JupyterLab to The top three
+   panes of this JupyterLab session display three different views of a
+   collection of named entities for human evaluation. All of these views are
+   driven off of Pandas DataFrames of <span, entity type> pairs. The bottom
+   pane is where human evaluators flag incorrectly labeled entities.
+   This Jupyter notebook is part of an in-depth tutorial available at `<https://github.com/CODAIT/text-extensions-for-pandas/tree/master/tutorials/corpus>`_.
+   :label:`labeling`
+
+
+The code that we used in this paper is available as a collection of Jupyter
+notebooks at
+`<https://github.com/CODAIT/text-extensions-for-pandas/tree/master/tutorials/corpus>`_.
+We are currently working to extend the techniques we
+developed in order to cover a wider variety of token classification corpora and
+to incorporate several of the techniques used in our paper into the Text
+Extensions for Pandas library :cite:`dash-la`.
+
+.. Note we have a paper to appear in DaSH-LA on what the previous paragraph
+   describes. Potentially update a citation here once that paper is available?
 
 
 
+Conclusion
+----------
 
-Community
----------
+This paper has introduced our library, Text Extensions for Pandas. Text
+Extensions for Pandas provides a collection of extension data types,
+NLP-specific operations, and NLP library integrations that turn Pandas
+DataFrams into a universal data structure for managing the machine data that
+flows through NLP applications.
+
+Text Extensions for Pandas is freely available as both an installable Python
+package and as source code.  We publish packages on the PyPI and Conda-Forge
+package repositories. Since our library is implemented in pure Python, these
+packages work on most operating systems.
 
 The source code for Text Extensions for Pandas is available at
-`<https://github.com/CODAIT/text-extensions-for-pandas>`_.  We welcome
-community contributions to the code as well as feedback from users about bugs
-and feature requests.
+`<https://github.com/CODAIT/text-extensions-for-pandas>`_ under version 2 of
+the Apache license.  We welcome community contributions to the code as well as
+feedback from users about bugs and feature requests.
 
-We also publish installable packages on the PyPI and Conda-Forge package
-repositories. Since our library is implemented in pure Python, these packages
-work on most operating systems.
 
 
