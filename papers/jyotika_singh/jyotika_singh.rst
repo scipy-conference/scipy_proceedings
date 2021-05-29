@@ -417,13 +417,11 @@ Location names such as Italy, France and Spain were also seen showing up in the 
 YouTube influencer channels that drove high engagement during summer and fall of 2020
 include the following.
 
-1. 4K Walk [#]_ – YouTube channel creating videos about walking tours all over Europe
-and America.
+1. 4K Walk [#]_ – YouTube channel creating videos about walking tours all over Europe and America.
 
 2. BeachTuber [#]_ – YouTube channel creating vlogs from different beaches all over Europe.
 
-3. Beach Walk [#]_ – YouTube channel posting about different beaches all over Europe and
-America. 
+3. Beach Walk [#]_ – YouTube channel posting about different beaches all over Europe and America. 
 
 4. DesiGirl Traveller [#]_ – YouTube channel creating videos about India travel.
 
