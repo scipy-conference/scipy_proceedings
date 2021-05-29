@@ -76,7 +76,7 @@ We implemented a simple split-apply-combine parallelization algorithm that divid
 .. raw:: latex
 
   \begin{table}
-  \begin{longtable*}[c]{p{0.3\tablewidth}p{0.1\tablewidth}lp{0.07\tablewidth}p{0.07\tablewidth}}
+  \begin{longtable*}[c]{p{0.3\tablewidth}p{0.1\tablewidth}}
    \toprule
    \textbf{name} & \textbf{format} & \textbf{file size (GB)} & \textbf{file size}  \tabularnewline
    \midrule
