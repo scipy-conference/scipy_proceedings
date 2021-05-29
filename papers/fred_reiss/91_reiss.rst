@@ -13,7 +13,7 @@
 
 :bibliography: references
 
-:video: https://youtu.be/dQw4w9WgXcQ
+.. :video: https://youtu.be/dQw4w9WgXcQ
 
 --------------------------------------------------
 Natural Language Processing with Pandas DataFrames
