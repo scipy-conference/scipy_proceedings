@@ -38,8 +38,6 @@
 :corresponding:
 
 
-
-
 --------------------------------------------------------------------------------------------------------------
 Classification of Diffuse Subcellular Morphologies
 --------------------------------------------------------------------------------------------------------------
@@ -59,8 +57,30 @@ Recent advancements in fluorescence microscopy and biomedical imaging have offer
 
 We propose a way to classify mitochondria based on their dynamics by representing the subcellular structures as social network graphs. Graphs offer an effective way to represent the amorphous mitochondrial structures and capture the different spatial morphologies. Furthermore, machine learning on graphs is becoming a very relevant and ubiquitous task that has made significant contributions to deep learning, helping find solutions to several problems in the biomedicine domain. 
 
+
+
 We analyze the cells of the last frame of the video data that portray the cells after the fusion or fission event to classify which structural change has occurred. We explore two methods that utilize graph machine learning and have proven to be effective in characterizing morphological events given only the last frame of the video. The first involves using an aggregate statistic and a traditional tree classifier to sort the different frames. The next method involves a graph neural network architecture that utilizes graph convolutional and pooling layers to categorize the different frames. They have proven to be effective methods for this particular classification task and have offered more intuition on representing mitochondria as graphs. 
 
+.. figure:: control.png
+   :scale: 30%
+   :figclass: w
+   :align: center
+
+   The first, middle and last frames on a control cell with no chemical exposure. 
+
+.. figure:: llo.png
+   :scale: 30%
+   :figclass: w
+   :align: center
+
+   The first, middle and last frames on an cell exposed to listeriolysin O (llo). The frames show the resulting fragmentation. 
+
+.. figure:: mdivi.png
+   :scale: 30%
+   :figclass: w
+   :align: center
+
+   The first, middle and last frames on an cell exposed mitochondrial- division inhibitor 1 (mdivi). The frames show the resulting fusion. 
 
 Background
 ----------
@@ -76,17 +96,17 @@ Cell Classification
 +++++++++++++++++++
 Advancements to microscopy and deep learning has led way to a new generation of cell and cell morphologies classification techniques. More recently, image based analyses have advanced past single cell classification and are able to allow morphological profiling as seen in :cite:`Meng_2019`. :cite:`Meng_2019` examines the advantages and challenges of different machine learning algorithms useful for large-scale label free multi-class cell classification tasks which would be applicable to a diverse set of biological applications ranging from cancer screening to drug identification. The authors propose a single cell classification network that uses a convolutional neural network architecture and compare it against traditional methods such as k-nearest neighbors and support vector machines. The CNN architecture proves to be an effective method for human somatic cell types and their morphologies. These morphologies are easier to segment and analyze than spatially diffuse structures like mitochondria. 
 
-Transfer learning has also given rise to novel advancements and shows much promise in cell classification tasks :cite:`Moran_2019`. :cite:`Moran_2019` utilizes a hybrid between generative adversarial networks (GANs) and transfer learning dubbed transferring of pertained generating adversarial networks (TOP-GAN) to classify various cancer cells. This approach tackles the main bottleneck of deep learning, small training datasets. To cope with the problem, :cite:`Moran_2019` suggests using a large number of unclassified images from other cell types. This solution is valid only for the context of a few problems. The problem is another label-free multi-class classification problem trying to categorize healthy and unhealthy cancer cells. The context of the problem allows the model to train on a variety of different cells which can then be applied to classify several other types of cells. 
+Transfer learning has also given rise to novel advancements and shows much promise in cell classification tasks :cite:`Moran_2018`. :cite:`Moran_2018` utilizes a hybrid between generative adversarial networks (GANs) and transfer learning dubbed transferring of pertained generating adversarial networks (TOP-GAN) to classify various cancer cells. This approach tackles the main bottleneck of deep learning, small training datasets. To cope with the problem, :cite:`Moran_2018` suggests using a large number of unclassified images from other cell types. This solution is valid only for the context of a few problems. The problem is another label-free multi-class classification problem trying to categorize healthy and unhealthy cancer cells. The context of the problem allows the model to train on a variety of different cells which can then be applied to classify several other types of cells. 
 
 Our problem, although having a relatively small data size, does not allow to generalize between different cells. We propose a model that uses only the spatial-temporal aspects of subcellular organelles to classify between healthy and unhealthy cells. 
 
-Another transfer learning method that deals specifically with classifying organelle morphology is :cite:`Li_2021`. This approach applies CNNs and their advantages of automatic feature engineering and invariance of learning non-linear, input-output mapping to predict morphological abnormalities in plant cells.  :cite:`Li_2021` looks at the morphologies of three different subcellular organelles in plant cells, chloroplasts, mitochondria, and peroxisomes to categorize abnormal perturbations. This results in three different types of images for each class with numerous organelles distributed across every image. Nine variants of five different CNN-based models were tested, Inception-v3 :cite:`Szegedy_2015`, VGG16 :cite:`Simonyan_2015`, ResNet :cite:`He_2016`, enseNet220 :cite:`Huang_2017`, and MobileNet-v2 :cite:`Sandler_2018` , all of which proved to be effective methods. 
+Another transfer learning method that deals specifically with classifying organelle morphology is :cite:`Li_2021`. This approach applies CNNs and their advantages of automatic feature engineering and invariance of learning non-linear, input-output mapping to predict morphological abnormalities in plant cells.  :cite:`Li_2021` looks at the morphologies of three different subcellular organelles in plant cells, chloroplasts, mitochondria, and peroxisomes to categorize abnormal perturbations. This results in three different types of images for each class with numerous organelles distributed across every image. Nine variants of five different CNN-based models were tested, Inception-v3 :cite:`Szegedy_2015`, VGG16 :cite:`Simonyan_2015`, ResNet :cite:`He_2016`, DenseNet220 :cite:`Huang_2017`, and MobileNet-v2 :cite:`Sandler_2018` , all of which proved to be effective methods. 
 
 Our problem deals primarily with using mitochondria to categorize anomalies in the cell. Plant cells and their functions vary largely compared to human cells. Most work in cell classification, thus far, deals largely with image data as is and utilizes a CNN or hybrid architecture due to their advantages for analyzing visual imagery. We leverage the principles of graph theory to model the mitochondrial patterns as a social network to study the changing topology of the graphs. Additionally, we look to apply a supervised single-class classification to single frames of mitochondria after a morphological change has occurred. 
 
 Graph Learning 
 ++++++++++++++
-Graph machine learning has been drawing increasing attention in recent years due to its versatility and numerous applications especially in biomedical research.Graphs offer a unique way to represent complex systems as set of entities(vertices) and relationships(edges) :cite:`Zhou_2020`. Graphs are able to capture the relationships between several biological entities including cells, genes, molecules, diseases and drugs. This area of deep learning has been showing much promise in modeling the interactions of various cell functions. In our work, we propose classification in a lesser known setting, categorizing the graph as a whole to categorize the different morphologies by analyzing their topologies. Thus, we explored a couple graph neural networks (GNNs), a class of deep learning methods designed to perform inference on graph data [8]. GNNs have proven to be very robust models because they are able to generalize to adapt to dynamic graphs and new unseen graphs. Following the success of word embeddings, node embeddings rose to prominence with DeepWalk (Perozzi et al., 2014), an embedding method often referred to as the first graph embedding for representation learning :cite:`Zhou_2020`. 
+Graph machine learning has been drawing increasing attention in recent years due to its versatility and numerous applications especially in biomedical research.Graphs offer a unique way to represent complex systems as set of entities(vertices) and relationships(edges) :cite:`Zhou_2020`. Graphs are able to capture the relationships between several biological entities including cells, genes, molecules, diseases and drugs. This area of deep learning has been showing much promise in modeling the interactions of various cell functions. In our work, we propose classification in a lesser known setting, categorizing the graph as a whole to categorize the different morphologies by analyzing their topologies. Thus, we explored a couple graph neural networks (GNNs), a class of deep learning methods designed to perform inference on graph data :cite:`Battaglia_2018`. GNNs have proven to be very robust models because they are able to generalize to adapt to dynamic graphs and new unseen graphs. Following the success of word embeddings, node embeddings rose to prominence with DeepWalk :cite:`Perozzi_2014`, an embedding method often referred to as the first graph embedding for representation learning :cite:`Zhou_2020`. 
 
 One of our methods does employ a simple embedding method based extracting graph feature information using node feature statistics. Although :cite:`Hamilton_2017` explains these traditional methods to be  limited and sometime inflexible, the method showed favorable results in our experiments. Several new methodologies to produce embeddings followed after DeepWalk but the methods  suffer a few drawbacks: node embeddings are computationally inefficient because the number of parameters increased with number of nodes as a result of no shared parameters and the direct embeddings lacked the ability to generalize to a new data. As a means to solve these problems and drawing inspiration to generalize CNNs, GNNs were proposed to aggregate information from the graph structure and better capture the elements and dependencies of the graphs. 
 
@@ -95,7 +115,7 @@ There are two main operations at the core of GNNs, convolution and pooling layer
 
 Because of their general nature, graph neural networks are applicable to three different tasks: node level tasks, link level tasks and graph level tasks. The most applicable task for our problem context is graph level because we attempt to perform classification of graph structures, where each whole graph is assigned a label.
 
-For the context of our problem we utilize graph convolution operations defined by graph convolutional networks in :cite:`Kipf_2016` and a GCS layer operations used to build graph neural networks with convolutional ARMA filters :cite:`Bianchi_2019`. 
+For the context of our problem we utilize graph convolution operations defined by graph convolutional networks in :cite:`Kipf_2016` and a GCS layer operations used to build graph neural networks with convolutional ARMA filters :cite:`Bianchi_2021`. 
 
 Data
 ----
@@ -122,12 +142,47 @@ To contextualize the empirical results, we split the problem up into two differe
 
 GNN
 +++
-We trained two different architectures one for each of the two classification problems at hand. One involves a GCN and second is a  slightly altered GCN architecture with a trainable skip connection called a GCS layer :cite:`Bianchi_2019`. Each of the GCN and GCS layers were followed by a MinCut Pooling layer :cite:`Bianchi_2019_Mincut` to get a more refined graph representation after each layer. The models accept a node feature matrix, X, and an adjacency matrix, A; each matrix individually is uninformative to the model but combined they provide the model with enough information about the graph structure. 
-The GCS filter operation is similar to :cite:`Kipf_2016` with an additional skip connection which has shown to sometimes be more applicable to graph classification. The generally known GCN convolution operation looks like [Equation 1]
+We trained two different architectures one for each of the two classification problems at hand. One involves a GCN and second is a  slightly altered GCN architecture with a trainable skip connection called a GCS layer :cite:`Bianchi_2021`. Each of the GCN and GCS layers were followed by a MinCut Pooling layer :cite:`Bianchi_2019_Mincut` to get a more refined graph representation after each layer. The models accept a node feature matrix, X, and an adjacency matrix, A; each matrix individually is uninformative to the model but combined they provide the model with enough information about the graph structure. 
+The GCS filter operation is similar to :cite:`Kipf_2016` with an additional skip connection which has shown to sometimes be more applicable to graph classification. The generally known GCN convolution operation looks like the following,
+
+.. math::
+	 \bar{X}^{t+1} = \sigma(LX^{(t)}W^{(t)}) 
+ 
+where :math:`\sigma` s the non linear activation function and :math:`W^{(t)}` is the weight matrix at t-th neural network layer. 
+
+The GCS operation which has an additional skip connection looks like the following
+
+.. math::
+	\bar{X}^{t+1} = \sigma(LX^{(t)}W^{(t)} + XV)
+
+where :math:`sigma` is the non linear activation function that can be ReLU, sigmoid or hyperbolic tangent (tanh) functions. W and V are trainable parameters. Each GCS layer is localized in the node space, and it performs a filtering operations between the local neighboring nodes through the skip connection and the initial node features X :cite:`Bianchi_2021`.
+
+
+.. figure:: Key.png
+   :scale: 30%
+   :figclass: bht
+   :align: left
+
+.. figure:: GCS.png
+   :scale: 40%
+   :figclass: bht
+   :align: left
+
+   The model arhcitecture used for the Llo-Mdivi classification using GCS layers. 
+
+.. figure:: GCN.png
+   :scale: 40%
+   :figclass: bht
+   :align: left
+
+   The model arhcitecture used for the Llo-Control classification using GCN Layers. 
+
 
 The graph convolution layer of each model is followed by the MinCut Pooling layer :cite:`Bianchi_2019_Mincut`. This method is based on the minCUT optimization problem which finds a cut of the graph that still preserves the topology and representation of the graph. It computes a soft clustering of the input graphs and outputs a reduced node features and adjacency matrix. The dimensions are reduced to the parameter k which is specified when calling the pooling layer. 
 Finally, the last layer of both architectures is a global pooling architecture that pools the graph by computing the sum of the inputs node features. Then the model is through a Dense layer, a fully connected output layer 
 The architectures were trained using Adam optimizer, and L2 penalty loss with weight 1e-3 and 16 hidden units. The GCS layers used a tanh activation function. The MinCut pooling layer is set to output N/2 nodes in the first layer and N/4 at the second layer and N is the average order of the graphs in the dataset. The Dense layer used a sigmoid activation function and we used binary cross entropy for the loss. The models ran for 3000 epochs.
+
+
 
 
 Grah level features using node statistics
@@ -135,6 +190,7 @@ Grah level features using node statistics
 
 This approach deals with finding a good graph representation by using a method similar tob bag of nodes. Because the available number of graphs for each class are limited, we created a graph feature by reducing the node features to a statistic. We created four different statistics to act as the graph features: min, max, mean and median. Once the graph features were created, we applied the synthetic minority oversampling technique (SMOTE) to oversample the minority classes as a solution to combat the class imbalance. A dataset with imbalanced classes such as the one in this problem could keep a classifier from effectively learning the decision boundary. SMOTE :cite:`Chawla_2003` does not simply duplicate the elements of the minority class but rather synthesizes new instances. This unique oversampling technique selects examples that are close to the actual elements in the feature space by drawing a line between two random existing instances and creating a new instance at a point along the line. This method is effective because the new samples that are created are realistic instances of the minority class and it helps balance the class distributions. 
 We used oversampled graph features as input data for three traditional machine learning algorithms to classify the features into a specific class, k-nearest neighbors, decision tree classifier and random forest classifier. 
+
 
 
 Experiments and Results
@@ -147,6 +203,45 @@ The Llo-Control problem was trained on the GNN with GCN layers. The Mdivi-Llo pr
 Alternatively, the input data for the traditional classifiers was oversampled using SMOTE, so the classes were balanced for those methods as well. The training set for the Llo-Control classification problem had 44 samples of each class  and the test set had 6 control instances 
 and 10 training instances. The Mdivi-Llo also had 44 instances of each class in the training set and had a test set consisting of 7 mdivi instances and 10 llo. The number of instances slightly differed as this method maintained 80-20 train-test split. Similarly to the GNN approach the frames cohen for training and test set for each run were randomly subsampeld each time. 
 Both the traditional classifier and GNN methods fully train on the test set and evaluate on the testing set. We measured the number of correctly classified instances of each model and used the accuracy as the main metric to evaluate the performance of our models. 
+
+.. table:: Results of the models for the two binary classification problems. :label:`rtable`
+   :widths: 30, 20, 20
+
+
+
+   +----------------------+-----------------+-----------------+
+   |                      | Llo vs. Control | Llo vs. Mdivi   |
+   +======================+=================+=================+
+   | GNN with GCN Layers  |     0.655       |      n/a        |
+   +----------------------+-----------------+-----------------+
+   | GNN with GCS Layers  |      n/a        |     0.718       |
+   +----------------------+-----------------+-----------------+
+   | Median-Random Forest |     0.740       |     0.770       |
+   +----------------------+-----------------+-----------------+
+   | Mean-Random Forest   |     0.777       |     0.741       |
+   +----------------------+-----------------+-----------------+
+   | Min-Random Forest    |     0.734       |     0.805       |
+   +----------------------+-----------------+-----------------+
+   | Max-Random Forest    |     0.822       |     0.708       |
+   +----------------------+-----------------+-----------------+
+   | Median-Decision Trees|     0.740       |     0.761       |
+   +----------------------+-----------------+-----------------+
+   | Mean-Decision Trees  |     0.755       |     0.739       |
+   +----------------------+-----------------+-----------------+
+   | Min-Decision Trees   |     0.719       |     0.782       |
+   +----------------------+-----------------+-----------------+
+   | Max-Decision Trees   |     0.810       |     0.720       |
+   +----------------------+-----------------+-----------------+
+   | Median-kNN           |     0.637       |     0.667       |
+   +----------------------+-----------------+-----------------+
+   | Mean-kNN             |     0.709       |     0.743       |
+   +----------------------+-----------------+-----------------+
+   | Min-kNN              |     0.632       |     0.702       |
+   +----------------------+-----------------+-----------------+
+   | Max-kNN              |     0.565       |     0.578       |
+   +----------------------+-----------------+-----------------+
+
+
 
 For the Llo-Mdivi classification problem, we found that the minimum of the node features as input for the random forest classifier performed the best. And for the Llo-Control, we found the maximum of the node features as the input graph feature for random forest classifiers had the best performance. Overall, we found the traditional classification method random forest had the best performance for both Llo-Mdivi and Llo-Control tests. K-NN classifier had the lowest performance but still performed comparably to the other models. The graph neural network methods also performed substantially well considering they had less training data than the traditional methods. 
 
