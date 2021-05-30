@@ -35,6 +35,8 @@
 :institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
 :institution: Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA
 
+:bibliography: references
+
 :corresponding:
 
 
@@ -53,7 +55,7 @@ Automation of cell classification remains to be a challenging but very important
 
 Tuberculosis causes structural changes to the mitochondria of cells that have been infected. :cite:`Delogu2013`.This ancient disease, although curable and treatable, can be fatal when not diagnosed properly and remains to be the world’s leading infectious disease killer having claimed 1.4 million lives in 2019 alone. Each following year brings rising cases of drug resistant TB, with more than 10 million people falling ill with active TB each year. A deeper understanding of the pathogenic processes associated with new infections will allow for the development of effective drug regimens. Although much research has been conducted on the disease, there are many questions on the mechanisms of pathogenesis that remain unanswered. Automating the process of classification offers a faster way to study the rising number of mutations of the Mtb pathogen which will help with the development of treatment plans and vaccines :cite:`Delogu2013`.
 
-Recent advancements in fluorescence microscopy and biomedical imaging have offered new ways to analyze these pathogens and their effects on cell health :cite:`durden18`. Previous studies have proposed artificial intelligence based cell classifiers using convolutional neural networks :cite:`oei_2019` , :cite:`yao_2019`. These networks had a few shortcomings due to the diversity of cells in any system and the studies in modeling different biological phenomena have been disproportionate. Most segmentation tasks deal with morphologies of cells and nuclei. These structures are much easier to segment, model and track than spatially diffuse structures such as mitochondria. Mitochondria act as significant signaling platforms in the cell whose dynamics modulate in response to pathogens to maintain their niche :cite:`Reishi_2018`,:cite:`Ramond_2019`. Infections induce mitochondrial changes and automating the classification of these anomalies will lead to more knowledge on the morphological changes which can further help create targeted therapies. 
+Recent advancements in fluorescence microscopy and biomedical imaging have offered new ways to analyze these pathogens and their effects on cell health :cite:`durden18`. Previous studies have proposed artificial intelligence based cell classifiers using convolutional neural networks :cite:`oei_2019` , :cite:`yao_2019`. These networks had a few shortcomings due to the diversity of cells in any system and the studies in modeling different biological phenomena have been disproportionate. Most segmentation tasks deal with morphologies of cells and nuclei. These structures are much easier to segment, model and track than spatially diffuse structures such as mitochondria. Mitochondria act as significant signaling platforms in the cell whose dynamics modulate in response to pathogens to maintain their niche :cite:`Reishi_2018`, :cite:`Ramond_2019`. Infections induce mitochondrial changes and automating the classification of these anomalies will lead to more knowledge on the morphological changes which can further help create targeted therapies. 
 
 We propose a way to classify mitochondria based on their dynamics by representing the subcellular structures as social network graphs. Graphs offer an effective way to represent the amorphous mitochondrial structures and capture the different spatial morphologies. Furthermore, machine learning on graphs is becoming a very relevant and ubiquitous task that has made significant contributions to deep learning, helping find solutions to several problems in the biomedicine domain. 
 
@@ -185,8 +187,8 @@ The architectures were trained using Adam optimizer, and L2 penalty loss with we
 
 
 
-Grah level features using node statistics
-+++++++++++++++++++++++++++++++++++++++++
+Graph level features using node statistics
+++++++++++++++++++++++++++++++++++++++++++
 
 This approach deals with finding a good graph representation by using a method similar tob bag of nodes. Because the available number of graphs for each class are limited, we created a graph feature by reducing the node features to a statistic. We created four different statistics to act as the graph features: min, max, mean and median. Once the graph features were created, we applied the synthetic minority oversampling technique (SMOTE) to oversample the minority classes as a solution to combat the class imbalance. A dataset with imbalanced classes such as the one in this problem could keep a classifier from effectively learning the decision boundary. SMOTE :cite:`Chawla_2003` does not simply duplicate the elements of the minority class but rather synthesizes new instances. This unique oversampling technique selects examples that are close to the actual elements in the feature space by drawing a line between two random existing instances and creating a new instance at a point along the line. This method is effective because the new samples that are created are realistic instances of the minority class and it helps balance the class distributions. 
 We used oversampled graph features as input data for three traditional machine learning algorithms to classify the features into a specific class, k-nearest neighbors, decision tree classifier and random forest classifier. 
