@@ -66,20 +66,20 @@ We implemented a simple split-apply-combine parallelization algorithm that divid
     \hline
     \textbf{name} & \textbf{format} & \textbf{file size (GB)} \\ [0.5ex]
     \hline\hline
-    H5MD\_default     & H5MD       & 113    \\
+    H5MD-default     & H5MD       & 113    \\
     \hline
-    H5MD\_chunked     & H5MD       & 113    \\
+    H5MD-chunked     & H5MD       & 113    \\
     \hline
-    H5MD\_contiguous  & H5MD       & 113    \\
+    H5MD-contiguous  & H5MD       & 113    \\
     \hline
-    H5MD\_gzipx1      & H5MD       & 77     \\
+    H5MD-gzipx1      & H5MD       & 77     \\
     \hline
-    H5MD\_gzipx9      & H5MD       & 75     \\ [0.75ex]
+    H5MD-gzipx9      & H5MD       & 75     \\ [0.75ex]
     \hline
    \end{tabular}
    \caption{Data files benchmarked on all three HPCS. \textbf{name} is the name that is used to identify the file in this paper. \textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes.
-      \textbf{H5MD\_default} original data file written with pyh5md which uses h5py's auto-chunking algorithm. \textbf{H5MD\_chunked} is the same file but written with chunk size (1, n\_atoms, 3) and \textbf{H5MD\_contiguous} is the
-      same file but written with no HDF5 chunking. \textbf{H5MD\_gzipx1} and \textbf{H5MD\_gzipx9} have the same chunk arrangement as \textbf{H5MD\_chunked} but are written with gzip compression where 1 is the lowest level of compression
+      \textbf{H5MD-default} original data file written with pyh5md which uses h5py's auto-chunking algorithm. \textbf{H5MD-chunked} is the same file but written with chunk size (1, n_atoms, 3) and \textbf{H5MD-contiguous} is the
+      same file but written with no HDF5 chunking. \textbf{H5MD-gzipx1} and \textbf{H5MD-gzipx9} have the same chunk arrangement as \textbf{H5MD-chunked} but are written with gzip compression where 1 is the lowest level of compression
       and 9 is the highest level.}
    \end{table}
 
@@ -166,12 +166,12 @@ We first ran benchmarks with the simplest parallelization scheme of splitting th
 
 .. figure:: figs/components_vanilla.pdf
 
-   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD_default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
+   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD-default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
    :label:`fig:components_vanilla`
 
 .. figure:: figs/scaling_vanilla.pdf
 
-   Strong scaling I/O performance of the RMSD analysis task of the ``H5MD_default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
+   Strong scaling I/O performance of the RMSD analysis task of the ``H5MD-default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
    :label:`fig:scaling_vanilla`
 
 Effects of Algorithmic Optimizations on File I/O
@@ -180,39 +180,39 @@ We tested three optimizations aimed at shortening file I/O time for the same dat
 
 .. figure:: figs/components_masked.pdf
 
-   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters for the ``masked_array`` optimization technique. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD_default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
+   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters for the ``masked_array`` optimization technique. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD-default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
    :label:`fig:components_masked`
 
 .. figure:: figs/scaling_masked.pdf
 
-   Strong scaling performance of the RMSD analysis task with the ``masked_array`` optimization technique. The benchmark used the ``H5MD_default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
+   Strong scaling performance of the RMSD analysis task with the ``masked_array`` optimization technique. The benchmark used the ``H5MD-default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
    :label:`fig:scaling_masked`
 
 With an MPI implementation, processes participating in parallel I/O communicate with one another. It is commonly understood that repeated, small file reads performs worse than a large, contiguous read of data. With this in mind, we tested this concept in our benchmark by loading the entire trajectory into memory prior to the RMSD task. Modern super computers make this possible as they contain hundreds of GB of memory per node. Figure :ref:`components_mem` shows that file I/O remains the largest contributor to the benchmark time. Interestingly, we found that the |twait| does not increase as the number of processes increases as in the other benchmark cases (Figure :ref:`components_mem` C). This indicates that there are no straggling processes, and all processes take approximately the same time to load their section of data. Comet showed the worst improvment in I/O, with a speedup of 2x with respect to the baseline benchmarks. In terms of absolute time, Agave showed the most substantial increase in performance, where in the single process case the baseline benchmark time was 4648s (Figure :ref:`scaling_vanilla` A) and 911s in the single process into-memory benchmark (Figure :ref:`scaling_mem` A). In the 4 full node case, Agave showed a 91x speedup with respect to the baseline benchmark performance (4658s to 73s at 112 cores). This gives strong evidence that the default access pattern of iterating through each frame was inefficient as opposed to loading the entire trajectory into memory in one go.
 
 .. figure:: figs/components_mem.pdf
 
-   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters for the loading-into-memory optimization technique. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD_default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
+   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters for the loading-into-memory optimization technique. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD-default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
    :label:`fig:components_mem`
 
 .. figure:: figs/scaling_mem.pdf
 
-   Strong scaling I/O performance of the RMSD analysis task with the loading-into-memory optimization technique. The benchmark used the ``H5MD_default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
+   Strong scaling I/O performance of the RMSD analysis task with the loading-into-memory optimization technique. The benchmark used the ``H5MD-default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
    :label:`fig:scaling_mem`
 
 
 Effects of HDF5 Chunking on File I/O
 ------------------------------------
-The speed at which a file can be read from disk depends not only on access pattern, but also the file's layout on disk. We rewrote the H5MD_default test file on the fly with MDAnalysis and tested two cases: one in which the file is written with no chunking applied (H5MD_contiguous), and one in which we applied a custom chunk layout to match the access pattern on the file (H5MD_chunked). Our benchmark follows a common MD trajecotry analysis scheme in that it iterates through the trajectory one frame at a time. Therefore, we applied a chunk shape of ``(1, n_atoms, 3)`` which matched exactly the shape of data to be read at each iteration step. First, we tested how the chunk layout affects baseline serial I/O performance for the file. We found I/O performance strongly depends on the layout of the file on disk. The auto-chunked H5MD_default file I/O time was 4101s, while our custom chunk layout resulted in an I/O time of 460s (Figure :ref:`serial_IO`). So, we effectively saw a 10x speedup from optimizing the chunk layout alone. To see what effect the chunk layout had on parallel I/O performance, we repeated our benchmarks on Agave but with the H5MD_chunked and H5MD_contiguous data files. For the serial one process case, we found a similar result in that the I/O time was dramatically increased with an approximate 10x speedup for both the contiguous and chunked file, with respect to the baseline benchmark (Figure :ref:`components_chunk` A). The rest of the timings remained unaffected (Figure :ref:`components_chunk` B-F). Although the absolute total benchmark time is much improved (Figure :ref:`scaling_chunk` A), the scaling remains challenging, with a maximum observed speedup of 12x for the contiguous file (Figure :ref:`scaling_chunk` B).
+The speed at which a file can be read from disk depends not only on access pattern, but also the file's layout on disk. We rewrote the H5MD-default test file on the fly with MDAnalysis and tested two cases: one in which the file is written with no chunking applied (H5MD-contiguous), and one in which we applied a custom chunk layout to match the access pattern on the file (H5MD-chunked). Our benchmark follows a common MD trajecotry analysis scheme in that it iterates through the trajectory one frame at a time. Therefore, we applied a chunk shape of ``(1, n_atoms, 3)`` which matched exactly the shape of data to be read at each iteration step. First, we tested how the chunk layout affects baseline serial I/O performance for the file. We found I/O performance strongly depends on the layout of the file on disk. The auto-chunked H5MD-default file I/O time was 4101s, while our custom chunk layout resulted in an I/O time of 460s (Figure :ref:`serial_IO`). So, we effectively saw a 10x speedup from optimizing the chunk layout alone. To see what effect the chunk layout had on parallel I/O performance, we repeated our benchmarks on Agave but with the H5MD-chunked and H5MD-contiguous data files. For the serial one process case, we found a similar result in that the I/O time was dramatically increased with an approximate 10x speedup for both the contiguous and chunked file, with respect to the baseline benchmark (Figure :ref:`components_chunk` A). The rest of the timings remained unaffected (Figure :ref:`components_chunk` B-F). Although the absolute total benchmark time is much improved (Figure :ref:`scaling_chunk` A), the scaling remains challenging, with a maximum observed speedup of 12x for the contiguous file (Figure :ref:`scaling_chunk` B).
 
 .. figure:: figs/Serial_IO.pdf
 
-   Serial I/O time for H5MD_default, H5MD_contiguous, and H5MD_chunked data files. Each file contained the same data (113GB, 90100 frames) but was written with a different HDF5 chunk arrangement, as outlined in Table :ref:`tab:files`. Each bar represents the mean of 5 repeat benchmark runs, with the standard deviation shown as error bars.
+   Serial I/O time for H5MD-default, H5MD-contiguous, and H5MD-chunked data files. Each file contained the same data (113GB, 90100 frames) but was written with a different HDF5 chunk arrangement, as outlined in Table :ref:`tab:files`. Each bar represents the mean of 5 repeat benchmark runs, with the standard deviation shown as error bars.
    :label:`fig:serial_IO`
 
 .. figure:: figs/components_chunk.pdf
 
-   Benchmark timings breakdown on ASU Agave for the three chunk arrangements tested. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112. \textbf{H5MD_default} was auto-chunked by ``h5py``. \textbf{H5MD_contiguous} was written with no chunking applied, and \textbf{H5MD_chunked} was written with a chunk shape of ``(1, n_atoms, 3)``. The trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
+   Benchmark timings breakdown on ASU Agave for the three chunk arrangements tested. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112. \textbf{H5MD-default} was auto-chunked by ``h5py``. \textbf{H5MD-contiguous} was written with no chunking applied, and \textbf{H5MD-chunked} was written with a chunk shape of ``(1, n_atoms, 3)``. The trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
    :label:`fig:components_chunk`
 
 .. figure:: figs/scaling_chunk.pdf
