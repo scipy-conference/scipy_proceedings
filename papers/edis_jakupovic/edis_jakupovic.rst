@@ -22,7 +22,7 @@
 .. |Ncores| replace:: :math:`M`
 .. |r(t)| replace:: :math:`\mathbf{r}(t)`
 .. |NProcesses| replace:: :math:`N_\text{processes}`
-		    
+
 
 ---------------------------------------------------------------------------------------------------------
 MPI-parallel Molecular Dynamics Trajectory Analysis with the H5MD Format in the MDAnalysis Python Package
@@ -78,11 +78,8 @@ We implemented a simple split-apply-combine parallelization algorithm :cite:`Wic
     H5MD-gzipx9      & H5MD       & 75     \\ [0.75ex]
     \hline
    \end{tabular}
-   \caption{Data files benchmarked on all three HPCS. \textbf{name} is the name that is used to identify the file in this paper. \textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes.
-      \textbf{H5MD-default} original data file written with pyh5md which uses the auto-chunking algorithm in ``h5py``. \textbf{H5MD-chunked} is the same file but written with chunk size (1, n atoms, 3) and \textbf{H5MD-contiguous} is the
-      same file but written with no HDF5 chunking. \textbf{H5MD-gzipx1} and \textbf{H5MD-gzipx9} have the same chunk arrangement as \textbf{H5MD-chunked} but are written with gzip compression where 1 is the lowest level of compression
-      and 9 is the highest level.}
-   \DUrole{label}{tab:files}       
+   \caption{Data files benchmarked on all three HPCS. \textbf{name} is the name that is used to identify the file in this paper. \textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes. \textbf{H5MD-default} original data file written with pyh5md which uses the auto-chunking algorithm in ``h5py``. \textbf{H5MD-chunked} is the same file but written with chunk size (1, n atoms, 3) and \textbf{H5MD-contiguous} is the same file but written with no HDF5 chunking. \textbf{H5MD-gzipx1} and \textbf{H5MD-gzipx9} have the same chunk arrangement as \textbf{H5MD-chunked} but are written with gzip compression where 1 is the lowest level of compression and 9 is the highest level.}
+   \DUrole{label}{tab:files}
    \end{table}
 
 In order to obtain detailed timing information we instrumented code as follows:
