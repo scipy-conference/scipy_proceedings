@@ -162,78 +162,78 @@ Results and Discussion
 Baseline Benchmarks
 -------------------
 
-We first ran benchmarks with the simplest parallelization scheme of splitting the frames of the trajectory evenly among all participating processes. The H5MD file involved in the benchmarks was written with ``pyh5md``, a python library that can easily read and write H5MD files. The datasets in the data file were chunked automatically by ``h5py``'s auto-chunking algorithm. File I/O remains the largest contributor to the total benchmark time, as shown by Figure :ref:`fig:components_vanilla` (A). Figure :ref:`fig:components_vanilla` (B, D-F) also shows the initialization times, computation, MPI communication are negligible with regards to overall the overall analysis time. |twait|, however, becomes increasingly relevant as the number of processes increases (Figure `fig:components_vanilla` C), indicating a growing variance in the iteration block time across all processes. Although the total benchmark time continues to decreases as the number of processes increases, the total speedup observed is 15x (Figure `fig:scaling_vanilla` A,B).
+We first ran benchmarks with the simplest parallelization scheme of splitting the frames of the trajectory evenly among all participating processes. The H5MD file involved in the benchmarks was written with ``pyh5md``, a python library that can easily read and write H5MD files. The datasets in the data file were chunked automatically by ``h5py``'s auto-chunking algorithm. File I/O remains the largest contributor to the total benchmark time, as shown by Figure :ref:`fig:components-vanilla` (A). Figure :ref:`fig:components-vanilla` (B, D-F) also shows the initialization times, computation, MPI communication are negligible with regards to overall the overall analysis time. |twait|, however, becomes increasingly relevant as the number of processes increases (Figure `fig:components-vanilla` C), indicating a growing variance in the iteration block time across all processes. Although the total benchmark time continues to decreases as the number of processes increases, the total speedup observed is 15x (Figure `fig:scaling-vanilla` A,B).
 
-.. figure:: figs/components_vanilla.pdf
+.. figure:: figs/components-vanilla.pdf
 
    Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD-default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
-   :label:`fig:components_vanilla`
+   :label:`fig:components-vanilla`
 
-.. figure:: figs/scaling_vanilla.pdf
+.. figure:: figs/scaling-vanilla.pdf
 
    Strong scaling I/O performance of the RMSD analysis task of the ``H5MD-default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
-   :label:`fig:scaling_vanilla`
+   :label:`fig:scaling-vanilla`
 
 Effects of Algorithmic Optimizations on File I/O
 ------------------------------------------------
-We tested three optimizations aimed at shortening file I/O time for the same data file. To investigate MPI rank competition, we increased the stripe count on Bridge’s and Comet’s Lustre filesystem up to 96. We found marginal IO scaling improvements of 1.2x on up to 4 full nodes (not shown). For any analysis task, not all coordinates in the trajectory may be necessary for the computation. For example, in our analysis test case, the RMSD was calculated for only the alpha carbons of the protein backbone, therefore the coordinates of all other atoms read from the file is essentially wasted I/O. To circumvent this issue, we impelemented the use of NumPy ``ma.masked_array``s, where the arrays of coordinate data are instead initialized as masked arrays that only fill data from selected coordinate indices. We found that Bridges showed the best scaling with the masked array implementation, with a total scaling of 23x at 4 full nodes as seen in Figure :ref:`scaling_masked` B. Agave showed a maximum scaling of 11x at 2 full nodes, while Comet showed 5x scaling at 4 full nodes (Figure :ref:`scaling_masked` B). In terms of absolute timings, Agave showed longer I/O time with masked arrays, with I/O time increasing when using masked arrays. For Bridges and Comet, we observed an approximate 5x speedup in I/O time for the masked array case when compared to the baseline benchmark.
+We tested three optimizations aimed at shortening file I/O time for the same data file. To investigate MPI rank competition, we increased the stripe count on Bridge’s and Comet’s Lustre filesystem up to 96. We found marginal IO scaling improvements of 1.2x on up to 4 full nodes (not shown). For any analysis task, not all coordinates in the trajectory may be necessary for the computation. For example, in our analysis test case, the RMSD was calculated for only the alpha carbons of the protein backbone, therefore the coordinates of all other atoms read from the file is essentially wasted I/O. To circumvent this issue, we impelemented the use of NumPy ``ma.masked_array``s, where the arrays of coordinate data are instead initialized as masked arrays that only fill data from selected coordinate indices. We found that Bridges showed the best scaling with the masked array implementation, with a total scaling of 23x at 4 full nodes as seen in Figure :ref:`scaling-masked` B. Agave showed a maximum scaling of 11x at 2 full nodes, while Comet showed 5x scaling at 4 full nodes (Figure :ref:`scaling-masked` B). In terms of absolute timings, Agave showed longer I/O time with masked arrays, with I/O time increasing when using masked arrays. For Bridges and Comet, we observed an approximate 5x speedup in I/O time for the masked array case when compared to the baseline benchmark.
 
-.. figure:: figs/components_masked.pdf
+.. figure:: figs/components-masked.pdf
 
    Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters for the ``masked_array`` optimization technique. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD-default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
-   :label:`fig:components_masked`
+   :label:`fig:components-masked`
 
-.. figure:: figs/scaling_masked.pdf
+.. figure:: figs/scaling-masked.pdf
 
    Strong scaling performance of the RMSD analysis task with the ``masked_array`` optimization technique. The benchmark used the ``H5MD-default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
-   :label:`fig:scaling_masked`
+   :label:`fig:scaling-masked`
 
-With an MPI implementation, processes participating in parallel I/O communicate with one another. It is commonly understood that repeated, small file reads performs worse than a large, contiguous read of data. With this in mind, we tested this concept in our benchmark by loading the entire trajectory into memory prior to the RMSD task. Modern super computers make this possible as they contain hundreds of GB of memory per node. Figure :ref:`components_mem` shows that file I/O remains the largest contributor to the benchmark time. Interestingly, we found that the |twait| does not increase as the number of processes increases as in the other benchmark cases (Figure :ref:`components_mem` C). This indicates that there are no straggling processes, and all processes take approximately the same time to load their section of data. Comet showed the worst improvment in I/O, with a speedup of 2x with respect to the baseline benchmarks. In terms of absolute time, Agave showed the most substantial increase in performance, where in the single process case the baseline benchmark time was 4648s (Figure :ref:`scaling_vanilla` A) and 911s in the single process into-memory benchmark (Figure :ref:`scaling_mem` A). In the 4 full node case, Agave showed a 91x speedup with respect to the baseline benchmark performance (4658s to 73s at 112 cores). This gives strong evidence that the default access pattern of iterating through each frame was inefficient as opposed to loading the entire trajectory into memory in one go.
+With an MPI implementation, processes participating in parallel I/O communicate with one another. It is commonly understood that repeated, small file reads performs worse than a large, contiguous read of data. With this in mind, we tested this concept in our benchmark by loading the entire trajectory into memory prior to the RMSD task. Modern super computers make this possible as they contain hundreds of GB of memory per node. Figure :ref:`components-mem` shows that file I/O remains the largest contributor to the benchmark time. Interestingly, we found that the |twait| does not increase as the number of processes increases as in the other benchmark cases (Figure :ref:`components-mem` C). This indicates that there are no straggling processes, and all processes take approximately the same time to load their section of data. Comet showed the worst improvment in I/O, with a speedup of 2x with respect to the baseline benchmarks. In terms of absolute time, Agave showed the most substantial increase in performance, where in the single process case the baseline benchmark time was 4648s (Figure :ref:`scaling-vanilla` A) and 911s in the single process into-memory benchmark (Figure :ref:`scaling-mem` A). In the 4 full node case, Agave showed a 91x speedup with respect to the baseline benchmark performance (4658s to 73s at 112 cores). This gives strong evidence that the default access pattern of iterating through each frame was inefficient as opposed to loading the entire trajectory into memory in one go.
 
-.. figure:: figs/components_mem.pdf
+.. figure:: figs/components-mem.pdf
 
    Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters for the loading-into-memory optimization technique. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD-default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
-   :label:`fig:components_mem`
+   :label:`fig:components-mem`
 
-.. figure:: figs/scaling_mem.pdf
+.. figure:: figs/scaling-mem.pdf
 
    Strong scaling I/O performance of the RMSD analysis task with the loading-into-memory optimization technique. The benchmark used the ``H5MD-default`` data file on Agave, Bridges, and Comet. N_Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
-   :label:`fig:scaling_mem`
+   :label:`fig:scaling-mem`
 
 
 Effects of HDF5 Chunking on File I/O
 ------------------------------------
-The speed at which a file can be read from disk depends not only on access pattern, but also the file's layout on disk. We rewrote the H5MD-default test file on the fly with MDAnalysis and tested two cases: one in which the file is written with no chunking applied (H5MD-contiguous), and one in which we applied a custom chunk layout to match the access pattern on the file (H5MD-chunked). Our benchmark follows a common MD trajecotry analysis scheme in that it iterates through the trajectory one frame at a time. Therefore, we applied a chunk shape of ``(1, n_atoms, 3)`` which matched exactly the shape of data to be read at each iteration step. First, we tested how the chunk layout affects baseline serial I/O performance for the file. We found I/O performance strongly depends on the layout of the file on disk. The auto-chunked H5MD-default file I/O time was 4101s, while our custom chunk layout resulted in an I/O time of 460s (Figure :ref:`serial_IO`). So, we effectively saw a 10x speedup from optimizing the chunk layout alone. To see what effect the chunk layout had on parallel I/O performance, we repeated our benchmarks on Agave but with the H5MD-chunked and H5MD-contiguous data files. For the serial one process case, we found a similar result in that the I/O time was dramatically increased with an approximate 10x speedup for both the contiguous and chunked file, with respect to the baseline benchmark (Figure :ref:`components_chunk` A). The rest of the timings remained unaffected (Figure :ref:`components_chunk` B-F). Although the absolute total benchmark time is much improved (Figure :ref:`scaling_chunk` A), the scaling remains challenging, with a maximum observed speedup of 12x for the contiguous file (Figure :ref:`scaling_chunk` B).
+The speed at which a file can be read from disk depends not only on access pattern, but also the file's layout on disk. We rewrote the H5MD-default test file on the fly with MDAnalysis and tested two cases: one in which the file is written with no chunking applied (H5MD-contiguous), and one in which we applied a custom chunk layout to match the access pattern on the file (H5MD-chunked). Our benchmark follows a common MD trajecotry analysis scheme in that it iterates through the trajectory one frame at a time. Therefore, we applied a chunk shape of ``(1, n_atoms, 3)`` which matched exactly the shape of data to be read at each iteration step. First, we tested how the chunk layout affects baseline serial I/O performance for the file. We found I/O performance strongly depends on the layout of the file on disk. The auto-chunked H5MD-default file I/O time was 4101s, while our custom chunk layout resulted in an I/O time of 460s (Figure :ref:`serial-IO`). So, we effectively saw a 10x speedup from optimizing the chunk layout alone. To see what effect the chunk layout had on parallel I/O performance, we repeated our benchmarks on Agave but with the H5MD-chunked and H5MD-contiguous data files. For the serial one process case, we found a similar result in that the I/O time was dramatically increased with an approximate 10x speedup for both the contiguous and chunked file, with respect to the baseline benchmark (Figure :ref:`components-chunk` A). The rest of the timings remained unaffected (Figure :ref:`components-chunk` B-F). Although the absolute total benchmark time is much improved (Figure :ref:`scaling-chunk` A), the scaling remains challenging, with a maximum observed speedup of 12x for the contiguous file (Figure :ref:`scaling-chunk` B).
 
-.. figure:: figs/Serial_IO.pdf
+.. figure:: figs/serial-IO.pdf
 
    Serial I/O time for H5MD-default, H5MD-contiguous, and H5MD-chunked data files. Each file contained the same data (113GB, 90100 frames) but was written with a different HDF5 chunk arrangement, as outlined in Table :ref:`tab:files`. Each bar represents the mean of 5 repeat benchmark runs, with the standard deviation shown as error bars.
-   :label:`fig:serial_IO`
+   :label:`fig:serial-IO`
 
-.. figure:: figs/components_chunk.pdf
+.. figure:: figs/components-chunk.pdf
 
    Benchmark timings breakdown on ASU Agave for the three chunk arrangements tested. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112. \textbf{H5MD-default} was auto-chunked by ``h5py``. \textbf{H5MD-contiguous} was written with no chunking applied, and \textbf{H5MD-chunked} was written with a chunk shape of ``(1, n_atoms, 3)``. The trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
-   :label:`fig:components_chunk`
+   :label:`fig:components-chunk`
 
-.. figure:: figs/scaling_chunk.pdf
+.. figure:: figs/scaling-chunk.pdf
 
    Strong scaling I/O performance of the RMSD analysis task with various chunk layouts tested on ASU Agave. N_Processes ranged from 1 core, to 4 full nodes, and the number of trajectory blocks was equal to the number of processes involved.
-   :label:`fig:scaling_chunk`
+   :label:`fig:scaling-chunk`
 
 
 Effects of HDF5 GZIP Compression on File I/O
 --------------------------------------------
-HDF5 files offer the ability to compress the files. To see how compression affected parallel I/O, we tested HDF5's gzip compression with a minimum setting of 1 and a maximum setting of 9. In the serial 1 process case, we found that I/O performance is slightly hampered, with I/O times approximately 4x longer with compression applied (Figure :ref:`scaling_gzip` A), however at increasing number of processes this difference disappears (Figure :ref:`scaling_gzip` A and Figure :ref:`components_gzip` A). This shows a clear benefit of applying gzip compression to a chunked HDF5 file for parallel analysis tasks, as the compressed file is ~2/3 the size of the original. Additionaly we found speedups of up to 36x on 2 full nodes for the compressed data file benchmarks (Figure :ref:`scaling_gzip` B).
+HDF5 files offer the ability to compress the files. To see how compression affected parallel I/O, we tested HDF5's gzip compression with a minimum setting of 1 and a maximum setting of 9. In the serial 1 process case, we found that I/O performance is slightly hampered, with I/O times approximately 4x longer with compression applied (Figure :ref:`scaling-gzip` A), however at increasing number of processes this difference disappears (Figure :ref:`scaling-gzip` A and Figure :ref:`components-gzip` A). This shows a clear benefit of applying gzip compression to a chunked HDF5 file for parallel analysis tasks, as the compressed file is ~2/3 the size of the original. Additionaly we found speedups of up to 36x on 2 full nodes for the compressed data file benchmarks (Figure :ref:`scaling-gzip` B).
 
-.. figure:: figs/components_gzip.pdf
+.. figure:: figs/components-gzip.pdf
 
    Benchmark timings breakdown on ASU Agave for the minimum gzip compression 1 and maximum gzip compression 9. The benchmark was run on up to 4 full nodes on each HPC, where N_processes was 1, 28, 56, and 112. The trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
-   :label:`fig:components_gzip`
+   :label:`fig:components-gzip`
 
-.. figure:: figs/scaling_gzip.pdf
+.. figure:: figs/scaling-gzip.pdf
 
    Strong scaling I/O performance of the RMSD analysis task with minimum and maximum gzip compression applied. N_Processes ranged from 1 core, to 4 full nodes, and the number of trajectory blocks was equal to the number of processes involved.
-   :label:`fig:scaling_gzip`
+   :label:`fig:scaling-gzip`
 
 Conclusions
 ===========
