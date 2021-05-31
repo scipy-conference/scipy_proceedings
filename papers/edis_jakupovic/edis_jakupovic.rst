@@ -21,7 +21,8 @@
 .. |ttotal| replace:: :math:`t^\text{total}`
 .. |Ncores| replace:: :math:`M`
 .. |r(t)| replace:: :math:`\mathbf{r}(t)`
-
+.. |NProcesses| replace:: :math:`N_\text{processes}`
+		    
 
 ---------------------------------------------------------------------------------------------------------
 MPI-parallel Molecular Dynamics Trajectory Analysis with the H5MD Format in the MDAnalysis Python Package
@@ -46,7 +47,7 @@ As HPC resources continue to increase, the size of molecular dynamics (MD) simul
 
 H5MD, or "HDF5 for molecular data", is an HDF5-based file format that is used to store MD simulation data, such as particle coordinates, box dimensions, and thermodynamic observables :cite:`Buyl:2014`. HDF5 is a structured, binary file format that organizes data into 2 objects: groups and datasets, which follows a hierarchical, tree-like structure, where groups represent nodes of the tree, and datasets represent the leaves :cite:`Collette:2014`. The HDF5 library can be built on top of a message passing interface (MPI) implementation so that a file can be accessed in parallel on a parallel filesystem such as Lustre or BeeGFS. We implemented a parallel MPI-IO capable HDF5-based file format trajectory reader into MDAnalysis, H5MDReader, that adheres to H5MD specifications. H5MDReader interfaces with ``h5py``, a high level Python package that provides a Pythonic interface to the HDF5 format such that accessing a file in parallel is as easy as passing a keyword argument into ``h5py.File``, and all of parallel disk access occurs under the hood.
 
-We benchmarked H5MDReader's parallel reading capabilities with MDAnalysis on three HPC clusters: ASU Agave, SDSC Comet, and PSC Bridges. The benchmark consisted of a simple split-apply-combine scheme of an IO-bound task that split a 90k frame (113GB) trajectory into n chunks for n processes, where each process a task on their chunk of data, and then gathered the results back to the root process. For the computational task, we computed the time series root mean squared distance (RMSD) of the positions of the alpha carbons in the protein to their initial coordinates at the first frame of the trajectory. The RMSD calculation is not only a very common task performed to analyze the dynamics of the structure of a protein, but more importantly is a very fast computation that is heavily bounded by how quickly data can be read from the file. Therefore it provided an excellent analysis candidate to test the I/O capabilities of H5MDReader.
+We benchmarked H5MDReader's parallel reading capabilities with MDAnalysis on three HPC clusters: ASU Agave, SDSC Comet, and PSC Bridges. The benchmark consisted of a simple split-apply-combine scheme of an IO-bound task that split a 90k frame (113GB) trajectory into n chunks for n processes, where each process a task on their chunk of data, and then gathered the results back to the root process. For the computational task, we computed the time series root mean squared distance (RMSD) of the positions of the |Calpha| alpha carbons in the protein to their initial coordinates at the first frame of the trajectory. The RMSD calculation is not only a very common task performed to analyze the dynamics of the structure of a protein, but more importantly is a very fast computation that is heavily bounded by how quickly data can be read from the file. Therefore it provided an excellent analysis candidate to test the I/O capabilities of H5MDReader.
 
 Across the three HPC clusters tested, the benchmarks were done on both a BeeGFS and Lustre parallel filesystem which is highly suited for multi-node MPI parallelization. We tested various algorithmic optimizations for our benchmark, including altering the stripe count, loading only necessary coordinate information with numpy.Masked_arrays, and front loading all I/O by loading the entire trajectory into memory prior to the RMSD calculation.
 
@@ -167,12 +168,12 @@ We first ran benchmarks with the simplest parallelization scheme of splitting th
 
 .. figure:: figs/components-vanilla.pdf
 
-   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters. The benchmark was run on up to 4 full nodes on each HPC, where N\_processes was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD-default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
+   Benchmark timings breakdown for the ASU Agave, PSC Bridges, and SDSC Comet HPC clusters. The benchmark was run on up to 4 full nodes on each HPC, where |Nprocesses| was 1, 28, 56, and 112 for Agave and Bridges, and 1, 24, 48, and 96 on Comet. The ``H5MD-default`` file was used in the benchmark, where the trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
    :label:`fig:components-vanilla`
 
 .. figure:: figs/scaling-vanilla.pdf
 
-   Strong scaling I/O performance of the RMSD analysis task of the ``H5MD-default`` data file on Agave, Bridges, and Comet. N Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
+   Strong scaling I/O performance of the RMSD analysis task of the ``H5MD-default`` data file on Agave, Bridges, and Comet. |NProcesses| ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
    :label:`fig:scaling-vanilla`
 
 Effects of Algorithmic Optimizations on File I/O
@@ -186,7 +187,7 @@ We tested three optimizations aimed at shortening file I/O time for the same dat
 
 .. figure:: figs/scaling-masked.pdf
 
-   Strong scaling performance of the RMSD analysis task with the ``masked_array`` optimization technique. The benchmark used the ``H5MD-default`` data file on Agave, Bridges, and Comet. N Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
+   Strong scaling performance of the RMSD analysis task with the ``masked_array`` optimization technique. The benchmark used the ``H5MD-default`` data file on Agave, Bridges, and Comet. |NProcesses| ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
    :label:`fig:scaling-masked`
 
 With an MPI implementation, processes participating in parallel I/O communicate with one another. It is commonly understood that repeated, small file reads performs worse than a large, contiguous read of data. With this in mind, we tested this concept in our benchmark by loading the entire trajectory into memory prior to the RMSD task. Modern super computers make this possible as they contain hundreds of GB of memory per node. Figure :ref:`fig:components-mem` shows that file I/O remains the largest contributor to the benchmark time. Interestingly, we found that the |twait| does not increase as the number of processes increases as in the other benchmark cases (Figure :ref:`fig:components-mem` C). This indicates that there are no straggling processes, and all processes take approximately the same time to load their section of data. Comet showed the worst improvment in I/O, with a speedup of 2x with respect to the baseline benchmarks. In terms of absolute time, Agave showed the most substantial increase in performance, where in the single process case the baseline benchmark time was 4648s (Figure :ref:`fig:scaling-vanilla` A) and 911s in the single process into-memory benchmark (Figure :ref:`fig:scaling-mem` A). In the 4 full node case, Agave showed a 91x speedup with respect to the baseline benchmark performance (4658s to 73s at 112 cores). This gives strong evidence that the default access pattern of iterating through each frame was inefficient as opposed to loading the entire trajectory into memory in one go.
@@ -198,7 +199,7 @@ With an MPI implementation, processes participating in parallel I/O communicate 
 
 .. figure:: figs/scaling-mem.pdf
 
-   Strong scaling I/O performance of the RMSD analysis task with the loading-into-memory optimization technique. The benchmark used the ``H5MD-default`` data file on Agave, Bridges, and Comet. N Processes ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
+   Strong scaling I/O performance of the RMSD analysis task with the loading-into-memory optimization technique. The benchmark used the ``H5MD-default`` data file on Agave, Bridges, and Comet. |NProcesses| ranged from 1 core, to 4 full nodes on each HPC, and the number of trajectory blocks was equal to the number of processes involved.
    :label:`fig:scaling-mem`
 
 
@@ -218,7 +219,7 @@ The speed at which a file can be read from disk depends not only on access patte
 
 .. figure:: figs/scaling-chunk.pdf
 
-   Strong scaling I/O performance of the RMSD analysis task with various chunk layouts tested on ASU Agave. N Processes ranged from 1 core, to 4 full nodes, and the number of trajectory blocks was equal to the number of processes involved.
+   Strong scaling I/O performance of the RMSD analysis task with various chunk layouts tested on ASU Agave. |NProcesses| ranged from 1 core, to 4 full nodes, and the number of trajectory blocks was equal to the number of processes involved.
    :label:`fig:scaling-chunk`
 
 
@@ -233,7 +234,7 @@ HDF5 files offer the ability to compress the files. To see how compression affec
 
 .. figure:: figs/scaling-gzip.pdf
 
-   Strong scaling I/O performance of the RMSD analysis task with minimum and maximum gzip compression applied. N Processes ranged from 1 core, to 4 full nodes, and the number of trajectory blocks was equal to the number of processes involved.
+   Strong scaling I/O performance of the RMSD analysis task with minimum and maximum gzip compression applied. |NProcesses| ranged from 1 core, to 4 full nodes, and the number of trajectory blocks was equal to the number of processes involved.
    :label:`fig:scaling-gzip`
 
 Conclusions
