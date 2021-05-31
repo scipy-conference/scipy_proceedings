@@ -78,9 +78,11 @@ Low level ToF image pre-processing (PCL based)
 ++++++++++++++++++++++++++++++++++++++++++++++
 .. MSz part
 
-In ToFNest we are approximating surface normals from depth images, recorded with Time-of-Flight cameras. The approximation is done using a neural network. The base of our neural network is the PyTorch library, since the whole process is done using Python 3.6 as our programming language.
+ToFNest
 
-The main pipeline of the data was the following: first we read the images with opencv, then we prepare them with numpy. From a numpy array it is easy to convert it to a torch tensor on the GPU, that then creates the predictions about the surface normals. An example of the prediction can be seen in the next image, where the direction of the normal vectors are decoded with RGB images. The results were accurate relative to other techniques, but the time was much less.
+In ToFNest we are approximating surface normals from depth images, recorded with Time-of-Flight cameras. The approximation is done using a neural network. The base of our neural network is the PyTorch library, since the whole process is done using Python 3.6 as our programming language. Using PyTorch we have created a Feature Pyramid Network type model (:cite:’FPN2017’).
+
+The main pipeline of the data was the following: first we read the depth images with opencv (alongside the depth information we could also use the infrared information or the rgb information from the camera as well, thus adding more information to work with), then we prepare them with numpy. From a numpy array it is easy to convert it to a torch tensor on the GPU, which then creates the predictions about the surface normals. An example of the prediction can be seen in the next image, where the direction of the normal vectors are decoded with RGB images. 
 
 .. figure:: ToFNest.png
   :width: 400
@@ -91,12 +93,57 @@ The main pipeline of the data was the following: first we read the images with o
 
   Exemplification of ToF normal estimation :label:`tofnest`
 
+The results were accurate relative to other techniques, but the time was much less. The time being less means that at least 100 times faster. This can be due to the fact, that this method works with images, instead of point clouds as other methods do. This makes it much faster.
+
+Our method was evaluated by verifying only the angles between the lines, not the exact directions of the vectors (this was the case in the other methods as well), but we can train that, although the results are going to get worse.
+
+Furthermore, in order to get a real-time visualization about the predictions, we used rospy to read the images from ROS topics, and also to publish the normal estimation values to another ROS topic, that we could visualize using Rviz. This can be seen in the demo video.
+
+ToFSmoothing
+
+This whole pipeline and network, with some minor modifications can be also used to  smoothen the depth image, thus making the point cloud smoother as well.
+
+For the dataset we added gaussian noise of 5 and 10 cm to the original data, while we smoothed the original data with PointCloudDenoising (:cite:`pistilli2020learning`) method.
+
+Our method got pretty close to the ground truth value, in most of the cases. Although, in the case of the original (originally fairly smooth) data resulted slightly worse results, then some other methods (for instance the PointCloud Library :cite:’Rusu_ICRA2011_PCL’), when we tested the smoothing for much more noisy data, our results barely changed, while other methods were highly compromised. A comparison between these cases can be seen in the next image 3 images:
+
+.. figure:: noise00.jpg
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
+
+  The average error for the original data :label:'noise00`
+
+.. figure:: noise05.jpg
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
+
+  The average error for data with 5 cm gaussian noise :label:'noise05`
+
+.. figure:: noise10.jpg
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
+
+  The average error for data with 10 cm gaussian noise :label:'noise10`
+
+Here we can see that our method kept very much the same throughout all the cases same as DeepDepthDenoising method (:cite:’sterzentsenko2019denoising’), which is the only other method that we have found, that works with depth images as well, making it about the same as ours, but a little bit more polished. Also this method performs at the same speed as ours.
+
+The jump in the error at the end of the scale is due to some denormalization bias that we need to fine-tune. 
+
 Furthermore, in order to get a real-time visualization about the predictions, we used rospy to read the images from ROS topics, and also to publish the normal estimation values to another ROS topic, that we could visualize using Rviz. This can be seen in the demo video.
 
 This whole pipeline and network, with some minor modifications can be also used to  smoothen the depth image, thus making the point cloud smoother as well.
 
 
-PCL based pipeline for ToF.
+.. PCL based pipeline for ToF.
 
 
 CNN based solutions
