@@ -58,7 +58,7 @@ We also tested the effects of HDF5 file chunking and file compression on I/O per
 Methods
 =======
 
-We implemented a simple split-apply-combine parallelization algorithm :cite:`Wickham:2011, Fan:2019aa, Khoshlessan:2020aa` that divides the number of frames in the trajectory evenly among all available processes. Each process receives a unique start and stop for which to iterate through their section of the trajectory and compute the RMSD at each frame. The data files used in our benchmark included a topology file ``YiiP_system.pdb`` with 111,815 atoms, and a trajectory file ``YiiP_system_9ns_center100x.h5md`` with 90100 frames. The trajetory data file was converted on the fly with MDAnalysis with different HDF5 chunking arrangements and compression settings. Table 1 gives all of the H5MD files benchmarked with how they are identified in this paper as well as their corresponding file size.
+We implemented a simple split-apply-combine parallelization algorithm :cite:`Wickham:2011, Fan:2019, Khoshlessan:2020` that divides the number of frames in the trajectory evenly among all available processes. Each process receives a unique start and stop for which to iterate through their section of the trajectory and compute the RMSD at each frame. The data files used in our benchmark included a topology file ``YiiP_system.pdb`` with 111,815 atoms, and a trajectory file ``YiiP_system_9ns_center100x.h5md`` with 90100 frames. The trajetory data file was converted on the fly with MDAnalysis with different HDF5 chunking arrangements and compression settings. Table 1 gives all of the H5MD files benchmarked with how they are identified in this paper as well as their corresponding file size.
 
 .. raw:: latex
 
