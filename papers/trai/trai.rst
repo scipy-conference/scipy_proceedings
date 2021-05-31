@@ -175,7 +175,25 @@ Person detection from IR imaging
 Detectnet is a detection algorithm based on the jetson-inference repository. 
 This repository uses NVIDIA TensorRT for efficient implementation of neural networks on the Jetson platform, improving performance and energy efficiency through graphical optimizations, kernel fusion and FP16/INT8 accuracy.
 
- |
+Object detection requires a lot of information for training. DetectNet uses a large dataset, and each image contains multiple objects. For each object in the image, the trained model must detect both the object and the corner coordinates of the bounding box. Since the number of objects can vary in the training image set, it would be difficult to define the loss function if we  choose the label format with variable length and dimensionality. This problem has been solved by introducing a 3-dimensional label format that enables DetectNet to ingest images of any size with a variable number of objects present.
+
+In the Figure :ref:`archdetectnet` you can see the architecture for the training process, which is based on 3 important steps:
+
+  * data layers ingest the training images and labels
+  * a fully-convolutional network (FCN) performs feature extraction and prediction of object classes and bounding boxes per grid square
+  * loss functions simultaneously measure the error in the two tasks of predicting the object coverage and object bounding box corners per grid square
+
+.. figure:: archdetectnet.png
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
+
+  DetectNet structure for training :label:`archdetectnet`
+
+The pre-trained model accepts 3 channel images – RGB, by modifying the existing model, we have managed to detect and track people on the infrared image – 1 channel. With the help of the OpenCV library and the 3.7 python programming language version, we have developed a script that modifies the contrast of the IR image; thus, we obtained a much better result than if we had not used this approach. This result can be seen in the Figure :ref:`detection`., where we can see that the people are detected on the IR image with high confidence.
+
 
 .. figure:: DetectNetIR.PNG
   :width: 400
@@ -184,9 +202,7 @@ This repository uses NVIDIA TensorRT for efficient implementation of neural netw
   :align: center
   :alt: Alternative text
 
-  Exemplification of skeleton detection on infrared images based detection:label:`detection`
-
-The pre-trained model accepts 3 channel images – RGB, by modifying the existing model, we have managed to detect and track people on the infrared image – 1 channel. With the help of the OpenCV library and the 3.7 python programming language version, we have developed a script that modifies the contrast of the IR image; thus, we obtained a much better result than if we had not used this approach. This result can be seen in the figure below, where we can see that the people are detected on the IR image with high confidence.
+  Exemplification of skeleton detection on infrared images based detection :label:`detection`
 
 To be able to run the algorithm in real-time we used the rospy client. With the help of this API, we have developed an efficient way to pass a ROS topic as input to our model. The algorithm was tested on a Jetson AGX, and the camera used was from Analog Devices (AD-96TOF1-EBZ). The result can be seen in the attached demo video.
 
