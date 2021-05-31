@@ -57,7 +57,7 @@ In the following parts the introduction to the specific ToF imaging, custom data
   :height: 400
   :scale: 40%
   :align: center
-  :alt: Alternative text
+  :alt: ToF camera overview
 
   Exemplification of ToF camera :label:`tof`
 
@@ -74,11 +74,27 @@ As the existing CNN models are mainly with the focus on colour images, thus ones
 This solution seemed to be effective in terms of precision and runtime on embedded devices (e.g Jetson Nx or AGX). 
 For the skeleton detection part we relied on the real-time tensorflow optimized module for the Jetson product family, however for the generic GPU enabled devices we had to tailor our models since these are custom solutions.
 
-Low level ToF image pre-processing (PCL based)
-++++++++++++++++++++++++++++++++++++++++++++++
+
+Custom pipeline for ToF data
+++++++++++++++++++++++++++++
+The main role of the depth image preprocessing part is the filtering and bounding box estimation for the 3D ROI. 
+The filtering is essential for the embedded device in order to reduce the computational overload. 
+For the filtering pipeline we considered three interconnected filters: voxel, pass-through and outlier filter as this is visible in Figure below. All these implementations are open source library  based variants.
+
+   
+.. figure:: filters.png
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
+
+  Processing pipeline for ToF camera :label:`filters`
+
+Low level ToF image pre-processing - Tofnest
+++++++++++++++++++++++++++++++++++++++++++++
 .. MSz part
 
-ToFNest
 
 In ToFNest we are approximating surface normals from depth images, recorded with Time-of-Flight cameras. The approximation is done using a neural network. The base of our neural network is the PyTorch library, since the whole process is done using Python 3.6 as our programming language. Using PyTorch we have created a Feature Pyramid Network type model (:cite:’FPN2017’).
 
@@ -99,7 +115,8 @@ Our method was evaluated by verifying only the angles between the lines, not the
 
 Furthermore, in order to get a real-time visualization about the predictions, we used rospy to read the images from ROS topics, and also to publish the normal estimation values to another ROS topic, that we could visualize using Rviz. This can be seen in the demo video.
 
-ToFSmoothing
+Low level ToF image pre-processing - Tofsmooth
+++++++++++++++++++++++++++++++++++++++++++++++
 
 This whole pipeline and network, with some minor modifications can be also used to  smoothen the depth image, thus making the point cloud smoother as well.
 
