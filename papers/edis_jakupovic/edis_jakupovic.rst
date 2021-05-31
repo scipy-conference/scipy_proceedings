@@ -214,7 +214,7 @@ The speed at which a file can be read from disk depends not only on access patte
 
 .. figure:: figs/components-chunk.pdf
 
-   Benchmark timings breakdown on ASU Agave for the three chunk arrangements tested. The benchmark was run on up to 4 full nodes on each HPC, where N processes was 1, 28, 56, and 112. \textbf{H5MD-default} was auto-chunked by ``h5py``. \textbf{H5MD-contiguous} was written with no chunking applied, and \textbf{H5MD-chunked} was written with a chunk shape of ``(1, n atoms, 3)``. The trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
+   Benchmark timings breakdown on ASU Agave for the three chunk arrangements tested. The benchmark was run on up to 4 full nodes on each HPC, where N processes was 1, 28, 56, and 112. **H5MD-default** was auto-chunked by ``h5py``. **H5MD-contiguous** was written with no chunking applied, and **H5MD-chunked** was written with a chunk shape of ``(1, n atoms, 3)``. The trajectory was split in N chunks for each corresponding N process benchmark. Points represent the mean over three repeats with the standard deviation shown as error bars.
    :label:`fig:components-chunk`
 
 .. figure:: figs/scaling-chunk.pdf
