@@ -247,6 +247,7 @@ MDAnalysis is a Python library for the analysis of molecular dynamics simulation
 Acknowledgments
 ===============
 Funding was provided by the National Science Foundation for a REU supplement to award ACI1443054.
+The authors thank Dr. Pierre de Buyl for advice on the implementation of the h5md format reading code.
 The SDSC Comet computer at the San Diego Supercomputer Center and PSC Bridges computer at the Pittsburgh Supercomputing Center was used under allocation TG-MCB130177.
 The authors acknowledge Research Computing at Arizona State University for providing HPC resources that have contributed to the research results reported within this paper.
 We would like to acknowledge Gil Speyer and Jason Yalim from the Research Computing Core Facilities at Arizona State University for advice and consultation.
