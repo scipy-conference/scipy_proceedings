@@ -81,7 +81,6 @@ We implemented a simple split-apply-combine parallelization algorithm that divid
       \textbf{H5MD\_default} original data file written with pyh5md which uses h5py's auto-chunking algorithm. \textbf{H5MD\_chunked} is the same file but written with chunk size (1, n\_atoms, 3) and \textbf{H5MD\_contiguous} is the
       same file but written with no HDF5 chunking. \textbf{H5MD\_gzipx1} and \textbf{H5MD\_gzipx9} have the same chunk arrangement as \textbf{H5MD\_chunked} but are written with gzip compression where 1 is the lowest level of compression
       and 9 is the highest level.}
-
    \end{table}
 
 In order to obtain detailed timing information we instrumented code as follows:
