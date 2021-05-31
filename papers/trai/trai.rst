@@ -179,14 +179,14 @@ Object detection requires a lot of information for training. DetectNet uses a la
 
 In the Figure :ref:`archdetectnet` you can see the architecture for the training process, which is based on 3 important steps:
 
-  * data layers ingest the training images and labels
-  * a fully-convolutional network (FCN) performs feature extraction and prediction of object classes and bounding boxes per grid square
-  * loss functions simultaneously measure the error in the two tasks of predicting the object coverage and object bounding box corners per grid square
+* data layers ingest the training images and labels
+* a fully-convolutional network (FCN) performs feature extraction and prediction of object classes and bounding boxes per grid square
+* loss functions simultaneously measure the error in the two tasks of predicting the object coverage and object bounding box corners per grid square
 
 .. figure:: archdetectnet.png
   :width: 400
   :height: 400
-  :scale: 40%
+  :scale: 50%
   :align: center
   :alt: Alternative text
 
