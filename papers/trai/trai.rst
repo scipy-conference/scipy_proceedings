@@ -114,7 +114,7 @@ Our method got pretty close to the ground truth value, in most of the cases. Alt
   :align: center
   :alt: Alternative text
 
-  The average error for the original data :label:'noise00`
+  The average error for the original data :label:`noise00`
 
 .. figure:: noise05.jpg
   :width: 400
@@ -123,7 +123,7 @@ Our method got pretty close to the ground truth value, in most of the cases. Alt
   :align: center
   :alt: Alternative text
 
-  The average error for data with 5 cm gaussian noise :label:'noise05`
+  The average error for data with 5 cm gaussian noise :label:`noise05`
 
 .. figure:: noise10.jpg
   :width: 400
@@ -132,7 +132,7 @@ Our method got pretty close to the ground truth value, in most of the cases. Alt
   :align: center
   :alt: Alternative text
 
-  The average error for data with 10 cm gaussian noise :label:'noise10`
+  The average error for data with 10 cm gaussian noise :label:`noise10`
 
 Here we can see that our method kept very much the same throughout all the cases same as DeepDepthDenoising method (:cite:’sterzentsenko2019denoising’), which is the only other method that we have found, that works with depth images as well, making it about the same as ours, but a little bit more polished. Also this method performs at the same speed as ours.
 
