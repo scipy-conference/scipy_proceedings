@@ -192,6 +192,10 @@ In the Figure :ref:`archdetectnet` you can see the architecture for the training
 
   DetectNet structure for training :label:`archdetectnet`
 
+In the final layers of DetectNet the openCV groupRectangles algorithm is used to cluster and filter the set of bounding boxes generated for grid squares with predicted coverage values greater than or equal to gridbox_cvg_threshold, which is specified in the DetectNet model definition prototxt file.
+
+DetectNet also uses the “Python Layers” interface to calculate and output a simplified mean Average Precision (mAP) score for the final set of output bounding boxes. For each predicted bounding box and each ground truth bounding box the Intersection over Union (IoU) score is computed. IoU is the ratio of the overlapping areas of two bounding boxes to the sum of their areas.
+
 The pre-trained model accepts 3 channel images – RGB, by modifying the existing model, we have managed to detect and track people on the infrared image – 1 channel. With the help of the OpenCV library and the 3.7 python programming language version, we have developed a script that modifies the contrast of the IR image; thus, we obtained a much better result than if we had not used this approach. This result can be seen in the Figure :ref:`detection`., where we can see that the people are detected on the IR image with high confidence.
 
 
