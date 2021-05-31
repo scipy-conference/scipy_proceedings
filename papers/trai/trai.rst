@@ -83,9 +83,9 @@ For the filtering pipeline we considered three interconnected filters: voxel, pa
 
    
 .. figure:: filters.png
-  :width: 400
+  :width: 800
   :height: 400
-  :scale: 40%
+  :scale: 80%
   :align: center
   :alt: Alternative text
 
