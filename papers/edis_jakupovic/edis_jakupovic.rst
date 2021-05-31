@@ -80,7 +80,7 @@ We implemented a simple split-apply-combine parallelization algorithm that divid
    \caption{Data files benchmarked on all three HPCS. \textbf{name} is the name that is used to identify the file in this paper. \textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes.
       \textbf{H5MD\_default} original data file written with pyh5md which uses h5py's auto-chunking algorithm. \textbf{H5MD\_chunked} is the same file but written with chunk size (1, n\_atoms, 3) and \textbf{H5MD_contiguous} is the
       same file but written with no HDF5 chunking. \textbf{H5MD\_gzipx1} and \textbf{H5MD_gzipx9} have the same chunk arrangement as \textbf{H5MD_chunked} but are written with gzip compression where 1 is the lowest level of compression
-      and 9 is the highest level.
+      and 9 is the highest level.}
 
    \end{table}
 
