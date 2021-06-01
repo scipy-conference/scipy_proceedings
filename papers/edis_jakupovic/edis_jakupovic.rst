@@ -11,6 +11,13 @@
 
 :bibliography: references
 
+.. Standard reST tables do not properly build and the first header column is lost.
+.. We therefore use raw LaTeX tables. However, booktabs is not automatically included
+.. unless rest2latex sees a table so we have to add it here manually.
+.. latex::
+   :usepackage: booktabs
+	       
+
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
@@ -65,20 +72,16 @@ We implemented a simple split-apply-combine parallelization algorithm :cite:`Wic
 .. raw:: latex
 
    \begin{table}
-   \begin{tabular}{||c | c | c ||}
-    \hline
+   \begin{tabular}{c c c}
+    \toprule
     \textbf{name} & \textbf{format} & \textbf{file size (GB)} \\ [0.5ex]
-    \hline\hline
+    \midrule
     H5MD-default     & H5MD       & 113    \\
-    \hline
     H5MD-chunked     & H5MD       & 113    \\
-    \hline
     H5MD-contiguous  & H5MD       & 113    \\
-    \hline
     H5MD-gzipx1      & H5MD       & 77     \\
-    \hline
-    H5MD-gzipx9      & H5MD       & 75     \\ [0.75ex]
-    \hline
+    H5MD-gzipx9      & H5MD       & 75     \\
+    \bottomrule
    \end{tabular}
    \caption{Data files benchmarked on all three HPCS. \textbf{name} is the name that is used to identify the file in this paper. \textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes. \textbf{H5MD-default} original data file written with pyh5md which uses the auto-chunking algorithm in ``h5py``. \textbf{H5MD-chunked} is the same file but written with chunk size (1, n atoms, 3) and \textbf{H5MD-contiguous} is the same file but written with no HDF5 chunking. \textbf{H5MD-gzipx1} and \textbf{H5MD-gzipx9} have the same chunk arrangement as \textbf{H5MD-chunked} but are written with gzip compression where 1 is the lowest level of compression and 9 is the highest level.}
    \DUrole{label}{tab:files}
