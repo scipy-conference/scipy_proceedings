@@ -215,26 +215,31 @@ Action recognition from IR images
 +++++++++++++++++++++++++++++++++
 .. PM part
 
-This is a small tutorial for detecting the skeleton of a person
-from an infrared image. In our setup we used one of the Analog Devices
+This is a small tutorial for detecting the skeleton, or rather 
+an approximation of the joints of a person, from an infrared image. 
+In our setup we used one of the Analog Devices
 Time-of-Flight cameras, which provided us the infrared image, and an
-NVIDIA Jetson Xavier NX module.
+NVIDIA Jetson Xavier NX board, which is a compact system-on-module (SOM),
+very well suited for model inference.
 
 As a baseline architecture model, we used the pretrained model from one
 of the NVIDIA-AI-IOT's repositories: https://github.com/NVIDIA-AI-IOT/trt_pose .
-We used the TensorRT SDK for achieving a better performance in our model inference
-pipeline.
+We used the TensorRT SDK in order to optimize our pretrained 
+model for th Jetson Xavier NX plotform, thus achieving 
+a better performance in our model inference pipeline.
 
-We also used, some of the Robot Operating System's tools for retrieving
+We also used, some of the Robot Operating System's (ROS) tools for retrieving
 the camera infrared images and by using the rospy client library API
-we managed to transfer our infrared images to the network model. While this
-would have been an easy step using the CvBridge, which provides an interface
+we managed to transfer our infrared images to the network's model. While this
+would have been an easy step using the CvBridge library, which provides an interface
 between ROS and OpenCV, this time wasn't the case, as we had some issues with
 this library. Because we are working on Jetson Xavier NX board, which comes with
 the latest OpenCV version, and CvBridge uses at its core an older version of
-OpenCV, we replaced the conversion from image message type to OpenCV image array
-made by CvBridge with a very useful numpy functionality which allowed us to make 
-make this conversion flawlessly. So, we replaced:
+OpenCv, we replaced the conversion from sensor_msgs/Image message type to the 
+OpenCv image array made by CvBridge with a very useful numpy functionality 
+which allowed us to make this conversion flawlessly, still achieving the same functionality
+and performance, in fact, being only a slight alteration of the underlying python
+implementation of the CvBridge package. So, we replaced:
 
 .. code-block:: python
 
@@ -270,16 +275,25 @@ After this step we supply the model input with this preprocessed image, and
 we obtained the results which can be seen in the Figure :ref:`skeleton`.
 
 
-Further more, we managed to extend the infrared people detection application
+Furthermore, as a side quest, because we tested the TensorRT SDK and we saw some 
+good results in our model's inference, we decided
+to extend the infrared people detection application
 by integrating it with NVIDIA's Deepstream SDK. While this SDK
-makes further improvements with regards to the model inference performance,
-one of the base application which the Deepstream SDk supports is the fact
-that is able to provide communication with a server and transmit the output of 
-the neural network model for further data processing. This can be very useful 
-in applications where we want to gather some sort of statistics or when our application
-has to make some decisions based on the output of our trained model, but we don't want 
-to affect the Jetson's inference performance. In the Figure :ref:`deepstream`, can be 
-seen the people detection made by using the Deepstream SDK, and below is the network'S
+brings further optimization to our model's inference performance and optimize 
+the image flow along the inference pipeline by transfering the image on GPU
+for any kind of preprocessing required before it enters the model and even 
+allowing us to serve multipple images, from multipple cameras, without a very 
+drastic change in the model's inference speed. Even though these functionalities
+are important, we were intersted by another functionality which the Deepstream SDk 
+supports, this being the fact that is able to provide communication with a server 
+and transmit the output of the neural network's model, which runs on the Jetson platform,
+to the server, for further data processing. 
+This can be very useful in applications where we want to gather some sort of 
+statistics or when our application has to make some decisions based on the 
+output of our trained model, but we don't want to affect the 
+Jetson's inference performance by overwhelming it with other processes. 
+In the Figure :ref:`deepstream`, can be seen the result of the people 
+detection algorithm made by using the Deepstream SDK, and below is the network's
 output received on our custom configured server when a person is detected:
 
 .. code-block:: json
