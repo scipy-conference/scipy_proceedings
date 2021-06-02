@@ -16,7 +16,7 @@
 .. unless rest2latex sees a table so we have to add it here manually.
 .. latex::
    :usepackage: booktabs
-	       
+
 
 .. definitions (like \newcommand)
 
@@ -82,17 +82,58 @@ We tested the effects of HDF5 file chunking and file compression on I/O performa
 Methods
 =======
 
-We implemented a simple split-apply-combine parallelization algorithm :cite:`Wickham:2011, Fan:2019, Khoshlessan:2020` that divides the number of frames in the trajectory evenly among all available processes.
-Each process receives a unique start and stop for which to iterate through their section of the trajectory.
-As the computational task,  the root mean square distance (RMSD) of the protein |Calpha| atoms after optimal structural superposition :cite:`Mura:2014` is computed at each frame with the QCProt algorithm :cite:`Theobald:2005vn`, as described in our previous work :cite:`Fan:2019, Khoshlessan:2020`.
+HPC environments
+----------------
+We tested the parallel MPI I/O capabilities of our H5MD implementation on three supercomputing environments: ASU Agave, PSC Bridges, and SDSC Comet.
+The Agave_ supercomputer offers 498 compute nodes.
+We utilized the Parallel Compute Nodes that offer 2 Intel Xeon E5-2680 v4 CPUs (2.40GHz, 14 cores/CPU, 28 cores/node, 128GB RAM/node) with a 1.2PB scratch BeeGFS_ file system that uses an Intel OmniPath interconnect system.
+The Bridges_ supercomputer offers over 850 compute nodes that supply 1.3018 Pf/s and 274 TiB RAM.
+We utilized the Regular Shared Memory Nodes that offer 2 Intel Haswell E5-2695 v3 CPUs (2.3-3.3GHz, 14 cores/CPU, 28 cores/node, 128GB RAM/node) with a 10PB scratch Lustre_ parallel file system that uses an InfiniBand interconnect system.
+The Comet_ supercomputer offers 2 Pf/s with 1944 standard compute nodes.
+We utilized the Intel Haswell Standard Compute Nodes that offer 2 Intel Xeon E5-2680 v3 CPUs (2.5GHz, 12 cores/CPU, 24 cores/node, 128GB RAM/node) with a 13PB scratch Lustre_ parallel file system that also uses an InfiniBand interconnect system.
 
-The data files used in our benchmark consist of a topology file ``YiiP_system.pdb`` with 111,815 atoms and a trajectory file ``YiiP_system_9ns_center100x.h5md`` with 90100 frames.
-The trajectory data file was generated with MDAnalysis with different HDF5 chunking arrangements and compression settings from the XTC file ``YiiP_system_9ns_center.xtc`` :cite:`Fan:2019`, using the "ChainReader" facility in MDAnalysis with the list ``100 * ["YiiP_system_9ns_center.xtc"]`` as input. 
-Table :ref:`tab:files` gives all of the H5MD files benchmarked with how they are identified in this paper as well as their corresponding file size.
+Our software library stacks were built with conda environments.
+Table :ref:`tab:hpcs` gives the versions of each library involed in the stack.
+We used an Intel c-compiler on Comet for MPI parallel jobs as recommended by the Comet user guide.
+In general, our stacks were built in the following manner:
+
+- module load anaconda3
+- create new conda environment
+- module load parallel hdf5 build
+- module load openMPI implementation
+- install mpi4py with ``env MPICC=/path/to/mpicc pip install mpi4py``
+- install h5py with ``CC="mpicc" HDF5_MPI="ON" HDF5_DIR=/path/to/parallel-hdf5 pip install --no-binary=h5py h5py``
+- install development MDAnalysis as outlined in the `MDAnalysis User Guide`_
 
 .. raw:: latex
 
    \begin{table}
+   \begin centering
+   \begin{tabular}{c c c c c c c c}
+    \toprule
+    \textbf{System} & \textbf{Python} & \textbf{c compiler} & \textbf{HDF5} & \text{openMPI} & \textbf{h5py} & \textbf{mpi4py} & \textbf{MDAnalysis} \\ [0.5ex]
+    \midrule
+    ASU Agave     & 3.8.5   & gcc 4.8.5    & 1.10.1   & openMPI 3.0.0   & 2.9.0   & 3.0.3   & 2.0.0-dev0    \\
+    PSC Bridges   & 3.8.5   & gcc 4.8.5    & 1.10.2   & openMPI 3.0.0   & 3.1.0   & 3.0.3   & 2.0.0-dev0    \\
+    SDSC Comet    & 3.6.9   & icc 18.0.1   & 1.10.3   & openMPI 3.1.4   & 3.1.0   & 3.0.3   & 2.0.0-dev0    \\
+    \bottomrule
+   \end{tabular}
+   \caption{Libary versions installed for each HPC environment.}
+   \DUrole{label}{tab:hpcs}
+   \end{table}
+
+
+Benchmark Data Files
+--------------------
+The test data files used in our benchmark consist of a topology file ``YiiP_system.pdb`` with 111,815 atoms and a trajectory file ``YiiP_system_9ns_center100x.h5md`` with 90100 frames.
+The initial trajectory data file (H5MD-default in Table :ref:`tab:files`) was generated with py5hmd using the XTC file ``YiiP_system_9ns_center.xtc`` :cite:`Fan:2019`, using the "ChainReader" facility in MDAnalysis with the list ``100 * ["YiiP_system_9ns_center.xtc"]`` as input.
+The rest of the test files were copies of H5MD-default and were written on the fly with MDAnalysis with different HDF5 chunking arrangements and compression settings.
+Table :ref:`tab:files` gives all of the files benchmarked with how they are identified in this paper as well as their corresponding file size.
+
+.. raw:: latex
+
+   \begin{table}
+   \begin centering
    \begin{tabular}{c c c}
     \toprule
     \textbf{name} & \textbf{format} & \textbf{file size (GiB)} \\ [0.5ex]
@@ -102,11 +143,21 @@ Table :ref:`tab:files` gives all of the H5MD files benchmarked with how they are
     H5MD-contiguous  & H5MD       & 113    \\
     H5MD-gzipx1      & H5MD       & 77     \\
     H5MD-gzipx9      & H5MD       & 75     \\
+    DCD              & DCD        & 113    \\
+    XTC              & XTC        & 35     \\
+    TRR              & TRR        & 113    \\
     \bottomrule
    \end{tabular}
-   \caption{Data files benchmarked on all three HPCS. \textbf{name} is the name that is used to identify the file in this paper. \textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes. \textbf{H5MD-default} original data file written with pyh5md which uses the auto-chunking algorithm in ``h5py``. \textbf{H5MD-chunked} is the same file but written with chunk size (1, n atoms, 3) and \textbf{H5MD-contiguous} is the same file but written with no HDF5 chunking. \textbf{H5MD-gzipx1} and \textbf{H5MD-gzipx9} have the same chunk arrangement as \textbf{H5MD-chunked} but are written with gzip compression where 1 is the lowest level of compression and 9 is the highest level.}
+   \caption{Data files benchmarked on all three HPCS. \textbf{name} is the name that is used to identify the file in this paper.\textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes. \textbf{H5MD-default} original data file written with pyh5md which uses the auto-chunking algorithm in ``h5py``. \textbf{H5MD-chunked} is the same file but written with chunk size (1, n atoms, 3) and \textbf{H5MD-contiguous} is the same file but written with no HDF5 chunking. \textbf{H5MD-gzipx1} and \textbf{H5MD-gzipx9} have the same chunk arrangement as \textbf{H5MD-chunked} but are written with gzip compression where 1 is the lowest level of compression and 9 is the highest level. \textbf{DCD}, \textbf{XTC}, and \textbf{TRR} are copies \textbf{H5MD-contiguous} written on the fly with MDAnalysis.}
    \DUrole{label}{tab:files}
    \end{table}
+
+
+Parallel Algorithm Benchmark
+----------------------------
+We implemented a simple split-apply-combine parallelization algorithm :cite:`Wickham:2011, Fan:2019, Khoshlessan:2020` that divides the number of frames in the trajectory evenly among all available processes.
+Each process receives a unique ``start`` and ``stop`` for which to iterate through their section of the trajectory.
+As the computational task, the root mean square distance (RMSD) of the protein |Calpha| atoms after optimal structural superposition :cite:`Mura:2014` is computed at each frame with the QCProt algorithm :cite:`Theobald:2005vn`, as described in our previous work :cite:`Fan:2019, Khoshlessan:2020`.
 
 In order to obtain detailed timing information we instrumented code as follows:
 
@@ -124,7 +175,8 @@ In order to obtain detailed timing information we instrumented code as follows:
            # always propagate exceptions forward
            return False
 
-The ``timeit`` class was used as a context manager to record how long our benchmark spent on particular lines of code. Below, we give example code of how each benchmark was performed:
+The ``timeit`` class was used as a context manager to record how long our benchmark spent on particular lines of code.
+Below, we give example code of how each benchmark was performed:
 
 .. code-block:: python
    :linenos:
@@ -146,18 +198,34 @@ The ``timeit`` class was used as a context manager to record how long our benchm
        CA = u.select_atoms("protein and name CA")
        x_ref = CA.positions.copy()
 
-       total_io = 0
-       total_rmsd = 0
+       slices = make_balanced_slices(n_frames,
+                                     size,
+                                     start=0,
+                                     stop=n_frames,
+                                     step=1)
+
+       # give each rank unique start and stop points
+       start = slices[rank].start
+       stop = slices[rank].stop
+       bsize = stop - start
+       # sendcounts is used for Gatherv() to know
+       # how many elements are sent
+       # from each rank
+       sendcounts = np.array([
+           slices[i].stop - slices[i].start for i in range(size)])
+
+       t_io = 0
+       t_rmsd = 0
        rmsd_array = np.empty(bsize, dtype=float)
        for i, frame in enumerate(range(start, stop)):
            with timeit() as io:
                ts = u.trajectory[frame]
-           total_io += io.elapsed
+           t_io += io.elapsed
            with timeit() as rms:
                rmsd_array[i] = rmsd(CA.positions,
                                     x_ref,
                                     superposition=True)
-           total_rmsd += rms.elapsed
+           t_rmsd += rms.elapsed
 
        with timeit() as wait_time:
            comm.Barrier()
@@ -174,9 +242,26 @@ The ``timeit`` class was used as a context manager to record how long our benchm
                         root=0)
        t_comm_gather = comm_gather.elapsed
 
-The time |tinit_top| records the time it takes to load a ``universe`` from the topology file. |tinit_traj| records the time it takes to open the trajectory file. The HDF5 file is opened with the ``mpio`` driver and the ``MPI.COMM_WORLD`` communicator to ensure the file is accessed in parallel via MPI I/O. It's important to separate the topology and trajectory initialization times, as the topology file is not opened in parallel and represents a fixed cost each process must pay to open the file.  |tIO| represents the time it takes to read the data for each frame into the corresponding ``MDAnalysis.Universe.trajectory.ts`` attribute. MDAnalysis reads data from MD trajectory files one frame, or "snapshot" at a time. Each time the ``u.trajectory[frame]`` is iterated through, MDAnalysis reads the file and fills in numpy arrays :cite:`Harris:2020` corresponding to that timestep. Each MPI process runs an identical copy of the script, but receives a unique ``start`` and ``stop`` variable such that the entire file is read in parallel. |tcomp| gives the total RMSD computation time. |twait| records how long each process waits before the results are gathered with ``comm.Gather()``. Gathering the results is done collectively by MPI, which means all processes must finish their iteration blocks before the results can be returned. Therefore, it's important to measure |twait| as it represents the existence of "straggling" processes. If one process takes substantially longer than the others to finish its iteration block, all processes are slowed down. |tcomm| measures the time MPI spends communicating the results from each process back to the root process.
+The time |tinit_top| records the time it takes to load a ``universe`` from the topology file.
+|tinit_traj| records the time it takes to open the trajectory file.
+The HDF5 file is opened with the ``mpio`` driver and the ``MPI.COMM_WORLD`` communicator to ensure the file is accessed in parallel via MPI I/O.
+It's important to separate the topology and trajectory initialization times, as the topology file is not opened in parallel and represents a fixed cost each process must pay to open the file.
+|tIO| represents the time it takes to read the data for each frame into the corresponding ``MDAnalysis.Universe.trajectory.ts`` attribute.
+MDAnalysis reads data from MD trajectory files one frame, or "snapshot" at a time.
+Each time the ``u.trajectory[frame]`` is iterated through, MDAnalysis reads the file and fills in numpy arrays :cite:`Harris:2020` corresponding to that timestep.
+Each MPI process runs an identical copy of the script, but receives a unique ``start`` and ``stop`` variable such that the entire file is read in parallel.
+|tcomp| gives the total RMSD computation time.
+|twait| records how long each process waits before the results are gathered with ``comm.Gather()``.
+Gathering the results is done collectively by MPI, which means all processes must finish their iteration blocks before the results can be returned.
+Therefore, it's important to measure |twait| as it represents the existence of "straggling" processes.
+If one process takes substantially longer than the others to finish its iteration block, all processes are slowed down.
+|tcomm| measures the time MPI spends communicating the results from each process back to the root process.
 
-We applied this benchmark scheme to H5MD test files on Agave, Bridges, and Comet. We also tested three algorithmic optimizations: Lustre file striping, loading the entire trajectory into memory, and using masked arrays in numpy to only load the |Calpha| coordinates required for the RMSD calculation. For striping, we ran the benchmark on Bridges and Comet with a file stripe count of 48 and 96. For the into memory optimization, we used ``MDAnalysis.Universe.transfer_to_memory()`` to read the entire file in one go and pass all file I/O to the HDF5 library. For the masked array optimization, we allowed ``u.load_new()`` to take a list or array of atom indices as an argument, ``sub``, so that the ``MDAnalysis.Universe.trajectory.ts`` arrays are instead initialized as ``numpy.ma.masked_array`` instances and only the indices corresponding to ``sub`` are read from the file.
+We applied this benchmark scheme to H5MD test files on Agave, Bridges, and Comet.
+We also tested three algorithmic optimizations: Lustre file striping, loading the entire trajectory into memory, and using masked arrays in numpy to only load the |Calpha| coordinates required for the RMSD calculation.
+For striping, we ran the benchmark on Bridges and Comet with a file stripe count of 48 and 96.
+For the into memory optimization, we used ``MDAnalysis.Universe.transfer_to_memory()`` to read the entire file in one go and pass all file I/O to the HDF5 library.
+For the masked array optimization, we allowed ``u.load_new()`` to take a list or array of atom indices as an argument, ``sub``, so that the ``MDAnalysis.Universe.trajectory.ts`` arrays are instead initialized as ``numpy.ma.masked_array`` instances and only the indices corresponding to ``sub`` are read from the file.
 
 Performance was quantified by measuring the I/O timing returned from the benchmarks, and strong scaling was assessed by calculating the speedup :math:`S(N) = t_{1}/t_{N}` and the efficiency :math:`E(N) = S(N)/N`.
 
@@ -281,10 +366,14 @@ References
 ----------
 
 .. links
-.. -----   
-.. _MDAnalysis: https://www.mdanalysis.org   
+.. -----
+.. _MDAnalysis: https://www.mdanalysis.org
+.. _MDAnalysis User Guide: https://userguide.mdanalysis.org/stable/contributing_code.html
 .. _H5MD: http://nongnu.org/h5md/
 .. _HDF5: https://www.hdfgroup.org/solutions/hdf5
+.. _Agave: https://cores.research.asu.edu/research-computing/user-guide
+.. _Bridges: https://portal.xsede.org/psc-bridges
+.. _Comet: https://www.sdsc.edu/support/user_guides/comet.html
 .. _Lustre: https://www.lustre.org/
 .. _BeeGFS: https://www.beegfs.io/
 .. _MPI: https://www.mpi-forum.org/
