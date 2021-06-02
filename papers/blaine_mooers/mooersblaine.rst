@@ -73,7 +73,7 @@ Methods
 -------
 
 To set support structural biology computations in Juptyer and Colab, we created snippet libraries for each structural biology package.
-Because a user would likely be insterested in only a subset of the libraries, we created a github site for each library (Table :ref:`libraries`).
+A beginner is unlikely to be interested cctbx and a cryo-EM users will have no use for xds, so we modularized the libraries and created a github site for each library (Table :ref:`libraries`).
 This modularization of the project should ease the correction and augmentation of individual libraries.
 We decided to only support editing Juptyer notebooks in JupyterLab because support for the classic Jupyter Notebook will be phased out eventually.
 Among the several alternative extensions for code snippets in JupyterLab, we choose jupyterlab-snippets and Elyra because these two extensions are actively maintained and have different features.
@@ -152,6 +152,10 @@ Each library is also archived in zenodo.
    +--------------------+-----------------------------------------------------------+
    | library            | url on GitHub                                             |
    +====================+===========================================================+
+   | xds                | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
+   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
+   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   +--------------------+-----------------------------------------------------------+
    | cctbx              | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
    |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
    |                    | https://github.com/MooersLab/colab-cctbxsnips             |
