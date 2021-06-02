@@ -401,7 +401,7 @@ We repeated our benchmarks on Agave (at this point, Bridges had been decomission
 For the serial one process case, we found a similar result in that the I/O time was dramatically increased with an approximate 10x speedup for both the contiguous and chunked file, with respect to the baseline benchmark (Figure :ref:`fig:components-chunk` A).
 The rest of the timings remained unaffected (Figure :ref:`fig:components-chunk` B-F).
 Although the absolute total benchmark time is much improved (Figure :ref:`fig:scaling-chunk` A), the scaling remains challenging, with a maximum observed speedup of 12x for the contiguous file (Figure :ref:`fig:scaling-chunk` B).
-The :math:`N=112` H5MD-contiguous run's I/O time was 47s (Fig. :ref:`components-chunk` A).
+The :math:`N=112` H5MD-contiguous run's I/O time was 47s (Fig. :ref:`fig:components-chunk` A).
 When compared to the 4623s baseline serial time, this is a 98x speedup.
 Similarly, the H5MD-chunked 4 node run resulted in an I/O time of 83s, which is a 56x speedup when compared to baseline serial performance.
 Therefore, the boost in performance seen by loading the H5MD-default trajectory into memory rather than iterating frame by frame is indeed most likely due to the original file's chunk layout.
