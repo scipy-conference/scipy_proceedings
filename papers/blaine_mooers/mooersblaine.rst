@@ -95,17 +95,120 @@ The use of Colab requires that the user has a Google account and a Google Drive.
 Results
 -------
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah [Godd18]_.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah [Beg21]_.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah [Gros02]_.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah [Kluy16]_.
+
+Structure determination and refinement workflows with Phenix
+************************************************************
+
+The Phenix software is an advanced and sophisticated software project that was initially developed for the refinement of protein crystal structures determined from X-ray diffraction data.
+It has been under development for two decades by a team of professional software developers based at the Berkeley-Lawrence National Laboratory under the leadership of Paul Adams.
+The project also includes several collaborators located around the world who develop auxiliary components of the package.
+
+Paul Adams had spent the prior decade developing the XPLOR and then  the CNS packages at Yale University with Axel Brunger.
+Shortly after arriving in the Bay Area, he was influenced by Warren Delano (the developer of the PyMOL molecular graphics program which is written in C but wrapped with Python) to also use Python to wrap CCTBX, the Computational Crystallography Tool Box, while developing Phenix.
+CCTBX was originally written in Cpp but its components have been migrating to Python.
+While Python eases the use of CCTBX, the harnessing of CCTBX requires at least intermediate if not advanced Python programming skills.
+On the other hand, Phenix was designed to be user-friendly via initially command line usage and then via a user-friendly GUI.
+
+The Phenix project is popular because it greatly eased the incorporation of simulated annealing into crystal structure refinement by hiding from the user the tedious preparation of parameter files that previously had to be customized for each structure.
+These parameter files were required by the molecular dynamics software that carried out the simulated annealing.
+The preparation and debugging of the parameter files could take many hours.
+
+Simulated annealing involves doing molecular dynamics at high temperature to move parts of a molecular model out of local energy minima and into to conformations that fit the experimental data better.
+Twenty minutes of the application of simulated annealing to an early model that still has numerous errors can lead to significant improvement in the model while saving the user a day or more of tedious manual rebuilding of the molecular model. 
+
+The Phenix project is based on Python but the computationally intensive components are run in Cpp via the CCTBX package.
+Users can interact with Phenix via a GUI interface, the command line, the command line plus the Phil domain-specific language scripts, the Python interpreter, or some combination thereof.
+More recently, Phenix has been extended for refinement of crystal structures with neutron diffraction data and for structure determination and refinement with cryo electron microscopy data.
+ 
+The Phenix software runs on top of CCTBX and provides higher-level user access via a command-line scripting language, a Python API, and a GUI.
+The phenix.python interpreter still uses Python2 whereas CCTBX moved to Python3 several years ago.
+On the other hand, Jupyter Lab and its extensions are best run with Python3.
+The easiest workaround is to run Phenix by using the command line instead of Python.
+The commands prepended with the exclamation mark to invoke the shell.
+Of course, the equivalent CCTBX code for the phenix code could be run instead but this code can be many lines in length and it can be challenging for beginners to customize to a specific problem.
+The most efficient approach can be to use the phenix command line as much as possible and then resort to CCTBX when the need arises.
+
+For example, the command below invokes a statistical analysis of the B-factors in a pdb file, a common text file file format for storing atomic coordinates. 
+The pdb file has a fixed format that was defined and popularized by the Protein Data Bank (PDB), the central public repository for atomic coordinates and structural data. 
+The PDB is celebrating its 50 anniversary this year. 
+It has and continues to play an central role in promoting the principles of open science and reproducible research in structural biology.
+
+.. code-block:: bash
+
+    !phenix.b_factor_statistics 1lw9.pdb 
 
 
-The libraries include code templates for installing the supported software. 
-These templates speed up software installation, which is often a barrier for beginners.
+The output form this command is printed below the cell that invokes the command. 
+Some of the output is shown below.
+
+.. code-block:: bash
+    
+    Starting phenix.b_factor_statistics
+    on Wed Jun  2 04:49:01 2021 by blaine
+    
+    Processing files:
+    
+      Found model, /Users/blaine/pdbFiles/1lw9.pdb
+    
+    Processing PHIL parameters:
+    
+      No PHIL parameters found
+    
+    Final processed PHIL parameters:
+    
+      data_manager {
+        model {
+          file = "/Users/blaine/pdbFiles/1lw9.pdb"
+        }
+        default_model = "/Users/blaine/pdbFiles/1lw9.pdb"
+      }
+    
+    
+    Starting job
+    Validating inputs
+                    min    max   mean <Bi,j>   iso aniso
+       Overall:    6.04 100.00  24.07    N/A  1542     0
+       Protein:    6.04 100.00  23.12    N/A  1328     0
+       Water:      9.98  55.93  30.47    N/A   203     0
+       Other:     14.11  35.47  21.10    N/A    11     0
+       Chain  A:   6.04 100.00  24.07    N/A  1542     0
+       Histogram:
+           Values      Number of atoms
+         6.04 - 15.44       309
+        15.44 - 24.83       858
+        24.83 - 34.23       187
+        34.23 - 43.62        78
+        43.62 - 53.02        32
+        53.02 - 62.42        16
+        62.42 - 71.81         8
+        71.81 - 81.21         6
+        81.21 - 90.60         2
+        90.60 - 100.00       46
+    
+    Job complete
+    usr+sys time: 1.92 seconds
+    wall clock time: 2.93 seconds
+
+
+There are several dozen commands that can be run via the shell and return useful output that can be captured in one Jupyter Notebook rather than in dozens of log files.
+The output can be copied and pasted into a new cell and then reformatted in markdown as a table or the copied output be used as input data to make a plot with matplotlib.
+While these are basic data science tasks, they are intimidating to new users of Jupyter and some of the details are easy for more experienced users to forget.
+To overcome this problem, we supply snippets that demonstrate how to transform the output and that can be used as templates by the users.  
+
+These commands are becoming harder to find as the on-line documentation has been migrating to serving only the GUI interface.
+The bash script files that run the phenix commands can be found by running 
+
+.. code-block:: bash
+
+    !ls /Applications/phenix-*/build/bin/phenix.\*
+
+These shell scripts invoke Python scripts that capture the command line arguments and pass them to the phenix Python interpreter.
+
+
+.. code-block:: bash
+
+    ls /Applications/phenix-1.19.2-4158/modules/phenix/phenix/command_line/*.py.
+
 
 
 Libraries supported
@@ -117,11 +220,20 @@ Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Bla
 Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
 Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
 
+
+
+
+
+
+Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+
 .. figure:: figure1.png
 
-   This is another the caption. 
-
-
+   This is yet another the caption. 
 
 
 .. table:: Table of libraries. :label:`mtable`
@@ -151,19 +263,6 @@ Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Bla
    +--------------------+-----------------------------------+
    | Cement             | :math:`\alpha`                    |
    +--------------------+-----------------------------------+
-
-
-
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-
-.. figure:: figure1.png
-
-   This is yet another the caption. 
-
 
 
 
