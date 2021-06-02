@@ -57,7 +57,7 @@ The main motivation behind the project is to provide user friendly access to BMR
 
 One of the most common and widely used NMR experiment in protein NMR spectroscopy is the :math:`^{1}H-^{15}N` Heteronuclear Single Quantum Coherence( :math:`^{1}H-^{15}N` HSQC) :cite:`BODENHAUSEN1980185` experiment. This 2D NMR experiment gives cross peaks between nitrogen and hydrogen for each amino acid in the sequence, which strongly depends on its three dimensional structure. In spectroscopic perspective :math:`^{1}H-^{15}N` HSQC spectrum is considered as the signature of the protein. It helps to identify whether the protein sample is in good shape or aggregated and to detect the structural changes during ligand biding studies. PyBMRB library generates 2D chemical shift list by combining the relevant chemical shift values from the given one dimensional chemical shift list in NMR-STAR format.    
 
-The single-entry visualization method can be used, for example, to simulate :math:`^{1}H-^{15}N` HSQC peak positions from an NMR-STAR file (from one or more specified BMRB entries or from the user’s own data) (Figures :ref:`hsqc1` and :ref:`hsqc2`). It is much easier to detect the chemical shift changes by overlaying multiple :math:`^{1}H-^{15}N` HSQC  rather than by scanning lists of chemical shifts. The most useful feature is that the user may easily compare his NMR measurements with any of the similar protein in the database. The Figures :ref:`hsqc1` and :ref:`hsqc2` show the comparison of user data with two similar entries from BMRB database. This comparison can be done with the following code
+The single-entry visualization method can be used, for example, to simulate :math:`^{1}H-^{15}N` HSQC peak positions from an NMR-STAR file (from one or more specified BMRB entries or from the user’s own data) (Figures :ref:`hsqc1` and :ref:`hsqc2`). It is much easier to detect the chemical shift changes by overlaying multiple :math:`^{1}H-^{15}N` HSQC  rather than by scanning lists of chemical shifts. The most useful feature is that the user may easily compare his NMR measurements with any of the protein of interest in the BMRB database. The Figures :ref:`hsqc1` and :ref:`hsqc2` show the comparison of user data with two similar entries from BMRB database. This comparison can be done with the following code
 
 .. code-block:: python
 
@@ -77,14 +77,14 @@ The chemical shift changes can be traced for each residue by using ``groupbyres`
 
 .. figure:: figure2.png
    
-   Comparison of arsenate reductase data from user to other arsenate reductase entries in the BMRB  :label:`hsqc1`
+   Comparison of :math:`^{1}H-^{15}N` HSQC spectra of arsenate reductase data from user with arsenate reductase entries in the BMRB  :label:`hsqc1`
 
 .. figure:: figure3.png
   
-   Peaks are connected based on sequence number.  :label:`hsqc2`
+   The cross peaks in the :math:`^{1}H-^{15}N` HSQC spectra  are connected based on matching sequence order.  :label:`hsqc2`
 
 
-The visualization library supports chemical shift histograms (Figure :ref:`hist`) from selected atom types from proteins or nucleic acids, which are easily generated from a single command.
+BMRB is well known for its chemical shift statistics, which is widely used by NMR spectroscopists and NMR software developers in various different ways. The chemical shift histogram of a given atom type help us to understand how strongly it depends on the secondary structure elements like alpha helix and beta sheets.  These histograms can be easily generated using a simple code using PyBMRB library
 
 .. code-block:: python
 
@@ -96,8 +96,9 @@ The visualization library supports chemical shift histograms (Figure :ref:`hist`
    
    Chemical shift distribution of CB atoms in different amino acids.  :label:`hist`
 
+Figure :ref:`hist` shows the comparison of CB chemical shifts for the twenty standard amino acids. The chemical shift histogram of a single atom in a given amino acid or list of atoms from different amino acids can be easily generated using PyBMRB.
 
-PyBMRB provides options for filtering data, for example, according to chemical shift ambiguity code or cutoff values based on standard deviation to exclude outliers. Bond correlation experiments are very common in NMR spectroscopy, and this library can be used to visualize patterns of chemical shift correlations between specified atom types in NMR spectra of proteins or nucleic acids as 2D histograms (Figure :ref:`hist2d`).
+PyBMRB provides options for filtering data, for example, according to chemical shift ambiguity code or cutoff values based on standard deviation to exclude outliers. Bond correlation experiments are very common in NMR spectroscopy, and this library can be used to visualize patterns of chemical shift correlations between specified atom types in NMR spectra of proteins or nucleic acids as 2D histograms. For example the chemical shift correlation between Cystidin CB and N is shown in Figure :ref:`hist2d`.
 
 .. code-block:: python
 
@@ -108,7 +109,7 @@ PyBMRB provides options for filtering data, for example, according to chemical s
 
    Chemical shift correlation of CYS-CB and CYS-N :label:`hist2d`
 
-The conditional histogram is another useful feature, helpful during the resonance assignment process to estimate the prior probability for an assignment. If the chemical shift value of one or more atoms for a given amino acid in a protein sequence are know than one can generate the distribution of the chemical shifts of the other atoms in the amino acid using the known chemical shifts as a filter. For example if the chemical shift of CA of Cystidin is known, then the distribution of CB chemical shift at the BMRB data base can be calculated using the following code 
+The conditional histogram is another useful feature, helpful during the resonance assignment process to estimate the prior probability for an assignment. The process of labeling each cross peak in the multidimensional NMR spectra to the relevant atoms is the most important step in the structure determination process. If the chemical shift value of one or more atoms for a given amino acid in a protein sequence are know than one can generate the distribution of the chemical shifts of the other atoms in the amino acid using the known chemical shifts as a filter. For example if the chemical shift of CA of Cystidin is known, then the distribution of CB chemical shift at the BMRB database can be calculated using the following code 
 
 .. code-block:: python
 
@@ -121,11 +122,13 @@ The conditional histogram is another useful feature, helpful during the resonanc
    
    Conditional histogram of CYS-CB for  CYS-CA=64.5ppm :label:`cond-hist`
 
-The overall and the filtered histogram of CYS-CB is shown in Figure :ref:`cond-hist`
+The overall and the filtered distribution of CYS-CB is shown in Figure :ref:`cond-hist`. The overall bimodal distribution of Cystidin CB indicates that its chemical shifts are strongly depend on secondary structures and for the given value of CA (64.5 ppm) it falls into one of secondary structure element like alpha helix or beta sheet. 
 
-The visualizations generated from the PyBMRB  library is interactive and portable. They open in any modern web browser and can be zoomed in and out with the mouse. Mousing over regions of interest will reveal the underlying sources of displayed data. These visualizations work as a standalone web page, which can be shared via email or website. Since the visualization tools obtain data directly from the BMRB API each time they are generated, there is no need to download or parse the data, and all underlying data are fully up to date. High quality static images can be extracted from the interactive visualizations with a single click and saved or printed.
+The visualizations generated using PyBMRB library are interactive and portable. It can be opened in any modern web browser and  zoomed in and out using the mouse. The tool tip  will show the underlying sources of displayed data. These visualizations work as a standalone web page, which can be shared via email or website. Since the visualization tools obtain data directly from the BMRB API each time they are generated, there is no need to download or parse the data, and all underlying data are fully up to date. High quality static images can be extracted from the interactive visualizations with a single click and saved or printed.
 
-As a final note, the Jupyter Notebook :cite:`soton403913` is becoming more and more popular among scientists :cite:`perkel2018`. Jupyter is a free, open-source, interactive web tool, known as a computational notebook, that researchers can use to combine software code, computational output, explanatory text and multimedia resources into a single document.  PyBMRB can be used in a Jupyter Notebook environment, which enables one to design and document a BMRB data analysis workflow and share it with others. For testing purposes, BMRB provides easy access to the PyBMRB library in a Jupyter Notebook environment from its homepage (http://www.bmrb.io/). This live BMRB Jupyter Notebook was created by using a third party software tool called Binder :cite:`project_jupyter-proc-scipy-2018`, which puts PyBMRB and Jupyter Notebook together in a docker container. Examples of BMRB Jupyter Notebooks with access to PyBMRB are available for trial without any needed installation at (https://github.com/uwbmrb/PyBMRB/blob/master/jupyter.md).
+As a final note, the Jupyter Notebook :cite:`soton403913` is becoming more and more popular among scientists :cite:`perkel2018`. Jupyter is a free, open-source, interactive web tool, known as a computational notebook, that researchers can use to combine software code, computational output, explanatory text and multimedia resources into a single document.  PyBMRB can be used in a Jupyter Notebook environment, which enables one to design and document a BMRB data analysis workflow and share it with others. For testing purposes, BMRB provides easy access to the PyBMRB library in a Jupyter Notebook environment from its homepage (http://www.bmrb.io/). This live BMRB Jupyter Notebook was created by using a third party software tool called Binder :cite:`project_jupyter-proc-scipy-2018`, which puts PyBMRB and Jupyter Notebook together in a docker container. Examples of BMRB Jupyter Notebooks with access to PyBMRB are available for trial without any needed installation at https://github.com/uwbmrb/PyBMRB/blob/master/jupyter.md.
+
+BMRB is constantly working on to improve PyBMRB visualization tool. The next update aimed to include simulation of more NMR experiment types and visualization options for other data contents like  distance and dihedral-angle restraints present in the BMRB database. BMRB is supported by grant R01GM109046 from NIH/NIGMS. 
 
 
 
