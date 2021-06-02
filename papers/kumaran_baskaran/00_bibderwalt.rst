@@ -121,7 +121,7 @@ The conditional histogram is another useful feature, helpful during the resonanc
    
    Conditional histogram of CYS-CB for  CYS-CA=64.5ppm :label:`cond-hist`
 
-The overall and the filtered histogram of CYS-CB is showing in Figure :ref:`cond-hist`
+The overall and the filtered histogram of CYS-CB is shown in Figure :ref:`cond-hist`
 
 The visualizations generated from the PyBMRB  library is interactive and portable. They open in any modern web browser and can be zoomed in and out with the mouse. Mousing over regions of interest will reveal the underlying sources of displayed data. These visualizations work as a standalone web page, which can be shared via email or website. Since the visualization tools obtain data directly from the BMRB API each time they are generated, there is no need to download or parse the data, and all underlying data are fully up to date. High quality static images can be extracted from the interactive visualizations with a single click and saved or printed.
 
