@@ -108,7 +108,7 @@ PyBMRB provides options for filtering data, for example, according to chemical s
 
    Chemical shift correlation of CYS-CB and CYS-N :label:`hist2d`
 
-The conditional histogram is another useful feature, helpful during the resonance assignment process to estimate the prior probability for an assignment. If the chemical shift value of one or more atoms for a given amino acid in a protein sequence are know then one can generate the distribution of the chemical shifts of the other atoms in the amino acid using the known chemical shifts as a filter. For example if the chemical shift of CA of Cystidin is known, then the distribution of CB chemical shift at the BMRB data base can be calculated using the following code 
+The conditional histogram is another useful feature, helpful during the resonance assignment process to estimate the prior probability for an assignment. If the chemical shift value of one or more atoms for a given amino acid in a protein sequence are know than one can generate the distribution of the chemical shifts of the other atoms in the amino acid using the known chemical shifts as a filter. For example if the chemical shift of CA of Cystidin is known, then the distribution of CB chemical shift at the BMRB data base can be calculated using the following code 
 
 .. code-block:: python
 
