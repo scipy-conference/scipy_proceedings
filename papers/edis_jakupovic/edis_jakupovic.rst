@@ -298,7 +298,7 @@ The H5MD file involved in the benchmarks was written with ``pyh5md``, a python l
 The datasets in the data file were chunked automatically by the auto-chunking algorithm in ``h5py``.
 File I/O remains the largest contributor to the total benchmark time, as shown by Figure :ref:`fig:components-vanilla` (A). Figure :ref:`fig:components-vanilla` (B, D-F) also show that the initialization, computation, and MPI communication times are negligible with regards to the overall analysis time.
 |twait|, however, becomes increasingly relevant as the number of processes increases (Figure :ref:`fig:components-vanilla` C), indicating a growing variance in the iteration block time across all processes.
-In effect, |twait| is measuring the occurance of "straggling" processes, which has been previously observered to be an issue on busy, multi-user HPC environments :cite:`Khoshlessan:2017, Khoshlessan:2020`.
+In effect, |twait| is measuring the occurance of "straggling" processes, which has been previously observered to be an issue on busy, multi-user HPC environments :cite:`Khoshlessan:2020`.
 Although the total benchmark time continues to decrease as the number of processes increases to over 100 (from 4648 |pm| 319 seconds at :math:`N=1` to 315.6 |pm| 59.8 seconds at :math:`N=112` on Agave), the maximum total I/O speedup observed is only 15x and efficiencies at around 0.2 (Fig. :ref:`fig:scaling-vanilla` A-C).
 The RMSD computation scaling, on the other hand, remains high, with nearly ideal scaling on Bridges and Comet, with Agave trailing behind at 71x speedup at 122 cores.
 Therefore, for a computationally bound analysis task, our parallel H5MD implementation will likely scale well.
