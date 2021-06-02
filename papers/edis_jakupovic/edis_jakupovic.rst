@@ -109,15 +109,17 @@ We utilized the Regular Shared Memory Nodes that offer 2 Intel Haswell E5-2695 v
 The Comet_ supercomputer offers 2 Pf/s with 1944 standard compute nodes.
 We utilized the Intel Haswell Standard Compute Nodes that offer 2 Intel Xeon E5-2680 v3 CPUs (2.5GHz, 12 cores/CPU, 24 cores/node, 128GB RAM/node) with a 13PB scratch Lustre_ parallel file system that also uses an InfiniBand interconnect system.
 
-Our software library stacks were built with conda environments.
+Our software library stacks were built with conda_ environments.
 Table :ref:`tab:hpcs` gives the versions of each library involed in the stack.
-We used an Intel c-compiler on Comet for MPI parallel jobs as recommended by the Comet user guide.
-In general, our stacks were built in the following manner:
+We used GNU C compilers on Agave and Bridges and the Intel C-compiler on Comet for MPI parallel jobs as recommended by the Comet user guide.
+We used OpenMPI_ as the MPI implementation on all HPC resources as this was generally the recommended environment and in the past we found it also the easiest to build against :cite:`Khoshlessan:2020`.
+The mpi4py_ :cite:`Dalcin:2011` package was used to make MPI available in Python code, as required by ``h5py``.
+In general, our software stacks were built in the following manner:
 
 - module load anaconda3
 - create new conda environment
 - module load parallel hdf5 build
-- module load openMPI implementation
+- module load OpenMPI implementation
 - install mpi4py with ``env MPICC=/path/to/mpicc pip install mpi4py``
 - install h5py with ``CC="mpicc" HDF5_MPI="ON" HDF5_DIR=/path/to/parallel-hdf5 pip install --no-binary=h5py h5py``
 - install development MDAnalysis as outlined in the `MDAnalysis User Guide`_
@@ -128,11 +130,11 @@ In general, our stacks were built in the following manner:
    \centering
    \begin{tabular}{c c c c c c c c}
     \toprule
-    \textbf{System} & \textbf{Python} & \textbf{c compiler} & \textbf{HDF5} & \textbf{openMPI} & \textbf{h5py} & \textbf{mpi4py} & \textbf{MDAnalysis} \\ [0.5ex]
+    \textbf{System} & \textbf{Python} & \textbf{C compiler} & \textbf{HDF5} & \textbf{OpenMPI} & \textbf{h5py} & \textbf{mpi4py} & \textbf{MDAnalysis} \\ [0.5ex]
     \midrule
-    ASU Agave     & 3.8.5   & gcc 4.8.5    & 1.10.1   & openMPI 3.0.0   & 2.9.0   & 3.0.3   & 2.0.0-dev0    \\
-    PSC Bridges   & 3.8.5   & gcc 4.8.5    & 1.10.2   & openMPI 3.0.0   & 3.1.0   & 3.0.3   & 2.0.0-dev0    \\
-    SDSC Comet    & 3.6.9   & icc 18.0.1   & 1.10.3   & openMPI 3.1.4   & 3.1.0   & 3.0.3   & 2.0.0-dev0    \\
+    ASU Agave     & 3.8.5   & gcc 4.8.5    & 1.10.1   & OpenMPI 3.0.0   & 2.9.0   & 3.0.3   & 2.0.0-dev0    \\
+    PSC Bridges   & 3.8.5   & gcc 4.8.5    & 1.10.2   & OpenMPI 3.0.0   & 3.1.0   & 3.0.3   & 2.0.0-dev0    \\
+    SDSC Comet    & 3.6.9   & icc 18.0.1   & 1.10.3   & OpenMPI 3.1.4   & 3.1.0   & 3.0.3   & 2.0.0-dev0    \\
     \bottomrule
    \end{tabular}
    \caption{Libary versions installed for each HPC environment.}
@@ -486,3 +488,6 @@ References
 .. _MPI: https://www.mpi-forum.org/
 .. _h5py: https://www.h5py.org/
 .. _pyh5md: https://github.com/pdebuyl/pyh5md
+.. _conda: https://conda.io/
+.. _OpenMPI: https://www.open-mpi.org/
+.. _mpi4py: https://github.com/mpi4py/mpi4py
