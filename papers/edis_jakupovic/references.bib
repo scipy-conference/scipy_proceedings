@@ -1,106 +1,106 @@
 
 @article{michaud-agrawal_mdanalysis_2011,
-	title = {{MDAnalysis}: A Toolkit for the Analysis of Molecular Dynamics Simulations},
+	title = {{MDAnalysis}: {A} {Toolkit} for the {Analysis} of {Molecular} {Dynamics} {Simulations}},
 	volume = {32},
 	doi = {10.1002/jcc.21787},
-	abstract = {{MDAnalysis} is an object-oriented library for structural and temporal analysis of molecular dynamics ({MD}) simulation trajectories and individual protein structures. It is written in the Python language with some performance-critical code in C. It uses the powerful {NumPy} package to expose trajectory data as fast and efficient {NumPy} arrays. It has been tested on systems of millions of particles. Many common file formats of simulation packages including {CHARMM}, Gromacs, and {NAMD} and the Protein Data Bank format can be read and written. Atoms can be selected with a syntax similar to {CHARMM}'s powerful selection commands. {MDAnalysis} enables both novice and experienced programmers to rapidly write their own analytical tools and access data stored in trajectories in an easily accessible manner that facilitates interactive explorative analysis. {MDAnalysis} has been tested on and works for most Unix-based platforms such as Linux and Mac {OS} X. It is freely available under the {GNU} Public License from http://mdanalysis.googlecode.com.},
-	pages = {2319--2327},
-	journaltitle = {J Comp Chem},
+	abstract = {MDAnalysis is an object-oriented library for structural and temporal analysis of molecular dynamics (MD) simulation trajectories and individual protein structures. It is written in the Python language with some performance-critical code in C. It uses the powerful NumPy package to expose trajectory data as fast and efficient NumPy arrays. It has been tested on systems of millions of particles. Many common file formats of simulation packages including CHARMM, Gromacs, and NAMD and the Protein Data Bank format can be read and written. Atoms can be selected with a syntax similar to CHARMM's powerful selection commands. MDAnalysis enables both novice and experienced programmers to rapidly write their own analytical tools and access data stored in trajectories in an easily accessible manner that facilitates interactive explorative analysis. MDAnalysis has been tested on and works for most Unix-based platforms such as Linux and Mac OS X. It is freely available under the GNU Public License from http://mdanalysis.googlecode.com.},
+	journal = {J Comp Chem},
 	author = {Michaud-Agrawal, Naveen and Denning, Elizabeth Jane and Woolf, Thomas B. and Beckstein, Oliver},
-	date = {2011},
-	keywords = {{MDAnalysis}, molecular dynamics ({MD}) simulation, Python}
+	year = {2011},
+	keywords = {MDAnalysis, molecular dynamics (MD) simulation, Python},
+	pages = {2319--2327}
 }
 
 @inproceedings{gowers_mdanalysis_2016,
-	location = {Austin, {TX}},
-	title = {{MDAnalysis}: A Python package for the Rapid Analysis of Molecular Dynamics Simulations},
+	address = {Austin, TX},
+	title = {{MDAnalysis}: {A} {Python} package for the {Rapid} {Analysis} of {Molecular} {Dynamics} {Simulations}},
 	url = {https://www.mdanalysis.org},
 	doi = {10.25080/Majora-629e541a-00e},
-	abstract = {{MDAnalysis} (http://mdanalysis.org) is a library for structural and temporal analysis of molecular dynamics ({MD}) simulation trajectories and individual protein structures. {MD} simulations of biological molecules have become an important tool to elucidate the relationship between molecular structure and physiological function. Simulations are performed with highly optimized software packages on {HPC} resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed. {MDAnalysis} addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user. It thus enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities. The user interface and modular design work equally well in complex scripted work flows, as foundations for other packages, and for interactive and rapid prototyping work in {IPython} / Jupyter notebooks, especially together with molecular visualization provided by nglview and time series analysis with pandas. {MDAnalysis} is written in Python and Cython and uses {NumPy} arrays for easy interoperability with the wider scientific Python ecosystem. It is widely used and forms the foundation for more specialized biomolecular simulation tools. {MDAnalysis} is available under the {GNU} General Public License v2.},
-	pages = {98--105},
-	booktitle = {Proceedings of the 15th Python in Science Conference},
-	publisher = {{SciPy}},
+	abstract = {MDAnalysis (http://mdanalysis.org) is a library for structural and temporal analysis of molecular dynamics (MD) simulation trajectories and individual protein structures. MD simulations of biological molecules have become an important tool to elucidate the relationship between molecular structure and physiological function. Simulations are performed with highly optimized software packages on HPC resources but most codes generate output trajectories in their own formats so that the development of new trajectory analysis algorithms is confined to specific user communities and widespread adoption and further development is delayed. MDAnalysis addresses this problem by abstracting access to the raw simulation data and presenting a uniform object-oriented Python interface to the user. It thus enables users to rapidly write code that is portable and immediately usable in virtually all biomolecular simulation communities. The user interface and modular design work equally well in complex scripted work flows, as foundations for other packages, and for interactive and rapid prototyping work in IPython / Jupyter notebooks, especially together with molecular visualization provided by nglview and time series analysis with pandas. MDAnalysis is written in Python and Cython and uses NumPy arrays for easy interoperability with the wider scientific Python ecosystem. It is widely used and forms the foundation for more specialized biomolecular simulation tools. MDAnalysis is available under the GNU General Public License v2.},
+	booktitle = {Proceedings of the 15th {Python} in {Science} {Conference}},
+	publisher = {SciPy},
 	author = {Gowers, Richard J. and Linke, Max and Barnoud, Jonathan and Reddy, Tyler J. E. and Melo, Manuel N. and Seyler, Sean L. and Dotson, David L and Domański, Jan and Buchoux, Sébastien and Kenney, Ian M. and Beckstein, Oliver},
 	editor = {Benthall, Sebastian and Rostrup, Scott},
-	date = {2016},
-	keywords = {{MDAnalysis}, Python, {SPIDAL}}
+	year = {2016},
+	keywords = {MDAnalysis, Python, SPIDAL},
+	pages = {98--105}
 }
 
 @inproceedings{fan_pmda_2019,
-	location = {Austin, {TX}},
-	title = {{PMDA} - Parallel Molecular Dynamics Analysis},
+	address = {Austin, TX},
+	title = {{PMDA} - {Parallel} {Molecular} {Dynamics} {Analysis}},
 	doi = {10.25080/Majora-7ddc1dd1-013},
-	abstract = {{MDAnalysis} is an object-oriented Python library to analyze trajectories from molecular dynamics ({MD}) simulations in many popular formats. With the development of highly optimized {MD} software packages on high performance computing ({HPC}) resources, the size of simulation trajectories is growing up to many terabytes in size. However efficient usage of multicore architecture is a challenge for {MDAnalysis}, which does not yet provide a standard interface for parallel analysis. To address the challenge, we developed {PMDA}, a Python library that builds upon {MDAnalysis} to provide parallel analysis algorithms. {PMDA} parallelizes common analysis algorithms in {MDAnalysis} through a task-based approach with the Dask library. We implement a simple split-apply-combine scheme for parallel trajectory analysis. The trajectory is split into blocks, analysis is performed separately and in parallel on each block ({\textbackslash}textquotedblapply{\textbackslash}textquotedbl), then results from each block are gathered and combined. {PMDA} allows one to perform parallel trajectory analysis with pre-defined analysis tasks. In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules. {PMDA} supports all schedulers in Dask, and one can run analysis in a distributed fashion on {HPC} machines, ad-hoc clusters, a single multi-core workstation or a laptop. We tested the performance of {PMDA} on single node and multiple nodes on a national supercomputer. The results show that parallelization improves the performance of trajectory analysis and, depending on the analysis task, can cut down time to solution from hours to minutes. Although still in alpha stage, it is already used on resources ranging from multi-core laptops to {XSEDE} supercomputers to speed up analysis of molecular dynamics trajectories. {PMDA} is available as open source under the {GNU} General Public License, version 2 and can be easily installed via the pip and conda package managers.},
-	pages = {134 -- 142},
-	booktitle = {Proceedings of the 18th Python in Science Conference},
-	publisher = {{SciPy}},
+	abstract = {MDAnalysis is an object-oriented Python library to analyze trajectories from molecular dynamics (MD) simulations in many popular formats. With the development of highly optimized MD software packages on high performance computing (HPC) resources, the size of simulation trajectories is growing up to many terabytes in size. However efficient usage of multicore architecture is a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis. To address the challenge, we developed PMDA, a Python library that builds upon MDAnalysis to provide parallel analysis algorithms. PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask library. We implement a simple split-apply-combine scheme for parallel trajectory analysis. The trajectory is split into blocks, analysis is performed separately and in parallel on each block ({\textbackslash}textquotedblapply{\textbackslash}textquotedbl), then results from each block are gathered and combined. PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks. In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules. PMDA supports all schedulers in Dask, and one can run analysis in a distributed fashion on HPC machines, ad-hoc clusters, a single multi-core workstation or a laptop. We tested the performance of PMDA on single node and multiple nodes on a national supercomputer. The results show that parallelization improves the performance of trajectory analysis and, depending on the analysis task, can cut down time to solution from hours to minutes. Although still in alpha stage, it is already used on resources ranging from multi-core laptops to XSEDE supercomputers to speed up analysis of molecular dynamics trajectories. PMDA is available as open source under the GNU General Public License, version 2 and can be easily installed via the pip and conda package managers.},
+	booktitle = {Proceedings of the 18th {Python} in {Science} {Conference}},
+	publisher = {SciPy},
 	author = {Fan, Shujie and Linke, Max and Paraskevakos, Ioannis and Gowers, Richard J. and Gecht, Michael and Beckstein, Oliver},
 	editor = {Calloway, Chris and Lippa, David and Niederhut, Dillon and Shupe, David},
-	date = {2019},
-	keywords = {{HPC}, {MDAnalysis}, Parallel algorithms, {PMDA}, {SPIDAL}}
+	year = {2019},
+	keywords = {HPC, MDAnalysis, Parallel algorithms, PMDA, SPIDAL},
+	pages = {134 -- 142}
 }
 
 @article{khoshlessan_parallel_2020,
 	title = {Parallel performance of molecular dynamics trajectory analysis},
 	volume = {32},
 	doi = {10.1002/cpe.5789},
-	abstract = {The performance of biomolecular molecular dynamics simulations has steadily increased on modern high-performance computing resources but acceleration of the analysis of the output trajectories has lagged behind so that analyzing simulations is becoming a bottleneck. To close this gap, we studied the performance of trajectory analysis with message passing interface ({MPI}) parallelization and the Python {MDAnalysis} library on three different Extreme Science and Engineering Discovery Environment ({XSEDE}) supercomputers where trajectories were read from a Lustre parallel file system. Strong scaling performance was impeded by stragglers, {MPI} processes that were slower than the typical process. Stragglers were less prevalent for compute-bound workloads, thus pointing to file reading as a bottleneck for scaling. However, a more complicated picture emerged in which both the computation and the data ingestion exhibited close to ideal strong scaling behavior whereas stragglers were primarily caused by either large {MPI} communication costs or long times to open the single shared trajectory file. We improved overall strong scaling performance by either subfiling (splitting the trajectory into separate files) or {MPI}-{IO} with parallel {HDF}5 trajectory files. The parallel {HDF}5 approach resulted in near ideal strong scaling on up to 384 cores (16 nodes), thus reducing trajectory analysis times by two orders of magnitude compared with the serial approach.},
-	pages = {e5789},
-	journaltitle = {Concurrency and Computation: Practice and Experience},
+	abstract = {The performance of biomolecular molecular dynamics simulations has steadily increased on modern high-performance computing resources but acceleration of the analysis of the output trajectories has lagged behind so that analyzing simulations is becoming a bottleneck. To close this gap, we studied the performance of trajectory analysis with message passing interface (MPI) parallelization and the Python MDAnalysis library on three different Extreme Science and Engineering Discovery Environment (XSEDE) supercomputers where trajectories were read from a Lustre parallel file system. Strong scaling performance was impeded by stragglers, MPI processes that were slower than the typical process. Stragglers were less prevalent for compute-bound workloads, thus pointing to file reading as a bottleneck for scaling. However, a more complicated picture emerged in which both the computation and the data ingestion exhibited close to ideal strong scaling behavior whereas stragglers were primarily caused by either large MPI communication costs or long times to open the single shared trajectory file. We improved overall strong scaling performance by either subfiling (splitting the trajectory into separate files) or MPI-IO with parallel HDF5 trajectory files. The parallel HDF5 approach resulted in near ideal strong scaling on up to 384 cores (16 nodes), thus reducing trajectory analysis times by two orders of magnitude compared with the serial approach.},
+	journal = {Concurrency and Computation: Practice and Experience},
 	author = {Khoshlessan, Mahzad and Paraskevakos, Ioannis and Fox, Geoffrey C. and Jha, Shantenu and Beckstein, Oliver},
-	date = {2020},
-	keywords = {big data, {HDF}5, {HPC}, {MDAnalysis}, molecular dynamics, {MPI}, {MPI} I/O, Python, straggler, trajectory analysis}
+	year = {2020},
+	keywords = {big data, HDF5, HPC, MDAnalysis, molecular dynamics, MPI, MPI I/O, Python, straggler, trajectory analysis},
+	pages = {e5789}
 }
 
 @article{buyl_h5md_2014,
-	title = {H5MD: A structured, efficient, and portable file format for molecular data},
+	title = {{H5MD}: {A} structured, efficient, and portable file format for molecular data},
 	volume = {185},
 	issn = {0010-4655},
 	doi = {10.1016/j.cpc.2014.01.018},
-	abstract = {We propose a new file format named “H5MD” for storing molecular simulation data, such as trajectories of particle positions and velocities, along with thermodynamic observables that are monitored during the course of the simulation. H5MD files are {HDF}5 (Hierarchical Data Format) files with a specific hierarchy and naming scheme. Thus, H5MD inherits many benefits of {HDF}5, e.g., structured layout of multi-dimensional datasets, data compression, fast and parallel I/O, and portability across many programming languages and hardware platforms. H5MD files are self-contained, and foster the reproducibility of scientific data and the interchange of data between researchers using different simulation programs and analysis software. In addition, the H5MD specification can serve for other kinds of data (e.g. experimental data) and is extensible to supplemental data, or may be part of an enclosing file structure.},
-	pages = {1546 -- 1553},
+	abstract = {We propose a new file format named “H5MD” for storing molecular simulation data, such as trajectories of particle positions and velocities, along with thermodynamic observables that are monitored during the course of the simulation. H5MD files are HDF5 (Hierarchical Data Format) files with a specific hierarchy and naming scheme. Thus, H5MD inherits many benefits of HDF5, e.g., structured layout of multi-dimensional datasets, data compression, fast and parallel I/O, and portability across many programming languages and hardware platforms. H5MD files are self-contained, and foster the reproducibility of scientific data and the interchange of data between researchers using different simulation programs and analysis software. In addition, the H5MD specification can serve for other kinds of data (e.g. experimental data) and is extensible to supplemental data, or may be part of an enclosing file structure.},
 	number = {6},
-	journaltitle = {Computer Physics Communications},
+	journal = {Computer Physics Communications},
 	author = {Buyl, Pierre de and Colberg, Peter H. and Höfling, Felix},
-	date = {2014},
-	keywords = {file format, H5MD, {HDF}5, Molecular simulation}
+	year = {2014},
+	keywords = {file format, H5MD, HDF5, Molecular simulation},
+	pages = {1546 -- 1553}
 }
 
 @incollection{collette_python_2014,
-	title = {Python and {HDF}5},
-	booktitle = {Python and {HDF}5},
-	publisher = {O'Reilly Media, Inc., 1005 Gravenstein Highway North, Sebastopol, {CA} 95472.},
+	title = {Python and {HDF5}},
+	booktitle = {Python and {HDF5}},
+	publisher = {O'Reilly Media, Inc., 1005 Gravenstein Highway North, Sebastopol, CA 95472.},
 	author = {Collette, Andrew},
 	editor = {Blanchette, Meghan and Roumeliotis, Rachel},
-	date = {2014}
+	year = {2014}
 }
 
 @article{harris_array_2020,
 	title = {Array programming with {NumPy}},
 	volume = {585},
 	doi = {10.1038/s41586-020-2649-2},
-	abstract = {Array programming provides a powerful, compact and expressive syntax for accessing, manipulating and operating on data in vectors, matrices and higher-dimensional arrays. {NumPy} is the primary array programming library for the Python language. It has an essential role in research analysis pipelines in fields as diverse as physics, chemistry, astronomy, geoscience, biology, psychology, materials science, engineering, finance and economics. For example, in astronomy, {NumPy} was an important part of the software stack used in the discovery of gravitational waves1 and in the first imaging of a black hole2. Here we review how a few fundamental array concepts lead to a simple and powerful programming paradigm for organizing, exploring and analysing scientific data. {NumPy} is the foundation upon which the scientific Python ecosystem is constructed. It is so pervasive that several projects, targeting audiences with specialized needs, have developed their own {NumPy}-like interfaces and array objects. Owing to its central position in the ecosystem, {NumPy} increasingly acts as an interoperability layer between such array computation libraries and, together with its application programming interface ({API}), provides a flexible framework to support the next decade of scientific and industrial analysis.},
-	pages = {357--362},
+	abstract = {Array programming provides a powerful, compact and expressive syntax for accessing, manipulating and operating on data in vectors, matrices and higher-dimensional arrays. NumPy is the primary array programming library for the Python language. It has an essential role in research analysis pipelines in fields as diverse as physics, chemistry, astronomy, geoscience, biology, psychology, materials science, engineering, finance and economics. For example, in astronomy, NumPy was an important part of the software stack used in the discovery of gravitational waves1 and in the first imaging of a black hole2. Here we review how a few fundamental array concepts lead to a simple and powerful programming paradigm for organizing, exploring and analysing scientific data. NumPy is the foundation upon which the scientific Python ecosystem is constructed. It is so pervasive that several projects, targeting audiences with specialized needs, have developed their own NumPy-like interfaces and array objects. Owing to its central position in the ecosystem, NumPy increasingly acts as an interoperability layer between such array computation libraries and, together with its application programming interface (API), provides a flexible framework to support the next decade of scientific and industrial analysis.},
 	number = {7825},
-	journaltitle = {Nature},
+	journal = {Nature},
 	author = {Harris, Charles R and Millman, K Jarrod and van der Walt, Stéfan J and Gommers, Ralf and Virtanen, Pauli and Cournapeau, David and Wieser, Eric and Taylor, Julian and Berg, Sebastian and Smith, Nathaniel J and Kern, Robert and Picus, Matti and Hoyer, Stephan and van Kerkwijk, Marten H and Brett, Matthew and Haldane, Allan and Del Río, Jaime Fernández and Wiebe, Mark and Peterson, Pearu and Gérard-Marchant, Pierre and Sheppard, Kevin and Reddy, Tyler and Weckesser, Warren and Abbasi, Hameer and Gohlke, Christoph and Oliphant, Travis E},
-	date = {2020},
+	year = {2020},
 	pmid = {32939066},
-	keywords = {numpy, python}
+	keywords = {numpy, python},
+	pages = {357--362}
 }
 
 @article{virtanen_scipy_2020,
-	title = {{SciPy} 1.0: fundamental algorithms for scientific computing in Python},
+	title = {{SciPy} 1.0: fundamental algorithms for scientific computing in {Python}},
 	volume = {17},
 	doi = {10.1038/s41592-019-0686-2},
-	abstract = {{SciPy} is an open-source scientific computing library for the Python programming language. Since its initial release in 2001, {SciPy} has become a de facto standard for leveraging scientific algorithms in Python, with over 600 unique code contributors, thousands of dependent packages, over 100,000 dependent repositories and millions of downloads per year. In this work, we provide an overview of the capabilities and development practices of {SciPy} 1.0 and highlight some recent technical developments.},
-	pages = {261--272},
+	abstract = {SciPy is an open-source scientific computing library for the Python programming language. Since its initial release in 2001, SciPy has become a de facto standard for leveraging scientific algorithms in Python, with over 600 unique code contributors, thousands of dependent packages, over 100,000 dependent repositories and millions of downloads per year. In this work, we provide an overview of the capabilities and development practices of SciPy 1.0 and highlight some recent technical developments.},
 	number = {3},
-	journaltitle = {Nat Methods},
+	journal = {Nat Methods},
 	author = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E and Haberland, Matt and Reddy, Tyler and Cournapeau, David and Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and Bright, Jonathan and van der Walt, Stéfan J and Brett, Matthew and Wilson, Joshua and Millman, K Jarrod and Mayorov, Nikolay and Nelson, Andrew R J and Jones, Eric and Kern, Robert and Larson, Eric and Carey, C J and Polat, İlhan and Feng, Yu and Moore, Eric W and VanderPlas, Jake and Laxalde, Denis and Perktold, Josef and Cimrman, Robert and Henriksen, Ian and Quintero, E A and Harris, Charles R and Archibald, Anne M and Ribeiro, Antônio H and Pedregosa, Fabian and van Mulbregt, Paul and {SciPy 1.0 Contributors}},
-	date = {2020},
+	year = {2020},
 	pmid = {32015543},
-	keywords = {numpy, python, scipy}
+	keywords = {numpy, python, scipy},
+	pages = {261--272}
 }
 
 @article{cheatham_impact_2015,
@@ -109,64 +109,67 @@
 	issn = {1521-9615},
 	doi = {10.1109/MCSE.2015.7},
 	abstract = {The field of biomolecular simulation has matured to the level that detailed, accurate, and functionally relevant information that complements experimental data about the structure, dynamics, and interactions of biomolecules can now be routinely discovered. This has been enabled by access to large scale and heterogeneous high performance computing resources, including special purpose hardware. The improved performance of modern simulation methods coupled with hardware advances is shifting the rate-limiting steps of common biomolecular simulations of small- to moderately-sized systems from the generation of data (for example via production molecular dynamics simulations that used to take weeks or even months) to the pre- and post-processing phases of the workflow, namely simulation set-up and data processing, management, and analysis. Access to heterogeneous computational resources enables a broader exploration of biomolecular structure and dynamics by facilitating distinct aspects of typical biomolecular simulation workflows.},
-	pages = {30--39},
 	number = {2},
-	journaltitle = {Computing in Science Engineering},
+	journal = {Computing in Science Engineering},
 	author = {Cheatham, T. and Roe, D.},
-	date = {2015},
-	keywords = {analysis, Analytical models, Biological system modeling, Chemistry, Computational modeling, Convergence, {DNA}, Educational institutions, Hardware, {MD} simulation, {REMD}, review}
+	year = {2015},
+	keywords = {analysis, Analytical models, Biological system modeling, Chemistry, Computational modeling, Convergence, DNA, Educational institutions, Hardware, MD simulation, REMD, review},
+	pages = {30--39}
 }
 
 @incollection{fox_contributions_2019,
-	title = {Contributions to High-Performance Big Data Computing},
+	series = {Advances in {Parallel} {Computing}},
+	title = {Contributions to {High}-{Performance} {Big} {Data} {Computing}},
 	volume = {34},
-	series = {Advances in Parallel Computing},
-	abstract = {Our project is at the interface of Big Data and {HPC} – High- Performance Big Data computing and this paper describes a collaboration between 7 collaborating Universities at Arizona State, Indiana (lead), Kansas, Rutgers, Stony Brook, Virginia Tech, and Utah. It addresses the intersection of High- performance and Big Data computing with several different application areas or communities driving the requirements for software systems and algorithms. We describe the base architecture, including the {HPC}-{ABDS}, High-Performance Computing enhanced Apache Big Data Stack, and an application use case study identifying key features that determine software and algorithm requirements. We summarize middleware including Harp-{DAAL} collective communication layer, Twister2 Big Data toolkit, and pilot jobs. Then we present the {SPIDAL} Scalable Parallel Interoperable Data Analytics Library and our work for it in core machine- learning, image processing and the application communities, Network science, Polar Science, Biomolecular Simulations, Pathology, and Spatial systems. We describe basic algorithms and their integration in end-to-end use cases.},
-	pages = {34--81},
-	booktitle = {Future Trends of {HPC} in a Disruptive Scenario},
-	publisher = {{IOS} Press},
-	author = {Fox, Geoffrey and Qiu, Judy and Crandall, David and von Laszewski, Gregor and Beckstein, Oliver and Paden, John and Paraskevakos, Ioannis and Jha, Shantenu and Wang, Fusheng and Marathe, Madhav and Vullikanti, Anil and Cheatham, Thomas E., {III}},
+	abstract = {Our project is at the interface of Big Data and HPC – High- Performance Big Data computing and this paper describes a collaboration between 7 collaborating Universities at Arizona State, Indiana (lead), Kansas, Rutgers, Stony Brook, Virginia Tech, and Utah. It addresses the intersection of High- performance and Big Data computing with several different application areas or communities driving the requirements for software systems and algorithms. We describe the base architecture, including the HPC-ABDS, High-Performance Computing enhanced Apache Big Data Stack, and an application use case study identifying key features that determine software and algorithm requirements. We summarize middleware including Harp-DAAL collective communication layer, Twister2 Big Data toolkit, and pilot jobs. Then we present the SPIDAL Scalable Parallel Interoperable Data Analytics Library and our work for it in core machine- learning, image processing and the application communities, Network science, Polar Science, Biomolecular Simulations, Pathology, and Spatial systems. We describe basic algorithms and their integration in end-to-end use cases.},
+	booktitle = {Future {Trends} of {HPC} in a {Disruptive} {Scenario}},
+	publisher = {IOS Press},
+	author = {Fox, Geoffrey and Qiu, Judy and Crandall, David and von Laszewski, Gregor and Beckstein, Oliver and Paden, John and Paraskevakos, Ioannis and Jha, Shantenu and Wang, Fusheng and Marathe, Madhav and Vullikanti, Anil and Cheatham, Thomas E., III},
 	editor = {Grandinetti, L. and Joubert, G. R. and Michielsen, K. and Mirtaheri, S. L. and Taufer, M. and Yokota, R},
-	date = {2019},
+	year = {2019},
 	doi = {10.3233/APC190005},
-	keywords = {Big Data, Biomolecular simulations, Clouds, Graph Analytics, {HPC}, {MIDAS}, Network Science, Pathology, Polar Science, {SPIDAL}}
+	keywords = {Big Data, Biomolecular simulations, Clouds, Graph Analytics, HPC, MIDAS, Network Science, Pathology, Polar Science, SPIDAL},
+	pages = {34--81},
+	annote = {ISBN print 978-1-61499-998-0}
 }
 
 @inproceedings{beckstein_convergence_2018,
 	title = {Convergence of data generation and analysis in the biomolecular simulation community},
 	url = {https://www.exascale.org/bdec/sites/www.exascale.org.bdec/files/whitepapers/Beckstein-Fox-Jha_BDEC2_WP_0.pdf},
-	pages = {4},
-	booktitle = {Online Resource for Big Data and Extreme-Scale Computing Workshop},
+	language = {en},
+	booktitle = {Online {Resource} for {Big} {Data} and {Extreme}-{Scale} {Computing} {Workshop}},
 	author = {Beckstein, Oliver and Fox, Geoffrey and Jha, Shantenu},
-	date = {2018-11},
-	langid = {english}
+	month = nov,
+	year = {2018},
+	pages = {4}
 }
 
 @article{wickham_split-apply-combine_2011,
-	title = {The Split-Apply-Combine Strategy for Data Analysis},
+	title = {The {Split}-{Apply}-{Combine} {Strategy} for {Data} {Analysis}},
 	volume = {40},
 	doi = {10.18637/jss.v040.i01},
 	abstract = {Many data analysis problems involve the application of a split-apply-combine strategy, where you break up a big problem into manageable pieces, operate on each piece independently and then put all the pieces back together. This insight gives rise to a new R package that allows you to smoothly apply this strategy, without having to worry about the type of structure in which your data is stored.},
-	pages = {1--29},
 	number = {1},
-	journaltitle = {Journal of Statistical Software},
+	journal = {Journal of Statistical Software},
 	author = {Wickham, Hadley},
-	date = {2011},
-	keywords = {parallel analysis framework, R}
+	year = {2011},
+	keywords = {parallel analysis framework, R},
+	pages = {1--29}
 }
 
 @article{theobald_rapid_2005,
 	title = {Rapid calculation of {RMSDs} using a quaternion-based characteristic polynomial},
 	volume = {61},
 	doi = {10.1107/S0108767305015266},
-	abstract = {A common measure of conformational similarity in structural bioinformatics is the minimum root mean square deviation ({RMSD}) between the coordinates of two macromolecules. In many applications, the rotations relating the structures are not needed. Several common algorithms for calculating {RMSDs} require the computationally costly procedures of determining either the eigen decomposition or matrix inversion of a 3x3 or 4x4 matrix. Using a quaternion-based method, here a simple algorithm is developed that rapidly and stably determines {RMSDs} by circumventing the decomposition and inversion problems.},
-	pages = {478--80},
-	issue = {Pt 4},
-	journaltitle = {Acta Crystallogr A},
+	abstract = {A common measure of conformational similarity in structural bioinformatics is the minimum root mean square deviation (RMSD) between the coordinates of two macromolecules. In many applications, the rotations relating the structures are not needed. Several common algorithms for calculating RMSDs require the computationally costly procedures of determining either the eigen decomposition or matrix inversion of a 3x3 or 4x4 matrix. Using a quaternion-based method, here a simple algorithm is developed that rapidly and stably determines RMSDs by circumventing the decomposition and inversion problems.},
+	number = {Pt 4},
+	journal = {Acta Crystallogr A},
 	author = {Theobald, Douglas L},
-	date = {2005-07},
+	month = jul,
+	year = {2005},
 	pmid = {15973002},
-	keywords = {{ALGORITHM}, qcprot}
+	keywords = {ALGORITHM, qcprot},
+	pages = {478--80}
 }
 
 @article{liu_fast_2010,
@@ -174,39 +177,41 @@
 	volume = {31},
 	doi = {10.1002/jcc.21439},
 	abstract = {Finding the rotational matrix that minimizes the sum of squared deviations between two vectors is an important problem in bioinformatics and crystallography. Traditional algorithms involve the inversion or decomposition of a 3 x 3 or 4 x 4 matrix, which can be computationally expensive and numerically unstable in certain cases. Here, we present a simple and robust algorithm to rapidly determine the optimal rotation using a Newton-Raphson quaternion-based method and an adjoint matrix. Our method is at least an order of magnitude more efficient than conventional inversion/decomposition methods, and it should be particularly useful for high-throughput analyses of molecular conformations.},
-	pages = {1561--3},
 	number = {7},
-	journaltitle = {J Comput Chem},
+	journal = {J Comput Chem},
 	author = {Liu, Pu and Agrafiotis, Dimitris K and Theobald, Douglas L},
-	date = {2010-05},
-	pmid = {20017124}
+	month = may,
+	year = {2010},
+	pmid = {20017124},
+	pages = {1561--3}
 }
 
 @article{huggins_biomolecular_2019,
-	title = {Biomolecular simulations: From dynamics and mechanisms to computational assays of biological activity},
+	title = {Biomolecular simulations: {From} dynamics and mechanisms to computational assays of biological activity},
 	volume = {9},
 	doi = {10.1002/wcms.1393},
 	abstract = {Biomolecular simulation is increasingly central to understanding and designing biological molecules and their interactions. Detailed, physics-based simulation methods are demonstrating rapidly growing impact in areas as diverse as biocatalysis, drug delivery, biomaterials, biotechnology, and drug design. Simulations offer the potential of uniquely detailed, atomic-level insight into mechanisms, dynamics, and processes, as well as increasingly accurate predictions of molecular properties. Simulations can now be used as computational assays of biological activity, for example, in predictions of drug resistance. Methodological and algorithmic developments, combined with advances in computational hardware, are transforming the scope and range of calculations. Different types of methods are required for different types of problem. Accurate methods and extensive simulations promise quantitative comparison with experiments across biochemistry. Atomistic simulations can now access experimentally relevant timescales for large systems, leading to a fertile interplay of experiment and theory and offering unprecedented opportunities for validating and developing models. Coarse-grained methods allow studies on larger length- and timescales, and theoretical developments are bringing electronic structure calculations into new regimes. Multiscale methods are another key focus for development, combining different levels of theory to increase accuracy, aiming to connect chemical and molecular changes to macroscopic observables. In this review, we outline biomolecular simulation methods and highlight examples of its application to investigate questions in biology. This article is categorized under: Molecular and Statistical Mechanics {\textgreater} Molecular Dynamics and Monte-Carlo Methods Structure and Mechanism {\textgreater} Computational Biochemistry and Biophysics Molecular and Statistical Mechanics {\textgreater} Free Energy Methods},
-	pages = {e1393},
 	number = {3},
-	journaltitle = {Wiley Interdisciplinary Reviews: Computational Molecular Science},
+	journal = {Wiley Interdisciplinary Reviews: Computational Molecular Science},
 	author = {Huggins, David J. and Biggin, Philip C. and Dämgen, Marc A. and Essex, Jonathan W. and Harris, Sarah A. and Henchman, Richard H. and Khalid, Syma and Kuzmanic, Antonija and Laughton, Charles A. and Michel, Julien and Mulholland, Adrian J. and Rosta, Edina and Sansom, Mark S. P. and van der Kamp, Marc W.},
-	date = {2019},
-	keywords = {enzyme, {MD} {SIMULATION}, membrane, molecular dynamics, {MOLECULAR} {DYNAMICS}, multiscale, protein, {QM}/{MM}, review}
+	year = {2019},
+	keywords = {enzyme, MD SIMULATION, membrane, molecular dynamics, MOLECULAR DYNAMICS, multiscale, protein, QM/MM, review},
+	pages = {e1393}
 }
 
 @article{towns_xsede_2014,
-	title = {{XSEDE}: Accelerating Scientific Discovery},
+	title = {{XSEDE}: {Accelerating} {Scientific} {Discovery}},
 	volume = {16},
 	issn = {1521-9615},
 	url = {doi.ieeecomputersociety.org/10.1109/MCSE.2014.80},
 	doi = {10.1109/MCSE.2014.80},
-	pages = {62--74},
 	number = {5},
-	journaltitle = {Computing in Science \& Engineering},
+	journal = {Computing in Science \& Engineering},
 	author = {Towns, J. and Cockerill, T. and Dahan, M. and Foster, I. and Gaither, K. and Grimshaw, A. and Hazlewood, V. and Lathrop, S. and Lifka, D. and Peterson, G. D. and Roskies, R. and Scott, J. R. and Wilkins-Diehr, N.},
-	date = {2014-10},
-	keywords = {Digital systems, Knowledge discovery, Materials engineering, Scientific computing, Supercomputers}
+	month = oct,
+	year = {2014},
+	keywords = {Digital systems, Knowledge discovery, Materials engineering, Scientific computing, Supercomputers},
+	pages = {62--74}
 }
 
 @article{mura_introduction_2014,
@@ -215,56 +220,56 @@
 	url = {http://dx.doi.org/10.1080/08927022.2014.935372},
 	doi = {10.1080/08927022.2014.935372},
 	abstract = {The biomolecules in and around a living cell – proteins, nucleic acids, lipids and carbohydrates – continuously sample myriad conformational states that are thermally accessible at physiological temperatures. Simultaneously, a given biomolecule also samples (and is sampled by) a rapidly fluctuating local environment comprising other biopolymers, small molecules, water, ions, etc. that diffuse to within a few nanometres, leading to inter-molecular contacts that stitch together large supramolecular assemblies. Indeed, all biological systems can be viewed as dynamic networks of molecular interactions. As a complement to experimentation, molecular simulation offers a uniquely powerful approach to analyse biomolecular structure, mechanism and dynamics; this is possible because the molecular contacts that define a complicated biomolecular system are governed by the same physical principles (forces and energetics) that characterise individual small molecules, and these simpler systems are relatively well-understood. With modern algorithms and computing capabilities, simulations are now an indispensable tool for examining biomolecular assemblies in atomic detail, from the conformational motion in an individual protein to the diffusional dynamics and inter-molecular collisions in the early stages of formation of cellular-scale assemblies such as the ribosome. This text introduces the physicochemical foundations of molecular simulations and docking, largely from the perspective of biomolecular interactions.},
-	pages = {732--764},
-	number = {10},
-	journaltitle = {Molecular Simulation},
-	author = {Mura, Cameron and {McAnany}, Charles E.},
-	date = {2014},
+	number = {10-11},
+	journal = {Molecular Simulation},
+	author = {Mura, Cameron and McAnany, Charles E.},
+	year = {2014},
 	note = {\_eprint: http://dx.doi.org/10.1080/08927022.2014.935372},
-	keywords = {docking, introduction, {MD} simulation, {MONTE} {CARLO}, {RARE} {EVENTS}, review, {STATISTICAL} {MECHANICS}}
+	keywords = {docking, introduction, MD simulation, MONTE CARLO, RARE EVENTS, review, STATISTICAL MECHANICS},
+	pages = {732--764}
 }
 
 @article{braun_best_2018,
-	title = {Best Practices for Foundations in Molecular Simulations [Article v1.0]},
+	title = {Best {Practices} for {Foundations} in {Molecular} {Simulations} [{Article} v1.0]},
 	volume = {1},
 	doi = {10.33011/livecoms.1.1.5957},
 	abstract = {This document provides a starting point for approaching molecular simulations, guiding beginning practitioners to what issues they need to know about before and while starting their first simulations, and why those issues are so critical. This document makes no claims to provide an adequate introduction to the subject on its own. Instead, our goal is to help people know what issues are critical before beginning, and to provide references to good resources on those topics. We also provide a checklist of key issues to consider before and while setting up molecular simulations which may serve as a foundation for other best practices documents.},
-	pages = {5957--},
 	number = {1},
-	journaltitle = {Living Journal of Computational Molecular Science},
+	journal = {Living Journal of Computational Molecular Science},
 	author = {Braun, Efrem and Gilmer, Justin and Mayes, Heather B. and Mobley, David L. and Monroe, Jacob I. and Prasad, Samarjeet and Zuckerman, Daniel M.},
-	date = {2018},
+	year = {2018},
 	note = {Publisher: University of Colorado Boulder},
-	keywords = {{MD}, molecular dynamics, review}
+	keywords = {MD, molecular dynamics, review},
+	pages = {5957--}
 }
 
 @article{dalcin_parallel_2011,
-	title = {Parallel distributed computing using Python},
+	title = {Parallel distributed computing using {Python}},
 	volume = {34},
 	issn = {0309-1708},
 	doi = {10.1016/j.advwatres.2011.04.013},
-	abstract = {This work presents two software components aimed to relieve the costs of accessing high-performance parallel computing resources within a Python programming environment: {MPI} for Python and {PETSc} for Python. {MPI} for Python is a general-purpose Python package that provides bindings for the Message Passing Interface ({MPI}) standard using any back-end {MPI} implementation. Its facilities allow parallel Python programs to easily exploit multiple processors using the message passing paradigm. {PETSc} for Python provides access to the Portable, Extensible Toolkit for Scientific Computation ({PETSc}) libraries. Its facilities allow sequential and parallel Python applications to exploit state of the art algorithms and data structures readily available in {PETSc} for the solution of large-scale problems in science and engineering. {MPI} for Python and {PETSc} for Python are fully integrated to {PETSc}-{FEM}, an {MPI} and {PETSc} based parallel, multiphysics, finite elements code developed at {CIMEC} laboratory. This software infrastructure supports research activities related to simulation of fluid flows with applications ranging from the design of microfluidic devices for biochemical analysis to modeling of large-scale stream/aquifer interactions.},
-	pages = {1124 -- 1139},
+	abstract = {This work presents two software components aimed to relieve the costs of accessing high-performance parallel computing resources within a Python programming environment: MPI for Python and PETSc for Python. MPI for Python is a general-purpose Python package that provides bindings for the Message Passing Interface (MPI) standard using any back-end MPI implementation. Its facilities allow parallel Python programs to easily exploit multiple processors using the message passing paradigm. PETSc for Python provides access to the Portable, Extensible Toolkit for Scientific Computation (PETSc) libraries. Its facilities allow sequential and parallel Python applications to exploit state of the art algorithms and data structures readily available in PETSc for the solution of large-scale problems in science and engineering. MPI for Python and PETSc for Python are fully integrated to PETSc-FEM, an MPI and PETSc based parallel, multiphysics, finite elements code developed at CIMEC laboratory. This software infrastructure supports research activities related to simulation of fluid flows with applications ranging from the design of microfluidic devices for biochemical analysis to modeling of large-scale stream/aquifer interactions.},
 	number = {9},
-	journaltitle = {Advances in Water Resources},
+	journal = {Advances in Water Resources},
 	author = {Dalcín, Lisandro D. and Paz, Rodrigo R. and Kler, Pablo A. and Cosimo, Alejandro},
-	date = {2011},
-	keywords = {{MPI}4py, parallel, {PETSc}, python}
+	year = {2011},
+	keywords = {MPI4py, parallel, PETSc, python},
+	pages = {1124 -- 1139},
+	annote = {New Computational Methods and Software Tools}
 }
 
 @inproceedings{khoshlessan_parallel_2017,
-	location = {Austin, Texas},
-	title = {Parallel Analysis in {MDAnalysis} using the Dask Parallel Computing Library},
+	address = {Austin, Texas},
+	title = {Parallel {Analysis} in {MDAnalysis} using the {Dask} {Parallel} {Computing} {Library}},
 	url = {https://conference.scipy.org/proceedings/scipy2017/mahzad_khoslessan.html},
 	doi = {10.25080/shinma-7f4c6e7-00a},
-	abstract = {The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range. We evaluated if this challenge can be met by a parallel map-reduce approach with the Dask parallel computing library for task-graph based computing coupled with our {MDAnalysis} Python library for the analysis of molecular dynamics ({MD}) simulations. We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing ﬁle formats for {MD} trajectory data. We found that the underlying storage system (solid state drives, parallel ﬁle systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottleneck in the analysis work ﬂow. However, the choice of the data ﬁle format can mitigate the effect of the storage system; in particular, the commonly used Gromacs {XTC} trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core {CPU}-intensive decompression. Scaling was tested on a single node and multiple nodes on national and local supercomputing resources as well as typical workstations. Although very good strong scaling could be achieved for single nodes, good scaling across multiple nodes was hindered by the persistent occurrence of "stragglers", tasks that take much longer than all other tasks, and whose ultimate cause could not be completely ascertained. In summary, we show that, due to the focus on high interoperability in the scientiﬁc Python eco system, it is straightforward to implement map-reduce with Dask in {MDAnalysis} and provide an in-depth analysis of the considerations to obtain good parallel performance on {HPC} resources.},
-	eventtitle = {Python in Science Conference},
-	pages = {64--72},
-	booktitle = {Proceedings of the 16th Python in Science Conference},
-	publisher = {{SciPy}},
-	author = {Khoshlessan, Mahzad and Paraskevakos, Ioannis and Jha, Shantenu and Beckstein, Oliver},
+	abstract = {The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range. We evaluated if this challenge can be met by a parallel map-reduce approach with the Dask parallel computing library for task-graph based computing coupled with our MDAnalysis Python library for the analysis of molecular dynamics (MD) simulations. We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing ﬁle formats for MD trajectory data. We found that the underlying storage system (solid state drives, parallel ﬁle systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottleneck in the analysis work ﬂow. However, the choice of the data ﬁle format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core CPU-intensive decompression. Scaling was tested on a single node and multiple nodes on national and local supercomputing resources as well as typical workstations. Although very good strong scaling could be achieved for single nodes, good scaling across multiple nodes was hindered by the persistent occurrence of "stragglers", tasks that take much longer than all other tasks, and whose ultimate cause could not be completely ascertained. In summary, we show that, due to the focus on high interoperability in the scientiﬁc Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.},
+	language = {en},
 	urldate = {2021-06-02},
-	date = {2017},
-	langid = {english},
+	booktitle = {Proceedings of the 16th {Python} in {Science} {Conference}},
+	publisher = {SciPy},
+	author = {Khoshlessan, Mahzad and Paraskevakos, Ioannis and Jha, Shantenu and Beckstein, Oliver},
+	year = {2017},
+	pages = {64--72},
 	file = {Khoshlessan et al. - 2017 - Parallel Analysis in MDAnalysis using the Dask Par.pdf:C\:\\Users\\16235\\Zotero\\storage\\UZAFBQ8W\\Khoshlessan et al. - 2017 - Parallel Analysis in MDAnalysis using the Dask Par.pdf:application/pdf}
 }
