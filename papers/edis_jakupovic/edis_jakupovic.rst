@@ -108,7 +108,6 @@ In general, our stacks were built in the following manner:
 .. raw:: latex
 
    \begin{table}
-   \begin centering
    \begin{tabular}{c c c c c c c c}
     \toprule
     \textbf{System} & \textbf{Python} & \textbf{c compiler} & \textbf{HDF5} & \text{openMPI} & \textbf{h5py} & \textbf{mpi4py} & \textbf{MDAnalysis} \\ [0.5ex]
@@ -133,7 +132,6 @@ Table :ref:`tab:files` gives all of the files benchmarked with how they are iden
 .. raw:: latex
 
    \begin{table}
-   \begin centering
    \begin{tabular}{c c c}
     \toprule
     \textbf{name} & \textbf{format} & \textbf{file size (GiB)} \\ [0.5ex]
@@ -186,13 +184,17 @@ Below, we give example code of how each benchmark was performed:
    from mpi4py import MPI
    import numpy as np
 
+   comm = MPI.COMM_WORLD
+   size = comm.Get_size()
+   rank = comm.Get_rank()
+
    def benchmark(topology, trajectory):
        with timeit() as init_top:
            u = mda.Universe(topology)
        with timeit() as init_traj:
            u.load_new(trajectory,
                       driver="mpio",
-                      comm=MPI.COMM_WORLD)
+                      comm=comm)
        t_init_top = init_top.elapsed
        t_init_traj = init_traj.elapsed
        CA = u.select_atoms("protein and name CA")
@@ -208,9 +210,8 @@ Below, we give example code of how each benchmark was performed:
        start = slices[rank].start
        stop = slices[rank].stop
        bsize = stop - start
-       # sendcounts is used for Gatherv() to know
-       # how many elements are sent
-       # from each rank
+       # sendcounts is used for Gatherv() to know how
+       # many elements are sent from each rank
        sendcounts = np.array([
            slices[i].stop - slices[i].start for i in range(size)])
 
