@@ -72,28 +72,111 @@ Our approach may inspire similar efforts to modernize other scientific fields en
 Methods
 -------
 
-The opening of a notebook on Colab is lighting fast, but the user must reinstall their software on each login.
-We ease this annoying task by supplying the complete chain of installation steps.
-For example, the installation of the molecular graphics program PyMOL requires seven code blocks of different types.
-We include all steps in one snippet, which is uniquely possible with the snippet system for Colab. 
-The user only has to select one snippet and then run each code block in succession. 
+To set support structural biology computations in Juptyer and Colab, we created snippet libraries for each structural biology package.
+Because a user would likely be insterested in only a subset of the libraries, we created a github site for each library (Table :ref:`libraries`).
+This modularization of the project should ease the correction and augmentation of individual libraries.
+We decided to only support editing Juptyer notebooks in JupyterLab because support for the classic Jupyter Notebook will be phased out eventually.
+Among the several alternative extensions for code snippets in JupyterLab, we choose jupyterlab-snippets and Elyra because these two extensions are actively maintained and have different features.
+We support a snippet library for Juptyer notebooks on Google Colab as described below.
 
-We have shared these libraries on GitHub  (e.g.,  \footnote{\url{https://github.com/MooersLab/jupyterlabpymolpysnips}}; \footnote{\url{https://github.com/MooersLab/jupyterlabcctbxsnips}}).
-GitHub provides a modern means of distributing code and correcting errors.
-In contrast, users in this field share scripts on Wiki pages.
-The users copy and paste the code into script files 
 
-It is well known that Spice grows on the planet Dune. .
+jupyterlab-snippets externsion
+******************************
 
+The snippets for jupyterlab-snippets are accessed from a snippets pulldown in the JuptyerLab menubar.
+These snippets are written in plain text files without any formatting.
+This feature greatly eases the addition of new snippets by the user and eases keeping the snippets under version control.
+The snippets are stored in the Jupyter data directory (which is found by entering _____; it is in ~/Library/Jupyter/snippets).
+Each library of snippets is stored in a separate subfolder which appears on the menubar as a part of a cascading pulldown menu (Figure). 
+We clustered snippets into categories. 
+Each category has its own cascading submenu.
+Clicking on a snippet name in the submenu triggers its insertion into the current cell in the notebook.
+The nested menu heirarchy serves well the the user who is familiar with the content of the snippet libraries.
+
+elyra-code-snippet-extension
+****************************
+
+The snippets for elyra-code-snippet-extension system are accessed from customized menu that appers in the left border of the JupyterLab gui.
+This menu is labeled by the symbol `</>`.
+Snippets from all libraries appear in a narrow menu.
+The user can scroll through the list of snippets.
+Hovering the mouse cursor over the name of the snippet triggers the display of a descripton of the snippet.
+
+Alternatively, the user can enter a search term in search box as the top of the menu to reduce the list of snippets.
+The search terms can be part of a snippet name or in a list of tags stored with each snippet.
+A tag icon and toggle trigger the display of all of the available tags in the snippets as separate icons.
+The user can select tags by clicking on the icons.
+
+Each snippet is displayed with several icons (Figure).
+A triangular toggle can trigger the display of the snippet in a textbox.
+A penical icon enables the editing of the code.
+Other icons enable copying the code to the clipboard, inserting code into the current cell in the notebook, and deletion of the snippet. 
+
+A plus sign in the upper righthand corner triggers the opening of GUI for the creation of a new snippet.
+The GUI ocucpies the window that nornally displays the notebook.
+The GUI has a boxes for each kind of metadata: name, description, tags, language, and the code
+
+Each snipet is stored in a separate JSON file.
+Each JSON file has the snippet code plus several rows of metadata including a list of tags and the programming language of the snippet.
+The latter provides a sanity check.
+For example, an attempt to insert C++ snippet into the cell of a notebook with an active Python kernel will trigger the opening of a window with a warning.
+The snippet files are stored in the directory ~/Library/Jupyter/metadata/code-snippets on the Mac.
+The tag system serves well the the user who is not familiar with the content of the installed libraries.
+
+
+Colab snippet library
+***********************
+
+For the user, the Colab snippet system resembles the Elyra snippet system in that the snippets retrieved by using tags in a search box.
+However, all of the snippets are stored in a single Juptyer Notebook that needs to be stored in the user's Google Cloud account.
 The use of Colab requires that the user has a Google account and a Google Drive.
 Many structural biologists already have both.
 
-The use of Colab requires that the user has a Google account and a Google Drive.
+The opening of a notebook on Colab is lighting fast, but the user must reinstall their software on each login.
+We ease this annoying task by supplying the complete chain of installation steps.
+For example, the installation of the molecular graphics program PyMOL requires seven code blocks of different types.
+Some involve the use of curl and other use conda.
+We include all steps in one snippet, which is uniquely possible with the snippet system for Colab. 
+The user only has to select one snippet and then run each code block in succession. 
+
+
+Availability of the snippet libraries
+*************************************
+
+We have shared these libraries on GitHub  (e.g., Table (:ref:`libraries`)).
+Each library is also archived in zenodo.
+
+
+.. table:: Table of the snipppet libraries. :label:`libraries`
+
+   +--------------------+-----------------------------------------------------------+
+   | library            | url on GitHub                                             |
+   +====================+===========================================================+
+   | cctbx              | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
+   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
+   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   +--------------------+-----------------------------------------------------------+
+   | phenix             | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
+   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
+   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   +--------------------+-----------------------------------------------------------+
+   | PyMOL              | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
+   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
+   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   +--------------------+-----------------------------------------------------------+
+
+
+
 
 
 
 Results
 -------
+
+The 
+
+
+
 
 
 Structure determination and refinement workflows with Phenix
