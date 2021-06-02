@@ -164,9 +164,14 @@ Each library is also archived in zenodo.
    |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
    |                    | https://github.com/MooersLab/colab-cctbxsnips             |
    +--------------------+-----------------------------------------------------------+
-
-
-
+   | chimerax           | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
+   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
+   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   +--------------------+-----------------------------------------------------------+
+   | prody              | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
+   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
+   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   +--------------------+-----------------------------------------------------------+
 
 
 
