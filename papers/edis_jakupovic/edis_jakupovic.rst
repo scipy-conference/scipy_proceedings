@@ -76,6 +76,7 @@ Previous work that focused on developing a task-based approach to parallel analy
 Our previous feasibility study suggested that parallel reading via MPI-IO and the HDF5_ file format could lead to good scaling although only a reduced size custom HDF5 trajectory was investigated and no usable implementation of a true MD trajectory reader was provided :cite:`Khoshlessan:2020`.
 
 H5MD_, or "HDF5 for molecular data", is an HDF5-based file format that is used to store MD simulation data, such as particle coordinates, box dimensions, and thermodynamic observables :cite:`Buyl:2014`.
+A Python reference implementation for H5MD exists (pyh5md_ :cite:`Buyl:2014`) but the library is not maintained anymore, and with advice from the original author of pyh5md, we implemented native support for H5MD I/O in the MDAnalysis package.
 HDF5_ is a structured, binary file format that organizes data into two objects: groups and datasets.
 It implements a hierarchical, tree-like structure, where groups represent nodes of the tree, and datasets represent the leaves :cite:`Collette:2014`.
 The HDF5 library can be built on top of a message passing interface (MPI_) implementation so that a file can be accessed in parallel on a parallel filesystem such as Lustre_ or BeeGFS_. We implemented a parallel MPI-IO capable HDF5-based file format trajectory reader into MDAnalysis, H5MDReader, that adheres to the H5MD specifications.
@@ -142,7 +143,7 @@ In general, our stacks were built in the following manner:
 Benchmark Data Files
 --------------------
 The test data files used in our benchmark consist of a topology file ``YiiP_system.pdb`` with 111,815 atoms and a trajectory file ``YiiP_system_9ns_center100x.h5md`` with 90100 frames.
-The initial trajectory data file (H5MD-default in Table :ref:`tab:files`) was generated with py5hmd using the XTC file ``YiiP_system_9ns_center.xtc`` :cite:`Fan:2019`, using the "ChainReader" facility in MDAnalysis with the list ``100 * ["YiiP_system_9ns_center.xtc"]`` as input.
+The initial trajectory data file (H5MD-default in Table :ref:`tab:files`) was generated with pyh5md_ :cite:`Buyl:2014` using the XTC file ``YiiP_system_9ns_center.xtc`` :cite:`Fan:2019`, using the "ChainReader" facility in MDAnalysis with the list ``100 * ["YiiP_system_9ns_center.xtc"]`` as input.
 The rest of the test files were copies of H5MD-default and were written on the fly with MDAnalysis with different HDF5 chunking arrangements and compression settings.
 Table :ref:`tab:files` gives all of the files benchmarked with how they are identified in this paper as well as their corresponding file size.
 
@@ -164,7 +165,7 @@ Table :ref:`tab:files` gives all of the files benchmarked with how they are iden
     TRR              & TRR        & 113    \\
     \bottomrule
    \end{tabular}
-   \caption{Data files benchmarked on all three HPCS. \textbf{name} is the name that is used to identify the file in this paper.\textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes. \textbf{H5MD-default} original data file written with pyh5md which uses the auto-chunking algorithm in ``h5py``. \textbf{H5MD-chunked} is the same file but written with chunk size (1, n atoms, 3) and \textbf{H5MD-contiguous} is the same file but written with no HDF5 chunking. \textbf{H5MD-gzipx1} and \textbf{H5MD-gzipx9} have the same chunk arrangement as \textbf{H5MD-chunked} but are written with gzip compression where 1 is the lowest level of compression and 9 is the highest level. \textbf{DCD}, \textbf{XTC}, and \textbf{TRR} are copies \textbf{H5MD-contiguous} written on the fly with MDAnalysis.}
+   \caption{Data files benchmarked on all three HPCS. \textbf{name} is the name that is used to identify the file in this paper.\textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes. \textbf{H5MD-default} original data file written with ``pyh5md`` :cite:`Buyl:2014` which uses the auto-chunking algorithm in ``h5py``. \textbf{H5MD-chunked} is the same file but written with chunk size ``(1, n atoms, 3)`` and \textbf{H5MD-contiguous} is the same file but written with no HDF5 chunking. \textbf{H5MD-gzipx1} and \textbf{H5MD-gzipx9} have the same chunk arrangement as \textbf{H5MD-chunked} but are written with gzip compression where 1 is the lowest level of compression and 9 is the highest level. \textbf{DCD}, \textbf{XTC}, and \textbf{TRR} are copies \textbf{H5MD-contiguous} written on the fly with MDAnalysis.}
    \DUrole{label}{tab:files}
    \end{table}
 
@@ -294,7 +295,7 @@ Results and Discussion
 Baseline Benchmarks
 -------------------
 We first ran benchmarks with the simplest parallelization scheme of splitting the frames of the trajectory evenly among all participating processes.
-The H5MD file involved in the benchmarks was written with ``pyh5md``, a python library that can easily read and write H5MD files :cite:`Buyl:2014`.
+The H5MD file involved in the benchmarks was written with the pyh5md_ library, the original Python reference implementation for the H5MD format :cite:`Buyl:2014`.
 The datasets in the data file were chunked automatically by the auto-chunking algorithm in ``h5py``.
 File I/O remains the largest contributor to the total benchmark time, as shown by Figure :ref:`fig:components-vanilla` (A). Figure :ref:`fig:components-vanilla` (B, D-F) also show that the initialization, computation, and MPI communication times are negligible with regards to the overall analysis time.
 |twait|, however, becomes increasingly relevant as the number of processes increases (Figure :ref:`fig:components-vanilla` C), indicating a growing variance in the iteration block time across all processes.
@@ -484,3 +485,4 @@ References
 .. _BeeGFS: https://www.beegfs.io/
 .. _MPI: https://www.mpi-forum.org/
 .. _h5py: https://www.h5py.org/
+.. _pyh5md: https://github.com/pdebuyl/pyh5md
