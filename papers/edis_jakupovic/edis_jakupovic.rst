@@ -108,6 +108,7 @@ In general, our stacks were built in the following manner:
 .. raw:: latex
 
    \begin{table}
+   \centering
    \begin{tabular}{c c c c c c c c}
     \toprule
     \textbf{System} & \textbf{Python} & \textbf{c compiler} & \textbf{HDF5} & \text{openMPI} & \textbf{h5py} & \textbf{mpi4py} & \textbf{MDAnalysis} \\ [0.5ex]
@@ -132,6 +133,7 @@ Table :ref:`tab:files` gives all of the files benchmarked with how they are iden
 .. raw:: latex
 
    \begin{table}
+   \centering
    \begin{tabular}{c c c}
     \toprule
     \textbf{name} & \textbf{format} & \textbf{file size (GiB)} \\ [0.5ex]
