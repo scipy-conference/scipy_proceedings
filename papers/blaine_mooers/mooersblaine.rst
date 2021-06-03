@@ -63,7 +63,7 @@ Colab spares the user of hardware maintenance and provides access to GPUs and TP
 Colab also eases collaborative work and provides a uniform computing environment for classes and workshops.
 The user can upload Jupyter Notebooks and data files to their Google Drive account and then run the notebooks in Colab.
 
-Here, we have combined GitHub, domain-specific code snippet libraries, Jupyter Notebooks, and Google Colab to support computing in biomolecular structure determination.
+Here, we have combined GitHub, domain-specific code snippet libraries, Jupyter notebooks, and Google Colab to support computing in biomolecular structure determination.
 We think this approach will advance the field by improving productivity and reproducibility.
 Our approach may inspire similar efforts to modernize other scientific fields endowed with legacy software.
 
@@ -72,72 +72,78 @@ Our approach may inspire similar efforts to modernize other scientific fields en
 Methods
 -------
 
-To set support structural biology computations in Juptyer and Colab, we created snippet libraries for each structural biology package.
-A beginner is unlikely to be interested cctbx and a cryo-EM users will have no use for xds, so we modularized the libraries and created a github site for each library (Table :ref:`libraries`).
-This modularization of the project should ease the correction and augmentation of individual libraries.
-We decided to only support editing Juptyer notebooks in JupyterLab because support for the classic Jupyter Notebook will be phased out eventually.
-Among the several alternative extensions for code snippets in JupyterLab, we choose jupyterlab-snippets and Elyra because these two extensions are actively maintained and have different features.
-We support a snippet library for Juptyer notebooks on Google Colab as described below.
+We created snippet libraries for each structural biology package to support structural biology computations in Jupyter and Colab.
+Any particular workflow is unlikely to require all of the libraries.
+For example, a beginner’s workflow is unlikely to use CCTBX, a library of Python wrapped C++ routines for building molecular structure determination software.
+Likewise, a cryo-electron microscopy workflow will not need XDS, a package for processing X-ray diffraction images.
+We created a GitHub site for each library to ease the downloading of only those libraries that interest users (Table :ref:`libraries`).
+This modularization of the project should ease the correction and augmentation of individual libraries as the extensions, and structural biology software packages evolve.
+We only provided libraries for JupyterLab because the Jupyter Project plans to phase out support for the Jupyter Notebook software.
+Among the several alternative extensions for code snippets in JupyterLab, we choose jupyterlab-snippets [jLsnip]_ and Elyra [Elyra]_ because these two extensions are actively maintained and have different features.
+We also support a snippet library for Juptyer notebooks on Google Colab as described below because Colab provides access to GPUs, which can accelerate some of the larger computational tasks.
 
 
 jupyterlab-snippets externsion
 ******************************
 
-The snippets for jupyterlab-snippets are accessed from a snippets pulldown in the JuptyerLab menubar.
-These snippets are written in plain text files without any formatting.
-This feature greatly eases the addition of new snippets by the user and eases keeping the snippets under version control.
-The snippets are stored in the Jupyter data directory (which is found by entering _____; it is in ~/Library/Jupyter/snippets).
-Each library of snippets is stored in a separate subfolder which appears on the menubar as a part of a cascading pulldown menu (Figure). 
+The jupyterlab-snippets extension adds a snippet menu to the JupyterLab menu bar.
+The user accesses the snippets through a cascading pulldown menu.
+Each snippet resides in a separate plain text file.
+The snippets are written in plain text files without any formatting.
+This feature dramatically eases adding new snippets by users and eases keeping the snippets under version control.
+The snippets are stored in the Jupyter data directory (which is found by entering :code:`jupyter --path`; it is in ~/Library/Jupyter/snippets).
+Each snippet library is stored in a separate subfolder, which appears on the menu bar as a part of a cascading pulldown menu (Figure). 
 We clustered snippets into categories. 
-Each category has its own cascading submenu.
+Each category has a cascading submenu.
 Clicking on a snippet name in the submenu triggers its insertion into the current cell in the notebook.
-The nested menu heirarchy serves well the the user who is familiar with the content of the snippet libraries.
+The nested menu hierarchy serves well the user who is familiar with the content of the snippet libraries.
 
-elyra-code-snippet-extension
+elyra-code-snippet extension
 ****************************
 
-The snippets for elyra-code-snippet-extension system are accessed from customized menu that appers in the left border of the JupyterLab gui.
-This menu is labeled by the symbol `</>`.
-Snippets from all libraries appear in a narrow menu.
+A menu icon labeled with `</>` provides access to snippets in the elyra-code-snippet-extension system.
+After the icon is clicked, the snippets appear in the left margin of the JupyterLab GUI.
+Snippets from all libraries appear in alphabetical order. 
 The user can scroll through the list of snippets.
-Hovering the mouse cursor over the name of the snippet triggers the display of a descripton of the snippet.
+Hovering the mouse cursor over the snippet's name triggers the display of a description of the snippet.
 
-Alternatively, the user can enter a search term in search box as the top of the menu to reduce the list of snippets.
-The search terms can be part of a snippet name or in a list of tags stored with each snippet.
-A tag icon and toggle trigger the display of all of the available tags in the snippets as separate icons.
-The user can select tags by clicking on the icons.
+Alternatively, the user can enter a search term in the search box at the top of the menu to reduce the list of snippets.
+The search terms can be part of a snippet name or a tag stored with each snippet.
+
+A tag icon displays all of the available tags in the snippets as separate icons.
+The user can select tags to be used to choose snippets by clicking on the icons.
 
 Each snippet is displayed with several icons (Figure).
 A triangular toggle can trigger the display of the snippet in a textbox.
-A penical icon enables the editing of the code.
-Other icons enable copying the code to the clipboard, inserting code into the current cell in the notebook, and deletion of the snippet. 
+A pencil icon enables the editing of the code.
+Other icons enable copying the code to the clipboard, inserting code into the current cell in the notebook, and deleting the snippet. 
 
-A plus sign in the upper righthand corner triggers the opening of GUI for the creation of a new snippet.
-The GUI ocucpies the window that nornally displays the notebook.
-The GUI has a boxes for each kind of metadata: name, description, tags, language, and the code
+A plus sign in the upper-righthand corner opens a GUI for the creation of a new snippet.
+The GUI occupies the window that usually displays the notebook.
+The GUI has a text box for each kind of metadata: name, description, tags, language, and the snippet code.
 
-Each snipet is stored in a separate JSON file.
-Each JSON file has the snippet code plus several rows of metadata including a list of tags and the programming language of the snippet.
+Each snippet is stored in a separate JSON file.
+Each JSON file has the snippet code plus several rows of metadata, including a list of tags and the programming language of the snippet.
 The latter provides a sanity check.
-For example, an attempt to insert C++ snippet into the cell of a notebook with an active Python kernel will trigger the opening of a window with a warning.
-The snippet files are stored in the directory ~/Library/Jupyter/metadata/code-snippets on the Mac.
-The tag system serves well the the user who is not familiar with the content of the installed libraries.
+For example, an attempt to insert a C++ snippet into a notebook with an active Python kernel will trigger the opening of a window with a warning.
+The directory ~/Library/Jupyter/metadata/code-snippets stores the snippet files on the Mac.
+The tag system serves the user who is not familiar with the content of the installed libraries.
 
 
 Colab snippet library
 ***********************
 
-For the user, the Colab snippet system resembles the Elyra snippet system in that the snippets retrieved by using tags in a search box.
-However, all of the snippets are stored in a single Juptyer Notebook that needs to be stored in the user's Google Cloud account.
+The Colab snippet system resembles the Elyra snippet system in that search terms in a search box retrieve snippets.
+However, the Colab system differs from the Elyra system ins that a single notebook stores all of the snippets. The user's Google Cloud account stores the notebook of snippets.
 The use of Colab requires that the user has a Google account and a Google Drive.
 Many structural biologists already have both.
 
-The opening of a notebook on Colab is lighting fast, but the user must reinstall their software on each login.
+Notebooks on Colab open lighting fast, but the user must reinstall their software on each login.
 We ease this annoying task by supplying the complete chain of installation steps.
 For example, the installation of the molecular graphics program PyMOL requires seven code blocks of different types.
-Some involve the use of curl and other use conda.
+Some involve the use of curl, and others use conda.
 We include all steps in one snippet, which is uniquely possible with the snippet system for Colab. 
-The user only has to select one snippet and then run each code block in succession. 
+The user only has to select one snippet and then run each code block in succession.
 
 
 Availability of the snippet libraries
@@ -548,6 +554,8 @@ References
             *Recent developments in the CCP-EM software suite*,
             Acta Cryst. D73(6), 469-477, June 2017.           
             doi: 10.1107/S2059798317007859
+            
+.. [Elyra]  https://github.com/elyra-ai/elyra/blob/master/docs/source/getting_started/overview.md 
            
 .. [Godd18] T. D. Goddard, C.C. Huang, E.C. Meng, E.F. Pettersen, G.S. Couch, J. H. Morris, and T. E. Ferrin. 
            *UCSF ChimeraX: Meeting modern challenges in visualization and analysis*,
@@ -568,6 +576,8 @@ References
            *Jupyter Notebooks -- a publishing format for reproducible computational workflows*,
            In F. Loizides and B. Schmidt (Eds.), Positioning and Power in Academic Publishing: Players, Agents and Agendas (pp, 87-90).
            doi:10.3233/978-1-61499-649-1-87
+           
+.. [jLsnip] https://github.com/QuantStack/jupyterlab-snippets
            
 .. [Lieb11] D. Liebschner, P.V. Afonine, M.L. Baker, G. Bunkóczi, V.B. Chen, T.I. Croll, B. Hintze, L.-W. Hung, S. Jain, A.J. McCoy, N.W. Moriarty, R.D. Oeffner, B.K. Poon, M G. Prisant, R.J. Read, J.S. Richardson, D.C. Richardson, M.D. Sammito, O.V. Sobolev, D.H. Stockwell, T.C. Terwilliger, A.G. Urzhumtsev, L.L. Videau, C.J. Williams, and P.D. Adams. 
            *Macromolecular structure determination using X-rays, neutrons and electrons: recent developments in Phenix*,
