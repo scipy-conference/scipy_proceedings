@@ -97,7 +97,7 @@ In order to solve the Stokes problem
 
 the following *sympy* functions and libraries were used: *im*, *re*, *subs*, *simplify* and *lambdify*. For the postprocessing the *sympy* functions *diff* and *series* were particularly useful. Additionally, the *latex* function allowed to use the latex code of the formulae. For the interactive development with *sympy* the *jupyter notebook* is used as GUI, here the *latex* math rendering is very useful. The visualization is done with *numpy* and *matplotlib*. Code snippets are provided within the text in the subsequent sections. In addition, supplemental python examples are available at this `public github repository <https://github.com/zolabar/ConformalMappingSympy>`_ [#]_.
 
-.. [#] `https://github.com/zolabar/ConformalMappingSympy` 
+.. [#] `<https://github.com/zolabar/ConformalMappingSympy>`_ 
 
 The theoretical methods used here are conformal mappings (inspired by [PHW33]_ and [BC09]_) and Taylor-expansions, following [LGK21]_. Equation (:ref:`stokesPoisseuilleCouette`) describes *Couette-flow* when :math:`dp=0` and :math:`u_R\neq 0` and *Poiseuille-flow*, when :math:`dp\neq 0` and :math:`u_R=0`. Furthermore, Equation (:ref:`stokesPoisseuilleCouette`) describes *Couette-Poiseuille-flow* when :math:`dp\neq 0` and :math:`u_R\neq 0`.
 
@@ -136,14 +136,14 @@ Using a Moebius transform (also called a bilinear transformation) in the form of
    
    \xi + \textrm{i}\,\eta = w(z)=\frac{z+\textrm{i}\,a}{az+\textrm{i}}\;\;\;\;(\textrm{with}\;\; z = x + \textrm{i}\, y)\,,
 
-an eccentric circle in the complex *z*-plane can be mapped onto a concentric circle in the corresponding *w*-plane. The Moebius transform used here is a slightly adapted version of the one presented in [BC09]_; :math:`a` is a constant (given in [BC09]_) and will be explicitly stated further down in this Section.
+an eccentric annulus in the complex *z*-plane can be mapped onto a concentric annulus in the corresponding *w*-plane. The Moebius transform used here is a slightly adapted version of the one presented in [BC09]_; :math:`a` is a constant (given in [BC09]_) and will be explicitly stated further down in this Section.
 
 .. code-block:: python
 
     from sympy import *
     x,y,z,R1,R2,a =symbols('x,y,z,R1,R2,a', real=True)
 
-Then, scaling the geometry in such a way that the outer circle ends up having a radius of 1
+Scaling the geometry in such a way that the outer circle ends up having a radius of 1
 
  .. code-block:: python
 
@@ -189,7 +189,7 @@ with :math:`c_M` given by
 	
 	c_M = \left(- \frac{R_{1}}{R_{2}} + \frac{b}{R_{2}}\right) \left(\frac{R_{1}}{R_{2}} + \frac{b}{R_{2}}\right) + 1\,.
 
-Applying the transformation (:ref:`moebius1`) to the boundaries leads to a concentric annular flow domain in th *w*-plane with inner radius 1 and outer radius :math:`R`, given by
+Applying the Moebius transformation (:ref:`moebius1`) to the boundaries leads to a concentric annular flow domain in the *w*-plane with inner radius 1 and outer radius :math:`R`, given by
    
 .. math::
    :label: constantR
@@ -204,7 +204,7 @@ This new flow domain is depicted in the following Figure :ref:`concentricW`.
    
    Concentric annular flow domain :label:`concentricW`       
    
-Conformal mappings preserve harmonic functions, so the Stokes equation in the *w*-plane is of the same form as in the *z*-plane. However, due to the Moebius transform (:ref:`moebius1`) inner and outer boundaries are interchanged. This will affect the boundary conditions so that the Stokes-problem in the *w*-plane is given by
+Conformal mappings preserve harmonic functions, so the Stokes equation in the *w*-plane is of the same form as in the *z*-plane. However, Equation (:ref:`moebius1`) interchanges inner and outer boundaries. This will affect the corresponding boundary conditions one needs to specify there so that the Stokes-problem in the *w*-plane is given by
 
 .. math::
    :label: stokesConcentricW
@@ -224,7 +224,7 @@ Using the structure of Equation (:ref:`concentricU`), the velocity in the *w*-pl
  
 where :math:`\rho=\sqrt{\xi^2+\eta^2}`.
 
-With the parameters specified in the following Table :ref:`data1`, the velocity in the *w*-plane (Equation (:ref:`concentricUinW`)) can be used as an example for visualization and further evaluation.
+With the parameters specified in the following Table :ref:`data1`, the velocity in the *w*-plane (i.e. Equation (:ref:`concentricUinW`)) can be used as an example for visualization and further evaluation.
 
 .. table:: Geometry parametrization and imposed velocity :label:`data1`
 
@@ -241,7 +241,7 @@ With the parameters specified in the following Table :ref:`data1`, the velocity 
    +------------+----------------+-------------------------+
 
 
-The very convenient *sympy* function *lambdify* is used to compute numerical values that are postprocessed by *matplotlib* and depicted in the following Figure :ref:`concentricWU`. The term *R_* in the following code block denotes the numerical expression of the outer radius in the w-plane (Equation :ref:`constantR`).
+The very convenient *sympy* function *lambdify* is used to compute numerical values that are postprocessed by *matplotlib* and depicted in the following Figure :ref:`concentricWU`. The term *R_* in the following code block denotes the numerical expression of the outer radius in the w-plane (see Equation (:ref:`constantR`).
 
  .. code-block:: python
  
@@ -309,8 +309,8 @@ Inverting Equation (:ref:`bipolar`) and separating real and imaginary parts as i
    :label: zeta2
    :type: eqnarray
   
-    \xi&=&-\operatorname{\arctan_{2}}{\left(2 c x,c^{2} - x^{2} - \left(\gamma + y\right)^{2} \right)} \\
-    \eta&=&\ln\left(\frac{c^{2} + 2 c \left(\gamma + y\right) + x^{2} + \left(\gamma + y\right)^{2}}{c^{2} - 2 c \left(\gamma + y\right) + x^{2} + \left(\gamma + y\right)^{2}} \right)^{1/2}\,.
+    \xi & = & -\operatorname{\arctan_{2}}{\left(2 c x,c^{2} - x^{2} - \left(\gamma + y\right)^{2} \right)} \\
+    \eta & = & \frac{1}{2}\ln\left(\frac{x^2 + (y + \gamma + c)^2}{x^2 + (y + \gamma - c)^2} \right)\,.
 
 Here, :math:`\operatorname{\arctan_{2}}(y,x)` is the 2-argument arctangent which returns the polar angle of a point with Cartesian coordinates :math:`(x,y)`. 
 
@@ -359,8 +359,9 @@ and the following Figure :ref:`rectangularWU` shows a *matplotlib*-visualization
 By again simply expressing :math:`\eta` in terms of :math:`x` and :math:`y`, one obtains the very same velocity distribution in the eccentric annulus (in the *z*-plane) as already depicted in Figure :ref:`concentricZU`.
 
    
-It is interesting to remark, that Equations (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) look somehow related to each other due to the logarithm in both relations. However it is not immediately evident that they are actually identical. Nevertheless, due to existence and uniqueness theorems for the Stokes equation from [L69]_ one knows that (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) are the same. 
-The following Figure :ref:`largeGapCouette` compares these two analytically obtained velocities with results from a 3D-CFD simulation (using ANSYS CFX) solving the full Navier-Stokes system. For these computations a velocity of :math:`u_R=-0.4` m/s is prescribed on the inner cylinder as boundary condition. All obtained velocities are evaluated along the symmetry axis of the annulus across the larger gap. 
+It is interesting to remark, that Equations (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) look somehow related to each other due to the logarithm in both relations. However it is not immediately evident that they are actually identical. Nevertheless, due to existence and uniqueness theorems for the Stokes equation from [L69]_, one knows that relations (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) are in fact the same. 
+
+The following Figure :ref:`largeGapCouette` compares these two analytically obtained velocities with results from a 3D-CFD simulation (using ANSYS CFX) solving the full Navier-Stokes system. For these computations a velocity of :math:`u_R=-0.4` :math:`\text{m}/\text{s}` is prescribed on the inner cylinder as boundary condition. All obtained velocities are evaluated along the symmetry axis of the annulus across the larger gap. The inner boundary is then reached on the left side, the outer boundary is hit on the right side of this Figure.  
 
 .. figure:: largeGapCouette.pdf
    :scale: 40% 
@@ -368,6 +369,8 @@ The following Figure :ref:`largeGapCouette` compares these two analytically obta
    
    Flow velocity across the large gap within an eccentric annulus (eccentricity :math:`\epsilon = 0.5`) :label:`largeGapCouette`
 
+
+As one can see, the two analytical approaches lead to the same velocity distribution across the larger gap and both boundary conditions are met exactly. On the other hand, due to the finite mesh size particularly at the outer radius :math:`R_2`, the boundary condition there is only approximately satisfied.
 
 In the next Section, the corresponding flow force is obtained with *sympy*-driven postprocessing and then compared again to the forces obtained by 3D-CFD and numerical evaluation.
   
@@ -424,7 +427,7 @@ Alternatively, the Couette-flow force can be derived from Equation (:ref:`rectan
    
    F_{Couette2} = -2\pi\,\frac{l \mu u_{R}}{\beta - \alpha}\,.
 
-With the data in Table :ref:`data1` and Table :ref:`data2`, the following Figure :ref:`flowForceCouette` shows a comparison between the analytically obtained relations (:ref:`Fcouette`) and (:ref:`FcouetteBipolar`) and results from 3D-CFD-simulations of the full Navier-Stokes system.
+With the data in Table :ref:`data1` and Table :ref:`data2`, the following Figure :ref:`flowForceCouette` shows a comparison between the analytically obtained relations (:ref:`Fcouette`) and (:ref:`FcouetteBipolar`) and results from 3D-CFD-simulations of the full Navier-Stokes system for a wide range of different eccentricities.
 
 .. table:: Additional fluid- and geometry-parameters :label:`data2`
 
@@ -444,6 +447,7 @@ With the data in Table :ref:`data1` and Table :ref:`data2`, the following Figure
    
    Flow force acting on the inner cylinder of an annulus with varying eccentricity :math:`\varepsilon` :label:`flowForceCouette`
 
+Again, both analytical relations agree perfectly but since the numerical CFD-results for the velocity slightly diverge from the analytical solution especially towards the outer boundary (as seen in Figure :ref:`largeGapCouette`), the flow force computed from this data also shows smaller deviations.  
    
    
 Taylor-expansions and small gaps
@@ -715,7 +719,7 @@ Two different conformal mappings are utilized to solve the Stokes problem within
 
 Both, the eccentric annular Couette velocity and flow force are validated with numerical CFD-results that are obtained by solving the full nonlinear Navier-Stokes equation in the flow domain between the two cylinders.
 
-The article concludes with an application of the comformal bipolar map to an eccentric Poiseuille-problem. Although the solution is known, it is seldomly implemented and visualized. With the help of *sympy* however, the implementation of such methods is much easier.
+The article concludes with an application of the conformal bipolar map to an eccentric Poiseuille-problem. Although the solution is known, it is seldomly implemented and visualized. With the help of *sympy* however, the implementation of such methods is much easier.
 Finally, the authors combine their results on eccentric annular Couette-flow with known results on eccentric annular Poiseuille-flow, deriving new expressions for the eccentric annular Couette-Poiseuille-flow.
 
 *sympy* performed particularly well in the application of the first conformal mapping (i.e. the Moebius transform). In case of the bipolar transformation, manual assistance had to be provided when separating real and imaginary parts of the conformal map. Furthermore, the authors realized that the *series*- and *simplify*-routines have some difficulties with terms involving square roots.
