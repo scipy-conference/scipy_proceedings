@@ -53,7 +53,7 @@ MPI-parallel Molecular Dynamics Trajectory Analysis with the H5MD Format in the 
    To investigate how the amount of data read at each frame affects I/O performance, we implemented a feature into the H5MDReader where only the necessary coordinates for the computation task are read from the file, which resulted in a fixed improvement of approximately 5x on all three HPCs.
    Furthermore, we investigated how front-loading all the file I/O by loading the trajectory into memory prior to the computation, rather than iterating through each time step, affected the I/O performance.
    This resulted in an improvement on Agave of up to 10x on up to 112 cores.
-   These optimization attempts led us to find that **how** our test file is stored on disk is just as important as how we access it.
+   These optimization attempts led us to find that *how* our test file is stored on disk is just as important as how we access it.
    By altering the HDF5 chunk layout of the file rather than letting h5py auto chunk the file as was done in the initial benchmarks, we found speedups on Agave of up to 98x on 112 cores with respect to the baseline serial I/O time of the default chunked file.
    As a bonus, we also found that applying HDF5's built in gzip compression does not affect parallel I/O performance at higher core counts while providing ~33% smaller files.
 
@@ -129,20 +129,24 @@ In general, our software stacks were built in the following manner:
 
 .. raw:: latex
 
-   \begin{table}
-   \centering
-   \begin{tabular}{c c c c c c c c}
-    \toprule
-    \textbf{System} & \textbf{Python} & \textbf{C compiler} & \textbf{HDF5} & \textbf{OpenMPI} & \textbf{h5py} & \textbf{mpi4py} & \textbf{MDAnalysis} \\ [0.5ex]
-    \midrule
-    ASU Agave     & 3.8.5   & gcc 4.8.5    & 1.10.1   & OpenMPI 3.0.0   & 2.9.0   & 3.0.3   & 2.0.0-dev0    \\
-    PSC Bridges   & 3.8.5   & gcc 4.8.5    & 1.10.2   & OpenMPI 3.0.0   & 3.1.0   & 3.0.3   & 2.0.0-dev0    \\
-    SDSC Comet    & 3.6.9   & icc 18.0.1   & 1.10.3   & OpenMPI 3.1.4   & 3.1.0   & 3.0.3   & 2.0.0-dev0    \\
-    \bottomrule
-   \end{tabular}
-   \caption{Library versions installed for each HPC environment.}
-   \DUrole{label}{tab:hpcs}
-   \end{table}
+  \begin{table}
+  \centering
+  \begin{tabular}{c c c c}
+   \toprule
+   \textbf{System} & ASU Agave & PSC Bridges & SDSC Comet \\ [0.5ex]
+   \midrule
+   \textbf{Python}       & 3.8.5       & 3.8.5       & 3.6.9        \\
+   \textbf{C compiler}   & gcc 4.8.5   & gcc 4.8.5   & icc 18.0.1   \\
+   \textbf{HDF5}         & 1.10.1      & 1.10.2      & 1.10.3       \\
+   \textbf{OpenMPI}      & 3.0.0       & 3.0.0       & 3.1.4        \\
+   \textbf{h5py}         & 2.9.0       & 3.1.0       & 3.1.0        \\
+   \textbf{mpi4py}       & 3.0.3       & 3.0.3       & 3.0.3        \\
+   \textbf{MDAnalysis}   & 2.0.0-dev0  & 2.0.0-dev0  & 2.0.0-dev0   \\
+   \bottomrule
+  \end{tabular}
+  \caption{Library versions installed for each HPC environment.}
+  \DUrole{label}{tab:hpcs}
+  \end{table}
 
 
 Benchmark Data Files
@@ -479,7 +483,7 @@ References
 
 .. links
 .. -----
-.. _numpy: https://numpy.org/   
+.. _numpy: https://numpy.org/
 .. _MDAnalysis: https://www.mdanalysis.org
 .. _MDAnalysis User Guide: https://userguide.mdanalysis.org/stable/contributing_code.html
 .. _H5MD: http://nongnu.org/h5md/
