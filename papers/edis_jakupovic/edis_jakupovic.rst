@@ -69,11 +69,13 @@ Introduction
 ============
 
 The molecular dynamics (MD) simulation approach :cite:`Huggins:2019` is widely used across the biomolecular and materials sciences, accounting for more than one quarter of the total computing time :cite:`Fox:2019` in the Extreme Science and Engineering Discovery Environment (XSEDE) network of national supercomputers in the US :cite:`xsede`.
-As high performance computing (HPC) resources continue to improve in performance, the size of MD simulation files are now commonly terabytes in size, making serial analysis of these trajectory files impractical.
-Parallel analysis is a necessity for the efficient use of both HPC resources and a scientist’s time :cite:`Cheatham:2015, Beckstein:2018, Fox:2019`.
-MDAnalysis_ is a widely used Python library that can read and write over 25 popular MD trajectory file formats while providing a common object-oriented interface :cite:`Michaud-Agrawal:2011, Gowers:2016`.
+As high performance computing (HPC) resources continue to improve in performance, the size of MD simulation files are now commonly terabytes in size, making serial analysis of these trajectory files impractical :cite:`Cheatham:2015`.
+Parallel analysis is a necessity for the efficient use of both HPC resources and a scientist’s time :cite:`Beckstein:2018, Fox:2019`.
+MD trajectory analysis can be parallelized using task-based or MPI-based approaches, each with their own advantages and disadvantages :cite:`Paraskevakos:2018`.
+Here we investigate parallel trajectory analysis with the MDAnalysis_ Python library :cite:`Michaud-Agrawal:2011, Gowers:2016`.
+MDAnalysis is a widely used package in the molecular simulation community that can read and write over 25 popular MD trajectory file formats while providing a common object-oriented interface.
 Previous work that focused on developing a task-based approach to parallel analysis found that an I/O bound task only scaled to 12 cores due to a file I/O bottleneck :cite:`Fan:2019`.
-Our previous feasibility study suggested that parallel reading via MPI-IO and the HDF5_ file format could lead to good scaling although only a reduced size custom HDF5 trajectory was investigated and no usable implementation of a true MD trajectory reader was provided :cite:`Khoshlessan:2020`.
+Our recent feasibility study suggested that parallel reading via MPI-IO and the HDF5_ file format could lead to good scaling although only a reduced size custom HDF5 trajectory was investigated and no usable implementation of a true MD trajectory reader was provided :cite:`Khoshlessan:2020`.
 
 H5MD_, or "HDF5 for molecular data", is an HDF5-based file format that is used to store MD simulation data, such as particle coordinates, box dimensions, and thermodynamic observables :cite:`Buyl:2014`.
 A Python reference implementation for H5MD exists (pyh5md_ :cite:`Buyl:2014`) but the library is not maintained anymore, and with advice from the original author of pyh5md, we implemented native support for H5MD I/O in the MDAnalysis package.
