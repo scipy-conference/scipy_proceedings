@@ -51,6 +51,7 @@ Introduction
 Last years the evolution of deep neuronal networks also affected the way in which the Time of Flight (ToF) specific images are processed. The images from the ToF cameras are usually obtained as synchronized depth and infrared (IR) image pairs.
 The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain. The applications targeted are ranging from persond detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
 In the following parts the introduction to the specific ToF imaging, custom data processing and CNN based solutions are presented.
+Although for the 2D data a bunch of CNN based solutions exists, for the 3D data :cite:`Gezawa2020` only some base architectures were widespread such as Pointnet :cite:`qi2017pointnet`.
    
 .. figure:: tof.png
   :width: 400
@@ -79,7 +80,7 @@ Custom pipeline for ToF data
 ++++++++++++++++++++++++++++
 The main role of the depth image preprocessing part is the filtering and bounding box estimation for the 3D ROI. 
 The filtering is essential for the embedded device in order to reduce the computational overload. 
-For the filtering pipeline we considered three interconnected filters: voxel, pass-through and outlier filter as this is visible in Figure below. All these implementations are open source library  based variants.
+For the filtering pipeline we considered three interconnected filters: voxel, pass-through and outlier filter as this is visible in Figure below. All these implementations are open source library  based variants. The details of the filtering were reported in :cite:`tamas2021embedded`.
 
    
 .. figure:: filters.png
@@ -96,7 +97,7 @@ Low level ToF image pre-processing - Tofnest
 .. MSz part
 
 
-In ToFNest we are approximating surface normals from depth images, recorded with Time-of-Flight cameras. The approximation is done using a neural network. The base of our neural network is the PyTorch library, since the whole process is done using Python 3.6 as our programming language. Using PyTorch we have created a Feature Pyramid Network type model (:cite:’FPN2017’).
+In ToFNest we are approximating surface normals from depth images, recorded with Time-of-Flight cameras. The approximation is done using a neural network. The base of our neural network is the PyTorch library, since the whole process is done using Python 3.6 as our programming language. Using PyTorch we have created a Feature Pyramid Network type model (:cite:`FPN2017`).
 
 The main pipeline of the data was the following: first we read the depth images with opencv (alongside the depth information we could also use the infrared information or the rgb information from the camera as well, thus adding more information to work with), then we prepare them with numpy. From a numpy array it is easy to convert it to a torch tensor on the GPU, which then creates the predictions about the surface normals. An example of the prediction can be seen in the next image, where the direction of the normal vectors are decoded with RGB images. 
 
@@ -109,11 +110,11 @@ The main pipeline of the data was the following: first we read the depth images 
 
   Exemplification of ToF normal estimation :label:`tofnest`
 
-The results were accurate relative to other techniques, but the time was much less. The time being less means that at least 100 times faster. This can be due to the fact, that this method works with images, instead of point clouds as other methods do. This makes it much faster.
+The results were accurate relative to other techniques, but the time was much less. The time being less means that at least 100 times faster. This can be due to the fact, that this method works with images, instead of point clouds as other methods do. This makes it much faster, as this was reported in :cite:`iros2021`.
 
 Our method was evaluated by verifying only the angles between the lines, not the exact directions of the vectors (this was the case in the other methods as well), but we can train that, although the results are going to get worse.
 
-Furthermore, in order to get a real-time visualization about the predictions, we used rospy to read the images from ROS topics, and also to publish the normal estimation values to another ROS topic, that we could visualize using Rviz. This can be seen in the demo video.
+Furthermore, in order to get a real-time visualization about the predictions, we used rospy to read the images from ROS topics, and also to publish the normal estimation values to another ROS topic, that we could visualize using Rviz. This can be seen in the demo video. 
 
 Low level ToF image pre-processing - Tofsmooth
 ++++++++++++++++++++++++++++++++++++++++++++++
@@ -122,7 +123,7 @@ This whole pipeline and network, with some minor modifications can be also used 
 
 For the dataset we added gaussian noise of 5 and 10 cm to the original data, while we smoothed the original data with PointCloudDenoising (:cite:`pistilli2020learning`) method.
 
-Our method got pretty close to the ground truth value, in most of the cases. Although, in the case of the original (originally fairly smooth) data resulted slightly worse results, then some other methods (for instance the PointCloud Library :cite:’Rusu_ICRA2011_PCL’), when we tested the smoothing for much more noisy data, our results barely changed, while other methods were highly compromised. A comparison between these cases can be seen in the next image 3 images:
+Our method got pretty close to the ground truth value, in most of the cases. Although, in the case of the original (originally fairly smooth) data resulted slightly worse results, then some other methods (for instance the PointCloud Library :cite:`Rusu_ICRA2011_PCL`), when we tested the smoothing for much more noisy data, our results barely changed, while other methods were highly compromised. A comparison between these cases can be seen in the next image 3 images:
 
 .. figure:: noise00.jpg
   :width: 400
@@ -151,7 +152,7 @@ Our method got pretty close to the ground truth value, in most of the cases. Alt
 
   The average error for data with 10 cm gaussian noise :label:`noise10`
 
-Here we can see that our method kept very much the same throughout all the cases same as DeepDepthDenoising method (:cite:’sterzentsenko2019denoising’), which is the only other method that we have found, that works with depth images as well, making it about the same as ours, but a little bit more polished. Also this method performs at the same speed as ours.
+Here we can see that our method kept very much the same throughout all the cases same as DeepDepthDenoising method (:cite:`sterzentsenko2019denoising`), which is the only other method that we have found, that works with depth images as well, making it about the same as ours, but a little bit more polished. Also this method performs at the same speed as ours.
 
 The jump in the error at the end of the scale is due to some denormalization bias that we need to fine-tune. 
 
@@ -172,7 +173,7 @@ Person detection from IR imaging
 ++++++++++++++++++++++++++++++++
 
 
-Detectnet is a detection algorithm based on the jetson-inference repository. 
+Detectnet is a detection algorithm based on the jetson-inference repository with people detection focus presented in :cite:`tracking2016` or :cite:`XUE201670`. 
 This repository uses NVIDIA TensorRT for efficient implementation of neural networks on the Jetson platform, improving performance and energy efficiency through graphical optimizations, kernel fusion and FP16/INT8 accuracy.
 
 Object detection requires a lot of information for training. DetectNet uses a large dataset, and each image contains multiple objects. For each object in the image, the trained model must detect both the object and the corner coordinates of the bounding box. Since the number of objects can vary in the training image set, it would be difficult to define the loss function if we  choose the label format with variable length and dimensionality. This problem has been solved by introducing a 3-dimensional label format that enables DetectNet to ingest images of any size with a variable number of objects present.
