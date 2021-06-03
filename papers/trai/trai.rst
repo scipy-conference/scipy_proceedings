@@ -386,7 +386,9 @@ The advantage of this method is that it allow the computation of the volume for 
 
   Corner detection :label:`corner`
 
-Volume estimation using enhanced planar/corner detections was done using the training from :cite:`sommer2020`.
+Volume estimation using enhanced planar/corner detections was done using the training from :cite:`sommer2020`. The largest benefit of this method is that it does not rely on Ransac and it can compute the volume for multiple objects. 
+
+This permits in further research to consider the idea of moving the camera in such a way to improve the volumetric measurement of multiple objects. This problem statement becomes equivalent to a Next Best View problem in which the view must optimize the accuracy or availability of a volumetric measurement. This translates to the question "In which of the available positions does the camera need to be placed next in order to improve the volumetric measurment". A starting point for such an idea would be to use the neural network architecture used in :cite:`zeng2020pc` and all , but change the loss function objective from reconstruction to Volumetric accuracy. By creating a scoring function for the volumetric accuracy, candidate new positions might be evaluated and chosen based on the input pointcloud.
 
 
 Conclusion
