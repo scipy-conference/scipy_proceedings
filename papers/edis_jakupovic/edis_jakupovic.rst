@@ -73,7 +73,7 @@ As high performance computing (HPC) resources continue to improve in performance
 Parallel analysis is a necessity for the efficient use of both HPC resources and a scientist’s time :cite:`Beckstein:2018, Fox:2019`.
 MD trajectory analysis can be parallelized using task-based or MPI-based approaches, each with their own advantages and disadvantages :cite:`Paraskevakos:2018`.
 Here we investigate parallel trajectory analysis with the MDAnalysis_ Python library :cite:`Michaud-Agrawal:2011, Gowers:2016`.
-MDAnalysis is a widely used package in the molecular simulation community that can read and write over 25 popular MD trajectory file formats while providing a common object-oriented interface.
+MDAnalysis is a widely used package in the molecular simulation community that can read and write over 25 popular MD trajectory file formats while providing a common object-oriented interface that makes data available as numpy_ arrays :cite:`Harris:2020`.
 Previous work that focused on developing a task-based approach to parallel analysis found that an I/O bound task only scaled to 12 cores due to a file I/O bottleneck :cite:`Fan:2019`.
 Our recent feasibility study suggested that parallel reading via MPI-IO and the HDF5_ file format could lead to good scaling although only a reduced size custom HDF5 trajectory was investigated and no usable implementation of a true MD trajectory reader was provided :cite:`Khoshlessan:2020`.
 
@@ -86,13 +86,14 @@ H5MDReader interfaces with h5py_, a high level Python package that provides a Py
 In ``h5py``, accessing a file in parallel is accomplished by passing a keyword argument into ``h5py.File``, which then manages parallel disk access.
 
 We benchmarked H5MDReader's parallel reading capabilities with MDAnalysis on three HPC clusters: ASU Agave at Arizona State University, and SDSC Comet and PSC Bridges, which are part of XSEDE :cite:`xsede`.
-The benchmark consisted of a simple split-apply-combine scheme :cite:`Wickham:2011` of an I/O-bound task that split a 90k frame (113 GiB) trajectory into :math:`N` chunks for :math:`N` processes, where each process a task on their chunk of data, and then gathered the results back to the root process.
-For the computational task, we computed the time series root mean squared distance (RMSD) of the positions of the |Calpha| (alpha carbon) atoms in the protein to their initial coordinates at the first frame of the trajectory.
+The benchmark consisted of a simple split-apply-combine scheme :cite:`Wickham:2011` of an I/O-bound task that split a 90k frame (113 GiB) trajectory into :math:`N` chunks for :math:`N` processes, where each process performed a computation on their chunk of data, and the results were finally gathered back to the root process.
+For the computational task, we computed the time series of the root mean squared distance (RMSD) of the positions of the |Calpha| (alpha carbon) atoms in the protein to their initial coordinates at the first frame of the trajectory.
+At each frame (time step) in the trajectory, the protein was optimally superimposed on the reference frame to remove translations and rotations.
 The RMSD calculation is a very common task performed to analyze the dynamics of the structure of a protein :cite:`Mura:2014`.
-It is a very fast computation that is heavily bounded by how quickly data can be read from the file.
-Therefore, it provides an excellent analysis candidate to test the I/O capabilities of H5MDReader.
+Because it is a fast computation that is bounded by how quickly data can be read from the file it is a suitable task to test the I/O capabilities of H5MDReader.
 
-Across the three HPC clusters tested, the benchmarks were done on BeeGFS_ and Lustre_ parallel file systems, which are  suited for multi-node MPI parallelization. We tested various algorithmic optimizations for our benchmark, including altering the stripe count, loading only necessary coordinate information with numpy masked arrays :cite:`Harris:2020`, and front loading all I/O by loading the entire trajectory into memory prior to the RMSD calculation.
+Across the three HPC clusters tested, the benchmarks were performed on BeeGFS_ and Lustre_ parallel file systems, which are suited for multi-node MPI parallelization.
+We tested various algorithmic optimizations for our benchmark, including altering the stripe count, loading only necessary coordinate information with numpy masked arrays :cite:`Harris:2020`, and front loading all I/O by loading the entire trajectory chunk into memory prior to the RMSD calculation.
 
 We tested the effects of HDF5 file chunking and file compression on I/O performance. An HDF5 file's datasets can be stored either contiguously on disk, or scattered across the disk in different locations in *chunks*. These chunks must be defined on initialization of the dataset, and for any element to be read from a chunk, the entire chunk must be read. In general we found that altering the stripe count and loading only necessary coordinates via masked arrays provided little improvement in benchmark times. Loading the entire trajectory into memory in one pass instead of iterating through, frame by frame, showed the greatest improvement in performance. This was compounded by our results with HDF5 chunking. Our baseline test file was auto-chunked with the auto-chunking algorithm in ``h5py``. When we recast the file into a contiguous form and a custom, optimized chunk layout, we saw improvements in serial I/O on the order of 10x. Additionally, our results from applying gzip compression to the file showed no loss in performance at higher processor counts, indicating H5MD files can be compressed without losing performance in parallel analysis tasks.
 
@@ -478,6 +479,7 @@ References
 
 .. links
 .. -----
+.. _numpy: https://numpy.org/   
 .. _MDAnalysis: https://www.mdanalysis.org
 .. _MDAnalysis User Guide: https://userguide.mdanalysis.org/stable/contributing_code.html
 .. _H5MD: http://nongnu.org/h5md/
