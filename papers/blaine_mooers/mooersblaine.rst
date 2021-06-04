@@ -145,15 +145,26 @@ A pencil icon enables the editing of the code.
 Other icons enable copying the code to the clipboard, inserting code into the current cell in the notebook, and deleting the snippet. 
 
 A plus sign in the upper-righthand corner opens a GUI for the creation of a new snippet.
-The GUI occupies the window that usually displays the notebook.
+The GUI occupies a new tab in the window that houses the Jupyter notebooks.
 The GUI has a text box for each kind of metadata: name, description, tags, language, and the snippet code.
+There is a save button at the bottom to add the new snippet to the current library.
+
+
+.. figure:: newElyraSnip.png
+
+   The GUI for the creation of new snippets. The Learn more link take the user to the documentation in Read-the-docs. :label:`newElyraSnip`
+
 
 Each snippet is stored in a separate JSON file.
 Each JSON file has the snippet code plus several rows of metadata, including a list of tags and the programming language of the snippet.
 The latter provides a sanity check.
 For example, an attempt to insert a C++ snippet into a notebook with an active Python kernel will trigger the opening of a window with a warning.
+
 The directory ~/Library/Jupyter/metadata/code-snippets stores the snippet files on the Mac.
-The tag system serves the user who is not familiar with the content of the installed libraries.
+There are no subfolders for individual snippet libraries, unlike the jupyterlab-snippets externsion.
+The snippets from multiple libraries are stored together in the code-snippets folder.
+The tag system can be used to select all snippets from one library.
+The tag system serves well the user who is not familiar with the content of the installed libraries.
 
 
 Colab snippet library
@@ -241,7 +252,8 @@ The preparation and debugging of the parameter files manually take many hours, b
 Simulated annealing involves molecular dynamics simulation at high temperatures to move parts of a molecular model out of local energy minima and into conformations that fit the experimental data better.
 Twenty minutes of applying simulated annealing to an early model that still has numerous errors can significantly improve the model while saving the user a day or more of the tedious manual rebuilding of the molecular model. 
 
-More recently, Phenix has been extended to refine crystal structures with neutron diffraction data and for structure determination and refinement with cryo-electron microscopy data.
+More recently, Phenix has been extended to refine crystal structures with neutron diffraction data and for structure determination and refinement with cryo-electron microscopy (cryo-EM) data.
+The addition of support for cryo-EM help address the recent need for the ability to fit atomic models to cryo-EM maps that have recently become available at near atomic resolution because of the dramatic imprvoements in detector technology []_.
 Users can interact with Phenix via a GUI interface or the command line, as mentioned before, but users can also use PHIL, domain-specific language scripting language for more precise parameter settings for Phenix. 
 In addition, users can use the :code:`phenix.python` interpreter. Unfortunately, the phenix.python interpreter is still limited to Python2, whereas CCTBX has been available for Python3 for over a year.
 
@@ -254,7 +266,7 @@ The PDB file format was defined and popularized by the Protein Data Bank, a repo
 The PDB was started in 1972 and unified with the branches in Japan and Europe in 2003 as the wwPDB [ ]. 
 The wwPDB continues to play a central role in promoting the principles of open science and reproducible research in structural biology.
 
-Since 2019, the wwPDB requires the PDBx/mmCIF format for new depositions [Adam21]_.
+Since 2019, the wwPDB requires the PDBx/mmCIF format for new depositions [Adam19]_.
 Many structural biology software packages now have the ability to read files in the PDBx/mmCIF format.
 
 .. code-block:: bash
@@ -573,6 +585,15 @@ This work is support in part by these National Institutes of Health grants: R01 
 
 References
 ----------
+
+.. [Adam19] P.D. Adams, P.V. Afonine, K. Baskaran, H.M. Berman, J. Berrisford, G. Bricogne, D.G. Brown, S.K. Burley, M. Chen, Z. Feng, C. Flensburg, A. Gutmanas, J.C. Hoch, Y. Ikegawa, Y. Kengaku, E. Krissinel, G. Kurisu, Y. Liang, D. Liebschner, L. Mak, J.L Markley, N.W. Moriarty, G.N. Murshudov, M. Noble, E. Peisach, I. Persikova, B.K. Poon, O.V. Sobolev, E.L. Ulrich, S. Velankar, C. Vonrhein, J. Westbrook, M. Wojdyr, M. Yokochi, and J.Y. Young.
+            *Announcing mandatory submission of PDBx/mmCIF format files for crystallographic depositions to the Protein Data Bank (PDB)*,
+            Acta Crystallographica Section D: Structural Biology, 75(4):451--454, April 2019.
+            doi:10.1107/S2059798319004522
+
+.. [Adam21]
+
+            
 .. [Beg21] M. Beg, J. Belin, T. Kluyver, A. Konovalov, M. Ragan-Kelley, N. Thiery, and H. Fangohr.
             *Using Jupyter for reproducible scientific workflows*,
             Computing in Science \& Engineering, 23(2):36--46, April 2021. 
