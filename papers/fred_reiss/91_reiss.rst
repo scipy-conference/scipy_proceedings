@@ -196,7 +196,7 @@ object represents a column of span data, and it stores this data internally
 using three Numpy :cite:`harris2020array` arrays, plus a shared reference to
 the underlying text.
 
-The three arrays that represent a column of spand data consist of arrays of
+The three arrays that represent a column of span data consist of arrays of
 begin and end offsets (in characters), plus a third array of indices into a
 dictionary of unique document texts. The ``SpanArray`` object also stores a
 shared reference to a dictionary data structure that tracks unique document
@@ -237,7 +237,7 @@ differently.
 
 The internal structure of our ``SpanArray`` and ``TokenSpanArray`` extension
 arrays allows for efficient vectorized implementations of common Pandas
-oeprations like slicing, filtering, and aggregation.  Slicing operations over a
+operations like slicing, filtering, and aggregation.  Slicing operations over a
 ``SpanArray`` produce a new ``SpanArray`` with views of the original
 ``SpanArray`` object's internal Numpy arrays, avoiding unneccessary copying of
 span data.
@@ -256,13 +256,13 @@ vectors.
 
 Our ``TensorArray`` extension array class represents a Pandas series where each
 element is a tensor.  Internally, we represent the entire series' data as a
-single dense NumPy array The TensorArray class translates Pandas array
+single dense NumPy array. The TensorArray class translates Pandas array
 operations to vectorized operations over the underlying Numpy array.  These
 vectorized operations are much more efficient than iterating over a list of
 tensors.
 
 Since the individual data items in a ``TensorArray`` are actually slices of a
-larger Numpy array, lour tensor data type integrates seamlessly with third
+larger Numpy array, our tensor data type integrates seamlessly with third
 party libraries that accept Numpy arrays.  For example, Figure
 :ref:`matplotlib` shows how our tensor data type works with the ``matplotlib``
 :cite:`Hunter:2007` plotting library in a Jupyter notebook.
@@ -568,14 +568,14 @@ themselves, ``transformers`` includes dedicated tokenizers for these models,
 most of which use subword tokenizers like *SentencePiece*
 :cite:`kudo-richardson-2018-sentencepiece` to improve accuracy.
 
-Text Extensions for Pandas can transform two types of output from the
+Text Extensions for Pandas can transform two types of outputs from the
 ``transformers`` library for masked language models into Pandas DataFrames.  We
 can convert the output of the library's tokenizers into DataFrames of token
 metadata, including spans marking the locations of each token.
 
 Our tensor data type can also represent embeddings from the encoder stage of a
 ``transformers`` language model.  Since the language models in ``transformers``
-have a limited sequence lengh, we also include utility functions for dividing
+have a limited sequence length, we also include utility functions for dividing
 large DataFrames of token information into token into fixed-size windows,
 generating embeddings for each window, and concatenating the resulting
 embeddings to produce a new column for the original DataFrame.
@@ -609,7 +609,7 @@ extraction models into Pandas DataFrames. The supported models are:
 * `relations`, which identifies relationships betwen pairs of named entities.
 
 Converting the outputs of these models to DataFrames makes building notebooks
-adn applications that analyze these outputs much easier.  For example, two
+and applications that analyze these outputs much easier.  For example, two
 lines of Python code, users can produce a DataFrame with information about all
 person names that a document mentions:
 
@@ -690,7 +690,7 @@ original table in the source PDF document.
    Watson Discovery's Table Understanding enrichment into a Pandas DataFrame.
    :label:`tabletodf`
 
-Our conversion also produces a the "shredded" representation of the table as a
+Our conversion also produces the "shredded" representation of the table as a
 DataFrame with one line for each cell of the original table. This data format
 facilitates data integration and cleaning of the extracted information.
 Pandas' facilities for data cleaning, filtering, and aggregation are extremely
