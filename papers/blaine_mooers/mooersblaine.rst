@@ -88,15 +88,36 @@ jupyterlab-snippets externsion
 
 The jupyterlab-snippets extension adds a snippet menu to the JupyterLab menu bar.
 The user accesses the snippets through a cascading pulldown menu.
-Each snippet resides in a separate plain text file.
-The snippets are written in plain text files without any formatting.
+Each snippet resides in a separate plain text file without any formatting.
 This feature dramatically eases adding new snippets by users and eases keeping the snippets under version control.
 The snippets are stored in the Jupyter data directory (which is found by entering :code:`jupyter --path`; it is in ~/Library/Jupyter/snippets).
-Each snippet library is stored in a separate subfolder, which appears on the menu bar as a part of a cascading pulldown menu (Figure). 
+Each snippet library is stored in a separate subfolder, which appears on the menu bar as a part of a cascading pulldown menu (Figure :ref:`snippetCascade`). 
+
+
+.. figure:: snippetCascade.png 
+
+   Cacading pull-down menu for the Juptyer categories of the jupyterlabpymolsnips library. :label:`snippetCascade`
+
 We clustered snippets into categories. 
 Each category has a cascading submenu.
 Clicking on a snippet name in the submenu triggers its insertion into the current cell in the notebook.
 The nested menu hierarchy serves well the user who is familiar with the content of the snippet libraries.
+
+Like most other snippet extnesions for Jupyter Notebook and JupyterLab, the jupyterlab-snippets externsion does not support tab stops nor tab triggers.
+These are common features of snippet libraries for most text editors and IDEs that accelerate the editing of parameter values in snippets.
+The tab stops are particularly valuable because they direct the user to sites that may need changes in their parameter values and they guide the user to all of the site to ensure that none are overlooked.
+The overlooking of parameter values that require changing can be a major source of bugs.
+The tab triggers are also often mirrored, so a change at one instance of the same parameter will be propagate automatically to other identical instances of the parameter.
+To compensate for the lack of tab triggers, we inlcude a second copy of the code in the same snippet but in a comment and with the tab triggers marked with curly braces and numbers (Figure :ref:`compareSnips`).
+The user uses the code in the comment to direct their editing of the active code.
+The user can delete the commented out comment when they have finished editing.
+Separate versions of the libraries were made with commented out code.
+These versions are distinguished by having "plus" appended to their names.
+
+.. figure:: compareSnips.png 
+
+   Comparison of active snippet at the bottom and commented out snippet at the top. The snippet at the top serves as a guide for editing because it has curly braces marking sites to be edited. :label:`compareSnips`
+
 
 elyra-code-snippet extension
 ****************************
@@ -106,6 +127,11 @@ After the icon is clicked, the snippets appear in the left margin of the Jupyter
 Snippets from all libraries appear in alphabetical order. 
 The user can scroll through the list of snippets.
 Hovering the mouse cursor over the snippet's name triggers the display of a description of the snippet.
+
+
+.. figure:: hbondsElyra.png 
+
+   This is yet another the caption. :label:`hbondElyra`
 
 Alternatively, the user can enter a search term in the search box at the top of the menu to reduce the list of snippets.
 The search terms can be part of a snippet name or a tag stored with each snippet.
@@ -197,39 +223,39 @@ The
 Structure determination and refinement workflows with Phenix
 ************************************************************
 
-The Phenix software is an advanced and sophisticated software project that was initially developed for the refinement of protein crystal structures determined from X-ray diffraction data.
-It has been under development for two decades by a team of professional software developers based at the Berkeley-Lawrence National Laboratory under the leadership of Paul Adams.
-The project also includes several collaborators located around the world who develop auxiliary components of the package.
+A team of professional software developers based at the Berkeley-Lawrence National Laboratory (BLNL) develops the Phenix software to refine protein crystal structures determined from X-ray diffraction data. 
+The project includes several collaborators located around the world who develop auxiliary components of the package.
+Paul Adams leads the team.
+He had spent the 1990s developing the two very successful protein crystallography software packages: XPLOR and CNS.
+Shortly after arriving in the Bay Area around 2000, Paul Adams was influenced by Warren Delano to use Python to wrap the Computational Crystallography Tool Box (CCTBX), which is written in C++.
+Phenix uses CCTBX modules for intensive computations.
+(Warren Delano was the developer of the PyMOL, a molecular graphics program that was written in C and wrapped with Python.)
+While Python eases the use of CCTBX, mastery of CCTBX requires at least an intermediate level of Python programming skills.
+On the other hand, Phenix is easy to use via the command line or a GUI.
 
-Paul Adams had spent the prior decade developing the XPLOR and then  the CNS packages at Yale University with Axel Brunger.
-Shortly after arriving in the Bay Area, he was influenced by Warren Delano (the developer of the PyMOL molecular graphics program which is written in C but wrapped with Python) to also use Python to wrap CCTBX, the Computational Crystallography Tool Box, while developing Phenix.
-CCTBX was originally written in Cpp but its components have been migrating to Python.
-While Python eases the use of CCTBX, the harnessing of CCTBX requires at least intermediate if not advanced Python programming skills.
-On the other hand, Phenix was designed to be user-friendly via initially command line usage and then via a user-friendly GUI.
+The Phenix project greatly eased the incorporation of simulated annealing into crystal structure refinement by hiding the tedious preparation of the required parameter files from the user.
+The PDB file does not have sufficient information about chemical bonding for MD simulations.
+The molecular dynamics software that carries out the simulated annealing requires two parameter files and the coordinate file.
+The preparation and debugging of the parameter files manually take many hours, but Phenix automates this takes.
 
-The Phenix project is popular because it greatly eased the incorporation of simulated annealing into crystal structure refinement by hiding from the user the tedious preparation of parameter files that previously had to be customized for each structure.
-These parameter files were required by the molecular dynamics software that carried out the simulated annealing.
-The preparation and debugging of the parameter files could take many hours.
+Simulated annealing involves molecular dynamics simulation at high temperatures to move parts of a molecular model out of local energy minima and into conformations that fit the experimental data better.
+Twenty minutes of applying simulated annealing to an early model that still has numerous errors can significantly improve the model while saving the user a day or more of the tedious manual rebuilding of the molecular model. 
 
-Simulated annealing involves doing molecular dynamics at high temperature to move parts of a molecular model out of local energy minima and into to conformations that fit the experimental data better.
-Twenty minutes of the application of simulated annealing to an early model that still has numerous errors can lead to significant improvement in the model while saving the user a day or more of tedious manual rebuilding of the molecular model. 
+More recently, Phenix has been extended to refine crystal structures with neutron diffraction data and for structure determination and refinement with cryo-electron microscopy data.
+Users can interact with Phenix via a GUI interface or the command line, as mentioned before, but users can also use PHIL, domain-specific language scripting language for more precise parameter settings for Phenix. 
+In addition, users can use the :code:`phenix.python` interpreter. Unfortunately, the phenix.python interpreter is still limited to Python2, whereas CCTBX has been available for Python3 for over a year.
 
-The Phenix project is based on Python but the computationally intensive components are run in Cpp via the CCTBX package.
-Users can interact with Phenix via a GUI interface, the command line, the command line plus the Phil domain-specific language scripts, the Python interpreter, or some combination thereof.
-More recently, Phenix has been extended for refinement of crystal structures with neutron diffraction data and for structure determination and refinement with cryo electron microscopy data.
- 
-The Phenix software runs on top of CCTBX and provides higher-level user access via a command-line scripting language, a Python API, and a GUI.
-The phenix.python interpreter still uses Python2 whereas CCTBX moved to Python3 several years ago.
-On the other hand, Jupyter Lab and its extensions are best run with Python3.
-The easiest workaround is to run Phenix by using the command line instead of Python.
-The commands prepended with the exclamation mark to invoke the shell.
-Of course, the equivalent CCTBX code for the phenix code could be run instead but this code can be many lines in length and it can be challenging for beginners to customize to a specific problem.
-The most efficient approach can be to use the phenix command line as much as possible and then resort to CCTBX when the need arises.
+Jupyter Lab and its extensions are also best run with Python3.
+The most practical approach to using Phenix in Jupyter Lab is to invoke Phenix by utilizing the shell rather than using Python.
+For example, the command shown below invokes statistical analysis of the B-factors in a Protein Data Bank (PDB) file by using one line of code in the shell (Figure :figure:XXXXXX).
+The PDB file uses a legacy, fixed-format file for storing the atomic coordinates and B-factors of crystal structures.
+The B-factors are a measure of the atomic motion in individual atoms in a protein structure. 
+The PDB file format was defined and popularized by the Protein Data Bank, a repository for atomic coordinates and structural data that has over 170,000 entries from around the world. 
+The PDB was started in 1972 and unified with the branches in Japan and Europe in 2003 as the wwPDB [ ]. 
+The wwPDB continues to play a central role in promoting the principles of open science and reproducible research in structural biology.
 
-For example, the command below invokes a statistical analysis of the B-factors in a pdb file, a common text file file format for storing atomic coordinates. 
-The pdb file has a fixed format that was defined and popularized by the Protein Data Bank (PDB), the central public repository for atomic coordinates and structural data. 
-The PDB is celebrating its 50 anniversary this year. 
-It has and continues to play an central role in promoting the principles of open science and reproducible research in structural biology.
+Since 2019, the wwPDB requires the PDBx/mmCIF format for new depositions [Adam21]_.
+Many structural biology software packages now have the ability to read files in the PDBx/mmCIF format.
 
 .. code-block:: bash
 
@@ -306,6 +332,13 @@ These shell scripts invoke Python scripts that capture the command line argument
 .. code-block:: bash
 
     ls /Applications/phenix-1.19.2-4158/modules/phenix/phenix/command_line/*.py.
+
+
+
+
+
+
+
 
 
 
