@@ -137,7 +137,6 @@ Snippets from all libraries appear in alphabetical order.
 The user can scroll through the list of snippets.
 Hovering the mouse cursor over the snippet's name triggers the display of a description of the snippet.
 
-
 .. figure:: hbondsElyra.png 
 
    This is yet another the caption. :label:`hbondElyra`
@@ -175,11 +174,8 @@ The snippets from multiple libraries are stored together in the code-snippets fo
 The tag system can be used to select all snippets from one library.
 The tag system serves well the user who is not familiar with the content of the installed libraries.
 
-
 Colab snippet library
-***********************
-
- 
+*********************
 
 The Colab snippet system resembles the Elyra snippet system in that search terms in a search box retrieve snippets.
 However, the Colab system differs from the Elyra system ins that a single notebook stores all of the snippets. The user's Google Cloud account stores the notebook of snippets.
@@ -193,6 +189,39 @@ Some involve the use of curl, and others use conda.
 We include all steps in one snippet, which is uniquely possible with the snippet system for Colab. 
 The user only has to select one snippet and then run each code block in succession.
 
+.. figure:: ColabPyMOL.png 
+
+   Code snippet for installing PyMOL on Colab. The <> icon opens a menu on the left side that lists all of the snippets. The search term 'pymol' was used to reduce the list of candidate snippets. The highlighted snippets name 'Install PyMOL is new Colab notebook'. Selecting this snippets opens the snippet below. The snippet description is displayed followed by the seven blocks of code. Clicking with the mouse cursor on 'INSERT' in blue inserts the code into in the cells on the notebook on the fight. :label:`ColabPyMOL`
+
+The user installs the snippets by loading on their Google Drive and then into Colab a specially formatted Jupyter Notebook.
+The user enters the url for the notebook in a the XXXX window (Fig. \ref{fig:snippets} a). 
+Multiple urls for multiple notebooks can be entered at one time (Fig. \ref{fig:snippets} a).
+The user logs out of Colab and upon logging in again, they will see the newly add snippets in the left margin (Fig. \ref{fig:snippets} b).
+A search box at the top of the list of snippets is used to recover a snippet (Fig. \ref{fig:snippets} b).
+
+The user enters a snippet name in the search box to display the snippet and its documentation (Fig. \ref{fig:snippets} c).
+The user hits the install button to install the snippet's code in the current code block of the notebook.
+The XXX snippet for a library will print in a table below the current cell a list of the snippets in the library and a brief description. 
+This table is stored in a panda's dataframe that can be searched with the panda's search function. 
+This table can also be searched for key terms with the search function in the notebook.
+The code block and output can be hidden by clicking on the three blue dots on the left margin of the cell. 
+
+
+Generation of the snippet libraries
+***********************************
+
+The Elyra snippet library is written in JavaScript.
+Each snippet resides in a separate file.
+All of the snippets reside in the folder \url{JUPYTER_DATA/metadata/code-snippets}.
+The path to \url{JUPYTER_DATA} varies with the operating system; the user finds this path the command .
+The user can download the snippets from GitHub as zip file and then uncompress this file and move the snippet files to the final destination.
+
+Notebooks with sample workflows
+*******************************
+
+We created a library of Jupyter Notebooks with sample workflows.
+This library of notebooks is only representative and not exhaustive because the combinatorial explosion of possible workflows makes covering all workflows impractical.
+These notebooks can serve as templates for the creation of new notebooks.
 
 Availability of the snippet libraries
 *************************************
@@ -236,11 +265,17 @@ Each library is also archived in zenodo.
 Results
 -------
 
-The 
-
-
-
-
+We describe here a set of libraries of code templates to support computational crystallography in Jupyter Notebooks on the cloud and on local computers.
+The libraries and notebooks can be loaded on and run on Google Colab where the user can share the notebook with collaborators or gain access to GPUs and TPUs.
+The user uploads the libraries and notebook to their Google Drive account and accesses the notebook from Colab.
+The storage of the libraries and notebooks on Google Drive persists between logins to Google Colab, but the crystallographic software must be reinstalled on each use of Colab.
+These libraries are installed only once; however, the crystallographic software must be reinstalled upon each login.
+We describe below installation scripts in the form of snippets that can be quickly run at the top of a Notebook to minimize the effort required to re-install the software.
+Another limitation of the Colab snippet system is that snippets from all libraries are stored in one pool and have to be accessed by either scrolling through a log list or by entering the snippet name in a search box.
+We addressed this limitation with a snippet for each library that prints a list of the available snippets with a short description.
+This list can span more than the length of a paper, but it can be collapsed to hide it or can be deleted when no longer needed.
+After the snippet is pulled out of the list by the search box, more detailed documentation about the snippet is displayed. 
+Next, we describe the content of each library with representative output in the Colab notebook.
 
 Structure determination and refinement workflows with Phenix
 ************************************************************
@@ -356,34 +391,6 @@ These shell scripts invoke Python scripts that capture the command line argument
     ls /Applications/phenix-1.19.2-4158/modules/phenix/phenix/command_line/*.py.
 
 
-
-
-
-
-
-
-
-
-Libraries supported
-*******************
-
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-
-
-
-
-
-
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-
 .. figure:: figure1.png
 
    This is yet another the caption. 
@@ -420,65 +427,29 @@ Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Bla
 
 
 
+
+
+
+
+
+
 JupyterLab snippets
 *******************
-
-
-
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-
-.. figure:: figure1.png
-
-   This is yet another the caption. 
 
 
 
 Elyra snippets
 **************
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-
-.. figure:: figure1.png
-
-   This is yet another the caption. 
-
 
 
 Colab library
 *************
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-
-.. figure:: figure1.png
-
-   This is yet another the caption. 
-
 
 
 Script to install PyMOL in Colab
 ********************************
-
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-
-.. figure:: figure1.png
-
-   This is yet another the caption. 
 
 
 
@@ -486,11 +457,6 @@ Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Bla
 Table of tutorial Jupyter Notebooks
 ***********************************
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
 
 .. figure:: figure1.png
 
@@ -500,14 +466,6 @@ Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Bla
 
 Help resource on GitHub
 ***********************
-
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-
-
 
 
 .. table:: Table of tutorial jupyter notebooks. :label:`jnbtable`
@@ -532,19 +490,6 @@ Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Bla
    | Literate programming   |                                   |
    +------------------------+-----------------------------------+
 
-
-
-
-
-.. figure:: figure1.png
-
-   This is yet another the caption. 
-
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
 
 
 Discussion
@@ -575,6 +520,21 @@ VSC is an advanced text editor that has stronger support for code snippets becau
 However, VSC is so feature-rich that it is over-whelming for the beginning users.
 To support a wider group of users, we developed the libraries for Google Colab.
 We plan to develop libraries for editing Jupyter Notebooks in VSC.
+
+What is new
+***********
+
+We report a set of code template libraries for doing biomolecular crystallographic computing on Colab.
+These template libraries only need to be installed once because they persist between logins.
+These templates include the code for installing the software required for crystallographic computing.
+These installation templates save time because the installation process involves as many as seven operations that would be difficult to remember.
+Once the user adds the installation code to the top of a given notebook, the user only needs to rerun these blocks of code upon logging into Colab to be able to reinstall the software.
+The user can modify the installation templates to install the software on their local machines.
+Examples of such adaptations are provided on a dedicated GitHub webpage.
+The template libraries presented here lower an important barrier to the use of Colab by those interested in crystallographic computing on the cloud.
+
+
+
 
 Relation to other work with snippet libraries
 *********************************************
@@ -607,6 +567,43 @@ This system would also work on Colab and may be preferred by expert users becaus
 That is, the user enters the start of a name and Ipython suggests the remainder of the name in a pop-up menu.
 We offer a variant library that inserts a commented out copy of the code that has been annotated with the sites that are to be edited by the user.
 
+Opportunities for Interoperability
+**********************************
+
+The set of template libraries can encourage synergistic interoperability between software packages supported by the snippet libraries.
+That is the development of notebooks that use two or more software packages and even programming languages.
+More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python, the reticulate package that enables the running of Python code in R , and the PyCall package in Julia that enables the running of the Python packages in Julia.
+The latter package is widely used to run matplotlib in Julia.
+Interoperability already occurs between the CCP4, clipper, and CCTBX projects and to a limited extent between CCTBX and PyMOL, but interoperability could be more widespread if the walls around the software silos were lowered.
+The snippet libraries provided here can prompt interoperability on Colab by their proximity on Colab.
+
+Polyglot snippets
+*****************
+
+The unique feature of the Colab snippets is that a given snippet can contain multiple cells.
+The cells can be a mix of markdown (text cells) and code cells.
+The cells can also use a mix of programming languages invoked by different cell magics.
+Cell magics are an alternate method to kernels for switching between programming languages.
+The code for defining various cell magics are included in our snippet library.
+The supported compiled programming languages include C, C++, Julia, and Fortran2008.
+The bash cell magic is built into Colab.
+This ability to two or more programming languages in one snippet leads to polyglot snippets.
+Some operations involving two or more programming languages need to be executed sequentially.
+These can be best grouped together in one snippet.
+This feature of polyglot snippets save time because the user does not have to reinvent the workflow by finding and inserting into the notebook a series of snippets.
+
+Ubiquitous computing platform on the cloud
+******************************************
+
+Colab provides the user with a ubiquitous instance of Ubuntu.
+Colab is accessed by opening Jupyter Notebooks stored on the users' Google Drive account.
+Colab can be accessed from devices that can access the Google Drive account.
+The opening of the Colab instance is rapid in contrast to the Binder service where the building of a new Ubuntu instance requires a wait of many minutes.
+In addition, the Colab session remains active for up to 12 hours on the free plan and longer on paid plans whereas a Binder instance closes after ten minutes of inactivity.
+Binder is an open-source project while Colab is a closed source project.
+Colab maintains the Ubuntu operating system so the user does not need to spend time on software updates.
+
+
 
 Acknowledgements
 ----------------
@@ -620,7 +617,7 @@ References
 .. [Adam19] P.D. Adams, P.V. Afonine, K. Baskaran, H.M. Berman, J. Berrisford, G. Bricogne, D.G. Brown, S.K. Burley, M. Chen, Z. Feng, C. Flensburg, A. Gutmanas, J.C. Hoch, Y. Ikegawa, Y. Kengaku, E. Krissinel, G. Kurisu, Y. Liang, D. Liebschner, L. Mak, J.L Markley, N.W. Moriarty, G.N. Murshudov, M. Noble, E. Peisach, I. Persikova, B.K. Poon, O.V. Sobolev, E.L. Ulrich, S. Velankar, C. Vonrhein, J. Westbrook, M. Wojdyr, M. Yokochi, and J.Y. Young.
             *Announcing mandatory submission of PDBx/mmCIF format files for crystallographic depositions to the Protein Data Bank (PDB)*,
             Acta Crystallographica Section D: Structural Biology, 75(4):451--454, April 2019.
-            doi:10.1107/S2059798319004522
+            doi: 10.1107/S2059798319004522
 
 .. [Adam21]
 
@@ -628,7 +625,7 @@ References
 .. [Beg21] M. Beg, J. Belin, T. Kluyver, A. Konovalov, M. Ragan-Kelley, N. Thiery, and H. Fangohr.
             *Using Jupyter for reproducible scientific workflows*,
             Computing Sci. \& Eng., 23(2):36-46, April 2021. 
-            doi:10.1109/MCSE.2021.3052101
+            doi: 10.1109/MCSE.2021.3052101
             
 .. [Brun98] A.T. Br{\"u}nger, P.D. Adams, G.M. Clore, W.L. Delano, P. Gros, R.W. Grosse-Kunstleve, J.-S. Jiang, J. Kuszewski, M. Nilges, N.S. Pannu, R.J. Read, L.M. Rice, T. Simonson, and G.L. Warren.
             *Crystallography \& NMR system: A new software suite for macromolecular structure determination*,
@@ -645,12 +642,12 @@ References
 .. [Godd18] T. D. Goddard, C.C. Huang, E.C. Meng, E.F. Pettersen, G.S. Couch, J. H. Morris, and T. E. Ferrin. 
            *UCSF ChimeraX: Meeting modern challenges in visualization and analysis*,
            Protein Sci., 27(1):14-25, January 2018.
-           doi:10.1002/pro.3235.
+           doi: 10.1002/pro.3235.
 
 .. [Gros02] R. W. Grosse-Kunstleve, N. K. Sauter, N. W. Moriatry, P. D. Adams. 
            *The Computational Crystallography Toolbox: crystallographic algorithms in a reusable software framework*,
            J Appl Cryst, 35(1):126-136, February 2002.
-           doi:10.1107/S0021889801017824.
+           doi: 10.1107/S0021889801017824.
            
 .. [Hopk17] J.B. Hopkins, R.E. Gillilan, and S. Skou.
            *BioXTAS RAW: improvements to a free open-source program for small-angle X-ray scattering data reduction and analysis*,
@@ -665,7 +662,7 @@ References
 .. [Kluy16] T. Kluyver, B. Ragan-Kelley, F. P{\'e}rez, B. Granger, M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout, S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing, and Jupyter Development Team.
            *Jupyter Notebooks -- a publishing format for reproducible computational workflows*,
            In F. Loizides and B. Schmidt (Eds.), Positioning and Power in Academic Publishing: Players, Agents and Agendas (pp, 87-90).
-           doi:10.3233/978-1-61499-649-1-87
+           doi: 10.3233/978-1-61499-649-1-87
            
 .. [jLsnip] https://github.com/QuantStack/jupyterlab-snippets
            
@@ -679,7 +676,7 @@ References
            J. Appl. Cryst., 54(1):343–355, February 2021.
            doi: 10.1107/S1600576720013412
            
-.. [Mott10] Mottarella, S. E. and Rosa, M. and Bangura, A. and Bernstein, H. J. and Craig, P. A.
+.. [Mott10] S.E. Mottarella, M. Rosa, A. Bangura, H.J. Bernstein, and P.A. Craig.
             *Conscript: RasMol to PyMOL script converter*,
            Biochem. Mol. Biol. Educ., 38(6):419-422, November 2010.
            doi: 10.1002/bmb.20450
@@ -697,10 +694,10 @@ References
 .. [Nguy17] H. Nguyen, D. A. Case, and A.S. Rose.
            *NGLview--interactive molecular graphics for Jupyter notebooks*,
            Bioinformatics, 34(7):1241-1242, April 2017.
-           doi:10.1093/bioinformatics/btx789
+           doi: 10.1093/bioinformatics/btx789
            
 .. [Winn11] M. D. Winn, C.C. Ballard, K.D. Cowtan, E.J. Dodson, P. Emsley, P.R. Evans, R.M. Keegan, E.B. Krissnel, A.G.W. Leslie, A. McCoy, S.J. McNicholas, G.N. Murshudov, N.S. Pannu, E.A. Potteron, H.R. Powell, R.J. Read, A. Vagin, and K.S. Wilson. 
-            *Overview of the CCP4 suite and current developments*,
-            Acta Cryst., D67(4):235-242, April 2011. 
-            doi:10.1107/S0907444910045749
+           *Overview of the CCP4 suite and current developments*,
+           Acta Cryst., D67(4):235-242, April 2011. 
+           doi: 10.1107/S0907444910045749
 
