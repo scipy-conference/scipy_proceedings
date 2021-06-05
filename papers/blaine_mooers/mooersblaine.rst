@@ -57,17 +57,26 @@ One extension (jupyterlab-snippets) provides access to snippets organized into n
 The other extension (elyra-code-snippet-extension) uses a search box to locate the desired snippet. 
 The user can easily add new code snippets to both systems. 
 
-We also ported the libraries to Google Colab.
+We also ported the libraries to Google Google Collaboratory or Google Colab or just Colab.
 Colab is an integrated development environment (IDE) for running Jupyter Notebooks on the Google Cloud Platform.
-Colab spares the user of hardware maintenance and provides access to GPUs and TPUs. 
+Colab was designed to promote the adpatation of deep learning software to new problems and faciliate collaborative computing.
+Colab is a free service that provides a temporary instance of a Linux operating system with access to one K80 GPU through a Jupyter Notebook.
+Access to TPUs is also available.
+
+Colab comes with the Python scientific computing stack and some deep learning software.
+Colab spares the user of hardware maintenance and the maintence a scientific computing stack.
+Colab can also serve as a test site for software on Linux when one's primary computing environment is a Mac or Windows.
 Colab also eases collaborative work and provides a uniform computing environment for classes and workshops.
-The user can upload Jupyter Notebooks and data files to their Google Drive account and then run the notebooks in Colab.
+The use of Colab requires that the user have a Google Drive account for storing software, jupyter notebooks, and data files.
 
-Here, we have combined GitHub, domain-specific code snippet libraries, Jupyter notebooks, and Google Colab to support computing in biomolecular structure determination.
-We think this approach will advance the field by improving productivity and reproducibility.
-Our approach may inspire similar efforts to modernize other scientific fields endowed with legacy software.
+The user can install additional Python and other packages including structural biology software, provide the user has the required software licenses. 
+The installation of this additional software is not facilitated by Google Colab through a pull-down menu.
+This software installation step requires extra time at the start of the Colab session because most structure bilogy software is comples and has numerous dependences.
+To accelerate this setup step, we provide notes and code snippets for the installation of this software in the Jupyter notebook that serves as the carrier of the snippet libraries on Colab.
+The user can install the required software in several minutes at the start of a session that has a time limit of 12 hours.
+The time limit can be extended with a small subscription fee.
+The software is deleted automatically from Google Cloud upon a logout or upon reaching the time limit, but the software code can be stored on the user's Google Drive for faster reinstallation.
 
-*The remainder is mostly filler to be replaced with the draft text soon.*
 
 Methods
 -------
@@ -169,6 +178,8 @@ The tag system serves well the user who is not familiar with the content of the 
 
 Colab snippet library
 ***********************
+
+ 
 
 The Colab snippet system resembles the Elyra snippet system in that search terms in a search box retrieve snippets.
 However, the Colab system differs from the Elyra system ins that a single notebook stores all of the snippets. The user's Google Cloud account stores the notebook of snippets.
@@ -339,7 +350,6 @@ The bash script files that run the phenix commands can be found by running
     !ls /Applications/phenix-*/build/bin/phenix.\*
 
 These shell scripts invoke Python scripts that capture the command line arguments and pass them to the phenix Python interpreter.
-
 
 .. code-block:: bash
 
@@ -540,41 +550,62 @@ Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Bla
 Discussion
 ----------
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+Amazon introduced the first cloud computing service in 2006; there are now over 200 services.
+These services have the advantage of providing access to computer hardware and software.
+These services can lower barriers for those labs that have limited access to computer hardware or that have trouble with installing software.
+Many of these services supply disk spaces and access to CPUs, GPUs, and sometimes TPUs.
+Access to basic services is often free with additional services, computing power, and disk space being available for a modest fee. 
+In principle, consumer computers could be used as an interface for doing all manner of crystallographic computing on the cloud.
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+Why Colab?
+**********
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+Colab was developed internally and first released for public use in 2018; numerous research papers in the physical and medical sciences have been published that used Colab (e.g.,  ).
+Google Colab provides fast and easy access for users with a Google account and Google drive, so many workers in crystallography already have the prerequisites.
+Many readers are also familiar with Jupyter Notebooks (10 million shared on GitHub as of early 2021).
+Jupyter Notebooks can be loaded onto Google Drive and then opened in Colab.
+Colab is a specialized IDE for editing Jupyter Notebooks.
+the Colab interfaces has more features that the easy-to-use nteract IDE, but fewer features than JupyterLab.
+Colab provides almost instant loading of specific Jupyter notebooks but at the cost of needing reinstall the software used in a notebook upon logging in again or after a 12-hour session.
+The first point lower the barrier to resuming work while the second point can be addressed by including the code for installing the required software at the head of the notebook.
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+Microsoft has stopped supporting its Azure Notebook and has asked users to migrate to several alternative approaches.
+One approach is to use of Visual Studio Code (VSC) rather to JupyterLab to edit and run Jupyter Notebooks locally and on Microsoft's cloud service.
+VSC is an advanced text editor that has stronger support for code snippets because it supports the use of tab triggers and tab stops, two important features that are missing from Colab, JupyterLab, and the Classic Jupyter Notebook.
+However, VSC is so feature-rich that it is over-whelming for the beginning users.
+To support a wider group of users, we developed the libraries for Google Colab.
+We plan to develop libraries for editing Jupyter Notebooks in VSC.
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+Relation to other work with snippet libraries
+*********************************************
 
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
-Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah. Blah blah.
+To the best of our knowledge, we are the first to provide snippet libraries for crystallographic computing.
+This library is among the first that is domain specific.
+Most existing snippet libraries are for programming languages or for hypertext languages like HTML, markdown and LaTeX.
+The average snippet also tends to be quite short and the size of the libraries tends to be quite small.
+The audience for these libraries are millions of professional programmers and web page developers.
+We reasoned that this great tool should be brought to the aid of the thousands of workers in crystallography.
+
+The other area where domain specific snippets have been provided is in molecular graphics.
+The pioneering work on a scripting wizard provided templates for use in RasMol [Hort99]_.
+The conscript program provided a converter from RasMol to PyMOL [Mott10]_.
+Language converters for translating code between the leading molecular graphics programs would allow users to more easily find and use the optimal molecular graphics program for the task at hand.
+
+We also provided snippets for PyMOL, which has 100,000 users, for use in text editors [Moo21a]_ and Juptyer Notebooks [Moo21b]_.
+The former support tab triggers and tab stops; the latter does not.
+
+The libraries have to be molecular graphics program specific because molecular graphics programs have been written in a range of programming languages.
+The user issues the commands in either in a general programming language like Python or a a domain specific language (DSL) like pml.
+To counter this growing tower of babel, the XXXXXX intiative was formed cite. 
+It would cause confusion to mix snippets from multiple languages.
+
+We have also worked out how to deploy this snippet libraries in OnDemand notebooks at High-Performance Computing centers.
+These notebooks resemble Colab notebooks in that JupyterLab extensions cannot be installed.
+However, they do not have any alternate support for accessing snippets from menus in the GUI.
+Instead, we had to create IPython magics for each snippet that load the snippet's code into the code cell.
+This system would also work on Colab and may be preferred by expert users because the snippet names used to invoke magic are under autocompletetion.
+That is, the user enters the start of a name and Ipython suggests the remainder of the name in a pop-up menu.
+We offer a variant library that inserts a commented out copy of the code that has been annotated with the sites that are to be edited by the user.
 
 
 Acknowledgements
@@ -596,35 +627,40 @@ References
             
 .. [Beg21] M. Beg, J. Belin, T. Kluyver, A. Konovalov, M. Ragan-Kelley, N. Thiery, and H. Fangohr.
             *Using Jupyter for reproducible scientific workflows*,
-            Computing in Science \& Engineering, 23(2):36--46, April 2021. 
+            Computing Sci. \& Eng., 23(2):36-46, April 2021. 
             doi:10.1109/MCSE.2021.3052101
             
 .. [Brun98] A.T. Br{\"u}nger, P.D. Adams, G.M. Clore, W.L. Delano, P. Gros, R.W. Grosse-Kunstleve, J.-S. Jiang, J. Kuszewski, M. Nilges, N.S. Pannu, R.J. Read, L.M. Rice, T. Simonson, and G.L. Warren.
             *Crystallography \& NMR system: A new software suite for macromolecular structure determination*,
-            Acta Cryst. D54(5), 905--921, May 1998.
+            Acta Cryst. D54(5), 905-921, May 1998.
             doi: 10.1107/S0907444998003254
            
 .. [Burn17] T. Burnley, C.M. Palmer, and M. Winn. 
             *Recent developments in the CCP-EM software suite*,
-            Acta Cryst. D73(6), 469-477, June 2017.           
+            Acta Cryst. D73(6), 469-477, June 2017.
             doi: 10.1107/S2059798317007859
             
 .. [Elyra]  https://github.com/elyra-ai/elyra/blob/master/docs/source/getting_started/overview.md 
            
 .. [Godd18] T. D. Goddard, C.C. Huang, E.C. Meng, E.F. Pettersen, G.S. Couch, J. H. Morris, and T. E. Ferrin. 
            *UCSF ChimeraX: Meeting modern challenges in visualization and analysis*,
-           Protein Sci., 27(1):14--25, January 2018.
+           Protein Sci., 27(1):14-25, January 2018.
            doi:10.1002/pro.3235.
 
 .. [Gros02] R. W. Grosse-Kunstleve, N. K. Sauter, N. W. Moriatry, P. D. Adams. 
            *The Computational Crystallography Toolbox: crystallographic algorithms in a reusable software framework*,
-           J Appl Cryst, 35(1):126--136, February 2002.
+           J Appl Cryst, 35(1):126-136, February 2002.
            doi:10.1107/S0021889801017824.
            
 .. [Hopk17] J.B. Hopkins, R.E. Gillilan, and S. Skou.
-           *BioXTAS RAW: improvements to a free open-source program for small-angle X-ray scattering data reduction and analysis*
-           J. Appl. Cryst. 50(5):1545–1553 October 2017.
-           doi:10.1107/S1600576717011438
+           *BioXTAS RAW: improvements to a free open-source program for small-angle X-ray scattering data reduction and analysis*,
+           J. Appl. Cryst., 50(5):1545–1553, October 2017.
+           doi: 10.1107/S1600576717011438
+           
+.. [Hort99] R.  M. Horton.
+           *Scripting Wizards for Chime and RasMol*,
+           Biotechniques, 26(5):874-876, May 1999.
+           doi: 10.2144/99265ir01 
            
 .. [Kluy16] T. Kluyver, B. Ragan-Kelley, F. P{\'e}rez, B. Granger, M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout, S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing, and Jupyter Development Team.
            *Jupyter Notebooks -- a publishing format for reproducible computational workflows*,
@@ -635,21 +671,36 @@ References
            
 .. [Lieb11] D. Liebschner, P.V. Afonine, M.L. Baker, G. Bunkóczi, V.B. Chen, T.I. Croll, B. Hintze, L.-W. Hung, S. Jain, A.J. McCoy, N.W. Moriarty, R.D. Oeffner, B.K. Poon, M G. Prisant, R.J. Read, J.S. Richardson, D.C. Richardson, M.D. Sammito, O.V. Sobolev, D.H. Stockwell, T.C. Terwilliger, A.G. Urzhumtsev, L.L. Videau, C.J. Williams, and P.D. Adams. 
            *Macromolecular structure determination using X-rays, neutrons and electrons: recent developments in Phenix*,
-           Acta Cryst. D75(10), 861--877, October 2019.
+           Acta Cryst., D75(10), 861-877, October 2019.
            doi: 10.1107/S2059798319011471
            
 .. [Mana21] K. Manalastas-Cantos, P.V. Konarev, N.R. Hajizadeh, A.G. Kikhney, M.V. Petoukhov, D.S. Molodenskiy, A. Panjkovich, H.D.T. Mertens, A. Gruzinov, C. Borges, M. Jeffries, D.I. Sverguna, and D. Franke.
            *ATSAS 3.0: expanded functionality and new tools for small-angle scattering data analysis*,
-           J. Appl. Cryst. 54(1), 343–-355, February 2021.
+           J. Appl. Cryst., 54(1):343–355, February 2021.
            doi: 10.1107/S1600576720013412
+           
+.. [Mott10] Mottarella, S. E. and Rosa, M. and Bangura, A. and Bernstein, H. J. and Craig, P. A.
+            *Conscript: RasMol to PyMOL script converter*,
+           Biochem. Mol. Biol. Educ., 38(6):419-422, November 2010.
+           doi: 10.1002/bmb.20450
+           
+.. [Moo21a] B.H.M. Mooers and M.E. Brown.
+           *Templates for writing PyMOL scripts*,
+           Pro. Sci., 30(1):262-269, January 2021.
+           doi: 10.1002/pro.3997
+
+.. [Moo21b] B.H.M. Mooers.
+           *A PyMOL snippet library for Jupyter to boost researcher productivity*,
+           Computing Sci. \& Eng., 23(2):47-53, April 2021.
+           doi: 10.1109/mcse.2021.3059536
            
 .. [Nguy17] H. Nguyen, D. A. Case, and A.S. Rose.
            *NGLview--interactive molecular graphics for Jupyter notebooks*,
-           Bioinformatics 34(7), 1241--1242, April 2017.
+           Bioinformatics, 34(7):1241-1242, April 2017.
            doi:10.1093/bioinformatics/btx789
            
 .. [Winn11] M. D. Winn, C.C. Ballard, K.D. Cowtan, E.J. Dodson, P. Emsley, P.R. Evans, R.M. Keegan, E.B. Krissnel, A.G.W. Leslie, A. McCoy, S.J. McNicholas, G.N. Murshudov, N.S. Pannu, E.A. Potteron, H.R. Powell, R.J. Read, A. Vagin, and K.S. Wilson. 
             *Overview of the CCP4 suite and current developments*,
-            Acta Cryst. D67(4), 235--242, April 2011. 
+            Acta Cryst., D67(4):235-242, April 2011. 
             doi:10.1107/S0907444910045749
 
