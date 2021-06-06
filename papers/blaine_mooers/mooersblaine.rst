@@ -177,10 +177,30 @@ The tag system serves well the user who is not familiar with the content of the 
 Colab snippet library
 *********************
 
-The Colab snippet system resembles the Elyra snippet system in that search terms in a search box retrieve snippets.
-However, the Colab system differs from the Elyra system ins that a single notebook stores all of the snippets. The user's Google Cloud account stores the notebook of snippets.
+The Colab snippet system resembles the Elyra snippet system in that the snippets appear in a menu to the left of the noteboook and that search terms in a search box retrieve snippets.
+However, the Colab system differs from the Elyra system ins that the snippets are stored in one or more Juptyer notebooks. 
+The user's Google Drive stores the notebook of snippets.
+The user enters the url for the notebook in a the XXXX window.
+Multiple urls for multiple notebooks can be entered at one time.
+The user logs out of Colab and upon logging in again, they will see the newly added snippets in the left margin.
 The use of Colab requires that the user has a Google account and a Google Drive.
 Many structural biologists already have both.
+
+.. figure:: ColabPyMOL.png 
+
+   Code snippet for installing PyMOL on Colab. The <> icon opens a menu on the left side that lists all of the snippets. The search term 'pymol' was used to reduce the list of candidate snippets. The highlighted snippets name 'Install PyMOL is new Colab notebook'. Selecting this snippets opens the snippet below. The snippet description is displayed followed by the seven blocks of code. The description includes the seven steps for installing the molecular graphics programs. Clicking with the mouse cursor on 'INSERT' in blue inserts the code into in the cells on the notebook on the fight. :label:`ColabPyMOL`
+
+A search box at the top of the list of snippets is used to recover a snippet (Figure :ref:`ColabPyMOL`.
+The user enters a snippet name in the search box to display the snippet and its documentation.
+The user hits the 'Install' button to install the snippet's code at the current position in the  notebook.
+Unlike the Elyra snippets which insert a whole snippet into one code block, a Colab snippet can have multiple code blocks that are inseted into the notebook at the current position of the mouse cursor.
+One snippet can have different types of code blocks.
+For example, the snippet in Figure :ref:`ColabPyMOL` has a three blocks of Python code, two blocks of shell commands, and two blocks of bash cell majics with multiple lines of bash commands.
+
+The list snippet for a library will print in a table below the current cell a list of the snippets in the library and a brief description. 
+This table is stored in a panda's dataframe that can be searched with the panda's search function. 
+This table can also be searched for key terms with the search function in the notebook.
+The code block and output can be hidden by clicking on the three blue dots on the left margin of the cell. 
 
 Notebooks on Colab open lighting fast, but the user must reinstall their software on each login.
 We ease this annoying task by supplying the complete chain of installation steps.
@@ -188,23 +208,6 @@ For example, the installation of the molecular graphics program PyMOL requires s
 Some involve the use of curl, and others use conda.
 We include all steps in one snippet, which is uniquely possible with the snippet system for Colab. 
 The user only has to select one snippet and then run each code block in succession.
-
-.. figure:: ColabPyMOL.png 
-
-   Code snippet for installing PyMOL on Colab. The <> icon opens a menu on the left side that lists all of the snippets. The search term 'pymol' was used to reduce the list of candidate snippets. The highlighted snippets name 'Install PyMOL is new Colab notebook'. Selecting this snippets opens the snippet below. The snippet description is displayed followed by the seven blocks of code. Clicking with the mouse cursor on 'INSERT' in blue inserts the code into in the cells on the notebook on the fight. :label:`ColabPyMOL`
-
-The user installs the snippets by loading on their Google Drive and then into Colab a specially formatted Jupyter Notebook.
-The user enters the url for the notebook in a the XXXX window (Fig. \ref{fig:snippets} a). 
-Multiple urls for multiple notebooks can be entered at one time (Fig. \ref{fig:snippets} a).
-The user logs out of Colab and upon logging in again, they will see the newly add snippets in the left margin (Fig. \ref{fig:snippets} b).
-A search box at the top of the list of snippets is used to recover a snippet (Fig. \ref{fig:snippets} b).
-
-The user enters a snippet name in the search box to display the snippet and its documentation (Fig. \ref{fig:snippets} c).
-The user hits the install button to install the snippet's code in the current code block of the notebook.
-The XXX snippet for a library will print in a table below the current cell a list of the snippets in the library and a brief description. 
-This table is stored in a panda's dataframe that can be searched with the panda's search function. 
-This table can also be searched for key terms with the search function in the notebook.
-The code block and output can be hidden by clicking on the three blue dots on the left margin of the cell. 
 
 
 Generation of the snippet libraries
