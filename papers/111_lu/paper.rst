@@ -95,8 +95,8 @@ Infrastructure
 The goal of the vaccine clinic is to provide accessibiliy to a senior friendly
 vaccine experience. Furthermore as a non-profit and volunteer effort,
 consideration as to cost and manpower. Unlike well established large medical
-practices, record management and HIPAA (expand) compliant computer
-infrastructure were not well established. Even the large medical practices had
+practices, record management and Health Insurance Portability and Accountability Act (HIPAA)
+compliant computer infrastructure were not well established. Even the large medical practices had
 difficulty maintaining a senior friendly environment during the early days of
 the  vaccine roll out where demand far exceeded capacity.
 
@@ -105,6 +105,8 @@ West PACE which stood up a small senior oriented covid vaccine clinic desires
 to mitigate the amount of paperwork a frail senior is subjected to. Quite a lot
 of data is repeatedly asked for to make appointments, on consent forms and in
 reminder cards.
+
+Privacy and compliance is an important aspect of setting up a vaccine clinic and information infrastructure for it. The key aspect ensuring privacy that conforms to HIPAA requirements is restricting access to private health information (PHI). For electronic systems, that means all data containing PHI should be encrypted when at rest and encrypted when in transit. For paper systems (including the printed forms mentioned below), papers containing PHI must be not be left in the open and when unattended be in a locked room or container where access is restricted to authorized use. Finally, for any cloud infrastructure the appropriate Business Associate Agreements must be in place.
 
 .. figure:: diagram.pdf
 
@@ -140,16 +142,22 @@ commercial services do provide electronic form filling with electronic
 signature. The reason for adopting paper is simply the cost and to provide a
 trail for downstream audits.
 
-Much of the vaccine pipeline is handled by the third parties such as 2-1-1 or
+Regarding compliance,  some of the vaccine pipeline is handled by the third parties such as 2-1-1 or
 the state. However, from the time the data is ingested from the state's
 appointment system to our processing center and transmitted to the clinic,
 strict HIPAA requirements are met. First, all communications from the
 appointment system took place under authentication and encryption. Fortunately,
 West Health has an processing center with the appropriate encryption at rest
 and encryption in transit as required by HIPAA in handling private health
-information. All processing took place in this platform. Finally, the processed
-forms were transfered to a server at the clinic site where volunteers could
-securely access the forms and print them out.
+information. The processing center is cloud based but we were able to
+leverage our existing BAA with the cloud services in order to meet
+HIPAA requirements. All processing took place in this
+platform. Finally, the processed forms were transfered using
+encryption to a server at the clinic site where an authorized operator
+could securely access the forms and print them out. The paper forms
+were in the custody of a volunteer until they were delivered to a back
+office. Per health department regulations, the forms are then stored
+for a proscribed amount of time in a locked cabinet.
 
 Setting up most of the systems in the pipeline faced challenges. Surprisingly,
 the most challenging technical difficulty was filling the forms. The remainder
