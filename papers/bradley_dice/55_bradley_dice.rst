@@ -304,7 +304,7 @@ Enhanced workflows
 **Directives:**
 Execution directives (or *directives* for short) provide a way to specify required resources on HPC schedulers such as number of CPUs/GPUs, MPI ranks, OpenMP threads, walltime, memory, and others.
 Directives can be a function of the job as well as the operation, allowing for great flexibility.
-In addition, directives work seamlessly with operation groups, job aggregation, and submission bundling (all of which are described in a later section).
+In addition, directives work seamlessly with operation groups, job aggregation, and submission bundling (all of which are described in the following section).
 
 **Dynamic workspaces:**
 The **signac-flow** package can now handle workspaces where jobs are created as the result of operations on other jobs.
