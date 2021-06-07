@@ -189,13 +189,13 @@ Directives are set through Python decorators and define resource and execution r
 Examples of directives include number of CPUs or GPUs, the walltime, and memory.
 The use of directives allows **signac-flow** workflows to be portable across HPC systems by generating resource requests that are specific to each machine's scheduler.
 
-Overview of New Features
+Overview of new features
 ------------------------
 
 The last three years of development of the **signac** framework have expanded its usability, feature set, user and developer documentation, and potential applications.
 Some of the largest architectural changes in the framework will be discussed in their own sections, namely extensions of the workflow model (support for executing groups of operations and aggregators that allow operations to act on multiple jobs) and a much more performant and flexible re-implementation of the core "data structure" classes that synchronize **signac**'s Python representation of state points and job documents with JSON-encoded dictionaries on disk.
 
-Data Archival
+Data archival
 ~~~~~~~~~~~~~
 
 The primary purpose of the core **signac** package is to simplify and accelerate data management.
@@ -256,10 +256,10 @@ Using an instance of ``H5Store`` as a context manager allows users to keep the H
 The ``signac diff`` command, available on both the command line and Python interfaces, returns the difference between two or more state points and allows for easily assessing subsets of the data space.
 By unifying state point and document queries, filtering, and searching workspaces can be more fine-grained and intuitive.
 
-Data Visualization and integrations
+Data visualization and integrations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Integrating with the PyData Ecosystem:**
+**Integrating with the PyData ecosystem:**
 Users can now summarize data from a **signac** project into a pandas DataFrame for analysis.
 The ``project.to_dataframe()`` feature exports state point and job document information to a pandas DataFrame in a consistent way that allows for quick analysis of all jobs' data.
 Support for Jupyter notebooks :cite:`jupyter` has also been added, enabling rich HTML representations of **signac** objects.
@@ -270,7 +270,7 @@ The dashboard runs in a browser and allows users to display job state points, ed
 Dashboards can be hosted on remote servers and accessed via port forwarding, which makes it possible to review data generated on a remote HPC system without needing to copy it back to a local system for inspection.
 Users can quickly save notes into the job document and then search those notes, which is useful for high throughput studies that require some manual investigation (e.g. reviewing plots).
 
-Performance Enhancements
+Performance enhancements
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 In early 2021, a significant portion of the codebase was profiled and refactored to improve performance and these improvements were released in **signac** 1.6.0 and **signac-flow** 0.12.0.
@@ -286,7 +286,7 @@ Similarly, performance enhancements were also made in the **signac-flow** packag
 Some of the optimizations identified include lazy evaluation of run commands and directives, and caching of job status information.
 In addition, the improvements in **signac** such as faster iteration over large **signac** projects used in **signac-flow** made **signac-flow**'s primary functions — checking project status, executing operations, and submitting operations to a cluster — significantly faster.
 
-Improved User Output
+Improved user output
 ~~~~~~~~~~~~~~~~~~~~
 
 **Workflow graph detection:**
@@ -298,7 +298,7 @@ This graph can now be detected from the workflow conditions and returned in a Ne
 Querying the status of a **signac-flow** project now has many options controlling the information displayed and has been templated to allow for plain text, Markdown, or HTML output.
 In doing so, the output has also become cleaner and compatible with external tools.
 
-Enhanced Workflows
+Enhanced workflows
 ~~~~~~~~~~~~~~~~~~
 
 **Directives:**
@@ -306,7 +306,7 @@ Execution directives (or *directives* for short) provide a way to specify requir
 Directives can be a function of the job as well as the operation, allowing for great flexibility.
 In addition, directives work seamlessly with operation groups, job aggregation, and submission bundling (all of which are described in a later section).
 
-**Dynamic Workspaces:**
+**Dynamic workspaces:**
 The **signac-flow** package can now handle workspaces where jobs are created as the result of operations on other jobs.
 This is crucial for optimization workflows and iteratively sampling parameter spaces, and allows projects to become more automated with some data points only run if a prior condition on another data point is reached.
 
@@ -454,7 +454,7 @@ Bundling is what allows the submission script to contain multiple jobs executing
 By storing information about the generated bundles during submission, **signac-flow** prevents accidental resubmission just as in the unbundled case.
 While the example mentioned above does not use either groups or aggregation, bundles works seamlessly with both.
 
-Cluster Templates
+Cluster templates
 ~~~~~~~~~~~~~~~~~
 
 The **signac-flow** software includes automatic detection and script support for SLURM, PBS/TORQUE, and LSF schedulers.
@@ -464,7 +464,7 @@ These cluster templates change frequently as HPC systems are brought online and 
 Users can create their own templates to contribute to the package or use locally.
 
 
-Synced Collections: Backend-agnostic, persistent, mutable data structures
+Synced collections: backend-agnostic, persistent, mutable data structures
 -------------------------------------------------------------------------
 
 Motivation
@@ -485,7 +485,7 @@ The *synced collections* framework represents the culmination of our efforts in 
 In **signac**, this framework allows us to hide the details of a particular file storage medium (like JSON) behind a dictionary-like interface, but it can just as easily be used for tasks such as creating a new, list-like interface that automatically saves all its data in a plain-text CSV format.
 This section will offer a high-level overview of the synced collections framework and our plans for its use within **signac**, with an eye to potential users in other domains as well.
 
-Summary of Features
+Summary of features
 ~~~~~~~~~~~~~~~~~~~
 
 We designed synced collections to be flexible, easily extensible, and independent of **signac**'s data model.
@@ -500,7 +500,7 @@ With the new framework, users can create fully-functional, arbitrarily nested ``
 Just as importantly, **signac** can now combine these data structures with a different backend, allowing us to swap in different storage mechanisms for improved performance and flexibility with no change in our APIs.
 Since different types of resources may have different approaches to batching transactions — for example, a SQLite backend may want to exploit true SQL transactions, while a Redis backend might simply collect all changes in memory and delay sending memory to the server — synced collections also support customizable buffering protocols, again via class inheritance.
 
-Applications of Synced Collections
+Applications of synced collections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The new synced collections promise to substantially simplify both feature and performance enhancements to the **signac** framework.
@@ -522,7 +522,7 @@ In future iterations of **signac**, we plan to allow users to opt into homogeneo
 Using this flexibility, we could also move away from our currently rigid workspace model to allow more general data layouts on disk for cases where users may benefit from more general folder structures.
 As such, synced collections are a stepping stone to creating a more general and powerful version of **signac**.
 
-Project Evolution
+Project evolution
 -----------------
 
 The **signac** project has evolved from being an open-source project mostly developed and managed by the Glotzer Group at the University of Michigan, to being supported by over 30 contributors and 8 committers/maintainers on 3 continents and with over 55 citations from academic and government research labs and 12 talks at large scientific, Python, and data science conferences.
