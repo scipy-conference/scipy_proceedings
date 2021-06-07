@@ -97,8 +97,8 @@ Moving beyond code development, this paper will also discuss the scientific rese
 We will share our project's experience in continuously revising project governance to encourage sustained contributions, adding more entry points for learning about the project (Slack support, weekly public office hours), and participating in Google Summer of Code in 2020 as a NumFOCUS Affiliated Project.
 Much of the work has been carried out in conjunction with the Molecular Simulation Design Framework (MoSDeF) :cite:`cummings.etal2021`, a National Science Foundation Cyberinfrastructure for Sustained Scientific Innovation (CSSI) effort.
 
-Structure and Implementation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Structure and implementation
+----------------------------
 
 With **signac**, file-based data and metadata are organized in folders and JSON files, respectively (see Figure :ref:`overview`).
 A **signac** data space, or *workspace*, contains jobs, which are individual directories associated with a single primary key known as a *state point* stored in a file ``signac_statepoint.json`` in that directory.
