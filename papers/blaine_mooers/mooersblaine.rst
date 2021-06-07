@@ -168,23 +168,33 @@ Each JSON file has the snippet code plus several rows of metadata, including a l
 The latter provides a sanity check.
 For example, an attempt to insert a C++ snippet into a notebook with an active Python kernel will trigger the opening of a window with a warning.
 
-The directory ~/Library/Jupyter/metadata/code-snippets stores the snippet files on the Mac.
+All of the snippets reside in the folder \url{JUPYTER_DATA/metadata/code-snippets}.
+This is the directory ~/Library/Jupyter/metadata/code-snippets on the Mac.
 There are no subfolders for individual snippet libraries, unlike the jupyterlab-snippets externsion.
 The snippets from multiple libraries are stored together in the code-snippets folder.
 The tag system can be used to select all snippets from one library.
 The tag system serves well the user who is not familiar with the content of the installed libraries.
+The user can download the snippets from GitHub as zip file and then uncompress this file and move the snippet files to the final destination.
 
 Colab snippet library
 *********************
 
 The Colab snippet system resembles the Elyra snippet system in that the snippets appear in a menu to the left of the noteboook and that search terms in a search box retrieve snippets.
-However, the Colab system differs from the Elyra system ins that the snippets are stored in one or more Juptyer notebooks. 
+However, the Colab system differs from the Elyra system ins that the snippets are stored in one or more Jupyter notebooks. 
 The user's Google Drive stores the notebook of snippets.
-The user enters the url for the notebook in a the XXXX window.
-Multiple urls for multiple notebooks can be entered at one time.
-The user logs out of Colab and upon logging in again, they will see the newly added snippets in the left margin.
-The use of Colab requires that the user has a Google account and a Google Drive.
-Many structural biologists already have both.
+The user enters the url for the notebook in a the Tools --> Settings --> Site --> Custom Snippet Notebook URL.
+Multiple URLs for multiple notebooks can be entered at one time.
+The user logs out of Colab and upon logging in again to install the snippets.
+The user will see the newly added snippets in the left margin after opening the snippet menu by clicking on the `</>` icon.
+
+Each snippet had a markdown cell followed by a code cell.
+The markdown cell contained the name of the snippet, a description of what the snippet does, and the structural biology software.
+These features are searched in the search box to narrow the list of snippets to inspect for selection.
+
+The first snippet in each notebook provided the steps for installing the software on Colab.
+The markdown cell listed these installation steps.
+Then a series of code snippets contained the code for carrying out the steps.
+This installation snippet was the only one in a notebook that contained more then one code snippet.
 
 .. figure:: ColabPyMOL.png 
 
@@ -206,18 +216,11 @@ Notebooks on Colab open lighting fast, but the user must reinstall their softwar
 We ease this annoying task by supplying the complete chain of installation steps.
 For example, the installation of the molecular graphics program PyMOL requires seven code blocks of different types.
 Some involve the use of curl, and others use conda.
-We include all steps in one snippet, which is uniquely possible with the snippet system for Colab. 
+We include all steps in one snippet, which is uniquely possible with the snippet system for Colab (Figure :ref:`ColabPyMOL`). 
 The user only has to select one snippet and then run each code block in succession.
 
-
-Generation of the snippet libraries
-***********************************
-
-The Elyra snippet library is written in JavaScript.
-Each snippet resides in a separate file.
-All of the snippets reside in the folder \url{JUPYTER_DATA/metadata/code-snippets}.
-The path to \url{JUPYTER_DATA} varies with the operating system; the user finds this path the command .
-The user can download the snippets from GitHub as zip file and then uncompress this file and move the snippet files to the final destination.
+The use of Colab requires that the user has a Google account and a Google Drive.
+Many structural biologists already have both.
 
 Notebooks with sample workflows
 *******************************
