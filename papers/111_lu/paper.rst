@@ -106,7 +106,15 @@ to mitigate the amount of paperwork a frail senior is subjected to. Quite a lot
 of data is repeatedly asked for to make appointments, on consent forms and in
 reminder cards.
 
-Privacy and compliance is an important aspect of setting up a vaccine clinic and information infrastructure for it. The key aspect ensuring privacy that conforms to HIPAA requirements is restricting access to private health information (PHI). For electronic systems, that means all data containing PHI should be encrypted when at rest and encrypted when in transit. For paper systems (including the printed forms mentioned below), papers containing PHI must be not be left in the open and when unattended be in a locked room or container where access is restricted to authorized use. Finally, for any cloud infrastructure the appropriate Business Associate Agreements must be in place.
+Privacy and compliance is an important aspect of setting up a vaccine clinic
+and information infrastructure for it. The key aspect ensuring privacy that
+conforms to HIPAA requirements is restricting access to Protected Health
+Information (PHI). For electronic systems, that means all data containing PHI
+should be encrypted when at rest and encrypted when in transit. For paper
+systems (including the printed forms mentioned below), papers containing PHI
+must be not be left in the open and when unattended be in a locked room or
+container where access is restricted to authorized use. Finally, for any cloud
+infrastructure the appropriate Business Associate Agreements must be in place.
 
 .. figure:: diagram.pdf
 
@@ -148,8 +156,8 @@ appointment system to our processing center and transmitted to the clinic,
 strict HIPAA requirements are met. First, all communications from the
 appointment system took place under authentication and encryption. Fortunately,
 West Health has an processing center with the appropriate encryption at rest
-and encryption in transit as required by HIPAA in handling private health
-information. The processing center is cloud based but we were able to
+and in transit as required by HIPAA in handling Protected Health
+Information. The processing center is cloud based but we were able to
 leverage our existing BAA with the cloud services in order to meet
 HIPAA requirements. All processing took place in this
 platform. Finally, the processed forms were transfered using
@@ -172,7 +180,7 @@ checkboxes and radio buttons are used. Furthermore, to make life easier
 for the staff, PDF forms for multiple patients needed to be consolidated
 into a single PDF.
 
-Programmatically Fillin Forms
+Programmatically Fill Forms
 -----------------------------
 
 Programatically filling in PDF forms can be a quick and accurate way to
