@@ -45,7 +45,7 @@ new appointment slots opened up. Needless to say my parents who are not
 completely tech ignorant would have had extreme difficulty.
 
 To address this the Gary and Mary West PACE (WestPACE) center established a
-pop-up point of distribution (POD) for the COVID-19 vaccine :cite:`pr`
+pop-up point of distribution (POD) for the COVID-19 vaccine :cite:`press`
 specifically for the elderly with emphasis on those who are most vulnerable.
 The success in the POD was touted in the local news media :cite:`knsd`
 :cite:`kpbs` and caught the attention of the state who asked WestPACE's sister
@@ -192,7 +192,8 @@ PDF details. Another useful resource is the PDF 1.7 specification :cite:`pdf`
 but it is well over 750 pages! Since the deployment of the vaccine clinic, the
 details of the form filling can be found at our blog :cite:`whblog`, the
 nitty-gritty details can be found there. The code is in the process of being
-made open source and can be found at <FILLIN>.
+made open source and can be found at `https://github.com/WestHealth/pdf-form-filler <https://github.com/WestHealth/pdf-form-filler>`_.
+.
 
 As a prelimiary, the following imports are used in the examples given below. We
 use the ``from`` directive in order to shorten the code lines so they can
