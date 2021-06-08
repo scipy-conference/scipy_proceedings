@@ -120,7 +120,7 @@ In addition to the following list, we break up the deadlines in the respective d
 - May 28: 1st Draft for Submission
 - May 28–June 24: Open Review Period
 - May 28: Reviewers Assigned
-- June 10: Initial Complete Review
+- June 17: Initial Complete Review
 - June 24: Final Recommendation and Comprehensive Review Deadlines
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 - July 7: Time Window for Publishing Conference Ready Proceedings
