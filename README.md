@@ -361,7 +361,7 @@ change in question, then that change should be requested and made before the
 ### Reviewer Deadlines
 
 - May 28: Reviewers Assigned
-- June 10: Initial Complete Review
+- June 17: Initial Complete Review
 - June 24: Final Recommendation and Comprehensive Review Deadlines
 
 ### Reviewer Workflow
