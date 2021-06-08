@@ -455,7 +455,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 - April 6: Authors invited to submit full papers
 - May 28–June 24: Open Review Period
 - May 28: Reviewers Assigned
-- June 10: Initial Complete Review
+- June 17: Initial Complete Review
     - Editors should verify that reviews have been completed
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 
