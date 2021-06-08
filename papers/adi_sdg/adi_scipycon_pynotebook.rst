@@ -1,32 +1,38 @@
-:authors: Mark Thoren, Cristina Suteu
-:emails: mark.thoren@analog.com, cristina.suteu@analog.com
+:author: Mark Thoren
+:email: mark.thoren@analog.com
 :institution: Analog Devices, Inc.
 
+:author: Cristina Suteu
+:email: cristina.suteu@analog.com
+:institution: Analog Devices, Inc.
+:corresponding:
+
+
+----------------------------------------------------------------------------------------------------
 Using Python for Analysis and Verification of Mixed-mode Signal Chains for Analog Signal Acquisition
-====================================================================================================
+----------------------------------------------------------------------------------------------------
 
-Abstract
---------
+.. class:: abstract
 
-Accurate, precise, and low-noise sensor measurements are essential
-before any machine can learn about (or artificial-intelligently make
-decisions about) the physical world (more concisely, “garbage in,
-garbage out”). Modern, highly integrated signal acquisition devices can
-perform analog signal conditioning, digitization, and digital filtering
-on a single silicon device, greatly simplifying system electronics.
-However, a complete understanding of the signal chain properties is
-still required to correctly utilize and debug these modern devices.
+    Accurate, precise, and low-noise sensor measurements are essential
+    before any machine can learn about (or artificial-intelligently make
+    decisions about) the physical world (more concisely, “garbage in,
+    garbage out”). Modern, highly integrated signal acquisition devices can
+    perform analog signal conditioning, digitization, and digital filtering
+    on a single silicon device, greatly simplifying system electronics.
+    However, a complete understanding of the signal chain properties is
+    still required to correctly utilize and debug these modern devices.
 
-This paper details the analysis and verification of such a signal
-acquisition system, including sensor performance limitations, analog
-gain optimization, analog to digital conversion, and digital filtering,
-to the point where data is ready for storage or display. Individual
-signal chain elements will first be modeled in LTspice and Python /
-SciPy, then verified using Python to drive low-cost instrumentation and
-evaluation boards via the Linux IIO framework. While primarily for the
-education space, these instruments have adequate performance for many
-industrial applications. Furthermore, the techniques can easily be
-adapted to other benchtop instruments.
+    This paper details the analysis and verification of such a signal
+    acquisition system, including sensor performance limitations, analog
+    gain optimization, analog to digital conversion, and digital filtering,
+    to the point where data is ready for storage or display. Individual
+    signal chain elements will first be modeled in LTspice and Python /
+    SciPy, then verified using Python to drive low-cost instrumentation and
+    evaluation boards via the Linux IIO framework. While primarily for the
+    education space, these instruments have adequate performance for many
+    industrial applications. Furthermore, the techniques can easily be
+    adapted to other benchtop instruments.
 
 Introduction
 ------------
@@ -101,7 +107,7 @@ T is the resistor’s absolute temperature (Kelvin)
 F2 and F1 are the upper and lower limits of the frequency band of
 interest.
 
-Normalizing the bandwidth to 1Hz expresses the noise density, in V/√Hz.
+Normalizing the bandwidth to 1Hz expresses the noise density, in V/:math:`\sqrt{\rm Hz}`.
 
 A sensor’s datasheet may specify a low output impedance (often close to
 zero ohms), but this likely a buffer stage - which eases interfacing to
@@ -129,7 +135,7 @@ principles, so in a sense can act as an uncalibrated standard. The OP482
 is an ultralow bias current amplifier with correspondingly low current
 noise, and a voltage noise low enough that the noise due to a 1M input
 impedance is dominant. Configured with a gain of 100, the output noise
-is 12.7 µV/√Hz. So in a sense - this circuit is the “world’s worst
+is 12.7 µV/:math:`\sqrt{\rm Hz}`. So in a sense - this circuit is the “world’s worst
 sensor”, with lots of sensor noise, but that does not actually sense
 anything. (It could be used as a crude temperature sensor - but in this
 application, any great departure from room temperature (~300 Kelvin)
@@ -148,7 +154,7 @@ the Scopy GUI’s spectrum analyzer, shown in Figure 3.
 <<Placeholder - this is LTC6655 noise test jig>>**
 
 Under the analyzer settings shown, the ADALM2000 noise floor is
-<<40µV/√Hz, well below the 1.27 mV/√Hz>> of the noise source. The idea
+<<40µV/:math:`\sqrt{\rm Hz}`, well below the 1.27 mV/:math:`\sqrt{\rm Hz}`>> of the noise source. The idea
 that your test instrument must be better than the circuit parameter
 being measured is intuitively obvious in this situation; what is less
 obvious, or at least not thought about as much, is that this principle
@@ -158,7 +164,7 @@ While Scopy is useful for single, visual measurements, the functionality
 can be replicated easily with the scipy.signal.periodogram function. Raw
 data is collected from an ADALM2000 using the libm2k and Python
 bindings, minimally processed to remove DC content (that would otherwise
-“leak” into low frequency bins), and scaled to nV/√Hz. This method can
+“leak” into low frequency bins), and scaled to nV/:math:`\sqrt{\rm Hz}`. This method can
 be applied to any data acquisition module, so long as the sample rate is
 fixed and known, and data can be formatted as a vector of voltages.
 
@@ -222,11 +228,11 @@ fixed and known, and data can be formatted as a vector of voltages.
         fig.suptitle('Power Spectral Density')
         axs[0].semilogy(adc_fs, np.sqrt(adc_psd))
         axs[0].set_xlabel('frequency [Hz]')
-        axs[0].set_ylabel('PSD [V/√ Hz]')
+        axs[0].set_ylabel('PSD [V/sqrt(Hz)]')
         axs[0].set_title("ADC Noise PSD")
         axs[1].semilogy(resistor_fs, np.sqrt(resistor_psd))
         axs[1].set_xlabel('frequency [Hz]')
-        axs[1].set_ylabel('PSD [V/√ Hz]')
+        axs[1].set_ylabel('PSD [V/sqrt(Hz)]')
         axs[1].set_title("Resistor Noise PSD")
         plt.show()
         libm2k.contextClose(ctx)    
@@ -376,8 +382,8 @@ quantization noise dominates. The Signal to Noise Ratio can be no
 greater than (6.02 N + 1.76) dB. If a noiseless signal is applied to the
 input of an N-bit ADC and the output is a gaussian distribution of
 “many” output codes, then a thermal noise source dominates. The Signal
-to Noise Ratio is no greater than 20\ *log(Vin(p-p)/(σ*\ √8)), where
-Vin(p-p) is the full-scale input signal and σ is the standard deviation
+to Noise Ratio is no greater than :math:`20\log(V_{in}(p-p)/(\sigma/\sqrt{8}))`, where
+:math:`V_{in}(p-p)` is the full-scale input signal and :math:`\sigma` is the standard deviation
 of the output codes in units of voltage.
 
 As an example of an ADC that is limited by quantization noise, consider
@@ -564,17 +570,19 @@ compared to other elements in the signal chain.
 This is quite powerful - it allows the ADC’s noise to be directly
 compared to the noise at the output of the last element in the analog
 signal chain, which may be an ADC driver stage, a gain stage, or even
-the sensor itself. Amplifiers will have a noise specification in nV/√Hz,
+the sensor itself. Amplifiers will have a noise specification in nV/:math:`\sqrt{\rm Hz}`,
 and well-specified sensors will have a noise density specified in terms
 of the parameter being measured. For example, the ADXL1001 accelerometer
-has a +/-100g input range, and an output noise of 30 µg/√Hz. The output
-can be expressed in nV/√Hz by multiplying by the slope of the sensor -
-20mV/g (or 20,000,000nV/g), for an output noise of 600nV/√Hz.
+has a +/-100g input range, and an output noise of 30 µg/:math:`\sqrt{\rm Hz}`. The output
+can be expressed in nV/:math:`\sqrt{\rm Hz}` by multiplying by the slope of the sensor -
+20mV/g (or 20,000,000nV/g), for an output noise of 600nV/:math:`\sqrt{\rm Hz}`.
 
 For the previous measurement - the total noise was 565nV at a data rate
 of 128sps. So the noise density is approximately:
 
-565nV/√64Hz = 70nV/√Hz
+.. math::
+
+    565nV/\sqrt{64\rm Hz} = 70nV/\sqrt{\rm Hz}
 
 Going back to the principle that:
 
@@ -844,7 +852,7 @@ and produces a time series of voltage values that can be sent to a DAC.
 
 This function can be verified by controlling one ADALM2000 through a
 libm2k script, and verifying the noise profile with a second ADALM2000
-and the spectrum analyzer in the Scopy GUI. The following code snippet generates four "bands" of 1mV/√Hz noise on the ADALM2000 W2 output (with a sinewave on W1, for double-checking functionality.)
+and the spectrum analyzer in the Scopy GUI. The following code snippet generates four "bands" of 1mV/:math:`\sqrt{\rm Hz}` noise on the ADALM2000 W2 output (with a sinewave on W1, for double-checking functionality.)
 
 .. code-block:: python
 
@@ -873,7 +881,7 @@ and the spectrum analyzer in the Scopy GUI. The following code snippet generates
 
 
 Figure 27 below shows four
-bands of 1mV/√Hz noise being generated by one ADALM2000. The input
+bands of 1mV/:math:`\sqrt{\rm Hz}` noise being generated by one ADALM2000. The input
 vector is 8192 points long at a sample rate of 75ksps, for a bandwidth
 of 9.1Hz per point. Each “band” is 512 points, or 4687Hz wide.
 
@@ -910,7 +918,8 @@ a flat passband “brick wall” filter that lets through the same amount of
 noise as the non-flat filter. A common example is the ENBW of a
 first-order R-C filter, which is:
 
-ENBW = fc*pi/2
+.. math::
+    ENBW = fc*\pi/2
 
 where:
 
@@ -997,7 +1006,7 @@ filter, 128sps sample rate.
     print("SINC4 enbw integrating response: ", sinc4_enbw_arb)
 
 The result is that the ENBW of the SINC4, 128sps filter is about 31Hz.
-Setting the test noise generator to generate a band of 1000µV/√Hz should
+Setting the test noise generator to generate a band of 1000µV/:math:`\sqrt{\rm Hz}` should
 result in a total noise of about 5.69mVRMS. Run the following cell to
 take the measurement.
 
@@ -1045,7 +1054,7 @@ element in a signal chain.
 .. image:: ad7124_noise_blast.png
 
 
-**Figure 28. Blasting the AD7124 with 1mV/√Hz**
+**Figure 28. Blasting the AD7124 with 1mV/:math:`\sqrt{\rm Hz}`**
 
 
 Conclusion
@@ -1079,7 +1088,7 @@ Travis Collins - Architect of Pyadi-iio (among many other things)
 Adrian Suciu - Software Team Manager and contributor to libm2k
 
 References
-==========
+----------
 
 .. [1] Smith, Steven W,
        *The Scientist & Engineer's Guide to Digital Signal Processing*
@@ -1105,4 +1114,3 @@ References
        <https://www.analog.com/en/analog-dialogue/articles/histogram-techniques-measure-adc-noise.html>
 .. [7] Active Learning Lab Activity: Analog to Digital Conversion 
        <https://wiki.analog.com/university/courses/electronics/electronics-lab-adc>
-
