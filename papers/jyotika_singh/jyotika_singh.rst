@@ -397,8 +397,11 @@ show a month over month comparison between 2019
 and 2020 to analyze average audience engagement patterns. The viewership trends
 reflect the reduction from March onwards when COVID hit most locations across the
 globe. Figure :ref:`statsshiftfig` further shows engagement shift between 2019
-and 2020. The trend slopes downwards, picks up a little July onwards, which
-correlates with the time Europe lifted a lot of the travel restrictions. It can
+and 2020. The trend slopes upwards until March hits, which is when a lot of locations
+imposed stay at home orders and lockdowns. The trend slopes downwards, picks up a
+little July onwards, which correlates with the time Europe lifted a lot of the travel
+restrictions. The chart representing "travel vlog" content engagement largely
+correlates with the flight search trend as shown in figure :ref:`flightsfig`. It can
 be seen however, people were still creating travel vlogs and commenting on such
 videos. Between June and September 2020, amidst a much-reduced travel, what were
 these videos, what content was getting created, who was creating it and what were
