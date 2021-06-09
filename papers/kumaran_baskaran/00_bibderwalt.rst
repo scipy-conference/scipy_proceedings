@@ -51,7 +51,7 @@ To achieve the full power of the BMRB database it is important to be able to ret
 
 
 
-In response to the demise of DEVise, BMRB developed graphic libraries in Python (PyBMRB)  that utilize more modern interactive visualization tools, such as the Plotly visualization tool kit, to reproduce the most commonly used features of DEVise with interactive visualizations. PyBMRB features single-entry (peak position simulation for NMR spectrum) and database-wide visualizations (histograms). 
+In response to the demise of DEVise, BMRB developed graphic libraries in Python (PyBMRB)  that utilize more modern interactive visualization tools, such as the Plotly visualization tool kit :cite:`plotly` , to reproduce the most commonly used features of DEVise with interactive visualizations. PyBMRB features single-entry (peak position simulation for NMR spectrum) and database-wide visualizations (histograms). 
 
 The main motivation behind the project is to provide user friendly access to BMRB data for biologists and biochemists, who find it difficult to understand or utilize the NMR-STAR data model. NMR-STAR is a metadata rich format, which includes all necessary metadata about the NMR sample, sample condition, instrument details, author details and experimental details in addition to the measured chemical shift values. Chemical shifts are measured using several multidimensional NMR experiments and expressed one-dimensional assigned chemical shift lists in NMR-STAR data format. Biologists and biochemists prefer to view the chemical shift data graphical spectra rather than as a list of numerical values. 
 
