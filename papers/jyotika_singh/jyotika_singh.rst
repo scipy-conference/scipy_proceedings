@@ -197,8 +197,8 @@ as follows.
   1. Wrappers of YouTube Data API [#]_ : Libraries that act as wrappers and
   provide a way to use YouTube Data API V3.
 
-  2. pyYouTubeAnalysis [#]_ : This library allows one to run searches, collect
-  comments and define search params (search keywords, timeframe and type).
+  2. pyYouTubeAnalysis [pyYouTubeAnalysis]_ [#]_ : This library allows one to
+  run searches, collect comments and define search params (search keywords, timeframe and type).
   Furthermore, the project includes error handling so code execution does not
   stop due to unforeseen errors while interacting with YouTube API. Additional
   features include NLP methods such as SpaCy based Named Entity Recognition (NER)
@@ -354,11 +354,12 @@ from March onwards as can be seen in figure :ref:`hotelfig` [#]_.
 Let’s try to correlate these findings and understand content consumption within
 those time periods on YouTube.
 
-First, a search was performed to gather videos about “travel vlogs”. Travel vlogs
-are a popular content genre on YouTube where a lot of people are able to find
-reviews, advice and sneak peaks of different destinations that wows them and
-inspires travel plans. Such videos typically consist of people traveling to
-different locations and recording themselves at different spots.
+First, a search was performed to gather videos about “travel vlogs” using the
+pyYouTubeAnalysis [pyYouTubeAnalysis]_. Travel vlogs are a popular content
+genre on YouTube where a lot of people are able to find reviews, advice
+and sneak peaks of different destinations that wows them and inspires travel
+plans. Such videos typically consist of people traveling to different locations
+and recording themselves at different spots.
 
 .. figure:: views_year.png
 
@@ -470,7 +471,7 @@ and American locations which correlate with travel restriction reductions in
 some of the places.
 
 This analysis, including data collection and NER, was performed
-using pyYouTubeAnalysis library [#]_.
+using pyYouTubeAnalysis library [pyYouTubeAnalysis]_ [#]_.
 
 .. [#] https://github.com/jsingh811/pyYouTubeAnalysis
 
@@ -486,18 +487,22 @@ References
 
 .. [CoNLL] Bennani-Smires, Kamil & Musat, Claudiu & Hossmann, Andreea & Baeriswyl,
           Michael & Jaggi, Martin. (2018). Simple Unsupervised Keyphrase Extraction
-          using Sentence Embeddings. 10.18653/v1/K18-1022.
+          using Sentence Embeddings. 10.18653/v1/K18-1022
 
 .. [spacy] Honnibal, Matthew and Montani, Ines and Van Landeghem, Sofie and Boyd, Adriane.
           (2020). spaCy: Industrial-strength Natural Language Processing in Python.
-          Zenodo. 10.5281/zenodo.1212303. https://doi.org/10.5281/zenodo.1212303.
+          Zenodo. 10.5281/zenodo.1212303. https://doi.org/10.5281/zenodo.1212303
+
+.. [pyYouTubeAnalysis] Singh, J. (2021). jsingh811/pyYouTubeAnalysis:
+          pyYouTubeAnalysis: YouTube data requests and NER on text (v1.0) [Computer software]. Zenodo.
+          10.5281/ZENODO.4915746. https://doi.org/10.5281/ZENODO.4915746
 
 .. [textblob] Loria, Steven. (2018). textblob Documentation. Release 0.15, 2.
-          https://textblob.readthedocs.io/en/dev/.
+          https://textblob.readthedocs.io/en/dev/
 
 .. [langdetect] Shuyo, Nakatani. (2010). Language Detection Library for Java.
           http://code.google.com/p/language-detection/, 
-          https://pypi.org/project/langdetect/.
+          https://pypi.org/project/langdetect/
 
 .. [OpenSubtitles2016] P Lison, J Tiedemann. (2016). 
           OpenSubtitles2016: Extracting Large Parallel Corpora from Movie and TV Subtitles.
