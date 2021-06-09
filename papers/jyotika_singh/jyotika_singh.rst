@@ -325,26 +325,32 @@ Trend analysis case study
    Domestic and international flight search patterns in 2020.
    :label:`flightsfig`
 
+.. figure:: global-flight-searches.jpg
+
+   Global flight search patterns in 2020.
+   :label:`flightsfigglobal`
+
 In the year 2020, COVID hit us all hard. The world went through a lot of changes
 in the matter of no time to reduce the spread of the virus. One such impact was
 observed massively in the travel and hospitality industry. Figure :ref:`flightsfig`
-shows the flight search trends between February and November 2020 for domestic and
+[#]_ shows the flight search trends between February and November 2020 for domestic and
 international flight searches from the US. Right before lockdown and restrictions
 were enforced starting in March across different places across the globe, a big
 spike can be seen in flight searches, correlating with the activity of people
 trying to fly back home if they were elsewhere before restrictions disabled
-them to do so. A massive reduction in flight searches [#]_ can be seen after March and
-beyond as travel was reduced due to COVID imposed restrictions.
+them to do so. A massive reduction in flight searches can be seen in figure
+:ref:`flightsfig`and figure :ref:`flightsfigglobal` after March and
+beyond as travel was reduced due to COVID imposed events and restrictions.
 
 .. [#] https://www.kayak.com/news/category/travel-trends/
 
-.. figure:: hotels.png
+.. figure:: global-hotel-searches.jpg
 
    Hotel booking search patterns in 2020.
    :label:`hotelfig`
 
-Aligning with reduced flight searches, reduced hotel search [#]_ were also reports
-from March onwards as can be seen in figure :ref:`hotelfig`
+Aligning with reduced flight searches, reduced hotel search were also reported
+from March onwards as can be seen in figure :ref:`hotelfig` [#]_.
 
 .. [#] https://www.sojern.com/blog/covid-19-insights-on-travel-impact-hotel-agency/
 
