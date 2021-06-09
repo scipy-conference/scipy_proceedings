@@ -289,12 +289,11 @@ following data cleaning techniques have been found to be helpful cleaning method
   Some NLP models tend to do very well for a particular style of language and
   word usage. On social media, the language seen can be accompanied with
   various incorrectly spelled words, also known as typos.
-  PySpellChecker [#]_, Autocorrect [#]_ and Textblob [#]_ are examples of open-source
+  PySpellChecker [OpenSubtitles2016]_ [#]_, Autocorrect [#]_ and Textblob [textblob]_ are examples of open-source
   tools that can be used for spelling corrections.
 
 .. [#] https://pypi.org/project/pyspellchecker/
 .. [#] https://pypi.org/project/autocorrect/
-.. [#] https://textblob.readthedocs.io/en/dev/
 
 
 4. Language detection and translations
@@ -307,12 +306,10 @@ following data cleaning techniques have been found to be helpful cleaning method
   Nonetheless, detection and translation is a popular technique while dealing
   with multiple different languages.
   Some examples of Python libraries that can be used for language detection
-  include langdetect [#]_, Pycld2 [#]_, Textblob [#]_ and Googletrans [#]_.
+  include langdetect [langdetect]_, Pycld2 [#]_, Textblob [textblob]_ and Googletrans [#]_.
   Translate [#]_ and Googletrans can be used for language translations.
 
-.. [#] https://pypi.org/project/langdetect/
 .. [#] https://pypi.org/project/pycld2/
-.. [#] https://textblob.readthedocs.io/en/dev/
 .. [#] https://pypi.org/project/googletrans/
 .. [#] https://pypi.org/project/translate/
 
@@ -494,3 +491,18 @@ References
 .. [spacy] Honnibal, Matthew and Montani, Ines and Van Landeghem, Sofie and Boyd, Adriane.
           (2020). spaCy: Industrial-strength Natural Language Processing in Python.
           Zenodo. 10.5281/zenodo.1212303. https://doi.org/10.5281/zenodo.1212303.
+
+.. [textblob] Loria, Steven. (2018). textblob Documentation. Release 0.15, 2.
+          https://textblob.readthedocs.io/en/dev/.
+
+.. [langdetect] Shuyo, Nakatani. (2010). Language Detection Library for Java.
+          http://code.google.com/p/language-detection/, 
+          https://pypi.org/project/langdetect/.
+
+.. [OpenSubtitles2016] P Lison, J Tiedemann. (2016). 
+          OpenSubtitles2016: Extracting Large Parallel Corpora from Movie and TV Subtitles.
+          In Proceedings of the 10th International Conference on Language Resources and Evaluation
+          (LREC 2016). https://www.aclweb.org/anthology/L16-1147.
+
+
+
