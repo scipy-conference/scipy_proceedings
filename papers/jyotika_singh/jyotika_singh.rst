@@ -77,14 +77,15 @@ rules and human language is ever evolving.".
 
 Some of the common NLP tasks on text data include the following.
 
-1. Named Entity Recognition
+1. Named entity recognition
 
   Named-entity recognition (NER) (also known as (named) entity identification,
   entity chunking, and entity extraction) is a subtask of information extraction
   that seeks to locate and classify named entities mentioned in unstructured text
   into predefined categories such as person names, organizations, locations,
   medical codes, time expressions, quantities, monetary values, percentages, etc.
-  Some popular python libraries that can be leveraged include SpaCy [spacy]_ and NLTK [bird]_.
+  Some popular python libraries that can be leveraged include SpaCy [spacy]_ and
+  NLTK [bird]_.
 
 2. Keyphrase extraction
 
@@ -127,7 +128,7 @@ Potential use cases include the following.
   text occurrences with other available data, topics and sentiment information,
   NLP method outputs, or combinations thereof.
 
-2. Story Telling
+2. Story telling
 
   Analyzing text using the various NLP techniques along with other statistical
   and available data aids in converting raw data to an informative story piece
@@ -198,11 +199,11 @@ as follows.
   provide a way to use YouTube Data API V3.
 
   2. pyYouTubeAnalysis [pyYouTubeAnalysis]_ [#]_ : This library allows one to
-  run searches, collect comments and define search params (search keywords, timeframe and type).
-  Furthermore, the project includes error handling so code execution does not
-  stop due to unforeseen errors while interacting with YouTube API. Additional
-  features include NLP methods such as SpaCy based Named Entity Recognition (NER)
-  that runs location extraction on text.
+  run searches, collect comments and define search params (search keywords,
+  timeframe and type). Furthermore, the project includes error handling so code
+  execution does not stop due to unforeseen errors while interacting with
+  YouTube API. Additional features include NLP methods such as SpaCy based
+  Named Entity Recognition (NER) that runs location extraction on text.
 
 .. [#] https://developers.google.com/youtube/v3/docs/search/list
 .. [#] https://developers.google.com/youtube/v3/quickstart/python
@@ -210,20 +211,21 @@ as follows.
 .. [#] https://github.com/jsingh811/pyYouTubeAnalysis
 
 
-Social media / YouTube data noise
+Social Media / YouTube Data Noise
 ---------------------------------
+
+.. figure:: comments.png
+   :scale: 42%
+   :figclass: w
+
+   Random sample of YouTube comments representing writing style diversity.
+   :label:`commentsfig`
+
 Text fields are available within several places on YouTube, including video title,
 description, tags, comments, channel title and channel description. Video title,
 description, tags and channel title and description are filled by the
 content/channel owner. Comments on the other hand are made by individuals
 reacting to a video.
-
-.. figure:: comments.png
-   :scale: 60%
-   :figclass: w
-
-   Random sample of YouTube comments representing writing style diversity.
-   :label:`commentsfig`
 
 The challenges in such a data source arise due to writing style diversity,
 language diversity and topic diversity. Figure :ref:`commentsfig` shows a few
@@ -289,8 +291,9 @@ following data cleaning techniques have been found to be helpful cleaning method
   Some NLP models tend to do very well for a particular style of language and
   word usage. On social media, the language seen can be accompanied with
   various incorrectly spelled words, also known as typos.
-  PySpellChecker [OpenSubtitles2016]_ [#]_, Autocorrect [#]_ and Textblob [textblob]_ are examples of open-source
-  tools that can be used for spelling corrections.
+  PySpellChecker [OpenSubtitles2016]_ [#]_, Autocorrect [#]_ and Textblob
+  [textblob]_ are examples of open-source tools that can be used for spelling
+  corrections.
 
 .. [#] https://pypi.org/project/pyspellchecker/
 .. [#] https://pypi.org/project/autocorrect/
@@ -314,34 +317,41 @@ following data cleaning techniques have been found to be helpful cleaning method
 .. [#] https://pypi.org/project/translate/
 
 
-Trend analysis case study
+Trend Analysis Case Study
 ---------------------------
 
-.. figure:: flights.png
-
-   Domestic and international flight search patterns in 2020.
-   :label:`flightsfig`
-
-.. figure:: global-flight-searches.jpg
+.. figure:: flights_s.png
+   :scale: 50%
+   :figclass: w
 
    Global flight search patterns in 2020.
    :label:`flightsfigglobal`
+
+.. figure:: flights.png
+   :scale: 100%
+   :figclass: w
+
+   Domestic and international flight search patterns in 2020.
+   :label:`flightsfig`
 
 In the year 2020, COVID hit us all hard. The world went through a lot of changes
 in the matter of no time to reduce the spread of the virus. One such impact was
 observed massively in the travel and hospitality industry. Figure :ref:`flightsfig`
 [#]_ shows the flight search trends between February and November 2020 for domestic and
-international flight searches from the US. Right before lockdown and restrictions
+international flight searches from the US using Kayak. Right before lockdown and restrictions
 were enforced starting in March across different places across the globe, a big
 spike can be seen in flight searches, correlating with the activity of people
 trying to fly back home if they were elsewhere before restrictions disabled
-them to do so. A massive reduction in flight searches can be seen in figure
-:ref:`flightsfig`and figure :ref:`flightsfigglobal` after March and
-beyond as travel was reduced due to COVID imposed events and restrictions.
+them to do so. A massive reduction in flight searches can be seen in figures
+:ref:`flightsfig` and :ref:`flightsfigglobal` [#]_ after March and as travel
+was reduced due to COVID imposed events and restrictions.
 
 .. [#] https://www.kayak.com/news/category/travel-trends/
+.. [#] https://www.sojern.com/blog/covid-19-insights-on-travel-impact-hotel-agency/
 
-.. figure:: global-hotel-searches.jpg
+.. figure:: hotels.png
+   :scale: 50%
+   :figclass: w
 
    Hotel booking search patterns in 2020.
    :label:`hotelfig`
@@ -362,14 +372,17 @@ plans. Such videos typically consist of people traveling to different locations
 and recording themselves at different spots.
 
 .. figure:: views_year.png
+   :scale: 60%
 
    Yearly video views. :label:`viewsyearfig`
 
 .. figure:: likes_year.png
+   :scale: 60%
 
    Yearly video likes. :label:`likesyearfig`
 
 .. figure:: comments_year.png
+   :scale: 60%
 
    Yearly video comments. :label:`commentsyearfig`
 
@@ -428,7 +441,7 @@ include the following.
 
 2. BeachTuber [#]_ – YouTube channel creating vlogs from different beaches all over Europe.
 
-3. Beach Walk [#]_ – YouTube channel posting about different beaches all over Europe and America. 
+3. Beach Walk [#]_ – YouTube channel posting about different beaches all over Europe and America.
 
 4. DesiGirl Traveller [#]_ – YouTube channel creating videos about India travel.
 
@@ -476,6 +489,22 @@ using pyYouTubeAnalysis library [pyYouTubeAnalysis]_ [#]_.
 .. [#] https://github.com/jsingh811/pyYouTubeAnalysis
 
 
+Conclusion
+----------
+
+Language usage on social media contains mixed writing styles, languages, freeform
+emoji and abbreviation usage. This variety makes it harder to perform NLP tasks
+on data coming from social media. Described cleaning techniques such as emoji removal,
+hyperlink removal, language translations and typo corrections have been found
+useful in dealing with language of such nature.
+
+Social media data contain statistics in addition to text data that measure human
+engagement and interest in content. Combining these statistics with inferences
+from NLP techniques such as named-entity recognition (NER) are found to be helpful
+in trend analysis and analytics around correlations and interests of people
+engaging with social media.
+
+
 References
 ----------
 .. [enwiki] Wikipedia contributors. "Natural language processing." Wikipedia,
@@ -494,20 +523,18 @@ References
           Zenodo. 10.5281/zenodo.1212303. https://doi.org/10.5281/zenodo.1212303
 
 .. [pyYouTubeAnalysis] Singh, J. (2021). jsingh811/pyYouTubeAnalysis:
-          pyYouTubeAnalysis: YouTube data requests and NER on text (v1.0) [Computer software]. Zenodo.
-          10.5281/ZENODO.4915746. https://doi.org/10.5281/ZENODO.4915746
+          pyYouTubeAnalysis: YouTube data requests and NER on text (v1.0)
+          [Computer software]. Zenodo. 10.5281/ZENODO.4915746.
+          https://doi.org/10.5281/ZENODO.4915746
 
 .. [textblob] Loria, Steven. (2018). textblob Documentation. Release 0.15, 2.
           https://textblob.readthedocs.io/en/dev/
 
 .. [langdetect] Shuyo, Nakatani. (2010). Language Detection Library for Java.
-          http://code.google.com/p/language-detection/, 
+          http://code.google.com/p/language-detection/,
           https://pypi.org/project/langdetect/
 
-.. [OpenSubtitles2016] P Lison, J Tiedemann. (2016). 
+.. [OpenSubtitles2016] P Lison, J Tiedemann. (2016).
           OpenSubtitles2016: Extracting Large Parallel Corpora from Movie and TV Subtitles.
           In Proceedings of the 10th International Conference on Language Resources and Evaluation
           (LREC 2016). https://www.aclweb.org/anthology/L16-1147.
-
-
-
