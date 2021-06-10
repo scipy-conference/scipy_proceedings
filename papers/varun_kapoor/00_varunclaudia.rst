@@ -97,46 +97,34 @@ The code for doing watershed in 3D using the complete set of seeds on the probab
             #Image = ProbabilityMap of Stardist
             #Label = Label segmentation image of Stardist 
             #Mask = U-Net predicted image post binarization 
-            properties = measure.regionprops(Label, Image)
-            cord = np.array([prop.centroid for prop 
-            in properties])
-            Unet_out, nb_labels = label(mask, return_num=True)
-            # Getting the set of labels where the Stardist 
-            #centroids fall
-            intersection = Unet_out[tuple(cord.T)]
-            # Creating a mapping to remove the 
-            #connected componnents (cc)
-            # from Unet that contain a centroid 
-            #from Stardist.
-            # After the following 2 opperations,
-            # mapping is a 1d array where:
-            # mapping[i] -> 0 if the cc 
-            #contains a Stardist barycenter
-            # mapping[i] -> i otherwise
-            mapping = np.arange(nb_labels+1, 
-            dtype=Unet_out.dtype)
-            mapping[intersection] = 0
-            # Applying the mapping, masked_Unet only has
-            # connected components that do not contain
-            # a Stardist centroid
-            masked_Unet = mapping[Unet_out]
-            # Only the necessary centroids are computed,
-            # the bounding boxes does not have to be computed
-            binaryproperties = measure.regionprops(masked_Unet)
-            bin_cord = [prop.centroid for prop 
-            in binaryproperties]
-            # Concatenating all the centroids together
-            # and proceeding as before
-            cord = np.vstack(([0, 0], cord, bin_cord))
-            cord_int = np.round(cord).astype(int)
-            markers_raw = np.zeros_like(Image)
-            markers_raw[tuple(cord_int.T)] =
-            1 + np.arange(len(cord))
-            markers =
-            morphology.dilation(markers_raw,
-            morphology.ball(2))
-            watershedImage =
-            watershed(-Image, markers, mask)
+            properties = measure.regionprops(Label, Image) 
+            binaryproperties = measure.regionprops(label(mask), Image) 
+            Coordinates = [prop.centroid for prop in properties] 
+            BinaryCoordinates = [prop.centroid for prop in binaryproperties]
+            Binarybbox = [prop.bbox for prop in binaryproperties]
+            Coordinates = sorted(Coordinates , key=lambda k: [k[0], k[1], k[2]]) 
+    
+            if len(Binarybbox) > 0:    
+                  for i in range(0, len(Binarybbox)):
+                
+                            box = Binarybbox[i]
+                            inside = [iou3D(box, star) for star in Coordinates]
+                
+                            if not any(inside) :
+                                  Coordinates.append(BinaryCoordinates[i])    
+                         
+    
+            Coordinates.append((0,0,0))
+            Coordinates = np.asarray(Coordinates)
+            coordinates_int = np.round(Coordinates).astype(int) 
+    
+            markers_raw = np.zeros_like(Image) 
+            markers_raw[tuple(coordinates_int.T)] = 1
+            + np.arange(len(Coordinates)) 
+            markers = morphology.dilation(
+            markers_raw.astype('uint16'), morphology.ball(2))
+    
+            watershedImage = watershed(-Image, markers, mask = mask.copy()) 
             return watershedImage, markers
     
     
