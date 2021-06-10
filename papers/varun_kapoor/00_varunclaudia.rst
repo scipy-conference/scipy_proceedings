@@ -94,38 +94,42 @@ The code for doing watershed in 3D using the complete set of seeds on the probab
 
 
   def WatershedwithMask3D(Image, Label, mask, grid):
-            #Image = ProbabilityMap of Stardist
-            #Label = Label segmentation image of Stardist 
-            #Mask = U-Net predicted image post binarization 
-            properties = measure.regionprops(Label, Image) 
-            binaryproperties = measure.regionprops(label(mask), Image) 
-            Coordinates = [prop.centroid for prop in properties] 
-            BinaryCoordinates = [prop.centroid for prop in binaryproperties]
-            Binarybbox = [prop.bbox for prop in binaryproperties]
-            Coordinates = sorted(Coordinates , key=lambda k: [k[0], k[1], k[2]]) 
-    
-            if len(Binarybbox) > 0:    
-                  for i in range(0, len(Binarybbox)):
-                
-                            box = Binarybbox[i]
-                            inside = [iou3D(box, star) for star in Coordinates]
-                
-                            if not any(inside) :
-                                  Coordinates.append(BinaryCoordinates[i])    
-                         
-    
-            Coordinates.append((0,0,0))
-            Coordinates = np.asarray(Coordinates)
-            coordinates_int = np.round(Coordinates).astype(int) 
-    
-            markers_raw = np.zeros_like(Image) 
-            markers_raw[tuple(coordinates_int.T)] = 1
-            + np.arange(len(Coordinates)) 
-            markers = morphology.dilation(
-            markers_raw.astype('uint16'), morphology.ball(2))
-    
-            watershedImage = watershed(-Image, markers, mask = mask.copy()) 
-            return watershedImage, markers
+    #Image = ProbabilityMap of Stardist
+    #Label = Label segmentation image of Stardist 
+    #Mask = U-Net predicted image post binarization 
+    properties = measure.regionprops(Label, Image) 
+    binaryproperties = measure.regionprops(label(mask), Image) 
+    Coordinates = [prop.centroid for prop in properties] 
+    BinaryCoordinates = [prop.centroid for 
+    prop in binaryproperties]
+    Binarybbox = [prop.bbox for prop in binaryproperties]
+    Coordinates = sorted(Coordinates , 
+    key=lambda k: [k[0], k[1], k[2]]) 
+
+    if len(Binarybbox) > 0:    
+         for i in range(0, len(Binarybbox)):
+        
+            box = Binarybbox[i]
+            inside = [iou3D(box, star) 
+            for star in Coordinates]
+
+            if not any(inside) :
+                  Coordinates.append(BinaryCoordinates[i])    
+         
+
+    Coordinates.append((0,0,0))
+    Coordinates = np.asarray(Coordinates)
+    coordinates_int = np.round(Coordinates).astype(int) 
+
+    markers_raw = np.zeros_like(Image) 
+    markers_raw[tuple(coordinates_int.T)] = 1
+    + np.arange(len(Coordinates)) 
+    markers = morphology.dilation(
+    markers_raw.astype('uint16'), morphology.ball(2))
+
+    watershedImage = watershed(-Image, markers, 
+    mask = mask.copy()) 
+    return watershedImage, markers
     
     
     
