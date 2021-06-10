@@ -487,6 +487,227 @@ Fig. :ref:`bench:autotuning:speedup:vs:matrix`.
    :label:`audikw-1-S-tuned-C-8`
 
 
+Experiments with SpMM and Autotuning
+------------------------------------
+
+Purpose of this section is to present **statistics of speedups** one may encounter by using PyRSB instead of SciPy CSR in practical usage.
+In our choice of experiments, and in the exposition, we favour **breadth** over depth.
+So **differently than in a paper with HPC in focus**, we focus on the achievable speedup, and not on performance.
+We also take **shortcuts** which we would not take otherwise, like
+mixing statistics from
+`single precision` 
+computations with 
+`double precision` ones, or real-valued  and complex-valued ones.
+Also the very focus of the article, namely comparing directly **threaded RSB to serial CSR** in SciPy would be ill-posed, were we interested to compare the parallelism grade of the two implementations.
+On the plots that will follow, samples are grouped by matrix;
+for each one,
+a `five-number summary` 
+(minimum and maximum, first quartile, second (median) and third quartiles)
+is drawn with a `boxes and whiskers` representation.
+
+Experimental Setup
+~~~~~~~~~~~~~~~~~~
+
+We use a
+`AMD EPYC 7742` node with 64 cores.
+Scaling of memory bandwidth in STREAM-like loops here is around :math:`10\times`.
+Considering we are dealing with memory-bound operations, we chose ``OMP_NUM_THREADS=24``,
+``OMP_PROC_BIND=spread``, and ``OMP_PLACES=cores``.
+``RSB_USER_SET_MEM_HIERARCHY_INFO`` was set to ``"L2:4/64/16000K,L1:8/64/32K"``.
+We use CSR from ``csr_matrix`` in SciPy ``e171a1`` from Feb 20, 2021, PyRSB ``8a6d603`` from Jun 08, 2021, pre-release LIBRSB-1.3.
+For both, we use ``-Ofast -march=native -mtune=native`` flags and ``gcc version 10.2.1 20210110 (Debian 10.2.1-6)``.
+We use matrices which were also used in [Martone14]_, available from [SSMC]_; see the table below.
+Many of these are symmetric; differently than ``rsb_matrix``, ``csr_matrix`` does not support `symmetric SpMM`;
+therefore in both cases we expand their symmetry and perform only `unsymmetric` (general) SpMM.
+Before starting any measurement, we run ``autotune`` on a temporary matrix to `warm-up` the OpenMP environment, once.
+Then we do one non-timed `warm-up` SpMM before iterating for 0.2s and taking the fastest sample.
+We repeat this for each of the 28 matrices, right-hand-sides (NRHS) in ``1,2,4,8``, order among ``'C'`` and ``'F'``, `BLAS numerical types` in ``C,D,S,Z``.
+When using ``rsb_matrix``, we measure both non-autotuned, and autotuned with ``autotune(nrhs=...,order=...,tmax=0)``.
+So the above totals to :math:`28\cdot4\cdot2\cdot4=896` records with samples in SpMM and tuning timing.
+To avoid also timing repeated allocation of the SpMM result (``C`` in ``C=A*B``), we allocate it once, and then instead of the ``*`` operator, we use the functions underneath it, which take ``C`` as argument (**this can be of interest to many performance-conscious users**).
+
+.. raw:: latex
+
+   \setlength{\tablewidth}{0.8\linewidth}
+   \begin{table}[ht]
+   \centering
+   \begin{tabular}{rllll}
+   \hline
+   & matrix & nonzeroes & rows & ratio \\
+     \hline
+  1 & arabic-2005 & 6.40e+08 & 2.27e+07 & 28.1 \\
+    2 & audikw\_1 & 7.77e+07 & 9.44e+05 & 82.3 \\
+    3 & bone010 & 7.17e+07 & 9.87e+05 & 72.6 \\
+    4 & channel-500x100x100-b050 & 8.54e+07 & 4.80e+06 & 17.8 \\
+    5 & Cube\_Coup\_dt6 & 1.27e+08 & 2.16e+06 & 58.8 \\
+    6 & delaunay\_n24 & 1.01e+08 & 1.68e+07 & 6.0 \\
+    7 & dielFilterV3real & 8.93e+07 & 1.10e+06 & 81.0 \\
+    8 & europe\_osm & 1.08e+08 & 5.09e+07 & 2.1 \\
+    9 & Flan\_1565 & 1.17e+08 & 1.56e+06 & 75.0 \\
+   10 & Geo\_1438 & 6.32e+07 & 1.44e+06 & 43.9 \\
+   11 & GL7d19 & 3.73e+07 & 1.91e+06 & 19.5 \\
+   12 & gsm\_106857 & 2.18e+07 & 5.89e+05 & 36.9 \\
+   13 & hollywood-2009 & 1.14e+08 & 1.14e+06 & 99.9 \\
+   14 & Hook\_1498 & 6.09e+07 & 1.50e+06 & 40.7 \\
+   15 & HV15R & 2.83e+08 & 2.02e+06 & 140.3 \\
+   16 & indochina-2004 & 1.94e+08 & 7.41e+06 & 26.2 \\
+   17 & kron\_g500-logn21 & 1.82e+08 & 2.10e+06 & 86.8 \\
+   18 & Long\_Coup\_dt6 & 8.71e+07 & 1.47e+06 & 59.2 \\
+   19 & nlpkkt160 & 2.30e+08 & 8.35e+06 & 27.5 \\
+   20 & nlpkkt200 & 4.48e+08 & 1.62e+07 & 27.6 \\
+   21 & nlpkkt240 & 7.74e+08 & 2.80e+07 & 27.7 \\
+   22 & relat9 & 3.90e+07 & 1.24e+07 & 3.2 \\
+   23 & rgg\_n\_2\_23\_s0 & 1.27e+08 & 8.39e+06 & 15.1 \\
+   24 & rgg\_n\_2\_24\_s0 & 2.65e+08 & 1.68e+07 & 15.8 \\
+   25 & RM07R & 3.75e+07 & 3.82e+05 & 98.2 \\
+   26 & road\_usa & 5.77e+07 & 2.39e+07 & 2.4 \\
+   27 & Serena & 6.45e+07 & 1.39e+06 & 46.4 \\
+   28 & uk-2002 & 2.98e+08 & 1.85e+07 & 16.1 \\
+      \hline
+   \end{tabular}
+   \end{table}
+
+
+SpMM Speedup: from ``csr_matrix`` to ``rsb_matrix``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Figure :ref:`bench:untuned:rsb:vs:csr:speedup:vs:matrix` summarizes the speed ratio of non-autotuned ``rsb_matrix`` over ``csr_matrix``.
+Speedup without RSB autotuning ranges from :math:`4\times` to :math:`64\times`, with median :math:`15\times`.
+Half of observed speedup cases falls between :math:`11\times` and :math:`20\times`.
+A `streaming memory access` benchmark we ran on this machine scaled up to circa :math:`10\times`, which just less than the observed median speedup (remember ``rsb_matrix`` is running with multiple cores, but ``csr_matrix`` cannot exploit that).
+
+For the reader who is not practical of SpMM performance: the memory access pattern of SpMM is typically very irregular, and largely dependent on the sparsity structure of the matrix.
+For this reason, for most layouts the multicore scaling of SpMM performance (in particular SpMV) tends to be worst than a streaming memory access scaling.
+But here we are comparing speed ratios of different algorithms, and these ratios differ as well.
+That reflects the better or worse aptness of a given format to a given matrix.
+For instance, matrix 17 has nonzeroes scattered quite regularly over the entire matrix, not much clustered: this favours RSB and the `cache blocking` induced by its structure rather than CSR (serial or not).
+Conversely, matrix 9 has most of its nonzeroes adjacent to some other, which is more CSR-friendly, and a contribution to the lesser improvement when switching to RSB here.
+See [Martone14]_ for more RSB-vs-CSR commentary.
+
+.. figure:: bench_untuned_rsb_vs_csr_speedup_vs_matrix.pdf
+
+   Performance samples grouped by matrices.
+   Each box represents a group of measurements on the different numerical type, NRHS, and operands layout.
+   The middle horizontal line is the median speedup of RSB vs CSR, corresponding to :math:`15\times`.
+   The other lines are the extremes, and the first and third quartiles in between (the second quartile being the median value).
+   Notice *autotuned* results in Fig. :ref:`bench:tuned:rsb:vs:csr:speedup:vs:matrix` improve this further.
+   :label:`bench:untuned:rsb:vs:csr:speedup:vs:matrix`
+
+The speedups shown so far and those in Fig. :ref:`bench:untuned:rsb:vs:csr:speedup:vs:matrix` rely on default RSB layouts.
+As said earlier, the RSB format is suited best to scenarios with large matrices and repeated SpMM applications.
+These are also the scenarios where the usage of ``autotune``, which refines the default layout according to the operands at hand, is most convenient.
+
+Figure :ref:`bench:tuned:rsb:vs:csr:speedup:vs:matrix` shows results with autotuned instances.
+Here ``autotune`` has been called for each combination of matrix, operands layout, NRHS, numerical type.
+The median speedup over CSR here (circa :math:`28.8\times`) is almost twice the one before autotuning.
+
+.. figure:: bench_tuned_rsb_vs_csr_speedup_vs_matrix.pdf
+
+   We observe speedup over CSR from a few up to :math:`81.7 \times`, with median of :math:`28.8 \times`.
+   Certain matrices benefit from RSB more (see matrices 5, 9, 15, 18), while others less (6,22,..).
+   Compare the relevant improvement over non-autotuned results in Fig. :ref:`bench:untuned:rsb:vs:csr:speedup:vs:matrix`, or see 
+   Fig. :ref:`bench:autotuning:speedup:vs:matrix` for the per-matrix ratios.
+   :label:`bench:tuned:rsb:vs:csr:speedup:vs:matrix`
+
+With respect to non-autotuned RSB samples, the application of ``autotune`` brought a median improvement of :math:`1.6\times`.
+This includes all samples, inclusive the lower quartile, with speedup between :math:`1\times` (no speedup) and :math:`1.2\times`, which we nevertheless regard as `ineffective` (see next subsection's discussion).
+An overview of which matrix benefited more, and which less from autotuning is given by
+Fig. :ref:`bench:autotuning:speedup:vs:matrix`.
+There is no clear trend to see here.
+We observe that most of the cases (70%) benefited from autotuning.
+It's worth to mention that the longer the time limit chosen to run SpMM before taking each performance sample, the less the fluctuation we would have encountered here, and times we chose were quite tight.
+
+.. figure:: bench_autotuning_speedup_vs_matrix.pdf
+
+   Per-sample autotuning effectiveness statistics: autotuned RSB SpMM speed to non-autotuned one.
+   Half of the cases improve by :math:`>1.6\times`, 25% of the cases by :math:`>2.9\times`.
+   Matrices 8,11,12,22,26 seem to barely profit from it.
+   These are the same ones that exhibit the highest `ineffective autotuning cost` on Fig. :ref:`bench:lost:autotuning:in:rsb:ops:vs:matrix`.
+   :label:`bench:autotuning:speedup:vs:matrix`
+
+
+Speedups of tuned RSB vs CSR have median :math:`29\times` with the ``'C'`` layout, and :math:`28.6\times` with ``'F'`` layout;
+also within RSB the ``'C'`` layout performs a few percentage points better than ``'F'``.
+
+As seen in this section, autotuning can speedup RSB a further bit, but not always.
+The next section quantifies the cost of autotuning in practical terms, for either effective and ineffective outcome.
+
+
+The Cost of RSB Autotuning
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:label:`sec:atc`
+
+As introduced earlier, ``autotune`` adapts the structure of an RSB matrix, seeking instances which execute a specified operation (here, SpMM) faster.
+A consistent fraction of the autotuning time is spent measuring SpMM timings of `prospective RSB instances`.
+It's important to remark: what one wants here is not merely faster execution of SpMM *after* autotuning.
+What one wants is that autotuning plus all following SpMM iterations shall take less time than the same count of iterations with a non-autotuned matrix.
+In other words, if the time savings of faster SpMM's cannot cover the autotuning duration, autotuning time is lost.
+For this reason it is convenient to quantify the number of iterations to reach the first SpMM bringing actual time saving (`amortization`);
+this is the duration of ``autotune`` divided by the time `saved` at each iteration (that is, `slow` time with `old RSB blocking`, minus `faster` time with `new RSB blocking`).
+
+For the purpose of this article, we chose to declare autotuning as `effective` if it brings a speedup of 20% or more.
+With this threshold set, while 94.5% of the cases get `some` speedup, it is 70% that qualify also as effective.
+
+What one observes among effectively autotuned cases 
+(see Fig. :ref:`bench:autotuning:amortization:in:csr:ops:vs:matrix`)
+is that in 75% of those cases, merely 2.5 CSR iterations are enough to amortize the autotuning time.
+This is thanks to the large speedup going from (serial) CSR to (parallel) RSB.
+
+If as cost unit we consider going from non-autotuned to autotuned RSB instead, then the relative gain is less (because threaded non-autotuned RSB is already much faster than serial CSR), and consequently, it takes more to amortize it; see Fig. :ref:`bench:autotuning:amortization:in:rsb:ops:vs:matrix`.
+
+When autotuning was ineffective (30% of the cases with our :math:`1.2\times` threshold, though only 5.5% exhibit no speedup at all), we regard its time as lost;
+in our test setup this was from a few dozen to a few hundred RSB iterations, with median 33;
+see Fig.  :ref:`bench:lost:autotuning:in:rsb:ops:vs:matrix`.
+If expressed in terms of serial CSR iterations, these would be :math:`<2.8` iterations in half of the cases, :math:`<8` in 75% of the cases.
+
+These results shall convince users that using ``autotune`` is a good option most of the times. 
+
+.. figure:: bench_autotuning_amortization_in_csr_ops_vs_matrix.pdf
+
+   Were one to use RSB instead of CSR, and obtain an autotuned instance via ``autotune``, then this would amortize in few iterations.
+   Notice than in the intended scenarios, where thousands of SpMM are foreseen, this is completely negligible.
+   Note: autotuning was effective in 70% of the cases, represented here and in Fig. :ref:`bench:autotuning:amortization:in:rsb:ops:vs:matrix`.
+   :label:`bench:autotuning:amortization:in:csr:ops:vs:matrix`
+
+.. figure:: bench_autotuning_amortization_in_rsb_ops_vs_matrix.pdf
+
+   If one were to start autotuning from RSB (thus with less improvement potential than with CSR), the amortization times `cost` more iterations (here, median is :math:`38.4\times`, 75% of the cases below :math:`76\times`).
+   Nevertheless, for many problems, where thousands of iterations are foreseen, this is perfectly acceptable.
+   :label:`bench:autotuning:amortization:in:rsb:ops:vs:matrix`
+
+.. figure:: bench_lost_autotuning_in_rsb_ops_vs_matrix.pdf
+
+   There is no guarantee autotuning improves SpMM performance.
+   Actually, autotuning would be unnecessary, if we were able to guess blockings optimal under all circumstances.
+   Indeed, without further analysis, one may even speculate that the default RSB blocking matrices where autotuning was ineffective, was also the *best*.
+   In our experiment, ineffective autotuning searches **costed** :math:`33\times` RSB (only :math:`2.8\times` CSR) SpMM iterations in the median case.
+   Note that for certain matrices (1,16,21) autotuning was always effective: this is why these have no associated box here.
+   :label:`bench:lost:autotuning:in:rsb:ops:vs:matrix`
+
+
+Conclusions and Future Work
+---------------------------
+
+Full utilization of the parallelism potential is important in achieving efficient operations on current CPUs.
+**PyRSB** does that by giving Python users transparent access to the shared-memory parallel `performance library` **LIBRSB**.
+Differently than classes in current ``scipy.sparse``, but with a very similar usage interface, PyRSB's ``rsb_matrix`` readily exploits shared-memory parallelism.
+This article's results section gave a wide sample of speedup statistics with respect to SciPy's ``csr_matrix``, on the SpMM operation.
+Observed median speedup with respect to ``csr_matrix`` exceeded the known memory bandwidth speedup on the machine;
+with autotuning, it doubled that, speaking for the good implementation in LIBRSB.
+Trade-off considerations in using PyRSB effectively by means of autotuning have also been delineated.
+
+SpMM and autotuning are the *workhorses* of PyRSB and we addressed their use here.
+Follow-up studies may address or reflect improvements on the LIBRSB side, special use cases,
+as well as mostly usability-related aspects on the PyRSB side, especially in striving for SciPy interoperability in the user interface.
+Comparing symmetric SpMM of PyRSB to that of specific `symmetric formats` in SciPy may also be of interest.
+
+Acknowledgments
+---------------
+
+This work has been financed by **PRACE-6IP**, under Grant agreement ID: 823767, under Project name `LyNcs`.
+LyNcs is one of 10 collaborations supported by PRACE-6IP, WP8 `"Forward Looking Software Solutions"`.
+Performance results have been obtained on systems in the test environment **BEAST** (`Bavarian Energy Architecture & Software Testbed`) at the Leibniz Supercomputing Centre.
 
 .. [PYRSB] *PyRSB*. (2021, May). Retrieved May 28, 2021, https://github.com/michelemartone/pyrsb
 .. [LIBRSB] *LIBRSB*. (2021, May). Retrieved May 28, 2021, https://librsb.sf.net
