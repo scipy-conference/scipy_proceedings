@@ -59,7 +59,7 @@ The RSB format is geared to execute possibly fast threaded SpMV and SpMM.
 LIBRSB is not a solver library, but provides most of the functionality required to build one.
 It is usable via several languages:
 C, C++, Fortran, GNU Octave [SPARSERSB]_, and now Python, too.
-A binding for the Julia language has also been contributed by D.C. Jones [RSB_JL]_.
+Bindings for the Julia language have been authored by D.C. Jones [RSB_JL]_.
 
 LIBRSB has been reportedly used for:
 Plasma physics
