@@ -48,7 +48,7 @@ To address this the Gary and Mary West PACE (WestPACE) center established a
 pop-up point of distribution (POD) for the COVID-19 vaccine :cite:`press`
 specifically for the elderly with emphasis on those who are most vulnerable.
 The success in the POD was touted in the local news media :cite:`knsd`
-:cite:`kpbs` and caught the attention of the state who asked WestPACE's sister
+:cite:`kpbs` and caught the attention of the State of California who asked WestPACE's sister
 organization the Gary and Mary West Health Institute to develop a playbook for
 the deploying a pop-up (POD) :cite:`pod`.
 
@@ -65,11 +65,11 @@ which provides nursing-home-level care. By the nature of the services provided,
 participants in the PACE program are among the most vulnerable.  In an effort
 to provide vaccinations as quickly as possible WestPACE sought to obtain the
 vaccine and necessary freezer to vaccinate their members rather than wait for
-the county to provide them. As it turns out the freezer was a great challenge
+San Diego County to provide them. As it turns out the freezer was a great challenge
 because at this time freezers were in high demand because of their need in
 storing the vaccine. In order to satisfy the need, WestPACE could only select
 from freezers that were available. One that had capacity to far exceed the
-needs of the center. With this excess freezer capacity, WestPace and the county
+needs of the center. With this excess freezer capacity, WestPace and the County
 collaborated to setup an unique vaccination center with a mission to vaccinate
 seniors specifically.
 
@@ -128,8 +128,8 @@ In our pipeline, the senior or senior's caregiver would telephone the 2-1-1
 call center and the operator  collects demographic and health information
 during a brief interview. In addition, 2-1-1 arranges transportation to and
 from the vaccine site if needed. The demographic and health information is
-entered into a state maintained appointment system. The information is
-downloaded the  appointment system prior to the next day's clinic and processed
+entered into appointment system managed by the California Department of Public Health.
+The information is downloaded the  appointment system prior to the next day's clinic and processed
 using Python for automated procedures and Jupyter for manual proceedures. (Due
 to the short duration of the clinic, full automation was not deemed necessary.)
 A forms packet is generated for each senior and consolidated into a few PDF
@@ -151,7 +151,7 @@ signature. The reason for adopting paper is simply the cost and to provide a
 trail for downstream audits.
 
 Regarding compliance,  some of the vaccine pipeline is handled by the third parties such as 2-1-1 or
-the state. However, from the time the data is ingested from the state's
+the State. However, from the time the data is ingested from the State's
 appointment system to our processing center and transmitted to the clinic,
 strict HIPAA requirements are met. First, all communications from the
 appointment system took place under authentication and encryption. Fortunately,
