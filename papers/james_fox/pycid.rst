@@ -33,8 +33,8 @@ PyCID: A Python Library for Causal Influence Diagrams
    certain objective incentivise? How can we improve this behaviour and ensure
    that a decision-maker chooses decisions with safer or fairer consequences?
    This paper introduces the Python package *PyCID*, built upon *pgmpy*, that
-   implements (causal) influence diagrams, a well-studied graphical modelling framework for 
-   decision-making problems. By providing numerous methods to solve and analyse
+   implements (causal) influence diagrams, a widely used graphical modelling framework for 
+   decision-making problems. By providing a range of methods to solve and analyse
    (causal) influence diagrams, *PyCID* helps answer questions about behaviour
    and incentives in both single-agent and multi-agent settings.
 
@@ -47,11 +47,11 @@ Introduction
    
 Influence-diagrams (IDs) are used to represent and analyse decision making situations under uncertainty (:cite:`howard2005influence`, :cite:`miller1976development`). Like Bayesian Networks, IDs have at their core a directed acyclic graph, but IDs also specify decision and utility nodes. Relationships between variables are specified with conditional probability distributions. When these are specified, we call it an influence model (IM). A decision-maker is interested in choosing a decision rule for a decision (conditional on the values of its parents in the ID) that maximises its expected utility. IMs have been extended to multi-agent settings (:cite:`koller2003multi`, :cite:`hammond2021equilibrium`) and causal influence models (CIMs) :cite:`everitt2021agent` allow for causal interventions and the ability to ask counterfactual questions :cite:`pearl2009causality`.
    
-Statistical and causal IDs have already shown promise for a wide variety of applications from the design of AI systems with safe and fair incentives (:cite:`everitt2021agent`, :cite:`carey2020incentives`, :cite:`everitt2019reward`, :cite:`holtman2020towards`, :cite:`everitt2019modeling`, :cite:`langlois2021rl`, and :cite:`cohen2020asymptotically`) to applications in business and medical decision making (:cite:`gomez2004real`, :cite:`kjaerulff2008bayesian`). Nevertheless, although Python libraries exist for Bayesian networks, perhaps most prominently, *pgmpy* :cite:`ankan2015pgmpy`, these libraries lack specific support for IDs. We found two Python wrappers of C++ influence diagram libraries: *pyAgrum* and *PySMILE*. These were limited by usability (we couldn’t readily install them), maintainability (using multiple languages) and versatility (they did not cover multi-agent or causal IDs). A Python library that focuses on implementing statistical and causal IDs is therefore needed to ensure their potential application can be explored, probed, and fully realised.
+Statistical and causal IDs have already shown promise for a wide variety of applications, from the design of AI systems with safe and fair incentives (:cite:`everitt2021agent`, :cite:`carey2020incentives`, :cite:`everitt2019reward`, :cite:`holtman2020towards`, :cite:`everitt2019modeling`, :cite:`langlois2021rl`, and :cite:`cohen2020asymptotically`) to applications in business and medical decision making (:cite:`gomez2004real`, :cite:`kjaerulff2008bayesian`). Nevertheless, although Python libraries exist for Bayesian networks, perhaps most prominently, *pgmpy* :cite:`ankan2015pgmpy`, these libraries lack specific support for IDs. We found two Python wrappers of C++ influence diagram libraries: *pyAgrum* and *PySMILE*. These were limited by usability (we couldn’t readily install them), maintainability (using multiple languages) and versatility (they did not cover multi-agent or causal IDs). A Python library that focuses on implementing statistical and causal IDs is therefore needed to ensure their potential application can be explored, probed, and fully realised.
  
-Consequently, this paper introduces *PyCID* [#]_, a Python library built upon *pgmpy* and *NetworkX* :cite:`hagberg2008exploring`, that concentrates on this need for an implementation of IDs and IMs (including their causal and multi-agent variants) and provides researchers and practitioners with convenient methods for analysing decision-making situations. *PyCID* can solve single-agent IMs, find Nash equilibria in multi-agent IMs, and compute the effect of causal interventions. It can also find which variables in an ID admit incentives. For example, positive value of information :cite:`howard1966information` and value of control :cite:`shachter1986evaluating` tell us when an agent can benefit from observing or controlling a variable. Meanwhile, other incentives concepts, recently proposed in :cite:`everitt2021agent`, reveal which variables it can be instrumentally useful to control and when a decision-maker benefits from responding to a variable :cite:`everitt2021agent`. Reasoning patterns are a related concept in multi-agent IDs that can also be computed in *PyCID*, they analyze why a decision-maker would care about a decision :cite:`pfeffer2007reasoning`.
+Consequently, this paper introduces *PyCID* [#]_, a Python library built upon *pgmpy* and *NetworkX* :cite:`hagberg2008exploring`, which concentrates on this need for an implementation of IDs and IMs (including their causal and multi-agent variants) and provides researchers and practitioners with convenient methods for analysing decision-making situations. *PyCID* can solve single-agent IMs, find Nash equilibria in multi-agent IMs, and compute the effect of causal interventions. It can also find which variables in an ID admit incentives. For example, positive value of information :cite:`howard1966information` and value of control :cite:`shachter1986evaluating` tell us when an agent can benefit from observing or controlling a variable. Meanwhile, other incentives concepts, recently proposed in :cite:`everitt2021agent`, reveal which variables it can be instrumentally useful to control and when a decision-maker benefits from responding to a variable :cite:`everitt2021agent`. Reasoning patterns are a related concept in multi-agent IDs: they analyze why a decision-maker would care about a decision :cite:`pfeffer2007reasoning`, and these can also be computed in *PyCID*.
  
-The next section will describe *PyCID*'s architecture along with installation instructions and some necessary background knowledge. We then move to showcasing some of *PyCID*'s features through applications to incentives and analysing games. In the *Causal Influence Diagrams* section, we demonstrate how to instantiate a simple CID in *PyCID* before demonstrating how to find the nodes which admit incentives in the *Incentives* section. Next, we turn to multi-agent CIDs and show how to use them to compute Nash equilibria. Finally, we explain how *PyCID* can construct random (MA)CIDs and conclude by discussing the future of *PyCID*.
+The next section will describe *PyCID*'s architecture along with installation instructions and some necessary background knowledge. We then move to showcasing some of *PyCID*'s features through applications to incentives and analysing games. In the *Causal Influence Diagrams* section, we demonstrate how to instantiate a simple CID in *PyCID* before demonstrating how to find the nodes which admit incentives in the *Incentives* section. We then turn to multi-agent CIDs and show how to use them to compute Nash equilibria. Finally, we explain how *PyCID* can construct random (MA)CIDs and conclude by discussing the future of *PyCID*.
    
 .. [#] This paper describes *PyCID* version 0.2.6.
 
@@ -95,7 +95,7 @@ Installation
    python3 -m pip install pycid
    
    
-PyCID is under continual development and so one can install the latest developmental package using a git checkout from the PyCID repository on GitHub, https://github.com/causalincentives/pycid.
+PyCID is under continual development and so one can install the latest developmental package using a git checkout from the PyCID repository on GitHub: https://github.com/causalincentives/pycid.
    
 
 Inherited Classes
@@ -107,7 +107,7 @@ Inherited Classes
    
    An overview of *PyCID*'s file structure. :label:`pycidfig`
    
-Figure :ref:`pycidfig` provides an overview of *PyCID*'s library [#]_. *PyCID*'s key classes inherit from *pgmpy*'s ``BayesianModel``, ``TabularCPD``, and ``BeliefPropagation`` classes :cite:`ankan2015pgmpy`. The ``BayesianModel`` class represents a *Bayesian network* and CPDs are assigned to each random variable in the model using instances of the ``TabularCPD`` class. These CPDs define the *Bayesian Network*'s joint distribution and the ``BeliefPropagation`` class is then used to perform probabilistic inference on a ``BayesianModel`` object; for instance, one can query the probability that node :math:`V` takes value 
+Figure :ref:`pycidfig` provides an overview of the *PyCID* library [#]_. *PyCID*'s key classes inherit from *pgmpy*'s ``BayesianModel``, ``TabularCPD``, and ``BeliefPropagation`` classes :cite:`ankan2015pgmpy`. The ``BayesianModel`` class represents a *Bayesian network* and CPDs are assigned to each random variable in the model using instances of the ``TabularCPD`` class. These CPDs define the *Bayesian Network*'s joint distribution and the ``BeliefPropagation`` class is then used to perform probabilistic inference on a ``BayesianModel`` object; for instance, one can query the probability that node :math:`V` takes value 
 :math:`v` given some instantiation of other variables in the DAG (known as a *context*). 
 
 .. [#] *PyCID* is under continued development, so more features will be added over time.
@@ -117,10 +117,10 @@ The */Core* folder
 
 *PyCID*'s base class is ``CausalBayesianNetwork``. This class inherits from *pgmpy*'s ``BayesianModel`` and represents a *causal Bayesian network*. Concretely, it extends ``BayesianModel`` by adding the ability to query the effect of *causal interventions*. It also adds methods for determining the expected value of a variable for a given *context* (again under an optional *causal intervention*) and for plotting the DAG of the *Causal Bayesian Network* using *NetworkX* :cite:`hagberg2008exploring`. CPDs for a ``CausalBayesianNetwork`` object can be defined using *pgmpy*'s ``TabularCPD`` class, but we also allow relationships to be specified more directly with stochastic functions (under the hood, these are implemented via a ``StochasticFunctionCPD`` class). This can be used to specify relationships between variables with a stochastic function, rather than just with a probability matrix (see the *Instantiating Causal Influence Diagrams* section). ``CausalBayesianNetwork`` also has an inner class, ``Model``, which keeps track of CPDs and domains for all ``CausalBayesianNetwork`` objects' variables in the form of a dictionary.
    
-The ``MACIDBase`` class, which inherits from ``CausalBayesianNetwork``, provides the underlying necessary methods for single-agent and multi-agent causal influence diagrams. The class includes methods for determining the expected utility of an agent, for finding optimal decision rules and policies, and for finding various new graphical criteria defined in influence diagrams (e.g. r-relevance). 
+The ``MACIDBase`` class, which inherits from ``CausalBayesianNetwork``, provides the underlying methods necessary for single-agent and multi-agent causal influence diagrams. The class includes methods for determining the expected utility of an agent, for finding optimal decision rules and policies, and for finding various new graphical criteria defined in influence diagrams (e.g. r-relevance). 
 
 ``CID`` and ``MACID`` are classes, inheriting from ``MACIDBase``, that represent single-agent and multi-agent CIDs and are the models of most concern in *PyCID*. They include methods for finding the optimal policy for an agent in a CIM and for finding Nash equilibria :cite:`nash1950equilibrium` and
-subgame perfect Nash equilibria :cite:`selten1965spieltheoretische` in a MACIM. It is important to highlight here that statistical (i.e. non-causal) single-agent and multi-agent influence diagrams can also be defined as ``CID`` and ``MACID`` objects using *PyCID*. In their case, all class methods are permitted except those which involve causal interventions.
+subgame perfect Nash equilibria :cite:`selten1965spieltheoretische` in a MACIM. It is important to highlight here that statistical (i.e., non-causal) single-agent and multi-agent influence diagrams can also be defined as ``CID`` and ``MACID`` objects using *PyCID*. In their case, all class methods are permitted except those that involve causal interventions.
 
 The *core/* folder also contains `get_paths.py`, which provides functions that exploit relationships between the (MA)CID's variables including functions for finding all (active) (directed) paths between variables. `relevance_graph.py` provides classes
 that find the relevance graphs :cite:`koller2003multi` associated with ``MACIDBase`` objects.
@@ -191,7 +191,7 @@ This returns the following output saying that the optimal decision rule for :mat
          {'x': 0}  ->  0
          {'x': 1}  ->  1}
    
-If the agent plays according to this optimal decision rule, we find that their expected utility is 1 using the code below. On the final line, `expected_utility` accepts optional dictionaries to specify contexts and causal interventions. 
+If the agent behaves according to this optimal decision rule, we find that their expected utility is 1 using the code below. On the final line, `expected_utility` accepts optional dictionaries to specify contexts and causal interventions. 
    
 .. code-block:: python
    
@@ -204,7 +204,7 @@ If the agent plays according to this optimal decision rule, we find that their e
 Analysing Incentives
 --------------------
    
-In this section, we demonstrate how to use *PyCID* to find which nodes in a single-decision CID admit different types of incentives :cite:`everitt2021agent`, using an incentive's graphical criterion. In general, a graphical criterion tells you what properties influence models can have, based on the influence diagram (i.e the graph) alone. A graphical criterion takes a graph and several nodes as arguments and returns whether or not the property (in this case the incentive) can occur for those nodes. Incentives are helpful for applications in safety and fairness (:cite:`everitt2021agent`, :cite:`holtman2020towards`), understanding the behaviour of RL algorithms :cite:`everitt2019reward` and comparing the promise of different AGI safety frameworks :cite:`everitt2019modeling`.
+In this section, we demonstrate how to use *PyCID* to find which nodes in a single-decision CID admit different types of incentives :cite:`everitt2021agent`, using an incentive's graphical criterion. In general, a graphical criterion tells you what properties influence models can have, based on the influence diagram (i.e, the graph) alone. A graphical criterion takes a graph and several nodes as arguments and returns whether or not the property (in this case the incentive) can occur for those nodes. Incentives are helpful for applications in safety and fairness (:cite:`everitt2021agent`, :cite:`holtman2020towards`), understanding the behaviour of RL algorithms :cite:`everitt2019reward` and comparing the promise of different AGI safety frameworks :cite:`everitt2019modeling`.
 We believe that *PyCID* can further mature these enquiries.
    
 The incentives we can currently find in a single-decision CID using their graphical criteria in *PyCID* are:
@@ -225,12 +225,12 @@ Value of Information (VoI)
 Intuitively, a variable has positive value of information (VoI) if a decision-maker would benefit from knowing its value before making a decision. VoI has been applied to a wide array of problems in economics and computer science :cite:`borgonovo2016sensitivity` and so our implementation of VoI in *PyCID* may be of great use. Although *PyCID*'s function `quantitatative_voi` returns the quantitative VoI of a variable in a CIM, for this section we shall focus on its graphical criterion, which depends upon which nodes are **requisite** observations in the CID. 
    
    
-**Requisite Observation Graphical Criterion**: Let :math:`\textbf{U}_D \in \textbf{U} \cap \textbf{Desc}_D` be the utility nodes that are in the set of :math:`D`'s descendants. An observation :math:`X \in \textbf{Pa}_D` in a single-decision CID is **requisite** if :math:`X \not\perp_{\mathcal{G}} \textbf{U}_D \vert (\textbf{Pa}_D \cup \{D\} \setminus \{X\}` [#]_.
+**Requisite Observation Graphical Criterion**: Let :math:`\textbf{U}_D \in \textbf{U} \cap \textbf{Desc}_D` be the utility nodes that are in the set of :math:`D`'s descendants. An observation :math:`X \in \textbf{Pa}_D` in a single-decision CID is **requisite** if :math:`X \not\perp_{\mathcal{G}} \textbf{U}_D \vert (\textbf{Pa}_D \cup \{D\} \setminus \{X\})` [#]_.
    
    
 **VoI Graphical Criterion**: A single decision CID, :math:`\mathcal{G}`, admits **Value of Information** for :math:`X \in \textbf{V} \setminus \textbf{Desc}_D` if and only if :math:`X` is a requisite observation in :math:`\mathcal{G}_{X \rightarrow D}`, the graph obtained by adding :math:`X \rightarrow D` to :math:`\mathcal{G}`.
    
-.. [#] :math:`X \not\perp_{\mathcal{G}} Y` denotes that :math:`X` is d-connected to :math:`Y` and :math:`X \perp_{\mathcal{G}} Y` would denote that :math:`X` is d-separated from :math:`Y` :cite:`pearl2009causality`
+.. [#] :math:`X \not\perp_{\mathcal{G}} Y \mid \textbf{W}` denotes that :math:`X` is d-connected to :math:`Y` conditional on the set of nodes in :math:`\textbf{W}` and :math:`X \perp_{\mathcal{G}} Y \mid \textbf{W}` would denote that :math:`X` is d-separated from :math:`Y` conditional on :math:`\textbf{W}`:cite:`pearl2009causality`.
 
    
 To demonstrate how to find nodes that admit VoI using *PyCID*, we will consider the following example taken from :cite:`everitt2021agent`.
@@ -279,7 +279,7 @@ We can also display this visually by passing, as an argument, a lambda function 
    
       A CID for the *Grade prediction example* with the variables that admit VoI coloured red (plotted using *PyCID*). :label:`cidvoifig`
    
-Straightforwardly implementing this example in *PyCID* has immediately revealed that there exists a parameterisation of this setup (i.e. a CIM with the given CID) where the prediction model would benefit from knowing the value of one or more of "High School', 'Education', or the student's true 'Grade' before making a grade prediction.
+Straightforwardly implementing this example in *PyCID* has immediately revealed that there exists a parameterisation of this setup (i.e., a CIM with the given CID) where the prediction model would benefit from knowing the value of one or more of "High School', 'Education', or the student's true 'Grade' before making a grade prediction.
    
 
 Response Incentives (RI)
@@ -302,7 +302,7 @@ To demonstrate how to find the nodes which admit RIs, we will again consider the
             pycid.admits_ri(cid, 'P', node))
    
 Implementing CIDs in *PyCID* can help suggest how to improve the fairness of AI systems. This is because :cite:`everitt2021agent` argue that a response incentive on a sensitive attribute can be interpreted as problematic from a fairness perspective. 
-A decision is considered counterfactually unfair if a change to a sensitive attribute, such as race or gender, would change the decision :cite:`kusner2017counterfactual`. Therefore, a response incentive on a sensitive attribute indicates that counterfactual unfairness is incentivised; specifically, it implies that all optimal policies are counterfactually unfair. To mitigate this, :cite:`everitt2021agent` propose redesigning the grade-predictor. By removing the predictor's access to knowledge about the student's high school (i.e. the edge :math:`HS \rightarrow P` ), there will no longer be a response incentive on a sensitive attribute. The following code trims the edge and shows that now no node admits an RI in the modified CID (Figure :ref:`cidrifig` (Right)).
+A decision is considered counterfactually unfair if a change to a sensitive attribute, such as race or gender, would change the decision :cite:`kusner2017counterfactual`. Therefore, a response incentive on a sensitive attribute indicates that counterfactual unfairness is incentivised; specifically, it implies that all optimal policies are counterfactually unfair. To mitigate this, :cite:`everitt2021agent` propose redesigning the grade-predictor. By removing the predictor's access to knowledge about the student's high school (i.e., the edge :math:`HS \rightarrow P` ), there will no longer be a response incentive on a sensitive attribute. The following code trims the edge and shows that now no node admits an RI in the modified CID (Figure :ref:`cidrifig` (Right)).
    
    
 .. code-block:: python
@@ -323,7 +323,7 @@ A decision is considered counterfactually unfair if a change to a sensitive attr
 Value of Control (VoC) and Instrumental Control Incentives (ICI)
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    
-We now turn to Value of Control (VoC) and Instrumental Control Incentives (ICI) and show that implementing the latter in *PyCID* can help design safer AI systems.  Intuitively, a variable has *positive value of control (VoC)* if a decision-maker could benefit from choosing that variable's value. Whereas, Instrumental Control Incentives can be intuitively understood as follows: 
+We now turn to Value of Control (VoC) and Instrumental Control Incentives (ICI) and show that implementing the latter in *PyCID* can help design safer AI systems.  Intuitively, a variable has *positive value of control (VoC)* if a decision-maker could benefit from choosing that variable's value. Instrumental Control Incentives can be intuitively understood as follows: 
 if the agent got to choose :math:`D` to influence :math:`X` independently of how :math:`D` influences other aspects of the environment, would that choice matter? In other words, is controlling :math:`X` instrumentally useful for maximising utility? The graphical criteria for these incentives in a single-decision CID are:
    
    **VoC Graphical Criterion**: A single decision CID, :math:`\mathcal{G}`, admits 
@@ -391,13 +391,7 @@ Recall from the *Background and Package Architecture* Section that a Multi-agent
 :math:`\{\textbf{D}^i\}_{i\in \textbf{N}}` and :math:`\{\textbf{U}^i\}_{i\in \textbf{N}}` to correspond to their association with a particular agent :math:`i \in \textbf{N}`. We also again underline that the only difference between statistical multi-agent influence diagrams/models (MAIDs/MAIMs) and MACIDs/MACIMs is that the edges
 represent every causal relationship between the random variables chosen to be endogenous variables in the model as opposed to just associational relationships. Nevertheless, because MACIDs subsume MAIDs (in the sense of Pearl's `causal hierarchy` :cite:`pearl2009causality`), everything we can do in a MAID, we can also do in a MACID. Therefore, for the examples we present here, MAIDs and MACIDs can be viewed as the same. In this section, we will show how to instantiate a MACID in *PyCID* and demonstrate some useful functions that use the graph to expose dependencies between variables.
    
-**Hospital procurement example:** A hospital employs an AI system to automate a procurement process. A company wants to tender a contract to the hospital for the supply of some medical equipment. Beforehand, they can choose whether or not to get independent accreditation to signal that their equipment is of high not poor quality, but doing so requires a cost (that is greater if the product is indeed poor). The AI system must decide, on behalf of the hospital, whether to accept the company's offer. The hospital only wants to sign a contract with a company that will supply high-quality equipment, but the AI system can't observe the quality of the equipment directly, it can only infer it indirectly through whether or not the company has independent accreditation. 
-
-We can construct a MACID for this example where:
-   
-*  X = whether the company's goods are of high or poor quality (chance node)
-*  D1 and U1 correspond to the company's decision whether or not to go get independent accreditation (and their utility)
-*  D2 and U2 correspond to the algorithm's decision whether or not to sign a contract with the company (and the company's utility)
+** Advertising example:** An electronics company uses an AI system to automate the advertising of their products to customers online. The products are of different quality (:math:`X`) and the AI must decide (:math:`D^1`) whether to advertise it on an upmarket or downmarket online store. Customers must decide (:math:`D^2`) whether they want to buy the advertised product and they will only be happy (:math:`U^2`) if it is of high quality; however, they can only infer the quality of a product indirectly through where it's advertised. The AI wants to maximise profit (:math:`U^1`) for the company. It is more expensive to advertise a low rather than a high quality product on the upmarket store because one has to pay to get through that store's quality control. It costs the same to advertise any product on the downmarket store.
    
 .. code-block:: python
    
@@ -424,7 +418,7 @@ We can construct a MACID for this example where:
    
    A MACID for the **Hospital procurement example** (Left) and its corresponding relevance graph (Right) (plotted using *PyCID*). :label:`macidfig`
    
-Figure :ref:`macidfig` (Left) shows that in *PyCID*, consistent with CIDs, chance nodes in MACIDs are drawn as circles, decision nodes are drawn as rectangles, and utility nodes are drawn as diamonds. However, because we now have more than one player, we reserve colouring to denote agent membership; each agent of the game is assigned a unique colour.
+Figure :ref:`macidfig` (Left) shows that in *PyCID*, consistent with CIDs, chance nodes in MACIDs are drawn as circles, decision nodes are drawn as rectangles, and utility nodes are drawn as diamonds. However, because we now have more than one player, we reserve colouring to denote agent membership; each agent is assigned a unique colour.
    
 :cite:`hammond2021equilibrium` introduced the graphical criterion *r-reachability* to determine whether another decision node is strategically relevant or a chance node is probabilistically relevant to a decision node.
    
@@ -443,7 +437,7 @@ Using *PyCID*, lines 1 and 2 below evaluate to `True`. This tells us that each d
 Game Theory in Multi-agent (Causal) Influence Models
 +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-In this section, we show how to parameterise a MACID as a MACIM using the Prisoner's Dilemma, which is probably the most well known simultaneous and symmetric two-player game. Next, we will show how to compute Nash equilibria.
+In this section, we show how to parameterise a MACID as a MACIM using the Prisoner's Dilemma, which is probably the best known simultaneous and symmetric two-player game. Next, we will show how to compute Nash equilibria.
    
 **Prisoner's Dilemma:** Two prisoners, suspected of committing a robbery together, are isolated and urged to confess.
 Each is concerned only with getting the shortest possible prison sentence for himself and each must decide whether to confess without knowing his partner’s decision. Both prisoners, however, know the consequences of their decisions. Each year spent in prison can be represented as -1 utility and so the payoff matrix for this game (or Normal form) is given in Figure :ref:`pdfig`.
@@ -489,7 +483,7 @@ We can draw the MACID in the same way as for CIDs:
    
    macid.draw()
    
-Finally, as we could in CIDs, we can compute the effects of interventions and find each agent's expected utility in MACIDs. For example, the following command tells us that the second player (agent) receives expected utility = -3 (i.e. they will spend 3 years in prison) given that player 1 decides to defect and player 2 decides to cooperate. This agrees with the payoff matrix in Figure :ref:`pdfig`.
+Finally, as we could in CIDs, we can compute the effects of interventions and find each agent's expected utility in MACIDs. For example, the following command tells us that the second player (agent) receives expected utility = -3 (i.e., they will spend 3 years in prison) given that player 1 decides to defect and player 2 decides to cooperate. This agrees with the payoff matrix in Figure :ref:`pdfig`.
    
 .. code-block:: python
    
@@ -589,7 +583,7 @@ We can find the NE in the only proper subgame:
 
    macid.get_all_pure_ne_in_sg(decisions_in_sg=['D2'])
 
-and finally all SPE in the MA(C)IM. The **Taxi Competition Example**'s MACIM has only one pure subgame perfect Nash equilibrium.:
+and finally all SPE in the MA(C)IM. The **Taxi Competition Example**'s MACIM has only one pure subgame perfect Nash equilibrium:
 
 .. code-block:: python
 
@@ -652,7 +646,7 @@ Conclusions and Future Directions
 *PyCID* is a Python library for solving and analysing single-agent and multi-agent causal influence diagrams.
 Several key classes - ``CausalBayesianNetwork``, ``CID``, and ``MACID`` - enable decision problems to be solved and the effects of causal interventions to be studied whilst *PyCID*'s analysis functions can find graphical properties such as incentives in CIDs, and reasoning patterns in MACIDs. This makes *PyCID* a customizable, but powerful library for testing research ideas and exploring applications. Moreover, implementing examples programmatically can substantiate the claims made by ID researchers about the benefit of their work; one can assess how different quantities vary over the parameter space or empirically verify complexity results :cite:`causalgames`. Single-agent and multi-agent causal influence diagrams are an area of active research, so as theory develops, the *PyCID* library will also grow. Extensions will likely include:
    
-*  Support for finding incentives in multi-decision CIDs :cite:`multidecision`:.
+*  Support for finding incentives in multi-decision CIDs :cite:`multidecision`.
 *  Support for Structural Causal Models :cite:`pearl2009causality` and therefore also quantitative RI and ICI.
 *  More game-theoretic concepts (e.g. more equilibrium concepts).
 *  Support for multi-agent incentives. 
