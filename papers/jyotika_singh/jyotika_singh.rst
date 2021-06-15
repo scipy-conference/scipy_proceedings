@@ -225,6 +225,13 @@ as follows.
 Social Media / YouTube Data Noise
 ---------------------------------
 
+.. figure:: comments.png
+   :scale: 42%
+   :figclass: w
+
+   Random sample of YouTube comments representing writing style diversity.
+   :label:`commentsfig`
+
 Text fields are available within several places on YouTube, including video title,
 description, tags, comments, channel title and channel description. Video title,
 description, tags, and channel title and description are filled by the
@@ -241,13 +248,6 @@ and emojis used by commenters are observed.
 
 Data Cleaning Techniques
 ~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. figure:: comments.png
-   :scale: 42%
-   :figclass: w
-
-   Random sample of YouTube comments representing writing style diversity.
-   :label:`commentsfig`
 
 Based on some noise seen on YouTube and other social media platforms, the
 following data cleaning techniques have been found to be helpful cleaning methods.
