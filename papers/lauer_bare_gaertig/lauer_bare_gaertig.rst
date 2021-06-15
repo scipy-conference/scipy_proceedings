@@ -46,23 +46,23 @@ Hence, in modern system modeling there are currently two main applications of an
 * Analytical approximations are included in the system simulation software components themselves, or
 * The user includes look-up tables for interpolation, entirely or partially generated with analytical approximations.   
    
-In this work we will focus on analytical approximations of flow forces that act upon the inner cylinder in an eccentric annular flow. Figure :ref:`fig2` shows the general case where an inner cylinder of radius :math:`R_1` is vertically displaced by a distance :math:`b` from the center of an outer cylinder with radius :math:`R_2`.
- 
+In this work we will focus on analytical approximations of flow forces that act upon the inner cylinder in an eccentric annular flow. Such forces are of interest in, for example, hydraulic valves that are electromagnetically actuated. When the armature moves within the oil-filled interior of the polecap, that movement causes a Couette-type annular flow, i.e. a viscous flow due to motion of a solid body, between both components; see Figure :ref:`armature`.
 
-.. figure:: eccentric_z.pdf
+.. figure:: armature.png
+   :scale: 50%
+   :figclass: bht
+
+   Armature and polecap in an electromagnetic actuator; the interior of the polecap is filled with oil (not shown here) :label:`armature` 
+
+For an analytical treatment, this geometry has to be simplified considerably. Both armature and polecap are therefore modeled as infinitely extended cylinders. Since in realistic scenarios, perfect concentricity between these two parts is rarely obtained, the armature can be supported eccentrically within the poletube. A cross-sectional cut perpendicular to the symmetry axes of both cylinders then leads to Figure :ref:`fig2`. 
+
+.. figure:: eccentric_z_new.pdf
    :scale: 20%
    :figclass: bht
 
-   Eccentric annular flow domain :label:`fig2`  
+   Cross-section of the simplified geometry of Figure :ref:`armature`, leading to an eccentric annular flow domain :label:`fig2`  
 
-Such forces are of interest in, for example, hydraulic valves that are electromagnetically actuated. 
-When the armature moves, that movement causes a Couette-type annular flow, i.e. a viscous flow due to motion of a solid body, between armature and polecap; see Figure :ref:`armature`.
-
-.. figure:: armature.png
-   :scale: 45%
-   :figclass: bht
-
-   Armature and polecap in an electromagnetic actuator :label:`armature` 
+It shows the general case where an inner cylinder of radius :math:`R_1` is vertically displaced by a distance :math:`b` from the center of an outer cylinder with radius :math:`R_2`. The eccentric annular flow domain is contained in the region between these two cylinders.
    
 In leading system simulation tools, the flow force that acts upon the inner cylinder in Figure :ref:`fig2` is typically approximated by the relation
 
@@ -199,11 +199,11 @@ Applying the Möbius transformation (:ref:`moebius1`) to the boundaries leads to
    
 This new flow domain is depicted in Figure :ref:`concentricW`.  
    
-.. figure:: concentric_w.pdf
+.. figure:: concentric_w_new.pdf
    :scale: 20%
    :figclass: bht
    
-   Concentric annular flow domain :label:`concentricW`       
+   Concentric annular flow domain after Möbius transformation; keep in mind that armature and polecap are swapped in the w-plane :label:`concentricW`       
    
 Conformal mappings preserve harmonic functions, so the Stokes equation in the *w*-plane is of the same form as in the *z*-plane. However, Equation (:ref:`moebius1`) interchanges inner and outer boundaries. This will affect the corresponding boundary conditions one needs to specify there so that the Stokes-problem in the *w*-plane is given by
 
