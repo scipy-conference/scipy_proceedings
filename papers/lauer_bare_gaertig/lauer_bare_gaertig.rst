@@ -72,13 +72,13 @@ In leading system simulation tools, the flow force that acts upon the inner cyli
    F_{system} = - 2\pi\,\frac{R_{1}l \mu u_R}{\delta}\,.
 
 Here :math:`\mu` denotes the viscosity of the fluid, :math:`l` the length of the inner cylinder, :math:`u_R` the velocity and :math:`\delta=R_2-R_1` the annular gap, i.e. the difference between outer and inner radius.
-Utilizing the capabilities of the open-source Computer Algebra System (CAS) *SymPy* (e.g. [MSP17]_), we answer the following two questions:
+Utilizing the capabilities of the open-source Computer Algebra System *SymPy* (as done e.g. in [MSP17]_), we answer the following two questions:
 
 1. How is Equation (:ref:`ForceSystemTool`) related to the corresponding Stokes equation?
 2. Does eccentricity :math:`\varepsilon = b/\delta` change this dependency and, if so, how exactly?
 
 Furthermore, the velocities and forces obtained by solving the Stokes equation (i.e. the linear part of the Navier-Stokes equation) with *SymPy* are compared to corresponding numerical solutions of the complete Navier-Stokes system, obtained from the commercially available Finite Volume tool ANSYS-CFX.
-Finally this article concludes with a note on the eccentric annular Poiseuille-flow (that is a flow due to a pressure drop) and finishes with a comment on Couette-Poiseuille-flow velocities and forces.
+Finally this article concludes with a note on the eccentric annular Poiseuille-flow (that is a flow due to a pressure drop) and finishes with a comment on comnbined Couette-Poiseuille-flow velocities and forces.
  
 
 Material and methods
@@ -90,16 +90,16 @@ In order to solve the Stokes problem
    :label: stokesPoisseuilleCouette
    :type: eqnarray
   
-    -\mu\Delta u&=&\frac{dp}{l} \text{ for $R_1<\sqrt{x^2+(y+b)^2}$ and $\sqrt{x^2+y^2}<R_2$}\nonumber\\
-	u&=&0 \text{ for $\sqrt{x^2+y^2}=R_2$}\nonumber \\
-	u&=&u_R \text{ for $\sqrt{x^2+(y+b)^2}=R_1$}\,,
+    -\mu\Delta u & = & \frac{dp}{l}\quad\text{for $R_1<\sqrt{x^2+(y+b)^2}$ and $\sqrt{x^2+y^2}<R_2$}\nonumber\\
+	u & = & 0 \quad\;\;\;\;\text{for $\sqrt{x^2+y^2}=R_2$}\nonumber \\
+	u & = & u_R \quad\;\;\text{for $\sqrt{x^2+(y+b)^2}=R_1$}\,,
 
 
 the following *SymPy* functions and libraries were used: *im*, *re*, *subs*, *simplify* and *lambdify*. For the postprocessing the *SymPy* functions *diff* and *series* were particularly useful. Additionally, the *latex* function allowed to use the latex code of the formulae. For the interactive development with *SymPy* the *Jupyter Notebook* is used as GUI; there the *latex* math rendering proved to be very useful. The visualization is done with *NumPy* and *Matplotlib*. Code snippets are provided within the text in the subsequent sections. In addition, supplemental Python examples are available at this `public GitHub repository <https://github.com/zolabar/ConformalMappingSympy>`_ [#]_.
 
 .. [#] `<https://github.com/zolabar/ConformalMappingSympy>`_ 
 
-The theoretical methods used here are conformal mappings (inspired by [PHW33]_ and [BC09]_) and Taylor-expansions, following [LGK21]_. Equation (:ref:`stokesPoisseuilleCouette`) describes *Couette-flow* when :math:`dp=0` and :math:`u_R\neq 0` and *Poiseuille-flow*, when :math:`dp\neq 0` and :math:`u_R=0`. Furthermore, Equation (:ref:`stokesPoisseuilleCouette`) describes *Couette-Poiseuille-flow* when :math:`dp\neq 0` and :math:`u_R\neq 0`.
+The theoretical methods used here are conformal mappings (inspired by [PHW33]_ and [BC09]_) and Taylor-expansions, following [LGK21]_. Equations (:ref:`stokesPoisseuilleCouette`) describe *Couette-flow* when :math:`dp=0` and :math:`u_R\neq 0` and *Poiseuille-flow*, when :math:`dp\neq 0` and :math:`u_R=0`. Furthermore, Equations (:ref:`stokesPoisseuilleCouette`) describe *Couette-Poiseuille-flow* when :math:`dp\neq 0` and :math:`u_R\neq 0`.
 
 
 
@@ -130,7 +130,7 @@ It then follows that
 .. math::
    0
 
-as expected. Further analytical solutions to the Laplace problem in simple domains as circles or rectangles can be found in e.g. [G78]_, [BC81]_ or [PP12]_.
+as expected. Further analytical solutions to the Laplace problem for other simple domains such as circles or rectangles can be found in e.g. [G78]_, [BC81]_ or [PP12]_.
 
 Transform the eccentric annulus to a simple domain with conformal mappings
 --------------------------------------------------------------------------
@@ -229,9 +229,9 @@ Conformal mappings preserve harmonic functions, so the Stokes equation in the *w
    :label: stokesConcentricW
    :type: eqnarray
    
-    -\Delta u&=&0 \text{ for $1<\rho<R$}\nonumber\\
-    u&=&0 \text{ for $\rho=1$}\nonumber\\
-    u&=&u_R \text{ for $\rho=R$}\,. 
+    -\Delta u & = & 0 \quad\quad\text{for $1<\rho<R$}\nonumber\\
+    u & = & 0 \quad\;\;\;\;\,\text{for $\rho=1$}\nonumber\\
+    u & = & u_R \quad\;\;\text{for $\rho=R$}\,. 
    
 
 Using the structure of Equation (:ref:`concentricU`), the velocity in the *w*-plane is given by  
@@ -313,7 +313,7 @@ where :math:`\gamma,\,c` are constants from [PHW33]_ which are explicitely given
    
    Rectangular domain in w-plane with color-coded boundaries, labelled vertices and some coordinate lines :label:`rectangularW` 
 
-This domain gets transformed as shown in Figure :ref:`eccAnnulusZ`. The vertices *A* and *C* (as well as *D* and *F*) are mapped onto the same respective points, i.e. :math:`A^\prime = C^\prime` and :math:`D^\prime = F^\prime`. the color-coding shows that inner and outer cylinder are traversed counter-clockwise when moving in positive :math:`\xi`-direction in the *w*-plane.
+This domain gets transformed as shown in Figure :ref:`eccAnnulusZ`. The vertices *A* and *C* (as well as *D* and *F*) are mapped onto the same respective points, i.e. :math:`A^\prime = C^\prime` and :math:`D^\prime = F^\prime`. The color-coding shows that inner and outer cylinder are traversed counter-clockwise when moving in positive :math:`\xi`-direction in the *w*-plane.
 
 Furthermore the left and right vertical boundaries in the *w*-plane are identified in the *z*-plane, so periodic boundary conditions need to be applied to any PDE one wants to solve on the simple rectangle.   
 
@@ -357,13 +357,13 @@ In the *w*-plane the corresponding Stokes-problem within the rectangular domain 
    :label: stokesRectangleCouette
    :type: eqnarray
 
-    -\mu\Delta u&=&0 \text{ for $\xi,\eta \in [-\pi,\pi]\times[\alpha,\beta]$}\nonumber\\
-    u&=&0 \text{ for $\eta=\alpha$}\nonumber\\
-    u&=&u_R \text{ for $\eta=\beta$}\nonumber\\
-    u(-\pi,\eta)&=&u(\pi,\eta) \nonumber\\
-    \frac{\partial u(-\pi,\eta)}{\partial \xi}&=&\frac{\partial u(\pi,\eta)}{\partial \xi}\,.
+    -\mu\Delta u & = & 0 \quad\quad\text{for $\xi,\eta \in [-\pi,\pi]\times[\alpha,\beta]$}\nonumber\\
+    u & = & 0 \quad\quad\text{for $\eta=\alpha$}\nonumber\\
+    u & = & u_R \quad\;\;\text{for $\eta=\beta$}\nonumber\\
+    u(-\pi,\eta) & = & u(\pi,\eta) \nonumber\\
+    \frac{\partial u(-\pi,\eta)}{\partial \xi} & = & \frac{\partial u(\pi,\eta)}{\partial \xi}\,.
    
-The last two equations specify the periodic boundary conditions one has to supply additionally. The solution to (:ref:`stokesRectangleCouette`) is easily obtained and given by the simple relation
+The last two equations specify the periodic boundary conditions one has to supply additionally. The solution to the system of equations (:ref:`stokesRectangleCouette`) is easily obtained and given by the simple relation
 
 .. math::
    :label: rectangularUinW
