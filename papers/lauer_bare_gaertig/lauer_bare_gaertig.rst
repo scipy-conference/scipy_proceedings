@@ -17,7 +17,7 @@ Conformal Mappings with SymPy: Towards Python-driven Analytical Modeling in Phys
 
 .. class:: abstract
 
-   This contribution shows how the symbolic computing Python library *SymPy* can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the space between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to fluid flow. The corresponding flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. *SymPy* can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow can be determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with *SymPy* are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette-flow force approximations and similar results for the known Poiseuille-flow (i.e. fluid flow induced by a pressure drop) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of *SymPy* when solving partial differential equations analytically.
+   This contribution shows how the symbolic computing Python library *SymPy* can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the region between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to a corresponding fluid flow. The flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. *SymPy* can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow can be determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with *SymPy* are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette-flow force approximations and similar results for the known Poiseuille-flow (i.e. fluid flow induced by a pressure drop) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of *SymPy* when solving partial differential equations analytically.
 
 
 .. class:: keywords
@@ -95,7 +95,7 @@ In order to solve the Stokes problem
 	u&=&u_R \text{ for $\sqrt{x^2+(y+b)^2}=R_1$}\,,
 
 
-the following *sympy* functions and libraries were used: *im*, *re*, *subs*, *simplify* and *lambdify*. For the postprocessing the *SymPy* functions *diff* and *series* were particularly useful. Additionally, the *latex* function allowed to use the latex code of the formulae. For the interactive development with *SymPy* the *Jupyter Notebook* is used as GUI; there the *latex* math rendering proved to be very useful. The visualization is done with *NumPy* and *Matplotlib*. Code snippets are provided within the text in the subsequent sections. In addition, supplemental Python examples are available at this `public GitHub repository <https://github.com/zolabar/ConformalMappingSympy>`_ [#]_.
+the following *SymPy* functions and libraries were used: *im*, *re*, *subs*, *simplify* and *lambdify*. For the postprocessing the *SymPy* functions *diff* and *series* were particularly useful. Additionally, the *latex* function allowed to use the latex code of the formulae. For the interactive development with *SymPy* the *Jupyter Notebook* is used as GUI; there the *latex* math rendering proved to be very useful. The visualization is done with *NumPy* and *Matplotlib*. Code snippets are provided within the text in the subsequent sections. In addition, supplemental Python examples are available at this `public GitHub repository <https://github.com/zolabar/ConformalMappingSympy>`_ [#]_.
 
 .. [#] `<https://github.com/zolabar/ConformalMappingSympy>`_ 
 
@@ -112,7 +112,24 @@ The solution of the Stokes problem within a concentric annulus for a Couette-typ
 
    u(r)=u_R\,\frac{\ln(r/R_2)}{\ln(R_1/R_2)}\,,
    
-where :math:`r = \sqrt{x^2 + y^2}`. Further analytical solutions to the Laplace problem in simple domains as circles or rectangles can be found in e.g. [G78]_, [BC81]_ or [PP12]_.
+where :math:`r = \sqrt{x^2 + y^2}`. This can easily be checked by using the *diff* function of *SymPy*. Keep in mind, that the natural logarithm is denoted by *log* there.
+
+.. code-block:: python
+
+    import sympy as sym
+    u_R, R1, R2, x, y = sym.symbols('u_r, R1, R2, x,
+                                    y', real=True)
+    u = u_R * log(sqrt(x**2 + y**2)/R2)/log(R1/R2)
+    laplacian = sym.diff(u, x, 2) + sym.diff(u, y, 2)
+
+It then follows that
+
+>>> sym.simplify(laplacian)
+
+.. math::
+   0
+
+as expected. Further analytical solutions to the Laplace problem in simple domains as circles or rectangles can be found in e.g. [G78]_, [BC81]_ or [PP12]_.
 
 Transform the eccentric annulus to a simple domain with conformal mappings
 --------------------------------------------------------------------------
@@ -138,11 +155,11 @@ Using a Möbius transform (also called a bilinear transformation) in the form of
 
 an eccentric annulus in the complex *z*-plane can be mapped onto a concentric annulus in the corresponding *w*-plane. The Möbius transform used here is a slightly adapted version of the one presented in [BC09]_; :math:`a` is a constant (given in [BC09]_) and will be defined further down in this Section.
 
+First of all, we will need some additional symbols for working with complex numbers and for the constant :math:`a`.
+
 .. code-block:: python
 
-    import sympy as sym
-    x, y, z, R1, R2, a = sym.symbols('x, y, z, R1, R2, a',
-                                     real=True)
+    z, a = sym.symbols('z, a', real=True)
 
 Scaling the geometry in such a way that the outer circle ends up having a radius of 1
 
@@ -225,7 +242,7 @@ Using the structure of Equation (:ref:`concentricU`), the velocity in the *w*-pl
  
 where :math:`\rho=\sqrt{\xi^2+\eta^2}`.
 
-With the parameters specified in the following Table :ref:`data1`, the velocity in the *w*-plane (i.e. Equation (:ref:`concentricUinW`)) can be used as an example for visualization and further evaluation.
+With the parameters specified in Table :ref:`data1`, the velocity in the *w*-plane (i.e. Equation (:ref:`concentricUinW`)) can be used as an example for visualization and further evaluation.
 
 .. table:: Geometry parametrization and imposed velocity for the simulations presented in this Section :label:`data1`
 
@@ -267,7 +284,7 @@ Now simply expressing :math:`\xi,\eta` in (:ref:`concentricUinW`) in terms of :m
     u = u_w.subs(xi, xi_).subs(eta, eta_)
     u = lambdify((x, y), u)
  
-Figure :ref:`concentricZU` depicts the velocity distribution in the original *z*-plane.   
+Figure :ref:`concentricZU` depicts the velocity distribution in the original *z*-plane. As one can see, the fluid gets dragged along the inner cylinder with the prescribed speed of :math:`\text{0.4 m}/\text{s}`. The velocity distribution then continuously drops down when moving radially outwards until it reaches zero along the outer cylinder.    
 
 .. figure:: u_moebius1_z.pdf
    :scale: 20%
@@ -286,7 +303,7 @@ Another way of solving this problem utilizes conformal mappings related to bipol
 
    z = c\cdot\tan\left(\frac{w}{2}\right) - \textrm{i}\,\gamma\;\;\;\;(\textrm{with}\;\; w = \xi + \textrm{i}\,\eta)\,,
    
-where :math:`\gamma,\,c` are constants from [PHW33]_ which are explicitely given in [W06]_ and [SL78]_; the term :math:`\textrm{i}\,\gamma` is added by the authors. Using this transformation, a properly chosen rectangular domain gets mapped onto an eccentric annulus; see Figure :ref:`rectangularW` for the domain in the *w*-plane. The boundaries are color-coded in order to visualize how the mapped borders are traversed in the *z*-plane. In addition the vertices are labelled and some coordinate lines are highlighted. 
+where :math:`\gamma,\,c` are constants from [PHW33]_ which are explicitely given in [W06]_ and [SL78]_; the term :math:`\textrm{i}\,\gamma` is added by the authors. Using this transformation, a properly chosen rectangular domain gets mapped onto an eccentric annulus; see Figure :ref:`rectangularW` for the domain in the *w*-plane. The boundaries are color-coded in order to visualize how the mapped borders are traversed in the *z*-plane. In addition the vertices are labelled and some coordinate lines are highlighted as well. 
 
 .. figure:: rectangle_w.pdf
    :scale: 32%
@@ -294,7 +311,9 @@ where :math:`\gamma,\,c` are constants from [PHW33]_ which are explicitely given
    
    Rectangular domain in w-plane with color-coded boundaries, labelled vertices and some coordinate lines :label:`rectangularW` 
 
-This domain gets transformed as shown in Figure :ref:`eccAnnulusZ`. The vertices *A* and *C* (as well as *D* and *F*) are mapped onto the same respective points; the color-coding shows that inner and outer cylinder are traversed counter-clockwise when moving in positive :math:`\xi`-direction in the *w*-plane.  
+This domain gets transformed as shown in Figure :ref:`eccAnnulusZ`. The vertices *A* and *C* (as well as *D* and *F*) are mapped onto the same respective points, i.e. :math:`A^\prime = C^\prime` and :math:`D^\prime = F^\prime`. the color-coding shows that inner and outer cylinder are traversed counter-clockwise when moving in positive :math:`\xi`-direction in the *w*-plane.
+
+Furthermore the left and right vertical boundaries in the *w*-plane are identified in the *z*-plane, so periodic boundary conditions need to be applied to any PDE one wants to solve on the simple rectangle.   
 
 .. figure:: ecc_annulus_z.pdf
     :scale: 41%
@@ -302,7 +321,7 @@ This domain gets transformed as shown in Figure :ref:`eccAnnulusZ`. The vertices
 
     Mapped boundaries and coordinate lines in z-plane; the color-coding visualizes how the mapped borders are traversed here :label:`eccAnnulusZ`
 
-Please note that for demonstrational purposes the radius of the inner circle is reduced in order to indicate how the coordinate lines are distorted. For conformal mappings however, although distances between corresponding points and lengths of curves are changing, the intersecting angle between any two curves is preserved.
+Please note that for demonstrational purposes the radius of the inner circle in Figure :ref:`eccAnnulusZ` is reduced in order to indicate how the coordinate lines are distorted. For conformal mappings however, although distances between corresponding points and lengths of curves are changing, the intersecting angle between any two curves is preserved.
 
 Further details on the relation between conformal mappings and bipolar coordinates can be found in e.g. [CTL09]_.
 Inverting Equation (:ref:`bipolar`) and separating real and imaginary parts as in the previous Section one gets
@@ -366,7 +385,7 @@ It is interesting to remark, that Equations (:ref:`concentricUinW`) and (:ref:`r
 Figure :ref:`largeGapCouette` compares these two analytically obtained velocities with results from a 3D computational fluid dynamics simulation (using ANSYS CFX) solving the full Navier-Stokes system. For these computations a velocity of :math:`u_R=-0.4` :math:`\text{m}/\text{s}` is prescribed onto the inner cylinder as boundary condition. All obtained velocities are evaluated along the symmetry axis of the annulus across the larger gap. The inner boundary is then reached on the left side, the outer boundary is hit on the right side of this Figure.  
 
 .. figure:: largeGapCouette.pdf
-   :scale: 40% 
+   :scale: 42% 
    :figclass: bht
    
    Flow velocity across the large gap within an eccentric annulus (eccentricity :math:`\epsilon = 0.5`); armature on the left, polecap on the right :label:`largeGapCouette`
@@ -390,7 +409,7 @@ The relation for the annular flow force that acts upon the inner cylinder is wel
    F_e =-\int\limits_0^l \int\limits_0^{2\pi} \left(\mu\,\rho \frac{\mathrm d}{\mathrm{d}\rho} u(\rho)\right)_{\rho = R_1}\textrm{d}\varphi\,\textrm{d}z\,.
 
 
-This equation can be implemented in *SymPy* using for example the velocity from Equation (:ref:`concentricUinW`). Keep in mind, that in *SymPy* the natural logarithm is denoted by *log*.
+This equation can be implemented in *SymPy* using for example the velocity from Equation (:ref:`concentricUinW`).
 
 >>> u_w = u_R * log(rho)/log(R)
 >>> u_w  
@@ -444,7 +463,7 @@ With the data in Table :ref:`data1` and Table :ref:`data2`, Figure :ref:`flowFor
    +---------------+----------------+-------------------------------+
 
 .. figure:: F_comparison.pdf
-   :scale: 40%
+   :scale: 42%
    :figclass: bht
    
    Flow force according to Equation (:ref:`Fwe`), acting on the inner cylinder of an annulus with varying eccentricity :math:`\varepsilon` :label:`flowForceCouette`
@@ -612,7 +631,7 @@ Adding the various pieces together, Piercy's Poiseuille-flow velocity (Equation 
    :scale: 20%
    :figclass: bht
    
-   Flow velocity for the Poiseuille problem in rectangular domain (w-plane); it's vanishing on upper and lower boundary and periodic in :math:`\xi` :label:`rectangularWUpiercy`   
+   Flow velocity for the Poiseuille problem in rectangular domain (w-plane); it's vanishing on upper and lower boundary and is periodic in :math:`\xi` :label:`rectangularWUpiercy`   
    
 And last but not least, again expressing :math:`\xi,\eta` in :math:`x` and :math:`y`, the velocity distribution in the eccentric annulus (i.e. in the *z*-plane) together with some isocontours is shown in Figure :ref:`rectangularZUpiercy`.
 
