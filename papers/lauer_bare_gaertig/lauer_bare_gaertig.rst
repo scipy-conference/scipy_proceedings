@@ -119,7 +119,8 @@ where :math:`r = \sqrt{x^2 + y^2}`. This can easily be checked by using the *dif
     import sympy as sym
     u_R, R1, R2, x, y = sym.symbols('u_r, R1, R2, x,
                                     y', real=True)
-    u = u_R * log(sqrt(x**2 + y**2)/R2)/log(R1/R2)
+    u = u_R * sym.log(sym.sqrt(x**2 + y**2)/R2)
+            / sym.log(R1/R2)
     laplacian = sym.diff(u, x, 2) + sym.diff(u, y, 2)
 
 It then follows that
@@ -165,15 +166,15 @@ Scaling the geometry in such a way that the outer circle ends up having a radius
 
  .. code-block:: python
 
-    w = (z + I * a)/(a * z + I)
-    w = w.subs(z, x/R2 + I * y/R2)
+    w = (z + sym.I * a)/(a * z + sym.I)
+    w = w.subs(z, x/R2 + sym.I * y/R2)
 
 and separating real and imaginary part with *sympy* functions
 
  .. code-block:: python
 
-    xi_ = simplify(re(w))
-    eta_ = simplify(im(w))
+    xi_ = sym.simplify(re(w))
+    eta_ = sym.simplify(im(w))
 
     
 one arrives at
@@ -187,7 +188,7 @@ one arrives at
     
 The latex rendering in the *Jupyter Notebook* shows directly the result of code in proper mathematical symbols, for instance
 
->>> simplify(im(w))
+>>> sym.simplify(im(w))
 
 .. math::
 
@@ -263,10 +264,11 @@ The very convenient *SymPy* function *lambdify* is used to compute numerical val
 
  .. code-block:: python
  
-    xi, eta = symbols(xi, eta, u_R, real=True)
-    u_w = u_R * log(sqrt(xi**2 + eta**2))/log(R)
+    xi, eta = sym.symbols(xi, eta, u_R, real=True)
+    u_w = u_R * sym.log(sym.sqrt(xi**2 + eta**2))
+              / sym.log(R)
     u_w = u_w.subs(u_R, 0.4).subs(R, R_)
-    u_w = lambdify((xi, eta), u)
+    u_w = sym.lambdify((xi, eta), u)
 
 .. figure:: u_moebius1_w.pdf
    :scale: 20%
@@ -282,7 +284,7 @@ Now simply expressing :math:`\xi,\eta` in (:ref:`concentricUinW`) in terms of :m
  .. code-block:: python
    
     u = u_w.subs(xi, xi_).subs(eta, eta_)
-    u = lambdify((x, y), u)
+    u = sym.lambdify((x, y), u)
  
 Figure :ref:`concentricZU` depicts the velocity distribution in the original *z*-plane. As one can see, the fluid gets dragged along the inner cylinder with the prescribed speed of :math:`\text{0.4 m}/\text{s}`. The velocity distribution then continuously drops down when moving radially outwards until it reaches zero along the outer cylinder.    
 
@@ -361,14 +363,14 @@ In the *w*-plane the corresponding Stokes-problem within the rectangular domain 
     u(-\pi,\eta)&=&u(\pi,\eta) \nonumber\\
     \frac{\partial u(-\pi,\eta)}{\partial \xi}&=&\frac{\partial u(\pi,\eta)}{\partial \xi}\,.
    
-The solution to (:ref:`stokesRectangleCouette`) is easily obtained and given by the simple relation
+The last two equations specify the periodic boundary conditions one has to supply additionally. The solution to (:ref:`stokesRectangleCouette`) is easily obtained and given by the simple relation
 
 .. math::
    :label: rectangularUinW
 
-    u(\xi,\eta)=\frac{u_{R} \left(- \alpha + \eta\right)}{- \alpha + \beta}   
+    u(\xi,\eta)=\frac{u_{R} \left(- \alpha + \eta\right)}{- \alpha + \beta}\,.   
  
-and Figure :ref:`rectangularWU` shows a *Matplotlib*-visualization of the velocity distribution in the *w*-plane.
+Figure :ref:`rectangularWU` shows a *Matplotlib*-visualization of the velocity distribution in the *w*-plane which is constant along :math:`\xi` and increases linearly with :math:`\eta`.
 
   
 .. figure:: u_bipolar_w.pdf
@@ -411,7 +413,7 @@ The relation for the annular flow force that acts upon the inner cylinder is wel
 
 This equation can be implemented in *SymPy* using for example the velocity from Equation (:ref:`concentricUinW`).
 
->>> u_w = u_R * log(rho)/log(R)
+>>> u_w = u_R * sym.log(rho)/sym.log(R)
 >>> u_w  
  
 .. math::
@@ -419,10 +421,10 @@ This equation can be implemented in *SymPy* using for example the velocity from 
 
 Using the *diff*, *subs* and *integrate* functions from *SymPy* then leads to
 
->>> Fe = mu * diff(u_w, rho)
+>>> Fe = mu * sym.diff(u_w, rho)
 >>> Fe = (rho * Fe).subs(rho, R1)
->>> Fe = integrate(Fe, (z, 0, l))
->>> Fe = -integrate(Fe, (phi, 0, 2 * pi))
+>>> Fe = sym.integrate(Fe, (z, 0, l))
+>>> Fe = -sym.integrate(Fe, (phi, 0, 2 * pi))
 >>> Fe   
  
 .. math::
@@ -486,7 +488,7 @@ Equation (:ref:`Fcouette`) is even defined for the concentric case. Substituting
 In order to finally answer the first question of the Introduction, i.e. how Equation (:ref:`ForceSystemTool`) is related to the Stokes equation, the *series* function of *SymPy* is used. 
 With *series*, a Taylor-expansion of :math:`F_c` in :math:`\delta = R_2 - R_1` around :math:`\delta = 0` can be performed
  
->>> series(Fc.subs(R2, R1 + delta), delta, 0, 2)
+>>> sym.series(Fc.subs(R2, R1 + delta), delta, 0, 2)
 
 .. math::
    :label: FcSeries
@@ -545,16 +547,17 @@ In a first step, the final relation for the Poisseuille-flow velocity derived in
 
 .. code-block:: python
 
-    xi, eta, b = symbols('xi, eta, b', real=True)
-    A, B, C = symbols('A, B, C', real=True)
-    alpha, beta, c = symbols('alpha, beta, c', real=True)
-    Psi_1, mu, l, dp = symbols('Psi_1, mu, l, dp',
-                               real=True)
-    k, m, n = symbols('k m n', integer=True)
+    xi, eta, b = sym.symbols('xi, eta, b', real=True)
+    A, B, C = sym.symbols('A, B, C', real=True)
+    alpha, beta, c = sym.symbols('alpha, beta, c',
+                                 real=True)
+    Psi_1, mu, l, dp = sym.symbols('Psi_1, mu, l, dp',
+                                   real=True)
+    k, m, n = sym.symbols('k m n', integer=True)
     
 >>> u = Psi_1 + A * eta + B
->>> u = u - (cosh(eta) - cos(xi))
-            /(4 * (cosh(eta) + cos(xi)))
+>>> u = u - (sym.cosh(eta) - sym.cos(xi))
+          / (4 * (sym.cosh(eta) + sym.cos(xi)))
 >>> u = (dp/(mu * l)) * c**2 * u
 >>> u
 
@@ -567,10 +570,10 @@ Afterwards its three separate components can be symbolically expressed and final
 
 .. code-block:: python
 
-    s1, s2 = symbols('s1, s2', real=True)
-    Psi_1_ = cos(n * xi)/(sinh(n * (beta - alpha)))
-             *(s1 + s2)
-    Psi_1_ = Sum((-1)**n * (testPsi), (n, 1, m))
+    s1, s2 = sym.symbols('s1, s2', real=True)
+    Psi_1_ = sym.cos(n * xi)
+             / (sym.sinh(n * (beta - alpha))) * (s1 + s2)
+    Psi_1_ = sym.Sum((-1)**n * (testPsi), (n, 1, m))
 
 >>> Psi_1_  
  
@@ -709,7 +712,7 @@ To conclude this Section it is remarked, that again the useful *SymPy* function 
 
 As shown in [LGK21]_, :math:`a(\kappa)` can be expanded in a Taylor-series around :math:`\kappa=1`.
 
->>> series(alpha, kappa, 1, 3)
+>>> sym.series(alpha, kappa, 1, 3)
 
 .. math::
  
