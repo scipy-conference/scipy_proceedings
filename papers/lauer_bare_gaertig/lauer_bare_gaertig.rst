@@ -17,7 +17,7 @@ Conformal Mappings with SymPy: Towards Python-driven Analytical Modeling in Phys
 
 .. class:: abstract
 
-   This contribution shows how the symbolic computing Python library *SymPy* can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the space between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses and leads to the fluid flow. The corresponding flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled pipe (the polecap), experiencing fluid forces due to the viscous oil. *SymPy* can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow can be determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with *SymPy* are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette-flow force approximations and similar results for the known Poiseuille-flow (i.e. fluid flow induced by a pressure drop) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of *SymPy* when solving partial differential equations analytically.
+   This contribution shows how the symbolic computing Python library *SymPy* can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the space between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to fluid flow. The corresponding flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. *SymPy* can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow can be determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with *SymPy* are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette-flow force approximations and similar results for the known Poiseuille-flow (i.e. fluid flow induced by a pressure drop) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of *SymPy* when solving partial differential equations analytically.
 
 
 .. class:: keywords
@@ -39,7 +39,7 @@ Figure :ref:`system` schematically shows such a valve system with input data fro
    :scale: 37%
    :figclass: bht
 
-   Valve system model with input data from look-up tables and 1D-component symbols :label:`system` 
+   Valve system model with input data from look-up tables and 1D-component symbols as used in standard system simulation tools :label:`system` 
    
 Hence, in modern system modeling there are currently two main applications of analytical approximations:
 
@@ -279,7 +279,7 @@ Figure :ref:`concentricZU` depicts the velocity distribution in the original *z*
 Mapping rectangles onto eccentric annuli by bipolar coordinate transformations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Another way of solving this problem utilized conformal mappings related to bipolar coordinates. These coordinates are described in [PHW33]_ and are commonly used in elasticity theory (e.g. [L44]_ and [TG51]_). For this contribution, we slighty adapted this transformation in such a way that it can be applied to the eccentric annulus of Figure :ref:`fig2`. The mapping is given by  
+Another way of solving this problem utilizes conformal mappings related to bipolar coordinates. These coordinates are described in [PHW33]_ and are commonly used in elasticity theory (e.g. [L44]_ and [TG51]_). For this contribution, we slighty adapted this transformation in such a way that it can be applied to the eccentric annulus of Figure :ref:`fig2`. The mapping is given by  
 
 .. math::
    :label: bipolar
