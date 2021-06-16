@@ -46,7 +46,7 @@ Hence, in modern system modeling there are currently two main applications of an
 * Analytical approximations are included in the system simulation software components themselves, or
 * The user includes look-up tables for interpolation, entirely or partially generated with analytical approximations.   
    
-In this work we will focus on analytical approximations of flow forces that act upon the inner cylinder in an eccentric annular flow. Such forces are of interest in, for example, hydraulic valves that are electromagnetically actuated. When the armature moves within the oil-filled interior of the polecap, that movement causes a Couette-type annular flow, i.e. a viscous flow due to motion of a solid body, between both components; see Figure :ref:`armature`.
+In this work we will focus on analytical approximations of flow forces that act upon the inner cylinder in an eccentric annular flow. Such forces are of interest in, for example, hydraulic valves that are electromagnetically actuated; see Figure :ref:`armature`. When the armature moves within the oil-filled interior of the polecap, that movement causes a Couette-type annular flow, i.e. a viscous flow due to motion of a solid body, between both components.
 
 .. figure:: armature.png
    :scale: 50%
@@ -227,7 +227,7 @@ where :math:`\rho=\sqrt{\xi^2+\eta^2}`.
 
 With the parameters specified in the following Table :ref:`data1`, the velocity in the *w*-plane (i.e. Equation (:ref:`concentricUinW`)) can be used as an example for visualization and further evaluation.
 
-.. table:: Geometry parametrization and imposed velocity :label:`data1`
+.. table:: Geometry parametrization and imposed velocity for the simulations presented in this Section :label:`data1`
 
    +------------+----------------+-------------------------+
    | Parameter  | Value          |Unit                     |
@@ -255,7 +255,7 @@ The very convenient *SymPy* function *lambdify* is used to compute numerical val
    :scale: 20%
    :figclass: bht
    
-   Flow velocity in concentric annulus (w-plane) :label:`concentricWU` 
+   Flow velocity in concentric annulus (w-plane); the boundary condition (:math:`u_R = \text{0.4 m}/\text{s}`) is applied to the outer cylinder, see Equation (:ref:`stokesConcentricW`) :label:`concentricWU` 
 
 At this stage it is pointed out that when working symbolically with *SymPy* one has to separate consistently between *expressions* and *symbols*. For instance *xi* and *eta* are symbols whereas *xi_* and *eta_* are expressions. The user can replace symbols by corresponding expressions when it best suits him/her.
 To avoid confusion, in this work the associated expression to a symbol *s* is tagged with an underline *s_*.
@@ -267,41 +267,42 @@ Now simply expressing :math:`\xi,\eta` in (:ref:`concentricUinW`) in terms of :m
     u = u_w.subs(xi, xi_).subs(eta, eta_)
     u = lambdify((x, y), u)
  
-Figure :ref:`concentricZU` depicts the velocity distribution in the *z*-plane.   
+Figure :ref:`concentricZU` depicts the velocity distribution in the original *z*-plane.   
 
 .. figure:: u_moebius1_z.pdf
    :scale: 20%
    :figclass: bht
    
-   Flow velocity in eccentric annulus (z-plane) :label:`concentricZU` 
+   Flow velocity in eccentric annulus (z-plane); here the inner cylinder moves with :math:`u_R = \text{0.4 m}/\text{s}` as required by Equation (:ref:`stokesPoisseuilleCouette`)  :label:`concentricZU` 
  
 
 Mapping rectangles onto eccentric annuli by bipolar coordinate transformations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Conformal mappings related to bipolar coordinates as described in [PHW33]_ are commonly used in elasticity theory (e.g. [L44]_ and [TG51]_). For this contribution, we slighty adapted this transformation in such a way that it can be applied to the eccentric annulus of Figure :ref:`fig2`. The mapping is given by  
+Another way of solving this problem utilized conformal mappings related to bipolar coordinates. These coordinates are described in [PHW33]_ and are commonly used in elasticity theory (e.g. [L44]_ and [TG51]_). For this contribution, we slighty adapted this transformation in such a way that it can be applied to the eccentric annulus of Figure :ref:`fig2`. The mapping is given by  
 
 .. math::
    :label: bipolar
 
    z = c\cdot\tan\left(\frac{w}{2}\right) - \textrm{i}\,\gamma\;\;\;\;(\textrm{with}\;\; w = \xi + \textrm{i}\,\eta)\,,
    
-where :math:`\gamma,\,c` are constants from [PHW33]_ which are explicitely given in [W06]_ and [SL78]_; the term :math:`\textrm{i}\,\gamma` is added by the authors. Using this transformation, a properly chosen rectangular domain gets mapped onto an eccentric annulus; see Figure :ref:`rectangularW` for the domain in the *w*-plane. The boundaries are color-coded and vertices are labelled; in addition some coordinate lines are highlighted as well. 
+where :math:`\gamma,\,c` are constants from [PHW33]_ which are explicitely given in [W06]_ and [SL78]_; the term :math:`\textrm{i}\,\gamma` is added by the authors. Using this transformation, a properly chosen rectangular domain gets mapped onto an eccentric annulus; see Figure :ref:`rectangularW` for the domain in the *w*-plane. The boundaries are color-coded in order to visualize how the mapped borders are traversed in the *z*-plane. In addition the vertices are labelled and some coordinate lines are highlighted. 
 
 .. figure:: rectangle_w.pdf
    :scale: 32%
    :figclass: bht
    
-   Rectangular domain in w-plane :label:`rectangularW` 
+   Rectangular domain in w-plane with color-coded boundaries, labelled vertices and some coordinate lines :label:`rectangularW` 
 
-This domain gets transformed as shown in Figure :ref:`eccAnnulusZ`. Please note that for demonstrational purposes the radius of the inner circle is reduced in order to indicate how the coordinate lines are distorted. For conformal mappings however, although distances between corresponding points and lengths of curves are changing, the intersecting angle between any two curves is preserved.
+This domain gets transformed as shown in Figure :ref:`eccAnnulusZ`. The vertices *A* and *C* (as well as *D* and *F*) are mapped onto the same respective points; the color-coding shows that inner and outer cylinder are traversed counter-clockwise when moving in positive :math:`\xi`-direction in the *w*-plane.  
 
 .. figure:: ecc_annulus_z.pdf
-    :scale: 39%
+    :scale: 41%
     :figclass: bht
 
-    Mapped boundaries and coordinate lines in z-plane :label:`eccAnnulusZ`
+    Mapped boundaries and coordinate lines in z-plane; the color-coding visualizes how the mapped borders are traversed here :label:`eccAnnulusZ`
 
+Please note that for demonstrational purposes the radius of the inner circle is reduced in order to indicate how the coordinate lines are distorted. For conformal mappings however, although distances between corresponding points and lengths of curves are changing, the intersecting angle between any two curves is preserved.
 
 Further details on the relation between conformal mappings and bipolar coordinates can be found in e.g. [CTL09]_.
 Inverting Equation (:ref:`bipolar`) and separating real and imaginary parts as in the previous Section one gets
@@ -341,34 +342,34 @@ In the *w*-plane the corresponding Stokes-problem within the rectangular domain 
     u(-\pi,\eta)&=&u(\pi,\eta) \nonumber\\
     \frac{\partial u(-\pi,\eta)}{\partial \xi}&=&\frac{\partial u(\pi,\eta)}{\partial \xi}\,.
    
-The solution to (:ref:`stokesRectangleCouette`) is given by
+The solution to (:ref:`stokesRectangleCouette`) is easily obtained and given by the simple relation
 
 .. math::
    :label: rectangularUinW
 
     u(\xi,\eta)=\frac{u_{R} \left(- \alpha + \eta\right)}{- \alpha + \beta}   
  
-and Figure :ref:`rectangularWU` shows a *Matplotlib*-visualization of *u* in the *w*-plane.
+and Figure :ref:`rectangularWU` shows a *Matplotlib*-visualization of the velocity distribution in the *w*-plane.
 
   
 .. figure:: u_bipolar_w.pdf
    :scale: 18%
    :figclass: bht
    
-   Flow velocity in rectangular domain (w-plane) :label:`rectangularWU`   
+   Flow velocity in rectangular domain (w-plane); again with proper boundary condition (:math:`u_R = \text{0.4 m}/\text{s}`) applied to upper boundary :label:`rectangularWU`   
 
-By again simply expressing :math:`\eta` in terms of :math:`x` and :math:`y`, one obtains the very same velocity distribution in the eccentric annulus (in the *z*-plane) as already depicted in Figure :ref:`concentricZU`.
+By again expressing :math:`\eta` in terms of :math:`x` and :math:`y`, one obtains the very same velocity distribution in the eccentric annulus (in the *z*-plane) as already depicted in Figure :ref:`concentricZU`.
 
    
 It is interesting to remark, that Equations (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) look somehow related to each other due to the logarithm in both relations. However it is not immediately evident that they are actually identical. Nevertheless, due to existence and uniqueness theorems for the Stokes equation from [L69]_, one knows that relations (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) are in fact the same. 
 
-Figure :ref:`largeGapCouette` compares these two analytically obtained velocities with results from a 3D computational fluid dynamics simulation (using ANSYS CFX) solving the full Navier-Stokes system. For these computations a velocity of :math:`u_R=-0.4` :math:`\text{m}/\text{s}` is prescribed on the inner cylinder as boundary condition. All obtained velocities are evaluated along the symmetry axis of the annulus across the larger gap. The inner boundary is then reached on the left side, the outer boundary is hit on the right side of this Figure.  
+Figure :ref:`largeGapCouette` compares these two analytically obtained velocities with results from a 3D computational fluid dynamics simulation (using ANSYS CFX) solving the full Navier-Stokes system. For these computations a velocity of :math:`u_R=-0.4` :math:`\text{m}/\text{s}` is prescribed onto the inner cylinder as boundary condition. All obtained velocities are evaluated along the symmetry axis of the annulus across the larger gap. The inner boundary is then reached on the left side, the outer boundary is hit on the right side of this Figure.  
 
 .. figure:: largeGapCouette.pdf
    :scale: 40% 
    :figclass: bht
    
-   Flow velocity across the large gap within an eccentric annulus (eccentricity :math:`\epsilon = 0.5`) :label:`largeGapCouette`
+   Flow velocity across the large gap within an eccentric annulus (eccentricity :math:`\epsilon = 0.5`); armature on the left, polecap on the right :label:`largeGapCouette`
 
 
 As one can see, the two analytical approaches lead to the same velocity distribution across the larger gap and both boundary conditions are met exactly. On the other hand, due to the finite mesh size particularly at the outer radius :math:`R_2`, the boundary condition there is only approximately satisfied.
@@ -428,9 +429,9 @@ Alternatively, the Couette-flow force can be derived from Equation (:ref:`rectan
    
    F_{Couette2} = -2\pi\,\frac{l \mu u_{R}}{\beta - \alpha}\,.
 
-With the data in Table :ref:`data1` and Table :ref:`data2`, Figure :ref:`flowForceCouette` shows a comparison between the analytically obtained relations (:ref:`Fcouette`) and (:ref:`FcouetteBipolar`) and results from 3D-CFD-simulations of the full Navier-Stokes system for a wide range of different eccentricities.
+With the data in Table :ref:`data1` and Table :ref:`data2`, Figure :ref:`flowForceCouette` shows a comparison between the analytically obtained relations (:ref:`Fcouette`) and (:ref:`FcouetteBipolar`) and results from 3D-CFD simulations of the full Navier-Stokes system for a wide range of different eccentricities.
 
-.. table:: Additional fluid- and geometry-parameters :label:`data2`
+.. table:: Additional fluid- and geometry-parameters used for the 3D-CFD simulations :label:`data2`
 
    +---------------+----------------+-------------------------------+
    | Parameter     |Value           |Unit                           |
@@ -446,7 +447,7 @@ With the data in Table :ref:`data1` and Table :ref:`data2`, Figure :ref:`flowFor
    :scale: 40%
    :figclass: bht
    
-   Flow force acting on the inner cylinder of an annulus with varying eccentricity :math:`\varepsilon` :label:`flowForceCouette`
+   Flow force according to Equation (:ref:`Fwe`), acting on the inner cylinder of an annulus with varying eccentricity :math:`\varepsilon` :label:`flowForceCouette`
 
 Again, both analytical relations agree perfectly but since the numerical CFD-results for the velocity slightly diverge from the analytical solution especially towards the outer boundary (as seen in Figure :ref:`largeGapCouette`), the flow force computed from this data also shows smaller deviations.  
    
@@ -580,7 +581,7 @@ The constants from [W06]_, [SL78]_ and [PHW33]_ read as
  
 As an example, taking the data from Table :ref:`data3`, Piercy's auxiliary harmonic function :math:`\Psi` in the *w*-plane is shown in Figure :ref:`rectangularPsiPiercy`. 
 
-.. table:: Geometry and fluid parameters :label:`data3`
+.. table:: Geometry and fluid parameters for the Poiseuille flow simulations in this Section :label:`data3`
 
    +------------+----------------+-------------------------------+
    | Parameter  | Value          |Unit                           |
@@ -602,7 +603,7 @@ As an example, taking the data from Table :ref:`data3`, Piercy's auxiliary harmo
    :scale: 20%
    :figclass: bht
    
-   Auxiliary function :math:`\Psi` in rectangular domain (w-plane) :label:`rectangularPsiPiercy`
+   Auxiliary, harmonic function :math:`\Psi` in rectangular domain (w-plane) used by [PHW33]_ as an intermediate step to solve the Poiseuille problem :label:`rectangularPsiPiercy`
  
  
 Adding the various pieces together, Piercy's Poiseuille-flow velocity (Equation (:ref:`uPiercyIdea`)) in the *w*-plane is depicted in Figure :ref:`rectangularWUpiercy`.
@@ -611,7 +612,7 @@ Adding the various pieces together, Piercy's Poiseuille-flow velocity (Equation 
    :scale: 20%
    :figclass: bht
    
-   Flow velocity in rectangular domain (w-plane) :label:`rectangularWUpiercy`   
+   Flow velocity for the Poiseuille problem in rectangular domain (w-plane); it's vanishing on upper and lower boundary and periodic in :math:`\xi` :label:`rectangularWUpiercy`   
    
 And last but not least, again expressing :math:`\xi,\eta` in :math:`x` and :math:`y`, the velocity distribution in the eccentric annulus (i.e. in the *z*-plane) together with some isocontours is shown in Figure :ref:`rectangularZUpiercy`.
 
@@ -619,7 +620,7 @@ And last but not least, again expressing :math:`\xi,\eta` in :math:`x` and :math
    :scale: 20%
    :figclass: bht
    
-   Flow velocity and isocontours in eccentric annulus (z-plane) :label:`rectangularZUpiercy`
+   Flow velocity and isocontours for the Poiseuille problem in eccentric annulus (z-plane); most of the fluid flow occurs through the large gap :label:`rectangularZUpiercy`
    
    
 The method described here is not only restricted to fluid dynamics. In elasticity theory, which inspired the work of [PHW33]_, :math:`\Psi` is the harmonic conjugate of the so-called warping- or St. Venant torsion-function :math:`\phi` (see [L44]_ or [M66]_), specified by 
@@ -683,7 +684,8 @@ Here, :math:`F_c` is the well known Poiseuille-flow force that acts upon the inn
    a(\kappa)&=&- (1 - \kappa) \frac{\left(1 - \kappa^2\right) +\left(1 + \kappa^2\right) \ln\kappa}{2\left(\kappa^2 + \displaystyle{\frac{\left(1 - \kappa^2\right)}{2\ln\kappa}}\right)\left(1 + \kappa\right)\ln^2\kappa}\,.
 
 
-The particular approximation for the eccentric flow force due to a pressure gradient, i.e. :math:`F_{Piercy}\approx F_c\left( 1 + a(\kappa)\,\varepsilon^2\right)`, was obtained for the first time in [LGK21]_.   
+The particular approximation for the eccentric flow force due to a pressure gradient, i.e. :math:`F_{Piercy}\approx F_c\left( 1 + a(\kappa)\,\varepsilon^2\right)`, was obtained for the first time in [LGK21]_.
+
 To conclude this Section it is remarked, that again the useful *SymPy* function *series* can help in figuring out how :math:`a(\kappa)` is approximated in the relevant practical case where :math:`R_1\approx R_2`.
 
 As shown in [LGK21]_, :math:`a(\kappa)` can be expanded in a Taylor-series around :math:`\kappa=1`.
