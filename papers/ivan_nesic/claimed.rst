@@ -38,24 +38,42 @@ CLAIMED, a visual and scalable component library for Trusted AI
 Introduction
 ============
 
-Monolithic scripts are often used in prototyping. For production deployments, modular pipeline
-engines like Slurm [slurm]
+Monolithic scripts are often used in prototyping. For production deployments, tools like 
+Slurm [slurm]_, Snakemake [snakemake]_, QSub [qsub]_, HTCondor [htcondor]_, Apache Nifi [nifi]_,
+NodeRED [nodered]_, KNIME [knime]_, Galaxy [galaxy]_, 
+Reana [reana]_, WEKA [weka]_, Rabix [rabix]_, Nextflow [nextflow]_, OpenWDL [openwdl]_, CWL [cwl]_
+or Cromwell [cromwell]_. 
+We found that these tools, even when used in conjunction, support only a subset of our requirements:
 
-Open source software for performing individual AI pipeline tasks are
-abundant, but the community lacks a fully integrated, trusted and
-scalable visual tool. Therefore we have built CLAIMED, the visual
+- low code / no code environment for rapid prototyping with visual editing and jupyter notebooks
+- seamless scaling during development and deployment
+- GPU support
+- pre-build components for various business domains
+- support for the complete python and R tooling including Apache Spark,
+  TensorFlow, PyTorch, pandas and scikit-learn
+- seamless extensibility
+- reproducibility of work
+- data lineage
+- collaboration support
+
+Therefore we have built an extensible component library to be used in low code / no code
+environments called CLAIMED, the visual
 **C**\ omponent **L**\ ibrary for **AI**, **M**\ achine Learning,
-**E**\ TL and **D**\ ata Science which runs on top of Elyra capable of
-pushing AI pipelines of any kind to Kubernetes [kubernetes]_. Any containerized
-application can become a component of the library. CLAIMED has been
-released [complib]_ under the Apache v2 open source license. In the following
-we introduce the open source components we are integrating in our
-current release, followed by an overview of different component
-categories paired with a description of exemplary components used in
-health care. This pipeline is also available in open source  [ect]_.
+**E**\ TL and **D**\ ata Science. In the following section we elaborate on the implementation
+details.
+
+Implementation
+==============
+
+Before we can elaborate on how the requirements have been addressed in CLAIMED and how the
+exemplary workflow has been implemented, we need to introduce some
+terms and technology in the technology breakdown.
+
+Technology breakdown
+--------------------
 
 Containerization and Kubernetes
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Virtualization opened up a lot of potential for managing the
 infrastructure, mainly the ability to run different operating systems on
@@ -84,7 +102,7 @@ joining CNCF, having moved all Watson Services to Kubernetes and aquired
 RedHat, IBM is now 3rd largest committer to Kubernetes [ibmcncf]_.
 
 Deep Learning with TensorFlow
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is the second incarnation of the Google Brain project’s scalable
 distributed training and inference system named DistBelief
@@ -100,7 +118,7 @@ debugging is much simpler in the first case, and if there is the need
 for speed, one can use the latter.
 
 Kubeflow
---------
+~~~~~~~~
 
 Kubeflow [kubeflow]_ is a machine learning pipeline management and execution system
 running as first class citizen on top of Kubernetes. Besides making use
@@ -108,27 +126,27 @@ of Kubernetes scalability it allows for reproducible work as machine
 learning pipelines and the results and intermediate artifacts of their
 executions are stored in a meta data repository.
 
-ElyraAI
--------
+Elyra
+~~~~~~~~~~~~~~~~
 
-ElyraAI [elyra]_ started as a set of extensions for the JupyterLab ecosystem.
-Here we concentrate on the pipeline editor of ElyraAI which allows for
+Elyra [elyra]_ started as a set of extensions for the JupyterLab ecosystem.
+Here we concentrate on the pipeline editor of Elyra which allows for
 expression of machine learning workflows using a drag’n’drop editor and
 send them for execution on top of different engines like Kubeflow or
 Airflow. This allows for non-programmers to read and understand but also
-create machine learning workflows. ElyraAI also supports visualizing
+create machine learning workflows. Elyra also supports visualizing
 such pipelines in the browser (e.g. from a github repository).
 
 JupyterLab
-----------
+~~~~~~~~~~
 
 JupyterLab [jupyter]_ is one of the most popular development environments for data
 science. Therefore we started to support JupyterLab first. But the
-pipeline editor of ElyraAI will be supported in other environments as
+pipeline editor of Elyra will be supported in other environments as
 well, VSCode being next on the list.
 
 AI Explainability
------------------
+~~~~~~~~~~~~~~~~~
 
 Besides their stunning performance, deep learning models face a lot of
 resistance for production usage because they are considered to be a
@@ -155,7 +173,7 @@ which indicates a problem with that particular classifier.
    areas of an image. :label:`limefig`
 
 AI Fairness and Bias
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 So what is bias? "Bias is a disproportionate weight in
 favor of or against an idea or thing, usually in a way that is
@@ -174,7 +192,7 @@ using the AIF360 [aif360]_ library which IBM donated to
 the Linux Foundation AI and therefore is under open governance.
 
 AI Adversarial Robustness
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Another pillar of Trusted AI is adversarial robustness. As researchers
 found out, adversarial noise can be introduced in data (data poisoning)
@@ -182,6 +200,11 @@ or models (model poisoning) to influence models decisions in favor of
 the adversarial. Libraries like the Adversarial Robustness Toolbox
 ART [art]_ support all state-of-the-art attacks and
 defenses.
+
+System Architecture and Requirements
+------------------------------------
+
+
 
 
 System Implementation and Demo Use Case
@@ -322,7 +345,7 @@ As of now, at least one representative component for each category has
 been released. Components are added to the library on a daily basis. The
 next components to be published are: Parallel Tensorflow Training with
 TFJob, Parallel Hyperparameter Tuning with Katib and Parallel Data
-Processing with Apache Spark. In addition, the next release of ElyraAI
+Processing with Apache Spark. In addition, the next release of Elyra
 (v.2.3.0) will improve component’s configuration options rendering
 capabilities, e.g. support for check-boxes and drop down menus and
 facilitated integration of exiting, containerized applications into the
@@ -336,7 +359,7 @@ We’ve build and proposed a trustable, low-code, scalable and open source
 visual AI pipeline system on top of many de facto standard components
 used by the machine learning community. Using KubeFlow Pipelines
 provides reproducability and auditability. Using Kubernetes provides
-scalability and standardization. Using ElyraAI for visual development
+scalability and standardization. Using Elyra for visual development
 provides ease of use, such that all internal and external stakeholders
 are empowered to audit the system in all dimensions.
 
@@ -375,3 +398,31 @@ References
 .. [ect] https://github.com/cloud-annotations/elyra-classification-training/tree/developer_article
 
 .. [slurm] https://slurm.schedmd.com/documentation.html
+
+.. [snakemake] https://snakemake.github.io/
+
+.. [qsub] https://en.wikipedia.org/wiki/Qsub
+
+.. [htcondor] https://research.cs.wisc.edu/htcondor/
+
+.. [galaxy] https://galaxyproject.org/
+
+.. [reana] https://reanahub.io/
+
+.. [nifi] https://nifi.apache.org/
+
+.. [nodered] https://nodered.org/
+
+.. [knime] https://www.knime.com/
+
+.. [weka] https://www.cs.waikato.ac.nz/ml/weka/
+
+.. [rabix] https://rabix.io/
+
+.. [nextflow] https://www.nextflow.io/
+
+.. [openwdl] https://openwdl.org/
+
+.. [cwl] https://www.commonwl.org/
+
+.. [cromwell] https://cromwell.readthedocs.io/en/stable/
