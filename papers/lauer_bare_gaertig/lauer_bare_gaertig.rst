@@ -403,15 +403,15 @@ Postprocessing
 Force calculation and comparison with 3D-CFD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The relation for the annular flow force that acts upon the inner cylinder is well known ([PHW33]_ or a more recent work [LGK21]_) and is given by
+The relation for the annular flow force that acts upon the armature in Figure :ref:`concentricW` is well known ([PHW33]_ or a more recent work [LGK21]_) and is given by
 
 .. math::
    :label: Fwe
   
-   F_e =-\int\limits_0^l \int\limits_0^{2\pi} \left(\mu\,\rho \frac{\mathrm d}{\mathrm{d}\rho} u(\rho)\right)_{\rho = R_1}\textrm{d}\varphi\,\textrm{d}z\,.
+   F_e =-\int\limits_0^l \int\limits_0^{2\pi} \left(\mu\,\rho \frac{\mathrm d}{\mathrm{d}\rho} u(\rho)\right)_{\rho = R}\textrm{d}\varphi\,\textrm{d}z\,.
 
 
-This equation can be implemented in *SymPy* using for example the velocity from Equation (:ref:`concentricUinW`).
+This equation can be implemented in *SymPy* using the velocity distribution from Equation (:ref:`concentricUinW`).
 
 >>> u_w = u_R * sym.log(rho)/sym.log(R)
 >>> u_w  
@@ -422,7 +422,7 @@ This equation can be implemented in *SymPy* using for example the velocity from 
 Using the *diff*, *subs* and *integrate* functions from *SymPy* then leads to
 
 >>> Fe = mu * sym.diff(u_w, rho)
->>> Fe = (rho * Fe).subs(rho, R1)
+>>> Fe = (rho * Fe).subs(rho, R)
 >>> Fe = sym.integrate(Fe, (z, 0, l))
 >>> Fe = -sym.integrate(Fe, (phi, 0, 2 * pi))
 >>> Fe   
@@ -482,7 +482,7 @@ Equation (:ref:`Fcouette`) is even defined for the concentric case. Substituting
 .. math::
    :label: Fzc
 
-   F_c=-u_R\,\frac{2\pi \mu l}{\ln(R_1/R_2)}\,.
+   F_c=-u_R\,\frac{2\pi \mu l}{\ln(R_2/R_1)}\,.
 
    
 In order to finally answer the first question of the Introduction, i.e. how Equation (:ref:`ForceSystemTool`) is related to the Stokes equation, the *series* function of *SymPy* is used. 
@@ -762,78 +762,79 @@ References
 ----------
 
 .. [BP89]  Bakhvalov NS, Panasenko G. *Homogenisation: averaging processes in periodic media: mathematical problems in the mechanics of composite materials*,
-           Kluwer, Dortmund, Boston, London, 1989.
+           Kluwer Academic Publisher; 1989
            
 .. [B14]   Bare Contreras DZ. *Asymptotic Analysis for Linearized Contact Problems in Thin Beams*,
-           Fraunhofer Verlag; 2014.     
+           Fraunhofer Verlag; 2014     
 
 .. [BPO16] Bare Z, Orlik J, Panasenko G. *Non homogeneous Dirichlet conditions for an elastic beam: an asymptotic analysis*,
-           Applicable Analysis. 2016 Dec 1;95(12):2625-36.           
+           Applicable Analysis, 2016, 2625-36.           
 
 .. [BSL06] Bird RB, Stewart WE, Lightfoot EN. *Transport phenomena*,
-           John Wiley & Sons; 2006 Dec 11.
+           John Wiley & Sons; 2006
            
 .. [BC81]  Churchill RV, Brown JW. *Fourier series and boundary value problems*,
-           McGraw-Hill Book Company; 1981.
+           McGraw-Hill, NY; 1981
        
 .. [BC09]  Brown JW, Churchill RV. *Complex variables and applications eighth edition*,
-           McGraw-Hill Book Company; 2009.
+           McGraw-Hill, NY; 2009
 
 .. [CTL09] Chen JT, Tsai MH, Liu CS. *Conformal mapping and bipolar coordinate for eccentric Laplace problems*,
-           Computer Applications in Engineering Education. 2009 Sep;17(3):314-22.
+           Computer Applications in Engineering Education. 2009, 314-22
            
 .. [G78]   Greenberg MD. *Foundations of applied mathematics*, 
-           Dover; 2013 Nov 26.
+           Dover; 2013
            
 .. [H10]   Hirose A. *Recent progress in applications of complex-valued neural networks*,
-           InInternational Conference on Artificial Intelligence and Soft Computing 2010 Jun 13 (pp. 42-46). Springer, Berlin, Heidelberg.
+           International Conference on Artificial Intelligence and Soft Computing 2010 Jun 13, 42-46
            
 .. [H12]   Hirose A. *Complex-valued neural networks*,
-           Springer Science & Business Media; 2012 Mar 23.
+           Springer Science & Business Media; 2012
                                  
 .. [K19]   Krebs J. *Optislang in functional development of hydraulic valves*,
            RDO Journal Issue 2, 2019.
 
 .. [L69]   Ladyzhenskaya OA. *The mathematical theory of viscous incompressible flow*,
-           New York: Gordon and Breach; 1969.       
+           Gordon and Breach, NY; 1969.       
 
 .. [LL60]  Landau LD, Lifshitz EM. *Electrodynamics of continuous media*,
-           Pergamon Press; 1960.           
+           Pergamon Press, NY; 1960.           
 
 .. [LL59]  Landau LD, Lifshitz EM. *Fluid Mechanics*,
-           Pergamon New York. 1959;61.
+           Pergamon Press, NY; 1959
            
 .. [LGK21] Lauer-Baré Z., Gaertig E., Krebs J., Arndt C., Sleziona A., Gensel A. *A note on leakage jet forces: Application in the modelling of digital twins of hydraulic valves*, 
            International Journal of Fluid Power, 2021, Vol. 22 (1), 113–146.
            
 .. [L44]   Love AU. E, H. *A treatise on the mathematical theory of elasticity*,
-           Dover Publications. 1944;164:165.
+           Dover Publications; 1944
            
 .. [MSP17] Meurer A, Smith CP, Paprocki M, Čertík O, Kirpichev SB, Rocklin M, Kumar A, Ivanov S, Moore JK, Singh S, Rathnayake T. *SymPy: symbolic computing in Python*,
-           PeerJ Computer Science. 2017 Jan 2;3:e103.
+           PeerJ Computer Science. 2017
            
 .. [M49]   Milne-Thomson TH, *Theoretical Hydrodynamics*,
-           Macmillan and Co. Ltd., New York. 1949.                 
+           Macmillan and Co. Ltd., NY; 1949                 
            
 .. [M66]   Muskhelishvili NI. *Some basic problems of mathematical elasticity theory*,
-           Science, Moscow. 1966.
+           Science, Moscow. 1966
            
-.. [PP12]  Pikulin VP, Pohozaev SI. *Equations in mathematical physics: a practical course*, Springer Science & Business Media; 2012 Jan 3.
+.. [PP12]  Pikulin VP, Pohozaev SI. *Equations in mathematical physics: a practical course*,
+           Springer Science & Business Media; 2012
            
 .. [S11]   Secomb TW. *Hemodynamics*, 
-           Comprehensive physiology. 2011 Jan 17;6(2):975-1003.
+           Comprehensive Physiology. 2011 Jan 17;6(2):975-1003
            
 .. [SL78]  Shah RK, London AL. *Laminar flow forced convection in ducts*,
-           Supplement; 1978.   
+           Supplement 1 to Advances in Heat Transfer. Academic Press, NY; 1978  
            
 .. [TG51]  Timoshenko S, Goodier JN. *Theory of elasticity*, 
-           1951. New York.;412:108.              
+           McGraw-Hill, NY; 1951            
            
 .. [TKM19] Jeffrey Tithof, Douglas H Kelley, Humberto Mestre, Maiken Nedergaard, and John H Thomas. *Hydraulic resistance of periarterial spaces in the brain*,
            Fluids and Barriers of the CNS, 16, 2019           
 
 .. [PHW33] N.A.V. Piercy D.Sc., M.S. Hooper & H.F. Winny Ph.D. *LIII. Viscous flow through pipes with cores*, 
-           The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science, 1933.
+           The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science, 1933
            
 .. [W06]   White FM. *Viscous fluid flow*,
-           New York: McGraw-Hill; 2006.           
+           McGraw-Hill, NY; 2006          
