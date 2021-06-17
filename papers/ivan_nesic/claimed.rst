@@ -95,7 +95,7 @@ communication between containers, schedule them, manage authentications,
 balance the load etc. Although there are other options like Docker
 Swarm, Kubernetes is the market leader in this domain. It was donated to
 CNCF [cncf]_ by Google, which means a lot of Google’s know-how and years of
-experience went into it. The system can run on public, on-prem or on
+experience went into it. The system can run on public, on-premises or on
 hybrid clouds. On-prem installation is very important for institutions
 dealing with sensitive data. For IBM, Kubernetes is also strategic,
 joining CNCF, having moved all Watson Services to Kubernetes and aquired
@@ -104,7 +104,7 @@ RedHat, IBM is now 3rd largest committer to Kubernetes [ibmcncf]_.
 Deep Learning with TensorFlow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is the second incarnation of the Google Brain project’s scalable
+TensorFlow is the second incarnation of the Google Brain project’s scalable
 distributed training and inference system named DistBelief
 [tf]_. It supports myriad of hardware platforms, from
 mobile phones to GPU/TPU clusters, for both training and inference. It
