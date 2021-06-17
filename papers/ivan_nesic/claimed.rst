@@ -13,24 +13,39 @@ CLAIMED, a visual and scalable component library for Trusted AI
 
 .. class:: abstract
 
-   Deep Learning models are getting more and more popular but constraints on explainability, adversarial robustness and fairness are often major concerns for production deployment. Although the open source ecosystem is abundant on addressing those concerns, fully integrated, end to end systems are lacking in open source.
-
-   Therefore we provide an entirely open source, reusable component framework, visual editor and execution engine for production grade machine learning on top of Kubernetes, a joint effort between IBM and the University Hospital Basel. It uses Kubeflow Pipelines, the AI Explainability360 toolkit, the AI Fairness360 toolkit and the Adversarial Robustness Toolkit on top of ElyraAI, Kubeflow, Kubernetes and JupyterLab. Using the Elyra pipeline editor, AI pipelines can be developed visually with a set of jupyter notebooks. We explain how we've created a COVID-19 deep learning classification pipeline based on CT scans. We use the toolkit to highlight parts of the images which have been crucial for the model’s decisions. We detect bias against age and gender and finally, show how to deploy the model to KFServing to share it across different hospital data centers of the Swiss Personalized Health Network.
-
+   We propose an Open Source low code / no code tool suite for data science supporting rapid
+   prototyping with visual editing and 
+   jupyter notebooks, seamless scaling during development and deployment (including GPU), 
+   pre-build components for various business domains, support for the complete python and 
+   R tooling including Apache Spark, TensorFlow, PyTorch, pandas and scikit-learn,
+   straightforward extensibility (anything which runs in a Docker container), 
+   reproducibility of work, data lineage and collaboration support.
+   More specifically we provide CLAIMED, the component library for AI, Machine Learning, ETL
+   and Data Science driven by the JupyterLab extension "Elyra Pipeline Editor", a framework
+   agnostic Low Code pipeline editor currently supporting local execution, Airflow and KubeFlow.
+   To exemplify its use,
+   we show an exemplary workflow composed exclusively from components in CLAIMED, to train,
+   evaluate and deploy a deep learning model
+   that determines if CT scans are positive for COVID-19.
+   
 
 
 .. class:: keywords
 
-    Kubernetes, Kubeflow, JupyterLab, ElyraAI, KFServing, TrustedAI, AI Explainability, AI Fairness, AI Adversarial Robustness
+    Kubernetes, Kubeflow, JupyterLab, Elyra, KFServing, TrustedAI,
+    AI Explainability, AI Fairness, AI Adversarial Robustness
 
 Introduction
 ============
+
+Monolithic scripts are often used in prototyping. For production deployments, modular pipeline
+engines like Slurm [slurm]
 
 Open source software for performing individual AI pipeline tasks are
 abundant, but the community lacks a fully integrated, trusted and
 scalable visual tool. Therefore we have built CLAIMED, the visual
 **C**\ omponent **L**\ ibrary for **AI**, **M**\ achine Learning,
-**E**\ TL and **D**\ ata Science which runs on top of ElyraAI capable of
+**E**\ TL and **D**\ ata Science which runs on top of Elyra capable of
 pushing AI pipelines of any kind to Kubernetes [kubernetes]_. Any containerized
 application can become a component of the library. CLAIMED has been
 released [complib]_ under the Apache v2 open source license. In the following
@@ -358,3 +373,5 @@ References
 .. [complib] https://github.com/elyra-ai/component-library
 
 .. [ect] https://github.com/cloud-annotations/elyra-classification-training/tree/developer_article
+
+.. [slurm] https://slurm.schedmd.com/documentation.html
