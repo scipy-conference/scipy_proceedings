@@ -86,7 +86,7 @@ RedHat, IBM is now 3rd largest committer to Kubernetes [ibmcncf]_.
 Deep Learning with TensorFlow
 -----------------------------
 
-It is the second incarnation of the Google Brain project’s scalable
+TensorFlow is the second incarnation of the Google Brain project’s scalable
 distributed training and inference system named DistBelief
 [tf]_. It supports myriad of hardware platforms, from
 mobile phones to GPU/TPU clusters, for both training and inference. It
