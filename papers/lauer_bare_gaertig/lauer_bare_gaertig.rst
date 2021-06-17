@@ -17,7 +17,7 @@ Conformal Mappings with SymPy: Towards Python-driven Analytical Modeling in Phys
 
 .. class:: abstract
 
-   This contribution shows how the symbolic computing Python library *SymPy* can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the region between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to a corresponding fluid flow. The flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. *SymPy* can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow can be determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with *SymPy* are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette-flow force approximations and similar results for the known Poiseuille-flow (i.e. fluid flow induced by a pressure drop) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of *SymPy* when solving partial differential equations analytically.
+   This contribution shows how the symbolic computing Python library *SymPy* can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the region between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to a corresponding fluid flow. The flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. *SymPy* can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow can be determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with *SymPy* are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette flow force approximations and similar results for the known Poiseuille flow (i.e. fluid flow induced by a pressure drop) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of *SymPy* when solving partial differential equations analytically.
 
 
 .. class:: keywords
@@ -78,7 +78,7 @@ Utilizing the capabilities of the open-source Computer Algebra System *SymPy* (a
 2. Does eccentricity :math:`\varepsilon = b/\delta` change this dependency and, if so, how exactly?
 
 Furthermore, the velocities and forces obtained by solving the Stokes equation (i.e. the linear part of the Navier-Stokes equation) with *SymPy* are compared to corresponding numerical solutions of the complete Navier-Stokes system, obtained from the commercially available Finite Volume tool ANSYS-CFX.
-Finally this article concludes with a note on the eccentric annular Poiseuille-flow (that is a flow due to a pressure drop) and finishes with a comment on comnbined Couette-Poiseuille-flow velocities and forces.
+Finally this article concludes with a note on the eccentric annular Poiseuille flow (that is a flow due to a pressure drop) and finishes with a comment on comnbined Couette-Poiseuille flow velocities and forces.
  
 
 Material and methods
@@ -99,7 +99,7 @@ the following *SymPy* functions and libraries were used: *im*, *re*, *subs*, *si
 
 .. [#] `<https://github.com/zolabar/ConformalMappingSympy>`_ 
 
-The theoretical methods used here are conformal mappings (inspired by [PHW33]_ and [BC09]_) and Taylor-expansions, following [LGK21]_. Equations (:ref:`stokesPoisseuilleCouette`) describe *Couette-flow* when :math:`dp=0` and :math:`u_R\neq 0` and *Poiseuille-flow*, when :math:`dp\neq 0` and :math:`u_R=0`. Furthermore, Equations (:ref:`stokesPoisseuilleCouette`) describe *Couette-Poiseuille-flow* when :math:`dp\neq 0` and :math:`u_R\neq 0`.
+The theoretical methods used here are conformal mappings (inspired by [PHW33]_ and [BC09]_) and Taylor-expansions, following [LGK21]_. Equations (:ref:`stokesPoisseuilleCouette`) describe *Couette flow* when :math:`dp=0` and :math:`u_R\neq 0` and *Poiseuille flow*, when :math:`dp\neq 0` and :math:`u_R=0`. Furthermore, Equations (:ref:`stokesPoisseuilleCouette`) describe *Couette-Poiseuille flow* when :math:`dp\neq 0` and :math:`u_R\neq 0`.
 
 
 
@@ -135,8 +135,8 @@ as expected. Further analytical solutions to the Laplace problem for other simpl
 Transform the eccentric annulus to a simple domain with conformal mappings
 --------------------------------------------------------------------------
 
-In the following two Sections we will show with *SymPy* how the Couette-flow problem within an eccentric annular domain can be transformed into a problem in a concentric annular region or into a rectangle.
-In these simple geometries analytical solutions to the Couette-flow problem are known. In order to transform the domains we make use of complex analysis, inspired by the French mathematician Jacques Hadamard (1865-1963):
+In the following two Sections we will show with *SymPy* how the Couette flow problem within an eccentric annular domain can be transformed into a problem in a concentric annular region or into a rectangle.
+In these simple geometries analytical solutions to this problem are well-known. In order to transform the domains we make use of complex analysis, inspired by the French mathematician Jacques Hadamard (1865-1963):
 
 
     *The shortest path between two truths in the real domain passes through the complex domain.*
@@ -430,7 +430,7 @@ Using the *diff*, *subs* and *integrate* functions from *SymPy* then leads to
 .. math::
    -2\pi\,\frac{l \mu u_{R}}{\ln(R)}
    
-Substituting the relation for :math:`R` into :math:`F_e`, the flow force of the eccentric annular Couette-flow is obtained. It can be manually adapated to the esthetic preferences of the authors, e.g.
+Substituting the relation for :math:`R` into :math:`F_e`, the flow force of the eccentric annular Couette flow is obtained. It can be manually adapated to the esthetic preferences of the authors, e.g.
 
 .. math::
    :label: Fcouette
@@ -443,7 +443,7 @@ Substituting the relation for :math:`R` into :math:`F_e`, the flow force of the 
 
 Equation (:ref:`Fcouette`) therefore answers the second question posed in the Introduction: *The flow force is decisively influenced by the eccentricity*. 
 
-Alternatively, the Couette-flow force can be derived from Equation (:ref:`rectangularUinW`), which is obtained from solving the equivalent Stokes-problem in bipolar coordinates and for this case it is given by
+Alternatively, the Couette flow force can be derived from Equation (:ref:`rectangularUinW`), which is obtained from solving the equivalent Stokes-problem in bipolar coordinates and for this case it is given by
 
 .. math::
    :label: FcouetteBipolar
@@ -495,23 +495,23 @@ With *series*, a Taylor-expansion of :math:`F_c` in :math:`\delta = R_2 - R_1` a
    
    \frac{\pi \delta l \mu u_{R}}{6 R_{1}} - \pi l \mu u_{R} - \frac{2 \pi R_{1} l \mu u_{R}}{\delta} + O\left(\delta^{2}\right)
 
-The answer to the aforementioned question then is: (:ref:`ForceSystemTool`) *is the leading term of a Taylor-expansion of the concentric annular Couette-flow force around* :math:`\delta = 0`.    
+The answer to the aforementioned question then is: (:ref:`ForceSystemTool`) *is the leading term of a Taylor-expansion of the concentric annular Couette flow force around* :math:`\delta = 0`.    
 
-The contribution of this article closes with some additional remarks on eccentric annular Poiseuille-flow and new possibilities of combining the results of the last Sections with results from [PHW33]_ and [LGK21]_.
+The contribution of this article closes with some additional remarks on eccentric annular Poiseuille flow and new possibilities of combining the results of the last Sections with results from [PHW33]_ and [LGK21]_.
 
-Additional remarks on Poiseuille-flow
+Additional remarks on Poiseuille flow
 -------------------------------------
 
-Eccentric annular Poiseuille-flow velocity
+Eccentric annular Poiseuille flow velocity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In various circumstances Couette-flow may also induce a secondary flow driven by a pressure difference; a so-called *Poiseuille-flow*. This particular type is of interest in many areas and we'll briefly show how the corresponding solution presented in [PHW33]_ is derived conceptually as well as how it can be implemented with the help of *SymPy*. 
+In various circumstances Couette flow may also induce a secondary flow driven by a pressure difference; a so-called *Poiseuille flow*. This particular type is of interest in many areas and we'll briefly show how the corresponding solution presented in [PHW33]_ is derived conceptually as well as how it can be implemented with the help of *SymPy*. 
 
 As far as we know, hitherto only the relations found in the aforementioned paper had been implemented (e.g. [W06]_, [TKM19]_), but unfortunately in a way that is rather difficult to reproduce. 
-The fact, that in the current context blood coagulation and hemodynamics are omnipresent in the media, eccentric annular blood flow in arteries is extensively studied ([TKM19]_) and flow forces that act upon the arteries are of great medical interest (e.g. [S11]_), makes it even more interesting to use the existing formualae of [PHW33]_, which are tedious to use when implemented by hand.
+The fact, that in the current context blood coagulation and hemodynamics are omnipresent in the media, eccentric annular blood flow in arteries is extensively studied ([TKM19]_) and flow forces that act upon the arteries are of great medical interest (e.g. [S11]_), makes it even more interesting to use the existing formulae of [PHW33]_, which are tedious to use when implemented by hand.
 
 
-In the case of Poiseuille-flow, the righthand-side of the corresponding Stokes equation is non-homogeneous (:math:`dp\neq 0; u_R= 0`); see also Equation (:ref:`stokesPoisseuilleCouette`). Hence, we need to deal with a different mathematical problem here than in the previous Sections.
+In the case of Poiseuille flow, the righthand-side of the corresponding Stokes equation is non-homogeneous (:math:`dp\neq 0; u_R= 0`); see also Equation (:ref:`stokesPoisseuilleCouette`). Hence, we need to deal with a different mathematical problem here compared to the previous Sections.
 
 However, it possible to reduce the Poiseuille problem to an equivalent Couette problem with prescribed velocities on the boundaries (e.g. [M49]_). That is the idea followed by [PHW33]_, who seek a solution of the form
 
@@ -628,7 +628,7 @@ As an example, taking the data from Table :ref:`data3`, Piercy's auxiliary harmo
    Auxiliary, harmonic function :math:`\Psi` in rectangular domain (w-plane) used by [PHW33]_ as an intermediate step to solve the Poiseuille problem :label:`rectangularPsiPiercy`
  
  
-Adding the various pieces together, Piercy's Poiseuille-flow velocity (Equation (:ref:`uPiercyIdea`)) in the *w*-plane is depicted in Figure :ref:`rectangularWUpiercy`.
+Adding the various pieces together, Piercy's Poiseuille flow velocity (Equation (:ref:`uPiercyIdea`)) in the *w*-plane is depicted in Figure :ref:`rectangularWUpiercy`.
 
 .. figure:: piercyW.pdf
    :scale: 20%
@@ -658,7 +658,7 @@ A practical implementation of :math:`\phi` can be found in e.g. [B14]_ and [BPO1
 Eccentric Couette-Poiseuille flow: Superposition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The velocity for eccentric Couette-Poiseuille flow can easily be found by superposing Equation (:ref:`velocityPiercy`) with one of the two Couette-flow velocities derived in this contribution by utilizing *SymPy*.
+The velocity for eccentric Couette-Poiseuille flow can easily be found by superposing Equation (:ref:`velocityPiercy`) with one of the two Couette flow velocities derived in this contribution by utilizing *SymPy*.
 
 The following relation 
 
@@ -687,7 +687,7 @@ where
 
 Since the conformal mapping (:ref:`bipolar`) is not defined for the concentric case :math:`b=0`, this drawback also translates to the corresponding forces in Equations (:ref:`forceCouePois`) and (:ref:`forcePiercy`). The relation above therefore is only defined for eccentric cases.
 
-However, the Couette-flow force obtained with the MÖbius transform, i.e. Equation (:ref:`Fcouette`), is defined for the concentric case as well. But since, to our knowledge, no one has ever constructed the Poiseuille-flow velocity using a MÖbius transform, the equivalent flow force (most likely defined for :math:`b = 0` too) is not available.
+However, the Couette flow force obtained with the Möbius transform, i.e. Equation (:ref:`Fcouette`), is defined for the concentric case as well. But since, to our knowledge, no one has ever constructed the Poiseuille flow velocity using a Möbius transform, the equivalent flow force (most likely defined for :math:`b = 0` too) is not available.
 
 Therefore, the best analytical approximation for the eccentric Couette-Poiseuille flow force, defined both for the eccentric and concentric case, that we can present here, is a combination of Equation (:ref:`Fcouette`) and a Taylor-expansion of Equation (:ref:`forcePiercy`) in the relative eccentricity :math:`\varepsilon=b/(R_2-R_1)` around :math:`\varepsilon = 0`. 
 
@@ -696,7 +696,7 @@ Therefore, the best analytical approximation for the eccentric Couette-Poiseuill
    
    F_{Coue-Pois}\approx F_{Couette}+F_c\left( 1 + a(\kappa)\,\varepsilon^2\right)\,.
 
-Here, :math:`F_c` is the well known Poiseuille-flow force that acts upon the inner cylinder in the concentric case (e.g. [BSL06]_) and  :math:`a(\kappa)` is a function of the ratio :math:`\kappa=R_1/R_2` given by  
+Here, :math:`F_c` is the well known Poiseuille flow force that acts upon the inner cylinder in the concentric case (e.g. [BSL06]_) and  :math:`a(\kappa)` is a function of the ratio :math:`\kappa=R_1/R_2` given by  
 
 .. math::
    :label: forceLauerBareGaertig 
@@ -737,9 +737,9 @@ Conclusion
 
 This article shows that classical tools from mathematical physics, such as conformal mappings and Taylor-expansions, are still relevant and indispensable in times of digitalization and wide use of numerics.
 
-With the help of *SymPy* it is shown, that a popular approximation of the eccentric annular Couette-flow force in modern system simulation tools is actually the leading-order term of a Taylor-expansion of the corresponding concentric annular force.
+With the help of *SymPy* it is shown, that a popular approximation of the eccentric annular Couette flow force in modern system simulation tools is actually the leading-order term of a Taylor-expansion of the corresponding concentric annular force.
 
-This force is calculated in this contribution as a special case of the more general eccentric annular Couette-flow by postprocessing the resulting velocity distribution.
+This force is calculated in this contribution as a special case of the more general eccentric annular Couette flow by postprocessing the resulting velocity distribution.
 The flow velocity is analytically obtained by solving the corresponding Stokes problem with the help of conformal mappings, i.e. holomorphic functions in the complex plane.
 The main *SymPy* functions used in the solving process are *im, re, subs, Sum, simplify* and *lambdify* and the main routines in the postprocessing are *diff, integrate* and *series*. *series* is used for the Taylor-expansions of the flow forces.
 
@@ -747,8 +747,8 @@ Two different conformal mappings are utilized to solve the Stokes problem within
 
 Both, the eccentric annular Couette velocity and flow force are validated with numerical CFD-results that are obtained by solving the full nonlinear Navier-Stokes equation in the flow domain between the two cylinders.
 
-The article concludes with an application of the conformal bipolar map to an eccentric Poiseuille-problem. Although the solution is known, it is seldomly implemented and visualized. With the help of *SymPy* however, the implementation of such methods is much easier.
-Finally, the authors combine their results on eccentric annular Couette-flow with known results on eccentric annular Poiseuille-flow, deriving new expressions for the eccentric annular Couette-Poiseuille-flow.
+The article concludes with an application of the conformal bipolar map to an eccentric Poiseuille problem. Although the solution is known, it is seldomly implemented and visualized. With the help of *SymPy* however, the implementation of such methods is much easier.
+Finally, the authors combine their results on eccentric annular Couette flow with known results on eccentric annular Poiseuille flow, deriving new expressions for the eccentric annular Couette-Poiseuille flow.
 
 *SymPy* performed particularly well in the application of the first conformal mapping (i.e. the Möbius transform). In case of the bipolar transformation, manual assistance had to be provided when separating real and imaginary parts of the conformal map. Furthermore, the authors realized that the *series*- and *simplify*-routines have some difficulties with terms involving square roots.
 
