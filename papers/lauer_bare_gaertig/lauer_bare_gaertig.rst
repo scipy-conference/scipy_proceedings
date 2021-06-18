@@ -634,7 +634,7 @@ Adding the various pieces together, Piercy's Poiseuille flow velocity (Equation 
    :scale: 20%
    :figclass: bht
    
-   Flow velocity for the Poiseuille problem in rectangular domain (w-plane); it's vanishing on upper and lower boundary and is periodic in :math:`\xi` :label:`rectangularWUpiercy`   
+   Flow velocity for the Poiseuille problem in rectangular domain (w-plane); it vanishes on upper and lower boundary and is periodic in :math:`\xi` :label:`rectangularWUpiercy`   
    
 And last but not least, again expressing :math:`\xi,\eta` in :math:`x` and :math:`y`, the velocity distribution in the eccentric annulus (i.e. in the *z*-plane) together with some isocontours is shown in Figure :ref:`rectangularZUpiercy`.
 
