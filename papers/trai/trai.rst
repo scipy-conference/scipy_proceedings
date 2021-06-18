@@ -36,10 +36,10 @@ CNN Based ToF Image Processing
 
 .. class:: abstract
 
-   The current report focuses on ToF specific data processing followed by a real life application using artificial intelligence to estimate the human body pose 
-   for applications such as gesture recognition, movement direction estimation or physical exercises monitoring. 
-   The entire human pose estimation application implementation flow is described, from generating and training the pose estimation 
-   AI model using Keras and TensorRT to deploying and running live on an Nvidia Xavier NX platform receiving data from an Analog Devices ToF camera.
+   In this paper a Time of Flight (ToF) camera specific data processing pipeline is presented, followed by real life application using artificial intelligence.
+   These applications include use cases such as gesture recognition, movement direction estimation or physical exercises monitoring. 
+   The whole pipeline for the body pose estimation is described in details, starting from generating and training phases to the pose estimation 
+   and deployment. The final deployment targets were Nvidia Xavier NX and AGX platforms receiving data from an Analog Devices ToF camera.
 
 .. class:: keywords
 
@@ -49,9 +49,9 @@ Introduction
 ------------
    
 Last years the evolution of deep neuronal networks also affected the way in which the Time of Flight (ToF) specific images are processed. The images from the ToF cameras are usually obtained as synchronized depth and infrared (IR) image pairs.
-The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain. The applications targeted are ranging from persond detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
-In the following parts the introduction to the specific ToF imaging, custom data processing and CNN based solutions are presented.
-Although for the 2D data a bunch of CNN based solutions exists, for the 3D data :cite:`Gezawa2020` only some base architectures were widespread such as Pointnet :cite:`qi2017pointnet`.
+The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain :cite:`blaga2021augmented`s. The applications targeted are ranging from persond detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
+In the following parts the introduction to the specific ToF imaging, custom data processing and CNN based solutions are presented :cite:`tamas2021embedded`.
+Although for the 2D data a bunch of CNN based solutions exists, for the 3D data :cite:`Gezawa2020` only some base architectures were widespread such as Pointnet :cite:`qi2017pointnet`, while for the calibration between different sensing modalities can be done in an efficient way according to :cite:`frohlich2019absolute`.
    
 .. figure:: tof.png
   :width: 400
@@ -73,7 +73,7 @@ skeleton extraction and hardware specific model translation.
 The latter is relevant in order to have a light-weight embedded solution running on limited floating-point precision hardware platforms such as Jetson Nvidia Family. 
 As the existing CNN models are mainly with the focus on colour images, thus ones has to adopt transfer learning as a method to finetune the existing CNN models such as VGG, MobileNet for the infrared or depth images specific to ToF cameras. 
 This solution seemed to be effective in terms of precision and runtime on embedded devices (e.g Jetson Nx or AGX). 
-For the skeleton detection part we relied on the real-time tensorflow optimized module for the Jetson product family, however for the generic GPU enabled devices we had to tailor our models since these are custom solutions.
+For the skeleton detection part we relied on the real-time Tensorflow optimized module for the Jetson product family, however for the generic GPU enabled devices we had to tailor our models since these are custom solutions.
 
 
 Custom pipeline for ToF data
@@ -99,7 +99,7 @@ Low level ToF image pre-processing - Tofnest
 
 In ToFNest we are approximating surface normals from depth images, recorded with Time-of-Flight cameras. The approximation is done using a neural network. The base of our neural network is the PyTorch library, since the whole process is done using Python 3.6 as our programming language. Using PyTorch we have created a Feature Pyramid Network type model (:cite:`FPN2017`).
 
-The main pipeline of the data was the following: first we read the depth images with opencv (alongside the depth information we could also use the infrared information or the rgb information from the camera as well, thus adding more information to work with), then we prepare them with numpy. From a numpy array it is easy to convert it to a torch tensor on the GPU, which then creates the predictions about the surface normals. An example of the prediction can be seen in the next image, where the direction of the normal vectors are decoded with RGB images. 
+The main pipeline of the data was the following: first we read the depth images with OpenCV (alongside the depth information we could also use the infrared information or the rgb information from the camera as well, thus adding more information to work with), then we prepare them with numpy. From a numpy array it is easy to convert it to a torch tensor on the GPU, which then creates the predictions about the surface normals. An example of the prediction can be seen in the next image, where the direction of the normal vectors are decoded with RGB images. 
 
 .. figure:: ToFNest.png
   :width: 400
@@ -166,14 +166,14 @@ This whole pipeline and network, with some minor modifications can be also used 
 
 CNN based solutions
 -------------------
-Jetson based solutions
+In this part we describe in details the person detection, action recognition and volumetric estimation applications.
 
 
 Person detection from IR imaging
 ++++++++++++++++++++++++++++++++
 
 
-Detectnet is a detection algorithm based on the jetson-inference repository with people detection focus presented in :cite:`tracking2016` or :cite:`XUE201670`. 
+DetectNet is a detection algorithm based on the jetson-inference repository with people detection focus presented in :cite:`tracking2016` or :cite:`XUE201670`. 
 This repository uses NVIDIA TensorRT for efficient implementation of neural networks on the Jetson platform, improving performance and energy efficiency through graphical optimizations, kernel fusion and FP16/INT8 accuracy.
 
 Object detection requires a lot of information for training. DetectNet uses a large dataset, and each image contains multiple objects. For each object in the image, the trained model must detect both the object and the corner coordinates of the bounding box. Since the number of objects can vary in the training image set, it would be difficult to define the loss function if we  choose the label format with variable length and dimensionality. This problem has been solved by introducing a 3-dimensional label format that enables DetectNet to ingest images of any size with a variable number of objects present.
@@ -189,7 +189,7 @@ In the Figure :ref:`archdetectnet` you can see the architecture for the training
   :height: 400
   :scale: 50%
   :align: center
-  :alt: Alternative text
+  :alt: DetectNet structure
 
   DetectNet structure for training :label:`archdetectnet`
 
@@ -205,7 +205,7 @@ The pre-trained model accepts 3 channel images – RGB, by modifying the existin
   :height: 400
   :scale: 24%
   :align: center
-  :alt: Alternative text
+  :alt: skeleton detection
 
   Exemplification of skeleton detection on infrared images based detection :label:`detection`
 
@@ -226,7 +226,7 @@ very well suited for model inference.
 As a baseline architecture model, we used the pretrained model from one
 of the NVIDIA-AI-IOT's repositories: https://github.com/NVIDIA-AI-IOT/trt_pose .
 We used the TensorRT SDK in order to optimize our pretrained 
-model for th Jetson Xavier NX plotform, thus achieving 
+model for th Jetson Xavier NX platform, thus achieving 
 a better performance in our model inference pipeline.
 
 We also used, some of the Robot Operating System's (ROS) tools for retrieving
@@ -266,7 +266,7 @@ with:
   :height: 400
   :scale: 40%
   :align: center
-  :alt: Alternative text
+  :alt: detection on infrared images
   
   Exemplification of skeleton detection on infrared images :label:`skeleton`
 
@@ -281,11 +281,11 @@ good results in our model's inference, we decided
 to extend the infrared people detection application
 by integrating it with NVIDIA's Deepstream SDK. While this SDK
 brings further optimization to our model's inference performance and optimize 
-the image flow along the inference pipeline by transfering the image on GPU
+the image flow along the inference pipeline by transferring the image on GPU
 for any kind of preprocessing required before it enters the model and even 
-allowing us to serve multipple images, from multipple cameras, without a very 
+allowing us to serve multiple images, from multiple cameras, without a very 
 drastic change in the model's inference speed. Even though these functionalities
-are important, we were intersted by another functionality which the Deepstream SDk 
+are important, we were interested by another functionality which the Deepstream SDk 
 supports, this being the fact that is able to provide communication with a server 
 and transmit the output of the neural network's model, which runs on the Jetson platform,
 to the server, for further data processing. 
@@ -337,10 +337,9 @@ output received on our custom configured server when a person is detected:
   :height: 400
   :scale: 40%
   :align: center
-  :alt: Alternative text
+  :alt: Deepstream
 
-  Here can be seen the people detection algorithm which 
-  runs with the Deepstream SDK on the Jetson Xavier NX board :label:`deepstream`
+  People detection algorithm running with the Deepstream SDK on the Jetson Xavier NX board :label:`deepstream`
 
 
 Volumetric estimates for depth images
@@ -356,24 +355,26 @@ The first algorithm iteratively finds the largest plane using RANSAC and uses eu
   :height: 400
   :scale: 40%
   :align: center
-  :alt: Alternative text
+  :alt: Planar detection
   
   Planar detection :label:`plamar`
 
 An important observation is that it can compute the volume using 2 planes instead of 3. This is due to the fact that if 2 planes are orthogonal, the common line between them will be determined by 2 points that are also corner points for the object. By selecting a corner point and the two perpendicular planes, a third plane can be determined that is perpendicular to the other two and it contains the chosen point. Once the virtual third plane has been computed, the algorithm resumes as in the case with 3 determined planes.
 
-An advantage of this method is that it uses readily avaible and studied functions for processing pointclouds. For a simple case of a box and floor plane, the algorithm accuracy depends on the level of noise the pointcloud has.
+An advantage of this method is that it uses readily available and studied functions for processing pointclouds. For a simple case of a box and floor plane, the algorithm accuracy depends on the level of noise the pointcloud has.
 
-The downside of this method is that it can compute the volume only for one box. Noise and other objects in the scene can totaly disrupt the volumetric estimate.
+The downside of this method is that it can compute the volume only for one box. Noise and other objects in the scene can totally disrupt the volumetric estimate.
 
 .. figure:: bad_plane_segmentation.png
   :width: 400
   :height: 400
   :scale: 40%
   :align: center
-  :alt: Alternative text
+  :alt: Limitations of planar segmentation
 
-Due to these shortcomings, a new method for measuring the volume is studied, based on the work by Sommer et all. Their paper details an algorithm that uses pointclouds with normals computed in each point in order to determine collections of point pairs for which their normals satisfy the orthogonality constraint.  
+  Limitations of planar segmentation :label:`limitations`
+
+Due to these shortcomings, a new method for measuring the volume is studied, based on the work by Sommer et. all. Their paper details an algorithm that uses pointclouds with normals computed in each point in order to determine collections of point pairs for which their normals satisfy the orthogonality constraint.  
 The point pair collections will approximate the orthogonal planes. By determining the points contained by each orthogonal plane, projections can be made that approximate the intersecting lines of the orthogonal planes. By selecting the 3 lines that have the edge points closest to each other, volume of a box can be computed.
 The advantage of this method is that it allow the computation of the volume for multiple box shaped objects and it 
 
@@ -382,7 +383,7 @@ The advantage of this method is that it allow the computation of the volume for 
   :height: 400
   :scale: 40%
   :align: center
-  :alt: Alternative text
+  :alt: Corner detection
 
   Corner detection :label:`corner`
 
@@ -393,7 +394,7 @@ This permits in further research to consider the idea of moving the camera in su
 
 Conclusion
 ----------
-In this report we provided some guidlines for the ToF specific image processing using python libraries. The demos are randing from 
+In this report we provided some guidelines for the ToF specific image processing using python libraries. The demos are ranging from 
 basic pointlcoud processing to people detection and enhanced volume estimation.
 
 
