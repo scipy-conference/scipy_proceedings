@@ -35,21 +35,21 @@ More precise aliases for these scientists include molecular structural biologist
 Some of the methods used to determine the near-atomic resolution molecular structures include molecular modeling, X-ray crystallography, NMR, and cryo-EM.
 These scientists often use the molecular structures of these large biomolecules to design small-molecule drugs for improved therapies. 
 As a result, structural biology plays a vital role in drug discovery and development, and many structural biologists work in the pharmaceutical industry.
-Those in academia in the United States have their work funded by the National Institutes of Health, the National Science Foundation, the Department of Defense, or the Department of Energy.
+Those in academia in the United States generally have their work funded by the National Institutes of Health, the National Science Foundation, the Department of Defense, or the Department of Energy.
 
 Structural biology is at the intersection of biochemistry, molecular biology, molecular biophysics, and computer science. 
-Structural biologists have diverse backgrounds and varying levels of experience with computer programming ranging from essentially none to very advanced. 
-Several decades ago, the barriers to entry into the field included expertise with running command-line-driven programs and the ability to write programs to meet unmet needs not met by existing software packages. 
+Structural biologists have diverse backgrounds and varying levels of experience with computer programming ranging from minimal to very advanced. 
+Several decades ago, the barriers to entry into the field included expertise with running command-line-driven programs and the ability to write programs to meet data analysis needs not met by existing software packages. 
 However, these barriers have been lowered over the past two decades by the widespread availability of GUI-driven software that is often free for academics (e.g., CCP4 [Winn11]_, Phenix [Lieb11]_, CNS [Brun98]_, ATSAS [Mana21]_, BioXTAS [Hopk17]_, CCPEM [Burn17]_ ). 
 As a result, biologists have become the largest component of the field.
 
 Computing is involved in the six or more steps from structural data acquisition to publication.
 Several alternate software packages are often available for each step. 
 Different combinations of these alternatives lead to a combinatorial explosion of possible workflows. 
-Although in some special situations, workers have set up software pipelines for some but not all of the steps.
+In some situations, workers have set up software pipelines for some of the steps.
 However, these pipelines are difficult to transfer or have trouble with the challenging samples that cannot yet be handled without human intervention.
-The current situation makes the computational work vulnerable to errors in tracking input and output files. 
-Storing the code and outputs in Jupyter Notebooks would reduce this vulnerability . 
+The current heterogenous computing environment makes the computational work vulnerable to errors in the tracking of input and output files. 
+Storing the code and outputs for some of the steps in Jupyter Notebooks would be one way to reduce this vulnerability . 
 
 To ease crystal structure determination in Jupyter, we made libraries of code templates for crucial programs [Kluy16]_. 
 We formatted the libraries for two code snippet extensions for JupyterLab. 
@@ -57,25 +57,25 @@ One extension (jupyterlab-snippets) provides access to snippets organized into n
 The other extension (elyra-code-snippet-extension) uses a search box to locate the desired snippet. 
 The user can easily add new code snippets to both systems. 
 
-We also ported the libraries to Google Google Collaboratory or Google Colab or just Colab.
-Colab is an integrated development environment (IDE) for running Jupyter Notebooks on the Google Cloud Platform.
-Colab was designed to promote the adpatation of deep learning software to new problems and faciliate collaborative computing.
+We also ported the libraries to Google Colaboratory or Google Colab or just Colab.
+Colab is an integrated development environment (IDE) for running Jupyter Notebooks on the Google Cloud Platform (GPC).
+Colab was designed to promote the adpatation of deep learning software to new problems and facilitate collaborative computing.
 Colab is a free service that provides a temporary instance of a Linux operating system with access to one K80 GPU through a Jupyter Notebook.
 Access to TPUs is also available.
+The access is terminate after long periods of inactivity or a 12-hour time limit, whichever is reached first.
+The time limit can be extended with a small subscription fee.
 
 Colab comes with the Python scientific computing stack and some deep learning software.
-Colab spares the user of hardware maintenance and the maintence a scientific computing stack.
-Colab can also serve as a test site for software on Linux when one's primary computing environment is a Mac or Windows.
+Colab spares the user of the maintenance of the hardware and the operating system software.
+Colab can also serve as a test platform for software on Linux when one's primary computing environment is a Mac or Windows.
 Colab also eases collaborative work and provides a uniform computing environment for classes and workshops.
-The use of Colab requires that the user have a Google Drive account for storing software, jupyter notebooks, and data files.
+The use of Colab requires that the user have a Google Drive account for storing software, Jupyter notebooks, and data files.
 
-The user can install additional Python and other packages including structural biology software, provide the user has the required software licenses. 
-The installation of this additional software is not facilitated by Google Colab through a pull-down menu.
-This software installation step requires extra time at the start of the Colab session because most structure bilogy software is comples and has numerous dependences.
+The user can install additional Python and other packages including structural biology software, provided the user has the required software licenses. 
+This software installation step requires extra time at the start of the Colab session because most structure bilogy software packages have numerous dependences.
 To accelerate this setup step, we provide notes and code snippets for the installation of this software in the Jupyter notebook that serves as the carrier of the snippet libraries on Colab.
-The user can install the required software in several minutes at the start of a session that has a time limit of 12 hours.
-The time limit can be extended with a small subscription fee.
-The software is deleted automatically from Google Cloud upon a logout or upon reaching the time limit, but the software code can be stored on the user's Google Drive for faster reinstallation.
+The user can install the required software in several minutes.
+Although the software is deleted automatically from Google Cloud at the end of session, the software can be stored on the user's Google Drive for faster reinstallation.
 
 
 Methods
@@ -92,7 +92,7 @@ Among the several alternative extensions for code snippets in JupyterLab, we cho
 We also support a snippet library for Juptyer notebooks on Google Colab as described below because Colab provides access to GPUs, which can accelerate some of the larger computational tasks.
 
 
-jupyterlab-snippets externsion
+jupyterlab-snippets extension
 ******************************
 
 The jupyterlab-snippets extension adds a snippet menu to the JupyterLab menu bar.
