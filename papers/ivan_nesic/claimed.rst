@@ -205,42 +205,16 @@ defenses.
 System Architecture and Requirements
 ------------------------------------
 
-=====  =====  ======
-   Inputs     Output
-------------  ------
-  A      B    A or B
-=====  =====  ======
-False  False  False
-True   False  True
-False  True   True
-True   True   True
-=====  =====  ======
-===============  ======== 
-Tool/Technology  Type	Low Code/No Code/Visual Editing	jupyter notebooks	Scaling (development/deployment)	GPU	pre-build components	python/R support	seamless extensibility	reproducibility	data lineage	collaboration
----------------
-Elyra	editor	X	X	(X/-)	X	-	X	X	X	-	X
-KubeFlow	executor	-	X	(-/X)	X	X	X	-	X	-	X
-AirFlow	executor	-	-	(-/X)	X	-	X	-	X	-	X
-Slurm	executor	-	-	(-/X)	X	-	X	-	X	-	X
-Snakemake	executor	-	-	(-/X)	X	-	X	-	X	-	X
-QSub	executor	-	-	(-/X)	X	-	X	-	X	-	X
-HTCondor	executor	-	-	(-/X)	X	-	X	-	X	-	X
-Apache Nifi	editor/executor	X	-	(X/X)^1	-	X	X	-	X	X	-
-NodeRED	editor/executor	X	-	-	-	X	-	-	-	-	X
-KNIME	editor/executor	X	-	(-/-)^2	-	X	X	-	X	-	-^2
-Galaxy	editor/executor	X	-	(X/X)^3	-^4	X	X	X	X	X	X
-Reana	executor	X^5	-	(-/X)	X	-	X	-	X	-	X
-Weka	editor/executor	X	-	(-/-)^2	-^2	X	(X)	-	X	-	-
-Rabix	editor	X	-	(-/-)	-	-	-	X	X	-	-
-Nextflow	workflow language	-	-	(-/-)	-	-	X	X	X	-	X
-OpenWDL	workflow language	-	-	-	-	-	X	X	X	-	X
-CWL	workflow language	X^5	-	-	-	-	X	X	X	-	X
-===============										
-1: Scaling Apache Nifi beyond 10 nodes is not recommended											
-2: Only available in commercial offering											
-3: Through Galaxy-Kubernetes integration											
-4: Not implemented, but possible via Galaxy-Kubernetes											
-5: Through Rabix											
+
+================== == == ===== == ==== ======== =====
+Requirement        KF AF Slurm SM Qsub HTCondor Reana
+================== == == ===== == ==== ======== =====
+Kubernetes Support X  X  o     X  o    X        X
+GPU support        X  X  X     X  X    X        X
+Component Library  X  o  o     o  o    o        o
+Reproducibility    X  X  o     X  o    X        X
+Data Lineage       X  o  o     o  o    o        X
+================== == == ===== == ==== ======== =====
 
 
 System Implementation and Demo Use Case
