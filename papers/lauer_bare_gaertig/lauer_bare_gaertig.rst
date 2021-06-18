@@ -17,7 +17,7 @@ Conformal Mappings with SymPy: Towards Python-driven Analytical Modeling in Phys
 
 .. class:: abstract
 
-   This contribution shows how the symbolic computing Python library *SymPy* can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the region between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to a corresponding fluid flow. The flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. *SymPy* can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow can be determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with *SymPy* are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette flow force approximations and similar results for the known Poiseuille flow (i.e. fluid flow induced by a pressure drop) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of *SymPy* when solving partial differential equations analytically.
+   This contribution shows how the symbolic computing Python library *SymPy* can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the region between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to a corresponding fluid flow. The flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. *SymPy* can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow is determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with *SymPy* are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette flow force approximations and similar results for the known Poiseuille flow (i.e. fluid flow induced by a pressure difference) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of *SymPy* when solving partial differential equations analytically.
 
 
 .. class:: keywords
@@ -46,7 +46,7 @@ Hence, in modern system modeling there are currently two main applications of an
 * Analytical approximations are included in the system simulation software components themselves, or
 * The user includes look-up tables for interpolation, entirely or partially generated with analytical approximations.   
    
-In this work we will focus on analytical approximations of flow forces that act upon the inner cylinder in an eccentric annular flow. Such forces are of interest in, for example, hydraulic valves that are electromagnetically actuated; see Figure :ref:`armature`. When the armature moves within the oil-filled interior of the polecap, that movement causes a Couette-type annular flow, i.e. a viscous flow due to motion of a solid body, between both components.
+In this work we will focus on analytical approximations of flow forces that act upon the inner cylinder in an eccentric annular flow domain. Such forces are of interest in, for example, hydraulic valves that are electromagnetically actuated; see Figure :ref:`armature`. When the armature moves within the oil-filled interior of the polecap, that movement causes a Couette-type annular flow, i.e. a viscous flow due to motion of a solid body, between both components.
 
 .. figure:: armature.png
    :scale: 50%
@@ -77,8 +77,8 @@ Utilizing the capabilities of the open-source Computer Algebra System *SymPy* (a
 1. How is Equation (:ref:`ForceSystemTool`) related to the corresponding Stokes equation?
 2. Does eccentricity :math:`\varepsilon = b/\delta` change this dependency and, if so, how exactly?
 
-Furthermore, the velocities and forces obtained by solving the Stokes equation (i.e. the linear part of the Navier-Stokes equation) with *SymPy* are compared to corresponding numerical solutions of the complete Navier-Stokes system, obtained from the commercially available Finite Volume tool ANSYS-CFX.
-Finally this article concludes with a note on the eccentric annular Poiseuille flow (that is a flow due to a pressure drop) and finishes with a comment on comnbined Couette-Poiseuille flow velocities and forces.
+Furthermore, the velocities and forces obtained by solving the Stokes problem (i.e. the linear part of the Navier-Stokes system) with *SymPy* are compared to corresponding numerical solutions of the full, nonlinear Navier-Stokes equations, obtained from the commercially available Finite Volume tool ANSYS-CFX.
+Finally this article concludes with a note on the eccentric annular Poiseuille flow (that is a flow due to a pressure difference) and finishes with a comment on comnbined Couette-Poiseuille flow velocities and forces.
  
 
 Material and methods
@@ -105,7 +105,7 @@ The theoretical methods used here are conformal mappings (inspired by [PHW33]_ a
 
 Solution of the Stokes problem within a concentric annulus for Couette-type flow
 --------------------------------------------------------------------------------
-The solution of the Stokes problem within a concentric annulus for a Couette-type flow is well known, e.g. [LL59]_ and given by
+The solution of the Stokes problem within a concentric annulus for a Couette-type flow is well known, e.g. [LL59]_, and given by
 
 .. math::
    :label: concentricU
@@ -132,10 +132,10 @@ It then follows that
 
 as expected. Further analytical solutions to the Laplace problem for other simple domains such as circles or rectangles can be found in e.g. [G78]_, [BC81]_ or [PP12]_.
 
-Transform the eccentric annulus to a simple domain with conformal mappings
---------------------------------------------------------------------------
+Transformation of the eccentric annulus to a simple domain with conformal mappings
+----------------------------------------------------------------------------------
 
-In the following two Sections we will show with *SymPy* how the Couette flow problem within an eccentric annular domain can be transformed into a problem in a concentric annular region or into a rectangle.
+In the following two Sections we will show with *SymPy* how the Couette flow problem within an eccentric annular domain can be transformed into a problem within a concentric annular region or within a rectangle.
 In these simple geometries analytical solutions to this problem are well-known. In order to transform the domains we make use of complex analysis, inspired by the French mathematician Jacques Hadamard (1865-1963):
 
 
@@ -292,7 +292,7 @@ Figure :ref:`concentricZU` depicts the velocity distribution in the original *z*
    :scale: 20%
    :figclass: bht
    
-   Flow velocity in eccentric annulus (z-plane); here the inner cylinder moves with :math:`u_R = \text{0.4 m}/\text{s}` as required by Equation (:ref:`stokesPoisseuilleCouette`)  :label:`concentricZU` 
+   Flow velocity in eccentric annulus (z-plane); here the fluid moves with :math:`u_R = \text{0.4 m}/\text{s}` along the inner cylinder, as required by Equation (:ref:`stokesPoisseuilleCouette`)  :label:`concentricZU` 
  
 
 Mapping rectangles onto eccentric annuli by bipolar coordinate transformations
@@ -305,7 +305,7 @@ Another way of solving this problem utilizes conformal mappings related to bipol
 
    z = c\cdot\tan\left(\frac{w}{2}\right) - \textrm{i}\,\gamma\;\;\;\;(\textrm{with}\;\; w = \xi + \textrm{i}\,\eta)\,,
    
-where :math:`\gamma,\,c` are constants from [PHW33]_ which are explicitely given in [W06]_ and [SL78]_; the term :math:`\textrm{i}\,\gamma` is added by the authors. Using this transformation, a properly chosen rectangular domain gets mapped onto an eccentric annulus; see Figure :ref:`rectangularW` for the domain in the *w*-plane. The boundaries are color-coded in order to visualize how the mapped borders are traversed in the *z*-plane. In addition the vertices are labelled and some coordinate lines are highlighted as well. 
+where :math:`\gamma,\,c` are constants from [PHW33]_ which are explicitly given in [W06]_ and [SL78]_; the term :math:`\textrm{i}\,\gamma` is added by the authors. Using this transformation, a properly chosen rectangular domain gets mapped onto an eccentric annulus; see Figure :ref:`rectangularW` for the domain in the *w*-plane. The boundaries are color-coded in order to visualize how the mapped borders are traversed in the *z*-plane. In addition the vertices are labelled and some coordinate lines are highlighted as well. 
 
 .. figure:: rectangle_w.pdf
    :scale: 32%
@@ -368,7 +368,7 @@ The last two equations specify the periodic boundary conditions one has to suppl
 .. math::
    :label: rectangularUinW
 
-    u(\xi,\eta)=\frac{u_{R} \left(- \alpha + \eta\right)}{- \alpha + \beta}\,.   
+    u(\xi,\eta)=\frac{u_{R} \left(\eta - \alpha\right)}{\beta - \alpha}\,.   
  
 Figure :ref:`rectangularWU` shows a *Matplotlib*-visualization of the velocity distribution in the *w*-plane which is constant along :math:`\xi` and increases linearly with :math:`\eta`.
 
@@ -377,7 +377,7 @@ Figure :ref:`rectangularWU` shows a *Matplotlib*-visualization of the velocity d
    :scale: 18%
    :figclass: bht
    
-   Flow velocity in rectangular domain (w-plane); again with proper boundary condition (:math:`u_R = \text{0.4 m}/\text{s}`) applied to upper boundary :label:`rectangularWU`   
+   Flow velocity in rectangular domain (w-plane); here the proper boundary condition :math:`u_R = \text{0.4 m}/\text{s}` is applied to the upper boundary :label:`rectangularWU`   
 
 By again expressing :math:`\eta` in terms of :math:`x` and :math:`y`, one obtains the very same velocity distribution in the eccentric annulus (in the *z*-plane) as already depicted in Figure :ref:`concentricZU`.
 
@@ -735,17 +735,17 @@ and (:ref:`forcePiercyLauerBareGaertig`) reduces to
 Conclusion
 ----------
 
-This article shows that classical tools from mathematical physics, such as conformal mappings and Taylor-expansions, are still relevant and indispensable in times of digitalization and wide use of numerics.
+This article shows that classical tools from mathematical physics, such as conformal mappings and Taylor-expansions, are still relevant and indispensable in times of digitization and wide use of numerics.
 
 With the help of *SymPy* it is shown, that a popular approximation of the eccentric annular Couette flow force in modern system simulation tools is actually the leading-order term of a Taylor-expansion of the corresponding concentric annular force.
 
 This force is calculated in this contribution as a special case of the more general eccentric annular Couette flow by postprocessing the resulting velocity distribution.
 The flow velocity is analytically obtained by solving the corresponding Stokes problem with the help of conformal mappings, i.e. holomorphic functions in the complex plane.
-The main *SymPy* functions used in the solving process are *im, re, subs, Sum, simplify* and *lambdify* and the main routines in the postprocessing are *diff, integrate* and *series*. *series* is used for the Taylor-expansions of the flow forces.
+The main *SymPy* functions used in the solving process are *im, re, subs, Sum, simplify* and *lambdify* and the main routines in the postprocessing are *diff, integrate* and *series*.
 
 Two different conformal mappings are utilized to solve the Stokes problem within an eccentric annulus by finding the equivalent harmonic solution in a much simpler geometric domain. The first conformal map is a Möbius transform that maps the eccentric annular flow domain onto a concentric one while the second conformal mapping disussed in this work is related to bipolar coordinates. By a slight modification of the original bipolar transformation function, an appropriately chosen rectangle gets mapped onto an eccentric annulus with the center of the larger circle at the origin of the coordinate system.
 
-Both, the eccentric annular Couette velocity and flow force are validated with numerical CFD-results that are obtained by solving the full nonlinear Navier-Stokes equation in the flow domain between the two cylinders.
+Both, the eccentric annular Couette velocity and flow force are validated with numerical CFD-results that are obtained by solving the full nonlinear Navier-Stokes system in the flow domain between the two cylinders.
 
 The article concludes with an application of the conformal bipolar map to an eccentric Poiseuille problem. Although the solution is known, it is seldomly implemented and visualized. With the help of *SymPy* however, the implementation of such methods is much easier.
 Finally, the authors combine their results on eccentric annular Couette flow with known results on eccentric annular Poiseuille flow, deriving new expressions for the eccentric annular Couette-Poiseuille flow.
