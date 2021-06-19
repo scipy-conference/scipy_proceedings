@@ -71,7 +71,7 @@ for the US Department of Energy's Office of Science.
 Some 8,000 scientists use NERSC to perform basic, non-classified research in
 predicting novel materials, modeling the Earth's climate, understanding the
 evolution of the Universe, analyzing experimental particle physics data,
-investigating protein structure, and more.
+investigating protein structure, and more [OA20]_.
 NERSC procures and operates supercomputers and massive storage systems under a
 strategy of balanced, timely introduction of new hardware and software
 technologies to benefit the broadest possible portion of this workload.
@@ -1071,3 +1071,6 @@ References
 
 .. [MODS]  NERSC 2017 Annual Report. pg 31.
            <https://www.nersc.gov/assets/Uploads/2017NERSC-AnnualReport.pdf> 
+
+.. [OA20]  NERSC Operational Assessment.
+           In press, 2020.
