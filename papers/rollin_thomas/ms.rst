@@ -75,8 +75,6 @@ investigating protein structure, and more [OA20]_.
 NERSC procures and operates supercomputers and massive storage systems under a
 strategy of balanced, timely introduction of new hardware and software
 technologies to benefit the broadest possible portion of this workload.
-Since any research project aligned with the mission of the Office of Science may
-apply for access, NERSC's workload is diverse and demanding.
 While procuring new systems or supporting users of existing ones, NERSC relies
 on detailed analysis of its workload to help inform strategy.
 
