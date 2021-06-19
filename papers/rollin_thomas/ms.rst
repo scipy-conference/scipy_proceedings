@@ -94,9 +94,9 @@ programming environments.
 Actively monitoring the workload also enables us to identify suboptimal or
 potentially problematic user practices and address them through direct
 intervention, improving documentation, or simply making it easier for users to
-use software better.
+use the software better.
 Measuring the relative frequency of use of different software components can
-help us streamline delivery, retiring less-utilized packages and promoting
+help us streamline delivery, retiring less-utilized packages, and promoting
 timely migration to newer versions.
 Detecting and analyzing trends in user behavior with software over time also
 helps us anticipate user needs and prepare accordingly.
@@ -125,7 +125,7 @@ notebook-based workflow for exploring the data set and communicating what we dis
 Our Results include high-level statements about what Python packages are used
 most often and at what scale on Cori, but also some interesting deeper dives
 into use of certain specific packages along with a few surprises.
-In the Discussion, we discuss the implications our results, share the strengths
+In the Discussion, we examine the implications of our results, share the strengths
 and weaknesses of our workflow and our lessons learned, and outline plans for
 improving the analysis to better fill out the picture of Python at NERSC.
 The Conclusion suggests some areas for future work.
@@ -257,7 +257,7 @@ outlined in [Mac17]_ with certain changes.
 Fig. :ref:`save-data` illustrates the infrastructure we have configured.
 As in [Mac17]_ a ``sitecustomize`` that registers the ``atexit`` handler is
 installed in a directory included into all users' Python ``sys.path``.
-The file system where ``sitecustomize`` is installed is physically on each node
+The ``sitecustomize`` module is installed directly on each compute node
 and not served over network, in order to avoid exacerbating poor performance of
 Python start-up at scale.
 We accomplish this by installing it and any associated Python modules into the
@@ -325,7 +325,7 @@ NERSC has developed a lightweight abstraction layer for message logging called
 nerscjson.
 It is a simple Python package that consumes JSON messages and forwards them to
 an appropriate transport layer that connects to NERSC's Operations Monitoring
-and Notification Infrastructure, OMNI [Bau19]_.
+and Notification Infrastructure (OMNI) [Bau19]_.
 Currently this is done with Python's standard ``SysLogHandler`` from the
 logging library, modified to format time to satisfy RFC 3339.
 Downstream from these transport layers, a message key is used to identify the
@@ -935,7 +935,8 @@ with Python on our systems is also an interesting avenue to pursue.
 
 We anticipate that developers of scientific Python software may find the
 information we gather to be informative.
-Readers can view the public MODS Python dashboard at **URL TBD**
+Readers can view the public MODS Python dashboard at
+`https://mods.nersc.gov/public/ <https://mods.nersc.gov/public/>`_
 
 .. 
    comment
@@ -1027,6 +1028,7 @@ References
 .. [Fah10] M. Fahey, N Jones, and B. Hadri, 
            *The Automatic Library Tracking Database,*
            Proceedings of the Cray User Group, Edinburgh, United Kingdom, 2010.
+           <https://doi.org/10.1145/1838574.1838582>
 
 .. [Fur91] J. L. Furlani,
            *Modules: Providing a Flexible User Environment,*
