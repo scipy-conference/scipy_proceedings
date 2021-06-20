@@ -247,7 +247,7 @@ The goal is to gather data for workload analysis across all of these options.
 .. figure:: mods-save-data.png
    :scale: 10%
 
-   Infrastructure for capturing Python package usage data at NERSC.
+   NERSC infrastructure for capturing Python usage data.
    :label:`save-data`
 
 Monitoring all of the above can be done quite easily by using the strategy
@@ -493,8 +493,8 @@ Fig. :ref:`analyze-data` illustrates the workflow.
 .. figure:: mods-analyze-data.png
    :scale: 9%
 
-   This diagram summarizes the workflow for processing and analyzing Python
-   data at NERSC. :label:`analyze-data`
+   Workflow for processing and analyzing Python usage data.
+   :label:`analyze-data`
 
 Members of the MODS team can share Jupyter notebooks with one another, but this
 format may not make for the best way to present data to other stakeholders, in
@@ -655,7 +655,7 @@ certain package was used and 0 otherwise.
 Fig. :ref:`corr2d` shows an example package correlation heatmap.
 The heatmap includes only package correlations above 0.6 to omit less
 interesting relationships and less than 0.8 as a simple way to filter out
-mandatory or optional interdependencies.
+interdependencies.
 Notable relationships between non-dependent packages include ``mpi4py`` and
 AstroPy, Seaborn and TensorFlow, FireWorks and Plotly.
 
@@ -705,7 +705,7 @@ binding energies of ligands in metal complexes.
 Since each job is independent, ``multiprocessing`` is used to start workflows on
 each available processor."
 As a package that users directly interact with, and as a dependency of other
-packages in scientific Python, ``multiprocessing`` is a workhorse package.
+packages in scientific Python, ``multiprocessing`` is a workhorse.
 
 Finally we consider Dask, a Python package for task-based parallelism and
 analytics at scale.
@@ -786,7 +786,7 @@ Finally, many users install complex packages designed for use on a wide range of
 systems; many of these packages such as
 `GPAW <https://wiki.fysik.dtu.dk/gpaw/install.html>`_
 may use OpenBLAS rather than MKL.
-Now that we have identified that MKL adoption is low, our goal is to try to
+Having seen that MKL adoption is low, our goal is to try to
 better understand the factors leading to this and ensure that users who can
 benefit from MKL make good choices about how they build their Python
 environments through documentation, training, and direct recommendation.
@@ -836,8 +836,8 @@ A common practice is for such collaborations to provide scripts that help a user
 "activate" their environment and may unset or rewrite ``PYTHONPATH``.
 This can cause undercounts in key packages, but we have very little enthusiasm
 for removing the opt-out capability.
-Rather, we believe we should make a positive case for users to remain opted in
-to data collection, based on the benefits it delivers to them.
+Rather, we believe we should make a positive case for users to remain opted in,
+based on the benefits it delivers to them.
 Indeed, that is a major motivation for this paper.
 
 A different systematic undercount may occur for applications that habitually run
@@ -902,7 +902,7 @@ Instrumenting Python to record how frequently key scientific Python packages are
 being imported in batch jobs on Cori confirmed many of our assumptions but
 yielded a few surprises.
 The next step is acting on the information we have gathered, and of course,
-monitoring the impact those actions have on the workload.
+monitoring the impact those actions have.
 
 Using Python itself as a platform for analyzing the Python workload poses a few
 challenges mostly related to supporting infrastructure and tooling.
