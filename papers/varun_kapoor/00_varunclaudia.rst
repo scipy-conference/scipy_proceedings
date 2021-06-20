@@ -86,7 +86,8 @@ The code for the merging of U-Net and Stardist seeds is the following:
     
     return inside
   
-  def Conditioncheck(centroid_centroid, box_unet, p, ndim):
+  def Conditioncheck(centroid_centroid, box_unet, 
+         p, ndim):
 
     condition = False
 
