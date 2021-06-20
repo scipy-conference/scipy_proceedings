@@ -135,8 +135,10 @@ The code for doing watershed in 3D using the complete set of seeds on the probab
     return watershedImage, markers
     
     
+Performance Metrics
+********************
     
-Accuracy of segmentation results is assesed by comparing the obtained labels to the gold standard ground truth (GT) labels. Most commonly used metric is to compute intersection over union (IOU) score between the predicted and the GT label image.
+Accuracy of segmentation results is assesed by comparing the obtained labels to the ground truth (GT) labels. The most commonly used metric is to compute intersection over union (IOU) score between the predicted and the GT label image.
 We define GT, labels and IOU score as:
 
 :math:`GT = \{gt\}`, :math:`SEG=\{seg\}` are two sets of segmented objects.
