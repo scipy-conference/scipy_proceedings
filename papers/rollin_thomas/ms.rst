@@ -536,7 +536,8 @@ We did use some of Vaex's native plotting functionality (in particular
 ``viz.histogram``), but we primarily used Seaborn for plotting with Vaex objects
 "underneath" which we found to be a fast and friendly way to generate appealing
 visualizations.
-Sometimes Matplotlib was used when Seaborn could not meet our needs.
+Sometimes Matplotlib was used when Seaborn could not meet our needs (to
+create a stacked barplot, for example).
 
 Finally, we note that the Python environment used for both data exploration and
 reduction on the GPU cluster, and for running the Voilà dashboard in Spin, is
@@ -721,7 +722,7 @@ The correlation data shown in Fig. :ref:`case-studies` (right) indicate an
 affinity with the weather and climate community, where ``netCDF4`` and
 ``xarray`` seem particularly important.
 We reached out to several Dask users to learn more.
-One reponded: "I don't remember having any Python Dask-related jobs running in
+One responded: "I don't remember having any Python Dask-related jobs running in
 the past 3 months."
 After some additional discussion and analysis, we discovered the user was using
 ``xarray`` which we believe was using Dask unbeknownst to the user.
@@ -744,20 +745,22 @@ We observe that Python jobs on Cori mostly come from environments that users
 themselves have provisioned, and not directly from the Python software
 environment module that NERSC provides.
 Our expectation was that the fraction of jobs running from such environments
-would be high since users have expressed to us in the past that they like being
-able to customize their Python experience at NERSC, e.g. using the Conda tool.
-A major driver behind this behavior is that users often want versions of
+would be high since we knew through interacting with our users that
+custom Conda environments were very popular.
+A major driver behind this popularity is that users often want versions of
 packages that are newer than they what can get from a centrally-managed Python
 environment.
 But rather than take that as a cue that we should be updating the NERSC-provided
-Python environment more often, we note that users manage their own environments
-in order to have control and not be at the mercy of NERSC's software upgrades.
-Finding new ways to empower users to manage their own software better becomes
-the priority.
+Python environment more often, finding new ways to empower users to manage
+their own software better has become our priority instead.
+This currently includes continuing to provide easy access to Conda
+environments, locations for centralized installations (i.e. shared by a
+collaboration), and improved support for containerized environments. However
+we are constantly reevaluating how best to support the needs of our users.
 
 Other results indicate that this may need to be done carefully.
 As mentioned in the Results, only about 17% of jobs that use NumPy, SciPy,
-Scikit-Learn, or NumExpr are using versions of those packages that rely on
+scikit-learn, or NumExpr are using versions of those packages that rely on
 OpenMP-threaded, optimized Intel MKL.
 Given that Cori's CPU architectures come from Intel, we might expect the best
 performance to come from libraries optimized for that architecture.
@@ -768,16 +771,17 @@ The surprising reliance of our users on ``multiprocessing`` and the tendency of
 users to use ``mpi4py`` for embarrassing parallelism suggest that users may find
 it easier to manage process parallelism than OpenMP thread parallelism in
 scientific Python.
-Since the interface to OpenMP is "buried" beneath the Python interface, users
-working at the Python level may instead work with tools they find within easy
-reach.
 Another consideration is that users value ease in software installation rather
-than performance. 
+than performance.
 Many Conda users rely heavily on the ``conda-forge`` channel, which does have a
 much greater diversity of packages as compared to the ``defaults`` channel, and
 will install libraries based on OpenBLAS.
 Users may be willing or able to tolerate some performance loss in favor of being
 able to easily install and update their software stack.
+(There
+are no easy answers or quick fixes to this problem of facilitating both
+easy installation and good performance, but this is a major
+goal of our efforts to support Python at NERSC.)
 Finally, many users install complex packages designed for use on a wide range of
 systems; many of these packages such as
 `GPAW <https://wiki.fysik.dtu.dk/gpaw/install.html>`_
