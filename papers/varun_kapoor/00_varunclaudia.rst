@@ -108,11 +108,13 @@ The code for doing watershed in 3D using the complete set of seeds on the probab
     #Label = Label segmentation image of Stardist 
     #Mask = U-Net predicted image post binarization 
     properties = measure.regionprops(Label, Image) 
-    binaryproperties = measure.regionprops(label(mask), Image) 
+    binaryproperties = 
+    measure.regionprops(label(mask), Image) 
     Coordinates = [prop.centroid for prop in properties] 
     BinaryCoordinates = [prop.centroid for 
     prop in binaryproperties]
-    Binarybbox = [prop.bbox for prop in binaryproperties]
+    Binarybbox =
+    [prop.bbox for prop in binaryproperties]
     Coordinates = sorted(Coordinates , 
     key=lambda k: [k[0], k[1], k[2]]) 
 
