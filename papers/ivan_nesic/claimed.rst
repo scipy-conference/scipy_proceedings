@@ -417,19 +417,20 @@ Image Transformer Components
 
    Example of directory structure supported by TensorFlow Dataset API. :label:`imgdir`
 
-One supported standard for the conversion of image dataset into the TensorFlow
-datasets [tfdataset]_, is to organize images into directories representing
+One supported standard for the conversion of image datasets into the TensorFlow's
+dataset supported format, is to organize images into directories representing
 their classes [tfimgprep]_. TensorFlow Dataset is an API that
 allows for a convenient way to create datasets from various input data,
 apply transformations and preprocessing steps and make iteration over
-the data easier and memory efficient.
+the data easier and memory efficient [tfdataset]_.
 
-In our example, the raw data isn’t in the required format.
-It’s just a directory full of images and alongside it is a CSV file
-which defines the attributes. Available attributes are exam finding, sex and age,
-but we only need the finding for our example.
+In our example, the data isn’t in the required format. It is organized as
+a directory full of images and alongside it is a CSV file which defines the
+attributes. Available attributes are exam finding, sex and age,
+from which we only require the finding for our example.
 The images are then arranged by following the previously
-described directory structure, as illustrated by Fig. :ref:`imgdir`
+described directory structure, as illustrated by Fig. :ref:`imgdir`.
+After performing this step, the data can be consumed by the Tensorflow Dataset API.
 
 Training Components
 ~~~~~~~~~~~~~~~~~~~
