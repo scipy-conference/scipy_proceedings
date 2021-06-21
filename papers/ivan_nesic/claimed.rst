@@ -59,8 +59,8 @@ We found that these tools, even when used in conjunction, support only a subset 
 
 Therefore we have built an extensible component library to be used in low code / no code
 environments called CLAIMED, the visual
-**C**\ omponent **L**\ ibrary for **AI**, **M**\ achine Learning,
-**E**\ TL and **D**\ ata Science. In the following section we elaborate on the implementation
+**C**\ omponent **L**\ ibrary for **A**\rtificial **I**\nteligence (AI), **M**\achine Learning (ML),
+**E**\xtract, Transform, Load (ETL) and **D**\ ata Science. In the following section we elaborate on the implementation
 details.
 
 Implementation
