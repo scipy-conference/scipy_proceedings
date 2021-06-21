@@ -95,7 +95,8 @@ is in the desired state, it needs to scale up or down, manage
 communication between containers, schedule them, manage authentications,
 balance the load etc. Although there are other options like Docker
 Swarm, Kubernetes is the market leader in this domain. It was donated to
-CNCF [cncf]_ by Google, which means a lot of Google’s know-how and years of
+Cloud Native Computing Foundation (CNCF) [cncf]_ by Google,
+which means a lot of Google’s know-how and years of
 experience went into it. The system can run on public, on-premises or on
 hybrid clouds. On-prem installation is very important for institutions
 dealing with sensitive data. For IBM, Kubernetes is also strategic,
