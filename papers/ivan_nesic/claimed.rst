@@ -201,8 +201,61 @@ the adversarial. Libraries like the Adversarial Robustness Toolbox
 ART [art]_ support all state-of-the-art attacks and
 defenses.
 
-System Architecture and Requirements
+Requirements and System Architecture 
 ------------------------------------
+
+Execution Engine
+~~~~~~~~~~~~~~~~
+An execution engine takes a pipeline description and executes it on top
+of physical machines reading source data and creating output data.
+The following requirements have been defined for an suitable execution
+engine.
+
+- Kubernetes Support
+
+  We defined Kubernetes as the lowest layer of abstraction because that
+  way the executor layer is agnostic of the underlying IaaS 
+  architecture. We can consume Kubernetes aaS like offered by a variety
+  of Cloud providers like IBM, Amazon, Google, Microsoft, OVH or Linode.
+  A lot of workload in this particular project is outsourced to SciCore
+  - a scientific computing data center part of the Swiss Personalized
+  Health Network and the Swiss Institute of Bioinformatics which runs
+  on OpenStack and provides Kubernetes as part of it (Magnum). On prem
+  of the University Hospital Basel RedHat OpenShift is used. In addition,
+  Kubernetes provides better resource utilization if multiple
+  pipelines are run in parallel on the system.
+
+- GPU support
+
+  GPU support is essential since a large fraction of the workload is
+  training of deep learning neural networks on TensorFlow and PyTorch.
+  Training those models on CPU doesn't make sense economically and
+  ecologically
+
+- Component Library
+
+  An execution engine is nice to have but if it comes with pre-defined,
+  ready to use components it is a huge plus. KubeFlow for example 
+  has components for parallel training of TensorFlow models (TFJob), 
+  parallel execution of Apache Spark jobs as a pipeline step,
+  parallel Hyperparameter tuning (Katib) and model serving (KFServing/
+  KNative)
+
+- Reproducibility
+
+  From a legal perspective (of course not limited to) is is often
+  necessary to reconstruct a certain decision, model or output
+  dataset for verification and audit. Therefore the ability to clone
+  and re-run a pipeline is a critical requirement.
+
+- Data Lineage
+
+  Although a subset of reproducibility, Data Lineage is a crucial
+  feature when it comes to visualizing the changes datasets went
+  through the pipeline execution. Although in KubeFlow there is
+  (not yet) a visual tool available - it is the only engine which
+  stores all intermediate results to a central storage for later
+  investigation.
 
 
 ================== == == ===== == ==== ======== =====
