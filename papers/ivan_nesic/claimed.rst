@@ -366,7 +366,7 @@ illustrates the exemplary TrustedAI pipeline we have built using the
 component library and figure :ref:`kfp` is a screenshot taken from
 Kubeflow displaying the pipeline after finishing it’s run.
 
-.. figure:: elyra_pipeline.png
+.. figure:: elyra_pipeline_zoomed.png
 
    The exemplary TrustedAI pipeline for the health care use case. :label:`pipeline`
 
