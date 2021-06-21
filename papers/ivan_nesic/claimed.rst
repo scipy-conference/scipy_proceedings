@@ -190,7 +190,7 @@ turns out that it isn’t that simple. Protected attributes are often
 encoded in other attributes. For example, race, religion and
 socioeconomic status are latently encoded in attributes like zip code,
 contact method or types of products purchased. Fairness assessment and
-bias detection is an art on it’s own. Luckily a huge number of single
+bias detection is not a trivial task. Luckily a huge number of single
 number metrics exist to assess bias in data and models. Here, we are
 using the AIF360 [aif360]_ library which IBM donated to
 the Linux Foundation AI and therefore is under open governance.
@@ -445,8 +445,8 @@ After performing this step, the data can be consumed by the Tensorflow Dataset A
 Training Components
 ~~~~~~~~~~~~~~~~~~~
 
-Understanding, defining and training deep learning models is an art on
-it’s own. Training a deep learning image classification model requires a
+Understanding, defining and training deep learning models is not simple.
+Training a deep learning image classification model requires a
 properly designed neural network architecture. Luckily, the community
 trends towards predefined model architectures, which are parameterized
 through hyper-parameters. At this stage, we are using the MobileNetV2, a
