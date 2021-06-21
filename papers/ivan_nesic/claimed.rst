@@ -296,7 +296,8 @@ tool:
   and an easy way of making jupyter notebooks part of the data processing
   pipeline is a huge plus.
 
-This leads us to the following table with those requirements added:
+This leads us to the following table with those requirements added: TODO 
+romeo - insert proper reference.
 
 ================== ==== ======= ===== ======
 Requirement        Nifi NodeRED KNIME Galaxy
@@ -309,6 +310,32 @@ Data Lineage       O    O       O     X
 Visual Editing     X    X       X     X
 Jupyter Notebooks  O    O       O     O
 ================== ==== ======= ===== ======
+
+
+Final technology choice
+~~~~~~~~~~~~~~~~~~~~~~~
+As can be concluded from the previous two tables non of the tools is
+capable of covering all requirements. Therefore we introduce Elyra 
+and KubeFlow here as primary technology choice for now but as can be
+seen later in the future work section, other tools like Galaxy and
+Reana are on our roadmap for being integrated into CLAIMED.
+
+The pipeline editor of Elyra allows for drag’n’drop of arbitrary 
+scripts (shell, R, python) and jupyter notebooks from the file explorer
+to the canvas. They can be assigned to a container image to be run on.
+Elyra allows to submit such pipelines to Airflow and KubeFlow at the
+moment. 
+
+Together with KubeFlow and JupyterLab (where Elyra runs as an extension)
+this combination fullfills all our requirements.
+
+Kubernetes support, GPU support, an existing and growing component
+library, Reproducibility and Data Lineage is there through KubeFlow
+and visual editing with low code support through jupyter notebooks
+and collaboration support with Git is achieved with Elyra and 
+JupyterLab.
+
+
 
 System Implementation and Demo Use Case
 =======================================
