@@ -426,7 +426,7 @@ the data easier and memory efficient.
 
 In our example, the raw data isn’t in the required format.
 It’s just a directory full of images and alongside it is a CSV file
-that defines the attributes. Available attributes are exam finding, sex and age,
+which defines the attributes. Available attributes are exam finding, sex and age,
 but we only need the finding for our example.
 The images are then arranged by following the previously
 described directory structure, as illustrated by Fig. :ref:`imgdir`
@@ -507,7 +507,7 @@ Conclusion
 We’ve build and proposed a trustable, low-code, scalable and open source
 visual AI pipeline system on top of many de facto standard components
 used by the machine learning community. Using KubeFlow Pipelines
-provides reproducability and auditability. Using Kubernetes provides
+provides reproducibility and auditability. Using Kubernetes provides
 scalability and standardization. Using Elyra for visual development
 provides ease of use, such that all internal and external stakeholders
 are empowered to audit the system in all dimensions.
