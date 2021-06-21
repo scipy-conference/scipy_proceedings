@@ -335,6 +335,9 @@ and visual editing with low code support through jupyter notebooks
 and collaboration support with Git is achieved with Elyra and 
 JupyterLab.
 
+.. figure:: architecture.png
+
+   Runtime architecture of CLAIMED. :label:`architecture`
 
 
 System Implementation and Demo Use Case
