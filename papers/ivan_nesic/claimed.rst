@@ -43,7 +43,7 @@ Reana [reana]_, WEKA [weka]_, Rabix [rabix]_, Nextflow [nextflow]_, OpenWDL [ope
 or Cromwell [cromwell]_. 
 We found that these tools, even when used in conjunction, support only a subset of our requirements:
 
-- low code / no code environment for rapid prototyping with visual editing and jupyter notebooks
+- low-code / no-code environment for rapid prototyping with visual editing and jupyter notebooks
 - seamless scaling during development and deployment
 - GPU support
 - pre-build components for various business domains
@@ -55,7 +55,7 @@ We found that these tools, even when used in conjunction, support only a subset 
 - collaboration support
 - component UI from metadata
 
-Therefore we have built an extensible component library to be used in low code / no code
+Therefore we have built an extensible component library to be used in low-code / no-code
 environments called CLAIMED, the visual
 **C**\ omponent **L**\ ibrary for **A**\rtificial **I**\nteligence (AI), **M**\achine Learning (ML),
 **E**\xtract, Transform, Load (ETL) and **D**\ ata Science. In the following section we elaborate on the implementation
@@ -64,9 +64,9 @@ details.
 Implementation
 ==============
 
-Before we can elaborate on how the requirements have been addressed in CLAIMED and how the
-exemplary workflow has been implemented, we need to introduce some
-terms and technology in the technology breakdown.
+Before we can elaborate on how the requirements have been addressed with CLAIMED and how the
+presented workflow has been implemented, we need to introduce some
+terms and technology in the technology breakdown section.
 
 Technology breakdown
 --------------------
@@ -89,14 +89,14 @@ the containerization platform is Docker.
 Containerization made it possible to run a large number of containers,
 which introduced the need of their orchestration. This means something,
 and hopefully not someone, needs to constantly take care that the system
-is in the desired state, it needs to scale up or down, manage
+is in the desired state. It needs to scale up and down, manage
 communication between containers, schedule them, manage authentications,
 balance the load etc. Although there are other options like Docker
 Swarm, Kubernetes is the market leader in this domain. It was donated to
 Cloud Native Computing Foundation (CNCF) [cncf]_ by Google,
 which means a lot of Google’s know-how and years of
 experience went into it. The system can run on public, on-premises or on
-hybrid clouds. On-prem installation is very important for institutions
+hybrid clouds. On-premises installation is very important for institutions
 dealing with sensitive data. For IBM, Kubernetes is also strategic. 
 This is mainly because Kubernetes enables the hybrid cloud scenario 
 backed by an
@@ -145,8 +145,8 @@ Elyra [elyra]_ started as a set of extensions for the JupyterLab ecosystem.
 Here we concentrate on the pipeline editor of Elyra which allows for
 expression of machine learning workflows using a drag’n’drop editor and
 send them for execution on top of different engines like Kubeflow or
-Airflow. This allows for non-programmers to read and understand but also
-create machine learning workflows. Elyra also supports visualizing
+Airflow. This means non-programmers can understand and create machine 
+learning workflows on their own. Elyra also supports visualizing
 such pipelines in the browser (e.g. from a github repository).
 
 JupyterLab
@@ -162,8 +162,8 @@ AI Explainability
 
 Besides their stunning performance, deep learning models face a lot of
 resistance for production usage because they are considered to be a
-black box. Technically deep learning models are a
-series of non-linear feature space transformations, it is hard to understand the
+black box. Technically, deep learning models are a
+series of non-linear feature space transformations, so it is not easy to understand the
 individual processing steps a deep learning network performs.
 Techniques exist to look over a deep learning model’s shoulder. The one
 we are using here is called LIME [lime]_. LIME takes the
@@ -188,17 +188,15 @@ AI Fairness and Bias
 
 So what is bias? "Bias is a disproportionate weight in
 favor of or against an idea or thing, usually in a way that is
-closed-minded, prejudicial, or
-unfair [bias]_. So here we have it. We want
-our model to be fair and unbiased towards protected attributes like
-
-, race, age, socioeconomic status, religion and so on. So wouldn't
-it be easy to just not "give" the model those data during training? It
-turns out that it isn’t that simple. Protected attributes are often
-encoded in other attributes. For example, race, religion and
+closed-minded, prejudicial, or unfair [bias]_. But what we want from 
+our model is to be fair and unbiased towards protected attributes like, 
+race, age, socioeconomic status, religion and so on. So wouldn't
+it be easier if we just "gave" the model that data during the training? It
+turns out that it isn’t that trivial. Protected attributes are often
+encoded inside the other attributes. For example, race, religion and
 socioeconomic status are latently encoded in attributes like zip code,
-contact method or types of products purchased. Fairness assessment and
-bias detection is not a trivial task. Luckily a huge number of single
+contact method or types of products purchased. Therfore, fairness assessment and
+bias detection is quite challenging. Luckily a huge number of single
 number metrics exist to assess bias in data and models. Here, we are
 using the AIF360 [aif360]_ library which IBM donated to
 the Linux Foundation AI and therefore is under open governance.
@@ -206,8 +204,8 @@ the Linux Foundation AI and therefore is under open governance.
 AI Adversarial Robustness
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Another pillar of Trusted AI is adversarial robustness. As researchers
-found out, adversarial noise can be introduced in data (data poisoning)
+Another pillar of Trusted AI is adversarial robustness. For example, 
+as researchers found out, adversarial noise can be introduced in data (data poisoning)
 or models (model poisoning) to influence models decisions in favor of
 the adversarial. Libraries like the Adversarial Robustness Toolbox
 ART [art]_ support all state-of-the-art attacks and
@@ -246,8 +244,8 @@ engine.
 
 - Component Library
 
-  An execution engine is nice to have but if it comes with pre-defined,
-  ready to use components it is a huge plus. KubeFlow for example 
+  An execution engine is nice to have, but if it comes with predefined,
+  ready to use components, it is much better. Kubeflow for example 
   has components for parallel training of TensorFlow models (TFJob), 
   parallel execution of Apache Spark jobs as a pipeline step,
   parallel Hyperparameter tuning (Katib) and model serving (KFServing/
@@ -264,7 +262,7 @@ engine.
 
   Although a subset of reproducibility, Data Lineage is a crucial
   feature when it comes to visualizing the changes datasets went
-  through the pipeline execution. Although in KubeFlow there is
+  through the pipeline execution. Although in Kubeflow there is
   (not yet) a visual tool available - it is the only engine which
   stores all intermediate results to a central storage for later
   investigation.
@@ -290,10 +288,10 @@ in the open source space are Apache Nifi, NodeRED, KNIME and Galaxy.
 The following additional requirements have been defined for a suitable
 tool:
 
-- Low Code/No Code/Visual Editing
+- Low-Code/No-Code/Visual Editing
 
-  As citizen data scientists (in this case, medical doctors) need to
-  work with the tool, visual editing is necessary. But apart from
+  Citizen data scientists (in this case, medical doctors) need to
+  work with the tool, so visual editing is necessary. But apart from
   being a visual editing tool only, support for creating custom
   pipeline components on the fly using R and python is necessary
   as well.
@@ -323,9 +321,9 @@ Jupyter Notebooks  O    O       O     O
 
 Final technology choice
 ~~~~~~~~~~~~~~~~~~~~~~~
-As can be concluded from the previous two tables non of the tools is
+As can be concluded from the previous two tables, none of the tools is
 capable of covering all requirements. Therefore we introduce Elyra 
-and KubeFlow here as primary technology choice for now but as can be
+and Kubeflow here as primary technology choice for now but as can be
 seen later in the future work section, other tools like Galaxy and
 Reana are on our roadmap for being integrated into CLAIMED.
 
