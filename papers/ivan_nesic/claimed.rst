@@ -374,9 +374,19 @@ Kubeflow displaying the pipeline after finishing it’s run.
 Pipeline Components
 -------------------
 
-In the following different categories of pipeline components are
-exemplified using components used in the Trusted AI image classification
-pipeline.
+
+
+This section exemplifies each (currently existing) category with at 
+least one component which has been used for this particular pipeline. 
+There exist more components not part of the pipeline exemplified here.
+Please note that the core feature of our software is threefold.
+
+- the CLAIMED component library
+- Elyra with it's capability to use CLAIMED to create a pipeline 
+  and push it to KubeFlow
+- the pipeline itself
+
+
 
 Input Components
 ~~~~~~~~~~~~~~~~
