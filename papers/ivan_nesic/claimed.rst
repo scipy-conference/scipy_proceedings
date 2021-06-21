@@ -26,7 +26,7 @@ CLAIMED, a visual and scalable component library for Trusted AI
    To exemplify its use,
    we show an exemplary workflow composed exclusively from components in CLAIMED, to train,
    evaluate and deploy a deep learning model
-   that determines if CT scans are positive for COVID-19.
+   that determines if CT scans are positive for COVID-19 [covidata]_.
    
 
 
@@ -308,7 +308,7 @@ Input Components
 ~~~~~~~~~~~~~~~~
 
 In this particular case, we’re pulling data directly from a GitHub
-repository via a public and permanent link. We just pull the
+repository via a public and permanent link [covidata]_. We just pull the
 metadata.csv and images folder. The component library will contain a
 component for each different type of data source like files and
 databases.
@@ -497,3 +497,5 @@ References
 .. [cwl] https://www.commonwl.org/
 
 .. [cromwell] https://cromwell.readthedocs.io/en/stable/
+
+.. [covidata] Joseph Paul Cohen et al. *COVID-19 Image Data Collection: Prospective Predictions Are the Future*, arXiv:2006.11988, 2020
