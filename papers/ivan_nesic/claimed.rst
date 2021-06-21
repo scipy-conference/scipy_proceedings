@@ -151,7 +151,7 @@ AI Explainability
 
 Besides their stunning performance, deep learning models face a lot of
 resistance for production usage because they are considered to be a
-black box. Technically (and mathematically) deep learning models are a
+black box. Technically deep learning models are a
 series of non-linear feature space transformations, it is hard to understand the
 individual processing steps a deep learning network performs.
 Techniques exist to look over a deep learning model’s shoulder. The one
