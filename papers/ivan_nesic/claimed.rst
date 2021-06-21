@@ -115,9 +115,11 @@ leaving the machine. Apart from being a valuable tool in research, it is
 also being used in demanding production environments. On a development
 side, representing machine learning algorithms in a tree-like structures
 makes it a very good expression interface. Lastly, on the performance vs
-usability side, both eager and graph modes are supported. Meaning
-debugging is much simpler in the first case, and if there is the need
-for speed, one can use the latter.
+usability side, both graph and eager modes are supported. Eager mode allows for
+easier debugging since the code is executed in Python control flow, as opposed to
+the TensorFlow specific graph control flow [tfeager]_.
+The advantages of graph mode is usage in distributed training, performance
+optimization and production deployment.
 
 Kubeflow
 ~~~~~~~~
@@ -499,3 +501,5 @@ References
 .. [cromwell] https://cromwell.readthedocs.io/en/stable/
 
 .. [covidata] Joseph Paul Cohen et al. *COVID-19 Image Data Collection: Prospective Predictions Are the Future*, arXiv:2006.11988, 2020
+
+.. [tfeager] https://www.tensorflow.org/guide/eager/
