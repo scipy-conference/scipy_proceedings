@@ -258,8 +258,6 @@ engine.
   stores all intermediate results to a central storage for later
   investigation.
 
-.. table:: Requirements for execution engines. KF: Kubeflow, AF: Airflow, SM: Snakemake
-
 ================== == == ===== == ==== ======== =====
 Requirement        KF AF Slurm SM Qsub HTCondor Reana
 ================== == == ===== == ==== ======== =====
