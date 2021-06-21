@@ -209,11 +209,11 @@ System Architecture and Requirements
 ================== == == ===== == ==== ======== =====
 Requirement        KF AF Slurm SM Qsub HTCondor Reana
 ================== == == ===== == ==== ======== =====
-Kubernetes Support X  X  o     X  o    X        X
+Kubernetes Support X  X  O     X  O    X        X
 GPU support        X  X  X     X  X    X        X
-Component Library  X  o  o     o  o    o        o
-Reproducibility    X  X  o     X  o    X        X
-Data Lineage       X  o  o     o  o    o        X
+Component Library  X  O  O     O  O    O        O
+Reproducibility    X  X  O     X  O    X        X
+Data Lineage       X  O  O     O  O    O        X
 ================== == == ===== == ==== ======== =====
 
 
