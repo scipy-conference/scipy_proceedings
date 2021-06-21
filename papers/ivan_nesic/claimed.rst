@@ -339,6 +339,17 @@ JupyterLab.
 
    Runtime architecture of CLAIMED. :label:`architecture`
 
+As can be seen in figure :ref:`architecture`, Elyra - an more specifically
+the pipeline editor of the Elyra Extension to JupyterLab - allows
+for visually building data pipelines with a set of assets like
+notebooks and scripts dragged on a canvas and transparently published
+to KubeFlow as a Kubeflow pipeline.
+
+The only thing missing now is a set of re-usable notebooks for different
+kinds of tasks. This is where CLAIMED kicks in. We've created CLAIMED
+as open source library under [complib]_. In the next sections we 
+will introduce the Demo Use Case and how components found in CLAIMED
+have been used to implement this pipeline.
 
 System Implementation and Demo Use Case
 =======================================
