@@ -13,20 +13,18 @@ CLAIMED, a visual and scalable component library for Trusted AI
 
 .. class:: abstract
 
-   We propose an Open Source low code / no code tool suite for data science supporting rapid
-   prototyping with visual editing and 
-   jupyter notebooks, seamless scaling during development and deployment (including GPU), 
-   pre-build components for various business domains, support for the complete python and 
-   R tooling including Apache Spark, TensorFlow, PyTorch, pandas and scikit-learn,
-   straightforward extensibility (anything which runs in a Docker container), 
-   reproducibility of work, data lineage and collaboration support.
+   We propose an Open Source low-code / no-code tool suite for data science supporting rapid
+   prototyping with visual editing and jupyter notebooks, seamless scaling during development 
+   and deployment (including GPU), pre-build components for various business domains, 
+   support for the complete python and R tooling including Apache Spark, TensorFlow, 
+   PyTorch, pandas and scikit-learn, straightforward extensibility 
+   (anything which runs in a Docker container), reproducibility of work, data lineage and collaboration support.
    More specifically we provide CLAIMED, the component library for AI, Machine Learning, ETL
    and Data Science driven by the JupyterLab extension "Elyra Pipeline Editor", a framework
-   agnostic Low Code pipeline editor currently supporting local execution, Airflow and KubeFlow.
-   To exemplify its use,
-   we show an exemplary workflow composed exclusively from components in CLAIMED, to train,
-   evaluate and deploy a deep learning model
-   that determines if CT scans are positive for COVID-19 [covidata]_.
+   agnostic low-code pipeline editor currently supporting local execution, Airflow and Kubeflow.
+   To exemplify its use, we constructed a workflow composed exclusively from components in CLAIMED, 
+   to train, evaluate and deploy a deep learning model, that determines if CT scans are positive 
+   for COVID-19 [covidata]_.
    
 
 
