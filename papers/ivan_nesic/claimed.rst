@@ -26,7 +26,7 @@ CLAIMED, a visual and scalable component library for Trusted AI
    To exemplify its use,
    we show an exemplary workflow composed exclusively from components in CLAIMED, to train,
    evaluate and deploy a deep learning model
-   that determines if CT scans are positive for COVID-19.
+   that determines if CT scans are positive for COVID-19 [covidata]_.
    
 
 
@@ -59,8 +59,8 @@ We found that these tools, even when used in conjunction, support only a subset 
 
 Therefore we have built an extensible component library to be used in low code / no code
 environments called CLAIMED, the visual
-**C**\ omponent **L**\ ibrary for **AI**, **M**\ achine Learning,
-**E**\ TL and **D**\ ata Science. In the following section we elaborate on the implementation
+**C**\ omponent **L**\ ibrary for **A**\rtificial **I**\nteligence (AI), **M**\achine Learning (ML),
+**E**\xtract, Transform, Load (ETL) and **D**\ ata Science. In the following section we elaborate on the implementation
 details.
 
 Implementation
@@ -115,9 +115,11 @@ leaving the machine. Apart from being a valuable tool in research, it is
 also being used in demanding production environments. On a development
 side, representing machine learning algorithms in a tree-like structures
 makes it a very good expression interface. Lastly, on the performance vs
-usability side, both eager and graph modes are supported. Meaning
-debugging is much simpler in the first case, and if there is the need
-for speed, one can use the latter.
+usability side, both graph and eager modes are supported. Eager mode allows for
+easier debugging since the code is executed in Python control flow, as opposed to
+the TensorFlow specific graph control flow [tfeager]_.
+The advantages of graph mode is usage in distributed training, performance
+optimization and production deployment.
 
 Kubeflow
 ~~~~~~~~
@@ -338,7 +340,7 @@ Input Components
 ~~~~~~~~~~~~~~~~
 
 In this particular case, we’re pulling data directly from a GitHub
-repository via a public and permanent link. We just pull the
+repository via a public and permanent link [covidata]_. We just pull the
 metadata.csv and images folder. The component library will contain a
 component for each different type of data source like files and
 databases.
@@ -527,3 +529,7 @@ References
 .. [cwl] https://www.commonwl.org/
 
 .. [cromwell] https://cromwell.readthedocs.io/en/stable/
+
+.. [covidata] Joseph Paul Cohen et al. *COVID-19 Image Data Collection: Prospective Predictions Are the Future*, arXiv:2006.11988, 2020
+
+.. [tfeager] https://www.tensorflow.org/guide/eager/
