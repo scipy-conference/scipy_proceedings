@@ -22,7 +22,7 @@ CLAIMED, a visual and scalable component library for Trusted AI
    More specifically we provide CLAIMED, the component library for AI, Machine Learning, ETL
    and Data Science driven by the JupyterLab extension "Elyra Pipeline Editor", a framework
    agnostic low-code pipeline editor currently supporting local execution, Airflow and Kubeflow.
-   To exemplify its use, we constructed a workflow composed exclusively from components in CLAIMED, 
+   To exemplify its use, we constructed a workflow composed exclusively of components in CLAIMED, 
    to train, evaluate and deploy a deep learning model, that determines if CT scans are positive 
    for COVID-19 [covidata]_.
    
