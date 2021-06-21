@@ -99,9 +99,19 @@ Cloud Native Computing Foundation (CNCF) [cncf]_ by Google,
 which means a lot of Google’s know-how and years of
 experience went into it. The system can run on public, on-premises or on
 hybrid clouds. On-prem installation is very important for institutions
-dealing with sensitive data. For IBM, Kubernetes is also strategic,
-joining CNCF, having moved all Watson Services to Kubernetes and aquired
-RedHat, IBM is now 3rd largest committer to Kubernetes [ibmcncf]_.
+dealing with sensitive data. For IBM, Kubernetes is also strategic. 
+This is mainly because Kubernetes enables the hybrid cloud scenario 
+backed by an
+open source common runtime capable of transparently moving workload 
+across different on-premises, remote and cloud data centers seamlessly.
+Besides acting as a Kubernetes runtime provider in the cloud and - 
+through the acquisition of RedHat - becoming the major vendor for 
+on-premises Kubernetes, IBM is now able to deliver software solutions
+- so called "Cloud Paks" - 
+on top of Kubernetes, making them run everywhere. Therefore, 
+IBM joined CNCF [ibmcncf]_, moved all Watson Services to Kubernetes 
+and acquired RedHat. This makes IBM the 3rd largest committer to
+Kubernetes.
 
 Deep Learning with TensorFlow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
