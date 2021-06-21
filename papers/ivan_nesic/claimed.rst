@@ -276,7 +276,37 @@ Integrated tools are tools which include a visual data flow editor,
 a component library and an execution engine. Prominent candidates
 in the open source space are Apache Nifi, NodeRED, KNIME and Galaxy.
 
+The following additional requirements have been defined for a suitable
+tool:
 
+- Low Code/No Code/Visual Editing
+
+  As citizen data scientists (in this case, medical doctors) need to
+  work with the tool, visual editing is necessary. But apart from
+  being a visual editing tool only, support for creating custom
+  pipeline components on the fly using R and python is necessary
+  as well.
+
+- Jupyter Notebooks
+
+  Citizen data scientists but also data scientists in general are used
+  to implement many tasks as jupyter notebooks. Support for JupyterLab
+  and an easy way of making jupyter notebooks part of the data processing
+  pipeline is a huge plus.
+
+This leads us to the following table with those requirements added:
+
+================== ==== ======= ===== ======
+Requirement        Nifi NodeRED KNIME Galaxy
+================== ==== ======= ===== ======
+Kubernetes Support O    O       O     X
+GPU support        O    O       O     X
+Component Library  X    X       X     X
+Reproducibility    X    O       X     X
+Data Lineage       O    O       O     X
+Visual Editing     X    X       X     X
+Jupyter Notebooks  O    O       O     O
+================== ==== ======= ===== ======
 
 System Implementation and Demo Use Case
 =======================================
