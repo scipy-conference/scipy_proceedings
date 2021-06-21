@@ -183,7 +183,8 @@ favor of or against an idea or thing, usually in a way that is
 closed-minded, prejudicial, or
 unfair [bias]_. So here we have it. We want
 our model to be fair and unbiased towards protected attributes like
-gender, race, age, socioeconomic status, religion and so on. So wouldn't
+
+, race, age, socioeconomic status, religion and so on. So wouldn't
 it be easy to just not "give" the model those data during training? It
 turns out that it isn’t that simple. Protected attributes are often
 encoded in other attributes. For example, race, religion and
@@ -414,17 +415,21 @@ Image Transformer Components
 
 .. figure:: images_folder_tree.png
 
-   De facto standard in folder structure for image classification data. :label:`imgdir`
+   Example of directory structure supported by TensorFlow Dataset API. :label:`imgdir`
 
-The de facto standard for labeled image data is putting images into one
-folder per class/category. But in this particular case, the raw data
-isn’t in the required format. It’s just a folder full of images and
-their properties are described in a separate CSV file. In addition to
-the class (or label) - finding in this case - this CSV file also
-contains information on the gender and age. So first, we just use the
-information on the finding label given in the CSV file and arrange the
-images in the appropriate folder structure, as illustrated in
-Fig. :ref:`imgdir`
+One supported standard for the conversion of image dataset into the TensorFlow
+datasets [tfdataset]_, is to organize images into directories representing
+their classes [tfimgprep]_. TensorFlow Dataset is an API that
+allows for a convenient way to create datasets from various input data,
+apply transformations and preprocessing steps and make iteration over
+the data easier and memory efficient.
+
+In our example, the raw data isn’t in the required format.
+It’s just a directory full of images and alongside it is a CSV file
+that defines the attributes. Available attributes are exam finding, sex and age,
+but we only need the finding for our example.
+The images are then arranged by following the previously
+described directory structure, as illustrated by Fig. :ref:`imgdir`
 
 Training Components
 ~~~~~~~~~~~~~~~~~~~
@@ -574,3 +579,7 @@ References
 .. [covidata] Joseph Paul Cohen et al. *COVID-19 Image Data Collection: Prospective Predictions Are the Future*, arXiv:2006.11988, 2020
 
 .. [tfeager] https://www.tensorflow.org/guide/eager/
+
+.. [tfdataset] https://www.tensorflow.org/api_docs/python/tf/data/Dataset
+
+.. [tfimgprep] https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image_dataset_from_directory
