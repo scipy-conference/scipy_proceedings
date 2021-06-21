@@ -257,6 +257,7 @@ engine.
   stores all intermediate results to a central storage for later
   investigation.
 
+.. table:: Requirements for execution engines. KF: Kubeflow, AF: Airflow, SM: Snakemake
 
 ================== == == ===== == ==== ======== =====
 Requirement        KF AF Slurm SM Qsub HTCondor Reana
@@ -267,6 +268,15 @@ Component Library  X  O  O     O  O    O        O
 Reproducibility    X  X  O     X  O    X        X
 Data Lineage       X  O  O     O  O    O        X
 ================== == == ===== == ==== ======== =====
+
+KF: Kubeflow, AF: Airflow, SM: Snakemake
+
+Integrated tools
+~~~~~~~~~~~~~~~~
+Integrated tools are tools which include a visual data flow editor,
+a component library and an execution engine. Prominent candidates
+in the open source space are Apache Nifi, NodeRED, KNIME and Galaxy.
+
 
 
 System Implementation and Demo Use Case
