@@ -40,7 +40,7 @@ Monolithic scripts are often used in prototyping. For production deployments, to
 Slurm [slurm]_, Snakemake [snakemake]_, QSub [qsub]_, HTCondor [htcondor]_, Apache Nifi [nifi]_,
 NodeRED [nodered]_, KNIME [knime]_, Galaxy [galaxy]_, 
 Reana [reana]_, WEKA [weka]_, Rabix [rabix]_, Nextflow [nextflow]_, OpenWDL [openwdl]_, CWL [cwl]_
-or Cromwell [cromwell]_. 
+or Cromwell [cromwell]_ are used. 
 We found that these tools, even when used in conjunction, support only a subset of our requirements:
 
 - low-code / no-code environment for rapid prototyping with visual editing and jupyter notebooks
@@ -53,13 +53,16 @@ We found that these tools, even when used in conjunction, support only a subset 
 - reproducibility of work
 - data lineage
 - collaboration support
-- component UI from metadata
 
 Therefore we have built an extensible component library to be used in low-code / no-code
 environments called CLAIMED, the visual
 **C**\ omponent **L**\ ibrary for **A**\rtificial **I**\nteligence (AI), **M**\achine Learning (ML),
-**E**\xtract, Transform, Load (ETL) and **D**\ ata Science. In the following section we elaborate on the implementation
-details.
+**E**\xtract, Transform, Load (ETL) and **D**\ ata Science.
+In the following section we elaborate on the implementation
+details followed by a description of an exemplary pipeline to showcase
+the capabilities of CLAIMED. Then, we elaborate on different ideas
+how CLAIMED can be improved in the "Future Work" section. Finally,
+we conclude.
 
 Implementation
 ==============
@@ -121,13 +124,15 @@ mobile phones to GPU/TPU clusters, for both training and inference. It
 can even run in browser on the client’s side, without the data ever
 leaving the machine. Apart from being a valuable tool in research, it is
 also being used in demanding production environments. On a development
-side, representing machine learning algorithms in a tree-like structures
+side, representing machine learning algorithms in tree-like structures
 makes it a very good expression interface. Lastly, on the performance vs
 usability side, both graph and eager modes are supported. Eager mode allows for
 easier debugging since the code is executed in Python control flow, as opposed to
 the TensorFlow specific graph control flow [tfeager]_.
 The advantages of graph mode is usage in distributed training, performance
-optimization and production deployment.
+optimization and production deployment. To learn more about the
+differences between graph and eager mode we recommend our book on the
+topic [tfbook]_. 
 
 Kubeflow
 ~~~~~~~~
@@ -155,7 +160,7 @@ JupyterLab
 JupyterLab [jupyter]_ is one of the most popular development environments for data
 science. Therefore we started to support JupyterLab first. But the
 pipeline editor of Elyra will be supported in other environments as
-well, VSCode being next on the list.
+well, VSCode [vscode]_ being next on the list.
 
 AI Explainability
 ~~~~~~~~~~~~~~~~~
@@ -168,7 +173,7 @@ individual processing steps a deep learning network performs.
 Techniques exist to look over a deep learning model’s shoulder. The one
 we are using here is called LIME [lime]_. LIME takes the
 existing classification model and permutes images taken from the
-validation set (therefore the real class label is known) as long as a
+validation set (therefore the real class label is known to LIME) as long as a
 misclassification is happening. That way LIME can be used to create heat
 maps as image overlays to indicate regions of images which are most
 relevant for the classifier to perform best. In other words, we identify
@@ -188,14 +193,15 @@ AI Fairness and Bias
 
 So what is bias? "Bias is a disproportionate weight in
 favor of or against an idea or thing, usually in a way that is
-closed-minded, prejudicial, or unfair [bias]_. But what we want from 
-our model is to be fair and unbiased towards protected attributes like, 
+closed-minded, prejudicial, or unfair" [bias]_. But what we want from 
+our model is to be fair and unbiased towards protected attributes like 
 race, age, socioeconomic status, religion and so on. So wouldn't
-it be easier if we just "gave" the model that data during the training? It
+it be easier if we just "hide" those columns from the model during the training? It
 turns out that it isn’t that trivial. Protected attributes are often
-encoded inside the other attributes. For example, race, religion and
+encoded inside the other attributes (latent features).
+For example, race, religion and
 socioeconomic status are latently encoded in attributes like zip code,
-contact method or types of products purchased. Therfore, fairness assessment and
+contact method or types of products purchased. Therefore, fairness assessment and
 bias detection is quite challenging. Luckily a huge number of single
 number metrics exist to assess bias in data and models. Here, we are
 using the AIF360 [aif360]_ library which IBM donated to
@@ -213,6 +219,9 @@ defenses.
 
 Requirements and System Architecture 
 ------------------------------------
+In the following we cover the system architecture as well as the
+requirements for the different parts of the
+system architecture: Execution Engine and Visual Workflow Editor.
 
 Execution Engine
 ~~~~~~~~~~~~~~~~
@@ -225,11 +234,12 @@ engine.
 
   We defined Kubernetes as the lowest layer of abstraction because that
   way the executor layer is agnostic of the underlying IaaS 
-  architecture. We can consume Kubernetes aaS like offered by a variety
+  architecture. We can consume Kubernetes aaS offered by a variety
   of Cloud providers like IBM, Amazon, Google, Microsoft, OVH or Linode.
   A lot of workload in this particular project is outsourced to SciCore
+  [scicore]_
   - a scientific computing data center part of the Swiss Personalized
-  Health Network and the Swiss Institute of Bioinformatics which runs
+  Health Network [sphn]_ and the Swiss Institute of Bioinformatics [sib]_ which runs
   on OpenStack and provides Kubernetes as part of it (Magnum). On prem
   of the University Hospital Basel RedHat OpenShift is used. In addition,
   Kubernetes provides better resource utilization if multiple
@@ -253,7 +263,7 @@ engine.
 
 - Reproducibility
 
-  From a legal perspective (of course not limited to) is is often
+  From a legal perspective (of course not limited to) it is often
   necessary to reconstruct a certain decision, model or output
   dataset for verification and audit. Therefore the ability to clone
   and re-run a pipeline is a critical requirement.
@@ -689,3 +699,13 @@ References
 .. [galaxy_ui] https://github.com/bgruening/galaxytools/blob/c1027a3f78bca2fd8a53f076ef718ea5adbf4a8a/tools/sklearn/pca.xml#L75
 
 .. [c3] https://github.com/romeokienzler/c3
+
+.. [tfbook] https://www.oreilly.com/library/view/whats-new-in/9781492073727/
+
+.. [vscode] https://code.visualstudio.com/
+
+.. [scicore] https://scicore.unibas.ch/
+
+.. [sphn] https://sphn.ch/
+
+.. [sib] https://www.sib.swiss/
