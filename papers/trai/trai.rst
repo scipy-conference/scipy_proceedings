@@ -378,6 +378,27 @@ Due to these shortcomings, a new method for measuring the volume is studied, bas
 The point pair collections will approximate the orthogonal planes. By determining the points contained by each orthogonal plane, projections can be made that approximate the intersecting lines of the orthogonal planes. By selecting the 3 lines that have the edge points closest to each other, volume of a box can be computed.
 The advantage of this method is that it allow the computation of the volume for multiple box shaped objects and it 
 
+.. figure:: Alex_pseudo_1.png
+  :width: 1000
+  :height: 1000
+  :scale: 40%
+  :align: left
+  :alt: Pseudo code 
+  
+  Planar detection :label:`pseudo_1`
+
+  .. figure:: Alex_pseudo_2.png
+  :width: 800
+  :height: 800
+  :scale: 40%
+  :align: left
+  :alt: Pseudo code 
+  
+  Planar detection :label:`pseudo_2`
+
+
+
+
 .. figure:: ortho_volume.png
   :width: 400
   :height: 400
