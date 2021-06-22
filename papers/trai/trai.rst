@@ -92,7 +92,7 @@ For the filtering pipeline we considered three interconnected filters: voxel, pa
 
   Processing pipeline for ToF camera :label:`filters`
 
-Low level ToF image pre-processing - Tofnest
+Low level ToF image pre-processing - ToFNest
 ++++++++++++++++++++++++++++++++++++++++++++
 .. MSz part
 
@@ -100,6 +100,20 @@ Low level ToF image pre-processing - Tofnest
 In ToFNest we are approximating surface normals from depth images, recorded with Time-of-Flight cameras. The approximation is done using a neural network. The base of our neural network is the PyTorch library, since the whole process is done using Python 3.6 as our programming language. Using PyTorch we have created a Feature Pyramid Network type model (:cite:`FPN2017`).
 
 The main pipeline of the data was the following: first we read the depth images with OpenCV (alongside the depth information we could also use the infrared information or the rgb information from the camera as well, thus adding more information to work with), then we prepare them with numpy. From a numpy array it is easy to convert it to a torch tensor on the GPU, which then creates the predictions about the surface normals. An example of the prediction can be seen in the next image, where the direction of the normal vectors are decoded with RGB images. 
+
+The following code represents the loss: 
+
+.. code-block:: python
+
+    pred=pred*2-1
+    gt=gt*2-1
+    inner_product = (pred * gt).sum(dim=1).unsqueeze(1)
+    cos = inner_product / 2
+    angle = torch.acos(cos)
+    if not args.orient_normals:
+        angle[angle>1.57]=3.14-angle[angle>1.57] 
+    loss = torch.mean(angle)
+    return loss
 
 .. figure:: ToFNest.png
   :width: 400
@@ -116,7 +130,7 @@ Our method was evaluated by verifying only the angles between the lines, not the
 
 Furthermore, in order to get a real-time visualization about the predictions, we used rospy to read the images from ROS topics, and also to publish the normal estimation values to another ROS topic, that we could visualize using Rviz. This can be seen in the demo video. 
 
-Low level ToF image pre-processing - Tofsmooth
+Low level ToF image pre-processing - ToFSmooth
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 This whole pipeline and network, with some minor modifications can be also used to  smoothen the depth image, thus making the point cloud smoother as well.
