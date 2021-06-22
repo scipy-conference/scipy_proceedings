@@ -102,7 +102,9 @@ In ToFNest we are approximating surface normals from depth images, recorded with
 The main pipeline of the data was the following: first we read the depth images with OpenCV (alongside the depth information we could also use the infrared information or the rgb information from the camera as well, thus adding more information to work with), then we prepare them with numpy. From a numpy array it is easy to convert it to a torch tensor on the GPU, which then creates the predictions about the surface normals. An example of the prediction can be seen in the next image, where the direction of the normal vectors are decoded with RGB images. 
 
 The following code represents the loss: 
+
 .. code-block:: python
+
     pred=pred*2-1
     gt=gt*2-1
     inner_product = (pred * gt).sum(dim=1).unsqueeze(1)
