@@ -517,61 +517,59 @@ scale to zero) in addition to built-in Trusted AI functionality.
 Future Work
 ===========
 We have financial support to add functionality to CLAIMED in multiple
-dimensions. Below we give a summary on the next steps.
+dimensions. Below we give a summary of the next steps.
 
 Extend component library
 ------------------------
 
-As of now, at least one representative component for each category has
+To this date, at least one representative component for each category has
 been released. Components are added to the library on a regular basis. 
-The
-next components to be published are: Parallel Tensorflow Training with
+The components due to be published are: Parallel Tensorflow Training with
 TFJob, Parallel Hyperparameter Tuning with Katib and Parallel Data
 Processing with Apache Spark.
 
-Component exporter for KubeFlow
+Component exporter for Kubeflow
 -------------------------------
 
-We've already started to implement a component exporter to KubeFlow
-which allows to take arbitrary assets like jupyter notebooks and
-scripts, attache them to a container image and transpile a KubeFlow
-component out of it. Independently from Elyra, this allows 
-to automate a task which is done over and over again in the data
-science community: creating notebooks and scripts and containerize
-them. We call this tool C3 (CLAIMED component compiler). It is available
-here: [c3]_.
+Containerizing notebooks and scripts is a frequent task in the data science community.
+In our environment, this involves attaching the arbitrary assets,
+like jupyter notebooks and scripts, to a container image and then
+transpiling a Kubeflow component out of it.
+We are currently in the process of implementing a tool that would facilitate this workflow.
+The name of the tool is C3 [c3]_, and it stands for CLAIMED component compiler.
 
 Import/Export of components to/from Galaxy
 ------------------------------------------
-Galaxy is one of the tools we've evaluated covering a majority of our
-requirements. Unfortunately, Galaxy components - they are called "tools"
-there - are very skewed towards genomics. Having components for other
-domains would give Galaxy a huge push. On the other hand, the existing
-component library Galaxy has is huge, established and tested and it 
-would make sense to automatically transpile those tools as components
-into CLAIMED. We are currently looking into
+As seen in the table comparing integrated tools,
+Galaxy covers a majority of our requirements already.
+Alas, Galaxy components - called "tools" - are very skewed towards genomics domain.
+Adding new components and extending functionality onto other domains would make
+the tool interesting for a wider audience.
+Reverse is also true, the existing component library Galaxy is extensive,
+well established and tested. It makes sense to automatically transpile
+those tools as components into CLAIMED. We are currently looking into
 adding import/export support between CLAIMED and Galaxy into C3.
 
 
 UX improvements of the Elyra pipeline editor
 --------------------------------------------
 
-Elyra will improve component’s configuration options rendering
-capabilities. Currently, only code reading environment variables is
-parsed to provide a rudimentary UI with one text field per variable.
-We want Elyra to be capable of reading complex descriptions with 
-dynamic forms, e.g. support for check-boxes,  drop down menus and
-update of available options based on selected values. We are inspired
-by the way this is done in Galaxy. As can be seen in [galaxy_ui]_, 
-complex UI behavior is expressed as XML configuration. It would be
-beneficial to either use this XML Schema one to one or make it at
-two-way transformable in support of adding import/export functionality
-to/from Galaxy to C3.
-Once agreed on the schema of the configuration option, an (optional)
-configuration block can be added to notebooks and scripts which is
-read by Elyra and the appropriate UI is rendered to specify the
-configuration of each pipeline component before submitting it to
-the executor.
+The components are isolated, so only explicitly shared information can be put into context for
+all of them. In order for the components' executor, e.g. Kubflow, to do this,
+it must be provided a configuration. We envision for Elyra to automatically deduce
+interesting parameters from the code and from the environment, upon which it would create
+dynamic forms. For example, fields like checkboxes and dropdowns where one can select
+input and output files mentioned in the code. Currently, only environment variables
+are provided in a rudimentary UI with one text field per variable.
+One proposal is to introduce an optional configuration block to the scripts and notebooks.
+It would then be interpreted by Elyra and the appropriate UI would be rendered.
+
+One successful example of such implementation is Galaxy's UI [galaxy_ui]_.
+A complex UI behavior is expressed by XML configuration. So we are also exploring an
+option of either using Galaxy's XML Schema or defining a new one and support the
+transformation from one into the other. In terms of tools, the transformation
+should be happening between the Galaxy and the C3.
+
 
 Add CWL support to the Elyra pipeline editor
 --------------------------------------------
@@ -591,14 +589,14 @@ Import 3rd party component libraries
 In theory it would be possible to import 3rd party component libraries
 like those from KNIME or Nifi into CLAIMED as the only thing needed to
 become a CLAIMED component at the end of the day is a container image
-and some meta data (which by the way also holds for KubeFlow components).
+and some meta data (which by the way also holds for Kubeflow components).
 It should be possible to wrap different components from KNIME, Nifi or
 similar tools into a container image and use it within Elyra or all
 other execution engines CLAIMED supports.
 
 Reana execution engine support
 ------------------------------
-Besides KubeFlow, Reana is well established, especially in the particle
+Besides Kubeflow, Reana is well established, especially in the particle
 physics community. As Reana already supports CWL, a CWL exporter
 would add this functionality out of the box.
 
@@ -618,7 +616,7 @@ Conclusion
 
 We’ve build and proposed a trustable, low-code, scalable and open source
 visual AI pipeline system on top of many de facto standard components
-used by the machine learning community. Using KubeFlow Pipelines
+used by the machine learning community. Using Kubeflow Pipelines
 provides reproducibility and auditability. Using Kubernetes provides
 scalability and standardization. Using Elyra for visual development
 provides ease of use, such that all internal and external stakeholders
