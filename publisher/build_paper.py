@@ -49,9 +49,9 @@ def rst2tex(in_path, out_path):
 
     base_dir = os.path.dirname(__file__)
     out_file = shutil.copy(status_file, out_path)
-    out_file= os.path.join(out_path,'draft.sty')
     os.rename(out_file, os.path.join(out_path, 'status.sty'))
     scipy_style = os.path.join(base_dir, '_static/scipy.sty')
+    shutil.copy(scipy_style, out_path)
     preamble = u'''\\usepackage{scipy}'''
 
     # Add the LaTeX commands required by Pygments to do syntax highlighting
