@@ -313,7 +313,7 @@ Kubernetes Support O    O       O     X
 GPU support        O    O       O     X
 Component Library  X    X       X     X
 Reproducibility    X    O       X     X
-Data Lineage       O    O       O     X
+Data Lineage       X    O       O     X
 Visual Editing     X    X       X     X
 Jupyter Notebooks  O    O       O     O
 ================== ==== ======= ===== ======
@@ -506,17 +506,102 @@ scale to zero) in addition to built-in Trusted AI functionality.
 
 Future Work
 ===========
+We have financial support to add functionality to CLAIMED in multiple
+dimensions. Below we give a summary on the next steps.
+
+Extend component library
+------------------------
 
 As of now, at least one representative component for each category has
-been released. Components are added to the library on a daily basis. The
+been released. Components are added to the library on a regular basis. 
+The
 next components to be published are: Parallel Tensorflow Training with
 TFJob, Parallel Hyperparameter Tuning with Katib and Parallel Data
-Processing with Apache Spark. In addition, the next release of Elyra
-(v.2.3.0) will improve component’s configuration options rendering
-capabilities, e.g. support for check-boxes and drop down menus and
-facilitated integration of exiting, containerized applications into the
-library without needing to wrap them in jupyter notebooks or python
-scripts.
+Processing with Apache Spark.
+
+Component exporter for KubeFlow
+-------------------------------
+
+We've already started to implement a component exporter to KubeFlow
+which allows to take arbitrary assets like jupyter notebooks and
+scripts, attache them to a container image and transpile a KubeFlow
+component out of it. Independently from Elyra, this allows 
+to automate a task which is done over and over again in the data
+science community: creating notebooks and scripts and containerize
+them. We call this tool C3 (CLAIMED component compiler). It is available
+here: [c3]_.
+
+Import/Export of components to/from Galaxy
+------------------------------------------
+Galaxy is one of the tools we've evaluated covering a majority of our
+requirements. Unfortunately, Galaxy components - they are called "tools"
+there - are very skewed towards genomics. Having components for other
+domains would give Galaxy a huge push. On the other hand, the existing
+component library Galaxy has is huge, established and tested and it 
+would make sense to automatically transpile those tools as components
+into CLAIMED. We are currently looking into
+adding import/export support between CLAIMED and Galaxy into C3.
+
+
+UX improvements of the Elyra pipeline editor
+--------------------------------------------
+
+Elyra will improve component’s configuration options rendering
+capabilities. Currently, only code reading environment variables is
+parsed to provide a rudimentary UI with one text field per variable.
+We want Elyra to be capable of reading complex descriptions with 
+dynamic forms, e.g. support for check-boxes,  drop down menus and
+update of available options based on selected values. We are inspired
+by the way this is done in Galaxy. As can be seen in [galaxy_ui]_, 
+complex UI behavior is expressed as XML configuration. It would be
+beneficial to either use this XML Schema one to one or make it at
+two-way transformable in support of adding import/export functionality
+to/from Galaxy to C3.
+Once agreed on the schema of the configuration option, an (optional)
+configuration block can be added to notebooks and scripts which is
+read by Elyra and the appropriate UI is rendered to specify the
+configuration of each pipeline component before submitting it to
+the executor.
+
+Add CWL support to the Elyra pipeline editor
+--------------------------------------------
+
+CWL is a powerful workflow expression language supported already by
+various tools we've evaluated. Currently, Elyra uses its own, 
+proprietary pipeline representation format. It would be highly
+beneficial if Elyra would switch to CWL to improve interoperability 
+between different software component. For example, Reana and Galaxy
+(partially) already support CWL which would allow for publishing
+pipelines from Elyra to Reana directly without transpiling the pipeline.
+Alternatively, any maybe more realistically, Elyra just could support
+export (and import) if CWL into its pipeline editor.
+
+Import 3rd party component libraries
+------------------------------------
+In theory it would be possible to import 3rd party component libraries
+like those from KNIME or Nifi into CLAIMED as the only thing needed to
+become a CLAIMED component at the end of the day is a container image
+and some meta data (which by the way also holds for KubeFlow components).
+It should be possible to wrap different components from KNIME, Nifi or
+similar tools into a container image and use it within Elyra or all
+other execution engines CLAIMED supports.
+
+Reana execution engine support
+------------------------------
+Besides KubeFlow, Reana is well established, especially in the particle
+physics community. As Reana already supports CWL, a CWL exporter
+would add this functionality out of the box.
+
+Create more (exemplary) pipelines
+---------------------------------
+Currently, CLAIMED ships with three exemplary pipelines. The health
+care inspired TrustedAI pipeline which was covered in this paper,
+a pipeline to visualize and predict soil temperature from a historic
+data set and a IoT sensor data analysis pipeline. The next pipeline
+we create is a genomics pipeline for the Swiss Institute of
+Bioinformatics affiliates University Hospital Berne/Berne University
+and potentially for particle physics at CERN.
+
 
 Conclusion
 ==========
@@ -600,3 +685,7 @@ References
 .. [tfdataset] https://www.tensorflow.org/api_docs/python/tf/data/Dataset
 
 .. [tfimgprep] https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image_dataset_from_directory
+
+.. [galaxy_ui] https://github.com/bgruening/galaxytools/blob/c1027a3f78bca2fd8a53f076ef718ea5adbf4a8a/tools/sklearn/pca.xml#L75
+
+.. [c3] https://github.com/romeokienzler/c3
