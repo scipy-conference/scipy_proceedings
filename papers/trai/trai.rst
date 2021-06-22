@@ -207,12 +207,30 @@ In the Figure :ref:`archdetectnet` you can see the architecture for the training
 
   DetectNet structure for training :label:`archdetectnet`
 
-In the final layers of DetectNet the openCV groupRectangles algorithm is used to cluster and filter the set of bounding boxes generated for grid squares with predicted coverage values greater than or equal to gridbox_cvg_threshold, which is specified in the DetectNet model definition prototxt file.
+In the final layers of DetectNet the openCV groupRectangles algorithm 
+is used to cluster and filter the set of bounding boxes generated for 
+grid squares with predicted coverage values greater than or equal to 
+gridbox_cvg_threshold, which is specified in the DetectNet 
+model definition prototxt file.
 
-DetectNet also uses the “Python Layers” interface to calculate and output a simplified mean Average Precision (mAP) score for the final set of output bounding boxes. For each predicted bounding box and each ground truth bounding box the Intersection over Union (IoU) score is computed. IoU is the ratio of the overlapping areas of two bounding boxes to the sum of their areas.
+DetectNet also uses the “Python Layers” interface 
+to calculate and output a simplified mean Average Precision (mAP) score
+for the final set of output bounding boxes. 
+For each predicted bounding box and each ground truth 
+bounding box the Intersection over Union (IoU) 
+score is computed. IoU is the ratio of the overlapping areas of 
+two bounding boxes to the sum of their areas.
 
-The pre-trained model accepts 3 channel images – RGB, by modifying the existing model, we have managed to detect and track people on the infrared image – 1 channel. With the help of the OpenCV library and the 3.7 python programming language version, we have developed a script that modifies the contrast of the IR image; thus, we obtained a much better result than if we had not used this approach. This result can be seen in the Figure :ref:`detection`., where we can see that the people are detected on the IR image with high confidence.
-
+The pre-trained model accepts 3 channel images – RGB, 
+by modifying the existing model, we have managed to detect 
+and track people on the infrared image – 1 channel. 
+With the help of the OpenCV library and the 3.7 python 
+programming language version, we have developed a script 
+that modifies the contrast of the IR image; 
+thus, we obtained a much better result than if we had not used 
+this approach. This result can be seen in 
+the Figure :ref:`detection`., where we can see that the people 
+are detected on the IR image with high confidence.
 
 .. figure:: DetectNetIR.PNG
   :width: 400
@@ -399,28 +417,25 @@ The advantage of this method is that it allow the computation of the volume for 
   :align: left
   :alt: Pseudo code 
   
-  Planar detection :label:`pseudo_1`
+  Planar detection :label:`pseudo1`
 
-  .. figure:: Alex_pseudo_2.png
+.. figure:: Alex_pseudo_2.png
   :width: 800
   :height: 800
   :scale: 40%
   :align: left
   :alt: Pseudo code 
   
-  Planar detection :label:`pseudo_2`
+  Planar detection :label:`pseudo2`
 
-  .. figure:: Alex_pseudo_3.png
+.. figure:: Alex_pseudo_3.png
   :width: 800
   :height: 800
   :scale: 40%
   :align: left
   :alt: Pseudo code 
   
-  Planar detection :label:`pseudo_3`
-
-
-
+  Pseudo-code :label:`pseudo3`
 
 .. figure:: ortho_volume.png
   :width: 400
@@ -433,7 +448,11 @@ The advantage of this method is that it allow the computation of the volume for 
 
 Volume estimation using enhanced planar/corner detections was done using the training from :cite:`sommer2020`. The largest benefit of this method is that it does not rely on Ransac and it can compute the volume for multiple objects. 
 
-This permits in further research to consider the idea of moving the camera in such a way to improve the volumetric measurement of multiple objects. This problem statement becomes equivalent to a Next Best View problem in which the view must optimize the accuracy or availability of a volumetric measurement. This translates to the question "In which of the available positions does the camera need to be placed next in order to improve the volumetric measurment". A starting point for such an idea would be to use the neural network architecture used in :cite:`zeng2020pc` and all , but change the loss function objective from reconstruction to Volumetric accuracy. By creating a scoring function for the volumetric accuracy, candidate new positions might be evaluated and chosen based on the input pointcloud.
+This permits in further research to consider the idea of moving the camera 
+in such a way to improve the volumetric measurement of multiple objects. 
+This problem statement becomes equivalent to a Next Best View problem in 
+which the view must optimize the accuracy or availability of a volumetric measurement. 
+This translates to the question "In which of the available positions does the camera need to be placed next in order to improve the volumetric measurment". A starting point for such an idea would be to use the neural network architecture used in :cite:`zeng2020pc` and all , but change the loss function objective from reconstruction to Volumetric accuracy. By creating a scoring function for the volumetric accuracy, candidate new positions might be evaluated and chosen based on the input pointcloud.
 
 
 Conclusion
