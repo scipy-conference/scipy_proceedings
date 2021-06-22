@@ -410,6 +410,15 @@ The advantage of this method is that it allow the computation of the volume for 
   
   Planar detection :label:`pseudo_2`
 
+  .. figure:: Alex_pseudo_3.png
+  :width: 800
+  :height: 800
+  :scale: 40%
+  :align: left
+  :alt: Pseudo code 
+  
+  Planar detection :label:`pseudo_3`
+
 
 
 
