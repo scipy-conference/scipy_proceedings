@@ -285,14 +285,18 @@ GPU support        X  X  X     X  X    X        X
 Component Library  X  O  O     O  O    O        O
 Reproducibility    X  X  O     X  O    X        X
 Data Lineage       X  O  O     O  O    O        X
+KF: Kubeflow, AF: Airflow, SM: Snakemake
+-----------------------------------------------------
 ================== == == ===== == ==== ======== =====
 
-KF: Kubeflow, AF: Airflow, SM: Snakemake
+Table 1 matches different execution engines against requirements.
 
 Integrated tools
 ~~~~~~~~~~~~~~~~
-Integrated tools are tools which include a visual data flow editor,
-a component library and an execution engine. Prominent candidates
+Integrated tools are tools which include
+a visual data flow editor,
+a component library and an execution engine.
+Prominent candidates
 in the open source space are Apache Nifi, NodeRED, KNIME and Galaxy.
 
 The following additional requirements have been defined for a suitable
@@ -313,8 +317,6 @@ tool:
   and an easy way of making jupyter notebooks part of the data processing
   pipeline is a huge plus.
 
-This leads us to the following table with those requirements added: TODO 
-romeo - insert proper reference.
 
 ================== ==== ======= ===== ======
 Requirement        Nifi NodeRED KNIME Galaxy
@@ -327,6 +329,8 @@ Data Lineage       X    O       O     X
 Visual Editing     X    X       X     X
 Jupyter Notebooks  O    O       O     O
 ================== ==== ======= ===== ======
+
+Table 2 matches different integrated tools against requirements.
 
 
 Final technology choice
@@ -347,16 +351,16 @@ Together with KubeFlow and JupyterLab (where Elyra runs as an extension)
 this combination fullfills all our requirements.
 
 Kubernetes support, GPU support, an existing and growing component
-library, Reproducibility and Data Lineage is there through KubeFlow
+library, Reproducibility and Data Lineage is provided by KubeFlow
 and visual editing with low code support through jupyter notebooks
-and collaboration support with Git is achieved with Elyra and 
+and collaboration support with Git is supported by Elyra and 
 JupyterLab.
 
 .. figure:: architecture.png
 
    Runtime architecture of CLAIMED. :label:`architecture`
 
-As can be seen in figure :ref:`architecture`, Elyra - an more specifically
+As can be seen in Figure :ref:`architecture`, Elyra - an more specifically
 the pipeline editor of the Elyra Extension to JupyterLab - allows
 for visually building data pipelines with a set of assets like
 notebooks and scripts dragged on a canvas and transparently published
@@ -380,7 +384,7 @@ learning. Pipelines are often a central part of a ML-Ops strategy. This
 especially holds for TrustedAI pipelines since reproducibility and
 auditability are even more important there. Figure :ref:`pipeline`
 illustrates the exemplary TrustedAI pipeline we have built using the
-component library and figure :ref:`kfp` is a screenshot taken from
+component library and Figure :ref:`kfp` is a screenshot taken from
 Kubeflow displaying the pipeline after finishing it’s run.
 
 .. figure:: elyra_pipeline_zoomed.png
@@ -409,9 +413,9 @@ Input Components
 
 In this particular case, we’re pulling data directly from a GitHub
 repository via a public and permanent link [covidata]_. We just pull the
-metadata.csv and images folder. The component library will contain a
-component for each different type of data source like files and
-databases.
+metadata.csv and images folder. Input components for different types 
+of data source like files and
+databases are available too.
 
 .. figure:: kfp.png
 
@@ -431,8 +435,7 @@ Filter Components
 ~~~~~~~~~~~~~~~~~
 
 Similar to changing content of rows in a data set also removing rows is
-a common task in data engineering - therefore the filter stage allows
-for exactly that. It is enough to provide a predicate - in this case the
+a common task in data engineering - therefore the filter stage allows doing exactly that. It is enough to provide a predicate - in this case the
 predicate ``~metadata.filename.str.contains('.gz')`` removes invalid
 images.
 
@@ -450,7 +453,7 @@ allows for a convenient way to create datasets from various input data,
 apply transformations and preprocessing steps and make iteration over
 the data easier and memory efficient [tfdataset]_.
 
-In our example, the data isn’t in the required format. It is organized as
+In our example, the data aren’t in the required format. It is organized as
 a directory full of images and alongside it is a CSV file which defines the
 attributes. Available attributes are exam finding, sex and age,
 from which we only require the finding for our example.
@@ -490,13 +493,13 @@ goes into production. Evaluating classification performance against the
 target labels has been state-of-the-art since the beginning of machine
 learning, therefore we have added components like confusion matrix. But
 taking TrustedAI measures into account is a newly emerging practice.
-Therefore, components for AI Fairness, AI Explainability [aix360]_ and AI
+Therefore, components for AI Fairness, AI Explainability and AI
 Adversarial Robustness have been added to the component library.
 
 Blessing Components
 ~~~~~~~~~~~~~~~~~~~
 
-In Trusted AI it is important to obtain a blessing of assets like
+In Trusted AI (but not limited to) it is important to obtain a blessing of assets like
 generated data, model or report to be published and used by other
 subsystems or humans. Therefore, a blessing component uses the results
 of the evaluation components to decide if the assets are ready for
@@ -540,9 +543,10 @@ The name of the tool is C3 [c3]_, and it stands for CLAIMED component compiler.
 
 Import/Export of components to/from Galaxy
 ------------------------------------------
-As seen in the table comparing integrated tools,
+As seen in Table 2,
 Galaxy covers a majority of our requirements already.
-Alas, Galaxy components - called "tools" - are very skewed towards genomics domain.
+Unfortunately, Galaxy components - called "tools" - are very skewed 
+towards genomics.
 Adding new components and extending functionality onto other domains would make
 the tool interesting for a wider audience.
 Reverse is also true, the existing component library Galaxy is extensive,
@@ -567,8 +571,7 @@ It would then be interpreted by Elyra and the appropriate UI would be rendered.
 One successful example of such implementation is Galaxy's UI [galaxy_ui]_.
 A complex UI behavior is expressed by XML configuration. So we are also exploring an
 option of either using Galaxy's XML Schema or defining a new one and support the
-transformation from one into the other. In terms of tools, the transformation
-should be happening between the Galaxy and the C3.
+transformation from one into the other.
 
 
 Add CWL support to the Elyra pipeline editor
@@ -578,20 +581,20 @@ CWL is a powerful workflow expression language supported already by
 various tools we've evaluated. Currently, Elyra uses its own, 
 proprietary pipeline representation format. It would be highly
 beneficial if Elyra would switch to CWL to improve interoperability 
-between different software component. For example, Reana and Galaxy
+between different software components. For example, Reana and Galaxy
 (partially) already support CWL which would allow for publishing
 pipelines from Elyra to Reana directly without transpiling the pipeline.
 Alternatively, any maybe more realistically, Elyra just could support
-export (and import) if CWL into its pipeline editor.
+export (and import) of CWL into its pipeline editor.
 
 Import 3rd party component libraries
 ------------------------------------
 In theory it would be possible to import 3rd party component libraries
 like those from KNIME or Nifi into CLAIMED as the only thing needed to
-become a CLAIMED component at the end of the day is a container image
+become a CLAIMED component is a container image
 and some meta data (which by the way also holds for Kubeflow components).
 It should be possible to wrap different components from KNIME, Nifi or
-similar tools into a container image and use it within Elyra or all
+similar tools into a container image and use it within Elyra and all
 other execution engines CLAIMED supports.
 
 Reana execution engine support
