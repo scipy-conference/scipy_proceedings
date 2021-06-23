@@ -342,14 +342,14 @@ integrated into CLAIMED.
 The pipeline editor of Elyra allows for drag’n’drop of arbitrary 
 scripts (shell, R, python) and jupyter notebooks from the file explorer
 to the canvas. They can be assigned to a container image to be run on.
-Elyra allows to submit such pipelines to Airflow and KubeFlow at the
+Elyra allows to submit such pipelines to Airflow and Kubeflow at the
 moment. 
 
-Together with KubeFlow and JupyterLab (where Elyra runs as an extension)
+Together with Kubeflow and JupyterLab (where Elyra runs as an extension)
 this combination fullfills all our requirements.
 
 Kubernetes support, GPU support, an existing and growing component
-library, Reproducibility and Data Lineage is provided by KubeFlow
+library, Reproducibility and Data Lineage is provided by Kubeflow
 and visual editing with low code support through jupyter notebooks
 and collaboration support with Git is supported by Elyra and 
 JupyterLab.
@@ -362,7 +362,7 @@ As can be seen in Figure :ref:`architecture`, Elyra - an more specifically
 the pipeline editor of the Elyra Extension to JupyterLab - allows
 for visually building data pipelines with a set of assets like
 notebooks and scripts dragged on a canvas and transparently published
-to KubeFlow as a Kubeflow pipeline.
+to Kubeflow as a Kubeflow pipeline.
 
 The only thing missing now is a set of re-usable notebooks for different
 kinds of tasks. This is where CLAIMED kicks in. We've created CLAIMED
@@ -401,7 +401,7 @@ Please note that the core feature of our software is threefold.
 
 - the CLAIMED component library
 - Elyra with it's capability to use CLAIMED to create a pipeline 
-  and push it to KubeFlow
+  and push it to Kubeflow
 - the pipeline itself
 
 
@@ -474,7 +474,7 @@ figure :ref:`trainingstage`, only a couple of parameters
 need to be specified.
 
 Although possible, hyper-parameter search is not considered in this
-processing stage as we want to make use of KubeFlow’s hyper-parameter
+processing stage as we want to make use of Kubeflow’s hyper-parameter
 search capabilities leveraged through Katib [katib]_ in
 the future.
 
