@@ -579,12 +579,13 @@ Add CWL support to the Elyra pipeline editor
 
 CWL is a powerful workflow expression language supported already by
 various tools we've evaluated. Currently, Elyra uses its own, 
-proprietary pipeline representation format. It would be highly
-beneficial if Elyra would switch to CWL to improve interoperability 
-between different software components. For example, Reana and Galaxy
-(partially) already support CWL which would allow for publishing
-pipelines from Elyra to Reana directly without transpiling the pipeline.
-Alternatively, Elyra could support export and import of CWL into its pipeline editor.
+proprietary pipeline representation format. Addin support of CWL to Elyra would
+improve interoperability between different software components. 
+For example, Reana, execution engine used in the particle physics community, and Galaxy
+partially already support CWL. This means it would be possible export
+pipelines from Elyra to Reana, without the need of transpiling the pipeline.
+Alternatively, Elyra could integrate export and import of CWL into its pipeline editor.
+
 
 Import 3rd party component libraries
 ------------------------------------
@@ -597,19 +598,14 @@ It is also possible to wrap different components from KNIME, Nifi or
 similar tools in this manner and use it within Elyra, as well as in
 the other execution engines CLAIMED supports.
 
-Reana execution engine support
-------------------------------
-Besides Kubeflow, Reana is well established, especially in the particle
-physics community. As Reana already supports CWL, a CWL exporter
-would add this functionality out of the box.
 
 Create more (exemplary) pipelines
 ---------------------------------
-Currently, CLAIMED ships with three exemplary pipelines. The health
+At the moment, CLAIMED ships with three exemplary pipelines. The health
 care inspired TrustedAI pipeline which was covered in this paper,
 a pipeline to visualize and predict soil temperature from a historic
-data set and a IoT sensor data analysis pipeline. The next pipeline
-we create is a genomics pipeline for the Swiss Institute of
+data set and an IoT sensor data analysis pipeline. The next pipeline
+in line is a genomics pipeline for the Swiss Institute of
 Bioinformatics affiliates University Hospital Berne/Berne University
 and potentially for particle physics at CERN.
 
@@ -618,8 +614,8 @@ Conclusion
 ==========
 
 We’ve build and proposed a trustable, low-code, scalable and open source
-visual AI pipeline system on top of many de facto standard components
-used by the machine learning community. Using Kubeflow Pipelines
+visual AI pipeline system on top of various common components
+used in the machine learning community. Using Kubeflow Pipelines
 provides reproducibility and auditability. Using Kubernetes provides
 scalability and standardization. Using Elyra for visual development
 provides ease of use, such that all internal and external stakeholders
