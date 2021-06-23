@@ -573,7 +573,7 @@ Afterwards its three separate components can be symbolically expressed and final
     s1, s2 = sym.symbols('s1, s2', real=True)
     Psi_1_ = sym.cos(n * xi)
              / (sym.sinh(n * (beta - alpha))) * (s1 + s2)
-    Psi_1_ = sym.Sum((-1)**n * (testPsi), (n, 1, m))
+    Psi_1_ = sym.Sum((-1)**n * (Psi_1_), (n, 1, m))
 
 >>> Psi_1_  
  
