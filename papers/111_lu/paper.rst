@@ -3,7 +3,7 @@
 :email: hlu@westhealth.org
 :institution: Gary and Mary West Health Institute
 
-:author: José Unpingco
+:author: JosÃ© Unpingco
 :email: jhunpingco@westhealth.org
 :institution: Gary and Mary West Health Institute
 
@@ -24,36 +24,32 @@ PDFrw was used to prepopulate Covid-19 vaccination forms to improve the efficien
 Introduction
 ------------
 
-The coronavirus pandemic has been perhaps one of the most disruptive nationwide
-events in living memory. The frail, vulnerable, and elderly are
-disproportionately affected by serious hospitalizations and deaths.  While the
-near miraculous pace of development of effective vaccines was potential
-salvation from the situation, the logistical challenges are immense
-particularly, when it comes to the elderly.
+The coronavirus pandemic has been one of the most disruptive nationwide events in living memory. The frail,
+vulnerable, and elderly have been disproportionately affected by serious hospitalizations and deaths.
+Notwithstanding the amazing pace of vaccine development, logistical problems can still inhibit large-scale
+vaccine distribution, especially among the elderly.  Vaccination centers typically require online
+appointments to facilitate vaccine distribution by State and Federal governments, but many elderly do not
+have Internet access or know how to make online appointments, or how to use online resources to coordinate
+transportation to and from the vaccination site, as needed. 
 
-When vaccination centers and clinics began to be established, all required
-appointments and nearly all appointments had to be made online. Providing
-vaccines to the most vulnerable population especially in the early stages of
-the vaccine rollouts proved challenging as seniors are less likely to be tech
-saavy and have transportation challenges.
+As a personal anecdote, when vaccinations were opened to all aged 65 and older, one of the authors tried to
+get his parents vaccinated and discovered that the experience documented here :cite:`letters_2021` was
+unfortunately typical and required regularly pinging the appointment site for a week to get an appointment.
+However, beyond persistence, getting an appointment required monitoring the site to track when batches of new
+appointments were released --- all tasks that require an uncommon knowledge of Internet infrastructure beyond
+most patients.
 
-As a personal anecdote, when vaccinations were open to all people 65 and older,
-the author ventured to get my parents vaccinated. This experience was
-rather typical :cite:`letters_2021` The process required periodic pinging of the 
-appointment site for a vaccine supercenter. This process took a week
-of constant trying until an appointment could be made. Beyond
-perisistence, it required observing the pattern of when batches of new
-appointments were made available. Needless to say seniors even those
-with some amount of technological saavy would have had extreme
-difficulty. 
+To help San Diego County with the vaccine rollout, the Gary and Mary West PACE (WestPACE)
+center established a pop-up point of distribution (POD) for the COVID-19 vaccine
+:cite:`press` specifically for the elderly with emphasis on those who are most vulnerable.
+The success in the POD was reported in the local news media :cite:`knsd` :cite:`kpbs` and
+prompted the State of California to ask WestPACE's sister organization (the
+Gary and Mary West Health Institute) to develop a playbook for the deploying a pop-up POD
+:cite:`pod`.
 
-To address this the Gary and Mary West PACE (WestPACE) center established a
-pop-up point of distribution (POD) for the COVID-19 vaccine :cite:`press`
-specifically for the elderly with emphasis on those who are most vulnerable.
-The success in the POD was touted in the local news media :cite:`knsd`
-:cite:`kpbs` and caught the attention of the State of California who asked WestPACE's sister
-organization the Gary and Mary West Health Institute to develop a playbook for
-the deploying a pop-up POD :cite:`pod`.
+This paper describes the logistical challenges regarding the vaccination rollout 
+for WestPACE and focuses on the use of Python's :code:`PDFrw`  module 
+to address real-world sensitive data issues with PDF documents.
 
 This paper gives a little more background of the effort. Next the overall
 infrastructure and information flow is descried. Finally, a very detailed
@@ -63,135 +59,103 @@ major bottleneck and volunteer pain point.
 Background
 ----------
 
-WestPACE operates a Program of All-Inclusive Care for the Elderly (PACE) center
-which provides nursing-home-level care. By the nature of the services provided,
-participants in the PACE program are among the most vulnerable.  In an effort
-to provide vaccinations as quickly as possible WestPACE sought to obtain the
-vaccine and necessary freezer to vaccinate their members rather than wait for
-San Diego County to provide them. However, obtaining a freezer was a great challenge
-because at that time freezers were in high demand because of the need for
-storing the vaccine. In order to satisfy the need, WestPACE could only select
-from freezers that were available. The freezer obtained had a capacity which far exceeded the
-needs of the center. With this excess freezer capacity, WestPace and the County
-collaborated to setup an unique vaccination center with a mission to vaccinate
-seniors specifically.
+WestPACE operates a Program of All-Inclusive Care for the Elderly (PACE) center which
+provides nursing-home-level care and wrap-around services such as transportation to the
+most vulnerable elderly.  To provide vaccinations to WestPACE patients as quickly as
+possible, WestPACE tried to acquire suitable freezers (some vaccines require special cold
+storage) instead of waiting for San Diego County to provide them; but, due to high-demand,
+acquiring a suitably-sized freezer was very problematic. As a pivot, WestPACE opted to
+acquire a freezer that was available but with excess capacity beyond what was needed for
+just WestPACE, and then collaborated with the County to use this excess capacity to
+establish a walk-up vaccination center for all San Diego seniors, in or out of WestPACE.
 
-To meet the needs of seniors, the West family of non-profits partnered
-with the local 2-1-1 organization (a non-profit that is a resource and
-information hub that connects people with community, health and disaster
-services). The 2-1-1 organization provided services such as a call center for the
-technologically inexperienced elderly population and partnered with ride sharing services to provide
-transportation to and from the vaccination site.
+WestPACE coordinated with the local 2-1-1 organization responsible for coordination of
+community health and disaster services. The 2-1-1 organization provided a call center with
+in-person support for vaccine appointments and transportation coordination to and from
+WestPACE. This immediately eased the difficulty of making online appointments and the burden
+of transportation coordination.  With these relationships in place, the vaccination clinic
+went from concept to active vaccine distribution site in about two weeks
+resulting in the successful vaccination of thousands of seniors.
 
-With these relationship in place, the vaccination clinic went from concept to
-distributing vaccines in about two weeks. During its brief existence, this
-clinic vaccinated thousands of seniors.
-
-Allhough this is a  technical paper, this background describes the real impact
-technology can make in peoples lives and perhaps even saving lives during one
-of the most distruptive crisis in our time.
+Allhough this is a  technical paper, this background describes the real impact technology
+can make in the lives of the vulnerable and elderly in society 
+in a crisis situation. 
 
 Infrastructure
 --------------
 
-The goal of the vaccine clinic is to provide accessibiliy to a senior friendly
-vaccine experience. Furthermore as a non-profit and volunteer effort,
-consideration must be given as to cost and manpower. Unlike well established large medical
-practices, record management and Health Insurance Portability and Accountability Act (HIPAA)
-compliant computer infrastructure were not well established. Even the large medical practices had
-difficulty maintaining a senior-friendly environment during the early days of
-the vaccine roll out when demand far exceeded capacity.
-
-With the goal of providing a senior-friendly vaccine experience, Gary and Mary
-West PACE which stood up a small senior oriented covid vaccine clinic with a desire
-to mitigate the amount of paperwork to which a frail senior is
-subjected. Typically several pages of information are repeatedly requested
-for appointments, on consent forms, and in reminder
-cards. Information ranging from basic demographics to over a dozen
-health questions.
-
-Privacy and compliance are  an important aspect of setting up a vaccine clinic
-and information infrastructure for it. The key aspect ensuring
-compliance to HIPAA requirements is restricting access to Protected
-Health Information (PHI). For electronic systems that means all data containing PHI
-should be encrypted both at rest and in transit. For paper
-systems (including the printed forms mentioned below), papers containing PHI
-must be not be left in the open and when unattended must be in a locked room or
-container where access is restricted to authorized use. Finally, for any cloud
-infrastructure the appropriate Business Associate Agreements (BAA) must be in place :cite:`filkins`.
+The goal of the WestPACE vaccine clinic was to provide a friendly environment to vaccinate
+seniors. Because this was a nonprofit and volunteer effort, the clinic did not have any
+pre-existing record management practices with corresponding IT infrastructure to handle
+sensitive health information according to Health Insurance Portability and Accountability
+Act (HIPAA) standards. One key obstacle is paperwork for appointments, questionnaires,
+consent forms, and reminder cards (among others) that must be processed securely and at
+speed, given the fierce demand for vaccines.  Putting the burden of dealing with this
+paperwork on the patients would  be confusing for the patient and time-consuming and limit
+the overall count of vaccinations delivered. Thus, the strategy was to use electronic
+systems to handle Protected Health Information (PHI) wherever possible and comply with HIPAA
+requirements for data encryption at rest and in-transit, including appropriate Business
+Associate Agreements (BAA) for any cloud service providers :cite:`filkins`. For physical
+paper, HIPAA requirements mean that PHI must always be kept in a locked room or a container
+with restricted access.
 
 .. figure:: diagram.pdf
 
    Vaccination Pipeline :label:`fig:infrastructure`
 
 Figure :ref:`fig:infrastructure` shows a high level view of the user experience and
-information flow. One difficultu for the older users, especially those with
-few people around them to help, is the challenge of making appointments. Because
-the appointment systems were set up in a hurry, many are not well designed and confusing.
-In the depicted pipeline, the persion seeking a vaccine or a caregiver would telephone the 2-1-1
-call center and the operator  collects demographic and health information
-during a brief interview. In addition, 2-1-1 arranges transportation to and
-from the vaccine site if needed. The demographic and health information is
-entered into the appointment system managed by the California Department of Public Health.
-The information is downloaded from the  appointment system prior to the next day's clinic and processed
-using Python for automated procedures and Jupyter for manual proceedures. (Due
-to the short duration of the clinic, full automation was not deemed necessary.)
-A forms packet is generated for each patient. A day's worth of packets
-are then consolidated into a few PDF
-files which are delivered to volunteers at the clinic, where the
-volunteers print the forms. These form
-packets include a consent form, county health forms, and CDC provided vaccine
-cards.
+information flow. Making appointments can be challenging, especially those with limited
+caregiver support.  Because the appointment systems were set up in a hurry, many user
+interfaces were confusing and poorly designed.  In the depicted pipeline, the person (or
+caregiver) telephones 2-1-1 call center and the live operator collects demographic and
+health information, and coordinates any necessary travel arrangements, as needed.  The
+demographic and health information is entered into the appointment system managed by the
+California Department of Public Health.  The information is then scraped and downloaded to
+the clinic from the appointment system the day before the scheduled vaccination. Unfortunately,
+given the time constraints, we were not able to fully automate this process. Next, a forms
+packet is generated for every scheduled patient and consolidated into a PDF file that is
+then printed and handed to the volunteers at the clinic. The packet consolidates documents
+including consent forms, health forms, and CDC-provided vaccination cards.
 
-When the patient arrives at the clinic, their forms are pulled, a volunteer
-reviews the question with the pateint, and corrects any errors. Once the
-information is validated, the patient is directed as to which forms to sign. As a
-result, neither the patient nor the volunteer needs to fill the information. This
-was crucial to maintain a good throughput of patients during peak times.
-Generally, most patients experience less than five minute delay between arrival
-at the clinic and administration of the vaccine.
+When the patient arrives at the clinic, their forms are pulled and a volunteer reviews the
+questions while correcting any errors. Once the information is validated, the patient is
+directed to sign the appropriate forms. The crucially efficient part is that the patient and
+volunteer only have to *validate* previously collected information instead of filling out
+multiple forms with redundant information. This was crucial during peak demand so that most
+patients experienced less than a five minute delay between arrival and vaccine
+administration. We also investigated commercial services to do the electronic form filling
+with auditable electronic signature, but these turned out to be too expensive and 
+time-consuming to set up.
 
-While many commercial services do provide electronic form filling with electronic
-signature. This system adopted paper for reasons of minimizing cost and providing a
-trail for downstream audits.
+Different entities such as 2-1-1 and the State of California handle certain elements of the
+data pipeline, but strict HIPAA requirements are followed each step.  All clinic
+communications with the State appointment system were manage through a properly
+authenticated and encrypted system. The vaccine clinic utilized pre-existing, cloud-based
+HIPAA-compliant system, with corresponding BAAs. All sensitive data processing occurred on
+this system.
 
-Regarding compliance, some of the vaccine pipeline is handled by the third parties such as 2-1-1 or
-the state. However, from the time the data is ingested from the state's
-appointment system to a processing center and transmitted to the clinic,
-strict HIPAA requirements are met. First, all communications from the
-appointment system took place under authentication and encryption. Fortunately,
-West Health has an processing center with the appropriate encryption at rest
-and in transit as required by HIPAA in handling PHI. The processing
-center is cloud-based but existing BAA with the cloud services were
-leveraged in order to meet
-HIPAA requirements. All processing took place in this
-platform. Finally, the processed forms were transfered using
-encryption to a server at the clinic site where an authorized operator
-could securely access the forms and print them out. The paper forms
-were in the custody of a volunteer until they were delivered to a back
-office. Per health department regulations, the forms are then stored
-for a proscribed amount of time in a locked cabinet.
+Finally, the processed PDF forms were transferred using encryption to a server at the clinic
+site where an authorized operator printed them out.  The paper forms were placed in the
+custody of a clinic volunteer until they were delivered to a back office for storage in a
+locked cabinet, pursuant to health department regulations.
 
-Though all aspects of the pipeline faced challenges, the
-pre-population of forms suprisingly posed a difficult technical
-challenge due to the lack of programmatic PDF tools that properly work with
-fillable forms. The remainder of the paper discusses the challenges
-and provides instructions on how to use python to fill PDF forms for printing.
+Though all aspects of the pipeline faced challenges, the pre-population of forms turned out
+to be surprisingly difficult due to the lack of programmatic PDF tools that properly work
+with fillable forms. The remainder of the paper discusses the challenges and provides
+instructions on how to use Python to fill PDF forms for printing.
 
 Programmatically Fill Forms
 ---------------------------
 
-Programatically filling in PDF forms can be a quick and accurate way to
-disseminate forms. Bits and pieces can be found throughout the Internet and
-places like Stack Overflow. No single source provides a complete
-answer. 
-However, the *Medium* blog post by Vivsvaan Sharma :cite:`sharma` is a good
-starting place. Another useful resource is the PDF 1.7 specification
-:cite:`pdf`. Since the deployment of the vaccine clinic, the 
-details of the form filling can be found at WestHealth's blog :cite:`whblog`.
-The code is available on github as described below.
+Programmatically filling in PDF forms can be a quick and accurate way to
+disseminate forms.  Bits and pieces can be found throughout the Internet and places like Stack Overflow but no
+single source provides a complete answer.  However, the *Medium* blog post by Vivsvaan
+Sharma :cite:`sharma` is a good starting place. Another useful resource is the PDF 1.7
+specification :cite:`pdf`. Since the deployment of the vaccine clinic, the details of the
+form filling can be found at WestHealth's blog :cite:`whblog`.  The code is available on
+Github as described below.
 
-As a prelimiary, the following imports are used in the examples given below.
+The following imports are used in the examples given below.
 
 .. code:: python
 
@@ -204,7 +168,7 @@ Finding Your Way Around PDFrw and Fillable Forms
 ------------------------------------------------
 
 Several examples of basic form filling code can be found on the
-Internet, including the above mentioned *Medium* blog post. The
+Internet, including the above-mentioned *Medium* blog post. The
 following is a typical snippet taken largely from the blog post.
 
 .. code:: python
@@ -224,7 +188,7 @@ following is a typical snippet taken largely from the blog post.
 The type of ``annotation['/T']`` is ``pdfString``. While some sources use
 ``[1:-1]`` to extract the string from ``pdfString``, the ``.to_unicode()``
 method is the proper way to extract the string. According to the PDF 1.7
-specification § 12.5.6.19, all fillable forms use widget annotation.
+specification Â§ 12.5.6.19, all fillable forms use widget annotation.
 The check for ``annotation['/SubType']`` filters the annotation
 to only widget annotations.
 
@@ -242,7 +206,7 @@ This converts `value`` into a ``PdfString`` and updates the
 
 In addition, at the top level of the ``PdfReader`` object ``pdf``, the
 ``NeedAppearances`` property in the interactive form dictionary,
-``AcroForm`` (See § 12.7,2) needs to be set, without this, the fields are updated but
+``AcroForm`` (See Â§ 12.7,2) needs to be set, without this, the fields are updated but
 will not necessarily display. To remedy this, the following code
 snippet can be used.
 
@@ -258,9 +222,9 @@ Combining the code snippets provides a simple method for filling
 in text fields, except if there are multiple instances of the same field. To
 refer back to the clinic example, each patient's form packet comprised multiple
 forms each with the ``Name`` field. Some forms even had the ``Name`` appear
-twice such as in a demographic section and then in a "Print Name" field
+twice such as in a demographic section and then in a ``Print Name`` field
 next to a signature line.  If the code above on such a form were run,
-the ``Name`` field doesn't show up. 
+the ``Name`` field will not show up. 
 
 Whenever the multiple
 fields occur with the same name the situation is more complicated. One
@@ -272,8 +236,8 @@ used for manual filling, this would require the user to enter the
 
 When fields appear multiple times, there are some widget annotations without
 the ``/T`` field but with a ``/Parent`` field. As it turns out this ``/Parent``
-contains the field name ``/T`` as well as the default value ``/V``. So
-for the present examples there is one ``/Parent`` and two
+contains the field name ``/T`` as well as the default value ``/V``. 
+For the current examples, there is one ``/Parent`` and two
 ``/Kids``. The code can be simply modified to handle repeated fields
 by inserting the following lines:
 
@@ -282,7 +246,7 @@ by inserting the following lines:
     if not annotation['/T']:
         annotation=annotation['/Parent']
 
-That can allow us to inspect and modify annotations that appear more
+These allow us to inspect and modify annotations that appear more
 than once. With this modification, the result of the inspection code
 yields:
 
@@ -312,7 +276,7 @@ with the same value.
 Checkboxes
 ----------
 
-In accordance to §12.7.4.2.3, the checkbox state can be set as
+In accordance to Â§12.7.4.2.3, the checkbox state can be set as
 follows:
 
 .. code:: python
@@ -324,51 +288,45 @@ follows:
             val_str = BasePdfName('/Off')
         annotation.update(PdfDict(V=val_str))
 
-This will work especially when the export value of the checkbox is
-``Yes``, but doesn't need to be. The easiest solution to edit the form is to ensure that the
+This may work especially the export value of the checkbox is
+``Yes``, but not always. The easiest solution to edit the form is to ensure that the
 export value of the checkbox is ``Yes`` and the default state of the box
 is unchecked. The recommendation in the specification is that it
-be set to ``Yes``. In the event, the tools to make this change are not
+be set to ``Yes``. In any event, the tools to make this change are not
 available, the ``/V`` and ``/AS`` fields should be set to the export value
 not ``Yes``.
 
-If the form is used not only for automatic filling but manual filling,
-certain checkboxes may be preferable to be checked as a default. In that case, while
-the code does work, the best practice is to delete the ``/V`` as
-well as the ``/AS``\ field from the dictionary. The export value can be
-discovered by examining the  appearance dictionary ``/AP`` and specifically at the ``/N`` field.
-Each annotation has up
-to 3 appearances in its appearance dictionary: ``/N``, ``/R`` and ``/D``,
-standing for *normal*, *rollover*, and *down* (§12.5.5). The latter two have to
-do with appearance in interacting with the mouse. The normal appearance has to
-do with how the form is printed.
+If the form is used  for both manual and automatic filling, certain checkboxes may be
+checked as a default. In that case, while the code does work, the best practice is to delete
+the ``/V`` as well as the ``/AS`` field from the dictionary. The export value can be
+inspected by examining the  appearance dictionary ``/AP`` and specifically at the ``/N``
+field.  Each annotation has up to three appearances in its appearance dictionary: ``/N``,
+``/R`` and ``/D``, standing for *normal*, *rollover*, and *down* (Â§12.5.5). The latter two
+have to do with appearance in interacting with the mouse. The normal appearance has to do
+with how the form is printed.
 
-According to the PDF specification for checkboxes, the appearance stream
-``/AS`` should be set to the same value ``/V``. Failure to do so may
-mean in some circumstances the checkboxes do not appear. It should be
-noted that there isn't really strict enforcement within PDF readers, so
-it is best not to tempt fate and enter a value other than the export
-value for a checked value. Additionally, all these complicated
-machinations with the appearance dictionary come into play when dealing
-with more complex form elements.
+According to the PDF specification for checkboxes, the appearance stream ``/AS`` should be
+set to the same value ``/V``. Failure to do so may mean that the checkboxes do not appear.
+It should be noted that  PDF readers do not provide strict enforcement so it is better enter
+a value other than the export value for a checked value. Additionally, all these complicated
+machinations with the appearance dictionary are exacerbated by more complex form elements.
 
 More Complex Forms
 ------------------
 
-For the purpose of the vaccine clinic application, the filling text fields
-and checkboxes were all that were needed. However, in the interest of not leaving a partial
-solution, other form field types were studied and solutions are given below.
+For the purpose of the vaccine clinic application, the filling text fields and checkboxes
+were all that were needed. However, for completeness, other form field types were studied
+and solutions are given below.
 
 
 Radio Buttons
 ~~~~~~~~~~~~~
 
-Radio buttons are by far the most complex of the form entries types.
-Each widget links to ``/Kids`` which represent the other buttons in the
-radio group. But each widget in a radio group will link to the same
-'kids'. Much like the 'parents' for the repeated forms fields with the
-same name, each kid need only be updated each once, but it can't hurt to apply
-the same update multiple times if it simplifies the code.
+Radio buttons are by far the most complex of the form entries types.  Each widget links to
+``/Kids`` which represent the other buttons in the radio group. Each widget in a radio
+group will link to the same 'kids'. Much like the 'parents' for the repeated forms fields
+with the same name, each kid need only be updated once, but 
+the same update can be used multiple times if it simplifies the code.
 
 In a nutshell, the value ``/V`` of each widget in a radio group needs to
 be set to the export value of the button selected. In each kid, the
@@ -402,7 +360,7 @@ Combo Boxes and Lists
 ~~~~~~~~~~~~~~~~~~~~~
 
 Both combo boxes and lists are forms of the choice form type. The combo
-boxes resemble drop down menus and lists are similar to list pickers in
+boxes resemble drop-down menus and lists are similar to list pickers in
 HTML. Functionally, they are very similar to form filling. The value
 ``/V`` and appearance stream ``/AS`` need to be set to their exported
 values. The ``/Op`` yields a list of lists associating the exported
@@ -450,21 +408,14 @@ be combined into one function.
 Determining Form Field Types Programmatically
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With the exception of the signature form (which probably should not be
-filled programatically), implementation of programatic filling of all
-input form field types has been presented. While PDF authoring tools
-or even visual inspection can identify each forms type,
-programatically determining a form field's type from the PDF document
-itself would complete the package.
-
-To address the missing ingredient, it is important to understand that
-fillable forms fall into four form types, button (push button, checkboxes
-and radio buttons), text, choice (combo box and list box) and signature.
-They correspond to following values of the ``/FT`` form type field of
-a given annotation, ``/Btn``, ``/Tx``, ``/Ch`` and ``/Sig``, respectively.
-Since signature filling is not supported and push button is a widget
-which can cause an action but is not fillable, those corresponding
-types are omitted from consideration.
+While PDF authoring tools or visual inspection can identify each forms' type, to determine
+this programmatically is possible.  It is important to understand that fillable forms fall
+into four form types, button (push button, checkboxes and radio buttons), text, choice
+(combo box and list box) and signature.  They correspond to following values of the ``/FT``
+form type field of a given annotation, ``/Btn``, ``/Tx``, ``/Ch`` and ``/Sig``,
+respectively.  Since signature filling is not supported and push button is a widget which
+can cause an action but is not fillable, those corresponding types are omitted from
+consideration.
 
 To distinguish the types of buttons and choices, the form
 flags ``/Ff`` field is examined For radio buttons, the 16th bit is set. For combo
@@ -518,19 +469,16 @@ values and does not permit the editing the fields. Going even further,
 one could render the PDFs as images if the only requirement is that the
 combined files be printable. However, tools like
 ``ghostscript`` and ``imagemagick`` don't do a good job of preserving
-form data. Other tools like PDFUnite don't solve any of these problems.
+form data and neither does  PDFUnite.
 
 Form Field Name Collisions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The rationale for combining multiple filled PDF files arose from the
-use case of the vaccine clinic. The same form was filled out for
-multiple patients. But printing hundreds of individual forms was
-problematic due to technological constraints (programs actually
-crashed). To combine a batch of PDF forms, all form field
-names are required to be different. The solution is quite
-simple, in the process of filling out the form using the code above,
-rename (set) the value of ``/T``.
+Combining multiple filled PDF files was an issue for the vaccine clinic because the same
+form was filled out for multiple patients. The alternative of printing hundreds of
+individual forms was infeasible.  To combine a batch of PDF forms, all form field names must
+be different. Thankfully, the solution is quite simple, in the process of filling out the
+form using the code above, rename (set) the value of ``/T``.
 
 .. code:: python
 
@@ -560,7 +508,7 @@ Combining the Files
 ~~~~~~~~~~~~~~~~~~~
 
 Solutions for combining files found on the Internet for combining PDF
-files using ``PDFrw``, the following recipe is typical of what ca be found.
+files using ``PDFrw``, the following recipe is typical,
 
 .. code:: python
 
@@ -571,13 +519,13 @@ files using ``PDFrw``, the following recipe is typical of what ca be found.
     writer.write("output.pdf")
 
 While the form data still exists in the output file, the rendering
-information is lost. and won't show when displayed or printed. The
+information is lost and won't show when displayed or printed. The
 problem comes from the fact that the written PDF does not have an
-interactive form dictionary (see §12.7.2 of the PDF 1.7 specification).
+interactive form dictionary (see Â§12.7.2 of the PDF 1.7 specification).
 In particular the interactive forms dictionary contains the boolean
-``NeedAppearances`` to be set in order for fields to be shown. If the
+``NeedAppearances`` to be set for fields to be shown. If the
 forms being combined have different interactive form dictionaries, they
-will need to be merged. For the purposes here since the source
+need to be merged. For our application, because the source
 form is identical amongst the various copies, any ``AcroForm``
 dictionary can be used.
 
@@ -603,6 +551,6 @@ A complete functional version of this PDF form filler is open source
 and can be found at WestHealth's github repository
 `https://github.com/WestHealth/pdf-form-filler
 <https://github.com/WestHealth/pdf-form-filler>`_ 
-This process was able to produce large quantities of
-pre-filled forms for seniors seeking COVID-19 vaccinations relieving one of the
-bottlenecks that have plagued many other vaccine clinics.
+This process was able to produce large quantities of pre-filled forms for seniors seeking
+COVID-19 vaccinations relieving one of the bottlenecks that have plagued many other vaccine
+clinics.
