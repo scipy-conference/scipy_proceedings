@@ -108,7 +108,7 @@ Privacy and compliance are  an important aspect of setting up a vaccine clinic
 and information infrastructure for it. The key aspect ensuring
 compliance to HIPAA requirements is restricting access to Protected
 Health Information (PHI). For electronic systems that means all data containing PHI
-should be encrypted when at rest and encrypted when in transit. For paper
+should be encrypted both at rest and in transit. For paper
 systems (including the printed forms mentioned below), papers containing PHI
 must be not be left in the open and when unattended must be in a locked room or
 container where access is restricted to authorized use. Finally, for any cloud
