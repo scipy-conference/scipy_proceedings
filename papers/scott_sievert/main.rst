@@ -22,8 +22,9 @@ Training machine learning models faster with Dask
    training time, provided that the number of workers grows with the batch
    size. In this work, we provide a package that trains PyTorch models on Dask
    clusters, and can grow the batch size if desired. Our simulations indicate
-   that the training time can be reduced from about 120 minutes to 45 minutes
-   for a popular image classification architecture that uses GPUs.
+   that for a particular model, the training time can be reduced from about 120
+   minutes with standard SGD to 45 minutes for a popular image classification
+   architecture that uses GPUs.
 
 .. class:: keywords
 
@@ -74,17 +75,17 @@ step :math:`k` is computed via
    \bm{g}(\bm{w}_k; \bm{z}_{i_s})
 
 where :math:`\bm{g}` is the gradient of the loss function :math:`f` for some
-batch size :math:`B_k \ge 1`, :math:`i_s` is chosen uniformly at random and a
-step size :math:`\gamma_k`. The objective function's gradient is approximated
-with :math:`B_k` examples – the gradient approximation
-:math:`\frac{1}{B_k}\sum_{i=1}^{B_k} \bm{g}(\bm{w}_k; \bm{z}_{i_s})` is an
-unbiased estimator of the loss function :math:`F`'s gradient. This computation
-is common in the vast majority of SGD variants, and is found in popular
-variants like Adam :cite:`adam`, RMSprop :cite:`rmsprop`, Adagrad
-:cite:`adagrad`, Adadelta :cite:`adadelta`, and averaged SGD :cite:`asgd`.
-These variants make modifications to the learning rate :math:`\gamma_k`
-:cite:`adagrad, adadelta, adam, rmsprop` or modifications to the final model
-:cite:`asgd`.
+batch size :math:`B_k \ge 1`, :math:`i_s` is chosen uniformly at random and
+:math:`\gamma_k > 0` is the learning rate or step size. The objective
+function's gradient is approximated with :math:`B_k` examples – the gradient
+approximation :math:`\frac{1}{B_k}\sum_{i=1}^{B_k} \bm{g}(\bm{w}_k;
+\bm{z}_{i_s})` is an unbiased estimator of the loss function :math:`F`'s
+gradient. This computation is common in the vast majority of SGD variants, and
+is found in popular variants like Adam :cite:`adam`, RMSprop :cite:`rmsprop`,
+Adagrad :cite:`adagrad`, Adadelta :cite:`adadelta`, and averaged SGD
+:cite:`asgd`.  These variants make modifications to the learning rate
+:math:`\gamma_k` :cite:`adagrad, adadelta, adam, rmsprop` or modifications to
+the final model :cite:`asgd`.
 
 Increasing the batch size :math:`B_k` will reduce the number of model updates
 while not requiring more FLOPs or gradient computations – both empirically
@@ -136,7 +137,16 @@ schedule. Specifically, this work provides the following:
        (through `Dask Job-Queue`_), YARN/Hadoop clusters (through `Dask Yarn`_)
        and Kubernetes clusters (through `Dask Kubernetes`_).
 
-First, let's cover related work to gain understanding of why variable batch
+.. latex::
+
+   A key component of AdaDamp is that the number of workers grows
+   with the batch size. Then, the model update time is agnostic to the batch size
+   (provided communication is instantaneous). This has been shown empirically:
+   Goyal et al. grow the batch size (and the number of workers with it) by a
+   factor of $44$ but the time for a single model update only increases by a
+   factor of $1.13$~\cite[Sec.~5.5]{goyal2017accurate}.
+
+Now, let's cover related work to gain understanding of why variable batch
 sizes provide a benefit in a distributed system. Then, let's cover the details
 of our software before presenting simulations. These simulations confirm that
 model training can be accelerated if the number of workers grows with the batch
@@ -172,6 +182,12 @@ there is a batch size of :math:`B` and :math:`P` machines. Then, the average of
 these gradients is taken and the model is updated. [#]_ Clearly, Amdahl's law
 is relevant because there are diminishing returns as the number of workers
 :math:`P` is increased :cite:`golmant2018computational`.
+
+In distributed systems, growing the amount of data with the number of workers
+is known as "weak scaling." By contrast, "strong scaling" has a fixed batch
+size and treats the number of workers as an internal detail. Of course,
+relevant experiments show that weak scaling exhibits better scaling than strong
+scaling :cite:`qi2017paleo`.
 
 ..  [#] Related but tangential methods include methods to efficiently
         communicate the gradient estimates
@@ -236,7 +252,7 @@ Model quality greatly influences the amount of information in the gradient
 – which influences the batch size :cite:`sievert2021improving`. For example, if
 models are poorly initialized, then using a large batch size has no benefit:
 the gradient—or direction to the optimal model—for each example will produce
-very similar numbers. In illustration is given in Figure :ref:`fig:eg`.
+very similar numbers. An illustration is given in Figure :ref:`fig:eg`.
 
 .. latex::
 
@@ -246,9 +262,7 @@ very similar numbers. In illustration is given in Figure :ref:`fig:eg`.
    performance have been proposed \cite{sievert2021improving, de2016big,
    balles2016coupling, byrd2012}.    Of course, these methods are adaptive so
    computing the batch size requires computation (though there are
-   workarounds~\cite{sievert2021improving, balles2016coupling}). The
-   convergence results for these adaptive methods suggest passive methods of
-   increasing the batch size \cite{sievert2021improving}.
+   workarounds~\cite{sievert2021improving, balles2016coupling}).
 
    Increasing the batch size is a provably good measure that (mathematically)
    requires far fewer model updates and no more computation than standard SGD
@@ -334,12 +348,6 @@ overhead :cite:`li2020pytorch`, and already has a Dask wrapper. [#]_
    Goyal et al. grow the batch size (and the number of workers with it) by a
    factor of $44$ but the time for a single model update only increases by a
    factor of $1.13$~\cite[Sec.~5.5]{goyal2017accurate}.
-
-In distributed systems, this behavior—growing the amount of data with the
-number of workers—is known as "weak scaling." By contrast, "strong scaling" has
-a fixed batch size and treats the number of workers as an internal detail. Of
-course, weak scaling exhibits better scaling than strong scaling
-:cite:`qi2017paleo`.
 
 Example usage
 -------------
@@ -528,7 +536,8 @@ shown in Table :ref:`table:centralized`.
 
    The same simulations as in Figure :ref:`fig:epochs`, but plotted with the
    number of model updates and wall-clock time plotted on the x-axis (the loss
-   obeys a similar behavior). :label:`fig:updates`
+   obeys a similar behavior as illustrated in the Appendix).
+   :label:`fig:updates`
 
 .. raw:: latex
 
@@ -715,8 +724,8 @@ In this work, we have provided a package to train PyTorch ML models with Dask
 cluster. This package reduces the amount of time required to train a model with
 the current centralized setup. However, it can be further accelerated by
 integration with PyTorch's distributed communication package as illustrated by
-extensive simulations. In summary, the expected gains are to go from training
-requiring about 120 minutes to 45 minutes.
+extensive simulations. For a particular model, only 45 minutes is required for
+training – an improvement over the 120 minutes required with standard SGD.
 
 References
 ==========
@@ -724,3 +733,32 @@ References
 .. latex::
 
    \newpage
+
+.. latex::
+
+   \appendix
+
+.. figure:: figs/decentralized-moderate/training_time-loss.png
+   :align: center
+   :scale: 70%
+   :figclass: h
+
+   The training time required for different optimizers under the
+   ``decentralized-moderate`` network.
+
+.. figure:: figs/decentralized-high/training_time-loss.png
+   :align: center
+   :scale: 70%
+   :figclass: h
+
+   The training time required for different optimizers under the
+   ``decentralized-high`` network.
+
+.. figure:: figs/centralized/training_time-loss.png
+   :align: center
+   :scale: 70%
+   :figclass: h
+
+   The training time required for different optimizers under the
+   ``centralized`` network.
+
