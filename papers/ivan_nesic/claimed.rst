@@ -277,27 +277,17 @@ engine.
   stores all intermediate results to a central storage for later
   investigation.
 
+.. table:: Execution engines against requirements. (Abbreviations: KF=Kubeflow, AF=Airflow, SM=Snakemake) :label:`engxreq`
 
-.. table:: Execution engines against requirements.
-
-   +----------------------------------+------------------------------------------------+
-   |                                  |                Execution Engine                |
-   |                                  +----+----+-------+----+------+----------+-------+
-   |                                  | KF | AF | Slurm | SM | Qsub | HTCondor | Reana |
-   +-------------+--------------------+----+----+-------+----+------+----------+-------+
-   |             | Kubernetes Support |  X |  X |   O   |  X |   O  |     X    |   X   |
-   |             +--------------------+----+----+-------+----+------+----------+-------+
-   |             | GPU support        |  X |  X |   X   |  X |   X  |     X    |   X   |
-   |             +--------------------+----+----+-------+----+------+----------+-------+
-   |             | Component Library  |  X |  O |   O   |  O |   O  |     O    |   O   |
-   | Requirement +--------------------+----+----+-------+----+------+----------+-------+
-   |             | Reproducibility    |  X |  X |   O   |  X |   O  |     X    |   X   |
-   |             +--------------------+----+----+-------+----+------+----------+-------+
-   |             | Data Lineage       |  X |  O |   O   |  O |   O  |     O    |   X   |
-   |             +--------------------+----+----+-------+----+------+----------+-------+
-   |             | KF: Kubeflow, AF: Airflow, SM: Snakemake                            |
-   +-------------+---------------------------------------------------------------------+
-
+    ================== == == ===== == ==== ======== =====
+    Requirement        KF AF Slurm SM Qsub HTCondor Reana
+    ================== == == ===== == ==== ======== =====
+    Kubernetes Support X  X        X       X        X
+    GPU support        X  X  X     X  X    X        X
+    Component Library  X
+    Reproducibility    X  X        X       X        X
+    Data Lineage       X                            X
+    ================== == == ===== == ==== ======== =====
 
 Integrated tools
 ~~~~~~~~~~~~~~~~
@@ -325,29 +315,29 @@ tool:
   and an easy way of making jupyter notebooks part of the data processing
   pipeline is a huge plus.
 
+.. table:: Integrated tools against requirements. :label:`toolxreq`
 
-================== ==== ======= ===== ======
-Requirement        Nifi NodeRED KNIME Galaxy
-================== ==== ======= ===== ======
-Kubernetes Support O    O       O     X
-GPU support        O    O       O     X
-Component Library  X    X       X     X
-Reproducibility    X    O       X     X
-Data Lineage       X    O       O     X
-Visual Editing     X    X       X     X
-Jupyter Notebooks  O    O       O     O
-================== ==== ======= ===== ======
-
-Table 2 matches different integrated tools against requirements.
+    ================== ==== ======= ===== ======
+    Requirement        Nifi NodeRED KNIME Galaxy
+    ================== ==== ======= ===== ======
+    Kubernetes Support                    X
+    GPU support                           X
+    Component Library  X    X       X     X
+    Reproducibility    X            X     X
+    Data Lineage       X                  X
+    Visual Editing     X    X       X     X
+    Jupyter Notebooks
+    ================== ==== ======= ===== ======
 
 
 Final technology choice
 ~~~~~~~~~~~~~~~~~~~~~~~
-As can be concluded from the previous two tables, none of the tools is
-capable of covering all requirements. Therefore we introduce Elyra 
-and Kubeflow here as primary technology choice for now but as can be
-seen later in the future work section, other tools like Galaxy and
-Reana are on our roadmap for being integrated into CLAIMED.
+As can be concluded from the tables :ref:`engxreq` and :ref:`toolxreq`,
+none of the tools are capable of covering all requirements.
+Therefore we introduce Elyra and Kubeflow here as primary technology
+choice for now, but as it will be covered in the future work section,
+other tools like Galaxy and Reana are on our roadmap for being
+integrated into CLAIMED.
 
 The pipeline editor of Elyra allows for drag’n’drop of arbitrary 
 scripts (shell, R, python) and jupyter notebooks from the file explorer
