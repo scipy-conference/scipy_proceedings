@@ -3,7 +3,7 @@
 :email: hlu@westhealth.org
 :institution: Gary and Mary West Health Institute
 
-:author: JosÃ© Unpingco
+:author: José Unpingco
 :email: jhunpingco@westhealth.org
 :institution: Gary and Mary West Health Institute
 
