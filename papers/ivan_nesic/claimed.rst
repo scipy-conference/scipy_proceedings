@@ -277,19 +277,27 @@ engine.
   stores all intermediate results to a central storage for later
   investigation.
 
-================== == == ===== == ==== ======== =====
-Requirement        KF AF Slurm SM Qsub HTCondor Reana
-================== == == ===== == ==== ======== =====
-Kubernetes Support X  X  O     X  O    X        X
-GPU support        X  X  X     X  X    X        X
-Component Library  X  O  O     O  O    O        O
-Reproducibility    X  X  O     X  O    X        X
-Data Lineage       X  O  O     O  O    O        X
-KF: Kubeflow, AF: Airflow, SM: Snakemake
------------------------------------------------------
-================== == == ===== == ==== ======== =====
 
-Table 1 matches different execution engines against requirements.
+.. table:: Execution engines against requirements. :label:`engxreq`
+
+   +----------------------------------+------------------------------------------------+
+   |                                  |                Execution Engine                |
+   |                                  +----+----+-------+----+------+----------+-------+
+   |                                  | KF | AF | Slurm | SM | Qsub | HTCondor | Reana |
+   +-------------+--------------------+----+----+-------+----+------+----------+-------+
+   |             | Kubernetes Support |  X |  X |   O   |  X |   O  |     X    |   X   |
+   |             +--------------------+----+----+-------+----+------+----------+-------+
+   |             | GPU support        |  X |  X |   X   |  X |   X  |     X    |   X   |
+   |             +--------------------+----+----+-------+----+------+----------+-------+
+   |             | Component Library  |  X |  O |   O   |  O |   O  |     O    |   O   |
+   | Requirement +--------------------+----+----+-------+----+------+----------+-------+
+   |             | Reproducibility    |  X |  X |   O   |  X |   O  |     X    |   X   |
+   |             +--------------------+----+----+-------+----+------+----------+-------+
+   |             | Data Lineage       |  X |  O |   O   |  O |   O  |     O    |   X   |
+   |             +--------------------+----+----+-------+----+------+----------+-------+
+   |             | KF: Kubeflow, AF: Airflow, SM: Snakemake                            |
+   +-------------+---------------------------------------------------------------------+
+
 
 Integrated tools
 ~~~~~~~~~~~~~~~~
