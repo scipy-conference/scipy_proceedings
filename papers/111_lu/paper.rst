@@ -151,7 +151,7 @@ trail for downstream audits.
 
 Regarding compliance, some of the vaccine pipeline is handled by the third parties such as 2-1-1 or
 the state. However, from the time the data is ingested from the state's
-appointment system to our processing center and transmitted to the clinic,
+appointment system to a processing center and transmitted to the clinic,
 strict HIPAA requirements are met. First, all communications from the
 appointment system took place under authentication and encryption. Fortunately,
 West Health has an processing center with the appropriate encryption at rest
@@ -182,7 +182,7 @@ answer.
 However, the *Medium* blog post by Vivsvaan Sharma :cite:`sharma` is a good
 starting place. Another useful resource is the PDF 1.7 specification
 :cite:`pdf`. Since the deployment of the vaccine clinic, the 
-details of the form filling can be found at our blog :cite:`whblog`.
+details of the form filling can be found at WestHealth's blog :cite:`whblog`.
 The code is available on github as described below.
 
 As a prelimiary, the following imports are used in the examples given below.
@@ -236,9 +236,9 @@ This converts `value`` into a ``PdfString`` and updates the
 
 In addition, at the top level of the ``PdfReader`` object ``pdf``, the
 ``NeedAppearances`` property in the interactive form dictionary,
-``AcroForm`` (See § 12.7,2) needs to be set Without this, the fields are updated but
-will not necessarily display. In our example, the corresponding snippet
-of code is
+``AcroForm`` (See § 12.7,2) needs to be set, without this, the fields are updated but
+will not necessarily display. To remedy this, the following code
+snippet can be used.
 
 .. code:: python
 
@@ -253,8 +253,8 @@ in text fields, except if there are multiple instances of the same field. To
 refer back to the clinic example, each patient's form packet comprised multiple
 forms each with the ``Name`` field. Some forms even had the ``Name`` appear
 twice such as in a demographic section and then in a "Print Name" field
-next to a signature line.  If we were to run the code above on such a form,
-we'd find the ``Name`` field doesn't show up. 
+next to a signature line.  If the code above on such a form were run,
+the ``Name`` field doesn't show up. 
 
 Whenever the multiple
 fields occur with the same name the situation is more complicated. One
@@ -553,8 +553,8 @@ can be as simple as a sequential number.
 Combining the Files
 ~~~~~~~~~~~~~~~~~~~
 
-Solutions for combining files found on the Interned for combining PDF files using ``PDFrw``, you'll get
-a recipe like the following.
+Solutions for combining files found on the Internet for combining PDF
+files using ``PDFrw``, the following recipe is typical of what ca be found.
 
 .. code:: python
 
@@ -571,7 +571,7 @@ interactive form dictionary (see §12.7.2 of the PDF 1.7 specification).
 In particular the interactive forms dictionary contains the boolean
 ``NeedAppearances`` to be set in order for fields to be shown. If the
 forms being combined have different interactive form dictionaries, they
-will need to be merged. For our purposes since the source
+will need to be merged. For the purposes here since the source
 form is identical amongst the various copies, any ``AcroForm``
 dictionary can be used.
 
@@ -587,7 +587,7 @@ pdf file.
 
 If one examines, these source code, the second parameter is set to the
 attribute ``trailer``, so assuming ``acro_form`` contains the
-interactive forms ``PdfDict`` you can set it by
+interactive forms ``PdfDict`` which can be set by
 ``writer.trailer.Root.AcroForm = acro_form``.
 
 Conclusion
