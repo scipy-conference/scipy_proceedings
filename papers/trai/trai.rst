@@ -391,9 +391,60 @@ The first algorithm iteratively finds the largest plane using RANSAC and uses eu
   
   Planar detection :label:`plamar`
 
+
 An important observation is that it can compute the volume using 2 planes instead of 3. This is due to the fact that if 2 planes are orthogonal, the common line between them will be determined by 2 points that are also corner points for the object. By selecting a corner point and the two perpendicular planes, a third plane can be determined that is perpendicular to the other two and it contains the chosen point. Once the virtual third plane has been computed, the algorithm resumes as in the case with 3 determined planes.
 
-An advantage of this method is that it uses readily available and studied functions for processing pointclouds. For a simple case of a box and floor plane, the algorithm accuracy depends on the level of noise the pointcloud has.
+An advantage of this method is that it uses readily available and studied functions for processing pointclouds. For a simple case of a box and floor plane, the algorithm accuracy depends on the level of noise the pointcloud has. The following code snippets ilustrate the functionality of the Planar Sgmenting Volume computation method using 2 planes.
+
+.. code-block:: python
+    :linenos:
+
+    def volume_main(perp_thresh,min_nr_points,input_pcd)
+    floor=pcl_Planar_Ransac(input_pcd)
+    input_pcd=Euclidean_extraction(input_pcd)
+    if (pcl_Planar_Ransac(input_pcd)>min_nr_points)
+       plane_1=Planar_Ransac(input_pcd)
+    input_pcd=Euclidean_extraction(input_pcd)
+    if(pcl_Planar_Ransac(input_pcd)>min_nr_points)
+      plane_2=pcl_Planar_Ransac(input_pcd)
+    if(cos(plane_1 * plane_2)<perpendicular_threshold>)
+      Volume=compute_volume_2_planes(plane1_plane2)
+    else
+      (p_A, p_B)=line_points(plane_1,plane_2)
+      plane_3=com_perp_plane_point(plane_1,plane_2,p_A)
+      if(cos(plane_1*plane_3)<perpendicular_threshold>)
+        Volume=compute_volume_2_planes(plane_2,plane_3)
+    
+
+
+.. code-block:: python
+    :linenos:
+
+    def compute_volume_2_planes(plane_A,plane_B):
+    (p_AB_1, p_AB_2)=line_points(plane_A,plane_B)
+    plane_C=com_perp_plane_point(plane_A,plane_B,p_AB_1)
+    (p_AC_1,p_AC_2)=line_points(plane_A,plane_C)
+    (p_BC_1,p_BC_2)=line_points(plane_B,plane_C)
+    L1=distance(p_AB_1, p_AB_2)
+    L2=distance(p_AC_1, p_AC_2)
+    L3=distance(p_BC_1, p_BC_2)
+    Volume=L1*L2*L3
+    
+
+
+.. code-block:: python
+    :linenos:
+
+    def line_points(plane_A,plane_B):
+    line_AB_pcd=pcl_project_inliers(plane_A,plane_B)
+    line_BA_pcd=pcl_project_inliers(plane_B,plane_A)
+    line_pcd=concat(line_AB_pcd,line_BA_pcd)
+    (abs_diff_x,p_AB_1_x,p_AB_2_x)=max_diff_x(line_pcd)
+    (abs_diff_y,p_AB_1_y,p_AB_2_y)=max_diff_y(line_pcd)
+    (abs_diff_x,p_AB_1_z,p_AB_2_z)=max_diff_z(line_pcd)
+    diff=max_diff(abs_diff_x,abs_diff_y,abs_diff_z)
+    (pointA, pointB)=points_max_diff(diff)
+
 
 The downside of this method is that it can compute the volume only for one box. Noise and other objects in the scene can totally disrupt the volumetric estimate.
 
@@ -408,34 +459,37 @@ The downside of this method is that it can compute the volume only for one box. 
 
 Due to these shortcomings, a new method for measuring the volume is studied, based on the work by Sommer et. all. Their paper details an algorithm that uses pointclouds with normals computed in each point in order to determine collections of point pairs for which their normals satisfy the orthogonality constraint.  
 The point pair collections will approximate the orthogonal planes. By determining the points contained by each orthogonal plane, projections can be made that approximate the intersecting lines of the orthogonal planes. By selecting the 3 lines that have the edge points closest to each other, volume of a box can be computed.
-The advantage of this method is that it allow the computation of the volume for multiple box shaped objects and it 
+The advantage of this method is that it allow the computation of the volume for multiple box shaped objects.
 
-.. figure:: Alex_pseudo_1.png
-  :width: 1000
-  :height: 1000
-  :scale: 40%
-  :align: left
-  :alt: Pseudo code 
-  
-  Planar detection :label:`pseudo1`
+.. code-block:: python
+    :linenos:
 
-.. figure:: Alex_pseudo_2.png
-  :width: 800
-  :height: 800
-  :scale: 40%
-  :align: left
-  :alt: Pseudo code 
-  
-  Planar detection :label:`pseudo2`
+    def compute_volume_ortho(pcd,dmin,dman,votes,seg,thresh):
+    all_lines=sommer_planes(pcd,dmin,dman,votes,seg)
+    all_triplets=find_line_triplet(thresh,all_lines)
+    for i in all_triplets:
+      line_1=distance(all_triplets[i][0])
+      line_2=distance(all_triplets[i][1])
+      line_3=distance(all_triplets[i][2])
+      Volume[i]=line_1*line_2*line_3
 
-.. figure:: Alex_pseudo_3.png
-  :width: 800
-  :height: 800
-  :scale: 40%
-  :align: left
-  :alt: Pseudo code 
-  
-  Pseudo-code :label:`pseudo3`
+.. code-block:: python
+    :linenos:
+
+    def find_line_triplet(thresh):
+    for i in range(0,size(all_lines-3)):
+     for j in range(i+1,size(all_lines-2)):
+      for k in range(j+1,size(all_lines-1)):
+       average_point=(all_lines[i]+all_lines[j]+all_lines[k])/3
+       if distance_each_to_average<threshold:
+          add_triplet(all_triplets)
+    
+
+
+
+
+
+
 
 .. figure:: ortho_volume.png
   :width: 400
