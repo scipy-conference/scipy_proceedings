@@ -38,8 +38,14 @@ the vaccine rollouts proved challenging as seniors are less likely to be tech
 saavy and have transportation challenges.
 
 As a personal anecdote, when vaccinations were open to all people 65 and older,
-the author ventured to get my parents vaccinated. The process required periodic pinging of the 
-appointment site for a vaccine supercenter. This process took a week of constant trying until an appointment could be made. Beyond perisistence, it required observing the pattern of when batches of new appointments were made available. Needless to say seniors even those with some amount of technological saavy  would have had extreme difficulty.
+the author ventured to get my parents vaccinated. This experience was
+rather typical :cite:`letters_2021` The process required periodic pinging of the 
+appointment site for a vaccine supercenter. This process took a week
+of constant trying until an appointment could be made. Beyond
+perisistence, it required observing the pattern of when batches of new
+appointments were made available. Needless to say seniors even those
+with some amount of technological saavy would have had extreme
+difficulty. 
 
 To address this the Gary and Mary West PACE (WestPACE) center established a
 pop-up point of distribution (POD) for the COVID-19 vaccine :cite:`press`
@@ -112,7 +118,7 @@ should be encrypted both at rest and in transit. For paper
 systems (including the printed forms mentioned below), papers containing PHI
 must be not be left in the open and when unattended must be in a locked room or
 container where access is restricted to authorized use. Finally, for any cloud
-infrastructure the appropriate Business Associate Agreements (BAA) must be in place.
+infrastructure the appropriate Business Associate Agreements (BAA) must be in place :cite:`filkins`.
 
 .. figure:: diagram.pdf
 
