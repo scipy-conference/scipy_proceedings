@@ -459,7 +459,7 @@ The downside of this method is that it can compute the volume only for one box. 
 
 Due to these shortcomings, a new method for measuring the volume is studied, based on the work by Sommer et. all. Their paper details an algorithm that uses pointclouds with normals computed in each point in order to determine collections of point pairs for which their normals satisfy the orthogonality constraint.  
 The point pair collections will approximate the orthogonal planes. By determining the points contained by each orthogonal plane, projections can be made that approximate the intersecting lines of the orthogonal planes. By selecting the 3 lines that have the edge points closest to each other, volume of a box can be computed.
-The advantage of this method is that it allow the computation of the volume for multiple box shaped objects.
+The advantage of this method is that it allow the computation of the volume for multiple box shaped objects. The following code snippets show the usage of the sommer plane determination method to compute the volume.
 
 .. code-block:: python
     :linenos:
