@@ -584,18 +584,18 @@ beneficial if Elyra would switch to CWL to improve interoperability
 between different software components. For example, Reana and Galaxy
 (partially) already support CWL which would allow for publishing
 pipelines from Elyra to Reana directly without transpiling the pipeline.
-Alternatively, any maybe more realistically, Elyra just could support
-export (and import) of CWL into its pipeline editor.
+Alternatively, Elyra could support export and import of CWL into its pipeline editor.
 
 Import 3rd party component libraries
 ------------------------------------
-In theory it would be possible to import 3rd party component libraries
-like those from KNIME or Nifi into CLAIMED as the only thing needed to
-become a CLAIMED component is a container image
-and some meta data (which by the way also holds for Kubeflow components).
-It should be possible to wrap different components from KNIME, Nifi or
-similar tools into a container image and use it within Elyra and all
-other execution engines CLAIMED supports.
+Since the only thing needed for something to become a CLAIMED component
+is to be wrapped in a container image and assigned some meta data,
+it is possible for 3rd party component libraries like those from KNIME or
+Nifi and to be imported into CLAIMED.
+This also holds true for Kubeflow components.
+It is also possible to wrap different components from KNIME, Nifi or
+similar tools in this manner and use it within Elyra, as well as in
+the other execution engines CLAIMED supports.
 
 Reana execution engine support
 ------------------------------
