@@ -271,7 +271,7 @@ adequacy of the execution engine.
   feature when it comes to visualizing the changes the datasets went
   through   during the pipeline execution.
 
-.. table:: Execution engines against requirements. (Abbreviations: KF=Kubeflow, AF=Airflow, SM=Snakemake) :label:`engxreq`
+.. table:: Fulfilment of requirements for execution engines. (Abbreviations: KF=Kubeflow, AF=Airflow, SM=Snakemake) :label:`engxreq`
 
     ================== == == ===== == ==== ======== =====
     Requirement        KF AF Slurm SM Qsub HTCondor Reana
@@ -308,7 +308,7 @@ tool:
   easy way of making jupyter notebooks part of the data processing pipeline,
   a key requirement.
 
-.. table:: Integrated tools against requirements. :label:`toolxreq`
+.. table:: Fulfilment of requirements for integrated tools. :label:`toolxreq`
 
     ================== ==== ======= ===== ====== =====
     Requirement        Nifi NodeRED KNIME Galaxy Elyra
