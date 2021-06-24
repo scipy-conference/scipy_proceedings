@@ -49,9 +49,9 @@ The DESI data processing pipeline is predominantly implemented using the Python 
 A strict requirement from the DESI data processing team is to keep the code implementation in Python.
 
 The existing state of the art implementation utilizes a divide and conquer framework to make *spectro-perfectionism* algorithm tractable on existing computing hardware, see Figure :ref:`patch-extraction`.
-The code utilizes the Message Passing Interface (MPI) via `mpi4py` to exploit both multi-core and multi-node parallelism.
+The code utilizes the Message Passing Interface (MPI) via `mpi4py` to exploit both multi-core and multi-node parallelism (:cite:`DALCIN20051108`).
 The application uses multidimensional array data structures provided by NumPy along with several linear algebra and special functions from the NumPy and SciPy libraries (:cite:`harris2020array`, :cite:`2020SciPy-NMeth`).
-Several expensive kernels are implemented using Numba just-in-time compilation :cite:`numba`.
+Several expensive kernels are implemented using Numba just-in-time compilation (:cite:`numba`).
 The application is parallelized by dividing an image into thousands of small patches, performing the extraction on each individual patch in parallel, and stitching the result back together.
 
 .. figure:: patch-extraction.png
@@ -124,7 +124,7 @@ The example code below demonstrates how we integrated `cupy`, `numba.cuda`, and 
       if i < x.size:
          x[i] += 1
 
-   # conveinance wrapper with thread/block configuration
+   # convenience wrapper with thread/block configuration
    def addone(x):
       # threads per block
       tpb = 32
