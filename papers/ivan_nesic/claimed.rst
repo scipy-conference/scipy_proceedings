@@ -61,8 +61,7 @@ environments called CLAIMED, the visual
 In the following section we elaborate on the implementation
 details followed by a description of an exemplary pipeline to showcase
 the capabilities of CLAIMED. Then, we elaborate on different ideas
-how CLAIMED can be improved in the "Future Work" section. Finally,
-we conclude.
+how CLAIMED can be improved in the "Future Work" section, followed by the conclusion.
 
 Implementation
 ==============
@@ -122,7 +121,7 @@ distributed training and inference system named DistBelief
 [tf]_. It supports myriad of hardware platforms, from
 mobile phones to GPU/TPU clusters, for both training and inference. It
 can even run in browser on the client’s side, without the data ever
-leaving the machine. Apart from being a valuable tool in research, it is
+leaving the machine. Apart from being a valuable tool in research domain, it is
 also being used in demanding production environments. On a development
 side, representing machine learning algorithms in tree-like structures
 makes it a very good expression interface. Lastly, on the performance vs
@@ -130,9 +129,8 @@ usability side, both graph and eager modes are supported. Eager mode allows for
 easier debugging since the code is executed in Python control flow, as opposed to
 the TensorFlow specific graph control flow [tfeager]_.
 The advantages of graph mode is usage in distributed training, performance
-optimization and production deployment. To learn more about the
-differences between graph and eager mode we recommend our book on the
-topic [tfbook]_. 
+optimization and production deployment.
+In-depth analysis of these two modes can be found here [tfbook]_.
 
 Kubeflow
 ~~~~~~~~
@@ -165,18 +163,18 @@ well, VSCode [vscode]_ being next on the list.
 AI Explainability
 ~~~~~~~~~~~~~~~~~
 
-Besides their stunning performance, deep learning models face a lot of
-resistance for production usage because they are considered to be a
-black box. Technically, deep learning models are a
-series of non-linear feature space transformations, so it is not easy to understand the
-individual processing steps a deep learning network performs.
-Techniques exist to look over a deep learning model’s shoulder. The one
-we are using here is called LIME [lime]_. LIME takes the
+Despite the good performance, deep learning models are viewed as
+being black box approaches.
+Technically, deep learning models are a series of non-linear feature
+space transformations, but an intuitive understanding of each of the
+individual processing steps is not trivial.
+There are techniques with which we can look over a deep learning model’s shoulder.
+The one we are using here is called LIME [lime]_. LIME takes the
 existing classification model and permutes images taken from the
 validation set (therefore the real class label is known to LIME) as long as a
 misclassification is happening. That way LIME can be used to create heat
 maps as image overlays to indicate regions of images which are most
-relevant for the classifier to perform best. In other words, we identify
+relevant for the classifier. In other words, we identify
 regions of the image the classifier is looking at.
 
 As Fig. :ref:`limefig` illustrates, the most relevant areas in an image
@@ -196,16 +194,16 @@ favor of or against an idea or thing, usually in a way that is
 closed-minded, prejudicial, or unfair" [bias]_. But what we want from 
 our model is to be fair and unbiased towards protected attributes like 
 race, age, socioeconomic status, religion and so on. So wouldn't
-it be easier if we just "hide" those columns from the model during the training? It
-turns out that it isn’t that trivial. Protected attributes are often
+it be easier if we just "hid" those columns from the model during the training?
+Unfortunately the problem is convoluted. Protected attributes are often
 encoded inside the other attributes (latent features).
 For example, race, religion and
-socioeconomic status are latently encoded in attributes like zip code,
-contact method or types of products purchased. Therefore, fairness assessment and
-bias detection is quite challenging. Luckily a huge number of single
+socioeconomic status are latently encoded in attributes like zip codes,
+contact methods or types of products purchased. Therefore, fairness assessment and
+bias detection is quite challenging. Luckily, a huge number of single
 number metrics exist to assess bias in data and models. Here, we are
-using the AIF360 [aif360]_ library which IBM donated to
-the Linux Foundation AI and therefore is under open governance.
+using the AIF360 [aif360]_ library. IBM donated it to
+the Linux Foundation AI, which puts it under open governance.
 
 AI Adversarial Robustness
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -227,55 +225,51 @@ Execution Engine
 ~~~~~~~~~~~~~~~~
 An execution engine takes a pipeline description and executes it on top
 of physical machines reading source data and creating output data.
-The following requirements have been defined for an suitable execution
-engine.
+The following requirements have been defined in order to assess the
+adequacy of the execution engine.
 
 - Kubernetes Support
 
   We defined Kubernetes as the lowest layer of abstraction because that
-  way the executor layer is agnostic of the underlying IaaS 
-  architecture. We can consume Kubernetes aaS offered by a variety
+  way the executor layer is agnostic of the underlying Infrastructure as a service (IaaS)
+  architecture. In addition, Kubernetes provides better resource utilization if multiple
+  pipelines are run in parallel on the system. We can consume Kubernetes as a service (aaS) offered by a variety
   of Cloud providers like IBM, Amazon, Google, Microsoft, OVH or Linode.
-  A lot of workload in this particular project is outsourced to SciCore
-  [scicore]_
-  - a scientific computing data center part of the Swiss Personalized
-  Health Network [sphn]_ and the Swiss Institute of Bioinformatics [sib]_ which runs
-  on OpenStack and provides Kubernetes as part of it (Magnum). On prem
-  of the University Hospital Basel RedHat OpenShift is used. In addition,
-  Kubernetes provides better resource utilization if multiple
-  pipelines are run in parallel on the system.
+  A lot of workload for this particular project has been envisioned to be outsourced
+  to SciCore [scicore]_ - a scientific computing data center part of the Swiss Personalized
+  Health Network (SPHN) [sphn]_ and the Swiss Institute of Bioinformatics [sib]_ which runs
+  on OpenStack and provides Kubernetes as part of it (Magnum), while on premises of the
+  on premises of the University Hospital Basel we have RedHat OpenShift.
 
 - GPU support
 
   GPU support is essential since a large fraction of the workload is
   training of deep learning neural networks on TensorFlow and PyTorch.
   Training those models on CPU doesn't make sense economically and
-  ecologically
+  ecologically.
 
 - Component Library
 
-  An execution engine is nice to have, but if it comes with predefined,
-  ready to use components, it is much better. Kubeflow for example 
-  has components for parallel training of TensorFlow models (TFJob), 
+  Predefined, ready to use components, are convenient to use,
+  save time and, if well tested, reduce the probability of an error.
+  Kubeflow for example has components for parallel training of TensorFlow models (TFJob),
   parallel execution of Apache Spark jobs as a pipeline step,
-  parallel Hyperparameter tuning (Katib) and model serving (KFServing/
+  parallel hyperparameter tuning (Katib) and model serving (KFServing/
   KNative)
 
 - Reproducibility
 
-  From a legal perspective (of course not limited to) it is often
+  From a legal point of view, in certain domains, it is
   necessary to reconstruct a certain decision, model or output
-  dataset for verification and audit. Therefore the ability to clone
-  and re-run a pipeline is a critical requirement.
+  dataset for verification and audit. Therefore the ability to reproduce
+  and re-run a pipeline is a critical requirement. Of course,
+  there are other examples where this is imperative, like in science.
 
 - Data Lineage
 
   Although a subset of reproducibility, Data Lineage is a crucial
-  feature when it comes to visualizing the changes datasets went
-  through the pipeline execution. Although in Kubeflow there is
-  (not yet) a visual tool available - it is the only engine which
-  stores all intermediate results to a central storage for later
-  investigation.
+  feature when it comes to visualizing the changes the datasets went
+  through   during the pipeline execution.
 
 .. table:: Execution engines against requirements. (Abbreviations: KF=Kubeflow, AF=Airflow, SM=Snakemake) :label:`engxreq`
 
@@ -291,18 +285,17 @@ engine.
 
 Integrated tools
 ~~~~~~~~~~~~~~~~
-Integrated tools are tools which include
-a visual data flow editor,
+Integrated tools are tools which include a visual data flow editor,
 a component library and an execution engine.
-Prominent candidates
-in the open source space are Apache Nifi, NodeRED, KNIME and Galaxy.
+Prominent candidates in the open source space are Apache Nifi,
+NodeRED, KNIME and Galaxy.
 
 The following additional requirements have been defined for a suitable
 tool:
 
 - Low-Code/No-Code/Visual Editing
 
-  Citizen data scientists (in this case, medical doctors) need to
+  Citizen data scientists (in our demo example, medical doctors) need to
   work with the tool, so visual editing is necessary. But apart from
   being a visual editing tool only, support for creating custom
   pipeline components on the fly using R and python is necessary
@@ -310,47 +303,45 @@ tool:
 
 - Jupyter Notebooks
 
-  Citizen data scientists but also data scientists in general are used
-  to implement many tasks as jupyter notebooks. Support for JupyterLab
-  and an easy way of making jupyter notebooks part of the data processing
-  pipeline is a huge plus.
+  Researchers in general are used to implement tasks in jupyter notebooks.
+  This makes support for JupyterLab, as well as having an
+  easy way of making jupyter notebooks part of the data processing pipeline,
+  a key requirement.
 
 .. table:: Integrated tools against requirements. :label:`toolxreq`
 
-    ================== ==== ======= ===== ======
-    Requirement        Nifi NodeRED KNIME Galaxy
-    ================== ==== ======= ===== ======
-    Kubernetes Support                    X
-    GPU support                           X
-    Component Library  X    X       X     X
-    Reproducibility    X            X     X
-    Data Lineage       X                  X
-    Visual Editing     X    X       X     X
-    Jupyter Notebooks
-    ================== ==== ======= ===== ======
+    ================== ==== ======= ===== ====== =====
+    Requirement        Nifi NodeRED KNIME Galaxy Elyra
+    ================== ==== ======= ===== ====== =====
+    Kubernetes Support                    X      X
+    GPU support                           X      X
+    Component Library  X    X       X     X      X
+    Reproducibility    X            X     X      X
+    Data Lineage       X                  X      X
+    Visual Editing     X    X       X     X      X
+    Jupyter Notebooks                            X
+    ================== ==== ======= ===== ====== =====
 
 
 Final technology choice
 ~~~~~~~~~~~~~~~~~~~~~~~
-As can be concluded from the tables :ref:`engxreq` and :ref:`toolxreq`,
-none of the tools are capable of covering all requirements.
-Therefore we introduce Elyra and Kubeflow here as primary technology
-choice for now, but as it will be covered in the future work section,
-other tools like Galaxy and Reana are on our roadmap for being
-integrated into CLAIMED.
+As it can be seen from the tables :ref:`engxreq` and :ref:`toolxreq`,
+only Kubeflow on the execution engine side, and Elyra as the
+integrated tool are capable of covering all of the requirements.
+Therefore we select this pair as our primary technology choice.
 
-The pipeline editor of Elyra allows for drag’n’drop of arbitrary 
-scripts (shell, R, python) and jupyter notebooks from the file explorer
-to the canvas. They can be assigned to a container image to be run on.
-Elyra allows to submit such pipelines to Airflow and Kubeflow at the
-moment. 
+Elyra's pipeline editor supports drag’n’drop functionality, for adding arbitrary
+scripts (shell, R, python) and Jupyter notebooks from the file explorer
+to the canvas. To each one of them can be assigned a container image
+which they would use to run on.
+Elyra supports submission of the pipelines to Airflow and Kubeflow at the
+moment.
 
 Together with Kubeflow and JupyterLab (where Elyra runs as an extension)
-this combination fullfills all our requirements.
-
+all our requirements are fulfilled.
 Kubernetes support, GPU support, an existing and growing component
 library, Reproducibility and Data Lineage is provided by Kubeflow
-and visual editing with low code support through jupyter notebooks
+and visual editing with low code support through Jupyter notebooks
 and collaboration support with Git is supported by Elyra and 
 JupyterLab.
 
@@ -358,16 +349,16 @@ JupyterLab.
 
    Runtime architecture of CLAIMED. :label:`architecture`
 
-As can be seen in Figure :ref:`architecture`, Elyra - an more specifically
+As it can be seen on Figure :ref:`architecture`, Elyra -  specifically
 the pipeline editor of the Elyra Extension to JupyterLab - allows
 for visually building data pipelines with a set of assets like
 notebooks and scripts dragged on a canvas and transparently published
 to Kubeflow as a Kubeflow pipeline.
 
-The only thing missing now is a set of re-usable notebooks for different
+The only thing missing is a set of re-usable notebooks for different
 kinds of tasks. This is where CLAIMED kicks in. We've created CLAIMED
-as open source library under [complib]_. In the next sections we 
-will introduce the Demo Use Case and how components found in CLAIMED
+as open source library [complib]_. In the next sections we
+will introduce the demo use case, along with how components found in CLAIMED
 have been used to implement this pipeline.
 
 System Implementation and Demo Use Case
@@ -394,10 +385,11 @@ Pipeline Components
 
 
 
-This section exemplifies each (currently existing) category with at 
+This section exemplifies each existing category with at
 least one component which has been used for this particular pipeline. 
-There exist more components not part of the pipeline exemplified here.
-Please note that the core feature of our software is threefold.
+There are also other components that are not part of the pipeline,
+so they haven't been exemplified here.
+Please note that the core feature of our software is threefold:
 
 - the CLAIMED component library
 - Elyra with it's capability to use CLAIMED to create a pipeline 
@@ -409,11 +401,13 @@ Please note that the core feature of our software is threefold.
 Input Components
 ~~~~~~~~~~~~~~~~
 
-In this particular case, we’re pulling data directly from a GitHub
-repository via a public and permanent link [covidata]_. We just pull the
-metadata.csv and images folder. Input components for different types 
-of data source like files and
-databases are available too.
+There are input components for different types
+of data source, like files and databases.
+
+In this particular case, we’re pulling data directly from the GitHub
+repository via a public and permanent link [covidata]_. We only pull the
+metadata.csv and images directory.
+
 
 .. figure:: kfp.png
 
@@ -422,18 +416,19 @@ databases are available too.
 Transform Components
 ~~~~~~~~~~~~~~~~~~~~
 
-Sometimes, transformations on the metadata (or any other structured
-dataset) are necessary. Therefore, we provide a generic transformation
+Sometimes, transformations on the metadata, or any other structured
+dataset, are necessary. Therefore, we provide a generic transformation
 component - in this case we just used it to change to format of the
 categories as the original file contained forward slashes which made it
-hard to use on the file system. We just need to specify the column name
-and function to be applied on that column.
+hard to use on the underlying operating system. This is performed by
+simply specifying the column name and function to be applied on that column.
 
 Filter Components
 ~~~~~~~~~~~~~~~~~
 
-Similar to changing content of rows in a data set also removing rows is
-a common task in data engineering - therefore the filter stage allows doing exactly that. It is enough to provide a predicate - in this case the
+Similar to changing content of rows in a dataset, removing rows is also
+a common task in data engineering. The filter stage allows doing exactly that.
+It is enough to provide a predicate - in this case the
 predicate ``~metadata.filename.str.contains('.gz')`` removes invalid
 images.
 
