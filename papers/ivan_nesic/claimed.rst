@@ -588,14 +588,12 @@ and potentially for particle physics at CERN.
 
 Conclusion
 ==========
-We’ve build and proposed a trustable, low-code, scalable and open source
-component library targeting visual data pipeline systems. We've
-implemented various exemplary pipelines in different domains to
-showcase the library's capabilities, running on one
-state-of-the-art execution engine (KubeFlow) and an emerging visual
-pipeline editor (Elyra). We believe that future import/export
-functionality of CLAIMED will improve reproducibility
-of data centric work even further.
+We’ve build a trustable, low-code, scalable and open source
+component library, targeting visual data pipeline systems. We've
+showcased the library's capabilities by building a domain specific pipeline
+on  Elyra, an emerging visual pipeline editor and running it on widely used
+Kubeflow execution engine. We believe that future import/export functionality of
+CLAIMED will improve reproducibility of data centric work even further.
 
 References
 ----------
