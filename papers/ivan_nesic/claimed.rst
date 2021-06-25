@@ -33,11 +33,11 @@ CLAIMED, a visual and scalable component library for Trusted AI
 Introduction
 ============
 
-Monolithic scripts are often used in prototyping. For production deployments, tools like 
+Monolithic scripts are often used for prototyping, but for production deployments, we need tools like
 Slurm [slurm]_, Snakemake [snakemake]_, QSub [qsub]_, HTCondor [htcondor]_, Apache Nifi [nifi]_,
 NodeRED [nodered]_, KNIME [knime]_, Galaxy [galaxy]_, 
 Reana [reana]_, WEKA [weka]_, Rabix [rabix]_, Nextflow [nextflow]_, OpenWDL [openwdl]_, CWL [cwl]_
-or Cromwell [cromwell]_ are used. 
+or Cromwell [cromwell]_.
 We found that these tools, even when used in conjunction, support only a subset of our requirements:
 
 - low-code / no-code environment for rapid prototyping with visual editing and jupyter notebooks
@@ -52,13 +52,13 @@ We found that these tools, even when used in conjunction, support only a subset 
 - collaboration support
 
 Therefore we have built an extensible component library to be used in low-code / no-code
-environments called CLAIMED, the visual
+environments called CLAIMED - the visual
 **C**\ omponent **L**\ ibrary for **A**\rtificial **I**\nteligence (AI), **M**\achine Learning (ML),
 **E**\xtract, Transform, Load (ETL) and **D**\ ata Science.
 In the following section we elaborate on the implementation
 details followed by a description of an exemplary pipeline to showcase
-the capabilities of CLAIMED. Then, we elaborate on different ideas
-how CLAIMED can be improved in the "Future Work" section, followed by the conclusion.
+the capabilities of CLAIMED. We continue on to elaborate on different ideas
+how CLAIMED can be improved in the "Future Work" section, finally followed by the conclusion.
 
 Implementation
 ==============
