@@ -290,15 +290,15 @@ tool:
 
   Citizen data scientists (in our demo example, medical doctors) need to
   work with the tool, so visual editing is necessary. But apart from
-  being a visual editing tool only, support for creating custom
+  being a visual editing tool, support for creating custom
   pipeline components on the fly using R and python is necessary
   as well.
 
 - Jupyter Notebooks
 
-  Researchers in general are used to implement tasks in jupyter notebooks.
+  Researchers in general like to implement tasks in jupyter notebooks.
   This makes support for JupyterLab, as well as having an
-  easy way of making jupyter notebooks part of the data processing pipeline,
+  easy way of making Jupyter notebooks part of the data processing pipeline,
   a key requirement.
 
 .. table:: Fulfilment of requirements for integrated tools. :label:`toolxreq`
@@ -323,20 +323,13 @@ only Kubeflow on the execution engine side, and Elyra as the
 integrated tool are capable of covering all of the requirements.
 Therefore we select this pair as our primary technology choice.
 
-Elyra's pipeline editor supports drag’n’drop functionality, for adding arbitrary
-scripts (shell, R, python) and Jupyter notebooks from the file explorer
-to the canvas. To each one of them can be assigned a container image
-which they would use to run on.
-Elyra supports submission of the pipelines to Airflow and Kubeflow at the
-moment.
+Elyra's pipeline editor supports drag and drop functionality, for adding arbitrary
+scripts (shell, R, python) and Jupyter notebooks to the canvas.
+Each script gets a container image assigned to be executed in.
+At the moment, Elyra supports pipeline submissions to Airflow and Kubeflow.
 
-Together with Kubeflow and JupyterLab (where Elyra runs as an extension)
+Together with Kubeflow and JupyterLab (where Elyra runs as an extension),
 all our requirements are fulfilled.
-Kubernetes support, GPU support, an existing and growing component
-library, Reproducibility and Data Lineage is provided by Kubeflow
-and visual editing with low code support through Jupyter notebooks
-and collaboration support with Git is supported by Elyra and 
-JupyterLab.
 
 .. figure:: architecture.png
 
@@ -345,12 +338,12 @@ JupyterLab.
 As it can be seen on Figure :ref:`architecture`, Elyra -  specifically
 the pipeline editor of the Elyra Extension to JupyterLab - allows
 for visually building data pipelines with a set of assets like
-notebooks and scripts dragged on a canvas and transparently published
-to Kubeflow as a Kubeflow pipeline.
+notebooks and scripts dragged onto a canvas and transparently published
+to Kubeflow, as a Kubeflow pipeline.
 
 The only thing missing is a set of re-usable notebooks for different
-kinds of tasks. This is where CLAIMED kicks in. We've created CLAIMED
-as open source library [complib]_. In the next sections we
+kinds of tasks and this is where CLAIMED comes in. We've published CLAIMED
+as an open source library [complib]_. In the next sections we
 will introduce the demo use case, along with how components found in CLAIMED
 have been used to implement this pipeline.
 
