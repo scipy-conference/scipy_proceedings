@@ -13,20 +13,18 @@ CLAIMED, a visual and scalable component library for Trusted AI
 
 .. class:: abstract
 
-   We propose an Open Source low-code / no-code tool suite for data science supporting rapid
-   prototyping with visual editing and jupyter notebooks, seamless scaling during development 
-   and deployment (including GPU), pre-build components for various business domains, 
-   support for the complete python and R tooling including Apache Spark, TensorFlow, 
-   PyTorch, pandas and scikit-learn, straightforward extensibility 
-   (anything which runs in a Docker container), reproducibility of work, data lineage and collaboration support.
-   More specifically we provide CLAIMED, the component library for AI, Machine Learning, ETL
-   and Data Science driven by the JupyterLab extension "Elyra Pipeline Editor", a framework
-   agnostic low-code pipeline editor currently supporting local execution, Airflow and Kubeflow.
-   To exemplify its use, we constructed a workflow composed exclusively of components in CLAIMED, 
-   to train, evaluate and deploy a deep learning model, that determines if CT scans are positive 
-   for COVID-19 [covidata]_.
-   
-
+   CLAIMED is a component library for artificial intelligence, machine learning,
+   "extract, transform, load" processes and data science.
+   The goal is to enable low-code/no-code rapid prototyping by providing
+   ready-made components, for various business domains,
+   supporting various computer languages, working on various data flow editors and
+   running on diverse execution engines.
+   To exemplify its use, we constructed a workflow composed exclusively of components in CLAIMED.
+   We used a publicly available dataset with CT scans [covidata]_
+   for training, evaluating and deploying a deep learning model,
+   with goal to classify exams as either COVID-19 positive or negative.
+   It was built with Elyra's Pipeline Visual Editor,
+   running either locally, on Airflow or on Kubeflow execution engines.
 
 .. class:: keywords
 
@@ -446,7 +444,7 @@ allows for a convenient way to create datasets from various input data,
 apply transformations and preprocessing steps and make iteration over
 the data easier and memory efficient [tfdataset]_.
 
-In our example, the data aren’t in the required format. It is organized as
+In our example, the data isn’t in the required format. It is organized as
 a directory full of images and alongside it is a CSV file which defines the
 attributes. Available attributes are exam finding, sex and age,
 from which we only require the finding for our example.
