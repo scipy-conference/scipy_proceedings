@@ -19,7 +19,7 @@ PDFrw was used to prepopulate Covid-19 vaccination forms to improve the efficien
 
 .. class:: keywords
 
-   machine learning, classification, categorical encoding
+   acrobat documents, form filling, HIPAA compliance, COVID-19
 
 Introduction
 ------------
@@ -34,10 +34,10 @@ transportation to and from the vaccination site, as needed.
 
 As a personal anecdote, when vaccinations were opened to all aged 65 and older, one of the authors tried to
 get his parents vaccinated and discovered that the experience documented here :cite:`letters_2021` was
-unfortunately typical and required regularly pinging the appointment site for a week to get an appointment.
-However, beyond persistence, getting an appointment required monitoring the site to track when batches of new
+unfortunately typical and required regularly pinging the appointment website for a week to get an appointment.
+However, beyond persistence, getting an appointment required monitoring the website to track when batches of new
 appointments were released --- all tasks that require an uncommon knowledge of Internet infrastructure beyond
-most patients.
+most patients, not just the elderly.
 
 To help San Diego County with the vaccine rollout, the Gary and Mary West PACE (WestPACE)
 center established a pop-up point of distribution (POD) for the COVID-19 vaccine
@@ -52,7 +52,7 @@ for WestPACE and focuses on the use of Python's :code:`PDFrw`  module
 to address real-world sensitive data issues with PDF documents.
 
 This paper gives a little more background of the effort. Next the overall
-infrastructure and information flow is descried. Finally, a very detailed
+infrastructure and information flow is described. Finally, a very detailed
 discussion on the use of python and the :code:`PDFrw` library to address a
 major bottleneck and volunteer pain point.
 
@@ -67,7 +67,7 @@ storage) instead of waiting for San Diego County to provide them; but, due to hi
 acquiring a suitably-sized freezer was very problematic. As a pivot, WestPACE opted to
 acquire a freezer that was available but with excess capacity beyond what was needed for
 just WestPACE, and then collaborated with the County to use this excess capacity to
-establish a walk-up vaccination center for all San Diego seniors, in or out of WestPACE.
+establish a walk-up vaccination center for all San Diego senior citizens, in or out of WestPACE.
 
 WestPACE coordinated with the local 2-1-1 organization responsible for coordination of
 community health and disaster services. The 2-1-1 organization provided a call center with
@@ -75,9 +75,9 @@ in-person support for vaccine appointments and transportation coordination to an
 WestPACE. This immediately eased the difficulty of making online appointments and the burden
 of transportation coordination.  With these relationships in place, the vaccination clinic
 went from concept to active vaccine distribution site in about two weeks
-resulting in the successful vaccination of thousands of seniors.
+resulting in the successful vaccination of thousands of elderly.
 
-Allhough this is a  technical paper, this background describes the real impact technology
+Although this is a  technical paper, this background describes the real impact technology
 can make in the lives of the vulnerable and elderly in society 
 in a crisis situation. 
 
@@ -107,29 +107,31 @@ Figure :ref:`fig:infrastructure` shows a high level view of the user experience 
 information flow. Making appointments can be challenging, especially those with limited
 caregiver support.  Because the appointment systems were set up in a hurry, many user
 interfaces were confusing and poorly designed.  In the depicted pipeline, the person (or
-caregiver) telephones 2-1-1 call center and the live operator collects demographic and
+caregiver) telephones the 2-1-1 call center and the live operator collects demographic and
 health information, and coordinates any necessary travel arrangements, as needed.  The
 demographic and health information is entered into the appointment system managed by the
-California Department of Public Health.  The information is then scraped and downloaded to
-the clinic from the appointment system the day before the scheduled vaccination. Unfortunately,
-given the time constraints, we were not able to fully automate this process. Next, a forms
+California Department of Public Health.  The information is then downloaded to
+the clinic from the appointment system the day before the scheduled vaccination. Next, a forms
 packet is generated for every scheduled patient and consolidated into a PDF file that is
 then printed and handed to the volunteers at the clinic. The packet consolidates documents
 including consent forms, health forms, and CDC-provided vaccination cards.
 
-When the patient arrives at the clinic, their forms are pulled and a volunteer reviews the
-questions while correcting any errors. Once the information is validated, the patient is
-directed to sign the appropriate forms. The crucially efficient part is that the patient and
-volunteer only have to *validate* previously collected information instead of filling out
-multiple forms with redundant information. This was crucial during peak demand so that most
-patients experienced less than a five minute delay between arrival and vaccine
-administration. We also investigated commercial services to do the electronic form filling
-with auditable electronic signature, but these turned out to be too expensive and 
+When the patient arrives at the clinic, their forms are pulled and a
+volunteer reviews the questions while correcting any errors. Once the
+information is validated, the patient is directed to sign the
+appropriate forms. The crucially efficient part is that the patient
+and volunteer only have to *validate* previously collected information
+instead of filling out multiple forms with redundant information. This
+was crucial during peak demand so that most patients experienced less
+than a five minute delay between arrival and vaccine
+administration. While there was consideration of commercial services
+to do the electronic form filling and electronic signatures, they were
+discounted because these turned out to be too expensive and
 time-consuming to set up.
 
 Different entities such as 2-1-1 and the State of California handle certain elements of the
-data pipeline, but strict HIPAA requirements are followed each step.  All clinic
-communications with the State appointment system were manage through a properly
+data pipeline, but strict HIPAA requirements are followed at each step.  All clinic
+communications with the State appointment system were managed through a properly
 authenticated and encrypted system. The vaccine clinic utilized pre-existing, cloud-based
 HIPAA-compliant system, with corresponding BAAs. All sensitive data processing occurred on
 this system.
@@ -149,11 +151,11 @@ Programmatically Fill Forms
 
 Programmatically filling in PDF forms can be a quick and accurate way to
 disseminate forms.  Bits and pieces can be found throughout the Internet and places like Stack Overflow but no
-single source provides a complete answer.  However, the *Medium* blog post by Vivsvaan
+single source provides a complete answer.  The *Medium* blog post by Vivsvaan
 Sharma :cite:`sharma` is a good starting place. Another useful resource is the PDF 1.7
 specification :cite:`pdf`. Since the deployment of the vaccine clinic, the details of the
 form filling can be found at WestHealth's blog :cite:`whblog`.  The code is available on
-Github as described below.
+GitHub as described below.
 
 The following imports are used in the examples given below.
 
@@ -169,7 +171,7 @@ Finding Your Way Around PDFrw and Fillable Forms
 
 Several examples of basic form filling code can be found on the
 Internet, including the above-mentioned *Medium* blog post. The
-following is a typical snippet taken largely from the blog post.
+following is a typical snippet which was taken largely from the blog post.
 
 .. code:: python
 
@@ -186,10 +188,10 @@ following is a typical snippet taken largely from the blog post.
                     print (key)
 
 The type of ``annotation['/T']`` is ``pdfString``. While some sources use
-``[1:-1]`` to extract the string from ``pdfString``, the ``.to_unicode()``
+``[1:-1]`` to extract the string from ``pdfString``, the ``to_unicode``
 method is the proper way to extract the string. According to the PDF 1.7
-specification Â§ 12.5.6.19, all fillable forms use widget annotation.
-The check for ``annotation['/SubType']`` filters the annotation
+specification § 12.5.6.19, all fillable forms use widget annotation.
+The check for ``annotation['/SubType']`` filters the annotations
 to only widget annotations.
 
 To set the value ``value``, a ``PDFString`` needs to be created by
@@ -201,12 +203,12 @@ shown in the following code snippet.
 
     annotation.update(PdfDict(V=PdfString.encode(value)))
 
-This converts `value`` into a ``PdfString`` and updates the
+This converts ``value`` into a ``PdfString`` and updates the
 ``annotation``, creating a value for ``annotation['/V'``].
 
 In addition, at the top level of the ``PdfReader`` object ``pdf``, the
 ``NeedAppearances`` property in the interactive form dictionary,
-``AcroForm`` (See Â§ 12.7,2) needs to be set, without this, the fields are updated but
+``AcroForm`` (See § 12.7.2) needs to be set, without this, the fields are updated but
 will not necessarily display. To remedy this, the following code
 snippet can be used.
 
@@ -227,27 +229,25 @@ next to a signature line.  If the code above on such a form were run,
 the ``Name`` field will not show up. 
 
 Whenever the multiple
-fields occur with the same name the situation is more complicated. One
+fields occur with the same name, the situation is more complicated. One
 way to deal with this is to simply rename the fields to be different
 such as ``Name-1`` and ``Name-2``, which is fine if the sole use of the
-form is for automated form filling. However, if the form is also to be
-used for manual filling, this would require the user to enter the
+form is for automated form filling. This would require access to a form authoring tool.
+If the form is also to be used for manual filling, this would require the user to enter the
 ``Name`` multiple times.
 
-When fields appear multiple times, there are some widget annotations without
-the ``/T`` field but with a ``/Parent`` field. As it turns out this ``/Parent``
+When fields appear multiple times, the widget annotation does not have 
+the ``/T`` field but has a ``/Parent`` field. As it turns out this ``/Parent``
 contains the field name ``/T`` as well as the default value ``/V``. 
-For the current examples, there is one ``/Parent`` and two
-``/Kids``. The code can be simply modified to handle repeated fields
-by inserting the following lines:
+Each ``/Parent`` has one ``/Kids`` for each occurrence of the field.
+To modify the code to handle repeated occurrences of a field, the following lines can be inserted:
 
 .. code:: python
 
     if not annotation['/T']:
         annotation=annotation['/Parent']
 
-These allow us to inspect and modify annotations that appear more
-than once. With this modification, the result of the inspection code
+These lines allow the inspection and modifications of annotations that appear more than once. With this modification, the result of the inspection code
 yields:
 
 .. code:: python
@@ -266,17 +266,18 @@ yields:
                     key = annotation['/T'].to_unicode()
                     print (key)
 
-``Name`` now appears twice, once for each
-instance, but they both point to the same ``/Parent``. With this
-modification, the form filler will actually fill the ``/Parent`` value
-twice, but this has no impact since it is overwriting the default value
-with the same value.
+With this code in the above example, ``Name`` would be printed
+multiple times, once for each
+instance, but each instance points to the same ``/Parent``. With this
+modification, the form filler will actually fills the ``/Parent`` value
+multiple times, but this has no impact since it is overwriting the
+default value with the same value.
 
 
 Checkboxes
 ----------
 
-In accordance to Â§12.7.4.2.3, the checkbox state can be set as
+In accordance to §12.7.4.2.3, the checkbox state can be set as
 follows:
 
 .. code:: python
@@ -288,33 +289,29 @@ follows:
             val_str = BasePdfName('/Off')
         annotation.update(PdfDict(V=val_str))
 
-This may work especially the export value of the checkbox is
-``Yes``, but not always. The easiest solution to edit the form is to ensure that the
+This could work if the export value of the checkbox is ``Yes``, which is the default, but not when the export value is something else. The easiest solution is to edit the form to ensure that the
 export value of the checkbox is ``Yes`` and the default state of the box
 is unchecked. The recommendation in the specification is that it
-be set to ``Yes``. In any event, the tools to make this change are not
+be set to ``Yes``. In the event tools to make this change are not
 available, the ``/V`` and ``/AS`` fields should be set to the export value
-not ``Yes``.
-
-If the form is used  for both manual and automatic filling, certain checkboxes may be
-checked as a default. In that case, while the code does work, the best practice is to delete
-the ``/V`` as well as the ``/AS`` field from the dictionary. The export value can be
+not ``Yes``. The export value can be
 inspected by examining the  appearance dictionary ``/AP`` and specifically at the ``/N``
 field.  Each annotation has up to three appearances in its appearance dictionary: ``/N``,
-``/R`` and ``/D``, standing for *normal*, *rollover*, and *down* (Â§12.5.5). The latter two
+``/R`` and ``/D``, standing for *normal*, *rollover*, and *down* (§12.5.5). The latter two
 have to do with appearance in interacting with the mouse. The normal appearance has to do
 with how the form is printed.
 
+There may be circumstances where the form has checkboxes whose default state
+is checked. In that case, in order to uncheck a box, the best practice is to delete
+the ``/V`` as well as the ``/AS`` field from the dictionary. 
+
 According to the PDF specification for checkboxes, the appearance stream ``/AS`` should be
 set to the same value ``/V``. Failure to do so may mean that the checkboxes do not appear.
-It should be noted that  PDF readers do not provide strict enforcement so it is better enter
-a value other than the export value for a checked value. Additionally, all these complicated
-machinations with the appearance dictionary are exacerbated by more complex form elements.
 
 More Complex Forms
 ------------------
 
-For the purpose of the vaccine clinic application, the filling text fields and checkboxes
+For the purpose of the vaccine clinic application, the filling of text fields and checkboxes
 were all that were needed. However, for completeness, other form field types were studied
 and solutions are given below.
 
@@ -324,7 +321,7 @@ Radio Buttons
 
 Radio buttons are by far the most complex of the form entries types.  Each widget links to
 ``/Kids`` which represent the other buttons in the radio group. Each widget in a radio
-group will link to the same 'kids'. Much like the 'parents' for the repeated forms fields
+group will link to the same \`kids'. Much like the \`parents' for the repeated forms fields
 with the same name, each kid need only be updated once, but 
 the same update can be used multiple times if it simplifies the code.
 
@@ -359,11 +356,11 @@ The resulting code could look like the following:
 Combo Boxes and Lists
 ~~~~~~~~~~~~~~~~~~~~~
 
-Both combo boxes and lists are forms of the choice form type. The combo
+Both combo boxes and lists are forms of the form type *choice*. The combo
 boxes resemble drop-down menus and lists are similar to list pickers in
-HTML. Functionally, they are very similar to form filling. The value
+HTML. Functionally, they are very similar in form filling. The value
 ``/V`` and appearance stream ``/AS`` need to be set to their exported
-values. The ``/Op`` yields a list of lists associating the exported
+values. The ``/Op`` field yields a list of lists associating the exported
 value with the value that appears in the widget.
 
 To set the combo box, the value needs to be set to the export
@@ -385,9 +382,9 @@ value.
 Lists are structurally very similar. The list of exported values can be
 found in the ``/Opt`` field. The main difference is that lists based on
 their configuration can take multiple values. Multiple values can be set
-with ``Pdfrw`` by setting ``\V`` and ``\AS`` to a list of ``PdfString``\ s.
+with ``Pdfrw`` by setting ``/V`` and ``/AS`` to a list of ``PdfString``\ s.
 The code presented here uses two separate helpers, but because of the
-similarity in struction between list boxes and combo boxes, they could
+similarity in structure between list boxes and combo boxes, they could
 be combined into one function.
 
 .. code:: python
@@ -408,17 +405,16 @@ be combined into one function.
 Determining Form Field Types Programmatically
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-While PDF authoring tools or visual inspection can identify each forms' type, to determine
-this programmatically is possible.  It is important to understand that fillable forms fall
+While PDF authoring tools or visual inspection can identify each form's type, the type can be determined programmatically as well.  It is important to understand that fillable forms fall
 into four form types, button (push button, checkboxes and radio buttons), text, choice
-(combo box and list box) and signature.  They correspond to following values of the ``/FT``
+(combo box and list box), and signature.  They correspond to following values of the ``/FT``
 form type field of a given annotation, ``/Btn``, ``/Tx``, ``/Ch`` and ``/Sig``,
-respectively.  Since signature filling is not supported and push button is a widget which
+respectively.  Since signature filling is not supported and the push button is a widget which
 can cause an action but is not fillable, those corresponding types are omitted from
 consideration.
 
 To distinguish the types of buttons and choices, the form
-flags ``/Ff`` field is examined For radio buttons, the 16th bit is set. For combo
+flags ``/Ff`` field is examined. For radio buttons, the 16th bit is set. For combo
 box the 18th bit is set. Please note that ``annotation['/Ff']`` returns
 a ``PdfObject`` when returned and must be coerced into an ``int`` for
 bit testing.
@@ -457,9 +453,10 @@ Consolidating Multiple Filled Forms
 -----------------------------------
 
 There are two problems with consolidating multiple filled forms. The
-first problem is that when two PDF files are merged matching names are
+first problem is that when two PDF files are merged, fields with
+matching names are 
 associated with each other. For instance, if John Doe were entered in
-one form and Jane Doe in the second, when after combining the two forms John Doe will
+one form's name field and Jane Doe in the second. After combining the two forms John Doe will
 override the second form's name field and John Doe would appear in both
 forms. The second problem is that most simple command line or
 programmatic methods of combining two or more PDF files lose form data.
@@ -468,8 +465,8 @@ printing the file to PDF. In effect, this bakes in the filled form
 values and does not permit the editing the fields. Going even further,
 one could render the PDFs as images if the only requirement is that the
 combined files be printable. However, tools like
-``ghostscript`` and ``imagemagick`` don't do a good job of preserving
-form data and neither does  PDFUnite.
+``ghostscript``, ``imagemagick``, and PDFUnite don't do a good job of
+preserving form data when rendering PDF files.
 
 Form Field Name Collisions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -507,8 +504,8 @@ can be as simple as a sequential number.
 Combining the Files
 ~~~~~~~~~~~~~~~~~~~
 
-Solutions for combining files found on the Internet for combining PDF
-files using ``PDFrw``, the following recipe is typical,
+Solutions for combining PDF files with ``PDFrw`` can be found on the Internet.
+The following recipe is typical:
 
 .. code:: python
 
@@ -521,36 +518,35 @@ files using ``PDFrw``, the following recipe is typical,
 While the form data still exists in the output file, the rendering
 information is lost and won't show when displayed or printed. The
 problem comes from the fact that the written PDF does not have an
-interactive form dictionary (see Â§12.7.2 of the PDF 1.7 specification).
-In particular the interactive forms dictionary contains the boolean
+interactive form dictionary (see §12.7.2 of the PDF 1.7 specification).
+In particular, the interactive forms dictionary contains the boolean
 ``NeedAppearances`` to be set for fields to be shown. If the
 forms being combined have different interactive form dictionaries, they
-need to be merged. For our application, because the source
-form is identical amongst the various copies, any ``AcroForm``
-dictionary can be used.
+need to be merged. In this application where the source forms are identical among the various copies, any ``AcroForm`` dictionary can be used.
 
-After obtaining the dictionary, from ``pdf.Root.AcroForm`` (assuming the
-reader is stored in ``pdf``), it is not clear how to add it to the
-``PdfWriter`` object. The clue comes from a simple recipe for copying a
-pdf file.
+After obtaining the dictionary from ``pdf.Root.AcroForm`` (assuming the
+``PdfReader`` object is stored in ``pdf``), it is not clear how to
+add it to the ``PdfWriter`` object. The clue comes from a simple
+recipe for copying a pdf file.
 
 .. code:: python
 
     pdf = PdfReader(in_file)
     PdfWriter().write(out_file, pdf)
 
-If one examines, these source code, the second parameter is set to the
-attribute ``trailer``, so assuming ``acro_form`` contains the
-interactive forms ``PdfDict`` which can be set by
-``writer.trailer.Root.AcroForm = acro_form``.
+Examination of the underlying source code shows the second parameter ``pdf``
+to be set to the attribute ``trailer`` of the ``PdfWriter`` object. Assuming ``acro_form``
+contains the desired interactive form, the interactive form dictionary
+can be added to the output document by using
+``writer.trailer.Root.AcroForm = acro_form``. 
 
 Conclusion
 ----------
 
 A complete functional version of this PDF form filler is open source
-and can be found at WestHealth's github repository
+and can be found at WestHealth's GitHub repository
 `https://github.com/WestHealth/pdf-form-filler
-<https://github.com/WestHealth/pdf-form-filler>`_ 
-This process was able to produce large quantities of pre-filled forms for seniors seeking
+<https://github.com/WestHealth/pdf-form-filler>`_.
+This process was able to produce large quantities of pre-populated forms for seniors seeking
 COVID-19 vaccinations relieving one of the bottlenecks that have plagued many other vaccine
 clinics.
