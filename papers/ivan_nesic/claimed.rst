@@ -605,14 +605,14 @@ and potentially for particle physics at CERN.
 
 Conclusion
 ==========
-
 We’ve build and proposed a trustable, low-code, scalable and open source
-visual AI pipeline system on top of various common components
-used in the machine learning community. Using Kubeflow Pipelines
-provides reproducibility and auditability. Using Kubernetes provides
-scalability and standardization. Using Elyra for visual development
-provides ease of use, such that all internal and external stakeholders
-are empowered to audit the system in all dimensions.
+component library targeting visual data pipeline systems. We've
+implemented various exemplary pipelines in different domains to
+showcase the library's capabilities. Those pipelines run on one
+state-of-the-art execution engine (KubeFlow) and an emerging visual
+pipeline editor (Elyra) powered by JupyterLab as user interface.
+We beliefe that future import/export functionality of CLAIMED will
+greatly improve reproducibility of data centric work in the community.
 
 References
 ----------
