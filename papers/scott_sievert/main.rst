@@ -18,13 +18,13 @@ Training machine learning models faster with Dask
 
    Machine learning (ML) relies on stochastic algorithms, all of which rely on
    gradient approximations with "batch size" examples. Growing the batch size
-   as an optimization proceeds is a simple and usable method to reduce the
+   as the optimization proceeds is a simple and usable method to reduce the
    training time, provided that the number of workers grows with the batch
    size. In this work, we provide a package that trains PyTorch models on Dask
    clusters, and can grow the batch size if desired. Our simulations indicate
-   that for a particular model, the training time can be reduced from about 120
-   minutes with standard SGD to 45 minutes for a popular image classification
-   architecture that uses GPUs.
+   that for a particular model that uses GPUs for a popular image
+   classification task, the training time can be reduced from about 120 minutes
+   with standard SGD to 45 minutes with a variable batch size method.
 
 .. class:: keywords
 
@@ -35,10 +35,11 @@ Introduction
 
 Training deep machine learning models takes a long time. For example, training
 a popular image classification model :cite:`recht2019imagenet` to reasonable
-accuracy takes "around 17 hours" on Google server. [#]_ Another example
+accuracy takes "around 17 hours" on Google servers. [#]_ Another example
 includes training an NLP model for 10 days on 8 high-end GPUs
-:cite:`radford2018improving`. [#]_ And the number of floating point operations
-(FLOPs) required for "the largest AI training runs" doubles every 3.4 months. [#]_
+:cite:`radford2018improving`. [#]_ Notably, the number of floating point
+operations (FLOPs) required for "the largest AI training runs" doubles every
+3.4 months. [#]_
 
 .. [#] Specifically, a ResNet-50 model on the ImageNet database using a Google
    Tensor Proceesing Unit (TPU)
@@ -89,13 +90,13 @@ Adagrad :cite:`adagrad`, Adadelta :cite:`adadelta`, and averaged SGD
 Increasing the batch size :math:`B_k` will reduce the number of model updates
 while not requiring more FLOPs or gradient computations – both empirically
 :cite:`smith2017` and theoretically :cite:`sievert2021improving`. Typically,
-the number of FLOPs controls the training time because it's performed on a
-single machine/worker, so at first, fewer model updates seems like an internal
+the number of FLOPs controls the training time because training is performed
+with a single processor. At first, fewer model updates seems like an internal
 benefit that doesn't affect training time.
 
 .. latex::
 
-    \par The benefit comes while training with multiple machines aka a
+    \par The benefit comes when training with multiple machines, aka a
     distributed system. Notably, the time required to complete a single model
     update is (nearly) agnostic to the batch size provided the number of
     workers in a distributed system grows with the batch size. In one
@@ -140,10 +141,10 @@ schedule. Specifically, this work provides the following:
 
    A key component of our software is that the number of workers grows with the
    batch size. Then, the model update time is agnostic to the batch size
-   provided communication is instantaneous. This has been shown empirically:
-   Goyal et al. grow the batch size (and the number of workers with it) by a
-   factor of $44$ but the time for a single model update only increases by a
-   factor of $1.13$~\cite[Sec.~5.5]{goyal2017accurate}.
+   provided that communication is instantaneous. This has been shown
+   empirically: Goyal et al. grow the batch size (and the number of workers
+   with it) by a factor of $44$ but the time for a single model update only
+   increases by a factor of $1.13$~\cite[Sec.~5.5]{goyal2017accurate}.
 
 Now, let's cover related work to gain understanding of why variable batch
 sizes provide a benefit in a distributed system. Then, let's cover the details
@@ -175,18 +176,20 @@ Related work
 .. number of model updates.
 
 The data flow for distributed model training involves distributing the
-computation of :math:`\frac{1}{B}\sum_{i=1}^{B} \bm{g}(\bm{w}_k; \bm{z}_i)`.
-Typically, each worker computes the gradients for :math:`B/P` examples when
-there is a batch size of :math:`B` and :math:`P` machines. Then, the average of
-these gradients is taken and the model is updated. [#]_ Clearly, Amdahl's law
-is relevant because there are diminishing returns as the number of workers
-:math:`P` is increased :cite:`golmant2018computational`.
+computation of the gradient estimate,
+:math:`\frac{1}{B}\sum_{i=1}^{B} \bm{g}(\bm{w}_k; \bm{z}_i)`.
+Typically, each worker computes the gradients for
+:math:`B/P` examples when there is a batch size of :math:`B` and :math:`P`
+machines. Then, the average of these gradients is taken and the model is
+updated. [#]_
 
-In distributed systems, growing the amount of data with the number of workers
-is known as "weak scaling." By contrast, "strong scaling" has a fixed batch
-size and treats the number of workers as an internal detail. Of course,
-relevant experiments show that weak scaling exhibits better scaling than strong
-scaling :cite:`qi2017paleo`.
+Clearly, Amdahl's law is relevant because there are diminishing returns as the
+number of workers :math:`P` is increased :cite:`golmant2018computational`.
+This as referred to as "strong scaling" because the batch size is fixed and the
+number of workers is treated as an internal detail.  By contrast, growing the
+amount of data with the number of workers is known as "weak scaling."  Of
+course, relevant experiments show that weak scaling exhibits better scaling
+than strong scaling :cite:`qi2017paleo`.
 
 ..  [#] Related but tangential methods include methods to efficiently
         communicate the gradient estimates
@@ -217,13 +220,13 @@ distributed system :cite:`perrone2019optimal`.
 
    \par Large constant batch sizes present generalization
    challenges~\cite{goyal2017accurate}. The generalization error is
-   hypothesized to come from convergence to a "sharp" minima, strongly
-   influenced by the learning rate and noise in the gradient
-   estimate~\cite{keskar2016large}. To match performance on the training
-   dataset, careful thought about choice of hyperparameters is
-   required~\cite[Sec.~3 and~5.2]{goyal2017accurate}. In fact, this has
-   motivated algorithms specifically designed for large constant batch sizes
-   and distributed systems~\cite{johnson2020adascale,jia2018, you2017large}.
+   hypothesized to come from "sharp" minima, strongly influenced by the
+   learning rate and noise in the gradient estimate~\cite{keskar2016large}. To
+   match performance on the training dataset, careful thought must be given to
+   hyperparameter selection~\cite[Sec.~3 and~5.2]{goyal2017accurate}. In fact,
+   this has motivated algorithms specifically designed for large constant batch
+   sizes and distributed systems~\cite{johnson2020adascale,jia2018,
+   you2017large}.
 
 
 .. By contrast, a method to increase the batch
@@ -263,14 +266,15 @@ very similar numbers. An illustration is given in Figure :ref:`fig:eg`.
    computing the batch size requires computation (though there are
    workarounds~\cite{sievert2021improving, balles2016coupling}).
 
-   Increasing the batch size is a provably good measure that (mathematically)
-   requires far fewer model updates and no more computation than standard SGD
-   for strongly convex functions for training
-   loss~\cite[Ch.~5]{bottou2018optimization}, and all function classes if the
-   batch size is provided by an oracle (or approximated
-   accurately)~\cite{sievert2021improving}.  Convergence proofs have also been
-   given for the \emph{passively} increasing the batch size, both for strongly
-   convex functions~\cite[Ch.~5]{bottou2018optimization} and for non-convex
+   Convergence results have been given for adaptive batch
+   sizes~\cite{sievert2021improving, bottou2018optimization, zhou2018new}.
+   Increasing the batch size is a provably good measure that requires far fewer
+   model updates and no more computation than standard SGD for strongly convex
+   functions~\cite[Ch.~5]{bottou2018optimization}, and all function classes if
+   the batch size is provided by an oracle~\cite{sievert2021improving}.
+   Convergence proofs have also been given for the \emph{passively} increasing
+   the batch size, both for strongly convex
+   functions~\cite[Ch.~5]{bottou2018optimization} and for non-convex
    functions~\cite{zhou2018new}. Both of these methods require fewer model
    updates than SGD \emph{and} do not increase the number of gradient
    computations.
@@ -278,28 +282,28 @@ very similar numbers. An illustration is given in Figure :ref:`fig:eg`.
 Notably, a geometric batch size increase schedule has shown great empirical
 performance in image classification :cite:`smith2017`.  Specifically, the
 number of model updates required to finish training decreased by a factor of
-2.2 over standard SGD despite the models performing equally well in terms of
-gradient computations or epochs :cite:`smith2017`. Smith et al. make an
-observation that batch size increase and learning rate decay are methods to
-decay the optimization's "noise scale" (or variance of the model update) and
-has connections to simulated annealing :cite:`smith2017`. This motivates
-increasing the batch size by the same factor the learning rate decays
-:cite:`smith2017`.
+2.2 over standard SGD :cite:`smith2017`. Smith et al. make an observation that
+increasing the batch size and decreasing the learning rate both decay the
+optimization's "noise scale" (or variance of the model update), which has
+connections to simulated annealing :cite:`smith2017`. This motivates increasing
+the batch size by the same factor the learning rate decays :cite:`smith2017`.
 
-Both growing the batch size and using large batch sizes should require the same
-number of floating point operations as constant small batch size SGD to reach a
-particular training loss (respectively :cite:`sievert2021improving,
-bottou2018optimization` and :cite:`johnson2020adascale, you2019large,
-yin2018`). Some proof techniques suggest the algorithms should mirror gradient
-descent :cite:`sievert2021improving, karimi2016linear`; correspondingly, the implementations does
-not require additional hyperparameter tuning :cite:`smith2017`.
+Both growing the batch size and using large constant batch sizes should require
+the same number of floating point operations as using standard SGD with small
+batch sizes to reach a particular training loss (respectively
+:cite:`sievert2021improving, bottou2018optimization` and
+:cite:`johnson2020adascale, you2019large, yin2018`). Some proof techniques
+suggest that variable batch size methods mirror gradient descent
+:cite:`sievert2021improving, karimi2016linear`, so correspondingly, the
+implementations do not require much additional hyperparameter tuning
+:cite:`smith2017`.
 
 Distributed training with Dask
 ==============================
 
-We have written AdaDamp, a package to to train a PyTorch model with a
-Scikit-learn API on any Dask cluster. [#]_  It supports the use of constant or
-variable batch sizes, which fits nicely with Dask's ability to change the
+We have written "AdaDamp," a software package to to train a PyTorch model with
+a Scikit-learn API on any Dask cluster. [#]_  It supports the use of constant
+or variable batch sizes, which fits nicely with Dask's ability to change the
 number of workers. [#]_ In this section, we will walk through the basic
 architecture of our software and an example usage. We will defer showing the
 primary benefit of our software to the experimental results.
@@ -330,7 +334,7 @@ distributed support). Specifically, the following happen on every model update:
 4. The master performs a model update with the aggregated gradients.
 
 We use Dask to implement this data flow, which adds some overhead. [#]_ AdaDamp
-supports constant batch sizes; however, there is little incentive to use
+supports static batch sizes; however, there is little incentive to use
 AdaDamp with a static batch sizes: the native solution has PyTorch less
 overhead :cite:`li2020pytorch`, and already has a Dask wrapper. [#]_
 
@@ -426,11 +430,8 @@ the following points:
        with a batch size of 256.
 
 1. Increasing the batch size reduces the number of model updates.
-2. The time required for model training is proportional the number of model
-   updates (presuming the distributed system is configured correctly).
-3. Adding more GPUs to a fixed increase schedule can further accelerate
-   training.
-
+2. The time required for model training is roughly proportional to the number
+   of model updates (presuming the distributed system is configured correctly).
 
 .. Model: Wide_ResNet w/ depth=16, widen_factor=4, dropout_rate=0.3, num_classes=10
 .. Dataset: CIFAR10.
@@ -452,10 +453,10 @@ the following points:
 .. | 256 |  5629 |
 .. | 512 |  10239 |
 
-To provide evidence for these points, let's run two experiments: one that
-varies the batch size increasing schedule, and one that varies the number of
-workers for a constant batch size. The first set of experiments will mirror the
-experiments by Smith et al. :cite:`smith2017`.
+To provide evidence for these points, let's run one set of experiments that
+varies the batch size increase schedule. These experiments will mirror the
+experiments by Smith et al. :cite:`smith2017`.  Additionally, let's ensure that
+our software accelerates model training as the number of GPUs increase.
 
 We train each batch size increase schedule once, and then write the historical
 performance to disk. This reduces the need for many GPUs, and allows us to
@@ -472,16 +473,17 @@ Batch size increase
    several trainings that require a different number of model updates. These
    experiments explicitly mirror the experiments by Smith et
    al.~\cite[Sec.~5.1]{smith2017}, which helps reduce the parameter tuning.
-   Largely, the same hyperparameters are used.
 
-These experiments only differ in the choice of batch size and learning rate, as
-shown in Figure :ref:`fig:labels`. As in the Smith et al. experiments, every
-optimizer uses Nesterov momentum :cite:`nesterov2013a` and the same momentum
-(0.9) and weight decay (:math:`0.5\cdot 10^{-3}`). They start with the same
-initial learning rate (0.05), [#]_ and either the learning rate is decreased or
-the batch size increases by a specified factor (5) at particular intervals
-(epochs 60, 120 and 180). This means that the variance of the model update is
-reduced by a constant factor at each update.
+
+Largely, the same hyperparameters are used.  These experiments only differ in
+the choice of batch size and learning rate, as shown in Figure
+:ref:`fig:labels`. As in the Smith et al. experiments, every optimizer uses
+Nesterov momentum :cite:`nesterov2013a` and the same momentum (0.9) and weight
+decay (:math:`0.5\cdot 10^{-3}`). They start with the same initial learning
+rate (0.05), [#]_ and either the learning rate is decreased or the batch size
+increases by a specified factor (5) at particular intervals (epochs 60, 120 and
+180). This means that the variance of the model update is reduced by a constant
+factor at each update.
 
 .. [#] These are the same as Smith et al. :cite:`smith2017` with the exception
        of learning rate (which had to be reduced by a factor of 2).
@@ -500,7 +502,7 @@ These different decay schedules exhibit the same performance in terms of number
 of epochs, which is proportional to the number of FLOPs, as shown in Figure
 :ref:`fig:epochs`.  The number of FLOPs is (approximately) to the cost, at
 least on Amazon EC2 where the cost to rent a server tends to be proportional to
-the number of CPU cores/GPUs.
+the number of GPUs.
 
 .. figure:: figs/centralized/epochs.pdf
    :align: center
