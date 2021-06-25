@@ -276,7 +276,7 @@ the latest OpenCV version, and CvBridge uses at its core an older version of
 OpenCv, we replaced the conversion from sensor_msgs/Image message type to the 
 OpenCv image array made by CvBridge with a very useful numpy functionality 
 which allowed us to make this conversion flawlessly, while still achieving the same functionality
-and performance, in fact, being only a slight alteration of the underlying Python
+and performance, because in fact, this was only a slight alteration of the underlying Python
 implementation of the CvBridge package. So, we replaced:
 
 .. code-block:: python
