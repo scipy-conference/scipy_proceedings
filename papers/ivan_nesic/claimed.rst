@@ -353,11 +353,11 @@ System Implementation and Demo Use Case
 A TrustedAI image classification pipeline
 -----------------------------------------
 
-As already mentioned previously, pipelines are a great way to introduce
+As mentioned, pipelines are a great way to introduce
 reproducibility, scaling, auditability and collaboration in machine
-learning. Pipelines are often a central part of a ML-Ops strategy. This
-especially holds for TrustedAI pipelines since reproducibility and
-auditability are even more important there. Figure :ref:`pipeline`
+learning. Pipelines are often a central part of a MLOps strategy. This
+holds for TrustedAI pipelines too, since reproducibility and
+auditability are even more important in this case. Figure :ref:`pipeline`
 illustrates the exemplary TrustedAI pipeline we have built using the
 component library and Figure :ref:`kfp` is a screenshot taken from
 Kubeflow displaying the pipeline after finishing it’s run.
@@ -369,19 +369,16 @@ Kubeflow displaying the pipeline after finishing it’s run.
 Pipeline Components
 -------------------
 
-
-
 This section exemplifies each existing category with at
 least one component which has been used for this particular pipeline. 
 There are also other components that are not part of the pipeline,
-so they haven't been exemplified here.
+so they haven't been shown here.
 Please note that the core feature of our software is threefold:
 
 - the CLAIMED component library
 - Elyra with it's capability to use CLAIMED to create a pipeline 
   and push it to Kubeflow
 - the pipeline itself
-
 
 
 Input Components
@@ -404,17 +401,17 @@ Transform Components
 
 Sometimes, transformations on the metadata, or any other structured
 dataset, are necessary. Therefore, we provide a generic transformation
-component - in this case we just used it to change to format of the
+component - in the example, we just used it to change to format of the
 categories as the original file contained forward slashes which made it
 hard to use on the underlying operating system. This is performed by
-simply specifying the column name and function to be applied on that column.
+simply specifying a column name and a function that is to be applied.
 
 Filter Components
 ~~~~~~~~~~~~~~~~~
 
 Similar to changing content of rows in a dataset, removing rows is also
 a common task in data engineering. The filter stage allows doing exactly that.
-It is enough to provide a predicate - in this case the
+It is enough to provide a predicate - specifically for our case the
 predicate ``~metadata.filename.str.contains('.gz')`` removes invalid
 images.
 
@@ -443,7 +440,7 @@ After performing this step, the data can be consumed by the Tensorflow Dataset A
 Training Components
 ~~~~~~~~~~~~~~~~~~~
 
-Understanding, defining and training deep learning models is not simple.
+Understanding, defining and training deep learning models is not a simple task.
 Training a deep learning image classification model requires a
 properly designed neural network architecture. Luckily, the community
 trends towards predefined model architectures, which are parameterized
@@ -455,7 +452,7 @@ figure :ref:`trainingstage`, only a couple of parameters
 need to be specified.
 
 Although possible, hyper-parameter search is not considered in this
-processing stage as we want to make use of Kubeflow’s hyper-parameter
+processing stage. The rason being, we want to make use of Kubeflow’s hyper-parameter
 search capabilities leveraged through Katib [katib]_ in
 the future.
 
@@ -467,13 +464,13 @@ the future.
 Evaluation Components
 ~~~~~~~~~~~~~~~~~~~~~
 
-Besides define, compile and fit, a model needs to be evaluated before it
+A model needs to be evaluated before it
 goes into production. Evaluating classification performance against the
-target labels has been state-of-the-art since the beginning of machine
-learning, therefore we have added components like confusion matrix. But
-taking TrustedAI measures into account is a newly emerging practice.
+target labels has been a common metric since the early days of machine learning,
+therefore we have also developed evaluation components, with confusion matrix
+support for instance. But taking TrustedAI measures into account is a newly emerging practice.
 Therefore, components for AI Fairness, AI Explainability and AI
-Adversarial Robustness have been added to the component library.
+Adversarial Robustness have been also added to the component library.
 
 Blessing Components
 ~~~~~~~~~~~~~~~~~~~
@@ -487,14 +484,14 @@ publishing.
 Publishing Components
 ~~~~~~~~~~~~~~~~~~~~~
 
-Depending on the asset type, publishing means either persisting a data
-set to a data store, deploying a machine learning model for consumption
-of other subsystems or publishing a report to be consumed by humans.
+Depending on the asset type, publishing means either persisting a dataset to
+a data store, deploying a machine learning model for consumption
+of other subsystems, or publishing a report to be consumed by humans.
 Here, we exemplify this category by a KFServing [kfserving]_ component which
 publishes the trained TensorFlow deep learning model to Kubernetes.
-KFServing, on top of KNative, is particular interesting as it draws from
-Kubernetes capabilities like canary deployment and scalability (including
-scale to zero) in addition to built-in Trusted AI functionality.
+KFServing, on top of KNative, is particularly interesting as it draws from
+Kubernetes capabilities, like canary deployment and scalability (including
+scale to zero), in addition to built-in Trusted AI functionality.
 
 Future Work
 ===========
