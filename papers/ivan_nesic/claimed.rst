@@ -608,11 +608,11 @@ Conclusion
 We’ve build and proposed a trustable, low-code, scalable and open source
 component library targeting visual data pipeline systems. We've
 implemented various exemplary pipelines in different domains to
-showcase the library's capabilities. Those pipelines run on one
+showcase the library's capabilities, running on one
 state-of-the-art execution engine (KubeFlow) and an emerging visual
-pipeline editor (Elyra) powered by JupyterLab as user interface.
-We beliefe that future import/export functionality of CLAIMED will
-greatly improve reproducibility of data centric work in the community.
+pipeline editor (Elyra). We believe that future import/export
+functionality of CLAIMED will improve reproducibility
+of data centric work even further.
 
 References
 ----------
