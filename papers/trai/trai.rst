@@ -36,7 +36,7 @@ CNN Based ToF Image Processing
 
 .. class:: abstract
 
-   In this paper a Time of Flight (ToF) camera specific data processing pipeline is presented, followed by real life application using artificial intelligence.
+   In this paper a Time of Flight (ToF) camera specific data processing pipeline is presented, followed by real life applications using artificial intelligence.
    These applications include use cases such as gesture recognition, movement direction estimation or physical exercises monitoring. 
    The whole pipeline for the body pose estimation is described in details, starting from generating and training phases to the pose estimation 
    and deployment. The final deployment targets were Nvidia Xavier NX and AGX platforms receiving data from an Analog Devices ToF camera.
@@ -48,8 +48,8 @@ CNN Based ToF Image Processing
 Introduction
 ------------
    
-Last years the evolution of deep neuronal networks also affected the way in which the Time of Flight (ToF) specific images are processed. The images from the ToF cameras are usually obtained as synchronized depth and infrared (IR) image pairs.
-The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain. The applications targeted are ranging from persond detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
+Last years the evolution of deep neurThe applications targeted are rangingfrom persond detection, counting, activity analysis to volumetricmeasurements,  mapping  and  navigation  with  mobile  agentsal networks also affected the way in which the Time of Flight (ToF) specific images are processed. The images from the ToF cameras are usually obtained as synchronized depth and infrared (IR) image pairs.
+The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain. The applications targeted are ranging from person detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
 In the following parts the introduction to the specific ToF imaging, custom data processing and CNN based solutions are presented :cite:`tamas2021embedded`.
 Although for the 2D data a bunch of CNN based solutions exists, for the 3D data :cite:`Gezawa2020` only some base architectures were widespread such as Pointnet :cite:`qi2017pointnet`, while for the calibration between different sensing modalities can be done in an efficient way according to :cite:`frohlich2019absolute`.
    
@@ -72,7 +72,7 @@ is a customized IR image module based on transfer learning for bounding box esti
 skeleton extraction and hardware specific model translation.
 The latter is relevant in order to have a light-weight embedded solution running on limited floating-point precision hardware platforms such as Jetson Nvidia Family. 
 As the existing CNN models are mainly with the focus on colour images, thus ones has to adopt transfer learning as a method to finetune the existing CNN models such as VGG, MobileNet for the infrared or depth images specific to ToF cameras. 
-This solution seemed to be effective in terms of precision and runtime on embedded devices (e.g Jetson Nx or AGX). 
+This solution seemed to be effective in terms of precision and runtime on embedded devices (e.g Jetson NX or AGX). 
 For the skeleton detection part we relied on the real-time Tensorflow optimized module for the Jetson product family, however for the generic GPU enabled devices we had to tailor our models since these are custom solutions.
 
 
@@ -80,7 +80,7 @@ Custom pipeline for ToF data
 ++++++++++++++++++++++++++++
 The main role of the depth image preprocessing part is the filtering and bounding box estimation for the 3D ROI. 
 The filtering is essential for the embedded device in order to reduce the computational overload. 
-For the filtering pipeline we considered three interconnected filters: voxel, pass-through and outlier filter as this is visible in Figure below. All these implementations are open source library  based variants. The details of the filtering were reported in :cite:`tamas2021embedded`.
+For the filtering pipeline we considered three interconnected filters: voxel, pass-through and outlier filter as this is visible in Figure :ref:`filters`. All these implementations are open source library  based variants. The details of the filtering were reported in :cite:`tamas2021embedded`.
 
    
 .. figure:: filters.png
@@ -99,7 +99,16 @@ Low level ToF image pre-processing - ToFNest
 
 In ToFNest we are approximating surface normals from depth images, recorded with Time-of-Flight cameras. The approximation is done using a neural network. The base of our neural network is the PyTorch library, since the whole process is done using Python 3.6 as our programming language. Using PyTorch we have created a Feature Pyramid Network type model (:cite:`FPN2017`).
 
-The main pipeline of the data was the following: first we read the depth images with OpenCV (alongside the depth information we could also use the infrared information or the rgb information from the camera as well, thus adding more information to work with), then we prepare them with numpy. From a numpy array it is easy to convert it to a torch tensor on the GPU, which then creates the predictions about the surface normals. An example of the prediction can be seen in the next image, where the direction of the normal vectors are decoded with RGB images. 
+The main pipeline of the data was the following: 
+first we read the depth images with OpenCV (alongside 
+the depth information we could also use the infrared 
+information or the rgb information from the camera as well,
+thus adding more information to work with), 
+then we prepare them with numpy. From a numpy array it is easy 
+to convert it to a torch tensor on the GPU, which then creates 
+the predictions about the surface normals. 
+An example of the prediction can be seen in Figure :ref:`tofnest`, 
+where the direction of the normal vectors are decoded with RGB images. 
 
 The following code represents the loss: 
 
@@ -170,10 +179,6 @@ Here we can see that our method kept very much the same throughout all the cases
 
 The jump in the error at the end of the scale is due to some denormalization bias that we need to fine-tune. 
 
-Furthermore, in order to get a real-time visualization about the predictions, we used rospy to read the images from ROS topics, and also to publish the normal estimation values to another ROS topic, that we could visualize using Rviz. This can be seen in the demo video.
-
-This whole pipeline and network, with some minor modifications can be also used to  smoothen the depth image, thus making the point cloud smoother as well.
-
 
 .. PCL based pipeline for ToF.
 
@@ -224,12 +229,12 @@ two bounding boxes to the sum of their areas.
 The pre-trained model accepts 3 channel images – RGB, 
 by modifying the existing model, we have managed to detect 
 and track people on the infrared image – 1 channel. 
-With the help of the OpenCV library and the 3.7 python 
+With the help of the OpenCV library and the 3.7 Python 
 programming language version, we have developed a script 
 that modifies the contrast of the IR image; 
 thus, we obtained a much better result than if we had not used 
 this approach. This result can be seen in 
-the Figure :ref:`detection`., where we can see that the people 
+the Figure :ref:`detection`, where we can see that the people 
 are detected on the IR image with high confidence.
 
 .. figure:: DetectNetIR.PNG
@@ -239,7 +244,7 @@ are detected on the IR image with high confidence.
   :align: center
   :alt: skeleton detection
 
-  Exemplification of skeleton detection on infrared images based detection :label:`detection`
+  Exemplification of people detection on infrared images based detection :label:`detection`
 
 To be able to run the algorithm in real-time we used the rospy client. With the help of this API, we have developed an efficient way to pass a ROS topic as input to our model. The algorithm was tested on a Jetson AGX, and the camera used was from Analog Devices (AD-96TOF1-EBZ). The result can be seen in the attached demo video.
 
@@ -258,25 +263,25 @@ very well suited for model inference.
 As a baseline architecture model, we used the pretrained model from one
 of the NVIDIA-AI-IOT's repositories: https://github.com/NVIDIA-AI-IOT/trt_pose .
 We used the TensorRT SDK in order to optimize our pretrained 
-model for th Jetson Xavier NX platform, thus achieving 
+model for the Jetson Xavier NX platform, thus achieving 
 a better performance in our model inference pipeline.
 
 We also used, some of the Robot Operating System's (ROS) tools for retrieving
 the camera infrared images and by using the rospy client library API
 we managed to transfer our infrared images to the network's model. While this
 would have been an easy step using the CvBridge library, which provides an interface
-between ROS and OpenCV, this time wasn't the case, as we had some issues with
+between ROS and OpenCV, this time was not the case, as we had some issues with
 this library. Because we are working on Jetson Xavier NX board, which comes with
 the latest OpenCV version, and CvBridge uses at its core an older version of
 OpenCv, we replaced the conversion from sensor_msgs/Image message type to the 
 OpenCv image array made by CvBridge with a very useful numpy functionality 
-which allowed us to make this conversion flawlessly, still achieving the same functionality
-and performance, in fact, being only a slight alteration of the underlying python
+which allowed us to make this conversion flawlessly, while still achieving the same functionality
+and performance, in fact, being only a slight alteration of the underlying Python
 implementation of the CvBridge package. So, we replaced:
 
 .. code-block:: python
 
-   ir_image = bridge.imgmsg_to_cv2(image_msg,-1)
+   ir_image = CvBridge().imgmsg_to_cv2(image_msg,-1)
 
 
 with:
@@ -284,9 +289,9 @@ with:
 
 .. code-block:: python
 
-   ir_image = np.frombuffer(
+   ir_image = numpy.frombuffer(
    image_msg.data,
-   dtype=np.uint8).reshape(
+   dtype=numpy.uint8).reshape(
                            image_msg.height,
                            image_msg.width,
                            -1)
@@ -296,7 +301,7 @@ with:
 .. figure:: ir_skeleton_detection.png
   :width: 400
   :height: 400
-  :scale: 40%
+  :scale: 38%
   :align: center
   :alt: detection on infrared images
   
@@ -317,7 +322,7 @@ the image flow along the inference pipeline by transferring the image on GPU
 for any kind of preprocessing required before it enters the model and even 
 allowing us to serve multiple images, from multiple cameras, without a very 
 drastic change in the model's inference speed. Even though these functionalities
-are important, we were interested by another functionality which the Deepstream SDk 
+are important, we were interested by another functionality which the Deepstream SDK 
 supports, this being the fact that is able to provide communication with a server 
 and transmit the output of the neural network's model, which runs on the Jetson platform,
 to the server, for further data processing. 
@@ -378,9 +383,15 @@ Volumetric estimates for depth images
 +++++++++++++++++++++++++++++++++++++
 .. PA part
 
-The goal of this research is to estimate the volume of objects using only depth images recorded with Time-of-Flight cameras. As a simplifying feature, we consider only box shaped objects, with clearly definable perpendicular planes. Two methods have been determined.The first method uses RANSAC algorithm to detect planes while the other one uses the ideas from Sommer et all. 
+The goal of this research is to estimate the volume of objects using 
+only depth images recorded with Time-of-Flight cameras. 
+As a simplifying feature, we consider only box shaped objects, 
+with clearly definable perpendicular planes. 
+Two methods have been determined.The first method uses RANSAC algorithm 
+to detect planes while the other one uses the ideas from :cite:`sommer2020`. 
 
-The first algorithm iteratively finds the largest plane using RANSAC and uses euclidean extraction to remove it from the point cloud. Once the planes are determined and checked to see if they are perpendicular, the intersection lines of the planes are determined by projecting between them. The projections approximate a line and the points with the largest component difference determine the length of the line. This way iteratively the 3 intersecting line lengths can be determined once the planes are determined and checked for orthogonality.
+The first algorithm iteratively finds the largest plane using RANSAC 
+and uses euclidean extraction to remove it from the point cloud. Once the planes are determined and checked to see if they are perpendicular, the intersection lines of the planes are determined by projecting between them. The projections approximate a line and the points with the largest component difference determine the length of the line. This way iteratively the 3 intersecting line lengths can be determined once the planes are determined and checked for orthogonality.
 
 .. figure:: RANSAC_volume.png
   :width: 400
@@ -394,7 +405,13 @@ The first algorithm iteratively finds the largest plane using RANSAC and uses eu
 
 An important observation is that it can compute the volume using 2 planes instead of 3. This is due to the fact that if 2 planes are orthogonal, the common line between them will be determined by 2 points that are also corner points for the object. By selecting a corner point and the two perpendicular planes, a third plane can be determined that is perpendicular to the other two and it contains the chosen point. Once the virtual third plane has been computed, the algorithm resumes as in the case with 3 determined planes.
 
-An advantage of this method is that it uses readily available and studied functions for processing pointclouds. For a simple case of a box and floor plane, the algorithm accuracy depends on the level of noise the pointcloud has. The following code snippets ilustrate the functionality of the Planar Sgmenting Volume computation method using 2 planes.
+An advantage of this method is that it uses readily available 
+and studied functions for processing pointclouds. 
+For a simple case of a box and floor plane, 
+the algorithm accuracy depends on the level of noise 
+the pointcloud has. The following code snippets ilustrate 
+the functionality of the Planar Segmenting Volume computation method 
+using 2 planes.
 
 .. code-block:: python
     :linenos:
@@ -457,9 +474,20 @@ The downside of this method is that it can compute the volume only for one box. 
 
   Limitations of planar segmentation :label:`limitations`
 
-Due to these shortcomings, a new method for measuring the volume is studied, based on the work by Sommer et. all. Their paper details an algorithm that uses pointclouds with normals computed in each point in order to determine collections of point pairs for which their normals satisfy the orthogonality constraint.  
-The point pair collections will approximate the orthogonal planes. By determining the points contained by each orthogonal plane, projections can be made that approximate the intersecting lines of the orthogonal planes. By selecting the 3 lines that have the edge points closest to each other, volume of a box can be computed.
-The advantage of this method is that it allow the computation of the volume for multiple box shaped objects. The following code snippets show the usage of the sommer plane determination method to compute the volume.
+Due to these shortcomings, a new method for measuring the volume is studied, 
+based on the work by :cite:`sommer2020`. 
+Their paper, details an algorithm that uses pointclouds with normals 
+computed in each point in order to determine collections of point 
+pairs for which their normals satisfy the orthogonality constraint.  
+The point pair collections will approximate the orthogonal planes. 
+By determining the points contained by each orthogonal plane, 
+projections can be made that approximate the intersecting lines 
+of the orthogonal planes. By selecting the 3 lines that have 
+the edge points closest to each other, volume of a box can be computed.
+The advantage of this method is that it allows the computation 
+of the volume for multiple box shaped objects. 
+The following code snippets show the usage of the 
+Sommer's plane determination method to compute the volume.
 
 .. code-block:: python
     :linenos:
@@ -485,12 +513,6 @@ The advantage of this method is that it allow the computation of the volume for 
           add_triplet(all_triplets)
     
 
-
-
-
-
-
-
 .. figure:: ortho_volume.png
   :width: 400
   :height: 400
@@ -500,19 +522,29 @@ The advantage of this method is that it allow the computation of the volume for 
 
   Corner detection :label:`corner`
 
-Volume estimation using enhanced planar/corner detections was done using the training from :cite:`sommer2020`. The largest benefit of this method is that it does not rely on Ransac and it can compute the volume for multiple objects. 
+Volume estimation using enhanced planar/corner detections 
+was done using the training from :cite:`sommer2020`. 
+The largest benefit of this method is that it does not 
+rely on RANSAC and it can compute the volume for multiple objects. 
 
-This permits in further research to consider the idea of moving the camera 
-in such a way to improve the volumetric measurement of multiple objects. 
+This permits in further research to consider the idea of moving 
+the camera in such a way to improve the volumetric measurement of multiple objects. 
 This problem statement becomes equivalent to a Next Best View problem in 
 which the view must optimize the accuracy or availability of a volumetric measurement. 
-This translates to the question "In which of the available positions does the camera need to be placed next in order to improve the volumetric measurment". A starting point for such an idea would be to use the neural network architecture used in :cite:`zeng2020pc` and all , but change the loss function objective from reconstruction to Volumetric accuracy. By creating a scoring function for the volumetric accuracy, candidate new positions might be evaluated and chosen based on the input pointcloud.
+This translates to the question "In which of the available positions 
+does the camera need to be placed next in order to improve the volumetric measurement". 
+A starting point for such an idea would be to use the 
+neural network architecture used in :cite:`zeng2020pc`, 
+but change the loss function's objective from reconstruction 
+to volumetric accuracy. By creating a scoring function for 
+the volumetric accuracy, candidate new positions might be evaluated and chosen based on the input pointcloud.
 
 
 Conclusion
 ----------
-In this report we provided some guidelines for the ToF specific image processing using python libraries. The demos are ranging from 
-basic pointlcoud processing to people detection and enhanced volume estimation.
+In this paper we provided some guidelines for the ToF specific image processing 
+using Python libraries. The demos are ranging from 
+basic pointcloud processing to people detection and enhanced volume estimation.
 
 
 
