@@ -1,0 +1,11 @@
+{
+    "title": "Breaking down the Jupyter notebook monolith: Building reliable notebook-based pipelines with Ploomber",
+    "authors": [
+        {
+            "name": "Eduardo Blancas Reyes",
+            "affiliation": "Ploomber",
+            "orcid": "0000-0002-9670-6416"
+        }
+    ],
+    "description": "This poster is an interactive demo of Ploomber, an open-source library that helps create reproducible pipelines with Jupyter."
+}
