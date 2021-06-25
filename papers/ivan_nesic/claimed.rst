@@ -210,14 +210,14 @@ defenses.
 
 Requirements and System Architecture 
 ------------------------------------
-In the following we cover the system architecture as well as the
-requirements for the different parts of the
-system architecture: Execution Engine and Visual Workflow Editor.
+In the following section we cover the system architecture and
+it's requirements. There are two major components:
+execution engine and integrated tools.
 
 Execution Engine
 ~~~~~~~~~~~~~~~~
 An execution engine takes a pipeline description and executes it on top
-of physical machines reading source data and creating output data.
+of physical machines, reads source data and creates output data.
 The following requirements have been defined in order to assess the
 adequacy of the execution engine.
 
@@ -226,25 +226,25 @@ adequacy of the execution engine.
   We defined Kubernetes as the lowest layer of abstraction because that
   way the executor layer is agnostic of the underlying Infrastructure as a service (IaaS)
   architecture. In addition, Kubernetes provides better resource utilization if multiple
-  pipelines are run in parallel on the system. We can consume Kubernetes as a service (aaS) offered by a variety
-  of Cloud providers like IBM, Amazon, Google, Microsoft, OVH or Linode.
+  pipelines are run in parallel on the system. We can consume Kubernetes as a service (aaS)
+  offered by a variety of Cloud providers like IBM, Amazon, Google, Microsoft, OVH or Linode.
   A lot of workload for this particular project has been envisioned to be outsourced
   to SciCore [scicore]_ - a scientific computing data center part of the Swiss Personalized
-  Health Network (SPHN) [sphn]_ and the Swiss Institute of Bioinformatics [sib]_ which runs
-  on OpenStack and provides Kubernetes as part of it (Magnum), while on premises of the
-  on premises of the University Hospital Basel we have RedHat OpenShift.
+  Health Network (SPHN) [sphn]_ and the Swiss Institute of Bioinformatics [sib]_. Best to our knowledge,
+  their cluster runs on OpenStack and provides Kubernetes as part of it (Magnum).
+  University Hospital of Basel has on-premises RedHat OpenShift platform.
 
 - GPU support
 
   GPU support is essential since a large fraction of the workload is
-  training of deep learning neural networks on TensorFlow and PyTorch.
+  training of deep learning neural networks with TensorFlow and PyTorch.
   Training those models on CPU doesn't make sense economically and
   ecologically.
 
 - Component Library
 
   Predefined, ready to use components, are convenient to use,
-  save time and, if well tested, reduce the probability of an error.
+  they save time and, if well tested, reduce the probability of an error.
   Kubeflow for example has components for parallel training of TensorFlow models (TFJob),
   parallel execution of Apache Spark jobs as a pipeline step,
   parallel hyperparameter tuning (Katib) and model serving (KFServing/
@@ -262,7 +262,7 @@ adequacy of the execution engine.
 
   Although a subset of reproducibility, Data Lineage is a crucial
   feature when it comes to visualizing the changes the datasets went
-  through   during the pipeline execution.
+  through during the pipeline execution.
 
 .. table:: Fulfilment of requirements for execution engines. (Abbreviations: KF=Kubeflow, AF=Airflow, SM=Snakemake) :label:`engxreq`
 
