@@ -63,9 +63,8 @@ how CLAIMED can be improved in the "Future Work" section, finally followed by th
 Implementation
 ==============
 
-Before we can elaborate on how the requirements have been addressed with CLAIMED and how the
-presented workflow has been implemented, we need to introduce some
-terms and technology in the technology breakdown section.
+Before we address how CLAIMED fulfills the previously defined requirements and how the
+exemplary workflow has been constructed, we will introduce some terms and technologies.
 
 Technology breakdown
 --------------------
@@ -85,28 +84,25 @@ but without the overhead of such endeavour. This is accomplished by
 running containers on top of the host operating system. An example of
 the containerization platform is Docker.
 
-Containerization made it possible to run a large number of containers,
-which introduced the need of their orchestration. This means something,
-and hopefully not someone, needs to constantly take care that the system
-is in the desired state. It needs to scale up and down, manage
-communication between containers, schedule them, manage authentications,
-balance the load etc. Although there are other options like Docker
-Swarm, Kubernetes is the market leader in this domain. It was donated to
-Cloud Native Computing Foundation (CNCF) [cncf]_ by Google,
-which means a lot of Google’s know-how and years of
-experience went into it. The system can run on public, on-premises or on
-hybrid clouds. On-premises installation is very important for institutions
+With the opportunity to run a vast number of containers, arose the need
+of their orchestration. The system needs to be constantly monitored and adjusted so
+that it stays in a desired state. Containers need to be scaled up and down,
+the communication has to be managed, they have to be scheduled,
+authentication needs to be managed, there is the need for load balancing etc.
+There are multiple optins on the market, but Kubernetes is the market leader in this domain.
+It was donated to Cloud Native Computing Foundation (CNCF) [cncf]_ by Google,
+which means a lot of Google’s know-how and years of experience went into it.
+The system can run on public, on-premises or on hybrid clouds.
+On-premises installation is very important for institutions
 dealing with sensitive data. For IBM, Kubernetes is also strategic. 
 This is mainly because Kubernetes enables the hybrid cloud scenario 
-backed by an
-open source common runtime capable of transparently moving workload 
+backed by an open source common runtime capable of transparently moving workload
 across different on-premises, remote and cloud data centers seamlessly.
 Besides acting as a Kubernetes runtime provider in the cloud and - 
 through the acquisition of RedHat - becoming the major vendor for 
 on-premises Kubernetes, IBM is now able to deliver software solutions
-- so called "Cloud Paks" - 
-on top of Kubernetes, making them run everywhere. Therefore, 
-IBM joined CNCF [ibmcncf]_, moved all Watson Services to Kubernetes 
+- so called "Cloud Paks" - on top of Kubernetes, making them run everywhere.
+Therefore, IBM joined CNCF [ibmcncf]_, moved all Watson Services to Kubernetes
 and acquired RedHat. This makes IBM the 3rd largest committer to
 Kubernetes.
 
@@ -117,11 +113,11 @@ TensorFlow is the second incarnation of the Google Brain project’s scalable
 distributed training and inference system named DistBelief
 [tf]_. It supports myriad of hardware platforms, from
 mobile phones to GPU/TPU clusters, for both training and inference. It
-can even run in browser on the client’s side, without the data ever
-leaving the machine. Apart from being a valuable tool in research domain, it is
+can even train and run models in browser, without the data ever
+leaving the user's environment. Apart from being a valuable tool in research domain, it is
 also being used in demanding production environments. On a development
 side, representing machine learning algorithms in tree-like structures
-makes it a very good expression interface. Lastly, on the performance vs
+makes it a good expression interface. Lastly, on the performance vs
 usability side, both graph and eager modes are supported. Eager mode allows for
 easier debugging since the code is executed in Python control flow, as opposed to
 the TensorFlow specific graph control flow [tfeager]_.
@@ -133,18 +129,18 @@ Kubeflow
 ~~~~~~~~
 
 Kubeflow [kubeflow]_ is a machine learning pipeline management and execution system
-running as first class citizen on top of Kubernetes. Besides making use
-of Kubernetes scalability it allows for reproducible work as machine
-learning pipelines and the results and intermediate artifacts of their
-executions are stored in a meta data repository.
+running as first class citizen on top of Kubernetes. Beside making use
+of Kubernetes scalability, it allows for reproducible work as machine
+learning pipelines, the results and intermediate artifacts of the
+executions are stored in a metadata repository.
 
 Elyra
 ~~~~~~~~~~~~~~~~
 
 Elyra [elyra]_ started as a set of extensions for the JupyterLab ecosystem.
-Here we concentrate on the pipeline editor of Elyra which allows for
-expression of machine learning workflows using a drag’n’drop editor and
-send them for execution on top of different engines like Kubeflow or
+Here we concentrate on the pipeline editor, which allows for
+expression of machine learning workflows using a drag and drop editor and
+send them for execution on top of different execution engines like Kubeflow or
 Airflow. This means non-programmers can understand and create machine 
 learning workflows on their own. Elyra also supports visualizing
 such pipelines in the browser (e.g. from a github repository).
@@ -153,7 +149,7 @@ JupyterLab
 ~~~~~~~~~~
 
 JupyterLab [jupyter]_ is one of the most popular development environments for data
-science. Therefore we started to support JupyterLab first. But the
+science. Therefore Elyra started to support JupyterLab first. But the
 pipeline editor of Elyra will be supported in other environments as
 well, VSCode [vscode]_ being next on the list.
 
@@ -166,7 +162,7 @@ Technically, deep learning models are a series of non-linear feature
 space transformations, but an intuitive understanding of each of the
 individual processing steps is not trivial.
 There are techniques with which we can look over a deep learning model’s shoulder.
-The one we are using here is called LIME [lime]_. LIME takes the
+The one we are using is called LIME [lime]_. LIME takes the
 existing classification model and permutes images taken from the
 validation set (therefore the real class label is known to LIME) as long as a
 misclassification is happening. That way LIME can be used to create heat
@@ -186,7 +182,7 @@ which indicates a problem with that particular classifier.
 AI Fairness and Bias
 ~~~~~~~~~~~~~~~~~~~~
 
-So what is bias? "Bias is a disproportionate weight in
+"Bias is a disproportionate weight in
 favor of or against an idea or thing, usually in a way that is
 closed-minded, prejudicial, or unfair" [bias]_. But what we want from 
 our model is to be fair and unbiased towards protected attributes like 
