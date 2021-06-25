@@ -83,9 +83,8 @@ approximation :math:`\frac{1}{B_k}\sum_{i=1}^{B_k} \bm{g}(\bm{w}_k;
 gradient. This computation is common in the vast majority of SGD variants, and
 is found in popular variants like Adam :cite:`adam`, RMSprop :cite:`rmsprop`,
 Adagrad :cite:`adagrad`, Adadelta :cite:`adadelta`, and averaged SGD
-:cite:`asgd`.  These variants make modifications to the learning rate
-:math:`\gamma_k` :cite:`adagrad, adadelta, adam, rmsprop` or modifications to
-the final model :cite:`asgd`.
+:cite:`asgd`.  Most variants make modifications to the learning rate
+:math:`\gamma_k` :cite:`adagrad, adadelta, adam, rmsprop`.
 
 Increasing the batch size :math:`B_k` will reduce the number of model updates
 while not requiring more FLOPs or gradient computations – both empirically
@@ -139,9 +138,9 @@ schedule. Specifically, this work provides the following:
 
 .. latex::
 
-   A key component of AdaDamp is that the number of workers grows
-   with the batch size. Then, the model update time is agnostic to the batch size
-   (provided communication is instantaneous). This has been shown empirically:
+   A key component of our software is that the number of workers grows with the
+   batch size. Then, the model update time is agnostic to the batch size
+   provided communication is instantaneous. This has been shown empirically:
    Goyal et al. grow the batch size (and the number of workers with it) by a
    factor of $44$ but the time for a single model update only increases by a
    factor of $1.13$~\cite[Sec.~5.5]{goyal2017accurate}.
@@ -332,7 +331,7 @@ distributed support). Specifically, the following happen on every model update:
 
 We use Dask to implement this data flow, which adds some overhead. [#]_ AdaDamp
 supports constant batch sizes; however, there is little incentive to use
-AdaDamp with a static batch sizes: the native solutions in PyTorch have less
+AdaDamp with a static batch sizes: the native solution has PyTorch less
 overhead :cite:`li2020pytorch`, and already has a Dask wrapper. [#]_
 
 .. [#] An opportunity for future work.
@@ -342,7 +341,7 @@ overhead :cite:`li2020pytorch`, and already has a Dask wrapper. [#]_
 
 .. latex::
 
-   The key feature of AdaDamp is that the number of workers grows
+   The key component of AdaDamp is that the number of workers grows
    with the batch size. Then, the model update time is agnostic to the batch size
    (provided communication is instantaneous). This has been shown empirically:
    Goyal et al. grow the batch size (and the number of workers with it) by a
@@ -405,6 +404,7 @@ used in the experiments. Now, we can train:
    X, y = make_regression(n_features=10)
    X = torch.from_numpy(X.astype("float32"))
    y = torch.from_numpy(y.astype("float32")).reshape(-1, 1)
+
    est.fit(X, y)
 
 
@@ -501,9 +501,6 @@ of epochs, which is proportional to the number of FLOPs, as shown in Figure
 :ref:`fig:epochs`.  The number of FLOPs is (approximately) to the cost, at
 least on Amazon EC2 where the cost to rent a server tends to be proportional to
 the number of CPU cores/GPUs.
-
-budget a computer twice as powerful (twice as many GPUs or CPU cores) costs
-(almost exactly) twice as much per hour.
 
 .. figure:: figs/centralized/epochs.pdf
    :align: center
