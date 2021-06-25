@@ -13,7 +13,7 @@ PyRSB: Portable Performance on Multithreaded Sparse BLAS Operations
 .. class:: abstract
 
   This article introduces **PyRSB**, a Python interface to the **LIBRSB** library.
-  LIBRSB is a portable *performance library* offering so called *Sparse BLAS* operations for modern multicore CPUs.
+  LIBRSB is a portable *performance library* offering so called *Sparse BLAS* (Sparse Basic Linear Algebra Subprograms) operations for modern multicore CPUs.
   It is based on the *Recursive Sparse Blocks* (**RSB**) format, which is particularly well suited for matrices of large dimensions.
   PyRSB allows LIBRSB usage with an interface styled after that of **SciPy**'s *sparse matrix* classes, and offers the extra benefit of exploiting multicore parallelism.
   This article introduces the concepts behind the RSB format and LIBRSB, and illustrates usage of PyRSB.
@@ -26,13 +26,13 @@ PyRSB: Portable Performance on Multithreaded Sparse BLAS Operations
 Introduction
 ------------
 
-Sparse linear systems solution is one of the most widespread problems in numerical scientific computing.
-Key to timely solution of sparse linear systems by means of iterative methods resides in fast multiplication of sparse matrices by dense matrices.
+Sparse linear systems solving is one of the most widespread problems in numerical scientific computing.
+The key to timely solution of sparse linear systems by means of iterative methods resides in fast multiplication of sparse matrices by dense matrices.
 More precisely, we mean the update:
 :math:`C \leftarrow C + \alpha A B` 
 (at the element level, equivalent to :math:`C_{i,k} \leftarrow C_{i,k} + \alpha A_{i,j} B_{j,k}`)
 where `B` and `C` are dense rectangular matrices, `A` is a *sparse* rectangular matrix, and `\alpha` a scalar.
-If `B` and `C` are vectors (i.e. have one column only) we call this operation `SpMV`; otherwise `SpMM`.
+If `B` and `C` are vectors (i.e. have one column only) we call this operation `SpMV` (short for `Sparse Matrix-Vector product`); otherwise `SpMM` (short for `Sparse Matrix-Matrix product`).
 
 PyRSB 
 [PYRSB]_
@@ -40,7 +40,7 @@ is a package suited
 for problems where:
 i) much of the time is spent in SpMV or SpMM,
 ii) one wants to exploit multicore hardware, and
-iii) sparse matrices are large (i.e. occupy a significant fraction of a computers' memory).
+iii) sparse matrices are large (i.e. occupy a significant fraction of a computer's memory).
 
 The PyRSB interface is styled after that of the sparse matrix classes in
 SciPy
@@ -55,7 +55,7 @@ LIBRSB
 [LIBRSB]_
 is a LGPLv3-licensed library written primarily to speed up solution of large sparse linear systems using iterative methods on shared-memory CPUs.
 It takes its name from the Recursive Sparse Blocks (RSB) data layout it uses.
-The RSB format is geared to execute possibly fast threaded SpMV and SpMM.
+The RSB format is geared to execute multithreaded SpMV and SpMM as fast as possible.
 LIBRSB is not a solver library, but provides most of the functionality required to build one.
 It is usable via several languages:
 C, C++, Fortran, GNU Octave [SPARSERSB]_, and now Python, too.
@@ -72,7 +72,7 @@ eigenvalue computations
 [Wu16]_,
 meteorology
 [Browne15T]_,
-data assimilation
+and data assimilation
 [Browne15M]_.
 
 It is available in pre-compiled form in popular GNU/Linux distributions like 
@@ -89,8 +89,10 @@ or EasyBuild
 [EASYBUILD]_,
 and
 GUIX
-[GUIX]_: using a version built it with an optimizing compiler shall give better results than with one from a binary distributions.
+[GUIX]_: using a version built with an optimizing compiler shall give better results than a version from a binary distribution.
 LIBRSB has minimal dependencies, so building it stand-alone is trivial.
+
+.. comment for the reviewer wrt `optimizing compiler`: A compiler capable of optimizing for the CPU at hand. This cannot be always given for granted.
 
 PyRSB [PYRSB]_ is a thin
 wrapper around LIBRSB based on 
@@ -101,7 +103,7 @@ LIBRSB performance and most of its functionality at minimal overhead.
 Basic Sparse Matrix Formats
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The explicit (**dense**) way to represent any numerical matrix is that by listing each of its numerical entries, whatever their value.
+The explicit (**dense**) way to represent any numerical matrix is to list each of its numerical entries, whatever their value.
 This can be done in Python using e.g.
 ``scipy.matrix``.
 
@@ -115,14 +117,16 @@ This can be done in Python using e.g.
    >>> A.shape
    (2, 2)
 
-This matrix has two rows and two columns; it contains three non-zero elements and one zero element on the second row.
+This matrix has two rows and two columns; it contains three non-zero elements and one zero element in the second row.
 Many scientific problems give rise to systems of linear equations with many (e.g. millions) of unknowns, but relatively few coefficients which are different than zero (e.g. `<1%`) in their matrix-form representation.
-Then it is usually the case that representing these zeroes in memory and processing them in linear algebraic operations does not impact the results, but takes `compute time` nevertheless.
+It is usually the case that representing these zeroes in memory and processing them in linear algebraic operations does not impact the results, but takes `compute time` nevertheless.
 In these cases the matrix is usually referred as **sparse**, and appropriate **sparse data structures** and algorithms are sought.
 
-The most straightforward sparse data structure for a numeric matrix is the one listing each of the non-zero elements, along with its `coordinate` location, by means of three arrays.
+.. comment for the reviewer: explicit zeroes occurring in a different format (say, BCSR), are tied to a different sequence of arithmetic operations, resulting in a different rounding error (negligible though).
+
+The most straightforward sparse data structure for a numeric matrix is one listing each of the non-zero elements, along with its `coordinate` location, by means of three arrays.
 This is called **COO**.
-It's one of the classes in ``scipy.sparse``; see the following listing, also illustrating conversion to dense:
+It's one of the classes in ``scipy.sparse``; see the following listing, whose output also illustrates conversion to dense:
 
 .. code-block:: python
 
@@ -142,12 +146,14 @@ It's one of the classes in ``scipy.sparse``; see the following listing, also ill
    (2, 2)
 
 
-Even if yielding same results, the algorithms beneath differ considerably.
+Even if yielding the same results, the algorithms beneath differ considerably.
 To carry out the 
 :math:`C_{i,k} \leftarrow C_{i,k} + \alpha A_{i,j} B_{j,k}` updates
-the ``scipy.coo_matrix`` implementation will get the matrix coefficients from the ``V`` array, its coordinates from ``I`` and ``J`` arrays, and use those (notice the **indirect access**) to address the operand's elements.
+the ``scipy.coo_matrix`` implementation will get the matrix coefficients from the ``V`` array, its coordinates from the ``I`` and ``J`` arrays, and use those (notice the **indirect access**) to address the operand's elements.
 
-In contrast to that, a dense implementation like ``scipy.matrix`` does not use any index array: the location of each numerical value (including zeroes) is in bidirectional correspondence with its row and column indices.
+In contrast to that, a dense implementation like ``scipy.matrix`` does not use any index array: the location of each numerical value (including zeroes) is in direct relation with its row and column indices.
+
+.. comment for the reviewer wrt the line above: by 'direct relation' I mean a bijective relation between (row,column) and location within the associated array.
 
 Beyond the ``V,I,J`` arrays, COO has no extra structure.
 COO serves well as an exchange format, and allows expressing many operations.
@@ -177,7 +183,7 @@ SciPy offers CSR matrices via ``scipy.csr_matrix``:
 
 
 CSR's ``P`` array allows direct access of each `sparse row`.
-This helps expressing row-oriented operations.
+This helps in expressing row-oriented operations.
 In the case of the SpMV operation, CSR encourages accumulation of partial results on a per-row basis.
 
 Notice that indices' occupation with COO is strictly proportional to the non-zeroes count of a matrix;
@@ -711,7 +717,7 @@ Performance results have been obtained on systems in the test environment **BEAS
 
 .. [PYRSB] *PyRSB*. (2021, May). Retrieved May 28, 2021, https://github.com/michelemartone/pyrsb
 .. [LIBRSB] *LIBRSB*. (2021, May). Retrieved May 28, 2021, https://librsb.sf.net
-.. [Martone14] Michele Martone. "Efficient multithreaded untransposed, transposed or symmetric sparse matrix-vector multiplication with the Recursive Sparse Blocks format". Parallel Comput. 40(7): 251-270 (2014)
+.. [Martone14] Michele Martone. "Efficient multithreaded untransposed, transposed or symmetric sparse matrix-vector multiplication with the Recursive Sparse Blocks format". Parallel Comput. 40(7): 251-270 (2014). http://dx.doi.org/10.1016/j.parco.2014.03.008
 .. [Virtanen20] P.Virtanen, R.Gommers, T.Oliphant, et al. "SciPy 1.0: fundamental algorithms for scientific computing in Python". Nat Methods 17, 261–272 (2020). https://doi.org/10.1038/s41592-019-0686-2
 .. [Behnel11] S.Behnel, R.Bradshaw, C.Citro, L.Dalcin, D.S.Seljebotn and K.Smith. "Cython: The Best of Both Worlds", in Computing in Science & Engineering, vol. 13, no. 2, pp. 31-39, March-April 2011, doi: 10.1109/MCSE.2010.118.
 .. [RSB_JL] *RecursiveSparseBlocks.jl*, (2021, April 08). Retrieved April 08, 2021, from https://github.com/dcjones/RecursiveSparseBlocks.jl.git
