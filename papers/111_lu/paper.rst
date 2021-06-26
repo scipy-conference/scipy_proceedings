@@ -93,8 +93,8 @@ consent forms, and reminder cards (among others) that must be processed securely
 speed, given the fierce demand for vaccines.  Putting the burden of dealing with this
 paperwork on the patients would  be confusing for the patient and time-consuming and limit
 the overall count of vaccinations delivered. Thus, the strategy was to use electronic
-systems to handle Protected Health Information (PHI) wherever possible and comply with HIPAA
-requirements for data encryption at rest and in-transit, including appropriate Business
+systems to handle Protected Health Information (PHI) wherever possible and comply with HIPAA 
+requirements :cite:`Moore269` for data encryption at rest and in-transit, including appropriate Business
 Associate Agreements (BAA) for any cloud service providers :cite:`filkins`. For physical
 paper, HIPAA requirements mean that PHI must always be kept in a locked room or a container
 with restricted access.
@@ -134,7 +134,7 @@ data pipeline, but strict HIPAA requirements are followed at each step.  All cli
 communications with the State appointment system were managed through a properly
 authenticated and encrypted system. The vaccine clinic utilized pre-existing, cloud-based
 HIPAA-compliant system, with corresponding BAAs. All sensitive data processing occurred on
-this system.
+this system. The system, which is described at :cite:`72_lu-proc-scipy-2020`, uses both python alone and in Jupyter notebooks.
 
 Finally, the processed PDF forms were transferred using encryption to a server at the clinic
 site where an authorized operator printed them out.  The paper forms were placed in the
