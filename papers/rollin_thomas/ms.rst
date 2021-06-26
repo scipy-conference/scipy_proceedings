@@ -916,24 +916,39 @@ Along the way, we identified shortcomings in our ecosystem, and this motivated
 us to develop tools for users that fill those gaps, and gave us direct
 experience with the very same tools our users use to do real science.
 
-Future plans include expanding Python workload analysis to the new GPU-based
-Perlmutter system being deployed now at NERSC.
-Through comprehensive monitoring of Python use on Perlmutter we hope to identify
-users of Perlmutter's CPU-only nodes who might be able to migrate to GPUs and
-accelerate their science.
-We look forward to finding out what fraction of our users might be able to do
-this and what the challenges are.
-At the center level, OMNI includes time series data from a variety of sources
-including the HPC and storage systems at NERSC, supporting computational
-infrastructure, environmental sensors, mechanical systems, and more.
-Understanding whether Python use has any measurable impacts at the systems
-level is one potential area of future work.
-Similarly, examining Python use within the context of specific science areas is
-possible by linking usage with user account and allocation data from other
-sources.
-Applying more advanced natural language analysis and machine learning techniques
-to proactively identify issues that users have
-with Python on our systems is also an interesting avenue to pursue.
+In the near future, we will expand Python workload analysis to Perlmutter, a new
+system with CPU+GPU and CPU-only nodes to identify users of the CPU nodes who
+might be able to take advantage of GPUs.
+Other future plans include examining Python use within the context of specific
+science areas by linking our data with user account and allocation data, and
+using natural language processing and machine learning to proactively identify
+issues that users have with Python on our systems.
+Another interesting avenue to pursue is whether the monitoring data we gather
+may be of use to users as an aid for reproducible computational science.
+If users are able to access Python usage data we collect from their jobs, they
+could use it to verify what Python packages and package versions were used and
+obtain some degree of software provenance for reproducing and verifying their
+results.
+
+..
+   Future plans include expanding Python workload analysis to the new GPU-based
+   Perlmutter system being deployed now at NERSC.
+   Through comprehensive monitoring of Python use on Perlmutter we hope to identify
+   users of Perlmutter's CPU-only nodes who might be able to migrate to GPUs and
+   accelerate their science.
+   We look forward to finding out what fraction of our users might be able to do
+   this and what the challenges are.
+   At the center level, OMNI includes time series data from a variety of sources
+   including the HPC and storage systems at NERSC, supporting computational
+   infrastructure, environmental sensors, mechanical systems, and more.
+   Understanding whether Python use has any measurable impacts at the systems
+   level is one potential area of future work.
+   Similarly, examining Python use within the context of specific science areas is
+   possible by linking usage with user account and allocation data from other
+   sources.
+   Applying more advanced natural language analysis and machine learning techniques
+   to proactively identify issues that users have
+   with Python on our systems is also an interesting avenue to pursue.
 
 We anticipate that developers of scientific Python software may find the
 information we gather to be informative.
