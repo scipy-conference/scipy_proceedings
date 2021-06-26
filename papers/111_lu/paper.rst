@@ -85,7 +85,7 @@ Infrastructure
 --------------
 
 The goal of the WestPACE vaccine clinic was to provide a friendly environment to vaccinate
-seniors. Because this was a nonprofit and volunteer effort, the clinic did not have any
+senior citizens. Because this was a nonprofit and volunteer effort, the clinic did not have any
 pre-existing record management practices with corresponding IT infrastructure to handle
 sensitive health information according to Health Insurance Portability and Accountability
 Act (HIPAA) standards. One key obstacle is paperwork for appointments, questionnaires,
@@ -269,7 +269,7 @@ yields:
 With this code in the above example, ``Name`` would be printed
 multiple times, once for each
 instance, but each instance points to the same ``/Parent``. With this
-modification, the form filler will actually fills the ``/Parent`` value
+modification, the form filler actually fills the ``/Parent`` value
 multiple times, but this has no impact since it is overwriting the
 default value with the same value.
 
@@ -306,7 +306,7 @@ is checked. In that case, in order to uncheck a box, the best practice is to del
 the ``/V`` as well as the ``/AS`` field from the dictionary. 
 
 According to the PDF specification for checkboxes, the appearance stream ``/AS`` should be
-set to the same value ``/V``. Failure to do so may mean that the checkboxes do not appear.
+set to the same value as ``/V``. Failure to do so may mean that the checkboxes do not appear.
 
 More Complex Forms
 ------------------
@@ -319,7 +319,7 @@ and solutions are given below.
 Radio Buttons
 ~~~~~~~~~~~~~
 
-Radio buttons are by far the most complex of the form entries types.  Each widget links to
+Radio buttons are by far the most complex of the form entry types.  Each widget links to
 ``/Kids`` which represent the other buttons in the radio group. Each widget in a radio
 group will link to the same \`kids'. Much like the \`parents' for the repeated forms fields
 with the same name, each kid need only be updated once, but 
@@ -382,7 +382,7 @@ value.
 Lists are structurally very similar. The list of exported values can be
 found in the ``/Opt`` field. The main difference is that lists based on
 their configuration can take multiple values. Multiple values can be set
-with ``Pdfrw`` by setting ``/V`` and ``/AS`` to a list of ``PdfString``\ s.
+with ``PDFrw`` by setting ``/V`` and ``/AS`` to a list of ``PdfString``\ s.
 The code presented here uses two separate helpers, but because of the
 similarity in structure between list boxes and combo boxes, they could
 be combined into one function.
@@ -520,7 +520,7 @@ information is lost and won't show when displayed or printed. The
 problem comes from the fact that the written PDF does not have an
 interactive form dictionary (see §12.7.2 of the PDF 1.7 specification).
 In particular, the interactive forms dictionary contains the boolean
-``NeedAppearances`` to be set for fields to be shown. If the
+``NeedAppearances`` which needs to be set for fields to be shown. If the
 forms being combined have different interactive form dictionaries, they
 need to be merged. In this application where the source forms are identical among the various copies, any ``AcroForm`` dictionary can be used.
 
@@ -547,6 +547,6 @@ A complete functional version of this PDF form filler is open source
 and can be found at WestHealth's GitHub repository
 `https://github.com/WestHealth/pdf-form-filler
 <https://github.com/WestHealth/pdf-form-filler>`_.
-This process was able to produce large quantities of pre-populated forms for seniors seeking
+This process was able to produce large quantities of pre-populated forms for senior citizens seeking
 COVID-19 vaccinations relieving one of the bottlenecks that have plagued many other vaccine
 clinics.
