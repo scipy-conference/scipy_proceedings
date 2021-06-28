@@ -762,31 +762,36 @@ References
 ----------
 
 .. [BP89]  Bakhvalov NS, Panasenko G. *Homogenisation: averaging processes in periodic media: mathematical problems in the mechanics of composite materials*,
-           Kluwer Academic Publisher; 1989
+           Kluwer Academic Publisher; 1989,
+           https://doi.org/10.1007/978-94-009-2247-1
            
 .. [B14]   Bare Contreras DZ. *Asymptotic Analysis for Linearized Contact Problems in Thin Beams*,
            Fraunhofer Verlag; 2014     
 
 .. [BPO16] Bare Z, Orlik J, Panasenko G. *Non homogeneous Dirichlet conditions for an elastic beam: an asymptotic analysis*,
-           Applicable Analysis, 2016, 2625-36.           
+           Applicable Analysis, 2016, 2625-36,
+           https://doi.org/10.1080/00036811.2015.1105960           
 
 .. [BSL06] Bird RB, Stewart WE, Lightfoot EN. *Transport phenomena*,
-           John Wiley & Sons; 2006
+           John Wiley & Sons; 2006,
+
            
 .. [BC81]  Churchill RV, Brown JW. *Fourier series and boundary value problems*,
            McGraw-Hill, NY; 1981
        
-.. [BC09]  Brown JW, Churchill RV. *Complex variables and applications eighth edition*,
+.. [BC09]  Brown JW, Churchill RV. *Complex variables and applications*,
            McGraw-Hill, NY; 2009
 
 .. [CTL09] Chen JT, Tsai MH, Liu CS. *Conformal mapping and bipolar coordinate for eccentric Laplace problems*,
-           Computer Applications in Engineering Education. 2009, 314-22
+           Computer Applications in Engineering Education. 2009, 314-22,
+           https://doi.org/10.1002/cae.20208
            
 .. [G78]   Greenberg MD. *Foundations of applied mathematics*, 
            Dover; 2013
            
 .. [H10]   Hirose A. *Recent progress in applications of complex-valued neural networks*,
-           International Conference on Artificial Intelligence and Soft Computing 2010 Jun 13, 42-46
+           International Conference on Artificial Intelligence and Soft Computing 2010 Jun 13,
+           https://doi.org/10.1007/978-3-642-13232-2_6
            
 .. [H12]   Hirose A. *Complex-valued neural networks*,
            Springer Science & Business Media; 2012
@@ -804,37 +809,44 @@ References
            Pergamon Press, NY; 1959
            
 .. [LGK21] Lauer-Baré Z., Gaertig E., Krebs J., Arndt C., Sleziona A., Gensel A. *A note on leakage jet forces: Application in the modelling of digital twins of hydraulic valves*, 
-           International Journal of Fluid Power, 2021, Vol. 22 (1), 113–146.
+           International Journal of Fluid Power, 2021, Vol. 22 (1), 113–146,
+           https://doi.org/10.13052/ijfp1439-9776.2214
            
 .. [L44]   Love AU. E, H. *A treatise on the mathematical theory of elasticity*,
            Dover Publications; 1944
            
 .. [MSP17] Meurer A, Smith CP, Paprocki M, Čertík O, Kirpichev SB, Rocklin M, Kumar A, Ivanov S, Moore JK, Singh S, Rathnayake T. *SymPy: symbolic computing in Python*,
-           PeerJ Computer Science. 2017
+           PeerJ Computer Science; 2017,
+           https://doi.org/10.7717/peerj-cs.103
            
 .. [M49]   Milne-Thomson TH, *Theoretical Hydrodynamics*,
            Macmillan and Co. Ltd., NY; 1949                 
            
 .. [M66]   Muskhelishvili NI. *Some basic problems of mathematical elasticity theory*,
-           Science, Moscow. 1966
+           Science, Moscow; 1966
            
 .. [PP12]  Pikulin VP, Pohozaev SI. *Equations in mathematical physics: a practical course*,
-           Springer Science & Business Media; 2012
+           Springer Science & Business Media; 2012,
+           https://doi.org/10.1007/978-3-0348-8285-9
            
 .. [S11]   Secomb TW. *Hemodynamics*, 
-           Comprehensive Physiology. 2011 Jan 17;6(2):975-1003
+           Comprehensive Physiology. 2011 Jan 17;6(2):975-1003,
+           https://doi.org/10.1002/cphy.c150038
            
 .. [SL78]  Shah RK, London AL. *Laminar flow forced convection in ducts*,
-           Supplement 1 to Advances in Heat Transfer. Academic Press, NY; 1978  
+           Supplement 1 to Advances in Heat Transfer. Academic Press, NY; 1978,
+           https://doi.org/10.1016/C2013-0-06152-X
            
 .. [TG51]  Timoshenko S, Goodier JN. *Theory of elasticity*, 
            McGraw-Hill, NY; 1951            
            
 .. [TKM19] Jeffrey Tithof, Douglas H Kelley, Humberto Mestre, Maiken Nedergaard, and John H Thomas. *Hydraulic resistance of periarterial spaces in the brain*,
-           Fluids and Barriers of the CNS, 16, 2019           
+           Fluids and Barriers of the CNS, 16, 2019,
+           https://doi.org/10.1186/s12987-019-0140-y           
 
 .. [PHW33] N.A.V. Piercy D.Sc., M.S. Hooper & H.F. Winny Ph.D. *LIII. Viscous flow through pipes with cores*, 
-           The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science, 1933
+           The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science, 1933,
+           https://doi.org/10.1080/14786443309462212
            
 .. [W06]   White FM. *Viscous fluid flow*,
            McGraw-Hill, NY; 2006          
