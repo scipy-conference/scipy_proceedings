@@ -771,28 +771,32 @@ References
            https://doi.org/10.1007/978-94-009-2247-1
            
 .. [B14]   Bare Contreras DZ. *Asymptotic Analysis for Linearized Contact Problems in Thin Beams*,
-           Fraunhofer Verlag; 2014     
+           Fraunhofer Verlag; 2014,
+           ISBN 978-3-8396-0762-6     
 
 .. [BPO16] Bare Z, Orlik J, Panasenko G. *Non homogeneous Dirichlet conditions for an elastic beam: an asymptotic analysis*,
            Applicable Analysis, 2016, 2625-36,
            https://doi.org/10.1080/00036811.2015.1105960           
 
 .. [BSL06] Bird RB, Stewart WE, Lightfoot EN. *Transport phenomena*,
-           John Wiley & Sons; 2007
+           John Wiley & Sons; 2007,
+           ISBN 978-0-470-11539-8
 
-           
 .. [BC81]  Churchill RV, Brown JW. *Fourier series and boundary value problems*,
-           McGraw-Hill, NY; 1981
+           McGraw-Hill, NY; 1981,
+           ISBN 978-0-0780-3597-5
        
 .. [BC09]  Brown JW, Churchill RV. *Complex variables and applications*,
-           McGraw-Hill, NY; 2009
+           McGraw-Hill, NY; 2009,
+           ISBN 978-0-0733-8317-0
 
 .. [CTL09] Chen JT, Tsai MH, Liu CS. *Conformal mapping and bipolar coordinate for eccentric Laplace problems*,
            Computer Applications in Engineering Education. 2009, 314-22,
            https://doi.org/10.1002/cae.20208
            
 .. [G78]   Greenberg MD. *Foundations of applied mathematics*, 
-           Dover; 2013
+           Dover; 2013,
+           ISBN 978-0-4864-9279-7
            
 .. [H10]   Hirose A. *Recent progress in applications of complex-valued neural networks*,
            International Conference on Artificial Intelligence and Soft Computing 2010 Jun 13,
@@ -806,30 +810,35 @@ References
            RDO Journal Issue 2, 2019
 
 .. [L69]   Ladyzhenskaya OA. *The mathematical theory of viscous incompressible flow*,
-           Gordon and Breach, NY; 1969     
+           Martino Publishing; 2014,
+           ISBN 978-1-6142-7671-5     
 
 .. [LL60]  Landau LD, Lifshitz EM. *Electrodynamics of continuous media*,
-           Pergamon Press, NY; 1960           
+           Pergamon Press, NY; 1984,
+           ISBN 978-0-08-030275-1           
 
 .. [LL59]  Landau LD, Lifshitz EM. *Fluid Mechanics*,
-           Pergamon Press, NY; 1959
+           Pergamon Press, NY; 1987,
+           https://doi.org/10.1016/C2013-0-03799-1
            
 .. [LGK21] Lauer-Baré Z., Gaertig E., Krebs J., Arndt C., Sleziona A., Gensel A. *A note on leakage jet forces: Application in the modelling of digital twins of hydraulic valves*, 
            International Journal of Fluid Power, 2021, Vol. 22 (1), 113–146,
            https://doi.org/10.13052/ijfp1439-9776.2214
            
 .. [L44]   Love AU. E, H. *A treatise on the mathematical theory of elasticity*,
-           Dover Publications; 1944
+           Cambridge University Press; 2013,
+           ISBN 978-1-1076-1809-1
            
 .. [MSP17] Meurer A, Smith CP, Paprocki M, Čertík O, Kirpichev SB, Rocklin M, Kumar A, Ivanov S, Moore JK, Singh S, Rathnayake T. *SymPy: symbolic computing in Python*,
            PeerJ Computer Science; 2017,
            https://doi.org/10.7717/peerj-cs.103
            
-.. [M49]   Milne-Thomson TH, *Theoretical Hydrodynamics*,
-           Macmillan and Co. Ltd., NY; 1949                 
+.. [M49]   Milne-Thomson LM, *Theoretical Hydrodynamics*,
+           Courier Corporation; 1996,
+           ISBN 978-0-4866-8970-8                
            
 .. [M66]   Muskhelishvili NI. *Some basic problems of mathematical elasticity theory*,
-           Science, Moscow; 1966,
+           Springer Science & Business Media; 1977,
            https://doi.org/10.1007/978-94-017-3034-1
            
 .. [PP12]  Pikulin VP, Pohozaev SI. *Equations in mathematical physics: a practical course*,
@@ -845,7 +854,8 @@ References
            https://doi.org/10.1016/C2013-0-06152-X
            
 .. [TG51]  Timoshenko S, Goodier JN. *Theory of elasticity*, 
-           McGraw-Hill, NY; 1951            
+           McGraw-Hill, NY; 2010,
+           ISBN 978-0-0707-0122-9            
            
 .. [TKM19] Jeffrey Tithof, Douglas H Kelley, Humberto Mestre, Maiken Nedergaard, and John H Thomas. *Hydraulic resistance of periarterial spaces in the brain*,
            Fluids and Barriers of the CNS, 16, 2019,
@@ -856,4 +866,5 @@ References
            https://doi.org/10.1080/14786443309462212
            
 .. [W06]   White FM. *Viscous fluid flow*,
-           McGraw-Hill, NY; 2006          
+           McGraw-Hill, NY; 2006,
+           ISBN 978-0-0724-0231-5         
