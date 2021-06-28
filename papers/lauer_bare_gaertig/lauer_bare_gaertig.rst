@@ -778,7 +778,7 @@ References
            https://doi.org/10.1080/00036811.2015.1105960           
 
 .. [BSL06] Bird RB, Stewart WE, Lightfoot EN. *Transport phenomena*,
-           John Wiley & Sons; 2006,
+           John Wiley & Sons; 2007
 
            
 .. [BC81]  Churchill RV, Brown JW. *Fourier series and boundary value problems*,
@@ -799,16 +799,17 @@ References
            https://doi.org/10.1007/978-3-642-13232-2_6
            
 .. [H12]   Hirose A. *Complex-valued neural networks*,
-           Springer Science & Business Media; 2012
+           Springer Science & Business Media; 2012,
+           https://doi.org/10.1007/978-3-642-27632-3
                                  
 .. [K19]   Krebs J. *Optislang in functional development of hydraulic valves*,
-           RDO Journal Issue 2, 2019.
+           RDO Journal Issue 2, 2019
 
 .. [L69]   Ladyzhenskaya OA. *The mathematical theory of viscous incompressible flow*,
-           Gordon and Breach, NY; 1969.       
+           Gordon and Breach, NY; 1969     
 
 .. [LL60]  Landau LD, Lifshitz EM. *Electrodynamics of continuous media*,
-           Pergamon Press, NY; 1960.           
+           Pergamon Press, NY; 1960           
 
 .. [LL59]  Landau LD, Lifshitz EM. *Fluid Mechanics*,
            Pergamon Press, NY; 1959
@@ -828,7 +829,8 @@ References
            Macmillan and Co. Ltd., NY; 1949                 
            
 .. [M66]   Muskhelishvili NI. *Some basic problems of mathematical elasticity theory*,
-           Science, Moscow; 1966
+           Science, Moscow; 1966,
+           https://doi.org/10.1007/978-94-017-3034-1
            
 .. [PP12]  Pikulin VP, Pohozaev SI. *Equations in mathematical physics: a practical course*,
            Springer Science & Business Media; 2012,
