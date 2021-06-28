@@ -17,7 +17,7 @@ Conformal Mappings with SymPy: Towards Python-driven Analytical Modeling in Phys
 
 .. class:: abstract
 
-   This contribution shows how the symbolic computing Python library *SymPy* can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the region between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to a corresponding fluid flow. The flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. *SymPy* can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow is determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with *SymPy* are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette flow force approximations and similar results for the known Poiseuille flow (i.e. fluid flow induced by a pressure difference) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of *SymPy* when solving partial differential equations analytically.
+   This contribution shows how the symbolic computing Python library ``SymPy`` can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the region between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to a corresponding fluid flow. The flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. ``SymPy`` can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow is determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with ``SymPy`` are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette flow force approximations and similar results for the known Poiseuille flow (i.e. fluid flow induced by a pressure difference) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of ``SymPy`` when solving partial differential equations analytically.
 
 
 .. class:: keywords
@@ -72,12 +72,12 @@ In leading system simulation tools, the flow force that acts upon the inner cyli
    F_{system} = - 2\pi\,\frac{R_{1}l \mu u_R}{\delta}\,.
 
 Here :math:`\mu` denotes the viscosity of the fluid, :math:`l` the length of the inner cylinder, :math:`u_R` the velocity and :math:`\delta=R_2-R_1` the annular gap, i.e. the difference between outer and inner radius.
-Utilizing the capabilities of the open-source Computer Algebra System *SymPy* (as done e.g. in [MSP17]_), we answer the following two questions:
+Utilizing the capabilities of the open-source Computer Algebra System ``SymPy`` (as done e.g. in [MSP17]_), we answer the following two questions:
 
 1. How is Equation (:ref:`ForceSystemTool`) related to the corresponding Stokes equation?
 2. Does eccentricity :math:`\varepsilon = b/\delta` change this dependency and, if so, how exactly?
 
-Furthermore, the velocities and forces obtained by solving the Stokes problem (i.e. the linear part of the Navier-Stokes system) with *SymPy* are compared to corresponding numerical solutions of the full, nonlinear Navier-Stokes equations, obtained from the commercially available Finite Volume tool ANSYS-CFX.
+Furthermore, the velocities and forces obtained by solving the Stokes problem (i.e. the linear part of the Navier-Stokes system) with ``SymPy`` are compared to corresponding numerical solutions of the full, nonlinear Navier-Stokes equations, obtained from the commercially available Finite Volume tool ANSYS-CFX.
 Finally this article concludes with a note on the eccentric annular Poiseuille flow (that is a flow due to a pressure difference) and finishes with a comment on comnbined Couette-Poiseuille flow velocities and forces.
  
 
@@ -95,7 +95,7 @@ In order to solve the Stokes problem
 	u & = & u_R \quad\;\;\text{for $\sqrt{x^2+(y+b)^2}=R_1$}\,,
 
 
-the following *SymPy* functions and libraries were used: ``im``, ``re``, ``subs``, ``simplify`` and ``lambdify``. For the postprocessing the *SymPy* functions ``diff`` and ``series`` were particularly useful. Additionally, the ``latex`` function allowed to use the latex code of the formulae. For the interactive development with *SymPy* the *Jupyter Notebook* is used as GUI; there the ``latex`` math rendering proved to be very useful. The visualization is done with *NumPy* and *Matplotlib*. Code snippets are provided within the text in the subsequent sections. In addition, supplemental Python examples are available at this `public GitHub repository <https://github.com/zolabar/ConformalMappingSympy>`_ [#]_.
+the following ``SymPy`` functions and libraries were used: ``im``, ``re``, ``subs``, ``simplify`` and ``lambdify``. For the postprocessing the ``SymPy`` functions ``diff`` and ``series`` were particularly useful. Additionally, the ``latex`` function allowed to use the latex code of the formulae. For the interactive development with ``SymPy`` the ``Jupyter Notebook`` is used as GUI; there the ``latex`` math rendering proved to be very useful. The visualization is done with ``NumPy`` and ``Matplotlib``. Code snippets are provided within the text in the subsequent sections. In addition, supplemental Python examples are available at this `public GitHub repository <https://github.com/zolabar/ConformalMappingSympy>`_ [#]_.
 
 .. [#] `<https://github.com/zolabar/ConformalMappingSympy>`_ 
 
@@ -112,7 +112,7 @@ The solution of the Stokes problem within a concentric annulus for a Couette-typ
 
    u(r)=u_R\,\frac{\ln(r/R_2)}{\ln(R_1/R_2)}\,,
    
-where :math:`r = \sqrt{x^2 + y^2}`. This can easily be checked by using the ``diff`` function of *SymPy*. Keep in mind, that the natural logarithm in Equation (:ref:`concentricU`)  is denoted by ``log`` there.
+where :math:`r = \sqrt{x^2 + y^2}`. This can easily be checked by using the ``diff`` function of ``SymPy``. Keep in mind, that the natural logarithm in Equation (:ref:`concentricU`)  is denoted by ``log`` there.
 
 .. code-block:: python
 
@@ -135,14 +135,14 @@ as expected. Further analytical solutions to the Laplace problem for other simpl
 Transformation of the eccentric annulus to a simple domain with conformal mappings
 ----------------------------------------------------------------------------------
 
-In the following two Sections we will show with *SymPy* how the Couette flow problem within an eccentric annular domain can be transformed into a problem within a concentric annular region or within a rectangle.
+In the following two Sections we will show with ``SymPy`` how the Couette flow problem within an eccentric annular domain can be transformed into a problem within a concentric annular region or within a rectangle.
 In these simple geometries analytical solutions to this problem are well-known. In order to transform the domains we make use of complex analysis, inspired by the French mathematician Jacques Hadamard (1865-1963):
 
 
     *The shortest path between two truths in the real domain passes through the complex domain.*
     
 
-The ideas and strategies of conformal mappings using *sympy* are mostly described in the following Section, where a Möbius transform is used.
+The ideas and strategies of conformal mappings using ``SymPy`` are mostly described in the following Section, where a Möbius transform is used.
 
 Transformation to a concentric annulus with Möbius transforms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -169,7 +169,7 @@ Scaling the geometry in such a way that the outer circle ends up having a radius
     w = (z + sym.I * a)/(a * z + sym.I)
     w = w.subs(z, x/R2 + sym.I * y/R2)
 
-and separating real and imaginary part with *sympy* functions
+and separating real and imaginary part with ``SymPy`` functions
 
  .. code-block:: python
 
@@ -186,7 +186,7 @@ one arrives at
     \xi&=&\frac{a x^{2} + \left(R_{2} + a y\right) \left(R_{2} a + y\right)}{a^{2} x^{2} + \left(R_{2} + a y\right)^{2}} \\
     \eta&=&\frac{x \left(- R_{2} - a y + a \left(R_{2} a + y\right)\right)}{a^{2} x^{2} + \left(R_{2} + a y\right)^{2}}\,. 
     
-The ``latex`` rendering in the *Jupyter Notebook* shows directly the result of code in proper mathematical symbols, for instance
+The ``latex`` rendering in the ``Jupyter Notebook`` shows directly the result of code in proper mathematical symbols, for instance
 
 >>> sym.simplify(im(w))
 
@@ -260,7 +260,7 @@ With the parameters specified in Table :ref:`data1`, the velocity in the *w*-pla
    +------------+----------------+-------------------------+
 
 
-The very convenient *SymPy* function ``lambdify`` is used to compute numerical values that are postprocessed by *Matplotlib* and depicted in Figure :ref:`concentricWU`. The term *R_* in the following code block denotes the numerical expression of the outer radius in the w-plane (see Equation (:ref:`constantR`)).
+The very convenient ``SymPy`` function ``lambdify`` is used to compute numerical values that are postprocessed by ``Matplotlib`` and depicted in Figure :ref:`concentricWU`. The term ``R_`` in the following code block denotes the numerical expression of the outer radius in the w-plane (see Equation (:ref:`constantR`)).
 
  .. code-block:: python
  
@@ -276,8 +276,8 @@ The very convenient *SymPy* function ``lambdify`` is used to compute numerical v
    
    Flow velocity in concentric annulus (w-plane); the boundary condition (:math:`u_R = \text{0.4 m}/\text{s}`) is applied to the outer cylinder, see Equation (:ref:`stokesConcentricW`) :label:`concentricWU` 
 
-At this stage it is pointed out that when working symbolically with *SymPy* one has to separate consistently between *expressions* and *symbols*. For instance *xi* and *eta* are symbols whereas *xi_* and *eta_* are expressions. The user can replace symbols by corresponding expressions when it best suits him/her.
-To avoid confusion, in this work the associated expression to a symbol *s* is tagged with an underline *s_*.
+At this stage it is pointed out that when working symbolically with ``SymPy`` one has to separate consistently between *expressions* and *symbols*. For instance ``xi`` and ``eta`` are symbols whereas ``xi_`` and ``eta_`` are expressions. The user can replace symbols by corresponding expressions when it best suits him/her.
+To avoid confusion, in this work the associated expression to a symbol ``s`` is tagged with an underline ``s_``.
    
 Now simply expressing :math:`\xi,\eta` in (:ref:`concentricUinW`) in terms of :math:`x` and :math:`y` (see Equation (:ref:`zeta1`)), one easily obtains the fluid velocity in the eccentric annulus.
 
@@ -370,7 +370,7 @@ The last two equations specify the periodic boundary conditions one has to suppl
 
     u(\xi,\eta)=\frac{u_{R} \left(\eta - \alpha\right)}{\beta - \alpha}\,.   
  
-Figure :ref:`rectangularWU` shows a *Matplotlib*-visualization of the velocity distribution in the *w*-plane which is constant along :math:`\xi` and increases linearly with :math:`\eta`.
+Figure :ref:`rectangularWU` shows a ``Matplotlib``-visualization of the velocity distribution in the *w*-plane which is constant along :math:`\xi` and increases linearly with :math:`\eta`.
 
   
 .. figure:: u_bipolar_w.pdf
@@ -395,7 +395,7 @@ Figure :ref:`largeGapCouette` compares these two analytically obtained velocitie
 
 As one can see, the two analytical approaches lead to the same velocity distribution across the larger gap and both boundary conditions are met exactly. On the other hand, due to the finite mesh size particularly at the outer radius :math:`R_2`, the boundary condition there is only approximately satisfied.
 
-In the next Section, the corresponding flow force is obtained with *SymPy*-driven postprocessing and then compared again to the forces obtained by 3D-CFD and numerical evaluation.
+In the next Section, the corresponding flow force is obtained with ``SymPy``-driven postprocessing and then compared again to the forces obtained by 3D-CFD and numerical evaluation.
   
 Postprocessing 
 --------------
@@ -411,7 +411,7 @@ The relation for the annular flow force that acts upon the armature in Figure :r
    F_e =-\int\limits_0^l \int\limits_0^{2\pi} \left(\mu\,\rho \frac{\mathrm d}{\mathrm{d}\rho} u(\rho)\right)_{\rho = R}\textrm{d}\varphi\,\textrm{d}z\,.
 
 
-This equation can be implemented in *SymPy* using the velocity distribution from Equation (:ref:`concentricUinW`).
+This equation can be implemented in ``SymPy`` using the velocity distribution from Equation (:ref:`concentricUinW`).
 
 >>> u_w = u_R * sym.log(rho)/sym.log(R)
 >>> u_w  
@@ -419,7 +419,7 @@ This equation can be implemented in *SymPy* using the velocity distribution from
 .. math::
    u_R\,\frac{\ln(\rho)}{\ln(R)}
 
-Using the ``diff``, ``subs`` and ``integrate`` functions from *SymPy* then leads to
+Using the ``diff``, ``subs`` and ``integrate`` functions from ``SymPy`` then leads to
 
 >>> Fe = mu * sym.diff(u_w, rho)
 >>> Fe = (rho * Fe).subs(rho, R)
@@ -485,7 +485,7 @@ Equation (:ref:`Fcouette`) is even defined for the concentric case. Substituting
    F_c=-u_R\,\frac{2\pi \mu l}{\ln(R_2/R_1)}\,.
 
    
-In order to finally answer the first question of the Introduction, i.e. how Equation (:ref:`ForceSystemTool`) is related to the Stokes equation, the ``series`` function of *SymPy* is used. 
+In order to finally answer the first question of the Introduction, i.e. how Equation (:ref:`ForceSystemTool`) is related to the Stokes equation, the ``series`` function of ``SymPy`` is used. 
 With ``series``, a Taylor-expansion of :math:`F_c` in :math:`\delta = R_2 - R_1` around :math:`\delta = 0` can be performed
  
 >>> sym.series(Fc.subs(R2, R1 + delta), delta, 0, 2)
@@ -505,7 +505,7 @@ Additional remarks on Poiseuille flow
 Eccentric annular Poiseuille flow velocity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In various circumstances Couette flow may also induce a secondary flow driven by a pressure difference; a so-called *Poiseuille flow*. This particular type is of interest in many areas and we'll briefly show how the corresponding solution presented in [PHW33]_ is derived conceptually as well as how it can be implemented with the help of *SymPy*. 
+In various circumstances Couette flow may also induce a secondary flow driven by a pressure difference; a so-called *Poiseuille flow*. This particular type is of interest in many areas and we'll briefly show how the corresponding solution presented in [PHW33]_ is derived conceptually as well as how it can be implemented with the help of ``SymPy``. 
 
 As far as we know, hitherto only the relations found in the aforementioned paper had been implemented (e.g. [W06]_, [TKM19]_), but unfortunately in a way that is rather difficult to reproduce. 
 The fact, that in the current context blood coagulation and hemodynamics are omnipresent in the media, eccentric annular blood flow in arteries is extensively studied ([TKM19]_) and flow forces that act upon the arteries are of great medical interest (e.g. [S11]_), makes it even more interesting to use the existing formulae of [PHW33]_, which are tedious to use when implemented by hand.
@@ -538,14 +538,14 @@ It then follows that :math:`\Delta u=dp/(\mu l)` in the *z*-plane and the bounda
 ..
       Here, :math:`\alpha` and :math:`\beta` correspond to the constant values of :math:`\eta` for the outer and inner radius of the eccentric annulus in the *w*-plane; compare with Figure :ref:`rectangularW` and Figure :ref:`eccAnnulusZ`.
 
-Subsequently, :math:`\Psi` is decomposed by [PHW33]_ into a sum of three harmonic functions 
+For further evaluation, :math:`\Psi` is decomposed by [PHW33]_ into a sum of three harmonic functions 
 
 .. math::
    :label: PSI
 
    \Psi=4\cdot\Psi_1+4\cdot A\cdot\eta+ 4\cdot B\,.
 
-In a first step, the final relation for the Poisseuille-flow velocity derived in [PHW33]_ can be symbolically expressed via
+Using this particular form of :math:`\Psi`, the final relation for the Poisseuille-flow velocity derived in [PHW33]_ can be symbolically expressed via
 
 .. code-block:: python
 
@@ -568,7 +568,7 @@ In a first step, the final relation for the Poisseuille-flow velocity derived in
    
    \frac{c^{2} dp \left(A \eta + B + \Psi_1 - \frac{- \cos{\left(\xi \right)} + \cosh{\left(\eta \right)}}{4 \cos{\left(\xi \right)} + 4 \cosh{\left(\eta \right)}}\right)}{l \mu} 
 
-Afterwards its three separate components can also be symbolically expressed and finally substituted into (:ref:`velocityPiercy`). In the following code the *sympy* function ``Sum`` is used, which simplifies the implementation of Fourier-type series in analytical formulae significantly.
+Afterwards the expressions for the three separate components :math:`A`, :math:`B` and :math:`\Psi_1` can finally be substituted into (:ref:`velocityPiercy`). In the following code the ``sympy`` function ``Sum`` is used, which simplifies the implementation of Fourier-type series in analytical formulae significantly.
 
 .. code-block:: python
 
@@ -662,7 +662,7 @@ A practical implementation of :math:`\phi` can be found in e.g. [B14]_ and [BPO1
 Eccentric Couette-Poiseuille flow: Superposition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The velocity for eccentric Couette-Poiseuille flow can easily be found by superposing Equation (:ref:`velocityPiercy`) with one of the two Couette flow velocities derived in this contribution by utilizing *SymPy*.
+The velocity for eccentric Couette-Poiseuille flow can easily be found by superposing Equation (:ref:`velocityPiercy`) with one of the two Couette flow velocities derived in this contribution by utilizing ``SymPy``.
 
 The following relation 
 
@@ -712,7 +712,7 @@ Here, :math:`F_c` is the well known Poiseuille flow force that acts upon the inn
 
 The particular approximation for the eccentric flow force due to a pressure gradient, i.e. :math:`F_{Piercy}\approx F_c\left( 1 + a(\kappa)\,\varepsilon^2\right)`, was obtained for the first time in [LGK21]_.
 
-To conclude this Section it is remarked, that again the useful *SymPy* function *series* can help in figuring out how :math:`a(\kappa)` is approximated in the relevant practical case where :math:`R_1\approx R_2`.
+To conclude this Section it is remarked, that again the useful ``SymPy`` function ``series`` can help in figuring out how :math:`a(\kappa)` is approximated in the relevant practical case where :math:`R_1\approx R_2`.
 
 As shown in [LGK21]_, :math:`a(\kappa)` can be expanded in a Taylor-series around :math:`\kappa=1`.
 
@@ -741,26 +741,26 @@ Conclusion
 
 This article shows that classical tools from mathematical physics, such as conformal mappings and Taylor-expansions, are still relevant and indispensable in times of digitization and wide use of numerics.
 
-As an example, by using *SymPy* as a tool for symbolic mathematics it is shown that a popular approximation of the eccentric annular Couette flow force in modern system simulation tools is actually the leading-order term of a Taylor-expansion of the corresponding concentric annular force. 
+As an example, by using ``SymPy`` as a tool for symbolic mathematics it is shown that a popular approximation of the eccentric annular Couette flow force in modern system simulation tools is actually the leading-order term of a Taylor-expansion of the corresponding concentric annular force. 
 
 This force is calculated as a special case of the more general eccentric annular Couette flow by postprocessing the resulting velocity distribution. The flow velocity is analytically obtained by solving the corresponding Stokes problem with the help of conformal mappings, i.e. holomorphic functions in the complex plane.
 
 ..   
-   The main *SymPy* functions used in the solving process are *im, re, subs, Sum, simplify* and *lambdify* and the main routines in the postprocessing are *diff, integrate* and *series*.
+   The main ``SymPy`` functions used in the solving process are ``im, re, subs, Sum, simplify`` and ``lambdify`` and the main routines in the postprocessing are ``diff, integrate`` and ``series``.
 
    Two different conformal mappings are utilized to solve the Stokes problem within an eccentric annulus by finding the equivalent harmonic solution in a much simpler geometric domain. The first conformal map is a Möbius transform that maps the eccentric annular flow domain onto a concentric one while the second conformal mapping disussed in this work is related to bipolar coordinates. By a slight modification of the original bipolar transformation function, an appropriately chosen rectangle gets mapped onto an eccentric annulus with the center of the larger circle at the origin of the coordinate system.
 
    Both, the eccentric annular Couette velocity and flow force are validated with numerical CFD-results that are obtained by solving the full nonlinear Navier-Stokes system in the flow domain between the two cylinders.
 
-   The article concludes with an application of the conformal bipolar map to an eccentric Poiseuille problem. Although the solution is known, it is seldomly implemented and visualized. With the help of *SymPy* however, the implementation of such methods is much easier.
+   The article concludes with an application of the conformal bipolar map to an eccentric Poiseuille problem. Although the solution is known, it is seldomly implemented and visualized. With the help of ``SymPy`` however, the implementation of such methods is much easier.
    Finally, the authors combine their results on eccentric annular Couette flow with known results on eccentric annular Poiseuille flow, deriving new expressions for the eccentric annular Couette-Poiseuille flow.
 
-*SymPy* performed particularly well in the application of a bilinear conformal mapping (i.e. the Möbius transform). In case of the bipolar transformation, manual assistance had to be provided when separating real and imaginary parts of the conformal map. Furthermore, the authors realized that the ``series``- and ``simplify``-routines have some difficulties with terms involving square roots. 
+   ``SymPy`` performed particularly well in the application of a bilinear conformal mapping (i.e. the Möbius transform). In case of the bipolar transformation, manual assistance had to be provided when separating real and imaginary parts of the conformal map. Furthermore, the authors realized that the ``series``- and ``simplify``-routines have some difficulties with terms involving square roots. 
 
-A further application field of *SymPy* in analytical methods in the context of PDEs, apart from conformal mappings and Taylor-expansions, may be homogenization. Since in homogenization, asymptotic expansions are substituted into the PDE and limiting problems are obtained in an algorithmical way, *SymPy* might prove to be a valuable supporting tool. 
-A starting point could be the introductory example from the classical textbook [BP89]_, which is worked out and compared to a FEM-solution obtained by COMSOL in [B14]_. Furthermore, apart from structure- and fluid-mechanics, due to similar equations in rotationally symmetric electromagnetic problems (e.g. [LL60]_), related applications of conformal mappings and Taylor-expansions with *SymPy* in electromagnetism are certainly possible.
+A further application field of ``SymPy`` in analytical methods in the context of PDEs may be homogenization. Since in homogenization, asymptotic expansions are substituted into the PDE and limiting problems are obtained in an algorithmical way, ``SymPy`` might prove to be a valuable supporting tool. 
+A starting point could be the introductory example from the classical textbook [BP89]_, which is worked out and compared to a FEM-solution obtained by COMSOL in [B14]_. Furthermore, due to similar equations in rotationally symmetric electromagnetic problems (e.g. [LL60]_), related applications of conformal mappings and Taylor-expansions with ``SymPy`` in electromagnetism are certainly possible.
 
-The authors think, by quoting Hadamards words again, that *the shortest path between two truths in the real domain passes through the complex domain* may not only be applicable to mathematical physics but also to neural networks. Already available work described in [H10]_ and [H12]_ points in that direction and *SymPy* might be of great help in such areas, too.
+The authors think, that these methods may not only be applicable to mathematical physics but could be helpful in other areas as well, e.g. for understanding neural networks. Already available work described in [H10]_ and [H12]_ points in that direction and ``SymPy`` might be of great help in such areas, too.
 
 
 References
