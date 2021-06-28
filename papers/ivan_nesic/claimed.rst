@@ -630,7 +630,7 @@ References
 
 .. [ect] https://github.com/cloud-annotations/elyra-classification-training/tree/developer_article
 
-.. [slurm] https://slurm.schedmd.com/documentation.html
+.. [slurm] "Yoo, Andy B. and Jette, Morris A. and Grondona, Mark, *SLURM: Simple Linux Utility for Resource Management*, Job Scheduling Strategies for Parallel Processing, Springer, 2003
 
 .. [snakemake] https://snakemake.github.io/
 
