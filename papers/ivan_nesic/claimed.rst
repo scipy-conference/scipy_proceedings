@@ -453,7 +453,7 @@ need to be specified.
 
 Although possible, hyper-parameter search is not considered in this
 processing stage. The rason being, we want to make use of Kubeflow’s hyper-parameter
-search capabilities leveraged through Katib [katib]_ in
+search capabilities leveraged through Katib [george2020katib]_ in
 the future.
 
 .. figure:: trainstage.png
@@ -597,17 +597,24 @@ CLAIMED will improve reproducibility of data centric work even further.
 
 References
 ----------
-.. [bias] Steinbock, Bonnie (1978). *Speciesism and the Idea of Equality*, Philosophy, 53 (204): 247–256, doi:10.1017/S0031819100016582
+
+.. [art] Adversarial Robustness Toolbox, https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last accessed 18 Feb 2021
 
 .. [aif360] AI Fairness 360 Toolkit, https://github.com/Trusted-AI/AIF360. Last accessed 18 Feb 2021
 
 .. [aix360] AI Explainability 360 Toolkit, https://github.com/Trusted-AI/AIX360 Last accessed 18 Feb 2021
 
+.. [bias] Steinbock, Bonnie (1978). *Speciesism and the Idea of Equality*, Philosophy, 53 (204): 247–256, doi:10.1017/S0031819100016582
+
+.. [cncf] Cloud Native Computing Foundation, https://www.cncf.io. Last accessed 18 Feb 2021
+
+.. [complib] https://github.com/elyra-ai/component-library
+
 .. [elyra] Elyra AI, https://github.com/elyra-ai. Last accessed 18 Feb 2021
 
 .. [kubernetes] Kubernetes, https://kubernetes.io/. Last accessed 18 Feb 2021
 
-.. [jupyter] JupyterLab, https://jupyter.org/. Last accessed 18 Feb 2021
+.. [jupyter] https://doi.org/10.5281/zenodo.4539666
 
 .. [kfserving] KFServing, https://www.kubeflow.org/docs/components/serving/kfserving Last accessed 18 Feb 2021
 
@@ -615,17 +622,11 @@ References
 
 .. [kubeflow] https://www.kubeflow.org/ Last accessed 18 Feb 2021
 
-.. [katib] George et al., *A Scalable and Cloud-Native Hyperparameter Tuning System*, arXiv:2006.02085, June 2020
+.. [george2020katib] George et al., *A Scalable and Cloud-Native Hyperparameter Tuning System*, arXiv:2006.02085, June 2020
 
 .. [tf] Martín Abadi et al. *TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems*, arXiv:1603.04467v2, March 2016
 
-.. [art] Adversarial Robustness Toolbox, https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last accessed 18 Feb 2021
-
 .. [ibmcncf] IBM joining CNCF, https://developer.ibm.com/technologies/containers/blogs/ibms-dedication-to-open-source-and-its-involvement-with-the-cncf Last accessed 18 Feb 2021
-
-.. [cncf] Cloud Native Computing Foundation, https://www.cncf.io. Last accessed 18 Feb 2021
-
-.. [complib] https://github.com/elyra-ai/component-library
 
 .. [ect] https://github.com/cloud-annotations/elyra-classification-training/tree/developer_article
 
