@@ -590,7 +590,7 @@ This method returns a list of all pure NE in the MA(C)ID. Each NE comes as a lis
    StochasticFunctionCPD<D2> 
       {}  ->  d]]
    
-In the Prisoner's dilemma, there is only one NE and this involves both player's defecting. We can then find that the expected utility for each agent is -2 under this NE joint policy profile:
+In the Prisoner's dilemma, there is only one NE and this involves both players defecting. We can then find that the expected utility for each agent is -2 under this NE joint policy profile:
    
 .. code-block:: python
    
