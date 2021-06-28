@@ -632,7 +632,7 @@ References
 
 .. [slurm] https://slurm.schedmd.com/documentation.html
 
-.. [snakemake] https://snakemake.github.io/
+.. [snakemake] Mölder F, Jablonski KP, Letcher B et al. *Sustainable data analysis with Snakemake* F1000Research, (10), doi:10.12688/f1000research.29032.1, 2021
 
 .. [qsub] https://en.wikipedia.org/wiki/Qsub
 
