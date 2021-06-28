@@ -568,7 +568,7 @@ Using this particular form of :math:`\Psi`, the final relation for the Poisseuil
    
    \frac{c^{2} dp \left(A \eta + B + \Psi_1 - \frac{- \cos{\left(\xi \right)} + \cosh{\left(\eta \right)}}{4 \cos{\left(\xi \right)} + 4 \cosh{\left(\eta \right)}}\right)}{l \mu} 
 
-Afterwards the expressions for the three separate components :math:`A`, :math:`B` and :math:`\Psi_1` can finally be substituted into (:ref:`velocityPiercy`). In the following code the ``sympy`` function ``Sum`` is used, which simplifies the implementation of Fourier-type series in analytical formulae significantly.
+Afterwards the expressions for the three separate components :math:`A`, :math:`B` and :math:`\Psi_1` can finally be substituted into (:ref:`velocityPiercy`). In the following code the ``SymPy`` function ``Sum`` is used, which simplifies the implementation of Fourier-type series in analytical formulae significantly.
 
 .. code-block:: python
 
