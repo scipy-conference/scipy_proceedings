@@ -638,7 +638,7 @@ References
 
 .. [htcondor] https://research.cs.wisc.edu/htcondor/
 
-.. [galaxy] https://galaxyproject.org/
+.. [galaxy] Enis Afgan et al. *The Galaxy platform for accessible, reproducible and collaborative biomedical analyses: 2018 update*, Nucleic Acids Research, (46):W537-W544, doi:10.1093/nar/gky379, July 2018
 
 .. [reana] https://reanahub.io/
 
