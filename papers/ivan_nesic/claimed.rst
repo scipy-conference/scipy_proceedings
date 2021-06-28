@@ -612,7 +612,7 @@ References
 
 .. [elyra] Elyra AI, https://github.com/elyra-ai. Last accessed 18 Feb 2021
 
-.. [kubernetes] Kubernetes, https://kubernetes.io/. Last accessed 18 Feb 2021
+.. [kubernetes] David Bernstein et al. *Containers and Cloud: From LXC to Docker to Kubernetes*, IEEE Cloud Computing (Volume: 1, Issue: 3), September 2014) 
 
 .. [jupyter] Thomas Kluyver et al. *Jupyter Notebooks – a publishing format for reproducible computational workflows*, Positioning and Power in Academic Publishing: Players, Agents and Agendas, 87-90, doi:10.3233/978-1-61499-649-1-87, 2016
 
