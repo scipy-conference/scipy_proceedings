@@ -469,7 +469,7 @@ goes into production. Evaluating classification performance against the
 target labels has been a common metric since the early days of machine learning,
 therefore we have also developed evaluation components, with confusion matrix
 support for instance. But taking TrustedAI measures into account is a newly emerging practice.
-Therefore, components for AI Fairness, AI Explainability and AI
+Therefore, components for AI Fairness, AI Explainability [aix360] and AI
 Adversarial Robustness have been also added to the component library.
 
 Blessing Components
@@ -614,7 +614,7 @@ References
 
 .. [kubernetes] Kubernetes, https://kubernetes.io/. Last accessed 18 Feb 2021
 
-.. [jupyter] https://doi.org/10.5281/zenodo.4539666
+.. [jupyter] Thomas Kluyver et al. *Jupyter Notebooks – a publishing format for reproducible computational workflows*, Positioning and Power in Academic Publishing: Players, Agents and Agendas, 87-90, doi:10.3233/978-1-61499-649-1-87, 2016
 
 .. [kfserving] KFServing, https://www.kubeflow.org/docs/components/serving/kfserving Last accessed 18 Feb 2021
 
