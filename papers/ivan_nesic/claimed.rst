@@ -632,7 +632,7 @@ References
 
 .. [slurm] "Yoo, Andy B. and Jette, Morris A. and Grondona, Mark, *SLURM: Simple Linux Utility for Resource Management*, Job Scheduling Strategies for Parallel Processing, Springer, 2003
 
-.. [snakemake] https://snakemake.github.io/
+.. [snakemake] Köster, Johannes and Rahmann, Sven, *Snakemake—a scalable bioinformatics workflow engine*, Journal of Bioinformatics, Number 19, Volume 28, Pages 2520-2522}, August 2012
 
 .. [qsub] https://en.wikipedia.org/wiki/Qsub
 
