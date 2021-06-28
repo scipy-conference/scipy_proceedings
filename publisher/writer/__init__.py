@@ -37,6 +37,7 @@ class Translator(LaTeXTranslator):
         self.author_institutions = []
         self.author_institution_map = dict()
         self.author_emails = []
+        self.author_orcid_map = dict()
         self.corresponding = []
         self.equal_contributors = []
         self.paper_title = ''
@@ -92,6 +93,9 @@ class Translator(LaTeXTranslator):
 
         if self.current_field == 'email':
             self.author_emails.append(text)
+        elif self.current_field == 'orcid':
+            self.validate_orcid(text)
+            self.author_orcid_map[self.author_names[-1]] = text
         elif self.current_field == 'corresponding':
             self.corresponding.append(self.author_names[-1])
         elif self.current_field == 'equal-contributor':
@@ -257,6 +261,7 @@ class Translator(LaTeXTranslator):
                                'author_email': self.author_emails,
                                'author_institution': self.author_institutions,
                                'author_institution_map' : self.author_institution_map,
+                               'author_orcid_map': self.author_orcid_map,
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder,
@@ -472,6 +477,37 @@ class Translator(LaTeXTranslator):
                 self.requirements[package] = '\\usepackage{%s}' % package
         self.out.append('\n' + node['latex'] + '\n')
         raise nodes.SkipNode
+
+    def validate_orcid(self, orcid):
+        """ Validate the ORCID string provided for an author
+
+        The code has been ported from this Ruby code from JOSS:
+        https://github.com/openjournals/whedon/blob/master/lib/whedon/orcid_validator.rb
+        """
+        groups = orcid.split('-')
+        if len(groups) != 4:
+            raise ValueError('ORCID {} must have four groups of digits'
+                             .format(orcid))
+        packed_orcid = orcid.replace('-', '')
+        if len(packed_orcid) != 16:
+            raise ValueError('ORCID {} has incorrect length'.format(orcid))
+        checksum_char = packed_orcid[-1]
+        first15 = packed_orcid[:-1]
+        if not first15.isdigit():
+            raise ValueError('ORCID {} has non-digit characters'.format(orcid))
+        if not((checksum_char == 'X') or checksum_char.isdigit()):
+            raise ValueError('ORCID {} last character must be digit or "X"'
+                             .format(orcid))
+        total = 0
+        for c in first15:
+            total = (total + int(c))*2
+        remainder = total % 11
+        result = (12 - remainder) % 11
+        if ((checksum_char == 'X' and result != 10) or
+                (checksum_char.isdigit() and result != int(checksum_char))):
+            raise ValueError('ORCID {} has last char {} and checksum {}'
+                             .format(orcid, checksum_char, result))
+        return
 
 
 writer = Writer()
