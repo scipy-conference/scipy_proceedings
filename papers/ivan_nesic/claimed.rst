@@ -636,7 +636,7 @@ References
 
 .. [qsub] https://en.wikipedia.org/wiki/Qsub
 
-.. [htcondor] https://research.cs.wisc.edu/htcondor/
+.. [htcondor] E M Fajardo et al, *How much higher can HTCondor fly?*, 2015 Journal of Physics.: Conference Series, Volume 664, June 2014
 
 .. [galaxy] Enis Afgan et al. *The Galaxy platform for accessible, reproducible and collaborative biomedical analyses: 2018 update*, Nucleic Acids Research, (46):W537-W544, doi:10.1093/nar/gky379, July 2018
 
