@@ -615,7 +615,7 @@ References
 
 .. [kubeflow] https://www.kubeflow.org/ Last accessed 18 Feb 2021
 
-.. [katib] Katib, https://github.com/kubeflow/katib. Last accessed 18 Feb 2021
+.. [katib] George et al., *A Scalable and Cloud-Native Hyperparameter Tuning System*, arXiv:2006.02085, June 2020
 
 .. [tf] Martín Abadi et al. *TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems*, arXiv:1603.04467v2, March 2016
 
