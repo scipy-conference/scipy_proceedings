@@ -640,7 +640,7 @@ References
 
 .. [galaxy] Enis Afgan et al. *The Galaxy platform for accessible, reproducible and collaborative biomedical analyses: 2018 update*, Nucleic Acids Research, (46):W537-W544, doi:10.1093/nar/gky379, July 2018
 
-.. [reana] https://reanahub.io/
+.. [reana] Tibor Šimko et al. *REANA: A System for Reusable Research Data Analyses*, 23rd International Conference on Computing in High Energy and Nuclear Physics (CHEP 2018), (214):06034, doi:10.1051/epjconf/201921406034, September 2019
 
 .. [nifi] https://nifi.apache.org/
 
