@@ -58,35 +58,6 @@ Influence-diagrams (IDs) are used to represent and analyse decision making situa
 
 Figure :ref:`gradepredfig` shows the DAG for this example, which displays clearly the structure of the decision situation. The decision being made by an agent is the grade prediction (decision node). They select a decision rule for this decision, based on what they know about the applicant (chance node), in order to optimise their prediction accuracy (utility node). The edges denote associational relationships in the case of a statistical IM, but denote causal links in causal influence models (CIMs), which were introduced by :cite:`everitt2021agent` to allow for causal interventions and the ability to ask counterfactual questions :cite:`pearl2009causality`. (C)IMs have also been extended to multi-agent settings by :cite:`koller2003multi`, :cite:`hammond2021equilibrium`, and :cite:`causalgames`.
 
-.. or causal links depending on whether 
-
-
-.. the accuracy of this prediction is modelled as a utility node, and 
-
-
-.. the decision-maker is the prediction model, which selects a decision rule for its grade prediction (decision node, blue rectangle) based on information about the applicant (chance node, white). The model wants to make accurate predictions (utility node, yellow). This example involves a single-agent, but IMs have been extended to multi-agent settings (:cite:`koller2003multi`, :cite:`hammond2021equilibrium`, and :cite:`multidecision`) and causal influence models (CIMs) :cite:`everitt2021agent` allow for causal interventions and the ability to ask counterfactual questions :cite:`pearl2009causality`. 
-
-.. The action A1 is modeled with a decision node (square) and the reward R2 is modeled as a utility node (diamond), while the states are normal chance nodes (rounded edges). Causal links specify that S1 and A1 influence S2, and that S2 determines R2. The information link S1 → A1 specifies that the agent knows the initial state S1 when choosing its action A1.
-
-.. In this example's ID (Figure :ref:`gradepredfig`), the decision-maker is the model, which must decide on a distribution over predicted grades conditional on its observations of gender and high school that achieves the highest expected utility. In Section ..., we shall see that viewing this as a CID 
-
-..    A decision-maker selects a distribution over its available actions at a decision (decision rule) based on what it knows (the values of its parents in the ID) to maximise its expected utility.
-
-
-
-.. To demonstrate how an ID represents a decision-making process, consider the following:
-
-
-
-.. The university would like the system to make accurate predictions (:math:`Ac`), without treating students differently based on their gender (:math:`Ge`) or race (:math:`R`). 
-.. The prediction model uses the gender of the student and the high school (:math:`HS`) they attended to make its grade prediction. 
-.. We make the following assumptions:
-.. *  Performance at university is evaluated by a student's grades (:math:`Gr`) and this depends on the quality of education (:math:`E`) the student received before university (which depends on the high school they attended). 
-.. *  Where a student attended high school is assumed to be impacted by their race, but not by their gender.
-
-.. In this example's ID (Figure ...), the decision-maker is the model, which must decide on a distribution over predicted grades conditional on its observations of gender and high school that achieves the highest expected utility. In Section ..., we shall see that viewing this as a CID 
-
-
 Statistical and causal IDs have shown promise for a wide variety of applications. In business and medical decision making, statistical IDs provide a simple yet powerful model for optimising decisions by making assumptions explicit and revealing what information is relevant :cite:`gomez2004real`, :cite:`kjaerulff2008bayesian`. Moreover, for the design of safe and fair AI systems, causal IDs have been used to help predict the behaviour of agents arising due to their incentives in an environment :cite:`everitt2021agent`, :cite:`carey2020incentives`, :cite:`everitt2021reward`, :cite:`holtman2020towards`, :cite:`everitt2019modeling`, :cite:`langlois2021rl`, and :cite:`cohen2020asymptotically`. Nevertheless, although Python libraries exist for Bayesian networks, perhaps most prominently *pgmpy* :cite:`ankan2015pgmpy`, these libraries lack specific support for IDs. We found two Python wrappers of C++ influence diagram libraries: *pyAgrum* :cite:`hal-02911619` and *PySMILE* :cite:`pySMILE`. These were limited by usability (hard to install), maintainability (using multiple languages) and versatility (they did not cover multi-agent or causal IDs). A Python library that focuses on implementing statistical and causal IDs is therefore needed to ensure their potential application can be explored, probed, and fully realised.
  
 Consequently, this paper introduces *PyCID* [#]_, a Python library built upon *pgmpy* :cite:`ankan2015pgmpy` and *NetworkX* :cite:`hagberg2008exploring`, which implements IDs and IMs (including their causal and multi-agent variants) and provides researchers and practitioners with convenient methods for analysing decision-making situations. *PyCID* can solve single-agent IMs, find Nash equilibria in multi-agent IMs, and compute the effect of causal interventions in CIMs (e.g., fixing the prediction model in Figure :ref:`gradepredfig` to always predict a high grade regardless of the applicant's information). *PyCID* can also find which variables in an ID admit incentives. For example, positive value of information :cite:`howard1966information` and value of control :cite:`shachter1986evaluating` tell us when an agent can benefit from observing or controlling a variable. Meanwhile, other incentives concepts, recently proposed in :cite:`everitt2021agent`, reveal which variables it can be instrumentally useful to control and when a decision-maker benefits from responding to a variable. Reasoning patterns are a related concept in multi-agent IDs: they analyze why a decision-maker would care about a decision :cite:`pfeffer2007reasoning`, and these can also be computed in *PyCID*.
@@ -247,10 +218,6 @@ We believe that *PyCID* can further mature these enquiries.
 *  Instrumental Control Incentives (ICI)
    
 .. [#] Nodes can be specified further as admitting indirect or direct Value of Control.
-   
-.. In this paper, we limit ourselves to describing the intuitive meaning of each of these concepts, and procedures for identifying whether these concepts can arise, based on the graphical structure alone. For formal definitions, we refer the reader to :cite:`everitt2021agent`. Nevertheless, the *PyCID* library also includes functions - `quantitative_voi` and `quantitative_voc` - that use the model (rather than just the graph) to compute the VoI and VoC.
-
-.. Although we refer the interested reader to :cite:`everitt2021agent` for full incentive definitions, we shall provide each incentive's graphical criterion as we demonstrate how to use *PyCID* to find them with the same examples that were used in :cite:`everitt2021agent`. Because :cite:`everitt2021agent` proved that all of these incentives are sound and complete, we can find whether a node admits a certain incentive using just CIDs (not CIMs); however, *PyCID* also provides functions - `quantitative_voi` and `quantitative_voc` - that return the quantitative VoI and VoC of variables in a CIM.
 
 Value of Information (VoI)
 ++++++++++++++++++++++++++
@@ -356,8 +323,6 @@ We now turn to Value of Control (VoC) and Instrumental Control Incentives (ICI) 
 **VoC Definition:** For a CIM :math:`\mathcal{M}`, the **value of control** for a non-decision node :math:`X \in \textbf{V} \setminus \textbf{D}` is :math:`\underset{\pi}{max}\underset{g^X}{max}\mathcal{U}^i_{\mathcal{M}_{g^X}}(\pi) - \underset{\pi}{max}\mathcal{U}^i_{\mathcal{M}}(\pi)`. :math:`\mathcal{M}_{g^X}` denotes the CIM :math:`\mathcal{M}` after intervening on :math:`X` with any CPD, :math:`g^X`, that respects the graph.
 
 **VoC Graphical Criterion**: A single decision CID, :math:`\mathcal{G}`, admits **positive value of control** for a node :math:`X \in \textbf{V} \setminus \{D\}` if and only if there is a directed path :math:`X \dashrightarrow U` in the requisite graph :math:`\mathcal{G}_{req}`.
-
-.. let :math:`\mathcal{M}_{X \not\rightarrow D}` and :math:`\mathcal{M}_{X \rightarrow D}` be :math:`\mathcal{M}` modified by respectively removing and adding the edge :math:`X \rightarrow D`. The **value of information** for :math:`X` is then :math:`\mathcal{U}^i_{\mathcal{M}_{X \rightarrow D}}(\pi) - \mathcal{U}^i_{\mathcal{M}_{X \not\rightarrow D}}(\pi)`.
 
 Although VoC is a useful concept, it does not consider whether it is actually possible for an agent to control that variable. Therefore, :cite:`everitt2021agent` introduce Instrumental Control Incentives, which can be intuitively understood as follows: if the agent got to choose :math:`D` to influence :math:`X` independently of how :math:`D` influences other aspects of the environment, would that choice matter? In other words, is controlling :math:`X` instrumentally useful for maximising utility? The graphical criteria for ICI in a single-decision CID is:
    
@@ -475,37 +440,6 @@ The following command tells us that the second player (agent) receives expected 
    
    macid.expected_utility(context={'D1':'d', 'D2': 'c'},
                            agent=2)
-
-
-
-.. **Advertising example:** An electronics company uses an AI system to automate the advertising of their products to customers online. The products are of different quality (:math:`X`) and the AI must decide (:math:`D^1`) whether to advertise it on an upmarket or downmarket online store. Customers must decide (:math:`D^2`) whether they want to buy the advertised product and they will only be happy (:math:`U^2`) if it is of high quality; however, they can only infer the quality of a product indirectly through where it's advertised. The AI wants to maximise profit (:math:`U^1`) for the company. It is more expensive to advertise a low rather than a high quality product on the upmarket store because one has to pay to get through that store's quality control. It costs the same to advertise any product on the downmarket store.
-   
-.. .. code-block:: python
-   
-..    macid = pycid.MACID(
-..       [
-..          ("X", "D1"),
-..          ("X", "U2"),
-..          ("X", "U1"),
-..          ("D1", "D2"),
-..          ("D1", "U1"),
-..          ("D2", "U1"),
-..          ("D2", "U2"),
-..       ],
-..       # specifies each agent's decision and utility nodes.
-..       agent_decisions={1: ["D1"], 2: ["D2"]},
-..       agent_utilities={1: ["U1"], 2: ["U2"]},
-..    )
-   
-..    macid.draw()
-   
-.. .. figure:: macid_relevance.PNG
-..    :align: center
-..    :figclass: bht
-   
-..    A MACID for the **Advertising example** (Left) and its corresponding relevance graph (Right) (plotted using *PyCID*). :label:`macidfig`
-   
-.. Figure :ref:`macidfig` (Left) shows that in *PyCID*, consistent with CIDs, chance nodes in MACIDs are drawn as circles, decision nodes are drawn as rectangles, and utility nodes are drawn as diamonds. However, because we now have more than one player, we reserve colouring to denote agent membership; each agent is assigned a unique colour.
    
 Strategic relevance is a useful concept for analysing decisions made in games; it asks which other decisions' decision rules need to be already be known before we can optimise a particular decision rule. :cite:`koller2003multi` introduced the graphical criterion *s-reachability* for determining this from the graph:
    
@@ -519,57 +453,6 @@ Using *PyCID*, lines 1 and 2 below evaluate to `True`, which tells us that each 
       macid.is_r_reachable('D1', 'D2')
       macid.is_r_reachable('D2', 'D1')
       pycid.RelevanceGraph(macid).draw()
-   
-
-.. Game Theory in Multi-agent (Causal) Influence Models
-.. +++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. In this section, we show how to parameterise a MACID as a MACIM using the Prisoner's Dilemma, which is probably the best known simultaneous and symmetric two-player game. Next, we will show how to compute Nash equilibria.
-   
-.. **Prisoner's Dilemma:** Two prisoners, suspected of committing a robbery together, are isolated and urged to confess.
-.. Each is concerned only with getting the shortest possible prison sentence for himself and each must decide whether to confess without knowing his partner’s decision. Both prisoners, however, know the consequences of their decisions. Each year spent in prison can be represented as -1 utility and so the payoff matrix for this game (or Normal form) is given in Figure :ref:`pdfig`.
-
-.. .. figure:: pri_dil.PNG
-..    :align: center
-..    :scale: 60%
-..    :figclass: bht
-   
-..    Normal form game giving the payoffs for each player in Prisoner's dilemma. Player 1 (2) is the row (column) player. :label:`pdfig`
-   
-.. .. code-block:: python
-    
-..    macid = pycid.MACID(
-..       [
-..          ("D1", "U1"),
-..          ("D1", "U2"),
-..          ("D2", "U1"),
-..          ("D2", "U2"),
-..       ],
-..       agent_decisions={1: ['D1'], 2: ['D2']},
-..       agent_utilities={1: ['U1'], 2: ['U2']},
-..    )
-   
-..    d1_dom = ['c', 'd']   
-..    d2_dom = ['c', 'd']
-   
-..    agent1_payoff = np.array([[-1, -3], [0, -2]])    
-..    agent2_payoff = np.transpose(agent1_payoff)
-   
-..    macid.add_cpds(
-..       D1=d1_dom,
-..       D2=d2_dom,
-..       U1=lambda d1, d2: agent1_payoff[d1_dom.index(d1),
-..                                     d2_dom.index(d2)],
-..       U2=lambda d1, d2: agent2_payoff[d1_dom.index(d1),
-..                                     d2_dom.index(d2)]
-..    )
-   
-.. We can draw the MACID in the same way as for CIDs:
-   
-.. .. code-block:: python
-   
-..    macid.draw()
-   
 
 We now turn to finding NE in games. We use :math:`\pi_{\textbf{A}}` to denote player :math:`i`'s set of decision rules for decisions :math:`\textbf{A} \subseteq \textbf{D}^i`, given a partial policy profile :math:`\pi_{-\textbf{A}}` over all of the other decision nodes in a MA(C)ID, :math:`\mathcal{M}`. We write :math:`\mathcal{U}^i_{\mathcal{M}}(\pi_{\textbf{A}}, \pi_{\textbf{-A}})` to denote the expected utility for player :math:`i` under the policy profile :math:`\pi = (\pi_{\textbf{A}}, \pi_{\textbf{-A}})`.
 
