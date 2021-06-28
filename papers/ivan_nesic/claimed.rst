@@ -453,7 +453,7 @@ need to be specified.
 
 Although possible, hyper-parameter search is not considered in this
 processing stage. The rason being, we want to make use of Kubeflow’s hyper-parameter
-search capabilities leveraged through Katib [george2020katib]_ in
+search capabilities leveraged through Katib [katib]_ in
 the future.
 
 .. figure:: trainstage.png
@@ -469,7 +469,7 @@ goes into production. Evaluating classification performance against the
 target labels has been a common metric since the early days of machine learning,
 therefore we have also developed evaluation components, with confusion matrix
 support for instance. But taking TrustedAI measures into account is a newly emerging practice.
-Therefore, components for AI Fairness, AI Explainability [aix360] and AI
+Therefore, components for AI Fairness, AI Explainability [aix360]_ and AI
 Adversarial Robustness have been also added to the component library.
 
 Blessing Components
@@ -600,9 +600,9 @@ References
 
 .. [art] Adversarial Robustness Toolbox, https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last accessed 18 Feb 2021
 
-.. [aif360] AI Fairness 360 Toolkit, https://github.com/Trusted-AI/AIF360. Last accessed 18 Feb 2021
+.. [aif360] Rachel K. E. Bellamy et al. *AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias*, arXiv:1810.01943, October 2018
 
-.. [aix360] AI Explainability 360 Toolkit, https://github.com/Trusted-AI/AIX360 Last accessed 18 Feb 2021
+.. [aix360] Vijay Arya et al. One Explanation Does Not Fit All: A Toolkit and Taxonomy of AI Explainability Techniques, arXiv:1909.03012, September 2019
 
 .. [bias] Steinbock, Bonnie (1978). *Speciesism and the Idea of Equality*, Philosophy, 53 (204): 247–256, doi:10.1017/S0031819100016582
 
@@ -622,7 +622,7 @@ References
 
 .. [kubeflow] https://www.kubeflow.org/ Last accessed 18 Feb 2021
 
-.. [george2020katib] George et al., *A Scalable and Cloud-Native Hyperparameter Tuning System*, arXiv:2006.02085, June 2020
+.. [katib] George et al. *A Scalable and Cloud-Native Hyperparameter Tuning System*, arXiv:2006.02085, June 2020
 
 .. [tf] Martín Abadi et al. *TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems*, arXiv:1603.04467v2, March 2016
 
