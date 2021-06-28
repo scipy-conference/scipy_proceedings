@@ -644,7 +644,7 @@ References
 
 .. [nifi] https://nifi.apache.org/
 
-.. [nodered] https://nodered.org/
+.. [nodered] Chaczko, Zenon and Braun, Robin, *Learning data engineering: Creating IoT apps using the node-RED and the RPI technologies*, 16th International Conference on Information Technology Based Higher Education and Training (ITHET), 2017
 
 .. [knime] https://www.knime.com/
 
