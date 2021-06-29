@@ -652,7 +652,7 @@ References
 
 .. [rabix] Gaurav Kaushik et al., *RABIX: AN OPEN-SOURCE WORKFLOW EXECUTOR SUPPORTING RECOMPUTABILITY AND INTEROPERABILITY OF WORKFLOW DESCRIPTIONS*, Preceedings of the Pacific Symposium on Biocomputing, Pages 154-165, 2017
 
-.. [nextflow] https://www.nextflow.io/
+.. [nextflow] Di Tommaso, P., Chatzou, M., Floden, E. et al., *Nextflow enables reproducible computational workflows.* Nature Biotechnology Issue 35, Pages 316–319, 2017), https://doi.org/10.1038/nbt.3820
 
 .. [openwdl] https://openwdl.org/
 
