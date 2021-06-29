@@ -664,7 +664,7 @@ References
 
 .. [tfeager] Akshay Agrawal et al., *TensorFlow Eager: A Multi-Stage, Python-Embedded DSL for Machine Learning*, Proceedings of the 2nd SysML Conference, 2019
 
-.. [tfdataset] https://www.tensorflow.org/api_docs/python/tf/data/Dataset
+.. [tfdataset] Steven W. D. Chien et al., *Characterizing Deep-Learning I/O Workloads in TensorFlow*, IEEE/ACM 3rd International Workshop on Parallel Data Storage - Data Intensive Scalable Computing Systems (PDSW-DISCS), 2018,  https://doi.org/10.1109/PDSW-DISCS.2018.00011
 
 .. [tfimgprep] https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image_dataset_from_directory
 
