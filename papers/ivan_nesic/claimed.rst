@@ -530,6 +530,16 @@ like jupyter notebooks and scripts, to a container image and then
 transpiling a Kubeflow component out of it.
 We are currently in the process of implementing a tool that would facilitate this workflow.
 The name of the tool is C3 [c3]_, and it stands for CLAIMED component compiler.
+Currently, transpiling from notebooks to Kubeflow Pipeline components is supported.
+In addition, publishing these components to component repositories will also be possible.
+C3 already suports publishing components to Machine Learning Exchange (MLX) [mlx]_, an open source
+asset repository for notebooks, pipelines, data sets, machine learning models and pipeline
+components. Figure :ref:`c3inaction` ilustrates the concept.
+
+
+.. figure:: c3inaction.png
+
+   C3 - The CLAIMED Component Compiler transpiles and publishes pipeline components for different target platforms :label:`c3inaction`
 
 Import/Export of components to/from Galaxy
 ------------------------------------------
@@ -701,3 +711,5 @@ References
 .. [jupyter_standard] Perkel, Jeffrey M. *Why Jupyter is data scientists' computational notebook of choice.* Nature, Volume 563, Number 7732, Page 145+, 2018
 
 .. [lowcode] Apurvanand Sahay et al., *Supporting the understanding and comparison of low-code development platforms*, Pages 171-178, IEEE 46th Euromicro Conference on Software Engineering and Advanced Applications (SEAA), https://doi.org/10.1109/SEAA51224.2020.00036, 2020
+
+.. [mlx] https://github.com/machine-learning-exchange/mlx, Accessed: 29 of June, 2021
