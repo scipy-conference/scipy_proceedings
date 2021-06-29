@@ -40,7 +40,9 @@ Introduction
 The Dark Energy Spectroscopic Instrument (DESI) experiment is a cosmological redshift survey. 
 The survey will create the most detailed 3D map of the Universe to date, using position and redshift information from over 30 million galaxies. 
 During operation, around 1000 CCD frames per night (30 per exposure) are read out from the instrument and transferred to NERSC for processing and analysis. 
-The data is processed in near-real time in order to monitor survey progress and update the observing schedule for the following night. 
+Each frame contains 500 2D spectrograph traces from galaxies, standard stars (for calibration), or just the sky (for background subtraction).
+These traces must be extracted from the CCD frames taking into account optical effects from the instrument, telescope, and the Earth’s atmosphere.
+Redshifts are measured from the extracted The data is processed in near-real time in order to monitor survey progress and update the observing schedule for the following night.
 Periodically, a complete reprocessing of all data observed to-date is performed and made available as data release to the collaboration and eventually released to the public.
 
 The DESI spectral extraction code is an implementation of the *spectro-perfectionism* algorithm, described in :cite:`BS10`.
@@ -52,6 +54,7 @@ The existing state of the art implementation utilizes a divide and conquer frame
 The code utilizes the Message Passing Interface (MPI) via `mpi4py` to exploit both multi-core and multi-node parallelism (:cite:`DALCIN20051108`).
 The application uses multidimensional array data structures provided by NumPy along with several linear algebra and special functions from the NumPy and SciPy libraries (:cite:`harris2020array`, :cite:`2020SciPy-NMeth`).
 Several expensive kernels are implemented using Numba just-in-time compilation (:cite:`numba`).
+All input and output files are stored on disk using the FITS file format.
 The application is parallelized by dividing an image into thousands of small patches, performing the extraction on each individual patch in parallel, and stitching the result back together.
 
 .. figure:: patch-extraction.png
@@ -73,7 +76,7 @@ The goal of this work is to speed up the DESI experiment's data processing pipel
 .. [#] https://docs.nersc.gov/systems/cori/
 .. [#] https://docs.nersc.gov/systems/perlmutter/
 
-In early 2020, the team began reimplementing the existing extraction code [#]_ by reconsidering the problem.
+In early 2020, the team began reimplementing the existing extraction code `specter` [#]_ by reconsidering the problem.
 The DESI spectral extraction problem is fundamentally an image processing problem which historically have been well-suited to GPUs.
 However, in many places, the existing CPU version of the code used loops and branching logic rather than vector or matrix-based operations.
 We performed a significant refactor switching key parts of the analysis to matrix-based operations which would be well suited to massive GPU parallelism.
@@ -85,7 +88,7 @@ We describe our iterative approach to porting and optimizing the application usi
 We use a combination of CuPy and JIT-compiled CUDA kernels via Numba for GPU-acceleration. 
 In order to maximize use of resources (both CPUs and GPUs), we use MPI via mpi4py and CUDA Multi-Process Service.
 We discuss the lessons we learned during the course of this work that will help guide future efforts of the team and inform other science teams looking to leverage GPU-acceleration in their Python-based data processing applications.
-We project that new extraction code [#]_ running on Perlmutter will achieve a 20x improvement in per-node throughput compared to the current production throughput on Cori Haswell.
+We project that new extraction code `gpu_specter` [#]_ running on Perlmutter will achieve a 20x improvement in per-node throughput compared to the current production throughput on Cori Haswell.
 
 .. [#] https://github.com/desihub/specter
 .. [#] https://github.com/desihub/gpu_specter
@@ -291,6 +294,9 @@ Overlapping Compute and IO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 At this point, we observed that reading the input data and writing the output results accounted for approximately 25%-30% of the total wall time to process 30 frames from a single exposure in series using a single node.
+The input data is read by a single MPI rank, transferred to GPU memory, and then broadcast to other MPI ranks using CUDA-aware MPI.
+After extraction, each MPI rank transfers its results back to CPU memory and the results are gathered to the root MPI rank.
+The root MPI rank combines the results and writes the output to a FITS file on disk.
 Using spare CPU cores, we were able to hide most of this IO latency and better utilize the resources available on a node.
 When there are multiple frames processed per node, the write and read steps between successive frames can be interleaved with computation.
 
