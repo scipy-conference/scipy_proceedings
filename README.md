@@ -120,8 +120,9 @@ In addition to the following list, we break up the deadlines in the respective d
 - May 28: 1st Draft for Submission
 - May 28–June 24: Open Review Period
 - May 28: Reviewers Assigned
-- June 10: Initial Complete Review
+- June 17: Initial Complete Review
 - June 24: Final Recommendation and Comprehensive Review Deadlines
+- July 1: Final Author Revision Deadline
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 - July 7: Time Window for Publishing Conference Ready Proceedings
 
@@ -158,6 +159,7 @@ have final say in whether to accept or reject a paper.
 - April 6: Authors invited to submit full papers
 - May 28: 1st Draft for Submission
 - May 28–June 24: Open Review Period
+- July 1: Final Author Revision Deadline
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
@@ -361,7 +363,7 @@ change in question, then that change should be requested and made before the
 ### Reviewer Deadlines
 
 - May 28: Reviewers Assigned
-- June 10: Initial Complete Review
+- June 17: Initial Complete Review
 - June 24: Final Recommendation and Comprehensive Review Deadlines
 
 ### Reviewer Workflow
@@ -455,7 +457,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 - April 6: Authors invited to submit full papers
 - May 28–June 24: Open Review Period
 - May 28: Reviewers Assigned
-- June 10: Initial Complete Review
+- June 17: Initial Complete Review
     - Editors should verify that reviews have been completed
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 
