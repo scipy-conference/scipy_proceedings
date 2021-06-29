@@ -333,15 +333,28 @@ Overlapping compute and IO in this manner effectively hides the intermediate rea
 Results
 -------
 
-Throughout development, we performed a standard benchmark after major feature implementations and to track progress over time. 
+Throughout development, we performed a standard benchmark after major feature implementations to track progress over time.
 For DESI, a useful and practical benchmark of performance is the number of frames that can be processed per node-time on NERSC systems.
 Specifically, we use the throughput measure *frames-per-node-hour* (FPNH) as the figure of merit (FoM) for this application.
+This figure enables DESI to cost out how much data it can process given a fixed allocation of compute resources.
+
+A summary of benchmark results by major feature milestone is shown in Figure :ref:`fom-progress` and listed in Table :ref:`benchmarktable`.
 The benchmark uses data from a single exposure containing 30 CCD frames.
+After major feature implementations, we typically perform a scan of hyperparameter values to identify the optimal settings.
+For example, after the "batch-subbundle" implementation, the optimal number of wavelength bins per patch changed from 50 to 30.
 The baseline FoM for this application on the Edison and Cori supercomputers is 27.89 FPNH and 40.15 FPNH, respectively.
-Since the Perlmutter system is not available at the time of writing, we estimate the expected performance by running the benchmark on an NVIDIA DGX-A100.
+The initial refactor improved the CPU-only performance on Cori Haswell by more than 50%.
+Our initial GPU port achieved 6.15 FPNH on Cori GPU nodes, an unimpressive mark compared to the baseline CPU benchmarks.
+Using visual profiling to guide optimization effort, we were able to iterively improve the performance to 362.2 FPNH on Cori GPU nodes.
+
+Since the Perlmutter system is not available at the time of writing, we estimate the expected performance by running the benchmark on an NVIDIA DGX-A100 system.
 A Perlmutter GPU node will have the same NVIDIA A100 GPUs as the DGX system and the newer AMD Milan CPU compared to the AMD Rome CPU on DGX.
 The projected FoM for this application on the new Perlmutter supercomputer is 575.25 FPNH, a roughly 20x improvement over the Edison baseline.
-A summary of benchmark results by major feature milestone is shown in Figure :ref:`fom-progress` and listed in Table :ref:`benchmarktable`.
+
+Going forward, the team will need to re-evaluate where to refocus optimization efforts.
+The performance of the spectral extraction step is now comparable to other steps in the DESI data processing pipeline.
+We are currently evaluating other steps in the DESI pipeline for GPU acceleration.
+The DESI team may also opt to spend the improved efficiency to perform more compute intensive processing if there is a scientific opportunity.
 
 .. figure:: desi-fom-progress.png
    :alt: DESI FoM Progress
@@ -364,6 +377,8 @@ A summary of benchmark results by major feature milestone is shown in Figure :re
    +--------------------+---------+--------------------+-------+---------------+--------------------+----------------+--------+
    | cpu-refactor       | Cori    | Haswell            | 2     | `-`           | 32                 |  830.2         |  65.05 |
    +--------------------+---------+--------------------+-------+---------------+--------------------+----------------+--------+
+   | initial-gpu        | CoriGPU | Skylake/V100       | 1     | 1             | 1                  |  585.5 [*]_    |   6.15 |
+   +--------------------+---------+--------------------+-------+---------------+--------------------+----------------+--------+
    | multi-gpu          | CoriGPU | Skylake/V100       | 2     | 4             | 8                  |  611.6         |  88.30 |
    +                    +---------+--------------------+-------+---------------+--------------------+----------------+--------+
    |                    | DGX     | Rome/A100          | 2     | 4             | 16                 |  526.8         | 102.51 |
@@ -381,6 +396,7 @@ A summary of benchmark results by major feature milestone is shown in Figure :re
    |                    | DGX     | Rome/A100          | 1     | 4             | 22                 |  187.7         | 575.25 |
    +--------------------+---------+--------------------+-------+---------------+--------------------+----------------+--------+
 
+.. [*] Note that the `initial-gpu` benchmark only processed a single frame instead of all 30 frames from an expoosure.
 
 Conclusion
 ----------
