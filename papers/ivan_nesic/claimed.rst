@@ -650,7 +650,7 @@ References
 
 .. [weka] https://www.cs.waikato.ac.nz/ml/weka/
 
-.. [rabix] https://rabix.io/
+.. [rabix] Gaurav Kaushik et al., *RABIX: AN OPEN-SOURCE WORKFLOW EXECUTOR SUPPORTING RECOMPUTABILITY AND INTEROPERABILITY OF WORKFLOW DESCRIPTIONS*, Preceedings of the Pacific Symposium on Biocomputing, Pages 154-165, 2017
 
 .. [nextflow] https://www.nextflow.io/
 
