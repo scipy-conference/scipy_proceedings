@@ -32,13 +32,11 @@ CLAIMED, a visual and scalable component library for Trusted AI
 
 Introduction
 ============
-
-Monolithic scripts are often used for prototyping, but for production deployments, we need tools like
-Slurm [slurm]_, Snakemake [snakemake]_, QSub [qsub]_, HTCondor [htcondor]_, Apache Nifi [nifi]_,
-NodeRED [nodered]_, KNIME [knime]_, Galaxy [galaxy]_, 
-Reana [reana]_, WEKA [weka]_, Rabix [rabix]_, Nextflow [nextflow]_, OpenWDL [openwdl]_, CWL [cwl]_
-or Cromwell [cromwell]_.
-We found that these tools, even when used in conjunction, support only a subset of our requirements:
+In our Hospital Research Department we regularly have Citizen Data Scientists (CDS) [citizends]_
+(in our case, mostly medical doctors) working on large corpora of clinical data.
+Often, monolithic scripts are used for prototyping, lacking quality and reproducibility.
+Therefore, in cooperation with CDS we've defined the following requirements for a new way
+of applying data-driven clinical research:
 
 - low-code / no-code environment for rapid prototyping with visual editing and jupyter notebooks
 - seamless scaling during development and deployment
@@ -51,13 +49,20 @@ We found that these tools, even when used in conjunction, support only a subset 
 - data lineage
 - collaboration support
 
-Therefore we have built an extensible component library to be used in low-code / no-code
-environments called CLAIMED - the visual
+We've evaluated the following software tools but we found that these tools,
+even when used in conjunction, support only a subset of our requirements:
+Slurm [slurm]_, Snakemake [snakemake]_, QSub [qsub]_, HTCondor [htcondor]_, Apache Nifi [nifi]_,
+NodeRED [nodered]_, KNIME [knime]_, Galaxy [galaxy]_, 
+Reana [reana]_, WEKA [weka]_, Rabix [rabix]_, Nextflow [nextflow]_, OpenWDL [openwdl]_, CWL [cwl]_
+or Cromwell [cromwell]_.
+
+To not reinvent the wheel but rather fill the gap,  we have built an extensible component library 
+to be used in low-code / no-code environments called CLAIMED - the visual
 **C**\ omponent **L**\ ibrary for **A**\rtificial **I**\nteligence (AI), **M**\achine Learning (ML),
 **E**\xtract, Transform, Load (ETL) and **D**\ ata Science.
 In the following section we elaborate on the implementation
 details followed by a description of an exemplary pipeline to showcase
-the capabilities of CLAIMED. We continue on to elaborate on different ideas
+the capabilities of CLAIMED. We continue to elaborate on different ideas
 how CLAIMED can be improved in the "Future Work" section, finally followed by the conclusion.
 
 Implementation
@@ -681,3 +686,5 @@ References
 .. [sphn] https://sphn.ch/
 
 .. [sib] https://www.sib.swiss/
+
+.. [citizends] Mullarkey, Matthew T. et al., *Citizen Data Scientist: A Design Science Research Method for the Conduct of Data Science Projects*, Extending the Boundaries of Design Science Theory and Practice, Pages 191-205, 2019, Springer International Publishing, ISBN 978-3-030-19504-5
