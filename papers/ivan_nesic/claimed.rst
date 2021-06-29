@@ -662,7 +662,7 @@ References
 
 .. [covidata] Joseph Paul Cohen et al. *COVID-19 Image Data Collection: Prospective Predictions Are the Future*, arXiv:2006.11988, 2020
 
-.. [tfeager] https://www.tensorflow.org/guide/eager/
+.. [tfeager] Akshay Agrawal et al., *TensorFlow Eager: A Multi-Stage, Python-Embedded DSL for Machine Learning*, Proceedings of the 2nd SysML Conference, 2019
 
 .. [tfdataset] https://www.tensorflow.org/api_docs/python/tf/data/Dataset
 
