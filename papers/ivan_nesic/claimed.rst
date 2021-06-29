@@ -20,7 +20,7 @@ CLAIMED, a visual and scalable component library for Trusted AI
    supporting various computer languages, working on various data flow editors and
    running on diverse execution engines.
    To demonstrate its utility, we constructed a workflow composed exclusively of CLAIMED components.
-   For this purpose, we made use of a publicly available CT scans dataset [covidata]_
+   For this purpose, we made use of a publicly available Computed Tomography (CT) scans dataset [covidata]_
    and created a deep learning model, which is supposed to classify exams as either
    COVID-19 positive or negative. The pipeline was built with Elyra's Pipeline Visual Editor,
    with support for local, Airflow and Kubeflow execution.
@@ -598,7 +598,7 @@ CLAIMED will improve reproducibility of data centric work even further.
 References
 ----------
 
-.. [art] Adversarial Robustness Toolbox, https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last accessed 18 Feb 2021
+.. [art] Maria-Irina Nicolae, Mathieu Sinn, Minh Ngoc Tran, Beat Buesser, Ambrish Rawat, Martin Wistuba, Valentina Zantedeschi, Nathalie Baracaldo, Bryant Chen, Heiko Ludwig, Ian M. Molloy, Ben Edwards *Adversarial Robustness Toolbox*, arXiv:1807.01069, November 2019
 
 .. [aif360] Rachel K. E. Bellamy et al. *AI Fairness 360: An Extensible Toolkit for Detecting, Understanding, and Mitigating Unwanted Algorithmic Bias*, arXiv:1810.01943, October 2018
 
@@ -612,15 +612,15 @@ References
 
 .. [elyra] Elyra AI, https://github.com/elyra-ai. Last accessed 18 Feb 2021
 
-.. [kubernetes] Kubernetes, https://kubernetes.io/. Last accessed 18 Feb 2021
+.. [kubernetes] David Bernstein et al. *Containers and Cloud: From LXC to Docker to Kubernetes*, IEEE Cloud Computing (Volume: 1, Issue: 3), September 2014)
 
 .. [jupyter] Thomas Kluyver et al. *Jupyter Notebooks – a publishing format for reproducible computational workflows*, Positioning and Power in Academic Publishing: Players, Agents and Agendas, 87-90, doi:10.3233/978-1-61499-649-1-87, 2016
 
-.. [kfserving] KFServing, https://www.kubeflow.org/docs/components/serving/kfserving Last accessed 18 Feb 2021
+.. [kfserving] Clive Cox and Dan Sun and Ellis Tarn and Animesh Singh and Rakesh Kelkar and David Goodwin, *Serverless inferencing on Kubernetes*,  Workshop on "Challenges in Deploying and Monitoring Machine Learning System" at ICML 2020
 
 .. [lime] Marco Tulio Ribeiro et al. *"Why Should I Trust You?": Explaining the Predictions of Any Classifier*, Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, San Francisco, CA, USA, pp. 1135–1144 (2016), doi:10.1145/2939672.2939778
 
-.. [kubeflow] https://www.kubeflow.org/ Last accessed 18 Feb 2021
+.. [kubeflow] Debo Dutta and Xinyuan Huang, *Consistent Multi-Cloud AI Lifecycle Management with Kubeflow*, OpML, 2019
 
 .. [katib] George et al. *A Scalable and Cloud-Native Hyperparameter Tuning System*, arXiv:2006.02085, June 2020
 
@@ -630,13 +630,13 @@ References
 
 .. [ect] https://github.com/cloud-annotations/elyra-classification-training/tree/developer_article
 
-.. [slurm] https://slurm.schedmd.com/documentation.html
+.. [slurm] "Yoo, Andy B. and Jette, Morris A. and Grondona, Mark, *SLURM: Simple Linux Utility for Resource Management*, Job Scheduling Strategies for Parallel Processing, Springer, 2003
 
-.. [snakemake] Mölder F, Jablonski KP, Letcher B et al. *Sustainable data analysis with Snakemake* F1000Research, (10), doi:10.12688/f1000research.29032.1, 2021
+.. [snakemake] Köster, Johannes and Rahmann, Sven, *Snakemake—a scalable bioinformatics workflow engine*, Journal of Bioinformatics, Number 19, Volume 28, Pages 2520-2522}, August 2012
 
 .. [qsub] https://en.wikipedia.org/wiki/Qsub
 
-.. [htcondor] https://research.cs.wisc.edu/htcondor/
+.. [htcondor] E M Fajardo et al, *How much higher can HTCondor fly?*, 2015 Journal of Physics.: Conference Series, Volume 664, June 2014
 
 .. [galaxy] Enis Afgan et al. *The Galaxy platform for accessible, reproducible and collaborative biomedical analyses: 2018 update*, Nucleic Acids Research, (46):W537-W544, doi:10.1093/nar/gky379, July 2018
 
@@ -644,15 +644,15 @@ References
 
 .. [nifi] https://nifi.apache.org/
 
-.. [nodered] https://nodered.org/
+.. [nodered] Chaczko, Zenon and Braun, Robin, *Learning data engineering: Creating IoT apps using the node-RED and the RPI technologies*, 16th International Conference on Information Technology Based Higher Education and Training (ITHET), 2017
 
-.. [knime] https://www.knime.com/
+.. [knime] Michael R. Berthold et al., *KNIME - the Konstanz information miner: version 2.0 and beyond*, ACM SIGKDD Explorations Newsletter Volume 11 Issue 1 June 2009 Pages, 26–31 https://doi.org/10.1145/1656274.1656280
 
 .. [weka] https://www.cs.waikato.ac.nz/ml/weka/
 
-.. [rabix] https://rabix.io/
+.. [rabix] Gaurav Kaushik et al., *RABIX: AN OPEN-SOURCE WORKFLOW EXECUTOR SUPPORTING RECOMPUTABILITY AND INTEROPERABILITY OF WORKFLOW DESCRIPTIONS*, Preceedings of the Pacific Symposium on Biocomputing, Pages 154-165, 2017
 
-.. [nextflow] https://www.nextflow.io/
+.. [nextflow] Di Tommaso, P., Chatzou, M., Floden, E. et al., *Nextflow enables reproducible computational workflows.* Nature Biotechnology Issue 35, Pages 316–319, 2017), https://doi.org/10.1038/nbt.3820
 
 .. [openwdl] https://openwdl.org/
 
@@ -662,9 +662,9 @@ References
 
 .. [covidata] Joseph Paul Cohen et al. *COVID-19 Image Data Collection: Prospective Predictions Are the Future*, arXiv:2006.11988, 2020
 
-.. [tfeager] https://www.tensorflow.org/guide/eager/
+.. [tfeager] Akshay Agrawal et al., *TensorFlow Eager: A Multi-Stage, Python-Embedded DSL for Machine Learning*, Proceedings of the 2nd SysML Conference, 2019
 
-.. [tfdataset] https://www.tensorflow.org/api_docs/python/tf/data/Dataset
+.. [tfdataset] Steven W. D. Chien et al., *Characterizing Deep-Learning I/O Workloads in TensorFlow*, IEEE/ACM 3rd International Workshop on Parallel Data Storage - Data Intensive Scalable Computing Systems (PDSW-DISCS), 2018,  https://doi.org/10.1109/PDSW-DISCS.2018.00011
 
 .. [tfimgprep] https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image_dataset_from_directory
 
@@ -672,7 +672,7 @@ References
 
 .. [c3] https://github.com/romeokienzler/c3
 
-.. [tfbook] https://www.oreilly.com/library/view/whats-new-in/9781492073727/
+.. [tfbook] Romeo Kienzler and Jerome Nilmeier, *What's New In TensorFlow 2.x?*, O'Reilly Media, Inc., ISBN: 9781492073710, July 2020
 
 .. [vscode] https://code.visualstudio.com/
 
