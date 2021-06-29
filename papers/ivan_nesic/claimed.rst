@@ -133,30 +133,39 @@ In-depth analysis of these two modes can be found here [tfbook]_.
 Kubeflow
 ~~~~~~~~
 
-Kubeflow [kubeflow]_ is a machine learning pipeline management and execution system
+Having a compute cluster capable of scaling at container level granularity
+calls for a workflow
+execution engine leveraging the advantages of containerization and container
+orchestration by integrating with Kubernetes seamlessly. This is where
+Kubeflow [kubeflow]_ kicks in. It is a machine learning pipeline management and execution system
 running as first class citizen on top of Kubernetes. Beside making use
-of Kubernetes scalability, it allows for reproducible work as machine
-learning pipelines, the results and intermediate artifacts of the
+of Kubernetes scalability, it allows for defining reproducible work products as machine
+learning pipelines, where results and intermediate artifacts of the
 executions are stored in a metadata repository.
 
+Jupyter Notebooks / JupyterLab
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When it comes to collaboration and reproducibility, document centric coding tools
+like Apache Zeppelin or Jupyter Notebooks are a great choice. Recently, JupyterLab [jupyter]_ 
+started setting the standard  for the research and data science community [jupyter_standard]_.
+Therefore we consider Jupyter Lab not only as an Integrated Development Environment (IDE)
+but more as a technology standard practitioners love to work with. 
+
 Elyra
-~~~~~~~~~~~~~~~~
-
+~~~~~
+Visual editing using drag and drop editing in "no code" / "low code" environments is
+gaining popularity [lowcode]_. As a representative of such environments we introduce Elyra.
 Elyra [elyra]_ started as a set of extensions for the JupyterLab ecosystem.
-Here we concentrate on the pipeline editor, which allows for
-expression of machine learning workflows using a drag and drop editor and
-send them for execution on top of different execution engines like Kubeflow or
+Here we concentrate on the pipeline editor, developed by IBM in Open Source
+under supervision of the authors, which allows for
+expression of machine learning workflows using a drag and drop editor. Inspired by CWL [cwl]_ and
+OpenWDL [openwdl]_, Elyra uses an open and interchangeable, JSON based format to represent the
+workflows. This allows Elyra to transpile workflows to different execution engines like Kubeflow or
 Airflow. This means non-programmers can understand and create machine 
-learning workflows on their own. Elyra also supports visualizing
-such pipelines in the browser (e.g. from a github repository).
-
-JupyterLab
-~~~~~~~~~~
-
-JupyterLab [jupyter]_ is one of the most popular development environments for data
-science. Therefore Elyra started to support JupyterLab first. But the
-pipeline editor of Elyra will be supported in other environments as
-well, VSCode [vscode]_ being next on the list.
+learning workflows on their own without coding and at the same time making use of Kubernetes massive scalability. 
+Elyra also ships with a browser extension for visualizing
+such pipelines in the browser (e.g. from a github repository) to improve collaboration.
 
 AI Explainability
 ~~~~~~~~~~~~~~~~~
@@ -688,3 +697,7 @@ References
 .. [sib] https://www.sib.swiss/
 
 .. [citizends] Mullarkey, Matthew T. et al., *Citizen Data Scientist: A Design Science Research Method for the Conduct of Data Science Projects*, Extending the Boundaries of Design Science Theory and Practice, Pages 191-205, 2019, Springer International Publishing, ISBN 978-3-030-19504-5
+
+.. [jupyter_standard] Perkel, Jeffrey M. *Why Jupyter is data scientists' computational notebook of choice.* Nature, Volume 563, Number 7732, Page 145+, 2018
+
+.. [lowcode] Apurvanand Sahay et al., *Supporting the understanding and comparison of low-code development platforms*, Pages 171-178, IEEE 46th Euromicro Conference on Software Engineering and Advanced Applications (SEAA), https://doi.org/10.1109/SEAA51224.2020.00036, 2020
