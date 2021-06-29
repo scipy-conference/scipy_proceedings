@@ -415,10 +415,10 @@ Transform Components
 
 Sometimes, transformations on the metadata, or any other structured
 dataset, are necessary. Therefore, we provide a generic transformation
-component - in the example, we just used it to change to format of the
+component - in the example, we used it to change to format of the
 categories as the original file contained forward slashes which made it
 hard to use on the underlying operating system. This is performed by
-simply specifying a column name and a function that is to be applied.
+specifying a column name and a function that is to be applied.
 
 Filter Components
 ~~~~~~~~~~~~~~~~~
@@ -532,7 +532,7 @@ We are currently in the process of implementing a tool that would facilitate thi
 The name of the tool is C3 [c3]_, and it stands for CLAIMED component compiler.
 Currently, transpiling from notebooks to Kubeflow Pipeline components is supported.
 In addition, publishing these components to component repositories will also be possible.
-C3 already suports publishing components to Machine Learning Exchange (MLX) [mlx]_, an open source
+C3 already supports publishing components to Machine Learning Exchange (MLX) [mlx]_, an open source
 asset repository for notebooks, pipelines, data sets, machine learning models and pipeline
 components. Figure :ref:`c3inaction` ilustrates the concept.
 
