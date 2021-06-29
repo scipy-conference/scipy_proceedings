@@ -672,7 +672,7 @@ References
 
 .. [c3] https://github.com/romeokienzler/c3
 
-.. [tfbook] https://www.oreilly.com/library/view/whats-new-in/9781492073727/
+.. [tfbook] Romeo Kienzler and Jerome Nilmeier, *What's New In TensorFlow 2.x?*, O'Reilly Media, Inc., ISBN: 9781492073710, July 2020
 
 .. [vscode] https://code.visualstudio.com/
 
