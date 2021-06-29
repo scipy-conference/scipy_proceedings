@@ -386,7 +386,7 @@ Pipeline Components
 This section exemplifies each existing category with at
 least one component which has been used for this particular pipeline. 
 There are also other components that are not part of the pipeline,
-so they haven't been shown here.
+so they are not introduced here.
 Please note that the core feature of our software is threefold:
 
 - the CLAIMED component library
@@ -418,7 +418,7 @@ dataset, are necessary. Therefore, we provide a generic transformation
 component - in the example, we used it to change to format of the
 categories as the original file contained forward slashes which made it
 hard to use on the underlying operating system. This is performed by
-specifying a column name and a function that is to be applied.
+specifying a column name and a function that has to be applied.
 
 Filter Components
 ~~~~~~~~~~~~~~~~~
@@ -462,11 +462,11 @@ through hyper-parameters. At this stage, we are using the MobileNetV2, a
 small deep learning neural network architecture with the set of the most
 common parameters. It ships with the TensorFlow distribution - ready to
 use, without any further definition of neurons or layers. As shown in
-figure :ref:`trainingstage`, only a couple of parameters
+Figure :ref:`trainingstage`, only a couple of parameters
 need to be specified.
 
 Although possible, hyper-parameter search is not considered in this
-processing stage. The rason being, we want to make use of Kubeflow’s hyper-parameter
+processing stage. The reason being, we want to make use of Kubeflow’s hyper-parameter
 search capabilities leveraged through Katib [katib]_ in
 the future.
 
@@ -483,14 +483,14 @@ goes into production. Evaluating classification performance against the
 target labels has been a common metric since the early days of machine learning,
 therefore we have also developed evaluation components, with confusion matrix
 support for instance. But taking TrustedAI measures into account is a newly emerging practice.
-Therefore, components for AI Fairness, AI Explainability [aix360]_ and AI
-Adversarial Robustness have been also added to the component library.
+Therefore, components for AI Fairness [aif360]_, AI Explainability [aix360]_ and AI
+Adversarial Robustness [art]_ have been also added to the component library.
 
 Blessing Components
 ~~~~~~~~~~~~~~~~~~~
 
 In Trusted AI (but not limited to) it is important to obtain a blessing of assets like
-generated data, model or report to be published and used by other
+generated data, models or reports to be published and used by other
 subsystems or humans. Therefore, a blessing component uses the results
 of the evaluation components to decide if the assets are ready for
 publishing.
@@ -534,7 +534,7 @@ Currently, transpiling from notebooks to Kubeflow Pipeline components is support
 In addition, publishing these components to component repositories will also be possible.
 C3 already supports publishing components to Machine Learning Exchange (MLX) [mlx]_, an open source
 asset repository for notebooks, pipelines, data sets, machine learning models and pipeline
-components. Figure :ref:`c3inaction` ilustrates the concept.
+components. Figure :ref:`c3inaction` illustrates the concept.
 
 
 .. figure:: c3inaction.png
@@ -543,7 +543,7 @@ components. Figure :ref:`c3inaction` ilustrates the concept.
 
 Import/Export of components to/from Galaxy
 ------------------------------------------
-As seen in Table 2,
+As seen in Table :ref:`toolxreq`,
 Galaxy covers a majority of our requirements already.
 Unfortunately, Galaxy components - called "tools" - are very skewed 
 towards genomics.
@@ -579,18 +579,18 @@ Add CWL support to the Elyra pipeline editor
 
 CWL is a powerful workflow expression language supported already by
 various tools we've evaluated. Currently, Elyra uses its own, 
-proprietary pipeline representation format. Addin support of CWL to Elyra would
+proprietary pipeline representation format. Adding support of CWL to Elyra would
 improve interoperability between different software components. 
-For example, Reana, execution engine used in the particle physics community, and Galaxy
-partially already support CWL. This means it would be possible export
+For example, the Reana execution engine used in the particle physics community, and Galaxy
+(partially) already support CWL. This means it would be possible to export
 pipelines from Elyra to Reana, without the need of transpiling the pipeline.
 Alternatively, Elyra could integrate export and import of CWL into its pipeline editor.
 
 
 Import 3rd party component libraries
 ------------------------------------
-Since the only thing needed for something to become a CLAIMED component
-is to be wrapped in a container image and assigned some meta data,
+Since the only thing needed for arbitrary code to become a CLAIMED component
+is to be wrapped in a container image and to be assigned with meta data,
 it is possible for 3rd party component libraries like those from KNIME or
 Nifi and to be imported into CLAIMED.
 This also holds true for Kubeflow components.
