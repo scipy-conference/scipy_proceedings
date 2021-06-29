@@ -646,7 +646,7 @@ References
 
 .. [nodered] Chaczko, Zenon and Braun, Robin, *Learning data engineering: Creating IoT apps using the node-RED and the RPI technologies*, 16th International Conference on Information Technology Based Higher Education and Training (ITHET), 2017
 
-.. [knime] https://www.knime.com/
+.. [knime] Michael R. Berthold et al., *KNIME - the Konstanz information miner: version 2.0 and beyond*, ACM SIGKDD Explorations Newsletter Volume 11 Issue 1 June 2009 Pages, 26–31 https://doi.org/10.1145/1656274.1656280
 
 .. [weka] https://www.cs.waikato.ac.nz/ml/weka/
 
