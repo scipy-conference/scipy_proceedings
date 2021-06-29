@@ -173,9 +173,10 @@ Finally, we specify the executable we wish to profile along with its arguments.
 The `--stats=true` option generates a set of useful summary statistics that is printed to stdout.
 For a more detailed look at runtime performance, it is useful view the generated report file using the NSight Systems GUI. 
 
-In Figure :ref:`nsight-early-profile`, we show a screenshot from an early profile of our GPU port using the NSight Systems GUI.
 Nsight Systems provides a zoomable timeline view that allows us to visualize the performance of our code.
 Using Nsight Systems, we can see the regions of our code that we marked with NVTX wrappers, as well as the lower level memory and kernel operations.
+In Figure :ref:`nsight-early-profile`, we show a screenshot from an early profile of our GPU port using the NSight Systems GUI.
+At a high-level, we see that memory transfers and kernel executions, respectively, account for 3% and 97% of the time spent on GPU.
 From this profile, we identified that approximately 85% of the runtime of the application is spent in the "decorrelate" step of the algorithm.
 We also discovered an unexpected performance issue near the end patch extraction that we were able to solve using NumPy advanced array indexing.
 The execution time of the `decorrelate` method is dominated by the eigenvalue decomposition operations. 
@@ -227,8 +228,9 @@ In Figure :ref:`multi-gpu-mpi-mps`, we show how performance scales with the numb
 The solid colored lines indicate the improved performance as we increase the number of GPU used.
 Different colors represent varying degrees of the number of MPI ranks per GPU.
 In this case, using 2 MPI ranks per GPU seems to saturate performance and we observe a slight degradation in performance oversubscribing further.
+We reached the GPU memory limit when attempting to go beyond 4 MPI ranks per GPU.
 The measurements for the analysis shown here were performed on test node at NERSC using 4 NVIDIA V100 GPUs.
-The Perlmutter system will use NVIDIA A100 GPUs which have more cores and significantly more memory than the V100s.
+The Perlmutter system will use NVIDIA A100 (40GB) GPUs which have more cores and significantly more memory than the V100 (16GB) GPUs.
 A similar analysis showed that we could go up to 5 MPI ranks per GPU on a test system with A100s.
 We note that while this configuration maximizes the expected GPU utilization on a Perlmutter with 4 A100 GPUs, the 64-core AMD Milan CPU is only at 31.25% utilization with 20 MPI ranks.
 Later on, we will discuss one way to utilize a few of these spare CPU cores.
