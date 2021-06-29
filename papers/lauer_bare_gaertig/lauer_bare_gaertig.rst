@@ -739,11 +739,11 @@ and (:ref:`forcePiercyLauerBareGaertig`) reduces to
 Conclusion
 ----------
 
-This article shows that classical tools from mathematical physics, such as conformal mappings and Taylor-expansions, are still relevant and indispensable in times of digitization and wide use of numerics.
+This article showed that classical tools from mathematical physics, such as conformal mappings and Taylor-expansions, are still relevant and indispensable in times of digitization and wide use of numerics.
 
-As an example, by using ``SymPy`` as a tool for symbolic mathematics it is shown that a popular approximation of the eccentric annular Couette flow force in modern system simulation tools is actually the leading-order term of a Taylor-expansion of the corresponding concentric annular force. 
+As an example, ``SymPy`` was used as a tool for symbolic mathematics in order to demonstrate that a popular approximation of the eccentric annular Couette flow force in modern system simulation tools is actually the leading-order term of a Taylor-expansion of the corresponding concentric annular force. 
 
-This force is calculated as a special case of the more general eccentric annular Couette flow by postprocessing the resulting velocity distribution. The flow velocity is analytically obtained by solving the corresponding Stokes problem with the help of conformal mappings, i.e. holomorphic functions in the complex plane.
+This force is calculated as special case of the more general eccentric annular Couette flow by postprocessing the resulting velocity distribution. Here, the velocity profile is analytically obtained by solving the equivalent Stokes problem with the help of conformal mappings, i.e. holomorphic functions in the complex plane.
 
 ..   
    The main ``SymPy`` functions used in the solving process are ``im, re, subs, Sum, simplify`` and ``lambdify`` and the main routines in the postprocessing are ``diff, integrate`` and ``series``.
@@ -757,8 +757,8 @@ This force is calculated as a special case of the more general eccentric annular
 
    ``SymPy`` performed particularly well in the application of a bilinear conformal mapping (i.e. the Möbius transform). In case of the bipolar transformation, manual assistance had to be provided when separating real and imaginary parts of the conformal map. Furthermore, the authors realized that the ``series``- and ``simplify``-routines have some difficulties with terms involving square roots. 
 
-A further application field of ``SymPy`` in analytical methods in the context of PDEs may be homogenization. Since in homogenization, asymptotic expansions are substituted into the PDE and limiting problems are obtained in an algorithmical way, ``SymPy`` might prove to be a valuable supporting tool. 
-A starting point could be the introductory example from the classical textbook [BP89]_, which is worked out and compared to a FEM-solution obtained by COMSOL in [B14]_. Furthermore, due to similar equations in rotationally symmetric electromagnetic problems (e.g. [LL60]_), related applications of conformal mappings and Taylor-expansions with ``SymPy`` in electromagnetism are certainly possible.
+The utilization of analytical method is not solely restricted to fluid dynamics. Another application of ``SymPy`` in the context of PDEs in general could be homogenization. There, asymptotic expansions are substituted into the PDE and limiting problems are obtained in an algorithmical way, so ``SymPy`` might prove to be a valuable supporting tool. 
+A starting point could be the introductory example from [BP89]_, which is worked out and compared to a FEM-solution obtained by COMSOL in [B14]_. Furthermore, due to similar equations in axisymmetric electromagnetic problems (e.g. [LL60]_), corresponding usage of conformal mappings and Taylor-expansions with ``SymPy`` is certainly possible there.
 
 The authors think, that these methods may not only be applicable to mathematical physics but could be helpful in other areas as well, e.g. for understanding neural networks. Already available work described in [H10]_ and [H12]_ points in that direction and ``SymPy`` might be of great help in such areas, too.
 
