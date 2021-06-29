@@ -44,7 +44,7 @@ The data is processed in near-real time in order to monitor survey progress and 
 Periodically, a complete reprocessing of all data observed to-date is performed and made available as data release to the collaboration and eventually released to the public.
 
 The DESI spectral extraction code is an implementation of the *spectro-perfectionism* algorithm, described in :cite:`BS10`.
-The process of extracting 1D spectra from 2D spectrograph traces for all 500 targets per frame is computationally intensive and has been the primary focus of optimization efforts for several years :cite:`stephey`.
+The process of extracting 1D spectra from 2D spectrograph traces for all 500 targets per frame is computationally intensive and has been the primary focus of optimization efforts for several years (:cite:`osti_1412701`, :cite:`stephey`).
 The DESI data processing pipeline is predominantly implemented using the Python programming language.
 A strict requirement from the DESI data processing team is to keep the code implementation in Python.
 
