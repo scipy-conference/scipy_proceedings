@@ -101,7 +101,18 @@ GPU Implementation
 ------------------
 
 The existing CPU implementation uses NumPy and SciPy (BLAS and LAPACK) for linear algebra, numba just-in-time compilation for specialized kernels, and mpi4py (MPI) for multi-core and multi-node scaling.
-The code is parallelized to run on multiple CPU cores and nodes using a Single Program Multiple Data (SPMD) programming pattern enabled by MPI through mpi4py. 
+The code is parallelized to run on multiple CPU cores and nodes using a Single Program Multiple Data (SPMD) programming pattern enabled by MPI through mpi4py.
+The structure of the program is illustrated in Figure :ref:`syncio-flow`, which highlights the main MPI communication points.
+
+.. figure:: syncio-flow.png
+   :alt: Program structure
+   :align: center
+   :figclass: bht
+   :scale: 50%
+
+   An illustration of the program structure highlighting main MPI communication points. Flow runs from top to bottom.
+   :label:`syncio-flow`
+
 In order to leverage the compute capabilities of GPU devices and adhere to the DESI Python requirement, we decided to use a GPU-accelerated Python library.
 The main considerations for heterogeneous CPU-GPU computing are to minimize data movement between the CPU host and the GPU device and to feed the GPU large chunks of data that can be processed in parallel.
 Keeping those considerations in mind, we left rest of the GPU programming details to external libraries.
