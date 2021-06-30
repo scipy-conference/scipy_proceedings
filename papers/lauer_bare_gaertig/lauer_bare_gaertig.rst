@@ -78,7 +78,7 @@ Utilizing the capabilities of the open-source Computer Algebra System ``SymPy`` 
 2. Does eccentricity :math:`\varepsilon = b/\delta` change this dependency and, if so, how exactly?
 
 Furthermore, the velocities and forces obtained by solving the Stokes problem (i.e. the linear part of the Navier-Stokes system) with ``SymPy`` are compared to corresponding numerical solutions of the full, nonlinear Navier-Stokes equations, obtained from the commercially available Finite Volume tool ANSYS-CFX.
-Finally this article concludes with a note on the eccentric annular Poiseuille flow (that is a flow due to a pressure difference) and finishes with a comment on comnbined Couette-Poiseuille flow velocities and forces.
+Finally this article concludes with a note on the eccentric annular Poiseuille flow (that is a flow due to a pressure difference) and finishes with a comment on combined Couette-Poiseuille flow velocities and forces.
  
 
 Material and methods
