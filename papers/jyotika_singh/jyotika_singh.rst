@@ -1,6 +1,7 @@
 :author: Jyotika Singh
 :email: singhjyotika811@gmail.com
 :institution: ICX Media, Inc.
+:orcid: 0000-0002-5442-3004
 
 :bibliography: paper
 
