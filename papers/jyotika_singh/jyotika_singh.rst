@@ -2,6 +2,8 @@
 :email: singhjyotika811@gmail.com
 :institution: ICX Media, Inc.
 
+:bibliography: paper
+
 ---------------------------------------------------
 Analyzing YouTube using Python and Machine Learning
 ---------------------------------------------------
@@ -64,14 +66,14 @@ Natural Language Processing
 
 Natural language processing (NLP) is the computer manipulation of natural language.
 Natural language refers to language coming from a human, either written or spoken.
-[enwiki]_ defined NLP as follows: NLP is a subfield of linguistics, computer science,
+:cite:`enwiki` defined NLP as follows: NLP is a subfield of linguistics, computer science,
 and artificial intelligence concerned with the interactions between computers and
 human language, in particular how to program computers to process and analyze
 large amounts of natural language data. The result is a computer capable of
 "understanding" the contents of documents, including the contextual nuances of
 the language within them. At one extreme, it could be as simple as counting word
 frequencies to compare different writing styles.
-[bird]_ mentions, "At the other extreme, NLP involves “understanding” complete
+:cite:`bird` mentions, "At the other extreme, NLP involves “understanding” complete
 human utterances, at least to the extent of being able to give useful responses
 to them. NLP is challenging because Natural language is messy. There are few
 rules and human language is ever evolving.".
@@ -86,17 +88,18 @@ Some of the common NLP tasks on text data include the following.
   into predefined categories such as person names, organizations, locations,
   medical codes, time expressions, quantities, monetary values, percentages, etc.
   Some popular Python libraries that can be leveraged to perform named entity
-  recognition for a variety of different entities include SpaCy [spacy]_ and
-  NLTK [bird]_.
+  recognition for a variety of different entities include SpaCy :cite:`spacy` and
+  NLTK :cite:`bird`.
 
 2. Keyphrase extraction
 
   Keyphrase extraction is the task of automatically selecting a small set of
-  phrases that best describe a given free text document. [CoNLL]_
+  phrases that best describe a given free text document. :cite:`CoNLL`
   Some popular tools that can be used for keyphrase extraction as mentioned in
-  this article [#]_ include Gensim [rehurek2011gensim]_ and RAKE-NLTK[#]_.
-  Another way keyphrase extraction can be performed is using NLTK [bird]_ methods.
-  This implementation is included in the pyYouTubeAnalysis [pyYouTubeAnalysis]_ library.
+  this article [#]_ include Gensim :cite:`rehurek2011gensim` and RAKE-NLTK[#]_.
+  Another way keyphrase extraction can be performed is using NLTK :cite:`bird` methods.
+  This implementation is included in the pyYouTubeAnalysis :cite:`pyYouTubeAnalysis`
+  library.
 
   .. [#] https://towardsdatascience.com/extracting-keyphrases-from-text-rake-and-gensim-in-python-eefd0fad582f
   .. [#] https://pypi.org/project/rake-nltk/
@@ -207,7 +210,7 @@ as follows.
   1. Wrappers of YouTube Data API [#]_ : Libraries that act as wrappers and
   provide a way to use YouTube Data API V3.
 
-  2. pyYouTubeAnalysis [pyYouTubeAnalysis]_ [#]_ : This library allows the user to
+  2. pyYouTubeAnalysis :cite `pyYouTubeAnalysis` [#]_ : This library allows the user to
   run searches, collect videos and comments, and define search params (search keywords,
   timeframe, and type). Furthermore, the project includes error handling that allows
   code execution to continue and not stop due to unforeseen errors while interacting with
@@ -312,8 +315,8 @@ following data cleaning techniques have been found to be helpful cleaning method
   Some NLP models tend to do very well for a particular style of language and
   word usage. On social media, the language seen can be accompanied with
   various incorrectly spelled words, also known as typos.
-  PySpellChecker [OpenSubtitles2016]_ [#]_, Autocorrect [#]_ and Textblob
-  [textblob]_ are examples of open-source tools that can be used for spelling
+  PySpellChecker :cite:`OpenSubtitles2016` [#]_, Autocorrect [#]_ and Textblob
+  :cite:`textblob` are examples of open-source tools that can be used for spelling
   corrections.
 
 .. [#] https://pypi.org/project/pyspellchecker/
@@ -330,8 +333,9 @@ following data cleaning techniques have been found to be helpful cleaning method
   Nonetheless, detection and translation is a popular technique while dealing
   with multiple different languages.
   Some examples of Python libraries that can be used for language detection
-  include langdetect [langdetect]_, Pycld2 [#]_, Textblob [textblob]_, and Googletrans [#]_.
-  Translate [#]_ and Googletrans can be used for language translations.
+  include langdetect :cite:`langdetect`, Pycld2 [#]_, Textblob :cite:`textblob`,
+  and Googletrans [#]_. Translate [#]_ and Googletrans can be used for language
+  translations.
 
 .. [#] https://pypi.org/project/pycld2/
 .. [#] https://pypi.org/project/googletrans/
@@ -462,7 +466,7 @@ talked about generated using keyphrase extraction implementation in pyYouTubeAna
 where the text passes through data cleaning techniques prior to keyphrase extraction
 that is inbuilt within the implementation. Application of these techniques prior
 to extracting keyphrases eliminated the noisy samples and improved the overall
-results quality. Additionally, wordcloud [wordcloud]_ [#]_ was used for creating
+results quality. Additionally, wordcloud :cite:`wordcloud` [#]_ was used for creating
 the visualization. Word cloud is a form of term occurrence visualization where
 the size of the appearance of a term in the word cloud is directly proportional
 to its occurrence count. Travel that would entail easier implementation of social
@@ -527,7 +531,7 @@ and American locations which correlate with travel restriction reductions in som
 of the places.
 
 This analysis, including data collection from social media, keyphrase extraction,
-and NER, was performed using pyYouTubeAnalysis library [pyYouTubeAnalysis]_ [#]_.
+and NER, was performed using pyYouTubeAnalysis library :cite:`pyYouTubeAnalysis` [#]_.
 Similar analysis for content other than "travel vlogs" can be performed for custom
 time windows using similar tools and the other NLP libraries mentioned in this effort.
 
@@ -552,46 +556,3 @@ engagement and interest in different types of content. Combining these statistic
 with inferences from NLP techniques such as named-entity recognition (NER) and
 keyphrase extraction are found to be helpful in trend analysis, analytics, and
 observing correlations and affinities of user engagement with social media.
-
-
-References
-----------
-.. [enwiki] Wikipedia contributors. "Natural language processing." Wikipedia,
-          The Free Encyclopedia. Wikipedia, The Free Encyclopedia,
-          21 May. 2021. Web. 27 May. 2021.
-
-.. [bird] Bird, Steven, et al. Natural Language Processing with Python.
-          O’Reilly Media, 2009.
-
-.. [CoNLL] Bennani-Smires, Kamil & Musat, Claudiu & Hossmann, Andreea & Baeriswyl,
-          Michael & Jaggi, Martin. (2018). Simple Unsupervised Keyphrase Extraction
-          using Sentence Embeddings. 10.18653/v1/K18-1022
-
-.. [spacy] Honnibal, Matthew and Montani, Ines and Van Landeghem, Sofie and Boyd, Adriane.
-          (2020). spaCy: Industrial-strength Natural Language Processing in Python.
-          Zenodo. 10.5281/zenodo.1212303. https://doi.org/10.5281/zenodo.1212303
-
-.. [pyYouTubeAnalysis] Singh, J. (2021). jsingh811/pyYouTubeAnalysis:
-          pyYouTubeAnalysis: YouTube data requests and NER on text (v1.0)
-          [Computer software]. Zenodo. 10.5281/ZENODO.4915746.
-          https://doi.org/10.5281/ZENODO.4915746
-
-.. [textblob] Loria, Steven. (2018). textblob Documentation. Release 0.15, 2.
-          https://textblob.readthedocs.io/en/dev/
-
-.. [langdetect] Shuyo, Nakatani. (2010). Language Detection Library for Java.
-          http://code.google.com/p/language-detection/,
-          https://pypi.org/project/langdetect/
-
-.. [OpenSubtitles2016] P Lison, J Tiedemann. (2016).
-          OpenSubtitles2016: Extracting Large Parallel Corpora from Movie and TV Subtitles.
-          In Proceedings of the 10th International Conference on Language Resources and Evaluation
-          (LREC 2016). https://www.aclweb.org/anthology/L16-1147.
-
-.. [rehurek2011gensim] Rehurek, R., & Sojka, P. (2011). Gensim–python framework for vector
-          space modelling. NLP Centre, Faculty of Informatics, Masaryk University,
-          Brno, Czech Republic, 3(2).
-
-.. [wordcloud] Oesper, L., Merico, D., Isserlin, R., & Bader, G. D. (2011).
-          WordCloud: a Cytoscape plugin to create a visual semantic summary of
-          networks. Source Code for Biology and Medicine, 6(1), 7.
