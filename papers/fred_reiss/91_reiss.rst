@@ -23,7 +23,7 @@ Natural Language Processing with Pandas DataFrames
 
     Most areas of Python data science have standardized on using Pandas
     DataFrames for representing and manipulating structured data in memory.
-    Natural Language Processing, not so much.
+    Natural Language Processing (NLP), not so much.
     
     We believe that Pandas has the potential to serve as a universal data
     structure for NLP data. DataFrames could make every phase of NLP easier,
@@ -47,7 +47,7 @@ Background and Motivation
 -------------------------
 
 This paper describes our work on applying general purpose data analysis tools
-from the Python data science stack to natural language processing (NLP)
+from the Python data science stack to Natural Language Processing (NLP)
 applications.  This work is motivated by our experiences working on NLP
 products from IBM's *Watson* portfolio, including IBM Watson Natural Language
 Understanding :cite:`nlu` and IBM Watson Discovery :cite:`discovery`.  
@@ -56,23 +56,23 @@ These products include many NLP components, such as state-of-the-art machine
 learning models, rule engines for subject matter experts to write business
 rules, and user interfaces for displaying model results.  However, the bulk of
 the development work on these products involves not the core NLP components,
-but data manipulation tasks like converting between the output formats of
-different models; manipulating training data; analyzing the outputs of models
-for correctness; and serializing data for transfer across programming language
+but data manipulation tasks, such as converting between the output formats of
+different models, manipulating training data, analyzing the outputs of models
+for correctness, and serializing data for transfer across programming language
 and machine boundaries.
 
-Although the raw input to our NLP algorithms is natural language text, most of
+Although the raw input to our NLP algorithms is text in a natural language, most of
 the code in our NLP systems operates over machine data. Examples of this
 machine data include:
 
 * Relational tables of training data in formats like CoNLL-U :cite:`DBLP:journals/corr/abs-2004-10643`
 * Model outputs formatted as tables for comparison against training data
 * Arrays of dense tensors that represent BERT embeddings :cite:`devlin-etal-2019-bert`
-* Trees that represent dependency parses 
+* Graphs that represent dependency-based parse trees 
 * Relational tables that represent document structure
 
-This focus on mundane engineering tasks at the expense of core AI algorithms is
-not unique to IBM, or indeed to natural language processing :cite:`10.5555/2969442.2969519`.
+This focus on data manipulation tasks instead of core AI algorithms is
+not unique to IBM, or indeed to NLP :cite:`10.5555/2969442.2969519`.
 However, NLP is unique in the quantity of redundant data structures and
 low-level algorithms that different systems reimplement over and over again.
 One can see this trend clearly in open source NLP libraries, where free access
@@ -87,24 +87,22 @@ many others.
 
 Here is how some popular Python NLP libraries represent spans:
 
-* *spaCy* :cite:`spacy` has a Python class ``Span`` that represents a range of tokens. The
+* *spaCy* :cite:`spacy` has a Python class named ``Span`` that represents a range of tokens. The
   locations of these tokens are stored inside the class ``Doc``. The  
   ``__getitem__`` method of ``Doc`` returns instances of the class ``Token``, which
   encodes the location of the token as a beginning character offset and a
   length in characters :cite:`spacy-api`.
-* *Stanza* :cite:`DBLP:journals/corr/abs-2003-07082` has a Python class
+* *Stanza* :cite:`DBLP:journals/corr/abs-2003-07082` has a Python class also
+  named
   ``Span`` that represents a range of *characters*.  Information about the
-  tokens that are contained within the character range are stored in the
+  tokens that are contained within the character range is stored in the
   ``tokens`` property of the ``Span`` as objects of type ``Token``
-  :cite:`stanza-src`.  These classes ``Span`` and ``Token`` are different from
-  the ``spaCy`` classes of the same names.
-* ``nltk`` :cite:`Loper02nltk:the` models text as a Python list. The elements
-  of the list can be Python strings or tuples, depending on the stage of
-  processing. Spans over tokens are represented by slices of the list.
-  Character location information is not generally available
+  :cite:`stanza-src`.  These classes, ``Span`` and ``Token``, are different from
+  the ``spaCy`` classes with the same names.
+* ``nltk`` :cite:`Loper02nltk:the` models text as a Python list. Depending on the stage of processing, the elements of the list can be Python strings or tuples. Spans over tokens are represented by slices of the list, and information about character locations is generally not available
   :cite:`10.5555/1717171`.
-* ``transformers`` :cite:`wolf2020huggingfaces` does not generally model spans, 
-  instead leaving that aspect up to the user.  One exception is the library's
+* ``transformers`` :cite:`wolf2020huggingfaces` does not generally model spans; 
+  instead it leaves that choice up to the user.  One exception to this policy is the library's
   ``TokenClassificationPipeline`` class, which has a method ``group_entities`` that
   returns a Python dictionary for each entity.  The fields ``start`` and
   ``end`` in this dictionary hold the span of the entity, measured in
@@ -118,7 +116,7 @@ Here is how some popular Python NLP libraries represent spans:
 
 
 All of these representations are incompatible with each other. Users who want
-to use two of these libraries together will need to write code to convert
+to use any two of these libraries together will need to write code to convert
 between their outputs.  Users are also left to invent their own algorithms for
 even the most basic operations over spans, including serializing them, finding
 their covered text, determining whether two spans overlap, and finding matches
@@ -126,7 +124,7 @@ between two sets of spans.
 
 The redundancy that these libraries display at the level of individual spans is
 pervasive across all the more complex structures that they extract from text.
-Users and library developers both spend considerable amounts of time reading
+Both users and library developers spend considerable amounts of time reading
 the documentation for these different data structures, writing code to convert
 between them, and reimplementing basic operations over them.
 
@@ -145,15 +143,15 @@ involves domain-specific concepts; and some of these concepts are inconvenient
 to express in Pandas.  For example, the *span* concept that we described in the
 previous section is a crucial part of many applications.  The closest analog to
 a span in Pandas' data model is the ``interval`` type, which represents an
-inteval using a pair of numbers.  When we prototyped some common NLP
+interval using a pair of numbers.  When we prototyped some common NLP
 applications using ``interval`` to represent spans, we needed additional code
 and data structures to track the relationships between intervals and target
 strings; as well as between spans and different tokenizations.  We also needed
-code to distinguish between intervals measured characters and in tokens. All of
+code to distinguish between intervals measured in characters and in tokens. All of
 this additional code negated much of the benefit of the general-purpose tool.
 
 To reduce the amount of code that users would need to write, we started working
-on extensions to Pandas to better cover represent NLP-specific data and to
+on extensions to Pandas to better represent NLP-specific data and to
 support key operations over that data.  We call the library that we eventually
 developed *Text Extensions for Pandas*.
 
@@ -176,7 +174,7 @@ operations for a columnar array object that backs a Pandas ``Series``
 :cite:`pandas-extending`.  Classes
 that extend ``ExtensionArray`` and implement a relatively short list of
 required operations can serve as the backing stores for Pandas ``Series``
-objects while supporting   support nearly all the operations that Pandas
+objects while supporting nearly all the operations that Pandas
 built-in types support, including filtering, slicing, aggregation, and binary
 I/O.
 
@@ -193,29 +191,42 @@ Spans
 We implement character-based spans with a Python class called ``SpanArray``,
 which derives from Pandas' ``ExtensionArray`` base class.  A ``SpanArray``
 object represents a column of span data, and it stores this data internally
-using three Numpy :cite:`harris2020array` arrays, plus a shared reference to
+using three NumPy :cite:`harris2020array` arrays, plus a shared reference to
 the underlying text.
 
 The three arrays that represent a column of span data consist of arrays of
 begin and end offsets (in characters), plus a third array of indices into a
-dictionary of unique document texts. The ``SpanArray`` object also stores a
-shared reference to a dictionary data structure that tracks unique document
-texts.
+table of unique target strings. The ``SpanArray`` object also stores a
+shared reference to this table of strings.
 
-The dictionary data structure is necessary because a Pandas series can contain
-spans from multiple different documents.  Users need to be able to perform
-operations over the containing DataFrames without creating many copies of the
-text of each document.  Dictionaries are append-only and are shared among
-SpanArray objects to facilitate zero-copy operations like filtering and slicing.
+The string table is necessary because a Pandas Series can contain spans over
+many target strings. The spans in the Series might come from multiple
+documents, or they may come from multiple fields of the same document.  Users
+need to be able to perform operations over the containing DataFrames without
+performing many string equality checks or creating many copies of the text of
+each document.  Representing the target text of each span as an index into the
+table allows us to quickly check whether two spans are over the same string.
+The string table also allows the ``SpanArray`` class to track exactly which
+unique strings the array's spans cover. Keeping track of this set of strings is
+important for efficient serialization, as well as for efficiently appending one
+``SpanArray`` to another. As an additional optimization, slicing and filtering
+operations over a ``SpanArray`` do not modify the string table; a slice of an
+array will share the same table as the original array.
+
 
 In addition to spans with character offsets, we also support spans whose begin
-and end offsets are measured in tokens.  Token-based spans are a useful
-construct because most machine learning models and rule engines for NLP operate
-over tokens, not characters.  Evaluation metrics for model result quality also
-tend to operate over tokens.  Representing spans with token offsets can
-facilitate operations like computing token distances between spans and can
-prevent errors that could lead to spans not starting or ending on a token
-boundary.
+and end offsets are measured in tokens.  Most machine learning models and rule
+engines for NLP do not operate over sequences of characters but over sequences
+of *tokens* |---| ranges of characters that correspond to elements like words,
+syllables, or punctuation marks.  Character-based spans are useful for
+comparing, visualizing, and combining the outputs of multiple models, because
+those models may use different tokenizations internally.  When analyzing the
+inputs and outputs of a single model (or rule set, in the case of a rule-based
+NLP system), tokens are a more appropriate unit for the begin and end offsets
+of spans.  Representing spans with token offsets allows for operations like
+computing token distances between spans and can prevent errors that could lead
+to spans not starting or ending on a token boundary.  The loss functions used
+to train most NLP models also tend to operate over tokens.
 
 There can be multiple different tokenizations of the same document, even within
 a single application. When storing token-based span offsets, it is important to
@@ -223,8 +234,8 @@ retain information about which tokenization of which document each token offset
 corresponds to.  The ``TokenSpanArray`` class represents each distinct
 tokenization of a document with an instance of ``SpanArray`` containing the
 locations of the tokens.  The representation of the token-based spans
-themselves consists of three Numpy arrays, holding begin and end offsets (in
-tokens) and a pointer to the ``SpanArray`` containing the token offsts.
+themselves consists of three NumPy arrays, holding begin and end offsets (in
+tokens) and a pointer to the ``SpanArray`` containing the token offsets.
 
 Although it stores the locations of spans as token offsets, the
 ``TokenSpanArray`` class can generate character-based begin and offsets on
@@ -239,7 +250,7 @@ The internal structure of our ``SpanArray`` and ``TokenSpanArray`` extension
 arrays allows for efficient vectorized implementations of common Pandas
 operations like slicing, filtering, and aggregation.  Slicing operations over a
 ``SpanArray`` produce a new ``SpanArray`` with views of the original
-``SpanArray`` object's internal Numpy arrays, avoiding unneccessary copying of
+``SpanArray`` object's internal NumPy arrays, avoiding unnecessary copying of
 span data.
 
 
@@ -247,23 +258,26 @@ Tensors
 -------
 
 *Tensors* |---| dense n-dimensional arrays |---| are another common concept in
-modern natural language processing.  The deep learning models that drive much
+modern NLP.  The deep learning models that drive much
 of state-of-the-art NLP today take tensors as inputs and outputs and operate
-internally over other tensors.  Embeddings, a key part of many NLP algorithms,
-can be efficiently represented with tensors.  Tensors are also useful for more
+internally over other tensors.  Embeddings |---| data structures that encode
+information about a block of text as a dense vector amenable to analysis with 
+algorithms that expect dense input |---| are a key part of many NLP algorithms and can be efficiently represented with tensors.  Tensors are also useful for more
 traditional types of NLP data, such as n-grams and one-hot-encoded feature
 vectors.
 
-Our ``TensorArray`` extension array class represents a Pandas series where each
-element is a tensor.  Internally, we represent the entire series' data as a
+Our ``TensorArray`` extension array class represents a Pandas Series where each
+element is a tensor.  Internally, we represent the entire Series' data as a
 single dense NumPy array. The TensorArray class translates Pandas array
-operations to vectorized operations over the underlying Numpy array.  These
+operations to vectorized operations over the underlying NumPy array.  
+Because CPython :cite:`cpython`, the most common runtime for Python, uses an intepreter to run
+Python code, these
 vectorized operations are much more efficient than iterating over a list of
 tensors.
 
 Since the individual data items in a ``TensorArray`` are actually slices of a
-larger Numpy array, our tensor data type integrates seamlessly with third
-party libraries that accept Numpy arrays.  For example, Figure
+larger NumPy array, our tensor data type integrates seamlessly with third
+party libraries that accept NumPy arrays.  For example, Figure
 :ref:`matplotlib` shows how our tensor data type works with the ``matplotlib``
 :cite:`Hunter:2007` plotting library in a Jupyter notebook.
 
@@ -301,12 +315,12 @@ series.
    leftmost column uses our span extension type to store the position of the
    token.  The rightmost column stores a BERT embedding at that token position.
    The columns in between hold token metadata that was created by aligning the
-   corpus's original tokenization with the language model's tokenization, then
+   corpus' original tokenization with the language model's tokenization, then
    propagating the corpus labels between pairs of aligned tokens.  The notebook
    in which this example appears (available at
    `<https://github.com/CODAIT/text-extensions-for-pandas/blob/master/notebooks/Model_Training_with_BERT.ipynb>`_)
    shows how to use this DataFrame as the input for training a named entity
-   recognition model with the ``sklearn`` libraray.
+   recognition model with the ``sklearn`` library.
    :label:`bert`
 
 
@@ -317,7 +331,7 @@ Many areas of modern NLP involve large collections of documents, and common NLP
 operations can expand the size of this data by orders of magnitude.  Pandas
 includes facilities for efficient serialization of Pandas data types using
 Apache Arrow :cite:`arrow`. Text Extensions for Pandas uses this support to
-convert data in the library's extension types into in Arrow format for
+convert data from the library's extension types into Arrow format for
 efficient storage and transfer.
 
 Efficient binary I/O can make reading and writing NLP corpora orders of
@@ -340,18 +354,18 @@ than reading the corpus in DocBin format with spaCy.
    :label:`readtimes`
 
 Text Extensions for Pandas also supports reading files in the text-based
-formats known as CoNLL and CoNLL-U.  Many benchmark data sets for natural
-language processing are released in these formats. Text Extensions for Pandas
+formats known as CoNLL and CoNLL-U.  Many benchmark datasets for NLP
+are released in these formats. Text Extensions for Pandas
 can convert these files into DataFrames with one line per token, using our span
-extension type to store the location of token and the location of the token's
-containing sentence.
+extension type to store the location of a given token and the location of the sentence
+that contains the token.
 
 Spanner Algebra
 ---------------
 
 In addition to representing span data, NLP applications need to filter,
-transform, and aggregate this data, often in ways that are unique to natural
-language processing.
+transform, and aggregate this data, often in ways that are unique to 
+NLP.
 
 The *document spanners* formalism :cite:`10.1145/2699442` extends the
 relational algebra with additional operations to cover a wide gamut of
@@ -359,8 +373,8 @@ critical NLP operations.
 
 Since it is an extension of the relational algebra, much of document spanners
 can already be expressed with Pandas core operations.  We have implemented
-several of the remaining parts of document spanners as operations over series
-of type Span.
+several of the remaining parts of document spanners as operations over Pandas
+Series of data type Span.
 
 Specifically, we have NLP-specific *join* operations (sometimes referred to as
 "merge") for identifying matching pairs of spans from two input sets, where the
@@ -369,7 +383,7 @@ relationship.  These join operations are crucial for combining the results of
 multiple NLP models, and they also play a role in rule-based business logic.
 For example, a domain expert might need to find out matches of one model that
 overlap with matches of a different model. If the output spans are in the
-"span" columns two DataFrames, ``model_1_out`` and ``model_2_out``, then the
+"span" columns of two DataFrames, ``model_1_out`` and ``model_2_out``, then the
 user can find all such matching pairs by running the following line of code:
 
 .. -----------------------------------------------------|
@@ -391,22 +405,22 @@ of spans over the current document that satisfy a constraint.  Our current
 implementations of *extract* support extracting the set of spans that match a
 regular expression or a gazetteer (dictionary).
 
-We also include a version of the *consolidate* operator, which takes as input a
+We include a version of the *consolidate* operator, which takes as input a
 set of spans and removes overlap among the spans by applying a consolidation
-policy.  This operator is useful for business logic that combines that results
+policy.  This operator is useful for business logic that combines the results
 of multiple models and/or extraction rules as well as for resolving ambiguity
 when a single model produces overlapping spans in its output.
 
 Other Span Operations
 +++++++++++++++++++++
 
-We also support span operations that are not part of the document spanners
+We support span operations that are not part of the document spanners
 formalism but are important for key NLP tasks. These operations include:
 
 * aligning spans based on one tokenization of the document to a different
   tokenization
 
-* *lemmatizing* spans |---| that is, converting the covered text of the span to
+* *lemmatizing* spans |---| that is, converting the text that the span covers to
   a normalized form
 
 * converting sequences of tokens tagged with inside-outside-beginning (IOB)
@@ -431,7 +445,10 @@ to show DataFrames in their own user interfaces. Our extension types also work
 with these interfaces.
 
 There is also an ecosystem of interactive libraries for exploring and
-visualizing Pandas DataFrames.  These libraries also work with our extension
+visualizing Pandas DataFrames. Examples of such libraries include D-Tale
+:cite:`dtale`, Qgrid :cite:`qgrid`, and the Spyder :cite:`spyder` Variable
+Explorer.
+These libraries also work with our extension
 types. Figure :ref:`dtale` shows an example of using Text Extensions for Pandas
 to display span data with the *D-Tale* interactive data analysis tool
 :cite:`dtale`.
@@ -443,9 +460,9 @@ to display span data with the *D-Tale* interactive data analysis tool
    without requiring any changes to those libraries.
    :label:`dtale`
 
-Because our extension types for tensors use Numpy's `ndarray` type for
+Because our extension types for tensors use NumPy's `ndarray` type for
 individual cell values, these extension types work with many tools that accept
-Numpy arrays.  Figure :ref:`matplotlib` shows an example of storing time series
+NumPy arrays.  Figure :ref:`matplotlib` shows an example of storing time series
 in the cells of a DataFrame and plotting those time series directly out of the
 DataFrame using the graphics library ``matplotlib`` in a Jupyter notebook.
 
@@ -459,7 +476,7 @@ shown in Figure :ref:`spandisplay`.
 
 .. figure:: figures/spandisplay.png
 
-   Displaying the contents of a Pandas series of span data in the context of
+   Displaying the contents of a Pandas Series of span data in the context of
    the target document, using the integration between Text Extensions for
    Pandas and Jupyter's APIs for HTML display.  The spans shown in this example
    represent all pronouns in sentences that contain the name "Arthur". We
@@ -476,22 +493,22 @@ NLP Library Integrations
 ------------------------
 
 Text Extensions for Pandas provides facilities for transforming the outputs of
-several common NLP libraries into Pandas DataFrames, using our extensions to
-Pandas to represent NLP concepts.
+several common NLP libraries into Pandas DataFrames to represent NLP concepts.
 
 
 spaCy
 +++++
 
-*spaCy* :cite:`spacy` is a Python library that provides a suite of natural
-language processing models intended for production use.  Users of spaCy access
+*spaCy* :cite:`spacy` is a Python library that provides a suite of NLP
+models intended for production use.  Users of spaCy access
 most of the library's functionality through spaCy *language models*, Python
 objects that encapsulate a pipeline of rule-based and machine learning models.
-A spaCy language model takes as input text in a particular natural language and
-produces many analysis results from the text.
+A spaCy language model takes natural language text as input and extracts  
+features such as parts of speech, named entities, and dependency relationships
+from the text. These features are useful in various downstream NLP tasks.
 
 Our spaCy integration converts the output of a spaCy language model into a
-DataFrame of token information. Figure shows an example of using this
+DataFrame of token information. Figure :ref:`spacymodel` shows an example of using this
 integration to process the first paragraph of the Wikipedia article for the
 film *Monty Python and the Holy Grail*.
 
@@ -501,9 +518,10 @@ film *Monty Python and the Holy Grail*.
    Each row of the DataFrame holds information about a single token, including
    the span of the token and the span of the containing sentence. The code for
    this example is available at `<https://github.com/CODAIT/text-extensions-for-pandas/blob/master/notebooks/Integrate_NLP_Libraries.ipynb>`_.
+   :label:`spacymodel`
 
-Converting from spaCy's internal representation to DataFrames allows users to
-use Pandas operations to analyze and transform the outputs of the language
+Converting from spaCy's internal representation to DataFrames allows usage of
+Pandas operations to analyze and transform the outputs of the language
 model.  For example, users can use Pandas' filtering, grouping, and aggregation
 to count the number of nouns in each sentence:
 
@@ -521,7 +539,7 @@ to count the number of nouns in each sentence:
 ..   :figclass: h
 
 
-Or they could use our span-specific join operations and the Pandas `merge`
+Or they could use our span-specific join operations and Pandas' `merge`
 function to match all pronouns in the document with the person entities that
 are in the same sentence:
 
@@ -553,7 +571,7 @@ We also support using spaCy's `DisplaCy` visualization library to display
 dependency parse trees stored in DataFrames.  Users can filter the output of
 the language model using Pandas operations, then display the resulting subgraph
 of the parse tree in a Jupyter notebook.  This display facility will work with
-any DataFrame that encodes a dependency parse as Pandas Series of token spans,
+any DataFrame that encodes a dependency parse as a Pandas Series of token spans,
 token IDs, and head IDs.
 
 
@@ -576,7 +594,7 @@ metadata, including spans marking the locations of each token.
 Our tensor data type can also represent embeddings from the encoder stage of a
 ``transformers`` language model.  Since the language models in ``transformers``
 have a limited sequence length, we also include utility functions for dividing
-large DataFrames of token information into token into fixed-size windows,
+large DataFrames of token information into fixed-size windows,
 generating embeddings for each window, and concatenating the resulting
 embeddings to produce a new column for the original DataFrame.
 Figure :ref:`bert` shows a DataFrame of token features that includes both a
@@ -585,12 +603,12 @@ token position.
 
 
 
-IBM Watson Natural Languague Understanding
-++++++++++++++++++++++++++++++++++++++++++
+IBM Watson Natural Language Understanding
++++++++++++++++++++++++++++++++++++++++++
 
 Watson Natural Language Understanding :cite:`nlu` is an API that provides access to
 prebuilt NLP models for common tasks across a wide variety of natural
-languagues.  Users can use these APIs to process several thousands documents per
+languages.  Users can use these APIs to process several thousands documents per
 month for free, with paid tiers of the service available for higher data rates.
 
 Our Pandas integration with Watson Natural Language Understanding can translate
@@ -605,11 +623,11 @@ extraction models into Pandas DataFrames. The supported models are:
   as well as information about the sentiment that the document expresses
   towards each keyword.
 * `semantic_roles`, which performs *semantic role labeling*, extracting
-  subject-verb-object triples that describe events that occurred in the text.
+  subject-verb-object triples that describe events which occur in the text.
 * `relations`, which identifies relationships betwen pairs of named entities.
 
 Converting the outputs of these models to DataFrames makes building notebooks
-and applications that analyze these outputs much easier.  For example, two
+and applications that analyze these outputs much easier.  For example, with two
 lines of Python code, users can produce a DataFrame with information about all
 person names that a document mentions:
 
@@ -638,14 +656,15 @@ run over an IBM press release.
    the Watson Natural Language Understanding's ``entities`` model to a
    DataFrame of entity mentions. We then used Pandas filtering operations to
    select the entity mentions of type "Person". The first column holds spans
-   that tell where in the document each mention occurred.
+   that tell where in the document each mention occurred.  The original press 
+   release can be found at `<https://newsroom.ibm.com/2020-12-02-IBM-Named-a-Leader-in-the-2020-IDC-MarketScape-For-Worldwide-Advanced-Machine-Learning-Software-Platform>`_.
    :label:`nluperson`
 
 
 With a few additional steps, users can combine the results of multiple models
 to produce sophisticated document analysis pipelines.  Figure :ref:`nlu` 
 shows a DataFrame with the names of 301 executives extracted from 191 IBM press
-releases by cross-referencing the outputs Watson Natural Language
+releases by cross-referencing the outputs of Watson Natural Language
 Understanding's ``entities`` and ``semantic_roles`` models.
 All of the analysis steps that went into producing this result were done with
 high-level operations from Pandas and Text Extensions for Pandas. Source code 
@@ -670,7 +689,8 @@ IBM Watson Discovery
 ++++++++++++++++++++
 
 IBM Watson Discovery :cite:`discovery` is a document management platform that
-uses intelligent search and text analytics to eliminate data silos and retrieve
+uses intelligent search and text analytics to eliminate barriers to sharing
+data between teams and to retrieve
 information buried inside enterprise data.  One of the key features of the IBM
 Watson Discovery product is *Table Understanding*, a document enrichment model
 that identifies and parses human-readable tables of data in PDF and HTML
@@ -715,7 +735,7 @@ Usage in Natural Language Processing Research
 
 We are using Text Extensions for Pandas in ongoing research on semisupervised
 identification of errors in NLP corpora.
-Pandas' data analysis facilities for provide a powerful substrate
+Pandas' data analysis facilities provide a powerful substrate
 for cross-referencing and analyzing the outputs of NLP models in order to
 pinpoint potentially-incorrect labels. 
 
@@ -726,10 +746,10 @@ We identified over 1300 errors in the corpus and published a corrected version
 of the corpus. We also revisited recent results in named entity recognition
 using the corrected corpus.
 
-Nearly every step of our analyis used Text Extensions for Pandas.  We started
+Nearly every step of our analysis used Text Extensions for Pandas.  We started
 by using our library's input format support to read the model results from the
-16 teams in the data set's original 2003 competition.  Then we used Text
-Extensions for Pandas to pivot convert these outputs from labeled tokens to
+16 teams in the dataset's original 2003 competition.  Then we used Text
+Extensions for Pandas to convert these outputs from labeled tokens to
 DataFrames of <span, label> pairs, with one such pair for each entity mention.
 Using spanner algebra, we cross-referenced these entity mentions with the
 entity mentions to find cases where there was strong agreement among the
@@ -740,9 +760,9 @@ Since we did not have model outputs for the training fold of the corpus, we
 used our library's integration with the ``transformers`` library to retokenize
 this part of the corpus with the BERT tokenizer. Then we used spanner algebra
 to match the corpus's token labels with the corresponding subword tokens from
-the BERT tokenizer. We again used our library's integration with
+the BERT tokenizer. Again, we used our library's integration with
 ``transformers`` to add a column to our DataFrame of tokens containing BERT
-embeddings at each token position as tensors.  Then we used scikit-learn to
+embeddings at each token position as tensors.  Then we used ``scikit-learn`` :cite:`scikit-learn` to
 train an ensemble of 17 token classification models over multiple different
 Gaussian random projections. By cross-referencing the outputs of these models,
 again using Pandas and spanner algebra, we were able to identify a large number
@@ -774,9 +794,6 @@ developed in order to cover a wider variety of token classification corpora and
 to incorporate several of the techniques used in our paper into the Text
 Extensions for Pandas library :cite:`dash-la`.
 
-.. Note we have a paper to appear in DaSH-LA on what the previous paragraph
-   describes. Potentially update a citation here once that paper is available?
-
 
 
 Conclusion
@@ -785,7 +802,7 @@ Conclusion
 This paper has introduced our library, Text Extensions for Pandas. Text
 Extensions for Pandas provides a collection of extension data types,
 NLP-specific operations, and NLP library integrations that turn Pandas
-DataFrams into a universal data structure for managing the machine data that
+DataFrames into a universal data structure for managing the machine data that
 flows through NLP applications.
 
 Text Extensions for Pandas is freely available as both an installable Python
