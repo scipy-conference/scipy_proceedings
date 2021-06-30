@@ -209,7 +209,7 @@ One snippet can have different types of code blocks.
 For example, the snippet in Figure :ref:`ColabPyMOL` has a three blocks of Python code, two blocks of shell commands, and two blocks of bash cell majics with multiple lines of bash commands.
 
 The list snippet for a library will print in a table below the current cell a list of the snippets in the library and a brief description. 
-This table is stored in a pandas dataframe that can be searched with the panda's search function. 
+This table is stored in a pandas dataframe that can be searched with the pandas search function. 
 This table can also be searched for key terms with the search function in the notebook.
 The code block and output can be hidden by clicking on the three blue dots on the left margin of the cell. 
 
@@ -242,29 +242,29 @@ Each library is also archived in zenodo.
    +--------------------+-----------------------------------------------------------+
    | library            | url on GitHub                                             |
    +====================+===========================================================+
-   | xds                | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
+   | xds                | https://github.com/MooersLab/jupyterlab-xdssnips          |
+   |                    | https://github.com/MooersLab/elyra-xdssnips               |
+   |                    | https://github.com/MooersLab/colab-xdssnips               |
+   +--------------------+-----------------------------------------------------------+
+   | cctbx              | https://github.com/MooersLab/jupyterlab-cctbxsnips        |
    |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
    |                    | https://github.com/MooersLab/colab-cctbxsnips             |
    +--------------------+-----------------------------------------------------------+
-   | cctbx              | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
-   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
-   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   | phenix             | https://github.com/MooersLab/jupyterlab-phenixsnips       |
+   |                    | https://github.com/MooersLab/elyra-phenixsnips            |
+   |                    | https://github.com/MooersLab/colab-phenixsnips            |
    +--------------------+-----------------------------------------------------------+
-   | phenix             | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
-   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
-   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   | PyMOL              | https://github.com/MooersLab/jupyterlab-pymolpysnips      |
+   |                    | https://github.com/MooersLab/elyra-pymolpysnips           |
+   |                    | https://github.com/MooersLab/colab-pymolpysnips           |
    +--------------------+-----------------------------------------------------------+
-   | PyMOL              | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
-   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
-   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   | chimerax           | https://github.com/MooersLab/jupyterlab-chimeraxsnips     |
+   |                    | https://github.com/MooersLab/elyra-chimeraxsnips          |
+   |                    | https://github.com/MooersLab/colab-chimeraxsnips          |
    +--------------------+-----------------------------------------------------------+
-   | chimerax           | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
-   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
-   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
-   +--------------------+-----------------------------------------------------------+
-   | prody              | https://github.com/MooersLab/JL-snippets-cctbxsnips       |
-   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
-   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
+   | prody              | https://github.com/MooersLab/jupyterlab-prodysnips        |
+   |                    | https://github.com/MooersLab/elyra-prodysnips             |
+   |                    | https://github.com/MooersLab/colab-prodysnips             |
    +--------------------+-----------------------------------------------------------+
 
 
