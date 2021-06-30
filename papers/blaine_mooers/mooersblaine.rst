@@ -100,7 +100,7 @@ The jupyterlab-snippets extension adds a snippet menu to the JupyterLab menu bar
 The user accesses the snippets through a cascading pulldown menu.
 Each snippet resides in a separate plain text file without any formatting.
 This feature dramatically eases adding new snippets by users and eases keeping the snippets under version control.
-The snippets are stored in the Jupyter data directory (which is found by entering :code:`jupyter --path`; it is in ~/Library/Jupyter/snippets).
+The snippets are stored in the Jupyter data directory (which is found by entering :code:`jupyter --path`; it is in ~/Library/Jupyter/snippets on Mac OS).
 Each snippet library is stored in a separate subfolder, which appears on the menu bar as a part of a cascading pulldown menu (Figure :ref:`snippetCascade`). 
 
 
@@ -204,16 +204,16 @@ This installation snippet was the only one in a notebook that contained more the
 A search box at the top of the list of snippets is used to recover a snippet (Figure :ref:`ColabPyMOL`.
 The user enters a snippet name in the search box to display the snippet and its documentation.
 The user hits the 'Install' button to install the snippet's code at the current position in the  notebook.
-Unlike the Elyra snippets which insert a whole snippet into one code block, a Colab snippet can have multiple code blocks that are inseted into the notebook at the current position of the mouse cursor.
+Unlike the Elyra snippets which insert a whole snippet into one code block, a Colab snippet can have multiple code blocks that are inserted into the notebook at the current position of the mouse cursor.
 One snippet can have different types of code blocks.
 For example, the snippet in Figure :ref:`ColabPyMOL` has a three blocks of Python code, two blocks of shell commands, and two blocks of bash cell majics with multiple lines of bash commands.
 
 The list snippet for a library will print in a table below the current cell a list of the snippets in the library and a brief description. 
-This table is stored in a panda's dataframe that can be searched with the panda's search function. 
+This table is stored in a pandas dataframe that can be searched with the panda's search function. 
 This table can also be searched for key terms with the search function in the notebook.
 The code block and output can be hidden by clicking on the three blue dots on the left margin of the cell. 
 
-Notebooks on Colab open lighting fast, but the user must reinstall their software on each login.
+Notebooks on Colab open very quickly, but the user must reinstall their software on each login.
 We ease this annoying task by supplying the complete chain of installation steps.
 For example, the installation of the molecular graphics program PyMOL requires seven code blocks of different types.
 Some involve the use of curl, and others use conda.
