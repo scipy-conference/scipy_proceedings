@@ -105,7 +105,7 @@ The theoretical methods used here are conformal mappings (inspired by [PHW33]_ a
 
 Solution of the Stokes problem within a concentric annulus for Couette-type flow
 --------------------------------------------------------------------------------
-The solution of the Stokes problem within a concentric annulus for a Couette-type flow is well known, e.g. [LL59]_, and given by
+The solution of the Stokes problem within a concentric annulus for a Couette-type flow is well known, e.g. [LL87]_, and given by
 
 .. math::
    :label: concentricU
@@ -130,7 +130,7 @@ It then follows that
 .. math::
    0
 
-as expected. Further analytical solutions to the Laplace problem for other simple domains such as circles or rectangles can be found in e.g. [G78]_, [BC81]_ or [PP12]_.
+as expected. Further analytical solutions to the Laplace problem for other simple domains such as circles or rectangles can be found in e.g. [G13]_, [BC81]_ or [PP12]_.
 
 Transformation of the eccentric annulus to a simple domain with conformal mappings
 ----------------------------------------------------------------------------------
@@ -298,7 +298,7 @@ Figure :ref:`concentricZU` depicts the velocity distribution in the original *z*
 Mapping rectangles onto eccentric annuli by bipolar coordinate transformations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Another way of solving this problem utilizes conformal mappings related to bipolar coordinates. These coordinates are described in [PHW33]_ and are commonly used in elasticity theory (e.g. [L44]_ and [TG51]_). For this contribution, we slighty adapted this transformation in such a way that it can be applied to the eccentric annulus of Figure :ref:`fig2`. The mapping is given by  
+Another way of solving this problem utilizes conformal mappings related to bipolar coordinates. These coordinates are described in [PHW33]_ and are commonly used in elasticity theory (e.g. [L13]_ and [TG10]_). For this contribution, we slighty adapted this transformation in such a way that it can be applied to the eccentric annulus of Figure :ref:`fig2`. The mapping is given by  
 
 .. math::
    :label: bipolar
@@ -382,7 +382,7 @@ Figure :ref:`rectangularWU` shows a ``Matplotlib``-visualization of the velocity
 By again expressing :math:`\eta` in terms of :math:`x` and :math:`y`, one obtains the very same velocity distribution in the eccentric annulus (in the *z*-plane) as already depicted in Figure :ref:`concentricZU`.
 
    
-It is interesting to remark, that Equations (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) look somehow related to each other due to the logarithm in both relations. However it is not immediately evident that they are actually identical. Nevertheless, due to existence and uniqueness theorems for the Stokes equation from [L69]_, one knows that relations (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) are in fact the same. 
+It is interesting to remark, that Equations (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) look somehow related to each other due to the logarithm in both relations. However it is not immediately evident that they are actually identical. Nevertheless, due to existence and uniqueness theorems for the Stokes equation from [L14]_, one knows that relations (:ref:`concentricUinW`) and (:ref:`rectangularUinW`) are in fact the same. 
 
 Figure :ref:`largeGapCouette` compares these two analytically obtained velocities with results from a 3D computational fluid dynamics simulation (using ANSYS CFX) solving the full Navier-Stokes system. For these computations a velocity of :math:`u_R=-0.4` :math:`\text{m}/\text{s}` is prescribed onto the inner cylinder as boundary condition. All obtained velocities are evaluated along the symmetry axis of the annulus across the larger gap. The inner boundary is then reached on the left side, the outer boundary is hit on the right side of this Figure.  
 
@@ -513,7 +513,7 @@ The fact, that in the current context blood coagulation and hemodynamics are omn
 
 In the case of Poiseuille flow, the righthand-side of the corresponding Stokes equation is non-homogeneous (:math:`dp\neq 0; u_R= 0`); see also Equation (:ref:`stokesPoisseuilleCouette`). Hence, we need to deal with a different mathematical problem here compared to the previous Sections.
 
-However, it possible to reduce the Poiseuille problem to an equivalent Couette problem with prescribed velocities on the boundaries (e.g. [M49]_). That is the idea followed by [PHW33]_, who seek a solution of the form
+However, it possible to reduce the Poiseuille problem to an equivalent Couette problem with prescribed velocities on the boundaries (e.g. [M96]_). That is the idea followed by [PHW33]_, who seek a solution of the form
 
 .. math::
    :label: uPiercyIdea
@@ -649,7 +649,7 @@ And last but not least, again expressing :math:`\xi,\eta` in :math:`x` and :math
    Flow velocity and isocontours for the Poiseuille problem in eccentric annulus (z-plane); most of the fluid flow occurs through the large gap :label:`rectangularZUpiercy`
    
    
-The method described here is not only restricted to fluid dynamics. In elasticity theory, which inspired the work of [PHW33]_, :math:`\Psi` is the harmonic conjugate of the so-called warping- or St. Venant torsion-function :math:`\phi` (see [L44]_ or [M66]_), specified by 
+The method described here is not only restricted to fluid dynamics. In elasticity theory, which inspired the work of [PHW33]_, :math:`\Psi` is the harmonic conjugate of the so-called warping- or St. Venant torsion-function :math:`\phi` (see [L13]_ or [M77]_), specified by 
 
 .. math::
 
@@ -700,7 +700,7 @@ Therefore, the best analytical approximation for the eccentric Couette-Poiseuill
    
    F_{Coue-Pois}\approx F_{Couette}+F_c\left( 1 + a(\kappa)\,\varepsilon^2\right)\,.
 
-Here, :math:`F_c` is the well known Poiseuille flow force that acts upon the inner cylinder in the concentric case (e.g. [BSL06]_) and  :math:`a(\kappa)` is a function of the ratio :math:`\kappa=R_1/R_2` given by  
+Here, :math:`F_c` is the well known Poiseuille flow force that acts upon the inner cylinder in the concentric case (e.g. [BSL07]_) and  :math:`a(\kappa)` is a function of the ratio :math:`\kappa=R_1/R_2` given by  
 
 .. math::
    :label: forceLauerBareGaertig 
@@ -758,7 +758,7 @@ This force is calculated as special case of the more general eccentric annular C
    ``SymPy`` performed particularly well in the application of a bilinear conformal mapping (i.e. the Möbius transform). In case of the bipolar transformation, manual assistance had to be provided when separating real and imaginary parts of the conformal map. Furthermore, the authors realized that the ``series``- and ``simplify``-routines have some difficulties with terms involving square roots. 
 
 The utilization of analytical methods is not solely restricted to fluid dynamics. Another application of ``SymPy`` in the context of PDEs in general could be homogenization. There, asymptotic expansions are substituted into the PDE and limiting problems are obtained in an algorithmical way, so ``SymPy`` might prove to be a valuable supporting tool. 
-A starting point could be the introductory example from [BP89]_, which is worked out and compared to a FEM-solution obtained by COMSOL in [B14]_. Furthermore, due to similar equations in axisymmetric electromagnetic problems (e.g. [LL60]_), corresponding usage of conformal mappings and Taylor-expansions with ``SymPy`` is certainly possible there.
+A starting point could be the introductory example from [BP89]_, which is worked out and compared to a FEM-solution obtained by COMSOL in [B14]_. Furthermore, due to similar equations in axisymmetric electromagnetic problems (e.g. [LL84]_), corresponding usage of conformal mappings and Taylor-expansions with ``SymPy`` is certainly possible there.
 
 The authors think, that these methods may not only be applicable to mathematical physics but could be helpful in other areas as well, e.g. for understanding neural networks. Already available work described in [H10]_ and [H12]_ points in that direction and ``SymPy`` might be of great help in such areas, too.
 
@@ -778,7 +778,7 @@ References
            Applicable Analysis, 2016, 2625-36,
            https://doi.org/10.1080/00036811.2015.1105960           
 
-.. [BSL06] Bird RB, Stewart WE, Lightfoot EN. *Transport phenomena*,
+.. [BSL07] Bird RB, Stewart WE, Lightfoot EN. *Transport phenomena*,
            John Wiley & Sons; 2007,
            ISBN 978-0-470-11539-8
 
@@ -794,7 +794,7 @@ References
            Computer Applications in Engineering Education. 2009, 314-22,
            https://doi.org/10.1002/cae.20208
            
-.. [G78]   Greenberg MD. *Foundations of applied mathematics*, 
+.. [G13]   Greenberg MD. *Foundations of applied mathematics*, 
            Dover; 2013,
            ISBN 978-0-4864-9279-7
            
@@ -809,15 +809,15 @@ References
 .. [K19]   Krebs J. *Optislang in functional development of hydraulic valves*,
            RDO Journal Issue 2, 2019
 
-.. [L69]   Ladyzhenskaya OA. *The mathematical theory of viscous incompressible flow*,
+.. [L14]   Ladyzhenskaya OA. *The mathematical theory of viscous incompressible flow*,
            Martino Publishing; 2014,
            ISBN 978-1-6142-7671-5     
 
-.. [LL60]  Landau LD, Lifshitz EM. *Electrodynamics of continuous media*,
+.. [LL84]  Landau LD, Lifshitz EM. *Electrodynamics of continuous media*,
            Pergamon Press, NY; 1984,
            ISBN 978-0-08-030275-1           
 
-.. [LL59]  Landau LD, Lifshitz EM. *Fluid Mechanics*,
+.. [LL87]  Landau LD, Lifshitz EM. *Fluid Mechanics*,
            Pergamon Press, NY; 1987,
            https://doi.org/10.1016/C2013-0-03799-1
            
@@ -825,7 +825,7 @@ References
            International Journal of Fluid Power, 2021, Vol. 22 (1), 113–146,
            https://doi.org/10.13052/ijfp1439-9776.2214
            
-.. [L44]   Love AU. E, H. *A treatise on the mathematical theory of elasticity*,
+.. [L13]   Love AEH *A treatise on the mathematical theory of elasticity*,
            Cambridge University Press; 2013,
            ISBN 978-1-1076-1809-1
            
@@ -833,11 +833,11 @@ References
            PeerJ Computer Science; 2017,
            https://doi.org/10.7717/peerj-cs.103
            
-.. [M49]   Milne-Thomson LM, *Theoretical Hydrodynamics*,
+.. [M96]   Milne-Thomson LM, *Theoretical Hydrodynamics*,
            Courier Corporation; 1996,
            ISBN 978-0-4866-8970-8                
            
-.. [M66]   Muskhelishvili NI. *Some basic problems of mathematical elasticity theory*,
+.. [M77]   Muskhelishvili NI. *Some basic problems of mathematical elasticity theory*,
            Springer Science & Business Media; 1977,
            https://doi.org/10.1007/978-94-017-3034-1
            
@@ -853,7 +853,7 @@ References
            Supplement 1 to Advances in Heat Transfer. Academic Press, NY; 1978,
            https://doi.org/10.1016/C2013-0-06152-X
            
-.. [TG51]  Timoshenko S, Goodier JN. *Theory of elasticity*, 
+.. [TG10]  Timoshenko S, Goodier JN. *Theory of elasticity*, 
            McGraw-Hill, NY; 2010,
            ISBN 978-0-0707-0122-9            
            
