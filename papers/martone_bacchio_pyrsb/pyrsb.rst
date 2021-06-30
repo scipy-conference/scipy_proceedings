@@ -83,7 +83,7 @@ Debian
 OpenSUSE
 [OPENSUSE]_; this is the best way have a LIBRSB installation to familiarize with PyRSB. 
 However, pre-compiled packages will likely miss compile-time optimizations.
-For this reason, the best performance will be obtained bulding on the target computer.
+For this reason, the best performance will be obtained by bulding on the target computer.
 This can be achieved using one of the several source-based code distributions offering LIBRSB, like Spack
 [SPACK]_,
 or EasyBuild
@@ -281,7 +281,10 @@ It supports transposed operation (in which case the ranges of each block are swa
 Symmetric operation is supported, too; in this case, an additional `transposed` contribution is considered for each block.
 
 As depicted in the first RSB illustration (Fig. :ref:`bayer02`), the order of the sparse blocks in memory proceeds along a *space-filling curve*.
-That order of processing the individual blocks can help delivering data from the memory to the cores faster; therefore it is prioritized.
+That order of processing the individual blocks can help to deliver data from the memory to the cores faster. 
+For this reason the individual cores attempt to follow that order whenever possible.
+
+.. comment for the reviewer: wrt the above: we do not wish to go in details of contention and locking of submatrices -- for that, one may peek in [Martone14].
 
 To have enough work for each thread, RSB arranges to have more blocks than threads.
 For this and other trade-offs involved,
@@ -605,7 +608,7 @@ As said earlier, the RSB format is suited best to scenarios with large matrices 
 These are also the scenarios where the usage of ``autotune``, which refines the default layout according to the operands at hand, is most convenient.
 
 Figure :ref:`bench:tuned:rsb:vs:csr:speedup:vs:matrix` shows results with autotuned instances.
-Here ``autotune`` has been called for each combination of matrix, operands layout, NRHS, numerical type.
+Here ``autotune`` has been called for each combination of matrix, operands layout, NRHS, and numerical type.
 The median speedup over CSR here (circa :math:`28.8\times`) is almost twice the one before autotuning.
 
 .. figure:: bench_tuned_rsb_vs_csr_speedup_vs_matrix.pdf
@@ -617,12 +620,12 @@ The median speedup over CSR here (circa :math:`28.8\times`) is almost twice the 
    :label:`bench:tuned:rsb:vs:csr:speedup:vs:matrix`
 
 With respect to non-autotuned RSB samples, the application of ``autotune`` brought a median improvement of :math:`1.6\times`.
-This includes all samples, inclusive the lower quartile, with speedup between :math:`1\times` (no speedup) and :math:`1.2\times`, which we nevertheless regard as `ineffective` (see next subsection's discussion).
+This includes all samples, inclusive of the lower quartile, with speedup between :math:`1\times` (no speedup) and :math:`1.2\times`, which we nevertheless regard as `ineffective` (see next subsection's discussion).
 An overview of which matrix benefited more, and which less from autotuning is given by
 Fig. :ref:`bench:autotuning:speedup:vs:matrix`.
 There is no clear trend to see here.
 We observe that most of the cases (70%) benefited from autotuning.
-It's worth to mention that the longer the time limit chosen to run SpMM before taking each performance sample, the less the fluctuation we would have encountered here, and times we chose were quite tight.
+It's worth mentioning that the longer the time limit chosen to run SpMM before taking each performance sample, the less the fluctuation we would have encountered here, and times we chose were quite tight.
 
 .. figure:: bench_autotuning_speedup_vs_matrix.pdf
 
@@ -637,7 +640,7 @@ Speedups of tuned RSB vs CSR have median :math:`29\times` with the ``'C'`` layou
 also within RSB the ``'C'`` layout performs a few percentage points better than ``'F'``.
 
 As seen in this section, autotuning can speedup RSB a further bit, but not always.
-The next section quantifies the cost of autotuning in practical terms, for either effective and ineffective outcome.
+The next section quantifies the cost of autotuning in practical terms, for both effective and ineffective outcomes.
 
 
 The Cost of RSB Autotuning
@@ -688,7 +691,7 @@ These results shall convince users that using ``autotune`` is a good option most
    There is no guarantee autotuning improves SpMM performance.
    Actually, autotuning would be unnecessary, if we were able to guess blockings optimal under all circumstances.
    Indeed, without further analysis, one may even speculate that the default RSB blocking matrices where autotuning was ineffective, was also the *best*.
-   In our experiment, ineffective autotuning searches **costed** :math:`33\times` RSB (only :math:`2.8\times` CSR) SpMM iterations in the median case.
+   In our experiment, ineffective autotuning searches **cost** :math:`33\times` RSB (only :math:`2.8\times` CSR) SpMM iterations in the median case.
    Note that for certain matrices (1,16,21) autotuning was always effective: this is why these have no associated box here.
    :label:`bench:lost:autotuning:in:rsb:ops:vs:matrix`
 
@@ -715,6 +718,8 @@ Acknowledgments
 This work has been financed by **PRACE-6IP**, under Grant agreement ID: 823767, under Project name `LyNcs`.
 LyNcs is one of 10 collaborations supported by PRACE-6IP, WP8 `"Forward Looking Software Solutions"`.
 Performance results have been obtained on systems in the test environment **BEAST** (`Bavarian Energy Architecture & Software Testbed`) at the Leibniz Supercomputing Centre.
+We are grateful to reviewer Meghann Agarwal for her energetic help in improving the quality of this article.
+
 
 .. [PYRSB] *PyRSB*. (2021, May). Retrieved May 28, 2021, https://github.com/michelemartone/pyrsb
 .. [LIBRSB] *LIBRSB*. (2021, May). Retrieved May 28, 2021, https://librsb.sf.net
