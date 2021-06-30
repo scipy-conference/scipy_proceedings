@@ -214,7 +214,7 @@ Each submatrix is then assigned the most appropriate format: COO if very sparse,
    each sparse block is labeled with its own format (the 'H' prefix indicating use of a shorter integer type);  
    each block's effectively non-empty rectangle is shown, in colour;
    greener blocks have fewer nonzoeroes than average; rosier ones have more.
-   Blocks' rows and columns ranges are evidenced (respectively magenta and green) on the blocks' sides.
+   Blocks' rows and columns ranges are highlighted (respectively magenta and green) on the blocks' sides.
    Note that larger blocks (like ``"9/9"``) may have fewer nonzeroes than smaller ones (like ``"4/9"``).
    :label:`bayer02`
 
@@ -251,11 +251,11 @@ Multi-threaded Sparse Matrix-Vector Multiplication with RSB
 
 The following sequence of pictures schematizes eight states of a two-threaded SpMV on an RSB matrix consisting of four (non-empty sparse) blocks.
 At any moment, up to two blocks are being object of concurrent SpMV (`active`).
-Here each active block has a gray background; its rows and column ranges are evidenced.
+Here each active block has a gray background; its rows and column ranges are highlighted.
 Left of the matrix, a (out-of-horizontal-scale) result vector is depicted.
-For each of the active blocks, the corresponding `active range` (corresponding to the rows) is evidenced on the vector.
+For each of the active blocks, the corresponding `active range` (corresponding to the rows) is highlighted on the vector.
 Similarly, right of the matrix, the (out-of-horizontal-scale) operand vector is shown; 
-its active ranges (corresponding to each blocks' column range) are evidenced.
+its active ranges (corresponding to each blocks' column range) are highlighted.
 
 .. figure:: spmv.pdf
    :scale: 100%
@@ -325,7 +325,7 @@ See Fig. :ref:`forder`, where a broken line follows the two operands' layout in 
    :scale: 25%
    :alt: alternate text
 
-   A Matrix and its SpMM operands, in **columns-major** order. Matrix consisting of four sparse blocks, of which one evidenced. Left hand side and right hand side operands consist of two vectors each. These are stored one column after the other (memory follows blue line). Consequently, the two column portions operands pertaining a given sparse block are not contiguous.
+   A Matrix and its SpMM operands, in **columns-major** order. Matrix consisting of four sparse blocks, of which one highlighted. Left hand side and right hand side operands consist of two vectors each. These are stored one column after the other (memory follows blue line). Consequently, the two column portions operands pertaining a given sparse block are not contiguous.
    :label:`forder`
 
 A straightforward SpMM implementation may run two individual SpMV over the entire matrix, one column at a time.
@@ -356,7 +356,7 @@ However, one may instead opt to choose a **by-rows** layout instead, shown in fi
    :alt: alternate text
 
    :label:`corder`
-   A Matrix and its SpMM operands, in **rows-major order**. Matrix consisting of four sparse blocks, of which one evidenced. Left hand side and right hand side operands consist of two vectors each, interspersed (memory follows blue line). Consequently, the two column portions operands pertaining a given sparse blocks are contiguous.
+   A Matrix and its SpMM operands, in **rows-major order**. Matrix consisting of four sparse blocks, of which one highlighted. Left hand side and right hand side operands consist of two vectors each, interspersed (memory follows blue line). Consequently, the two column portions operands pertaining a given sparse blocks are contiguous.
 
 A by-rows layout can be thought as interspersing all the columns, one index at a time.
 Here in the figure, the blue line follows their **order in memory**.
