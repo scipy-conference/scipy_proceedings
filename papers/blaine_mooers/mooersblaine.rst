@@ -5,7 +5,8 @@
 :institution: Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
 :institution: Biomolecular Structure Core, Oklahoma COBRE in Structural Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
 :orcid: 0000-0001-8181-8987
-:corresponding:
+:corresponding: Blaine H. M. Mooers
+
 
 
 
@@ -15,15 +16,15 @@ Modernizing computing by structural biologists with Jupyter and Colab
 
 .. class:: abstract
 
-Protein crystallography produces most of the molecular structures used in structure-based drug design. 
-The process of structure determination is computationally intensive and error-prone because many software packages are involved.
-Here, we attempt to support the reproducibility of this computational work by using Jupyter Notebooks in JupyterLab or Google Colab. 
-We have made libraries of code templates to ease running the crystallography packages in Jupyter Notebooks.
-Our combined use of GitHub, snippet libraries, Jupyter Notebooks, and Colab will help modernize the computing done by structural biologists.
+Protein crystallography produces most of the protein structures used in structure-based drug design. 
+The process of protein structure determination is computationally intensive and error-prone because many software packages are involved.
+Here, we attempt to support the reproducibility of this computational work by using Jupyter notebooks to document the decisions made, the code, and selected output. 
+We have made libraries of code templates to ease running the crystallography packages in Jupyter notebooks when editing them with JupyterLab or Colab.
+Our combined use of GitHub, snippet libraries, Jupyter notebooks, JupyterLab, and Colab will help modernize the computing done by structural biologists.
 
 .. class:: keywords
 
-   literate programming,reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter Notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, scientific communication, molecular artwork, computational molecular biophysics
+   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter Notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, scientific communication, molecular artwork, computational molecular biophysics
 
 
 Introduction
@@ -35,13 +36,13 @@ More precise aliases for these scientists include molecular structural biologist
 Some of the methods used to determine the near-atomic resolution molecular structures include molecular modeling, X-ray crystallography, NMR, and cryo-EM.
 These scientists often use the molecular structures of these large biomolecules to design small-molecule drugs for improved therapies. 
 As a result, structural biology plays a vital role in drug discovery and development, and many structural biologists work in the pharmaceutical industry.
-Those in academia in the United States generally have their work funded by the National Institutes of Health, the National Science Foundation, the Department of Defense, or the Department of Energy.
+Those in academia in the United States generally have their work funded by the National Institutes of Health, the National Science Foundation, the Department of Defense, the Department of Energy, or one of several disease oriented medical foundations.
 
 Structural biology is at the intersection of biochemistry, molecular biology, molecular biophysics, and computer science. 
 Structural biologists have diverse backgrounds and varying levels of experience with computer programming ranging from minimal to very advanced. 
 Several decades ago, the barriers to entry into the field included expertise with running command-line-driven programs and the ability to write programs to meet data analysis needs not met by existing software packages. 
-However, these barriers have been lowered over the past two decades by the widespread availability of GUI-driven software that is often free for academics (e.g., CCP4 [Winn11]_, Phenix [Lieb11]_, CNS [Brun98]_, ATSAS [Mana21]_, BioXTAS [Hopk17]_, CCPEM [Burn17]_ ). 
-As a result, biologists have become the largest component of the field.
+However, these barriers have been lowered over the past two decades by the widespread availability of GUI-driven software that is often free for academics (e.g., CCP4 [Winn11]_, Phenix [Lieb11]_, CNS [Brun98]_, ATSAS [Mana21]_, BioXTAS [Hopk17]_, CCPEM [Burn17]_). 
+As a result, biologists with minimal formal training in computing have become the largest component of the field.
 
 Computing is involved in the six or more steps from structural data acquisition to publication.
 Several alternate software packages are often available for each step. 
@@ -625,8 +626,7 @@ References
             Acta Crystallographica Section D: Structural Biology, 75(4):451--454, April 2019.
             doi: 10.1107/S2059798319004522
 
-.. [Adam21]
-
+.. .. [Adam21]
             
 .. [Beg21] M. Beg, J. Belin, T. Kluyver, A. Konovalov, M. Ragan-Kelley, N. Thiery, and H. Fangohr.
             *Using Jupyter for reproducible scientific workflows*,
@@ -683,7 +683,7 @@ References
            doi: 10.1107/S1600576720013412
            
 .. [Mott10] S.E. Mottarella, M. Rosa, A. Bangura, H.J. Bernstein, and P.A. Craig.
-            *Conscript: RasMol to PyMOL script converter*,
+           *Conscript: RasMol to PyMOL script converter*,
            Biochem. Mol. Biol. Educ., 38(6):419-422, November 2010.
            doi: 10.1002/bmb.20450
            
