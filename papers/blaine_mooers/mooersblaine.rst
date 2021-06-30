@@ -24,7 +24,7 @@ Our combined use of GitHub, snippet libraries, Jupyter notebooks, JupyterLab, an
 
 .. class:: keywords
 
-   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter Notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, scientific communication, molecular artwork, computational molecular biophysics
+   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, scientific communication, molecular artwork, computational molecular biophysics
 
 
 Introduction
@@ -50,7 +50,7 @@ Different combinations of these alternatives lead to a combinatorial explosion o
 In some situations, workers have set up software pipelines for some of the steps.
 However, these pipelines are difficult to transfer or have trouble with the challenging samples that cannot yet be handled without human intervention.
 The current heterogenous computing environment makes the computational work vulnerable to errors in the tracking of input and output files. 
-Storing the code and outputs for some of the steps in Jupyter Notebooks would be one way to reduce this vulnerability . 
+Storing the code and outputs for some of the steps in Jupyter notebooks would be one way to reduce this vulnerability . 
 
 To ease crystal structure determination in Jupyter, we made libraries of code templates for crucial programs [Kluy16]_. 
 We formatted the libraries for two code snippet extensions for JupyterLab. 
@@ -59,9 +59,9 @@ The other extension (elyra-code-snippet-extension) uses a search box to locate t
 The user can easily add new code snippets to both systems. 
 
 We also ported the libraries to Google Colaboratory or Google Colab or just Colab.
-Colab is an integrated development environment (IDE) for running Jupyter Notebooks on the Google Cloud Platform (GPC).
+Colab is an integrated development environment (IDE) for running Jupyter notebooks on the Google Cloud Platform (GPC).
 Colab was designed to promote the adpatation of deep learning software to new problems and facilitate collaborative computing.
-Colab is a free service that provides a temporary instance of a Linux operating system with access to one K80 GPU through a Jupyter Notebook.
+Colab is a free service that provides a temporary instance of a Linux operating system with access to one K80 GPU through a Jupyter notebook.
 Access to TPUs is also available.
 The access is terminate after long periods of inactivity or a 12-hour time limit, whichever is reached first.
 The time limit can be extended with a small subscription fee.
@@ -113,12 +113,12 @@ Each category has a cascading submenu.
 Clicking on a snippet name in the submenu triggers its insertion into the current cell in the notebook.
 The nested menu hierarchy serves well the user who is familiar with the content of the snippet libraries.
 
-Like most other snippet extnesions for Jupyter Notebook and JupyterLab, the jupyterlab-snippets externsion does not support tab stops nor tab triggers.
+Like most other snippet extnesions for Jupyter Notebook and JupyterLab, the jupyterlab-snippets extension does not support tab stops nor tab triggers.
 These are common features of snippet libraries for most text editors and IDEs that accelerate the editing of parameter values in snippets.
-The tab stops are particularly valuable because they direct the user to sites that may need changes in their parameter values and they guide the user to all of the site to ensure that none are overlooked.
+The tab stops are particularly valuable because they direct the user to sites that may need changes in their parameter values, and they guide the user to all of the site to ensure that none are overlooked.
 The overlooking of parameter values that require changing can be a major source of bugs.
 The tab triggers are also often mirrored, so a change at one instance of the same parameter will be propagate automatically to other identical instances of the parameter.
-To compensate for the lack of tab triggers, we inlcude a second copy of the code in the same snippet but in a comment and with the tab triggers marked with curly braces and numbers (Figure :ref:`compareSnips`).
+To compensate for the lack of tab triggers, we include a second copy of the code in the same snippet but in a comment and with the tab triggers marked with curly braces and numbers (Figure :ref:`compareSnips`).
 The user uses the code in the comment to direct their editing of the active code.
 The user can delete the commented out comment when they have finished editing.
 Separate versions of the libraries were made with commented out code.
@@ -681,7 +681,7 @@ References
            *ATSAS 3.0: expanded functionality and new tools for small-angle scattering data analysis*,
            J. Appl. Cryst., 54(1):343–355, February 2021.
            doi: 10.1107/S1600576720013412
-           
+
 .. [Mott10] S.E. Mottarella, M. Rosa, A. Bangura, H.J. Bernstein, and P.A. Craig.
            *Conscript: RasMol to PyMOL script converter*,
            Biochem. Mol. Biol. Educ., 38(6):419-422, November 2010.
