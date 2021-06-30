@@ -148,7 +148,7 @@ The search terms can be part of a snippet name or a tag stored with each snippet
 A tag icon displays all of the available tags in the snippets as separate icons.
 The user can select tags to be used to choose snippets by clicking on the icons.
 
-Each snippet is displayed with several icons (Figure).
+Each snippet is displayed with several icons (Figure :ref:`hbondElyra`).
 A triangular toggle can trigger the display of the snippet in a textbox.
 A pencil icon enables the editing of the code.
 Other icons enable copying the code to the clipboard, inserting code into the current cell in the notebook, and deleting the snippet. 
