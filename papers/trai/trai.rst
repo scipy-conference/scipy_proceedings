@@ -48,7 +48,8 @@ CNN Based ToF Image Processing
 Introduction
 ------------
    
-Last years the evolution of deep neurThe applications targeted are rangingfrom persond detection, counting, activity analysis to volumetricmeasurements,  mapping  and  navigation  with  mobile  agentsal networks also affected the way in which the Time of Flight (ToF) specific images are processed. The images from the ToF cameras are usually obtained as synchronized depth and infrared (IR) image pairs.
+In recent years the evolution of deep neural networks has affected the way in which Time of Flight (ToF) images are 
+processed. Images from ToF cameras are usually obtained as synchronized depth and infrared (IR) image pairs. 
 The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain. The applications targeted are ranging from person detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
 In the following parts the introduction to the specific ToF imaging, custom data processing and CNN based solutions are presented :cite:`tamas2021embedded`.
 Although for the 2D data a bunch of CNN based solutions exists, for the 3D data :cite:`Gezawa2020` only some base architectures were widespread such as Pointnet :cite:`qi2017pointnet`, while for the calibration between different sensing modalities can be done in an efficient way according to :cite:`frohlich2019absolute`.
