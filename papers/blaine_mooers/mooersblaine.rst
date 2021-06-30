@@ -113,7 +113,7 @@ Each category has a cascading submenu.
 Clicking on a snippet name in the submenu triggers its insertion into the current cell in the notebook.
 The nested menu hierarchy serves well the user who is familiar with the content of the snippet libraries.
 
-Like most other snippet extnesions for Jupyter Notebook and JupyterLab, the jupyterlab-snippets extension does not support tab stops nor tab triggers.
+Like most other snippet extensions for Jupyter Notebook and JupyterLab, the jupyterlab-snippets extension does not support tab stops or tab triggers.
 These are common features of snippet libraries for most text editors and IDEs that accelerate the editing of parameter values in snippets.
 The tab stops are particularly valuable because they direct the user to sites that may need changes in their parameter values, and they guide the user to all of the site to ensure that none are overlooked.
 The overlooking of parameter values that require changing can be a major source of bugs.
@@ -148,7 +148,7 @@ The search terms can be part of a snippet name or a tag stored with each snippet
 A tag icon displays all of the available tags in the snippets as separate icons.
 The user can select tags to be used to choose snippets by clicking on the icons.
 
-Each snippet is displayed with several icons (Figure).
+Each snippet is displayed with several icons (Figure :ref:`hbondElyra`).
 A triangular toggle can trigger the display of the snippet in a textbox.
 A pencil icon enables the editing of the code.
 Other icons enable copying the code to the clipboard, inserting code into the current cell in the notebook, and deleting the snippet. 
@@ -706,4 +706,3 @@ References
            *Overview of the CCP4 suite and current developments*,
            Acta Cryst., D67(4):235-242, April 2011. 
            doi: 10.1107/S0907444910045749
-
