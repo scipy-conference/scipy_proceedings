@@ -821,11 +821,11 @@ References
            Pergamon Press, NY; 1987,
            https://doi.org/10.1016/C2013-0-03799-1
            
-.. [LGK21] Lauer-Baré Z., Gaertig E., Krebs J., Arndt C., Sleziona A., Gensel A. *A note on leakage jet forces: Application in the modelling of digital twins of hydraulic valves*, 
+.. [LGK21] Lauer-Baré Z, Gaertig E, Krebs J, Arndt C, Sleziona C, Gensel A. *A note on leakage jet forces: Application in the modelling of digital twins of hydraulic valves*, 
            International Journal of Fluid Power, 2021, Vol. 22 (1), 113–146,
            https://doi.org/10.13052/ijfp1439-9776.2214
            
-.. [L13]   Love AEH *A treatise on the mathematical theory of elasticity*,
+.. [L13]   Love AEH. *A treatise on the mathematical theory of elasticity*,
            Cambridge University Press; 2013,
            ISBN 978-1-1076-1809-1
            
@@ -833,7 +833,7 @@ References
            PeerJ Computer Science; 2017,
            https://doi.org/10.7717/peerj-cs.103
            
-.. [M96]   Milne-Thomson LM, *Theoretical Hydrodynamics*,
+.. [M96]   Milne-Thomson LM. *Theoretical Hydrodynamics*,
            Courier Corporation; 1996,
            ISBN 978-0-4866-8970-8                
            
@@ -861,7 +861,7 @@ References
            Fluids and Barriers of the CNS, 16, 2019,
            https://doi.org/10.1186/s12987-019-0140-y           
 
-.. [PHW33] N.A.V. Piercy D.Sc., M.S. Hooper & H.F. Winny Ph.D. *LIII. Viscous flow through pipes with cores*, 
+.. [PHW33] Piercy NAV, Hooper MS, Winny HF. *LIII. Viscous flow through pipes with cores*, 
            The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science, 1933,
            https://doi.org/10.1080/14786443309462212
            
