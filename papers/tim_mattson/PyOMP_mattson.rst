@@ -20,7 +20,7 @@ A modern CPU delivers performance through parallelism.  A program that exploits 
 available from a CPU must run in parallel on multiple cores.   This is usually best done through multithreading.
 Threads belong to a process and share the memory associated with that process.  The most
 popular approach for writing multithreaded code is to use directives to tell the compiler
-how to convert the code into multithreaded code.  The most commonly used directive-based API for
+how to convert  code into multithreaded code.  The most commonly used directive-based API for
 writing multithreaded code is OpenMP.  
 Python is not designed for parallel programming with threads.
 The GlobalInterpreterLock (GIL) prevents multiple threads from simultaneously accessing Python objects.
@@ -49,24 +49,43 @@ triply nested loop for a matrix multiply routine and found that the Python code 
 results that, when rounded to the correct number of significant digits, were zero percent of the 
 available peak performance from the chip.  
 
-The performance issues in Python come from a lack of focus on performance.  They also
-emerge from a common attitude among Python programmers.  Python is for developing new
-applications.  If the performance of an application is not good enough, then the code is 
-reimplemented in a low-level language such as C.  Why bother with performance if people
-plan to rewrite code in C anyway?
+A common attitude in the high performance computing  community is that  Python is for developing new
+algorithms or managing workflows built up from external, high performance modules
+written in low level languages.  If the performance is not good enough from Python, then the code is 
+reimplemented in a low-level language such as C.  Why sacrifice productivity for performance if 
+programmers who need high performance will rewrite their code in C anyway?
 
-In our line of research, we are trying to develop technologies that let programmers stay in 
+In our line of research, we are developing technologies that let programmers stay in 
 Python.  Some of our prior work in this area is ParallelAccelerator in Numba (i.e., the
 parallel=True option to the Numba JIT decorator) ( [Lam15]_  [And17]_  [NPar]_  ) 
 In this work, common 
 patterns in code are exploited to expose concurrency in the code which is then executed in parallel.
 The parallelism is implicit in the patterns of code written by a programmer aware of these tools.
-
 Implicit parallelism is powerful but there are too many cases where it can not find sufficient 
 concurrency to support the levels of parallelism needed to fully occupy the cores on a modern CPU.
-A well-rounded Python tool chain needs to include explicit parallelism as well.   With our
+
+Another approach is to embed parallelism inside the functions from modules such as NumPy.  This is an effective way
+to exploit the parallel resources of a system.   However, there are two well known limitations to this approach.
+First, if the parallelism is constrained to the body of a function, there is startup overhead in launching
+the parallel threads and shutting them down for each function call.  This overhead may be small, 
+but they add up since they occur each time a function is called.  This increases the fraction of a program execution
+time that is not reduced as parallel resources are added (the "serial fraction") and
+limits the maximum possible speedup (which is restricted by Amdahl's law to one over the serial fraction).
+Second, limiting parallelism to the bodies of parallelized functions misses the opportunity for additional
+parallelism that comes from running those functions in parallel.  A great deal of available parallelism 
+is missed if such cross-function parallelism is not exploited.
+
+Taken together, we believe these limitations to parallelism strongly suggest that a
+well-rounded Python tool chain needs to include explicit parallelism.   With our
 focus on programming the cores in a CPU, this translates into utilizing multiple threads 
-in parallel.
+in parallel from python code.  The problem is that the GlobalInterpreterLock (GIL) prevents 
+multiple threads from simultaneously accessing Python objects.  The GIL helps programmers write
+correct code.  It reduces the chances that a program would produce different results based 
+on how threads are scheduled (a "race condition").  It means that loads and stores from memory are
+unlikely to conflict and create a "data race". There were very good reasons for including the GIL in Python.
+It has the effect, however, of preventing parallel programming 
+with multiple threads and therefore keeps Python from accessing the full performance 
+from a CPU.   
 
 Multithreading for performance has been a foundational technology for writing applications in
 high performance computing for over four decades.   Its use grew rapidly in 1997 with the introduction
@@ -75,7 +94,7 @@ could direct the compiler to generate multithreaded code through a sequence of d
 The power of OpenMP is that a programmer can add parallelism to a serial program incrementally, 
 evolving a program step by step into a parallel program.  
 
-In this paper, we introduce PyOMP: a research prototype of a system where we add support for OpenMP directives in Python.
+In this paper, we introduce PyOMP: a research prototype system with support for OpenMP directives in Python.
 PyOMP uses the Python with statement to expose the directives in OpenMP.
 These with statements are interpreted by our custom Numba JIT and combined with a backend that connects these
 constructs to analogous entry points in the generated LLVM code.  This LLVM code is then compiled
@@ -86,6 +105,16 @@ We describe the subset of OpenMP supported from Python including the most common
 by OpenMP programmers.  We then discuss details of how we worked with Numba to implement this tool.  
 Finally, we include some preliminary benchmark numbers and then close with a description of our future plans
 for PyOMP.
+
+We want to be clear about what this paper is not.  It is not a review of alternative approaches for parallel programming
+in Python.  It is not a benchmarking paper where we compare major approaches for parallel programming in Python.
+We hope to write those papers in the future, but that is work-in-progress.  Furthermore, we take benchmarking very seriously.
+We will not publish benchmarks that have not been fully optimized, reviewed for correctness by the authors of
+the alternative systems we are comparing against, and address patterns application developers actually use.  A good
+benchmarking paper is a major undertaking, which we fully intend to do.  For now, however, we just want to introduce
+this new form of parallel programming in Python; to gauge interest and find fellow-travelers to join us as we turn
+this research prototype system into a robust technology for the general Python programming community.
+
 
 PyOMP:  Python and OpenMP
 --------------------------------------------
@@ -102,10 +131,10 @@ restrict themselves to a subset of the OpenMP 3.0 specification released in 2008
 This subset of the 21 most commonly used elements of OpenMP is called the
 "OpenMP Common Core" [Mat19]_  .  
 
-PyOMP is a research prototype of a system implementing OpenMP in Python.
+PyOMP is a research prototype system implementing OpenMP in Python.
 In PyOMP, we cover 90% of the common core.   
 These are are summarized in table I.  
-PyOMP is tied to the Numba JIT (just-in-time) compilation system.   Any function using PyOMP
+PyOMP is tied to the Numba JIT (Just-In-Time) compilation system.   Any function using PyOMP
 must be JIT'ed with Numba.  The contents of PyOMP are provided as a module included with
 Numba.  The Numba compiler works with NumPy arrays which must be used for any arrays
 inside a PyOMP function.
@@ -156,19 +185,19 @@ The SPMD Pattern
 As with multithreaded programming environments in general, OpenMP is a shared memory API.  
 The threads "belong" to a single process and they all share the heap associated with the process.
 Variables visible outside a parallel construct are by default shared inside the construct.  Variables created
-inside a construct are by default \emph{private} to the construct (i.e., there is a copy of the variable for each
+inside a construct are by default private to the construct (i.e., there is a copy of the variable for each
 thread in the team).  It is good form in OpenMP programming to make the status of variables
 explicit in an OpenMP construct which we do with the shared and private clauses
-in lines~14 and 15 in figure1.
+in lines 14 and 15 in figure 1.
 
 In an SPMD program, you need to find the rank (or thread number) and number of threads.
-We do this with OpenMP runtime functions in lines~16 and 18.   The rank of a thread, threadID,
+We do this with OpenMP runtime functions in lines 16 and 18.   The rank of a thread, threadID,
 is private since each thread needs its own value for its ID.   All threads in a single team, however,
 see the same value for the number of threads (numThrds) so this is a shared variable.
 In multithreaded programming, it is a data race if multiple threads write to the same variable; even if
 the value being written is the same for each thread.  So we must assure that only one thread 
 sets the value for the number of threads.  This is done with the single construct
-on line~17.   
+on line 17.   
 
 The extent of the parallel algorithm is the for-loop starting at line 22.    Each thread starts with
 a loop iteration (i) equal to its rank, which is incremented by the number of threads. The result is
@@ -203,7 +232,7 @@ Loop Level Parallelism
 ------------------------
 
 The Loop Level Parallelism pattern is where most people start with OpenMP.
-This is shown in figure2.  The code is almost identical to 
+This is shown in figure 2.  The code is almost identical to 
 the serial version of the program.   Other than the import and timing statements,
 parallelism is introduced through a single with statement to express
 the parallel for construct.  This construct creates a team of threads
@@ -228,7 +257,7 @@ Once again, the performance is similar to that achieved with the C version of th
 
 .. figure:: figure2.png
 
-   A program using the Loop level parallelism pattern to numerically approximate 
+   A program using the Loop Level Parallelism pattern to numerically approximate 
    a definite integral that should equal pi 
 
 
@@ -238,7 +267,7 @@ Tasks and Divide and Conquer
 Our final pattern is more complex than the other two.  This important pattern
 is heavily used by more advanced parallel programmers.  A wide range of problems including 
 optimization problems, spectral methods, and cache oblivious algorithms use
-the divide and conquer pattern.  The general idea is to define three basic
+the Divide and Conquer pattern.  The general idea is to define three basic
 phases of the algorithm: split, compute, and merge.  The split phase recursively divides a  problem into 
 smaller subproblems.  After enough splits, the subproblems are small enough to 
 directly compute in the compute phase.  The final phase merges subproblems together
@@ -249,7 +278,7 @@ to produce the final answer.
    A program using the Divide and Conquer pattern with tasks to numerically approximate 
    a definite integral that should equal pi. 
 
-A divide and conquer solution to our pi problem is shown in figure 3.  We start
+A Divide and Conquer solution to our pi problem is shown in figure 3.  We start
 by creating a team of threads on line 37.   We use the single construct to select one thread 
 to start the algorithm with a call to our recursive function piComp().   With the 
 single construct, one thread does the computation within the construct while the other threads 
@@ -353,14 +382,14 @@ Thus, these variables are not visible in the untyped phase in which the data cla
 Such temporaries used solely within an OpenMP region should be classified as private in the tags associated with the surrounding OpenMP region's OpenMP\_start demarcation function call.
 In PyOMP, we implemented a callback in the Numba function that creates these LLVM temporary variables such that we can learn of the existence of these new variables and to add them as private to the previously emitted tags of the surrounding OpenMP region.
 
-Finally, certain OpenMP directives such as single}and critical, require the use of memory fences with acquire, release, or acquire/release memory orders.
+Finally, certain OpenMP directives such as single and critical, require the use of memory fences with acquire, release, or acquire/release memory orders.
 Our prototype knows which directives require which kind of fences and we store that information in the Numba OpenMP IR node as those are created during the untyped phase.
 During conversion of those OpenMP IR nodes to LLVM, if the node require memory fences then we insert the equivalent LLVM fence instructions into the LLVM IR.
 
 Results
 ----------------
 
-The key result of this paper is that PyOMP works.  As we saw in firgre 2, we achieved 
+The key result of this paper is that PyOMP works.  As we saw in figure 2, we achieved 
 reasonable speedups for the three key patterns that dominate OpenMP programming where
 by the word "reasonable" we mean "achieving performance similar to that from C".
 The pi programs, however, are "toy programs".
@@ -374,7 +403,7 @@ If a compilation tool-chain is going to work well, DGEMM is where this would be 
 
 Our DGEMM code comes from the Parallel Research Kernels (PRK) [VdW14]_ version 2.17.  All code is available 
 from the PRK repository [PRK]_. The PyOMP code is summarized in figure 6.  The
-numba JIT was done with the 'fastmath' option.  This resulted in a 20% performance improvement.  Numba
+Numba JIT was done with the 'fastmath' option.  This resulted in a 20% performance improvement.  Numba
 and therefore PyOMP requires that any arrays use NumPy.  They are allocated and initialized on lines 10 to 12 and then 
 assigned values on lines 16 to 18 such that the matrix product is known and available for testing to verify correctness. 
 The multiplication itself occurs on lines 21 to 25.  The ikj loop order is used since it leads to 
@@ -420,11 +449,11 @@ to the memory controllers on the chip.
 
 We choose a matrix order large enough to create sufficient work to overcome memory movement and thread
 overhead.  These matrices were too large for the computation to complete on our system
-for matrices represented through Python lists.  Using numpy arrays with triply nested loops
+for matrices represented through Python lists.  Using NumPy arrays with triply nested loops
 in i,k,j order, the computation ran at  0.00199 GFLOPS.
 For our scalability studies, all runs were repeated 250 times.  Averages and standard deviations in GFLOPS are reported.
 Results are shown in figure 8.  For the PyOMP results, we do not include the JIT times.
-These were only done once per run (i.e. \emph{not} once per iteration) and took on the order of two seconds.
+These were only done once per run (i.e. not once per iteration) and took on the order of two seconds.
 
 
 Parallel Research Kernel DGEMM gigaFLOPS per second for order 1000 matrices.  
@@ -445,7 +474,7 @@ compile the python code.  This one-time cost was observed to add around 2 second
 If we use
 NumPy and call the matrix multiplication function provided with NumPy (line 22 in figure 7, 
 the order 1000 DGEMM ran at 11.29 +/- 0.58 GFLOPS with one thread (using the matmul() function
-from numpy.   This high performance serves to emphasize that while DGEMM is a useful 
+from NumPy).   This high performance serves to emphasize that while DGEMM is a useful 
 benchmark to compare different approaches to writing code, if you ever need to multiply matrices in a
 real application, you should use code in a library produced by performance optimization experts.
 
@@ -456,9 +485,9 @@ In the paper "There's plenty of room at the top..." [Lei20]_, much was made of t
 written in Python.  They motivated their discussion using DGEMM. The implication 
 was that when you care about performance, rewrite your code in C.
 We understand that sentiment and often use that strategy ourselves.  Our goal, however, is to
-meet programmers "on their turf" and let them "stay with python".
+meet programmers "on their turf" and let them "stay with Python".
 
-One of the key challenges to the "stay with python" goal is multithreading.  Because of the GIL, if you
+One of the key challenges to the "stay with Python" goal is multithreading.  Because of the GIL, if you
 want multithreaded code to execute in parallel, you can't use Python.  In this paper, we have 
 addressed this issue by using Numba to map onto LLVM and the OpenMP hooks contained therein.
 This resulted in our Python OpenMP system called PyOMP.
@@ -470,7 +499,7 @@ supported in PyOMP (known as the "Common Core" [Mat19]_) and for the three funda
 patterns used by OpenMP programmers.
 
 PyOMP is a research prototype system.  It is a proof-of-concept system we created to validate 
-that Numba together with LLVM could enable Multithreaded programming in Python through OpenMP.  A 
+that Numba together with LLVM could enable multithreaded programming in Python through OpenMP.  A 
 great deal of work is needed to move from a research prototype to a production-ready 
 tool for application programmers.
  
