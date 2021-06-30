@@ -81,16 +81,17 @@ Ubuntu
 Debian
 [DEBIAN]_,
 OpenSUSE
-[OPENSUSE]_.
-One may install it via a source-based distribution like
-Spack
+[OPENSUSE]_; this is the best way have a LIBRSB installation to familiarize with PyRSB. 
+However, pre-compiled packages will likely miss compile-time optimizations.
+For this reason, the best performance will be obtained bulding on the target computer.
+This can be achieved using one of the several source-based code distributions offering LIBRSB, like Spack
 [SPACK]_,
 or EasyBuild
 [EASYBUILD]_,
-and
+or
 GUIX
-[GUIX]_: using a version built with an optimizing compiler shall give better results than a version from a binary distribution.
-LIBRSB has minimal dependencies, so building it stand-alone is trivial.
+[GUIX]_.
+LIBRSB has minimal dependencies, so even bulding by hand is trivial.
 
 .. comment for the reviewer wrt `optimizing compiler`: A compiler capable of optimizing for the CPU at hand. This cannot be always given for granted.
 
