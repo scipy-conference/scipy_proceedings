@@ -493,7 +493,7 @@ Sommer's plane determination method to compute the volume.
 .. code-block:: python
     :linenos:
 
-    def compute_volume_ortho(pcd,dmin,dman,votes,seg,thresh):
+    def comp_vol_ortho(pcd,dmin,dman,votes,seg,thresh):
     all_lines=sommer_planes(pcd,dmin,dman,votes,seg)
     all_triplets=find_line_triplet(thresh,all_lines)
     for i in all_triplets:
@@ -509,8 +509,8 @@ Sommer's plane determination method to compute the volume.
     for i in range(0,size(all_lines-3)):
      for j in range(i+1,size(all_lines-2)):
       for k in range(j+1,size(all_lines-1)):
-       average_point=(all_lines[i]+all_lines[j]+all_lines[k])/3
-       if distance_each_to_average<threshold:
+       avr_p=(all_lines[i]+all_lines[j]+all_lines[k])/3
+       if dist_each_to_avr(avr_p)<threshold:
           add_triplet(all_triplets)
     
 
