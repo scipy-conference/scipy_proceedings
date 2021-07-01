@@ -294,6 +294,89 @@ Discussion
 ----------
 Overall, all the methods prove that the node features effectively capture the properties of three different organelle morphologies. Given that deep learning models are very data hungry, GNNs still performed well. They could however benefit from more data. Considering the results, oversampling proved very effective for the traditional methods and utilizing an oversampling technique for GNN data could increase results. Lastly, the traditional methods had the best performance but extracting structural information through graph statistics could be limiting and time-consuming. 
 
+.. raw:: latex
+
+   \begin{table*}
+   \centering
+   \begin{tabular}{llllllll}
+                           & Accuracy & \multicolumn{2}{c}{Precision~} & \multicolumn{2}{c}{Recall} & \multicolumn{2}{c}{F-1 Score}  \\
+                           & -        & Control & LLO                  & Control & LLO              & Control & LLO                  \\
+   GNN with GCS Layers     & 0.59     & 0.58    & 0.6                  & 0.59    & 0.59             & 0.58    & 0.59                 \\
+   GNN with GCS Layers     & 0.686    & 0.5     & 0.83                 & 0.75    & 0.62             & 0.6     & 0.71                 \\
+   Median - Random Forest  & 0.59     & 0.6     & 0.58                 & 0.55    & 0.64             & 0.57    & 0.61                 \\
+   Mean - Random Forest    & 0.45     & 0.44    & 0.46                 & 0.36    & 0.55             & 0.4     & 0.5                  \\
+   Min - Random Forest     & 0.41     & 0.38    & 0.43                 & 0.27    & 0.55             & 0.32    & 0.48                 \\
+   Max - Random Forest     & 0.68     & 0.7     & 0.67                 & 0.64    & 0.73             & 0.67    & 0.7                  \\
+   Median - Decision Trees & 0.59     & 0.6     & 0.58                 & 0.55    & 0.64             & 0.57    & 0.61                 \\
+   Mean - Decision Trees   & 0.55     & 0.54    & 0.56                 & 0.64    & 0.45             & 0.58    & 0.5                  \\
+   Min - Decision Trees    & 0.5      & 0.5     & 0.5                  & 0.36    & 0.64             & 0.42    & 0.56                 \\
+   Max - Decision Trees    & 0.64     & 0.71    & 0.6                  & 0.45    & 0.82             & 0.56    & 0.69                 \\
+   Median - kNN            & 0.55     & 0.57    & 0.53                 & 0.36    & 0.73             & 0.44    & 0.62                 \\
+   Mean - kNN              & 0.41     & 0.25    & 0.44                 & 0.09    & 0.73             & 0.13    & 0.55                 \\
+   Min - kNN               & 0.41     & 0.33    & 0.44                 & 0.18    & 0.64             & 0.24    & 0.52                 \\
+   Max - kNN               & 0.41     & 0.38    & 0.43                 & 0.27    & 0.55             & 0.32    & 0.48                
+   \end{tabular}
+   \caption{Results for Control vs. LLO task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class.}
+   \end{table*}
+
+
+.. raw:: latex
+
+   \begin{table*}
+   \centering
+   \begin{tabular}{llllllll}
+                           & \multicolumn{1}{c}{Accuracy} & \multicolumn{2}{c}{Precision~} & \multicolumn{2}{c}{Recall} & \multicolumn{2}{c}{F-1 Score}  \\
+                           & -                            & Mdivi & LLO                    & Mdivi & LLO                & Mdivi & LLO                    \\
+   GNN with GCS Layers     & \textbf{0.736}               & 0.75  & 0.67                   & 0.69  & 0.73               & 0.72  & 0.7                    \\
+   GNN with GCS Layers     & 0.58                         & 0.58  & 0.58                   & 0.58  & 0.58               & 0.58  & 0.58                   \\
+   Median - Random Forest  & 0.55                         & 0.55  & 0.55                   & 0.55  & 0.55               & 0.55  & 0.55                   \\
+   Mean - Random Forest    & \textbf{0.73}                & 0.73  & 0.73                   & 0.73  & 0.73               & 0.73  & 0.73                   \\
+   Min - Random Forest     & 0.55                         & 0.55  & 0.55                   & 0.55  & 0.55               & 0.55  & 0.55                   \\
+   Max - Random Forest     & 0.45                         & 0.45  & 0.45                   & 0.45  & 0.45               & 0.45  & 0.45                   \\
+   Median - Decision Trees & \textbf{0.73}                & 0.78  & 0.69                   & 0.64  & 0.82               & 0.7   & 0.75                   \\
+   Mean - Decision Trees   & 0.64                         & 0.71  & 0.6                    & 0.45  & 0.82               & 0.56  & 0.69                   \\
+   Min - Decision Trees    & 0.55                         & 0.56  & 0.54                   & 0.45  & 0.64               & 0.5   & 0.58                   \\
+   Max - Decision Trees    & 0.55                         & 0.53  & 0.57                   & 0.73  & 0.36               & 0.62  & 0.44                   \\
+   Median - kNN            & 0.5                          & 0.5   & 0.5                    & 0.36  & 0.64               & 0.42  & 0.56                   \\
+   Mean - kNN              & 0.5                          & 0.5   & 0.5                    & 0.64  & 0.36               & 0.56  & 0.42                   \\
+   Min - kNN               & 0.59                         & 0.56  & 0.75                   & 0.91  & 0.27               & 0.69  & 0.4                    \\
+   Max - kNN               & \textbf{0.73}                & 0.73  & 0.73                   & 0.73  & 0.73               & 0.73  & 0.73                  
+   \end{tabular}
+   \caption{Results for Mdivi vs. LLO task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class.}
+   \end{table*}
+
+
+.. raw:: latex
+
+   \begin{table*}
+   \centering
+   \begin{tabular}{llllllll}
+                           & Accuracy      & \multicolumn{2}{c}{Precision~} & \multicolumn{2}{c}{Recall} & \multicolumn{2}{c}{F-1 Score}  \\
+                           & -             & Control & Mdivi                & Control & Mdivi            & Control & Mdivi                \\
+   GNN with GCS Layers     & 0.619         & 0.6     & 0.64                 & 0.64    & 0.6              & 0.64    & 0.6                  \\
+   GNN with GCN Layers     & 0.57          & 0.6     & 0.55                 & 0.55    & 0.6              & 0.57    & 0.57                 \\
+   Median - Random Forest  & 0.55          & 0.56    & 0.54                 & 0.45    & 0.64             & 0.5     & 0.58                 \\
+   Mean - Random Forest    & 0.64          & 0.67    & 0.62                 & 0.55    & 0.73             & 0.6     & 0.67                 \\
+   Min - Random Forest     & 0.64          & 0.6     & 0.71                 & 0.82    & 0.45             & 0.69    & 0.56                 \\
+   Max - Random Forest     & 0.55          & 0.57    & 0.53                 & 0.36    & 0.73             & 0.44    & 0.62                 \\
+   Median - Decision Trees & 0.55          & 0.56    & 0.54                 & 0.45    & 0.64             & 0.5     & 0.58                 \\
+   Mean - Decision Trees   & 0.64          & 0.67    & 0.62                 & 0.55    & 0.73             & 0.6     & 0.67                 \\
+   Min - Decision Trees    & 0.55          & 0.55    & 0.55                 & 0.55    & 0.55             & 0.55    & 0.55                 \\
+   Max - Decision Trees    & 0.59          & 0.62    & 0.57                 & 0.45    & 0.73             & 0.53    & 0.64                 \\
+   Median - kNN            & 0.5           & 0.5     & 0.5                  & 0.45    & 0.55             & 0.48    & 0.52                 \\
+   Mean - kNN              & \textbf{0.68} & 1       & 0.61                 & 0.36    & 1                & 0.53    & 0.76                 \\
+   Min - kNN               & 0.64          & 0.67    & 0.62                 & 0.55    & 0.73             & 0.6     & 0.67                 \\
+   Max - kNN               & 0.55          & 0.57    & 0.53                 & 0.36    & 0.73             & 0.44    & 0.62                
+   \end{tabular}
+   \caption{Results for Mdivi vs. Control task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class.}
+   \end{table*}
+
+
+
+
+
+
+
 Conclusion
 ----------
 
