@@ -24,7 +24,7 @@ Our combined use of GitHub, snippet libraries, Jupyter notebooks, JupyterLab, an
 
 .. class:: keywords
 
-   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, scientific communication, molecular artwork, computational molecular biophysics
+   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, molecular visualization, scientific communication, molecular artwork, computational molecular biophysics
 
 
 Introduction
@@ -33,7 +33,7 @@ Introduction
 Structural biologists study the molecular structures of proteins and nucleic acids to understand how they function in biology and medicine.
 The underlying premise of the field is that molecular function follows molecular form.
 More precise aliases for these scientists include molecular structural biologists, structural biochemists, and molecular biophysicists.
-Some of the methods used to determine the near-atomic resolution molecular structures include molecular modeling, X-ray crystallography, NMR, and cryo-EM.
+Some of the methods used to determine the near-atomic resolution molecular structures include molecular modeling, X-ray crystallography, nuclear magnetic resonance (NMR), and cryo electron microscopy (cryo-EM).
 These scientists often use the molecular structures of these large biomolecules to design small-molecule drugs for improved therapies.
 As a result, structural biology plays a vital role in drug discovery and development, and many structural biologists work in the pharmaceutical industry.
 Those in academia in the United States generally have their work funded by the National Institutes of Health, the National Science Foundation, the Department of Defense, the Department of Energy, or one of several disease oriented medical foundations.
@@ -42,25 +42,25 @@ Structural biology is at the intersection of biochemistry, molecular biology, mo
 Structural biologists have diverse backgrounds and varying levels of experience with computer programming ranging from minimal to very advanced. 
 Several decades ago, the barriers to entry into the field included expertise with running command-line-driven programs and the ability to write programs to meet data analysis needs not met by existing software packages. 
 However, these barriers have been lowered over the past two decades by the widespread availability of GUI-driven software that is often free for academics (e.g., CCP4 [Winn11]_, Phenix [Lieb11]_, CNS [Brun98]_, ATSAS [Mana21]_, BioXTAS [Hopk17]_, CCPEM [Burn17]_). 
-As a result, biologists with minimal formal training in computing have become the largest component of the field.
+As a result, biologists, who often have little formal training in computing, have become the largest component of the field.
 
 Computing is involved in the six or more steps from structural data acquisition to publication.
 Several alternate software packages are often available for each step.
-Different combinations of these alternatives lead to a combinatorial explosion of possible workflows. 
+Different combinations of these alternatives lead to a combinatorial explosion of possible workflows.
 In some situations, workers have set up software pipelines for some of the steps.
 However, these pipelines are difficult to transfer or have trouble with the challenging samples that cannot yet be handled without human intervention.
 The current heterogenous computing environment makes the computational work vulnerable to errors in the tracking of input and output files.
-Storing the code and outputs for some of the steps in Jupyter notebooks would be one way to reduce this vulnerability 
+Storing the code and outputs for some of the steps in Jupyter notebooks would be one way to reduce this vulnerability [Kluy16]_.
 
-To ease crystal structure determination in Jupyter, we made libraries of code templates for crucial programs [Kluy16]_. 
-We formatted the libraries for two code snippet extensions for JupyterLab. 
-One extension (jupyterlab-snippets) provides access to snippets organized into nested pull-down menus. 
-The other extension (elyra-code-snippet-extension) uses a search box to locate the desired snippet. 
-The user can easily add new code snippets to both systems. 
+To ease crystal structure determination in Jupyter, we made libraries of code templates for crucial programs.
+We formatted the libraries for two extensions of JupyterLab that provide access to code snippets.
+One extension (jupyterlab-snippets) displays the snippets in nested pull-down menus (https://github.com/QuantStack/jupyterlab-snippets). 
+The other extension (elyra-code-snippet-extension) uses a search box to locate the desired snippet (https://elyra.readthedocs.io/en/latest/user_guide/code-snippets.html ; also see blog post by Luciano Resende https://blog.jupyter.org/reusable-code-snippets-in-jupyterlab-8d75a0f9d207).
+The user can easily add new code snippets to both systems.
 
 We also ported the libraries to Google Colaboratory or Google Colab or just Colab.
 Colab is an integrated development environment (IDE) for running Jupyter notebooks on the Google Cloud Platform (GPC).
-Colab was designed to promote the adpatation of deep learning software to new problems and facilitate collaborative computing.
+Colab was designed to promote the adapatation of deep learning software to new problems and facilitate collaborative computing.
 Colab is a free service that provides a temporary instance of a Linux operating system with access to one K80 GPU through a Jupyter notebook.
 Access to TPUs is also available.
 The access is terminate after long periods of inactivity or a 12-hour time limit, whichever is reached first.
@@ -72,8 +72,8 @@ Colab can also serve as a test platform for software on Linux when one's primary
 Colab also eases collaborative work and provides a uniform computing environment for classes and workshops.
 The use of Colab requires that the user have a Google Drive account for storing software, Jupyter notebooks, and data files.
 
-The user can install additional Python and other packages including structural biology software, provided the user has the required software licenses. 
-This software installation step requires extra time at the start of the Colab session because most structure bilogy software packages have numerous dependences.
+The user can install additional Python and other packages including structural biology software, provided the user has the required software licenses.
+This software installation step requires extra time at the start of the Colab session because most structure biology software packages have numerous dependences.
 To accelerate this setup step, we provide notes and code snippets for the installation of this software in the Jupyter notebook that serves as the carrier of the snippet libraries on Colab.
 The user can install the required software in several minutes.
 Although the software is deleted automatically from Google Cloud at the end of session, the software can be stored on the user's Google Drive for faster reinstallation.
@@ -85,28 +85,28 @@ Methods
 We created snippet libraries for each structural biology package to support structural biology computations in Jupyter and Colab.
 Any particular workflow is unlikely to require all of the libraries.
 For example, a beginner’s workflow is unlikely to use CCTBX, a library of Python wrapped C++ routines for building molecular structure determination software.
-Likewise, a cryo-electron microscopy workflow will not need XDS, a package for processing X-ray diffraction images.
+Likewise, a cryo-EM workflow will not need XDS, a package for processing X-ray diffraction images.
 We created a GitHub site for each library to ease the downloading of only those libraries that interest users (Table :ref:`libraries`).
 This modularization of the project should ease the correction and augmentation of individual libraries as the extensions, and structural biology software packages evolve.
 We only provided libraries for JupyterLab because the Jupyter Project plans to phase out support for the Jupyter Notebook software.
 Among the several alternative extensions for code snippets in JupyterLab, we choose jupyterlab-snippets [jLsnip]_ and Elyra [Elyra]_ because these two extensions are actively maintained and have different features.
-We also support a snippet library for Juptyer notebooks on Google Colab as described below because Colab provides access to GPUs, which can accelerate some of the larger computational tasks.
+We also support a snippet library for Jupyter notebooks on Google Colab as described below because Colab provides access to GPUs, which can accelerate some of the larger computational tasks.
 
 
-jupyterlab-snippets extension
-******************************
+The jupyterlab-snippets extension
+*********************************
 
 The jupyterlab-snippets extension adds a snippet menu to the JupyterLab menu bar.
 The user accesses the snippets through a cascading pulldown menu.
 Each snippet resides in a separate plain text file without any formatting.
 This feature dramatically eases adding new snippets by users and eases keeping the snippets under version control.
 The snippets are stored in the Jupyter data directory (which is found by entering :code:`jupyter --path`; it is in ~/Library/Jupyter/snippets on Mac OS).
-Each snippet library is stored in a separate subfolder, which appears on the menu bar as a part of a cascading pulldown menu (Figure :ref:`snippetCascade`). 
+Each snippet library is stored in a separate subfolder, which appears on the menu bar as a part of a cascading pulldown menu (Figure :ref:`snippetCascade`).
 
 
 .. figure:: snippetCascade.png 
 
-   Cacading pull-down menu for the Juptyer categories of the jupyterlabpymolsnips library. :label:`snippetCascade`
+   Cascading pull-down menu for the Jupyter categories of the jupyterlabpymolpysnips library. :label:`snippetCascade`
 
 We clustered snippets into categories. 
 Each category has a cascading submenu.
@@ -129,12 +129,12 @@ These versions are distinguished by having "plus" appended to their names.
    Comparison of active snippet at the bottom and commented out snippet at the top. The snippet at the top serves as a guide for editing because it has curly braces marking sites to be edited. :label:`compareSnips`
 
 
-elyra-code-snippet extension
-****************************
+The elyra-code-snippet extension
+********************************
 
 A menu icon labeled with `</>` provides access to snippets in the elyra-code-snippet-extension system.
 After the icon is clicked, the snippets appear in the left margin of the JupyterLab GUI.
-Snippets from all libraries appear in alphabetical order. 
+Snippets from all libraries appear in alphabetical order.
 The user can scroll through the list of snippets.
 Hovering the mouse cursor over the snippet's name triggers the display of a description of the snippet.
 
@@ -151,7 +151,7 @@ The user can select tags to be used to choose snippets by clicking on the icons.
 Each snippet is displayed with several icons (Figure :ref:`hbondElyra`).
 A triangular toggle can trigger the display of the snippet in a textbox.
 A pencil icon enables the editing of the code.
-Other icons enable copying the code to the clipboard, inserting code into the current cell in the notebook, and deleting the snippet. 
+Other icons enable copying the code to the clipboard, inserting code into the current cell in the notebook, and deleting the snippet.
 
 A plus sign in the upper-righthand corner opens a GUI for the creation of a new snippet.
 The GUI occupies a new tab in the window that houses the Jupyter notebooks.
@@ -171,7 +171,7 @@ For example, an attempt to insert a C++ snippet into a notebook with an active P
 
 All of the snippets reside in the folder \url{JUPYTER_DATA/metadata/code-snippets}.
 This is the directory ~/Library/Jupyter/metadata/code-snippets on the Mac.
-There are no subfolders for individual snippet libraries, unlike the jupyterlab-snippets externsion.
+There are no subfolders for individual snippet libraries, unlike the jupyterlab-snippets extension.
 The snippets from multiple libraries are stored together in the code-snippets folder.
 The tag system can be used to select all snippets from one library.
 The tag system serves well the user who is not familiar with the content of the installed libraries.
@@ -180,7 +180,7 @@ The user can download the snippets from GitHub as zip file and then uncompress t
 Colab snippet library
 *********************
 
-The Colab snippet system resembles the Elyra snippet system in that the snippets appear in a menu to the left of the noteboook and that search terms in a search box retrieve snippets.
+The Colab snippet system resembles the Elyra snippet system in that the snippets appear in a menu to the left of the notebook and that search terms in a search box retrieve snippets.
 However, the Colab system differs from the Elyra system ins that the snippets are stored in one or more Jupyter notebooks. 
 The user's Google Drive stores the notebook of snippets.
 The user enters the url for the notebook in a the Tools --> Settings --> Site --> Custom Snippet Notebook URL.
@@ -206,17 +206,17 @@ The user enters a snippet name in the search box to display the snippet and its 
 The user hits the 'Install' button to install the snippet's code at the current position in the  notebook.
 Unlike the Elyra snippets which insert a whole snippet into one code block, a Colab snippet can have multiple code blocks that are inserted into the notebook at the current position of the mouse cursor.
 One snippet can have different types of code blocks.
-For example, the snippet in Figure :ref:`ColabPyMOL` has a three blocks of Python code, two blocks of shell commands, and two blocks of bash cell majics with multiple lines of bash commands.
+For example, the snippet in Figure :ref:`ColabPyMOL` has a three blocks of Python code, two blocks of shell commands, and two blocks of bash cell magics with multiple lines of bash commands.
 
 The list snippet for a library will print in a table below the current cell a list of the snippets in the library and a brief description. 
-This table is stored in a pandas dataframe that can be searched with the pandas search function. 
+This table is stored in a pandas DataFrame that can be searched with the pandas search function.
 This table can also be searched for key terms with the search function in the notebook.
 The code block and output can be hidden by clicking on the three blue dots on the left margin of the cell. 
 
 Notebooks on Colab open very quickly, but the user must reinstall their software on each login.
 We ease this annoying task by supplying the complete chain of installation steps.
 For example, the installation of the molecular graphics program PyMOL requires seven code blocks of different types.
-Some involve the use of curl, and others use conda.
+Some involve the use of curl, and others use the conda package management system.
 We include all steps in one snippet, which is uniquely possible with the snippet system for Colab (Figure :ref:`ColabPyMOL`). 
 The user only has to select one snippet and then run each code block in succession.
 
@@ -228,45 +228,13 @@ Notebooks with sample workflows
 
 We created a library of Jupyter Notebooks with sample workflows.
 This library of notebooks is only representative and not exhaustive because the combinatorial explosion of possible workflows makes covering all workflows impractical.
-These notebooks can serve as templates for the creation of new notebooks.
+These notebooks can serve as templates for the creation of new notebooks and are available on https://github.com/MooersLab.
 
 Availability of the snippet libraries
 *************************************
 
-We have shared these libraries on GitHub  (e.g., Table (:ref:`libraries`)).
+We have shared these libraries on GitHub (https://github.com/MooersLab).
 Each library is also archived in zenodo.
-
-
-.. table:: Table of the snipppet libraries. :label:`libraries`
-
-   +--------------------+-----------------------------------------------------------+
-   | library            | url on GitHub                                             |
-   +====================+===========================================================+
-   | xds                | https://github.com/MooersLab/jupyterlab-xdssnips          |
-   |                    | https://github.com/MooersLab/elyra-xdssnips               |
-   |                    | https://github.com/MooersLab/colab-xdssnips               |
-   +--------------------+-----------------------------------------------------------+
-   | cctbx              | https://github.com/MooersLab/jupyterlab-cctbxsnips        |
-   |                    | https://github.com/MooersLab/elyra-cctbxsnips             |
-   |                    | https://github.com/MooersLab/colab-cctbxsnips             |
-   +--------------------+-----------------------------------------------------------+
-   | phenix             | https://github.com/MooersLab/jupyterlab-phenixsnips       |
-   |                    | https://github.com/MooersLab/elyra-phenixsnips            |
-   |                    | https://github.com/MooersLab/colab-phenixsnips            |
-   +--------------------+-----------------------------------------------------------+
-   | PyMOL              | https://github.com/MooersLab/jupyterlab-pymolpysnips      |
-   |                    | https://github.com/MooersLab/elyra-pymolpysnips           |
-   |                    | https://github.com/MooersLab/colab-pymolpysnips           |
-   +--------------------+-----------------------------------------------------------+
-   | chimerax           | https://github.com/MooersLab/jupyterlab-chimeraxsnips     |
-   |                    | https://github.com/MooersLab/elyra-chimeraxsnips          |
-   |                    | https://github.com/MooersLab/colab-chimeraxsnips          |
-   +--------------------+-----------------------------------------------------------+
-   | prody              | https://github.com/MooersLab/jupyterlab-prodysnips        |
-   |                    | https://github.com/MooersLab/elyra-prodysnips             |
-   |                    | https://github.com/MooersLab/colab-prodysnips             |
-   +--------------------+-----------------------------------------------------------+
-
 
 
 Results
@@ -303,20 +271,20 @@ The molecular dynamics software that carries out the simulated annealing require
 The preparation and debugging of the parameter files manually take many hours, but Phenix automates this takes.
 
 Simulated annealing involves molecular dynamics simulation at high temperatures to move parts of a molecular model out of local energy minima and into conformations that fit the experimental data better.
-Twenty minutes of applying simulated annealing to an early model that still has numerous errors can significantly improve the model while saving the user a day or more of the tedious manual rebuilding of the molecular model. 
+Twenty minutes of applying simulated annealing to an early model that still has numerous errors can significantly improve the model while saving the user a day or more of the tedious manual rebuilding of the molecular model.
 
-More recently, Phenix has been extended to refine crystal structures with neutron diffraction data and for structure determination and refinement with cryo-electron microscopy (cryo-EM) data.
-The addition of support for cryo-EM help address the recent need for the ability to fit atomic models to cryo-EM maps that have recently become available at near atomic resolution because of the dramatic imprvoements in detector technology []_.
-Users can interact with Phenix via a GUI interface or the command line, as mentioned before, but users can also use PHIL, domain-specific language scripting language for more precise parameter settings for Phenix. 
+More recently, Phenix has been extended to refine crystal structures with neutron diffraction data and for structure determination and refinement with cryo-EM data.
+The addition of support for cryo-EM help address the recent need for the ability to fit atomic models to cryo-EM maps that have recently become available at near atomic resolution because of the dramatic improvements in detector technology []_.
+Users can interact with Phenix via a GUI interface or the command line, as mentioned before, but users can also use PHIL, domain-specific language scripting language for more precise parameter settings for Phenix.
 In addition, users can use the :code:`phenix.python` interpreter. Unfortunately, the phenix.python interpreter is still limited to Python2, whereas CCTBX has been available for Python3 for over a year.
 
 Jupyter Lab and its extensions are also best run with Python3.
 The most practical approach to using Phenix in Jupyter Lab is to invoke Phenix by utilizing the shell rather than using Python.
-For example, the command shown below invokes statistical analysis of the B-factors in a Protein Data Bank (PDB) file by using one line of code in the shell (Figure :figure:XXXXXX).
+For example, the command shown below invokes statistical analysis of the B-factors in a Protein Data Bank (PDB) file by using one line of code in the shell.
 The PDB file uses a legacy, fixed-format file for storing the atomic coordinates and B-factors of crystal structures.
-The B-factors are a measure of the atomic motion in individual atoms in a protein structure. 
-The PDB file format was defined and popularized by the Protein Data Bank, a repository for atomic coordinates and structural data that has over 170,000 entries from around the world. 
-The PDB was started in 1972 and unified with the branches in Japan and Europe in 2003 as the wwPDB [ ]. 
+The B-factors are a measure of the atomic motion, statistical disorder, or both in individual atoms in a protein structure.
+The PDB file format was defined and popularized by the Protein Data Bank, a repository for atomic coordinates and structural data that has over 170,000 entries from around the world.
+The PDB was started in 1972 and unified with the branches in Japan and Europe in 2003 as the wwPDB [Berm03]_.
 The wwPDB continues to play a central role in promoting the principles of open science and reproducible research in structural biology.
 
 Since 2019, the wwPDB requires the PDBx/mmCIF format for new depositions [Adam19]_.
@@ -398,44 +366,6 @@ These shell scripts invoke Python scripts that capture the command line argument
     ls /Applications/phenix-1.19.2-4158/modules/phenix/phenix/command_line/*.py.
 
 
-.. figure:: figure1.png
-
-   This is yet another the caption. 
-
-
-.. table:: Table of libraries. :label:`mtable`
-
-   +--------------------+-----------------------------------+
-   | Programs           | url                               |
-   +====================+===================================+
-   | XDS                |                                   |
-   +--------------------+-----------------------------------+
-   | Aimless            |                                   |
-   +--------------------+-----------------------------------+
-   | Native Patterson   |                                   |
-   +--------------------+-----------------------------------+
-   | Normal probability |                                   |
-   +--------------------+-----------------------------------+
-   | Phenix             |                                   |
-   +--------------------+-----------------------------------+
-   | CCTBX Xray         |                                   |
-   +--------------------+-----------------------------------+
-   | Prody              |                                   |
-   +--------------------+-----------------------------------+
-   | Chimera            |                                   |
-   +--------------------+-----------------------------------+
-   | ChimeraX           |                                   |
-   +--------------------+-----------------------------------+
-   | CCTBX pdb          |                                   |
-   +--------------------+-----------------------------------+
-   | Cement             | :math:`\alpha`                    |
-   +--------------------+-----------------------------------+
-
-
-
-
-
-
 
 Discussion
 ----------
@@ -500,7 +430,7 @@ The former support tab triggers and tab stops; the latter does not.
 The libraries have to be molecular graphics program specific because molecular graphics programs have been written in a range of programming languages.
 The user issues the commands in either in a general programming language like Python or a a domain specific language (DSL) like pml.
 It would cause confusion to mix snippets from multiple languages.
-To counter this growing tower of babel, the OpenStructure intiative was formed [Bias13]_. 
+To counter this growing tower of babel, the OpenStructure initiative was formed [Bias13]_. 
 
 
 We have also worked out how to deploy this snippet libraries in OnDemand notebooks at High-Performance Computing centers.
@@ -558,24 +488,27 @@ This work is support in part by these National Institutes of Health grants: R01 
 References
 ----------
 
-.. [Adam19] P.D. Adams, P.V. Afonine, K. Baskaran, H.M. Berman, J. Berrisford, G. Bricogne, D.G. Brown, S.K. Burley, M. Chen, Z. Feng, C. Flensburg, A. Gutmanas, J.C. Hoch, Y. Ikegawa, Y. Kengaku, E. Krissinel, G. Kurisu, Y. Liang, D. Liebschner, L. Mak, J.L Markley, N.W. Moriarty, G.N. Murshudov, M. Noble, E. Peisach, I. Persikova, B.K. Poon, O.V. Sobolev, E.L. Ulrich, S. Velankar, C. Vonrhein, J. Westbrook, M. Wojdyr, M. Yokochi, and J.Y. Young.
+.. [Adam19] P. D. Adams, P. V. Afonine, K. Baskaran, H. M. Berman, J. Berrisford, G. Bricogne, D. G. Brown, S. K. Burley, M. Chen, Z. Feng, C. Flensburg, A. Gutmanas, J. C. Hoch, Y. Ikegawa, Y. Kengaku, E. Krissinel, G. Kurisu, Y. Liang, D. Liebschner, L. Mak, J.L Markley, N. W. Moriarty, G. N. Murshudov, M. Noble, E. Peisach, I. Persikova, B. K. Poon, O. V. Sobolev, E. L. Ulrich, S. Velankar, C. Vonrhein, J. Westbrook, M. Wojdyr, M. Yokochi, and J. Y. Young.
             *Announcing mandatory submission of PDBx/mmCIF format files for crystallographic depositions to the Protein Data Bank (PDB)*,
             Acta Crystallographica Section D: Structural Biology, 75(4):451-454, April 2019.
             doi: 10.1107/S2059798319004522
-
-.. .. [Adam21]
             
 .. [Beg21] M. Beg, J. Belin, T. Kluyver, A. Konovalov, M. Ragan-Kelley, N. Thiery, and H. Fangohr.
             *Using Jupyter for reproducible scientific workflows*,
             Computing Sci. \& Eng., 23(2):36-46, April 2021. 
             doi: 10.1109/MCSE.2021.3052101
             
-.. [Bias13] M. Biasini, T. Schmidt, Bienert,S., Mariani,V., Studer,G., Haas,J., Johner,N., Schenk,A. D., Philippsen,A. and Schwede,T. (2013) 
+.. [Berm03] H. Berman, K. Hendrick, and H. Nakamura. 
+            *Announcing the worldwide Protein Data Bank*,
+            Nature Structural \& Molecular Biology, 10(12):980, December 2003.
+.. no doi available
+
+.. [Bias13] M. Biasini, T. Schmidt, S. Bienert, V. Mariani, G. Studer, J. Haas, N. Johner, A. D. Schenk, A. Philippsen, and T. Schwede. 
             *OpenStructure: an integrated software framework for computational structural biology*,
             Acta Cryst. D69(5):701–709, May 2013.
             doi:10.1107/S0907444913007051
             
-.. [Brun98] A.T. Br{\"u}nger, P.D. Adams, G.M. Clore, W.L. Delano, P. Gros, R.W. Grosse-Kunstleve, J.-S. Jiang, J. Kuszewski, M. Nilges, N.S. Pannu, R.J. Read, L.M. Rice, T. Simonson, and G.L. Warren.
+.. [Brun98] A.T. Br{\"u}nger, P.D. Adams, G.M. Clore, W.L. Delano, P. Gros, R.W. Grosse-Kunstleve, J.-S. Jiang, J. Kuszewski, M. Nilges, N. S. Pannu, R. J. Read, L. M. Rice, T. Simonson, and G. L. Warren.
             *Crystallography \& NMR system: A new software suite for macromolecular structure determination*,
             Acta Cryst. D54(5):905-921, May 1998.
             doi: 10.1107/S0907444998003254
@@ -597,12 +530,12 @@ References
            J Appl Cryst, 35(1):126-136, February 2002.
            doi: 10.1107/S0021889801017824.
            
-.. [Hopk17] J.B. Hopkins, R.E. Gillilan, and S. Skou.
+.. [Hopk17] J.B. Hopkins, R. E. Gillilan, and S. Skou.
            *BioXTAS RAW: improvements to a free open-source program for small-angle X-ray scattering data reduction and analysis*,
            J. Appl. Cryst., 50(5):1545–1553, October 2017.
            doi: 10.1107/S1600576717011438
            
-.. [Hort99] R.  M. Horton.
+.. [Hort99] R. M. Horton.
            *Scripting Wizards for Chime and RasMol*,
            Biotechniques, 26(5):874-876, May 1999.
            doi: 10.2144/99265ir01 
@@ -614,27 +547,27 @@ References
            
 .. [jLsnip] https://github.com/QuantStack/jupyterlab-snippets
            
-.. [Lieb11] D. Liebschner, P.V. Afonine, M.L. Baker, G. Bunkóczi, V.B. Chen, T.I. Croll, B. Hintze, L.-W. Hung, S. Jain, A.J. McCoy, N.W. Moriarty, R.D. Oeffner, B.K. Poon, M G. Prisant, R.J. Read, J.S. Richardson, D.C. Richardson, M.D. Sammito, O.V. Sobolev, D.H. Stockwell, T.C. Terwilliger, A.G. Urzhumtsev, L.L. Videau, C.J. Williams, and P.D. Adams. 
+.. [Lieb11] D. Liebschner, P. V. Afonine, M. L. Baker, G. Bunkóczi, V. B. Chen, T. I. Croll, B. Hintze, L.-W. Hung, S. Jain, A. J. McCoy, N.W. Moriarty, R. D. Oeffner, B. K. Poon, M. G. Prisant, R. J. Read, J. S. Richardson, D. C. Richardson, M. D. Sammito, O. V. Sobolev, D. H. Stockwell, T. C. Terwilliger, A. G. Urzhumtsev, L. L. Videau, C. J. Williams, and P. D. Adams. 
            *Macromolecular structure determination using X-rays, neutrons and electrons: recent developments in Phenix*,
            Acta Cryst., D75(10):861-877, October 2019.
            doi: 10.1107/S2059798319011471
            
-.. [Mana21] K. Manalastas-Cantos, P.V. Konarev, N.R. Hajizadeh, A.G. Kikhney, M.V. Petoukhov, D.S. Molodenskiy, A. Panjkovich, H.D.T. Mertens, A. Gruzinov, C. Borges, M. Jeffries, D.I. Sverguna, and D. Franke.
+.. [Mana21] K. Manalastas-Cantos, P. V. Konarev, N. R. Hajizadeh, A. G. Kikhney, M. V. Petoukhov, D. S. Molodenskiy, A. Panjkovich, H. D. T. Mertens, A. Gruzinov, C. Borges, M. Jeffries, D. I. Sverguna, and D. Franke.
            *ATSAS 3.0: expanded functionality and new tools for small-angle scattering data analysis*,
            J. Appl. Cryst., 54(1):343–355, February 2021.
            doi: 10.1107/S1600576720013412
 
-.. [Mott10] S.E. Mottarella, M. Rosa, A. Bangura, H.J. Bernstein, and P.A. Craig.
+.. [Mott10] S. E. Mottarella, M. Rosa, A. Bangura, H. J. Bernstein, and P. A. Craig.
            *Conscript: RasMol to PyMOL script converter*,
            Biochem. Mol. Biol. Educ., 38(6):419-422, November 2010.
            doi: 10.1002/bmb.20450
            
-.. [Moo21a] B.H.M. Mooers and M.E. Brown.
+.. [Moo21a] B. H. M. Mooers and M .E. Brown.
            *Templates for writing PyMOL scripts*,
            Pro. Sci., 30(1):262-269, January 2021.
            doi: 10.1002/pro.3997
 
-.. [Moo21b] B.H.M. Mooers.
+.. [Moo21b] B. H. M. Mooers.
            *A PyMOL snippet library for Jupyter to boost researcher productivity*,
            Computing Sci. \& Eng., 23(2):47-53, April 2021.
            doi: 10.1109/mcse.2021.3059536
@@ -644,7 +577,7 @@ References
            Bioinformatics, 34(7):1241-1242, April 2017.
            doi: 10.1093/bioinformatics/btx789
            
-.. [Winn11] M. D. Winn, C.C. Ballard, K.D. Cowtan, E.J. Dodson, P. Emsley, P.R. Evans, R.M. Keegan, E.B. Krissnel, A.G.W. Leslie, A. McCoy, S.J. McNicholas, G.N. Murshudov, N.S. Pannu, E.A. Potteron, H.R. Powell, R.J. Read, A. Vagin, and K.S. Wilson. 
+.. [Winn11] M. D. Winn, C. C. Ballard, K. D. Cowtan, E. J. Dodson, P. Emsley, P. R. Evans, R .M. Keegan, E. B. Krissnel, A. G. W. Leslie, A. McCoy, S. J. McNicholas, G .N. Murshudov, N. S. Pannu, E. A. Potteron, H .R. Powell, R. J. Read, A. Vagin, and K. S. Wilson. 
            *Overview of the CCP4 suite and current developments*,
            Acta Cryst., D67(4):235-242, April 2011. 
            doi: 10.1107/S0907444910045749
