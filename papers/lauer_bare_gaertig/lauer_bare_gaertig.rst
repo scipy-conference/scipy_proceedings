@@ -54,7 +54,7 @@ In this work we will focus on analytical approximations of flow forces that act 
 
    Armature and polecap in an electromagnetic actuator; the interior of the polecap is filled with oil (not shown here) :label:`armature` 
 
-For an analytical treatment, this geometry has to be simplified considerably. Both armature and polecap are therefore modeled as infinitely extended cylinders. Since in realistic scenarios, perfect concentricity between these two parts is rarely obtained, the armature can be supported eccentrically within the poletube. A cross-sectional cut perpendicular to the symmetry axes of both cylinders then leads to Figure :ref:`fig2`. 
+For an analytical treatment, this geometry has to be simplified considerably. Both armature and polecap are therefore modeled as solid and hollow cylinders respectively. Since in realistic scenarios, perfect concentricity between these two parts is rarely obtained, the armature can be supported eccentrically within the poletube. A cross-sectional cut perpendicular to the symmetry axes of both cylinders then leads to Figure :ref:`fig2`. 
 
 .. figure:: eccentric_z_new.pdf
    :scale: 20%
