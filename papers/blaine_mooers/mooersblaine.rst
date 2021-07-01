@@ -41,7 +41,7 @@ Those in academia in the United States generally have their work funded by the N
 Structural biology is at the intersection of biochemistry, molecular biology, molecular biophysics, and computer science. 
 Structural biologists have diverse backgrounds and varying levels of experience with computer programming ranging from minimal to very advanced. 
 Several decades ago, the barriers to entry into the field included expertise with running command-line-driven programs and the ability to write programs to meet data analysis needs not met by existing software packages. 
-However, these barriers have been lowered over the past two decades by the widespread availability of GUI-driven software that is often free for academics (e.g., CCP4 [Winn11]_, Phenix [Lieb11]_, CNS [Brun98]_, ATSAS [Mana21]_, BioXTAS [Hopk17]_, CCPEM [Burn17]_). 
+However, these barriers have been lowered over the past two decades by the widespread availability of GUI-driven software that is often free for academics (e.g., CCP4 [Winn11]_, Phenix [Lieb19]_, CNS [Brun98]_, ATSAS [Mana21]_, BioXTAS [Hopk17]_, CCPEM [Burn17]_). 
 As a result, biologists, who often have little formal training in computing, have become the largest component of the field.
 
 Computing is involved in the six or more steps from structural data acquisition to publication.
@@ -233,7 +233,7 @@ These notebooks can serve as templates for the creation of new notebooks and are
 Availability of the snippet libraries
 *************************************
 
-We have shared these libraries on GitHub (https://github.com/MooersLab).
+We have shared these libraries on GitHub [MLGH]_.
 Each library is also archived in zenodo.
 
 
@@ -255,28 +255,25 @@ Next, we describe the content of each library with representative output in the 
 Structure determination and refinement workflows with Phenix
 ************************************************************
 
-A team of professional software developers based at the Berkeley-Lawrence National Laboratory (BLNL) develops the Phenix software to refine protein crystal structures determined from X-ray diffraction data. 
+A team of professional software developers based at the Berkeley-Lawrence National Laboratory (BLNL) develops the Phenix software to refine protein crystal structures determined from X-ray diffraction data [Adam02]_. 
 The project includes several collaborators located around the world who develop auxiliary components of the package.
-Paul Adams leads the team.
-He had spent the 1990s developing the two very successful protein crystallography software packages: XPLOR and CNS.
-Shortly after arriving in the Bay Area around 2000, Paul Adams was influenced by Warren Delano to use Python to wrap the Computational Crystallography Tool Box (CCTBX), which is written in C++.
-Phenix uses CCTBX modules for intensive computations.
-(Warren Delano was the developer of the PyMOL, a molecular graphics program that was written in C and wrapped with Python.)
+Phenix uses Python to interface with the Computational Crystallography Tool Box (CCTBX), which is written in C++ for speed [Gros02]_.
+CCTBX is also wrapped in Python and can be imported at as module.
 While Python eases the use of CCTBX, mastery of CCTBX requires at least an intermediate level of Python programming skills.
-On the other hand, Phenix is easy to use via the command line or a GUI.
+On the other hand, Phenix is easy to use via the command line or a GUI and has become of the most popular software packages for biological crystallography.
 
 The Phenix project greatly eased the incorporation of simulated annealing into crystal structure refinement by hiding the tedious preparation of the required parameter files from the user.
+Simulated annealing involves molecular dynamics (MD) simulation at high temperatures to move parts of a molecular model out of local energy minima and into conformations that fit the experimental data better.
+Twenty minutes of applying simulated annealing to an early model that still has numerous errors can significantly improve the model while saving the user a day or more of the tedious manual rebuilding of the molecular model.
 The PDB file does not have sufficient information about chemical bonding for MD simulations.
 The molecular dynamics software that carries out the simulated annealing requires two parameter files and the coordinate file.
-The preparation and debugging of the parameter files manually take many hours, but Phenix automates this takes.
+The preparation and debugging of the parameter files manually takes many hours, but Phenix automates this task.
 
-Simulated annealing involves molecular dynamics simulation at high temperatures to move parts of a molecular model out of local energy minima and into conformations that fit the experimental data better.
-Twenty minutes of applying simulated annealing to an early model that still has numerous errors can significantly improve the model while saving the user a day or more of the tedious manual rebuilding of the molecular model.
-
-More recently, Phenix has been extended to refine crystal structures with neutron diffraction data and for structure determination and refinement with cryo-EM data.
-The addition of support for cryo-EM help address the recent need for the ability to fit atomic models to cryo-EM maps that have recently become available at near atomic resolution because of the dramatic improvements in detector technology []_.
+More recently, Phenix has been extended to refine crystal structures with neutron diffraction data and for structure determination and refinement with cryo-EM data [Lieb19]_.
+The addition of support for cryo-EM help address the recent need for the ability to fit atomic models to cryo-EM maps that have recently become available at near atomic resolution because of the dramatic improvements in detector technology.
 Users can interact with Phenix via a GUI interface or the command line, as mentioned before, but users can also use PHIL, domain-specific language scripting language for more precise parameter settings for Phenix.
-In addition, users can use the :code:`phenix.python` interpreter. Unfortunately, the phenix.python interpreter is still limited to Python2, whereas CCTBX has been available for Python3 for over a year.
+In addition, users can use the :code:`phenix.python` interpreter. 
+Unfortunately, the phenix.python interpreter is still limited to Python2, whereas CCTBX has been available for Python3 for over a year.
 
 Jupyter Lab and its extensions are also best run with Python3.
 The most practical approach to using Phenix in Jupyter Lab is to invoke Phenix by utilizing the shell rather than using Python.
@@ -353,13 +350,13 @@ While these are basic data science tasks, they are intimidating to new users of 
 To overcome this problem, we supply snippets that demonstrate how to transform the output and that can be used as templates by the users.  
 
 These commands are becoming harder to find as the on-line documentation has been migrating to serving only the GUI interface.
-The bash script files that run the phenix commands can be found by running 
+The bash script files that run the Phenix commands can be found by running 
 
 .. code-block:: bash
 
     !ls /Applications/phenix-*/build/bin/phenix.\*
 
-These shell scripts invoke Python scripts that capture the command line arguments and pass them to the phenix Python interpreter.
+These shell scripts invoke Python scripts that capture the command line arguments and pass them to the Phenix Python interpreter.
 
 .. code-block:: bash
 
@@ -381,7 +378,7 @@ Why Colab?
 **********
 
 Colab was developed internally and first released for public use in 2018.
-Numerous research papers in the physical and medical sciences have been published that used Colab (e.g.,  ).
+Numerous research papers in the physical and medical sciences have been published that used Colab.
 Google Colab provides fast and easy access for users with a Google account and Google drive, so many workers in crystallography already have the prerequisites.
 Many readers are also familiar with Jupyter Notebooks (10 million shared on GitHub as of early 2021).
 Jupyter Notebooks can be loaded onto Google Drive and then opened in Colab.
@@ -424,7 +421,7 @@ The pioneering work on a scripting wizard provided templates for use in the mole
 The conscript program provided a converter from RasMol to PyMOL [Mott10]_.
 Language converters for translating code between the leading molecular graphics programs would allow users to more easily find and use the optimal molecular graphics program for the task at hand.
 
-We also provided snippets for PyMOL, which has 100,000 users, for use in text editors [Moo21a]_ and Juptyer notebooks [Moo21b]_.
+We also provided snippets for PyMOL, which has 100,000 users, for use in text editors [Moo21a]_ and Jupyter notebooks [Moo21b]_.
 The former support tab triggers and tab stops; the latter does not.
 
 The libraries have to be molecular graphics program specific because molecular graphics programs have been written in a range of programming languages.
@@ -438,7 +435,7 @@ These notebooks resemble Colab notebooks in that JupyterLab extensions cannot be
 However, they do not have any alternate support for accessing snippets from menus in the GUI.
 Instead, we had to create IPython magics for each snippet that load the snippet's code into the code cell.
 This system would also work on Colab and may be preferred by expert users because the snippet names used to invoke magic are under autocompletetion.
-That is, the user enters the start of a name and Ipython suggests the remainder of the name in a pop-up menu.
+That is, the user enters the start of a name and IPython suggests the remainder of the name in a pop-up menu.
 We offer a variant library that inserts a commented out copy of the code that has been annotated with the sites that are to be edited by the user.
 
 Opportunities for Interoperability
@@ -488,6 +485,11 @@ This work is support in part by these National Institutes of Health grants: R01 
 References
 ----------
 
+.. [Adam02] P. D. Adams, R. W. Grosse-Kunstleve, L.-W. Hung, T. R. Ioerger, A. J. McCoy, N. W. Moriarty, R. J. Read, J. C. Sacchettini, N. K. Sauter, and T. C. Terwilliger.
+            *PHENIX: building new software for automated crystallographic structure determination*,
+            Acta Cryst. D58(11):1948–1954, November 2002.
+            doi: 10.1107/S0907444902016657
+
 .. [Adam19] P. D. Adams, P. V. Afonine, K. Baskaran, H. M. Berman, J. Berrisford, G. Bricogne, D. G. Brown, S. K. Burley, M. Chen, Z. Feng, C. Flensburg, A. Gutmanas, J. C. Hoch, Y. Ikegawa, Y. Kengaku, E. Krissinel, G. Kurisu, Y. Liang, D. Liebschner, L. Mak, J.L Markley, N. W. Moriarty, G. N. Murshudov, M. Noble, E. Peisach, I. Persikova, B. K. Poon, O. V. Sobolev, E. L. Ulrich, S. Velankar, C. Vonrhein, J. Westbrook, M. Wojdyr, M. Yokochi, and J. Y. Young.
             *Announcing mandatory submission of PDBx/mmCIF format files for crystallographic depositions to the Protein Data Bank (PDB)*,
             Acta Crystallographica Section D: Structural Biology, 75(4):451-454, April 2019.
@@ -506,7 +508,7 @@ References
 .. [Bias13] M. Biasini, T. Schmidt, S. Bienert, V. Mariani, G. Studer, J. Haas, N. Johner, A. D. Schenk, A. Philippsen, and T. Schwede. 
             *OpenStructure: an integrated software framework for computational structural biology*,
             Acta Cryst. D69(5):701–709, May 2013.
-            doi:10.1107/S0907444913007051
+            doi: 10.1107/S0907444913007051
             
 .. [Brun98] A.T. Br{\"u}nger, P.D. Adams, G.M. Clore, W.L. Delano, P. Gros, R.W. Grosse-Kunstleve, J.-S. Jiang, J. Kuszewski, M. Nilges, N. S. Pannu, R. J. Read, L. M. Rice, T. Simonson, and G. L. Warren.
             *Crystallography \& NMR system: A new software suite for macromolecular structure determination*,
@@ -547,7 +549,7 @@ References
            
 .. [jLsnip] https://github.com/QuantStack/jupyterlab-snippets
            
-.. [Lieb11] D. Liebschner, P. V. Afonine, M. L. Baker, G. Bunkóczi, V. B. Chen, T. I. Croll, B. Hintze, L.-W. Hung, S. Jain, A. J. McCoy, N.W. Moriarty, R. D. Oeffner, B. K. Poon, M. G. Prisant, R. J. Read, J. S. Richardson, D. C. Richardson, M. D. Sammito, O. V. Sobolev, D. H. Stockwell, T. C. Terwilliger, A. G. Urzhumtsev, L. L. Videau, C. J. Williams, and P. D. Adams. 
+.. [Lieb19] D. Liebschner, P. V. Afonine, M. L. Baker, G. Bunkóczi, V. B. Chen, T. I. Croll, B. Hintze, L.-W. Hung, S. Jain, A. J. McCoy, N.W. Moriarty, R. D. Oeffner, B. K. Poon, M. G. Prisant, R. J. Read, J. S. Richardson, D. C. Richardson, M. D. Sammito, O. V. Sobolev, D. H. Stockwell, T. C. Terwilliger, A. G. Urzhumtsev, L. L. Videau, C. J. Williams, and P. D. Adams. 
            *Macromolecular structure determination using X-rays, neutrons and electrons: recent developments in Phenix*,
            Acta Cryst., D75(10):861-877, October 2019.
            doi: 10.1107/S2059798319011471
@@ -561,6 +563,8 @@ References
            *Conscript: RasMol to PyMOL script converter*,
            Biochem. Mol. Biol. Educ., 38(6):419-422, November 2010.
            doi: 10.1002/bmb.20450
+           
+.. [MLGH]   https://github.com/MooersLab
            
 .. [Moo21a] B. H. M. Mooers and M .E. Brown.
            *Templates for writing PyMOL scripts*,
