@@ -54,13 +54,13 @@ Storing the code and outputs for some of the steps in Jupyter notebooks would be
 
 To ease crystal structure determination in Jupyter, we made libraries of code templates for crucial programs.
 We formatted the libraries for two extensions of JupyterLab that provide access to code snippets.
-One extension (jupyterlab-snippets) displays the snippets in nested pull-down menus (https://github.com/QuantStack/jupyterlab-snippets). 
-The other extension (elyra-code-snippet-extension) uses a search box to locate the desired snippet (https://elyra.readthedocs.io/en/latest/user_guide/code-snippets.html ; also see blog post by Luciano Resende https://blog.jupyter.org/reusable-code-snippets-in-jupyterlab-8d75a0f9d207).
+One extension (jupyterlab-snippets) displays the snippets in nested pull-down menus [jLsnip]_. 
+The other extension (elyra-code-snippet-extension) uses a search box to locate the desired snippet [ELSN]_ (also see the blog post by Luciano Resende [Rese20]_).
 The user can easily add new code snippets to both systems.
 
 We also ported the libraries to Google Colaboratory or Google Colab or just Colab.
 Colab is an integrated development environment (IDE) for running Jupyter notebooks on the Google Cloud Platform (GPC).
-Colab was designed to promote the adapatation of deep learning software to new problems and facilitate collaborative computing.
+Colab was designed to promote the adaptation of deep learning software to new problems and facilitate collaborative computing.
 Colab is a free service that provides a temporary instance of a Linux operating system with access to one K80 GPU through a Jupyter notebook.
 Access to TPUs is also available.
 The access is terminate after long periods of inactivity or a 12-hour time limit, whichever is reached first.
@@ -228,7 +228,7 @@ Notebooks with sample workflows
 
 We created a library of Jupyter Notebooks with sample workflows.
 This library of notebooks is only representative and not exhaustive because the combinatorial explosion of possible workflows makes covering all workflows impractical.
-These notebooks can serve as templates for the creation of new notebooks and are available on https://github.com/MooersLab.
+These notebooks can serve as templates for the creation of new notebooks and are available on our GitHub site [MLGH]_.
 
 Availability of the snippet libraries
 *************************************
@@ -520,7 +520,10 @@ References
             Acta Cryst. D73(6):469-477, June 2017.
             doi: 10.1107/S2059798317007859
             
+.. [ELSN]   https://elyra.readthedocs.io/en/latest/user_guide/code-snippets.html
+            
 .. [Elyra]  https://github.com/elyra-ai/elyra/blob/master/docs/source/getting_started/overview.md 
+            
            
 .. [Godd18] T. D. Goddard, C.C. Huang, E.C. Meng, E.F. Pettersen, G.S. Couch, J. H. Morris, and T. E. Ferrin. 
            *UCSF ChimeraX: Meeting modern challenges in visualization and analysis*,
@@ -580,6 +583,8 @@ References
            *NGLview--interactive molecular graphics for Jupyter notebooks*,
            Bioinformatics, 34(7):1241-1242, April 2017.
            doi: 10.1093/bioinformatics/btx789
+           
+.. [Rese20] https://blog.jupyter.org/reusable-code-snippets-in-jupyterlab-8d75a0f9d207
            
 .. [Winn11] M. D. Winn, C. C. Ballard, K. D. Cowtan, E. J. Dodson, P. Emsley, P. R. Evans, R .M. Keegan, E. B. Krissnel, A. G. W. Leslie, A. McCoy, S. J. McNicholas, G .N. Murshudov, N. S. Pannu, E. A. Potteron, H .R. Powell, R. J. Read, A. Vagin, and K. S. Wilson. 
            *Overview of the CCP4 suite and current developments*,
