@@ -160,52 +160,6 @@ The GCS operation which has an additional skip connection looks like the followi
 where :math:`\sigma` is the non linear activation function that can be ReLU, sigmoid or hyperbolic tangent (tanh) functions. W and V are trainable parameters. Each GCS layer is localized in the node space, and it performs a filtering operations between the local neighboring nodes through the skip connection and the initial node features X :cite:`Bianchi_2021`.
 
 
-.. figure:: Key.png
-   :scale: 30%
-   :figclass: bht
-   :align: left
-
-.. figure:: GCS.png
-   :scale: 40%
-   :figclass: bht
-   :align: left
-
-   The model arhcitecture used for the Llo-Mdivi classification using GCS layers. 
-
-.. figure:: GCN.png
-   :scale: 40%
-   :figclass: bht
-   :align: left
-
-   The model arhcitecture used for the Llo-Control classification using GCN Layers. 
-
-
-The graph convolution layer of each model is followed by the MinCut Pooling layer :cite:`Bianchi_2019_Mincut`. This method is based on the minCUT optimization problem which finds a cut of the graph that still preserves the topology and representation of the graph. It computes a soft clustering of the input graphs and outputs a reduced node features and adjacency matrix. The dimensions are reduced to the parameter k which is specified when calling the pooling layer. 
-Finally, the last layer of both architectures is a global pooling architecture that pools the graph by computing the sum of the inputs node features. Then the model is through a Dense layer, a fully connected output layer 
-The architectures were trained using Adam optimizer, and L2 penalty loss with weight 1e-3 and 16 hidden units. The GCS layers used a tanh activation function. The MinCut pooling layer is set to output N/2 nodes in the first layer and N/4 at the second layer and N is the average order of the graphs in the dataset. The Dense layer used a sigmoid activation function and we used binary cross entropy for the loss. The models ran for 3000 epochs.
-
-
-
-
-Graph level features using node statistics
-++++++++++++++++++++++++++++++++++++++++++
-
-
-This approach deals with finding a good graph representation by using a method similar to bag of nodes. Because the available number of graphs for each class are limited, we create a graph feature by reducing the node features to a vector of statistics. We created four different statistics to act as the graph features: min, max, mean and median. Meaning, for each of the node features, one aggregate statistic (min, max, mean or median) is applied to create a vector of size 5 that would serve as an input for the classifiers. After all the data instances are reduced to a vector, we apply a stratified split using an 80-20 train-test-split. Note, the stratified split preserves the proportions of the classes. This is done before any oversampling technique to ensure that all the samples used for testing are from the original data. Then for the training set we apply the synthetic minority oversampling technique (SMOTE) to oversample the minority classes as a solution to combat the class imbalance. A dataset with imbalanced classes such as the case in this problem could keep a classifier from effectively learning the decision boundary. SMOTE :cite:`Chawla_2003` does not simply duplicate the elements of the minority class but rather synthesizes new instances. This unique oversampling technique selects examples that are close to the original elements in the feature space by drawing a line between two random existing instances and creating a new instance at a point along the line. This method is very effective because the new samples that are created are realistic instances of the minority class and it helps balance the class distributions. We used oversampled graph features as input data for three traditional machine learning algorithms to classify the features into a specific class, k-nearest neighbors, decision tree classifier and random forest classifier. 
-
-
-
-Experiments and Results
------------------------
-
-We test the performance of our methods on two different classification tasks: (i) categorize between the last frame images of mitochondria that have been exposed to toxin listeriolysin (class llo) and mitochondria that have been exposed to mitochondrial- division inhibitor 1 (class mdivi), (ii) categorize between the last frames of mitochondria belong to class llo and mitochondria that was exposed to no external stimuli to serve as a control group (class control).
-The two classification problems help evaluate the differences in the morphologies. The classification task that deals with llo and control data is meant to explore whether our methods can distinguish between an anomalous cell and a healthy cell. The classification task that deals with llo and mdivi data investigates whether the methods can distinguish between two different types of anomalies (fusion and fission). 
-Due to the class imbalance and relatively small size of the dataset, (llo had 54 instances, mdivi had 31 instances and control had 29 instances) we had to downsample the llo which was the majority class to help the GNN methods. Specifically, this undersampling technique kept the model from randomly guessing the llo class for every test instance. Therefore, 19 frames of each of the three classes were used for training and 12 frames were used for testing. The sequence of frames that were in the training and test set for each run varied as they were randomly subsampled each time. 
-The Llo-Control problem was trained on the GNN with GCN layers. The Mdivi-Llo problem was trained on the GNN with GCS layers. 
-Alternatively, the input data for the traditional classifiers was oversampled using SMOTE, so the classes were balanced for those methods as well. The training set for the Llo-Control classification problem had 44 samples of each class  and the test set had 6 control instances 
-and 10 training instances. The Mdivi-Llo also had 44 instances of each class in the training set and had a test set consisting of 7 mdivi instances and 10 llo. The number of instances slightly differed as this method maintained 80-20 train-test split. Similarly to the GNN approach the frames chosen for training and test set for each run were randomly subsampeld each time. 
-Both the traditional classifier and GNN methods fully train on the test set and evaluate on the testing set. We measured the number of correctly classified instances of each model and used the accuracy as the main metric to evaluate the performance of our models. 
-
 
 
 .. raw:: latex
@@ -283,16 +237,19 @@ Both the traditional classifier and GNN methods fully train on the test set and 
    \end{table*}
 
 
+The graph convolution layer of each model is followed by the MinCut Pooling layer :cite:`Bianchi_2019_Mincut`. This method is based on the minCUT optimization problem which finds a cut of the graph that still preserves the topology and representation of the graph. It computes a soft clustering of the input graphs and outputs a reduced node features and adjacency matrix. The dimensions are reduced to the parameter k which is specified when calling the pooling layer. 
+Finally, the last layer of both architectures is a global pooling architecture that pools the graph by computing the sum of the inputs node features. Then the model is through a Dense layer, a fully connected output layer 
+The architectures were trained using Adam optimizer, and L2 penalty loss with weight 1e-3 and 16 hidden units. The GCS layers used a tanh activation function. The MinCut pooling layer is set to output N/2 nodes in the first layer and N/4 at the second layer and N is the average order of the graphs in the dataset. The Dense layer used a sigmoid activation function and we used binary cross entropy for the loss. The models ran for 3000 epochs.
 
 
 
+Graph level features using node statistics
+++++++++++++++++++++++++++++++++++++++++++
 
 
-For the Llo-Mdivi classification problem, we found that the minimum of the node features as input for the random forest classifier performed the best. And for the Llo-Control, we found the maximum of the node features as the input graph feature for random forest classifiers had the best performance. Overall, we found the traditional classification method random forest had the best performance for both Llo-Mdivi and Llo-Control tests. K-NN classifier had the lowest performance but still performed comparably to the other models. The graph neural network methods also performed substantially well considering they had less training data than the traditional methods. 
+This approach deals with finding a good graph representation by using a method similar to bag of nodes. Because the available number of graphs for each class are limited, we create a graph feature by reducing the node features to a vector of statistics. We created four different statistics to act as the graph features: min, max, mean and median. Meaning, for each of the node features, one aggregate statistic (min, max, mean or median) is applied to create a vector of size 5 that would serve as an input for the classifiers. After all the data instances are reduced to a vector, we apply a stratified split using an 80-20 train-test-split. Note, the stratified split preserves the proportions of the classes. This is done before any oversampling technique to ensure that all the samples used for testing are from the original data. Then for the training set we apply the synthetic minority oversampling technique (SMOTE) to oversample the minority classes as a solution to combat the class imbalance. A dataset with imbalanced classes such as the case in this problem could keep a classifier from effectively learning the decision boundary. SMOTE :cite:`Chawla_2003` does not simply duplicate the elements of the minority class but rather synthesizes new instances. This unique oversampling technique selects examples that are close to the original elements in the feature space by drawing a line between two random existing instances and creating a new instance at a point along the line. This method is very effective because the new samples that are created are realistic instances of the minority class and it helps balance the class distributions. We used oversampled graph features as input data for three traditional machine learning algorithms to classify the features into a specific class, k-nearest neighbors, decision tree classifier and random forest classifier. 
 
-Discussion
-----------
-Overall, all the methods prove that the node features effectively capture the properties of three different organelle morphologies. Given that deep learning models are very data hungry, GNNs still performed well. They could however benefit from more data. Considering the results, oversampling proved very effective for the traditional methods and utilizing an oversampling technique for GNN data could increase results. Lastly, the traditional methods had the best performance but extracting structural information through graph statistics could be limiting and time-consuming. 
+
 
 .. raw:: latex
 
@@ -370,6 +327,27 @@ Overall, all the methods prove that the node features effectively capture the pr
    \end{tabular}
    \caption{Results for Mdivi vs. Control task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class.}
    \end{table*}
+
+
+
+
+Experiments and Results
+-----------------------
+
+We test the performance of our methods on three different classification tasks: (i) categorize between the last frame images of mitochondria that have been exposed to toxin listeriolysin (class llo) and mitochondria that have been exposed to mitochondrial- division inhibitor 1 (class mdivi), (ii)categorize between the last frames of mitochondria belong to class llo and mitochondria that was exposed to no external stimuli to serve as a control group (class control) and (iii) categorize between  mitochondria that have been exposed to mitochondrial- division inhibitor 1 (class mdivi) and mitochondria that was exposed to no external stimuli to serve as a control group (class control).
+The three classification problems help evaluate all possible differences in the morphologies. Both classification tasks that deal with llo and control data and mdivi and control are meant to explore whether our methods can distinguish between anomalous and healthy cells. The classification task that deals with llo and mdivi data investigates whether the methods can distinguish between two different types of anomalies (fusion and fission). 
+Due to the class imbalance and relatively small size of the dataset, (llo had 54 instances, mdivi had 31 instances and control had 29 instances) we decided to take two different approaches for the two methods. One solution was to downsample the llo class which is the majority class to help the GNN methods. We also used this downsampling method for the traditional classifiers to compare the different methodologies effectively. Specifically, this downsampling technique was chosen to keep the model from randomly guessing the llo class for every test instance. Therefore, 19 frames of each of the three classes were used for training and 12 frames were used for testing. The sequence of frames that were in the training and test set for each run varied as they were randomly subsampled each time.  The Llo-Control problem was trained on the GNN with GCN layers. The Mdivi-Llo problem was trained on the GNN with GCS layers. 
+Alternatively, we utilized an oversampling technique on the input data for the traditional classifiers. The input data for the traditional classifiers was oversampled using SMOTE, so the classes were balanced for those methods as well. The training set for the Llo-Control classification problem had 44 samples of each class  and the test set had 6 control instances and 10 llo instances. The Mdivi-Llo also had 44 instances of each class in the training set and had a test set consisting of 7 mdivi instances and 10 llo. The number of instances slightly differed as this method maintained an 80-20 train-test split. Similar to the GNN approach the frames chosen for training and test set for each run were randomly subsampeld each time. 
+Both the traditional classifier and GNN methods fully train on the test set and evaluate on the testing set. We measured the number of correctly classified instances of each model and used the accuracy as the main metric to evaluate the performance of our models. 
+  
+For the Llo-Mdivi classification problem, we found that the minimum of the node features as input for the random forest classifier performed the best. And for the Llo-Control, we found the maximum of the node features as the input graph feature for random forest classifiers had the best performance. Overall, we found the traditional classification method random forest had the best performance for both Llo-Mdivi and Llo-Control tests. K-NN classifier had the lowest performance but still performed comparably to the other models. The graph neural network methods also performed substantially well considering they had less training data than the traditional methods. 
+ 
+
+
+
+Discussion
+----------
+Overall, all the methods prove that the node features effectively capture the properties of three different organelle morphologies. Given that deep learning models are very data hungry, GNNs still performed well. They could however benefit from more data. Considering the results, oversampling proved very effective for the traditional methods and utilizing an oversampling technique for GNN data could increase results. Lastly, the traditional methods had the best performance but extracting structural information through graph statistics could be limiting and time-consuming. 
 
 
 
