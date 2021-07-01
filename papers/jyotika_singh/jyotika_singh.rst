@@ -5,9 +5,9 @@
 
 :bibliography: paper
 
----------------------------------------------------
-Analyzing YouTube using Python and Machine Learning
----------------------------------------------------
+------------------------------------------------------------------
+Social Media Analysis using Natural Language Processing Techniques
+------------------------------------------------------------------
 
 .. class:: abstract
 
