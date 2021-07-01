@@ -64,21 +64,21 @@ We propose two methods to classify mitochondria based on their dynamics by repre
 We analyze the cells of the last frame of the video data that portray the cells after the fusion or fission event to classify which structural change has occurred. We explore two methods that utilize graph machine learning and have proven to be effective in characterizing morphological events given only the last frame of the video. The first involves using an aggregate statistic that acts as a graph representaion and a traditional classifier to sort the different frames. The next method involves a graph neural network architecture that utilizes graph convolutional and pooling layers to categorize the different frames. Both methods show to be effective methods for classifying the different classes of mitochondira.  
 
 .. figure:: control.png
-   :scale: 30%
+   :scale: 45%
    :figclass: w
    :align: center
 
    The first, middle and last frames on a control cell with no chemical exposure. 
 
 .. figure:: llo.png
-   :scale: 30%
+   :scale: 45%
    :figclass: w
    :align: center
 
    The first, middle and last frames on an cell exposed to listeriolysin O (llo). The frames show the resulting fragmentation. 
 
 .. figure:: mdivi.png
-   :scale: 30%
+   :scale: 45%
    :figclass: w
    :align: center
 
@@ -206,42 +206,85 @@ Alternatively, the input data for the traditional classifiers was oversampled us
 and 10 training instances. The Mdivi-Llo also had 44 instances of each class in the training set and had a test set consisting of 7 mdivi instances and 10 llo. The number of instances slightly differed as this method maintained 80-20 train-test split. Similarly to the GNN approach the frames chosen for training and test set for each run were randomly subsampeld each time. 
 Both the traditional classifier and GNN methods fully train on the test set and evaluate on the testing set. We measured the number of correctly classified instances of each model and used the accuracy as the main metric to evaluate the performance of our models. 
 
-.. table:: Results of the models for the two binary classification problems. :label:`rtable`
-   :widths: 30, 20, 20
+
+
+.. raw:: latex
+
+   \begin{table*}
+   \centering
+   \begin{longtable*}{llllllll}
+                           &                & \multicolumn{2}{l}{}           & \multicolumn{2}{l}{}       & \multicolumn{2}{l}{}           \\
+                           &                &       &                        &       &                    &       &                        \\
+                           &                &       &                        &       &                    &       &                        \\
+                           & Accuracy       & \multicolumn{2}{c}{Precision~} & \multicolumn{2}{c}{Recall} & \multicolumn{2}{c}{F-1 Score}  \\
+                           & -              & Mdivi & LLO                    & Mdivi & LLO                & Mdivi & LLO                    \\
+   Median - Random Forest  & 0.770          & 0.908 & 0.739                  & 0.500 & 0.959              & 0.624 & 0.832                  \\
+   Mean - Random Forest    & 0.743          & 0.871 & 0.718                  & 0.452 & 0.948              & 0.574 & 0.814                  \\
+   Min - Random Forest     & \textbf{0.812} & 0.893 & 0.792                  & 0.629 & 0.941              & 0.721 & 0.857                  \\
+   Max - Random Forest     & 0.707          & 0.824 & 0.687                  & 0.374 & 0.939              & 0.494 & 0.791                  \\
+   Median - Decision Trees & 0.764          & 0.890 & 0.737                  & 0.495 & 0.952              & 0.613 & 0.828                  \\
+   Mean - Decision Trees   & 0.741          & 0.860 & 0.718                  & 0.455 & 0.941              & 0.572 & 0.812                  \\
+   Min - Decision Trees    & 0.781          & 0.866 & 0.762                  & 0.565 & 0.931              & 0.664 & 0.835                  \\
+   Max - Decision Trees    & 0.720          & 0.825 & 0.702                  & 0.418 & 0.932              & 0.531 & 0.798                  \\
+   Median - kNN            & 0.670          & 0.588 & 0.752                  & 0.662 & 0.676              & 0.615 & 0.705                  \\
+   Mean - kNN              & 0.747          & 0.718 & 0.778                  & 0.650 & 0.815              & 0.669 & 0.790                  \\
+   Min - kNN               & 0.702          & 0.610 & 0.795                  & 0.725 & 0.686              & 0.659 & 0.732                  \\
+   Max - kNN               & 0.579          & 0.479 & 0.646                  & 0.464 & 0.659              & 0.462 & 0.647                 
+   \end{longtable*}
+   \caption{Results for Mdivi vs. LLO task using traditional classifiers and SMOTE oversampling technique}
+   \end{table*}
+
+
+.. raw:: latex
+
+   \begin{table*}
+   \centering
+   \begin{tabular}{llllllll}
+                           & Accuracy       & \multicolumn{2}{c}{Precision~} & \multicolumn{2}{c}{Recall} & \multicolumn{2}{c}{F-1 Score}  \\
+                           & -              & Control & LLO                  & Control & LLO              & Control & LLO                  \\
+   Median - Random Forest  & 0.745          & 0.835   & 0.733                & 0.413   & 0.944            & 0.530   & 0.823                \\
+   Mean - Random Forest    & 0.780          & 0.937   & 0.752                & 0.446   & 0.979            & 0.581   & 0.849                \\
+   Min - Random Forest     & 0.739          & 0.819   & 0.730                & 0.403   & 0.941            & 0.517   & 0.820                \\
+   Max - Random Forest     & \textbf{0.826} & 0.927   & 0.804                & 0.586   & 0.970            & 0.696   & 0.876                \\
+   Median - Decision Trees & 0.749          & 0.837   & 0.737                & 0.421   & 0.945            & 0.536   & 0.826                \\
+   Mean - Decision Trees   & 0.763          & 0.875   & 0.746                & 0.439   & 0.958            & 0.559   & 0.836                \\
+   Min - Decision Trees    & 0.721          & 0.757   & 0.721                & 0.393   & 0.918            & 0.493   & 0.805                \\
+   Max - Decision Trees    & 0.814          & 0.923   & 0.791                & 0.555   & 0.969            & 0.671   & 0.869                \\
+   Median - kNN            & 0.636          & 0.512   & 0.714                & 0.509   & 0.712            & 0.500   & 0.708                \\
+   Mean - kNN              & 0.703          & 0.635   & 0.739                & 0.500   & 0.825            & 0.545   & 0.776                \\
+   Min - kNN               & 0.634          & 0.504   & 0.711                & 0.493   & 0.719            & 0.488   & 0.710                \\
+   Max - kNN               & 0.560          & 0.391   & 0.651                & 0.388   & 0.664            & 0.382   & 0.652               
+   \end{tabular}
+   \caption{Results for Control vs. LLO task using traditional classifiers and SMOTE oversampling technique}
+   \end{table*}
+
+
+.. raw:: latex
+
+   \begin{table*}
+   \centering
+   \begin{tabular}{llllllll}
+                           & Accuracy       & \multicolumn{2}{c}{Precision~} & \multicolumn{2}{c}{Recall} & \multicolumn{2}{c}{F-1 Score}  \\
+                           & -              & Control & LLO                  & Control & LLO              & Control & LLO                  \\
+   Median - Random Forest  & 0.745          & 0.835   & 0.733                & 0.413   & 0.944            & 0.530   & 0.823                \\
+   Mean - Random Forest    & 0.780          & 0.937   & 0.752                & 0.446   & 0.979            & 0.581   & 0.849                \\
+   Min - Random Forest     & 0.739          & 0.819   & 0.730                & 0.403   & 0.941            & 0.517   & 0.820                \\
+   Max - Random Forest     & \textbf{0.826} & 0.927   & 0.804                & 0.586   & 0.970            & 0.696   & 0.876                \\
+   Median - Decision Trees & 0.749          & 0.837   & 0.737                & 0.421   & 0.945            & 0.536   & 0.826                \\
+   Mean - Decision Trees   & 0.763          & 0.875   & 0.746                & 0.439   & 0.958            & 0.559   & 0.836                \\
+   Min - Decision Trees    & 0.721          & 0.757   & 0.721                & 0.393   & 0.918            & 0.493   & 0.805                \\
+   Max - Decision Trees    & 0.814          & 0.923   & 0.791                & 0.555   & 0.969            & 0.671   & 0.869                \\
+   Median - kNN            & 0.636          & 0.512   & 0.714                & 0.509   & 0.712            & 0.500   & 0.708                \\
+   Mean - kNN              & 0.703          & 0.635   & 0.739                & 0.500   & 0.825            & 0.545   & 0.776                \\
+   Min - kNN               & 0.634          & 0.504   & 0.711                & 0.493   & 0.719            & 0.488   & 0.710                \\
+   Max - kNN               & 0.560          & 0.391   & 0.651                & 0.388   & 0.664            & 0.382   & 0.652               
+   \end{tabular}
+   \caption{Results for Control vs. Mdivi task using traditional classifiers and SMOTE oversampling technique}
+   \end{table*}
 
 
 
-   +----------------------+-----------------+-----------------+
-   |                      | Llo vs. Control | Llo vs. Mdivi   |
-   +======================+=================+=================+
-   | GNN with GCN Layers  |     0.655       |      n/a        |
-   +----------------------+-----------------+-----------------+
-   | GNN with GCS Layers  |      n/a        |     0.718       |
-   +----------------------+-----------------+-----------------+
-   | Median-Random Forest |     0.740       |     0.770       |
-   +----------------------+-----------------+-----------------+
-   | Mean-Random Forest   |     0.777       |     0.741       |
-   +----------------------+-----------------+-----------------+
-   | Min-Random Forest    |     0.734       |     0.805       |
-   +----------------------+-----------------+-----------------+
-   | Max-Random Forest    |     0.822       |     0.708       |
-   +----------------------+-----------------+-----------------+
-   | Median-Decision Trees|     0.740       |     0.761       |
-   +----------------------+-----------------+-----------------+
-   | Mean-Decision Trees  |     0.755       |     0.739       |
-   +----------------------+-----------------+-----------------+
-   | Min-Decision Trees   |     0.719       |     0.782       |
-   +----------------------+-----------------+-----------------+
-   | Max-Decision Trees   |     0.810       |     0.720       |
-   +----------------------+-----------------+-----------------+
-   | Median-kNN           |     0.637       |     0.667       |
-   +----------------------+-----------------+-----------------+
-   | Mean-kNN             |     0.709       |     0.743       |
-   +----------------------+-----------------+-----------------+
-   | Min-kNN              |     0.632       |     0.702       |
-   +----------------------+-----------------+-----------------+
-   | Max-kNN              |     0.565       |     0.578       |
-   +----------------------+-----------------+-----------------+
+
 
 
 

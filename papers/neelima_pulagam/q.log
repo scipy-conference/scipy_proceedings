@@ -1,0 +1,24 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.5.29)  1 JUL 2021 12:42
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**q
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/q.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-18> File ignored
+)
+! Emergency stop.
+<*> q
+     
+*** (job aborted, no legal \end found)
+
+ 
+Here is how much of TeX's memory you used:
+ 17 strings out of 478994
+ 510 string characters out of 5858184
+ 283044 words of memory out of 5000000
+ 17602 multiletter control sequences out of 15000+600000
+ 403430 words of font info for 27 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 13i,0n,15p,81b,10s stack positions out of 5000i,500n,10000p,200000b,80000s
+!  ==> Fatal error occurred, no output PDF file produced!
