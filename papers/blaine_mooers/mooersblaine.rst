@@ -16,9 +16,9 @@ Modernizing computing by structural biologists with Jupyter and Colab
 
 .. class:: abstract
 
-Protein crystallography produces most of the protein structures used in structure-based drug design. 
+Protein crystallography produces most of the protein structures used in structure-based drug design.
 The process of protein structure determination is computationally intensive and error-prone because many software packages are involved.
-Here, we attempt to support the reproducibility of this computational work by using Jupyter notebooks to document the decisions made, the code, and selected output. 
+Here, we attempt to support the reproducibility of this computational work by using Jupyter notebooks to document the decisions made, the code, and selected output.
 We have made libraries of code templates to ease running the crystallography packages in Jupyter notebooks when editing them with JupyterLab or Colab.
 Our combined use of GitHub, snippet libraries, Jupyter notebooks, JupyterLab, and Colab will help modernize the computing done by structural biologists.
 
@@ -30,11 +30,11 @@ Our combined use of GitHub, snippet libraries, Jupyter notebooks, JupyterLab, an
 Introduction
 ------------
 
-Structural biologists study the molecular structures of proteins and nucleic acids to understand how they function in biology and medicine. 
+Structural biologists study the molecular structures of proteins and nucleic acids to understand how they function in biology and medicine.
 The underlying premise of the field is that molecular function follows molecular form.
-More precise aliases for these scientists include molecular structural biologists, structural biochemists, and molecular biophysicists. 
+More precise aliases for these scientists include molecular structural biologists, structural biochemists, and molecular biophysicists.
 Some of the methods used to determine the near-atomic resolution molecular structures include molecular modeling, X-ray crystallography, NMR, and cryo-EM.
-These scientists often use the molecular structures of these large biomolecules to design small-molecule drugs for improved therapies. 
+These scientists often use the molecular structures of these large biomolecules to design small-molecule drugs for improved therapies.
 As a result, structural biology plays a vital role in drug discovery and development, and many structural biologists work in the pharmaceutical industry.
 Those in academia in the United States generally have their work funded by the National Institutes of Health, the National Science Foundation, the Department of Defense, the Department of Energy, or one of several disease oriented medical foundations.
 
@@ -45,12 +45,12 @@ However, these barriers have been lowered over the past two decades by the wides
 As a result, biologists with minimal formal training in computing have become the largest component of the field.
 
 Computing is involved in the six or more steps from structural data acquisition to publication.
-Several alternate software packages are often available for each step. 
+Several alternate software packages are often available for each step.
 Different combinations of these alternatives lead to a combinatorial explosion of possible workflows. 
 In some situations, workers have set up software pipelines for some of the steps.
 However, these pipelines are difficult to transfer or have trouble with the challenging samples that cannot yet be handled without human intervention.
-The current heterogenous computing environment makes the computational work vulnerable to errors in the tracking of input and output files. 
-Storing the code and outputs for some of the steps in Jupyter notebooks would be one way to reduce this vulnerability . 
+The current heterogenous computing environment makes the computational work vulnerable to errors in the tracking of input and output files.
+Storing the code and outputs for some of the steps in Jupyter notebooks would be one way to reduce this vulnerability 
 
 To ease crystal structure determination in Jupyter, we made libraries of code templates for crucial programs [Kluy16]_. 
 We formatted the libraries for two code snippet extensions for JupyterLab. 
@@ -437,68 +437,6 @@ These shell scripts invoke Python scripts that capture the command line argument
 
 
 
-
-
-
-JupyterLab snippets
-*******************
-
-
-
-Elyra snippets
-**************
-
-
-
-Colab library
-*************
-
-
-
-Script to install PyMOL in Colab
-********************************
-
-
-
-
-Table of tutorial Jupyter Notebooks
-***********************************
-
-
-.. figure:: figure1.png
-
-   This is yet another the caption. 
-
-
-
-Help resource on GitHub
-***********************
-
-
-.. table:: Table of tutorial jupyter notebooks. :label:`jnbtable`
-
-   +------------------------+-----------------------------------+
-   | Topic                  | Notebook name                     |
-   +========================+===================================+
-   | SAD phasing analysis   |                                   |
-   +------------------------+-----------------------------------+
-   | Twinned data analysis  |                                   |
-   +------------------------+-----------------------------------+
-   | SAXS data analysis     |                                   |
-   +------------------------+-----------------------------------+
-   | Atomic res  refinement |                                   |
-   +------------------------+-----------------------------------+
-   | Movie making           |                                   |
-   +------------------------+-----------------------------------+
-   | Ensemble with Prody    |                                   |
-   +------------------------+-----------------------------------+
-   | PCA analysis w/ bio3d  |                                   |
-   +------------------------+-----------------------------------+
-   | Literate programming   |                                   |
-   +------------------------+-----------------------------------+
-
-
-
 Discussion
 ----------
 
@@ -512,7 +450,8 @@ In principle, consumer computers could be used as an interface for doing all man
 Why Colab?
 **********
 
-Colab was developed internally and first released for public use in 2018; numerous research papers in the physical and medical sciences have been published that used Colab (e.g.,  ).
+Colab was developed internally and first released for public use in 2018.
+Numerous research papers in the physical and medical sciences have been published that used Colab (e.g.,  ).
 Google Colab provides fast and easy access for users with a Google account and Google drive, so many workers in crystallography already have the prerequisites.
 Many readers are also familiar with Jupyter Notebooks (10 million shared on GitHub as of early 2021).
 Jupyter Notebooks can be loaded onto Google Drive and then opened in Colab.
@@ -522,9 +461,9 @@ Colab provides almost instant loading of specific Jupyter notebooks but at the c
 The first point lower the barrier to resuming work while the second point can be addressed by including the code for installing the required software at the head of the notebook.
 
 Microsoft has stopped supporting its Azure Notebook and has asked users to migrate to several alternative approaches.
-One approach is to use of Visual Studio Code (VSC) rather to JupyterLab to edit and run Jupyter Notebooks locally and on Microsoft's cloud service.
+One approach is to use of Visual Studio Code (VSC) rather to JupyterLab to edit and run Jupyter notebooks locally and on Microsoft's cloud service.
 VSC is an advanced text editor that has stronger support for code snippets because it supports the use of tab triggers and tab stops, two important features that are missing from Colab, JupyterLab, and the Classic Jupyter Notebook.
-However, VSC is so feature-rich that it is over-whelming for the beginning users.
+However, VSC is so feature-rich that it can be over-whelming for some beginning users.
 To support a wider group of users, we developed the libraries for Google Colab.
 We plan to develop libraries for editing Jupyter Notebooks in VSC.
 
@@ -540,31 +479,29 @@ The user can modify the installation templates to install the software on their 
 Examples of such adaptations are provided on a dedicated GitHub webpage.
 The template libraries presented here lower an important barrier to the use of Colab by those interested in crystallographic computing on the cloud.
 
-
-
-
 Relation to other work with snippet libraries
 *********************************************
 
 To the best of our knowledge, we are the first to provide snippet libraries for crystallographic computing.
 This library is among the first that is domain specific.
-Most existing snippet libraries are for programming languages or for hypertext languages like HTML, markdown and LaTeX.
+Most snippet libraries are for programming languages or for hypertext languages like HTML, markdown and LaTeX.
 The average snippet also tends to be quite short and the size of the libraries tends to be quite small.
 The audience for these libraries are millions of professional programmers and web page developers.
 We reasoned that this great tool should be brought to the aid of the thousands of workers in crystallography.
 
 The other area where domain specific snippets have been provided is in molecular graphics.
-The pioneering work on a scripting wizard provided templates for use in RasMol [Hort99]_.
+The pioneering work on a scripting wizard provided templates for use in the molecular graphics program RasMol [Hort99]_.
 The conscript program provided a converter from RasMol to PyMOL [Mott10]_.
 Language converters for translating code between the leading molecular graphics programs would allow users to more easily find and use the optimal molecular graphics program for the task at hand.
 
-We also provided snippets for PyMOL, which has 100,000 users, for use in text editors [Moo21a]_ and Juptyer Notebooks [Moo21b]_.
+We also provided snippets for PyMOL, which has 100,000 users, for use in text editors [Moo21a]_ and Juptyer notebooks [Moo21b]_.
 The former support tab triggers and tab stops; the latter does not.
 
 The libraries have to be molecular graphics program specific because molecular graphics programs have been written in a range of programming languages.
 The user issues the commands in either in a general programming language like Python or a a domain specific language (DSL) like pml.
-To counter this growing tower of babel, the XXXXXX intiative was formed cite. 
 It would cause confusion to mix snippets from multiple languages.
+To counter this growing tower of babel, the OpenStructure intiative was formed [Bias13]_. 
+
 
 We have also worked out how to deploy this snippet libraries in OnDemand notebooks at High-Performance Computing centers.
 These notebooks resemble Colab notebooks in that JupyterLab extensions cannot be installed.
@@ -623,7 +560,7 @@ References
 
 .. [Adam19] P.D. Adams, P.V. Afonine, K. Baskaran, H.M. Berman, J. Berrisford, G. Bricogne, D.G. Brown, S.K. Burley, M. Chen, Z. Feng, C. Flensburg, A. Gutmanas, J.C. Hoch, Y. Ikegawa, Y. Kengaku, E. Krissinel, G. Kurisu, Y. Liang, D. Liebschner, L. Mak, J.L Markley, N.W. Moriarty, G.N. Murshudov, M. Noble, E. Peisach, I. Persikova, B.K. Poon, O.V. Sobolev, E.L. Ulrich, S. Velankar, C. Vonrhein, J. Westbrook, M. Wojdyr, M. Yokochi, and J.Y. Young.
             *Announcing mandatory submission of PDBx/mmCIF format files for crystallographic depositions to the Protein Data Bank (PDB)*,
-            Acta Crystallographica Section D: Structural Biology, 75(4):451--454, April 2019.
+            Acta Crystallographica Section D: Structural Biology, 75(4):451-454, April 2019.
             doi: 10.1107/S2059798319004522
 
 .. .. [Adam21]
@@ -633,14 +570,19 @@ References
             Computing Sci. \& Eng., 23(2):36-46, April 2021. 
             doi: 10.1109/MCSE.2021.3052101
             
+.. [Bias13] M. Biasini, T. Schmidt, Bienert,S., Mariani,V., Studer,G., Haas,J., Johner,N., Schenk,A. D., Philippsen,A. and Schwede,T. (2013) 
+            *OpenStructure: an integrated software framework for computational structural biology*,
+            Acta Cryst. D69(5):701–709, May 2013.
+            doi:10.1107/S0907444913007051
+            
 .. [Brun98] A.T. Br{\"u}nger, P.D. Adams, G.M. Clore, W.L. Delano, P. Gros, R.W. Grosse-Kunstleve, J.-S. Jiang, J. Kuszewski, M. Nilges, N.S. Pannu, R.J. Read, L.M. Rice, T. Simonson, and G.L. Warren.
             *Crystallography \& NMR system: A new software suite for macromolecular structure determination*,
-            Acta Cryst. D54(5), 905-921, May 1998.
+            Acta Cryst. D54(5):905-921, May 1998.
             doi: 10.1107/S0907444998003254
            
 .. [Burn17] T. Burnley, C.M. Palmer, and M. Winn. 
             *Recent developments in the CCP-EM software suite*,
-            Acta Cryst. D73(6), 469-477, June 2017.
+            Acta Cryst. D73(6):469-477, June 2017.
             doi: 10.1107/S2059798317007859
             
 .. [Elyra]  https://github.com/elyra-ai/elyra/blob/master/docs/source/getting_started/overview.md 
@@ -674,7 +616,7 @@ References
            
 .. [Lieb11] D. Liebschner, P.V. Afonine, M.L. Baker, G. Bunkóczi, V.B. Chen, T.I. Croll, B. Hintze, L.-W. Hung, S. Jain, A.J. McCoy, N.W. Moriarty, R.D. Oeffner, B.K. Poon, M G. Prisant, R.J. Read, J.S. Richardson, D.C. Richardson, M.D. Sammito, O.V. Sobolev, D.H. Stockwell, T.C. Terwilliger, A.G. Urzhumtsev, L.L. Videau, C.J. Williams, and P.D. Adams. 
            *Macromolecular structure determination using X-rays, neutrons and electrons: recent developments in Phenix*,
-           Acta Cryst., D75(10), 861-877, October 2019.
+           Acta Cryst., D75(10):861-877, October 2019.
            doi: 10.1107/S2059798319011471
            
 .. [Mana21] K. Manalastas-Cantos, P.V. Konarev, N.R. Hajizadeh, A.G. Kikhney, M.V. Petoukhov, D.S. Molodenskiy, A. Panjkovich, H.D.T. Mertens, A. Gruzinov, C. Borges, M. Jeffries, D.I. Sverguna, and D. Franke.
