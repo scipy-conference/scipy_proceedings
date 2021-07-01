@@ -507,8 +507,7 @@ Eccentric annular Poiseuille flow velocity
 
 In various circumstances Couette flow may also induce a secondary flow driven by a pressure difference; a so-called *Poiseuille flow*. This particular type is of interest in many areas and we'll briefly show how the corresponding solution presented in [PHW33]_ is derived conceptually as well as how it can be implemented with the help of ``SymPy``. 
 
-As far as we know, hitherto only the relations found in the aforementioned paper had been implemented (e.g. [W06]_, [TKM19]_), but unfortunately in a way that is rather difficult to reproduce. 
-The fact, that in the current context blood coagulation and hemodynamics are omnipresent in the media, eccentric annular blood flow in arteries is extensively studied ([TKM19]_) and flow forces that act upon the arteries are of great medical interest (e.g. [S11]_), makes it even more interesting to use the existing formulae of [PHW33]_, which are tedious to use when implemented by hand.
+As far as we know, most of the current literature either refers to the aforementioned paper only by using its derived results (e.g. the volume flow relation found in [W06]_) or by solving the Poiseuille problem numerically (as done in [TKM19]_). The fact, that in the current context blood coagulation and hemodynamics are omnipresent in the media, eccentric annular blood flow in arteries is extensively studied ([TKM19]_) and flow forces that act upon the arteries are of great medical interest (e.g. [S11]_), makes it even more interesting to retrace the existing formulae of [PHW33]_, which are tedious to use when implemented by hand.
 
 
 In the case of Poiseuille flow, the righthand-side of the corresponding Stokes equation is non-homogeneous (:math:`dp\neq 0; u_R= 0`); see also Equation (:ref:`stokesPoisseuilleCouette`). Hence, we need to deal with a different mathematical problem here compared to the previous Sections.
