@@ -526,7 +526,7 @@ Considering we are dealing with memory-bound operations, we chose ``OMP_NUM_THRE
 ``RSB_USER_SET_MEM_HIERARCHY_INFO`` was set to ``"L2:4/64/16000K,L1:8/64/32K"``.
 We use CSR from ``csr_matrix`` in SciPy ``e171a1`` from Feb 20, 2021, PyRSB ``8a6d603`` from Jun 08, 2021, pre-release LIBRSB-1.3.
 For both, we use ``-Ofast -march=native -mtune=native`` flags and ``gcc version 10.2.1 20210110 (Debian 10.2.1-6)``.
-We use matrices which were also used in [Martone14]_, available from [SSMC]_; see the table below.
+We use matrices which were also used in [Martone14]_, available from https://sparse.tamu.edu/ ([SSMC]_); see the table below.
 Many of these are symmetric; differently than ``rsb_matrix``, ``csr_matrix`` does not support `symmetric SpMM`;
 therefore in both cases we expand their symmetry and perform only `unsymmetric` (general) SpMM.
 Before starting any measurement, we run ``autotune`` on a temporary matrix to `warm-up` the OpenMP environment, once.
@@ -731,7 +731,7 @@ We are grateful to reviewer Meghann Agarwal for her energetic help in improving 
 .. [PyDataSparse] *PyDataSparse.jl*, (2021, April 08). Retrieved April 08, 2021, from https://github.com/pydata/sparse.
 .. [Lee15] M.Lee, W.Chiang and C.Lin, "Fast Matrix-Vector Multiplications for Large-Scale Logistic Regression on Shared-Memory Systems," 2015 IEEE International Conference on Data Mining, Atlantic City, NJ, USA, 2015, pp. 835-840, doi: 10.1109/ICDM.2015.75.
 .. [Stegmeir15] A.Stegmeir (Jan 2015). "GRILLIX: A 3D turbulence code for magnetic fusion devices based on a field line map". Available from INIS: http://inis.iaea.org/search/search.aspx?orig_q=RN:46119630
-.. [Klos18] P.Klos, S.König, H.-W.Hammer, J.E. Lynn, and A.Schwenk. "Signatures of few-body resonances in finite volume". Phys. Rev. C 98, 034004 – Published 24 September 2018
+.. [Klos18] P.Klos, S.König, H.-W.Hammer, J.E. Lynn, and A.Schwenk. "Signatures of few-body resonances in finite volume". Phys. Rev. C 98, 034004 – Published 24 September 2018, doi: 10.1103/PhysRevC.98.034004
 .. [Wu16] L.Wu. "Algorithms for Large Scale Problems in Eigenvalue and Svd Computations and in Big Data Applications" (2016). Dissertations, Theses, and Masters Projects. Paper 1477068451.  http://doi.org/10.21220/S2S880
 .. [Browne15T] P.A. Browne, P.J. van Leeuwen. "Twin experiments with the equivalent weights particle filter and HadCM3". Quarterly Journal of the Royal Meteorological Society, vol. 141, no. 693, pp. 3399-3414, https://doi.org/10.1002/qj.2621
 .. [Browne15M] P.A. Browne, S. Wilson. "A simple method for integrating a complex model into an ensemble data assimilation system using MPI". Environmental Modelling & Software, vol. 68, pp. 122-128, https://doi.org/10.1016/j.envsoft.2015.02.003
@@ -742,6 +742,6 @@ We are grateful to reviewer Meghann Agarwal for her energetic help in improving 
 .. [OPENSUSE] *OpenSUSE*. (2021, May). Retrieved May 28, 2021, from https://www.opensuse.org
 .. [GUIX] *GuixHPC*. (2021, May). Retrieved May 28, 2021, from https://hpc.guix.info/
 .. [SPARSERSB] *SparseRSB*, (2021, April 09). Retrieved April 09, 2021, from https://octave.sourceforge.io/sparsersb/ 
-.. [SSMC] *SuiteSparse Matrix Collection*, (2021, May 28). Retrieved May 28, 2021, from https://sparse.tamu.edu/
+.. [SSMC] Timothy A. Davis and Yifan Hu. 2011. The University of Florida Sparse Matrix Collection. ACM Transactions on Mathematical Software 38, 1, Article 1 (December 2011), 25 pages. doi: https://doi.org/10.1145/2049662.2049663
 .. [OPENMP] *OpenMP*, (2021, May). Retrieved May 28, 2021, from https://www.openmp.org/
 
