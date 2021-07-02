@@ -262,6 +262,46 @@ This approach deals with finding a good graph representation by using a method s
 
 
 
+
+
+
+
+Experiments and Results
+-----------------------
+
+We test the performance of our methods on three different classification tasks: (i) categorize between the last frame images of mitochondria that have been exposed to toxin listeriolysin (class llo) and mitochondria that have been exposed to mitochondrial- division inhibitor 1 (class mdivi), (ii)categorize between the last frames of mitochondria that have been exposed to toxin listeriolysin (class llo) and mitochondria that was exposed to no external stimuli to serve as a control group (class control) and (iii) categorize between  mitochondria that have been exposed to mitochondrial- division inhibitor 1 (class mdivi) and mitochondria that was exposed to no external stimuli to serve as a control group (class control).
+The three classification problems help evaluate all possible differences in the morphologies. Both classification tasks that deal with distinguishing between class llo versus class control and class mdivi versus class control are meant to explore whether our methods can distinguish between anomalous and healthy cells. The classification task that deals with llo and mdivi data investigates whether the methods can distinguish between two different types of anomalies (fusion and fission). 
+
+
+Due to the class imbalance and relatively small size of the dataset, (llo had 54 instances, mdivi had 31 instances and control had 29 instances) we decided to take two different approaches for the methods. One solution was to downsample the llo class which is the majority class to help the GNN methods. We also used this downsampling method for the traditional classifiers to compare the different methodologies effectively. Specifically, this downsampling technique was chosen to keep the model from randomly guessing the llo class for every test instance. Therefore, 19 frames of each of the three classes were used for training and 12 frames were used for testing. The sequence of frames that were in the training and test sets for each run varied as they were randomly subsampled for each time. We used two GNN architectures and three different classifiers with four aggregate stattistics resulting in twelve traditonal methods total. 
+
+Alternatively, we utilized an oversampling technique on the input data, which consited of the graph representation vectors, for the traditional classifiers. The input data for the traditional classifiers was first split into training and test sets. Eigty percent of each class was reserved for testing and the remaining twenty perenct for testing. The frames chosen for training and test set for each run were randomly subsampeld for each run. Then sythetic minority oversampling technique (SMOTE) was applied to the data reserved for training to balance the classes. After oversampling, the training set for the Llo-Control classification problem had 44 samples of each class and the test set had 6 control instances and 10 llo instances. The Mdivi-Llo task also had 44 instances of each class in the training set and had a test set consisting of 7 mdivi instances and 10 llo. Lastly, the Mdivi-Control task had 25 instances of each class for training and 6 instances of each respective class for testing. The train-test split was applied prior to oversampling to ensure that only real data points are used for testing. Oversampling was only possible with the data for the traditonal methods as it is not possible to apply an oversampling technique to create entire graphs and their node features. The input data for GNNs is a graph and its node features. Furthermore, the shape of each graph varied based on the instance which would make oversampling difficult and ineffective at producing new data instances.
+
+Both the traditional classifier and GNN methods fully train on the test set and evaluate on the testing set. We measured the number of correctly classified instances of each model and used the accuracy as the main metric to evaluate the performance of our models. Additionally, we include the precision, recall and F-1 scores for each class to show the statistical significance of the results. 
+
+
+Tables :ref:`mdivi-llo-smote`, :ref:`control-llo-smote`, :ref:`control-mdivi-smote` contain the results for oversampled data using traditional classifiers. Table :ref:`mdivi-llo-smote` shows the results for classifying mdivi and llo data instances using oversampling with SMOTE. For this task, random forest classifer using the min aggregate statistic produced the best results with an accuracy of 0.812. Table :ref:`control-llo-smote` shows the results for classifying llo and control data instances using oversampling with SMOTE. Max random forest had the performed in distinguishing control versus llo frames with an accuracy of 0.826. Table :ref:`control-mdivi-smote` shows the results for classifying mdivi and control data instances using oversampling with SMOTE with Median-Random Forest having the highest accuracy at 0.781.
+
+Tables :ref:`llo-mdivi`, :ref:`control-llo`, :ref:`control-mdivi` contain the results for of the traditional classifiers and the graph neural network architectures with the downsampled data. Table :ref:`llo-mdivi` shows the results for control-llo classification task with Max-Random Forest and GNNs with GCS layers having best accuracy of 0.68 and 0.686 respectively. Table :ref:`llo-mdivi` shows the results for mdivi-llo classificaiton. This task had four methods that had the best accuracy, GNN with GCS layers with an accuracy of 0.736 and Mean-Random Forest, Median-Decision trees and Max-kNN all three of which had an accuracy of 0.73. Lastly, table :ref:`control-mdivi` shows the results for Mdivi-control classification. The highest accuracy for this task was Min-Random Forest with an accuracy of 0.619.
+
+Discussion
+----------
+
+Overall, both methods have proven to be effective in classifying anomalies in mitochondria. The methods also prove that the node features effectively capture the properties of three different organelle morphologies and graphs are an effective way to represent mitochondria. It is clear from the results that oversampling the data is a good way to train the models well and make better predictions. So, it is worth noting that especially the deep learning models, which are known to be extremely data hungry, could benefit even more so from having more data. 
+
+When the data is oversampled, the random forest classifier performs well consitently but the aggregate statistic varies for each task. It is also interesting to note that the recall metric is disproportionately better for one class in every task. For llo-mdivi and llo-control tasks, this can potentially be attributed to oversampling the minority class and the majority class, which is llo in both cases, having more real data instances.
+
+When the data was downsampled, there was a considerable drop in performance as depicted by tables :ref:`llo-mdivi`, :ref:`control-llo`, :ref:`control-mdivi`. In this sampling method, the recall scores for the two classes in all three tasks appear to be closer which can again be potentially be attributed to training on all real data. The best metrics varied across each of the tasks. Graph deep learning methods performed well in the control-llo task and mdivi-llo task. Random forest continued to oupefrom most methods except for the mdivi-llo task, in which Max-kNN and Median-decision trees had high accuracies. 
+
+
+
+Conclusion
+----------
+
+Healthy dynamics of subcellular organelles are vital to their metabolic functions. Identifying anomalies in the dynamics is a challenging but important task. In this work, we propose two approaches to classifying different cell morphologies utilizing only the last frames of videos capturing mitochondrial fusion and fission. One method takes the node features and applies a general statistic to make one graph level feature to serve as input for a traditional classifier.  Another approach proposes using a graph neural network architecture to perform graph classification that take in a node feature matrix and an adjacency matrix as inputs. We show that both approaches are effective ways to classify between anomalous and regular mitochondria and between two different types of anomalous morphologies. Furthermore, we prove graph neural networks show much promise in classifying and perhaps even tracking the mitochondria and their morphologies. 
+
+
+
 .. raw:: latex
 
    \begin{table*}
@@ -338,42 +378,5 @@ This approach deals with finding a good graph representation by using a method s
    \end{tabular}
    \caption{Results for Mdivi vs. Control task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class.\DUrole{label}{control-mdivi}}
    \end{table*}
-
-
-
-
-Experiments and Results
------------------------
-
-We test the performance of our methods on three different classification tasks: (i) categorize between the last frame images of mitochondria that have been exposed to toxin listeriolysin (class llo) and mitochondria that have been exposed to mitochondrial- division inhibitor 1 (class mdivi), (ii)categorize between the last frames of mitochondria that have been exposed to toxin listeriolysin (class llo) and mitochondria that was exposed to no external stimuli to serve as a control group (class control) and (iii) categorize between  mitochondria that have been exposed to mitochondrial- division inhibitor 1 (class mdivi) and mitochondria that was exposed to no external stimuli to serve as a control group (class control).
-The three classification problems help evaluate all possible differences in the morphologies. Both classification tasks that deal with distinguishing between class llo versus class control and class mdivi versus class control are meant to explore whether our methods can distinguish between anomalous and healthy cells. The classification task that deals with llo and mdivi data investigates whether the methods can distinguish between two different types of anomalies (fusion and fission). 
-
-
-Due to the class imbalance and relatively small size of the dataset, (llo had 54 instances, mdivi had 31 instances and control had 29 instances) we decided to take two different approaches for the methods. One solution was to downsample the llo class which is the majority class to help the GNN methods. We also used this downsampling method for the traditional classifiers to compare the different methodologies effectively. Specifically, this downsampling technique was chosen to keep the model from randomly guessing the llo class for every test instance. Therefore, 19 frames of each of the three classes were used for training and 12 frames were used for testing. The sequence of frames that were in the training and test sets for each run varied as they were randomly subsampled for each time. We used two GNN architectures and three different classifiers with four aggregate stattistics resulting in twelve traditonal methods total. 
-
-Alternatively, we utilized an oversampling technique on the input data, which consited of the graph representation vectors, for the traditional classifiers. The input data for the traditional classifiers was first split into training and test sets. Eigty percent of each class was reserved for testing and the remaining twenty perenct for testing. The frames chosen for training and test set for each run were randomly subsampeld for each run. Then sythetic minority oversampling technique (SMOTE) was applied to the data reserved for training to balance the classes. After oversampling, the training set for the Llo-Control classification problem had 44 samples of each class and the test set had 6 control instances and 10 llo instances. The Mdivi-Llo task also had 44 instances of each class in the training set and had a test set consisting of 7 mdivi instances and 10 llo. Lastly, the Mdivi-Control task had 25 instances of each class for training and 6 instances of each respective class for testing. The train-test split was applied prior to oversampling to ensure that only real data points are used for testing. Oversampling was only possible with the data for the traditonal methods as it is not possible to apply an oversampling technique to create entire graphs and their node features. The input data for GNNs is a graph and its node features. Furthermore, the shape of each graph varied based on the instance which would make oversampling difficult and ineffective at producing new data instances.
-
-Both the traditional classifier and GNN methods fully train on the test set and evaluate on the testing set. We measured the number of correctly classified instances of each model and used the accuracy as the main metric to evaluate the performance of our models. Additionally, we include the precision, recall and F-1 scores for each class to show the statistical significance of the results. 
-
-
-Tables :ref:`mdivi-llo-smote`, :ref:`control-llo-smote`, :ref:`control-mdivi-smote` contain the results for oversampled data using traditional classifiers. Table :ref:`mdivi-llo-smote` shows the results for classifying mdivi and llo data instances using oversampling with SMOTE. For this task, random forest classifer using the min aggregate statistic produced the best results with an accuracy of 0.812. Table :ref:`control-llo-smote` shows the results for classifying llo and control data instances using oversampling with SMOTE. Max random forest had the performed in distinguishing control versus llo frames with an accuracy of 0.826. Table :ref:`control-mdivi-smote` shows the results for classifying mdivi and control data instances using oversampling with SMOTE with Median-Random Forest having the highest accuracy at 0.781.
-
-Tables :ref:`llo-mdivi`, :ref:`control-llo`, :ref:`control-mdivi` contain the results for of the traditional classifiers and the graph neural network architectures with the downsampled data. Table :ref:`llo-mdivi` shows the results for control-llo classification task with Max-Random Forest and GNNs with GCS layers having best accuracy of 0.68 and 0.686 respectively. Table :ref:`llo-mdivi` shows the results for mdivi-llo classificaiton. This task had four methods that had the best accuracy, GNN with GCS layers with an accuracy of 0.736 and Mean-Random Forest, Median-Decision trees and Max-kNN all three of which had an accuracy of 0.73. Lastly, table :ref:`control-mdivi` shows the results for Mdivi-control classification. The highest accuracy for this task was Min-Random Forest with an accuracy of 0.619.
-
-Discussion
-----------
-
-Overall, both methods have proven to be effective in classifying anomalies in mitochondria. The methods also prove that the node features effectively capture the properties of three different organelle morphologies and graphs are an effective way to represent mitochondria. It is clear from the results that oversampling the data is a good way to train the models well and make better predictions. So, it is worth noting that especially the deep learning models, which are known to be extremely data hungry, could benefit even more so from having more data. 
-
-When the data is oversampled, the random forest classifier performs well consitently but the aggregate statistic varies for each task. It is also interesting to note that the recall metric is disproportionately better for one class in every task. For llo-mdivi and llo-control tasks, this can potentially be attributed to oversampling the minority class and the majority class, which is llo in both cases, having more real data instances.
-
-When the data was downsampled, there was a considerable drop in performance as depicted by tables :ref:`llo-mdivi`, :ref:`control-llo`, :ref:`control-mdivi`. In this sampling method, the recall scores for the two classes in all three tasks appear to be closer which can again be potentially be attributed to training on all real data. The best metrics varied across each of the tasks. Graph deep learning methods performed well in the control-llo task and mdivi-llo task. Random forest continued to oupefrom most methods except for the mdivi-llo task, in which Max-kNN and Median-decision trees had high accuracies. 
-
-
-
-Conclusion
-----------
-
-Healthy dynamics of subcellular organelles are vital to their metabolic functions. Identifying anomalies in the dynamics is a challenging but important task. In this work, we propose two approaches to classifying different cell morphologies utilizing only the last frames of videos capturing mitochondrial fusion and fission. One method takes the node features and applies a general statistic to make one graph level feature to serve as input for a traditional classifier.  Another approach proposes using a graph neural network architecture to perform graph classification that take in a node feature matrix and an adjacency matrix as inputs. We show that both approaches are effective ways to classify between anomalous and regular mitochondria and between two different types of anomalous morphologies. Furthermore, we prove graph neural networks show much promise in classifying and perhaps even tracking the mitochondria and their morphologies. 
 
 
