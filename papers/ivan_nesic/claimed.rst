@@ -660,23 +660,70 @@ References
 
 .. [qsub] https://en.wikipedia.org/wiki/Qsub
 
-.. [htcondor] E M Fajardo et al, *How much higher can HTCondor fly?*, 2015 Journal of Physics.: Conference Series, Volume 664, June 2014
+.. [htcondor]
+    E M Fajardo et al,
+    *How much higher can HTCondor fly?*,
+    2015 Journal of Physics.: Conference Series,
+    Volume 664,
+    June 2014
 
-.. [galaxy] Enis Afgan et al. *The Galaxy platform for accessible, reproducible and collaborative biomedical analyses: 2018 update*, Nucleic Acids Research, (46):W537-W544, doi:10.1093/nar/gky379, July 2018
+.. [galaxy]
+    Enis Afgan et al.
+    *The Galaxy platform for accessible, reproducible and collaborative biomedical analyses: 2018 update*,
+    Nucleic Acids Research,
+    46):W537-W544,
+    doi:10.1093/nar/gky379,
+    July 2018
 
-.. [reana] Tibor Šimko et al. *REANA: A System for Reusable Research Data Analyses*, 23rd International Conference on Computing in High Energy and Nuclear Physics (CHEP 2018), (214):06034, doi:10.1051/epjconf/201921406034, September 2019
+.. [reana]
+    Tibor Šimko et al.
+    *REANA: A System for Reusable Research Data Analyses*,
+    23rd International Conference on Computing in High Energy and Nuclear Physics (CHEP 2018),
+    (214):06034,
+    doi:10.1051/epjconf/201921406034,
+    September 2019
 
 .. [nifi] https://nifi.apache.org/
 
-.. [nodered] Chaczko, Zenon and Braun, Robin, *Learning data engineering: Creating IoT apps using the node-RED and the RPI technologies*, 16th International Conference on Information Technology Based Higher Education and Training (ITHET), 2017
+.. [nodered]
+    Z. Chaczko and R. Braun,
+    *Learning data engineering: Creating IoT apps using the node-RED and the RPI technologies*,
+    16th International Conference on Information Technology Based Higher Education and Training (ITHET),
+    1-8,
+    doi: 10.1109/ITHET.2017.8067827,
+    2017
 
-.. [knime] Michael R. Berthold et al., *KNIME - the Konstanz information miner: version 2.0 and beyond*, ACM SIGKDD Explorations Newsletter Volume 11 Issue 1 June 2009 Pages, 26–31 https://doi.org/10.1145/1656274.1656280
+.. [knime]
+    Michael R. Berthold et al.
+    *KNIME - the Konstanz information miner: version 2.0 and beyond*,
+    ACM SIGKDD Explorations Newsletter,
+    (11):26–31,
+    doi:10.1145/1656274.1656280,
+    June 2009
 
-.. [weka] https://www.cs.waikato.ac.nz/ml/weka/
+.. [weka]
+    Mark Hall et al.
+    *The WEKA data mining software: an update*,
+    ACM SIGKDD Explorations Newsletter,
+    (11):10–18,
+    doi:10.1145/1656274.1656278,
+    June 2009
 
-.. [rabix] Gaurav Kaushik et al., *RABIX: AN OPEN-SOURCE WORKFLOW EXECUTOR SUPPORTING RECOMPUTABILITY AND INTEROPERABILITY OF WORKFLOW DESCRIPTIONS*, Preceedings of the Pacific Symposium on Biocomputing, Pages 154-165, 2017
+.. [rabix]
+    Gaurav Kaushik et al.,
+    *RABIX: AN OPEN-SOURCE WORKFLOW EXECUTOR SUPPORTING RECOMPUTABILITY AND INTEROPERABILITY OF WORKFLOW DESCRIPTIONS*,
+    Proceedings of the Pacific Symposium on Biocomputing 2017,
+    (22):154-165,
+    doi:10.1142/9789813207813_0016,
+    November 2017
 
-.. [nextflow] Di Tommaso, P., Chatzou, M., Floden, E. et al., *Nextflow enables reproducible computational workflows.* Nature Biotechnology Issue 35, Pages 316–319, 2017), https://doi.org/10.1038/nbt.3820
+.. [nextflow]
+    Di Tommaso, P., Chatzou, M., Floden, E. et al.
+    *Nextflow enables reproducible computational workflows.*,
+    Nature Biotechnology,
+    (35):316–319,
+    doi:10.1038/nbt.3820,
+    2017
 
 .. [openwdl] https://openwdl.org/
 
@@ -684,19 +731,39 @@ References
 
 .. [cromwell] https://cromwell.readthedocs.io/en/stable/
 
-.. [covidata] Joseph Paul Cohen et al. *COVID-19 Image Data Collection: Prospective Predictions Are the Future*, arXiv:2006.11988, 2020
+.. [covidata]
+    Joseph Paul Cohen et al.
+    *COVID-19 Image Data Collection: Prospective Predictions Are the Future*,
+    arXiv:2006.11988,
+    2020
 
-.. [tfeager] Akshay Agrawal et al., *TensorFlow Eager: A Multi-Stage, Python-Embedded DSL for Machine Learning*, Proceedings of the 2nd SysML Conference, 2019
+.. [tfeager]
+    Akshay Agrawal et al.
+    *TensorFlow Eager: A Multi-Stage, Python-Embedded DSL for Machine Learning*,
+    Proceedings of the 2nd SysML Conference,
+    arXiv:1903.01855,
+    2019
 
-.. [tfdataset] Steven W. D. Chien et al., *Characterizing Deep-Learning I/O Workloads in TensorFlow*, IEEE/ACM 3rd International Workshop on Parallel Data Storage - Data Intensive Scalable Computing Systems (PDSW-DISCS), 2018,  https://doi.org/10.1109/PDSW-DISCS.2018.00011
+.. [tfdataset]
+    Steven W. D. Chien et al.
+    *Characterizing Deep-Learning I/O Workloads in TensorFlow*,
+    IEEE/ACM 3rd International Workshop on Parallel Data Storage - Data Intensive Scalable Computing Systems (PDSW-DISCS),
+    doi:10.1109/PDSW-DISCS.2018.00011
+    2018
 
-.. [tfimgprep] https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image_dataset_from_directory
+.. [tfimgprep]
+    https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image_dataset_from_directory
 
 .. [galaxy_ui] https://github.com/bgruening/galaxytools/blob/c1027a3f78bca2fd8a53f076ef718ea5adbf4a8a/tools/sklearn/pca.xml#L75
 
 .. [c3] https://github.com/romeokienzler/c3
 
-.. [tfbook] Romeo Kienzler and Jerome Nilmeier, *What's New In TensorFlow 2.x?*, O'Reilly Media, Inc., ISBN: 9781492073710, July 2020
+.. [tfbook]
+    Romeo Kienzler and Jerome Nilmeier,
+    *What's New In TensorFlow 2.x?*,
+    O'Reilly Media, Inc.,
+    ISBN: 9781492073710,
+    July 2020
 
 .. [vscode] https://code.visualstudio.com/
 
@@ -706,10 +773,23 @@ References
 
 .. [sib] https://www.sib.swiss/
 
-.. [citizends] Mullarkey, Matthew T. et al., *Citizen Data Scientist: A Design Science Research Method for the Conduct of Data Science Projects*, Extending the Boundaries of Design Science Theory and Practice, Pages 191-205, 2019, Springer International Publishing, ISBN 978-3-030-19504-5
+.. [citizends]
+    Mullarkey, Matthew T. et al.,
+    *Citizen Data Scientist: A Design Science Research Method for the Conduct of Data Science Projects*,
+    Extending the Boundaries of Design Science Theory and Practice,
+    191-205,
+    Springer International Publishing,
+    ISBN 978-3-030-19504-5,
+    2019
 
 .. [jupyter_standard] Perkel, Jeffrey M. *Why Jupyter is data scientists' computational notebook of choice.* Nature, Volume 563, Number 7732, Page 145+, 2018
 
-.. [lowcode] Apurvanand Sahay et al., *Supporting the understanding and comparison of low-code development platforms*, Pages 171-178, IEEE 46th Euromicro Conference on Software Engineering and Advanced Applications (SEAA), https://doi.org/10.1109/SEAA51224.2020.00036, 2020
+.. [lowcode]
+    Apurvanand Sahay et al.
+    *Supporting the understanding and comparison of low-code development platforms*,
+    171-178,
+    IEEE 46th Euromicro Conference on Software Engineering and Advanced Applications (SEAA),
+    doi:10.1109/SEAA51224.2020.00036,
+    2020
 
 .. [mlx] https://github.com/machine-learning-exchange/mlx, Accessed: 29 of June, 2021
