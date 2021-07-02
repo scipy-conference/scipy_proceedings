@@ -40,16 +40,16 @@ MPI-parallel Molecular Dynamics Trajectory Analysis with the H5MD Format in the 
 
 .. class:: abstract
 
-   Molecular dynamics (MD) computer simulations can help elucidate details of the molecular happenings of complex biological systems, from protein dynamics to drug discovery.
+   Molecular dynamics (MD) computer simulations help elucidate details of the molecular processes in complex biological systems, from protein dynamics to drug discovery.
    One major issue is that these MD simulation files are now commonly terabytes in size, which means analyzing the data from these files becomes a painstakingly expensive task.
-   In the age of national supercomputers, methods of parallel analysis are becoming a necessity for the efficient use of time and high performance computing (HPC) resources, however, for any task-based approach to parallel analysis, simply reading the file from disk typically becomes the limiting factor of overall analysis speed.
-   One promising way around this file I/O hurdle is to use a message passing interface (MPI) implementation with the HDF5 (Hierarchical Data Format 5) file format to access a single file simultaneously by numerous processes on a parallel filesystem.
-   Our previous feasibility study suggested that this combination can lead to good scaling, so we implemented an HDF5 reader (``H5MDReader``) into MDAnalysis that adheres to H5MD_ (HDF5 for Molecular Dynamics) specifications.
-   MDAnalysis is a toolkit that simplifies the process of reading and writing various popular MD file formats by providing a streamlined user-interface that is independent of any specific file format.
-   We benchmarked its parallel file reading capabilities on three HPC clusters: ASU Agave, SDSC Comet, and PSC Bridges.
-   The benchmark consisted of a simple split-apply-combine scheme of an I/O bound task that split a 90k frame (113GiB) trajectory into :math:`N` chunks for :math:`N` processes, where each process performed an RMSD calculation on their chunk of data, and then gathered the results back to the root process.
+   In the age of national supercomputers, methods of parallel analysis are becoming a necessity for the efficient use of time and high performance computing (HPC) resources but for any approach to parallel analysis, simply reading the file from disk becomes the performance bottleneck that limits overall analysis speed.
+   One promising way around this file I/O hurdle is to use a parallel message passing interface (MPI) implementation with the HDF5 (Hierarchical Data Format 5) file format to access a single file simultaneously with numerous processes on a parallel file system.
+   Our previous feasibility study suggested that this combination can lead to favorable parallel scaling with hundreds of CPU cores, so we implemented a fast and user-friendly HDF5 reader (the ``H5MDReader`` class) that adheres to H5MD_ (HDF5 for Molecular Dynamics) specifications.
+   We made ``H5MDReader`` (together with a H5MD output class ``H5MDWriter``) available in the MDAnalysis library, a Python package that simplifies the process of reading and writing various popular MD file formats by providing a streamlined user-interface that is independent of any specific file format.
+   We benchmarked H5MDReader's parallel file reading capabilities on three HPC clusters: ASU Agave, SDSC Comet, and PSC Bridges.
+   The benchmark consisted of a simple split-apply-combine scheme of an I/O bound task that split a 90k frame (113 GiB) coordinate trajectory into :math:`N` chunks for :math:`N` processes, where each process performed the commonly used RMSD (root mean square distance after optimal structural superposition) calculation on their chunk of data, and then gathered the results back to the root process.
    For baseline performance, we found maximum I/O speedups at 2 full nodes, with Agave showing 20x, and a maximum computation speedup on Comet of 373x on 384 cores (all three HPCs scaled well in their computation task).
-   We went on to test a series of optimizations attempting to speed up I/O performance, including adjusting file system stripe count, implementing a masked array feature that only loads relelvant data for the computation task, front loading all I/O by loading the entire trajectory into memory, and manually adjusting the HDF5 dataset chunk shapes.
+   We went on to test a series of optimizations attempting to speed up I/O performance, including adjusting file system stripe count, implementing a masked array feature that only loads relevant data for the computation task, front loading all I/O by loading the entire trajectory into memory, and manually adjusting the HDF5 dataset chunk shapes.
    We found the largest improvement in I/O performance by optimizing the chunk shape of the HDF5 datasets to match the iterative access pattern of our analysis benchmark.
    With respect to baseline serial performance, our best result was a 98x speedup at 112 cores on ASU Agave.
    In terms of absolute time saved, the analysis went from 4623 seconds in the baseline serial run to 83 seconds in the parallel, properly chunked run.
@@ -68,10 +68,10 @@ Introduction
 
 The molecular dynamics (MD) simulation approach :cite:`Huggins:2019` is widely used across the biomolecular and materials sciences, accounting for more than one quarter of the total computing time :cite:`Fox:2019` in the Extreme Science and Engineering Discovery Environment (XSEDE) network of national supercomputers in the US :cite:`xsede`.
 MD simulations, especially in the realm of studying protein dynamics, serve an important purpose in characterizing the dynamics, and ultimately the function of a protein :cite:`Orozco:2014dq`.
-While the parameters involved in fine tuning the physics driving these simulations continues to improve, the computational demand of longer, more accurate simulations increases :cite:`Dror:2012cr`.
+While the parameters involved in fine tuning the physics driving these simulations continue to improve, the computational demand of longer, more accurate simulations increases :cite:`Dror:2012cr`.
 As high performance computing (HPC) resources continue to improve in performance, the size of MD simulation files are now commonly terabytes in size, making serial analysis of these trajectory files impractical :cite:`Cheatham:2015`.
 Parallel analysis is a necessity for the efficient use of both HPC resources and a scientist’s time :cite:`Beckstein:2018, Fox:2019`.
-MD trajectory analysis can be parallelized using task-based or MPI-based approaches, each with their own advantages and disadvantages :cite:`Paraskevakos:2018`.
+MD trajectory analysis can be parallelized using task-based or MPI-based (message passing interface) approaches, each with their own advantages and disadvantages :cite:`Paraskevakos:2018`.
 Here we investigate parallel trajectory analysis with the MDAnalysis_ Python library :cite:`Michaud-Agrawal:2011, Gowers:2016`.
 MDAnalysis is a widely used package in the molecular simulation community that can read and write over 25 popular MD trajectory file formats while providing a common object-oriented interface that makes data available as numpy_ arrays :cite:`Harris:2020`.
 Previous work that focused on developing a task-based approach to parallel analysis found that an I/O bound task only scaled to 12 cores due to a file I/O bottleneck :cite:`Fan:2019`.
@@ -181,7 +181,7 @@ Table :ref:`tab:files` gives all of the files benchmarked with how they are iden
    \end{tabular}
    \caption{Data files benchmarked on all three HPCS.
             \textbf{name} is the name that is used to identify the file in this paper.
-            \textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gibibytes.
+            \textbf{format} is the format of the file, and \textbf{file size} gives the size of the file in gigabytes.
             \textbf{H5MD-default} original data file written with pyh5md which uses the auto-chunking algorithm in h5py.
             \textbf{H5MD-chunked} is the same file but written with chunk size (1, n atoms, 3) and \textbf{H5MD-contiguous} is the same file but written with no HDF5 chunking.
             \textbf{H5MD-gzipx1} and \textbf{H5MD-gzipx9} have the same chunk arrangement as \textbf{H5MD-chunked} but are written with gzip compression where 1 is the lowest level of compression and 9 is the highest level.
@@ -275,12 +275,12 @@ Table :ref:`tab:timing` outlines the specific lines in the code that were timed 
    \end{table}
 
 The HDF5 file is opened with the ``mpio`` driver and the ``MPI.COMM_WORLD`` communicator to ensure the file is accessed in parallel via MPI I/O.
-It's important to separate the topology and trajectory initialization times, as the topology file is not opened in parallel and represents a fixed cost each process must pay to open the file.
+The topology and trajectory initialization times must be analyzed separately because the topology file is not opened in parallel and represents a fixed cost each process must pay to open the file.
 MDAnalysis reads data from MD trajectory files one frame, or "snapshot" at a time.
 Each time the ``u.trajectory[frame]`` is iterated through, MDAnalysis reads the file and fills in numpy arrays :cite:`Harris:2020` corresponding to that time step.
 Each MPI process runs an identical copy of the script, but receives a unique ``start`` and ``stop`` variable such that the entire file is read in parallel.
 Gathering the results is done collectively by MPI, which means all processes must finish their iteration blocks before the results can be returned.
-Therefore, it's important to measure |twait| as it represents the existence of "straggling" processes.
+Therefore, it is important to measure |twait| as it represents the existence of "straggling" processes.
 If one process takes substantially longer than the others to finish its iteration block, all processes are slowed down.
 These 6 timings are returned and saved as an array for each benchmark run.
 
@@ -387,7 +387,7 @@ In the next section we discuss the effects of HDF5 chunking on I/O performance.
 
 Effects of HDF5 Chunking on File I/O
 ------------------------------------
-To test the hypothesis that the increase in serial file I/O between the baseline performance in loading into memory performance was caused by the layout of the file on disk, we created `H5MDWriter`, an MDAnalysis file format writer class that gives one the ability to write H5MD files on the fly with MDAnalysis user interface.
+To test the hypothesis that the increase in serial file I/O between the baseline performance in loading into memory performance was caused by the layout of the file on disk, we created `H5MDWriter`, an MDAnalysis file format writer class that gives one the ability to write H5MD files on the fly with the MDAnalysis user interface.
 These files can be written with user-decided custom chunk layouts, file compression settings, and can be opened with MPI parallel drivers that enable parallel writing.
 We ran some initial serial writing tests and found that writing from DCD, TRR, and XTC to H5MD typically took ~360 seconds on Agave.
 For the 113 GiB test file, this was a 0.31 GiB/s write bandwidth.
@@ -427,7 +427,7 @@ Similarly, the H5MD-chunked 4 node run resulted in an I/O time of 83s, which is 
 Therefore, the boost in performance seen by loading the H5MD-default trajectory into memory rather than iterating frame by frame is indeed most likely due to the original file's chunk layout.
 This emphasizes the point that one may garner substantial I/O improvements if one thinks carefully not only about how their algorithm accesses the file, but also how the file is actually stored on disk.
 The relationship between layout on disk and disk access pattern is crucial for optimized I/O.
-Furthermore, as the auto-chunked layout of the ``H5MD-default`` file scattered data from a single time step across multiple chunks, it's very likely that these chunks themselves were also scattered across stripes.
+Furthermore, as the auto-chunked layout of the ``H5MD-default`` file scattered data from a single time step across multiple chunks, it is very likely that these chunks themselves were also scattered across stripes.
 In this case, multiple processes are still attempting to read from the same chunk which would nullify any beneficial effect striping has on file contention.
 We would have liked to further test the effects of striping with a proper chunk layout, but our XSEDE allocation expired.
 
@@ -469,8 +469,9 @@ From this data we can safely assume that H5MD files can be compressed without fe
 Conclusions
 ===========
 
-The growing size of trajectory files demands parallelization of trajectory analysis, however file I/O has become a bottleneck in the workflow of analyzing simulation trajectories.
-Our implementation an HDF5-based file format trajectory reader into MDAnalysis can perform parallel MPI I/O, and our benchmarks on various national HPC environments show that speed-ups on the order of 20x for 48 cores are attainable.
+The growing size of trajectory files demands parallelization of trajectory analysis.
+However, file I/O has become a bottleneck in the workflow of analyzing simulation trajectories.
+Our implementation of an HDF5-based file format trajectory reader in MDAnalysis can perform parallel MPI I/O, and our benchmarks on various national HPC environments show that speed-ups on the order of 20x for 48 cores are attainable.
 Scaling up to achieve higher parallel data ingestion rates remains challenging, so we developed several algorithmic optimizations in our analysis workflows that lead to improvements in I/O times.
 The results from these optimization attempts led us to find that the our original data file that was auto-chunked by h5py's chunking algorithm had an incredibly inefficient chunk layout of the original file.
 With a custom, optimized chunk layout and gzip compression, we found maximum scaling of 36x on 2 full nodes on Agave.
