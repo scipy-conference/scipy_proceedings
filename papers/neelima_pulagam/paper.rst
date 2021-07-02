@@ -117,7 +117,7 @@ There are two main operations at the core of GNNs, convolution and pooling layer
 
 Because of their general nature, graph neural networks are applicable to three different tasks: node level tasks, link level tasks and graph level tasks. The most applicable task for our problem context is graph level because we attempt to perform classification of graph structures, where each whole graph is assigned a label.
 
-For the context of our problem we utilize graph convolution operations defined by graph convolutional networks in :cite:`Kipf_2016` and a GCS layer operations used to build graph neural networks with convolutional auto-regressive moving average ARMA filters :cite:`Bianchi_2021`. 
+For the context of our problem we utilize graph convolution operations defined by graph convolutional networks in :cite:`Kipf_2016` and a GCS layer operations used to build graph neural networks with convolutional auto-regressive moving average filters also known as ARMA filters :cite:`Bianchi_2021`. 
 
 Data
 ----
@@ -150,7 +150,7 @@ The GCS filter operation is similar to :cite:`Kipf_2016` with an additional skip
 .. math::
 	 \bar{X}^{t+1} = \sigma(LX^{(t)}W^{(t)}) 
  
-where :math:`\sigma` s the non linear activation function and :math:`W^{(t)}` is the weight matrix at t-th neural network layer. 
+where :math:`\sigma` is the non linear activation function and :math:`W^{(t)}` is the weight matrix at t-th neural network layer. 
 
 The GCS operation which has an additional skip connection looks like the following
 
@@ -185,7 +185,7 @@ where :math:`\sigma` is the non linear activation function that can be ReLU, sig
    Min - kNN               & 0.702          & 0.610 & 0.795                  & 0.725 & 0.686              & 0.659 & 0.732                  \\
    Max - kNN               & 0.579          & 0.479 & 0.646                  & 0.464 & 0.659              & 0.462 & 0.647                 
    \end{longtable*}
-   \caption{Results for Mdivi vs. LLO task using traditional classifiers and SMOTE oversampling technique}
+   \caption{Results for Mdivi vs. LLO task using traditional classifiers and SMOTE oversampling technique \DUrole{label}{mdivi-llo-smote}}
    \end{table*}
 
 
@@ -209,7 +209,7 @@ where :math:`\sigma` is the non linear activation function that can be ReLU, sig
    Min - kNN               & 0.634          & 0.504   & 0.711                & 0.493   & 0.719            & 0.488   & 0.710                \\
    Max - kNN               & 0.560          & 0.391   & 0.651                & 0.388   & 0.664            & 0.382   & 0.652               
    \end{tabular}
-   \caption{Results for Control vs. LLO task using traditional classifiers and SMOTE oversampling technique}
+   \caption{Results for Control vs. LLO task using traditional classifiers and SMOTE oversampling technique \DUrole{label}{control-llo-smote}}
    \end{table*}
 
 
@@ -219,22 +219,28 @@ where :math:`\sigma` is the non linear activation function that can be ReLU, sig
    \centering
    \begin{tabular}{llllllll}
                            & Accuracy       & \multicolumn{2}{c}{Precision~} & \multicolumn{2}{c}{Recall} & \multicolumn{2}{c}{F-1 Score}  \\
-                           & -              & Control & LLO                  & Control & LLO              & Control & LLO                  \\
-   Median - Random Forest  & 0.745          & 0.835   & 0.733                & 0.413   & 0.944            & 0.530   & 0.823                \\
-   Mean - Random Forest    & 0.780          & 0.937   & 0.752                & 0.446   & 0.979            & 0.581   & 0.849                \\
-   Min - Random Forest     & 0.739          & 0.819   & 0.730                & 0.403   & 0.941            & 0.517   & 0.820                \\
-   Max - Random Forest     & \textbf{0.826} & 0.927   & 0.804                & 0.586   & 0.970            & 0.696   & 0.876                \\
-   Median - Decision Trees & 0.749          & 0.837   & 0.737                & 0.421   & 0.945            & 0.536   & 0.826                \\
-   Mean - Decision Trees   & 0.763          & 0.875   & 0.746                & 0.439   & 0.958            & 0.559   & 0.836                \\
-   Min - Decision Trees    & 0.721          & 0.757   & 0.721                & 0.393   & 0.918            & 0.493   & 0.805                \\
-   Max - Decision Trees    & 0.814          & 0.923   & 0.791                & 0.555   & 0.969            & 0.671   & 0.869                \\
-   Median - kNN            & 0.636          & 0.512   & 0.714                & 0.509   & 0.712            & 0.500   & 0.708                \\
-   Mean - kNN              & 0.703          & 0.635   & 0.739                & 0.500   & 0.825            & 0.545   & 0.776                \\
-   Min - kNN               & 0.634          & 0.504   & 0.711                & 0.493   & 0.719            & 0.488   & 0.710                \\
-   Max - kNN               & 0.560          & 0.391   & 0.651                & 0.388   & 0.664            & 0.382   & 0.652               
+                           & -              & Control & Mdivi                & Control & Mdivi            & Control & Mdivi                \\
+   Median - Random Forest  & \textbf{0.781} & 0.905   & 0.731                & 0.637   & 0.924            & 0.731   & 0.811                \\
+   Mean - Random Forest    & 0.750          & 0.876   & 0.705                & 0.595   & 0.905            & 0.688   & 0.786                \\
+   Min - Random Forest     & 0.755          & 0.904   & 0.704                & 0.580   & 0.931            & 0.685   & 0.795                \\
+   Max - Random Forest     & 0.763          & 0.890   & 0.717                & 0.610   & 0.916            & 0.704   & 0.798                \\
+   Median - Decision Trees & 0.734          & 0.888   & 0.683                & 0.546   & 0.921            & 0.653   & 0.778                \\
+   Mean - Decision Trees   & 0.731          & 0.865   & 0.686                & 0.562   & 0.900            & 0.659   & 0.772                \\
+   Min - Decision Trees    & 0.719          & 0.869   & 0.670                & 0.524   & 0.913            & 0.630   & 0.767                \\
+   Max - Decision Trees    & 0.737          & 0.870   & 0.692                & 0.566   & 0.908            & 0.664   & 0.778                \\
+   Median - kNN            & 0.613          & 0.692   & 0.591                & 0.433   & 0.794            & 0.512   & 0.671                \\
+   Mean - kNN              & 0.691          & 0.726   & 0.677                & 0.602   & 0.781            & 0.648   & 0.719                \\
+   Min - kNN               & 0.576          & 0.600   & 0.566                & 0.444   & 0.708            & 0.496   & 0.622                \\
+   Max - kNN               & 0.596          & 0.590   & 0.604                & 0.555   & 0.637            & 0.563   & 0.611               
    \end{tabular}
-   \caption{Results for Control vs. Mdivi task using traditional classifiers and SMOTE oversampling technique}
+   \caption{Results for Control vs. Mdivi task using traditional classifiers and SMOTE oversampling technique \DUrole{label}{control-mdivi-smote}}
    \end{table*}
+
+
+
+
+
+
 
 
 The graph convolution layer of each model is followed by the MinCut Pooling layer :cite:`Bianchi_2019_Mincut`. This method is based on the minCUT optimization problem which finds a cut of the graph that still preserves the topology and representation of the graph. It computes a soft clustering of the input graphs and outputs a reduced node features and adjacency matrix. The dimensions are reduced to the parameter k which is specified when calling the pooling layer. 
@@ -259,11 +265,11 @@ This approach deals with finding a good graph representation by using a method s
                            & Accuracy & \multicolumn{2}{c}{Precision~} & \multicolumn{2}{c}{Recall} & \multicolumn{2}{c}{F-1 Score}  \\
                            & -        & Control & LLO                  & Control & LLO              & Control & LLO                  \\
    GNN with GCS Layers     & 0.59     & 0.58    & 0.6                  & 0.59    & 0.59             & 0.58    & 0.59                 \\
-   GNN with GCS Layers     & 0.686    & 0.5     & 0.83                 & 0.75    & 0.62             & 0.6     & 0.71                 \\
+   GNN with GCS Layers     & \textbf{0.686}    & 0.5     & 0.83                 & 0.75    & 0.62             & 0.6     & 0.71                 \\
    Median - Random Forest  & 0.59     & 0.6     & 0.58                 & 0.55    & 0.64             & 0.57    & 0.61                 \\
    Mean - Random Forest    & 0.45     & 0.44    & 0.46                 & 0.36    & 0.55             & 0.4     & 0.5                  \\
    Min - Random Forest     & 0.41     & 0.38    & 0.43                 & 0.27    & 0.55             & 0.32    & 0.48                 \\
-   Max - Random Forest     & 0.68     & 0.7     & 0.67                 & 0.64    & 0.73             & 0.67    & 0.7                  \\
+   Max - Random Forest     & \textbf{0.68}     & 0.7     & 0.67                 & 0.64    & 0.73             & 0.67    & 0.7                  \\
    Median - Decision Trees & 0.59     & 0.6     & 0.58                 & 0.55    & 0.64             & 0.57    & 0.61                 \\
    Mean - Decision Trees   & 0.55     & 0.54    & 0.56                 & 0.64    & 0.45             & 0.58    & 0.5                  \\
    Min - Decision Trees    & 0.5      & 0.5     & 0.5                  & 0.36    & 0.64             & 0.42    & 0.56                 \\
@@ -273,7 +279,7 @@ This approach deals with finding a good graph representation by using a method s
    Min - kNN               & 0.41     & 0.33    & 0.44                 & 0.18    & 0.64             & 0.24    & 0.52                 \\
    Max - kNN               & 0.41     & 0.38    & 0.43                 & 0.27    & 0.55             & 0.32    & 0.48                
    \end{tabular}
-   \caption{Results for Control vs. LLO task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class.}
+   \caption{Results for Control vs. LLO task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class. \DUrole{label}{control-llo}}
    \end{table*}
 
 
@@ -299,7 +305,7 @@ This approach deals with finding a good graph representation by using a method s
    Min - kNN               & 0.59                         & 0.56  & 0.75                   & 0.91  & 0.27               & 0.69  & 0.4                    \\
    Max - kNN               & \textbf{0.73}                & 0.73  & 0.73                   & 0.73  & 0.73               & 0.73  & 0.73                  
    \end{tabular}
-   \caption{Results for Mdivi vs. LLO task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class.}
+   \caption{Results for Mdivi vs. LLO task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class. \DUrole{label}{llo-mdivi}}
    \end{table*}
 
 
@@ -325,7 +331,7 @@ This approach deals with finding a good graph representation by using a method s
    Min - kNN               & 0.64          & 0.67    & 0.62                 & 0.55    & 0.73             & 0.6     & 0.67                 \\
    Max - kNN               & 0.55          & 0.57    & 0.53                 & 0.36    & 0.73             & 0.44    & 0.62                
    \end{tabular}
-   \caption{Results for Mdivi vs. Control task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class.}
+   \caption{Results for Mdivi vs. Control task using traditional classifiers and GNNs. The data was undersampled meaning the training set had 19 instances of each class and the test set had 11 instances of each class.\DUrole{label}{control-mdivi}}
    \end{table*}
 
 
@@ -336,12 +342,21 @@ Experiments and Results
 
 We test the performance of our methods on three different classification tasks: (i) categorize between the last frame images of mitochondria that have been exposed to toxin listeriolysin (class llo) and mitochondria that have been exposed to mitochondrial- division inhibitor 1 (class mdivi), (ii)categorize between the last frames of mitochondria that have been exposed to toxin listeriolysin (class llo) and mitochondria that was exposed to no external stimuli to serve as a control group (class control) and (iii) categorize between  mitochondria that have been exposed to mitochondrial- division inhibitor 1 (class mdivi) and mitochondria that was exposed to no external stimuli to serve as a control group (class control).
 The three classification problems help evaluate all possible differences in the morphologies. Both classification tasks that deal with distinguishing between class llo versus class control and class mdivi versus class control are meant to explore whether our methods can distinguish between anomalous and healthy cells. The classification task that deals with llo and mdivi data investigates whether the methods can distinguish between two different types of anomalies (fusion and fission). 
-Due to the class imbalance and relatively small size of the dataset, (llo had 54 instances, mdivi had 31 instances and control had 29 instances) we decided to take two different approaches for the two methods. One solution was to downsample the llo class which is the majority class to help the GNN methods. We also used this downsampling method for the traditional classifiers to compare the different methodologies effectively. Specifically, this downsampling technique was chosen to keep the model from randomly guessing the llo class for every test instance. Therefore, 19 frames of each of the three classes were used for training and 12 frames were used for testing. The sequence of frames that were in the training and test set for each run varied as they were randomly subsampled each time.  The Llo-Control problem was trained on the GNN with GCN layers. The Mdivi-Llo problem was trained on the GNN with GCS layers. 
-Alternatively, we utilized an oversampling technique on the input data for the traditional classifiers. The input data for the traditional classifiers was oversampled using SMOTE, so the classes were balanced for those methods as well. The training set for the Llo-Control classification problem had 44 samples of each class and the test set had 6 control instances and 10 llo instances. The Mdivi-Llo task also had 44 instances of each class in the training set and had a test set consisting of 7 mdivi instances and 10 llo. The number of instances slightly differed as this method maintained an 80-20 train-test split. The frames chosen for training and test set for each run were randomly subsampeld for each run. 
-Both the traditional classifier and GNN methods fully train on the test set and evaluate on the testing set. We measured the number of correctly classified instances of each model and used the accuracy as the main metric to evaluate the performance of our models. Additionally, we include the precision, recall and F-1 scores for each class to show the statistical significance of the results. 
-  
 
- 
+
+Due to the class imbalance and relatively small size of the dataset, (llo had 54 instances, mdivi had 31 instances and control had 29 instances) we decided to take two different approaches for the methods. One solution was to downsample the llo class which is the majority class to help the GNN methods. We also used this downsampling method for the traditional classifiers to compare the different methodologies effectively. Specifically, this downsampling technique was chosen to keep the model from randomly guessing the llo class for every test instance. Therefore, 19 frames of each of the three classes were used for training and 12 frames were used for testing. The sequence of frames that were in the training and test sets for each run varied as they were randomly subsampled for each time. We used two GNN architectures and three different classifiers with four aggregate stattistics resulting in twelve traditonal methods total. 
+
+Alternatively, we utilized an oversampling technique on the input data, which consited of the graph representation vectors, for the traditional classifiers. The input data for the traditional classifiers was first split into training and test sets. Eigty percent of each class was reserved for testing and the remaining twenty perenct for testing. The frames chosen for training and test set for each run were randomly subsampeld for each run. Then sythetic minority oversampling technique (SMOTE) was applied to the data reserved for training to balance the classes. After oversampling, the training set for the Llo-Control classification problem had 44 samples of each class and the test set had 6 control instances and 10 llo instances. The Mdivi-Llo task also had 44 instances of each class in the training set and had a test set consisting of 7 mdivi instances and 10 llo. Lastly, the Mdivi-Control task had 25 instances of each class for training and 6 instances of each respective class for testing. The train-test split was applied prior to oversampling to ensure that only real data points are used for testing. Oversampling was only possible with the data for the traditonal methods as it is not possible to apply an oversampling technique to create entire graphs and their node features. The input data for GNNs is a graph and its node features. Furthermore, the shape of each graph varied based on the instance which would make oversampling difficult and ineffective at producing new data instances.
+
+Both the traditional classifier and GNN methods fully train on the test set and evaluate on the testing set. We measured the number of correctly classified instances of each model and used the accuracy as the main metric to evaluate the performance of our models. Additionally, we include the precision, recall and F-1 scores for each class to show the statistical significance of the results. 
+
+
+Tables :ref:`mdivi-llo-smote`, :ref:`control-llo-smote`, :ref:`control-mdivi-smote` contain the results for oversampled data using traditional classifiers. Table :ref:`mdivi-llo-smote` shows the results for classifying mdivi and llo data instances using oversampling with SMOTE. For this task, random forest classifer using the min aggregate statistic produced the best results with an accuracy of 0.812. Table :ref:`control-llo-smote` shows the results for classifying llo and control data instances using oversampling with SMOTE. Max random forest had the performed in distinguishing control versus llo frames with an accuracy of 0.826. Table :ref:`control-mdivi-smote` shows the results for classifying mdivi and control data instances using oversampling with SMOTE with Median-Random Forest having the highest accuracy at 0.781.
+
+Tables :ref:`llo-mdivi`, :ref:`control-llo`, :ref:`control-mdivi` contain the results for of the traditional classifiers and the graph neural network architectures with the downsampled data. Table :ref:`llo-mdivi` shows the results for control-llo classification task with Max-Random Forest and GNNs with GCS layers having best accuracy of 0.68 and 0.686 respectively. Table :ref:`llo-mdivi` shows the results for mdivi-llo classificaiton. This task had four methods that had the best accuracy, GNN with GCS layers with an accuracy of 0.736 and Mean-Random Forest, Median-Decision trees and Max-kNN all three of which had an accuracy of 0.73. Lastly, table :ref:`control-mdivi` shows the results for Mdivi-control classification. The highest accuracy for this task was Mean-kNN with an accuracy of 0.68. 
+
+
+
 
 Discussion
 ----------
@@ -356,5 +371,6 @@ Overall, all the methods prove that the node features effectively capture the pr
 Conclusion
 ----------
 
-Healthy dynamics of subcellular organelles are vital to their metabolic functions. Identifying anomalies in the dynamics is a challenging but important task. In this work, we propose two approaches to classifying different cell morphologies utilizing only the last frames of videos capturing mitochondrial fusion and fission. One method takes the node features and applies a general statistic to make one graph level feature to serve as input for a traditional classifier.  Another approach proposes using a graph neural network architecture to perform graph classification that take in a  node feature matrix and an adjacency matrix as inputs. We show that both approaches are effective ways to classify between anomalous and regular mitochondria and between two different types of anomalous morphologies. 
+Healthy dynamics of subcellular organelles are vital to their metabolic functions. Identifying anomalies in the dynamics is a challenging but important task. In this work, we propose two approaches to classifying different cell morphologies utilizing only the last frames of videos capturing mitochondrial fusion and fission. One method takes the node features and applies a general statistic to make one graph level feature to serve as input for a traditional classifier.  Another approach proposes using a graph neural network architecture to perform graph classification that take in a node feature matrix and an adjacency matrix as inputs. We show that both approaches are effective ways to classify between anomalous and regular mitochondria and between two different types of anomalous morphologies. Furthermore, we prove graph neural networks show much promise in classifying and perhaps even tracking the mitochondria and their morphologies. 
+
 
