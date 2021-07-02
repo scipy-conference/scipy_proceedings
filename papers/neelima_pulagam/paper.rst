@@ -68,21 +68,21 @@ We analyze the cells of the last frame of the video data that portray the cells 
    :figclass: w
    :align: center
 
-   The first, middle and last frames on a control cell with no chemical exposure. 
+   The first, middle and last frames on a control cell with no chemical exposure. :label:`fig1`
 
 .. figure:: llo.png
    :scale: 45%
    :figclass: w
    :align: center
 
-   The first, middle and last frames on an cell exposed to listeriolysin O (llo). The frames show the resulting fragmentation. 
+   The first, middle and last frames on an cell exposed to listeriolysin O (llo). The frames show the resulting fragmentation. :label:`fig23`
 
 .. figure:: mdivi.png
    :scale: 45%
    :figclass: w
    :align: center
 
-   The first, middle and last frames on an cell exposed mitochondrial- division inhibitor 1 (mdivi). The frames show the resulting fusion. 
+   The first, middle and last frames on an cell exposed mitochondrial- division inhibitor 1 (mdivi). The frames show the resulting fusion. :label:`fig3` 
 
 Background
 ----------
@@ -124,13 +124,13 @@ Data
 
 Microscopy Imagery
 ++++++++++++++++++
-The data consists of a series of live confocal imaging videos that portray the various mitochondrial morphologies in HeLA cells. For visualization purposes, the cell was transfected with the DsRed2-Mito-7 protein which gives the mitochondria a red hue. Three different groups of cells with different dynamics were captured: a group experiencing fragmentation from being exposed to toxin listeriolysin O (llo), another group experiencing fusion as a result of being exposed to mitochondrial- division inhibitor 1 (mdivi) and finally a control group that was not exposed to any chemical. All the videos were taken using a Nikon A1R confocal microscope. The camera captured 20,000 frames per video with dimensions 512x512 pixels, i.e one image every 10 seconds for the length of the video. All the cells were kept at a temperature of 37 degrees C and 5% CO2 levels for the duration of imaging. 
+The data consists of a series of live confocal imaging videos that portray the various mitochondrial morphologies in HeLA cells. Figures :ref:`fig1` , :ref:`fig23` and :ref:`fig3` show the raw images of the first, middle and last frames of cells that belong to three different classes.  For visualization purposes, the cell was transfected with the DsRed2-Mito-7 protein which gives the mitochondria a red hue. Three different groups of cells with different dynamics were captured: a group experiencing fragmentation from being exposed to toxin listeriolysin O (llo) as seen in figure ref:`fig23`, another group experiencing fusion as a result of being exposed to mitochondrial- division inhibitor 1 (mdivi) as seen in figure :ref:`fig3` and finally a control group that was not exposed to any chemical as seen in figure :ref:`fig1`. All the videos were taken using a Nikon A1R confocal microscope. The camera captured 20,000 frames per video with dimensions 512x512 pixels, i.e one image every 10 seconds for the length of the video. All the cells were kept at a temperature of 37 degrees C and 5% CO2 levels for the duration of imaging. 
 
 Graph Data
 ++++++++++
 From the 114 videos, we take the last frame and create node features for each single cell video. The dataset we used to train and test our methods contains a node feature matrix and an adjacency matrix for last frames of 114 videos. 
 
-The existing OrNet frameworks utilizes Gaussian mixture models (GMMs) to construct the social networks graphs. GMMs were used to determine the spatial regions of the microscope imagery that constructed mitochondrial cluster graphs by iteratively updating the parameters of the underlying mixture distribution until they converged.  The parameters of the mixture distributions, post convergence, were used to construct the social network graph :cite:`durden18`, :cite:`Hill_2020`, :cite:`Fazli_2020`.
+The existing OrNet frameworks utilizes Gaussian mixture models (GMMs) to construct the social networks graphs. GMMs were used to determine the spatial regions of the microscope imagery that constructed mitochondrial cluster graphs by iteratively updating the parameters of the underlying mixture distribution until they converged.  The parameters of the mixture distributions, post convergence, were used to construct the social network graph :cite:`durden18`, :cite:`Hill_2020`, :cite:`Fazli_2020`. The Gaussian mixture components update over each frame to track the morphologies and the last frames show the social network graph of Gaussians after a series of events. It is for this reason, we use the last frames as the mixture components in the last frame are most indiative of the morphology.  
 
 The nodes in the graph correspond to the gaussian mixture components, and the statistics that describe each mixture distribution act as the features. The Gaussian distributions are 2-dimensional, because they model the spatial locations of mitochondrial clusters in the microscopy imagery. Intuitively, the five node features correspond to the location of the Gaussian, the shape of its distribution, and the density of the mitochondrial cluster. Computationally, the location of the gaussian is represented by the pixel coordinates of the center of the distribution, which corresponds to the means of both dimensions; the shape is defined by the variance of each dimension; and the density of the mitochondrial cluster is represented by the number of pixels that are "members" of the mixture component, meaning it is more probable that those pixel belong to the given mixture distribution than any of the others.
 
@@ -140,7 +140,7 @@ After the data preprocessing, there are 114 feature matrices of the shape [N,5] 
 Methodology
 -----------
 
-To contextualize the empirical results, we split the problem up into two different binary classification problems. One problem is to differentiate between the fusion and fission events, i.e categorize between llo and mdivi groups. And the second is to categorize between the fusion event and no abnormal changes i.e, categorize between llo and control. 
+To contextualize the empirical results, we split the problem up into two different binary classification problems. One problem is to differentiate between the fusion and fission events, i.e categorize between llo and mdivi groups. And the second is to categorize between the fusion event and no abnormal changes i.e, categorize between llo and control and between mdivi and control. 
 
 GNN
 +++
@@ -150,14 +150,15 @@ The GCS filter operation is similar to :cite:`Kipf_2016` with an additional skip
 .. math::
 	 \bar{X}^{t+1} = \sigma(LX^{(t)}W^{(t)}) 
  
-where :math:`\sigma` is the non linear activation function and :math:`W^{(t)}` is the weight matrix at t-th neural network layer. 
+where :math:`\sigma` is the non linear activation function, :math:`W^{(t)}` is the weight matrix at t-th neural network layer and :math:`L` is the graph Laplacian which can be computed using the normalized grpah adjacency matrix :math:`\hat{A}` and identiy matrix :math:`I`. :math:`L = I-\hat{A}`
 
 The GCS operation which has an additional skip connection looks like the following
 
 .. math::
 	\bar{X}^{t+1} = \sigma(LX^{(t)}W^{(t)} + XV)
 
-where :math:`\sigma` is the non linear activation function that can be ReLU, sigmoid or hyperbolic tangent (tanh) functions. W and V are trainable parameters. Each GCS layer is localized in the node space, and it performs a filtering operations between the local neighboring nodes through the skip connection and the initial node features X :cite:`Bianchi_2021`.
+where :math:`\sigma` is the non linear activation function that can be ReLU, sigmoid or hyperbolic tangent (tanh) functions. W and V are trainable parameters. :math:`L` is the graph Laplacian which can be computed using the normalized grpah adjacency matrix :math:`\hat{A}` and identiy matrix :math:`I`. :math:`L = I-\hat{A}`
+Each GCS layer is localized in the node space, and it performs a filtering operations between the local neighboring nodes through the skip connection and the initial node features X :cite:`Bianchi_2021`.
 
 
 
@@ -320,14 +321,14 @@ This approach deals with finding a good graph representation by using a method s
    GNN with GCN Layers     & 0.57          & 0.6     & 0.55                 & 0.55    & 0.6              & 0.57    & 0.57                 \\
    Median - Random Forest  & 0.55          & 0.56    & 0.54                 & 0.45    & 0.64             & 0.5     & 0.58                 \\
    Mean - Random Forest    & 0.64          & 0.67    & 0.62                 & 0.55    & 0.73             & 0.6     & 0.67                 \\
-   Min - Random Forest     & 0.64          & 0.6     & 0.71                 & 0.82    & 0.45             & 0.69    & 0.56                 \\
+   Min - Random Forest     & \textbf{0.69}          & 0.69    & 0.68                 & 0.80    & 0.56             & 0.73    & 0.62                 \\
    Max - Random Forest     & 0.55          & 0.57    & 0.53                 & 0.36    & 0.73             & 0.44    & 0.62                 \\
    Median - Decision Trees & 0.55          & 0.56    & 0.54                 & 0.45    & 0.64             & 0.5     & 0.58                 \\
    Mean - Decision Trees   & 0.64          & 0.67    & 0.62                 & 0.55    & 0.73             & 0.6     & 0.67                 \\
    Min - Decision Trees    & 0.55          & 0.55    & 0.55                 & 0.55    & 0.55             & 0.55    & 0.55                 \\
    Max - Decision Trees    & 0.59          & 0.62    & 0.57                 & 0.45    & 0.73             & 0.53    & 0.64                 \\
    Median - kNN            & 0.5           & 0.5     & 0.5                  & 0.45    & 0.55             & 0.48    & 0.52                 \\
-   Mean - kNN              & \textbf{0.68} & 1       & 0.61                 & 0.36    & 1                & 0.53    & 0.76                 \\
+   Mean - kNN              & 0.57          & 0.7     & 0.59                 & 0.34    & 0.66             & 0.52    & 0.62                 \\
    Min - kNN               & 0.64          & 0.67    & 0.62                 & 0.55    & 0.73             & 0.6     & 0.67                 \\
    Max - kNN               & 0.55          & 0.57    & 0.53                 & 0.36    & 0.73             & 0.44    & 0.62                
    \end{tabular}
@@ -353,18 +354,16 @@ Both the traditional classifier and GNN methods fully train on the test set and 
 
 Tables :ref:`mdivi-llo-smote`, :ref:`control-llo-smote`, :ref:`control-mdivi-smote` contain the results for oversampled data using traditional classifiers. Table :ref:`mdivi-llo-smote` shows the results for classifying mdivi and llo data instances using oversampling with SMOTE. For this task, random forest classifer using the min aggregate statistic produced the best results with an accuracy of 0.812. Table :ref:`control-llo-smote` shows the results for classifying llo and control data instances using oversampling with SMOTE. Max random forest had the performed in distinguishing control versus llo frames with an accuracy of 0.826. Table :ref:`control-mdivi-smote` shows the results for classifying mdivi and control data instances using oversampling with SMOTE with Median-Random Forest having the highest accuracy at 0.781.
 
-Tables :ref:`llo-mdivi`, :ref:`control-llo`, :ref:`control-mdivi` contain the results for of the traditional classifiers and the graph neural network architectures with the downsampled data. Table :ref:`llo-mdivi` shows the results for control-llo classification task with Max-Random Forest and GNNs with GCS layers having best accuracy of 0.68 and 0.686 respectively. Table :ref:`llo-mdivi` shows the results for mdivi-llo classificaiton. This task had four methods that had the best accuracy, GNN with GCS layers with an accuracy of 0.736 and Mean-Random Forest, Median-Decision trees and Max-kNN all three of which had an accuracy of 0.73. Lastly, table :ref:`control-mdivi` shows the results for Mdivi-control classification. The highest accuracy for this task was Mean-kNN with an accuracy of 0.68. 
-
-
-
+Tables :ref:`llo-mdivi`, :ref:`control-llo`, :ref:`control-mdivi` contain the results for of the traditional classifiers and the graph neural network architectures with the downsampled data. Table :ref:`llo-mdivi` shows the results for control-llo classification task with Max-Random Forest and GNNs with GCS layers having best accuracy of 0.68 and 0.686 respectively. Table :ref:`llo-mdivi` shows the results for mdivi-llo classificaiton. This task had four methods that had the best accuracy, GNN with GCS layers with an accuracy of 0.736 and Mean-Random Forest, Median-Decision trees and Max-kNN all three of which had an accuracy of 0.73. Lastly, table :ref:`control-mdivi` shows the results for Mdivi-control classification. The highest accuracy for this task was Min-Random Forest with an accuracy of 0.619.
 
 Discussion
 ----------
-Overall, all the methods prove that the node features effectively capture the properties of three different organelle morphologies. Given that deep learning models are very data hungry, GNNs still performed well. They could however benefit from more data. Considering the results, oversampling proved very effective for the traditional methods and utilizing an oversampling technique for GNN data could increase results. Lastly, the traditional methods had the best performance but extracting structural information through graph statistics could be limiting and time-consuming. 
 
+Overall, both methods have proven to be effective in classifying anomalies in mitochondria. The methods also prove that the node features effectively capture the properties of three different organelle morphologies and graphs are an effective way to represent mitochondria. It is clear from the results that oversampling the data is a good way to train the models well and make better predictions. So, it is worth noting that especially the deep learning models, which are known to be extremely data hungry, could benefit even more so from having more data. 
 
+When the data is oversampled, the random forest classifier performs well consitently but the aggregate statistic varies for each task. It is also interesting to note that the recall metric is disproportionately better for one class in every task. For llo-mdivi and llo-control tasks, this can potentially be attributed to oversampling the minority class and the majority class, which is llo in both cases, having more real data instances.
 
-
+When the data was downsampled, there was a considerable drop in performance as depicted by tables :ref:`llo-mdivi`, :ref:`control-llo`, :ref:`control-mdivi`. In this sampling method, the recall scores for the two classes in all three tasks appear to be closer which can again be potentially be attributed to training on all real data. The best metrics varied across each of the tasks. Graph deep learning methods performed well in the control-llo task and mdivi-llo task. Random forest continued to oupefrom most methods except for the mdivi-llo task, in which Max-kNN and Median-decision trees had high accuracies. 
 
 
 
