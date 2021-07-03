@@ -71,7 +71,7 @@ In leading system simulation tools, the flow force that acts upon the inner cyli
 
    F_{system} = - 2\pi\,\frac{R_{1}l \mu u_R}{\delta}\,.
 
-Here :math:`\mu` denotes the viscosity of the fluid, :math:`l` the length of the inner cylinder, :math:`u_R` the velocity and :math:`\delta=R_2-R_1` the annular gap, i.e. the difference between outer and inner radius.
+Here :math:`\mu` denotes the viscosity of the fluid, :math:`l` the common length of both cylinders, :math:`u_R` the velocity and :math:`\delta=R_2-R_1` the annular gap, i.e. the difference between outer and inner radius.
 Utilizing the capabilities of the open-source Computer Algebra System ``SymPy`` (as done e.g. in [MSP17]_), we answer the following two questions:
 
 1. How is Equation (:ref:`ForceSystemTool`) related to the corresponding Stokes equation?
@@ -740,7 +740,7 @@ Conclusion
 
 This article showed that classical tools from mathematical physics, such as conformal mappings and Taylor-expansions, are still relevant and indispensable in times of digitization and wide use of numerics.
 
-As an example, ``SymPy`` was used as a tool for symbolic mathematics in order to demonstrate that a popular approximation of the eccentric annular Couette flow force in modern system simulation tools is actually the leading-order term of a Taylor-expansion of the corresponding concentric annular force. 
+As an example, ``SymPy`` was used as a tool for symbolic mathematics in order to demonstrate that a popular approximation of the eccentric annular Couette flow force in modern system simulation tools is actually the leading-order term in a Taylor-expansion of the corresponding concentric annular force. 
 
 This force is calculated as special case of the more general eccentric annular Couette flow by postprocessing the resulting velocity distribution. Here, the velocity profile is analytically obtained by solving the equivalent Stokes problem with the help of conformal mappings, i.e. holomorphic functions in the complex plane.
 
