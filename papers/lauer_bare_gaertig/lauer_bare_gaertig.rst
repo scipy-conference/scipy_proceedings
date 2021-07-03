@@ -130,7 +130,7 @@ It then follows that
 .. math::
    0
 
-as expected. Further analytical solutions to the Laplace problem for other simple domains such as circles or rectangles can be found in e.g. [G13]_, [BC81]_ or [PP12]_.
+as expected. Further analytical solutions to the Laplace problem for other simple domains such as circles or rectangles can be found in e.g. [G13]_, [CB81]_ or [PP12]_.
 
 Transformation of the eccentric annulus to a simple domain with conformal mappings
 ----------------------------------------------------------------------------------
@@ -780,10 +780,6 @@ References
 .. [BSL07] Bird RB, Stewart WE, Lightfoot EN. *Transport phenomena*,
            John Wiley & Sons; 2007,
            ISBN 978-0-470-11539-8
-
-.. [BC81]  Churchill RV, Brown JW. *Fourier series and boundary value problems*,
-           McGraw-Hill, NY; 1981,
-           ISBN 978-0-0780-3597-5
        
 .. [BC09]  Brown JW, Churchill RV. *Complex variables and applications*,
            McGraw-Hill, NY; 2009,
@@ -792,6 +788,10 @@ References
 .. [CTL09] Chen JT, Tsai MH, Liu CS. *Conformal mapping and bipolar coordinate for eccentric Laplace problems*,
            Computer Applications in Engineering Education. 2009, 314-22,
            https://doi.org/10.1002/cae.20208
+
+.. [CB81]  Churchill RV, Brown JW. *Fourier series and boundary value problems*,
+           McGraw-Hill, NY; 1981,
+           ISBN 978-0-0780-3597-5
            
 .. [G13]   Greenberg MD. *Foundations of applied mathematics*, 
            Dover; 2013,
@@ -839,6 +839,10 @@ References
 .. [M77]   Muskhelishvili NI. *Some basic problems of mathematical elasticity theory*,
            Springer Science & Business Media; 1977,
            https://doi.org/10.1007/978-94-017-3034-1
+
+.. [PHW33] Piercy NAV, Hooper MS, Winny HF. *LIII. Viscous flow through pipes with cores*, 
+           The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science, 1933,
+           https://doi.org/10.1080/14786443309462212
            
 .. [PP12]  Pikulin VP, Pohozaev SI. *Equations in mathematical physics: a practical course*,
            Springer Science & Business Media; 2012,
@@ -856,13 +860,9 @@ References
            McGraw-Hill, NY; 2010,
            ISBN 978-0-0707-0122-9            
            
-.. [TKM19] Jeffrey Tithof, Douglas H Kelley, Humberto Mestre, Maiken Nedergaard, and John H Thomas. *Hydraulic resistance of periarterial spaces in the brain*,
+.. [TKM19] Tithof J, Kelley DH, Mestre H, Nedergaard M, Thomas JH. *Hydraulic resistance of periarterial spaces in the brain*,
            Fluids and Barriers of the CNS, 16, 2019,
            https://doi.org/10.1186/s12987-019-0140-y           
-
-.. [PHW33] Piercy NAV, Hooper MS, Winny HF. *LIII. Viscous flow through pipes with cores*, 
-           The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science, 1933,
-           https://doi.org/10.1080/14786443309462212
            
 .. [W06]   White FM. *Viscous fluid flow*,
            McGraw-Hill, NY; 2006,
