@@ -50,7 +50,7 @@ Different combinations of these alternatives lead to a combinatorial explosion o
 In some situations, workers have set up software pipelines for some of the steps.
 However, these pipelines are difficult to transfer or have trouble with the challenging samples that cannot yet be handled without human intervention.
 The current heterogenous computing environment makes the computational work vulnerable to errors in the tracking of input and output files.
-Storing the code and outputs for some of the steps in Jupyter notebooks would be one way to reduce this vulnerability [Kluy16]_.
+Storing the code and outputs for some of the steps in Jupyter notebooks would be one way to reduce this vulnerability [Kluy16]_ [Gran21]_
 
 To ease crystal structure determination in Jupyter, we made libraries of code templates for crucial programs.
 We formatted the libraries for two extensions of JupyterLab that provide access to code snippets.
@@ -58,7 +58,7 @@ One extension (jupyterlab-snippets) displays the snippets in nested pull-down me
 The other extension (elyra-code-snippet-extension) uses a search box to locate the desired snippet [ELSN]_ (also see the blog post by Luciano Resende [Rese20]_).
 The user can easily add new code snippets to both systems.
 
-We also ported the libraries to Google Colaboratory or Google Colab or just Colab.
+We also ported the libraries to Google Colaboratory or Google Colab or just Colab [Carn18]_ [Cola21]_.
 Colab is an integrated development environment (IDE) for running Jupyter notebooks on the Google Cloud Platform (GPC).
 Colab was designed to promote the adaptation of deep learning software to new problems and facilitate collaborative computing.
 Colab is a free service that provides a temporary instance of a Linux operating system with access to one K80 GPU through a Jupyter notebook.
@@ -66,7 +66,7 @@ Access to TPUs is also available.
 The access is terminate after long periods of inactivity or a 12-hour time limit, whichever is reached first.
 The time limit can be extended with a small subscription fee.
 
-Colab comes with the Python scientific computing stack and some deep learning software.
+Colab comes with some deep learning software and the Python scientific computing stack including SciPy [SciP20]_.
 Colab spares the user of the maintenance of the hardware and the operating system software.
 Colab can also serve as a test platform for software on Linux when one's primary computing environment is a Mac or Windows.
 Colab also eases collaborative work and provides a uniform computing environment for classes and workshops.
@@ -126,7 +126,7 @@ These versions are distinguished by having "plus" appended to their names.
 
 .. figure:: compareSnips.png 
 
-   Comparison of active snippet at the bottom and commented out snippet at the top. The snippet at the top serves as a guide for editing because it has curly braces marking sites to be edited. :label:`compareSnips`
+   Comparison of active code in the bottom code block and the commented out code above the active code from a code snippet. The commented lines of code serve as guides for editing because they have curly braces marking sites to be considered for editing. The commented lines of code compensate for the absence of tab stops. :label:`compareSnips`
 
 
 The elyra-code-snippet extension
@@ -140,7 +140,7 @@ Hovering the mouse cursor over the snippet's name triggers the display of a desc
 
 .. figure:: hbondsElyra.png 
 
-   This is yet another the caption. :label:`hbondElyra`
+   The GUI from the elyra-code-snippet extension for accessing code snippets is shown on the left. A preview of the *hbonddash* snippet is shown in the lower left. A Jupyter notebook with the inserted the *hbonddash* snippet is shown on the right. :label:`hbondElyra`
 
 Alternatively, the user can enter a search term in the search box at the top of the menu to reduce the list of snippets.
 The search terms can be part of a snippet name or a tag stored with each snippet.
@@ -161,7 +161,7 @@ There is a save button at the bottom to add the new snippet to the current libra
 
 .. figure:: newElyraSnip.png
 
-   The GUI for the creation of new snippets. The Learn more link take the user to the documentation in Read-the-docs. :label:`newElyraSnip`
+   The GUI from elyra-code-snippet extension for the creation of new snippets. The Learn more link takes the user to the documentation on Read-the-docs. :label:`newElyraSnip`
 
 
 Each snippet is stored in a separate JSON file.
@@ -504,7 +504,7 @@ References
             *Announcing the worldwide Protein Data Bank*,
             Nature Structural \& Molecular Biology, 10(12):980, December 2003.
 .. no doi available
-
+            
 .. [Bias13] M. Biasini, T. Schmidt, S. Bienert, V. Mariani, G. Studer, J. Haas, N. Johner, A. D. Schenk, A. Philippsen, and T. Schwede. 
             *OpenStructure: an integrated software framework for computational structural biology*,
             Acta Cryst. D69(5):701–709, May 2013.
@@ -520,6 +520,13 @@ References
             Acta Cryst. D73(6):469-477, June 2017.
             doi: 10.1107/S2059798317007859
             
+.. [Carn18] T. Carneiro, R. V. M. Da N{\'o}brega, T. Nepomuceno, G.-B. Bian, V. H. C. De Albuquerque and P. P. Reboucas Filho.
+            *Performance analysis of google colaboratory as a tool for accelerating deep learning applications*,
+            IEEE Access 6:61677-61685, November 2018.
+            doi: 10.1109/ACCESS.2018.2874767
+            
+.. [Cola21] https://colab.research.google.com
+            
 .. [ELSN]   https://elyra.readthedocs.io/en/latest/user_guide/code-snippets.html
             
 .. [Elyra]  https://github.com/elyra-ai/elyra/blob/master/docs/source/getting_started/overview.md 
@@ -529,7 +536,12 @@ References
            *UCSF ChimeraX: Meeting modern challenges in visualization and analysis*,
            Protein Sci., 27(1):14-25, January 2018.
            doi: 10.1002/pro.3235.
-
+           
+.. [Gran21] B. E. Granger and F. Pérez.
+           *Jupyter: Thinking and Storytelling With Code and Data*,
+           Computing in Science & Engineering, 23(2):7-14, March-April 2021.
+           doi: 10.1109/MCSE.2021.3059263
+           
 .. [Gros02] R. W. Grosse-Kunstleve, N. K. Sauter, N. W. Moriatry, P. D. Adams. 
            *The Computational Crystallography Toolbox: crystallographic algorithms in a reusable software framework*,
            J Appl Cryst, 35(1):126-136, February 2002.
@@ -585,6 +597,11 @@ References
            doi: 10.1093/bioinformatics/btx789
            
 .. [Rese20] https://blog.jupyter.org/reusable-code-snippets-in-jupyterlab-8d75a0f9d207
+            
+.. [SciP20] P. Virtanen, R. Gommers, T. E. Oliphant, M. Haberland, T. Reddy, D. Cournapeau, E. Burovski, P. Peterson, W. Weckesser, J. Bright, S. J. {van der Walt}, M. Brett, J. Wilson, K. J. Millman, N. Mayorov, A. R. J.Nelson, E. Jones, R. Kern, E. Larson, C. J. Carey, I. Polat, Y. Feng, E. W. Moore, J. {VanderPlas}, D. Laxalde, J. Perktold, R. Cimrman, I. Henriksen, E. A. Quintero, C. R. Harris, A. M. Archibald, A. H. Ribeiro, F. Pedregosa, P. {van Mulbregt}, Paul and {SciPy 1.0 Contributors}.
+           *{{{SciPy} 1.0: Fundamental Algorithms for Scientific Computing in Python}}*,
+           Nature Methods, 17(3):261-272, February 2020.
+           doi: 10.1038/s41592-019-0686-2
            
 .. [Winn11] M. D. Winn, C. C. Ballard, K. D. Cowtan, E. J. Dodson, P. Emsley, P. R. Evans, R .M. Keegan, E. B. Krissnel, A. G. W. Leslie, A. McCoy, S. J. McNicholas, G .N. Murshudov, N. S. Pannu, E. A. Potteron, H .R. Powell, R. J. Read, A. Vagin, and K. S. Wilson. 
            *Overview of the CCP4 suite and current developments*,
