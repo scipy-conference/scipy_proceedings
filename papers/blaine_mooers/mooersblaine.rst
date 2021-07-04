@@ -139,6 +139,9 @@ The user can scroll through the list of snippets.
 Hovering the mouse cursor over the snippet's name triggers the display of a description of the snippet.
 
 .. figure:: hbondsElyra.png 
+   :align: center
+   :figclass: w
+   :scale: 44%
 
    The GUI from the elyra-code-snippet extension for accessing code snippets is shown on the left. A preview of the *hbonddash* snippet is shown in the lower left. A Jupyter notebook with the inserted the *hbonddash* snippet is shown on the right. :label:`hbondElyra`
 
@@ -160,6 +163,9 @@ There is a save button at the bottom to add the new snippet to the current libra
 
 
 .. figure:: newElyraSnip.png
+   :align: center
+   :figclass: w
+   :scale: 39%
 
    The GUI from elyra-code-snippet extension for the creation of new snippets. The Learn more link takes the user to the documentation on Read-the-docs. :label:`newElyraSnip`
 
@@ -170,7 +176,7 @@ The latter provides a sanity check.
 For example, an attempt to insert a C++ snippet into a notebook with an active Python kernel will trigger the opening of a window with a warning.
 
 All of the snippets reside in the folder \url{JUPYTER_DATA/metadata/code-snippets}.
-This is the directory ~/Library/Jupyter/metadata/code-snippets on the Mac.
+This is the directory \url{~/Library/Jupyter/metadata/code-snippets} on the Mac.
 There are no subfolders for individual snippet libraries, unlike the jupyterlab-snippets extension.
 The snippets from multiple libraries are stored together in the code-snippets folder.
 The tag system can be used to select all snippets from one library.
@@ -198,6 +204,9 @@ Then a series of code snippets contained the code for carrying out the steps.
 This installation snippet was the only one in a notebook that contained more then one code snippet.
 
 .. figure:: ColabPyMOL.png 
+   :align: center
+   :figclass: w
+   :scale: 50%
 
    Code snippet for installing PyMOL on Colab. The <> icon opens a menu on the left side that lists all of the snippets. The search term 'pymol' was used to reduce the list of candidate snippets. The highlighted snippets name 'Install PyMOL is new Colab notebook'. Selecting this snippets opens the snippet below. The snippet description is displayed followed by the seven blocks of code. The description includes the seven steps for installing the molecular graphics programs. Clicking with the mouse cursor on 'INSERT' in blue inserts the code into in the cells on the notebook on the fight. :label:`ColabPyMOL`
 
@@ -246,11 +255,12 @@ The user uploads the libraries and notebook to their Google Drive account and ac
 The storage of the libraries and notebooks on Google Drive persists between logins to Google Colab, but the crystallographic software must be reinstalled on each use of Colab.
 These libraries are installed only once; however, the crystallographic software must be reinstalled upon each login.
 We describe below installation scripts in the form of snippets that can be quickly run at the top of a Notebook to minimize the effort required to re-install the software.
-Another limitation of the Colab snippet system is that snippets from all libraries are stored in one pool and have to be accessed by either scrolling through a log list or by entering the snippet name in a search box.
+Another limitation of the Colab snippet system is that snippets from all libraries are stored in one pool and have to be accessed by either scrolling through a long list or by entering the snippet name in a search box.
 We addressed this limitation with a snippet for each library that prints a list of the available snippets with a short description.
 This list can span more than the length of a paper, but it can be collapsed to hide it or can be deleted when no longer needed.
 After the snippet is pulled out of the list by the search box, more detailed documentation about the snippet is displayed. 
 Next, we describe the content of each library with representative output in the Colab notebook.
+
 
 Structure determination and refinement workflows with Phenix
 ************************************************************
@@ -350,18 +360,42 @@ While these are basic data science tasks, they are intimidating to new users of 
 To overcome this problem, we supply snippets that demonstrate how to transform the output and that can be used as templates by the users.  
 
 These commands are becoming harder to find as the on-line documentation has been migrating to serving only the GUI interface.
-The bash script files that run the Phenix commands can be found by running 
+The bash script files that run the Phenix commands can be found on Mac OSX by running the following command: 
 
 .. code-block:: bash
 
     !ls /Applications/phenix-*/build/bin/phenix.\*
 
 These shell scripts invoke Python scripts that capture the command line arguments and pass them to the Phenix Python interpreter.
+This Python script files can be found on Mac OSX by running the following command: 
 
 .. code-block:: bash
 
-    ls /Applications/phenix-1.19.2-4158/modules/phenix/phenix/command_line/*.py.
+    !ls /Applications/phenix-1.19.2-4158/modules/phenix/phenix/command_line/*.py.
 
+
+Molecular graphics with PyMOL
+*****************************
+
+The end result of the crystal structure refinement in Phenix is a set of atomic coordinates.
+They can be displayed in one of the many available molecular graphics programs like PyMOL [PyMO21]_.
+If PyMOL is available in the current Python environment, PyMOL's Python API can be accessed by importing the *cmd* class.
+In addition, it is useful to import the *Image* class from IPython to be able to upload images written to disk by PyMOL.
+
+.. code-block:: bash
+
+    from pymol import cmd
+    from IPython.display import Image
+
+
+After installing PyMOL in Colab as outlines in Figure :ref:`ColabPyMOL` and the PyMOL snippet library, the *T4L* snippet was inserted into a Colab notebook and executed.
+The snippet includes the IPython command that was used to upload the image into the Notebook as shown in Figure :ref:`ColabT4L`. 
+
+.. figure:: ColabT4L.png 
+
+   The code of the *T4L* snippet inserted into a code block in Colab. :label:`ColabT4L`.
+
+There are several other methods of importing images including using Markdown or HTML code.
 
 
 Discussion
@@ -595,6 +629,8 @@ References
            *NGLview--interactive molecular graphics for Jupyter notebooks*,
            Bioinformatics, 34(7):1241-1242, April 2017.
            doi: 10.1093/bioinformatics/btx789
+           
+.. [PyMO21] https://pymol.org/2/
            
 .. [Rese20] https://blog.jupyter.org/reusable-code-snippets-in-jupyterlab-8d75a0f9d207
             
