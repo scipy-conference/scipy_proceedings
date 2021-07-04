@@ -374,7 +374,7 @@ Figure :ref:`rectangularWU` shows a ``Matplotlib``-visualization of the velocity
 
   
 .. figure:: u_bipolar_w.pdf
-   :scale: 18%
+   :scale: 19%
    :figclass: bht
    
    Flow velocity in rectangular domain (w-plane); here the proper boundary condition :math:`u_R = \text{0.4 m}/\text{s}` is applied to the upper boundary :label:`rectangularWU`   
@@ -581,7 +581,7 @@ Afterwards the expressions for the three separate components :math:`A`, :math:`B
 .. math::
    :label: psi
    
-   \sum_{n=1}^{m} \frac{\left(-1\right)^{n} \left(s_{1} + s_{2}\right) \cos{\left(n \xi \right)}}{\sinh{\left(n \left(- \alpha + \beta\right) \right)}}
+   \sum_{n=1}^{m} \frac{\left(-1\right)^{n} \left(s_{1} + s_{2}\right) \cos{\left(n \xi \right)}}{\sinh{\left(n \left(\beta - \alpha\right) \right)}}
  
 with
 
@@ -589,8 +589,8 @@ with
    :label: auxSummands
    :type: eqnarray  
    
-   s_1&=& e^{- \beta n} \sinh{\left(n \left(- \alpha + \eta\right) \right)} \coth{\left(\beta \right)}\nonumber\\
-   s_2&=& - e^{- \alpha n} \sinh{\left(n \left(- \beta + \eta\right) \right)} \coth{\left(\alpha \right)}\,.\nonumber
+   s_1 & = & e^{- \beta n} \sinh{\left(n \left(\eta - \alpha\right) \right)} \coth{\left(\beta \right)}\nonumber\\
+   s_2 & = & - e^{- \alpha n} \sinh{\left(n \left(\eta - \beta\right) \right)} \coth{\left(\alpha \right)}\,.\nonumber
  
 The constants from [W06]_, [SL78]_ and [PHW33]_ read as    
 
@@ -668,7 +668,7 @@ The following relation
 .. math::
    :label: velocityPiercyLauerBareGaertig
    
-   u_{Coue-Pois}=\frac{c^{2} dp \left(\Psi - \frac{- \cos{\left(\xi \right)} + \cosh{\left(\eta \right)}}{ \cos{\left(\xi \right)} +  \cosh{\left(\eta \right)}}\right)}{4 l \mu} + \frac{u_{d} \left(- \alpha + \eta\right)}{- \alpha + \beta}  
+   u_{Coue-Pois} = \frac{c^{2} dp \left(\Psi - \frac{- \cos{\left(\xi \right)} + \cosh{\left(\eta \right)}}{ \cos{\left(\xi \right)} +  \cosh{\left(\eta \right)}}\right)}{4 l \mu} + \frac{u_{d} \left(\eta - \alpha\right)}{\beta - \alpha}  
 
 
 shows such a superposed Couette-Poiseuille flow velocity, where both velocities where obtained by using the bipolar coordinate transformation (:ref:`bipolar`) that maps rectangles onto eccentric annuli.
@@ -678,7 +678,7 @@ Combining Equation (:ref:`FcouetteBipolar`) with the flow force from [PHW33]_, t
 .. math::
    :label: forceCouePois
    
-   F_{Coue-Pois}=F_{piercy}- \frac{2 \pi l \mu u_{R}}{- \alpha + \beta}
+   F_{Coue-Pois}=F_{piercy}- \frac{2 \pi l \mu u_{R}}{\beta - \alpha}
  
 where
 
