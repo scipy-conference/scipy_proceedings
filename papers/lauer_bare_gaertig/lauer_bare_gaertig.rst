@@ -95,7 +95,7 @@ In order to solve the Stokes problem
 	u & = & u_R \quad\;\;\text{for $\sqrt{x^2+(y+b)^2}=R_1$}\,,
 
 
-the following ``SymPy`` functions and libraries were used: ``im``, ``re``, ``subs``, ``simplify`` and ``lambdify``. For the postprocessing the ``SymPy`` functions ``diff`` and ``series`` were particularly useful. Additionally, the ``latex`` function allowed to use the latex code of the formulae. For the interactive development with ``SymPy`` the ``Jupyter Notebook`` is used as GUI; there the ``latex`` math rendering proved to be very useful. The visualization is done with ``NumPy`` and ``Matplotlib``. Code snippets are provided within the text in the subsequent sections. In addition, supplemental Python examples are available at this `public GitHub repository <https://github.com/zolabar/ConformalMappingSympy>`_ [#]_.
+the following ``SymPy`` functions and libraries were used: ``im``, ``re``, ``subs``, ``simplify`` and ``lambdify``. For the postprocessing the ``SymPy`` functions ``diff`` and ``series`` were particularly useful. Additionally, the ``latex`` function allowed to use the latex code of the formulae. For the interactive development with ``SymPy`` the ``Jupyter Notebook`` is used as GUI; there the ``latex`` math rendering proved to be very useful. The visualization is done with ``NumPy`` [HMW20]_ and ``Matplotlib`` [H07]_. Code snippets are provided within the text in the subsequent sections. In addition, supplemental Python examples are available at this `public GitHub repository <https://github.com/zolabar/ConformalMappingSympy>`_ [#]_.
 
 .. [#] `<https://github.com/zolabar/ConformalMappingSympy>`_ 
 
@@ -786,7 +786,7 @@ References
            ISBN 978-0-0733-8317-0
 
 .. [CTL09] Chen JT, Tsai MH, Liu CS. *Conformal mapping and bipolar coordinate for eccentric Laplace problems*,
-           Computer Applications in Engineering Education. 2009, 314-22,
+           Computer Applications in Engineering Education, 2009, 314-22,
            https://doi.org/10.1002/cae.20208
 
 .. [CB81]  Churchill RV, Brown JW. *Fourier series and boundary value problems*,
@@ -796,14 +796,22 @@ References
 .. [G13]   Greenberg MD. *Foundations of applied mathematics*, 
            Dover; 2013,
            ISBN 978-0-4864-9279-7
+
+.. [HMW20] Harris CR, Millman KJ, van der Walt SJ et al. *Array programming with NumPy*,
+           Nature 585, 2020, 357–362,
+           https://doi.org/10.1038/s41586-020-2649-2
            
 .. [H10]   Hirose A. *Recent progress in applications of complex-valued neural networks*,
-           International Conference on Artificial Intelligence and Soft Computing 2010 Jun 13,
+           International Conference on Artificial Intelligence and Soft Computing, 2010,
            https://doi.org/10.1007/978-3-642-13232-2_6
            
 .. [H12]   Hirose A. *Complex-valued neural networks*,
            Springer Science & Business Media; 2012,
            https://doi.org/10.1007/978-3-642-27632-3
+	   
+.. [H07]   Hunter JD. *Matplotlib: A 2D Graphics Environment*,
+           Computing in Science & Engineering, 2007, vol. 9, no. 3, 90-95,
+           https://doi.org/10.5281/zenodo.592536
                                  
 .. [K19]   Krebs J. *Optislang in functional development of hydraulic valves*,
            RDO Journal Issue 2, 2019
@@ -849,11 +857,11 @@ References
            https://doi.org/10.1007/978-3-0348-8285-9
            
 .. [S11]   Secomb TW. *Hemodynamics*, 
-           Comprehensive Physiology. 2011 Jan 17;6(2):975-1003,
+           Comprehensive Physiology, 2011 Jan 17;6(2):975-1003,
            https://doi.org/10.1002/cphy.c150038
            
 .. [SL78]  Shah RK, London AL. *Laminar flow forced convection in ducts*,
-           Supplement 1 to Advances in Heat Transfer. Academic Press, NY; 1978,
+           Supplement 1 to Advances in Heat Transfer, Academic Press, NY; 1978,
            https://doi.org/10.1016/C2013-0-06152-X
            
 .. [TG10]  Timoshenko S, Goodier JN. *Theory of elasticity*, 
