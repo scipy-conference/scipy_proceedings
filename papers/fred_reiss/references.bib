@@ -1,0 +1,458 @@
+@Book{hume48,
+  author =  "David Hume",
+  year =    "1748",
+  title =   "An enquiry concerning human understanding",
+  address =     "Indianapolis, IN",
+  publisher =   "Hackett",
+  doi = "10.1017/CBO9780511808432",
+}
+
+@article{DBLP:journals/corr/abs-2004-10643,
+  author    = {Joakim Nivre and
+               Marie{-}Catherine de Marneffe and
+               Filip Ginter and
+               Jan Hajic and
+               Christopher D. Manning and
+               Sampo Pyysalo and
+               Sebastian Schuster and
+               Francis M. Tyers and
+               Daniel Zeman},
+  title     = {Universal Dependencies v2: An Evergrowing Multilingual Treebank Collection},
+  journal   = {CoRR},
+  volume    = {abs/2004.10643},
+  year      = {2020},
+  url       = {https://arxiv.org/abs/2004.10643},
+  archivePrefix = {arXiv},
+  eprint    = {2004.10643},
+  timestamp = {Tue, 28 Apr 2020 16:10:02 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-2004-10643.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@article{10.1145/2699442,
+author = {Fagin, Ronald and Kimelfeld, Benny and Reiss, Frederick and Vansummeren, Stijn},
+title = {Document Spanners: A Formal Approach to Information Extraction},
+year = {2015},
+issue_date = {May 2015},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {62},
+number = {2},
+issn = {0004-5411},
+url = {https://doi.org/10.1145/2699442},
+doi = {10.1145/2699442},
+abstract = {An intrinsic part of information extraction is the creation and manipulation of relations extracted from text. In this article, we develop a foundational framework where the central construct is what we call a document spanner (or just spanner for short). A spanner maps an input string into a relation over the spans (intervals specified by bounding indices) of the string. The focus of this article is on the representation of spanners. Conceptually, there are two kinds of such representations. Spanners defined in a primitive representation extract relations directly from the input string; those defined in an algebra apply algebraic operations to the primitively represented spanners. This framework is driven by SystemT, an IBM commercial product for text analysis, where the primitive representation is that of regular expressions with capture variables.We define additional types of primitive spanner representations by means of two kinds of automata that assign spans to variables. We prove that the first kind has the same expressive power as regular expressions with capture variables; the second kind expresses precisely the algebra of the regular spanners—the closure of the first kind under standard relational operators. The core spanners extend the regular ones by string-equality selection (an extension used in SystemT). We give some fundamental results on the expressiveness of regular and core spanners. As an example, we prove that regular spanners are closed under difference (and complement), but core spanners are not. Finally, we establish connections with related notions in the literature.},
+journal = {J. ACM},
+month = may,
+articleno = {12},
+numpages = {51},
+keywords = {document spanners, finite-state automata, regular expressions, Information extraction}
+}
+
+@article{marketintel,
+author = {Frederick Reiss and Bryan Cutler},
+title = {Market Intelligence with Pandas and IBM Watson},
+year = {2021},
+publisher = {Medium},
+howpublished = "\url{https://medium.com/ibm-data-ai/market-intelligence-with-pandas-and-ibm-watson-a939323a31ea}"
+}
+
+@inproceedings{reiss-etal-2020-identifying,
+    title = "Identifying Incorrect Labels in the {C}o{NLL}-2003 Corpus",
+    author = "Reiss, Frederick  and
+      Xu, Hong  and
+      Cutler, Bryan  and
+      Muthuraman, Karthik  and
+      Eichenberger, Zachary",
+    booktitle = "Proceedings of the 24th Conference on Computational Natural Language Learning",
+    month = nov,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2020.conll-1.16",
+    doi = "10.18653/v1/2020.conll-1.16",
+    pages = "215--226",
+    abstract = "The CoNLL-2003 corpus for English-language named entity recognition (NER) is one of the most influential corpora for NER model research. A large number of publications, including many landmark works, have used this corpus as a source of ground truth for NER tasks. In this paper, we examine this corpus and identify over 1300 incorrect labels (out of 35089 in the corpus). In particular, the number of incorrect labels in the test fold is comparable to the number of errors that state-of-the-art models make when running inference over this corpus. We describe the process by which we identified these incorrect labels, using novel variants of techniques from semi-supervised learning. We also summarize the types of errors that we found, and we revisit several recent results in NER in light of the corrected data. Finally, we show experimentally that our corrections to the corpus have a positive impact on three state-of-the-art models.",
+}
+
+@inproceedings{dash-la,
+    title = "Data Cleaning Tools for Token Classification Tasks",
+    author = "Karthik Muthuraman and Frederick Reiss and Hong Xu and Bryan Cutler and Zachary Eichenberger",
+    booktitle = {DaSH-LA},
+    year = "2021"
+}
+
+@software{nlu,
+  author = {{International Business Machines Corp.}},
+  title = {{IBM Watson Natural Language Understanding}},
+  url = {https://www.ibm.com/cloud/watson-natural-language-understanding}
+}
+
+@software{discovery,
+  author = {{International Business Machines Corp.}},
+  title = {{IBM Watson Discovery}},
+  url = {https://www.ibm.com/cloud/watson-discovery}
+}
+
+@inproceedings{10.5555/2969442.2969519,
+author = {Sculley, D. and Holt, Gary and Golovin, Daniel and Davydov, Eugene and Phillips, Todd and Ebner, Dietmar and Chaudhary, Vinay and Young, Michael and Crespo, Jean-Francois and Dennison, Dan},
+title = {Hidden Technical Debt in Machine Learning Systems},
+year = {2015},
+publisher = {MIT Press},
+address = {Cambridge, MA, USA},
+abstract = {Machine learning offers a fantastically powerful toolkit for building useful complex prediction systems quickly. This paper argues it is dangerous to think of these quick wins as coming for free. Using the software engineering framework of technical debt, we find it is common to incur massive ongoing maintenance costs in real-world ML systems. We explore several ML-specific risk factors to account for in system design. These include boundary erosion, entanglement, hidden feedback loops, undeclared consumers, data dependencies, configuration issues, changes in the external world, and a variety of system-level anti-patterns.},
+booktitle = {Proceedings of the 28th International Conference on Neural Information Processing Systems - Volume 2},
+pages = {2503–2511},
+numpages = {9},
+location = {Montreal, Canada},
+series = {NIPS'15}
+}
+
+@software{spacy,
+  author = {Honnibal, Matthew and Montani, Ines and Van Landeghem, Sofie and Boyd, Adriane},
+  title = {{spaCy: Industrial-strength Natural Language Processing in Python}},
+  year = 2020,
+  publisher = {Zenodo},
+  doi = {10.5281/zenodo.1212303},
+  url = {https://doi.org/10.5281/zenodo.1212303}
+}
+
+@online{spacy-api,
+  author = {{Explosion.io}},
+  title = {{SpaCy} API Documentation: Containers},
+  year = 2021,
+  url = {https://spacy.io/api/doc},
+  urldate = {2021-05-28}
+}
+
+@article{DBLP:journals/corr/abs-2003-07082,
+  author    = {Peng Qi and
+               Yuhao Zhang and
+               Yuhui Zhang and
+               Jason Bolton and
+               Christopher D. Manning},
+  title     = {Stanza: {A} Python Natural Language Processing Toolkit for Many Human
+               Languages},
+  journal   = {CoRR},
+  volume    = {abs/2003.07082},
+  year      = {2020},
+  url       = {https://arxiv.org/abs/2003.07082},
+  archivePrefix = {arXiv},
+  eprint    = {2003.07082},
+  timestamp = {Fri, 20 Nov 2020 14:04:05 +0100},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-2003-07082.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@misc{stanza-src,
+  author = {Stanza Maintainers},
+  title = {Source code for basic data structres in Stanza},
+  year = {2021},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/stanfordnlp/stanza/blob/main/stanza/models/common/doc.py}},
+  commit = {bae0589bb729ba05048f221f74ad8dfd34027412}
+}
+
+@INPROCEEDINGS{Loper02nltk:the,
+    author = {Edward Loper and Steven Bird},
+    title = {NLTK: The Natural Language Toolkit},
+    booktitle = {In Proceedings of the ACL Workshop on Effective Tools and Methodologies for Teaching Natural Language Processing and Computational Linguistics. Philadelphia: Association for Computational Linguistics},
+    year = {2002}
+}
+
+@book{10.5555/1717171,
+author = {Bird, Steven and Klein, Ewan and Loper, Edward},
+title = {Natural Language Processing with Python},
+year = {2009},
+isbn = {0596516495},
+publisher = {O'Reilly Media, Inc.},
+edition = {1st},
+abstract = {This book offers a highly accessible introduction to natural language processing, the field that supports a variety of language technologies, from predictive text and email filtering to automatic summarization and translation. With it, you'll learn how to write Python programs that work with large collections of unstructured text. You'll access richly annotated datasets using a comprehensive range of linguistic data structures, and you'll understand the main algorithms for analyzing the content and structure of written communication. Packed with examples and exercises, Natural Language Processing with Python will help you: Extract information from unstructured text, either to guess the topic or identify "named entities" Analyze linguistic structure in text, including parsing and semantic analysis Access popular linguistic databases, including WordNet and treebanks Integrate techniques drawn from fields as diverse as linguistics and artificial intelligence This book will help you gain practical skills in natural language processing using the Python programming language and the Natural Language Toolkit (NLTK) open source library. If you're interested in developing web applications, analyzing multilingual news sources, or documenting endangered languages -- or if you're simply curious to have a programmer's perspective on how human language works -- you'll find Natural Language Processing with Python both fascinating and immensely useful.}
+}
+
+@misc{wolf2020huggingfaces,
+      title={HuggingFace's Transformers: State-of-the-art Natural Language Processing}, 
+      author={Thomas Wolf and Lysandre Debut and Victor Sanh and Julien Chaumond and Clement Delangue and Anthony Moi and Pierric Cistac and Tim Rault and Rémi Louf and Morgan Funtowicz and Joe Davison and Sam Shleifer and Patrick von Platen and Clara Ma and Yacine Jernite and Julien Plu and Canwen Xu and Teven Le Scao and Sylvain Gugger and Mariama Drame and Quentin Lhoest and Alexander M. Rush},
+      year={2020},
+      eprint={1910.03771},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+@online{transformers-api,
+  author = {{Huggingface}},
+  title = {{Transformers} API Documentation: TokenClassificationPipeline},
+  year = 2021,
+  url = {https://huggingface.co/transformers/main_classes/pipelines.html#tokenclassificationpipeline},
+  urldate = {2021-05-28}
+}
+
+@misc{tensorflow2015-whitepaper,
+title={ {TensorFlow}: Large-Scale Machine Learning on Heterogeneous Systems},
+url={https://www.tensorflow.org/},
+note={Software available from tensorflow.org},
+author={
+    Mart\'{\i}n~Abadi and
+    Ashish~Agarwal and
+    Paul~Barham and
+    Eugene~Brevdo and
+    Zhifeng~Chen and
+    Craig~Citro and
+    Greg~S.~Corrado and
+    Andy~Davis and
+    Jeffrey~Dean and
+    Matthieu~Devin and
+    Sanjay~Ghemawat and
+    Ian~Goodfellow and
+    Andrew~Harp and
+    Geoffrey~Irving and
+    Michael~Isard and
+    Yangqing Jia and
+    Rafal~Jozefowicz and
+    Lukasz~Kaiser and
+    Manjunath~Kudlur and
+    Josh~Levenberg and
+    Dandelion~Man\'{e} and
+    Rajat~Monga and
+    Sherry~Moore and
+    Derek~Murray and
+    Chris~Olah and
+    Mike~Schuster and
+    Jonathon~Shlens and
+    Benoit~Steiner and
+    Ilya~Sutskever and
+    Kunal~Talwar and
+    Paul~Tucker and
+    Vincent~Vanhoucke and
+    Vijay~Vasudevan and
+    Fernanda~Vi\'{e}gas and
+    Oriol~Vinyals and
+    Pete~Warden and
+    Martin~Wattenberg and
+    Martin~Wicke and
+    Yuan~Yu and
+    Xiaoqiang~Zheng},
+  year={2015},
+}
+
+@software{tftext,
+  author = {{TensorFlow} Text Maintainers},
+  title = {{TensorFlow} Text},
+  year = 2021,
+  publisher = {Google},
+  url = {https://github.com/tensorflow/text}
+}
+
+@online{tftext-api,
+  author = {{TensorFlow} Text Maintainers},
+  title = {{TensorFlow} Text API Documentation},
+  year = 2021,
+  url = {https://www.tensorflow.org/text/api_docs/python/text},
+  urldate = {2021-05-28}
+}
+
+@software{jeff_reback_2021_4681666,
+  author       = {The pandas development team},
+  title        = {pandas-dev/pandas: Pandas 1.2.4},
+  month        = apr,
+  year         = 2021,
+  publisher    = {Zenodo},
+  version      = {v1.2.4},
+  doi          = {10.5281/zenodo.4681666},
+  url          = {https://doi.org/10.5281/zenodo.4681666}
+}
+
+@online{pandas-extending,
+  author       = {The pandas development team},
+  title = {Pandas API documentation: Extending Pandas},
+  year = 2021,
+  url = {https://pandas.pydata.org/pandas-docs/stable/development/extending.html},
+  urldate = {2021-05-28}
+}
+
+@Article{Hunter:2007,
+  Author    = {Hunter, J. D.},
+  Title     = {Matplotlib: A 2D graphics environment},
+  Journal   = {Computing in Science \& Engineering},
+  Volume    = {9},
+  Number    = {3},
+  Pages     = {90--95},
+  abstract  = {Matplotlib is a 2D graphics package used for Python for
+  application development, interactive scripting, and publication-quality
+  image generation across user interfaces and operating systems.},
+  publisher = {IEEE COMPUTER SOC},
+  doi       = {10.1109/MCSE.2007.55},
+  year      = 2007
+}
+
+@article{DBLP:journals/corr/cmp-lg-9505040,
+  author    = {Lance A. Ramshaw and
+               Mitchell P. Marcus},
+  title     = {Text Chunking using Transformation-Based Learning},
+  journal   = {CoRR},
+  volume    = {cmp-lg/9505040},
+  year      = {1995},
+  url       = {http://arxiv.org/abs/cmp-lg/9505040},
+  timestamp = {Mon, 13 Aug 2018 16:48:46 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/cmp-lg-9505040.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@software{dtale,
+  author       = {The D-Tale development team},
+  title        = {D-Tale},
+  year         = 2021,
+  publisher    = {Man Group},
+  url          = {https://github.com/man-group/dtale}
+}
+
+@software{qgrid,
+  author       = {The Qgrid development team},
+  title        = {Qgrid},
+  year         = 2021,
+  publisher    = {quantopian},
+  url          = {https://github.com/quantopian/qgrid}
+}
+
+@software{spyder,
+  author       = {Spyder Project Contributors},
+  title        = {Spyder},
+  year         = 2021,
+  publisher    = {spyder-ide},
+  url          = {https://github.com/spyder-ide/spyder}
+}
+
+@inproceedings{kudo-richardson-2018-sentencepiece,
+    title = "{S}entence{P}iece: A simple and language independent subword tokenizer and detokenizer for Neural Text Processing",
+    author = "Kudo, Taku  and
+      Richardson, John",
+    booktitle = "Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing: System Demonstrations",
+    month = nov,
+    year = "2018",
+    address = "Brussels, Belgium",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/D18-2012",
+    doi = "10.18653/v1/D18-2012",
+    pages = "66--71",
+    abstract = "This paper describes SentencePiece, a language-independent subword tokenizer and detokenizer designed for Neural-based text processing, including Neural Machine Translation. It provides open-source C++ and Python implementations for subword units. While existing subword segmentation tools assume that the input is pre-tokenized into word sequences, SentencePiece can train subword models directly from raw sentences, which allows us to make a purely end-to-end and language independent system. We perform a validation experiment of NMT on English-Japanese machine translation, and find that it is possible to achieve comparable accuracy to direct subword training from raw sentences. We also compare the performance of subword training and segmentation with various configurations. SentencePiece is available under the Apache 2 license at \url{https://github.com/google/sentencepiece}.",
+}
+
+@inproceedings{devlin-etal-2019-bert,
+    title = "{BERT}: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    author = "Devlin, Jacob  and
+      Chang, Ming-Wei  and
+      Lee, Kenton  and
+      Toutanova, Kristina",
+    booktitle = "NAACL-HLT",
+    month = jun,
+    year = "2019",
+    address = "Minneapolis, Minnesota",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/N19-1423",
+    doi = "10.18653/v1/N19-1423",
+    pages = "4171--4186",
+    abstract = "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models (Peters et al., 2018a; Radford et al., 2018), BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications. BERT is conceptually simple and empirically powerful. It obtains new state-of-the-art results on eleven natural language processing tasks, including pushing the GLUE score to 80.5 (7.7 point absolute improvement), MultiNLI accuracy to 86.7{\%} (4.6{\%} absolute improvement), SQuAD v1.1 question answering Test F1 to 93.2 (1.5 point absolute improvement) and SQuAD v2.0 Test F1 to 83.1 (5.1 point absolute improvement).",
+}
+
+
+@article{DBLP:journals/corr/abs-1907-11692,
+  author    = {Yinhan Liu and
+               Myle Ott and
+               Naman Goyal and
+               Jingfei Du and
+               Mandar Joshi and
+               Danqi Chen and
+               Omer Levy and
+               Mike Lewis and
+               Luke Zettlemoyer and
+               Veselin Stoyanov},
+  title     = {RoBERTa: {A} Robustly Optimized {BERT} Pretraining Approach},
+  journal   = {CoRR},
+  volume    = {abs/1907.11692},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1907.11692},
+  archivePrefix = {arXiv},
+  eprint    = {1907.11692},
+  timestamp = {Thu, 01 Aug 2019 08:59:33 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1907-11692.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@Article{         harris2020array,
+ title         = {Array programming with {NumPy}},
+ author        = {Charles R. Harris and K. Jarrod Millman and St{\'{e}}fan J.
+                 van der Walt et al.},
+ year          = {2020},
+ month         = sep,
+ journal       = {Nature},
+ volume        = {585},
+ number        = {7825},
+ pages         = {357--362},
+ doi           = {10.1038/s41586-020-2649-2},
+ publisher     = {Springer Science and Business Media {LLC}},
+ url           = {https://doi.org/10.1038/s41586-020-2649-2}
+}
+
+@article{hoyer2017xarray,
+  title     = {xarray: {N-D} labeled arrays and datasets in {Python}},
+  author    = {Hoyer, S. and J. Hamman},
+  journal   = {Journal of Open Research Software},
+  volume    = {5},
+  number    = {1},
+  year      = {2017},
+  publisher = {Ubiquity Press},
+  doi       = {10.5334/jors.148},
+  url       = {http://doi.org/10.5334/jors.148}
+}
+
+@software{arrow,
+  author       = {Apache Arrow Committers},
+  title        = {Apache Arrow},
+  year         = 2021,
+  publisher    = {Apache Software Foundation},
+  url          = {https://arrow.apache.org/}
+}
+
+@software{parquet,
+  author       = {Apache Parquet Committers},
+  title        = {Apache Parquet},
+  year         = 2021,
+  publisher    = {Apache Software Foundation},
+  url          = {https://parquet.apache.org/}
+}
+
+
+@inproceedings{tjong-kim-sang-de-meulder-2003-introduction,
+    title = "Introduction to the {C}o{NLL}-2003 Shared Task: Language-Independent Named Entity Recognition",
+    author = "Tjong Kim Sang, Erik F.  and
+      De Meulder, Fien",
+    booktitle = "Proceedings of the Seventh Conference on Natural Language Learning at {HLT}-{NAACL} 2003",
+    year = "2003",
+    url = "https://www.aclweb.org/anthology/W03-0419",
+    pages = "142--147",
+}
+
+@article{scikit-learn,
+ title={Scikit-learn: Machine Learning in {P}ython},
+ author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.
+         and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.
+         and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and
+         Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},
+ journal={Journal of Machine Learning Research},
+ volume={12},
+ pages={2825--2830},
+ year={2011}
+}
+
+
+@software{cpython,
+  author       = {Python core developers},
+  title        = {CPython},
+  year         = 2021,
+  publisher    = {Python Software Foundation},
+  url          = {https://github.com/python/cpython}
+}
+
+
