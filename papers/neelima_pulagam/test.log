@@ -1,0 +1,147 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdftex 2021.5.29)  1 JUL 2021 12:39
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**test.tex
+(./test.tex
+! Undefined control sequence.
+l.1 \begin
+          {table*}
+? 
+! Undefined control sequence.
+l.3      \begin
+               {longtable*}{|l|r|r|r|}
+? 
+! Undefined control sequence.
+l.4      \hline
+               
+? 
+! Undefined control sequence.
+l.5      \multirow
+                  {2}{*}{Model} &
+? 
+! Misplaced alignment tab character &.
+l.5      \multirow{2}{*}{Model} &
+                                 
+? 
+! Undefined control sequence.
+l.6      \multicolumn
+                     {2}{c|}{Area in square miles}
+? 
+! Undefined control sequence.
+l.7      \cline
+               {2-3}
+? 
+! Misplaced alignment tab character &.
+l.8       &
+            Large Horizontal Area & Large Vertical Area \tabularnewline
+? 
+! Misplaced alignment tab character &.
+l.8       & Large Horizontal Area &
+                                    Large Vertical Area \tabularnewline
+? 
+! Undefined control sequence.
+l.8 ... Area & Large Vertical Area \tabularnewline
+                                                  
+? 
+! Undefined control sequence.
+l.10       \multicolumn
+                       {2}{c|}{Area in square miles} \tabularnewline
+? 
+! Undefined control sequence.
+l.10 ...{c|}{Area in square miles} \tabularnewline
+                                                  
+? 
+! Undefined control sequence.
+l.11      \cline
+                {2-3}
+? 
+! Misplaced alignment tab character &.
+l.12       &
+             Large Horizontal Area & Large Vertical Area \tabularnewline
+? 
+! Misplaced alignment tab character &.
+l.12       & Large Horizontal Area &
+                                     Large Vertical Area \tabularnewline
+? 
+! Undefined control sequence.
+l.12 ...Area & Large Vertical Area \tabularnewline
+                                                  
+? 
+! Undefined control sequence.
+l.13      \hline
+                
+? 
+! Misplaced alignment tab character &.
+l.14      Albers Equal Area  &
+                               7,498.7 & 10,847.3 \tabularnewline
+? 
+! Misplaced alignment tab character &.
+l.14      Albers Equal Area  & 7,498.7 &
+                                         10,847.3 \tabularnewline
+? 
+! Undefined control sequence.
+l.14 ...Area  & 7,498.7 & 10,847.3 \tabularnewline
+                                                  
+? 
+! Undefined control sequence.
+l.15      \hline
+                
+? 
+! Misplaced alignment tab character &.
+l.16      Web Mercator &
+                         13,410.0 & 18,271.4 \tabularnewline
+? 
+! Misplaced alignment tab character &.
+l.16      Web Mercator & 13,410.0 &
+                                    18,271.4 \tabularnewline
+? 
+! Undefined control sequence.
+l.16 ...ator & 13,410.0 & 18,271.4 \tabularnewline
+                                                  
+? 
+! Undefined control sequence.
+l.17      \hline
+                
+? 
+! Misplaced alignment tab character &.
+l.18      Difference &
+                       5,911.3 & 7,424.1 \tabularnewline
+? 
+! Misplaced alignment tab character &.
+l.18      Difference & 5,911.3 &
+                                 7,424.1 \tabularnewline
+? 
+! Undefined control sequence.
+l.18 ...erence & 5,911.3 & 7,424.1 \tabularnewline
+                                                  
+? 
+! Undefined control sequence.
+l.19      \hline
+                
+? 
+! Misplaced alignment tab character &.
+l.20      Percent Difference &
+                               44\% & 41\% \tabularnewline
+? 
+! Misplaced alignment tab character &.
+l.20      Percent Difference & 44\% &
+                                      41\% \tabularnewline
+? 
+! Undefined control sequence.
+l.20 ...t Difference & 44\% & 41\% \tabularnewline
+                                                  
+? 
+! Undefined control sequence.
+l.21      \hline
+                
+? 
+[1{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] )</us
+r/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
+Output written on test.pdf (1 page, 18792 bytes).
+PDF statistics:
+ 12 PDF objects out of 1000 (max. 8388607)
+ 7 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
