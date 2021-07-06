@@ -592,7 +592,6 @@ B.D. and B.B. acknowledge fellowship support from the National Science Foundatio
 B.D was also supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260 (2016–2019).
 V.R. acknowledges the 2019-2020 J. Robert Beyster Computational Innovation Graduate Fellowship at the University of Michigan.
 A.T. is supported by the National Science Foundation under DMR 1707640.
-M.M.H is supported by the National Science Foundation under OAC 1835593.
 Software was deployed and validated and benchmarked on the Extreme Science and Engineering Discovery Environment (XSEDE) :cite:`xsede`, which is supported by National Science Foundation Grant No. ACI-1053575 (XSEDE award DMR 140129) and on resources of the Oak Ridge Leadership Computing Facility which is a DOE Office of Science User Facility supported under Contract No. DE-AC05-00OR22725.
 
 Author contributions
