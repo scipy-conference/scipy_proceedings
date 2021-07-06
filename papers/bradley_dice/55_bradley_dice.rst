@@ -589,7 +589,7 @@ We would also like to thank NumFOCUS for providing helpful advice on open-source
 
 This work was supported by the National Science Foundation, Office of Advanced Cyberinfrastructure Awards OAC 1835612 and OAC 1835593.
 B.D. and B.B. acknowledge fellowship support from the National Science Foundation under ACI 1547580, S212: Impl: The Molecular Sciences Software Institute :cite:`molssi1, molssi2`.
-B.D was also supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260 (2016–2019).
+B.D. was also supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260 (2016–2019).
 V.R. acknowledges the 2019-2020 J. Robert Beyster Computational Innovation Graduate Fellowship at the University of Michigan.
 A.T. is supported by the National Science Foundation under DMR 1707640.
 Software was deployed and validated and benchmarked on the Extreme Science and Engineering Discovery Environment (XSEDE) :cite:`xsede`, which is supported by National Science Foundation Grant No. ACI-1053575 (XSEDE award DMR 140129) and on resources of the Oak Ridge Leadership Computing Facility which is a DOE Office of Science User Facility supported under Contract No. DE-AC05-00OR22725.
