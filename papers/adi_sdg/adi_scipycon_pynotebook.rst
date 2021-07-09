@@ -36,7 +36,7 @@ Figure :ref:`mixmode` shows a generic signal chain typical of a precision instru
    A Generic Mixed Mode Signal Chain.
    :label:`mixmode`
 
-If the sensor’s signal will eventually reside on, or at least take a trip through a computer, an ADC will be involved somewhere along the way. There are numerous background references on analog to digital converters available [1]_ , and most readers will have a sense that an analog to digital converter samples an input signal at some point in time (or measures the average of a signal over some observation time), and produces a numerical representation of that signal - most often as a binary number with some value between zero and (2**N)-1 where N is the number of bits in the output word.
+If the sensor’s signal will eventually reside on, or at least take a trip through a computer, an ADC will be involved somewhere along the way. There are numerous background references on analog to digital converters available [1]_ , and most readers will have a sense that an analog to digital converter samples an input signal at some point in time (or measures the average of a signal over some observation time), and produces a numerical representation of that signal - most often as a binary number with some value between zero and :math:`2^N - 1` where N is the number of bits in the output word.
 
 ADC Noise Sources
 ---------------------------------------------------------
@@ -61,7 +61,7 @@ Very high resolution converters, such as the AD7124-8 that will be used as an ex
 .. figure:: ad7124_histograms.png
    :scale: 30 %
 
-   AD7124 output noise. PGA-gain=1(left), PGA-gain=128(right)
+   AD7124 output noise. PGA-gain=1 (left), PGA-gain=128 (right).
    :label:`ad7124hist`
 
 Experimental Setup
@@ -133,7 +133,7 @@ Figure :ref:`warmup` shows the first few captures after initially applying power
 .. figure:: ad7124_warmup.png
    :scale: 125 %
 
-   Initial warmup: top traces - ADC wanders, bottom traces: ADC warmed up and stabilsed 
+   Initial warmup: top traces - ADC wanders, bottom traces: ADC warmed up and stabilised. 
    :label:`warmup`
 
 The "wandering" can be due to a number of factors - the internal reference warming up, the external resistors warming up (and hence drifting), or parasitic thermocouples, where slightly dissimilar metals will produce a voltage in the presence of thermal gradients. The lower traces in Figure :ref:`warmup` are after wrapping the AD7124 and resistor divider in antistatic bubble wrap, and waiting half an hour. Figure :ref:`ad7124noise` shows a single trace after warmup.
@@ -177,7 +177,7 @@ where:
 
 fs is the ADC sample rate in samples/second.
 
-The total noise from Figure :ref:`ad7124noise` was 565nV at a data rate of 128sps. So the noise density is approximately:
+The total noise from Figure :ref:`ad7124noise` was 565nV at a data rate of 128SPS. So the noise density is approximately:
 
 .. math::
 
@@ -195,7 +195,7 @@ This can be used as a guideline for optimizing amplifier gain:
 
 “Increase signal chain gain just to the point where the noise of the last stage before the ADC is a bit higher than the ADC noise… then **STOP**. Don’t bother increasing the signal chain gain any more - you’re just amplifying noise, and decreasing the allowable range of inputs”
 
-This runs counter to historical advice to “fill” the ADC’s input range. There may be benefit to using more of an ADC’s input range IF there are steps or discontinuities in the ADC’s transfer function, but for “well behaved” ADCs (most sigma delta ADCs and modern, high-resolution Successive Approximation Register(SAR) ADCs), optimizing by noise is the preferred approach.
+This runs counter to historical advice to “fill” the ADC’s input range. There may be benefit to using more of an ADC’s input range IF there are steps or discontinuities in the ADC’s transfer function, but for “well behaved” ADCs (most sigma delta ADCs and modern, high-resolution Successive Approximation Register (SAR) ADCs), optimizing by noise is the preferred approach.
 
 
 Measuring ADC filter response
@@ -266,7 +266,7 @@ Figures :ref:`10hznotch` [4]_  and :ref:`50hznotch` [4]_  show the AD7124-8’s 
    AD7124 50Hz notch filter.
    :label:`50hznotch`
 
-SINC filters (with a frequency response proportional to [sin(f)/f]^N) are fairly easy to construct when nulls are known. The simultaneous 50Hz/60Hz rejection filter shown in Figure :ref:`5060hzflt` [4]_ is a nontrivial example.
+SINC filters (with a frequency response proportional to :math:`(sin{f}/f)^N` are fairly easy to construct when nulls are known. The simultaneous 50Hz/60Hz rejection filter shown in Figure :ref:`5060hzflt` [4]_ is a nontrivial example.
 
 .. figure:: simult_50_60_reverse_eng.png
    :scale: 50 %
@@ -369,7 +369,7 @@ The OP482 is an ultralow bias current amplifier with correspondingly low current
 .. figure:: noise_source_schematic.png
    :scale: 50 %
 
-   Laboratory Noise Source
+   Laboratory Noise Source.
    :label:`ananoisesrc`
 
 The noise source was verified with an ADALM2000 USB instrument, using the Scopy [8]_  GUI’s spectrum analyzer, shown in Figure :ref:`ngoutput`.
@@ -541,7 +541,7 @@ where:
 
 fc is the cutoff frequency of the filter. If broadband noise, from “DC to daylight”, is applied to the inputs of both a 1KHz, first-order lowpass filter and 1.57kHz brickwall lowpass filter, the total noise power at the outputs will be the same.
 
-The ENBW Example code block below accepts a filter magnitude response, and returns the effective noise bandwidth. A single-pole filter’s magnitude response is calculated, and used to verify the ENBW = fc*pi/2 relationship.
+The ENBW Example code block below accepts a filter magnitude response, and returns the effective noise bandwidth. A single-pole filter’s magnitude response is calculated, and used to verify the ENBW = :math:`fc*pi/2` relationship.
 
 .. -----------------------------------------------------|
 .. code-block:: python
