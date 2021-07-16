@@ -1,0 +1,11 @@
+{
+    "title": "Social Media Analysis using Natural Language Processing Techniques",
+    "authors": [
+        {
+            "name": "Jyotika Singh",
+            "affiliation": "ICX Media, Inc.",
+            "orcid": "0000-0002-5442-3004"
+        }
+    ],
+    "description": "Demonstration of social media noise and cleaning methods, followed by trend analysis on YouTube with NLP and statistics using pyYouTubeAnalysis."
+}
