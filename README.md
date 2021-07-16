@@ -467,7 +467,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](#creating-a-new-branch-based-off-of-2019) for your paper based off the latest `2019` branch.
+3. [Create a new branch](#creating-a-new-branch-based-off-of-2021) for your paper based off the latest `2021` branch.
 4. Inside the `presentations` folder, there are directories for:
     1. 3-minute lightning talk slide decks (lightning)
     2. Posters presented at the poster session (posters)
