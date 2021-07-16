@@ -174,6 +174,7 @@ have final say in whether to accept or reject a paper.
   this, the co-chairs will change your title on your behalf.
 - Authors may include a project or consortium (e.g. [The Jupyter Project](https://raw.githubusercontent.com/scipy-conference/scipy_proceedings/2018/papers/project_jupyter/paper.rst))
 - There must be at least one corresponding author, and this must be a specific person with a valid email address
+- Authors of papers from previous SciPys may change their name on their published work by contacting the Proceedings Co-chairs
 - All citations that have DOIs should include those DOIs in the paper's
   references section, see [`mybib.bib`](./papers/00_bibderwalt/mybib.bib).
 - All figures and tables should have captions.
