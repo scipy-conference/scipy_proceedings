@@ -1,0 +1,16 @@
+{
+    "title": "Adopting static typing in scientific projects",
+    "authors": [
+        {
+            "name": "Predrag Gruevski",
+            "affiliation": "Kensho Technologies, LLC.",
+            "orcid": "0000-0003-2713-6621"
+        },
+        {
+            "name": "Colin Carroll",
+            "affiliation": "Google Research",
+            "orcid": "0000-0001-6977-0861"
+        }
+    ],
+    "description": "Are you interested in adding typing to your existing codebase, but are not sure how to get started? Are you worried about managing the typing process without pausing your project's development?\n\nIn this talk, we'll embrace the fact that a large project's transition toward typing will likely happen over the course of many months, concurrently with ongoing development. However, that doesn't mean that getting started with typing has to be difficult! We'll share with you two examples of adopting typing in existing open-source codebases (100k and 40k lines of Python). We'll particularly focus on the typing experience from the perspective of project maintainers, contributors, and users of these Python libraries.\n\nWe will discuss useful tools and strategies, surprising difficulties, the types of bugs and errors we found, and how the addition of typing changes the overall development experience. By the end of this talk, you'll be able to confidently manage the migration toward typing in your own codebase."
+}
