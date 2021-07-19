@@ -1,0 +1,16 @@
+{
+    "title": "SciPy Tools Plenary: Jupyter Updates",
+    "authors": [
+        {
+            "name": "Isabela Presedo-Floyd",
+            "affiliation": "Project Jupyter",
+            "orcid": ""
+        },
+        {
+            "name": "Matthias Bussonnier",
+            "affiliation": "Project Jupyter",
+            "orcid": ""
+        }
+    ],
+    "description": "Project Jupyter creates open source software, standards, and services for interactive computing. This presentation covers recent milestones and ideas for people to contribute across the Jupyter ecosystem."
+}
