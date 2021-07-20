@@ -1,0 +1,11 @@
+{
+    "title": "Awkward Array",
+    "authors": [
+        {
+            "name": "Jim Pivarski",
+            "affiliation": "Princeton University",
+            "orcid": "0000-0002-6649-343X"
+        }
+    ],
+    "description": "Tools update on Awkward Array."
+}
