@@ -48,7 +48,7 @@ While there are several noise sources in Figure :ref:`mixmode`, one that is ofte
 As with any signal chain, one noise source within an ADC often dominates. Thus, if a noiseless signal is applied to an N-bit ADC:
 
 -  results in either a single output code, or two adjacent output codes, then **quantization noise dominates**. The Signal to Noise Ratio can be no greater than (6.02 N + 1.76) dB. [7]_ 
--  results in a gaussian distribution of “many” output codes, then a **thermal noise source dominates**. The Signal to Noise Ratio is no greater than: 
+-  results in a gaussian distribution of "many" output codes, then a **thermal noise source dominates**. The Signal to Noise Ratio is no greater than: 
 
    :math:`20\log(V_{in}(p-p)/(\sigma/\sqrt{8}))`, where:
 
@@ -67,7 +67,7 @@ Very high resolution converters, such as the AD7124-8 that will be used as an ex
 Modeling and Measuring ADC noise
 --------------------------------
 
-Modeling the noise of a thermal-noise limited ADC’s is straightforward. If the noise is “well behaved” (Gaussian, as it is in Figure :ref:`ad7124hist`) and constant across the ADC’s input span, the ADC’s time-domain noise can be modelled using Numpy’s [9]_  :code:`random.normal function` , then verified by taking the standard deviation, as seen in the Model Gaussian Noise code block.
+Modeling the noise of a thermal-noise limited ADC’s is straightforward. If the noise is "well behaved" (Gaussian, as it is in Figure :ref:`ad7124hist`) and constant across the ADC’s input span, the ADC’s time-domain noise can be modelled using Numpy’s [9]_  :code:`random.normal` function , then verified by taking the standard deviation, as seen in the Model Gaussian Noise code block.
 
 .. -----------------------------------------------------|
 .. code-block:: python
@@ -137,6 +137,7 @@ The "wandering" can be due to a number of factors - the internal reference warmi
 
 Expressing ADC Noise as a Density
 ---------------------------------
+The general principle of analog signal chain design (that the input noise of one stage should be somewhat lower than the output noise of the preceding stage) is an easy calculation if all elements include noise density specifications, as most well-specified sensors, and nearly all amplifiers do.
 
 Unlike amplifiers and sensors, ADC datasheets typically do not include a noise density specification. Expressing the ADC's noise as a density allows it to be directly compared to the noise at the output of the last element in the analog signal chain, which may be an ADC driver stage, a gain stage, or the sensor itself.
 
@@ -160,23 +161,17 @@ where:
 
 fs is the ADC sample rate in samples/second.
 
-The total noise from Figure :ref:`ad7124noise` was 565nV at a data rate of 128sps. The noise density is approximately:
+The total noise from Figure :ref:`warmup` after warmup was 565nV at a data rate of 128sps. The noise density is approximately:
 
 .. math::
 
     565nV/\sqrt{64 Hz} = 70nV/\sqrt{Hz}
 
-So:
+The ADC can now be directly included in the signal chain noise analysis, and leads to a guideline for optimizing the signal chain's gain:
 
-“The input noise of **the ADC** should be a bit lower than the output noise of the preceding stage”
+Increase the gain just to the point where the noise density of the last stage before the ADC is a bit higher than that of the ADC, then stop. Don’t bother increasing the signal chain gain any more - you’re just amplifying noise, and decreasing the allowable range of inputs.
 
-This is now an easy comparison, since the ADC input noise is now expressed in the same units as a typical sensor, operational amplifier, or spectrum analyzer.
-
-This can be used as a guideline for optimizing amplifier gain:
-
-“Increase signal chain gain just to the point where the noise density of the last stage before the ADC is a bit higher than that of the ADC, then **STOP**. Don’t bother increasing the signal chain gain any more - you’re just amplifying noise, and decreasing the allowable range of inputs”
-
-This runs counter to historical advice to “fill” the ADC’s input range. There may be benefit to using more of an ADC’s input range if there are steps or discontinuities in the ADC’s transfer function, but for “well behaved” ADCs (most sigma delta ADCs and modern, high-resolution Successive Approximation Register (SAR) ADCs), optimizing by noise is the preferred approach.
+This runs counter to the conventional wisdom of "filling" the ADC’s input range. There may be benefit to using more of an ADC’s input range if there are steps or discontinuities in the ADC’s transfer function, but for "well behaved" ADCs (most sigma delta ADCs and modern, high-resolution Successive Approximation Register (SAR) ADCs), optimizing by noise is the preferred approach.
 
 
 Measuring ADC filter response
@@ -190,7 +185,7 @@ The AD7124-8 is a sigma-delta ADC, in which a modulator produces a high sample r
    AD7124 - m2k Connections for Filter Response Measurement. The 1k resistor protects the AD7124-8 if a malfunction occurs, as the m2k output range is -5V to +5V, beyond the -0.3V to 3.6V absolute maximum limits of the converter.
    :label:`ad7124m2k`
 
-The AD7124-8 Filter Response code block will set the ADALM2000’s waveform generator to generate a sinewave at 10Hz, capture 1024 data points, calculate the RMS value, then append the result to a list. It will then step through frequencies up to 250Hz, then plot the result as shown in Figure :ref:`measresp`.
+The AD7124-8 Filter Response code block will set the ADALM2000’s waveform generator to generate a sinewave at 10Hz, capture 1024 data points, calculate the RMS value, then append the result to a list. (The :code:`send_sinewave` and :code:`capture_data` are utility functions that send a sinewave to the ADALM2000 and receive a block of data from the AD7124, respectively [2]_ .) It will then step through frequencies up to 250Hz, then plot the result as shown in Figure :ref:`measresp`.
 
 .. -----------------------------------------------------|
 .. code-block:: python
@@ -225,7 +220,7 @@ The AD7124-8 Filter Response code block will set the ADALM2000’s waveform gene
    AD7124 Measured Filter Response, 64sps SINC4 mode, showing the filter's passband, first lobe, and first two nulls.
    :label:`measresp`
 
-While measuring high attenuation values requires a quieter and lower distortion signal generator, the response of the first few major “lobes” is apparent with this setup.
+While measuring high attenuation values requires a quieter and lower distortion signal generator, the response of the first few major "lobes" is apparent with this setup.
 
 Modeling ADC filters
 --------------------
@@ -236,7 +231,7 @@ Note that what follows is only a model of the AD7124-8 filters, it is not a bit-
 
 The AD7124's filters all have frequency responses that are combinations of various SINC functions (with a frequency response proportional to :math:`(sin{f}/f)^N` ) . These filters are fairly easy to construct, and to reverse-engineer when nulls are known.
 
-Figures :ref:`10hznotch` and :ref:`50hznotch`, both from Ref. [8]_  show the AD7124-8’s 10Hz and 50Hz notch filters. Various combinations of Higher order SINC3 and SINC4 filters are also available. 
+Figure :ref:`10hznotch` from Ref. [8]_  shows the AD7124-8’s 10Hz notch filters. Various combinations of Higher order SINC3 and SINC4 filters are also available. 
 
 .. figure:: media/ad7124_filter_10.png
    :scale: 60 %
@@ -276,7 +271,7 @@ Higher order SINC filters can be generated by convolving SINC1 filters. For exam
     # Figure 91, with three zeros at 50Hz, one at 60Hz.
     filt_50_60_rej = np.convolve(sinc3_50, sinc1_60)
 
-The resulting impulse (time domain) shapes of the filters are shown in Figure :ref:`fltimpluse`.
+The resulting impulse (time domain) shapes of the filters are shown in Figure :ref:`fltimpluse`. Filter coefficient (tap) values are normalized for unity (0dB) gain at zero frequency.
 
 .. figure:: media/rev_eng_filters_all_new.png
    :scale: 40 %
@@ -309,7 +304,7 @@ And finally, the frequency response can be calculated using NumPy’s  freqz fun
 Resistance is Futile: A Fundamental Sensor Limitation
 -----------------------------------------------------
 
-All sensors, no matter how perfect, have some maximum input value (and a corresponding maximum output - which may be a voltage, current, resistance, or even dial position) and a finite noise floor - “wiggles” at the output that exist even if the input is perfectly still. At some point, a sensor with an electrical output will include an element with a finite resistance (or more generally, impedance) represented by Rsensor in Figure :ref:`genericsensor` This represents one fundamental noise limit that cannot be improved upon - this resistance will produce, at a minimum:
+All sensors, no matter how perfect, have some maximum input value (and a corresponding maximum output - which may be a voltage, current, resistance, or even dial position) and a finite noise floor - "wiggles" at the output that exist even if the input is perfectly still. At some point, a sensor with an electrical output will include an element with a finite resistance (or more generally, impedance) represented by Rsensor in Figure :ref:`genericsensor` This represents one fundamental noise limit that cannot be improved upon - this resistance will produce, at a minimum:
 
 :math:`e_n(RMS) = \sqrt{4 * K * T * Rsensor * (F2-F1)}` Volts of noise,
 where:
@@ -338,7 +333,7 @@ There are numerous other sensor limitations - mechanical, chemical, optical, eac
 A Laboratory Noise Source
 -------------------------
 
-A calibrated noise generator functions as a “world’s worst sensor”, that emulates the noise of a sensor without actually sensing anything. Such a generator allows a signal chain's response to noise to be measured directly. The circuit shown in Figure :ref:`ananoisesrc` uses a 1M resistor as a 127nV/:math:`\sqrt{Hz}` (at room temperature) noise source with “okay accuracy” and bandwidth. While the accuracy is only “okay”, this method has advantages:
+A calibrated noise generator functions as a "world’s worst sensor", that emulates the noise of a sensor without actually sensing anything. Such a generator allows a signal chain's response to noise to be measured directly. The circuit shown in Figure :ref:`ananoisesrc` uses a 1M resistor as a 127nV/:math:`\sqrt{Hz}` (at room temperature) noise source with "okay accuracy" and bandwidth. While the accuracy is only "okay", this method has advantages:
 
 -  It is based on first principles, so in a sense can act as an uncalibrated standard.
 -  It is truly random, with no repeating patterns.
@@ -361,7 +356,7 @@ The noise source was verified with an ADALM2000 USB instrument, using the Scopy 
 
 Under the analyzer settings shown, the ADALM2000 noise floor is 40µV/:math:`\sqrt{Hz}`, well below the 269 µV/:math:`\sqrt{Hz}` of the noise source.
 
-While Scopy is useful for single, visual measurements, the functionality can be replicated easily with the SciPy periodogram function. Raw data is collected from an ADALM2000 using the libm2k [12]_  and Python bindings, minimally processed to remove DC content (that would otherwise “leak” into low frequency bins), and scaled to nV/:math:`\sqrt{Hz}`. This method, shown in the Noise Source Measurement code block can be applied to any data acquisition module, so long as the sample rate is fixed and known, and data can be formatted as a vector of voltages.
+While Scopy is useful for single, visual measurements, the functionality can be replicated easily with the SciPy periodogram function. Raw data is collected from an ADALM2000 using the libm2k [12]_  and Python bindings, minimally processed to remove DC content (that would otherwise "leak" into low frequency bins), and scaled to nV/:math:`\sqrt{Hz}`. This method, shown in the Noise Source Measurement code block can be applied to any data acquisition module, so long as the sample rate is fixed and known, and data can be formatted as a vector of voltages.
 
 .. -----------------------------------------------------|
 .. code-block:: python
@@ -395,7 +390,7 @@ Figure :ref:`ngltspice` shows a noise simulation of the analog noise generator, 
    LTspice simulation of Laboratory Noise Source, showing approximately the same usable bandwidth as the measured circuit.
    :label:`ngltspice`
 
-Figure :ref:`ngltspice` circuit’s noise is fairly trivial to model, given that it is constant for some bandwidth (in which a signal of interest would lie), above which it rolls off with approximately a first order lowpass response. Where this technique comes in handy is modeling non-flat noise floors, either due to higher order analog filtering, or active elements themselves. The classic example is the “noise mountain” that often exists in autozero amplifiers such as the LTC2057, as seen in Figure :ref:`ltc2057nsd` , from Ref. [13]_ .
+Figure :ref:`ngltspice` circuit’s noise is fairly trivial to model, given that it is constant for some bandwidth (in which a signal of interest would lie), above which it rolls off with approximately a first order lowpass response. Where this technique comes in handy is modeling non-flat noise floors, either due to higher order analog filtering, or active elements themselves. The classic example is the "noise mountain" that often exists in autozero amplifiers such as the LTC2057, as seen in Figure :ref:`ltc2057nsd` , from Ref. [13]_ .
 
 .. figure:: media/inputvoltage_noise_spectrum.png
    :scale: 30 %
@@ -434,7 +429,7 @@ Reading in the exported noise data and passing to the integrate_psd function res
 Generating Test Noise
 ---------------------
 
-Expanding on the functionality of the purely analog noise generator above, it is very useful to be able to produce not only flat, but arbitrary noise profiles - flat “bands” of noise, "pink noise", “noise mountains” emulating peaking in some amplifiers. The Generate Time-series From Half-spectrum code block starts with a desired noise spectral density (which can be generated manually, or taken from an LTspice simulation), the sample rate of the time series, and produces a time series of voltage values that can be sent to a DAC.
+Expanding on the functionality of the purely analog noise generator above, it is very useful to be able to produce not only flat, but arbitrary noise profiles - flat "bands" of noise, "pink noise", "noise mountains" emulating peaking in some amplifiers. The Generate Time-series From Half-spectrum code block starts with a desired noise spectral density (which can be generated manually, or taken from an LTspice simulation), the sample rate of the time series, and produces a time series of voltage values that can be sent to a DAC.
 
 .. -----------------------------------------------------|
 .. code-block:: python
@@ -483,7 +478,7 @@ This function can be verified by controlling one ADALM2000 through a libm2k scri
     aout.push(buffer)
 	
 
-Figure :ref:`m2k-noise-bands` shows four bands of 1mV/:math:`\sqrt{Hz}` noise being generated by one ADALM2000. The input vector is 8192 points long at a sample rate of 75ksps, for a bandwidth of 9.1Hz per point. Each “band” is 512 points, or 4687Hz wide.
+Figure :ref:`m2k-noise-bands` shows four bands of 1mV/:math:`\sqrt{Hz}` noise being generated by one ADALM2000. The input vector is 8192 points long at a sample rate of 75ksps, for a bandwidth of 9.1Hz per point. Each "band" is 512 points, or 4687Hz wide.
 The rolloff above ~20kHz is the SINC rolloff of the DAC. If the DAC is capable of a higher sample rate, the time series data can be upsampled and filtered by an interpolating filter. [14]_ 
 
 .. figure:: media/m2k_noise_bands_new.png
@@ -500,14 +495,14 @@ Modeling and verifying ADC Noise Bandwidth
 
 External noise sources and spurious tones above Fs/2 will fold back (alias) into the DC-Fs/2 region - and a converter may be sensitive to noise far beyond Fs/2 - the AD872A mentioned above has a sample rate of 10Msps, but an input bandwidth of 35MHz. While performance may not be the best at such high frequencies, this converter will happily digitize 7 Nyquist zones of noise and fold them back on top of your signal. This illustrates the importance of antialias filters for wideband ADCs. But converters for precision applications, which are typically sigma-delta (like the AD7124-8) or oversampling SAR architectures, in which the input bandwidth is limited by design.
 
-It is often useful to think of the “equivalent noise bandwidth” (ENBW) of a filter, including an ADC’s built-in filter. The ENBW is the bandwidth of a flat passband “brick wall” filter that lets through the same amount of noise as the non-flat filter. A common example is the ENBW of a first-order R-C filter, which is:
+It is often useful to think of the "equivalent noise bandwidth" (ENBW) of a filter, including an ADC’s built-in filter. The ENBW is the bandwidth of a flat passband "brick wall" filter that lets through the same amount of noise as the non-flat filter. A common example is the ENBW of a first-order R-C filter, which is:
 
 .. math::
     ENBW = fc*\pi/2
 
 where:
 
-fc is the cutoff frequency of the filter. If broadband noise, from “DC to daylight”, is applied to the inputs of both a 1KHz, first-order lowpass filter and 1.57kHz brickwall lowpass filter, the total noise power at the outputs will be the same.
+fc is the cutoff frequency of the filter. If broadband noise, from "DC to daylight", is applied to the inputs of both a 1KHz, first-order lowpass filter and 1.57kHz brickwall lowpass filter, the total noise power at the outputs will be the same.
 
 The ENBW Example code block accepts a filter magnitude response, and returns the effective noise bandwidth. A single-pole filter’s magnitude response is calculated, and used to verify the ENBW = :math:`fc*pi/2` relationship.
 
