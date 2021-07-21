@@ -1,0 +1,31 @@
+{
+    "title": "cuCIM - A GPU image I/O and processing library",
+    "authors": [
+        {
+            "name": "Gregory R. Lee",
+            "affiliation": "Quansight",
+            "orcid": "0000-0001-8895-2740"
+        },
+        {
+            "name": "Gigon Bae",
+            "affiliation": "NVIDIA",
+            "orcid": "0000-0003-0648-9735"
+        },
+        {
+            "name": "Benjamin Zaitlen",
+            "affiliation": "NVIDIA",
+            "orcid": ""
+        },
+        {
+            "name": "John Kirkham",
+            "affiliation": "NVIDIA",
+            "orcid": ""
+        },
+        {
+            "name": "Rahul Choudhury",
+            "affiliation": "NVIDIA",
+            "orcid": ""
+        }
+    ],
+    "description": "A presentation introducing RAPIDS cuCIM, a library for image I/O and processing on GPUs"
+}
