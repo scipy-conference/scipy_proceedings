@@ -496,7 +496,7 @@ It is often useful to think of the "equivalent noise bandwidth" (ENBW) of a filt
 .. math::
     ENBW = fc*\pi/2
 
-Where: :math:`fc` is the cutoff frequency of the filter. If broadband noise, from "DC to daylight", is applied to the inputs of both a 1KHz, first-order lowpass filter and 1.57kHz brickwall lowpass filter, the total noise power at the outputs will be the same.
+Where :math:`fc` is the cutoff frequency of the filter. If broadband noise, from "DC to daylight", is applied to the inputs of both a 1KHz, first-order lowpass filter and 1.57kHz brickwall lowpass filter, the total noise power at the outputs will be the same.
 
 The ENBW Example code block accepts a filter magnitude response, and returns the effective noise bandwidth. A single-pole filter’s magnitude response is calculated, and used to verify the ENBW = :math:`fc*pi/2` relationship.
 
