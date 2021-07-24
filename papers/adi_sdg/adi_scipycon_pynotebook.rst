@@ -318,7 +318,7 @@ interest.
 
 Normalizing the bandwidth to 1Hz expresses the noise density, in :math:`\frac{V}{\sqrt{Hz}}`.
 
-A sensor’s datasheet may specify a low output impedance (often close to zero ohms), but this is likely a buffer stage - which eases interfacing to downstream circuits, but does not eliminate noise due to impedances earlier in the signal chain.
+A sensor’s datasheet may specify a low output impedance (often close to zero Ohms), but this is likely a buffer stage - which eases interfacing to downstream circuits, but does not eliminate noise due to impedances earlier in the signal chain.
 
 .. figure:: media/generic_buffered_sensor.png
    :scale: 110 %
