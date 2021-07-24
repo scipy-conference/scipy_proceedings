@@ -43,7 +43,7 @@ ADC Noise Sources
 
 While there are several noise sources in Figure :ref:`mixmode`, one that is often either ignored, or over-emphasized, is the number of bits in the ADC's digital output. Historically, an ADC's "number of bits" was considered the ultimate figure of merit, where a 16-bit converter was 4 times better than a 14-bit converter [6]_. But in the case of modern, high-resolution converters, the "number of bits" can be safely ignored. Note a general principle of signal chain design:
 
-"The input noise of one stage should be somewhat lower than the output noise of the preceding stage"
+"The input noise of one stage should be somewhat lower than the output noise of the preceding stage."
 
 As with any signal chain, one noise source within an ADC often dominates. Thus, if a noiseless signal is applied to an N-bit ADC:
 
@@ -586,5 +586,4 @@ References
 .. [14] Kester, Walt, "Oversampling Interpolating DACs",  Analog Devices Tutorial, 2009, https://www.analog.com/media/en/training-seminars/tutorials/MT-017.pdf, accessed 1 July, 2021.
 
 .. [15] Ruscak, Steve and Singer, L, "Using Histogram Techniques to Measure ADC Noise" Analog Dialogue, Volume 29, May, 1995. https://www.analog.com/en/analog-dialogue/articles/histogram-techniques-measure-adc-noise.html, accessed 1 July, 2021.
-
 
