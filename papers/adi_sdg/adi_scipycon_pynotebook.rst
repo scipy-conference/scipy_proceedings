@@ -237,7 +237,7 @@ Figure :ref:`10hznotch` from Ref. [8]_ shows the AD7124-8’s 10Hz notch filters
    AD7124-8 10Hz notch filter frequency response. Magnitude response is SINC1, Impulse response is simply an unweighted (rectangular) average of samples over a 100ms interval.
    :label:`10hznotch`
 
-The simultaneous 50Hz/60Hz rejection filter shown in Figure :ref:`5060hzflt` , from Ref. [8]_ is a nontrivial example. This filter is intended to strongly reject noise from A.C. power lines, which is either 50Hz (as in Europe) or 60Hz (as in the United States).
+The simultaneous 50Hz/60Hz rejection filter shown in Figure :ref:`5060hzflt`, from Ref. [8]_ is a nontrivial example. This filter is intended to strongly reject noise from A.C. power lines, which is either 50Hz (as in Europe) or 60Hz (as in the United States).
 
 .. figure:: media/simult_50_60_reverse_eng.png
    :scale: 50 %
