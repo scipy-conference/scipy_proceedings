@@ -296,7 +296,7 @@ Performance was quantified by measuring the I/O timing returned from the benchma
 
 Data Sharing
 ------------
-All of our SLURM submission shell scripts and Python benchmark scripts for all three HPC environments are available in the repository https://github.com/Becksteinlab/scipy2021-mpiH5MD-data and are archived under DOI `10.5281/zenodo.5083859`_.
+All of our SLURM submission shell scripts and Python benchmark scripts for all three HPC environments are available in the repository https://github.com/Becksteinlab/scipy2021-mpiH5MD-data and are archived under DOI `10.5281/zenodo.5083858`_.
 
 
 Results and Discussion
@@ -519,4 +519,4 @@ References
 .. _OpenMPI: https://www.open-mpi.org/
 .. _mpi4py: https://github.com/mpi4py/mpi4py
 .. _`file striping`: https://www.nics.tennessee.edu/computing-resources/file-systems/lustre-striping-guide
-.. _`10.5281/zenodo.5083859`: https://zenodo.org/record/5083859
+.. _`10.5281/zenodo.5083858`: https://doi.org/10.5281/zenodo.5083858
