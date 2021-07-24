@@ -141,7 +141,7 @@ The general principle of analog signal chain design (that the input noise of one
 
 Unlike amplifiers and sensors, ADC datasheets typically do not include a noise density specification. Expressing the ADC's noise as a density allows it to be directly compared to the noise at the output of the last element in the analog signal chain, which may be an ADC driver stage, a gain stage, or the sensor itself.
 
-An ADC’s internal noise will necessarily appear somewhere between DC and half the sample rate. Ideally this noise is flat, or at least predictably shaped. In fact, since the ADC’s total noise is spread out across a known bandwidth, it can be converted to a noise density that can be directly compared to other elements in the signal chain. Precision converters typically have total noise given directly, in volts RMS: :math:`e_{RMS} = \sigma` , where: :math:`e_{RMS}` is the total RMS noise, calculated from the standard deviation of a grounded-input histogram of codes.
+An ADC’s internal noise will necessarily appear somewhere between DC and half the sample rate. Ideally this noise is flat, or at least predictably shaped. In fact, since the ADC’s total noise is spread out across a known bandwidth, it can be converted to a noise density that can be directly compared to other elements in the signal chain. Precision converters typically have total noise given directly, in volts RMS: :math:`e_{RMS} = \sigma` , where :math:`e_{RMS}` is the total RMS noise, calculated from the standard deviation of a grounded-input histogram of codes.
 
 Higher speed converters that are tested and characterized with sinusoidal signals will typically have a signal to noise (SNR) specification. If provided, the total RMS noise can be calculated as:
 
