@@ -556,26 +556,26 @@ References
 
 .. [1] "Converter Connectivity Tutorial", https://wiki.analog.com/university/labs/software/iio_intro_toolbox, accessed 1 July, 2021.
 
-.. [2] Analog Devices Education Tools Repository <https://doi.org/10.5281/zenodo.5105696>
+.. [2] Analog Devices Education Tools Repository https://doi.org/10.5281/zenodo.5105696
 
 .. [3] Pauli Virtanen, Ralf Gommers et al. (2020) SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. Nature Methods, 17(3), 261-272.
 
-.. [4] "LTspice Simulator", https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html>, accessed 1 July, 2021.
+.. [4] "LTspice Simulator", https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html, accessed 1 July, 2021.
 
 .. [5] Smith, Steven W, The Scientist & Engineer's Guide to Digital Signal Processing, https://www.analog.com/en/education/education-library/scientist_engineers_guide.html, accessed 1 July, 2021.
 
 .. [6] Man, Ching, "Quantization Noise: An Expanded Derivation of the Equation, SNR = 6.02 N + 1.76", https://www.analog.com/media/en/training-seminars/tutorials/MT-229.pdf, accessed 1 July, 2021.
 
-.. [7] Kester, Walt, "Taking the Mystery out of the Infamous Formula, "SNR = 6.02N + 1.76dB"" Analog Devices Tutorial, 2009,https://www.analog.com/media/en/training-seminars/tutorials/MT-001.pdf, accessed 1 July, 2021.
+.. [7] Kester, Walt, "Taking the Mystery out of the Infamous Formula, "SNR = 6.02N + 1.76dB"" Analog Devices Tutorial, 2009, https://www.analog.com/media/en/training-seminars/tutorials/MT-001.pdf, accessed 1 July, 2021.
 
 .. [8] "AD7124-8 Rev E" https://www.analog.com/media/en/technical-documentation/data-sheets/ad7124-8.pdf, accessed 1 July, 2021.
 
 
 
 .. [9] Charles R. Harris, K. Jarrod Millman, et al. Array programming with NumPy, Nature, 585, 357–362 (2020)
-       <DOI:10.1038/s41586-020-2649-2>
+       DOI:10.1038/s41586-020-2649-2
 
-.. [10] "pyadi-iio: Device Specific Python Interfaces For IIO Drivers",https://wiki.analog.com/resources/tools-software/linux-software/pyadi-iio, accessed 1 July, 2021.
+.. [10] "pyadi-iio: Device Specific Python Interfaces For IIO Drivers", https://wiki.analog.com/resources/tools-software/linux-software/pyadi-iio, accessed 1 July, 2021.
 
 .. [11] "Scopy", https://wiki.analog.com/university/tools/m2k/scopy, accessed 1 July, 2021.
 
