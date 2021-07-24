@@ -45,7 +45,7 @@ While there are several noise sources in Figure :ref:`mixmode`, one that is ofte
 
 "The input noise of one stage should be somewhat lower than the output noise of the preceding stage."
 
-As with any signal chain, one noise source within an ADC often dominates. Thus, if a noiseless signal is applied to an N-bit ADC:
+As with any signal chain, one noise source within an ADC often dominates. Thus, if a noiseless signal applied to an N-bit ADC:
 
 -  results in either a single output code, or two adjacent output codes, then **quantization noise dominates**. The Signal to Noise Ratio can be no greater than (6.02 N + 1.76) dB [7]_.
 -  results in a gaussian distribution of "many" output codes, then **thermal noise source dominates**. The Signal to Noise Ratio is no greater than: 
@@ -586,4 +586,3 @@ References
 .. [14] Kester, Walt, "Oversampling Interpolating DACs",  Analog Devices Tutorial, 2009, https://www.analog.com/media/en/training-seminars/tutorials/MT-017.pdf, accessed 1 July, 2021.
 
 .. [15] Ruscak, Steve and Singer, L, "Using Histogram Techniques to Measure ADC Noise" Analog Dialogue, Volume 29, May, 1995. https://www.analog.com/en/analog-dialogue/articles/histogram-techniques-measure-adc-noise.html, accessed 1 July, 2021.
-
