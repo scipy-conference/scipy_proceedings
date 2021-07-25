@@ -216,7 +216,7 @@ The AD7124-8 Filter Response code block will set the ADALM2000’s waveform gene
 .. figure:: media/ad7124_filter_resp_measured_new.png
    :scale: 40 %
 
-   A measurement of the AD7124 Filter Response in 64sps, SINC4 mode shows the filter's passband, first lobe, and first two nulls.
+   A measurement of the AD7124 filter response in 64sps, SINC4 mode shows the filter's passband, first lobe, and first two nulls.
    :label:`measresp`
 
 While measuring high attenuation values requires a quieter and lower distortion signal generator, the response of the first few major "lobes" is apparent with this setup.
