@@ -1,0 +1,26 @@
+{
+    "authors": [
+        {
+            "name": "Samantha Walkow",
+            "affiliation": "iSchool and NCSA at the University of Illinois",
+            "orcid": "0000-0001-7329-1863"
+        },
+        {
+            "name": "Dr. Chris Havlin",
+            "affiliation": "iSchool at the University of Illinois",
+            "orcid": "0000-0003-0585-8236"
+        },
+        {
+            "name": "Dr. Matthew Turk",
+            "affiliation": "iSchool and NCSA at the University of Illinois",
+            "orcid": "0000-0002-5294-0198"
+        },
+        {
+            "name": "Dr. Corentin Cadiou",
+            "affiliation": "University College London",
+            "orcid": "0000-0003-2285-0332"
+        }
+    ],
+    "title": "Towards a Scientific Workflow Description: a yt Project Prototype for Interdisciplinary Analysis",
+    "description": "Scientific workflow description provides an alternative to the cognitive overhead of learning a new software package and use of imperative programming paradigms often used with python. This description is encoded in a JSON schema, accessed by the user through a configuration file, and run using python modules that attach the configuration file to the code which produces output. We use yt, an computational astrophyics tool, to demonstrate how a domain specific software can operate within a descriptive framework."
+}
