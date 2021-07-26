@@ -303,7 +303,7 @@ And finally, the frequency response can be calculated using NumPy’s  freqz fun
 Resistance is Futile: A Fundamental Sensor Limitation
 -----------------------------------------------------
 
-All sensors, no matter how perfect, have some maximum input value (and a corresponding maximum output - which may be a voltage, current, resistance, or even dial position) and a finite noise floor - "wiggles" at the output that exist even if the input is perfectly still. At some point, a sensor with an electrical output will include an element with a finite resistance (or more generally, impedance) represented by Rsensor in Figure :ref:`genericsensor` This represents one fundamental noise limit that cannot be improved upon - this resistance will produce, at a minimum:
+All sensors, no matter how perfect, have some maximum input value (and a corresponding maximum output - which may be a voltage, current, resistance, or even dial position) and a finite noise floor - "wiggles" at the output that exist even if the input is perfectly still. At some point, a sensor with an electrical output will include an element with a finite resistance (or more generally, impedance) represented by Rsensor in Figure :ref:`genericsensor`. This represents one fundamental noise limit that cannot be improved upon - this resistance will produce, at a minimum:
 
 :math:`e_n(RMS) = \sqrt{4 * K * T * Rsensor * (F2-F1)}` Volts of noise,
 where:
