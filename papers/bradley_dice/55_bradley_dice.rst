@@ -45,6 +45,7 @@
 :email: sglotzer@umich.edu
 :institution: Department of Physics, University of Michigan, Ann Arbor
 :institution: Department of Chemical Engineering, University of Michigan, Ann Arbor
+:institution: Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor
 :institution: Biointerfaces Institute, University of Michigan, Ann Arbor
 
 :bibliography: paper
