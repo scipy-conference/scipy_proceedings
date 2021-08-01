@@ -1,0 +1,15 @@
+{
+    "title": "Cell Tracking in 3D using Deep Learning Segmentations",
+    "authors": [
+        {
+            "name": "Varun Kapoor",
+            "affiliation": "Institut Curie, U934/UMR3215, PSL-Paris, France"
+        },
+        {
+            "name": "Claudia Carabana",
+            "affiliation": "Institute Curie, U934/UMR3215, PSL- Paris, France"
+        }
+    ],
+    "zenodo_url": "https://zenodo.org/record/5151980",
+    "description": "Live-cell imaging is highly used technique to study cell migration and dynamics over tile. Automated analysis of florescently membrane-labelled cells can be highly challenging due to their irregular shape, variability in size and dynamic movement across Z planes making it difficult to detect and track them. Ze introduce a detailed analysis pipeline to perform segmentation with accurate shape information, combined with BTrackmate, a customized codebase of popular ImageJ/Fiji software Trackmate, to perform cell tracking inside the tissue of interest. We also created an interface in Napari to visualize the tracks along a chosen view making it possible to follow a cell along the plane of motion. We provide a detailed protocaol to implement this pipeline in a new dataset, together with the required Jupyter notebooks."
+}

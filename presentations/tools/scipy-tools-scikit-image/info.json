@@ -1,0 +1,12 @@
+{
+    "title": "SciPy Tools Plenary: scikit-image annual update",
+    "authors": [
+        {
+            "name": "Gregory R. Lee",
+            "affiliation": "Quansight",
+            "orcid": "0000-0001-8895-2740"
+        }
+    ],
+    "zenodo_url": "https://zenodo.org/record/5152054",
+    "description": "A brief update on recent improvements and future plans for scikit-image."
+}

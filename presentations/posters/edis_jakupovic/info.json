@@ -1,0 +1,15 @@
+{
+    "title": "Speeding Up Molecular Dynamics Trajectory Analysis with MPI Parallelization",
+    "authors": [
+        {
+            "name": "Edis Jakupovic",
+            "affiliation": "Arizona State University"
+        },
+        {
+            "name": "Oliver Beckstein",
+            "affiliation": "Arizona State University"
+        }
+    ],
+    "description": "",
+    "zenodo_url": "https://zenodo.org/record/5151924"
+}
