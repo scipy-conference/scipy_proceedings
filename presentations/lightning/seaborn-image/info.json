@@ -1,0 +1,11 @@
+{
+  "title" : "seaborn-image : image data visualization in Python",
+  "authors" : [
+    {
+      "name": "Sarthak Jariwala",
+      "affiliation": "University of Washington, Seattle",
+      "orcid": "0000-0002-7020-9008"
+    }
+  ],
+  "description" : "High level API for attractive and descriptive image visualization in Python built on top of matplotlib" 
+}
