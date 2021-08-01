@@ -6,6 +6,7 @@
             "orcid": "0000-0002-5442-3004"
         }
     ],
+    "zenodo_url": "https://zenodo.org/record/5151932",
     "title": "Social Media Analysis using Natural Language Processing Techniques",
     "description": "Social media is very popularly used every day with daily content viewing and/or posting that in turn influences people around this world in a variety of ways. Social media platforms, such as YouTube, have a lot of activity that goes on every day in terms of video posting, watching and commenting. While we can open the YouTube app on our phones and look at videos and what people are commenting, it only gives us a limited view as to kind of things others around us care about and what is trending amongst other consumers of our favorite topics or videos. Crawling some of this raw data and performing analysis on it using Natural Language Processing (NLP) can be tricky given the different styles of language usage by people in today’s world. This effort highlights the YouTube’s open Data API and how to use it in python to get the raw data, data cleaning using NLP tricks and Machine Learning in python for social media interactions, and extraction of trends and key influential factors from this data in an automated fashion using pyYouTubeAnalysis."
 }

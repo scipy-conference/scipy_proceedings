@@ -18,5 +18,6 @@
             "affiliation": "Lockheed Martin, Advanced Technology Laboratories"
         }
     ],
+    "zenodo_url": "https://zenodo.org/record/5151947",
     "description": "Mitigating bias in AI-enabled systems is a topic of great concern within the research community. We began developing an approach to identify a subset of cognitive biases that may be present in development artifacts (e.g., version control commit messages): anchoring bias, availability bias, confirmation bias, and hyperbolic discounting. We developed multiple natural language processing (NLP) models to identify and classify the presence of bias in text originating from software development artifacts."
 }

@@ -6,5 +6,6 @@
             "affiliation": "ARK Information Systems"
         }
     ],
-    "description": "Do you want to visualize 3D scientific data in a Pythonic way like matplotlib? If you want, this poster is for you. This poster is the introduction of PyVista.
+    "zenodo_url": "https://zenodo.org/record/5151953",
+    "description": "Do you want to visualize 3D scientific data in a Pythonic way like matplotlib? If you want, this poster is for you. This poster is the introduction of PyVista."
 }

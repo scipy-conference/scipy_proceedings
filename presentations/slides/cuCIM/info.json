@@ -1,5 +1,6 @@
 {
     "title": "cuCIM - A GPU image I/O and processing library",
+    "zenodo_url": "https://zenodo.org/record/5151998",
     "authors": [
         {
             "name": "Gregory R. Lee",

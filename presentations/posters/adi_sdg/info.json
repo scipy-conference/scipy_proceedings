@@ -1,4 +1,4 @@
- {   
+ {
      "title": "Using Python for Analysis and Verification of Mixed-mode Signal Chains for Analog Signal Acquisition",
      "authors": [
         {
@@ -10,6 +10,7 @@
             "affiliation": "Analog Devices Inc"
         }
     ],
+    "zenodo_url": "https://zenodo.org/record/5151918",
      "description": "Accurate, precise, and low-noise sensor measurements are essential before any machine can learn about (or artificial-intelligently make decisions about) the physical world. Modern, highly integrated signal acquisition devices can perform analog signal conditioning, digitization, and digital filtering on a single silicon device, greatly simplifying system electronics. However, a complete understanding of the signal chain properties is still required to correctly utilize and debug these modern devices."
  }
 

@@ -7,5 +7,6 @@
             "orcid": "0000-0002-7602-1057"
         }
     ],
+    "zenodo_url": "https://zenodo.org/record/5151986",
     "description": "The Atmospheric data Community Toolkit (ACT) is an open-source Python library for working with n-dimensional atmospheric time-series datasets.  ACT contains functions for every aspect of the research lifecycle."
 }

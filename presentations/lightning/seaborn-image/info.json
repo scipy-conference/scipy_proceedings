@@ -1,5 +1,6 @@
 {
   "title" : "seaborn-image : image data visualization in Python",
+  "zenodo_url": "https://zenodo.org/record/5151891",
   "authors" : [
     {
       "name": "Sarthak Jariwala",
@@ -7,5 +8,5 @@
       "orcid": "0000-0002-7020-9008"
     }
   ],
-  "description" : "High level API for attractive and descriptive image visualization in Python built on top of matplotlib" 
+  "description" : "High level API for attractive and descriptive image visualization in Python built on top of matplotlib"
 }

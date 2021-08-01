@@ -17,5 +17,6 @@
             "orcid": "0000-0003-4806-3601"
         }
     ],
+    "zenodo_url": "https://zenodo.org/record/5151976",
     "description": "As data becomes more and more accessible, it can be tempting to misuse data analysis techniques to find statistically significant results, a practice known as 'p-hacking'. Tukey's HSD (Honestly Significant Difference) test is one of several tests that guards against this practice by using the studentized range distribution to compute p-values that account for the number of comparisons performed. Implementations of Tukey's HSD already exist within the scientific Python ecosystem, but they rely on approximations of the studentized range distribution that may not behave well outside of their intended range and, even within the intended range, are only accurate to a few digits. In this document, we present a fast, highly accurate, and direct implementation of the studentized range distribution for SciPy, and we demonstrate its speed and accuracy."
 }

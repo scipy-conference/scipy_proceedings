@@ -21,6 +21,7 @@
             "orcid": "0000-0003-2285-0332"
         }
     ],
+    "zenodo_url": "https://zenodo.org/record/5151905",
     "title": "Towards a Scientific Workflow Description: a yt Project Prototype for Interdisciplinary Analysis",
     "description": "Scientific workflow description provides an alternative to the cognitive overhead of learning a new software package and use of imperative programming paradigms often used with python. This description is encoded in a JSON schema, accessed by the user through a configuration file, and run using python modules that attach the configuration file to the code which produces output. We use yt, an computational astrophyics tool, to demonstrate how a domain specific software can operate within a descriptive framework."
 }
