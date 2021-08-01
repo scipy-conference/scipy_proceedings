@@ -1,0 +1,16 @@
+{
+    "title": "Scientific Python Ecosystem Coordination",
+    "authors": [
+        {
+            "name": "K. Jarrod Millman",
+            "affiliation": "University of California, Berkeley",
+            "orcid": "0000-0002-5263-5070"
+        },
+        {
+            "name": "Stéfan van der Walt",
+            "affiliation": "University of California, Berkeley",
+            "orcid": "https://orcid.org/0000-0001-9276-1891"
+        }
+    ],
+    "description": "Planning for the Next Decade of Scientific Python: outline of first phase"
+}
