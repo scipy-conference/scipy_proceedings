@@ -1,0 +1,1048 @@
+{
+  "toc": [
+    {
+      "title": "How PDFrw and fillable forms improves throughput at a Covid-19 Vaccine Clinic",
+      "authors": "Haw-minn Lu, José Unpingco",
+      "author": [
+        "Haw-minn Lu",
+        "José Unpingco"
+      ],
+      "author_email": [
+        "hlu@westhealth.org",
+        "jhunpingco@westhealth.org"
+      ],
+      "author_institution": [
+        "Gary and Mary West Health Institute",
+        "Gary and Mary West Health Institute"
+      ],
+      "author_institution_map": {
+        "Haw-minn Lu": [
+          "Gary and Mary West Health Institute"
+        ],
+        "José Unpingco": [
+          "Gary and Mary West Health Institute"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "PDFrw was used to prepopulate Covid-19 vaccination forms to improve the efficiency and integrity of the vaccination process in terms of federal and state privacy requirements.  We will describe the vaccination process from the initial appointment, through the vaccination delivery, to the creation of subsequent required documentation. Although Python modules for PDF generation are common, they struggle with managing fillable forms where a fillable field may appear multiple times within the same form.  Additionally, field types such as checkboxes, radio buttons, lists and combo boxes are not straightforward to programmatically fill. Another challenge is combining multiple filled forms while maintaining the integrity of the values of the fillable fields.  Additionally, HIPAA compliance issues are discussed."
+      ],
+      "keywords": "acrobat documents, form filling, HIPAA compliance, COVID-19",
+      "copyright_holder": "Haw-minn Lu et al.",
+      "video": "",
+      "bibliography": "ourbib",
+      "pages": 5,
+      "page": {
+        "start": 1,
+        "stop": 5
+      },
+      "paper_id": "111_lu",
+      "doi": "10.25080/majora-1b6fd038-000"
+    },
+    {
+      "title": "Using Python for Analysis and Verification of Mixed-mode Signal Chains",
+      "authors": "Mark Thoren, Cristina Suteu",
+      "author": [
+        "Mark Thoren",
+        "Cristina Suteu"
+      ],
+      "author_email": [
+        "mark.thoren@analog.com",
+        "cristina.suteu@analog.com"
+      ],
+      "author_institution": [
+        "Analog Devices, Inc.",
+        "Analog Devices, Inc."
+      ],
+      "author_institution_map": {
+        "Mark Thoren": [
+          "Analog Devices, Inc."
+        ],
+        "Cristina Suteu": [
+          "Analog Devices, Inc."
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Any application involving sensitive measurements of the physical world starts with accurate, precise, and low-noise signal chain. Modern, highly integrated data acquisition devices can often be directly connected to sensor outputs, performing analog signal conditioning, digitization, and digital filtering on a single silicon device, greatly simplifying system electronics. However, a complete understanding of the signal chain's noise sources and noise limiting filters is still required to extract maximum performance from and debug these modern devices."
+      ],
+      "keywords": "",
+      "copyright_holder": "Mark Thoren et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 8,
+      "page": {
+        "start": 6,
+        "stop": 13
+      },
+      "paper_id": "adi_sdg",
+      "doi": "10.25080/majora-1b6fd038-001"
+    },
+    {
+      "title": "Modernizing computing by structural biologists with Jupyter and Colab",
+      "authors": "Blaine H. M. Mooers",
+      "author": [
+        "Blaine H. M. Mooers"
+      ],
+      "author_email": [
+        "blaine-mooers@ouhsc.edu"
+      ],
+      "author_institution": [
+        "Dept of Biochemistry and Molecular Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+        "Stephenson Cancer Center, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+        "Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+        "Biomolecular Structure Core, Oklahoma COBRE in Structural Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104"
+      ],
+      "author_institution_map": {
+        "Blaine H. M. Mooers": [
+          "Dept of Biochemistry and Molecular Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+          "Stephenson Cancer Center, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+          "Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+          "Biomolecular Structure Core, Oklahoma COBRE in Structural Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104"
+        ]
+      },
+      "author_orcid_map": {
+        "Blaine H. M. Mooers": "0000-0001-8181-8987"
+      },
+      "abstract": [
+        "Protein crystallography produces most of the protein structures used in structure-based drug design.\nThe process of protein structure determination is computationally intensive and error-prone because many software packages are involved.\nHere, we attempt to support the reproducibility of this computational work by using Jupyter notebooks to document the decisions made, the code, and selected output.\nWe have made libraries of code templates to ease running the crystallography packages in Jupyter notebooks when editing them with JupyterLab or Colab.\nOur combined use of GitHub, snippet libraries, Jupyter notebooks, JupyterLab, and Colab will help modernize the computing done by structural biologists."
+      ],
+      "keywords": "literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, molecular visualization, scientific communication, molecular artwork, computational molecular biophysics",
+      "copyright_holder": "Blaine H. M. Mooers.",
+      "video": "",
+      "bibliography": "",
+      "pages": 9,
+      "page": {
+        "start": 14,
+        "stop": 22
+      },
+      "paper_id": "blaine_mooers",
+      "doi": "10.25080/majora-1b6fd038-002"
+    },
+    {
+      "title": "signac: Data Management and Workflows for Computational Researchers",
+      "authors": "Bradley D. Dice, Brandon L. Butler, Vyas Ramasubramani, Alyssa Travitz, Michael M. Henry, Hardik Ojha, Kelly L. Wang, Carl S. Adorf, Eric Jankowski, Sharon C. Glotzer",
+      "author": [
+        "Bradley D. Dice",
+        "Brandon L. Butler",
+        "Vyas Ramasubramani",
+        "Alyssa Travitz",
+        "Michael M. Henry",
+        "Hardik Ojha",
+        "Kelly L. Wang",
+        "Carl S. Adorf",
+        "Eric Jankowski",
+        "Sharon C. Glotzer"
+      ],
+      "author_email": [
+        "bdice@umich.edu",
+        "butlerbr@umich.edu",
+        "vramasub@umich.edu",
+        "atravitz@umich.edu",
+        "mikehenry@u.boisestate.edu",
+        "hojha@ch.iitr.ac.in",
+        "kelwang@umich.edu",
+        "csadorf@umich.edu",
+        "ericjankowski@boisestate.edu",
+        "sglotzer@umich.edu"
+      ],
+      "author_institution": [
+        "Department of Physics, University of Michigan, Ann Arbor",
+        "Department of Chemical Engineering, University of Michigan, Ann Arbor",
+        "Department of Chemical Engineering, University of Michigan, Ann Arbor",
+        "Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor",
+        "Micron School of Materials Science and Engineering, Boise State University",
+        "Department of Chemical Engineering, Indian Institute of Technology Roorkee",
+        "Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor",
+        "Department of Chemical Engineering, University of Michigan, Ann Arbor",
+        "Micron School of Materials Science and Engineering, Boise State University",
+        "Department of Physics, University of Michigan, Ann Arbor",
+        "Department of Chemical Engineering, University of Michigan, Ann Arbor",
+        "Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor",
+        "Biointerfaces Institute, University of Michigan, Ann Arbor"
+      ],
+      "author_institution_map": {
+        "Bradley D. Dice": [
+          "Department of Physics, University of Michigan, Ann Arbor"
+        ],
+        "Brandon L. Butler": [
+          "Department of Chemical Engineering, University of Michigan, Ann Arbor"
+        ],
+        "Vyas Ramasubramani": [
+          "Department of Chemical Engineering, University of Michigan, Ann Arbor"
+        ],
+        "Alyssa Travitz": [
+          "Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor"
+        ],
+        "Michael M. Henry": [
+          "Micron School of Materials Science and Engineering, Boise State University"
+        ],
+        "Hardik Ojha": [
+          "Department of Chemical Engineering, Indian Institute of Technology Roorkee"
+        ],
+        "Kelly L. Wang": [
+          "Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor"
+        ],
+        "Carl S. Adorf": [
+          "Department of Chemical Engineering, University of Michigan, Ann Arbor"
+        ],
+        "Eric Jankowski": [
+          "Micron School of Materials Science and Engineering, Boise State University"
+        ],
+        "Sharon C. Glotzer": [
+          "Department of Physics, University of Michigan, Ann Arbor",
+          "Department of Chemical Engineering, University of Michigan, Ann Arbor",
+          "Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor",
+          "Biointerfaces Institute, University of Michigan, Ann Arbor"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "The signac data management framework (https://signac.io) helps researchers execute reproducible computational studies, scales workflows from laptops to supercomputers, and emphasizes portability and fast prototyping.\nWith signac, users can track, search, and archive data and metadata for file-based workflows and automate workflow submission on high performance computing (HPC) clusters.\nWe will discuss recent improvements to the software's feature set, scalability, scientific applications, usability, and community.\nNewly implemented synced data structures, features for generalized workflow execution, and performance optimizations will be covered, as well as recent research using the framework and changes to the project's outreach and governance as a response to its growth."
+      ],
+      "keywords": "data management, data science, database, simulation, collaboration, workflow, HPC, reproducibility",
+      "copyright_holder": "Bradley D. Dice et al.",
+      "video": "",
+      "bibliography": "paper",
+      "pages": 10,
+      "page": {
+        "start": 23,
+        "stop": 32
+      },
+      "paper_id": "bradley_dice",
+      "doi": "10.25080/majora-1b6fd038-003"
+    },
+    {
+      "title": "Accelerating Spectroscopic Data Processing Using Python and GPUs on NERSC Supercomputers",
+      "authors": "Daniel Margala, Laurie Stephey, Rollin Thomas, Stephen Bailey",
+      "author": [
+        "Daniel Margala",
+        "Laurie Stephey",
+        "Rollin Thomas",
+        "Stephen Bailey"
+      ],
+      "author_email": [
+        "danielmargala@lbl.gov",
+        "lastephey@lbl.gov",
+        "rcthomas@lbl.gov",
+        "sbailey@lbl.gov"
+      ],
+      "author_institution": [
+        "Lawrence Berkeley National Laboratory: National Energy Scientific Research and Computing Center",
+        "Lawrence Berkeley National Laboratory: National Energy Scientific Research and Computing Center",
+        "Lawrence Berkeley National Laboratory: National Energy Scientific Research and Computing Center",
+        "Lawrence Berkeley National Laboratory: Physics Division"
+      ],
+      "author_institution_map": {
+        "Daniel Margala": [
+          "Lawrence Berkeley National Laboratory: National Energy Scientific Research and Computing Center"
+        ],
+        "Laurie Stephey": [
+          "Lawrence Berkeley National Laboratory: National Energy Scientific Research and Computing Center"
+        ],
+        "Rollin Thomas": [
+          "Lawrence Berkeley National Laboratory: National Energy Scientific Research and Computing Center"
+        ],
+        "Stephen Bailey": [
+          "Lawrence Berkeley National Laboratory: Physics Division"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "The Dark Energy Spectroscopic Instrument (DESI) will create the most detailed 3D map of the Universe to date by measuring redshifts in light spectra of over 30 million galaxies.\nThe extraction of 1D spectra from 2D spectrograph traces in the instrument output is one of the main computational bottlenecks of DESI data processing pipeline, which is predominantly implemented in Python.\nThe new Perlmutter supercomputer system at the National Energy Scientific Research and Computing Center (NERSC) will feature over 6,000 NVIDIA A100 GPUs across 1,500 nodes.\nThe new heterogenous CPU-GPU computing capability at NERSC opens the door for improved performance for science applications that are able to leverage the high-throughput computation enabled by GPUs.\nWe have ported the DESI spectral extraction code to run on GPU devices to achieve a 20x improvement in per-node throughput compared to the current state of the art on the CPU-only Haswell partition of the Cori supercomputer system at NERSC."
+      ],
+      "keywords": "Python, HPC, GPU, CUDA, MPI, CuPy, Numba, mpi4py, NumPy, SciPy, Astronomy, Spectroscopy",
+      "copyright_holder": "Daniel Margala et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 7,
+      "page": {
+        "start": 33,
+        "stop": 39
+      },
+      "paper_id": "daniel_margala",
+      "doi": "10.25080/majora-1b6fd038-004"
+    },
+    {
+      "title": "MPI-parallel Molecular Dynamics Trajectory Analysis with the H5MD Format in the MDAnalysis Python Package",
+      "authors": "Edis Jakupovic, Oliver Beckstein",
+      "author": [
+        "Edis Jakupovic",
+        "Oliver Beckstein"
+      ],
+      "author_email": [
+        "ejakupov@asu.edu",
+        "obeckste@asu.edu"
+      ],
+      "author_institution": [
+        "Arizona State University",
+        "Arizona State University"
+      ],
+      "author_institution_map": {
+        "Edis Jakupovic": [
+          "Arizona State University"
+        ],
+        "Oliver Beckstein": [
+          "Arizona State University"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Molecular dynamics (MD) computer simulations help elucidate details of the molecular processes in complex biological systems, from protein dynamics to drug discovery.\nOne major issue is that these MD simulation files are now commonly terabytes in size, which means analyzing the data from these files becomes a painstakingly expensive task.\nIn the age of national supercomputers, methods of parallel analysis are becoming a necessity for the efficient use of time and high performance computing (HPC) resources but for any approach to parallel analysis, simply reading the file from disk becomes the performance bottleneck that limits overall analysis speed.\nOne promising way around this file I/O hurdle is to use a parallel message passing interface (MPI) implementation with the HDF5 (Hierarchical Data Format 5) file format to access a single file simultaneously with numerous processes on a parallel file system.\nOur previous feasibility study suggested that this combination can lead to favorable parallel scaling with hundreds of CPU cores, so we implemented a fast and user-friendly HDF5 reader (the H5MDReader class) that adheres to H5MD (HDF5 for Molecular Dynamics) specifications.\nWe made H5MDReader (together with a H5MD output class H5MDWriter) available in the MDAnalysis library, a Python package that simplifies the process of reading and writing various popular MD file formats by providing a streamlined user-interface that is independent of any specific file format.\nWe benchmarked H5MDReader's parallel file reading capabilities on three HPC clusters: ASU Agave, SDSC Comet, and PSC Bridges.\nThe benchmark consisted of a simple split-apply-combine scheme of an I/O bound task that split a 90k frame (113 GiB) coordinate trajectory into  chunks for  processes, where each process performed the commonly used RMSD (root mean square distance after optimal structural superposition) calculation on their chunk of data, and then gathered the results back to the root process.\nFor baseline performance, we found maximum I/O speedups at 2 full nodes, with Agave showing 20x, and a maximum computation speedup on Comet of 373x on 384 cores (all three HPCs scaled well in their computation task).\nWe went on to test a series of optimizations attempting to speed up I/O performance, including adjusting file system stripe count, implementing a masked array feature that only loads relevant data for the computation task, front loading all I/O by loading the entire trajectory into memory, and manually adjusting the HDF5 dataset chunk shapes.\nWe found the largest improvement in I/O performance by optimizing the chunk shape of the HDF5 datasets to match the iterative access pattern of our analysis benchmark.\nWith respect to baseline serial performance, our best result was a 98x speedup at 112 cores on ASU Agave.\nIn terms of absolute time saved, the analysis went from 4623 seconds in the baseline serial run to 47 seconds in the parallel, properly chunked run.\nOur results emphasize the fact that file I/O is not just dependent on the access pattern of the file, but more so the synergy between access pattern and the layout of the file on disk."
+      ],
+      "keywords": "Molecular Dynamics Simulations, High Performance Computing, Python, MDAnalysis, HDF5, H5MD, MPI I/O",
+      "copyright_holder": "Edis Jakupovic et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 9,
+      "page": {
+        "start": 40,
+        "stop": 48
+      },
+      "paper_id": "edis_jakupovic",
+      "doi": "10.25080/majora-1b6fd038-005"
+    },
+    {
+      "title": "Natural Language Processing with Pandas DataFrames",
+      "authors": "Frederick Reiss, Bryan Cutler, Zachary Eichenberger",
+      "author": [
+        "Frederick Reiss",
+        "Bryan Cutler",
+        "Zachary Eichenberger"
+      ],
+      "author_email": [
+        "frreiss@us.ibm.com",
+        "bjcutler@us.ibm.com",
+        "zachary.eichen@gmail.com"
+      ],
+      "author_institution": [
+        "IBM Research",
+        "IBM",
+        "University of Michigan",
+        "IBM Research"
+      ],
+      "author_institution_map": {
+        "Frederick Reiss": [
+          "IBM Research"
+        ],
+        "Bryan Cutler": [
+          "IBM"
+        ],
+        "Zachary Eichenberger": [
+          "University of Michigan",
+          "IBM Research"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Most areas of Python data science have standardized on using Pandas\nDataFrames for representing and manipulating structured data in memory.\nNatural Language Processing (NLP), not so much.",
+        "We believe that Pandas has the potential to serve as a universal data\nstructure for NLP data. DataFrames could make every phase of NLP easier,\nfrom creating new models, to evaluating their effectiveness, to building\napplications that integrate those models.  However, Pandas currently lacks\nimportant data types and operations for representing and manipulating\ncrucial types of data in many of these NLP tasks.",
+        "This paper describes Text Extensions for Pandas, a library of extensions\nto Pandas that make it possible to build end-to-end NLP applications while\nrepresenting all of the applications' internal data with DataFrames.\nWe leverage the extension points built into Pandas library to add new data\ntypes, and we provide important NLP-specfific operations over these data\ntypes and and integrations with popular NLP libraries and data formats."
+      ],
+      "keywords": "natural language processing, Pandas, DataFrames",
+      "copyright_holder": "Frederick Reiss et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 9,
+      "page": {
+        "start": 49,
+        "stop": 57
+      },
+      "paper_id": "fred_reiss",
+      "doi": "10.25080/majora-1b6fd038-006"
+    },
+    {
+      "title": "CLAIMED, a visual and scalable component library for Trusted AI",
+      "authors": "Romeo Kienzler, Ivan Nesic",
+      "author": [
+        "Romeo Kienzler",
+        "Ivan Nesic"
+      ],
+      "author_email": [
+        "romeo.kienzler@ch.ibm.com",
+        "ivan.nesic@usb.ch"
+      ],
+      "author_institution": [
+        "IBM, Center for Open Source Data and AI Technologies (CODAIT)",
+        "University Hospital of Basel"
+      ],
+      "author_institution_map": {
+        "Romeo Kienzler": [
+          "IBM, Center for Open Source Data and AI Technologies (CODAIT)"
+        ],
+        "Ivan Nesic": [
+          "University Hospital of Basel"
+        ]
+      },
+      "author_orcid_map": {
+        "Ivan Nesic": "0000-0002-4373-8860"
+      },
+      "abstract": [
+        "CLAIMED is a component library for artificial intelligence, machine learning,\n\\textquotedbl{}extract, transform, load\\textquotedbl{} processes and data science.\nThe goal is to enable low-code/no-code rapid prototyping by providing\nready-made components for various business domains,\nsupporting various computer languages, working on various data flow editors and\nrunning on diverse execution engines.\nTo demonstrate its utility, we constructed a workflow composed exclusively of CLAIMED components.\nFor this purpose, we made use of a publicly available Computed Tomography (CT) scans dataset covidata\nand created a deep learning model, which is supposed to classify exams as either\nCOVID-19 positive or negative. The pipeline was built with Elyra's Pipeline Visual Editor,\nwith support for local, Airflow and Kubeflow execution."
+      ],
+      "keywords": "Kubernetes, Kubeflow, JupyterLab, Elyra, KFServing, TrustedAI,\nAI Explainability, AI Fairness, AI Adversarial Robustness",
+      "copyright_holder": "Romeo Kienzler et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 7,
+      "page": {
+        "start": 58,
+        "stop": 64
+      },
+      "paper_id": "ivan_nesic",
+      "doi": "10.25080/majora-1b6fd038-007"
+    },
+    {
+      "title": "PyCID: A Python Library for Causal Influence Diagrams",
+      "authors": "James Fox, Tom Everitt, Ryan Carey, Eric Langlois, Alessandro Abate, Michael Wooldridge",
+      "author": [
+        "James Fox",
+        "Tom Everitt",
+        "Ryan Carey",
+        "Eric Langlois",
+        "Alessandro Abate",
+        "Michael Wooldridge"
+      ],
+      "author_email": [
+        "james.fox@cs.ox.ac.uk",
+        "tomeveritt@google.com",
+        "ryan.carey@jesus.ox.ac.uk",
+        "edl@cs.toronto.edu",
+        "aabate@cs.ox.ac.uk",
+        "mjw@cs.ox.ac.uk"
+      ],
+      "author_institution": [
+        "University of Oxford",
+        "DeepMind",
+        "University of Oxford",
+        "University of Toronto",
+        "University of Oxford",
+        "University of Oxford"
+      ],
+      "author_institution_map": {
+        "James Fox": [
+          "University of Oxford"
+        ],
+        "Tom Everitt": [
+          "DeepMind"
+        ],
+        "Ryan Carey": [
+          "University of Oxford"
+        ],
+        "Eric Langlois": [
+          "University of Toronto"
+        ],
+        "Alessandro Abate": [
+          "University of Oxford"
+        ],
+        "Michael Wooldridge": [
+          "University of Oxford"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Why did a decision maker select a certain decision? What behaviour does a\ncertain objective incentivise? How can we improve this behaviour and ensure\nthat a decision-maker chooses decisions with safer or fairer consequences?\nThis paper introduces the Python package PyCID, built upon pgmpy, that\nimplements (causal) influence diagrams, a widely used graphical modelling framework for\ndecision-making problems. By providing a range of methods to solve and analyse\n(causal) influence diagrams, PyCID helps answer questions about behaviour\nand incentives in both single-agent and multi-agent settings."
+      ],
+      "keywords": "Influence Diagrams, Causal Models, Probabilistic Graphical Models, Game Theory, Decision Theory",
+      "copyright_holder": "James Fox et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 9,
+      "page": {
+        "start": 65,
+        "stop": 73
+      },
+      "paper_id": "james_fox",
+      "doi": "10.25080/majora-1b6fd038-008"
+    },
+    {
+      "title": "Social Media Analysis using Natural Language Processing Techniques",
+      "authors": "Jyotika Singh",
+      "author": [
+        "Jyotika Singh"
+      ],
+      "author_email": [
+        "singhjyotika811@gmail.com"
+      ],
+      "author_institution": [
+        "ICX Media, Inc."
+      ],
+      "author_institution_map": {
+        "Jyotika Singh": [
+          "ICX Media, Inc."
+        ]
+      },
+      "author_orcid_map": {
+        "Jyotika Singh": "0000-0002-5442-3004"
+      },
+      "abstract": [
+        "Social media is very popularly used every day with daily content viewing\nand/or posting that in turn influences people around this world in a variety\nof ways. Social media platforms, such as YouTube, have a lot of activity that\ngoes on every day in terms of video posting, watching and commenting. While\nwe can open the YouTube app on our phones and look at videos and what people\nare commenting, it only gives us a limited view as to kind of things others\naround us care about and what is trending amongst other consumers of our\nfavorite topics or videos. Crawling some of this raw data and performing\nanalysis on it using Natural Language Processing (NLP) can be tricky given\nthe different styles of language usage by people in today’s world. This effort\nhighlights the YouTube’s open Data API and how to use it in python to get the\nraw data, data cleaning using NLP tricks and Machine Learning in python for social\nmedia interactions, and extraction of trends and key influential factors from\nthis data in an automated fashion. All these steps towards trend analysis are\ndiscussed and demonstrated with examples that use different open-source\npython tools."
+      ],
+      "keywords": "nlp, natural language processing, social media data, youtube, named entitity\nrecognition, ner, keyphrase extraction",
+      "copyright_holder": "Jyotika Singh.",
+      "video": "",
+      "bibliography": "paper",
+      "pages": 7,
+      "page": {
+        "start": 74,
+        "stop": 80
+      },
+      "paper_id": "jyotika_singh",
+      "doi": "10.25080/majora-1b6fd038-009"
+    },
+    {
+      "title": "PyBMRB: Data visualization tool for BioMagResBank",
+      "authors": "Kumaran Baskaran, Jonathan R Wedell, Eldon L. Ulrich, Jeffery C. Hoch, John L. Markley",
+      "author": [
+        "Kumaran Baskaran",
+        "Jonathan R Wedell",
+        "Eldon L. Ulrich",
+        "Jeffery C. Hoch",
+        "John L. Markley"
+      ],
+      "author_email": [
+        "baskaran@uchc.edu",
+        "wedell@uchc.edu",
+        "ulrich@uchc.edu",
+        "hoch@uchc.edu",
+        "markley@biochem.wisc.edu"
+      ],
+      "author_institution": [
+        "UCONN Health, Molecular Biology and Biophysics",
+        "263 Farmington Ave. Farmington, CT 06030-3305, USA",
+        "UCONN Health, Molecular Biology and Biophysics",
+        "263 Farmington Ave. Farmington, CT 06030-3305, USA",
+        "UCONN Health, Molecular Biology and Biophysics",
+        "263 Farmington Ave. Farmington, CT 06030-3305, USA",
+        "UCONN Health, Molecular Biology and Biophysics",
+        "263 Farmington Ave. Farmington, CT 06030-3305, USA",
+        "Department of Biochemistry, University of Wisconsin-Madison",
+        "433 Babcock Drive, Madison, Wisconsin 53606-1544, USA"
+      ],
+      "author_institution_map": {
+        "Kumaran Baskaran": [
+          "UCONN Health, Molecular Biology and Biophysics",
+          "263 Farmington Ave. Farmington, CT 06030-3305, USA"
+        ],
+        "Jonathan R Wedell": [
+          "UCONN Health, Molecular Biology and Biophysics",
+          "263 Farmington Ave. Farmington, CT 06030-3305, USA"
+        ],
+        "Eldon L. Ulrich": [
+          "UCONN Health, Molecular Biology and Biophysics",
+          "263 Farmington Ave. Farmington, CT 06030-3305, USA"
+        ],
+        "Jeffery C. Hoch": [
+          "UCONN Health, Molecular Biology and Biophysics",
+          "263 Farmington Ave. Farmington, CT 06030-3305, USA"
+        ],
+        "John L. Markley": [
+          "Department of Biochemistry, University of Wisconsin-Madison",
+          "433 Babcock Drive, Madison, Wisconsin 53606-1544, USA"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "The Biological Magnetic Resonance Data Bank (BioMagResBank or BMRB https://bmrb.io), founded in 1988, is the international, open archive for data generated by Nuclear Magnetic Resonance (NMR) spectroscopy of biological systems. NMR spectroscopy is unique among biophysical approaches in its ability to provide a broad range of atomic and higher-level information relevant to the structural, dynamic, and chemical properties of biological macromolecules, as well as report on metabolite and natural product concentrations in complex mixtures and their chemical structures. NMR-STAR is the official data format of BMRB and BMRB provides python parser (PyNMRSTAR https://github.com/uwbmrb/PyNMRSTAR), a data visualization tool (PyBMRB https://github.com/uwbmrb/PyBMRB) and an Application Program Interface (API)(BMRB-API https://github.com/uwbmrb/BMRB-API) to access the BMRB archive. PyBMRB displays the chemical shifts data in each entry as a simulated NMR spectrum and to generates database-wide chemical shift histograms of different atom types in proteins and nucleic acids. PyBMRB provides access to BMRB data through the API and generates portable and interactive visualizations as a single html file. It also supports  data visualization workflows using Jupyter Notebooks, which can be both easily created and shared."
+      ],
+      "keywords": "NMR Spectroscopy, chemical shifts, proteins, Biological Magnetic Resonance data Bank(BMRB),NMR-STAR, chemical shift histogram, HSQC",
+      "copyright_holder": "Kumaran Baskaran et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 4,
+      "page": {
+        "start": 81,
+        "stop": 84
+      },
+      "paper_id": "kumaran_baskaran",
+      "doi": "10.25080/majora-1b6fd038-00a"
+    },
+    {
+      "title": "Conformal Mappings with SymPy: Towards Python-driven Analytical Modeling in Physics",
+      "authors": "Zoufiné Lauer-Baré, Erich Gaertig",
+      "author": [
+        "Zoufiné Lauer-Baré",
+        "Erich Gaertig"
+      ],
+      "author_email": [
+        "zoufine.lauer-bare@hilite.com",
+        "erich.gaertig@hilite.com"
+      ],
+      "author_institution": [
+        "Hilite International, Weberstrasse 17, Nürtingen, Germany",
+        "Hilite International, Weberstrasse 17, Nürtingen, Germany"
+      ],
+      "author_institution_map": {
+        "Zoufiné Lauer-Baré": [
+          "Hilite International, Weberstrasse 17, Nürtingen, Germany"
+        ],
+        "Erich Gaertig": [
+          "Hilite International, Weberstrasse 17, Nürtingen, Germany"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "This contribution shows how the symbolic computing Python library SymPy can be used to improve flow force modeling due to a Couette-type flow, i.e. a flow of viscous fluid in the region between two bodies, where one body is in tangential motion relative to the other. This motion imposes shear stresses on the fluid and leads to a corresponding fluid flow. The flow forces exerted on the moving component are of interest in many applications, for example in system simulations of electrohydraulic valves. There, an eccentrically mounted cylindrical core (the armature) moves within an oil-filled tube (the polecap), experiencing fluid forces due to the viscous oil. SymPy can help to understand the range of validity as well as the limitations of analytical relations that are commonly used as standard approximations for these type of forces in many leading system simulation tools. In order to motivate these approaches, this contribution elucidates how the velocity of the flow is determined analytically by solving the Stokes equation in an eccentric annulus with a conformal mapping-approach. Afterwards analytical postprocessing leads to the corresponding flow force. The results obtained with SymPy are then checked against full 3D computational fluid dynamics (CFD) simulations. This work concludes with the combination of new Couette flow force approximations and similar results for the known Poiseuille flow (i.e. fluid flow induced by a pressure difference) to derive new relations for a combined Couette-Poiseuille flow force. This article is addressed to natural scientists and engineers that are interested in the application of conformal mappings and Taylor-expansions with the help of SymPy when solving partial differential equations analytically."
+      ],
+      "keywords": "Physical modeling, Stokes equation, Eccentric annulus, Flow force, Conformal mapping, SymPy",
+      "copyright_holder": "Zoufiné Lauer-Baré et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 9,
+      "page": {
+        "start": 85,
+        "stop": 93
+      },
+      "paper_id": "lauer_bare_gaertig",
+      "doi": "10.25080/majora-1b6fd038-00b"
+    },
+    {
+      "title": "Programmatically Identifying Cognitive Biases Present in Software Development",
+      "authors": "Amanda E. Kraft, Matthew Widjaja, Trevor M. Sands, Brad J. Galego",
+      "author": [
+        "Amanda E. Kraft",
+        "Matthew Widjaja",
+        "Trevor M. Sands",
+        "Brad J. Galego"
+      ],
+      "author_email": [
+        "amanda.e.kraft@lmco.com",
+        "matthew.widjaja@lmco.com",
+        "trevor.m.sands@lmco.com",
+        "brad.j.galego@lmco.com"
+      ],
+      "author_institution": [
+        "Lockheed Martin Advanced Technology Laboratories",
+        "Lockheed Martin Advanced Technology Laboratories",
+        "Lockheed Martin Advanced Technology Laboratories",
+        "Lockheed Martin Advanced Technology Laboratories"
+      ],
+      "author_institution_map": {
+        "Amanda E. Kraft": [
+          "Lockheed Martin Advanced Technology Laboratories"
+        ],
+        "Matthew Widjaja": [
+          "Lockheed Martin Advanced Technology Laboratories"
+        ],
+        "Trevor M. Sands": [
+          "Lockheed Martin Advanced Technology Laboratories"
+        ],
+        "Brad J. Galego": [
+          "Lockheed Martin Advanced Technology Laboratories"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Mitigating bias in AI-enabled systems is a topic of great concern within the\nresearch community. While efforts are underway to increase model\ninterpretability and de-bias datasets, little attention has been given to\nidentifying biases that are introduced by developers as part of the software\nengineering process. To address this, we began developing an approach to\nidentify a subset of cognitive biases that may be present in development\nartifacts: anchoring bias, availability bias, confirmation bias, and\nhyperbolic discounting. We developed multiple natural language processing\n(NLP) models to identify and classify the presence of bias in text\noriginating from software development artifacts."
+      ],
+      "keywords": "cognitive bias, software engineering, natural language processing",
+      "copyright_holder": "Amanda E. Kraft et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 7,
+      "page": {
+        "start": 94,
+        "stop": 100
+      },
+      "paper_id": "lm_cognitive",
+      "doi": "10.25080/majora-1b6fd038-00c"
+    },
+    {
+      "title": "How PDFrw and fillable forms improves throughput at a Covid-19 Vaccine Clinic",
+      "authors": "Haw-minn Lu, José Unpingco",
+      "author": [
+        "Haw-minn Lu",
+        "José Unpingco"
+      ],
+      "author_email": [
+        "hlu@westhealth.org",
+        "jhunpingco@westhealth.org"
+      ],
+      "author_institution": [
+        "Gary and Mary West Health Institute",
+        "Gary and Mary West Health Institute"
+      ],
+      "author_institution_map": {
+        "Haw-minn Lu": [
+          "Gary and Mary West Health Institute"
+        ],
+        "José Unpingco": [
+          "Gary and Mary West Health Institute"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "PDFrw was used to prepopulate Covid-19 vaccination forms to improve the efficiency and integrity of the vaccination process in terms of federal and state privacy requirements.  We will describe the vaccination process from the initial appointment, through the vaccination delivery, to the creation of subsequent required documentation. Although Python modules for PDF generation are common, they struggle with managing fillable forms where a fillable field may appear multiple times within the same form.  Additionally, field types such as checkboxes, radio buttons, lists and combo boxes are not straightforward to programmatically fill. Another challenge is combining multiple filled forms while maintaining the integrity of the values of the fillable fields.  Additionally, HIPAA compliance issues are discussed."
+      ],
+      "keywords": "acrobat documents, form filling, HIPAA compliance, COVID-19",
+      "copyright_holder": "Haw-minn Lu et al.",
+      "video": "",
+      "bibliography": "ourbib",
+      "pages": 5,
+      "page": {
+        "start": 101,
+        "stop": 105
+      },
+      "paper_id": "lu",
+      "doi": "10.25080/majora-1b6fd038-00d"
+    },
+    {
+      "title": "PyRSB: Portable Performance on Multithreaded Sparse BLAS Operations",
+      "authors": "Michele Martone, Simone Bacchio",
+      "author": [
+        "Michele Martone",
+        "Simone Bacchio"
+      ],
+      "author_email": [
+        "michele.martone@lrz.de",
+        "s.bacchio@cyi.ac.cy"
+      ],
+      "author_institution": [
+        "Leibniz Supercomputing Centre (LRZ), Garching near Munich, Germany",
+        "CaSToRC, The Cyprus Institute, Nicosia, Cyprus"
+      ],
+      "author_institution_map": {
+        "Michele Martone": [
+          "Leibniz Supercomputing Centre (LRZ), Garching near Munich, Germany"
+        ],
+        "Simone Bacchio": [
+          "CaSToRC, The Cyprus Institute, Nicosia, Cyprus"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "This article introduces PyRSB, a Python interface to the LIBRSB library.\nLIBRSB is a portable performance library offering so called Sparse BLAS (Sparse Basic Linear Algebra Subprograms) operations for modern multicore CPUs.\nIt is based on the Recursive Sparse Blocks (RSB) format, which is particularly well suited for matrices of large dimensions.\nPyRSB allows LIBRSB usage with an interface styled after that of SciPy's sparse matrix classes, and offers the extra benefit of exploiting multicore parallelism.\nThis article introduces the concepts behind the RSB format and LIBRSB, and illustrates usage of PyRSB.\nIt concludes with a user-oriented overview of speedup advantage of rsb\\_matrix over scipy.sparse.csr\\_matrix running general sparse matrix-matrix multiplication on a modern shared-memory computer."
+      ],
+      "keywords": "",
+      "copyright_holder": "Michele Martone et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 9,
+      "page": {
+        "start": 106,
+        "stop": 114
+      },
+      "paper_id": "martone_bacchio_pyrsb",
+      "doi": "10.25080/majora-1b6fd038-00e"
+    },
+    {
+      "title": "Classification of Diffuse Subcellular Morphologies",
+      "authors": "Neelima Pulagam, Marcus Hill, Mojtaba Fazli, Rachel Mattson, Meekail Zain, Andrew Durden, Frederick D Quinn, S Chakra Chennubhotla, Shannon P Quinn",
+      "author": [
+        "Neelima Pulagam",
+        "Marcus Hill",
+        "Mojtaba Fazli",
+        "Rachel Mattson",
+        "Meekail Zain",
+        "Andrew Durden",
+        "Frederick D Quinn",
+        "S Chakra Chennubhotla",
+        "Shannon P Quinn"
+      ],
+      "author_email": [
+        "np26102@uga.edu",
+        "marcdh@uga.edu",
+        "Mojtaba@uga.edu",
+        "rachel.mattson@uga.edu",
+        "meekail.zain@uga.edu",
+        "andrewdurden@uga.edu",
+        "fquinn@uga.edu",
+        "chakracs@pitt.edu",
+        "spq@uga.edu"
+      ],
+      "author_institution": [
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Cognitive Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Infectious Diseases, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA 15232 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA"
+      ],
+      "author_institution_map": {
+        "Neelima Pulagam": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Marcus Hill": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Mojtaba Fazli": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Rachel Mattson": [
+          "Department of Cognitive Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Meekail Zain": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Andrew Durden": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Frederick D Quinn": [
+          "Department of Infectious Diseases, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "S Chakra Chennubhotla": [
+          "Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA 15232 USA"
+        ],
+        "Shannon P Quinn": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+          "Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Characterizing dynamic sub-cellular morphologies in response to perturbation remains a challenging and important problem. Many organelles are anisotropic and difficult to segment, and few methods exist for quantifying the shape, size, and quantity of these organelles. The OrNet (Organelle Networks) framework models the diffuse organelle structures as social networks using graph theoretic and probabilistic approaches. Specifically, this architecture tracks the morphological changes in mitochondria because its structural changes offer insight into the adverse effects of pathogens on the host and aid the diagnosis and treatment of diseases; such as tuberculosis. The OrNet framework offers a segmentation pipeline to preprocess confocal imaging videos that display various mitochondrial morphologies into social network graphs. Earlier methods of anomaly detection in organelle structures include manual identification by researchers in the biology domain. Although those approaches were successful, manual classification is time consuming, tedious, and error-prone. Existing convolutional architectures do not have the capability to adapt to general graphs and fail to represent diffuse organelle morphologies due their amorphous characteristic. Thus, we propose the two different methods to perform classification on these organelles that captures their dynamic behaviors and identifies the fragmentation and fusion of mitochondria. One is a graph deep learning architecture, and the second is an approach that finds a graph representation for each social network and uses a traditional machine learning method for classification. Recent studies have demonstrated graph neural network models perform well on time-series imaging tasks, and the graph architectures are better able to represent amorphous and spatially diffuse structures such as mitochondria. Alternatively, much research has established traditional machine learning methods to be promising and robust models. Testing and comparing different architectures and models will effectively improve the robustness of categorizing distinct structural changes in subcellular organelle structures that is very useful for identifying infection patterns, offering a new way to understand cellular health and dynamic responses."
+      ],
+      "keywords": "",
+      "copyright_holder": "Neelima Pulagam et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 8,
+      "page": {
+        "start": 115,
+        "stop": 122
+      },
+      "paper_id": "neelima_pulagam",
+      "doi": "10.25080/majora-1b6fd038-00f"
+    },
+    {
+      "title": "Monitoring Scientific Python Usage on a Supercomputer",
+      "authors": "Rollin Thomas, Laurie Stephey, Annette Greiner, Brandon Cook",
+      "author": [
+        "Rollin Thomas",
+        "Laurie Stephey",
+        "Annette Greiner",
+        "Brandon Cook"
+      ],
+      "author_email": [
+        "rcthomas@lbl.gov",
+        "lastephey@lbl.gov",
+        "amgreiner@lbl.gov",
+        "bgcook@lbl.gov"
+      ],
+      "author_institution": [
+        "National Energy Research Scientific Computing Center,\nLawrence Berkeley National Laboratory,\n1 Cyclotron Road MS59-4010A,\nBerkeley, California, 94720",
+        "National Energy Research Scientific Computing Center,\nLawrence Berkeley National Laboratory,\n1 Cyclotron Road MS59-4010A,\nBerkeley, California, 94720",
+        "National Energy Research Scientific Computing Center,\nLawrence Berkeley National Laboratory,\n1 Cyclotron Road MS59-4010A,\nBerkeley, California, 94720",
+        "National Energy Research Scientific Computing Center,\nLawrence Berkeley National Laboratory,\n1 Cyclotron Road MS59-4010A,\nBerkeley, California, 94720"
+      ],
+      "author_institution_map": {
+        "Rollin Thomas": [
+          "National Energy Research Scientific Computing Center,\nLawrence Berkeley National Laboratory,\n1 Cyclotron Road MS59-4010A,\nBerkeley, California, 94720"
+        ],
+        "Laurie Stephey": [
+          "National Energy Research Scientific Computing Center,\nLawrence Berkeley National Laboratory,\n1 Cyclotron Road MS59-4010A,\nBerkeley, California, 94720"
+        ],
+        "Annette Greiner": [
+          "National Energy Research Scientific Computing Center,\nLawrence Berkeley National Laboratory,\n1 Cyclotron Road MS59-4010A,\nBerkeley, California, 94720"
+        ],
+        "Brandon Cook": [
+          "National Energy Research Scientific Computing Center,\nLawrence Berkeley National Laboratory,\n1 Cyclotron Road MS59-4010A,\nBerkeley, California, 94720"
+        ]
+      },
+      "author_orcid_map": {
+        "Rollin Thomas": "0000-0002-2834-4257",
+        "Laurie Stephey": "0000-0003-3868-6178",
+        "Annette Greiner": "0000-0001-6465-7456",
+        "Brandon Cook": "0000-0002-4203-4079"
+      },
+      "abstract": [
+        "In 2021, more than 30\\% of users at the National Energy Research Scientific\nComputing Center (NERSC) used Python on the Cori supercomputer. To determine\nthis we have developed and open-sourced a simple, minimally invasive monitoring\nframework that\nleverages standard Python features to capture Python imports and other job data\nvia a package called \\textquotedbl{}Customs\\textquotedbl{}. To analyze the data we collect via Customs,\nwe have developed a Jupyter-based analysis framework designed to be interactive,\nshareable, extensible, and publishable via a dashboard. Our stack includes\nPapermill to execute parameterized notebooks, Dask-cuDF for multi-GPU\nprocessing, and Voila to render our notebooks as web-based dashboards. We\nreport preliminary findings from Customs data collection and analysis. This\nwork demonstrates that our monitoring framework can capture insightful and\nactionable data including top Python libraries, preferred user software\nstacks, and correlated libraries, leading to a better understanding of\nuser behavior and affording us opportunity to make increasingly data-driven\ndecisions regarding Python at NERSC."
+      ],
+      "keywords": "HPC, Python monitoring, GPUs, dashboards, parallel, Jupyter",
+      "copyright_holder": "Rollin Thomas et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 9,
+      "page": {
+        "start": 123,
+        "stop": 131
+      },
+      "paper_id": "rollin_thomas",
+      "doi": "10.25080/majora-1b6fd038-010"
+    },
+    {
+      "title": "Training machine learning models faster with Dask",
+      "authors": "Joesph Holt, Scott Sievert",
+      "author": [
+        "Joesph Holt",
+        "Scott Sievert"
+      ],
+      "author_email": [
+        "jpholt2@wisc.edu",
+        "stsievert@wisc.com"
+      ],
+      "author_institution": [
+        "University of Wisconsin–Madison",
+        "University of Wisconsin–Madison"
+      ],
+      "author_institution_map": {
+        "Joesph Holt": [
+          "University of Wisconsin–Madison"
+        ],
+        "Scott Sievert": [
+          "University of Wisconsin–Madison"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Machine learning (ML) relies on stochastic algorithms, all of which rely on\ngradient approximations with \\textquotedbl{}batch size\\textquotedbl{} examples. Growing the batch size\nas the optimization proceeds is a simple and usable method to reduce the\ntraining time, provided that the number of workers grows with the batch\nsize. In this work, we provide a package that trains PyTorch models on Dask\nclusters, and can grow the batch size if desired. Our simulations indicate\nthat for a particular model that uses GPUs for a popular image\nclassification task, the training time can be reduced from about 120 minutes\nwith standard SGD to 45 minutes with a variable batch size method."
+      ],
+      "keywords": "machine learning, model training, distributed computation",
+      "copyright_holder": "Joesph Holt et al.",
+      "video": "",
+      "bibliography": "refs",
+      "pages": 8,
+      "page": {
+        "start": 132,
+        "stop": 139
+      },
+      "paper_id": "scott_sievert",
+      "doi": "10.25080/majora-1b6fd038-011"
+    },
+    {
+      "title": "Multithreaded parallel Python through OpenMP support in Numba",
+      "authors": "Todd Anderson, Tim Mattson",
+      "author": [
+        "Todd Anderson",
+        "Tim Mattson"
+      ],
+      "author_email": [
+        "todd.a.anderson@intel.com",
+        "timothy.g.mattson@intel.com"
+      ],
+      "author_institution": [
+        "Intel Corp.",
+        "Intel Corp."
+      ],
+      "author_institution_map": {
+        "Todd Anderson": [
+          "Intel Corp."
+        ],
+        "Tim Mattson": [
+          "Intel Corp."
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "A modern CPU delivers performance through parallelism.  A program that exploits the performance\navailable from a CPU must run in parallel on multiple cores.   This is usually best done through multithreading.\nThreads belong to a process and share the memory associated with that process.  The most\npopular approach for writing multithreaded code is to use directives to tell the compiler\nhow to convert  code into multithreaded code.  The most commonly used directive-based API for\nwriting multithreaded code is OpenMP.\nPython is not designed for parallel programming with threads.\nThe GlobalInterpreterLock (GIL) prevents multiple threads from simultaneously accessing Python objects.\nThis effectively prevents data races and makes Python naturally thread safe.  Consequently, the GIL prevents parallel programming\nwith multiple threads and therefore keeps Python from accessing the full performance\nfrom a CPU.\nIn this paper, we describe a solution to this problem.  We implement OpenMP in\nPython so programmers can easily annotate their code and then let the Numba just-in-time (JIT) compiler generate\nmultithreaded, OpenMP code in LLVM, thereby bypassing the GIL.  We describe this new multithreading\nsystem for Python and and show that the performance in our early tests is on par with the analogous C code."
+      ],
+      "keywords": "OpenMP, Python, Numba",
+      "copyright_holder": "Todd Anderson et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 8,
+      "page": {
+        "start": 140,
+        "stop": 147
+      },
+      "paper_id": "tim_mattson",
+      "doi": "10.25080/majora-1b6fd038-012"
+    },
+    {
+      "title": "CNN Based ToF Image Processing",
+      "authors": "Marian-Leontin Pop, Szilard Molnar, Alexandru Pop, Benjamin Kelenyi, Levente Tamas, Andrei Cozma",
+      "author": [
+        "Marian-Leontin Pop",
+        "Szilard Molnar",
+        "Alexandru Pop",
+        "Benjamin Kelenyi",
+        "Levente Tamas",
+        "Andrei Cozma"
+      ],
+      "author_email": [
+        "popmarianleontin@gmail.com",
+        "molnarszilard10@gmail.com",
+        "Alexandru.Pop@aut.utcluj.ro",
+        "Benjamin.Kelenyi@aut.utcluj.ro",
+        "Levente.Tamas@aut.utcluj.ro",
+        "Andrei.Cozma@analog.com"
+      ],
+      "author_institution": [
+        "Technical University of Cluj-Napoca",
+        "Technical University of Cluj-Napoca",
+        "Technical University of Cluj-Napoca",
+        "Technical University of Cluj-Napoca",
+        "Technical University of Cluj-Napoca",
+        "Analog Devices International"
+      ],
+      "author_institution_map": {
+        "Marian-Leontin Pop": [
+          "Technical University of Cluj-Napoca"
+        ],
+        "Szilard Molnar": [
+          "Technical University of Cluj-Napoca"
+        ],
+        "Alexandru Pop": [
+          "Technical University of Cluj-Napoca"
+        ],
+        "Benjamin Kelenyi": [
+          "Technical University of Cluj-Napoca"
+        ],
+        "Levente Tamas": [
+          "Technical University of Cluj-Napoca"
+        ],
+        "Andrei Cozma": [
+          "Analog Devices International"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "In this paper a Time of Flight (ToF) camera specific data processing pipeline is presented, followed by real life applications using artificial intelligence.\nThese applications include use cases such as gesture recognition, movement direction estimation or physical exercises monitoring.\nThe whole pipeline for the body pose estimation is described in details, starting from generating and training phases to the pose estimation\nand deployment. The final deployment targets were Nvidia Xavier NX and AGX platforms receiving data from an Analog Devices ToF camera."
+      ],
+      "keywords": "transfer learning, ToF, python",
+      "copyright_holder": "Marian-Leontin Pop et al.",
+      "video": "https://www.youtube.com/watch?v=kANXhHwFrCo",
+      "bibliography": "mybib",
+      "pages": 6,
+      "page": {
+        "start": 148,
+        "stop": 153
+      },
+      "paper_id": "trai",
+      "doi": "10.25080/majora-1b6fd038-013"
+    },
+    {
+      "title": "Cell Tracking in 3D using deep learning segmentations",
+      "authors": "Varun Kapoor, Claudia Carabaña",
+      "author": [
+        "Varun Kapoor",
+        "Claudia Carabaña"
+      ],
+      "author_email": [
+        "varun.kapoor@curie.fr",
+        "claudia.carabana-garcia@curie.fr"
+      ],
+      "author_institution": [
+        "Institut Curie, PSL Research University, Sorbonne University, CNRSUMR 3215, INSERM U934, Genetics and Developemental Biology, Paris, France.",
+        "Institut Curie, PSL Research University, Sorbonne University, CNRSUMR 3215, INSERM U934, Genetics and Developemental Biology, Paris, France."
+      ],
+      "author_institution_map": {
+        "Varun Kapoor": [
+          "Institut Curie, PSL Research University, Sorbonne University, CNRSUMR 3215, INSERM U934, Genetics and Developemental Biology, Paris, France."
+        ],
+        "Claudia Carabaña": [
+          "Institut Curie, PSL Research University, Sorbonne University, CNRSUMR 3215, INSERM U934, Genetics and Developemental Biology, Paris, France."
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Live-cell imaging is a highly used technique to study cell migration and dynamics over time. Although many computational tools have been developed during the past years to automatically detect and track cells, they are optimized to detect cell nuclei with similar shapes and/or cells not clustering together. These existing tools are challenged when tracking fluorescently labelled membranes of cells due to cell's irregular shape, variability in size and dynamic movement across Z planes making it difficult to detect and track them.\nHere we introduce a detailed analysis pipeline to perform segmentation with accurate shape information, combined with BTrackmate, a customized codebase of popular ImageJ/Fiji software Trackmate, to perform cell tracking inside the tissue of interest. We developed VollSeg, a new segmentation method able to detect membrane-labelled cells with low signal-to-noise ratio and dense packing. Finally, we also created an interface in Napari, an Euler angle based viewer, to visualize the tracks along a chosen view making it possible to follow a cell along the plane of motion. Importantly, we provide a detailed protocol to implement this pipeline in a new dataset, together with the required Jupyter notebooks. Our codes are open source available at Github2021."
+      ],
+      "keywords": "3D segmentation, cell tracking, deep learning, irregular shaped cells, fluorescent microscopy.",
+      "copyright_holder": "Varun Kapoor et al.",
+      "video": "",
+      "bibliography": "vkc",
+      "pages": 8,
+      "page": {
+        "start": 154,
+        "stop": 161
+      },
+      "paper_id": "varun_kapoor",
+      "doi": "10.25080/majora-1b6fd038-014"
+    }
+  ]
+}

@@ -1,0 +1,396 @@
+{
+  "lightning": [
+    {
+      "title": "Social Media Analysis using Natural Language Processing Techniques",
+      "zenodo_url": "https://zenodo.org/record/5151865",
+      "authors": [
+        {
+          "name": "Jyotika Singh",
+          "affiliation": "ICX Media, Inc.",
+          "orcid": "0000-0002-5442-3004"
+        }
+      ],
+      "description": "Demonstration of social media noise and cleaning methods, followed by trend analysis on YouTube with NLP and statistics using pyYouTubeAnalysis.",
+      "slide_id": "jyotika_singh",
+      "doi": "10.25080/majora-1b6fd038-015"
+    },
+    {
+      "title": "seaborn-image : image data visualization in Python",
+      "zenodo_url": "https://zenodo.org/record/5151891",
+      "authors": [
+        {
+          "name": "Sarthak Jariwala",
+          "affiliation": "University of Washington, Seattle",
+          "orcid": "0000-0002-7020-9008"
+        }
+      ],
+      "description": "High level API for attractive and descriptive image visualization in Python built on top of matplotlib",
+      "slide_id": "seaborn-image",
+      "doi": "10.25080/majora-1b6fd038-016"
+    }
+  ],
+  "posters": [
+    {
+      "authors": [
+        {
+          "name": "Samantha Walkow",
+          "affiliation": "iSchool and NCSA at the University of Illinois",
+          "orcid": "0000-0001-7329-1863"
+        },
+        {
+          "name": "Dr. Chris Havlin",
+          "affiliation": "iSchool at the University of Illinois",
+          "orcid": "0000-0003-0585-8236"
+        },
+        {
+          "name": "Dr. Matthew Turk",
+          "affiliation": "iSchool and NCSA at the University of Illinois",
+          "orcid": "0000-0002-5294-0198"
+        },
+        {
+          "name": "Dr. Corentin Cadiou",
+          "affiliation": "University College London",
+          "orcid": "0000-0003-2285-0332"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151905",
+      "title": "Towards a Scientific Workflow Description: a yt Project Prototype for Interdisciplinary Analysis",
+      "description": "Scientific workflow description provides an alternative to the cognitive overhead of learning a new software package and use of imperative programming paradigms often used with python. This description is encoded in a JSON schema, accessed by the user through a configuration file, and run using python modules that attach the configuration file to the code which produces output. We use yt, an computational astrophyics tool, to demonstrate how a domain specific software can operate within a descriptive framework.",
+      "slide_id": "AnalysisSchema",
+      "doi": "10.25080/majora-1b6fd038-017"
+    },
+    {
+      "title": "Using Python for Analysis and Verification of Mixed-mode Signal Chains for Analog Signal Acquisition",
+      "authors": [
+        {
+          "name": "Mark Thoren",
+          "affiliation": "Analog Devices Inc"
+        },
+        {
+          "name": "Cristina Suteu",
+          "affiliation": "Analog Devices Inc"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151918",
+      "description": "Accurate, precise, and low-noise sensor measurements are essential before any machine can learn about (or artificial-intelligently make decisions about) the physical world. Modern, highly integrated signal acquisition devices can perform analog signal conditioning, digitization, and digital filtering on a single silicon device, greatly simplifying system electronics. However, a complete understanding of the signal chain properties is still required to correctly utilize and debug these modern devices.",
+      "slide_id": "adi_sdg",
+      "doi": "10.25080/majora-1b6fd038-018"
+    },
+    {
+      "title": "Speeding Up Molecular Dynamics Trajectory Analysis with MPI Parallelization",
+      "authors": [
+        {
+          "name": "Edis Jakupovic",
+          "affiliation": "Arizona State University"
+        },
+        {
+          "name": "Oliver Beckstein",
+          "affiliation": "Arizona State University"
+        }
+      ],
+      "description": "",
+      "zenodo_url": "https://zenodo.org/record/5151924",
+      "slide_id": "edis_jakupovic",
+      "doi": "10.25080/majora-1b6fd038-019"
+    },
+    {
+      "authors": [
+        {
+          "name": "Jyotika Singh",
+          "affiliation": "ICX Media, Inc.",
+          "orcid": "0000-0002-5442-3004"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151932",
+      "title": "Social Media Analysis using Natural Language Processing Techniques",
+      "description": "Social media is very popularly used every day with daily content viewing and/or posting that in turn influences people around this world in a variety of ways. Social media platforms, such as YouTube, have a lot of activity that goes on every day in terms of video posting, watching and commenting. While we can open the YouTube app on our phones and look at videos and what people are commenting, it only gives us a limited view as to kind of things others around us care about and what is trending amongst other consumers of our favorite topics or videos. Crawling some of this raw data and performing analysis on it using Natural Language Processing (NLP) can be tricky given the different styles of language usage by people in today’s world. This effort highlights the YouTube’s open Data API and how to use it in python to get the raw data, data cleaning using NLP tricks and Machine Learning in python for social media interactions, and extraction of trends and key influential factors from this data in an automated fashion using pyYouTubeAnalysis.",
+      "slide_id": "jyotika_singh",
+      "doi": "10.25080/majora-1b6fd038-01a"
+    },
+    {
+      "title": "Programmatically Identifying Cognitive Biases Present in Software Development",
+      "authors": [
+        {
+          "name": "Amanda E. Kraft",
+          "affiliation": "Lockheed Martin, Advanced Technology Laboratories"
+        },
+        {
+          "name": "Matthew Widjaja",
+          "affiliation": "Lockheed Martin, Advanced Technology Laboratories"
+        },
+        {
+          "name": "Trevor M. Sands",
+          "affiliation": "Lockheed Martin, Advanced Technology Laboratories"
+        },
+        {
+          "name": "Brad J. Galego",
+          "affiliation": "Lockheed Martin, Advanced Technology Laboratories"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151947",
+      "description": "Mitigating bias in AI-enabled systems is a topic of great concern within the research community. We began developing an approach to identify a subset of cognitive biases that may be present in development artifacts (e.g., version control commit messages): anchoring bias, availability bias, confirmation bias, and hyperbolic discounting. We developed multiple natural language processing (NLP) models to identify and classify the presence of bias in text originating from software development artifacts.",
+      "slide_id": "lm_cognitive",
+      "doi": "10.25080/majora-1b6fd038-01b"
+    },
+    {
+      "title": "Visualize 3D scientific data in a Pythonic way like matplotlib",
+      "authors": [
+        {
+          "name": "Tetsuo Koyama",
+          "affiliation": "ARK Information Systems"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151953",
+      "description": "Do you want to visualize 3D scientific data in a Pythonic way like matplotlib? If you want, this poster is for you. This poster is the introduction of PyVista.",
+      "slide_id": "pyvista",
+      "doi": "10.25080/majora-1b6fd038-01c"
+    },
+    {
+      "authors": [
+        {
+          "name": "Roni Kobrosly",
+          "affiliation": "DrFirst"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151967",
+      "title": "causal-curve: tools to perform causal inference given a continuous treatment",
+      "description": "There are a multitude of scenarios in both research and industry where this would be useful to evaluate the impact of a continuous “treatment” on an outcome of interest in a causal inference framework. Unfortunately, we are not aware of an established python package that is able to perform this. The `causal-curve` package attempts to fill that gap, providing users with tools to generate causal dose-response curves (AKA causal curves).",
+      "slide_id": "roni_kobrosly_causal_curve",
+      "doi": "10.25080/majora-1b6fd038-01d"
+    },
+    {
+      "title": "SciPy 2021: An Accurate Implementation of the Studentized Range Distribution for Python",
+      "authors": [
+        {
+          "name": "Samuel Wallan",
+          "affiliation": "Computer Science and Software Engineering Department",
+          "orcid": ""
+        },
+        {
+          "name": "Dominic Chmiel",
+          "affiliation": "Mechanical Engineering  Department",
+          "orcid": ""
+        },
+        {
+          "name": "Matt Haberland",
+          "affiliation": "BioResource and Agricultural Engineering Department",
+          "orcid": "0000-0003-4806-3601"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151976",
+      "description": "As data becomes more and more accessible, it can be tempting to misuse data analysis techniques to find statistically significant results, a practice known as 'p-hacking'. Tukey's HSD (Honestly Significant Difference) test is one of several tests that guards against this practice by using the studentized range distribution to compute p-values that account for the number of comparisons performed. Implementations of Tukey's HSD already exist within the scientific Python ecosystem, but they rely on approximations of the studentized range distribution that may not behave well outside of their intended range and, even within the intended range, are only accurate to a few digits. In this document, we present a fast, highly accurate, and direct implementation of the studentized range distribution for SciPy, and we demonstrate its speed and accuracy.",
+      "slide_id": "studentized_range",
+      "doi": "10.25080/majora-1b6fd038-01e"
+    },
+    {
+      "title": "Cell Tracking in 3D using Deep Learning Segmentations",
+      "authors": [
+        {
+          "name": "Varun Kapoor",
+          "affiliation": "Institut Curie, U934/UMR3215, PSL-Paris, France"
+        },
+        {
+          "name": "Claudia Carabana",
+          "affiliation": "Institute Curie, U934/UMR3215, PSL- Paris, France"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151980",
+      "description": "Live-cell imaging is highly used technique to study cell migration and dynamics over tile. Automated analysis of florescently membrane-labelled cells can be highly challenging due to their irregular shape, variability in size and dynamic movement across Z planes making it difficult to detect and track them. Ze introduce a detailed analysis pipeline to perform segmentation with accurate shape information, combined with BTrackmate, a customized codebase of popular ImageJ/Fiji software Trackmate, to perform cell tracking inside the tissue of interest. We also created an interface in Napari to visualize the tracks along a chosen view making it possible to follow a cell along the plane of motion. We provide a detailed protocaol to implement this pipeline in a new dataset, together with the required Jupyter notebooks.",
+      "slide_id": "varun_kapoor",
+      "doi": "10.25080/majora-1b6fd038-01f"
+    }
+  ],
+  "slides": [
+    {
+      "title": "It's Time for the Atmospheric Science Community to ACT Together",
+      "authors": [
+        {
+          "name": "Adam Theisen",
+          "affiliation": "Argonne National Laboratory",
+          "orcid": "0000-0002-7602-1057"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151986",
+      "description": "The Atmospheric data Community Toolkit (ACT) is an open-source Python library for working with n-dimensional atmospheric time-series datasets.  ACT contains functions for every aspect of the research lifecycle.",
+      "slide_id": "Atmospheric_data_Community_Toolkit",
+      "doi": "10.25080/majora-1b6fd038-020"
+    },
+    {
+      "title": "Adopting static typing in scientific projects",
+      "authors": [
+        {
+          "name": "Predrag Gruevski",
+          "affiliation": "Kensho Technologies, LLC.",
+          "orcid": "0000-0003-2713-6621"
+        },
+        {
+          "name": "Colin Carroll",
+          "affiliation": "Google Research",
+          "orcid": "0000-0001-6977-0861"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5151994",
+      "description": "Are you interested in adding typing to your existing codebase, but are not sure how to get started? Are you worried about managing the typing process without pausing your project's development?\n\nIn this talk, we'll embrace the fact that a large project's transition toward typing will likely happen over the course of many months, concurrently with ongoing development. However, that doesn't mean that getting started with typing has to be difficult! We'll share with you two examples of adopting typing in existing open-source codebases (100k and 40k lines of Python). We'll particularly focus on the typing experience from the perspective of project maintainers, contributors, and users of these Python libraries.\n\nWe will discuss useful tools and strategies, surprising difficulties, the types of bugs and errors we found, and how the addition of typing changes the overall development experience. By the end of this talk, you'll be able to confidently manage the migration toward typing in your own codebase.",
+      "slide_id": "adopting_static_typing",
+      "doi": "10.25080/majora-1b6fd038-021"
+    },
+    {
+      "title": "cuCIM - A GPU image I/O and processing library",
+      "zenodo_url": "https://zenodo.org/record/5151998",
+      "authors": [
+        {
+          "name": "Gregory R. Lee",
+          "affiliation": "Quansight",
+          "orcid": "0000-0001-8895-2740"
+        },
+        {
+          "name": "Gigon Bae",
+          "affiliation": "NVIDIA",
+          "orcid": "0000-0003-0648-9735"
+        },
+        {
+          "name": "Benjamin Zaitlen",
+          "affiliation": "NVIDIA",
+          "orcid": ""
+        },
+        {
+          "name": "John Kirkham",
+          "affiliation": "NVIDIA",
+          "orcid": ""
+        },
+        {
+          "name": "Rahul Choudhury",
+          "affiliation": "NVIDIA",
+          "orcid": ""
+        }
+      ],
+      "description": "A presentation introducing RAPIDS cuCIM, a library for image I/O and processing on GPUs",
+      "slide_id": "cuCIM",
+      "doi": "10.25080/majora-1b6fd038-022"
+    },
+    {
+      "title": "Distributed statistical inference with pyhf powered by funcX",
+      "authors": [
+        {
+          "name": "Matthew Feickert",
+          "affiliation": "University of Illinois at Urbana-Champaign",
+          "orcid": "0000-0003-4124-7862"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5152006",
+      "description": "In high energy physics (HEP) a core component of analysis of data collected at the Large Hadron Collider is performing statistical inference for binned models to extract physics information. The statistical fitting tools used in HEP have traditionally been implemented in C++, but in recent years pyhf, a pure-Python library with automatic differentiation and hardware acceleration, has grown in use for analysis related statistical inference problems. The fitting of multiple different hypotheses for new physics signatures (signals) is a computational problem that lends itself easily to parallelization, but is hampered on HPC environments by the additional tooling overhead required, which can be very difficult to master. Through use of funcX, a pure-Python high performance function serving system designed to orchestrate scientific workloads across heterogeneous computing resources, pyhf can be used as a highly scalable (fitting) function as a service (FaaS) on HPCs.",
+      "slide_id": "pyhf-funcx",
+      "doi": "10.25080/majora-1b6fd038-023"
+    }
+  ],
+  "tools": [
+    {
+      "title": "Awkward Array",
+      "authors": [
+        {
+          "name": "Jim Pivarski",
+          "affiliation": "Princeton University",
+          "orcid": "0000-0002-6649-343X"
+        }
+      ],
+      "description": "Tools update on Awkward Array.",
+      "zenodo_url": "https://zenodo.org/record/5152018",
+      "slide_id": "jpivarski-awkward",
+      "doi": "10.25080/majora-1b6fd038-024"
+    },
+    {
+      "title": "SciPy Tools Plenary on Matplotlib",
+      "authors": [
+        {
+          "name": "Elliott Sales de Andrade",
+          "affiliation": "Matplotlib",
+          "orcid": "0000-0001-7310-8942"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5152026",
+      "description": "Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python. This presentation summarizes changes over the past year, new features, and future plans.",
+      "slide_id": "matplotlib",
+      "doi": "10.25080/majora-1b6fd038-025"
+    },
+    {
+      "title": "NumPy – Annual Update",
+      "authors": [
+        {
+          "name": "Inessa Pawson",
+          "affiliation": "Albus Code",
+          "orcid": "0000-0001-7294-122X"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5152034",
+      "description": "Presentation about the highlights and milestones of the NumPy project in 2020-2021",
+      "slide_id": "numpy",
+      "doi": "10.25080/majora-1b6fd038-026"
+    },
+    {
+      "title": "SciPy Tools Plenary: Jupyter Updates",
+      "authors": [
+        {
+          "name": "Isabela Presedo-Floyd",
+          "affiliation": "Project Jupyter",
+          "orcid": ""
+        },
+        {
+          "name": "Matthias Bussonnier",
+          "affiliation": "Project Jupyter",
+          "orcid": "0000-0002-7636-8632"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5152036",
+      "description": "Project Jupyter creates open source software, standards, and services for interactive computing. This presentation covers recent milestones and ideas for people to contribute across the Jupyter ecosystem.",
+      "slide_id": "project-jupyter",
+      "doi": "10.25080/majora-1b6fd038-027"
+    },
+    {
+      "title": "Scientific Python Ecosystem Coordination",
+      "authors": [
+        {
+          "name": "K. Jarrod Millman",
+          "affiliation": "University of California, Berkeley",
+          "orcid": "0000-0002-5263-5070"
+        },
+        {
+          "name": "Stéfan van der Walt",
+          "affiliation": "University of California, Berkeley",
+          "orcid": "0000-0001-9276-1891"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5152046",
+      "description": "Planning for the Next Decade of Scientific Python: outline of first phase",
+      "slide_id": "scientific-python-ecosystem-coordination",
+      "doi": "10.25080/majora-1b6fd038-028"
+    },
+    {
+      "title": "SciPy: SciPy 2021 Tools Track",
+      "authors": [
+        {
+          "name": "Pamphile T. Roy",
+          "affiliation": "iTranslate, Graz",
+          "orcid": "0000-0001-9816-1416"
+        }
+      ],
+      "description": "2021 updates and outlooks in SciPy",
+      "zenodo_url": "https://zenodo.org/record/5152050",
+      "slide_id": "scipy",
+      "doi": "10.25080/majora-1b6fd038-029"
+    },
+    {
+      "title": "SciPy Tools Plenary: scikit-image annual update",
+      "authors": [
+        {
+          "name": "Gregory R. Lee",
+          "affiliation": "Quansight",
+          "orcid": "0000-0001-8895-2740"
+        }
+      ],
+      "zenodo_url": "https://zenodo.org/record/5152054",
+      "description": "A brief update on recent improvements and future plans for scikit-image.",
+      "slide_id": "scipy-tools-scikit-image",
+      "doi": "10.25080/majora-1b6fd038-02a"
+    }
+  ]
+}
