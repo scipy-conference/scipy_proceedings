@@ -1,0 +1,21 @@
+{
+    "title": "SciPy 2021: An Accurate Implementation of the Studentized Range Distribution for Python",
+    "authors": [
+        {
+            "name": "Samuel Wallan",
+            "affiliation": "Computer Science and Software Engineering Department",
+            "orcid": ""
+        },
+        {
+            "name": "Dominic Chmiel",
+            "affiliation": "Mechanical Engineering  Department",
+            "orcid": ""
+		},
+		{
+            "name": "Matt Haberland",
+            "affiliation": "BioResource and Agricultural Engineering Department",
+            "orcid": "0000-0003-4806-3601"
+        }
+    ],
+    "description": "As data becomes more and more accessible, it can be tempting to misuse data analysis techniques to find statistically significant results, a practice known as 'p-hacking'. Tukey's HSD (Honestly Significant Difference) test is one of several tests that guards against this practice by using the studentized range distribution to compute p-values that account for the number of comparisons performed. Implementations of Tukey's HSD already exist within the scientific Python ecosystem, but they rely on approximations of the studentized range distribution that may not behave well outside of their intended range and, even within the intended range, are only accurate to a few digits. In this document, we present a fast, highly accurate, and direct implementation of the studentized range distribution for SciPy, and we demonstrate its speed and accuracy."
+}
