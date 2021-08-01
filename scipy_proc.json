@@ -222,7 +222,85 @@
       "name": "Proceedings Reviewers",
       "members": [
         {
-          "name": ""
+          "name": "Adam Thompson"
+        },
+        {
+          "name": "Alberto Antonietti"
+        },
+        {
+          "name": "Anirudh Acharya"
+        },
+        {
+          "name": "Brian Gue"
+        },
+        {
+          "name": "Chiara Marmo"
+        },
+        {
+          "name": "Chris Calloway"
+        },
+        {
+          "name": "David Nicholson"
+        },
+        {
+          "name": "David Shupe"
+        },
+        {
+          "name": "Dillon Niederhut"
+        },
+        {
+          "name": "Fatma Tarlaci"
+        },
+        {
+          "name": "Heather Schovanec"
+        },
+        {
+          "name": "Jyotika Singh"
+        },
+        {
+          "name": "Kelvin Lee"
+        },
+        {
+          "name": "Kirtan Dave"
+        },
+        {
+          "name": "Kyle Penner"
+        },
+        {
+          "name": "Matthew Feickert"
+        },
+        {
+          "name": "Meghann Agarwal"
+        },
+        {
+          "name": "Nadia Tahiri"
+        },
+        {
+          "name": "Nuno Castro"
+        },
+        {
+          "name": "Richard Liaw"
+        },
+        {
+          "name": "Ryan Bunney"
+        },
+        {
+          "name": "Shubham Sharma"
+        },
+        {
+          "name": "Scott Sievert"
+        },
+        {
+          "name": "Stéfan van der Walt"
+        },
+        {
+          "name": "Tetsuo Koyama"
+        },
+        {
+          "name": "Tyler Skluzacek"
+        },
+        {
+          "name": "Tzu-Chi Yen"
         }
       ]
     }
@@ -240,21 +318,152 @@
   "scipy_scholarship": [
     {
       "org": "",
-      "name": ""
+      "name": "Ahmed Abdelazeem Adam"
     },
     {
       "org": "",
-      "name": ""
+      "name": "Jishan Ahmed"
+    },
+    {
+      "org": "",
+      "name": "Erick Faria"
+    },
+    {
+      "org": "",
+      "name": "T.S.Sachin Venkatesh"
+    },
+    {
+      "org": "",
+      "name": "Alessandro Lodi"
+    },
+    {
+      "org": "",
+      "name": "Pablo Adrian Toledo Margalef"
+    },
+    {
+      "org": "",
+      "name": "Moinak  Bose"
+    },
+    {
+      "org": "",
+      "name": "Vinícius Salazar"
+    },
+    {
+      "org": "",
+      "name": "Vinicius  Cerutti"
+    },
+    {
+      "org": "",
+      "name": "Ana Krelling"
+    },
+    {
+      "org": "",
+      "name": "Sai Santhosh  Akavaram"
+    },
+    {
+      "org": "",
+      "name": "Idris Zakariyya"
+    },
+    {
+      "org": "",
+      "name": "Mauricio Ernesto Rodríguez Alas"
+    },
+    {
+      "org": "",
+      "name": "Shubham Sharma"
+    },
+    {
+      "org": "",
+      "name": "Gajendra Deshpande"
+    },
+    {
+      "org": "",
+      "name": "Israel Adeh-Aboh"
+    },
+    {
+      "org": "",
+      "name": "Serge Guelton"
+    },
+    {
+      "org": "",
+      "name": "Samuel Damilola Obafisoye"
+    },
+    {
+      "org": "",
+      "name": "Akihiro Nitta"
+    },
+    {
+      "org": "",
+      "name": "Francesco Andreuzzi"
+    },
+    {
+      "org": "",
+      "name": "Laura  Gutierrez Funderburk"
+    },
+    {
+      "org": "",
+      "name": "Appah Akuamoah Adarkwah"
+    },
+    {
+      "org": "",
+      "name": "Neha Gupta"
+    },
+    {
+      "org": "",
+      "name": "Eduardo Destefani Stefanato"
+    },
+    {
+      "org": "",
+      "name": "Milan Marlon McGraw"
+    },
+    {
+      "org": "",
+      "name": "Wamba Tchinda Claudin"
+    },
+    {
+      "org": "",
+      "name": "Vinicius Cerutti"
+    },
+    {
+      "org": "",
+      "name": "Oluwakayode Olamoyegun"
+    },
+    {
+      "org": "",
+      "name": "Tyler Newton"
+    },
+    {
+      "org": "",
+      "name": "Kaira Paul"
+    },
+    {
+      "org": "",
+      "name": "Annajiat Alim Rasel"
+    },
+    {
+      "org": "",
+      "name": "Ernest Arko"
+    },
+    {
+      "org": "",
+      "name": "Emaude Altema"
+    },
+    {
+      "org": "",
+      "name": "Eyal Kazin"
+    },
+    {
+      "org": "",
+      "name": "Nurul Farahain Mohammad"
+    },
+    {
+      "org": "",
+      "name": "Aman Goel"
+    },
+    {
+      "org": "",
+      "name": "Victoria Sayo Turner"
     }
   ],
-  "diversity_scholarship": [
-    {
-      "org": "",
-      "name": ""
-    },
-    {
-      "org": "",
-      "name": ""
-    }
-  ]
+  "diversity_scholarship": []
 }
