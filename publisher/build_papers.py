@@ -91,7 +91,7 @@ if __name__ == "__main__":
         dest_pdf = os.path.join(pdf_dir, paper_id+'.pdf')
         shutil.copy(src_pdf, dest_pdf)
 
-    for track_dir, folder_ids in other_dirs.items():
+    for track_dir, folder_ids in sorted(other_dirs.items()):
         track = os.path.split(track_dir)[-1]
         other_entries[track] = []
         for folder in folder_ids:
