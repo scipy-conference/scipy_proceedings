@@ -122,6 +122,7 @@ In addition to the following list, we break up the deadlines in the respective d
 - May 27: Reviewers Assigned
 - June 9: Initial Complete Review
 - June 23: Final Recommendation and Comprehensive Review Deadlines
+- June 29: Final Author Revision Deadline
 - July 6: Final Editorial Decisions for Proceedings Contents Deadline
 - July 30: Time Window for Publishing Conference Ready Proceedings
 
@@ -158,6 +159,7 @@ have final say in whether to accept or reject a paper.
 - April 5: Authors invited to submit full papers
 - May 27: 1st Draft for Submission
 - May 27–June 23: Open Review Period
+- June 29: Final Author Revision Deadline
 - July 6: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
