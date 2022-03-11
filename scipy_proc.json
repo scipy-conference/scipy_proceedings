@@ -1,6 +1,6 @@
 {
   "proceedings": {
-    "doi": "10.25080/majora-1b6fd038-02b",
+    "doi": "",
     "xref": {
       "prefix": "10.25080",
       "registrant": "Crossref",
@@ -190,7 +190,7 @@
       "name": "Activities",
       "members": [
         {
-          "org": "HEB",
+          "org": "Codecov",
           "name": "Paul Anzel"
         },
         {
