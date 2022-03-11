@@ -19,19 +19,19 @@
     },
     "title": {
       "conference": "Python in Science Conference",
-      "full": "Proceedings of the 19th Python in Science Conference",
-      "short": "PROC. OF THE 19th PYTHON IN SCIENCE CONF. (SCIPY 2020)",
+      "full": "Proceedings of the 21st Python in Science Conference",
+      "short": "PROC. OF THE 21st PYTHON IN SCIENCE CONF. (SCIPY 2022)",
       "acronym": "SciPy",
-      "ordinal": "19th"
+      "ordinal": "21st"
     },
-    "citation_key": "proc-scipy-2020",
+    "citation_key": "proc-scipy-2022",
     "editor_email": [
       "agarwal.meghann@gmail.com",
       "cbc@unc.edu",
       "dillon.niederhut@gmail.com",
       "dave.shupe@gmail.com"
     ],
-    "dates": "July 6 - July 12",
+    "dates": "July 11 - July 17",
     "editor": [
       "Meghann Agarwal",
       "Chris Calloway",
@@ -39,10 +39,10 @@
       "David Shupe"
     ],
     "location": "Austin, Texas",
-    "volume": 5,
+    "volume": 7,
     "number": 1,
     "isbn": "noisbn",
-    "year": "2020"
+    "year": "2022"
   },
   "organization": [
     {
@@ -54,7 +54,7 @@
         },
         {
           "org": "Enthought, Inc.",
-          "name": "Corran Webster"
+          "name": "Alexandre Chabot-Leclerc"
         }
       ]
     },
@@ -62,24 +62,20 @@
       "name": "Program Chairs",
       "members": [
         {
-          "org": "CapitalOne",
-          "name": "Gil Forsyth"
-        },
-        {
           "org": "Cal Poly",
           "name": "Matt Haberland"
         },
         {
-          "org": "Columbia University",
-          "name": "Nicolas Hug"
-        },
-        {
-          "org": "Bloomberg",
-          "name": "Paul Ivanov"
+          "org": "Mozilla",
+          "name": "Julie Hollek"
         },
         {
           "org": "University of Illinois",
           "name": "Madicken Munk"
+        },
+        {
+          "org": "Microsoft Corp",
+          "name": "Guen Prawiroatmodjo"
         }
       ]
     },
@@ -87,12 +83,16 @@
       "name": "Communications",
       "members": [
         {
-          "org": "Microsoft",
-          "name": "Tania Allard"
+          "org": "NumFOCUS",
+          "name": "Arliss Collins"
         },
         {
           "org": "Populus",
           "name": "Matt Davis"
+        },
+        {
+          "org": "Embedded Intelligence",
+          "name": "David Nicholson"
         }
       ]
     },
@@ -100,8 +100,12 @@
       "name": "Birds of a Feather",
       "members": [
         {
-          "org": "University of California, Merced",
-          "name": "Matthias Bussonnier"
+          "org": "NIST",
+          "name": "Andrew Reid"
+        },
+        {
+          "org": "George Washington University",
+          "name": "Anastasiia Sarmakeeva"
         }
       ]
     },
@@ -109,7 +113,7 @@
       "name": "Proceedings",
       "members": [
         {
-          "org": "Oracle",
+          "org": "Overhaul",
           "name": "Meghann Agarwal"
         },
         {
@@ -134,10 +138,6 @@
           "name": "Scott Collis"
         },
         {
-          "org": "Novartis Institutes for Biomedical Research",
-          "name": "Eric Ma"
-        },
-        {
           "org": "Université de Montréal",
           "name": "Nadia Tahiri"
         }
@@ -147,16 +147,12 @@
       "name": "Tutorials",
       "members": [
         {
-          "org": "Enthought, Inc.",
-          "name": "Alexandre Chabot-Leclerc"
-        },
-        {
           "org": "USGS",
           "name": "Mike Hearne"
         },
         {
-          "org": "The Carpentries",
-          "name": "Serah Rono"
+          "org": "Enthought, Inc.",
+          "name": "Logan Thomas"
         }
       ]
     },
@@ -164,16 +160,12 @@
       "name": "Sprints",
       "members": [
         {
-          "org": "University Corporation for Atmospheric Research",
-          "name": "Ryan May"
+          "org": "Quansight Labs",
+          "name": "Tania Allard"
         },
         {
-          "org": "Monash University",
-          "name": "Juan Nunez-Iglesias"
-        },
-        {
-          "org": "US Army Engineer Research and Development Center",
-          "name": "Dharhas Pothina"
+          "org": "Caltech/IPAC",
+          "name": "Brigitta Sipőcz"
         }
       ]
     },
@@ -185,8 +177,12 @@
           "name": "Celia Cintas"
         },
         {
-          "org": "Federal University of Santa Catarina",
-          "name": "Melissa Weber Mendonca"
+          "org": "O'Reilly Media",
+          "name": "Bonny P McClain"
+        },
+        {
+          "org": "OpenTeams",
+          "name": "Fatma Tarlaci"
         }
       ]
     },
@@ -194,12 +190,8 @@
       "name": "Activities",
       "members": [
         {
-          "org": "HEB",
-          "name": "Paul Anze"
-        },
-        {
-          "org": "Oregon State University",
-          "name": "Kyle Neimeyer"
+          "org": "Codecov",
+          "name": "Paul Anzel"
         },
         {
           "org": "Albus Code",
@@ -210,10 +202,6 @@
     {
       "name": "Sponsors",
       "members": [
-        {
-          "org": "Enthought, Inc.",
-          "name": "Jill Cowan"
-        },
         {
           "org": "Enthought, Inc.",
           "name": "Kristen Leiser"
@@ -240,10 +228,6 @@
     {
       "name": "Logistics",
       "members": [
-        {
-          "org": "Enthought, Inc.",
-          "name": "Jill Cowan"
-        },
         {
           "org": "Enthought, Inc.",
           "name": "Kristen Leiser"
