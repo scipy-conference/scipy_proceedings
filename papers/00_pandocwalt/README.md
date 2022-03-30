@@ -1,0 +1,1 @@
+You can run the POC pandoc build with `pandoc -s -o paper.tex --metadata-file=meta.yaml --template=template.tex paper.rst && pdflatex paper`
