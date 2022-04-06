@@ -10,21 +10,24 @@ abstract: "A short version of the long version that is way too long to be writte
    protocol."
 authors:
 - email: jj@rome.it
-  institution:
-  - Senate House, S.P.Q.R.
-  - Egyptian Embassy, S.P.Q.R.
+  institution: [1, 2]
   name: Gaius Caesar
 - email: mark37@rome.it
-  institution:
-  - Egyptian Embassy, S.P.Q.R.
+  institution: [2]
   name: Mark Anthony
 - email: millman@rome.it
-  institution:
-  - Egyptian Embassy, S.P.Q.R.
-  - Yet another place, S.P.Q.R.
+  institution: [2, 3]
   name: Jarrod Millman
   corresponding: true
 - email: brutus@rome.it
   name: Brutus
+institutions:
+- name: Senate House, S.P.Q.R.
+  order: 1
+- name: Egyptian Embassy, S.P.Q.R.
+  order: 2
+- name: Yet another place, S.P.Q.R.
+  order: 3
 bibliography: mybib
 video: "<http://www.youtube.com/watch?v=dhRUe-gz690>"
+---

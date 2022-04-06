@@ -218,7 +218,7 @@ We show the different quantities of materials required in Table
 :ref:`mtable`.
 
 
-.. The statement below shows how to adjust the width of a table.
+The statement below shows how to adjust the width of a table.
 
 .. raw:: latex
 
@@ -256,7 +256,7 @@ won't work try raw LaTeX:
      \hline
      \end{longtable*}
 
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
+     \caption{Area Comparisons  \label{quanitities-table}}
 
    \end{table*}
 

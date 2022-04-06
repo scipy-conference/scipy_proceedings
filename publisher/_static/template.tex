@@ -126,6 +126,9 @@
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
+% include page numbers if we have them
+\InputIfFileExists{page_numbers.tex}{}{}
+
 $if(title)$
 \title{$title$}
 $endif$
