@@ -238,6 +238,7 @@ won't work try raw LaTeX:
 
 .. raw:: latex
 
+   \tablecaption{Area Comparisons  \label{quanitities-table}}
    \begin{xtabular}{|l|r|r|r|}
    \hline
    \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
@@ -253,8 +254,6 @@ won't work try raw LaTeX:
    Percent Difference & 44\% & 41\% & 43\%\tabularnewline
    \hline
    \end{xtabular}
-
-   \tablecaption{Area Comparisons  \label{quanitities-table}}
 
 
 Perhaps we want to end off with a quote by Lao Tse [#]_:
