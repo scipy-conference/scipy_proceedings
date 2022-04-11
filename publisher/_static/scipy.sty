@@ -46,10 +46,14 @@
 % (then docutils won't automatically add the package)
 \usepackage{graphicx}
 
+
+% this hack is here because we use a two column format -- xtab supports this,
+% but longtable does not, and the tex file outputs from pandoc currently
+% transpile rst tables as longtables
 \usepackage{longtable}
 \ifthenelse{\isundefined{\longtable}}{}{
-  \renewenvironment{longtable}{\begin{center}\begin{tabular}}%
-    {\end{tabular}\end{center}\vspace{2mm}}
+  \renewenvironment{longtable}{\begin{table}\begin{center}\begin{tabular}}%
+    {\end{tabular}\end{center}\end{table}\vspace{2mm}}
 
 % Another brittle table fix.  Have a look at this if problems crop
 % up with tables again.

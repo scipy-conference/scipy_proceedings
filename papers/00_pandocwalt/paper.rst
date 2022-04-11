@@ -238,27 +238,24 @@ won't work try raw LaTeX:
 
 .. raw:: latex
 
-   \begin{table*}
+   \begin{xtabular}{|l|r|r|r|}
+   \hline
+   \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
+   \cline{2-4}
+   & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
+   \hline
+   Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
+   \hline
+   Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
+   \hline
+   Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
+   \hline
+   Percent Difference & 44\% & 41\% & 43\%\tabularnewline
+   \hline
+   \end{xtabular}
 
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
+   \tablecaption{Area Comparisons  \label{quanitities-table}}
 
-     \caption{Area Comparisons  \label{quanitities-table}}
-
-   \end{table*}
 
 Perhaps we want to end off with a quote by Lao Tse [#]_:
 
