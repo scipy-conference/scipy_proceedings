@@ -28,9 +28,9 @@
 
 :bilbliography: mybib
 
-------------------------------------------------------------------------------------------------------
-Improving atmospheric wind retrievals using automatic differentiation and Augmented Lagrangian methods
-------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+Improving PyDDA's atmospheric wind retrievals using automatic differentiation and Augmented Lagrangian methods
+--------------------------------------------------------------------------------------------------------------
 
 ============
 Introduction
@@ -52,6 +52,7 @@ cost function :math:`J`.
 
     J(\textbf{V}) = \mu_{m}J_{m} + \mu_{o}J_{o} + \mu_{v}J_{v} + \mu{b}J_{b} + \mu_{s}J_{s}
 
+
 Here, :math:`J_{m}` is how much the wind field :math:`\textbf{V}` violates the
 anelastic mass continuity equation. :math:`J_{o}` is how much the wind field is
 different from the radar observations. :math:`J_{v}` is how much the wind field
@@ -65,18 +66,19 @@ For more specific information on these cost functions, see :cite:`Shapiroetal200
 
 PyDDA is an open source Python package that implements the weak variational technique
 for retrieving winds :cite:`Jacksonetal2020`. In PyDDA versions 0.5 and prior,
-PyDDA, Equation :ref:`cost_function` is implemented using NumPy :cite:`harris2020array`.
+Equation :ref:`cost_function` is implemented using NumPy :cite:`harris2020array`.
 In order to find the wind field :math:`\textbf{V}` that minimizes :math:`J`, PyDDA
 used the limited memory Broyden–Fletcher–Goldfarb–Shanno bounded (L-BFGS-B) from SciPy.
 L-BFGS-B requires gradients of :math:`J` in order to minimize :math:`J`.
-PyDDA provides SciPy with a function that computes the derivatives.
 PyDDA versions 0.5 and prior provided handcoded derivatives to SciPy. In PyDDA 1.0,
 PyDDA now takes advantage of modern frameworks such as JAX :cite:`jax2018github`
 and TensorFlow :cite:in order to optimize the calculation of :math:`J(\textbf{V})`.
 JAX and TensorFlow both provide automatic differentiation capability for differentiating :math:`J`,
 making the calculation of the derivatives less prone to round-off and human coding errors.
 Finally, upgrading PyDDA to use Jax and TensorFlow allows it to take advantage of GPUs,
-increasing the speed of retrievals.
+increasing the speed of retrievals. This paper shows how Jax and TensorFlow are used
+to automatically calculate the gradient of $J$ and improve the performance of PyDDA's
+wind retrievals using GPUs.
 
 In addition, one drawback to the weak variational technique is that because the technique requires
 user specified constants :math:`\mu`, this therefore creates the possibility that winds retrieved
@@ -87,12 +89,106 @@ such that it follows the mass continuity within a specified tolerance
 while minimizing the rest of the cost function. This paper will show
 that this new approach eliminates the need for user specified constants.
 
+==========================
+Weak variational technique
+==========================
+
+PyDDA currently uses the weak variational formulation given by Equation :ref:`cost_function`.
+For this proceedings, we will focus our attention on the mass continuity :math:`J_m` and
+In PyDDA, $J_{m}$ is given as the discrete volume integral of the square of the anelastic mass
+continuity equation
+.. math::
+    :label: mass_continuity}
+
+    J_{m}(u,v,w) = \sum_{volume} \left[ \frac{\delta(\rho_{s}u)}{\delta x}  + \frac{\delta(\rho_{s}v)}{\delta y} + \frac{\delta(\rho_{s}w)}{\delta z}\right]^2,
+
+where :math:`u` is the zonal component of the wind field and :math:`v` is the meridional component
+of the wind field. :math:`\rho_{s}` is the density of air, which is approximated in PyDDA as
+:math:`\rho_{s}(z) = e^{-z/10000}` where :math:`z` is the height in meters. The physical
+interpretation of this equation is that a column of air in the atmosphere is only allowed to compress
+in order to generate changes in air density in the vertical direction. Therefore, wind convergence at
+the surface will generate vertical air motion. A corollary of this is that divergent winds must occur
+in the presence of a downdraft. At the scales of winds observed by PyDDA, this is a reasonable
+approximation of the winds in the atmosphere.
+
+The cost function :math:`J_{v}` metricizes how much the wind field is different from the winds
+measured by each radar. Since a scanning radar will scan a storm while pointing at an elevation angle
+:math:`\theta` and an azimuth angle :math:`\phi`, the wind field must first be projected to the
+radar's coordinates. After that, PyDDA finds the total square error between the analysis wind field
+and the radar observed winds as done in Equation :ref:`radar_wind_cost`.
+
+.. math::
+    :label: radar_wind_cost
+
+    \begin{aligned}
+       J_{v}(u,v,w) = \sum_{volume} \left(u \cos \theta \sin \phi +
+       v \cos \theta \cos \phi + (w - w_{t}) \sin \theta \right)^2
+    \end{aligned}
+    \end{equation}
+
+Here, :math:`w_{t}` is the terminal velocity of the particles scanned by the radar volume. This is
+approximated using empirical relationships between :math:`w_t` and the radar reflectivity :math:`Z`.
+PyDDA then uses the limited memory Broyden–Fletcher–Goldfarb–Shanno bounded (L-BFGS-B) algorithm
+(see, e.g., :cite:`Liu89onthe`) to find the :math:`u`, :math:`v`, and :math:`w` that solves the
+optimization problem
+
+.. math::
+   :label: unconstrained
+
+    \displaystyle\min_{u,v,w} J(u,v,w) \triangleq \mu_{m}J_{m}(u,v,w) + \mu_{v}J_{v}(u,v,w).
+
+For experiments using the weak variational technique, we run the optimization until either the
+:math:`L^_{\inf}` norm of the gradient of J is less than :math:`10^{-8}` or when the maximum change
+in :math:`u`, :math:`v`, and :math:`w` between iterations is less than 0.01 m/s as done by :cite:`Shapiroetal2012`.
+Typically, the second criteria is reached first. Before PyDDA 1.0, PyDDA utilized SciPy's L-BFGS-B
+implementation. However, as of PyDDA 1.0 one can also use TensorFlow's L-BFGS-B implementation, which
+is used here for the experiments with the weak variational technique :cite:`tensorflow2015-whitepaper`.
+
 ===============================
 Using automatic differentiation
 ===============================
 
-In Computing the gradients of :math:`J` using Jax can be done in two lines of
-code using :code:`jax.vjp`:
+The optimization problem in Equation :ref:`unconstrained` requires the gradients of :math:`J`.
+In PyDDA 0.5 and prior, the gradients of the cost function :math:`J` were calculated
+by finding the closed form of the gradient by hand and then coding the closed form
+in Python. The code snippet below provides an example of how the cost function :math:`J_{m}`
+is implemented in PyDDA using NumPy.
+
+.. code::
+
+    def calculate_mass_continuity(u, v, w, z, dx, dy, dz):
+
+        dudx = np.gradient(u, dx, axis=2)
+        dvdy = np.gradient(v, dy, axis=1)
+        dwdz = np.gradient(w, dz, axis=0)
+
+        div = dudx + dvdy + dwdz
+
+        return coeff * np.sum(np.square(div)) / 2.0
+
+In order to hand code the gradient of the cost function above, one has to write the
+closed form of the derivative into another function like below.
+
+.. code::
+
+    def calculate_mass_continuity_gradient(u, v, w, z, dx,
+                                           dy, dz, coeff):
+        dudx = np.gradient(u, dx, axis=2)
+        dvdy = np.gradient(v, dy, axis=1)
+        dwdz = np.gradient(w, dz, axis=0)
+
+        grad_u = -np.gradient(div, dx, axis=2) * coeff
+        grad_v = -np.gradient(div, dy, axis=1) * coeff
+        grad_w = -np.gradient(div, dz, axis=0) * coeff
+
+        y = np.stack([grad_u, grad_v, grad_w], axis=0)
+        return y.flatten()
+
+Hand coding these functions can be labor intensive for complicated cost
+functions. In addition, there is no guarantee that
+Therefore, we tested using both Jax and TensorFlow to automatically compute the
+gradients of :math:`J`. Computing the gradients of :math:`J` using Jax can be done
+in two lines of code using :code:`jax.vjp`:
 
 .. code::
 
@@ -102,6 +198,7 @@ code using :code:`jax.vjp`:
 
 Calculating the gradients using automatic differentiation using TensorFlow
 is also a simple code snippet using :code:`tf.GradientTape`:
+
 .. code::
 
     with tf.GradientTape() as tape:
@@ -111,20 +208,65 @@ is also a simple code snippet using :code:`tf.GradientTape`:
         loss = calculate_radial_vel_cost_function(
             vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff)
 
+    grad = tape.gradient(loss)
+
+As one can see, there is no more need to derive the closed form of the gradient
+of the cost function. Rather, the cost function itself is now the input to a snippet
+of code that automatically provides the derivative. In PyDDA 1.0, there are now three different
+engines that the user can specify. The classic "scipy" mode uses the NumPy-based cost function and
+hand coded gradients used by previous versions of PyDDA. In addition, there are now TensorFlow and Jax
+modes that use both cost functions and automatically generated gradients generated using TensorFlow
+or Jax.
+
 
 ===========================================
 Improving performance with GPU capabilities
 ===========================================
 
+The implementation of a TensorFlow-based engine provides PyDDA the capability to take advantage
+of CUDA-compatible Graphics Processing Units (GPUs). Given that weather radar datasets can span
+decades and processing each 10 minute time period of data given by the radar can take on the order
+of 1-2 minutes with PyDDA using regular CPU operations, if this time were reduced to seconds, then
+processing winds from years of radar data would become tenable. Therefore, we used the TensorFlow-based
+PyDDA using the weak variational technique on the Hurricane Florence example in the PyDDA Documentation.
+On 14 September 2018, Hurricane Florence was within range of 2 radars from the NEXRAD network:
+KMHX stationed in Newport, NC and KLTX stationed in Wilmington, NC. In addition, the High Resolution
+Rapid Refresh model runs provided an additional constraint for the wind retrieval. For more information
+on this example, see :cite:`Jacksonetal2020`. The analysis domain spans 400 km by 400 km horizontally,
+and the horizontal resolution was allowed to vary for different runs in order to compare how both the
+CPU and GPU-based retrievals' performance would be affected by grid resolution. The time of completion
+of each of these retrievals is shown in Figure :ref:`timing`.
+
+
+.. figure:: florence_figure.png
+   :align: center
+
+   The time in seconds of execution of the Hurricane Florence retrieval example when using the
+   TensorFlow engine on an Intel Core i7 MacBook in CPU mode and on a node of Argonne National
+   Laboratory's Lambda cluster, utlizing a single NVIDIA Tesla A100 GPU for the calculation. :ref:`timing`
+
+Figure :ref:`timing` shows that, in general, the retrievals took anywhere from 10 to 100 fold less time
+on the GPU compared to the CPU. The discrepancy in performance between the GPU and CPU-based
+retrievals increases as resolution decreases, demonstrating the importance of the GPU for conducting
+high-resolution wind retrievals. Using a GPU to retrieve the Hurricane Florence example at 1 km
+resolution reduces the run time from 341s hours to 12 s. Therefore, these performance improvements
+show that PyDDA's TensorFlow-based engine now enables it to handle both spatial scales of hundreds of
+kms at a 1 km resolution. For a day of data at this resolution, assuming five minutes between scans,
+an entire day of data can be processed in 57 minutes. With the use of multi-GPU clusters and selecting
+for cases where precipitation is present, this enables the ability to process winds from multi-year
+radar datasets within days instead of months.
 
 ===========================
 Augmented Lagrangian method
 ===========================
 
-In this work, we consider a constrained reformulation of Equation~\ref{unconstrained} that requires wind fields returned by PyDDA to (approximately) satisfy mass continuity constraints.
+In addition to focusing on improving PyDDA's performance and gradent accuracy, for PyDDA 1.0
+we also have implemented a technique that enables the user to automatically determine the weight
+cofficients :math:`\mu`. In this work, we consider a constrained reformulation of Equation~\ref{unconstrained} that requires
+wind fields returned by PyDDA to (approximately) satisfy mass continuity constraints.
 That is, we focus on the constrained optimization problem
+
 .. math::
-    :label: constrained
 
     \begin{array}{rl}
     \displaystyle\min_{u,v,w} & J_{v}(u,v,w)\\
@@ -178,24 +320,75 @@ In our implementation, the minimization of the augmented Lagrangian --
 and the minimization of the squared constraint violation in a feasiblity restoration phase
 -- is performed by LBFGS-B.
 
-.. figure:: wrf_simulation.png
+.. figure:: Example_storm.png
    :align: center
 
-.. figure:: auglag1.eps
-   :align: center
+
+   The PyDDA retrieved winds overlaid over reflectivity from the C-band Polarization Radar for the
+   MCS that passed over Darwin, Australia on 20 Jan 2006. The contours represent vertical velocities
+   at 3.5 km altitude. The boxed region shows the updrafts that generated the heavy preciptation.
+   :label:`storm`
+
+The PyDDA docuentation contains an example of a mesoscale convective system (MCS) that was sampled by a C-band
+Polarization Radar and a Bureau of Meteorology Australia radar on 20 Jan 2006 in Darwin, Australia. This
+ For more details on this storm and the radar network configuration, see :cite:`Collisetal2013`.
+Figure :ref:`storm` shows the winds retrieved by the Augmented lagrangian technique overlaid over
 
 .. figure:: auglag2.eps
    :align: center
 
-.. figure:: lbfgs1.eps
-   :align: center
+   The :math:`x`-axis shows, on a logarithmic scale, the maximum constraint violation
+   in the units of divergence of the wind field and the :math:`y`-axis shows the value of the
+   data-fitting term :math:`J_v` at the optimal solution. The legend lists the number of
+   function/gradient calls made by the filter Augmented Lagrangian Method,
+   which is the dominant cost of both approaches.
+   The dashed line at :math:`10^{-3}` denotes the tolerance on the maximum constraint violation
+   that was supplied to the filter Augmented Lagrangian method. :label:`auglag2`
 
 .. figure:: lbfgs2.eps
    :align: center
 
+   As :ref:`auglag2 , but for the weak variational technique that uses L-BFGS-B.
+
+We solve the unconstrained formulation \eqref{unconstrained} using the implementation of L-BFGS-B
+currently employed in PyDDA; we fix the value $\mu_v=1$ and vary $\{\mu_m = 2^j: j = 0,1,2,\dots,16\}.$
+We also solve the constrained formulation \eqref{constrained} using our implementation of a
+filter Augmented Lagrangian method, and instead vary the initial guess of penalty parameter
+$\{\mu = 2^j: j = 0,1,2,\dots,16\}$. For the initial state we use the wind profile of the rawinsonde
+launch at 00 UTC 20 Jan 2006 from Darwin and apply it to the whole analysis domain.
+A summary of results is shown in Figure~\ref{fig:example2}. We applied a maximum constraint violation
+tolerance of :math:`10^{-3}` to the filter Augmented Lagrangian method. Notice that such a tolerance is
+impossible to supply to the weak variational method, highlighting the key advantage of
+employing a constrained method. Notice that in this example, only :math:`5` settings of :math:`\mu_m`
+lead to sufficiently feasible solutions returned by the variational technique.
+
+
 .. figure:: figure_updrafts.png
    :align: center
+
+   The mean updraft velocity obtained by (left) the weak variational and (right) the Augmented
+   Lagrangian technique inside the updrafts in the boxed region
+   of Figure :ref:`storm`. Each line represents a different value of :math:`\mu` for the given
+   technique. :label:`updraft_velocity`
+
+Finally, a variable of interest to atmospheric scientists for winds inside MCSes is the vertical
+wind velocity. It provides a measure of the intensity of the storm by demonstrating the amount
+of upscale growth contributing to intensification. Figure :ref:`updraft_velocity` shows the mean
+updraft velocities inside the box in Figure :ref:`storm` as a function of height for each of the
+runs of the TensorFlow L-BFGS-B and Augmented Lagrangian techniques. For the updraft velocities
+produced by the Augmented Lagrangian technique, there is a 1 m/s spread of velocities produced
+for given values of :math:`\mu`. However, for the weak variational technique, the sensitivity of
+the retrieval to :math:`\mu` is much more pronounced, with up to 4 m/s differences between retrievals.
+Therefore, using the Augmented Lagrangian technique makes the vertical velocities less sensitive to
+the choice of coefficients used and therefore reduces retrieval uncertainties simply due to the choice
+of :math:`\mu`. Therefore,
 
 ===========
 Conclusions
 ===========
+
+
+===============
+Acknowledgments
+===============
+
