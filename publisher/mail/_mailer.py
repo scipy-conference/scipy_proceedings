@@ -2,6 +2,7 @@ import attr
 from email.message import EmailMessage
 import smtplib
 import getpass
+import time
 import typing as t
 import warnings
 
@@ -74,6 +75,11 @@ class Mailer:
                         # a dict of errors, potentially empty
                         if errors:
                             warnings.warn(repr(errors))
+                        # GMail will close the connection if more than ~50 emails are sent
+                        # per minute
+                        # https://stackoverflow.com/questions/45756808/bulk-emails-failed-with-421-4-7-0-try-again-later
+                        # https://support.google.com/a/answer/3726730?hl=en
+                        time.sleep(2)
 
         else:
             # if we're doing a test run, dump everything to the terminal
