@@ -65,18 +65,26 @@
 % but longtable does not, and the tex file outputs from pandoc currently
 % transpile rst tables as longtables
 \usepackage{longtable}
-\ifthenelse{\isundefined{\longtable}}{}{
-  \renewenvironment{longtable}{\begin{table}\begin{center}\begin{tabular}}%
-    {\end{tabular}\end{center}\end{table}\vspace{2mm}}
-
-% Another brittle table fix.  Have a look at this if problems crop
-% up with tables again.
-  \renewcommand{\endfirsthead}{}
-  \renewcommand{\endlastfoot}{}
-  \renewcommand{\endhead}{}
-  \renewcommand{\endfoot}{}
-
+\makeatletter
+\let\oldlt\longtable
+\let\endoldlt\endlongtable
+\def\longtable{\@ifnextchar[\longtable@i \longtable@ii}
+\def\longtable@i[#1]{\begin{figure}[t]
+\onecolumn
+\begin{minipage}{0.5\textwidth}
+\oldlt[#1]
 }
+\def\longtable@ii{\begin{figure}[t]
+\onecolumn
+\begin{minipage}{0.5\textwidth}
+\oldlt
+}
+\def\endlongtable{\endoldlt
+\end{minipage}
+\twocolumn
+\end{figure}}
+\makeatother
+
 
 \usepackage{multirow}
 \newlength{\tablewidth}
@@ -106,7 +114,7 @@
 }
 
 % we need this so that figures don't shoot off the edge of the page
-\usepackage{xtab,booktabs,array}
+\usepackage{booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
