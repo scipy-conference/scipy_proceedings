@@ -1,28 +1,31 @@
-:author: Gaius Caesar
-:email: jj@rome.it
-:institution: Senate House, S.P.Q.R.
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Timothy J. Callow
+:email: t.callow@hzdr.de
+:institution: Center for Advanced Systems Understanding (CASUS), D-02826 G\"orlitz, Germany
+:institution: Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Daniel Kotik
+:email: d.kotik@hzdr.de
+:institution: Center for Advanced Systems Understanding (CASUS), D-02826 G\"orlitz, Germany
+:institution: Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany	      
 
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:institution: Yet another place, S.P.Q.R.
+:author: Eli Kraisler
+:email: eli.kraisler@mail.huji.ac.il
+:institution: Fritz Haber Center for Molecular Dynamics and Institute of Chemistry, The Hebrew University of Jerusalem, 9091401 Jerusalem, Israel
 
-:author: Brutus
-:email: brutus@rome.it
-:institution: Unaffiliated
+:author: Attila Cangi
+:email: a.cangi@hzdr.de
+:institution: Center for Advanced Systems Understanding (CASUS), D-02826 G\"orlitz, Germany
+:institution: Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany
+   
 :bibliography: mybib
 
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+..
+   :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
-------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
-------------------------------------------------
+------------------------------------------------------------------------------------
+Improving the accessibility of average-atom models for warm dense matter with atoMEC
+------------------------------------------------------------------------------------
 
 .. class:: abstract
 
