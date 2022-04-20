@@ -10,11 +10,20 @@ Enabling Active Learning Pedagogy and Insight Mining with a Grammar of Model Ana
 
 .. class:: abstract
 
-Modern engineering models are complex, with dozens of inputs, uncertainties arising from simplifying assumptions, and dense output data. While major strides have been made in the computational scalability of complex models, relatively less attention has been paid to user-friendly, reusable tools to explore and make sense of these models. Such tools have the potential to help engineers mine their models for valuable insights, and to enable more effective engineering pedagogy through hands-on active learning approaches. Grama is a python package aimed at supporting these activities.
-
-Grama is a grammar of model analysis: an ontology that specifies data (in tidy form), models (with quantified uncertainties), and the verbs that connect these objects. Grama implements a :code:`Model` class that combines input metadata with an input-to-output mapping. This definition enables a reusable set of evaluation "verbs" that provide a consistent analysis toolkit across different grama models.
-
-This paper presents three case studies that illustrate pedagogy and engineering work with grama: 1. Invariants in the "grama model" design provide teachable moments that encourage more sound analysis. 2. Reusable tools encourage users to self-initiate healthy modeling behaviors. 3. Reusable tools enable *exploratory model analysis* (EMA), an analog of exploratory data analysis augmented with a data generation loop.
+Modern engineering models are complex, with dozens of inputs, uncertainties
+arising from simplifying assumptions, and dense output data. While major strides
+have been made in the computational scalability of complex models, relatively
+less attention has been paid to user-friendly, reusable tools to explore and
+make sense of these models. Grama is a python package aimed at supporting these
+activities. Grama is a grammar of model analysis: an ontology that specifies
+data (in tidy form), models (with quantified uncertainties), and the verbs that
+connect these objects. This definition enables a reusable set of evaluation
+"verbs" that provide a consistent analysis toolkit across different grama
+models. This paper presents three case studies that illustrate pedagogy and
+engineering work with grama: 1. Providing teachable moments that encourage more
+sound analysis, 2. Providing reusable tools to help users self-initiate
+productive modeling behaviors, and 3. Enabling *exploratory model analysis*
+(EMA)---exploratory data analysis augmented with data generation.
 
 .. class:: keywords
 
@@ -23,16 +32,16 @@ This paper presents three case studies that illustrate pedagogy and engineering 
 Introduction
 ============
 
-(TODO Background on computational engineering models)
+Modern engineering relies on scientific computing. Computational advances enable faster analysis and design cycles by reducing the need for physical experiments; for instance, finite-element analysis enables computational study of aerodynamic flutter, and reynolds-averaged Navier-Stokes simulation supports the simulation of jet engines---both of these are enabling technologies that support the design of modern aircraft :cite:`keane2005computational`. Modern areas of computational research include heterogeneous computing environments :cite:`mittal2015survey`, task-based parallelism :cite:`bauer2012legion`, and big data :cite:`sagiroglu2013big`. Another line of work considers the development of *integrated tools* to unite diverse disciplinary perspectives in a single, unified environment, e.g. :cite:`maeda2022integrated`. Such integrated computational frameworks are highlighted as *essential* for applications such as computational analysis and design of aircraft :cite:`slotnick2014cfd`. While engineering computation has advanced along the aforementioned axes, the conceptual understanding of practicing engineers has lagged in key areas.
 
- Every aircraft you have ever flown on has been designed using probabilistically-flawed, potentially dangerous criteria :cite:`zdr2021allowables`. The fundamental issue underlying these criteria is a flawed heuristic for uncertainty propagation; initial human subjects work suggests that engineers' tendency to mis-diagnose sources of variability as inconsequential noise may contribute to the persistent application of flawed design criteria :cite:`aggarwal2021qualitative`. These flawed treatments of uncertainty are not limited to engineering design; recent work by Kahneman et al. :cite:`kahneman2021noise` highlights widespread failures to recognize or address variability in human judgment, leading to bias in hiring, economic loss, and an unacceptably capricious application of justice.
+Every aircraft you have ever flown on has been designed using probabilistically-flawed, potentially dangerous criteria :cite:`zdr2021allowables`. The fundamental issue underlying these criteria is a flawed heuristic for uncertainty propagation; initial human subjects work suggests that engineers' tendency to mis-diagnose sources of variability as inconsequential noise may contribute to the persistent application of flawed design criteria :cite:`aggarwal2021qualitative`. These flawed treatments of uncertainty are not limited to engineering design; recent work by Kahneman et al. :cite:`kahneman2021noise` highlights widespread failures to recognize or address variability in human judgment, leading to bias in hiring, economic loss, and an unacceptably capricious application of justice.
 
-Grama was originally developed to support model analysis under uncertainty; in particular, to enable active learning pedagogy to promote deeper student learning :cite:`freeman2014active`. The design of grama is heavily inspired by the Tidyverse :cite:`wickham2019welcome`, an interoperable set of R packages organized around the 'tidy data' concept :cite:`wickham2014tidy`. Grama uses the tidy data concept and introduces an analogous concepts for *models*.
+Grama was originally developed to support model analysis under uncertainty; in particular, to enable active learning pedagogy to promote deeper student learning :cite:`freeman2014active`. This toolkit aims to *integrate* the disciplinary perspectives of computational engineering and statistical analysis within a unified environment to support a *coding to learn* pedagogy :cite:`barba2016computational`. The design of grama is heavily inspired by the Tidyverse :cite:`wickham2019welcome`, an integrated set of R packages organized around the 'tidy data' concept :cite:`wickham2014tidy`. Grama uses the tidy data concept and introduces an analogous concepts for *models*.
 
 Grama: A Grammar of Model Analysis
 ==================================
 
-Grama :cite:`zdr2020grama` is a set of tools for working with *data* and *models*. Pandas :cite:`mckinney2011pandas` is used as the underlying data class, while grama implements the :code:`Model` class. A grama model includes a number of functions---mathematical expressions or simulations---and domain/distribution information for the deterministic/random inputs. The following code illustrates a simple grama model with both deterministic and random inputs [#]_.
+Grama :cite:`zdr2020grama` is an integrated set of tools for working with *data* and *models*. Pandas :cite:`mckinney2011pandas` is used as the underlying data class, while grama implements the :code:`Model` class. A grama model includes a number of functions---mathematical expressions or simulations---and domain/distribution information for the deterministic/random inputs. The following code illustrates a simple grama model with both deterministic and random inputs [#]_.
 
 .. [#] Throughout, :code:`import grama as gr` is assumed.
 
@@ -56,6 +65,8 @@ Grama :cite:`zdr2020grama` is a set of tools for working with *data* and *models
 		        df_corr=gr.df_make(var1="y", var2="z", corr=0.5)
 		    )
 		)
+
+While an engineer's interpretation of the term "model" focuses on the input-to-output mapping (the simulation), and a statistician's interpretation of the term "model" focuses on a distribution, the grama model integrates both perspectives in a single model.
 
 Grama models are intended to be *evaluated* to generate data. The data can then be analyzed using visual and statistical means. Models can be *composed* to add more information, or *fit* to a dataset. Figure :ref:`verbs` illustrates this interplay between data and models in terms of the four categories of function "verbs" provided in grama.
 
