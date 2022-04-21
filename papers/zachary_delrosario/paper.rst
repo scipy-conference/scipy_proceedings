@@ -75,3 +75,87 @@ Grama models are intended to be *evaluated* to generate data. The data can then 
    :figclass: bht
 
    Verb categories in grama. These grama functions start with an identifying prefix, e.g. :code:`ev_*` for evaluation verbs. :label:`verbs`
+
+Defaults for Concise Code
+-------------------------
+
+Grama verbs are designed with sensible default arguments to enable concise code. For instance, the following code visualizes input sweeps across its three inputs, similar to a *ceteris paribus* profile :cite:`kuzba2019pyceterisparibus,biecek2020paribus`.
+
+.. code-block:: python
+
+		(
+		    ## Concise default analysis
+		    md_example
+		    >> gr.ev_sinews(df_det="swp")
+		    >> gr.pt_auto()
+		)
+
+This code uses the default number of sweeps and sweep density, and constructs a visualization of the results. The resulting plot is shown in Figure :ref:`example-sweep`.
+
+.. figure:: example-sweep.png
+   :scale: 50%
+   :figclass: bht
+
+   Input sweep generated from the code above. Each panel visualizes the effect of changing a single input, with all other inputs held constant. :label:`example-sweep`
+
+Grama imports the plotnine package for data visualization :cite:`kibirige2021plotnine`, both to provide an expressive grammar of graphics, but also to implement a variety of "autoplot" routines. These are called via a dispatcher ``gr.pt_auto()`` which uses metadata from evaluation verbs to construct a default visual. Combined with sensible defaults for keyword arguments, these tools provide a concise syntax even for sophisticated analyses. The same code can be slightly modified to change a default argument value, or to use plotnine to create a more tailored visual.
+
+.. code-block:: python
+
+		(
+		    md_example
+		    ## Override default parameters
+		    >> gr.ev_sinews(df_det="swp", n_sweeps=10)
+		    >> gr.pt_auto()
+		)
+
+		(
+		    md_example
+		    >> gr.ev_sinews(df_det="swp")
+		    ## Construct a targeted plot
+		    >> gr.tf_filter(DF.sweep_var == "x")
+		    >> gr.ggplot(gr.aes("x", "f", group="sweep_ind"))
+		    + gr.geom_line()
+		)
+
+This system of defaults is important for pedagogical design: Introductory grama code can be made extremely simple when first introducing a concept. However, the defaults can be overridden to carry out sophisticated and targeted analyses. We will see in the Case Studies below how this concise syntax encourages sound analysis among students.
+
+Case Studies
+============
+
+Planned Errors as Teachable Moments
+-----------------------------------
+
+.. code-block:: python
+
+		md_flawed = (
+		    gr.Model("An example model")
+		    >> gr.cp_vec_function(
+		        fun=lambda df: gr.df_make(f=df.x+df.y+df.z),
+			var=["x", "y", "z"],
+			out=["f"],
+		    )
+		    >> gr.cp_bounds(x=(-1, +1))
+		    >> gr.cp_marginals(
+		        y=gr.marg_mom("norm", mean=0, sd=1),
+		        z=gr.marg_mom("uniform", mean=0, sd=1),
+		    )
+		    ## NOTE: No copula specified
+		)
+
+		(
+		    md_flawed
+		    ## This code will throw the following Error
+		    >> gr.ev_sample(n=1000, df_det="nom")
+		)
+
+
+.. error::
+
+   ``ValueError``: Present model copula must be defined for sampling. Use ``CopulaIndependence`` only when inputs can be guaranteed independent. See the Documentation chapter on Random Variable Modeling for more information. https://py-grama.readthedocs.io/en/latest/source/rv_modeling.html
+
+Encouraging Sound Analysis
+--------------------------
+
+Exploratory Model Analysis
+--------------------------
