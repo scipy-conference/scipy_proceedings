@@ -10,20 +10,7 @@ Enabling Active Learning Pedagogy and Insight Mining with a Grammar of Model Ana
 
 .. class:: abstract
 
-Modern engineering models are complex, with dozens of inputs, uncertainties
-arising from simplifying assumptions, and dense output data. While major strides
-have been made in the computational scalability of complex models, relatively
-less attention has been paid to user-friendly, reusable tools to explore and
-make sense of these models. Grama is a python package aimed at supporting these
-activities. Grama is a grammar of model analysis: an ontology that specifies
-data (in tidy form), models (with quantified uncertainties), and the verbs that
-connect these objects. This definition enables a reusable set of evaluation
-"verbs" that provide a consistent analysis toolkit across different grama
-models. This paper presents three case studies that illustrate pedagogy and
-engineering work with grama: 1. Providing teachable moments that encourage more
-sound analysis, 2. Providing reusable tools to help users self-initiate
-productive modeling behaviors, and 3. Enabling *exploratory model analysis*
-(EMA)---exploratory data analysis augmented with data generation.
+Modern engineering models are complex, with dozens of inputs, uncertainties arising from simplifying assumptions, and dense output data. While major strides have been made in the computational scalability of complex models, relatively less attention has been paid to user-friendly, reusable tools to explore and make sense of these models. Grama is a python package aimed at supporting these activities. Grama is a grammar of model analysis: an ontology that specifies data (in tidy form), models (with quantified uncertainties), and the verbs that connect these objects. This definition enables a reusable set of evaluation "verbs" that provide a consistent analysis toolkit across different grama models. This paper presents three case studies that illustrate pedagogy and engineering work with grama: 1. Providing teachable moments through planned errors, 2. Providing reusable tools to help users self-initiate productive modeling behaviors, and 3. Enabling *exploratory model analysis* (EMA)---exploratory data analysis augmented with data generation.
 
 .. class:: keywords
 
