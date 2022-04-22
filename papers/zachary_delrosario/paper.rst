@@ -28,7 +28,7 @@ Grama was originally developed to support model analysis under uncertainty; in p
 Grama: A Grammar of Model Analysis
 ==================================
 
-Grama :cite:`zdr2020grama` is an integrated set of tools for working with *data* and *models*. Pandas :cite:`mckinney2011pandas` is used as the underlying data class, while grama implements the :code:`Model` class. A grama model includes a number of functions---mathematical expressions or simulations---and domain/distribution information for the deterministic/random inputs. The following code illustrates a simple grama model with both deterministic and random inputs [#]_.
+Grama :cite:`zdr2020grama` is an integrated set of tools for working with *data* and *models*. Pandas :cite:`mckinney2011pandas` is used as the underlying data class, while grama implements a :code:`Model` class. A grama model includes a number of functions---mathematical expressions or simulations---and domain/distribution information for the deterministic/random inputs. The following code illustrates a simple grama model with both deterministic and random inputs [#]_.
 
 .. [#] Throughout, :code:`import grama as gr` is assumed.
 
@@ -110,8 +110,16 @@ This system of defaults is important for pedagogical design: Introductory grama 
 Case Studies
 ============
 
+
+
 Planned Errors as Teachable Moments
 -----------------------------------
+
+An advantage of a unified modeling environment like grama is the opportunity to introduce *planned errors as techable moments*.
+
+It is common in probabilistic modeling to make problematic assumptions. For instance, Cullen and Frey :cite:`cullen1999probabilistic` note that modelers frequently and erroneously treat the normal distribution as a default choice for all unknown quantities. Another common issue is to assume, by default, the independence of all random inputs to a model. This is often done *tacitly*---with the independence assumption unstated. These assumptions are problematic, as they can adversely impact the validity of a probabilistic analysis :cite:`zdr2021allowables`.
+
+To highlight the dependency issue for novice modelers, grama uses error messages to provide just-in-time feedback to a user who does not articulate their modeling choices. For example, the following code builds a model with no dependency structure specified. The result is an error message that summarizes the conceptual issue and points the user to a primer on random variable modeling.
 
 .. code-block:: python
 
@@ -127,7 +135,7 @@ Planned Errors as Teachable Moments
 		        y=gr.marg_mom("norm", mean=0, sd=1),
 		        z=gr.marg_mom("uniform", mean=0, sd=1),
 		    )
-		    ## NOTE: No copula specified
+		    ## NOTE: No dependency specified
 		)
 
 		(
@@ -143,6 +151,104 @@ Planned Errors as Teachable Moments
 
 Encouraging Sound Analysis
 --------------------------
+
+As mentioned above, concise grama syntax is desirable to *encourage sound analysis practices*. Grama is designed to support higher-level learning outcomes :cite:`bloom1956taxonomy`; for instance, rather than focusing on *applying* programming constructs to generate model results, grama is intended to help users focus *study* model results ("evaluation", according to Bloom's Taxonomy). Sound computational analysis demands study of simulation results, e.g. to check for numerical instabilities. This case study makes this learning outcome distinction concrete by considering *parameter sweeps*.
+
+Generating a parameter sweep similar to Figure :ref:`example-sweep` with standard Python libraries requires a considerable amount of boilerplate code, manual coordination of model data, and explicit loop construction: The following code generates parameter sweep data using standard libraries. Note that this code sweeps through values of ``x`` holding values of ``y`` fixed; additional code would be necessary to construct a sweep through ``y``.
+
+.. code-block:: python
+
+    ## Manual approach
+    # Gather model data
+    x_lo = -1; x_up = +1;
+    y_lo = -1; y_up = +1;
+    f_model = lambda x, y: x**2 * y
+    # Analysis parameters
+    nx = 10               # Grid resolution for x
+    y_const = [-1, 0, +1] # Constant values for y
+    # Generate data
+    data = np.zeros((nx * len(y_const), 3))
+    for i, x in enumerate(np.linspace(x_lo, x_up, num=nx)):
+        for j, y in enumerate(y_const):
+            data[i + j*nx, 0] = f_model(x, y)
+            data[i + j*nx, 1] = x
+            data[i + j*nx, 2] = y
+    # Package data for visual
+    df_manual = pd.DataFrame(
+        data=data,
+        columns=["f", "x", "y"],
+    )
+
+The ability to write low-level programming constructs---such as the loops above---is an obviously worthy learning outcome in a course on scientific computing. However, not all courses should focus on low-level programming constructs. Grama is not designed to support low-level learning outcomes; instead, the package is designed to support a "coding to learn" philosophy :cite:`barba2016computational` focused on higher-order learning outcomes to support sound modeling practices.
+
+Parameter sweep functionality can be achieved in grama without explicit loop management and with sensible defaults for the analysis parameters. This provides a "quick and dirty" tool to inspect a model's behavior. A grama approach to parameter sweeps is shown below.
+
+.. code-block:: python
+
+    ## Grama approach
+    # Gather model data
+    md_gr = (
+        gr.Model()
+        >> gr.cp_vec_function(
+            fun=lambda df: gr.df_make(f=df.x**2 * df.y),
+            var=["x", "y"],
+            out=["f"],
+        )
+        >> gr.cp_bounds(
+            x=(-1, +1),
+            y=(-1, +1),
+        )
+    )
+    # Generate data
+    df_gr = gr.eval_sinews(
+        md_gr,
+        df_det="swp",
+        n_sweeps=3,
+    )
+
+Once a model is implemented in grama, performing a parameter sweep is trivial, requiring just two lines of code and zero initial choices for analysis parameters. The practical outcome of this software design is that users will tend to *self-initiate* parameter sweeps: While students will rarely choose to write the extensive boilerplate code necessary for a parameter sweep (unless required to do so), students writing code in grama will tend to self-initiate sound analysis practices.
+
+For example, the following code is unmodified from a student report [#]_. The original author implemented an ordinary differential equation model to simulate the track time ``"finish_time"`` of an electric formula car, and sought to study the impact of variables such as the gear ratio ``"GR"`` on ``"finish_time"``. While the assignment requirements did not require a parameter sweep, the student chose to carry out this analysis. The code below is a self-initiated parameter sweep of the track time model.
+
+.. [#] Included with permission of the author, on condition of anonymity.
+
+.. code-block:: python
+
+		## Unedited student code
+		md_car = (
+		    gr.Model("Accel Model")
+		    >> gr.cp_function(
+		        fun = calculate_finish_time,
+		        var = ["GR", "dt_mass", "I_net" ],
+		        out = ["finish_time"],
+		    )
+
+		    >> gr.cp_bounds(
+		        GR=(+1,+4),
+		        dt_mass=(+5,+15),
+		        I_net=(+.2,+.3),
+		    )
+		)
+
+		gr.plot_auto(
+		    gr.eval_sinews(
+		        md_car,
+		        df_det="swp",
+		        #skip=True,
+		        n_density=20,
+		        n_sweeps=5,
+		        seed=101,
+		    )
+		)
+
+
+.. figure:: student-sweep-focus.png
+   :scale: 40%
+   :figclass: bht
+
+   Input sweep generated from the student code above. The image has been cropped for space, and the results are generated with an older version of grama. The jagged response at higher values of the input are evidence of solver instabilities. :label:`example-sweep`
+
+The parameter sweep shown in Figure :ref:`example-sweep` gives an overall impression of the effect of input ``"GR"`` on the output ``"finish_time"``---this particular input tends to dominate the results. However, variable results at higher values of ``"GR"`` provide evidence of numerical instability in the ODE solver underlying the model. Without this sort of model evaluation, the student author would not have discovered the limitations of the model.
 
 Exploratory Model Analysis
 --------------------------
