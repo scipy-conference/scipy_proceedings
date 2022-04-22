@@ -137,10 +137,9 @@ To highlight the dependency issue for novice modelers, grama uses error messages
 		    )
 		    ## NOTE: No dependency specified
 		)
-
 		(
 		    md_flawed
-		    ## This code will throw the following Error
+		    ## This code will throw an Error
 		    >> gr.ev_sample(n=1000, df_det="nom")
 		)
 
@@ -149,12 +148,16 @@ To highlight the dependency issue for novice modelers, grama uses error messages
 
    ``ValueError``: Present model copula must be defined for sampling. Use ``CopulaIndependence`` only when inputs can be guaranteed independent. See the Documentation chapter on Random Variable Modeling for more information. https://py-grama.readthedocs.io/en/latest/source/rv_modeling.html
 
+Grama is designed both as a teaching tool and a scientific modeling toolkit. For the student, grama offers teachable moments to help the novice grow as a modeler. For the scientist, enforces practices that promote scientific reproducibility.
+
 Encouraging Sound Analysis
 --------------------------
 
-As mentioned above, concise grama syntax is desirable to *encourage sound analysis practices*. Grama is designed to support higher-level learning outcomes :cite:`bloom1956taxonomy`; for instance, rather than focusing on *applying* programming constructs to generate model results, grama is intended to help users focus *study* model results ("evaluation", according to Bloom's Taxonomy). Sound computational analysis demands study of simulation results, e.g. to check for numerical instabilities. This case study makes this learning outcome distinction concrete by considering *parameter sweeps*.
+As mentioned above, concise grama syntax is desirable to *encourage sound analysis practices*. Grama is designed to support higher-level learning outcomes :cite:`bloom1956taxonomy`; for instance, rather than focusing on *applying* programming constructs to generate model results, grama is intended to help users *study* model results ("evaluate", according to Bloom's Taxonomy). Sound computational analysis demands study of simulation results, e.g. to check for numerical instabilities. This case study makes this learning outcome distinction concrete by considering *parameter sweeps*.
 
-Generating a parameter sweep similar to Figure :ref:`example-sweep` with standard Python libraries requires a considerable amount of boilerplate code, manual coordination of model data, and explicit loop construction: The following code generates parameter sweep data using standard libraries. Note that this code sweeps through values of ``x`` holding values of ``y`` fixed; additional code would be necessary to construct a sweep through ``y``.
+Generating a parameter sweep similar to Figure :ref:`example-sweep` with standard Python libraries requires a considerable amount of boilerplate code, manual coordination of model data, and explicit loop construction: The following code generates parameter sweep data using standard libraries. Note that this code sweeps through values of ``x`` holding values of ``y`` fixed; additional code would be necessary to construct a sweep through ``y`` [#]_.
+
+.. [#] Code assumes ``import numpy as np; import pandas as pd``.
 
 .. code-block:: python
 
@@ -208,7 +211,7 @@ Parameter sweep functionality can be achieved in grama without explicit loop man
 
 Once a model is implemented in grama, performing a parameter sweep is trivial, requiring just two lines of code and zero initial choices for analysis parameters. The practical outcome of this software design is that users will tend to *self-initiate* parameter sweeps: While students will rarely choose to write the extensive boilerplate code necessary for a parameter sweep (unless required to do so), students writing code in grama will tend to self-initiate sound analysis practices.
 
-For example, the following code is unmodified from a student report [#]_. The original author implemented an ordinary differential equation model to simulate the track time ``"finish_time"`` of an electric formula car, and sought to study the impact of variables such as the gear ratio ``"GR"`` on ``"finish_time"``. While the assignment requirements did not require a parameter sweep, the student chose to carry out this analysis. The code below is a self-initiated parameter sweep of the track time model.
+For example, the following code is unmodified from a student report [#]_. The original author implemented an ordinary differential equation model to simulate the track time ``"finish_time"`` of an electric formula car, and sought to study the impact of variables such as the gear ratio ``"GR"`` on ``"finish_time"``. While the assignment did not require a parameter sweep, the student chose to carry out their own study. The code below is a self-initiated parameter sweep of the track time model.
 
 .. [#] Included with permission of the author, on condition of anonymity.
 
