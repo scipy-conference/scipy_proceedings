@@ -1,0 +1,57 @@
+:author: Gaius Caesar
+:email: jj@rome.it
+:institution: Senate House, S.P.Q.R.
+:institution: Egyptian Embassy, S.P.Q.R.
+
+:author: Mark Anthony
+:email: mark37@rome.it
+:institution: Egyptian Embassy, S.P.Q.R.
+
+:author: Jarrod Millman
+:email: millman@rome.it
+:institution: Egyptian Embassy, S.P.Q.R.
+:institution: Yet another place, S.P.Q.R.
+
+:author: Brutus
+:email: brutus@rome.it
+:institution: Unaffiliated
+:bibliography: references
+
+
+:video: http://www.youtube.com/watch?v=dhRUe-gz690
+
+------------------------------------------------
+A Numerical Perspective to Terraforming a Desert
+------------------------------------------------
+
+.. class:: abstract
+
+   A short version of the long version that is way too long to be written as a
+   short version anyway.  Still, when considering the facts from first
+   principles, we find that the outcomes of this introspective approach is
+   compatible with the guidelines previously established.
+
+   In such an experiment it is then clear that the potential for further
+   development not only depends on previous relationships found but also on
+   connections made during exploitation of this novel new experimental
+   protocol.
+
+.. class:: keywords
+
+   terraforming, desert, numerical perspective
+
+Introduction
+------------
+
+Labeled image data is essential for tuning and evaluating the performance of machine learning applications.
+Such labels are typically defined with approximate enclosing shapes (i.e. simple polygons or parametric shapes), which tend to misrepresent more complex components.
+
+Alternatively, semantic segmentation is a technique providing pixel-level accuracy which avoids poor foreground representation :cite:`chengSurveyAnalysisAutomatic2018`.
+One such field applying this method include Bill-of-Material (BoM) extraction. This BoM, or list of all surface-mount devices (SMDs) on a printed circuit board (PCB) surface, can be generated from optical images of a board under test. Next, it can be compared against a reference design to detect likely counterfeit, tampered, or defective SMDs :cite:`paradis2020color,azhaganReviewAutomaticBill2019`. To create such a BoM using optical data alone, it is crucial that detected SMDs use segmentation masks that are representative of structures such as pins, solder flow, and more. This is the only way the collected data will remain indicative of true BoM properties. An example annotation is shown in :ref:`fig:pcb`.
+
+.. figure:: pcb
+   :width: 4in
+   :figclass: bht
+
+   Example PCB segmentation. Surface-mount device (SMD) properties such as pin count, solder quality, connectivity, and more are difficult or impossible to infer without precise and accurate image segmentation.
+   :label:`fig:pcb`
