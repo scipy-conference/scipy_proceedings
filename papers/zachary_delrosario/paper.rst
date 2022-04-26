@@ -107,8 +107,8 @@ Grama imports the plotnine package for data visualization :cite:`kibirige2021plo
 
 This system of defaults is important for pedagogical design: Introductory grama code can be made extremely simple when first introducing a concept. However, the defaults can be overridden to carry out sophisticated and targeted analyses. We will see in the Case Studies below how this concise syntax encourages sound analysis among students.
 
-Case Studies
-============
+Peadgogy Case Studies
+=====================
 
 
 
@@ -253,9 +253,12 @@ For example, the following code is unmodified from a student report [#]_. The or
 
 The parameter sweep shown in Figure :ref:`example-sweep` gives an overall impression of the effect of input ``"GR"`` on the output ``"finish_time"``---this particular input tends to dominate the results. However, variable results at higher values of ``"GR"`` provide evidence of numerical instability in the ODE solver underlying the model. Without this sort of model evaluation, the student author would not have discovered the limitations of the model.
 
-Exploratory Model Analysis
---------------------------
+Model Analysis Case Study
+=========================
 
+
+Static Stability of Boat Hulls
+------------------------------
 
 .. figure:: hull-schematic-stable.png
    :scale: 40%
@@ -273,4 +276,69 @@ Exploratory Model Analysis
    :scale: 40%
    :figclass: bht
 
-   Restoring torque of a boat hull as it is rotated through :math:`180^{\circ}`. A positive slope at upright :math:`\theta=0^{\circ}` is required for upright stability. Stability is lost at an extreme angle known as the *angle of vanishing stability* (AVS); beyond this angle the boat will not right. :label:`boat-unstable`
+   Restoring torque of a boat hull as it is rotated through :math:`180^{\circ}`. A positive slope at upright :math:`\theta=0^{\circ}` is required for upright stability. Stability is lost at the *angle of vanishing stability* (AVS). :label:`boat-unstable`
+
+EMA for Insight Mining
+----------------------
+
+.. code-block:: python
+
+		(
+		    df_boats
+		    >> gr.tf_iocorr(
+		        var=["H", "W", "n", "d", "f_com"],
+			out=["mass", "angle", "stability"],
+		    )
+		    >> gr.pt_auto()
+		)
+
+.. figure:: corrtile.png
+   :scale: 40%
+   :figclass: bht
+
+   Tile plot of input/output correlations. :label:`corrtile`
+
+.. code-block:: python
+
+		ft_common = gr.ft_gp(
+		    var=["H", "W", "n", "d", "f_com"],
+                    out=["angle", "stability"],
+		)
+
+		(
+		    df_boats
+		    >> gr.tf_kfolds(
+		        ft=ft_common,
+                        out=["angle", "stability"],
+		    )
+		)
+
+TODO get KCV table formatted
+
+
+.. code-block:: python
+
+		md_fit = (
+		    df_boats
+		    >> ft_common()
+		    >> gr.cp_marginals(
+		        H=gr.marg_mom("uniform", mean=2.0, cov=0.30),
+		        W=gr.marg_mom("uniform", mean=2.5, cov=0.35),
+		        n=gr.marg_mom("uniform", mean=1.0, cov=0.30),
+		        d=gr.marg_mom("uniform", mean=0.5, cov=0.30),
+		        f_com=gr.marg_mom("uniform", mean=0.55, cov=0.47),
+		    )
+		    >> gr.cp_copula_independence()
+		)
+
+		(
+		    md_fit
+		    >> gr.ev_sinews(df_det="swp", n_sweeps=5)
+		    >> gr.pt_auto()
+		)
+
+.. figure:: fit-sweep.png
+   :scale: 60%
+   :figclass: bht
+
+   Parameter sweeps for fitted GP model. :label:`fit-sweep`
