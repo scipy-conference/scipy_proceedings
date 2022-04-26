@@ -1,6 +1,6 @@
 :author: Robert Jackson
 :email: rjackson@anl.gov
-:institution: Argonne National Laboratory
+:institution: Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439
 
 :author: Rebecca Gjini
 :email: rgjini@ucsd.edu
@@ -8,25 +8,24 @@
 
 :author: Sri Hari Krishna Narayanan
 :email: snarayan@anl.gov
-:institution: Argonne National Laboratory
+:institution: Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439
 
 :author: Matt Menickelly
 :email: menickelly@anl.gov
-:instiution: Argonne National Laboratory
+:instiution: Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439
 
 :author: Paul Hovland
 :email: hovland@mcs.anl.gov
-:institution: Argonne National Laboratory
+:institution: Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439
 
 :author: Jan Hückelheim
 :email: jueckelheim@anl.gov
-:institution: Argonne National Laboratory
+:institution: Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439
 
 :author: Scott Collis
 :email: scollis@anl.gov
-:institution: Argonne National Laboratory
-
-:bilbliography: mybib
+:institution: Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439
+:bibliography: mybib
 
 --------------------------------------------------------------------------------------------------------------
 Improving PyDDA's atmospheric wind retrievals using automatic differentiation and Augmented Lagrangian methods
@@ -63,15 +62,15 @@ are weights determining the relative contribution of each cost function to the t
 The flexibility in this formulation potentially allows
 for factoring in the uncertainties that are inherent in the measurements. This formulation is expandable
 to include cost functions related to data from other sources such as weather forecast models and soundings.
-For more specific information on these cost functions, see :cite:`Shapiroetal2009` and :cite:`Potvinetal2012`.
+For more specific information on these cost functions, see :cite:`Shapiroetal2012` and :cite:`Potvinetal2012`.
 
 PyDDA is an open source Python package that implements the weak variational technique
-for retrieving winds :cite:`Jacksonetal2020`. It was originally developed in order
+for retrieving winds. It was originally developed in order
 to modernize existing codes for the weak variational retrievals such as Multidop and
-CEDRIC as detailed in the 2019 SciPy Conference proceedings :cite:`robert_jackson-proc-scipy-2019`.
-In PyDDA versions 0.5 and prior, the implemntation of Equation (:ref:`costfunction`) uses NumPy :cite:`harris2020array`.
+CEDRIC as detailed in the 2019 SciPy Conference proceedings (see :cite:`Jacksonetal2020, robert_jackson-proc-scipy-2019`). It provided a much easier to use and more portable interface for wind retrievals than was provided by CEDRIC and Multidop. 
+In PyDDA versions 0.5 and prior, the implementation of Equation (:ref:`costfunction`) uses NumPy :cite:`harris2020array` to calculate :math:`J` and its gradient.
 In order to find the wind field :math:`\textbf{V}` that minimizes :math:`J`, PyDDA
-used the limited memory Broyden–Fletcher–Goldfarb–Shanno bounded (L-BFGS-B) from SciPy.
+used the limited memory Broyden–Fletcher–Goldfarb–Shanno bounded (L-BFGS-B) from SciPy :cite:`scipy`.
 L-BFGS-B requires gradients of :math:`J` in order to minimize :math:`J`.
 PyDDA versions 0.5 and prior provided handcoded derivatives to SciPy. Considering the antiquity
 of the CEDRIC and Multidop packages, these first steps provided the transition to Python that
@@ -80,23 +79,17 @@ For more information about PyDDA versions 0.5 and prior, consult :cite:`robert_j
 :cite:`Jacksonetal2020`.
 
 However, there are further improvements that still needed to be made in order to optimize both the accuracy
-and speed of the PyDDA retrievals, motivating new features for the release of PyDDA 1.0.
-The PyDDA development team has now released PyDDA 1.0 which now takes
-advantage of modern frameworks such as JAX :cite:`jax2018github`
-and TensorFlow :cite:`tensorflow2015-whitepaper` in order to optimize the calculation of :math:`J(\textbf{V})`.
-The weak variational technique requires the calculation of the gradient of :math:`J(\textbf{V})`. In PyDDA 1.0, we
-utilize JAX and TensorFlow's automatic differentiation capabilities for differentiating :math:`J`,
-making the calculation of the gradient less prone to round-off and human coding errors.
+and speed of the PyDDA retrievals. For example, the cost functions and gradients in PyDDA 0.5 areimplemented in NumPy which does not take advantage of GPU architectures for potential speedups :cite:`harris2020array`. In addition, the gradients of the cost function that are required for the weak variational technique are handcoded even though packages such as Jax :cite:`jax2018github` and TensorFlow :cite:`tensorflow2015-whitepaper` can automatically calculate these gradients. These needs motivated new features for the release of PyDDA 1.0. The weak variational technique requires the calculation of the gradient of :math:`J(\textbf{V})`. In PyDDA 1.0, we
+utilize JAX and TensorFlow's automatic differentiation capabilities for differentiating :math:`J`, making these calculations less prone to human error and more efficient.
 Finally, upgrading PyDDA to use Jax and TensorFlow allows it to take advantage of GPUs,
 increasing the speed of retrievals. This paper shows how Jax and TensorFlow are used
 to automatically calculate the gradient of :math:`J` and improve the performance of PyDDA's
 wind retrievals using GPUs. This makes it feasible to conduct multi-year and multi-hundred kilometer scale
 wind retrievals on GPU based systems.
 
-In addition, a drawback to the weak variational technique is that because the technique requires
-user specified constants :math:`\mu`, this therefore creates the possibility that winds retrieved
-from different datasets may not be physically consistent with each other. This affects the reproducibility
-of the solutions produced by PyDDA. Therefore, for the PyDDA 1.1 release, this paper also details a new approach
+In addition, a drawback to the weak variational technique is that the technique requires 
+user specified constants :math:`\mu`. This therefore creates the possibility that winds retrieved
+from different datasets may not be physically consistent with each other, affecting reproducibility. Therefore, for the PyDDA 1.1 release, this paper also details a new approach
 that uses Augmented Lagrangian solvers in order to place strong constraints on the wind field
 such that it follows the mass continuity within a specified tolerance
 while minimizing the rest of the cost function. This paper will show that this new approach
@@ -110,7 +103,7 @@ Weak variational technique
 This section summarizes the weak variational technique that was implemented in PyDDA previous to version 1.0
 and is the default option for PyDDA 1.1.0. PyDDA currently uses the weak variational formulation
 given by Equation :ref:`costfunction`.
-For this proceedings, we will focus our attention on the mass continuity :math:`J_m` and
+For this proceedings, we will focus our attention on the mass continuity :math:`J_m` and observational cost function :math:`J_{o}`.
 In PyDDA, :math:`J_{m}` is given as the discrete volume integral of the square of the anelastic mass
 continuity equation
 
@@ -128,7 +121,7 @@ the surface will generate vertical air motion. A corollary of this is that diver
 in the presence of a downdraft. At the scales of winds observed by PyDDA, this is a reasonable
 approximation of the winds in the atmosphere.
 
-The cost function :math:`J_{v}` metricizes how much the wind field is different from the winds
+The cost function :math:`J_{o}` metricizes how much the wind field is different from the winds
 measured by each radar. Since a scanning radar will scan a storm while pointing at an elevation angle
 :math:`\theta` and an azimuth angle :math:`\phi`, the wind field must first be projected to the
 radar's coordinates. After that, PyDDA finds the total square error between the analysis wind field
@@ -138,7 +131,7 @@ and the radar observed winds as done in Equation :ref:`radarwindcost`.
     :label: radarwindcost
 
     \begin{aligned}
-       J_{v}(u,v,w) = \sum_{volume} \left(u \cos \theta \sin \phi +
+       J_{o}(u,v,w) = \sum_{volume} \left(u \cos \theta \sin \phi +
        v \cos \theta \cos \phi + (w - w_{t}) \sin \theta \right)^2
     \end{aligned}
 
@@ -156,7 +149,7 @@ optimization problem
 
 For experiments using the weak variational technique, we run the optimization until either the
 :math:`L^{\inf}` norm of the gradient of J is less than :math:`10^{-8}` or when the maximum change
-in :math:`u`, :math:`v`, and :math:`w` between iterations is less than 0.01 m/s as done by :cite:`Shapiroetal2012`.
+in :math:`u`, :math:`v`, and :math:`w` between iterations is less than 0.01 m/s as done by :cite:`Potvinetal2012`.
 Typically, the second criteria is reached first. Before PyDDA 1.0, PyDDA utilized SciPy's L-BFGS-B
 implementation. However, as of PyDDA 1.0 one can also use TensorFlow's L-BFGS-B implementation, which
 is used here for the experiments with the weak variational technique :cite:`tensorflow2015-whitepaper`.
@@ -209,8 +202,10 @@ in two lines of code using :code:`jax.vjp`:
 
 .. code:: python
 
-    primals, fun_vjp = jax.vjp(calculate_radial_vel_cost_function,
-            vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff)
+    primals, fun_vjp = jax.vjp(
+        calculate_radial_vel_cost_function,
+        vrs, azs, els, u, v, w, wts, rmsVr, weights, 
+        coeff)
     _, _, _, p_x1, p_y1, p_z1, _, _, _, _ = fun_vjp(1.0)
 
 Calculating the gradients using automatic differentiation using TensorFlow
@@ -223,7 +218,8 @@ is also a simple code snippet using :code:`tf.GradientTape`:
         tape.watch(v)
         tape.watch(w)
         loss = calculate_radial_vel_cost_function(
-            vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff)
+            vrs, azs, els, u, v, w,
+            wts, rmsVr, weights, coeff)
 
     grad = tape.gradient(loss)
 
@@ -290,7 +286,7 @@ That is, we focus on the constrained optimization problem
     \end{array}
 
 where we now interpret :math:`J_m` as a vector mapping that outputs, at each grid point in the discretized volume
-:math:`\frac{\delta(\rho_{s}u)}{\delta x}  + \frac{\delta(\rho_{s}v)}{\delta y} + \frac{\delta(\rho_{s}w)}{\delta z}`.
+:math:`\frac{\delta(\rho_{s}u)}{\delta x} + \frac{\delta(\rho_{s}v)}{\delta y} + \frac{\delta(\rho_{s}w)}{\delta z}`.
 Notice that the formulation in Equation :ref:`constrained` has no dependencies on scalars :math:`\mu`.
 
 To solve the optimization problem in Equation :ref:`constrained`, we implemented an augmented Lagrangian method with a
@@ -299,7 +295,7 @@ an equality-constrained optimization problem, in this case :math:`\mathcal{L}_0(
 where :math:`\lambda` is a vector of Lagrange multipliers of the same length as the number of gridpoints in the discretized volume.
 The Lagrangian is then *augmented* with an additional squared-penalty term on the constraints to yield
 :math:`\mathcal{L}_{\mu}(u,v,w,\lambda) = \mathcal{L}_0(u,v,w,\lambda) + \frac{\mu}{2}\|J_m(u,v,w)\|^2`,
-where we have intentionally used $\mu>0$ as the scalar in the penalty term to make comparisons with
+where we have intentionally used :math:`\mu > 0` as the scalar in the penalty term to make comparisons with
 Equation :ref:`unconstrained` transparent. It is well known (see, for instance, Theorem 17.5 of :cite:`NoceWrig06`)
 that under some not overly restrictive conditions there exists a finite :math:`\bar\mu` such that if
 :math:`\mu \geq \bar\mu`, then each local solution of Equation :ref:`constrained` corresponds to a strict
@@ -319,10 +315,10 @@ Filter methods are inspired by biobjective minimization. In the augmented Lagran
 :math:`|\nabla_{u,v,w} \mathcal{L}_{\mu_k}(u,v,w,\lambda_k)\|` and the
 minimization of :math:`\|J_m(u,v,w)\|` as two separate, but obviously related, objectives.
 The filter method iteratively constructs an envelope around the Pareto front of
-these two objectives to filter out candidate solutions from the :math:`k`th
+these two objectives to filter out candidate solutions from the :math:`k` th
 iteration of the augmented Lagrangian method that do not make sufficient
 progress towards the simultaneous minimization of both objectives; if an
-approximate minimizer of the :math:`k`th augmented Lagrangian is outside the envelope,
+approximate minimizer of the :math:`k` th augmented Lagrangian is outside the envelope,
 it is deemed acceptable to the filter.
 When insufficient progress towards the minimization of :math:`\|J_m(u,v,w)\|` is detected,
 the method enters a feasibility restoration phase to rapidly decrease the constraint
@@ -403,14 +399,13 @@ of :math:`\mu`. Therefore, this shows that using the Augmented Lagrangian techni
 reproducible wind fields from radar wind networks since it is less sensitive to user-defined parameters
 than the weak variational technique. However, the current disadvantage of this technique is that, for now,
 the technique only incorporates the radar radial velocity and mass continuity constraints. Since PyDDA also includes
-cost functions that constrain the solution against model, vertical wind profile, and point data, future work remains
-to expand this technique to incorporate these other constraints.
+cost functions that constrain the solution against model, vertical wind profile, and point data, plans for PyDDA 1.2 and beyond include expanding this technique to incorporate these other constraints.
 
 ===============
 Acknowledgments
 ===============
 
-The submitted manuscript has been created by UChicago Argonne, LLC, Operator of Argonne National Laboratory (`Argonne').
+The submitted manuscript has been created by UChicago Argonne, LLC, Operator of Argonne National Laboratory ('Argonne').
 Argonne, a U.S. Department of Energy Office of Science laboratory, is operated under Contract No. DE-AC02-06CH11357.
 The U.S. Government retains for itself, and others acting on its behalf, a paid-up nonexclusive, irrevocable worldwide
 license in said article to reproduce, prepare derivative works, distribute copies to the public, and perform publicly
