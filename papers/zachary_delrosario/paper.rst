@@ -255,3 +255,16 @@ The parameter sweep shown in Figure :ref:`example-sweep` gives an overall impres
 
 Exploratory Model Analysis
 --------------------------
+
+
+.. figure:: hull-schematic-stable.png
+   :scale: 40%
+   :figclass: bht
+
+   Schematic boat hull rotated to :math:`22.5^{\circ}`. The forces due to gravity and buoyancy act at the center of mass (COM) and center of buoyancy (COB), respectively. Note that this hull is stable, as the couple will rotate the boat to upright. :label:`boat-stable`
+
+.. figure:: hull-schematic-unstable.png
+   :scale: 40%
+   :figclass: bht
+
+   Schematic boat hull rotated to :math:`22.5^{\circ}`. Gravity and buoyancy are annotated as in Figure :ref:`boat-stable`. Note that this hull is unstable, as the couple will rotate the boat away from upright. :label:`boat-unstable`
