@@ -261,10 +261,16 @@ Exploratory Model Analysis
    :scale: 40%
    :figclass: bht
 
-   Schematic boat hull rotated to :math:`22.5^{\circ}`. The forces due to gravity and buoyancy act at the center of mass (COM) and center of buoyancy (COB), respectively. Note that this hull is stable, as the couple will rotate the boat to upright. :label:`boat-stable`
+   Schematic boat hull rotated to :math:`22.5^{\circ}`. The forces due to gravity and buoyancy act at the center of mass (COM) and center of buoyancy (COB), respectively. Note that this hull is upright stable, as the couple will rotate the boat to upright. :label:`boat-stable`
 
 .. figure:: hull-schematic-unstable.png
    :scale: 40%
    :figclass: bht
 
-   Schematic boat hull rotated to :math:`22.5^{\circ}`. Gravity and buoyancy are annotated as in Figure :ref:`boat-stable`. Note that this hull is unstable, as the couple will rotate the boat away from upright. :label:`boat-unstable`
+   Schematic boat hull rotated to :math:`22.5^{\circ}`. Gravity and buoyancy are annotated as in Figure :ref:`boat-stable`. Note that this hull is upright unstable, as the couple will rotate the boat away from upright. Design variables such as the boat's displacement ratio :code:`d` and center of mass height :code:`f_com` affect stability in complex, interrelated ways. :label:`boat-unstable`
+
+.. figure:: moment-curve.png
+   :scale: 40%
+   :figclass: bht
+
+   Restoring torque of a boat hull as it is rotated through :math:`180^{\circ}`. A positive slope at upright :math:`\theta=0^{\circ}` is required for upright stability. Stability is lost at an extreme angle known as the *angle of vanishing stability* (AVS); beyond this angle the boat will not right. :label:`boat-unstable`
