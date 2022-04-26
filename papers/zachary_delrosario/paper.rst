@@ -260,6 +260,8 @@ Model Analysis Case Study
 Static Stability of Boat Hulls
 ------------------------------
 
+TODO introduce the basics of boat hull stability.
+
 .. figure:: hull-schematic-stable.png
    :scale: 40%
    :figclass: bht
@@ -270,7 +272,7 @@ Static Stability of Boat Hulls
    :scale: 40%
    :figclass: bht
 
-   Schematic boat hull rotated to :math:`22.5^{\circ}`. Gravity and buoyancy are annotated as in Figure :ref:`boat-stable`. Note that this hull is upright unstable, as the couple will rotate the boat away from upright. Design variables such as the boat's displacement ratio :code:`d` and center of mass height :code:`f_com` affect stability in complex, interrelated ways. :label:`boat-unstable`
+   Schematic boat hull rotated to :math:`22.5^{\circ}`. Gravity and buoyancy are annotated as in Figure :ref:`boat-stable`. Note that this hull is upright unstable, as the couple will rotate the boat away from upright. :label:`boat-unstable`
 
 .. figure:: moment-curve.png
    :scale: 40%
@@ -280,6 +282,19 @@ Static Stability of Boat Hulls
 
 EMA for Insight Mining
 ----------------------
+
+TODO Describe the generation of the sample
+
+.. code-block:: python
+
+		df_doe = (
+		    md_performance
+		    >> gr.ev_sample(n=5e3, df_det="nom", seed=101, skip=True)
+		    >> gr.tf_sp(n=1000, seed=101)
+		    >> gr.ev_md(md_performance)
+		)
+
+TODO EDA of sample
 
 .. code-block:: python
 
@@ -298,11 +313,19 @@ EMA for Insight Mining
 
    Tile plot of input/output correlations. :label:`corrtile`
 
+TODO Designing a surrogate model [#]_.
+
+.. [#] :code:`RBF` is imported as :code:`from sklearn.gaussian_process.kernels import RBF`.
+
 .. code-block:: python
 
 		ft_common = gr.ft_gp(
 		    var=["H", "W", "n", "d", "f_com"],
                     out=["angle", "stability"],
+		    kernels=dict(
+		        stability=None,  # Use default
+			angle=RBF(length_scale=0.1),
+		    )
 		)
 
 		(
@@ -314,7 +337,6 @@ EMA for Insight Mining
 		)
 
 TODO get KCV table formatted
-
 
 .. code-block:: python
 
@@ -341,4 +363,6 @@ TODO get KCV table formatted
    :scale: 60%
    :figclass: bht
 
-   Parameter sweeps for fitted GP model. :label:`fit-sweep`
+   Parameter sweeps for fitted GP model. Model :code:`mean:` and predictive uncertainty :code:`sd` values are reported for each output :code:`angle`, :code:`stability`. :label:`fit-sweep`
+
+Figure :ref:`fit-sweep` shows a consistent effect of :code:`f_com` on the :code:`stability_mean` of the boat. Given the high accuracy of the model for :code:`stability` (as measured by k-folds CV), this trend is reasonably trustworthy. However, the same figure shows an inconsistent (non-monotone) effect of most inputs on the AVS :code:`angle_mean` (also corroborated by k-folds CV results).
