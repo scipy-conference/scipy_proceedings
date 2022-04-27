@@ -268,33 +268,48 @@ TODO introduce the basics of boat hull stability.
 
    Schematic boat hull rotated to :math:`22.5^{\circ}`. The forces due to gravity and buoyancy act at the center of mass (COM) and center of buoyancy (COB), respectively. Note that this hull is upright stable, as the couple will rotate the boat to upright. :label:`boat-stable`
 
+As a boat is rotated away from its upright orientation, its center of buoyancy (COB) will tend to migrate. If the boat is in vertical equilibrium, its buoyant force will be equal in magnitude to its weight. A stable boat is a hull whose COB migrates in such a way that a restoring torque is generated (Fig. :ref:`boat-stable`). However, this upright stability is not guaranteed; Figure :ref:`boat-unstable` illustrates a boat design that does not provide a restoring torque near its upright angle. An upright-unstable boat will tend to capsize spontaneously.
+
 .. figure:: hull-schematic-unstable.png
    :scale: 40%
    :figclass: bht
 
    Schematic boat hull rotated to :math:`22.5^{\circ}`. Gravity and buoyancy are annotated as in Figure :ref:`boat-stable`. Note that this hull is upright unstable, as the couple will rotate the boat away from upright. :label:`boat-unstable`
 
+Naval engineers analyze the stability of a boat design by constructing a *moment curve*, such as the one pictured in Figure :ref:`moment-curve`. This curve depicts the net moment due to buoyancy at various angles, assuming the vessel is in vertical equilibrium. From this figure we can see that the design is upright-stable, as it possesses a negative slope at upright :math:`\theta=0^{\circ}`. Note that a boat may not have an unlimited range of stability; note that Figure :ref:`moment-curve` exhibits an *angle of vanishing stability* (AVS) beyond which the boat does not recover to upright.
+
 .. figure:: moment-curve.png
    :scale: 40%
    :figclass: bht
 
-   Restoring torque of a boat hull as it is rotated through :math:`180^{\circ}`. A positive slope at upright :math:`\theta=0^{\circ}` is required for upright stability. Stability is lost at the *angle of vanishing stability* (AVS). :label:`boat-unstable`
+   Restoring torque of a boat hull as it is rotated through :math:`180^{\circ}`. A negative slope at upright :math:`\theta=0^{\circ}` is required for upright stability. Stability is lost at the *angle of vanishing stability* (AVS). :label:`moment-curve`
+
+The classical way to build intuition about boat stability is via mathematical derivations :cite:`larsson2000yacht`. In the following section we present an alternative way to build intuition through exploratory model analysis.
 
 EMA for Insight Mining
 ----------------------
 
-TODO Describe the generation of the sample
+Generation and post-processing of the moment curve are implemented in the grama model :code:`md_performance` [#]_. This model parameterizes a 2d boat hull via its height :code:`H`, width :code:`W`, shape of corner :code:`n`, the vertical height of the center of mass :code:`f_com` (as a fraction of the height), and the *displacement ratio* :code:`d`---the ratio of the boat's mass to maximum water mass displaced. Note that a boat with :code:`d > 1` is incapable of flotation. The model :code:`md_performance` returns :code:`stability = -dMdtheta_0`; the negative of the moment curve slope at upright, as well as the :code:`mass` and AVS :code:`angle`. A positive value of :code:`stability` indicates upright stability, while a larger value of :code:`angle` indicates a greater resistance to tipping.
+
+The EMA process begins by generating data from the model; however, the generation of a moment curve is a nontrivial calculation. One should exercise care in choosing an initial sample of designs to analyze. The statistical problem of selecting inputs values for a computer model is called the design of computer experiments :cite:`sacks1989doe`: The grama verb `gr.tf_sp()` implements the support points algorithm :cite:`mak2018support` to reduce a large dataset of target points to a smaller (but representative) sample before evaluating the model. The following code generates a sample of input design values via :code:`gr.ev_sample()` with the :code:`skip=True` argument, uses :code:`gr.tf_sp()` to "compact" this large sample, then evaluates the performance model at the smaller sample.
+
+.. [#] The analysis reported here is available as a jupyter notebook at TODO URL.
 
 .. code-block:: python
 
-		df_doe = (
+		df_boats = (
 		    md_performance
-		    >> gr.ev_sample(n=5e3, df_det="nom", seed=101, skip=True)
+		    >> gr.ev_sample(
+		        n=5e3,
+			df_det="nom",
+			seed=101,
+			skip=True,
+		    )
 		    >> gr.tf_sp(n=1000, seed=101)
-		    >> gr.ev_md(md_performance)
+		    >> gr.tf_md(md=md_performance)
 		)
 
-TODO EDA of sample
+With an initial sample generated, we can perform an exploratory analysis relating the inputs and outputs. The verb :code:`gr.tf_iocorr()` computes correlations between every pair of input variables :code:`var` and outputs :code:`out`. The routine also attaches metadata, enabling an autoplot as a tileplot of the correlation values.
 
 .. code-block:: python
 
