@@ -110,7 +110,7 @@ This system of defaults is important for pedagogical design: Introductory grama 
 Peadgogy Case Studies
 =====================
 
-
+The following two case studies illustrate how grama is designed to support teaching.
 
 Planned Errors as Teachable Moments
 -----------------------------------
@@ -253,14 +253,15 @@ For example, the following code is unmodified from a student report [#]_. The or
 
 The parameter sweep shown in Figure :ref:`example-sweep` gives an overall impression of the effect of input ``"GR"`` on the output ``"finish_time"``---this particular input tends to dominate the results. However, variable results at higher values of ``"GR"`` provide evidence of numerical instability in the ODE solver underlying the model. Without this sort of model evaluation, the student author would not have discovered the limitations of the model.
 
-Model Analysis Case Study
-=========================
+Exploratory Model Analysis Case Study
+=====================================
 
+This final case study illustrates how grama supports exploratory model analysis. This iterative process is a computational approach to mining insights into physical systems. We illustrate the approach by considering the design of boat hull cross-sections.
 
 Static Stability of Boat Hulls
 ------------------------------
 
-TODO introduce the basics of boat hull stability.
+Stability is a key consideration in boat hull design. One of the most fundamental aspects of stability is *static stability*; the behavior of a boat when perturbed away from static equilibrium :cite:`larsson2000yacht`. Figure :ref:`boat-stable` illustrates the physical mechanism governing stability at small perturbations from an upright orientation.
 
 .. figure:: hull-schematic-stable.png
    :scale: 40%
@@ -282,16 +283,16 @@ Naval engineers analyze the stability of a boat design by constructing a *moment
    :scale: 40%
    :figclass: bht
 
-   Restoring torque of a boat hull as it is rotated through :math:`180^{\circ}`. A negative slope at upright :math:`\theta=0^{\circ}` is required for upright stability. Stability is lost at the *angle of vanishing stability* (AVS). :label:`moment-curve`
+   Total moment on a boat hull as it is rotated through :math:`180^{\circ}`. A negative slope at upright :math:`\theta=0^{\circ}` is required for upright stability. Stability is lost at the *angle of vanishing stability* (AVS). :label:`moment-curve`
 
 The classical way to build intuition about boat stability is via mathematical derivations :cite:`larsson2000yacht`. In the following section we present an alternative way to build intuition through exploratory model analysis.
 
 EMA for Insight Mining
 ----------------------
 
-Generation and post-processing of the moment curve are implemented in the grama model :code:`md_performance` [#]_. This model parameterizes a 2d boat hull via its height :code:`H`, width :code:`W`, shape of corner :code:`n`, the vertical height of the center of mass :code:`f_com` (as a fraction of the height), and the *displacement ratio* :code:`d`---the ratio of the boat's mass to maximum water mass displaced. Note that a boat with :code:`d > 1` is incapable of flotation. The model :code:`md_performance` returns :code:`stability = -dMdtheta_0`; the negative of the moment curve slope at upright, as well as the :code:`mass` and AVS :code:`angle`. A positive value of :code:`stability` indicates upright stability, while a larger value of :code:`angle` indicates a greater resistance to tipping.
+Generation and post-processing of the moment curve are implemented in the grama model :code:`md_performance` [#]_. This model parameterizes a 2d boat hull via its height :code:`H`, width :code:`W`, shape of corner :code:`n`, the vertical height of the center of mass :code:`f_com` (as a fraction of the height), and the *displacement ratio* :code:`d`---the ratio of the boat's mass to maximum water mass displaced. Note that a boat with :code:`d > 1` is incapable of flotation. The model :code:`md_performance` returns :code:`stability = -dMdtheta_0`; the negative of the moment curve slope at upright, as well as the :code:`mass` and AVS :code:`angle`. A positive value of :code:`stability` indicates upright stability, while a larger value of :code:`angle` indicates a wider range of stability.
 
-The EMA process begins by generating data from the model; however, the generation of a moment curve is a nontrivial calculation. One should exercise care in choosing an initial sample of designs to analyze. The statistical problem of selecting inputs values for a computer model is called the design of computer experiments :cite:`sacks1989doe`: The grama verb `gr.tf_sp()` implements the support points algorithm :cite:`mak2018support` to reduce a large dataset of target points to a smaller (but representative) sample before evaluating the model. The following code generates a sample of input design values via :code:`gr.ev_sample()` with the :code:`skip=True` argument, uses :code:`gr.tf_sp()` to "compact" this large sample, then evaluates the performance model at the smaller sample.
+The EMA process begins by generating data from the model; however, the generation of a moment curve is a nontrivial calculation. One should exercise care in choosing an initial sample of designs to analyze. The statistical problem of selecting efficient input values for a computer model is called the *design of computer experiments* :cite:`sacks1989doe`: The grama verb `gr.tf_sp()` implements the support points algorithm :cite:`mak2018support` to reduce a large dataset of target points to a smaller (but representative) sample. The following code generates a sample of input design values via :code:`gr.ev_sample()` with the :code:`skip=True` argument, uses :code:`gr.tf_sp()` to "compact" this large sample, then evaluates the performance model at the smaller sample.
 
 .. [#] The analysis reported here is available as a jupyter notebook at TODO URL.
 
@@ -323,17 +324,20 @@ With an initial sample generated, we can perform an exploratory analysis relatin
 		)
 
 .. figure:: corrtile.png
-   :scale: 40%
+   :scale: 50%
    :figclass: bht
 
-   Tile plot of input/output correlations. :label:`corrtile`
+   Tile plot of input/output correlations; autoplot `gr.pt_auto()` visualization of `gr.tf_iocorr()` output. :label:`corrtile`
 
-TODO Designing a surrogate model [#]_.
+The correlations in Figure :ref:`corrtile` suggest that :code:`stability` is positively impacted by increasing the width :code:`W` and displacement ratio :code:`d` of a boat, and by decreasing the height :code:`H`, shape factor :code:`n`, and vertical location of the center of mass :code:`f_com`. The correlations also suggest a similar impact of each variable on the AVS :code:`angle`, but with a weaker dependence on :code:`H`. These results also suggest that :code:`f_com` has the strongest effect on both :code:`stability` and :code:`angle`.
+
+Correlations are a reasonable first-check of input/output behavior, but linear correlation quantifies only an average, linear association. A second-pass at the data would be to fit an accurate surrogate model and inspect parameter sweeps. The following code defines a gaussian process fit :cite:`rasmussen2006gp` for both :code:`stability` and :code:`angle`, and estimates model error using k-folds cross validation :cite:`james2013introduction`. Note that a non-default kernel is necessary for a reasonable fit of the latter output [#]_.
 
 .. [#] :code:`RBF` is imported as :code:`from sklearn.gaussian_process.kernels import RBF`.
 
 .. code-block:: python
 
+		## Define fitting procedure
 		ft_common = gr.ft_gp(
 		    var=["H", "W", "n", "d", "f_com"],
                     out=["angle", "stability"],
@@ -342,7 +346,7 @@ TODO Designing a surrogate model [#]_.
 			angle=RBF(length_scale=0.1),
 		    )
 		)
-
+		## Estimate model accuracy via k-folds CV
 		(
 		    df_boats
 		    >> gr.tf_kfolds(
@@ -352,6 +356,8 @@ TODO Designing a surrogate model [#]_.
 		)
 
 TODO get KCV table formatted
+
+The k-folds CV results suggest a highly accurate model for :code:`stability`, and a moderately accurate model for :code:`angle`. The following code defines the surrogate model over a domain that includes the original dataset, and performs parameter sweeps across all inputs.
 
 .. code-block:: python
 
@@ -378,6 +384,56 @@ TODO get KCV table formatted
    :scale: 60%
    :figclass: bht
 
-   Parameter sweeps for fitted GP model. Model :code:`mean:` and predictive uncertainty :code:`sd` values are reported for each output :code:`angle`, :code:`stability`. :label:`fit-sweep`
+   Parameter sweeps for fitted GP model. Model :code:`*_mean` and predictive uncertainty :code:`*_sd` values are reported for each output :code:`angle`, :code:`stability`. :label:`fit-sweep`
 
-Figure :ref:`fit-sweep` shows a consistent effect of :code:`f_com` on the :code:`stability_mean` of the boat. Given the high accuracy of the model for :code:`stability` (as measured by k-folds CV), this trend is reasonably trustworthy. However, the same figure shows an inconsistent (non-monotone) effect of most inputs on the AVS :code:`angle_mean` (also corroborated by k-folds CV results).
+Figure :ref:`fit-sweep` displays parameter sweeps for the surrogate model of :code:`stability` and :code:`angle`. Note that the surrogate model reports both a mean trend :code:`*_mean` and a predictive uncertainty :code:`*_sd`. The former is the model's prediction for future values, while the latter quantifies the model's confidence in each prediction.
+
+The parameter sweeps Figure :ref:`fit-sweep` of show a consistent and strong effect of :code:`f_com` on the :code:`stability_mean` of the boat; note that all the sweeps across :code:`f_com` for :code:`stability_mean` tend to be monotone with a fairly steep slope. This is in agreement with the correlation results of Figure :ref:`corrtile`; the :code:`f_com` sweeps tend to have the steepest slopes. Given the high accuracy of the model for :code:`stability` (as measured by k-folds CV), this trend is reasonably trustworthy.
+
+However, the same figure shows an inconsistent (non-monotone) effect of most inputs on the AVS :code:`angle_mean`. These results are in agreement with the k-fold CV results shown above. Clearly, the surrogate model is untrustworthy, and we should resist trusting conclusions from the parameter sweeps for :code:`angle_mean`. This undermines the conclusion we drew from the input/output correlations pictured in Figure :ref:`corrtile`. Clearly, :code:`angle` exhibits more complex behavior than a simple linear correlation with each of the both design variables.
+
+A different analysis of the boat hull :code:`angle` data helps develop useful insights. We pursue an active subspace analysis of the data to reduce the dimensionality of the input space by identifying directions that best explain variation in the output :cite:`delRosario2017,constantine2015`. The verb :code:`gr.tf_polyridge()` implements the variable projection algorithm of Reference :cite:`hokanson2018projection`; the following code pursues a two-dimensional reduction of the input space. Note that the hyperparameter :code:`n_degree=6` is set via a cross-validation study.
+
+.. code-block:: python
+
+		## Find 2 important directions
+		df_weights = (
+		    df_boats
+		    >> gr.tf_polyridge(
+		        var=["H", "W", "n", "d", "f_com"],
+		        out="angle",
+		        n_degree=6, # Set via CV study
+		        n_dim=2,    # Seek 2d subspace
+		    )
+		)
+
+
+The subspace weights are reported in Table :ref:`weights` below. Note that the leading direction :code:`1` is dominated by the displacement ratio :code:`d` and COM location :code:`f_com`; essentially, this describes the "loading" of the vessel. The second direction corresponds to "widening and shortening" of the hull cross-section (in addition to lowering :code:`d` and :code:`f_com`).
+
+
+.. table:: Subspace weights in :code:`df_weights`. :label:`weights`
+
+   +-----------+-----------+----------+-----------+-----------+-----------+
+   | Direction |     H     |     W    |      n    |     d     |   f_com   |
+   +===========+===========+==========+===========+===========+===========+
+   |     1     | -0.027733 | 0.039411 | -0.118663 |  0.400932 | -0.907111 |
+   +-----------+-----------+----------+-----------+-----------+-----------+
+   |     2     | -0.653515 | 0.379819 | -0.015670 | -0.612041 | -0.231983 |
+   +-----------+-----------+----------+-----------+-----------+-----------+
+
+
+Using the subspace weights in Table :ref:`weights` to project the data to two dimensions enables visualizing all boat geometries in a single plot. Figure :ref:`2d-projection` reveals that this 2d projection is very successful at separating universally-stable (:code:`angle==180`), upright-unstable (:code:`angle==0`), and intermediate cases (:code:`0 < angle < 180`). Intermediate cases are concentrated at higher values of the second active variable; there is a phase transition between universally-stable and upright-unstable vessels at lower values of the second active variable.
+
+.. figure:: 2d-projection.png
+   :scale: 50%
+   :figclass: bht
+
+   Boat design feature vectors projected to 2d active subspace. The origin corresponds to the mean feature vector. :label:`2d-projection`
+
+
+Interpreting Figure :ref:`2d-projection` in light of Table :ref:`weights` provides us with deep insight about boat stability: Since active variable 1 corresponds to loading (high displacement ratio :code:`d` with a low COM :code:`f_com`), we can see that the boat's loading conditions are key to determining its stability. Since active variable 2 depends on the aspect ratio (higher width, shorter height), Figure Figure :ref:`2d-projection` suggests that only wider boats will tend to exhibit intermediate stability.
+
+Conclusions
+===========
+
+TODO
