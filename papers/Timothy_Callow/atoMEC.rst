@@ -1,11 +1,11 @@
 :author: Timothy J. Callow
 :email: t.callow@hzdr.de
-:institution: Center for Advanced Systems Understanding (CASUS), D-02826 G\"orlitz, Germany
+:institution: Center for Advanced Systems Understanding (CASUS), D-02826 Görlitz, Germany
 :institution: Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany
 
 :author: Daniel Kotik
 :email: d.kotik@hzdr.de
-:institution: Center for Advanced Systems Understanding (CASUS), D-02826 G\"orlitz, Germany
+:institution: Center for Advanced Systems Understanding (CASUS), D-02826 Görlitz, Germany
 :institution: Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany	      
 
 :author: Eli Kraisler
@@ -14,7 +14,7 @@
 
 :author: Attila Cangi
 :email: a.cangi@hzdr.de
-:institution: Center for Advanced Systems Understanding (CASUS), D-02826 G\"orlitz, Germany
+:institution: Center for Advanced Systems Understanding (CASUS), D-02826 Görlitz, Germany
 :institution: Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany
    
 :bibliography: main
@@ -43,17 +43,17 @@ Of particular interest within this broad field is the warm dense matter (WDM) re
 In this regime, it is important to account for the quantum mechanical nature of the electrons (and in some cases, the nuclei also). Therefore conventional methods from plasma physics, which either neglect quantum effects or treat them in a coarse manner, are usually not sufficiently accurate.
 On the other hand, methods from condensed-matter physics and quantum chemistry, which account fully for quantum interactions, typically target the ground-state only, and are not therefore suitable for studying statistical ensembles which emerge at temperatures above zero.
 
-Nevertheless, there are methods which can, in principle, be applied to study materials at any given temperature and density whilst formally accounting for quantum interactions. These methods are often denoted ''first-principles'' because, formally speaking, they yield the exact properties of the statistical quantum ensemble, under certain well-founded theoretical approximations.
+Nevertheless, there are methods which can, in principle, be applied to study materials at any given temperature and density whilst formally accounting for quantum interactions. These methods are often denoted "first-principles" because, formally speaking, they yield the exact properties of the statistical quantum ensemble, under certain well-founded theoretical approximations.
 Density-functional theory (DFT), initially developed as a ground-state theory :cite:`HK64,KS65` but later extended to non-zero temperatures :cite:`M65`, is one such theory and has been used extensively to study materials under WDM conditions :cite:`graziani_14`.
-However, even though DFT reformulates the Schr\"odinger equation in a computationally efficient manner :cite:`Kohn_Nobel_lecture`, the cost of running calculations becomes prohibitively expensive at higher temperatures; formally, it scales as :math:`\mathcal{O}(N^3 T^3)`, with :math:`N` the particle number (which usually also increases with temperature) and :math:`T` the temperature :cite:`stoc_DFT`.
-Furthermore, although it is formally an exact theory, in practise DFT relies on approximations for the so-called ''exchange-correlation'' energy, and these have not been rigorously tested under WDM conditions.
+However, even though DFT reformulates the Schrödinger equation in a computationally efficient manner :cite:`Kohn_Nobel_lecture`, the cost of running calculations becomes prohibitively expensive at higher temperatures; formally, it scales as :math:`\mathcal{O}(N^3 T^3)`, with :math:`N` the particle number (which usually also increases with temperature) and :math:`T` the temperature :cite:`stoc_DFT`.
+Furthermore, although it is formally an exact theory, in practise DFT relies on approximations for the so-called "exchange-correlation" energy, and these have not been rigorously tested under WDM conditions.
 An alternative method used in the WDM community is path-integral Monte-Carlo :cite:`DGB18`, which yields essentially exact properties; however, it is even more limited by compuational cost than DFT, and in particularly becomes unfeasiable expensive at lower temperatures due to the fermion sign problem.
 
 It is therefore of great interest to develop computationally cheap alternatives to the aforementioned methods. Some examples of promising developments in this regard include machine-learning based solutions :cite:`mala` and stochastic DFT :cite:`stoc_DFT`.
-However, in this paper, we focus on an alternative class of models known as ''average-atom'' models. Average-atom models have a long history in plasma Physics :cite:`PRR_AA`: they account for quantum effects, typically using DFT, but reduce the complex system of interacting electrons and nuclei to a single atom immersed in a plasma (the "average" atom). An illustration of this principle (reduced to two-dimensions for visual purposes) is shown in Fig. 1.
+However, in this paper, we focus on an alternative class of models known as "average-atom" models. Average-atom models have a long history in plasma Physics :cite:`PRR_AA`: they account for quantum effects, typically using DFT, but reduce the complex system of interacting electrons and nuclei to a single atom immersed in a plasma (the "average" atom). An illustration of this principle (reduced to two-dimensions for visual purposes) is shown in Fig. ??.
 This significantly reduces the cost relative to a full DFT simulation, because the particle number is restricted to the number of electrons per nucleus, and spherical symmetry is exploited to reduce the three-dimensional problem to one-dimension.
 
-Naturally, in order to reduce the complexity of the problem as described, various approximations must be introduced. It is important to understand these approximations and their limitations in order for avergae-atom models to have genuine predictive capabalities.
+Naturally, in order to reduce the complexity of the problem as described, various approximations must be introduced. It is important to understand these approximations and their limitations in order for average-atom models to have genuine predictive capabalities.
 Unfortunately, this is not always the case: although average-atom models share common concepts, there is no unique formal theory underpinning them and thus a variety of models and codes exist, and it is not typically clear which models can be expected to perform most accurately under which conditions.
 In a previous paper :cite:`PRR_AA`, we addressed this issue by deriving an average-atom from first principles, and comparing the impact of different approximations within this model on some common properties.
 
@@ -85,7 +85,7 @@ We shall briefly review the key theory underpinning the type of average-atom mod
 For a comprehensive derivation of this average-atom model, we direct readers to Ref. :cite:`PRR_AA`.
 The average-atom model we shall describe falls into a class of models known as *ion-sphere* models, which are the simplest (and still most widely-used) class of average-atom model. There are alternative (more advanced) classes of model such as *ion-correlation* [CITE] and *neutral pseudo-atom* models which we are not yet implemented in atoMEC and thus we don't elaborate on them here.
 
-As demonstrated in Fig. 1, the idea of the ion-sphere model is to map a fully-interacting system of many electrons and nuclei into a set of independent atoms which do not interact explicity with any of the other spheres.
+As demonstrated in Fig. ??, the idea of the ion-sphere model is to map a fully-interacting system of many electrons and nuclei into a set of independent atoms which do not interact explicity with any of the other spheres.
 Naturally, this depends on several assumptions and approximations, but there is formal justification for such a mapping :cite:`PRR_AA`; furthermore, there are many examples in which average-atom models have shown good agreement with more accurate simulations and experimental data [CITE], which further justifies this mapping.
 
 Although the average-atom picture is significantly simplified relative to the full many-body problem, even determining the wave-functions and their ensemble weights for an atom at finite temperature is a complex problem.
@@ -100,7 +100,7 @@ Due to the spherical symmetry of the atom, the non-interacting electrons - known
 
 where :math:`n,l,m` are the *quantum numbers* of the orbitals, which come from the fact that the wave-function is an eigenfunction of the Hamiltonian operator; and :math:`Y_l^m(\theta, \phi)` are the spherical harmonic functions. The radial co-ordinate :math:`r` represents the absolute distance from the nucelus.
 
-We therefore only need to determine the radial KS orbitals :math:`X_{nl}(r)`. These are determined by solving the radial KS equation, which is similar to the Schr\"odinger equation for a non-interacting system, with an additional term in the potential to mimic the effects of electron-electron interaction (within the single atom).
+We therefore only need to determine the radial KS orbitals :math:`X_{nl}(r)`. These are determined by solving the radial KS equation, which is similar to the Schrödinger equation for a non-interacting system, with an additional term in the potential to mimic the effects of electron-electron interaction (within the single atom).
 The radial KS equation is given by
 
 .. math::
