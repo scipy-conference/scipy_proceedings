@@ -61,7 +61,7 @@ In this paper, we continue this theme but now focus on computational aspects. We
 The aim of atoMEC, as indicated by the title of this paper, is to improve the accessibility and understanding of average-atom models.
 To the best of our knowledge, open-source average-atom codes are in scarce supply: with atoMEC, we aim to provide a tool which people can not only use to run average-atom simulations, but also to add their own models and thus facilitate comparisons of different approximations. 
 The relative simplicity of average-atom codes means that they are not only efficient to run, but also efficient to develop: this means, for example, that they can be used as a test-bed for new ideas that could be later implemented in full DFT codes, and are also accessible to those without extensive prior expertise, such as students.
-atoMEC aims to facilitate development by following good practise in software engineering (for example extensive documentation), a careful design structure, and of course through the choice of Python and its NumPy and SciPy libraries, which is arguably the most popular scientific programming language. 
+atoMEC aims to facilitate development by following good practise in software engineering (for example extensive documentation), a careful design structure, and of course through the choice of Python and its NumPy :cite:`numpy` and SciPy :cite:`scipy` libraries, which is arguably the most popular scientific programming language. 
 
 This paper is structured as follows. In the next section, we briefly review the key theoretical points which are important to understand the functionality of atoMEC, assuming no prior physical knowledge of the reader.
 Following that, we present the key functionality of atoMEC, discuss the code structure and algorithms, and explain how these relate to the theoretical aspects introduced.
@@ -181,7 +181,74 @@ Such properties typically take as input the KS orbitals, their eigenvalues and o
    The dotted lines represent operations that are taken care of within the `models.CalcEnergy` function, but are shown nevertheless to improve understanding.
    
 
+Code structure and details
+--------------------------
 
+In the following sections, we describe the structure of the code in relation to the physical problem being modelled.
+Average-atom models can (at least appear) to rely on many different parameters and approximations.
+In atoMEC, we have tried to structure the code in a way that makes clear which parameters come from the physical problem studied compared to choices of the model and numerical or algorithmic choices.
+
+
+`atoMEC.Atom`: Physical parameters
+**********************************
+
+The first step of any simulation in WDM (which also applies to simulations in science more generally) is to define the physical parameters of the problem.
+These parameters are unique in the sense that, if we had an exact method to simulate the real system, then for each combination of these parameters there would be a unique solution.
+In other words, regardless of the model - be it average atom or a different technique - these parameters are always required and independent of the model.
+
+In average-atom models, there are typically three parameters defining the physical problem:
+
+* The **atomic species**
+* The **temperature** of the material
+* The **mass density** of the material
+
+The mass density also directly corresponds to the mean distance between two nuclei (atomic centres), which in the average-atom model is equal to twice the radius of the atomic sphere.
+
+In atoMEC, these physical parameters are controlled by the `Atom` object.
+As an example, we consider Aluminium under ambient conditions, i.e. at room temperature, :math:`\tau=100\ \textrm{eV}`, and normal metallic density, :math:`\rho_\textrm{m}=2.7\ \textrm{g cm}^{-3}`.
+We set this up as
+
+.. code-block:: python
+   
+   from atoMEC import Atom
+   Al = Atom("Al", 300, density=2.7, units_temp="K")
+
+.. figure:: atom.png
+
+   Auto-generated print statement from calling the `atoMEC.Atom` object.
+
+By default, the above code automatically prints the output seen in Fig. 3. We see that the first two arguments of the `Atom` object are the chemical symbol of the element being studied, and the temperature.
+In addition, at least one of "density" or "radius" must be specified.
+In atoMEC, the default (and only permitted) units for the mass density are :math:`\textrm{g cm}^{-3}`; *all* other input and output units in atoMEC are by default Hartree atomic units, and hence we specify "K" for Kelvin.
+
+The information in Fig. 3 displays the chosen parameters in common units, as well as some other information directly obtained from these parameters.
+The chemical symbol ("Al" in this case) is passed to the `mendeleev` library :cite:`mendeleev2014` to generate this data, which is used later in the calculation.
+
+This initial stage of the average-atom calculation, i.e. the specification of physical parameters and initilization of the `Atom` object, is shown in the top row at the top of Fig. ??.
+
+`atoMEC.models`: model parameters
+*********************************
+
+After the physical parameters are set, the next stage of the average-atom calculation is to choose the model and approximations within that class of model.
+As discussed, so far the only class of model implemented in atoMEC is the ion-sphere model.
+Within this model, there are still various choices to be made by the user.
+In some cases, these choices make little difference to the results, but in other cases they have significant impact; the user might have some physical intuition as to which is most important, or alternatively may want to run the same physical parameters with several different model parameters to examine the effects.
+Below we list some choices which are available in atoMEC, very approximately in decreasing order of impact (but this can depend strongly on the system under consideration):
+
+* the **boundary condition** used to solve the KS equations (:ref:`eq:kseqn`)
+* the treatement of the **unbound electrons**, which means those with energy above a certain threshold
+* the choice of **exchange** and **correlation** functionals
+* the **spin** polarization and magnetization
+
+We do not discuss the theory and impact of these different choices in this paper. Rather, we direct readers to Refs. :cite:`PRR_AA` and ?? in which all of these choices are discussed.
+
+In atoMEC, the ion-sphere model is controlled by the `models.ISModel` object. Continuing with our Aluminium example, we choose the so-called "Neumann" boundary condition, with a "quantum" treatment of the unbound electrons, and choose the LDA exchange functional (which is also the default). This model is set up as
+
+.. code-block:: python
+		
+   from atoMEC import models
+   model = models.ISModel(Al, bc="neumann",
+		xfunc_id="lda_x", unbound="quantum")
 
 
 .. [#f1] The summation in Eq. (:ref:`eq:MIS`) is often shown as an integral because the energies above a certain threshold form a continuous distribution (in most models).
