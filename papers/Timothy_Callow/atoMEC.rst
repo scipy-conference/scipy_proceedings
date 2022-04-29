@@ -76,7 +76,7 @@ Finally, we present an example case study: we consider Beryllium (which plays an
 Theoretical background
 ----------------------
 
-Properties of interest in the warm dense matter regime include, for example, equation-of-state data, which relates the density, energy temperature and pressure of a material [CITE]; the mean ionization state and the electron ionization energies, which tell us about how tightly bound the electrons are to the nuclei; and the electrical and thermal conductivities.
+Properties of interest in the warm dense matter regime include, for example, equation-of-state data, which relates the density, energy, temperature and pressure of a material [CITE]; the mean ionization state and the electron ionization energies, which tell us about how tightly bound the electrons are to the nuclei; and the electrical and thermal conductivities.
 These properties yield information pertinent to our understanding of stellar and planetary physics, the earth's core, inertial confinement fusion, and more besides.
 To exactly obtain these properties, one needs (in theory) to determine the thermodynamic ensemble of the quantum states (the so-called *wave-functions*) representing the electrons and nuclei.
 Fortunately, they can be obtained with reasonable accuracy using models such as average-atom models; in this section, we eloborate on how this is done.
@@ -120,7 +120,7 @@ The :math:`v_\textrm{s}[n](r)` term is the KS potential, which itself is compose
 
 where :math:`r^>(x)=\max(r,x)`. The three terms in the potential are respectively the electron-nuclear attraction, the classical Hartree repulsion, and the exchange-correlation (xc) potential.
 
-We note that the KS potential and its constituents are function\ *als* of the electron density :math:`n(r)`. Were it not for this dependence on the density, solving Eq. :ref:`eq:kseqn` just amounts to solving an ordinary linear differential equation.
+We note that the KS potential and its constituents are function\ *als* of the electron density :math:`n(r)`. Were it not for this dependence on the density, solving Eq. :ref:`eq:kseqn` just amounts to solving an ordinary linear differential equation (ODE).
 However, the electron density is in fact constructed from the orbitals in the following way,
 
 .. math::
@@ -137,6 +137,38 @@ where :math:`f_{nl}(\epsilon_{nl},\mu,\tau)` is the Fermi-Dirac (FD) distributio
 
 The Fermi-Dirac distribution therefore assigns weights to the KS orbitals in the construction of the density, with the weight depending on their energy.
 
+Therefore, the KS potential which determines the KS orbitals via the ODE (:ref:`eq:kseqn`), is itself dependent on the KS orbitals.
+Consequently, the KS orbitals and its dependent quantities (the density and KS potential) must be determined via a so-called self-consistent field (SCF) procedure.
+An initial guess for the orbitals, :math:`X_{nl}^0(r)`, is used to construct the initial density :math:`n^0(r)` and potential :math:`v_\textrm{s}^0(r)`.
+The ODE (:ref:`eq:kseqn`) is then solved to update the orbitals.
+This process is iterated until some appropriately chosen quantities - in atoMEC the total free energy, density and KS potential - are converged, i.e. :math:`n^{i+1}(r)=n^i(r),\ v_\textrm{s}^{i+1}(r)=v_\textrm{s}^i(r),\ F^{i+1} = F^i` within some reasonable numerical tolerance.
+In Fig. 2, we illustrate the life-cycle of the average-atom model described so far, including the SCF procedure.
+On the left-hand side of this figure, we show the physical choices and mathematical operations, and on the right-hand side, the representative classes and functions in atoMEC.
+In the following section, we shall discuss some aspects of this figure in more detail.
+
+Some quantities obtained from the completion of the SCF procedure are directly of interest.
+For example, the energy eigenvalues :math:`\epsilon_{nl}` are related to the electron ionization energies, i.e. the amount of energy required to excite an electron from being bound to the nucleus to being a free (conducting) electron.
+These predicted ionization energies can be used, for example, to verify experimental data [CITE] or help understand the so-called ionization potential depression effect, an important effect in WDM [CITE].
+Another property that can be straightforwardly obtained from the energy levels and their occupation numbers is the mean ionization state :math:`\bar{Z}` [#f1]_,
+
+.. math::
+   :label: eq:MIS
+
+   \bar{Z} = \sum_{n,l} (2l+1) f_{nl}(\epsilon_{nl}, \mu, \tau)
+
+which is an important input parameter for various models, such as hydrodynamics codes used to simulate inertial confinement fusion [CITE].
+
+Various other interesting properties can also be calculated following some postprocessing of the output of an SCF calculation. One such example is the electronic pressure :math:`P_\textrm{e}`, which is given by the functional derivative of the free energy with respect volume at fixed temperature,
+
+.. math::
+   
+   P_\textrm{e} = -\frac{\delta F}{\delta V}\bigg|_\tau.
+
+This can be evaluated using finite differences, by running two SCF calculations with radii :math:`R+\delta R` and :math:`R-\delta R`. Other methods exist for computing the pressure using the output of a single SCF calculation [CITE].
+Furthermore, response properties, i.e. those resulting from an external perturbation like a laser pulse, can also be obtained from the output of an SCF cycle. These properties include for example electrical conductivities [CITE] and dynamical structure factors [CITE].
+Such properties typically take as input the KS orbitals, their eigenvalues and occupation numbers, but require a larger number of orbitals than a normal SCF calculation (i.e. many orbitals with zero occupation need to be computed).
+
+
 .. figure:: tikz-figure0.pdf
    :align: center
    :figclass: w
@@ -148,3 +180,8 @@ The Fermi-Dirac distribution therefore assigns weights to the KS orbitals in the
    Some liberties are taken with the code in the figure in order to improve readability.
    The dotted lines represent operations that are taken care of within the `models.CalcEnergy` function, but are shown nevertheless to improve understanding.
    
+
+
+
+
+.. [#f1] The summation in Eq. (:ref:`eq:MIS`) is often shown as an integral because the energies above a certain threshold form a continuous distribution (in most models).
