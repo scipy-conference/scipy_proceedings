@@ -76,14 +76,15 @@ Finally, we present an example case study: we consider Beryllium (which plays an
 Theoretical background
 ----------------------
 
-Properties of interest in the warm dense matter regime include, for example, equation-of-state data, which relates the density, energy, temperature and pressure of a material [CITE]; the mean ionization state and the electron ionization energies, which tell us about how tightly bound the electrons are to the nuclei; and the electrical and thermal conductivities.
+Properties of interest in the warm dense matter regime include, for example, equation-of-state data, which relates the density, energy, temperature and pressure of a material :cite:`hugoniot`; the mean ionization state and the electron ionization energies, which tell us about how tightly bound the electrons are to the nuclei; and the electrical and thermal conductivities.
 These properties yield information pertinent to our understanding of stellar and planetary physics, the earth's core, inertial confinement fusion, and more besides.
 To exactly obtain these properties, one needs (in theory) to determine the thermodynamic ensemble of the quantum states (the so-called *wave-functions*) representing the electrons and nuclei.
 Fortunately, they can be obtained with reasonable accuracy using models such as average-atom models; in this section, we eloborate on how this is done.
 
 We shall briefly review the key theory underpinning the type of average-atom models implemented in atoMEC. This is intended for readers without a background in quantum mechanics, to give some context to the purposes and mechanisms of the code.
 For a comprehensive derivation of this average-atom model, we direct readers to Ref. :cite:`PRR_AA`.
-The average-atom model we shall describe falls into a class of models known as *ion-sphere* models, which are the simplest (and still most widely-used) class of average-atom model. There are alternative (more advanced) classes of model such as *ion-correlation* [CITE] and *neutral pseudo-atom* models which we are not yet implemented in atoMEC and thus we don't elaborate on them here.
+The average-atom model we shall describe falls into a class of models known as *ion-sphere* models, which are the simplest (and still most widely-used) class of average-atom model.
+There are alternative (more advanced) classes of model such as *ion-correlation* :cite:`ioncorrelation` and *neutral pseudo-atom* models :cite:`NPA` which we are not yet implemented in atoMEC and thus we don't elaborate on them here.
 
 As demonstrated in Fig. ??, the idea of the ion-sphere model is to map a fully-interacting system of many electrons and nuclei into a set of independent atoms which do not interact explicity with any of the other spheres.
 Naturally, this depends on several assumptions and approximations, but there is formal justification for such a mapping :cite:`PRR_AA`; furthermore, there are many examples in which average-atom models have shown good agreement with more accurate simulations and experimental data [CITE], which further justifies this mapping.
@@ -148,7 +149,7 @@ In the following section, we shall discuss some aspects of this figure in more d
 
 Some quantities obtained from the completion of the SCF procedure are directly of interest.
 For example, the energy eigenvalues :math:`\epsilon_{nl}` are related to the electron ionization energies, i.e. the amount of energy required to excite an electron from being bound to the nucleus to being a free (conducting) electron.
-These predicted ionization energies can be used, for example, to verify experimental data [CITE] or help understand the so-called ionization potential depression effect, an important effect in WDM [CITE].
+These predicted ionization energies can be used, for example, to help understand ionization potential depression, an important but somewhat controversial effect in WDM :cite:`IPDdepression`.
 Another property that can be straightforwardly obtained from the energy levels and their occupation numbers is the mean ionization state :math:`\bar{Z}` [#f1]_,
 
 .. math::
@@ -156,7 +157,9 @@ Another property that can be straightforwardly obtained from the energy levels a
 
    \bar{Z} = \sum_{n,l} (2l+1) f_{nl}(\epsilon_{nl}, \mu, \tau)
 
-which is an important input parameter for various models, such as hydrodynamics codes used to simulate inertial confinement fusion [CITE].
+which is an important input parameter for various models, such as adiabats which are used to model inertial confinement fusion :cite:`ICFadiabats`.
+
+.. [#f1] The summation in Eq. (:ref:`eq:MIS`) is often shown as an integral because the energies above a certain threshold form a continuous distribution (in most models).
 
 Various other interesting properties can also be calculated following some postprocessing of the output of an SCF calculation. One such example is the electronic pressure :math:`P_\textrm{e}`, which is given by the functional derivative of the free energy with respect volume at fixed temperature,
 
@@ -164,8 +167,8 @@ Various other interesting properties can also be calculated following some postp
    
    P_\textrm{e} = -\frac{\delta F}{\delta V}\bigg|_\tau.
 
-This can be evaluated using finite differences, by running two SCF calculations with radii :math:`R+\delta R` and :math:`R-\delta R`. Other methods exist for computing the pressure using the output of a single SCF calculation [CITE].
-Furthermore, response properties, i.e. those resulting from an external perturbation like a laser pulse, can also be obtained from the output of an SCF cycle. These properties include for example electrical conductivities [CITE] and dynamical structure factors [CITE].
+This can be evaluated using finite differences, by running two SCF calculations with radii :math:`R+\delta R` and :math:`R-\delta R`. Other methods exist for computing the pressure using the output of a single SCF calculation :cite:`AA_pressure`.
+Furthermore, response properties, i.e. those resulting from an external perturbation like a laser pulse, can also be obtained from the output of an SCF cycle. These properties include for example electrical conductivities :cite:`AA_KG` and dynamical structure factors :cite:`AA_DSF`.
 Such properties typically take as input the KS orbitals, their eigenvalues and occupation numbers, but require a larger number of orbitals than a normal SCF calculation (i.e. many orbitals with zero occupation need to be computed).
 
 
@@ -203,6 +206,8 @@ In average-atom models, there are typically three parameters defining the physic
 * The **mass density** of the material
 
 The mass density also directly corresponds to the mean distance between two nuclei (atomic centres), which in the average-atom model is equal to twice the radius of the atomic sphere.
+An additional physical parameter not mentioned above is the **net charge** of the material being considered.
+However, we almost always assume zero net charge in average-atom simulations (i.e. the number of electrons is equal to the atomic charge).
 
 In atoMEC, these physical parameters are controlled by the `Atom` object.
 As an example, we consider Aluminium under ambient conditions, i.e. at room temperature, :math:`\tau=100\ \textrm{eV}`, and normal metallic density, :math:`\rho_\textrm{m}=2.7\ \textrm{g cm}^{-3}`.
@@ -235,14 +240,14 @@ Within this model, there are still various choices to be made by the user.
 In some cases, these choices make little difference to the results, but in other cases they have significant impact; the user might have some physical intuition as to which is most important, or alternatively may want to run the same physical parameters with several different model parameters to examine the effects.
 Below we list some choices which are available in atoMEC, very approximately in decreasing order of impact (but this can depend strongly on the system under consideration):
 
-* the **boundary condition** used to solve the KS equations (:ref:`eq:kseqn`)
+* the **boundary conditions** used to solve the KS equations
 * the treatement of the **unbound electrons**, which means those with energy above a certain threshold
 * the choice of **exchange** and **correlation** functionals
 * the **spin** polarization and magnetization
 
-We do not discuss the theory and impact of these different choices in this paper. Rather, we direct readers to Refs. :cite:`PRR_AA` and ?? in which all of these choices are discussed.
+We do not discuss the theory and impact of these different choices in this paper. Rather, we direct readers to Refs. :cite:`PRR_AA` and :cite:`arxiv_KG` in which all of these choices are discussed.
 
-In atoMEC, the ion-sphere model is controlled by the `models.ISModel` object. Continuing with our Aluminium example, we choose the so-called "Neumann" boundary condition, with a "quantum" treatment of the unbound electrons, and choose the LDA exchange functional (which is also the default). This model is set up as
+In atoMEC, the ion-sphere model is controlled by the `models.ISModel` object. Continuing with our Aluminium example, we choose the so-called "neumann" boundary condition, with a "quantum" treatment of the unbound electrons, and choose the LDA exchange functional (which is also the default). This model is set up as
 
 .. code-block:: python
 		
@@ -250,5 +255,146 @@ In atoMEC, the ion-sphere model is controlled by the `models.ISModel` object. Co
    model = models.ISModel(Al, bc="neumann",
 		xfunc_id="lda_x", unbound="quantum")
 
+By default, the above code prints the output shown in Fig. 4. The first (and only mandatory) input parameter to the `models.ISModel` object is the `Atom` object that we generated earlier.
+Together with the optional `spinpol` and `spinmag` parameters in the `models.ISModel` object, this sets either the total number of electrons (`spinpol=False`) or the number of electrons in each spin channel (`spinpol=True`).
 
-.. [#f1] The summation in Eq. (:ref:`eq:MIS`) is often shown as an integral because the energies above a certain threshold form a continuous distribution (in most models).
+The remaining information displayed in Fig. ?? shows directly the chosen model parameters, or the default values where these parameters are not specified.
+The exchange and correlation functionals - set by the parameters `xfunc_id` and `cfunc_id` - are passed to the LIBXC library :cite:`libxc_2018` for processing.
+So far, only the "local density" family of approximations is available in atoMEC, and thus the default values are usually a sensible choice.
+For more information on exchange and correlation functionals, there is a number of reviews in the literature, for example Ref. :cite:`xc_review`.
+
+This stage of the average-atom calculation, i.e. the specification of the model and the choices of approximation within that, is shown in the second row of Fig. ??.
+
+
+.. figure:: atoMEC_model.png
+   :scale: 45
+   :align: left
+
+   Auto-generated print statement from calling the `models.ISModel` object.
+
+
+`ISModel.CalcEnergy`: SCF calculation and numerical parameters
+**************************************************************
+
+Once the physical parameters and model has been defined, the next stage in the average-atom calculation (or indeed any DFT calculation) is the SCF procedure.
+In atomEC, this is invoked by the `ISModel.CalcEnergy` function.
+This function is called `CalcEnergy` because it finds the KS orbitals (and associated KS density) which minimize the total free energy.
+
+Clearly, there are various mathematical and algorithmic choices in this calculation.
+These include, for example, the basis in which the KS orbitals and potential are represented; the algorithim used to solve the KS equations (:ref:`kseqn`); and how to ensure smooth convergence of the SCF cycle.
+In atoMEC, the SCF procedure currently follows a single pre-determined algorithm, which we breifly review below.
+
+In atoMEC, we represent the radial KS quantities (orbitals, density and potential) on a logarithmic grid, i.e. :math:`x=\log(r)`.
+Furthermore, we make a transformation of the orbitals :math:`P_{nl}(x) = X_{nl}(x)e^{x/2}`. Then the equations to be solve become:
+
+.. math::
+   :type: eqnarray
+   :label: eq:logkseqn
+
+   \frac{\textrm{d}^2 P_{nl}(x)}{\textrm{d}x^2} - 2e^{2x}(W(x)-\epsilon_{nl})P_{nl}(x)=0 \\
+   W(x) = v_\textrm{s}[n](x) + \frac{1}{2}\left(l+\frac{1}{2}\right)^2 e^{-2x}
+
+In atoMEC, we solve the KS equations using a matrix implementation of Numerov's algorithm :cite:`matrix_numerov`.
+This means we diagonalize the following equation:
+
+.. math::
+   :type: eqnarray
+   :label: eq:ham
+	   
+   \hat{H}\vec{P} &&= \vec{\epsilon} \hat{B} \vec{P} \\
+   \hat{H} &&= \hat{T} + \hat{B} + W_\textrm{s}(\vec{x}) \\
+   \hat{T} &&= -\frac{1}{2} e^{-2\vec{x}} \hat{A} \\
+   \hat{A} &&= \frac{\hat{I}_{-1} -2\hat{I}_0 + \hat{I}_1}{\textrm{d}x^2} \\
+   \hat{B} &&= \frac{\hat{I}_{-1} +10\hat{I}_0 + \hat{I}_1}{12}\,,
+   	   
+where :math:`\hat{I}_{-1/0/1}` are lower shift, identify and upper shift matrices.
+
+The Hamiltonian matrix :math:`\hat{H}` is sparse and we only seek a subset of eigenstates with lower energies: there is therefore no need to perform a full diagonalization, which scales as :math:`\mathcal{O}(N^3)`, with :math:`N` being the size of the radial grid.
+Instead, we use SciPy's sparse matrix diagonalization function :code:`scipy.sparse.linalg.eigs`, which scales more efficiently and allows us to go to larger grid sizes.
+
+After each step in the SCF cycle, the relative changes in the free energy :math:`F`, density :math:`n(r)` and potential :math:`v_\textrm{s}(r)` are computed.
+Specifically, the quantities computed are
+
+.. math::
+   :type: eqnarray
+   :label: eq:conv
+
+    \Delta F &&= \left|\frac{F^{i}-F^{i-1}}{F^{i}}\right| \\
+    \Delta n &&= \frac{\int \mathrm{d}r|n^i(r)-n^{i-1}(r)|}{\int \mathrm{d}r n^i(r)}\\
+    \Delta v &&= \frac{\int \mathrm{d}r|v^i_\textrm{s}(r)-v_\textrm{s}^{i-1}(r)|}{\int \mathrm{d}r v_\textrm{s}^i(r)}
+
+Once all three of these metrics fall below a certain threshold, the SCF cycle is considered converged and the calculation finishes.
+
+The SCF cycle is an example of a non-linear system and thus is prone to chaotic (non-convergent) behaviour, and consequently a range of techniques have been developed to ensure convergence :cite:`SCFconvergence`.
+Fortunately, the tendency for calculations not to converge becomes less likely for temperatures above zero (and especially as temperature increases).
+Therefore we have implemented only a simple linear mixing scheme in atoMEC.
+The potential used in each diagonilization step of the SCF cycle is not simply the one generated from the most recent density, but a mix of that potential and the previous one,
+
+.. math::
+   :label: eq:potmix
+
+   v_\textrm{s}^{(i)}(r) = \alpha v_\textrm{s}^{i}(r) + (1 - \alpha) v_\textrm{s}^{i-1}(r)\,.
+
+In general, a lower value of the mixing fraction :math:`alpha` makes the SCF cycle more stable, but requires more iterations to converge.
+Typically a choice of :math:`\alpha\approx 0.5` gives a reasonable balance between speed and stability.
+
+We can thus summarize the key parameters in an SCF calculation as follows:
+
+* The maximum number of **eigenstates** to compute, in terms of both the principal and angular quantum numbers
+* The numerical **grid** parameters, in particular the grid size
+* The **convergence** tolerances, Eqs. (??) to (??)
+* The **SCF** parameters, i.e. the mixing fraction and the maximum number of iterations
+
+The first three items in this list essentially control the accuracy of the calculation.
+In principle, for each SCF calculation - i.e. a unique set of physical and model inputs - these parameters should be independently varied until some property (such as the total free energy) is considered suitably converged with respect to that parameter.
+Changing the SCF parameters should not affect the final results (within the convergence tolerances), only the number of iterations in the SCF cycle.
+  
+Let us now consider an example SCF calculation, using the `Atom` and `model` objects we have already defined:
+
+.. code-block:: python
+
+   from atoMEC import config
+   config.numcores = -1 # parallelize
+
+   nmax = 3 # max value of principal quantum number
+   lmax = 3 # max value of angular quantum number
+
+   # run SCF calculation
+   scf_out = model.CalcEnergy(
+    nmax,
+    lmax,
+    grid_params={"ngrid": 1500},
+    scf_params={"mixfrac": 0.7},
+    )
+
+We see that the first two parameters passed to the `CalcEnergy` function are the `nmax` and `lmax` quantum numbers, which specify the number of eigenstates to compute.
+Precisely speaking, there is a unique Hamiltonian for each value of the angular quantum number :math:`l` (and in a spin-polarized calculation, also for each spin quantum number).
+The sparse diagonilization routine then computes the first `nmax` eigenvalues for each Hamiltonian.
+In atoMEC, these diagonilizations can be run in parallel since they are independent for each value of :math:`l`.
+This is done by setting the :code:`config.numcores` variable to the number of cores desired (:code:`config.numcores=-1` uses all the available cores) and handled via the joblib library :cite:`joblib`.
+
+The remaining parameters passed to the :code:`CalcEnergy` function are optional; in the above, we have specified a grid size of 1500 points and a mixing fraction :math:`\alpha=0.7`.
+The above code automatically prints the output seen in Fig. ??.
+This output shows the SCF cycle and, upon completion, the breakdown of the total free energy into its various components, as well as other useful information such as the KS energy levels and their occupations.
+
+.. figure:: SCF_output.png
+
+   Auto-generated print statement from calling the :code:`ISModel.CalcEnergy` function
+
+Addtionally, the output of the SCF function is a dictionary containing the :code:`staticKS.Orbitals`, :code:`staticKS.Density`, :code:`staticKS.Potential` and :code:`staticKS.Density` objects.
+For example, one could extract the eigenfunctions as
+
+.. code-block:: python
+
+   orbs = scf_out["orbitals"] # orbs object
+   ks_eigfuncs = orbs.eigfuncs # eigenfunctions
+   
+The initialization of the SCF procedure is shown in the third and fourth rows of Fig. ??, with the SCF procedure itself shown in the remaining rows.
+
+This completes the section on the code structure and algorithmic details.
+As discussed, with the output of an SCF calculation, there are various kinds of postprocessing one can perform to obtain other properties of interest.
+So far in atoMEC, these are limited to the computation of the pressure (:code:`ISModel.CalcPressure`), the electron localization function (:code:`atoMEC.postprocess.ELFTools`) and the Kubo-Greenwood conductivity (:code:`atoMEC.postprocess.conductivity`).
+We refer readers to our pre-print :cite:`arxiv_KG` for details on how the electron localization function and the Kubo-Greenwood conductivity can be used to improve predictions of the mean ionization state.
+   
+
+
