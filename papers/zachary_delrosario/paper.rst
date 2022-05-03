@@ -148,21 +148,21 @@ To highlight the dependency issue for novice modelers, grama uses error messages
 
    ``ValueError``: Present model copula must be defined for sampling. Use ``CopulaIndependence`` only when inputs can be guaranteed independent. See the Documentation chapter on Random Variable Modeling for more information. https://py-grama.readthedocs.io/en/latest/source/rv_modeling.html
 
-Grama is designed both as a teaching tool and a scientific modeling toolkit. For the student, grama offers teachable moments to help the novice grow as a modeler. For the scientist, enforces practices that promote scientific reproducibility.
+Grama is designed both as a teaching tool and a scientific modeling toolkit. For the student, grama offers teachable moments to help the novice grow as a modeler. For the scientist, grama enforces practices that promote scientific reproducibility.
 
 Encouraging Sound Analysis
 --------------------------
 
 As mentioned above, concise grama syntax is desirable to *encourage sound analysis practices*. Grama is designed to support higher-level learning outcomes :cite:`bloom1956taxonomy`; for instance, rather than focusing on *applying* programming constructs to generate model results, grama is intended to help users *study* model results ("evaluate", according to Bloom's Taxonomy). Sound computational analysis demands study of simulation results, e.g. to check for numerical instabilities. This case study makes this learning outcome distinction concrete by considering *parameter sweeps*.
 
-Generating a parameter sweep similar to Figure :ref:`example-sweep` with standard Python libraries requires a considerable amount of boilerplate code, manual coordination of model data, and explicit loop construction: The following code generates parameter sweep data using standard libraries. Note that this code sweeps through values of ``x`` holding values of ``y`` fixed; additional code would be necessary to construct a sweep through ``y`` [#]_.
+Generating a parameter sweep similar to Figure :ref:`example-sweep` with standard Python libraries requires a considerable amount of boilerplate code, manual coordination of model information, and explicit loop construction: The following code generates parameter sweep data using standard libraries. Note that this code sweeps through values of ``x`` holding values of ``y`` fixed; additional code would be necessary to construct a sweep through ``y`` [#]_.
 
 .. [#] Code assumes ``import numpy as np; import pandas as pd``.
 
 .. code-block:: python
 
-    ## Manual approach
-    # Gather model data
+    ## Parameter sweep: Manual approach
+    # Gather model info
     x_lo = -1; x_up = +1;
     y_lo = -1; y_up = +1;
     f_model = lambda x, y: x**2 * y
@@ -188,8 +188,8 @@ Parameter sweep functionality can be achieved in grama without explicit loop man
 
 .. code-block:: python
 
-    ## Grama approach
-    # Gather model data
+    ## Parameter sweep: Grama approach
+    # Gather model info
     md_gr = (
         gr.Model()
         >> gr.cp_vec_function(
@@ -209,7 +209,7 @@ Parameter sweep functionality can be achieved in grama without explicit loop man
         n_sweeps=3,
     )
 
-Once a model is implemented in grama, performing a parameter sweep is trivial, requiring just two lines of code and zero initial choices for analysis parameters. The practical outcome of this software design is that users will tend to *self-initiate* parameter sweeps: While students will rarely choose to write the extensive boilerplate code necessary for a parameter sweep (unless required to do so), students writing code in grama will tend to self-initiate sound analysis practices.
+Once a model is implemented in grama, generating and visualizing a parameter sweep is trivial, requiring just two lines of code and zero initial choices for analysis parameters. The practical outcome of this software design is that users will tend to *self-initiate* parameter sweeps: While students will rarely choose to write the extensive boilerplate code necessary for a parameter sweep (unless required to do so), students writing code in grama will tend to self-initiate sound analysis practices.
 
 For example, the following code is unmodified from a student report [#]_. The original author implemented an ordinary differential equation model to simulate the track time ``"finish_time"`` of an electric formula car, and sought to study the impact of variables such as the gear ratio ``"GR"`` on ``"finish_time"``. While the assignment did not require a parameter sweep, the student chose to carry out their own study. The code below is a self-initiated parameter sweep of the track time model.
 
@@ -290,7 +290,7 @@ The classical way to build intuition about boat stability is via mathematical de
 EMA for Insight Mining
 ----------------------
 
-Generation and post-processing of the moment curve are implemented in the grama model :code:`md_performance` [#]_. This model parameterizes a 2d boat hull via its height :code:`H`, width :code:`W`, shape of corner :code:`n`, the vertical height of the center of mass :code:`f_com` (as a fraction of the height), and the *displacement ratio* :code:`d`---the ratio of the boat's mass to maximum water mass displaced. Note that a boat with :code:`d > 1` is incapable of flotation. The model :code:`md_performance` returns :code:`stability = -dMdtheta_0`; the negative of the moment curve slope at upright, as well as the :code:`mass` and AVS :code:`angle`. A positive value of :code:`stability` indicates upright stability, while a larger value of :code:`angle` indicates a wider range of stability.
+Generation and post-processing of the moment curve are implemented in the grama model :code:`md_performance` [#]_. This model parameterizes a 2d boat hull via its height :code:`H`, width :code:`W`, shape of corner :code:`n`, the vertical height of the center of mass :code:`f_com` (as a fraction of the height), and the *displacement ratio* :code:`d`---the ratio of the boat's mass to maximum water mass displaced. Note that a boat with :code:`d > 1` is incapable of flotation; a smaller value of :code:`d` corresponds to a boat that floats higher in the water. The model :code:`md_performance` returns :code:`stability = -dMdtheta_0`; the negative of the moment curve slope at upright, as well as the :code:`mass` and AVS :code:`angle`. A positive value of :code:`stability` indicates upright stability, while a larger value of :code:`angle` indicates a wider range of stability.
 
 The EMA process begins by generating data from the model; however, the generation of a moment curve is a nontrivial calculation. One should exercise care in choosing an initial sample of designs to analyze. The statistical problem of selecting efficient input values for a computer model is called the *design of computer experiments* :cite:`sacks1989doe`: The grama verb `gr.tf_sp()` implements the support points algorithm :cite:`mak2018support` to reduce a large dataset of target points to a smaller (but representative) sample. The following code generates a sample of input design values via :code:`gr.ev_sample()` with the :code:`skip=True` argument, uses :code:`gr.tf_sp()` to "compact" this large sample, then evaluates the performance model at the smaller sample.
 
@@ -355,9 +355,11 @@ Correlations are a reasonable first-check of input/output behavior, but linear c
 		    )
 		)
 
-TODO get KCV table formatted
 
-The k-folds CV results suggest a highly accurate model for :code:`stability`, and a moderately accurate model for :code:`angle`. The following code defines the surrogate model over a domain that includes the original dataset, and performs parameter sweeps across all inputs.
+.. csv-table:: Accuracy (:math:`R^2`) estimated via k-fold cross validation of gaussian process model. :label:`kcv`
+   :file: ./papers/zachary_delrosario/kcv.csv
+
+The k-folds CV results (Tab. :ref:`kcv`) suggest a highly accurate model for :code:`stability`, and a moderately accurate model for :code:`angle`. The following code defines the surrogate model over a domain that includes the original dataset, and performs parameter sweeps across all inputs.
 
 .. code-block:: python
 
@@ -369,7 +371,11 @@ The k-folds CV results suggest a highly accurate model for :code:`stability`, an
 		        W=gr.marg_mom("uniform", mean=2.5, cov=0.35),
 		        n=gr.marg_mom("uniform", mean=1.0, cov=0.30),
 		        d=gr.marg_mom("uniform", mean=0.5, cov=0.30),
-		        f_com=gr.marg_mom("uniform", mean=0.55, cov=0.47),
+		        f_com=gr.marg_mom(
+			    "uniform",
+			    mean=0.55,
+			    cov=0.47,
+			),
 		    )
 		    >> gr.cp_copula_independence()
 		)
@@ -381,7 +387,7 @@ The k-folds CV results suggest a highly accurate model for :code:`stability`, an
 		)
 
 .. figure:: fit-sweep.png
-   :scale: 60%
+   :scale: 50%
    :figclass: bht
 
    Parameter sweeps for fitted GP model. Model :code:`*_mean` and predictive uncertainty :code:`*_sd` values are reported for each output :code:`angle`, :code:`stability`. :label:`fit-sweep`
@@ -390,13 +396,13 @@ Figure :ref:`fit-sweep` displays parameter sweeps for the surrogate model of :co
 
 The parameter sweeps Figure :ref:`fit-sweep` of show a consistent and strong effect of :code:`f_com` on the :code:`stability_mean` of the boat; note that all the sweeps across :code:`f_com` for :code:`stability_mean` tend to be monotone with a fairly steep slope. This is in agreement with the correlation results of Figure :ref:`corrtile`; the :code:`f_com` sweeps tend to have the steepest slopes. Given the high accuracy of the model for :code:`stability` (as measured by k-folds CV), this trend is reasonably trustworthy.
 
-However, the same figure shows an inconsistent (non-monotone) effect of most inputs on the AVS :code:`angle_mean`. These results are in agreement with the k-fold CV results shown above. Clearly, the surrogate model is untrustworthy, and we should resist trusting conclusions from the parameter sweeps for :code:`angle_mean`. This undermines the conclusion we drew from the input/output correlations pictured in Figure :ref:`corrtile`. Clearly, :code:`angle` exhibits more complex behavior than a simple linear correlation with each of the both design variables.
+However, the same figure shows an inconsistent (non-monotone) effect of most inputs on the AVS :code:`angle_mean`. These results are in agreement with the k-fold CV results shown above. Clearly, the surrogate model is untrustworthy, and we should resist trusting conclusions from the parameter sweeps for :code:`angle_mean`. This undermines the conclusion we drew from the input/output correlations pictured in Figure :ref:`corrtile`. Clearly, :code:`angle` exhibits more complex behavior than a simple linear correlation with each of the boat design variables.
 
 A different analysis of the boat hull :code:`angle` data helps develop useful insights. We pursue an active subspace analysis of the data to reduce the dimensionality of the input space by identifying directions that best explain variation in the output :cite:`delRosario2017,constantine2015`. The verb :code:`gr.tf_polyridge()` implements the variable projection algorithm of Reference :cite:`hokanson2018projection`; the following code pursues a two-dimensional reduction of the input space. Note that the hyperparameter :code:`n_degree=6` is set via a cross-validation study.
 
 .. code-block:: python
 
-		## Find 2 important directions
+		## Find two important directions
 		df_weights = (
 		    df_boats
 		    >> gr.tf_polyridge(
@@ -413,16 +419,16 @@ The subspace weights are reported in Table :ref:`weights` below. Note that the l
 
 .. table:: Subspace weights in :code:`df_weights`. :label:`weights`
 
-   +-----------+-----------+----------+-----------+-----------+-----------+
-   | Direction |     H     |     W    |      n    |     d     |   f_com   |
-   +===========+===========+==========+===========+===========+===========+
-   |     1     | -0.027733 | 0.039411 | -0.118663 |  0.400932 | -0.907111 |
-   +-----------+-----------+----------+-----------+-----------+-----------+
-   |     2     | -0.653515 | 0.379819 | -0.015670 | -0.612041 | -0.231983 |
-   +-----------+-----------+----------+-----------+-----------+-----------+
+   +-----------+---------+--------+---------+---------+---------+
+   | Direction |    H    |    W   |     n   |    d    |  f_com  |
+   +===========+=========+========+=========+=========+=========+
+   |     1     | -0.0277 | 0.0394 | -0.1187 |  0.4009 | -0.9071 |
+   +-----------+---------+--------+---------+---------+---------+
+   |     2     | -0.6535 | 0.3798 | -0.0157 | -0.6120 | -0.2320 |
+   +-----------+---------+--------+---------+---------+---------+
 
 
-Using the subspace weights in Table :ref:`weights` to project the data to two dimensions enables visualizing all boat geometries in a single plot. Figure :ref:`2d-projection` reveals that this 2d projection is very successful at separating universally-stable (:code:`angle==180`), upright-unstable (:code:`angle==0`), and intermediate cases (:code:`0 < angle < 180`). Intermediate cases are concentrated at higher values of the second active variable; there is a phase transition between universally-stable and upright-unstable vessels at lower values of the second active variable.
+Using the subspace weights in Table :ref:`weights` to produce a 2d projection of the feature space enables visualizing all boat geometries in a single plot. Figure :ref:`2d-projection` reveals that this 2d projection is very successful at separating universally-stable (:code:`angle==180`), upright-unstable (:code:`angle==0`), and intermediate cases (:code:`0 < angle < 180`). Intermediate cases are concentrated at higher values of the second active variable; there is a phase transition between universally-stable and upright-unstable vessels at lower values of the second active variable.
 
 .. figure:: 2d-projection.png
    :scale: 50%
@@ -431,7 +437,7 @@ Using the subspace weights in Table :ref:`weights` to project the data to two di
    Boat design feature vectors projected to 2d active subspace. The origin corresponds to the mean feature vector. :label:`2d-projection`
 
 
-Interpreting Figure :ref:`2d-projection` in light of Table :ref:`weights` provides us with deep insight about boat stability: Since active variable 1 corresponds to loading (high displacement ratio :code:`d` with a low COM :code:`f_com`), we can see that the boat's loading conditions are key to determining its stability. Since active variable 2 depends on the aspect ratio (higher width, shorter height), Figure Figure :ref:`2d-projection` suggests that only wider boats will tend to exhibit intermediate stability.
+Interpreting Figure :ref:`2d-projection` in light of Table :ref:`weights` provides us with deep insight about boat stability: Since active variable 1 corresponds to loading (high displacement ratio :code:`d` with a low COM :code:`f_com`), we can see that the boat's loading conditions are key to determining its stability. Since active variable 2 depends on the aspect ratio (higher width, shorter height), Figure :ref:`2d-projection` suggests that only wider boats will tend to exhibit intermediate stability.
 
 Conclusions
 ===========
