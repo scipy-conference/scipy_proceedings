@@ -110,7 +110,7 @@ This system of defaults is important for pedagogical design: Introductory grama 
 Pedagogy Case Studies
 =====================
 
-The following two case studies illustrate how grama is designed to support teaching.
+The following two case studies illustrate how grama is designed to support *pedagogy*: the formal method and practice of teaching. In particular, grama is designed for an active learning pedagogy :cite:`freeman2014active`, a style of teaching characterized by active student engagement.
 
 Teachable Moments through Errors for Learners
 ---------------------------------------------
