@@ -294,7 +294,7 @@ Generation and post-processing of the moment curve are implemented in the grama 
 
 The EMA process begins by generating data from the model; however, the generation of a moment curve is a nontrivial calculation. One should exercise care in choosing an initial sample of designs to analyze. The statistical problem of selecting efficient input values for a computer model is called the *design of computer experiments* :cite:`sacks1989doe`: The grama verb `gr.tf_sp()` implements the support points algorithm :cite:`mak2018support` to reduce a large dataset of target points to a smaller (but representative) sample. The following code generates a sample of input design values via :code:`gr.ev_sample()` with the :code:`skip=True` argument, uses :code:`gr.tf_sp()` to "compact" this large sample, then evaluates the performance model at the smaller sample.
 
-.. [#] The analysis reported here is available as a jupyter notebook at TODO URL.
+.. [#] The analysis reported here is available as a `jupyter notebook <https://github.com/zdelrosario/boat-stability/blob/main/01-ema-example.ipynb>`_.
 
 .. code-block:: python
 
