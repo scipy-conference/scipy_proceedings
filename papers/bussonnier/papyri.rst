@@ -18,6 +18,8 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
    library navigation search and indexing. By decoupling documentation generation
    from rendering we hope this can help to adress some of the documentation accesibility
    concern, and allow customisation based on users preferences. 
+   
+   To be continued.
 
 
 
