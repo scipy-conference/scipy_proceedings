@@ -135,6 +135,34 @@ to use either tools like `docrepr` or viewing pre-produced html.
 Editing docstring between a rock and a hard place
 -------------------------------------------------
 
+The numpydoc format is ubiquitous among the scientific ecosystem
+https://numpydoc.readthedocs.io/en/latest/format.html, It is loosely based on
+RST syntax, and despite supporting full rst syntax, docstrings often rarely
+contain full-featured directive.  As many tools show raw docstrings and are
+incapable of interpreting directive on the fly maintainers are often pull in two
+opposite directions. 
+
+  - keeping the docstrings simple, mostly text based with few directive in order
+    to have readability to the end user that might be exposed to the docstring
+    when using tools like IPython and Jupyter. 
+
+  - Write an extensive docstring, with references, and directive that
+    potentially create graphics, tables and more, but impede readability. 
+
+While tools like `docrepr` mitigate this problem, this is true only for IDE
+users and not Terminal users that will still be exposed to raw docstrings. This
+leads to long discussions, for example in `sympy
+<https://github.com/sympy/sympy/issues/14964>` on how should equations be
+represented in docstrings. 
+
+
+Some libraries would also prefer to use markdown in their docstrings, but this
+would create inconsistencies for the end user with respect to rendering. 
+
+Thus we have a
+
+
+
 Making documentation multi-step
 -------------------------------
 
@@ -170,9 +198,80 @@ documentation without having to go through the long and slow process of
 rebuilding everything. 
 
 
+Non Goals
+---------
+
+Many of the existing projects to build online documentation are well
+established, extremely flexible and fits the need or their users. We are in no
+way trying to cover many of the use case covered by projects like sphinx, or
+Jupyter Book. When authors want or need complete control of the output and wide
+personalisation options, or branding papyri is likely not the project to look
+at. That is to say single-project websites where appearance, layout, domain is
+controlled by the author is an explicit non-goal.
+
+For user who are already using sphinx, mkdocs or other projects and are
+interested in using Papyri, we also not targeting 100% compatibilities. You
+should expect your project to requires minor modifications to work with papyri. 
+We in particular are stricter on many of the rst directive than docutils and
+sphinx are, and we believe that a stricter requirements leads to more uniform
+documentation setup and syntax, which is simpler for contributors and allow to
+catch more errors at compile time. This is qualitatively supported by number of
+documentation fixes we did upstream during the developments ADD REFERENCES,
+HERE`.
+
+
+Standadarzing IRD format
+------------------------
+
+
+High level Architecture 
+-----------------------
+
+The papyri lifecycle for documentation can roughly be decomposed into 3 broad
+categories of stakeholders, and processes. 
+
+The first stakeholders are library maintainers. Those should ensure that papyri
+can build Intermediate Representation Documentation (IRD) files. And publish
+and IRD bundle.
+
+Creation of IRD files and bundles is a computation intensive step, that may
+requires complex dependencies, or specific plugins. Creation of these files may
+be a multi-step process or use external tooling that is not related to papyri or
+does not use Python. Note that these steps do not requires the libraries
+maintainer to worry about visual appearance and rendering of documentation.
+
+
+The second category of stakeholder are end-users. Those users are responsible
+from installing IRD bundles from the libraries the wish to use on their
+machines. Note that IRD from libraries that are not in use are installable as
+well, and that IRD bundle not attached to a particular library could also be
+installed, providing for example domain specific tutorials or examples. 
+
+
+The third category of stakeholder are IDE developers, who want to make sure
+IRD files can be properly rendered and browsed by their users; potentially
+taking into account user preferences, and providing added values with for
+example indexing, searching, bookmarks. Such a category of stakeholder could
+also be opinionated web hosting in a similar fashion to rustsdocs, devdocs.io
 
 
 
+
+
+
+
+
+
+
+
+
+Misc
+----
+
+Is is common for compiler to use IR (MIRI, LLVM IR)
+Not a novel idea, allow to mix compilation from multiple targets, LTO.
+Diataxis
+rustdocs.
 
 
 
