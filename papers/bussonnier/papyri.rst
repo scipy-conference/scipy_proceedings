@@ -1,7 +1,7 @@
 :author: Matthias Bussonnier
 :email: bussonniermatthias@gmail.com
 :institution: QuanSight, Inc
-:institution: Digital Ours Lab
+:institution: Digital Ours Lab, SARL.
 :orcid: 0000-0002-7636-8632
 :corresponding:
 
@@ -37,7 +37,7 @@ that can make it hard to develop coherent and integrated systems.
 While a number of tools and documentation exists, and improvements are made
 every-day, most efforts attempt to build documentation in an isolated way. This
 inherently leads to a heterogamous aspect of documentation that can be hard to
-grasp for the newcomer. This also means that each library authors much make
+grasp for the newcomers. This also means that each library authors much make
 choices and maintain build script or services.
 
 Efforts such as conda-forge have shown that concerted efforts can give a much
@@ -45,6 +45,29 @@ better experience to end-users, and in todays world where sharing libraries
 source on code platforms, Continuous Integration, and many other tools is
 ubiquitous, we believe a better documentation framework for many of the
 libraries of the scientific Python is possible.
+
+
+Motivation
+----------
+
+We've been frustrated by the documentation experience in the Python ecosystem, 
+and have found the many of our colleagues are as well. To often have we seen
+less experienced users struggle to find the correct "official" website for the
+documentation of a given libraries, or stumble across an old version that is
+better ranked in your favorite search engine. 
+
+While access to inspector in many IDE gives access to some documentation, it
+does not get access to narrative, or galleries. CLI users are in a  even worse
+place as raw source is often displayed and no navigation is possible.
+
+As libraries, maintainers we do not want to have to think about final rendering.
+Though we'd like our users to gain from improvement in the rendering without
+having to rebuild all our docs.
+
+Against all advices we received and our own experience we decided to rebuild a
+documentation framework from scratch, and with minimal dependencies.
+
+
 
 Parallel with to Compiled languages
 -----------------------------------
@@ -56,8 +79,12 @@ a machine to a final output targeting the flesh and blood machine between the
 keyboard and the chair.
 
 In particular we'll draw similarities with "ahead-of-time" [AOT]_,
-"just-in-time" [JIT_], "intermediate representation (IR)" [IR]_, link-time
-optimization (LTO) [LTO]_.
+"just-in-time" [JIT]_, "intermediate representation (IR)" [IR]_, link-time
+optimization (LTO) [LTO]_, static vs dynamic linking.
+
+If you are familiar with these concept that might be a good parallel to keep in
+mind in order to follow the reasoning and architecture, but is not necessary to
+understand the concepts behind papyri.
 
 Current Tools and their limitations
 -----------------------------------
@@ -89,11 +116,15 @@ documentation build time and are thus inherently unidirectional. Even
 considering `numpy` and `scipy` that are two extremely close libraries, having
 proper cross-linked of documentation requires at least three 5 steps:
 
-   - build numpy documentation
-   - publish numpy ``object.inv`` file. 
-   - build scipy documentation using numpy ``obj.inv`` file.
-   - publish scipy ``object.inv`` file
-   - rebuild numpy docs to make use of scipy's ``obj.inv``
+- build numpy documentation
+
+- publish numpy ``object.inv`` file. 
+
+- build scipy documentation using numpy ``obj.inv`` file.
+
+- publish scipy ``object.inv`` file
+  
+- rebuild numpy docs to make use of scipy's ``obj.inv``
 
 Any of the created links being potentially invalidated on the publication of a
 new version of any of those libraries. 
@@ -115,12 +146,12 @@ contain full-featured directive.  As many tools show raw docstrings and are
 incapable of interpreting directive on the fly maintainers are often pull in two
 opposite directions. 
 
-  - keeping the docstrings simple, mostly text based with few directive in order
-    to have readability to the end user that might be exposed to the docstring
-    when using tools like IPython and Jupyter. 
+- keeping the docstrings simple, mostly text based with few directive in order
+  to have readability to the end user that might be exposed to the docstring
+  when using tools like IPython and Jupyter. 
 
-  - Write an extensive docstring, with references, and directive that
-    potentially create graphics, tables and more, but impede readability. 
+- Write an extensive docstring, with references, and directive that
+  potentially create graphics, tables and more, but impede readability. 
 
 While tools like `docrepr` mitigate this problem, this is true only for IDE
 users and not Terminal users that will still be exposed to raw docstrings. This
@@ -142,8 +173,8 @@ Making documentation multi-step
 We first recognised that many of the customisation made by user when building
 documentation with sphinx fall in two categories:
 
-  - simpler input convenience. 
-  - modification of final rendering. 
+- simpler input convenience. 
+- modification of final rendering. 
 
 
 Wether you customise the ``.. code-block:`` directive to execute or reformat your
@@ -161,9 +192,10 @@ code snippets in a single click, `pydata-sphinx-theme` provide a different light
 theme. We'll note that this second category many of the improvement can fall
 into user preferences (`sphinx-rtd-dark-mode`), and developers end up making
 choices on behalf of their end users: 
-  - which syntax highlight to use ?
-  - should I show type annotations ?
-  - do I provide a light or dark theme ? 
+
+- which syntax highlight to use ?
+- should I show type annotations ?
+- do I provide a light or dark theme ? 
 
 
 We have often wished to modify the second category of extension and rebuild
@@ -228,14 +260,125 @@ example indexing, searching, bookmarks. Such a category of stakeholder could
 also be opinionated web hosting in a similar fashion to rustsdocs, devdocs.io
 
 
+Future possibilities
+--------------------
+
+- Removal of dynamic docstrings, 
+- Markdown
+- Static website,
+- post deprecation
+- translation
+
+
+Challenges
+----------
+
+Fully qualified names vs canonical names. 
+case sensitivity.
 
 
 
+Current implementation
+----------------------
 
 
+IRD file Generation
+~~~~~~~~~~~~~~~~~~~
+
+While the core idea around papyri resides in the IRD files and bundles, we can
+come back on some of the decision we made with current implementation.
+
+The current implementation only support parsing RST and Numpydoc in docstrings. 
+While we hope to extend it with MyST later, or provide it as a plugin, this is
+our main focus as a wide majority of the core Scientific python stack.
+We use Tree-Sitter, and tree-sitter-rst to parse RST syntax, in particular
+tree-sitter allow us to easily "unparse" an AST node when necessary as the ast
+nodes contains bytes offset to the original buffer. This was relatively
+convenient to handle custom directive a number of edge cases where project
+relied on loose definition of the rst syntax. For example rst directive are of
+the form::
+
+  .. directive:: arguments
+      
+      body
+
+While technically there is no space before the ``::``, docutils and sphinx allow
+this, but it fails in tree-sitter with an error node. We can check error nodes,
+un-parse, add heuristics to restore a proper syntax and parse the new node.
+
+Alternatively a number of directive like ``warnings``, ``notes``
+``admonitions`` still contain valid RST. Instead of storing the directive with
+the raw text, we parse the full document (potentially finding invalid syntax),
+and unparse to the raw text only if the directive requires it.
 
 
+Serialisation of datastructure into IRD files are currently using a custom
+serialiser that we hope to swap for msgspec. The AST objects are completely
+typed but contains a number of Unions and Sequences of Unions. We found out that
+many frameworks like ``pydantic`` do not support sequences of Unions where each
+item in the Union may be of a different type.
 
+
+We currently try to type-infer all code examples with Jedi, and pre-syntax
+highlight using pygments when possible.
+
+IRD File Installation
+~~~~~~~~~~~~~~~~~~~~~
+
+Download and Installation of IRD files is done concurrently using ``httpx``,
+with ``trio`` as an async framework. 
+
+The IRD files post-processed into a local custom format. Object informations are
+store in 3 different places: A local SQLite database, CBOR representation of
+each document, and raw storage on disk for assets and binary blobs. 
+
+SQlite allows us to easily query graph informations at run time, just before
+rendering, and is mostly optimised for infrequent read access.
+
+CBOR object for post-processed IRD files has been chosen to provide a more
+compact representation than JSON which is highly redundant, while still
+avoiding to use compression for fast access.
+
+
+Access to these resources is providing via an internal ``GraphStore`` API which
+is agnostic of the backend, and ensure the consistency of operation like
+adding/removing/replacing documents.
+
+Documentation Rendering
+~~~~~~~~~~~~~~~~~~~~~~~
+
+We've prototypes a number of rendering engines, each of them basically consist
+of fetching a single page and it's metadata, and walking the IRD AST tree, and
+rendering each nodes with user preferences. 
+
+- An ASCII terminal render using Jinja2. This can be useful to pipe
+  documentation to other tools like grep, less, cat.
+
+- A TUI browser using urwid. This lets you navigate in the terminal, reflow long
+  line on window resize, and can even open images files in external editors. We
+  encountered several bugs in urwid and are considering rewriting it using
+  Rich/Textual.
+
+- A Just-in-Time rendering engine using Jinja2/quart/trio ; Quart being an async
+  version of flask. This version is the one with the most features.
+
+- A static "Ahead of time", rendering of all the existing pages that can be
+  rendered ahead of time, using the same class as the Just-in-time rendering
+  that basically loops through all entries in the SQLite database and render
+  each.
+
+
+Our profile show that documentation rendering is limited by object serialisation
+and de serialisation from disk as well a Jinja2 templating engine. 
+We've played with writing a static html renderer in a compiled language (Rust,
+using compiled, and typed checked templates), and managed to get about a factor
+10 speedup, but this implementation is now out of syn with the main papyri
+code base. 
+
+
+Finally we've started implementing a JupyterLab extension that is capable of
+basic IRD file browsing and rendering, using react and typescript. It has
+limited capabilities, like ability to browse to previous pages.
 
 
 Misc
@@ -325,31 +468,31 @@ pulvinar id metus.
 .. [#] On the one hand, a footnote.
 .. [#] On the other hand, another footnote.
 
-.. figure:: figure1.png
-
-   This is the caption.:code:`chunk of code` inside of it. :label:`egfig` 
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-   This caption also has :code:`chunk of code`.
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it.  :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
+.. .. figure:: figure1.png
+.. 
+..    This is the caption.:code:`chunk of code` inside of it. :label:`egfig` 
+.. 
+.. .. figure:: figure1.png
+..    :align: center
+..    :figclass: w
+.. 
+..    This is a wide figure, specified by adding "w" to the figclass.  It is also
+..    center aligned, by setting the align keyword (can be left, right or center).
+..    This caption also has :code:`chunk of code`.
+.. 
+.. .. figure:: figure1.png
+..    :scale: 20%
+..    :figclass: bht
+.. 
+..    This is the caption on a smaller figure that will be placed by default at the
+..    bottom of the page, and failing that it will be placed inline or at the top.
+..    Note that for now, scale is relative to a completely arbitrary original
+..    reference size which might be the original size of your image - you probably
+..    have to play with it.  :label:`egfig2`
+.. 
+.. As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
+.. figures.
+.. 
 .. table:: This is the caption for the materials table. :label:`mtable`
 
    +------------+----------------+
