@@ -46,67 +46,40 @@ source on code platforms, Continuous Integration, and many other tools is
 ubiquitous, we believe a better documentation framework for many of the
 libraries of the scientific Python is possible.
 
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
+Parallel with to Compiled languages
+-----------------------------------
 
-   def sum(a, b):
-       """Sum two numbers."""
+We'll draw several comparison between documentation building and compiled
+languages, plus borrow an adapt a couple of terms from the domain.
+Needed, what is building the documentation bur going from a source-code meant for
+a machine to a final output targeting the flesh and blood machine between the
+keyboard and the chair.
 
-       return a + b
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
-   
-Inline code looks like this: :code:`chunk of code`.
+In particular we'll draw similarities with "ahead-of-time" [AOT]_,
+"just-in-time" [JIT_], "intermediate representation (IR)" [IR]_, link-time
+optimization (LTO) [LTO]_.
 
 Current Tools and their limitations
 -----------------------------------
 
-
 It is difficult to speak about the scientific python ecosystem documentation
-without speaking about `docutils` and `sphinx`, both of these libraries are the
-cornerstone of publishing html documentation. While few alternative exists, most
-tools and services have some internal knowledge of sphinx. `read the docs`
-provide a `specific sphinx theme` user can opt-in to, `Jupyter-book` is  built
-on top of sphinx, and `MyST` parser made to allow markdown in documentation
-targets sphinx as a backend. 
+without speaking about docutils [docutils]_ and sphinx [sphinx]_ which are
+virtually use by all the libraries in the scientific Python ecosystem. Both hese
+libraries are the cornerstone of publishing html documentation for Python. While
+few alternative exists, most tools and services have some internal knowledge of
+sphinx. read the docs [RTD]_ provide a specific sphinx theme [RTD-theme]_ user
+can opt-in to, `Jupyter-book` is  built on top of sphinx, and `MyST` parser made
+to allow markdown in documentation targets sphinx as a backend. 
 
 All the above tools provides an "ahead of time" documentation compilation and
-rendering, a step that is slow and computationally intensive. Each project needs
-its specific plugins, extensions and configurations to properly build. It is
-also often relatively difficult to build documentation for a single object,
-making use of those tools for interactive exploration difficult. While this is
-attempted by projects like `docrepr` that is integrated both in `Jupyter` and
-`Spyder`, the above limitation means interactive documentation lacks inline
-plots, crosslinks, indexing and search.
+rendering, a step which is slow and computationally intensive. Each project
+needs its specific plugins, extensions and configurations to properly build. It
+is also often relatively difficult to build documentation for a single object (a
+single function, module or class), making use of those tools for interactive
+exploration difficult.  While this "just-in-time" approach is attempted by
+projects like `docrepr` that is integrated both in `Jupyter` and `Spyder`, the
+above limitation means interactive documentation lacks inline plots, crosslinks,
+indexing, search and many custom directives.
 
 
 Some of the above limitation are inherent to the design of documentation build
@@ -275,6 +248,30 @@ rustdocs.
 
 
 
+.. comment: 
+    In this talk we will demo and discuss the work that is being done on Papyri, a
+    new framework to provide rich documentation in Jupyter and Terminal IPython
+    with plots, crosslink, equations. We will describe how libraries can opt-in to
+    this new framework while still in beta to provide feedback, what are the trade-off of using it, the current
+    capabilities and the one planed with current funding, as well as where this
+    could go in the future.
+
+    This talk discusses a solution to a widely encountered problem of documentation while using Jupyter and Terminal IPython. This will be an impactful talk to the community of all scientific groups.
+
+
+
+    ## Summary
+
+    This submission is very interesting! I would have liked if the authors gave more detail on the difference between user perspectives (that is, library users navigating documentation with this tool), and developer perspectives (developers of libraries that may want to integrate this documentation framework into their projects). I also hope that the authors comment on documentation accessibilty for users of different skill levels and if / how this framework addresses it.
+
+    ## Is the abstract compelling?
+
+    Absolutely! This sounds like a fantastic tool that would be of interest to package developers and users in the SciPy community.
+
+    ## How relevant, immediately useful, and novel is the topic?
+
+    The topic is both relevant and useful to the community.
+
 
 
 
@@ -435,5 +432,11 @@ References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
+.. [docutils] https://docutils.sourceforge.io/
+.. [sphinx] https://www.sphinx-doc.org/en/master/
+.. [RTD] https://readthedocs.org/
+.. [RTD-theme] https://sphinx-rtd-theme.readthedocs.io/en/stable/
+.. [AOT] https://en.wikipedia.org/wiki/Ahead-of-time_compilation
+.. [JIT] https://en.wikipedia.org/wiki/Just-in-time_compilation
+.. [IR] https://en.wikipedia.org/wiki/Intermediate_representation
+.. [LTO] https://en.wikipedia.org/wiki/Interprocedural_optimization
