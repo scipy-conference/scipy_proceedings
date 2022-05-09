@@ -11,13 +11,15 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
 
 .. class:: abstract
 
-   We present here the idea behind papyri, a framework we are devlopping to
+   We present here the idea behind Papyri, a framework we are developing to
    provide a better documentation experience for the scientific ecosystem.
-   In particular we wish to provide a documentation browser from within Jupyter
-   or other IDE and python editors that gives an unified experience, cross
-   library navigation search and indexing. By decoupling documentation generation
-   from rendering we hope this can help to adress some of the documentation accesibility
-   concern, and allow customisation based on users preferences. 
+   In particular, we wish to provide a documentation browser from within Jupyter
+   or other IDE**s?** and Python editors that gives a unified experience, cross
+   library navigation search and indexing. 
+ %% I don't understand the last part of the sentence (let's chat).  
+   By decoupling documentation generation
+   from rendering we hope this can help adress some of the documentation accessibility
+   concerns, and allow customisation based on users' preferences. 
    
    To be continued.
 
@@ -26,12 +28,12 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
 
 .. class:: keywords
 
-   document, jupyter, eco-system, accessibility
+   Document, Jupyter, ecosystem, accessibility
 
 Introduction
 ------------
 
-The python ecosystem has grown rapidly over the past two decades, one one of the
+The Python ecosystem has grown rapidly over the past two decades, one of the
 last bastion where some of the proprietary competition tools shine is integrated
 documentation. Open-source libraries are also developed in distributed setting
 that can make it hard to develop coherent and integrated systems. 
