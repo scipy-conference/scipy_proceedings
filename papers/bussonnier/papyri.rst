@@ -11,75 +11,78 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
 
 .. class:: abstract
 
-   We present here the idea behind papyri, a framework we are devlopping to
+   We present here the idea behind Papyri, a framework we are developing to
    provide a better documentation experience for the scientific ecosystem.
-   In particular we wish to provide a documentation browser from within Jupyter
-   or other IDE and python editors that gives an unified experience, cross
-   library navigation search and indexing. By decoupling documentation generation
-   from rendering we hope this can help to adress some of the documentation accesibility
-   concern, and allow customisation based on users preferences. 
+   In particular, we wish to provide a documentation browser from within Jupyter
+   or other IDE **s?** and Python editors that gives a unified experience, cross
+   library navigation search and indexing. *I don't understand the last part of the sentence (let's chat).*  
+   By decoupling documentation generation from rendering we hope this can help address some of the documentation accessibility
+   concerns, and allow customisation based on users' preferences. 
    
 
 .. class:: keywords
 
-   document, jupyter, eco-system, accessibility
+   Document, Jupyter, ecosystem, accessibility
 
 Introduction
 ------------
 
-The python ecosystem has grown rapidly over the past two decades, one of the
+Over the past decades, the Python ecosystem has grown rapidly, and one of the
 last bastion where some of the proprietary competition tools shine is integrated
-documentation. Open-source libraries are – unlike proprietary counterparts –
-developed in a distributed setting that can make it hard to develop coherent and
-integrated documentation systems. 
+documentation. Indeed, open-source libraries are usually developed in
+distributed settings that can make it hard to develop coherent and integrated
+systems. 
 
-.. cequetuveux:
+While a number of tools and documentations exists (and improvements are made
+everyday), most efforts attempt to build documentation in an isolated way,
+inherently creating a heterogeneous framework. The consequences are twofolds:
+(i) it becomes difficult for newcomers to grasp the tools properly, (ii) there
+is a lack of cohesion and unified framework as library authors make their proper
+choices and must maintain build scripts or services.
 
-   commentatires en block.
-
-While a number of tools and documentation exists, and improvements are made
-every-day, most efforts attempt to build documentation in an isolated way. This
-inherently leads to a heterogeneous aspect of documentation that can be hard to
-grasp for the newcomers. This also means that each library authors much make
-choices and maintain build script or services.
-
-Efforts such as conda-forge have shown that concerted efforts can give a much
-better experience to end-users, and in todays world where sharing libraries
-source on code platforms, Continuous Integration, and many other tools is
-ubiquitous, we believe a better documentation framework for many of the
-libraries of the scientific Python is possible.
+Efforts such as conda-forge **[add ref]** have shown that concerted efforts can
+give a much better experience to end-users, and in today's world where sharing
+libraries source on code platforms, continuous integration, and many other tools
+is ubiquitous, we believe a better documentation framework for many of the
+libraries of the scientific Python is should be available.
 
 
 Motivation
 ----------
 
-We've been frustrated by the documentation experience in the Python ecosystem, 
-and have found the many of our colleagues are as well. To often have we seen
-less experienced users struggle to find the correct "official" website for the
-documentation of a given libraries, or stumble across an old version that is
-better ranked in your favorite search engine. 
+Many users, colleagues, and members of the community have been frustrated with
+the documentation experience in the Python ecosystem. Given a library, who
+hasn't struggle to find the "official" website for the documentation ? Often,
+users stumble across an old documentation version that is better ranked in their
+favorite search engine, and this impacts less experienced users' learning
+greatly.
 
-While access to inspector in many IDE gives access to some documentation, it
-does not get access to narrative, or galleries. CLI users are in a  even worse
-place as raw source is often displayed and no navigation is possible.
 
-As libraries, maintainers we do not want to have to think about final rendering.
-Though we'd like our users to gain from improvement in the rendering without
+While access to inspector in many IDE provides some documentation, it does not
+get access to the narrative, or full documentation gallery. Command Line
+Interface (CLI) users are in an even worse place as raw source is often
+displayed and no navigation is possible.
+
+As library maintainers, we do not want to have to think about final rendering.
+Though we would like users to gain from improvement in the rendering without
 having to rebuild all our docs.
 
-Against all advices we received and our own experience we decided to rebuild a
-documentation framework from scratch, and with minimal dependencies.
+Thus, against all advice we received and our own experience, we have decided to
+rebuild a documentation framework, from scratch, and with minimal dependencies:
+**Paryri**.
 
-
+**A classic paper/proceeding would : (i) merge intro and motiv, (ii) add a
+paragraph on Papyri just to say the goal of the proceeding is to present it, and
+then some outline**
 
 Parallel with to Compiled languages
 -----------------------------------
 
 We'll draw several comparison between documentation building and compiled
-languages, plus borrow an adapt a couple of terms from the domain.
-Needed, what is building the documentation bur going from a source-code meant for
-a machine to a final output targeting the flesh and blood machine between the
-keyboard and the chair.
+languages, plus borrow an adapt a couple of terms from the domain. Needed, what
+is building the documentation bur going from a source-code meant for a machine
+to a final output targeting the flesh and blood machine between the keyboard and
+the chair.
 
 In particular we'll draw similarities with "ahead-of-time" [AOT]_,
 "just-in-time" [JIT]_, "intermediate representation (IR)" [IR]_, link-time
