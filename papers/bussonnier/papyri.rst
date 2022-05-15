@@ -19,10 +19,6 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
    from rendering we hope this can help to adress some of the documentation accesibility
    concern, and allow customisation based on users preferences. 
    
-   To be continued.
-
-
-
 
 .. class:: keywords
 
@@ -31,14 +27,19 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
 Introduction
 ------------
 
-The python ecosystem has grown rapidly over the past two decades, one one of the
+The python ecosystem has grown rapidly over the past two decades, one of the
 last bastion where some of the proprietary competition tools shine is integrated
-documentation. Open-source libraries are also developed in distributed setting
-that can make it hard to develop coherent and integrated systems. 
+documentation. Open-source libraries are – unlike proprietary counterparts –
+developed in a distributed setting that can make it hard to develop coherent and
+integrated documentation systems. 
+
+.. cequetuveux:
+
+   commentatires en block.
 
 While a number of tools and documentation exists, and improvements are made
 every-day, most efforts attempt to build documentation in an isolated way. This
-inherently leads to a heterogamous aspect of documentation that can be hard to
+inherently leads to a heterogeneous aspect of documentation that can be hard to
 grasp for the newcomers. This also means that each library authors much make
 choices and maintain build script or services.
 
@@ -118,15 +119,15 @@ documentation build time and are thus inherently unidirectional. Even
 considering `numpy` and `scipy` that are two extremely close libraries, having
 proper cross-linked of documentation requires at least three 5 steps:
 
-- build numpy documentation
+- build NumPy documentation
 
-- publish numpy ``object.inv`` file. 
+- publish NumPy ``object.inv`` file. 
 
-- build scipy documentation using numpy ``obj.inv`` file.
+- build scipy documentation using NumPy ``obj.inv`` file.
 
 - publish scipy ``object.inv`` file
   
-- rebuild numpy docs to make use of scipy's ``obj.inv``
+- rebuild NumPy docs to make use of scipy's ``obj.inv``
 
 Any of the created links being potentially invalidated on the publication of a
 new version of any of those libraries. 
@@ -205,8 +206,11 @@ documentation without having to go through the long and slow process of
 rebuilding everything. 
 
 
-Non Goals
----------
+Goals Non Goals
+---------------
+
+Generic Website builder
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Many of the existing projects to build online documentation are well
 established, extremely flexible and fits the need or their users. We are in no
@@ -215,6 +219,9 @@ Jupyter Book. When authors want or need complete control of the output and wide
 personalisation options, or branding papyri is likely not the project to look
 at. That is to say single-project websites where appearance, layout, domain is
 controlled by the author is an explicit non-goal.
+
+Full compatibility with current systems
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For user who are already using sphinx, mkdocs or other projects and are
 interested in using Papyri, we also not targeting 100% compatibilities. You
@@ -226,9 +233,92 @@ catch more errors at compile time. This is qualitatively supported by number of
 documentation fixes we did upstream during the developments ADD REFERENCES,
 HERE`.
 
+Prescribing documentation sctructure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Standadarzing IRD format
-------------------------
+We do not want to prescribe how to write documentation, and who it should be
+targeted to. Nonetheless as we have to make technical choices, and when possible
+will keep in mind the Diátaxis Framework [DT]_ when possible.
+
+Accessibility and User proficiency
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We care about accessibility as well, one of the reason we will try to attach
+semantic meaning to items in the documentation when possible. As we also want
+documentation rendering to be separated from documentation building, this should
+let users opt-in to accessibility features, like hight contrast themes. 
+
+We believe also renderer can add preferences and configuration to alter
+representation of docs depending on the user proficiency. For example while type
+annotation is useful to the advance user it can be confusing for the neophyte.
+
+Similarly, newcomers tend to prefer working from examples, and could thus decide
+to promote examples earlier in the rendering. 
+
+Regardless of configure ability, we believe that a coherent experience where
+documentation is uniform and in a single place should make users more
+comfortable with finding information.
+
+Simplicity, speed and independence
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We still wish to have relative separation of documentation building, that is
+to say we wish to be able to build the documentation for each library
+independently. Especially library should be able to build without access to
+documentation bundle from library they link to.
+
+We do want IRD bundle installation to be relatively straightforward and fast. On
+large distributed system, we cannot afford to have the installation speed to
+grow polynomially with the number of installed packages.
+
+We do want the ability to have forward and backward links between pages. 
+
+And we do want to ability to lookup documentation for an object from the
+interactive REPL.
+
+
+Standard IRD format
+-------------------
+
+While we are still in search of a better name, most of the success of this
+project relies on the definition of standard interchangeable Intermediate
+Representation for Documentation format (IRD).
+
+This allow to separate concerns between M producers and N renderer, and reduce a
+M*N problem where each renderer need to be able to be able to consume input from
+each producer, to an N+M, where each producer should only care about producing
+IRD, and each renderer consume it.
+
+As of the writing of this paper, IRD files are currently separated into multiple
+categories. 
+
+- API files describe the documentation for a single object, expressed as a
+  Json object. When possible the informations are encoded semantically.
+  Files are organized based on the fully-qualified name of the Python object
+  they reference, and contain either absolute reference to another object
+  (library, version and identifier), or delayed references to objects that may
+  exists in another library. Some extra per-object meta information like
+  file/line number of definition can be stored as well.
+- Narrative files are similar to API file, except with the notion they do not
+  represent a given object, but posses a previous/next page, and are organised
+  in an ordered tree related to the table of content. 
+- Examples files are non-ordered collection of files.
+- Assets are untouched binary blobs that can be references by any of the above
+  three categories, and are the only category that only have backward
+  references, and no forward references.
+
+In addition to those 4 kinds of objects, metadata about the current package is
+stored: library name, current version, pypi name, GitHub slug, maintainer name,
+logo, issue tracker and a few other. Allowing us to for example auto generate
+link to issue tracker, or to source files. 
+
+We also store a mapping from fully qualified names to canonical names, in order
+to properly resolve some references, of normalise links.
+
+
+The final specification of the IRD file is unfinished, we thus invite you to
+consult the current state on the GitHub repository.
+
 
 
 High level Architecture 
@@ -275,9 +365,39 @@ Future possibilities
 Challenges
 ----------
 
-Fully qualified names vs canonical names. 
-case sensitivity.
+In order to be able to link to object documentation without having access the
+the build IRD bundles from all the library we need to come up with a schema that
+uniquely identify each object. For this we decided to use the fully qualified
+names of an object. That is to say the concatenation of the module in which it
+is defined, with its local name. We encountered multiple edge cases with that. 
 
+ - To mirror python syntax is it easy to use ``.`` to concatenate both parts. 
+   Unfortunately that leads to ambiguity when modules re-export functions of
+   the same name. 
+
+   .. code-block:: python
+
+       # module mylib/__init__.py
+
+       from .mything import mything
+
+   ``mylib.mything`` is ambiguous with respect to the ``mything`` submodule and
+   the object reexported. In future version we'll  use ``:`` as a module/name
+   separator.
+
+ - Decorated functions or other dynamic approaches to expose function to users
+   end up having ``<local>>`` in their fully qualified names, which is invalid. 
+
+ - Many builtins functions (``np.sin``, ``np.cos``, ...) do not have a fully
+   qualified name that can be extracted by object introspection. 
+
+ - Fully qualified names are often not canonical names (the name you typically
+   use for import), and finding the canonical name automatically is not always
+   straitforward. 
+
+We also came across challenges with case sensitivity, in particular of
+filesystems, and a couple of object have same fully qualified name up to
+difference in casing. 
 
 
 Current implementation
@@ -382,6 +502,34 @@ Finally we've started implementing a JupyterLab extension that is capable of
 basic IRD file browsing and rendering, using react and typescript. It has
 limited capabilities, like ability to browse to previous pages.
 
+.. figure:: scipy-dpss-old-new.png
+   :align: center
+   :figclass: w
+
+   The following screenshot shows current help for ``scipy.signal.dpss`` as
+   currently accessible on the left, as shown by the  papyri for jupyterlab
+   extension on the right.
+
+.. figure:: jupyterlab-prototype.png
+
+   Zoomed out view of the papyri for jupyterlab extension, we can see that the
+   code examples include plots. Most token in each examples are link to the
+   corresponding page. Early navigatin bar visible at the top.
+
+
+.. figure:: local-graph.png
+
+   (screenshot). We played with the possibility of using D3.js to a local graph
+   of connection among the most important node arround ``numpy.ndarray``. Nodes
+   are sized with respectd to the number of incomming links, and colored with
+   respect to their library.
+
+
+
+
+
+
+
 
 Misc
 ----
@@ -407,7 +555,13 @@ rustdocs.
 
     ## Summary
 
-    This submission is very interesting! I would have liked if the authors gave more detail on the difference between user perspectives (that is, library users navigating documentation with this tool), and developer perspectives (developers of libraries that may want to integrate this documentation framework into their projects). I also hope that the authors comment on documentation accessibilty for users of different skill levels and if / how this framework addresses it.
+    This submission is very interesting! I would have liked if the authors gave
+    more detail on the difference between user perspectives (that is, library
+    users navigating documentation with this tool), and developer perspectives
+    (developers of libraries that may want to integrate this documentation
+    framework into their projects). I also hope that the authors comment on
+    documentation accessibilty for users of different skill levels and if / how
+    this framework addresses it.
 
     ## Is the abstract compelling?
 
@@ -585,3 +739,4 @@ References
 .. [JIT] https://en.wikipedia.org/wiki/Just-in-time_compilation
 .. [IR] https://en.wikipedia.org/wiki/Intermediate_representation
 .. [LTO] https://en.wikipedia.org/wiki/Interprocedural_optimization
+.. [DT] https://diataxis.fr/
