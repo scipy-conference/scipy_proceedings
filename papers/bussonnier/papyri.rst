@@ -41,16 +41,6 @@ inherently creating a heterogeneous framework. The consequences are twofolds:
 is a lack of cohesion and unified framework as library authors make their proper
 choices and must maintain build scripts or services.
 
-Efforts such as conda-forge [CFORGE]_ have shown that concerted efforts can
-give a much better experience to end-users, and in today's world where sharing
-libraries source on code platforms, continuous integration, and many other tools
-is ubiquitous, we believe a better documentation framework for many of the
-libraries of the scientific Python is should be available.
-
-
-Motivation
-----------
-
 Many users, colleagues, and members of the community have been frustrated with
 the documentation experience in the Python ecosystem. Given a library, who
 hasn't struggle to find the "official" website for the documentation ? Often,
@@ -58,23 +48,29 @@ users stumble across an old documentation version that is better ranked in their
 favorite search engine, and this impacts less experienced users' learning
 greatly.
 
-
+The experience on users's local machine is not better:
 While access to inspector in many IDE provides some documentation, it does not
 get access to the narrative, or full documentation gallery. Command Line
 Interface (CLI) users are in an even worse place as raw source is often
 displayed and no navigation is possible.
 
-As library maintainers, we do not want to have to think about final rendering.
-Though we would like users to gain from improvement in the rendering without
-having to rebuild all our docs.
+Maintainers are not either in a good position, we do not want to have to think
+about final rendering. Though we would like users to gain from improvement in
+the rendering without having to rebuild all our docs.
+
+Efforts such as conda-forge [CFRG]_ have shown that concerted efforts can
+give a much better experience to end-users, and in today's world where sharing
+libraries source on code platforms, continuous integration, and many other tools
+is ubiquitous, we believe a better documentation framework for many of the
+libraries of the scientific Python is should be available.
 
 Thus, against all advice we received and our own experience, we have decided to
-rebuild a documentation framework, from scratch, and with minimal dependencies:
-**Paryri**.
+rebuild an opinionated documentation framework, from scratch, and with minimal
+dependencies: **Paryri**. Papyri focus on building an intermediate documentation
+representation format, that let us decoupling building, and rendering the docs;
+highly simplifying many operations and giving us access to many desired features
+not available until now.
 
-**A classic paper/proceeding would : (i) merge intro and motiv, (ii) add a
-paragraph on Papyri just to say the goal of the proceeding is to present it, and
-then some outline**
 
 Parallel with to Compiled languages
 -----------------------------------
@@ -97,13 +93,14 @@ Current Tools and their limitations
 -----------------------------------
 
 It is difficult to speak about the scientific python ecosystem documentation
-without speaking about docutils [docutils]_ and sphinx [sphinx]_ which are
-virtually use by all the libraries in the scientific Python ecosystem. Both hese
-libraries are the cornerstone of publishing html documentation for Python. While
-few alternative exists, most tools and services have some internal knowledge of
-sphinx. read the docs [RTD]_ provide a specific sphinx theme [RTD-theme]_ user
-can opt-in to, `Jupyter-book` is  built on top of sphinx, and `MyST` parser made
-to allow markdown in documentation targets sphinx as a backend. 
+without making reference to docutils [docutils]_ and sphinx [sphinx]_ which are
+virtually use by all the libraries in the scientific Python ecosystem. Both
+these libraries are the cornerstone of publishing html documentation for Python.
+While few alternative exists, most tools and services have some internal
+knowledge of sphinx. Read the Docs [RTD]_ provide a specific sphinx theme
+[RTD-theme]_ user can opt-in to, `Jupyter-book` is  built on top of sphinx, and
+MyST parser [MYST]_ which is made to allow markdown in documentation does targets
+sphinx as a backend. 
 
 All the above tools provides an "ahead of time" documentation compilation and
 rendering, a step which is slow and computationally intensive. Each project
@@ -112,46 +109,52 @@ is also often relatively difficult to build documentation for a single object (a
 single function, module or class), making use of those tools for interactive
 exploration difficult.  While this "just-in-time" approach is attempted by
 projects like `docrepr` that is integrated both in `Jupyter` and `Spyder`, the
-above limitation means interactive documentation lacks inline plots, crosslinks,
-indexing, search and many custom directives.
+above limitations means interactive documentation lacks inline plots,
+crosslinks, indexing, search and many custom directives.
 
 
 Some of the above limitation are inherent to the design of documentation build
-tools that were designed to build documentation in isolation. While sphinx
-does provide features like `intersphinx`, link resolutions are done at
-documentation build time and are thus inherently unidirectional. Even
-considering `numpy` and `scipy` that are two extremely close libraries, having
-proper cross-linked of documentation requires at least three 5 steps:
+tools that were designed to build documentation in isolation. While sphinx does
+provide features like `intersphinx`, link resolutions are done at documentation
+build time and are thus inherently unidirectional, and can easily get broken.
+For example, let's considering `numpy` and `scipy` which are two extremely close
+libraries, having proper cross-linked documentation requires at least five
+steps:
 
 - build NumPy documentation
 
 - publish NumPy ``object.inv`` file. 
 
-- build scipy documentation using NumPy ``obj.inv`` file.
+- build SciPy documentation using NumPy ``obj.inv`` file.
 
-- publish scipy ``object.inv`` file
+- publish SciPy ``object.inv`` file
   
-- rebuild NumPy docs to make use of scipy's ``obj.inv``
+- rebuild NumPy docs to make use of SciPy's ``obj.inv``
+
+Only then can both SciPy's and NumPy's documentation refer to each other.
 
 Any of the created links being potentially invalidated on the publication of a
-new version of any of those libraries. 
+new version of any of those libraries, which is something that regularly happen
+[#]_. 
 
-RPy2 moved : https://github.com/ipython/ipython/pull/12210
+
+.. [#] `ipython/ipython#12210 <https://github.com/ipython/ipython/pull/12210>`_, `numpy/numpy#21016 <https://github.com/numpy/numpy/pull/21016>`_, `& #29073 <https://github.com/numpy/numpy/pull/20973>`_
 
 
 This make using pre-produced html in IDEs and other tools difficult and error
 prone. This has also raised security issue where some institution are reluctant
 to use either tools like `docrepr` or viewing pre-produced html. 
 
-Editing docstring between a rock and a hard place
--------------------------------------------------
+Editing docstrings between a rock and a hard place
+--------------------------------------------------
 
-The numpydoc format is ubiquitous among the scientific ecosystem
-https://numpydoc.readthedocs.io/en/latest/format.html, It is loosely based on
-RST syntax, and despite supporting full rst syntax, docstrings often rarely
-contain full-featured directive.  As many tools show raw docstrings and are
-incapable of interpreting directive on the fly maintainers are often pull in two
-opposite directions. 
+The numpydoc format is ubiquitous among the scientific ecosystem [NPDOC]_ , It
+is loosely based on RST syntax, and despite supporting full rst syntax,
+docstrings often rarely contain full-featured directive. As many tools show raw
+docstrings and are incapable of interpreting directive on the fly, even if they
+could or had the right plugin, this may be computationally intensive which is
+undesirable, and executing code to view docs could be a security risk.
+Maintainers are thus often pull in two opposite directions. 
 
 - keeping the docstrings simple, mostly text based with few directive in order
   to have readability to the end user that might be exposed to the docstring
@@ -162,56 +165,26 @@ opposite directions.
 
 While tools like `docrepr` mitigate this problem, this is true only for IDE
 users and not Terminal users that will still be exposed to raw docstrings. This
-leads to long discussions, for example in `sympy
+leads to long discussions, for example in `SymPy
 <https://github.com/sympy/sympy/issues/14964>` on how should equations be
 represented in docstrings. 
 
-
 Some libraries would also prefer to use markdown in their docstrings, but this
-would create inconsistencies for the end user with respect to rendering. 
+would create inconsistencies for the end user with respect to rendering, and
+have the same dilemmas as above.
 
-Thus we have a
-
-
-
-Making documentation multi-step
--------------------------------
-
-We first recognised that many of the customisation made by user when building
-documentation with sphinx fall in two categories:
-
-- simpler input convenience. 
-- modification of final rendering. 
-
-
-Wether you customise the ``.. code-block:`` directive to execute or reformat your
-entry, or create a ``:rc:`` role to link to configuration parameters, a large
-number of custom directive and plug-in make it easier to create references, or
-make sure the content is auto generated to avoid documentation becoming out of
-sync with libraries source code. This first category often require arbitrary
-code execution and must import the library you are currently building the
-documentation for. 
-
-
-The second category of plugins attempt to improve the rendering in order to be
-more user friendly. For example `sphinx-copybutton` add a button to easily copy
-code snippets in a single click, `pydata-sphinx-theme` provide a different light
-theme. We'll note that this second category many of the improvement can fall
-into user preferences (`sphinx-rtd-dark-mode`), and developers end up making
-choices on behalf of their end users: 
-
-- which syntax highlight to use ?
-- should I show type annotations ?
-- do I provide a light or dark theme ? 
-
-
-We have often wished to modify the second category of extension and rebuild
-documentation without having to go through the long and slow process of
-rebuilding everything. 
+Finally a few library will dynamically modify their docstring at runtime in
+order to avoid using directives. This can have runtime cost, as well as a more
+complex maintenance and contribution cost.
 
 
 Goals Non Goals
 ---------------
+
+Below we'll layout goals and non-goals. Non-goals are as much if not more
+important than goals as they will frame the limit of the what the tools we'll
+build can do, and the more limited our goals are the more we can reason about
+the system and usually the smarter the tools can be.
 
 Generic Website builder
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,7 +193,7 @@ Many of the existing projects to build online documentation are well
 established, extremely flexible and fits the need or their users. We are in no
 way trying to cover many of the use case covered by projects like sphinx, or
 Jupyter Book. When authors want or need complete control of the output and wide
-personalisation options, or branding papyri is likely not the project to look
+personalisation options, or branding; papyri is likely not the project to look
 at. That is to say single-project websites where appearance, layout, domain is
 controlled by the author is an explicit non-goal.
 
@@ -234,64 +207,127 @@ We in particular are stricter on many of the rst directive than docutils and
 sphinx are, and we believe that a stricter requirements leads to more uniform
 documentation setup and syntax, which is simpler for contributors and allow to
 catch more errors at compile time. This is qualitatively supported by number of
-documentation fixes we did upstream during the developments ADD REFERENCES,
-HERE`.
+documentation fixes we did upstream during the developments **ADD REFERENCES,
+HERE to many fixes to numpy/scipy**.
 
 Prescribing documentation sctructure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We do not want to prescribe how to write documentation, and who it should be
 targeted to. Nonetheless as we have to make technical choices, and when possible
-will keep in mind the Diátaxis Framework [DT]_ when possible.
+will keep in mind the Diátaxis Framework [DT]_, this.
 
 Accessibility and User proficiency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We care about accessibility as well, one of the reason we will try to attach
-semantic meaning to items in the documentation when possible. As we also want
-documentation rendering to be separated from documentation building, this should
-let users opt-in to accessibility features, like hight contrast themes. 
+We care about accessibility as well, this is one of the reason we will try to
+attach semantic meaning to items in the documentation when possible. As we also
+want documentation rendering to be separated from documentation building, this
+should let users opt-in to accessibility features, like hight contrast themes, 
+or make it easier for speech to text library to consume the raw data.
 
-We believe also renderer can add preferences and configuration to alter
-representation of docs depending on the user proficiency. For example while type
+We also want to separate rendering in order to give users the opportunity to alter 
+documentation depending on their proficiency. For example while type
 annotation is useful to the advance user it can be confusing for the neophyte.
 
 Similarly, newcomers tend to prefer working from examples, and could thus decide
 to promote examples earlier in the rendering. 
 
-Regardless of configure ability, we believe that a coherent experience where
+Regardless of configurability, we believe that a coherent experience where
 documentation is uniform and in a single place should make users more
 comfortable with finding information.
 
 Simplicity, speed and independence
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We still wish to have relative separation of documentation building, that is
-to say we wish to be able to build the documentation for each library
-independently. Especially library should be able to build without access to
-documentation bundle from library they link to.
+We wish to have relative independence of documentation building across
+libraries. That is to say the system should be able to build documentation for a
+single library, without the need to access documentation for another.
 
-We do want IRD bundle installation to be relatively straightforward and fast. On
-large distributed system, we cannot afford to have the installation speed to
-grow polynomially with the number of installed packages.
+We do want documentation installation and rendering to be relatively
+straightforward and fast. On large distributed system, we cannot afford to have
+the installation speed to grow polynomially with the number of installed
+packages.
 
-We do want the ability to have forward and backward links between pages. 
+We do want the ability to have forward and backward links and references between
+pages. 
 
 And we do want to ability to lookup documentation for an object from the
 interactive REPL.
 
+The Papyri solution
+-------------------
+
+Here we present the solution we came up that we believe solve most of the
+problems we highlighted above, and then describe the current state of our
+implementations.
+
+Making documentation multi-step
+-------------------------------
+
+We first recognised that many of the customisation made by maintainers when
+building documentation with sphinx and similar tools fall in two categories:
+
+- simpler input convenience. 
+- modification of final rendering. 
+
+
+Wether you customise the ``.. code-block:`` directive to execute or reformat
+your entries, or create a ``:rc:`` role to link to configuration parameters, a
+large number of custom directive and plug-in only purpose make it easier to
+create references, or make sure the content is auto generated to avoid
+documentation becoming out of sync with libraries source code. This first
+category often require arbitrary code execution and must import the library you
+are currently building the documentation for. 
+
+
+The second category of plugins attempt to improve the documentation final
+rendering in order to be more user friendly. For example `sphinx-copybutton` add
+a button to easily copy code snippets in a single click, `pydata-sphinx-theme`
+provide a different appearance.
+
+We'll note that this second category many of the improvement can fall into user
+preferences (`sphinx-rtd-dark-mode`), and developers end up making choices on
+behalf of their end users: 
+
+- which syntax highlight to use ?
+- should I show type annotations ?
+- do I provide a light or dark theme ? 
+
+
+We have often wished to modify the second category of extension and re-render 
+documentation without having to go through the long and slow process of
+rebuilding and executing everything. 
+
+
+Thus our first choice was to have  strict boundary between the two types of
+plugins. The building or "generate" step of papyri that collect documentation
+informations has no knowledge and no configuration options that permit to modify
+the final appearance of the final documentation.
+
+The optional rendering process also have no knowledge of the building step, and
+can be run without access to the libraries we are rendering documentation for.
+
+This a powerful separation of concern, that will give a number of advantages and
+will allow us to achieve many features that are currently relatively hard with
+current systems. This is not a new technique if we refer to the field of
+compiler, where we can reason independently about each compilation units .
 
 Standard IRD format
 -------------------
 
-While we are still in search of a better name, most of the success of this
-project relies on the definition of standard interchangeable Intermediate
-Representation for Documentation format (IRD).
+While we are still in search of a better name, most of the success of papyri 
+relies on the definition of standard interchangeable Intermediate
+Representation for Documentation format (IRD). We borrow the name IR again from
+compilers.
 
 This allow to separate concerns between M producers and N renderer, and reduce a
 M*N problem where each renderer need to be able to be able to consume input from
 each producer, to an N+M, where each producer should only care about producing
 IRD, and each renderer consume it.
+
+This also allows us to take IRD from multiple producer are once, and render it
+together to a single target, this breaking the silos between libraries.
 
 As of the writing of this paper, IRD files are currently separated into multiple
 categories. 
@@ -312,21 +348,28 @@ categories.
   references, and no forward references.
 
 In addition to those 4 kinds of objects, metadata about the current package is
-stored: library name, current version, pypi name, GitHub slug, maintainer name,
+stored: library name, current version, pypi name, GitHub slug, maintainers names,
 logo, issue tracker and a few other. Allowing us to for example auto generate
-link to issue tracker, or to source files. 
+link to issue tracker, or to source files when rendering. 
 
 We also store a mapping from fully qualified names to canonical names, in order
 to properly resolve some references, of normalise links.
 
-
 The final specification of the IRD file is unfinished, we thus invite you to
 consult the current state on the GitHub repository.
 
+Those IRD files must be standardise in order to achieve our end goal, and
+distribution of those files are not going to be covered in this paper.
 
 
-High level Architecture 
------------------------
+IRD Installation
+----------------
+
+
+
+
+High level Usage 
+----------------
 
 The papyri lifecycle for documentation can roughly be decomposed into 3 broad
 categories of stakeholders, and processes. 
@@ -335,7 +378,7 @@ The first stakeholders are library maintainers. Those should ensure that papyri
 can build Intermediate Representation Documentation (IRD) files. And publish
 and IRD bundle.
 
-Creation of IRD files and bundles is a computation intensive step, that may
+Creation of IRD files and bundles is the computation intensive step, that may
 requires complex dependencies, or specific plugins. Creation of these files may
 be a multi-step process or use external tooling that is not related to papyri or
 does not use Python. Note that these steps do not requires the libraries
@@ -343,7 +386,7 @@ maintainer to worry about visual appearance and rendering of documentation.
 
 
 The second category of stakeholder are end-users. Those users are responsible
-from installing IRD bundles from the libraries the wish to use on their
+from installing IRD bundles from the libraries they wish to use on their
 machines. Note that IRD from libraries that are not in use are installable as
 well, and that IRD bundle not attached to a particular library could also be
 installed, providing for example domain specific tutorials or examples. 
@@ -375,29 +418,29 @@ uniquely identify each object. For this we decided to use the fully qualified
 names of an object. That is to say the concatenation of the module in which it
 is defined, with its local name. We encountered multiple edge cases with that. 
 
- - To mirror python syntax is it easy to use ``.`` to concatenate both parts. 
-   Unfortunately that leads to ambiguity when modules re-export functions of
-   the same name. 
+- To mirror python syntax is it easy to use ``.`` to concatenate both parts. 
+  Unfortunately that leads to ambiguity when modules re-export functions of
+  the same name. 
 
-   .. code-block:: python
+  .. code-block:: python
 
-       # module mylib/__init__.py
+      # module mylib/__init__.py
 
-       from .mything import mything
+      from .mything import mything
 
-   ``mylib.mything`` is ambiguous with respect to the ``mything`` submodule and
-   the object reexported. In future version we'll  use ``:`` as a module/name
-   separator.
+  ``mylib.mything`` is ambiguous with respect to the ``mything`` submodule and
+  the object reexported. In future version we'll  use ``:`` as a module/name
+  separator.
 
- - Decorated functions or other dynamic approaches to expose function to users
-   end up having ``<local>>`` in their fully qualified names, which is invalid. 
+- Decorated functions or other dynamic approaches to expose function to users
+  end up having ``<local>>`` in their fully qualified names, which is invalid. 
 
- - Many builtins functions (``np.sin``, ``np.cos``, ...) do not have a fully
-   qualified name that can be extracted by object introspection. 
+- Many builtins functions (``np.sin``, ``np.cos``, ...) do not have a fully
+  qualified name that can be extracted by object introspection. 
 
- - Fully qualified names are often not canonical names (the name you typically
-   use for import), and finding the canonical name automatically is not always
-   straitforward. 
+- Fully qualified names are often not canonical names (the name you typically
+  use for import), and finding the canonical name automatically is not always
+  straitforward. 
 
 We also came across challenges with case sensitivity, in particular of
 filesystems, and a couple of object have same fully qualified name up to
@@ -542,6 +585,7 @@ Is is common for compiler to use IR (MIRI, LLVM IR)
 Not a novel idea, allow to mix compilation from multiple targets, LTO.
 Diataxis
 rustdocs.
+https://markdoc.io/
 
 
 
@@ -580,7 +624,6 @@ rustdocs.
 
 
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
 some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
 equation on a separate line:
 
@@ -743,4 +786,6 @@ References
 .. [IR] https://en.wikipedia.org/wiki/Intermediate_representation
 .. [LTO] https://en.wikipedia.org/wiki/Interprocedural_optimization
 .. [DT] https://diataxis.fr/
-.. [CFORGE] https://conda-forge.org/
+.. [CFRG] https://conda-forge.org/
+.. [MYST] https://myst-parser.readthedocs.io/en/latest/
+.. [NPDOC] https://numpydoc.readthedocs.io/en/latest/format.html
