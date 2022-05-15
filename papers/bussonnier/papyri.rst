@@ -12,12 +12,13 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
 .. class:: abstract
 
    We present here the idea behind Papyri, a framework we are developing to
-   provide a better documentation experience for the scientific ecosystem.
-   In particular, we wish to provide a documentation browser from within Jupyter
-   or other IDE **s?** and Python editors that gives a unified experience, cross
-   library navigation search and indexing. *I don't understand the last part of the sentence (let's chat).*  
-   By decoupling documentation generation from rendering we hope this can help address some of the documentation accessibility
-   concerns, and allow customisation based on users' preferences. 
+   provide a better documentation experience for the scientific ecosystem. In
+   particular, we wish to provide a documentation browser from within Jupyter or
+   other IDEs and Python editors that gives a unified experience, cross library
+   navigation search and indexing. *I don't understand the last part of the
+   sentence (let's chat).*  By decoupling documentation generation from
+   rendering we hope this can help address some of the documentation
+   accessibility concerns, and allow customisation based on users' preferences. 
    
 
 .. class:: keywords
@@ -40,7 +41,7 @@ inherently creating a heterogeneous framework. The consequences are twofolds:
 is a lack of cohesion and unified framework as library authors make their proper
 choices and must maintain build scripts or services.
 
-Efforts such as conda-forge **[add ref]** have shown that concerted efforts can
+Efforts such as conda-forge [CFORGE]_ have shown that concerted efforts can
 give a much better experience to end-users, and in today's world where sharing
 libraries source on code platforms, continuous integration, and many other tools
 is ubiquitous, we believe a better documentation framework for many of the
@@ -732,8 +733,7 @@ Perhaps we want to end off with a quote by Lao Tse [#]_:
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+
 .. [docutils] https://docutils.sourceforge.io/
 .. [sphinx] https://www.sphinx-doc.org/en/master/
 .. [RTD] https://readthedocs.org/
@@ -743,3 +743,4 @@ References
 .. [IR] https://en.wikipedia.org/wiki/Intermediate_representation
 .. [LTO] https://en.wikipedia.org/wiki/Interprocedural_optimization
 .. [DT] https://diataxis.fr/
+.. [CFORGE] https://conda-forge.org/
