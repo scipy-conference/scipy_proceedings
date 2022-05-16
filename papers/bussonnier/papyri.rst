@@ -47,13 +47,9 @@ users stumble across an old documentation version that is better ranked in their
 favorite search engine, and this impacts less experienced users' learning
 greatly.
 
-.. The experience on users' local machine is not better: while access to inspector in many **Integrated Development Environments (IDEs)** provides some documentation, it does not get access to the narrative, or full documentation gallery. Command Line
-Interface (CLI) users are in an even worse place as raw source is often
-displayed and no navigation is possible.
+.. The experience on users' local machine is not better: while access to inspector in many **Integrated Development Environments (IDEs)** provides some documentation, it does not get access to the narrative, or full documentation gallery. Command Line Interface (CLI) users are in an even worse place as raw source is often displayed and no navigation is possible.
 
-.. Maintainers are not either in a good position, we do not want to have to think
-about final rendering. Though we would like users to gain from improvement in
-the rendering without having to rebuild all our docs.
+.. Maintainers are not either in a good position, we do not want to have to think about final rendering. Though we would like users to gain from improvement in the rendering without having to rebuild all our docs.
 
 The experience on users' local machine is affected by limited documentation rendering. Indeed, while the inspector in many **Integrated Development Environments (IDEs)** provides some documentation, users do not get access to the narrative, or full documentation gallery. For Command Line Interface (CLI) users, documentation is often displayed as raw source where no navigation is possible. On the maintainers' side, the final documentation rendering is less a priority. Rather, maintainers aim at making users gain from improvement in the rendering without having to rebuild all the docs.
 
@@ -69,56 +65,33 @@ dependencies: **Papyri**. Papyri **focuses** on building an intermediate documen
 representation format, that **lets** us decoupling building, and rendering the docs. 
 **This highly simplifies many operations and gives us access to many desired features that where not available up to now.**
 
-**Outline** It what follows we provide...
+**It what follows we provide the framework in which Papyri has been created and present its objectives (Context and goals), we describe the Papyri features (format, installation, and usage), then present its current implementation. We end this paper with comments on current challenges and future work.**
 
 
-Parallel with to Compiled languages
------------------------------------
-
-We'll draw several comparison between documentation building and compiled
-languages, plus borrow an adapt a couple of terms from the domain. Needed, what
-is building the documentation bur going from a source-code meant for a machine
+1) Context, goals and non-goals
+-------------------------------
+Through out the paper, we will draw several comparisons between documentation building and compiled
+languages. Also, we will borrow and adapt commonly used terminology. In particular, similarities with "ahead-of-time (AOT)" [AOT]_,
+"just-in-time (JIT)" [JIT]_, "intermediate representation (IR)" [IR]_, link-time
+optimization (LTO) [LTO]_, static vs dynamic linking will be highlighted. This allows to clarify the presentation of the underlying architecture, however there is no requirement to be familiar with the above to understand the concepts underneath Papyri. In that context, we wish to discuss documentation building as a process from a source-code meant for a machine
 to a final output targeting the flesh and blood machine between the keyboard and
-the chair.
+the chair. 
 
-In particular we'll draw similarities with "ahead-of-time" [AOT]_,
-"just-in-time" [JIT]_, "intermediate representation (IR)" [IR]_, link-time
-optimization (LTO) [LTO]_, static vs dynamic linking.
+1) Current tools and limitations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you are familiar with these concept that might be a good parallel to keep in
-mind in order to follow the reasoning and architecture, but is not necessary to
-understand the concepts behind papyri.
+In the scientific Python ecosystem, it is well known that Docutils [docutils]_ and Sphinx [sphinx]_ are major cornerstones for publishing html documentation for Python, and are used by all the libraries in this ecosystem. While a few alternatives exist, most tools and services have some internal knowledge of Sphinx. For instance, `Read the Docs` [RTD]_ provides a specific Sphinx theme
+[RTD-theme]_ users can opt-in to, `Jupyter-book` is built on top of Sphinx, and MyST parser [MYST]_ which is made to allow markdown in documentation does targets
+Sphinx as a backend, to name a few. All of the above provides an "ahead-of-time" documentation compilation and
+rendering, which is slow and computationally intensive. When a project needs its specific plugins, extensions and configurations to properly build (which is almost always the case), it is relatively difficult to build documentation for a single object (like a single function, module or class). This makes (AOT) tools difficult to use for interactive
+exploration. One can then consier a "just-in-time" approach, as done for `Docrepr` (integrated both in `Jupyter` and `Spyder`). However in that case, interactive documentation lacks inline plots, crosslinks, indexing, search and many custom directives.
 
-Current Tools and their limitations
------------------------------------
-
-It is difficult to speak about the scientific python ecosystem documentation
-without making reference to docutils [docutils]_ and sphinx [sphinx]_ which are
-virtually use by all the libraries in the scientific Python ecosystem. Both
-these libraries are the cornerstone of publishing html documentation for Python.
-While few alternative exists, most tools and services have some internal
-knowledge of sphinx. Read the Docs [RTD]_ provide a specific sphinx theme
-[RTD-theme]_ user can opt-in to, `Jupyter-book` is  built on top of sphinx, and
-MyST parser [MYST]_ which is made to allow markdown in documentation does targets
-sphinx as a backend. 
-
-All the above tools provides an "ahead of time" documentation compilation and
-rendering, a step which is slow and computationally intensive. Each project
-needs its specific plugins, extensions and configurations to properly build. It
-is also often relatively difficult to build documentation for a single object (a
-single function, module or class), making use of those tools for interactive
-exploration difficult.  While this "just-in-time" approach is attempted by
-projects like `docrepr` that is integrated both in `Jupyter` and `Spyder`, the
-above limitations means interactive documentation lacks inline plots,
-crosslinks, indexing, search and many custom directives.
-
-
-Some of the above limitation are inherent to the design of documentation build
-tools that were designed to build documentation in isolation. While sphinx does
+Some of the above limitations are inherent to the design of documentation build
+tools that were designed to build documentation separately. While Sphinx does
 provide features like `intersphinx`, link resolutions are done at documentation
-build time and are thus inherently unidirectional, and can easily get broken.
-For example, let's considering `numpy` and `scipy` which are two extremely close
-libraries, having proper cross-linked documentation requires at least five
+build time. Thus, this is inherently unidirectional, and can easily get broken.
+To illustrate this, we consider `NumPy` and `SciPy`, two extremely close
+libraries. In order to obtain proper cross-linked documentation, one is required to perform at least five
 steps:
 
 - build NumPy documentation
@@ -131,55 +104,31 @@ steps:
   
 - rebuild NumPy docs to make use of SciPy's ``obj.inv``
 
-Only then can both SciPy's and NumPy's documentation refer to each other.
-
-Any of the created links being potentially invalidated on the publication of a
-new version of any of those libraries, which is something that regularly happen
-[#]_. 
-
+Only then can both SciPy's and NumPy's documentation refer to each other. As one can expect, crosslinks break everytime a new version of a library is published [#]_. Pre-produced html in IDEs and other tools are then prone to error and difficult to maintain. This also raises security issues: some institutions become reluctant to use tools like `Docrepr` or viewing pre-produced html. 
 
 .. [#] `ipython/ipython#12210 <https://github.com/ipython/ipython/pull/12210>`_, `numpy/numpy#21016 <https://github.com/numpy/numpy/pull/21016>`_, `& #29073 <https://github.com/numpy/numpy/pull/20973>`_
 
 
-This make using pre-produced html in IDEs and other tools difficult and error
-prone. This has also raised security issue where some institution are reluctant
-to use either tools like `docrepr` or viewing pre-produced html. 
+2) Editing docstrings between a rock and a hard place
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Editing docstrings between a rock and a hard place
---------------------------------------------------
-
-The numpydoc format is ubiquitous among the scientific ecosystem [NPDOC]_ , It
+The `numpydoc` format is ubiquitous among the scientific ecosystem [NPDOC]_. It
 is loosely based on RST syntax, and despite supporting full rst syntax,
-docstrings often rarely contain full-featured directive. As many tools show raw
-docstrings and are incapable of interpreting directive on the fly, even if they
-could or had the right plugin, this may be computationally intensive which is
-undesirable, and executing code to view docs could be a security risk.
-Maintainers are thus often pull in two opposite directions. 
+docstrings rarely contain full-featured directive. Maintainers confronted to the following dilemma:
 
-- keeping the docstrings simple, mostly text based with few directive in order
-  to have readability to the end user that might be exposed to the docstring
-  when using tools like IPython and Jupyter. 
+- keep the docstrings simple. This means mostly text based docstrings with few directive for efficient readability. The end-user may be exposed to raw docstring, there is no on-the-fly directive interpretation.
+  This is the case for tools such as IPython and Jupyter. 
 
-- Write an extensive docstring, with references, and directive that
-  potentially create graphics, tables and more, but impede readability. 
+- write an extensive docstring. This includes references, and directive that
+  potentially create graphics, tables and more, allowing a riched end-user experience. However this may be computationally intensive, and executing code to view docs could be a security risk.
 
-While tools like `docrepr` mitigate this problem, this is true only for IDE
-users and not Terminal users that will still be exposed to raw docstrings. This
-leads to long discussions, for example in `SymPy
-<https://github.com/sympy/sympy/issues/14964>` on how should equations be
-represented in docstrings. 
-
-Some libraries would also prefer to use markdown in their docstrings, but this
-would create inconsistencies for the end user with respect to rendering, and
-have the same dilemmas as above.
-
-Finally a few library will dynamically modify their docstring at runtime in
-order to avoid using directives. This can have runtime cost, as well as a more
-complex maintenance and contribution cost.
+Other factors enhance this choice: (i) users, (ii) format, (iii) runtime. IDE users or not Terminal users motivate to push for extensive docstrings, and tools like `Docrepr` can mitigate this problem. However, users are often exposed to raw docstrings (see for example the discussion `SymPy
+<https://github.com/sympy/sympy/issues/14964>`_ on how should equations be
+represented in docstrings). In terms of format, markdown is appealing, however inconsistencies in the rendering will be created between libraries. Finally, some libraries can dynamically modify their docstring at runtime. While this avoids using directives, it ends up more expensive (runtime costs, complex maintenance, and contribution costs).
 
 
-Goals Non Goals
----------------
+3) Goals and non-goals
+~~~~~~~~~~~~~~~~~~~~~~
 
 Below we'll layout goals and non-goals. Non-goals are as much if not more
 important than goals as they will frame the limit of the what the tools we'll
@@ -254,6 +203,111 @@ pages.
 
 And we do want to ability to lookup documentation for an object from the
 interactive REPL.
+
+.. Parallel with to Compiled languages
+.. -----------------------------------
+
+.. We will draw several comparison between documentation building and compiled
+.. languages, plus borrow an adapt a couple of terms from the domain. Needed, what
+.. is building the documentation bur going from a source-code meant for a machine
+.. to a final output targeting the flesh and blood machine between the keyboard and
+.. the chair.
+
+.. In particular we'll draw similarities with "ahead-of-time" [AOT]_,
+.. "just-in-time" [JIT]_, "intermediate representation (IR)" [IR]_, link-time
+.. optimization (LTO) [LTO]_, static vs dynamic linking.
+
+.. If you are familiar with these concept that might be a good parallel to keep in
+.. mind in order to follow the reasoning and architecture, but is not necessary to
+.. understand the concepts behind papyri.
+
+.. Current Tools and their limitations
+.. -----------------------------------
+
+.. It is difficult to speak about the scientific python ecosystem documentation
+.. without making reference to docutils [docutils]_ and sphinx [sphinx]_ which are
+.. virtually use by all the libraries in the scientific Python ecosystem. Both
+.. these libraries are the cornerstone of publishing html documentation for Python.
+.. While few alternative exists, most tools and services have some internal
+.. knowledge of sphinx. Read the Docs [RTD]_ provide a specific sphinx theme
+.. [RTD-theme]_ user can opt-in to, `Jupyter-book` is  built on top of sphinx, and
+.. MyST parser [MYST]_ which is made to allow markdown in documentation does targets
+.. sphinx as a backend. 
+
+.. All the above tools provides an "ahead of time" documentation compilation and
+.. rendering, a step which is slow and computationally intensive. Each project
+.. needs its specific plugins, extensions and configurations to properly build. It
+.. is also often relatively difficult to build documentation for a single object (a
+.. single function, module or class), making use of those tools for interactive
+.. exploration difficult.  While this "just-in-time" approach is attempted by
+.. projects like `docrepr` that is integrated both in `Jupyter` and `Spyder`, the
+.. above limitations means interactive documentation lacks inline plots,
+.. crosslinks, indexing, search and many custom directives.
+
+
+.. Some of the above limitation are inherent to the design of documentation build
+.. tools that were designed to build documentation in isolation. While sphinx does
+.. provide features like `intersphinx`, link resolutions are done at documentation
+.. build time and are thus inherently unidirectional, and can easily get broken.
+.. For example, let's considering `numpy` and `scipy` which are two extremely close
+.. libraries, having proper cross-linked documentation requires at least five
+.. steps:
+
+.. - build NumPy documentation
+
+.. - publish NumPy ``object.inv`` file. 
+
+.. - build SciPy documentation using NumPy ``obj.inv`` file.
+
+.. - publish SciPy ``object.inv`` file
+  
+.. - rebuild NumPy docs to make use of SciPy's ``obj.inv``
+
+.. Only then can both SciPy's and NumPy's documentation refer to each other.
+
+.. Any of the created links being potentially invalidated on the publication of a
+.. new version of any of those libraries, which is something that regularly happen
+.. [#]_. 
+
+
+.. .. [#] `ipython/ipython#12210 <https://github.com/ipython/ipython/pull/12210>`_, `numpy/numpy#21016 <https://github.com/numpy/numpy/pull/21016>`_, `& #29073 <https://github.com/numpy/numpy/pull/20973>`_
+
+
+.. This make using pre-produced html in IDEs and other tools difficult and error
+.. prone. This has also raised security issue where some institution are reluctant
+.. to use either tools like `docrepr` or viewing pre-produced html. 
+
+.. Editing docstrings between a rock and a hard place
+.. --------------------------------------------------
+
+.. The numpydoc format is ubiquitous among the scientific ecosystem [NPDOC]_ , It
+.. is loosely based on RST syntax, and despite supporting full rst syntax,
+.. docstrings often rarely contain full-featured directive. As many tools show raw
+.. docstrings and are incapable of interpreting directive on the fly, even if they
+.. could or had the right plugin, this may be computationally intensive which is
+.. undesirable, and executing code to view docs could be a security risk.
+.. Maintainers are thus often pull in two opposite directions. 
+
+.. - keeping the docstrings simple, mostly text based with few directive in order
+  to have readability to the end user that might be exposed to the docstring
+  when using tools like IPython and Jupyter. 
+
+.. - Write an extensive docstring, with references, and directive that
+..   potentially create graphics, tables and more, but impede readability. 
+
+.. While tools like `docrepr` mitigate this problem, this is true only for IDE
+.. users and not Terminal users that will still be exposed to raw docstrings. This
+.. leads to long discussions, for example in `SymPy
+.. <https://github.com/sympy/sympy/issues/14964>`_ on how should equations be
+.. represented in docstrings. 
+
+.. Some libraries would also prefer to use markdown in their docstrings, but this
+.. would create inconsistencies for the end user with respect to rendering, and
+.. have the same dilemmas as above.
+
+.. Finally a few library will dynamically modify their docstring at runtime in
+.. order to avoid using directives. This can have runtime cost, as well as a more
+.. complex maintenance and contribution cost.
 
 The Papyri solution
 -------------------
