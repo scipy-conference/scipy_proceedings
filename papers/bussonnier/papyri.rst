@@ -15,8 +15,7 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
    provide a better documentation experience for the scientific ecosystem. In
    particular, we wish to provide a documentation browser from within Jupyter or
    other IDEs and Python editors that gives a unified experience, cross library
-   navigation search and indexing. *I don't understand the last part of the
-   sentence (let's chat).*  By decoupling documentation generation from
+   navigation search and indexing. By decoupling documentation generation from
    rendering we hope this can help address some of the documentation
    accessibility concerns, and allow customisation based on users' preferences. 
    
@@ -48,15 +47,15 @@ users stumble across an old documentation version that is better ranked in their
 favorite search engine, and this impacts less experienced users' learning
 greatly.
 
-The experience on users's local machine is not better:
-While access to inspector in many IDE provides some documentation, it does not
-get access to the narrative, or full documentation gallery. Command Line
+.. The experience on users' local machine is not better: while access to inspector in many **Integrated Development Environments (IDEs)** provides some documentation, it does not get access to the narrative, or full documentation gallery. Command Line
 Interface (CLI) users are in an even worse place as raw source is often
 displayed and no navigation is possible.
 
-Maintainers are not either in a good position, we do not want to have to think
+.. Maintainers are not either in a good position, we do not want to have to think
 about final rendering. Though we would like users to gain from improvement in
 the rendering without having to rebuild all our docs.
+
+The experience on users' local machine is affected by limited documentation rendering. Indeed, while the inspector in many **Integrated Development Environments (IDEs)** provides some documentation, users do not get access to the narrative, or full documentation gallery. For Command Line Interface (CLI) users, documentation is often displayed as raw source where no navigation is possible. On the maintainers' side, the final documentation rendering is less a priority. Rather, maintainers aim at making users gain from improvement in the rendering without having to rebuild all the docs.
 
 Efforts such as conda-forge [CFRG]_ have shown that concerted efforts can
 give a much better experience to end-users, and in today's world where sharing
@@ -66,10 +65,11 @@ libraries of the scientific Python is should be available.
 
 Thus, against all advice we received and our own experience, we have decided to
 rebuild an opinionated documentation framework, from scratch, and with minimal
-dependencies: **Paryri**. Papyri focus on building an intermediate documentation
-representation format, that let us decoupling building, and rendering the docs;
-highly simplifying many operations and giving us access to many desired features
-not available until now.
+dependencies: **Papyri**. Papyri **focuses** on building an intermediate documentation
+representation format, that **lets** us decoupling building, and rendering the docs. 
+**This highly simplifies many operations and gives us access to many desired features that where not available up to now.**
+
+**Outline** It what follows we provide...
 
 
 Parallel with to Compiled languages
