@@ -67,8 +67,7 @@ For isolated small molecules and extended non-periodic systems, rdkit can be use
 Recently, we implemented a workflow that employs active learning (AL) for intelligent and iterative identification of promising materials candidates within a large dataset [Abroshan]_. In this approach, machine learning and DFT are combined. In the framework of AL, the predicted value with associated uncertainty is considered to decide what materials to be added in each iteration, aiming to improve the model's performance in the next iteration (Figure :ref:`figal`). There we used descriptors as implemented in rdkit to featurize the chemical structures. These descriptors generated on the initial subset of structures are given as vectors to an algorithm based on Random Forest as implemented in scikit-learn. Bayesian optimization is employed to tune the hyperparameters of the model. In each iteration, a trained model is applied for making predictions on the remaining materials in the dataset. Since it could be important to consider multiple properties in material discovery, multiple property optimization is also implemented [Kwak]_. Multiple properties are  scaled and combined into a single score value. In this particular study, for a dataset of ~9,000 molecules, the AL workflow determined the top candidates for hole (positively charged carrier) transport layer  by evaluating 550 molecules in 10 iterations using DFT calculations. Performing DFT calculations for all of the 9,000 molecules in the dataset would increase the computational cost by a factor of 15 versus the AL workflow.
 
 .. figure:: fig_al.jpg
-   :scale: 80%
-   :figclass: bht
+   :scale: 30%
 
    Active Learning workflow for the design and discovery of novel optoelectronics molecules. :label:`figal`
 
