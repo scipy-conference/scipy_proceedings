@@ -68,7 +68,7 @@ Recently, we implemented a workflow that employs active learning (AL) for intell
 
 .. figure:: fig_al.jpg
 
-    Active Learning workflow for the design and discovery of novel optoelectronics molecules. :label:`fig_al`
+   Active Learning workflow for the design and discovery of novel optoelectronics molecules. :label:`figal`
 
 Conclusions
 -----------
