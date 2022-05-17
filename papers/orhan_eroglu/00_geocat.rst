@@ -1,6 +1,7 @@
 :author: Orhan Eroglu
 :email: oero@ucar.edu
 :institution: National Center for Atmospheric Research
+:corresponding:
 
 :author: GeoCAT member 1
 :email: email
@@ -19,24 +20,24 @@
 :institution: National Center for Atmospheric Research
 
 
-:bibliography: mybib
+:bibliography: references
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
-------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------
 The Geoscience Community Analysis Toolkit: An Open Development, Community Driven Toolkit in the Scientific Python Ecosystem
-------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------
 
 .. class:: abstract
 
-   The Geoscience Community Analysis Toolkit (GeoCAT) team develops and maintains
-   data analysis and visualization tools on structured and unstructured grids for
-   the geosciences community in the scientific Python ecosystem. In response to
-   dealing with increasing geoscientific data sizes, GeoCAT prioritizes scalability,
-   ensuring its implementations to be scalable from personal laptops to HPC clusters.
-   Another major goal of the GeoCAT team is to ensure community involvement throughout
-   the whole project lifecycle, which is realized through an open development mindset
-   by encouraging the users/contributors to get involved in any decision-making.
+The Geoscience Community Analysis Toolkit (GeoCAT) team develops and maintains
+data analysis and visualization tools on structured and unstructured grids for
+the geosciences community in the scientific Python ecosystem. In response to
+dealing with increasing geoscientific data sizes, GeoCAT prioritizes scalability,
+ensuring its implementations to be scalable from personal laptops to HPC clusters.
+Another major goal of the GeoCAT team is to ensure community involvement throughout
+the whole project lifecycle, which is realized through an open development mindset
+by encouraging the users/contributors to get involved in any decision-making.
 
 .. class:: keywords
 
@@ -57,7 +58,7 @@ alongside having the whole software stack open-sourced.
 
 GeoCAT created several, now-established Python tools that are hosted and
 managed publicly on Github to develop computation and visualization functions,
-which  are built on cornerstone Pangeo :code:`:cite:`hume48`` (i.e. a community platform for big data
+which  are built on cornerstone Pangeo :cite:`hume48` (i.e. a community platform for big data
 geoscience) packages such as Xarray and Dask. Namely, GeoCAT-comp houses
 computational operators for applications ranging from regridding and
 interpolation, to climatology and meteorology. GeoCAT-examples provides over
