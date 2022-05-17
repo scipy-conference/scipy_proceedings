@@ -58,7 +58,7 @@ alongside having the whole software stack open-sourced.
 
 GeoCAT created several, now-established Python tools that are hosted and
 managed publicly on Github to develop computation and visualization functions,
-which  are built on cornerstone Pangeo :cite:`hume48` (i.e. a community platform for big data
+which  are built on cornerstone Pangeo :cite:`pangeo18` (i.e. a community platform for big data
 geoscience) packages such as Xarray and Dask. Namely, GeoCAT-comp houses
 computational operators for applications ranging from regridding and
 interpolation, to climatology and meteorology. GeoCAT-examples provides over
