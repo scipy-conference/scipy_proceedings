@@ -47,11 +47,14 @@ users stumble across an old documentation version that is better ranked in their
 favorite search engine, and this impacts less experienced users' learning
 greatly.
 
-.. The experience on users' local machine is not better: while access to inspector in many **Integrated Development Environments (IDEs)** provides some documentation, it does not get access to the narrative, or full documentation gallery. Command Line Interface (CLI) users are in an even worse place as raw source is often displayed and no navigation is possible.
-
-.. Maintainers are not either in a good position, we do not want to have to think about final rendering. Though we would like users to gain from improvement in the rendering without having to rebuild all our docs.
-
-The experience on users' local machine is affected by limited documentation rendering. Indeed, while the inspector in many **Integrated Development Environments (IDEs)** provides some documentation, users do not get access to the narrative, or full documentation gallery. For Command Line Interface (CLI) users, documentation is often displayed as raw source where no navigation is possible. On the maintainers' side, the final documentation rendering is less a priority. Rather, maintainers aim at making users gain from improvement in the rendering without having to rebuild all the docs.
+The experience on users' local machine is affected by limited documentation
+rendering. Indeed, while the inspector in many **Integrated Development
+Environments (IDEs)** provides some documentation, users do not get access to
+the narrative, or full documentation gallery. For Command Line Interface (CLI)
+users, documentation is often displayed as raw source where no navigation is
+possible. On the maintainers' side, the final documentation rendering is less a
+priority. Rather, maintainers should aim at making users gain from improvement
+in the rendering without having to rebuild all the docs.
 
 Efforts such as conda-forge [CFRG]_ have shown that concerted efforts can
 give a much better experience to end-users, and in today's world where sharing
@@ -61,30 +64,51 @@ libraries of the scientific Python is should be available.
 
 Thus, against all advice we received and our own experience, we have decided to
 rebuild an opinionated documentation framework, from scratch, and with minimal
-dependencies: **Papyri**. Papyri **focuses** on building an intermediate documentation
-representation format, that **lets** us decoupling building, and rendering the docs. 
-**This highly simplifies many operations and gives us access to many desired features that where not available up to now.**
+dependencies: **Papyri**. Papyri **focuses** on building an intermediate
+documentation representation format, that **lets** us decouple building, and
+rendering the docs. **This highly simplifies many operations and gives us access
+to many desired features that where not available up to now.**
 
-**It what follows we provide the framework in which Papyri has been created and present its objectives (Context and goals), we describe the Papyri features (format, installation, and usage), then present its current implementation. We end this paper with comments on current challenges and future work.**
+**In what follows we provide the framework in which Papyri has been created and
+present its objectives (Context and goals), we describe the Papyri features
+(format, installation, and usage), then present its current implementation. We
+end this paper with comments on current challenges and future work.**
 
 
 1) Context, goals and non-goals
 -------------------------------
-Through out the paper, we will draw several comparisons between documentation building and compiled
-languages. Also, we will borrow and adapt commonly used terminology. In particular, similarities with "ahead-of-time (AOT)" [AOT]_,
+
+Through out the paper, we will draw several comparisons between documentation
+building and compiled languages. Also, we will borrow and adapt commonly used
+terminology. In particular, similarities with "ahead-of-time (AOT)" [AOT]_,
 "just-in-time (JIT)" [JIT]_, "intermediate representation (IR)" [IR]_, link-time
-optimization (LTO) [LTO]_, static vs dynamic linking will be highlighted. This allows to clarify the presentation of the underlying architecture, however there is no requirement to be familiar with the above to understand the concepts underneath Papyri. In that context, we wish to discuss documentation building as a process from a source-code meant for a machine
-to a final output targeting the flesh and blood machine between the keyboard and
-the chair. 
+optimization (LTO) [LTO]_, static vs dynamic linking will be highlighted. This
+allows to clarify the presentation of the underlying architecture, however there
+is no requirement to be familiar with the above to understand the concepts
+underneath Papyri. In that context, we wish to discuss documentation building as
+a process from a source-code meant for a machine to a final output targeting the
+flesh and blood machine between the keyboard and the chair. 
 
 1) Current tools and limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In the scientific Python ecosystem, it is well known that Docutils [docutils]_ and Sphinx [sphinx]_ are major cornerstones for publishing html documentation for Python, and are used by all the libraries in this ecosystem. While a few alternatives exist, most tools and services have some internal knowledge of Sphinx. For instance, `Read the Docs` [RTD]_ provides a specific Sphinx theme
-[RTD-theme]_ users can opt-in to, `Jupyter-book` is built on top of Sphinx, and MyST parser [MYST]_ which is made to allow markdown in documentation does targets
-Sphinx as a backend, to name a few. All of the above provides an "ahead-of-time" documentation compilation and
-rendering, which is slow and computationally intensive. When a project needs its specific plugins, extensions and configurations to properly build (which is almost always the case), it is relatively difficult to build documentation for a single object (like a single function, module or class). This makes (AOT) tools difficult to use for interactive
-exploration. One can then consier a "just-in-time" approach, as done for `Docrepr` (integrated both in `Jupyter` and `Spyder`). However in that case, interactive documentation lacks inline plots, crosslinks, indexing, search and many custom directives.
+In the scientific Python ecosystem, it is well known that Docutils [docutils]_
+and Sphinx [sphinx]_ are major cornerstones for publishing html documentation
+for Python, and are used by all the libraries in this ecosystem. While a few
+alternatives exist, most tools and services have some internal knowledge of
+Sphinx. For instance, `Read the Docs` [RTD]_ provides a specific Sphinx theme
+[RTD-theme]_ users can opt-in to, `Jupyter-book` is built on top of Sphinx, and
+MyST parser [MYST]_ which is made to allow markdown in documentation does
+targets Sphinx as a backend, to name a few. All of the above provides an
+"ahead-of-time" documentation compilation and rendering, which is slow and
+computationally intensive. When a project needs its specific plugins, extensions
+and configurations to properly build (which is almost always the case), it is
+relatively difficult to build documentation for a single object (like a single
+function, module or class). This makes (AOT) tools difficult to use for
+interactive exploration. One can then consider a "just-in-time" approach, as done
+for `Docrepr` (integrated both in `Jupyter` and `Spyder`). However in that case,
+interactive documentation lacks inline plots, crosslinks, indexing, search and
+many custom directives.
 
 Some of the above limitations are inherent to the design of documentation build
 tools that were designed to build documentation separately. While Sphinx does
