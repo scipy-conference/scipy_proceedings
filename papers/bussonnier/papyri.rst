@@ -4,6 +4,11 @@
 :institution: Digital Ours Lab, SARL.
 :orcid: 0000-0002-7636-8632
 :corresponding:
+:author: Camille Carvalho
+:email: 
+:institution: University of California Merced: Merced, CA, US
+:institution: Groupe INSA: Villeurbanne, FR
+:orcid: 0000-0002-8426-549X
 
 ====================================================================
 Papyri: Better documentation for the Scientific Ecosystem in Jupyter
