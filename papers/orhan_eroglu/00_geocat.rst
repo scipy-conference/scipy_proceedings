@@ -22,7 +22,7 @@
 
 :bibliography: references
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: https://www.youtube.com/watch?v=34zFGkDwJPc
 
 ---------------------------------------------------------------------------------------------------------------------------
 The Geoscience Community Analysis Toolkit: An Open Development, Community Driven Toolkit in the Scientific Python Ecosystem
@@ -49,8 +49,8 @@ Introduction
 
 The Geoscience Community Analysis Toolkit (GeoCAT) team, established in 2019,
 leads the software engineering efforts of the National Center for Atmospheric
-Research (NCAR)’s “Pivot to Python” initiative. GeoCAT essentially aims at
-creating scalable data analysis and visualization tools on structured and
+Research (NCAR)’s “Pivot to Python” initiative :cite:`pivot19`. GeoCAT essentially
+aims at creating scalable data analysis and visualization tools on structured and
 unstructured grids for the geosciences community in the scientific Python
 ecosystem. The GeoCAT team is committed to open development, which helps the
 team prioritize community involvement at any level of the project lifecycle
@@ -58,22 +58,23 @@ alongside having the whole software stack open-sourced.
 
 GeoCAT created several, now-established Python tools that are hosted and
 managed publicly on Github to develop computation and visualization functions,
-which  are built on cornerstone Pangeo :cite:`pangeo18` (i.e. a community platform for big data
-geoscience) packages such as Xarray and Dask. Namely, GeoCAT-comp houses
-computational operators for applications ranging from regridding and
-interpolation, to climatology and meteorology. GeoCAT-examples provides over
-140 publication-quality plotting scripts in Python for Earth sciences. It also
-houses Jupyter notebooks with high-performance, interactive plots that enable
-features such as pan and zoom on fine-resolution geoscience data (e.g. ~3 km
-data rendered within a few tens of seconds to few minutes on personal laptops).
-GeoCAT-viz enables higher-level implementation of Matplotlib and Cartopy
-plotting capabilities through it's variety of easy to use visualization
-convenience functions for GeoCAT-examples. GeoCAT also maintains WRF-Python
-(Weather Research and Forecasting), which works with WRF-ARW model output and
-provides diagnostic and interpolation routines.
+which  are built on cornerstone Pangeo :cite:`pangeo18` (i.e. a community platform
+for big data geoscience) packages such as Xarray :cite:`xarray17` and Dask
+:cite:`dask15`. Namely, GeoCAT-comp houses computational operators for
+applications ranging from regridding and interpolation, to climatology and
+meteorology. GeoCAT-examples provides over 140 publication-quality plotting
+scripts in Python for Earth sciences. It also houses Jupyter notebooks with
+high-performance, interactive plots that enable features such as pan and zoom
+on fine-resolution geoscience data (e.g. ~3 km data rendered within a few
+tens of seconds to few minutes on personal laptops). GeoCAT-viz enables
+higher-level implementation of Matplotlib and Cartopy plotting capabilities
+through it's variety of easy to use visualization convenience functions for
+GeoCAT-examples. GeoCAT also maintains WRF-Python (Weather Research and
+Forecasting), which works with WRF-ARW model output and provides diagnostic
+and interpolation routines.
 
 GeoCAT was recently awarded Project Raijin, which is an NSF EarthCube-funded
-effort. Its goal is to enhance the open-source analysis and visualization tool
+effort :cite:`raijinaward21`. Its goal is to enhance the open-source analysis and visualization tool
 landscape by developing community-owned, sustainable, scalable tools that
 facilitate operating on unstructured climate and global weather data in the
 scientific Python ecosystem. To realize this, GeoCAT created the Xarray-based
