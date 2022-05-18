@@ -94,15 +94,17 @@ of a monthly package release cycle on package management systems and package ind
 such as Conda and PyPI. To assist this process, the team utilizes advanced continuous
 integration/deployment (CI/CD) technologies throughout Github assets to ensure
 automation, unit testing and code coverage, as well as licensing and
-reproducibility. Figure :ref:`badges` illustrates this interplay between data and
+reproducibility.
+
+Figure :ref:`badges` illustrates this interplay between data and
 models in terms of the four categories of function "verbs" provided in grama.
 
 .. figure:: figures/figure1.png
    :scale: 40%
    :figclass: bht
 
-GeoCAT-comp's badges in the beginning of its README file (i.e. the home page of the
-Githug repository) :label:`badges`
+   GeoCAT-comp's badges in the beginning of its README file (i.e. the home page of the
+   Githug repository) :label:`badges`
 
 Project Raijin
 --------------
