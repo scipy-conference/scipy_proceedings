@@ -29,7 +29,7 @@ Improving the accessibility of average-atom models for warm dense matter with at
 
 .. class:: abstract
 
-   Abstract will go here.
+   Abstract will go here
 
 .. class:: keywords
 
@@ -109,7 +109,7 @@ The radial KS equation is given by
 
    \left[- \left(\frac{\textrm{d}^2}{\textrm{d}r^2} + \frac{2}{r}\frac{\textrm{d}}{\textrm{d}r} - \frac{l(l+1)}{r^2} \right) + v_\textrm{s}[n](r) \right] X_{nl}(r) = \epsilon_{nl} X_{nl}(r).
 
-We have written the above equation in a way that emphasizes that it is an eigenvalue equation, with the eigenvalues :math:`epsilon_{nl}` being the energies of the KS orbitals.
+We have written the above equation in a way that emphasizes that it is an eigenvalue equation, with the eigenvalues :math:`\epsilon_{nl}` being the energies of the KS orbitals.
 
 On the left-hand side, the terms in the round brackets come from the kinetic energy operator acting on the orbitals.
 The :math:`v_\textrm{s}[n](r)` term is the KS potential, which itself is composed of three different terms,
@@ -395,6 +395,73 @@ This completes the section on the code structure and algorithmic details.
 As discussed, with the output of an SCF calculation, there are various kinds of postprocessing one can perform to obtain other properties of interest.
 So far in atoMEC, these are limited to the computation of the pressure (:code:`ISModel.CalcPressure`), the electron localization function (:code:`atoMEC.postprocess.ELFTools`) and the Kubo-Greenwood conductivity (:code:`atoMEC.postprocess.conductivity`).
 We refer readers to our pre-print :cite:`arxiv_KG` for details on how the electron localization function and the Kubo-Greenwood conductivity can be used to improve predictions of the mean ionization state.
+
+Case-study: Helium 
+-------------------
+
+In this section, we consider an application of atoMEC in the WDM regime.
+Helium is the second most abundant element in the universe (after Hydrogen) and therefore understanding its behaviour under a wide range of conditions is important for our understanding of many astrophysical processes.
+Of particular interest are the conditions under which Helium is expected to undergo a transition from insulating to metallic behaviour in the outer layers of white dwarves, which are characterized by densities of around :math:`1-20 \textrm{ g cm}^{-3}` and temperatures of :math:`10-50` kK [CITE].
+These conditions are a typical example of the WDM regime.
+Besides predicting the point at which the insulator-to-metallic transition occurs in the density-temperature spectrum, other properties of interest include equation-of-state data (relating pressure, density and temperature) and electrical conductivity.
+
+To calculate the insulator-to-metallic transition point, the key quantity is the the electronic *band-gap*.
+The concept of band-structures in solid-state physics is a complicated topic on which we attempt a brief and over-simplified description.
+In solids, electrons can occupy certain energy ranges - we call these the energy bands.
+In insulating materials, there is a gap between these energy ranges which electrons are forbidden from occupying - this is the so-called band-gap.
+In conducting materials, there is no such gap, and therefore electrons can conduct electricity because they can be excited into any part of the energy spectrum.
+Therefore, a very simple method to determine the insulator-to-metallic transition is determine the density at which the band-gap becomes zero.
+
+In Fig. ??, we plot the density-of-states (DOS) as a function of energy, for different densities and at fixed temperature :math:`T=50,000` K.
+The DOS shows the energy ranges which the electrons are allowed to occpy; we also show the actual energies occupied by the electrons (according to Fermi-Dirac statistics) with the black dots.
+We can clearly see in this figure that the band-gap (the region where the DOS is zero) becomes smaller as a function of density.
+From this figure, it seems the transition from insulating to metallic state happens somewhere between 5 and 6 :math:`\textrm{g cm}^{-3}.`
+
+
+.. figure:: He_dos.pdf
+   :scale: 100
+
+   Helium density-of-states (DOS) as a function of energy, for different mass densities :math:`\rho_\textrm{m}`, and at temperature :math:`T=50,000` K.
+   Black dots indicate the occupations of the electrons in the permitted energy ranges.
+   Dashed black lines indicate the band-gap (the energy gap between the insulating and conducting bands).
+   Between 5 and 6 :math:`\textrm{g cm}^{-3}`, the band-gap disappears.	   
+
+In Fig. ??, we plot the band-gap as a function of density, for a fixed temperature :math:`T=50,000` K.
+Visually, it appears that the relationship between band-gap and density is linear at this temperature.
+This is confirmed using a linear fit, which has a coefficient of determination value of almost exactly one, :math:`R^2=0.9997`.
+Using this fit, the band-gap is predicted to close at :math:`5.5\ \textrm{g cm}^{-3}`.
+Also in this figure, we show the fraction of ionized electrons, which is given by :math:`\bar{Z}/N_\textrm{e}`, using Eq. :ref:`eq:MIS` to calculate :math:`\bar{Z}` and :math:`N_\textrm{e}` being the total electron number.
+The ionization fraction also relates to the conductivity of the material, because ionized electrons are not bound to any nuclei and therefore free to conduct electricity.
+We see that the ionization fraction mostly increases with density (excepting some strange behavior around :math:`\rho_\textrm{m}=1\ \textrm{g cm}^{-3}`, which is further evidence of the transition from insulating to conducting behaviour with increasing density.
+
+   
+.. figure:: He_bg_Z.pdf
+   :scale: 100
+
+   Band-gap (left axis) and ionization fraction (right axis) for Helium as a function of mass density, at temperature :math:`T=50,000` K.
+   A linear fit accurately describes the relationship between the band-gap and the density.
+
+As a final analysis, we plot the pressure as a function of mass density and temperature in Fig. ??.
+The pressure is given by the sum of two terms: (i) the electronic pressure, calculated using the method described in Ref. [CITE], amnd (ii) the ionic pressure, calculated using the ideal gas law.
+We observe that the pressure increases with both density and temperature, which is the expected behaviour.
+Under these conditions, the density dependence is much stronger, especially for higher densities.
+
+
+.. figure:: He_pressure.pdf
+   :scale: 100
+
+   Helium pressure (logarithmic scale) as a function of mass density and temperature.
+   The pressure increases with density and temperature (as expected), with a stronger dependence on density.
+
+
+
+
+Conclusions
+-----------
+
+* Must mention the benefits of open-source, since this was mentioned by at least one referee
+
+
    
 
 
