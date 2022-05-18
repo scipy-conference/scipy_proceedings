@@ -158,7 +158,7 @@ Let us emphasize that the project is no way intended to replace or cover many fe
 Those projects are extremely flexible and fit the need of their users. The Papyri project addresses specific documentation challenges (mentioned above), we present below what is (and what is not) the scope of work.
 
 a) A generic (little customisable) website builder
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When authors want or need complete control of the output and wide
 personalisation options, or branding, then Papyri is likely not the project to look
@@ -177,7 +177,7 @@ Since Papyri is not fully-customisable, users who are already using documentatio
 c) Accessibility and user proficiency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Accessiblity is a top priority of the project. To that aim, items are associated to semantic meaning as much as possible, and documentation rendering is separated from documentation building phase. That way, accessibility features such as high contract themes (for better speech-to-text raw data reading), early example highlights (for newcomers) and typed annotation (for advanced users) can be quickly available. With the uniform documentation structure, this provides a coherent experience where users become more comfortable to find information (and in a single location).
+Accessibility is a top priority of the project. To that aim, items are associated to semantic meaning as much as possible, and documentation rendering is separated from documentation building phase. That way, accessibility features such as high contract themes (for better speech-to-text raw data reading), early example highlights (for newcomers) and typed annotation (for advanced users) can be quickly available. With the uniform documentation structure, this provides a coherent experience where users become more comfortable to find information (and in a single location).
 
 d) Simplicity, speed, and independence
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -185,111 +185,6 @@ d) Simplicity, speed, and independence
 One objective of the project is to make documentation installation and rendering relatively straightforward and fast. To that aim, the project includes relative independence of documentation building across libraries, allowing bidirectional crosslinks (i.e. both forward and backward links between pages) to be maintained more easily. In other words, a single library can be built without the need to access documentation from another. Also, the project should include straightforward lookup documentation for an object from the
 interactive REPL. Finally, efforts are put to limit the installation speed (to avoid polynomial growth when installing packages on large distributed systems). Finally, 
 
-
-.. Parallel with to Compiled languages
-.. -----------------------------------
-
-.. We will draw several comparison between documentation building and compiled
-.. languages, plus borrow an adapt a couple of terms from the domain. Needed, what
-.. is building the documentation bur going from a source-code meant for a machine
-.. to a final output targeting the flesh and blood machine between the keyboard and
-.. the chair.
-
-.. In particular we'll draw similarities with "ahead-of-time" [AOT]_,
-.. "just-in-time" [JIT]_, "intermediate representation (IR)" [IR]_, link-time
-.. optimization (LTO) [LTO]_, static vs dynamic linking.
-
-.. If you are familiar with these concept that might be a good parallel to keep in
-.. mind in order to follow the reasoning and architecture, but is not necessary to
-.. understand the concepts behind papyri.
-
-.. Current Tools and their limitations
-.. -----------------------------------
-
-.. It is difficult to speak about the scientific python ecosystem documentation
-.. without making reference to docutils [docutils]_ and sphinx [sphinx]_ which are
-.. virtually use by all the libraries in the scientific Python ecosystem. Both
-.. these libraries are the cornerstone of publishing html documentation for Python.
-.. While few alternative exists, most tools and services have some internal
-.. knowledge of sphinx. Read the Docs [RTD]_ provide a specific sphinx theme
-.. [RTD-theme]_ user can opt-in to, `Jupyter-book` is  built on top of sphinx, and
-.. MyST parser [MYST]_ which is made to allow markdown in documentation does targets
-.. sphinx as a backend. 
-
-.. All the above tools provides an "ahead of time" documentation compilation and
-.. rendering, a step which is slow and computationally intensive. Each project
-.. needs its specific plugins, extensions and configurations to properly build. It
-.. is also often relatively difficult to build documentation for a single object (a
-.. single function, module or class), making use of those tools for interactive
-.. exploration difficult.  While this "just-in-time" approach is attempted by
-.. projects like `docrepr` that is integrated both in `Jupyter` and `Spyder`, the
-.. above limitations means interactive documentation lacks inline plots,
-.. crosslinks, indexing, search and many custom directives.
-
-
-.. Some of the above limitation are inherent to the design of documentation build
-.. tools that were designed to build documentation in isolation. While sphinx does
-.. provide features like `intersphinx`, link resolutions are done at documentation
-.. build time and are thus inherently unidirectional, and can easily get broken.
-.. For example, let's considering `numpy` and `scipy` which are two extremely close
-.. libraries, having proper cross-linked documentation requires at least five
-.. steps:
-
-.. - build NumPy documentation
-
-.. - publish NumPy ``object.inv`` file. 
-
-.. - build SciPy documentation using NumPy ``obj.inv`` file.
-
-.. - publish SciPy ``object.inv`` file
-  
-.. - rebuild NumPy docs to make use of SciPy's ``obj.inv``
-
-.. Only then can both SciPy's and NumPy's documentation refer to each other.
-
-.. Any of the created links being potentially invalidated on the publication of a
-.. new version of any of those libraries, which is something that regularly happen
-.. [#]_. 
-
-
-.. .. [#] `ipython/ipython#12210 <https://github.com/ipython/ipython/pull/12210>`_, `numpy/numpy#21016 <https://github.com/numpy/numpy/pull/21016>`_, `& #29073 <https://github.com/numpy/numpy/pull/20973>`_
-
-
-.. This make using pre-produced html in IDEs and other tools difficult and error
-.. prone. This has also raised security issue where some institution are reluctant
-.. to use either tools like `docrepr` or viewing pre-produced html. 
-
-.. Editing docstrings between a rock and a hard place
-.. --------------------------------------------------
-
-.. The numpydoc format is ubiquitous among the scientific ecosystem [NPDOC]_ , It
-.. is loosely based on RST syntax, and despite supporting full rst syntax,
-.. docstrings often rarely contain full-featured directive. As many tools show raw
-.. docstrings and are incapable of interpreting directive on the fly, even if they
-.. could or had the right plugin, this may be computationally intensive which is
-.. undesirable, and executing code to view docs could be a security risk.
-.. Maintainers are thus often pull in two opposite directions. 
-
-.. - keeping the docstrings simple, mostly text based with few directive in order
-  to have readability to the end user that might be exposed to the docstring
-  when using tools like IPython and Jupyter. 
-
-.. - Write an extensive docstring, with references, and directive that
-..   potentially create graphics, tables and more, but impede readability. 
-
-.. While tools like `docrepr` mitigate this problem, this is true only for IDE
-.. users and not Terminal users that will still be exposed to raw docstrings. This
-.. leads to long discussions, for example in `SymPy
-.. <https://github.com/sympy/sympy/issues/14964>`_ on how should equations be
-.. represented in docstrings. 
-
-.. Some libraries would also prefer to use markdown in their docstrings, but this
-.. would create inconsistencies for the end user with respect to rendering, and
-.. have the same dilemmas as above.
-
-.. Finally a few library will dynamically modify their docstring at runtime in
-.. order to avoid using directives. This can have runtime cost, as well as a more
-.. complex maintenance and contribution cost.
 
 The Papyri solution
 -------------------
@@ -401,18 +296,31 @@ distribution of those files are not going to be covered in this paper.
 IRD Installation
 ----------------
 
+Unlike packages installation IRD bundles do not have the notion of dependencies,
+thus a full-fledge package manager is not necessary, and installing can be
+limited to downloading corresponding files and unpacking them.
 
+We'll note as well that IRD bundles for multiple versions of the same library,
+or conflicting libraries is not inherently problematic, and can be shared across
+multiple multiple environments.
+
+From a security standpoint, installing IRD bundles does not requires the
+execution of arbitrary code. This is critical for adoption in deployments.
+
+
+There is an opportunity at IRD installation time to provide localized variant,
+but we have not explored much the opportunity of IRD bundle translations.
 
 
 High level Usage 
 ----------------
 
-The papyri lifecycle for documentation can roughly be decomposed into 3 broad
-categories of stakeholders, and processes. 
+The papyri lifecycle for papyri-based documentation can roughly be decomposed
+into 3 broad categories of stakeholders, and processes. 
 
 The first stakeholders are library maintainers. Those should ensure that papyri
 can build Intermediate Representation Documentation (IRD) files. And publish
-and IRD bundle.
+an IRD bundle.
 
 Creation of IRD files and bundles is the computation intensive step, that may
 requires complex dependencies, or specific plugins. Creation of these files may
@@ -420,19 +328,27 @@ be a multi-step process or use external tooling that is not related to papyri or
 does not use Python. Note that these steps do not requires the libraries
 maintainer to worry about visual appearance and rendering of documentation.
 
+.. comment:
+   maybe move next paragrah somewehre else ?
+
+On our test machine (2021 Macbook Pro M1, base model), building scipy & numpy
+documentatatio IRD files can take several minutes. This include executing
+examples in most docstrings and type inferring most examples in order to
+provide information about each variable.
 
 The second category of stakeholder are end-users. Those users are responsible
-from installing IRD bundles from the libraries they wish to use on their
-machines. Note that IRD from libraries that are not in use are installable as
-well, and that IRD bundle not attached to a particular library could also be
-installed, providing for example domain specific tutorials or examples. 
+from installing desired IRD bundles. In most case this will be IRD bundles from
+already installed libraries.  While papyri is not currently integrated with
+package manager or IDEs, we could imagine this process being automatic, or on
+demand.
 
 
-The third category of stakeholder are IDE developers, who want to make sure
-IRD files can be properly rendered and browsed by their users; potentially
-taking into account user preferences, and providing added values with for
-example indexing, searching, bookmarks. Such a category of stakeholder could
-also be opinionated web hosting in a similar fashion to rustsdocs, devdocs.io
+The third category of stakeholder are IDEs developers, who want to make sure
+IRD files can be properly rendered and browsed by their users when requested;
+potentially taking into account user preferences, and providing added
+values with for example indexing, searching, bookmarks. Such a category of
+stakeholder could also be opinionated web hosting in a similar fashion to
+rustsdocs, devdocs.io
 
 
 Future possibilities
@@ -444,11 +360,10 @@ Future possibilities
 - post deprecation
 - translation
 
-
 Challenges
 ----------
 
-In order to be able to link to object documentation without having access the
+In order to be able to link to object documentation without having access
 the build IRD bundles from all the library we need to come up with a schema that
 uniquely identify each object. For this we decided to use the fully qualified
 names of an object. That is to say the concatenation of the module in which it
@@ -472,34 +387,47 @@ is defined, with its local name. We encountered multiple edge cases with that.
   end up having ``<local>>`` in their fully qualified names, which is invalid. 
 
 - Many builtins functions (``np.sin``, ``np.cos``, ...) do not have a fully
-  qualified name that can be extracted by object introspection. 
+  qualified name that can be extracted by object introspection. We believe it 
+  should be possible to identify those via other means (e.g. docstring hash) but
+  haven't explored those possibilities yet.
 
-- Fully qualified names are often not canonical names (the name you typically
-  use for import), and finding the canonical name automatically is not always
-  straitforward. 
+- Fully qualified names are often not canonical names (the name that are
+  typically use for import), and finding the canonical name automatically is not
+  always straightforward. 
 
-We also came across challenges with case sensitivity, in particular of
-filesystems, and a couple of object have same fully qualified name up to
-difference in casing. 
+- There are also challenges with case sensitivity, in particular of
+  MacOS file systems, and a couple of object ends up referring to the same IRD file
+  on disk if proper care is not taken. We currently append a case-sensitive hash
+  at end of the filename to disambiguate.
+
+- Many libraries have syntax that _looks_ right once rendered to html, but does
+  not follow proper syntax, or relies on peculiarities of docutils and sphinx
+  rendering and parsing.
+
+- Many custom directive plugins cannot be reused from sphinx, and need to be
+  reimplemented.
+
 
 
 Current implementation
-----------------------
+======================
+
+In this section we'll describe a few of the choices we've make for a our current
+implementation. 
 
 
 IRD file Generation
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
-While the core idea around papyri resides in the IRD files and bundles, we can
-come back on some of the decision we made with current implementation.
+While the core idea around papyri resides in the IRD files and bundles, we 
+we made with current implementation. As a wide majority of the core Scientific python stack
+uses sphinx, RST and Numpydoc, the current implementation only support those. 
+We do hope to extend it with MyST later, or provide it as a plugin.
 
-The current implementation only support parsing RST and Numpydoc in docstrings. 
-While we hope to extend it with MyST later, or provide it as a plugin, this is
-our main focus as a wide majority of the core Scientific python stack.
 We use Tree-Sitter, and tree-sitter-rst to parse RST syntax, in particular
 tree-sitter allow us to easily "unparse" an AST node when necessary as the ast
 nodes contains bytes offset to the original buffer. This was relatively
-convenient to handle custom directive a number of edge cases where project
+convenient to handle custom directive and number of edge cases where project
 relied on loose definition of the rst syntax. For example rst directive are of
 the form::
 
@@ -508,8 +436,9 @@ the form::
       body
 
 While technically there is no space before the ``::``, docutils and sphinx allow
-this, but it fails in tree-sitter with an error node. We can check error nodes,
-un-parse, add heuristics to restore a proper syntax and parse the new node.
+this, but it fails in tree-sitter with an error node. We check for error nodes,
+un-parse, and add heuristics to restore a proper syntax and parse again  to
+obtain the new node.
 
 Alternatively a number of directive like ``warnings``, ``notes``
 ``admonitions`` still contain valid RST. Instead of storing the directive with
@@ -517,73 +446,94 @@ the raw text, we parse the full document (potentially finding invalid syntax),
 and unparse to the raw text only if the directive requires it.
 
 
-Serialisation of datastructure into IRD files are currently using a custom
-serialiser that we hope to swap for msgspec. The AST objects are completely
+Serialisation of data structure into IRD files are currently using a custom
+serialiser that we hope to swap for msgspec **ADD REF**. The AST objects are completely
 typed but contains a number of Unions and Sequences of Unions. We found out that
 many frameworks like ``pydantic`` do not support sequences of Unions where each
 item in the Union may be of a different type.
-
 
 We currently try to type-infer all code examples with Jedi, and pre-syntax
 highlight using pygments when possible.
 
 IRD File Installation
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 Download and Installation of IRD files is done concurrently using ``httpx``,
-with ``trio`` as an async framework. 
+with ``trio`` as an async framework. This let us download files concurrently.
 
-The IRD files post-processed into a local custom format. Object informations are
+As the current implementation of Papyri is targeted at Python documentation and
+written in Python, we can query the existing version of Python libraries
+installed, and infer the right version of the requested documentation. Our
+implementation currently attempt to guess relevant libraries version when the
+exact version number is missing from for the install command. 
+
+
+The IRD files are post-processed into a local custom format. Object informations are
 store in 3 different places: A local SQLite database, CBOR representation of
 each document, and raw storage on disk for assets and binary blobs. 
 
 SQlite allows us to easily query graph informations at run time, just before
-rendering, and is mostly optimised for infrequent read access.
+rendering, and is mostly optimised for infrequent read access. While we still
+mostly resolve some SQLite information at runtime, we are planning to move some
+of this processing to installation time. For example, determining whether inter
+libraries links exists.
 
 CBOR object for post-processed IRD files has been chosen to provide a more
-compact representation than JSON which is highly redundant, while still
-avoiding to use compression for fast access.
-
+compact representation than JSON which keys are often is highly redundant, while
+still avoiding to use compression for fast access.
 
 Access to these resources is providing via an internal ``GraphStore`` API which
-is agnostic of the backend, and ensure the consistency of operation like
+is agnostic of the backend, and ensure the consistency of operations like
 adding/removing/replacing documents.
 
 Documentation Rendering
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
-We've prototypes a number of rendering engines, each of them basically consist
-of fetching a single page and it's metadata, and walking the IRD AST tree, and
-rendering each nodes with user preferences. 
+The current papyri implementation contains Wea number of rendering engines, each
+of them mostly consist of fetching a single page, it's metadata, and
+walking the IRD AST tree, and rendering each nodes with user preferences. 
 
 - An ASCII terminal render using Jinja2. This can be useful to pipe
-  documentation to other tools like grep, less, cat.
+  documentation to other tools like grep, less, cat. 
+  This also helps us to work in a highly restricted environment, and make sure
+  reading the documentation is sensible; for example as a proxy to using a
+  screen reader.
 
-- A TUI browser using urwid. This lets you navigate in the terminal, reflow long
-  line on window resize, and can even open images files in external editors. We
-  encountered several bugs in urwid and are considering rewriting it using
-  Rich/Textual.
+- A Textual User Interface browser using urwid. This lets you navigate in the
+  terminal, reflow long line on window resize, and can even open images files in
+  external editors. We encountered several bugs in urwid and are considering
+  rewriting it using Rich/Textual. Our project is for this renderer to replace
+  CLI IPython ``?`` interface which currently only shows raw docstrings.
 
-- A Just-in-Time rendering engine using Jinja2/quart/trio ; Quart being an async
-  version of flask. This version is the one with the most features.
+- A "Just-in-Time" rendering engine using Jinja2/quart/trio ; Quart being an async
+  version of flask. This version is the one with the most features, and is the
+  principal one we use for development. This environment let us iterate rapidly
+  over the rendering engine.
 
 - A static "Ahead of time", rendering of all the existing pages that can be
   rendered ahead of time, using the same class as the Just-in-time rendering
   that basically loops through all entries in the SQLite database and render
-  each.
+  each independently. We use this renderer mostly for exhaustive testing, and
+  measure performance. 
+
+  With this renderer we can render most of the API documentation of IPython,
+  astropy, dask, distributed, matplotlib, networkx, numpy, pandas, papyri, scipy,
+  scikit-image. This represent ~28000 pages in ~60 seconds, so about 450 pages/sec on
+  a recent macbook pro M1.
+
+For all of the above renderer, our profiling shows that documentation rendering is
+mostly limited by object de-serialisation from disk as well a Jinja2
+templating engine. We've played with writing a static html renderer in a
+compiled language (Rust, using compiled, and typed checked templates), and
+managed to get about a factor 10 speedup, but this implementation is now out of
+sync with the main papyri code base. 
 
 
-Our profile show that documentation rendering is limited by object serialisation
-and de serialisation from disk as well a Jinja2 templating engine. 
-We've played with writing a static html renderer in a compiled language (Rust,
-using compiled, and typed checked templates), and managed to get about a factor
-10 speedup, but this implementation is now out of syn with the main papyri
-code base. 
-
-
-Finally we've started implementing a JupyterLab extension that is capable of
-basic IRD file browsing and rendering, using react and typescript. It has
-limited capabilities, like ability to browse to previous pages.
+Finally we've started implementing a JupyterLab extension that present itself as
+a side-panel and is capable of basic browsing and rendering. Is uses typescript,
+react and native JupyterLab component. Future plan is to replace and complement
+JupyterLab's ``?`` and ``?`` operator as well as JupyterLab Inspector when
+possible.
 
 .. figure:: scipy-dpss-old-new.png
    :align: center
@@ -732,6 +682,9 @@ pulvinar id metus.
 .. As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
 .. figures.
 .. 
+
+
+   
 .. table:: This is the caption for the materials table. :label:`mtable`
 
    +------------+----------------+
