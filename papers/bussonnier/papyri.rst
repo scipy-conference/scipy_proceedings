@@ -5,9 +5,9 @@
 :orcid: 0000-0002-7636-8632
 :corresponding:
 
---------------------------------------------------------------------
+====================================================================
 Papyri: Better documentation for the Scientific Ecosystem in Jupyter
---------------------------------------------------------------------
+====================================================================
 
 .. class:: abstract
 
@@ -25,7 +25,7 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
    Document, Jupyter, ecosystem, accessibility
 
 Introduction
-------------
+============
 
 Over the past decades, the Python ecosystem has grown rapidly, and one of the
 last bastion where some of the proprietary competition tools shine is integrated
@@ -48,8 +48,8 @@ favorite search engine, and this impacts less experienced users' learning
 greatly.
 
 The experience on users' local machine is affected by limited documentation
-rendering. Indeed, while the inspector in many **Integrated Development
-Environments (IDEs)** provides some documentation, users do not get access to
+rendering. Indeed, while the inspector in many Integrated Development
+Environments (IDEs) provides some documentation, users do not get access to
 the narrative, or full documentation gallery. For Command Line Interface (CLI)
 users, documentation is often displayed as raw source where no navigation is
 possible. On the maintainers' side, the final documentation rendering is less a
@@ -60,23 +60,23 @@ Efforts such as conda-forge [CFRG]_ have shown that concerted efforts can
 give a much better experience to end-users, and in today's world where sharing
 libraries source on code platforms, continuous integration, and many other tools
 is ubiquitous, we believe a better documentation framework for many of the
-libraries of the scientific Python is should be available.
+libraries of the scientific Python should be available.
 
 Thus, against all advice we received and our own experience, we have decided to
-rebuild an opinionated documentation framework, from scratch, and with minimal
-dependencies: **Papyri**. Papyri **focuses** on building an intermediate
-documentation representation format, that **lets** us decouple building, and
-rendering the docs. **This highly simplifies many operations and gives us access
-to many desired features that where not available up to now.**
+rebuild an *opinionated* documentation framework, from scratch, and with minimal
+dependencies: *Papyri*. Papyri focuses on building an intermediate
+documentation representation format, that lets us decouple building, and
+rendering the docs. This highly simplifies many operations and gives us access
+to many desired features that where not available up to now.
 
-**In what follows we provide the framework in which Papyri has been created and
+In what follows we provide the framework in which Papyri has been created and
 present its objectives (Context and goals), we describe the Papyri features
 (format, installation, and usage), then present its current implementation. We
-end this paper with comments on current challenges and future work.**
+end this paper with comments on current challenges and future work.
 
 
-1) Context, goals and non-goals
--------------------------------
+1) Context and objectives
+=========================
 
 Through out the paper, we will draw several comparisons between documentation
 building and compiled languages. Also, we will borrow and adapt commonly used
@@ -90,7 +90,7 @@ a process from a source-code meant for a machine to a final output targeting the
 flesh and blood machine between the keyboard and the chair. 
 
 1) Current tools and limitations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------
 
 In the scientific Python ecosystem, it is well known that Docutils [docutils]_
 and Sphinx [sphinx]_ are major cornerstones for publishing html documentation
@@ -99,7 +99,7 @@ alternatives exist, most tools and services have some internal knowledge of
 Sphinx. For instance, `Read the Docs` [RTD]_ provides a specific Sphinx theme
 [RTD-theme]_ users can opt-in to, `Jupyter-book` is built on top of Sphinx, and
 MyST parser [MYST]_ which is made to allow markdown in documentation does
-targets Sphinx as a backend, to name a few. All of the above provides an
+targets Sphinx as a backend, to name a few. All of the above provide an
 "ahead-of-time" documentation compilation and rendering, which is slow and
 computationally intensive. When a project needs its specific plugins, extensions
 and configurations to properly build (which is almost always the case), it is
@@ -111,7 +111,7 @@ interactive documentation lacks inline plots, crosslinks, indexing, search and
 many custom directives.
 
 Some of the above limitations are inherent to the design of documentation build
-tools that were designed to build documentation separately. While Sphinx does
+tools that were intended for a separate documentation construction. While Sphinx does
 provide features like `intersphinx`, link resolutions are done at documentation
 build time. Thus, this is inherently unidirectional, and can easily get broken.
 To illustrate this, we consider `NumPy` and `SciPy`, two extremely close
@@ -133,100 +133,58 @@ Only then can both SciPy's and NumPy's documentation refer to each other. As one
 .. [#] `ipython/ipython#12210 <https://github.com/ipython/ipython/pull/12210>`_, `numpy/numpy#21016 <https://github.com/numpy/numpy/pull/21016>`_, `& #29073 <https://github.com/numpy/numpy/pull/20973>`_
 
 
-2) Editing docstrings between a rock and a hard place
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2) Docstrings format
+--------------------
 
 The `numpydoc` format is ubiquitous among the scientific ecosystem [NPDOC]_. It
 is loosely based on RST syntax, and despite supporting full rst syntax,
 docstrings rarely contain full-featured directive. Maintainers confronted to the following dilemma:
 
-- keep the docstrings simple. This means mostly text based docstrings with few directive for efficient readability. The end-user may be exposed to raw docstring, there is no on-the-fly directive interpretation.
-  This is the case for tools such as IPython and Jupyter. 
+- keep the docstrings simple. This means mostly text-based docstrings with few directive for efficient readability. The end-user may be exposed to raw docstring, there is no on-the-fly directive interpretation. This is the case for tools such as IPython and Jupyter. 
 
 - write an extensive docstring. This includes references, and directive that
-  potentially create graphics, tables and more, allowing a riched end-user experience. However this may be computationally intensive, and executing code to view docs could be a security risk.
+  potentially creates graphics, tables and more, allowing an enriched end-user experience. However this may be computationally intensive, and executing code to view docs could be a security risk.
 
-Other factors enhance this choice: (i) users, (ii) format, (iii) runtime. IDE users or not Terminal users motivate to push for extensive docstrings, and tools like `Docrepr` can mitigate this problem. However, users are often exposed to raw docstrings (see for example the discussion `SymPy
+Other factors impact this choice: (i) users, (ii) format, (iii) runtime. IDE users or non-Terminal users motivate to push for extensive docstrings, and tools like `Docrepr` can mitigate this problem. However, users are often exposed to raw docstrings (see for example the discussion `SymPy
 <https://github.com/sympy/sympy/issues/14964>`_ on how should equations be
-represented in docstrings). In terms of format, markdown is appealing, however inconsistencies in the rendering will be created between libraries. Finally, some libraries can dynamically modify their docstring at runtime. While this avoids using directives, it ends up more expensive (runtime costs, complex maintenance, and contribution costs).
+represented in docstrings). In terms of format, markdown is appealing, however inconsistencies in the rendering will be created between libraries. Finally, some libraries can dynamically modify their docstring at runtime. While this avoids using directives, it ends up being more expensive (runtime costs, complex maintenance, and contribution costs).
 
 
-3) Goals and non-goals
-~~~~~~~~~~~~~~~~~~~~~~
+3) Objectives of the project
+----------------------------
 
-Below we'll layout goals and non-goals. Non-goals are as much if not more
-important than goals as they will frame the limit of the what the tools we'll
-build can do, and the more limited our goals are the more we can reason about
-the system and usually the smarter the tools can be.
+We now layout the objectives of the Papyri documentation framework. 
+Let us emphasize that the project is no way intended to replace or cover many features included in well established documentation tools such as Sphinx or Jupyter-book.
+Those projects are extremely flexible and fit the need of their users. The Papyri project addresses specific documentation challenges (mentioned above), we present below what is (and what is not) the scope of work.
 
-Generic Website builder
-~~~~~~~~~~~~~~~~~~~~~~~
+a) A generic (little customisable) website builder
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Many of the existing projects to build online documentation are well
-established, extremely flexible and fits the need or their users. We are in no
-way trying to cover many of the use case covered by projects like sphinx, or
-Jupyter Book. When authors want or need complete control of the output and wide
-personalisation options, or branding; papyri is likely not the project to look
-at. That is to say single-project websites where appearance, layout, domain is
-controlled by the author is an explicit non-goal.
+When authors want or need complete control of the output and wide
+personalisation options, or branding, then Papyri is likely not the project to look
+at. That is to say single-project websites where appearance, layout, domain need to be
+controlled by the author is not part of the objectives.
 
-Full compatibility with current systems
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+b) A uniform documentation structure and syntax
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For user who are already using sphinx, mkdocs or other projects and are
-interested in using Papyri, we also not targeting 100% compatibilities. You
-should expect your project to requires minor modifications to work with papyri. 
-We in particular are stricter on many of the rst directive than docutils and
-sphinx are, and we believe that a stricter requirements leads to more uniform
-documentation setup and syntax, which is simpler for contributors and allow to
-catch more errors at compile time. This is qualitatively supported by number of
-documentation fixes we did upstream during the developments **ADD REFERENCES,
+The Papyri project prescribes stricter requirements in terms of format and structure compared to other tools such as Docutils and Sphinx. When possible, the documentation follows the Diátaxis Framework [DT]_. This provides a uniform documentation setup and syntax, simplifying contributions to the project and easing error catching at compile time. 
+Such strict environment is qualitatively supported by number of documentation fixes done upstream during the development stage of the project **ADD REFERENCES,
 HERE to many fixes to numpy/scipy**.
+Since Papyri is not fully-customisable, users who are already using documentation tools such as Sphinx, `mkdocs` **Not cited before in the context section, why not ?** and others should expect their project to require minor modifications to work with Papyri. 
 
-Prescribing documentation sctructure
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We do not want to prescribe how to write documentation, and who it should be
-targeted to. Nonetheless as we have to make technical choices, and when possible
-will keep in mind the Diátaxis Framework [DT]_, this.
+c) Accessibility and user proficiency
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Accessibility and User proficiency
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Accessiblity is a top priority of the project. To that aim, items are associated to semantic meaning as much as possible, and documentation rendering is separated from documentation building phase. That way, accessibility features such as high contract themes (for better speech-to-text raw data reading), early example highlights (for newcomers) and typed annotation (for advanced users) can be quickly available. With the uniform documentation structure, this provides a coherent experience where users become more comfortable to find information (and in a single location).
 
-We care about accessibility as well, this is one of the reason we will try to
-attach semantic meaning to items in the documentation when possible. As we also
-want documentation rendering to be separated from documentation building, this
-should let users opt-in to accessibility features, like hight contrast themes, 
-or make it easier for speech to text library to consume the raw data.
+d) Simplicity, speed, and independence
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We also want to separate rendering in order to give users the opportunity to alter 
-documentation depending on their proficiency. For example while type
-annotation is useful to the advance user it can be confusing for the neophyte.
+One objective of the project is to make documentation installation and rendering relatively straightforward and fast. To that aim, the project includes relative independence of documentation building across libraries, allowing crosslinks (as well as forward and backward links between pages) to be maintained more easily. In other words, a single library can be built without the need to access documentation from another. Also, the project should include straightforward lookup documentation for an object from the
+interactive REPL. Finally, efforts are put to limit the installation speed (to avoid polynomial growth when installing packages on large distributed systems). Finally, 
 
-Similarly, newcomers tend to prefer working from examples, and could thus decide
-to promote examples earlier in the rendering. 
-
-Regardless of configurability, we believe that a coherent experience where
-documentation is uniform and in a single place should make users more
-comfortable with finding information.
-
-Simplicity, speed and independence
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-We wish to have relative independence of documentation building across
-libraries. That is to say the system should be able to build documentation for a
-single library, without the need to access documentation for another.
-
-We do want documentation installation and rendering to be relatively
-straightforward and fast. On large distributed system, we cannot afford to have
-the installation speed to grow polynomially with the number of installed
-packages.
-
-We do want the ability to have forward and backward links and references between
-pages. 
-
-And we do want to ability to lookup documentation for an object from the
-interactive REPL.
 
 .. Parallel with to Compiled languages
 .. -----------------------------------
