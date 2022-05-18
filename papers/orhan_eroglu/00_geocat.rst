@@ -74,22 +74,42 @@ Forecasting), which works with WRF-ARW model output and provides diagnostic
 and interpolation routines.
 
 GeoCAT was recently awarded Project Raijin, which is an NSF EarthCube-funded
-effort :cite:`raijinaward21`. Its goal is to enhance the open-source analysis and visualization tool
-landscape by developing community-owned, sustainable, scalable tools that
-facilitate operating on unstructured climate and global weather data in the
-scientific Python ecosystem. To realize this, GeoCAT created the Xarray-based
-Uxarray package to recognize unstructured grid models through partnership with
-the geoscience community groups. Throughout this three-year project, GeoCAT
-will work on the development of data analysis and visualization functions that
-operate directly on the native grid as well as establish an active community
-of user-contributors.
+effort :cite:`raijinaward21`. Its goal is to enhance the open-source analysis
+and visualization tool landscape by developing community-owned, sustainable,
+scalable tools that facilitate operating on unstructured climate and global
+weather data in the scientific Python ecosystem. Throughout this three-year
+project, GeoCAT will work on the development of data analysis and
+visualization functions that operate directly on the native grid as well as
+establish an active community of user-contributors.
 
-This paper will provide insights about the GeoCAT's open development methodology,
-software stack and current status, team scope and near-term plans, as well as
-ways of community involvement.
+This paper will provide insights about the GeoCAT's software stack and
+current status, team scope and near-term plans, open development methodology,
+as well as ways of community involvement.
 
 GeoCAT Software
 ---------------
+
+GeoCAT employs a continuous delivery model, which has been achieved through the use
+of a monthly package release cycle on package management systems and package indexes
+such as Conda and PyPI. To assist this process, the team utilizes advanced continuous
+integration/deployment (CI/CD) technologies throughout Github assets to ensure
+automation, unit testing and code coverage, as well as licensing and
+reproducibility. Figure :ref:`badges` illustrates this interplay between data and
+models in terms of the four categories of function "verbs" provided in grama.
+
+.. figure:: figures/figure1.png
+   :scale: 40%
+   :figclass: bht
+
+GeoCAT-comp's badges in the beginning of its README file (i.e. the home page of the
+Githug repository) :label:`badges`
+
+Project Raijin
+--------------
+
+To realize this, GeoCAT
+created the Xarray-based Uxarray package to recognize unstructured grid models
+through partnership with the geoscience community groups.
 
 
 
@@ -108,12 +128,10 @@ documentation, along with community announcements on the GeoCAT blog.
 Furthermore, GeoCAT encourages community feedback and contribution at any level
 with inclusive and welcoming language.
 
-GeoCAT employs a continuous delivery model, which has been achieved through the use
-of a monthly package release cycle on package management systems and package indexes
-such as Conda and PyPI. To assist this process, the team utilizes advanced continuous
-integration/deployment (CI/CD) technologies throughout Github assets to ensure
-automation, unit testing and code coverage, licensing and
-reproducibility. Additionally, to further promote user engagement with the
+Community engagement
+--------------------
+
+Additionally, to further promote user engagement with the
 geoscience community, GeoCAT has contributed multiple Python tutorials to
 the web-based, community-owned, educational resources created through Project
 Pythia. The GeoCAT team has also encouraged undergraduate and graduate student
