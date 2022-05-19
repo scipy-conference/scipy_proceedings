@@ -103,7 +103,7 @@ such as Conda :cite:`conda` and PyPI :cite:`conda`. To assist this process, the 
 utilizes advanced  technologies throughout Github assets to ensure automation, unit
 testing and code coverage, as well as licensing and reproducibility.
 
-Figure :ref:`fig1_badges`, for example, illustrates the set of badges from one of our
+Figure :ref:`fig1badges`, for example, illustrates the set of badges from one of our
 software tools, GeoCAT's computational component, GeoCAT-comp, which shows the near
 real-time status of each CI/CD implementation at any time in the Github repository
 homepage. More precisely, CI build tests of our repositories are implemented and
@@ -118,7 +118,7 @@ is populated mostly-automatically through Sphinx Python documentation generator
 :cite:`sphinx` and published through ReadTheDocs :cite:`readthedocs` via an automated
 building/versioning schema. The "DOCS" badge provides a link to the documentation page
 as well as shows failures, if any, with the documentation rendering process. Figure
-:ref:`fig2_rtd` shows the documentation homepage of GeoCAT-comp for instance. The
+:ref:`fig2rtd` shows the documentation homepage of GeoCAT-comp for instance. The
 "NCAR" and "PYPI" badges in the "Package" row shows and links to the latest versions
 of the software tool distributed through NCAR's Conda channel and PyPI, respectively.
 The "LICENSE" badge provides a link to our software licenses, which is Apache License
@@ -134,14 +134,14 @@ they used for scientific/research purposes.
    :figclass: bht
 
    GeoCAT-comp's badges in the beginning of its README file (i.e. the home page of
-   the Githug repository) :label:`fig1_badges`
+   the Githug repository) :label:`fig1badges`
 
 .. figure:: figures/fig2_rtd.png
    :align: center
    :figclass: w
 
    GeoCAT-comp documentation homepage built with Sphinx using a theme provided by
-   ReadTheDocs :label:`fig2_rtd`
+   ReadTheDocs :label:`fig2rtd`
 
 Project Raijin
 --------------
