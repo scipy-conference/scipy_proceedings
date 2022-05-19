@@ -1,3 +1,7 @@
+:author: Ido Michael
+:email: ido@ploomber.io
+:institution: Ploomber
+
 Keeping your Jupyter notebook code quality bar high (and production ready) with Ploomber
 ========================================================================================
 
@@ -290,7 +294,7 @@ You can see that only the ``gradient-boosting-regressor`` task ran!
 Incremental builds allow us to iterate faster without keeping track of
 task changes.
 
-Check out :doc:`playground/output/gradient-boosting-regressor.ipynb`,
+Check out ``playground/output/gradient-boosting-regressor.ipynb``,
 which contains the output notebooks with the model evaluation plot.
 
 8. Execution in the cloud
@@ -328,6 +332,6 @@ Here are a few resources to dig deeper:
 10. Contact
 ===========
 
--  `Twitter (@ploomber):  https://twitter.com/ploomber`_
--  `Join us on Slack: http://ploomber.io/community`_
--  `E-mail: contact@ploomber.io`_
+-  `Twitter:  <https://twitter.com/ploomber>`__
+-  `Join us on Slack: <http://ploomber.io/community>`__
+-  `E-mail: <contact@ploomber.io>`__
