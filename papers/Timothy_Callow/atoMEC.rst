@@ -29,7 +29,13 @@ Improving the accessibility of average-atom models for warm dense matter with at
 
 .. class:: abstract
 
-   Abstract will go here
+   Average-atom models are an important tool in studying matter under extreme conditions, such as those conditions experienced in planetary cores, brown and white dwarves, and during inertial confinement fusion.
+   In the right context, average-atom models can yield results close enough in accuracy (i.e. within experimental uncertainties) to codes which require orders of magnitude more computing time, and thus greatly reduce financial and environmental costs.
+   Unfortunately, due to the the wide-range of available models and lack of open-source codes, average-atom models can appear somewhat unapproachable.
+   In this paper, we present our open-source average-atom code, atoMEC.
+   We explain the aims and structure of atoMEC to illuminate the different stages and options in an average-atom calculation, and facilitate future community contributions.
+   We also discuss the use of various open-source Python packages in atoMEC, which have (and still do) expedited its development.
+
 
 .. class:: keywords
 
@@ -38,34 +44,34 @@ Improving the accessibility of average-atom models for warm dense matter with at
 Introduction
 ------------
 
-The study of matter under extreme conditions - materials exposed to temperatures, pressures or electromagnetic fields beyond ambient conditions on earth - is critical to our understanding of many important scientific and technological processes, such as nuclear fusion and various astro and planetary physics phenomena :cite:`MEC_linac`.
+The study of matter under extreme conditions - materials exposed to high temperatures, high pressures, or strong electromagnetic fields - is critical to our understanding of many important scientific and technological processes, such as nuclear fusion and various astrophysical and planetary physics phenomena :cite:`MEC_linac`.
 Of particular interest within this broad field is the warm dense matter (WDM) regime, which is typically characterized by temperatures from the kK to MK range (:math:`\sim 1-100` eV) and densities ranging from dense gases to highly compressed solids (:math:`\sim 0.01 - 1000\ \textrm{g cm}^{-3}`) :cite:`Bonitz_20`.
 In this regime, it is important to account for the quantum mechanical nature of the electrons (and in some cases, the nuclei also). Therefore conventional methods from plasma physics, which either neglect quantum effects or treat them in a coarse manner, are usually not sufficiently accurate.
-On the other hand, methods from condensed-matter physics and quantum chemistry, which account fully for quantum interactions, typically target the ground-state only, and are not therefore suitable for studying statistical ensembles which emerge at temperatures above zero.
+On the other hand, methods from condensed-matter physics and quantum chemistry, which account fully for quantum interactions, typically target the ground-state only, and become computationally intratactable for studying statistical ensembles which emerge at temperatures above zero.
 
 Nevertheless, there are methods which can, in principle, be applied to study materials at any given temperature and density whilst formally accounting for quantum interactions. These methods are often denoted "first-principles" because, formally speaking, they yield the exact properties of the statistical quantum ensemble, under certain well-founded theoretical approximations.
-Density-functional theory (DFT), initially developed as a ground-state theory :cite:`HK64,KS65` but later extended to non-zero temperatures :cite:`M65`, is one such theory and has been used extensively to study materials under WDM conditions :cite:`graziani_14`.
+Density-functional theory (DFT), initially developed as a ground-state theory :cite:`HK64,KS65` but later extended to non-zero temperatures :cite:`M65,FT_DFT_exact`, is one such theory and has been used extensively to study materials under WDM conditions :cite:`graziani_14`.
 However, even though DFT reformulates the Schrödinger equation in a computationally efficient manner :cite:`Kohn_Nobel_lecture`, the cost of running calculations becomes prohibitively expensive at higher temperatures; formally, it scales as :math:`\mathcal{O}(N^3 T^3)`, with :math:`N` the particle number (which usually also increases with temperature) and :math:`T` the temperature :cite:`stoc_DFT`.
 Furthermore, although it is formally an exact theory, in practise DFT relies on approximations for the so-called "exchange-correlation" energy, and these have not been rigorously tested under WDM conditions.
 An alternative method used in the WDM community is path-integral Monte-Carlo :cite:`DGB18`, which yields essentially exact properties; however, it is even more limited by compuational cost than DFT, and in particularly becomes unfeasiable expensive at lower temperatures due to the fermion sign problem.
 
-It is therefore of great interest to develop computationally cheap alternatives to the aforementioned methods. Some examples of promising developments in this regard include machine-learning based solutions :cite:`mala` and stochastic DFT :cite:`stoc_DFT`.
-However, in this paper, we focus on an alternative class of models known as "average-atom" models. Average-atom models have a long history in plasma Physics :cite:`PRR_AA`: they account for quantum effects, typically using DFT, but reduce the complex system of interacting electrons and nuclei to a single atom immersed in a plasma (the "average" atom). An illustration of this principle (reduced to two-dimensions for visual purposes) is shown in Fig. ??.
+It is therefore of great interest to develop computationally cheap alternatives to the aforementioned methods. Some examples of promising developments in this regard include machine-learning based solutions :cite:`ML_DFT_1,ML_DFT_2,mala` and stochastic DFT :cite:`stoc_DFT,stoc_DFT_2`.
+However, in this paper, we focus on an alternative class of models known as "average-atom" models. Average-atom models have a long history in plasma Physics :cite:`PRR_AA`: they account for quantum effects, typically using DFT, but reduce the complex system of interacting electrons and nuclei to a single atom immersed in a plasma (the "average" atom). An illustration of this principle (reduced to two-dimensions for visual purposes) is shown in Fig. 1.
 This significantly reduces the cost relative to a full DFT simulation, because the particle number is restricted to the number of electrons per nucleus, and spherical symmetry is exploited to reduce the three-dimensional problem to one-dimension.
 
 Naturally, in order to reduce the complexity of the problem as described, various approximations must be introduced. It is important to understand these approximations and their limitations in order for average-atom models to have genuine predictive capabalities.
 Unfortunately, this is not always the case: although average-atom models share common concepts, there is no unique formal theory underpinning them and thus a variety of models and codes exist, and it is not typically clear which models can be expected to perform most accurately under which conditions.
 In a previous paper :cite:`PRR_AA`, we addressed this issue by deriving an average-atom from first principles, and comparing the impact of different approximations within this model on some common properties.
 
-In this paper, we continue this theme but now focus on computational aspects. We introduce atoMEC: an open-source average-**ato**\m code for studying **M**\atter under **E**\xtreme **C**\onditions.
+In this paper, we continue this theme but now focus on computational aspects. We introduce atoMEC :cite:`atoMEC_zenodo`: an open-source average-**ato**\m code for studying **M**\atter under **E**\xtreme **C**\onditions.
 The aim of atoMEC, as indicated by the title of this paper, is to improve the accessibility and understanding of average-atom models.
 To the best of our knowledge, open-source average-atom codes are in scarce supply: with atoMEC, we aim to provide a tool which people can not only use to run average-atom simulations, but also to add their own models and thus facilitate comparisons of different approximations. 
 The relative simplicity of average-atom codes means that they are not only efficient to run, but also efficient to develop: this means, for example, that they can be used as a test-bed for new ideas that could be later implemented in full DFT codes, and are also accessible to those without extensive prior expertise, such as students.
 atoMEC aims to facilitate development by following good practise in software engineering (for example extensive documentation), a careful design structure, and of course through the choice of Python and its NumPy :cite:`numpy` and SciPy :cite:`scipy` libraries, which is arguably the most popular scientific programming language. 
 
-This paper is structured as follows. In the next section, we briefly review the key theoretical points which are important to understand the functionality of atoMEC, assuming no prior physical knowledge of the reader.
+This paper is structured as follows: in the next section, we briefly review the key theoretical points which are important to understand the functionality of atoMEC, assuming no prior physical knowledge of the reader.
 Following that, we present the key functionality of atoMEC, discuss the code structure and algorithms, and explain how these relate to the theoretical aspects introduced.
-Finally, we present an example case study: we consider Beryllium (which plays an important role in inertial confinement fusion) under a range of temperatures and densities, and probe the behaviour of a few important properties, namely the pressure, ionization state and ionization energies under these conditions.
+Finally, we present an example case study: we consider Hellium under the conditions often experienced in the outer layers of a white dwarf star, and probe the behaviour of a few important properties, namely the band-gap, pressure and ionization degree.
 
 .. figure:: test_voronoi.pdf
    :scale: 100
@@ -79,18 +85,18 @@ Theoretical background
 Properties of interest in the warm dense matter regime include, for example, equation-of-state data, which relates the density, energy, temperature and pressure of a material :cite:`hugoniot`; the mean ionization state and the electron ionization energies, which tell us about how tightly bound the electrons are to the nuclei; and the electrical and thermal conductivities.
 These properties yield information pertinent to our understanding of stellar and planetary physics, the earth's core, inertial confinement fusion, and more besides.
 To exactly obtain these properties, one needs (in theory) to determine the thermodynamic ensemble of the quantum states (the so-called *wave-functions*) representing the electrons and nuclei.
-Fortunately, they can be obtained with reasonable accuracy using models such as average-atom models; in this section, we eloborate on how this is done.
+Fortunately, they can be obtained with reasonable accuracy using models such as average-atom models; in this section, we elaborate on how this is done.
 
 We shall briefly review the key theory underpinning the type of average-atom models implemented in atoMEC. This is intended for readers without a background in quantum mechanics, to give some context to the purposes and mechanisms of the code.
 For a comprehensive derivation of this average-atom model, we direct readers to Ref. :cite:`PRR_AA`.
 The average-atom model we shall describe falls into a class of models known as *ion-sphere* models, which are the simplest (and still most widely-used) class of average-atom model.
-There are alternative (more advanced) classes of model such as *ion-correlation* :cite:`ioncorrelation` and *neutral pseudo-atom* models :cite:`NPA` which we are not yet implemented in atoMEC and thus we don't elaborate on them here.
+There are alternative (more advanced) classes of model such as *ion-correlation* :cite:`ioncorrelation` and *neutral pseudo-atom* models :cite:`NPA` which we are not yet implemented in atoMEC and thus we do not elaborate on them here.
 
 As demonstrated in Fig. ??, the idea of the ion-sphere model is to map a fully-interacting system of many electrons and nuclei into a set of independent atoms which do not interact explicity with any of the other spheres.
-Naturally, this depends on several assumptions and approximations, but there is formal justification for such a mapping :cite:`PRR_AA`; furthermore, there are many examples in which average-atom models have shown good agreement with more accurate simulations and experimental data [CITE], which further justifies this mapping.
+Naturally, this depends on several assumptions and approximations, but there is formal justification for such a mapping :cite:`PRR_AA`; furthermore, there are many examples in which average-atom models have shown good agreement with more accurate simulations and experimental data :cite:`AA_pressure`, which further justifies this mapping.
 
 Although the average-atom picture is significantly simplified relative to the full many-body problem, even determining the wave-functions and their ensemble weights for an atom at finite temperature is a complex problem.
-Fortunately, DFT reduces this complexity further, by establishing that the electronic *density* - a far less complex entity than the wave-functions - is sufficient to determine all physical observables.
+Fortunately, DFT reduces this complexity further, by establishing that the electron *density* - a far less complex entity than the wave-functions - is sufficient to determine all physical observables.
 The most popular formulation of DFT, known as Kohn-Sham DFT (KS-DFT) :cite:`KS65`, allows us to construct the *fully-interacting* density from a *non-interacting* system of electrons, simplifying the problem still.
 Due to the spherical symmetry of the atom, the non-interacting electrons - known as the KS orbitals - can be represented as a product of radial and angular components,
 
@@ -117,11 +123,12 @@ The :math:`v_\textrm{s}[n](r)` term is the KS potential, which itself is compose
 .. math::
    :label: eq:kspot
 	   
-   v_{\textrm{s}}[n](r) = -\frac{Z}{r} + 4\pi \int_0^{R_\textrm{WS}} \textrm{d}{x} \frac{n(x)x^2}{r^>(x)} + \frac{\delta F_\textrm{xc}^\tau [n]}{\delta n(r)}\,,
+   v_{\textrm{s}}[n](r) = -\frac{Z}{r} + 4\pi \int_0^{R_\textrm{WS}} \textrm{d}{x} \frac{n(x)x^2}{r^>(x)} + \frac{\delta F_\textrm{xc}[n]}{\delta n(r)}\,,
 
-where :math:`r^>(x)=\max(r,x)`. The three terms in the potential are respectively the electron-nuclear attraction, the classical Hartree repulsion, and the exchange-correlation (xc) potential.
+where :math:`r^>(x)=\max(r,x)`, :math:`R_\textrm{WS}` is the radius of the atomic sphere, :math:`n(r)` is the electron density, :math:`Z` the nuclear charge, and :math:`F_\textrm{xc}[n]` the exchange-correlation free energy functional.
+Thus the three terms in the potential are respectively the electron-nuclear attraction, the classical Hartree repulsion, and the exchange-correlation (xc) potential.
 
-We note that the KS potential and its constituents are function\ *als* of the electron density :math:`n(r)`. Were it not for this dependence on the density, solving Eq. :ref:`eq:kseqn` just amounts to solving an ordinary linear differential equation (ODE).
+We note that the KS potential and its constituents are functionals of the electron density :math:`n(r)`. Were it not for this dependence on the density, solving Eq. :ref:`eq:kseqn` just amounts to solving an ordinary linear differential equation (ODE).
 However, the electron density is in fact constructed from the orbitals in the following way,
 
 .. math::
@@ -209,8 +216,8 @@ The mass density also directly corresponds to the mean distance between two nucl
 An additional physical parameter not mentioned above is the **net charge** of the material being considered.
 However, we almost always assume zero net charge in average-atom simulations (i.e. the number of electrons is equal to the atomic charge).
 
-In atoMEC, these physical parameters are controlled by the `Atom` object.
-As an example, we consider Aluminium under ambient conditions, i.e. at room temperature, :math:`\tau=100\ \textrm{eV}`, and normal metallic density, :math:`\rho_\textrm{m}=2.7\ \textrm{g cm}^{-3}`.
+In atoMEC, these physical parameters are controlled by the :code:`Atom` object.
+As an example, we consider Aluminium under ambient conditions, i.e. at room temperature, :math:`\tau=300\ \textrm{K}`, and normal metallic density, :math:`\rho_\textrm{m}=2.7\ \textrm{g cm}^{-3}`.
 We set this up as
 
 .. code-block:: python
@@ -220,16 +227,16 @@ We set this up as
 
 .. figure:: atom.png
 
-   Auto-generated print statement from calling the `atoMEC.Atom` object.
+   Auto-generated print statement from calling the :code:`atoMEC.Atom` object.
 
-By default, the above code automatically prints the output seen in Fig. 3. We see that the first two arguments of the `Atom` object are the chemical symbol of the element being studied, and the temperature.
+By default, the above code automatically prints the output seen in Fig. 3. We see that the first two arguments of the :code:`Atom` object are the chemical symbol of the element being studied, and the temperature.
 In addition, at least one of "density" or "radius" must be specified.
 In atoMEC, the default (and only permitted) units for the mass density are :math:`\textrm{g cm}^{-3}`; *all* other input and output units in atoMEC are by default Hartree atomic units, and hence we specify "K" for Kelvin.
 
 The information in Fig. 3 displays the chosen parameters in common units, as well as some other information directly obtained from these parameters.
-The chemical symbol ("Al" in this case) is passed to the `mendeleev` library :cite:`mendeleev2014` to generate this data, which is used later in the calculation.
+The chemical symbol ("Al" in this case) is passed to the mendeleev library :cite:`mendeleev2014` to generate this data, which is used later in the calculation.
 
-This initial stage of the average-atom calculation, i.e. the specification of physical parameters and initilization of the `Atom` object, is shown in the top row at the top of Fig. ??.
+This initial stage of the average-atom calculation, i.e. the specification of physical parameters and initilization of the :code:`Atom` object, is shown in the top row at the top of Fig. 2.
 
 `atoMEC.models`: model parameters
 *********************************
@@ -247,7 +254,7 @@ Below we list some choices which are available in atoMEC, very approximately in 
 
 We do not discuss the theory and impact of these different choices in this paper. Rather, we direct readers to Refs. :cite:`PRR_AA` and :cite:`arxiv_KG` in which all of these choices are discussed.
 
-In atoMEC, the ion-sphere model is controlled by the `models.ISModel` object. Continuing with our Aluminium example, we choose the so-called "neumann" boundary condition, with a "quantum" treatment of the unbound electrons, and choose the LDA exchange functional (which is also the default). This model is set up as
+In atoMEC, the ion-sphere model is controlled by the :code:`models.ISModel` object. Continuing with our Aluminium example, we choose the so-called "neumann" boundary condition, with a "quantum" treatment of the unbound electrons, and choose the LDA exchange functional (which is also the default). This model is set up as
 
 .. code-block:: python
 		
@@ -255,15 +262,15 @@ In atoMEC, the ion-sphere model is controlled by the `models.ISModel` object. Co
    model = models.ISModel(Al, bc="neumann",
 		xfunc_id="lda_x", unbound="quantum")
 
-By default, the above code prints the output shown in Fig. 4. The first (and only mandatory) input parameter to the `models.ISModel` object is the `Atom` object that we generated earlier.
-Together with the optional `spinpol` and `spinmag` parameters in the `models.ISModel` object, this sets either the total number of electrons (`spinpol=False`) or the number of electrons in each spin channel (`spinpol=True`).
+By default, the above code prints the output shown in Fig. 4. The first (and only mandatory) input parameter to the :code:`models.ISModel` object is the :code:`Atom` object that we generated earlier.
+Together with the optional :code:`spinpol` and :code:`spinmag` parameters in the :code:`models.ISModel` object, this sets either the total number of electrons (:code:`spinpol=False`) or the number of electrons in each spin channel (:code:`spinpol=True`).
 
-The remaining information displayed in Fig. ?? shows directly the chosen model parameters, or the default values where these parameters are not specified.
-The exchange and correlation functionals - set by the parameters `xfunc_id` and `cfunc_id` - are passed to the LIBXC library :cite:`libxc_2018` for processing.
+The remaining information displayed in Fig. 4 shows directly the chosen model parameters, or the default values where these parameters are not specified.
+The exchange and correlation functionals - set by the parameters :code:`xfunc_id` and :code:`cfunc_id` - are passed to the LIBXC library :cite:`libxc_2018` for processing.
 So far, only the "local density" family of approximations is available in atoMEC, and thus the default values are usually a sensible choice.
 For more information on exchange and correlation functionals, there is a number of reviews in the literature, for example Ref. :cite:`xc_review`.
 
-This stage of the average-atom calculation, i.e. the specification of the model and the choices of approximation within that, is shown in the second row of Fig. ??.
+This stage of the average-atom calculation, i.e. the specification of the model and the choices of approximation within that, is shown in the second row of Fig. 2.
 
 
 .. figure:: atoMEC_model.png
@@ -277,12 +284,12 @@ This stage of the average-atom calculation, i.e. the specification of the model 
 **************************************************************
 
 Once the physical parameters and model has been defined, the next stage in the average-atom calculation (or indeed any DFT calculation) is the SCF procedure.
-In atomEC, this is invoked by the `ISModel.CalcEnergy` function.
-This function is called `CalcEnergy` because it finds the KS orbitals (and associated KS density) which minimize the total free energy.
+In atoMEC, this is invoked by the :code:`ISModel.CalcEnergy` function.
+This function is called :code:`CalcEnergy` because it finds the KS orbitals (and associated KS density) which minimize the total free energy.
 
 Clearly, there are various mathematical and algorithmic choices in this calculation.
-These include, for example, the basis in which the KS orbitals and potential are represented; the algorithim used to solve the KS equations (:ref:`kseqn`); and how to ensure smooth convergence of the SCF cycle.
-In atoMEC, the SCF procedure currently follows a single pre-determined algorithm, which we breifly review below.
+These include, for example, the basis in which the KS orbitals and potential are represented; the algorithim used to solve the KS equations (:ref:`eq:kseqn`); and how to ensure smooth convergence of the SCF cycle.
+In atoMEC, the SCF procedure currently follows a single pre-determined algorithm, which we briefly review below.
 
 In atoMEC, we represent the radial KS quantities (orbitals, density and potential) on a logarithmic grid, i.e. :math:`x=\log(r)`.
 Furthermore, we make a transformation of the orbitals :math:`P_{nl}(x) = X_{nl}(x)e^{x/2}`. Then the equations to be solve become:
@@ -335,7 +342,7 @@ The potential used in each diagonilization step of the SCF cycle is not simply t
 
    v_\textrm{s}^{(i)}(r) = \alpha v_\textrm{s}^{i}(r) + (1 - \alpha) v_\textrm{s}^{i-1}(r)\,.
 
-In general, a lower value of the mixing fraction :math:`alpha` makes the SCF cycle more stable, but requires more iterations to converge.
+In general, a lower value of the mixing fraction :math:`\alpha` makes the SCF cycle more stable, but requires more iterations to converge.
 Typically a choice of :math:`\alpha\approx 0.5` gives a reasonable balance between speed and stability.
 
 We can thus summarize the key parameters in an SCF calculation as follows:
@@ -349,7 +356,7 @@ The first three items in this list essentially control the accuracy of the calcu
 In principle, for each SCF calculation - i.e. a unique set of physical and model inputs - these parameters should be independently varied until some property (such as the total free energy) is considered suitably converged with respect to that parameter.
 Changing the SCF parameters should not affect the final results (within the convergence tolerances), only the number of iterations in the SCF cycle.
   
-Let us now consider an example SCF calculation, using the `Atom` and `model` objects we have already defined:
+Let us now consider an example SCF calculation, using the :code:`Atom` and :code:`model` objects we have already defined:
 
 .. code-block:: python
 
@@ -367,14 +374,14 @@ Let us now consider an example SCF calculation, using the `Atom` and `model` obj
     scf_params={"mixfrac": 0.7},
     )
 
-We see that the first two parameters passed to the `CalcEnergy` function are the `nmax` and `lmax` quantum numbers, which specify the number of eigenstates to compute.
+We see that the first two parameters passed to the :code:`CalcEnergy` function are the :code:`nmax` and :code:`lmax` quantum numbers, which specify the number of eigenstates to compute.
 Precisely speaking, there is a unique Hamiltonian for each value of the angular quantum number :math:`l` (and in a spin-polarized calculation, also for each spin quantum number).
-The sparse diagonilization routine then computes the first `nmax` eigenvalues for each Hamiltonian.
+The sparse diagonilization routine then computes the first :code:`nmax` eigenvalues for each Hamiltonian.
 In atoMEC, these diagonilizations can be run in parallel since they are independent for each value of :math:`l`.
 This is done by setting the :code:`config.numcores` variable to the number of cores desired (:code:`config.numcores=-1` uses all the available cores) and handled via the joblib library :cite:`joblib`.
 
 The remaining parameters passed to the :code:`CalcEnergy` function are optional; in the above, we have specified a grid size of 1500 points and a mixing fraction :math:`\alpha=0.7`.
-The above code automatically prints the output seen in Fig. ??.
+The above code automatically prints the output seen in Fig. 5.
 This output shows the SCF cycle and, upon completion, the breakdown of the total free energy into its various components, as well as other useful information such as the KS energy levels and their occupations.
 
 .. figure:: SCF_output.png
@@ -389,7 +396,7 @@ For example, one could extract the eigenfunctions as
    orbs = scf_out["orbitals"] # orbs object
    ks_eigfuncs = orbs.eigfuncs # eigenfunctions
    
-The initialization of the SCF procedure is shown in the third and fourth rows of Fig. ??, with the SCF procedure itself shown in the remaining rows.
+The initialization of the SCF procedure is shown in the third and fourth rows of Fig. 2, with the SCF procedure itself shown in the remaining rows.
 
 This completes the section on the code structure and algorithmic details.
 As discussed, with the output of an SCF calculation, there are various kinds of postprocessing one can perform to obtain other properties of interest.
@@ -401,7 +408,7 @@ Case-study: Helium
 
 In this section, we consider an application of atoMEC in the WDM regime.
 Helium is the second most abundant element in the universe (after Hydrogen) and therefore understanding its behaviour under a wide range of conditions is important for our understanding of many astrophysical processes.
-Of particular interest are the conditions under which Helium is expected to undergo a transition from insulating to metallic behaviour in the outer layers of white dwarves, which are characterized by densities of around :math:`1-20 \textrm{ g cm}^{-3}` and temperatures of :math:`10-50` kK [CITE].
+Of particular interest are the conditions under which Helium is expected to undergo a transition from insulating to metallic behaviour in the outer layers of white dwarves, which are characterized by densities of around :math:`1-20 \textrm{ g cm}^{-3}` and temperatures of :math:`10-50` kK :cite:`Hellium_metal`.
 These conditions are a typical example of the WDM regime.
 Besides predicting the point at which the insulator-to-metallic transition occurs in the density-temperature spectrum, other properties of interest include equation-of-state data (relating pressure, density and temperature) and electrical conductivity.
 
@@ -412,7 +419,7 @@ In insulating materials, there is a gap between these energy ranges which electr
 In conducting materials, there is no such gap, and therefore electrons can conduct electricity because they can be excited into any part of the energy spectrum.
 Therefore, a very simple method to determine the insulator-to-metallic transition is determine the density at which the band-gap becomes zero.
 
-In Fig. ??, we plot the density-of-states (DOS) as a function of energy, for different densities and at fixed temperature :math:`T=50,000` K.
+In Fig. 6, we plot the density-of-states (DOS) as a function of energy, for different densities and at fixed temperature :math:`\tau=50` kK.
 The DOS shows the energy ranges which the electrons are allowed to occpy; we also show the actual energies occupied by the electrons (according to Fermi-Dirac statistics) with the black dots.
 We can clearly see in this figure that the band-gap (the region where the DOS is zero) becomes smaller as a function of density.
 From this figure, it seems the transition from insulating to metallic state happens somewhere between 5 and 6 :math:`\textrm{g cm}^{-3}.`
@@ -426,7 +433,7 @@ From this figure, it seems the transition from insulating to metallic state happ
    Dashed black lines indicate the band-gap (the energy gap between the insulating and conducting bands).
    Between 5 and 6 :math:`\textrm{g cm}^{-3}`, the band-gap disappears.	   
 
-In Fig. ??, we plot the band-gap as a function of density, for a fixed temperature :math:`T=50,000` K.
+In Fig. 7, we plot the band-gap as a function of density, for a fixed temperature :math:`\tau=50` kK.
 Visually, it appears that the relationship between band-gap and density is linear at this temperature.
 This is confirmed using a linear fit, which has a coefficient of determination value of almost exactly one, :math:`R^2=0.9997`.
 Using this fit, the band-gap is predicted to close at :math:`5.5\ \textrm{g cm}^{-3}`.
@@ -438,11 +445,11 @@ We see that the ionization fraction mostly increases with density (excepting som
 .. figure:: He_bg_Z.pdf
    :scale: 100
 
-   Band-gap (left axis) and ionization fraction (right axis) for Helium as a function of mass density, at temperature :math:`T=50,000` K.
-   A linear fit accurately describes the relationship between the band-gap and the density.
+   Band-gap (red circles) and ionization fraction (blue squares) for Helium as a function of mass density, at temperature :math:`T=50` kK.
+   The relationship between the band-gap and the density appears to be linear.
 
-As a final analysis, we plot the pressure as a function of mass density and temperature in Fig. ??.
-The pressure is given by the sum of two terms: (i) the electronic pressure, calculated using the method described in Ref. [CITE], amnd (ii) the ionic pressure, calculated using the ideal gas law.
+As a final analysis, we plot the pressure as a function of mass density and temperature in Fig. 8.
+The pressure is given by the sum of two terms: (i) the electronic pressure, calculated using the method described in Ref. :cite:`AA_pressure`, and (ii) the ionic pressure, calculated using the ideal gas law.
 We observe that the pressure increases with both density and temperature, which is the expected behaviour.
 Under these conditions, the density dependence is much stronger, especially for higher densities.
 
