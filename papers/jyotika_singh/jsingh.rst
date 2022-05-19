@@ -265,8 +265,8 @@ These hold very useful information about audio and are often used to train machi
 The process of developing these coefficients can be seen in the form of an illustration in Figure :ref:`S1Fig`.
 
 
-Gammatone Frequency Cepstral Coefficients (GFCC)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Gammatone Frequency Cepstral Coefficients (GFCC)**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Another filter inspired by human hearing is the Gammatone filter bank. The
 gammatone filterbank shape looks similar to the Mel filter bank, expect the peaks
@@ -288,15 +288,15 @@ loudness compression and DCT, as seen in Figure :ref:`S2Fig`. The first
 (approximately) 22 features are called GFCCs. GFCCs have a number of applications
 in speech processing, such as speaker identification.
 
-Temporal Features
-^^^^^^^^^^^^^^^^^
+**Temporal Features**
+^^^^^^^^^^^^^^^^^^^^^
 
 Temporal features from audio are extracted from the signal information in its time domain representations.
 Examples include signal energy, entropy, zero crossing rate, etc.
 
 
-Spectral features
-^^^^^^^^^^^^^^^^^
+**Spectral features**
+^^^^^^^^^^^^^^^^^^^^^
 
 Spectral features on the other hand derive information contained in the frequency domain representation of an audio signal.
 The signal can be converted from time domain to frequency domain using Fourier Transform. Useful
@@ -304,8 +304,8 @@ features from the signal spectrum include fundamental frequency, spectral entrop
 spectral centroid, spectral roll-off, etc.
 
 
-Chroma Features
-^^^^^^^^^^^^^^^
+**Chroma Features**
+^^^^^^^^^^^^^^^^^^^
 
 Chroma features are highly popular for music audio data.
 In Western music, the term chroma feature or chromagram closely relates to the twelve different pitch classes.
@@ -402,8 +402,8 @@ Integrations
 ------------
 
 
-Training, classification, and evaluation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Training, classification, and evaluation**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The library contains integrations with scikit-learn classifiers for passing audio
 through feature extraction followed by classification directly using the raw audios
@@ -411,16 +411,16 @@ as input. Training results include computation of cross-validation results along
 with hyperparameter tuning details.
 
 
-Audio format conversion
-^^^^^^^^^^^^^^^^^^^^^^^
+**Audio format conversion**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Some applications and integrations work best with .wav data format. pyAudioProcessing
 integrates with tools that perform format conversion and presents it as a functionality
 via the library.
 
 
-Audio visualization
-^^^^^^^^^^^^^^^^^^^
+**Audio visualization**
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Spectrograms are 2-D images representing sequences of spectra with time along one axis,
 frequency along the other, and brightness or color representing the strength of a frequency
