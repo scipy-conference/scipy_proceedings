@@ -70,17 +70,22 @@ of popular and different audio feature extraction along with an integration with
 Audio data can be cleaned, trained, tested, and classified using pyAudioProcessing :cite:`pAP`.
 
 Some other useful libraries for the domain of audio processing include librosa
-:cite:`mcfee2015librosa`, spafe, essentia :cite:`essentia`, and
-pyAudioAnalysis :cite:`giannakopoulos2015pyaudioanalysis`.
+:cite:`mcfee2015librosa`, spafe, essentia :cite:`essentia`,
+pyAudioAnalysis :cite:`giannakopoulos2015pyaudioanalysis`, and paid services from service
+providers such as Google [#]_.
+
+.. [#] https://developers.google.com/learn/pathways/get-started-audio-classification
 
 The use of pyAudioProcessing in the community inspires the need and growth of this software.
 It is referenced in a text book titled `Artificial Intelligence with Python Cookbook` published by
 Packt Publishing in October 2020 :cite:`packt`. Additionally, pyAudioProcessing is a part of specific
-admissions requirement for a funded PhD project at University of Portsmouth (https://www.port.ac.uk/study/postgraduate-research/research-degrees/phd/explore-our-projects/detection-of-emotional-states-from-speech-and-text).
+admissions requirement for a funded PhD project at University of Portsmouth [#]_.
 It is further referenced in this thesis paper titled "Master Thesis AI Methodologies for Processing
 Acoustic Signals AI Usage for Processing Acoustic Signals" :cite:`phdthesis`, in recent researches in audio
 processing for assessing attention levels in Attention Deficit Hyperactivity Disorder (ADHD)
 students :cite:`paper`, and more.
+
+.. [#] https://www.port.ac.uk/study/postgraduate-research/research-degrees/phd/explore-our-projects/detection-of-emotional-states-from-speech-and-text
 
 Core Functionalities
 ====================
@@ -147,11 +152,11 @@ Confusion matrix produces scores as shown in :ref:`speech-music`.
 .. table:: Confusion matrix for audio type (speech vs music) classification pre-trained model. :label:`speech-music`
 
      +-----------+------------+------------+
-     |           | Music      | Speech     |
+     |           | **Music**  | **Speech** |
      +-----------+------------+------------+
-     | Music     | 48.80      | 1.20       |
+     | **Music** | **48.80**  | 1.20       |
      +-----------+------------+------------+
-     | Speech    | 0.60       | 49.40      |
+     | **Speech**| 0.60       | **49.40**  |
      +-----------+------------+------------+
 
 
@@ -163,13 +168,13 @@ chroma features. Confusion matrix has scores as shown in :ref:`speech-music-bird
 .. table:: Confusion matrix for audio type (speech vs music vs bird sound) classification pre-trained model. :label:`speech-music-birds`
 
      +-----------+------------+------------+------------+
-     |           | Music      | Speech     | Birds      |
+     |           | **Music**  | **Speech** | **Birds**  |
      +-----------+------------+------------+------------+
-     | Music     | 31.53      | 0.73       | 1.07       |
+     | **Music** | **31.53**  | 0.73       | 1.07       |
      +-----------+------------+------------+------------+
-     | Speech    | 1.00       | 32.33      | 0.00       |
+     | **Speech**| 1.00       | **32.33**  | 0.00       |
      +-----------+------------+------------+------------+
-     | Birds     | 0.00       | 0.00       | 33.33      |
+     | **Birds** | 0.00       | 0.00       | **33.33**  |
      +-----------+------------+------------+------------+
 
 3. Music genre classifier using the GTZAN :cite:`tzanetakis:2001`:
@@ -181,29 +186,29 @@ jazz, metal, pop, reggae, rock. Confusion matrix has scores as shown in :ref:`mu
 .. table:: Confusion matrix for music genre classification pre-trained model. :label:`music-genre`
     :class: w
 
-    +------+------+------+------+------+------+------+------+------+------+------+
-    |      | pop  | met  | dis  | blu  | reg  | cla  | rock | hip  | cou  | jazz |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | pop  | 7.25 | 0.00 | 0.74 | 0.38 | 0.09 | 0.09 | 0.33 | 0.60 | 0.50 | 0.04 |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | met  | 0.03 | 8.74 | 0.66 | 0.09 | 0.00 | 0.00 | 0.45 | 0.00 | 0.04 | 0.00 |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | dis  | 0.69 | 0.08 | 6.29 | 0.00 | 0.74 | 0.11 | 0.90 | 0.51 | 0.69 | 0.00 |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | blu  | 0.00 | 0.20 | 0.00 | 8.31 | 0.25 | 0.08 | 0.44 | 0.09 | 0.30 | 0.34 |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | reg  | 0.11 | 0.00 | 0.26 | 0.58 | 7.99 | 0.00 | 0.28 | 0.59 | 0.09 | 0.11 |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | cla  | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 9.07 | 0.23 | 0.00 | 0.23 | 0.48 |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | rock | 0.14 | 0.90 | 1.10 | 0.80 | 0.35 | 0.29 | 5.31 | 0.01 | 1.09 | 0.01 |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | hip  | 0.71 | 0.14 | 0.56 | 0.18 | 1.96 | 0.00 | 0.19 | 6.10 | 0.03 | 0.14 |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | cou  | 0.25 | 0.15 | 0.84 | 0.64 | 0.08 | 0.10 | 1.87 | 0.00 | 5.84 | 0.24 |
-    +------+------+------+------+------+------+------+------+------+------+------+
-    | jazz | 0.04 | 0.01 | 0.13 | 0.41 | 0.00 | 0.76 | 0.31 | 0.00 | 0.53 | 7.81 |
-    +------+------+------+------+------+------+------+------+------+------+------+
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    |          | **pop**  | **met**  | **dis**  | **blu**  | **reg**  | **cla**  | **rock** | **hip**  | **cou**  | **jazz** |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **pop**  | **7.25** | 0.00     | 0.74     | 0.38     | 0.09     | 0.09     | 0.33     | 0.60     | 0.50     | 0.04     |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **met**  | 0.03     | **8.74** | 0.66     | 0.09     | 0.00     | 0.00     | 0.45     | 0.00     | 0.04     | 0.00     |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **dis**  | 0.69     | 0.08     | **6.29** | 0.00     | 0.74     | 0.11     | 0.90     | 0.51     | 0.69     | 0.00     |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **blu**  | 0.00     | 0.20     | 0.00     | **8.31** | 0.25     | 0.08     | 0.44     | 0.09     | 0.30     | 0.34     |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **reg**  | 0.11     | 0.00     | 0.26     | 0.58     | **7.99** | 0.00     | 0.28     | 0.59     | 0.09     | 0.11     |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **cla**  | 0.00     | 0.00     | 0.00     | 0.00     | 0.00     | **9.07** | 0.23     | 0.00     | 0.23     | 0.48     |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **rock** | 0.14     | 0.90     | 1.10     | 0.80     | 0.35     | 0.29     | **5.31** | 0.01     | 1.09     | 0.01     |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **hip**  | 0.71     | 0.14     | 0.56     | 0.18     | 1.96     | 0.00     | 0.19     | **6.10** | 0.03     | 0.14     |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **cou**  | 0.25     | 0.15     | 0.84     | 0.64     | 0.08     | 0.10     | 1.87     | 0.00     | **5.84** | 0.24     |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
+    | **jazz** | 0.04     | 0.01     | 0.13     | 0.41     | 0.00     | 0.76     | 0.31     | 0.00     | 0.53     | **7.81** |
+    +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
 
 
 These baseline models aim to present capability of audio feature generation algorithms
@@ -229,9 +234,12 @@ classification, speech classification, GFCC features have been found to have app
 identification or speaker diarization. Applications, comparisons and uses can be found
 in :cite:`6639061`, :cite:`patent`, and :cite:`patent2`.
 
+pyAudioProcessing library includes computation of these features for audio segments of a single audio,
+followed by computing mean and standard deviation of all the signal segments.
 
-Mel Frequency Cepstral Coefficients (MFCC)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Mel Frequency Cepstral Coefficients (MFCC)**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Mel scale relates perceived frequency, or pitch, of a pure tone to its actual measured
 frequency. Humans are much better at discerning small changes in pitch at low frequencies
@@ -260,7 +268,9 @@ The process of developing these coefficients can be seen in the form of an illus
 Gammatone Frequency Cepstral Coefficients (GFCC)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Another filter inspired by human hearing is the Gammatone filter bank. Gammatone filters
+Another filter inspired by human hearing is the Gammatone filter bank. The
+gammatone filterbank shape looks similar to the Mel filter bank, expect the peaks
+are smoother than the triangular shape of the mel filters. Gammatone filters
 are conceived to be a good approximation to the human auditory filters and are used as a
 front-end simulation of the cochlea. Since a human ear is the perfect receiver and distinguisher
 of speakers in the presence of noise or no noise, construction of gammatone filters that mimic
@@ -300,18 +310,19 @@ Chroma Features
 Chroma features are highly popular for music audio data.
 In Western music, the term chroma feature or chromagram closely relates to the twelve different pitch classes.
 Chroma-based features, which are also referred to as "pitch class profiles", are a powerful tool for analyzing
-music whose pitches can be meaningfully categorized (often into twelve categories) and whose tuning approximates to the equal-tempered scale :cite:`chromawiki`.
+music whose pitches can be meaningfully categorized (often into twelve categories : A, A#, B, C, C#, D, D#, E, F, F#, G, G#
+) and whose tuning approximates to the equal-tempered scale :cite:`chromawiki`.
 A popular characteristic of chroma features is that they capture the harmonic and melodic attributes of audio,
 while being robust to changes in timbre and instrumentation.
-
 
 
 Audio data cleaning
 -------------------
 
 Often times an audio has multiple segments present in the same signal that do not contain anything but
-silence or a slight degree of background noise. This makes for the portion of the audio that contain the
-least relevant information compared to the rest of the signal.
+silence or a slight degree of background noise compared to the rest of the audio.
+For most applications, those low activity segments make up for the relevant information
+of the signal.
 
 The audio clip shown in Figure :ref:`S3Fig` is a human saying the word "london" and represents
 the audio plotted in time-domain, with signal amplitude as y-axis and sample number as x-axis. The
@@ -362,16 +373,16 @@ as well as low-activity regions from the audio.
 These visualizations were produced using pyAudioProcessing and can be produced for any audio signal
 using the library.
 
-Impact on classification tasks example:
-
+Impact of cleaning on feature formations for a classification task
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 A spoken location name classification problem was considered for this evaluation.
-The dataset consisted of 23 samples for training per class. The total number of
-classes are 2 - london and boston. This dataset can be found linked in the project
+The dataset consisted of 23 samples for training per class and 17 samples for testing per class.
+The total number of classes are 2 - london and boston. This dataset can be found linked in the project
 readme of pyAudioProcessing. For comparative purposes, the classifier is kept constant
 at SVM, and the parameter C is chosen based on grid search for each experiment based
 on best precision, recall and F1. Results in table :ref:`clean` show the impact of
 applying the low-activity region removal using pyAudioProcessing prior to training
-the model using MFCC features from pyAudioProcessing.
+the model using MFCC features.
 
 It can be seen that the accuracies increased when audios were cleaned prior to training the model.
 This is specially useful in cases where silence or low-activity regions in the
@@ -380,12 +391,47 @@ audio do not contribute to the predictions and act as noise in the signal.
 .. table:: Performance comparison on test data between MFCC feature trained model with and without cleaning. :label:`clean`
 
    +------------------+------------------+------------------+
-   | Features (Tools) | bos acc          | lon acc          |
+   | Features (Tools) | boston acc       | london acc       |
    +==================+==================+==================+
-   | mfcc(l,p,pAP)    | 0.765            | 0.412            |
+   | **mfcc**         | 0.765            | 0.412            |
    +------------------+------------------+------------------+
-   | clean+mfcc(pAP)  | 0.823            | 0.471            |
+   | **clean+mfcc**   | **0.823**        | **0.471**        |
    +------------------+------------------+------------------+
+
+Integrations
+------------
+
+
+Training, classification, and evaluation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The library contains integrations with scikit-learn classifiers for passing audio
+through feature extraction followed by classification directly using the raw audios
+as input. Training results include computation of cross-validation results along
+with hyperparameter tuning details.
+
+
+Audio format conversion
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Some applications and integrations work best with .wav data format. pyAudioProcessing
+integrates with tools that perform format conversion and presents it as a functionality
+via the library.
+
+
+Audio visualization
+^^^^^^^^^^^^^^^^^^^
+
+Spectrograms are 2-D images representing sequences of spectra with time along one axis,
+frequency along the other, and brightness or color representing the strength of a frequency
+component at each time frame :cite:`spectro`. Not only can one see whether there is more or less energy at,
+for example, 2 Hz vs 10 Hz, but one can also see how energy levels vary over time :cite:`specPNSN`.
+Some of the convolutional neural network architectures for images can be applied to audios on top of
+the spectrograms. This is a different route of building audio models is developing spectrograms
+followed by image processing.
+Time-series, frequency-domain, and spectrograms (both time and frequency domains)
+can be retrieved using pyAudioProcessing and its integrations.
+See figures :ref:`S5Fig` and :ref:`S4Fig` as examples.
 
 
 Conclusion
