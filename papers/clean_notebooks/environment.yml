@@ -1,0 +1,18 @@
+name: ploomber-workshop
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.8
+  - pygraphviz
+  - pip
+  - pip:
+    - ploomber
+    - soorgeon
+    - pandas
+    - scikit-learn
+    - seaborn
+    - jupyterlab
+    - invoke
+    - ipywidgets
