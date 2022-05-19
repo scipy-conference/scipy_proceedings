@@ -66,7 +66,7 @@ it to a classification backend.
 
 PyAudioProcessing includes the capability of computing spectrograms, but mainly
 focusses most functionalities around the latter for building audio models. This tool contains implementation
-of popular and different audio feature extraction along with an integration with popular scikit-learn classifiers.
+of popular and different audio feature extraction along with integration with popular scikit-learn classifiers.
 Audio data can be cleaned, trained, tested, and classified using pyAudioProcessing :cite:`pAP`.
 
 Some other useful libraries for the domain of audio processing include librosa
@@ -105,7 +105,7 @@ tackle new and unseen problems.
 PyAudioProcessing provides seven core functionalities comprising different stages of audio signal processing.
 
 1. Converting audio files to .wav  format to give the users the ability to work with different types of audio
-files and convert them to .wav to increase compatibility with code and processes that work best with .wav audio type.
+to increase compatibility with code and processes that work best with .wav audio type.
 
 2. Audio visualization in time-series and frequency representation, including
 spectrograms.
