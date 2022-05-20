@@ -101,12 +101,13 @@ GeoCAT employs a continuous delivery model, which has been achieved through the 
 of a monthly package release cycle on package management systems and package indexes
 such as Conda :cite:`conda` and PyPI :cite:`conda`. To assist this process, the team
 utilizes advanced  technologies throughout Github assets to ensure automation, unit
-testing and code coverage, as well as licensing and reproducibility.
-
-Figure :ref:`fig1badges`, for example, illustrates the set of badges from one of our
+testing and code coverage, as well as licensing and reproducibility. Figure
+:ref:`fig1badges`, for example, illustrates the set of badges from one of our
 software tools, GeoCAT's computational component, GeoCAT-comp, which shows the near
 real-time status of each CI/CD implementation at any time in the Github repository
-homepage. More precisely, CI build tests of our repositories are implemented and
+homepage.
+
+CI build tests of our repositories are implemented and
 automated (for pushed commits, pull requests, and daily scheduled execution) via
 Github Actions workflows :cite:`githubactions`, and the "CI" badge shows if those
 workflows are passing or failing. Similarly, the "CONDA-BUILDS" badge shows if the
@@ -147,12 +148,19 @@ GeoCAT tools they used for scientific/research purposes.
 GeoCAT-comp
 ===========
 
-GeoCAT-comp is the computational component of the GeoCAT project, and it houses
-implementations of geoscience data analysis functions. Novel research and
-development is conducted for analyzing structured as well as unstructured grid
-data from various research fields such as climate, weather, atmosphere, ocean,
-etc. In addition, some of the functionalities of GeoCAT-comp are
-inspired/reimplemented from NCAR Command Language (NCL).
+GeoCAT-comp is the computational component of the GeoCAT project as can be seen in
+Figure :ref:`fig2rtd`, and it houses implementations of geoscience data analysis
+functions. Novel research and development is conducted for analyzing structured as
+well as unstructured grid data from various research fields such as climate,
+weather, atmosphere, ocean, etc. In addition, some of the functionalities of
+GeoCAT-comp are inspired/reimplemented from NCAR Command Language (NCL).
+
+.. figure:: figures/fig3_structure.png
+   :align: center
+   :scale: 30%
+   :figclass: w
+
+   GeoCAT project structure with all of the software tools :label:`fig3structure`
 
 Many of the computational functions in GeoCAT are implemented in pure Python.
 However, there are some others that are implemented in Fortran but wrapped up
