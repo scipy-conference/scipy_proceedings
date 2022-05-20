@@ -263,6 +263,13 @@ JPEG and MPEG compressions. The peaks after DCT contain the gist of the audio in
 Typically, the first 13-20 coefficients extracted from the Mel cepstrum are called the MFCCs.
 These hold very useful information about audio and are often used to train machine learning models.
 The process of developing these coefficients can be seen in the form of an illustration in Figure :ref:`S1Fig`.
+MFCC for a sample speech audio can be seen in Figure :ref:`mfccspeech`.
+
+.. figure:: mfcc_speech.png
+   :scale: 39%
+   :figclass: bht
+
+   MFCC from a sample speech audio. :label:`mfccspeech`
 
 
 **Gammatone Frequency Cepstral Coefficients (GFCC)**
@@ -286,14 +293,28 @@ it aims to replicate how we hear.
 GFCCs are formed by passing the spectrum through Gammatone filter bank, followed by
 loudness compression and DCT, as seen in Figure :ref:`S2Fig`. The first
 (approximately) 22 features are called GFCCs. GFCCs have a number of applications
-in speech processing, such as speaker identification.
+in speech processing, such as speaker identification. GFCC for a sample
+speech audio can be seen in Figure :ref:`gfccspeech`.
+
+
+.. figure:: gfcc_speech.png
+   :scale: 39%
+   :figclass: bht
+
+   GFCC from a sample speech audio. :label:`gfccspeech`
 
 **Temporal Features**
 ^^^^^^^^^^^^^^^^^^^^^
 
 Temporal features from audio are extracted from the signal information in its time domain representations.
 Examples include signal energy, entropy, zero crossing rate, etc.
+Some sample mean temporal features can be seen in Figure :ref:`temp`.
 
+.. figure:: temporal_speech.png
+   :scale: 39%
+   :figclass: bht
+
+   Temporal extractions from a sample speech audio. :label:`temp`
 
 **Spectral features**
 ^^^^^^^^^^^^^^^^^^^^^
@@ -302,7 +323,13 @@ Spectral features on the other hand derive information contained in the frequenc
 The signal can be converted from time domain to frequency domain using Fourier Transform. Useful
 features from the signal spectrum include fundamental frequency, spectral entropy, spectral spread, spectral flux,
 spectral centroid, spectral roll-off, etc.
+Some sample mean spectral features can be seen in Figure :ref:`spec`.
 
+.. figure:: spectral_speech.png
+   :scale: 39%
+   :figclass: bht
+
+   Spectral features from a sample speech audio. :label:`spec`
 
 **Chroma Features**
 ^^^^^^^^^^^^^^^^^^^
@@ -314,6 +341,13 @@ music whose pitches can be meaningfully categorized (often into twelve categorie
 ) and whose tuning approximates to the equal-tempered scale :cite:`chromawiki`.
 A popular characteristic of chroma features is that they capture the harmonic and melodic attributes of audio,
 while being robust to changes in timbre and instrumentation.
+Some sample mean chroma features can be seen in Figure :ref:`chroma`.
+
+.. figure:: chroma_speech.png
+   :scale: 39%
+   :figclass: bht
+
+   Chroma features from a sample speech audio. :label:`chroma`
 
 
 Audio data cleaning
