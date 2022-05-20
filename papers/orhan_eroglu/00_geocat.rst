@@ -59,12 +59,12 @@ alongside having the whole software stack open-sourced.
 GeoCAT created several, now-established Python tools that are hosted and
 managed publicly on Github to develop computation and visualization functions,
 which  are built on cornerstone Pangeo :cite:`pangeo18` (i.e. a community platform
-for big data geoscience) packages such as Xarray :cite:`xarray17` and Dask
-:cite:`dask15`. Namely, GeoCAT-comp houses computational operators for
-applications ranging from regridding and interpolation, to climatology and
-meteorology. GeoCAT-examples provides over 140 publication-quality plotting
-scripts in Python for Earth sciences. It also houses Jupyter notebooks with
-high-performance, interactive plots that enable features such as pan and zoom
+for big data geoscience) packages such as Xarray :cite:`xarray17`, Dask
+:cite:`dask15`, and Jupyter Notebooks. Namely, GeoCAT-comp houses computational
+operators for applications ranging from regridding and interpolation, to
+climatology and meteorology. GeoCAT-examples provides over 140 publication-quality
+plotting scripts in Python for Earth sciences. It also houses Jupyter notebooks
+with high-performance, interactive plots that enable features such as pan and zoom
 on fine-resolution geoscience data (e.g. ~3 km data rendered within a few
 tens of seconds to few minutes on personal laptops). GeoCAT-viz enables
 higher-level implementation of Matplotlib and Cartopy plotting capabilities
@@ -126,8 +126,8 @@ version 2.0 for all of the GeoCAT stack that enables the redistribution of the
 open-source software products on an "AS IS" basis. Finally, to provide reproducibility
 of our software products (either for the latest or any older version), we publish
 version-specific Digital Object Identifiers (DOIs), which can be accessed through the
-"DOI"badge. This allows the end-user to accurately cite the version of any GeoCAT tool
-they used for scientific/research purposes.
+"DOI" badge. This allows the end-user to accurately cite the specific version of the
+GeoCAT tools they used for scientific/research purposes.
 
 .. figure:: figures/fig1_badges.png
    :scale: 35%
@@ -138,10 +138,46 @@ they used for scientific/research purposes.
 
 .. figure:: figures/fig2_rtd.png
    :align: center
+   :scale: 30%
    :figclass: w
 
    GeoCAT-comp documentation homepage built with Sphinx using a theme provided by
    ReadTheDocs :label:`fig2rtd`
+
+GeoCAT-comp
+===========
+
+GeoCAT-comp is the computational component of the GeoCAT project, and it houses
+implementations of geoscience data analysis functions. Novel research and
+development is conducted for analyzing structured as well as unstructured grid
+data from various research fields such as climate, weather, atmosphere, ocean,
+etc. In addition, some of the functionalities of GeoCAT-comp are
+inspired/reimplemented from NCAR Command Language (NCL).
+
+Many of the computational functions in GeoCAT are implemented in pure Python.
+However, there are some others that are implemented in Fortran but wrapped up
+in Python. To facilitate contribution, the whole GeoCAT-comp structure is split
+into two repositories with respect to being either pure-Python or Python with
+compiled codes (i.e. Fortran) implementations. Such implementation layers are
+handled within GeoCAT-comp and GeoCAT-f2py repositories, respectively.
+
+GeoCAT-comp code-base does not explicitly contain or require any compiled
+code, making it more accessible to the general Python community at large.
+In addition, GeoCAT-f2py is automatically installed through GeoCAT-comp
+installation, and all functions contained in the "geocat.f2py" package are
+imported transparently into the "geocat.comp" namespace. Thus, GeoCAT-comp
+serves as a user API to access the entire computational toolkit even though
+its Github repository itself only contains pure Python code from the
+developer’s perspective. Whenever prospective contributors want to add new
+computational functionality implemented as pure Python, GeoCAT-comp is the
+Github repository to deal with. Therefore, there is no onus on contributors
+of pure Python code to build/compile/test any compiled code (i.e. Fortran)
+at GeoCAT-comp level.
+
+GeoCAT-examples
+===============
+
+G
 
 Project Raijin
 --------------
