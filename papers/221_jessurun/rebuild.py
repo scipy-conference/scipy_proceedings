@@ -53,14 +53,22 @@ def sync_overleaf():
         # return
 
     worktree_dir = os.path.relpath(paper_dir, rootpath)
-    for pull_dir in "figures", "sections":
+    for pull_path in "figures", "sections", "references.bib", "main.tex":
+        # "checkout" ignores local changes, and this must be a mirror
+        # so discard these changes and ensure exactly remote files
+        # exist
+        dest_path = os.path.join(paper_dir, pull_path)
+        if os.path.isdir(dest_path):
+            shutil.rmtree(dest_path)
+        elif os.path.isfile(dest_path):
+            os.remove(dest_path)
         _print_and_run(
             "git",
             f"--work-tree={worktree_dir}",
             "checkout",
             f"overleaf/master",
             "--",
-            pull_dir,
+            pull_path,
             cwd=rootpath,
             check=True,
         )
@@ -72,6 +80,8 @@ def build_paper():
     subprocess.run(
         [sys.executable, builder_script, paper_relpath], shell=True, cwd=rootpath
     )
+    # For some reason, output files are added to git, fix with "git reset"
+    subprocess.run(["git", "reset"], capture_output=True, cwd=rootpath)
 
 
 def create_argparser():

@@ -1,0 +1,34 @@
+\documentclass{IEEEtran}
+\usepackage{graphicx, float}
+\usepackage{soul}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
+
+\input{figures/makefigs}
+
+%% Paper title.
+\title{Semi-Supervised Semantic Annotator (S3A): Toward Efficient Semantic Image Labeling}
+
+%% This is how authors are specified in the journal style
+
+%% indicate IEEE Member or Student Member in form indicated below
+\author{Nathan Jessurun, Daniel E. Capecci, Olivia P. Dizon-Paradis, Damon L. Woodard, Navid Asadizanjani}
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Most semantic image annotation platforms suffer severe bottlenecks when handling large images, complex regions of interest, or numerous distinct foreground regions in a single image. We have developed the Semi-Supervised Semantic Annotator (S3A) to address each of these issues and facilitate rapid collection of ground truth pixel-level labeled data. Such a feat is accomplished through a robust and easy-to-extend integration of arbitrary python image processing functions into the semantic labeling process. Importantly, the framework devised for this application allows easy visualization and machine learning prediction of arbitrary formats and amounts of per-component metadata. To our knowledge, the ease and flexibility offered are unique to S3A among all open-source alternatives. S3A is available through pypi.org (\url{https://pypi.org/project/s3a/}) and GitLab (\url{https://gitlab.com/s3a/s3a}).
+\end{abstract}
+
+\input{sections/intro}
+\input{sections/methods}
+\input{sections/case_study}
+\input{sections/conclusion}
+
+
+\printbibliography
+\end{document}
+
