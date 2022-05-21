@@ -56,22 +56,26 @@ ecosystem. The GeoCAT team is committed to open development, which helps the
 team prioritize community involvement at any level of the project lifecycle
 alongside having the whole software stack open-sourced.
 
-GeoCAT created several, now-established Python tools that are hosted and
+GeoCAT created several, now-established, Python tools that are hosted and
 managed publicly on Github to develop computation and visualization functions,
 which  are built on cornerstone Pangeo :cite:`pangeo18` (i.e. a community platform
 for big data geoscience) packages such as Xarray :cite:`xarray17`, Dask
-:cite:`dask15`, and Jupyter Notebooks. Namely, GeoCAT-comp houses computational
-operators for applications ranging from regridding and interpolation, to
-climatology and meteorology. GeoCAT-examples provides over 140 publication-quality
-plotting scripts in Python for Earth sciences. It also houses Jupyter notebooks
-with high-performance, interactive plots that enable features such as pan and zoom
-on fine-resolution geoscience data (e.g. ~3 km data rendered within a few
-tens of seconds to few minutes on personal laptops). GeoCAT-viz enables
-higher-level implementation of Matplotlib and Cartopy plotting capabilities
-through it's variety of easy to use visualization convenience functions for
-GeoCAT-examples. GeoCAT also maintains WRF-Python (Weather Research and
-Forecasting), which works with WRF-ARW model output and provides diagnostic
-and interpolation routines.
+:cite:`dask15`, as well as Jupyter Notebooks, and is compatible with Numpy. Dask
+compatibility allows the GeoCAT-comp functions to scale from personal laptops to
+high performance computing systems such as NCAR’s Casper, Cheyenne, and upcoming
+Derecho clusters :cite:`ams22heather`.
+
+Briefly, GeoCAT-comp houses computational operators for applications ranging from
+regridding and interpolation, to climatology and meteorology. GeoCAT-examples
+provides over 140 publication-quality plotting scripts in Python for Earth
+sciences. It also houses Jupyter notebooks with high-performance, interactive
+plots that enable features such as pan and zoom on fine-resolution geoscience
+data (e.g. ~3 km data rendered within a few tens of seconds to few minutes on
+personal laptops). GeoCAT-viz enables higher-level implementation of Matplotlib
+and Cartopy plotting capabilities through it's variety of easy to use
+visualization convenience functions for GeoCAT-examples. GeoCAT also maintains
+WRF-Python (Weather Research and Forecasting), which works with WRF-ARW model
+output and provides diagnostic and interpolation routines.
 
 GeoCAT was recently awarded Project Raijin, which is an NSF EarthCube-funded
 effort :cite:`raijinaward21`. Its goal is to enhance the open-source analysis
@@ -99,13 +103,14 @@ Continuous Integration and Continuous Delivery/Deployment (CI/CD)
 
 GeoCAT employs a continuous delivery model, which has been achieved through the use
 of a monthly package release cycle on package management systems and package indexes
-such as Conda :cite:`conda` and PyPI :cite:`conda`. To assist this process, the team
-utilizes advanced  technologies throughout Github assets to ensure automation, unit
-testing and code coverage, as well as licensing and reproducibility. Figure
-:ref:`fig1badges`, for example, illustrates the set of badges from one of our
-software tools, GeoCAT's computational component, GeoCAT-comp, which shows the near
-real-time status of each CI/CD implementation at any time in the Github repository
-homepage.
+such as Conda :cite:`conda` and PyPI :cite:`conda`. This model helps the team make
+new functions available as soon as they are implemented and address potential errors
+pretty quickly. To assist this process, the team utilizes advanced  technologies
+throughout Github assets to ensure automation, unit testing and code coverage, as
+well as licensing and reproducibility. Figure :ref:`fig1badges`, for example,
+illustrates the set of badges from one of our software tools, GeoCAT's computational
+component, GeoCAT-comp, which shows the near real-time status of each CI/CD
+implementation at any time in the Github repository homepage.
 
 CI build tests of our repositories are implemented and
 automated (for pushed commits, pull requests, and daily scheduled execution) via
@@ -135,7 +140,7 @@ GeoCAT tools they used for scientific/research purposes.
    :figclass: bht
 
    GeoCAT-comp's badges in the beginning of its README file (i.e. the home page of
-   the Githug repository) :label:`fig1badges`
+   the Githug repository) :cite:`geocatcomprepo` :label:`fig1badges`
 
 .. figure:: figures/fig2_rtd.png
    :align: center
@@ -143,7 +148,7 @@ GeoCAT tools they used for scientific/research purposes.
    :figclass: w
 
    GeoCAT-comp documentation homepage built with Sphinx using a theme provided by
-   ReadTheDocs :label:`fig2rtd`
+   ReadTheDocs :cite:`geocatcomprtd` :label:`fig2rtd`
 
 GeoCAT-comp
 ===========
@@ -155,12 +160,25 @@ well as unstructured grid data from various research fields such as climate,
 weather, atmosphere, ocean, etc. In addition, some of the functionalities of
 GeoCAT-comp are inspired/reimplemented from NCAR Command Language (NCL).
 
+Spherical harmonics (both decomposition and recomposition as well as area
+weighting); Fourier transforms such as band-block, band-pass, low-pass, and
+high-pass; meteorological variables such as relative humidity, dewpoint temperature,
+heat index, saturation vapure pressure, etc.; climatology functions such as climate
+average over multiple years, daily/monthly/seasonal averages, as well as anomalies;
+regridding of curvilinear grid to rectilinear grid, unstructured grid to rectilinear
+grid, curvilinear grid to unstructured grid, and vice versa; interpolation methods
+such as bilinear interpolation of a rectilinear to another rectilinear grid,
+hybrid-sigma levels to isobaric levels, and sigma to hybrid coordinates; empirical
+orthogonal function (EOF) analysis; are some of the functions that are made
+available through GeoCAT-comp :cite:`geocatcomprtd`.
+
 .. figure:: figures/fig3_structure.png
    :align: center
-   :scale: 30%
+   :scale: 50%
    :figclass: w
 
-   GeoCAT project structure with all of the software tools :label:`fig3structure`
+   GeoCAT project structure with all of the software tools
+   :cite:`geocatcontribguide` :label:`fig3structure`
 
 Many of the computational functions in GeoCAT are implemented in pure Python.
 However, there are some others that are implemented in Fortran but wrapped up
