@@ -15,6 +15,10 @@
 :email: email 4
 :institution: National Center for Atmospheric Research
 
+:author: Author 5
+:email: email 5
+:institution: National Center for Atmospheric Research
+
 :author: John Clyne
 :email: clyne@ucar.edu
 :institution: National Center for Atmospheric Research
@@ -32,7 +36,7 @@ The Geoscience Community Analysis Toolkit: An Open Development, Community Driven
 
 The Geoscience Community Analysis Toolkit (GeoCAT) team develops and maintains
 data analysis and visualization tools on structured and unstructured grids for
-the geosciences community in the scientific Python ecosystem. In response to
+the geosciences community in the Scientific Python Ecosystem (SPE). In response to
 dealing with increasing geoscientific data sizes, GeoCAT prioritizes scalability,
 ensuring its implementations to be scalable from personal laptops to HPC clusters.
 Another major goal of the GeoCAT team is to ensure community involvement throughout
@@ -49,12 +53,15 @@ Introduction
 
 The Geoscience Community Analysis Toolkit (GeoCAT) team, established in 2019,
 leads the software engineering efforts of the National Center for Atmospheric
-Research (NCAR)’s “Pivot to Python” initiative :cite:`pivot19`. GeoCAT essentially
-aims at creating scalable data analysis and visualization tools on structured and
-unstructured grids for the geosciences community in the scientific Python
-ecosystem. The GeoCAT team is committed to open development, which helps the
-team prioritize community involvement at any level of the project lifecycle
-alongside having the whole software stack open-sourced.
+Research (NCAR)’s “Pivot to Python” initiative :cite:`pivot19`. The initiative
+had an initial two-year roadmap with major milestones being: (1) Replicating
+NCL’s computational routines in Python, (2) training and support for
+transitioning NCL users into Python, and (3) moving tools into an open development
+model. GeoCAT essentially aims at creating scalable data analysis and
+visualization tools on structured and unstructured grids for the geosciences
+community in the SPE. The GeoCAT team is committed to open development, which
+helps the team prioritize community involvement at any level of the project
+lifecycle alongside having the whole software stack open-sourced.
 
 GeoCAT created several, now-established, Python tools that are hosted and
 managed publicly on Github to develop computation and visualization functions,
@@ -63,7 +70,7 @@ for big data geoscience) packages such as Xarray :cite:`xarray17`, Dask
 :cite:`dask15`, as well as Jupyter Notebooks, and is compatible with Numpy. Dask
 compatibility allows the GeoCAT-comp functions to scale from personal laptops to
 high performance computing systems such as NCAR’s Casper, Cheyenne, and upcoming
-Derecho clusters :cite:`ams22heather`.
+Derecho clusters :cite:`ams22craker`.
 
 Briefly, GeoCAT-comp houses computational operators for applications ranging from
 regridding and interpolation, to climatology and meteorology. GeoCAT-examples
@@ -81,10 +88,10 @@ GeoCAT was recently awarded Project Raijin, which is an NSF EarthCube-funded
 effort :cite:`raijinaward21`. Its goal is to enhance the open-source analysis
 and visualization tool landscape by developing community-owned, sustainable,
 scalable tools that facilitate operating on unstructured climate and global
-weather data in the scientific Python ecosystem. Throughout this three-year
-project, GeoCAT will work on the development of data analysis and
-visualization functions that operate directly on the native grid as well as
-establish an active community of user-contributors.
+weather data in the SPE. Throughout this three-year project, GeoCAT will work
+on the development of data analysis and visualization functions that operate
+directly on the native grid as well as establish an active community of
+user-contributors.
 
 This paper will provide insights about the GeoCAT's software stack and
 current status, team scope and near-term plans, open development methodology,
@@ -208,14 +215,24 @@ GeoCAT-examples (and GeoCAT-viz)
 GeoCAT-examples :cite:`geocatexamplesrepo` was created to address a few of
 the original milestones of NCAR's "Pivot to Python" initiative: (1) to
 provide the geoscience community with well-documented visualization examples
-for several plotting classes in the scientific Python ecosystem, (2) to help
-transition NCL users into the Python ecosystem through providing such
-resources. It was born in early 2020 as the result of a few-day hackathon
-event among the GeoCAT team and several other scientists and developers from
-various NCAR labs/groups. It has since grown to house novel visualization
-examples as well as showcases of the capabilities of other GeoCAT aspects
-like GeoCAT-comp, along with newer technologies like interactive plotting
-notebooks.
+for several plotting classes in the SPE, (2) to help transition NCL users
+into the Python ecosystem through providing such resources. It was born in
+early 2020 as the result of a few-day hackathon event among the GeoCAT team
+and several other scientists and developers from various NCAR labs/groups.
+It has since grown to house novel visualization examples as well as showcases
+of the capabilities of other GeoCAT aspects like GeoCAT-comp, along with
+newer technologies like interactive plotting notebooks. Figure
+:ref:`fig4cmap`, for example, illustrates a unique GeoCAT-examples case that
+was aimed at exploring the best practices for data visualization
+like choosing color blind friendly colormaps.
+
+.. figure:: figures/fig4_cmap.png
+   :scale: 28%
+   :figclass: bht
+
+   Comparison between NCL (left) and Python (right) when choosing a
+   colormap; GeoCAT-examples aiming at choosing color blind friendly
+   colormaps :label:`fig4cmap`
 
 The GeoCAT-examples :cite:`geocatexamplesrtd` gallery contains over 140
 example Python plotting scripts, demonstrating functionalities from Python
@@ -238,21 +255,34 @@ cosmetic or plotting style-related effects such as font sizes, color
 schemes, etc.), the GeoCAT-viz library :cite:`geocatvizrepo` has been
 implemented. Use of functions from this library in GeoCAT-examples
 significantly reduces the LOC requirements for most of the visualization
-examples to comparable numbers to those of NCL's. Figure :ref:`fig4viz`
+examples to comparable numbers to those of NCL's. Figure :ref:`fig5viz`
 shows Taylor diagram and curly vector examples that were made available
 with the recent implementations in GeoCAT-viz.
 
-.. figure:: figures/fig4_viz.png
+.. figure:: figures/fig5_viz.png
    :scale: 28%
    :figclass: bht
 
    Taylor diagram and curly vector examples that were released with
-   GeoCAT-viz v2022.05.0 :label:`fig4viz`
+   GeoCAT-viz v2022.05.0 :label:`fig5viz`
 
 WRF-Python
 ==========
 
-WRF-Python focuses on creating a Python package that eliminates the need to work across multiple software platforms when using WRF datasets.
+WRF-Python was created in early 2017 in order to replicate NCL's Weather
+Research and Forecasting (WRF) package in the SPE. About two years later,
+NCAR's “Pivot to Python” initiative was announced, and the GeoCAT team
+has taken over development and maintenance of WRF-Python.
+
+The package focuses on creating a Python package that eliminates the need
+to work across multiple software platforms when using WRF datasets. It
+contains more than 30 computational (e.g. diagnostic calculations, several
+interpolation routines) and visualization routines that aim at reducing
+the amount of post-processing tools necessary to visualize WRF output
+files.
+
+These visualizations were created using WRF-python with Cartopy and the code used to create them is available on the WRF-Python readthedocs website
+
 
 Project Raijin
 --------------
