@@ -3,16 +3,16 @@
 :institution: National Center for Atmospheric Research
 :corresponding:
 
-:author: GeoCAT member 1
-:email: email
+:author: Author 2
+:email: email 2
 :institution: National Center for Atmospheric Research
 
-:author: GeoCAT member 2
-:email: email
+:author: Author 3
+:email: email 3
 :institution: National Center for Atmospheric Research
 
-:author: GeoCAT member 3
-:email: email
+:author: Author 4
+:email: email 4
 :institution: National Center for Atmospheric Research
 
 :author: John Clyne
@@ -243,7 +243,7 @@ shows Taylor diagram and curly vector examples that were made available
 with the recent implementations in GeoCAT-viz.
 
 .. figure:: figures/fig4_viz.png
-   :scale: 30%
+   :scale: 28%
    :figclass: bht
 
    Taylor diagram and curly vector examples that were released with
