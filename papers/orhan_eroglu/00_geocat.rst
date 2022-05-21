@@ -150,8 +150,8 @@ GeoCAT tools they used for scientific/research purposes.
    GeoCAT-comp documentation homepage built with Sphinx using a theme provided by
    ReadTheDocs :cite:`geocatcomprtd` :label:`fig2rtd`
 
-GeoCAT-comp
-===========
+GeoCAT-comp (and GeoCAT-f2py)
+=============================
 
 GeoCAT-comp is the computational component of the GeoCAT project as can be seen in
 Figure :ref:`fig2rtd`, and it houses implementations of geoscience data analysis
@@ -170,7 +170,9 @@ grid, curvilinear grid to unstructured grid, and vice versa; interpolation metho
 such as bilinear interpolation of a rectilinear to another rectilinear grid,
 hybrid-sigma levels to isobaric levels, and sigma to hybrid coordinates; empirical
 orthogonal function (EOF) analysis; are some of the functions that are made
-available through GeoCAT-comp :cite:`geocatcomprtd`.
+available through GeoCAT-comp. GeoCAT-comp documentation :cite:`geocatcomprtd`
+provides signatures and descriptions of these functions as well as a line to the
+usage examples.
 
 .. figure:: figures/fig3_structure.png
    :align: center
@@ -200,10 +202,57 @@ Github repository to deal with. Therefore, there is no onus on contributors
 of pure Python code to build/compile/test any compiled code (i.e. Fortran)
 at GeoCAT-comp level.
 
-GeoCAT-examples
-===============
+GeoCAT-examples (and GeoCAT-viz)
+================================
 
-G
+GeoCAT-examples :cite:`geocatexamplesrepo` was created to address a few of
+the original milestones of NCAR's "Pivot to Python" initiative: (1) to
+provide the geoscience community with well-documented visualization examples
+for several plotting classes in the scientific Python ecosystem, (2) to help
+transition NCL users into the Python ecosystem through providing such
+resources. It was born in early 2020 as the result of a few-day hackathon
+event among the GeoCAT team and several other scientists and developers from
+various NCAR labs/groups. It has since grown to house novel visualization
+examples as well as showcases of the capabilities of other GeoCAT aspects
+like GeoCAT-comp, along with newer technologies like interactive plotting
+notebooks.
+
+The GeoCAT-examples :cite:`geocatexamplesrtd` gallery contains over 140
+example Python plotting scripts, demonstrating functionalities from Python
+packages like Matplotlib, Cartopy, Numpy, and Xarray. The gallery includes
+plots from a range of visualization categories such as box plots, contours,
+meteograms, overlays, projections, shapefiles, streamlines, trajectories,
+etc. In addition, it houses plotting examples for individual GeoCAT-comp
+analysis functions.
+
+Despite the capabilities of Matplotlib and Cartopy to reproduce almost all
+of NCL plots, there was one significant caveat with using their low-level
+implementations against NCL: NCL's high-level plotting functions allowed
+scientists to plot most of the cases in only a few tens of lines of codes
+(LOC) while the Matplotlib and Cartopy stack required writing a few
+hundreds of LOC. In order to build a higher-level implementation on top of
+Matplotlib and Cartopy while recreating the NCL-like plots (from vital
+plotting capabilities that were not readily available in Python ecosystem
+at the time such as Taylor, and curly vectors to more
+cosmetic or plotting style-related effects such as font sizes, color
+schemes, etc.), the GeoCAT-viz library :cite:`geocatvizrepo` has been
+implemented. Use of functions from this library in GeoCAT-examples
+significantly reduces the LOC requirements for most of the visualization
+examples to comparable numbers to those of NCL's. Figure :ref:`fig4viz`
+shows Taylor diagram and curly vector examples that were made available
+with the recent implementations in GeoCAT-viz.
+
+.. figure:: figures/fig4_viz.png
+   :scale: 35%
+   :figclass: bht
+
+   Taylor diagram and curly vector examples that were released with
+   GeoCAT-viz v2022.05.0 :label:`fig4viz`
+
+WRF-Python
+==========
+
+WRF-Python focuses on creating a Python package that eliminates the need to work across multiple software platforms when using WRF datasets.
 
 Project Raijin
 --------------
@@ -211,8 +260,6 @@ Project Raijin
 To realize this, GeoCAT
 created the Xarray-based Uxarray package to recognize unstructured grid models
 through partnership with the geoscience community groups.
-
-
 
 Open Development
 ----------------
@@ -235,8 +282,18 @@ Community engagement
 Additionally, to further promote user engagement with the
 geoscience community, GeoCAT has contributed multiple Python tutorials to
 the web-based, community-owned, educational resources created through Project
-Pythia. The GeoCAT team has also encouraged undergraduate and graduate student
-engagement in the python ecosystem through participation in NCAR's Summer
-Internships in Parallel Computational Science (SIParCS).
+Pythia.
+
+The GeoCAT team has also encouraged undergraduate and graduate student
+engagement in the Python ecosystem through participation in NCAR's Summer
+Internships in Parallel Computational Science (SIParCS). GeoCAT-examples and
+GeoCAT-viz has received significant contributions through NCAR's Summer
+Internships in Parallel Computational Science (SIParCS) in 2020 and 2021
+summers.
+
+Project Pythia
+==============
+
+The GeoCAT effort is also a part of the NSF funded project, Project Pythia. Project Pythia aims to provide a public, web-accessible training resource that will help educate earth scientists to more effectively use the Scientific Python Ecosystem and cloud computing to make sense of huge volumes of numerical scientific data.
 
 
