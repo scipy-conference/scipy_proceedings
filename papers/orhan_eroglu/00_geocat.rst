@@ -243,7 +243,7 @@ shows Taylor diagram and curly vector examples that were made available
 with the recent implementations in GeoCAT-viz.
 
 .. figure:: figures/fig4_viz.png
-   :scale: 35%
+   :scale: 30%
    :figclass: bht
 
    Taylor diagram and curly vector examples that were released with
