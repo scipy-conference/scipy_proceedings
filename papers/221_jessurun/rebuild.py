@@ -1,7 +1,7 @@
 from pathlib import Path
 import shutil
 import sys, subprocess, os
-
+import argparse
 
 def _print_and_run(*cmd, **kwargs):
     print(*cmd)
@@ -47,7 +47,10 @@ def rm_old_outputs():
 def sync_overleaf():
     _ensure_overleaf_remote_exists()
 
-    _print_and_run("git", "fetch", "overleaf", cwd=rootpath, check=True)
+    output = _print_and_run("git", "fetch", "overleaf", cwd=rootpath, check=True, capture_output=True, text=True)
+    # if output.stdout == "":
+        # print("Overleaf remote is up to date, no need to fetch figures and sections")
+        # return
 
     worktree_dir = os.path.relpath(paper_dir, rootpath)
     for pull_dir in "figures", "sections":
@@ -71,11 +74,23 @@ def build_paper():
     )
 
 
+def create_argparser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--sync-overleaf",
+        action="store_true",
+        default=False,
+        help="Check for overleaf upstream and fetch changes"
+    )
+    return parser
+
 paper_id = "221_jessurun"
 paper_dir = Path(__file__).resolve().parent
 rootpath = _find_root_path()
 
 if __name__ == "__main__":
+    parser = create_argparser()
+    if parser.parse_args().sync_overleaf:
+        sync_overleaf()
     rm_old_outputs()
-    sync_overleaf()
     build_paper()

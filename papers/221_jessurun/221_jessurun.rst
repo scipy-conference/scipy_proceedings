@@ -33,8 +33,11 @@ Semi-Supervised Semantic Annotator (S3A): Toward Efficient Semantic Labeling
 .. class:: keywords
 
    Semantic annotation, Image labeling, Semi-supervised, Region of interest
-
+   
 .. raw:: latex
 
-    \input{figures/makefigs}
-    \input{sections/intro}
+   \input{figures/makefigs}
+   \input{sections/intro}
+   \input{sections/methods}
+   \input{sections/case_study}
+   \input{sections/conclusion}
