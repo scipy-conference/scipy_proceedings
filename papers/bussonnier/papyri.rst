@@ -206,8 +206,8 @@ interactive REPL. Finally, efforts are put to limit the installation speed (to a
 In this section we describe in more details how Papyri has been implemented to address the objectives mentioned above. 
 
 
-1) Making documentation multi-step process
-------------------------------------------
+1) Making documentation a multi-step process
+--------------------------------------------
 
 When building documentation, one can either customise the ``.. code-block:`` directive to execute/reformat entries, or create a ``:rc:`` role to link to configure parameters, several custom directives and plug-ins to simplify the rendering (including creating references, auto-genering documentation)
 and sync with libraries source code. Customisation made by documentation maintainers then usually falls into the following two categories:
@@ -224,14 +224,15 @@ can be run without accessing the libraries involved.
 
 This technique is commonly used in the field of compilers **add ref**, but to our knowledge, it has not been implemented for documentation in the Python ecosystem. As mentioned before, this separation is key to achieve many features proposed in Objectives (c), (d).
 
-2) Standard IRD format
-----------------------
- 
-Papyri relies on standard interchangeable "Intermediate
-Representation for Documentation format" (IRD). 
+2) Intermediate Representation for Documentation (IRD)
+------------------------------------------------------
+
+IRD format
+~~~~~~~~~~
 .. We borrow the name IR again from compilers.
 
-This allows to reduce operation complexity of the documentation build. For example, given M documentation producers and N renderers, the current documentation build is O(MN). If each producer only cares about producing IRD, and if each renderer only consumes it, then one can reduce to O(M+N).
+Papyri relies on standard interchangeable "Intermediate
+Representation for Documentation format" (IRD). This allows to reduce operation complexity of the documentation build. For example, given M documentation producers and N renderers, the current documentation build is O(MN). If each producer only cares about producing IRD, and if each renderer only consumes it, then one can reduce to O(M+N).
 Additionally, one can take IRD from multiple producers at once, and render them all to a single target, breaking the silos between libraries.
 
 At the moment, IRD files are currently separated into four main categories:**provide a sketch or example with all ??**
@@ -259,64 +260,51 @@ In order to properly resolve some references and normalize links convention, we 
 IRD files must be standardized in order to achieve a uniform syntax structure (Objective (b)), In this paper, we do not discuss the IRD files distribution. The final specification IRD files is still in progress. We thus invite contributors to
 consult the current state on the GitHub repository **add ref to the repo**.
 
-
-3) IRD Installation
--------------------
+IRD bundles
+~~~~~~~~~~~
+**Why is it important to talk about IRD bundles ? to clarify ? Having a difficult time to edit this subsection**
 
 Unlike packages installation IRD bundles do not have the notion of dependencies,
 thus a full-fledge package manager is not necessary, and installing can be
 limited to downloading corresponding files and unpacking them.
 
-We'll note as well that IRD bundles for multiple versions of the same library,
-or conflicting libraries is not inherently problematic, and can be shared across
+IRD bundles for multiple versions of the same library (or conflicting libraries) is not inherently problematic, and can be shared across
 multiple multiple environments.
 
-From a security standpoint, installing IRD bundles does not requires the
+From a security standpoint, installing IRD bundles does not require the
 execution of arbitrary code. This is critical for adoption in deployments.
-
 
 There is an opportunity at IRD installation time to provide localized variant,
 but we have not explored much the opportunity of IRD bundle translations.
 
 
-High level Usage 
-----------------
+IRD and high level usage 
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-The papyri lifecycle for papyri-based documentation can roughly be decomposed
-into 3 broad categories of stakeholders, and processes. 
+Papyri-based documentation involves three broad categories of stakeholders (library maintainers, end-users, IDE developers), and processes. This leads to certain requirements on IRD files and bundles.
 
-The first stakeholders are library maintainers. Those should ensure that papyri
-can build Intermediate Representation Documentation (IRD) files. And publish
-an IRD bundle.
+On the maintainers' side, the goal is to ensure that Papyri can build IRD files, and publish IRD bundles.
 
-Creation of IRD files and bundles is the computation intensive step, that may
-requires complex dependencies, or specific plugins. Creation of these files may
-be a multi-step process or use external tooling that is not related to papyri or
-does not use Python. Note that these steps do not requires the libraries
-maintainer to worry about visual appearance and rendering of documentation.
+Creation of IRD files and bundles is the most computational intensive step. It may
+require complex dependencies, or specific plugins. Thus, this can be a multi-step process, or one can use external tooling (not related to Papyri nor
+uses Python) to create them. Visual appearance and rendering of documentation is not taken into account in this process.
 
 .. comment:
    maybe move next paragrah somewehre else ?
+   
+End-users are responsible from installing desired IRD bundles. In most cases, it will consist of IRD bundles from
+already installed libraries.  While Papyri is not currently integrated with
+packages manager or IDEs, one could imagine this process being automatic, or on demand.
 
-On our test machine (2021 Macbook Pro M1, base model), building scipy & numpy
-documentatatio IRD files can take several minutes. This include executing
-examples in most docstrings and type inferring most examples in order to
-provide information about each variable.
-
-The second category of stakeholder are end-users. Those users are responsible
-from installing desired IRD bundles. In most case this will be IRD bundles from
-already installed libraries.  While papyri is not currently integrated with
-package manager or IDEs, we could imagine this process being automatic, or on
-demand.
+Finally, IDEs developers want to make sure
+IRD files can be properly rendered and browsed by their users when requested. This may
+potentially take into account users' preferences, and may provide added
+values such as indexing, searching, bookmarks, etc.), as seen in rustsdocs, devdocs.io. 
 
 
-The third category of stakeholder are IDEs developers, who want to make sure
-IRD files can be properly rendered and browsed by their users when requested;
-potentially taking into account user preferences, and providing added
-values with for example indexing, searching, bookmarks. Such a category of
-stakeholder could also be opinionated web hosting in a similar fashion to
-rustsdocs, devdocs.io
-
+Overall, building cost depends on the three stakeholders. For example, building SciPy & NumPy
+documentation IRD files on a 2021 Macbook Pro M1 (base model), including executing
+examples in most docstrings and type inferring most examples (with most variables semanticly inferred) can take several minutes. **Is that good ? Comparison with other docs building ?Can we make a comment on this ? **
 
 
 Current implementation
