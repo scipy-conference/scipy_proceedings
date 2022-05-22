@@ -290,16 +290,18 @@ Project Raijin
 --------------
 
 “Collaborative Research: EarthCube Capabilities: Raijin: Community Geoscience
-Analysis Tools for Unstructured Mesh Data”, i.e. Project Raijin
-:cite:`raijin`, of the consortium between NCAR and Pennsylvania State
-University has been awarded by NSF 21-515 EarthCube for an award period of 1
-September, 2021 - 31 August, 2024 :cite:`raijinaward21`. The GeoCAT team is
-in charge of the software development of Project Raijin, which mainly consists
-of implementing visualization and analysis functions in the SPE to be executed
-on native unstructured grids. While doing so, GeoCAT is also responsible of
-establishing an open development environment, clearly documenting the
-implementation work, and aligning the deployments with the project milestones
-as well as SPE requirements and specifications.
+Analysis Tools for Unstructured Mesh Data”, i.e. Project Raijin, of the
+consortium between NCAR and Pennsylvania State University has been awarded by
+NSF 21-515 EarthCube for an award period of 1 September, 2021 - 31 August,
+2024 :cite:`raijinaward21`. Project Raijin aims at developing community-owned,
+sustainable, scalable tools that facilitate operating on unstructured climate
+and global weather data :cite:`raijin`. The GeoCAT team is in charge of the
+software development of Project Raijin, which mainly consists of implementing
+visualization and analysis functions in the SPE to be executed on native
+grids. While doing so, GeoCAT is also responsible of establishing an open
+development environment, clearly documenting the implementation work, and
+aligning the deployments with the project milestones as well as SPE
+requirements and specifications.
 
 To realize the aforementioned functionalities, GeoCAT created the
 Xarray-based Uxarray package :cite:`uxarrayrepo` to recognize unstructured
@@ -308,6 +310,14 @@ is built on top of the built-in Xarray Dataset functionalities while
 recognizing several unstructured grid formats (UGRID, SCRIP, Exodus for now).
 Since there are more unstructured mesh models in the community than UXarray
 natively supports, its architecture will also support addition of new models.
+Figure :ref:`fig6raijin` shows the regularly structured “latitude-longitude”
+grids versus a few unstructured grid models.
+
+.. figure:: figures/fig6_raijin.png
+   :scale: 28%
+   :figclass: bht
+
+   Regular grid (left) vs MPAS-A & CAM-SE grids :label:`fig6raijin`
 
 The UXarray project has implemented data input/output functions for UGRID,
 SCRIP, and Exodus, as well as methods for surface area and integration
@@ -320,8 +330,8 @@ lifecycle.
 Open Development
 ----------------
 
-To ensure community involvement at any level in the development lifecycle, GeoCAT
-is committed to an open development model. With this model, we not only
+To ensure community involvement at any level in the development lifecycle,
+GeoCAT is committed to an open development model. With this model, we not only
 have our code-base open-sourced but also ensure most of the project assets that are
 directly related to the software development lifecycle are publicly accessible.
 In order to implement this model, GeoCAT provides all of its software tools as
