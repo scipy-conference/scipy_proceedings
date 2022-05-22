@@ -24,7 +24,7 @@
 poliastro: a Python library for interactive Astrodynamics
 ---------------------------------------------------------
 
-.. todo::
+.. note::
    Consider everything to be confirmed, from section titles to actual content.
 
 .. class:: abstract
@@ -52,7 +52,7 @@ Astrodynamics
 Astrodynamics as the branch of Mechanics that studies practical problems
 concerning the motion of rockets and other artificial objects through space.
 
-.. todo::
+.. note::
    Citation needed
 
 Since in 1609 German mathematician and astronomer Johannes Kepler published his book *Astronomia nova*,
@@ -64,14 +64,14 @@ the one that captures the essence of the two-body problem in its most restricted
 already has this mathematical intricacy,
 any further development will carry away similar or greater complexity.
 
-.. todo::
+.. note::
    Use less evocative language?
 
 .. math::
 
    M = E - e \sin{E}
 
-.. todo::
+.. note::
    Make this a figure, rather than an equation?
 
 Almost three centuries later, in 1903, Russian rocket scientist Konstantin E. Tsiolkovsky
@@ -87,7 +87,7 @@ to the real possibility of going to space.
 
    \Delta v = v_e \ln \frac{m_0}{m_f}
 
-.. todo::
+.. note::
    Make this a figure, rather than an equation?
 
 Tsiolkovsky's contribution could be considered the starting point of Astrodynamics,
@@ -107,11 +107,11 @@ The severe limitations in weight and available energy for such kind of travels
 were already apparent for these pioneers,
 who were, in some way, anticipating the need to optimize on board fuel consumption.
 
-.. todo::
+.. note::
    This whole paragraph is nice but it was used to justify the importance of low-thrust,
    we should reword it.
 
-.. todo::
+.. note::
    Add more background on
    (1) the initial value two-body problem (propagation),
    (2) the boundary value two-body problem (initial orbit determination), and
@@ -119,11 +119,11 @@ who were, in some way, anticipating the need to optimize on board fuel consumpti
    including modern references to research about these topics.
    Leave software references for later.
 
-.. todo::
+.. note::
    Discuss the differences between real-world Earth satellite propagation with SGP4
    from more generic Astrodynamics work.
 
-.. todo::
+.. note::
    Discuss software related to Astrodynamics,
    including classical, well-stablished open-source toolboxes like SPICE
    (does SPICE have propagation?),
@@ -156,26 +156,26 @@ Methods
 Background
 ++++++++++
 
-.. todo::
+.. note::
    Describe separately propagation, IOD, and continuous thrust.
 
 Software Architecture
 +++++++++++++++++++++
 
-.. todo::
+.. note::
    Two-layered architecture, `poliastro.twobody` vs `poliastro.ephem`
 
 poliastro usage
 ---------------
 
-.. todo::
+.. note::
    Pick a few examples from the user guide
    and relevant notebooks from the gallery.
 
 Future work
 -----------
 
-.. todo::
+.. note::
    Limitations and shortcomings of poliastro
    Technical: bad APIs, inconsistencies.
    Non-technical: Lack of development time/sustainability model beyond GSOC money and NumFOCUS grants,
@@ -463,3 +463,6 @@ References
               Revised Edition*. AIAA Education Series. 1999.
 .. [Val07Fun] Vallado, David A.. *Fundamentals of Astrodynamics and Applications (3rd Edition)*.
               Microcosm Press/Springer. May 2007.
+
+.. [Atr03] P. Atreides. *How to catch a sandworm*,
+           Transactions on Terraforming, 21(3):261-300, August 2003.
