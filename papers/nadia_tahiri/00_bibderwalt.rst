@@ -17,9 +17,6 @@
 
 :bibliography: mybib
 
-
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
-
 -------------------------------------------------------------
 Phylogeo: Analysis of genetic and climatic data of SARS-CoV-2
 -------------------------------------------------------------
