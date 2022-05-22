@@ -81,22 +81,63 @@ As a result, we highlighted a correlation between parts of genes with a high rat
 
 The creation of phylogenetic trees, as mentioned above, is an important part of the solution and includes the main steps of the developed pipeline. The main parameters of this part are as follows:
 
+.. code-block:: python
+
+   def sliding_window(window_size=0, step=0):
+      try:
+         f = open("infile", "r")
+         ...
+         # slide the window along the sequence
+         start  = 0
+         fin = start + window_size
+         while fin <= longueur:
+            index = 0 
+            with open("out", "r") as f, ... as out:
+                  ...
+                  for line in f:
+                     if line != "\n":
+                        espece = list_names[index]
+                        nbr_espaces = 11 - len(espece)
+                        out.write(espece)
+                        for i in range(nbr_espaces):
+                              out.write(" ")
+                        out.write(line[debut:fin] + "\n")
+                        index = index + 1
+            out.close()
+            f.close()
+            start = start + step
+            fin = fin + step
+   except:
+      print("An error occurred.")
 
 .. code-block:: python
 
-   def create_phylo_tree(g...):
-    ...
-    for file in files:
-        try:
-            ...
-            create_bootstrap()
-            run_dnadist()
-            run_neighbor()
-            run_consense() 
-            filter_results(...)
-            ...
-        except Exception as error:
-            raise 
+   def create_phylo_tree(gene, 
+                        window_size, 
+                        step_size, 
+                        bootstrap_threshold, 
+                        rf_threshold, 
+                        data_names):
+
+      number_seq = align_sequence(gene)
+      sliding_window(window_size, step_size)
+      ...
+      for file in files:
+         try:
+               ...
+               create_bootstrap()
+               run_dnadist()
+               run_neighbor()
+               run_consense() 
+               filter_results(gene, 
+                              bootstrap_threshold, 
+                              rf_threshold, 
+                              data_names, 
+                              number_seq, 
+                              file))
+               ...
+         except Exception as error:
+               raise 
 
 
 This function takes gene data, window size, step size, bootstrap threshold, threshold for the Robinson and Foulds distance, and data names as input parameters. Then the function sequentially connects the main steps of the pipeline: align_sequence(gene), sliding_window(window_size, step_size), create_bootstrap(), run_dnadist(), run_neighbor(), run_consense(), and filter_results with parameters. As a result, we obtain a phylogenetic tree (or several trees), which is written to a file.
