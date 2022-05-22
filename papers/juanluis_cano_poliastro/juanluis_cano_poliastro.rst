@@ -1,8 +1,6 @@
-:author: Gaius Caesar
-:email: jj@rome.it
-:institution: Senate House, S.P.Q.R.
-:institution: Egyptian Embassy, S.P.Q.R.
-:orcid: 0101-0101-0101-0103
+:author: Juan Luis Cano Rodríguez
+:email: hello@juanlu.space
+:orcid: 0000-0002-2187-161X
 :corresponding:
 
 :author: Mark Anthony
@@ -22,9 +20,12 @@
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
-------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
-------------------------------------------------
+---------------------------------------------------------
+poliastro: a Python library for interactive Astrodynamics
+---------------------------------------------------------
+
+.. todo::
+   Consider everything to be confirmed, from section titles to actual content.
 
 .. class:: abstract
 
@@ -40,26 +41,167 @@ A Numerical Perspective to Terraforming a Desert
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   astrodynamics, orbital mechanics, orbit propagation, orbit visualization, two-body problem
 
 Introduction
 ------------
 
-Twelve hundred years ago  |---| in a galaxy just across the hill...
+Astrodynamics
++++++++++++++
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+Astrodynamics as the branch of Mechanics that studies practical problems
+concerning the motion of rockets and other artificial objects through space.
 
+.. todo::
+   Citation needed
+
+Since in 1609 German mathematician and astronomer Johannes Kepler published his book *Astronomia nova*,
+containing the most famous of all transcendental equations,
+the motion of the celestial bodies has attracted the attention of the greatest minds in human history,
+even sparking entire new fields in mathematics [Bat99Int]_.
+It is easy to imagine that if even Kepler's equation,
+the one that captures the essence of the two-body problem in its most restricted form,
+already has this mathematical intricacy,
+any further development will carry away similar or greater complexity.
+
+.. todo::
+   Use less evocative language?
+
+.. math::
+
+   M = E - e \sin{E}
+
+.. todo::
+   Make this a figure, rather than an equation?
+
+Almost three centuries later, in 1903, Russian rocket scientist Konstantin E. Tsiolkovsky
+first explained in his article *Exploration of Outer Space by Means of Rocket Devices*
+precise conditions for artificial objects to reach the orbit of the Earth,
+making a huge leap from the mere observation of the celestial bodies
+and the science fiction stories that had inspired him
+to the real possibility of going to space.
+
+.. Regarding Saxon genitive and equation names, see http://english.stackexchange.com/a/301270/20057
+
+.. math::
+
+   \Delta v = v_e \ln \frac{m_0}{m_f}
+
+.. todo::
+   Make this a figure, rather than an equation?
+
+Tsiolkovsky's contribution could be considered the starting point of Astrodynamics,
+and many others ensued before they could be tested in practice during the second half of the 20th century.
+In 1919 Yuri V. Kondratyuk conceived the gravitational slingshot or flyby
+to accelerate a spacecraft through interplanetary flight
+and suggested a mission profile for a Lunar landing \cite{siddiqi2000challenge},
+in 1925 Walter Hohmann conjectured
+that the minimum-fuel transfer between two coplanar circular orbits
+consists of two tangent impulses along the line of apses
+(although this result was not proved until almost forty years later in \cite{lawden1963optimal}),
+and in 1926 Hermann J. Oberth observed
+that the velocity gain of an impulsive maneuver
+is higher when the kinetic energy is maximum
+(nowadays known as the Oberth effect).
+The severe limitations in weight and available energy for such kind of travels
+were already apparent for these pioneers,
+who were, in some way, anticipating the need to optimize on board fuel consumption.
+
+.. todo::
+   This whole paragraph is nice but it was used to justify the importance of low-thrust,
+   we should reword it.
+
+.. todo::
+   Add more background on
+   (1) the initial value two-body problem (propagation),
+   (2) the boundary value two-body problem (initial orbit determination), and
+   (3) analytical continuous thrust guidance laws,
+   including modern references to research about these topics.
+   Leave software references for later.
+
+.. todo::
+   Discuss the differences between real-world Earth satellite propagation with SGP4
+   from more generic Astrodynamics work.
+
+.. todo::
+   Discuss software related to Astrodynamics,
+   including classical, well-stablished open-source toolboxes like SPICE
+   (does SPICE have propagation?),
+   GUI-based software like GMAT and gpredict,
+   and more modern initiatives like Skyfield.
+
+State of the art
+++++++++++++++++
+
+Three main problems with Astrodynamics software:
+
+1. Lack of reproducibility/"code available upon request"
+2. Existing software requires deep expertise and has some implicit assumptions
+   (like coordinate frame names etc)
+3. There is no "scripting" alternative for Astrodynamics
+
+Three main motives for poliastro existence:
+
+1. Set an example on reproducibility and good coding practices in Astrodynamics
+2. Become an approachable software even for novices
+3. Offer an scripting interface
+
+Other ideas:
+
+- Common misconceptions (reference frames! TLE propagation! Mean anomaly!)
+
+Methods
+-------
+
+Background
+++++++++++
+
+.. todo::
+   Describe separately propagation, IOD, and continuous thrust.
+
+Software Architecture
++++++++++++++++++++++
+
+.. todo::
+   Two-layered architecture, `poliastro.twobody` vs `poliastro.ephem`
+
+poliastro usage
+---------------
+
+.. todo::
+   Pick a few examples from the user guide
+   and relevant notebooks from the gallery.
+
+Future work
+-----------
+
+.. todo::
+   Limitations and shortcomings of poliastro
+   Technical: bad APIs, inconsistencies.
+   Non-technical: Lack of development time/sustainability model beyond GSOC money and NumFOCUS grants,
+   licensing concerns, reusability in the wider ecosystem.
+
+On reusability:
+
+- So-so: IBM/spacetech-ssa, AnalyticalGraphicsInc/STKCodeExamples
+- Did not reuse: sbpy, beyond, mubody
+
+On sustainability:
+
+Several companies seem to use it, but there is no two-way communication.
+
+Conclusions
+-----------
+
+poliastro is cool and nice,
+it has some unique features,
+and is decently fast
+(and hopefully getting faster).
+It does have some limitations
+(both technical and non-technical)
+that can be addressed with more development time.
+
+---
 
 Bibliographies, citations and block quotes
 ------------------------------------------
@@ -317,7 +459,7 @@ Perhaps we want to end off with a quote by Lao Tse [#]_:
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
+.. [Bat99Int] Battin, Richrd H.. *An Introduction to the Mathematics and Methods of Astrodynamics,
+              Revised Edition*. AIAA Education Series. 1999.
+.. [Val07Fun] Vallado, David A.. *Fundamentals of Astrodynamics and Applications (3rd Edition)*.
+              Microcosm Press/Springer. May 2007.
