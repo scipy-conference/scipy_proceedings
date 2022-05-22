@@ -161,7 +161,7 @@ GeoCAT-comp (and GeoCAT-f2py)
 =============================
 
 GeoCAT-comp is the computational component of the GeoCAT project as can be seen in
-Figure :ref:`fig2rtd`, and it houses implementations of geoscience data analysis
+Figure :ref:`fig3structure`, and it houses implementations of geoscience data analysis
 functions. Novel research and development is conducted for analyzing structured as
 well as unstructured grid data from various research fields such as climate,
 weather, atmosphere, ocean, etc. In addition, some of the functionalities of
@@ -222,7 +222,7 @@ and several other scientists and developers from various NCAR labs/groups.
 It has since grown to house novel visualization examples as well as showcases
 of the capabilities of other GeoCAT aspects like GeoCAT-comp, along with
 newer technologies like interactive plotting notebooks. Figure
-:ref:`fig4cmap`, for example, illustrates a unique GeoCAT-examples case that
+:ref:`fig4cmap` illustrates one of the unique GeoCAT-examples cases that
 was aimed at exploring the best practices for data visualization
 like choosing color blind friendly colormaps.
 
@@ -232,7 +232,7 @@ like choosing color blind friendly colormaps.
 
    Comparison between NCL (left) and Python (right) when choosing a
    colormap; GeoCAT-examples aiming at choosing color blind friendly
-   colormaps :label:`fig4cmap`
+   colormaps :cite:`ams22sizemore` :label:`fig4cmap`
 
 The GeoCAT-examples :cite:`geocatexamplesrtd` gallery contains over 140
 example Python plotting scripts, demonstrating functionalities from Python
@@ -281,11 +281,25 @@ interpolation routines) and visualization routines that aim at reducing
 the amount of post-processing tools necessary to visualize WRF output
 files.
 
-These visualizations were created using WRF-python with Cartopy and the code used to create them is available on the WRF-Python readthedocs website
-
+Even though there is no continuous development in WRF-Python as it is in
+the rest of the GeoCAT stack, the package is still maintained strongly
+with timely responses and bug-fix releases to the issues reported by the
+user community.
 
 Project Raijin
 --------------
+
+“Collaborative Research: EarthCube Capabilities: Raijin: Community Geoscience
+Analysis Tools for Unstructured Mesh Data”, Project Raijin in short, of the
+consortium between NCAR and Pennsylvania State Universityhas been
+awarded by NSF 21-515 EarthCube for an award period of 1 September,
+2021 - 31 August, 2024 :cite:`raijinaward21`. The GeoCAT team is in charge of
+the software development of the Project Raijin, which mainly consists of Python
+visualization and analysis functions implementation. While doing so, GeoCAT
+is also responsible of establishing an open development environment,
+clearly documenting the implementation work, and aligning the
+deployments with the project milestones as well as SPE requirements and
+specifications.
 
 To realize this, GeoCAT
 created the Xarray-based Uxarray package to recognize unstructured grid models
