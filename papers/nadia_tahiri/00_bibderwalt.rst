@@ -49,14 +49,11 @@ Phylogeography is the study of the principles and processes that govern the dist
 In a phylogeographic study, three major processes must be considered (:cite:`N92`) which are:
 
 1.	Genetic drift is the result of allele sampling errors. These errors are due to generational transmission of alleles and geographical barriers. Genetic drift is a function of the size of the population. Indeed, the larger the population, the lower the genetic drift. This is due to the ability to maintain genetic diversity in the original population. By convention, we say that an allele is fixed if it reaches the frequency of 100% and we say that it is lost if it reaches the frequency of 0%.
-
 2.	Gene flow or migration is an important process for conducting a phylogeographic study. It is the transfer of alleles from one population to another, increasing intrapopulation diversity and decreasing interpopulation diversity.
-
-3.	There are many selections in all species, let us indicate the two most important ones when they are important for a phylogeographic study.
-   
-   a.	Sexual selection is a phenomenon resulting from an attractive characteristic between two species. This selection is therefore a function of the size of the population.
-   
-   b.	Natural selection is a function of both fertility, mortality and adaptation of a species to a habitat. adaptation of a species to a habitat.
+3.	There are many selections in all species, let us indicate the two most important ones when they are important for a phylogeographic study. 
+      
+      a. Sexual selection is a phenomenon resulting from an attractive characteristic between two species. This selection is therefore a function of the size of the population. 
+      b. Natural selection is a function of both fertility, mortality and adaptation of a species to a habitat.
 
 Populations living in different environments with varying climatic conditions are subject to pressures that can lead to evolutionary divergence and reproductive isolation (:cite:`OS98`; :cite:`S01`).  Phylogeny and geography are then correlated. This study therefore aims to present an algorithm to show the possible correlation between certain genes or gene fragments and the geographical distribution of species.
 
@@ -186,7 +183,7 @@ The Pango lineage nomenclature system is hierarchical and fine-scaled and is des
          D.5       & Sweden 65.0\%          & 2020-10-12    & OU370897                                                      & Q.7     & France   86.0\%      & 2021-01-29    & ON442016                                                      \\ \hline
      \end{longtable*}
 
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
+     \caption{SARS-CoV-2 lineages analyzed. The lineage assignments covered in the table were last updated on March 1, 2022. Among all Pango lineages of SARS-CoV-2, 38 lineages were analyzed. The corresponding sequencing data were found in the NCBI database based on information on the date of earliest detection and the country of most common. The table also marks the percentage of the virus in the most common country compared to all countries where the virus is present. \DUrole{label}{quanitities-table}}
 
    \end{table*}
 
@@ -194,7 +191,7 @@ For this study, the meteorological parameters of the selected countries were con
 
 .. figure:: Fig2.png
 
-   Heatmap of Robinson and Foulds topological distance in alignment windows. :label:`fig2`
+   Climatic conditions of each lineage in most common country at the time of first detection. The climate factors involved include Temperature at 2 Meters (C), Specific Humidity at 2 Meters (g/kg), Precipitation Corrected (mm/day), Wind Speed at 10 Meters (m/s), and All Sky Surface Shortwave Downward Irradiance $(kW-hr/m^2/day)$. :label:`fig2`
 
 
 Results
@@ -204,14 +201,8 @@ In this section, we describe the results obtained by our dataset (see Data secti
 The size of sliding window and advanced step for the sliding window play important roles in analysis. We restricted our conditions to certain values. For comparation, we applied 5 combinations of parameters (window size and step size) to the same dataset. These include the choice of different window sizes (20bp, 50bp, 200bp) and step sizes (10bp, 50bp, 200bp). Those combinations of window sizes and step sizes allow us to have 3 different strategies of movement (overlapping, nonoverlapping, with gaps). Here we fixed the couple (window size, step size) to some values (20, 10), (20, 50), (50, 50), (200, 50) and (200, 200). 
 
 1.	Robinson and Foulds baseline and bootstrap threshold: In this study, the phylogenetic trees constructed in each sliding window are compared with the climatic trees using the Robinson and Foulds topological distance (RF distance). We defined the value of RF distance obtained for regions without any mutations as the baseline. Although different sample sizes and sample sequence characteristics can cause differences in the baseline, however, regions without any mutation are often accompanied by very low bootstrap values. Using the distribution of bootstrap values and combining it with the validation of alignment visualization, we confirmed that the RF baseline value in this study was 50 and the bootstrap values corresponding to this baseline was smaller than 10.
-
-
 2.	The implementation of sliding window technology with bootstrap threshold provides a more accurate identification of regions with high gene mutation rates. Figure 3 shows the general pattern of RF distance changes over alignments windows with different climate conditions on bootstrap value greater than 10. The trend of RF variation under different climatic conditions does not vary much throughout this whole sequence sliding window scan, which may be related to the correlation between climatic factors (Wind Speed, Downward Irradiance, Precipitation, Humidity, Temperature). Windows starting from or containing position (28550bp) were screened in all five scans for different combinations of window size and step size. The window formed by position 29200bp to position 29470bp is screened out in all four scans except the combination of 50bp window size with 50bp step size. As can be seen from Figure 3, when gaps are present in the scan (window size: 20bp, step size: 50bp), some potential mutation windows are not screened compared to other movement strategies because the sequences of the gap part are not computed by the algorithm. In addition, when the window size is small, the capture of the window mutation signal becomes more sensitive, especially when the number of samples is small. At this time, a single base change in a single sequence can cause a change in the value of RF. Therefore, a high quality of sequencing data is required to prevent the error caused by ambiguous characters (N in nucleotide) on RF values. And when a larger window size (200bp) is selected, the overlapping movement strategy (window size: 200bp, step size 50bp) allows the signal of base mutations to be repeatedly verified and enhanced in adjacent window scans compared to the non-overlapping strategy (window size: 200bp, step size: 200bp). In this situation, the range of RF values is relatively large, and the number of windows eventually screened is relatively greater. Because of the small number of the SARS-CoV-2 lineages sequences we analyzed in this study, we chose to scan the alignment sequences with a larger window and overlapping movement strategy for further analysis (window size: 200bp, step size 50bp).
-
-
 3.	RF distance quantified the difference between phylogenetic tree constructed in certain sliding window and climatic tree constructed in corresponding climatic data. Relatively low RF distance values represent relatively more similarity between phylogenetic tree and climatic tree. With our algorithm based on the sliding window technique, regions with high mutation rates can be identified (Fig 4). Subsequently, we compare the RF values of these regions. If there is a correlation between the occurrence of mutations and the climate factors studied, then regions with relatively low RF values (the alignment position of 15550bp – 15600bp and 24650bp-24750bp) are more likely to be correlated with climate factors than the other loci screened for mutations. 
-
-
 4.	Our pipeline can also be applied to phylogeographic studies of other species. In cases where it is determined (or assumed) that the occurrence of a mutation is associated with certain geographic factors, our pipeline can help to highlight mutant regions and specific mutant regions within them that are more likely to be associated with that geographic parameter. Our algorithm can provide a reference for further biological studies.
 
 .. figure:: Fig3.png
@@ -235,14 +226,8 @@ In this paper, a bioinformatics pipeline for phylogeographic analysis is designe
 As a future work on the project, we plan to incorporate the following additional features:
 
 1.	We can handle large amounts of data, especially when considering many countries and longer time periods (dates). In addition, since the size of the sliding window and the forward step play an important role in the analysis, we need to perform several tests to choose the best combination of parameters. In this case, it is important to provide faster performance of this solution, and we plan to adapt the code to parallelize the computations. In addition, we intend to use the resources of Compute Canada and Compute Quebec for these high load calculations.
-
-
 2.	To enable further analysis of this topic, it would be interesting to relate the results obtained, especially the values obtained from the best positions of the multiple sequence alignments, to the dimensional structure of the proteins, or to the map of the selective pressure exerted on the indicated alignment fragments.
-
-
 3.	We can envisage a study that would consist in selecting only different phenotypes of a single species, for example, Homo Sapiens, in different geographical locations. In this case, we would have to consider a larger geographical area in order to significantly increase the variation of the selected climatic parameters. Such a study would consist in observing the evolution of the genes of the selected species according to different climatic parameters.
-
-
 4.	We intend to develop a website that can help biologists, ecologists and other interested professionals to perform calculations in their phylogeography projects faster and easier. We plan to create a user-friendly interface with the input of the necessary initial parameters and the possibility to save the results (for example, by sending them to an email). These results will include calculated parameters and visualizations.
 
 
