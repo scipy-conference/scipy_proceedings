@@ -290,20 +290,32 @@ Project Raijin
 --------------
 
 “Collaborative Research: EarthCube Capabilities: Raijin: Community Geoscience
-Analysis Tools for Unstructured Mesh Data”, Project Raijin in short, of the
-consortium between NCAR and Pennsylvania State Universityhas been
-awarded by NSF 21-515 EarthCube for an award period of 1 September,
-2021 - 31 August, 2024 :cite:`raijinaward21`. The GeoCAT team is in charge of
-the software development of the Project Raijin, which mainly consists of Python
-visualization and analysis functions implementation. While doing so, GeoCAT
-is also responsible of establishing an open development environment,
-clearly documenting the implementation work, and aligning the
-deployments with the project milestones as well as SPE requirements and
-specifications.
+Analysis Tools for Unstructured Mesh Data”, i.e. Project Raijin
+:cite:`raijin`, of the consortium between NCAR and Pennsylvania State
+University has been awarded by NSF 21-515 EarthCube for an award period of 1
+September, 2021 - 31 August, 2024 :cite:`raijinaward21`. The GeoCAT team is
+in charge of the software development of Project Raijin, which mainly consists
+of implementing visualization and analysis functions in the SPE to be executed
+on native unstructured grids. While doing so, GeoCAT is also responsible of
+establishing an open development environment, clearly documenting the
+implementation work, and aligning the deployments with the project milestones
+as well as SPE requirements and specifications.
 
-To realize this, GeoCAT
-created the Xarray-based Uxarray package to recognize unstructured grid models
-through partnership with the geoscience community groups.
+To realize the aforementioned functionalities, GeoCAT created the
+Xarray-based Uxarray package :cite:`uxarrayrepo` to recognize unstructured
+grid models through partnership with the geoscience community groups. UXarray
+is built on top of the built-in Xarray Dataset functionalities while
+recognizing several unstructured grid formats (UGRID, SCRIP, Exodus for now).
+Since there are more unstructured mesh models in the community than UXarray
+natively supports, its architecture will also support addition of new models.
+
+The UXarray project has implemented data input/output functions for UGRID,
+SCRIP, and Exodus, as well as methods for surface area and integration
+calculations so far. The team is currently conducting open discussions
+(through Github Discussions) with community members, who are interested
+in unstructured grids research and development, intha order to prioritize
+data analysis operators that will be implemented throughout the project
+lifecycle.
 
 Open Development
 ----------------
