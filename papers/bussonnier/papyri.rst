@@ -6,8 +6,8 @@
 :corresponding:
 :author: Camille Carvalho
 :email: 
-:institution: University of California Merced: Merced, CA, US
-:institution: Groupe INSA: Villeurbanne, FR
+:institution: University of California Merced, Merced, CA, USA
+:institution: Univ Lyon, INSA Lyon, UJM, UCBL, ECL, CNRS UMR 5208, ICJ, F-69621, France
 :orcid: 0000-0002-8426-549X
 
 ====================================================================
@@ -67,7 +67,7 @@ libraries source on code platforms, continuous integration, and many other tools
 is ubiquitous, we believe a better documentation framework for many of the
 libraries of the scientific Python should be available.
 
-Thus, against all advice we received and our own experience, we have decided to
+Thus, against all advice we received and based on our own experience, we have decided to
 rebuild an *opinionated* documentation framework, from scratch, and with minimal
 dependencies: *Papyri*. Papyri focuses on building an intermediate
 documentation representation format, that lets us decouple building, and
@@ -85,8 +85,8 @@ end this paper with comments on current challenges and future work.
 
 Through out the paper, we will draw several comparisons between documentation
 building and compiled languages. Also, we will borrow and adapt commonly used
-terminology. In particular, similarities with "ahead-of-time (AOT)" [AOT]_,
-"just-in-time (JIT)" [JIT]_, "intermediate representation (IR)" [IR]_, link-time
+terminology. In particular, similarities with "ahead-of-time" (AOT) [AOT]_,
+"just-in-time"" (JIT) [JIT]_, intermediate representation (IR) [IR]_, link-time
 optimization (LTO) [LTO]_, static vs dynamic linking will be highlighted. This
 allows to clarify the presentation of the underlying architecture, however there
 is no requirement to be familiar with the above to understand the concepts
@@ -103,14 +103,14 @@ for Python, and are used by all the libraries in this ecosystem. While a few
 alternatives exist, most tools and services have some internal knowledge of
 Sphinx. For instance, `Read the Docs` [RTD]_ provides a specific Sphinx theme
 [RTD-theme]_ users can opt-in to, `Jupyter-book` is built on top of Sphinx, and
-MyST parser [MYST]_ which is made to allow markdown in documentation does
+MyST parser [MYST]_ (which is made to allow markdown in documentation) 
 targets Sphinx as a backend, to name a few. All of the above provide an
 "ahead-of-time" documentation compilation and rendering, which is slow and
 computationally intensive. When a project needs its specific plugins, extensions
 and configurations to properly build (which is almost always the case), it is
 relatively difficult to build documentation for a single object (like a single
-function, module or class). This makes (AOT) tools difficult to use for
-interactive exploration. One can then consider a "just-in-time" approach, as done
+function, module or class). This makes AOT tools difficult to use for
+interactive exploration. One can then consider a JIT approach, as done
 for `Docrepr` (integrated both in `Jupyter` and `Spyder`). However in that case,
 interactive documentation lacks inline plots, crosslinks, indexing, search and
 many custom directives.
@@ -159,7 +159,7 @@ represented in docstrings), and :ref:`Fig1`. In terms of format, markdown is app
 .. figure:: scipy-dpss-old-new.png
 
    The following screenshot shows current help for ``scipy.signal.dpss`` as
-   currently accessible on the left, as shown by the  papyri for jupyterlab
+   currently accessible on the left, as shown by Papyri for Jupyterlab
    extension on the right. :label:`Fig1`
 
 
@@ -167,7 +167,7 @@ represented in docstrings), and :ref:`Fig1`. In terms of format, markdown is app
 ----------------------------
 
 We now layout the objectives of the Papyri documentation framework. 
-Let us emphasize that the project is no way intended to replace or cover many features included in well established documentation tools such as Sphinx or Jupyter-book.
+Let us emphasize that the project is in no way intended to replace or cover many features included in well established documentation tools such as Sphinx or Jupyter-book.
 Those projects are extremely flexible and fit the need of their users. The Papyri project addresses specific documentation challenges (mentioned above), we present below what is (and what is not) the scope of work.
 
 a) A generic (little customisable) website builder
@@ -190,179 +190,121 @@ Since Papyri is not fully-customisable, users who are already using documentatio
 c) Accessibility and user proficiency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Accessibility is a top priority of the project. To that aim, items are associated to semantic meaning as much as possible, and documentation rendering is separated from documentation building phase. That way, accessibility features such as high contract themes (for better speech-to-text raw data reading), early example highlights (for newcomers) and typed annotation (for advanced users) can be quickly available. With the uniform documentation structure, this provides a coherent experience where users become more comfortable to find information (and in a single location).
+Accessibility is a top priority of the project. To that aim, items are associated to semantic meaning as much as possible, and documentation rendering is separated from documentation building phase. That way, accessibility features such as high contract themes (for better speech-to-text raw data reading), early example highlights (for newcomers) and type annotation (for advanced users) can be quickly available. With the uniform documentation structure, this provides a coherent experience where users become more comfortable to find information (and in a single location) (see Figure 1).
 
 d) Simplicity, speed, and independence
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 One objective of the project is to make documentation installation and rendering relatively straightforward and fast. To that aim, the project includes relative independence of documentation building across libraries, allowing bidirectional crosslinks (i.e. both forward and backward links between pages) to be maintained more easily. In other words, a single library can be built without the need to access documentation from another. Also, the project should include straightforward lookup documentation for an object from the
-interactive REPL. Finally, efforts are put to limit the installation speed (to avoid polynomial growth when installing packages on large distributed systems). Finally, 
+interactive REPL. Finally, efforts are put to limit the installation speed (to avoid polynomial growth when installing packages on large distributed systems).
+
+**TO MB: should IRD be introduced in this section then ??**
+
+2) The Papyri solution
+======================
+
+In this section we describe in more details how Papyri has been implemented to address the objectives mentioned above. 
 
 
-The Papyri solution
--------------------
+1) Making documentation a multi-step process
+--------------------------------------------
 
-Here we present the solution we came up that we believe solve most of the
-problems we highlighted above, and then describe the current state of our
-implementations.
+When building documentation, one can either customise the ``.. code-block:`` directive to execute/reformat entries, or create a ``:rc:`` role to link to configure parameters, several custom directives and plug-ins to simplify the rendering (including creating references, auto-genering documentation)
+and sync with libraries source code. Customisation made by documentation maintainers then usually falls into the following two categories:
+- simpler input convenience,
+- modification of final rendering.
 
-Making documentation multi-step
--------------------------------
+This first category often requires arbitrary code execution and must import the library currently being built. The second one offers a more user friendly environment (but requires to implement user preferences). For example, `sphinx-copybutton` adds a button to easily copy code snippets in a single click, and `pydata-sphinx-theme` and `sphinx-rtd-dark-mode` provide a different appearance. As a consequence, developers must make choices on
+behalf of their end-users: this may concern syntax highlights, type annotations display, light/dark theme. 
 
-We first recognised that many of the customisation made by maintainers when
-building documentation with sphinx and similar tools fall in two categories:
+Being able to modify extensions and re-render the
+documentation without the rebuilding and executing stage is quite appealing. Thus, the building phase in Papyri (collecting documentation
+information) is separated from the rendering phase (Objective (c)): at this step, Papyri has no knowledge and no configuration options that permit to modify the final appearance of the final documentation. Additionally, the optional rendering process has no knowledge of the building step, and
+can be run without accessing the libraries involved.
 
-- simpler input convenience. 
-- modification of final rendering. 
+This technique is commonly used in the field of compilers **add ref**, but to our knowledge, it has not been implemented for documentation in the Python ecosystem. As mentioned before, this separation is key to achieve many features proposed in Objectives (c), (d).
 
+2) Intermediate Representation for Documentation (IRD)
+------------------------------------------------------
 
-Wether you customise the ``.. code-block:`` directive to execute or reformat
-your entries, or create a ``:rc:`` role to link to configuration parameters, a
-large number of custom directive and plug-in only purpose make it easier to
-create references, or make sure the content is auto generated to avoid
-documentation becoming out of sync with libraries source code. This first
-category often require arbitrary code execution and must import the library you
-are currently building the documentation for. 
+IRD format
+~~~~~~~~~~
+.. We borrow the name IR again from compilers.
 
+Papyri relies on standard interchangeable "Intermediate
+Representation for Documentation format" (IRD). This allows to reduce operation complexity of the documentation build. For example, given M documentation producers and N renderers, the current documentation build is O(MN). If each producer only cares about producing IRD, and if each renderer only consumes it, then one can reduce to O(M+N).
+Additionally, one can take IRD from multiple producers at once, and render them all to a single target, breaking the silos between libraries.
 
-The second category of plugins attempt to improve the documentation final
-rendering in order to be more user friendly. For example `sphinx-copybutton` add
-a button to easily copy code snippets in a single click, `pydata-sphinx-theme`
-provide a different appearance.
-
-We'll note that this second category many of the improvement can fall into user
-preferences (`sphinx-rtd-dark-mode`), and developers end up making choices on
-behalf of their end users: 
-
-- which syntax highlight to use ?
-- should I show type annotations ?
-- do I provide a light or dark theme ? 
-
-
-We have often wished to modify the second category of extension and re-render 
-documentation without having to go through the long and slow process of
-rebuilding and executing everything. 
-
-
-Thus our first choice was to have  strict boundary between the two types of
-plugins. The building or "generate" step of papyri that collect documentation
-informations has no knowledge and no configuration options that permit to modify
-the final appearance of the final documentation.
-
-The optional rendering process also have no knowledge of the building step, and
-can be run without access to the libraries we are rendering documentation for.
-
-This a powerful separation of concern, that will give a number of advantages and
-will allow us to achieve many features that are currently relatively hard with
-current systems. This is not a new technique if we refer to the field of
-compiler, where we can reason independently about each compilation units .
-
-Standard IRD format
--------------------
-
-While we are still in search of a better name, most of the success of papyri 
-relies on the definition of standard interchangeable Intermediate
-Representation for Documentation format (IRD). We borrow the name IR again from
-compilers.
-
-This allow to separate concerns between M producers and N renderer, and reduce a
-M*N problem where each renderer need to be able to be able to consume input from
-each producer, to an N+M, where each producer should only care about producing
-IRD, and each renderer consume it.
-
-This also allows us to take IRD from multiple producer are once, and render it
-together to a single target, this breaking the silos between libraries.
-
-As of the writing of this paper, IRD files are currently separated into multiple
-categories. 
+At the moment, IRD files are currently separated into four main categories:**provide a sketch or example with all ??**
 
 - API files describe the documentation for a single object, expressed as a
-  Json object. When possible the informations are encoded semantically.
+  Json object. When possible, the information is encoded semantically (Objective (c)).
   Files are organized based on the fully-qualified name of the Python object
   they reference, and contain either absolute reference to another object
   (library, version and identifier), or delayed references to objects that may
-  exists in another library. Some extra per-object meta information like
-  file/line number of definition can be stored as well.
-- Narrative files are similar to API file, except with the notion they do not
-  represent a given object, but posses a previous/next page, and are organised
+  exist in another library. Some extra per-object meta information like
+  file/line number of definitions can be stored as well. 
+- Narrative files are similar to API files, except that they do not
+  represent a given object, but posess a previous/next page, and are organised
   in an ordered tree related to the table of content. 
-- Examples files are non-ordered collection of files.
-- Assets are untouched binary blobs that can be references by any of the above
-  three categories, and are the only category that only have backward
-  references, and no forward references.
+- Examples files are a non-ordered collection of files.
+- Assets files are untouched binary blobs **find better word** that can be referenced by any of the above
+  three ones. They are the only ones that contain backward references, and no forward references.
 
-In addition to those 4 kinds of objects, metadata about the current package is
-stored: library name, current version, pypi name, GitHub slug, maintainers names,
-logo, issue tracker and a few other. Allowing us to for example auto generate
-link to issue tracker, or to source files when rendering. 
+In addition to the four categories above, metadata about the current package is
+stored: this includes library name, current version, PyPi name, GitHub slug **real term?**, maintainers' names,
+logo, issue tracker and others. In particular, metadata allows us to auto generate
+links to issue trackers, and to source files when rendering. 
+In order to properly resolve some references and normalize links convention, we also store a mapping from fully qualified names to canonical ones.
 
-We also store a mapping from fully qualified names to canonical names, in order
-to properly resolve some references, of normalise links.
+IRD files must be standardized in order to achieve a uniform syntax structure (Objective (b)), In this paper, we do not discuss the IRD files distribution. The final specification IRD files is still in progress. We thus invite contributors to
+consult the current state on the GitHub repository **add ref to the repo**.
 
-The final specification of the IRD file is unfinished, we thus invite you to
-consult the current state on the GitHub repository.
-
-Those IRD files must be standardise in order to achieve our end goal, and
-distribution of those files are not going to be covered in this paper.
-
-
-IRD Installation
-----------------
+IRD bundles
+~~~~~~~~~~~
+**Why is it important to talk about IRD bundles ? to clarify ? Having a difficult time to edit this subsection**
 
 Unlike packages installation IRD bundles do not have the notion of dependencies,
 thus a full-fledge package manager is not necessary, and installing can be
 limited to downloading corresponding files and unpacking them.
 
-We'll note as well that IRD bundles for multiple versions of the same library,
-or conflicting libraries is not inherently problematic, and can be shared across
+IRD bundles for multiple versions of the same library (or conflicting libraries) is not inherently problematic, and can be shared across
 multiple multiple environments.
 
-From a security standpoint, installing IRD bundles does not requires the
+From a security standpoint, installing IRD bundles does not require the
 execution of arbitrary code. This is critical for adoption in deployments.
-
 
 There is an opportunity at IRD installation time to provide localized variant,
 but we have not explored much the opportunity of IRD bundle translations.
 
 
-High level Usage 
-----------------
+IRD and high level usage 
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-The papyri lifecycle for papyri-based documentation can roughly be decomposed
-into 3 broad categories of stakeholders, and processes. 
+Papyri-based documentation involves three broad categories of stakeholders (library maintainers, end-users, IDE developers), and processes. This leads to certain requirements on IRD files and bundles.
 
-The first stakeholders are library maintainers. Those should ensure that papyri
-can build Intermediate Representation Documentation (IRD) files. And publish
-an IRD bundle.
+On the maintainers' side, the goal is to ensure that Papyri can build IRD files, and publish IRD bundles.
 
-Creation of IRD files and bundles is the computation intensive step, that may
-requires complex dependencies, or specific plugins. Creation of these files may
-be a multi-step process or use external tooling that is not related to papyri or
-does not use Python. Note that these steps do not requires the libraries
-maintainer to worry about visual appearance and rendering of documentation.
+Creation of IRD files and bundles is the most computational intensive step. It may
+require complex dependencies, or specific plugins. Thus, this can be a multi-step process, or one can use external tooling (not related to Papyri nor
+uses Python) to create them. Visual appearance and rendering of documentation is not taken into account in this process.
 
 .. comment:
    maybe move next paragrah somewehre else ?
+   
+End-users are responsible from installing desired IRD bundles. In most cases, it will consist of IRD bundles from
+already installed libraries.  While Papyri is not currently integrated with
+packages manager or IDEs, one could imagine this process being automatic, or on demand.
 
-On our test machine (2021 Macbook Pro M1, base model), building scipy & numpy
-documentatatio IRD files can take several minutes. This include executing
-examples in most docstrings and type inferring most examples in order to
-provide information about each variable.
-
-The second category of stakeholder are end-users. Those users are responsible
-from installing desired IRD bundles. In most case this will be IRD bundles from
-already installed libraries.  While papyri is not currently integrated with
-package manager or IDEs, we could imagine this process being automatic, or on
-demand.
+Finally, IDEs developers want to make sure
+IRD files can be properly rendered and browsed by their users when requested. This may
+potentially take into account users' preferences, and may provide added
+values such as indexing, searching, bookmarks, etc.), as seen in rustsdocs, devdocs.io. 
 
 
-The third category of stakeholder are IDEs developers, who want to make sure
-IRD files can be properly rendered and browsed by their users when requested;
-potentially taking into account user preferences, and providing added
-values with for example indexing, searching, bookmarks. Such a category of
-stakeholder could also be opinionated web hosting in a similar fashion to
-rustsdocs, devdocs.io
-
+Overall, building cost depends on the three stakeholders. For example, building SciPy & NumPy
+documentation IRD files on a 2021 Macbook Pro M1 (base model), including executing
+examples in most docstrings and type inferring most examples (with most variables semanticly inferred) can take several minutes. **Is that good ? Comparison with other docs building ?Can we make a comment on this ? **
 
 
 Current implementation
@@ -513,7 +455,7 @@ extension can be seen in :ref:`Fig1` and :ref:`Fig2`.
 
 
 Challenges
-----------
+==========
 
 In order to be able to link to object documentation without having access
 the build IRD bundles from all the library we need to come up with a schema that
@@ -562,7 +504,7 @@ is defined, with its local name. We encountered multiple edge cases with that.
 
 
 Future possibilities
---------------------
+====================
 
 Beyond what has been presented in this paper, there is a number of opportunities
 to improved and extend on what papyri can allow for the Scientific Python
