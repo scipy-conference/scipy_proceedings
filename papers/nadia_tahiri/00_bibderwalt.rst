@@ -61,40 +61,11 @@ The first step involves collecting data to search for quality viral sequences th
 
 In the second step, trees are created with climatic data and genetic data, respectively. For climatic data, we calculated the dissimilarity between each pair of variants (i.e., from different climatic conditions), resulting in a symmetric square matrix. From this matrix, the neighbor joining algorithm was used to construct the climate tree. The same approach was implemented for genetic data. Using nucleotide sequences from the 38 SARS-CoV-2 lineages, phylogenetic reconstruction is repeated to construct genetic trees, considering only the data within a window that moves along the alignment in user-defined steps and window size.
 
-In the third step, the phylogenetic trees constructed in each sliding window are compared with the climatic trees using the Robinson and Foulds topological distance (:cite:`RF81`). The distance was normalized by 2n-6, where n is the number of leaves (i.e., taxa). The proposed approach considers bootstrapping. The implementation of sliding window technology provides a more accurate identification of regions with high gene mutation rates. 
+In the third step, the phylogenetic trees constructed in each sliding window are compared with the climatic trees using the Robinson and Foulds topological distance (:cite:`RF81`). The distance was normalized by :math:`2n-6`, where :math:`n` is the number of leaves (i.e., taxa). The proposed approach considers bootstrapping. The implementation of sliding window technology provides a more accurate identification of regions with high gene mutation rates. 
 
 As a result, we highlighted a correlation between parts of genes with a high rate of mutations depending on the geographic distribution of viruses, which emphasizes the emergence of new variants (i.e., Delta, Alpha, Gamma, Beta, and Omicron).
 
 The creation of phylogenetic trees, as mentioned above, is an important part of the solution and includes the main steps of the developed pipeline. The main parameters of this part are as follows:
-
-.. code-block:: python
-
-   def sliding_window(window_size=0, step=0):
-      try:
-         f = open("infile", "r")
-         ...
-         # slide the window along the sequence
-         start  = 0
-         fin = start + window_size
-         while fin <= longueur:
-            index = 0 
-            with open("out", "r") as f, ... as out:
-                  ...
-                  for line in f:
-                     if line != "\n":
-                        espece = list_names[index]
-                        nbr_espaces = 11 - len(espece)
-                        out.write(espece)
-                        for i in range(nbr_espaces):
-                              out.write(" ")
-                        out.write(line[debut:fin] + "\n")
-                        index = index + 1
-            out.close()
-            f.close()
-            start = start + step
-            fin = fin + step
-   except:
-      print("An error occurred.")
 
 .. code-block:: python
 
@@ -130,6 +101,38 @@ This function takes gene data, window size, step size, bootstrap threshold, thre
 
 The sliding window strategy can detect genetic fragments depending on environmental parameters, but this work requires time-consuming data preprocessing and the use of several bioinformatics programs. For example, we need to verify that each sequence identifier in the sequencing data always matches the corresponding metadata. If samples are added or removed, we need to check whether the sequencing dataset matches the metadata and make changes accordingly.  In the next stage we need to align the sequences and integrate everything step by step into specific software such as MUSCLE (:cite:`E04`), Paquet Phylip: Seqboot, DNADist, Neighbor, Consense (:cite:`F93`), RF (:cite:`RF81`), and raxmlHPC (:cite:`S14`). The use of each software requires expertise in bioinformatics. In addition, the intermediate analysis steps inevitably generate many intermediate files, the management of which not only consumes the time of the biologist, but is also subject to errors, which reduces the reproducibility of the study. At present, there are only a few systems designed to automate the analysis of phylogeography. In this context, the development of a computer program for a better understanding of the nature and evolution of coronavirus is essential for the advancement of clinical research.
 
+
+The following sliding window function illustrates how to move the sliding window through the alignment with the window size and the step size as parameters. The first 11 characters are allocated to the species names, plus a space.
+
+.. code-block:: python
+
+   def sliding_window(window_size=0, step=0):
+      try:
+         f = open("infile", "r")
+         ...
+         # slide the window along the sequence
+         start  = 0
+         fin = start + window_size
+         while fin <= longueur:
+            index = 0 
+            with open("out", "r") as f, ... as out:
+                  ...
+                  for line in f:
+                     if line != "\n":
+                        espece = list_names[index]
+                        nbr_espaces = 11 - len(espece)
+                        out.write(espece)
+                        for i in range(nbr_espaces):
+                              out.write(" ")
+                        out.write(line[debut:fin] + "\n")
+                        index = index + 1
+            out.close()
+            f.close()
+            start = start + step
+            fin = fin + step
+   except:
+      print("An error occurred.")
+
 .. figure:: Fig1.jpeg
    :align: center
    :figclass: w
@@ -145,18 +148,13 @@ The complexity of the algorithm described in the previous section depends on bot
 Let us recall the different complexities of the different external programs used in the algorithm.
 
 - SeqBoot program: :math:`\mathcal{O}(r \times n \times SA)`
-- Protdist program: :math:`\mathcal{O}(n^2)`
+- DnaDist program: :math:`\mathcal{O}(n^2)`
 - Neighbor program: :math:`\mathcal{O}(n^3)`
 - Consense program: :math:`\mathcal{O}(r \times n^2)`
 - RaxML program: :math:`\mathcal{O}(e \times n \times SA)`
 - RF program: :math:`\mathcal{O}(n^2)`
 
-Where :math:`n` is a number of species (or taxa), :math:`r` is a number of replicates, :math:`SA` is a size of the multiple sequence alignment, and :math:`e` is a number of refinement steps performed by the RaxML algorithm. 
-
-
-_Lemma_ For all :math:`SA \in {N^*}` and for all :math:`WS, S \in {N}` then :math:`nb = \left\lfloor \frac {SA - WS}{S} + 1 \right\rfloor`.
-
-Where :math:`WS` is a window size, and :math:`S` is the spep.
+Where :math:`n` is a number of species (or taxa), :math:`r` is a number of replicates, :math:`SA` is a size of the multiple sequence alignment, and :math:`e` is a number of refinement steps performed by the RaxML algorithm. For all :math:`SA \in {N^*}` and for all :math:`WS, S \in {N}` then :math:`nb = \left\lfloor \frac {SA - WS}{S} + 1 \right\rfloor`; Where :math:`WS` is a window size, and :math:`S` is the spep.
 
 Dataset
 -------
