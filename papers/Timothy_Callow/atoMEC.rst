@@ -76,7 +76,7 @@ This paper is structured as follows: in the next section, we briefly review the 
 Following that, we present the key functionality of atoMEC, discuss the code structure and algorithms, and explain how these relate to the theoretical aspects introduced.
 Finally, we present an example case study: we consider Helium under the conditions often experienced in the outer layers of a white dwarf star, and probe the behaviour of a few important properties, namely the band-gap, pressure and ionization degree.
 
-.. figure:: test_voronoi.pdf
+.. figure:: test_voronoi-1.png
    :scale: 100
 	   
    Illustration of the average-atom concept. The many-body and fully interacting system of electron density (shaded blue) and nuclei (red points) on the left is mapped into the much simpler system of independent atoms on the right.
@@ -175,7 +175,7 @@ which is an important input parameter for various models, such as adiabats which
 Various other interesting properties can also be calculated following some postprocessing of the output of an SCF calculation, for example the pressure exerted by the electrons and ions.
 Furthermore, response properties, i.e. those resulting from an external perturbation like a laser pulse, can also be obtained from the output of an SCF cycle. These properties include for example electrical conductivities :cite:`AA_KG` and dynamical structure factors :cite:`AA_DSF`.
 
-.. figure:: tikz-figure0.pdf
+.. figure:: SCF_tikz-1.png
    :align: center
    :figclass: w
    :scale: 90
@@ -421,7 +421,7 @@ We can clearly see in this figure that the band-gap (the region where the DOS is
 From this figure, it seems the transition from insulating to metallic state happens somewhere between 5 and 6 :math:`\textrm{g cm}^{-3}.`
 
 
-.. figure:: He_dos.pdf
+.. figure:: He_dos-1.png
    :scale: 100
 
    Helium density-of-states (DOS) as a function of energy, for different mass densities :math:`\rho_\textrm{m}`, and at temperature :math:`T=50` kK.
@@ -438,7 +438,7 @@ The ionization fraction also relates to the conductivity of the material, becaus
 We see that the ionization fraction mostly increases with density (excepting some strange behavior around :math:`\rho_\textrm{m}=1\ \textrm{g cm}^{-3}`), which is further evidence of the transition from insulating to conducting behaviour with increasing density.
 
    
-.. figure:: He_bg_Z.pdf
+.. figure:: He_bg_Z-1.png
    :scale: 100
 
    Band-gap (red circles) and ionization fraction (blue squares) for Helium as a function of mass density, at temperature :math:`T=50` kK.
@@ -451,7 +451,7 @@ Under these conditions, the density dependence is much stronger, especially for 
 
 The code required to generate the above results and plots can be found in `this repository <https://github.com/atomec-project/Helium-white-dwarfs>`_.
 
-.. figure:: He_pressure.pdf
+.. figure:: He_pressure-1.png
    :scale: 100
 
    Helium pressure (logarithmic scale) as a function of mass density and temperature.
