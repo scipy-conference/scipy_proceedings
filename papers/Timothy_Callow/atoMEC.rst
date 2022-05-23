@@ -23,13 +23,13 @@
 ..
    :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
-------------------------------------------------------------------------------------
-Improving the accessibility of average-atom models for warm dense matter with atoMEC
-------------------------------------------------------------------------------------
+-----------------------------------------------
+atoMEC: an open-source average-atom Python code
+-----------------------------------------------
 
 .. class:: abstract
 
-   Average-atom models are an important tool in studying matter under extreme conditions, such as those conditions experienced in planetary cores, brown and white dwarves, and during inertial confinement fusion.
+   Average-atom models are an important tool in studying matter under extreme conditions, such as those conditions experienced in planetary cores, brown and white dwarfs, and during inertial confinement fusion.
    In the right context, average-atom models can yield results with similar accuracy to simulations which require orders of magnitude more computing time, and thus they can greatly reduce financial and environmental costs.
    Unfortunately, due to the wide range of possible models and approximations, and the lack of open-source codes, average-atom models can at times appear inaccessible.
    In this paper, we present our open-source average-atom code, `atoMEC <https://github.com/atomec-project/atoMEC>`_.
@@ -67,40 +67,40 @@ In a previous paper :cite:`PRR_AA`, we addressed this issue by deriving an avera
 
 In this paper, we focus on computational aspects of average-atom models for WDM.
 We introduce atoMEC :cite:`atoMEC_zenodo`: an open-source average-**ato**\m code for studying **M**\atter under **E**\xtreme **C**\onditions.
-The aim of atoMEC, as indicated by the title of this paper, is to improve the accessibility and understanding of average-atom models.
+One of the main aims of atoMEC is to improve the accessibility and understanding of average-atom models.
 To the best of our knowledge, open-source average-atom codes are in scarce supply: with atoMEC, we aim to provide a tool which people can not only use to run average-atom simulations, but also to add their own models and thus facilitate comparisons of different approximations. 
 The relative simplicity of average-atom codes means that they are not only efficient to run, but also efficient to develop: this means, for example, that they can be used as a test-bed for new ideas that could be later implemented in full DFT codes, and are also accessible to those without extensive prior expertise, such as students.
-atoMEC aims to facilitate development by following good practise in software engineering (for example extensive documentation), a careful design structure, and of course through the choice of Python and its NumPy :cite:`numpy` and SciPy :cite:`scipy` libraries, which is arguably the most popular scientific programming language. 
+atoMEC aims to facilitate development by following good practise in software engineering (for example extensive documentation), a careful design structure, and of course through the choice of Python and its widely used scientific stack, in particular the NumPy :cite:`numpy` and SciPy :cite:`scipy` libraries.
 
 This paper is structured as follows: in the next section, we briefly review the key theoretical points which are important to understand the functionality of atoMEC, assuming no prior physical knowledge of the reader.
 Following that, we present the key functionality of atoMEC, discuss the code structure and algorithms, and explain how these relate to the theoretical aspects introduced.
-Finally, we present an example case study: we consider Hellium under the conditions often experienced in the outer layers of a white dwarf star, and probe the behaviour of a few important properties, namely the band-gap, pressure and ionization degree.
+Finally, we present an example case study: we consider Helium under the conditions often experienced in the outer layers of a white dwarf star, and probe the behaviour of a few important properties, namely the band-gap, pressure and ionization degree.
 
 .. figure:: test_voronoi.pdf
    :scale: 100
 	   
-   Illustration of the average-atom concept. The many-body and fully-interacting system of electron density (shaded blue) and nuclei (red points) on the left is mapped into the much simpler system of independent atoms on the right.
+   Illustration of the average-atom concept. The many-body and fully interacting system of electron density (shaded blue) and nuclei (red points) on the left is mapped into the much simpler system of independent atoms on the right.
    Any of these identical atoms represents the "average-atom". The effects of interaction from neighbouring atoms are implicitly accounted for in an approximate manner through the choice of boundary conditions.
 
 Theoretical background
 ----------------------
 
-Properties of interest in the warm dense matter regime include, the equation-of-state data, which is the relation between the density, energy, temperature and pressure of a material :cite:`hugoniot`; the mean ionization state and the electron ionization energies, which tell us about how tightly bound the electrons are to the nuclei; and the electrical and thermal conductivities.
+Properties of interest in the warm dense matter regime include the equation-of-state data, which is the relation between the density, energy, temperature and pressure of a material :cite:`hugoniot`; the mean ionization state and the electron ionization energies, which tell us about how tightly bound the electrons are to the nuclei; and the electrical and thermal conductivities.
 These properties yield information pertinent to our understanding of stellar and planetary physics, the Earth's core, inertial confinement fusion, and more besides.
 To exactly obtain these properties, one needs (in theory) to determine the thermodynamic ensemble of the quantum states (the so-called *wave-functions*) representing the electrons and nuclei.
 Fortunately, they can be obtained with reasonable accuracy using models such as average-atom models; in this section, we elaborate on how this is done.
 
 We shall briefly review the key theory underpinning the type of average-atom models implemented in atoMEC. This is intended for readers without a background in quantum mechanics, to give some context to the purposes and mechanisms of the code.
 For a comprehensive derivation of this average-atom model, we direct readers to Ref. :cite:`PRR_AA`.
-The average-atom model we shall describe falls into a class of models known as *ion-sphere* models, which are the simplest (and still most widely-used) class of average-atom model.
+The average-atom model we shall describe falls into a class of models known as *ion-sphere* models, which are the simplest (and still most widely used) class of average-atom model.
 There are alternative (more advanced) classes of model such as *ion-correlation* :cite:`ioncorrelation` and *neutral pseudo-atom* models :cite:`NPA` which we have not yet implemented in atoMEC and thus we do not elaborate on them here.
 
-As demonstrated in Fig. ??, the idea of the ion-sphere model is to map a fully-interacting system of many electrons and nuclei into a set of independent atoms which do not interact explicity with any of the other spheres.
+As demonstrated in Fig. 1, the idea of the ion-sphere model is to map a fully interacting system of many electrons and nuclei into a set of independent atoms which do not interact explicity with any of the other spheres.
 Naturally, this depends on several assumptions and approximations, but there is formal justification for such a mapping :cite:`PRR_AA`; furthermore, there are many examples in which average-atom models have shown good agreement with more accurate simulations and experimental data :cite:`AA_pressure`, which further justifies this mapping.
 
 Although the average-atom picture is significantly simplified relative to the full many-body problem, even determining the wave-functions and their ensemble weights for an atom at finite temperature is a complex problem.
 Fortunately, DFT reduces this complexity further, by establishing that the electron *density* - a far less complex entity than the wave-functions - is sufficient to determine all physical observables.
-The most popular formulation of DFT, known as Kohn-Sham DFT (KS-DFT) :cite:`KS65`, allows us to construct the *fully-interacting* density from a *non-interacting* system of electrons, simplifying the problem still.
+The most popular formulation of DFT, known as Kohn-Sham DFT (KS-DFT) :cite:`KS65`, allows us to construct the *fully interacting* density from a *non-interacting* system of electrons, simplifying the problem still.
 Due to the spherical symmetry of the atom, the non-interacting electrons - known as KS electrons (or KS orbitals) - can be represented as a wave-function that is a product of radial and angular components,
 
 .. math::
@@ -146,14 +146,14 @@ where :math:`f_{nl}(\epsilon_{nl},\mu,\tau)` is the Fermi-Dirac distribution, gi
 	   
    f_{nl}(\epsilon_{nl},\mu,\tau) = \frac{1}{1+e^{(\epsilon_{nl}-\mu)/\tau}}\,,
 
-where :math:`\tau` is the temperature, and :math:`\mu` the chemical potential, which is determined by fixing the number of electrons to be equal to a pre-determined value (typically the nuclear charge :math:`Z`).
+where :math:`\tau` is the temperature, and :math:`\mu` the chemical potential, which is determined by fixing the number of electrons to be equal to a pre-determined value :math:`N_\textrm{e}` (typically equal to the nuclear charge :math:`Z`).
 The Fermi-Dirac distribution therefore assigns weights to the KS orbitals in the construction of the density, with the weight depending on their energy.
 
 Therefore, the KS potential which determines the KS orbitals via the ODE (:ref:`eq:kseqn`), is itself dependent on the KS orbitals.
 Consequently, the KS orbitals and its dependent quantities (the density and KS potential) must be determined via a so-called self-consistent field (SCF) procedure.
 An initial guess for the orbitals, :math:`X_{nl}^0(r)`, is used to construct the initial density :math:`n^0(r)` and potential :math:`v_\textrm{s}^0(r)`.
 The ODE (:ref:`eq:kseqn`) is then solved to update the orbitals.
-This process is iterated until some appropriately chosen quantities - in atoMEC the total free energy, density and KS potential - are converged, i.e. :math:`n^{i+1}(r)=n^i(r),\ v_\textrm{s}^{i+1}(r)=v_\textrm{s}^i(r),\ F^{i+1} = F^i` within some reasonable numerical tolerance.
+This process is iterated until some appropriately chosen quantities - in atoMEC the total free energy, density and KS potential - are converged, i.e. :math:`n^{i+1}(r)=n^i(r),\ v_\textrm{s}^{i+1}(r)=v_\textrm{s}^i(r),\ F^{i+1} = F^i`, within some reasonable numerical tolerance.
 In Fig. 2, we illustrate the life-cycle of the average-atom model described so far, including the SCF procedure.
 On the left-hand side of this figure, we show the physical choices and mathematical operations, and on the right-hand side, the representative classes and functions in atoMEC.
 In the following section, we shall discuss some aspects of this figure in more detail.
@@ -191,7 +191,7 @@ Code structure and details
 --------------------------
 
 In the following sections, we describe the structure of the code in relation to the physical problem being modelled.
-Average-atom models typically rely on various different parameters and approximations.
+Average-atom models typically rely on various parameters and approximations.
 In atoMEC, we have tried to structure the code in a way that makes clear which parameters come from the physical problem studied compared to choices of the model and numerical or algorithmic choices.
 
 
@@ -210,7 +210,7 @@ In average-atom models, there are typically three parameters defining the physic
 
 The mass density also directly corresponds to the mean distance between two nuclei (atomic centres), which in the average-atom model is equal to twice the radius of the atomic sphere, :math:`R_\textrm{WS}`.
 An additional physical parameter not mentioned above is the **net charge** of the material being considered, i.e. the difference between the nuclear charge :math:`Z` and the electron number :math:`N_\textrm{e}`.
-However, we almost always assume zero net charge in average-atom simulations (i.e. the number of electrons is equal to the atomic charge).
+However, we usually assume zero net charge in average-atom simulations (i.e. the number of electrons is equal to the atomic charge).
 
 In atoMEC, these physical parameters are controlled by the :code:`Atom` object.
 As an example, we consider Aluminium under ambient conditions, i.e. at room temperature, :math:`\tau=300\ \textrm{K}`, and normal metallic density, :math:`\rho_\textrm{m}=2.7\ \textrm{g cm}^{-3}`.
@@ -241,7 +241,7 @@ After the physical parameters are set, the next stage of the average-atom calcul
 As discussed, so far the only class of model implemented in atoMEC is the ion-sphere model.
 Within this model, there are still various choices to be made by the user.
 In some cases, these choices make little difference to the results, but in other cases they have significant impact; the user might have some physical intuition as to which is most important, or alternatively may want to run the same physical parameters with several different model parameters to examine the effects.
-Below we list some choices which are available in atoMEC, very approximately in decreasing order of impact (but this can depend strongly on the system under consideration):
+Below we list some choices which are available in atoMEC, approximately in decreasing order of impact (but this can depend strongly on the system under consideration):
 
 * the **boundary conditions** used to solve the KS equations
 * the treatement of the **unbound electrons**, which means those electrons not tightly bound to the nucleus, but rather delocalized over the whole atomic sphere
@@ -404,16 +404,16 @@ Case-study: Helium
 
 In this section, we consider an application of atoMEC in the WDM regime.
 Helium is the second most abundant element in the universe (after Hydrogen) and therefore understanding its behaviour under a wide range of conditions is important for our understanding of many astrophysical processes.
-Of particular interest are the conditions under which Helium is expected to undergo a transition from insulating to metallic behaviour in the outer layers of white dwarves, which are characterized by densities of around :math:`1-20 \textrm{ g cm}^{-3}` and temperatures of :math:`10-50` kK :cite:`Hellium_metal`.
+Of particular interest are the conditions under which Helium is expected to undergo a transition from insulating to metallic behaviour in the outer layers of white dwarfs, which are characterized by densities of around :math:`1-20 \textrm{ g cm}^{-3}` and temperatures of :math:`10-50` kK :cite:`Hellium_metal`.
 These conditions are a typical example of the WDM regime.
 Besides predicting the point at which the insulator-to-metallic transition occurs in the density-temperature spectrum, other properties of interest include equation-of-state data (relating pressure, density and temperature) and electrical conductivity.
 
-To calculate the insulator-to-metallic transition point, the key quantity is the the electronic *band-gap*.
+To calculate the insulator-to-metallic transition point, the key quantity is the electronic *band-gap*.
 The concept of band-structures is a complicated topic, which we try to briefly describe in layman's terms.
 In solids, electrons can occupy certain energy ranges - we call these the energy bands.
 In insulating materials, there is a gap between these energy ranges which electrons are forbidden from occupying - this is the so-called band-gap.
 In conducting materials, there is no such gap, and therefore electrons can conduct electricity because they can be excited into any part of the energy spectrum.
-Therefore, a very simple method to determine the insulator-to-metallic transition is determine the density at which the band-gap becomes zero.
+Therefore, a simple method to determine the insulator-to-metallic transition is determine the density at which the band-gap becomes zero.
 
 In Fig. 6, we plot the density-of-states (DOS) as a function of energy, for different densities and at fixed temperature :math:`\tau=50` kK.
 The DOS shows the energy ranges which the electrons are allowed to occpy; we also show the actual energies occupied by the electrons (according to Fermi-Dirac statistics) with the black dots.
@@ -463,12 +463,12 @@ The code required to generate the above results and plots can be found in `this 
 Conclusions and future work
 ---------------------------
 
-In this paper, we have presented atoMEC: an  average-atom code for studying materials under extreme conditions.
+In this paper, we have presented atoMEC: an  average-atom Python code for studying materials under extreme conditions.
 The open-source nature of atoMEC, and the choice to use (pure) Python as the programming language, is designed to improve the accessibility of average-atom models.
 
 We gave significant attention to the code structure in this paper, and tried as much as possible to connect the functions and objects in the code with the underyling theory.
-Hopefully, this not only improves atoMEC from a user perspective, but also facilitates new contributions from the wider average-atom, WDM, Python and SciPy communities.
-Another aim of the paper was to communicate how atoMEC benefits from a strong ecosystem of open source scientific libraries - especially the Python libraries NumPy, SciPy, joblib and mendeleev, as well as LIBXC.
+We hope that this not only improves atoMEC from a user perspective, but also facilitates new contributions from the wider average-atom, WDM and scientific Python communities.
+Another aim of the paper was to communicate how atoMEC benefits from a strong ecosystem of open-source scientific libraries - especially the Python libraries NumPy, SciPy, joblib and mendeleev, as well as LIBXC.
 
 We finish this paper by emphasizing that atoMEC is still in the early stages of development, and there are many opportunities to improve and extend the code.
 These include, for example:
