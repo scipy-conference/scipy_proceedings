@@ -3,20 +3,20 @@
 :institution: National Center for Atmospheric Research
 :corresponding:
 
-:author: Author 2
-:email: email 2
+:author: Michaela Sizemore
+:email: misi1684@ucar.edu
 :institution: National Center for Atmospheric Research
 
-:author: Author 3
-:email: email 3
+:author: Anissa Zacharias
+:email: anissaz@ucar.edu
 :institution: National Center for Atmospheric Research
 
-:author: Author 4
-:email: email 4
+:author: Alea Kootz
+:email: akootz@ucar.edu
 :institution: National Center for Atmospheric Research
 
-:author: Author 5
-:email: email 5
+:author: Heather Craker
+:email: hcraker@ucar.edu
 :institution: National Center for Atmospheric Research
 
 :author: John Clyne
@@ -348,8 +348,8 @@ involvement in our development lifecycle.
 Community engagement
 --------------------
 
-To further promote community engagement with the geoscience community, GeoCAT
-organizes and is involved several community events.
+To further promote engagement with the geoscience community, GeoCAT organizes
+and attends various community events.
 
 The GeoCAT team has also encouraged undergraduate and graduate student
 engagement in the Python ecosystem through participation in NCAR's Summer
@@ -361,9 +361,11 @@ summers.
 Project Pythia
 ==============
 
-The GeoCAT effort is also a part of the NSF funded project, Project Pythia.
-Project Pythia aims to provide a public, web-accessible training resource that will help educate earth scientists to more effectively use the Scientific Python Ecosystem and cloud computing to make sense of huge volumes of numerical scientific data.
+The GeoCAT effort is also a part of the NSF funded Project Pythia. Project
+Pythia aims to provide a public, web-accessible training resource that could
+help educate earth scientists to more effectively use the SPE and cloud
+computing for dealing with big data in geosciences. GeoCAT helps the Pythia
+development with content creation as well as infrastructure contributions.
 
-has contributed multiple Python tutorials to
-the web-based, community-owned, educational resources created through Project
-Pythia.
+GeoCAT has also contributed several Python tutorials to educational resources
+created through Project Pythia.
