@@ -2,15 +2,6 @@
 :email: wanlin.li@usherbrooke.ca
 :institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 
-:author: Aleksandr Koshkarov
-:email: aleksandr.koshkarov@usherbrooke.ca
-:institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
-:institution: Center of Artificial Intelligence, Astrakhan State University, Astrakhan, 414056, Russia
-
-:author: My-Linh Luu
-:email: luu.my-linh@courrier.uqam.ca 
-:institution: Department of Computer Science,  University of Quebec at Montreal, Montreal, QC, Canada
-
 :author: Nadia Tahiri
 :email: Nadia.Tahiri@USherbrooke.ca
 :institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
@@ -41,7 +32,6 @@ Several studies showed that COVID-19 cases and related climatic factors correlat
 In this study, we examine the geospatial lineage of SARS-CoV-2 by combining genetic data and metadata from associated sampling locations. Thus, an association between genetics and the geographic distribution of SARS-CoV-2 variants can be found. We focus on developing a new algorithm to find relationships between a reference tree (i.e., a tree of geographic species distributions, temperature trees, habitat precipitation trees, or others) with their genetic compositions. This new algorithm can help find which genes or which subparts of a gene are sensitive or favorable to a given environment.
 
 
-
 Problem statement and proposal
 ------------------------------
 
@@ -60,6 +50,7 @@ Populations living in different environments with varying climatic conditions ar
 In this paper, we focused on SARS-CoV-2 to understand the correlation between the occurrence of different variants and the climate environment. Identifying ways in which patterns of divergence within SARS-CoV-2 variants coincide with geographic features can be difficult for several reasons. 
 
 Most studies in phylogeography consider only genetic data without directly considering climatic data. They indirectly take this information as a basis for locating the habitat of the species. We have developed the first version of a phylogeography that integrates climate data. The sliding window strategy provides more robust results, as it particularly highlights the areas sensitive to climate adaptation. 
+
 
 Methods and Python scripts
 --------------------------
@@ -146,6 +137,13 @@ The sliding window strategy can detect genetic fragments depending on environmen
 
    The workflow of the algorithm. The operations within this workflow include several blocks. The blocks are highlighted by different three colors. The first block (the light pink color) is responsible for creating the trees based on the climate data. The second block (the dark yellow color) performs the function of input parameter validation. The third block (the light-yellow color) allows the creation of phylogenetic trees. This is the most important block and the basis of this study, through the results of which the user receives the output data with the necessary calculations. :label:`fig1`
 
+
+Algorithmic complexity
+----------------------
+The complexity of the algorithm described in the previous section depends on both the complexity of the various external programs used and the number of windows that the alignment can contain, plus one for the total alignment that the program will process. 
+
+
+
 Dataset
 -------
 Through significant advances in the generation and exchange of SARS-CoV-2 genomic data in real time, international spread of lineages is tracked and recorded on the website (cov-lineages.org/global_report.html) (:cite:`OHPWBKU21`). In this study, we focused on the 38 complete SARS-CoV-2 lineages collected from their first reported location at their earliest reported date (Table 1). 
@@ -231,7 +229,6 @@ As a future work on the project, we plan to incorporate the following additional
 
 Acknowledgements
 ----------------
-
 The authors thank the members of PyCon Canada for their valuable comments on this project. We would like to thank SciPy conference, Dillon Niederhut, David Shupe, Chris Calloway, and anonymous reviewers for their valuable comments on this manuscript. This work was supported by Natural Sciences and Engineering Research Council of Canada and Fonds de Recherche sur la Nature et Technologies of Quebec
 
 
