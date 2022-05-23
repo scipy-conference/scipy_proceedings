@@ -142,7 +142,21 @@ Algorithmic complexity
 ----------------------
 The complexity of the algorithm described in the previous section depends on both the complexity of the various external programs used and the number of windows that the alignment can contain, plus one for the total alignment that the program will process. 
 
+Let us recall the different complexities of the different external programs used in the algorithm.
 
+- SeqBoot program: :math:`\mathcal{O}(r \times n \times SA)`
+- Protdist program: :math:`\mathcal{O}(n^2)`
+- Neighbor program: :math:`\mathcal{O}(n^3)`
+- Consense program: :math:`\mathcal{O}(r \times n^2)`
+- RaxML program: :math:`\mathcal{O}(e \times n \times SA)`
+- RF program: :math:`\mathcal{O}(n^2)`
+
+Where :math:`n` is a number of species (or taxa), :math:`r` is a number of replicates, :math:`SA` is a size of the multiple sequence alignment, and :math:`e` is a number of refinement steps performed by the RaxML algorithm. 
+
+
+_Lemma_ For all :math:`SA \in {N^*}` and for all :math:`WS, S \in {N}` then :math:`nb = \left\lfloor \frac {SA - WS}{S} + 1 \right\rfloor`.
+
+Where :math:`WS` is a window size, and :math:`S` is the spep.
 
 Dataset
 -------
