@@ -314,14 +314,14 @@ Figure :ref:`fig6raijin` shows the regularly structured “latitude-longitude”
 grids versus a few unstructured grid models.
 
 .. figure:: figures/fig6_raijin.png
-   :scale: 28%
+   :scale: 20%
    :figclass: bht
 
    Regular grid (left) vs MPAS-A & CAM-SE grids :label:`fig6raijin`
 
 The UXarray project has implemented data input/output functions for UGRID,
 SCRIP, and Exodus, as well as methods for surface area and integration
-calculations so far. The team is currently conducting open discussions
+calculations so far.The team is currently conducting open discussions
 (through Github Discussions) with community members, who are interested
 in unstructured grids research and development, intha order to prioritize
 data analysis operators that will be implemented throughout the project
@@ -332,23 +332,24 @@ Open Development
 
 To ensure community involvement at any level in the development lifecycle,
 GeoCAT is committed to an open development model. With this model, we not only
-have our code-base open-sourced but also ensure most of the project assets that are
-directly related to the software development lifecycle are publicly accessible.
-In order to implement this model, GeoCAT provides all of its software tools as
-Github repositories with publicly accessible Github project boards and roadmaps,
+have our project stack open-sourced but also ensure most of the project assets
+that are directly related to the software development lifecycle are publicly
+accessible. In order to implement this model, GeoCAT provides all of its software
+tools as Github repositories with public Github project boards and roadmaps,
 issue tracking and development reviewing, comprehensive documentation for
-users/contributors such as Contributor’s Guide and toolkit-specific
-documentation, along with community announcements on the GeoCAT blog.
-Furthermore, GeoCAT encourages community feedback and contribution at any level
-with inclusive and welcoming language.
+users/contributors such as Contributor’s Guide :cite:`geocatcontribguide` and
+toolkit-specific documentation, along with community announcements on the GeoCAT
+blog. Furthermore, GeoCAT encourages community feedback and contribution at any
+level with inclusive and welcoming language. As a result of this, numerous
+community requests and feedback have played significant role in forming/revising
+GeoCAT roadmap and projects' scope. We are hoping to increase the community
+involvement in our development lifecycle.
 
 Community engagement
 --------------------
 
-Additionally, to further promote user engagement with the
-geoscience community, GeoCAT has contributed multiple Python tutorials to
-the web-based, community-owned, educational resources created through Project
-Pythia.
+To further promote community engagement with the geoscience community, GeoCAT
+organizes and is involved several community events.
 
 The GeoCAT team has also encouraged undergraduate and graduate student
 engagement in the Python ecosystem through participation in NCAR's Summer
@@ -360,6 +361,9 @@ summers.
 Project Pythia
 ==============
 
-The GeoCAT effort is also a part of the NSF funded project, Project Pythia. Project Pythia aims to provide a public, web-accessible training resource that will help educate earth scientists to more effectively use the Scientific Python Ecosystem and cloud computing to make sense of huge volumes of numerical scientific data.
+The GeoCAT effort is also a part of the NSF funded project, Project Pythia.
+Project Pythia aims to provide a public, web-accessible training resource that will help educate earth scientists to more effectively use the Scientific Python Ecosystem and cloud computing to make sense of huge volumes of numerical scientific data.
 
-
+has contributed multiple Python tutorials to
+the web-based, community-owned, educational resources created through Project
+Pythia.
