@@ -167,28 +167,47 @@ The Pango lineage nomenclature system is hierarchical and fine-scaled and is des
 
    \begin{table*}
 
-     \begin{longtable*}{|l|l|l|l||l|l|l|l|}
-        \hline
-         Lineage & Most Common Country                & Earliest Date & Accession Number & Lineage & Most Common Country & Earliest Date & Accession Number\\ \hline
-         A.2.3     & United Kingdom 100.0\% & 2020-03-12    & OW470304.1                                                    & L.2     & Netherlands 73.0\%   & 2020-03-23    & LR883305                                                      \\ \hline
-         AE.2      & Bahrain 100.0\%        & 2020-06-23    & MW341474                                                      & L.4     & USA 100.0\%          & 2020-06-29    & OK546730                                                      \\ \hline
-         AH.1      & Switzerland 100.0\%    & 2021-01-05    & OD999779                                                      & M.2     & Switzerland 90.0\%   & 2020-10-26    & OU009929                                                      \\ \hline
-         AK.2      & Germany   100.0\%      & 2020-09-19    & OU077014                                                      & N.1     & USA   91.0\%         & 2020-03-25    & MT520277                                                      \\ \hline
-         B.1.1.107 & United Kingdom 100.0\% & 2020-06-06    & OA976647                                                      & N.3     & Argentina   96.0\%   & 2020-04-17    & MW633892                                                      \\ \hline
-         B.1.1.172 & USA   100.0\%          & 2020-04-06    & MW035925                                                      & N.4     & Chile   92.0\%       & 2020-03-25    & MW365278                                                      \\ \hline
-         BA.2.24   & Japan   99.0\%         & 2022-01-27    & BS004276                                                      & N.6     & Chile   98.0\%       & 2020-02-16    & MW365092                                                      \\ \hline
-         C.1       & South  Africa 93.0\%   & 2020-04-16    & OM739053.1                                                    & N.7     & Uruguay   100.0\%    & 2020-06-18    & MW298637                                                      \\ \hline
-         C.17      & Egypt 69.0\%           & 2020-04-04    & MZ380247                                                      & N.8     & Kenya   94.0\%       & 2020-06-23    & OK510491                                                      \\ \hline
-         C.20      & Switzerland 85.0\%     & 2020-10-26    & OU007060                                                      & N.9     & Brazil   96.0\%      & 2020-09-25    & MZ191508                                                      \\ \hline
-         C.23      & USA   90.0\%           & 2020-05-11    & ON134852                                                      & P.1.13  & USA   100.0\%        & 2021-02-24    & OL522465                                                      \\ \hline
-         C.31      & USA   87.0\%           & 2020-08-11    & OM052492                                                      & P.1.7.1 & Peru 94.0\%          & 2021-02-07    & OK594577                                                      \\ \hline
-         C.36      & Egypt 34.0\%           & 2020-03-13    & MW828621                                                      & P.2     & Brazil   58.0\%      & 2020-04-13    & ON148325                                                      \\ \hline
-         C.37      & Peru 43.0\%            & 2021-02-02    & OL622102                                                      & P.3     & Philippines   83.0\% & 2021-01-08    & OL989074                                                      \\ \hline
-         C.7       & Denmark 100.0\%        & 2020-05-11    & OU282540                                                      & P.7     & Brazil   71.0\%      & 2020-07-01    & ON148327                                                      \\ \hline
-         D.2       & Australia 100.0\%      & 2020-03-19    & MW320730                                                      & Q.2     & Italy 99.0\%         & 2020-12-15    & OU471040                                                      \\ \hline
-         D.3       & Australia 100.0\%      & 2020-06-14    & MW320869                                                      & Q.3     & USA   99.0\%         & 2020-07-08    & ON129429                                                      \\ \hline
-         D.4       & United Kingdom 80.0\%  & 2020-08-13    & OA967683                                                      & Q.6     & France   92.0\%      & 2021-03-02    & ON300460                                                      \\ \hline
-         D.5       & Sweden 65.0\%          & 2020-10-12    & OU370897                                                      & Q.7     & France   86.0\%      & 2021-01-29    & ON442016                                                      \\ \hline
+     \begin{longtable*}{|l|l|l|l|}
+         \hline
+         Lineage & Most Common Country                & Earliest Date & Sequence Accession \\ \hline
+         A.2.3 & United Kingdom   100.0\% & 2020-03-12 & OW470304.1 \\ \hline
+         AE.2      & Bahrain 100.0\%          & 2020-06-23 & MW341474  \\ \hline
+         AH.1      & Switzerland 100.0\%      & 2021-01-05 & OD999779  \\ \hline
+         AK.2    & Germany 100.0\%     & 2020-09-19    & OU077014 \\ \hline
+         B.1.1.107 & United Kingdom   100.0\% & 2020-06-06 & OA976647  \\ \hline
+         B.1.1.172 & USA 100.0\%              & 2020-04-06 & MW035925 \\ \hline
+         BA.2.24   & Japan 99.0\%             & 2022-01-27 & BS004276 \\ \hline
+         C.1   & South Africa 93.0\%      & 2020-04-16 & OM739053.1  \\ \hline
+         C.7   & Denmark 100.0\%          & 2020-05-11 & OU282540    \\ \hline
+         C.17  & Egypt 69.0\%             & 2020-04-04 & MZ380247    \\ \hline
+         C.20  & Switzerland 85.0\%       & 2020-10-26 & OU007060    \\ \hline
+         C.23  & USA 90.0\%               & 2020-05-11 & ON134852    \\ \hline
+         C.31  & USA 87.0\%               & 2020-08-11 & OM052492    \\ \hline
+         C.36  & Egypt 34.0\%             & 2020-03-13 & MW828621    \\ \hline
+         C.37  & Peru 43.0\%              & 2021-02-02 & OL622102    \\ \hline
+         D.2   & Australia 100.0\%        & 2020-03-19 & MW320730    \\ \hline
+         D.3   & Australia 100.0\%        & 2020-06-14 & MW320869    \\ \hline
+         D.4   & United Kingdom   80.0\%  & 2020-08-13 & OA967683    \\ \hline
+         D.5   & Sweden 65.0\%            & 2020-10-12 & OU370897    \\ \hline
+         Q.2   & Italy 99.0\%             & 2020-12-15 & OU471040    \\ \hline
+         Q.3   & USA 99.0\%               & 2020-07-08 & ON129429    \\ \hline
+         Q.6   & France 92.0\%            & 2021-03-02 & ON300460    \\ \hline
+         Q.7   & France 86.0\%            & 2021-01-29 & ON442016    \\ \hline
+         L.2   & Netherlands 73.0\%       & 2020-03-23 & LR883305    \\ \hline
+         L.4     & USA 100.0\% & 2020-06-29  & OK546730  \\ \hline
+         N.1       & USA 91.0\%               & 2020-03-25 & MT520277 \\ \hline
+         N.3       & Argentina 96.0\%         & 2020-04-17 & MW633892 \\ \hline
+         N.4       & Chile 92.0\%             & 2020-03-25 & MW365278 \\ \hline
+         N.6       & Chile 98.0\%             & 2020-02-16 & MW365092 \\ \hline
+         N.7       & Uruguay 100.0\%          & 2020-06-18 & MW298637 \\ \hline
+         N.8       & Kenya 94.0\%             & 2020-06-23 & OK510491 \\ \hline
+         N.9       & Brazil 96.0\%            & 2020-09-25 & MZ191508 \\ \hline
+         M.2       & Switzerland 90.0\%       & 2020-10-26 & OU009929 \\ \hline
+         P.1.7.1   & Peru 94.0\%              & 2021-02-07 & OK594577 \\ \hline
+         P.1.13    & USA 100.0\%              & 2021-02-24 & OL522465 \\ \hline
+         P.2       & Brazil 58.0\%            & 2020-04-13 & ON148325 \\ \hline
+         P.3       & Philippines 83.0\%       & 2021-01-08 & OL989074 \\ \hline
+         P.7       & Brazil 71.0\%            & 2020-07-01 & ON148327 \\ \hline
      \end{longtable*}
 
      \caption{SARS-CoV-2 lineages analyzed. The lineage assignments covered in the table were last updated on March 1, 2022. Among all Pango lineages of SARS-CoV-2, 38 lineages were analyzed. Corresponding sequencing data were found in the NCBI database based on the date of earliest detection and country of most common. The table also marks the percentage of the virus in the most common country compared to all countries where the virus is present. \DUrole{label}{quanitities-table}}
