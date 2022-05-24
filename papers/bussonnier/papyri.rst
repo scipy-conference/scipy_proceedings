@@ -304,7 +304,7 @@ values such as indexing, searching, bookmarks, etc.), as seen in rustsdocs, devd
 
 Overall, building cost depends on the three stakeholders. For example, building SciPy & NumPy
 documentation IRD files on a 2021 Macbook Pro M1 (base model), including executing
-examples in most docstrings and type inferring most examples (with most variables semanticly inferred) can take several minutes. **Is that good ? Comparison with other docs building ?Can we make a comment on this ? **
+examples in most docstrings and type inferring most examples (with most variables semanticly inferred) can take several minutes. **Is that good ? Comparison with other docs building ?Can we make a comment on this ?**
 
 
 Current implementation
