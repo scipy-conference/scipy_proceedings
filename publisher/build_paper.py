@@ -12,6 +12,7 @@ import shutil
 import io
 
 from distutils import dir_util
+from pathlib import Path
 
 from writer import writer
 from conf import papers_dir, output_dir, status_file, static_dir
@@ -224,14 +225,24 @@ def build_paper(paper_id, start=1):
     page_count(pdflatex_stdout, out_path)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: build_paper.py paper_directory")
-        sys.exit(-1)
+    if len(sys.argv) > 2:
+        sys.exit("Usage: build_paper.py paper_directory")
 
-    in_path = os.path.normpath(sys.argv[1])
+    if len(sys.argv) == 1:
+        pths = list((Path(__file__).parent.parent / "papers").glob("*"))
+        pths = [p for p in pths if p.name not in {"00_bibderwalt", "00_vanderwalt"}]
+        if len(pths) == 1:
+            pth = str(pths[0])
+        else:
+            sys.exit(
+                "Couldn't autodetect folder, please use: build_paper.py paper_directory"
+            )
+    else:
+        pth == sys.argv[1]
+
+    in_path = os.path.normpath(pth)
     if not os.path.isdir(in_path):
-        print("Cannot open directory: %s" % in_path)
-        sys.exit(-1)
+        sys.exit("Cannot open directory: %s" % in_path)
 
     paper_id = os.path.basename(in_path)
     build_paper(paper_id)
