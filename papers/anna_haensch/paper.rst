@@ -8,9 +8,10 @@
 :institution: Tufts University
 :institution: Data Intensive Studies Center
 
-------------------------------------------------
-Python for Global Applications
-------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+Python for Global Applications:  teaching scientific Python in context to law and diplomacy students
+-----------------------------------------------------------------------------------------------------
+
 
 .. class:: abstract
 
@@ -100,7 +101,7 @@ We broke the course into three modules, each with focused reading/journaling top
    :figclass: w
    :scale: 40%
 
-   This is a course outline for a 13-week semester with two 70 minute instructional blocks each week. Course readings are highlighted in gray and policy project benchmarks are highlighted in green. :label:`outline`
+   Course outline for a 13-week semester with two 70 minute instructional blocks each week. Course readings are highlighted in gray and policy project benchmarks are highlighted in green. :label:`outline`
 
 Getting and Cleaning Data
 **************************
@@ -139,7 +140,7 @@ Formal assessment was based on four components, already alluded to throughout th
    :figclass: w
    :scale: 35%
 
-   This is a rubric for the policy project that formed a core component of the formal assessment of students throughout the course. :label:`rubric`
+   Rubric for the policy project that formed a core component of the formal assessment of students throughout the course. :label:`rubric`
 
 The policy project culminated with in-class “micro presentations” and a policy paper.  We dedicated two days of class in week 13 for in-class presentations, for which each student presented one slide consisting of a descriptive title, one visualization, and several “key takeaways” from the project.  This extremely restrictive format helped students to think critically about the narrative information conveyed in a visualization, and was designed to create time for robust conversation around each presentation.  
 
