@@ -209,20 +209,38 @@ In this section we describe in more details how Papyri has been implemented to a
 1) Making documentation a multi-step process
 --------------------------------------------
 
-When building documentation, one can either customise the ``.. code-block:`` directive to execute/reformat entries, or create a ``:rc:`` role to link to configure parameters, several custom directives and plug-ins to simplify the rendering (including creating references, auto-genering documentation)
-and sync with libraries source code. Customisation made by documentation maintainers then usually falls into the following two categories:
+.. When building documentation, one can either customise the ``.. code-block:`` directive to execute/reformat entries, or create a ``:rc:`` role to link to configure parameters, several custom directives and plug-ins to simplify the rendering (including creating references, auto-genering documentation)
+.. and sync with libraries source code. 
+
+
+When using current documentation tools, customisation made by maintainers usually
+falls into the following two categories:
+
 - simpler input convenience,
 - modification of final rendering.
 
-This first category often requires arbitrary code execution and must import the library currently being built. The second one offers a more user friendly environment (but requires to implement user preferences). For example, `sphinx-copybutton` adds a button to easily copy code snippets in a single click, and `pydata-sphinx-theme` and `sphinx-rtd-dark-mode` provide a different appearance. As a consequence, developers must make choices on
-behalf of their end-users: this may concern syntax highlights, type annotations display, light/dark theme. 
+This first category often requires arbitrary code execution and must import the
+library currently being built. For example implicit imports of ``..
+code-block:``, or custom ``:rc:`` directive). The second one offers a more user
+friendly environment. For example,
+`sphinx-copybutton` **Add ref** adds a button to easily copy code snippets in a single
+click, and `pydata-sphinx-theme` or `sphinx-rtd-dark-mode` **add REF** provide a different
+appearance. As a consequence, developers must make choices on behalf of their
+end-users: this may concern syntax highlights, type annotations display,
+light/dark theme. 
 
-Being able to modify extensions and re-render the
-documentation without the rebuilding and executing stage is quite appealing. Thus, the building phase in Papyri (collecting documentation
-information) is separated from the rendering phase (Objective (c)): at this step, Papyri has no knowledge and no configuration options that permit to modify the final appearance of the final documentation. Additionally, the optional rendering process has no knowledge of the building step, and
-can be run without accessing the libraries involved.
+Being able to modify extensions and re-render the documentation without the
+rebuilding and executing stage is quite appealing. Thus, the building phase in
+Papyri (collecting documentation information) is separated from the rendering
+phase (Objective (c)): at this step, Papyri has no knowledge and no
+configuration options that permit to modify the appearance of the final
+documentation. Additionally, the optional rendering process has no knowledge of
+the building step, and can be run without accessing the libraries involved.
 
-This technique is commonly used in the field of compilers **add ref**, but to our knowledge, it has not been implemented for documentation in the Python ecosystem. As mentioned before, this separation is key to achieve many features proposed in Objectives (c), (d).
+This technique is commonly used in the field of compilers **add ref**, but to
+our knowledge, it has not been implemented for documentation in the Python
+ecosystem. As mentioned before, this separation is key to achieve many features
+proposed in Objectives (c), (d).
 
 2) Intermediate Representation for Documentation (IRD)
 ------------------------------------------------------
@@ -231,9 +249,13 @@ IRD format
 ~~~~~~~~~~
 .. We borrow the name IR again from compilers.
 
-Papyri relies on standard interchangeable "Intermediate
-Representation for Documentation format" (IRD). This allows to reduce operation complexity of the documentation build. For example, given M documentation producers and N renderers, the current documentation build is O(MN). If each producer only cares about producing IRD, and if each renderer only consumes it, then one can reduce to O(M+N).
-Additionally, one can take IRD from multiple producers at once, and render them all to a single target, breaking the silos between libraries.
+Papyri relies on standard interchangeable "Intermediate Representation for
+Documentation format" (IRD). This allows to reduce operation complexity of the
+documentation build. For example, given M documentation producers and N
+renderers, the documentation build would be O(MN). If each producer only cares
+about producing IRD, and if each renderer only consumes it, then one can reduce
+to O(M+N). Additionally, one can take IRD from multiple producers at once, and
+render them all to a single target, breaking the silos between libraries.
 
 At the moment, IRD files are currently separated into four main categories:**provide a sketch or example with all ??**
 
@@ -245,7 +267,7 @@ At the moment, IRD files are currently separated into four main categories:**pro
   exist in another library. Some extra per-object meta information like
   file/line number of definitions can be stored as well. 
 - Narrative files are similar to API files, except that they do not
-  represent a given object, but posess a previous/next page, and are organised
+  represent a given object, but possesses a previous/next page, and are organised
   in an ordered tree related to the table of content. 
 - Examples files are a non-ordered collection of files.
 - Assets files are untouched binary blobs **find better word** that can be referenced by any of the above
