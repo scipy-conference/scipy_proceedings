@@ -226,7 +226,7 @@ For this study, the meteorological parameters of the selected countries were con
 
 .. figure:: Fig2.png
 
-   Climatic conditions of each lineage in most common country at the time of first detection. The climate factors involved include Temperature at 2 Meters (C), Specific Humidity at 2 Meters (g/kg), Precipitation Corrected (mm/day), Wind Speed at 10 Meters (m/s), and All Sky Surface Shortwave Downward Irradiance $(kW-hr/m^2/day)$. :label:`fig2`
+   Climatic conditions of each lineage in most common country at the time of first detection. The climate factors involved include Temperature at 2 Meters $(C)$, Specific Humidity at 2 Meters (g/kg), Precipitation Corrected $(mm/day)$, Wind Speed at 10 Meters $(m/s)$, and All Sky Surface Shortwave Downward Irradiance $(kW-hr/m^2/day)$. :label:`fig2`
 
 
 Results
