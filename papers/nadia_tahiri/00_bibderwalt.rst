@@ -38,14 +38,14 @@ Problem statement and proposal
 Phylogeography is the study of the principles and processes that govern the distribution of genealogical lineages, particularly at the intraspecific level. The geographic distribution of species is often correlated with the patterns associated with the species' genes (:cite:`A00`, :cite:`KM02`).
 In a phylogeographic study, three major processes should be considered (:cite:`N92`), which are:
 
-1.	Genetic drift is the result of allele sampling errors. These errors are due to generational transmission of alleles and geographical barriers. Genetic drift is a function of the size of the population. Indeed, the larger the population, the lower the genetic drift. This is due to the ability to maintain genetic diversity in the original population. By convention, we say that an allele is fixed if it reaches the frequency of 100%, and that it is lost if it reaches the frequency of 0%.
+1.	Genetic drift is the result of allele sampling errors. These errors are due to generational transmission of alleles and geographical barriers. Genetic drift is a function of the size of the population. Indeed, the larger the population, the lower the genetic drift. This is explained by the ability to maintain genetic diversity in the original population. By convention, we say that an allele is fixed if it reaches the frequency of 100%, and that it is lost if it reaches the frequency of 0%.
 2.	Gene flow or migration is an important process for conducting a phylogeographic study. It is the transfer of alleles from one population to another, increasing intrapopulation diversity and decreasing interpopulation diversity.
 3.	There are many selections in all species; here we indicate the two most important of them, if they are essential for a phylogeographic study.  
       
       a. Sexual selection is a phenomenon resulting from an attractive characteristic between two species. Therefore, this selection is a function of the size of the population. 
       b. Natural selection is a function of fertility, mortality, and adaptation of a species to a habitat.
 
-Populations living in different environments with varying climatic conditions are subject to pressures that can lead to evolutionary divergence and reproductive isolation (:cite:`OS98`; :cite:`S01`).  Phylogeny and geography are then correlated. This study, therefore, aims to present an algorithm to show the possible correlation between certain genes or gene fragments and the geographical distribution of species.
+Populations living in different environments with varying climatic conditions are subject to pressures that can lead to evolutionary divergence and reproductive isolation (:cite:`OS98`; :cite:`S01`). Phylogeny and geography are then correlated. This study, therefore, aims to present an algorithm to show the possible correlation between certain genes or gene fragments and the geographical distribution of species.
 
 In this paper, we focused on SARS-CoV-2 to understand the correlation between the occurrence of different variants and the climate environment. Identifying ways in which patterns of divergence within SARS-CoV-2 variants coincide with geographic features can be difficult for several reasons. 
 
