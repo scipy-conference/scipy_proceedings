@@ -136,11 +136,11 @@ as well as shows failures, if any, with the documentation rendering process. Fig
 of the software tool distributed through NCAR's Conda channel and PyPI, respectively.
 The "LICENSE" badge provides a link to our software licenses, which is Apache License
 version 2.0 for all of the GeoCAT stack that enables the redistribution of the
-open-source software products on an "AS IS" basis. Finally, to provide reproducibility
-of our software products (either for the latest or any older version), we publish
-version-specific Digital Object Identifiers (DOIs), which can be accessed through the
-"DOI" badge. This allows the end-user to accurately cite the specific version of the
-GeoCAT tools they used for scientific/research purposes.
+open-source software products on an "AS IS" basis :cite:`apache`. Finally, to provide
+reproducibility of our software products (either for the latest or any older version),
+we publish version-specific Digital Object Identifiers (DOIs), which can be accessed
+through the "DOI" badge. This allows the end-user to accurately cite the specific
+version of the GeoCAT tools they used for scientific/research purposes.
 
 .. figure:: figures/fig1_badges.png
    :scale: 35%
@@ -342,21 +342,39 @@ toolkit-specific documentation, along with community announcements on the GeoCAT
 blog. Furthermore, GeoCAT encourages community feedback and contribution at any
 level with inclusive and welcoming language. As a result of this, numerous
 community requests and feedback have played significant role in forming/revising
-GeoCAT roadmap and projects' scope. We are hoping to increase the community
-involvement in our development lifecycle.
+GeoCAT roadmap and projects' scope.
 
 Community engagement
 --------------------
 
 To further promote engagement with the geoscience community, GeoCAT organizes
-and attends various community events.
+and attends various community events. First of all, scientific conferences and
+meetings are great venues for such a scientific software engineering project
+to share updates and progress with the community. For instance, the American
+Meteorological Society (AMS) Annual Meeting and American Geophysical Union
+(AGU) Fall Meeting are two significant scientific events that GeoCAT has
+always been presented by one or multiple publications since its birth to
+inform the community. The annual Scientific Computing with Python (SciPy)
+conference is another great fit to showcase what GeoCAT has been conducting
+in geoscience. The team also attended The International Conference for High
+Performance Computing, Networking, Storage, and Analysis (SC) a few times to
+keep up-to-date with the industry state-of-the-arts in these technologies.
 
-The GeoCAT team has also encouraged undergraduate and graduate student
-engagement in the Python ecosystem through participation in NCAR's Summer
-Internships in Parallel Computational Science (SIParCS). GeoCAT-examples and
+Creating internship projects is another way of improving community
+interactions as it triggers collaboration through GeoCAT, institutions,
+students, and university in general. The GeoCAT team, thus,encourages
+undergraduate and graduate student engagement in the Python ecosystem
+through participation in NCAR's Summer Internships in Parallel Computational
+Science (SIParCS). Such programs are quite beneficial for both students and
+scientific software development teams. To exemplify, GeoCAT-examples and
 GeoCAT-viz has received significant contributions through NCAR's Summer
-Internships in Parallel Computational Science (SIParCS) in 2020 and 2021
-summers.
+SIParCS in 2020 and 2021 summers (i.e. tens of visualization examples as
+well as improtant infrastructural changes were made available by our
+interns). Furthermore, the team has created three essential and one
+collaboration project through SIParCS 2022 summer through which advanced
+geoscientific visualization, unstructured grid visualization and data
+analysis, Fortran to Python algorithm and code development, as well as
+GPU optimization for GeoCAT-comp routines will be investigated.
 
 Project Pythia
 ==============
@@ -366,6 +384,9 @@ Pythia aims to provide a public, web-accessible training resource that could
 help educate earth scientists to more effectively use the SPE and cloud
 computing for dealing with big data in geosciences. GeoCAT helps the Pythia
 development with content creation as well as infrastructure contributions.
-
-GeoCAT has also contributed several Python tutorials to educational resources
-created through Project Pythia.
+GeoCAT has also contributed several Python tutorials (such as Numpy,
+Matplotlib, Cartopy, etc.) to educational resources created through Project
+Pythia. These materials consist of live tutorial sessions, interactive
+Jupyter notebook demonstrations, Q&A sessions, as well as published video
+recording of the event on Pythia's Youtube channel. As a result, it helps
+us engage with the community through multiple channels.
