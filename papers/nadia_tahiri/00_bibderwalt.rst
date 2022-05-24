@@ -29,7 +29,7 @@ The global pandemic caused by severe acute respiratory syndrome coronavirus 2 (S
 
 Several studies showed that COVID-19 cases and related climatic factors correlate significantly with each other (:cite:`[OCFC20]`; :cite:`SDPMS20`; :cite:`SMSKSGB22`). :cite:`OCFC20` reported a decrease in the rate of SARS-CoV-2 progression with the onset of spring and summer in the northern hemisphere. :cite:`SDPMS20` suggested a negative correlation between mean temperature by country and the number of SARS-CoV-2 infections, along with a positive correlation between rainfall and SARS-CoV-2 transmission. This contrasts with the results of the study by :cite:`SMSKSGB22`, which showed that an increase in temperature led to an increase in the spread of SARS-CoV-2. The results of :cite:`CPKGWBB21` imply that a country located 1000 km closer to the equator can expect 33% fewer cases of SARS-CoV-2 per million population. Some virus variants may be more stable in environments with specific climatic factors. :cite:`SMSKSGB22` compared mutation patterns of SARS-CoV-2 with time series of changes in precipitation, humidity, and temperature. They suggested that temperatures between 43°F and 54°F, humidity of 67-75%, and precipitation of 2-4 mm may be the optimal environment for the transition of the mutant form from D614 to G614.
 
-In this study, we examine the geospatial lineage of SARS-CoV-2 by combining genetic data and metadata from associated sampling locations. Thus, an association between genetics and the geographic distribution of SARS-CoV-2 variants can be found. We focus on developing a new algorithm to find relationships between a reference tree (i.e., a tree of geographic species distributions, temperature trees, habitat precipitation trees, or others) with their genetic compositions. This new algorithm can help find which genes or which subparts of a gene are sensitive or favorable to a given environment.
+In this study, we examine the geospatial lineage of SARS-CoV-2 by combining genetic data and metadata from associated sampling locations. Thus, an association between genetics and the geographic distribution of SARS-CoV-2 variants can be found. We focus on developing a new algorithm to find relationships between a reference tree (i.e., a tree of geographic species distributions, a temperature tree, a habitat precipitation tree, or others) with their genetic compositions. This new algorithm can help find which genes or which subparts of a gene are sensitive or favorable to a given environment.
 
 
 Problem statement and proposal
@@ -265,9 +265,6 @@ The authors thank the members of PyCon Canada for their valuable comments on thi
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
 .. [A00] Avise, J. C. (2000). Phylogeography: the history and formation of species. Harvard university press. DOI: https://doi.org/10.1093/icb/41.1.134  
 .. [CPKGWBB21] Chen, S., Prettner, K., Kuhn, M., Geldsetzer, P., Wang, C., Bärnighausen, T., & Bloom, D. E. (2021). Climate and the spread of COVID-19. Scientific Reports, 11(1), 1-6. DOI: https://doi.org/10.1038/s41598-021-87692-z  
 .. [CRADD22] Cascella, M., Rajnik, M., Aleem, A., Dulebohn, S. C., & Di Napoli, R. (2022). Features, evaluation, and treatment of coronavirus (COVID-19). Statpearls [internet]. 
