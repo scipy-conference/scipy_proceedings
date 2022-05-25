@@ -464,7 +464,7 @@ experiments shall be run to further analyze this.
    \end{tabular}
    }
    \caption{A summary of segmentation scores on test data for a base U-Net model, ZCA+U-Net, SAE+U-Net, and a composite model, with various feature extraction hyperparameters. The best result for each scoring metric is in bold.}
-   \label{fig:results}
+   \DUrole{label}{fig:results}
    \end{figure}
 
 The base U-Net does outperform the others in precision, however. From an
@@ -489,7 +489,7 @@ segmentation.
    \end{tabular}
    }
    \caption{Comparison of predicted masks and ground truth for three test images. ZCA mapped images with $\epsilon=1\mathrm{e}-4$ and SAE reconstructions with $\alpha=1\mathrm{e}-3$ are used where applicable.} 
-   \label{fig:test_images}
+   \DUrole{label}{fig:testimages}
    \end{figure}
    \end{center}
 
