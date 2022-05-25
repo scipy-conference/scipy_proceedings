@@ -1,10 +1,19 @@
 :author: Meekail Zain
 :email: meekail.zain@uga.edu
 :institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+:corresponding:
+:equal-contributor:
 
 :author: Eric Miller
 :email: EricMiller@uga.edu
 :institution: Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA
+:corresponding:
+:equal-contributor:
+
+:author: Shannon P Quinn
+:email: spq@uga.edu
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+:institution: Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA
 
 :bibliography: refs
 
