@@ -33,8 +33,8 @@ Pylira: deconvolution of images in the presence of Poisson noise
 
 .. class:: abstract
 
-    All physical and astronomical imaging observations are affected by the limited angular
-    resolution of the camera and telescope systems, and the recovery of the true image is limited by
+    All physical and astronomical imaging observations are degraded by the limited angular
+    resolution of the camera and telescope systems. The recovery of the true image is limited by
     both how well the instrument characteristics are known and  by the magnitude of measurement noise.
     In the case of a high signal to noise ratio data, the image can be sharpened or “deconvolved” robustly
     by using established standard methods such as the Wiener Filter or the Richardson-Lucy method. More recently,
@@ -96,30 +96,52 @@ Deconvolution Methods
 Richardson-Lucy
 +++++++++++++++
 One of the first methods for deconvolution of images with Poisson
-noise was proposed by :ref:`richardson` and :ref:`lucy`. This method,
+noise was proposed by :ref:`Richardson1987` and :ref:`lucy`. This method,
 named after the original authors, is often known as the *Richardson & Lucy* (RL)
 method. The method takes the fundamental statistical properties
 of the image into account and describes the measurement process
 as a likelihood based forward modelling procedure.
 
-Assuming each pixel :math:`x_i` in image follows a Poisson likelihood, the total
-likelihood of obtaining the image with :math:`N` pixels is given by:
+Assuming the noise in each pixel :math:`x_i` in the recorded image
+follows a Poisson likelihood, the total likelihood of obtaining the
+measured image from an unknown true image :math:`\lambda_i` with
+:math:`N` pixels is given by:
 
 .. math::
    :label: poisson
 
-   P\left( x \right) = \frac{{e^{ - \lambda } \lambda ^x }}{{x!}}
+   \mathcal{L}\left( \mathbf{x} | \mathbf{\lambda} \right) = \prod_i^N \frac{{e^{ - x_i } \lambda_i ^ {x_i}}}{{x_i!}}
 
-
-The *Cash* statistics for the :math:`k`-th dataset:
+By taking the logarithm and dropping the constant terms one can transform the
+product into a sum over pixels, which is often called the *Cash* statistics:
 
 .. math::
    :label: cash
 
-   \mathcal{C}_k = \sum_i M_i - D_i \log{M_i}
+   \mathcal{C}\left( \mathbf{x} | \mathbf{\lambda} \right) = \sum_i \lambda_i - x_i \log{\lambda_i}
 
+Where the expected counts are given by the convolution of the true underlying flux distribution
+with the PSF :math:`z_k`:
+
+.. math::
+   :label: convolution
+
+    \lambda_i = \sum_k x_i z_{i - k}
+
+This approach is often called "forward modelling" or "forward folding" with the instrument response.
+To obtain the most likely model given the data one searches a minimum of the total likelihood
+function. Assuming the pixels values of the true image as independent parameters, one can take
+the derivative of the Eq. :ref:`cash` with respect to the individual :math:`x_i`.
+By setting the derivative to zero, once can obtain an update rule for :math:`x_i`,
+which converges to a maximum likelihood solution of Eq. :ref:`cash`.
 A Python implementation of the standard RL method is available e.g. in the `Scikit-Image`
-package :ref:`scikit-image`.
+package :cite:`skimage`.
+
+
+Instead of this gradient decent minimization it is also possible to sample from the posterior
+using a simple Metropolis-Hasting approach. This is demonstrated in one of the *Pylira*
+online tutorials: `Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__
+
 
 
 An alternative approach to this analysis challenge is the use of deconvolution methods. While in other branches of astronomy
