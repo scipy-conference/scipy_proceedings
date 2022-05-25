@@ -171,36 +171,13 @@ On *Linux* the *RMath* dependency can be installed using standard package manage
 For more detailed instructions see `Pylira installation instructions <https://pylira.readthedocs.io/en/latest/pylira/index.html#installation>`__.
 
 
-Analysis Examples
-+++++++++++++++++
+Simple Analysis Example
++++++++++++++++++++++++
+*Pylira* was designed to offer a simple Python class based user interface,
+which allow for a short learning curve of using the package, given that
+users are familiar with Python in general and optionally *Numpy* and *Astropy*.
+A typical complete usage example of the *Pylira* package is shown in the following:
 
-.. figure:: images/pylira-chandra-gc.pdf
-   :scale: 70%
-   :figclass: w
-
-   Pylira applied to Chandra data from the Galactic center region, using the observation IDs
-   *4684* and *4684*. The image on the left shows the raw observed counts between
-   0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
-   values where chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
-   No baseline background model was taken into account.
-
-.. figure:: images/pylira-fermi-gc.pdf
-   :scale: 70%
-   :figclass: w
-
-   Pylira applied to Chandra data from the Galactic center region, using the observation IDs
-   *4684* and *4684*. The image on the left shows the raw observed counts between
-   0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
-   values where chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
-   No baseline background model was taken into account.
-
-
-The main API is exposed via the :code:`LIRADeconvolver` class, which takes the configuration of
-the algorithm. The data which represented by a simple Python :code:`dict` data structure contains
-a :code:`"counts"`, :code:`"psf"` and optionally :code:`"exposure"` and :code:`"background"` array.
-The datasetis then passed to the :code:`LIRADeconvolver.run()` method to execute the deconvolution.
-The result is a :code:`LIRADeconvolverResult` object, which features the possibility to write the
-result as a *FITS* file, as well as to inspect the result with diagnostic plots.
 
 .. code-block:: python
    :linenos:
@@ -214,21 +191,34 @@ result as a *FITS* file, as well as to inspect the result with diagnostic plots.
 
     # define initial flux image
     data["flux_init"] = data["flux"]
-    deconvolve = LIRADeconvolver(alpha_init=np.ones(5))
+
+    deconvolve = LIRADeconvolver(
+        n_iter_max=3_000,
+        n_burn_in=500,
+        alpha_init=np.ones(5)
+    )
 
     result = deconvolve.run(data=data)
 
-    # plot pixel traces, result shown in Figure 3
+    # plot pixel traces, result shown in Figure 1
     result.plot_parameter_traces()
 
-    # plot pixel traces, result shown in Figure 4
+    # plot pixel traces, result shown in Figure 2
     result.plot_pixel_traces_region(
         center_pix=(16, 16), radius_pix=3
     )
 
+
+The main interface is exposed via the :code:`LIRADeconvolver` class, which takes the configuration of
+the algorithm on initialisation. The data, which represented by a simple Python :code:`dict` data structure,
+contains a :code:`"counts"`, :code:`"psf"` and optionally :code:`"exposure"` and :code:`"background"` array.
+The dataset is then passed to the :code:`LIRADeconvolver.run()` method to execute the deconvolution.
+The result is a :code:`LIRADeconvolverResult` object, which features the possibility to write the
+result as a *FITS* file, as well as to inspect the result with diagnostic plots.
+
+
 Diagnostic Plots
 ++++++++++++++++
-
 
 .. figure:: images/pylira-diagnosis.pdf
    :scale: 70%
