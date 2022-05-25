@@ -229,7 +229,18 @@ Diagnostic Plots
    value as well as traces of the values of the prior parameter values. The *SmoothingparamN* parameters
    correspond to the smoothing parameters per multi-scale level. The solid horizontal orange lines show the mean
    value, the shaded orange area the :math:`1~\sigma` error region. The burn in phase is shown transparent and ignored
-   while estimating the mean.
+   while estimating the mean.  :label:`diagnosis1`
+
+
+*Pylira* relies on an MCMC sampling approach to sample a series of reconstructed images from the posterior
+likelihood defined by Eq. :ref:`post`. Along with the sampling it marginalises over the smoothing
+hyper-parameters and optimizes them in the same process. To diagnose the validity of the results
+it is important to visualise the sampling traces of both the sampled images as well as hyper-parameters.
+Fig. :ref:`diagnosis1` shows one typical diagnostics plot created by the code example above.
+In a multi-panel figure user can inspect the traces of the total log-posteriror as well as the
+traces of th smoothing parameters. The figure also shows the mean value along with the :math:`1~\sigma` error
+region. In this case the algorithm show stable convergence after a burn-in phase of approximately 200
+iterations.
 
 
 .. figure:: images/pylira-diagnosis-pixel.pdf
@@ -242,7 +253,39 @@ Diagnostic Plots
    shows the circular region defining the neighboring pixels. The blue line on the right plot shows the trace
    of the pixel of interest. The solid horizontal orange lines show the mean value, the shaded orange area
    the :math:`1~\sigma` error region. The burn in phase is shown in transparent blue and ignored while computing
-   the mean. The shaded gray lines show the traces of the neighboring pixels.
+   the mean. The shaded gray lines show the traces of the neighboring pixels.  :label:`diagnosis2`
+
+
+Another useful diagnostic plot is shown in Fig. :ref:`diagnosis2`. The plot shows the
+image sampling trace for a single pixel of interest and its surrounding circular region of interest.
+This visualisation allows user to asses the stability of a small region in the image
+e.g. an astronomical point source during the MCMC sampling process. Due to the correlation with
+neighbouring pixels the actual value of a pixel might vary in the samplong process, which appears
+as dips in the trace of the pixel. In the this example a stable sate of the pixels of interest
+is reached after approximately 1000 iterations.
+
+
+
+.. figure:: images/pylira-chandra-gc.pdf
+   :scale: 70%
+   :figclass: w
+
+   Pylira applied to Chandra data from the Galactic center region, using the observation IDs
+   *4684* and *4684*. The image on the left shows the raw observed counts between
+   0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
+   values where chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
+   No baseline background model was taken into account.
+
+.. figure:: images/pylira-fermi-gc.pdf
+   :scale: 70%
+   :figclass: w
+
+   Pylira applied to Chandra data from the Galactic center region, using the observation IDs
+   *4684* and *4684*. The image on the left shows the raw observed counts between
+   0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
+   values where chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
+   No baseline background model was taken into account.
+
 
 Test Datasets
 +++++++++++++
