@@ -433,27 +433,30 @@ experiments shall be run to further analyze this.
 
 .. raw:: latex
 
-    \begin{figure}
-    \centering
-    \scalebox{0.6}{
-    \begin{tabular}{rcc|ccccl}
-     Model          & $\epsilon$ (ZCA) & $\alpha$ (SAE)    & IoU & Accuracy & Recall & Dice & Precision\\ \hline
-     U-Net (base)  & --- & --- & 0.399 & 0.759 & 0.501 & 0.529 & \textbf{0.692}  \\ \hline
-     \multirow{4}{*}{ZCA + U-Net}  & $1\mathrm{e}-4$ & --- & 0.395 & 0.754 & 0.509 & 0.513 & 0.625 \\
-       & $1\mathrm{e}-5$ & --- & 0.401 & 0.732 & 0.563 & 0.539 & 0.607 \\
-       & $1\mathrm{e}-6$ & --- & 0.408 &  0.756 & 0.543 & 0.546 & 0.644 \\
-       & $1\mathrm{e}-7$ & --- & 0.419 & 0.758 & 0.563 & 0.557 & 0.639 \\ \hline
-     \multirow{3}{*}{SAE + U-Net}  & --- & $1\mathrm{e}-2$ & 0.380 & 0.719 & 0.568 & 0.520 & 0.558 \\
-       & --- & $1\mathrm{e}-3$ & 0.398 & 0.751 & 0.512 & 0.526 & 0.656 \\
-       & --- & $1\mathrm{e}-4$ & 0.416 & 0.735 & \textbf{0.607} & 0.555 & 0.603 \\ \hline
-     \multirow{3}{*}{Composite}  & $1\mathrm{e}-6$ & $1\mathrm{e}-4$ & 0.405 & 0.729 & 0.587 & 0.545 & 0.591 \\
-       & $1\mathrm{e}-4$ & $1\mathrm{e}-2$ & 0.401 & 0.761 & 0.506 & 0.521 & 0.649 \\
-       & $1\mathrm{e}-4$ & $1\mathrm{e}-3$ & \textbf{0.441} & \textbf{0.767} & 0.580 & \textbf{0.585} & 0.661 \\\hline
-    \end{tabular}
-    }
-    \caption{A summary of segmentation scores on test data for a base U-Net model, ZCA+U-Net, SAE+U-Net, and a composite model, with various feature extraction hyperparameters. The best result for each scoring metric is in bold.}
-    \label{fig:results}
-    \end{figure}
+   \begin{figure}
+   \centering
+   \scalebox{0.7}{
+   \begin{tabular}{rccccccl}\toprule
+   & \multicolumn{2}{c}{Extractor Parameters} & \multicolumn{5}{c}{Scores}
+   \\\cmidrule(lr){2-3}\cmidrule(lr){4-8}
+   Model          & $\epsilon$ (ZCA) & $\alpha$ (SAE)    & IoU & Accuracy & Recall & Dice & Precision\\ \midrule
+   U-Net (base)  & --- & --- & 0.399 & 0.759 & 0.501 & 0.529 & \textbf{0.692}  \\ \midrule
+   \multirow{4}{*}{ZCA + U-Net}  & $1\mathrm{e}-4$ & --- & 0.395 & 0.754 & 0.509 & 0.513 & 0.625 \\
+      & $1\mathrm{e}-5$ & --- & 0.401 & 0.732 & 0.563 & 0.539 & 0.607 \\
+      & $1\mathrm{e}-6$ & --- & 0.408 &  0.756 & 0.543 & 0.546 & 0.644 \\
+      & $1\mathrm{e}-7$ & --- & 0.419 & 0.758 & 0.563 & 0.557 & 0.639 \\ \midrule
+   \multirow{3}{*}{SAE + U-Net}  & --- & $1\mathrm{e}-2$ & 0.380 & 0.719 & 0.568 & 0.520 & 0.558 \\
+      & --- & $1\mathrm{e}-3$ & 0.398 & 0.751 & 0.512 & 0.526 & 0.656 \\
+      & --- & $1\mathrm{e}-4$ & 0.416 & 0.735 & \textbf{0.607} & 0.555 & 0.603 \\ \midrule
+   \multirow{3}{*}{Composite}  & $1\mathrm{e}-6$ & $1\mathrm{e}-4$ & 0.405 & 0.729 & 0.587 & 0.545 & 0.591 \\
+      & $1\mathrm{e}-4$ & $1\mathrm{e}-2$ & 0.401 & 0.761 & 0.506 & 0.521 & 0.649 \\
+      & $1\mathrm{e}-4$ & $1\mathrm{e}-3$ & \textbf{0.441} & \textbf{0.767} & 0.580 & \textbf{0.585} & 0.661 \\
+      \bottomrule
+   \end{tabular}
+   }
+   \caption{A summary of segmentation scores on test data for a base U-Net model, ZCA+U-Net, SAE+U-Net, and a composite model, with various feature extraction hyperparameters. The best result for each scoring metric is in bold.}
+   \label{fig:results}
+   \end{figure}
 
 The base U-Net does outperform the others in precision, however. From an
 analysis of predicted masks from various models, some of which are shown
@@ -464,20 +467,22 @@ segmentation.
 
 .. raw:: latex
 
-    \begin{center}
-    \begin{figure}
-    \scalebox{0.4}{
-    \begin{tabular}{rccccccl}
-    Original Image       & ZCA & SAE  & Ground Truth & Base U-Net & ZCA + U-Net & SAE + U-Net & Composite \\\hline\\
-    \includegraphics[scale=0.5]{cilia/ex1/orig.png} & \includegraphics[scale=0.5]{cilia/ex1/zca.png} & \includegraphics[scale=0.5]{cilia/ex1/sae.png} & \includegraphics[scale=0.5]{cilia/ex1/mask.png} &\includegraphics[scale=0.5]{cilia/ex1/pred.png}&\includegraphics[scale=0.5]{cilia/ex1/zca_pred.png} &\includegraphics[scale=0.5]{cilia/ex1/sae_pred.png} &\includegraphics[scale=0.5]{cilia/ex1/comp_pred.png} \\
-    \includegraphics[scale=0.5]{cilia/ex2/orig.png} & \includegraphics[scale=0.5]{cilia/ex2/zca.png} & \includegraphics[scale=0.5]{cilia/ex2/sae.png} & \includegraphics[scale=0.5]{cilia/ex2/mask.png} &\includegraphics[scale=0.5]{cilia/ex2/pred.png}&\includegraphics[scale=0.5]{cilia/ex2/zca_pred.png} &\includegraphics[scale=0.5]{cilia/ex2/sae_pred.png} &\includegraphics[scale=0.5]{cilia/ex2/comp_pred.png} \\
-    \includegraphics[scale=0.5]{cilia/ex3/orig.png} & \includegraphics[scale=0.5]{cilia/ex3/zca.png} & \includegraphics[scale=0.5]{cilia/ex3/sae.png} & \includegraphics[scale=0.5]{cilia/ex3/mask.png} &\includegraphics[scale=0.5]{cilia/ex3/pred.png}&\includegraphics[scale=0.5]{cilia/ex3/zca_pred.png} &\includegraphics[scale=0.5]{cilia/ex3/sae_pred.png} &\includegraphics[scale=0.5]{cilia/ex3/comp_pred.png} \\
-    \end{tabular}
-    }
-    \caption{Comparison of predicted masks and ground truth for three test images. ZCA mapped images with $\epsilon=1\mathrm{e}-4$ and SAE reconstructions with $\alpha=1\mathrm{e}-3$ are used where applicable.} 
-    \label{fig:test_images}
-    \end{figure}
-    \end{center}
+   \begin{center}
+   \begin{figure}
+   \scalebox{0.4}{
+   \begin{tabular}{rccccccl}\toprule
+   \multicolumn{3}{c}{Input Images} & & \multicolumn{4}{c}{Predicted Masks}
+   \\\cmidrule(lr){1-3}\cmidrule(lr){5-8}
+   Original          & ZCA & SAE  & Ground Truth & Base U-Net & ZCA + U-Net & SAE + U-Net & Composite \\ \midrule
+   \includegraphics[scale=0.5]{cilia/ex1/orig.png} & \includegraphics[scale=0.5]{cilia/ex1/zca.png} & \includegraphics[scale=0.5]{cilia/ex1/sae.png} & \includegraphics[scale=0.5]{cilia/ex1/mask.png} &\includegraphics[scale=0.5]{cilia/ex1/pred.png}&\includegraphics[scale=0.5]{cilia/ex1/zca_pred.png} &\includegraphics[scale=0.5]{cilia/ex1/sae_pred.png} &\includegraphics[scale=0.5]{cilia/ex1/comp_pred.png} \\\midrule
+   \includegraphics[scale=0.5]{cilia/ex2/orig.png} & \includegraphics[scale=0.5]{cilia/ex2/zca.png} & \includegraphics[scale=0.5]{cilia/ex2/sae.png} & \includegraphics[scale=0.5]{cilia/ex2/mask.png} &\includegraphics[scale=0.5]{cilia/ex2/pred.png}&\includegraphics[scale=0.5]{cilia/ex2/zca_pred.png} &\includegraphics[scale=0.5]{cilia/ex2/sae_pred.png} &\includegraphics[scale=0.5]{cilia/ex2/comp_pred.png} \\ \midrule
+   \includegraphics[scale=0.5]{cilia/ex3/orig.png} & \includegraphics[scale=0.5]{cilia/ex3/zca.png} & \includegraphics[scale=0.5]{cilia/ex3/sae.png} & \includegraphics[scale=0.5]{cilia/ex3/mask.png} &\includegraphics[scale=0.5]{cilia/ex3/pred.png}&\includegraphics[scale=0.5]{cilia/ex3/zca_pred.png} &\includegraphics[scale=0.5]{cilia/ex3/sae_pred.png} &\includegraphics[scale=0.5]{cilia/ex3/comp_pred.png} \\ \bottomrule
+   \end{tabular}
+   }
+   \caption{Comparison of predicted masks and ground truth for three test images. ZCA mapped images with $\epsilon=1\mathrm{e}-4$ and SAE reconstructions with $\alpha=1\mathrm{e}-3$ are used where applicable.} 
+   \label{fig:test_images}
+   \end{figure}
+   \end{center}
 
 Conclusions
 ===========
