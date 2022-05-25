@@ -10,7 +10,7 @@
 :email: SPQ@uga.edu
 :institution: University of Georgia
 
-:bibliography: paper 
+:bibliography: paperbib
 
 ----------------------------------------------------------------------------------------------------------------------
 A Novel Pipeline for Cell Instance Segmentation, Tracking and Motility Classification of Toxoplasma Gondii in 3D Space
