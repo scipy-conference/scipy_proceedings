@@ -268,7 +268,7 @@ As a future work on the project, we plan to incorporate the following additional
 
 Acknowledgements
 ----------------
-The authors thank the members of PyCon Canada for their valuable comments on this project. We would like to thank SciPy conference and reviewers for their valuable comments on this paper. This work was supported by Natural Sciences and Engineering Research Council of Canada and Fonds de Recherche sur la Nature et Technologies of Quebec
+The authors thank SciPy conference and reviewers for their valuable comments on this paper. This work was supported by Natural Sciences and Engineering Research Council of Canada and University of Sherbrooke grant.
 
 
 References
