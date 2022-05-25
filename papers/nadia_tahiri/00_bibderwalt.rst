@@ -2,14 +2,14 @@
 :email: wanlin.li@usherbrooke.ca
 :institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 
+:author:	My-Linh Luu
+:email:	luu.my-linh@courrier.uqam.ca
+:institution:	Department of Computer Science, University of Quebec at Montreal, Montreal, QC, Canada
+
 :author:	Aleksandr Koshkarov
 :email:	aleksandr.koshkarov@usherbrooke.ca
 :institution:	Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 :institution:	Center of Artificial Intelligence, Astrakhan State University, Astrakhan, 414056, Russia
-
-:author:	My-Linh Luu
-:email:	luu.my-linh@courrier.uqam.ca
-:institution:	Department of Computer Science, University of Quebec at Montreal, Montreal, QC, Canada
 
 :author: Nadia Tahiri
 :email: Nadia.Tahiri@USherbrooke.ca
