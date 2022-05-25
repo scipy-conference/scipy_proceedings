@@ -13,6 +13,73 @@
 	abstract = {Image restoration including deconvolution techniques offers a powerful tool to improve resolution in images and to extract information on the multiscale structure stored in astronomical observations. We present a new method for statistical deconvolution, which we call expectation through Markov Chain Monte Carlo (EMC2). This method is designed to remedy several shortfalls of currently used deconvolution and restoration techniques for Poisson data. We use a wavelet-like multiscale representation of the true image to achieve smoothing at all scales of resolution simultaneously, thus capturing detailed features in the image at the same time as larger scale extended features. Thus, this method smooths the image, while maintaining the ability to effectively reconstruct point sources and sharp features in the image. We use a principled, fully Bayesian model-based analysis, which produces extensive information about the uncertainty in the fitted smooth image, allowing assessment of the errors in the resulting reconstruction. Our method also includes automatic fitting of the multiscale smoothing parameters. We show several examples of application of EMC2 to both simulated data and a real astronomical X-ray source.}
 }
 
+@INPROCEEDINGS{Connors2011,
+       author = {{Connors}, A. and {Stein}, N.~M. and {van Dyk}, D. and {Kashyap}, V. and {Siemiginowska}, A.},
+        title = "{LIRA {\textemdash} The Low-Counts Image Restoration and Analysis Package: A Teaching Version via R}",
+    booktitle = {Astronomical Data Analysis Software and Systems XX},
+         year = 2011,
+       editor = {{Evans}, I.~N. and {Accomazzi}, A. and {Mink}, D.~J. and {Rots}, A.~H.},
+       series = {Astronomical Society of the Pacific Conference Series},
+       volume = {442},
+        month = jul,
+        pages = {463},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2011ASPC..442..463C},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+
+@unpublished{ipywidgets,
+author = {Jupyter widgets community},
+title = {ipywidgets, a GitHub repository},
+year = {2015},
+note = {Retrieved from https://github.com/jupyter-widgets/ipywidgets}
+}
+
+@Article{matplotlib,
+  Author    = {Hunter, J. D.},
+  Title     = {Matplotlib: A 2D graphics environment},
+  Journal   = {Computing in Science \& Engineering},
+  Volume    = {9},
+  Number    = {3},
+  Pages     = {90--95},
+  abstract  = {Matplotlib is a 2D graphics package used for Python for
+  application development, interactive scripting, and publication-quality
+  image generation across user interfaces and operating systems.},
+  publisher = {IEEE COMPUTER SOC},
+  doi       = {10.1109/MCSE.2007.55},
+  year      = 2007
+}
+
+@article{numpy,
+ title         = {Array programming with {NumPy}},
+ author        = {Charles R. Harris and K. Jarrod Millman and St{\'{e}}fan J.
+                 van der Walt and Ralf Gommers and Pauli Virtanen and David
+                 Cournapeau and Eric Wieser and Julian Taylor and Sebastian
+                 Berg and Nathaniel J. Smith and Robert Kern and Matti Picus
+                 and Stephan Hoyer and Marten H. van Kerkwijk and Matthew
+                 Brett and Allan Haldane and Jaime Fern{\'{a}}ndez del
+                 R{\'{i}}o and Mark Wiebe and Pearu Peterson and Pierre
+                 G{\'{e}}rard-Marchant and Kevin Sheppard and Tyler Reddy and
+                 Warren Weckesser and Hameer Abbasi and Christoph Gohlke and
+                 Travis E. Oliphant},
+ year          = {2020},
+ month         = sep,
+ journal       = {Nature},
+ volume        = {585},
+ number        = {7825},
+ pages         = {357--362},
+ doi           = {10.1038/s41586-020-2649-2},
+ publisher     = {Springer Science and Business Media {LLC}},
+ url           = {https://doi.org/10.1038/s41586-020-2649-2}
+}
+
+
+@misc{pybind11,
+    author = {Wenzel Jakob and Jason Rhinelander and Dean Moldovan},
+    year = {2017},
+    note = {https://github.com/pybind/pybind11},
+    title = {pybind11 -- Seamless operability between C++11 and Python}
+}
 
 @article{Astropy2018,
        author = {Astropy Collaboration},
@@ -32,3 +99,12 @@ archivePrefix = {arXiv},
        adsurl = {https://ui.adsabs.harvard.edu/abs/2018AJ....156..123A},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
+
+@Manual{rmath,
+    title = {R: A Language and Environment for Statistical Computing},
+    author = {{R Core Team}},
+    organization = {R Foundation for Statistical Computing},
+    address = {Vienna, Austria},
+    year = {2020},
+    url = {https://www.R-project.org/},
+  }
