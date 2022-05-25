@@ -128,18 +128,31 @@ LIRA Multiscale Prior
 
 The Pylira Package
 ------------------
-The *Pylira* package is a thin Python wrapper around the original *LIRA* implementation provided by :cite:`lira`.
-The original implementation relies on the *RMath* :cite:`rmath` library, which is still a required dependency.
-The Python wrapper were built using the *pybind11* :cite:`pypind11` package. For the data handling *Pylira*
-relies on *Numpy*:cite:`numoy` and *Astropy*:cite:`Astropy2018` for the *FITS* serialisation. The (interactive) plotting functionality is
-achieved via *matplotlib*:cite:`matplotlib` and *ipywidgets*:cite:`ipywidgets`, which are optional dependencies.
 
-*Pylira* is developed on Github :cite:`LIRAGithub`.
+Dependencies & Development
+++++++++++++++++++++++++++
+
+The *Pylira* package is a thin Python wrapper around the original *LIRA* implementation provided by
+the authors of :cite:`Connors2011`. The original algorithm was implemented in *C* and made available
+as a package to the *R Language* :cite:`rmath`. Thus the implementation depends on the *RMath* library,
+which is still a required dependency to *Pylira*.
+The Python wrapper was built using the *Pybind11* :cite:`pybind11` package. For the data handling *Pylira*
+relies on *Numpy* :cite:`numpy` and *Astropy* :cite:`Astropy2018` for the *FITS* serialisation. The (interactive)
+plotting functionality is achieved via *Matplotlib* :cite:`matplotlib` and *Ipywidgets* :cite:`ipywidgets`,
+which are both optional dependencies. *Pylira* is openly developed on Github  at `https://github.com/astrostat/pylira <https://github.com/astrostat/pylira>`__.
+It relies on *GitHub Actions* as a continuous integration service and uses the *Read the Docs* service
+to build and deploy the documentation. The online documentation can be found on `https://pylira.readthedocs.io <https://pylira.readthedocs.io>`__.
+*Pylira* implements a set of unit tests to assure compatibility and reproducibility of the
+results with different versions of the dependencies and across different platforms.
+As *Pylira* relies on random sampling for the MCMC process an exact reproducibility
+of results is hard on different platforms, however the agreement of results is at least
+guaranteed in the statistical limit of drawing many samples.
 
 Installation
 ++++++++++++
-
-Pylira requires to install the R library first, so the recommended way to install Pylira is on MacOS:
+*Pylira* is avaliable via the Python package index (`pypi.org <https://pypi.org/project/pylira/>`__),
+currently at version 0.1. As *Pylira* still depends on the *RMath* library, it si required to install
+this first. So the recommended way to install Pylira is on *MacOS* is:
 
 .. code-block:: bash
    :linenos:
@@ -147,7 +160,7 @@ Pylira requires to install the R library first, so the recommended way to instal
     $ brew install r
     $ pip install pylira
 
-And on Linux:
+On *Linux* the *RMath* dependency can be installed using standard package managers:
 
 .. code-block:: bash
    :linenos:
