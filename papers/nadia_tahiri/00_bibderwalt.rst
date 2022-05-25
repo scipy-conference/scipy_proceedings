@@ -50,10 +50,7 @@ In a phylogeographic study, three major processes should be considered (see :cit
 
 1.	Genetic drift is the result of allele sampling errors. These errors are due to generational transmission of alleles and geographical barriers. Genetic drift is a function of the size of the population. Indeed, the larger the population, the lower the genetic drift. This is explained by the ability to maintain genetic diversity in the original population. By convention, we say that an allele is fixed if it reaches the frequency of 100%, and that it is lost if it reaches the frequency of 0%.
 2.	Gene flow or migration is an important process for conducting a phylogeographic study. It is the transfer of alleles from one population to another, increasing intrapopulation diversity and decreasing interpopulation diversity.
-3.	There are many selections in all species; here we indicate the two most important of them, if they are essential for a phylogeographic study.  
-      
-      a. Sexual selection is a phenomenon resulting from an attractive characteristic between two species. Therefore, this selection is a function of the size of the population. 
-      b. Natural selection is a function of fertility, mortality, and adaptation of a species to a habitat.
+3.	There are many selections in all species; here we indicate the two most important of them, if they are essential for a phylogeographic study. (a) Sexual selection is a phenomenon resulting from an attractive characteristic between two species. Therefore, this selection is a function of the size of the population. (b) Natural selection is a function of fertility, mortality, and adaptation of a species to a habitat.
 
 Populations living in different environments with varying climatic conditions are subject to pressures that can lead to evolutionary divergence and reproductive isolation (:cite:`OS98` and :cite:`S01`). Phylogeny and geography are then correlated. This study, therefore, aims to present an algorithm to show the possible correlation between certain genes or gene fragments and the geographical distribution of species.
 
@@ -139,8 +136,8 @@ The following sliding window function illustrates moving the sliding window thro
             f.close()
             start = start + step
             fin = fin + step
-   except:
-      print("An error occurred.")
+      except:
+         print("An error occurred.")
 
 .. figure:: Fig1.jpeg
    :align: center
