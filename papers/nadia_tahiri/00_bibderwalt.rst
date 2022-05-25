@@ -17,9 +17,9 @@
 
 :bibliography: mybib
 
--------------------------------------------------------------
-Phylogeo: Analysis of genetic and climatic data of SARS-CoV-2
--------------------------------------------------------------
+-------------------------------------------------------------------
+Phylogeography: Analysis of genetic and climatic data of SARS-CoV-2
+-------------------------------------------------------------------
 
 .. class:: abstract
 
