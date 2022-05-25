@@ -1,9 +1,5 @@
-:author: 
-:email: Nadia.Tahiri@USherbrooke.ca
-:institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
-
 :author: Wanlin Li
-:email: wanlin.li@usherbrooke.ca
+:email: Nadia.Tahiri@USherbrooke.ca
 :institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 
 :author:	My-Linh Luu
