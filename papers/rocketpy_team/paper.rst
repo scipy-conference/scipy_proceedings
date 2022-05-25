@@ -19,6 +19,10 @@
 :email: adrianoaugusto98@usp.br
 :institution: Escola Politécnica of the University of Sao Paulo.
 
+:author: Giovani Hidalgo Ceotto
+:email: giovani.ceotto@alumni.usp.br
+:institution: Escola Politécnica of the University of Sao Paulo.
+
 ------------------------------------------------------------------------------------------------------------
 RocketPy: Combining Open-Source and Scientific Libraries to Make the Space Sector More Modern and Accessible
 ------------------------------------------------------------------------------------------------------------
@@ -61,25 +65,53 @@ RocketPy: Combining Open-Source and Scientific Libraries to Make the Space Secto
 Introduction
 ============
 .. First author: Ciclope
-   Length: 1/15 columns
-   Suggested Topics:
-      (0) sounding rockets and high-powered rockets
-      (1) high-powered rocketry importance is under high increase trajectory  
-      (2) trajectory simulations are important for both safety and performance, 
-      (3) RocketPy as a solution for trajectory simulations (the next generation!)
 
-As described in (cite:`ceotto2021rocketpy`)
+When it comes to rockets, there is a wide field ranging from orbital rockets to toy rockets. 
+Between them, two types will be noted: sounding rockets and high-powered rockets (HPRs). 
+Sounding rockets are mainly used by government agencies for scientific experiments in suborbital 
+flights and HPR are mainly used for educational purposes, with increasing popularity among student competitions, 
+such as SpacePort America Rocket Competition, with more than 100 teams from all over the world and happening annually. 
+Also, with the reaching of the Kármán line by the university-built rocket TRAVELER IV (Aitoumeziane et al. 2019), 
+both types of rockets are converging to a similar flight trajectory.
+
+With this convergence, HPR are becoming bigger and more robust, increasing their potential hazard, along with their capacity, 
+making safety an important issue.  Moreover, performance is always a requirement both for saving costs, 
+and time and to accurately reach competition and scientific experiment goals.
+
+In that scene, many parameters should be determined before launching an HPR for both safety and performance, 
+such as the landing site coordinates, increasing safety and possibility of recovering the rocket (Wilde 2018); 
+apogee altitude, avoiding collision with aircraft and maintaining the ideal altitude for the rocket to function.
+
+To better attend to those issues, RocketPy was created as a computational tool that can accurately predict all dynamic parameters 
+involved in the flight of sounding, model, and HPR, given parameters such as the rocket geometry, motor characteristics, 
+and environmental conditions. It is also open source, well structured, and well documented, 
+allowing minor changes to bring new features (ref: RocketPy)
+
 
 Background 
 ==========
-.. Length: 2/15 columns
+
+In this section, we clarify some terms specific to the rocketry field that may help to better understand the text.
 
 Rocketry terminology
 --------------------
 .. First author: Ciclope
-   Suggest topics:
-      (1) explain different basic concepts regarding rockets!
-      (2) explain expected ouputs (don't forget to include Monte Carlo basic concepts)
+
+Apogee: the point at which a corpus is furthest from earth
+Degrees of freedom: maximum number of independent values in an equation
+Flight Trajectory: the 3-dimensional path, over time, of the rocket during its flight
+Launch Rail: Guidance for the rocket to accelerate to a stable flight speed
+Powered Flight: phase of the flight where the motor is active
+Free Flight: phase of the flight where the motor is inactive and no other component 
+but its inertia is influencing the rocket's trajectory
+Standard Atmosphere: Average pressure, temperature, and air density for various altitudes
+Nozzle: part of the rocket’s engine that accelerate the exhaust gases
+Static hot-fire test: Test to measure the integrity of the motor and determine its thrust curve
+Thrust Curve: Thrust overtime of a motor
+Static Margin: Is a non-dimensional distance to analyze the stability
+Nosecone: The forwardmost section of a rocket-shaped conically for aerodynamics
+Fin: flattened append of the rocket providing stability during flight, keeping it in the flight trajectory
+
 
 Flight Model
 ------------
@@ -122,7 +154,7 @@ The figure :ref:`fig1` illustrates RocketPy architecture.
 
 .. figure:: Fluxogram.png
    :align: center
-   :scale: 23%
+   :scale: 24%
    :figclass: bht
 
    RocketPy classes interaction :label:`fig1`
@@ -137,7 +169,7 @@ Function
 
 Variable interpolation meshes/grids from different sources can lead to problems regarding coupling different data types. 
 In order to solve this, RocketPy employs a dedicated *Function* class which allows for more natural and dynamic handling 
-of these objects, structuring them in a way similar to :math:`\mathbb{R}^n \to \mathbb{R}^n` mathematical functions. 
+of these objects, structuring them like :math:`\mathbb{R}^n \to \mathbb{R}^n` mathematical functions. 
 
 Through the use of magic methods, this approach allows for quick and easy arithmetic operations
 between lambda expressions and list-defined interpolated functions, as well as scalars. 
@@ -145,7 +177,7 @@ Different interpolation methods are available to be chosen from, among them simp
 Extrapolation of *Function* objects outside the domain constrained by a given dataset is also allowed.
 
 Furthermore, evaluation of definite integrals of these *Function* objects is among their feature set. By cleverly exploiting
-the choosed interpolation option, RocketPy calculates the values fast and precisely through the use of [the employment of the respective...] different 
+the choosed interpolation option, RocketPy calculates the values fast and precisely through the use of different 
 analytical methods.  If numerical integration is required, the class makes use of SciPy's implementation of the QUADPACK Fortran library (citar referencia).
 For 1-dimensional Functions, evaluation of derivatives at a point is made possible through the employment of a simple finite difference method.
 
@@ -156,8 +188,10 @@ in multiple ways depending on the given arguments. If no argument is given, a ma
 of the function is shown inside it's domain. This is especially useful for [the post-processing methods where various
 information on the multiple classes is presented, providing for more concise code]. If a n-sized array is passed
 instead, RocketPy will try and evaluate the value of the Function at this given point [using different methods], returning
-it's value. Additionally, if another *Function* object is passed, the class will try to match their respective domain and
-codomain in order to return a third instance, representing a composition of functions in the likes of: :math:`h(x) = (g \circ f)(x) = g(f(x))`. 
+it's value. 
+
+Additionally, if another *Function* object is passed, the class will try to match their respective domain and
+codomain in order to return a third instance, representing a composition of functions, in the likes of: :math:`h(x) = (g \circ f)(x) = g(f(x))`. 
 By imitating in syntax commonly used mathematical notation, RocketPy allows for more understandable and human-readable code, 
 especially in the implementation of the more extense and cluttered rocket equations of motion.
 
@@ -240,6 +274,7 @@ Motor
 .. First author: Gribel
 
 RocketPy is flexible enough to work with most types of motors used in sound rockets. 
+
 .. Currently, a robust Motor class has been fully implemented and tested. 
 
 The main function of thrus informations to provide the thrust curve, the propulsive mass, the inertia tensor, 
@@ -274,10 +309,10 @@ Rocket
 ------
 
 .. First author: Stano
+.. 1Revisor: Adriano
 
-The Rocket Class is responsible for creating and defining the rocket with its core characteristics. Mostly composed of physical
-attributes, such as mass, radius and moments of inertia, the rocket object will be responsible for the storage and calculation 
-of mechanical parameters. 
+The Rocket Class is responsible for creating and defining the rocket's core characteristics. Mostly composed of physical
+attributes, such as mass and moments of inertia, the rocket object will be responsible to storage and calculate mechanical parameters.
 
 A rocket object can be defined with the following code:
 
@@ -295,24 +330,23 @@ A rocket object can be defined with the following code:
       powerOnDrag="data/rocket/powerOnDragCurve.csv",
    )
 
-.. Maybe talking about every input is exagerating
-
 As stated in [RocketPy architecture], a fundamental input of the rocket is its motor, an object of the Motor class
 that must be previously defined. Some inputs are fairly simple inputs that can be easily obtained with a CAD model
 of the rocket such as radius, mass, and moment of inertia in two different directions. 
-The 'distace' inputs are relative to center of mass, and define the position of the motor nozzle and the center of mass of the motor propellant. 
-The *powerOffDrag* and *powerOnDrag* receive .csv curves that represents the drag coefficient as a function of rocket speed for the case where the motor off and other for motor still burning, respectvely.
+The 'distace' inputs are relative to center of mass, and define the position of the motor nozzle and the center of mass of the motor 
+propellant. The *powerOffDrag* and *powerOnDrag* receive .csv data that represents the drag coefficient as a function of rocket 
+speed for the case where the motor off and other for motor still burning, respectvely.
+
+.. Revisor1: Nao colocaria a parte abaixo, me parece algo mais apr aum manual d RocketPy
 .. The calculations made in the class consider, as the geometrical reference, the center of mass of the rocket.
 .. Thus, all parts of the rocket must be defined considering its distace to the rockets CM
 
-Using only the class constructor for the definition of the rocket object leads to an unfineshed rocket. One large tube of a
-certain diameter, with its center of mass positioned at a specific point along the axis of this tube, and a motor at the end would be
-used in the simulation if left like that. A few more important aspects should then be defined, these are
-called *Aerodynamic surfaces*. 
-Three of then are accepted in the code, these being the nosecone, fins, and tail. 
-They can be simply added to the code via the following methods:
+At this point, the simulation would run a rocket with a tube of a certain diameter, with its center of mass specified and a motor at its end. 
+For an better simulation, a few more important aspects should then be defined, called *Aerodynamic surfaces*. Three of then are accepted 
+in the code, these being the nosecone, fins, and tail. They can be simply added to the code via the following methods:
 
 .. TODO: example image of a nosecone, fin and tail???
+.. Rvisor1: Por mim nao coloca nenhum
 
 
 .. code-block:: python
@@ -337,8 +371,12 @@ the center of pressure and subseuquently the static margin. Inside each of these
 
 With the rocket fully defined, the `info()` and `allInfo()` methods can be called giving us information and plots of the calculations performed
 in the class. 
-One of the most relevant outputs of the Rocket class is the static margin thorught the time plot :ref:`figSM`, which shows
-the variation of the static margin as the motor burns its propellant.
+One of the most relevant outputs of the Rocket class is the static margin, as it is iportant for the rocket stability and makes posible
+several different analysis.
+It is visualized thorught the time plot :ref:`figSM`, which shows the variation of the static margin as the motor burns its propellant.
+.. Revisor1: Reduzi um pouco o texto e agrupei todas as infos de static margin antes de mostrar o exmeplo dela.
+..One of the most relevant outputs of the Rocket class is the static margin, thorught the time plot :ref:`figSM`, which shows
+..the variation of the static margin as the motor burns its propellant.
 
 .. figure:: SMoutput.png
    :align: center
@@ -346,7 +384,7 @@ the variation of the static margin as the motor burns its propellant.
    
    Static Margin :label:`figSM`
 
-Since the static margin is essential to understand the rocket stability, this plot is very useful for several different analysis.
+..Since the static margin is essential to understand the rocket stability, this plot is very useful for several different analysis.
 
 Flight
 ------
@@ -379,21 +417,57 @@ along with parameters such as launch heading and inclination relative to the Ear
       inclination=85,
       heading=0)
 
-It is in this object of the Flight class that all information of the rocket's flight and simulation is stored.
+It is in this object of the Flight class that all information of the rocket's flight trajectory simulation is stored.
 
-.. (1) TODO: Cite LSODA (citations can be found here: https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.LSODA.html)
+.. (1) TODO: Cite Scipy and LSODA (citations can be found here: https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.LSODA.html)
 
-For the integration, the Flight class uses the LSODA solver implemented as a Scipy integrator.
+For the integration, the Flight class uses the LSODA solver implemented by Scipy's `scipy.integrate` module.
 Usually, well designed rockets result in non-stiff equations of motion.
 However, during flight, rockets may become unstable due to variations in its inertial and aerodynamic properties, which can result in a stiff system.
 LSODA switches automatically between the nonstiff Adams method and the stiff BDF method, depending on the dected stiffness, perfectly handling both cases.
 
-.. (2) 
+.. (2) FlightPhases as a container datatype, which holds FlightPhase instances
 
-Since the flight trajectory is usally composed of multiple phases, each with its own set of equations of motion, the Flight class uses a ``FlightPhases`` container to organize each flight phase.
+Since a rocket's flight trajectory is usally composed of multiple phases,
+each with its own set of governing equations,
+the Flight class uses a ``FlightPhases`` container to hold each ``FlightPhase``.
+A ``FlightPhase`` object is initialized with a simulation time,
+a function which calculates the equatios of motion,
+a list of callbacks and a boolean parameter.
+The parameter ``t`` indicates the initial time for that ``FlightPhases``, the ``derivative`` would be the derivative function of the motion of the body, the ``callback`` is for .... and the ``clear``
+is used for .... .
+
+.. (b) The fact that it is dynamic, new phases can be added and removed
+
+The FlightPhases container will orchestrate the different FlightPhase elements, and compose them during the flight. This is important because there are events
+unkown a priori, or that it's unknown when they will happen, therefore it's important for the computations done on the class Flight to have a mecanism of 
+creating events that are not know a priori, but that can be detected during flight, that will change the derivative of equation of motion. 
+
+like the ejection of N parachutes, that changes the derivative of the equation of motion for the rocket.
+
+There are some events that are know a priori that are the out of rail event, apogee and impact. The out-of-rail event is important because they will change
+completely the equation of motion of the rocket, as explained in [rocketpaper] the system will become a 6-DOF instead of 1-DOF. The apogee event is important
+because .... And finally the Impact Event is important because it will mark the end of the flight. 
+
+.. (c) The fact that it is iterable, and that it can be used in a for loop
+
+.. (d) How flight phases are created during the simulation and when
+
 The container is intialized with a *rail phase*, which is the start of the flight, and also a *max time* which is the maximum time of the flight.
 Throught the simulation, more flight phases can be added and removed, but only after the current phase in order to preserve the order of the flight trajectory.
 As an example, once the rocket leaves the rail, a new phase is added.
+
+..  (3) TimeNodes as a container datatype, which holds TimeNode instances
+..      (a) TimeNodes as a basic discretization of the flight phase
+..      (b) Why use TimeNodes: parachute release, control events, etc.
+
+The second data-type that is important to understand are the TimeNodes. An instance of the TimeNode class will contain the information important for
+a given time of the Flight, it is a discretization of the continuous time. The TimeNode have similar parameters to the FlightPhase, it receives
+the current time respective to the TimeNode, the parachutes that will be ejected on that specific TimeNode and callbacks functions that will be executed. 
+Therefore the basic functioning is that the Flight is partioned on different FlightPhases, that have it's own equations and characteristics, and each
+FlightPhase will have TimeNodes, which is a point in the time where the integration step will be executed, and this class is important to control the
+parachute release and other discrete events.
+
 
 .. Which phase is added, why and most importantly, how exactly?
 
@@ -434,10 +508,12 @@ Using RocketPy for such thing is such kind special...
 
    .. First author: Patrick
       For inspiration, you can see the following content:https://colab.research.google.com/github/giovaniceotto/rocketpy/blob/master/docs/notebooks/getting_started_colab.ipynb#scrollTo=qsXBVgGANVGD
+   ..Revisor1: Adriano
 
-Apogee is one of the most important results in a Rocket Flight on competitions, it's highly valuable for teams to understand how the parameters of the Rocket
-changes the Apogee, as a direct function is not available for this kind of computation, the caracteristic of running simulation quickly are utilized for evaluating
-how the Apogee is affected by the mass of the Rocket. This function is highly used during the early phases of the design of a Rocket.
+Because of performance and safety reasons, apogee is one of the most important results in rocketry competitions, and it's highly valuable for 
+teams to understand how different Rocket parameters can change it. Since a direct relation is not available for this kind of computation, the 
+caracteristic of running simulation quickly are utilized for evaluatin how the Apogee is affected by the mass of the Rocket. This function is 
+highly used during the early phases of the design of a Rocket.
 
 An example of code of how this could be achieved:
 
@@ -474,18 +550,19 @@ The possibility of generating this relation between mass and apogee in a graph s
 designed to run fast.
 
 1. Dynamic Stability Analysis
+   
    .. First author: Guilherme
 
 In this analysis the integration of three different RocketPy classes will be explored: Function, Rocket, and Flight.
 The motivation is to investigate how static stability translates into dynamic stability, 
 i.e. different static margins result relies on different dynamic behaviour, 
-which also depends on the rocket's rotational inertial.
+which also depends on the rocket's rotational inertia.
 
-We can assume the objects stated on [motor] and [rocket] sections and just add coulpe variations on some input data in order to visualize the output effects. 
-Therefore, 
-the idea here is to explore how the dynamic stability of Calisto varies if we change the position of the set of fins by a certain factor.
+We can assume the objects stated on [motor] and [rocket] sections and just add couple variations on some input data in order to visualize the output effects. 
+More specifically, 
+the idea will be to explore how the dynamic stability of Calisto varies by changing the position of the set of fins by a certain factor.
 
-In order to do that, we have to Simulate flights with Different Static Margins by Varying Fin Position, this can be done through a simple loop from python, as described below:
+In order to do that, we have to simulate multiple flights with different static margins, which is achieved by varying the rocket's fin positions. This can be done through a simple python loop, as described below:
 
 
 .. code-block:: python
@@ -523,11 +600,11 @@ In order to do that, we have to Simulate flights with Different Static Margins b
       ylabel="Attitude Angle (deg)",
    )
 
-The next step is to start the simulations itself, which can be done through a loop where we call Flight class, perform the simulation, 
+The next step is to start the simulations themselves, which can be done through a loop where we call Flight class, perform the simulation, 
 save the desired parameters into a list and then follow through the next iteration.
-We are using the Post process flight data method to make RocketPy evaluate additional result parameter after the simulation.
+We'll also be using the *post-process* flight data method to make RocketPy evaluate additional result parameter after the simulation.
 
-Finally, the `Function.comparePlots()` method is used to plot final result.
+Finally, the `Function.comparePlots()` method is used to plot the final result.
 
 [Precisa incluir imagem aqui e refinar o texto acima!]
 
@@ -682,7 +759,7 @@ Acknowledgements
 .. TODO: Who else should be mentioned?
 
 The authors would like to thank the *University of São Paulo*, for the support during the development the current publication,
-and also thank all members of Projeto Jupiter and the RocketPy Team who contributed in the making of the RocketPy library.
+all members of Projeto Jupiter and the RocketPy Team who contributed in the making of the RocketPy library.
 
 References
 ==========
