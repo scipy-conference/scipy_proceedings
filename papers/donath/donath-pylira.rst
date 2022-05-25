@@ -55,12 +55,39 @@ Pylira: deconvolution of images in the presence of Poisson noise
 
 Introduction
 ------------
-For vey low fluxes one enters the Poisson regime.
+Any physical and astronomical imaging process is affected by the limited
+angular resolution of the instrument or telescope. In addition the quality
+of the resulting image is also degraded by background or instrumental
+measurement noise and non-uniform exposure.
+For short wavelengths and associated low intensities
+of the signal, the imaging process consists in recording individual photons arriving from
+a source of interest, often called "events".
+This imaging process is typically for x-ray and gamma-ray telescopes, but is also found
+in magnetic resonance imaging or fluorescence microscopy.
+For each individual photon the incident direction and energy is
+measured. Based on this information the event can be histogramed
+into two dimensional data structures to form an actual image.
 
-Careful treatment of the statistics.
+Because of the low intensities associated recording of individual
+events, the measured signal follows Poisson statistics. This imposes
+a non-linear relationship between the measured signal and true
+underlying intensity as well as a coupling of the signal with the
+measurement noise. Any statistically correct post-processing
+or reconstruction method of thus requires are
+careful treatment of the Poisson nature of the measured image.
 
-x-ray and gamma-ray astronomy, but also microscopy...
-
+To maximise the scientific use of the data is is often desired
+to correct the degradation introduced by the imaging process.
+Besides correction for non-uniform exposure and background
+noise this also includes the correction for the "blurring"
+introduced by the point spread function (PSF) of the
+instrument, often called "deconvolution". Depending on whether
+the PSF of the instrument is known, one distinguishes between
+the "blind deconvolution" and "non blind deconvolution" process.
+For astronomical observations the PSF can often either be
+simulated, given a model of the detector or inferred
+directly from the data by observing far distant objects,
+which appear as point source to the instrument.
 
 
 Deconvolution Methods
@@ -68,6 +95,32 @@ Deconvolution Methods
 
 Richardson-Lucy
 +++++++++++++++
+One of the first methods for deconvolution of images with Poisson
+noise was proposed by :ref:`richardson` and :ref:`lucy`. This method,
+named after the original authors, is often known as the *Richardson & Lucy* (RL)
+method. The method takes the fundamental statistical properties
+of the image into account and describes the measurement process
+as a likelihood based forward modelling procedure.
+
+Assuming each pixel :math:`x_i` in image follows a Poisson likelihood, the total
+likelihood of obtaining the image with :math:`N` pixels is given by:
+
+.. math::
+   :label: poisson
+
+   P\left( x \right) = \frac{{e^{ - \lambda } \lambda ^x }}{{x!}}
+
+
+The *Cash* statistics for the :math:`k`-th dataset:
+
+.. math::
+   :label: cash
+
+   \mathcal{C}_k = \sum_i M_i - D_i \log{M_i}
+
+A Python implementation of the standard RL method is available e.g. in the `Scikit-Image`
+package :ref:`scikit-image`.
+
 
 An alternative approach to this analysis challenge is the use of deconvolution methods. While in other branches of astronomy
 similar methods are already part of the standard analysis, such as the CLEAN algorithm for radio data, this is not the case
@@ -79,16 +132,10 @@ to this problem was proposed in :cite:`Esch2004`, by using a fully Bayesian trea
 State of the art de-blurring algorithms based on deep convolutional neural networks show exceptional results on conventional image data,
 but they cannot be straightforwardly applied to astronomical gamma-ray data, because of a lack of ground truth and training data in general.
 
-The *Cash* statistics for the :math:`k`-th dataset:
-
-.. math::
-   :label: cash
-
-   \mathcal{C}_k = \sum_i M_i - D_i \log{M_i}
 
 
-Extended Richardson-Lucy
-++++++++++++++++++++++++
+Extending Richardson-Lucy
++++++++++++++++++++++++++
 Based on the maximum likelihood formulation the model function can be extended
 by taking into account the exposure, a baseline and multiple measurementof the
 same underlying true flux distribution.
@@ -234,13 +281,16 @@ Diagnostic Plots
 
 *Pylira* relies on an MCMC sampling approach to sample a series of reconstructed images from the posterior
 likelihood defined by Eq. :ref:`post`. Along with the sampling it marginalises over the smoothing
-hyper-parameters and optimizes them in the same process. To diagnose the validity of the results
-it is important to visualise the sampling traces of both the sampled images as well as hyper-parameters.
+hyper-parameters and optimizes them in the same process. To diagnose the validity of the results it is
+important to visualise the sampling traces of both the sampled images as well as hyper-parameters.
+
 Fig. :ref:`diagnosis1` shows one typical diagnostics plot created by the code example above.
 In a multi-panel figure user can inspect the traces of the total log-posteriror as well as the
-traces of th smoothing parameters. The figure also shows the mean value along with the :math:`1~\sigma` error
+traces of th smoothing parameters. Each panel corresponds smoothing hyper parameter
+introduced for each level of the multi-scale representation of the reconstructed image.
+The figure also shows the mean value along with the :math:`1~\sigma` error
 region. In this case the algorithm show stable convergence after a burn-in phase of approximately 200
-iterations.
+iterations for the log-posterior as well as all of the multi-scale smoothing parameters.
 
 
 .. figure:: images/pylira-diagnosis-pixel.pdf
@@ -260,8 +310,9 @@ Another useful diagnostic plot is shown in Fig. :ref:`diagnosis2`. The plot show
 image sampling trace for a single pixel of interest and its surrounding circular region of interest.
 This visualisation allows user to asses the stability of a small region in the image
 e.g. an astronomical point source during the MCMC sampling process. Due to the correlation with
-neighbouring pixels the actual value of a pixel might vary in the samplong process, which appears
-as dips in the trace of the pixel. In the this example a stable sate of the pixels of interest
+neighbouring pixels the actual value of a pixel might vary in the sampling process, which appears
+as "dips" in the trace of the pixel of interested and anti-correlated "peaks" in the one or mutiple
+of the surrounding pixels. In the this example a stable state of the pixels of interest
 is reached after approximately 1000 iterations.
 
 
