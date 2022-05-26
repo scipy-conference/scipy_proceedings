@@ -3,14 +3,14 @@
 :institution: University of Georgia
 
 :author: Gianni Orlando
-:email: mark37@rome.it
+:email: Gianni.Orlando22@UGA.EDU
 :institution: University of Georgia
 
 :author: Shannon Quinn
 :email: SPQ@uga.edu
 :institution: University of Georgia
 
-:bibliography: paperbib
+:bibliography: paper
 
 ----------------------------------------------------------------------------------------------------------------------
 A Novel Pipeline for Cell Instance Segmentation, Tracking and Motility Classification of Toxoplasma Gondii in 3D Space
@@ -44,7 +44,7 @@ This Stardist pipeline is similar in concept to our pipeline. Both create an aut
 Conclusion and Discussion
 -------------------------
 
-Future work on our pipeline will include the expanding of implemented algorithms and completely automated setup scripting. In order to currently run the pipeline, conda must be installed with Plantseg and cellpose environments installed if needed. Ideally, a script should be created to spawn these resources without any additional actions from the end user. Our pipeline aims to be easy-to-use by any party of microscopy researcher thus templates for scripting new segmentation algorithms into the pipeline would make the tool easier to customize. Even segmentation tools that perform suboptimally in comparison to cellpose and Plantseg should be “plug-in” options for research use. Stardust and computationally non-intensive segmentation would create a flexible tool for researchers without access to GPU machines. 
+Future work on our pipeline will include the expanding of implemented algorithms and completely automated setup scripting. In order to currently run the pipeline, conda must be installed with Plantseg and cellpose environments installed if needed. Ideally, a script should be created to spawn these resources without any additional actions from the end user. Our pipeline aims to be easy-to-use by any party of microscopy researcher thus templates for scripting new segmentation algorithms into the pipeline would make the tool easier to customize. Even segmentation tools that perform suboptimally in comparison to cellpose and Plantseg should be "plug-in" options for research use. Stardust and computationally non-intensive segmentation would create a flexible tool for researchers without access to GPU machines. 
 
 
 References
