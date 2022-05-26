@@ -266,7 +266,7 @@ As a future work on the project, we plan to incorporate the following additional
 
 Acknowledgements
 ----------------
-The authors thank SciPy conference and reviewers for their valuable comments on this paper. This work was supported by Natural Sciences and Engineering Research Council of Canada and University of Sherbrooke grant.
+The authors thank SciPy conference and reviewers for their valuable comments on this paper. This work was supported by Natural Sciences and Engineering Research Council of Canada and the University of Sherbrooke grant.
 
 
 References
