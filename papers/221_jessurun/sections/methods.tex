@@ -2,7 +2,7 @@
 Design decisions throughout S3A's architecture have been driven by the following objectives: metadata should have significance rather than be treated as an afterthought; high-resolution images should have minimal impact on the annotation workflow; ROI density and complexity should not limit annotation workflow; and prototyping should not be hindered by application complexity.
 These motives were selected upon noticing the general lack of solutions for related problems in previous literature and tooling. Moreover, applications that \emph{do} address multiple aspects of complex region annotation often require an enterprise service and cannot be accessed under open-source policies.
 
-While the first three points are highlighted in the case study in Section~\ref{sec:case_study}, the subsections below outline pieces of S3A's architecture that prove useful for iterative algorithm prototyping and dataset generation as depicted in \autoref{fig:feedbackLoop}. Note that beyond the facets illustrated here, S3A possesses multiple additional characteristics as outlined in its documentation (\url{https://gitlab.com/s3a/s3a/-/wikis/docs/User's-Guide}).
+While the first three points are highlighted in the case study, the subsections below outline pieces of S3A's architecture that prove useful for iterative algorithm prototyping and dataset generation as depicted in \autoref{fig:feedbackLoop}. Note that beyond the facets illustrated here, S3A possesses multiple additional characteristics as outlined in its documentation (\url{https://gitlab.com/s3a/s3a/-/wikis/docs/User's-Guide}).
 
 \makeFeedbackLoopFig
 
@@ -16,7 +16,7 @@ These processes can also be arbitrarily nested and chained, which is critical fo
 \makeRegionAnalyticsFig
 
 \subsection{Plugins for User Extensions}\label{sec:plugins}
-Section \ref{sec:procFramework} briefly described how custom user functions are easily be wrapped within a process, exposing its parameters within S3A in a GUI format. A rich plugin interface is built on top of this capability in which custom functions, table field predictors, default action hooks, and more can be directly integrated into S3A. In all cases, only a few lines of code are required to achieve most integrations between user code and plugin interface specifications. The core plugin infrastructure consists of a function/property registration mechanism and an interaction window that shows them in the UI. As such, arbitrary user functions can be `registered` in one line of code to a plugin, where it will be effectively exposed to the user within S3A.
+The previous section briefly described how custom user functions are easily be wrapped within a process, exposing its parameters within S3A in a GUI format. A rich plugin interface is built on top of this capability in which custom functions, table field predictors, default action hooks, and more can be directly integrated into S3A. In all cases, only a few lines of code are required to achieve most integrations between user code and plugin interface specifications. The core plugin infrastructure consists of a function/property registration mechanism and an interaction window that shows them in the UI. As such, arbitrary user functions can be `registered` in one line of code to a plugin, where it will be effectively exposed to the user within S3A.
 
 % \makeCustomMiscFuncFig
 

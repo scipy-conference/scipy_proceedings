@@ -36,8 +36,9 @@ Semi-Supervised Semantic Annotator (S3A): Toward Efficient Semantic Labeling
    
 .. raw:: latex
 
-   \input{figures/makefigs}
-   \input{sections/intro}
-   \input{sections/methods}
-   \input{sections/case_study}
-   \input{sections/conclusion}
+   \input{figures/makefigssanitized}
+
+.. include:: papers/221_jessurun/sections_rst/intro.rst
+.. include:: papers/221_jessurun/sections_rst/methods.rst
+.. include:: papers/221_jessurun/sections_rst/casestudy.rst
+.. include:: papers/221_jessurun/sections_rst/conclusion.rst

@@ -2,6 +2,8 @@ from pathlib import Path
 import shutil
 import sys, subprocess, os
 import argparse
+import re
+
 
 def _print_and_run(*cmd, **kwargs):
     print(*cmd)
@@ -33,9 +35,7 @@ def _ensure_overleaf_remote_exists():
         if not repo_name:
             raise ValueError("Must fetch from overleaf, but remote was not set!")
         print("Overleaf remote didn't already exist, adding now")
-        _print_and_run(
-            f"git remote add overleaf {repo_name}"
-        )
+        _print_and_run(f"git remote add overleaf {repo_name}")
 
 
 def rm_old_outputs():
@@ -47,10 +47,18 @@ def rm_old_outputs():
 def sync_overleaf():
     _ensure_overleaf_remote_exists()
 
-    output = _print_and_run("git", "fetch", "overleaf", cwd=rootpath, check=True, capture_output=True, text=True)
+    output = _print_and_run(
+        "git",
+        "fetch",
+        "overleaf",
+        cwd=rootpath,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
     # if output.stdout == "":
-        # print("Overleaf remote is up to date, no need to fetch figures and sections")
-        # return
+    # print("Overleaf remote is up to date, no need to fetch figures and sections")
+    # return
 
     worktree_dir = os.path.relpath(paper_dir, rootpath)
     for pull_path in "figures", "sections", "references.bib", "main.tex":
@@ -74,6 +82,92 @@ def sync_overleaf():
         )
 
 
+def create_rst_sections():
+    """
+    Converts sections/*.tex to sections/*.rst by changing tex conventions
+    to rst conventions.
+    """
+    cite_pat = r"\\cite\{(.*?)\}"
+    # Make sure the label can go above the section
+    label_pat = r"(.*)\\label\{(.*?)\}"
+    section_pat = r"\\(sub)?section\{(.*?)\}"
+    ref_pat = r"\\(auto)?ref\{(.*?)\}"
+    emph_pat = r"\\emph\{(.*?)\}"
+    fig_pat = r"(\\make.*Fig)"
+    backtick_pat = r'``(.*?)"'
+    tilde_pat = r"~"
+    comment_pat = r"(^%.*)"
+    href_pat = r"\\href\{(.*?)\}\{(.*?)\}"
+    url_pat = r"\\url\{(.*?)\}"
+    footnote_pat = r"\\footnote\{(.*?)\}"
+
+    def _sanitized_label(text):
+        return text.replace(":", "").replace("_", "")
+
+    def section_replace(match):
+        groups = match.groups()
+        section_name = groups[1]
+        if groups[0]:
+            replace_char = "-"
+        else:
+            replace_char = "="
+        return f"{section_name}\n{replace_char * len(section_name)}"
+
+    def ref_replace(match):
+        groups = match.groups()
+        replace_name = _sanitized_label(groups[1])
+        if groups[0]:
+            # \autoref means "Figure" should be added
+            return f"Figure :ref:`{replace_name}`"
+        else:
+            return f":ref:`{replace_name}`"
+
+    footnotes = []
+
+    def footnote_replace(match):
+        footnotes.append(f".. [#] {match.group(1)}")
+        return f" [#]_"
+
+    def label_replace(match):
+        replace_name = _sanitized_label(match.group(2))
+        return f".. _{replace_name}:\n\n{match.group(1)}"
+
+    replace_spec = {
+        cite_pat: r":cite:`\1`",
+        label_pat: label_replace,
+        section_pat: section_replace,
+        ref_pat: ref_replace,
+        emph_pat: r"*\1*",
+        fig_pat: r".. raw:: latex\n\n    \1",
+        backtick_pat: r'"\1"',
+        tilde_pat: r" ",
+        comment_pat: r"\n..\n    \1\n",
+        href_pat: r"`\2 <\1>`_",
+        url_pat: r"`\1 <\1>`_",
+        footnote_pat: footnote_replace,
+    }
+
+    rst_dir = paper_dir / "sections_rst"
+    for tex_file in paper_dir.glob("sections/*.tex"):
+        footnotes.clear()
+        file_text = tex_file.read_text()
+        for pattern, replacement in replace_spec.items():
+            file_text = re.sub(pattern, replacement, file_text, flags=re.MULTILINE)
+        file_text += "\n\n" + "\n".join(footnotes)
+        rst_file = rst_dir / tex_file.name.replace(".tex", ".rst")
+        rst_file.write_text(file_text)
+
+    # Handle figures file with disallowed reference characters
+    def makefig_replace(match):
+        return rf"\label{{{_sanitized_label(match.group(1))}}}"
+
+    makefigs_file = paper_dir / "figures/makefigs.tex"
+    sanitized_text = re.sub(
+        r"\\label\{(.*?)\}", makefig_replace, makefigs_file.read_text()
+    )
+    makefigs_file.with_name("makefigssanitized.tex").write_text(sanitized_text)
+
+
 def build_paper():
     builder_script = rootpath / "publisher/build_paper.py"
     paper_relpath = f"papers/{paper_id}"
@@ -90,9 +184,10 @@ def create_argparser():
         "--sync-overleaf",
         action="store_true",
         default=False,
-        help="Check for overleaf upstream and fetch changes"
+        help="Check for overleaf upstream and fetch changes",
     )
     return parser
+
 
 paper_id = "221_jessurun"
 paper_dir = Path(__file__).resolve().parent
@@ -102,5 +197,6 @@ if __name__ == "__main__":
     parser = create_argparser()
     if parser.parse_args().sync_overleaf:
         sync_overleaf()
+    create_rst_sections()
     rm_old_outputs()
     build_paper()
