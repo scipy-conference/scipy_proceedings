@@ -87,7 +87,7 @@ The last section presents the conclusion and discussions that did not fit into e
 2. Solving Navier-Stokes equations with PINN
 --------------------------------------------
 
-The incompressible Navier-Stokes equations in the vector form are composed of the continuity equation:
+The incompressible Navier-Stokes equations in vector form are composed of the continuity equation:
 
 .. math::
    :label: eq:continuity
@@ -102,12 +102,12 @@ and momentum equations:
    \frac{\partial \vec{U}}{\partial t}+(\vec{U} \cdot \nabla) \vec{U}=-\frac{1}{\rho} \nabla p +\nu \nabla^{2} \vec{U} + \vec{g}
 
 where :math:`\rho=\rho(\vec{x}, t)`, :math:`\nu=\nu(\vec{x}, t)`, and :math:`p=p(\vec{x}, t)` are scalar fields denoting density, kinematic viscosity, and pressure, respectively.
-:math:`\vec{x}` denotes the spatial coordinate, and :math:`\vec{x}=\left[x,\ y\right]^{\mathsf{T}}`.
+:math:`\vec{x}` denotes the spatial coordinate, and :math:`\vec{x}=\left[x,\ y\right]^{\mathsf{T}}` in two dimensions.
 The density and viscosity fields are usually known and given, while the pressure field is unknown.
 :math:`\vec{U}=\vec{U}(\vec{x}, t)=\left[u(x, y, t),\ v(x, y, t)\right]^\mathsf{T}` is a vector field for flow velocity.
-All of them are functions of spatial coordinate in the computational domain :math:`\Omega` and time before a given limit :math:`T`.
-The gravity field :math:`\vec{g}` may also be a function of space and time, though it is usually a constant.
-A solution to the Navier-Stokes equations are subjected to an initial condition and boundary conditions:
+All of them are functions of the spatial coordinate in the computational domain :math:`\Omega` and time before a given limit :math:`T`.
+The gravitational field :math:`\vec{g}` may also be a function of space and time, though it is usually a constant.
+A solution to the Navier-Stokes equations is subjected to an initial condition and boundary conditions:
 
 .. math::
    :label: eq:ic-and-bc
@@ -120,7 +120,7 @@ A solution to the Navier-Stokes equations are subjected to an initial condition 
       \end{array}
    \right.
 
-:math:`\Gamma` represent the boundary of the computational domain.
+where :math:`\Gamma` represents the boundary of the computational domain.
 
 2.1. The PINN method
 ++++++++++++++++++++
@@ -139,7 +139,7 @@ The basic form of the PINN method starts from approximating :math:`\vec{U}` and 
 Here we use a single network that predicts both pressure and velocity fields.
 It is also possible to use different networks for them separately.
 Later in this work, we will use :math:`G^U` and :math:`G^p` to denote the predicted velocity and pressure from the neural network.
-:math:`\Theta` at this point represents free parameters of the network.
+:math:`\Theta` at this point represents the free parameters of the network.
 
 To determine the free parameters, :math:`\Theta`, ideally, we hope the approximate solution gives zero residuals for equations (:ref:`eq:continuity`), (:ref:`eq:momentum`), and (:ref:`eq:ic-and-bc`).
 That is
@@ -161,11 +161,11 @@ The derivatives of :math:`G` with respect to :math:`\vec{x}` and :math:`t` are u
 Nevertheless, it is possible to use analytical derivatives when the chosen network architecture is simple enough, as reported by early-day literature (:cite:`lagaris_artificial_1998,Li2003`).
 
 If residuals in (:ref:`eq:residuals`) are not complicated, and if the number of the parameters, :math:`N_\Theta`, is small enough, we may numerically find the zero root by solving a system of :math:`N_\Theta` nonlinear equations generated from a proper set of :math:`N_\Theta` spatial-temporal points.
-However, the scenario rarely happens as :math:`G` is usually highly complicated and :math:`N_\Theta` is not trivial.
-Moreover, we do not even know if such a zero root exists for equations in (:ref:`eq:residuals`).
+However, the scenario rarely happens as :math:`G` is usually highly complicated and :math:`N_\Theta` is large.
+Moreover, we do not even know if such a zero root exists for the equations in (:ref:`eq:residuals`).
 
 Instead, in PINN, the condition is relaxed.
-We do not seek the zero root of (:ref:`eq:residuals`) but just hope to find a set of parameters that make the residuals as close to zero.
+We do not seek the zero root of (:ref:`eq:residuals`) but just hope to find a set of parameters that make the residuals close to zero.
 Considering the sum of the :math:`l_2` norms of residuals,
 
 .. math::
@@ -181,14 +181,14 @@ In other words,
 
    \theta = \operatorname*{arg\,min}\limits_{\Theta} r(\vec{x}, t; \Theta)\,\ \forall \left\{\begin{array}{l}x \in \Omega \\ t\in[0, T]\end{array}\right.
 
-This poses a fundamental difference between the PINN method and the traditional CFD schemes, causing the PINN method potentially more difficult to achieve the same accuracy as the traditional schemes.
-We will discuss more in section 3.
+This poses a fundamental difference between the PINN method and traditional CFD schemes, making it potentially more difficult for the PINN method to achieve the same accuracy as the traditional schemes.
+We will discuss this more in section 3.
 
-To solve (:ref:`eq:objective`), theoretically, we can use any numbers of spatial-temporal points, which eases the need of computational resources, compared to finding the zero root directly.
-Gradient-descent-based optimizers further reduce the computational cost, especially in terms of memory usage and the difficulty of computing parallelization.
+To solve (:ref:`eq:objective`), theoretically, we can use any number of spatial-temporal points, which eases the need of computational resources, compared to finding the zero root directly.
+Gradient-descent-based optimizers further reduce the computational cost, especially in terms of memory usage and the difficulty of parallelization.
 Alternatively, Quasi-Newton methods may work but only when :math:`N_\Theta` is small enough.
 
-However, even though the equation (:ref:`eq:objective`) may be solvable, it is still a significantly expensive task.
+However, even though equation (:ref:`eq:objective`) may be solvable, it is still a significantly expensive task.
 Compared to regular data-driven learning applications, due to the use of automatic differentiation to evaluate the derivatives of :math:`G` with respect to :math:`\vec{x}` and :math:`t`, the computational graph becomes much larger.
 The first-order derivatives require one back-propagation on the network, while the second-order derivatives present in the diffusion term :math:`\nabla^2 G^U` require an additional back-propagation on the first-order derivatives' computational graph. 
 Finally, to update parameters in an optimizer, the gradients of :math:`G` with respect to parameters :math:`\Theta` requires another back-propagation on the graph of the second-order derivatives.
@@ -201,22 +201,22 @@ We will see the performance of the PINN method in the case studies.
 
 For readers with a background in numerical methods for partial differential equations, we would like to make an analogy between traditional numerical methods and PINN.
 
-Considering solving strong solutions of differential equations, we can describe the solving workflows of most numerical methods with five stages:
+In obtaining strong solutions to differential equations, we can describe the solution workflows of most numerical methods with five stages:
 
 1. *Designing the approximate solution with undetermined parameters*
 2. *Choosing proper approximation for derivatives*
-3. *Obtaining the so-called modified equation by substituting approximate solution into the differential equations and initial/boundary conditions*
-4. *Generating a system of linear/nonlinear equations*
+3. *Obtaining the so-called modified equation by substituting approximate derivatives into the differential equations and initial/boundary conditions*
+4. *Generating a system of linear/nonlinear algebraic equations*
 5. *Solving the system of equations*
 
-For example, to solve :math:`\nabla U^2(x)=s(x)`, the naivest spectral method (:cite:`trefethen_spectral_2000`) approximates the solution with :math:`U(x)\approx G(x)=\sum\limits_{i=1}^{N}c_i\phi_i(x)`, where :math:`c_i` represents undetermined parameters, and :math:`\phi_i(x)` denotes a set of either polynomials, trigonometric functions, or complex exponential.
-Next, the first derivative of :math:`U` is straightforward—we can just assume :math:`U^{\prime}(x)\approx G^{\prime}(x)=\sum\limits_{i=1}^{N}c_i \phi_i^{\prime}(x)`.
-The second-order derivative may be tricky.
+For example, to solve :math:`\nabla U^2(x)=s(x)`, the most naive spectral method (:cite:`trefethen_spectral_2000`) approximates the solution with :math:`U(x)\approx G(x)=\sum\limits_{i=1}^{N}c_i\phi_i(x)`, where :math:`c_i` represents undetermined parameters, and :math:`\phi_i(x)` denotes a set of either polynomials, trigonometric functions, or complex exponentials.
+Next, obtaining the first derivative of :math:`U` is straightforward—we can just assume :math:`U^{\prime}(x)\approx G^{\prime}(x)=\sum\limits_{i=1}^{N}c_i \phi_i^{\prime}(x)`.
+The second-order derivative may be more tricky.
 One can assume :math:`U^{\prime\prime}(x)\approx G^{\prime\prime}=\sum\limits_{i=1}^{N}c_i \phi_i^{\prime\prime}(x)`.
 Or, another choice for nodal bases (i.e., when :math:`\phi_i(x)` is chosen to make :math:`c_i\equiv G(x_i)`) is :math:`U^{\prime\prime}(x)\approx \sum\limits_{i=1}^{N}c_i G^{\prime}(x_i)`.
 Because :math:`\phi_i(x)` is known, the derivatives are analytical.
-After substituting the approximate solution and derivatives in to the target differential equation, we need to solve parameters :math:`c_1,\cdots,c_N`.
-We do so by selecting :math:`N` points from the computational domain and create a system of :math:`N` linear equations 
+After substituting the approximate solution and derivatives in to the target differential equation, we need to solve for parameters :math:`c_1,\cdots,c_N`.
+We do so by selecting :math:`N` points from the computational domain and creating a system of :math:`N` linear equations:
 
 .. math::
    :label: eq:spectral-linear-sys
@@ -236,13 +236,13 @@ We do so by selecting :math:`N` points from the computational domain and create 
    = 0
 
 Finally, we determine the parameters by solving this linear system.
-Though this example uses a spectral method, the workflow also applies to many other numerical methods, such as finite difference method, which can be reformatted as a form of spectral method.
+Though this example uses a spectral method, the workflow also applies to many other numerical methods, such as finite difference methods, which can be reformatted as a form of spectral method.
 
 With this workflow in mind, it should be easy to see the analogy between PINN and conventional numerical methods.
 Aside from using much more complicated approximate solutions, the major difference lies in how to determine the unknown parameters in the approximate solutions.
 While traditional methods solve the zero-residual conditions, PINN relies on searching the minimal residuals.
 A secondary difference is how to approximate derivatives.
-Conventional numerical methods use analytical or numerical differentiation of the approximate solutions, and the PINN methods usually depend on automatic differentiation.
+Conventional numerical methods use analytical or numerical differentiation of the approximate solutions, and the PINN methods usually depends on automatic differentiation.
 This difference may be minor as we are still able to use analytical differentiation for simple network architectures with PINN.
 However, automatic differentiation is a major factor affecting PINN's performance.
 
