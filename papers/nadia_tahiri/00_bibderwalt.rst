@@ -2,14 +2,14 @@
 :email: Nadia.Tahiri@USherbrooke.ca
 :institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 
-:author:	My-Linh Luu
-:email:	luu.my-linh@courrier.uqam.ca
-:institution:	Department of Computer Science, University of Quebec at Montreal, Montreal, QC, Canada
-
 :author:	Aleksandr Koshkarov
 :email:	aleksandr.koshkarov@usherbrooke.ca
 :institution:	Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 :institution:	Center of Artificial Intelligence, Astrakhan State University, Astrakhan, 414056, Russia
+
+:author:	My-Linh Luu
+:email:	luu.my-linh@courrier.uqam.ca
+:institution:	Department of Computer Science, University of Quebec at Montreal, Montreal, QC, Canada
 
 :author: Nadia Tahiri
 :email: Nadia.Tahiri@USherbrooke.ca
@@ -24,7 +24,7 @@ Phylogeography: Analysis of genetic and climatic data of SARS-CoV-2
 .. class:: abstract
 
    Due to the fact that the SARS-CoV-2 pandemic reaches its peak, researchers around the globe are combining efforts to investigate the genetics of different variants to better deal with its distribution. This paper discusses phylogeographic approaches to examine how patterns of divergence within SARS-CoV-2 coincide with geographic features, such as climatic features.
-   First, we propose a python-based bioinformatic pipeline called aPhylogeo for phylogeographic analysis written in Python 3 that help researchers better understand the distribution of the virus in specific regions via a configuration file, and then run all the analysis operations in a single run. In particular, the aPhylogeo tool determines which parts of the genetic sequence undergo a high mutation rate depending on geographic conditions, using a sliding window that moves along the genetic sequence alignment in user-defined steps and a window size. As a Python-based cross-platform program, aPhylogeo works on Windows®, MacOS X® and GNU/Linux. The implementation of this pipeline is publicly available on GitHub (https://github.com/tahiri-lab/aPhylogeo).
+   First, we propose a python-based bioinformatic pipeline called **aPhylogeo** for phylogeographic analysis written in Python 3 that help researchers better understand the distribution of the virus in specific regions via a configuration file, and then run all the analysis operations in a single run. In particular, the aPhylogeo tool determines which parts of the genetic sequence undergo a high mutation rate depending on geographic conditions, using a sliding window that moves along the genetic sequence alignment in user-defined steps and a window size. As a Python-based cross-platform program, aPhylogeo works on Windows®, MacOS X® and GNU/Linux. The implementation of this pipeline is publicly available on GitHub (https://github.com/tahiri-lab/aPhylogeo).
    Second, we present an example of analysis of our new aPhylogeo tool on real data (SARS-CoV-2) to understand the occurrence of different variants. 
 
 
@@ -104,7 +104,7 @@ The creation of phylogenetic trees, as mentioned above, is an important part of 
                raise 
 
 
-This function takes gene data, window size, step size, bootstrap threshold, threshold for the Robinson and Foulds distance, and data names as input parameters. Then the function sequentially connects the main steps of the pipeline: align_sequence(gene), sliding_window(window_size, step_size), create_bootstrap(), run_dnadist(), run_neighbor(), run_consense(), and filter_results with parameters. As a result, we obtain a phylogenetic tree (or several trees), which is written to a file.
+This function takes gene data, window size, step size, bootstrap threshold, threshold for the Robinson and Foulds distance, and data names as input parameters. Then the function sequentially connects the main steps of the pipeline: `align_sequence(gene)`, `sliding_window(window_size, step_size)`, `create_bootstrap()`, `run_dnadist()`, `run_neighbor()`, `run_consense()`, and `filter_results` with parameters. As a result, we obtain a phylogenetic tree (or several trees), which is written to a file.
 
 The sliding window strategy can detect genetic fragments depending on environmental parameters, but this work requires time-consuming data preprocessing and the use of several bioinformatics programs. For example, we need to verify that each sequence identifier in the sequencing data always matches the corresponding metadata. If samples are added or removed, we need to check whether the sequencing dataset matches the metadata and make changes accordingly. In the next stage, we need to align the sequences and integrate all step by step into specific software such as MUSCLE :cite:`E04`, Phylip package (i.e. Seqboot, DNADist, Neighbor, and Consense) :cite:`F93`, RF :cite:`RF81`, and raxmlHPC :cite:`S14`. The use of each software requires expertise in bioinformatics. In addition, the intermediate analysis steps inevitably generate many files, the management of which not only consumes the time of the biologist, but is also subject to errors, which reduces the reproducibility of the study. At present, there are only a few systems designed to automate the analysis of phylogeography. In this context, the development of a computer program for a better understanding of the nature and evolution of coronavirus is essential for the advancement of clinical research.
 
@@ -254,7 +254,7 @@ The size of the sliding window and the advanced step for the sliding window play
 
 Conclusions and Future Work
 ---------------------------
-In this paper, a bioinformatics pipeline for phylogeographic analysis is designed to help researchers better understand the distribution of viruses in specific regions using genetic and climate data. We propose a new algorithm called phylogeo that allows the user to quickly and intuitively create trees from genetic and climate data. Using a sliding window, the algorithm finds specific regions on the viral genetic sequences that can be correlated to the climatic conditions of the region.  To our knowledge, this is the first study of its kind that incorporates climate data into this type of study. It aims to help the scientific community by facilitating research in the field of phylogeography. Our solution runs on Windows®, MacOS X® and GNU/Linux and the code is freely available to researchers and collaborators on GitHub (https://github.com/tahiri-lab/aPhylogeo).
+In this paper, a bioinformatics pipeline for phylogeographic analysis is designed to help researchers better understand the distribution of viruses in specific regions using genetic and climate data. We propose a new algorithm called **aPhylogeo** that allows the user to quickly and intuitively create trees from genetic and climate data. Using a sliding window, the algorithm finds specific regions on the viral genetic sequences that can be correlated to the climatic conditions of the region.  To our knowledge, this is the first study of its kind that incorporates climate data into this type of study. It aims to help the scientific community by facilitating research in the field of phylogeography. Our solution runs on Windows®, MacOS X® and GNU/Linux and the code is freely available to researchers and collaborators on GitHub (https://github.com/tahiri-lab/aPhylogeo).
 
 As a future work on the project, we plan to incorporate the following additional features:
 
