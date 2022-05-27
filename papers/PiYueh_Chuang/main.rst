@@ -417,7 +417,7 @@ We were not sure if it made sense to define a problem size as the sum of the per
 For example, 100 model parameters plus 100 training points is not equivalent to 150 model parameters plus 50 training points in terms of workloads.
 So without a proper definition of problem size and workload, it was not clear how to fairly compare PINN and traditional CFD methods.
 
-Nevertheless, the gap between the performances of PINN and PetIBM is too larage, and no one can argue that using other metrics would change the conclusion.
+Nevertheless, the gap between the performances of PINN and PetIBM is too large, and no one can argue that using other metrics would change the conclusion.
 Not to mention that the PINN solver ran on A100 GPUs, while PetIBM ran on a single K40 GPU in our lab, a product from 2013.
 This is also not a surprising conclusion because, as indicated in section 2, the use of automatic differentiation for temporal and spatial derivatives results in a huge computational graph.
 In addition, the PINN solver uses gradient-descent based method, which is a first-order method and limits the performance.
