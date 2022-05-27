@@ -1,0 +1,44 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{CGK11}
+
+\bibitem[Ble90]{blelloch90}
+Guy~E. Blelloch.
+\newblock Prefix sums and their applications.
+\newblock Technical Report CMU-CS-90-190, School of Computer Science, Carnegie
+  Mellon University, November 1990.
+
+\bibitem[CGK11]{copperhead2011}
+Bryan Catanzaro, Michael Garland, and Kurt Keutzer.
+\newblock Copperhead: compiling an embedded data parallel language.
+\newblock {\em ACM SIGPLAN Notices}, 46(8):47--56, February 2011.
+\newblock URL: \url{https://doi.org/10.1145/2038037.1941562}, \href
+  {http://dx.doi.org/10.1145/2038037.1941562}
+  {\path{doi:10.1145/2038037.1941562}}.
+
+\bibitem[Ram16]{pysph16}
+Prabhu Ramachandran.
+\newblock {PySPH}: a reproducible and high-performance framework for smoothed
+  particle hydrodynamics.
+\newblock In Sebastian Benthall and Scott Rostrup, editors, {\em {P}roceedings
+  of the 15th {P}ython in {S}cience {C}onference}, pages 127 -- 135, 2016.
+
+\bibitem[RP{\etalchar{+}}19]{pysph2019}
+Prabhu Ramachandran, , Kunal Puri, Aditya Bhosale, Dinesh Adepu, Abhinav Muta,
+  Pawan Negi, Rahul Govind, Suraj Sanka, Pankaj Pandey, Chandrashekhar Kaushik,
+  Anshuman Kumar, Ananyo Sen, Rohan Kaushik, Mrinalgouda Patil, Deep Tavker,
+  Dileep Menon, Vikas Kurapati, Amal~S Sebastian, Arkopal Dutt, and Arpit
+  Agarwal.
+\newblock {PySPH}: a {Python-based} framework for smoothed particle
+  hydrodynamics.
+\newblock {\em arXiv preprint arXiv:1909.04504}, 2019.
+\newblock URL: \url{https://arxiv.org/abs/1909.04504}.
+
+\bibitem[Sch15]{schroeder2015}
+Daniel~V. Schroeder.
+\newblock Interactive molecular dynamics.
+\newblock {\em American Journal of Physics}, 83(3):210--218, February 2015.
+\newblock Publisher: American Association of Physics Teachers.
+\newblock \href {http://dx.doi.org/10.1119/1.4901185}
+  {\path{doi:10.1119/1.4901185}}.
+
+\end{thebibliography}
