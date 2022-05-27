@@ -6,6 +6,18 @@
 :email: Gianni.Orlando22@UGA.EDU
 :institution: University of Georgia
 
+:author: Mojtaba Fazli
+:email: mfazli@meei.harvard.edu
+:institution: harvard University
+
+:author: Gary Ward
+:email: Gary.Ward@uvm.edu
+:institution: University of Vermont
+
+:author: Silvia Moreno
+:email: smoreno@uga.edu
+:institution: University of Georgia
+
 :author: Shannon Quinn
 :email: SPQ@uga.edu
 :institution: University of Georgia
