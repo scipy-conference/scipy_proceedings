@@ -16,9 +16,9 @@
 
 :bibliography: references
 
----------------------------------------------------
-popmon analysis package for dataset shift detection
----------------------------------------------------
+----------------------------------------------------
+popmon: Analysis Package for Dataset Shift Detection
+----------------------------------------------------
 
 .. class:: abstract
 
