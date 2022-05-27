@@ -24,7 +24,25 @@ The Advanced Scientific Data Format (ADSF): An Update
 
 .. class:: abstract
 
- We report on progress in developing and extending the new format we have developed for the data from the James Webb and Nancy Grace Roman Space Telescopes since we reported on it at a previous Scipy. While the format was developed as a replacement for the long standard FITS format used in astronomy, it is quite generic and not restricted to use with astronomical data. We will briefly review the format, and extensions and changes made to the standard itself, as well as to the Python library we have developed to support it. The standard itself has been clarified in a number of respects. Recent improvements include easier to develop Python conversion code between special Python objects and ASDF representation of such objects, better control of the configuration of extensions supported and versioning of extensions. tools for display and searching of the structured metadata,  better developer documentation, tutorials, a more maintainable and flexible schema system, This has included a reorganization of the components to make the standard free from astronomical assumptions. A important motivator for the format was the ability to support serializing functional transforms in multiple dimensions as well as expressions built out of such transforms, which has now been implemented. More generalized compression schemes are now enabled. We are currently working on adding chunking support and will discuss our plan for further enhancements.
+ We report on progress in developing and extending the new (ASDF) format
+ we have developed for the data from the James Webb and Nancy Grace Roman
+ Space Telescopes since we reported on it at a previous Scipy. While the
+ format was developed as a replacement for the long-standard FITS format
+ used in astronomy, it is quite generic and not restricted to use with
+ astronomical data. We will briefly review the format, and extensions and
+ changes made to the standard itself, as well as to the Python library we
+ have developed to support it. The standard itself has been clarified in
+ a number of respects. Recent improvements include easier to develop
+ Python conversion code between special Python objects and ASDF
+ representation of such objects, better control of the configuration of
+ extensions supported and versioning of extensions, tools for display and
+ searching of the structured metadata,  better developer documentation, tutorials, a more maintainable and flexible schema system. This has
+ included a reorganization of the components to make the standard free
+ from astronomical assumptions. A important motivator for the format was
+ the ability to support serializing functional transforms in multiple dimensions as well as expressions built out of such transforms, which
+ has now been implemented. More generalized compression schemes are now
+ enabled. We are currently working on adding chunking support and will
+ discuss our plan for further enhancements.
 
 
 
@@ -57,7 +75,7 @@ Summary of Motivations
 ......................
 
 - Suitable as an archival format:
-   - Old versions continue to be supported by libraries
+   - Old versions continue to be supported by libraries.
    - Format is sufficiently transparent (e.g., not requiring extensive
      documentation to decode) for the fundamental set of capabilities.
    - Metadata is easily viewed without library.
@@ -74,13 +92,13 @@ Summary of Motivations
 Basics of ASDF Format
 .....................
 
-- Format consists of a YAML header optionally followed by 1 or more binary
+- Format consists of a YAML header optionally followed by one or more binary
   blocks for containing binary data.
 - The YAML [http://yaml.org] header contains all the metadata and defines
   the structural
   relationship of all the data elements.
 - YAML tags are used to indicate to libraries the semantics of subsections
-  of the YAML header that libraries can use to construct special software objects. A tag for a data array, for example, would indicate to a Python 
+  of the YAML header that libraries can use to construct special software objects. For example, a tag for a data array would indicate to a Python 
   library to convert it into a numpy array.
 - YAML anchors and alias are used to share common elements to avoid
   duplication.
@@ -91,12 +109,12 @@ Basics of ASDF Format
   these schemas.
 - Binary blocks are referenced in the YAML to link binary data to YAML
   attributes.
-- ASDF supports arrays embedded in YAML or in a binary block.
-- Streaming supported for a single binary block
-- Permits local definition of tags and schemas outside of the standard
+- Support for arrays embedded in YAML or in a binary block.
+- Streaming support for a single binary block.
+- Permit local definitions of tags and schemas outside of the standard.
 - While developed for astronomy, useful for general scientific or engineering
   use.
-- Aims to be language neutral
+- Aims to be language neutral.
 
 Current and planned uses
 ------------------------
@@ -106,10 +124,10 @@ James Webb Space Telescope (JWST)
 
 NASA requires JWST data products be made available in the FITS
 format. Nevertheless, all the calibration pipelines operate on the data
-in the ASDF representation, work with ASDF or FITS files, and where the 
-World Coordinate System information for the data is always in the, ASDF,
-embedded in FITS files when the FITS format is requested. The data is also
-made available in ASDF format
+using the ASDF representation, but can work using ASDF or FITS files.
+Moreover, the World Coordinate System information for the data is always
+stored using ASDF, but embedded in FITS files when the FITS format is
+requested.
 
 Nancy Grace Roman Space Telescope
 .................................
@@ -120,10 +138,10 @@ but a much larger field of view than HST, will be launched in 2026 or thereabout
 Daniel K Inoue Solar Telescope
 ..............................
 
-This telescope is using ASDF for much of the early data product to hold
-the metadata for a combined set of data involving up to many thousands
-of files. Also held in the ASDF file is the World Coordinate System information
-for all the referenced data.
+This telescope is using ASDF for much of the early data products to hold
+the metadata for a combined set of data which can involve many thousands
+of files. Furthermore, the World Coordinate System information is stored
+using ASDF for all the referenced data.
 
 Vera Rubin Telescope (for World Coordinate System interchange)
 ..............................................................
@@ -131,16 +149,16 @@ Vera Rubin Telescope (for World Coordinate System interchange)
 This ground-based telescope will scan the complete night sky every
 3 days searching for transient events. They are using ASDF as an
 interchange format for the World Coordinate Systems.
-
+|
 There have been users outside of astronomy using ASDF, as well as contributors
-to the source code. 
+to the source code.
 
 Changes to the standard (completed and proposed)
 ------------------------------------------------
 
 These are based on lessons learned from usage.
 
-The current version of the standard is 1.5.0 (1.6.0 being developed)
+The current version of the standard is 1.5.0 (1.6.0 being developed).
 
 The following items reflect areas where we felt improvements were needed.
 
@@ -158,10 +176,10 @@ Moving astronomy-specific schemas out of standard
 .................................................
 
 These primarily affect the previous inclusion of World Coordinate Tags,
-that are strongly associated with astronomy. Remaining are those 
+which are strongly associated with astronomy. Remaining are those 
 related to time and unit standards, both of obvious generality, but the
 implementation must be based on some standards,
-and the astropy-based ones are as good or better than any.
+and currently the astropy-based ones are as good or better than any.
 
 Added documentation on how ASDF library internals work
 ......................................................
@@ -201,13 +219,13 @@ Handling of null values and their interpretation
 
 The standard doesn't specify the behavior regarding null values.
 The Python library previously removed attributes from the YAML
-tree when the corresponding Python attribute has a None value upon
+tree when the corresponding Python attribute has a ``None`` value upon
 writing to an ADSF file. On reading files where the attribute was
 missing but the schema indicated a default value, the library 
 would create the Python attribute with the default. As mentioned
 in the next item, we no longer use this mechanism, and now on 
 write, the attribute can written into the tree with a null value
-if the Python value is None and the schema permits null values.
+if the Python value is ``None`` and the schema permits null values.
 
 Add alternative tag URI schemas
 ...............................
@@ -433,8 +451,8 @@ the model more precisely. These include:
 - definitions of the units used.
 - indications of the valid range of the inputs or parameters (bounds)
 - each function shows the mapping of the inputs and the naming of the
-  outputs of each function
-- the addition operator is itself a transform
+  outputs of each function.
+- the addition operator is itself a transform.
 
 Without the use of units, the YAML would be simpler. But the point is
 that the YAML easily accommodates expression trees. The tags are used
@@ -448,7 +466,7 @@ the output of one model into another. This system has been used to
 define complex coordinate transforms from telescope detectors to sky
 coordinates for imaging, and wavelengths for spectrographs, using
 over 100 model components, something that the FITS format had no hope
-of managing, nor any other that we are aware of.
+of managing, nor any other format that we are aware of.
 
 Displaying the contents of ASDF files
 -------------------------------------
@@ -459,7 +477,7 @@ options of what depth to display, how many lines to display, etc.
 And example of the info use is shown in Figure 2.
 
 There is also functionality to search for items in the file by attribute
-name and values, also using pattern matching for either. The search
+name and/or values, also using pattern matching for either. The search
 results are shown as attribute paths to the items that were found.
 
 .. figure:: figure2.png
@@ -496,7 +514,7 @@ the schema (as well as proving extra information for the ASDF content
 in the info command). Normally the converters and manifest are registered
 with ASDF using standard ASDF functions, and that this registration
 is normally (but is not required to be) triggered by use of Python
-entry points defined in the setup.cfg file so that this extension is 
+entry points defined in the ``setup.cfg`` file so that this extension is 
 automatically recognized when the extension package is installed.
 
 One can of course write their own custom code to convert the contents
@@ -589,13 +607,14 @@ Most scientists and even scientific software developers tend to find
 JSON Schema files tedious to interpret. A more compact, and intuitive
 rendering of the contents would be very useful.
 
-C/C++ implementation
-....................
+Independent implementation
+..........................
 
 Having ASDF accepted as a standard data format requires a library
-that is divorced from a Python API. Initially this can be done 
+that is divorced from a Python API. Initially this can be done
 most easily by layering it on the Python library, but ultimately
-there should be an independent implementation in C/C++. This is by
+there should be an independent implementation which includes support
+for C/C++ wrappers. This is by
 far the item that will require the most effort, and would benefit
 from outside involvement.
 
@@ -611,7 +630,7 @@ Sources of Information
 
 - ASDF Standard: https://asdf-standard.readthedocs.io/en/1.0.2/
 - Python ASDF package documentation: https://asdf.readthedocs.io/en/stable/
-- Repository: github.com/asdf-format/asdf
+- Repository: https://github.com//asdf-format/asdf
 - Tutorials: https://github.com/asdf-format/tutorials
 
 
@@ -622,23 +641,25 @@ References
 .. [Gre15] P. Greenfield, M. Droettboom, E. Bray. 
            *ASDF: A new data format for astronomy*,
            Astronomy and Computing, 12:240-251, September 2015.
+           https://doi.org/10.1016/j.ascom.2015.06.004
 .. [FIT16] FITS Working Group. *Definition of the Flexible Image Transport
            System*, International Astronomical Union, 
            http://fits.gsfc.nasa.gov/fits_standard.html, July 2016.
 .. [Jes13] E. Jeschke. 
            *Ginga: an open-source astronomical image viewer and toolkit*,
-           Proc. of the 12th Python in Science Conference., p58-64,January 2013.
+           Proc. of the 12th Python in Science Conference., p58-64,January 2013. DOI:10.25080/Majora-8b375195-00a
 .. [McK10] W. McKinney. *Data structures for statistical computing in python*,
-           Proceedigns of the 9th Python in Science Conference, p56-61, 2010. 
+           Proceedigns of the 9th Python in Science Conference, p56-61, 2010.
+           DOI:10.25080/Majora-92bf1922-00a 
 .. [Pen09] W. Pence, R. Seaman, R. L. White,
            *Lossless Astronomical Image Compression and the Effects of Noise*,
            Publications of the Astronomical Society of the Pacific,
-           121:414-427, April 2009
+           121:414-427, April 2009. https://doi.org/10.48550/arXiv.0903.2140
 .. [Pen10] W. Pence, R. L. White, R. Seaman.
            *Optimal Compression of Floating-Point Astronomical Images
            Without Significant Loss of Information*,
            Publications of the Astronomical Society of the Pacific,
-           122:1065-1076, September 2010.
+           122:1065-1076, September 2010. https://doi.org/10.1086/656249
 .. [Joy03] W. A. Joye, E. Mandel. *New Features of SAOImage DS9*,
            Astronomical Data Analysis Software and Systems XII ASP
            Conference Series, 295:489, 2003.
