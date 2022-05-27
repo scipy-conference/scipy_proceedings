@@ -19,7 +19,7 @@
 :email: cel36@pitt.edu
 :institution: Department of Developmental Biology, University of Pittsburgh, Pittsburgh, PA 15261 USA
 
-:bibliography: refs.bib
+:bibliography: refs
 
 ----------------------------------------------------
 Low Level Feature Extraction for Cilia Segmentation
