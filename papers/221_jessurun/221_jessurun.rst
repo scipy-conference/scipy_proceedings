@@ -20,7 +20,7 @@
 
 :bibliography: references
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+.. :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 ----------------------------------------------------------------------------
 Semi-Supervised Semantic Annotator (S3A): Toward Efficient Semantic Labeling
