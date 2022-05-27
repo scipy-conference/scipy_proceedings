@@ -158,7 +158,7 @@ This modular architecture, along with its well-structured and documented code, f
 starting with the use of Jupyter Notebooks that people can adapt for their specific use case.
 The Fig. :ref:`fig1` illustrates RocketPy architecture. 
 
-.. figure:: Fluxogram.png
+.. figure:: images/Fluxogram.png
    :align: center
    :scale: 24%
    :figclass: bht
@@ -384,7 +384,7 @@ It is visualized through the time plot in Fig. :ref:`figSM`, which shows the var
 ..One of the most relevant outputs of the Rocket class is the static margin, thorught the time plot :ref:`figSM`, which shows
 ..the variation of the static margin as the motor burns its propellant.
 
-.. figure:: SMoutput.png
+.. figure:: images/SMoutput.png
    :align: center
    :figclass: bht
    
