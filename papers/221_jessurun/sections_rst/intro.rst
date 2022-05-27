@@ -64,7 +64,7 @@ While this may not be an issue for some datasets, such assumptions are *cripplin
     %Toward this end,
 
 
-With improving hardware capabilities and increasing need for high-resolution ground truth segmentation, there are a continually growing number of applications that \textit{require} high-resolution imaging with the previously described characteristics :cite:`Mohajerani_cloudRemoteSensing,Demochkina_improvingOneShotXray`.
+With improving hardware capabilities and increasing need for high-resolution ground truth segmentation, there are a continually growing number of applications that *require* high-resolution imaging with the previously described characteristics :cite:`Mohajerani_cloudRemoteSensing,Demochkina_improvingOneShotXray`.
 In these cases, the existing annotation tooling greatly impacts productivity due to the previously referenced assumptions and lack of support :cite:`SpaceNet2020-lb`.
 
 In response to these bottlenecks, *we present the Semi-Supervised Semantic Annotation (S3A) annotation and prototyping platform -- an application which eases the process of pixel-level labeling in large, complex scenes.* [#]_

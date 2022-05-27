@@ -20,7 +20,7 @@ Another key performance improvement comes from resizing the processed region to 
 
 Complex Vertices/Semantic Segmentation
 --------------------------------------
-Multiple types of PCB components possess complex shapes which might contain holes or noncontiguous regions. Subsequently, it is beneficial for software like S3A to represent these features inherently with a "ComplexXYVertices" object: that is, a collection of polygons which either describe foreground regions or holes. Subsequently, any possible shape or shape grouping can be represented as needed. Example components difficult to accomodate with single-polygon annotation formats are illustrated in Figure :ref:`figcomplexRegion`.
+Multiple types of PCB components possess complex shapes which might contain holes or noncontiguous regions. Subsequently, it is beneficial for software like S3A to represent these features inherently with a ``ComplexXYVertices`` object: that is, a collection of polygons which either describe foreground regions or holes. Subsequently, any possible shape or shape grouping can be represented as needed. Example components difficult to accomodate with single-polygon annotation formats are illustrated in Figure :ref:`figcomplexRegion`.
 
 .. raw:: latex
 

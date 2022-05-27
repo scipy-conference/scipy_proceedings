@@ -15,7 +15,7 @@ While the first three points are highlighted in the case study, the subsections 
 
 Processing Framework
 --------------------
-At the root of S3A's functionality and configurability lies its adaptive processing framework. Functions exposed within S3A are thinly wrapped using a \texttt{Process} structure responsible for parsing signature information to provide documentation, parameter information, and more to the UI. Hence, all graphical depictions are abstracted beyond the concern of the user while remaining trivial to specify (but can be modified or customized if desired). As a result, incorporating additional/customized application functionality can require as little as one line of code. Processes interface with PyQtGraph parameters to gain access to data-customized widget types and more (`https://github.com/pyqtgraph/pyqtgraph <https://github.com/pyqtgraph/pyqtgraph>`_).
+At the root of S3A's functionality and configurability lies its adaptive processing framework. Functions exposed within S3A are thinly wrapped using a ``Process`` structure responsible for parsing signature information to provide documentation, parameter information, and more to the UI. Hence, all graphical depictions are abstracted beyond the concern of the user while remaining trivial to specify (but can be modified or customized if desired). As a result, incorporating additional/customized application functionality can require as little as one line of code. Processes interface with PyQtGraph parameters to gain access to data-customized widget types and more (`https://github.com/pyqtgraph/pyqtgraph <https://github.com/pyqtgraph/pyqtgraph>`_).
 
 
 ..

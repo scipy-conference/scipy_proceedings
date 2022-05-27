@@ -87,19 +87,10 @@ def create_rst_sections():
     Converts sections/*.tex to sections/*.rst by changing tex conventions
     to rst conventions.
     """
-    cite_pat = r"\\cite\{(.*?)\}"
-    # Make sure the label can go above the section
-    label_pat = r"(.*)\\label\{(.*?)\}"
-    section_pat = r"\\(sub)?section\{(.*?)\}"
-    ref_pat = r"\\(auto)?ref\{(.*?)\}"
-    emph_pat = r"\\emph\{(.*?)\}"
-    fig_pat = r"(\\make.*Fig)"
-    backtick_pat = r'``(.*?)"'
-    tilde_pat = r"~"
-    comment_pat = r"(^%.*)"
-    href_pat = r"\\href\{(.*?)\}\{(.*?)\}"
-    url_pat = r"\\url\{(.*?)\}"
-    footnote_pat = r"\\footnote\{(.*?)\}"
+
+    # Finds a suitable regex for most latex commands (i.e. emph, ref, etc.)
+    def command_regex(cmd, num_args=1):
+        return r"\\" + cmd + r"\{(.*?)\}" * num_args
 
     def _sanitized_label(text):
         return text.replace(":", "").replace("_", "")
@@ -133,18 +124,27 @@ def create_rst_sections():
         return f".. _{replace_name}:\n\n{match.group(1)}"
 
     replace_spec = {
-        cite_pat: r":cite:`\1`",
-        label_pat: label_replace,
-        section_pat: section_replace,
-        ref_pat: ref_replace,
-        emph_pat: r"*\1*",
-        fig_pat: r".. raw:: latex\n\n    \1",
-        backtick_pat: r'"\1"',
-        tilde_pat: r" ",
-        comment_pat: r"\n..\n    \1\n",
-        href_pat: r"`\2 <\1>`_",
-        url_pat: r"`\1 <\1>`_",
-        footnote_pat: footnote_replace,
+        command_regex("cite"): r":cite:`\1`",
+        # Make sure the label can go above the section by capturing the previous line
+        r"(.*)\\label\{(.*?)\}": label_replace,
+        # Section/subsection
+        r"\\(sub)?section\{(.*?)\}": section_replace,
+        # ref/autoref
+        r"\\(auto)?ref\{(.*?)\}": ref_replace,
+        command_regex("emph"): r"*\1*",
+        command_regex("texttt"): r"``\1``",
+        # I use a separate makefigs.tex file with figure commands, this
+        # allows figures to be inserted with "\make...Fig"
+        r"(\\make.*Fig)": r".. raw:: latex\n\n    \1",
+        # RST can handle quotes just fine
+        r'``(.*?)"': r'"\1"',
+        # Tilde nbsp doesn't work in RST
+        r"~": r" ",
+        # Comments start with "%" in latex
+        r"(^%.*)": r"\n..\n    \1\n",
+        command_regex("href", num_args=2): r"`\2 <\1>`_",
+        command_regex("url"): r"`\1 <\1>`_",
+        command_regex("footnote"): footnote_replace,
     }
 
     rst_dir = paper_dir / "sections_rst"
