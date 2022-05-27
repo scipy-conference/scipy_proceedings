@@ -593,7 +593,7 @@ Let us move back to the flow problem to conclude this case study.
 The model complexity may not be the culprit here.
 Vortex shedding is the product of the dynamical systems of the Navier-Stokes equations and the perturbations from numerical calculations (which implicitly mimic the perturbations in nature).
 Suppose the PINN solver's prediction was the steady-state solution to the flow.
-We may need to introduce uncertainties and perturbations in the neural network or the training data, such as a perturbed initial condition described in :cite:`laroussi_vortex_2014`.
+We may need to introduce uncertainties and perturbations in the neural network or the training data, such as a perturbed initial condition described in :cite:`laroussi_vortex_2015`.
 As for why PINN predicts the steady-state solution, we cannot answer it currently. 
 
 5. Further discussion and conclusion
