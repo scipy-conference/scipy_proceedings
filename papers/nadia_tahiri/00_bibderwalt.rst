@@ -70,7 +70,7 @@ In the second step, trees are created with climatic data and genetic data, respe
 
 In the third step, the phylogenetic trees constructed in each sliding window are compared to the climatic trees using the Robinson and Foulds topological distance :cite:`RF81`. The distance was normalized by :math:`2n-6`, where :math:`n` is the number of leaves (i.e., taxa). The proposed approach considers bootstrapping. The implementation of sliding window technology provides a more accurate identification of regions with high gene mutation rates. 
 
-As a result, we highlighted a correlation between parts of genes with a high rate of mutations depending on the geographic distribution of viruses, which emphasizes the emergence of new variants (i.e., Delta, Alpha, Gamma, Beta, and Omicron).
+As a result, we highlighted a correlation between parts of genes with a high rate of mutations depending on the geographic distribution of viruses, which emphasizes the emergence of new variants (i.e., Alpha, Beta, Delta, Gamma, and Omicron).
 
 The creation of phylogenetic trees, as mentioned above, is an important part of the solution and includes the main steps of the developed pipeline. The main parameters of this part are as follows:
 
@@ -154,7 +154,7 @@ The complexity of the algorithm described in the previous section depends on the
 Recall the different complexities of the different external programs used in the algorithm:
 
 - SeqBoot program: :math:`\mathcal{O}(r \times n \times SA)`
-- DnaDist program: :math:`\mathcal{O}(n^2)`
+- DNADist program: :math:`\mathcal{O}(n^2)`
 - Neighbor program: :math:`\mathcal{O}(n^3)`
 - Consense program: :math:`\mathcal{O}(r \times n^2)`
 - RaxML program: :math:`\mathcal{O}(e \times n \times SA)`
