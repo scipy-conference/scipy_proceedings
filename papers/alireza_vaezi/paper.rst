@@ -1,9 +1,9 @@
 :author: Seyed Alireza Vaezi
-:email: SeyedAlireza.Vaezi@uga.edu
+:email: sv22900@uga.edu
 :institution: University of Georgia
 
 :author: Gianni Orlando
-:email: Gianni.Orlando22@UGA.EDU
+:email: gro68561@uga.edu
 :institution: University of Georgia
 
 :author: Mojtaba Fazli
@@ -19,7 +19,7 @@
 :institution: University of Georgia
 
 :author: Shannon Quinn
-:email: SPQ@uga.edu
+:email: spq@uga.edu
 :institution: University of Georgia
 
 :bibliography: paper
