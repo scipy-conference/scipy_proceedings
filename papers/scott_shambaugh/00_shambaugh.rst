@@ -13,7 +13,7 @@ Monaco: A Monte-Carlo Framework for Performing Uncertainty and Sensitivity Analy
 
 .. class:: keywords
 
-   monte carlo, modelling, uncertainty quantification, uncertainty analysis, sensitivity analysis, VARS, DVARS, IVARS
+   monte carlo, modelling, uncertainty quantification, uncertainty analysis, sensitivity analysis, ensemble prediction, VARS, D-VARS
 
 Introduction
 ============
@@ -36,7 +36,7 @@ Randomized Monte Carlo sampling offers a cure to the curse of dimensionality - c
 
    Volume fraction :math:`V` of a :math:`k`-dimensional hypercube enclosed by the convex hull of a large number :math:`n \to \infty` of random samples versus OAT samples along the principle axes of the input space. The volume enclosed by OAT sampling falls off super-exponentially even assuming the more optimistic :math:`l_2` norm over the :math:`l_1` norm. :label:`figvolume`
 
-To sample :math:`k` input factors where each factor :math:`x_{i \in [1, ..., k]}` is drawn from a unique probability distribution, it is a common practice to uniformly draw a random percentile between 0 and 1 :math:`p_i \in U[0, 1]`, and transform this to the target distribution through that distribution's inverse cumulative density function :math:`x_i = F_i^{-1}(p_i)`. Thus the previous reasoning is easily generalized to an arbitrarily distributed input space.
+To sample :math:`k` input factors where each factor :math:`x_{i \in [1, ..., k]}` is drawn from a unique probability distribution, it is a common practice to uniformly draw a random percentile between 0 and 1 :math:`p_i \in U[0, 1]`, and transform this to the target distribution through that distribution's inverse cumulative density function (CDF) :math:`x_i = F_i^{-1}(p_i)`. Thus the previous reasoning is easily generalized to an arbitrarily distributed input space.
 
 
 When to Use and When to Avoid Monte Carlo Analysis
@@ -49,7 +49,9 @@ The outputs of Monte Carlo analysis can result in highly statistically signfican
 
 This is not to say that UA and SA should not be conducted early in the model development process - indeed, obtaining the range of plausible output uncertainties is a critical prerequisite to conducting model validation. Small quantities of test data cannot be compared to a point estimate of a model's output, and it is necessary to have the full distribution of output values to compare test data against. Once a Monte Carlo analysis has generated these output distributions, hypothesis testing or probablistic prediction measures like the Brier score or log loss can be used to anchor the model against real-life test data.
 
-Another pitfall of Monte Carlo approaches is that rare events may be undersampled or undermodeled in a standard Monte Carlo analysis. For example, NASA uses Monte Carlos extensively during launch vehicle design to predict the rocket trajectory.[NASA01]_ However, they must prove robustness to anomalous or stressing scenarios which may occu only one or two times in the thousands of cases. In these instances, rare event scenarios should be investigated directly.
+Another pitfall of Monte Carlo approaches is that rare events may be undersampled or undermodeled in a standard Monte Carlo analysis. For example, NASA uses Monte Carlos extensively during launch vehicle design to predict the rocket trajectory. [Han01]_ However, they must prove robustness to anomalous or stressing scenarios which may occu only one or two times in the thousands of cases. In these instances, rare event scenarios should be investigated directly.
+
+Note that *monaco*'s overhead in creating easily-iterrogatable objects for variables, values, and cases makes it a slow choice for computationally simple applications with high :math:`n`, such as Monte Carlo integration.
 
 Some benefits are more qualitative. Monte Carlo analysis is an excellent way to uncover unexpected edge cases in a model through unexpected combinations of inputs, especially in highly nonlinear models. This is essentially the concept behind "fuzzing" techniques in software testing.
 
@@ -80,7 +82,7 @@ Data Flow
 2) Add input variables to the sim with specified probability distributions.
 3) Run the simulation. This executes the following:
     a) Random percentiles are drawn `ndraws` times for each of the input variables.
-    b) These percentiles are turned into random values via the inverse cumulative density function of the target probability distribution.
+    b) These percentiles are turned into random values via the inverse CDF of the target probability distribution.
     c) If nonnumeric inputs are desired, the random numbers are converted to objects via a `nummap` dict.
     d) The values are distributed to `ndraws` number of cases.
     e) Each case is run by structuring the inputs values with the `preprocess` function, passing them to the `run` function, and collecting the output values with the `postprocess` function.
@@ -127,35 +129,51 @@ Technical Features
 Sampling Methods
 ----------------
 
-Random sampling of the percentiles for each variable can be done using scipy's pseudo-random number generator (PRNG), or with any of the methods in `scip.stats.qmc` Quasi-Monte Carlo module. In general, the `sobol_random` method that generates Sobol sequences with Owen scrambling (TODO: ref) is recommended in nearly all cases as a well-performing quasi-random sequence with the best known space-filling properties, balanced integration properties as long as the number of cases is a power of 2, and a fairly flat frequency spectra. In cases where computing sample points is taking prohibitively long, users may fall back to `random` sampling directly from the PRNG at the cost of less even distribution of points in the input space.
+Random sampling of the percentiles for each variable can be done using scipy's pseudo-random number generator (PRNG), or with any of the methods in `scip.stats.qmc` Quasi-Monte Carlo module. In general, the `sobol_random` method that generates Sobol sequences with Owen scrambling (TODO: ref) is recommended in nearly all cases as a well-performing quasi-random sequence with the best known convergence, balanced integration properties as long as the number of cases is a power of 2, and a fairly flat frequency spectra. In cases where computing sample points is taking prohibitively long, users may fall back to `random` sampling directly from the PRNG at the cost of less even distribution of points in the input space.
+
+
+Order Statistics, or, How Many Cases to Run?
+-------------------------------------------
+
+How many Monte Carlo cases should one run? One answer would be to choose :math:`n \geq 2^k` for a sampling method that implements a (t,m,s)-net such as a Sobol sequence, which guarentees that there will be at least one sample point in every hyperoctant of the input space. (TODO: reference) However this will undersample for low :math:`k` and may be infeasible for high :math:`k`.
+
+A rigorous way of choosing the number of cases is to first choose the output percentile or tolerance interval of the population which is desired to contain a sample with the target value, and then use order statistics to calculate the :math:`n` required to obtain that result with a desired confidence level. *monaco* implements routines for calculating these statistical intervals via a distribution-free approach with no assumptions about the normality or other shape characteristics of the output distribution. See chaper 5 of [Hah01]_.
+
+A more qualitative method would simply to choose a reasonably high :math:`n` (say, :math:`n=2^10`), manually examine the results to ensure high-interest areas are not being undersampled, and rely on bootstrapping of the results to obtain the desired significance levels of the desired statistic. 
 
 
 Variable Statistics
 -------------------
 
+For any input or output variable, a statistic can be calculated for the ensemble of results. *monaco* builds in some common statistics, or a custom one can be passed in. To obtain a confidence interval for this statistic, the results are sampled with replacement using the `scipy.stats.bootstrap` module. The number of bootstrap samples is determined using an order statistic approach as in the previous section, and multiplying that by a scaling factor (default 10x) for smoothness of results.
+
 
 Sensitivity Indices
 -------------------
 
+Sensitivity indices give a measure of the relationship between the variance of a scalar output variable to the variance of each of the input variables. In other words, a measure of which of the inputs has the largest effect on the outputs. It is crucial that sensitivity indices are global rather than local measures - there is no reason to rely on the latter in scenarios such as computer experiments where data can be easily and aribitrarily sampled.
+
+With computer-designed experiments, it is possible to contruct a specially designed sample set to directly calculate sensitivity indices such as the Total-order Sobol index, or the IVARS100 index. (TODO references). However, this requires either sacrificing the desirable UA properties of low-discrepancy sampling, or conducting two separate Monte Carlo analyses for UA and SA with different sample sets. For this reason, *monaco* uses the D-VARS approach to calculating sensitivity indices, which allows calcualating global indices from a set of given data. This is the first publically availble implementation of the D-VARS algorithm. [She01]_
+
 
 Plotting
 --------
+*monaco* includes a plotting module that takes in input and output variables and quickly creates histograms, empirical CDFs, scatter plots, or 2D or 3D "spaghetti plots" depending on which is most appropriate for those variables. Variable statistics and their confidence intervals are automatically plotted when applicable.
 
 
 Parallel Processing
 -------------------
 
-*monaco* uses *dask distributed* (TODO: ref) as a parallel processing backend, and fully supports preprocessing, running, and postprocessing cases in a massively parallel arrangement. Users very familiar with *dask* can extend the parellization of their simulation from their single machine to a distributed cluster.
+*monaco* uses *dask distributed* [Roc01]_ as a parallel processing backend, and fully supports preprocessing, running, and postprocessing cases in a massively parallel arrangement. Users very familiar with *dask* can extend the parellization of their simulation from their single machine to a distributed cluster.
 
 For simple simulations such as the example code at the end of the paper, the overhead of setting up a *dask* server may outweigh the speedup from parallel computation, and in those cases *monaco* also supports running single-threaded in a single for-loop.
-
 
 
 Example
 =======
 Presented here is a simple example showing a Monte-Carlo simulation of rolling two 6-sided dice and looking at their sum.
 
-The user starts with their `run` function which is either directly their computational model or wraps it. They must create `preprocess` and `postprocess` functions to feed the randomized input values and collect the outputs from that model.
+The user starts with their `run` function which is either their computational model directly, or wraps it. They must then create `preprocess` and `postprocess` functions to feed in the randomized input values and collect the outputs from that model.
 
 .. code-block:: python
     
@@ -242,7 +260,7 @@ The results of the simulation can then be postprocessed and examined. Fig. :ref:
 
 .. figure:: example.png
 
-   Output from the example code block. The top plot shows a histogram of the 2-dice sum, the middle plot shows the randomness over the set of rolls, and the bottom plot shows that each of the dice contributes 50% to the variance of the sum (i.e, they are weighted equally). :label:`figexample`
+   Output from the example code which calculates the sum of two random dice rolls. The top plot shows a histogram of the 2-dice sum, the middle plot shows the randomness over the set of rolls, and the bottom plot shows that each of the dice contributes 50% to the variance of the sum (i.e, they are weighted equally). :label:`figexample`
 
 Summary
 =======
@@ -251,7 +269,15 @@ Summary
 
 References
 ==========
-.. [Sat01] A. Saltelli. et al. *Why so many published sensitivity analyses are false: A systematic review of sensitivity analysis practices*, Environmental Modelling & Software, Vol 114:29-39, April 2019.
+.. [Hah01] Hahn, G. J., & Meeker, W. Q. "Statistical intervals: a guide for practitioners" (Vol. 92). John Wiley & Sons. 2001.
 
-.. [NASA01] J.M. Hanson and B.B. Beard. *Applying Monte Carlo Simulation to Launch Vehicle Design and Requirements Analysis*, Marshall Space Flight Center NASA/TP-2010-216447, September 2010.
+.. [Han01] Hanson, J.M. and B.B. Beard. *Applying Monte Carlo Simulation to Launch Vehicle Design and Requirements Analysis*, Marshall Space Flight Center NASA/TP-2010-216447, September 2010.
+
+.. [Roc01] Rocklin, Matthew. "Dask: Parallel computation with blocked algorithms and task scheduling." Proceedings of the 14th python in science conference. Vol. 130. Austin, TX: SciPy, 2015.
+
+.. [Sat01] Saltelli, A. et al. *Why so many published sensitivity analyses are false: A systematic review of sensitivity analysis practices*, Environmental Modelling & Software, Vol 114:29-39, April 2019.
+
+.. [She01] Sheikholeslami, Razi, and Saman Razavi. "A fresh look at variography: measuring dependence and possible sensitivities across geophysical systems from any given data." Geophysical Research Letters 47.20 (2020): e2020GL089829.
+
+
 
