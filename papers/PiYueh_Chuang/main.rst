@@ -602,12 +602,12 @@ As for why PINN predicts the steady-state solution, we cannot answer it currentl
 Because of the widely available deep learning libraries, such as PyTorch, and the ease of Python, implementing a PINN solver is relatively more straightforward nowadays.
 This may be one reason why the PINN method suddenly became so popular in recent years.
 This paper does not intend to discourage people from trying the PINN method.
-Instead, we shared our failures and frustration in PINN so that interested folks would know what immediate challenges should be resolved for PINN. 
+Instead, we share our failures and frustration using PINN so that interested readers may know what immediate challenges should be resolved for PINN. 
 
 Our paper is limited to using the PINN solver as a replacement for traditional CFD solvers.
 However, as the first section indicates, PINN can do more than solving one specific flow under specific flow parameters. 
 Moreover, PINN can also work with traditional CFD solvers.
-Literature shows researchers have shifted their attention to hybrid-mode applications.
+The literature shows researchers have shifted their attention to hybrid-mode applications.
 For example, in :cite:`jiang_meshfreeflownet_2020`, the authors combined the concept of PINN and a traditional CFD solver to train a model that takes in low-resolution CFD simulation results and outputs high-resolution flow fields.
 
 For people with a strong background in numerical methods or CFD, we would suggest trying to think out of the box.
@@ -616,17 +616,17 @@ An example is the initial conditions.
 We were used to only having one set of initial conditions when the temporal derivative in differential equations is only first-order.
 However, in PINN, nothing limits us from using more than one initial condition.
 We can generate results at :math:`t=0,1,\dots,t_n` using a traditional CFD solver and add the residuals corresponding to these time snapshots to the total residual, so the PINN method may perform better in predicting :math:`t>t_n`.
-In other words, the PINN solver becomes traditional CFD solvers' replacement only for :math:`t>t_n`.
+In other words, the PINN solver becomes the traditional CFD solvers' replacement only for :math:`t>t_n`.
 
 As discussed in :cite:`thuerey_physics-based_2022`, solving partial differential equations with deep learning is still a work-in-progress.
 It may not work in many situations.
 Nevertheless, it does not mean we should stay away from PINN and discard this idea.
-Stepping away from a new thing makes zeros chance for it to evolve, and we will never know if PINN can be improved to a mature state that works well. 
+Stepping away from a new thing gives zeros chance for it to evolve, and we will never know if PINN can be improved to a mature state that works well. 
 Of course, overly promoting its bright side with success stories does not help, either.
 Rather, we should honestly face all troubles, difficulties, and challenges.
-Knowing the problems is the first step to solving a problem.
+Knowing the problems is the first step to solving it.
 
 Acknowledgements
 ----------------
 
-Appreciation to NVIDIA for sponsoring the access to its high-performance computing cluster. 
+We appreciate the support by NVIDIA, through sponsoring the access to its high-performance computing cluster. 
