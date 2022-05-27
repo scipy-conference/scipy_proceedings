@@ -35,17 +35,16 @@ Pylira: deconvolution of images in the presence of Poisson noise
 
     All physical and astronomical imaging observations are degraded by the limited angular
     resolution of the camera and telescope systems. The recovery of the true image is limited by
-    both how well the instrument characteristics are known and  by the magnitude of measurement noise.
+    both how well the instrument characteristics are known and by the magnitude of measurement noise.
     In the case of a high signal to noise ratio data, the image can be sharpened or “deconvolved” robustly
-    by using established standard methods such as the Wiener Filter or the Richardson-Lucy method. More recently,
-    given the existence of when sufficient training data are available, convolutional neural networks have also been
-    shown to be very effective at this task. The situation changes for rare sparse data and the low signal to noise regime,
-    where deconvolution leads inevitably to an amplification of noise. However the results of classical
-    methods can be improved considerably by making use of prior assumptions and / or modern machine learning inspired
-    techniques, such as k-fold cross validation and stochastic gradient decent. In this contribution we give a brief
-    overview and comparison of existing methods in the Python scientific ecosystem and apply them to low counts astronomical
-    data. At the same time we present This improved method is available in a new python package called Pylira :
-    a new Python package dedicated to solving the deconvolution problem in the presence of Poisson noise.
+    by using established standard methods such the Richardson-Lucy method. However the situation changes for rare
+    sparse data and the low signal to noise regime, where deconvolution leads inevitably to an amplification
+    of noise and poorly reconstructed images. However the results in this regime can be improved
+    by making use of prior assumptions. One proposed method is the LIRA algorithm, which
+    requires smoothness of the reconstructed image at multiple scales. In this contribution we
+    introduce a new python package called *Pylira*, which exposes the original C implementation
+    of the LIRA algorithm to Python users. We briefly describe the package structure, development
+    setup and show a Chandra as well as Fermi-LAT analysis example.
 
 
 
@@ -175,20 +174,43 @@ and :cite:`Fish95`.
 
 The LIRA Multiscale Prior
 +++++++++++++++++++++++++
-Based on the maximum likelihood formulation the model function
-can fist be be extended by taking into account the non uniform
-exposure :math:`e_i` and a background estimate :math:`b_i`:
+One possible solution to this problem was described in :cite:`Esch2004`.
+First the standard RL method can be extended by taking into account
+the non uniform exposure :math:`e_i` and a background estimate :math:`b_i`:
 
 .. math::
    :label: convolution
 
     \lambda_i = \sum_k (e_i \cdot x_i) p_{i - k} + b_i
 
-And by introducing a multi-scale prior to the likelihood term
-in Eq. :ref:`cash`.
+Second the authors proposed to extend the Poisson log-likelihood
+function (Eq. :ref:`cash`) by a log-prior term that controls the
+smoothness of the reconstructed
+image on multiple spatial scales. For this the image is transformed
+into a multi-scale representation. Starting from the full resolution
+the image is divided into groups of 2x2 pixels. Each of the groups
+of 2x2 pixels is then divided by their total sum, resulting in
+an image containing the "split proportions" with respect to the
+image down sampled by a factor of two. This process is continued
+to further reduce the resolution of the image until only one
+pixel, containing the total sum of the full-resolution image,
+is left. For each of the 2x2 groups of the re-normalized images
+a Dirichlet distribution is introduced as a prior and summed
+up across all 2x2 groups and resolution levels. For each resolution
+level a parameter :math:`\alpha_k` is introduced, which represents
+the number of "prior counts" added to this resolution level,
+equally to each pixel, which effectively results in a smoothing
+of the image at the given resolution level. The distribution
+of `\alpha` values at each resolution level is described
+by a hyperprior distribution:
 
+.. math::
+   :label: prior
 
-A solution to this problem was proposed in :cite:`Esch2004`.
+    p(\alpha_k) = \exp{-\delta \alpha^3 / 3}
+
+Resulting in a fully hierarchical Bayesian model. A complete more
+detailed description of the prior definition is given in :cite:`Esch2004`.
 
 
 The Pylira Package
@@ -366,7 +388,7 @@ compared to the unprocessed counts data shown in the left panel.
    *4684* and *4684*. The image on the left shows the raw observed counts between
    0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
    values where chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
-   No baseline background model was taken into account.
+   No baseline background model was taken into account. :label:`chandra-gc`
 
 
 Figure :ref:`fermi-gc` shows the result of the *Pylira*
