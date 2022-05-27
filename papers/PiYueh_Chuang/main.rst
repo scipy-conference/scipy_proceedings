@@ -425,7 +425,7 @@ In addition, the PINN solver uses gradient-descent based method, which is a firs
 Weak scaling is a natural choice of the PINN solver when it comes to distributed computing.
 As we don't know a proper way to define workload, simply copying all model parameters to all processes and using the same number of training points on all processes works well.
 
-1. Case 2: 2D cylinder flows--harder than we thought
+4. Case 2: 2D cylinder flows: harder than we thought
 ----------------------------------------------------
 
 This case study shows what really made us frustrated: a 2D cylinder flow at Reynolds number :math:`Re=200`.
@@ -442,22 +442,22 @@ The initial condition is :math:`(u, v)=(0, 0)`.
 Note that this initial condition is different from most traditional CFD simulations.
 Conventionally, CFD simulations use :math:`(u, v)=(1, 0)` for cylinder flows.
 A uniform initial condition of :math:`u=1` does not satisfy the Navier-Stokes equations due to the no-slip boundary on the cylinder surface.
-Conventional CFD solvers are usually able to correct the solution during time-marching by propagating boundary effect into the domain through numerical schemes' stencils.
+Conventional CFD solvers are usually able to correct the solution during time-marching by propagating boundary effects into the domain through numerical schemes' stencils.
 In our experience, using :math:`u=1` or :math:`u=0` did not matter for PINN because both did not give reasonable results.
 Nevertheless, the PINN solver's results shown in this section were obtained using a uniform :math:`u=0` for the initial condition.
 
 The density, :math:`\rho`, is one, and the kinematic viscosity is :math:`\nu=0.005`.
 These parameters correspond to Reynolds number :math:`Re=200`.
 Figure :ref:`fig:cylinder-petibm-contour-t200` shows the velocity and vorticity snapshots at :math:`t=200`.
-As shown in the figure, this type of flow has a phenomenon called vortex shedding.
-Though vortex shedding makes the flow always unsteady, after a certain time, the flow reaches a periodic stage that the flow pattern repeats after a certain period.
+As shown in the figure, this type of flow displays a phenomenon called vortex shedding.
+Though vortex shedding makes the flow always unsteady, after a certain time, the flow reaches a periodic stage and the flow pattern repeats after a certain period.
 
 .. figure:: cylinder-petibm-contour-t200.png
    :align: center
 
    Demonstration of velocity and vorticity fields at :math:`t=200` from a PetIBM simulation. :label:`fig:cylinder-petibm-contour-t200`
 
-The Navier-Stokes equations can be deemed as a dynamic system.
+The Navier-Stokes equations can be deemed as a dynamical system.
 Instability appears in the flow under some flow conditions and responds to small perturbations, causing the vortex shedding.
 In nature, the vortex shedding comes from the uncertainty and perturbation existing everywhere.
 In CFD simulations, the vortex shedding is caused by small numerical and rounding errors in calculations.
@@ -474,11 +474,11 @@ Our intention for this case study was to successfully obtain physical solutions 
 Therefore, we would adjust the learning rate to accelerate the convergence or to escape from local minimums.
 This decision was in line with common machine learning practice.
 
-The PINN solver pre-generated :math:`40,960,000` spatial-temporal points from spatial domain :math:`[-8, 25]\times[-8, 8]` and temporal domain :math:`(0, 200]` to evaluate residuals of the Navier-Stokes equations and used :math:`40,960` points per iteration.
+The PINN solver pre-generated :math:`40,960,000` spatial-temporal points from a spatial domain in :math:`[-8, 25]\times[-8, 8]` and temporal domain :math:`(0, 200]` to evaluate residuals of the Navier-Stokes equations, and used :math:`40,960` points per iteration.
 The number of pre-generated points for the initial condition was :math:`2,048,000`, and the per-iteration number is :math:`2,048`.
 On each boundary, the numbers of pre-generated and per-iteration points are 8,192,000 and 8,192.
 Both cases used 8 A100 GPUs, which scaled these numbers up with a factor of 8.
-For example, during each iteration, a total of :math:`327680` points were actually used to evaluate the Navier-Stokes equations' residuals.
+For example, during each iteration, a total of :math:`327,680` points were actually used to evaluate the Navier-Stokes equations' residuals.
 Both cases ran up to 64 hours in wall time.
 
 One PetIBM simulation was carried out as a baseline.
@@ -487,17 +487,17 @@ Figure :ref:`fig:cylinder-petibm-contour-t200` was rendered using this simulatio
 The hardware used was 1 K40 GPU plus 6 cores of i7-5930K CPU.
 It took about 1.7 hours to finish.
 
-The quantity of our interest is the drag coefficient.
-We consider both the friction drag and pressure drag in the coefficient calculation:
+The quantity of interest is the drag coefficient.
+We consider both the friction drag and pressure drag in the coefficient calculation as follows:
 
 .. math:: 
    :label: eq:drag-coefficient
 
    C_D=\frac{2}{\rho U_0^2 D}\int\limits_S\left(\rho\nu\frac{\partial \left(\vec{U}\cdot\vec{t}\right)}{\partial \vec{n}}n_y-pn_x\right)\mathrm{d}S
 
-where :math:`U_0=1` is the inlet velocity. :math:`\vec{n}=[n_x,n_y]^\mathsf{T}` and :math:`\vec{t}=[ny, -nx]^\mathsf{T}` are the normal and tengent vectors, respectively.
+Here, :math:`U_0=1` is the inlet velocity. :math:`\vec{n}=[n_x,n_y]^\mathsf{T}` and :math:`\vec{t}=[ny, -nx]^\mathsf{T}` are the normal and tangent vectors, respectively.
 :math:`S` represents the cylinder surface.
-Also, the theoretical lift coefficient (:math:`C_L`) for this flow is zero due to the symmetrical geometry.
+The theoretical lift coefficient (:math:`C_L`) for this flow is zero due to the symmetrical geometry.
 
 4.3. Results
 ++++++++++++
@@ -514,7 +514,7 @@ However, we decided not to continue the training because, as later results will 
 
 Figure :ref:`fig:cylinder-pinn-contour-t200` provides a visualization of the predicted velocity and vorticity at :math:`t=200`.
 And in figure :ref:`cylinder-cd-cl` are the drag and lift coefficients versus simulation time.
-From the both figures, we couldn't see any sign of vortex shedding form the PINN solver.
+From both figures, we couldn't see any sign of vortex shedding with the PINN solver.
 
 .. figure:: cylinder-pinn-contour-t200.png
    :align: center
@@ -528,8 +528,8 @@ From the both figures, we couldn't see any sign of vortex shedding form the PINN
 
 We provide a comparison against the values reported by others in table :ref:`table:drag-comparison`.
 References :cite:`gushchin_numerical_1974` and :cite:`Fornberg1980` calculate the drag coefficients using steady flow simulations, which were popular decades ago because of their inexpensive computational costs.
-The actual flow is not a steady flow, and these steady-flow results are lower than unsteady-flow predictions. 
-The drag coefficient from the PINN solver, however, is closer to the steady-flow predictions.
+The actual flow is not a steady flow, and these steady-flow coefficient values are lower than unsteady-flow predictions. 
+The drag coefficient from the PINN solver is closer to the steady-flow predictions.
 
 .. raw:: latex
 
@@ -549,7 +549,7 @@ The drag coefficient from the PINN solver, however, is closer to the steady-flow
 4.4. Discussion
 +++++++++++++++
 
-While scholars in academia may be interested in why the PINN solver behaves like a steady flow solver, in this section, we would like to focus more on the user experience and the usability of PINN in practice.
+While researchers may be interested in why the PINN solver behaves like a steady flow solver, in this section, we would like to focus more on the user experience and the usability of PINN in practice.
 Our viewpoints may be subjective, and hence we leave them here in the discussion.
 
 Allow us to start this discussion with a hypothetical situation.
@@ -558,7 +558,7 @@ However, if the person asks why we chose 6 hidden layers and 256 neurons per lay
 "It worked in another case!" is probably the best answer we can offer.
 The situation also indicates that we have systematic approaches to improve a conventional simulation but can only improve PINN's results through computer experiments.
 
-In our view, most traditional numerical methods have rigorous analytical derivations and analyses.
+Most traditional numerical methods have rigorous analytical derivations and analyses.
 Each parameter used in a scheme has a meaning or a purpose in physical or numerical aspects.
 The simplest example is the spatial resolution in the finite difference method, which controls the truncation errors in derivatives.
 Or, the choice of the limiters in finite volume methods, which inhibits the oscillation in solutions.
@@ -567,13 +567,13 @@ Moreover, when necessary, practitioners know how to balance the computational co
 Engineering concerns the costs and outcomes.
 
 On the other hand, the PINN method lacks well-defined procedures to control the outcome.
-For example, we know the numbers of neurons and layers control the degree of freedom in a model.
-With more degree of freedom, a neural network model can approximate a more complicated phenomenon.
+For example, we know the numbers of neurons and layers control the degrees of freedom in a model.
+With more degrees of freedom, a neural network model can approximate a more complicated phenomenon.
 However, when we feel that a neural network is not complicated enough to capture a physical phenomenon, what strategy should we use to adjust the neurons and layers?
 Should we increase neurons or layers first?
 By how many?
 
-Moreover, when it comes to something non-numeric, it is even more challenging to know what to use and why to use them.
+Moreover, when it comes to something non-numeric, it is even more challenging to know what to use and why to use it.
 For instance, what activation function should we use and why?
 Should we use the same activation everywhere?
 Not to mention that we are not yet even considering a different network architecture here.
@@ -581,7 +581,7 @@ Not to mention that we are not yet even considering a different network architec
 Ultimately, are we even sure that increasing the network's complexity is the right path?
 Our assumption that the network is not complicated enough may just be wrong.
 
-This situation happened in this case study.
+The following situation happened in this case study.
 Before we realized the PINN solver behaved like a steady-flow solver, we attributed the cause to model complexity.
 We faced the problem of how to increase the model complexity systematically.
 Theoretically, we could follow the practice of the design of experiments.
@@ -591,7 +591,7 @@ In our case, the vortex shedding remains absent regardless of how we changed hyp
 
 Let us move back to the flow problem to conclude this case study.
 The model complexity may not be the culprit here.
-Vortex shedding is the product of the dynamic systems of the Navier-Stokes equations and the perturbations from numerical calculations (which implicitly mimic the perturbations in nature).
+Vortex shedding is the product of the dynamical systems of the Navier-Stokes equations and the perturbations from numerical calculations (which implicitly mimic the perturbations in nature).
 Suppose the PINN solver's prediction was the steady-state solution to the flow.
 We may need to introduce uncertainties and perturbations in the neural network or the training data, such as a perturbed initial condition described in :cite:`laroussi_vortex_2014`.
 As for why PINN predicts the steady-state solution, we cannot answer it currently. 
