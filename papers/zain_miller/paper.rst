@@ -19,7 +19,7 @@
 :email: cel36@pitt.edu
 :institution: Department of Developmental Biology, University of Pittsburgh, Pittsburgh, PA 15261 USA
 
-:bibliography: refs
+:bibliography: refs.bib
 
 ----------------------------------------------------
 Low Level Feature Extraction for Cilia Segmentation
@@ -119,7 +119,7 @@ they first augment the underlying images with the calculated optical
 flow. In this way, their segmentation strategy employs both spatial
 *and* temporal information. To compare against
 :cite:`charles`, the authors evaluated their segmentation
-model in the same way – as an upstream to an CNN/LSTM classification
+model in the same way — as an upstream to an CNN/LSTM classification
 network. Their model improved the classification accuracy two points
 above that of Charles et. al. (2018). Their reported
 intersection-over-union (IoU) score is :math:`33.06\%` and marks the
@@ -453,23 +453,23 @@ experiments shall be run to further analyze this.
    & \multicolumn{2}{c}{Extractor Parameters} & \multicolumn{5}{c}{Scores}
    \\\cmidrule(lr){2-3}\cmidrule(lr){4-8}
    Model          & $\epsilon$ (ZCA) & $\alpha$ (SAE)    & IoU & Accuracy & Recall & Dice & Precision\\ \midrule
-   U-Net (base)  & --- & --- & 0.399 & 0.759 & 0.501 & 0.529 & \textbf{0.692}  \\ \midrule
+   U-Net (base)  & --- & --- & 0.399 & 0.759 & 0.501 & 0.529 & 0.692  \\ \midrule
    \multirow{4}{*}{ZCA + U-Net}  & $1\mathrm{e}-4$ & --- & 0.395 & 0.754 & 0.509 & 0.513 & 0.625 \\
       & $1\mathrm{e}-5$ & --- & 0.401 & 0.732 & 0.563 & 0.539 & 0.607 \\
       & $1\mathrm{e}-6$ & --- & 0.408 &  0.756 & 0.543 & 0.546 & 0.644 \\
       & $1\mathrm{e}-7$ & --- & 0.419 & 0.758 & 0.563 & 0.557 & 0.639 \\ \midrule
    \multirow{3}{*}{SAE + U-Net}  & --- & $1\mathrm{e}-2$ & 0.380 & 0.719 & 0.568 & 0.520 & 0.558 \\
       & --- & $1\mathrm{e}-3$ & 0.398 & 0.751 & 0.512 & 0.526 & 0.656 \\
-      & --- & $1\mathrm{e}-4$ & 0.416 & 0.735 & \textbf{0.607} & 0.555 & 0.603 \\ \midrule
+      & --- & $1\mathrm{e}-4$ & 0.416 & 0.735 & 0.607 & 0.555 & 0.603 \\ \midrule
    \multirow{12}{*}{Composite}
       & $1\mathrm{e}-4$ & $1\mathrm{e}-2$ & 0.401 & 0.761 & 0.506 & 0.521 & 0.649 \\
-      & $1\mathrm{e}-4$ & $1\mathrm{e}-3$ & \textbf{0.441} & \textbf{0.767} & 0.580 & \textbf{0.585} & 0.661 \\
+      & $1\mathrm{e}-4$ & $1\mathrm{e}-3$ & \textbf{0.441} & 0.767 & 0.580 & \textbf{0.585} & 0.661 \\
       & $1\mathrm{e}-4$ & $1\mathrm{e}-4$ & 0.305 & 0.722 & 0.398 & 0.424 & 0.588 \\
-      & $1\mathrm{e}-5$ & $1\mathrm{e}-2$ & 0.392 & 0.707 & 0.624 & 0.530 & 0.534 \\
-      & $1\mathrm{e}-5$ & $1\mathrm{e}-3$ & 0.413 & 0.770 & 0.514 & 0.546 & 0.678 \\
+      & $1\mathrm{e}-5$ & $1\mathrm{e}-2$ & 0.392 & 0.707 & \textbf{0.624} & 0.530 & 0.534 \\
+      & $1\mathrm{e}-5$ & $1\mathrm{e}-3$ & 0.413 & \textbf{0.770} & 0.514 & 0.546 & 0.678 \\
       & $1\mathrm{e}-5$ & $1\mathrm{e}-4$ & 0.413 & 0.751 & 0.565 & 0.550 & 0.619 \\
       & $1\mathrm{e}-6$ & $1\mathrm{e}-2$ & 0.392 & 0.719 & 0.602 & 0.527 & 0.571 \\
-      & $1\mathrm{e}-6$ & $1\mathrm{e}-3$ & 0.395 & 0.759 & 0.480 & 0.521 & 0.711 \\
+      & $1\mathrm{e}-6$ & $1\mathrm{e}-3$ & 0.395 & 0.759 & 0.480 & 0.521 & \textbf{0.711} \\
       & $1\mathrm{e}-6$ & $1\mathrm{e}-4$ & 0.405 & 0.729 & 0.587 & 0.545 & 0.591 \\
       & $1\mathrm{e}-7$ & $1\mathrm{e}-2$ & 0.383 & 0.753 & 0.487 & 0.503 & 0.655 \\
       & $1\mathrm{e}-7$ & $1\mathrm{e}-3$ & 0.380 & 0.736 & 0.526 & 0.519 & 0.605 \\
@@ -513,7 +513,7 @@ Conclusions
 In this paper, we discussed the current shortcomings of automated,
 deep-learning based segmentation models for cilia, specifically on the
 data provided to the Quinn Research Group, and provided two additional
-methods–Zero-Phase PCA Sphering (ZCA) and Sparse Autoencoders (SAE)—for
+methods—Zero-Phase PCA Sphering (ZCA) and Sparse Autoencoders (SAE)—for
 providing feature extracting augmentations with the purpose of aiding a
 U-Net model in segmentation. We evaluate the performance of U-Nets with
 various combinations of these feature extraction and parameters to
@@ -571,13 +571,13 @@ particular, a novel and still-developing alternative to the convolution
 layer known as a Sharpened Cosine Similarity (SCS) layer has begun to
 attract some attention. While regular CNNs are proficient at filtering,
 developing invariance to certain forms of noise and perturbation, they
-are notoriously poor at serving as a spatial indicator for features –
+are notoriously poor at serving as a spatial indicator for features —
 convolution activations can be high due to changes in luminosity, and do
 not necessarily imply the *distribution* of the underlying luminosity,
 therefore losing precise spatial information. SCS is designed to avoid
 these faults by considering the mathematical case of a “normalized”
 convolution, wherein neither the magnitude of the input, nor of the
-kernel, affect the final output – instead, SCS activations are dictated
+kernel, affect the final output — instead, SCS activations are dictated
 purely by the *relative* magnitudes of weights in the kernel, which is
 to say by the *spatial distribution* of features in the input
 :cite:`scs`. Domain knowledge suggests that cilia, while
@@ -586,7 +586,7 @@ when compared to non-cilia, e.g. cells, out-of-phase structures,
 microscopy artifacts, etc. Therefore, we believe that SCS may provide a
 strong augmentation to the backbone U-Net model by acting as an
 additional layer *in tandem with* the already existing convolution
-layers – this way the model is a true generalization of the canonical
+layers — this way the model is a true generalization of the canonical
 U-Net, and is less likely to suffer poor performance due to the
 introduction of SCS.
 
