@@ -15,6 +15,10 @@
 :institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
 :institution: Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA
 
+:author: Cecilia Lo
+:email: cel36@pitt.edu
+:institution: Department of Developmental Biology, University of Pittsburgh, Pittsburgh, PA 15261 USA
+
 :bibliography: refs
 
 ----------------------------------------------------
