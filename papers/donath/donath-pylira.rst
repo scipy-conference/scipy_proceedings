@@ -20,7 +20,7 @@
 :author: Karthik Reddy Solipuram
 :institution: University of Maryland Baltimore County
 
-:author: David van Dyke
+:author: David van Dyk
 :institution: Imperial College London
 
 :bibliography: mybib
@@ -169,13 +169,12 @@ when compared with the data. Those almost equally good solutions correspond
 to many narrow local minima or "spikes" in the global likelihood surface. Depending
 on the start estimate for the reconstructed image :math:`\mathbf{x}` the RL method will follow
 the steepest gradient and converge towards the nearest narrow local minimum.
-This problem has been described by multiple authors such as :cite:`Reeves1994`
+This problem has been described by multiple authors, such as :cite:`Reeves1994`
 and :cite:`Fish95`.
 
 
-The LIRA method
-+++++++++++++++
-A solution to this problem was proposed in :cite:`Esch2004`.
+The LIRA Multiscale Prior
++++++++++++++++++++++++++
 Based on the maximum likelihood formulation the model function
 can fist be be extended by taking into account the non uniform
 exposure :math:`e_i` and a background estimate :math:`b_i`:
@@ -189,6 +188,7 @@ And by introducing a multi-scale prior to the likelihood term
 in Eq. :ref:`cash`.
 
 
+A solution to this problem was proposed in :cite:`Esch2004`.
 
 
 The Pylira Package
@@ -213,10 +213,19 @@ As *Pylira* relies on random sampling for the MCMC process an exact reproducibil
 of results is hard on different platforms, however the agreement of results is at least
 guaranteed in the statistical limit of drawing many samples.
 
+API & Subpackages
++++++++++++++++++
+*Pylira* is structured in multiple sub-packages. The :code:`pylira.core` module contains the original
+C implementation and the *Pybind11* wrapper code. The :code:`pylira.core` sub-package
+contains the main Python API, :code:`pylira.utils` includes utility functions for
+plotting and serialisation. And :code:`pylira.data` implements multiple pre-defined
+datasets for testing and tutorials.
+
+
 Installation
 ++++++++++++
-*Pylira* is avaliable via the Python package index (`pypi.org <https://pypi.org/project/pylira/>`__),
-currently at version 0.1. As *Pylira* still depends on the *RMath* library, it si required to install
+*Pylira* is available via the Python package index (`pypi.org <https://pypi.org/project/pylira/>`__),
+currently at version 0.1. As *Pylira* still depends on the *RMath* library, it is required to install
 this first. So the recommended way to install Pylira is on *MacOS* is:
 
 .. code-block:: bash
@@ -236,8 +245,11 @@ On *Linux* the *RMath* dependency can be installed using standard package manage
 For more detailed instructions see `Pylira installation instructions <https://pylira.readthedocs.io/en/latest/pylira/index.html#installation>`__.
 
 
-Simple Analysis Example
-+++++++++++++++++++++++
+Analysis Examples
+-----------------
+
+Simple Point Source
++++++++++++++++++++
 *Pylira* was designed to offer a simple Python class based user interface,
 which allow for a short learning curve of using the package, given that
 users are familiar with Python in general and optionally *Numpy* and *Astropy*.
@@ -334,6 +346,17 @@ of the surrounding pixels. In the this example a stable state of the pixels of i
 is reached after approximately 1000 iterations.
 
 
+Astronomical Analysis Examples
+++++++++++++++++++++++++++++++
+
+Both in the x-ray as well as gamma-ray regime the The Galactic Center is a complex emission
+region. It shows point sources, extended sources as well as underlying diffuse emission and
+thus represents a challenge for any astronomical data analsyis. Figure :ref:`chandra-gc`
+shows the result of the *Pylira* algorithm applied to Chandra data of the Galactic
+center region between 0.5 and 7 keV. The PSF was obtained from simulation using the official
+Chandra science tools *ciao 4.14*. The algorithm achieves both an improved spatial
+resolution as well as a reduced noise level and higher contrast of the image in the right panel
+compared to the unprocessed counts data shown in the left panel.
 
 .. figure:: images/pylira-chandra-gc.pdf
    :scale: 70%
@@ -345,6 +368,14 @@ is reached after approximately 1000 iterations.
    values where chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
    No baseline background model was taken into account.
 
+
+Figure :ref:`fermi-gc` shows the result of the *Pylira*
+algorithm applied to Fermi-LAT data above 1~GeV to the region around the Galactic Center.
+First one can see that the algorithm achieves again a considerable improvement of the spatial resolution
+compared to the raw counts. It clearly resolves multiple point sources left to the
+the bright Galactic center source.
+
+
 .. figure:: images/pylira-fermi-gc.pdf
    :scale: 70%
    :figclass: w
@@ -353,12 +384,7 @@ is reached after approximately 1000 iterations.
    *4684* and *4684*. The image on the left shows the raw observed counts between
    0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
    values where chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
-   No baseline background model was taken into account.
-
-
-Test Datasets
-+++++++++++++
-Describe test datasets here...
+   No baseline background model was taken into account. :label:`fermi-gc`
 
 
 Summary & Outlook
@@ -366,14 +392,10 @@ Summary & Outlook
 The *Pylira* package provides Python wrappers for the LIRA algorithm. It allows to deconvolve low-counts data
 following Poisson statistics using a Bayesian sampling approach and a multi-scale smoothing prior assumption.
 The results can be easily written to FITS files and inspected by plotting the trace of the sampling process.
-This allows to check for general convergence as well as pixel to pixel correlations for selected regions of interest.
-In the future the package will be extended to support distributed computing, more flexible prior definitions and to
-account for systematic errors on the PSF.
-
-
-References
-----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
+This allows to check for general convergence as well as pixel to pixel correlations for selected regions of
+interest. The package is openly developed on GitHub and includes tests and documentation, such that it can be
+maintained and improved in future, while ensuring consistency of the results. It comes with multiple built-in
+test datasets and explanatory tutorials in form of Jupyter notebooks. Future plans include the support
+support parallelisation or distributed computing, more flexible prior definitions and to account for systematic
+errors on the PSF during the sampling process.
 
