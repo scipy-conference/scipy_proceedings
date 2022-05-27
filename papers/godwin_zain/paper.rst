@@ -23,7 +23,7 @@
 :institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
 :institution: Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA
 
-:bibliography: bibliography.bib
+:bibliography: bibliography
 
 ---------------------------------------------------------------------------------------------------
 Boosting Task-Based Active Learning with Task-Agnostic Information Using a Variational Autoencoder
