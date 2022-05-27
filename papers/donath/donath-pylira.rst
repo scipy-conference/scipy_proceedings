@@ -95,53 +95,62 @@ Deconvolution Methods
 
 Richardson-Lucy
 +++++++++++++++
-One of the first methods for deconvolution of images with Poisson
-noise was proposed by :ref:`Richardson1987` and :ref:`lucy`. This method,
-named after the original authors, is often known as the *Richardson & Lucy* (RL)
-method. The method takes the fundamental statistical properties
-of the image into account and describes the measurement process
-as a likelihood based forward modelling procedure.
+One of the first methods for deconvolution of images with Poisson noise was
+proposed by :cite:`Richardson1972` and :cite:`Lucy1974`. This method, named
+after the original authors, is often known as the *Richardson & Lucy* (RL)
+method. The method takes the fundamental statistical properties of the image
+into account and describes the measurement process as a "forward fold" model.
+The true image is then inferred from a likelihood based optimization procedure.
 
-Assuming the noise in each pixel :math:`x_i` in the recorded image
-follows a Poisson likelihood, the total likelihood of obtaining the
-measured image from an unknown true image :math:`\lambda_i` with
+Assuming the noise in each pixel :math:`d_i` in the recorded counts image
+follows a Poisson distribution, the total likelihood of obtaining the
+measured image from a model image of the expected counts :math:`\lambda_i` with
 :math:`N` pixels is given by:
 
 .. math::
    :label: poisson
 
-   \mathcal{L}\left( \mathbf{x} | \mathbf{\lambda} \right) = \prod_i^N \frac{{e^{ - x_i } \lambda_i ^ {x_i}}}{{x_i!}}
+   \mathcal{L}\left( \mathbf{d} | \mathbf{\lambda} \right) = \prod_i^N \frac{{e^{ - d_i } \lambda_i ^ {d_i}}}{{d_i!}}
 
 By taking the logarithm and dropping the constant terms one can transform the
-product into a sum over pixels, which is often called the *Cash* statistics:
+product into a sum over pixels, which is also often called the *Cash* :cite:`Cash1979`
+fit statistics:
 
 .. math::
    :label: cash
 
-   \mathcal{C}\left( \mathbf{x} | \mathbf{\lambda} \right) = \sum_i \lambda_i - x_i \log{\lambda_i}
+   \mathcal{C}\left( \mathbf{d} | \mathbf{\lambda} \right) = \sum_i^N \lambda_i - d_i \log{\lambda_i}
 
-Where the expected counts are given by the convolution of the true underlying flux distribution
-with the PSF :math:`z_k`:
+Where the expected counts :math:`\lambda_i` are given by the convolution of the true underlying
+flux distribution :math:`x_i` with the PSF :math:`p_k`:
 
 .. math::
    :label: convolution
 
-    \lambda_i = \sum_k x_i z_{i - k}
+    \lambda_i = \sum_k x_i p_{i - k}
 
-This approach is often called "forward modelling" or "forward folding" with the instrument response.
+This operation is often called "forward modelling" or "forward folding" with the instrument response.
 To obtain the most likely model given the data one searches a minimum of the total likelihood
-function. Assuming the pixels values of the true image as independent parameters, one can take
-the derivative of the Eq. :ref:`cash` with respect to the individual :math:`x_i`.
-By setting the derivative to zero, once can obtain an update rule for :math:`x_i`,
-which converges to a maximum likelihood solution of Eq. :ref:`cash`.
-A Python implementation of the standard RL method is available e.g. in the `Scikit-Image`
-package :cite:`skimage`.
+function, or equivalently of :math:`\mathcal{C}`. This high dimensional optimization problem
+can be solved by a classic gradient decent approach. Assuming the pixels values :math:`x_i`
+of the true image as independent parameters, one can take the derivative of the Eq. :ref:`cash`
+with respect to the individual :math:`x_i`: and obtain the rule on how to update the
+current set pixels :math:`\mathbf{x}_n` in each iteration of the optimization:
 
+.. math::
+   :label: cash
 
-Instead of this gradient decent minimization it is also possible to sample from the posterior
-using a simple Metropolis-Hasting approach. This is demonstrated in one of the *Pylira*
-online tutorials: `Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__
+    \mathbf{x}_{n + 1}  = \mathbf{x}_{n} -\alpha \cdot \frac{\partial \mathcal{C}\left( \mathbf{d} | \mathbf{x} \right)}{\partial x_i}
 
+Where :math:`\alpha` is a factor to define the step size. It was shown by :cite:`Richardson1972`
+that this converges to a maximum likelihood solution of Eq. :ref:`cash`. This method
+is in general equivalent to the gradient decent and backpropagation methods used in
+modern machine learning techniques. A Python implementation of the standard RL method
+is available e.g. in the `Scikit-Image` package :cite:`skimage`.
+
+Instead of this gradient decent minimization it is also possible to sample from the
+likelihood function using a simple Metropolis-Hasting approach. This is demonstrated
+in one of the *Pylira* online tutorials: `Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__
 
 
 An alternative approach to this analysis challenge is the use of deconvolution methods. While in other branches of astronomy
