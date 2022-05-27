@@ -109,14 +109,6 @@ the points of highest ranking. This is the current default AL
 approach, as technological advancements have made it a less demanding
 task in terms of processing and memory.
 
-.. container:: algorithm
-
-   :math:`L \leftarrow \xi`-sized random subset of :math:`D`
-   :math:`U \leftarrow D\backslash L`
-   :math:`A \leftarrow \varnothing` train :math:`\mathcal{T}` on
-   :math:`L` create a line graph plotting :math:`a_0` against
-   :math:`a_1` for each :math:`a \in A`
-
 The popularity of the pool-based method has led to a widely-used
 evaluation procedure, which we describe in Algorithm 1. This
 procedure trains a task model :math:`\mathcal{T}` on the initial
