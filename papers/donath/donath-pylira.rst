@@ -89,6 +89,16 @@ simulated, given a model of the detector or inferred
 directly from the data by observing far distant objects,
 which appear as point source to the instrument.
 
+While in other branches of astronomy deconvolution methods are already part
+of the standard analysis, such as the CLEAN algorithm for radio data, this
+is not the case for x-ray and gamma-ray astronomy. As any deconvolution method
+aims to enhance small scale structures in an image it becomes increasingly
+hard to solve for the regime of low signal to noise ratio.
+State of the art de-blurring algorithms based on deep convolutional neural networks
+show exceptional results on conventional image data,
+but they cannot be straightforwardly applied to astronomical counts data,
+because of a lack of ground truth and training data in general.
+
 
 Deconvolution Methods
 ---------------------
@@ -134,11 +144,11 @@ To obtain the most likely model given the data one searches a minimum of the tot
 function, or equivalently of :math:`\mathcal{C}`. This high dimensional optimization problem
 can be solved by a classic gradient decent approach. Assuming the pixels values :math:`x_i`
 of the true image as independent parameters, one can take the derivative of the Eq. :ref:`cash`
-with respect to the individual :math:`x_i`: and obtain the rule on how to update the
+with respect to the individual :math:`x_i`. This way one obtains a rule for how to update the
 current set pixels :math:`\mathbf{x}_n` in each iteration of the optimization:
 
 .. math::
-   :label: cash
+   :label: rl
 
     \mathbf{x}_{n + 1}  = \mathbf{x}_{n} -\alpha \cdot \frac{\partial \mathcal{C}\left( \mathbf{d} | \mathbf{x} \right)}{\partial x_i}
 
@@ -146,60 +156,37 @@ Where :math:`\alpha` is a factor to define the step size. It was shown by :cite:
 that this converges to a maximum likelihood solution of Eq. :ref:`cash`. This method
 is in general equivalent to the gradient decent and backpropagation methods used in
 modern machine learning techniques. A Python implementation of the standard RL method
-is available e.g. in the `Scikit-Image` package :cite:`skimage`.
+is available e.g. in the `Scikit-Image` package :cite:`skimage`. Instead of the gradient
+decent based optimization it is also possible to sample from the likelihood function using
+a simple Metropolis-Hastings approach. This is demonstrated in one of the *Pylira* online
+tutorials (`Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__).
 
-Instead of this gradient decent minimization it is also possible to sample from the
-likelihood function using a simple Metropolis-Hasting approach. This is demonstrated
-in one of the *Pylira* online tutorials: `Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__
-
-
-An alternative approach to this analysis challenge is the use of deconvolution methods. While in other branches of astronomy
-similar methods are already part of the standard analysis, such as the CLEAN algorithm for radio data, this is not the case
-for gamma-ray astronomy. As any deconvolution method aims to enhance small scale structures in an image it becomes increasingly
-hard to solve for the regime of low signal to noise ratio. The standard maximum likelihood solution accounting for the Poisson
-statistics is known as the *Richardson-Lucy* (RL) method. However the method considers each pixel of an image as an independent
-parameter and therefor tends to yield non-smooth and fragmented results, depending on the maximum number of iterations allowed. A solution
-to this problem was proposed in :cite:`Esch2004`, by using a fully Bayesian treatment and introducing a multi-scale prior assumption.
-State of the art de-blurring algorithms based on deep convolutional neural networks show exceptional results on conventional image data,
-but they cannot be straightforwardly applied to astronomical gamma-ray data, because of a lack of ground truth and training data in general.
-
+While technically the RL method converges to a maximum likelihood solution, it mostly
+still results in poorly restored images, especially if extended emission regions are
+present in the image. Because of the PSF convolution an extended emission region
+can decompose into multiple nearby point sources and still lead to good model prediction,
+when compared with the data. Those almost equally good solutions correspond
+to many narrow local minima or "spikes" in the global likelihood surface. Depending
+on the start estimate for the reconstructed image :math:`\mathbf{x}` the RL method will follow
+the steepest gradient and converge towards the nearest narrow local minimum.
+This problem has been described by multiple authors such as :cite:`Reeves1994`
+and :cite:`Fish95`.
 
 
-Extending Richardson-Lucy
-+++++++++++++++++++++++++
-Based on the maximum likelihood formulation the model function can be extended
-by taking into account the exposure, a baseline and multiple measurementof the
-same underlying true flux distribution.
-
-The *Cash* statistics for the :math:`k`-th dataset:
+The LIRA method
++++++++++++++++
+A solution to this problem was proposed in :cite:`Esch2004`.
+Based on the maximum likelihood formulation the model function
+can fist be be extended by taking into account the non uniform
+exposure :math:`e_i` and a background estimate :math:`b_i`:
 
 .. math::
-   :label: cash
+   :label: convolution
 
-   \mathcal{C}_k = \sum_i M_i - D_i \log{M_i}
+    \lambda_i = \sum_k (e_i \cdot x_i) p_{i - k} + b_i
 
-Where the individual :math:`M_i` are given by:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-
-Where :math:`E` is the exposure, :math:`P` the PSF and :math:`B` the optional baseline model.
-
-The `Cash` statistics Eq. :ref:`cash`
-
-
-LIRA Multiscale Prior
-+++++++++++++++++++++
-
-
-.. math::
-   :label: cash
-
-   \mathcal{C}_k = \sum_i M_i - D_i \log{M_i}
+And by introducing a multi-scale prior to the likelihood term
+in Eq. :ref:`cash`.
 
 
 
