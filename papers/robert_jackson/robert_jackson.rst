@@ -331,7 +331,7 @@ be physically realistic. Therefore, for :math:`\mu = 1`, the Augmented Lagrangia
 resolving the updrafts present in the storm than the weak variational technique is. This shows
 that adjusting :math:`\mu` is required in order for the weak variational technique to resolve the updraft.
 
-.. figure:: auglag2.eps
+.. figure:: auglag2.png
    :align: center
 
    The :math:`x`-axis shows, on a logarithmic scale, the maximum constraint violation
@@ -342,7 +342,7 @@ that adjusting :math:`\mu` is required in order for the weak variational techniq
    The dashed line at :math:`10^{-3}` denotes the tolerance on the maximum constraint violation
    that was supplied to the filter Augmented Lagrangian method. :label:`auglag2`
 
-.. figure:: lbfgs2.eps
+.. figure:: lbfgs2.png
    :align: center
 
    As :ref:`auglag2`, but for the weak variational technique that uses L-BFGS-B. :label:`lbfgs2`
