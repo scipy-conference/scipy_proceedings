@@ -1,3 +1,38 @@
+:author: Nathan Jacobi
+:email: Nathan.Jacobi@uga.edu
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+:corresponding:
+:equal-contributor:
+
+:author: Ivan Mo
+:email: Ivan.Mo@uga.edu
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+:corresponding:
+:equal-contributor:
+
+:author: Albert You
+:email: Albert.You@uga.edu
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+:corresponding:
+:equal-contributor:
+
+:author: Krishi Kishore
+:email: krishikishore@gmail.com
+
+:author: Zane Page
+:email: zanepage@gmail.com
+
+:author: Shannon P Quinn
+:email: spq@uga.edu
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+:institution: Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA
+
+:author: Timothy Heckman
+:email: heckman@uga.edu
+:institution: Department of Public Health, University of Georgia, Athens, GA 30602 USA
+
+:bibliography: refs.bib
+
 1. **Abstract**
 
 Human languages’ semantics and structure constantly change over time

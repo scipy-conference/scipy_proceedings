@@ -1,0 +1,9 @@
+README.rst
+setup.cfg
+setup.py
+shutilwhich/__init__.py
+shutilwhich/lib.py
+shutilwhich.egg-info/PKG-INFO
+shutilwhich.egg-info/SOURCES.txt
+shutilwhich.egg-info/dependency_links.txt
+shutilwhich.egg-info/top_level.txt

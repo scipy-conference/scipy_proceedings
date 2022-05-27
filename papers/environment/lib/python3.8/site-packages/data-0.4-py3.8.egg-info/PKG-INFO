@@ -1,0 +1,193 @@
+Metadata-Version: 1.1
+Name: data
+Version: 0.4
+Summary: Work with unicode/non-unicode data from files or strings uniformly.
+Home-page: http://github.com/mbr/data
+Author: Marc Brinkmann
+Author-email: git@marcbrinkmann.de
+License: MIT
+Description: data
+        ====
+        
+        ``data`` is a small Python module that allows you to treat input in a singular
+        way and leave it up to the caller to supply a byte-string, a unicode object, a
+        file-like or a filename.
+        
+        .. code-block:: python
+        
+            >>> open('helloworld.txt', 'w').write('hello, world from a file')
+        
+            >>> from data import Data as I
+            >>> a = I(u'hello, world')
+            >>> b = I(file='helloworld.txt')
+            >>> c = I(open('helloworld.txt'))
+        
+            >>> print unicode(a)
+            hello, world
+            >>> print unicode(b)
+            hello, world from a file
+            >>> print unicode(c)
+            hello, world from a file
+        
+        This can be made even more convenient using the ``data`` decorator:
+        
+        .. code-block:: python
+        
+            >>> from data.decorators import data
+        
+            >>> @data('buf')
+            ... def parse_buffer(buf, magic_mode=False):
+            ...   return 'buf passed in as ' + repr(buf)
+            ...
+        
+            >>> parse_buffer('hello')
+            "buf passed in as Data(data='hello', encoding='utf8')"
+        
+            >>> rv = parse_buffer(open('helloworld.txt'))
+            >>> assert 'file=' in rv
+        
+        
+        Fitting in
+        ----------
+        
+        All instances support methods like ``read`` or ``__str__`` that make it easy to
+        fit it into existing APIs:
+        
+        .. code-block:: python
+        
+            >>> d = I('some data')
+            >>> d.read(4)
+            u'some'
+            >>> d.read(4)
+            u' dat'
+            >>> d.read(4)
+            u'a'
+            >>> e = I(u'more data')
+            >>> str(e)
+            'more data'
+        
+        Note how ``read`` returns unicode. Additionally, ``readb`` is available:
+        
+        .. code-block:: python
+        
+            >>> f = I(u'I am \xdcnicode.')
+            >>> f.readb()
+            'I am \xc3\x9cnicode.'
+        
+        Every ``data`` object has an encoding attribute which is used for converting
+        from and to unicode.
+        
+        .. code-block:: python
+        
+            >>> g = I(u'I am \xdcnicode.', encoding='latin1')
+            >>> g.readb()
+            'I am \xdcnicode.'
+        
+        Iteration and line reading are also supported:
+        
+        .. code-block:: python
+        
+            >>> h = I('I am\nof many\nlines')
+            >>> h.readline()
+            u'I am\n'
+            >>> h.readlines()
+            [u'of many\n', u'lines']
+        
+            >>> i = I('line one\nline two\n')
+            >>> list(iter(i))
+            [u'line one\n', u'line two\n']
+        
+        
+        Extras
+        ------
+        
+        save_to
+        ~~~~~~~
+        
+        Some useful convenience methods are available:
+        
+        .. code-block:: python
+        
+            >>> j = I('example')
+            >>> j.save_to('example.txt')
+        
+        The ``save_to`` method will use the most efficient way possible to save the
+        data to a file (``copyfileobj`` or ``write()``). It can also be passed a
+        file-like object:
+        
+        .. code-block:: python
+        
+            >>> k = I('example2')
+            >>> with open('example2.txt', 'wb') as out:
+            ...     k.save_to(out)
+            ...
+        
+        
+        temp_saved
+        ~~~~~~~~~~
+        
+        If you need the output inside a secure temporary file, ``temp_saved`` is
+        available:
+        
+        .. code-block:: python
+        
+            >>> l = I('goes into tmp')
+            >>> with l.temp_saved() as tmp:
+            ...     print tmp.name.startswith('/tmp/tmp')
+            ...     print l.read()
+            ...
+            True
+            goes into tmp
+        
+        ``temp_saved`` functions almost identically to ``tempfile.NamedTemporaryFile``,
+        with one difference: There is no ``delete`` argument. The file is removed only
+        when the context manager exits.
+        
+        
+        Where it is useful
+        ------------------
+        
+        ``data`` can be used on both sides of an API, either while passing values in:
+        
+        .. code-block:: python
+        
+            >>> import json
+            >>> from data import Data as I
+        
+            >>> m = I('{"this": "json"}')
+            >>> json.load(m)
+            {u'this': u'json'}
+        
+        or when getting values passed (see the data decorator example above). If
+        necessary, you can also support APIs that allow users to pass in filenames:
+        
+        .. code-block:: python
+        
+            >>> class Parser(object):
+            ...   @data('input')
+            ...   def parse(self, input, parser_opt=False):
+            ...     return input
+            ...   def parse_file(self, input_file, *args, **kwargs):
+            ...     return self.parse(I(file=input_file), *args, **kwargs)
+            ...
+        
+            >>> p = Parser()
+            >>> p.parse_file('/dev/urandom')
+            Data(file='/dev/urandom', encoding='utf8')
+        
+        
+        See the documentation at http://pythonhosted.org/data for an API reference.
+        
+        
+        Python 2 and 3
+        --------------
+        
+        ``data`` works the same on Python 2 and 3 thanks to `six
+        <https://pypi.python.org/pypi/six>`_, a few compatibility functions and a
+        testsuite.
+        
+        Python 3 is supported from 3.3 onwards, Python 2 from 2.6.
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
