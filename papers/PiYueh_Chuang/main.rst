@@ -246,14 +246,14 @@ Conventional numerical methods use analytical or numerical differentiation of th
 This difference may be minor as we are still able to use analytical differentiation for simple network architectures with PINN.
 However, automatic differentiation is a major factor affecting PINN's performance.
 
-3. Case 1: Taylor-Green vortex--for accuracy and performance
+3. Case 1: Taylor-Green vortex: accuracy and performance
 -------------------------------------------------------------
 
 3.1. 2D Taylor-Green vortex
 +++++++++++++++++++++++++++
 
-Taylor-Green vortex represents a family of flows with a specific form of analytical initial flow conditions in both 2D and 3D.
-2D Taylor-Green vortex has closed-form analytical solutions with periodic boundary conditions, and hence they are standard benchmark cases for verifying CFD solvers. 
+The Taylor-Green vortex represents a family of flows with a specific form of analytical initial flow conditions in both 2D and 3D.
+The 2D Taylor-Green vortex has closed-form analytical solutions with periodic boundary conditions, and hence they are standard benchmark cases for verifying CFD solvers. 
 In this work, we used the following 2D Taylor-Green vortex:
 
 .. math:: 
@@ -301,7 +301,7 @@ We carried out the training using different numbers of GPUs to investigate the p
 All cases were trained up to 1 million iterations.
 Note that the parallelization was done with weak scaling, meaning increasing the number of GPUs would not reduce the workload of each GPU.
 Instead, increasing the number of GPUs would increase the total and per-iteration numbers of training points. 
-Therefore, our expected outcome was that all cases required about the same wall time to finish, while the residual from using 8 GPUs would converge the fast.
+Therefore, our expected outcome was that all cases required about the same wall time to finish, while the residual from using 8 GPUs would converge the fastest.
 
 After training, the PINN solver's prediction errors (i.e., accuracy) were evaluated on cell centers of a :math:`512 \times 512` Cartesian mesh against the analytical solution.
 With these spatially distributed errors, we calculated the :math:`L_2` error norm for a given :math:`t`:
@@ -311,10 +311,10 @@ With these spatially distributed errors, we calculated the :math:`L_2` error nor
 
    L_2 = \sqrt{\int\limits_{\Omega} error(x, y)^2 \mathrm{d}\Omega} \approx \sqrt{\sum\limits_{i}\sum\limits_{j} error_{i, j}^2 \Delta \Omega_{i,j}}
 
-where :math:`i` and :math:`j` here are the indices of a cell center in the Cartesian mesh. :math:`\Delta\Omega_{i,j}` is the corresponding cell area and is :math:`4\pi^2/512^2` in this case.
+where :math:`i` and :math:`j` here are the indices of a cell center in the Cartesian mesh. :math:`\Delta\Omega_{i,j}` is the corresponding cell area, :math:`4\pi^2/512^2` in this case.
 
-A comparison of accuracy and performance was made against the results from PetIBM.
-All PetIBM simulations in this section were done with 1 K40 GPU and 6 CPU cores (Intel i7-5930K).
+We compared accuracy and performance against results using PetIBM.
+All PetIBM simulations in this section were done with 1 K40 GPU and 6 CPU cores (Intel i7-5930K)j on our old lab workstation.
 We carried out 7 PetIBM simulations with different spatial resolutions: :math:`2^k\times 2^k` for :math:`k=4, 5, \dots, 10`.
 The time step size for each spatial resolution was :math:`\Delta t=0.1/2^{k-4}`.
 
@@ -327,8 +327,8 @@ However, this discrepancy does not change the qualitative findings and conclusio
 ++++++++++++
 
 Figure :ref:`fig:tgv-pinn-training-convergence` shows the convergence history of the total residuals (equation (:ref:`eq:total-residual`)).
-Using more GPUs did not accelerate the convergence, unlike what we expected previously.
-All cases converged as a similar rate.
+Using more GPUs did not accelerate the convergence, contrary to what we expected.
+All cases converged at a similar rate.
 Though without a quantitative criterion or justification, we considered that further training would not improve the accuracy.
 Figure :ref:`fig:tgv-pinn-contour-t32` gives a visual taste of what the predictions from the neural network look like.
 
@@ -345,19 +345,19 @@ Figure :ref:`fig:tgv-pinn-contour-t32` gives a visual taste of what the predicti
 The result visually agrees with that in figure :ref:`fig:tgv-petibm-contour-t32`.
 However, as shown in figure :ref:`fig:tgv-sim-time-errors`, the error magnitudes from the PINN solver are much higher than those from PetIBM.
 Figure :ref:`fig:tgv-sim-time-errors` shows the prediction errors with respect to :math:`t`.
-We only present the error of :math:`u` velocity as those of :math:`v` and :math:`p` are similar.
+We only present the error on the :math:`u` velocity as those for :math:`v` and :math:`p` are similar.
 The accuracy of the PINN solver is similar to that of the :math:`16 \times 16` simulation with PetIBM.
 Using more GPUs, which implies more training points, does not improve the accuracy.
 
-Regardless of the magnitudes, the trends of errors with respect to :math:`t` are similar for both PINN and PetIBM.
+Regardless of the magnitudes, the trends of the errors with respect to :math:`t` are similar for both PINN and PetIBM.
 For PetIBM, the trend shown in figure :ref:`fig:tgv-sim-time-errors` indicates that the temporal error is bounded, and the scheme is stable.
-However, this concept does not apply to PINN as PINN does not use any time-marching schemes.
+However, this concept does not apply to PINN as it does not use any time-marching schemes.
 What this means for PINN is still unclear to us.
 Nevertheless, it shows that PINN is able to propagate the influence of initial conditions to later times, which is a crucial factor for solving hyperbolic partial differential equations. 
 
 Figure :ref:`fig:tgv-run-time-errors` shows the computational cost of PINN and PetIBM in terms of the desired accuracy versus the required wall time.
-We only showed the PINN results of 8 A100 GPUs on this figure.
-We believe this type of plot may help evaluate the computational cost in engineering.
+We only show the PINN results of 8 A100 GPUs on this figure.
+We believe this type of plot may help evaluate the computational cost in engineering applications.
 According to the figure, for example, achieving an accuracy of :math:`10^{-2}` at :math:`t=2` requires less than 20 seconds for PetIBM with 1 K40 and 6 CPU cores, but it requires more than 8 hours with at least 1 A100 GPU.
 
 .. figure:: tgv-sim-time-errors.png
@@ -386,10 +386,10 @@ As indicated previously, weak scaling was used in PINN, which follows most machi
 3.4. Discussion
 +++++++++++++++
 
-Taylor-Green vortex serves as a good benchmark case because it reduces the number of required residual constraints: residuals :math:`r_4` and :math:`r_5` are excluded from :math:`r` in equation :ref:`eq:total-residual`.
-This makes the optimizer can focus only on the residuals of initial conditions and the Navier-Stokes equations.
+The Taylor-Green vortex serves as a good benchmark case because it reduces the number of required residual constraints: residuals :math:`r_4` and :math:`r_5` are excluded from :math:`r` in equation :ref:`eq:total-residual`.
+This means the optimizer can concentrte only on the residuals of initial conditions and the Navier-Stokes equations.
 
-Using more GPUs (thus using more training points) did not speed up the convergence may indicate that the per-iteration number of points on a single GPU is already big enough.
+Using more GPUs (thus using more training points) did not speed up the convergence, which may indicate that the per-iteration number of points on a single GPU is already big enough.
 The number of training points mainly affects the mean gradients of the residual with respect to model parameters, which then will be used to update parameters by gradient-descent-based optimizers.
 If the number of points is already big enough on a single GPU, then using more points or more GPU is unlikely to change the mean gradients significantly, causing the convergence solely to rely on learning rates.
 
@@ -399,30 +399,30 @@ Recall the theory in section 2.
 The PINN method only seeks the minimal residual on the total residual's hyperplane.
 It does not try to find the zero root of the hyperplane and does not even care whether such a zero root exists.
 Furthermore, by using a gradient-descent-based optimizer, the resulting minimum is likely just a local minimum.
-It makes sense the residual may be hard to close to zero, meaning it is hard to make error small.
+It makes sense that it is hard for the residual to be close to zero, meaning it is hard to make errors small.
 
 Regarding the performance result in figure :ref:`fig:tgv-run-time-errors`, we would like to avoid interpreting the result as one solver being better than the other one.
 The proper conclusion drawn from the figure should be as follows: when using the PINN solver as a CFD simulator for a specific flow condition, PetIBM outperforms the PINN solver.
 As stated in section 1, the PINN method can solve flows under different flow parameters in one run—a capability that PetIBM does not have.
-The performance result in figure :ref:`fig:tgv-run-time-errors` only considers a limited aspect of the PINN solver.
+The performance result in figure :ref:`fig:tgv-run-time-errors` only considers a limited application of the PINN solver.
 
-One issue in this case study was fairly comparing the PINN solver and PetIBM, especially when investigating the accuracy versus the workload/problem size or time-to-solution versus problem size.
+One issue for this case study was how to fairly compare the PINN solver and PetIBM, especially when investigating the accuracy versus the workload/problem size or time-to-solution versus problem size.
 Defining the problem size in PINN is not as straightforward as we thought.
 Let us start with degrees of freedom—in PINN, it is called the number of model parameters, and in traditional CFD solvers, it is called the number of unknowns.
 The PINN solver and traditional CFD solvers are all trying to determine the free parameters in models (that is, approximate solutions).
-Hence, degrees of freedom determines the problem sizes and workloads.
+Hence, the number of degrees of freedom determines the problem sizes and workloads.
 However, in PINN, problem sizes and workloads do not depend on degrees of freedom solely.
 The number of training points also plays a critical role in workloads.
 We were not sure if it made sense to define a problem size as the sum of the per-iteration number of training points and the number of model parameters.
 For example, 100 model parameters plus 100 training points is not equivalent to 150 model parameters plus 50 training points in terms of workloads.
-So without a proper definition of problem size and workload, it was not clear how to fairly compare PINN and traditional CFD.
+So without a proper definition of problem size and workload, it was not clear how to fairly compare PINN and traditional CFD methods.
 
-Nevertheless, the gap between the performances of PINN and PetIBM is too significant, and no one can argue using other metrics would change the conclusion.
-Not to mention that the PINN solver ran on A100 GPUs, while PetIBM ran on a single K40 GPU, a product from 2013.
+Nevertheless, the gap between the performances of PINN and PetIBM is too larage, and no one can argue that using other metrics would change the conclusion.
+Not to mention that the PINN solver ran on A100 GPUs, while PetIBM ran on a single K40 GPU in our lab, a product from 2013.
 This is also not a surprising conclusion because, as indicated in section 2, the use of automatic differentiation for temporal and spatial derivatives results in a huge computational graph.
 In addition, the PINN solver uses gradient-descent based method, which is a first-order method and limits the performance.
 
-Week scaling is a natural choice of the PINN solver when it comes to distributed computing.
+Weak scaling is a natural choice of the PINN solver when it comes to distributed computing.
 As we don't know a proper way to define workload, simply copying all model parameters to all processes and using the same number of training points on all processes works well.
 
 1. Case 2: 2D cylinder flows--harder than we thought
