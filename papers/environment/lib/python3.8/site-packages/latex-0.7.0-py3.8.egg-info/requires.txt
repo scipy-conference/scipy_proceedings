@@ -1,4 +1,0 @@
-tempdir
-data
-future
-shutilwhich
