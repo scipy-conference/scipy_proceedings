@@ -8,9 +8,9 @@
 
 :bibliography: reference
 
--------------------------------------------------------------------------------------------------------------------
-A case study of physics-informed neural networks in computational fluid dynamics: limitations and frustration
--------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Experience report of physics-informed neural networks in fluid simulations: pitfalls and frustration
+----------------------------------------------------------------------------------------------------
 
 .. class:: abstract
 
