@@ -495,7 +495,7 @@ We consider both the friction drag and pressure drag in the coefficient calculat
 
    C_D=\frac{2}{\rho U_0^2 D}\int\limits_S\left(\rho\nu\frac{\partial \left(\vec{U}\cdot\vec{t}\right)}{\partial \vec{n}}n_y-pn_x\right)\mathrm{d}S
 
-Here, :math:`U_0=1` is the inlet velocity. :math:`\vec{n}=[n_x,n_y]^\mathsf{T}` and :math:`\vec{t}=[ny, -nx]^\mathsf{T}` are the normal and tangent vectors, respectively.
+Here, :math:`U_0=1` is the inlet velocity. :math:`\vec{n}=[n_x,n_y]^\mathsf{T}` and :math:`\vec{t}=[n_y, -n_x]^\mathsf{T}` are the normal and tangent vectors, respectively.
 :math:`S` represents the cylinder surface.
 The theoretical lift coefficient (:math:`C_L`) for this flow is zero due to the symmetrical geometry.
 
