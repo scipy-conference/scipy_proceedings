@@ -277,6 +277,13 @@ The following code shows how to construct a DFM in *statsmodels*
 Linear Gaussian state space models
 ''''''''''''''''''''''''''''''''''
 
+.. figure:: ssm_flowchart.png
+   :scale: 23%
+   :align: center
+   :figclass: wht
+
+   Selected functionality of state space models in statsmodels. :label:`ssmflow`
+
 In *statsmodels*, each of the model classes introduced above (
 :code:`statespace.ExponentialSmoothing`, :code:`UnobservedComponents`,
 :code:`ARIMA`, :code:`VARMAX`, :code:`DynamicFactor`, and
@@ -301,12 +308,7 @@ inference for these models. The implementation in *statsmodels* largely follows
 the treatment in :cite:`durbin_time_2012`, and is described in more detail in
 :cite:`fulton_estimating_2015`.
 
-.. figure:: ssm_flowchart.png
-   :scale: 23%
-   :align: center
-   :figclass: wt
 
-   Selected functionality of state space models in statsmodels. :label:`ssmflow`
 
 
 In addition to these key tools, state space models also admit general
@@ -448,13 +450,13 @@ computation introduced above.
    samples_rw = az.convert_to_inference_data(
       samples_rw)
    az.plot_posterior(samples_rw.posterior.sel(
-      {'draw': np.s_[1000::10]}))
+      {'draw': np.s_[10000::10]}))
 
 .. figure:: mh_samples.png
    :scale: 50%
    :align: center
 
-   Kernel density estimate of posterior, Metropolis-Hastings. :label:`mhsamples`
+   Approximate posterior distribution of variance parameter, random walk model, Metropolis-Hastings. :label:`mhsamples`
 
 The approximate posterior distribution, constructed from the sample chain,
 is shown in Figure :ref:`mhsamples`.
@@ -474,53 +476,62 @@ Here, we show how to implement Gibbs sampling estimation of the variance
 parameter, now making use of an inverse Gamma prior, and the simulation smoother
 introduced above.
 
-.. code-block:: python
-
-   model_rw = sm.tsa.UnobservedComponents(y, 'rwalk')
-
-   # Construct the simulation smoother
-   sim_rw = model_rw.simulation_smoother()
-
-   # Specify the prior distribution. With GS, we
-   # must choose an inverse Gamma prior.
-   prior = stats.invgamma(0.001, scale=0.001)
-
-   # Storage
-   niter = 100000
-   samples_rw = np.zeros(niter + 1)
-
-   # Initialization
-   samples_rw[0] = y.diff().var()
-
-   # Iterations
-   for i in range(1, niter + 1):
-      # Update the model parameters
-      model_rw.update(samples_rw[i - 1])
-      # Draw from the conditional posterior of
-      # the state vector
-      sim_rw.simulate()
-      sample_state = sim_rw.simulated_state.T
-      
-      # Compute the conditional posterior of
-      # the variance parameter, and draw from it
-      resid = sample_state[1:] - sample_state[:-1]
-      post_shape = len(resid) / 2 + 0.001
-      post_scale = np.sum(resid**2) / 2 + 0.001
-      samples_rw[i] = stats.invgamma(
-         post_shape, scale=post_scale).rvs()
-
-         
-   # Convert for use with ArviZ and plot posterior
-   samples_rw = az.convert_to_inference_data(
-      samples_rw)
-   az.plot_posterior(samples_rw.posterior.sel(
-      {'draw': np.s_[1000::10]}))
-
 .. figure:: gs_samples.png
    :scale: 50%
    :align: center
 
-   Kernel density estimate of posterior, Gibbs sampling. :label:`gssamples`
+   Approximate posterior joint distribution of variance parameters, local level model, Gibbs sampling. :label:`gssamples`
+
+.. code-block:: python
+
+   model_ll = sm.tsa.UnobservedComponents(y, 'llevel')
+
+   # Construct the simulation smoother
+   sim_ll = model_ll.simulation_smoother()
+
+   # Specify the prior distributions. With GS, we
+   # must choose an inverse Gamma prior for each
+   # variance
+   priors = [stats.invgamma(0.01, scale=0.01)] * 2
+
+   # Storage
+   niter = 100000
+   samples_ll = np.zeros((niter + 1, 2))
+
+   # Initialization
+   samples_ll[0] = [y.diff().var(), 1e-5]
+
+   # Iterations
+   for i in range(1, niter + 1):
+      # Update the model parameters
+      model_ll.update(samples_ll[i - 1])
+      # Draw from the conditional posterior of
+      # the state vector
+      sim_ll.simulate()
+      sample_state = sim_ll.simulated_state.T
+
+      # Compute / draw from conditional posterior of
+      # ...observation error variance
+      resid = y - sample_state[:, 0]
+      post_shape = len(resid) / 2 + 0.01
+      post_scale = np.sum(resid**2) / 2 + 0.01
+      samples_ll[i, 0] = stats.invgamma(
+         post_shape, scale=post_scale).rvs()
+
+      # ...level error variance
+      resid = sample_state[1:] - sample_state[:-1]
+      post_shape = len(resid) / 2 + 0.01
+      post_scale = np.sum(resid**2) / 2 + 0.01
+      samples_ll[i, 1] = stats.invgamma(
+         post_shape, scale=post_scale).rvs()
+
+   # Convert for use with ArviZ and plot posterior
+   samples_ll = az.convert_to_inference_data(
+      {'parameters': samples_ll[None, ...]},
+      coords={'parameter': model_ll.param_names},
+      dims={'parameters': ['parameter']})
+   az.plot_pair(samples_ll.posterior.sel(
+      {'draw': np.s_[10000::10]}), kind='hexbin');
 
 The approximate posterior distribution, constructed from the sample chain,
 is shown in Figure :ref:`gssamples`.
