@@ -1,10 +1,10 @@
 :author: Allan Campopiano
 :email: allan@deepnote.com
-:bibliography: paper.bib
+:bibliography: mybib
 
-=====
+=====================================================
 The myth of the normal curve and what to do about it
-=====
+=====================================================
 
 Reliance on the normal curve as a tool for measurement is almost a given.
 It shapes our grading systems, our measures of intelligence, and importantly,
@@ -36,9 +36,9 @@ and (2) statistics other than the sample mean were not tested and may behave dif
 demonstrated discoveries have been made (:cite:`wilcox2013introduction`). These call into question the usefulness of
 the normal curve and will be discussed in the following sections.
 
------
+------------------------
 The contaminated normal
------
+------------------------
 
 One of the most striking counterexamples of “N=40 is enough” is shown when sampling from the
 so-called contaminated normal (:cite:`20000755025`; :cite:`tan1982sampling`).
@@ -57,9 +57,9 @@ from normality, especially in the tails, can have a large impact on commonly use
 The problems get even worse when looking at the effect of contamination on statistical power
 and effect sizes but these findings are not discussed in this article (see :cite:`wilcox1992can`).
 
------
+-------------------------
 Student’s t distribution
------
+-------------------------
 
 It turns out that T (the statistic you get from Student’s t-test) is more sensitive to violations
 of normality than even the sample mean (which has already been shown to not be robust).
@@ -85,9 +85,9 @@ significance (:cite:`wilcox1998many`).
     like the Liberty Bell, it should be enshrined somewhere as a memorial to
     more heroic days — Earnest Ernest, Philadelphia Inquirer. 10 November 1974. (:cite:`fashing1981myth`)”
 
------
+----------------------
 Modern robust methods
------
+----------------------
 
 When it comes to hypothesis testing, an intuitive way of dealing with the issues described
 above would be to (1) replace the sample mean (and standard deviation) with
@@ -97,9 +97,9 @@ Two such candidates are the 20% trimmed mean and the percentile bootstrap test,
 both of which have been shown to have practical value when dealing with issues
 of outliers and non-normality (:cite:`campopiano2018statslab`; :cite:`wilcox2013introduction`).
 
-*****
+*****************
 The trimmed mean
-*****
+*****************
 
 The trimmed mean is nothing more than sorting values, removing a proportion from each
 tail, and computing the mean on the remaining values. Formally, the trimmed mean is calculated as follows:
@@ -119,9 +119,9 @@ robustness that have been studied (:cite:`wilcox2013introduction`). In particula
 associated with the median (not discussed here)
 and still protects against outliers.
 
-*****
+******************************
 The percentile bootstrap test
-*****
+******************************
 
 In most traditional parametric tests, there is an assumption that the sampling distribution
 has a particular shape (normal, f distribution, t distribution, etc).
@@ -139,8 +139,7 @@ For a two-sample case, it can be described as follows:
 3. Compute :math:`\bar{X}_1 - \bar{X}_2` based on you new sample (the mean difference)
 4. Store the difference & repeat steps 1-3 many times (say, 1000)
 5. Consider the middle 95% of all differences (the confidence interval)
-6. If the confidence interval contains zero, there is no statistical difference, otherwise,
-you can reject the null hypothesis (there is a statistical difference)
+6. If the confidence interval contains zero, there is no statistical difference, otherwise, you can reject the null hypothesis (there is a statistical difference)
 
 The percentile bootstrap is simply a computational algorithm that uses the data at hand to estimate
 the underlying sampling distribution of a statistic (again, rather than assuming it
@@ -148,9 +147,9 @@ takes some particular shape).  It works well with small sample sizes,
 under normality, under non-normality, and it easily extends to multi-group tests
 (ANOVA) and measures of association (correlation, regression).
 
------
+------------------------------------------------
 Implementing and teaching modern robust methods
------
+------------------------------------------------
 
 Despite over a half a century of convincing findings, and thousands of papers, robust
 statistical methods are still not widely adopted in applied research
@@ -165,9 +164,9 @@ Perhaps the most obvious reason for the lack of adoption of modern methods
 is a lack of easy-to-use software and training resources. In the following sections,
 two resources will be presented—one for implementing robust methods and one for teaching them.
 
-*****
+*****************************
 Robust statistics for Python
-*****
+*****************************
 
 Hypothesize is a robust null hypothesis significance testing (NHST) library for
 Python (:cite:`Campopiano2020`). It is based on Wilcox’s `WRS package <https://dornsife.usc.edu/labs/rwilcox/software>`_ for R
@@ -211,9 +210,9 @@ Winsorized correlation which is a robust alternative to Pearson’s R. For examp
 
 returns the Winsorized correlation coefficient and the p-value (among other details).
 
-*****
+****************************
 Robust statistics simulator
-*****
+****************************
 
 Having a library of robust statistical functions is not enough to make modern methods
 commonplace in applied research. Professors, educators, and practitioners still need
@@ -260,9 +259,9 @@ This is a replication of the result described by :cite:`wilcox1998many` and in F
 
     Estimating Type-I Error with the robust statistics simulator.
 
------
+-----------
 Conclusion
------
+-----------
 
 This paper gives an overview of the issues associated with the normal curve.
 The concern with traditional methods, in terms of robustness to violations of
