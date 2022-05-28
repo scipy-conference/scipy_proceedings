@@ -96,7 +96,7 @@ To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, 
    :scale: 20%
    :figclass: w
 
-   Covasim releases since the start of the pandemic. :label:`worldmap`
+   Locations where Covasim has been used to help produce a paper, report, or policy recommendation. :label:`worldmap`
 
 
 
