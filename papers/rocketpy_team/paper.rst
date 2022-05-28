@@ -162,7 +162,7 @@ of these objects, structuring them as :math:`\mathbb{R}^n \to \mathbb{R}` mathem
 
 Through the use of those methods, this approach allows for quick and easy arithmetic operations between lambda
 expressions and list-defined interpolated functions, as well as scalars. Different interpolation methods are available
-to be chosen from, among them simple polynomial, spline, and Akima (:cite:`Association for Computing Machinery ({ACM})`).
+to be chosen from, among them simple polynomial, spline, and Akima (:cite:`akima1970new`).
 Extrapolation of *Function* objects outside the domain constrained by a given dataset is also allowed.
 
 Furthermore, evaluation of definite integrals of these *Function* objects is among their feature set. By cleverly
