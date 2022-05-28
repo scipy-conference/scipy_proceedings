@@ -173,8 +173,13 @@ structured and unstructured grid data from various research fields such as clima
 weather, atmosphere, ocean, among others. In addition, some of the functionalities of
 GeoCAT-comp are inspired or reimplemented from the NCL.
 
-Spherical harmonics (both decomposition and recomposition as well as area
-weighting); Fourier transforms such as band-block, band-pass, low-pass, and
+Some of the functions that are made available through GeoCAT-comp are listed below,
+for which the GeoCAT-comp documentation :cite:`geocatcomprtd` provides signatures and
+descriptions as well as links to the usage examples:
+
+- Spherical harmonics (both decomposition and recomposition as well as area
+weighting),
+- Fourier transforms such as band-block, band-pass, low-pass, and
 high-pass; meteorological variables such as relative humidity, dew-point temperature,
 heat index, saturation vapor pressure, etc.; climatology functions such as climate
 average over multiple years, daily/monthly/seasonal averages, as well as anomalies;
@@ -182,10 +187,7 @@ regridding of curvilinear grid to rectilinear grid, unstructured grid to rectili
 grid, curvilinear grid to unstructured grid, and vice versa; interpolation methods
 such as bilinear interpolation of a rectilinear to another rectilinear grid,
 hybrid-sigma levels to isobaric levels, and sigma to hybrid coordinates; empirical
-orthogonal function (EOF) analysis; are some of the functions that are made
-available through GeoCAT-comp. GeoCAT-comp documentation :cite:`geocatcomprtd`
-provides signatures and descriptions of these functions as well as links to the
-usage examples.
+orthogonal function (EOF) analysis.
 
 .. figure:: figures/fig3_structure.png
    :align: center
