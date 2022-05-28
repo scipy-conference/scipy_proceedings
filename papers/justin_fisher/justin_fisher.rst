@@ -100,4 +100,4 @@ Lengthy discussion of the new API and its planned inclusion in Webots is here: h
 
 A working early-access version of the new API and a variety of sample programs are available here: https://github.com/Justin-Fisher/new_python_api_for_webots
 
-Webots home page, including freee download of Webots: https://cyberbotics.com/
+Webots home page, including free download of Webots: https://cyberbotics.com/
