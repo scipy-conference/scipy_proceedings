@@ -71,12 +71,14 @@ whole software stack open-sourced.
 
 GeoCAT has created several, now-established, Python tools that are hosted and
 managed publicly on GitHub to develop computation and visualization functions,
-which  are built on cornerstone Pangeo :cite:`pangeo18` (i.e. a community platform
+which are built on cornerstone Pangeo :cite:`pangeo18` (i.e. a community platform
 for big data geoscience) packages such as Xarray :cite:`xarray17`, Dask
 :cite:`dask15`, as well as Jupyter Notebooks. Dask compatibility allows the
 GeoCAT-comp functions to scale from personal laptops to high performance computing
 systems such as NCAR’s Casper, Cheyenne, and upcoming Derecho clusters
-:cite:`ams22craker`.
+:cite:`ams22craker`. Additionally, GeoCAT also utilizes Numba, an open source
+just-in-time (JIT) compiler, to translate Python and NumPy code into machine
+codes in order get faster executions wherever possible.
 
 Briefly, GeoCAT-comp houses computational operators for applications ranging from
 regridding and interpolation, to climatology and meteorology. GeoCAT-examples
@@ -405,3 +407,20 @@ Project Pythia. These materials consist of live tutorial sessions,
 interactive Jupyter notebook demonstrations, Q&A sessions, as well as
 published video recording of the event on Pythia's Youtube channel. As a
 result, it helps us engage with the community through multiple channels.
+
+Future directions
+-----------------
+
+GeoCAT aims to keep increasing the number of data analysis and visualization
+functionalities in both structured and unstructured meshes with the same pace
+as has been done so far. The team will continue prioritizing scalability and
+open development in future development and maintenance of its software tools
+landscape. To achieve the goals with scalability of our tools, we will ensure
+our implementations are compatible with the state-of-the-art and up-to-date
+with the best practices of the technology we are using, e.g. Dask. To
+enhance the community involvement in our open development model, we will
+continue interacting with the community members through significant
+events such as Pangeo community meetings, scientific conferences,
+tutorials and workshops of GeoCAT's own as well as other community
+members; we will keep our timely communication with the stakeholders
+through GitHub assets and other communication channels.
