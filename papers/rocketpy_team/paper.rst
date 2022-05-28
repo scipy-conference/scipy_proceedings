@@ -365,13 +365,13 @@ a boolean value that signifies when the parachute should be activated. The *samp
     return True if vel_z < 0 and height < 800 else False
 
    ParachuteName = RocketName.addParachute(
-                           'ParachuteName',
-                            CdS=10.0,
-                            trigger=parachuteTrigger, 
-                            samplingRate=105,
-                            lag=1.5,
-                            noise=(0, 8.3, 0.5)
-                            )
+      'ParachuteName',
+      CdS=10.0,
+      trigger=parachuteTrigger, 
+      samplingRate=105,
+      lag=1.5,
+      noise=(0, 8.3, 0.5)
+   )
 
 With the rocket fully defined, the :code:`Rocket.info()` and :code:`Rocket.allInfo()` methods can be called giving us information and plots of the
 calculations performed in the class. 
