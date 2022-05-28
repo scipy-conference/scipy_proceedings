@@ -418,6 +418,35 @@ Finally, both types have methods to convert between them:
   The resulting ``Orbit`` loses the information about the original,
   potentially complex trajectory.
 
+Orbit propagation
+-----------------
+
+``Orbit`` objects have a ``.propagate`` method that takes an elapsed time
+and returns another ``Orbit`` with new orbital elements and an updated epoch::
+
+   In [2]: from poliastro.examples import iss
+
+   In [3]: iss
+   Out[3]: 6772 x 6790 km x 51.6 deg (GCRS) ...
+
+   In [4]: iss.nu.to(u.deg)
+   Out[4]: <Quantity 46.59580468 deg>
+
+   In [5]: iss_30m = iss.propagate(30 << u.min)
+
+   In [6]: (iss_30m.epoch - iss.epoch).datetime
+   Out[6]: datetime.timedelta(seconds=1800)
+
+   In [7]: (iss_30m.nu - iss.nu).to(u.deg)
+   Out[7]: <Quantity 116.54513153 deg>
+
+The default propagation algorithm is an analytical procedure described in :cite:`farnocchia_robust_2013`
+that works seamlessly in the near parabolic region.
+In addition, poliastro implements analytical propagation algorithms as described in
+:cite:`danby_solution_1983`, :cite:`odell_procedures_1986`, :cite:`markley_kepler_1995`,
+:cite:`mikkola_cubic_1987`, :cite:`pimienta-penalver_accurate_2013`, :cite:`charls_recursive_2022`,
+and :cite:`vallado_fundamentals_2007`.
+
 Future work
 ===========
 
