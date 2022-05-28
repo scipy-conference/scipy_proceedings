@@ -3,12 +3,12 @@
 :institution: National Center for Atmospheric Research
 :corresponding:
 
-:author: Michaela Sizemore
-:email: misi1684@ucar.edu
-:institution: National Center for Atmospheric Research
-
 :author: Anissa Zacharias
 :email: anissaz@ucar.edu
+:institution: National Center for Atmospheric Research
+
+:author: Michaela Sizemore
+:email: misi1684@ucar.edu
 :institution: National Center for Atmospheric Research
 
 :author: Alea Kootz
