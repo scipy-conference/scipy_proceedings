@@ -564,9 +564,5 @@ support for automatic outlier handling, stochastic volatility, and regime
 switching models, even though these are largely infeasible in *statsmodels*
 when using frequentist methods.
 
-References
-----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
 
 
