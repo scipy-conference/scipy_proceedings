@@ -53,9 +53,15 @@ Introduction
 
 The Geoscience Community Analysis Toolkit (GeoCAT) team, established in 2019,
 leads the software engineering efforts of the National Center for Atmospheric
-Research (NCAR)’s “Pivot to Python” initiative :cite:`pivot19`. The initiative
-had an initial two-year roadmap with major milestones being: (1) Replicating
-NCL’s computational routines in Python, (2) training and support for
+Research (NCAR)’s “Pivot to Python” initiative :cite:`pivot19`. Before then,
+NCAR Command Language (NCL) :cite:`ncl` was developed by NCAR as an interpreted,
+domain-specific language that was aimed to support the analysis and
+visualization needs of the global geosciences community. NCL had been serving
+several tens of thousands of users for decades. It is still available for use
+but has not been actively developed as it has been in maintenance mode.
+
+The initiative had an initial two-year roadmap with major milestones being: (1)
+Replicating NCL’s computational routines in Python, (2) training and support for
 transitioning NCL users into Python, and (3) moving tools into an open development
 model. GeoCAT essentially aims at creating scalable data analysis and
 visualization tools on structured and unstructured grids for the geosciences
