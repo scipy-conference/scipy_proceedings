@@ -168,6 +168,13 @@ few examples are given in the following code
    model_arma11 = sm.tsa.UnobservedComponents(
       y, 'lltrend', seasonal=4)
 
+These models have become popular for time series analysis and forecasting, as
+they are flexible and the estimated components are intuitive. Indeed, Google's
+Causal Impact library  :cite:`brodersen_inferring_2015` uses a Bayesian
+structural time series approach directly, and Facebook's Prophet library
+:cite:`taylor_forecasting_2017` uses a conceptually similar framework and is
+estimated using PyStan.
+
 Autoregressive moving-average models
 ''''''''''''''''''''''''''''''''''''
 
