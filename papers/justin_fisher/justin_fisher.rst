@@ -3,9 +3,9 @@
 :institution: Southern Methodist University, Department of Philosophy
 :corresponding:
 
--------------------------------------------------------------
+------------------------------------------------
 A New Python API for Webots Robotics Simulations
--------------------------------------------------------------
+------------------------------------------------
 
 .. class:: abstract
 
