@@ -180,12 +180,17 @@ developments to pybind11. Pybind11 provided significant benefits to our
 packages over (mis)-using Cython for bindings; reduced maintenance, simpler
 builds, no need to pin NumPy when building, and a cross-package API. The
 ``iMinuit`` package was later moved to pybind11 as well, and pybind11 became
-the Scikit-HEP recommended binding tool.
+the Scikit-HEP recommended binding tool. Scikit-HEP developers contributed a
+variety of fixes and features to pybind11, including positional and keyword
+arguments, prepending to the overload chain, type access and manipulation,
+completely redesigned CMake integration, a new pure-Setuptools helpers, and a
+complete CI redesign based on GitHub Actions, with over 70 jobs and expanded
+compiler support. We also helped improve all the example projects.
 
-
-This development then encouraged the development of Awkward 1.0, a rewrite of
-AwkwardArray replacing the Python-only code with compiled code, fixing some
-long-standing limitations and enabling further developments in backends.
+This example of a project with binary components being usable everywhere then
+encouraged the development of Awkward 1.0, a rewrite of AwkwardArray replacing
+the Python-only code with compiled code, fixing some long-standing limitations
+and enabling further developments in backends.
 
 
 Broader ecosystem
@@ -226,34 +231,103 @@ simple utilities to help a library also accept ROOT histograms, which do not
 (currently) follow the Protocol.
 
 Scikit-HEP's external contributions continued to grow. One of the most notable
-ones was our work on cibuildwheel. This was a Python package that supported building 
-redistributable wheels on multiple CI systems. Unlike our own ``azure-wheel-helpers``
-or the competing multibuild package, it was written in Python, so good practices
-in package design could apply, and it was easy to remain independent of the underlying
-CI system. Building wheels on Linux requires a docker image, macOS requires the
-python.org Python, and Windows can use any copy of Python - cibuildwheel uses this
-to supply Python in all cases, which keeps it from depending on the CI's support
-for a particular Python version.
+ones was our work on cibuildwheel. This was a Python package that supported
+building redistributable wheels on multiple CI systems. Unlike our own
+``azure-wheel-helpers`` or the competing multibuild package, it was written in
+Python, so good practices in package design could apply, and it was easy to
+remain independent of the underlying CI system. Building wheels on Linux
+requires a docker image, macOS requires the python.org Python, and Windows can
+use any copy of Python - cibuildwheel uses this to supply Python in all cases,
+which keeps it from depending on the CI's support for a particular Python
+version. We merged our improvments to cibuildwheel, dropped
+azure-wheel-helpers, and eventually joined the cibuildwheel project.
+``cibuildwheel`` would go on to join the PyPA, and is now in use in over 600
+packages, including ``numpy``, ``matplotlib``, ``mypy``, ``scikit-learn``, and
+more.
+
+Our continued contributions to cibuildwheel included a new TOML-based
+configuration system for cibuildwheel 2.0, an override system to make
+supporting multiple manylinux and musllinux targets easier, build directly from
+SDists, option to use ``build`` instead of ``pip``, automatic detection of
+python version requirements, better globbing support, and more. We also helped
+fully statically type the codebase, apply various checks and style controls,
+automate CI processes, improve support for special platforms like CPython 3.8
+on macOS Apple Silicon, and much more.
+
+We also have helped with ``build``, ``nox``, ``pyodide``, and many other packages.
 
 The Scikit-HEP Developer Pages
 ------------------------------
 
+A variety of packaging best practices were coming out of the boost-histogram
+work, supporting both ease of installation for users as well as various static
+checks and styling to keep the package easy to maintain and reduce bugs. These
+techniques would also be useful apply to Scikit-HEP's nearly thirty other
+packages, but applying them one-by-one was not scalable. The development and
+adoption of ``azure-wheel-helpers`` included a series of blog posts that
+covered the Azure Pipelines platform and wheel building details. This ended up
+serving as the inspiration for a new set of pages on the Scikit-HEP website for
+developers interested in making Python packages. Unlike blog posts, these would
+be continuously maintained and extended over the years, serving as a template
+and guide for updating and adding packages to Scikit-HEP, and educating new
+developers.
 
-Another development from the boost-histogram work was the Scikit-HEP developer
-pages. These pages describe the best practices for developing and maintaining a
-package, covering recommended configuration, style checking, testing, continuous
-integration setup, and more.
+These pages grew to describe the best practices for developing and maintaining
+a package, covering recommended configuration, style checking, testing,
+continuous integration setup, task runners, and more. Shortly after the
+introduction of the developer pages, Scikit-HEP developers started asking for a
+template to quickly produce new packages following the guidelines. This
+was eventually produced; the "cookiecutter" based template is kept in sync with
+the developer pages; any new addition to one is also added to the other. The
+developer pages are also kept up to date using a CI job that bumps any GitHub
+Actions or pre-commit versions to the most recent versions weekly. Some portions
+of the developer pages have been contributed to packaging.python.org, as well.
+
+The cookie cutter was developed to be able to support multiple build backends;
+the original design was to target both pure Python and Pybind11 based binary
+builds.  This has expanded to include 11 different backends by mid 2022,
+including Rust extensions, many PEP 621 based backends, and a Scikit-Build
+based backend for pybind11 in addition to the classic Setuptools one.  This has
+helped work out bugs and influence the design of several PEP 621 packages,
+including helping with the addition of PEP 621 to Setuptools.
+
+The most recent addition to the pages was based on a new ``repo-review`` package
+which evaluates and existing repository to see what parts of the guidelines are
+being followed. This was helpful for monitoring adoption of the developer
+pages, especially newer additions, across the Scikit-HEP packages. This package
+was then implemented directly into the Scikit-HEP pages, using Pyodide to run
+Python in WebAssembly directly inside a user's browser. Now anyone visiting the
+page can enter their repository and branch, and see the adoption report in a
+couple of seconds.
 
 
 Working toward the future
 -------------------------
 
-Scikit-HEP is looking toward the future in several different areas.
+Scikit-HEP is looking toward the future in several different areas. We have
+been working with the Pyodide developers to support WebAssembly;
+boost-histogram is compiled into Pyodide 0.20, and Pyodide's support for
+pybind11 packages is significantly better due to that work, including adding
+support for C++ exception handling. PyHF's documentation includes a live
+Pyodide kernel, and a try-pyhf site (based on the repo-review tool) lets users
+run a model without installing anything - it can even be saved as a webapp on
+mobile devices.
 
+We have also been working with Scikit-Build to try to provide a modern build
+experience in Python using CMake. This project is just starting, but we expect
+over the next year or two that the usage of CMake as a first class build tool
+for binaries in Python will be possible using modern developments and avoiding
+distutils/setuptools hacks.
 
 Summary
 -------
 
+
+The Scikit-HEP project started in 2016 and has grown to be a core component in
+many HEP analyses. It has also provided packages that are growing in usage
+outside of HEP, like AwkwardArray, boost-histogram/Hist, and iMinuit. The
+tooling developed and improved by Scikit-HEP has helped Scikit-HEP developers
+as well as the broader Python ecosystem. 
 
 
 
