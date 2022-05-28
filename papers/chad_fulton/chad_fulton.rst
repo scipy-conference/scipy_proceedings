@@ -47,12 +47,19 @@ includes powerful libraries such as
 and *TensorFlow Probability* :cite:`dillon_tensorflow_2017`. Meanwhile,
 *ArviZ* :cite:`kumar_arviz_2019` provides many excellent tools for associated
 diagnostics and vizualisations. The aim of these libraries is to provide support
-for Bayesian analysis of a large class of models. While each of the libraries
-above does include support for at least some time series models, this has not
-been their primary focus. As a result, introducing Bayesian analysis for the
+for Bayesian analysis of a large class of models, and they make available both
+advanced techniques, including auto-tuning algorithms, and flexible model
+specification. By contrast, here we focus on simpler techniques. However, while
+the libraries above do include some support for time series models, this has not
+been their primary focus. As a result, introducing Bayesian inference for the
 well-developed stable of time series models in *statsmodels*, and providing
-access to the rich feature set already mentioned, presents a complementary
-option to these more general-purpose libraries.
+access to the rich associated feature set already mentioned, presents a
+complementary option to these more general-purpose libraries. [#]_
+
+.. [#] In addition, it is possible to combine the sampling algorithms of PyMC3
+       with the time series models of *statsmodels*, although we will not
+       discuss this approach in detail here. See, for example,
+       https://www.statsmodels.org/v0.13.0/examples/notebooks/generated/statespace_sarimax_pymc3.html.
 
 Time series analysis in *statsmodels*
 -------------------------------------
