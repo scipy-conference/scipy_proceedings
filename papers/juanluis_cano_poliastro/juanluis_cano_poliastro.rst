@@ -1,55 +1,66 @@
 :author: Juan Luis Cano Rodríguez
 :email: hello@juanlu.space
 :orcid: 0000-0002-2187-161X
+:institution: Unaffiliated
 :corresponding:
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:institution: Yet another place, S.P.Q.R.
-
-:author: Brutus
-:email: brutus@rome.it
+:author: Jorge Martínez Garrido
+:email: contact@jorgemartinez.space
 :institution: Unaffiliated
-:bibliography: mybib
+
+:bibliography: refs
 
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: https://www.youtube.com/watch?v=VCpTgU1pb5k
 
----------------------------------------------------------
+=========================================================
 poliastro: a Python library for interactive Astrodynamics
----------------------------------------------------------
-
-.. note::
-   Consider everything to be confirmed, from section titles to actual content.
+=========================================================
 
 .. class:: abstract
 
-   A short version of the long version that is way too long to be written as a
-   short version anyway.  Still, when considering the facts from first
-   principles, we find that the outcomes of this introspective approach is
-   compatible with the guidelines previously established.
+   Space is more popular than ever, with the growing public awareness of interplanetary scientific missions,
+   as well as the increasingly large number of satellite companies planning to deploy satellite constellations.
+   Python has become a fundamental technology in the astronomical sciences,
+   and it has also caught the attention of the Space Engineering community.
 
-   In such an experiment it is then clear that the potential for further
-   development not only depends on previous relationships found but also on
-   connections made during exploitation of this novel new experimental
-   protocol.
+   One of the requirements for designing a space mission is
+   studying the trajectories of satellites, probes, and other artificial objects,
+   usually ignoring non-gravitational forces or treating them as perturbations:
+   the so-called n-body problem.
+   However, for preliminary design studies and most practical purposes,
+   it is sufficient to consider only two bodies: the object under study and its attractor.
+
+   Even though the two-body problem has many analytical solutions,
+   orbit propagation (the initial value problem) and targeting (the boundary value problem)
+   remain computationally intensive because of long propagation times, tight tolerances, and vast solution spaces.
+   On the other hand, Astrodynamics researchers often do not share
+   the source code they used to run analyses and simulations,
+   which makes it challenging to try out new solutions.
+
+   This paper presents poliastro, an open-source Python library for interactive Astrodynamics
+   that features an easy-to-use API and tools for quick visualization.
+   poliastro implements core Astrodynamics algorithms
+   (such as the resolution of the Kepler and Lambert problems)
+   and leverages numba, a Just-in-Time compiler for scientific Python,
+   to optimize the running time.
+   Thanks to Astropy, poliastro can perform seamless coordinate frame conversions
+   and use proper physical units and timescales.
+   At the moment, poliastro is the longest-lived Python library for Astrodynamics,
+   has contributors from all around the world,
+   and several New Space companies and people in academia use it. 
 
 .. class:: keywords
 
    astrodynamics, orbital mechanics, orbit propagation, orbit visualization, two-body problem
 
 Introduction
-------------
+============
 
 Astrodynamics
-+++++++++++++
+-------------
 
-Astrodynamics as the branch of Mechanics that studies practical problems
+Astrodynamics is the branch of Mechanics that studies practical problems
 concerning the motion of rockets and other artificial objects through space.
 
 .. note::
@@ -58,8 +69,8 @@ concerning the motion of rockets and other artificial objects through space.
 Since in 1609 German mathematician and astronomer Johannes Kepler published his book *Astronomia nova*,
 containing the most famous of all transcendental equations,
 the motion of the celestial bodies has attracted the attention of the greatest minds in human history,
-even sparking entire new fields in mathematics [Bat99Int]_.
-It is easy to imagine that if even Kepler's equation,
+even sparking entire new fields in mathematics :cite:`battin_introduction_1999`.
+It is easy to imagine that if even Kepler's equation (:ref:`eq:kepler`),
 the one that captures the essence of the two-body problem in its most restricted form,
 already has this mathematical intricacy,
 any further development will carry away similar or greater complexity.
@@ -67,12 +78,13 @@ any further development will carry away similar or greater complexity.
 .. note::
    Use less evocative language?
 
-.. math::
+.. raw:: latex
 
-   M = E - e \sin{E}
-
-.. note::
-   Make this a figure, rather than an equation?
+   \begin{figure}
+   \[ M = E - e \sin{E} \]
+   \caption{The Kepler equation}
+   \label{eq:kepler}
+   \end{figure}
 
 Almost three centuries later, in 1903, Russian rocket scientist Konstantin E. Tsiolkovsky
 first explained in his article *Exploration of Outer Space by Means of Rocket Devices*
@@ -83,22 +95,23 @@ to the real possibility of going to space.
 
 .. Regarding Saxon genitive and equation names, see http://english.stackexchange.com/a/301270/20057
 
-.. math::
+.. raw:: latex
 
-   \Delta v = v_e \ln \frac{m_0}{m_f}
-
-.. note::
-   Make this a figure, rather than an equation?
+   \begin{figure}
+   \[ \Delta v = v_e \ln \frac{m_0}{m_f} \]
+   \caption{The Tsiolkovsky equation}
+   \label{eq:tsiolkovsky}
+   \end{figure}
 
 Tsiolkovsky's contribution could be considered the starting point of Astrodynamics,
 and many others ensued before they could be tested in practice during the second half of the 20th century.
 In 1919 Yuri V. Kondratyuk conceived the gravitational slingshot or flyby
 to accelerate a spacecraft through interplanetary flight
-and suggested a mission profile for a Lunar landing \cite{siddiqi2000challenge},
+and suggested a mission profile for a Lunar landing :cite:`siddiqi_challenge_2000`,
 in 1925 Walter Hohmann conjectured
 that the minimum-fuel transfer between two coplanar circular orbits
 consists of two tangent impulses along the line of apses
-(although this result was not proved until almost forty years later in \cite{lawden1963optimal}),
+(although this result was not proved until almost forty years later in :cite:`lawden_optimal_1963`),
 and in 1926 Hermann J. Oberth observed
 that the velocity gain of an impulsive maneuver
 is higher when the kinetic energy is maximum
@@ -131,7 +144,7 @@ who were, in some way, anticipating the need to optimize on board fuel consumpti
    and more modern initiatives like Skyfield.
 
 State of the art
-++++++++++++++++
+----------------
 
 Three main problems with Astrodynamics software:
 
@@ -151,29 +164,138 @@ Other ideas:
 - Common misconceptions (reference frames! TLE propagation! Mean anomaly!)
 
 Methods
--------
+=======
 
 Background
-++++++++++
+----------
 
 .. note::
    Describe separately propagation, IOD, and continuous thrust.
 
 Software Architecture
-+++++++++++++++++++++
+---------------------
 
-.. note::
-   Two-layered architecture, `poliastro.twobody` vs `poliastro.ephem`
+The architecture of poliastro emerges from the following set of conflicting requirements:
 
-poliastro usage
----------------
+1. There should be a high-level API that enables users to perform orbital calculations
+   in a straightforward way and prevent typical mistakes.
+2. The running time of the algorithms should be within the same order of magnitude
+   of existing compiled implementations.
+3. The library should be written in a popular open-source language
+   to maximize adoption and lower the barrier to external contributors.
 
-.. note::
-   Pick a few examples from the user guide
-   and relevant notebooks from the gallery.
+One of the most typical mistakes we set ourselves to prevent with the high-level API
+is dimensional errors. Addition and substraction operations of physical quantities
+are defined only for quantities with the same units :cite:`drobot_foundations_1953`:
+for example, the operation :math:`1~\text{km} + 100~\text{m}`
+requires a scale transformation of at least one of the operands,
+since they have different units (kilometers and meters) but the same dimension (length),
+whereas the operation :math:`1~\text{km} + 1~\text{kg}` is directly not allowed
+because dimensions are incompatible (length and mass).
+As such, software systems operating with physical quantities
+should raise exceptions when adding different dimensions,
+and transparently perform the required scale transformations
+when adding different units of the same dimension.
+
+With this in mind, we evaluated several Python packages for unit handling
+(see :cite:`j_goldbaum_unyt_2018` for a recent survey) and chose ``astropy.units``
+:cite:`the_astropy_collaboration_astropy_2018`.
+
+.. code-block:: python
+
+   radius = 6000  # km
+   altitude = 500  # m
+
+   # Wrong!
+   distance = radius + altitude  
+
+   from astropy import units as u
+
+   # Correct
+   distance = (radius << u.km) + (altitude << u.m)
+
+This notion of providing a "safe" API extends to other parts of the library
+by leveraging other capabilities of the Astropy project.
+For example, timestamps use ``astropy.time`` objects,
+which take care of the appropriate handling of time scales (such as TDB or UTC),
+reference frame conversions leverage ``astropy.coordinates``, and so forth.
+
+One of the drawbacks of existing unit packages is that
+they impose a significant performance penalty.
+Even though ``astropy.units`` is integrated with NumPy,
+hence allowing the creation of array quantities,
+all the unit compatibility checks are implemented in Python
+and require lots of introspection,
+and this can slow down mathematical operations by several orders of magnitude.
+As such, to fulfill our desired performance requirement for poliastro,
+we envisioned a two-layer architecture:
+
+- The **Core API** follows a procedural style, and all the functions
+  receive Python numerical types and NumPy arrays for maximum performance.
+- The **High level API** is object-oriented, all the methods
+  receive Astropy ``Quantity`` objects with physical units,
+  and computations are deferred to the Core API.
+
+Most of the methods of the High level API consist only of
+the necessary unit compatibility checks,
+plus a wrapper over the corresponding Core API function
+that performs the actual computation.
+
+.. code-block:: python
+
+   @u.quantity_input(E=u.rad, ecc=u.one)
+   def E_to_nu(E, ecc):
+       """True anomaly from eccentric anomaly."""
+       return (
+           E_to_nu_fast(
+               E.to_value(u.rad),
+               ecc.value
+           ) << u.rad
+       ).to(E.unit)
+
+As a result, poliastro offers a unit-safe API
+that performs the least amount of computation possible
+to minimize the performance penalty of unit checks,
+and also a unit-unsafe API tha offers maximum performance
+at the cost of not performing any unit validation checks.
+
+.. figure:: architecture.pdf
+   :scale: 75%
+   :align: center
+
+   poliastro two-layer architecture :label:`architecture`
+
+Finally, there are several options to write performant code
+that can be used from Python,
+and one of them is using a fast, compiled language for the CPU intensive parts.
+Successful examples of this include NumPy,
+written in C :cite:`harris_array_2020`, SciPy, featuring a mix of
+FORTRAN, C, and C++ code :cite:`virtanen_scipy_2020`, and pandas,
+making heavy use of Cython :cite:`behnel_cython_2011`.
+However, having to write code in two different languages
+hinders the development speed, makes debugging more difficult,
+and narrows the potential contributor base
+(what Julia creators called "The Two Language Problem" :cite:`bezanson_julia_2017`).
+As authors of poliastro we wanted to use Python
+as the sole programming language of the implementation,
+and the best solution we found to improve its performance
+was to use Numba, a LLVM-based Python JIT compiler :cite:`lam_numba_2015`. 
+
+Usage
+=====
+
+Basic ``Orbit`` and ``Ephem`` creation
+--------------------------------------
+
+The two central objects of the poliastro high level API are ``Orbit`` and ``Ephem``:
+
+- ``Orbit`` objects represent an osculating (hence Keplerian) orbit of a dimensionless object
+  around an attractor at a given point in time and a certain reference frame.
+- ``Ephem`` objects represent an ephemerides, hence a sequence of spatial coordinates
+  over a period of time in a certain reference frame.
 
 Future work
------------
+===========
 
 .. note::
    Limitations and shortcomings of poliastro
@@ -191,7 +313,7 @@ On sustainability:
 Several companies seem to use it, but there is no two-way communication.
 
 Conclusions
------------
+===========
 
 poliastro is cool and nice,
 it has some unique features,
@@ -206,47 +328,8 @@ that can be addressed with more development time.
 Bibliographies, citations and block quotes
 ------------------------------------------
 
-If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension. 
-
-**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work. 
-
-To reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`hume48` (which literally is :code:`:cite:`hume48`` in accordance with the ``hume48`` cite-key in the associated ``mybib.bib`` file).
-
-However, if you use a bibtex file, this will overwrite any manually written references. 
-
-So what would previously have registered as a in text reference ``[Atr03]_`` for 
-
-:: 
-
-     [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-what you actually see will be an empty reference rendered as **[?]**.
-
-E.g., [Atr03]_.
-
-
-If you wish to have a block quote, you can just indent the text, as in 
-
-    When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
-
 Dois in bibliographies
 ++++++++++++++++++++++
-
-In order to include a doi in your bibliography, add the doi to your bibliography
-entry as a string. For example:
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = "10.1017/CBO9780511808432",
-   }
-
 
 If there are errors when adding it due to non-alphanumeric characters, see if
 wrapping the doi in ``\detokenize`` works to solve the issue.
@@ -264,23 +347,6 @@ wrapping the doi in ``\detokenize`` works to solve the issue.
 
 Source code examples
 --------------------
-
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
 
 Maybe also in another language, and with line numbers:
 
@@ -307,7 +373,7 @@ Or a snippet from the above code, starting at the correct line number:
 Important Part
 --------------
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
+It is well known that Spice grows on the planet Dune.  Test
 some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
 equation on a separate line:
 
@@ -338,33 +404,12 @@ The area of a circle and volume of a sphere are given as
 We can then refer back to Equation (:ref:`circarea`) or
 (:ref:`spherevol`) later.
 
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+In tellus metus, elementum vitae tincidunt ac,
 volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
 pulvinar id metus.
 
 .. [#] On the one hand, a footnote.
 .. [#] On the other hand, another footnote.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
 
 .. figure:: figure1.png
    :scale: 20%
@@ -444,25 +489,5 @@ Perhaps we want to end off with a quote by Lao Tse [#]_:
 
 .. [#] :math:`\mathrm{e^{-i\pi}}`
 
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
-
 References
-----------
-.. [Bat99Int] Battin, Richrd H.. *An Introduction to the Mathematics and Methods of Astrodynamics,
-              Revised Edition*. AIAA Education Series. 1999.
-.. [Val07Fun] Vallado, David A.. *Fundamentals of Astrodynamics and Applications (3rd Edition)*.
-              Microcosm Press/Springer. May 2007.
-
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+==========
