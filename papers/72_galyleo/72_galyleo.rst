@@ -1,3 +1,7 @@
+:author: Rick McGeer
+:email: rick.mcgeer@engageLively.com
+:institution: engageLively
+
 :author: Andreas Bergen
 :email: abergen@engageLively.com
 :institution: engageLively
@@ -10,10 +14,6 @@
 :email: mhemmings@engageLively.com
 :institution: engageLively
 
-:author: Patrick McGeer
-:email: rick.mcgeer@engageLively.com
-:institution: engageLively
-
 :author: Robin Schreiber
 :email: robin.schreiber@engageLively.com
 :institution: engageLively
@@ -22,7 +22,6 @@
 :bibliography: mybib
 
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 ------------------------------------------------------------
 Galyleo: A General-Purpose Extensible Visualization Solution
@@ -84,7 +83,7 @@ Once a file is opened, or a new file created, a new  Galyleo tab opens onto it. 
 
 .. figure:: galyleo.png
 
-    The Galyelo Dashboard Studio
+    The Galyleo Dashboard Studio
 
 The top bar handles the introduction of decorative and styling elements to the dashboard: labels and text, simple shapes (ellipses, rectangles, polygons, lines), and images.  All images are referenced by URL.
 
@@ -107,41 +106,79 @@ With this in hand, the data flow is straightforward.  A Table is updated from an
 
 Each item in this flow conceptually has a single data source, but multiple data targets.  There can be multiple Views over a Table, but each View has a single Table as a source.  There can be multiple charts fed by a View, but each Chart has a single Table or View as a source.
 
+It's important to note that there are no special cases.  There is no distinction, as there is in most visualization systems, between a "Dimension" or a "Measure"; there are simply columns of data, which can be either a value or category axis for any Chart.  From this simplicity significant generality is achieved. For example, a filter selects values from any column, whether that column is providing value or category.  Applying a range filter to a category column gives natural telescoping and zooming on the x-axis of a chart, without change to the architecture.
+
+Drilldowns
+^^^^^^^^^^
+An important operation for any interactive dashboard is drilldowns: expanding detail for a datapoint on a chart.  The user should be able to click on a chart and see a detailed view of the data underlying the datapoint.  This was naturally implemented in our system by associating a filter with every chart: *every chart in Galyleo is also a Select Filter, and it can be used as a Filter in a view, just as any other widget can be*.
+
 Publishing The Dashboard
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 Once the dashboard is complete, it can be published to the web simply by moving the dashboard file to any place it get an URL (e.g. a github repo).  It can then be viewed by visiting `https://galyleobeta.engagelively.com/public/galyleo/index.html?dashboard=<url of dashboard file>`
 
 
-
 Galyleo Data Model And Architecture
 -----------------------------------
-Central element: the Galyleo Table
-Logical, not physical artifact
-Similar to PANDAS Dataframe
-Conceptually, a pair (rows, columns)
-The Filter: Logical operator over tables
-Basic idea: boolean function on table rows: row either passes or fails the filter
-Views: connection between tables and filters.  Subset of a table, where columns are statically selected and rows are selected dynamically by a collection of filters
-Charts can have views or tables as data sources.  If a view, the chart automatically updates when a widget changes
+The Galyleo Data Model and Architecture closely models the dashboard architecture discussed in the previous section.  As with the Dashboard Architecture, it is based on the idea of a few simple, generalizable structures, which are largely independent of each other and communicate through simple interfaces.
 
-Overall Galyleo Architecture
-----------------------------
-Two largely independent platforms: Galyleo Dashboard Studio, Jupyter Analytics
-Jupyter supplies data to the dashboard
+The GalyleoTable
+^^^^^^^^^^^^^^^^
+A GalyleoTable is the fundamental data structure in Galyleo.  It is a logical, not a physical abstraction; it simply responds to the GalyleoTable API.  A GalyleoTable is a pair (columns, rows), where columns is a list of pairs (name, type), where type is one of {string, boolean, number, date}, and rows is a list of lists of primitive values, where the length of each component list is the length of the list of columns and the type of the kth entry in each list is the type specified by  the kth column.
 
-The Galyleo Client library
---------------------------
+Small, public tables may be contained in the dashboard file; these are called *explicit* tables.  However, explicitly representing the table in the dashboard file has a number of disadvantages:
+
+1. An explicit table is in the memory of the client viewing the dashboard; if it is too large, it may cause significant performance problems on the dashboard author or viewer's device
+2. Since the dashboard file is accessible on the web, any data within it is public
+3. The data may be continuously updated from a source, and  it's inconvenient to re-run the Notebook to update the data.
+
+Therefore, the GalyleoTable can be of one  of three types:
+1. A data server that implements the Table REST API
+2. A JavaScript object within the dashboard page itself
+3. A JavaScript messenger in the page that implements a messaging version of the API
+
+An explicit table is simply a special case of (2) -- in this case, the JavaScript object is simply a linear list of rows.  
+
+These are not exclusive.  The JavaScript messenger case is designed to support the ability of a containing application within the browser to handle viewer authentication, shrinking the security vulnerability footprint and ensuring that the client application controls the data going to the dashboard.  In general, aside from performing tasks like authentication, the messenger will call an external data server for the values themselves.
+
+Whether in a Data Server, a containing application, or a JavaScript object, Tables support three operations:
+1. Get all the values for a specific column
+2. Get the max/min/increment for a specific numeric column
+3. Get the rows which match a boolean function, passed in as a parameter to the operation
+
+(3) is of course the operation that we have seen above, to populate a view and a chart.  (1) and (2) populate widgets on the dashboard; (1) is designed for a select filter, which is a widget that lets a user pick a specific set of values for a column; (2) is an optimization for numeric filters, so that the entire list of values for the column need not be sent -- rather, only the start and end values, and the increment between them.
+
+Each type of table specifies a source, additional information (in the case of a data server, for example, any header variables that must be specified in order to fetch the data), and, optionally, a polling interval.  The latter is designed to handle live data; the dashboard will query the data source at each polling interval to see if the data has changed.
+
+The choice of these three table instantiations (REST, JavaScript object, messenger) is that they provide the key foundational building block for future extensions; it's easy to add a SQL connection on top of a REST interface, or a Python simulator.  
+
+Filters
+^^^^^^^
+Tables must be filtered *in situ*.  One of the key motivators behind remote tables is in keeping large amounts of data from hitting the browser.  This is largely defeated if the entire table is sent to the dashboard and then filtered there.  As a result, there is a Filter API together with the Table API whereever there are tables.
+
+The data flow of the previous section remains unchanged; it is simply that the filter functions are transmitted to wherever the tables happen to be.
+
+Comments
+^^^^^^^^
+Again, simplicity and orthogonality have shown tremendous benefits here.  Though filters conceptually act as selectors on rows, they may perform a variety of roles in implementations.  For example, a table produced by a simulator may be controlled by a parameter value given by a Filter function.
+
+
+Extending Galyleo
+-----------------
+Every element of the Galyleo system, whether it is a widget, Chart, Table Server, or Filter is defined exclusively through a small set of public APIs.  This is done to permit easy extension, by either the Galyleo team, users, or third parties.  A Chart is defined as an object which has a physical HTML representation, and it supports four JavaScript methods: redraw (draw the chart), set data (set the chart's data), set options (set the chart's options), and supports table (a boolean which returns true if and only if the chart can draw the passed-in data set).  In addition, it exports out a defined JSON structure which indicates what options it supports and the types of their values; this is used by the Chart Editor to display a configurator for the chart.
+
+Similarly, the underlying lively.next system supports user design of new filters.  Again, a filter is simply an object with a physical presence, that the user can design in lively, and supports a specific API -- broadly, set the choices and hand back the Boolean function as a JSON object which will be used to filter the data.
+
 
 Integration into Jupyter Lab: The Galyleo Extension
 ---------------------------------------------------
+Galyleo is a standalone web application that is integrated into JupyterLab using an iframe inside a JupyterLab tab for physical design.  A small JupyterLab extension was built, that implements the JupyterLab editor API.  The JupyterLab extension has two major functions: to handle read/write/undo requests from the JupyterLab menus and file browser, and receive and transmit messages from the running Jupyter kernels to update tables on the Dashboard Studio, and to handle the reverse messages where the studio requests data from the kernel.  
 
-Further Extension Applications
--------------------------------
+Standard Jupyter and browser mechanisms are used.  File system requests come to the extension from the standard Jupyter API, exactly the same requests and mechanisms that are sent to a Markdown or Notebook editor.  The extension receives them, and then uses standard browser-based messaging (`window.postMessage`) to signal the standalone web app.  Similarly, when the extension makes a request of JupyterLab, it does so through this mechanism and a receiver in the extension gets it and makes the appropriate method calls within JupyterLab to achieve the objective.
 
-Conclusions and Future Work
-----------------------------
-.
+When a kernel makes a request through the Galyleo Client, this is handled exactly the same way.  A Jupyter messaging server within the extension receives the message from the kernel, and then uses browser messaging to contact the application with the request, and does the reverse on a Galyleo message to the kernel.
 
+This is a highly efficient method of interaction, since browser-based messaging is in-memory transactions on the client machine.
 
-:code:`:bibliography:mybib`
+It's important to note that there is nothing Galyleo-specific about the extension: the Galyleo Extension is a general method for *any* standalone web editor (e.g., a slide or drawing editor) to be integrated into JupyterLab.  The JupyterLab connection is a few tens of lines of code in the Galyleo Dashboard.  The extension is slightly more complex, but it can be configured for a different application with a simple data structure which specifies the URL of the application, file type and extension to be manipulated, and message list.
+
 
