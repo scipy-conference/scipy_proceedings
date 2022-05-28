@@ -178,24 +178,25 @@ for which the GeoCAT-comp documentation :cite:`geocatcomprtd` provides signature
 descriptions as well as links to the usage examples:
 
 - Spherical harmonics (both decomposition and recomposition as well as area
-weighting)
+  weighting)
 
 - Fourier transforms such as band-block, band-pass, low-pass, and high-pass
 
 - Meteorological variables such as relative humidity, dew-point temperature,
-heat index, saturation vapor pressure, and more
+  heat index, saturation vapor pressure, and more
 
 - Climatology functions such as climate average over multiple years,
-daily/monthly/seasonal averages, as well as anomalies
+  daily/monthly/seasonal averages, as well as anomalies
 
 - Regridding of curvilinear grid to rectilinear grid, unstructured grid to
-rectilinear grid, curvilinear grid to unstructured grid, and vice versa
+  rectilinear grid, curvilinear grid to unstructured grid, and vice versa
 
 - Interpolation methods such as bilinear interpolation of a rectilinear to another
-rectilinear grid, hybrid-sigma levels to isobaric levels, and sigma to hybrid
-coordinates
+  rectilinear grid, hybrid-sigma levels to isobaric levels, and sigma to hybrid
+  coordinates
 
 - Empirical orthogonal function (EOF) analysis
+
 
 .. figure:: figures/fig3_structure.png
    :align: center
