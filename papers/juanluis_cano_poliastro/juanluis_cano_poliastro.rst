@@ -304,10 +304,11 @@ However, having to write code in two different languages
 hinders the development speed, makes debugging more difficult,
 and narrows the potential contributor base
 (what Julia creators called "The Two Language Problem" :cite:`bezanson_julia_2017`).
+
 As authors of poliastro we wanted to use Python
 as the sole programming language of the implementation,
 and the best solution we found to improve its performance
-was to use Numba, a LLVM-based Python JIT compiler :cite:`lam_numba_2015`. 
+was to use Numba, a LLVM-based Python JIT compiler :cite:`lam_numba_2015`.
 
 Usage
 =====
@@ -321,6 +322,101 @@ The two central objects of the poliastro high level API are ``Orbit`` and ``Ephe
   around an attractor at a given point in time and a certain reference frame.
 - ``Ephem`` objects represent an ephemerides, hence a sequence of spatial coordinates
   over a period of time in a certain reference frame.
+
+Here is how to create an ``Orbit`` from cartesian and from classical Keplerian elements:
+
+.. code-block:: python
+
+   from astropy import units as u
+
+   from poliastro.bodies import Earth, Sun
+   from poliastro.twobody import Orbit
+   from poliastro.constants import J2000
+
+   # Data from Curtis, example 4.3
+   r = [-6045, -3490, 2500] << u.km
+   v = [-3.457, 6.618, 2.533] << u.km / u.s
+
+   orb_curtis = Orbit.from_vectors(
+      Earth,  # Attractor
+      r, v  # Elements
+   )
+
+   # Data for Mars at J2000 from JPL HORIZONS
+   a = 1.523679 << u.au
+   ecc = 0.093315 << u.one
+   inc = 1.85 << u.deg
+   raan = 49.562 << u.deg
+   argp = 286.537 << u.deg
+   nu = 23.33 << u.deg
+
+   orb_mars = Orbit.from_classical(
+      Sun,
+      a, ecc, inc, raan, argp, nu,
+      J2000  # Epoch
+   )
+
+When displayed on an interactive REPL, ``Orbit`` objects
+provide basic information about the geometry, the attractor, and the epoch::
+
+   In [2]: orb_curtis
+   Out[2]: 7283 x 10293 km x 153.2 deg (GCRS) orbit around Earth (X) at epoch J2000.000 (TT)
+
+   In [3]: orb_mars
+   Out[3]: 1 x 2 AU x 1.9 deg (HCRS) orbit around Sun (X) at epoch J2000.000 (TT)
+
+.. note::
+   This output looks really bad, turn into a figure?
+
+Similarly, ``Ephem`` objects can be created using a variety of classmethods as well.
+Thanks to ``astropy.coordinates`` built-in low-fidelity ephemerides,
+as well as its capability to remotely access the JPL HORIZONS system,
+the user can seamlessly build an object that contains the time history
+of the position of any Solar System body:
+
+.. code-block:: python
+
+   from astropy.time import Time
+   from astropy.coordinates import solar_system_ephemeris
+
+   from poliastro.ephem import Ephem
+
+   # Configure high fidelity ephemerides globally
+   # (requires network access)
+   solar_system_ephemeris.set("jpl")
+
+   # For predefined poliastro attractors
+   earth = Ephem.from_body(Earth, Time.now().tdb)
+
+   # For the rest of the Solar System bodies
+   ceres = Ephem.from_horizons("Ceres", Time.now().tdb)
+
+There are some crucial differences between ``Orbit`` and ``Ephem`` objects:
+
+- ``Orbit`` objects have an attractor, whereas ``Ephem`` objects do not.
+  Ephemerides can originate from complex trajectories
+  that don't necessarily conform to the ideal two-body problem.
+- ``Orbit`` objects capture a precise instant in a two-body motion
+  plus the necessary information to propagate it forward in time indefinitely,
+  whereas ``Ephem`` objects represent a bounded time history of a trajectory.
+  This is because the equations for the two-body motion are known,
+  whereas an ephemerides is either an observation or a prediction
+  that cannot be extrapolated in any case without external knowledge.
+  As such, ``Orbit`` objects have a ``.propagate`` method,
+  but ``Ephem`` ones do not. This prevents users from attempting to
+  propagate the position of the planets, which will always yield
+  poor results compared to the excellent ephemerides calculated by
+  external entities.
+
+Finally, both types have methods to convert between them:
+
+- ``Orbit.to_ephem`` is the equivalent of sampling a two-body motion
+  over a given time interval. As explained above, the resulting ``Ephem``
+  loses the information about the original attractor.
+- ``Ephem.to_orbit`` is the equivalent of calculating the osculating orbit
+  at a certain point of a trajectory, assuming a given attractor.
+  The resulting ``Orbit`` loses the information about the original,
+  potentially complex trajectory.
 
 Future work
 ===========
