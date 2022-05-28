@@ -128,26 +128,26 @@ from one of our software tools.
 
 CI build tests of our repositories are implemented and
 automated (for pushed commits, pull requests, and daily scheduled execution) via
-GitHub Actions workflows :cite:`githubactions`, with the "CI" `CI` badge shown in
+GitHub Actions workflows :cite:`githubactions`, with the `CI` badge shown in
 :ref:`fig1badges` displaying the status (i.e. pass or fail) of those workflows.
-Similarly, the "CONDA-BUILDS" badge shows if the conda recipe works successfully for
+Similarly, the `CONDA-BUILDS` badge shows if the conda recipe works successfully for
 the repository. The Python package "codecov" :cite:`codecov` analyzes the percentage
 of code coverage from unit tests in the repository. Additionally, the overall results
-as well as details for each code script can be seen via the "COVERAGE" badge. Each of
+as well as details for each code script can be seen via the `COVERAGE` badge. Each of
 our software repositories has a corresponding documentation page that is populated
 mostly-automatically through the Sphinx Python documentation generator :cite:`sphinx`
 and published through ReadTheDocs :cite:`readthedocs` via an automated building and
-versioning schema. The "DOCS" badge provides a link to the documentation page along
+versioning schema. The `DOCS` badge provides a link to the documentation page along
 with showing failures, if any, with the documentation rendering process. Figure
-:ref:`fig2rtd` shows the documentation homepage of GeoCAT-comp. The "NCAR" and "PYPI"
-badges in the "Package" row shows and links to the latest versions of the software
-tool distributed through NCAR's Conda channel and PyPI, respectively. The "LICENSE"
+:ref:`fig2rtd` shows the documentation homepage of GeoCAT-comp. The `NCAR` and `PYPI`
+badges in the `Package` row shows and links to the latest versions of the software
+tool distributed through NCAR's Conda channel and PyPI, respectively. The `LICENSE`
 badge provides a link to our software licenses, Apache License version 2.0
 :cite:`apache`, for all of the GeoCAT stack, enabling the redistribution of the
-open-source software products on an "AS IS" basis. Finally, to provide reproducibility
+open-source software products on an "as is" basis. Finally, to provide reproducibility
 of our software products (either for the latest or any older version), we publish
 version-specific Digital Object Identifiers (DOIs), which can be accessed through
-the "DOI" badge. This allows the end-user to accurately cite the specific version
+the `DOI` badge. This allows the end-user to accurately cite the specific version
 of the GeoCAT tools they used for science or research purposes.
 
 .. figure:: figures/fig1_badges.png
