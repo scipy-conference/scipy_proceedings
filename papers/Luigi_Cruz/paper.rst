@@ -1,3 +1,16 @@
+:author: Luigi Cruz
+:email: lfcruz@seti.org
+:institution: SETI Institute
+
+:author: Wael Farah
+:email: wfarah@seti.org 
+:institution: SETI Institute
+
+:author: Richard Elkins
+:institution: SETI Institute
+
+:bibliography: reference
+
 ------------------------------------------------------------------------------------
 Search for Extraterrestrial Intelligence: GPU Accelerated E.T. Search with TurboSETI
 ------------------------------------------------------------------------------------
