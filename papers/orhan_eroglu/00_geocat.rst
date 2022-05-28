@@ -75,7 +75,7 @@ which are built on cornerstone Pangeo :cite:`pangeo18` (i.e. a community platfor
 for big data geoscience) packages such as Xarray :cite:`xarray17`, Dask
 :cite:`dask15`, as well as Jupyter Notebooks. Dask compatibility allows the
 GeoCAT-comp functions to scale from personal laptops to high performance computing
-systems such as NCAR’s Casper, Cheyenne, and upcoming Derecho clusters
+(HPC) systems such as NCAR’s Casper, Cheyenne, and upcoming Derecho clusters
 :cite:`ams22craker`. Additionally, GeoCAT also utilizes Numba, an open source
 just-in-time (JIT) compiler :cite:`numba`, to translate Python and NumPy code into
 machine codes in order to get faster executions wherever possible.
@@ -128,7 +128,7 @@ from one of our software tools.
 
 CI build tests of our repositories are implemented and
 automated (for pushed commits, pull requests, and daily scheduled execution) via
-GitHub Actions workflows :cite:`githubactions`, with the `CI` badge shown in
+GitHub Actions workflows :cite:`githubactions`, with the `CI` badge shown in Figure
 :ref:`fig1badges` displaying the status (i.e. pass or fail) of those workflows.
 Similarly, the `CONDA-BUILDS` badge shows if the conda recipe works successfully for
 the repository. The Python package "codecov" :cite:`codecov` analyzes the percentage
@@ -343,6 +343,26 @@ calculations so far. The team is currently conducting open discussions
 (through GitHub Discussions) with community members, who are interested
 in unstructured grids research and development in order to prioritize
 data analysis operators to be implemented throughout the project lifecycle.
+
+Scalability
+-----------
+
+GeoCAT is aware of the fact that today's geoscientific models are capable of
+generating huge sizes of data. Furthermore, these datasets, such as those
+produced by global convective-permitting models, are going to grow
+even larger in size in the future. Therefore, computational and visualization
+functions that are being developed in the geoscientific research and
+development workflows need to be scalable from personal devices (e.g. laptops)
+to HPC (e.g. NCAR's Casper, Cheyenne, and upcoming Derecho clusters) and cloud
+platforms (e.g. AWS).
+
+In order to keep up with the scalability objectives, GeoCAT functions are
+implemented to operate on Dask DataArray objects in addition to natively
+supporting Xarray and NumPy data arrays. Therefore, the GeoCAT functions can
+trivially and transparently be parallelize to be run on shared-memory and
+distributed-memory platforms after having Dask cluster/client properly
+configured and functions fed with Dask DataArrays or chunked Xarray
+DataArrays.
 
 Open Development
 ----------------
