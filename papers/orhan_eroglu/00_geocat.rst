@@ -269,8 +269,8 @@ GeoCAT-viz.
    :scale: 28%
    :figclass: bht
 
-   Taylor diagram and curly vector examples that created with the help
-   of GeoCAT-viz :label:`fig5viz`
+   Taylor diagram and curly vector examples that were released with
+   GeoCAT-viz v2022.05.0 :label:`fig5viz`
 
 WRF-Python
 ==========
@@ -288,8 +288,8 @@ the amount of post-processing tools necessary to visualize WRF output
 files.
 
 Even though there is no continuous development in WRF-Python, as is seen
-in the rest of the GeoCAT stack, the package is still maintained with
-timely responses and bug-fix releases to the issues reported by the
+in the rest of the GeoCAT stack, the package is still maintained strongly
+with timely responses and bug-fix releases to the issues reported by the
 user community.
 
 Project Raijin
@@ -304,19 +304,20 @@ sustainable, scalable tools that facilitate operating on unstructured climate
 and global weather data :cite:`raijin`. The GeoCAT team is in charge of the
 software development of Project Raijin, which mainly consists of implementing
 visualization and analysis functions in the SPE to be executed on native
-grids. While doing so, GeoCAT is also responsible for establishing an open
+grids. While doing so, GeoCAT is also responsible of establishing an open
 development environment, clearly documenting the implementation work, and
-aligning deployments with the project milestones as well as SPE
+aligning the deployments with the project milestones as well as SPE
 requirements and specifications.
 
-GeoCAT has created the Xarray-based Uxarray package :cite:`uxarrayrepo` to
-recognize unstructured grid models through partnership with geoscience community
-groups. UXarray is built on top of the built-in Xarray Dataset functionalities
-while recognizing several unstructured grid formats (UGRID, SCRIP, and Exodus
-for now). Since there are more unstructured mesh models in the community than
-UXarray natively supports, its architecture will also support addition of new
-models. Figure :ref:`fig6raijin` shows the regularly structured
-“latitude-longitude” grids versus a few unstructured grid models.
+To realize the aforementioned functionalities, GeoCAT created the
+Xarray-based Uxarray package :cite:`uxarrayrepo` to recognize unstructured
+grid models through partnership with geoscience community groups. UXarray
+is built on top of the built-in Xarray Dataset functionalities while
+recognizing several unstructured grid formats (UGRID, SCRIP, and Exodus for now).
+Since there are more unstructured mesh models in the community than UXarray
+natively supports, its architecture will also support addition of new models.
+Figure :ref:`fig6raijin` shows the regularly structured “latitude-longitude”
+grids versus a few unstructured grid models.
 
 .. figure:: figures/fig6_raijin.png
    :scale: 20%
@@ -328,7 +329,7 @@ The UXarray project has implemented data input/output functions for UGRID,
 SCRIP, and Exodus, as well as methods for surface area and integration
 calculations so far. The team is currently conducting open discussions
 (through GitHub Discussions) with community members, who are interested
-in unstructured grids research and development in order to prioritize
+in unstructured grids research and development, in order to prioritize
 data analysis operators to be implemented throughout the project lifecycle.
 
 Open Development
@@ -341,7 +342,7 @@ that are directly related to the software development lifecycle are publicly
 accessible. In order to implement this model, GeoCAT provides all of its software
 tools as GitHub repositories with public GitHub project boards and roadmaps,
 issue tracking and development reviewing, comprehensive documentation for
-users and contributors such as Contributor’s Guide :cite:`geocatcontribguide` and
+users/contributors such as Contributor’s Guide :cite:`geocatcontribguide` and
 toolkit-specific documentation, along with community announcements on the GeoCAT
 blog. Furthermore, GeoCAT encourages community feedback and contribution at any
 level with inclusive and welcoming language. As a result of this, community
@@ -371,10 +372,10 @@ undergraduate and graduate student engagement in the Python ecosystem
 through participation in NCAR's Summer Internships in Parallel Computational
 Science (SIParCS). Such programs are quite beneficial for both students and
 scientific software development teams. To exemplify, GeoCAT-examples and
-GeoCAT-viz in particular has received significant contributions through
-NCAR's Summer SIParCS in 2020 and 2021 summers (i.e. tens of visualization
-examples as well as improtant infrastructural changes were made available
-by our interns). Furthermore, the team has created three essential and one
+GeoCAT-viz has received significant contributions through NCAR's Summer
+SIParCS in 2020 and 2021 summers (i.e. tens of visualization examples as
+well as improtant infrastructural changes were made available by our
+interns). Furthermore, the team has created three essential and one
 collaboration project through SIParCS 2022 summer through which advanced
 geoscientific visualization, unstructured grid visualization and data
 analysis, Fortran to Python algorithm and code development, as well as
