@@ -624,7 +624,7 @@ Nevertheless, it does not mean we should stay away from PINN and discard this id
 Stepping away from a new thing gives zeros chance for it to evolve, and we will never know if PINN can be improved to a mature state that works well. 
 Of course, overly promoting its bright side with success stories does not help, either.
 Rather, we should honestly face all troubles, difficulties, and challenges.
-Knowing the problems is the first step to solving it.
+Knowing the problem is the first step to solving it.
 
 Acknowledgements
 ----------------
