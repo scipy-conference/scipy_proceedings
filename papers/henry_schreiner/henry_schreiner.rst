@@ -77,6 +77,11 @@ manipulation was important (especially Lorenz Vectors, a four dimensional
 relativistic vector with a non-Euclidean metric), and data fitting was
 important, especially with complex models and excellent error estimation.
 
+.. figure:: shells-hep.pdf
+
+   The Scikit-HEP ecosystem and affilated packages.
+   :label:`fig-shells`
+
 Beginnings of a scikit
 ----------------------
 
@@ -111,7 +116,7 @@ First initial success
 In 2016, the largest barrier to using Python in HEP in a Pythonic way was
 ROOT. It was a challenging compile, a huge "library", not very Pythonic,
 and didn't play well with packaging. Many analyses started with a "convert data"
-step and worked with a Python friendly format like HDF5.\
+step and worked with a Python friendly format like HDF5.
 
 This changed when Jim Pivarski introduced Uproot (originally envisioned as
 "µroot"). This was a pure-Python implementation of a ROOT file reader (and
@@ -145,6 +150,14 @@ existing format.
 Building better
 ---------------
 
+.. figure:: github-histogram-libraries.pdf
+   :figclass: w
+   :scale: 65%
+
+   The landscape of different libraries for Histograms in HEP.
+   From the Analysis Ecosystem II Workshop.
+   :label:`fig-github-histogram`
+
 In 2018, HEP physicist and programmer Hans Dembenski proposed a histogram
 library to the Boost libraries, the most respected C++ library collection. It
 provided a histogram-as-an-object concept from HEP, but rethought histograms in
@@ -152,13 +165,20 @@ C++14, using composable axes and storage types. It originally had an initial
 Python binding, written in Boost::Python. Henry Schreiner proposed the creation
 of a standalone binding to be written with pybind11 in Scikit-HEP. The original
 bindings were removed, Boost::Histogram was accepted into the Boost libraries,
-and work began on ``boost-histogram``.
+and work began on ``boost-histogram``. The IRIS-HEP grant had just started,
+which was providing funding for several developers to work on Scikit-HEP
+projects such as this.
 
-The development of a library with compiled components intended to be usable
-everywhere required good support for building libraries. Advancements in the
-packaging ecosystem, such as the wheel format and the manylinux specification
-and docker image had made redistributable Python wheels possible, but there
-still were many challenges to making a new library that could be used anywhere.
+There were already a variety of attempts at histogram libraries, but none of
+them filled the requirements of HEP physicists, and most of them were not easy
+to install or use. Any new attempt here would have to be clearly better than
+the existing collection of diverse attempts (see Fig
+:ref:`fig-github-histogram`). The development of a library with compiled
+components intended to be usable everywhere required good support for building
+libraries.  Advancements in the packaging ecosystem, such as the wheel format
+and the manylinux specification and docker image had made redistributable
+Python wheels possible, but there still were many challenges to making a new
+library that could be used anywhere.
 
 The boost-histogram library only depended on header-only components of the
 Boost libraries, and the header only pybind11 package, and all needed files
@@ -192,15 +212,24 @@ encouraged the development of Awkward 1.0, a rewrite of AwkwardArray replacing
 the Python-only code with compiled code, fixing some long-standing limitations
 and enabling further developments in backends.
 
+Scikit-HEP was becoming a "toolset", a collection of packages that worked together
+instead of a "toolkit" like ROOT, which is one monopackage that tries to provide
+everything. A toolset is more natural in the Python ecosystem, where we have
+good packaging tools and many existing libraries. Scikit-HEP only needed to fill
+existing gaps, instead of covering every possible aspect of an analysis like ROOT
+(from 1994) did. The ``scikit-hep`` package started to be pulled out into separate
+packages, and instead simply was becoming a metapackage that would install a useful
+subset of libraries for an physicist starting a new analysis.
+
 
 Broader ecosystem
 -----------------
 
-Scikit-HEP was quickly becoming the center of Python focused analysis in HEP.
-Several other projects joined Scikit-HEP, like iMinuit, a popular HEP and
-astrophysics fitting library, was probably the most popular single package to
-join. PyHF and cabinetry also joined; these were larger frameworks built on
-Scikit-HEP packages.
+Scikit-HEP was quickly becoming the center of Python focused analysis in HEP
+(see Fig. :ref:`fig-shells`).  Several other projects joined Scikit-HEP, like
+iMinuit, a popular HEP and astrophysics fitting library, was probably the most
+popular single package to join. PyHF and cabinetry also joined; these were
+larger frameworks built on Scikit-HEP packages.
 
 Other packages, like Coffea and zFit, were not added, but were built on
 Scikit-HEP packages and had developers working closely with Scikit-HEP
@@ -217,18 +246,27 @@ rewritten (as the unreleased HEPVector and also in uproot-methods) was finally
 put together into a package "Vector", and include Awkward and Numba backends.
 Mplhep added important matplotlib plot types and style for HEP usage.
 
-Histogramming was designed to be a collection of specialized packages;
-boost-histogram for manipulation and filling, Hist for a user-friendly
-interface and simple plotting tools, histoprint for displaying histograms, and
-the existing mplhep and uproot packages also needed to be able to work with
-histograms. This ecosystem was build and is held together with UHI, which is a
-formal specification, backed by a statically typed Protocol, for a
-PlottableHistogram object. Producers of histograms, like boost-histogram/hist
-and uproot provide objects that follow this specification, and users of
-histograms, such as mplhep and histoprint take any object that follows this
-specification. UHI is not required at runtime, though it does provide a few
-simple utilities to help a library also accept ROOT histograms, which do not
-(currently) follow the Protocol.
+Histogramming was designed to be a collection of specialized packages
+(see Fig. :ref:`fig-histogram`); boost-histogram for manipulation and filling,
+Hist for a user-friendly interface and simple plotting tools, histoprint for
+displaying histograms, and the existing mplhep and uproot packages also needed
+to be able to work with histograms. This ecosystem was build and is held
+together with UHI, which is a formal specification, backed by a statically
+typed Protocol, for a PlottableHistogram object. Producers of histograms, like
+boost-histogram/hist and uproot provide objects that follow this specification,
+and users of histograms, such as mplhep and histoprint take any object that
+follows this specification. UHI is not required at runtime, though it does
+provide a few simple utilities to help a library also accept ROOT histograms,
+which do not (currently) follow the Protocol.
+
+One example of a package pulling together many components was
+``uproot-browswer``, a tool that combined uproot, hist, and Python libraries
+like textual and plotext to provide a terminal browser for ROOT files.
+
+.. figure:: histogram-convergence.pdf
+
+   The collection of histogram packages and related packages in Scikit-HEP.
+   :label:`fig-histogram`
 
 Scikit-HEP's external contributions continued to grow. One of the most notable
 ones was our work on cibuildwheel. This was a Python package that supported
