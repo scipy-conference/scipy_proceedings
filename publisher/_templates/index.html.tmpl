@@ -5,8 +5,10 @@
 <p><b>{{', '.join(proceedings['editor'])}}</b><p>
 <p><small>{{proceedings['dates']}}</small></p>
 <p><small>{{proceedings['location']}}</small></p>
+<p><small>{{proceedings['doi']}}</small></p>
 <p></p>
-<p><a href="organization.html">Organizers</a> | 
+<p><a href="organization.html">Organizers</a> |
+{{if slides or posters or lightning or tools}}<a href="slides.html">Posters and Slides</a> | {{endif}}
 <a href="students.html">Sponsored Students</a>
 </p>
 

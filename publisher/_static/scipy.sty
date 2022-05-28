@@ -19,6 +19,7 @@
 % Provide AMS mathematical commands such as "align"
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{amssymb}
 \usepackage{bm}
 
 % Define colours for hyperref
@@ -28,6 +29,9 @@
 \definecolor{darkorange}{rgb}{.71,0.21,0.01}
 \definecolor{darkblue}{rgb}{.01,0.21,0.71}
 \definecolor{darkgreen}{rgb}{.1,.52,.09}
+
+% allow line breaks on hyphens for long urls
+\PassOptionsToPackage{hyphens}{url}
 
 \usepackage{hyperref}
 \hypersetup{pdftex,  % needed for pdflatex
@@ -61,4 +65,24 @@
 \setlength{\tablewidth}{\linewidth}
 
 % Packages required for code highlighting
+% textcomp and upquote make single quotes non-curly in literal blocks
+\usepackage{textcomp}
+\usepackage{upquote}
 \usepackage{fancyvrb}
+
+% Make single quotes non-curly in inline literal text (\texttt)
+% and in code-block directives (which use Pygments; patch Pygments macro).
+% Also fix backtick in inline literal text.
+\AtBeginDocument{%
+  \let\scipyoriginaltexttt\texttt
+  \def\texttt#1{%
+    \begingroup
+    \scantokens{%
+	  \catcode`\'=\active
+	  \catcode`\`=\active
+	  \let'\textquotesingle
+	  \let`\textasciigrave
+	  \scipyoriginaltexttt{#1}\noexpand}%
+    \endgroup}%
+  \def\PYZsq{\textquotesingle}%
+}

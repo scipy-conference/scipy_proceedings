@@ -2,16 +2,19 @@
 :email: jj@rome.it
 :institution: Senate House, S.P.Q.R.
 :institution: Egyptian Embassy, S.P.Q.R.
+:orcid: 0101-0101-0101-0103
 :corresponding:
 
 :author: Mark Anthony
 :email: mark37@rome.it
 :institution: Egyptian Embassy, S.P.Q.R.
+:orcid: 0202-0211-0101-0141
 
 :author: Jarrod Millman
 :email: millman@rome.it
 :institution: Egyptian Embassy, S.P.Q.R.
 :institution: Yet another place, S.P.Q.R.
+:orcid: 0303-0303-0101-010X
 :equal-contributor:
 
 :author: Brutus
@@ -36,6 +39,8 @@ A Numerical Perspective to Terraforming a Desert
    development not only depends on previous relationships found but also on
    connections made during exploitation of this novel new experimental
    protocol.
+
+
 
 .. class:: keywords
 
@@ -97,6 +102,8 @@ Or a snippet from the above code, starting at the correct line number:
    for (int i = 0; i < 10; i++) {
        /* do something */
    }
+   
+Inline code looks like this: :code:`chunk of code`.
 
 Important Part
 --------------
@@ -151,7 +158,7 @@ pulvinar id metus.
 
 .. figure:: figure1.png
 
-   This is the caption. :label:`egfig`
+   This is the caption.:code:`chunk of code` inside of it. :label:`egfig` 
 
 .. figure:: figure1.png
    :align: center
@@ -159,6 +166,7 @@ pulvinar id metus.
 
    This is a wide figure, specified by adding "w" to the figclass.  It is also
    center aligned, by setting the align keyword (can be left, right or center).
+   This caption also has :code:`chunk of code`.
 
 .. figure:: figure1.png
    :scale: 20%
@@ -168,7 +176,7 @@ pulvinar id metus.
    bottom of the page, and failing that it will be placed inline or at the top.
    Note that for now, scale is relative to a completely arbitrary original
    reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
+   have to play with it.  :label:`egfig2`
 
 As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
 figures.

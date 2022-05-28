@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 __all__ = ['writer']
 
 import docutils.core as dc
@@ -35,6 +37,7 @@ class Translator(LaTeXTranslator):
         self.author_institutions = []
         self.author_institution_map = dict()
         self.author_emails = []
+        self.author_orcid_map = dict()
         self.corresponding = []
         self.equal_contributors = []
         self.paper_title = ''
@@ -42,6 +45,7 @@ class Translator(LaTeXTranslator):
         self.keywords = ''
         self.table_caption = []
         self.video_url = ''
+        self.latex_video_url = ''
         self.bibliography = ''
 
         # This gets read by the underlying docutils implementation.
@@ -55,21 +59,12 @@ class Translator(LaTeXTranslator):
         self.figure_type = 'figure'
         self.figure_alignment = 'left'
         self.table_type = 'table'
-
-        self.active_table.set_table_style('booktabs')
+        self.settings.table_style = ['booktabs']
 
     def visit_docinfo(self, node):
         pass
 
     def depart_docinfo(self, node):
-        pass
-
-    def visit_author(self, node):
-        self.author_names.append(self.encode(node.astext()))
-        self.author_institution_map[self.author_names[-1]] = []
-        raise nodes.SkipNode
-
-    def depart_author(self, node):
         pass
 
     def visit_author(self, node):
@@ -98,6 +93,9 @@ class Translator(LaTeXTranslator):
 
         if self.current_field == 'email':
             self.author_emails.append(text)
+        elif self.current_field == 'orcid':
+            self.validate_orcid(text)
+            self.author_orcid_map[self.author_names[-1]] = text
         elif self.current_field == 'corresponding':
             self.corresponding.append(self.author_names[-1])
         elif self.current_field == 'equal-contributor':
@@ -108,7 +106,8 @@ class Translator(LaTeXTranslator):
         elif self.current_field == 'copyright_holder':
             self.copyright_holder = text
         elif self.current_field == 'video':
-            self.video_url = text
+            self.latex_video_url = text
+            self.video_url = node.astext() if text else ''
         elif self.current_field == 'bibliography':
             self.bibtex = ['alphaurl', text]
             self._use_latex_citations = True
@@ -122,6 +121,16 @@ class Translator(LaTeXTranslator):
     def depart_field_body(self, node):
         raise nodes.SkipNode
 
+
+    def footmark(self, n):
+        '''Insert footmark #n.  Footmark 1 is reserved for
+        the corresponding author. Footmark 2 is reserved for
+        the equal contributors.\
+        '''
+        return ('\\setcounter{footnotecounter}{%d}' % n,
+                '\\fnsymbol{footnotecounter}')
+
+
     def depart_document(self, node):
         LaTeXTranslator.depart_document(self, node)
 
@@ -133,24 +142,17 @@ class Translator(LaTeXTranslator):
             for inst in self.author_institution_map[auth]:
                 institution_authors.setdefault(inst, []).append(auth)
 
-        def footmark(n):
-            """Insert footmark #n.  Footmark 1 is reserved for
-            the corresponding author. Footmark 2 is reserved for
-            the equal contributors.\
-            """
-            return ('\\setcounter{footnotecounter}{%d}' % n,
-                    '\\fnsymbol{footnotecounter}')
 
         # Build a footmark for the corresponding author
-        corresponding_footmark = footmark(1)
+        corresponding_footmark = self.footmark(1)
 
         # Build a footmark for equal contributors
-        equal_footmark = footmark(2)
+        equal_footmark = self.footmark(2)
 
         # Build one footmark for each institution
         institute_footmark = {}
         for i, inst in enumerate(institution_authors):
-            institute_footmark[inst] = footmark(i + 3)
+            institute_footmark[inst] = self.footmark(i + 3)
 
         footmark_template = r'\thanks{%(footmark)s %(instutions)}'
         corresponding_auth_template = r'''%%
@@ -233,10 +235,10 @@ class Translator(LaTeXTranslator):
 
         ## Set up title and page headers
 
-        if not self.video_url:
+        if not self.latex_video_url:
             video_template = ''
         else:
-            video_template = r'\\\vspace{5mm}\tt\url{%s}\vspace{-5mm}' % self.video_url
+            video_template = '\\\\\\vspace{5mm}\\tt\\url{%s}\\vspace{-5mm}' % self.latex_video_url
 
         title_template = r'\newcounter{footnotecounter}' \
                 r'\title{%s}\author{%s' \
@@ -258,6 +260,8 @@ class Translator(LaTeXTranslator):
                                'author': self.author_names,
                                'author_email': self.author_emails,
                                'author_institution': self.author_institutions,
+                               'author_institution_map' : self.author_institution_map,
+                               'author_orcid_map': self.author_orcid_map,
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder,
@@ -281,9 +285,9 @@ class Translator(LaTeXTranslator):
         if self.section_level == 1:
             if self.paper_title:
                 import warnings
-                warnings.warn(RuntimeWarning("Title set twice--ignored. "
-                                             "Could be due to ReST"
-                                             "error.)"))
+                warnings.warn(RuntimeWarning('Title set twice--ignored. '
+                                             'Could be due to ReST'
+                                             'error.)'))
             else:
                 self.paper_title = self.encode(node.astext())
             raise nodes.SkipNode
@@ -367,9 +371,9 @@ class Translator(LaTeXTranslator):
             node.append(nodes.label(text='_abcdefghijklmno_'))
 
         # Work-around for a bug in docutils where
-        # "%" is prepended to footnote text
+        # '%' is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
-        self.out[-1] = self.out[1].strip('%')
+        self.out[-1] = self.out[-1].strip('%')
 
         self.non_breaking_paragraph = True
 
@@ -391,7 +395,6 @@ class Translator(LaTeXTranslator):
 
         self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set('preamble written', 1)
-        self.active_table.set_table_style('booktabs')
 
     def visit_thead(self, node):
         # Store table caption locally and then remove it
@@ -436,8 +439,8 @@ class Translator(LaTeXTranslator):
                                            linenostart=linenostart,
                                            verboptions=extra_opts))
 
-            self.out.append("\\vspace{1mm}\n" + tex +
-                            "\\vspace{1mm}\n")
+            self.out.append('\\vspace{1mm}\n' + tex +
+                            '\\vspace{1mm}\n')
             raise nodes.SkipNode
         else:
             LaTeXTranslator.visit_literal_block(self, node)
@@ -458,22 +461,53 @@ class Translator(LaTeXTranslator):
     # Math directives from rstex
 
     def visit_InlineMath(self, node):
-        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.requirements['amsmath'] = '\\usepackage{amsmath}'
         self.out.append('$' + node['latex'] + '$')
         raise nodes.SkipNode
 
     def visit_PartMath(self, node):
-        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.requirements['amsmath'] = '\\usepackage{amsmath}'
         self.out.append(mathEnv(node['latex'], node['label'], node['type']))
         self.non_breaking_paragraph = True
         raise nodes.SkipNode
 
     def visit_PartLaTeX(self, node):
-        if node["usepackage"]:
-            for package in node["usepackage"]:
-                self.requirements[package] = r'\usepackage{%s}' % package
-        self.out.append("\n" + node['latex'] + "\n")
+        if node['usepackage']:
+            for package in node['usepackage']:
+                self.requirements[package] = '\\usepackage{%s}' % package
+        self.out.append('\n' + node['latex'] + '\n')
         raise nodes.SkipNode
+
+    def validate_orcid(self, orcid):
+        """ Validate the ORCID string provided for an author
+
+        The code has been ported from this Ruby code from JOSS:
+        https://github.com/openjournals/whedon/blob/master/lib/whedon/orcid_validator.rb
+        """
+        groups = orcid.split('-')
+        if len(groups) != 4:
+            raise ValueError('ORCID {} must have four groups of digits'
+                             .format(orcid))
+        packed_orcid = orcid.replace('-', '')
+        if len(packed_orcid) != 16:
+            raise ValueError('ORCID {} has incorrect length'.format(orcid))
+        checksum_char = packed_orcid[-1]
+        first15 = packed_orcid[:-1]
+        if not first15.isdigit():
+            raise ValueError('ORCID {} has non-digit characters'.format(orcid))
+        if not((checksum_char == 'X') or checksum_char.isdigit()):
+            raise ValueError('ORCID {} last character must be digit or "X"'
+                             .format(orcid))
+        total = 0
+        for c in first15:
+            total = (total + int(c))*2
+        remainder = total % 11
+        result = (12 - remainder) % 11
+        if ((checksum_char == 'X' and result != 10) or
+                (checksum_char.isdigit() and result != int(checksum_char))):
+            raise ValueError('ORCID {} has last char {} and checksum {}'
+                             .format(orcid, checksum_char, result))
+        return
 
 
 writer = Writer()

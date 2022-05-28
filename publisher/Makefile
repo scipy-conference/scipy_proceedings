@@ -5,6 +5,9 @@ PDFDIR = _build/pdfs
 PAPERDIR = ../output
 TEMPLATES = _templates
 STATIC = _static
+YEARDIR = scipy`date "+%Y"`
+ZIPNAME = draft_proceedings.zip
+DOIXMLNAME = doi_batch.xml
 
 BUILDTMPL = ./build_template.py
 TEX2PDF := cd $(TEXDIR) && pdflatex -interaction=batchmode
@@ -28,18 +31,31 @@ $(TEXDIR)/%.pdf: $(TEXDIR)/%.tex
 title-pdf: $(TEXDIR)/title.pdf
 copyright-pdf: $(TEXDIR)/copyright.pdf
 organization-pdf: $(TEXDIR)/organization.pdf
-students-pdf: $(TEXDIR)/students.pdf
+students-pdf: $(TEXDIR)/students.pdf 
+slides-pdf: $(TEXDIR)/slides.pdf 
 
-front-pdf: title-pdf copyright-pdf organization-pdf students-pdf
+front-pdf: title-pdf copyright-pdf organization-pdf students-pdf slides-pdf
 
-papers:
+papers: clean
 	./build_papers.py
 
-proceedings: front-pdf papers $(TEXDIR)/proceedings.tex
+proceedings: papers $(TEXDIR)/proceedings.tex front-pdf
 	($(TEX2PDF) proceedings 1>/dev/null)
 	($(TEX2PDF) proceedings 1>/dev/null)
-	cp $(TEXDIR)/proceedings.pdf $(PDFDIR)/proceedings.pdf 
+	cp $(TEXDIR)/proceedings.pdf $(PDFDIR)/proceedings.pdf
 
-proceedings-html: proceedings
+html:
 	python build_html.py
 	-convert $(STATIC)/logo.png -resize x100 $(HTMLDIR)/logo.png
+
+zip:
+	cp -r $(HTMLDIR) $(YEARDIR)
+	cp $(BUILDDIR)/$(DOIXMLNAME) $(YEARDIR)/$(DOIXMLNAME)
+	zip -r $(ZIPNAME) $(YEARDIR)
+	rm -rf $(YEARDIR)
+
+html-zip: html zip
+
+proceedings-html: proceedings html
+
+proceedings-html-zip: proceedings html-zip
