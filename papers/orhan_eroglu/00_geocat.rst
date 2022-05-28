@@ -210,10 +210,11 @@ imported transparently into the "geocat.comp" namespace. Thus, GeoCAT-comp
 serves as a user API to access the entire computational toolkit even though
 its GitHub repository itself only contains pure Python code from the
 developer’s perspective. Whenever prospective contributors want to
-contribute computational functionality in pure Python, GeoCAT-comp is the
-only GitHub repository they need to deal with. Therefore, there is no onus
-on contributors of pure Python code to build, compile, or test any compiled
-code (e.g. Fortran) at GeoCAT-comp level.
+contribute
+computational functionality implemented as pure Python, GeoCAT-comp is the
+GitHub repository to deal with. Therefore, there is no onus on contributors
+of pure Python code to build/compile/test any compiled code (i.e. Fortran)
+at GeoCAT-comp level.
 
 GeoCAT-examples (and GeoCAT-viz)
 ================================
@@ -221,12 +222,12 @@ GeoCAT-examples (and GeoCAT-viz)
 GeoCAT-examples :cite:`geocatexamplesrepo` was created to address a few of
 the original milestones of NCAR's "Pivot to Python" initiative: (1) to
 provide the geoscience community with well-documented visualization examples
-for several plotting classes in the SPE, and (2) to help transition NCL users
+for several plotting classes in the SPE, (2) to help transition NCL users
 into the Python ecosystem through providing such resources. It was born in
 early 2020 as the result of a multi-day hackathon event among the GeoCAT team
 and several other scientists and developers from various NCAR labs/groups. It
-has since grown to house novel visualization examples and showcase the
-capabilities of other GeoCAT components, like GeoCAT-comp, along with
+has since grown to house novel visualization examples as well as showcased
+the capabilities of other GeoCAT components, like GeoCAT-comp, along with
 newer technologies like interactive plotting notebooks. Figure
 :ref:`fig4cmap` illustrates one of the unique GeoCAT-examples cases that
 was aimed at exploring the best practices for data visualization
@@ -248,7 +249,7 @@ meteograms, overlays, projections, shapefiles, streamlines, and trajectories
 among others. In addition, GeoCAT-examples houses plotting examples for
 individual GeoCAT-comp analysis functions.
 
-Despite Matplotlib and Cartopy's capabilities to reproduce almost all
+Despite the capabilities of Matplotlib and Cartopy to reproduce almost all
 of NCL plots, there was one significant caveat with using their low-level
 implementations against NCL: NCL's high-level plotting functions allowed
 scientists to plot most of the cases in only tens of lines of codes (LOC)
@@ -256,14 +257,14 @@ while the Matplotlib and Cartopy stack required writing a few hundred
 LOC. In order to build a higher-level implementation on top of Matplotlib
 and Cartopy while recreating the NCL-like plots (from vital plotting
 capabilities that were not readily available in the Python ecosystem at
-the time such as Taylor diagrams and curly vectors to more stylistic
-changes such as font sizes, color schemes, etc. that resemble NCL plots),
+the time such as Taylor diagrams and curly vectors to more cosmetic or
+plotting style-related effects such as font sizes, color schemes, etc.),
 the GeoCAT-viz library :cite:`geocatvizrepo` was implemented. Use of
 functions from this library in GeoCAT-examples significantly reduces the
 LOC requirements for most of the visualization examples to comparable
 numbers to those of NCL's. Figure :ref:`fig5viz` shows Taylor diagram
-and curly vector examples that have been created with the help of
-GeoCAT-viz.
+and curly vector examples that were made available with the recent
+implementations in GeoCAT-viz.
 
 .. figure:: figures/fig5_viz.png
    :scale: 28%
