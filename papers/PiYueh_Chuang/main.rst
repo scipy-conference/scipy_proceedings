@@ -289,7 +289,7 @@ The learning rate exponentially decayed through PyTorch's :code:`ExponentialLR` 
 
 The training data were simply spatial-temporal coordinates.
 Before the training, the PINN solver pre-generated 18,432,000 spatial-temporal points to evaluate the residuals of the Navier-Stokes equations (the :math:`r_1` and :math:`r_2` in equation (:ref:`eq:residuals`)).
-These training points were randomly chosen from the spatial domain :math:`[-\pi, \pi]\times[\pi, \pi]` and temporal domain :math:`(0, 100]`.
+These training points were randomly chosen from the spatial domain :math:`[-\pi, \pi]\times[-\pi, \pi]` and temporal domain :math:`(0, 100]`.
 The solver used only 18,432 points in each training iteration, making it a batch training.
 For the residual of the initial condition (the :math:`r_3`), the solver also pre-generated 18,432,000 random spatial points and used only 18,432 per iteration.
 Note that for :math:`r_3`, the points were distributed in space only because :math:`t=0` is a fixed condition.
@@ -314,7 +314,7 @@ With these spatially distributed errors, we calculated the :math:`L_2` error nor
 where :math:`i` and :math:`j` here are the indices of a cell center in the Cartesian mesh. :math:`\Delta\Omega_{i,j}` is the corresponding cell area, :math:`4\pi^2/512^2` in this case.
 
 We compared accuracy and performance against results using PetIBM.
-All PetIBM simulations in this section were done with 1 K40 GPU and 6 CPU cores (Intel i7-5930K)j on our old lab workstation.
+All PetIBM simulations in this section were done with 1 K40 GPU and 6 CPU cores (Intel i7-5930K) on our old lab workstation.
 We carried out 7 PetIBM simulations with different spatial resolutions: :math:`2^k\times 2^k` for :math:`k=4, 5, \dots, 10`.
 The time step size for each spatial resolution was :math:`\Delta t=0.1/2^{k-4}`.
 
@@ -358,7 +358,7 @@ Nevertheless, it shows that PINN is able to propagate the influence of initial c
 Figure :ref:`fig:tgv-run-time-errors` shows the computational cost of PINN and PetIBM in terms of the desired accuracy versus the required wall time.
 We only show the PINN results of 8 A100 GPUs on this figure.
 We believe this type of plot may help evaluate the computational cost in engineering applications.
-According to the figure, for example, achieving an accuracy of :math:`10^{-2}` at :math:`t=2` requires less than 20 seconds for PetIBM with 1 K40 and 6 CPU cores, but it requires more than 8 hours with at least 1 A100 GPU.
+According to the figure, for example, achieving an accuracy of :math:`10^{-2}` at :math:`t=2` requires less than 20 seconds for PetIBM with 1 K40 and 6 CPU cores, but it requires more than 8 hours for PINN with at least 1 A100 GPU.
 
 .. figure:: tgv-sim-time-errors.png
    :align: center
