@@ -1,35 +1,35 @@
 :author: João Lemes Gribel Soares
 :email: jgribel@usp.br
-:institution: Escola Politécnica of the University of Sao Paulo
+:institution: Escola Politécnica of the University of São Paulo
 :corresponding:
 
 :author: Mateus Stano Junqueira
 :email: mateusstano@usp.br
-:institution: Escola Politécnica of the University of Sao Paulo.
+:institution: Escola Politécnica of the University of São Paulo
 
 :author: Oscar Mauricio Prada Ramirez
 :email: oscarmprada@usp.br
-:institution: Escola Politécnica of the University of Sao Paulo.
+:institution: Escola Politécnica of the University of São Paulo
 :orcid: 0000-0001-6904-8959
 
 :author: Patrick Sampaio dos Santos Brandão
 :email: patricksampaio@usp.br
-:institution: Escola Politécnica of the University of Sao Paulo.
-:institution: École Centrale de Nantes
+:institution: Escola Politécnica of the University of São Paulo
+:institution: École Centrale de Nantes.
 
 :author: Adriano Augusto Antongiovanni
 :email: adrianoaugusto98@usp.br
-:institution: Escola Politécnica of the University of Sao Paulo.
+:institution: Escola Politécnica of the University of São Paulo
 :orcid: 0000-0002-3658-0153
 
 :author: Guilherme Fernandes Alves
 :email: guilherme_fernandes@usp.br
-:institution: Escola Politécnica of the University of Sao Paulo.
+:institution: Escola Politécnica of the University of São Paulo
 :orcid: 0000-0003-3873-2699
 
 :author: Giovani Hidalgo Ceotto
 :email: giovani.ceotto@alumni.usp.br
-:institution: Escola Politécnica of the University of Sao Paulo.
+:institution: Escola Politécnica of the University of São Paulo
 :orcid: 0000-0002-1614-3028
 
 :bibliography: references
@@ -39,105 +39,86 @@ RocketPy: Combining Open-Source and Scientific Libraries to Make the Space Secto
 ------------------------------------------------------------------------------------------------------------
 
 .. class:: abstract
-
-   In recent years we are seeing exponential growth in the space sectors, with new companies emerging in it. 
-   With that, we are seeing more people fascinated and eager to participate in the aerospace revolution, witch motivates
-   students and hobbyists to build more High Powered and Sounding Rockets. However, rocketry is a very inaccessible field, 
-   with a high knowledge entry level and very specific terms. To make it more accessible, people need an active community 
-   with flexible, easy to use and well documented tools.
-   RocketPy is a tool created to address all those issues, solving the trajectory simulation for High-Power and Sounding 
-   rockets built using SciPy and the Python Scientific Environment. The code allows for a sophisticated 6 degrees of freedom
-   simulation of a rocket's flight trajectory, including high fidelity variable mass effects as well as descent under
-   parachutes. All of this is packaged into an architecture that facilitates complex simulations, such as multi-stage
-   rockets, design and trajectory optimization and dispersion analysis. Weather conditions, such as wind profile, can
-   also be imported from detailed forecasts and reanalysis models, allowing for realistic simulations.
-   While RocketPy has a sophisticated feature set, it is also accessible for anyone interested, as the code is well
-   documented, and the repository`s GitHub page is filled with example Jupyter Notebooks that people can adapt for
-   their specific use case. At the same time, RocketPy is also a well validated software by comparing RocketPy`s result 
-   with rocketry flight data.
-   This talk is intended for anyone who wants to get involved in the Space Sector and will show how RocketPy is a
-   great entrance door to a welcoming community. It will be an opportunity to learn basic concepts about rocketry and
-   to get to know this tool used by various rocketry groups around the world.   
-   By the end of the talk, the audience will have learned about the RocketPy`s architecture, how to simulate simple
-   rockets, and hopefully will be motivated to join the RocketPy community, as members from diverse backgrounds can
-   help us enhance and grow this project!
-
-   .. TODO: Rewrite the following paragraphs, since this is not a "talk" but rather an "article".
-   .. TODO: Reduce total length of our abstract
+   
+   In recent years we are seeing exponential growth in the space sector, with new companies emerging in it. 
+   On top of that more people are becoming fascinated to participate in the aerospace revolution, which motivates
+   students and hobbyists to build more High Powered and Sounding Rockets. 
+   However, rocketry is still a very inaccessible field, with a high knowledge entry-level and very specific terms. 
+   To make it more accessible, people need an active community with flexible, easy-to-use, and well-documented tools.
+   RocketPy is a software solution created to address all those issues, solving the trajectory simulation for High-Power
+   rockets being built on top of SciPy and the Python Scientific Environment. 
+   The code allows for a sophisticated 6 degrees of freedom simulation of a rocket's flight trajectory, including high fidelity variable mass effects as well as descent under parachutes. 
+   All of this is packaged into an architecture that facilitates complex simulations, such as multi-stage rockets, 
+   design and trajectory optimization, and dispersion analysis. 
+   In this work, the flexibility and usability of RocketPy are indicated in four example simulations: 
+   a basic trajectory simulation, an , a dynamic stability analysis, and a Monte Carlo dispersion simulation. 
+   The code structure and the main implemented methods are also presented.
+   .. While RocketPy has a sophisticated feature set, it is also accessible for anyone interested, as the code is well
+   .. documented, and the repository's GitHub page is filled with example Jupyter Notebooks that can be adapted for
+   .. specific use case.
 .. class:: keywords
 
-   space, rocketry, rocket, simulation, trajectory, dynamics, ode, rocket trajectory simulation, sounding rockets, 
-   high-powered rockets, flight dynamics, six degrees of freedom, Monte Carlo analysis, stochastic simulation
+   rocketry, flight, rocket trajectory, flexibility, Monte Carlo analysis
 
 Introduction
 ============
-.. First author: Ciclope
 
 When it comes to rockets, there is a wide field ranging from orbital rockets to toy rockets. 
 Between them, two types will be noted: sounding rockets and High-Powered Rockets (HPRs). 
 Sounding rockets are mainly used by government agencies for scientific experiments in suborbital 
-flights and HPR are mainly used for educational purposes, with increasing popularity among student competitions, 
-such as the annual Spaceport America Rocket Competition, with more than 100 teams from all over the world and happening annually. 
-Also, with the reaching of the Kármán line by the university-built rocket TRAVELER IV :cite:`TravelerIV`, 
+flights and HPR are mainly used for educational purposes, with increasing popularity in student competitions, 
+such as the annual Spaceport America Competition, with more than 100 rocket design teams from all over the world. 
+Also, after the university-built rocket TRAVELER IV :cite:`TravelerIV`reaching the Kármán line, 
 both types of rockets are converging to a similar flight trajectory.
 
-With this convergence, HPR are becoming bigger and more robust, increasing their potential hazard, along with their
-capacity, making safety an important issue. Moreover, performance is always a requirement both for saving costs, and 
-time and to accurately reach competition and scientific experiment goals.
+With this convergence, HPRs are becoming bigger and more robust, increasing their potential hazard, along with their
+capacity, making safety an important issue. 
+Moreover, performance is always a requirement both for saving cost, and time and to accurately reach scientific 
+experiment goals.
 
-In that scene, many parameters should be determined before launching an HPR for both safety and performance, 
-such as the landing site coordinates, increasing safety and possibility of recovering the rocket 
+In that scenario, many parameters should be determined before launching an HPR for both safety and performance, 
+such as the landing site coordinates, increasing safety and the possibility of recovering the rocket 
 :cite:`Wilde2018RangeLaunches`; apogee altitude, avoiding collision with aircraft and maintaining the ideal 
-altitude for the rocket to function.
+altitude so the rocket can function.
 
 To better attend to those issues, RocketPy was created as a computational tool that can accurately predict all 
 dynamic parameters involved in the flight of sounding, model, and HPR, given parameters such as the rocket geometry,
-motor characteristics, and environmental conditions. It is also open source, well structured, and well documented, 
-allowing minor changes to bring new features (ref: RocketPy)
-
+motor characteristics, and environmental conditions. It is also open source, well structured, and documented, 
+allowing minor changes to bring new features :cite:`ceotto2021rocketpy`.
 
 Background 
 ==========
 
-In this section, we clarify some terms specific to the rocketry field that may help to better understand the text.
+Rocketry Introduction
+---------------------
+.. First author: Stano
+
+To better understand RocketPy, a few general aspects of rocketry are of major importance. First, rockets are flying
+vehicles that can be 
+
+
 
 Rocketry terminology
 --------------------
-.. First author: Ciclope
+In this section, we clarify some terms specific to the rocketry field that may help to better understand the text.
 
-Apogee 
-   The point at which a body is furthest from earth
-Degrees of freedom 
-   maximum number of independent values in an equation
-Flight Trajectory 
-   the 3-dimensional path, over time, of the rocket during its flight
-Launch Rail 
-   Guidance for the rocket to accelerate to a stable flight speed
-Powered Flight 
-   phase of the flight where the motor is active
-Free Flight 
-   phase of the flight where the motor is inactive and no other component 
-   but its inertia is influencing the rocket's trajectory
-Standard Atmosphere 
-   Average pressure, temperature, and air density for various altitudes
-Nozzle 
-   part of the rocket’s engine that accelerate the exhaust gases
-Static hot-fire test 
-   Test to measure the integrity of the motor and determine its thrust curve
-Thrust Curve 
-   Thrust overtime of a motor
-Static Margin 
-   Is a non-dimensional distance to analyze the stability
-Nosecone 
-   The forward most section of a rocket-shaped conically for aerodynamics
-Fin 
-   flattened append of the rocket providing stability during flight, keeping it in the flight trajectory
+- Apogee: The point at which a body is furthest from earth
+- Degrees of freedom: Maximum number of independent values in an equation
+- Flight Trajectory: 3-dimensional path, over time, of the rocket during its flight
+- Launch Rail: Guidance for the rocket to accelerate to a stable flight speed
+- Powered Flight: Phase of the flight where the motor is active
+- Free Flight: Phase of the flight where the motor is inactive and no other component but its inertia is influencing the rocket's trajectory
+- Standard Atmosphere: Average pressure, temperature, and air density for various altitudes
+- Nozzle: Part of the rocket’s engine that accelerate the exhaust gases
+- Static hot-fire test: Test to measure the integrity of the motor and determine its thrust curve
+- Thrust Curve: Thrust overtime of a motor
+- Static Margin: Is a non-dimensional distance to analyze the stability
+- Nosecone: The forward most section of a rocket, shaped for aerodynamics
+- Fin: Flattened append of the rocket providing stability during flight, keeping it in the flight trajectory
 
 
 Flight Model
 ------------
-.. First authors: Oscar/Gui
-
 The flight model of a high-powered rocket takes into account at least three different phases:
 
 1. The first phase consists of a linear movement along the launch rail:
@@ -147,13 +128,13 @@ aerodynamic forces.
 
 2. After completely leaving the rail, a phase of 6 degrees of freedom (DOF) is established, 
 which includes powered flight and free flight:
-The rocket is free to move in three-dimensional space. 
-In this phase the weight, engine thrust, normal and axial aerodynamic forces are still important.
+The rocket is free to move in three-dimensional space and weight, engine thrust, normal and axial 
+aerodynamic forces are still important.
 
 3. Once apogee is reached, a parachute is usually deployed, characterizing the third phase of flight:
 the parachute descent.
 In the last phase, the parachute is launched from the rocket, which is usually divided into two
-or more parts joined by ropes. 
+or more parts joined by ropes. This phase ends in the point of impact.
 
 .. multibody dynamics is taken into account during descent.
 
@@ -177,7 +158,7 @@ The Fig. :ref:`fig1` illustrates RocketPy architecture.
 
 .. figure:: images/Fluxogram.png
    :align: center
-   :scale: 24%
+   :scale: 25%
    :figclass: bht
 
    RocketPy classes interaction :label:`fig1`
@@ -194,9 +175,9 @@ Variable interpolation meshes/grids from different sources can lead to problems 
 In order to solve this, RocketPy employs a dedicated *Function* class which allows for more natural and dynamic handling
 of these objects, structuring them like :math:`\mathbb{R}^n \to \mathbb{R}^n` mathematical functions.
 
-Through the use of magic methods, this approach allows for quick and easy arithmetic operations between lambda
+Through the use of those methods, this approach allows for quick and easy arithmetic operations between lambda
 expressions and list-defined interpolated functions, as well as scalars. Different interpolation methods are available
-to be chosen from, among them simple polynomial, spline and Akima (ref. paper original). Extrapolation of *Function*
+to be chosen from, among them simple polynomial, spline and Akima (:cite:`ceotto2021rocketpy`). Extrapolation of *Function*
 objects outside the domain constrained by a given dataset is also allowed.
 
 Furthermore, evaluation of definite integrals of these *Function* objects is among their feature set. By cleverly
@@ -248,7 +229,7 @@ RocketPy requires `datetime` library information specifying year, month,
 day and hour to compute the weather conditions on the specified day of launch. 
 An optional argument, the timezone, may also be specified. 
 If the user prefers to omit it, RocketPy will assume 
-the datetime is given in standard UTC time, just as following:
+the `datetime` object is given in standard UTC time, just as following:
 
 .. code-block:: python
    
@@ -296,7 +277,6 @@ analyst by calling the `Env.info()` method.
 
 Motor
 -----
-.. First author: Gribel
 
 RocketPy is flexible enough to work with most types of motors used in sound rockets. 
 
@@ -391,6 +371,8 @@ simply added to the code via the following methods:
       topRadius=0.0635, bottomRadius=0.0435, length=0.060, 
       distanceToCM=-1.194656
    )
+   
+.. TODO: explicar como adicionar paraquedas... 
 
 All these methods receive defining geometrical parameters and their distance to the rocket's center of mass 
 (distanceToCM) as inputs. Each of these surfaces generates, during the flight, a lift force that can be calculated via 
@@ -419,23 +401,23 @@ burns its propellant.
 Flight
 ------
 .. First author: Giovani/Stano
-.. Suggested topics:
-..  (0) Basic intro describing what class does
-..  (1) Use of LSODA and why (taking advantage of explicit and implitcit solvers) and how (if interesting)
-..  (2) FlightPhases as a container datatype, which holds FlightPhase instances
-..      (a) How is the FlightPases container initialized (rail phase and max time)
-..      (b) The fact that it is dynamic, new phases can be added and removed
-..      (c) The fact that it is iterable, and that it can be used in a for loop
-..      (d) How flight phases are created during the simulation and when
-..  (3) TimeNodes as a container datatype, which holds TimeNode instances
-..      (a) TimeNodes as a basic discretization of the flight phase
-..      (b) Why use TimeNodes: parachute release, control events, etc.
-..  (4) Time overshoot - why? faster when events are rarely triggered
-..  (5) Post processing and results (allInfo)
-
+   Suggested topics:
+    (0) Basic intro describing what class does
+    (1) Use of LSODA and why (taking advantage of explicit and implitcit solvers) and how (if interesting)
+    (2) FlightPhases as a container datatype, which holds FlightPhase instances
+        (a) How is the FlightPases container initialized (rail phase and max time)
+        (b) The fact that it is dynamic, new phases can be added and removed
+        (c) The fact that it is iterable, and that it can be used in a for loop
+        (d) How flight phases are created during the simulation and when
+    (3) TimeNodes as a container datatype, which holds TimeNode instances
+        (a) TimeNodes as a basic discretization of the flight phase
+        (b) Why use TimeNodes: parachute release, control events, etc.
+    (4) Time overshoot - why? faster when events are rarely triggered
+    (5) Post processing and results (allInfo)
+   
 .. (0)
 
-The Flight class is responsible for the integration of the rocket's equation of motion overtime
+The Flight class is responsible for the integration of the rocket's equations of motion overtime
 :cite:`ceotto2021rocketpy`. Data from instances of the Rocket class and the Environment class are used as input to
 initialize it, along with parameters such as launch heading and inclination relative to the Earth's surface:
 
@@ -448,9 +430,9 @@ initialize it, along with parameters such as launch heading and inclination rela
       heading=0
    )
 
-Once the simulation is initialized, run and completed, the instance of the Flight class stores the relevant raw data.
-The :code:`Flight.postProcess()` can then be used to compute secondary parameters such the rocket's Mach number during
-flight and it's angle of attack.
+Once the simulation is initialized, run and completed, the instance of the Flight class stores relevant raw data. The
+:code:`Flight.postProcess()` method can then be used to compute secondary parameters such the rocket's Mach number
+during flight and it's angle of attack.
 
 .. (1) TODO: Cite Scipy and LSODA (citations can be found here: https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.LSODA.html)
 
@@ -465,55 +447,81 @@ nonstiff Adams method and the stiff BDF method, depending on the dected stiffnes
 Since a rocket's flight trajectory is composed of multiple phases, each with its own set of governing equations,
 RocketPy employs a couple of clever methods to run the numerical integration. The Flight class uses a
 :code:`FlightPhases` container to hold each :code:`FlightPhase`. The :code:`FlightPhases` container will orchestrate the
-different FlightPhase elements, and compose them during the flight.
+different :code:`FlightPhase` instances, and compose them during the flight.
 
 .. (b) The fact that it is dynamic, new phases can be added and removed
 
-This is crucial because there are events which may or may not happen during the flight, such as the triggering of a
-parachute ejection system (which may or may not fail) or the activation of a flight termination system. There are also
-events such as the departure from the launch rail or the apogee that are known to occur, but their timestamp is unknown
-until the simulation is run. All of these events can trigger new flight phases, caracterized by a change in the
-rocket's equations of motion. Furthermore, such events can happen close to each other and provoke delayed new flight
-phases.
+This is crucial because there are events which may or may not happen during the simulation, such as the triggering of a
+parachute ejection system (which may or may not fail) or the activation of a premature flight termination event. There
+are also events such as the departure from the launch rail or the apogee that are known to occur, but their timestamp is
+unknown until the simulation is run. All of these events can trigger new flight phases, caracterized by a change in the
+rocket's equations of motion. Furthermore, such events can happen close to each other and provoke delayed phases.
 
-To handle this, the Flight class has a mechanism of creating new flight phases and adding them dynamically in the
-appropriate order to the :code:`FlightPhases` container.
+To handle this, the Flight class has a mechanism of creating new phases and adding them dynamically in the appropriate
+order to the :code:`FlightPhases` container.
 
 The constructur of the :code:`FlightPhase` class takes the following arguments:
 
 - :code:`t`: a timestamp which simbolizes at which instant such flight phase should begin;
-- :code:`derivative`: a function which returns the derivatives of the rocket's state vector (i.e., calculates the
+- :code:`derivative`: a function which returns the time derivatives of the rocket's state vector (i.e., calculates the
   equations of motion for this flight phase);
 - :code:`callbacks`: a list of callback functions to be run when the flight phase begins (which can be usefull if some
-  parameter of the rocket needs to be altered before the flight phase begins).
+  parameters of the rocket need to be modified before the flight phase begins).
 
 .. (c) The fact that it is iterable, and that it can be used in a for loop
 
 The constructor of the Flight class initializes the :code:`FlightPhases` container with a *rail phase* and also a
-dummy *max time* phase which marks the maximum flight duration. Then, it loops through  elements of the container.
+dummy *max time* phase which marks the maximum flight duration. Then, it loops through the elements of the container.
 
 Inside the loop, an important attribute of the current flight phase is set: :code:`FlightPhase.timeBound`, the maximum
-timestamp of the flight phase, which is always equal to the initial timestamp of the next flight phase. 
+timestamp of the flight phase, which is always equal to the initial timestamp of the next flight phase. Ordinarily, it
+would be possible to run the LSODA solver from :code:`FlightPhase.t` to :code:`FlightPhase.timeBound`. However, this is
+not an option because the events which can trigger new flight phases need to be checked throughtout the simulation.
+While :code:`scipy.integrate.solve_ivp` does offer the :code:`events` argument to aid in this, it is not possible to use
+it with most of the events that need to be tracked, since they cannot be expressed in the necessary form.
 
-.. (d) How flight phases are created during the simulation and when
-
-Throught the simulation, more flight phases can be added and removed, but only after the current phase in order to
-preserve the order of the flight trajectory. As an example, once the rocket leaves the rail, a new phase is added.
+As an example, consider the very common event of a parachute ejection system. In order to simulate real-time algorithms,
+the necessary inputs to the ejection algorithm need to be supplied at regular intervals to simulate a desired sampling
+rate. Furthermore, the ejection algorithm cannot be called multiple times without real data since it generally stores
+all the inputs it gets to calculate if the rocket has reached the apogee in order to trigger the parachute release
+mechanism. Discrete controllers can present the same peculiar properties.
 
 ..  (3) TimeNodes as a container datatype, which holds TimeNode instances
 ..      (a) TimeNodes as a basic discretization of the flight phase
 ..      (b) Why use TimeNodes: parachute release, control events, etc.
 
-The second data-type that is important to understand are the TimeNodes. An instance of the TimeNode class will contain 
-the information important fora given time of the Flight, it is a discretization of the continuous time. The TimeNode 
-have similar parameters to the FlightPhase, it receives the current time respective to the TimeNode, the parachutes that 
-will be ejected on that specific TimeNode and callbacks functions that will be executed. Therefore the basic 
-functioning is that the Flight is partioned on different FlightPhases, that have it's own equations and 
-characteristics, and each FlightPhase will have TimeNodes, which is a point in the time where the integration step will 
-be executed, and this class is important to control theparachute release and other discrete events.
+To handle this, the instance of the :code:`FlightPhase` class holds a :code:`TimeNodes` container, which stores all
+the required timesteps, or :code:`TimeNode`, that the integration algorithm should stop at so that the events can be
+checked, usually by feedding the necessary data to parachutes and discrete control trigger functions. When it comes to
+discrete controllers, they may change some parameters in the rocket once they are called. On the other hand, parachute
+triggers rarely actually trigger, and thus, rarely invoke the creation of a new flight phase caractherized by
+*descent under parachute* governing equations of motion.
 
+..  (4) Time overshoot - why? faster when events are rarely triggered
 
-.. Which phase is added, why and most importantly, how exactly?
+The Flight class can take advantage of this fact by employing overshootable time nodes: time nodes that the integrator
+does not really need to stop at. This allows the integration algorithm to use more optmized timesteps and significantly
+reduce the number of iterations needed to perform a simulation. Once a new timestep is taken, the Flight class checks
+all overshootable time nodes that have passed and feed their event triggers with interpolated data. In case when event
+is actually triggered, the simulation is rolled back to that state.
+
+.. (2)(d) How flight phases are created during the simulation and when
+
+In summary, throughout a simulation, the Flight class loops through each non-overshootable :code:`TimeNode` of each
+element of the :code:`FlightPhases` container. At each :code:`TimeNode`, the event triggers are fed with the necessary
+input data. Once an event is triggered, a new :code:`FlightPhase` is created and added to the main container.
+These loops continue until the simulation is completed, either by reaching the maximum flight duration or by reaching
+a terminal event, such as ground impact.
+
+..  (5) Post processing and results (allInfo)
+
+Once the simulation is completed, raw data can already be accessed. To compute secondary parameters, the
+:code:`Flight.postProcess()` is used. It takes advtange of the fact that the :code:`FlightPhases` container keeps all
+relevant flight information to essentially retrace the trajectory and capture more information about the flight.
+
+Once secondary parameters are computed, the :code:`Flight.allInfo` method can be used to show and plot all the relevant
+information ...
+.. TODO: Add trajectory plot, or other relavant plots
 
 .. TODO: Come up with a better section title, one which is shorter and clearer
 
@@ -526,17 +534,17 @@ Design: Adaptability of the Code and Accessibility
       object-oriented programming makes everything easier and more accessible
 
 
-RocketPy started to be build in 2017 with some requirements in mind: the code must run fast, this is important because
-we are interested in running multiple simulations to compare different parameters, and also the possibility of 
-implementing optimisation methods for the rocket parameters, the code must be flexible, this is important because each
-team have their necessity, therefore we structured the code in a fashion that each major component of the problem 
-separated in classes, using concepts of Single Responsability Principle (SRP), and finally the code must be accessible, 
+RocketPy's development started in 2017 with some requirements in mind: the code must run fast, which is important because
+we are interested in running multiple simulations to compare different parameters; and there must be the possibility of 
+implementing optimization methods for the rocket parameters; the code must be flexible, this is important because each
+team has their own necessity, therefore we structured the code in a fashion that each major component of the problem 
+separated in classes, using concepts of Single Responsibility Principle (SRP), and finally, the code must be accessible, 
 that's why the code was published on the Github (citar rocketpy.org) and why we started the RocketPy Team to improve 
-this tool and to create a community around it, facilitating the access of  high quality simulation without a great level
+this tool and to create a community around it, facilitating the access to high-quality simulation without a great level
 of specialization.
 
-Through examples it will be clear how RocketPy is an usefull tool during the design, operation of the Rocket, enabling
-functionalities not available by other rocket simulation softwares.
+The following examples demonstrate how RocketPy is an useful tool during the design, and operation of the Rocket, 
+enabling functionalities not available by other rocket simulation software.
 
 Examples
 ========
@@ -599,8 +607,6 @@ also the importance of the simulation being designed to run fast.
 
 1. Dynamic Stability Analysis
    
-   .. First author: Guilherme
-
 In this analysis the integration of three different RocketPy classes will be explored: Function, Rocket, and Flight.
 The motivation is to investigate how static stability translates into dynamic stability, 
 i.e. different static margins result relies on different dynamic behaviour, 
@@ -661,35 +667,42 @@ Finally, the `Function.comparePlots()` method is used to plot the final result.
 
 Monte Carlo Simulation
 ----------------------
-.. First author: Stano
 
-When designing a rocket, many parameters are not accurately measured or predicted. This may be thought of as uncertainty 
-in measurements and parameters during the design phase or the construction phase of the rocket. In RocketPy, these
-uncertainties can be considered in a dispersion analysis using the Monte Carlo method.
+When simulating a rocket's trajectory, many input parameters may not be completely reliable due to several
+uncertainties in measurements raised during the design or construction phase of the rocket. 
+These uncertainties can be considered together in a group of Monte Carlo simulations
+:cite:`rubinstein2016simulationc` which can be built on top of RocketPy.
 
-In RocketPy, the Monte Carlo methodis applied by running a significant number of simulations where each simulation
-has a different set of inputs that are randomly sampled given a standard deviation of a Gaussian distribution. Almost
-every input presents some kind of uncertainty, except for the number of fins or propellant grains that a rocket has. 
-However, some inputs, such as wind conditions, system failures, or the aerodynamic coefficient curves, may behave 
-differently and must receive special treatment. A statistical analysis can then be made on all the simulations, with the
+The Monte Carlo method here is applied by running a significant number of simulations where each iteration
+has a different set of inputs that are randomly sampled given a previously known probability distribution, 
+for instance the mean and standard deviation of a Gaussian distribution. 
+Almost every input data presents some kind of uncertainty, except for the number of fins or propellant grains
+that a rocket presents. 
+Moreover, some inputs, such as wind conditions, system failures, or the aerodynamic coefficient curves, may behave
+differently and must receive special treatment.
+
+Statistical analysis can then be made on all the simulations, with the
 main result being the :math:`1\sigma`, :math:`2\sigma`, and :math:`3\sigma` ellipses representing the possible area of 
-impact and the area where the apogee is reached (:ref:`figEllipses`). All ellipses were evaluated based on the method presented by Chew (1966)
-(referenciar Chew).
+impact and the area where the apogee is reached (:ref:`figEllipses`). All ellipses can be evaluated 
+based on the method presented by :cite:`Chew1966ConfidenceDistribution`.
 
 .. figure:: images/ellipses.png
    :align: center
    :figclass: bht
    
-   Ellipses :label:`figEllipses`
+   1 sigma, 2 sigma, and 3 sigma dispersion ellipses for both apogee and landing point :label:`figEllipses`
 
-When running the dispersion simulation, the inputs (the parameters along with their respective standard deviation) are
-stored in a dictionary. The randomized set of inputs is then generated using a 'yield' function:
+.. TODO: remover titulo do grafico, corrigir o simbolo sigma na legenda
+
+When performing the Monte Carlo simulations on RocketPy, all the inputs - i.e. the parameters along with their
+respective standard deviation - are stored in a dictionary. The randomized set of inputs is then generated using
+a `yield` function:
 
 .. code-block:: python
 
-   def sim_settings(analysis_parameters, total_number):
+   def sim_settings(analysis_parameters, iter_number):
       i = 0
-      while i < total_number:
+      while i < iter_number:
          # Generate a simulation setting
          sim_setting = {}
          for p_key, p_value in analysis_parameters.items():
@@ -702,37 +715,67 @@ stored in a dictionary. The randomized set of inputs is then generated using a '
          # Yield a simulation setting
          yield sim_setting
 
-Where *analysis_parameters* is the dictionary with the inputs and *total_number* is the total number of simulations desired.
-The function yields one dictionary with one set of inputs. This set is then used to run a simulation. The *flight_settings*
-function is then called again and another simulation is run:
+Where *analysis_parameters* is the dictionary with the inputs and *iter_number* is the total number of simulations
+to be performed.
+At that time the function yields one dictionary with one set of inputs, which will be used to run a simulation. 
+Later the *sim_settings* function is called again and another simulation is run until the loop iterations reach
+the number of simulations:
 
 .. code-block:: python
    
-   for setting in flight_settings(analysis_parameters, number_of_simulations): 
-      # calls Environment, Motor, Rocket, and Flight class to run
-      # the simulation with the set of inputs yielded by the flight_setting function
+   for s in sim_settings(analysis_parameters, iter_number): 
+      # Call the Environment, Motor, Rocket, 
+      # and Flight class to run a simulation 
+      # with the set of inputs yielded by the 
+      # flight_setting function
       ...
 
-Furthermore, the set of inputs for each simulation along with its set of outputs, are stored in a .txt file. This allows
-for long term data stored and the possibility to append simulations to previously finished ones.
+Finally, the set of inputs for each simulation along with its set of outputs, are stored in a .txt file. 
+This allows for long-term data storage and the possibility to append simulations to previously finished ones.
+The stored output data can be used to study the final probability distribution of key parameters, as illustrated 
+on :ref:`apogAlt`.
+
+.. figure:: images/apogeeAltitude.png
+   :align: center
+   :figclass: bht
+   
+   Distribution of apogee altitude :label:`apogAlt`
+.. 
+
+Finally, it is also worth mentioning that all the information generated in the Monte Carlo simulation based on
+RocketPy may be of utmost importance to safety and operational management during rocket launches, once it allows for a 
+more reliable prediction of the landing site and apogee coordinates.
 
 Validation of the results 
 =========================
 
-Validation is a big problem for libraries like RocketPy, where the true values for some results like
-Apogee, Maximum Velocity are not available. Therefore, in order to make RocketPy a software more 
-flexible, easier to modify while being rigorous on the results, some testing strategies have been 
-implemented. First of all, Unit Test were implemented for the classes, this ensures that each 
-function is working properly, given the set of different inputs that each function can receive, the 
-output is inside what is expected, and there are no unexpected errors.
+Validation is a big problem for libraries like RocketPy, where true values for some results like apogee and maximum 
+velocity are very hard to obtain or simply not available. Therefore, in order to make RocketPy more robust and easier to
+modify, while maintaining precise results, some innovative testing strategies have been implemented.
 
-After, there is a second layer of testing which will evaluate if the equations are dimensionally
-correct, as some equations can get very convoluted, implementation errors are very common, hence 
-tests to verify if the computation is dimensionally correct are very useful. These tests implemented
-using the numericalunits library, which generates a random number that will be associated to a given
-unit. For example, given one initialization of this library the meter will be equal to the numerical
-value of 4.08. Using this ideia, the classes Rocket, SolidMotor are initilized with parameters with 
-his respectives units.
+First of all, unit tests were implemented for all classes and their methods ensuring that each function is working
+properly. Given a set of different inputs that each function can receive, the respective outputs are tested against
+expected results, which can be based on real data or augmented examples cases. The test fails if the output deviates
+considerably from the established conditions, or an unexpected error occurs along the way.
+
+Since RocketPy relies heavily on mathematical functions to express the governing equations, implementation errors
+can occur due to convulated nature of such expressions. Hence, to reduce the probability of such errors, there is a
+second layer of testing which will evaluate if such equations are dimensionally correct.
+
+To accomplish this, RocketPy makes use of the `numericalunits` library, which defines a set of independent base units as
+randomly-chosen positive floating point numbers. In a dimensionally-correct function, the units all cancel out when the
+final answer is devided by its resulting unit. And thus, the result is deterministic, not random. On the otIn a dimensionally-incorrect
+calculations, there will be random factors causing a randomly-varying final answer.
+
+"A complete set of independent base units (meters, kilograms, seconds, coulombs, kelvins) are defined as randomly-chosen
+positive floating-point numbers. All other units and constants are defined in terms of those. In a dimensionally-correct
+calculation, the units all cancel out, so the final answer is deterministic, not random. In a dimensionally-incorrect
+calculations, there will be random factors causing a randomly-varying final answer."
+
+These tests are implemented using the numericalunits library, which
+generates a random number that will be associated to a given unit. For example, given one initialization of this library
+the meter will be equal to the numerical value of 4.08. Using this ideia, the classes Rocket, SolidMotor are initilized
+with parameters with their respectives units.
 
 Initilization without using numericalunits
 
@@ -864,12 +907,32 @@ Rocketpy is an easy-to-use tool for simulating high-powered rocket trajectories 
 the Python Scientific Environment. 
 The software's modular architecture is based on four main classes and helper classes with well-documented code 
 that allows to easily adapt complex simulations to various needs using the supplied Jupyter Notebooks.
-RocketPy is a useful tool during Rocket design and operation, allowing to calculate key parameters 
-such as apogee and dynamic stability as well as high-fidelity 6-DOF vehicle trajectory from 
-a wide variety of customizable parameters.
+The code can be a useful tool during Rocket design and operation, allowing to calculate key parameters 
+such as apogee and dynamic stability as well as high-fidelity 6-DOF vehicle trajectory with
+a wide variety of customizable parameters, from its launch to its point of impact.
 RocketPy is an ever-evolving framework and is also accessible to anyone interested, with an active community 
 maintaining it and working on future features such as the implementation of other engine types, 
 such as hybrids and liquids motors, and even orbital flights.
+
+Installing RocketPy
+===================
+
+RocketPy was made to run on Python 3.6+ and requires the packeges: Numpy >=1.0, Scipy >=1.0 and Matplotlib >= 3.0. For a
+complete experience we also recomend netCDF4 >= 1.4. All these packeges, except netCDF4, will be installed automatically
+if the user do not have then. To install, execute:
+
+.. code-block:: python
+
+   pip install rocketpy
+
+or 
+
+.. code-block:: python
+
+   conda install -c conda-forge rocketpy
+
+The sourcecode, documentaton and more examplres are avaiable in https://github.com/Projeto-Jupiter/RocketPy
+
 
 Acknowledgements
 ================
