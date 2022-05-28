@@ -77,8 +77,8 @@ for big data geoscience) packages such as Xarray :cite:`xarray17`, Dask
 GeoCAT-comp functions to scale from personal laptops to high performance computing
 systems such as NCAR’s Casper, Cheyenne, and upcoming Derecho clusters
 :cite:`ams22craker`. Additionally, GeoCAT also utilizes Numba, an open source
-just-in-time (JIT) compiler, to translate Python and NumPy code into machine
-codes in order get faster executions wherever possible.
+just-in-time (JIT) compiler :cite:`numba`, to translate Python and NumPy code into
+machine codes in order to get faster executions wherever possible.
 
 Briefly, GeoCAT-comp houses computational operators for applications ranging from
 regridding and interpolation, to climatology and meteorology. GeoCAT-examples
