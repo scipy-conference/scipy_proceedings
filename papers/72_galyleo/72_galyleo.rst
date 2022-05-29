@@ -134,6 +134,13 @@ Once the dashboard is complete, it can be published to the web simply by moving 
 
     A Published Galyleo Dashboard
 
+No-Code, Low-Code, and Appropriate-Code
+---------------------------------------
+No-code and low-code environments are popular, for a number of reasons.  The first is the assumption that coding is time-consuming and hard, which isn't always or necessarily true; the second is the assumption that coding is a skill known to only a small fraction of the population, which is becoming less true by the day.  40% of Berkeley undergraduates take Data 8, in which every assignment involves programming in a Jupyter Notebook.  The third, particularly for graphics code, is that manual design and configuration gives instant feedback and tight control over appearance -- WYSIWYG.  For example, the authors of a LaTeX paper (including this one) can't control the placement of figures within the text.  The fourth, which is correct, is that configuration code is more verbose, error-prone, and time-consuming than manual configuration.
+
+What is less often appreciated is that when operations become sufficiently complex, coding is a much simpler interface than manual configuration.  For example, building a pivot table in a spreadsheet using point-and-click operations "have always had a reputation for being complicated" :cite:`devaney-pivot`.  It's three lines of code in Python, even without using the Pandas `pivot_table` method.  Most analytics procedures are far more easily done in code.
+
+As a result, Galyleo is an *appropriate-code* environment, combining Jupyter-based code for analytics with manual design and configuration for graphical elements and layout.
 
 Galyleo Data Model And Architecture
 -----------------------------------
@@ -207,6 +214,10 @@ Lively shares with Jupyter an emphasis on live programming :cite:`kubelka2018roa
 Lively abstracts away HTML and CSS tags in graphical objects called "Morphs".  Morphs :cite:`maloney1995directness` were invented as the user interface layer for Self :cite:`ungar1987self`, and have been used as the foundation of the graphics system  in Squeak and Scratch :cite:`maloney2010scratch`.  In morphic, every physical object is a Morph; these can be as simple as a simple polygon or text string to a full application.  Morphs are combined via composition, similar to the way that objects are grouped in a presentation or drawing program.  The composition is simply another morph, which in turn can be composed with other morphs.  In this manner, complex morphs can be built up from collections of simpler ones in a very natural way.  For example, a slider is simply the composition of a circle (the knob) with a thin, long rectangle (the bar).
 
 Each morph can be individually programmed as a JavaScript object, or can inherit base level behavior and extend it.  
+
+.. figure:: lively-screenshot.png
+    
+    The lively.next environment
 
 In lively.next, each morph turns into a snippet of HTML, CSS, and JavaScript code and the entire application turns into a web page.  The programmer  doesn't see the HTML and CSS code directly; these are auto-generated.  Instead, the programmer writes  JavaScript code for both logic and configuration (to the extent that the configuration isn't done by hand).  The code is bundled with the object and integrated in the web page.
 
