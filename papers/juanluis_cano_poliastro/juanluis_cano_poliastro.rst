@@ -13,6 +13,11 @@
 
 :video: https://www.youtube.com/watch?v=VCpTgU1pb5k
 
+.. raw:: latex
+
+   \newcommand{\diff}{\operatorname{d}}
+   \renewcommand{\vec}[1]{\mathbf{#1}}
+
 =========================================================
 poliastro: a Python library for interactive Astrodynamics
 =========================================================
@@ -447,6 +452,63 @@ In addition, poliastro implements analytical propagation algorithms as described
 :cite:`mikkola_cubic_1987`, :cite:`pimienta-penalver_accurate_2013`, :cite:`charls_recursive_2022`,
 and :cite:`vallado_fundamentals_2007`.
 
+Analytical propagators take advantage of the structure of the two-body problem
+and as a result have better performance than numerical methods.
+However, to study the effect of natural and artificial perturbations,
+it is necessary to use numerical propagators.
+poliastro implements Cowell's method :cite:`cowell_investigation_1910`,
+which consists of adding all the perturbation accelerations (:ref:`eq:cowell`).
+
+.. math::
+   :label: eq:cowell
+
+   \frac{\diff^2{\vec{r}}}{\diff{t}^2} = -\frac{\mu}{|r|^3} \vec{r} + \vec{a}_d
+
+To accomplish this, poliastro ships the ideal objective function ``func_twobody``
+that the user can extend with their own perturbation acceleration of choice.
+There are several natural perturbations included: J2 and J3 gravitational terms,
+several atmospheric drag models (exponential, :cite:`jacchia_77`, COESA76, COESA62),
+and helpers for third body gravitational attraction and radiation pressure
+as described in :cite:`curtis_2008`.
+
+.. code-block:: python
+
+   @njit
+   def combined_a_d(
+       t0, state, k, J2, R, C_D, A_over_m, H0, rho0
+   ):
+       return (
+           J2_perturbation(
+               t0, state, k, J2, R
+           ) + atmospheric_drag_exponential(
+               t0, state, k, R, C_D, A_over_m, H0, rho0
+           )
+       )
+
+   def f(t0, state, k):
+       du_kep = func_twobody(t0, state, k)
+       ax, ay, az = combined_a_d(
+           t0,
+           state,
+           k,
+           R=R,
+           C_D=C_D,
+           A_over_m=A_over_m,
+           H0=H0,
+           rho0=rho0,
+           J2=Earth.J2.value,
+       )
+       du_ad = np.array([0, 0, 0, ax, ay, az])
+
+       return du_kep + du_ad
+
+   rr = propagate(
+       orbit,
+       tofs,
+       method=cowell,
+       f=f,
+   )
+
 Future work
 ===========
 
@@ -526,14 +588,6 @@ Or a snippet from the above code, starting at the correct line number:
 Important Part
 --------------
 
-It is well known that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
 or on multiple, aligned lines:
 
 .. math::
@@ -541,21 +595,6 @@ or on multiple, aligned lines:
 
    g(x) &=& \int_0^\infty f(x) dx \\
         &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
 
 In tellus metus, elementum vitae tincidunt ac,
 volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
@@ -635,12 +674,6 @@ won't work try raw LaTeX:
      \caption{Area Comparisons \DUrole{label}{quanitities-table}}
 
    \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
 
 References
 ==========
