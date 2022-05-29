@@ -39,7 +39,7 @@ JupyterLab, JupyterLab extension, Dashboard construction, Data visualization
 Introduction
 ------------
 
-Current dashboarding solutions:cite:`holoviz` :cite:`holoviews` :cite:`plotly` :cite:`panel` :cite:`d2013handbook` for Jupyter either involve external, heavyweight tools, ingrained HTML/CSS coding, complex publication, or limited control over layout, and have restricted widget sets and visualization libraries.   Graphics and visualization objects require a great deal of configuration: size, position, colors, fonts, and so on must be set for each object and, often, each component, and thus library solutions involve a significant amount of fairly simple code.  Conversely, visualization involves analytics, an inherently complex set of operations.  "Visualization" tools such as Tableau or Looker combine visualization and analytics in a single application presenting through a point-and-click interface.  But point-and-click interfaces are limited in the number of operations supported, and in the complexity of operations supported.  The complexity of an operation isn't reduced by having a simple point-and-click interface; instead, the user is confronted with the challenge of trying to do something complicated by pointing.  The result is that tools encapsulate complex operations in a few buttons, and that leads to a limited number of operations with reduced options and/or tools with steep learning curves.
+Current dashboarding solutions :cite:`holoviz` :cite:`holoviews` :cite:`plotly` :cite:`panel` for Jupyter either involve external, heavyweight tools, ingrained HTML/CSS coding, complex publication, or limited control over layout, and have restricted widget sets and visualization libraries.   Graphics and visualization objects require a great deal of configuration: size, position, colors, fonts, and so on must be set for each object and, often, each component, and thus library solutions involve a significant amount of fairly simple code.  Conversely, visualization involves analytics, an inherently complex set of operations.  "Visualization" tools such as Tableau :cite:`d2013handbook` or Looker :cite:`looker` combine visualization and analytics in a single application presenting through a point-and-click interface.  But point-and-click interfaces are limited in the number of operations supported, and in the complexity of operations supported.  The complexity of an operation isn't reduced by having a simple point-and-click interface; instead, the user is confronted with the challenge of trying to do something complicated by pointing.  The result is that tools encapsulate complex operations in a few buttons, and that leads to a limited number of operations with reduced options and/or tools with steep learning curves.
 
 In contrast, Jupyter is simply a superior analytics environment in every respect over a standalone visualization tool: its various kernels and their libraries provide a much broader range of analytics capabilities; its programming interface is a much cleaner and simpler way to perform complex operations; hardware  resources can scale far more easily than the can for a visualization tool; and connectors to data sources are both plentiful and very easy to extend.
 
@@ -114,7 +114,7 @@ in the View.
 
 .. figure:: galyleo_dataflow.png
 
-Dataflow in Galyleo
+    Dataflow in Galyleo
 
 With this in hand, the data flow is straightforward.  A Table is updated from an external source, or the user manipulates a widget.  When this happens, the affected item signals the dashboard controller that it has been updated.  The controller then signals all charts to redraw themselves.  Each Chart will then request updated data from its source Table or View.  A View then requests its configured filters for their current logic functions, and passes these to the source Table with a request to apply the filters and return the rows which are selected by *all* the filters (in the future, a more general Boolean will be applied; the UI elements to construct this function are under design).  The Table then returns the rows which pass the filters; the View selects the static subset of columns it supports, and passes this to its Charts, which then redraw themselves
 
@@ -132,7 +132,7 @@ Once the dashboard is complete, it can be published to the web simply by moving 
 
 .. figure:: dashboard_screenshot.png
 
-A Published Galyleo Dashboard
+    A Published Galyleo Dashboard
 
 
 Galyleo Data Model And Architecture
@@ -185,7 +185,7 @@ The data flow of the previous section remains unchanged; it is simply that the f
 
 .. figure:: galyleo_remote_dataflow.png
 
-Galyleo Dataflow with Remote Tables
+    Galyleo Dataflow with Remote Tables
 
 Comments
 ^^^^^^^^
@@ -198,6 +198,64 @@ Every element of the Galyleo system, whether it is a widget, Chart, Table Server
 
 Similarly, the underlying lively.next system supports user design of new filters.  Again, a filter is simply an object with a physical presence, that the user can design in lively, and supports a specific API -- broadly, set the choices and hand back the Boolean function as a JSON object which will be used to filter the data.
 
+lively.next
+^^^^^^^^^^^
+Any system can be used to extend Galyleo; at the end of the day, all that need be done is encapsulate a widget or chart in a snippet of HTML with a JavaScript interface that matches the Galyleo protocol.  This is done most easily and quickly by using lively.next :cite:`lively-next`.  lively.next is the latest in a line of Smalltalk- and Squeak-inspired :cite:`ingalls1997back` JavaScript/HTML integrated development environments that began with the Lively Kernel :cite:`ingalls2008lively` :cite:`krahn2009lively` and continued through the Lively Web :cite:`lincke2012lively` :cite:`ingalls2016lively` :cite:`taivalsaari2017web`.  Galyleo is an application built in Lively, following the work done in :cite:`hemmings2016livetalk`.  
+
+Lively shares with Jupyter an emphasis on live programming :cite:`kubelka2018road`, orwhere a Read-Evaluate-Act Loop (REAL) programming style.  It adds to that a combination of visual and text programming :cite:`andersen2020adding`, where physical objects are positioned and  configured largely by hand as done with any drawing or design program (e.g., PowerPoint, Illustrator, DrawPad, Google Draw) and programmed with a built-in editor and workspace, similar in concept if not form to a Jupyter Notebook.  
+
+Lively abstracts away HTML and CSS tags in graphical objects called "Morphs".  Morphs :cite:`maloney1995directness` were invented as the user interface layer for Self :cite:`ungar1987self`, and have been used as the foundation of the graphics system  in Squeak and Scratch :cite:`maloney2010scratch`.  In morphic, every physical object is a Morph; these can be as simple as a simple polygon or text string to a full application.  Morphs are combined via composition, similar to the way that objects are grouped in a presentation or drawing program.  The composition is simply another morph, which in turn can be composed with other morphs.  In this manner, complex morphs can be built up from collections of simpler ones in a very natural way.  For example, a slider is simply the composition of a circle (the knob) with a thin, long rectangle (the bar).
+
+Each morph can be individually programmed as a JavaScript object, or can inherit base level behavior and extend it.  
+
+In lively.next, each morph turns into a snippet of HTML, CSS, and JavaScript code and the entire application turns into a web page.  The programmer  doesn't see the HTML and CSS code directly; these are auto-generated.  Instead, the programmer writes  JavaScript code for both logic and configuration (to the extent that the configuration isn't done by hand).  The code is bundled with the object and integrated in the web page.
+
+Morphs can be set as reusable components by a simple declaration.  Once so published, they can be reused in any lively design.  
+
+Incorporating New Libraries
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Libraries are typically incorporated into lively.next by attaching them to a convenient physical object, importing the library from a package manager such as npm or jspm, and then writing a small amount of convenience code to expose the object's API.  The simplest form of this is to assign the module to an instance variable so it has an addressable name, but typically a few convenience methods are written as well.  In this way, a large number of libraries have been incorporated as reusable components in lively.next, including Google Maps, Google Charts :cite:`google-charts`, Chartjs :cite:`chartjs`, D3 :cite:`bostock`, Leaflet.js :cite:`leaflet`, OpenLayers :cite:`openlayers`, cytoscape:`ono` and many more.
+
+Extending Galyleo's Charting and Visualization capabilities
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A Galyleo Chart is anything that changes its display based on tabular data from a Galyleo Table or Galyleo View.  It responds to a specific API, which includes two principal methods:
+
+1. `drawChart`: redraw the chart using the current tabular data from the input or view
+
+2. `acceptsDataset(<Table or View>)` returns a boolean depending on whether this chart can draw the data in this view.  For example, a Table Chart can draw any tabular data; a Geo Chart typically requires that the first column be a place specifier.
+
+In addition, it has a read-only property:
+
+1. `optionSpec`: A JSON structure describing the options for the chart.  This is a dictionary, which specifies the name of each option, and its type (color, number, string, boolean, or enum with values given).  Each type corresponds to a specific UI widget that the chart editor uses.
+
+And two read write properties:
+
+1. `options`: The current options, as a JSON dictionary.  This matches exactly the JSON dictionary in `optionSpec`, with values in place of the types.
+
+2. `dataSource`: a string, the name of the current Galyleo Table or Galyleo View
+
+Typically, an extension to Galyleo's charting capabilities is done by incorporating the library as described in the previous section, implementing the API given in this section, and then publishing the result as a component
+
+Extending Galyleo's Widget Set
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A widget is a graphical item used to filter data.  It operates on a single column on any table in the current data set.  It is either a range filter (which selects a range of numeric values) or a select filter (which selects a specific value, or a set of specific values).  The API that is implemented consists only of properties.
+
+1. `valueChanged`: a signal, which is fired whenever the value of the widget is changed
+
+2. `value`: a read-write property, the current value of the widget
+
+3. `filter`: read-only.  The current filter function, as a JSON structure
+
+4. `allValues`: read-write, select filters only.
+
+5. `column`: read-only.  The name of the column of this widget.  Set when the widget is created, and then read-only
+
+6. `numericSpec`: read-write.  A dictionary containing the numeric specification for a numeric or date filter
+
+Widgets are typically designed as a standard Lively graphical component, much as the slider described above.
+
+
 
 Integration into Jupyter Lab: The Galyleo Extension
 ---------------------------------------------------
@@ -205,7 +263,7 @@ Galyleo is a standalone web application that is integrated into JupyterLab using
 
 .. figure:: extension_architecture.png
 
-Galyleo Extension Architecture
+    Galyleo Extension Architecture
 
 Standard Jupyter and browser mechanisms are used.  File system requests come to the extension from the standard Jupyter API, exactly the same requests and mechanisms that are sent to a Markdown or Notebook editor.  The extension receives them, and then uses standard browser-based messaging (`window.postMessage`) to signal the standalone web app.  Similarly, when the extension makes a request of JupyterLab, it does so through this mechanism and a receiver in the extension gets it and makes the appropriate method calls within JupyterLab to achieve the objective.
 
@@ -248,11 +306,11 @@ The promise of the Galyleo Extension is that it can be adapted to *any* open-sou
 * URL of an image for the launcher
 * Name of the application for the file menu
 
-The application must implement a small messaging client, using the standard JavaScript messaging interface, and implement the calls the Galyleo Extension makes.  The conceptual picture is shown here:
+The application must implement a small messaging client, using the standard JavaScript messaging interface, and implement the calls the Galyleo Extension makes.  The conceptual picture is shown :
 
 .. figure:: messaging_protocol.png
 
-Galyleo Extension Application-Side messaging
+    Galyleo Extension Application-Side messaging
 
 And it must support (at a minimum) messages to read and write the file being edited.
 
@@ -261,7 +319,8 @@ The Third Generation of Network Computing
 The World-Wide Web and email comprised  the first generation of Internet computing (the Internet had been around for a decade before the Web, and earlier networks dated from the sixties, but the Web and email were the first mass-market applications on the network), and they were very simple -- both were document-exchange applications, using slightly different protocols.  The second generation of Network applications were the siloed productivity applications, where standard desktop applications moved to the Cloud.  The most famous example is of course GSuite and Office 365, but there were and are many others -- Canva, Loom, Picasa, as well as a large number of social/chat/social media applications.  What they all had in common was that they were siloed applications which, with the exception of the office suites, didn't even share a common store.  In many ways, this second generation of network applications recapitulates the era immediately prior to the introduction of the personal computer.  That era was dominated by single-application computers such as word processors, which were simply computers with a hardcoded program loaded into ROM.   
 
 .. figure:: generations.png
-Generations of Internet Computing
+
+    Generations of Internet Computing
 
 The Word Processor era was due to technological limitations -- the processing power, and especially memory, to run multiple programs simply wasn't available on low-end hardware, and PC operating systems didn't yet exist.  In some sense, the current second generation of Internet Computing suffers from similar technological constraints.  The "Operating System" for Internet Computing doesn't yet exist.  The Jupyter Computer can provide it.
 
@@ -277,4 +336,4 @@ The vision of the Jupyter Computer, bringing the power of the Cloud to the perso
 
 Acknowledgements
 ----------------
-The authors wish to thank the anonymous reviewers for their insightful comments on the early drafts of this paper.  On the Lively (client) side we have received invaluable help from Robert Krahn, Marko Röder, Jens Lincke and Linus Hagemann.  We particularly want to thank the engageLively team for all of their support and help: Tim Braman, Patrick Scaglia, Leighton Smith, Sharon Zehavi, Igor Zhukovsky,  Deepak Gupta, Steve King, Rick Rasmussen, Patrick McCue, Jeff Wade, Tim Gibson.  The JupyterLab development community has been especially helpful and supportive; we want to thank Tony Fast, Jason Grout, Mehmet Bektas, Isabela Presedo-Floyd, Brian Granger, and Michal Krassowski.  The engageLively Technology Advisory Board has helped shape these ideas: Ani Mardurkar, Priya Joseph, David Peterson, Sunil Joshi, Michael Czahor, Isha Oke, Petrus Zwart, Larry Rowe.  We want to thank the people from the AWS team that have helped us tremendously: Matt Vail, Omar Valle, Pat Santora.  Galyleo has been dramatically improved with the assistance of our Japanese colleagues at KCT and Pacific Rim Technologies: Yoshio Nakamura, Ted Okasaki, Ryder Saint, Tokushige-san, and Shimazaki-san.  Our undestanding of Jupyter in an academic context came from our colleagues and friends at Berkeley, the University of Victoria, and UBC: Shawna Dark, Hausi Müller, Ulrike Stege, James Colliander, Chris Holdgraf, Nitesh Mor.  Use of Jupyter in a research context was emphasized by Andrew Weidlea, Eli Dart, Jeff D'Ambrogia.  We benefitted enormously from the CITRIS Foundry: Alic Chen, Jing Ge, Peter Minor, Kyle Clark, Julie Sammons, Kira Gardner.  The Alchemist Accelerator was central to making this product: Ravi Belani, Arianna Haider, Jasmine Sunga,  Mia Scott, Kenn So, Aaron Kalb, Adam Frankl.  Kris Singh was a constant source of inspiration and help.  Larry Singer gave us tremendous help early on.  Vibhu Mittal more than anyone inspired us to pursue this road.  Ken Lutz has been a constant sounding board and inspiration, and worked hand-in-hand with us to develop this product.  Our early customers and partners have been and continue to be a source of inspiration, support, and experience that is absolutely invaluable: Jonathan Tan, Roger Basu, Jason Koeller, Steve Schwab, Michael Collins, Alefiya Hussain, Geoff Lawler, Jim Chimiak, Fraukë Tillman, Andy Bavier, Andy Milburn.  All of our customers are really partners, none moreso than the fantastic  teams at Tanjo AI and Ultisim: Bjorn Nordwall, Ken Lane, Jay Sanders, Eric Smith, Miguel Matos, Linda Bernard, Kevin Clark, and Richard Boyd.  We want to especially thank our investors, who bet on this technology and company. 
+The authors wish to thank the anonymous reviewers for their insightful comments on the early drafts of this paper.  On the Lively (client) side we have received invaluable help from Robert Krahn, Marko Röder, Jens Lincke and Linus Hagemann.  We particularly want to thank the engageLively team for all of their support and help: Tim Braman, Patrick Scaglia, Leighton Smith, Sharon Zehavi, Igor Zhukovsky,  Deepak Gupta, Steve King, Rick Rasmussen, Patrick McCue, Jeff Wade, Tim Gibson.  The JupyterLab development community has been especially helpful and supportive; we want to thank Tony Fast, Jason Grout, Mehmet Bektas, Isabela Presedo-Floyd, Brian Granger, and Michal Krassowski.  The engageLively Technology Advisory Board has helped shape these ideas: Ani Mardurkar, Priya Joseph, David Peterson, Sunil Joshi, Michael Czahor, Isha Oke, Petrus Zwart, Larry Rowe, Glenn Ricart.  We want to thank the people from the AWS team that have helped us tremendously: Matt Vail, Omar Valle, Pat Santora.  Galyleo has been dramatically improved with the assistance of our Japanese colleagues at KCT and Pacific Rim Technologies: Yoshio Nakamura, Ted Okasaki, Ryder Saint, Tokushige-san, and Shimazaki-san.  Our undestanding of Jupyter in an academic context came from our colleagues and friends at Berkeley, the University of Victoria, and UBC: Shawna Dark, Hausi Müller, Ulrike Stege, James Colliander, Chris Holdgraf, Nitesh Mor.  Use of Jupyter in a research context was emphasized by Andrew Weidlea, Eli Dart, Jeff D'Ambrogia.  We benefitted enormously from the CITRIS Foundry: Alic Chen, Jing Ge, Peter Minor, Kyle Clark, Julie Sammons, Kira Gardner.  The Alchemist Accelerator was central to making this product: Ravi Belani, Arianna Haider, Jasmine Sunga,  Mia Scott, Kenn So, Aaron Kalb, Adam Frankl.  Kris Singh was a constant source of inspiration and help.  Larry Singer gave us tremendous help early on.  Vibhu Mittal more than anyone inspired us to pursue this road.  Ken Lutz has been a constant sounding board and inspiration, and worked hand-in-hand with us to develop this product.  Our early customers and partners have been and continue to be a source of inspiration, support, and experience that is absolutely invaluable: Jonathan Tan, Roger Basu, Jason Koeller, Steve Schwab, Michael Collins, Alefiya Hussain, Geoff Lawler, Jim Chimiak, Fraukë Tillman, Andy Bavier, Andy Milburn, Augustine Bui.  All of our customers are really partners, none moreso than the fantastic  teams at Tanjo AI and Ultisim: Bjorn Nordwall, Ken Lane, Jay Sanders, Eric Smith, Miguel Matos, Linda Bernard, Kevin Clark, and Richard Boyd.  We want to especially thank our investors, who bet on this technology and company. 
