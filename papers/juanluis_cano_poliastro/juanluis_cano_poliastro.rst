@@ -452,6 +452,9 @@ In addition, poliastro implements analytical propagation algorithms as described
 :cite:`mikkola_cubic_1987`, :cite:`pimienta-penalver_accurate_2013`, :cite:`charls_recursive_2022`,
 and :cite:`vallado_fundamentals_2007`.
 
+Natural perturbations
+---------------------
+
 Analytical propagators take advantage of the structure of the two-body problem
 and as a result have better performance than numerical methods.
 However, to study the effect of natural and artificial perturbations,
@@ -509,6 +512,34 @@ as described in :cite:`curtis_orbital_2008`.
        method=cowell,
        f=f,
    )
+
+Continuous thrust control laws
+------------------------------
+
+Beyond natural perturbations, spacecraft can modify their trajectory on purpose
+by using impulsive maneuvers (as explained in the next section)
+as well as continuous thrust guidance laws.
+The user can define custom guidance laws by providing an perturbation acceleration
+in the same way natural perturbations are used.
+In addition, poliastro includes several analytical solutions
+for continuous thrust guidance laws with specific purposes,
+as studied in :cite:`cano_rodriguez_study_2017`:
+optimal transfer between circular coplanar orbits :cite:`edelbaum_propulsion_1961` :cite:`burt_space_1967`,
+optimal transfer between circular inclined orbits :cite:`edelbaum_propulsion_1961` :cite:`kechichian_reformulation_1997`,
+quasi-optimal eccentricity-only change :cite:`pollard_simplified_1997`,
+simultaneous eccentricity and inclination change :cite:`pollard_simplified_2000`,
+and agument of periapsis adjustment :cite:`pollard_evaluation_1998`.
+A much more rigorous analysis of a similar set of laws can be found in :cite:`di_carlo_analytical_2021`.
+
+.. code-block:: python
+
+   from poliastro.twobody.thrust import change_ecc_inc
+
+   ecc_f = 0.0 << u.one
+   inc_f = 20.0 << u.deg
+   f = 2.4e-6 << (u.km / u.s**2)
+
+   a_d, _, t_f = change_ecc_inc(orbit, ecc_f, inc_f, f)
 
 Future work
 ===========
