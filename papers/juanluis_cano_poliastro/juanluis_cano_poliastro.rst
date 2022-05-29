@@ -591,31 +591,6 @@ wrapping the doi in ``\detokenize`` works to solve the issue.
      publisher =   "Hackett",
      doi = \detokenize{10.1017/CBO9780511808432},
    }
-
-Source code examples
---------------------
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
  
 Important Part
 --------------
