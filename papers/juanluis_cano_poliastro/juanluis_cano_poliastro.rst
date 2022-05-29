@@ -467,9 +467,10 @@ which consists of adding all the perturbation accelerations (:ref:`eq:cowell`).
 To accomplish this, poliastro ships the ideal objective function ``func_twobody``
 that the user can extend with their own perturbation acceleration of choice.
 There are several natural perturbations included: J2 and J3 gravitational terms,
-several atmospheric drag models (exponential, :cite:`jacchia_77`, COESA76, COESA62),
+several atmospheric drag models
+(exponential, :cite:`jacchia_77`, :cite:`atmosphere_us_1962`, :cite:`atmosphere_us_1976`),
 and helpers for third body gravitational attraction and radiation pressure
-as described in :cite:`curtis_2008`.
+as described in :cite:`curtis_orbital_2008`.
 
 .. code-block:: python
 
