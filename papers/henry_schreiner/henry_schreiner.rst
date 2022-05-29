@@ -40,7 +40,7 @@ Introduction
 
 High Energy Physics (HEP) has always had intense computing needs. The World
 Wide Web was invented at CERN in 1989 :cite:`leiner2009brief`. Today, we have
-the largest machine in the world at CERN, the Large Hadron Collider (LHC), 27
+the largest machine in the world at CERN: the Large Hadron Collider (LHC), 27
 km in circumference :cite:`evans2008lhc`. We have one of the largest scientific
 dataset in the world of exabyte scale :cite:`peters2011exabyte`.
 
@@ -48,10 +48,10 @@ HEP scientists have been interested in Python since 1993
 :cite:`templon_jeffrey_2022_6353621`. With the release of Python 1.0.0 in 1994,
 physicists started writing code in Python. It was not able to provide the
 performance required to become the main language for HEP.  In 1995, the ROOT
-project was released, making C++ the main language for HEP.  The ROOT project
-also needed an "extension" languages; this is the language driving the
+project for an analysis toolkit (and framework) was released, making C++ the main language for HEP.  The ROOT project
+also needed an "extension language" - this is the language driving the
 analysis. Python was rejected for this role due to being "exotic", and because
-it was considered too much to ask Physicists to code in two language. Instead,
+it was considered too much to ask Physicists to code in two languages. Instead,
 ROOT provided a C++ interpreter, called CINT, which later was replaced with
 Cling, which is the basis for the clang-repl project in LLVM today :cite:`ifrim2022gpu`.
 
@@ -59,7 +59,7 @@ Python would start showing up a few years later in experiment frameworks as a
 configuration language. These frameworks were primarily written in C++, but
 were made of many configurable parts; the glueing together of the system was
 done in Python - a model still popular today, though some experiments are now
-using Python + Numba model instead, like Xenon1T :cite:`remenska2017giving,rousselle2021fast`.
+using Python + Numba as an alternative, enhanced, model, like Xenon1T :cite:`remenska2017giving,rousselle2021fast`.
 
 In the early 2000s, the use of Python HEP exploded, heavily driven by
 experiments like LHCb at CERN developing frameworks and user tools for
@@ -68,7 +68,7 @@ scripting. ROOT started providing Python bindings in 2004
 required a complex multi-hour build of ROOT to use [#]_. Analyses
 still consisted largely of ROOT, with Python sometimes showing up.
 
-.. [#] Almost 20 years later ROOT's Python bindigns have been rewritten for
+.. [#] Almost 20 years later ROOT's Python bindings have been rewritten for
    easier Pythonizations, and installing ROOT in Conda is now much easier,
    thanks in large part to efforts from Scikit-HEP developers.
 
@@ -87,7 +87,7 @@ important, especially with complex models and excellent error estimation.
 
 .. figure:: shells-hep.pdf
 
-   The Scikit-HEP ecosystem and affilated packages.
+   The Scikit-HEP ecosystem and affiliated packages.
    :label:`fig-shells`
 
 Beginnings of a scikit
@@ -97,10 +97,10 @@ Beginnings of a scikit
    About how it was planned and built.
 
 In 2016, the ecosystem for Python in HEP was rather fragmented. There were
-several rather popular packages that were useful in HEP spread around among
-different authors. ROOTPy had several packages that made the ROOT-Python bridge
-a little easier, such as ``root-numpy`` and ``root-pandas`` packages. The
-MINUIT fitting library was integrated into ROOT, but the ``iminuit`` package :cite:`iminuit`
+a handful of popular packages that were useful in HEP spread around among
+different authors. The rootpy project had several packages that made the ROOT-Python bridge
+a little easier, such as the ``root-numpy`` and related ``root-pandas`` packages. The
+C++ MINUIT fitting library was integrated into ROOT, but the ``iminuit`` package :cite:`iminuit`
 provided a standalone Python package with an extracted copy of MINUIT. Several
 other specialized standalone C++ packages had bindings as well.
 
@@ -108,13 +108,13 @@ Eduardo Rodrigues, a scientist working in the LHCb project at CERN for the
 University of Cincinnati, started working on a package called ``scikit-hep``
 that would provide a set to tools useful for physicists working on an analysis.
 The initial version of the ``scikit-hep`` package had a simple vector library,
-unit conversions, several useful statistical tools, and province recording
+unit conversions, several useful statistical tools, and provenance recording
 functionality - interesting, but not yet transformational for most analyses.
 
 He also placed the GitHub repository into a GitHub organization of the same
 name, and asked several of the other HEP related packages to join. The ROOTPy
 project was ending, with the primary author moving on, and so several of the
-then-popular packages that were included in the ROOTPy org were happily
+then-popular packages that were included in the rootpy organization were happily
 transferred to Scikit-HEP. Several other existing HEP libraries, primarily
 interfacing to existing C++ simulation and tracking frameworks, also joined.
 
@@ -134,10 +134,10 @@ pip installing a package. It also had a simple, Pythonic interface and produced
 
 Uproot was not just a file format reader; it quickly split into three packages.
 One, uproot-methods, included Pythonic access to functionality provided by ROOT
-for it's classes, like vectors. The other was AwkwardArray, which would grow to
+for its classes, like vectors. The other was AwkwardArray, which would grow to
 become one of the most important and most general packages in Scikit-HEP. This
 package allowed NumPy-like idioms for array-at-a-time manipulation and access
-to jagged data structures. These are common in HEP; events have a variable
+to jagged data structures. These are very common and relevant in HEP; events have a variable
 number of tracks, tracks have a variable number of hits in the detector, etc.
 Many other fields also have jagged data structures; while there are formats to
 store such structures, computations on jagged structures have usually been
@@ -148,14 +148,14 @@ HEP data using pip or conda, use tools they already knew like Pandas and the
 rapidly growing machine learning frameworks. There were still some gaps and
 pain points in the ecosystem, but an analysis without C++ or compiling ROOT was
 finally possible. Scikit-HEP did not and does not intend to "replace" ROOT, but
-it provides solutions that work natively in the Python ecosystem, which in this
+it provides alternative solutions that work natively in the Python "Big Data" ecosystem, which in this
 case was to remove the ROOT requirement from reading data files.
 
-Several other useful HEP libraries were also written. Particle for accessing
+Several other useful HEP libraries were also written.For example: Particle for accessing
 the Particle Data Group (PDG) particle data in a simple and Pythonic way.
 DecayLanguage originally provided tooling for decay definitions, but was
 quickly expanded to include tools to read and validate "DEC" decay files, an
-existing format.
+existing text format used to configure simulations in HEP.
 
 Building better
 ---------------
@@ -165,10 +165,10 @@ Building better
    :scale: 65%
 
    The landscape of different libraries for Histograms in HEP.
-   From the Analysis Ecosystem II Workshop.
+   From the HEP Software Foundation Analysis Ecosystems II Workshop, May 2022.
    :label:`fig-github-histogram`
 
-In 2018, HEP physicist and programmer Hans Dembenski proposed a histogram
+In 2018, HEP physicist and programmer Hans Dembinski proposed a histogram
 library to the Boost libraries, the most respected C++ library collection. It
 provided a histogram-as-an-object concept from HEP, but rethought histograms in
 C++14, using composable axes and storage types. It originally had an initial
@@ -177,10 +177,10 @@ of a standalone binding to be written with pybind11 in Scikit-HEP. The original
 bindings were removed, Boost::Histogram was accepted into the Boost libraries,
 and work began on ``boost-histogram``. The IRIS-HEP grant had just started,
 which was providing funding for several developers to work on Scikit-HEP
-projects such as this.
+project packages such as this one.
 
 There were already a variety of attempts at histogram libraries, but none of
-them filled the requirements of HEP physicists, and most of them were not easy
+them filled the requirements of HEP physicists fully, and most of them were not easy
 to install or use. Any new attempt here would have to be clearly better than
 the existing collection of diverse attempts (see Fig
 :ref:`fig-github-histogram`). The development of a library with compiled
@@ -207,14 +207,14 @@ non-ROOT binary packages in Scikit-HEP.
 
 The second major development was the upstreaming of CI and build system
 developments to pybind11. Pybind11 provided significant benefits to our
-packages over (mis)-using Cython for bindings; reduced maintenance, simpler
+packages over (mis)-using Cython for bindings: reduced maintenance, simpler
 builds, no need to pin NumPy when building, and a cross-package API. The
 ``iMinuit`` package was later moved to pybind11 as well, and pybind11 became
-the Scikit-HEP recommended binding tool. Scikit-HEP developers contributed a
+the Scikit-HEP recommended binding tool. Scikit-HEP developers, notably Henry Schreiner, contributed a
 variety of fixes and features to pybind11, including positional and keyword
 arguments, prepending to the overload chain, type access and manipulation,
 completely redesigned CMake integration, a new pure-Setuptools helpers, and a
-complete CI redesign based on GitHub Actions, with over 70 jobs and expanded
+complete CI redesign based on GitHub Actions, with over 70 jobs, and expanded
 compiler support. We also helped improve all the example projects.
 
 This example of a project with binary components being usable everywhere then
@@ -222,7 +222,7 @@ encouraged the development of Awkward 1.0, a rewrite of AwkwardArray replacing
 the Python-only code with compiled code, fixing some long-standing limitations
 and enabling further developments in backends :cite:`pivarski2020awkward`.
 
-Scikit-HEP was becoming a "toolset", a collection of packages that worked together
+Scikit-HEP had become a reasonably popular "toolset" for HEP analysis in Python, a collection of packages that worked together,
 instead of a "toolkit" like ROOT, which is one monopackage that tries to
 provide everything :cite:`Rodrigues:2020syo`.  A toolset is more natural in the
 Python ecosystem, where we have good packaging tools and many existing
@@ -230,16 +230,16 @@ libraries. Scikit-HEP only needed to fill existing gaps, instead of covering
 every possible aspect of an analysis like ROOT (from 1994) did. The
 ``scikit-hep`` package started to be pulled out into separate packages, and
 instead simply was becoming a metapackage that would install a useful subset of
-libraries for an physicist starting a new analysis.
+libraries for a physicist starting a new analysis.
 
 
 Broader ecosystem
 -----------------
 
 Scikit-HEP was quickly becoming the center of Python focused analysis in HEP
-(see Fig. :ref:`fig-shells`).  Several other projects joined Scikit-HEP, like
-iMinuit, a popular HEP and astrophysics fitting library, was probably the most
-popular single package to join. PyHF and cabinetry also joined; these were
+(see Fig. :ref:`fig-shells`).  Several other projects or packages joined Scikit-HEP, like
+iMinuit, a popular HEP and astrophysics fitting library, probably the most
+popular single package to have joined. PyHF and cabinetry also joined; these were
 larger frameworks built on Scikit-HEP packages.
 
 Other packages, like Coffea and zFit, were not added, but were built on
@@ -248,10 +248,10 @@ maintainers. Scikit-HEP introduced an "affiliated" classification, which
 allowed an external package to be listed on the Scikit-HEP website. Currently
 all affiliated packages have at least one Scikit-HEP developer as a maintainer,
 though that is currently not a requirement.  An affiliated package fills a
-particular need, Scikit-HEP doesn't have to attempt to develop a package, but
-can just use the external one.
+particular need for the community. Scikit-HEP doesn't have to, or need to, attempt to develop a package that others are providing, but rather tries to ensure that the externally provided package
+works well with the broader HEP ecosystem.
 
-Scikit-HEP continued to grow with new packages as well. Vector manipulation,
+Scikit-HEP continues to grow with new packages: for example, vector manipulation,
 which had been part of the original scikit-hep "package", and had been
 rewritten (as the unreleased HEPVector and also in uproot-methods) was finally
 put together into a package "Vector", and include Awkward and Numba backends.
@@ -270,8 +270,8 @@ follows this specification. UHI is not required at runtime, though it does
 provide a few simple utilities to help a library also accept ROOT histograms,
 which do not (currently) follow the Protocol.
 
-One example of a package pulling together many components was
-``uproot-browswer``, a tool that combined uproot, hist, and Python libraries
+One example of a package pulling together many components is
+``uproot-browser``, a tool that combines uproot, Hist, and Python libraries
 like textual and plotext to provide a terminal browser for ROOT files.
 
 .. figure:: histogram-convergence.pdf
@@ -372,7 +372,7 @@ Summary
 -------
 
 
-The Scikit-HEP project started in 2016 and has grown to be a core component in
+The Scikit-HEP project started in Autumn 2016 and has grown to be a core component in
 many HEP analyses. It has also provided packages that are growing in usage
 outside of HEP, like AwkwardArray, boost-histogram/Hist, and iMinuit. The
 tooling developed and improved by Scikit-HEP has helped Scikit-HEP developers
