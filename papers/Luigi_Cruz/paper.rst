@@ -81,31 +81,31 @@ Table 1 indicates the processing times it took to process three different files 
 We can notice that the CPU implementation based on Numba is measurably faster than the original Cython implementation. 
 At the same time, the GPU-accelerated backend processed the data from 6.8 to 9.3 times faster than the original CPU-based implementation.
 
-+--------------------------------------------------------------------------------+
-| Double-Precision (float64)                                                     |
-+================+========+==============+===================+===================+
-| Implementation | Device |   Voyager 1  | Voyager 1 (2-bit) | Voyager 1 (8-bit) |
-+----------------+--------+--------------+-------------------+-------------------+
-| Cython         | CPU    | 0.44 minutes | 25.26 minutes     | 23.06 minutes     |
-+----------------+--------+--------------+-------------------+-------------------+
-| Numba          | CPU    | 0.36 minutes | 20.67 minutes     | 22.44 minutes     |
-+----------------+--------+--------------+-------------------+-------------------+
-| CuPy           | GPU    | 0.05 minutes | 2.73 minutes      | 3.40 minutes      |
-+----------------+--------+--------------+-------------------+-------------------+
++------------------------------------------------------------+
+| Double-Precision (float64)                                 |
++=========+========+==========+==============+===============+
+| Impl.   | Device |  File A  |    File B    |    File C     |
++---------+--------+----------+--------------+---------------+
+| Cython  | CPU    | 0.44 min | 25.26 min    | 23.06 min     |
++---------+--------+----------+--------------+---------------+
+| Numba   | CPU    | 0.36 min | 20.67 min    | 22.44 min     |
++---------+--------+----------+--------------+---------------+
+| CuPy    | GPU    | 0.05 min | 2.73 min     | 3.40 min      |
++---------+--------+----------+--------------+---------------+
 
 Table 2 indicates the same results as Table 1 but with single-precision floating points. 
 The original Cython implementation was left out because it doesn’t support single-precision mode. 
 Here, the same data was processed from 7.5 to 10.6 times faster than the Numba CPU-based implementation.
 
-+--------------------------------------------------------------------------------+
-| Double-Precision (float64)                                                     |
-+================+========+==============+===================+===================+
-| Implementation | Device |   Voyager 1  | Voyager 1 (2-bit) | Voyager 1 (8-bit) |
-+----------------+--------+--------------+-------------------+-------------------+
-| Numba          | CPU    | 0.26 minutes | 16.13 minutes     | 16.15 minutes     |
-+----------------+--------+--------------+-------------------+-------------------+
-| CuPy           | GPU    | 0.03 minutes | 1.52 minutes      | 2.14 minutes      |
-+----------------+--------+--------------+-------------------+-------------------+
++-----------------------------------------------------------+
+| Double-Precision (float64)                                |
++=========+========+===========+=============+==============+
+| Impl.   | Device |   File A  |   File B    |   File C     |
++---------+--------+-----------+-------------+--------------+
+| Numba   | CPU    | 0.26 min  | 16.13 min   | 16.15 min    |
++---------+--------+-----------+-------------+--------------+
+| CuPy    | GPU    | 0.03 min  | 1.52 min    | 2.14 min     |
++---------+--------+-----------+-------------+--------------+
 
 To illustrate the processing time improvement, a single observation containing 105 GB of data was processed in 12 hours by the original CPU-based TurboSETI implementation on an i7-7700K Intel CPU, and just 1 hour and 45 minutes by the GPU-accelerated backend on a GTX 1070 Ti NVIDIA GPU.
 
