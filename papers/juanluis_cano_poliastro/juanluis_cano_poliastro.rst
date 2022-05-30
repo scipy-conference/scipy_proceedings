@@ -62,14 +62,14 @@ poliastro: a Python library for interactive Astrodynamics
 Introduction
 ============
 
-Astrodynamics
--------------
+History
+-------
 
-Astrodynamics is the branch of Mechanics that studies practical problems
-concerning the motion of rockets and other artificial objects through space.
-
-.. note::
-   Citation needed
+The term "Astrodynamics" was coined by the American astronomer Samuel Herrick,
+who received encouragement from the space pioneer Robert H. Goddard,
+and refers to the branch of space science dealing with the motion of artificial celestial bodies
+(:cite:`duboshin_1973`, :cite:`herrick_1971`).
+However, the roots of its mathematical foundations go back several centuries.
 
 Since in 1609 German mathematician and astronomer Johannes Kepler published his book *Astronomia nova*,
 containing the most famous of all transcendental equations,
