@@ -602,6 +602,105 @@ A much more rigorous analysis of a similar set of laws can be found in :cite:`di
 
    a_d, _, t_f = change_ecc_inc(orbit, ecc_f, inc_f, f)
 
+
+Impulsive maneuvers
+-------------------
+Impulsive maneuvers are modeled considering a change in the velocity of a
+spacecraft while its position remains fixed. The ``poliastro.maneuver.Maneuver``
+class provides various constructors to instantiate popular impulsive maneuvers
+in the framework of the non-perturbed two-body problem:
+
+- ``Maneuver.impulse``
+- ``Maneuver.hohmann``
+- ``Maneuver.bielliptic``
+- ``Maneuver.lambert``
+
+.. code-block:: python
+
+    from poliastro.maneuver import Maneuver
+
+    ss_i = Orbit.circular(Earth, alt=700 * u.km)
+    hoh = Maneuver.hohmann(ss_i, r_f=36000 * u.km)
+
+Once instantiated, ``Maneuver`` objects provide information regarding total
+:math:`\Delta v` and :math:`\Delta t`:
+
+.. code-block:: pycon
+
+    >>> hoh.get_total_cost()
+    <Quantity 3.6173981270031357 km / s>
+
+    >>> hoh.get_total_time()
+    <Quantity 15729.741535747102 s>
+
+``Maneuver`` objects can be applied to ``Orbit`` instances using the
+``apply_maneuver`` method.
+
+.. code-block:: pycon
+
+    >>> ss_i
+    7078 x 7078 km x 0.0 deg (GCRS) orbit
+    around Earth (X)
+
+    >>> ss_f = ss_i.apply_maneuver(hoh)
+    >>> ss_f
+    36000 x 36000 km x 0.0 deg (GCRS) orbit
+    around Earth (X)
+
+
+Targeting
+---------
+Targeting is the problem of finding the orbit connecting two positions over a
+finite amount of time. Within the context of the non-perturbed two-body problem,
+targeting is just a matter of solving the BVP, also known as Lambert's problem.
+Because targeting tries to find for an orbit, the problem is included in the
+Initial Orbit Determination field.
+
+The `poliastro.iod` module contains ``izzo`` and ``vallado`` modules. These
+provide a ``lambert`` function for solving the targeting problem. Nevertheless,
+a ``Maneuver.lambert`` constructor is also provided so users can keep taking
+advante of ``Orbit`` objects.
+
+.. code-block:: python
+
+   # Declare departure and arrival datetimes
+   date_launch = time.Time(
+       '2011-11-26 15:02', scale='tdb'
+   )
+   date_arrival = time.Time(
+       '2012-08-06 05:17', scale='tdb'
+   )
+
+   # Define initial and final orbits
+   ss_earth = Orbit.from_ephem(
+       Sun, Ephem.from_body(Earth, date_launch),
+       date_launch
+   )
+   ss_mars = Orbit.from_ephem(
+       Sun, Ephem.from_body(Mars, date_arrival),
+       date_arrival
+   )
+
+   # Compute targetting maneuver and apply it
+   man_lambert = Maneuver.lambert(ss_earth, ss_mars)
+   ss_trans, ss_target = ss0.apply_maneuver(
+       man_lambert, intermediate=true
+   )
+
+Targeting is closely related to quick mission design by means of porkchop
+diagrams. These are contour plots showing all combinations of departure and
+arrival dates with the specific energy for each transfer orbit. They allow to
+quickly identify the most optimal transfer dates between two bodies.
+
+The ``poliastro.plotting.porkchop`` provides the ``PorkchopPlotter`` class which
+allows to generate these diagrams.
+
+.. figure:: porkchop.pdf
+   :align: center
+
+   Porkchop plot for Earth-Mars transfer arrival energy showing latest missions
+   to the Martian planet.
+
 Future work
 ===========
 
