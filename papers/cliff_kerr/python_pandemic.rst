@@ -67,16 +67,7 @@ When "coronavirus disease 2019" (COVID-19) and the virus that causes it (SARS-Co
 
 The first step was to identify which software tool would form the best starting point for our new COVID model. The richest modeling framework used by IDM at the time was EMOD, which is a multi-disease agent-based model written in C++ and based on JSON configuration files :cite:`bershteyn2018implementation`. We also considered Atomica, a multi-disease compartmental model written in Python and based on Excel input files :cite:`kedziora2019cascade`. However, both options had significant drawbacks: as a compartmental model, Atomica was unable to capture the individual level detail necessary for modeling the Diamond Princess outbreak (such as passenger-crew interactions); EMOD had sufficient flexibility, but developing new disease modules had historically required months rather than days. 
 
-As a result, we instead started developing Covasim ("COVID-19 Agent-based Simulator") from a nascent agent-based model written in Python, LEMOD-FP ("Light"-EMOD for Family Planning). LEMOD-FP was used to model reproductive health choices of women in Senegal, and this model had in turn been based on an even simpler agent-based model of measles vaccination programs in Nigeria ("Value-of-information simulator" or VoISim). The timeline and interrelations between IDM's software ecosystem are shown in Fig. :ref:`ecosystem`.
-
-
-.. figure:: fig_ecosystem.png
-   :align: center
-   :scale: 20%
-   :figclass: w
-
-   IDM's software ecosystem. EMOD: Epidemiology Modeling Software; VoISim: Value-of-Information Simulator; LEMOD-FP: Light EMOD Family Planning Simulator; Covasim: COVID-19 Agent-based Simulator; SynthPops: Synthetic Population Model; FPsim: Family Planning Simulator. :label:`ecosystem`
-
+As a result, we instead started developing Covasim ("COVID-19 Agent-based Simulator") from a nascent agent-based model written in Python, LEMOD-FP ("Light-EMOD for Family Planning"). LEMOD-FP was used to model reproductive health choices of women in Senegal; this model had in turn been based on an even simpler agent-based model of measles vaccination programs in Nigeria ("Value-of-information simulator" or VoISim). (We subsequently applied the lessons we learned from developing Covasim to turn LEMOD-FP into a new family planning model, "FPsim", which will be launched later this year :cite:`o2022fpsim`.)
 
 Parallel to the development of Covasim, other research teams at IDM developed their own COVID models, including one based on the EMOD framework, and one based on an earlier influenza model :cite:`chao2020modeling`. However, while both of these models saw use in academic contexts :cite:`selvaraj2022rural`:cite:`koo2020interventions`, neither was able to incorporate new features quickly enough, or was easy enough to use, for widespread adoption in a policy context.
 
@@ -88,7 +79,7 @@ Covasim, by contrast, had immediate real-world impact. The first version was rel
    Covasim releases since the start of the pandemic. :label:`releases`
 
 
-To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, used in dozens of academic studies :cite:`kerr2021`, and informed decision-making on every continent (Fig. :ref:`worldmap`), making it one of the most widely used Python-based COVID models. We believe key elements of its success include (a) the simplicity of its architecture; (b) its high performance, enabled by the use of NumPy arrays and Numba decorators; and (c) our emphasis on prioritizing usability, including flexible type handling and careful choices of default settings. In the remainder of this paper, we outline these principles in more detail, in the hope that this will provide a useful roadmap for other groups wanting to quickly develop high-performance scientific computing libraries.
+To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, has been used in dozens of academic studies :cite:`kerr2021`, and informed decision-making on every continent (Fig. :ref:`worldmap`), making it one of the most widely used Python-based COVID models. We believe key elements of its success include (a) the simplicity of its architecture; (b) its high performance, enabled by the use of NumPy arrays and Numba decorators; and (c) our emphasis on prioritizing usability, including flexible type handling and careful choices of default settings. In the remainder of this paper, we outline these principles in more detail, in the hope that this will provide a useful roadmap for other groups wanting to quickly develop high-performance, easy-to-use scientific computing libraries.
 
 
 .. figure:: fig_worldmap.png
@@ -187,7 +178,7 @@ Array-based architecture
 
 In a typical agent-based simulation, the outermost loop is over time, while the inner loops iterate over different agents and agent states. For a simulation like Covasim, with roughly 700 (daily) timesteps, tens or hundreds of thousands of agents, and several dozen states, this requires on the order of one billion update steps.
 
-However, we can take advantage of the fact that each state (such as agent age or their infection status) has the same data type, and thus we can avoid an explicit loop over agents by instead representing agents as entries in NumPy vectors, and performing operations on these vectors. These two architectures are shown in Fig. :ref:`array`. Compared to the explicitly object-oriented implementation of an agent-based model, the array-based version is 1-2 orders of magnitude faster for population sizes larger than 10,000 agents (Fig. :ref:`perf`). Example code implementations of the two approaches are shown below using the example of FPsim (which, like Covasim, was initially implemented using an object-oriented approach before being converted to an array-based approach).
+However, we can take advantage of the fact that each state (such as agent age or their infection status) has the same data type, and thus we can avoid an explicit loop over agents by instead representing agents as entries in NumPy vectors, and performing operations on these vectors. These two architectures are shown in Fig. :ref:`array`. Compared to the explicitly object-oriented implementation of an agent-based model, the array-based version is 1-2 orders of magnitude faster for population sizes larger than 10,000 agents. The relative performance of these two approaches is shown in Fig. :ref:`perf` for FPsim (which, like Covasim, was initially implemented using an object-oriented approach before being converted to an array-based approach). An illustration of how aging and death would be implemented in each of these two approaches is also provided below.
 
 
 .. figure:: fig_array.png
@@ -201,65 +192,48 @@ However, we can take advantage of the fact that each state (such as agent age or
 
 
 .. code-block:: python
-   
-   #%% Loop-based agent simulation
 
-   if self.alive:  # Do not step if not alive
+    #%% Object-based agent simulation
 
-    self.age_person() # Age person
-    self.check_mortality()
-    if not self.alive:
-        return self.step_results
+    # Person methods
+    def age_person(self):
+        self.age += 1
+        return
 
-    cond =  self.age < self.pars['age_lim_fecund']
-    if self.sex == 0 and cond:
+    def check_died(self):
+        rand = np.random.random()
+        if rand < self.death_prob:
+            self.alive = False
+        return
 
-        if self.preg:
-            self.check_delivery()
-            self.update_pregnancy()
-            if not self.alive:
-                return self.step_results
-
-        if not self.preg:
-            self.check_sexually_active()
-            cond1 = self.pars['method_age']<=self.age
-            cond2 = self.age<self.pars['age_lim_fecund']
-            if cond1 and cond2:
-                self.update_contraception(t, y)
-            self.check_lam()
-            if self.sexually_active:
-                self.check_conception()
-            if self.postpartum:
-                self.update_postpartum()
-
-        if self.lactate:
-            self.update_breastfeeding()
+    # Object-based sim integration loop
+    for t in self.time_vec:
+        for person in self.people:
+            if person.alive:
+                person.age_person()
+                person.check_died()
 
 
 .. code-block:: python
 
-   #%% Array-based agent simulation
-   
-   alive_i = sc.findinds(self.alive)
-   self.age_person(inds=alive_i)
-   self.check_mortality(inds=alive_i)
+    #%% Array-based agent simulation
 
-   age_lim = self.age<self.pars['age_lim_fecund']
-   fem_bool = self.alive*(self.sex==0)*age_lim
-   fem_i = sc.findinds(fem_bool)
-   preg_i = fem_i[sc.findinds(self.preg[fem_i])]
-   lact_i = fem_i[sc.findinds(self.lactate[fem_i])]
-   nonpreg_i = np.setdiff1d(fem_i, preg_i)
+    # People methods
+    def age_people(self, inds):
+        self.age[inds] += 1
+        return
 
-   # Update everything
-   self.check_delivery(preg_i)
-   self.update_pregnancy(preg_i)
-   self.check_sexually_active(nonpreg_i)
-   self.update_contraception(nonpreg_i)
-   self.check_lam(nonpreg_i)
-   self.update_postpartum(nonpreg_i)
-   self.update_breastfeeding(lact_i)
-   self.check_conception(nonpreg_i)
+    def check_died(self, inds):
+        rands = np.random.rand(len(inds))
+        died = rands < self.death_probs[inds]:
+        self.alive[inds[died]] = False
+        return
+
+    # Array-based sim integration loop
+    for t in self.time_vec:
+        alive_inds = sc.findinds(self.people.alive)
+        self.people.age_people(inds=alive_inds)
+        self.people.check_died(inds=alive_inds)
 
 
 
@@ -278,7 +252,7 @@ Numba is a compiler that translates subsets of Python and NumPy into machine cod
 
 Since Covasim is stochastic, calculations rarely need to be exact; as a result, most numerical operations are performed as 32-bit operations.
 
-Together, these speed optimizations allow Covasim to run at speeds comparable to agent-based models implemented in C\+\+. Practically, this means that most users can run Covasim analyses on their laptops without needing to use cloud-based or HPC compute resources.
+Together, these speed optimizations allow Covasim to run at roughly 5-10 million simulated person-days per second of CPU time -- a speed comparable to agent-based models implemented purely in C or C\+\+ :cite:`hinch2021openabm`. Practically, this means that most users can run Covasim analyses on their laptops without needing to use cloud-based or HPC compute resources.
 
 
 
@@ -288,13 +262,13 @@ Lessons for scientific software development
 Accessible coding and design
 ++++++++++++++++++++++++++++
 
-Since Covasim was designed to be used by scientists and health officials, not developers, we made a number of design decisions that were aimed to improve accessibility to our audience, rather than follow common principles of good software design.
+Since Covasim was designed to be used by scientists and health officials, not developers, we made a number of design decisions that preferenced accessibility to our audience over other principles of good software design.
 
 First, Covasim is designed to have as flexible of user inputs as possible. For example, a date can be specified as an integer number of days from the start of the simulation, as a string (e.g. ``'2020-04-04'``), or as a ``datetime.datetime`` object. Similarly, numeric inputs that can have either one or multiple values (such as the change in transmission rate following one or multiple lockdowns) can be provided as a scalar, list, or NumPy array. As long as the input is unambiguous, we prioritized ease-of-use and simplicity of the interface over rigorous type checking. Since Covasim is a top-level library (i.e., it does not perform low-level functions as part of other libraries), this prioritization has been welcomed by its users.
 
 Second, "advanced" Python programming paradigms – such as method and function decorators, lambda functions, multiple inheritance, and "dunder" methods – have been avoided where possible, even when they would otherwise be good coding practice. This is because a relatively large fraction of Covasim users, including those with relatively limited Python backgrounds, need to inspect and modify the source code. A Covasim user coming from an R programming background, for example, may not have encountered the NumPy function ``intersect1d()`` before, but they can quickly look it up and understand it as being equivalent to R's ``intersect()`` function. In contrast, an R user who has not encountered decorators before is unlikely to be able to look them up and understand their meaning (indeed, they may not even know what terms to search for). While Covasim indeed does use each of the "advanced" methods listed above, they have been kept to a minimum and sequestered in particular files the user is less likely to interact with.
 
-Third, testing for Covasim presented a major challenge. Given that Covasim was being used to make decisions that affected tens of millions of people, even the smallest errors could have potentially catastrophic consequences. Furthermore, errors could arise not only in the software logic, but also in an incorrectly entered parameter value or a misinterpreted study. Compounding these challenges, features often had to be developed and used on a timescale of hours or days to be of use to policymakers, a speed which was incompatible with traditional software testing approaches. In addition, the rapidly evolving codebase made it difficult to write even simple regression tests. Our solution was to use a hierarchical testing approach: low-level functions were tested through a standard software unit test approach, while new features and higher-level outputs were tested extensively by epidemiologists who varied inputs corresponding to realistic scenarios, and checked the outputs (predominantly in the form of graphs) against their intuition. We found that these high-level "sanity checks" were far more effective in catching bugs than formal software tests, and as a result shifted the emphasis of our test suite to prioritize the former. Despite extensive scrutiny, both by our external collaborators and by "COVID skeptics" :cite:`skeptics`, to our knowledge, no bug that had a qualitatively significant effect on the results ever made it through to public release.
+Third, testing for Covasim presented a major challenge. Given that Covasim was being used to make decisions that affected tens of millions of people, even the smallest errors could have potentially catastrophic consequences. Furthermore, errors could arise not only in the software logic, but also in an incorrectly entered parameter value or a misinterpreted study. Compounding these challenges, features often had to be developed and used on a timescale of hours or days to be of use to policymakers, a speed which was incompatible with traditional software testing approaches. In addition, the rapidly evolving codebase made it difficult to write even simple regression tests. Our solution was to use a hierarchical testing approach: low-level functions were tested through a standard software unit test approach, while new features and higher-level outputs were tested extensively by epidemiologists who varied inputs corresponding to realistic scenarios, and checked the outputs (predominantly in the form of graphs) against their intuition. We found that these high-level "sanity checks" were far more effective in catching bugs than formal software tests, and as a result shifted the emphasis of our test suite to prioritize the former. Public releases of Covasim have held up well to extensive scrutiny, both by our external collaborators and by "COVID skeptics" who were highly critical of other COVID models :cite:`skeptics`.
 
 
 Workflow and team management
