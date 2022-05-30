@@ -3,6 +3,8 @@
 :institution: Science Institute, University of Iceland
 :institution: Quansight Austin, TX, USA
 :bibliography: SciPyCon2022
+:orcid: 0000-0002-2393-8056
+:corresponding:
 
 ----------------------------------------------------------
 Wailord: Parsers and Reproducibility for Quantum Chemistry
