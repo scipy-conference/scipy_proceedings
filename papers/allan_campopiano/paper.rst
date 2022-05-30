@@ -310,6 +310,6 @@ to integrate robust statistical methods into their inferential testing repertoir
 Acknowledgements
 ----------------
 
-The authors would like to Karlynn Chan and Rand R. Wilcox as well
+The author would like to Karlynn Chan and Rand R. Wilcox as well
 as Elizabeth Dlha and the entire Deepnote team for their support
 of this project.
