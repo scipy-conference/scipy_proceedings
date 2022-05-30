@@ -360,7 +360,7 @@ Nevertheless, it shows that PINN is able to propagate the influence of initial c
 Figure :ref:`fig:tgv-run-time-errors` shows the computational cost of PINN and PetIBM in terms of the desired accuracy versus the required wall time.
 We only show the PINN results of 8 A100 GPUs on this figure.
 We believe this type of plot may help evaluate the computational cost in engineering applications.
-According to the figure, for example, achieving an accuracy of :math:`10^{-2}` at :math:`t=2` requires less than 20 seconds for PetIBM with 1 K40 and 6 CPU cores, but it requires more than 8 hours for PINN with at least 1 A100 GPU.
+According to the figure, for example, achieving an accuracy of :math:`10^{-3}` at :math:`t=2` requires less than 1 second for PetIBM with 1 K40 and 6 CPU cores, but it requires more than 8 hours for PINN with at least 1 A100 GPU.
 
 .. figure:: tgv-sim-time-errors.png
    :align: center
