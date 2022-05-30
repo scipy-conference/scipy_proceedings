@@ -24,6 +24,7 @@ The 2D cylinder flow, on the other hand, did not even result in a physical solut
 The PINN method behaved like a steady-flow solver and did not capture the vortex shedding phenomenon.
 By sharing our experience, we would like to emphasize that the PINN method is still a work-in-progress.
 More work is needed to make PINN feasible for real-world problems.
+(Reproducibility package: :cite:`pi_yueh_chuang_2022_6592457`.)
 
 .. class:: keywords
 
@@ -78,6 +79,7 @@ Modulus is a high-level Python package built on top of PyTorch that helps users 
 Also, in each case study, we also carried out simulations with our CFD solver, PetIBM (:cite:`chuang_petibm_2018`).
 PetIBM is a traditional solver using staggered-grid finite difference methods with MPI parallelization and GPU computing.
 PetIBM simulations in each case study served as baseline data.
+All cases' configurations, post-processing scripts, and required Singularity image difinitions can be found at reference :cite:`pi_yueh_chuang_2022_6592457`.
 
 This paper is structured as follows: the second section briefly describes the PINN method and an analogy to traditional CFD methods.
 The third and fourth sections provide the case studies of the Taylor-Green vortex in 2D for accuracy/performance benchmarking and a 2D laminar cylinder flow with vortex shedding.
