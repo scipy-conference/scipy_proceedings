@@ -362,16 +362,17 @@ Here is how to create an ``Orbit`` from cartesian and from classical Keplerian e
    )
 
 When displayed on an interactive REPL, ``Orbit`` objects
-provide basic information about the geometry, the attractor, and the epoch::
+provide basic information about the geometry, the attractor, and the epoch:
 
-   In [2]: orb_curtis
-   Out[2]: 7283 x 10293 km x 153.2 deg (GCRS) orbit around Earth (X) at epoch J2000.000 (TT)
+.. code-block:: pycon
 
-   In [3]: orb_mars
-   Out[3]: 1 x 2 AU x 1.9 deg (HCRS) orbit around Sun (X) at epoch J2000.000 (TT)
+    >>> orb_curtis
+    7283 x 10293 km x 153.2 deg (GCRS) orbit
+    around Earth (X) at epoch J2000.000 (TT)
 
-.. note::
-   This output looks really bad, turn into a figure?
+    >>> orb_mars
+    1 x 2 AU x 1.9 deg (HCRS) orbit
+    around Sun (X) at epoch J2000.000 (TT)
 
 Similarly, ``Ephem`` objects can be created using a variety of classmethods as well.
 Thanks to ``astropy.coordinates`` built-in low-fidelity ephemerides,
@@ -427,23 +428,25 @@ Orbit propagation
 -----------------
 
 ``Orbit`` objects have a ``.propagate`` method that takes an elapsed time
-and returns another ``Orbit`` with new orbital elements and an updated epoch::
+and returns another ``Orbit`` with new orbital elements and an updated epoch:
 
-   In [2]: from poliastro.examples import iss
+.. code-block:: pycon
 
-   In [3]: iss
-   Out[3]: 6772 x 6790 km x 51.6 deg (GCRS) ...
+    >>> from poliastro.examples import iss
 
-   In [4]: iss.nu.to(u.deg)
-   Out[4]: <Quantity 46.59580468 deg>
+    >>> iss
+    >>> 6772 x 6790 km x 51.6 deg (GCRS) ...
 
-   In [5]: iss_30m = iss.propagate(30 << u.min)
+    >>> iss.nu.to(u.deg)
+    <Quantity 46.59580468 deg>
 
-   In [6]: (iss_30m.epoch - iss.epoch).datetime
-   Out[6]: datetime.timedelta(seconds=1800)
+    >>> iss_30m = iss.propagate(30 << u.min)
 
-   In [7]: (iss_30m.nu - iss.nu).to(u.deg)
-   Out[7]: <Quantity 116.54513153 deg>
+    >>> (iss_30m.epoch - iss.epoch).datetime
+    datetime.timedelta(seconds=1800)
+
+    >>> (iss_30m.nu - iss.nu).to(u.deg)
+    <Quantity 116.54513153 deg>
 
 The default propagation algorithm is an analytical procedure described in :cite:`farnocchia_robust_2013`
 that works seamlessly in the near parabolic region.
@@ -465,13 +468,13 @@ which consists of adding all the perturbation accelerations (:ref:`eq:cowell`).
 .. math::
    :label: eq:cowell
 
-   \frac{\diff^2{\vec{r}}}{\diff{t}^2} = -\frac{\mu}{|r|^3} \vec{r} + \vec{a}_d
+   \frac{\diff^2{\vec{r}}}{\diff{t}^2} = -\frac{\mu}{r^3} \vec{r} + \vec{a}_d
 
 To accomplish this, poliastro ships the ideal objective function ``func_twobody``
 that the user can extend with their own perturbation acceleration of choice.
 There are several natural perturbations included: J2 and J3 gravitational terms,
 several atmospheric drag models
-(exponential, :cite:`jacchia_77`, :cite:`atmosphere_us_1962`, :cite:`atmosphere_us_1976`),
+(exponential, :cite:`jacchia_thermospheric_1977`, :cite:`atmosphere_us_1962`, :cite:`atmosphere_us_1976`),
 and helpers for third body gravitational attraction and radiation pressure
 as described in :cite:`curtis_orbital_2008`.
 
