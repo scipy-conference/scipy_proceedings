@@ -28,7 +28,8 @@ The normal curve has had a grip on us for some time; the aphorism by :cite:`cram
 And even when we violate the assumption of the normal curve, we’re still pretty clingy to it
 :cite:`gleason1993understanding`. In one form or another, many students of statistics learn that N=40 is
 enough to ignore the violation of the assumption of normality.  This belief stems from
-early research showing that the sampling distribution of the mean quickly approaches normal, even when drawing from non-normal distributions—as long as samples are sufficiently large.
+early research showing that the sampling distribution of the mean quickly approaches normal,
+even when drawing from non-normal distributions—as long as samples are sufficiently large.
 
 It is common to demonstrate this result by sampling from uniform and exponential distributions.
 Since these look nothing like the normal curve, it was assumed that N=40 must be enough to avoid practical
@@ -37,8 +38,8 @@ issues when sampling from other types of non-normal distributions :cite:`wilcox2
 Two practical issues have since been identified based on this early research: (1)
 The distributions under study were light tailed (they did not produce outliers),
 and (2) statistics other than the sample mean were not tested and may behave differently
-(e.g., Student’s t). In the half century following these early findings, many important and easily
-demonstrated discoveries have been made :cite:`wilcox2013introduction`. These call into question the usefulness of
+(e.g., Student’s t). In the half century following these early findings, many important
+discoveries have been made :cite:`wilcox2013introduction`. These call into question the usefulness of
 the normal curve and will be discussed in the following sections.
 
 The contaminated normal
@@ -48,8 +49,8 @@ One of the most striking counterexamples of “N=40 is enough” is shown when s
 so-called contaminated normal :cite:`20000755025`:cite:`tan1982sampling`.
 This distribution is also bell-shaped
 and symmetrical but it has slightly heavier tails when compared to the standard normal curve.
-That is, it contains outliers. Consider the distributions in Figure :ref:`contnorm`. The variance of a normal
-distribution is 1 but the variance of the contaminated normal is 10.9!
+That is, it contains outliers. Consider the distributions in Figure :ref:`contnorm`. The variance of the
+normal distribution is 1 but the variance of the contaminated normal is 10.9!
 
 .. figure:: cont_norm.png
    :scale: 50%
@@ -58,23 +59,24 @@ distribution is 1 but the variance of the contaminated normal is 10.9!
    Standard normal (grey) and contaminated normal (blue). :label:`contnorm`
 
 Moreover, confidence intervals, based on the sample mean, will be over three times longer
-for the contaminated curve than the standard normal. The point here is that even small departures
-from normality, especially in the tails, can have a large impact on commonly used statistics.
-The problems get even worse when looking at the effect of contamination on statistical power
-and effect sizes but these findings are not discussed in this article. Interested readers
-should see :cite:`wilcox1992can`.
+when sampling is from the contaminated curve compared to the normal curve. The point
+here is that even small departures from normality, especially in the tails,
+can have a large impact on commonly used statistics. The problems get even worse when looking
+at the effect of contamination on statistical power and effect sizes but these findings are not
+discussed in this article. Interested readers should see :cite:`wilcox1992can`.
 
 Student’s t distribution
 ------------------------
 
-It turns out that T (the statistic you get from Student’s t-test) is more sensitive to violations
+It turns out that T, the statistic you get from Student’s t-test, is more sensitive to violations
 of normality than even the sample mean (which has already been shown to not be robust).
 This is despite the fact that the t distribution is also bell shaped, light tailed, and
 symmetrical—a close relative of the normal curve.
 
-The assumption is that T follows a t distribution. Figure :ref:`tcurve` tests this assumption by calculating
-T many times based on a computer-generated population distribution
-(5000 samples; n=20; lognormal distribution). As you can see, the assumption that T follows a t distribution does not hold.
+The assumption is that T follows a t distribution (and with large samples, approaches normality).
+Figure :ref:`tcurve` tests this assumption by calculating T many times based on a computer-generated
+population distribution (5000 samples; n=20; lognormal distribution).
+As you can see, the assumption that T follows a t distribution does not hold.
 
 .. figure:: t.png
    :scale: 50%
@@ -108,11 +110,13 @@ The trimmed mean
 ****************
 
 The trimmed mean is nothing more than sorting values, removing a proportion from each
-tail, and computing the mean on the remaining values. Formally, the trimmed mean is calculated as follows:
+tail, and computing the mean on the remaining values. Formally,
 
 - Let :math:`X_1 ... X_n` be a random sample and :math:`X_{(1)} \leq X_{(2)} ... \leq X_{(n)}` be the observations in ascending order
 - The proportion to trim is :math:`\gamma (0 \leq \gamma \leq .5)`
 - Let :math:`g = \lfloor \gamma n \rfloor`. That is, the proportion to trim multiplied by :math:`n`, rounded down to the nearest integer
+
+Then, in symbols, the trimmed mean can be expressed as follows:
 
 .. math::
 
@@ -120,7 +124,7 @@ tail, and computing the mean on the remaining values. Formally, the trimmed mean
    \bar{X}_t = \frac{X_{(g+1)}+...+X_{(n-g)}}{n-2g}
    \end{aligned}
 
-If the proportion set to trim is 0.2, more than twenty percent of the values would
+If the proportion to trim is 0.2, more than twenty percent of the values would
 have to be altered to make the trimmed mean arbitrarily large or small.
 The sample mean, on the other hand, can be made to go to :math:`\pm\infty` (arbitrarily large or small) by
 changing a single value. The trimmed mean is more robust than the sample mean in all measures of
@@ -162,7 +166,7 @@ Implementing and teaching modern robust methods
 Despite over a half a century of convincing findings, and thousands of papers, robust
 statistical methods are still not widely adopted in applied research
 :cite:`erceg2008modern`:cite:`wilcox1998many`.
-This may be due to various false beliefs, including the following:
+This may be due to various *false* beliefs. For example,
 
 - Classical methods are robust to violations of assumptions
 - Correcting non-normal distributions by transforming the data will solve all issues
@@ -187,12 +191,12 @@ Hypothesize brings many of these functions into the Python library ecosystem wit
 the goal of lowering the barrier to modern methods—even for those who have not
 had extensive training in statistics or coding. Thanks to modern browser-based
 compute environments (e.g., `Deepnote <https://deepnote.com/>`_), learning to use Hypothesize is relatively
-straightforward. Every statistical test is associated with an interactive notebook
-environment, pre-filled boilerplate code. This means that no time is spent
+straightforward. Every statistical test is associated with a hosted interactive notebook,
+pre-filled with example data and code. This means that no time is spent
 copying and pasting code from docs to a locally managed compute environment.
 The library is ready to use immediately.
 
-The API for Hypothesize is organized by single- and mult-factor tests, as well as
+The API for Hypothesize is organized by single- and two-factor tests, as well as
 measures of association. For example, one can compare two independent groups
 using the 20% trimmed mean and the percentile bootstrap test as follows
 (note that Hypothesize uses the naming conventions found in WRS):
@@ -204,8 +208,21 @@ using the 20% trimmed mean and the percentile bootstrap test as follows
         import pb2gen
     results=pb2gen(df.column_1, df.column_2, trim_mean)
 
-The results are returned as a Python dictionary and contain the p-value,
-confidence intervals, and other useful details.
+As shown below, the results are returned as a Python dictionary containing the p-value,
+confidence intervals, and other important details.
+
+.. code-block:: python
+
+    { 
+    'ci': [-0.22625614592148624, 0.06961754796950131], 
+    'est_1': 0.43968438076483285, 
+    'est_2': 0.5290985245430996, 
+    'est_dif': -0.08941414377826673, 
+    'n1': 50, 
+    'n2': 50, 
+    'p_value': 0.27, 
+    'variance': 0.005787027326924963 
+    }
 
 For measuring associations, several options exist in Hypothesize. One example is the
 Winsorized correlation which is a robust alternative to Pearson’s R. For example,
@@ -215,7 +232,18 @@ Winsorized correlation which is a robust alternative to Pearson’s R. For examp
     from hypothesize.measuring_associations import wincor
     results=wincor(df.column_1, df.column_2, tr=.2)
 
-returns the Winsorized correlation coefficient and the p-value (among other details).
+returns the Winsorized correlation coefficient and other relevant statistics:
+
+.. code-block:: python
+
+    {
+    'cor': 0.08515087411576182,
+    'nval': 50,
+    'sig': 0.558539575073185,
+    'wcov': 0.004207827245660796
+    }
+
+
 
 Robust statistics simulator
 ***************************
@@ -226,9 +254,9 @@ intuitive training tools that demonstrate the core issues surrounding classical
 methods and how robust analogues compare.
 
 As mentioned, computational notebooks that run in the cloud offer a unique solution to
-learning beyond that of static textbooks and documentation. Since documentation,
-visualizations, widgets (e.g., buttons, slider bars), and code can all be
-experienced in a read-to-go compute environment, learning can be interactive
+learning beyond that of static textbooks and documentation. Since narration,
+visualization, widgets (e.g., buttons, slider bars), and code can all be
+experienced in a ready-to-go compute environment, learning can be interactive
 and exploratory—with no overhead related local environment setup.
 
 As a compendium to Hypothesize, and a resource for understanding and teaching robust statistics
@@ -240,7 +268,7 @@ A hosted notebook with the rendered visualizations of the simulations can be acc
 `here <https://deepnote.com/workspace/allan-campopiano-4ca00e1d-f4d4-44a2-bcfe-b2a17a031bc6/project/robust-stats-simulator-7c7b8650-9f18-4df2-80be-e84ce201a2ff/%2Fnotebook.ipynb)>`_.
 and seen in Figure :ref:`sim`.
 
-The robust statistics simulator allows the user to interact with the following relevant parameters:
+The robust statistics simulator allows the user to interact with the following parameters:
 
 - Distribution shape
 - Level of contamination
@@ -256,7 +284,7 @@ from our population. We want to choose estimators that have a low standard error
 Type I Error is also known as False Positive Rate. We want to choose methods that
 keep Type I Error close to the nominal rate (usually 0.05). The robust statistics
 simulator can guide these decisions by providing empirical evidence as to why
-particular estimators and statistical have been chosen.
+particular estimators and statistical tests have been chosen.
 
 
 .. figure:: sim.png
@@ -274,7 +302,14 @@ been recommended; however, for various reasons that have been discussed,
 modern robust methods have not yet become commonplace in applied research settings.
 
 One reason is the lack of easy-to-use software and teaching resources for robust statistics.
-To help fill this gap, Hypothesize, a peer-reviewed and  open-source Python library was developed.
+To help fill this gap, Hypothesize, a peer-reviewed and open-source Python library was developed.
 In addition, to help clearly demonstrate and visualize the advantages of robust methods,
 the robust statistics simulator was created. Using these tools, practitioners can begin
 to integrate robust statistical methods into their inferential testing repertoire.
+
+Acknowledgements
+----------------
+
+The authors would like to Karlynn Chan and Rand R. Wilcox as well
+as Elizabeth Dlha and the entire Deepnote team for their support
+of this project.
