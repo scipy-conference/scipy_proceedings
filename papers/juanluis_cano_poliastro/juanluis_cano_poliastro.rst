@@ -80,9 +80,6 @@ the one that captures the essence of the two-body problem in its most restricted
 already has this mathematical intricacy,
 any further development will carry away similar or greater complexity.
 
-.. note::
-   Use less evocative language?
-
 .. raw:: latex
 
    \begin{figure}
@@ -125,9 +122,43 @@ The severe limitations in weight and available energy for such kind of travels
 were already apparent for these pioneers,
 who were, in some way, anticipating the need to optimize on board fuel consumption.
 
-.. note::
-   This whole paragraph is nice but it was used to justify the importance of low-thrust,
-   we should reword it.
+The two-body problem
+--------------------
+
+In a system of :math:`i \in {1, ..., n}` bodies subject to their mutual attraction,
+by application of Newton's law of universal gravitation,
+the total force :math:`\vec{f}_i` affecting :math:`m_i`
+due to the presence of the other :math:`n - 1` masses is given by :cite:`battin_introduction_1999`:
+
+.. math::
+
+   \vec{f}_i = -G \sum_{j \neq i}^n \frac{m_i m_j}{|r_{ij}|^3} \vec{r}_{ij}
+
+Where :math:`G = 6.67430\cdot 10^{-11}~\text{N m$^2$ kg$^{-2}$}` is the universal gravitational constant,
+and :math:`\vec{r}_{ij}` denotes the position vector from :math:`m_i` to :math:`m_j`.
+Applying Newton's second law of motion results in a system of :math:`n` differential equations:
+
+.. math::
+
+   \frac{\diff^2{\vec{r}}_i}{\diff{t}^2} = -G \sum_{j \neq i}^n \frac{m_j}{|r_{ij}|^3} \vec{r}_{ij}
+
+No general closed-form solution exists for the n-body problem, as established by Henri Poincaré in the 1890s:
+except for a few restricted cases, the resulting dynamical system is chaotic.
+Karl F. Sundman proved in the 1900s the existence of convergent solutions for the :math:`n = 3` case.
+However, the :math:`n = 2` case does have a closed-form solution,
+which was studied in detail by Daniel and Johann Bernoulli, and most specially by Leonhard Euler in 1744
+:cite:`battin_introduction_1999`.
+
+By setting :math:`n = 2` and differencing both equations,
+one arrives to the fundamental equation of the two-body problem:
+
+.. math::
+
+   \frac{\diff^2{\vec{r}}_i}{\diff{t}^2} = -\frac{\mu}{|r|^3} \vec{r}
+
+where :math:`\mu = G(m_1 + m_2) = G(M + m)`. When :math:`m \ll M`
+(for example, an artificial satellite orbiting a planet),
+one can consider :math:`\mu = GM` a property of the attractor.
 
 .. note::
    Add more background on
