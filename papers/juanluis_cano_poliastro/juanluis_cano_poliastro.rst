@@ -154,7 +154,7 @@ one arrives to the fundamental equation of the two-body problem:
 
 .. math::
 
-   \frac{\diff^2{\vec{r}}_i}{\diff{t}^2} = -\frac{\mu}{|r|^3} \vec{r}
+   \frac{\diff^2{\vec{r}}}{\diff{t}^2} = -\frac{\mu}{r^3} \vec{r}
 
 where :math:`\mu = G(m_1 + m_2) = G(M + m)`. When :math:`m \ll M`
 (for example, an artificial satellite orbiting a planet),
