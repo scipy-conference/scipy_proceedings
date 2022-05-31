@@ -177,6 +177,7 @@ and :math:`\vec{r}_{ij}` denotes the position vector from :math:`m_i` to :math:`
 Applying Newton's second law of motion results in a system of :math:`n` differential equations:
 
 .. math::
+   :label: eq:twobody
 
    \frac{\diff^2{\vec{r}}_i}{\diff{t}^2} = -G \sum_{j \neq i}^n \frac{m_j}{|r_{ij}|^3} \vec{r}_{ij}
 
@@ -187,13 +188,33 @@ However, the :math:`n = 2` case does have a closed-form solution,
 which was studied in detail by Daniel and Johann Bernoulli, and most specially by Leonhard Euler in 1744
 :cite:`battin_introduction_1999`.
 
-.. note::
-   Add more background on
-   (1) the initial value two-body problem (propagation),
-   (2) the boundary value two-body problem (initial orbit determination), and
-   (3) analytical continuous thrust guidance laws,
-   including modern references to research about these topics.
-   Leave software references for later.
+By conveniently manipulating this equation, one can obtain several properties :cite:`battin_introduction_1999`
+that were already published by Johannes Kepler in the 1610s, namely:
+
+1. The orbit always describes a conic section (an ellipse, a parabola, or an hyperbola),
+   with the attractor at one of the two foci and can be written in polar coordinates
+   like :math:`r = \frac{p}{1 + e \cos{\nu}}` (Kepler's first law).
+2. The magnitude of the specific angular momentum :math:`h = r^2 \frac{\diff{\theta}}{\diff t}`
+   is constant an equal to two times the areal velocity (Kepler's second law).
+3. For closed (circular and elliptical) orbits, the period is related to the size of the orbit through
+   :math:`P = 2 \pi \sqrt{\frac{a^3}{\mu}}` (Kepler's third law).
+
+In the real world, celestial bodies do not follow these laws in an exact manner,
+because there are perturbations of different kinds affecting the ideal motion.
+However, for many practical purposes it is usually sufficient to limit the study
+two one object orbiting an attractor and ignore all other external forces of the system.
+The trajectories of such objects are called "Keplerian".
+
+There can be several problems formulated from equation :ref:`eq:twobody`, namely:
+
+- The **initial-value problem**, which is usually called **propagation**,
+  involves determining the position and velocity of an object after an elapse period of time
+  given some initial conditions.
+- **Preliminary orbit determination**, which involves using exact or approximate methods
+  to derive a Keplerian orbit from a set of observations.
+- The **boundary-value problem**, often named **the Lambert problem**,
+  which involves determining a Keplerian orbit from boundary conditions,
+  usually departure and arrival position vectors and a time of flight.
 
 .. note::
    Discuss the differences between real-world Earth satellite propagation with SGP4
