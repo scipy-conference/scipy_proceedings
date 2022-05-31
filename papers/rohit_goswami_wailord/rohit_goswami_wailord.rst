@@ -278,12 +278,12 @@ shown. The test-driven-development approach is a robust methodology for
 interacting with  closed source software. It is expected that the package shall
 be augmented with more workflows, in particular, with a focus on nudged elastic
 band. The methodology here has been applied to ORCA, however, the two level
-structure is generalizable to most quantum chemistry codes as well.
+structure is generalization to most quantum chemistry codes as well.
 
 Importantly, we note that the ideas expressed form a design pattern for
 interacting with a plethora of computational tools in a reproducible manner. By
 defining appropriate scopes for our structured parsers, generating deterministic
-directory trees, along with a judious use of regular expressions for output data
+directory trees, along with a judicious use of regular expressions for output data
 harvesting, we are able to leverage tidy-data principles to analyze the results
 of a large number of single-shot runs.
 
