@@ -289,6 +289,11 @@ of a large number of single-shot runs.
 
 Taken together, this tool-set and methodology can be used to generate elegant reports combining code and concepts together in a seamless whole.
 
+Acknowledgments
+----------------
+
+This work was supported by the Icelandic Research Fund, grant number 217436052.
+
 ..
    References
    ----------
