@@ -88,16 +88,58 @@ To automate the process of submitting Helios model parameter sweeps to the HPC v
 2. Speed Sweep
 3. Ensemble Analysis
 
-Using the Panel library, interfaces for each workflow were first created in a Jupyter Notebook. We were then able to deploy each workflow as a standalone Bokeh application. We then integrated the Panel-based app into Tethys to leverage the compute job management system and single-sign-on authentication. As additional features are required, we are able to leverage the same pipeline: first developing the capability in a Jupyter Notebook, then testing with a Bokeh-served app, and finally, fully integrating into Tethys.
+Using the Panel library, interfaces for each workflow were first created in a Jupyter Notebook. We were then able to deploy each workflow as a standalone Bokeh application. We then integrated the Panel-based app into Tethys to leverage the compute job management system and single-sign-on authentication. See figures :ref:`fig1`, :ref:`fig2`, and :ref:`fig3`.
 
+.. figure:: images/jupyter_collective_sweep.png
+
+  Collective Sweep Inputs Stage rendered in a Jupyter Notebook. :label:`fig1`
+
+.. figure:: images/bokeh_collective_sweep.png
+
+  Collective Sweep Inputs Stage rendered as a stand-alone Bokeh app. :label:`fig2`
+
+.. figure:: images/tethys_collective_sweep.png
+
+  Collective Sweep Inputs Stage rendered in the Helios Tethys App. :label:`fig3`
+
+As additional features are required, we are able to leverage the same pipeline: first developing the capability in a Jupyter Notebook, then testing with a Bokeh-served app, and finally, fully integrating into Tethys.
 
 
 Results
 -------
 
-.. figure:: images/workflow_selection.png
+By integrating the Panel workflows into the Helios Tethys app we can take advantage of Tethys Platform features, such as the jobs table, which persists metadata about computational jobs in a database.
 
-   The Helios Tethys App is the framework for launching each of the three Panel-based Helios parameter sweep workflows.
+.. figure:: images/jobs_table.png
+  :figclass: bht
+
+  Helios Tethys App home page showing a table of previously submitted Helios simulations. :label:`fig4`
+
+Each of the three workflows can be launched from the home page of the Helios Tethys app as shown in Figure :ref:`fig5`. While the home page was created in the Tethys framework, once the workflows are launched the same Panel code that was previously developed is called to display the workflow (refer to figures :ref:`fig1`, :ref:`fig2`, and :ref:`fig3`).
+
+.. figure:: images/task_buttons.png
+   :figclass: bht
+
+   The Helios Tethys App is the framework for launching each of the three Panel-based Helios parameter sweep workflows. :label:`fig5`
+
+
+From the Tethys Jobs Table different actions are available for each job including viewing results once the job has completed (see :ref:`fig6`).
+
+.. figure:: images/job_actions.png
+  :scale: 50%
+  :figclass: bht
+
+  Actions associated with a job. The available actions depend on the job's status. :label:`fig6`
+
+View job results is much more natural in the Tethys app. Helios jobs often take multiple days to complete. By embedding the Helios Panel workflows in Tethys users can leave the web app (ending their session), and then come back later and pull up the results to view. The pages the display the results are built with Panel, but Tethys enables them to be populated with information about the job from the database. Figure :ref:`fig7` and figure :ref:`fig8` show different views of the Panel layout that visualizes Helios results that is embedded in the Helios Tethys app.
+
+.. figure:: images/results_tracking.png
+
+  Timeseries output associated with a Helios Speed Sweep run. :label:`fig7`
+
+.. figure:: images/results_coviz.png
+
+  Isosurface visualization from a Helios Speed Sweep run. :label:`fig8`
 
 Conclusion
 ----------
