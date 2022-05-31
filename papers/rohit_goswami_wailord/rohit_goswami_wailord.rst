@@ -292,7 +292,9 @@ Taken together, this tool-set and methodology can be used to generate elegant re
 Acknowledgments
 ----------------
 
-This work was supported by the Icelandic Research Fund, grant number 217436052.
+R Goswami thanks H. Jónsson and V. Ásgeirsson for discussions on the design of
+computational experiments for inference in computation chemistry. This work was
+partially supported by the Icelandic Research Fund, grant number 217436052.
 
 ..
    References
