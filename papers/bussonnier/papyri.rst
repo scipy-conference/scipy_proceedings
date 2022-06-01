@@ -27,7 +27,7 @@ Papyri: Better documentation for the Scientific Ecosystem in Jupyter
 
 .. class:: keywords
 
-   Document, Jupyter, ecosystem, accessibility
+   Documentation, Jupyter, ecosystem, accessibility
 
 Introduction
 ============
@@ -72,7 +72,7 @@ rebuild an *opinionated* documentation framework, from scratch, and with minimal
 dependencies: *Papyri*. Papyri focuses on building an intermediate
 documentation representation format, that lets us decouple building, and
 rendering the docs. This highly simplifies many operations and gives us access
-to many desired features that where not available up to now.
+to many desired features that were not available up to now.
 
 In what follows we provide the framework in which Papyri has been created and
 present its objectives (Context and goals), we describe the Papyri features
@@ -103,7 +103,7 @@ for Python, and are used by all the libraries in this ecosystem. While a few
 alternatives exist, most tools and services have some internal knowledge of
 Sphinx. For instance, `Read the Docs` [RTD]_ provides a specific Sphinx theme
 [RTD-theme]_ users can opt-in to, `Jupyter-book` is built on top of Sphinx, and
-MyST parser [MYST]_ (which is made to allow markdown in documentation) 
+`MyST` parser [MYST]_ (which is made to allow markdown in documentation) 
 targets Sphinx as a backend, to name a few. All of the above provide an
 "ahead-of-time" documentation compilation and rendering, which is slow and
 computationally intensive. When a project needs its specific plugins, extensions
@@ -118,7 +118,7 @@ many custom directives.
 Some of the above limitations are inherent to the design of documentation build
 tools that were intended for a separate documentation construction. While Sphinx does
 provide features like `intersphinx`, link resolutions are done at documentation
-build time. Thus, this is inherently unidirectional, and can easily get broken.
+building phase. Thus, this is inherently unidirectional, and can easily get broken.
 To illustrate this, we consider `NumPy` and `SciPy`, two extremely close
 libraries. In order to obtain proper cross-linked documentation, one is required to perform at least five
 steps:
@@ -143,7 +143,7 @@ Only then can both SciPy's and NumPy's documentation refer to each other. As one
 
 The `numpydoc` format is ubiquitous among the scientific ecosystem [NPDOC]_. It
 is loosely based on RST syntax, and despite supporting full rst syntax,
-docstrings rarely contain full-featured directive. Maintainers confronted to the following dilemma:
+docstrings rarely contain full-featured directive. Maintainers are confronted to the following dilemma:
 
 - keep the docstrings simple. This means mostly text-based docstrings with few directive for efficient readability. The end-user may be exposed to raw docstring, there is no on-the-fly directive interpretation. This is the case for tools such as IPython and Jupyter. 
 
@@ -152,15 +152,13 @@ docstrings rarely contain full-featured directive. Maintainers confronted to the
 
 Other factors impact this choice: (i) users, (ii) format, (iii) runtime. IDE users or non-Terminal users motivate to push for extensive docstrings, and tools like `Docrepr` can mitigate this problem. However, users are often exposed to raw docstrings (see for example the discussion `SymPy
 <https://github.com/sympy/sympy/issues/14964>`_ on how should equations be
-represented in docstrings), and :ref:`Fig1`. In terms of format, markdown is appealing, however inconsistencies in the rendering will be created between libraries. Finally, some libraries can dynamically modify their docstring at runtime. While this avoids using directives, it ends up being more expensive (runtime costs, complex maintenance, and contribution costs).
+represented in docstrings), and Fig :ref:`oldnew`. In terms of format, markdown is appealing, however inconsistencies in the rendering will be created between libraries. Finally, some libraries can dynamically modify their docstring at runtime. While this avoids using directives, it ends up being more expensive (runtime costs, complex maintenance, and contribution costs).
 
-..   :align: center
-..   :figclass: w
 .. figure:: scipy-dpss-old-new.png
 
    The following screenshot shows current help for ``scipy.signal.dpss`` as
    currently accessible on the left, as shown by Papyri for Jupyterlab
-   extension on the right. And extended version of the right pannel is seen on
+   extension on the right. An extended version of the right pannel is displayed in
    Fig :ref:`jlab`. :label:`oldnew`
 
 
@@ -183,22 +181,22 @@ b) A uniform documentation structure and syntax
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Papyri project prescribes stricter requirements in terms of format and structure compared to other tools such as Docutils and Sphinx. When possible, the documentation follows the Diátaxis Framework [DT]_. This provides a uniform documentation setup and syntax, simplifying contributions to the project and easing error catching at compile time. 
-Such strict environment is qualitatively supported by number of documentation fixes done upstream during the development stage of the project [#]_.
+Such strict environment is qualitatively supported by a number of documentation fixes done upstream during the development stage of the project [#]_.
 Since Papyri is not fully-customisable, users who are already using documentation tools such as Sphinx, mkdocs [mkdocs]_ and others should expect their project to require minor modifications to work with Papyri. 
 
-.. [#] `NumPy <https://github.com/numpy/numpy/pulls?q=is%3Apr+is%3Aclosed+author%3ACarreau>`_, `SciPy <https://github.com/scipy/scipy/pulls?q=is%3Apr+is%3Aclosed+author%3ACarreau>`_
+.. [#] Tests have been performed on `NumPy <https://github.com/numpy/numpy/pulls?q=is%3Apr+is%3Aclosed+author%3ACarreau>`_, `SciPy <https://github.com/scipy/scipy/pulls?q=is%3Apr+is%3Aclosed+author%3ACarreau>`_
 
 
 c) Accessibility and user proficiency
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Accessibility is a top priority of the project. To that aim, items are associated to semantic meaning as much as possible, and documentation rendering is separated from documentation building phase. That way, accessibility features such as high contract themes (for better speech-to-text raw data reading), early example highlights (for newcomers) and type annotation (for advanced users) can be quickly available. With the uniform documentation structure, this provides a coherent experience where users become more comfortable to find information (and in a single location) (see Figure 1).
+Accessibility is a top priority of the project. To that aim, items are associated to semantic meaning as much as possible, and documentation rendering is separated from documentation building phase. That way, accessibility features such as high contract themes (for better text-to-speech (TTS) raw data), early example highlights (for newcomers) and type annotation (for advanced users) can be quickly available. With the uniform documentation structure, this provides a coherent experience where users become more comfortable to find information (and in a single location) (see Fig :ref:'oldnew').
 
 d) Simplicity, speed, and independence
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 One objective of the project is to make documentation installation and rendering relatively straightforward and fast. To that aim, the project includes relative independence of documentation building across libraries, allowing bidirectional crosslinks (i.e. both forward and backward links between pages) to be maintained more easily. In other words, a single library can be built without the need to access documentation from another. Also, the project should include straightforward lookup documentation for an object from the
-interactive REPL. Finally, efforts are put to limit the installation speed (to avoid polynomial growth when installing packages on large distributed systems).
+interactive read–eval–print loop (REPL). Finally, efforts are put to limit the installation speed (to avoid polynomial growth when installing packages on large distributed systems).
 
 .. **TO MB: should IRD be introduced in this section then ??**
 .. MB: I dont' think so, as IRD is not a goal but  a solution ? 
@@ -223,11 +221,11 @@ falls into the following two categories:
 - modification of final rendering.
 
 This first category often requires arbitrary code execution and must import the
-library currently being built. For example use of ``..
-code-block:``, or custom ``:rc:`` directive). The second one offers a more user
+library currently being built. This is the case for example for the use of ``..
+code-block:``, or custom ``:rc:`` directive. The second one offers a more user
 friendly environment. For example,
-`sphinx-copybutton` **Add ref** adds a button to easily copy code snippets in a single
-click, and `pydata-sphinx-theme` or `sphinx-rtd-dark-mode` **add REF** provide a different
+`sphinx-copybutton` [sphinx-copybutton]_ adds a button to easily copy code snippets in a single
+click, and `pydata-sphinx-theme` or `sphinx-rtd-dark-mode` [pydata-sphinx-theme]_ provide a different
 appearance. As a consequence, developers must make choices on behalf of their
 end-users: this may concern syntax highlights, type annotations display,
 light/dark theme. 
@@ -265,27 +263,27 @@ IRD format
 Papyri relies on standard interchangeable "Intermediate Representation for
 Documentation format" (IRD). This allows to reduce operation complexity of the
 documentation build. For example, given M documentation producers and N
-renderers, a full documentation build would be O(MN) (each renderer need to
+renderers, a full documentation build would be O(MN) (each renderer needs to
 understand each producer). If each producer only cares about producing IRD, and
 if each renderer only consumes it, then one can reduce to O(M+N). Additionally,
 one can take IRD from multiple producers at once, and render them all to a
 single target, breaking the silos between libraries.
 
 At the moment, IRD files are currently separated into four main categories
-roughly following the Diataxis framework [DT]_, and some technical needs:
+roughly following the Diátaxis framework [DT]_ and some technical needs:
 
 - API files describe the documentation for a single object, expressed as a
-  Json object. When possible, the information is encoded semantically (Objective (c)).
+  `Json` object. When possible, the information is encoded semantically (Objective (c)).
   Files are organized based on the fully-qualified name of the Python object
   they reference, and contain either absolute reference to another object
   (library, version and identifier), or delayed references to objects that may
   exist in another library. Some extra per-object meta information like
   file/line number of definitions can be stored as well. 
 - Narrative files are similar to API files, except that they do not
-  represent a given object, but possesses a previous/next page, and are organised
+  represent a given object, but possess a previous/next page, and are organised
   in an ordered tree related to the table of content. 
 - Examples files are a non-ordered collection of files.
-- Assets files are untouched binary blobs **find better word** that can be referenced by any of the above
+- Assets files are untouched binary resource archive files that can be referenced by any of the above
   three ones. They are the only ones that contain backward references, and no forward references.
 
 In addition to the four categories above, metadata about the current package is
@@ -294,40 +292,33 @@ logo, issue tracker and others. In particular, metadata allows us to auto genera
 links to issue trackers, and to source files when rendering. 
 In order to properly resolve some references and normalize links convention, we also store a mapping from fully qualified names to canonical ones.
 
-.. [#] "slug" is the common term that refer to the various combinaison of
-   organistaion name, user name, repository name, that uniquely identify a
-   repository on a platform like github.
+.. [#] "slug" is the common term that refers to the various combinaison of
+   organization name/user name/repository name, that uniquely identifies a
+   repository on a platform like GitHub.
 
-IRD files must be standardized in order to achieve a uniform syntax structure (Objective (b)), In this paper, we do not discuss the IRD files distribution. The final specification IRD files is still in progress. We thus invite contributors to
+IRD files must be standardized in order to achieve a uniform syntax structure (Objective (b)). In this paper, we do not discuss the IRD files distribution. The final specification IRD files is still in progress. We thus invite contributors to
 consult the current state on the GitHub repository [papyri]_ .
 
 IRD bundles
 ~~~~~~~~~~~
 
-Once a library have collected IRD representation for all documentation items
-(functions, class, narrative sections, tutorials, examples), those are
-consolidated into what we will refer to as IRD bundles. A Bundle regroups all
-the IRD files and metadata for a single version of a library [#]_. Bundles are a
+Once a library has collected IRD representation for all documentation items
+(functions, class, narrative sections, tutorials, examples), Papyri consolidates them into what we will refer to as IRD bundles. A Bundle gathers all IRD files and metadata for a single version of a library [#]_. Bundles are a
 convenient unit to speak about publication, installation, or update of a given
 library documentation files.
 
-.. [#] we can imagine having IRD bundles not attached to a particular library,
-   if for example, an author wish to provide only set of examples or tutorials, 
-   but we won't dicuss this use case in the proceeding.
+.. [#] One could have IRD bundles not attached to a particular library. For example, this can be done if an author wishes to provide only a set of examples or tutorials. We will not dicuss this case further here.
 
 
-Unlike packages installation IRD bundles do not have the notion of dependencies,
-thus a full-fledge package manager is not necessary, and installing can be
-limited to downloading corresponding files and unpacking them.
+Unlike package installation, IRD bundles do not have the notion of dependencies.
+Thus, a fully fledged package manager is not necessary, and one can simply download corresponding files and unpack them at the installation phase.
 
-IRD bundles for multiple versions of the same library (or conflicting libraries) is not inherently problematic, and can be shared across
-multiple multiple environments.
+Additionally, IRD bundles for multiple versions of the same library (or conflicting libraries) is not inherently problematic as they can be shared across
+multiple environments.
 
 From a security standpoint, installing IRD bundles does not require the
-execution of arbitrary code. This is critical for adoption in deployments.
-
-There is an opportunity at IRD installation time to provide localized variant,
-but we have not explored much the opportunity of IRD bundle translations.
+execution of arbitrary code. This is a critical element for adoption in deployments.
+There exists as well to opportunity to provide localized variants at the IRD installation time (IRD bundles translations haven't been explored exhaustively at the moment).
 
 
 IRD and high level usage 
@@ -337,17 +328,11 @@ Papyri-based documentation involves three broad categories of stakeholders
 (library maintainers, end-users, IDE developers), and processes. This leads to
 certain requirements on IRD files and bundles.
 
-On the maintainers' side, the goal is to ensure that Papyri can build IRD files, and publish IRD bundles.
-
-Creation of IRD files and bundles is the most computational intensive step. It
+On the maintainers' side, the goal is to ensure that Papyri can build IRD files, and publish IRD bundles. Creation of IRD files and bundles is the most computationally intensive step. It
 may require complex dependencies, or specific plugins. Thus, this can be a
 multi-step process, or one can use external tooling (not related to Papyri nor
-uses Python) to create them. Visual appearance and rendering of documentation is
-not taken into account in this process.
-
-Overall, building IDR and bundles takes about the same amount of time as running
-a full Sphinx build as the limiting factor will often be executing library
-examples, and code snippets. For example, building SciPy & NumPy documentation
+using Python) to create them. Visual appearance and rendering of documentation is
+not taken into account in this process. Overall, building IDR files and bundles takes about the same amount of time as running a full Sphinx build. The limiting factor is often associated to executing library examples and code snippets. For example, building SciPy & NumPy documentation
 IRD files on a 2021 Macbook Pro M1 (base model), including executing examples in
 most docstrings and type inferring most examples (with most variables
 semantically inferred) can take several minutes. 
@@ -356,7 +341,7 @@ End-users are responsible from installing desired IRD bundles. In most cases, it
 will consist of IRD bundles from already installed libraries. While Papyri is
 not currently integrated with packages manager or IDEs, one could imagine
 this process being automatic, or on demand. This step should be fairly efficient
-as it mostly requires downloading on unpacking IRD files.
+as it mostly requires downloading and unpacking IRD files.
 
 Finally, IDEs developers want to make sure
 IRD files can be properly rendered and browsed by their users when requested. This may
@@ -365,15 +350,15 @@ values such as indexing, searching, bookmarks, etc.), as seen in rustsdocs, devd
 
 
 
-Current implementation
-======================
+3) Current implementation
+=========================
 
 In this section we'll describe a few of the choices we've make for a our current
 implementation. 
 
 
-IRD file Generation
--------------------
+1) IRD file Generation
+----------------------
 
 While the core idea around papyri resides in the IRD files and bundles, we 
 we made with current implementation. As a wide majority of the core Scientific python stack
@@ -411,8 +396,8 @@ item in the Union may be of a different type.
 We currently try to type-infer all code examples with Jedi, and pre-syntax
 highlight using pygments when possible.
 
-IRD File Installation
----------------------
+2) IRD File Installation
+------------------------
 
 Download and Installation of IRD files is done concurrently using ``httpx``,
 with ``trio`` as an async framework. This let us download files concurrently.
@@ -442,8 +427,8 @@ Access to these resources is providing via an internal ``GraphStore`` API which
 is agnostic of the backend, and ensure the consistency of operations like
 adding/removing/replacing documents.
 
-Documentation Rendering
------------------------
+3) Documentation Rendering
+--------------------------
 
 The current papyri implementation contains Wea number of rendering engines, each
 of them mostly consist of fetching a single page, it's metadata, and
@@ -510,10 +495,11 @@ extension can be seen in :ref:`oldnew` and :ref:`jlab`.
    respect to their library.
 
 
+4) Challenges
+=============
 
-
-Challenges
-==========
+1) Limitations
+--------------
 
 In order to be able to link to object documentation without having access
 the build IRD bundles from all the library we need to come up with a schema that
@@ -559,10 +545,8 @@ is defined, with its local name. We encountered multiple edge cases with that.
 - Many custom directive plugins cannot be reused from sphinx, and need to be
   reimplemented.
 
-
-
-Future possibilities
-====================
+2) Future possibilities
+-----------------------
 
 Beyond what has been presented in this paper, there is a number of opportunities
 to improved and extend on what papyri can allow for the Scientific Python
@@ -598,8 +582,8 @@ With a bit more work, it should be possible  to infer *when* a parameter was
 removed, or will be removed, or simply allow to display the difference between
 two versions.
 
-Conclusion
-==========
+5) Conclusion
+=============
 
 While we are still at the beginning of this project and we have already seen
 clear impacts it can have on the availability of high-quality documentation for
@@ -694,3 +678,5 @@ References
 .. [NPDOC] https://numpydoc.readthedocs.io/en/latest/format.html
 .. [SCU] https://en.wikipedia.org/wiki/Single_Compilation_Unit
 .. [papyri] https://github.com/jupyter/papyri
+.. [sphinx-copybutton] https://sphinx-copybutton.readthedocs.io/en/latest/
+.. [pydata-sphinx-theme] https://pydata-sphinx-theme.readthedocs.io/en/stable/
