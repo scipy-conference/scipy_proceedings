@@ -1,3 +1,26 @@
+.. raw:: latex
+
+    \makeatletter
+    \let\@oldmakefntext\@makefntext
+    \renewcommand\@makefntext[1]{%
+      \noindent\makebox[0pt][r]{}#1}
+    \makeatother
+
+    \footnotetext{Notice: This manuscript has been authored by UT-Battelle, LLC, under
+    contract DE-AC05-00OR22725 with the US Department of Energy (DOE). The US
+    government retains and the publisher, by accepting the article for
+    publication, acknowledges that the US government retains a nonexclusive,
+    paid-up, irrevocable, worldwide license to publish or reproduce the
+    published form of this manuscript, or allow others to do so, for US
+    government purposes. DOE will provide public access to these results of
+    federally sponsored research in accordance with the DOE Public Access Plan
+    (http://energy.gov/downloads/doe-public-access-plan).
+    }
+
+    \makeatletter
+    \let\@makefntext\@oldmakefntext
+    \makeatother
+
 :author: Nathan Martindale
 :email: martindalena@ornl.gov
 :institution: Oak Ridge National Laboratory
@@ -18,7 +41,9 @@
 :email: adamsmb@ornl.gov
 :institution: Oak Ridge National Laboratory
 :orcid: 0000-0002-5414-2800
-            
+
+:copyright_holder: Oak Ridge National Laboratory
+
 :bibliography: mybib
 
 -----------------------------------------------------
@@ -769,11 +794,6 @@ Acknowledgements
 The authors would like to acknowledge the US Department of Energy, National
 Nuclear Security Administration’s Office of Defense Nuclear Nonproliferation
 Research and Development (NA-22) for supporting this work.
-
-This manuscript has been authored by UT-Battelle, LLC, under
-contract DE-AC05-00OR22725 with the US Department of Energy (DOE). The publisher
-acknowledges the US government license to provide public access under the DOE
-Public Access Plan (http://energy.gov/downloads/doe-public-access-plan).
 
 References
 ==========
