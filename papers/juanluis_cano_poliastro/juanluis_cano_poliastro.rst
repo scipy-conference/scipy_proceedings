@@ -178,6 +178,36 @@ However, for many practical purposes it is usually sufficient to limit the study
 two one object orbiting an attractor and ignore all other external forces of the system.
 The trajectories of such objects are called "Keplerian".
 
+There are six parameters that uniquely determine a Keplerian orbit,
+plus the gravitational parameter of the corresponding attractor (:math:`k` or :math:`\mu`).
+Optionally, an epoch that contextualizes the orbit can be included as well.
+This set of six parameters is not unique,
+and several of them have been developed over the years to serve different purposes.
+The most widely used ones are:
+
+- **Cartesian elements**: Three components for the position :math:`(x, y, z)`
+  and three components for the velocity :math:`(v_x, v_y, v_z)`.
+  This set has no singularities.
+- **Classical Keplerian elements**: Two components for the shape of the conic
+  (usually the semimajor axis :math:`a` or semiparameter :math:`p` and the eccentricity :math:`e`),
+  three Euler angles for the orientation of the orbital plane in space
+  (inclination :math:`i`, right ascension of the ascending node :math:`\Omega`, and argument of periapsis :math:`\omega`),
+  and one polar angle for the position of the body along the conic
+  (usually true anomaly :math:`f` or :math:`\nu`).
+  This set of elements has an easy geometrical interpretation
+  and the advantage that, in pure two-body motion,
+  five of them are fixed :math:`(a, e, i, \Omega, \omega)`
+  and only one is time-dependent (:math:`\nu`),
+  which greatly simplifies the analytical treatment of orbital perturbations.
+  However, they suffer from singularities steming from the Euler angles ("gimbal lock")
+  and equations expressed in them are ill-conditioned near such singularities.
+- **Walker modified equinoctial elements**: Six parameters :math:`(p, f, g, h, k, L)`.
+  Only :math:`L` is time-dependent and this set has no singularities,
+  however the geometrical interpretation of the rest of the elements is lost.
+
+Propagation, orbit determination, and the Lambert problem
+---------------------------------------------------------
+
 There can be several problems formulated from equation :ref:`eq:twobody`, namely:
 
 - The **initial-value problem**, which is usually called **propagation**,
@@ -188,6 +218,9 @@ There can be several problems formulated from equation :ref:`eq:twobody`, namely
 - The **boundary-value problem**, often named **the Lambert problem**,
   which involves determining a Keplerian orbit from boundary conditions,
   usually departure and arrival position vectors and a time of flight.
+
+.. note::
+   Describe separately propagation, IOD, and continuous thrust.
 
 .. note::
    Discuss the differences between real-world Earth satellite propagation with SGP4
@@ -222,40 +255,6 @@ Other ideas:
 
 Methods
 =======
-
-Background
-----------
-
-.. note::
-   Describe separately propagation, IOD, and continuous thrust.
-
-In the context of the two-body motion,
-there are six parameters that uniquely determine an orbit,
-plus the gravitational parameter of the corresponding attractor (:math:`k` or :math:`\mu`).
-Optionally, an epoch that contextualizes the orbit can be included as well.
-This set of six parameters is not unique,
-and several of them have been developed over the years to serve different purposes.
-The most widely used ones are:
-
-- **Cartesian elements**: Three components for the position :math:`(x, y, z)`
-  and three components for the velocity :math:`(v_x, v_y, v_z)`.
-  This set has no singularities.
-- **Classical Keplerian elements**: Two components for the shape of the conic
-  (usually the semimajor axis :math:`a` or semiparameter :math:`p` and the eccentricity :math:`e`),
-  three Euler angles for the orientation of the orbital plane in space
-  (inclination :math:`i`, right ascension of the ascending node :math:`\Omega`, and argument of periapsis :math:`\omega`),
-  and one polar angle for the position of the body along the conic
-  (usually true anomaly :math:`f` or :math:`\nu`).
-  This set of elements has an easy geometrical interpretation
-  and the advantage that, in pure two-body motion,
-  five of them are fixed :math:`(a, e, i, \Omega, \omega)`
-  and only one is time-dependent (:math:`\nu`),
-  which greatly simplifies the analytical treatment of orbital perturbations.
-  However, they suffer from singularities steming from the Euler angles ("gimbal lock")
-  and equations expressed in them are ill-conditioned near such singularities.
-- **Walker modified equinoctial elements**: Six parameters :math:`(p, f, g, h, k, L)`.
-  Only :math:`L` is time-dependent and this set has no singularities,
-  however the geometrical interpretation of the rest of the elements is lost.
 
 Software Architecture
 ---------------------
