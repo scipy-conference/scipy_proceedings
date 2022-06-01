@@ -35,7 +35,7 @@ More work is needed to make PINN feasible for real-world problems.
 
 Recent advances in computing and programming techniques have motivated practitioners to revisit deep learning applications in computational fluid dynamics (CFD).
 We use the verb "revisit" because deep learning applications in CFD already existed going back to at least the 1990s,
-for example, using neural networks as surrogate models  (:cite:`Linse1993,Faller1997`).
+for example, using neural networks as surrogate models (:cite:`Linse1993,Faller1997`).
 Another example is the work of Lagaris and his/her colleagues (:cite:`lagaris_artificial_1998`) on solving partial differential equations with fully-connected neural networks back in 1998.
 Similar work with radial basis function networks can be found in reference :cite:`Li2003`.
 Nevertheless, deep learning applications in CFD did not get much attention until this decade, thanks to modern computing technology, including GPUs, cloud computing, high-level libraries like PyTorch and TensorFlow, and their Python APIs.
@@ -79,7 +79,7 @@ Modulus is a high-level Python package built on top of PyTorch that helps users 
 Also, in each case study, we also carried out simulations with our CFD solver, PetIBM (:cite:`chuang_petibm_2018`).
 PetIBM is a traditional solver using staggered-grid finite difference methods with MPI parallelization and GPU computing.
 PetIBM simulations in each case study served as baseline data.
-All cases' configurations, post-processing scripts, and required Singularity image difinitions can be found at reference :cite:`pi_yueh_chuang_2022_6592457`.
+All cases' configurations, post-processing scripts, and required Singularity image definitions can be found at reference :cite:`pi_yueh_chuang_2022_6592457`.
 
 This paper is structured as follows: the second section briefly describes the PINN method and an analogy to traditional CFD methods.
 The third and fourth sections provide the case studies of the Taylor-Green vortex in 2D for accuracy/performance benchmarking and a 2D laminar cylinder flow with vortex shedding.
@@ -153,8 +153,8 @@ That is
       & r_{1}(\vec{x}, t; \Theta) \equiv \nabla \cdot G^{U} = 0 \\
       & r_{2}(\vec{x}, t; \Theta) \equiv \frac{\partial G^{U}}{\partial t}+(G^{U} \cdot \nabla) G^{U}+\frac{1}{\rho} \nabla G^p -\nu \nabla^{2} G^{U} - \vec{g} =0 \\
       & r_{3}(\vec{x}; \Theta) \equiv G^{U}_{t=0}-\vec{U}_0 = 0 \\
-      & r_{4}(\vec{x}, t; \Theta) \equiv  G^{U}-\vec{U}_\Gamma = 0,\ \forall \vec{x} \in \Gamma \\
-      & r_{5}(\vec{x}, t; \Theta) \equiv  G^{p}-p_\Gamma = 0,\ \forall \vec{x} \in \Gamma \\
+      & r_{4}(\vec{x}, t; \Theta) \equiv G^{U}-\vec{U}_\Gamma = 0,\ \forall \vec{x} \in \Gamma \\
+      & r_{5}(\vec{x}, t; \Theta) \equiv G^{p}-p_\Gamma = 0,\ \forall \vec{x} \in \Gamma \\
    \end{aligned}
 
 And the set of desired parameter, :math:`\Theta=\theta`, is the common zero root of the all residuals.
@@ -168,14 +168,14 @@ Moreover, we do not even know if such a zero root exists for the equations in (:
 
 Instead, in PINN, the condition is relaxed.
 We do not seek the zero root of (:ref:`eq:residuals`) but just hope to find a set of parameters that make the residuals close to zero.
-Considering the sum of the :math:`l_2` norms of residuals,
+Consider the sum of the :math:`l_2` norms of residuals:
 
 .. math::
    :label: eq:total-residual
 
    r(\vec{x}, t; \Theta=\theta) \equiv \sum\limits_{i=1}^{5} \lVert r_i(\vec{x}, t; \Theta=\theta) \rVert^2,\ \forall \left\{\begin{array}{l}x \in \Omega \\ t\in[0, T]\end{array}\right.
 
-the :math:`\theta` that makes residuals closest to zero (or even equal to zero if such :math:`\theta` exists) also makes (:ref:`eq:total-residual`) minimal because :math:`r(\vec{x}, t; \Theta) \ge 0`.
+The :math:`\theta` that makes residuals closest to zero (or even equal to zero if such :math:`\theta` exists) also makes (:ref:`eq:total-residual`) minimal because :math:`r(\vec{x}, t; \Theta) \ge 0`.
 In other words,
 
 .. math::
@@ -259,7 +259,7 @@ The 2D Taylor-Green vortex has closed-form analytical solutions with periodic bo
 In this work, we used the following 2D Taylor-Green vortex:
 
 .. math:: 
-   :label: eq-tgv
+   :label: eq:tgv
 
    \left\{
    \begin{aligned}
@@ -311,7 +311,7 @@ With these spatially distributed errors, we calculated the :math:`L_2` error nor
 .. math::
    :label: eq:l2norm
 
-   L_2 = \sqrt{\int\limits_{\Omega} error(x, y)^2 \mathrm{d}\Omega} \approx \sqrt{\sum\limits_{i}\sum\limits_{j} error_{i, j}^2 \Delta \Omega_{i,j}}
+   L_2 = \sqrt{\int\limits_{\Omega} error(x, y)^2 \mathrm{d}\Omega} \approx \sqrt{\sum\limits_{i}\sum\limits_{j} error_{i, j}^2 \Delta \Omega_{i, j}}
 
 where :math:`i` and :math:`j` here are the indices of a cell center in the Cartesian mesh. :math:`\Delta\Omega_{i,j}` is the corresponding cell area, :math:`4\pi^2/512^2` in this case.
 
@@ -389,7 +389,7 @@ As indicated previously, weak scaling was used in PINN, which follows most machi
 +++++++++++++++
 
 The Taylor-Green vortex serves as a good benchmark case because it reduces the number of required residual constraints: residuals :math:`r_4` and :math:`r_5` are excluded from :math:`r` in equation :ref:`eq:total-residual`.
-This means the optimizer can concentrte only on the residuals of initial conditions and the Navier-Stokes equations.
+This means the optimizer can concentrate only on the residuals of initial conditions and the Navier-Stokes equations.
 
 Using more GPUs (thus using more training points) did not speed up the convergence, which may indicate that the per-iteration number of points on a single GPU is already big enough.
 The number of training points mainly affects the mean gradients of the residual with respect to model parameters, which then will be used to update parameters by gradient-descent-based optimizers.
