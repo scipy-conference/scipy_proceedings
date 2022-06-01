@@ -42,7 +42,7 @@
 :institution: Oak Ridge National Laboratory
 :orcid: 0000-0002-5414-2800
 
-:copyright_holder: Oak Ridge National Laboratory
+:copyright_holder: Oak Ridge National Laboratory.
 
 :bibliography: mybib
 
