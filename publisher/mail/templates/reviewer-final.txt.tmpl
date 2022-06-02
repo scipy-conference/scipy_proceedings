@@ -1,0 +1,15 @@
+Dear {{to_name}},
+
+Thank you a third time for volunteering to review full papers for the {{proceedings['title']['acronym']}} {{proceedings['year']}}. This is your final reminder that you have been invited to review "{{title}}", which can be found at {{url}}.
+
+If you accept, please reply to this email with your GitHub username by close of business today. If we do not hear from you, we will need to find a new reviewer for this paper immediately, to ensure that it can be reviewed in time for the conference this year.
+
+Please don't hesitate to contact us with any questions.
+
+Yours,
+The {{proceedings['title']['acronym']}} {{proceedings['year']}} Proceedings Committee
+{{for n in proceedings['editor']}}
+  {{n}}
+{{endfor}}
+
+
