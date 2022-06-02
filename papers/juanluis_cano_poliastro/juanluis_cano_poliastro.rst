@@ -203,7 +203,7 @@ The most widely used ones are:
   and equations expressed in them are ill-conditioned near such singularities.
 - **Walker modified equinoctial elements**: Six parameters :math:`(p, f, g, h, k, L)`.
   Only :math:`L` is time-dependent and this set has no singularities,
-  however the geometrical interpretation of the rest of the elements is lost.
+  however the geometrical interpretation of the rest of the elements is lost :cite:`walker_1985`.
 
 Propagation, orbit determination, and the Lambert problem
 ---------------------------------------------------------
@@ -219,8 +219,29 @@ There can be several problems formulated from equation :ref:`eq:twobody`, namely
   which involves determining a Keplerian orbit from boundary conditions,
   usually departure and arrival position vectors and a time of flight.
 
-.. note::
-   Describe separately propagation, IOD, and continuous thrust.
+Fortunately, most of these problems boil down to finding numerical solutions to
+relatively simple algebraic relations between time and angular variables.
+For example, speaking about orbital propagation,
+by conveniently manipulating the two-body equations and assuming :math:`0 \le e < 1`
+one can arrive to the Kepler equation mentioned at the beginning:
+
+.. math::
+   :type: eqnarray*
+   :label: eq:kepler
+
+   M = n \Delta t = E - e \sin{E} \\
+   \tan{\frac{1}{2} \nu} = \sqrt{\frac{1 + e}{1 - e}} \tan{\frac{1}{2} E}
+
+Where :math:`M` is called the mean anomaly and :math:`E` is the eccentric anomaly.
+Similar relations exist for the other eccentricity regimes :cite:`battin_introduction_1999`.
+Despite not having closed-form solution, these equations can be solved
+in a number of different ways, each one with different complexity and precision tradeoffs.
+
+Doing a literature review of such methods is out of scope of this paper,
+however in the Methods section we list the ones implemented by poliastro.
+
+Commercial satellite data
+-------------------------
 
 .. note::
    Discuss the differences between real-world Earth satellite propagation with SGP4
