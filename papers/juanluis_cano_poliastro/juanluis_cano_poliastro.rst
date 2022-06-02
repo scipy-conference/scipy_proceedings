@@ -122,6 +122,10 @@ The severe limitations in weight and available energy for such kind of travels
 were already apparent for these pioneers,
 who were, in some way, anticipating the need to optimize on board fuel consumption.
 
+The rich history of Astrodynamics as a field continues to this day,
+as new research offers better methods to solve these ancient equations
+and more computational efficiency is neeeded to perform large scale simulations.
+
 The two-body problem
 --------------------
 
