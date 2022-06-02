@@ -68,7 +68,7 @@ History
 The term "Astrodynamics" was coined by the American astronomer Samuel Herrick,
 who received encouragement from the space pioneer Robert H. Goddard,
 and refers to the branch of space science dealing with the motion of artificial celestial bodies
-(:cite:`duboshin_1973`, :cite:`herrick_1971`).
+(:cite:`duboshin_book_1973`, :cite:`herrick_astrodynamics_1971`).
 However, the roots of its mathematical foundations go back several centuries.
 
 Since in 1609 German mathematician and astronomer Johannes Kepler published his book *Astronomia nova*,
