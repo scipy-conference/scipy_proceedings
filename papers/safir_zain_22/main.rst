@@ -435,7 +435,8 @@ similar in dimensionality (1 x 28 x 28), number of samples (60,000 and
    :scale: 45%
    :figclass: w
    :align: center
-   Sample images from the MNIST (left) and OrganAMNIST of MedMNIST (right) datasets
+
+Sample images from the MNIST (left) and OrganAMNIST of MedMNIST (right) datasets
 
 Hardware
 =========
@@ -484,7 +485,7 @@ the quality of clustering in the latent representations on a semi-supervised dat
 amounts (roughly less than 100 samples) of labelled data and a sufficient quantity of unlabelled data.
 But an important caveat is that it is not convincing that the DML Autoencoder effectively combined
 the unsupervised and supervised losses to create a superior model, as a plain autoencoder (i.e. the DML
-Autoencoder with α = 1) outperforms the DML for the partial labels percentage of or less than 0.1% and
+Autoencoder with :math:`\alpha = 1`) outperforms the DML for the partial labels percentage of or less than 0.1% and
 underperforms the DML for the partial labels percentage of 10%.
 
 .. figure:: figs/claim_1_mnist.PNG
@@ -583,7 +584,7 @@ better than the corresponding VAE model.
    :align: center
    
    Table 4: Experiments performed on MVAE architecture across fully labelled MNIST dataset that trains
-   on objective function L = LU + γ ∗LS on fully supervised dataset. The best results for the classification
+   on objective function :math:`L = LU + \gamma * LS` on fully supervised dataset. The best results for the classification
    accuracy on the MVAE embeddings in a given latent-dimensionality are bolded.
 
 Conclusion
@@ -613,7 +614,7 @@ Further research could look to develop or compare several different training reg
 would simply be to keep alternating between losses but at the level of each batch instead of each epoch.
 Another alternative, specifically for the MVAE, may be first training DML on labelled data, training a
 GMM on it’s outputs, and then using the GMM as the prior distribution for the VAE. Grosnit et al.
-(:citeyear:`grosnit2021high`) has defined a more complex training routines to balance the DML and unsupervised loss. If this
+(:cite:`grosnit2021high`) has defined a more complex training routines to balance the DML and unsupervised loss. If this
 line of research is pursued, it may be worthwhile to review the field of auxiliary task learning, in which a
 model trains against an additional task or tasks, to find a solution to how to optimize the training routine
 of the modified DML models.
