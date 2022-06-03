@@ -224,7 +224,7 @@ git clone https://github.com/mpacer/scipy_proceedings
 6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#push-your-changes) and [check your paper](#check-your-paper) on http://procbuild.scipy.org.
     - If you want to alter the build system, do not include it in your
       submission's PR, create a separate PR against `dev`
-      ([see below](creating-build-system-prs) for more details).
+      ([see below](#creating-build-system-prs) for more details).
 7. Repeat steps 5 and 6, while also responding to reviewer feedback.
 
 #### Getting a local copy of the scipy_proceedings repo
@@ -290,7 +290,7 @@ git push --set-upstream origin <your_branch_name>
 - Do not commit any changes to files outside of your paper directory.
 
 If you want to change the way the build system works, we use a separate
-submission procedure ([see below](creating-build-system-prs)).
+submission procedure ([see below](#creating-build-system-prs)).
 
 #### Build your paper
 
