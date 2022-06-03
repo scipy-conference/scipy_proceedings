@@ -456,25 +456,22 @@ extension can be seen in Figure :ref:`jlab`.
 
 .. figure:: local-graph.png
 
-   Local graph (made with D3.js) representing the connections among the most important nodes around ``numpy.ndarray``. Nodes
+   Local graph (made with D3.js [D3js]_) representing the connections among the most important nodes around ``numpy.ndarray``. Nodes
    are sized with respect to the number of incomming links, and colored with respect to their library.
 
 
 4) Challenges
 =============
 
+We mentioned above some limitations we encountered (in rendering usage for instance) and what will be done in the future to address them. We provide below some limitations related to syntax choices, and broader opportunities that arise from the Papyri project. 
+
 1) Limitations
 --------------
+The decoupling of the building and rendering phases is key in Papyri. However it requires to come up with a scheme that uniquely identifies each object. In particular, this is essential in order to link any object documentation without accessing the IRD bundles build from all the libraries. To that aim, we use the fully qualified names of an object. Namely, each object is identified by the the concatenation of the module in which it is defined, with its local name. Several particular cases needed specific treatment. 
 
-In order to be able to link to object documentation without having access
-the build IRD bundles from all the library we need to come up with a schema that
-uniquely identify each object. For this we decided to use the fully qualified
-names of an object. That is to say the concatenation of the module in which it
-is defined, with its local name. We encountered multiple edge cases with that. 
-
-- To mirror python syntax is it easy to use ``.`` to concatenate both parts. 
-  Unfortunately that leads to ambiguity when modules re-export functions of
-  the same name. 
+- To mirror the Python syntax, is it easy to use ``.`` to concatenate both parts. 
+  Unfortunately, that leads to ambiguity when modules re-export functions are of
+  the same name. For example, if one types
 
   .. code-block:: python
 
@@ -482,100 +479,85 @@ is defined, with its local name. We encountered multiple edge cases with that.
 
       from .mything import mything
 
-  ``mylib.mything`` is ambiguous with respect to the ``mything`` submodule and
-  the object reexported. In future version we'll  use ``:`` as a module/name
+  then ``mylib.mything`` is ambiguous both with respect to the ``mything`` submodule, and
+  the reexported object. In future versions, the convention used will be ``:`` as a module/name
   separator.
 
-- Decorated functions or other dynamic approaches to expose function to users
+- Decorated functions or other dynamic approaches to expose functions to users
   end up having ``<local>>`` in their fully qualified names, which is invalid. 
 
-- Many builtins functions (``np.sin``, ``np.cos``, ...) do not have a fully
+- Many built-in functions (``np.sin``, ``np.cos``, ...) do not have a fully
   qualified name that can be extracted by object introspection. We believe it 
-  should be possible to identify those via other means (e.g. docstring hash) but
-  haven't explored those possibilities yet.
+  should be possible to identify those via other means like docstring hash (to be explored).
 
-- Fully qualified names are often not canonical names (the name that are
-  typically use for import), and finding the canonical name automatically is not
-  always straightforward. 
+- Fully qualified names are often not canonical names (i.e. the name typically used for import). While we made efforts in creating a mapping from one to another, finding the canonical name automatically is not always straightforward. 
 
-- There are also challenges with case sensitivity, in particular of
-  MacOS file systems, and a couple of object ends up referring to the same IRD file
-  on disk if proper care is not taken. We currently append a case-sensitive hash
-  at end of the filename to disambiguate.
+- There are also challenges with case sensitivity. For example for
+  MacOS file systems, a couple of objects may unfortunately refer to the same IRD file
+  on disk. To address this, a case-sensitive hash is appened at end of the filename.
 
 - Many libraries have syntax that _looks_ right once rendered to html, but does
-  not follow proper syntax, or relies on peculiarities of docutils and sphinx
-  rendering and parsing.
+  not follow proper syntax, or relies on specificities of Docutils and Sphinx
+  rendering/parsing.
 
-- Many custom directive plugins cannot be reused from sphinx, and need to be
+- Many custom directive plugins cannot be reused from Sphinx. These will need to be
   reimplemented.
 
 2) Future possibilities
 -----------------------
 
-Beyond what has been presented in this paper, there is a number of opportunities
-to improved and extend on what papyri can allow for the Scientific Python
-ecosystem. 
+Beyond what has been presented in this paper, there are several opportunities
+to improve and extend what Papyri can allow for the Scientific Python
+ecosystem.
 
-One of the area we have not talked about is the ability to build IRD bundle on
-Continuous Integration platform. Services like GitHub action, Azure pipeline and
-many other are already setup to test packages. We hope to leverage this
-infrastructure to build IRD file and make them available to users. 
+The first area is the ability to build IRD bundles on
+Continuous Integration platforms. Services like GitHub action, Azure pipeline and
+many others are already setup to test packages. We hope to leverage this
+infrastructure to build IRD files and make them available to users. 
 
-Hosting of intermediate IRD file has also not been covered, while we currently
-have a prototype of http index using GitHub pages, it is likely not a
-sustainable hosting platform as disk space is limited. IRD being in our
-experience smaller than HTML documentation, we hope that other platform like
-readthedoc can be leveraged. A platform like readthedocs could also provide a
-single domain that renders the documentation for multiple libraries, thus
-avoiding having many sub domains for each library and giving a more unified
-experience to users. 
+A second area is hosting of intermediate IRD files. While the current prototype is hosting by http index using GitHub pages, it is likely not a
+sustainable hosting platform as disk space is limited. To our knowledge, IRD are smaller in size than HTML documentation, we hope that other platforms like Readthedoc can be leveraged. This could provide a single domain that renders the documentation for multiple libraries, thus
+avoiding the display of many library subdomains. This contributes to giving a more unified experience to users. 
 
 It should be possible for projects to avoid using many dynamic docstrings
-interpolation that are use to documents ``*args`` and ``**kwargs``. This would
-make sources easier to read, and potentially speedup some library import time. 
+interpolation that are used to document ``*args`` and ``**kwargs``. This would
+make sources easier to read, and potentially have some speedup at the library import time. 
 
-Once a given library is confident enough of its users use an IDE that support
-papyri for documentation, docstring syntax could be exchanged for markdown.
+Once a (given and appropriately used by its users) library uses an IDE that supports
+Papyri for documentation, docstring syntax could be exchanged for markdown.
 
 As IRD files are structured, it should be feasible to provide cross-version
-information in documentation. For example, if one installs multiple version of
-IRD bundle for a library. Assuming the user does not use the latest version,
-the renderer could inspect IRD file from previous/future versions to indicate
-the range of version for which the documentation has not changed.
-With a bit more work, it should be possible  to infer *when* a parameter was
+information in the documentation. For example, if one installs multiple versions of
+IRD bundles for a library, then assuming the user does not use the latest version,
+the renderer could inspect IRD files from previous/future versions to indicate
+the range of versions for which the documentation has not changed.
+Upon additional efforts, it should be possible to infer *when* a parameter was
 removed, or will be removed, or simply allow to display the difference between
 two versions.
 
 5) Conclusion
 =============
 
-While we are still at the beginning of this project and we have already seen
-clear impacts it can have on the availability of high-quality documentation for
-end users while still simplifying workload for maintainers. Building IRD format
-open a wide range of technical possibilities, and user experience improvements
-that would highly contribute to the success of the Scientific Python ecosystem, 
-and will be a necessity for users to navigate in a exponentially growing
+To address some of current limitations in documentation accessibility, building and maintaining, we have provided a new documentation framework called Papyri. We presented its features and underlying implementation choices (this includes crosslinks maintainance, decoupling building and rendering phases, enrich the rendering features, use the IRD format to create a unified syntax structure, etc.). While the project is still at its early stage, clear impacts can be already seen on the availability of high-quality documentation for endusers, and on the workload reduction for maintainers. Building IRD format opened a wide range of technical possibilities, and contributes to improve users' experience (and therefore the success of the Scientific Python ecosystem). This may become necessary for users to navigate in a exponentially growing
 ecosystem.
 
 
 Acknowledgments
 ===============
 
-We want to acknowledge and thanks a number of people and organisation for their 
-interest feedback and help on this project. In no particular orders, Santos Gallegos, author of
-Tree-sitter-rst, Juan Luis Cano Rodríguez and 
-Eric Holscher from Read The Docs, Chris Holdgraf from 2i2c, Brian Granger and
-Fernando Pérez from the Jupyter Project, Tania Allard,
-Isabela Presedo-floyd from QuanSight.
+The authors want to thank S. Gallegos (author of
+Tree-sitter-rst), J. L. Cano Rodríguez and 
+E. Holscher (Read The Docs), C. Holdgraf (2i2c), B. Granger and
+F. Pérez (Jupyter Project), T. Allard and I. Presedo-Floyd (QuanSight) for their 
+useful feedback and help on this project. 
 
 
 Funding
 =======
 
-This project received a 2 years funding grant from the Chan Zuckerberg
+M. B. received a 2-year grant from the Chan Zuckerberg
 Initiative (CZI) Essential Open Source Software for Science (EOS)
-– EOSS4-0000000017 via the NumFOCUS 501(3)c non profit.
+– EOSS4-0000000017 via the NumFOCUS 501(3)c non profit to develop the Papyri project.
 
 
 
@@ -645,4 +627,5 @@ References
 .. [papyri] https://github.com/jupyter/papyri
 .. [sphinx-copybutton] https://sphinx-copybutton.readthedocs.io/en/latest/
 .. [pydata-sphinx-theme] https://pydata-sphinx-theme.readthedocs.io/en/stable/
-.. [msgspec] https://pypi.org/project/msgspec
+.. [msgspec] https://pypi.org/porject/msgspec
+.. [D3js] https://d3js.org/
