@@ -294,6 +294,28 @@ are usually used in Astrodynamics, since the integration times are quite large
 and the tolerances comparatively tight. An in-depth discussion of such methods
 can be found in :cite:`hairer_2009`.
 
+Commercial Earth satellites
+---------------------------
+
+The downside of numerical methods is that they are much slower than analytical ones,
+and therefore they might be unsuitable for large scale simulations, satellite conjunction assesment,
+propagation in constrained hardware, and so forth.
+To address this issue, semianalytical propagation methods were devised that
+attempt to strike a balance between the fast running times of analytical methods
+and the necessary inclusion of perturbation forces.
+
+.. figure:: leo-perturbations
+   :scale: 30%
+   :align: center
+
+   Natural perturbations affecting Low-Earth Orbit (LEO) motion
+   (source: :cite:`vallado_fundamentals_2007`) :label:`fig:leo-perturbations`
+
+Figure :ref:`fig:leo-perturbations` gives a clear picture
+of the most important natural perturbations affecting satellites in LEO, namely:
+first harmonic of the geopotential field :math:`J_2` (representing the attractor oblateness),
+the atmospheric drag, and the higher order harmonics of the geopotential field.
+
 .. note::
    Discuss the differences between real-world Earth satellite propagation with SGP4
    from more generic Astrodynamics work.
