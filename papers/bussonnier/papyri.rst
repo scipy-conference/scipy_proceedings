@@ -141,7 +141,7 @@ Only then can both SciPy's and NumPy's documentation refer to each other. As one
 2) Docstrings format
 --------------------
 
-The `numpydoc` format is ubiquitous among the scientific ecosystem [NPDOC]_. It
+The `Numpydoc` format is ubiquitous among the scientific ecosystem [NPDOC]_. It
 is loosely based on RST syntax, and despite supporting full rst syntax,
 docstrings rarely contain full-featured directive. Maintainers are confronted to the following dilemma:
 
@@ -242,16 +242,14 @@ This kind of technique is commonly used in the field of compilers with the usage
 of Single Compilation Unit [SCU]_ and Intermediate Representation [IR]_, but to
 our knowledge, it has not been implemented for documentation in the Python
 ecosystem. As mentioned before, this separation is key to achieve many features
-proposed in Objectives (c), (d).
+proposed in Objectives (c), (d) (see Fig :ref:`diag`).
 
 .. figure:: diagramme.png
    :figclass: w
 
-   Schema representing how to buld documentation with papyri: 1) Each projects
-   build an IRD bundle that contain semantic information about the project
-   documentation. 2) These IRD bundle are publihsed online. 3) Users install IRD
-   bundles locally, pages get corsslinked, indexed, etc.... 4) IDEs render
-   documentation on the fly taking into consideration user preferences. :label:`diag`
+   Sketch representing how to build documentation with Papyri. Step 1: Each project
+   builds an IRD bundle that contains semantic information about the project
+   documentation. Step 2: the IRD bundles are publihsed online. Step 3: users install IRD bundles locally on their machine, pages get corsslinked, indexed, etc. Step 4: IDEs render documentation on-the-fly, taking into consideration users' preferences. :label:`diag`
 
 2) Intermediate Representation for Documentation (IRD)
 ------------------------------------------------------
@@ -353,146 +351,113 @@ values such as indexing, searching, bookmarks, etc.), as seen in rustsdocs, devd
 3) Current implementation
 =========================
 
-In this section we'll describe a few of the choices we've make for a our current
-implementation. 
+We present here some of the choices made in the current Papyri implementation.
 
 
-1) IRD file Generation
-----------------------
+1) IRD files generation
+-----------------------
 
-While the core idea around papyri resides in the IRD files and bundles, we 
-we made with current implementation. As a wide majority of the core Scientific python stack
-uses sphinx, RST and Numpydoc, the current implementation only support those. 
-We do hope to extend it with MyST later, or provide it as a plugin.
+For now, the current implementation of Papyri only supports Sphinx, RST and Numpydoc. Those are widely used by a majority of the core Scientific Python ecosystem, and are compatible with IRD files and bundles (which are at the center of Papyri). Future work includes extensions to be compatible with MyST.
 
-We use Tree-Sitter, and tree-sitter-rst to parse RST syntax, in particular
-tree-sitter allow us to easily "unparse" an AST node when necessary as the ast
-nodes contains bytes offset to the original buffer. This was relatively
-convenient to handle custom directive and number of edge cases where project
-relied on loose definition of the rst syntax. For example rst directive are of
-the form::
+
+The project uses 'tree-sitter' and 'tree-sitter-rst' to parse RST syntax. "Abstract syntax tree" (AST) nodes contain offset bytes to the original buffer, then tree-sitter allows us to easily "unparse" an AST node when necessary. This is relatively
+convenient for handling custom directives and limit cases (for instance when projects rely on loose definition of the RST syntax). Let us provide an example: RST directives are usually of the form::
 
   .. directive:: arguments
       
       body
 
-While technically there is no space before the ``::``, docutils and sphinx allow
-this, but it fails in tree-sitter with an error node. We check for error nodes,
-un-parse, and add heuristics to restore a proper syntax and parse again  to
-obtain the new node.
+While technically there is no space before the ``::``, Docutils and Sphinx will not create errors when building the documentation. Due to our choice of a rigid (but unified) structure, we use tree-sitter that indicates an error node if there is an extra space. This allows us to check for error nodes, un-parse, add heuristics to restore a proper syntax, then parse again to obtain the new node.
 
-Alternatively a number of directive like ``warnings``, ``notes``
+Alternatively a number of directives like ``warnings``, ``notes``
 ``admonitions`` still contain valid RST. Instead of storing the directive with
 the raw text, we parse the full document (potentially finding invalid syntax),
 and unparse to the raw text only if the directive requires it.
 
 
-Serialisation of data structure into IRD files are currently using a custom
-serialiser that we hope to swap for msgspec **ADD REF**. The AST objects are completely
-typed but contains a number of Unions and Sequences of Unions. We found out that
-many frameworks like ``pydantic`` do not support sequences of Unions where each
-item in the Union may be of a different type.
+Serialisation of data structure into IRD files is currently using a custom
+serialiser. Future work includes swaping to msgspec [msgspec]_. The AST objects are completely typed, however they contain a number of unions and sequences of unions. It turns out, many frameworks like ``pydantic`` do not support sequences of unions where each item in the union may be of a different type.
 
-We currently try to type-infer all code examples with Jedi, and pre-syntax
-highlight using pygments when possible.
+The current Papyri strategy is to type-infer all code examples with `Jedi`, and pre-syntax highlight using 'pygments' when possible.
 
 2) IRD File Installation
 ------------------------
 
 Download and Installation of IRD files is done concurrently using ``httpx``,
-with ``trio`` as an async framework. This let us download files concurrently.
+with ``trio`` as an async framework, allowing to download files concurrently.
 
-As the current implementation of Papyri is targeted at Python documentation and
-written in Python, we can query the existing version of Python libraries
-installed, and infer the right version of the requested documentation. Our
-implementation currently attempt to guess relevant libraries version when the
+The current implementation of Papyri targets Python documentation and
+is written in Python. We can then query the existing version of Python libraries
+installed, and infer the appropriate version of the requested documentation. At the moment, the
+implementation is set to tentatively guess relevant libraries versions when the
 exact version number is missing from for the install command. 
 
 
 The IRD files are post-processed into a local custom format. Object informations are
-store in 3 different places: A local SQLite database, CBOR representation of
-each document, and raw storage on disk for assets and binary blobs. 
+stored in 3 different places: a local `SQLite` database, `CBOR` representation of
+each document, and raw storage on the disk for assets and binary resource archive files. 
 
-SQlite allows us to easily query graph informations at run time, just before
-rendering, and is mostly optimised for infrequent read access. While we still
-mostly resolve some SQLite information at runtime, we are planning to move some
-of this processing to installation time. For example, determining whether inter
-libraries links exists.
+SQlite allows us to easily query graph information at runtime and just before
+rendering. It is mostly optimized for infrequent reading access. The goal is to move most of SQLite information resolving at the installation time (such as looking for interlibraries links).
 
-CBOR object for post-processed IRD files has been chosen to provide a more
-compact representation than JSON which keys are often is highly redundant, while
-still avoiding to use compression for fast access.
+CBOR represenation of post-processed IRD files is more compact than JSON (where keys are often highly redundant). Additionally, it avoids compression uses for fast access.
 
-Access to these resources is providing via an internal ``GraphStore`` API which
-is agnostic of the backend, and ensure the consistency of operations like
+Finallt, access to these resources is provided via an internal ``GraphStore`` API which
+is agnostic of the backend. This ensures the consistency of operations like
 adding/removing/replacing documents.
 
 3) Documentation Rendering
 --------------------------
 
-The current papyri implementation contains Wea number of rendering engines, each
-of them mostly consist of fetching a single page, it's metadata, and
-walking the IRD AST tree, and rendering each nodes with user preferences. 
+The current Papyri implementation contains a certain number of rendering engines (presented below). Each
+of them mostly consists of fetching a single page with its metadata, and
+walking through the IRD AST tree, and rendering each nodes with users' preferences. 
 
-- An ASCII terminal render using Jinja2. This can be useful to pipe
-  documentation to other tools like grep, less, cat. 
-  This also helps us to work in a highly restricted environment, and make sure
-  reading the documentation is sensible; for example as a proxy to using a
+- An ASCII terminal renders using `Jinja2`. This can be useful to pipe
+  documentation to other tools like ``grep``, ``less``, ``cat``. 
+  Then one can work in a highly restricted environment, make sure that
+  reading the documentation is coherent. This can serve as a proxy to using a
   screen reader.
 
-- A Textual User Interface browser using urwid. This lets you navigate in the
-  terminal, reflow long line on window resize, and can even open images files in
-  external editors. We encountered several bugs in urwid and are considering
-  rewriting it using Rich/Textual. Our project is for this renderer to replace
-  CLI IPython ``?`` interface which currently only shows raw docstrings.
+- A Textual User Interface browser renders using `urwid`. Navigation within the
+  terminal is possible, one can reflow long line on resized window, and even open image files in
+  external editors. Though, several bugs have been encountered in urwid. The project includes replacing the
+  CLI IPython ``?`` interface (which currently only shows raw docstrings) in urwid with a new one written with Rich/Textual.
 
-- A "Just-in-Time" rendering engine using Jinja2/quart/trio ; Quart being an async
-  version of flask. This version is the one with the most features, and is the
-  principal one we use for development. This environment let us iterate rapidly
+- A JIT rendering engine uses Jinja2, `Quart`, `Trio`. Quart is an async
+  version of `flask` **and trio is ??what is flask ?**. This option contains the most features, and therefore is the
+  main one used for development. This environment lets us iterate rapidly
   over the rendering engine.
 
-- A static "Ahead of time", rendering of all the existing pages that can be
-  rendered ahead of time, using the same class as the Just-in-time rendering
-  that basically loops through all entries in the SQLite database and render
-  each independently. We use this renderer mostly for exhaustive testing, and
-  measure performance. 
+- A static AOT rendering of all the existing pages that can be
+  rendered ahead of time uses the same class as the JIT rendering. Basically, this loops through all entries in the SQLite database and renders
+  each item independently. This renderer is mostly used for exhaustive testing and performance measures for Papyri. This can render most of the API documentation of IPython, `Astropy`, `Dask`, `Distributed`, `Matplotlib`, `Networkx`, NumPy, `Pandas`, Papyri, SciPy, `Scikit-image` and others. It can represent ~28000 pages in ~60 seconds (that is ~450 pages/s on a recent Macbook pro M1).
+  
 
-  With this renderer we can render most of the API documentation of IPython,
-  astropy, dask, distributed, matplotlib, networkx, numpy, pandas, papyri, scipy,
-  scikit-image. This represent ~28000 pages in ~60 seconds, so about 450 pages/sec on
-  a recent macbook pro M1.
-
-For all of the above renderer, our profiling shows that documentation rendering is
-mostly limited by object de-serialisation from disk as well a Jinja2
-templating engine. We've played with writing a static html renderer in a
-compiled language (Rust, using compiled, and typed checked templates), and
-managed to get about a factor 10 speedup, but this implementation is now out of
-sync with the main papyri code base. 
+For all of the above renderers, profiling shows that documentation rendering is
+mostly limited by object de-serialisation from disk and Jinja2
+templating engine. In the early project development phase, we attempted to write a static html renderer in a
+compiled language (like Rust, using compiled and typed checked templates). This provided a speedup of roughly a factor 10. However, its implementation is now out of sync with the main Papyri code base. 
 
 
-Finally we've started implementing a JupyterLab extension that present itself as
-a side-panel and is capable of basic browsing and rendering. Is uses typescript,
-react and native JupyterLab component. Future plan is to replace and complement
-JupyterLab's ``?`` and ``?`` operator as well as JupyterLab Inspector when
-possible. A screen shot of current development version of the JupyterLab
-extension can be seen in :ref:`oldnew` and :ref:`jlab`.
+Finally, a JupyterLab extension is currently in progress.The documentation then presents itself as
+a side-panel and is capable of basic browsing and rendering (see Figure :ref:`oldnew` and Figure :ref:`jlab`). The model uses typescript,
+react and native JupyterLab component. Future goals include improving/replacing the
+JupyterLab's ``?`` and the JupyterLab Inspector (when possible). A screenshot of the current development version of the JupyterLab
+extension can be seen in Figure :ref:`jlab`.
 
 
 .. figure:: jupyterlab-prototype.png
    :scale: 80%
 
 
-   Zoomed out view of the papyri for jupyterlab extension, we can see that the
-   code examples include plots. Most token in each examples are link to the
-   corresponding page. Early navigatin bar visible at the top. :label:`jlab`
+   Example of extended view of the Papyri documentation for Jupyterlab extension (here for SciPy). Code examples can now include plots. Most token in each examples are linked to the corresponding page. Early navigation bar is visible at the top. :label:`jlab`
 
 
 .. figure:: local-graph.png
 
-   (screenshot). We played with the possibility of using D3.js to a local graph
-   of connection among the most important node arround ``numpy.ndarray``. Nodes
-   are sized with respectd to the number of incomming links, and colored with
-   respect to their library.
+   Local graph (made with D3.js) representing the connections among the most important nodes around ``numpy.ndarray``. Nodes
+   are sized with respect to the number of incomming links, and colored with respect to their library.
 
 
 4) Challenges
@@ -680,3 +645,4 @@ References
 .. [papyri] https://github.com/jupyter/papyri
 .. [sphinx-copybutton] https://sphinx-copybutton.readthedocs.io/en/latest/
 .. [pydata-sphinx-theme] https://pydata-sphinx-theme.readthedocs.io/en/stable/
+.. [msgspec] https://pypi.org/porject/msgspec
