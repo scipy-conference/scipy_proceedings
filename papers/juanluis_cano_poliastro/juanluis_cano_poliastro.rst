@@ -209,8 +209,8 @@ The most widely used ones are:
   Only :math:`L` is time-dependent and this set has no singularities,
   however the geometrical interpretation of the rest of the elements is lost :cite:`walker_1985`.
 
-Propagation, orbit determination, and the Lambert problem
----------------------------------------------------------
+Keplerian motion
+----------------
 
 There can be several problems formulated from equation :ref:`eq:twobody`, namely:
 
@@ -244,12 +244,62 @@ in a number of different ways, each one with different complexity and precision 
 Doing a literature review of such methods is out of scope of this paper,
 however in the Methods section we list the ones implemented by poliastro.
 
-Commercial satellite data
--------------------------
+Orbital perturbations
+---------------------
+
+The analytical methods discussed above are perfect for solving the ideal Keplerian motion.
+This approximation is usually good enough for interplanetary travel,
+when all other forces aside from the Sun gravity are negligible.
+However, there are many situations in which natural and artificial orbital perturbations
+must be taken into account so that the actual non-Keplerian motion can be properly analyzed:
+
+- Interplanetary travel in the proximity of other planets.
+  On a first approximation it is usually enough to study the trajectory in segments
+  and focus the analysis on the closest attractor,
+  hence patching several Keplerian orbits along the way
+  (the so-called "patched-conic approximation") :cite:`battin_introduction_1999`.
+  The boundary surface that separates one segment from the other is called
+  the sphere of influence.
+- Use of solar sails, electric propulsion, or other means of continuous thrust.
+  Devising the optimal guidance laws that minimize travel time or fuel consumption
+  under these conditions is usually treated as an optimization problem of a dynamical system,
+  and as such it is particularly challenging :cite:`conway_2014`.
+- Artificial satellites in the vicinity of a planet.
+  This is the regime in which all the commercial space industry operates,
+  especially for those satellites in Low-Earth Orbit (LEO).
+
+.. figure:: enckes_method.pdf
+   :scale: 50%
+   :align: center
+
+   Osculating (Keplerian) vs perturbed (true) orbit
+   (source: Wikipedia, CC BY-SA 3.0):label:`fig:osculating`
+
+As showcased in Figure :ref:`fig:osculating`, at any point in a trajectory
+we can define an ideal Keplerian orbit with the same position and velocity
+under the attraction of a point mass: this is called the osculating orbit.
+Some numerical propagation methods exist that model the true, perturbed orbit
+as a deviation from an evolving, osculating orbit: for example,
+Cowell's method :cite:`cowell_investigation_1910` consists in adding
+all the perturbation accelerations and then integrating
+the resulting differential equation with any numerical method of choice:
+
+.. math::
+   :label: eq:cowell
+
+   \frac{\diff^2{\vec{r}}}{\diff{t}^2} = -\frac{\mu}{r^3} \vec{r} + \vec{a}_d
+
+High order numerical integration methods, such as Dormand-Prince 8(5,3) (`DOP853`),
+are usually used in Astrodynamics, since the integration times are quite large
+and the tolerances comparatively tight. An in-depth discussion of such methods
+can be found in :cite:`hairer_2009`.
 
 .. note::
    Discuss the differences between real-world Earth satellite propagation with SGP4
    from more generic Astrodynamics work.
+
+State of the art
+----------------
 
 .. note::
    Discuss software related to Astrodynamics,
@@ -538,15 +588,8 @@ Analytical propagators take advantage of the structure of the two-body problem
 and as a result have better performance than numerical methods.
 However, to study the effect of natural and artificial perturbations,
 it is necessary to use numerical propagators.
-poliastro implements Cowell's method :cite:`cowell_investigation_1910`,
-which consists of adding all the perturbation accelerations (:ref:`eq:cowell`).
-
-.. math::
-   :label: eq:cowell
-
-   \frac{\diff^2{\vec{r}}}{\diff{t}^2} = -\frac{\mu}{r^3} \vec{r} + \vec{a}_d
-
-To accomplish this, poliastro ships the ideal objective function ``func_twobody``
+poliastro implements Cowell's method :cite:`cowell_investigation_1910`
+by shipping the ideal objective function ``func_twobody``
 that the user can extend with their own perturbation acceleration of choice.
 There are several natural perturbations included: J2 and J3 gravitational terms,
 several atmospheric drag models
