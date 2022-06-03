@@ -645,4 +645,4 @@ References
 .. [papyri] https://github.com/jupyter/papyri
 .. [sphinx-copybutton] https://sphinx-copybutton.readthedocs.io/en/latest/
 .. [pydata-sphinx-theme] https://pydata-sphinx-theme.readthedocs.io/en/stable/
-.. [msgspec] https://pypi.org/porject/msgspec
+.. [msgspec] https://pypi.org/project/msgspec
