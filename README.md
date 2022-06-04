@@ -120,9 +120,9 @@ In addition to the following list, we break up the deadlines in the respective d
 - May 27: 1st Draft for Submission
 - May 27–June 23: Open Review Period
 - May 27: Reviewers Assigned
-- June 9: Initial Complete Review
-- June 23: Final Recommendation and Comprehensive Review Deadlines
-- June 29: Final Author Revision Deadline
+- June 16: Initial Complete Review
+- June 30: Final Recommendation and Comprehensive Review Deadlines
+- July 4: Final Author Revision Deadline
 - July 6: Final Editorial Decisions for Proceedings Contents Deadline
 - July 30: Time Window for Publishing Conference Ready Proceedings
 
@@ -364,8 +364,8 @@ change in question, then that change should be requested and made before the
 ### Reviewer Deadlines
 
 - May 27: Reviewers Assigned
-- June 9: Initial Complete Review
-- June 23: Final Recommendation and Comprehensive Review Deadlines
+- June 16: Initial Complete Review
+- June 30: Final Recommendation and Comprehensive Review Deadlines
 
 ### Reviewer Workflow
 
@@ -436,9 +436,9 @@ To information about how to manage the whole proceedings, please see
 `publisher/README.md` and `publisher/Makefile`.
 
 #### Publisher Deadlines
- 
+
 - April 5: Authors invited to submit full papers
-- May 27–June 23: Open Review Period
+- May 27–June 30: Open Review Period
     - The [build server](#build-server) should be maintained throughout the Open Review Period.
 - July 30: Time Window for Publishing Conference Ready Proceedings
 
@@ -458,7 +458,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 - April 5: Authors invited to submit full papers
 - May 27–June 23: Open Review Period
 - May 27: Reviewers Assigned
-- June 9: Initial Complete Review
+- June 16: Initial Complete Review
     - Editors should verify that reviews have been completed
 - July 6: Final Editorial Decisions for Proceedings Contents Deadline
 
