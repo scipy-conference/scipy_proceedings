@@ -28,7 +28,7 @@ Dataset bias :cite:`engstromIdentifyingStatisticalBias2020,blumRecoveringBiasedD
 Structure and Implementation
 ----------------------------
 
-Python has grown to become the lingua-franca for much of the scientific community :cite:`oliphantPythonScientificComputing2007a,millmanPythonScientistsEngineers2011`, in no small part because of its interactive nature. In particular, the REPL (read-evaluate-print-loop) structure which has been prioritized (from IPython to Jupyter) is one of the prime motivations for the use of Python as an exploratory tool. Additionally, PyPI, the python package index, accelerates the widespread disambiguation of software packages. Thus ``wailord`` is implemented as a free and open source ``python`` library.
+Python has grown to become the lingua-franca for much of the scientific community :cite:`oliphantPythonScientificComputing2007,millmanPythonScientistsEngineers2011`, in no small part because of its interactive nature. In particular, the REPL (read-evaluate-print-loop) structure which has been prioritized (from IPython to Jupyter) is one of the prime motivations for the use of Python as an exploratory tool. Additionally, PyPI, the python package index, accelerates the widespread disambiguation of software packages. Thus ``wailord`` is implemented as a free and open source ``python`` library.
 
 Structure
 +++++++++
