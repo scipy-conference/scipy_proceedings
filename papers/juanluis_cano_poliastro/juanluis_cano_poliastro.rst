@@ -273,7 +273,7 @@ must be taken into account so that the actual non-Keplerian motion can be proper
    :align: center
 
    Osculating (Keplerian) vs perturbed (true) orbit
-   (source: Wikipedia, CC BY-SA 3.0):label:`fig:osculating`
+   (source: Wikipedia, CC BY-SA 3.0) :label:`fig:osculating`
 
 As showcased in Figure :ref:`fig:osculating`, at any point in a trajectory
 we can define an ideal Keplerian orbit with the same position and velocity
