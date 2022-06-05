@@ -882,6 +882,8 @@ Most important classes in the ``poliastro.plotting`` package are
 which allows to visualize inner and outter both in 2D and 3D, as requested by
 users.
 
+The following example illustrates how to plotting capabilities of poliastro:
+
 .. code-block:: python
 
     from poliastro.plotting.misc import plot_solar_system
@@ -898,10 +900,25 @@ users.
     florence_style = {label="Florence", color="#000000"}
     halley_style = {label="Florence", color="#84B0B8"}
 
+For generating a static 2D plot:
+
+.. code-block:: python
+
     # Generate a static 2D figure
     frame2D = rame = plot_solar_system(epoch=now, outer=False)
     frame2D.plot(florence, **florence_style)
     frame2D.plot(florence, **halley_style)
+
+.. figure:: plotting_2D.png
+   :align: center
+
+   Two dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting2D`
+
+Result is shown in figure :ref:`fig:plotting2D`.
+
+For generating an interactive 3D plot:
+
+.. code-block:: python
 
     # Generate an interactive 3D figure
     frame3D = rame = plot_solar_system(
@@ -910,21 +927,12 @@ users.
     frame3D.plot(florence, **florence_style)
     frame3D.plot(florence, **halley_style)
 
-
-Figures :ref:`fig:plotting2D` and :ref:`fig:plotting3D` show the output figures
-from previous code snippet.
-
-
-.. figure:: plotting_2D.png
-   :align: center
-
-   Two dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting2D`
-
 .. figure:: plotting_3D.png
    :align: center
 
    Three dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting3D`
 
+Result is shown in figure :ref:`fig:plotting3D`.
 
 Future work
 ===========
