@@ -865,6 +865,67 @@ Previous code, with some additional customization, generates figure
    Porkchop plot for Earth-Mars transfer arrival energy showing latest missions
    to the Martian planet. :label:`fig:porkchop`
 
+
+Plotting
+--------
+For visualization purposes, poliastro provides the ``poliastro.plotting``
+package, which contains various utilities for generating 2D and 3D graphics
+using different backends such us ``matplotlib`` and ``plotly``. 
+
+Generated graphics can be static or interactive. Main difference between these
+is the ability to modify the camera view in a dynamic way when using interactive
+plotters. It must be said 
+
+Most important classes in the ``poliastro.plotting`` package are
+``StaticOrbitPlotter`` and ``OrbitPlotter3D``.  In addition, the
+``poliastro.plotting.misc`` module contains the ``plot_solar_system`` function,
+which allows to visualize inner and outter both in 2D and 3D, as requested by
+users.
+
+.. code-block:: python
+
+    from poliastro.plotting.misc import plot_solar_system
+
+    # Current datetime
+    now = Time.now().tdb
+
+    # Obtain Florence and Halley orbits
+    florence = Orbit.from_sbdb("Florence")
+    halley_1835_ephem = Ephem.from_horizons("90000031", now)
+    halley_1835 = Orbit.from_ephem(Sun, halley_1835_ephem, halley_1835_ephem.epochs[0])
+
+    # Define orbit labels and color style
+    florence_style = {label="Florence", color="#000000"}
+    halley_style = {label="Florence", color="#84B0B8"}
+
+    # Generate a static 2D figure
+    frame2D = rame = plot_solar_system(epoch=now, outer=False)
+    frame2D.plot(florence, **florence_style)
+    frame2D.plot(florence, **halley_style)
+
+    # Generate an interactive 3D figure
+    frame3D = rame = plot_solar_system(
+        epoch=now, outer=False, use_3d=True, interactive=true
+    )
+    frame3D.plot(florence, **florence_style)
+    frame3D.plot(florence, **halley_style)
+
+
+Figures :ref:`fig:plotting2D` and :ref:`fig:plotting3D` show the output figures
+from previous code snippet.
+
+
+.. figure:: plotting_2D.png
+   :align: center
+
+   Two dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting2D`
+
+.. figure:: plotting_3D.png
+   :align: center
+
+   Three dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting3D`
+
+
 Future work
 ===========
 
