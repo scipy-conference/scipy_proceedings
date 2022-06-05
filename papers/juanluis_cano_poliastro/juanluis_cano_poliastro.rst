@@ -999,7 +999,7 @@ David A. Vallado for his encouragement and for publishing the source code for th
 Dr. T.S. Kelso for his tireless efforts in maintaining CelesTrak,
 Alejandro Sáez for sharing the dream of a better way,
 Prof. Dr. Manuel Sanjurjo Rivo for believing in my work,
-Helge Heichhorn for his enthusiasm and decisive influence in poliastro,
+Helge Eichhorn for his enthusiasm and decisive influence in poliastro,
 the whole OpenAstronomy collaboration for opening the door for us,
 the NumFOCUS organization for their immense support,
 and Alexandra Elbakyan for enabling scientific progress worldwide.
