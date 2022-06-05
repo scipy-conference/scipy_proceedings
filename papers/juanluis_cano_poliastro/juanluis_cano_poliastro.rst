@@ -994,7 +994,7 @@ and include them in the conversation exist. However, these have not been explore
 Acknowledgements
 ================
 
-Juan Luis would like to thank Prof. Michèle Lavagna for her original guidance and inspiration,
+The authors would like to thank Prof. Michèle Lavagna for her original guidance and inspiration,
 David A. Vallado for his encouragement and for publishing the source code for the algorithms from his book for free,
 Dr. T.S. Kelso for his tireless efforts in maintaining CelesTrak,
 Alejandro Sáez for sharing the dream of a better way,
