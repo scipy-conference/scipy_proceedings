@@ -333,8 +333,9 @@ and its results are expressed in a special coordinate system called True Equator
 Special care needs to be taken to avoid mixing mean elements with osculating elements,
 and to convert the output of the propagation to the appropriate reference frame.
 These element sets have been traditionally distributed in a compact text representation called
-Two-Line Element sets (TLEs), although this format suffers from a number of shortcomings
-and recently there has been a push to use the Orbit Data Messages international standard
+Two-Line Element sets (TLEs) (see :ref:`fig:tle` for an example).
+However this format is quite cryptic and suffers from a number of shortcomings,
+so recently there has been a push to use the Orbit Data Messages international standard
 developed by the Consultive Committee for Space Data Systems (CCSDS 502.0-B-2).
 
 .. figure:: tle.pdf
