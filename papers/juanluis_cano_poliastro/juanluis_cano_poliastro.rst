@@ -937,31 +937,55 @@ Result is shown in figure :ref:`fig:plotting3D`.
 Future work
 ===========
 
-.. note::
-   Limitations and shortcomings of poliastro
-   Technical: bad APIs, inconsistencies.
-   Non-technical: Lack of development time/sustainability model beyond GSOC money and NumFOCUS grants,
-   licensing concerns, reusability in the wider ecosystem.
+Despite the fact that poliastro has existed for almost a decade,
+for most of its history it has been developed by volunteers on their free time,
+and only in the past five years it has received funding through various Summer of Code programs
+(SOCIS 2017, GSOC 2018-2021) and institutional grants (NumFOCUS 2020, 2021).
+The funded work has had a overwhemingly positive impact on the project,
+however the lack of a dedicated maintainer has caused some technical debt to accrue over the years,
+and some parts of the project are in need of refactorings or better documentation.
+One of the outstanding issues is the lack of a flexible way to define custom reference frames,
+which is needed for certain visualization operations.
+Another one is the poor support for General Perturbations data (OMMs and TLEs),
+which at the moment can be achieved writing some glue code that is not oficially part of the library [#]_.
 
-On reusability:
+.. [#] https://docs.poliastro.space/en/stable/examples/Loading%20OMM%20and%20TLE%20satellite%20data.html
 
-- So-so: IBM/spacetech-ssa, AnalyticalGraphicsInc/STKCodeExamples
-- Did not reuse: sbpy, beyond, mubody
+Historically, poliastro has tried to implement algorithms that were applicable
+for all the planets in the Solar System. However, some of them have proved to be very difficult to generalize,
+like the pass and rise times approximation, or have not received much interest,
+like atmospheric drag models for planets other than the Earth.
+For cases like these, poliastro ships a ``poliastro.earth`` package,
+but going forward we would like to continue embracing a generic approach that can serve other bodies as well.
 
-On sustainability:
+Several open source projects have successfully used poliastro or were created taking inspiration from it,
+like spacetech-ssa by IBM [#]_ or mubody :cite:`bermejo_ballesteros_mubody_2022`.
+AGI (previously Analytical Graphics, Inc., now Ansys Government Initiatives)
+published a series of scripts to automate the commercial tool STK from Python leveraging poliastro [#]_.
+However, we have observed that there is still lots of repeated code
+across similar open source libraries written in Python,
+which means that there is an opportunity to provide a "kernel" of algorithms that can be easily reused.
+Although ``poliastro.core`` started as a separate layer
+to isolate fast, non-safe functions as described above,
+we think we could move it to an external package so it can be depended upon
+by projects that do not want to use some of the higher level poliastro abstractions
+or drag its large number of heavy dependencies.
 
-Several companies seem to use it, but there is no two-way communication.
+.. [#] https://github.com/IBM/spacetech-ssa
+.. [#] https://github.com/AnalyticalGraphicsInc/STKCodeExamples/
 
-Conclusions
-===========
-
-poliastro is cool and nice,
-it has some unique features,
-and is decently fast
-(and hopefully getting faster).
-It does have some limitations
-(both technical and non-technical)
-that can be addressed with more development time.
+Finally, the sustainability of the project cannot yet be taken for granted:
+the project has reached a level of complexity that already warrants dedicated development effort
+that cannot be covered with short-lived grants. Such funding could potentially come from the private sector,
+but although there is evidence that several for-profit companies are using poliastro,
+we have very little information of how is it being used and what problems are those users having,
+let alone what avenues for funded work could potentially work.
+Organizations like the Libre Space Foundation advocate for a strong copyleft licensing model
+to convince commercial actors to contribute to the commons,
+but in principle that goes against the permissive licensing that the wider Scientific Python ecosystem,
+including poliastro, has adopted. With the advent of new business models and the ever increasing reliance
+in open source by the private sector, a variety of ways to engage commercial users
+and include them in the conversation exist. However, these have not been explored yet.
 
 Acknowledgements
 ================
