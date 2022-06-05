@@ -207,7 +207,7 @@ The most widely used ones are:
   and equations expressed in them are ill-conditioned near such singularities.
 - **Walker modified equinoctial elements**: Six parameters :math:`(p, f, g, h, k, L)`.
   Only :math:`L` is time-dependent and this set has no singularities,
-  however the geometrical interpretation of the rest of the elements is lost :cite:`walker_1985`.
+  however the geometrical interpretation of the rest of the elements is lost :cite:`walker_set_1985`.
 
 Keplerian motion
 ----------------
@@ -263,7 +263,7 @@ must be taken into account so that the actual non-Keplerian motion can be proper
 - Use of solar sails, electric propulsion, or other means of continuous thrust.
   Devising the optimal guidance laws that minimize travel time or fuel consumption
   under these conditions is usually treated as an optimization problem of a dynamical system,
-  and as such it is particularly challenging :cite:`conway_2014`.
+  and as such it is particularly challenging :cite:`conway_spacecraft_2014`.
 - Artificial satellites in the vicinity of a planet.
   This is the regime in which all the commercial space industry operates,
   especially for those satellites in Low-Earth Orbit (LEO).
@@ -292,7 +292,7 @@ the resulting differential equation with any numerical method of choice:
 High order numerical integration methods, such as Dormand-Prince 8(5,3) (`DOP853`),
 are usually used in Astrodynamics, since the integration times are quite large
 and the tolerances comparatively tight. An in-depth discussion of such methods
-can be found in :cite:`hairer_2009`.
+can be found in :cite:`hairer_solving_2009`.
 
 Commercial Earth satellites
 ---------------------------
@@ -319,16 +319,16 @@ attempt to strike a balance between the fast running times of analytical methods
 and the necessary inclusion of perturbation forces.
 
 One of such semianalytical methods are the Simplified General Perturbation (SGP) models,
-first developed in :ref:`hilton_mathematical_1966` and then refined in :ref:`lane_improved_1969` into what
-we know these days as the SGP4 propagator :ref:`hoots_models_1980` :ref:`vallado_revisiting_2006`.
+first developed in :cite:`hilton_mathematical_1966` and then refined in :cite:`lane_improved_1969` into what
+we know these days as the SGP4 propagator :cite:`hoots_models_1980` :cite:`vallado_revisiting_2006`.
 Even though certain elements of the reference frame used by SGP4 are not properly specified
-:ref:`vallado_revisiting_2006` and that its accuracy might still be too limited for certain applications
-:ref:`kelso_analysis_2009` :ref:`lara_analytical_2016`, it is nowadays the most widely used propagation method
+:cite:`vallado_revisiting_2006` and that its accuracy might still be too limited for certain applications
+:cite:`kelso_analysis_2009` :cite:`lara_analytical_2016`, it is nowadays the most widely used propagation method
 thanks in large part to the dissemination of General Perturbations orbital data by the US 501(c)(3) CelesTrak
 (which itself obtains it from the 18th Space Defense Squadron of the US Space Force).
 
-The starting point of SGP4 is a special element set that uses Brouwer mean orbital elements :ref:`brouwer_solution_1959`
-plus a ballistic coefficient based on an approximation of the atmospheric drag :ref:`lane_1969`,
+The starting point of SGP4 is a special element set that uses Brouwer mean orbital elements :cite:`brouwer_solution_1959`
+plus a ballistic coefficient based on an approximation of the atmospheric drag :cite:`lane_improved_1969`,
 and its results are expressed in a special coordinate system called True Equator Mean Equinox (TEME).
 Special care needs to be taken to avoid mixing mean elements with osculating elements,
 and to convert the output of the propagation to the appropriate reference frame.
