@@ -955,17 +955,10 @@ and only in the past five years it has received funding through various Summer o
 The funded work has had a overwhemingly positive impact on the project,
 however the lack of a dedicated maintainer has caused some technical debt to accrue over the years,
 and some parts of the project are in need of refactorings or better documentation.
-One of the outstanding issues is the lack of a flexible way to define custom reference frames,
-which is needed for certain visualization operations.
-Another one is the poor support for General Perturbations data (OMMs and TLEs),
-which at the moment can be achieved writing some glue code that is not oficially part of the library [#]_.
-
-.. [#] https://docs.poliastro.space/en/stable/examples/Loading%20OMM%20and%20TLE%20satellite%20data.html
 
 Historically, poliastro has tried to implement algorithms that were applicable
-for all the planets in the Solar System. However, some of them have proved to be very difficult to generalize,
-like the pass and rise times approximation, or have not received much interest,
-like atmospheric drag models for planets other than the Earth.
+for all the planets in the Solar System, however some of them have proved to be
+very difficult to generalize for bodies other than the Earth.
 For cases like these, poliastro ships a ``poliastro.earth`` package,
 but going forward we would like to continue embracing a generic approach that can serve other bodies as well.
 
