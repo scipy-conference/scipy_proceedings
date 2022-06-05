@@ -801,11 +801,35 @@ quickly identify the most optimal transfer dates between two bodies.
 The ``poliastro.plotting.porkchop`` provides the ``PorkchopPlotter`` class which
 allows to generate these diagrams.
 
+
+.. code-block:: python
+
+    from poliastro.plotting.porkchop import (
+        PorkchopPlotter
+    )
+    from poliastro.utils import time_range
+
+    # Generate all launch and arrival dates
+    launch_span = time_range(
+        "2020-03-01", end="2020-10-01", periods=int(150)
+    )
+    arrival_span = time_range(
+        "2020-10-01", end="2021-05-01", periods=int(150)
+    )
+
+    # Create an instance of the porkchop and plot it
+    porkchop = PorkchopPlotter(
+        Earth, Mars, launch_span, arrival_span,
+    )
+
+Previous code, with some additional customization, generates figure
+:ref:`fig:porkchop`. 
+
 .. figure:: porkchop.pdf
    :align: center
 
    Porkchop plot for Earth-Mars transfer arrival energy showing latest missions
-   to the Martian planet.
+   to the Martian planet. :label:`fig:porkchop`
 
 Future work
 ===========
