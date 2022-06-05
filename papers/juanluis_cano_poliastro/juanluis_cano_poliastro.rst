@@ -385,7 +385,7 @@ Classical algorithms developed throughout the 20th century are described in pape
 difficult to find, and source code or validation data is almost never available.
 When it comes to modern research carried in the digital era, source code and validation data are supposedly provided
 "upon reasonable request", but a majority of such requests are never addressed
-despite the slow adoption of more open policies by major journals :cite:`stodden_2018`.
+despite the slow adoption of more open policies by major journals :cite:`stodden_empirical_2018`.
 
 From the user perspective, it is no surprise that Astrodynamics software often requires deep expertise.
 However, there are often implicit assumptions that are not documented with an adequate level of detail
