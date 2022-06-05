@@ -873,8 +873,8 @@ package, which contains various utilities for generating 2D and 3D graphics
 using different backends such as matplotlib :cite:`hunter_2007_matplotlib` and Plotly.
 
 Generated graphics can be static or interactive. Main difference between these
-is the ability to modify the camera view in a dynamic way when using interactive
-plotters. It must be said 
+two is the ability to modify the camera view in a dynamic way when using
+interactive plotters. 
 
 Most important classes in the ``poliastro.plotting`` package are
 ``StaticOrbitPlotter`` and ``OrbitPlotter3D``.  In addition, the
