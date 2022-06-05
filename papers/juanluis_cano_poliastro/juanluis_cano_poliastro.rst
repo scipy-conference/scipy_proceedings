@@ -136,7 +136,7 @@ due to the presence of the other :math:`n - 1` masses is given by :cite:`battin_
 
 .. math::
 
-   \vec{f}_i = -G \sum_{j \neq i}^n \frac{m_i m_j}{|r_{ij}|^3} \vec{r}_{ij}
+   \vec{f}_i = -G \sum_{j \neq i}^n \frac{m_i m_j}{|\vec{r}_{ij}|^3} \vec{r}_{ij}
 
 Where :math:`G = 6.67430\cdot 10^{-11}~\text{N m$^2$ kg$^{-2}$}` is the universal gravitational constant,
 and :math:`\vec{r}_{ij}` denotes the position vector from :math:`m_i` to :math:`m_j`.
@@ -144,7 +144,7 @@ Applying Newton's second law of motion results in a system of :math:`n` differen
 
 .. math::
 
-   \frac{\diff^2{\vec{r}}_i}{\diff{t}^2} = -G \sum_{j \neq i}^n \frac{m_j}{|r_{ij}|^3} \vec{r}_{ij}
+   \frac{\diff^2{\vec{r}}_i}{\diff{t}^2} = -G \sum_{j \neq i}^n \frac{m_j}{|\vec{r}_{ij}|^3} \vec{r}_{ij}
 
 No general closed-form solution exists for the n-body problem, as established by Henri Poincaré in the 1890s:
 except for a few restricted cases, the resulting dynamical system is chaotic.
