@@ -353,8 +353,8 @@ a "low level space dynamics library written in Java" with an open governance mod
 and SPICE [#]_, a toolkit developed by NASA's Navigation and Ancillary Information Facility
 at the Jet Propulsion Laboratory.
 Other similar, smaller projects that appeared later on and that are still maintained to this day
-include PyKEP :cite:`izzo_esapykep_2019`, beyond [#]_, tudatpy [#]_,
-sbpy :cite:`mommert_sbpy_2019`, Skyfield :cite:`rhodes` (Python),
+include PyKEP :cite:`izzo_esapykep_2020`, beyond [#]_, tudatpy [#]_,
+sbpy :cite:`mommert_sbpy_2019`, Skyfield :cite:`rhodes_skyfield_2020` (Python),
 CelestLab [#]_ (Scilab), Astrodynamics.jl (Julia) [#]_ and Nyx (Rust) [#]_.
 In addition, there are some Graphical User Interface (GUI) based open source programs
 used for Mission Analysis and orbit visualization, such as GMAT [#]_ and gpredict [#]_,
@@ -377,7 +377,7 @@ Community-led projects with a strong corporate backing like Orekit are in excell
 while on the other hand smaller projects developed by volunteers (beyond, Astrodynamics.jl)
 or with limited institutional support (PyKEP, GMAT) suffer from lack of maintenance.
 Part of the problem might stem from the fact that most scientists are never taught how to build software
-efficiently, let alone the skills to collaboratively develop software in the open :cite:`wilson_2014`,
+efficiently, let alone the skills to collaboratively develop software in the open :cite:`wilson_best_2014`,
 and astrodynamicists are no exception.
 
 On the other hand, it is often difficult to translate the advances in Astrodynamics research to software.
@@ -391,13 +391,13 @@ From the user perspective, it is no surprise that Astrodynamics software often r
 However, there are often implicit assumptions that are not documented with an adequate level of detail
 which originate widespread misconceptions and lead even seasoned professionals to make conceptual mistakes.
 Some of the most notorious misconceptions arise around
-the use of general perturbations data (OMMs and TLEs) :cite:`finkleman_2007`,
+the use of general perturbations data (OMMs and TLEs) :cite:`finkleman_tle_2007`,
 the geometric interpretation of the mean anomaly :cite:`battin_introduction_1999`,
 or coordinate transformations :cite:`vallado_revisiting_2006`.
 
 Finally, aside from GUI-based applications, few of the open source software libraries mentioned above
 are amenable to scripting or interactive use,
-as promoted by modern computational tools like Jupyter :cite:`kluyver_2016`.
+as promoted by modern computational tools like Jupyter :cite:`kluyver_jupyter_2016`.
 
 All the issues above pose a barrier of entry for novices and amateur practitioners,
 and serve as the main drivers behind the creation of poliastro and its ongoing maintenance.
@@ -870,7 +870,7 @@ Plotting
 --------
 For visualization purposes, poliastro provides the ``poliastro.plotting``
 package, which contains various utilities for generating 2D and 3D graphics
-using different backends such as matplotlib :cite:`hunter_2007_matplotlib` and Plotly.
+using different backends such as matplotlib :cite:`hunter_matplotlib_2007` and Plotly :cite:`inc_collaborative_2015`.
 
 Generated graphics can be static or interactive. Main difference between these
 two is the ability to modify the camera view in a dynamic way when using
