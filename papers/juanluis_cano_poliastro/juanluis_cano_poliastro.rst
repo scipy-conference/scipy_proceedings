@@ -340,39 +340,72 @@ developed by the Consultive Committee for Space Data Systems (CCSDS 502.0-B-2).
 
 .. figure:: tle.pdf
    :align: center
-   :figclass: w
+   :figclass: bht
 
    Two-Line Element set (TLE) for the ISS (retrieved on 2022-06-05) :label:`fig:tle`
 
 State of the art
 ----------------
 
-.. note::
-   Discuss software related to Astrodynamics,
-   including classical, well-stablished open-source toolboxes like SPICE
-   (does SPICE have propagation?),
-   GUI-based software like GMAT and gpredict,
-   and more modern initiatives like Skyfield.
+At the time of creating poliastro there were already numerous open-source libraries
+for Astrodynamics. Probably the most mature ones are Orekit [#]_,
+a "low level space dynamics library written in Java" with an open governance model,
+and SPICE [#]_, a toolkit developed by NASA's Navigation and Ancillary Information Facility
+at the Jet Propulsion Laboratory.
+Other similar, smaller projects that appeared later on and that are still maintained to this day
+include PyKEP :cite:`izzo_esapykep_2019`, beyond [#]_, tudatpy [#]_,
+sbpy :cite:`mommert_sbpy_2019`, Skyfield :cite:`rhodes` (Python),
+CelestLab [#]_ (Scilab), Astrodynamics.jl (Julia) [#]_ and Nyx (Rust) [#]_.
+In addition, there are some Graphical User Interface (GUI) based open source programs
+used for Mission Analysis and orbit visualization, such as GMAT [#]_ and gpredict [#]_,
+and complete web applications for tracking constellations of satellites like the
+SatNOGS project by the Libre Space Foundation [#]_.
 
-State of the art
-----------------
+.. [#] https://orekit.org/
+.. [#] https://naif.jpl.nasa.gov/naif/toolkit.html
+.. [#] https://pypi.org/project/beyond/0.7.4/
+.. [#] https://github.com/tudat-team/tudatpy/releases/tag/0.6.0
+.. [#] https://atoms.scilab.org/toolboxes/celestlab/3.4.1
+.. [#] https://juliaastrodynamics.github.io/
+.. [#] https://nyxspace.com/
+.. [#] https://opensource.gsfc.nasa.gov/projects/GMAT/index.php
+.. [#] http://gpredict.oz9aec.net/
+.. [#] https://satnogs.org/
 
-Three main problems with Astrodynamics software:
+The level of quality and maintenance of these packages is somewhat heterogeneous.
+Community-led projects with a strong corporate backing like Orekit are in excellent health,
+while on the other hand smaller projects developed by volunteers (beyond, Astrodynamics.jl)
+or with limited institutional support (PyKEP, GMAT) suffer from lack of maintenance.
+Part of the problem might stem from the fact that most scientists are never taught how to build software
+efficiently, let alone the skills to collaboratively develop software in the open :cite:`wilson_2014`,
+and astrodynamicists are no exception.
 
-1. Lack of reproducibility/"code available upon request"
-2. Existing software requires deep expertise and has some implicit assumptions
-   (like coordinate frame names etc)
-3. There is no "scripting" alternative for Astrodynamics
+On the other hand, it is often difficult to translate the advances in Astrodynamics research to software.
+Classical algorithms developed throughout the 20th century are described in papers that are sometimes
+difficult to find, and source code or validation data is almost never available.
+When it comes to modern research carried in the digital era, source code and validation data are supposedly provided
+"upon reasonable request", but a majority of such requests are never addressed
+despite the slow adoption of more open policies by major journals :cite:`stodden_2018`.
 
-Three main motives for poliastro existence:
+From the user perspective, it is no surprise that Astrodynamics software often requires deep expertise.
+However, there are often implicit assumptions that are not documented with an adequate level of detail
+which originate widespread misconceptions and lead even seasoned professionals to make conceptual mistakes.
+Some of the most notorious misconceptions arise around
+the use of general perturbations data (OMMs and TLEs) :cite:`finkleman_2007`,
+the geometric interpretation of the mean anomaly :cite:`battin_introduction_1999`,
+or coordinate transformations :cite:`vallado_revisiting_2006`.
 
-1. Set an example on reproducibility and good coding practices in Astrodynamics
-2. Become an approachable software even for novices
-3. Offer an scripting interface
+Finally, aside from GUI-based applications, few of the open source software libraries mentioned above
+are amenable to scripting or interactive use,
+as promoted by modern computational tools like Jupyter :cite:`kluyver_2016`.
 
-Other ideas:
+All the issues above pose a barrier of entry for novices and amateur practitioners,
+and serve as the main drivers behind the creation of poliastro and its ongoing maintenance.
+In summary, the goals of poliastro be condensed as follows:
 
-- Common misconceptions (reference frames! TLE propagation! Mean anomaly!)
+1. Set an example on reproducibility and good coding practices in Astrodynamics.
+2. Become an approachable software even for novices.
+3. Offer a performant software that can be also used in scripting and interactive workflows.
 
 Methods
 =======
