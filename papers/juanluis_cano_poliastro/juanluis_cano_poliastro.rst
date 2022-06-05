@@ -882,7 +882,8 @@ Most important classes in the ``poliastro.plotting`` package are
 which allows to visualize inner and outter both in 2D and 3D, as requested by
 users.
 
-The following example illustrates how to plotting capabilities of poliastro:
+The following example illustrates how to plotting capabilities of poliastro. At
+first, orbits to be plotted are computed and their plotting style is declared:
 
 .. code-block:: python
 
@@ -893,46 +894,56 @@ The following example illustrates how to plotting capabilities of poliastro:
 
     # Obtain Florence and Halley orbits
     florence = Orbit.from_sbdb("Florence")
-    halley_1835_ephem = Ephem.from_horizons("90000031", now)
-    halley_1835 = Orbit.from_ephem(Sun, halley_1835_ephem, halley_1835_ephem.epochs[0])
+    halley_1835_ephem = Ephem.from_horizons(
+        "90000031", now
+    )
+    halley_1835 = Orbit.from_ephem(
+        Sun, halley_1835_ephem, halley_1835_ephem.epochs[0]
+    )
 
     # Define orbit labels and color style
     florence_style = {label="Florence", color="#000000"}
     halley_style = {label="Florence", color="#84B0B8"}
 
-For generating a static 2D plot:
+The static two-dimensional plot can be created using the following code:
 
 .. code-block:: python
 
     # Generate a static 2D figure
-    frame2D = rame = plot_solar_system(epoch=now, outer=False)
+    frame2D = rame = plot_solar_system(
+        epoch=now, outer=False
+    )
     frame2D.plot(florence, **florence_style)
     frame2D.plot(florence, **halley_style)
 
+As a result, figure :ref:`fig:plotting2D` is obtained.
+
 .. figure:: plotting_2D.png
    :align: center
+   :figclass: h
 
    Two dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting2D`
 
-Result is shown in figure :ref:`fig:plotting2D`.
-
-For generating an interactive 3D plot:
+The interactive three-dimensional plot can be created using the following code:
 
 .. code-block:: python
 
     # Generate an interactive 3D figure
     frame3D = rame = plot_solar_system(
-        epoch=now, outer=False, use_3d=True, interactive=true
+        epoch=now, outer=False,
+        use_3d=True, interactive=true
     )
     frame3D.plot(florence, **florence_style)
     frame3D.plot(florence, **halley_style)
 
+As a result, figure :ref:`fig:plotting3D` is obtained.
+
 .. figure:: plotting_3D.png
    :align: center
+   :figclass: h
 
    Three dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting3D`
 
-Result is shown in figure :ref:`fig:plotting3D`.
 
 Future work
 ===========
