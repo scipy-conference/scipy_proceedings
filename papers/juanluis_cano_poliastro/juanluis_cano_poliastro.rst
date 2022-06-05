@@ -297,28 +297,50 @@ can be found in :cite:`hairer_2009`.
 Commercial Earth satellites
 ---------------------------
 
-The downside of numerical methods is that they are much slower than analytical ones,
-and therefore they might be unsuitable for large scale simulations, satellite conjunction assesment,
-propagation in constrained hardware, and so forth.
-To address this issue, semianalytical propagation methods were devised that
-attempt to strike a balance between the fast running times of analytical methods
-and the necessary inclusion of perturbation forces.
+Figure :ref:`fig:leo-perturbations` gives a clear picture
+of the most important natural perturbations affecting satellites in LEO, namely:
+first harmonic of the geopotential field :math:`J_2` (representing the attractor oblateness),
+the atmospheric drag, and the higher order harmonics of the geopotential field.
 
-.. figure:: leo-perturbations
+.. figure:: leo-perturbations.png
    :scale: 30%
    :align: center
 
    Natural perturbations affecting Low-Earth Orbit (LEO) motion
    (source: :cite:`vallado_fundamentals_2007`) :label:`fig:leo-perturbations`
 
-Figure :ref:`fig:leo-perturbations` gives a clear picture
-of the most important natural perturbations affecting satellites in LEO, namely:
-first harmonic of the geopotential field :math:`J_2` (representing the attractor oblateness),
-the atmospheric drag, and the higher order harmonics of the geopotential field.
+At least the most significant of these perturbations need to be taken into account
+when propagating LEO orbits, and therefore the methods for purely Keplerian motion are not enough.
+However, numerical methods are much slower than analytical ones,
+and this can render them unsuitable for large scale simulations, satellite conjunction assesment,
+propagation in constrained hardware, and so forth.
+To address this issue, semianalytical propagation methods were devised that
+attempt to strike a balance between the fast running times of analytical methods
+and the necessary inclusion of perturbation forces.
 
-.. note::
-   Discuss the differences between real-world Earth satellite propagation with SGP4
-   from more generic Astrodynamics work.
+One of such semianalytical methods are the Simplified General Perturbation (SGP) models,
+first developed in :ref:`hilton_mathematical_1966` and then refined in :ref:`lane_improved_1969` into what
+we know these days as the SGP4 propagator :ref:`hoots_models_1980` :ref:`vallado_revisiting_2006`.
+Even though certain elements of the reference frame used by SGP4 are not properly specified
+:ref:`vallado_revisiting_2006` and that its accuracy might still be too limited for certain applications
+:ref:`kelso_analysis_2009` :ref:`lara_analytical_2016`, it is nowadays the most widely used propagation method
+thanks in large part to the dissemination of General Perturbations orbital data by the US 501(c)(3) CelesTrak
+(which itself obtains it from the 18th Space Defense Squadron of the US Space Force).
+
+The starting point of SGP4 is a special element set that uses Brouwer mean orbital elements :ref:`brouwer_solution_1959`
+plus a ballistic coefficient based on an approximation of the atmospheric drag :ref:`lane_1969`,
+and its results are expressed in a special coordinate system called True Equator Mean Equinox (TEME).
+Special care needs to be taken to avoid mixing mean elements with osculating elements,
+and to convert the output of the propagation to the appropriate reference frame.
+These element sets have been traditionally distributed in a compact text representation called
+Two-Line Element sets (TLEs), although this format suffers from a number of shortcomings
+and recently there has been a push to use the Orbit Data Messages international standard
+developed by the Consultive Committee for Space Data Systems (CCSDS 502.0-B-2).
+
+.. figure:: tle.pdf
+   :align: center
+
+   Two-Line Element set (TLE) for the ISS (retrieved on 2022-06-05) :label:`fig:tle`
 
 State of the art
 ----------------
