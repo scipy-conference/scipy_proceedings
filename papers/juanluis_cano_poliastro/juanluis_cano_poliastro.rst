@@ -870,7 +870,7 @@ Plotting
 --------
 For visualization purposes, poliastro provides the ``poliastro.plotting``
 package, which contains various utilities for generating 2D and 3D graphics
-using different backends such us ``matplotlib`` and ``plotly``. 
+using different backends such as matplotlib :cite:`hunter_2007_matplotlib` and Plotly.
 
 Generated graphics can be static or interactive. Main difference between these
 is the ability to modify the camera view in a dynamic way when using interactive
