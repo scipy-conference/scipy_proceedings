@@ -763,7 +763,7 @@ targeting is just a matter of solving the BVP, also known as Lambert's problem.
 Because targeting tries to find for an orbit, the problem is included in the
 Initial Orbit Determination field.
 
-The `poliastro.iod` module contains ``izzo`` and ``vallado`` modules. These
+The ``poliastro.iod`` package contains ``izzo`` and ``vallado`` modules. These
 provide a ``lambert`` function for solving the targeting problem. Nevertheless,
 a ``Maneuver.lambert`` constructor is also provided so users can keep taking
 advante of ``Orbit`` objects.
