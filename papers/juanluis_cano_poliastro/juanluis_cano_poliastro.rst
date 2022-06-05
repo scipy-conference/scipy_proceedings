@@ -339,6 +339,7 @@ developed by the Consultive Committee for Space Data Systems (CCSDS 502.0-B-2).
 
 .. figure:: tle.pdf
    :align: center
+   :figclass: w
 
    Two-Line Element set (TLE) for the ISS (retrieved on 2022-06-05) :label:`fig:tle`
 
