@@ -922,7 +922,7 @@ As a result, figure :ref:`fig:plotting2D` is obtained.
    :align: center
    :figclass: h
 
-   Two dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting2D`
+   Two-dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting2D`
 
 The interactive three-dimensional plot can be created using the following code:
 
@@ -942,7 +942,7 @@ As a result, figure :ref:`fig:plotting3D` is obtained.
    :align: center
    :figclass: h
 
-   Three dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting3D`
+   Three-dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting3D`
 
 
 Future work
