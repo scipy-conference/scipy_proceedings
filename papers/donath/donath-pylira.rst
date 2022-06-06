@@ -405,7 +405,7 @@ counts data shown in the left panel.
 As second example we use data from the Fermi Large Area Telescope (LAT). The Fermi-LAT
 is a satellite-based an imaging gamma-ray detector, which covers and energy range
 of 20 MeV to >300 GeV. The angular resolution varies strongly with energy and ranges
-from 0.1 to >10 degree. .. [#] https://www.slac.stanford.edu/exp/glast/groups/canda/lat_Performance.htm
+from 0.1 to >10 degree [#]_.
 
 Figure :ref:`fermi-gc` shows the result of the *Pylira*
 algorithm applied to Fermi-LAT data above 1~GeV to the region around the Galactic Center. The PSF
@@ -413,6 +413,8 @@ was obtained form the official Fermitools v2.0.19 and the *gtpsf* tool.
 First one can see that the algorithm achieves again a considerable improvement of the spatial resolution
 compared to the raw counts. It clearly resolves multiple point sources left to the
 the bright Galactic center source.
+
+.. [#] https://www.slac.stanford.edu/exp/glast/groups/canda/lat_Performance.htm
 
 
 .. figure:: images/pylira-fermi-gc.pdf
