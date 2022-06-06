@@ -67,7 +67,7 @@ For each individual photon, the incident direction and energy is
 measured. Based on this information the event can be histogramed
 into two dimensional data structures to form an actual image.
 
-Because of the low intensities associated recording of individual
+The measured signal follows Poisson statistics, as a consequence of the low intensities associated recording of individual events.
 events, the measured signal follows Poisson statistics. This imposes
 a non-linear relationship between the measured signal and true
 underlying intensity as well as a coupling of the signal with the
