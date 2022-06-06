@@ -84,7 +84,7 @@ instrument, often called "deconvolution". Depending on whether
 the PSF of the instrument is known, one distinguishes between
 the "blind deconvolution" and "non blind deconvolution" process.
 For astronomical observations the PSF can often either be
-simulated, given a model of the detector or inferred
+simulated, given a model of the detector, or inferred
 directly from the data by observing far distant objects,
 which appear as point source to the instrument.
 
