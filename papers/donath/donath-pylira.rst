@@ -75,7 +75,7 @@ measurement noise. Any statistically correct post-processing
 or reconstruction method of thus requires are
 careful treatment of the Poisson nature of the measured image.
 
-To maximise the scientific use of the data is is often desired
+To maximise the scientific use of the data, it is often desired
 to correct the degradation introduced by the imaging process.
 Besides correction for non-uniform exposure and background
 noise this also includes the correction for the "blurring"
