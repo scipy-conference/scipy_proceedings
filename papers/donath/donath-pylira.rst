@@ -63,7 +63,7 @@ of the signal, the imaging process consists in recording individual photons arri
 a source of interest, often called "events".
 This imaging process is typically for x-ray and gamma-ray telescopes, but is also found
 in magnetic resonance imaging or fluorescence microscopy.
-For each individual photon the incident direction and energy is
+For each individual photon, the incident direction and energy is
 measured. Based on this information the event can be histogramed
 into two dimensional data structures to form an actual image.
 
