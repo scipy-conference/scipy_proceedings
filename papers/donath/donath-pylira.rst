@@ -55,7 +55,7 @@ Pylira: deconvolution of images in the presence of Poisson noise
 Introduction
 ------------
 Any physical and astronomical imaging process is affected by the limited
-angular resolution of the instrument or telescope. In addition the quality
+angular resolution of the instrument or telescope. In addition, the quality
 of the resulting image is also degraded by background or instrumental
 measurement noise and non-uniform exposure.
 For short wavelengths and associated low intensities
