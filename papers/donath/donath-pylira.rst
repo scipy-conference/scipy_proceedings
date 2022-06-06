@@ -376,12 +376,20 @@ Astronomical Analysis Examples
 
 Both in the x-ray as well as gamma-ray regime the The Galactic Center is a complex emission
 region. It shows point sources, extended sources as well as underlying diffuse emission and
-thus represents a challenge for any astronomical data analysis. Figure :ref:`chandra-gc`
-shows the result of the *Pylira* algorithm applied to Chandra data of the Galactic
-center region between 0.5 and 7 keV. The PSF was obtained from simulation using the official
-Chandra science tools *ciao 4.14*. The algorithm achieves both an improved spatial
-resolution as well as a reduced noise level and higher contrast of the image in the right panel
-compared to the unprocessed counts data shown in the left panel.
+thus represents a challenge for any astronomical data analysis. *Chandra* is a spaced based
+x-ray observatory, which is in operation since 1999. It consists of nested cylindrical paraboloid
+and hyperboloid surfaces, which form an imaging optical system for x-rays. In the focal plane
+it has multiple instruments for different scientific purposes. This includes a high resolution
+camera (HRC) and an Advanced CCD Imaging Spectrometer (ACIS). The typical angular resolution
+is 0.5 arcsecond and the covered energy ranges from 0.1 - 10 keV.
+
+
+Figure :ref:`chandra-gc` shows the result of the *Pylira* algorithm applied to Chandra data
+of the Galactic center region between 0.5 and 7 keV. The PSF was obtained from simulations
+using the official Chandra science tools *ciao 4.14* and the *simulate_psf* tool.
+The algorithm achieves both an improved spatial resolution as well as a reduced noise
+level and higher contrast of the image in the right panel compared to the unprocessed
+counts data shown in the left panel.
 
 .. figure:: images/pylira-chandra-gc.pdf
    :scale: 70%
@@ -394,9 +402,14 @@ compared to the unprocessed counts data shown in the left panel.
    No baseline background model was taken into account. :label:`chandra-gc`
    TODO: include pixel size...
 
+As second example we use data from the Fermi Large Area Telescope (LAT). The Fermi-LAT
+is a satellite-based an imaging gamma-ray detector, which covers and energy range
+of 20 MeV to >300 GeV. The angular resolution varies strongly with energy and ranges
+from 0.1 to >10 degree. .. [#] https://www.slac.stanford.edu/exp/glast/groups/canda/lat_Performance.htm
 
 Figure :ref:`fermi-gc` shows the result of the *Pylira*
-algorithm applied to Fermi-LAT data above 1~GeV to the region around the Galactic Center.
+algorithm applied to Fermi-LAT data above 1~GeV to the region around the Galactic Center. The PSF
+was obtained form the official Fermitools v2.0.19 and the *gtpsf* tool.
 First one can see that the algorithm achieves again a considerable improvement of the spatial resolution
 compared to the raw counts. It clearly resolves multiple point sources left to the
 the bright Galactic center source.
