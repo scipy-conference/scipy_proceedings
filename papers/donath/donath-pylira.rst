@@ -59,13 +59,14 @@ angular resolution of the instrument or telescope. In addition, the quality
 of the resulting image is also degraded by background or instrumental
 measurement noise and non-uniform exposure.
 For short wavelengths and associated low intensities
-of the signal, the imaging process consists in recording individual photons arriving from
-a source of interest, often called "events".
-This imaging process is typically for x-ray and gamma-ray telescopes, but is also found
+of the signal, the imaging process consists of recording individual photons
+(often called "events") originating from a source of interest.
+This imaging process is typical for x-ray and gamma-ray telescopes, but is also found
 in magnetic resonance imaging or fluorescence microscopy.
-For each individual photon, the incident direction and energy is
-measured. Based on this information the event can be histogramed
-into two dimensional data structures to form an actual image.
+For each individual photon, the incident direction, energy
+and arrival time is measured. Based on this information the
+event can be binned into two dimensional data structures to
+form an actual image.
 
 The measured signal follows Poisson statistics, as a consequence of the low intensities associated recording of individual events.
 events, the measured signal follows Poisson statistics. This imposes
@@ -107,9 +108,12 @@ Richardson-Lucy
 One of the first methods for deconvolution of images with Poisson noise was
 proposed by :cite:`Richardson1972` and :cite:`Lucy1974`. This method, named
 after the original authors, is often known as the *Richardson & Lucy* (RL)
-method. The method takes the fundamental statistical properties of the image
-into account and describes the measurement process as a "forward fold" model.
-The true image is then inferred from a likelihood based optimization procedure.
+method. The method takes the fundamental statistical properties of the
+observed image into account and describes the measurement process as
+a "forward folded" modeling problem. An estimate of the true image is
+then reconstructed using an iterative, likelihood based optimization method.
+
+
 
 Assuming the noise in each pixel :math:`d_i` in the recorded counts image
 follows a Poisson distribution, the total likelihood of obtaining the
@@ -373,7 +377,7 @@ Astronomical Analysis Examples
 
 Both in the x-ray as well as gamma-ray regime the The Galactic Center is a complex emission
 region. It shows point sources, extended sources as well as underlying diffuse emission and
-thus represents a challenge for any astronomical data analsyis. Figure :ref:`chandra-gc`
+thus represents a challenge for any astronomical data analysis. Figure :ref:`chandra-gc`
 shows the result of the *Pylira* algorithm applied to Chandra data of the Galactic
 center region between 0.5 and 7 keV. The PSF was obtained from simulation using the official
 Chandra science tools *ciao 4.14*. The algorithm achieves both an improved spatial
@@ -387,8 +391,9 @@ compared to the unprocessed counts data shown in the left panel.
    Pylira applied to Chandra data from the Galactic center region, using the observation IDs
    *4684* and *4684*. The image on the left shows the raw observed counts between
    0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
-   values where chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
+   values were chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
    No baseline background model was taken into account. :label:`chandra-gc`
+   TODO: include pixel size...
 
 
 Figure :ref:`fermi-gc` shows the result of the *Pylira*
@@ -402,11 +407,11 @@ the bright Galactic center source.
    :scale: 70%
    :figclass: w
 
-   Pylira applied to Chandra data from the Galactic center region, using the observation IDs
-   *4684* and *4684*. The image on the left shows the raw observed counts between
-   0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
-   values where chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
-   No baseline background model was taken into account. :label:`fermi-gc`
+   Pylira applied to Fermi-LAT data from the Galactic center region. The image on
+   the left shows the raw measured counts between 5 and 1000 GeV. The image on the right
+   shows the deconvolved version. The LIRA hyperprior values were chosen as
+   *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*. A baseline background model
+   was not included. :label:`fermi-gc`
 
 
 Summary & Outlook
