@@ -200,11 +200,13 @@ For instance, an Environment object can be set as representing New Mexico, Unite
    :linenos:
 
    from rocketpy import Environment
-   env = Environment(
+
+   ex_env = Environment(
       railLength=5.2,
       latitude=32.990254,
       longitude=-106.974998,
-      elevation=1400) 
+      elevation=1400
+   ) 
 
 RocketPy requires `datetime` library information specifying the year, month, 
 day and hour to compute the weather conditions on the specified day of launch. 
@@ -242,10 +244,10 @@ a forecast with a quarter degree equally spaced longitude/latitude grid with a t
 .. code-block:: python
    :linenos:
 
-   env.setAtmosphericModel(
+   ex_env.setAtmosphericModel(
       type='Forecast', 
       file='GFS')
-   env.info()
+   ex_env.info()
 
 What is happening on the back-end of this code's snippet is RocketPy utilizing 
 the OPeNDAP protocol to retrieve data arrays from NOAA's server. 
@@ -276,7 +278,9 @@ For example, a typical solid motor can be created as an object in the following 
 .. code-block:: python
    :linenos:
    
-   motor_name = SolidMotor(
+   from rocketpy import SolidMotor
+
+   ex_motor = SolidMotor(
       thrustSource='Motor_file.eng',
       burnOut=2,
       reshapeThrustCurve= False,
@@ -302,8 +306,10 @@ A rocket object can be defined with the following code:
 .. code-block:: python
    :linenos:
 
-   rocket_name = Rocket(
-      motor=motor_name,
+   from rocketpy import Rocket
+
+   ex_rocket = Rocket(
+      motor=ex_motor,
       radius=127 / 2000,
       mass=19.197 - 2.956,
       inertiaI=6.60,
@@ -330,15 +336,15 @@ simply added to the code via the following methods:
 .. code-block:: python
    :linenos:
    
-   nosecone = RocketName.addNose(
+   nose_cone = ex_rocket.addNose(
       length=0.55829, kind="vonKarman", 
       distanceToCM=0.71971
    )
-   fin_set = RocketName.addFins(
+   fin_set = ex_rocket.addFins(
       4, span=0.100, rootChord=0.120, tipChord=0.040, 
       distanceToCM=-1.04956
    )
-   tail = RocketName.addTail(
+   tail = ex_rocket.addTail(
       topRadius=0.0635, bottomRadius=0.0435, length=0.060, 
       distanceToCM=-1.194656
    )
@@ -358,13 +364,13 @@ a boolean value that signifies when the parachute should be activated. The *samp
 .. code-block:: python
    :linenos:
    
-   def parachuteTrigger(p, y):
+   def parachute_trigger(p, y):
        return True if vel_z < 0 and height < 800 else False
 
-   parachute_name = RocketName.addParachute(
+   ex_parachute = ex_rocket.addParachute(
       'ParachuteName',
       CdS=10.0,
-      trigger=parachuteTrigger, 
+      trigger=parachute_trigger, 
       samplingRate=105,
       lag=1.5,
       noise=(0, 8.3, 0.5)
@@ -393,7 +399,9 @@ initialize it, along with parameters such as launch heading and inclination rela
 .. code-block:: python
    :linenos:
    
-   test_flight = Flight(
+   from rocketpy import Flight
+
+   ex_flight = Flight(
       rocket=rocket,
       environment=env,
       inclination=85,
@@ -519,38 +527,46 @@ An example of code of how this could be achieved:
 .. code-block:: python
    :linenos:
 
+   from rocketpy import Function
+
    def apogee(mass):
       # Prepare Environment
-      env = Environment(....)
+      ex_env = Environment(...)
 
-      env.setAtmosphericModel(type="CustomAtmosphere", 
-      wind_v=-5)
+      ex_env.setAtmosphericModel(
+         type="CustomAtmosphere", 
+         wind_v=-5
+      )
 
       # Prepare Motor
-      motor_name = SolidMotor(.....)
+      ex_motor = SolidMotor(...)
 
       # Prepare Rocket
-      rocket_name = Rocket(.....
+      ex_rocket = Rocket(
+         ...,
          mass=mass,
-         ......)
+         ...
+      )
 
-      rocket_name.setRailButtons([0.2, -0.5])
-      nose = RocketName.addNose(.....)
-      fin_set = RocketName.addFins(....)
-      tail = RocketName.addTail(....)
+      ex_rocket.setRailButtons([0.2, -0.5])
+      nose_cone = ex_rocket.addNose(.....)
+      fin_set = ex_rocket.addFins(....)
+      tail = ex_rocket.addTail(....)
 
       # Simulate Flight until Apogee
-      test_flight = Flight(.....)
-      return test_flight.apogee
+      ex_flight = Flight(.....)
+      return ex_flight.apogee
 
-   apogee_by_mass = Function(apogee, inputs="Mass (kg)", 
-   outputs="Estimated Apogee (m)")
+   apogee_by_mass = Function(
+      apogee, inputs="Mass (kg)", 
+      outputs="Estimated Apogee (m)"
+   )
    apogee_by_mass.plot(8, 20, 20)
 
 The possibility of generating this relation between mass and apogee in a graph shows the flexibility of Rocketpy and 
 also the importance of the simulation being designed to run fast.
 
-2. Dynamic Stability Analysis
+1. Dynamic Stability Analysis
    
 In this analysis the integration of three different RocketPy classes will be explored: Function, Rocket, and Flight.
 The motivation is to investigate how static stability translates into dynamic stability, 
@@ -675,12 +691,12 @@ the number of simulations:
       # set of inputs generated by sim_settings
       
       # Prepare Environment
-      env = Environment(.....)
+      ex_env = Environment(.....)
       # Prepare Motor
       ex_motor = SolidMotor(.....)
       # Prepare Rocket
       ex_rocket = Rocket(.....)
-      nose = ex_rocket.addNose(.....)
+      nose_cone = ex_rocket.addNose(.....)
       fin_set = ex_rocket.addFins(....)
       tail = ex_rocket.addTail(.....)
 
@@ -744,7 +760,7 @@ Here is an example. First, a SolidMotor object and a Rocket object are initializ
 
    @pytest.fixture
    def unitless_solid_motor():
-      example_motor = SolidMotor(
+      return SolidMotor(
          thrustSource="Cesaroni_M1670.eng",
          burnOut=3.9,
          grainNumber=5,
@@ -752,12 +768,10 @@ Here is an example. First, a SolidMotor object and a Rocket object are initializ
          grainDensity=1815,
          ...
       )
-      return example_motor
-
 
    @pytest.fixture
    def unitless_rocket(solid_motor):
-      example_rocket = Rocket(
+      return Rocket(
          motor=unitless_solid_motor,
          radius=0.0635,
          mass=16.241,
@@ -767,7 +781,6 @@ Here is an example. First, a SolidMotor object and a Rocket object are initializ
          distanceRocketPropellant=-0.85704,
          ...
       )
-      return example_rocket
 
 Then, a SolidMotor object and a Rocket object are initialized with `numericalunits`:
 
@@ -787,7 +800,7 @@ Then, a SolidMotor object and a Rocket object are initialized with `numericaluni
 
    @pytest.fixture
    def unitful_motor(kg, m):
-      example_motor = SolidMotor(
+      return SolidMotor(
          thrustSource="Cesaroni_M1670.eng",
          burnOut=3.9,
          grainNumber=5,
@@ -795,11 +808,10 @@ Then, a SolidMotor object and a Rocket object are initialized with `numericaluni
          grainDensity=1815 * (kg / m**3),
          ...
       )
-      return example_motor
 
    @pytest.fixture
    def unitful_rocket(kg, m, dimensionless_motor):
-      example_rocket = Rocket(
+      return Rocket(
          motor=unitful_motor,
          radius=0.0635 * m,
          mass=16.241 * kg,
@@ -809,7 +821,6 @@ Then, a SolidMotor object and a Rocket object are initialized with `numericaluni
          distanceRocketPropellant=-0.85704 * m,
          ...
       )
-      return example_rocket
 
 Then, to ensure that the equations implemented in both classes (:code:`Rocket` and :code:`SolidMotor`) are dimensionally
 correct, the values computed can be compared. For example, the :code:`Rocket` class computes the rocket's static margin,
@@ -823,7 +834,7 @@ which is a non-dimensional value and the result from both calculations should be
       unitful_rocket
    ):
       ...
-      s1 = unitless_rocket.staticMargin()
+      s1 = unitless_rocket.staticMargin(0)
       s2 = unitful_rocket.staticMargin(0)
       assert abs(s1 - s2) < 1e-6
 
@@ -838,8 +849,8 @@ of length, then such value must be divided by the relevant unit for comparison:
       unitful_rocket
    ):
       ...
-      cp1 = unitless_rocket.cpPosition()
-      cp2 = unitful_rocket.cpPosition() / m
+      cp1 = unitless_rocket.cpPosition(0)
+      cp2 = unitful_rocket.cpPosition(0) / m
       assert abs(cp1 - cp2) < 1e-6
 
 If the assertion fails, we can assume that the formula responsible for calculating the center of pressure position was
