@@ -322,9 +322,6 @@ mass of the motor propellant. The *powerOffDrag* and *powerOnDrag* receive .csv 
 coefficient as a function of rocket speed for the case where the motor is off and other for the motor still burning, 
 respectively.
 
-.. The calculations made in the class consider, as the geometrical reference, the center of mass of the rocket.
-.. Thus, all parts of the rocket must be defined considering its distance to the rockets CM
-
 At this point, the simulation would run a rocket with a tube of a certain diameter, with its center of mass specified 
 and a motor at its end. For a better simulation, a few more important aspects should then be defined, called 
 *Aerodynamic surfaces*. Three of them are accepted in the code, these being the nosecone, fins, and tail. They can be 
@@ -712,7 +709,6 @@ on Fig. :ref:`apogAlt`.
    :figclass: bht
    
    Distribution of apogee altitude :label:`apogAlt`
-.. 
 
 Finally, it is also worth mentioning that all the information generated in the Monte Carlo simulation is based on
 RocketPy may be of utmost importance to safety and operational management during rocket launches, once it allows for a 
