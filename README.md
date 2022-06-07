@@ -158,8 +158,8 @@ have final say in whether to accept or reject a paper.
 
 - April 5: Authors invited to submit full papers
 - May 27: 1st Draft for Submission
-- May 27–June 23: Open Review Period
-- June 29: Final Author Revision Deadline
+- May 27–June 30: Open Review Period
+- July 4: Final Author Revision Deadline
 - July 6: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
