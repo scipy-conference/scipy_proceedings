@@ -258,14 +258,13 @@ This step is only required once and depends on the computer architecture the cod
 f2py -c --fcompiler=gnu95 pyDAMPF.f90 -m mypyDAMPF
 \end{verbatim}
 \end{quote}
-
 This command-line generates mypyDAMPF.so, which will be automatically located in the simulation folders.
 
 Once we have obtained the numerical code as Python modules, we need to choose the execution mode, which can be serial or parallel. Whereby parallel refers to multi-threading capabilities only within this first version of the code.
 
 \paragraph{Serial method}
 
-This method is completely transparent to the user and will execute all the simulation cases found in the file \textit{tempall.txt} by running the script \textitP{inputs\_processor.py}. Our in-house development creates an individual folder for each simulation case, which can be executed in one thread.
+This method is completely transparent to the user and will execute all the simulation cases found in the file \textit{tempall.txt} by running the script \textit{inputs\_processor.py}. Our in-house development creates an individual folder for each simulation case, which can be executed in one thread.
 
 \begin{Verbatim}[commandchars=\\\{\},fontsize=\footnotesize]
 \PY{k}{def} \PY{n+nf}{serial\PYZus{}method}\PY{p}{(}\PY{n}{tcases}\PY{p}{,} \PY{n}{factor}\PY{p}{,} \PY{n}{tempall}\PY{p}{)}\PY{p}{:}

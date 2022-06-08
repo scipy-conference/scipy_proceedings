@@ -1,5 +1,11 @@
-\BOOKMARK [2][-]{section*.1}{Motivation and background}{}% 1
-\BOOKMARK [2][-]{section*.2}{High-level overview}{}% 2
-\BOOKMARK [2][-]{section*.3}{Installation}{}% 3
-\BOOKMARK [2][-]{section*.4}{Parallel algorithms}{}% 4
-\BOOKMARK [3][-]{section*.5}{Elementwise}{section*.4}% 5
+\BOOKMARK [2][-]{section*.1}{Introduction and Motivation}{}% 1
+\BOOKMARK [2][-]{section*.2}{Methods}{}% 2
+\BOOKMARK [3][-]{section*.3}{Processing inputs}{section*.2}% 3
+\BOOKMARK [3][-]{section*.4}{Execute pyDAMPF}{section*.2}% 4
+\BOOKMARK [3][-]{section*.8}{Analysis}{section*.2}% 5
+\BOOKMARK [2][-]{section*.11}{Results and discussions}{}% 6
+\BOOKMARK [2][-]{section*.22}{Limitations}{}% 7
+\BOOKMARK [2][-]{section*.23}{Future work}{}% 8
+\BOOKMARK [2][-]{section*.24}{Conclusions}{}% 9
+\BOOKMARK [2][-]{section*.25}{Acknowledgments}{}% 10
+\BOOKMARK [1][-]{section*.26}{References}{}% 11
