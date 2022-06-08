@@ -50,7 +50,7 @@ Pylira: deconvolution of images in the presence of Poisson noise
 
 .. class:: keywords
 
-   deconvolution, point spread function, poisson, low counts, x-ray, gamma-ray
+   deconvolution, point spread function, poisson, low counts, X-ray, gamma-ray
 
 Introduction
 ------------
@@ -61,7 +61,7 @@ measurement noise and non-uniform exposure.
 For short wavelengths and associated low intensities
 of the signal, the imaging process consists of recording individual photons
 (often called "events") originating from a source of interest.
-This imaging process is typical for x-ray and gamma-ray telescopes, but is also found
+This imaging process is typical for X-ray and gamma-ray telescopes, but is also found
 in magnetic resonance imaging or fluorescence microscopy.
 For each individual photon, the incident direction, energy
 and arrival time is measured. Based on this information the
@@ -91,7 +91,7 @@ which appear as point source to the instrument.
 
 While in other branches of astronomy deconvolution methods are already part
 of the standard analysis, such as the CLEAN algorithm for radio data, this
-is not the case for x-ray and gamma-ray astronomy. As any deconvolution method
+is not the case for X-ray and gamma-ray astronomy. As any deconvolution method
 aims to enhance small scale structures in an image it becomes increasingly
 hard to solve for the regime of low signal to noise ratio.
 State of the art de-blurring algorithms based on deep convolutional neural networks
@@ -374,11 +374,11 @@ is reached after approximately 1000 iterations.
 Astronomical Analysis Examples
 ++++++++++++++++++++++++++++++
 
-Both in the x-ray as well as gamma-ray regime the The Galactic Center is a complex emission
+Both in the X-ray as well as gamma-ray regime the The Galactic Center is a complex emission
 region. It shows point sources, extended sources as well as underlying diffuse emission and
 thus represents a challenge for any astronomical data analysis. *Chandra* is a spaced based
-x-ray observatory, which is in operation since 1999. It consists of nested cylindrical paraboloid
-and hyperboloid surfaces, which form an imaging optical system for x-rays. In the focal plane
+X-ray observatory, which is in operation since 1999. It consists of nested cylindrical paraboloid
+and hyperboloid surfaces, which form an imaging optical system for X-rays. In the focal plane
 it has multiple instruments for different scientific purposes. This includes a high resolution
 camera (HRC) and an Advanced CCD Imaging Spectrometer (ACIS). The typical angular resolution
 is 0.5 arcsecond and the covered energy ranges from 0.1 - 10 keV.
