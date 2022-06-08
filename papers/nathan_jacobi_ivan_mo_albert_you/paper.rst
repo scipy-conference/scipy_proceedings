@@ -339,7 +339,7 @@ If certain clusters begin having an increased rate of appearing, it can be flagg
 
 .. figure:: hiv_plot.png
 
-   Bar Graph Showing KMeans Clustering Distribution of HIVl Terms against All Terms :label:`hivplot`
+   Bar Graph Showing KMeans Clustering Distribution of HIV Terms against All Terms :label:`hivplot`
 
 Conclusion
 ----------
