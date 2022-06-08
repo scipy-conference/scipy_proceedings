@@ -82,15 +82,6 @@ We now briefly review the models for time series data that are available in
        testing related to time series data; see
        https://www.statsmodels.org/stable/tsa.html.
 
-..
-   Models:
-
-   - Exponential smoothing models
-   - Autoregressive and moving-average models and their extensions
-   - Structural time series (foreshadow Bayesian STS, cite Causal Impact, Prophet, and TensorFlow)
-   - Vector autoregressive models
-   - Dynamic factor models
-
 Exponential smoothing models
 ''''''''''''''''''''''''''''
 
@@ -170,7 +161,7 @@ few examples are given in the following code
 
 These models have become popular for time series analysis and forecasting, as
 they are flexible and the estimated components are intuitive. Indeed, Google's
-Causal Impact library  :cite:`brodersen_inferring_2015` uses a Bayesian
+Causal Impact library :cite:`brodersen_inferring_2015` uses a Bayesian
 structural time series approach directly, and Facebook's Prophet library
 :cite:`taylor_forecasting_2017` uses a conceptually similar framework and is
 estimated using PyStan.
@@ -272,7 +263,7 @@ The following code shows how to construct a DFM in *statsmodels*
 
    # DFM with 2 factors that evolve as a VAR(3)
    model_dfm = sm.tsa.DynamicFactor(
-      y, k_factors=2, factor_order=3)
+      z, k_factors=2, factor_order=3)
 
 Linear Gaussian state space models
 ''''''''''''''''''''''''''''''''''
@@ -307,9 +298,6 @@ a simulation smoother, all of which are important for conducting Bayesian
 inference for these models. The implementation in *statsmodels* largely follows
 the treatment in :cite:`durbin_time_2012`, and is described in more detail in
 :cite:`fulton_estimating_2015`.
-
-
-
 
 In addition to these key tools, state space models also admit general
 implementations of useful features such as forecasting, data simulation, time
@@ -351,6 +339,25 @@ above, since they are all implemented as part of the same state space model
 framework. In the next section, we show how these features can be used to
 perform Bayesian inference with these models.
 
+..
+   Model
+   - Known parameters: `update`, `filter` or `smooth`
+   - Frequentist inference: `fit`
+   - Bayesian inference: 
+   Results
+
+
+..
+   Features:
+
+   - Fitting / loglikelihood (need the latter in the Bayesian section)
+   - Forecast
+   - Simulate
+      + Simulation smoother
+   - States (i.e. time series decomposition)
+   - Impulse responses
+   - News
+
 Bayesian inference via Markov chain Monte Carlo
 -----------------------------------------------
 
@@ -381,15 +388,17 @@ In addition, the ArviZ library is designed to work with MCMC output from any
 source, and we can easily adapt it to our use.
 
 With either Metropolis-Hastings or Gibbs sampling, our procedure will produce a
-sequence of sample values (of parameters and the unobserved state vector) that
-– assuming certain conditions are met – approximate draws from the posterior
-distribution arbitrarily well, as the number of length of the chain of samples
-becomes very large.
+sequence of sample values (of parameters and / or the unobserved state vector)
+that – assuming certain conditions are met – approximate draws from the
+posterior distribution arbitrarily well, as the number of length of the chain of
+samples becomes very large.
 
 .. [#] While a detailed description of these issues is out of the scope of this
        paper, there are many superb references on this topic. We refer the
        interested reader to :cite:`west_bayesian_1999`, which provides a
-       book-length treatment of Bayesian inference for state space models.
+       book-length treatment of Bayesian inference for state space models, and
+       :cite:`kim_state-space_1999`, which provides many examples and
+       applications.
 
 Random walk Metropolis-Hastings
 '''''''''''''''''''''''''''''''
@@ -408,6 +417,8 @@ computation introduced above.
 
    import arviz as az
    from scipy import stats
+   
+   # Construct the model
    model_rw = sm.tsa.UnobservedComponents(y, 'rwalk')
 
    # Specify the prior distribution. With MH, this
@@ -449,14 +460,17 @@ computation introduced above.
    # Convert for use with ArviZ and plot posterior
    samples_rw = az.convert_to_inference_data(
       samples_rw)
+   # Eliminate the first 10000 samples as burn-in;
+   # thin by factor of 10 to reduce autocorrelation
    az.plot_posterior(samples_rw.posterior.sel(
-      {'draw': np.s_[10000::10]}))
+      {'draw': np.s_[10000::10]}), kind='bin',
+      point_estimate='median')
 
 .. figure:: mh_samples.png
    :scale: 50%
    :align: center
 
-   Approximate posterior distribution of variance parameter, random walk model, Metropolis-Hastings. :label:`mhsamples`
+   Approximate posterior distribution of variance parameter, random walk model, Metropolis-Hastings; CPI inflation. :label:`mhsamples`
 
 The approximate posterior distribution, constructed from the sample chain,
 is shown in Figure :ref:`mhsamples`.
@@ -464,34 +478,32 @@ is shown in Figure :ref:`mhsamples`.
 Gibbs sampling
 ''''''''''''''
 
-Gibbs sampling is a special case of Metropolis-Hastings (MH) that is applicable
-when it is possible to produce draws directly from the conditional distributions
-of every variable, even though it is still not possible to derive the general
-form of the joint posterior. While this approach can be superior to MH when
-it is applicable, the ability to derive the conditional distributions typically
-requires the use of a "conjugage" prior -- i.e. a prior from some specific
-family of distributions. For example, above we specified a uniform distribution
-as the prior when sampling via MH, but that is not possible with Gibbs sampling.
-Here, we show how to implement Gibbs sampling estimation of the variance
-parameter, now making use of an inverse Gamma prior, and the simulation smoother
-introduced above.
+Gibbs sampling (GS) is a special case of Metropolis-Hastings (MH) that is
+applicable when it is possible to produce draws directly from the conditional
+distributions of every variable, even though it is still not possible to derive
+the general form of the joint posterior. While this approach can be superior to
+random walk MH when it is applicable, the ability to derive the conditional
+distributions typically requires the use of a "conjugate" prior – i.e. a prior
+from some specific family of distributions. For example, above we specified a
+uniform distribution as the prior when sampling via MH, but that is not possible
+with Gibbs sampling. Here, we show how to implement Gibbs sampling estimation of
+the variance parameter, now making use of an inverse Gamma prior, and the
+simulation smoother introduced above.
 
 .. figure:: gs_samples.png
    :scale: 50%
    :align: center
 
-   Approximate posterior joint distribution of variance parameters, local level model, Gibbs sampling. :label:`gssamples`
+   Approximate posterior joint distribution of variance parameters, local level model, Gibbs sampling; CPI inflation. :label:`gssamples`
 
 .. code-block:: python
 
+   # Construct the model and simulation smoother
    model_ll = sm.tsa.UnobservedComponents(y, 'llevel')
-
-   # Construct the simulation smoother
    sim_ll = model_ll.simulation_smoother()
 
-   # Specify the prior distributions. With GS, we
-   # must choose an inverse Gamma prior for each
-   # variance
+   # Specify the prior distributions. With GS, we must
+   # choose an inverse Gamma prior for each variance
    priors = [stats.invgamma(0.01, scale=0.01)] * 2
 
    # Storage
@@ -503,14 +515,16 @@ introduced above.
 
    # Iterations
    for i in range(1, niter + 1):
-      # Update the model parameters
+      # (a) Update the model parameters
       model_ll.update(samples_ll[i - 1])
-      # Draw from the conditional posterior of
+
+      # (b) Draw from the conditional posterior of
       # the state vector
       sim_ll.simulate()
       sample_state = sim_ll.simulated_state.T
 
-      # Compute / draw from conditional posterior of
+      # (c) Compute / draw from conditional posterior
+      # of the parameters:
       # ...observation error variance
       resid = y - sample_state[:, 0]
       post_shape = len(resid) / 2 + 0.01
@@ -536,33 +550,160 @@ introduced above.
 The approximate posterior distribution, constructed from the sample chain,
 is shown in Figure :ref:`gssamples`.
 
-Conclusion
-----------
+Illustrative examples
+---------------------
 
 For clarity and brevity, the examples in the previous section gave results for
-simple cases. However, these basic methods carry through to
-each of the models introduced earlier, including in cases with hundreds of
+simple cases. However, these basic methods carry through to each of the models
+introduced earlier, including in cases with multivariate data and hundreds of
 parameters. Moreover, the Metropolis-Hastings approach can be combined with
 the Gibbs sampling approach, so that if the end user wishes to use Gibbs
 sampling for some parameters, they are not restricted to choose only conjugate
-priors for all parameters, 
+priors for all parameters.
 
 In addition to sampling the posterior distributions of the parameters, this
 method allows sampling other objects of interest, including forecasts of
 observed variables, impulse response functions, and the unobserved state vector.
 This last possibility is especially useful in cases such as the structural time
 series model, in which the unobserved states correspond to interpretable
-elements such as the trend and seasonal components.
+elements such as the trend and seasonal components. We provide several
+illustrative examples of the various types of analysis that are possible.
 
-Finally, there are a number of extensions to the time series models presented
-here that are made possible when using Bayesian inference. First, it is
-easy to create custom state space models within the *statsmodels* framework,
-which automatically inherit all the functionality described above. Second,
-because the general state space model introduced above allows for time-varying
-system matrices, it is possible using Gibbs sampling methods to introduce
-support for automatic outlier handling, stochastic volatility, and regime
-switching models, even though these are largely infeasible in *statsmodels*
-when using frequentist methods.
+Forecasting and Time Series Decomposition
+'''''''''''''''''''''''''''''''''''''''''
+
+.. figure:: indpro_fcast.png
+   :scale: 60%
+   :align: center
+
+   Data and forecast with 90% credible interval; U.S. Industrial Production. :label:`indproforecast`
+
+.. figure:: indpro_level_trend.png
+   :scale: 60%
+   :align: center
+
+   Estimated level, trend, and seasonal components, with 90% credible interval; U.S. Industrial Production. :label:`indproleveltrend`
 
 
+.. figure:: causal_impact.png
+   :scale: 60%
+   :align: center
+   :figclass: wht
 
+   "Causal impact" of COVID-19 on U.S. Sales in Manufacturing and Trade Industries. :label:`causalimpact`
+
+In our first example, we apply the Gibbs sampling approach to a
+structural time series model in order to forecast U.S. Industrial Production
+and to produce a decomposition of the series into level, trend, and seasonal
+components. The model is
+
+.. math::
+
+   \begin{aligned}
+   \hspace{7.5em} y_t & = \mu_t + \gamma_t + \varepsilon_t & \hspace{2em} \text{observation equation} \\
+   \mu_t & = \beta_t + \mu_{t-1} + \zeta_t & \text{level} \\
+   \beta_t & = \beta_{t-1} + \xi_t & \text{trend} \\
+   \gamma_t & = \gamma_{t-s} + \eta_t & \text{seasonal} 
+   \end{aligned}
+
+Here, we set the seasonal periodicity to `s=12`, since Industrial Production is
+a monthly variable. We can construct this model in Statsmodels as [#]_
+
+.. code-block:: python
+
+   model = sm.tsa.UnobservedComponents(
+      y, 'lltrend', seasonal=12)
+
+.. [#] This model is often referred to as a "local linear trend" model (with
+   additionally a seasonal component); `lltrend` is an abbreviation of this
+   name.
+
+To produce the time-series decomposition into level, trend, and seasonal
+components, we will use samples from the posterior of the state vector
+:math:`(\mu_t, \beta_t, \gamma_t)` for each time period :math:`t`. These are
+immediately available when using the Gibbs sampling approach; in the earlier
+example, the draw at each iteration was assigned to the variable `sample_state`.
+To produce forecasts, we need to draw from the posterior predictive
+distribution for horizons :math:`h = 1, 2, \dots H`. This can
+be easily accomplished by using the `simulate` method introduced earlier. To be
+concrete, we can accomplish these tasks by modifying section (b) of our Gibbs
+sampler iterations as follows:
+
+.. code-block:: python
+   
+    # (b') Draw from the conditional posterior of
+    # the state vector
+    model.update(params[i - 1])
+    sim.simulate()
+    # save the draw for use later in time series
+    # decomposition
+    states[i] = sim.simulated_state.T
+
+    # Draw from the posterior predictive distribution
+    # using the `simulate` method
+    n_fcast = 48
+    fcast[i] = model.simulate(
+       params[i - 1], n_fcast,
+       initial_state=states[i, -1]).to_frame()
+
+These forecasts and the decomposition into level, trend, and seasonal components
+are summarized in Figures :ref:`indproforecast` and :ref:`indproleveltrend`,
+which show the median values along with 90% credible intervals. Notably, the
+intervals shown incorporate for both the uncertainty arising from the stochastic
+terms in the model as well as the need to estimate the models' parameters. [#]_
+
+.. [#] The popular Prophet library, :cite:`taylor_forecasting_2017`, similarly
+   uses an additive model combined with Bayesian sampling methods to produce
+   forecasts and decompositions, although its underlying model is a GAM rather
+   than a state space model.
+
+Casual impacts
+''''''''''''''
+
+A closely related procedure described in :cite:`brodersen_inferring_2015` uses
+a Bayesian structural time series model to estimate the "causal impact" of
+some event on some observed variable. This approach stops estimation of the
+model just before the date of an event and produces a forecast by drawing from
+the posterior predictive density, using the procedure described just above. It
+then uses the difference between the actual path of the data and the forecast to
+estimate impact of the event.
+
+An example of this approach is shown in Figure :ref:`causalimpact`, in which we
+use this method to illustrate the effect of the COVID-19 pandemic on U.S. Sales
+in Manufacturing and Trade Industries. [#]_
+
+.. [#] In this example, we used a local linear trend model with no seasonal
+   component.
+
+Extensions
+----------
+
+There are many extensions to the time series models presented here that are
+made possible when using Bayesian inference. First, it is easy to create custom
+state space models within the *statsmodels* framework. As one example, the
+*statsmodels* documentation describes how to create a model that extends the
+typical VAR described above with time-varying parameters. [#]_ These custom
+state space models automatically inherit all the functionality described above,
+so that Bayesian inference can be conducted in exactly the same way.
+
+.. [#] For details, see https://www.statsmodels.org/devel/examples/notebooks/generated/statespace_tvpvar_mcmc_cfa.html.
+
+Second, because the general state space model available in *statsmodels* and
+introduced above allows for time-varying system matrices, it is possible using
+Gibbs sampling methods to introduce support for automatic outlier handling,
+stochastic volatility, and regime switching models, even though these are
+largely infeasible in *statsmodels* when using frequentist methods such as
+maximum likelihood estimation. [#]_
+
+.. [#] See, for example, :cite:`stock_core_2016` for an application of these
+       techniques that handles outliers, :cite:`kim_stochastic_1998` for
+       stochastic volatility, and :cite:`kim_business_1998` for
+       an application to dynamic factor models with regime switching.
+
+Conclusion
+----------
+
+This paper introduces the suite of time series models available in *statsmodels*
+and shows how Bayesian inference using Markov chain Monte Carlo methods can be
+applied to estimate their parameters and produce analyses of interest, including
+time series decompositions and forecasts.
