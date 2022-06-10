@@ -116,33 +116,41 @@ Derivative of objective functional F(X) in the direction of the random vector Y 
 
 where density function of the random vector $X^\epsilon=X^0+\epsilon Y$ may be expressed in terms of joint density function $p_{{X^0},Y} (x,y)$ of $X^0$ and Y as follows:
 
-  \begin{equation}
+  
+.. math::
+
     p_{x^ \epsilon} (x) = \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dy
-    \end{equation}
+
 
 The following relation (property of divergence) will be needed later 
 
 
-   \begin{equation}
+   
+.. math::
+
    \frac{d}{d \epsilon} p_{x^ \epsilon} (x - \epsilon y,y) =(-\nabla_x  p_{x^ \epsilon} (x,y), y ) = -div_x ( p_{x^ \epsilon} (x,y) y )
-    \end{equation}
+ 
 
 where ( , ) defines dot product.
 
 Assuming differentiability of the integrals (for example, by selecting the appropriate $p_{x^ \epsilon} (x,y)$ and using (3), (4) we get
 
-   \begin{equation}
+  
+.. math::
+
    \delta _Y F(X^0 ) = [\frac{d}{d \epsilon} \int_{R^n}   \int_{R^n} f(x) p_{x^ \epsilon} (x - \epsilon y,y) dx dy] _{\epsilon=0}=
-    \end{equation}
+
 
 $   = [\frac{d}{d \epsilon} \int_{R^n} f(x)  \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dx dy] _{\epsilon=0}= [ \int_{R^n} f(x) ( \frac{d}{d \epsilon} \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dy )dx] _{\epsilon=0}=$
 
 
 $= \int_{R^n} f(x)(  \int_{R^n} [\frac{d}{d \epsilon}  p_{x^ \epsilon} (x - \epsilon y,y)] _{\epsilon=0} dy) dx=- \int_{R^n} f(x)(  \int_{R^n} [div_x ( p_{x^ \epsilon} (x,y) y )]  dy) dx=$
  
-   \begin{equation}
-- \int_{R^n} f(x) div_x [  \int_{R^n} ( p_{x^ \epsilon} (x,y) y )  dy] dx
-   \end{equation}
+  
+.. math::
+
+   - \int_{R^n} f(x) div_x [  \int_{R^n} ( p_{x^ \epsilon} (x,y) y )  dy] dx
+
 
 Using formula for conditional distribution $ p_{Y/X^0=x} (y)=\frac {p_{x^ \epsilon y} (x,y)}{p_{x^ \epsilon}  (x) )}$ ,
 
@@ -153,9 +161,12 @@ we get $\delta _Y F(X^0 )= - \int_{R^n} f(x) div_x [ p_{x^ \epsilon}(x) \int_{R^
 Denote $ \overline {y}(x) = \int_{R^n}  yp_{Y/X^0=x} (y)  dy=E[Y/X^0=x]$
 
 Taking into account normalization condition for density we arrive at the following expression for directional derivative:
- \begin{equation}
-\delta _Y F(X^0 )= - \int_{R^n} (f(x)-C) div_x [ p_{x^0}(x)\overline y(x)]dx 
-\end{equation}
+
+
+.. math::
+
+    \delta _Y F(X^0 )= - \int_{R^n} (f(x)-C) div_x [ p_{x^0}(x)\overline y(x)]dx 
+
 where C is arbitrary chosen constant
 
 Considering solution to $\delta _Y F(X^0 )\to\min_Y $ allows to obtain gradient-like alggorithms for optimization that use only objective function values ( do not use derivatives of objective function)
@@ -165,30 +176,38 @@ Potential function as a solution to Poisson's equation
 ------------------------------------------------------
 Decomposing vector field $p_{x^0}(x)\overline y(x)$  into potential field $\nabla \phi_0 (x)$ and divergence-free component $W_0 (x)$:
 
- \begin{equation}
-p_{x^0}(x)\overline y(x)= \nabla \phi_0 (x) +W_0 (x)
-\end{equation}
+ 
+.. math::
+
+    p_{x^0}(x)\overline y(x)= \nabla \phi_0 (x) +W_0 (x)
+
 
 we arrive at Poisson's equation for potential function:
 
- \begin{equation}
- \delta \phi_0 (x) = -L [f(x)-C]p_u (x) 
-\end{equation}
+
+.. math::
+
+    \delta \phi_0 (x) = -L [f(x)-C]p_u (x) 
+
 where L is a constant
 
 Solution to Poisson's equation approaching 0 at infinity may be written in the following form
-Solution to Poisson's equation approaching 0 at infinity may be written in the following form
- \begin{equation}
-\varphi_0 (x)=  \int_{R^n} E(x,\xi)  [f(\xi) - C] p_u (\xi)d\xi
-\end{equation}
+
+
+.. math::
+
+     \varphi_0 (x)=  \int_{R^n} E(x,\xi)  [f(\xi) - C] p_u (\xi)d\xi
+
 where $E(x,\xi) $ is a fundamental solution to Laplace's equation.
 
 Then for potential component$\Delta \varphi_0 (x)$  we have
 
 
- \begin{equation}
- \Delta \varphi_0 (x) = -L E[\Delta_x E(x,u)(f(x)-C)] 
-\end{equation}
+
+.. math::
+
+   \Delta \varphi_0 (x) = -L E[\Delta_x E(x,u)(f(x)-C)] 
+
 
 To conclude, the representation  for gradient-like direction is obtained. This direction maximizes directional derivative of the objective functional F(X). Therefore, this representation can be used for computing the gradient of the objective function f(x) using only its values.
 Gradient direction of the objective function f(x) is determined by the gradient of the potential function $\varphi_0 (x)$, which, in turn,  is determined by Poisson’s equation.
@@ -198,23 +217,29 @@ Practical considerations
 The dynamics of the expectation of objective function may be written in the space of random vectors as follows: 
 The dynamics of the expectation of objective function may be written in the space of random vectors as follows: 
 
- \begin{equation}
- X_{N+1} = X_{N}+ \alpha_{N+1}Y_{N+1}
-\end{equation}
+
+.. math::
+
+     X_{N+1} = X_{N}+ \alpha_{N+1}Y_{N+1}
+
 
 where N - iteration number, $Y^{N+1}$ - random vector that defines direction of move at ( N+1)th iteration, $\alpha_{N+1}$ -step size on (N+1)th iteration.
 $Y^{N+1}$  must be feasible at each iteration, i.e. the objective functional should decrease: $F(X^{N+1})<(X^{N})$. 
 Applying expection to (12) and presenting $E[Y_{N+1}$ asconditional expectation $E_x E[Y/X]$ we get:
 
- \begin{equation}
- X_{N+1} =E[ X_{N}]+ \alpha_{N+1}E_{X^N} E[Y^{N+1}/X^N]
-\end{equation}
+
+.. math::
+
+     X_{N+1} =E[ X_{N}]+ \alpha_{N+1}E_{X^N} E[Y^{N+1}/X^N]
+
 
 Replacing mathematical expectations $E[ X_{N}]$ and $Y_{N+1}]$  with their estimates $\overline E  ^{ N+1}$ and  $ \overline y (X^N)$ we get:
 
- \begin{equation}
- \overline E  ^{ N+1} = \overline E  ^{ N}+ \alpha_{N+1} \overline E  _{X^N} [ \overline y (X^N)]
-\end{equation}
+
+.. math::
+
+     \overline E  ^{ N+1} = \overline E  ^{ N}+ \alpha_{N+1} \overline E  _{X^N} [ \overline y (X^N)]
+
 
 Note that expression for  $ \overline y (X^N)$ was obtained in the previos section up to certain parameters. By setting parameters to certain values 
 we can obtain stochastic extensions of well known heuristics such as Nelder and Mead algorithm or Covariance Matrix Adaptation Evolution Strategy.  
