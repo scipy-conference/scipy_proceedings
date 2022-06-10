@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from skimage.restoration import richardson_lucy
-from pylira.data import gauss_and_point_sources_gauss_psf, lincoln
+from pylira.data import lincoln
 from astropy.visualization import simple_norm
 
 random_state = np.random.RandomState(936)

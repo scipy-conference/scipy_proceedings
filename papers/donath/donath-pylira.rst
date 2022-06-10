@@ -129,22 +129,25 @@ Where the expected counts :math:`\lambda_i` are given by the convolution of the 
 flux distribution :math:`x_i` with the PSF :math:`p_k`:
 
 .. math::
-   :label: convolution
+   :label: simple_model
 
-    \lambda_i = \sum_k x_i p_{i - k}
+   \lambda_i = \sum_k x_i p_{i - k}
 
 This operation is often called "forward modelling" or "forward folding" with the instrument response.
+
+Richardson Lucy (RL)
+++++++++++++++++++++
 To obtain the most likely model given the data one searches a minimum of the total likelihood
 function, or equivalently of :math:`\mathcal{C}`. This high dimensional optimization problem
 can e.g., be solved by a classic gradient decent approach. Assuming the pixels values :math:`x_i`
-of the true image as independent parameters, one can take the derivative of the Eq. :ref:`cash`
+of the true image as independent parameters, one can take the derivative of the Eq.  :ref:`cash`
 with respect to the individual :math:`x_i`. This way one obtains a rule for how to update the
 current set pixels :math:`\mathbf{x}_n` in each iteration of the optimization:
 
 .. math::
    :label: rl
 
-    \mathbf{x}_{n + 1}  = \mathbf{x}_{n} -\alpha \cdot \frac{\partial \mathcal{C}\left( \mathbf{d} | \mathbf{x} \right)}{\partial x_i}
+   \mathbf{x}_{n + 1}  = \mathbf{x}_{n} -\alpha \cdot \frac{\partial \mathcal{C}\left( \mathbf{d} | \mathbf{x} \right)}{\partial x_i}
 
 Where :math:`\alpha` is a factor to define the step size. This method is in general
 equivalent to the gradient decent and backpropagation methods used in modern machine
@@ -152,19 +155,23 @@ learning techniques. This basic principle of solving the deconvolution problem f
 images with Poisson noise was proposed by :cite:`Richardson1972` and :cite:`Lucy1974`.
 Their method, named after the original authors, is often known as the *Richardson & Lucy* (RL)
 method. It was shown by :cite:`Richardson1972` that this converges to a maximum
-likelihood solution of Eq. :ref:`cash`. A Python implementation of the standard RL method
+likelihood solution of Eq.  :ref:`cash`. A Python implementation of the standard RL method
 is available e.g. in the `Scikit-Image` package :cite:`skimage`.
 
 Instead of the iterative, gradient decent based optimization it is also possible to sample from
 the likelihood function using a simple Metropolis-Hastings approach. This is demonstrated
 in one of the *Pylira* online tutorials (`Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__).
 
+
+RL Reconstruction Quality
++++++++++++++++++++++++++
 While technically the RL method converges to a maximum likelihood solution, it mostly
 still results in poorly restored images, especially if extended emission regions are
-present in the image. The problem is illustrated in Fig.:ref:`fig` using
+present in the image. The problem is illustrated in Fig.~:ref:`rl` using
 a simulated example image. While for a low number of iterations the RL method
-still results in a smooth intensity distribution, the structure decomposes
-more and more into a set of point-like sources with growing number of iterations.
+still results in a smooth intensity distribution, the structure of the image
+decomposes more and more into a set of point-like sources with growing number
+of iterations.
 
 Because of the PSF convolution an extended emission region
 can decompose into multiple nearby point sources and still lead to good model prediction,
@@ -185,48 +192,80 @@ and :cite:`Fish95`.
    counts. Those have been derived from the ground truth (upper mid) by convolving with
    a Gaussian PSF of width :math:`\sigma=3~\mathrm{pix}` and applying Poisson noise to
    it. The illustration uses the implementation of the RL algorithm from the `Scikit-Image`
-   package :cite:`skimage`. :label:`rl`
+   package :cite:`skimage`.  :label:`rl`
 
 
 LIRA Multiscale Prior
 +++++++++++++++++++++
-One possible solution to this problem was described in :cite:`Esch2004`.
-First the standard RL method can be extended by taking into account
-the non uniform exposure :math:`e_i` and a background estimate :math:`b_i`:
+One possible solution to this problem was described in :cite:`Esch2004`
+and :cite:`Connors2011`. First the simple forward folded model described
+in Eq. ~:ref:`simple_model` can be extended by taking into account the
+non-uniform exposure :math:`e_i` and a background estimate :math:`b_i`:
 
 .. math::
-   :label: convolution
+   :label: model
 
-    \lambda_i = \sum_k (e_i \cdot x_i) p_{i - k} + b_i
+   \lambda_i = \sum_k \left( e_i \cdot (x_i + b_i) \right) p_{i - k}
+
+The background :math:`b_i` can be more generally understood
+as a "baseline" image and thus e.g. include known structures,
+which are not of interested for the deconvolution process.
 
 Second the authors proposed to extend the Poisson log-likelihood
-function (Eq. :ref:`cash`) by a log-prior term that controls the
-smoothness of the reconstructed
-image on multiple spatial scales. For this the image is transformed
-into a multi-scale representation. Starting from the full resolution
-the image is divided into groups of 2x2 pixels. Each of the groups
-of 2x2 pixels is then divided by their total sum, resulting in
-an image containing the "split proportions" with respect to the
-image down sampled by a factor of two. This process is continued
-to further reduce the resolution of the image until only one
-pixel, containing the total sum of the full-resolution image,
-is left. For each of the 2x2 groups of the re-normalized images
-a Dirichlet distribution is introduced as a prior and summed
-up across all 2x2 groups and resolution levels. For each resolution
-level a parameter :math:`\alpha_k` is introduced, which represents
-the number of "prior counts" added to this resolution level,
+function (Equation :ref:`cash`) by a log-prior term that controls the
+smoothness of the reconstructed image on multiple spatial scales.
+For this the image :math:`x_i` is transformed into a multi-scale representation:
+starting from the full resolution the image is divided into groups
+of 2x2 pixels :math:`Q_k`. Each of the groups of 2x2 pixels is
+then divided by their total sum. This results in an image containing
+the "split proportions" with respect to the image down-sized
+by a factor of two. The process is continued to further reduce the
+resolution of the image until only one pixel, containing the total
+sum of the full-resolution image is left. This multiscale
+decomposition is illustrated in Figure~:ref:`ms-levels`.
+
+For each of the 2x2 groups of the re-normalized images
+a Dirichlet distribution is introduced as a prior:
+
+.. math::
+   :label: dirichlet
+
+    \phi_k \propto \mathrm{Dirichlet}(\alpha_k, \alpha_k, \alpha_k, \alpha_k)
+
+And multiplied across all 2x2 groups and resolution levels :math:`k`.
+For each resolutionlevel a parameter :math:`\alpha_k` is introduced,
+which represents the number of "prior counts" added to this resolution level,
 equally to each pixel, which effectively results in a smoothing
 of the image at the given resolution level. The distribution
 of `\alpha` values at each resolution level is described
 by a hyperprior distribution:
 
 .. math::
-   :label: prior
+   :label: hyperprior
 
     p(\alpha_k) = \exp{-\delta \alpha^3 / 3}
 
 Resulting in a fully hierarchical Bayesian model. A complete more
 detailed description of the prior definition is given in :cite:`Esch2004`.
+
+
+.. figure:: images/ms-levels.png
+   :scale: 80%
+   :figclass: bht
+
+   The image illustrates the multiscale decomposition used in the LIRA prior for
+   a 4x4 pixels example image. Each quadrant of 2x2 sub-images is labelled with
+   :math:`Q_N`. The sub-pixels in each quadrant are labelled :math:`\Lambda_{ij}`.
+   :label:`ms-levels`
+
+The problem is then solved by using a "hyprid" Gibbs MCMC sampling approach. For
+each iteration of sampling an image :math:`x_i`, the :math:`\alpha_k` parameters are optimized
+using a Newton method and thus "marginalized". After a "burn-in" phase the sampling
+process typically reaches convergence and starts sampling from the
+posterior distribution. The reconstructed image is then computed from the mean of the
+posterior samples. As for each pixels a full distribution of its values is available,
+the information can also be used to compute and associated error of the reconstructed
+value. This is another main advantages over e.g. the standard RL algorithms.
 
 
 The Pylira Package
@@ -237,10 +276,12 @@ Dependencies & Development
 
 The *Pylira* package is a thin Python wrapper around the original *LIRA* implementation provided by
 the authors of :cite:`Connors2011`. The original algorithm was implemented in *C* and made available
-as a package to the *R Language* :cite:`rmath`. Thus the implementation depends on the *RMath* library,
+as a package for the *R Language* :cite:`rmath`. Thus the implementation depends on the *RMath* library,
 which is still a required dependency to *Pylira*.
-The Python wrapper was built using the *Pybind11* :cite:`pybind11` package. For the data handling *Pylira*
-relies on *Numpy* :cite:`numpy` and *Astropy* :cite:`Astropy2018` for the *FITS* serialisation. The (interactive)
+The Python wrapper was built using the *Pybind11* :cite:`pybind11` package, which allows to reduce
+the code overhead introduced by the wrapper to a minimum. For the data handling *Pylira*
+relies on *Numpy* :cite:`numpy` arrays for the serialisation to the *FITS*  data format
+on *Astropy* :cite:`Astropy2018`. The (interactive)
 plotting functionality is achieved via *Matplotlib* :cite:`matplotlib` and *Ipywidgets* :cite:`ipywidgets`,
 which are both optional dependencies. *Pylira* is openly developed on Github  at `https://github.com/astrostat/pylira <https://github.com/astrostat/pylira>`__.
 It relies on *GitHub Actions* as a continuous integration service and uses the *Read the Docs* service
@@ -248,16 +289,8 @@ to build and deploy the documentation. The online documentation can be found on 
 *Pylira* implements a set of unit tests to assure compatibility and reproducibility of the
 results with different versions of the dependencies and across different platforms.
 As *Pylira* relies on random sampling for the MCMC process an exact reproducibility
-of results is hard on different platforms, however the agreement of results is at least
-guaranteed in the statistical limit of drawing many samples.
-
-API & Subpackages
-+++++++++++++++++
-*Pylira* is structured in multiple sub-packages. The :code:`pylira.core` module contains the original
-C implementation and the *Pybind11* wrapper code. The :code:`pylira.core` sub-package
-contains the main Python API, :code:`pylira.utils` includes utility functions for
-plotting and serialisation. And :code:`pylira.data` implements multiple pre-defined
-datasets for testing and tutorials.
+of results is hard to achieve on different platforms, however the agreement of results
+is at least guaranteed in the statistical limit of drawing many samples.
 
 
 Installation
@@ -282,6 +315,14 @@ On *Linux* the *RMath* dependency can be installed using standard package manage
 
 For more detailed instructions see `Pylira installation instructions <https://pylira.readthedocs.io/en/latest/pylira/index.html#installation>`__.
 
+API & Subpackages
++++++++++++++++++
+*Pylira* is structured in multiple sub-packages. The :code:`pylira.src` module contains the original
+C implementation and the *Pybind11* wrapper code. The :code:`pylira.core` sub-package
+contains the main Python API, :code:`pylira.utils` includes utility functions for
+plotting and serialisation. And :code:`pylira.data` implements multiple pre-defined
+datasets for testing and tutorials.
+
 
 Analysis Examples
 -----------------
@@ -289,9 +330,10 @@ Analysis Examples
 Simple Point Source
 +++++++++++++++++++
 *Pylira* was designed to offer a simple Python class based user interface,
-which allow for a short learning curve of using the package, given that
-users are familiar with Python in general and optionally *Numpy* and *Astropy*.
-A typical complete usage example of the *Pylira* package is shown in the following:
+which allows for a short learning curve of using the package, given that
+users are familiar with Python in general and more specifically *Numpy*.
+A typical complete usage example of the *Pylira* package is shown in the
+following:
 
 
 .. code-block:: python
@@ -315,51 +357,31 @@ A typical complete usage example of the *Pylira* package is shown in the followi
 
     result = deconvolve.run(data=data)
 
-    # plot pixel traces, result shown in Figure 1
-    result.plot_parameter_traces()
-
-    # plot pixel traces, result shown in Figure 2
+    # plot pixel traces, result shown in Figure 3
     result.plot_pixel_traces_region(
         center_pix=(16, 16), radius_pix=3
     )
 
+    # plot pixel traces, result shown in Figure 4
+    result.plot_parameter_traces()
+
+    # finally serialise the result
+    result.write("result.fits")
+
 
 The main interface is exposed via the :code:`LIRADeconvolver` class, which takes the configuration of
-the algorithm on initialisation. The data, which represented by a simple Python :code:`dict` data structure,
+the algorithm on initialisation. Typical configuration parameters include the total number of
+iterations :code:`n_iter_max` and the number of "burn-in" iterations, to be excluded from the
+posterior mean computation. The data, which represented by a simple Python :code:`dict` data structure,
 contains a :code:`"counts"`, :code:`"psf"` and optionally :code:`"exposure"` and :code:`"background"` array.
 The dataset is then passed to the :code:`LIRADeconvolver.run()` method to execute the deconvolution.
 The result is a :code:`LIRADeconvolverResult` object, which features the possibility to write the
-result as a *FITS* file, as well as to inspect the result with diagnostic plots.
+result as a *FITS* file, as well as to inspect the result with diagnostic plots. The result of
+the computation is shown in the left panel of Fig. :ref:`diagnosis1`.
 
 
 Diagnostic Plots
 ++++++++++++++++
-
-.. figure:: images/pylira-diagnosis.pdf
-   :scale: 70%
-   :align: center
-   :figclass: w
-
-   The curves show the traces of the log posterior
-   value as well as traces of the values of the prior parameter values. The *SmoothingparamN* parameters
-   correspond to the smoothing parameters per multi-scale level. The solid horizontal orange lines show the mean
-   value, the shaded orange area the :math:`1~\sigma` error region. The burn in phase is shown transparent and ignored
-   while estimating the mean.  :label:`diagnosis1`
-
-
-*Pylira* relies on an MCMC sampling approach to sample a series of reconstructed images from the posterior
-likelihood defined by Eq. :ref:`post`. Along with the sampling it marginalises over the smoothing
-hyper-parameters and optimizes them in the same process. To diagnose the validity of the results it is
-important to visualise the sampling traces of both the sampled images as well as hyper-parameters.
-
-Fig. :ref:`diagnosis1` shows one typical diagnostics plot created by the code example above.
-In a multi-panel figure user can inspect the traces of the total log-posteriror as well as the
-traces of th smoothing parameters. Each panel corresponds smoothing hyper parameter
-introduced for each level of the multi-scale representation of the reconstructed image.
-The figure also shows the mean value along with the :math:`1~\sigma` error
-region. In this case the algorithm show stable convergence after a burn-in phase of approximately 200
-iterations for the log-posterior as well as all of the multi-scale smoothing parameters.
-
 
 .. figure:: images/pylira-diagnosis-pixel.pdf
    :scale: 60%
@@ -371,17 +393,43 @@ iterations for the log-posterior as well as all of the multi-scale smoothing par
    shows the circular region defining the neighboring pixels. The blue line on the right plot shows the trace
    of the pixel of interest. The solid horizontal orange lines show the mean value, the shaded orange area
    the :math:`1~\sigma` error region. The burn in phase is shown in transparent blue and ignored while computing
-   the mean. The shaded gray lines show the traces of the neighboring pixels.  :label:`diagnosis2`
+   the mean. The shaded gray lines show the traces of the neighboring pixels.  :label:`diagnosis1`
 
-
-Another useful diagnostic plot is shown in Fig. :ref:`diagnosis2`. The plot shows the
+To validate the quality of the results *Pylira* provide many built-in diagnostic plots.
+One of these diagnostic plot is shown in the right panel of Fig. :ref:`diagnosis1`. The plot shows the
 image sampling trace for a single pixel of interest and its surrounding circular region of interest.
 This visualisation allows user to asses the stability of a small region in the image
 e.g. an astronomical point source during the MCMC sampling process. Due to the correlation with
 neighbouring pixels the actual value of a pixel might vary in the sampling process, which appears
 as "dips" in the trace of the pixel of interested and anti-correlated "peaks" in the one or mutiple
 of the surrounding pixels. In the this example a stable state of the pixels of interest
-is reached after approximately 1000 iterations.
+is reached after approximately 1000 iterations. This suggests the number of burn-in iterations, which
+were defined beforehand, should be increased.
+
+
+.. figure:: images/pylira-diagnosis.pdf
+   :scale: 70%
+   :align: center
+   :figclass: w
+
+   The curves show the traces of the log posterior
+   value as well as traces of the values of the prior parameter values. The *SmoothingparamN* parameters
+   correspond to the smoothing parameters :math:`\alpha_N` per multi-scale level. The solid horizontal orange lines show the mean
+   value, the shaded orange area the :math:`1~\sigma` error region. The burn in phase is shown transparent and ignored
+   while estimating the mean.  :label:`diagnosis2`
+
+*Pylira* relies on an MCMC sampling approach to sample a series of reconstructed images from the posterior
+likelihood defined by Eq. :ref:`cash`. Along with the sampling it marginalises over the smoothing
+hyper-parameters and optimizes them in the same process. To diagnose the validity of the results it is
+important to visualise the sampling traces of both the sampled images as well as hyper-parameters.
+
+Figure :ref:`diagnosis2` shows another typical diagnostic plot created by the code example above.
+In a multi-panel figure user can inspect the traces of the total log-posteriror as well as the
+traces of th smoothing parameters. Each panel corresponds smoothing hyper parameter
+introduced for each level of the multi-scale representation of the reconstructed image.
+The figure also shows the mean value along with the :math:`1~\sigma` error
+region. In this case the algorithm show stable convergence after a burn-in phase of approximately 200
+iterations for the log-posterior as well as all of the multi-scale smoothing parameters.
 
 
 Astronomical Analysis Examples
