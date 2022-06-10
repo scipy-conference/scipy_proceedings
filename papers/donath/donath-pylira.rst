@@ -33,14 +33,16 @@ Pylira: deconvolution of images in the presence of Poisson noise
 
 .. class:: abstract
 
-    All physical and astronomical imaging observations are degraded by the limited angular
+    All physical and astronomical imaging observations are degraded by the finite angular
     resolution of the camera and telescope systems. The recovery of the true image is limited by
     both how well the instrument characteristics are known and by the magnitude of measurement noise.
     In the case of a high signal to noise ratio data, the image can be sharpened or “deconvolved” robustly
-    by using established standard methods such the Richardson-Lucy method. However, the situation changes for rare
-    sparse data and the low signal to noise regime, where deconvolution leads inevitably to an amplification
+    by using established standard methods such as the Richardson-Lucy method. However, the situation changes
+    for sparse data and the low signal to noise regime, such as those frequently encountered in
+    X-ray and gamma-ray astronomy, where deconvolution leads inevitably to an amplification
     of noise and poorly reconstructed images. However, the results in this regime can be improved
-    by making use of prior assumptions. One proposed method is the LIRA algorithm, which
+    by making use of physically meaningful prior assumptions and statistically principled
+    modeling techniques. One proposed method is the LIRA algorithm, which
     requires smoothness of the reconstructed image at multiple scales. In this contribution we
     introduce a new python package called *Pylira*, which exposes the original C implementation
     of the LIRA algorithm to Python users. We briefly describe the package structure, development
