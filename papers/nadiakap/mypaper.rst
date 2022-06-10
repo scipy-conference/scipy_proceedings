@@ -87,13 +87,13 @@ By randomizing we get
   
     F(X) = E(f(x))\to\min_{x \in R_n } 
  
-	where  X is a set of random vectors with values from $R^n$ .
+where  X is a set of random vectors with values from $R^n$ .
 	
 The solution of (2) is a random vector from  that optimizes a functional  .
 	
 Note the following: 
 
-	a) (1) and (2) are equivalent (see [1] for proof); 
+	a) (1) and (2) are equivalent (see [KAP1] for proof); 
 
 	b) (2) is the stochastic optimization problem of the functional  .
 
@@ -174,79 +174,6 @@ where C is arbitrary chosen constant
 Considering solution to $\delta _Y F(X^0 )\to\min_Y $ allows to obtain gradient-like alggorithms for optimization that use only objective function values ( do not use derivatives of objective function)
 
 
-Potential function as a solution to Poisson's equation
-------------------------------------------------------
-Decomposing vector field $p_{x^0}(x)\overline y(x)$  into potential field $\nabla \phi_0 (x)$ and divergence-free component $W_0 (x)$:
-
- 
-.. math::
-
-    p_{x^0}(x)\overline y(x)= \nabla \phi_0 (x) +W_0 (x)
-
-
-we arrive at Poisson's equation for potential function:
-
-
-.. math::
-
-    \delta \phi_0 (x) = -L [f(x)-C]p_u (x) 
-
-where L is a constant
-
-Solution to Poisson's equation approaching 0 at infinity may be written in the following form
-
-
-.. math::
-
-     \varphi_0 (x)=  \int_{R^n} E(x,\xi)  [f(\xi) - C] p_u (\xi)d\xi
-
-where $E(x,\xi) $ is a fundamental solution to Laplace's equation.
-
-Then for potential component$\Delta \varphi_0 (x)$  we have
-
-
-
-.. math::
-
-   \Delta \varphi_0 (x) = -L E[\Delta_x E(x,u)(f(x)-C)] 
-
-
-To conclude, the representation  for gradient-like direction is obtained. This direction maximizes directional derivative of the objective functional F(X). Therefore, this representation can be used for computing the gradient of the objective function f(x) using only its values.
-Gradient direction of the objective function f(x) is determined by the gradient of the potential function $\varphi_0 (x)$, which, in turn,  is determined by Poisson’s equation.
-
-Practical considerations
-------------------------
-The dynamics of the expectation of objective function may be written in the space of random vectors as follows: 
-The dynamics of the expectation of objective function may be written in the space of random vectors as follows: 
-
-
-.. math::
-
-     X_{N+1} = X_{N}+ \alpha_{N+1}Y_{N+1}
-
-
-where N - iteration number, $Y^{N+1}$ - random vector that defines direction of move at ( N+1)th iteration, $\alpha_{N+1}$ -step size on (N+1)th iteration.
-$Y^{N+1}$  must be feasible at each iteration, i.e. the objective functional should decrease: $F(X^{N+1})<(X^{N})$. 
-Applying expection to (12) and presenting $E[Y_{N+1}$ asconditional expectation $E_x E[Y/X]$ we get:
-
-
-.. math::
-
-     X_{N+1} =E[ X_{N}]+ \alpha_{N+1}E_{X^N} E[Y^{N+1}/X^N]
-
-
-Replacing mathematical expectations $E[ X_{N}]$ and $Y_{N+1}]$  with their estimates $\overline E  ^{ N+1}$ and  $ \overline y (X^N)$ we get:
-
-
-.. math::
-
-     \overline E  ^{ N+1} = \overline E  ^{ N}+ \alpha_{N+1} \overline E  _{X^N} [ \overline y (X^N)]
-
-
-Note that expression for  $ \overline y (X^N)$ was obtained in the previos section up to certain parameters. By setting parameters to certain values 
-we can obtain stochastic extensions of well known heuristics such as Nelder and Mead algorithm or Covariance Matrix Adaptation Evolution Strategy.  
-In minpy library we use several common building blocks to create different algorithms. Customized algorithms may be defined by combining these 
-common blocks and varying their parameters. 
 
 Stochastic extention of Nelder and Mead algorithm
 -------------------------------------------------
