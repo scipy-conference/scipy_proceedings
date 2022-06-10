@@ -40,38 +40,40 @@ Materials import and generation
 -------------------------------
 
 For reading and writing of material structures, several open source packages (e.g. OpenBabel [Obabel]_, RDKit [Rdkit]_) have implemented functionality for working with several extensively used formats (e.g. CIF, PDB, mol, xyz).
-Experimental periodic structures of materials, mainly coming from single crystal X-ray diffraction, are distributed in CIF (Crystallographic Information File), PDB (Protein Data Bank) and lately mmCIF formats [Formats]_. Correctly reading experimental structures is of significant importance, since the rest of the materials discovery workflow depends on it.
-In addition to  atom coordinates and periodic cell information, structural data also contains symmetry operations (listed explicitly or by the means of providing a space group) that can be used to decrease the number of computations required for a particular system taking symmetry into account.
+Experimental periodic structures of materials, mainly coming from single crystal X-ray diffraction, are distributed in CIF (Crystallographic Information File), PDB (Protein Data Bank) and lately mmCIF formats [Formats]_.
+Correctly reading experimental structures is of significant importance, since the rest of the materials discovery workflow depends on it.
+In addition to atom coordinates and periodic cell information, structural data also contains symmetry operations (listed explicitly or by the means of providing a space group) that can be used to decrease the number of computations required for a particular system taking symmetry into account.
 This can be important for scaling high-throughput calculations.
- Both formats allow description of the positional disorder (one example being a solvent molecule not having a stable position within the cell can be described by two or more sets of coordinates).
-Another complication is  that experimental data spans an interval of almost a century, one of the oldest crystal structures deposited in the Cambridge Structural Database (CSD) [CSD]_, dates to 1924 [Grph]_.
-All these nuances present non-trivial technical challenges.
-Thus, it has been a continuous effort by Schrödinger (at least 39 commits went into this project) and others to correctly read and convert periodic structures in OpenBabel.
-By version 3.1.1 (the most recent at writing time), this effort resulted in very few (if any) known cases where OpenBabel reads incorrect structure from the experimental data.
+PBD, CIF and mmCIF formats allow description of the positional disorder (for example, a solvent molecule without a stable position within the cell which can be described by multiple sets of coordinates).
+Another complication is that experimental data spans an interval of almost a century, one of the oldest crystal structures deposited in the Cambridge Structural Database (CSD) [CSD]_, dates to 1924 [Grph]_.
+All these nuances present nontrivial technical challenges.
+Thus, it has been a continuous effort by Schrödinger, Inc. (at least 39 commits and several weeks of work went into this project) and others to correctly read and convert periodic structures in OpenBabel.
+By version 3.1.1 (the most recent at writing time), there are no known structures read incorrectly by OpenBabel that authors are aware of.
 Non-periodic molecular formats are simpler since they only contain atom coordinates and no cell or symmetry information.
 
 An important application of structure generation is modeling of substitutional disorder in solid alloys and materials with point defects (intermetallics, semiconductors, oxides and their crystalline surfaces).
 In this case the unit cell and atomic sites of the crystal or surface slab are well defined while the chemical species occupying the site may vary.
 In order to simulate substitutional disorder one must generate the ensemble of structures that includes all statistically significant atomic distribution in a given unit cell.
- This can be achieved by a brute force enumeration of all symmetrically unique atomic structures with a given number of vacancies, impurities or solute atoms.
+This can be achieved by a brute force enumeration of all symmetrically unique atomic structures with a given number of vacancies, impurities or solute atoms.
 The enumlib library implements algorithms for such a systematic enumeration of periodic structures [Enumlib]_.
 This allows to generate a big set of symmetrically nonequivalent materials with different compositions (e.g. doping or defect concentration).
 Recently, we applied this approach in simultaneous study of the activity and stability of Pt based core-shell type catalysts for the oxygen reduction reaction.
 We generated a set of stable doped Pt/transition metal/nitrogen surfaces using periodic enumeration.
-Using Quantum ESPRESSO (QE) [QE]_ to perform periodic density functional theory (DFT) calculations, we assessed surface phase diagrams for Pt alloys and  and identified the avenues for stabilizing the cost effective  core-shell systems by a judicious choice of the catalyst core material.
-Such catalysts may prove critical in electrocatalysis for the fuel cell applications [TM]_.
+Using Quantum ESPRESSO (QE) [QE]_ to perform periodic density functional theory (DFT) calculations, we assessed surface phase diagrams for Pt alloys and and identified the avenues for stabilizing the cost effective core-shell systems by a judicious choice of the catalyst core material.
+Such catalysts may prove critical in electrocatalysis for fuel cell applications [TM]_.
 
 Workflow capabilities
 ---------------------
 
 In order to be able to run a massively parallel screening of materials a highly scalable and stable queuing system (job scheduler) is required.
-We have implemented a job queuing system on top of the most used queuing systems (SLURM, torque, etc.) and exposed a Python API to submit and monitor jobs.
+We have implemented a job queuing system on top of the most used queuing systems (LSF, PBS, SGE, SLURM, TORQUE, UGE) and exposed a Python API to submit and monitor jobs.
+Cloud is also supported by means of a virtual cluster configured with SLURM. This allows to submit a large number of jobs, limited only by SLURM scheduling capabilities and cloud resources.
 In order to accommodate job dependencies in the workflows, for each job a parent job (or multiple parent jobs) can be defined forming a directed graph of jobs.
-If a job fails (and can not be restarted), all its children (if any) will not start, thus saving queuing and computational time (some examples of workflows are provided below).
+There could be several reasons for a job to fail and there are several restart/recovery mechanisms in place. The lowest level is the restart mechanism (in SLURM it is called *requeue*) by the queuing system itself. This is triggered when a node goes down for some reason. On the cloud, preemptible instances (nodes) can go offline at any moment. On top of that, each individual workflow implements its own way to deal with failures. For example, in case when the simulation is not converging to a requested energy accuracy, it is wasteful to blindly restart the calculation without changing some input parameters. However, in the case of full disk space failure, it is reasonable to try restart with hopes to get a node with more empty disk space. If a job fails (and can not be restarted), all its children (if any) will not start, thus saving queuing and computational time (some examples of workflows are provided below).
 This allowed us and our customers to perform massive screenings of materials and their properties.
 We reported a massive screening of 250,000 charge-conducting organic materials, totaling approximately 3,619,000 DFT SCF (self-consistent field) single-molecule calculations using quantum mechanics (QM) Jaguar code [Jaguar]_ that took 457,265 CPU hours (~52 years) [CScreen]_.
 Another case study is high-throughput molecular dynamics simulations (MD) of thermophysical properties of polymers for various applications [MDS]_.
-There, using Desmond code [Desmond]_ we computed the glass transition temperature (Tg) of 315 polymers and compared the results with experimental measurements [Bicerano]_.
+There, using the Desmond code [Desmond]_ we computed the glass transition temperature (:math:`T_g`) of 315 polymers and compared the results with experimental measurements [Bicerano]_.
 This study took advantage of GPU (graphics processing unit) support as implemented in Desmond, as well as the job scheduler API described above.
 
 For soft materials (polymers, organic small molecules and substrates composed of soft molecules), convex hull and related mathematical methods are important for finding possible accessible solvent voids (during submerging or sorption) and adsorbate sites (during molecular deposition).
@@ -85,24 +87,27 @@ Each of these deposition techniques introduces changes to the film structure and
 Data fitting algorithms and use cases
 -------------------------------------
 
-Whereas for the materials simulations (QM, periodic DFT, classical MD) Python, even with SciPy/NumPy can be slow, SciPy and related packages provide sophisticated numerical function optimization and fitting capabilities, below we list several examples used in the suite.
+Materials simulation engines for QM, periodic DFT, and classical MD (backends) are frequently written in compiled languages with enabled parallelization for CPU or GPU hardware.
+These backends are called from Python workflows using job queuing system described above.
+Meanwhile, packages such as SciPy and NumPy provide sophisticated numerical function optimization and fitting capabilities.
+Below, we describe examples of how the Schrödinger suite can be used to combine materials simulations with popular optimization routines in the SciPy ecosystem.
 
 Recently we implemented convex analysis of the stress strain curve (as described here [Patrone]_).
-Technically, it is a constrained minimization with boundary conditions (as implemented in ``scipy.optimize.minimize``) of a function related to the stress strain curve.
-The stress strain curve is obtained from a series of consequent MD simulations on deformed cells (cell deformations are defined by strain type and deformation step).
+The package ``scipy.optimize.minimize`` is used for a constrained minimization with boundary conditions of a function related to the stress strain curve.
+The stress strain curve is obtained from a series of MD simulations on deformed cells (cell deformations are defined by strain type and deformation step).
 The pressure tensor of a deformed cell is related to stress.
 This analysis allowed us to predict elongation at yield for high density polyethylene polymer and compare it with experimental data [Convex]_.
 
-Another area where scipy.optimize is used is fitting of the bulk energies at different cell volumes (compressed and expanded) in order to obtain bulk modulus and equation of state (EOS) of a material.
-Technically, it is a least squares method.
+The ``scipy.optimize`` package is used for a least-squares fit of the bulk energies at different cell volumes (compressed and expanded) in order to obtain the bulk modulus and equation of state (EOS) of a material.
 In the Schrödinger suite this was implemented as a part of the EOS workflow, fitting is performed on the the results obtained from a series of QE calculations performed on the original and compressed/expanded (deformed) cells.
 This is also an example of the loosely coupled (embarrassingly parallel) jobs.
 Calculations of the deformed cells only depend on the bulk calculation and do not depend on each other and thus all the deformation jobs can be submitted in parallel, this greatly facilitates high-throughput runs.
 
-One of the more complex examples of optimization is fitting of the experimental powder diffraction intensity peaks to the indexed peaks (Pawley refinement) [Jansen]_.
-Here we employed the lmfit package [Lmfit]_ to perform a minimization of the multivariable Voigt-like function that represents the entire diffraction spectrum.
-This allows to refine (optimize) unit cell parameters coming from the indexing data as a result goodness of fit (R-factor) between experimental and simulated spectrum is reported.
-Powder diffraction is widely used in drug discovery to assess purity of the material and discover known or unknown crystal polymorphs that could form [Powder]_.
+Experimental structure refinement from powder diffraction is another example where more complex optimization is used.
+Powder diffraction is a widely used method in drug discovery to assess purity of the material and discover known or unknown crystal polymorphs that could form [Powder]_.
+In particular, fitting of the experimental powder diffraction intensity peaks to the indexed peaks (Pawley refinement) [Jansen]_.
+Here we employed the ``lmfit`` package [Lmfit]_ to perform a minimization of the multivariable Voigt-like function that represents the entire diffraction spectrum.
+This allows to refine (optimize) unit cell parameters coming from the indexing data as a result goodness of fit (:math:`R`-factor) between experimental and simulated spectrum is reported.
 
 Machine learning techniques
 ---------------------------
@@ -116,7 +121,13 @@ There are several techniques to generate the model, spawning from linear or non-
 In the Schrödinger suite, benchmark data for small molecules and finite systems can be obtained using QM DFT molecular Jaguar code, for periodic systems, QE used, for larger polymeric and similar systems molecular dynamics Desmond code is used.
 
 For crystalline periodic systems, we have implemented several sets of descriptors.
-Element descriptors (such as atomic weight, number of valence electrons in s-, p- and d-shells, electronegativity), structure descriptors (such as density, volume per atom, and packing fraction descriptors) as implemented in matminer [Matminer]_, intercalation descriptors (such as cation and anion counts, crystal packing fraction, average neighbor ionicity) [Sendek]_, 3D-based smooth overlap of atomic positions (SOAP) descriptors, as implemented in DScribe [DScribe]_.
+These descriptors include:
+
+- elemental features such as atomic weight, number of valence electrons in *s*, *p* and *d*-shells, electronegativity
+- structural features such as density, volume per atom, and packing fraction descriptors implemented in matminer [Matminer]_
+- intercalation descriptors such as cation and anion counts, crystal packing fraction, average neighbor ionicity [Sendek]_
+- three-dimensional smooth overlap of atomic positions (SOAP) descriptors implemented in DScribe [DScribe]_.
+
 Using these descriptors and kernel regression methods to train the model, as implemented in scikit-learn [SkLearn]_, we were able to train a model that successfully predicted bulk modulus of a set of Li-containing battery related compounds.
 
 For isolated small molecules and extended non-periodic systems, rdkit can be used to generate a large number of atomic and molecular descriptors.
@@ -131,8 +142,8 @@ These descriptors generated on the initial subset of structures are given as vec
 Bayesian optimization is employed to tune the hyperparameters of the model.
 In each iteration, a trained model is applied for making predictions on the remaining materials in the dataset.
 Since it could be important to consider multiple properties in material discovery, multiple property optimization is also implemented [Kwak]_.
-Multiple properties are  scaled and combined into a single score value.
-In this particular study, for a dataset of ~9,000 molecules, the AL workflow determined the top candidates for hole (positively charged carrier) transport layer  by evaluating 550 molecules in 10 iterations using DFT calculations.
+Multiple properties are scaled and combined into a single score value.
+In this particular study, for a dataset of ~9,000 molecules, the AL workflow determined the top candidates for hole (positively charged carrier) transport layer by evaluating 550 molecules in 10 iterations using DFT calculations.
 Performing DFT calculations for all of the 9,000 molecules in the dataset would increase the computational cost by a factor of 15 versus the AL workflow.
 
 .. figure:: fig_al.jpg
@@ -192,7 +203,7 @@ References
 
 .. [Lmfit] M. Newville, et al. *LMFIT: Non-linear least-square minimization and curve-fitting for Python*, Astrophysics Source Code Library (2016): ascl-1606. https://lmfit.github.io/lmfit-py/
 
-.. [Powder] J. A. Kaduk, et al., *Powder diffraction*, Nature Reviews Methods Primers 1: 77  (2021).
+.. [Powder] J. A. Kaduk, et al., *Powder diffraction*, Nature Reviews Methods Primers 1: 77 (2021).
 
 .. [Deepchem] B. Ramsundar, et al., *Deep Learning for the Life Sciences.* O'Reilly Media, 2019.
 
