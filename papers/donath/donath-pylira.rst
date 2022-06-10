@@ -129,7 +129,7 @@ Where the expected counts :math:`\lambda_i` are given by the convolution of the 
 flux distribution :math:`x_i` with the PSF :math:`p_k`:
 
 .. math::
-   :label: simple_model
+   :label: simplemodel
 
    \lambda_i = \sum_k x_i p_{i - k}
 
@@ -142,7 +142,7 @@ function, or equivalently of :math:`\mathcal{C}`. This high dimensional optimiza
 can e.g., be solved by a classic gradient decent approach. Assuming the pixels values :math:`x_i`
 of the true image as independent parameters, one can take the derivative of the Eq.  :ref:`cash`
 with respect to the individual :math:`x_i`. This way one obtains a rule for how to update the
-current set pixels :math:`\mathbf{x}_n` in each iteration of the optimization:
+current set of pixels :math:`\mathbf{x}_n` in each iteration of the optimization:
 
 .. math::
    :label: rl
@@ -155,7 +155,7 @@ learning techniques. This basic principle of solving the deconvolution problem f
 images with Poisson noise was proposed by :cite:`Richardson1972` and :cite:`Lucy1974`.
 Their method, named after the original authors, is often known as the *Richardson & Lucy* (RL)
 method. It was shown by :cite:`Richardson1972` that this converges to a maximum
-likelihood solution of Eq.  :ref:`cash`. A Python implementation of the standard RL method
+likelihood solution of Eq. :ref:`cash`. A Python implementation of the standard RL method
 is available e.g. in the `Scikit-Image` package :cite:`skimage`.
 
 Instead of the iterative, gradient decent based optimization it is also possible to sample from
@@ -167,7 +167,7 @@ RL Reconstruction Quality
 +++++++++++++++++++++++++
 While technically the RL method converges to a maximum likelihood solution, it mostly
 still results in poorly restored images, especially if extended emission regions are
-present in the image. The problem is illustrated in Fig.~:ref:`rl` using
+present in the image. The problem is illustrated in Fig. :ref:`rl` using
 a simulated example image. While for a low number of iterations the RL method
 still results in a smooth intensity distribution, the structure of the image
 decomposes more and more into a set of point-like sources with growing number
@@ -195,11 +195,11 @@ and :cite:`Fish95`.
    package :cite:`skimage`.  :label:`rl`
 
 
-LIRA Multiscale Prior
-+++++++++++++++++++++
+LIRA Multi-Scale Prior
+++++++++++++++++++++++
 One possible solution to this problem was described in :cite:`Esch2004`
 and :cite:`Connors2011`. First the simple forward folded model described
-in Eq. ~:ref:`simple_model` can be extended by taking into account the
+in Eq. :ref:`simplemodel` can be extended by taking into account the
 non-uniform exposure :math:`e_i` and a background estimate :math:`b_i`:
 
 .. math::
@@ -221,8 +221,8 @@ then divided by their total sum. This results in an image containing
 the "split proportions" with respect to the image down-sized
 by a factor of two. The process is continued to further reduce the
 resolution of the image until only one pixel, containing the total
-sum of the full-resolution image is left. This multiscale
-decomposition is illustrated in Figure~:ref:`ms-levels`.
+sum of the full-resolution image is left. This multi-scale
+decomposition is illustrated in Fig. :ref:`ms-levels`.
 
 For each of the 2x2 groups of the re-normalized images
 a Dirichlet distribution is introduced as a prior:
@@ -233,19 +233,19 @@ a Dirichlet distribution is introduced as a prior:
     \phi_k \propto \mathrm{Dirichlet}(\alpha_k, \alpha_k, \alpha_k, \alpha_k)
 
 And multiplied across all 2x2 groups and resolution levels :math:`k`.
-For each resolutionlevel a parameter :math:`\alpha_k` is introduced,
+For each resolution level a parameter :math:`\alpha_k` is introduced,
 which represents the number of "prior counts" added to this resolution level,
 equally to each pixel, which effectively results in a smoothing
 of the image at the given resolution level. The distribution
 of `\alpha` values at each resolution level is described
-by a hyperprior distribution:
+by a hyper-prior distribution:
 
 .. math::
    :label: hyperprior
 
     p(\alpha_k) = \exp{-\delta \alpha^3 / 3}
 
-Resulting in a fully hierarchical Bayesian model. A complete more
+Resulting in a fully hierarchical Bayesian model. A more complete and
 detailed description of the prior definition is given in :cite:`Esch2004`.
 
 
@@ -253,10 +253,10 @@ detailed description of the prior definition is given in :cite:`Esch2004`.
    :scale: 80%
    :figclass: bht
 
-   The image illustrates the multiscale decomposition used in the LIRA prior for
+   The image illustrates the multi-scale decomposition used in the LIRA prior for
    a 4x4 pixels example image. Each quadrant of 2x2 sub-images is labelled with
    :math:`Q_N`. The sub-pixels in each quadrant are labelled :math:`\Lambda_{ij}`.
-   :label:`ms-levels`
+   :label:`ms-levels`.
 
 The problem is then solved by using a "hyprid" Gibbs MCMC sampling approach. For
 each iteration of sampling an image :math:`x_i`, the :math:`\alpha_k` parameters are optimized
@@ -460,8 +460,7 @@ counts data shown in the left panel.
    *4684* and *4684*. The image on the left shows the raw observed counts between
    0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
    values were chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
-   No baseline background model was taken into account. :label:`chandra-gc`
-   TODO: include pixel size...
+   No baseline background model was taken into account.  :label:`chandra-gc`
 
 As second example we use data from the Fermi Large Area Telescope (LAT). The Fermi-LAT
 is a satellite-based an imaging gamma-ray detector, which covers and energy range
@@ -469,7 +468,7 @@ of 20 MeV to >300 GeV. The angular resolution varies strongly with energy and ra
 from 0.1 to >10 degree [#]_.
 
 Figure :ref:`fermi-gc` shows the result of the *Pylira*
-algorithm applied to Fermi-LAT data above 1~GeV to the region around the Galactic Center. The PSF
+algorithm applied to Fermi-LAT data above 1 GeV to the region around the Galactic Center. The PSF
 was obtained form the official Fermitools v2.0.19 and the *gtpsf* tool.
 First one can see that the algorithm achieves again a considerable improvement of the spatial resolution
 compared to the raw counts. It clearly resolves multiple point sources left to the
@@ -486,7 +485,7 @@ the bright Galactic center source.
    the left shows the raw measured counts between 5 and 1000 GeV. The image on the right
    shows the deconvolved version. The LIRA hyperprior values were chosen as
    *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*. A baseline background model
-   was not included. :label:`fermi-gc`
+   was not included.  :label:`fermi-gc`
 
 
 Summary & Outlook
