@@ -57,6 +57,35 @@ see [BIS]_ for convergence of PSO, and to re prove convergence of well known gra
 first order methods   - see  [NBAG]_ for convergence of gradient descent and [ZALO]_ for mirror descent. 
 For potential functions approach for stochastic first order optimization methods see [ATFB]_.
 
+Outline of the approach
+-----------------------
+
+The approach works for non-smooth or algorithmically defined functions.  For detailed description of the approach see [KAP1]_, [KAP2]_.
+In this approach the original optimization problem is replaced with a randomized problem, allowing the use of Monte-Carlo methods for calculating integrals. 
+This is especially important if objective function is given by its values (no analytical formula) and derivatives 
+are not known. The original problem is restated in the framework of gradient (sub gradient) methods, employing the 
+standard theory (convergence theorems for gradient (sub gradient) methods), whereas no derivatives of the objective 
+function are needed. At the same time, the method obtained is a method of nonlocal search unlike other gradient methods. 
+It will be shown, that instead of measuring the gradient of the objective function we can measure the gradient of the 
+potential function at each iteration step  , and the value of the gradient can be obtained using values of objective 
+function only, in the framework of Monte Carlo methods for calculating integrals. Furthermore, this value does not have 
+to be precise, because it is recalculated at each iteration step. It will also be shown that well-known zero-order 
+optimization methods ( methods that do not use derivatives of objective function but its values only) are generalized 
+into their adaptive extensions. The generalization of zero-order methods (that are heuristic in nature) is obtained 
+using standardized methodology, namely, gradient (sub gradient) framework.
+We consider the unconstrained optimization problem
+
+Expression for directional derivative 
+-------------------------------------
+
+
+Derivative of objective functional F(X) in the direction of the random vector Y at the point $X^0$ (Gateaux derivative) is:
+
+Potential function as a solution to Poisson's equation
+------------------------------------------------------
+
+Decomposing vector field $p_{x^0}(x)\overline y(x)$  into potential field $\nabla \phi_0 (x)$ and divergence-free component $W_0 (x)$:
+
 References
 ----------
 .. [KAP1] Kaplinskij, A.I.,Pesin, A.M.,Propoj, A.I.. (1994). Analysis of search methods of optimization based on potential theory. I: Nonlocal properties. Automation and Remote Control. N.9, pp.97-105 
