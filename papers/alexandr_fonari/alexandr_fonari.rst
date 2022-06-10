@@ -118,7 +118,10 @@ In order to train a model, benchmark data from calculations and/or experimental 
 Besides benchmark data, computation of the relevant descriptors is required (see below).
 Finally, a model based on benchmark data and descriptors is generated that allows prediction of properties for novel materials.
 There are several techniques to generate the model, spawning from linear or non-linear fitting to neural networks, DeepChem [Deepchem]_ and AutoQSAR [AutoQSAR]_.
-In the Schrödinger suite, benchmark data for small molecules and finite systems can be obtained using QM DFT molecular Jaguar code, for periodic systems, QE used, for larger polymeric and similar systems molecular dynamics Desmond code is used.
+In the Schrödinger suite, benchmark data can be obtained using a few different tools.
+The QM DFT molecular Jaguar code is used for small molecules and finite systems.
+Periodic systems are simulated with Quantum ESPRESSO.
+Lastly, larger polymeric and similar systems use the Desmond molecular dynamics code.
 
 For crystalline periodic systems, we have implemented several sets of descriptors.
 These descriptors include:
@@ -147,7 +150,8 @@ In this particular study, for a dataset of ~9,000 molecules, the AL workflow det
 Performing DFT calculations for all of the 9,000 molecules in the dataset would increase the computational cost by a factor of 15 versus the AL workflow.
 
 .. figure:: fig_al.jpg
-   :scale: 25%
+   :align: center
+   :figclass: w
 
    Active Learning workflow for the design and discovery of novel optoelectronics molecules. :label:`figal`
 
