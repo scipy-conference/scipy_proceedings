@@ -165,6 +165,7 @@ present in the image. The problem is illustrated in Fig.:ref:`fig` using
 a simulated example image. While for a low number of iterations the RL method
 still results in a smooth intensity distribution, the structure decomposes
 more and more into a set of point-like sources with growing number of iterations.
+
 Because of the PSF convolution an extended emission region
 can decompose into multiple nearby point sources and still lead to good model prediction,
 when compared with the data. Those almost equally good solutions correspond
@@ -449,6 +450,6 @@ This allows to check for general convergence as well as pixel to pixel correlati
 interest. The package is openly developed on GitHub and includes tests and documentation, such that it can be
 maintained and improved in future, while ensuring consistency of the results. It comes with multiple built-in
 test datasets and explanatory tutorials in form of Jupyter notebooks. Future plans include the support
-support parallelisation or distributed computing, more flexible prior definitions and to account for systematic
-errors on the PSF during the sampling process.
+for parallelisation or distributed computing, more flexible prior definitions and the
+possibility to account for systematic errors on the PSF during the sampling process.
 
