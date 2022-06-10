@@ -23,7 +23,6 @@ understand how known heuristic optimization methods work and how certain paramet
 
 
 
-
 .. class:: keywords
 
    global optimization, black-box functions, algorithmically defined functions, potential functions
