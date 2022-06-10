@@ -101,20 +101,11 @@ hard to solve for the regime of low signal to noise ratio, where small
 scale structures are stronger affected by noise.
 
 
-Deconvolution Methods
----------------------
+The Deconvolution Problem
+-------------------------
 
-Richardson-Lucy
-+++++++++++++++
-One of the first methods for deconvolution of images with Poisson noise was
-proposed by :cite:`Richardson1972` and :cite:`Lucy1974`. This method, named
-after the original authors, is often known as the *Richardson & Lucy* (RL)
-method. The method takes the fundamental statistical properties of the
-observed image into account and describes the measurement process as
-a "forward folded" modeling problem. An estimate of the true image is
-then reconstructed using an iterative, likelihood based optimization method.
-
-
+Basic Statistical Model
++++++++++++++++++++++++
 Assuming the noise in each pixel :math:`d_i` in the recorded counts image
 follows a Poisson distribution, the total likelihood of obtaining the
 measured image from a model image of the expected counts :math:`\lambda_i` with
@@ -145,7 +136,7 @@ flux distribution :math:`x_i` with the PSF :math:`p_k`:
 This operation is often called "forward modelling" or "forward folding" with the instrument response.
 To obtain the most likely model given the data one searches a minimum of the total likelihood
 function, or equivalently of :math:`\mathcal{C}`. This high dimensional optimization problem
-can be solved by a classic gradient decent approach. Assuming the pixels values :math:`x_i`
+can e.g., be solved by a classic gradient decent approach. Assuming the pixels values :math:`x_i`
 of the true image as independent parameters, one can take the derivative of the Eq. :ref:`cash`
 with respect to the individual :math:`x_i`. This way one obtains a rule for how to update the
 current set pixels :math:`\mathbf{x}_n` in each iteration of the optimization:
@@ -155,18 +146,26 @@ current set pixels :math:`\mathbf{x}_n` in each iteration of the optimization:
 
     \mathbf{x}_{n + 1}  = \mathbf{x}_{n} -\alpha \cdot \frac{\partial \mathcal{C}\left( \mathbf{d} | \mathbf{x} \right)}{\partial x_i}
 
-Where :math:`\alpha` is a factor to define the step size. It was shown by :cite:`Richardson1972`
-that this converges to a maximum likelihood solution of Eq. :ref:`cash`. This method
-is in general equivalent to the gradient decent and backpropagation methods used in
-modern machine learning techniques. A Python implementation of the standard RL method
-is available e.g. in the `Scikit-Image` package :cite:`skimage`. Instead of the gradient
-decent based optimization it is also possible to sample from the likelihood function using
-a simple Metropolis-Hastings approach. This is demonstrated in one of the *Pylira* online
-tutorials (`Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__).
+Where :math:`\alpha` is a factor to define the step size. This method is in general
+equivalent to the gradient decent and backpropagation methods used in modern machine
+learning techniques. This basic principle of solving the deconvolution problem for
+images with Poisson noise was proposed by :cite:`Richardson1972` and :cite:`Lucy1974`.
+Their method, named after the original authors, is often known as the *Richardson & Lucy* (RL)
+method. It was shown by :cite:`Richardson1972` that this converges to a maximum
+likelihood solution of Eq. :ref:`cash`. A Python implementation of the standard RL method
+is available e.g. in the `Scikit-Image` package :cite:`skimage`.
+
+Instead of the iterative, gradient decent based optimization it is also possible to sample from
+the likelihood function using a simple Metropolis-Hastings approach. This is demonstrated
+in one of the *Pylira* online tutorials (`Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__).
 
 While technically the RL method converges to a maximum likelihood solution, it mostly
 still results in poorly restored images, especially if extended emission regions are
-present in the image. Because of the PSF convolution an extended emission region
+present in the image. The problem is illustrated in Fig.:ref:`fig` using
+a simulated example image. While for a low number of iterations the RL method
+still results in a smooth intensity distribution, the structure decomposes
+more and more into a set of point-like sources with growing number of iterations.
+Because of the PSF convolution an extended emission region
 can decompose into multiple nearby point sources and still lead to good model prediction,
 when compared with the data. Those almost equally good solutions correspond
 to many narrow local minima or "spikes" in the global likelihood surface. Depending
@@ -176,8 +175,20 @@ This problem has been described by multiple authors, such as :cite:`Reeves1994`
 and :cite:`Fish95`.
 
 
-The LIRA Multiscale Prior
-+++++++++++++++++++++++++
+.. figure:: images/richardson-lucy.png
+   :scale: 90%
+   :figclass: bht
+
+   The images show the result of the RL algorithm applied to a simulated example dataset
+   with varying numbers of iterations. The image in the upper left shows the simulated
+   counts. Those have been derived from the ground truth (upper mid) by convolving with
+   a Gaussian PSF of width :math:`\sigma=3~\mathrm{pix}` and applying Poisson noise to
+   it. The illustration uses the implementation of the RL algorithm from the `Scikit-Image`
+   package :cite:`skimage`. :label:`rl`
+
+
+LIRA Multiscale Prior
++++++++++++++++++++++
 One possible solution to this problem was described in :cite:`Esch2004`.
 First the standard RL method can be extended by taking into account
 the non uniform exposure :math:`e_i` and a background estimate :math:`b_i`:
