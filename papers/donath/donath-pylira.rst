@@ -70,36 +70,35 @@ and arrival time is measured. Based on this information the
 event can be binned into two dimensional data structures to
 form an actual image.
 
-The measured signal follows Poisson statistics, as a consequence of the low intensities associated recording of individual events.
-events, the measured signal follows Poisson statistics. This imposes
+As a consequence of the low intensities associated to the recording of individual events,
+the measured signal follows Poisson statistics. This imposes
 a non-linear relationship between the measured signal and true
-underlying intensity as well as a coupling of the signal with the
-measurement noise. Any statistically correct post-processing
-or reconstruction method of thus requires are
-careful treatment of the Poisson nature of the measured image.
+underlying intensity as well as a coupling of the signal intensity
+to the the signal variance. Any statistically correct post-processing
+or reconstruction method of thus requires a careful treatment of
+the Poisson nature of the measured image.
 
 To maximise the scientific use of the data, it is often desired
 to correct the degradation introduced by the imaging process.
 Besides correction for non-uniform exposure and background
 noise this also includes the correction for the "blurring"
 introduced by the point spread function (PSF) of the
-instrument, often called "deconvolution". Depending on whether
-the PSF of the instrument is known, one distinguishes between
-the "blind deconvolution" and "non blind deconvolution" process.
-For astronomical observations the PSF can often either be
-simulated, given a model of the detector, or inferred
+instrument. Where the latter process is often called "deconvolution".
+Depending on whether the PSF of the instrument is known,
+one distinguishes between the "blind deconvolution" and
+"non blind deconvolution" process. For astronomical
+observations the PSF can often either be
+simulated, given a model of the telescope and detector, or inferred
 directly from the data by observing far distant objects,
-which appear as point source to the instrument.
+which appear as a point source to the instrument.
 
 While in other branches of astronomy deconvolution methods are already part
-of the standard analysis, such as the CLEAN algorithm for radio data, this
+of the standard analysis, such as the CLEAN algorithm for radio data, developed
+by :cite:`Hogbom1974`, this
 is not the case for X-ray and gamma-ray astronomy. As any deconvolution method
 aims to enhance small scale structures in an image it becomes increasingly
-hard to solve for the regime of low signal to noise ratio.
-State of the art de-blurring algorithms based on deep convolutional neural networks
-show exceptional results on conventional image data,
-but they cannot be straightforwardly applied to astronomical counts data,
-because of a lack of ground truth and training data in general.
+hard to solve for the regime of low signal to noise ratio, where small
+scale structures are stronger affected by noise.
 
 
 Deconvolution Methods
