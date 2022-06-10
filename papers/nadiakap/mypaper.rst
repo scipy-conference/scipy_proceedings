@@ -82,9 +82,11 @@ We consider the unconstrained optimization problem
    f(x_1,x_2,..x_n)\to\min_{x \in R_n }
 
 By randomizing we get 
-   \begin{equation}
+  
+.. math::
+  
     F(X) = E(f(x))\to\min_{x \in R_n } 
-    \end{equation}
+ 
 	where  X is a set of random vectors with values from $R^n$ .
 	
 The solution of (2) is a random vector from  that optimizes a functional  .
