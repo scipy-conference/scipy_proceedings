@@ -41,7 +41,7 @@ def main(data_path: str, send: bool = False):
             one_email["to_name"] = name
             one_email["title"] = row["title"].replace("Paper: ", "")
             one_email["url"] = row["url"]
-            one_email["subject"] = f"{proceedings['title']['acronym']} {proceedings['year']} invitation to review proceedings"
+            one_email["subject"] = f"Urgent: {proceedings['title']['acronym']} {proceedings['year']} final invitation to review"
             email_data.append(one_email)
         else:
             print(f"could not parse {row['reviewer']}")
