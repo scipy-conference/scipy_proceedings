@@ -23,6 +23,7 @@ understand how known heuristic optimization methods work and how certain paramet
 
 
 
+
 .. class:: keywords
 
    global optimization, black-box functions, algorithmically defined functions, potential functions
@@ -57,6 +58,7 @@ see [BIS]_ for convergence of PSO, and to re prove convergence of well known gra
 first order methods   - see  [NBAG]_ for convergence of gradient descent and [ZALO]_ for mirror descent. 
 For potential functions approach for stochastic first order optimization methods see [ATFB]_.
 
+
 Outline of the approach
 -----------------------
 
@@ -75,16 +77,185 @@ into their adaptive extensions. The generalization of zero-order methods (that a
 using standardized methodology, namely, gradient (sub gradient) framework.
 We consider the unconstrained optimization problem
 
+.. math::
+
+   f(x_1,x_2,..x_n)\to\min_{x \in R_n }
+
+By randomizing we get 
+
+.. math::
+
+    F(X) = E(f(x))\to\min_{x \in R_n } 
+
+where  X is a set of random vectors with values from :math:`R^n` .
+	
+The solution of (2) is a random vector from  that optimizes a functional  .
+	
+Note the following: 
+
+	a) (1) and (2) are equivalent (see [1] for proof); 
+
+	b) (2) is the stochastic optimization problem of the functional  .
+
+	To study the gradient nature of the solution algorithms for problem (2), a variation of objective functional  F(X)  will be considered.
+The suggested scheme makes it possible to obtain optimization methods in systematic way, similar to methodology adopted in smooth optimization. Derivation includes the following steps
+	randomization of the original optimization problem,
+	finding directional derivative for the randomized problem,
+	choosing direction Y of the next iteration step of the algorithm is based on the condition that directional derivative in the direction of Y is being less or equal to 0.
+
+Because of randomization, the expression for directional derivative doesn’t contain the differential characteristics of the original function. We obtain the condition for selecting the direction of search Y in terms of its characteristics – conditional expectation. Conditional expectation is a vector function (or vector field) and can be decomposed (following the theorem of decomposition of the vector field) into the sum of the gradient of scalar function P and a function with div=0. P is called a potential function. As a result the original problem is reduced to optimization of the potential function, furthermore, the potential function is specific for each iteration step. Next, we arrive at partial differential equation that connects P and the original function.
+To define computational algorithms it is necessary to specify the dynamics of the random vectors. For example, the dynamics can be expressed in a form of densities. For certain class of distributions, for example normal distribution, the dynamics can be written in terms of expectation and covariance matrix. It is also possible to express the dynamics in mixed characteristics. 
+
+
 Expression for directional derivative 
 -------------------------------------
 
 
 Derivative of objective functional F(X) in the direction of the random vector Y at the point $X^0$ (Gateaux derivative) is:
 
+
+ :math:`\delta _Y F(X^0 )=\frac{d}{d \epsilon} F(X^0+\epsilon Y) _{\epsilon=0}=\frac{d}{d \epsilon} F(X^\epsilon) _{\epsilon=0}=\frac{d}{d \epsilon} \int f(X) p_{x^\epsilon}(x) _{\epsilon=0}`
+
+where density function of the random vector :math:`X^\epsilon=X^0+\epsilon Y` may be expressed in terms of joint density function :math:`p_{{X^0},Y} (x,y)` of :math:`X^0` and Y as follows:
+
+.. math::
+
+    p_{x^ \epsilon} (x) = \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dy
+    
+
+The following relation (property of divergence) will be needed later 
+
+.. math::
+
+   \frac{d}{d \epsilon} p_{x^ \epsilon} (x - \epsilon y,y) =(-\nabla_x  p_{x^ \epsilon} (x,y), y ) = -div_x ( p_{x^ \epsilon} (x,y) y )
+
+
+where ( , ) defines dot product.
+
+Assuming differentiability of the integrals (for example, by selecting the appropriate :math:`p_{x^ \epsilon} (x,y)` and using (3), (4) we get
+
+.. math::
+
+   \delta _Y F(X^0 ) = [\frac{d}{d \epsilon} \int_{R^n}   \int_{R^n} f(x) p_{x^ \epsilon} (x - \epsilon y,y) dx dy] _{\epsilon=0}=
+
+
+:math:`   = [\frac{d}{d \epsilon} \int_{R^n} f(x)  \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dx dy] _{\epsilon=0}= [ \int_{R^n} f(x) ( \frac{d}{d \epsilon} \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dy )dx] _{\epsilon=0}=`
+
+
+:math:`= \int_{R^n} f(x)(  \int_{R^n} [\frac{d}{d \epsilon}  p_{x^ \epsilon} (x - \epsilon y,y)] _{\epsilon=0} dy) dx=- \int_{R^n} f(x)(  \int_{R^n} [div_x ( p_{x^ \epsilon} (x,y) y )]  dy) dx=`
+ 
+.. math::
+
+- \int_{R^n} f(x) div_x [  \int_{R^n} ( p_{x^ \epsilon} (x,y) y )  dy] dx
+
+
+Using formula for conditional distribution :math:` p_{Y/X^0=x} (y)=\frac {p_{x^ \epsilon y} (x,y)}{p_{x^ \epsilon}  (x) )}` ,
+
+where  :math:`p_{x^ \epsilon}(x) =  \int_{R^n} p_{x^ \epsilon y} (x,u) du`
+
+we get :math:`\delta _Y F(X^0 )= - \int_{R^n} f(x) div_x [ p_{x^ \epsilon}(x) \int_{R^n}  p_{Y/X^0=x} (y) y dy] dx `
+
+Denote :math:` \overline {y}(x) = \int_{R^n}  yp_{Y/X^0=x} (y)  dy=E[Y/X^0=x]`
+
+Taking into account normalization condition for density we arrive at the following expression for directional derivative:
+
+.. math::
+
+\delta _Y F(X^0 )= - \int_{R^n} (f(x)-C) div_x [ p_{x^0}(x)\overline y(x)]dx 
+
+where C is arbitrary chosen constant
+
+Considering solution to :math:`\delta _Y F(X^0 )\to\min_Y ` allows to obtain gradient-like alggorithms for optimization that use only objective function values ( do not use derivatives of objective function)
+
+
 Potential function as a solution to Poisson's equation
 ------------------------------------------------------
+Decomposing vector field :math:`p_{x^0}(x)\overline y(x)`  into potential field $\nabla \phi_0 (x)$ and divergence-free component :math:`W_0 (x)`:
 
-Decomposing vector field $p_{x^0}(x)\overline y(x)$  into potential field $\nabla \phi_0 (x)$ and divergence-free component $W_0 (x)$:
+.. math::
+
+p_{x^0}(x)\overline y(x)= \nabla \phi_0 (x) +W_0 (x)
+
+
+we arrive at Poisson's equation for potential function:
+
+.. math::
+
+ \delta \phi_0 (x) = -L [f(x)-C]p_u (x) 
+
+where L is a constant
+
+Solution to Poisson's equation approaching 0 at infinity may be written in the following form
+Solution to Poisson's equation approaching 0 at infinity may be written in the following form
+
+.. math::
+
+\varphi_0 (x)=  \int_{R^n} E(x,\xi)  [f(\xi) - C] p_u (\xi)d\xi
+
+where :math:`E(x,\xi) ` is a fundamental solution to Laplace's equation.
+
+Then for potential component :math:`\Delta \varphi_0 (x)`  we have
+
+
+.. math::
+
+ \Delta \varphi_0 (x) = -L E[\Delta_x E(x,u)(f(x)-C)] 
+
+
+To conclude, the representation  for gradient-like direction is obtained. This direction maximizes directional derivative of the objective functional F(X). Therefore, this representation can be used for computing the gradient of the objective function f(x) using only its values.
+Gradient direction of the objective function f(x) is determined by the gradient of the potential function :math:`\varphi_0 (x)`, which, in turn,  is determined by Poisson’s equation.
+
+Practical considerations
+------------------------
+The dynamics of the expectation of objective function may be written in the space of random vectors as follows: 
+
+.. math::
+
+  X_{N+1} = X_{N}+ \alpha_{N+1}Y_{N+1}
+
+
+where N - iteration number, :math:`Y^{N+1}` - random vector that defines direction of move at ( N+1)th iteration, :math:`\alpha_{N+1}` -step size on (N+1)th iteration.
+:math:`Y^{N+1}`  must be feasible at each iteration, i.e. the objective functional should decrease: :math:`F(X^{N+1})<(X^{N})`. 
+Applying expection to (12) and presenting :math:`E[Y_{N+1}` asconditional expectation :math:`E_x E[Y/X]` we get:
+
+.. math::
+
+ X_{N+1} =E[ X_{N}]+ \alpha_{N+1}E_{X^N} E[Y^{N+1}/X^N]
+
+
+Replacing mathematical expectations :math:`E[ X_{N}]` and :math:`Y_{N+1}]`  with their estimates :math:`\overline E  ^{ N+1}' and  :math:` \overline y (X^N)` we get:
+
+.. math::
+
+ \overline E  ^{ N+1} = \overline E  ^{ N}+ \alpha_{N+1} \overline E  _{X^N} [ \overline y (X^N)]
+
+Note that expression for  :math:` \overline y (X^N)` was obtained in the previos section up to certain parameters. By setting parameters to certain values 
+we can obtain stochastic extensions of well known heuristics such as Nelder and Mead algorithm or Covariance Matrix Adaptation Evolution Strategy.  
+In minpy library we use several common building blocks to create different algorithms. Customized algorithms may be defined by combining these 
+common blocks and varying their parameters. 
+
+Stochastic extention of Nelder and Mead algorithm
+-------------------------------------------------
+
+1.Initialize the search by generating :math:`K \geq n`  separate realizations of  :math:`u_0^i `,i=1,..K of the random vector :math:` U_0`.  
+	
+Set :math:`m_0=\frac{1}{K} \sum_{i=0}^{K} u_0^i`
+
+2.On step k = 1, 2, ...
+
+Compute the mean level :math:` c_{k-1}=\frac{1}{K} \sum_{i=1}^K f(u_{k-1}^i )`
+
+Calculate a new set of vertices:
+
+ :math:`u_k^i= m_{k-1}+\epsilon_{k-1} (f(u_{k-1}^i)-c_{k-1})\frac{  m_{k-1} -u_{k-1}^i}  {||m_{k-1} -u_{k-1}^i ||^n }`
+
+Set  :math:` m_k=\frac{1}{K} \sum_{i=0}^K u_ k^i `
+
+Adjust the step size :math:`\epsilon_{k-1}` so that :math:`f(m_k)<f(m_{k-1})`. 
+
+If approximate :math:`\epsilon _{k-1}` cannot be obtained within the specified number of trails, then set :math:`m_k=m_{k-1}`
+
+ Use the sample standard deviation as the termination criterion: :math:`D_k=(\frac{1}{K-1} \sum_{i=1}^K (f(u_k^i)-c_k)^2)^{1/2} `
 
 References
 ----------
