@@ -151,7 +151,7 @@ Assuming differentiability of the integrals (for example, by selecting the appro
    - \int_{R^n} f(x) div_x [  \int_{R^n} ( p_{x^ \epsilon} (x,y) y )  dy] dx
 
 
-Using formula for conditional distribution :math:` p_{Y/X^0=x} (y)=\frac {p_{x^ \epsilon y} (x,y)}{p_{x^ \epsilon}  (x) )}` ,
+Using formula for conditional distribution :math:`p_{Y/X^0=x} (y)=\frac {p_{x^ \epsilon y} (x,y)}{p_{x^ \epsilon} (x) )}` ,
 
 where  :math:`p_{x^ \epsilon}(x) =  \int_{R^n} p_{x^ \epsilon y} (x,u) du`
 
@@ -253,7 +253,7 @@ Calculate a new set of vertices:
 
 :math:`u_k^i= m_{k-1}+\epsilon_{k-1} (f(u_{k-1}^i)-c_{k-1})\frac{  m_{k-1} -u_{k-1}^i}  {||m_{k-1} -u_{k-1}^i ||^n }`
 
-Set  :math:` m_k=\frac{1}{K} \sum_{i=0}^K u_k^i`
+Set  :math:`m_k=\frac{1}{K} \sum_{i=0}^K u_k^i`
 
 Adjust the step size :math:`\epsilon_{k-1}` so that :math:`f(m_k)<f(m_{k-1})`.
 
