@@ -110,7 +110,7 @@ approach, as technological advancements have made it a less demanding
 task in terms of processing and memory.
 
 .. figure:: algorithm_1.png
-   :scale: 40%
+   :scale: 5%
    :figclass: bht
 
 The popularity of the pool-based method has led to a widely-used
