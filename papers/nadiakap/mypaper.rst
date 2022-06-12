@@ -53,7 +53,7 @@ As an example, consider variant of simulated annealing proposed in [FGSB]_ where
 Testing functions are included in the library. They represent broad range of use cases covering above
 mentioned difficult functions. In this paper we describe the approach underlying these optimization methods.
 The distinctive feature of these methods is that they are not heuristic in nature. The algorithms are derived
-based on potential theory [KAP1]_, and their convergence is guaranteed by their derivation method [KAP3]_.
+based on potential theory [KAP]_, and their convergence is guaranteed by their derivation method [KPP]_.
 Recently potential theory was applied to prove convergence of well known heuristic methods, for example
 see [BIS]_ for convergence of PSO, and to re prove convergence of well known gradient based methods, in particular,
 first order methods   - see  [NBAG]_ for convergence of gradient descent and [ZALO]_ for mirror descent.
@@ -63,7 +63,7 @@ For potential functions approach for stochastic first order optimization methods
 Outline of the approach
 -----------------------
 
-The approach works for non-smooth or algorithmically defined functions.  For detailed description of the approach see [KAP1]_, [KAP2]_.
+The approach works for non-smooth or algorithmically defined functions.  For detailed description of the approach see [KAP]_, [KP]_.
 In this approach the original optimization problem is replaced with a randomized problem, allowing the use of Monte-Carlo methods for calculating integrals.
 This is especially important if objective function is given by its values (no analytical formula) and derivatives
 are not known. The original problem is restated in the framework of gradient (sub gradient) methods, employing the
@@ -93,15 +93,15 @@ By randomizing we get
 
 where  X is a set of random vectors with values from :math:`R^n` .
 
-The solution of :eq:`rfx` is a random vector from  that optimizes a functional  .
+The solution of :ref:`rfx` is a random vector from  that optimizes a functional  .
 
 Note the following:
 
-	a) :eq:`fx` and :eq:`rfx` are equivalent (see [KAP]_ for proof);
+	a) :ref:`fx` and :ref:`rfx` are equivalent (see [KAP]_ for proof);
 
-	b) :eq:`rfx` is the stochastic optimization problem of the functional F(X) .
+	b) :ref:`rfx` is the stochastic optimization problem of the functional F(X) .
 
-	To study the gradient nature of the solution algorithms for problem :eq:`rfx`, a variation of objective functional  F(X)  will be considered.
+	To study the gradient nature of the solution algorithms for problem :ref:`rfx`, a variation of objective functional  F(X)  will be considered.
 
 The suggested scheme makes it possible to obtain optimization methods in systematic way, similar to methodology adopted in smooth optimization. Derivation includes the following steps
 	randomization of the original optimization problem,
