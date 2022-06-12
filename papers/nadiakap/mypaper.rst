@@ -14,7 +14,7 @@ of such functions is a challenging task because traditional derivative based
 optimization methods with guaranteed convergence properties cannot be used.. This software
 allows to create new optimization methods with desired properties, based on basic modules.
 These basic modules are designed in accordance with approach for constructing global optimization
-methods based on potential theory[KAP1]_. These methods do not use derivatives of objective function
+methods based on potential theory [KAP1]_. These methods do not use derivatives of objective function
 and as a result work with nondifferentiable functions (or functions given by computer programs,
 or black box functions), but have guaranteed convergence. The software helps to understand
 principles of learning algorithms. This software may be used by researchers to design their own
@@ -114,10 +114,10 @@ Expression for directional derivative
 -------------------------------------
 
 
-Derivative of objective functional F(X) in the direction of the random vector Y at the point $X^0$ (Gateaux derivative) is:
+Derivative of objective functional F(X) in the direction of the random vector Y at the point :math:`X^0` (Gateaux derivative) is:
 
 
- $\delta _Y F(X^0 )=\frac{d}{d \epsilon} F(X^0+\epsilon Y) _{\epsilon=0}=\frac{d}{d \epsilon} F(X^\epsilon) _{\epsilon=0}=\frac{d}{d \epsilon} \int f(X) p_{x^\epsilon}(x) _{\epsilon=0}$
+ :math:`\delta _Y F(X^0 )=\frac{d}{d \epsilon} F(X^0+\epsilon Y) _{\epsilon=0}=\frac{d}{d \epsilon} F(X^\epsilon) _{\epsilon=0}=\frac{d}{d \epsilon} \int f(X) p_{x^\epsilon}(x) _{\epsilon=0}`
 
 where density function of the random vector :math:`X^\epsilon=X^0+\epsilon Y` may be expressed in terms of joint density function :math:`p_{{X^0},Y} (x,y)` of :math:`X^0` and Y as follows:
 
@@ -142,7 +142,7 @@ Assuming differentiability of the integrals (for example, by selecting the appro
    \delta _Y F(X^0 ) = [\frac{d}{d \epsilon} \int_{R^n}   \int_{R^n} f(x) p_{x^ \epsilon} (x - \epsilon y,y) dx dy] _{\epsilon=0}=
 
 
-:math:`   = [\frac{d}{d \epsilon} \int_{R^n} f(x)  \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dx dy] _{\epsilon=0}= [ \int_{R^n} f(x) ( \frac{d}{d \epsilon} \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dy )dx] _{\epsilon=0}=`
+:math:`= [\frac{d}{d \epsilon} \int_{R^n} f(x)  \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dx dy] _{\epsilon=0}= [ \int_{R^n} f(x) ( \frac{d}{d \epsilon} \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dy )dx] _{\epsilon=0}=`
 
 
 :math:`= \int_{R^n} f(x)(  \int_{R^n} [\frac{d}{d \epsilon}  p_{x^ \epsilon} (x - \epsilon y,y)] _{\epsilon=0} dy) dx=- \int_{R^n} f(x)(  \int_{R^n} [div_x ( p_{x^ \epsilon} (x,y) y )]  dy) dx=`
@@ -191,7 +191,6 @@ we arrive at Poisson's equation for potential function:
 where L is a constant
 
 Solution to Poisson's equation approaching 0 at infinity may be written in the following form
-Solution to Poisson's equation approaching 0 at infinity may be written in the following form
 
 .. math::
 
@@ -229,14 +228,14 @@ Applying expection to (12) and presenting :math:`E[Y_{N+1}` asconditional expect
    X_{N+1} =E[ X_{N}]+ \alpha_{N+1}E_{X^N} E[Y^{N+1}/X^N]
 
 
-Replacing mathematical expectations :math:`E[ X_{N}]` and :math:`Y_{N+1}]`  with their estimates :math:`\overline E ^{ N+1}`` and  :math:` \overline y (X^N)` we get:
+Replacing mathematical expectations :math:`E[ X_{N}]` and :math:`Y_{N+1}]`  with their estimates :math:`\overline E ^{ N+1}` and  :math:`\overline y (X^N)` we get:
 
 .. math::
 
    \overline E  ^{ N+1} = \overline E  ^{ N}+ \alpha_{N+1} \overline E  _{X^N} [ \overline y (X^N)]
 
 
-Note that expression for  :math:` \overline y (X^N)` was obtained in the previos section up to certain parameters. By setting parameters to certain values
+Note that expression for  :math:`\overline y (X^N)` was obtained in the previos section up to certain parameters. By setting parameters to certain values
 we can obtain stochastic extensions of well known heuristics such as Nelder and Mead algorithm or Covariance Matrix Adaptation Evolution Strategy.
 In minpy library we use several common building blocks to create different algorithms. Customized algorithms may be defined by combining these
 common blocks and varying their parameters.
