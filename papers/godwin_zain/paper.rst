@@ -347,3 +347,7 @@ modify the loss prediction method, we concatenate the VAE features to
 the final ResNet feature concatenation :math:`\mathbf{c}` before the
 loss prediction, so that the extra information is factored into the
 training of the prediction network :math:`\mathfrak{P}`.
+
+Experiments
+===========
+
