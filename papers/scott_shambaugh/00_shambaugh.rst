@@ -29,6 +29,7 @@ Typically UA and SA are done using Monte Carlo simulations, for reasons explored
 .. figure:: monaco_logo.png
    :align: center
    :figclass: h
+   :scale: 20 %
 
    The monaco project logo. :label:`monacologo`
 
@@ -52,7 +53,7 @@ To sample :math:`k` input factors where each factor :math:`x_{i \in [1, ..., k]}
 When to Use and When to Avoid Monte Carlo Analysis
 --------------------------------------------------
 
-A complete exploration of a model's input space is necessary to fully characterize its behavior, and responsible use of computational models requires understanding the total range of predictions they imply. Policy papers have identified UA and SA as a critical component of good modeling practice :cite:`azzini2020uncertainty` :cite:`us2009guidance`. The short answer to the question of when to conduct UA and SA is, "always".
+A complete exploration of a model's input space is necessary to fully characterize its behavior, and responsible use of computational models requires understanding the total range of predictions they imply. Policy papers have identified UA and SA as a critical good modeling practice :cite:`azzini2020uncertainty` :cite:`us2009guidance`. The short answer to the question of when to conduct UA and SA is, "always".
 
 There are some important considerations to keep in mind, however. With computational power making running large numbers of cases ever easier, a Monte Carlo analysis can result in highly statistically signficant conclusions. However these results are *conditional on the correctness of the underlying model and input distributions*. If the underlying model has not been throroughly validated, then any precise quantification of uncertainty and sensitivities will be washed out by the mismatch between the model and reality.
 
@@ -60,7 +61,7 @@ This validation can be difficult - outputs are a function of the combined inputs
 
 This is not to say that UA and SA should not be conducted early in the model development process - obtaining the range of plausible output uncertainties is a critical step in input and model validation. Test data cannot be well compared against a single point estimate of a model's output, and it is necessary to have the full distribution of output values to compare test data against. Once a Monte Carlo analysis has generated these distributions, hypothesis testing or probablistic prediction measures like loss scores can be used to anchor the outputs against real-life test data.
 
-Some benefits are more qualitative. Monte Carlo analysis is an excellent way to uncover edge cases in a model through unexpected combinations of inputs, especially in highly nonlinear models. This is the core concept behind "fuzzing" techniques in software testing. And for any practitioner, outlier cases often contain the most useful information. :cite:`saltelli2019so` identifies this as one reason why researchers might (reflexively or unscrupulously) avoid UA and SA - it forces them to address the gaps in their models and makes it more difficult to explain away inconvenient results.
+Some benefits are more qualitative. Monte Carlo analysis is an excellent way to uncover edge cases in a model through unexpected combinations of inputs, especially in highly nonlinear models. This is the core concept behind "fuzzing" techniques in software testing. And for any practitioner, outlier cases often contain the most useful information. :cite:`saltelli2019so` identifies this as one reason why researchers might (reflexively or unscrupulously) avoid UA and SA - it forces addressing gaps in models and makes it more difficult to explain away inconvenient results.
 
 While Monte Carlo analysis is not strictly necessary for linear models, it is often an easier and conceptually simpler way to compute the propogation of uncertainties and sensitivities through a model than using linear methods. And by making nonlinear models easier to examine, there should be less of a need to make linearity assumptions about a system in the first place.
 
@@ -92,7 +93,6 @@ Note that *monaco* does not currently have tools for model or parameter validati
    :figclass: h
 
    Monte Carlo workflow for understanding the full behavior of a computational model, inspired by :cite:`saltelli2019so`. :label:`figanalysisprocess`
-
 
 
 *monaco* Structure
@@ -177,7 +177,6 @@ A summary of the process and data flow:
 
 4) Calculate statistics & sensitivities for input & output variables.
 5) Plot variables, their statistics, and sensitivities.
-
 
 
 Technical Features
@@ -323,7 +322,7 @@ The results of the simulation can then be postprocessed and examined. Fig. :ref:
    :align: center
    :figclass: h
 
-   Output from the example code which calculates the sum of two random dice rolls. The top plot shows a histogram of the 2-dice sum with the mean and 5 - 95th percentiles marked, the middle plot shows the randomness over the set of rolls, and the bottom plot shows that each of the dice contributes 50% to the variance of the sum (i.e, they are weighted equally). :label:`figexample`
+   Output from the example code which calculates the sum of two random dice rolls. The top plot shows a histogram of the 2-dice sum with the mean and 5 - 95th percentiles marked, the middle plot shows the randomness over the set of rolls, and the bottom plot shows that each of the dice contributes 50% to the variance of the sum. :label:`figexample`
 
 
 Conclusion
