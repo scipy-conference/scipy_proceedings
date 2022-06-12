@@ -93,22 +93,16 @@ By randomizing we get
 
 where  X is a set of random vectors with values from :math:`R^n` .
 
-The solution of :ref:`rfx` is a random vector from  that optimizes a functional  .
+The solution of :ref:`rfx` is a random vector from  {X} that optimizes a functional F(x) .
 
-Note the following:
+Note that :ref:`fx` and :ref:`rfx` are equivalent (see [KAP]_ for proof) and :ref:`rfx` is the stochastic optimization problem of the functional F(X) .
 
-	a) :ref:`fx` and :ref:`rfx` are equivalent (see [KAP]_ for proof);
+To study the gradient nature of the solution algorithms for problem :ref:`rfx`, a variation of objective functional  F(X)  will be considered.
 
-	b) :ref:`rfx` is the stochastic optimization problem of the functional F(X) .
+The suggested approCH makes it possible to obtain optimization methods in systematic way, similar to methodology adopted in smooth optimization. 
+Derivation includes randomization of the original optimization problem, finding directional derivative for the randomized problem and choosing moving direction Y based on the condition that directional derivative in the direction of Y is being less or equal to 0.
 
-	To study the gradient nature of the solution algorithms for problem :ref:`rfx`, a variation of objective functional  F(X)  will be considered.
-
-The suggested scheme makes it possible to obtain optimization methods in systematic way, similar to methodology adopted in smooth optimization. Derivation includes the following steps
-	randomization of the original optimization problem,
-	finding directional derivative for the randomized problem,
-	choosing direction Y of the next iteration step of the algorithm is based on the condition that directional derivative in the direction of Y is being less or equal to 0.
-
-Because of randomization, the expression for directional derivative doesn't contain the differential characteristics of the original function. We obtain the condition for selecting the direction of search Y in terms of its characteristics - conditional expectation. Conditional expectation is a vector function (or vector field) and can be decomposed (following the theorem of decomposition of the vector field) into the sum of the gradient of scalar function P and a function with div=0. P is called a potential function. As a result the original problem is reduced to optimization of the potential function, furthermore, the potential function is specific for each iteration step. Next, we arrive at partial differential equation that connects P and the original function.
+Because of randomization, the expression for directional derivative doesn't contain the differential characteristics of the original function. We obtain the condition for selecting the direction of search Y in terms of its characteristics - conditional expectation. Conditional expectation is a vector function (or vector field) and can be decomposed (following the theorem of decomposition of the vector field) into the sum of the gradient of scalar function P and a function with zero divergence. P is called a potential function. As a result the original problem is reduced to optimization of the potential function, furthermore, the potential function is specific for each iteration step. Next, we arrive at partial differential equation that connects P and the original function.
 To define computational algorithms it is necessary to specify the dynamics of the random vectors. For example, the dynamics can be expressed in a form of densities. For certain class of distributions, for example normal distribution, the dynamics can be written in terms of expectation and covariance matrix. It is also possible to express the dynamics in mixed characteristics.
 
 
