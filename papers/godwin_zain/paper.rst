@@ -109,6 +109,10 @@ the points of highest ranking. This is the current default AL
 approach, as technological advancements have made it a less demanding
 task in terms of processing and memory.
 
+.. figure:: algorithm_1.png
+   :scale: 40%
+   :figclass: bht
+
 The popularity of the pool-based method has led to a widely-used
 evaluation procedure, which we describe in Algorithm 1. This
 procedure trains a task model :math:`\mathfrak{T}` on the initial
