@@ -34,7 +34,7 @@ It is often much easier and less expensive to collect data than to
 label it. Active learning (AL) responds to this issue by selecting
 which unlabeled data are best to label next. Standard approaches
 utilize task-aware AL, which identifies informative samples based on
-a model trained to perform a classification task. Task-agnostic AL
+a trained supervised model. Task-agnostic AL
 ignores the task model and instead makes selections based on learned
 properties of the dataset. We seek to combine these approaches and
 measure the contribution of incorporating task-agnostic information
@@ -104,17 +104,17 @@ synthesis (:cite:`angluin1988queries`), stream-based
 sampling (:cite:`atlas1989training`), and pool-based
 sampling (:cite:`lewis1994sequential`). The latter method
 takes a holistic approach of ranking all available unlabeled points
-by some chosen heuristic :math:`\mathcal{H}` and choosing to label
+by some chosen heuristic :math:`\mathfrak{H}` and choosing to label
 the points of highest ranking. This is the current default AL
 approach, as technological advancements have made it a less demanding
 task in terms of processing and memory.
 
 The popularity of the pool-based method has led to a widely-used
 evaluation procedure, which we describe in Algorithm 1. This
-procedure trains a task model :math:`\mathcal{T}` on the initial
+procedure trains a task model :math:`\mathfrak{T}` on the initial
 labeled data, records its test accuracy, then uses
-:math:`\mathcal{H}` to label a set of unlabeled points. We then once
-again train :math:`\mathcal{T}` on the labeled data and record its
+:math:`\mathfrak{H}` to label a set of unlabeled points. We then once
+again train :math:`\mathfrak{T}` on the labeled data and record its
 accuracy. This is repeated until a desired number of labels is
 reached, and then the accuracies can be graphed against the number of
 available labels to demonstrate performance over the course of
@@ -139,13 +139,13 @@ Recent heuristics using deep features
 -------------------------------------
 
 For convolutional neural networks (CNNs) in image classification
-settings, the task model :math:`\mathcal{T}` can be decomposed into a
+settings, the task model :math:`\mathfrak{T}` can be decomposed into a
 feature-generating module
 
 .. math::
 
    \begin{aligned}
-   \mathcal{T}_f \colon \mathbb{R}^n \to \mathbb{R}^f,
+   \mathfrak{T}_f \colon \mathbb{R}^n \to \mathbb{R}^f,
    \end{aligned}
 
 which maps the input data vectors to the output of the final fully
@@ -154,7 +154,7 @@ connected layer before classification, and a classification module
 .. math::
 
    \begin{aligned}
-   \mathcal{T}_c \colon \mathbb{R}^f \to \{0,1,...,c\},
+   \mathfrak{T}_c \colon \mathbb{R}^f \to \{0,1,...,c\},
    \end{aligned}
 
 where :math:`c` is the number of classes.
@@ -175,7 +175,7 @@ Algorithm 1 is chosen by
    :label: eq:core-set-selection
 
    \begin{aligned}
-   \mathbf{u}^* = \mathop{\mathrm{arg max}}_{\mathbf{u} \in U} \min_{{\boldsymbol\ell} \in L} || (\mathcal{T}_f(\mathbf{u}) - \mathcal{T}_f({\boldsymbol\ell})) ||^2,
+   \mathbf{u}^* = \mathop{\mathrm{arg max}}_{\mathbf{u} \in U} \min_{{\boldsymbol\ell} \in L} || (\mathfrak{T}_f(\mathbf{u}) - \mathfrak{T}_f({\boldsymbol\ell})) ||^2,
    \end{aligned}
 
 where :math:`U` is the unlabeled set and :math:`L` is the labeled
@@ -185,7 +185,7 @@ set. The analogous operation for MedAL is
    :label: eq:med-al-selection
 
    \begin{aligned}
-   \mathbf{u}^* = \mathop{\mathrm{arg max}}_{\mathbf{u} \in U} {1 \over |L|} \sum_{i=1}^{|L|} || \mathcal{T}_f(\mathbf{u}) -  \mathcal{T}_f(\mathbf{L_i}) ||^2 .
+   \mathbf{u}^* = \mathop{\mathrm{arg max}}_{\mathbf{u} \in U} {1 \over |L|} \sum_{i=1}^{|L|} || \mathfrak{T}_f(\mathbf{u}) -  \mathfrak{T}_f(\mathbf{L_i}) ||^2 .
    \end{aligned}
 
 Note that after a point :math:`\mathbf{u}^*` is chosen, the selection
@@ -201,11 +201,11 @@ uses the average distance.
 
 Another recent method (:cite:`yoo2019learning`) trains a
 regression network to predict the loss of the task model, then takes
-the heuristic :math:`\mathcal{H}` to select the unlabeled points of
+the heuristic :math:`\mathfrak{H}` to select the unlabeled points of
 highest predicted loss. To implement this, the loss prediction
-network :math:`\mathcal{P}` is attached to a ResNet task model
-:math:`\mathcal{T}` and is trained jointly with :math:`\mathcal{T}`.
-The inputs to :math:`\mathcal{P}` are the features output by the
+network :math:`\mathfrak{P}` is attached to a ResNet task model
+:math:`\mathfrak{T}` and is trained jointly with :math:`\mathfrak{T}`.
+The inputs to :math:`\mathfrak{P}` are the features output by the
 ResNet’s four residual blocks. These features are mapped into the
 same dimensionality via a fully connected layer and then concatenated
 to form a representation :math:`\mathbf{c}`. An additional fully
@@ -213,19 +213,19 @@ connected layer then maps :math:`\mathbf{c}` into a single value
 constituting the loss prediction.
 
 When attempting to train a network to directly predict
-:math:`\mathcal{T}`\ ’s loss during training, the ground truth losses
-naturally decrease as :math:`\mathcal{T}` is optimized, resulting in
+:math:`\mathfrak{T}`\ ’s loss during training, the ground truth losses
+naturally decrease as :math:`\mathfrak{T}` is optimized, resulting in
 a moving objective. The authors
 of (:cite:`yoo2019learning`) find that a more stable ground
 truth is the inequality between the losses of given pairs of points.
-In this case, :math:`\mathcal{P}` is trained on pairs of labeled
-points, so that :math:`\mathcal{P}` is penalized for producing
+In this case, :math:`\mathfrak{P}` is trained on pairs of labeled
+points, so that :math:`\mathfrak{P}` is penalized for producing
 predicted loss pairs that exhibit a different inequality than the
 corresponding true loss pair.
 
 More specifically, for each batch of labeled data
 :math:`L_{batch} \subset L` that is propagated through
-:math:`\mathcal{T}` during training, the batch of true losses is
+:math:`\mathfrak{T}` during training, the batch of true losses is
 computed and split randomly into a batch of pairs :math:`P_{batch}`.
 The loss prediction network produces a corresponding batch of
 predicted loss pairs, denoted :math:`\widetilde{P}_{batch}`. The
@@ -237,17 +237,17 @@ following pair loss is then computed given each
    :label: eq:pair-loss
 
    \begin{aligned}
-   \mathcal{L}_{pair}(p, \tilde{p}) = \max (0, -\mathcal{I}(p) \cdot (\tilde{p}^{(1)} - \tilde{p}^{(2)}) + \xi),
+   \mathfrak{L}_{pair}(p, \tilde{p}) = \max (0, -\mathfrak{I}(p) \cdot (\tilde{p}^{(1)} - \tilde{p}^{(2)}) + \xi),
    \end{aligned}
 
-where :math:`\mathcal{I}` is the following indicator function for
+where :math:`\mathfrak{I}` is the following indicator function for
 pair inequality:
 
 .. math::
    :label: eq:inequality-indicator
 
    \begin{aligned}
-   \mathcal{I}(p) = \begin{cases}
+   \mathfrak{I}(p) = \begin{cases}
                         \hspace{0.75em}1, \quad p^{(1)} > p^{(2)}\\
                         -1, \quad p^{(1)} \le p^{(2)}
                      \end{cases}.
@@ -274,7 +274,7 @@ following loss function (:cite:`kingma2019introduction`):
    :label: eq:vae-loss
 
    \begin{aligned}
-   \mathcal{L}_{\theta, \phi}(\mathbf{x}) = \log p_{\theta}(\mathbf{x} | \mathbf{z}) + [\log p_{\theta}(\mathbf{z}) - \log q_{\phi}(\mathbf{z | x})],
+   \mathfrak{L}_{\theta, \phi}(\mathbf{x}) = \log p_{\theta}(\mathbf{x} | \mathbf{z}) + [\log p_{\theta}(\mathbf{z}) - \log q_{\phi}(\mathbf{z | x})],
    \end{aligned}
 
 where :math:`\theta` and :math:`\phi` are the parameters of the
@@ -295,14 +295,14 @@ Methods
 
 We observe that the notions of uncertainty developed in the core-set
 and MedAL methods rely on distances between feature vectors modeled
-by the task model :math:`\mathcal{T}`. Additionally, loss prediction
+by the task model :math:`\mathfrak{T}`. Additionally, loss prediction
 relies on a fully connected layer mapping from a feature space to a
 single value, producing different predictions depending on the values
 of the relevant feature vector. Thus all of these methods utilize
 spatial reasoning in a vector space.
 
 Furthermore, in each of these methods, the heuristic
-:math:`\mathcal{H}` only has access to information learned by the
+:math:`\mathfrak{H}` only has access to information learned by the
 task model, which is trained only on the labeled points at a given
 timestep in the labeling procedure. Since variational autoencoder
 (VAE) encodings are not limited by the contents of the labeled set,
@@ -313,8 +313,8 @@ additional features will constitute representative and previously
 inaccessible information regarding the data, which may improve the
 active learning process.
 
-We implement this by first training a VAE model :math:`\mathcal{V}`
-on the given dataset. :math:`\mathcal{V}` can then be used as a
+We implement this by first training a VAE model :math:`\mathfrak{V}`
+on the given dataset. :math:`\mathfrak{V}` can then be used as a
 function returning the VAE features for any given datapoint. We
 append these additional features to the relevant vector spaces using
 vector concatenation, an operation we denote with the symbol
@@ -325,7 +325,7 @@ then becomes
    :label: eq:vae-core-set-selection
 
    \begin{aligned}
-   \mathbf{u}^* = \mathop{\mathrm{arg max}}_{\mathbf{u} \in U} \min_{{\boldsymbol\ell} \in L} || ([\mathcal{T}_f(\mathbf{u}) \frown \alpha\mathcal{V}(\mathbf{u})] - [\mathcal{T}_f({\boldsymbol\ell}) \frown \alpha\mathcal{V}(\mathbf{\boldsymbol\ell})] ||^2,
+   \mathbf{u}^* = \mathop{\mathrm{arg max}}_{\mathbf{u} \in U} \min_{{\boldsymbol\ell} \in L} || ([\mathfrak{T}_f(\mathbf{u}) \frown \alpha\mathfrak{V}(\mathbf{u})] - [\mathfrak{T}_f({\boldsymbol\ell}) \frown \alpha\mathfrak{V}(\mathbf{\boldsymbol\ell})] ||^2,
    \end{aligned}
 
 and the analogous MedAL operation becomes
@@ -334,7 +334,7 @@ and the analogous MedAL operation becomes
    :label: eq:vae-med-al-selection
 
    \begin{aligned}
-   \mathbf{u}^* = \mathop{\mathrm{arg max}}_{\mathbf{u} \in U} {1 \over |L|} \sum_{i=1}^{|L|} || [\mathcal{T}_f(\mathbf{u}) \frown \alpha\mathcal{V}(\mathbf{u})] - [\mathcal{T}_f(\mathbf{L_i}) \frown \alpha\mathcal{V}(\mathbf{L_i})] ||^2 ,
+   \mathbf{u}^* = \mathop{\mathrm{arg max}}_{\mathbf{u} \in U} {1 \over |L|} \sum_{i=1}^{|L|} || [\mathfrak{T}_f(\mathbf{u}) \frown \alpha\mathfrak{V}(\mathbf{u})] - [\mathfrak{T}_f(\mathbf{L_i}) \frown \alpha\mathfrak{V}(\mathbf{L_i})] ||^2 ,
    \end{aligned}
 
 where :math:`\alpha` is a hyperparameter that scales the influence of
@@ -342,4 +342,4 @@ the VAE features in computing the vector distance. To similarly
 modify the loss prediction method, we concatenate the VAE features to
 the final ResNet feature concatenation :math:`\mathbf{c}` before the
 loss prediction, so that the extra information is factored into the
-training of the prediction network :math:`\mathcal{P}`.
+training of the prediction network :math:`\mathfrak{P}`.
