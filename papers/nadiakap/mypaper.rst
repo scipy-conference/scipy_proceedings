@@ -14,7 +14,7 @@ of such functions is a challenging task because traditional derivative based
 optimization methods with guaranteed convergence properties cannot be used.. This software
 allows to create new optimization methods with desired properties, based on basic modules.
 These basic modules are designed in accordance with approach for constructing global optimization
-methods based on potential theory [KAP1]_. These methods do not use derivatives of objective function
+methods based on potential theory [KAP]_. These methods do not use derivatives of objective function
 and as a result work with nondifferentiable functions (or functions given by computer programs,
 or black box functions), but have guaranteed convergence. The software helps to understand
 principles of learning algorithms. This software may be used by researchers to design their own
@@ -265,9 +265,9 @@ Use the sample standard deviation as the termination criterion: :math:`D_k=(\fra
 
 References
 ----------
-.. [KAP1] Kaplinskij, A.I.,Pesin, A.M.,Propoj, A.I.. (1994). Analysis of search methods of optimization based on potential theory. I: Nonlocal properties. Automation and Remote Control. N.9, pp.97-105
-.. [KAP2] A.I. Kaplinskiĭ, A. I. Propoĭ, First-order nonlocal optimization methods that use potential theory, Automation and Remote Control,1994
-.. [KAP3] Kaplinskij, A.I., Pesin, A.M.,Propoj, A.I.. (1994). Analysis of search methods of optimization based on potential theory. III: Convergence of methods. Automation and Remote Control.
+.. [KAP] Kaplinskij, A.I.,Pesin, A.M.,Propoj, A.I.(1994). Analysis of search methods of optimization based on potential theory. I: Nonlocal properties. Automation and Remote Control. N.9, pp.97-105
+.. [KP] Kaplinskiĭ, A. I. Propoĭ, A.I , First-order nonlocal optimization methods that use potential theory, Automation and Remote Control,1994
+.. [KPP] Kaplinskij, A.I., Pesin, A.M.,Propoj, A.I. (1994). Analysis of search methods of optimization based on potential theory. III: Convergence of methods. Automation and Remote Control.
 .. [NBAG] Nikhil Bansal, Anupam Gupta, Potential-function proofs for gradient methods, Theory of Computing, 2019
 .. [ATFB] Adrien Taylor, Francis Bach, Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions, 2019
 .. [ZALO] Zeyuan Allen-Zhu and Lorenzo Orecchia, Linear Coupling: An Ultimate Unification of Gradient and Mirror Descent, Innovations in Theoretical Computer Science Conference (ITCS), 2017, pp. 3:1-3:22.
