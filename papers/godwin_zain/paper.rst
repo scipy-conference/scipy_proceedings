@@ -351,3 +351,7 @@ training of the prediction network :math:`\mathfrak{P}`.
 Experiments
 ===========
 
+In order to measure the performance of the newly proposed method, we
+first run the original core-set and loss prediction methods through
+Algorithm 1. We then run the augmented methods under the same
+experimental settings and compare the output accuracy graphs.
