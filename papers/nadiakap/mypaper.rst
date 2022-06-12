@@ -79,27 +79,29 @@ using standardized methodology, namely, gradient (sub gradient) framework.
 We consider the unconstrained optimization problem
 
 .. math::
-
+   :label: fx
+   
    f(x_1, x_2,..x_n)\to\min_{x \in R_n }
 
 
 By randomizing we get
 
 .. math::
-
+   :label: rfx
+   
    F(X) = E(f(x))\to\min_{x \in R_n }
 
 where  X is a set of random vectors with values from :math:`R^n` .
 
-The solution of (2) is a random vector from  that optimizes a functional  .
+The solution of :eq:`rfx` is a random vector from  that optimizes a functional  .
 
 Note the following:
 
-	a) (1) and (2) are equivalent (see [1] for proof);
+	a) :eq:`fx` and :eq:`rfx` are equivalent (see [KAP]_ for proof);
 
-	b) (2) is the stochastic optimization problem of the functional  .
+	b) :eq:`rfx` is the stochastic optimization problem of the functional F(X) .
 
-	To study the gradient nature of the solution algorithms for problem (2), a variation of objective functional  F(X)  will be considered.
+	To study the gradient nature of the solution algorithms for problem :eq:`rfx`, a variation of objective functional  F(X)  will be considered.
 
 The suggested scheme makes it possible to obtain optimization methods in systematic way, similar to methodology adopted in smooth optimization. Derivation includes the following steps
 	randomization of the original optimization problem,
