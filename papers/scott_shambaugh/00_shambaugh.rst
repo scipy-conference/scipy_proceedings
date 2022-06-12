@@ -1,4 +1,4 @@
-:author: W Scott Shambaugh
+:author: W\. Scott Shambaugh
 :email: wsshambaugh@gmail.com
 :bibliography: refs
 
@@ -9,12 +9,12 @@ Monaco: A Monte Carlo Framework for Performing Uncertainty and Sensitivity Analy
 
 .. class:: abstract
 
-   This paper introduces *monaco*, a python library for conducting Monte Carlo simulations of computational models, and performing uncertainty analysis (UA) and sensitivity analysis (SA) on the results. UA and SA are critical to effective and responsible use of models in science, engineering, and public policy, however their use is uncommon and hampered by lack of tools and need for advanced statistical knowledge. By providing a simple, general, and rigorous-by-default framework that wraps around existing models, *monaco* makes UA and SA easy and accessible to practitioners with a basic knowledge of statistics.
+   This paper introduces *monaco*, a Python library for conducting Monte Carlo simulations of computational models, and performing uncertainty analysis (UA) and sensitivity analysis (SA) on the results. UA and SA are critical to effective and responsible use of models in science, engineering, and public policy, however their use is uncommon and hampered by lack of tools and need for advanced statistical knowledge. By providing a simple, general, and rigorous-by-default framework that wraps around existing models, *monaco* makes UA and SA easy and accessible to practitioners with a basic knowledge of statistics.
 
 
 .. class:: keywords
 
-   Monte Carlo, Modelling, Uncertainty Quantification, Uncertainty Analysis, Sensitivity Analysis, Ensemble Prediction, VARS, D-VARS
+   Monte Carlo, Modeling, Uncertainty Quantification, Uncertainty Analysis, Sensitivity Analysis, Ensemble Prediction, VARS, D-VARS
 
 
 Introduction
@@ -24,8 +24,13 @@ Computational models form the backbone of decision-making processes in science, 
 
 Despite the importance of UA and SA in modeling, a recent literature review of the most highly cited papers across a wide range of disciplines showed that they are uncommon in most fields. And even when performed, best practices are usually lacking - amongst papers which specifically claimed to perform sensitivity analysis, only 21% performed global (as opposed to local or zero) UA and 41% performed global SA. :cite:`saltelli2019so` 
 
-Typically UA and SA are done using Monte Carlo simulations, for reasons explored in the following section. There are Monte Carlo frameworks available, however existing options are domain-specific, focused on narrow sub-problems (i.e. integration), tailored towards training neural nets, or require a deep statistical background to use (TODO: lots of references). For the domain expert who is not a statistician and wants to perform UA and SA on their existing models, there are no good options. *monaco* was written to address this gap.
+Typically UA and SA are done using Monte Carlo simulations, for reasons explored in the following section. There are Monte Carlo frameworks available, however existing options are domain-specific, focused on narrow sub-problems (i.e. integration), tailored towards training neural nets, or require a deep statistical background to use. See the introduction of :cite:`OLIVIER2020101204` for an overview of the currently available Python tools for conducting UA. For the domain expert who is not a statistician and wants to perform UA and SA on their existing models, there are no good options. *monaco* was written to address this gap.
 
+.. figure:: monaco_logo.png
+   :align: center
+   :figclass: h
+
+   The monaco project logo. :label:`monacologo`
 
 Why Monte Carlos?
 =================
@@ -33,7 +38,7 @@ Why Monte Carlos?
 Mathematical Grounding
 ----------------------
 
-Randomized Monte Carlo sampling offers a cure to the curse of dimensionality - consider an investigation of the output from :math:`k` input factors :math:`y = f(x_1, x_2, ..., x_k)` where each factor is uniformly sampled between 0 and 1, :math:`x_i \in U[0, 1]`. The input space is then a :math:`k`-dimensional hypercube with volume 1. If each input is varied one at a time (OAT), then points which are sampled lie on the principle axes passing through the point :math:`x_{i\in[1, ..., k]} = 0.5`. The volume of the sample space as :math:`n \to \infty` is the convex hull of these axes, which for the :math:`l_1` norm forms a :math:`k`-dimensional hyperoctahedron with volume :math:`\frac{1}{k!}` (or most optimistically, a :math:`l_2` norm hypersphere with volume :math:`\frac{\pi^{k/2}}{2^k \Gamma(k/2 + 1)}`), both of which decrease super-exponentially as :math:`k` increases. Unless the model is known to be linear, this is a wholly inadequate method to sample the input space. In contrast, the volume of the convex hull of random samples as is obtained with a Monte Carlo approach will converge to the entire input volume as :math:`n \to \infty` (with much better coverage within that volume as well). (TODO: references) See Fig. :ref:`figvolume`.
+Randomized Monte Carlo sampling offers a cure to the curse of dimensionality - consider an investigation of the output from :math:`k` input factors :math:`y = f(x_1, x_2, ..., x_k)` where each factor is uniformly sampled between 0 and 1, :math:`x_i \in U[0, 1]`. The input space is then a :math:`k`-dimensional hypercube with volume 1. If each input is varied one at a time (OAT), then points which are sampled lie on the principle axes passing through the point :math:`x_{i\in[1, ..., k]} = 0.5`. The volume of the sample space as :math:`n \to \infty` is the convex hull of these axes, which for the :math:`l_1` norm forms a :math:`k`-dimensional hyperoctahedron with volume :math:`\frac{1}{k!}` (or most optimistically, a :math:`l_2` norm hypersphere with volume :math:`\frac{\pi^{k/2}}{2^k \Gamma(k/2 + 1)}`), both of which decrease super-exponentially as :math:`k` increases. Unless the model is known to be linear, this is a wholly inadequate method to sample the input space. In contrast, the volume of the convex hull of random samples as is obtained with a Monte Carlo approach will converge to the entire input volume as :math:`n \to \infty` (with much better coverage within that volume as well) :cite:`dyer1992volumes`. See Fig. :ref:`figvolume`.
 
 .. figure:: hypersphere_volume.png
    :align: center
@@ -47,19 +52,32 @@ To sample :math:`k` input factors where each factor :math:`x_{i \in [1, ..., k]}
 When to Use and When to Avoid Monte Carlo Analysis
 --------------------------------------------------
 
-A complete exploration of a model's input space is necessary to fully characterize its behavior, and responsible use of computational models requires that any results are expressed not as point estimates but as intervals. Policy papers have identified UA and SA as a critical component of good modeling practice. (TODO: European commission reference). The short answer to the question of when to conduct UA and SA is, "always".
+A complete exploration of a model's input space is necessary to fully characterize its behavior, and responsible use of computational models requires understanding the complete range of predictions they imply. Policy papers have identified UA and SA as a critical component of good modeling practice :cite:`azzini2020uncertainty` :cite:`us2009guidance`. The short answer to the question of when to conduct UA and SA is, "always".
 
-With computational power making running large numbers of cases ever easier, a Monte Carlo analysis can result in highly statistically signficant conclusions. However these results are *conditional on the correctness of the underlying model and input distributions*. If the underlying model has not been throroughly validated, then any precise quantification of uncertainty and sensitivities will be washed out by the mismatch between the model and reality. 
+With computational power making running large numbers of cases ever easier, a Monte Carlo analysis can result in highly statistically signficant conclusions. However these results are *conditional on the correctness of the underlying model and input distributions*. If the underlying model has not been throroughly validated, then any precise quantification of uncertainty and sensitivities will be washed out by the mismatch between the model and reality.
 
-This is not to say that UA and SA should not be conducted early in the model development process - indeed, obtaining the range of plausible output uncertainties is a critical prerequisite to conducting model validation. Test data cannot be well compared against a point estimate of a model's output, and it is necessary to have the full distribution of output values to compare test data against. Once a Monte Carlo analysis has generated these distributions, hypothesis testing or probablistic prediction measures like the Brier score or log loss can be used to anchor the model against real-life test data.
+This validation can be difficult - outputs are a function of the combined inputs and model, and cannot be used to validate either the inputs or the model on their own. Generally validation requires significant domain expertise to ensure a mechanistic model has a solid theoretical foundation, and to diagnose errors in its implementation. 
 
-Some benefits are more qualitative. Monte Carlo analysis is an excellent way to uncover unexpected edge cases in a model through unexpected combinations of inputs, especially in highly nonlinear models. This is the core concept behind "fuzzing" techniques in software testing. :cite:`saltelli2019so` identifies this as one reason why researchers might (reflexively or unscrupulously) avoid UA and SA - it forces them to address the gaps in their models and makes it more difficult to explain away inconvenient results.
+This is not to say that UA and SA should not be conducted early in the model development process - obtaining the range of plausible output uncertainties is a critical step in input and model validation. Test data cannot be well compared against a single point estimate of a model's output, and it is necessary to have the full distribution of output values to compare test data against. Once a Monte Carlo analysis has generated these distributions, hypothesis testing or probablistic prediction measures like loss scores can be used to anchor the outputs against real-life test data.
 
-While Monte Carlo analysis is not strictly necessary for linear models, it is often an easier and conceptually simpler way to compute the propogation of uncertainties and sensitivities through a model than using linear-specific methods. And by making nonlinear models easier to examine, there should be less of a need to make linearity assumptions about a system in the first place.
+Some benefits are more qualitative. Monte Carlo analysis is an excellent way to uncover edge cases in a model through unexpected combinations of inputs, especially in highly nonlinear models. This is the core concept behind "fuzzing" techniques in software testing. And for any practitioner, outlier cases often contain the most useful information. :cite:`saltelli2019so` identifies this as one reason why researchers might (reflexively or unscrupulously) avoid UA and SA - it forces them to address the gaps in their models and makes it more difficult to explain away inconvenient results.
 
-One inherent pitfall of Monte Carlo approaches is that rare events may be undersampled (or unmodeled). For example, NASA uses Monte Carlo simulations extensively during launch vehicle design to predict the rocket trajectory and performance. :cite:`hanson2010applying` However, they must prove robustness to anomalous or stressing scenarios which may occur only one or two times in a run of thousands of cases, which is not enough to draw conclusions from. In instances such as this, rare event scenarios should be investigated directly.
+While Monte Carlo analysis is not strictly necessary for linear models, it is often an easier and conceptually simpler way to compute the propogation of uncertainties and sensitivities through a model than using linear methods. And by making nonlinear models easier to examine, there should be less of a need to make linearity assumptions about a system in the first place.
 
-Note that *monaco*'s computational and storage overhead in creating easily-iterrogatable objects for each variable, value, and case makes it an inefficient choice for computationally simple applications with high :math:`n`, such as Monte Carlo integration. It is best suited for models with moderate to high computational cost. *monaco* also trades the greater computational efficiency of methods such as importance sampling or bayesian methods in favor of the conceptual simplicity of random sampling.
+One inherent pitfall of Monte Carlo approaches is that rare events may be undersampled. For example, NASA uses Monte Carlo simulations extensively during launch vehicle design to predict the rocket trajectory and performance. :cite:`hanson2010applying` However, they must prove robustness to anomalous or stressing scenarios which may occur only one or two times in a run of thousands of cases, which is not enough to draw conclusions from. In instances such as this, rare event scenarios should be investigated directly.
+
+Note that *monaco*'s computational and storage overhead in creating easily-iterrogatable objects for each variable, value, and case makes it an inefficient choice for computationally simple applications with high :math:`n`, such as Monte Carlo integration. It is best suited for models with moderate to high computational cost. 
+
+
+Why Use Basic Monte Carlo over Bayesian Methods?
+------------------------------------------------
+
+*monaco* purposefully eschews the greater computational efficiency and built-in input parameter estimation of Bayesian methods such as Markov Chain Monte Carlo in favor of basic sampling. For its target audience of scientists, engineers, and policy analysts with mechanistic models, this is useful for many reasons:
+
+* `monaco` favors conceptual simplicity for greater accessibility. The goal is to be usable by someone at the level of knowing what a Uniform and Normal distribution are, and not require an in-depth data science background in inference. For one example of a barrier to entry that would not be covered in an undergraduate education, Bayesian methods generate correlated sample points, which invalidates the independence assumption of many basic statistical methods one might want to apply to outputs. 
+* Many modeling domains are not data-rich, especially in contrast to the dimensionality :math:`k` of the model. This precludes using standard Bayesian approaches to obtain results with any useful level of confidence. Consider NASA's use of Monte Carlo in predicting a rocket's flight :cite:`hanson2010applying` - they might have high levels of confidence that the hundreds of parameters describing their rocket are properly bound, and that their model correctly implements the physics of flight, but before their first launch they won't have any flight data at all. UA and SA are still critical tools in these situations.
+* Bayesian approaches require knowing a-priori which output statistics need to be calculated, and will undersample regions of low importance. In practice, the author has found that much of the value of UA is exploratory - using it to probe regions of the model that were previously unexamined. This can't be done if the practitioner has pidgeonholed their purview to particular posteriors.
+* Bayesian methods have poor repeatability of specific cases. If different posteriors need to be calculated, this will require a re-run that changes the sample points and erases previous interesting cases of interest.
 
 
 Workflow
@@ -104,13 +122,13 @@ At this point the sim can be run. The randomized drawing of input values, creati
 User-Defined Functions
 ----------------------
 
-The user needs to define three functions to wrap the Monte Carlo framework around their existing computational model. First is a `run` function which either calls or directly is their model. Second is a `preprocess` function which takes in a `Case` object, extracts the randomized inputs, and structures them with any other invariant data to pass to the `run` function. Thrid is a `postprocess` function which takes in a `Case` object as well as the results from the model, and extracts the desired output values. The python call chain is as:
+The user needs to define three functions to wrap the Monte Carlo framework around their existing computational model. First is a `run` function which either calls or directly is their model. Second is a `preprocess` function which takes in a `Case` object, extracts the randomized inputs, and structures them with any other invariant data to pass to the `run` function. Thrid is a `postprocess` function which takes in a `Case` object as well as the results from the model, and extracts the desired output values. The Python call chain is as:
 
 .. code-block:: python
     
     postprocess(case, *run(*preprocess(case)))
 
-Or equivalently to expand the python star notation into pseudocode:
+Or equivalently to expand the Python star notation into pseudocode:
 
 .. code-block:: python
     
@@ -146,7 +164,7 @@ A summary of the process and data flow:
 
 1) Instantiate a `Sim` object.
 2) Add input variables to the sim with specified probability distributions.
-3) Run the simulation. This executes the following:
+3) Run the simulation. This executes the following:    
 
  a) Random percentiles are drawn `ndraws` times for each of the input variables.
  b) These percentiles are transformed into random values via the inverse CDF of the target probability distribution.
@@ -166,7 +184,7 @@ Technical Features
 Sampling Methods
 ----------------
 
-Random sampling of the percentiles for each variable can be done using scipy's pseudo-random number generator (PRNG), or with any of the low-discrepancy methods in `scip.stats.qmc` Quasi-Monte Carlo module. In general, the `'sobol_random'` method that generates Sobol sequences with Owen scrambling (TODO: ref) is recommended in nearly all cases as a well-performing quasi-random sequence with the best known convergence, balanced integration properties as long as the number of cases is a power of 2, and a fairly flat frequency spectra. This is set as default. In cases where computing sample points takes a  prohibitively long amount of time, users may fall back to `'random'` sampling directly from the PRNG at the cost of less even distribution of points in the input space. See Fig. :ref:`figsampling` for a visual comparison.
+Random sampling of the percentiles for each variable can be done using scipy's pseudo-random number generator (PRNG), or with any of the low-discrepancy methods in `scip.stats.qmc` Quasi-Monte Carlo module. In general, the `'sobol_random'` method that generates Sobol sequences with Owen scrambling :cite:`sobol1967distribution` :cite:`owen2020dropping` is recommended in nearly all cases as a well-performing quasi-random sequence with the best known convergence, balanced integration properties as long as the number of cases is a power of 2, and a fairly flat frequency spectra :cite:`perrier2018sequences`. This is set as default. In cases where computing sample points takes a  prohibitively long amount of time, users may fall back to `'random'` sampling directly from the PRNG at the cost of less even distribution of points in the input space. See Fig. :ref:`figsampling` for a visual comparison.
 
 
 .. figure:: sampling.png
@@ -179,11 +197,13 @@ Random sampling of the percentiles for each variable can be done using scipy's p
 Order Statistics, or, How Many Cases to Run?
 --------------------------------------------
 
-How many Monte Carlo cases should one run? One answer would be to choose :math:`n \geq 2^k` for a sampling method that implements a (t,m,s)-net (such as a Sobol or Halton sequence), which guarentees that there will be at least one sample point in every hyperoctant of the input space. (TODO: reference) However this will undersample for low :math:`k` and may be infeasible for high :math:`k`.
+How many Monte Carlo cases should one run? One answer would be to choose :math:`n \geq 2^k` with a sampling method that implements a (t,m,s) digital net (such as a Sobol or Halton sequence), which guarentees that there will be at least one sample point in every hyperoctant of the input space :cite:`joe2008constructing`. This should be considered a lower bound for SA, with the number of cases run being some integer multiple of :math:`2^k`.
 
-A rigorous way of choosing the number of cases is to first choose an output percentile or tolerance interval of the population which is desired to contain a sample with a target value, and then use order statistics to calculate the :math:`n` required to obtain that result with a desired confidence level. *monaco* implements routines for calculating these statistical intervals via an order statistics distribution-free approach with no assumptions about the normality or other shape characteristics of the output distribution. See Chaper 5 of :cite:`hahn2011statistical`.
+Along a similar vein, :cite:`dyer1992volumes` suggests that with random sampling :math:`n \geq 2.136^k` is sufficient to ensure that the volume fraction :math:`V` approaches 1. The author hypothesizes that for a low-discrepancy Sobol sequence, the :math:`n \geq \lambda^k` condition will be satisfied with :math:`\lambda \leq 2`, and that :math:`n \geq 2^k` will suffice for this condition to hold. However, this method of choosing the number of cases may undersample for low :math:`k` and be infeasible for high :math:`k`.
 
-A more qualitative method would simply to choose a reasonably high :math:`n` (say, :math:`n=2^{10}`), manually examine the results to ensure high-interest areas are not being undersampled, and rely on bootstrapping of the desired variable statistics to obtain the required significance levels. 
+A rigorous way of choosing the number of cases is to first choose a statistical interval (confidence interval for a percentile, or a tolerance interval to contain a percent of the population), and then use order statistics to calculate the minimum :math:`n` required to obtain that result with a desired confidence level. *monaco* implements routines for calculating these statistical intervals via an order statistics distribution-free approach with no assumptions about the normality or other shape characteristics of the output distribution. See Chaper 5 of :cite:`hahn1991statistical`.
+
+A more qualitative UA method would simply to choose a reasonably high :math:`n` (say, :math:`n=2^{10}`), manually examine the results to ensure high-interest areas are not being undersampled, and rely on bootstrapping of the desired variable statistics to obtain the required confidence levels. 
 
 
 Variable Statistics
@@ -195,9 +215,9 @@ For any input or output variable, a statistic can be calculated for the ensemble
 Sensitivity Indices
 -------------------
 
-Sensitivity indices give a measure of the relationship between the variance of a scalar output variable to the variance of each of the input variables. In other words, they measure which of the inputs has the largest effect on the outputs. It is crucial that sensitivity indices are global rather than local measures - global sensitivity has the stronger theoretical grounding and there is no reason to rely on local measures in scenarios such as automated computer experiments where data can be easily and aribitrarily sampled.
+Sensitivity indices give a measure of the relationship between the variance of a scalar output variable to the variance of each of the input variables. In other words, they measure which of the inputs has the largest effect on the outputs. It is crucial that sensitivity indices are global rather than local measures - global sensitivity has the stronger theoretical grounding and there is no reason to rely on local measures in scenarios such as automated computer experiments where data can be easily and aribitrarily sampled. :cite:`saltelli2008global` :cite:`puy2022comprehensive`
 
-With computer-designed experiments, it is possible to contruct a specially constructed sample set to directly calculate sensitivity indices such as the Total-Order Sobol index, or the IVARS100 index. (TODO: references). However, this special construction requires either sacrificing the desirable UA properties of low-discrepancy sampling, or conducting an additional Monte Carlo analysis of the model with a different sample set. For this reason, *monaco* uses the D-VARS approach to calculating global sensitivity indices, which allows for using a set of given data :cite:`sheikholeslami2020fresh`. This is the first publically available implementation of the D-VARS algorithm.
+With computer-designed experiments, it is possible to contruct a specially constructed sample set to directly calculate global sensitivity indices such as the Total-Order Sobol index :cite:`sobol2001global`, or the IVARS100 index :cite:`razavi2016new`. However, this special construction requires either sacrificing the desirable UA properties of low-discrepancy sampling, or conducting an additional Monte Carlo analysis of the model with a different sample set. For this reason, *monaco* uses the D-VARS approach to calculating global sensitivity indices, which allows for using a set of given data :cite:`sheikholeslami2020fresh`. This is the first publically available implementation of the D-VARS algorithm.
 
 
 Plotting
