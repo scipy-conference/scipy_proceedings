@@ -118,20 +118,22 @@ Derivative of objective functional F(X) in the direction of the random vector Y 
 where density function of the random vector :math:`X^\epsilon=X^0+\epsilon Y` may be expressed in terms of joint density function :math:`p_{{X^0},Y} (x,y)` of :math:`X^0` and Y as follows:
 
 .. math::
-
+   :label: ddrv
+   
    p_{x^ \epsilon} (x) = \int_{R^n} p_{x^ \epsilon} (x - \epsilon y,y) dy
 
 
 The following relation (property of divergence) will be needed later
 
 .. math::
-
+   :label: pdiv
+   
    \frac{d}{d \epsilon} p_{x^ \epsilon} (x - \epsilon y,y) =(-\nabla_x  p_{x^ \epsilon} (x,y), y ) = -div_x ( p_{x^ \epsilon} (x,y) y )
 
 
 where ( , ) defines dot product.
 
-Assuming differentiability of the integrals (for example, by selecting the appropriate :math:`p_{x^ \epsilon} (x,y)` and using (3), (4) we get
+Assuming differentiability of the integrals (for example, by selecting the appropriate :math:`p_{x^ \epsilon} (x,y)` and using :ref:`ddrv`, :ref:`pdiv` we get
 
 .. math::
 
