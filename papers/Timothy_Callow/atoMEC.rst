@@ -59,14 +59,14 @@ An alternative method used in the WDM community is path-integral Monte-Carlo :ci
 
 It is therefore of great interest to reduce the computational complexity of the aforementioned methods.
 Some examples of promising developments in this regard include machine-learning-based solutions :cite:`ML_DFT_1,ML_DFT_2,mala` and stochastic DFT :cite:`stoc_DFT,stoc_DFT_2`.
-However, in this paper, we focus on an alternative class of models known as "average-atom" models. Average-atom models have a long history in plasma Physics :cite:`PRR_AA`: they account for quantum effects, typically using DFT, but reduce the complex system of interacting electrons and nuclei to a single atom immersed in a plasma (the "average" atom).
+However, in this paper, we focus on an alternative class of models known as "average-atom" models. Average-atom models have a long history in plasma physics :cite:`PRR_AA`: they account for quantum effects, typically using DFT, but reduce the complex system of interacting electrons and nuclei to a single atom immersed in a plasma (the "average" atom).
 An illustration of this principle (reduced to two dimensions for visual purposes) is shown in Fig. 1.
 This significantly reduces the cost relative to a full DFT simulation, because the particle number is restricted to the number of electrons per nucleus, and spherical symmetry is exploited to reduce the three-dimensional problem to one dimension.
 
 Naturally, to reduce the complexity of the problem as described, various approximations must be introduced.
 It is important to understand these approximations and their limitations for average-atom models to have genuine predictive capabilities.
 Unfortunately, this is not always the case: although average-atom models share common concepts, there is no unique formal theory underpinning them and thus a variety of models and codes exist, and it is not typically clear which models can be expected to perform most accurately under which conditions.
-In a previous paper :cite:`PRR_AA`, we addressed this issue by deriving an average-atom from first principles, and comparing the impact of different approximations within this model on some common properties.
+In a previous paper :cite:`PRR_AA`, we addressed this issue by deriving an average-atom model from first principles, and comparing the impact of different approximations within this model on some common properties.
 
 In this paper, we focus on computational aspects of average-atom models for WDM.
 We introduce atoMEC :cite:`atoMEC_zenodo`: an open-source average-**ato**\m code for studying **M**\atter under **E**\xtreme **C**\onditions.
@@ -93,7 +93,7 @@ These properties yield information pertinent to our understanding of stellar and
 To exactly obtain these properties, one needs (in theory) to determine the thermodynamic ensemble of the quantum states (the so-called *wave-functions*) representing the electrons and nuclei.
 Fortunately, they can be obtained with reasonable accuracy using models such as average-atom models; in this section, we elaborate on how this is done.
 
-We shall briefly review the key theory underpinning the type of average-atom models implemented in atoMEC. This is intended for readers without a background in quantum mechanics, to give some context to the purposes and mechanisms of the code.
+We shall briefly review the key theory underpinning the type of average-atom model implemented in atoMEC. This is intended for readers without a background in quantum mechanics, to give some context to the purposes and mechanisms of the code.
 For a comprehensive derivation of this average-atom model, we direct readers to Ref. :cite:`PRR_AA`.
 The average-atom model we shall describe falls into a class of models known as *ion-sphere* models, which are the simplest (and still most widely used) class of average-atom model.
 There are alternative (more advanced) classes of model such as *ion-correlation* :cite:`ioncorrelation` and *neutral pseudo-atom* models :cite:`NPA` which we have not yet implemented in atoMEC and thus we do not elaborate on them here.
@@ -111,9 +111,12 @@ Due to the spherical symmetry of the atom, the non-interacting electrons - known
 
    \phi_{nlm}(\mathbf{r}) = X_{nl}(r) Y_l^m(\theta, \phi)\,,
 
-where :math:`n,\ l,\ \textrm{and}\ m` are the *quantum numbers* of the orbitals, which come from the fact that the wave-function is an eigenfunction of the Hamiltonian operator; and :math:`Y_l^m(\theta, \phi)` are the spherical harmonic functions. The radial coordinate :math:`r` represents the absolute distance from the nucleus.
+where :math:`n,\ l,\ \textrm{and}\ m` are the *quantum numbers* of the orbitals, which come from the fact that the wave-function is an eigenfunction of the Hamiltonian operator; and :math:`Y_l^m(\theta, \phi)` are the spherical harmonic functions. [#f2]_ The radial coordinate :math:`r` represents the absolute distance from the nucleus.
 
-We therefore only need to determine the radial KS orbitals :math:`X_{nl}(r)`. These are determined by solving the radial KS equation, which is similar to the Schrödinger equation for a non-interacting system, with an additional term in the potential to mimic the effects of electron-electron interaction (within the single atom).
+.. [#f2] Please note that the notation in Eq. (:ref:`eq:phi`) does not imply Einstein summation notation. All summations in this paper are written explicitly; Einstein summation notation is not used.
+
+We therefore only need to determine the radial KS orbitals :math:`X_{nl}(r)`.
+These are determined by solving the radial KS equation, which is similar to the Schrödinger equation for a non-interacting system, with an additional term in the potential to mimic the effects of electron-electron interaction (within the single atom).
 The radial KS equation is given by
 
 .. math::
@@ -129,9 +132,9 @@ The :math:`v_\textrm{s}[n](r)` term is the KS potential, which itself is compose
 .. math::
    :label: eq:kspot
 	   
-   v_{\textrm{s}}[n](r) = -\frac{Z}{r} + 4\pi \int_0^{R_\textrm{WS}} \textrm{d}{x} \frac{n(x)x^2}{r^>(x)} + \frac{\delta F_\textrm{xc}[n]}{\delta n(r)}\,,
+   v_{\textrm{s}}[n](r) = -\frac{Z}{r} + 4\pi \int_0^{R_\textrm{WS}} \textrm{d}{x} \frac{n(x)x^2}{\max(r,x)} + \frac{\delta F_\textrm{xc}[n]}{\delta n(r)}\,,
 
-where :math:`r^>(x)=\max(r,x)`, :math:`R_\textrm{WS}` is the radius of the atomic sphere, :math:`n(r)` is the electron density, :math:`Z` the nuclear charge, and :math:`F_\textrm{xc}[n]` the exchange-correlation free energy functional.
+where :math:`R_\textrm{WS}` is the radius of the atomic sphere, :math:`n(r)` is the electron density, :math:`Z` the nuclear charge, and :math:`F_\textrm{xc}[n]` the exchange-correlation free energy functional.
 Thus the three terms in the potential are respectively the electron-nuclear attraction, the classical Hartree repulsion, and the exchange-correlation (xc) potential.
 
 We note that the KS potential and its constituents are functionals of the electron density :math:`n(r)`.
@@ -153,7 +156,7 @@ where :math:`f_{nl}(\epsilon_{nl},\mu,\tau)` is the Fermi-Dirac distribution, gi
 where :math:`\tau` is the temperature, and :math:`\mu` is the chemical potential, which is determined by fixing the number of electrons to be equal to a pre-determined value :math:`N_\textrm{e}` (typically equal to the nuclear charge :math:`Z`).
 The Fermi-Dirac distribution therefore assigns weights to the KS orbitals in the construction of the density, with the weight depending on their energy.
 
-Therefore, the KS potential which determines the KS orbitals via the ODE (:ref:`eq:kseqn`), is itself dependent on the KS orbitals.
+Therefore, the KS potential that determines the KS orbitals via the ODE (:ref:`eq:kseqn`), is itself dependent on the KS orbitals.
 Consequently, the KS orbitals and their dependent quantities (the density and KS potential) must be determined via a so-called self-consistent field (SCF) procedure.
 An initial guess for the orbitals, :math:`X_{nl}^0(r)`, is used to construct the initial density :math:`n^0(r)` and potential :math:`v_\textrm{s}^0(r)`.
 The ODE (:ref:`eq:kseqn`) is then solved to update the orbitals.
@@ -177,7 +180,8 @@ which is an important input parameter for various models, such as adiabats which
 .. [#f1] The summation in Eq. (:ref:`eq:MIS`) is often shown as an integral because the energies above a certain threshold form a continuous distribution (in most models).
 
 Various other interesting properties can also be calculated following some post-processing of the output of an SCF calculation, for example the pressure exerted by the electrons and ions.
-Furthermore, response properties, i.e. those resulting from an external perturbation like a laser pulse, can also be obtained from the output of an SCF cycle. These properties include for example electrical conductivities :cite:`AA_KG` and dynamical structure factors :cite:`AA_DSF`.
+Furthermore, response properties, i.e. those resulting from an external perturbation like a laser pulse, can also be obtained from the output of an SCF cycle.
+These properties include, for example, electrical conductivities :cite:`AA_KG` and dynamical structure factors :cite:`AA_DSF`.
 
 .. figure:: SCF_tikz-1.png
    :align: center
@@ -187,7 +191,7 @@ Furthermore, response properties, i.e. those resulting from an external perturba
    Schematic of the average-atom model set-up and the self-consistent field (SCF) cycle.
    On the left-hand side, the physical choices and mathematical operations that define the model and SCF cycle are shown.
    On the right-hand side, the (higher-order) functions and classes in atoMEC corresponding to the items on the left-hand side are shown.
-   Some liberties are taken with the code in the figure to improve readability.
+   Some liberties are taken with the code snippets in the right-hand column of the figure to improve readability; more precisely, some non-crucial intermediate steps are not shown, and some parameters are also not shown or simplified.
    The dotted lines represent operations that are taken care of within the :code:`models.CalcEnergy` function, but are shown nevertheless to improve understanding.
    
 
@@ -233,7 +237,7 @@ By default, the above code automatically prints the output seen in Fig. 3. We se
 In addition, at least one of "density" or "radius" must be specified.
 In atoMEC, the default (and only permitted) units for the mass density are :math:`\textrm{g cm}^{-3}`; *all* other input and output units in atoMEC are by default Hartree atomic units, and hence we specify "K" for Kelvin.
 
-The information in Fig. 3 displays the chosen parameters in common units, as well as some other information directly obtained from these parameters.
+The information in Fig. 3 displays the chosen parameters in units commonly used in the plasma and condensed-matter physics communities, as well as some other information directly obtained from these parameters.
 The chemical symbol ("Al" in this case) is passed to the mendeleev library :cite:`mendeleev2014` to generate this data, which is used later in the calculation.
 
 This initial stage of the average-atom calculation, i.e. the specification of physical parameters and initialization of the :code:`Atom` object, is shown in the top row at the top of Fig. 2.
@@ -268,7 +272,7 @@ Together with the optional :code:`spinpol` and :code:`spinmag` parameters in the
 The remaining information displayed in Fig. 4 shows directly the chosen model parameters, or the default values where these parameters are not specified.
 The exchange and correlation functionals - set by the parameters :code:`xfunc_id` and :code:`cfunc_id` - are passed to the LIBXC library :cite:`libxc_2018` for processing.
 So far, only the "local density" family of approximations is available in atoMEC, and thus the default values are usually a sensible choice.
-For more information on exchange and correlation functionals, there is a number of reviews in the literature, for example Ref. :cite:`xc_review`.
+For more information on exchange and correlation functionals, there are many reviews in the literature, for example Ref. :cite:`xc_review`.
 
 This stage of the average-atom calculation, i.e. the specification of the model and the choices of approximation within that, is shown in the second row of Fig. 2.
 
@@ -437,7 +441,7 @@ In Fig. 7, we plot the band-gap as a function of density, for a fixed temperatur
 Visually, it appears that the relationship between band-gap and density is linear at this temperature.
 This is confirmed using a linear fit, which has a coefficient of determination value of almost exactly one, :math:`R^2=0.9997`.
 Using this fit, the band-gap is predicted to close at :math:`5.5\ \textrm{g cm}^{-3}`.
-Also in this figure, we show the fraction of ionized electrons, which is given by :math:`\bar{Z}/N_\textrm{e}`, using Eq. :ref:`eq:MIS` to calculate :math:`\bar{Z}` and :math:`N_\textrm{e}` being the total electron number.
+Also in this figure, we show the fraction of ionized electrons, which is given by :math:`\bar{Z}/N_\textrm{e}`, using Eq. (:ref:`eq:MIS`) to calculate :math:`\bar{Z}`, and :math:`N_\textrm{e}` being the total electron number.
 The ionization fraction also relates to the conductivity of the material, because ionized electrons are not bound to any nuclei and therefore free to conduct electricity.
 We see that the ionization fraction mostly increases with density (excepting some strange behavior around :math:`\rho_\textrm{m}=1\ \textrm{g cm}^{-3}`), which is further evidence of the transition from insulating to conducting behaviour with increasing density.
 
