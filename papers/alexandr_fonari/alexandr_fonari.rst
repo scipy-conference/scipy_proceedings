@@ -161,6 +161,7 @@ Performing DFT calculations for all of the 9,000 molecules in the dataset would 
 
 .. figure:: fig_al.png
    :align: center
+   :figclass: w
 
    Active Learning workflow for the design and discovery of novel optoelectronics molecules. :label:`figal`
 
