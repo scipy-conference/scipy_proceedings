@@ -39,7 +39,7 @@ Every step of this workflow can benefit from open source code.
 Materials import and generation
 -------------------------------
 
-For reading and writing of material structures, several open source packages (e.g. OpenBabel [Obabel]_, RDKit [Rdkit]_) have implemented functionality for working with several extensively used formats (e.g. CIF, PDB, mol, xyz).
+For reading and writing of material structures, several open source packages (e.g. OpenBabel [Obabel]_, RDKit [RDKit]_) have implemented functionality for working with several extensively used formats (e.g. CIF, PDB, mol, xyz).
 Experimental periodic structures of materials, mainly coming from single crystal X-ray diffraction, are distributed in CIF (Crystallographic Information File), PDB (Protein Data Bank) and lately mmCIF formats [Formats]_.
 Correctly reading experimental structures is of significant importance, since the rest of the materials discovery workflow depends on it.
 In addition to atom coordinates and periodic cell information, structural data also contains symmetry operations (listed explicitly or by the means of providing a space group) that can be used to decrease the number of computations required for a particular system taking symmetry into account.
@@ -55,21 +55,29 @@ An important application of structure generation is modeling of substitutional d
 In this case the unit cell and atomic sites of the crystal or surface slab are well defined while the chemical species occupying the site may vary.
 In order to simulate substitutional disorder one must generate the ensemble of structures that includes all statistically significant atomic distribution in a given unit cell.
 This can be achieved by a brute force enumeration of all symmetrically unique atomic structures with a given number of vacancies, impurities or solute atoms.
-The enumlib library implements algorithms for such a systematic enumeration of periodic structures [Enumlib]_.
+Open source enumlib library [Enumlib]_ implements algorithms for such a systematic enumeration of periodic structures.
 This allows to generate a big set of symmetrically nonequivalent materials with different compositions (e.g. doping or defect concentration).
-Recently, we applied this approach in simultaneous study of the activity and stability of Pt based core-shell type catalysts for the oxygen reduction reaction.
+Recently, we applied this approach in simultaneous study of the activity and stability of Pt based core-shell type catalysts for the oxygen reduction reaction [TM]_.
 We generated a set of stable doped Pt/transition metal/nitrogen surfaces using periodic enumeration.
-Using Quantum ESPRESSO (QE) [QE]_ to perform periodic density functional theory (DFT) calculations, we assessed surface phase diagrams for Pt alloys and and identified the avenues for stabilizing the cost effective core-shell systems by a judicious choice of the catalyst core material.
-Such catalysts may prove critical in electrocatalysis for fuel cell applications [TM]_.
+Using open source Quantum ESPRESSO (QE) code [QE]_ to perform periodic density functional theory (DFT) calculations, we assessed surface phase diagrams for Pt alloys and and identified the avenues for stabilizing the cost effective core-shell systems by a judicious choice of the catalyst core material.
+Such catalysts may prove critical in electrocatalysis for fuel cell applications.
 
 Workflow capabilities
 ---------------------
 
-In order to be able to run a massively parallel screening of materials a highly scalable and stable queuing system (job scheduler) is required.
+In order to be able to run a massively parallel screening of materials, a highly scalable and stable queuing system (job scheduler) is required.
 We have implemented a job queuing system on top of the most used queuing systems (LSF, PBS, SGE, SLURM, TORQUE, UGE) and exposed a Python API to submit and monitor jobs.
-Cloud is also supported by means of a virtual cluster configured with SLURM. This allows to submit a large number of jobs, limited only by SLURM scheduling capabilities and cloud resources.
+Cloud is also supported by means of a virtual cluster configured with SLURM.
+This allows to submit a large number of jobs, limited only by SLURM scheduling capabilities and cloud resources.
 In order to accommodate job dependencies in the workflows, for each job a parent job (or multiple parent jobs) can be defined forming a directed graph of jobs.
-There could be several reasons for a job to fail and there are several restart/recovery mechanisms in place. The lowest level is the restart mechanism (in SLURM it is called *requeue*) by the queuing system itself. This is triggered when a node goes down for some reason. On the cloud, preemptible instances (nodes) can go offline at any moment. On top of that, each individual workflow implements its own way to deal with failures. For example, in case when the simulation is not converging to a requested energy accuracy, it is wasteful to blindly restart the calculation without changing some input parameters. However, in the case of full disk space failure, it is reasonable to try restart with hopes to get a node with more empty disk space. If a job fails (and can not be restarted), all its children (if any) will not start, thus saving queuing and computational time (some examples of workflows are provided below).
+There could be several reasons for a job to fail and there are several restart/recovery mechanisms in place.
+The lowest level is the restart mechanism (in SLURM it is called *requeue*) by the queuing system itself.
+This is triggered when a node goes down for some reason.
+On the cloud, preemptible instances (nodes) can go offline at any moment.
+On top of that, each individual workflow implements its own way to deal with failures.
+For example, in case when the simulation is not converging to a requested energy accuracy, it is wasteful to blindly restart the calculation without changing some input parameters.
+However, in the case of full disk space failure, it is reasonable to try restart with hopes to get a node with more empty disk space.
+If a job fails (and can not be restarted), all its children (if any) will not start, thus saving queuing and computational time (some examples of workflows are provided below).
 This allowed us and our customers to perform massive screenings of materials and their properties.
 We reported a massive screening of 250,000 charge-conducting organic materials, totaling approximately 3,619,000 DFT SCF (self-consistent field) single-molecule calculations using quantum mechanics (QM) Jaguar code [Jaguar]_ that took 457,265 CPU hours (~52 years) [CScreen]_.
 Another case study is high-throughput molecular dynamics simulations (MD) of thermophysical properties of polymers for various applications [MDS]_.
@@ -77,8 +85,8 @@ There, using the Desmond code [Desmond]_ we computed the glass transition temper
 This study took advantage of GPU (graphics processing unit) support as implemented in Desmond, as well as the job scheduler API described above.
 
 For soft materials (polymers, organic small molecules and substrates composed of soft molecules), convex hull and related mathematical methods are important for finding possible accessible solvent voids (during submerging or sorption) and adsorbate sites (during molecular deposition).
-These methods are conveniently implemented in SciPy [Scipy]_.
-We implemented molecular deposition and evaporation workflows using the Desmond MD engine as the backend.
+These methods are conveniently implemented in the open source SciPy package [Scipy]_.
+We implemented molecular deposition and evaporation workflows by using the Desmond MD engine as the backend.
 This workflow enables simulation of the deposition and evaporation of the small molecules on a substrate.
 As an example, organic light-emitting diodes (OLEDs) are fabricated using a stepwise process, where layers are deposited on top of previous layers.
 Both vacuum and solution deposition processes have been used to prepare these films, primarily as "amorphous" thin film active layers lacking long-range order.
@@ -99,14 +107,14 @@ The pressure tensor of a deformed cell is related to stress.
 This analysis allowed us to predict elongation at yield for high density polyethylene polymer and compare it with experimental data [Convex]_.
 
 The ``scipy.optimize`` package is used for a least-squares fit of the bulk energies at different cell volumes (compressed and expanded) in order to obtain the bulk modulus and equation of state (EOS) of a material.
-In the Schrödinger suite this was implemented as a part of the EOS workflow, fitting is performed on the the results obtained from a series of QE calculations performed on the original and compressed/expanded (deformed) cells.
+In the Schrödinger suite this was implemented as a part of the EOS workflow, fitting is performed on the results obtained from a series of QE calculations performed on the original and compressed/expanded (deformed) cells.
 This is also an example of the loosely coupled (embarrassingly parallel) jobs.
 Calculations of the deformed cells only depend on the bulk calculation and do not depend on each other and thus all the deformation jobs can be submitted in parallel, this greatly facilitates high-throughput runs.
 
 Experimental structure refinement from powder diffraction is another example where more complex optimization is used.
 Powder diffraction is a widely used method in drug discovery to assess purity of the material and discover known or unknown crystal polymorphs that could form [Powder]_.
 In particular, fitting of the experimental powder diffraction intensity peaks to the indexed peaks (Pawley refinement) [Jansen]_.
-Here we employed the ``lmfit`` package [Lmfit]_ to perform a minimization of the multivariable Voigt-like function that represents the entire diffraction spectrum.
+Here we employed the open source ``lmfit`` package [Lmfit]_ to perform a minimization of the multivariable Voigt-like function that represents the entire diffraction spectrum.
 This allows to refine (optimize) unit cell parameters coming from the indexing data as a result goodness of fit (:math:`R`-factor) between experimental and simulated spectrum is reported.
 
 Machine learning techniques
@@ -114,10 +122,10 @@ Machine learning techniques
 
 There is great interest in machine learning assisted materials discovery.
 There are several components required to perform machine learning assisted materials discovery.
-In order to train a model, benchmark data from calculations and/or experimental data is required.
+In order to train a model, benchmark data from simulation and/or experimental data is required.
 Besides benchmark data, computation of the relevant descriptors is required (see below).
 Finally, a model based on benchmark data and descriptors is generated that allows prediction of properties for novel materials.
-There are several techniques to generate the model, spawning from linear or non-linear fitting to neural networks, DeepChem [Deepchem]_ and AutoQSAR [AutoQSAR]_.
+There are several techniques to generate the model, spawning from linear or non-linear fitting to neural networks, open source DeepChem [DeepChem]_ and AutoQSAR [AutoQSAR]_ from the Schrödinger suite.
 In the Schrödinger suite, benchmark data can be obtained using a few different tools.
 The QM DFT molecular Jaguar code is used for small molecules and finite systems.
 Periodic systems are simulated with Quantum ESPRESSO.
@@ -127,26 +135,28 @@ For crystalline periodic systems, we have implemented several sets of descriptor
 These descriptors include:
 
 - elemental features such as atomic weight, number of valence electrons in *s*, *p* and *d*-shells, electronegativity
-- structural features such as density, volume per atom, and packing fraction descriptors implemented in matminer [Matminer]_
-- intercalation descriptors such as cation and anion counts, crystal packing fraction, average neighbor ionicity [Sendek]_
-- three-dimensional smooth overlap of atomic positions (SOAP) descriptors implemented in DScribe [DScribe]_.
+- structural features such as density, volume per atom, and packing fraction descriptors implemented in the open source matminer package [Matminer]_
+- intercalation descriptors such as cation and anion counts, crystal packing fraction, average neighbor ionicity [Sendek]_ implemented in the Schrödinger suite
+- three-dimensional smooth overlap of atomic positions (SOAP) descriptors implemented in the open source DScribe package [DScribe]_.
 
-Using these descriptors and kernel regression methods to train the model, as implemented in scikit-learn [SkLearn]_, we were able to train a model that successfully predicted bulk modulus of a set of Li-containing battery related compounds.
+Using these descriptors and kernel regression methods to train the model, as implemented in the open source scikit-learn code [SkLearn]_, we were able to train a model that successfully predicted bulk modulus of a set of Li-containing battery related compounds.
 
-For isolated small molecules and extended non-periodic systems, rdkit can be used to generate a large number of atomic and molecular descriptors.
-A lot of effort has been devoted to ensure that rdkit works on a wide variety of materials that are supported by Schrödinger suite.
-As at the time of writing, the 4th most active contributor to rdkit is Ricardo Rodriguez-Schmidt from Schrödinger [RdkitC]_.
+For isolated small molecules and extended non-periodic systems, RDKit can be used to generate a large number of atomic and molecular descriptors.
+A lot of effort has been devoted to ensure that RDKit works on a wide variety of materials that are supported by Schrödinger suite.
+As at the time of writing, the 4th most active contributor to RDKit is Ricardo Rodriguez-Schmidt from Schrödinger [RDKitC]_.
 
-Recently, we implemented a workflow that employs active learning (AL) for intelligent and iterative identification of promising materials candidates within a large dataset [Abroshan]_.
-In this approach, machine learning and DFT are combined.
+Recently, active learning (AL) combined with DFT has received much attention to address the challenge of leveraging exhaustive libraries in materials informatics [Vasudevan]_, [Schleder]_.
+On our side, we have implemented a workflow that employs active learning (AL) for intelligent and iterative identification of promising materials candidates within a large dataset.
 In the framework of AL, the predicted value with associated uncertainty is considered to decide what materials to be added in each iteration, aiming to improve the model's performance in the next iteration (Figure :ref:`figal`).
-There we used descriptors as implemented in rdkit to featurize the chemical structures.
+Since it could be important to consider multiple properties simultaneously in material discovery, multiple property optimization (MPO) has also been implemented as a part of the AL workflow [Kwak]_.
+MPO allows to scale and combine multiple properties into a single score.
+We employed the AL workflow to determine the top candidates for hole (positively charged carrier) transport layer by evaluating 550 molecules in 10 iterations using DFT calculations for a dataset of ~9,000 molecules [Abroshan]_.
+According to the semiclassical Marcus equation [Marcus]_, high rates of hole transfer are inversely proportional to hole reorganization energies.
+Thus, MPO score was computed based on minimizing hole reorganization energy and targeting oxidation potential to an appropriate level to ensure a low energy barrier for hole injection from the anode into the emissive layer.
+We used RDKit to compute descriptors for the chemical structures.
 These descriptors generated on the initial subset of structures are given as vectors to an algorithm based on Random Forest as implemented in scikit-learn.
 Bayesian optimization is employed to tune the hyperparameters of the model.
 In each iteration, a trained model is applied for making predictions on the remaining materials in the dataset.
-Since it could be important to consider multiple properties in material discovery, multiple property optimization is also implemented [Kwak]_.
-Multiple properties are scaled and combined into a single score value.
-In this particular study, for a dataset of ~9,000 molecules, the AL workflow determined the top candidates for hole (positively charged carrier) transport layer by evaluating 550 molecules in 10 iterations using DFT calculations.
 Performing DFT calculations for all of the 9,000 molecules in the dataset would increase the computational cost by a factor of 15 versus the AL workflow.
 
 .. figure:: fig_al.jpg
@@ -171,7 +181,7 @@ References
 
 .. [Obabel] N. M. O'Boyle, et al. *Open Babel: An open chemical toolbox*, Journal of cheminformatics 3.1 (2011): 1-14. https://openbabel.org/
 
-.. [Rdkit] G. Landrum. *RDKit: A software suite for cheminformatics, computational chemistry, and predictive modeling*, (2013). http://www.rdkit.org/
+.. [RDKit] G. Landrum. *RDKit: A software suite for cheminformatics, computational chemistry, and predictive modeling*, (2013). http://www.rdkit.org/
 
 .. [Formats] J. D. Westbrook, and P. MD Fitzgerald. *The PDB format, mmCIF formats, and other data formats*, Structural bioinformatics 2: 271-291 (2003).
 
@@ -209,7 +219,7 @@ References
 
 .. [Powder] J. A. Kaduk, et al., *Powder diffraction*, Nature Reviews Methods Primers 1: 77 (2021).
 
-.. [Deepchem] B. Ramsundar, et al., *Deep Learning for the Life Sciences.* O'Reilly Media, 2019.
+.. [DeepChem] B. Ramsundar, et al., *Deep Learning for the Life Sciences.* O'Reilly Media, 2019.
 
 .. [AutoQSAR] S. L. Dixon, et al. *AutoQSAR: an automated machine learning tool for best-practice quantitative structure–activity relationship modeling*, Future medicinal chemistry 8 (15): 1825-1839 (2016).
 
@@ -219,9 +229,15 @@ References
 
 .. [DScribe] L. Himanen, et al. *DScribe: Library of descriptors for machine learning in materials science*, Computer Physics Communications 247: 106949 (2020). https://singroup.github.io/dscribe/latest/
 
-.. [SkLearn] F. Pedregosa, et al., *Scikit-learn: Machine learning in Python*, Journal of Machine Learning Research 12: 2825-2830 (2011). https://scikit-learn.org/
+.. [SkLearn] F. Pedregosa, et al., *Scikit-learn: Machine learning in Python.*, Journal of Machine Learning Research 12: 2825-2830 (2011). https://scikit-learn.org/
 
-.. [RdkitC] https://github.com/rdkit/rdkit/graphs/contributors
+.. [RDKitC] https://github.com/rdkit/rdkit/graphs/contributors
+
+.. [Vasudevan] R. Vasudevan, et al., *Machine learning for materials design and discovery.*, Journal of Applied Physics 129(7): 070401 (2021).
+
+.. [Schleder] G. R. Schleder, et al., *From DFT to machine learning: recent approaches to materials science–a review*, Journal of Physics: Materials 2(3): 032001 (2019).
+
+.. [Marcus] R. A. Marcus, *Electron Transfer Reactions in Chemistry. Theory and experiment.*, Rev. Mod. Phys. 65: 599–610 (1993).
 
 .. [Abroshan] H. Abroshan, et al., *Active Learning Accelerates Design and Optimization of Hole-Transporting Materials for Organic Electronics* Frontiers in Chemistry 9 (2021).
 
