@@ -159,7 +159,7 @@ Bayesian optimization is employed to tune the hyperparameters of the model.
 In each iteration, a trained model is applied for making predictions on the remaining materials in the dataset.
 Performing DFT calculations for all of the 9,000 molecules in the dataset would increase the computational cost by a factor of 15 versus the AL workflow.
 
-.. figure:: fig_al.jpg
+.. figure:: fig_al.png
    :align: center
    :figclass: w
 
