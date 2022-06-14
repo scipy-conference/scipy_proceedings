@@ -282,8 +282,16 @@ In order to properly resolve some references and normalize links convention, we 
    organization name/user name/repository name, that uniquely identifies a
    repository on a platform like GitHub.
 
-IRD files must be standardized in order to achieve a uniform syntax structure (Objective (b)). In this paper, we do not discuss IRD files distribution. The final specification IRD files is still in progress. We thus invite contributors to
-consult the current state on the GitHub repository [Papyri]_ .
+IRD files must be standardized in order to achieve a uniform syntax structure
+(Objective (b)). In this paper, we do not discuss IRD files distribution.
+
+The final specification IRD files is still in progress and still regularly
+undergo major changes – therefor we do not describe it in this paper as the
+description would already be outdated by the time this paper is published.
+We thus invite contributors to consult the current state on the GitHub repository [Papyri]_,
+and look at the current implementation. Once the IRD format is more stable we
+plan on publishing a JSON schema, full specification and more in depth description.
+
 
 **IRD bundles**
 ~~~~~~~~~~~~~~~
