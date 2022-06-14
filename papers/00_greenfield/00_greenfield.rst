@@ -19,7 +19,7 @@
 :equal-contributor:
 
 -----------------------------------------------------
-The Advanced Scientific Data Format (ADSF): An Update
+The Advanced Scientific Data Format (ASDF): An Update
 -----------------------------------------------------
 
 .. class:: abstract
