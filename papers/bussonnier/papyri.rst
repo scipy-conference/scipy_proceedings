@@ -393,19 +393,64 @@ installed, and infer the appropriate version of the requested documentation. At 
 implementation is set to tentatively guess relevant libraries versions when the
 exact version number is missing from the install command. 
 
+With our current implementation IRD bundle are post-processed and stored in a
+different format for later just in time rendering. This is done purely for
+convenience and performance reasons for local usage.
 
-The IRD files are post-processed into a local custom format. Object information is
-stored in 3 different places: a local `SQLite` database, `CBOR` representation of
-each document, and raw storage on the disk for assets and binary resource archive files. 
+For local rendering, we mostly need to the following operations::
 
-SQlite allows us to easily query graph information at runtime and just before
-rendering. It is mostly optimized for infrequent reading access. The goal is to move most of SQLite information resolving step at the installation time (such as looking for interlibraries links).
+1. Querying graph informations about cross links across documents.
+2. Rendering of a single page.
+3. Accessing raw data like images.
 
-CBOR representation of post-processed IRD files is more compact than JSON (where keys are often highly redundant). Additionally, it avoids compression usage for fast access.
+As we assume documentation access is happening on an end-user machine, we will
+also consider that IRD files are infrequently updated, disk space is limited, 
+and installing of running services (like a database server), are not available
+options. 
 
-Finally, access to these resources is provided via an internal ``GraphStore`` API which
-is agnostic of the backend. This ensures consistency of operations like
-adding/removing/replacing documents.
+With those requirements we decided to use a combination of `SQLite` (an
+in-process database engine), `CBOR` [#]_ and raw storage to better reflect the
+access pattern. 
+
+.. [#] Concise Binary Object Representation
+  
+
+SQlite allows us to easily query for object existence, and graph information
+(relationship between objects) at runtime. It is optimized for infrequent
+reading access. The goal is to move most of SQLite information resolving step at
+the installation time (such as looking for inter-libraries links). SQLite is
+less strongly typed than other relational or graph database and needs custom
+logic, but is ubiquitous on all systems and does not need a separate server
+process.
+
+CBOR is a more space efficient alternative to JSON. In particular keys in IRD
+are often highly redundant, and can be highly optimised when using CBOR.
+Storing IRD in CBOR thus reduces disk usage and can also allow faster
+deserialization without requiring potentially CPU intensive
+compression/decompression, which seem a good compromised for potentially low
+performance user machines.
+
+Raw storage is used for binary blobs which needs to be accesses without further
+processing, typically images. This permits access with standard tools like image
+viewers.
+
+Finally, access to all of these resources is provided via an internal
+``GraphStore`` API which is agnostic of the backend, but ensures consistency of
+operations like adding/removing/replacing documents.
+
+.. figure:: graphstore.png
+
+   Local implementation of papyri stores informations in 3 different format depending on
+   access patterns. A SQLite database for relationship information, on-disk CBOR
+   files for more compact storate of IRD, and RAW files (e.g. Images). A `GraphStore`
+   API abstract those access and takes care of maintinaing consistency. :label:`GraphStore`
+
+
+Depending on the context where documentation is rendered and viewed, those
+choices should be adapted. For example an online archive to browse documentation
+for multiple projects and versions would likely decide to use an actual graph
+database for object relation ship, and store other files on a CDN or blob
+storage for random access.
 
 Documentation Rendering
 -----------------------
