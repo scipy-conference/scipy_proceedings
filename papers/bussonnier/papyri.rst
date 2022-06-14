@@ -506,6 +506,18 @@ walking through the IRD AST tree, and rendering each node with users' preference
   version of `flask` [flask]_. This option contains the most features, and therefore is the
   main one used for development. This environment lets us iterate over the rendering engine rapidly.
 
+  We used this serve to explore the User Interface design and navigation. In
+  particular we found that a list of back references has limited uses, as it is
+  difficult to judge the relevance of back references, or their relationship
+  with each other, and we are playing with a network graph rendering :ref:`localgraph`
+  of back references, and found that is seem to help with finding cluster or
+  similar information. This representation also have challenges when pages have
+  a large number of back references as the graph become too busy.
+
+  We've experience here one of the advantage of the papyri architecture,
+  creating this network graph did not require any regeneration of the documentation.
+  We only had to update the template and re-render the current page.
+
 - A static AOT rendering of all the existing pages that can be
   rendered ahead of time uses the same class as the JIT rendering. Basically, this loops through all entries in the SQLite database and renders
   each item independently. This renderer is mostly used for exhaustive testing and performance measures for Papyri. This can render most of the API documentation of IPython, `Astropy`, `Dask`, `Distributed`, `Matplotlib`, `Networkx`, NumPy, `Pandas`, Papyri, SciPy, `Scikit-image` and others. It can represent ~28000 pages in ~60 seconds (that is ~450 pages/s on a recent Macbook pro M1).
@@ -528,13 +540,13 @@ extension can be seen in Figure :ref:`jlab`.
    :scale: 80%
 
 
-   Example of extended view of the Papyri documentation for Jupyterlab extension (here for SciPy). Code examples can now include plots. Most token in each examples are linked to the corresponding page. Early navigation bar is visible at the top. :label:`jlab`
+   Example of extended view of the Papyri documentation for Jupyterlab extension (here for SciPy). Code examples can now include plots. Most token in each examples are linked to the corresponding page. Early navigation bar is visible at the top.  :label:`jlab`
 
 
 .. figure:: local-graph.png
 
-   Local graph (made with D3.js [D3js]_) representing the connections among the most important nodes around ``numpy.ndarray``. Nodes
-   are sized with respect to the number of incomming links, and colored with respect to their library.
+   Local graph (made with D3.js [D3js]_) representing the connections among the most important nodes around current page. Here when viewing ``numpy.ndarray``. 
+   Nodes are sized with respect to the number of incomming links, and colored with respect to their library. This graph is generated at render-time, and updates depending on the currently installed libraries, it can be conveninent to find related function and documentation, but can be challenging to read for highly connected items as seem here for ``numpy.ndarray``.  :label:`localgraph`
 
 
 Challenges
