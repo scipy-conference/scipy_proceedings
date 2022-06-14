@@ -282,6 +282,12 @@ In order to properly resolve some references and normalize links convention, we 
    organization name/user name/repository name, that uniquely identifies a
    repository on a platform like GitHub.
 
+The exact structure of package metadata is not yet defined, we currently limit
+it to the minimum functional. While we could adopt formats like codemeta
+[CODEMETA]_, we want to avoid duplicating information, and would prefer to rely
+on metadata already present in the published packages, or extracting from source
+repository GitHub.
+
 IRD files must be standardized in order to achieve a uniform syntax structure
 (Objective (b)). In this paper, we do not discuss IRD files distribution.
 
@@ -620,3 +626,4 @@ References
 .. [msgspec] https://pypi.org/project/msgspec
 .. [D3js] https://d3js.org/
 .. [flask] https://flask.palletsprojects.com/en/2.1.x/
+.. [CODEMETA] https://codemeta.github.io/
