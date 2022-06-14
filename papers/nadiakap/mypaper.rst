@@ -238,6 +238,13 @@ we can obtain stochastic extensions of well known heuristics such as Nelder and 
 In minpy library we use several common building blocks to create different algorithms. Customized algorithms may be defined by combining these
 common blocks and varying their parameters.
 
+Main building blocks include computing center of mass of the sample points. The implementation of the method depends on the distribution of points. The implemeentation will be similar to Nelder and Mead algorithm if points are uniformly distributed.  
+
+.. code-block:: python
+   def center_of_mass():
+       """center of mass"""
+       return 0
+
 Stochastic extention of Nelder and Mead algorithm
 -------------------------------------------------
 
