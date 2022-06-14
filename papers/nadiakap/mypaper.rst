@@ -184,7 +184,7 @@ we arrive at Poisson's equation for potential function:
 
 .. math::
 
-   \delta \phi_0 (x) = -L [f(x)-C]p_u (x)
+   \nabla \phi_0 (x) = -L [f(x)-C]p_u (x)
 
 where L is a constant
 
