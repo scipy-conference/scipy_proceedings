@@ -173,7 +173,7 @@ Considering solution to :math:`\delta _Y F(X^0 )\to\min_Y` allows to obtain grad
 
 Potential function as a solution to Poisson's equation
 ------------------------------------------------------
-Decomposing vector field :math:`p_{x^0}(x)\overline y(x)`  into potential field $\nabla \phi_0 (x)$ and divergence-free component :math:`W_0 (x)`:
+Decomposing vector field :math:`p_{x^0}(x)\overline y(x)`  into potential field :math:`\nabla \varphi_0 (x)` and divergence-free component :math:`W_0 (x)`:
 
 .. math::
 
@@ -184,7 +184,7 @@ we arrive at Poisson's equation for potential function:
 
 .. math::
 
-   \nabla \phi_0 (x) = -L [f(x)-C]p_u (x)
+   \nabla \varphi_0 (x) = -L [f(x)-C]p_u (x)
 
 where L is a constant
 
