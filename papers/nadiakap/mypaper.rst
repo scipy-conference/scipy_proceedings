@@ -238,13 +238,21 @@ we can obtain stochastic extensions of well known heuristics such as Nelder and 
 In minpy library we use several common building blocks to create different algorithms. Customized algorithms may be defined by combining these
 common blocks and varying their parameters.
 
-Main building blocks include computing center of mass of the sample points. The implementation of the method depends on the distribution of points. The implemeentation will be similar to Nelder and Mead algorithm if points are uniformly distributed.  
+Main building blocks include computing center of mass of the sample points and finding newtonian potential. 
+
+The implementation of center_of_mass() method depends on the distribution of points. The implemeentation of this step will be similar to finding center of mass step in Nelder and Mead algorithm ( for example, see this paper on Nelder and Mead algorithm, which also includes analysis of convergence approaches [NMA]_ if points are uniformly distributed.  
 
 .. code-block:: python
    def center_of_mass():
        """center of mass"""
        return 0
 
+
+.. code-block:: python
+   def newtonian_potential():
+       """center of mass"""
+       return 0
+       
 Stochastic extention of Nelder and Mead algorithm
 -------------------------------------------------
 
@@ -279,3 +287,4 @@ References
 .. [BIS] Berthold Immanuel Schmitt, Convergence Analysis for Particle Swarm Optimization, Dissertation, 2015
 .. [FGSB] FJuan Frausto-Solis, Ernesto Liñán-García, Juan Paulo Sánchez-Hernández, J. Javier González-Barbosa, Carlos González-Flores, Guadalupe Castilla-Valdez, Multiphase Simulated Annealing Based on Boltzmann and Bose-Einstein Distribution Applied to Protein Folding Problem,  Advances in Bioinformatics, 2016
 .. [GLUQ] Gong G., Liu, Y., Qian M, Simulated annealing with a potential function with discontinuous gradient on $R^d$,  Ici. China Ser. A-Math. 44, 571-578, 2001
+.. [NMA] Galántai, A. Convergence of the Nelder-Mead method. Numer Algor 90, 1043–1072, 2022
