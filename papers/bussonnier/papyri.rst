@@ -352,17 +352,51 @@ values such as indexing, searching, bookmarks and others, as seen in rustsdocs, 
 Current implementation
 ++++++++++++++++++++++
 
-We present here some of the choices made in the current Papyri implementation.
+We present here some of the technological choices made in the current Papyri
+implementation. The current implementation is targeting only a subset of
+projects and users that could make use of IRD, and are thus highly opinionated
+in order to minimise current scope and development effort. Understanding the
+implementation should also not be necessary to use Papyri either as a maintainer
+or a user, but can help understanding some of the current limitation.
 
+Nothing prevent alternatives and complementary implementations with different
+choices. As long as other implementations also produce (or consume) IRD bundles,
+they should be perfectly compatible and work together.
+
+The following sections are thus mostly informative to understand the state of
+the current code base. In particular we are mostly interested into:
+
+- Producing IRD bundle for the core scientific Python Projects (Numpy, SciPy,
+  matplotlib...)
+- Rendering IRD documentation for a single user on their local machine.
+
+
+Some of the technological choices also do not have other justification than the
+main developer having interests in them.
 
 IRD files generation
 --------------------
 
-For now, the current implementation of Papyri only supports Sphinx, RST and Numpydoc. These are widely used by a majority of the core scientific Python ecosystem, and are compatible with IRD files and bundles (which are at the center of Papyri). Future work includes extensions to be compatible with MyST.
+For now, the current implementation of Papyri only targets some compatibility
+with Sphinx (a website and PDF documentation builder), reStructuredText (RST) as
+narrative documentation syntax and Numpydoc (both a project and standard for
+docstring formatting) as docstring format.
 
+These are widely used by a majority of the core scientific Python ecosystem, and
+thus having Papyri and IRD bundles compatible with existing project is a
+critical goal. We estimate that currently about 85% to 90% of current
+documentation pages currently being built with Sphinx, Rst and Numdoc works can
+be built with Papyri. Future work includes extensions to be compatible with MyST
+(a project to bring Markdown syntax to Sphinx).
 
-The project uses `tree-sitter` and `tree-sitter-rst` to parse RST syntax. "Abstract syntax tree" (AST) nodes contain offset bytes to the original buffer, then tree-sitter allows us to easily "unparse" an AST node when necessary. This is relatively
-convenient for handling custom directives and limit cases (for instance, when projects rely on a loose definition of the RST syntax). Let us provide an example: RST directives are usually of the form::
+To understand RST Syntax in narrative documentation, RST documents need to be parsed.
+To do so Papyri  uses `tree-sitter` and `tree-sitter-rst` projects, allowing us to
+extract an "Abstract syntax tree" (AST) from the text files. When using
+tree-sitter, AST nodes contain bytes-offsets into the original text buffer. Thus
+tree-sitter allowing us to easily "unparse" an AST node when necessary. This is
+relatively convenient for handling custom directives and limit cases (for
+instance, when projects rely on a loose definition of the RST syntax). Let us
+provide an example: RST directives are usually of the form::
 
   .. directive:: arguments
       
@@ -377,7 +411,7 @@ and unparse to the raw text only if the directive requires it.
 
 
 Serialisation of data structure into IRD files is currently using a custom
-serialiser. Future work includes swapping to msgspec [msgspec]_. The AST objects are completely typed, however they contain a number of unions and sequences of unions. It turns out, many frameworks like ``pydantic`` do not support sequences of unions where each item in the union may be of a different type.
+serialiser. Future work includes maybe swapping to msgspec [msgspec]_. The AST objects are completely typed, however they contain a number of unions and sequences of unions. It turns out, many frameworks like ``pydantic`` do not support sequences of unions where each item in the union may be of a different type.
 
 The current Papyri strategy is to type-infer all code examples with `Jedi`, and pre-syntax highlight using `pygments` when possible.
 
