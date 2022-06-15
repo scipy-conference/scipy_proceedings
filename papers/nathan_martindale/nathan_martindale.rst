@@ -661,13 +661,14 @@ Caching
 
 Curifactory supports per-stage caching, similar to memoization, through a set of
 easy-to-use caching strategies. When a stage executes, it uses the specified
-cache mechanism to store the stage outputs to disk, hashed based on the
-experiment name and arguments used. When the experiment is re-executed, if it finds
-an existing output on disk based on the hash, it short-circuits the stage
-computation and simply reloads the previously cached files, allowing a form of
-re-entrancy. Adding this caching
-ability to a stage is done through simply providing the list of caching
-strategies to the stage decorator, one for each output:
+cache mechanism to store the stage outputs to disk, with a filename based on the
+experiment name, stage name, and a hash of the arguments. When the experiment is
+re-executed, if it finds an existing output on disk based on this name, it
+short-circuits the stage computation and simply reloads the previously cached
+files, allowing a form of re-entrancy. Adding this caching ability to a stage is
+done through simply providing the list of caching strategies to the stage
+decorator, one for each output:
+
 
 .. code-block:: python
 
