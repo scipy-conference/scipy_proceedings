@@ -60,7 +60,7 @@ possible. On the maintainers' side, the final documentation rendering is less of
 priority. Rather, maintainers should aim at making users gain from improvement
 in the rendering without having to rebuild all the docs.
 
-Conda-forge [CFRG]_ has shown that concerted efforts can
+Conda-Forge [CFRG]_ has shown that concerted efforts can
 give a much better experience to end-users, and in today's world where it is ubiquitous to share libraries source on code platforms, perform continuous integration and many other tools, we believe a better documentation framework for many of the
 libraries of the scientific Python should be available.
 
@@ -98,7 +98,7 @@ and *Sphinx* [sphinx]_ are major cornerstones for publishing html documentation
 for Python. In fact, they are used by all the libraries in this ecosystem. While a few
 alternatives exist, most tools and services have some internal knowledge of
 *Sphinx*. For instance, Read the Docs [RTD]_ provides a specific Sphinx theme
-[RTD-theme]_ users can opt-in to, `*Jupyter-book*` is built on top of Sphinx, and
+[RTD-theme]_ users can opt-in to, *Jupyter-book* [JPYBOOK]_ is built on top of Sphinx, and
 *MyST* parser [MYST]_ (which is made to allow markdown in documentation) 
 targets Sphinx as a backend, to name a few. All of the above provide an
 "ahead-of-time" documentation compilation and rendering, which is slow and
@@ -107,7 +107,7 @@ and configurations to properly build (which is almost always the case), it is
 relatively difficult to build documentation for a single object (like a single
 function, module or class). This makes AOT tools difficult to use for
 interactive exploration. One can then consider a JIT approach, as done
-for `*Docrepr*` (integrated both in `Jupyter` and *Spyder* [Spyder]_). However in that case,
+for *Docrepr* [DOCREPR]_ (integrated both in `Jupyter` and *Spyder* [Spyder]_). However in that case,
 interactive documentation lacks inline plots, crosslinks, indexing, search and
 many custom directives.
 
@@ -124,13 +124,13 @@ steps:
 
 - publish NumPy ``object.inv`` file. 
 
-- build SciPy documentation using NumPy ``obj.inv`` file.
+- (re)build SciPy documentation using NumPy ``obj.inv`` file.
 
 - publish SciPy ``object.inv`` file
   
-- rebuild NumPy docs to make use of SciPy's ``obj.inv``
+- (re)build NumPy docs to make use of SciPy's ``obj.inv``
 
-Only then can both SciPy's and NumPy's documentation refer to each other. As one can expect, cross links break every time a new version of a library is published [#]_. Pre-produced html in IDEs and other tools are then prone to error and difficult to maintain. This also raises security issues: some institutions become reluctant to use tools like `*Docrepr*` or viewing pre-produced html. 
+Only then can both SciPy's and NumPy's documentation refer to each other. As one can expect, cross links break every time a new version of a library is published [#]_. Pre-produced html in IDEs and other tools are then prone to error and difficult to maintain. This also raises security issues: some institutions become reluctant to use tools like *Docrepr* or viewing pre-produced html. 
 
 .. [#] `ipython/ipython#12210 <https://github.com/ipython/ipython/pull/12210>`_, `numpy/numpy#21016 <https://github.com/numpy/numpy/pull/21016>`_, `& #29073 <https://github.com/numpy/numpy/pull/20973>`_
 
@@ -147,9 +147,10 @@ docstrings rarely contain full-featured directive. Maintainers are confronted to
 - write an extensive docstring. This includes references, and directive that
   potentially creates graphics, tables and more, allowing an enriched end-user experience. However this may be computationally intensive, and executing code to view docs could be a security risk.
 
-Other factors impact this choice: (i) users, (ii) format, (iii) runtime. IDE users or non-Terminal users motivate to push for extensive docstrings, and tools like `Docrepr` can mitigate this problem. However, users are often exposed to raw docstrings (see for example the `SymPy
-<https://github.com/sympy/sympy/issues/14964>`_ discussion on how equations should be
-displayed in docstrings, and Fig :ref:`oldnew`). In terms of format, markdown is appealing, however inconsistencies in the rendering will be created between libraries. Finally, some libraries can dynamically modify their docstring at runtime. While this avoids using directives, it ends up being more expensive (runtime costs, complex maintenance, and contribution costs).
+Other factors impact this choice: (i) users, (ii) format, (iii) runtime. IDE users or non-Terminal users motivate to push for extensive docstrings. Tools like *Docrepr* can mitigate this problem by allowing partial rendering. However, users are often exposed to raw docstrings (see for example the *SymPy* discussion [#]_ on how equations should be
+displayed in docstrings, and left panel of Fig :ref:`oldnew`). In terms of format, markdown is appealing, however inconsistencies in the rendering will be created between libraries. Finally, some libraries can dynamically modify their docstring at runtime. While this sometime avoids using directives, it ends up being more expensive (runtime costs, complex maintenance, and contribution costs).
+
+.. [#] `sympy/sympy#14963 <https://github.com/sympy/sympy/issues/14964>`_
 
 .. figure:: scipy-dpss-old-new.png
 
@@ -164,7 +165,7 @@ Objectives of the project
 
 We now layout the objectives of the Papyri documentation framework. 
 Let us emphasize that the project is in no way intended to replace or cover many features included in well-established documentation tools such as Sphinx or Jupyter-book.
-Those projects are extremely flexible and meet the needs of their users. The Papyri project addresses specific documentation challenges (mentioned above), we present below what is (and what is not) the scope of work.
+Those projects are extremely flexible and meet the needs of their users for publishing of standalone documentation website of PDFs. The Papyri project addresses specific documentation challenges (mentioned above), we present below what is (and what is not) the scope of work.
 
 **Goal (a): design a non-generic (non fully customisable) website builder.**
 When authors want or need complete control of the output and wide
@@ -173,7 +174,7 @@ at. That is to say single-project websites where appearance, layout, domain need
 controlled by the author is not part of the objectives.
 
 **Goal (b): create a uniform documentation structure and syntax.**
-The Papyri project prescribes stricter requirements in terms of format and structure compared to other tools such as Docutils and Sphinx. When possible, the documentation follows the *Diátaxis* Framework [DT]_. This provides a uniform documentation setup and syntax, simplifying contributions to the project and easing error catching at compile time. 
+The Papyri project prescribes stricter requirements in terms of format, structure, and syntax compared to other tools such as Docutils and Sphinx. When possible, the documentation follows the *Diátaxis* Framework [DT]_. This provides a uniform documentation setup and syntax, simplifying contributions to the project and easing error catching at compile time. 
 Such strict environment is qualitatively supported by a number of documentation fixes done upstream during the development stage of the project [#]_.
 Since Papyri is not fully customisable, users who are already using documentation tools such as Sphinx, *mkdocs* [mkdocs]_ and others should expect their project to require minor modifications to work with Papyri. 
 
@@ -211,7 +212,7 @@ falls into the following two categories:
 
 This first category often requires arbitrary code execution and must import the
 library currently being built. This is the case for example for the use of ``..
-code-block:``, or custom ``:rc:`` directive. The second one offers a more user
+code-block:::``, or custom ``:rc:`` directive. The second one offers a more user
 friendly environment. For example,
 `sphinx-copybutton` [sphinx-copybutton]_ adds a button to easily copy code snippets in a single
 click, and `pydata-sphinx-theme` [pydata-sphinx-theme]_ or `sphinx-rtd-dark-mode`  provide a different
@@ -357,8 +358,8 @@ We present here some of the technological choices made in the current Papyri
 implementation. The current implementation is targeting only a subset of
 projects and users that could make use of IRD, and are thus highly opinionated
 in order to minimise current scope and development effort. Understanding the
-implementation should also **not** be **necessary to use** *Papyri* either as a maintainer
-or as a user, but can help understanding some of the current limitation.
+implementation  is **not necessary to use Papyri** neither as a project maintainer
+nor as a user, but can help understanding some of the current limitation.
 
 Nothing prevent alternatives and complementary implementations with different
 choices. As long as other implementations also produce (or consume) IRD bundles,
@@ -413,7 +414,7 @@ and unparse to the raw text only if the directive requires it.
 
 
 Serialisation of data structure into IRD files is currently using a custom
-serialiser. Future work includes maybe swapping to msgspec [msgspec]_. The AST objects are completely typed, however they contain a number of unions and sequences of unions. It turns out, many frameworks like ``*pydantic*`` do not support sequences of unions where each item in the union may be of a different type.
+serialiser. Future work includes maybe swapping to msgspec [msgspec]_. The AST objects are completely typed, however they contain a number of unions and sequences of unions. It turns out, many frameworks like *pydantic* [pydantic]_ do not support sequences of unions where each item in the union may be of a different type.
 We know of only a few other documentation related project that treat AST as an intermediate
 object with a stable format that can be manipulated by external tools, the most
 popular one being Pandoc [pandoc]_, a project meant to convert from many type of
@@ -434,7 +435,7 @@ implementation is set to tentatively guess relevant libraries versions when the
 exact version number is missing from the install command. 
 
 With our current implementation IRD bundle are post-processed and stored in a
-different format for later just in time rendering. This is done purely for
+different format. This is done purely for
 convenience and performance reasons in the case of local usage.
 
 For local rendering, we mostly need to the following operations:
@@ -445,7 +446,7 @@ For local rendering, we mostly need to the following operations:
 
 As we assume documentation access is happening on an end-user machine, we will
 also consider that IRD files are infrequently updated, disk space is limited, 
-and installing of running services (like a database server), are not available
+and installing or running services (like a database server) are not available
 options. 
 
 With those requirements we decided to use a combination of `SQLite` (an
@@ -457,7 +458,7 @@ access pattern.
 
 *SQLite* allows us to easily query for object existence, and graph information
 (relationship between objects) at runtime. It is optimized for infrequent
-reading access currently many queries are done at runtime, when rendering
+reading access. Currently many queries are done at runtime, when rendering
 documentation. The goal is to move most of *SQLite* information resolving step at
 the installation time (such as looking for inter-libraries links) once the
 codebase and IRD format have stabilized. SQLite is
@@ -470,7 +471,7 @@ are often highly redundant, and can be highly optimised when using *CBOR*.
 Storing IRD in CBOR thus reduces disk usage and can also allow faster
 deserialization without requiring potentially CPU intensive
 compression/decompression, which seem a good compromised for potentially low
-performance user machines.
+performance users' machines.
 
 Raw storage is used for binary blobs which needs to be accesses without further
 processing, typically images. This also permits access with standard tools like image
@@ -511,7 +512,7 @@ walking through the IRD AST tree, and rendering each node with users' preference
   terminal is possible, one can reflow long lines on resized windows, and even
   open image files in external editors. Nonetheless, several bugs have been
   encountered in urwid. The project aims at replacing the CLI IPython *question
-  mark* (``obj?``) interface (which currently only shows raw docstrings) in
+  mark operator* (``obj?``) interface (which currently only shows raw docstrings) in
   urwid with a new one written with *Rich*/*Textual*. For this interface,
   having images stored raw on disk is useful as it allows us to directly call
   into a system image viewer to display them.
@@ -534,7 +535,7 @@ walking through the IRD AST tree, and rendering each node with users' preference
 
 - A static AOT rendering of all the existing pages that can be
   rendered ahead of time uses the same class as the JIT rendering. Basically, this loops through all entries in the SQLite database and renders
-  each item independently. This renderer is mostly used for exhaustive testing and performance measures for *Papyri*. This can render most of the API documentation of IPython, `*Astropy*`, `*Dask*`, `*Distributed*`, *Matplotlib* [MPL]_ [MPL-DOI]_, `*Networkx*`, NumPy [NP]_, `Pandas`, Papyri, SciPy, `Scikit-image` and others. It can represent ~28000 pages in ~60 seconds (that is ~450 pages/s on a recent Macbook pro M1).
+  each item independently. This renderer is mostly used for exhaustive testing and performance measures for *Papyri*. This can render most of the API documentation of IPython, *Astropy* [astropy]_, *Dask* and *distributed* [Dask]_, *Matplotlib* [MPL]_ [MPL-DOI]_, *Networkx* [NX]_, NumPy [NP]_, `Pandas`, Papyri, SciPy, `Scikit-image` and others. It can represent ~28000 pages in ~60 seconds (that is ~450 pages/s on a recent Macbook pro M1).
   
 
 For all of the above renderers, profiling shows that documentation rendering is
@@ -716,10 +717,13 @@ References
 .. [CFRG] conda-forge community. (2015). The conda-forge Project: Community-based Software Distribution Built on the conda Package Format and Ecosystem. Zenodo. http://doi.org/10.5281/zenodo.4774216
 .. [CODEMETA] https://codemeta.github.io/
 .. [D3js] https://d3js.org/
+.. [DOCREPR] https://github.com/spyder-ide/docrepr
 .. [DT] https://diataxis.fr/
+.. [Dask] Dask Development Team (2016). Dask: Library for dynamic task scheduling, https://dask.org
 .. [IR] https://en.wikipedia.org/wiki/Intermediate_representation
 .. [JEDI] https://github.com/davidhalter/jedi
 .. [JIT] https://en.wikipedia.org/wiki/Just-in-time_compilation
+.. [JPYBOOK] https://jupyterbook.org/
 .. [Jinja2] https://jinja.palletsprojects.com/
 .. [LTO] https://en.wikipedia.org/wiki/Interprocedural_optimization
 .. [MPL-DOI] https://doi.org/10.5281/zenodo.6513224
@@ -727,6 +731,7 @@ References
 .. [MYST] https://myst-parser.readthedocs.io/en/latest/
 .. [NPDOC] https://numpydoc.readthedocs.io/en/latest/format.html
 .. [NP] Harris, C.R., Millman, K.J., van der Walt, S.J. et al. Array programming with NumPy. Nature 585, 357–362 (2020). DOI: 10.1038/s41586-020-2649-2
+.. [NX] Aric A. Hagberg, Daniel A. Schult and Pieter J. Swart, “Exploring network structure, dynamics, and function using NetworkX”, in Proceedings of the 7th Python in Science Conference (SciPy2008), Gäel Varoquaux, Travis Vaught, and Jarrod Millman (Eds), (Pasadena, CA USA), pp. 11–15, Aug 2008
 .. [Papyri] https://github.com/jupyter/papyri
 .. [RTD-theme] https://sphinx-rtd-theme.readthedocs.io/en/stable/
 .. [RTD] https://readthedocs.org/
@@ -735,12 +740,14 @@ References
 .. [Spyder] https://www.spyder-ide.org/
 .. [TSRST] https://github.com/stsewd/tree-sitter-rst
 .. [TS] https://tree-sitter.github.io/tree-sitter/
+.. [astropy] The Astropy Project: Building an inclusive, open-science project and status of the v2.0 core package, https://doi.org/10.48550/arXiv.1801.02634
 .. [docutils] https://docutils.sourceforge.io/
 .. [flask] https://flask.palletsprojects.com/en/2.1.x/
 .. [httpx] https://www.python-httpx.org/
 .. [mkdocs] https://www.mkdocs.org/
 .. [msgspec] https://pypi.org/project/msgspec
 .. [pandoc] https://pandoc.org/
+.. [pydantic] https://pydantic-docs.helpmanual.io/
 .. [pydata-sphinx-theme] https://pydata-sphinx-theme.readthedocs.io/en/stable/
 .. [quart] https://pgjones.gitlab.io/quart/
 .. [sphinx-copybutton] https://sphinx-copybutton.readthedocs.io/en/latest/
