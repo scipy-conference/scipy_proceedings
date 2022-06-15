@@ -113,7 +113,7 @@ the tasks and their outputs as follows:
        product:
          nb: output/executed.ipynb
          data: output/data.csv
-     
+
      # more tasks here...
 
 The previous pipeline has a single task (``script.py``) and generates
@@ -314,7 +314,7 @@ support for:
 -  `Airflow <https://soopervisor.readthedocs.io/en/latest/tutorials/airflow.html>`_
 
 9. Resources
-============
+------------
 
 Thanks for taking the time to go through this tutorial! We hope you
 consider using Ploomber for your next project. If you have any questions
@@ -330,7 +330,7 @@ Here are a few resources to dig deeper:
 -  `Pangeo Showcase talk (AWS Batch demo) <https://youtu.be/XCgX1AszVF4>`_
 
 10. Contact
-===========
+-----------
 
 -  `Twitter:  <https://twitter.com/ploomber>`__
 -  `Join us on Slack: <http://ploomber.io/community>`__
