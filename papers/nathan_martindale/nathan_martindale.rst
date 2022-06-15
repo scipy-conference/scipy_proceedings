@@ -319,8 +319,8 @@ in :cite:`rufDemystifyingMLOpsPresenting2021`.
 
 Although not provided as a design capability in the other works, we claim the
 mechanisms provided for parameterization are important, as these mechanisms are
-the primary way to configure, modify, and vary experiment code without
-explicitly changing the stage code itself or modifying hard-coded values. This
+the primary way to configure, modify, and vary experiment execution without
+explicitly changing the code itself or modifying hard-coded values. This
 means that a recorded parameter set can better "describe" an experiment run,
 increasing provenance and making it easier for another researcher to understand
 what pieces of an experiment can be readily changed and explored.
