@@ -5,6 +5,10 @@
 Keeping your Jupyter notebook code quality bar high (and production ready) with Ploomber
 ========================================================================================
 
+This paper walks through this `interactive tutorial <https://github.com/idomic/ploomber-workshop>`_.
+It is highly recommended running this interactively so it's easier to follow and see the results in real-time.
+There's a binder link in there as well, so you can launch it instantly.
+
 1. Introduction
 ---------------
 
@@ -39,28 +43,24 @@ execute them all with a single command.
 2. Refactoring a legacy notebook
 --------------------------------
 
-If you already have a project in a single notebook, you can use our tool
+If you already have a python project in a single notebook, you can use our tool
 `Soorgeon <https://github.com/ploomber/soorgeon>`__ to automatically
 refactor it into a `Ploomber <https://github.com/ploomber/ploomber>`__
-pipeline.
-
-Let’s use the sample notebook in the ``playground/`` directory:
-
-.. code:: sh
-
-   ls playground
-
-Our sample notebook is the ``playground/nb.ipynb`` file,
-let’s take a look at it.
+pipeline. Soorgeon statically analyze your code, clean up unnecessary imports,
+and makes sure your monolithic notebook is broken down into smaller components.
+It does that by scanning the markdown in the notebook and analyzing the headers,
+each H2 header in our example is marking a new self-contained task. In addition,
+it can transform a notebook to a single-task pipeline and then the user can split
+it into smaller tasks the way they see fit.
 
 To refactor the notebook, we use the ``soorgeon refactor`` command:
 
 .. code:: sh
 
-   cd playground
    soorgeon refactor nb.ipynb
 
-Let’s take a look at the directory:
+After running the refactor command, we can take a look at the local directory,
+and we'll see that now we have multiple python tasks which are ready for production:
 
 .. code:: sh
 
@@ -74,18 +74,21 @@ identified based on our H2 Markdown headings.
 
    ls playground/tasks
 
-Let’s plot the pipeline (note that we’re now using ``ploomber``, which
-is the framework for developing pipelines:
+One of the best ways to onboard new people and explain what each workflow is doing
+is by ploting the pipeline (note that we’re now using ``ploomber``, which
+is the framework for developing pipelines):
 
 .. code:: sh
 
-   cd playground
    ploomber plot
 
-.. code:: python
+This command will generate the plot below for us, that way we can stay up to date
+with changes that are happening in our pipeline and get an immidate status of what
+task was executed or failed.
 
-   from IPython.display import Image
-   Image('playground/pipeline.png')
+
+.. image:: images/pipeline-step-2.png
+
 
 Soorgeon correctly identified the *stages* in our original ``nb.ipynb``
 notebook. It even detected that the last two tasks
@@ -99,6 +102,7 @@ We can also get a summary of the pipeline with ``ploomber status``:
    cd playground
    ploomber status
 
+.. image:: images/status-output.png
 
 3. The ``pipeline.yaml`` file
 -----------------------------
@@ -127,9 +131,7 @@ Ploomber integrates with Jupyter, allowing you to edit scripts as
 notebooks.
 
 In this case, since we used ``soorgeon`` to refactor an existing
-notebook, we didn’t have to write the ``pipeline.yaml`` file, let’s take
-a look at the auto-generated one:
-```playground/pipeline.yaml`` <playground/pipeline.yaml>`__.
+notebook, we did not have to write the ``pipeline.yaml`` file.
 
 
 4. Building the pipeline
@@ -142,6 +144,11 @@ Let’s build the pipeline (this will take ~30 seconds):
    cd playground
    ploomber build
 
+We can see which are the tasks that ran during this command, how long did it take,
+and what's the partial percentage of the overall pipeline execution runtime.
+
+.. image:: images/build-output.png
+
 Navigate to ``playground/output/`` and you’ll see all the outputs: the
 executed notebooks, data files and trained model.
 
@@ -149,14 +156,62 @@ executed notebooks, data files and trained model.
 
    ls playground/output
 
-5. Declaring dependencies
--------------------------
+.. image:: images/post-build-artifacts.png
+
+In this figure, we can see all of the data that was collected during the pipeline,
+any artifacts that might be useful to the user, and some of the execution history
+that is saved on the notebook's context.
+
+5. Testing and quality checks
+-----------------------------
+
+** Open `tasks/train-test-split.py` as a notebook by right-clicking on it and then `Open With` -> `Notebook` and add the following code after the cell with `# noqa`:
+
+.. code:: python
+
+    # Sample data quality checks after loading the raw data
+    # Check nulls
+    assert not df['HouseAge'].isnull().values.any()
+
+    # Check a specific range - no outliers
+    assert df['HouseAge'].between(0,100).any()
+
+    # Exact expected row count
+    assert len(df) == 11085
+
+
+** We'll do the same for `tasks/linear-regression.py`, open the file and add the tests:
+
+.. code:: python
+
+    # Sample tests after the notebook ran
+    # Check task test input exists
+    assert Path(upstream['train-test-split']['X_test']).exists()
+
+    # Check task train input exists
+    assert Path(upstream['train-test-split']['y_train']).exists()
+
+    # Validating output type
+    assert 'pkl' in upstream['train-test-split']['X_test']
+
+Adding these snippets will allow us to validate that the data we're looking for exists
+as well as the quality we expect. For instance, in the first test we're checking
+there are no missing rows, and that the data sample we have are for houses up to 100
+years old.
+
+In the second snippet, we're checking that there are train and test inputs which
+are crucial to us before training the model.
+
+6. Maintaining the pipeline
+---------------------------
 
 Let’s look again at our pipeline plot:
 
 .. code:: python
 
    Image('playground/pipeline.png')
+
+.. image:: images/executed-pipeline.png
 
 
 The arrows in the diagram represent input/output dependencies, hence,
@@ -170,7 +225,10 @@ Soorgeon extracted and declared this dependencies for us, but if we want
 to modify the existing pipeline, we need to declare such dependencies.
 Let’s see how.
 
-6. Adding a new task
+We can also see that the pipeline is green, meaning all of the tasks in it have
+been executed recently.
+
+7. Adding a new task
 --------------------
 
 Let’s say we want to train another model and decide to try `Gradient
@@ -179,7 +237,7 @@ Regressor <https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.Gr
 First, we modify the ``pipeline.yaml`` file and add a new task:
 
 Open ``playground/pipeline.yaml`` and add the following lines at the end
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 .. code:: yaml
 
@@ -194,6 +252,19 @@ Now, let’s create a base file by executing ``ploomber scaffold``:
    cd playground
    ploomber scaffold
 
+This is the output of the command:
+```
+Found spec at 'pipeline.yaml'
+Adding /Users/ido/ploomber-workshop/
+playground/tasks/
+gradient-boosting-regressor.py...
+Created 1 new task sources.
+```
+
+We can see it created the task sources for our new task, we just have to fill
+those in right now.
+
+
 Let's see how the plot looks now:
 
 .. code:: sh
@@ -201,12 +272,10 @@ Let's see how the plot looks now:
    cd playground
    ploomber plot
 
-.. code:: python
+.. image:: images/new-task.png
 
-   from IPython.display import Image
-   Image('playground/pipeline.png')
 
-You can see that Ploomber recognizes the new file, but it doesn’t have
+You can see that Ploomber recognizes the new file, but it does not have
 any dependency, so let’s tell Ploomber that it should execute after
 ``train-test-split``:
 
@@ -241,10 +310,7 @@ Let's generate the plot again:
    cd playground
    ploomber plot
 
-.. code:: python
-
-   from IPython.display import Image
-   Image('playground/pipeline.png')
+.. image:: images/new-task-attached.png
 
 
 Ploomber now recognizes our dependency declaration!
@@ -332,6 +398,6 @@ Here are a few resources to dig deeper:
 10. Contact
 -----------
 
--  `Twitter:  <https://twitter.com/ploomber>`__
--  `Join us on Slack: <http://ploomber.io/community>`__
--  `E-mail: <contact@ploomber.io>`__
+-  `Twitter  <https://twitter.com/ploomber>`__
+-  `Join us on Slack <http://ploomber.io/community>`__
+-  `E-mail us <contact@ploomber.io>`__
