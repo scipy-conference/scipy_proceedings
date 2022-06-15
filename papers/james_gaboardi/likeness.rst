@@ -698,7 +698,14 @@ with multi-modal travel, we plan to incorporate multiple trip models based on la
 human activity datasets like the American Time Use Survey [#footnote9]_ and National
 Household Travel Survey [#footnote10]_. Together, these improvements will extend our travel
 simulations to "non-obligate" population segments traveling to civic, social, and
-recreational activities :cite:`brelsford2022NOPE`.
+recreational activities :cite:`brelsford2022NOPE`. Third, the current procedure
+for spatial allocation uses block groups as the target scale
+for population synthesis. However, there are a limited number of constraining variables
+available at the block group level. To include a larger volume of constraints (e.g.,
+vehicle access, language), we are exploring an additional tract-level approach. P-MEDM in
+this case is run on cross-covariances between tracts and "supertract" aggregations created
+with the Max-:math:`p`-regions problem :cite:`duque2012max` implemented in PySAL's 
+``spopt`` :cite:`pysal2007, spopt2021, pysal2021, spopt2022`.
 
 .. [#footnote9] https://www.bls.gov/tus
 .. [#footnote10] https://nhts.ornl.gov
@@ -708,7 +715,7 @@ dependencies in the Scientific Python ecosystem, the core of which are, of cours
 ``numpy`` :cite:`harris2020array` and ``scipy`` :cite:`2020SciPy-NMeth`. Although an
 exhaustive list would be prohibitive, major packages not previously mentioned include
 ``geopandas`` :cite:`kelsey_jordahl_2021_5573592`, ``matplotlib`` :cite:`Hunter:2007`,
-``networkx`` :cite:`SciPyProceedings_11` ``pandas`` :cite:`reback2020pandas,
+``networkx`` :cite:`SciPyProceedings_11`, ``pandas`` :cite:`reback2020pandas,
 mckinney-proc-scipy-2010`, and ``shapely`` :cite:`shapely:shapely`. Our goal is contribute
 to the community with releases of the packages comprising Likeness, but since this is an
 emerging project its development to date has been limited to researchers at ORNL. However,
