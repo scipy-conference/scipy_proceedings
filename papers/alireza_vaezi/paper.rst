@@ -68,6 +68,36 @@ Wen et al. :cite:`Wen2021-bn` combines multiple existing new technologies includ
 Many segmentation tools require some amount of knowledge in Machine or Deep Learning concepts. Training the neural network in creating masks is a common step for open-source segmentation tools. Automating this process makes the pipeline more accessible to microbiology researchers. 
 
 
+Method
+------
+Data
+++++
+
+Our dataset consists of 11 videos of T. gondii cells under a microscope, obtained from different experiments with different numbers of cells. The videos are on average around 63 frames in length. Each frame has a stack of 41 image slices of size 500×502 pixels along the z-axis (z-slices). The z-slices are captured 1µm apart in optical focal length making them 402µm×401µm×40µm in volume. The slices were recorded in raw format as RGB TIF images but are converted to grayscale for our purpose. This data is captured using a PlanApo 20x objective (NA = 0:75) on a preheated Nikon Eclipse TE300 epifluorescence microscope. The image stacks were captured using an iXon 885 EMCCD camera (Andor Technology, Belfast,
+Ireland) cooled to -70oC and driven by NIS Elements software (Nikon Instruments, Melville, NY) as part of related research by Dr. Gary Ward :cite:`10.1371/journal.pone.0085763`. The camera was set to frame transfer sensor mode, with a vertical pixel shift speed of 1:0 µs, vertical clock voltage amplitude of +1, readout speed of 35MHz, conversion gain of 3:8×, EM gain setting of 3 and 22 binning, and the z-slices were imaged with an exposure time of 16ms.
+
+Software
+++++++++
+Napari Plugin
+~~~~~~~~~~~~~
+TSeg is developed as a plugin for Napari - a fast and interactive multi-dimensional image viewer for python that allows volumetric viewing of 3D images [cite napari website]. Plugins enable developers to customize and extend the functionality of Napari. For every module of our pipeline, we developed its corresponding widget in the GUI, plus a widget for file management. The widgets have self-explanatory interface elements with tooltips to guide the inexperienced user to traverse through the pipeline with ease. Layers in Napari are the basic viewable objects that can be shown in the Napari viewer. Seven different layer types are supported in Napari: *Image, Labels, Points, Shapes, Surface, Tracks,* and *Vectors*, each of which corresponds to a different data type, visualization, and interactivity [cite napari website]. After its execution, the viewable output of each widget gets added to the layers. This allows the user to evaluate and modify the parameters of the widget to get the best results before continuing to the next widget. Napari supports bidirectional communication between the viewer and the Python kernel and has a built-in console that allows users to control all the features of the viewer programmatically. This adds more flexibility and customizability to TSeg for the advanced user. The full code of TSeg is available on GitHub under the MIT open source license at https://github.com/salirezav/napari-seg. TSeg can be installed through Napari's plugins menu.
+
+
+Computational Pipeline
+++++++++++++++++++++++
+Pre-Processing
+~~~~~~~~~~~~~~
+Due to the fast imaging speed in data acquisition, the image slices will inherently have a vignetting artifact, meaning that the corners of the images will be slightly darker than the center of the image. To eliminate this artifact we added adaptive thresholding and logarithmic correction to the pre-processing module. Furthermore, another prevalent artifact on our dataset images was a Film-Grain noise (AKA salt and pepper noise). To remove or reduce such noise a simple gaussian blur filter and a sharpening filter are included.
+
+Cell Detection and Segmentation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TSeg's Detection and Segmentation modules are in fact backed by PlantSeg, CellPose, and VollSeg. The Detection Module is built only based on PlantSeg's CNN Detection Module :cite:`plantseg` , and for the Segmentation Module, only one of the three tools can be selected to be executed as the segmentation tool in the pipeline. Naturally, each of the tools demands specific interface elements different from the others since each accepts different input values and various parameters. TSeg orchestrates this and makes sure the arguments and parameters are passed to the corresponding selected segmentation tool properly and the execution will be handled accordingly. The parameters include but are not limited to input data location, output directory, and desired segmentation algorithm. This allows the end-user complete control over the process and feedback from each step of the process. The preprocessed images and relevant parameters are sent to a modular segmentation controller script. As an effort to allow future development on TSeg, the segmentation controller script shows how the pipeline integrates two completely different segmentation packages. While both PlantSeg and CellPose use conda environments, PlantSeg requires modification of a YAML file for initialization while CellPose initializes directly from command line parameters. In order to implement PlantSeg, our pipeline generates a YAML file based on GUI input elements. After parameters are aligned, the conda environment for the chosen segmentation algorithm is opened in a subprocess. The `$CONDA_PREFIX` environment variable allows the bash command to start conda and context switch to the correct segmentation environment. 
+
+Tracking
+~~~~~~~~
+Features in each segmented image are found using the scipy label function. In order to reduce any leftover noise, any features under a minimum size are filtered out and considered leftover noise. After feature extraction, centroids are calculated using the center of mass function in scipy. The centroid of the 3D cell can be used as a representation of the entire body during tracking. The tracking algorithm goes through each captured time instance and connects centroids to the likely next movement of the cell. Tracking involves a series of measures in order to avoid incorrect assignments. An incorrect assignment could lead to inaccurate result sets and unrealistic motility patterns. If the same number of features in each frame of time could be guaranteed from segmentation, minimum distance could assign features rather accurately. Since this is not a guarantee, the Hungarian algorithm must be used to associate a COST with the assignment of feature tracking. The Hungarian method is a combinatorial optimization algorithm that solves the assignment problem in polynomial time. COST for the tracking algorithm determines which feature is the next iteration of the cell's tracking through the complete time series. The combination of distance between centroids for all previous points and the distance to the potential new centroid. If an optimal next centroid can't be found within an acceptable distance of the current point, the tracking for the cell is considered as complete. Likewise, if a feature is not assigned to a current centroid, this feature is considered a new object and is tracked as the algorithm progresses. The complete path for each feature is then stored for motility analysis. 
+
+
 Conclusion and Discussion
 -------------------------
 
