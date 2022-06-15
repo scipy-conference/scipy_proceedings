@@ -629,10 +629,19 @@ include complex Python objects. Unlike Sacred, this means Curifactory cannot
 directly translate back and forth from static configuration files, but in
 exchange allows for grid searches to be defined directly and easily in a single
 parameter file, as well as allowing argument sets to be composed or even inherit
-from other argument set instances. This allows a great deal of flexibility, and
-is valuable in experiments where a large range of parameters need to be tested.
-Importantly, Curifactory can still encode representations of arguments into JSON
-for provenance, but this is a one directional transformation.
+from other argument set instances. Importantly, Curifactory can still encode
+representations of arguments into JSON for provenance, but this is a one
+directional transformation.
+
+This approach allows a great deal of flexibility, and is valuable in experiments
+where a large range of parameters need to be tested or there is significant
+repetition among parameter sets. For example, in an experiment testing
+different effects of model training hyperparameters, there may be several
+parameter files meant to vary only the arguments needed for model training while
+using the same base set of data cleaning arguments. Composing these parameter
+sets from a common imported set means that any subsequent changes to the data
+cleaning arguments only need to be modified in one place, rather than each
+individual parameter file.
 
 
 .. code-block:: python
@@ -662,7 +671,7 @@ Caching
 Curifactory supports per-stage caching, similar to memoization, through a set of
 easy-to-use caching strategies. When a stage executes, it uses the specified
 cache mechanism to store the stage outputs to disk, with a filename based on the
-experiment name, stage name, and a hash of the arguments. When the experiment is
+experiment, stage, and a hash of the arguments. When the experiment is
 re-executed, if it finds an existing output on disk based on this name, it
 short-circuits the stage computation and simply reloads the previously cached
 files, allowing a form of re-entrancy. Adding this caching ability to a stage is
