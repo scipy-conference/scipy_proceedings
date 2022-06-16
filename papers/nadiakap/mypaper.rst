@@ -157,7 +157,7 @@ where  :math:`p_{x^ \epsilon}(x) =  \int_{R^n} p_{x^ \epsilon y} (x,u) du`
 
 we get :math:`\delta _Y F(X^0 )= - \int_{R^n} f(x) div_x [ p_{x^ \epsilon}(x) \int_{R^n}  p_{Y/X^0=x} (y) y dy] dx`
 
-Denote :math:` \overline {y}(x) = \int_{R^n}  yp_{Y/X^0=x} (y)  dy=E[Y/X^0=x]`
+Denote :math:`\overline {y}(x) = \int_{R^n} yp_{Y/X^0=x} (y) dy=E[Y/X^0=x]`
 
 Taking into account normalization condition for density we arrive at the following expression for directional derivative:
 
