@@ -93,13 +93,13 @@ By randomizing we get
 
 where  X is a set of random vectors with values from :math:`R^n` .
 
-The solution of :ref:`rfx` is a random vector from  {X} that optimizes a functional F(x) .
+The solution of :ref:`rfx` is a random vector from  {X} that optimizes a functional F(X) .
 
 Note that :ref:`fx` and :ref:`rfx` are equivalent (see [KAP]_ for proof) and :ref:`rfx` is the stochastic optimization problem of the functional F(X) .
 
 To study the gradient nature of the solution algorithms for problem :ref:`rfx`, a variation of objective functional  F(X)  will be considered.
 
-The suggested approCH makes it possible to obtain optimization methods in systematic way, similar to methodology adopted in smooth optimization. 
+The suggested approach makes it possible to obtain optimization methods in systematic way, similar to methodology adopted in smooth optimization. 
 Derivation includes randomization of the original optimization problem, finding directional derivative for the randomized problem and choosing moving direction Y based on the condition that directional derivative in the direction of Y is being less or equal to 0.
 
 Because of randomization, the expression for directional derivative doesn't contain the differential characteristics of the original function. We obtain the condition for selecting the direction of search Y in terms of its characteristics - conditional expectation. Conditional expectation is a vector function (or vector field) and can be decomposed (following the theorem of decomposition of the vector field) into the sum of the gradient of scalar function P and a function with zero divergence. P is called a potential function. As a result the original problem is reduced to optimization of the potential function, furthermore, the potential function is specific for each iteration step. Next, we arrive at partial differential equation that connects P and the original function.
@@ -113,7 +113,7 @@ Expression for directional derivative
 Derivative of objective functional F(X) in the direction of the random vector Y at the point :math:`X^0` (Gateaux derivative) is:
 
 
- :math:`\delta _Y F(X^0 )=\frac{d}{d \epsilon} F(X^0+\epsilon Y) _{\epsilon=0}=\frac{d}{d \epsilon} F(X^\epsilon) _{\epsilon=0}=\frac{d}{d \epsilon} \int f(X) p_{x^\epsilon}(x) _{\epsilon=0}`
+ :math:`\delta _Y F(X^0 )=\frac{d}{d \epsilon} F(X^0+\epsilon Y) _{\epsilon=0}=\frac{d}{d \epsilon} F(X^\epsilon) dx_{\epsilon=0}=\frac{d}{d \epsilon} \int f(X) p_{x^\epsilon}(x) _{\epsilon=0}`
 
 where density function of the random vector :math:`X^\epsilon=X^0+\epsilon Y` may be expressed in terms of joint density function :math:`p_{{X^0},Y} (x,y)` of :math:`X^0` and Y as follows:
 
@@ -275,4 +275,4 @@ References
 .. [ZALO] Zeyuan Allen-Zhu and Lorenzo Orecchia, Linear Coupling: An Ultimate Unification of Gradient and Mirror Descent, Innovations in Theoretical Computer Science Conference (ITCS), 2017, pp. 3:1-3:22.
 .. [BIS] Berthold Immanuel Schmitt, Convergence Analysis for Particle Swarm Optimization, Dissertation, 2015
 .. [FGSB] FJuan Frausto-Solis, Ernesto Liñán-García, Juan Paulo Sánchez-Hernández, J. Javier González-Barbosa, Carlos González-Flores, Guadalupe Castilla-Valdez, Multiphase Simulated Annealing Based on Boltzmann and Bose-Einstein Distribution Applied to Protein Folding Problem,  Advances in Bioinformatics, 2016
-.. [GLUQ] Gong G., Liu, Y., Qian M, Simulated annealing with a potential function with discontinuous gradient on $R^d$,  Ici. China Ser. A-Math. 44, 571-578, 2001
+.. [GLUQ] Gong G., Liu, Y., Qian M, Simulated annealing with a potential function with discontinuous gradient on :math:`R^d`,  Ici. China Ser. A-Math. 44, 571-578, 2001
