@@ -245,13 +245,16 @@ Main building blocks include computing center of mass of the sample points and f
 Stochastic extention of Nelder and Mead algorithm
 -------------------------------------------------
 
+The following algorithm was obtained using general steps describded in the previous section  and assuming uniform distribution in randomization process.
+This algorithm resembles Nelder and Mead algorithm but selects only those points that are less than mean level of objective funtion. Such an improvement in nelder and Mead algorithm assures its convergence [KPP]_. 
+
 1. Initialize the search by generating :math:`K \geq n`  separate realizations of  :math:`u_0^i`,i=1,..K of the random vector :math:`U_0`.
 
 Set :math:`m_0=\frac{1}{K} \sum_{i=0}^{K} u_0^i`
 
 2. On step k = 1, 2, ...
 
-Compute the mean level :math:` c_{k-1}=\frac{1}{K} \sum_{i=1}^K f(u_{k-1}^i )`
+Compute the mean level :math:`c_{k-1}=\frac{1}{K} \sum_{i=1}^K f(u_{k-1}^i)`
 
 Calculate a new set of vertices:
 
