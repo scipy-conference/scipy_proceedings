@@ -33,7 +33,10 @@ The Schrödinger Materials Suite [Schr]_ uses a wide variety of scientific packa
 
 A common materials discovery practice is to start with reading an experimental structure of a material, compute its properties of interest (e.g. elastic constants, electrical conductivity), tune the material by modifying its structure (e.g. doping) or adding and removing atoms (deposition, evaporation), and then recompute the properties of the modified material.
 This cycle can be run in a high-throughput manner, enumerating different structure modifications in a systematic fashion, such as doping ratio in a semiconductor or depositing different adsorbates.
-Every step of this workflow can benefit from open source code.
+There are several of open source packages that allow to generate a large number of structures, run calculation in high throughput manner and analyze the results.
+pymatgen allows to generate and analyze periodic structures [pymatgen]_.
+It can generate inputs and read outputs of several packages, such as Quantum ESPRESSO (QE), VASP, Gaussian, etc.
+To run and manage workflows' jobs in a high-throughput manner, open source packages such as Custodian [pymatgen]_ and AiiDA [AiiDA]_ can be used.
 
 
 Materials import and generation
@@ -178,6 +181,10 @@ We hope that this report will inspire other scientific companies to give back to
 References
 ----------
 .. [Schr] Schrödinger Release (2021). Schrödinger Release 2021-2: Materials Science Suite. New York, NY: Schrödinger, LLC. http://www.schrodinger.com/materials/
+
+.. [pymatgen] S. P. Ong, et al. *Python Materials Genomics (pymatgen): A Robust, Open-Source Python Library for Materials Analysis*, Computational Materials Science, 68: 314–319 (2013). https://pymatgen.org/
+
+.. [AiiDA] S. P. Huber et al., *AiiDA 1.0, a scalable computational infrastructure for automated reproducible workflows and data provenance*, Scientific Data 7: 300 (2020). https://www.aiida.net/
 
 .. [Obabel] N. M. O'Boyle, et al. *Open Babel: An open chemical toolbox*, Journal of cheminformatics 3.1 (2011): 1-14. https://openbabel.org/
 
