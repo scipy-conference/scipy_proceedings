@@ -704,7 +704,7 @@ for population synthesis. However, there are a limited number of constraining va
 available at the block group level. To include a larger volume of constraints (e.g.,
 vehicle access, language), we are exploring an additional tract-level approach. P-MEDM in
 this case is run on cross-covariances between tracts and "supertract" aggregations created
-with the Max-:math:`p`-regions problem :cite:`duque2012max` implemented in PySAL's 
+with the Max-:math:`p`-regions problem :cite:`duque2012max, wei2021` implemented in PySAL's 
 ``spopt`` :cite:`pysal2007, spopt2021, pysal2021, spopt2022`.
 
 .. [#footnote9] https://www.bls.gov/tus
