@@ -225,8 +225,9 @@ phase. In the supervised phase the modified DML model behaves identically
 to the base DML model, training on the same metric loss function. In the 
 unsupervised phase, the DML model will train against an unsupervised loss
 inspired by the VAE. This may require extra steps to be added to the DML 
-architecture. :math:`\alpha` is a hyperparameter which modulates the impact of the
-unsupervised on total loss for the DML autoencoder. 
+architecture. In the pseudocode, :math:`s` refers to boolean variable representing
+if the current phase is supervised. :math:`\alpha` is a hyperparameter which modulates
+the impact of the unsupervised on total loss for the DML autoencoder. 
 
 Claim 1 
 +++++++++++++
