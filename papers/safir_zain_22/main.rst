@@ -364,8 +364,8 @@ Learning Rate (lr)
 ===================
 
 Through informal experimentation, we have found that the learning rate
-of 0.001 causes the models to converge consistently. The learning rate
-is thus set to 0.001 in each experiment.
+of 0.001 causes the models to converge consistently (relative
+to 0.005 and 0.0005). The learning rate is thus set to 0.001 in each experiment.
 
 Latent Space Dimensionality (lsdim)
 ====================================
