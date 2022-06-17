@@ -56,27 +56,27 @@ because unlabelled data is often easier to obtain and is potentially informative
 
 We take inspiration from variational autoencoders (VAEs), a generative representation learning architecture,
 for using unlabelled data to create accurate representations. Specifically, we look to evaluate three
-atomic claims that detail how pieces of the VAE architecture can create a better deep metric learning
+atomic improvement proposals that detail how pieces of the VAE architecture can create a better deep metric learning
 (DML) model on a semi-supervised dataset. From here, we can ascertain which specific qualities of how
 VAEs process unlabelled data are most helpful in modifying DML methods to train with semi-supervised
 datasets.
 
 First, we propose that the autoencoder structure of the VAE helps the clustering of unlabelled points,
 as the reconstruction loss may help incorporate semantic information from unlabelled sources. Second,
-we claim that the structure of the VAE latent space, as it is confined by a prior distribution, can be used
+we propose that the structure of the VAE latent space, as it is confined by a prior distribution, can be used
 to induce bias in the latent space of a DML system. For instance, if we know a dataset contains N -many
 classes, creating a prior distribution that is a learnable mixture of N gaussians may help produce better
-representations. Third, we claim that performing DML on the latent space of the VAE so that the DML
+representations. Third, we propose that performing DML on the latent space of the VAE so that the DML
 task can be jointly optimized with the VAE to incorporate unlabelled data may help produce better representations.
 
-Each of the three claims will be evaluated experimentally. The claims will be evaluated by comparing
+Each of the three improvement proposals will be evaluated experimentally. The improvement proposals will be evaluated by comparing
 a standard DML implementation to the same DML implementation:
 
 * jointly optimized with an autoencoder
 * while structuring the latent space around a prior distribution using the VAE’s KL-divergence loss term between the approximated posterior and prior
 * jointly optimized with a VAE
 
-Our primary contribution is evaluating these three claims. Our secondary contribution is presenting
+Our primary contribution is evaluating these three improvement proposals. Our secondary contribution is presenting
 the results of the joint approaches for VAEs and DML for more recent metric losses that have not been
 jointly optimized with a VAE in previous literature.
 
@@ -210,7 +210,7 @@ Methodology
 We look to discover the potential of applying components of the VAE
 methodology to DML systems. We test this through presenting incremental
 modifications to the basic DML architecture. Each modified architecture
-corresponds to a claim about how a specific part of the VAE training
+corresponds to an improvement proposal about how a specific part of the VAE training
 regime and loss function may be adapted to assist the performance of a
 DML method for a semi-supervised dataset.
 
@@ -229,10 +229,10 @@ architecture. In the pseudocode, :math:`s` refers to boolean variable representi
 if the current phase is supervised. :math:`\alpha` is a hyperparameter which modulates
 the impact of the unsupervised on total loss for the DML autoencoder. 
 
-Claim 1 
+Improvement Proposal 1 
 +++++++++++++
 
-We first look to evaluate the claim that adding a reconstruction loss
+We first look to evaluate the improvement proposal that adding a reconstruction loss
 to a DML system can improve the quality of clustering in the latent
 representations on a semi-supervised dataset. Reconstruction loss in
 and of itself enforces a similar semantic mapping onto the latent
@@ -263,7 +263,7 @@ is equal to the reconstruction loss.
    :figclass: w
    :align: center
 
-Claim 2 
+Improvement Proposal 2 
 +++++++++++++
 
 Say we are aware that a dataset has :math:`n` classes. It may be
@@ -325,10 +325,10 @@ and analytically with the unit prior.
    :figclass: w
    :align: center
 
-Claim 3 
+Improvement Proposal 3 
 +++++++++++++
 
-The third claim we look to evaluate is that given a semi-supervised
+The third improvement proposal we look to evaluate is that given a semi-supervised
 dataset, optimizing a DML model jointly with a VAE on the VAE’s latent
 space will produce superior clustering than the DML model individually.
 The intuition behind this approach is that DML methods can learn from
@@ -418,8 +418,8 @@ dataset from MedMNIST v2 (:cite:`medmnistv2`). This dataset
 contains 2D slices from computed tomography images from the Liver Tumor
 Segmentation Benchmark – the labels correspond to the classification of
 11 different body organs. The decision to use a second dataset was
-motivated because as the claims are tested over more datasets, the
-results supporting the claims become more generalizable. The decision to
+motivated because as the improvement proposals are tested over more datasets, the
+results supporting the improvement proposals become more generalizable. The decision to
 use the OrganAMNIST dataset specifically is motivated in part due to
 the Quinn Research Group working on similar tasks for biomedical imaging
 (:cite:`Zain2020TowardsAU`). It is also motivated in part
@@ -466,9 +466,9 @@ implementation of AMI (:cite:`scikit-learn`). The
 performance of a classifier on the latent points intuitively can be used
 as a measure of quality of clustering. 
 
-Claim 1 Results: Benefits of Reconstruction Loss
+Improvement Proposal 1 Results: Benefits of Reconstruction Loss
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-In evaluating the first claim, we compare the performance of the plain DML model to the DML Autoencoder model. 
+In evaluating the first improvement proposal, we compare the performance of the plain DML model to the DML Autoencoder model. 
 We do so by comparing the performance of the plain DML system and the DML Autoencoder across a search space
 containing the lsdim, alpha, and pl% hyperparameters and both datasets.
 
@@ -480,7 +480,7 @@ outperforms the DML Autoencoder. This trend is not too surprising, as when there
 unsupervised methods and insufficient data to train supervised method, as is the case for the 0.01 and 0.1
 partial label percentages, the unsupervised method will likely perform better.
 
-The data looks to show that the claim that adding a reconstruction loss to a DML system can improve
+The data looks to show that adding a reconstruction loss to a DML system can improve
 the quality of clustering in the latent representations on a semi-supervised dataset when there are small
 amounts (roughly less than 100 samples) of labelled data and a sufficient quantity of unlabelled data.
 But an important caveat is that it is not convincing that the DML Autoencoder effectively combined
@@ -504,9 +504,9 @@ underperforms the DML for the partial labels percentage of 10%.
    Table 2: Comparison of the DML (left) and DML Autoencoder (right) models for the MEDMNIST dataset..
 
 
-Claim 2 Results: Incorporating Inductive Bias with a Prior
+Improvement Proposal 2 Results: Incorporating Inductive Bias with a Prior
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-In evaluating the second claim, we compare the performance of the plain DML model to the DML with
+In evaluating the second improvement proposal, we compare the performance of the plain DML model to the DML with
 a unit prior and a DML with a GMM prior. The DML prior with the GMM prior will have 2^2 = 4 gaussian
 components when lsdim = 2 and 2^4 = 16 components when lsdim = 4. Our broad intention is to see 
 if changing the shape (specifically the number of components) of the prior can induce bias by affecting
@@ -549,16 +549,16 @@ the latent space.
    magnitude of the latent vectors
 
 
-Claim 3 Results: Jointly Optimizing DML with VAE
+Improvement Proposal 3 Results: Jointly Optimizing DML with VAE
 ++++++++++++++++++++++++++++++++++++++++++++++++
 
-To evaluate the third claim, we compare the performance of DMLs to MetricVAEs (defined in the previous chapter)
+To evaluate the third improvement proposal, we compare the performance of DMLs to MetricVAEs (defined in the previous chapter)
 across several metric losses. We run experiments for triplet loss, supervised loss, and center
-loss DML and MetricVAE models. To judge whether the claim is true, we will assess whether the model
+loss DML and MetricVAE models. To evaluate the improvement proposal, we will assess whether the model
 performance improves for the MetricVAE over the DML for the same metric loss and other hyper parameters.
 
-Like the previous claim, the proposed MetricVAE model does not perform better than the null model. 
-As with claim 2, it is possible this is because the training routine of alternating between supervised loss (in this case, metric loss) and
+Like the previous improvement proposal, the proposed MetricVAE model does not perform better than the null model. 
+As with improvement proposal 2, it is possible this is because the training routine of alternating between supervised loss (in this case, metric loss) and
 unsupervised (in this case, VAE loss) is not optimal for training the model.
 
 We have trained a seperate combined VAE and DML model which trains on both the unsupervised and supervised loss
@@ -596,24 +596,24 @@ Conclusion
 In this work, we have set out to determine how DML can be extended
 for semi-supervised datasets by borrowing components of the
 variational autoencoder. We have formalized this approach through
-defining three specific claims. To evaluate each claim, we have created
+defining three specific improvement proposals. To evaluate each improvement proposal, we have created
 several variations of the DML model, such as the DML Autoencoder, 
 DML with Unit/GMM Prior, and MVAE. We then tested the performance
 of the models across several semi-supervised partitions of two datasets, 
 along with other configurations of hyperparameters.
 We have determined from the analysis of our results, there is too 
-much dissenting data to clearly accept any three of the claims. 
-For claim 1, while the DML Autoencoder outperforms the DML for
+much dissenting data to clearly accept any three of the improvement proposals. 
+For improvement proposal 1, while the DML Autoencoder outperforms the DML for
 semisupervised datasets with small amounts of labelled data, it’s 
 peformance is not consistently much better than that of a plain
-autoencoder which uses no labelled data. For claim 2, each of the DML models with
+autoencoder which uses no labelled data. For improvement proposal 2, each of the DML models with
 an added prior performed extremely poorly, near or at the level of the null model.
-For claim 3, we see the same extremely poor performance from the MVAE models.
+For improvement proposal 3, we see the same extremely poor performance from the MVAE models.
 
 Future Work
 ++++++++++++
 
-In the future, it would be worthwhile to evaluate these claims using a different training routine. We have
+In the future, it would be worthwhile to evaluate these improvement proposals using a different training routine. We have
 stated previously that perhaps the extremely poor performance of the DML with a prior and MVAE models 
 may be due to the training regimen of alternating on training against a supervised and unsupervised loss.
 Further research could look to develop or compare several different training regimens. One alternative
@@ -625,7 +625,7 @@ line of research is pursued, it may be worthwhile to review the field of auxilia
 model trains against an additional task or tasks, to find a solution to how to optimize the training routine
 of the modified DML models.
 
-Another potentially interesting avenue for future study is in investigating a fourth claim for a possible
+Another potentially interesting avenue for future study is in investigating a fourth improvement proposal for a possible
 benefit to combining DML and VAE methodology: the ability to define a Riemannian metric on the
 latent space. Previous research has shown a Riemannian metric can be computed on the latent space
 of the VAE by computing the pull-back metric of the VAE’s decoder function (:cite:`arvanitidis2020geometrically`).
