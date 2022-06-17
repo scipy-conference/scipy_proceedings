@@ -404,7 +404,7 @@ datasets we use is fully labelled, so a partially labelled datset can be
 trivially constructed by ignoring some of the labels. As the sizes of
 the dataset vary, each percentage can refer to a different number of
 labelled samples. Values for the partial label percentage we use across
-experiments include 0.01, 0.1, 10, and 100 (with each value referring to
+experiments include 0.01, 0.1,  and 10 (with each value referring to
 the percentage).
 
 Datasets
