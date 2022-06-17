@@ -589,6 +589,9 @@ better than the corresponding VAE model.
 Conclusion
 ------------
 
+Conclusion
++++++++++++
+
 In this work, we have set out to determine how DML can be extended
 for semi-supervised datasets by borrowing components of the
 variational autoencoder. We have formalized this approach through
@@ -605,6 +608,9 @@ peformance is not consistently much better than that of a plain
 autoencoder which uses no labelled data. For claim 2, each of the DML models with
 an added prior performed extremely poorly, near or at the level of the null model.
 For claim 3, we see the same extremely poor performance from the MVAE models.
+
+Future Work
+++++++++++++
 
 In the future, it would be worthwhile to evaluate these claims using a different training routine. We have
 stated previously that perhaps the extremely poor performance of the DML with a prior and MVAE models 
