@@ -46,7 +46,7 @@ Introduction
 The generation of random variates is an important tool that is required in
 many applications. Various software programs or packages contain generators
 for standard distributions, e.g., R (:cite:`Rmanual`) and SciPy
-(:cite:`scipy:2020`) and NumPy (:cite:`oliphant2006numpy`) in Python.
+(:cite:`scipy:2020`) and NumPy (:cite:`numpy:2020`) in Python.
 Standard references for these algorithms are the books :cite:`devroye:1986`,
 :cite:`dagpunar:1988`, :cite:`gentle:2003`, and :cite:`knuth2014art`. An
 interested reader will find many references to the vast existing literature
@@ -418,17 +418,13 @@ are:
 
 * the ziggurat algorithm (:cite:`marsaglia2000ziggurat`) to sample from the
   standard normal distribution,
-* the rejection algorithms in :cite:`devroye:1986` if :math:`\alpha < 1` and
-  in :cite:`marsaglia2000simple` if :math:`\alpha > 1` for the Gamma
-  distribution,
-* Johnk's algorithm (:cite:`johnk1964`, :cite:`devroye:1986`) if
-  :math:`\max \{ \alpha, \beta \} \le 1`, otherwise a ratio of two Gamma
-  variates with shape parameter :math:`\alpha` and :math:`\beta` (see e.g.
-  :cite:`devroye:1986`) for the beta distribution.
-
-
-.. Note: The citations were in the form "\cite[Section~IX.3.5]{devroye:1986}"
-   Is there any way to cite particular sections of a peper in ReST?
+* the rejection algorithms in Chapter XII.2.6 in :cite:`devroye:1986` if
+  :math:`\alpha < 1` and in :cite:`marsaglia2000simple` if :math:`\alpha > 1`
+  for the Gamma distribution,
+* Johnk's algorithm (:cite:`johnk1964`, Section IX.3.5 in :cite:`devroye:1986`)
+  if :math:`\max \{ \alpha, \beta \} \le 1`, otherwise a ratio of two Gamma
+  variates with shape parameter :math:`\alpha` and :math:`\beta` (see
+  Section IX.4.1 in :cite:`devroye:1986`) for the beta distribution.
 
 
 Benchmarking against the normal, gamma, and beta distributions
@@ -436,9 +432,7 @@ Benchmarking against the normal, gamma, and beta distributions
 
 
 .. Note: The text below is raw latex because it references a table with raw
-   latex label. Is there a way to reference raw latex labels in ReST or label
-   a "raw:: latex" block?
-
+   latex label.
 
 .. raw:: latex
 
@@ -602,8 +596,10 @@ The interface to UNU.RAN in SciPy provides easy access to different algorithms
 for non-uniform variate generation for large classes of univariate continuous
 and discrete distributions. We have shown that the methods are easy to use and
 that the algorithms perform very well both for standard and non-standard
-distributions. A comprehensive documentation suite including a tutorial and
-many examples is available at https://docs.scipy.org/doc/scipy/reference/.
+distributions. A comprehensive documentation suite, a tutorial and
+many examples are available at
+https://docs.scipy.org/doc/scipy/reference/stats.sampling.html
+and https://docs.scipy.org/doc/scipy/tutorial/stats/sampling.html.
 Various methods have been implemented in SciPy, and if specific use cases
 require additional functionality from UNU.RAN, the methods can easily be added
 to SciPy given the flexible framework that has been developed. Another area of
