@@ -67,8 +67,7 @@ we claim that the structure of the VAE latent space, as it is confined by a prio
 to induce bias in the latent space of a DML system. For instance, if we know a dataset contains N -many
 classes, creating a prior distribution that is a learnable mixture of N gaussians may help produce better
 representations. Third, we claim that performing DML on the latent space of the VAE so that the DML
-task can be jointly optimized with the VAE to incorporate unlabelled data may help produce better repre-
-sentations.
+task can be jointly optimized with the VAE to incorporate unlabelled data may help produce better representations.
 
 Each of the three claims will be evaluated experimentally. The claims will be evaluated by comparing
 a standard DML implementation to the same DML implementation:
@@ -281,7 +280,7 @@ performance, we can evaluate whether this inductive bias is helpful.
 Given a fully supervised dataset, we assume a standard DML system will
 use only the labelled data and train given a metric loss
 :math:`L_{metric}`. Our modified model will extend the DML system’s
-training regime by setting hte unsupervised loss to a KL divergence term that
+training regime by setting the unsupervised loss to a KL divergence term that
 measures the difference between posterior distributions and a prior
 distribution. It should also be noted that, like the VAE encoder, we
 will map the input not to a latent point but to a latent distribution.
@@ -297,7 +296,7 @@ latent space. The logvar of each component is set equal to one.
 Constructing the prior in this way is beneficial in that it is ensured
 that each component is evenly spaced within the latent space, but is
 limiting in that there must be exactly :math:`2^{d}` components in the
-GMM prior. Thus, to test, we will test a datset with 10 classes on the
+GMM prior. Thus, to test, we will test a dataset with 10 classes on the
 latent space dimensionality of 4, such that there are
 :math:`2^{4} = 16` gaussian components in the GMM prior. Though the
 number of prior components is greater than the number of classes, the
@@ -418,12 +417,12 @@ dataset from MedMNIST v2 (:cite:`medmnistv2`). This dataset
 contains 2D slices from computed tomography images from the Liver Tumor
 Segmentation Benchmark – the labels correspond to the classification of
 11 different body organs. The decision to use a second dataset was
-motivated because the as the claims are tested over more datasets, the
+motivated because as the claims are tested over more datasets, the
 results supporting the claims become more generalizable. The decision to
-use the OrganAMNIST dataset specifically is motivated in part due to the
+use the OrganAMNIST dataset specifically is motivated in part due to
 the Quinn Research Group working on similar tasks for biomedical imaging
 (:cite:`Zain2020TowardsAU`). It is also motivated in part
-because OrganAMNIST is a more difficult dataset, at least for a the
+because OrganAMNIST is a more difficult dataset, at least for the
 classfication task, as the leading accuracy for MNIST is .9991
 (:cite:`DBLP:journals/corr/abs-2008-10400`) while the
 leading accuracy for OrganAMNIST is .951
@@ -511,14 +510,14 @@ a unit prior and a DML with a GMM prior. The DML prior with the GMM prior will h
 components when lsdim = 2 and 2^4 = 16 components when lsdim = 4. Our broad intention is to see 
 if changing the shape (specifically the number of components) of the prior can induce bias by affecting
 the pattern of embeddings. We hypothesize that when the GMM prior contains n components and n is
-slightly greater than or equal to the number of classes, each class will cluste raround one of the prior components.
+slightly greater than or equal to the number of classes, each class will cluster around one of the prior components.
 We will test this for the GMM prior with 16 components (lsdim = 4) as both the MNIST and MedMNIST
 datasets have 10 classes. We are unable to set the number of GMM components to 10 as our GMM sampling 
 method only allows for the number of components to equal a power of 2. Bseline models include a plain DML
 and a DML with a unit prior (the distribution N(0, 1)).
 
 In Table 3, it is very evident that across both datasets, the DML models with any prior distribution all
-devolve to the null model (i.e. the classifier is no better than random selection). From the visualilzations of
+devolve to the null model (i.e. the classifier is no better than random selection). From the visualizations of
 the latent embeddings, we see that the embedded data for the DML models with priors appears completely
 random. In the case of the GMM prior, it also does not appear to take on the shape of the
 prior or reflect the number of components in the prior. This may be due to the training routine of the
