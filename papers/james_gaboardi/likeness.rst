@@ -121,7 +121,9 @@ Overview of Core Capabilities and Workflow
 ------------------------------------------
 
 UrbanPop initially combined the vivid synthetic populations produced from the American
-Community Survey (ACS) using P-MEDM with a commute model based on origin-destination
+Community Survey (ACS) using the *Penalized-Maximum Entropy
+Dasymetric Modeling* (P-MEDM) method, which is detailed later,
+ with a commute model based on origin-destination
 flows, to generate a detailed dataset of daytime and nighttime synthetic populations
 across the United States :cite:`morton2017simulation`. Our development of Likeness is
 motivated by extending the existing capabilities of UrbanPop to routing libraries
@@ -164,8 +166,8 @@ Iterative Proportional Fitting (IPF) provide a maximum-likelihood estimator for 
 responses in small (e.g., neighborhood) areas based on aggregate data published about
 those areas (known as "constraints"), resulting in a baseline for population synthesis
 :cite:`wheaton2009synthesized, beckman1996creating, templ2017simulation`. UrbanPop is
-built upon a regularized implementation of IPF, the *Penalized-Maximum Entropy
-Dasymetric Modeling* (P-MEDM) method, that permits many more input census variables than
+built upon a regularized implementation of IPF, the P-MEDM method, 
+that permits many more input census variables than
 traditional approaches :cite:`leyk_maximum_2013, nagle2014dasymetric`. The P-MEDM
 objective function (Eq. :ref:`eq:pmedm`) is written as: 
 
