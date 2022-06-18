@@ -1,11 +1,11 @@
-:author: Wanlin Li
-:email: Nadia.Tahiri@USherbrooke.ca
-:institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
-
 :author:	Aleksandr Koshkarov
-:email:	aleksandr.koshkarov@usherbrooke.ca
+:email:	Nadia.Tahiri@USherbrooke.ca
 :institution:	Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 :institution:	Center of Artificial Intelligence, Astrakhan State University, Astrakhan, 414056, Russia
+
+:author: Wanlin Li
+:email: Wanlin.Li@USherbrooke.ca
+:institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 
 :author:	My-Linh Luu
 :email:	luu.my-linh@courrier.uqam.ca
@@ -66,7 +66,7 @@ In order to achieve our goal, we designed a workflow and then developed a script
 
 The first step involves collecting data to search for quality viral sequences that are essential for the conditions of our results. All sequences were retrieved from the NCBI Virus website (National Center for Biotechnology Information, https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/). In total, 20 regions were selected to represent 38 gene sequences of SARS-CoV-2. After collecting genetic data, we extracted 5 climatic factors for the 20 regions, i.e., Temperature, Humidity, Precipitation, Wind Speed, and Sky Surface Shortwave Downward Irradiance. This data was obtained from the NASA website (https://power.larc.nasa.gov/).
 
-In the second step, trees are created with climatic data and genetic data, respectively. For climatic data, we calculated the dissimilarity between each pair of variants (i.e., from different climatic conditions), resulting in a symmetric square matrix. From this matrix, the neighbor joining algorithm was used to construct the climate tree. The same approach was implemented for genetic data. Using nucleotide sequences from the 38 SARS-CoV-2 lineages, phylogenetic reconstruction is repeated to construct genetic trees, considering only the data within a window that moves along the alignment in user-defined steps and window size.
+In the second step, trees are created with climatic data and genetic data, respectively. For climatic data, we calculated the dissimilarity between each pair of variants (i.e., from different climatic conditions), resulting in a symmetric square matrix. From this matrix, the neighbor joining algorithm was used to construct the climate tree. The same approach was implemented for genetic data. Using nucleotide sequences from the 38 SARS-CoV-2 lineages, phylogenetic reconstruction is repeated to construct genetic trees, considering only the data within a window that moves along the alignment in user-defined steps and window size (their length is denoted by the number of base pairs (bp)).
 
 In the third step, the phylogenetic trees constructed in each sliding window are compared to the climatic trees using the Robinson and Foulds topological distance :cite:`RF81`. The distance was normalized by :math:`2n-6`, where :math:`n` is the number of leaves (i.e., taxa). The proposed approach considers bootstrapping. The implementation of sliding window technology provides a more accurate identification of regions with high gene mutation rates. 
 
