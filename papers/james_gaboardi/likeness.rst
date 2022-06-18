@@ -213,7 +213,7 @@ required to solve the P-MEDM problem:
 - The individual (household) level constraints based on ACS PUMS. To preserve households from the PUMS in the synthetic population, the person-level constraints describing household members are aggregated to the household level and merged with household-level constraints.
 - PUMS household sample weights.
 - The target (e.g., block group) and aggregate (e.g., tract) zone constraints based on population-level estimates available in the ACS SF.
-- The target/aggregate zone 90% margins of error (MOE) and associated standard errors (:math:`SE = 1.645 \times MOE`).
+- The target/aggregate zone 90% margins of error and associated standard errors (:math:`SE = 1.645 \times MOE`).
 
 The ``PMEDM`` classes feature an inner method, ``solve()``, that returns an optimized
 P-MEDM solution and allocation matrix. Through a ``diagnostics`` module, users may then
