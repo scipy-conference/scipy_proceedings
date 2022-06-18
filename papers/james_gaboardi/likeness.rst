@@ -165,7 +165,7 @@ responses in small (e.g., neighborhood) areas based on aggregate data published 
 those areas (known as "constraints"), resulting in a baseline for population synthesis
 :cite:`wheaton2009synthesized, beckman1996creating, templ2017simulation`. UrbanPop is
 built upon a regularized implementation of IPF, the *Penalized-Maximum Entropy
-Daysmetric Modeling* (P-MEDM) method, that permits many more input census variables than
+Dasymetric Modeling* (P-MEDM) method, that permits many more input census variables than
 traditional approaches :cite:`leyk_maximum_2013, nagle2014dasymetric`. The P-MEDM
 objective function (Eq. :ref:`eq:pmedm`) is written as: 
 
