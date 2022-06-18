@@ -516,7 +516,7 @@ adherence to network space.
 Students
 ++++++++
 
-Our study of K–12 students examine social contact networks with respect potentially
+Our study of K–12 students examine social contact networks with respect to potentially
 underserved student populations via the compositional characteristics of POIs (schools).
 
 We characterized each school's student body by identifying student profiles based on
