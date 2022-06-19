@@ -83,18 +83,19 @@ The state's response led to questioning if the outbreak could have been stemmed 
 Our corpus was selected with a focus on Tweets related to the outbreak.
 By closely studying the semantic shifts during this outbreak, we hope to accurately predict similar future outbreaks before they reach large case numbers, allowing for a critical, earlier response.
 
-To study semantic shifts through time, the corpus was split into 18 temporal buckets, each spanning a 2 month period.
+To study semantic shifts through time, the corpus was split into 18 temporal buckets, each spanning a 2 month period. All data utilized in scripts was handled via the pandas Python package.
 The corpus within each bucket is represented by *D_t*, with t representing the temporal slice. Within each 2 month period, Tweets were split into 12 pre-processed output csv files.
 Pre-processing steps first removed retweets, links, images, emojis, and punctuation.
 Common stop words were removed from the Tweets using the NLTK Python Package, and each Tweet was then tokenized.
 A vocabulary dictionary was then generated for each of the 18 temporal buckets, containing each unique word and a count of its occurrences within its respective bucket.
 The vocabulary dictionaries for each bucket were then combined into a global vocabulary dictionary, containing the total counts for each unique word across all 18 buckets.
-Our experiments utilized two vocabulary dictionaries: the first being the 10,000 most frequently occurring words from the global vocabulary;
-the second being a list of medical terms taken from a published list of terms taken from combining two medical spell check libraries.
-The combined vocabulary *V* consisted of the top 10,000 words across *D* as well as an additional 8,156 medical terms that occurred within all data handled in scripts utilized the pandas Python package.
-Additionally, we created a vocabulary of 227 HIV/AIDS specific medical terms to be used in analysis.
-
-.. _repository: https://github.com/glutanimate/wordlist-medicalterms-en
+Our experiments utilized two vocabulary dictionaries: the first being the 10,000 most frequently occurring words from the global vocabulary for ensuring proper generation of embedding vectors; 
+the second being a a vocabulary of 15,000 terms, including our target HIV/AIDS related terms.
+This combined vocabulary consisted of the top 10,000 words across *D* as well as an additional 473 HIV/AIDS related terms that occurred at least 8 times within the corpus.
+The 10,000th most frequent term in *D* occurred 39 times, so to ensure results were not influenced by sparsity in the less frequent HIV/AIDS terms, 
+4527 randomly selected terms with occurences between 10 and 25 times were added to the vocabulary, bringing it to a total of 15,000 terms. 
+The HIV/AIDS related terms came from a list of 1,031 terms we compiled, primarly coming from the U.S. Department of Veteran Affairs published list of HIV/AIDS related terms, 
+and other terms we thought were pertinent to include, such as HIV medications and terms relating to sexual health :cite:`dva05`. 
 
 Temporally Aligned Vector Generation
 ====================================
@@ -156,15 +157,14 @@ Our initial solution involves determining patterns within medical related terms,
 Using the word embedding vectors generated for each temporal bucket, a new data set was created to use for determining semantic shift patterns.
 All 18 temporal observations of each word were included in this data set, however rather than using the embedding for each word for each temporal bucket,
 the change in the embeddings between each consecutive bucket was used instead, subtracting the first temporal bucket's embedding from the second.
-Additionally, the two dimensional representation of initial and next positions of each embedding were listed as features.
+Additionally, a ten dimensional representation of vector for the initial and next time period were listed as features, so position in the embedding space kept significance.
 These two dimensional representations of the word embeddings were generated using UMAP for dimensionality reduction, with a set random state to ensure a shared space.
-This yielded each word having 17 observations and 104 features: {d_vec0 … d_vec99, x0, y0, x1, y1}.
+This yielded each word having 17 observations and 104 features: {d_vec0 … d_vec99, v_init_0 … v_init_9, v_fin_0 … v_fin_9}.
 
-The data was then split into 80% training and 20% testing.
-Using these training data, K-means clustering was performed to try to classify each observation.
-Several iterations with various parameters were attempted, but all led had converging inertia values of over 20,000.
-Therefore features were reassessed, and embedding vectors were created again with dimension d = 10, yielding 14 features per observation.
-Inertia at convergence on 8 cluster K-Means was reduced to around 3,000, yielding significantly better results.
+Using these data, K-means clustering was performed to try to classify each observation.
+Several iterations with various parameters were attempted, all having extremely large convergin inertial values. 
+Therefore features were reassessed, and embedding vectors were created again with dimensionality of d = 10, yielding 14 features per observation.
+Inertia at convergence on 8 cluster K-Means was reduced significantly, by around 86%, yielding significantly better results.
 Following the clustering, the results were analyzed to determine which clusters contained the higher than average incidence rates of medical terms and HIV/AIDS related terms.
 These clusters are then considered target clusters, and large incidences of words being clustered within these can be flagged as indicative as a possible outbreak.
 
@@ -340,6 +340,11 @@ If certain clusters begin having an increased rate of appearing, it can be flagg
 .. figure:: hiv_plot.png
 
    Bar Graph Showing KMeans Clustering Distribution of HIV Terms against All Terms :label:`hivplot`
+   
+Machine Learning Predictions
+============================
+
+K-Means clustering revealed measurable differences in trajectories of medical and HIV related terms compared to non-medical terms.  
 
 Conclusion
 ----------
