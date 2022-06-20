@@ -270,8 +270,8 @@ in general, the `robust statistics simulator <https://github.com/Alcampopiano/ro
 repository has been developed.
 It is a notebook-based collection of interactive demonstrations aimed at clearly and visually
 explaining the conditions under which classic methods fail relative to robust methods.
-A hosted notebook with the rendered visualizations of the simulations can be accessed
-`here <https://deepnote.com/workspace/allan-campopiano-4ca00e1d-f4d4-44a2-bcfe-b2a17a031bc6/project/robust-stats-simulator-7c7b8650-9f18-4df2-80be-e84ce201a2ff/%2Fnotebook.ipynb)>`_.
+A hosted notebook with the rendered visualizations of the
+simulations `can be accessed here <https://deepnote.com/workspace/allan-campopiano-4ca00e1d-f4d4-44a2-bcfe-b2a17a031bc6/project/robust-stats-simulator-7c7b8650-9f18-4df2-80be-e84ce201a2ff/%2Fnotebook.ipynb>`_.
 and seen in Figure :ref:`sim`.
 
 The robust statistics simulator allows the user to interact with the following parameters:
