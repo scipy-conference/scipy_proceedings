@@ -156,14 +156,13 @@ the problem becomes determining which patterns are indicative of the disease out
 Our initial solution involves determining patterns within medical related terms, as those words are semantically linked to a medical emergency such as this outbreak.
 Using the word embedding vectors generated for each temporal bucket, a new data set was created to use for determining semantic shift patterns.
 All 18 temporal observations of each word were included in this data set, however rather than using the embedding for each word for each temporal bucket,
-the change in the embeddings between each consecutive bucket was used instead, subtracting the first temporal bucket's embedding from the second.
+the change in the embeddings between each consecutive bucket was used instead, subtracting the first temporal bucket's embedding from the second. 
+The reasoning for this was so that in analysis of future corpora, shifts in terms rather than solely their location can be studied to look for trends.
 Additionally, a ten dimensional representation of vector for the initial and next time period were listed as features, so position in the embedding space kept significance.
-These two dimensional representations of the word embeddings were generated using UMAP for dimensionality reduction, with a set random state to ensure a shared space.
-This yielded each word having 17 observations and 104 features: {d_vec0 … d_vec99, v_init_0 … v_init_9, v_fin_0 … v_fin_9}.
+This yielded each word having 17 observations and 120 features: {d_vec0 … d_vec99, v_init_0 … v_init_9, v_fin_0 … v_fin_9}.
 
-Using these data, K-means clustering was performed to try to classify each observation.
-Several iterations with various parameters were attempted, all having extremely large convergin inertial values. 
-Therefore features were reassessed, and embedding vectors were created again with dimensionality of d = 10, yielding 14 features per observation.
+Using these data, two machine learning alogrithms were performed: unsupervised k-means clustering, and a supervised neural network. 
+Initial attemps at k-means yeilded extremely large intertial values, therefore features were reassessed
 Inertia at convergence on 8 cluster K-Means was reduced significantly, by around 86%, yielding significantly better results.
 Following the clustering, the results were analyzed to determine which clusters contained the higher than average incidence rates of medical terms and HIV/AIDS related terms.
 These clusters are then considered target clusters, and large incidences of words being clustered within these can be flagged as indicative as a possible outbreak.
@@ -193,7 +192,7 @@ Analysis of Embeddings
    | username (w2v)       | discipline  | writer      | seals        | merit          | nanti       |
    +----------------------+-------------+-------------+--------------+----------------+-------------+
 
-.. table:: The percentage and counts of our vocabulary sharing a given number of closest words (SCW for short) between word2vec and our model for time bucket #17. :label:`sharedclosest`
+.. table:: The percentage and counts of our vocabulary sharing a given number of closest words (Shared closest words, or SCW for short) between word2vec and our model for time bucket #17. :label:`sharedclosest`
 
    +----------------+-------------------------+---------------------+
    | No. of SCW     | Percent Occurrences     | No. Occurrences     |
@@ -344,7 +343,7 @@ If certain clusters begin having an increased rate of appearing, it can be flagg
 Machine Learning Predictions
 ============================
 
-K-Means clustering revealed measurable differences in trajectories of medical and HIV related terms compared to non-medical terms.  
+K-Means clustering revealed measurable differences in trajectories of medical and HIV related terms compared to non-medical terms. Following this discovery, we created a neural network model for binary classification of our terms. Our target class was terms that we hypothesized were closely related to the HIV epidemic in Scott County, i.e. any word in our HIV terms list. Our data set was
 
 Conclusion
 ----------
