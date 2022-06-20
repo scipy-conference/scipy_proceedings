@@ -162,7 +162,7 @@ And the set of desired parameter, :math:`\Theta=\theta`, is the common zero root
 The derivatives of :math:`G` with respect to :math:`\vec{x}` and :math:`t` are usually obtained using automatic differentiation. 
 Nevertheless, it is possible to use analytical derivatives when the chosen network architecture is simple enough, as reported by early-day literature (:cite:`lagaris_artificial_1998,Li2003`).
 
-If residuals in (:ref:`eq:residuals`) are not complicated, and if the number of the parameters, :math:`N_\Theta`, is small enough, we may numerically find the zero root by solving a system of :math:`N_\Theta` nonlinear equations generated from a proper set of :math:`N_\Theta` spatial-temporal points.
+If residuals in (:ref:`eq:residuals`) are not complicated, and if the number of the parameters, :math:`N_\Theta`, is small enough, we may numerically find the zero root by solving a system of :math:`N_\Theta` nonlinear equations generated from a suitable set of :math:`N_\Theta` spatial-temporal points.
 However, the scenario rarely happens as :math:`G` is usually highly complicated and :math:`N_\Theta` is large.
 Moreover, we do not even know if such a zero root exists for the equations in (:ref:`eq:residuals`).
 
