@@ -157,7 +157,7 @@ That is
       & r_{5}(\vec{x}, t; \Theta) \equiv G^{p}-p_\Gamma = 0,\ \forall \vec{x} \in \Gamma \\
    \end{aligned}
 
-And the set of desired parameter, :math:`\Theta=\theta`, is the common zero root of the all residuals.
+And the set of desired parameter, :math:`\Theta=\theta`, is the common zero root of all the residuals.
 
 The derivatives of :math:`G` with respect to :math:`\vec{x}` and :math:`t` are usually obtained using automatic differentiation. 
 Nevertheless, it is possible to use analytical derivatives when the chosen network architecture is simple enough, as reported by early-day literature (:cite:`lagaris_artificial_1998,Li2003`).
