@@ -145,7 +145,13 @@ Non-parametric resampling techniques such as bootstrapping and
 permutation tests build empirical sampling distributions,
 and from these, one can robustly derive p-values and CIs.
 One example is the percentile bootstrap test :cite:`efron1992bootstrap`:cite:`tibshirani1993introduction`.
-For a two-sample case, it can be described as follows:
+
+The percentile bootstrap is simply a computational algorithm that uses the data at hand to estimate
+the underlying sampling distribution of a statistic (again, rather than assuming it
+takes some particular shape).  It works well with small sample sizes,
+under normality, under non-normality, and it easily extends to multi-group tests
+(ANOVA) and measures of association (correlation, regression).
+For a two-sample case, the steps to compute the percentile bootstrap test can be described as follows:
 
 1. Randomly resample with replacement :math:`n` values from group one
 2. Randomly resample with replacement :math:`n` values from group two
@@ -154,11 +160,8 @@ For a two-sample case, it can be described as follows:
 5. Consider the middle 95% of all differences (the confidence interval)
 6. If the confidence interval contains zero, there is no statistical difference, otherwise, you can reject the null hypothesis (there is a statistical difference)
 
-The percentile bootstrap is simply a computational algorithm that uses the data at hand to estimate
-the underlying sampling distribution of a statistic (again, rather than assuming it
-takes some particular shape).  It works well with small sample sizes,
-under normality, under non-normality, and it easily extends to multi-group tests
-(ANOVA) and measures of association (correlation, regression).
+In the subsequent sections of this paper, software resources will be presented for implementing and teaching robust methods
+such as the percentile bootstrap test.
 
 Implementing and teaching modern robust methods
 -----------------------------------------------
