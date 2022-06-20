@@ -65,26 +65,26 @@ can have a large impact on commonly used statistics. The problems get even worse
 at the effect of contamination on statistical power and effect sizes but these findings are not
 discussed in this article. Interested readers should see :cite:`wilcox1992can`.
 
-Student’s t distribution
+Student’s t-distribution
 ------------------------
 
 It turns out that T, the statistic you get from Student’s t-test, is more sensitive to violations
 of normality than even the sample mean (which has already been shown to not be robust).
-This is despite the fact that the t distribution is also bell shaped, light tailed, and
+This is despite the fact that the t-distribution is also bell shaped, light tailed, and
 symmetrical—a close relative of the normal curve.
 
-The assumption is that T follows a t distribution (and with large samples it approaches normality).
+The assumption is that T follows a t-distribution (and with large samples it approaches normality).
 We can test this assumption by generating random samples from a lognormal
 distribution. Specifically, 5000 datasets of sample size 20 were randomly drawn
 from a lognormal distribution using SciPy's :code:`lognorm.rvs` function.
 For each dataset, T was calculated and the resulting t-distribution was plotted.
-Figure :ref:`tcurve` shows that the assumption that T follows a t distribution does not hold.
+Figure :ref:`tcurve` shows that the assumption that T follows a t-distribution does not hold.
 
 .. figure:: t.png
    :scale: 50%
    :align: center
 
-   Actual t distribution (orange) and assumed t distribution (blue). :label:`tcurve`
+   Actual t-distribution (orange) and assumed t-distribution (blue). :label:`tcurve`
 
 One conclusion that can be drawn from this is as follows: When sampling is from skewed
 distributions (e.g., lognormal), the t-test leads to increased false positive rates (Type I Error).
@@ -139,7 +139,7 @@ The percentile bootstrap test
 *****************************
 
 In most traditional parametric tests, there is an assumption that the sampling distribution
-has a particular shape (normal, f distribution, t distribution, etc).
+has a particular shape (normal, f-distribution, t-distribution, etc).
 We use these distributions to test the null hypothesis; however, as
 discussed, the theoretical distributions are not approximated well
 when even small violations of assumptions occur.
