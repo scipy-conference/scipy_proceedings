@@ -25,15 +25,16 @@ The normal curve has had a grip on us for some time; the aphorism by :cite:`cram
 
     “Everyone believes in the [normal] law of errors, the experimenters because they think it is a mathematical theorem, the mathematicians because they think it is an experimental fact.”
 
-And even when we violate the assumption of the normal curve, we’re still pretty clingy to it
-:cite:`gleason1993understanding`. In one form or another, many students of statistics learn that N=40 is
-enough to ignore the violation of the assumption of normality.  This belief stems from
+Many students of statistics learn that N=40 is enough to ignore the violation of the assumption of normality.
+This belief stems from early research showing that the sampling distribution of the mean quickly approaches normal,
+even when drawing from non-normal distributions—as long as samples are sufficiently large. This belief stems from
 early research showing that the sampling distribution of the mean quickly approaches normal,
 even when drawing from non-normal distributions—as long as samples are sufficiently large.
 
 It is common to demonstrate this result by sampling from uniform and exponential distributions.
 Since these look nothing like the normal curve, it was assumed that N=40 must be enough to avoid practical
-issues when sampling from other types of non-normal distributions :cite:`wilcox2013introduction`.
+issues when sampling from other types of non-normal distributions :cite:`wilcox2013introduction`. (Others
+reached similar conclusions with different methodology :cite:`gleason1993understanding`.)
 
 Two practical issues have since been identified based on this early research: (1)
 The distributions under study were light tailed (they did not produce outliers),
