@@ -92,6 +92,17 @@ def create_rst_sections():
     def command_regex(cmd, num_args=1):
         return r"\\" + cmd + r"\{(.*?)\}" * num_args
 
+    def env_regex(env, begin=True, end=True):
+        assert begin or end, "Must have at least one of begin or end"
+        if begin and not end:
+            cur_regex = "begin"
+        elif end and not begin:
+            cur_regex = "end"
+        else:
+            cur_regex = "(begin|end)"
+
+        return rf"\\{cur_regex}\{{" + env + r"\}"
+
     def _sanitized_label(text):
         return text.replace(":", "").replace("_", "")
 
@@ -145,6 +156,11 @@ def create_rst_sections():
         command_regex("href", num_args=2): r"`\2 <\1>`_",
         command_regex("url"): r"`\1 <\1>`_",
         command_regex("footnote"): footnote_replace,
+        # Itemize is the only current occurrence of environments
+        env_regex("itemize") + "\n": "",
+        r"\\item": "*",
+        env_regex("lstlisting", begin=True, end=False): "```python",
+        env_regex("lstlisting", begin=False, end=True): "```",
     }
 
     rst_dir = paper_dir / "sections_rst"

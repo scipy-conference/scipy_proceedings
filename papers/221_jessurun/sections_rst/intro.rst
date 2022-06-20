@@ -1,7 +1,8 @@
 Introduction
 ============
-Labeled image data is essential for tuning and evaluating the performance of machine learning applications.
-Such labels are typically defined with approximate enclosing shapes (i.e., simple polygons or parametric shapes), which tend to misrepresent more complex components.
+Labeled image data is essential for training, tuning, and evaluating the performance of many machine learning applications.
+Such labels are typically defined with simple polygons, ellipses, and bounding boxes (i.e., "this rectangle contains a cat").
+However, this approach can misrepresent more complex shapes with holes or multiple regions as shown later in Figure :ref:`figcomplexRegion`.
 When high accuracy is required, labels must be specified at or close to the pixel-level - a process known as semantic labeling or semantic segmentation.
 A detailed description of this process is given in :cite:`chengSurveyAnalysisAutomatic2018`.
 Examples can readily be found in several popular datasets such as COCO, depicted in Figure :ref:`figsampleSegData`.

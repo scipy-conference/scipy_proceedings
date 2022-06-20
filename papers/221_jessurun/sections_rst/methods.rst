@@ -2,7 +2,13 @@
 
 Application Overview
 ====================
-Design decisions throughout S3A's architecture have been driven by the following objectives: metadata should have significance rather than be treated as an afterthought; high-resolution images should have minimal impact on the annotation workflow; ROI density and complexity should not limit annotation workflow; and prototyping should not be hindered by application complexity.
+Design decisions throughout S3A's architecture have been driven by the following objectives:
+
+* Metadata should have significance rather than be treated as an afterthought,
+* High-resolution images should have minimal impact on the annotation workflow,
+* ROI density and complexity should not limit annotation workflow, and
+* Prototyping should not be hindered by application complexity.
+
 These motives were selected upon noticing the general lack of solutions for related problems in previous literature and tooling.
 Moreover, applications that *do* address multiple aspects of complex region annotation often require an enterprise service and cannot be accessed under open-source policies.
 
@@ -36,14 +42,19 @@ This, in turn, reduces the effort required to determine which parameters must be
 
 Plugins for User Extensions
 ---------------------------
-The previous section briefly described how custom user functions are easily be wrapped within a process, exposing its parameters within S3A in a GUI format.
+The previous section briefly described how custom user functions are easily wrapped within a process, exposing its parameters within S3A in a GUI format.
 A rich plugin interface is built on top of this capability in which custom functions, table field predictors, default action hooks, and more can be directly integrated into S3A.
 In all cases, only a few lines of code are required to achieve most integrations between user code and plugin interface specifications.
 The core plugin infrastructure consists of a function/property registration mechanism and an interaction window that shows them in the UI.
-As such, arbitrary user functions can be `registered` in one line of code to a plugin, where it will be effectively exposed to the user within S3A.
+As such, arbitrary user functions can be "registered" in one line of code to a plugin, where it will be effectively exposed to the user within S3A.
+A trivial example is depicted in Figure :ref:`figfuncIntegration`, but more complex behavior such as OCR integration is possible with similar ease (see `this snippet <https://gitlab.com/s3a/s3a/-/snippets/2203628>`_ for an implementation leveraging ``easyocr``).
+
+.. raw:: latex
+
+    \makeFuncIntegrationFig
 
 Plugin features are heavily oriented toward easing the process of automation both for general annotation needs and niche datasets.
-In either case, incorporating existing library functions is converted into a trivial task directly resulting in lower annotation and higher labeling accuracy.
+In either case, incorporating existing library functions is converted into a trivial task directly resulting in lower annotation time and higher labeling accuracy.
 
 Adaptable I/O
 -------------
@@ -55,7 +66,7 @@ Particularly helpful for models with fixed input sizes, these exports can option
 This is accomplished by incorporating additional scene pixels around each object until the appropriate size is obtained.
 Models trained on these exports can be directly plugged back into S3A's processing framework, allowing them to generate new annotations or refine preliminary user efforts.
 The described I/O framework is also heavily modularized such that custom dataset specifications can easily be incorporated.
-In this manner, future versions of S3A will facilitate interoperability with popular formats such as COCO and Pascal VOC.
+In this manner, future versions of S3A will facilitate interoperability with popular formats such as COCO and Pascal VOC :cite:`lin_microsoft_2014,everingham_pascal_2010`.
 
 .. raw:: latex
 
