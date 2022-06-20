@@ -92,11 +92,12 @@ dynamics are linked to human security problems (e.g., how a person's age, limite
 transportation access, and linguistic isolation may interact with their housing situation
 in a flood evacuation emergency).
 
-In this paper, we introduce Likeness :cite:`tuccillo_jospeh_v_2022_6607533`, a Python
+In this paper, we introduce Likeness :cite:`tuccillo_joseph_v_2022_6607533`, a Python
 toolkit for connecting the social fabric of place to human dynamics via models that
 support increased spatial, temporal, and demographic fidelity. Likeness is an extension of
 the UrbanPop framework developed at Oak Ridge National Laboratory (ORNL) that embraces a
-new paradigm of "vivid" synthetic populations, in which individual agents may be
+new paradigm of "vivid" synthetic populations :cite:`joe_tuccillo_2021_6672291, tuccillo2021individual`,
+in which individual agents may be
 attributed in potentially hundreds of ways, across subjects spanning demographics,
 socioeconomic status, housing, and health. Vivid synthetic populations benefit human
 dynamics research both by enabling more precise geolocation of population segments, as
@@ -179,7 +180,10 @@ where :math:`w_{it}` is the estimate of variable :math:`i` in zone :math:`t`,
 :math:`d_{it}` is the synthetic estimate of variable :math:`i` in location :math:`t`,
 :math:`n` is the number of microdata responses, and :math:`N` is the total population
 size.  Uncertainty in variable estimates is handled by adding an error term to the
-allocation  :math:`\widehat{pop_{k}} + e_{k}`. This is accomplished by leveraging the
+allocation :math:`\sum_{k}\frac{e^2_{k}}{2\sigma_{k}^2}`, where :math:`e_k` is the
+error between the synthetic and published estimate of ACS variable :math:`k` and
+:math:`\sigma_k` is the ACS standard error for the estimate of variable :math:`k`. 
+This is accomplished by leveraging the
 uncertainty in the input variables: the "tighter" the margins of error on the estimate of
 variable :math:`k` in place :math:`t`, the more leverage it holds upon the solution
 :cite:`nagle2014dasymetric`.
