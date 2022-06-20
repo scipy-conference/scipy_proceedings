@@ -127,7 +127,7 @@ where :math:`\Gamma` represents the boundary of the computational domain.
 2.1. The PINN method
 ++++++++++++++++++++
 
-The basic form of the PINN method starts from approximating :math:`\vec{U}` and :math:`p` with a neural network:
+The basic form of the PINN method :cite:`raissi_physics-informed_2019` starts from approximating :math:`\vec{U}` and :math:`p` with a neural network:
 
 .. math::
    :label: eq:neural-network
