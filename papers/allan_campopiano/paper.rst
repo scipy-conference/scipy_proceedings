@@ -59,7 +59,7 @@ normal distribution is 1 but the variance of the contaminated normal is 10.9!
    Standard normal (orange) and contaminated normal (blue). :label:`contnorm`
 
 Moreover, confidence intervals, based on the sample mean, will be over three times longer
-when sampling is from the contaminated curve compared to the normal curve. The point
+when sampling from the contaminated curve compared to the normal curve. The point
 here is that even small departures from normality, especially in the tails,
 can have a large impact on commonly used statistics. The problems get even worse when looking
 at the effect of contamination on statistical power and effect sizes but these findings are not
@@ -86,8 +86,9 @@ Figure :ref:`tcurve` shows that the assumption that T follows a t-distribution d
 
    Actual t-distribution (orange) and assumed t-distribution (blue). :label:`tcurve`
 
-One conclusion that can be drawn from this is as follows: When sampling is from skewed
-distributions (e.g., lognormal), the t-test leads to increased false positive rates (Type I Error).
+One conclusion that can be drawn from this is as follows: When sampling from skewed
+distributions (e.g., lognormal), the t-test leads to increased false positive rates
+(Type I Error) as seen from the left tails in :ref:`tcurve`.
 You can intuit this by comparing the left tails in the chart above. The middle 95% of the blue
 curve is much wider than that of the gray curve. Therefore, when we assume the t
 distribution in these scenarios, we’re much more likely to incorrectly conclude statistical
