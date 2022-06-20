@@ -29,9 +29,8 @@ Many students of statistics learn that N=40 is enough to ignore the violation of
 This belief stems from early research showing that the sampling distribution of the mean quickly approaches normal,
 even when drawing from non-normal distributions—as long as samples are sufficiently large. This belief stems from
 early research showing that the sampling distribution of the mean quickly approaches normal,
-even when drawing from non-normal distributions—as long as samples are sufficiently large.
-
-It is common to demonstrate this result by sampling from uniform and exponential distributions.
+even when drawing from non-normal distributions—as long as samples are sufficiently large. It is
+common to demonstrate this result by sampling from uniform and exponential distributions.
 Since these look nothing like the normal curve, it was assumed that N=40 must be enough to avoid practical
 issues when sampling from other types of non-normal distributions :cite:`wilcox2013introduction`. (Others
 reached similar conclusions with different methodology :cite:`gleason1993understanding`.)
