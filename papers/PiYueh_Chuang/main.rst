@@ -167,7 +167,7 @@ However, the scenario rarely happens as :math:`G` is usually highly complicated 
 Moreover, we do not even know if such a zero root exists for the equations in (:ref:`eq:residuals`).
 
 Instead, in PINN, the condition is relaxed.
-We do not seek the zero root of (:ref:`eq:residuals`) but just hope to find a set of parameters that make the residuals close to zero.
+We do not seek the zero root of (:ref:`eq:residuals`) but just hope to find a set of parameters that make the residuals sufficiently close to zero.
 Consider the sum of the :math:`l_2` norms of residuals:
 
 .. math::
