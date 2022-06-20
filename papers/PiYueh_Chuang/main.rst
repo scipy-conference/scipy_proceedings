@@ -392,7 +392,7 @@ As indicated previously, weak scaling was used in PINN, which follows most machi
 The Taylor-Green vortex serves as a good benchmark case because it reduces the number of required residual constraints: residuals :math:`r_4` and :math:`r_5` are excluded from :math:`r` in equation :ref:`eq:total-residual`.
 This means the optimizer can concentrate only on the residuals of initial conditions and the Navier-Stokes equations.
 
-Using more GPUs (thus using more training points) did not speed up the convergence, which may indicate that the per-iteration number of points on a single GPU is already big enough.
+Using more GPUs (thus using more training points, i.e., spatio-temporal points) did not speed up the convergence, which may indicate that the per-iteration number of points on a single GPU is already big enough.
 The number of training points mainly affects the mean gradients of the residual with respect to model parameters, which then will be used to update parameters by gradient-descent-based optimizers.
 If the number of points is already big enough on a single GPU, then using more points or more GPU is unlikely to change the mean gradients significantly, causing the convergence solely to rely on learning rates.
 
