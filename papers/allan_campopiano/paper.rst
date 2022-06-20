@@ -144,7 +144,7 @@ when even small violations of assumptions occur.
 Non-parametric resampling techniques such as bootstrapping and
 permutation tests build empirical sampling distributions,
 and from these, one can robustly derive p-values and CIs.
-One example is the percentile bootstrap test :cite:`tibshirani1993introduction`.
+One example is the percentile bootstrap test :cite:`efron1992bootstrap`:cite:`tibshirani1993introduction`.
 For a two-sample case, it can be described as follows:
 
 1. Randomly resample with replacement :math:`n` values from group one
