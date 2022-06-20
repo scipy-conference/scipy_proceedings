@@ -73,10 +73,12 @@ of normality than even the sample mean (which has already been shown to not be r
 This is despite the fact that the t distribution is also bell shaped, light tailed, and
 symmetrical—a close relative of the normal curve.
 
-The assumption is that T follows a t distribution (and with large samples, approaches normality).
-Figure :ref:`tcurve` tests this assumption by calculating T many times based on a computer-generated
-population distribution (5000 samples; n=20; lognormal distribution).
-As you can see, the assumption that T follows a t distribution does not hold.
+The assumption is that T follows a t distribution (and with large samples it approaches normality).
+We can test this assumption by generating random samples from a lognormal
+distribution. Specifically, 5000 datasets of sample size 20 were randomly drawn
+from a lognormal distribution using SciPy's :code:`lognorm.rvs` function.
+For each dataset, T was calculated and the resulting t-distribution was plotted.
+Figure :ref:`tcurve` shows that the assumption that T follows a t distribution does not hold.
 
 .. figure:: t.png
    :scale: 50%
