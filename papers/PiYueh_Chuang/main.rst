@@ -191,9 +191,10 @@ Gradient-descent-based optimizers further reduce the computational cost, especia
 Alternatively, Quasi-Newton methods may work but only when :math:`N_\Theta` is small enough.
 
 However, even though equation (:ref:`eq:objective`) may be solvable, it is still a significantly expensive task.
-Compared to regular data-driven learning applications, due to the use of automatic differentiation to evaluate the derivatives of :math:`G` with respect to :math:`\vec{x}` and :math:`t`, the computational graph becomes much larger.
+While typical data-driven learning requires one back-propagation pass on the derivatives of the loss function, here automatic differentiation is needed to evaluate the derivatives of :math:`G` with respect to :math:`\vec{x}` and :math:`t`.
 The first-order derivatives require one back-propagation on the network, while the second-order derivatives present in the diffusion term :math:`\nabla^2 G^U` require an additional back-propagation on the first-order derivatives' computational graph. 
 Finally, to update parameters in an optimizer, the gradients of :math:`G` with respect to parameters :math:`\Theta` requires another back-propagation on the graph of the second-order derivatives.
+This all leads to a very large computational graph.
 We will see the performance of the PINN method in the case studies.
 
 
