@@ -16,9 +16,9 @@ Notebooks are an excellent environment for data exploration: they allow
 us to write code interactively and get visual feedback, providing an
 unbeatable experience for understanding our data.
 
-However, this convenience comes at a cost: if we are not careful about
+However, this convenience comes at a cost; if we are not careful about
 adding and removing code cells, we may have an irreproducible notebook.
-Arbitrary execution order is a prevalent problem: A `recent
+Arbitrary execution order is a prevalent problem: a `recent
 analysis <https://blog.jetbrains.com/datalore/2020/12/17/we-downloaded-10-000-000-jupyter-notebooks-from-github-this-is-what-we-learned/>`_
 found that about 36% of notebooks on GitHub did not execute in linear
 order. To ensure our notebooks run, we must continuously test them to
@@ -30,7 +30,7 @@ and code involved.
 
 Software engineers typically break down projects into multiple steps and
 test continuously to prevent broken and unmaintainable code. However,
-applying these ideas for data analysis requires extra work: multiple
+applying these ideas for data analysis requires extra work; multiple
 notebooks imply we have to ensure the output from one stage becomes the
 input for the next one. Furthermore, we can no longer press “Run all
 cells” in Jupyter to test our analysis from start to finish.
@@ -46,12 +46,12 @@ execute them all with a single command.
 If you already have a python project in a single notebook, you can use our tool
 `Soorgeon <https://github.com/ploomber/soorgeon>`__ to automatically
 refactor it into a `Ploomber <https://github.com/ploomber/ploomber>`__
-pipeline. Soorgeon statically analyze your code, clean up unnecessary imports,
+pipeline. Soorgeon statically analyzes your code, cleans up unnecessary imports,
 and makes sure your monolithic notebook is broken down into smaller components.
-It does that by scanning the markdown in the notebook and analyzing the headers,
+It does that by scanning the markdown in the notebook and analyzing the headers;
 each H2 header in our example is marking a new self-contained task. In addition,
 it can transform a notebook to a single-task pipeline and then the user can split
-it into smaller tasks the way they see fit.
+it into smaller tasks as they see fit.
 
 To refactor the notebook, we use the ``soorgeon refactor`` command:
 
@@ -59,8 +59,8 @@ To refactor the notebook, we use the ``soorgeon refactor`` command:
 
    soorgeon refactor nb.ipynb
 
-After running the refactor command, we can take a look at the local directory,
-and we'll see that now we have multiple python tasks which are ready for production:
+After running the refactor command, we can take a look at the local directory
+and see that we now have multiple python tasks which that are ready for production:
 
 .. code:: sh
 
@@ -68,32 +68,35 @@ and we'll see that now we have multiple python tasks which are ready for product
 
 We can see that we have a few new files. ``pipeline.yaml`` contains the
 pipeline declaration, and ``tasks/`` contains the *stages* that Soorgeon
-identified based on our H2 Markdown headings.
+identified based on our H2 Markdown headings:
 
 .. code:: sh
 
    ls playground/tasks
 
 One of the best ways to onboard new people and explain what each workflow is doing
-is by ploting the pipeline (note that we’re now using ``ploomber``, which
+is by plotting the pipeline (note that we’re now using ``ploomber``, which
 is the framework for developing pipelines):
 
 .. code:: sh
 
    ploomber plot
 
-This command will generate the plot below for us, that way we can stay up to date
-with changes that are happening in our pipeline and get an immidate status of what
-task was executed or failed.
+This command will generate the plot below for us, which will allow us to stay up to date
+with changes that are happening in our pipeline and get the current status of
+tasks that were executed or failed to execute.
 
+.. figure:: images/pipeline-step-2.png
+   :alt: pipeline-steps-2
 
-.. image:: images/pipeline-step-2.png
+   In this pipeline none of the tasks were executed - it's all red.
+
 
 
 Soorgeon correctly identified the *stages* in our original ``nb.ipynb``
 notebook. It even detected that the last two tasks
-(``linear-regression``, and ``random-forest-regressor`` are independent
-of each other!).
+(``linear-regression``, and ``random-forest-regressor``) are independent
+of each other!
 
 We can also get a summary of the pipeline with ``ploomber status``:
 
@@ -102,7 +105,12 @@ We can also get a summary of the pipeline with ``ploomber status``:
    cd playground
    ploomber status
 
-.. image:: images/status-output.png
+.. figure:: images/status-output.png
+   :alt: status-output
+
+   In here we can see the status of each of our pipeline's tasks, runtime and location.
+
+
 
 3. The ``pipeline.yaml`` file
 -----------------------------
@@ -144,8 +152,8 @@ Let’s build the pipeline (this will take ~30 seconds):
    cd playground
    ploomber build
 
-We can see which are the tasks that ran during this command, how long did it take,
-and what's the partial percentage of the overall pipeline execution runtime.
+We can see which are the tasks that ran during this command, how long they took to execute,
+and the contributions of each task to the overall pipeline execution runtime.
 
 .. image:: images/build-output.png
 
@@ -310,7 +318,10 @@ Let's generate the plot again:
    cd playground
    ploomber plot
 
-.. image:: images/new-task-attached.png
+.. figure:: images/new-task-attached.png
+   :alt: new-pipeline-task-attached
+
+   The new task is attached to the pipeline
 
 
 Ploomber now recognizes our dependency declaration!
@@ -339,7 +350,7 @@ Open ``playground/tasks/gradient-boosting-regressor.py`` as a notebook by right-
 
 
 
-7. Incremental builds
+8. Incremental builds
 ---------------------
 
 Data workflows require a lot of iteration. For example, you may want to
@@ -363,13 +374,68 @@ task changes.
 Check out ``playground/output/gradient-boosting-regressor.ipynb``,
 which contains the output notebooks with the model evaluation plot.
 
-8. Execution in the cloud
--------------------------
+
+9. Parallel execution and Ploomber cloud execution
+--------------------------------------------------
+
+This section can run locally or on the cloud.
+To setup the cloud we'll need to register for an `api key <https://docs.ploomber.io/en/latest/cloud/index.html>`_
+
+Ploomber cloud allows you to scale your experiments into the cloud without provisioning machines and without dealing with infrastrucutres.
+
+Open `playground/pipeline.yaml` and add the following code instead of the source task:
+
+.. code:: yaml
+
+    - source: tasks/random-forest-regressor.py
+
+
+This is how your task should look like in the end
+
+.. code:: yaml
+
+    - source: tasks/random-forest-regressor.py
+      name: random-forest-
+      product:
+        nb: output/random-forest-regressor.ipynb
+      grid:
+            # creates 4 tasks (2 * 2)
+            n_estimators: [5, 10]
+            criterion: [gini, entropy]
+
+
+In addition, we'll need to add a flag to tell the pipeline to execute in parallel.
+Open `playground/pipeline.yaml` and add the following code above the `-tasks` section (line 1):
+
+yaml
+
+# Execute independent tasks in parallel
+executor: parallel
+
+
+.. code:: sh
+
+   ploomber plot
+
+
+.. figure:: images/parallel-tasks.png
+   :alt: parallel-tasks
+
+   We can see this pipeline has multiple new tasks.
+
+
+.. code:: sh
+
+   ploomber build
+
+10. Execution in the cloud
+--------------------------
 
 When working with datasets that fit in memory, running your pipeline is
 simple enough, but sometimes you may need more computing power for your
 analysis. Ploomber makes it simple to execute your code in a distributed
 environment without code changes.
+
 
 Check out `Soopervisor <https://soopervisor.readthedocs.io>`_, the
 package that implements exporting Ploomber projects in the cloud with
@@ -379,8 +445,8 @@ support for:
 -  `AWS Batch <https://soopervisor.readthedocs.io/en/latest/tutorials/aws-batch.html>`_
 -  `Airflow <https://soopervisor.readthedocs.io/en/latest/tutorials/airflow.html>`_
 
-9. Resources
-------------
+11. Resources
+-------------
 
 Thanks for taking the time to go through this tutorial! We hope you
 consider using Ploomber for your next project. If you have any questions
