@@ -275,10 +275,11 @@ intuitive training tools that demonstrate the core issues surrounding classical
 methods and how robust analogues compare.
 
 As mentioned, computational notebooks that run in the cloud offer a unique solution to
-learning beyond that of static textbooks and documentation. Since narration,
-visualization, widgets (e.g., buttons, slider bars), and code can all be
-experienced in a ready-to-go compute environment, learning can be interactive
-and exploratory—with no overhead related local environment setup.
+learning beyond that of static textbooks and documentation. Learning can be interactive
+and exploratory since narration, visualization,
+widgets (e.g., buttons, slider bars), and code can all be
+experienced in a ready-to-go compute environment—with no overhead
+related to local environment setup.
 
 As a compendium to Hypothesize, and a resource for understanding and teaching robust statistics
 in general, the `robust statistics simulator <https://github.com/Alcampopiano/robust_statistics_simulator)>`_
@@ -287,9 +288,11 @@ It is a notebook-based collection of interactive demonstrations aimed at clearly
 explaining the conditions under which classic methods fail relative to robust methods.
 A hosted notebook with the rendered visualizations of the
 simulations `can be accessed here <https://deepnote.com/workspace/allan-campopiano-4ca00e1d-f4d4-44a2-bcfe-b2a17a031bc6/project/robust-stats-simulator-7c7b8650-9f18-4df2-80be-e84ce201a2ff/%2Fnotebook.ipynb>`_.
-and seen in Figure :ref:`sim`.
+and seen in Figure :ref:`sim`. Since the simulations run in the browser and require
+very little understanding of code, students and teachers can easily onboard
+to the study of robust statistics.
 
-The robust statistics simulator allows the user to interact with the following parameters:
+The robust statistics simulator allows users to interact with the following parameters:
 
 - Distribution shape
 - Level of contamination
