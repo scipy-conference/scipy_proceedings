@@ -116,10 +116,13 @@ Modern robust methods
 When it comes to hypothesis testing, one intuitive way of dealing with the issues described
 above would be to (1) replace the sample mean (and standard deviation) with
 a robust alternative and (2) use a non-parametric resampling technique to
-estimate the sampling distribution (rather than assuming a theoretical shape).
+estimate the sampling distribution (rather than assuming a theoretical shape) [#f1]_.
 Two such candidates are the 20% trimmed mean and the percentile bootstrap test,
 both of which have been shown to have practical value when dealing with issues
 of outliers and non-normality :cite:`campopiano2018statslab`:cite:`wilcox2013introduction`.
+
+
+.. [#f1] Another option is to use a parametric test that assumes a different underlying model.
 
 The trimmed mean
 ****************
