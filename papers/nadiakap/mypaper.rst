@@ -89,13 +89,12 @@ By randomizing we get
 .. math::
    :label: rfx
    
-   F(X) = E(f(x))\to\min_{x \in R_n }
+   F(X) = E[f(X)]\to\min_{x \in R_n }
 
-where  X is a set of random vectors with values from :math:`R^n` .
+where  X is a random vector from :math:`R^n`, {X} is a set of such random vectors, and :math:`E[\cdot]` is the expectation operator. 
 
-The solution of :ref:`rfx` is a random vector from  {X} that optimizes a functional F(X) .
-
-Note that :ref:`fx` and :ref:`rfx` are equivalent (see [KAP]_ for proof) and :ref:`rfx` is the stochastic optimization problem of the functional F(X) .
+Problem  :ref:`rfx` is equivalent to problem :ref:`fx` in the sense that any realization of the random vector :math:`X^*`, where :math:`X^*` is a solution to :ref:`rfx`, that has a nonzero probability, will be a solution to problem :ref:`fx`(see [KAP]_ for proof). 
+Note that :ref:`rfx` is the stochastic optimization problem of the functional F(X) .
 
 To study the gradient nature of the solution algorithms for problem :ref:`rfx`, a variation of objective functional  F(X)  will be considered.
 
