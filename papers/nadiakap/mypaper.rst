@@ -65,7 +65,7 @@ Outline of the approach
 
 The approach works for non-smooth or algorithmically defined functions.  For detailed description of the approach see [KAP]_, [KP]_.
 In this approach the original optimization problem is replaced with a randomized problem, allowing the use of Monte-Carlo methods for calculating integrals.
-This is especially important if objective function is given by its values (no analytical formula) and derivatives
+This is especially important if the objective function is given by its values (no analytical formula) and derivatives
 are not known. The original problem is restated in the framework of gradient (sub gradient) methods, employing the
 standard theory (convergence theorems for gradient (sub gradient) methods), whereas no derivatives of the objective
 function are needed. At the same time, the method obtained is a method of nonlocal search unlike other gradient methods.
