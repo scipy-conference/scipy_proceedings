@@ -113,7 +113,7 @@ significance :cite:`wilcox1998many`.
 Modern robust methods
 ---------------------
 
-When it comes to hypothesis testing, an intuitive way of dealing with the issues described
+When it comes to hypothesis testing, one intuitive way of dealing with the issues described
 above would be to (1) replace the sample mean (and standard deviation) with
 a robust alternative and (2) use a non-parametric resampling technique to
 estimate the sampling distribution (rather than assuming a theoretical shape).
