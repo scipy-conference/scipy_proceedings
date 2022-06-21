@@ -115,7 +115,7 @@ walkthrough of its central workflow with respect to ``livelike``, a package for
 population synthesis and residential characterization, and ``actlike`` a package for
 activity allocation. We provide preliminary usage examples for Likeness based on 1) social
 contact networks in POIs 2) 24-hour POI occupancy characteristics. Finally, we discuss
-existing limitations and outlook for future development.
+existing limitations and the outlook for future development.
 
 
 Overview of Core Capabilities and Workflow
@@ -135,16 +135,17 @@ U.S. Census Bureau's ACS Summary File (SF) and Census Microdata APIs, enabling t
 production of activity models on-the-fly.
 
 .. figure:: figs/likeness_workflow.png
-   :scale: 65%
+   :scale: 63%
    :align: center
    :figclass: whbt
 
-   Likeness core capabilities and workflow. :label:`fig:workflow`
+   Core capabilities and workflow of Likeness. :label:`fig:workflow`
+
 
 Likeness features three core capabilities supporting activity simulation with vivid
 synthetic populations (Figure :ref:`fig:workflow`). The first, spatial allocation, is
-provided by the ``pymedm`` and ``pmedm_legacy`` packages and uses iterative
-proportional fitting (IPF) to downscale census microdata records to small neighborhood
+provided by the ``pymedm`` and ``pmedm_legacy`` packages and uses Iterative
+Proportional Fitting (IPF) to downscale census microdata records to small neighborhood
 areas, providing a basis for population synthesis. Baseline residential synthetic
 populations are then created and stratified into agent segments (e.g., grade 10 students,
 hospitality workers) using the ``livelike`` package. Finally, the ``actlike``
@@ -161,8 +162,8 @@ Spatial Allocation: the ``pymedm`` & ``pmedm_legacy`` packages
 Synthetic populations are typically generated from census microdata, which consists of a
 sample of publicly available longform responses to official statistical surveys. To
 preserve respondent confidentiality, census microdata is often published at spatial
-scales the size of a city or larger. A family of spatial allocation methods known as
-Iterative Proportional Fitting (IPF) provide a maximum-likelihood estimator for microdata
+scales the size of a city or larger. Spatial allocation with 
+IPF provides a maximum-likelihood estimator for microdata
 responses in small (e.g., neighborhood) areas based on aggregate data published about
 those areas (known as "constraints"), resulting in a baseline for population synthesis
 :cite:`wheaton2009synthesized, beckman1996creating, templ2017simulation`. UrbanPop is
@@ -179,7 +180,7 @@ objective function (Eq. :ref:`eq:pmedm`) is written as:
 where :math:`w_{it}` is the estimate of variable :math:`i` in zone :math:`t`,
 :math:`d_{it}` is the synthetic estimate of variable :math:`i` in location :math:`t`,
 :math:`n` is the number of microdata responses, and :math:`N` is the total population
-size.  Uncertainty in variable estimates is handled by adding an error term to the
+size. Uncertainty in variable estimates is handled by adding an error term to the
 allocation :math:`\sum_{k}\frac{e^2_{k}}{2\sigma_{k}^2}`, where :math:`e_k` is the
 error between the synthetic and published estimate of ACS variable :math:`k` and
 :math:`\sigma_k` is the ACS standard error for the estimate of variable :math:`k`. 
@@ -195,10 +196,11 @@ depending upon the use-case.
 
 Downscaling the PUMS from the Public-Use Microdata Area (PUMA) level at which it is
 offered (100,000 or more people) to these neighborhood scales then enables us to produce
-synthetic populations (the ``livelike`` package) and simulate their travel to POIs
-(the ``actlike`` package) in an integrated model. To our knowledge, this integrated
-model is the first instance of a microsimulation that is carried out with respect to both
-real-world transportation networks and POIs.
+synthetic populations (the ``livelike`` package) and simulate their travel to POIs (the
+``actlike`` package) in an integrated model. This approach provides a new means of modeling
+population mobility and activity spaces with respect to real-world transportation networks
+and POIs, in turn enabling investigation of social processes from the atomic (e.g., person)
+level in human systems.
 
 Likeness offers two implementations of P-MEDM. The first, the ``pymedm`` package, is
 written natively in Python based on ``scipy.optimize.minimize``, and while fully
@@ -219,10 +221,10 @@ required to solve the P-MEDM problem:
 - The target (e.g., block group) and aggregate (e.g., tract) zone constraints based on population-level estimates available in the ACS SF.
 - The target/aggregate zone 90% margins of error and associated standard errors (:math:`SE = 1.645 \times MOE`).
 
-The ``PMEDM`` classes feature an inner method, ``solve()``, that returns an optimized
+The ``PMEDM`` classes feature a ``solve()`` method that returns an optimized
 P-MEDM solution and allocation matrix. Through a ``diagnostics`` module, users may then
-evaluate a P-MEDM solution based on the proportion of published 90% margins of error
-(MOEs) from the summary-level ACS data preserved at the target (allocation) scale.
+evaluate a P-MEDM solution based on the proportion of published 90% MOEs 
+from the summary-level ACS data preserved at the target (allocation) scale.
 
 
 Population Synthesis: the ``livelike`` package
@@ -314,7 +316,7 @@ workers by industry, students by grade) for activity modeling with the ``actlike
 package. Agent segments may be identified in several ways:
 
 
-- Using ``acs.extract_pums_segment_ids()`` to fetch the person IDs (household serial number + person line number) from the Census Microdata API matching some criteria of interest (e.g., public school students in 10th grade).
+- Using ``acs.extract_pums_segment_ids()`` to fetch the person IDs (household serial number + person line number) from the Census Microdata API matching some criteria of interest (e.g., public school students in 10\ :sup:`th` grade).
 - Using ``acs.extract_pums_descriptors()`` to fetch criteria that may be queried from the Census Microdata API. This is useful when dealing with criteria more specific than can be directly controlled for in the P-MEDM problem (e.g., detailed NAICS code of worker, exact number of hours worked). 
 
 The function ``est.tabulate_by_serial()`` is then used to tabulate agents by target
@@ -357,11 +359,12 @@ Activity Allocation: the ``actlike`` package
 --------------------------------------------
 
 The ``actlike`` package :cite:`gaboardi_simulating_2022` allocates agents from synthetic
-populations generated by ``livelike`` to points of interest (POI), like schools and
+populations generated by ``livelike`` POI, like schools and
 workplaces, based on optimal allocation about transportation networks derived from
 ``osmnx`` and ``pandana`` :cite:`boeing_osmnx_2017, foti_generalized_2012`.
-Solutions are the product of a modified integer program (Transportation Problem) modeled
-in ``pulp`` or ``mip`` :cite:`mitchell_pulp_2011, santos_mixed_2020`, whereby supply
+Solutions are the product of a modified integer program
+(Transportation Problem :cite:`hitchcock_distribution_1941, koopmans_optimum_1949, miller_geographic_2001, miller_geographic_2015`)
+modeled in ``pulp`` or ``mip`` :cite:`mitchell_pulp_2011, santos_mixed_2020`, whereby supply
 (students/workers) are "shipped" to demand locations (schools/workplaces), with
 potentially relaxed minimum and maximum capacity constraints at demand locations.
 Impedance from nighttime to daytime locations (Origin-Destination [OD] pairs) can be
@@ -377,7 +380,7 @@ site pseudo-neighborhood clusters of random points, we adopt a dasymetric
 whereby household locations are only placed within blocks known to have been populated at
 a particular period in time and are placed with a greater frequency proportional to
 reported household density :cite:`lovelace_truncate_2013`. We employ population and
-housing counts within 2010 Decennial Census blocks to build a modified Variable Size Bin
+housing counts within 2010 Decennial Census blocks to formulate a modified Variable Size Bin
 Packing Problem :cite:`friesen_variable_1986, correia_solving_2008` for each populated
 block group, which allows for an optimal placement of household points and is accomplished
 by the ``actlike.block_denisty_allocation()`` function that creates and solves an
@@ -400,8 +403,7 @@ representations within network space :cite:`Gaboardi2020a`.
 
 With a cost matrix from all residences to daytime locations calculated, the simulated
 population can then be "sent" to the likely activity spaces by utilizing an instance of
-``actlike.ActivityAllocation`` to generate an adapted Transportation Problem
-:cite:`hitchcock_distribution_1941, koopmans_optimum_1949, miller_geographic_2001, miller_geographic_2015`.
+``actlike.ActivityAllocation`` to generate an adapted Transportation Problem.
 This mixed integer program, solved using the ``solve()`` method, optimally associates all
 population within an activity space with the objective of minimizing the total cost of
 impedance (Eq. :ref:`eq:tp:obj:func`), being subject to potentially relaxed minimum and
@@ -459,10 +461,10 @@ an integer value to the ``reduce_seed`` keyword argument. By triggering this
 functionality, the count and magnitude of reduction is determined algorithmically. A
 random reduction of this nature is beneficial in generating dispersed solutions that do
 not resemble compact clusters, with an example being the replication of a private school's
-study body that does not adhere to public school attendance zones. 
+student body that does not adhere to public school attendance zones. 
 
 After the optimal solution is found for an ``actlike.ActivityAllocation`` instance,
-selected decisions are isolated from non-negative decision variables with the
+selected decisions are isolated from non-zero decision variables with the
 ``realized_allocations()`` method. These allocations are then used to generate
 solution routes with the ``network_routes()`` function that represent the shortest
 path along the network traversed from residential locations to assigned activity spaces.
@@ -491,13 +493,13 @@ Data [#footnote6]_.
 .. [#footnote5] https://hifld-geoplatform.opendata.arcgis.com
 .. [#footnote6] https://nces.ed.gov/ccd/files.asp
 
-We chose the Knox County School District, which coincides with Knox county boundaries, as
+We chose the Knox County School District, which coincides with Knox County's boundaries, as
 our study area. We used the ``livelike`` package to create 30 synthetic populations
-for the Knoxville Core-Based Statistical Area (CBSA), then for each simulation: 
+for the Knoxville Core-Based Statistical Area (CBSA), then for each simulation we: 
 
-- Isolated agent segments from the synthetic population. K–12 educators consist of full-time workers employed as primary education and secondary education teachers (2018 Standard Occupation Classification System codes 2300–2320) in elementary and secondary schools (NAICS 6111). We separated out student agents by public schools and by grade level (Kindergarten through Grade 12).
+- Isolated agent segments from the synthetic population. K–12 educators consist of full-time workers employed as primary and secondary education teachers (2018 Standard Occupation Classification System codes 2300–2320) in elementary and secondary schools (NAICS 6111). We separated out student agents by public schools and by grade level (Kindergarten through Grade 12).
 - Performed *IBB* allocation to simulate the household locations of workers and students. Our selection of household locations for workers and students varied geographically. Because school attendance in Knox County is restricted by district boundaries, we only placed student households in the PUMAs intersecting with the district (FIPS 4701601, 4701602, 4701603, 4701604). However, because educators may live outside school district boundaries, we simulated their household locations throughout the Knoxville CBSA.
-- Used ``actlike`` to perform optimal allocation of workers and students about road networks in Knox County/Knoxville CBSA. Across the 30 simulations and 14 segments identified, we produced a total of 420 travel simulations. Network impedance was measured in geographic distance for all students simulations and travel time for all educator simulations.
+- Used ``actlike`` to perform optimal allocation of workers and students about road networks in Knox County/Knoxville CBSA. Across the 30 simulations and 14 segments identified, we produced a total of 420 travel simulations. Network impedance was measured in geographic distance for all student simulations and travel time for all educator simulations.
 
 Figure :ref:`fig:k12:10pub:student` demonstrates the optimal allocations, routing, and
 network space for a single simulation of 10\ :sup:`th` grade public school
@@ -514,14 +516,14 @@ adherence to network space.
    :align: center
    :figclass: w
 
-   Optimal allocations for one simulation of 10\ :sup:`th` grade public schools in Knox County, TN. :label:`fig:k12:10pub:student`
+   Optimal allocations for one simulation of 10\ :sup:`th` grade public school students in Knox County, TN. :label:`fig:k12:10pub:student`
 
 .. _Students:
 
 Students
 ++++++++
 
-Our study of K–12 students examine social contact networks with respect to potentially
+Our study of K–12 students examines social contact networks with respect to potentially
 underserved student populations via the compositional characteristics of POIs (schools).
 
 We characterized each school's student body by identifying student profiles based on
@@ -587,7 +589,7 @@ close to capacity. In the afternoon, workers begin to gradually depart at 3:00 P
 (``t1700``–``t1800``), by which most have returned home.
 
 Geographic differences are also visible and may be a function of (1) a higher
-concentration of a particular school type (e.g. elementary, middle, high) in this area and
+concentration of a particular school type (e.g., elementary, middle, high) in this area and
 (2) staggered starts between these types (to accommodate bus schedules, etc.). This could
 be due in part to concentrations of different school schedules by grade level, especially
 elementary schools starting much earlier than middle and high schools [#footnote:sch:conc]_.
@@ -618,7 +620,7 @@ Validation & Diagnostics
    \caption{Validating optimal allocations considering reported enrollment at public schools \& faculty employment at all schools. \DUrole{label}{table:validation}}
    \end{table*}
 
-A determination of modeling output robustness is needed to validate our results.
+A determination of modeling output robustness was needed to validate our results.
 Specifically, we aimed to ensure the preservation of relative facility size and
 composition. To perform this validation, we tested the optimal allocations of those
 generated by Likeness against the maximally adjusted reported enrollment & faculty
@@ -627,8 +629,11 @@ population synthesis phase resulted in a total demographic segment greater than 
 total facility capacity. We employed Canonical Correlation Analysis (CCA)
 :cite:`knapp_canonical_1978` for the K–12 public school student allocations due to their
 stratified nature, and an ordinary least squares (OLS) simple linear regression for the
-educator allocations :cite:`scikit-learn`. The CCA for students was performed in two components:
-Between-Destination, which measures capacity across *facilities*, and
+educator allocations :cite:`scikit-learn`. Because CCA is a multivariate measure, it is
+only a suitable diagnostic for activity allocation when multiple segments (e.g., students
+by grade) are of interest. For educators, which we treated as a single agent segment
+without stratification, we used OLS regression instead. The CCA for students was performed
+in two components: Between-Destination, which measures capacity across *facilities*, and
 Within-Destination, which measures capacity across *strata*.
 
 Descriptive Monte Carlo statistics from the 30 simulations were run on the resultant
@@ -649,7 +654,7 @@ Our `Case Study`_ demonstrates the twofold benefits of modeling human dynamics w
 vivid synthetic populations. Using Likeness, we are able to both produce a more reasoned
 estimate of the neighborhoods in which people reside and interact than existing synthetic
 population frameworks, as well as support more nuanced characterization of human
-activities at specific POIs (social contact networks, occupancy).
+activities at specific POIs (e.g., social contact networks, occupancy).
 
 The examples provided in the `Case Study`_ show how this refined understanding of
 human dynamics can benefit planning applications. For example, in the event of a localized
@@ -659,14 +664,14 @@ more students from single caregiver vs. married family households). Additionally
 occupancy dynamics demonstrated in `Workers (Educators)`_ could be used to assess the
 times at which worker commutes to/from places of employment might be most sensitive to a
 nearby disruption. Another application in the public health sphere might be to use
-occupancy estimates to anticipate the best time of day to reach workers, e.g., during a
-vaccination campaign.
+occupancy estimates to anticipate the best time of day to reach workers, during a
+vaccination campaign, for example.
 
 Our case study had several limitations that we plan to overcome in future work. First, we
 assumed that all travel within our study area occurs along road networks. While road-based
 travel *is* the dominant means of travel in the Knoxville CBSA, this assumption is
 not transferable to other urban areas within the United States. Our eventual goal is to
-build in additional modes of travel like public transit, walk/bike, and ferries using by
+build in additional modes of travel like public transit, walk/bike, and ferries by
 expanding our ingest of OpenStreetMap features.
 
 Second, we do not yet offer direct support for non-traditional schools (e.g., populations
@@ -687,7 +692,7 @@ Conclusion
 
 The Likeness toolkit enhances agent creation for modeling human dynamics through its dual
 capabilities of high-fidelity ("vivid") agent characterization and travel along
-real-world transportation networks to points of interest (POIs). These capabilities
+real-world transportation networks to POIs. These capabilities
 benefit planners and urban researchers by providing a richer understanding of how spatial
 policy interventions can be designed with respect to how people live, move, and interact.
 Likeness strives to be flexible toward a variety of research applications linked to human
