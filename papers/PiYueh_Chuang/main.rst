@@ -330,7 +330,7 @@ However, this discrepancy does not change the qualitative findings and conclusio
 ++++++++++++
 
 Figure :ref:`fig:tgv-pinn-training-convergence` shows the convergence history of the total residuals (equation (:ref:`eq:total-residual`)).
-Using more GPUs did not accelerate the convergence, contrary to what we expected.
+Using more GPUs in weak scaling (i.e., more training points) did not accelerate the convergence, contrary to what we expected.
 All cases converged at a similar rate.
 Though without a quantitative criterion or justification, we considered that further training would not improve the accuracy.
 Figure :ref:`fig:tgv-pinn-contour-t32` gives a visual taste of what the predictions from the neural network look like.
