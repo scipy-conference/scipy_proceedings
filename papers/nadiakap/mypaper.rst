@@ -34,7 +34,7 @@ Introduction
 Optimization lies at the heart of machine learning and data science.
 One of the most relevant problems in machine learning is automatic selection of the algorithm depending on
 the objective. This is necessary in many applications such as robotics, simulating biological or chemical
-processes, trading strategies optimization, to name a few.
+processes, trading strategies optimization, to name a few [KHNT]_.
 We developed a library of optimization methods as a first step for self-adapting algorithms. Optimization
 methods in this library work with all objectives including very onerous ones, such as black box functions
 and functions given by computer code, and the convergences of methods is guaranteed. This library allows
@@ -289,4 +289,4 @@ References
 .. [TMAACBA] Thoufeili Taufek, Yupiter H.P. Manurung, Mohd Shahriman Adenan, Syidatul Akma, Hui Leng Choo, Borhen Louhichi, Martin Bednardz, and Izhar Aziz. Modeling and Simulation of Additively Manufactured Cylindrical Component Using Combined Thermomechanical and Inherent Strain Method with Nelder–Mead Optimization, 3D Printing and Additive Manufacturing
 .. [CTC] Vismara, P., Coletta, R. & Trombettoni, G. Constrained global optimization for wine blending. 2016
 .. [CWC] Terry Hui-Ye Chiu, Chienwen Wu, Chun-Hao Chen, A Generalized Wine Quality Prediction Framework by Evolutionary Algorithms, International Journal of Interactive Multimedia and Artificial Intelligence, Vol. 6, Nº7,2021
-
+.. [KHNT] Pascal Kerschke, Holger H. Hoos, Frank Neumann, Heike Trautmann; Automated Algorithm Selection: Survey and Perspectives. Evol Comput 2019
