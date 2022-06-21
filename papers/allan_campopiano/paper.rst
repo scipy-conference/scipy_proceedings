@@ -79,8 +79,9 @@ discussed in the following section.
 Student’s t-distribution
 ------------------------
 
-It turns out that T, the statistic you get from Student’s t-test, is more sensitive to violations
-of normality than even the sample mean (which has already been shown to not be robust).
+Another common statistic is the T-value obtained from Student's t-test.
+As will be demonstrated, T is more sensitive to violations
+of normality than the sample mean (which has already been shown to not be robust).
 This is despite the fact that the t-distribution is also bell shaped, light tailed, and
 symmetrical—a close relative of the normal curve.
 
