@@ -216,6 +216,7 @@ The library is ready to use immediately.
 
 The API for Hypothesize is organized by single- and two-factor tests, as well as
 measures of association. For example, one can compare two independent groups
+(e.g., placebo versus treatment)
 using the 20% trimmed mean and the percentile bootstrap test as follows
 (note that Hypothesize uses the naming conventions found in WRS):
 
@@ -224,7 +225,8 @@ using the 20% trimmed mean and the percentile bootstrap test as follows
     from hypothesize.utilities import trim_mean
     from hypothesize.compare_groups_with_single_factor \
         import pb2gen
-    results=pb2gen(df.column_1, df.column_2, trim_mean)
+
+    results = pb2gen(df.placebo, df.treatment, trim_mean)
 
 As shown below, the results are returned as a Python dictionary containing the p-value,
 confidence intervals, and other important details.
@@ -248,7 +250,8 @@ Winsorized correlation which is a robust alternative to Pearson’s R. For examp
 .. code-block:: python
 
     from hypothesize.measuring_associations import wincor
-    results=wincor(df.column_1, df.column_2, tr=.2)
+
+    results = wincor(df.height, df.weight, tr=.2)
 
 returns the Winsorized correlation coefficient and other relevant statistics:
 
