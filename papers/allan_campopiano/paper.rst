@@ -65,6 +65,17 @@ can have a large impact on commonly used statistics. The problems get even worse
 at the effect of contamination on statistical power and effect sizes but these findings are not
 discussed in this article. Interested readers should see :cite:`wilcox1992can`.
 
+Perhaps one could argue that the contaminated normal distribution actually represents
+an extreme departure from normality and therefore should not be taken seriously; however,
+distributions that generate outliers are likely common in practice
+(:cite:`hill1982robustness`:cite:`micceri1989unicorn`:cite:`wilcox2009robust`).
+A reasonable goal would then be to choose methods that perform well
+under such situations and continue to perform well under normality.
+In addition, serious issues still exist even when examining
+light-tailed and skewed distributions (e.g., lognormal), and statistics
+other than the sample mean (e.g., T). These finding will be
+discussed in the following section.
+
 Student’s t-distribution
 ------------------------
 
