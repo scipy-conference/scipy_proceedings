@@ -99,7 +99,7 @@ Note that :ref:`fx` and :ref:`rfx` are equivalent (see [KAP]_ for proof) and :re
 
 To study the gradient nature of the solution algorithms for problem :ref:`rfx`, a variation of objective functional  F(X)  will be considered.
 
-The suggested approach makes it possible to obtain optimization methods in systematic way, similar to methodology adopted in smooth optimization. 
+The suggested approach makes it possible to obtain optimization methods in systematic way, similar to the methodology adopted in smooth optimization. 
 Derivation includes randomization of the original optimization problem, finding directional derivative for the randomized problem and choosing moving direction Y based on the condition that directional derivative in the direction of Y is being less or equal to 0.
 
 Because of randomization, the expression for directional derivative doesn't contain the differential characteristics of the original function. We obtain the condition for selecting the direction of search Y in terms of its characteristics - conditional expectation. Conditional expectation is a vector function (or vector field) and can be decomposed (following the theorem of decomposition of the vector field) into the sum of the gradient of scalar function P and a function with zero divergence. P is called a potential function. As a result the original problem is reduced to optimization of the potential function, furthermore, the potential function is specific for each iteration step. Next, we arrive at partial differential equation that connects P and the original function.
