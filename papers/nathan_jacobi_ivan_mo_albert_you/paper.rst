@@ -151,14 +151,11 @@ Predictions for Detecting Modern Shifts
 =======================================
 
 Following the generation of temporally aligned word embedding, they can be used for semantic shift analysis.
-Machine learning algorithms can easily recognize patterns between past and present semantic shifts, but for our purposes,
-the problem becomes determining which patterns are indicative of the disease outbreak that was ongoing during the initial Scott County HIV outbreak.
-Our initial solution involves determining patterns within medical related terms, as those words are semantically linked to a medical emergency such as this outbreak.
 Using the word embedding vectors generated for each temporal bucket, a new data set was created to use for determining semantic shift patterns.
-All 18 temporal observations of each word were included in this data set, however rather than using the embedding for each word for each temporal bucket,
+All 18 temporal observations of each word were included in this data set, however rather than using the embedding for each word from each temporal bucket,
 the change in the embeddings between each consecutive bucket was used instead, subtracting the first temporal bucket's embedding from the second. 
-The reasoning for this was so that in analysis of future corpora, shifts in terms rather than solely their location can be studied to look for trends.
-Additionally, a ten dimensional representation of vector for the initial and next time period were listed as features, so position in the embedding space kept significance.
+The reasoning for this was so that in analysis of future corpora, shifts in terms—rather than solely their location in the embedding space—can be studied to look for trends.
+In addition to the the change in the 100 dimensioned vector, the initial and final positions  
 This yielded each word having 17 observations and 120 features: {d_vec0 … d_vec99, v_init_0 … v_init_9, v_fin_0 … v_fin_9}.
 
 Using these data, two machine learning alogrithms were performed: unsupervised k-means clustering, and a supervised neural network. 
@@ -166,6 +163,11 @@ Initial attemps at k-means yeilded extremely large intertial values, therefore f
 Inertia at convergence on 8 cluster K-Means was reduced significantly, by around 86%, yielding significantly better results.
 Following the clustering, the results were analyzed to determine which clusters contained the higher than average incidence rates of medical terms and HIV/AIDS related terms.
 These clusters are then considered target clusters, and large incidences of words being clustered within these can be flagged as indicative as a possible outbreak.
+
+Machine Learning Predictions
+============================
+
+K-Means clustering revealed measurable differences in trajectories of medical and HIV related terms compared to non-medical terms. Following this discovery, we created a neural network model for binary classification of our terms. Our target class was terms that we hypothesized were closely related to the HIV epidemic in Scott County, i.e. any word in our HIV terms list. Our data set was composed of 
 
 Results
 -------
@@ -340,10 +342,6 @@ If certain clusters begin having an increased rate of appearing, it can be flagg
 
    Bar Graph Showing KMeans Clustering Distribution of HIV Terms against All Terms :label:`hivplot`
    
-Machine Learning Predictions
-============================
-
-K-Means clustering revealed measurable differences in trajectories of medical and HIV related terms compared to non-medical terms. Following this discovery, we created a neural network model for binary classification of our terms. Our target class was terms that we hypothesized were closely related to the HIV epidemic in Scott County, i.e. any word in our HIV terms list. Our data set was
 
 Conclusion
 ----------
