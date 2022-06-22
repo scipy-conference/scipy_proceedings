@@ -55,17 +55,17 @@ Proprietary classical molecular dynamics code Desmond (distributed by Schröding
 Figure :ref:`fig2` gives an overview of some of the various products that compose the Schrödinger Materials Science Suite.
 The various workflows are implemented mainly in Python (some of them described below), calling on proprietary or open-source code where appropriate, again, to improve the performance of the software and reduce overall maintenance.
 
-.. figure:: fig_product.png
-   :align: center
-   :figclass: w
-
-   Some example products that compose the Schrödinger Materials Science Suite. :label:`fig2`
-
 The materials discovery cycle can be run in a high-throughput manner, enumerating different structure modifications in a systematic fashion, such as doping ratio in a semiconductor or depositing different adsorbates.
 As we will detail herein, there are several open source packages that allow the user to generate a large number of structures, run calculations in high throughput manner and analyze the results.
 For example, pymatgen open source package [pymatgen]_ facilitates generation and analysis of periodic structures.
 It can generate inputs and read outputs of several packages, such as QE and also commercial VASP and Gaussian codes, etc.
 To run and manage workflow jobs in a high-throughput manner, open source packages such as Custodian [pymatgen]_ and AiiDA [AiiDA]_ can be used.
+
+.. figure:: fig_product.png
+   :align: center
+   :figclass: w
+
+   Some example products that compose the Schrödinger Materials Science Suite. :label:`fig2`
 
 
 Materials import and generation
@@ -121,7 +121,7 @@ For example, in case when the simulation is not converging to a requested energy
 However, in the case of full disk space failure, it is reasonable to try restart with hopes to get a node with more empty disk space.
 If a job fails (and can not be restarted), all its children (if any) will not start, thus saving queuing and computational time.
 
-Having developed robust systems for running calculations, queueing and troubleshooting (autonomously, when applicable), the developed workflows have allowed us and our customers to perform massive screenings of materials and their properties.
+Having developed robust systems for running calculations, job queuing and troubleshooting (autonomously, when applicable), the developed workflows have allowed us and our customers to perform massive screenings of materials and their properties.
 For example, we reported a massive screening of 250,000 charge-conducting organic materials, totaling approximately 3,619,000 DFT SCF (self-consistent field) single-molecule calculations using Jaguar that took 457,265 CPU hours (~52 years) [CScreen]_.
 Another similar case study is the high-throughput molecular dynamics simulations (MD) of thermophysical properties of polymers for various applications [MDS]_.
 There, using Desmond we computed the glass transition temperature (:math:`T_g`) of 315 polymers and compared the results with experimental measurements [Bicerano]_.
@@ -148,7 +148,14 @@ Recently we implemented convex analysis of the stress strain curve (as described
 ``scipy.optimize.minimize`` [ScipyOptimize]_ is used for a constrained minimization with boundary conditions of a function related to the stress strain curve.
 The stress strain curve is obtained from a series of MD simulations on deformed cells (cell deformations are defined by strain type and deformation step).
 The pressure tensor of a deformed cell is related to stress.
-This analysis allowed prediction of elongation at yield for high density polyethylene polymer and comparison to experimental data [Convex]_.
+This analysis allowed prediction of elongation at yield for high density polyethylene polymer.
+Obtained calculated yield of 10% *vs.* experimental value within 9-18% range (Figure :ref:`fig_stress_strain`) [Convex]_.
+
+.. figure:: fig_stress_strain.png
+   :align: center
+   :figclass: w
+
+   Left: The uniaxial stress/strain curve of a polymer calculated using Desmond MD through the Stress Strain module using the OPLS3 force-field. Grey band indicates inflection point (yield). Right: Constant strain simulation with convex analysis indicates elongation at yield. :label:`fig_stress_strain`
 
 The ``scipy.optimize`` package is used for a least-squares fit of the bulk energies at different cell volumes (compressed and expanded) in order to obtain the bulk modulus and equation of state (EOS) of a material.
 In the Schrödinger suite this was implemented as a part of an EOS workflow, in which fitting is performed on the results obtained from a series of QE calculations performed on the original as well as compressed and expanded (deformed) cells.
