@@ -139,7 +139,7 @@ The following sliding window function illustrates moving the sliding window thro
       except:
          print("An error occurred.")
 
-.. figure:: Fig1.jpeg
+.. figure:: Fig1.png
    :align: center
    :figclass: w
    :scale: 30%
