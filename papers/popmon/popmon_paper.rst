@@ -41,7 +41,9 @@ Introduction
 ------------
 
 Tracking model performance is crucial to guarantee that a model behaves
-as designed initially. Model performance depends directly on the data
+as designed and trained initially, and for determining whether
+to promote a model with the same initial design but trained on
+different data to production. Model performance depends directly on the data
 used for training and the data predicted on. Changes in the
 latter (e.g. certain word frequency, user demographics, etc.) can affect
 the performance and make predictions unreliable.
@@ -106,7 +108,7 @@ is available as open-source software. [1]_
 Related work
 ~~~~~~~~~~~~
 
-Many concept drift algorithms exist that follow a similar
+Many algorithms detecting dataset shift exist that follow a similar
 structure :cite:`lu2018learning`, using various data
 structures and algorithms at each step :cite:`dasu2006information, qahtan2015pca`.
 However, few are readily available to use in production. ``popmon`` offers both a
@@ -118,7 +120,7 @@ Other families of tools have been developed that work on individual data points,
 for model explanations (e.g. SHAP
 :cite:`lundberg2017unified`, feature attributions
 :cite:`sturmfels2020visualizing`), rule-based data
-monitoring :cite:`Gong_Great_Expectations` and outlier
+monitoring (e.g. Great Expectations, Deequ :cite:`Gong_Great_Expectations, deequ`) and outlier
 detection (e.g.
 :cite:`rabanser2019failing, lopez2017revisiting`).
 
@@ -205,8 +207,8 @@ shift see Quinonero-Candela et al.
 :cite:`quinonero2008dataset`.
 
 ``popmon`` is primarily interested in monitoring the distributions of
-features :math:`p(x)` and label :math:`p(y)`, for trained classifiers,
-the data in deployment ideally resembles the training data. However, the package
+features :math:`p(x)` and labels :math:`p(y)` for monitoring trained classifiers.
+These data in deployment ideally resembles the training data. However, the package
 can be used more widely, for instance by monitoring interactions between
 features and the label, or the distribution of model predictions.
 
@@ -263,7 +265,8 @@ approach taken in ``popmon``.
 Histograms are small in size, and thus are efficiently stored and
 transferred, regardless of the input dataset size. Once data
 records have been aggregated feature-wise, with a minimum number of
-entries per bin, they are typically no longer privacy sensitive.
+entries per bin, they are typically no longer privacy sensitive
+(e.g. knowing the number of records with age 30-35 in a dataset).
 
 ``popmon`` is primarily looking for changes in data distributions.
 Solely monitoring the (main) profiles of a distribution, such as the
@@ -315,8 +318,7 @@ derived automatically. Both categorical and sparse histograms are
 dictionaries with histogram properties. New (index, bin) pairs get
 created whenever needed. Although this could result in out-of-memory
 problems, e.g. when histogramming billions of unique strings, in
-practice this is typically not an issue.
-
+practice this is typically not an issue, as this can be easily mitigated.
 Features may be transformed into a representation with a lower number
 of distinct values, e.g. via embedding or substrings; or one selects the
 top-:math:`n` most frequently occurring values.
@@ -362,8 +364,8 @@ There is one downside to using histograms: since the data get aggregated
 into bins, and profiles and statistical tests are obtained from the
 histograms, slightly lower resolution is achieved than on the full
 dataset. In practice, however, this is a non-issue; histograms work
-great for data monitoring.
-
+great for data monitoring. The reference type and time-axis binning
+configuration allow the user for selecting an effective resolution.
 
 Comparisons
 -----------
@@ -415,9 +417,9 @@ classifier depends on the similarity of the test data to the training
 data. Moreover, it may pick up an incremental departure (trend) from the initial
 distribution, that will not be significant in comparison to the adjacent
 time-slots. A sliding reference, on the other hand, is updated with more
-recent data, that incorporates this trend. Consider the case where contains a
-price field that is yearly indexed to the inflation, then using a static
-reference may alert purely on the change in trend.
+recent data, that incorporates this trend. Consider the case where the data
+contain a price field that is yearly indexed to the inflation, then using
+a static reference may alert purely on the trend.
 
 The reference implementations are provided for common scenarios, such as
 working with a fixed dataset, batched dataset or with streaming data.
@@ -485,8 +487,8 @@ Profiles
 
 Tracking the distribution of values of interest over time is achieved
 via profiles. These are functions of the input histogram. Metrics may be
-defined for all dimensions (e.g. count, correlations), or specifically
-for say 1D numerical histograms (e.g. quantiles). Extending the existing set of
+defined for all dimensions (e.g. count, correlations), or for specific dimensions
+as in the case of 1D numerical histograms (e.g. quantiles). Extending the existing set of
 profiles is possible via a syntax similar as above:
 
 .. code-block:: python
@@ -523,8 +525,8 @@ incoming data, :math:`\mathrm{pull}_i(t)` follows a normal distribution centered
 around zero and with unit width, :math:`N(0, 1)`, as dictated by the
 central limit theorem :cite:`Fischer2011`.
 
-In practice the criteria for normality are hardly ever met, typically
-resulting in a wider distribution with larger tails, yet approximately
+In practice, the criteria for normality are hardly ever met. Typically
+the distribution is wider with larger tails. Yet, approximately
 normal behaviour is exhibited. Chebyshev’s
 inequality :cite:`chebyshev1867valeurs` guarantees that, for
 a wide class of distributions, no more than :math:`1/k^2` of the
@@ -546,8 +548,8 @@ rules can be static or dynamic, as explained in this section.
 Static monitoring rules
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Static monitoring rules are traditional data quality rules. Denote
-:math:`x_{i}(t)` as metric :math:`i` of feature :math:`x` at time
+Static monitoring rules are traditional data quality rules (e.g. :cite:`rahm2000data`).
+Denote :math:`x_{i}(t)` as metric :math:`i` of feature :math:`x` at time
 :math:`t`, for example the number of NaNs encountered in feature
 :math:`x` on a given day. As an example, the following traffic lights
 might be set on :math:`x_{i}(t)`:
@@ -615,6 +617,7 @@ Reporting
 ---------
 
 .. figure:: report_overview.png
+   :scale: 20%
 
    A snapshot of part of the HTML stability report. It shows the aggregated traffic light overview.
    This view can be used to prioritize features for inspection.
@@ -633,7 +636,7 @@ metrics computed by ``popmon`` are exposed and can be exported into
 other databases, for example Kibana. One downside of producing self-contained reports is
 that they can get large as the plots are pre-computed and embedded. This
 may be mitigated by replacing the plots with interactive visualizations
-(e.g. using Bokeh or plotly express).
+(e.g. using Bokeh :cite:`bokeh` or plotly express :cite:`plotlypy`).
 
 Note that multiple reference types can be used in the same stability
 report. For instance, ``popmon``\ ’s default reference pipelines always
@@ -660,11 +663,11 @@ configurations are available in the code repository.
 
 .. figure:: prev_pearson_led.png
 
-    :label:`pearson1` *LED*: Pearson correlation compared with previous histogram. The shifting points are correctly identified at every 5th of the dataset. Similar patterns are visible for other comparisons, e.g. :math:`\chi^2`.
+    :label:`pearson1` *LED*: Pearson correlation compared with previous histogram. The shifting points are correctly identified at every 5th of the LED dataset. Similar patterns are visible for other comparisons, e.g. :math:`\chi^2`.
 
 .. figure:: prev_pearson_sine1.png
 
-    *Sine1*: The dataset shifts around data points 20.000, 40.000, 60.000 and 80.000 are clearly visible.
+    *Sine1*: The dataset shifts around data points 20.000, 40.000, 60.000 and 80.000 of the Sine1 dataset are clearly visible.
 
 The reports generated by ``popmon`` capture features and time bins where
 the dataset shift is occurring for all tested datasets. Interactions between features
