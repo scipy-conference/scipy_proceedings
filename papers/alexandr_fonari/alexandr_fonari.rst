@@ -155,7 +155,7 @@ Obtained calculated yield of 10% *vs.* experimental value within 9-18% range (Fi
    :align: center
    :figclass: w
 
-   Left: The uniaxial stress/strain curve of a polymer calculated using Desmond MD through the Stress Strain module using the OPLS3 force-field. Grey band indicates inflection point (yield). Right: Constant strain simulation with convex analysis indicates elongation at yield. :label:`fig_stress_strain`
+   Left: The uniaxial stress/strain curve of a polymer calculated using Desmond through the stress strain workflow using the OPLS3 force-field, grey band indicates inflection point (yield)). Right: Constant strain simulation with convex analysis indicates elongation at yield. Red curve - simulated stress versus strain. Blue curve - convex analysis. :label:`fig_stress_strain`
 
 The ``scipy.optimize`` package is used for a least-squares fit of the bulk energies at different cell volumes (compressed and expanded) in order to obtain the bulk modulus and equation of state (EOS) of a material.
 In the Schrödinger suite this was implemented as a part of an EOS workflow, in which fitting is performed on the results obtained from a series of QE calculations performed on the original as well as compressed and expanded (deformed) cells.
