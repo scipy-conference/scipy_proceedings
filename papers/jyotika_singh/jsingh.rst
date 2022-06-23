@@ -16,16 +16,16 @@ pyAudioProcessing: Audio Processing, Feature Extraction and Building Machine Lea
     models, and classifying data with existing pre-trained audio classification models or
     custom user-built models. MATLAB is a popular language of choice for a vast amount of
     research in the audio and speech processing domain. On the contrary, Python remains
-    the language of choice for a vast majority of Machine Learning research and
+    the language of choice for a vast majority of machine learning research and
     functionality. This library contains features built in Python that were originally
-    published in MATLAB following research inventions. PyAudioProcessing allows the user to
+    published in MATLAB as a part of the original research. PyAudioProcessing allows the user to
     compute various features from audio files including Gammatone Frequency Cepstral
     Coefficients (GFCC), Mel Frequency Cepstral Coefficients (MFCC), spectral features,
-    chroma features, and others such as beat based and cepstrum-based features from audio.
+    chroma features, and others such as beat-based and cepstrum-based features from audio.
     One can use these features along with one’s own classification backend or any of the
     popular scikit-learn classifiers that have been integrated into pyAudioProcessing.
     Cleaning functions to strip unwanted portions from the audio are another offering of the library.
-    It further contains integrations with other audio functionalities such as frequency and time series
+    It further contains integrations with other audio functionalities such as frequency and time-series
     visualizations and audio format conversions. This software aims to provide
     machine learning engineers, data scientists, researchers, and students with a set of baseline models
     to classify audio. The library is available at https://github.com/jsingh811/pyAudioProcessing
@@ -39,38 +39,38 @@ pyAudioProcessing: Audio Processing, Feature Extraction and Building Machine Lea
 Introduction
 ============
 
-The motivation behind this software is understanding the popularity of Python for
-Machine Learning and presenting solutions for computing complex audio features using
-Python. This not only implies the need for resources to guide solutions for audio
+The motivation behind this software is to make available complex audio features in Python for a variety of audio processing tasks. Python is a popular
+choice for machine learning tasks. Having solutions for computing complex audio features using Python enables easier and unified usage of Python for building machine learning algorithms on audio.
+This not only implies the need for resources to guide solutions for audio
 processing, but also signifies the need for Python guides and implementations to solve
 audio and speech cleaning, transformation, and classification tasks.
 
 Different data processing techniques work well for different types of data. For
-example, word vector formations work great for text data :cite:`nlp`. However, passing
-numbers data, an audio signal or an image through word vector formation is not likely
-to bring back any meaningful numerical representation that can be used to train
+example, in natural language processing, word embedding is a term used for the representation of words for text analysis, typically in the form of a real-valued numerical vector that encodes the meaning of the word such that the words that are closer in the vector space are expected to be similar in meaning :cite:`enwiki:1091348337`.
+Word embeddings work great for many applications surrounding textual data :cite:`nlp`. However, passing numbers, an audio signal, or an image through a word embeddings generation method is not likely
+to return any meaningful numerical representation that can be used to train
 machine learning models. Different data types correlate with feature formation
 techniques specific to their domain rather than a one-size-fits-all. These methods for
 audio signals are very specific to audio and speech signal processing, which is a domain
 of digital signal processing. Digital signal processing is a field of its own and is not
-feasible to master in an ad-hoc fashion. This calls for the need to have popular and
+feasible to master in an ad-hoc fashion. This calls for the need to have sought-after and
 useful processes for audio signals to be in a ready-to-use state by users.
 
 There are two popular approaches for feature building in audio classification tasks.
 
-1. Computing spectrograms from audios as images and using an image classification
+1. Computing spectrograms from audio signals as images and using an image classification
 pipeline for the remainder.
 
 2. Computing features from audio files directly as numerical vectors and applying
-it to a classification backend.
+them to a classification backend.
 
-PyAudioProcessing includes the capability of computing spectrograms, but mainly
-focusses most functionalities around the latter for building audio models. This tool contains implementation
-of popular and different audio feature extraction along with integration with popular scikit-learn classifiers.
+PyAudioProcessing includes the capability of computing spectrograms, but
+focusses most functionalities around the latter for building audio models. This tool contains implementations
+of various widely used audio feature extraction techniques, and integrates with popular scikit-learn classifiers.
 Audio data can be cleaned, trained, tested, and classified using pyAudioProcessing :cite:`pAP`.
 
 Some other useful libraries for the domain of audio processing include librosa
-:cite:`mcfee2015librosa`, spafe, essentia :cite:`essentia`,
+:cite:`mcfee2015librosa`, spafe :cite:`ayoubmalek2020`, essentia :cite:`essentia`,
 pyAudioAnalysis :cite:`giannakopoulos2015pyaudioanalysis`, and paid services from service
 providers such as Google [#]_.
 
@@ -81,9 +81,9 @@ It is referenced in a text book titled `Artificial Intelligence with Python Cook
 Packt Publishing in October 2020 :cite:`packt`. Additionally, pyAudioProcessing is a part of specific
 admissions requirement for a funded PhD project at University of Portsmouth [#]_.
 It is further referenced in this thesis paper titled "Master Thesis AI Methodologies for Processing
-Acoustic Signals AI Usage for Processing Acoustic Signals" :cite:`phdthesis`, in recent researches in audio
+Acoustic Signals AI Usage for Processing Acoustic Signals" :cite:`phdthesis`, in recent research on audio
 processing for assessing attention levels in Attention Deficit Hyperactivity Disorder (ADHD)
-students :cite:`paper`, and more.
+students :cite:`paper`, and more. There are thus far 16000+ downloads via pip for pyAudioProcessing with 1000+ downloads in the last month :cite:`pepy`. As several different audio features need development, new issues are created on GitHub and contributions to the code by the open-source community are welcome to grow the tool faster.
 
 .. [#] https://www.port.ac.uk/study/postgraduate-research/research-degrees/phd/explore-our-projects/detection-of-emotional-states-from-speech-and-text
 
@@ -93,11 +93,11 @@ Core Functionalities
 PyAudioProcessing aims to provide an end-to-end processing solution for converting between audio file
 formats, visualizing time and frequency domain representations, cleaning with silence and low-activity
 segments removal from audio, building features from raw audio samples, and training a
-machine learning model that can then be used to classify unseen raw audio samples.
+machine learning model that can then be used to classify unseen raw audio samples (e.g., into categories such a music, speech, etc.).
 This library allows the user to extract features such as Mel Frequency Cepstral Coefficients (MFCC) :cite:`6921394`,
 Gammatone Frequency Cepstral Coefficients (GFCC) :cite:`inbook`, spectral features,
-chroma features and other beat based and cepstrum based features from audio to use
-with one’s own classification backend or popular scikit-learn classifiers that have been
+chroma features and other beat-based and cepstrum based features from audio to use
+with one’s own classification backend or scikit-learn classifiers that have been
 built into pyAudioProcessing. The classifier implementation examples that are a part of this software aim to give the users
 a sample solution to audio classification problems and help build the foundation to
 tackle new and unseen problems.
@@ -114,19 +114,19 @@ spectrograms.
 less likely to represent meaningful information.
 
 4. Building numerical features from audio that can be used to train machine learning models. The set of features
-supported evolve with time as research informs new and improved algorithms.
+supported evolves with time as research informs new and improved algorithms.
 
 5. Ability to export the features built with this library to use with any custom machine learning backend of
 the user's choosing.
 
 6. Capability that allows users to train scikit-learn classifiers using features of their choosing directly
-from raw data. This library runs
+from raw data. pyAudioProcessing
 
-  a). automatic hyper-parameter tuning
+  a). runs automatic hyper-parameter tuning
 
-  b). returns to the user the training model metrics along with cross-validation confusion matrix for model evaluation
+  b). returns to the user the training model metrics along with cross-validation confusion matrix (a cross-validation confusion matrix is an evaluation matrix from where we can estimate the performance of the model broken down by each class/category) for model evaluation
 
-  c). allows the users to test the created classifier with the same features used for training
+  c). allows the user to test the created classifier with the same features used for training
 
 7. Includes pre-trained models to provide users with baseline audio
 classifiers.
@@ -139,17 +139,17 @@ Methods and Results
 Pre-trained models
 ------------------
 
-This software offers pre-trained audio classification models for the Python community to aid in quick baseline establishment.
+pyAudioProcessing offers pre-trained audio classification models for the Python community to aid in quick baseline establishment.
 This is an evolving feature as new datasets and classification problems gain prominence in the field.
 
 Some of the pre-trained models include the following.
 
 1. Audio type classifier to determine speech versus music:
 Trained a Support Vector Machine (SVM) classifier for classifying audio into two possible classes - music,
-speech. This classifier was trained using mel frequency cepstral coefficients (MFCC), spectral, and chroma features.
-Confusion matrix produces scores as shown in :ref:`speech-music`.
+speech. This classifier was trained using Mel Frequency Cepstral Coefficients (MFCC), spectral features, and chroma features. This model was trained on manually curated custom samples for speech and music.
+The confusion matrix produces results as shown in :ref:`speech-music`.
 
-.. table:: Confusion matrix for audio type (speech vs music) classification pre-trained model. :label:`speech-music`
+.. table:: Confusion matrix for audio type (speech vs music) classification pre-trained model. (numbers are in % of all samples, and the same no. of samples are considered for each class) :label:`speech-music`
 
      +-----------+------------+------------+
      |           | **Music**  | **Speech** |
@@ -161,11 +161,11 @@ Confusion matrix produces scores as shown in :ref:`speech-music`.
 
 
 2. Audio type classifier to determine speech versus music versus bird sounds:
-Trained Support Vector Machine (SVM) classifier that classifying audio into three possible classes -
-music, speech, birds. This classifier was trained using mel frequency cepstral coefficients (MFCC), spectral and
-chroma features. Confusion matrix has scores as shown in :ref:`speech-music-birds`.
+Trained Support Vector Machine (SVM) classifier for classifying audio into three possible classes -
+music, speech, birds. This classifier was trained using Mel Frequency Cepstral Coefficients (MFCC), spectral features, and
+chroma features. The confusion matrix produces results as shown in :ref:`speech-music-birds`.
 
-.. table:: Confusion matrix for audio type (speech vs music vs bird sound) classification pre-trained model. :label:`speech-music-birds`
+.. table:: Confusion matrix for audio type (speech vs music vs bird sound) classification pre-trained model. (numbers are in % of all samples, and the same no. of samples are considered for each class) :label:`speech-music-birds`
 
      +-----------+------------+------------+------------+
      |           | **Music**  | **Speech** | **Birds**  |
@@ -178,12 +178,12 @@ chroma features. Confusion matrix has scores as shown in :ref:`speech-music-bird
      +-----------+------------+------------+------------+
 
 3. Music genre classifier using the GTZAN :cite:`tzanetakis:2001`:
-Trained on SVM classifier using gammatone frequency cepstral coefficients (GFCC),
-mel frequency cepstral coefficients (MFCC), spectral and chroma features to classify
+Trained on SVM classifier using Gammatone Frequency Cepstral Coefficients (GFCC),
+Mel Frequency Cepstral Coefficients (MFCC), spectral features, and chroma features to classify
 music into 10 genre classes - blues, classical, country, disco, hiphop,
-jazz, metal, pop, reggae, rock. Confusion matrix has scores as shown in :ref:`music-genre`.
+jazz, metal, pop, reggae, rock. The confusion matrix produces results as shown in :ref:`music-genre`.
 
-.. table:: Confusion matrix for music genre classification pre-trained model. :label:`music-genre`
+.. table:: Confusion matrix for music genre classification pre-trained model. (numbers are in % of all samples, and the same no. of samples are considered for each class) :label:`music-genre`
     :class: w
 
     +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
@@ -211,7 +211,7 @@ jazz, metal, pop, reggae, rock. Confusion matrix has scores as shown in :ref:`mu
     +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
 
 
-These baseline models aim to present capability of audio feature generation algorithms
+These models aim to present capability of audio feature generation algorithms
 in extracting meaningful numeric patterns from the audio data. One can train their own
 classifiers using similar features and different machine learning backend for researching
 and exploring improvements.
@@ -225,13 +225,13 @@ getting started with audio processing is well described in :cite:`opensource`.
 pyAudioProcessing allows users to compute GFCC, MFCC, other cepstral features, spectral features,
 temporal features, chroma features, and more. Details on how to extract these features
 are present in the project documentation on GitHub. Generally, features useful in different audio prediction
-tasks (especially speech) include Linear prediction coefficients and Linear prediction cepstral coefficients (LPCC),
-Bark frequency cepstral coefficients (BFCC), Power normalized cepstral coefficients (PNCC), and
+tasks (especially speech) include Linear Prediction Coefficients (LPC) and Linear Prediction Cepstral Coefficients (LPCC),
+Bark Frequency Cepstral Coefficients (BFCC), Power Normalized Cepstral Coefficients (PNCC), and
 spectral features like spectral flux, entropy, roll off, centroid, spread, and energy entropy.
 
 While MFCC features find use in most commonly encountered audio processing tasks such as audio type
 classification, speech classification, GFCC features have been found to have application in speaker
-identification or speaker diarization. Applications, comparisons and uses can be found
+identification or speaker diarization (the process of partitioning an input audio stream into homogeneous segments according to the human speaker identity :cite:`enwiki:1090834931`). Applications, comparisons and uses can be found
 in :cite:`6639061`, :cite:`patent`, and :cite:`patent2`.
 
 pyAudioProcessing library includes computation of these features for audio segments of a single audio,
@@ -290,7 +290,7 @@ it aims to replicate how we hear.
 
    GFCC from audio spectrum. :label:`S2Fig`
 
-GFCCs are formed by passing the spectrum through Gammatone filter bank, followed by
+GFCCs are formed by passing the spectrum through a gammatone filter bank, followed by
 loudness compression and DCT, as seen in Figure :ref:`S2Fig`. The first
 (approximately) 22 features are called GFCCs. GFCCs have a number of applications
 in speech processing, such as speaker identification. GFCC for a sample
@@ -320,7 +320,7 @@ Some sample mean temporal features can be seen in Figure :ref:`temp`.
 ^^^^^^^^^^^^^^^^^^^^^
 
 Spectral features on the other hand derive information contained in the frequency domain representation of an audio signal.
-The signal can be converted from time domain to frequency domain using Fourier Transform. Useful
+The signal can be converted from time domain to frequency domain using the Fourier transform. Useful
 features from the signal spectrum include fundamental frequency, spectral entropy, spectral spread, spectral flux,
 spectral centroid, spectral roll-off, etc.
 Some sample mean spectral features can be seen in Figure :ref:`spec`.
@@ -339,7 +339,7 @@ In Western music, the term chroma feature or chromagram closely relates to the t
 Chroma-based features, which are also referred to as "pitch class profiles", are a powerful tool for analyzing
 music whose pitches can be meaningfully categorized (often into twelve categories : A, A#, B, C, C#, D, D#, E, F, F#, G, G#
 ) and whose tuning approximates to the equal-tempered scale :cite:`chromawiki`.
-A popular characteristic of chroma features is that they capture the harmonic and melodic attributes of audio,
+A prime characteristic of chroma features is that they capture the harmonic and melodic attributes of audio,
 while being robust to changes in timbre and instrumentation.
 Some sample mean chroma features can be seen in Figure :ref:`chroma`.
 
@@ -353,18 +353,18 @@ Some sample mean chroma features can be seen in Figure :ref:`chroma`.
 Audio data cleaning
 -------------------
 
-Often times an audio has multiple segments present in the same signal that do not contain anything but
+Often times an audio sample has multiple segments present in the same signal that do not contain anything but
 silence or a slight degree of background noise compared to the rest of the audio.
-For most applications, those low activity segments make up for the relevant information
+For most applications, those low activity segments make up the irrelevant information
 of the signal.
 
 The audio clip shown in Figure :ref:`S3Fig` is a human saying the word "london" and represents
-the audio plotted in time-domain, with signal amplitude as y-axis and sample number as x-axis. The
+the audio plotted in the time-domain, with signal amplitude as y-axis and sample number as x-axis. The
 areas where the signal looks closer to zero/low in amplitude are areas where speech is absent and
 represents the pauses the speaker took while saying the word "london".
 
 .. figure:: S3_Fig.png
-   :scale: 30%
+   :scale: 50%
    :figclass: bht
 
    Time-series representation of speech for "london". :label:`S3Fig`
@@ -381,7 +381,7 @@ filters, by Fourier transform or by a wavelet transform. A spectrogram is usuall
 i.e., as an image with the intensity shown by varying the color or brightness.
 
 .. figure:: S4_Fig.png
-   :scale: 30%
+   :scale: 50%
    :figclass: bht
 
    Spectrogram of speech for "london". :label:`S4Fig`
@@ -393,13 +393,13 @@ audio and the resultant audio contains more activity filled regions. This algori
 as well as low-activity regions from the audio.
 
 .. figure:: S5_Fig.png
-   :scale: 30%
+   :scale: 50%
    :figclass: bht
 
    Time-series representation of cleaned speech for "london". :label:`S5Fig`
 
 .. figure:: S6_Fig.png
-  :scale: 30%
+  :scale: 50%
   :figclass: bht
 
   Spectrogram of cleaned speech for "london". :label:`S6Fig`
@@ -407,19 +407,21 @@ as well as low-activity regions from the audio.
 These visualizations were produced using pyAudioProcessing and can be produced for any audio signal
 using the library.
 
+
 Impact of cleaning on feature formations for a classification task
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 A spoken location name classification problem was considered for this evaluation.
 The dataset consisted of 23 samples for training per class and 17 samples for testing per class.
-The total number of classes are 2 - london and boston. This dataset can be found linked in the project
+The total number of classes is 2 - london and boston. This dataset was manually curated and can be found linked in the project
 readme of pyAudioProcessing. For comparative purposes, the classifier is kept constant
 at SVM, and the parameter C is chosen based on grid search for each experiment based
-on best precision, recall and F1. Results in table :ref:`clean` show the impact of
+on best precision, recall and F1 score. Results in table :ref:`clean` show the impact of
 applying the low-activity region removal using pyAudioProcessing prior to training
 the model using MFCC features.
 
-It can be seen that the accuracies increased when audios were cleaned prior to training the model.
-This is specially useful in cases where silence or low-activity regions in the
+It can be seen that the accuracies increased when audio samples were cleaned prior to training the model.
+This is especially useful in cases where silence or low-activity regions in the
 audio do not contribute to the predictions and act as noise in the signal.
 
 .. table:: Performance comparison on test data between MFCC feature trained model with and without cleaning. :label:`clean`
@@ -440,7 +442,7 @@ Integrations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The library contains integrations with scikit-learn classifiers for passing audio
-through feature extraction followed by classification directly using the raw audios
+through feature extraction followed by classification directly using the raw audio samples
 as input. Training results include computation of cross-validation results along
 with hyperparameter tuning details.
 
@@ -449,7 +451,7 @@ with hyperparameter tuning details.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Some applications and integrations work best with .wav data format. pyAudioProcessing
-integrates with tools that perform format conversion and presents it as a functionality
+integrates with tools that perform format conversion and presents them as a functionality
 via the library.
 
 
@@ -460,10 +462,10 @@ Spectrograms are 2-D images representing sequences of spectra with time along on
 frequency along the other, and brightness or color representing the strength of a frequency
 component at each time frame :cite:`spectro`. Not only can one see whether there is more or less energy at,
 for example, 2 Hz vs 10 Hz, but one can also see how energy levels vary over time :cite:`specPNSN`.
-Some of the convolutional neural network architectures for images can be applied to audios on top of
-the spectrograms. This is a different route of building audio models is developing spectrograms
+Some of the convolutional neural network architectures for images can be applied to audio signals on top of
+the spectrograms. This is a different route of building audio models by developing spectrograms
 followed by image processing.
-Time-series, frequency-domain, and spectrograms (both time and frequency domains)
+Time-series, frequency-domain, and spectrogram (both time and frequency domains) visualizations
 can be retrieved using pyAudioProcessing and its integrations.
 See figures :ref:`S5Fig` and :ref:`S4Fig` as examples.
 
@@ -471,9 +473,9 @@ See figures :ref:`S5Fig` and :ref:`S4Fig` as examples.
 Conclusion
 ==========
 
-In this paper pyAudioProcessing, an open-source Python library, is presented that implements and integrates a
+In this paper pyAudioProcessing, an open-source Python library, is presented. The tool implements and integrates a
 wide range of audio processing functionalities. Using pyAudioProcessing, one can read and visualize
-audios, clean audio signals by removal of irrelevant content, build and extract complex features such
+audio signals, clean audio signals by removal of irrelevant content, build and extract complex features such
 as GFCC, MFCC and other spectrum and cepstrum based features, build classification models,
 and use pre-built trained baseline models to classify different types of audio. Wrappers along with
 command-line usage examples are provided in the software's readme and wiki for giving the user
@@ -482,12 +484,12 @@ and can be used as the basis for further python-based research efforts.
 
 pyAudioProcessing is updated frequently in order to apply enhancements and new functionalities
 with recent research efforts of the digital signal processing and machine learning community.
-Some of the ongoing implementations include LPCC feature additions and integration with deep learning backend.
+Some of the ongoing implementations include LPCC feature additions and integration with deep learning backends.
 
 Acknowledgments
 ===============
 
-This project was built with the consideration for contributions towards the open-source community.
+This project was built as a contribution towards the open-source community.
 We want to thank the open-source community and Github for making open-source contributions possible.
 
 
