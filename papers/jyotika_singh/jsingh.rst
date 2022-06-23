@@ -408,8 +408,8 @@ These visualizations were produced using pyAudioProcessing and can be produced f
 using the library.
 
 
-Impact of cleaning on feature formations for a classification task
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Impact of cleaning on features for a classification task
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A spoken location name classification problem was considered for this evaluation.
 The dataset consisted of 23 samples for training per class and 17 samples for testing per class.
