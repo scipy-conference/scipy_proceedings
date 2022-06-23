@@ -149,7 +149,7 @@ Trained a Support Vector Machine (SVM) classifier for classifying audio into two
 speech. This classifier was trained using Mel Frequency Cepstral Coefficients (MFCC), spectral features, and chroma features. This model was trained on manually curated custom samples for speech and music.
 The confusion matrix produces results as shown in :ref:`speech-music`.
 
-.. table:: Confusion matrix for audio type (speech vs music) classification pre-trained model. (numbers are in % of all samples, and the same no. of samples are considered for each class) :label:`speech-music`
+.. table:: Confusion matrix for audio type (speech vs music) classification pre-trained model. (numbers are in % of all samples, and the same no. of samples were considered for each class) :label:`speech-music`
 
      +-----------+------------+------------+
      |           | **Music**  | **Speech** |
@@ -165,7 +165,7 @@ Trained Support Vector Machine (SVM) classifier for classifying audio into three
 music, speech, birds. This classifier was trained using Mel Frequency Cepstral Coefficients (MFCC), spectral features, and
 chroma features. The confusion matrix produces results as shown in :ref:`speech-music-birds`.
 
-.. table:: Confusion matrix for audio type (speech vs music vs bird sound) classification pre-trained model. (numbers are in % of all samples, and the same no. of samples are considered for each class) :label:`speech-music-birds`
+.. table:: Confusion matrix for audio type (speech vs music vs bird sound) classification pre-trained model. (numbers are in % of all samples, and the same no. of samples were considered for each class) :label:`speech-music-birds`
 
      +-----------+------------+------------+------------+
      |           | **Music**  | **Speech** | **Birds**  |
@@ -183,7 +183,7 @@ Mel Frequency Cepstral Coefficients (MFCC), spectral features, and chroma featur
 music into 10 genre classes - blues, classical, country, disco, hiphop,
 jazz, metal, pop, reggae, rock. The confusion matrix produces results as shown in :ref:`music-genre`.
 
-.. table:: Confusion matrix for music genre classification pre-trained model. (numbers are in % of all samples, and the same no. of samples are considered for each class) :label:`music-genre`
+.. table:: Confusion matrix for music genre classification pre-trained model. (numbers are in % of all samples, and the same no. of samples were considered for each class) :label:`music-genre`
     :class: w
 
     +----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+
