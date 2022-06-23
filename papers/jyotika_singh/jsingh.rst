@@ -266,7 +266,7 @@ The process of developing these coefficients can be seen in the form of an illus
 MFCC for a sample speech audio can be seen in Figure :ref:`mfccspeech`.
 
 .. figure:: mfcc_speech.png
-   :scale: 39%
+   :scale: 30%
    :figclass: bht
 
    MFCC from a sample speech audio. :label:`mfccspeech`
@@ -298,7 +298,7 @@ speech audio can be seen in Figure :ref:`gfccspeech`.
 
 
 .. figure:: gfcc_speech.png
-   :scale: 39%
+   :scale: 30%
    :figclass: bht
 
    GFCC from a sample speech audio. :label:`gfccspeech`
@@ -311,7 +311,7 @@ Examples include signal energy, entropy, zero crossing rate, etc.
 Some sample mean temporal features can be seen in Figure :ref:`temp`.
 
 .. figure:: temporal_speech.png
-   :scale: 39%
+   :scale: 30%
    :figclass: bht
 
    Temporal extractions from a sample speech audio. :label:`temp`
@@ -326,7 +326,7 @@ spectral centroid, spectral roll-off, etc.
 Some sample mean spectral features can be seen in Figure :ref:`spec`.
 
 .. figure:: spectral_speech.png
-   :scale: 39%
+   :scale: 30%
    :figclass: bht
 
    Spectral features from a sample speech audio. :label:`spec`
@@ -344,7 +344,7 @@ while being robust to changes in timbre and instrumentation.
 Some sample mean chroma features can be seen in Figure :ref:`chroma`.
 
 .. figure:: chroma_speech.png
-   :scale: 39%
+   :scale: 30%
    :figclass: bht
 
    Chroma features from a sample speech audio. :label:`chroma`
