@@ -78,7 +78,7 @@ A key resource to which we thought all students needed access was instructor att
 
 We contend that the value of supported programming time is two-fold. First, it helps beginning programmers learn more quickly. While learning to code necessarily involves challenges, students new to a language can sometimes struggle for an unproductively long time on things like simple syntax issues. When students have help available, they can move forward from minor issues faster and move more efficiently into building a meaningful understanding. Secondly, supported programming time helps students to understand that they are not alone in the challenges they are facing in learning to program.  They can see other students learning and facing similar challenges, can have the empowering experience of helping each other out, and when asking for help can notice that even their instructors sometimes rely on resources like `StackOverflow <https://stackoverflow.com/>`_. An unforeseen benefit we believe co-teaching had was to give us as instructors the opportunity to consult with each other during class time and share different approaches. These instructor interactions modeled for students how even as experienced practitioners of data science, we too were constantly learning.
 
-Lastly, a small but (we thought) important aspect of our setup was teaching students to set up a computing environment on their own laptops, with Python, conda, and JupyterLab. Using the command line and moving from an environment like Google Colab to one’s own computer can both present significant barriers, but doing so successfully can be an important part of helping students feel like ‘real’ programmers. We devoted an entire class period to helping students with installation and setup on their own computers.
+Lastly, a small but (we thought) important aspect of our setup was teaching students to set up a computing environment on their own laptops, with Python, conda [Ana16]_, and JupyterLab [Pro22]_. Using the command line and moving from an environment like Google Colab to one’s own computer can both present significant barriers, but doing so successfully can be an important part of helping students feel like ‘real’ programmers. We devoted an entire class period to helping students with installation and setup on their own computers.
 
 We considered it an important measure of success how many students told us at the end of the course that the class had helped them overcome sometimes longstanding feelings that technical skills like coding and modeling were not for them.
 
@@ -161,9 +161,10 @@ Learning programming from the ground up is difficult.  Students arrive excited t
 
 References
 -----------
+.. [Ana16] Anaconda Software Distribution. *Computer software. Vers. 2-2.4.0.* Anaconda, Nov. 2016. Web. https://anaconda.com.
+
 .. [Boy12] Boyd, Danah, and Kate Crawford. *Critical questions for big data: Provocations for a cultural, technological, and scholarly phenomenon*. 
            Information, communication & society 15.5 (2012):662-679. https://doi.org/10.1080/1369118X.2012.678878
-
 
 .. [Bui13] Buitinck, Lars, Gilles Louppe, Mathieu Blondel, Fabian Pedregosa, Andreas Mueller, Olivier Grisel, Vlad Niculae et al. *API design for machine learning software: experiences from the scikit-learn project*. arXiv preprint arXiv:1309.0238 (2013).
 
@@ -194,6 +195,8 @@ References
 .. [Ped11] Pedregosa, Fabian, Gaël Varoquaux, Alexandre Gramfort, Vincent Michel, Bertrand Thirion, Olivier Grisel, Mathieu Blondel et al. *Scikit-learn: Machine learning in Python*. the Journal of machine Learning research 12 (2011): 2825-2830. https://dl.acm.org/doi/10.5555/1953048.2078195
 
 .. [Pen16] Penuel, William R., Daniela K. DiGiacomo, Katie Van Horne, and Ben Kirshner. *A Social Practice Theory of Learning and Becoming across Contexts and Time*. Frontline Learning Research 4, no. 4 (2016): 30-38. http://dx.doi.org/10.14786/flr.v4i4.205
+
+.. [Pro22] Project Jupyter, 2022. *jupyterlab/jupyterlab: JupyterLab 3.4.3*  https://github.com/jupyterlab/jupyterlab
 
 .. [The22] The Pandas Development Team, 2022. *pandas-dev/pandas: Pandas 1.4.2*. Zenodo. https://doi.org/10.5281/zenodo.6408044
 
