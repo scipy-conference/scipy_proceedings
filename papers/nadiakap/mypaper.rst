@@ -44,9 +44,7 @@ blocks from this library or other Python libraries.
 The library is intended primarily for educational
 purposes and its focus is on transparency of the methods rather than on efficiency of implementation.
 
-Minpy can be used by researches to design optimization methods with desired properties by varying parameters of the general algorithm. Such design step is very often required in newly developing industry projects, where objective function has unknown behavior, Algorithm designing stage is necessary for two reasons: It helps to understand objective function behavior, and it is needed for function optimization. Very often one method would work best for studying function behavior, and another method - for function optimization.
-
-One typical situation is when different algorithm behavior is required when being far from optimal point, and when being close to optimal point.
+The library can be used by researches to design optimization methods with desired properties by varying parameters of the general algorithm. 
 
 As an example, consider variant of simulated annealing (SA) proposed in [FGSB]_ where different values of parameters ( Boltzman distribution parameters, step size, etc.) are used depending of the distance to optimal point. In this paper the basic SA algorithm is used as a starting point. We can offer more basic module as a starting point ( and by specifying distribution as 'exponential' get the variant of SA) thus achieving more flexible design opportunities for custom optimization algorithm. Note that convergence of the newly created hybrid algorithm does not need to be verified when using minpy basic modules, whereas previously mentioned SA-based hybrid has to be verified separately ( see [GLUQ]_)
 
