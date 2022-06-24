@@ -52,7 +52,7 @@ For example, the main simulation engine for molecular quantum mechanics is Jagua
 Proprietary classical molecular dynamics code Desmond (distributed by Schrödinger, Inc.) [Desmond]_ is used to obtain physical properties of soft materials, surfaces and polymers.
 For periodic quantum mechanics, the main simulation engine is Quantum ESPRESSO (QE) [QE]_ open source code.
 One of the co-authors of this proceedings (A. Fonari) contributes to the QE code in order to make integration with the Materials suite more seamless and less error-prone.
-Also there is a push to use portable ``XML`` format as the input/output format for QE, this has been implemented in the Python open source ``qeschema`` code [qeschema]_.
+Also there is a push to use portable ``XML`` format as the input/output format for QE, this has been implemented in the Python open source qeschema code [qeschema]_.
 
 Figure :ref:`fig2` gives an overview of some of the various products that compose the Schrödinger Materials Science Suite.
 The various workflows are implemented mainly in Python (some of them described below), calling on proprietary or open-source code where appropriate, again, to improve the performance of the software and reduce overall maintenance.
