@@ -45,12 +45,14 @@ Software tools for computational materials discovery can be facilitated by utili
 This use of existing libraries allows developers to devote more time to developing new features instead of re-inventing established methods.
 As a result, such a complementary approach improves the performance of computational materials software and reduces overall maintenance.
 
-The Schrödinger Materials Science Suite [Schr]_ is a proprietary computational chemistry/physics platform that streamlines materials discovery workflows into a single graphical user interface (Materials Science Maestro) [Link to website]_.
+The Schrödinger Materials Science Suite [Schr]_ is a proprietary computational chemistry/physics platform that streamlines materials discovery workflows into a single graphical user interface (Materials Science Maestro).
 The interface is a single portal for structure building and enumeration, physics-based modeling and machine learning, visualization and analysis.
 Tying together the various modules are a wide variety of scientific packages, some of which are proprietary to Schrödinger, Inc., some of which are open-source and many of which blend the two to optimize capabilities and efficiency.
 For example, the main simulation engine for molecular quantum mechanics is Jaguar [Jaguar]_ proprietary code.
-For periodic quantum mechanics, the main simulation engine is Quantum ESPRESSO (QE) [QE]_ open source code.
 Proprietary classical molecular dynamics code Desmond (distributed by Schrödinger, Inc.) [Desmond]_ is used to obtain physical properties of soft materials, surfaces and polymers.
+For periodic quantum mechanics, the main simulation engine is Quantum ESPRESSO (QE) [QE]_ open source code.
+One of the co-authors of this proceedings (A. Fonari) contributes to the QE code in order to make integration with the Materials suite more seamless and less error-prone.
+Also there is a push to use portable ``XML`` format as the input/output format for QE, this has been implemented in the Python open source ``qeschema`` code [qeschema]_.
 
 Figure :ref:`fig2` gives an overview of some of the various products that compose the Schrödinger Materials Science Suite.
 The various workflows are implemented mainly in Python (some of them described below), calling on proprietary or open-source code where appropriate, again, to improve the performance of the software and reduce overall maintenance.
@@ -76,6 +78,57 @@ Experimental periodic structures of materials, mainly determined by single cryst
 Correctly reading experimental structures is of significant importance, since the rest of the materials discovery workflow depends on it.
 In addition to atom coordinates and periodic cell information, structural data also contains symmetry operations (listed explicitly or by the means of providing a space group) that can be used to decrease the number of computations required for a particular system by accounting for symmetry.
 This can be important, especially when scaling high-throughput calculations.
+From file, structure is read in a structure object through which atomic coordinates (as a NumPy array) and chemical information of the material can be accessed and updated.
+Structure object is similar to the one implemented in open source packages such as pymatgen [pymatgen]_ and ASE [ase]_.
+All the structure manipulations during the workflows are done using structure object interface.
+Example of Structure object definition in pymatgen:
+
+.. code-block:: python
+
+   class Structure:
+
+      def __init__(
+          self,
+          lattice: Union[ArrayLike, Lattice],
+          species: Sequence[CompositionLike],
+          coords: Sequence[ArrayLike],
+          charge: float = None,
+          validate_proximity: bool = False,
+          to_unit_cell: bool = False,
+          coords_are_cartesian: bool = False,
+          site_properties: dict = None,
+      ):
+          """
+          Create a periodic structure.
+          Args:
+              lattice: The lattice, either as a pymatgen.core.lattice.Lattice or
+                  simply as any 2D array. Each row should correspond to a lattice
+                  vector. E.g., [[10,0,0], [20,10,0], [0,0,30]] specifies a
+                  lattice with lattice vectors [10,0,0], [20,10,0] and [0,0,30].
+              species: List of species on each site. Can take in flexible input,
+                  including:
+                  i.  A sequence of element / species specified either as string
+                      symbols, e.g. ["Li", "Fe2+", "P", ...] or atomic numbers,
+                      e.g., (3, 56, ...) or actual Element or Species objects.
+                  ii. List of dict of elements/species and occupancies, e.g.,
+                      [{"Fe" : 0.5, "Mn":0.5}, ...]. This allows the setup of
+                      disordered structures.
+              coords (Nx3 array): list of fractional/cartesian coordinates of
+                  each species.
+              charge (int): overall charge of the structure. Defaults to behavior
+                  in SiteCollection where total charge is the sum of the oxidation
+                  states.
+              validate_proximity (bool): Whether to check if there are sites
+                  that are less than 0.01 Ang apart. Defaults to False.
+              to_unit_cell (bool): Whether to map all sites into the unit cell,
+                  i.e., fractional coords between 0 and 1. Defaults to False.
+              coords_are_cartesian (bool): Set to True if you are providing
+                  coordinates in cartesian coordinates. Defaults to False.
+              site_properties (dict): Properties associated with the sites as a
+                  dict of sequences, e.g., {"magmom":[5,5,5,5]}. The sequences
+                  have to be the same length as the atomic species and
+                  fractional_coords. Defaults to None for no properties.
+          """
 
 One consideration of note is that PBD, CIF and mmCIF structure formats allow description of the positional disorder (for example, a solvent molecule without a stable position within the cell which can be described by multiple sets of coordinates).
 Another complication is that experimental data spans an interval of almost a century, one of the oldest crystal structures deposited in the Cambridge Structural Database (CSD) [CSD]_, dates to 1924 [Grph]_.
@@ -83,12 +136,14 @@ These nuances  and others present nontrivial technical challenges for developers
 Thus, it has been a continuous effort by Schrödinger, Inc. (at least 39 commits and several weeks of work went into this project) and others to correctly read and convert periodic structures in OpenBabel.
 By version 3.1.1 (the most recent at writing time), there are no known structures read incorrectly by OpenBabel that the authors are aware of.
 In general, non-periodic molecular formats are simpler to handle because they only contain atom coordinates and no cell or symmetry information.
+OpenBabel has Python bindings but due to the GPL license limitation, it is called as a subprocess from the Schrödinger suite.
 
 Another important consideration in structure generation is modeling of substitutional disorder in solid alloys and materials with point defects (intermetallics, semiconductors, oxides and their crystalline surfaces).
 In such cases, the unit cell and atomic sites of the crystal or surface slab are well defined while the chemical species occupying the site may vary.
 In order to simulate substitutional disorder, one must generate the ensemble of structures that includes all statistically significant atomic distributions in a given unit cell.
 This can be achieved by a brute force enumeration of all symmetrically unique atomic structures with a given number of vacancies, impurities or solute atoms.
 Open source enumlib library [Enumlib]_ implements algorithms for such a systematic enumeration of periodic structures.
+enumlib consists of several Fortran binaries and Python scripts that can be run as a subprocess (no Python bindings).
 This allows the user to generate a large set of symmetrically nonequivalent materials with different compositions (e.g. doping or defect concentration).
 
 Recently, we applied this approach in simultaneous study of the activity and stability of Pt based core-shell type catalysts for the oxygen reduction reaction [TM]_.
@@ -130,11 +185,15 @@ This study took advantage of GPU (graphics processing unit) support as implement
 Other workflows implemented in the Schrödinger Materials Science Suite utilize open source packages as well.
 For soft materials (polymers, organic small molecules and substrates composed of soft molecules), convex hull and related mathematical methods are important for finding possible accessible solvent voids (during submerging or sorption) and adsorbate sites (during molecular deposition).
 These methods are conveniently implemented in the open source SciPy package [Scipy]_.
-Thus, we implemented molecular deposition and evaporation workflows by using the Desmond MD engine as the backend in tandem with the open source SciPy implementations.
+Thus, we implemented molecular deposition and evaporation workflows by using the Desmond MD engine as the backend in tandem with the convex hull functionality.
 This workflow enables simulation of the deposition and evaporation of the small molecules on a substrate.
 We utilized the aforementioned deposition workflow in the study of organic light-emitting diodes (OLEDs), which are fabricated using a stepwise process, where new layers are deposited on top of previous layers.
 Both vacuum and solution deposition processes have been used to prepare these films, primarily as amorphous thin film active layers lacking long-range order.
 Each of these deposition techniques introduces changes to the film structure and consequently, different charge-transfer and luminescent properties [Deposition]_.
+
+As can be seen from above a workflow is usually some sort of structure modification through the structure object with a subsequent call to a backend code and analysis of its output (input for the next iteration depends on the output of the previous iteration is some workflows) after it successful (or not) exit.
+Due to the large chemical and manipulation space of the materials, sometimes it very tricky to keep code for all workflows follow the same code logic.
+For every workflow and/or functionality, some sort of peer reviewed material (publication, conference presentation) is created where implemented algorithms are described to facilitate reproducibility.
 
 Data fitting algorithms and use cases
 -------------------------------------
@@ -159,6 +218,20 @@ Figure :ref:`fig4` shows obtained calculated yield of 10% *vs.* experimental val
 
 The ``scipy.optimize`` package is used for a least-squares fit of the bulk energies at different cell volumes (compressed and expanded) in order to obtain the bulk modulus and equation of state (EOS) of a material.
 In the Schrödinger suite this was implemented as a part of an EOS workflow, in which fitting is performed on the results obtained from a series of QE calculations performed on the original as well as compressed and expanded (deformed) cells.
+An example of deformation applied to a structure in pymatgen:
+
+.. code-block:: python
+
+   deform = Deformation([[1.0, 0.02, 0.02], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+   lattice = Lattice([
+      [3.8401979337, 0.00, 0.00],
+      [1.9200989668, 3.3257101909, 0.00],
+      [0.00, -2.2171384943, 3.1355090603],
+   ])
+   structure = Structure(lattice, ["Si", "Si"], [[0, 0, 0], [0.75, 0.5, 0.75]])
+
+   strained_structure = deform.apply_to_structure(structure)
+
 This is also an example of loosely coupled (embarrassingly parallel) jobs.
 In particular, calculations of the deformed cells only depend on the bulk calculation and do not depend on each other.
 Thus, all the deformation jobs can be submitted in parallel, greatly facilitating high-throughput runs.
@@ -223,7 +296,7 @@ To appreciate the computational efficiency of such an approach, it is worth noti
 Conclusions
 -----------
 
-We present several examples of how Schrödinger Materials Suite incorporates open source software packages.
+We present several examples of how Schrödinger Materials Suite integrates open source software packages.
 There is a wide range of applications in materials science that can benefit from already existing open source code.
 Where possible, we report issues to the package authors and submit improvements and bug fixes in the form of the pull requests.
 We are thankful to all who have contributed to open source libraries, and have made it possible for us to develop a platform for accelerating innovation in materials and drug discovery.
@@ -239,10 +312,12 @@ References
 .. [Obabel] N. M. O'Boyle, et al. *Open Babel: An open chemical toolbox*, Journal of cheminformatics 3.1 (2011): 1-14. https://openbabel.org/
 .. [RDKit] G. Landrum. *RDKit: A software suite for cheminformatics, computational chemistry, and predictive modeling*, (2013). http://www.rdkit.org/
 .. [Formats] J. D. Westbrook, and P. MD Fitzgerald. *The PDB format, mmCIF formats, and other data formats*, Structural bioinformatics 2: 271-291 (2003).
+.. [ASE] A. H. Larsen et al. *The atomic simulation environment—a Python library for working with atoms.* J. Phys. Cond. Matt. 29 (27): 273002 (2017). https://wiki.fysik.dtu.dk/ase/
 .. [CSD] C. R. Groom, I. J. Bruno, M. P. Lightfoot and S. C. Ward. *The Cambridge Structural Database*, Acta Cryst. B72: 171-179 (2016).
 .. [Grph] O Hassel, H Mark. *The Crystal Structure of Graphite*, Zeitschrift für Physik (Journal of Physics), 25: 317–337 (1924).
 .. [Enumlib] G. LW Hart, and R. W. Forcade. *Algorithm for generating derivative structures*, Physical Review B 77 (22): 224115 (2008). https://github.com/msg-byu/enumlib/
 .. [QE] P. Giannozzi, et al. *Advanced capabilities for materials modelling with Quantum ESPRESSO*, Journal of physics: Condensed matter 29 (46): 465901 (2017). https://www.quantum-espresso.org/
+.. [qeschema]_ D. Brunato, et al. *qeschema*. https://github.com/QEF/qeschema
 .. [TM] T. Mustard, et al. *Surface reactivity and stability of core-shell solid catalysts from ab initio combinatorial calculations*, ABSTRACTS OF PAPERS OF THE AMERICAN CHEMICAL SOCIETY. 258. (2019).
 .. [Jaguar] A. D. Bochevarov, et al. *Jaguar: A high‐performance quantum chemistry software program with strengths in life and materials sciences*, International Journal of Quantum Chemistry 113 (18): 2110-2142 (2013).
 .. [CScreen] N. N. Matsuzawa, et al. *Massive theoretical screen of hole conducting organic materials in the heteroacene family by using a cloud-computing environment*, The Journal of Physical Chemistry A 124 (10): 1981-1992 (2020).
