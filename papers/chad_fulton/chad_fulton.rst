@@ -592,13 +592,13 @@ Forecasting and Time Series Decomposition
    :scale: 60%
    :align: center
 
-   Data and forecast with 90% credible interval; U.S. Industrial Production. :label:`indproforecast`
+   Data and forecast with 80% credible interval; U.S. Industrial Production. :label:`indproforecast`
 
 .. figure:: indpro_level_trend.png
    :scale: 60%
    :align: center
 
-   Estimated level, trend, and seasonal components, with 90% credible interval; U.S. Industrial Production. :label:`indproleveltrend`
+   Estimated level, trend, and seasonal components, with 80% credible interval; U.S. Industrial Production. :label:`indproleveltrend`
 
 
 .. figure:: causal_impact.png
@@ -664,7 +664,7 @@ sampler iterations as follows:
 
 These forecasts and the decomposition into level, trend, and seasonal components
 are summarized in Figures :ref:`indproforecast` and :ref:`indproleveltrend`,
-which show the median values along with 90% credible intervals. Notably, the
+which show the median values along with 80% credible intervals. Notably, the
 intervals shown incorporate for both the uncertainty arising from the stochastic
 terms in the model as well as the need to estimate the models' parameters. [#]_
 
