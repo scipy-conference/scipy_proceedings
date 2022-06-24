@@ -149,13 +149,13 @@ Recently we implemented convex analysis of the stress strain curve (as described
 The stress strain curve is obtained from a series of MD simulations on deformed cells (cell deformations are defined by strain type and deformation step).
 The pressure tensor of a deformed cell is related to stress.
 This analysis allowed prediction of elongation at yield for high density polyethylene polymer.
-Obtained calculated yield of 10% *vs.* experimental value within 9-18% range (Figure :ref:`fig_stress_strain`) [Convex]_.
+Figure :ref:`fig4` shows obtained calculated yield of 10% *vs.* experimental value within 9-18% range [Convex]_.
 
 .. figure:: fig_stress_strain.png
    :align: center
    :figclass: w
 
-   Left: The uniaxial stress/strain curve of a polymer calculated using Desmond through the stress strain workflow using the OPLS3 force-field, grey band indicates inflection point (yield)). Right: Constant strain simulation with convex analysis indicates elongation at yield. Red curve - simulated stress versus strain. Blue curve - convex analysis. :label:`fig_stress_strain`
+   Left: The uniaxial stress/strain curve of a polymer calculated using Desmond through the stress strain workflow, grey band indicates inflection point (yield)). Right: Constant strain simulation with convex analysis indicates elongation at yield. Red curve - simulated stress versus strain. Blue curve - convex analysis. :label:`fig4`
 
 The ``scipy.optimize`` package is used for a least-squares fit of the bulk energies at different cell volumes (compressed and expanded) in order to obtain the bulk modulus and equation of state (EOS) of a material.
 In the Schrödinger suite this was implemented as a part of an EOS workflow, in which fitting is performed on the results obtained from a series of QE calculations performed on the original as well as compressed and expanded (deformed) cells.
@@ -234,74 +234,39 @@ We hope that this report will inspire other scientific companies to give back to
 References
 ----------
 .. [Schr] Schrödinger Release (2021). Schrödinger Release 2021-2: Materials Science Suite. New York, NY: Schrödinger, LLC. http://www.schrodinger.com/materials/
-
 .. [pymatgen] S. P. Ong, et al. *Python Materials Genomics (pymatgen): A Robust, Open-Source Python Library for Materials Analysis*, Computational Materials Science, 68: 314–319 (2013). https://pymatgen.org/
-
 .. [AiiDA] S. P. Huber et al., *AiiDA 1.0, a scalable computational infrastructure for automated reproducible workflows and data provenance*, Scientific Data 7: 300 (2020). https://www.aiida.net/
-
 .. [Obabel] N. M. O'Boyle, et al. *Open Babel: An open chemical toolbox*, Journal of cheminformatics 3.1 (2011): 1-14. https://openbabel.org/
-
 .. [RDKit] G. Landrum. *RDKit: A software suite for cheminformatics, computational chemistry, and predictive modeling*, (2013). http://www.rdkit.org/
-
 .. [Formats] J. D. Westbrook, and P. MD Fitzgerald. *The PDB format, mmCIF formats, and other data formats*, Structural bioinformatics 2: 271-291 (2003).
-
 .. [CSD] C. R. Groom, I. J. Bruno, M. P. Lightfoot and S. C. Ward. *The Cambridge Structural Database*, Acta Cryst. B72: 171-179 (2016).
-
 .. [Grph] O Hassel, H Mark. *The Crystal Structure of Graphite*, Zeitschrift für Physik (Journal of Physics), 25: 317–337 (1924).
-
 .. [Enumlib] G. LW Hart, and R. W. Forcade. *Algorithm for generating derivative structures*, Physical Review B 77 (22): 224115 (2008). https://github.com/msg-byu/enumlib/
-
 .. [QE] P. Giannozzi, et al. *Advanced capabilities for materials modelling with Quantum ESPRESSO*, Journal of physics: Condensed matter 29 (46): 465901 (2017). https://www.quantum-espresso.org/
-
 .. [TM] T. Mustard, et al. *Surface reactivity and stability of core-shell solid catalysts from ab initio combinatorial calculations*, ABSTRACTS OF PAPERS OF THE AMERICAN CHEMICAL SOCIETY. 258. (2019).
-
 .. [Jaguar] A. D. Bochevarov, et al. *Jaguar: A high‐performance quantum chemistry software program with strengths in life and materials sciences*, International Journal of Quantum Chemistry 113 (18): 2110-2142 (2013).
-
 .. [CScreen] N. N. Matsuzawa, et al. *Massive theoretical screen of hole conducting organic materials in the heteroacene family by using a cloud-computing environment*, The Journal of Physical Chemistry A 124 (10): 1981-1992 (2020).
-
 .. [MDS] M. Atif F. Afzal, et al. *High-throughput molecular dynamics simulations and validation of thermophysical properties of polymers for various applications*, ACS Applied Polymer Materials 3 (2): 620-630 (2020).
-
 .. [Desmond] D. E. Shaw, et al. *Anton 2: Raising the Bar for Performance and Programmability in a Special-Purpose Molecular Dynamics Supercomputer*, SC14: International Conference for High Performance Computing, Networking, Storage and Analysis: 41 (2014).
-
 .. [Bicerano] J Bicerano. *Prediction of polymer properties.* cRc Press, 2002.
-
 .. [Scipy] P. Virtanen, et al. *SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python*, Nature Methods, 17(3): 261-272 (2020). https://scipy.org/
-
 .. [Deposition] P. Winget, et al. *Organic Thin Films for OLED Applications: Influence of Molecular Structure, Deposition Method, and Deposition Conditions*, International Conference on the Science and Technology of Synthetic Metals (2022).
-
 .. [Patrone] P. Patrone, A. Kearsley, A. Dienstfrey. *The role of data analysis in uncertainty quantification: Case studies for materials modeling*, 2018 AIAA Non-Deterministic Approaches Conference. 2018.
-
 .. [ScipyOptimize] https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
-
 .. [Convex] A. R. Browning, M. A. F. Afzal, J. Sanders, A. Goldberg, A. Chandrasekaran, H. S. Kwak, M. D. Halls. *Polyolefin Molecular Simulation for Critical Physical Characteristics*, International Polyolefins Conference. 2020.
-
 .. [Jansen] J. Jansen, R. T. Peschar, H. Schenk. *On the determination of accurate intensities from powder diffraction data. I. Whole-pattern fitting with a least-squares procedure*, Journal of applied crystallography 25(2): 231-236 (1992).
-
 .. [Lmfit] M. Newville, et al. *LMFIT: Non-linear least-square minimization and curve-fitting for Python*, Astrophysics Source Code Library (2016): ascl-1606. https://lmfit.github.io/lmfit-py/
-
 .. [Powder] J. A. Kaduk, et al., *Powder diffraction*, Nature Reviews Methods Primers 1: 77 (2021).
-
 .. [DeepChem] B. Ramsundar, et al., *Deep Learning for the Life Sciences.* O'Reilly Media, 2019.
-
 .. [AutoQSAR] S. L. Dixon, et al. *AutoQSAR: an automated machine learning tool for best-practice quantitative structure–activity relationship modeling*, Future medicinal chemistry 8 (15): 1825-1839 (2016).
-
 .. [Matminer] L. Ward, et al., *Matminer: An open source toolkit for materials data mining*, Computational Materials Science 152: 60-69 (2018). https://hackingmaterials.lbl.gov/matminer/
-
 .. [Sendek] A. D. Sendek, et al., *Holistic computational structure screening of more than 12000 candidates for solid lithium-ion conductor materials.* Energy & Environmental Science 10 (1): 306-320: (2017).
-
 .. [DScribe] L. Himanen, et al. *DScribe: Library of descriptors for machine learning in materials science*, Computer Physics Communications 247: 106949 (2020). https://singroup.github.io/dscribe/latest/
-
 .. [SkLearn] F. Pedregosa, et al., *Scikit-learn: Machine learning in Python.*, Journal of Machine Learning Research 12: 2825-2830 (2011). https://scikit-learn.org/
-
-.. [Chandrasekaran] A. Chandrasekaran *Active Learning Accelerated Design of Ionic Material*, in progress.  
+.. [Chandrasekaran] A. Chandrasekaran *Active Learning Accelerated Design of Ionic Material*, in progress.
 .. [RDKitC] https://github.com/rdkit/rdkit/graphs/contributors
-
 .. [Vasudevan] R. Vasudevan, et al., *Machine learning for materials design and discovery.*, Journal of Applied Physics 129(7): 070401 (2021).
-
 .. [Schleder] G. R. Schleder, et al., *From DFT to machine learning: recent approaches to materials science–a review*, Journal of Physics: Materials 2(3): 032001 (2019).
-
 .. [Marcus] R. A. Marcus, *Electron Transfer Reactions in Chemistry. Theory and experiment.*, Rev. Mod. Phys. 65: 599–610 (1993).
-
 .. [Abroshan] H. Abroshan, et al., *Active Learning Accelerates Design and Optimization of Hole-Transporting Materials for Organic Electronics* Frontiers in Chemistry 9 (2021).
-
 .. [Kwak] H. S. Kwak, et al., *Design of organic electronic materials with a goal-directed generative model powered by deep neural networks and high-throughput molecular simulations.*, Frontiers in Chemistry 9: 800370 (2022).
