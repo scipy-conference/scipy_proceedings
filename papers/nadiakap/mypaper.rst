@@ -166,7 +166,7 @@ Taking into account normalization condition for density we arrive at the followi
 
 where C is arbitrary chosen constant
 
-Considering solution to :math:`\delta _Y F(X^0 )\to\min_Y` allows to obtain gradient-like alggorithms for optimization that use only objective function values ( do not use derivatives of objective function)
+Considering solution to :math:`\delta _Y F(X^0 )\to\min_Y` allows to obtain gradient-like algorithms for optimization that use only objective function values ( do not use derivatives of objective function)
 
 
 Potential function as a solution to Poisson's equation
