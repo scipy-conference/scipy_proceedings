@@ -10,10 +10,10 @@ Bayesian Estimation and Forecasting of Time Series in statsmodels
 
 .. class:: abstract
 
-   *Statsmodels*, a Python library for statistical and econometric analysis,
+   ``Statsmodels``, a Python library for statistical and econometric analysis,
    has traditionally focused on frequentist inference, including in its
    models for time series data. This paper introduces the powerful features
-   for Bayesian inference of time series models that exist in *statsmodels*, with
+   for Bayesian inference of time series models that exist in ``statsmodels``, with
    applications to model fitting, forecasting, time series decomposition,
    data simulation, and impulse response functions.
 
@@ -25,7 +25,7 @@ Bayesian Estimation and Forecasting of Time Series in statsmodels
 Introduction
 ------------
 
-*Statsmodels* :cite:`seabold_statsmodels_2010` is a well-established Python
+``Statsmodels`` :cite:`seabold_statsmodels_2010` is a well-established Python
 library for statistical and econometric analysis, with support for a wide range
 of important model classes, including linear regression, ANOVA, generalized
 linear models (GLM), generalized additive models (GAM), mixed effects models,
@@ -33,36 +33,36 @@ and time series models, among many others. In most cases, model fitting proceeds
 by using frequentist inference, such as maximum likelihood estimation (MLE). In
 this paper, we focus on the class of time series models
 :cite:`mckinney_time_2011`, support for which has grown substantially in
-*statsmodels* over the last decade. After introducing several of the most
+``statsmodels`` over the last decade. After introducing several of the most
 important new model classes – which are by default fitted using MLE – and
 their features – which include forecasting, time series decomposition and
 seasonal adjustment, data simulation, and impulse response analysis – we
 describe the powerful functions that enable users to apply Bayesian methods to
 a wide range of time series models.
 
-Support for Bayesian inference in Python outside of *statsmodels* has also grown
+Support for Bayesian inference in Python outside of ``statsmodels`` has also grown
 tremendously, particularly in the realm of probabilistic programming, and
 includes powerful libraries such as
-*PyMC3* :cite:`salvatier_probabilistic_2016`, *PyStan* :cite:`carpenter_stan_2017`,
-and *TensorFlow Probability* :cite:`dillon_tensorflow_2017`. Meanwhile,
-*ArviZ* :cite:`kumar_arviz_2019` provides many excellent tools for associated
+``PyMC3`` :cite:`salvatier_probabilistic_2016`, ``PyStan`` :cite:`carpenter_stan_2017`,
+and ``TensorFlow Probability`` :cite:`dillon_tensorflow_2017`. Meanwhile,
+``ArviZ`` :cite:`kumar_arviz_2019` provides many excellent tools for associated
 diagnostics and vizualisations. The aim of these libraries is to provide support
 for Bayesian analysis of a large class of models, and they make available both
 advanced techniques, including auto-tuning algorithms, and flexible model
 specification. By contrast, here we focus on simpler techniques. However, while
 the libraries above do include some support for time series models, this has not
 been their primary focus. As a result, introducing Bayesian inference for the
-well-developed stable of time series models in *statsmodels*, and providing
+well-developed stable of time series models in ``statsmodels``, and providing
 access to the rich associated feature set already mentioned, presents a
 complementary option to these more general-purpose libraries. [#]_
 
 .. [#] In addition, it is possible to combine the sampling algorithms of PyMC3
-       with the time series models of *statsmodels*, although we will not
+       with the time series models of ``statsmodels``, although we will not
        discuss this approach in detail here. See, for example,
        https://www.statsmodels.org/v0.13.0/examples/notebooks/generated/statespace_sarimax_pymc3.html.
 
-Time series analysis in *statsmodels*
--------------------------------------
+Time series analysis in ``statsmodels``
+---------------------------------------
 
 A time series is a sequence of observations ordered in time, and time series
 data appear commonly in statistics, economics, finance, climate science,
@@ -75,9 +75,9 @@ cyclical components, produce forecasts of future data, and study the propagation
 of shocks over time.
 
 We now briefly review the models for time series data that are available in
-*statsmodels* and describe their features. [#]_
+``statsmodels`` and describe their features. [#]_
 
-.. [#] In addition to statistical models, *statsmodels* also provides a number
+.. [#] In addition to statistical models, ``statsmodels`` also provides a number
        of tools for exploratory data analysis, diagnostics, and hypothesis
        testing related to time series data; see
        https://www.statsmodels.org/stable/tsa.html.
@@ -89,8 +89,8 @@ Exponential smoothing models are constructed by combining one or more simple
 equations that each describe some aspect of the evolution of univariate
 time series data. While originally somewhat *ad hoc*, these models can be
 defined in terms of a proper statistical model (for example, see
-:cite:`hyndman_forecasting_2008`), and, regardless, they have enjoyed
-considerably popularity in forecasting (for example, see the implementation in
+:cite:`hyndman_forecasting_2008`). They have enjoyed
+considerable popularity in forecasting (for example, see the implementation in
 R described by :cite:`hyndman2018forecasting`). A prototypical example that
 allows for trending data and a seasonal component – often known as the additive
 "Holt-Winters' method" – can be written as
@@ -107,8 +107,8 @@ where :math:`l_t` is the level of the series, :math:`b_t` is the trend,
 :math:`s_t` is the seasonal component of period :math:`m`, and
 :math:`\alpha, \beta, \gamma` are parameters of the model. When augmented with
 an error term with some given probability distribution (usually Gaussian),
-likelihood-based inference can be used to, for example, estimate the parameters.
-In *statsmodels*, additive exponential smoothing models
+likelihood-based inference can be used to estimate the parameters.
+In ``statsmodels``, additive exponential smoothing models
 can be constructed using the :code:`statespace.ExponentialSmoothing` class. [#]_
 The following code shows how to apply the additive Holt-Winters model above to
 model quarterly data on consumer prices:
@@ -147,9 +147,9 @@ where :math:`\mu_t` is the trend, :math:`\gamma_t` is the seasonal component,
 equation can be augmented in many ways, for example to include explanatory
 variables or an autoregressive component. In addition, there are many possible
 specifications for the trend, seasonal, and cyclical components, so that a wide
-variety of time series characteristics can be accommodated. In *statsmodels*,
+variety of time series characteristics can be accommodated. In ``statsmodels``,
 these models can be constructed from the :code:`UnobservedComponents` class; a
-few examples are given in the following code
+few examples are given in the following code:
 
 .. code-block:: python
 
@@ -170,7 +170,7 @@ Autoregressive moving-average models
 ''''''''''''''''''''''''''''''''''''
 
 Autoregressive moving-average (ARMA) models, ubiquitous in time series
-applications, are well-supported in *statsmodels*, including their
+applications, are well-supported in ``statsmodels``, including their
 generalizations, abbreviated as "SARIMAX", that allow for integrated time series
 data, explanatory variables, and seasonal effects. [#]_ A general version of
 this model, excluding integration, can be written as
@@ -184,7 +184,7 @@ this model, excluding integration, can be written as
    \end{aligned}
 
 where :math:`\varepsilon_t \sim N(0, \sigma^2)`. These are constructed in
-*statsmodels* with the :code:`ARIMA` class; the following code shows how to
+``statsmodels`` with the :code:`ARIMA` class; the following code shows how to
 construct a variety of autoregressive moving-average models for consumer price
 data:
 
@@ -200,7 +200,7 @@ data:
    model_sarimax = sm.tsa.ARIMA(
       y, order=(p, d, q), seasonal_order=(P, D, Q, s))
 
-.. [#] Note that in *statsmodels*, models with explanatory variables are in the
+.. [#] Note that in ``statsmodels``, models with explanatory variables are in the
        form of "regression with SARIMA errors".
 
 While this class of models often produces highly competitive forecasts, it does
@@ -210,7 +210,7 @@ seasonal components.
 Vector autoregressive models
 ''''''''''''''''''''''''''''
 
-While the SARIMAX models above handle univariate series, *statsmodels* also has
+While the SARIMAX models above handle univariate series, ``statsmodels`` also has
 support for the multivariate generalization to vector autoregressive (VAR)
 models. [#]_ These models are written
 
@@ -219,7 +219,7 @@ models. [#]_ These models are written
    y_t = \nu + \Phi_1 y_{t-1} + \dots + \Phi_p y_{t-p} + \varepsilon_t
 
 where :math:`y_t` is now considered as a vector, and the coefficients
-:math:`\Phi_i` are matrices. These models can be constructed in *statsmodels*
+:math:`\Phi_i` are matrices. These models can be constructed in ``statsmodels``
 using the :code:`VARMAX` class, as follows [#]_
 
 .. code:: python
@@ -232,7 +232,7 @@ using the :code:`VARMAX` class, as follows [#]_
    model_var = sm.tsa.VARMAX(z, order=(1, 0))
 
 
-.. [#] *statsmodels* also supports vector moving-average (VMA) models using the
+.. [#] ``statsmodels`` also supports vector moving-average (VMA) models using the
        same model class as described here for the VAR case, but, for brevity,
        we do not explicitly discuss them here.
 .. [#] A second class, :code:`VAR`, can also be used to fit VAR models, using
@@ -242,10 +242,10 @@ using the :code:`VARMAX` class, as follows [#]_
 Dynamic factor models
 '''''''''''''''''''''
 
-*statsmodels* also supports a second model for multivariate time series: the
+``statsmodels`` also supports a second model for multivariate time series: the
 dynamic factor model (DFM). These models, often used for dimension reduction,
 posit a few unobserved factors, with autoregressive dynamics, that are used to
-explain the variation in the observed dataset. In *statsmodels*, there are two
+explain the variation in the observed dataset. In ``statsmodels``, there are two
 model classes, :code:`DynamicFactor`` and :code:`DynamicFactorMQ`, that can fit
 versions of the DFM. Here we focus on the :code:`DynamicFactor` class, for which
 the model can be written
@@ -257,7 +257,7 @@ the model can be written
    f_t & = \Phi_1 f_{t-1} + \dots + \Phi_p f_{t-p} + \eta_t
    \end{aligned}
 
-The following code shows how to construct a DFM in *statsmodels*
+The following code shows how to construct a DFM in ``statsmodels``
 
 .. code:: python
 
@@ -275,7 +275,7 @@ Linear Gaussian state space models
 
    Selected functionality of state space models in statsmodels. :label:`ssmflow`
 
-In *statsmodels*, each of the model classes introduced above (
+In ``statsmodels``, each of the model classes introduced above (
 :code:`statespace.ExponentialSmoothing`, :code:`UnobservedComponents`,
 :code:`ARIMA`, :code:`VARMAX`, :code:`DynamicFactor`, and
 :code:`DynamicFactorMQ`) are implemented as part of a broader class of models,
@@ -295,7 +295,7 @@ values of the unobserved state vector, compute the value of the likelihood
 function for frequentist inference, and perform posterior sampling for Bayesian
 inference. These tools include the celebrated Kalman filter and smoother and
 a simulation smoother, all of which are important for conducting Bayesian
-inference for these models. The implementation in *statsmodels* largely follows
+inference for these models. The implementation in ``statsmodels`` largely follows
 the treatment in :cite:`durbin_time_2012`, and is described in more detail in
 :cite:`fulton_estimating_2015`.
 
@@ -383,15 +383,14 @@ Probability emphasize Hamiltonian Monte Carlo (HMC) and no-U-turn sampling
 (NUTS) MCMC methods, we focus on the simpler random walk Metropolis-Hastings
 (MH) and Gibbs sampling (GS) methods. These are standard MCMC methods that
 have enjoyed great success in time series applications and which are simple to
-implement, given the state space framework already available in *statsmodels*.
+implement, given the state space framework already available in ``statsmodels``.
 In addition, the ArviZ library is designed to work with MCMC output from any
 source, and we can easily adapt it to our use.
 
 With either Metropolis-Hastings or Gibbs sampling, our procedure will produce a
 sequence of sample values (of parameters and / or the unobserved state vector)
-that – assuming certain conditions are met – approximate draws from the
-posterior distribution arbitrarily well, as the number of length of the chain of
-samples becomes very large.
+that approximate draws from the posterior distribution arbitrarily well, as the
+number of length of the chain of samples becomes very large.
 
 .. [#] While a detailed description of these issues is out of the scope of this
        paper, there are many superb references on this topic. We refer the
@@ -404,11 +403,11 @@ Random walk Metropolis-Hastings
 '''''''''''''''''''''''''''''''
 
 In random walk Metropolis-Hastings (MH), we begin with an arbitrary point as the
-initial sample, and then interatively construct new samples in the chain as
+initial sample, and then iteratively construct new samples in the chain as
 follows. At each iteration, (a) construct a proposal by perturbing the previous
 sample by a Gaussian random variable, and then (b) accept the proposal with some
 probability. If a proposal is accepted, it becomes the next sample in the chain,
-while if it is rejected then previous sample value is carried over. Here, we
+while if it is rejected then the previous sample value is carried over. Here, we
 show how to implement Metropolis-Hastings estimation of the variance parameter
 in a simple model, which only requires the use of the log-likelihood
 computation introduced above.
@@ -483,7 +482,7 @@ applicable when it is possible to produce draws directly from the conditional
 distributions of every variable, even though it is still not possible to derive
 the general form of the joint posterior. While this approach can be superior to
 random walk MH when it is applicable, the ability to derive the conditional
-distributions typically requires the use of a "conjugate" prior – i.e. a prior
+distributions typically requires the use of a "conjugate" prior – i.e., a prior
 from some specific family of distributions. For example, above we specified a
 uniform distribution as the prior when sampling via MH, but that is not possible
 with Gibbs sampling. Here, we show how to implement Gibbs sampling estimation of
@@ -680,19 +679,19 @@ Extensions
 
 There are many extensions to the time series models presented here that are
 made possible when using Bayesian inference. First, it is easy to create custom
-state space models within the *statsmodels* framework. As one example, the
-*statsmodels* documentation describes how to create a model that extends the
+state space models within the ``statsmodels`` framework. As one example, the
+``statsmodels`` documentation describes how to create a model that extends the
 typical VAR described above with time-varying parameters. [#]_ These custom
 state space models automatically inherit all the functionality described above,
 so that Bayesian inference can be conducted in exactly the same way.
 
 .. [#] For details, see https://www.statsmodels.org/devel/examples/notebooks/generated/statespace_tvpvar_mcmc_cfa.html.
 
-Second, because the general state space model available in *statsmodels* and
+Second, because the general state space model available in ``statsmodels`` and
 introduced above allows for time-varying system matrices, it is possible using
 Gibbs sampling methods to introduce support for automatic outlier handling,
 stochastic volatility, and regime switching models, even though these are
-largely infeasible in *statsmodels* when using frequentist methods such as
+largely infeasible in ``statsmodels`` when using frequentist methods such as
 maximum likelihood estimation. [#]_
 
 .. [#] See, for example, :cite:`stock_core_2016` for an application of these
@@ -703,7 +702,10 @@ maximum likelihood estimation. [#]_
 Conclusion
 ----------
 
-This paper introduces the suite of time series models available in *statsmodels*
+This paper introduces the suite of time series models available in ``statsmodels``
 and shows how Bayesian inference using Markov chain Monte Carlo methods can be
 applied to estimate their parameters and produce analyses of interest, including
 time series decompositions and forecasts.
+
+References
+----------
