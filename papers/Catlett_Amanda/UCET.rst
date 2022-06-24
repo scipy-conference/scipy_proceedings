@@ -74,8 +74,8 @@ HoloViews.
 Each UCET tool’s model class declares the input and output values used in the model as class variables. Each input and
 output variables are declared and given the following metadata features:
 
-- default:  each input variable is defined as a Param with a default value defined from the 1992 ACES user manual
-- bounds: each input variable is defined with range values defined in the 1992 ACES user manual
+- default:  each input variable is defined as a Param with a default value defined from the 1992 ACES user manual [UG, Leenknecht]
+- bounds: each input variable is defined with range values defined in the 1992 ACES user manual [UG, Leenknecht]
 - doc or docstrings: input and output variables have the expected variable and description of the variable defined as a doc. This is used as a label over the input and output widgets. Most docstrings follow the pattern of <variable>:<description of variable [units, if any]>
 - constant: the output variables all set constant equal True, thereby restricting the user’s ability to manipulate the value. Note that when calculations are being done they will need to be inside a with param.edit_constant(self) function
 - precedence: input and output variables will use precedence when there are instances where the variable does not need to be seen.
@@ -161,6 +161,40 @@ current profile”. The graph panel is tabbed where the first tab shows the grap
 provided within the graph. Some of the UCET tools have more complicated input or output visualizations and that tool’s
 GUI class will add or modify methods to meet the needs of that tool.
 
+Current State
+-------------
+UCET approaches software development from the perspective of someone within the field of Research and Development. Each
+tool within UCET is not inherently complex from the traditional software perspective. However, this codebase enables
+researchers to execute complex coastal engineering models in a user-friendly environment by leveraging open-source
+libraries in the scientific Python ecosystem such as: Param, Panel, and HoloViews.
+
+
+
+Currently, UCET is only deployed using a command line interface panel serve command. UCET is awaiting on the Security
+Technical Implementation Guide process before it can be launched as a website. While this process is happening, we have
+started to get feedback from coastal engineers to update the tools usability, accuracy, and adding suggested features.
+To minimize the amount of computer science knowledge the coastal engineers need, our team created a batch script.
+This script creates a conda environment, activates and runs the panel serve command to launch the app on a local host.
+The user only needs to click on the batch script for this to take place.
+
+
+
+Other tests are being done to ensure the accuracy of the tools by utilizing PyTests to compare results UCET obtains
+with that of the FORTRAN original code. The biggest block is getting data from the FORTRAN to compare with Python.
+Currently there are tests for most of the tools that will read a .csv file of input and output results from FORTRAN and
+compare with what the Python is calculating.
+
+
+
+Our team has also compiled an updated user guide on how to use the tool, what to expect from the tool, and a deeper
+description on any warning messages that might appear as the user adds input values. An example of a warning message
+would be, if a user chooses input values that make it so the application does not make physical sense, a warning message
+will appear under the output header and replace all output values. For a more concrete example: Linear Wave Theory
+has a vertical coordinate (z) and the water depth (d) as input values and when those values sum is less than zero the
+point is outside the waveform. Therefore, if a user makes a combination where the sum is less than zero, UCET
+will post a warning to tell the user that the point is outside the waveform. The developers have been documenting
+this project using GitHub and JIRA.
+
 
 Results
 -------
@@ -181,6 +215,10 @@ and output variables will change so only what is used or calculated for those se
 .. figure:: windspeed.png
 Screen shot of Windspeed Adjustment and Wave Growth
 
+
+
+
+
 Conclusion
 ----------
 Thirty years ago, ACES was developed to provide improved design capabilities to Corps coastal specialists and while
@@ -199,15 +237,15 @@ application work more smoothly.
 
 References
 ----------
-.. [Leenknecht] David A. Leenknecht, Andre Szuwalski, and Ann R. Sherlock. 1992. Automated Coastal Engineering System -Technical Reference. Technical report.
+.. [Leenknecht] David A. Leenknecht, Andre Szuwalski, and Ann R. Sherlock. 1992. Automated Coastal Engineering System -Technical Reference. Technical report. https://usace.contentdm.oclc.org/digital/collection/p266001coll1/id/2320/rec/2
 
 .. [panel] “Panel: A High-Level App and Dashboarding Solution for Python.” Panel 0.12.6 Documentation, Panel Contributors, 2019, https://panel.holoviz.org/.
 
 .. [holoviz] “High-Level Tools to Simplify Visualization in Python.” HoloViz 0.13.0 Documentation, HoloViz Authors, 2017, https://holoviz.org.
 
-.. [UG] David A. Leenknecht, et al. “Automated Tools for Coastal Engineering.” Journal of Coastal Research, vol. 11, no. 4, Coastal Education & Research Foundation, Inc., 1995, pp. 1108-24.
+.. [UG] David A. Leenknecht, et al. “Automated Tools for Coastal Engineering.” Journal of Coastal Research, vol. 11, no. 4, Coastal Education & Research Foundation, Inc., 1995, pp. 1108-24. https://usace.contentdm.oclc.org/digital/collection/p266001coll1/id/2321/
 
-.. [shankar] N.J. Shankar, M.P.R. Jayaratne, Wave run-up and overtopping on smooth and rough slopes of coastal structures, Ocean Engineering, Volume 30, Issue 2, 2003, Pages 221-238, ISSN 0029-8018,
+.. [shankar] N.J. Shankar, M.P.R. Jayaratne, Wave run-up and overtopping on smooth and rough slopes of coastal structures, Ocean Engineering, Volume 30, Issue 2, 2003, Pages 221-238, ISSN 0029-8018,  https://doi.org/10.1016/S0029-8018(02)00016-1
 
 
 
