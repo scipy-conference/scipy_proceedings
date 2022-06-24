@@ -215,10 +215,6 @@ and output variables will change so only what is used or calculated for those se
 .. figure:: windspeed.png
 Screen shot of Windspeed Adjustment and Wave Growth
 
-
-
-
-
 Conclusion
 ----------
 Thirty years ago, ACES was developed to provide improved design capabilities to Corps coastal specialists and while
