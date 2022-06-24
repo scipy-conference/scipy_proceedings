@@ -180,7 +180,7 @@ this model, excluding integration, can be written as
    \begin{aligned}
    y_t & = x_t \beta + \xi_t \\
    \xi_t & = \phi_1 \xi_{t-1} + \dots + \phi_p \xi_{t-p}
-   + \varepsilon_t + \theta_1 \varepsilon_t + \dots + \theta_q \varepsilon_{t-q}
+   + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \dots + \theta_q \varepsilon_{t-q}
    \end{aligned}
 
 where :math:`\varepsilon_t \sim N(0, \sigma^2)`. These are constructed in
@@ -218,8 +218,11 @@ models. [#]_ These models are written
 
    y_t = \nu + \Phi_1 y_{t-1} + \dots + \Phi_p y_{t-p} + \varepsilon_t
 
-where :math:`y_t` is now considered as a vector, and the coefficients
-:math:`\Phi_i` are matrices. These models can be constructed in ``statsmodels``
+where :math:`y_t` is now considered as an :math:`m \times 1` vector. As a result,
+the intercept :math:`\nu` is also an :math:`m \times 1` vector, the
+coefficients :math:`\Phi_i` are each :math:`m \times m` matrices, and the error
+term is :math:`\varepsilon_t \sim N(0_m, \Omega)`, with :math:`\Omega` an
+:math:`m \times m` matrix. These models can be constructed in ``statsmodels``
 using the :code:`VARMAX` class, as follows [#]_
 
 .. code:: python
@@ -257,6 +260,10 @@ the model can be written
    f_t & = \Phi_1 f_{t-1} + \dots + \Phi_p f_{t-p} + \eta_t
    \end{aligned}
 
+Here again, the observation is assumed to be :math:`m \times 1`, but the
+factors are :math:`k \times 1`, where it is possible that :math:`k << m`. As
+before, we assume conformable coefficient matrices and Gaussian errors.
+
 The following code shows how to construct a DFM in ``statsmodels``
 
 .. code:: python
@@ -290,14 +297,24 @@ referred to as linear Gaussian state space models (hereafter for brevity, simply
    \end{aligned}
 
 where :math:`\alpha_t` represents an unobserved vector containing the "state" of
-the dynamic system. Powerful tools exist for state space models to estimate the
+the dynamic system. In general, the model is multivariate, with :math:`y_t` and :math:`\varepsilon_t` :math:`m \times 1` vector, :math:`\alpha_t`
+:math:`k \times 1`, and :math:`\eta_t` `r \times 1`.
+
+Powerful tools exist for state space models to estimate the
 values of the unobserved state vector, compute the value of the likelihood
 function for frequentist inference, and perform posterior sampling for Bayesian
 inference. These tools include the celebrated Kalman filter and smoother and
 a simulation smoother, all of which are important for conducting Bayesian
-inference for these models. The implementation in ``statsmodels`` largely follows
+inference for these models. [#]_ The implementation in ``statsmodels`` largely follows
 the treatment in :cite:`durbin_time_2012`, and is described in more detail in
 :cite:`fulton_estimating_2015`.
+
+.. [#] ``Statsmodels`` currently contains two implementations of simulation
+   smoothers for the linear Gaussian state space model. The default is the
+   "mean correction" simulation smoother of :cite:`durbin_simple_2002`. The
+   precision-based simulation smoother of :cite:`chan_efficient_2009` can
+   alternatively be used by specifying ``method='cfa'`` when creating the
+   simulation smoother object.
 
 In addition to these key tools, state space models also admit general
 implementations of useful features such as forecasting, data simulation, time
