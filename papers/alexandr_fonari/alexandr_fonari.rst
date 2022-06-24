@@ -317,7 +317,7 @@ References
 .. [Grph] O Hassel, H Mark. *The Crystal Structure of Graphite*, Zeitschrift für Physik (Journal of Physics), 25: 317–337 (1924).
 .. [Enumlib] G. LW Hart, and R. W. Forcade. *Algorithm for generating derivative structures*, Physical Review B 77 (22): 224115 (2008). https://github.com/msg-byu/enumlib/
 .. [QE] P. Giannozzi, et al. *Advanced capabilities for materials modelling with Quantum ESPRESSO*, Journal of physics: Condensed matter 29 (46): 465901 (2017). https://www.quantum-espresso.org/
-.. [qeschema]_ D. Brunato, et al. *qeschema*. https://github.com/QEF/qeschema
+.. [qeschema] D. Brunato, et al. *qeschema*. https://github.com/QEF/qeschema
 .. [TM] T. Mustard, et al. *Surface reactivity and stability of core-shell solid catalysts from ab initio combinatorial calculations*, ABSTRACTS OF PAPERS OF THE AMERICAN CHEMICAL SOCIETY. 258. (2019).
 .. [Jaguar] A. D. Bochevarov, et al. *Jaguar: A high‐performance quantum chemistry software program with strengths in life and materials sciences*, International Journal of Quantum Chemistry 113 (18): 2110-2142 (2013).
 .. [CScreen] N. N. Matsuzawa, et al. *Massive theoretical screen of hole conducting organic materials in the heteroacene family by using a cloud-computing environment*, The Journal of Physical Chemistry A 124 (10): 1981-1992 (2020).
