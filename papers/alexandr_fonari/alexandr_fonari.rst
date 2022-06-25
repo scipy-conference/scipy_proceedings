@@ -271,7 +271,7 @@ Figure :ref:`figalplot` (B) presents MPO scores of the materials used in the tra
    :align: center
    :figclass: w
 
-   (A) MPO score of all materials in the HTL dataset and (B) those used in the training set as a function of the hole reorganization energy (:math:`\lambda_h`). :label:`figalplot`
+   (A) MPO score of all materials in the HTL dataset and (B) those used in the training set as a function of the hole reorganization energy. :label:`figalplot`
 
 To appreciate the computational efficiency of such an approach, it is worth noting that performing DFT calculations for all of the 9,000 molecules in the dataset would increase the computational cost by a factor of 15 versus the AL workflow.
 
