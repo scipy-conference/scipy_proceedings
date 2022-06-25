@@ -252,7 +252,7 @@ In the framework of AL, the predicted value with associated uncertainty is consi
 .. figure:: fig_al.png
    :align: center
    :figclass: w
-   :scale: 60%
+   :scale: 40%
 
    Active learning workflow for the design and discovery of novel optoelectronics molecules. :label:`figal`
 
