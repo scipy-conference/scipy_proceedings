@@ -87,47 +87,10 @@ Example of Structure object definition in pymatgen:
 
    class Structure:
 
-      def __init__(
-          self,
-          lattice: Union[ArrayLike, Lattice],
-          species: Sequence[CompositionLike],
-          coords: Sequence[ArrayLike],
-          charge: float = None,
-          validate_proximity: bool = False,
-          to_unit_cell: bool = False,
-          coords_are_cartesian: bool = False,
-          site_properties: dict = None,
-      ):
+      def __init__(self, lattice, species, coords, ...):
           """
           Create a periodic structure.
-          Args:
-              lattice: The lattice, either as a pymatgen.core.lattice.Lattice or
-                  simply as any 2D array. Each row should correspond to a lattice
-                  vector. E.g., [[10,0,0], [20,10,0], [0,0,30]] specifies a
-                  lattice with lattice vectors [10,0,0], [20,10,0] and [0,0,30].
-              species: List of species on each site. Can take in flexible input,
-                  including:
-                  i.  A sequence of element / species specified either as string
-                      symbols, e.g. ["Li", "Fe2+", "P", ...] or atomic numbers,
-                      e.g., (3, 56, ...) or actual Element or Species objects.
-                  ii. List of dict of elements/species and occupancies, e.g.,
-                      [{"Fe" : 0.5, "Mn":0.5}, ...]. This allows the setup of
-                      disordered structures.
-              coords (Nx3 array): list of fractional/cartesian coordinates of
-                  each species.
-              charge (int): overall charge of the structure. Defaults to behavior
-                  in SiteCollection where total charge is the sum of the oxidation
-                  states.
-              validate_proximity (bool): Whether to check if there are sites
-                  that are less than 0.01 Ang apart. Defaults to False.
-              to_unit_cell (bool): Whether to map all sites into the unit cell,
-                  i.e., fractional coords between 0 and 1. Defaults to False.
-              coords_are_cartesian (bool): Set to True if you are providing
-                  coordinates in cartesian coordinates. Defaults to False.
-              site_properties (dict): Properties associated with the sites as a
-                  dict of sequences, e.g., {"magmom":[5,5,5,5]}. The sequences
-                  have to be the same length as the atomic species and
-                  fractional_coords. Defaults to None for no properties.
+          ...
           """
 
 One consideration of note is that PBD, CIF and mmCIF structure formats allow description of the positional disorder (for example, a solvent molecule without a stable position within the cell which can be described by multiple sets of coordinates).
@@ -222,15 +185,22 @@ An example of deformation applied to a structure in pymatgen:
 
 .. code-block:: python
 
-   deform = Deformation([[1.0, 0.02, 0.02], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
-   lattice = Lattice([
-      [3.8401979337, 0.00, 0.00],
-      [1.9200989668, 3.3257101909, 0.00],
-      [0.00, -2.2171384943, 3.1355090603],
-   ])
-   structure = Structure(lattice, ["Si", "Si"], [[0, 0, 0], [0.75, 0.5, 0.75]])
+   deform = Deformation([
+      [1.0, 0.02, 0.02],
+      [0.0, 1.0, 0.0],
+      [0.0, 0.0, 1.0]])
 
-   strained_structure = deform.apply_to_structure(structure)
+   latt = Lattice([
+      [3.84, 0.00, 0.00],
+      [1.92, 3.326, 0.00],
+      [0.00, -2.22, 3.14],
+   ])
+   st = Structure(
+      latt,
+      ["Si", "Si"],
+      [[0, 0, 0], [0.75, 0.5, 0.75]])
+
+   strained_st = deform.apply_to_structure(st)
 
 This is also an example of loosely coupled (embarrassingly parallel) jobs.
 In particular, calculations of the deformed cells only depend on the bulk calculation and do not depend on each other.
@@ -266,7 +236,8 @@ Specifically:
 - intercalation descriptors such as cation and anion counts, crystal packing fraction, average neighbor ionicity [Sendek]_ implemented in the Schrödinger suite
 - three-dimensional smooth overlap of atomic positions (SOAP) descriptors implemented in the open source DScribe package [DScribe]_.
 
-Using these descriptors and kernel regression methods to train the model, as implemented in the open source scikit-learn code [SkLearn]_, we were able to train a model that successfully predicted bulk modulus of a set of Li-containing battery related compounds [Chandrasekaran]_.
+We are currently training models that use these descriptors to predict properties, such as bulk modulus, of a set of Li-containing battery related compounds [Chandrasekaran]_.
+Several methods to generate model will be compared, such as kernel regression methods (as implemented in the open source scikit-learn code [SkLearn]_) and AutoQSAR.
 
 For isolated small molecules and extended non-periodic systems, RDKit can be used to generate a large number of atomic and molecular descriptors.
 A lot of effort has been devoted to ensure that RDKit can be used on a wide variety of materials that are supported by the Schrödinger suite.
@@ -284,14 +255,29 @@ In the framework of AL, the predicted value with associated uncertainty is consi
 
 Since it could be important to consider multiple properties simultaneously in material discovery, multiple property optimization (MPO) has also been implemented as a part of the AL workflow [Kwak]_.
 MPO allows scaling and combining multiple properties into a single score.
-We employed the AL workflow to determine the top candidates for hole (positively charged carrier) transport layer by evaluating 550 molecules in 10 iterations using DFT calculations for a dataset of ~9,000 molecules [Abroshan]_.
+We employed the AL workflow to determine the top candidates for hole (positively charged carrier) transport layer (HTL) by evaluating 550 molecules in 10 iterations using DFT calculations for a dataset of ~9,000 molecules [Abroshan]_.
+Resulting model was validated by randomly picking a molecule from the dataset, computing properties with DFT and comparing those to the predicted values.
 According to the semiclassical Marcus equation [Marcus]_, high rates of hole transfer are inversely proportional to hole reorganization energies.
 Thus, MPO scores were computed based on minimizing hole reorganization energy and targeting oxidation potential to an appropriate level to ensure a low energy barrier for hole injection from the anode into the emissive layer.
 In this workflow, we used RDKit to compute descriptors for the chemical structures.
-These descriptors generated on the initial subset of structures are given as vectors to an algorithm based on Random Forest as implemented in scikit-learn.
+These descriptors generated on the initial subset of structures are given as vectors to an algorithm based on Random Forest Regressor as implemented in scikit-learn [SKRFR]_.
 Bayesian optimization is employed to tune the hyperparameters of the model.
 In each iteration, a trained model is applied for making predictions on the remaining materials in the dataset.
+Figure :ref:`figalplot` (A) displays MPO scores for the HTL dataset estimated by AL as a function of hole reorganization energies that are separately calculated for all the materials.
+This figure indicates that there are many materials in the dataset with desired low hole reorganization energies but are not suitable for HTL due to their improper oxidation potentials, suggesting that MPO is important to evaluate the optoelectronic performance of the materials.
+Figure :ref:`figalplot` (B) presents MPO scores of the materials used in the training dataset of AL, demonstrating that the feedback loop in the AL workflow efficiently guides the data collection as the size of the training set increases.
+
+.. figure:: fig_al_plot.png
+   :align: center
+   :figclass: w
+
+   (A) MPO score of all materials in the HTL dataset and (B) those used in the training set as a function of the hole reorganization energy (:math:`\lambda_h`). Active learning workflow for the design and discovery of novel optoelectronics molecules. :label:`figalplot`
+
 To appreciate the computational efficiency of such an approach, it is worth noting that performing DFT calculations for all of the 9,000 molecules in the dataset would increase the computational cost by a factor of 15 versus the AL workflow.
+
+It seems that AL approach can be useful in the cases where problem space is broad (like chemical space), but there are many clusters of similar items (similar molecules).
+In this case, benchmark data is only needed for few representatives of each cluster.
+We are currently working on applying this approach to train models for predicting physical properties of soft materials (polymers).
 
 Conclusions
 -----------
@@ -343,5 +329,6 @@ References
 .. [Vasudevan] R. Vasudevan, et al., *Machine learning for materials design and discovery.*, Journal of Applied Physics 129(7): 070401 (2021).
 .. [Schleder] G. R. Schleder, et al., *From DFT to machine learning: recent approaches to materials science–a review*, Journal of Physics: Materials 2(3): 032001 (2019).
 .. [Marcus] R. A. Marcus, *Electron Transfer Reactions in Chemistry. Theory and experiment.*, Rev. Mod. Phys. 65: 599–610 (1993).
+.. [SKRFR] https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html
 .. [Abroshan] H. Abroshan, et al., *Active Learning Accelerates Design and Optimization of Hole-Transporting Materials for Organic Electronics* Frontiers in Chemistry 9 (2021).
 .. [Kwak] H. S. Kwak, et al., *Design of organic electronic materials with a goal-directed generative model powered by deep neural networks and high-throughput molecular simulations.*, Frontiers in Chemistry 9: 800370 (2022).
