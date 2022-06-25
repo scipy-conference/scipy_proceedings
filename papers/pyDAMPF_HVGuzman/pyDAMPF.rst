@@ -219,13 +219,13 @@ Analysis
 Graphically
 ~~~~~~~~~~~
 
--  With static graphics, as shown in Figures :ref:`fig2a`__, :ref:`fig3a`__, :ref:`fig4a`__ and :ref:`fig5`__.
+-  With static graphics, as shown in Figures :ref:`fig2a`, :ref:`fig3a`, :ref:`fig4a` and :ref:`fig5`.
 
 ::
 
          python3 Graphical_analysis.py
 
--  With interactive graphics, as shown in Figure :ref:`fig6a`__.
+-  With interactive graphics, as shown in Figure :ref:`fig6a`.
 
 ::
 
@@ -262,7 +262,7 @@ Quantitatively
 Results and discussions
 =======================
 
-In Figure :ref:`fig1a`__, we show four scenarios to be tackled in this test-case for pyDAMPF. As described in the introduction, the first scenario (Figure :ref:`fig1a`__), compares between air and moist environment, the second tackles soft and stiff cantilevers(see Figure :ref:`fig1b`__), next is Figure Figure :ref:`fig1c`__, with the cantilever volume comparison and the force the tip’s radio (see Figure :ref:`fig1d`__). Further details of the cantilevers depicted here are included in Table :ref:`tab1`__.
+In Figure :ref:`fig1a`, we show four scenarios to be tackled in this test-case for pyDAMPF. As described in the introduction, the first scenario (Figure :ref:`fig1a`), compares between air and moist environment, the second tackles soft and stiff cantilevers(see Figure :ref:`fig1b`), next is Figure Figure :ref:`fig1c`, with the cantilever volume comparison and the force the tip’s radio (see Figure :ref:`fig1d`). Further details of the cantilevers depicted here are included in Table :ref:`tab1`.
 
 
 .. figure:: casoa.png
@@ -282,7 +282,7 @@ In Figure :ref:`fig1a`__, we show four scenarios to be tackled in this test-cas
 
     Schematic of the tip-sample interface comparing a cantilever with a wide tip with a cantilever with a sharp tip. :label:`fig1d`
 
-The AFM is widely used for mechanical properties mapping of matter :cite:`GarciaRev2021`. Hence, the first comparison of the four scenarios points out to the force response versus time according to a Hertzian interaction :cite:`GuzmanScalingBJON2015`. In Figure :ref:`fig2a`__, we see the humid air (RH = 60.1%) changes the measurement conditions by almost 10%. Using a stiffer cantilever (:math:`k_c=2.7 [N/m]`) will also increase the force by almost 50% from the softer one (:math:`k_c=0.8 [N/m]`), see Figure :ref:`fig2b`__. Interestingly, the cantilever’s volume, a smaller cantilever, results in the highest force by almost doubling the force by almost five folds of the smallest volume (Figure :ref:`fig2c`__). Finally, the Tip radius difference between 8 and 20 nm will impact the force in roughly 40 pN (Figure :ref:`fig2d`__).
+The AFM is widely used for mechanical properties mapping of matter :cite:`GarciaRev2021`. Hence, the first comparison of the four scenarios points out to the force response versus time according to a Hertzian interaction :cite:`GuzmanScalingBJON2015`. In Figure :ref:`fig2a`, we see the humid air (RH = 60.1%) changes the measurement conditions by almost 10%. Using a stiffer cantilever (:math:`k_c=2.7 [N/m]`) will also increase the force by almost 50% from the softer one (:math:`k_c=0.8 [N/m]`), see Figure :ref:`fig2b`. Interestingly, the cantilever’s volume, a smaller cantilever, results in the highest force by almost doubling the force by almost five folds of the smallest volume (Figure :ref:`fig2c`). Finally, the Tip radius difference between 8 and 20 nm will impact the force in roughly 40 pN (Figure :ref:`fig2d`).
 
 
 .. figure:: fig2aHR3.png
@@ -303,7 +303,7 @@ The AFM is widely used for mechanical properties mapping of matter :cite:`Garci
 
     Time-varying force for PVA at RH = 60.1% for different cantilevers. The simulations show elastic (Hertz) responses. For each curve, the maximum force value is the peak force. Two complete oscillations are shown corresponding to a cantilever with a wide tip with a cantilever with a sharp tip. The simulations were performed for :math:`A_{sp}/A_{0}` = 0.8 . :label:`fig2d`
 
-Now, if we consider literature values for different RH :cite:`Modul1, Modul2`, we can evaluate the Peak or Maximum Forces. This force in all cases depicted in Figure :ref:`fig3a`__ shows a monotonically increasing behavior with the higher Young modulus. Remarkably, the force varies in a range of 25% from dried PVA to one at RH = 60.1% (see Figure :ref:`fig3a`__).
+Now, if we consider literature values for different RH :cite:`Modul1, Modul2`, we can evaluate the Peak or Maximum Forces. This force in all cases depicted in Figure :ref:`fig3a` shows a monotonically increasing behavior with the higher Young modulus. Remarkably, the force varies in a range of 25% from dried PVA to one at RH = 60.1% (see Figure :ref:`fig3a`).
 
 
 
@@ -327,7 +327,7 @@ Now, if we consider literature values for different RH :cite:`Modul1, Modul2`, 
     Peak force reached for a PVA sample subjected to different relative humidities 0.0%, 29.5%, 39.9% and 60.1% corresponding to a cantilever with a wide tip with a cantilever with a sharp tip. The simulations were performed for :math:`A_{sp}/A_{0}` = 0.8 . :label:`fig3d`
 
 
-In order to properly describe operational parameters in dynamic AFM we analyze the peak force dependence with the set-point amplitude :math:`A_{sp}`. In Figure :ref:`fig4a`__, we have the comparison of peak forces for the different cantilevers as a function of :math:`A_{sp}`. The sensitivity of the peak force is higher for the type of cantilevers with varying :math:`k_c` and :math:`V_c`. Nonetheless, the peak force dependence given by the Hertzian mechanics has a dependence with the square root of the tip radius, and for those Radii on Table :ref:`tab1`__ are not influencing the force much. However, they could strongly influence resolution :cite:`GuzmanScalingBJON2013`.
+In order to properly describe operational parameters in dynamic AFM we analyze the peak force dependence with the set-point amplitude :math:`A_{sp}`. In Figure :ref:`fig4a`, we have the comparison of peak forces for the different cantilevers as a function of :math:`A_{sp}`. The sensitivity of the peak force is higher for the type of cantilevers with varying :math:`k_c` and :math:`V_c`. Nonetheless, the peak force dependence given by the Hertzian mechanics has a dependence with the square root of the tip radius, and for those Radii on Table :ref:`tab1` are not influencing the force much. However, they could strongly influence resolution :cite:`GuzmanScalingBJON2013`.
 
 
 .. figure:: fig4aHR3.png
@@ -348,7 +348,7 @@ In order to properly describe operational parameters in dynamic AFM we analyze t
 
     Dependence of the maximum force on the set-point amplitude corresponding to a cantilever with a wide tip with a cantilever with a sharp tip. :label:`fig4d`
 
-Figure :ref:`fig5`__ shows the dependence of the peak force as a function of :math:`k_c`, :math:`V_c`, and :math:`R_T`, respectively, for all the cantilevers listed in Table :ref:`tab1`__; constituting a graphical summary of the seven analyzed cantilevers for completeness of the analysis.
+Figure :ref:`fig5` shows the dependence of the peak force as a function of :math:`k_c`, :math:`V_c`, and :math:`R_T`, respectively, for all the cantilevers listed in Table :ref:`tab1`; constituting a graphical summary of the seven analyzed cantilevers for completeness of the analysis.
 
 
 .. figure:: fig5cutCOMPLETEHR3.png
@@ -356,7 +356,7 @@ Figure :ref:`fig5`__ shows the dependence of the peak force as a function of :m
     Dependence of the maximum force with the most important characteristics of each cantilever, filtering the cantilevers used for the scenarios , the figure shows maximum force dependent on the: (a)  force constant k, (b)  cantilever tip radius, and (c) cantilever volume, respectively. The simulations were performed for $A_{sp}/A_{0}$ = 0.8. :label:`fig5`
 
 
-Another way to summarize the results in AFM simulations if to show the Force vs. Distance curves (see Fig. :ref:`fig6a`__), which in these case show exactly how for example a stiffer cantilever may penetrate more into the sample by simple checking the distance cantilever *e* reaches. On the other hand, it also jumps into the eyes that a cantilever with small volume *f* has less damping from the environment and thus it also indents more than the ones with higher volume. Although these type of plots are the easiest to make, they carry lots of experimental information. In addition, pyDAMPF can plot such 3D figures interactively that enables a detailed comparison of those curves.
+Another way to summarize the results in AFM simulations if to show the Force vs. Distance curves (see Fig. :ref:`fig6a`), which in these case show exactly how for example a stiffer cantilever may penetrate more into the sample by simple checking the distance cantilever *e* reaches. On the other hand, it also jumps into the eyes that a cantilever with small volume *f* has less damping from the environment and thus it also indents more than the ones with higher volume. Although these type of plots are the easiest to make, they carry lots of experimental information. In addition, pyDAMPF can plot such 3D figures interactively that enables a detailed comparison of those curves.
 
 
 
@@ -371,7 +371,7 @@ Another way to summarize the results in AFM simulations if to show the Force vs.
     Three-dimensional plots of the various cantilevers provided by the manufacturer and those in the pyDAMPF database that establish a given maximum force at a given distance between the tip and the sample for a PVA polymer subjected to  RH = 60.1\% with E = 248.8 [MPa]. :label:`fig6b`
 
 
-As we aim a massive use of pyDAMPF, we also perform the corresponding benchmarks on four different computing platforms, where two of them resembles the standard PC or Laptop found at the labs, and the other two aim to cloud and HPC facilities, respectively (see Table :ref:`tab2`__ for details).
+As we aim a massive use of pyDAMPF, we also perform the corresponding benchmarks on four different computing platforms, where two of them resembles the standard PC or Laptop found at the labs, and the other two aim to cloud and HPC facilities, respectively (see Table :ref:`tab2` for details).
 
 
 
@@ -383,12 +383,12 @@ As we aim a massive use of pyDAMPF, we also perform the corresponding benchmarks
 
     Speed up parallel method. :label:`fig7b`
 
-Figure :ref:`fig7a`__ shows the average run time for the serial and parallel implementation. Despite a slightly higher performance for the case of the HPC cluster nodes, a high-end computer (PC 2) may also reach similar values, which is our current goal. Another striking aspect observed by looking at the speed-up, is the maximum and minimum run times, which notoriously show the on-demand character of cloud services. As their maxima and minima show the highest variations.
+Figure :ref:`fig7a` shows the average run time for the serial and parallel implementation. Despite a slightly higher performance for the case of the HPC cluster nodes, a high-end computer (PC 2) may also reach similar values, which is our current goal. Another striking aspect observed by looking at the speed-up, is the maximum and minimum run times, which notoriously show the on-demand character of cloud services. As their maxima and minima show the highest variations.
 
 
 .. figure:: tab1.png
 
-    Data used for Figs. :ref:`fig2a`__, :ref:`fig3a`__ and :ref:`fig4a`__ with an :math:`A_0=10[nm]` . Observe that the quality factor and Young's modulus have three different values respectively for RH1 = 29.5\%, RH2 = 39.9\% y RH3 = 60.1\%. $^{**}$ The values presented for Quality Factor :math:`Q` were calculated at  `Google Colaboratory notebook Q calculation <https://colab.research.google.com/drive/1O1xjLfmMoL6J4EwVods95zfelzr8GDUQ?usp=sharing>`__, using the method proposed by :cite:`Sader, Sader2`. :label:`tab1`
+    Data used for Figs. :ref:`fig2a`, :ref:`fig3a` and :ref:`fig4a` with an :math:`A_0=10[nm]` . Observe that the quality factor and Young's modulus have three different values respectively for RH1 = 29.5\%, RH2 = 39.9\% y RH3 = 60.1\%. $^{**}$ The values presented for Quality Factor :math:`Q` were calculated at  `Google Colaboratory notebook Q calculation <https://colab.research.google.com/drive/1O1xjLfmMoL6J4EwVods95zfelzr8GDUQ?usp=sharing>`__, using the method proposed by :cite:`Sader, Sader2`. :label:`tab1`
 
 .. figure:: tab2.png
 
@@ -403,7 +403,7 @@ To calculate the speed up we use the following equation:
 
 .. math:: S = \frac{t_{total}}{t_{thread}} %= \frac{Case_{time}}{Thread_{average}}
 
-Where :math:`S` is the speed up , :math:`t_{Thread}` is the execution time of a computational thread, and :math:`t_{Total}` is the sum of times, shown in the table :ref:`tab3`__. For our calculations we used the highest, the average and the lowest execution time per thread.
+Where :math:`S` is the speed up , :math:`t_{Thread}` is the execution time of a computational thread, and :math:`t_{Total}` is the sum of times, shown in the table :ref:`tab3`. For our calculations we used the highest, the average and the lowest execution time per thread.
 
 Limitations [limitations]
 =========================
