@@ -38,7 +38,7 @@ Computational materials discovery leverages such workflows to empower researcher
 .. figure:: fig_scheme.png
    :align: center
    :figclass: w
-   :scale: 100%
+   :scale: 60%
 
    Example of a workflow for computational materials discovery. :label:`fig1`
 
@@ -67,6 +67,7 @@ To run and manage workflow jobs in a high-throughput manner, open source package
 .. figure:: fig_product.png
    :align: center
    :figclass: w
+   :scale: 60%
 
    Some example products that compose the Schrödinger Materials Science Suite. :label:`fig2`
 
@@ -128,6 +129,7 @@ In order to accommodate job dependencies in workflows, for each job, a parent jo
 .. figure:: fig_job_scheme.png
    :align: center
    :figclass: w
+   :scale: 60%
 
    Example of the job submission process. :label:`fig3`
 
@@ -176,8 +178,7 @@ Figure :ref:`fig4` shows obtained calculated yield of 10% *vs.* experimental val
 
 .. figure:: fig_stress_strain.png
    :align: center
-   :figclass: whbt
-   :scale: 100%
+   :scale: 60%
 
    Left: The uniaxial stress/strain curve of a polymer calculated using Desmond through the stress strain workflow, grey band indicates inflection point (yield)). Right: Constant strain simulation with convex analysis indicates elongation at yield. Red curve - simulated stress versus strain. Blue curve - convex analysis. :label:`fig4`
 
