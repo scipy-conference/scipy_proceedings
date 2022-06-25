@@ -175,7 +175,8 @@ Figure :ref:`fig4` shows obtained calculated yield of 10% *vs.* experimental val
 
 .. figure:: fig_stress_strain.png
    :align: center
-   :figclass: w
+   :figclass: whbt
+   :scale: 100%
 
    Left: The uniaxial stress/strain curve of a polymer calculated using Desmond through the stress strain workflow, grey band indicates inflection point (yield)). Right: Constant strain simulation with convex analysis indicates elongation at yield. Red curve - simulated stress versus strain. Blue curve - convex analysis. :label:`fig4`
 
