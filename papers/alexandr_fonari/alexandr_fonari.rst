@@ -38,6 +38,7 @@ Computational materials discovery leverages such workflows to empower researcher
 .. figure:: fig_scheme.png
    :align: center
    :figclass: w
+   :scale: 100%
 
    Example of a workflow for computational materials discovery. :label:`fig1`
 
