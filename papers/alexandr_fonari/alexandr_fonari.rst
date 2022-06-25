@@ -79,7 +79,7 @@ Correctly reading experimental structures is of significant importance, since th
 In addition to atom coordinates and periodic cell information, structural data also contains symmetry operations (listed explicitly or by the means of providing a space group) that can be used to decrease the number of computations required for a particular system by accounting for symmetry.
 This can be important, especially when scaling high-throughput calculations.
 From file, structure is read in a structure object through which atomic coordinates (as a NumPy array) and chemical information of the material can be accessed and updated.
-Structure object is similar to the one implemented in open source packages such as pymatgen [pymatgen]_ and ASE [ase]_.
+Structure object is similar to the one implemented in open source packages such as pymatgen [pymatgen]_ and ASE [ASE]_.
 All the structure manipulations during the workflows are done using structure object interface.
 Example of Structure object definition in pymatgen:
 
@@ -271,7 +271,7 @@ Figure :ref:`figalplot` (B) presents MPO scores of the materials used in the tra
    :align: center
    :figclass: w
 
-   Active learning workflow for the design and discovery of novel optoelectronics molecules. :label:`figalplot`
+   (A) MPO score of all materials in the HTL dataset and (B) those used in the training set as a function of the hole reorganization energy (:math:`\lambda_h`). :label:`figalplot`
 
 To appreciate the computational efficiency of such an approach, it is worth noting that performing DFT calculations for all of the 9,000 molecules in the dataset would increase the computational cost by a factor of 15 versus the AL workflow.
 
