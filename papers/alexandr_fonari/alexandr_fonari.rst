@@ -273,7 +273,7 @@ Figure :ref:`figalplot` (B) presents MPO scores of the materials used in the tra
 .. figure:: fig_al_plot.png
    :align: center
    :figclass: w
-   :scale: 100%
+   :scale: 110%
 
    A: MPO score of all materials in the HTL dataset. B: Those used in the training set as a function of the hole reorganization energy - :math:`\lambda_h`. :label:`figalplot`
 
