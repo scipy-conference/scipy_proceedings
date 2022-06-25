@@ -127,7 +127,7 @@ This allows the user to submit a large number of jobs, limited only by SLURM sch
 In order to accommodate job dependencies in workflows, for each job, a parent job (or multiple parent jobs) can be defined forming a directed graph of jobs (Figure :ref:`fig3`).
 
 .. figure:: fig_job_scheme.png
-   :scale: 20%
+   :scale: 30%
 
    Example of the job submission process. :label:`fig3`
 
@@ -252,6 +252,7 @@ In the framework of AL, the predicted value with associated uncertainty is consi
 .. figure:: fig_al.png
    :align: center
    :figclass: w
+   :scale: 60%
 
    Active learning workflow for the design and discovery of novel optoelectronics molecules. :label:`figal`
 
@@ -272,7 +273,7 @@ Figure :ref:`figalplot` (B) presents MPO scores of the materials used in the tra
 .. figure:: fig_al_plot.png
    :align: center
    :figclass: w
-   :scale: 70%
+   :scale: 100%
 
    A: MPO score of all materials in the HTL dataset. B: Those used in the training set as a function of the hole reorganization energy - :math:`\lambda_h`. :label:`figalplot`
 
