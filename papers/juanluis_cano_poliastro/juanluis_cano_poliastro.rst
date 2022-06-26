@@ -80,13 +80,10 @@ the one that captures the essence of the two-body problem in its most restricted
 already has this mathematical intricacy,
 any further development will carry away similar or greater complexity.
 
-.. raw:: latex
+.. math::
+   :label: eq:kepler
 
-   \begin{figure}
-   \[ M = E - e \sin{E} \]
-   \caption{The Kepler equation}
-   \label{eq:kepler}
-   \end{figure}
+   M = E - e \sin{E}
 
 Almost three centuries later, in 1903, Russian rocket scientist Konstantin E. Tsiolkovsky
 first explained precise conditions for artificial objects to reach the orbit of the Earth
@@ -97,13 +94,11 @@ to the real possibility of going to space.
 
 .. Regarding Saxon genitive and equation names, see http://english.stackexchange.com/a/301270/20057
 
-.. raw:: latex
 
-   \begin{figure}
-   \[ \Delta v = v_e \ln \frac{m_0}{m_f} \]
-   \caption{The Tsiolkovsky equation}
-   \label{eq:tsiolkovsky}
-   \end{figure}
+.. math::
+   :label: eq:tsiolkovsky
+
+   \Delta v = v_e \ln \frac{m_0}{m_f}
 
 Tsiolkovsky's contribution could be considered the starting point of Astrodynamics,
 and many others ensued before they could be tested in practice during the second half of the 20th century.
