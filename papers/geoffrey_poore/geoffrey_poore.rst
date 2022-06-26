@@ -280,7 +280,7 @@ JavaScript library for rendering LaTeX math in the browser.
 One of the disadvantages of using Pandoc to create the preview is that
 every update of the preview is a complete update. This makes the preview
 more sensitive to HTML rendering time. In contrast, in a Jupyter
-notebook, it is common to create Markdown in multiple cells which are
+notebook, it is common to write Markdown in multiple cells which are
 rendered separately and independently.
 
 MathJax :cite:`mathjax` provides a broader range of LaTeX support than
