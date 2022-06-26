@@ -235,13 +235,28 @@ to trace each individual plot back to a particular line of code in the
 Markdown source. In such cases, the line range of the executed code is
 mapped proportionally to the vertical space occupied by its output.
 
-Pandoc supports multi-file documents. When Pandoc runs on the command
-line, it can be given a list of files, which it combines into a single
-output document. Codebraid Preview provides scroll sync for multi-file
-documents. Once the list of files is specified (for example, in a
-configuration file ``_codebraid_preview.yaml``), then scrolling the
-preview automatically switches between the different source files
-depending on the part of the preview that is visible.
+Pandoc supports multi-file documents. It can be given a list of files to
+combine into a single output document. Codebraid Preview provides scroll
+sync for multi-file documents. For example, suppose a document is
+divided into two files in the same directory, ``chapter_1.md`` and
+``chapter_2.md``. Treating these as a single document involves creating
+a YAML configuration file ``_codebraid_preview.yaml`` that lists the
+files:
+
+.. raw:: latex
+
+    \begin{quotation}
+    \begin{Verbatim}
+    input-files:
+    - chapter_1.md
+    - chapter_2.md
+    \end{Verbatim}
+    \end{quotation}
+    Now launching a preview from either \Verb|chapter_1.md| or
+    \Verb|chapter_2.md| will display a preview that combines both files.
+    When the preview is scrolled, the editor scrolls to the corresponding
+    source location, automatically switching between \Verb|chapter_1.md| and
+    \Verb|chapter_2.md| depending on the part of the preview that is visible.
 
 The preview still works when the input format is set to a non-CommonMark
 format, but in that case scroll sync is disabled. If Pandoc adds
