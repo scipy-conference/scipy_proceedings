@@ -217,7 +217,7 @@ regime and loss function may be adapted to assist the performance of a
 DML method for a semi-supervised dataset.
 
 .. figure:: figs/alg_base.PNG
-   :scale: 45%
+   :scale: 90%
    :figclass: w
    :align: center
 
