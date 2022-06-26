@@ -677,13 +677,13 @@ as described in :cite:`curtis_orbital_2008`.
 
    @njit
    def combined_a_d(
-       t0, state, k, J2, R, C_D, A_over_m, H0, rho0
+       t0, state, k, j2, r_eq, c_d, a_over_m, h0, rho0
    ):
        return (
            J2_perturbation(
-               t0, state, k, J2, R
+               t0, state, k, j2, r_eq
            ) + atmospheric_drag_exponential(
-               t0, state, k, R, C_D, A_over_m, H0, rho0
+               t0, state, k, r_eq, c_d, a_over_m, h0, rho0
            )
        )
 
@@ -756,8 +756,8 @@ in the framework of the non-perturbed two-body problem:
 
     from poliastro.maneuver import Maneuver
 
-    ss_i = Orbit.circular(Earth, alt=700 * u.km)
-    hoh = Maneuver.hohmann(ss_i, r_f=36000 * u.km)
+    orb_i = Orbit.circular(Earth, alt=700 << u.km)
+    hoh = Maneuver.hohmann(orb_i, r_f=36000 << u.km)
 
 Once instantiated, ``Maneuver`` objects provide information regarding total
 :math:`\Delta v` and :math:`\Delta t`:
@@ -775,12 +775,12 @@ Once instantiated, ``Maneuver`` objects provide information regarding total
 
 .. code-block:: pycon
 
-    >>> ss_i
+    >>> orb_i
     7078 x 7078 km x 0.0 deg (GCRS) orbit
     around Earth (X)
 
-    >>> ss_f = ss_i.apply_maneuver(hoh)
-    >>> ss_f
+    >>> orb_f = orb_i.apply_maneuver(hoh)
+    >>> orb_f
     36000 x 36000 km x 0.0 deg (GCRS) orbit
     around Earth (X)
 
@@ -809,18 +809,18 @@ advantage of ``Orbit`` objects.
    )
 
    # Define initial and final orbits
-   ss_earth = Orbit.from_ephem(
+   orb_earth = Orbit.from_ephem(
        Sun, Ephem.from_body(Earth, date_launch),
        date_launch
    )
-   ss_mars = Orbit.from_ephem(
+   orb_mars = Orbit.from_ephem(
        Sun, Ephem.from_body(Mars, date_arrival),
        date_arrival
    )
 
    # Compute targetting maneuver and apply it
-   man_lambert = Maneuver.lambert(ss_earth, ss_mars)
-   ss_trans, ss_target = ss0.apply_maneuver(
+   man_lambert = Maneuver.lambert(orb_earth, orb_mars)
+   orb_trans, orb_target = ss0.apply_maneuver(
        man_lambert, intermediate=true
    )
 
@@ -899,8 +899,8 @@ first, orbits to be plotted are computed and their plotting style is declared:
     )
 
     # Define orbit labels and color style
-    florence_style = {label="Florence", color="#000000"}
-    halley_style = {label="Florence", color="#84B0B8"}
+    florence_style = {label: "Florence", color: "#000000"}
+    halley_style = {label: "Florence", color: "#84B0B8"}
 
 The static two-dimensional plot can be created using the following code:
 
