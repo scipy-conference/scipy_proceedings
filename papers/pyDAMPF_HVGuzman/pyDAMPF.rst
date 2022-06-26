@@ -237,7 +237,6 @@ Graphically
 
 
 
-
 Quantitatively
 ~~~~~~~~~~~~~~
 
@@ -405,14 +404,13 @@ To calculate the speed up we use the following equation:
 
 Where :math:`S` is the speed up , :math:`t_{Thread}` is the execution time of a computational thread, and :math:`t_{Total}` is the sum of times, shown in the table :ref:`tab3`. For our calculations we used the highest, the average and the lowest execution time per thread.
 
-Limitations [limitations]
-=========================
+Limitations
+============
 
 The main limitation of dynamic AFM simulators based in continuum modeling is that sometimes a molecular behavior is overlooked. Such a limitation comes from the multiple time and length scales behind the physics of complex systems, as it is the case of polymers and biopolymers. In this regard, several efforts on the multiscale modeling of materials have been proposed, joining mainly efforts to stretch the multiscale gap :cite:`GuzmanCPC2019`. We also plan to do so, within a current project, for modeling the polymeric fibers as molecular chains and providing "feedback" between models from a top-down strategy. Code-wise, the implementation will be also gradually improved. Nonetheless, to maintain scientific code is a challenging task. In particular without the support for our students once they finish their thesis. In this respect, we will seek software funding and more community contributions.
 
-Future work [future-work]
-=========================
-
+Future work
+============
 There are several improvements that are planned for pyDAMPF.
 
 -  We plan to include a link to molecular dynamics simulations of polymer chains in a multiscale like approach.
@@ -423,15 +421,15 @@ There are several improvements that are planned for pyDAMPF.
 
 -  Some AI optimization was also envisioned, particularly for optimizing criteria and comparing operational parameters.
 
-Conclusions [Conclusions]
-=========================
+Conclusions
+============
 
 In summary, pyDAMPF is a highly efficient and adaptable simulation tool aimed at analyzing, planning and interpreting dynamic AFM experiments.
 
 It is important to keep in mind that pyDAMPF uses cantilever manufacturers information to analyze, evaluate and choose a certain nanoprobe that fulfills experimental criteria. If this will not be the case, it will advise the experimentalists on what to expect from their measurements and the response a material may have. We currently support multi-thread execution using in-house development. However, in our outlook, we plan to extend the code to GPU by using transpiling tools, like compyle :cite:`compyleScipy2019`, as the availability of GPUs also increases in standard workstations. In addition, we have shown how to reuse a widely tested Fortran code :cite:`GuzmanACSnano2013` and wrap it as a python module to profit from pythonic libraries and interactivity via Jupyter notebooks. Implementing new interaction forces for the simulator is straightforward. However, this code includes the state-of-the-art contact, viscous, van der Waals, capillarity and electrostatic forces used for physics at the interfaces. Moreover, we plan to implement soon semi-empirical analysis and multiscale modeling with molecular dynamics simulations.3
 
-Acknowledgments [acknowledgments]
-=================================
+Acknowledgments
+===============
 
 H.V.G thanks the financial support by the Slovenian Research Agency (Funding No. P1-0055). We gratefully acknowledge the fruitful discussions with Tomas Corrales.
 
