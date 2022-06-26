@@ -438,7 +438,7 @@ similar in dimensionality (1 x 28 x 28), number of samples (60,000 and
    :figclass: w
    :align: center
 
-Sample images from the MNIST (left) and OrganAMNIST of MedMNIST (right) datasets
+   Sample images from the MNIST (left) and OrganAMNIST of MedMNIST (right) datasets
 
 Hardware
 =========
