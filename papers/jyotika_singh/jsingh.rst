@@ -152,11 +152,13 @@ The per-class evaluation metrics are shown in :ref:`speech-music`.
 .. table:: Per-class evaluation metrics for audio type (speech vs music) classification pre-trained model. :label:`speech-music`
 
      +-----------+-------------+-------------+-------------+
+     | Class     |             | Metric      |             |
+     +-----------+-------------+-------------+-------------+
      |           |**Accuracy** |**Precision**| **F1**      |
+     +===========+=============+=============+=============+
+     | **music** | 97.60%      | 98.79%      | 98.19%      |
      +-----------+-------------+-------------+-------------+
-     | **Music** | 97.60%      | 98.79%      | 98.19%      |
-     +-----------+-------------+-------------+-------------+
-     | **Speech**| 98.80%      | 97.63%      | 98.21%      |
+     | **speech**| 98.80%      | 97.63%      | 98.21%      |
      +-----------+-------------+-------------+-------------+
 
 
@@ -168,13 +170,15 @@ chroma features. The per-class evaluation metrics are shown in :ref:`speech-musi
 .. table:: Per-class evaluation metrics for audio type (speech vs music vs bird sound) classification pre-trained model. :label:`speech-music-birds`
 
      +-----------+-------------+-------------+-------------+
+     | Class     |             | Metric      |             |
+     +-----------+-------------+-------------+-------------+
      |           |**Accuracy** |**Precision**| **F1**      |
+     +===========+=============+=============+=============+
+     | **music** | 94.60%      | 96.93%      | 95.75%      |
      +-----------+-------------+-------------+-------------+
-     | **Music** | 94.60%      | 96.93%      | 95.75%      |
+     | **speech**| 97.00%      | 97.79%      | 97.39%      |
      +-----------+-------------+-------------+-------------+
-     | **Speech**| 97.00%      | 97.79%      | 97.39%      |
-     +-----------+-------------+-------------+-------------+
-     | **Birds** | 100.00%     | 96.89%      | 98.42%      |
+     | **birds** | 100.00%     | 96.89%      | 98.42%      |
      +-----------+-------------+-------------+-------------+
 
 3. Music genre classifier using the GTZAN :cite:`tzanetakis:2001`:
@@ -184,10 +188,13 @@ music into 10 genre classes - blues, classical, country, disco, hiphop,
 jazz, metal, pop, reggae, rock. The per-class evaluation metrics are shown in :ref:`music-class-genre`.
 
 .. table:: Per-class evaluation metrics for music genre classification pre-trained model. :label:`music-class-genre`
+    :class: w
 
     +----------+---------------+---------------+---------------+
-    |          | **Accuracy**  | **Precision** | **F1**        |
+    | Class    |               | Metric        |               |
     +----------+---------------+---------------+---------------+
+    |          | **Accuracy**  | **Precision** | **F1**        |
+    +==========+===============+===============+===============+
     | **pop**  | 72.36%	       | 78.63%        | 75.36%        |
     +----------+---------------+---------------+---------------+
     | **met**  | 87.31%	       | 85.52%	       | 86.41%        |
@@ -250,7 +257,7 @@ This is motivated by the fact that the human auditory system becomes less freque
 frequency increases above 1 kHz.
 
 .. figure:: S1_Fig.png
-   :scale: 39%
+   :scale: 42%
    :figclass: w
 
    MFCC from audio spectrum. :label:`S1Fig`
@@ -287,7 +294,7 @@ auditory filters became desirable. Thus, it has many applications in speech proc
 it aims to replicate how we hear.
 
 .. figure:: S2_Fig.png
-   :scale: 34%
+   :scale: 37%
    :figclass: w
 
    GFCC from audio spectrum. :label:`S2Fig`
@@ -438,7 +445,7 @@ audio do not contribute to the predictions and act as noise in the signal.
 .. table:: Performance comparison on test data between MFCC feature trained model with and without cleaning. :label:`clean`
 
    +------------------+------------------+------------------+
-   | Features (Tools) | boston acc       | london acc       |
+   | Features         | boston acc       | london acc       |
    +==================+==================+==================+
    | **mfcc**         | 0.765            | 0.412            |
    +------------------+------------------+------------------+
@@ -500,12 +507,6 @@ and can be used as the basis for further python-based research efforts.
 pyAudioProcessing is updated frequently in order to apply enhancements and new functionalities
 with recent research efforts of the digital signal processing and machine learning community.
 Some of the ongoing implementations include additions of cepstral features such as LPCC, integration with deep learning backends, and a variety of spectrogram formations that can be used for image classification-based audio classification tasks.
-
-Acknowledgments
-===============
-
-This project was built as a contribution towards the open-source community.
-We want to thank the open-source community and Github for making open-source contributions possible.
 
 
 References
