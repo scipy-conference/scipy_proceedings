@@ -486,10 +486,10 @@ There are some crucial differences between ``Orbit`` and ``Ephem`` objects:
 
 Finally, both types have methods to convert between them:
 
-- ``Orbit.to_ephem`` is the equivalent of sampling a two-body motion
+- ``Ephem.from_orbit`` is the equivalent of sampling a two-body motion
   over a given time interval. As explained above, the resulting ``Ephem``
   loses the information about the original attractor.
-- ``Ephem.to_orbit`` is the equivalent of calculating the osculating orbit
+- ``Orbit.from_ephem`` is the equivalent of calculating the osculating orbit
   at a certain point of a trajectory, assuming a given attractor.
   The resulting ``Orbit`` loses the information about the original,
   potentially complex trajectory.
