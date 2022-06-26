@@ -71,55 +71,34 @@ and refers to the branch of space science dealing with the motion of artificial 
 (:cite:`duboshin_book_1973`, :cite:`herrick_astrodynamics_1971`).
 However, the roots of its mathematical foundations go back several centuries.
 
-Since 1609, when German mathematician and astronomer Johannes Kepler published his book *Astronomia nova*,
-containing the most famous of all transcendental equations,
-the motion of the celestial bodies has attracted the attention of the greatest minds in human history,
-even sparking entire new fields in mathematics :cite:`battin_introduction_1999`.
-It is easy to imagine that if even Kepler's equation (:ref:`eq:kepler`),
-the one that captures the essence of the two-body problem in its most restricted form,
-already has this mathematical intricacy,
-any further development will carry away similar or greater complexity.
+Kepler first introduced his laws of planetary motion in 1609 and 1619
+and derived his famous transcendental equation (:ref:`eq:kepler`),
+which we now see as capturing a restricted form of the two-body problem.
+This work was generalized by Newton to give birth to the n-body problem,
+and many other mathematicians worked on it throughout the centuries
+(Daniel and Johann Bernoulli, Euler, Gauss).
+Poincaré established in the 1890s that no general closed-form solution
+exists for the n-body problem, since the resulting dynamical system is
+chaotic :cite:`battin_introduction_1999`. Sundman proved in the 1900s
+the existence of convergent solutions for a few restricted with :math:`n = 3`.
 
 .. math::
    :label: eq:kepler
 
    M = E - e \sin{E}
 
-Almost three centuries later, in 1903, Russian rocket scientist Konstantin E. Tsiolkovsky
-first explained precise conditions for artificial objects to reach the orbit of the Earth
-in his article *Exploration of Outer Space by Means of Rocket Devices*.
-This made a huge leap from the mere observation of the celestial bodies
-and the science fiction stories that had inspired him
-to the real possibility of going to space.
-
-.. Regarding Saxon genitive and equation names, see http://english.stackexchange.com/a/301270/20057
-
+In 1903 Tsiokovsky evaluated the conditions
+required for artificial objects to leave the orbit of the earth;
+this is considered as a foundational contribution to the field of astrodynamics.
+Further developments by Kondratyuk, Hohmann, and Oberth in the early 20th century
+all added to the growing field of orbital mechanics,
+which in turn enabled the development of space flight in the USSR and the United States
+in the 1950s and 1960s.
 
 .. math::
    :label: eq:tsiolkovsky
 
    \Delta v = v_e \ln \frac{m_0}{m_f}
-
-Tsiolkovsky's contribution could be considered the starting point of astrodynamics,
-and many others ensued before they could be tested in practice during the second half of the 20th century.
-In 1919 Yuri V. Kondratyuk conceived the gravitational slingshot or flyby
-to accelerate a spacecraft through interplanetary flight
-and suggested a mission profile for a Lunar landing :cite:`siddiqi_challenge_2000`,
-in 1925 Walter Hohmann conjectured
-that the minimum-fuel transfer between two coplanar circular orbits
-consists of two tangent impulses along the line of apses
-(although this result was not proved until almost forty years later in :cite:`lawden_optimal_1963`),
-and in 1926 Hermann J. Oberth observed
-that the velocity gain of an impulsive maneuver
-is higher when the kinetic energy is at a maximum
-(nowadays known as the Oberth effect).
-The severe limitations in weight and available energy for such kind of travels
-were already apparent for these pioneers,
-who were, in some way, anticipating the need to optimize on board fuel consumption.
-
-The rich history of astrodynamics as a field continues to this day,
-as new research offers better methods to solve these ancient equations
-and more computational efficiency is neeeded to perform large scale simulations.
 
 The two-body problem
 --------------------
@@ -143,14 +122,7 @@ Applying Newton's second law of motion results in a system of :math:`n` differen
 
    \frac{\diff^2{\vec{r}}_i}{\diff{t}^2} = -G \sum_{j \neq i}^n \frac{m_j}{|\vec{r}_{ij}|^3} \vec{r}_{ij}
 
-No general closed-form solution exists for the n-body problem, as established by Henri Poincaré in the 1890s:
-except for a few restricted cases, the resulting dynamical system is chaotic.
-Karl F. Sundman proved in the 1900s the existence of convergent solutions for the :math:`n = 3` case.
-However, the :math:`n = 2` case does have a closed-form solution,
-which was studied in detail by Daniel and Johann Bernoulli, and most specially by Leonhard Euler in 1744
-:cite:`battin_introduction_1999`.
-
-By setting :math:`n = 2` in :ref:`eq:nbody` and subtracting the two resulting equations,
+By setting :math:`n = 2` in :ref:`eq:nbody` and subtracting the two resulting equalities,
 one arrives to the **fundamental equation of the two-body problem**:
 
 .. math::
@@ -162,7 +134,10 @@ where :math:`\mu = G(m_1 + m_2) = G(M + m)`. When :math:`m \ll M`
 (for example, an artificial satellite orbiting a planet),
 one can consider :math:`\mu = GM` a property of the attractor.
 
-Conveniently manipulating this equation leads to several properties :cite:`battin_introduction_1999`
+Keplerian vs non-keplerian motion
+---------------------------------
+
+Conveniently manipulating equation :ref:`eq:twobody` leads to several properties :cite:`battin_introduction_1999`
 that were already published by Johannes Kepler in the 1610s, namely:
 
 1. The orbit always describes a conic section (an ellipse, a parabola, or an hyperbola),
@@ -173,43 +148,10 @@ that were already published by Johannes Kepler in the 1610s, namely:
 3. For closed (circular and elliptical) orbits, the period is related to the size of the orbit through
    :math:`P = 2 \pi \sqrt{\frac{a^3}{\mu}}` (Kepler's third law).
 
-In the real world, celestial bodies do not follow these laws in an exact manner,
-because there are perturbations of different kinds affecting the ideal motion.
-However, for many practical purposes it is usually sufficient to limit the study
-to one object orbiting an attractor and ignore all other external forces of the system.
-The trajectories of such objects are called "Keplerian".
-
-There are six parameters that uniquely determine a Keplerian orbit,
-plus the gravitational parameter of the corresponding attractor (:math:`k` or :math:`\mu`).
-Optionally, an epoch that contextualizes the orbit can be included as well.
-This set of six parameters is not unique,
-and several of them have been developed over the years to serve different purposes.
-The most widely used ones are:
-
-- **Cartesian elements**: Three components for the position :math:`(x, y, z)`
-  and three components for the velocity :math:`(v_x, v_y, v_z)`.
-  This set has no singularities.
-- **Classical Keplerian elements**: Two components for the shape of the conic
-  (usually the semimajor axis :math:`a` or semiparameter :math:`p` and the eccentricity :math:`e`),
-  three Euler angles for the orientation of the orbital plane in space
-  (inclination :math:`i`, right ascension of the ascending node :math:`\Omega`, and argument of periapsis :math:`\omega`),
-  and one polar angle for the position of the body along the conic
-  (usually true anomaly :math:`f` or :math:`\nu`).
-  This set of elements has an easy geometrical interpretation
-  and the advantage that, in pure two-body motion,
-  five of them are fixed :math:`(a, e, i, \Omega, \omega)`
-  and only one is time-dependent (:math:`\nu`),
-  which greatly simplifies the analytical treatment of orbital perturbations.
-  However, they suffer from singularities steming from the Euler angles ("gimbal lock")
-  and equations expressed in them are ill-conditioned near such singularities.
-- **Walker modified equinoctial elements**: Six parameters :math:`(p, f, g, h, k, L)`.
-  Only :math:`L` is time-dependent and this set has no singularities,
-  however the geometrical interpretation of the rest of the elements is lost :cite:`walker_set_1985`.
-
-Keplerian motion
-----------------
-
-There can be several problems formulated from equation :ref:`eq:twobody`, namely:
+For many practical purposes it is usually sufficient to limit the study
+to one object orbiting an attractor and ignore all other external forces of the system,
+hence restricting the study to trajectories governed by equation :ref:`eq:twobody`.
+Such trajectories are called "Keplerian", and several problems can be formulated for them:
 
 - The **initial-value problem**, which is usually called **propagation**,
   involves determining the position and velocity of an object after an elapse period of time
@@ -221,33 +163,14 @@ There can be several problems formulated from equation :ref:`eq:twobody`, namely
   usually departure and arrival position vectors and a time of flight.
 
 Fortunately, most of these problems boil down to finding numerical solutions to
-relatively simple algebraic relations between time and angular variables.
-For example, speaking about orbital propagation,
-by conveniently manipulating the two-body equations and assuming :math:`0 \le e < 1`
-one can arrive to the Kepler equation mentioned at the beginning:
+relatively simple algebraic relations between time and angular variables:
+for elliptic motion (:math:`0 \le e < 1`) it is the Kepler equation,
+and equivalent relations exist for the other eccentricity regimes :cite:`battin_introduction_1999`.
+Numerical solutions for these equations can be found in a number of different ways,
+each one with different complexity and precision tradeoffs.
+In the Methods section we list the ones implemented by poliastro.
 
-.. math::
-   :type: eqnarray*
-   :label: eq:kepler
-
-   M = n \Delta t = E - e \sin{E} \\
-   \tan{\frac{1}{2} \nu} = \sqrt{\frac{1 + e}{1 - e}} \tan{\frac{1}{2} E}
-
-where :math:`M` is called the mean anomaly and :math:`E` is the eccentric anomaly.
-Similar relations exist for the other eccentricity regimes :cite:`battin_introduction_1999`.
-Despite not having a closed-form solution, these equations can be solved
-in a number of different ways, each one with different complexity and precision tradeoffs.
-
-Doing a literature review of such methods is out of scope of this paper,
-however in the Methods section we list the ones implemented by poliastro.
-
-Orbital perturbations
----------------------
-
-The analytical methods discussed above are perfect for solving the ideal Keplerian motion.
-This approximation is usually good enough for interplanetary travel,
-when all other forces aside from the sun's gravity are negligible.
-However, there are many situations in which natural and artificial orbital perturbations
+On the other hand, there are many situations in which natural and artificial orbital perturbations
 must be taken into account so that the actual non-Keplerian motion can be properly analyzed:
 
 - Interplanetary travel in the proximity of other planets.
@@ -265,109 +188,31 @@ must be taken into account so that the actual non-Keplerian motion can be proper
   This is the regime in which all the commercial space industry operates,
   especially for those satellites in Low-Earth Orbit (LEO).
 
-.. figure:: enckes_method.pdf
-   :scale: 50%
-   :align: center
-
-   Osculating (Keplerian) vs perturbed (true) orbit
-   (source: Wikipedia, CC BY-SA 3.0) :label:`fig:osculating`
-
-As showcased in Figure :ref:`fig:osculating`, at any point in a trajectory
-we can define an ideal Keplerian orbit with the same position and velocity
-under the attraction of a point mass: this is called the osculating orbit.
-Some numerical propagation methods exist that model the true, perturbed orbit
-as a deviation from an evolving, osculating orbit: for example,
-Cowell's method :cite:`cowell_investigation_1910` consists in adding
-all the perturbation accelerations and then integrating
-the resulting differential equation with any numerical method of choice:
-
-.. math::
-   :label: eq:cowell
-
-   \frac{\diff^2{\vec{r}}}{\diff{t}^2} = -\frac{\mu}{r^3} \vec{r} + \vec{a}_d
-
-High order numerical integration methods, such as Dormand-Prince 8(5,3) (`DOP853`),
-are usually used in astrodynamics, since the integration times are quite large
-and the tolerances comparatively tight. An in-depth discussion of such methods
-can be found in :cite:`hairer_solving_2009`.
-
-Commercial Earth satellites
----------------------------
-
-Figure :ref:`fig:leo-perturbations` gives a clear picture
-of the most important natural perturbations affecting satellites in LEO, namely:
-the first harmonic of the geopotential field :math:`J_2` (representing the attractor oblateness),
-the atmospheric drag, and the higher order harmonics of the geopotential field.
-
-.. figure:: leo-perturbations.png
-   :scale: 30%
-   :align: center
-
-   Natural perturbations affecting Low-Earth Orbit (LEO) motion
-   (source: :cite:`vallado_fundamentals_2007`) :label:`fig:leo-perturbations`
-
-At least the most significant of these perturbations need to be taken into account
-when propagating LEO orbits, and therefore the methods for purely Keplerian motion are not enough.
-However, numerical methods are much slower than analytical ones,
-and this can render them unsuitable for large scale simulations, satellite conjunction assesment,
-propagation in constrained hardware, and so forth.
-To address this issue, semianalytical propagation methods were devised that
-attempt to strike a balance between the fast running times of analytical methods
-and the necessary inclusion of perturbation forces.
-
-One of such semianalytical methods are the Simplified General Perturbation (SGP) models,
-first developed in :cite:`hilton_mathematical_1966` and then refined in :cite:`lane_improved_1969` into what
-we know these days as the SGP4 propagator :cite:`hoots_models_1980` :cite:`vallado_revisiting_2006`.
-Even though certain elements of the reference frame used by SGP4 are not properly specified
-:cite:`vallado_revisiting_2006` and that its accuracy might still be too limited for certain applications
-:cite:`kelso_analysis_2009` :cite:`lara_analytical_2016`, it is nowadays the most widely used propagation method
-thanks in large part to the dissemination of General Perturbations orbital data by the US 501(c)(3) CelesTrak
-(which itself obtains it from the 18th Space Defense Squadron of the US Space Force).
-
-The starting point of SGP4 is a special element set that uses Brouwer mean orbital elements :cite:`brouwer_solution_1959`
-plus a ballistic coefficient based on an approximation of the atmospheric drag :cite:`lane_improved_1969`,
-and its results are expressed in a special coordinate system called True Equator Mean Equinox (TEME).
-Special care needs to be taken to avoid mixing mean elements with osculating elements,
-and to convert the output of the propagation to the appropriate reference frame.
-These element sets have been traditionally distributed in a compact text representation called
-Two-Line Element sets (TLEs) (see :ref:`fig:tle` for an example).
-However this format is quite cryptic and suffers from a number of shortcomings,
-so recently there has been a push to use the Orbit Data Messages international standard
-developed by the Consultive Committee for Space Data Systems (CCSDS 502.0-B-2).
-
-.. figure:: tle.pdf
-   :align: center
-   :figclass: bht
-
-   Two-Line Element set (TLE) for the ISS (retrieved on 2022-06-05) :label:`fig:tle`
-
 State of the art
 ----------------
 
-At the time of creating poliastro there were already numerous open-source libraries
-for astrodynamics. Probably the most mature ones are Orekit [#]_,
+In our view, at the time of creating poliastro there were a number of issues
+with existing open source astrodynamics software
+that posed a barrier of entry for novices and amateur practitioners.
+Most of these barriers still exist today and are described in the following paragraphs.
+The goals of the project can be condensed as follows:
+
+1. Set an example on reproducibility and good coding practices in astrodynamics.
+2. Become an approachable software even for novices.
+3. Offer a performant software that can be also used in scripting and interactive workflows.
+
+The most mature software libraries for astrodynamics are arguably Orekit :cite:`orekit`,
 a "low level space dynamics library written in Java" with an open governance model,
-and SPICE [#]_, a toolkit developed by NASA's Navigation and Ancillary Information Facility
+and SPICE :cite:`spice`, a toolkit developed by NASA's Navigation and Ancillary Information Facility
 at the Jet Propulsion Laboratory.
 Other similar, smaller projects that appeared later on and that are still maintained to this day
-include PyKEP :cite:`izzo_esapykep_2020`, beyond [#]_, tudatpy [#]_,
+include PyKEP :cite:`izzo_esapykep_2020`, beyond :cite:`beyond`, tudatpy :cite:`tudatpy`,
 sbpy :cite:`mommert_sbpy_2019`, Skyfield :cite:`rhodes_skyfield_2020` (Python),
-CelestLab [#]_ (Scilab), astrodynamics.jl (Julia) [#]_ and Nyx (Rust) [#]_.
+CelestLab (Scilab) :cite:`celestlab`, astrodynamics.jl (Julia) :cite:`astrodynamicsjl` and Nyx (Rust) :cite:`nyx`.
 In addition, there are some Graphical User Interface (GUI) based open source programs
-used for Mission Analysis and orbit visualization, such as GMAT [#]_ and gpredict [#]_,
+used for Mission Analysis and orbit visualization, such as GMAT :cite:`gmat` and gpredict :cite:`gpredict`,
 and complete web applications for tracking constellations of satellites like the
-SatNOGS project by the Libre Space Foundation [#]_.
-
-.. [#] https://orekit.org/
-.. [#] https://naif.jpl.nasa.gov/naif/toolkit.html
-.. [#] https://pypi.org/project/beyond/0.7.4/
-.. [#] https://github.com/tudat-team/tudatpy/releases/tag/0.6.0
-.. [#] https://atoms.scilab.org/toolboxes/celestlab/3.4.1
-.. [#] https://juliaastrodynamics.github.io/
-.. [#] https://nyxspace.com/
-.. [#] https://opensource.gsfc.nasa.gov/projects/GMAT/index.php
-.. [#] http://gpredict.oz9aec.net/
-.. [#] https://satnogs.org/
+SatNOGS project by the Libre Space Foundation :cite:`satnogs`.
 
 The level of quality and maintenance of these packages is somewhat heterogeneous.
 Community-led projects with a strong corporate backing like Orekit are in excellent health,
@@ -380,11 +225,11 @@ and astrodynamicists are no exception.
 On the other hand, it is often difficult to translate the advances in astrodynamics research to software.
 Classical algorithms developed throughout the 20th century are described in papers that are sometimes
 difficult to find, and source code or validation data is almost never available.
-When it comes to modern research carried in the digital era, source code and validation data are supposedly provided
-"upon reasonable request", but a majority of such requests are never addressed
-despite the slow adoption of more open policies by major journals :cite:`stodden_empirical_2018`.
+When it comes to modern research carried in the digital era, source code and validation data
+is still difficult, even though they are supposedly provided
+"upon reasonable request" :cite:`stodden_empirical_2018`.
 
-From the user perspective, it is no surprise that astrodynamics software often requires deep expertise.
+It is no surprise that astrodynamics software often requires deep expertise.
 However, there are often implicit assumptions that are not documented with an adequate level of detail
 which originate widespread misconceptions and lead even seasoned professionals to make conceptual mistakes.
 Some of the most notorious misconceptions arise around
@@ -392,17 +237,12 @@ the use of general perturbations data (OMMs and TLEs) :cite:`finkleman_tle_2007`
 the geometric interpretation of the mean anomaly :cite:`battin_introduction_1999`,
 or coordinate transformations :cite:`vallado_revisiting_2006`.
 
-Finally, aside from GUI-based applications, few of the open source software libraries mentioned above
+Finally, few of the open source software libraries mentioned above
 are amenable to scripting or interactive use,
-as promoted by modern computational tools like Jupyter :cite:`kluyver_jupyter_2016`.
+as promoted by computational notebooks like Jupyter :cite:`kluyver_jupyter_2016`.
 
-All the issues above pose a barrier of entry for novices and amateur practitioners,
-and serve as the main drivers behind the creation of poliastro and its ongoing maintenance.
-In summary, the goals of poliastro can be condensed as follows:
-
-1. Set an example on reproducibility and good coding practices in astrodynamics.
-2. Become an approachable software even for novices.
-3. Offer a performant software that can be also used in scripting and interactive workflows.
+The following sections will now discuss the various areas of current research
+that an astrodynamicist will engage in, and how poliastro improves their workflow.
 
 Methods
 =======
@@ -530,7 +370,35 @@ The two central objects of the poliastro high level API are ``Orbit`` and ``Ephe
 - ``Ephem`` objects represent an ephemerides, a sequence of spatial coordinates
   over a period of time in a certain reference frame.
 
-Here is how to create an ``Orbit`` from cartesian and from classical Keplerian elements:
+There are six parameters that uniquely determine a Keplerian orbit,
+plus the gravitational parameter of the corresponding attractor (:math:`k` or :math:`\mu`).
+Optionally, an epoch that contextualizes the orbit can be included as well.
+This set of six parameters is not unique,
+and several of them have been developed over the years to serve different purposes.
+The most widely used ones are:
+
+- **Cartesian elements**: Three components for the position :math:`(x, y, z)`
+  and three components for the velocity :math:`(v_x, v_y, v_z)`.
+  This set has no singularities.
+- **Classical Keplerian elements**: Two components for the shape of the conic
+  (usually the semimajor axis :math:`a` or semiparameter :math:`p` and the eccentricity :math:`e`),
+  three Euler angles for the orientation of the orbital plane in space
+  (inclination :math:`i`, right ascension of the ascending node :math:`\Omega`, and argument of periapsis :math:`\omega`),
+  and one polar angle for the position of the body along the conic
+  (usually true anomaly :math:`f` or :math:`\nu`).
+  This set of elements has an easy geometrical interpretation
+  and the advantage that, in pure two-body motion,
+  five of them are fixed :math:`(a, e, i, \Omega, \omega)`
+  and only one is time-dependent (:math:`\nu`),
+  which greatly simplifies the analytical treatment of orbital perturbations.
+  However, they suffer from singularities steming from the Euler angles ("gimbal lock")
+  and equations expressed in them are ill-conditioned near such singularities.
+- **Walker modified equinoctial elements**: Six parameters :math:`(p, f, g, h, k, L)`.
+  Only :math:`L` is time-dependent and this set has no singularities,
+  however the geometrical interpretation of the rest of the elements is lost :cite:`walker_set_1985`.
+
+Here is how to create an ``Orbit`` from cartesian and from classical Keplerian elements.
+Walker modified equinoctial elements are supported as well.
 
 .. code-block:: python
 
@@ -660,13 +528,33 @@ and :cite:`vallado_fundamentals_2007`.
 Natural perturbations
 ---------------------
 
-Analytical propagators take advantage of the structure of the two-body problem
-and as a result have better performance than numerical methods.
-However, to study the effect of natural and artificial perturbations,
-it is necessary to use numerical propagators.
-poliastro implements Cowell's method :cite:`cowell_investigation_1910`
-by shipping the ideal objective function ``func_twobody``
-that the user can extend with their own perturbation acceleration of choice.
+.. figure:: enckes_method.pdf
+   :scale: 50%
+   :align: center
+
+   Osculating (Keplerian) vs perturbed (true) orbit
+   (source: Wikipedia, CC BY-SA 3.0) :label:`fig:osculating`
+
+As showcased in Figure :ref:`fig:osculating`, at any point in a trajectory
+we can define an ideal Keplerian orbit with the same position and velocity
+under the attraction of a point mass: this is called the osculating orbit.
+Some numerical propagation methods exist that model the true, perturbed orbit
+as a deviation from an evolving, osculating orbit.
+poliastro implements Cowell's method :cite:`cowell_investigation_1910`,
+which consists in adding all the perturbation accelerations and then integrating
+the resulting differential equation with any numerical method of choice:
+
+.. math::
+   :label: eq:cowell
+
+   \frac{\diff^2{\vec{r}}}{\diff{t}^2} = -\frac{\mu}{r^3} \vec{r} + \vec{a}_d
+
+The resulting equation is usually integrated using high order numerical methods,
+since the integration times are quite large and the tolerances comparatively tight.
+An in-depth discussion of such methods can be found in :cite:`hairer_solving_2009`.
+poliastro uses Dormand-Prince 8(5,3) (``DOP853``), a commonly used method
+available in SciPy :cite:`harris_array_2020`.
+
 There are several natural perturbations included: J2 and J3 gravitational terms,
 several atmospheric drag models
 (exponential, :cite:`jacchia_thermospheric_1977`, :cite:`atmosphere_us_1962`, :cite:`atmosphere_us_1976`),
@@ -742,6 +630,7 @@ A much more rigorous analysis of a similar set of laws can be found in :cite:`di
 
 Impulsive maneuvers
 -------------------
+
 Impulsive maneuvers are modeled considering a change in the velocity of a
 spacecraft while its position remains fixed. The ``poliastro.maneuver.Maneuver``
 class provides various constructors to instantiate popular impulsive maneuvers
@@ -784,9 +673,9 @@ Once instantiated, ``Maneuver`` objects provide information regarding total
     36000 x 36000 km x 0.0 deg (GCRS) orbit
     around Earth (X)
 
-
 Targeting
 ---------
+
 Targeting is the problem of finding the orbit connecting two positions over a
 finite amount of time. Within the context of the non-perturbed two-body problem,
 targeting is just a matter of solving the BVP, also known as Lambert's problem.
@@ -865,6 +754,7 @@ Previous code, with some additional customization, generates figure
 
 Plotting
 --------
+
 For visualization purposes, poliastro provides the ``poliastro.plotting``
 package, which contains various utilities for generating 2D and 3D graphics
 using different backends such as matplotlib :cite:`hunter_matplotlib_2007` and Plotly :cite:`inc_collaborative_2015`.
@@ -941,6 +831,108 @@ As a result, figure :ref:`fig:plotting3D` is obtained.
 
    Three-dimensional view of the inner Solar System, Florence, and Halley. :label:`fig:plotting3D`
 
+Commercial Earth satellites
+---------------------------
+
+Figure :ref:`fig:leo-perturbations` gives a clear picture
+of the most important natural perturbations affecting satellites in LEO, namely:
+the first harmonic of the geopotential field :math:`J_2` (representing the attractor oblateness),
+the atmospheric drag, and the higher order harmonics of the geopotential field.
+
+.. figure:: leo-perturbations.png
+   :scale: 30%
+   :align: center
+
+   Natural perturbations affecting Low-Earth Orbit (LEO) motion
+   (source: :cite:`vallado_fundamentals_2007`) :label:`fig:leo-perturbations`
+
+At least the most significant of these perturbations need to be taken into account
+when propagating LEO orbits, and therefore the methods for purely Keplerian motion are not enough.
+As seen above, poliastro implements a number of these perturbations already - however,
+numerical methods are much slower than analytical ones,
+and this can render them unsuitable for large scale simulations, satellite conjunction assesment,
+propagation in constrained hardware, and so forth.
+
+To address this issue, semianalytical propagation methods were devised that
+attempt to strike a balance between the fast running times of analytical methods
+and the necessary inclusion of perturbation forces.
+One of such semianalytical methods are the Simplified General Perturbation (SGP) models,
+first developed in :cite:`hilton_mathematical_1966` and then refined in :cite:`lane_improved_1969` into what
+we know these days as the SGP4 propagator :cite:`hoots_models_1980` :cite:`vallado_revisiting_2006`.
+Even though certain elements of the reference frame used by SGP4 are not properly specified
+:cite:`vallado_revisiting_2006` and that its accuracy might still be too limited for certain applications
+:cite:`kelso_analysis_2009` :cite:`lara_analytical_2016`, it is nowadays the most widely used propagation method
+thanks in large part to the dissemination of General Perturbations orbital data by the US 501(c)(3) CelesTrak
+(which itself obtains it from the 18th Space Defense Squadron of the US Space Force).
+
+The starting point of SGP4 is a special element set that uses Brouwer mean orbital elements :cite:`brouwer_solution_1959`
+plus a ballistic coefficient based on an approximation of the atmospheric drag :cite:`lane_improved_1969`,
+and its results are expressed in a special coordinate system called True Equator Mean Equinox (TEME).
+Special care needs to be taken to avoid mixing mean elements with osculating elements,
+and to convert the output of the propagation to the appropriate reference frame.
+These element sets have been traditionally distributed in a compact text representation called
+Two-Line Element sets (TLEs) (see :ref:`fig:tle` for an example).
+However this format is quite cryptic and suffers from a number of shortcomings,
+so recently there has been a push to use the Orbit Data Messages international standard
+developed by the Consultive Committee for Space Data Systems (CCSDS 502.0-B-2).
+
+.. figure:: tle.pdf
+   :align: center
+   :figclass: bht
+
+   Two-Line Element set (TLE) for the ISS (retrieved on 2022-06-05) :label:`fig:tle`
+
+At the moment, general perturbations data both in OMM and TLE format
+can be integrated with poliastro thanks to the ``sgp4`` Python library
+and the ``Ephem`` class as follows:
+
+.. code-block:: python
+
+   from astropy.coordinates import TEME, GCRS
+
+   from poliastro.ephem import Ephem
+   from poliastro.frames import Planes
+
+
+   def ephem_from_gp(sat, times):
+       errors, rs, vs = sat.sgp4_array(times.jd1, times.jd2)
+       if not (errors == 0).all():
+           warn(
+               "Some objects could not be propagated, "
+               "proceeding with the rest",
+               stacklevel=2,
+           )
+           rs = rs[errors == 0]
+           vs = vs[errors == 0]
+           times = times[errors == 0]
+
+       cart_teme = CartesianRepresentation(
+           rs << u.km,
+           xyz_axis=-1,
+           differentials=CartesianDifferential(
+               vs << (u.km / u.s),
+               xyz_axis=-1,
+           ),
+       )
+       cart_gcrs = (
+           TEME(cart_teme, obstime=times)
+           .transform_to(GCRS(obstime=times))
+           .cartesian
+       )
+
+       return Ephem(
+           cart_gcrs,
+           times,
+           plane=Planes.EARTH_EQUATOR
+       )
+
+However, no native integration with SGP4 has been implemented yet in poliastro,
+for technical and non-technical reasons. On one hand, this propagator is too different
+from the other methods, and we have not yet devised how to add it to the library
+in a way that does not create confusion.
+On the other hand, adding such a propagator to poliastro would probably open the flood gates
+of corporate users of the library, and we would like to first devise a sustainability strategy
+for the project, which is addressed in the next section.
 
 Future work
 ===========
