@@ -118,7 +118,7 @@ low-dimensional manifold in the latent space.
 One more recent common general approach to this problem is to use the
 unlabelled data’s proximity to the labelled data to estimate labels
 for unlabelled data, effectively transforming unlabelled data into
-labelled data. Dutta et al. (:cite:`dutta2021semi`)
+labelled data. Dutta et al. (:cite:`dutta2021semi`) and Li et al. (:cite:`li2019semi`)
 propose a model which uses affinity propagation on a
 k-Nearest-Neighbors graph to label partitions of unlabelled data based
 on their closest neighbors in the latent space. Wu et al.
