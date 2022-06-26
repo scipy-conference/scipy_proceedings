@@ -605,6 +605,8 @@ several variations of the DML model, such as the DML Autoencoder,
 DML with Unit/GMM Prior, and MVAE. We then tested the performance
 of the models across several semi-supervised partitions of two datasets, 
 along with other configurations of hyperparameters.
+
+
 We have determined from the analysis of our results, there is too 
 much dissenting data to clearly accept any three of the improvement proposals. 
 For improvement proposal 1, while the DML Autoencoder outperforms the DML for
@@ -613,6 +615,13 @@ peformance is not consistently much better than that of a plain
 autoencoder which uses no labelled data. For improvement proposal 2, each of the DML models with
 an added prior performed extremely poorly, near or at the level of the null model.
 For improvement proposal 3, we see the same extremely poor performance from the MVAE models.
+
+From the results in improvement proposals 1 and 3, we find that there may be potential
+in incorporating the autoencoder and VAE loss terms into DML systems. However, we were unable to show
+that any of these improvement proposals would consistently outperform the both the DML and fully unsupervised
+architectures in semisupervised settings. We also found that the training routine used for the improvement proposals,
+in which the loss function would alternate between supervised and unsupervised losses each epoch,
+was not effective. This is especially evident in comparing the two combined VAE DML models for improvement proposal 3. 
 
 Future Work
 ++++++++++++
