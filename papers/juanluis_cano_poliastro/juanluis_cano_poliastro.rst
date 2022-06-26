@@ -71,7 +71,7 @@ and refers to the branch of space science dealing with the motion of artificial 
 (:cite:`duboshin_book_1973`, :cite:`herrick_astrodynamics_1971`).
 However, the roots of its mathematical foundations go back several centuries.
 
-Since in 1609 German mathematician and astronomer Johannes Kepler published his book *Astronomia nova*,
+Since 1609, when German mathematician and astronomer Johannes Kepler published his book *Astronomia nova*,
 containing the most famous of all transcendental equations,
 the motion of the celestial bodies has attracted the attention of the greatest minds in human history,
 even sparking entire new fields in mathematics :cite:`battin_introduction_1999`.
@@ -89,9 +89,9 @@ any further development will carry away similar or greater complexity.
    \end{figure}
 
 Almost three centuries later, in 1903, Russian rocket scientist Konstantin E. Tsiolkovsky
-first explained in his article *Exploration of Outer Space by Means of Rocket Devices*
-precise conditions for artificial objects to reach the orbit of the Earth,
-making a huge leap from the mere observation of the celestial bodies
+first explained precise conditions for artificial objects to reach the orbit of the Earth
+in his article *Exploration of Outer Space by Means of Rocket Devices*.
+This made a huge leap from the mere observation of the celestial bodies
 and the science fiction stories that had inspired him
 to the real possibility of going to space.
 
@@ -116,7 +116,7 @@ consists of two tangent impulses along the line of apses
 (although this result was not proved until almost forty years later in :cite:`lawden_optimal_1963`),
 and in 1926 Hermann J. Oberth observed
 that the velocity gain of an impulsive maneuver
-is higher when the kinetic energy is maximum
+is higher when the kinetic energy is at a maximum
 (nowadays known as the Oberth effect).
 The severe limitations in weight and available energy for such kind of travels
 were already apparent for these pioneers,
@@ -135,14 +135,16 @@ the total force :math:`\vec{f}_i` affecting :math:`m_i`
 due to the presence of the other :math:`n - 1` masses is given by :cite:`battin_introduction_1999`:
 
 .. math::
+   :label: eq:gravforces
 
    \vec{f}_i = -G \sum_{j \neq i}^n \frac{m_i m_j}{|\vec{r}_{ij}|^3} \vec{r}_{ij}
 
-Where :math:`G = 6.67430\cdot 10^{-11}~\text{N m$^2$ kg$^{-2}$}` is the universal gravitational constant,
+where :math:`G = 6.67430\cdot 10^{-11}~\text{N m$^2$ kg$^{-2}$}` is the universal gravitational constant,
 and :math:`\vec{r}_{ij}` denotes the position vector from :math:`m_i` to :math:`m_j`.
 Applying Newton's second law of motion results in a system of :math:`n` differential equations:
 
 .. math::
+   :label: eq:nbody
 
    \frac{\diff^2{\vec{r}}_i}{\diff{t}^2} = -G \sum_{j \neq i}^n \frac{m_j}{|\vec{r}_{ij}|^3} \vec{r}_{ij}
 
@@ -153,7 +155,7 @@ However, the :math:`n = 2` case does have a closed-form solution,
 which was studied in detail by Daniel and Johann Bernoulli, and most specially by Leonhard Euler in 1744
 :cite:`battin_introduction_1999`.
 
-By setting :math:`n = 2` and differencing both equations,
+By setting :math:`n = 2` in :ref:`eq:nbody` and subtracting the two resulting equations,
 one arrives to the **fundamental equation of the two-body problem**:
 
 .. math::
@@ -179,7 +181,7 @@ that were already published by Johannes Kepler in the 1610s, namely:
 In the real world, celestial bodies do not follow these laws in an exact manner,
 because there are perturbations of different kinds affecting the ideal motion.
 However, for many practical purposes it is usually sufficient to limit the study
-two one object orbiting an attractor and ignore all other external forces of the system.
+to one object orbiting an attractor and ignore all other external forces of the system.
 The trajectories of such objects are called "Keplerian".
 
 There are six parameters that uniquely determine a Keplerian orbit,
@@ -236,9 +238,9 @@ one can arrive to the Kepler equation mentioned at the beginning:
    M = n \Delta t = E - e \sin{E} \\
    \tan{\frac{1}{2} \nu} = \sqrt{\frac{1 + e}{1 - e}} \tan{\frac{1}{2} E}
 
-Where :math:`M` is called the mean anomaly and :math:`E` is the eccentric anomaly.
+where :math:`M` is called the mean anomaly and :math:`E` is the eccentric anomaly.
 Similar relations exist for the other eccentricity regimes :cite:`battin_introduction_1999`.
-Despite not having closed-form solution, these equations can be solved
+Despite not having a closed-form solution, these equations can be solved
 in a number of different ways, each one with different complexity and precision tradeoffs.
 
 Doing a literature review of such methods is out of scope of this paper,
@@ -249,7 +251,7 @@ Orbital perturbations
 
 The analytical methods discussed above are perfect for solving the ideal Keplerian motion.
 This approximation is usually good enough for interplanetary travel,
-when all other forces aside from the Sun gravity are negligible.
+when all other forces aside from the sun's gravity are negligible.
 However, there are many situations in which natural and artificial orbital perturbations
 must be taken into account so that the actual non-Keplerian motion can be properly analyzed:
 
@@ -299,7 +301,7 @@ Commercial Earth satellites
 
 Figure :ref:`fig:leo-perturbations` gives a clear picture
 of the most important natural perturbations affecting satellites in LEO, namely:
-first harmonic of the geopotential field :math:`J_2` (representing the attractor oblateness),
+the first harmonic of the geopotential field :math:`J_2` (representing the attractor oblateness),
 the atmospheric drag, and the higher order harmonics of the geopotential field.
 
 .. figure:: leo-perturbations.png
@@ -401,7 +403,7 @@ as promoted by modern computational tools like Jupyter :cite:`kluyver_jupyter_20
 
 All the issues above pose a barrier of entry for novices and amateur practitioners,
 and serve as the main drivers behind the creation of poliastro and its ongoing maintenance.
-In summary, the goals of poliastro be condensed as follows:
+In summary, the goals of poliastro can be condensed as follows:
 
 1. Set an example on reproducibility and good coding practices in Astrodynamics.
 2. Become an approachable software even for novices.
@@ -494,7 +496,7 @@ that performs the actual computation.
 As a result, poliastro offers a unit-safe API
 that performs the least amount of computation possible
 to minimize the performance penalty of unit checks,
-and also a unit-unsafe API tha offers maximum performance
+and also a unit-unsafe API that offers maximum performance
 at the cost of not performing any unit validation checks.
 
 .. figure:: architecture.pdf
@@ -530,7 +532,7 @@ The two central objects of the poliastro high level API are ``Orbit`` and ``Ephe
 
 - ``Orbit`` objects represent an osculating (hence Keplerian) orbit of a dimensionless object
   around an attractor at a given point in time and a certain reference frame.
-- ``Ephem`` objects represent an ephemerides, hence a sequence of spatial coordinates
+- ``Ephem`` objects represent an ephemerides, a sequence of spatial coordinates
   over a period of time in a certain reference frame.
 
 Here is how to create an ``Orbit`` from cartesian and from classical Keplerian elements:
@@ -611,7 +613,7 @@ There are some crucial differences between ``Orbit`` and ``Ephem`` objects:
   plus the necessary information to propagate it forward in time indefinitely,
   whereas ``Ephem`` objects represent a bounded time history of a trajectory.
   This is because the equations for the two-body motion are known,
-  whereas an ephemerides is either an observation or a prediction
+  whereas an ephemeris is either an observation or a prediction
   that cannot be extrapolated in any case without external knowledge.
   As such, ``Orbit`` objects have a ``.propagate`` method,
   but ``Ephem`` ones do not. This prevents users from attempting to
@@ -720,7 +722,7 @@ Continuous thrust control laws
 Beyond natural perturbations, spacecraft can modify their trajectory on purpose
 by using impulsive maneuvers (as explained in the next section)
 as well as continuous thrust guidance laws.
-The user can define custom guidance laws by providing an perturbation acceleration
+The user can define custom guidance laws by providing a perturbation acceleration
 in the same way natural perturbations are used.
 In addition, poliastro includes several analytical solutions
 for continuous thrust guidance laws with specific purposes,
@@ -799,7 +801,7 @@ Initial Orbit Determination field.
 The ``poliastro.iod`` package contains ``izzo`` and ``vallado`` modules. These
 provide a ``lambert`` function for solving the targeting problem. Nevertheless,
 a ``Maneuver.lambert`` constructor is also provided so users can keep taking
-advante of ``Orbit`` objects.
+advantage of ``Orbit`` objects.
 
 .. code-block:: python
 
@@ -829,11 +831,11 @@ advante of ``Orbit`` objects.
 
 Targeting is closely related to quick mission design by means of porkchop
 diagrams. These are contour plots showing all combinations of departure and
-arrival dates with the specific energy for each transfer orbit. They allow to
-quickly identify the most optimal transfer dates between two bodies.
+arrival dates with the specific energy for each transfer orbit. They allow for
+quick identification of the most optimal transfer dates between two bodies.
 
 The ``poliastro.plotting.porkchop`` provides the ``PorkchopPlotter`` class which
-allows to generate these diagrams.
+allows the user to generate these diagrams.
 
 
 .. code-block:: python
@@ -872,17 +874,17 @@ For visualization purposes, poliastro provides the ``poliastro.plotting``
 package, which contains various utilities for generating 2D and 3D graphics
 using different backends such as matplotlib :cite:`hunter_matplotlib_2007` and Plotly :cite:`inc_collaborative_2015`.
 
-Generated graphics can be static or interactive. Main difference between these
+Generated graphics can be static or interactive. The main difference between these
 two is the ability to modify the camera view in a dynamic way when using
 interactive plotters. 
 
-Most important classes in the ``poliastro.plotting`` package are
+The most important classes in the ``poliastro.plotting`` package are
 ``StaticOrbitPlotter`` and ``OrbitPlotter3D``.  In addition, the
 ``poliastro.plotting.misc`` module contains the ``plot_solar_system`` function,
-which allows to visualize inner and outter both in 2D and 3D, as requested by
+which allows the user to visualize inner and outter both in 2D and 3D, as requested by
 users.
 
-The following example illustrates how to plotting capabilities of poliastro. At
+The following example illustrates the plotting capabilities of poliastro. At
 first, orbits to be plotted are computed and their plotting style is declared:
 
 .. code-block:: python
@@ -952,9 +954,9 @@ Despite the fact that poliastro has existed for almost a decade,
 for most of its history it has been developed by volunteers on their free time,
 and only in the past five years it has received funding through various Summer of Code programs
 (SOCIS 2017, GSOC 2018-2021) and institutional grants (NumFOCUS 2020, 2021).
-The funded work has had a overwhemingly positive impact on the project,
+The funded work has had an overwhemingly positive impact on the project,
 however the lack of a dedicated maintainer has caused some technical debt to accrue over the years,
-and some parts of the project are in need of refactorings or better documentation.
+and some parts of the project are in need of refactoring or better documentation.
 
 Historically, poliastro has tried to implement algorithms that were applicable
 for all the planets in the Solar System, however some of them have proved to be
