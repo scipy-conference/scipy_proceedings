@@ -40,7 +40,7 @@ Markdown, such as citations, footnotes, mathematics, and tables. At the
 same time, Pandoc simplifies document creation by providing conversion
 from Markdown (and other formats) to formats like LaTeX, HTML, Microsoft
 Word, and PowerPoint. Pandoc is especially useful for documents with
-embedded code that is executed during the build process. Rstudio’s
+embedded code that is executed during the build process. RStudio’s
 RMarkdown :cite:`rmarkdown` and more recently Quarto :cite:`quarto`
 leverage Pandoc to convert Markdown documents to other formats, with
 code execution provided by knitr :cite:`Xie2015`. JupyterLab
@@ -94,7 +94,7 @@ executed as part of the document build process, preview update is
 blocked until code execution completes.
 
 .. [#rstudio_visual]
-   The Rstudio editor is unique in also offering a Pandoc-based visual editing
+   The RStudio editor is unique in also offering a Pandoc-based visual editing
    mode, starting with version 1.4 from January 2021
    (https://www.rstudio.com/blog/announcing-rstudio-1-4/).
 
@@ -395,7 +395,7 @@ been possible previously, it also suggests additional avenues for future
 exploration. Codebraid’s built-in code execution system is designed to
 execute a predefined sequence of code chunks and then exit. Jupyter
 kernels are currently used in the same manner to avoid any potential
-issues with out-of-order execution. However, Jupyter kernals can receive
+issues with out-of-order execution. However, Jupyter kernels can receive
 and execute code indefinitely, which is how they commonly function in
 Jupyter notebooks. Instead of starting a new Jupyter kernel at the
 beginning of each code execution cycle, it would be possible to keep the
