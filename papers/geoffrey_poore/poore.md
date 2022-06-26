@@ -117,8 +117,9 @@ remaining challenges in creating a better Pandoc writing experience.
    :figclass: w
 
    Screenshot of a Markdown document with Codebraid Preview in VS Code.  This
-   document uses Codebraid to execute code, so all plots and math visible in
-   the preview are generated during document build.  :label:`screenshot`
+   document uses Codebraid to execute code with Jupyter kernels, so all plots
+   and math visible in the preview are generated during document build.
+   :label:`screenshot`
 
 
 ```
@@ -176,7 +177,9 @@ Optional execution of embedded code is possible with Codebraid [codebraid],
 using its built-in code execution system or Jupyter kernels.  When Jupyter
 kernels are used, it is possible to obtain the same output that would be
 present in a Jupyter notebook, including rich output such as plots and
-mathematics.  Code execution is decoupled from the preview process, so the
+mathematics.  It is also possible to specify a custom display so that only
+a selected combination of code, stdout, stderr, and rich output is shown while
+the rest are hidden.  Code execution is decoupled from the preview process, so the
 Markdown source can be edited and the preview can update even while code is
 running in the background.  As far as I am aware, no previous software for
 executing code in Markdown has supported building a document with partial code
