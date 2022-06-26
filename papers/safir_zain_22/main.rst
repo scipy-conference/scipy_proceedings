@@ -35,7 +35,9 @@ Variational Autoencoders For Semi-Supervised Deep Metric Learning
     performing borrowing components of the variational autoencoder (VAE) methodology to extend DML
     methods to train on semi-supervised datasets. We experimentally evaluate atomic benefits to the perform-
     ing DML on the VAE latent space such as the enhanced ability to train using unlabelled data and to induce
-    bias given prior knowledge
+    bias given prior knowledge. We find that jointly training DML with an autoencoder and VAE may be potentially
+    helpful for some semisuprevised datasets, but that a training regime of alternating between the DML loss
+    and an additional unsupervised loss across epochs is generally unviable.  
 
 .. class:: keywords
 
