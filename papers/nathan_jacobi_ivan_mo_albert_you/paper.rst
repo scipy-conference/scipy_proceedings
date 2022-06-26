@@ -175,10 +175,12 @@ K-means Clustering
 To try to examine any similarities within shifts, k-means clustering was performed on the data sets at first.
 Initial attempts at k-means with the d = 100 dimensioned embeddings yielded extremely large inertial values, and poor results. 
 In an attempt to reduce inertia, features for data that k-means would be performed onto were assessed.
-K-means was performed on a reduced dimensionality data set, with embedding vectors of dimensionality d = 10.
-The data set with the change in an embeddings vector, data_201, remained to contain the changes of the vectors, as well as the two dimensional representation of the term for the initial and next time bucket.
-The data set also did not have the term's label listed as a feature. 
-Inertia at convergence on 8 cluster K-Means was reduced significantly, by around 86%, yielding significantly better results.
+K-means was performed on a reduced dimensionality data set, with embedding vectors of dimensionality d = 10, however this led to strict convergence, and poor results again.
+The data set with the change in an embeddings vector, data_121, remained to contain the changes of the vectors, as well as the two dimensional representation of the vector for the initial and next time bucket, rather than the 10 dimensional representation.
+The second data set, data_201, always led to strict convergence on clustering, even when reduced to just the 10 dimensional representations. Therefore, k-means was performed explicitly on the data_121 set, with the 2 dimensional representations along side the 100 dimensional change in the vectors. 
+Seperate two dimensional UMAP representations were generated for visual examnination.
+The data set also did not have the term's label listed as a feature for clustering. 
+Inertia at convergence on clustering for k-means was reduced significantly after features were reassassed, as much as 86%, yielding significantly better results.
 The data was split into a 20% test and 80% training data sets, and k-means was then performed on the reduced dimensionality data sets.
 Following the clustering, the results were analyzed to determine which clusters contained the higher than average incidence rates of medical terms and HIV/AIDS related terms.
 These clusters can then be considered target clusters, and large incidences of words being clustered within these can be flagged as indicative as a possible outbreak.
@@ -194,9 +196,8 @@ Several iterations with varying number of layers, activation functions, and node
 Each model used an 80% training, 20% testing split on these data. However, two variations were performed of this split on training and testing data.
 The first was randomly splitting all 255,000 observations, without care of some observations for a term being in both training set and some being in the testing set.
 This split of data will be refered to as "mixed" data, as the terms are mixed between the splits. The second split of data split the 15,000 words into 80% training and 20% testing.
-After the vocabulary was split, the corresponding observations in the data were split accordingly. 
-Additionally, we tested a neural network that would input the same data, either data_201 or data_121, with the addition of the label assigned to that observation by the k-means model. 
-The k-means model used to assign these labels was trained and tested using the same 80% train 20% test split. 
+After the vocabulary was split, the corresponding observations in the data were split accordingly, leaving all observations for each term within the same split. 
+Additionally, we tested a neural network that would input the same data, either data_201 or data_121, with the addition of the label assigned to that observation by the k-means model as a feature, with the same split of training and testing between k-means and the neural network. 
 
 Results
 -------
@@ -318,32 +319,6 @@ and HIV related terms in table :ref:`hivterm` and figure :ref:`hivplot`.
 This increased incidence rate of HIV and medical related terms in certain clusters leads us to hypothesize that semantic shifts of terms in future datasets can be clustered using the KMeans model,
 and analyzed to search for outbreaks.
 If certain clusters begin having an increased rate of appearing, it can be flagged for a potential outbreak.
-
-.. table:: Distribution of medical terms and all terms within k-means clusters :label:`medterm`
-
-   +------------+------------+-------------------+-------------+
-   | Cluster    | All Words  | Medical Terms     | Difference  |
-   +============+============+===================+=============+
-   | 0          | 0.055184   | 0.077877          | 0.022693    |
-   +------------+------------+-------------------+-------------+
-   | 1          | 0.132719   | 0.070984          | -0.06173    |
-   +------------+------------+-------------------+-------------+
-   | 2          | 0.093325   | 0.09203           | -0.0013     |
-   +------------+------------+-------------------+-------------+
-   | 3          | 0.188303   | 0.132459          | -0.05584    |
-   +------------+------------+-------------------+-------------+
-   | 4          | 0.187044   | 0.277972          | 0.090929    |
-   +------------+------------+-------------------+-------------+
-   | 5          | 0.071675   | 0.099538          | 0.027864    |
-   +------------+------------+-------------------+-------------+
-   | 6          | 0.142118   | 0.062721          | -0.0794     |
-   +------------+------------+-------------------+-------------+
-   | 7          | 0.129633   | 0.186419          | 0.056786    |
-   +------------+------------+-------------------+-------------+
-
-.. figure:: med_plot.png
-
-   Bar Graph Showing KMeans Clustering Distribution of Medical Terms against All Terms :label:`medplot`
 
 .. table:: Distribution of HIV terms and all terms within k-means clusters :label:`hivterm`
 
