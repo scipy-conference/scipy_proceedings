@@ -27,7 +27,7 @@ Codebraid Preview for VS Code: Pandoc Markdown Preview with Jupyter Kernels
 .. class:: keywords
 
    reproducibility, dynamic report generation, literate programming, Python,
-   Pandoc, Project Jupyter
+   Pandoc, Markdown, Project Jupyter
 
 
 Introduction
@@ -56,7 +56,7 @@ advantages when multiple output formats are required, since Pandoc
 provides the conversion capabilities. Pandoc Markdown variants can also
 serve as a simpler syntax when creating HTML, LaTeX, or similar
 documents. They allow HTML and LaTeX to be intermixed with Markdown
-syntax and also support including raw chunks of text in other formats
+syntax. They also support including raw chunks of text in other formats
 such as reStructuredText. When executable code is involved, the
 RMarkdown-style approach of Markdown with embedded code can sometimes be
 more convenient than a browser-based Jupyter notebook since the writing
@@ -319,7 +319,7 @@ The standard approach to executing code within Markdown documents blocks
 the document build process until all code has finished running. Code is
 extracted from the Markdown source and executed. Then the output is
 combined with the original source and passed on to Pandoc or another
-Markdown utility for final conversion. This is the approach taken by
+Markdown application for final conversion. This is the approach taken by
 RMarkdown, Quarto, and similar software, as well as by Codebraid until
 recently. This design works well for building a document a single time,
 but blocking until all code has executed is not ideal in the context of
