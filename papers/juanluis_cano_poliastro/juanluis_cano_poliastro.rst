@@ -201,18 +201,18 @@ The goals of the project can be condensed as follows:
 2. Become an approachable software even for novices.
 3. Offer a performant software that can be also used in scripting and interactive workflows.
 
-The most mature software libraries for astrodynamics are arguably Orekit :cite:`orekit`,
+The most mature software libraries for astrodynamics are arguably Orekit :cite:`noauthor_orekit_2022`,
 a "low level space dynamics library written in Java" with an open governance model,
-and SPICE :cite:`spice`, a toolkit developed by NASA's Navigation and Ancillary Information Facility
+and SPICE :cite:`noauthor_spice_2022`, a toolkit developed by NASA's Navigation and Ancillary Information Facility
 at the Jet Propulsion Laboratory.
 Other similar, smaller projects that appeared later on and that are still maintained to this day
-include PyKEP :cite:`izzo_esapykep_2020`, beyond :cite:`beyond`, tudatpy :cite:`tudatpy`,
+include PyKEP :cite:`izzo_esapykep_2020`, beyond :cite:`noauthor_beyond_2022`, tudatpy :cite:`noauthor_tudatpy_2022`,
 sbpy :cite:`mommert_sbpy_2019`, Skyfield :cite:`rhodes_skyfield_2020` (Python),
-CelestLab (Scilab) :cite:`celestlab`, astrodynamics.jl (Julia) :cite:`astrodynamicsjl` and Nyx (Rust) :cite:`nyx`.
+CelestLab (Scilab) :cite:`noauthor_celestlab_2022`, astrodynamics.jl (Julia) :cite:`noauthor_astrodynamicsjl_nodate` and Nyx (Rust) :cite:`noauthor_nyx_2021`.
 In addition, there are some Graphical User Interface (GUI) based open source programs
-used for Mission Analysis and orbit visualization, such as GMAT :cite:`gmat` and gpredict :cite:`gpredict`,
+used for Mission Analysis and orbit visualization, such as GMAT :cite:`noauthor_gmat_2020` and gpredict :cite:`noauthor_gpredict_2018`,
 and complete web applications for tracking constellations of satellites like the
-SatNOGS project by the Libre Space Foundation :cite:`satnogs`.
+SatNOGS project by the Libre Space Foundation :cite:`noauthor_satnogs_2021`.
 
 The level of quality and maintenance of these packages is somewhat heterogeneous.
 Community-led projects with a strong corporate backing like Orekit are in excellent health,
