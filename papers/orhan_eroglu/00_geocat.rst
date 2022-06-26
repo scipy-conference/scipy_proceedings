@@ -215,11 +215,18 @@ descriptions as well as links to the usage examples:
    :cite:`geocatcontribguide` :label:`fig3structure`
 
 Many of the computational functions in GeoCAT are implemented in pure Python.
-However, there are others that are implemented in Fortran but wrapped up
-in Python. To facilitate contribution, the whole GeoCAT-comp structure is split
-into two repositories with respect to being either pure-Python or Python with
-compiled code (i.e. Fortran) implementations. Such implementation layers are
-handled with the GeoCAT-comp and GeoCAT-f2py repositories, respectively.
+However, there are others that were originally implemented in Fortran but are
+now wrapped up in Python with the help of Numpy's F2PY, Fortran to Python
+interface generator. This is mostly because re-implementing some functions
+would require understanding of complicated algorithm flows and implementation
+of extensive unit tests that would end up taking too much time, compared to
+wrapping their already-implemented Fortran routines up in Python. Furthermore,
+outside contributors from science background would keep considering to add
+new functions to GeoCAT from their older Fortran routines in the future. To
+facilitate contribution, the whole GeoCAT-comp structure is split into two
+repositories with respect to being either pure-Python or Python with compiled
+code (i.e. Fortran) implementations. Such implementation layers are handled
+with the GeoCAT-comp and GeoCAT-f2py repositories, respectively.
 
 GeoCAT-comp code-base does not explicitly contain or require any compiled
 code, making it more accessible to the general Python community at large.
