@@ -19,7 +19,7 @@
    \renewcommand{\vec}[1]{\mathbf{#1}}
 
 =========================================================
-poliastro: a Python library for interactive Astrodynamics
+poliastro: a Python library for interactive astrodynamics
 =========================================================
 
 .. class:: abstract
@@ -39,19 +39,19 @@ poliastro: a Python library for interactive Astrodynamics
    Even though the two-body problem has many analytical solutions,
    orbit propagation (the initial value problem) and targeting (the boundary value problem)
    remain computationally intensive because of long propagation times, tight tolerances, and vast solution spaces.
-   On the other hand, Astrodynamics researchers often do not share
+   On the other hand, astrodynamics researchers often do not share
    the source code they used to run analyses and simulations,
    which makes it challenging to try out new solutions.
 
-   This paper presents poliastro, an open-source Python library for interactive Astrodynamics
+   This paper presents poliastro, an open-source Python library for interactive astrodynamics
    that features an easy-to-use API and tools for quick visualization.
-   poliastro implements core Astrodynamics algorithms
+   poliastro implements core astrodynamics algorithms
    (such as the resolution of the Kepler and Lambert problems)
    and leverages numba, a Just-in-Time compiler for scientific Python,
    to optimize the running time.
    Thanks to Astropy, poliastro can perform seamless coordinate frame conversions
    and use proper physical units and timescales.
-   At the moment, poliastro is the longest-lived Python library for Astrodynamics,
+   At the moment, poliastro is the longest-lived Python library for astrodynamics,
    has contributors from all around the world,
    and several New Space companies and people in academia use it. 
 
@@ -65,7 +65,7 @@ Introduction
 History
 -------
 
-The term "Astrodynamics" was coined by the American astronomer Samuel Herrick,
+The term "astrodynamics" was coined by the American astronomer Samuel Herrick,
 who received encouragement from the space pioneer Robert H. Goddard,
 and refers to the branch of space science dealing with the motion of artificial celestial bodies
 (:cite:`duboshin_book_1973`, :cite:`herrick_astrodynamics_1971`).
@@ -100,7 +100,7 @@ to the real possibility of going to space.
 
    \Delta v = v_e \ln \frac{m_0}{m_f}
 
-Tsiolkovsky's contribution could be considered the starting point of Astrodynamics,
+Tsiolkovsky's contribution could be considered the starting point of astrodynamics,
 and many others ensued before they could be tested in practice during the second half of the 20th century.
 In 1919 Yuri V. Kondratyuk conceived the gravitational slingshot or flyby
 to accelerate a spacecraft through interplanetary flight
@@ -117,7 +117,7 @@ The severe limitations in weight and available energy for such kind of travels
 were already apparent for these pioneers,
 who were, in some way, anticipating the need to optimize on board fuel consumption.
 
-The rich history of Astrodynamics as a field continues to this day,
+The rich history of astrodynamics as a field continues to this day,
 as new research offers better methods to solve these ancient equations
 and more computational efficiency is neeeded to perform large scale simulations.
 
@@ -287,7 +287,7 @@ the resulting differential equation with any numerical method of choice:
    \frac{\diff^2{\vec{r}}}{\diff{t}^2} = -\frac{\mu}{r^3} \vec{r} + \vec{a}_d
 
 High order numerical integration methods, such as Dormand-Prince 8(5,3) (`DOP853`),
-are usually used in Astrodynamics, since the integration times are quite large
+are usually used in astrodynamics, since the integration times are quite large
 and the tolerances comparatively tight. An in-depth discussion of such methods
 can be found in :cite:`hairer_solving_2009`.
 
@@ -345,14 +345,14 @@ State of the art
 ----------------
 
 At the time of creating poliastro there were already numerous open-source libraries
-for Astrodynamics. Probably the most mature ones are Orekit [#]_,
+for astrodynamics. Probably the most mature ones are Orekit [#]_,
 a "low level space dynamics library written in Java" with an open governance model,
 and SPICE [#]_, a toolkit developed by NASA's Navigation and Ancillary Information Facility
 at the Jet Propulsion Laboratory.
 Other similar, smaller projects that appeared later on and that are still maintained to this day
 include PyKEP :cite:`izzo_esapykep_2020`, beyond [#]_, tudatpy [#]_,
 sbpy :cite:`mommert_sbpy_2019`, Skyfield :cite:`rhodes_skyfield_2020` (Python),
-CelestLab [#]_ (Scilab), Astrodynamics.jl (Julia) [#]_ and Nyx (Rust) [#]_.
+CelestLab [#]_ (Scilab), astrodynamics.jl (Julia) [#]_ and Nyx (Rust) [#]_.
 In addition, there are some Graphical User Interface (GUI) based open source programs
 used for Mission Analysis and orbit visualization, such as GMAT [#]_ and gpredict [#]_,
 and complete web applications for tracking constellations of satellites like the
@@ -371,20 +371,20 @@ SatNOGS project by the Libre Space Foundation [#]_.
 
 The level of quality and maintenance of these packages is somewhat heterogeneous.
 Community-led projects with a strong corporate backing like Orekit are in excellent health,
-while on the other hand smaller projects developed by volunteers (beyond, Astrodynamics.jl)
+while on the other hand smaller projects developed by volunteers (beyond, astrodynamics.jl)
 or with limited institutional support (PyKEP, GMAT) suffer from lack of maintenance.
 Part of the problem might stem from the fact that most scientists are never taught how to build software
 efficiently, let alone the skills to collaboratively develop software in the open :cite:`wilson_best_2014`,
 and astrodynamicists are no exception.
 
-On the other hand, it is often difficult to translate the advances in Astrodynamics research to software.
+On the other hand, it is often difficult to translate the advances in astrodynamics research to software.
 Classical algorithms developed throughout the 20th century are described in papers that are sometimes
 difficult to find, and source code or validation data is almost never available.
 When it comes to modern research carried in the digital era, source code and validation data are supposedly provided
 "upon reasonable request", but a majority of such requests are never addressed
 despite the slow adoption of more open policies by major journals :cite:`stodden_empirical_2018`.
 
-From the user perspective, it is no surprise that Astrodynamics software often requires deep expertise.
+From the user perspective, it is no surprise that astrodynamics software often requires deep expertise.
 However, there are often implicit assumptions that are not documented with an adequate level of detail
 which originate widespread misconceptions and lead even seasoned professionals to make conceptual mistakes.
 Some of the most notorious misconceptions arise around
@@ -400,7 +400,7 @@ All the issues above pose a barrier of entry for novices and amateur practitione
 and serve as the main drivers behind the creation of poliastro and its ongoing maintenance.
 In summary, the goals of poliastro can be condensed as follows:
 
-1. Set an example on reproducibility and good coding practices in Astrodynamics.
+1. Set an example on reproducibility and good coding practices in astrodynamics.
 2. Become an approachable software even for novices.
 3. Offer a performant software that can be also used in scripting and interactive workflows.
 
