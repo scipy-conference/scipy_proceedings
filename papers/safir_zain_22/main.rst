@@ -230,7 +230,7 @@ if the current phase is supervised. :math:`\alpha` is a hyperparameter which mod
 the impact of the unsupervised on total loss for the DML autoencoder. 
 
 Improvement Proposal 1 
-+++++++++++++
+++++++++++++++++++++++++++
 
 We first look to evaluate the improvement proposal that adding a reconstruction loss
 to a DML system can improve the quality of clustering in the latent
@@ -264,7 +264,7 @@ is equal to the reconstruction loss.
    :align: center
 
 Improvement Proposal 2 
-+++++++++++++
+++++++++++++++++++++++++++
 
 Say we are aware that a dataset has :math:`n` classes. It may be
 useful to encourage that there are :math:`n` clusters in the latent
@@ -326,7 +326,7 @@ and analytically with the unit prior.
    :align: center
 
 Improvement Proposal 3 
-+++++++++++++
+++++++++++++++++++++++++++
 
 The third improvement proposal we look to evaluate is that given a semi-supervised
 dataset, optimizing a DML model jointly with a VAE on the VAE’s latent
@@ -467,7 +467,8 @@ performance of a classifier on the latent points intuitively can be used
 as a measure of quality of clustering. 
 
 Improvement Proposal 1 Results: Benefits of Reconstruction Loss
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 In evaluating the first improvement proposal, we compare the performance of the plain DML model to the DML Autoencoder model. 
 We do so by comparing the performance of the plain DML system and the DML Autoencoder across a search space
 containing the lsdim, alpha, and pl% hyperparameters and both datasets.
@@ -505,7 +506,8 @@ underperforms the DML for the partial labels percentage of 10%.
 
 
 Improvement Proposal 2 Results: Incorporating Inductive Bias with a Prior
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 In evaluating the second improvement proposal, we compare the performance of the plain DML model to the DML with
 a unit prior and a DML with a GMM prior. The DML prior with the GMM prior will have 2^2 = 4 gaussian
 components when lsdim = 2 and 2^4 = 16 components when lsdim = 4. Our broad intention is to see 
@@ -550,7 +552,7 @@ the latent space.
 
 
 Improvement Proposal 3 Results: Jointly Optimizing DML with VAE
-++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 To evaluate the third improvement proposal, we compare the performance of DMLs to MetricVAEs (defined in the previous chapter)
 across several metric losses. We run experiments for triplet loss, supervised loss, and center
