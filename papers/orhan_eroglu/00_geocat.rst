@@ -190,8 +190,8 @@ descriptions as well as links to the usage examples:
 
 - Fourier transforms such as band-block, band-pass, low-pass, and high-pass
 
-- Meteorological variables such as relative humidity, dew-point temperature,
-  heat index, saturation vapor pressure, and more
+- Meteorological variable computations such as relative humidity, dew-point
+  temperature, heat index, saturation vapor pressure, and more
 
 - Climatology functions such as climate average over multiple years,
   daily/monthly/seasonal averages, as well as anomalies
