@@ -172,8 +172,14 @@ GeoCAT-comp is the computational component of the GeoCAT project as can be seen 
 Figure :ref:`fig3structure`. GeoCAT-comp houses implementations of geoscience data
 analysis functions. Novel research and development is conducted for analyzing both
 structured and unstructured grid data from various research fields such as climate,
-weather, atmosphere, ocean, among others. In addition, some of the functionalities of
-GeoCAT-comp are inspired or reimplemented from the NCL.
+weather, atmosphere, ocean, among others. In addition, some of the functionalities
+of GeoCAT-comp are inspired or reimplemented from the NCL in order to address the
+first goal of the "Pivot to Python effort. For that purpose, 114 NCL routines were
+selected, excluding some functionalities such as date routines, which could be
+handled by other packages in the Python ecosystem today. These functions were
+ranked by order of website documentation access from most to least, and
+prioritization was made based on those ranks. Today, GeoCAT-comp provides the same
+or similar capabilities of about 39% (44 out of 114) of those functions.
 
 Some of the functions that are made available through GeoCAT-comp are listed below,
 for which the GeoCAT-comp documentation :cite:`geocatcomprtd` provides signatures and
@@ -258,8 +264,10 @@ example Python plotting scripts, demonstrating functionalities from Python
 packages like Matplotlib, Cartopy, Numpy, and Xarray. The gallery includes
 plots from a range of visualization categories such as box plots, contours,
 meteograms, overlays, projections, shapefiles, streamlines, and trajectories
-among others. In addition, GeoCAT-examples houses plotting examples for
-individual GeoCAT-comp analysis functions.
+among others. The plotting categories and scripts under GeoCAT-examples
+cover almost all of the NCL plot types and techniques. In addition,
+GeoCAT-examples houses plotting examples for individual GeoCAT-comp analysis
+functions.
 
 Despite Matplotlib and Cartopy's capabilities to reproduce almost all
 of NCL plots, there was one significant caveat with using their low-level
@@ -289,9 +297,10 @@ WRF-Python
 ==========
 
 WRF-Python was created in early 2017 in order to replicate NCL's Weather
-Research and Forecasting (WRF) package in the SPE. About two years later,
-NCAR's “Pivot to Python” initiative was announced, and the GeoCAT team
-has taken over development and maintenance of WRF-Python.
+Research and Forecasting (WRF) package in the SPE, and it covers 100% of
+the routines in that package. About two years later, NCAR's “Pivot to
+Python” initiative was announced, and the GeoCAT team has taken over
+development and maintenance of WRF-Python.
 
 The package focuses on creating a Python package that eliminates the need
 to work across multiple software platforms when using WRF datasets. It
