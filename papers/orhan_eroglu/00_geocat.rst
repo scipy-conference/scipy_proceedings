@@ -74,7 +74,7 @@ managed publicly on GitHub to develop computation and visualization functions,
 which are built on cornerstone Pangeo :cite:`pangeo18` (i.e. a community platform
 for big data geoscience) packages such as Xarray :cite:`xarray17`, Dask
 :cite:`dask15`, as well as Jupyter Notebooks. Dask compatibility allows the
-GeoCAT-comp functions to scale from personal laptops to high performance computing
+GeoCAT functions to scale from personal laptops to high performance computing
 (HPC) systems such as NCAR’s Casper, Cheyenne, and upcoming Derecho clusters
 :cite:`ams22craker`. Additionally, GeoCAT also utilizes Numba, an open source
 just-in-time (JIT) compiler :cite:`numba`, to translate Python and NumPy code into
