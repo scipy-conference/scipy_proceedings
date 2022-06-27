@@ -76,8 +76,8 @@ was needed in order to enhance accessibility of wind retrieval software by the s
 For more information about PyDDA versions 0.5 and prior, consult :cite:`robert_jackson-proc-scipy-2019` and
 :cite:`Jacksonetal2020`.
 
-However, there are further improvements that still needed to be made in order to optimize both the accuracy
-and speed of the PyDDA retrievals. For example, the cost functions and gradients in PyDDA 0.5 are implemented in NumPy which does not take advantage of GPU architectures for potential speedups :cite:`harris2020array`. In addition, the gradients of the cost function that are required for the weak variational technique are hand-coded even though packages such as Jax :cite:`jax2018github` and TensorFlow :cite:`tensorflow2015-whitepaper` can automatically calculate these gradients. These needs motivated new features for the release of PyDDA 1.0. In PyDDA 1.0, we utilize Jax and TensorFlow's automatic differentiation capabilities for differentiating :math:`J`, making these calculations less prone to human error and more efficient.
+However, there are further improvements that still needed to be made in order to optimize both the accuracy and speed of the PyDDA retrievals. For example, the cost functions and gradients in PyDDA 0.5 are implemented in NumPy which does not take advantage of GPU architectures for potential speedups :cite:`harris2020array`. In addition, the gradients of the cost function that are required for the weak variational technique are hand-coded even though packages such as Jax :cite:`jax2018github` and TensorFlow :cite:`tensorflow2015-whitepaper` can automatically calculate these gradients. These needs motivated new features for the release of PyDDA 1.0. In PyDDA 1.0, we utilize Jax and TensorFlow's automatic differentiation capabilities for differentiating :math:`J`, making these calculations less prone to human error and more efficient.
+
 Finally, upgrading PyDDA to use Jax and TensorFlow allows it to take advantage of GPUs,
 increasing the speed of retrievals. This paper shows how Jax and TensorFlow are used
 to automatically calculate the gradient of :math:`J` and improve the performance of PyDDA's
@@ -283,6 +283,7 @@ radar datasets within days instead of months.
 
 In addition, simply using TensorFlow's implementation of L-BFGS-B as well as the TensorFlow calculated cost function and gradients provides a significant performance improvement compared to the original "scipy" engine in PyDDA 0.5, being up to a factor of 30 faster. In fact, running PyDDA's original "scipy" engine on the 0.5 km resolution data for the Hurricane Florence example would have likely taken 50 days to complete on an Intel Core i7-based MacBook laptop. Therefore, that particular run was not tenable to do and therefore not shown in Figure :ref:`timing`. In any case, this shows that upgrading the calculations to use TensorFlow's automatically generated gradients and L-BFGS-B implementation provides a very significant speedup to the processing time. 
 
+
 ===========================
 Augmented Lagrangian method
 ===========================
@@ -339,6 +340,7 @@ required by such a filter method is also performed by the SciPy implementation o
 The PyDDA documentation contains an example of a mesoscale convective system (MCS) that was sampled by a C-band
 Polarization Radar (CPOL) and a Bureau of Meteorology Australia radar on 20 Jan 2006 in Darwin, Australia.
 For more details on this storm and the radar network configuration, see :cite:`Collisetal2013`. For more information about the CPOL radar dataset, see :cite:`Jacksonetal2018`.  This example with its data is included in the PyDDA Documentation as the "Example of retrieving and plotting winds."
+
 Figure :ref:`storm` shows the winds retrieved by the Augmented Lagrangian technique with :math:`\mu = 1` and from
 the weak variational technique with :math:`\mu = 1` on the right. Figure :ref:`storm` shows that both techniques are
 capturing similar horizontal wind fields in this storm. However, the Augmented Lagrangian technique is resolving an
@@ -347,6 +349,7 @@ wind convergence in this region, we expect there to be an updraft present in thi
 be physically realistic. Therefore, for :math:`\mu = 1`, the Augmented Lagrangian technique is doing a better job at
 resolving the updrafts present in the storm than the weak variational technique is. This shows
 that adjusting :math:`\mu` is required in order for the weak variational technique to resolve the updraft.
+
 
 .. figure:: auglag2.pdf
    :align: center
@@ -358,6 +361,7 @@ that adjusting :math:`\mu` is required in order for the weak variational techniq
    which is the dominant cost of both approaches.
    The dashed line at :math:`10^{-3}` denotes the tolerance on the maximum constraint violation
    that was supplied to the filter Augmented Lagrangian method. :label:`auglag2`
+
 
 .. figure:: lbfgs2.pdf
    :align: center
@@ -426,6 +430,7 @@ Therefore, this shows that using the Augmented Lagrangian technique will result 
 reproducible wind fields from radar wind networks since it is less sensitive to user-defined parameters
 than the weak variational technique. However, a limitation of this technique is that, for now, this technique is limited to two radars and to the mass continuity and vertical vorticity constraints.
 
+
 ==================
 Concluding remarks
 ==================
@@ -461,6 +466,7 @@ Code Availability
 =================
 
 PyDDA is available for public use with documentation and examples available at https://openradarscience.org/PyDDA. The GitHub repository that hosts PyDDA's source code is available at https://github.com/openradar/PyDDA.
+
 
 ===============
 Acknowledgments
