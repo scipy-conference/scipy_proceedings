@@ -68,7 +68,7 @@ James Webb Space Telescope, and summarize the most important changes
 we have made to the standard, the Python library that we use to read 
 and write ASDF files, and best practices for using the format.
 
-We will give an example of amore advanced use case that illustrates some
+We will give an example of a more advanced use case that illustrates some
 of the powerful advantages of ASDF, and that its application is not
 limited to astronomy, but suitable for much of scientific and engineering
 data, as well as models. We finish by outlining our near term plans for
@@ -153,9 +153,6 @@ using ASDF for all the referenced data.
 Vera Rubin Telescope (for World Coordinate System interchange)
 ..............................................................
 
-This ground-based telescope will scan the complete night sky every
-3 days searching for transient events. They are using ASDF as an
-interchange format for the World Coordinate Systems.
 |
 There have been users outside of astronomy using ASDF, as well as contributors
 to the source code.
@@ -217,8 +214,8 @@ tree when the corresponding Python attribute has a ``None`` value upon
 writing to an ADSF file. On reading files where the attribute was
 missing but the schema indicated a default value, the library 
 would create the Python attribute with the default. As mentioned
-in the next item, we no longer use this mechanism, and now on 
-write, the attribute can written into the tree with a null value
+in the next item, we no longer use this mechanism, and now when 
+written, the attribute appears in the YAML tree with a null value
 if the Python value is ``None`` and the schema permits null values.
 
 Interpretation of default values in schema
@@ -641,7 +638,7 @@ in the ASDF format as an interchange option.
 Sources of Information
 ----------------------
 
-- ASDF Standard: https://asdf-standard.readthedocs.io/en/1.0.2/
+- ASDF Standard: https://asdf-standard.readthedocs.io/en/latest/
 - Python ASDF package documentation: https://asdf.readthedocs.io/en/stable/
 - Repository: https://github.com//asdf-format/asdf
 - Tutorials: https://github.com/asdf-format/tutorials
@@ -649,8 +646,6 @@ Sources of Information
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
 .. [Gre15] P. Greenfield, M. Droettboom, E. Bray. 
            *ASDF: A new data format for astronomy*,
            Astronomy and Computing, 12:240-251, September 2015.
