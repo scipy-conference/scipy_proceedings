@@ -30,7 +30,7 @@ Grama was originally developed to support model analysis under uncertainty; in p
 Grama: A Grammar of Model Analysis
 ==================================
 
-Grama :cite:`zdr2020grama` is an integrated set of tools for working with *data* and *models*. Pandas :cite:`mckinney2011pandas` is used as the underlying data class, while grama implements a :code:`Model` class. A grama model includes a number of functions |----| mathematical expressions or simulations |----| and domain/distribution information for the deterministic/random inputs. The following code illustrates a simple grama model with both deterministic and random inputs [#]_.
+Grama :cite:`zdr2020grama` is an integrated set of tools for working with *data* and *models*. Pandas :cite:`reback2020pandas,mckinney-proc-scipy-2010` is used as the underlying data class, while grama implements a :code:`Model` class. A grama model includes a number of functions |----| mathematical expressions or simulations |----| and domain/distribution information for the deterministic/random inputs. The following code illustrates a simple grama model with both deterministic and random inputs [#]_.
 
 .. [#] Throughout, :code:`import grama as gr` is assumed.
 
