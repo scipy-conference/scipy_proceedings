@@ -351,7 +351,7 @@ resolving the updrafts present in the storm than the weak variational technique 
 that adjusting :math:`\mu` is required in order for the weak variational technique to resolve the updraft.
 
 
-.. figure:: auglag2.pdf
+.. figure:: auglag2.png
    :align: center
 
    The :math:`x`-axis shows, on a logarithmic scale, the maximum constraint violation
@@ -363,7 +363,7 @@ that adjusting :math:`\mu` is required in order for the weak variational techniq
    that was supplied to the filter Augmented Lagrangian method. :label:`auglag2`
 
 
-.. figure:: lbfgs2.pdf
+.. figure:: lbfgs2.png
    :align: center
 
    As :ref:`auglag2`, but for the weak variational technique that uses L-BFGS-B. :label:`lbfgs2`
