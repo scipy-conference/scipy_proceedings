@@ -49,7 +49,11 @@ Grama :cite:`zdr2020grama` is an integrated set of tools for working with *data*
 		        z=gr.marg_mom("uniform", mean=0, sd=1),
 		    )
 		    >> gr.cp_copula_gaussian(
-		        df_corr=gr.df_make(var1="y", var2="z", corr=0.5)
+		        df_corr=gr.df_make(
+			    var1="y",
+			    var2="z",
+			    corr=0.5,
+			)
 		    )
 		)
 
