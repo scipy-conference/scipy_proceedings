@@ -503,6 +503,7 @@ Benchmarking against the normal, gamma, and beta distributions
    \hline
 
    \end{tabular}
+   \vspace{2mm}
    \caption{\label{tab:benchmark_standard}Average time taken (reported in
             milliseconds, unless mentioned otherwise) to sample 1 million
             random variates from the standard normal distribution. The mean is
@@ -570,6 +571,7 @@ Benchmarking against a non-standard distribution
    Python (PINV Method, PCG64 urng) & 50 & 47 & 45 & 41 & 40 & 37 & 38 & 38\\
    \hline
    \end{tabular}
+   \vspace{2mm}
    \caption{\label{tab:gennorm}Comparing SciPy's implementation and a
             specialized method against PINV to sample 1 million variates from
             the generalized normal distribution for different values of the
