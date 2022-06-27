@@ -365,6 +365,7 @@ Correlations are a reasonable first-check of input/output behavior, but linear c
 
 
 .. csv-table:: Accuracy (:math:`R^2`) estimated via k-fold cross validation of gaussian process model. :label:`kcv`
+   :widths: 10 10 10
    :file: ./papers/zachary_delrosario/kcv.csv
 
 The k-folds CV results (Tab. :ref:`kcv`) suggest a highly accurate model for :code:`stability`, and a moderately accurate model for :code:`angle`. The following code defines the surrogate model over a domain that includes the original dataset, and performs parameter sweeps across all inputs.
