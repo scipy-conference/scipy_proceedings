@@ -65,13 +65,15 @@ In 2015, Bill Gates gave a TED talk stating that the world was not ready to deal
 
 When "coronavirus disease 2019" (COVID-19) and the virus that causes it (SARS-CoV-2) were first identified in late 2019, our team began summarizing what was known about the virus :cite:`famulare2019ncov`. By early February 2020, even though it was more than a month before the WHO would declare a pandemic :cite:`medicine2020covid`, it had become clear that COVID-19 was emerging as a major public health threat. The outbreak on the Diamond Princess cruise ship :cite:`rocklov2020covid` was the impetus for us to start modeling COVID in detail. Specifically,  we needed a tool to (a) incorporate new data as soon as it became available, (b) explore policy scenarios, and (c) predict likely future epidemic trajectories.
 
-The first step was to identify which software tool would form the best starting point for our new COVID model. The richest modeling framework used by IDM at the time was EMOD, which is a multi-disease agent-based model written in C++ and based on JSON configuration files :cite:`bershteyn2018implementation`. We also considered Atomica, a multi-disease compartmental model written in Python and based on Excel input files :cite:`kedziora2019cascade`. However, both options had significant drawbacks: as a compartmental model, Atomica was unable to capture the individual level detail necessary for modeling the Diamond Princess outbreak (such as passenger-crew interactions); EMOD had sufficient flexibility, but developing new disease modules had historically required months rather than days. 
+The first step was to identify which software tool would form the best starting point for our new COVID model. Infectious disease models come in two major types: *agent-based models* track the behavior of individual "people" (agents) in the simulation, with each agent's behavior typically defined as a random (probabilistic) process. *Compartmental models* track populations of people over time, typically using deterministic difference equations. The richest modeling framework used by IDM at the time was EMOD, which is a multi-disease agent-based model written in C++ and based on JSON configuration files :cite:`bershteyn2018implementation`. We also considered Atomica, a multi-disease compartmental model written in Python and based on Excel input files :cite:`kedziora2019cascade`. However, both options had significant drawbacks: as a compartmental model, Atomica was unable to capture the individual level detail necessary for modeling the Diamond Princess outbreak (such as passenger-crew interactions); EMOD had sufficient flexibility, but developing new disease modules had historically required months rather than days. 
 
 As a result, we instead started developing Covasim ("COVID-19 Agent-based Simulator") from a nascent agent-based model written in Python, LEMOD-FP ("Light-EMOD for Family Planning"). LEMOD-FP was used to model reproductive health choices of women in Senegal; this model had in turn been based on an even simpler agent-based model of measles vaccination programs in Nigeria ("Value-of-information simulator" or VoISim). (We subsequently applied the lessons we learned from developing Covasim to turn LEMOD-FP into a new family planning model, "FPsim", which will be launched later this year :cite:`o2022fpsim`.)
 
-Parallel to the development of Covasim, other research teams at IDM developed their own COVID models, including one based on the EMOD framework, and one based on an earlier influenza model :cite:`chao2020modeling`. However, while both of these models saw use in academic contexts :cite:`selvaraj2022rural`:cite:`koo2020interventions`, neither was able to incorporate new features quickly enough, or was easy enough to use, for widespread adoption in a policy context.
+Parallel to the development of Covasim, other research teams at IDM developed their own COVID models, including one based on the EMOD framework, and one based on an earlier influenza model :cite:`chao2020modeling`. However, while both of these models saw use in academic contexts :cite:`selvaraj2022rural`:cite:`koo2020interventions`, neither were able to incorporate new features quickly enough, or were easy enough to use, for widespread adoption in a policy context.
 
-Covasim, by contrast, had immediate real-world impact. The first version was released on 10 March 2020, and on 12 March 2020, its output was presented by Governor Jay Inslee of Washington State as justification for school closures and social distancing measures :cite:`kerr2021`. Since the early days of the pandemic, Covasim releases have coincided with major events in the pandemic, especially the identification of new variants of concern (Fig. :ref:`releases`). Covasim was quickly adopted globally, including applications in the UK regarding school closures :cite:`panovska2020determining`, Australia regarding outbreak control :cite:`stuart2021role`, and Vietnam regarding lockdown measures :cite:`pham2021estimating`. 
+Covasim, by contrast, had immediate real-world impact. The first version was released on 10 March 2020, and on 12 March 2020, its output was presented by Washington State Governor Jay Inslee during a press conference as justification for school closures and social distancing measures :cite:`kerr2021`.
+
+Since the early days of the pandemic, Covasim releases have coincided with major events in the pandemic, especially the identification of new variants of concern (Fig. :ref:`releases`). Covasim was quickly adopted globally, including applications in the UK regarding school closures :cite:`panovska2020determining`, Australia regarding outbreak control :cite:`stuart2021role`, and Vietnam regarding lockdown measures :cite:`pham2021estimating`. 
 
 
 .. figure:: fig_releases.png
@@ -79,7 +81,7 @@ Covasim, by contrast, had immediate real-world impact. The first version was rel
    Covasim releases since the start of the pandemic. :label:`releases`
 
 
-To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, has been used in dozens of academic studies :cite:`kerr2021`, and informed decision-making on every continent (Fig. :ref:`worldmap`), making it one of the most widely used Python-based COVID models. We believe key elements of its success include (a) the simplicity of its architecture; (b) its high performance, enabled by the use of NumPy arrays and Numba decorators; and (c) our emphasis on prioritizing usability, including flexible type handling and careful choices of default settings. In the remainder of this paper, we outline these principles in more detail, in the hope that this will provide a useful roadmap for other groups wanting to quickly develop high-performance, easy-to-use scientific computing libraries.
+To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, has been used in dozens of academic studies :cite:`kerr2021`, and informed decision-making on every continent (Fig. :ref:`worldmap`), making it one of the most widely used COVID models. We believe key elements of its success include (a) the simplicity of its architecture; (b) its high performance, enabled by the use of NumPy arrays and Numba decorators; and (c) our emphasis on prioritizing usability, including flexible type handling and careful choices of default settings. In the remainder of this paper, we outline these principles in more detail, in the hope that this will provide a useful roadmap for other groups wanting to quickly develop high-performance, easy-to-use scientific computing libraries.
 
 
 .. figure:: fig_worldmap.png
@@ -169,7 +171,7 @@ As shown in Fig. :ref:`sciris`, Sciris significantly reduces the number of lines
    :scale: 25%
    :figclass: w
 
-   Comparison of functionally identical code implemented with Sciris (left) and without (right). :label:`sciris`
+   Comparison of functionally identical code implemented with Sciris (left) and without (right). Figure adapted from sciris.org. :label:`sciris`
 
 
 
@@ -195,45 +197,49 @@ However, we can take advantage of the fact that each state (such as agent age or
 
     #%% Object-based agent simulation
 
-    # Person methods
-    def age_person(self):
-        self.age += 1
-        return
+    class Person:
 
-    def check_died(self):
-        rand = np.random.random()
-        if rand < self.death_prob:
-            self.alive = False
-        return
+        # Person methods
+        def age_person(self):
+            self.age += 1
+            return
 
-    # Object-based sim integration loop
-    for t in self.time_vec:
-        for person in self.people:
-            if person.alive:
-                person.age_person()
-                person.check_died()
+        def check_died(self):
+            rand = np.random.random()
+            if rand < self.death_prob:
+                self.alive = False
+            return
+
+        # Object-based sim integration loop
+        for t in self.time_vec:
+            for person in self.people:
+                if person.alive:
+                    person.age_person()
+                    person.check_died()
 
 
 .. code-block:: python
 
     #%% Array-based agent simulation
 
-    # People methods
-    def age_people(self, inds):
-        self.age[inds] += 1
-        return
+    class People:
 
-    def check_died(self, inds):
-        rands = np.random.rand(len(inds))
-        died = rands < self.death_probs[inds]:
-        self.alive[inds[died]] = False
-        return
+        # People methods
+        def age_people(self, inds):
+            self.age[inds] += 1
+            return
 
-    # Array-based sim integration loop
-    for t in self.time_vec:
-        alive_inds = sc.findinds(self.people.alive)
-        self.people.age_people(inds=alive_inds)
-        self.people.check_died(inds=alive_inds)
+        def check_died(self, inds):
+            rands = np.random.rand(len(inds))
+            died = rands < self.death_probs[inds]:
+            self.alive[inds[died]] = False
+            return
+
+        # Array-based sim integration loop
+        for t in self.time_vec:
+            alive_inds = sc.findinds(self.people.alive)
+            self.people.age_people(inds=alive_inds)
+            self.people.check_died(inds=alive_inds)
 
 
 
@@ -252,7 +258,7 @@ Numba is a compiler that translates subsets of Python and NumPy into machine cod
 
 Since Covasim is stochastic, calculations rarely need to be exact; as a result, most numerical operations are performed as 32-bit operations.
 
-Together, these speed optimizations allow Covasim to run at roughly 5-10 million simulated person-days per second of CPU time -- a speed comparable to agent-based models implemented purely in C or C\+\+ :cite:`hinch2021openabm`. Practically, this means that most users can run Covasim analyses on their laptops without needing to use cloud-based or HPC compute resources.
+Together, these speed optimizations allow Covasim to run at roughly 5-10 million simulated person-days per second of CPU time -- a speed comparable to agent-based models implemented purely in C or C\+\+ :cite:`hinch2021openabm`. Practically, this means that most users can run Covasim analyses on their laptops without needing to use cloud-based or HPC computing resources.
 
 
 
