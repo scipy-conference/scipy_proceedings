@@ -437,7 +437,7 @@ The subspace weights are reported in Table :ref:`weights`. Note that the leading
    +-----------+---------+--------+---------+---------+---------+
 
 
-Using the subspace weights in Table :ref:`weights` to produce a 2d projection of the feature space enables visualizing all boat geometries in a single plot. Figure :ref:`2d-projection` reveals that this 2d projection is very successful at separating universally-stable (:code:`angle==180`), upright-unstable (:code:`angle==0`), and intermediate cases (:code:`0 < angle < 180`). Intermediate cases are concentrated at higher values of the second active variable; there is a phase transition between universally-stable and upright-unstable vessels at lower values of the second active variable.
+Using the subspace weights in Table :ref:`weights` to produce a 2d projection of the feature space enables visualizing all boat geometries in a single plot. Figure :ref:`2d-projection` reveals that this 2d projection is very successful at separating universally-stable (:code:`angle==180`), upright-unstable (:code:`angle==0`), and intermediate cases (:code:`0 < angle < 180`). Intermediate cases are concentrated at higher values of the second active variable. There is a phase transition between universally-stable and upright-unstable vessels at lower values of the second active variable.
 
 .. figure:: 2d-projection.png
    :scale: 50%
