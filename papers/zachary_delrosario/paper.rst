@@ -264,7 +264,7 @@ The parameter sweep shown in Figure :ref:`example-sweep` gives an overall impres
 Exploratory Model Analysis Case Study
 =====================================
 
-This final case study illustrates how grama supports exploratory model analysis. This iterative process is a computational approach to mining insights into physical systems. We illustrate the approach by considering the design of boat hull cross-sections.
+This final case study illustrates how grama supports exploratory model analysis. This iterative process is a computational approach to mining insights into physical systems. The following use case illustrates the approach by considering the design of boat hull cross-sections.
 
 Static Stability of Boat Hulls
 ------------------------------
