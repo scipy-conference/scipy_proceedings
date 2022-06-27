@@ -423,7 +423,7 @@ A different analysis of the boat hull :code:`angle` data helps develop useful in
 		)
 
 
-The subspace weights are reported in Table :ref:`weights`. Note that the leading direction :code:`1` is dominated by the displacement ratio :code:`d` and COM location :code:`f_com`; essentially, this describes the "loading" of the vessel. The second direction corresponds to "widening and shortening" of the hull cross-section (in addition to lowering :code:`d` and :code:`f_com`).
+The subspace weights are reported in Table :ref:`weights`. Note that the leading direction :code:`1` is dominated by the displacement ratio :code:`d` and COM location :code:`f_com`. Essentially, this describes the "loading" of the vessel. The second direction corresponds to "widening and shortening" of the hull cross-section (in addition to lowering :code:`d` and :code:`f_com`).
 
 
 .. table:: Subspace weights in :code:`df_weights`. :label:`weights`
