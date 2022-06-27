@@ -177,7 +177,9 @@ Generating a parameter sweep similar to Figure :ref:`example-sweep` with standar
     y_const = [-1, 0, +1] # Constant values for y
     # Generate data
     data = np.zeros((nx * len(y_const), 3))
-    for i, x in enumerate(np.linspace(x_lo, x_up, num=nx)):
+    for i, x in enumerate(
+            np.linspace(x_lo, x_up, num=nx)
+        ):
         for j, y in enumerate(y_const):
             data[i + j*nx, 0] = f_model(x, y)
             data[i + j*nx, 1] = x
