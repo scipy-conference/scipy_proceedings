@@ -219,7 +219,7 @@ Parameter sweep functionality can be achieved in grama without explicit loop man
 
 Once a model is implemented in grama, generating and visualizing a parameter sweep is trivial, requiring just two lines of code and zero initial choices for analysis parameters. The practical outcome of this software design is that users will tend to *self-initiate* parameter sweeps: While students will rarely choose to write the extensive boilerplate code necessary for a parameter sweep (unless required to do so), students writing code in grama will tend to self-initiate sound analysis practices.
 
-For example, the following code is unmodified from a student report [#]_. The original author implemented an ordinary differential equation model to simulate the track time ``"finish_time"`` of an electric formula car, and sought to study the impact of variables such as the gear ratio ``"GR"`` on ``"finish_time"``. While the assignment did not require a parameter sweep, the student chose to carry out their own study. The code below is a self-initiated parameter sweep of the track time model.
+For example, the following code is unmodified from a student report [#]_. The original author implemented an ordinary differential equation model to simulate the track time :code:`"finish_time"` of an electric formula car, and sought to study the impact of variables such as the gear ratio :code:`"GR"` on :code:`"finish_time"`. While the assignment did not require a parameter sweep, the student chose to carry out their own study. The code below is a self-initiated parameter sweep of the track time model.
 
 .. [#] Included with permission of the author, on condition of anonymity.
 
