@@ -2,7 +2,7 @@
 :email: njessurun@ufl.edu
 :institution: University of Florida
 
-:author: Dan E. Capecci
+:author: Daniel E. Capecci
 :email: dcapecci@ufl.edu
 :institution: University of Florida
 
