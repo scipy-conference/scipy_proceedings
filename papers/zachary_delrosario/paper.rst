@@ -285,7 +285,7 @@ As a boat is rotated away from its upright orientation, its center of buoyancy (
 
    Schematic boat hull rotated to :math:`22.5^{\circ}`. Gravity and buoyancy are annotated as in Figure :ref:`boat-stable`. Note that this hull is upright unstable, as the couple will rotate the boat away from upright. :label:`boat-unstable`
 
-Naval engineers analyze the stability of a boat design by constructing a *moment curve*, such as the one pictured in Figure :ref:`moment-curve`. This curve depicts the net moment due to buoyancy at various angles, assuming the vessel is in vertical equilibrium. From this figure we can see that the design is upright-stable, as it possesses a negative slope at upright :math:`\theta=0^{\circ}`. Note that a boat may not have an unlimited range of stability; note that Figure :ref:`moment-curve` exhibits an *angle of vanishing stability* (AVS) beyond which the boat does not recover to upright.
+Naval engineers analyze the stability of a boat design by constructing a *moment curve*, such as the one pictured in Figure :ref:`moment-curve`. This curve depicts the net moment due to buoyancy at various angles, assuming the vessel is in vertical equilibrium. From this figure we can see that the design is upright-stable, as it possesses a negative slope at upright :math:`\theta=0^{\circ}`. Note that a boat may not have an unlimited range of stability as Figure :ref:`moment-curve` exhibits an *angle of vanishing stability* (AVS) beyond which the boat does not recover to upright.
 
 .. figure:: moment-curve.png
    :scale: 40%
