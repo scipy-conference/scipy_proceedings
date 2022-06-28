@@ -58,7 +58,8 @@ Existing exchange-correlation approximations have not been rigorously tested und
 An alternative method used in the WDM community is path-integral Monte–Carlo :cite:`DGB18`, which yields essentially exact properties; however, it is even more limited by computational cost than DFT, and becomes unfeasibly expensive at lower temperatures due to the fermion sign problem.
 
 It is therefore of great interest to reduce the computational complexity of the aforementioned methods.
-Some examples of promising developments in this regard include machine-learning-based solutions :cite:`ML_DFT_1,ML_DFT_2,mala` and stochastic DFT :cite:`stoc_DFT,stoc_DFT_2`.
+The use of graphics processing units in DFT calculations is becomingly increasingly common, and has been shown to offer significant speed-ups relative to conventional calculations using central processing units :cite:`GPUs_1,GPUs_2`.
+Some other examples of promising developments to reduce the cost of DFT calculations include machine-learning-based solutions :cite:`ML_DFT_1,ML_DFT_2,mala` and stochastic DFT :cite:`stoc_DFT,stoc_DFT_2`.
 However, in this paper, we focus on an alternative class of models known as "average-atom" models.
 Average-atom models have a long history in plasma physics :cite:`PRR_AA`: they account for quantum effects, typically using DFT, but reduce the complex system of interacting electrons and nuclei to a single atom immersed in a plasma (the "average" atom).
 An illustration of this principle (reduced to two dimensions for visual purposes) is shown in Fig. 1.

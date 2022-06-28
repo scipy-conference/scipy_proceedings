@@ -581,3 +581,34 @@ howpublished = {\url{https://joblib.readthedocs.io/}},
   doi = {10.1103/PhysRevB.102.224107},
   url = {https://link.aps.org/doi/10.1103/PhysRevB.102.224107}
 }
+
+
+@article{GPUs_2,
+title = {Fast plane wave density functional theory molecular dynamics calculations on multi-GPU machines},
+journal = {Journal of Computational Physics},
+volume = {251},
+pages = {102-115},
+year = {2013},
+issn = {0021-9991},
+doi = {https://doi.org/10.1016/j.jcp.2013.05.005},
+url = {https://www.sciencedirect.com/science/article/pii/S002199911300329X},
+author = {Weile Jia and Jiyun Fu and Zongyan Cao and Long Wang and Xuebin Chi and Weiguo Gao and Lin-Wang Wang},
+keywords = {Molecular dynamics, Electronic structure, First-principles, Density functional theory, Plane wave pseudopotential, GPU},
+abstract = {Plane wave pseudopotential (PWP) density functional theory (DFT) calculation is the most widely used method for material simulations, but its absolute speed stagnated due to the inability to use large scale CPU based computers. By a drastic redesign of the algorithm, and moving all the major computation parts into GPU, we have reached a speed of 12s per molecular dynamics (MD) step for a 512 atom system using 256GPU cards. This is about 20 times faster than the CPU version of the code regardless of the number of CPU cores used. Our tests and analysis on different GPU platforms and configurations shed lights on the optimal GPU deployments for PWP-DFT calculations. An 1800 step MD simulation is used to study the liquid phase properties of GaInP.}
+}
+
+
+@article{GPUs_1,
+title = {Speeding up plane-wave electronic-structure calculations using graphics-processing units},
+journal = {Computer Physics Communications},
+volume = {182},
+number = {7},
+pages = {1421-1427},
+year = {2011},
+issn = {0010-4655},
+doi = {https://doi.org/10.1016/j.cpc.2011.03.010},
+url = {https://www.sciencedirect.com/science/article/pii/S0010465511000889},
+author = {Stefan Maintz and Bernhard Eck and Richard Dronskowski},
+keywords = {Electronic structure, Density-functional theory, Plane waves, Graphics-processing unit, Davidson algorithm, Fast Fourier transformation, Rectangular matrix multiplication},
+abstract = {We report on a source-code modification of the density-functional program suite VASP which benefits from the use of graphics-processing units (GPUs). For the electronic minimization needed to achieve the ground state using an implementation of the blocked Davidson iteration scheme (EDDAV), speed-ups of up to 3.39 on S1070 devices or 6.97 on a C2050 device were observed when calculating an ion–conductor system of actual research interest. Concerning the GPU specialty – memory throughput – the low double-precision performance forms the bottleneck on the S1070, whereas on Fermi cards the code reaches 61.7\% efficiency while not suffering from any accuracy losses compared to well-established calculations performed on a central processing unit (CPU). The algorithmic bottleneck was found to be the multiplication of rectangular matrices. An initial idea to solve this problem is given.}
+}
