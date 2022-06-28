@@ -185,6 +185,8 @@ In other words,
 
 This poses a fundamental difference between the PINN method and traditional CFD schemes, making it potentially more difficult for the PINN method to achieve the same accuracy as the traditional schemes.
 We will discuss this more in section 3.
+Note that in practice, each loss term on the right-hand-side of equation (:ref:`eq:total-residual`) is weighted.
+We ignore the weights here for demonstrating purpose. 
 
 To solve (:ref:`eq:objective`), theoretically, we can use any number of spatial-temporal points, which eases the need of computational resources, compared to finding the zero root directly.
 Gradient-descent-based optimizers further reduce the computational cost, especially in terms of memory usage and the difficulty of parallelization.
