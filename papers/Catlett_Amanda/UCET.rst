@@ -39,19 +39,19 @@ Introduction
 ------------
 
 The Automated Coastal Engineering System (ACES) was developed in response to the charge by the LTG E. R. Heiberg III,
-who was the Chief of Engineers, to provide improved design capabilities to the Corps coastal specialists. [Leenknecht] In 1992, ACES
+who was the Chief of Engineers at the time, to provide improved design capabilities to the Corps coastal specialists. [Leenknecht] In 1992, ACES
 was presented as an interactive computer-based design and analysis system in the field of coastal engineering. The tools
 consist of seven functional areas which are: Wave Prediction, Wave Theory, Structural Design, Wave Runup Transmission
 and Overtopping, Littoral Process, and Inlet Processes. These functional areas contain classical theory describing wave
 motion, to expressions resulting from tests of structures in wave flumes, and numerical models describing the exchange
-of energy from the atmosphere to the sea surface. The math behind these will utilize anything from simple algebraic
+of energy from the atmosphere to the sea surface. The math behind these uses anything from simple algebraic
 expressions, both theoretical and empirical, to numerically intense algorithms. [Leenknecht][UG][shankar]
 
-Originally ACES was written in FORTRAN 77 and as technology has evolved, the ability to use the tool has decreased.
+Originally, ACES was written in FORTRAN 77 resulting in a decreased ability to use the tool as technology has evolved.
 In 2017, the codebase was converted from FORTRAN 77 to MATLAB and Python. This conversion ensured that coastal engineers
 using this tool base would not need training in yet another coding language. In 2020, the Engineered Resilient Systems
-(ERS) Rapid Application Development (RAD) team undertook the project with the goal of deploying this as a web-based
-tool, and ultimately renamed it to: USACE Coastal Engineering Toolkit (UCET).
+(ERS) Rapid Application Development (RAD) team undertook the project with the goal of deploying the ACES tools as a web-based
+application, and ultimately renamed it to: USACE Coastal Engineering Toolkit (UCET).
 
 The RAD team focused on updating the Python codebase utilizing Python’s object-oriented programming and the newly
 developed HoloViz ecosystem. The team refactored the code to implement inheritance so the code is clean, readable, and
@@ -65,14 +65,14 @@ Param library, the class hierarchy used, and utilization of Panel and HoloViews 
 Refactoring Using Param
 -----------------------
 
-Each coastal tool in UCET has two classes, the model class and the GUI class. The model class will hold input and output
-variables and the methods needed to run the model. Where the GUI class will hold information for GUI visualization.
+Each coastal tool in UCET has two classes, the model class and the GUI class. The model class holds input and output
+variables and the methods needed to run the model. Whereas the GUI class holds information for GUI visualization.
 To make implementation of the GUI more seamless we refactored model variables to utilize the Param library. Param is a
 library that has the goal of simplifying the codebase by letting the programmer explicitly declare the types and values
 of parameters accepted by the code. Param can also be seamlessly used when implementing the GUI through Panel and
 HoloViews.
 
-Each UCET tool’s model class declares the input and output values used in the model as class variables. Each input and
+Each UCET tool’s model class declares the input and output values used in the model as class parameters. Each input and
 output variables are declared and given the following metadata features:
 
 - **default**:  each input variable is defined as a Param with a default value defined from the 1992 ACES user manual
@@ -81,7 +81,7 @@ output variables are declared and given the following metadata features:
 - **constant**: the output variables all set constant equal True, thereby restricting the user’s ability to manipulate the value. Note that when calculations are being done they will need to be inside a with param.edit_constant(self) function
 - **precedence**: input and output variables will use precedence when there are instances where the variable does not need to be seen.
 
-An example of an input variable is:
+The following is an example of an input parameter:
 
 .. code-block:: python
 
@@ -100,9 +100,8 @@ An example of an output variable is:
       constant=True
   )
 
-The model functions that were written in 2017 did not need to change after changing the input and output model
-variables. Param allowed for the ability to remove code that did type checking and bounds check; however, the tool’s
-main calculation code-base was able to mostly remain unchanged.
+The model's main calculation functions mostly remained unchanged. However, the use of Param eliminated the need for
+code that handled type checking and bounds checks.
 
 Class Hierarchy
 ---------------
@@ -111,7 +110,7 @@ UCET has twenty tools from six of the original seven functional areas of ACES. W
 focused on the visualization of the web application rather than functional areas. Thus, each tool’s class can be
 categorized into Base-Tool, Graph-Tool, Water-Tool, or Graph-Water-Tool. The Base-Tool has the coastal engineering
 models that do not have any water property inputs (such as water density) in the calculations and no graphical output.
-The Graph-Tool has the coastal engineering models that do not have any water property inputs in the calculations but has
+The Graph-Tool has the coastal engineering models that do not have any water property inputs in the calculations but have
 a graphical output. Water-Tool has the coastal engineering models that have water property inputs in the calculations
 and no graphical output. Graph-Water-Tool has the coastal engineering models that have water property inputs in the
 calculations and has a graphical output. Figure 1 shows a flow of inheritance for each of those classes.
@@ -130,9 +129,9 @@ classes have methods and functions that are utilized across more than one tool. 
 -	**WaterTypeGui**: has the widget for water selection.
 -	**TabulatorDataGui**: holds the functions and methods used for visualizing plots and the ability to download the data that is used for plotting.
 
-Each coastal tool in UCET has two classes, the model class and the GUI class. The model class will hold input and output
-variables and the methods needed to run the model. The model class will either directly inherit from the BaseDriver or
-the WaterTypeDriver.  The tool’s GUI class will hold information for GUI visualization that is different from the
+Each coastal tool in UCET has two classes, the model class and the GUI class. The model class holds input and output
+variables and the methods needed to run the model. The model class either directly inherits from the BaseDriver or
+the WaterTypeDriver.  The tool’s GUI class holds information for GUI visualization that is different from the
 BaseGui, WaterTypeGUI, and TabulatorDataGui classes. In figure 1 the model classes are labeled as: Base-Tool Class,
 Graph-Tool Class, Water-Tool Class, and Graph-Water-Tool Class and each has a corresponding GUI class.
 
@@ -162,11 +161,11 @@ UCET utilizes the following widgets to gather user input:
 
 UCET utilizes indicators.Number, Tabulator, and graphs to visualize the outputs of the coastal engineering models.  A
 single number is shown using indicators.Number and graph data is displayed using the Tabulator widget to show the data
-of the graph. The graphs are created using HoloViews and will have tool options such as pan, zooming, and saving.
+of the graph. The graphs are created using HoloViews and have tool options such as pan, zooming, and saving.
 Buttons are used to calculate, save the current run, and save the graph data.
 
 All of these widgets are organized into 5 panels: title, options, inputs, outputs, and graph. The
-BaseGui/WaterTypeGui/TabularDataGui have methods that will organize the widgets within the 5 panels that most tools
+BaseGui/WaterTypeGui/TabularDataGui have methods that organize the widgets within the 5 panels that most tools
 follow. The “options” panel has a row that holds the dropdown selections for units and water type (if the tool is a
 Water-Tool). Some tools have a second row in the “options” panel with other drop-down options. The input panel has two
 columns for spinner widgets with a calculation button at the bottom left. The output panel has two columns of
@@ -184,8 +183,9 @@ libraries in the scientific Python ecosystem such as: Param, Panel, and HoloView
 
 
 
-Currently, UCET is only deployed using a command line interface panel serve command. UCET is awaiting on the Security
-Technical Implementation Guide process before it can be launched as a website. While this process is happening, we have
+Currently, UCET is only deployed using a command line interface panel serve command. UCET is awaiting the Security
+Technical Implementation Guide process before it can be launched as a website. As part of this security vetting process
+we plan to leverage continuous integration/continuous development (CI/CD) tools to automate the deployment process. While this process is happening, we have
 started to get feedback from coastal engineers to update the tools usability, accuracy, and adding suggested features.
 To minimize the amount of computer science knowledge the coastal engineers need, our team created a batch script.
 This script creates a conda environment, activates and runs the panel serve command to launch the app on a local host.
@@ -193,10 +193,10 @@ The user only needs to click on the batch script for this to take place.
 
 
 
-Other tests are being done to ensure the accuracy of the tools by utilizing PyTests to compare results UCET obtains
-with that of the FORTRAN original code. The biggest block is getting data from the FORTRAN to compare with Python.
-Currently there are tests for most of the tools that will read a .csv file of input and output results from FORTRAN and
-compare with what the Python is calculating.
+Other tests are being created to ensure the accuracy of the tools using a testing framework to compare output from UCET
+with that of the FORTRAN original code. The biggest barrier to this testing strategy is getting data from the FORTRAN to compare with Python.
+Currently, there are tests for most of the tools that read a CSV file of input and output results from FORTRAN and
+compare with what the Python code is calculating.
 
 
 
@@ -206,8 +206,7 @@ would be, if a user chooses input values that make it so the application does no
 will appear under the output header and replace all output values. For a more concrete example: Linear Wave Theory
 has a vertical coordinate (z) and the water depth (d) as input values and when those values sum is less than zero the
 point is outside the waveform. Therefore, if a user makes a combination where the sum is less than zero, UCET
-will post a warning to tell the user that the point is outside the waveform. The developers have been documenting
-this project using GitHub and JIRA.
+will post a warning to tell the user that the point is outside the waveform.
 
 
 Results
@@ -232,8 +231,8 @@ and output variables will change so only what is used or calculated for those se
 
   Screen shot of Windspeed Adjustment and Wave Growth
 
-Conclusion
-----------
+Conclusion and Future Work
+--------------------------
 
 Thirty years ago, ACES was developed to provide improved design capabilities to Corps coastal specialists and while
 these tools are still used today, it became more and more difficult for users to access them. Five years ago, there was
@@ -244,8 +243,10 @@ HoloViews libraries. The use of inheritance has allowed for shorter code-bases a
 added to the toolkit. Param, Panel, and HoloViews work cohesively together to not only run the models but make a simple
 interface.
 
-Future work will involve expanding UCET to include current coastal engineering models and refining the code to make the
-application work more smoothly.
+Future work will involve expanding UCET to include current coastal engineering models, and completing the security
+vetting process to deploy to a publicly accessible website. We plan to incorporate an automated CI/CD to ensure smooth
+deployment of future versions. We also will continue to incorporate feedback from users and refine the code to ensure
+the application provides a quality user experience.
 
 References
 ----------
