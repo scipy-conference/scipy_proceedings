@@ -23,7 +23,7 @@
 :institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
 :institution: Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA
 
-:bibliography: ref
+:bibliography: refs
 
 ------------------------------------------------------------------
 Variational Autoencoders For Semi-Supervised Deep Metric Learning
