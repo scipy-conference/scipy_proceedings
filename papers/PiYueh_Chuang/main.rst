@@ -199,6 +199,16 @@ Finally, to update parameters in an optimizer, the gradients of :math:`G` with r
 This all leads to a very large computational graph.
 We will see the performance of the PINN method in the case studies.
 
+In summary, when viewing the PINN method as supervised machine learning, the inputs of a network are spatial-temporal coordinates, and the outputs are the physical quantities of our interest.
+The loss or objective functions in PINN are governing equations that regulate how the target physical quantities should behave. 
+The use of governing equations eliminates the need for true answers.
+A trivial example is using Bernoulli's equation as the loss function, i.e., :math:`loss=\frac{u^2}{2g}+\frac{p}{\rho g}-H_0+z(x)`, and a neural network predicts the flow speed :math:`u` and pressure :math:`p` at a given location :math:`x` along a streamline.
+(The gravitational acceleration :math:`g`, density :math:`\rho`, energy head :math:`H_0`, and elevation :math:`z(x)` are usually known and given.)
+Such a loss function regulates the relationship between predicted :math:`u` and :math:`p` and does not need true answers for the two quantities.
+Unlike Bernoulli’s equation, most governing equations in physics are usually differential equations (e.g., heat equations).
+The main difference is that now the PINN method needs automatic differentiation to evaluate the loss.
+Regardless of the forms of governing equations, spatial-temporal coordinates are the only data required during training.
+Hence, throughout this paper, training data means spatial-temporal points and does not involve any true answers to predicted quantities.
 
 
 2.2. An analogy to conventional numerical methods
