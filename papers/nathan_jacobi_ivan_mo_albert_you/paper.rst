@@ -106,7 +106,7 @@ Our methods use a CBOW approach at generating embeddings, which generates a word
 i.e the words in a window range surrounding the target word. Following pre-processing of our corpus, steps for generating word embeddings were
 applied to each temporal bucket. For each time bucket, co-occurrence matrices were first created, with a window size w = 5. These matrices contained
 the total occurrences of each word against every other within a window range :math:`L` of 5 words within the corpus at time t :math:`D_t`. Each co-occurrence matrix was of
-dimensions :math:`V \times V`. Following the generation of each of these co-occurrence matrices, a :math:`|V| \times |V|` dimensioned Positive Pointwise Mutual Information
+dimensions :math:`\abs{V} \times \abs{V}`. Following the generation of each of these co-occurrence matrices, a :math:`\abs{V} \times \abs{V}` dimensioned Positive Pointwise Mutual Information
 matrix was calculated. The value in each cell was calculated as follows:
 
 .. math::
