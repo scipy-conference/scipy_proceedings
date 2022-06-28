@@ -176,10 +176,10 @@ Recall the different complexities of the different external programs used in the
 - RaxML program: :math:`\mathcal{O}(e \times n \times SA)`
 - RF program: :math:`\mathcal{O}(n^2)`,
 
-where :math:`n` is a number of species (or taxa), :math:`r` is a number of replicates, :math:`SA` is a size of the multiple sequence alignment (MSA), and :math:`e` is a number of refinement steps performed by the RaxML algorithm. For all :math:`SA \in {N^*}` and for all :math:`WS, S \in {N}`, the number of windows can be evaluated as follow:
+where :math:`n` is a number of species (or taxa), :math:`r` is a number of replicates, :math:`SA` is a size of the multiple sequence alignment (MSA), and :math:`e` is a number of refinement steps performed by the RaxML algorithm. For all :math:`SA \in {N^*}` and for all :math:`WS, S \in {N}`, the number of windows can be evaluated as follow (Eq. :ref:`eq:nb`):
 
 .. math::
-   :label: equation1:
+   :label: eq:nb
    
    nb = \left\lfloor \frac {SA - WS}{S} + 1 \right\rfloor, 
 
