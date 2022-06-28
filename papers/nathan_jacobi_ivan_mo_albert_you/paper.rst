@@ -311,7 +311,7 @@ In future iterations, the length of each temporal bucket will be decreased, hope
 K-Means Clustering Results
 ==========================
 
-The results of k-means clustering led revealed semantic shifts of HIV related terms being clustered with higher incedence than other terms in one cluster. 
+The results of k-means clustering led revealed semantic shifts of HIV related terms being clustered with higher incidence than other terms in one cluster. 
 Incidence rates for all terms and HIV terms in each cluster can be seen in table :ref:`hivterm` and figure :ref:`hivplot`.
 This increased incidence rate of HIV related terms in certain clusters leads us to hypothesize that semantic shifts of terms in future datasets can be clustered using the same k-means model,
 and analyzed to search for outbreaks.
