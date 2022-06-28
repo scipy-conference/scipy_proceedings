@@ -23,7 +23,12 @@ Introduction
 
 The use of computational methods for chemistry is ubiquitous and few modern chemists retain the initial skepticism of the field :cite:`kohnNobelLectureElectronic1999,schaeferMethyleneParadigmComputational1986`. Machine learning has been further earmarked :cite:`meyerMachineLearningComputational2019,dralQuantumChemistryAge2020,schuttUnifyingMachineLearning2019` as an effective accelerator for computational chemistry at every level, from DFT :cite:`gaoMachineLearningCorrection2016` to alchemical searches :cite:`deComparingMoleculesSolids2016` and saddle point searches :cite:`asgeirssonExploringPotentialEnergy2018`. Reproducibility :cite:`pengReproducibleResearchComputational2011,sandveTenSimpleRules2013` in all fields of computational research, and has spawned a veritable flock of methodological and programmatic advances :cite:`communityTuringWayHandbook2019`, including the sophisticated provenance tracking of AiiDA :cite:`pizziAiiDAAutomatedInteractive2016,huberAiiDAScalableComputational2020`.
 
-Dataset bias :cite:`engstromIdentifyingStatisticalBias2020,blumRecoveringBiasedData2019,rahamanSpectralBiasNeural2019` has gained prominence in the machine learning literature, but has not yet percolated through to the chemical sciences community. At its core, the argument for dataset biases in generic machine learning problems of image and text classification, can be linked to the difficulty in obtaining labeled results for training purposes. This is not an issue in the physical sciences at all, as the training data is always labeled without human intervention. There is still a strong tendency to focus on "benchmark" datasets and results :cite:`hojaQM7XComprehensiveDataset2020,seniorProteinStructurePrediction2019`. Compute is expensive, and the reproduction of data which is openly available is not a valid scientific endeavor. In the following sections, we will outline ~wailord~, a library which implements a two level structure for interacting with ORCA :cite:`neeseORCAQuantumChemistry2020` to implement an end-to-end workflow to analyse and prepare datasets.
+Dataset bias :cite:`engstromIdentifyingStatisticalBias2020,blumRecoveringBiasedData2019,rahamanSpectralBiasNeural2019` has gained prominence in the machine learning literature, but has not yet percolated through to the chemical sciences community. At its core, the argument for dataset biases in generic machine learning problems of image and text classification, can be linked to the difficulty in obtaining labeled results for training purposes. This is not an issue in the physical sciences at all, as the training data is always labeled without human intervention. There is still a strong tendency to focus on "benchmark" datasets and results :cite:`hojaQM7XComprehensiveDataset2020,seniorProteinStructurePrediction2019`. Compute is expensive, and the reproduction of data which is openly available is not a valid scientific endeavor. In the following sections, we will outline ~wailord~, a library which implements a two level structure for interacting with ORCA :cite:`neeseORCAProgramSystem2012` to implement an end-to-end workflow to analyse and prepare datasets.
+
+In particular, we shall understand this library from the lens of what is often
+known as a design pattern in the practice of computational science and
+engineering. That is, a template or description to solve commonly occurring
+problems in the design of programs.
 
 Structure and Implementation
 ----------------------------
@@ -37,7 +42,7 @@ Data generation involves set of known configurations (say, ``xyz`` inputs) and a
 
 Downstream tasks for simulations of chemical systems involve questions phrased as queries or comparative measures. With that in mind, ``wailord`` generates ``pandas`` dataframes which are indistinguishable from standard machine learning information sources, to trivialize the data-munging and preparation process. The outputs of ``wailord`` represent concrete *information* and it is not meant to store runs like the ASE database :cite:`larsenAtomicSimulationEnvironment2017` , nor run a process to manage discrete workflows like AiiDA :cite:`huberAiiDAScalableComputational2020`.
 
-By construction, it differs also from existing "interchange" formats as those favored by the materials data repositories like the QCArchive project and is partially close in spirit to the ``cclib`` endeavor.
+By construction, it differs also from existing "interchange" formats as those favored by the materials data repositories like the QCArchive project :cite:`smithMolSSIQCArchiveProject2021` and is partially close in spirit to the ``cclib`` endeavor :cite:`oboyleCclibLibraryPackageindependent2008a`.
 
 Implementation
 ++++++++++++++
@@ -49,11 +54,20 @@ Python has a rich set of structures implemented in the standard library, which h
 User Interface
 ++++++++++++++
 
-The core user interface is depicted in Fig. [[fig:uiwail]]. The test suites cover standard usage and serve as ad-hoc tutorials. Additionally, ``jupyter`` notebooks are also able to effectively run ``wailord`` which facilitates its use over SSH connections to high-performance-computing (HPC) clusters. The user is able to describe the nature of calculations required in a simple YAML file format. A command line interface and then be used to generate inputs, or another YAML file may be passed to describe the paths needed. A very basic harness script for submissions is also generated which can be rate limited to ensure optimal runs on an HPC cluster.
+The core user interface is depicted in Fig. [[fig:uiwail]]. The test suites
+cover standard usage and serve as ad-hoc tutorials. Additionally, ``jupyter``
+notebooks are also able to effectively run ``wailord`` which facilitates its use
+over SSH connections to high-performance-computing (HPC) clusters. The user is
+able to describe the nature of calculations required in a simple YAML file
+format. A command line interface can then be used to generate inputs, or another
+YAML file may be passed to describe the paths needed. A very basic harness
+script for submissions is also generated which can be rate limited to ensure
+optimal runs on an HPC cluster.
 
 .. figure:: overviewWailord.jpg
 
    Some implemented workflows including the two input YML files
+   :label:`uiwail`
 
 Design and Usage
 ----------------
@@ -275,10 +289,11 @@ manner the structured inputs and output datasets which facilitate chemical
 insight. The formulation of bespoke datasets tailored to the study of specific
 properties across a wide range of materials at varying levels of theory has been
 shown. The test-driven-development approach is a robust methodology for
-interacting with  closed source software. It is expected that the package shall
-be augmented with more workflows, in particular, with a focus on nudged elastic
+interacting with  closed source software. The design patterns expressed, of
+which the ``wailord`` library is a concrete implementation, is expected to be
+augmented with more workflows, in particular, with a focus on nudged elastic
 band. The methodology here has been applied to ORCA, however, the two level
-structure is generalization to most quantum chemistry codes as well.
+structure has generalizations to most quantum chemistry codes as well.
 
 Importantly, we note that the ideas expressed form a design pattern for
 interacting with a plethora of computational tools in a reproducible manner. By
