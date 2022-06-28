@@ -299,6 +299,23 @@ GeoCAT-viz.
    Taylor diagram and curly vector examples that created with the help
    of GeoCAT-viz :label:`fig5viz`
 
+GeoCAT-datafiles
+================
+
+GeoCAT-datafiles is GeoCAT's small data storage component as a Github
+repository. This tool houses many datasets in different file formats such as
+NetCDF, which can be used along with other GeoCAT tools or ad-hoc data needs
+in any other Python script. The datasets can be accessed by the end-user
+through a lightweight convenience function:
+
+.. code-block:: python
+
+   geocat.datafiles.get("folder_name/filename")
+
+GeoCAT-datafiles fetches the file by simply reading from the local storage,
+if any, or downloading from the GeoCAT-datafiles repository, if not in the
+local storage, with the help of Pooch framework :cite:`geocatvizrepo`.
+
 WRF-Python
 ==========
 
