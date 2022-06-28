@@ -17,7 +17,7 @@ Experience report of physics-informed neural networks in fluid simulations: pitf
 The deep learning boom motivates researchers and practitioners of computational fluid dynamics eager to integrate the two areas.
 The PINN (physics-informed neural network) method is one such attempt.
 While most reports in the literature show positive outcomes of applying the PINN method, our experiments with it stifled such optimism.
-This work presents our not-so-successful story of using PINN to solve two fundamental flow problems: 2D Taylor-Green vortex at :math:`Re = 100` and 2D cylinder flow at :math:`Re = 200`.
+This report presents our not-so-successful experiments with PINN to solve two fundamental flow problems: 2D Taylor-Green vortex at :math:`Re = 100` and 2D cylinder flow at :math:`Re = 200`.
 The PINN method solved the 2D Taylor-Green vortex problem with acceptable results, and we used this flow as an accuracy and performance benchmark.
 About 32 hours of training were required for the PINN method's accuracy to match the accuracy of a :math:`16 \times 16` finite-difference simulation, which took less than 20 seconds.
 The 2D cylinder flow, on the other hand, did not even result in a physical solution.
@@ -68,7 +68,7 @@ Fluid flows are sensitive nonlinear dynamical systems in which a small change or
 So to get correct solutions, the optimization in PINN must minimize the loss to values extremely close to zero, further compromising the method's solvability and performance.
 
 This paper provides our not-so-successful PINN story as a lesson learned to readers.
-Our story includes two case studies that were initially designed as benchmarks for the PINN method's accuracy and computational performance.
+Our story includes two computational experiments as case studies to benchmark the PINN method's accuracy and computational performance.
 The first case study, a Taylor-Green vortex, worked out, though not to our satisfaction.
 We will discuss the performance of PINN using this case study.
 The second case study, flow over a cylinder, did not even result in a physical solution.
@@ -82,7 +82,7 @@ PetIBM simulations in each case study served as baseline data.
 All cases' configurations, post-processing scripts, and required Singularity image definitions can be found at reference :cite:`pi_yueh_chuang_2022_6592457`.
 
 This paper is structured as follows: the second section briefly describes the PINN method and an analogy to traditional CFD methods.
-The third and fourth sections provide the case studies of the Taylor-Green vortex in 2D for accuracy/performance benchmarking and a 2D laminar cylinder flow with vortex shedding.
+The third and fourth sections provide our computational experiments of the Taylor-Green vortex in 2D and a 2D laminar cylinder flow with vortex shedding.
 Most discussions happen in the corresponding case studies.
 The last section presents the conclusion and discussions that did not fit into either one of the cases.
 
@@ -301,6 +301,8 @@ The neural network used in the PINN solver is a fully-connected neural network w
 The activation functions are SiLU (:cite:`hendrycks_gaussian_2016`).
 We used Adam for optimization, and its initial parameters are the defaults from PyTorch.
 The learning rate exponentially decayed through PyTorch's :code:`ExponentialLR` with :code:`gamma` equal to :math:`0.95^{1/10000}`.
+Note we did not conduct hyperparameter optimization, given the computational cost.
+The hyperparameters are mostly the defaults used by the 3D Taylor-Green example in Modulus (:cite:`noauthor_modulus_nodate`).
 
 The training data were simply spatial-temporal coordinates.
 Before the training, the PINN solver pre-generated 18,432,000 spatial-temporal points to evaluate the residuals of the Navier-Stokes equations (the :math:`r_1` and :math:`r_2` in equation (:ref:`eq:residuals`)).
@@ -332,7 +334,6 @@ We compared accuracy and performance against results using PetIBM.
 All PetIBM simulations in this section were done with 1 K40 GPU and 6 CPU cores (Intel i7-5930K) on our old lab workstation.
 We carried out 7 PetIBM simulations with different spatial resolutions: :math:`2^k\times 2^k` for :math:`k=4, 5, \dots, 10`.
 The time step size for each spatial resolution was :math:`\Delta t=0.1/2^{k-4}`.
-
 
 A special note should be made here: the PINN solver used single-precision floats, while PetIBM used double-precision floats.
 It might sound unfair.
@@ -400,6 +401,11 @@ As indicated previously, weak scaling was used in PINN, which follows most machi
 
 3.4. Discussion
 +++++++++++++++
+
+A notice should be made regarding the results: we do not claim that these results represent the most optimized configuration of the PINN method.
+Neither do we claim the qualitative conclusions apply to all other hyperparameter configurations.
+These results merely reflect the outcomes of our computational experiments with respect to the specific configuration abovementioned.
+They should be deemed experimental data rather than a thorough analysis of the method's characteristics.
 
 The Taylor-Green vortex serves as a good benchmark case because it reduces the number of required residual constraints: residuals :math:`r_4` and :math:`r_5` are excluded from :math:`r` in equation :ref:`eq:total-residual`.
 This means the optimizer can concentrate only on the residuals of initial conditions and the Navier-Stokes equations.
@@ -488,6 +494,8 @@ All other network configurations were the same as those in section 3, except we 
 Our intention for this case study was to successfully obtain physical solutions from the PINN solver, rather than conducting a performance and accuracy benchmark.
 Therefore, we would adjust the learning rate to accelerate the convergence or to escape from local minimums.
 This decision was in line with common machine learning practice.
+We did not carry out hyperparameter optimization.
+These parameters were chosen because they work in Modulus' examples and in the Taylor-Green vortex experiment.
 
 The PINN solver pre-generated :math:`40,960,000` spatial-temporal points from a spatial domain in :math:`[-8, 25]\times[-8, 8]` and temporal domain :math:`(0, 200]` to evaluate residuals of the Navier-Stokes equations, and used :math:`40,960` points per iteration.
 The number of pre-generated points for the initial condition was :math:`2,048,000`, and the per-iteration number is :math:`2,048`.
@@ -516,6 +524,9 @@ The theoretical lift coefficient (:math:`C_L`) for this flow is zero due to the 
 
 4.3. Results
 ++++++++++++
+
+Note, as stated in section 3.4, we deem the results as experimental data under a specific experiment configuration.
+Hence, we do not claim that the results and qualitative conclusions will apply to other hyperparameter configuration.
 
 Figure :ref:`fig:cylinder-pinn-training-convergence` shows the convergence history.
 The bumps in the history correspond to our manual adjustment of the learning rates.
@@ -599,7 +610,7 @@ Our assumption that the network is not complicated enough may just be wrong.
 The following situation happened in this case study.
 Before we realized the PINN solver behaved like a steady-flow solver, we attributed the cause to model complexity.
 We faced the problem of how to increase the model complexity systematically.
-Theoretically, we could follow the practice of the design of experiments.
+Theoretically, we could follow the practice of the design of experiments (e.g., through grid search or Taguchi methods).
 However, given the computational cost and the number of hyperparameters/options of PINN, a proper design of experiments is not affordable for us.
 Furthermore, the design of experiments requires the outcome to change with changes in inputs.
 In our case, the vortex shedding remains absent regardless of how we changed hyperparameters.
