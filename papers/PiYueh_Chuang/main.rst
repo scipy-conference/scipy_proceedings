@@ -127,7 +127,7 @@ where :math:`\Gamma` represents the boundary of the computational domain.
 2.1. The PINN method
 ++++++++++++++++++++
 
-The basic form of the PINN method :cite:`raissi_physics-informed_2019` starts from approximating :math:`\vec{U}` and :math:`p` with a neural network:
+The basic form of the PINN method (:cite:`raissi_physics-informed_2019,cai_physics-informed_2021`) starts from approximating :math:`\vec{U}` and :math:`p` with a neural network:
 
 .. math::
    :label: eq:neural-network
@@ -209,6 +209,7 @@ Unlike Bernoulli’s equation, most governing equations in physics are usually d
 The main difference is that now the PINN method needs automatic differentiation to evaluate the loss.
 Regardless of the forms of governing equations, spatial-temporal coordinates are the only data required during training.
 Hence, throughout this paper, training data means spatial-temporal points and does not involve any true answers to predicted quantities.
+(Note in some literature, the PINN method is applied to applications that do need true answers, see :cite:`cai_physics-informed_2021`. These applications are out of scope here.)
 
 
 2.2. An analogy to conventional numerical methods
@@ -642,7 +643,7 @@ An example is the initial conditions.
 We were used to only having one set of initial conditions when the temporal derivative in differential equations is only first-order.
 However, in PINN, nothing limits us from using more than one initial condition.
 We can generate results at :math:`t=0,1,\dots,t_n` using a traditional CFD solver and add the residuals corresponding to these time snapshots to the total residual, so the PINN method may perform better in predicting :math:`t>t_n`.
-In other words, the PINN solver becomes the traditional CFD solvers' replacement only for :math:`t>t_n`.
+In other words, the PINN solver becomes the traditional CFD solvers' replacement only for :math:`t>t_n` (:cite:`noauthor_modulus_nodate`).
 
 As discussed in :cite:`thuerey_physics-based_2022`, solving partial differential equations with deep learning is still a work-in-progress.
 It may not work in many situations.
