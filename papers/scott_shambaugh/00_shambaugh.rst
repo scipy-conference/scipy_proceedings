@@ -20,9 +20,9 @@ Monaco: A Monte Carlo Library for Performing Uncertainty and Sensitivity Analyse
 Introduction
 ============
 
-Computational models form the backbone of decision-making processes in science, engineering, and public policy. However, our increased reliance on these models stands in contrast to the difficulty in understanding them as we add increasing complexity to try and capture ever more of the fine details of real-world interactions. Practitioners will often :cite:`ferretti2016trends` take the results of their large, complex model as a point estimate, with no knowledge of how uncertain those results are. Multiple-scenario modeling (e.g. looking at a worst-case, most-likely, and best-case scenario) is an improvement, but what is needed is a complete global exploration of the input space. That gives insight into the overall distribution of results (UA) as well as the relative influence of the different input factors on the ouput variance (SA). This complete understanding is critical for effective and responsible use of models in any decision-making process, and policy papers have identified UA and SA as key modeling practices :cite:`azzini2020uncertainty` :cite:`us2009guidance`.
+Computational models form the backbone of decision-making processes in science, engineering, and public policy. However, our increased reliance on these models stands in contrast to the difficulty in understanding them as we add increasing complexity to try and capture ever more of the fine details of real-world interactions. Practitioners will often take the results of their large, complex model as a point estimate, with no knowledge of how uncertain those results are :cite:`ferretti2016trends`. Multiple-scenario modeling (e.g. looking at a worst-case, most-likely, and best-case scenario) is an improvement, but what is needed is a complete global exploration of the input space. That gives insight into the overall distribution of results (UA) as well as the relative influence of the different input factors on the ouput variance (SA). This complete understanding is critical for effective and responsible use of models in any decision-making process, and policy papers have identified UA and SA as key modeling practices :cite:`azzini2020uncertainty` :cite:`us2009guidance`.
 
-Despite the importance of UA and SA, recent literature reviews show that they are uncommon - in 2014 only 1.3% of all published papers :cite:`ferretti2016trends` using modeling performed any SA. And even when performed, best practices are usually lacking - amongst papers which specifically claimed to perform sensitivity analysis, a 2019 review found only 21% performed global (as opposed to local or zero) UA, and 41% performed global SA :cite:`saltelli2019so`. 
+Despite the importance of UA and SA, recent literature reviews show that they are uncommon – in 2014 only 1.3% of all published papers :cite:`ferretti2016trends` using modeling performed any SA. And even when performed, best practices are usually lacking – amongst papers which specifically claimed to perform sensitivity analysis, a 2019 review found only 21% performed global (as opposed to local or zero) UA, and 41% performed global SA :cite:`saltelli2019so`. 
 
 Typically UA and SA are done using Monte Carlo simulations, for reasons explored in the following section. There are Monte Carlo frameworks available, however existing options are largely domain-specific, focused on narrow sub-problems (i.e. integration), tailored towards training neural nets, or require a deep statistical background to use. See :cite:`OLIVIER2020101204`, :cite:`razavi2021future`, and :cite:`DOUGLASSMITH2020104588` for an overview of the currently available Python tools for performing UA and SA. For the domain expert who wants to perform UA and SA on their existing models, there is not an easy tool to do both in a single shot. *monaco* was written to address this gap.
 
@@ -39,7 +39,7 @@ Motivation for Monte Carlo Approach
 Mathematical Grounding
 ----------------------
 
-Randomized Monte Carlo sampling offers a cure to the curse of dimensionality: consider an investigation of the output from :math:`k` input factors :math:`y = f(x_1, x_2, ..., x_k)` where each factor is uniformly sampled between 0 and 1, :math:`x_i \in U[0, 1]`. The input space is then a :math:`k`-dimensional hypercube with volume 1. If each input is varied one at a time (OAT), then the volume :math:`V` of the convex hull of the sampled points forms a hyperoctahedron with volume :math:`V = \frac{1}{k!}` (or optimistically, a hypersphere with :math:`V = \frac{\pi^{k/2}}{2^k \Gamma(k/2 + 1)}`), both of which decrease super-exponentially as :math:`k` increases. Unless the model is known to be linear, this leaves the input space wholly unexplored. In contrast, the volume of the convex hull of random samples as is obtained with a Monte Carlo approach will converge to :math:`V=1`, with much better coverage within that volume as well :cite:`dyer1992volumes`. See Fig. :ref:`figvolume`.
+Randomized Monte Carlo sampling offers a cure to the curse of dimensionality: consider an investigation of the output from :math:`k` input factors :math:`y = f(x_1, x_2, ..., x_k)` where each factor is uniformly sampled between 0 and 1, :math:`x_i \in U[0, 1]`. The input space is then a :math:`k`-dimensional hypercube with volume 1. If each input is varied one at a time (OAT), then the volume :math:`V` of the convex hull of the sampled points forms a hyperoctahedron with volume :math:`V = \frac{1}{k!}` (or optimistically, a hypersphere with :math:`V = \frac{\pi^{k/2}}{2^k \Gamma(k/2 + 1)}`), both of which decrease super-exponentially as :math:`k` increases. Unless the model is known to be linear, this leaves the input space wholly unexplored. In contrast, the volume of the convex hull of :math:`n \to \infty` random samples as is obtained with a Monte Carlo approach will converge to :math:`V=1`, with much better coverage within that volume as well :cite:`dyer1992volumes`. See Fig. :ref:`figvolume`.
 
 .. figure:: hypersphere_volume.png
    :align: center
@@ -56,11 +56,11 @@ Benefits and Drawbacks of Basic Monte Carlo Sampling
 
 * The method is conceptually simple, lowering the barrier of entry and increasing the ease of communicating results to a broader audience.
 * The same sample points can be used for UA and SA. Generally, Bayesian methods such as Markov Chain Monte Carlo provide much faster convergence on UA quantities of interest, but their undersampling of regions that do not contribute to the desired quantities is inadequate for SA and complete exploration of the input space. The author's experience aligns with :cite:`saltelli2019so` in that there is great practical benefit in broad sampling without pidgeonholing one's purview to particular posteriors, through uncovering bugs and edge cases in regions of input space that were not being previously considered.
-* It can be applied to domains that are not data-rich. See for example NASA's use of Monte Carlo simulations during launch vehicle design prior collecting test flight :cite:`hanson2010applying` data.
+* It can be applied to domains that are not data-rich. See for example NASA's use of Monte Carlo simulations during rocket design prior to collecting test flight data :cite:`hanson2010applying`.
 
 However, basic Monte Carlo sampling is subject to the classical drawbacks of the method such as poor sampling of rare events and the slow :math:`\sigma / \sqrt{n}` convergence on quantities of interest. If the outputs and regions of interest are firmly known at the outset, then other sampling methods will be more efficient :cite:`kroese2013handbook`.
 
-Additionally, given that any conclusions are conditional on the correctness of the underlying model and input parameters, the task of validation is critical to confidence in the UA and SA results. However, this is currently out of scope for the library and must be performed with other tools. In a data-poor domain, hypothesis testing or probablistic prediction measures like loss scores can be used to anchor the outputs against a small number of real-life test data. More generally, the "inverse problem" of model and parameter validation is a deep field unto itself and :cite:`national2012assessing` and :cite:`shiffrin2008survey` are recommended as overviews of some methods. If *monaco*'s scope is too limited for the reader's needs, the author recommends :cite:`OLIVIER2020101204` for UA and SA, and :cite:`salvatier2016probabilistic` and :cite:`carpenter2017stan` as good general-purpose probablistic programming Python libraries.
+Additionally, given that any conclusions are conditional on the correctness of the underlying model and input parameters, the task of validation is critical to confidence in the UA and SA results. However, this is currently out of scope for the library and must be performed with other tools. In a data-poor domain, hypothesis testing or probablistic prediction measures like loss scores can be used to anchor the outputs against a small number of real-life test data. More generally, the "inverse problem" of model and parameter validation is a deep field unto itself and :cite:`national2012assessing` and :cite:`shiffrin2008survey` are recommended as overviews of some methods. If *monaco*'s scope is too limited for the reader's needs, the author recommends `UQpy` :cite:`OLIVIER2020101204` for UA and SA, and `PyMC` :cite:`salvatier2016probabilistic` or `Stan` :cite:`carpenter2017stan` as good general-purpose probablistic programming Python libraries.
 
 
 Workflow
@@ -68,7 +68,7 @@ Workflow
 
 UA and SA of any model follows a common workflow. Probability distributions for the model inputs are defined, and randomly sampled values for a large number of cases are fed to the model. The outputs from each case are collected and the full set of inputs and outputs can be analyzed. Typically UA is performed by generating histograms, scatter plots, and summary statistics for the output variables, and SA is performed by looking at the effect of input on output variables through scatter plots, performing regressions, and calculating sensitivity indices. These results can then be compared to real-world test data to validate the model or inform revisions to the model and input variables. See Fig. :ref:`figanalysisprocess`.
 
-Note again that *monaco* does not currently have tools for model or input parameter validation, and closing that part of the workflow loop is left up to the user. 
+Note that with model and input parameter validation currently outside *monaco*'s scope, closing that part of the workflow loop is left up to the user.
 
 .. figure:: analysis_process.png
    :align: center
@@ -151,8 +151,8 @@ A summary of the process and data flow:
 3) Run the simulation. This executes the following:    
 
  a) Random percentiles :math:`p_i \in U[0,1]` are drawn `ndraws` times for each of the input variables.
- b) These percentiles are transformed into random values via the inverse cumulative density function of the target probability distribution.
- c) If nonnumeric inputs are desired, the random numbers are converted to objects via a `nummap` dict.
+ b) These percentiles are transformed into random values via the inverse cumulative density function of the target probability distribution :math:`x_i = F^{-1}(p_i)`.
+ c) If nonnumeric inputs are desired, the numbers are converted to objects via a `nummap` dict.
  d) `Case` objects are created and populated with the input values for each case.
  e) Each case is run by structuring the inputs values with the `preprocess` function, passing them to the `run` function, and collecting the output values with the `postprocess` function.
  f) The output values are collected into output variables and saved back to the sim. If the values are nonnumeric, a `valmap` dict assigning numbers to each unique value is automatically generated.
@@ -164,7 +164,7 @@ A summary of the process and data flow:
 Incorporating into Existing Workflows 
 -------------------------------------
 
-If the user want to use existing workflows for generating, running, post-processing, or examining results, any combination of *monaco*'s major steps can be replaced by external tooling by saving and loading input and output variables to file. For example, *monaco* can be used only for its parallel processing backend by importing existing randomly drawn input variables, running the simulation, and exporting the output variables for outside analysis. Or, it can be used only for its plotting and analysis capabilities by feeding it inputs and outputs generated elsewhere.
+If the user wants to use existing workflows for generating, running, post-processing, or examining results, any combination of *monaco*'s major steps can be replaced with external tooling by saving and loading input and output variables to file. For example, *monaco* can be used only for its parallel processing backend by importing existing randomly drawn input variables, running the simulation, and exporting the output variables for outside analysis. Or, it can be used only for its plotting and analysis capabilities by feeding it inputs and outputs generated elsewhere.
 
 
 Resource Usage
@@ -179,7 +179,7 @@ Technical Features
 Sampling Methods
 ----------------
 
-Random sampling of the percentiles for each variable can be done using scipy's pseudo-random number generator (PRNG), or with any of the low-discrepancy methods from the `scip.stats.qmc` quasi-Monte Carlo (QMC) module. QMC in general provides faster :math:`O(\log(n)^k n^{-1})` convergence compared to the :math:`O(n^{-1/2})` convergence of random sampling :cite:`caflisch1998monte`. Available low-discrepancy options are regular or scrambled Sobol sequences, regular or scrambled Halton sequences, or Latin Hypercube Sampling. In general, the `'sobol_random'` method that generates Sobol sequences with Owen scrambling :cite:`sobol1967distribution` :cite:`owen2020dropping` is recommended in nearly all cases as the sequence with the fastest QMC convergence :cite:`christensen2018progressive`, balanced integration properties as long as the number of cases is a power of 2, and a fairly flat frequency spectra (though the sampling spectra is rarely a concern) :cite:`perrier2018sequences`. See Fig. :ref:`figsampling` for a visual comparison of some of the options.
+Random sampling of the percentiles for each variable can be done using scipy's pseudo-random number generator (PRNG), or with any of the low-discrepancy methods from the `scip.stats.qmc` quasi-Monte Carlo (QMC) module. QMC in general provides faster :math:`O(\log(n)^k n^{-1})` convergence compared to the :math:`O(n^{-1/2})` convergence of random sampling :cite:`caflisch1998monte`. Available low-discrepancy options are regular or scrambled Sobol sequences, regular or scrambled Halton sequences, or Latin Hypercube Sampling. In general, the `'sobol_random'` method that generates scrambled Sobol sequences :cite:`sobol1967distribution` :cite:`owen2020dropping` is recommended in nearly all cases as the sequence with the fastest QMC convergence :cite:`christensen2018progressive`, balanced integration properties as long as the number of cases is a power of 2, and a fairly flat frequency spectra (though the sampling spectra is rarely a concern) :cite:`perrier2018sequences`. See Fig. :ref:`figsampling` for a visual comparison of some of the options.
 
 
 .. figure:: sampling.png
@@ -197,9 +197,9 @@ How many Monte Carlo cases should one run? One answer would be to choose :math:`
 
 Along a similar vein, :cite:`dyer1992volumes` suggests that with random sampling :math:`n \geq 2.136^k` is sufficient to ensure that the volume fraction :math:`V` approaches 1. The author hypothesizes that for a digital net, the :math:`n \geq \lambda^k` condition will be satisfied with some :math:`\lambda \leq 2`, and so :math:`n \geq 2^k` will suffice for this condition to hold. However, these methods of choosing the number of cases may undersample for low :math:`k` and be infeasible for high :math:`k`.
 
-A rigorous way of choosing the number of cases is to first choose a statistical interval (e.g. a confidence interval for a percentile, or a tolerance interval to contain a percent of the population), and then use order statistics to calculate the minimum :math:`n` required to obtain that result at a desired confidence level. This approach is independent of :math:`k`, making UA of high-dimensional models tractable. *monaco* implements order statistics routines for calculating these statistical intervals with a distribution-free approach that makes no assumptions about the normality or other shape characteristics of the output distribution. See Chaper 5 of :cite:`hahn1991statistical`.
+A rigorous way of choosing the number of cases is to first choose a statistical interval (e.g. a confidence interval for a percentile, or a tolerance interval to contain a percent of the population), and then use order statistics to calculate the minimum :math:`n` required to obtain that result at a desired confidence level. This approach is independent of :math:`k`, making UA of high-dimensional models tractable. *monaco* implements order statistics routines for calculating these statistical intervals with a distribution-free approach that makes no assumptions about the normality or other shape characteristics of the output distribution. See Chaper 5 of :cite:`hahn1991statistical` for background.
 
-A more qualitative UA method would simply to choose a reasonably high :math:`n` (say, :math:`n=2^{10}`), manually examine the results to ensure high-interest areas are not being undersampled, and rely on bootstrapping of the desired variable statistics to obtain the required confidence levels. 
+A more qualitative UA method would simply be to choose a reasonably high :math:`n` (say, :math:`n=2^{10}`), manually examine the results to ensure high-interest areas are not being undersampled, and rely on bootstrapping of the desired variable statistics to obtain the required confidence levels. 
 
 
 Variable Statistics
@@ -211,7 +211,7 @@ For any input or output variable, a statistic can be calculated for the ensemble
 Sensitivity Indices
 -------------------
 
-Sensitivity indices give a measure of the relationship between the variance of a scalar output variable to the variance of each of the input variables. In other words, they measure which of the input ranges has the largest effect on an output range. It is crucial that sensitivity indices are global rather than local measures - global sensitivity has the stronger theoretical grounding and there is no reason to rely on local measures in scenarios such as automated computer experiments where data can be easily and aribitrarily sampled :cite:`saltelli2008global` :cite:`puy2022comprehensive`.
+Sensitivity indices give a measure of the relationship between the variance of a scalar output variable to the variance of each of the input variables. In other words, they measure which of the input ranges has the largest effect on an output range. It is crucial that sensitivity indices are global rather than local measures – global sensitivity has the stronger theoretical grounding and there is no reason to rely on local measures in scenarios such as automated computer experiments where data can be easily and aribitrarily sampled :cite:`saltelli2008global` :cite:`puy2022comprehensive`.
 
 With computer-designed experiments, it is possible to contruct a specially constructed sample set to directly calculate global sensitivity indices such as the Total-Order Sobol index :cite:`sobol2001global`, or the IVARS100 index :cite:`razavi2016new`. However, this special construction requires either sacrificing the desirable UA properties of low-discrepancy sampling, or conducting an additional Monte Carlo analysis of the model with a different sample set. For this reason, *monaco* uses the D-VARS approach to calculating global sensitivity indices, which allows for using a set of given data :cite:`sheikholeslami2020fresh`. This is the first publically available implementation of the D-VARS algorithm.
 
@@ -252,7 +252,7 @@ By default, all the raw results from each case's simulation run prior to postpro
 Saving and Loading to File 
 --------------------------
 
-The base `Sim` object and the `Case` objects can be serialized and saved to or loaded from `.mcsim` and `.mccase` files respectively, stored in a results directory. The Case objects are saved separately since the raw results from a run of the simulation may be arbitrarily large, and the Sim object can be comparatively lightweight. Loading the Sim object from file will automatically attempt to load the cases in the same directory, but can also stand alone if the raw results are not needed.
+The base `Sim` object and the `Case` objects can be serialized and saved to or loaded from `.mcsim` and `.mccase` files respectively, which are stored in a results directory. The Case objects are saved separately since the raw results from a run of the simulation may be arbitrarily large, and the Sim object can be comparatively lightweight. Loading the Sim object from file will automatically attempt to load the cases in the same directory, but can also stand alone if the raw results are not needed.
 
 Alternatively, the numerical representations for input and output variables can be saved to and loaded from `.json` or `.csv` files. This is useful for interfacing with external tooling, but discards the metadata that would be present by saving to *monaco*'s native objects.
 
@@ -346,7 +346,7 @@ The results of the simulation can then be analyzed and examined. Fig. :ref:`fige
    :figclass: h
    :scale: 40 %
 
-   Output from the example code which calculates the sum of two random dice rolls. The top plot shows a histogram of the 2-dice sum with the mean and 5 - 95th percentiles marked, the middle plot shows the randomness over the set of rolls, and the bottom plot shows that each of the dice contributes 50% to the variance of the sum. :label:`figexample`
+   Output from the example code which calculates the sum of two random dice rolls. The top plot shows a histogram of the 2-dice sum with the mean and 5–95th percentiles marked, the middle plot shows the randomness over the set of rolls, and the bottom plot shows that each of the dice contributes 50% to the variance of the sum. :label:`figexample`
 
 
 Case Studies
@@ -367,7 +367,7 @@ Fig. :ref:`figbaseball` shows some plots of the results. A baseball team might u
    :figclass: h
    :scale: 55 %
 
-   100 simulated baseball trajectories (top), and the relationship between launch angle and landing distance (bottom). Home runs are highlighted. :label:`figbaseball`
+   100 simulated baseball trajectories (top), and the relationship between launch angle and landing distance (bottom). Home runs are highlighted in orange. :label:`figbaseball`
 
 
 Election
@@ -377,7 +377,7 @@ This case study attempts to predict the result of the 2020 US presidential elect
 
 Each state independently casts a normally distributed percentage of votes for the Democratic, Republican, and Other candidates, based on polling. Also assumed is a uniform ±3% national swing due to polling error which is applied to all states equally. That summed percentage is then normalized so the total for all candidates is 100%. The winner of each state's election assigns their electoral votes to that candidate, and the candidate that wins at least 270 of the 538 electoral votes is the winner.
 
-The caculated win probabilities from this simulation are 93.4% Democratic, 6.2% Republican, and 0.4% Tie. The 25-75th percentile range for the number of electoral votes for the Democratic candidate is 281 - 412, and the actual election result was 306 electoral votes. See Fig. :ref:`figelection`.
+The caculated win probabilities from this simulation are 93.4% Democratic, 6.2% Republican, and 0.4% Tie. The 25–75th percentile range for the number of electoral votes for the Democratic candidate is 281–412, and the actual election result was 306 electoral votes. See Fig. :ref:`figelection`.
 
 .. figure:: election.png
    :align: center
