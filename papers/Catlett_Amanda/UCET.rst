@@ -15,13 +15,13 @@
 :institution: ERDC
 
 
-------------------------------------------------
+----------------------------------------------------------------------------------
 USACE Coastal Engineering Toolkit and a Method of Creating a Web-Based Application
-------------------------------------------------
+----------------------------------------------------------------------------------
 
 .. class:: abstract
 
-   In the early 1990s the Automated Coastal Engineering Systems, ACES, was created with the goal of providing
+In the early 1990s the Automated Coastal Engineering Systems, ACES, was created with the goal of providing
 state-of-the-art computer-based tools to increase the accuracy, reliability, and cost-effectiveness of Corps coastal
 engineering endeavors. Over the past 30 years, ACES has become less and less accessible to engineers. An
 updated version of ACES was necessary for use in coastal engineering. Our goal was to bring the tools in ACES to a user-friendly
@@ -64,6 +64,7 @@ Param library, the class hierarchy used, and utilization of Panel and HoloViews 
 
 Refactoring Using Param
 -----------------------
+
 Each coastal tool in UCET has two classes, the model class and the GUI class. The model class will hold input and output
 variables and the methods needed to run the model. Where the GUI class will hold information for GUI visualization.
 To make implementation of the GUI more seamless we refactored model variables to utilize the Param library. Param is a
@@ -74,19 +75,30 @@ HoloViews.
 Each UCET tool’s model class declares the input and output values used in the model as class variables. Each input and
 output variables are declared and given the following metadata features:
 
-- default:  each input variable is defined as a Param with a default value defined from the 1992 ACES user manual [UG, Leenknecht]
-- bounds: each input variable is defined with range values defined in the 1992 ACES user manual [UG, Leenknecht]
-- doc or docstrings: input and output variables have the expected variable and description of the variable defined as a doc. This is used as a label over the input and output widgets. Most docstrings follow the pattern of <variable>:<description of variable [units, if any]>
-- constant: the output variables all set constant equal True, thereby restricting the user’s ability to manipulate the value. Note that when calculations are being done they will need to be inside a with param.edit_constant(self) function
-- precedence: input and output variables will use precedence when there are instances where the variable does not need to be seen.
+- **default**:  each input variable is defined as a Param with a default value defined from the 1992 ACES user manual
+- **bounds**: each input variable is defined with range values defined in the 1992 ACES user manual
+- **doc or docstrings**: input and output variables have the expected variable and description of the variable defined as a doc. This is used as a label over the input and output widgets. Most docstrings follow the pattern of <variable>:<description of variable [units, if any]>
+- **constant**: the output variables all set constant equal True, thereby restricting the user’s ability to manipulate the value. Note that when calculations are being done they will need to be inside a with param.edit_constant(self) function
+- **precedence**: input and output variables will use precedence when there are instances where the variable does not need to be seen.
 
-An example of an input variable is
-.. code-block:: python
-H = param.Number(doc='H: wave height [{distance_unit}]', default=6.3, bounds=(0.1, 200))
+An example of an input variable is:
 
-An example of an output variable is
 .. code-block:: python
-L = param.Number(doc='L: Wavelength [{distance_unit}]', constant=True)
+
+  H = param.Number(
+      doc='H: wave height [{distance_unit}]',
+      default=6.3,
+      bounds=(0.1, 200)
+  )
+
+An example of an output variable is:
+
+.. code-block:: python
+
+  L = param.Number(
+      doc='L: Wavelength [{distance_unit}]',
+      constant=True
+  )
 
 The model functions that were written in 2017 did not need to change after changing the input and output model
 variables. Param allowed for the ability to remove code that did type checking and bounds check; however, the tool’s
@@ -94,6 +106,7 @@ main calculation code-base was able to mostly remain unchanged.
 
 Class Hierarchy
 ---------------
+
 UCET has twenty tools from six of the original seven functional areas of ACES. When we designed our class hierarchy, we
 focused on the visualization of the web application rather than functional areas. Thus, each tool’s class can be
 categorized into Base-Tool, Graph-Tool, Water-Tool, or Graph-Water-Tool. The Base-Tool has the coastal engineering
@@ -104,17 +117,18 @@ and no graphical output. Graph-Water-Tool has the coastal engineering models tha
 calculations and has a graphical output. Figure 1 shows a flow of inheritance for each of those classes.
 
 .. figure::hierarchy.png
-The four types of tools in UCET and the hierarchy of classes used to produce a GUI for that tool
+
+  The four types of tools in UCET and the hierarchy of classes used to produce a GUI for that tool
 
 
 There are two types of general categories for the classes in the UCET codebase: utility and tool-specific. Utility
 classes have methods and functions that are utilized across more than one tool. The Utility classes are:
 
--	BaseDriver: holds methods and functions that each tool needs to collect data, run coastal engineering models, and print data.
--	WaterDriver: has the methods that make water density and water weight available to the models that need those inputs for the calculations.
--	BaseGui: has the functions and methods for the visualization and utilization of all inputs and outputs within each tool’s GUI.
--	WaterTypeGui: has the widget for water selection.
--	TabulatorDataGui: holds the functions and methods used for visualizing plots and the ability to download the data that is used for plotting.
+-	**BaseDriver**: holds methods and functions that each tool needs to collect data, run coastal engineering models, and print data.
+-	**WaterDriver**: has the methods that make water density and water weight available to the models that need those inputs for the calculations.
+-	**BaseGui**: has the functions and methods for the visualization and utilization of all inputs and outputs within each tool’s GUI.
+-	**WaterTypeGui**: has the widget for water selection.
+-	**TabulatorDataGui**: holds the functions and methods used for visualizing plots and the ability to download the data that is used for plotting.
 
 Each coastal tool in UCET has two classes, the model class and the GUI class. The model class will hold input and output
 variables and the methods needed to run the model. The model class will either directly inherit from the BaseDriver or
@@ -141,10 +155,10 @@ gather user input and run the specific tool’s model.
 
 UCET utilizes the following widgets to gather user input:
 
-*	Spinner: single numeric input values
-*	Tabulator: table input data
-*	CheckBox: true or false values
-*	Drop down: items that have a list of pre-selected values, such as which units to use
+*	**Spinner**: single numeric input values
+*	**Tabulator**: table input data
+*	**CheckBox**: true or false values
+*	**Drop down**: items that have a list of pre-selected values, such as which units to use
 
 UCET utilizes indicators.Number, Tabulator, and graphs to visualize the outputs of the coastal engineering models.  A
 single number is shown using indicators.Number and graph data is displayed using the Tabulator widget to show the data
@@ -198,12 +212,14 @@ this project using GitHub and JIRA.
 
 Results
 -------
+
 Linear Wave Theory was described in the class hierarchy example. This Graph-Water-Tool utilizes most of the BaseGui
 methods. The biggest difference is instead of having three graphs in the graph panel there is a plot selector drop down
 where the user can select which graph they want to see.
 
 .. figure:: linear.png
-Screen shot of Linear Wave Theory
+
+  Screen shot of Linear Wave Theory
 
 
 Windspeed Adjustment and Wave Growth provides a quick and simple estimate for wave growth over open-water and
@@ -213,10 +229,12 @@ type, fetch type, wave equation type, and if knots are being used. Based on the 
 and output variables will change so only what is used or calculated for those selections are seen.
 
 .. figure:: windspeed.png
-Screen shot of Windspeed Adjustment and Wave Growth
+
+  Screen shot of Windspeed Adjustment and Wave Growth
 
 Conclusion
 ----------
+
 Thirty years ago, ACES was developed to provide improved design capabilities to Corps coastal specialists and while
 these tools are still used today, it became more and more difficult for users to access them. Five years ago, there was
 a push to update the code base to one that coastal specialists would be more familiar with: MATLAB and Python. Within
@@ -229,11 +247,10 @@ interface.
 Future work will involve expanding UCET to include current coastal engineering models and refining the code to make the
 application work more smoothly.
 
-
-
 References
 ----------
-.. [Leenknecht] David A. Leenknecht, Andre Szuwalski, and Ann R. Sherlock. 1992. Automated Coastal Engineering System -Technical Reference. Technical report. https://usace.contentdm.oclc.org/digital/collection/p266001coll1/id/2320/rec/2
+
+.. [Leenknecht] David A. Leenknecht, Andre Szuwalski, and Ann R. Sherlock. 1992. Automated Coastal Engineering System -Technical Reference. Technical report.
 
 .. [panel] “Panel: A High-Level App and Dashboarding Solution for Python.” Panel 0.12.6 Documentation, Panel Contributors, 2019, https://panel.holoviz.org/.
 
