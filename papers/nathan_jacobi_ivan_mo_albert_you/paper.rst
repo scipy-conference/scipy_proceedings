@@ -198,6 +198,13 @@ This split of data will be refered to as "mixed" data, as the terms are mixed be
 After the vocabulary was split, the corresponding observations in the data were split accordingly, leaving all observations for each term within the same split. 
 Additionally, we tested a neural network that would input the same data, either data_201 or data_121, with the addition of the label assigned to that observation by the k-means model as a feature. 
 
+The four main neural network models used were all four layers, with three ReLu layers with 128, 256, and 256 neurons, followed by a single neuron sigmoid output layer. 
+Parameters of the neural network layers were adjusted, but results did not improve. All models were trained with a varying number of epochs: 50, 100, 150, and 200.
+The main difference between all of them was the input data itself. The input data were as follows: data_201 with and without k-means labels, data_121 with and without k-means labels. 
+On each of these, there were two splits of the training and testing data, as in the prior mentioned "mixed" terms. 
+Additionally, several certainty thresholds for a positive classification were tested on each of the models. The best results from each will be listed in the results section.
+As we begin implementation of these models on other HIV outbreak related data sets, the proper certainty thresholds can be better determined.
+
 Results
 -------
 
@@ -390,7 +397,7 @@ If terms we predict to be possibly linked to an ongoing outbreak begin getting c
 Neural Network Results
 ======================
 
-Neural network models we generated showed 
+Neural network models we generated showed promising results on classification of HIV related terms. 
 
 Conclusion
 ----------
