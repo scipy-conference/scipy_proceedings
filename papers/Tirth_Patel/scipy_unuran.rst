@@ -33,15 +33,6 @@ Automatic random variate generation in Python
    numerical inversion, generation of random variates
 
 
-**Acknowledgments**: The authors wish to thank Wolfgang Hörmann and Josef
-Leydold for agreeing to publish the library under a BSD license and for
-helpful feedback on the implementation and this note. In addition, we thank
-Ralf Gommers, Matt Haberland, Nicholas McKibben, Pamphile Roy, and Kai Striega
-for their code contributions, reviews, and helpful suggestions. The second
-author was supported by the Google Summer of Code 2021 program
-(https://summerofcode.withgoogle.com/projects/#5912428874825728).
-
-
 Introduction
 ------------
 
@@ -616,3 +607,15 @@ Carlo and copula methods are not part of SciPy. Relevant Python packages in
 that context are PyMC (:cite:`pymc`), PyStan relying on Stan (:cite:`stan`),
 Copulas (https://sdv.dev/Copulas/) and PyCopula
 (https://blent-ai.github.io/pycopula/).
+
+
+Acknowledgments
+---------------
+
+The authors wish to thank Wolfgang Hörmann and Josef
+Leydold for agreeing to publish the library under a BSD license and for
+helpful feedback on the implementation and this note. In addition, we thank
+Ralf Gommers, Matt Haberland, Nicholas McKibben, Pamphile Roy, and Kai Striega
+for their code contributions, reviews, and helpful suggestions. The second
+author was supported by the Google Summer of Code 2021 program
+(https://summerofcode.withgoogle.com/projects/#5912428874825728).
