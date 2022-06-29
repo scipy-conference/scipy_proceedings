@@ -318,7 +318,8 @@ Here are the corresponding results from Hypothesize's :code:`yuenbt` test
     from hypothesize.compare_groups_with_single_factor \
         import yuenbt
 
-    results = yuenbt(df.males, df.females, tr=.2, alpha=.05)
+    results = yuenbt(df.males, df.females,
+        tr=.2, alpha=.05)
 
     {
     'ci': [1.41, 2.11],
