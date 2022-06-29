@@ -171,8 +171,13 @@ Water-Tool). Some tools have a second row in the “options” panel with other 
 columns for spinner widgets with a calculation button at the bottom left. The output panel has two columns of
 indicators.Number for the single numeric output values. At the bottom of the output panel there is a button to “save the
 current profile”. The graph panel is tabbed where the first tab shows the graph and the second tab shows the data
-provided within the graph. Some of the UCET tools have more complicated input or output visualizations and that tool’s
-GUI class will add or modify methods to meet the needs of that tool.
+provided within the graph. An visual outline of this can ben seen in the following figure. Some of the UCET tools have
+more complicated input or output visualizations and that tool’s GUI class will add or modify methods to meet the needs
+of that tool.
+
+.. figure:: panel-layout.png
+
+The general outline of a UCET tool for the GUI.
 
 Current State
 -------------
@@ -206,8 +211,12 @@ would be, if a user chooses input values that make it so the application does no
 will appear under the output header and replace all output values. For a more concrete example: Linear Wave Theory
 has a vertical coordinate (z) and the water depth (d) as input values and when those values sum is less than zero the
 point is outside the waveform. Therefore, if a user makes a combination where the sum is less than zero, UCET
-will post a warning to tell the user that the point is outside the waveform.
+will post a warning to tell the user that the point is outside the waveform. See the below figure for an example
+The developers have been documenting this project using GitHub and JIRA.
 
+.. figure:: ucet_warning_message.png
+
+An example of a warning message based on chosen inputs.
 
 Results
 -------
