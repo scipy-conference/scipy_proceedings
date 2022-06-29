@@ -23,7 +23,7 @@ Introduction
 
 The use of computational methods for chemistry is ubiquitous and few modern chemists retain the initial skepticism of the field :cite:`kohnNobelLectureElectronic1999,schaeferMethyleneParadigmComputational1986`. Machine learning has been further earmarked :cite:`meyerMachineLearningComputational2019,dralQuantumChemistryAge2020,schuttUnifyingMachineLearning2019` as an effective accelerator for computational chemistry at every level, from DFT :cite:`gaoMachineLearningCorrection2016` to alchemical searches :cite:`deComparingMoleculesSolids2016` and saddle point searches :cite:`asgeirssonExploringPotentialEnergy2018`. Reproducibility :cite:`pengReproducibleResearchComputational2011,sandveTenSimpleRules2013` in all fields of computational research, and has spawned a veritable flock of methodological and programmatic advances :cite:`communityTuringWayHandbook2019`, including the sophisticated provenance tracking of AiiDA :cite:`pizziAiiDAAutomatedInteractive2016,huberAiiDAScalableComputational2020`.
 
-Dataset bias :cite:`engstromIdentifyingStatisticalBias2020,blumRecoveringBiasedData2019,rahamanSpectralBiasNeural2019` has gained prominence in the machine learning literature, but has not yet percolated through to the chemical sciences community. At its core, the argument for dataset biases in generic machine learning problems of image and text classification, can be linked to the difficulty in obtaining labeled results for training purposes. This is not an issue in the physical sciences at all, as the training data is always labeled without human intervention. There is still a strong tendency to focus on "benchmark" datasets and results :cite:`hojaQM7XComprehensiveDataset2020,seniorProteinStructurePrediction2019`. Compute is expensive, and the reproduction of data which is openly available is not a valid scientific endeavor. In the following sections, we will outline ~wailord~, a library which implements a two level structure for interacting with ORCA :cite:`neeseORCAProgramSystem2012` to implement an end-to-end workflow to analyse and prepare datasets.
+Dataset bias :cite:`engstromIdentifyingStatisticalBias2020,blumRecoveringBiasedData2019,rahamanSpectralBiasNeural2019` has gained prominence in the machine learning literature, but has not yet percolated through to the chemical sciences community. At its core, the argument for dataset biases in generic machine learning problems of image and text classification, can be linked to the difficulty in obtaining labeled results for training purposes. This is not an issue in the physical sciences at all, as the training data is always labeled without human intervention. There is still a strong tendency to focus on "benchmark" datasets and results :cite:`hojaQM7XComprehensiveDataset2020,seniorProteinStructurePrediction2019`. Compute is expensive, and the reproduction of data which is openly available is not a valid scientific endeavor. In the following sections, we will outline ~wailord~, a library which implements a two level structure for interacting with ORCA :cite:`neeseORCAProgramSystem2012` to implement an end-to-end workflow to analyze and prepare datasets.
 
 In particular, we shall understand this library from the lens of what is often
 known as a design pattern in the practice of computational science and
@@ -47,9 +47,11 @@ By construction, it differs also from existing "interchange" formats as those fa
 Implementation
 ++++++++++++++
 
-Two classes form the backbone of the data-harvesting process. The intended point of interface with a user is the ``orcaExp`` class which collects information from multiple ORCA outputs and produces dataframes which include relevant metadata (theory, basis, system, etc.) along with the requested results (energy surfaces, energies, angles, geometries, frequencies, etc.). A lower level "orca visitor" class is meant to parse each individual ORCA output. Until the release of ORCA 5 which promises structured property files, the outputs are necessarily parsed with regular expressions, but validated extensively. The focus on ORCA has allowed for more exotic helper functions, like the calculation of rate constants from ``orcaVis`` files.
+Two classes form the backbone of the data-harvesting process. The intended point of interface with a user is the ``orcaExp`` class which collects information from multiple ORCA outputs and produces dataframes which include relevant metadata (theory, basis, system, etc.) along with the requested results (energy surfaces, energies, angles, geometries, frequencies, etc.). A lower level "orca visitor" class is meant to parse each individual ORCA output. Until the release of ORCA 5 which promises structured property files, the outputs are necessarily parsed with regular expressions, but validated extensively. The focus on ORCA has allowed for more exotic helper functions, like the calculation of rate constants from ``orcaVis`` files. However, beyond this functionality offered by the quantum chemistry software (ORCA), a computational chemistry workflow requires data to be more malleable. To this end, the plain-text or binary outputs of quantum chemistry software must be further worked on (post-processed) to gain insights. This means for example, that the outputs may be entered into a spreadsheet, or into a plain text note, or a lab notebook, but in practice, programming languages are a good level of abstraction. Of the programming languages, Python as a general purpose programming language with a high rate of community adoption is a good starting place.
 
 Python has a rich set of structures implemented in the standard library, which have been liberally used for structuring outputs. Furthermore, there have been efforts to convert the grammar of graphics :cite:`wilkinsonGrammarGraphics2005` and tidy-data :cite:`wickhamWelcomeTidyverse2019` approaches to the ``pandas`` package which have also been adapted internally, including strict unit adherence using the ``pint`` library. The user is not burdened by these implementation details and is instead ensured a ``pandas`` data-frame for all operations, both at the ``orcaVis`` level, and the ``orcaExp`` level.
+
+Software industry practices have been followed throughout the development process. In particular, the entire package is written in a test-driven-development fashion, where each feature is accompanied by a test-case. This is meant to ensure that once the end-user is able to run the test-suite, they are guaranteed the features promised by the software. Additionally, this means that potential bugs can be submitted as a test case which helps isolate errors for fixes.
 
 User Interface
 ++++++++++++++
@@ -66,7 +68,7 @@ optimal runs on an HPC cluster.
 
 .. figure:: overviewWailord.jpg
 
-   Some implemented workflows including the two input YML files
+   Some implemented workflows including the two input YML files. VPT2 stands for second-order vibrational perturbation theory and ``Orca_vis`` objects are part of ``wailord``'s class structure. PES stands for potential energy surface.
    :label:`uiwail`
 
 Design and Usage
@@ -280,6 +282,8 @@ Which gives rise to the concise representation :ref:`ph2a` from which all requir
 
    Plots generated from tidy principles for post-processing ``wailord`` parsed outputs.
    :label:`ph2a`
+
+In this particular case, it is possible to see the deviations from the experimental results at varying levels of theory for different basis sets.
 
 Conclusions
 -----------
