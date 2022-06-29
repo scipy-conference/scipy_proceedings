@@ -389,12 +389,12 @@ to HPC (e.g. NCAR's Casper, Cheyenne, and upcoming Derecho clusters) and cloud
 platforms (e.g. AWS).
 
 In order to keep up with the scalability objectives, GeoCAT functions are
-implemented to operate on Dask DataArray objects in addition to natively
-supporting Xarray and NumPy data arrays. Therefore, the GeoCAT functions can
-trivially and transparently be parallelized to be run on shared-memory and
+implemented to operate on Dask arrays in addition to natively supporting
+NumPy arrays and Xarray DataArrays. Therefore, the GeoCAT functions
+can trivially and transparently be parallelized to be run on shared-memory and
 distributed-memory platforms after having Dask cluster/client properly
-configured and functions fed with Dask DataArrays or chunked Xarray
-DataArrays.
+configured and functions fed with Dask arrays or Dask-backed Xarray
+DataArrays (i.e. chunked Xarray DataArrays that wrap up Dask arrays).
 
 Open Development
 ----------------
