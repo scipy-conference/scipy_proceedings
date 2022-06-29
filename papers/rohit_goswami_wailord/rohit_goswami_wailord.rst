@@ -21,9 +21,43 @@ Wailord: Parsers and Reproducibility for Quantum Chemistry
 Introduction
 ------------
 
-The use of computational methods for chemistry is ubiquitous and few modern chemists retain the initial skepticism of the field :cite:`kohnNobelLectureElectronic1999,schaeferMethyleneParadigmComputational1986`. Machine learning has been further earmarked :cite:`meyerMachineLearningComputational2019,dralQuantumChemistryAge2020,schuttUnifyingMachineLearning2019` as an effective accelerator for computational chemistry at every level, from DFT :cite:`gaoMachineLearningCorrection2016` to alchemical searches :cite:`deComparingMoleculesSolids2016` and saddle point searches :cite:`asgeirssonExploringPotentialEnergy2018`. Reproducibility :cite:`pengReproducibleResearchComputational2011,sandveTenSimpleRules2013` in all fields of computational research, and has spawned a veritable flock of methodological and programmatic advances :cite:`communityTuringWayHandbook2019`, including the sophisticated provenance tracking of AiiDA :cite:`pizziAiiDAAutomatedInteractive2016,huberAiiDAScalableComputational2020`.
+The use of computational methods for chemistry is ubiquitous and few modern
+chemists retain the initial skepticism of the field
+:cite:`kohnNobelLectureElectronic1999,schaeferMethyleneParadigmComputational1986`.
+Machine learning has been further earmarked
+:cite:`meyerMachineLearningComputational2019,dralQuantumChemistryAge2020,schuttUnifyingMachineLearning2019`
+as an effective accelerator for computational chemistry at every level, from DFT
+:cite:`gaoMachineLearningCorrection2016` to alchemical searches
+:cite:`deComparingMoleculesSolids2016` and saddle point searches
+:cite:`asgeirssonExploringPotentialEnergy2018`. However, these methods trade
+technical rigor for vast amounts of data, and so the ability to reproduce
+results becomes increasingly more important. Independently, the ability to
+reproduce results
+:cite:`pengReproducibleResearchComputational2011,sandveTenSimpleRules2013` in
+all fields of computational research, and has spawned a veritable flock of
+methodological and programmatic advances :cite:`communityTuringWayHandbook2019`,
+including the sophisticated provenance tracking of AiiDA
+:cite:`pizziAiiDAAutomatedInteractive2016,huberAiiDAScalableComputational2020`.
+Dataset bias
+------------
 
-Dataset bias :cite:`engstromIdentifyingStatisticalBias2020,blumRecoveringBiasedData2019,rahamanSpectralBiasNeural2019` has gained prominence in the machine learning literature, but has not yet percolated through to the chemical sciences community. At its core, the argument for dataset biases in generic machine learning problems of image and text classification, can be linked to the difficulty in obtaining labeled results for training purposes. This is not an issue in the physical sciences at all, as the training data is always labeled without human intervention. There is still a strong tendency to focus on "benchmark" datasets and results :cite:`hojaQM7XComprehensiveDataset2020,seniorProteinStructurePrediction2019`. Compute is expensive, and the reproduction of data which is openly available is not a valid scientific endeavor. In the following sections, we will outline ~wailord~, a library which implements a two level structure for interacting with ORCA :cite:`neeseORCAProgramSystem2012` to implement an end-to-end workflow to analyze and prepare datasets.
+:cite:`engstromIdentifyingStatisticalBias2020,blumRecoveringBiasedData2019,rahamanSpectralBiasNeural2019`
+has gained prominence in the machine learning literature, but has not yet
+percolated through to the chemical sciences community. At its core, the argument
+for dataset biases in generic machine learning problems of image and text
+classification, can be linked to the difficulty in obtaining labeled results for
+training purposes. This is not an issue in the computational physical sciences
+at all, as the training data can often be labeled without human intervention.
+This is especially true when simulations are carried out at varying levels of
+accuracy. However, this also leads to a heavy reliance on high accuracy
+calculations on "benchmark" datasets and results
+:cite:`hojaQM7XComprehensiveDataset2020,seniorProteinStructurePrediction2019`.
+
+Compute is expensive, and the reproduction of data which is openly available is
+not a valid scientific endeavor. In the following sections, we will outline
+``wailord``, a library which implements a two level structure for interacting
+with ORCA :cite:``neeseORCAProgramSystem2012` to implement an end-to-end
+workflow to analyze and prepare datasets.
 
 In particular, we shall understand this library from the lens of what is often
 known as a design pattern in the practice of computational science and
@@ -33,25 +67,79 @@ problems in the design of programs.
 Structure and Implementation
 ----------------------------
 
-Python has grown to become the lingua-franca for much of the scientific community :cite:`oliphantPythonScientificComputing2007,millmanPythonScientistsEngineers2011`, in no small part because of its interactive nature. In particular, the REPL (read-evaluate-print-loop) structure which has been prioritized (from IPython to Jupyter) is one of the prime motivations for the use of Python as an exploratory tool. Additionally, PyPI, the python package index, accelerates the widespread disambiguation of software packages. Thus ``wailord`` is implemented as a free and open source ``python`` library.
+Python has grown to become the lingua-franca for much of the scientific
+community
+:cite:`oliphantPythonScientificComputing2007,millmanPythonScientistsEngineers2011`,
+in no small part because of its interactive nature. In particular, the REPL
+(read-evaluate-print-loop) structure which has been prioritized (from IPython to
+Jupyter) is one of the prime motivations for the use of Python as an exploratory
+tool. Additionally, PyPI, the python package index, accelerates the widespread
+disambiguation of software packages. Thus ``wailord`` is implemented as a free
+and open source ``python`` library.
 
 Structure
 +++++++++
 
-Data generation involves set of known configurations (say, ``xyz`` inputs) and a series of common calculations whose outputs are required. Computational chemistry packages tend to be focused on acceleration and setup details on a *per-job* scale. ``wailord``, in contrast, considers the outputs of simulations to form a tree, where the actual run and its inputs are the leaves, and each layer of the tree structure holds information which is collated into a single dataframe which is presented to the user.
+Data generation involves set of known configurations (say, ``xyz`` inputs) and a
+series of common calculations whose outputs are required. Computational
+chemistry packages tend to be focused on acceleration and setup details on a
+*per-job* scale. ``wailord``, in contrast, considers the outputs of simulations
+to form a tree, where the actual run and its inputs are the leaves, and each
+layer of the tree structure holds information which is collated into a single
+dataframe which is presented to the user.
 
-Downstream tasks for simulations of chemical systems involve questions phrased as queries or comparative measures. With that in mind, ``wailord`` generates ``pandas`` dataframes which are indistinguishable from standard machine learning information sources, to trivialize the data-munging and preparation process. The outputs of ``wailord`` represent concrete *information* and it is not meant to store runs like the ASE database :cite:`larsenAtomicSimulationEnvironment2017` , nor run a process to manage discrete workflows like AiiDA :cite:`huberAiiDAScalableComputational2020`.
+Downstream tasks for simulations of chemical systems involve questions phrased
+as queries or comparative measures. With that in mind, ``wailord`` generates
+``pandas`` dataframes which are indistinguishable from standard machine learning
+information sources, to trivialize the data-munging and preparation process. The
+outputs of ``wailord`` represent concrete *information* and it is not meant to
+store runs like the ASE database :cite:`larsenAtomicSimulationEnvironment2017` ,
+nor run a process to manage discrete workflows like AiiDA
+:cite:`huberAiiDAScalableComputational2020`.
 
-By construction, it differs also from existing "interchange" formats as those favored by the materials data repositories like the QCArchive project :cite:`smithMolSSIQCArchiveProject2021` and is partially close in spirit to the ``cclib`` endeavor :cite:`oboyleCclibLibraryPackageindependent2008a`.
+By construction, it differs also from existing "interchange" formats as those
+favored by the materials data repositories like the QCArchive project
+:cite:`smithMolSSIQCArchiveProject2021` and is partially close in spirit to the
+``cclib`` endeavor :cite:`oboyleCclibLibraryPackageindependent2008a`.
 
 Implementation
 ++++++++++++++
 
-Two classes form the backbone of the data-harvesting process. The intended point of interface with a user is the ``orcaExp`` class which collects information from multiple ORCA outputs and produces dataframes which include relevant metadata (theory, basis, system, etc.) along with the requested results (energy surfaces, energies, angles, geometries, frequencies, etc.). A lower level "orca visitor" class is meant to parse each individual ORCA output. Until the release of ORCA 5 which promises structured property files, the outputs are necessarily parsed with regular expressions, but validated extensively. The focus on ORCA has allowed for more exotic helper functions, like the calculation of rate constants from ``orcaVis`` files. However, beyond this functionality offered by the quantum chemistry software (ORCA), a computational chemistry workflow requires data to be more malleable. To this end, the plain-text or binary outputs of quantum chemistry software must be further worked on (post-processed) to gain insights. This means for example, that the outputs may be entered into a spreadsheet, or into a plain text note, or a lab notebook, but in practice, programming languages are a good level of abstraction. Of the programming languages, Python as a general purpose programming language with a high rate of community adoption is a good starting place.
+Two classes form the backbone of the data-harvesting process. The intended point
+of interface with a user is the ``orcaExp`` class which collects information
+from multiple ORCA outputs and produces dataframes which include relevant
+metadata (theory, basis, system, etc.) along with the requested results (energy
+surfaces, energies, angles, geometries, frequencies, etc.). A lower level "orca
+visitor" class is meant to parse each individual ORCA output. Until the release
+of ORCA 5 which promises structured property files, the outputs are necessarily
+parsed with regular expressions, but validated extensively. The focus on ORCA
+has allowed for more exotic helper functions, like the calculation of rate
+constants from ``orcaVis`` files. However, beyond this functionality offered by
+the quantum chemistry software (ORCA), a computational chemistry workflow
+requires data to be more malleable. To this end, the plain-text or binary
+outputs of quantum chemistry software must be further worked on (post-processed)
+to gain insights. This means for example, that the outputs may be entered into a
+spreadsheet, or into a plain text note, or a lab notebook, but in practice,
+programming languages are a good level of abstraction. Of the programming
+languages, Python as a general purpose programming language with a high rate of
+community adoption is a good starting place.
 
-Python has a rich set of structures implemented in the standard library, which have been liberally used for structuring outputs. Furthermore, there have been efforts to convert the grammar of graphics :cite:`wilkinsonGrammarGraphics2005` and tidy-data :cite:`wickhamWelcomeTidyverse2019` approaches to the ``pandas`` package which have also been adapted internally, including strict unit adherence using the ``pint`` library. The user is not burdened by these implementation details and is instead ensured a ``pandas`` data-frame for all operations, both at the ``orcaVis`` level, and the ``orcaExp`` level.
+Python has a rich set of structures implemented in the standard library, which
+have been liberally used for structuring outputs. Furthermore, there have been
+efforts to convert the grammar of graphics :cite:`wilkinsonGrammarGraphics2005`
+and tidy-data :cite:`wickhamWelcomeTidyverse2019` approaches to the ``pandas``
+package which have also been adapted internally, including strict unit adherence
+using the ``pint`` library. The user is not burdened by these implementation
+details and is instead ensured a ``pandas`` data-frame for all operations, both
+at the ``orcaVis`` level, and the ``orcaExp`` level.
 
-Software industry practices have been followed throughout the development process. In particular, the entire package is written in a test-driven-development fashion, where each feature is accompanied by a test-case. This is meant to ensure that once the end-user is able to run the test-suite, they are guaranteed the features promised by the software. Additionally, this means that potential bugs can be submitted as a test case which helps isolate errors for fixes.
+Software industry practices have been followed throughout the development
+process. In particular, the entire package is written in a
+test-driven-development fashion, where each feature is accompanied by a
+test-case. This is meant to ensure that once the end-user is able to run the
+test-suite, they are guaranteed the features promised by the software.
+Additionally, this means that potential bugs can be submitted as a test case
+which helps isolate errors for fixes.
 
 User Interface
 ++++++++++++++
@@ -82,7 +170,8 @@ A simulation study can be broken into:
 - Outputs per run
 - Post-processing and aggregation
 
-Of the inputs, structured data like configurations (XYZ formats) are best handled by concrete grammars:
+Of the inputs, structured data like configurations (XYZ formats) are best
+handled by concrete grammars:
 
 .. code-block:: python
 
@@ -105,7 +194,8 @@ However, the generation of inputs is facilitated through the use of generalized
 templates for "experiments" controlled by ``cookiecutter``. This allows for
 validations on the workflow during setup itself.
 
-For the purposes of the simulation study, one "experiment" consists of multiple single-shot runs; each of which can take a long time.
+For the purposes of the simulation study, one "experiment" consists of multiple
+single-shot runs; each of which can take a long time.
 
 Concretely, the top-level "experiment" is controlled by a YAML file:
 
@@ -153,7 +243,9 @@ Usage is then facilitated by a high-level call.
     filen="./lab6/expCookieST_meth.yml",
     )
 
-The resulting directory tree can be sent to a High Performance Computing Cluster (HPC), and once executed via the generated run-script helper; locally analysis can proceed.
+The resulting directory tree can be sent to a High Performance Computing Cluster
+(HPC), and once executed via the generated run-script helper; locally analysis
+can proceed.
 
 .. code-block:: python
 
@@ -165,11 +257,15 @@ The resulting directory tree can be sent to a High Performance Computing Cluster
     at various levels of theory, with NUMGRAD"))
 
 
-In certain situations, ordering may be relevant as well (e.g. for generating curves of varying density functional theoretic complexity). This can be handled as well.
+In certain situations, ordering may be relevant as well (e.g. for generating
+curves of varying density functional theoretic complexity). This can be handled
+as well.
 
 For the outputs, similar to the key ideas across ``signac``, ``nix``, ``spack``
 and other tools, control is largely taken away from the user in terms of the
-auto-generated directory structure. The outputs of each run is largely collected through regular expressions, due to the ever changing nature of the outputs of closed source software.
+auto-generated directory structure. The outputs of each run is largely collected
+through regular expressions, due to the ever changing nature of the outputs of
+closed source software.
 
 Importantly, for a code which is meant to confer insights, the concept of units
 is key. ``wailord`` with ``ORCA`` has first class support for units using
@@ -178,7 +274,12 @@ is key. ``wailord`` with ``ORCA`` has first class support for units using
 Dissociation of H2
 ++++++++++++++++++
 
-As a concrete example, we demonstrate a popular pedagogical exercise, namely to obtain the binding energy curves of the H2 molecule at varying basis sets and for the Hartree Fock, along with the results of Kolos and Wolniewicz :cite:`kolosImprovedTheoreticalGround1968`. We first recognize, that even for a moderate 9 basis sets with 33 points, we expect around 1814 data points. Where each basis set requires a separate run, this is easily expected to be tedious.
+As a concrete example, we demonstrate a popular pedagogical exercise, namely to
+obtain the binding energy curves of the H2 molecule at varying basis sets and
+for the Hartree Fock, along with the results of Kolos and Wolniewicz
+:cite:`kolosImprovedTheoreticalGround1968`. We first recognize, that even for a
+moderate 9 basis sets with 33 points, we expect around 1814 data points. Where
+each basis set requires a separate run, this is easily expected to be tedious.
 
 Naively, this would require modifying and generating ORCA input files.
 
@@ -228,7 +329,9 @@ We can formulate the requirement imperatively as:
     extra: Null
     jobscript: "basejob.sh"
 
-This run configuration is coupled with an experiment setup file, similar to the one in the previous section. With this in place, generating a data-set of all the required data is fairly trivial.
+This run configuration is coupled with an experiment setup file, similar to the
+one in the previous section. With this in place, generating a data-set of all
+the required data is fairly trivial.
 
 .. code-block:: python
 
@@ -276,14 +379,16 @@ Finally, the resulting data can be plotted using tidy principles.
     )
     p1a.save(imgname, width=10, height=10, dpi=300)
 
-Which gives rise to the concise representation :ref:`ph2a` from which all required inference can be drawn.
+Which gives rise to the concise representation :ref:`ph2a` from which all
+required inference can be drawn.
 
 .. figure:: plotH2A.png
 
    Plots generated from tidy principles for post-processing ``wailord`` parsed outputs.
    :label:`ph2a`
 
-In this particular case, it is possible to see the deviations from the experimental results at varying levels of theory for different basis sets.
+In this particular case, it is possible to see the deviations from the
+experimental results at varying levels of theory for different basis sets.
 
 Conclusions
 -----------
@@ -306,7 +411,8 @@ directory trees, along with a judicious use of regular expressions for output da
 harvesting, we are able to leverage tidy-data principles to analyze the results
 of a large number of single-shot runs.
 
-Taken together, this tool-set and methodology can be used to generate elegant reports combining code and concepts together in a seamless whole.
+Taken together, this tool-set and methodology can be used to generate elegant
+reports combining code and concepts together in a seamless whole.
 
 Acknowledgments
 ----------------
