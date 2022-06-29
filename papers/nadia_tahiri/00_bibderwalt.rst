@@ -60,7 +60,7 @@ Most studies in phylogeography consider only genetic data without directly consi
 Methods and Python scripts
 --------------------------
 
-In order to achieve our goal, we designed a workflow and then developed a script in Python version 3.9. It interacts with multiple bioinformatic programs, taking nucleotide data as input, and performs multiple phylogenetic analyses using a sliding window approach. The process is divided into three main steps (see Figure 1).
+In order to achieve our goal, we designed a workflow and then developed a script in Python version 3.9. It interacts with multiple bioinformatic programs, taking climatic data and nucleotide data as input, and performs multiple phylogenetic analyses on nucleotide sequencing data using a sliding window approach. The process is divided into three main steps (see Figure 1).
 
 The first step involves collecting data to search for quality viral sequences that are essential for the conditions of our results. All sequences were retrieved from the NCBI Virus website (National Center for Biotechnology Information, https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/). In total, 20 regions were selected to represent 38 gene sequences of SARS-CoV-2. After collecting genetic data, we extracted 5 climatic factors for the 20 regions, i.e., Temperature, Humidity, Precipitation, Wind Speed, and Sky Surface Shortwave Downward Irradiance. This data was obtained from the NASA website (https://power.larc.nasa.gov/).
 
