@@ -69,15 +69,15 @@ them with Student's t-test, statistical power was approximately 0.94.
 However, when following this same procedure for the contaminated groups,
 statistical power was only 0.25.
 
-.. figure:: power.png
-   :align: center
-
-   Two normal curves (left) and two contaminated normal curves (right). Each group has means separated by 0.08.  :label:`power`
-
 The point here is that even small apparent departures from normality,
 especially in the tails, can have a large impact on commonly used statistics.
 The problems continue to get worse when examining effect sizes but these findings
 are not discussed in this article. Interested readers should see :cite:`wilcox1992can`.
+
+.. figure:: power_concat.png
+   :align: center
+
+   Two normal curves (left) and two contaminated normal curves (right). Each pair has a mean difference of 0.8.  :label:`power`
 
 Perhaps one could argue that the contaminated normal distribution actually represents
 an extreme departure from normality and therefore should not be taken seriously; however,
