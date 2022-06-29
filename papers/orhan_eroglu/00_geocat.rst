@@ -86,13 +86,15 @@ Briefly, GeoCAT-comp houses computational operators for applications ranging fro
 regridding and interpolation, to climatology and meteorology. GeoCAT-examples
 provides over 140 publication-quality plotting scripts in Python for Earth
 sciences. It also houses Jupyter notebooks with high-performance, interactive
-plots that enable features such as pan and zoom on fine-resolution geoscience
-data (e.g. ~3 km data rendered within a few tens of seconds to a few minutes on
-personal laptops). GeoCAT-viz enables higher-level implementation of Matplotlib
-and Cartopy plotting capabilities through its variety of easy to use
-visualization convenience functions for GeoCAT-examples. GeoCAT also maintains
-WRF-Python (Weather Research and Forecasting), which works with WRF-ARW model
-output and provides diagnostic and interpolation routines.
+plots that enable features such as pan and zoom on fine-resolution, unstructured
+geoscience data (e.g. ~3 km data rendered within a few tens of seconds to a few
+minutes on personal laptops). This is achieved by making use of the connectivity
+information in the unstructured grid and rendering data via the Datashader and
+Holoviews ecosystem. GeoCAT-viz enables higher-level implementation of Matplotlib
+and Cartopy plotting capabilities through its variety of easy to use visualization
+convenience functions for GeoCAT-examples. GeoCAT also maintains WRF-Python
+(Weather Research and Forecasting), which works with WRF-ARW model output and
+provides diagnostic and interpolation routines.
 
 GeoCAT was recently awarded Project Raijin, which is an NSF EarthCube-funded
 effort :cite:`raijinaward21`. Its goal is to enhance the open-source analysis
