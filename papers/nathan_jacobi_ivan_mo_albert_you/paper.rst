@@ -98,6 +98,8 @@ The 10,000th most frequent term in *D* occurred 39 times, so to ensure results w
 The HIV/AIDS related terms came from a list of 1,031 terms we compiled, primarily coming from the U.S. Department of Veteran Affairs published list of HIV/AIDS related terms, 
 and other terms we thought were pertinent to include, such as HIV medications and terms relating to sexual health :cite:`dva05`. 
 
+.. [#] All code used can be found here https://github.com/quinngroup/Twitter-Embedding-Analysis/
+
 Temporally Aligned Vector Generation
 ====================================
 
@@ -130,7 +132,7 @@ The proposed solution focuses on the equation:
 
 where U is a set of embeddings from time period t.
 Decomposing each PPMI(t) will yield embedding U(t), however each U(t) is not guaranteed to be in the same embedding space.
-Yao et al. derives :math:`U(t)A = B` with the following equation [1]_ [2]_ [3]_ :cite:`dwe18`:
+Yao et al. derives :math:`U(t)A = B` with the following equation [2]_ [3]_ [4]_ :cite:`dwe18`:
 
 .. [#] :math:`\gamma` represents the forcing regularizer. :math:`\lambda` represents Frobenius norm regularizer. :math:`\tau` represents smoothing regularizer.
 .. [#] Y(t) represents PPMI(t).
@@ -365,9 +367,13 @@ Neural Network Results
 
 Neural network models we generated showed promising results on classification of HIV related terms.
 The goal of the models was to identify and discover terms surrounding the HIV outbreak, therefore we were not concerned about the rate of false positive terms.
-False positive terms likely had semantic shifts very similar to the HIV related terms, and therefore can be related to the outbreak. 
+False positive terms likely had semantic shifts very similar to the HIV related terms, and therefore can be related to the outbreak.
 These terms can be labeled as potentially HIV related while studying future data sets, which can aid the identifying of if an outbreak is ongoing during the time tweets in the corpus were tweeted.
-RESULTS NEED TO BE CONDENSED -- COMING IN THE MORNING
+We looked for a balance of finding false positive terms without lowering our certainty threshold to include too many terms. This threshold will be fine tuned as this model is tested on other data sets. 
+
+These results show that classification of terms surrounding the Scott County HIV outbreak is achievable, but the model will need to be refined on more data.
+It can be seen that the mixed term split of data led to a high rate of true positives, however it quickly became overfit with false positives dropping to low rates on models with higher epochs.
+Additionally, accuracy begins to increase between 150 and 200 epoch models on the no mixed split, so even higher epoch models might improve results further on the no mixed split.
 
 Conclusion
 ----------
