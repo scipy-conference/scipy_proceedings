@@ -41,7 +41,10 @@ dealing with increasing geoscientific data sizes, GeoCAT prioritizes scalability
 ensuring its implementations are scalable from personal laptops to HPC clusters.
 Another major goal of the GeoCAT team is to ensure community involvement throughout
 the whole project lifecycle, which is realized through an open development mindset
-by encouraging users and contributors to get involved in decision-making.
+by encouraging users and contributors to get involved in decision-making. With this
+model, we not only have our project stack open-sourced but also ensure most of the
+project assets that are directly related to the software development lifecycle are
+publicly accessible.
 
 .. class:: keywords
 
@@ -400,18 +403,16 @@ Open Development
 ----------------
 
 To ensure community involvement at every level in the development lifecycle,
-GeoCAT is committed to an open development model. With this model, we not only
-have our project stack open-sourced but also ensure most of the project assets
-that are directly related to the software development lifecycle are publicly
-accessible. In order to implement this model, GeoCAT provides all of its software
-tools as GitHub repositories with public GitHub project boards and roadmaps,
-issue tracking and development reviewing, comprehensive documentation for
-users and contributors such as Contributor’s Guide :cite:`geocatcontribguide` and
-toolkit-specific documentation, along with community announcements on the GeoCAT
-blog. Furthermore, GeoCAT encourages community feedback and contribution at any
-level with inclusive and welcoming language. As a result of this, community
-requests and feedback have played significant role in forming and revising the
-GeoCAT roadmap and projects' scope.
+GeoCAT is committed to an open development model. In order to implement this
+model, GeoCAT provides all of its software tools as GitHub repositories with
+public GitHub project boards and roadmaps, issue tracking and development
+reviewing, comprehensive documentation for users and contributors such as
+Contributor’s Guide :cite:`geocatcontribguide` and toolkit-specific documentation,
+along with community announcements on the GeoCAT blog. Furthermore, GeoCAT
+encourages community feedback and contribution at any level with inclusive and
+welcoming language. As a result of this, community requests and feedback have
+played significant role in forming and revising the GeoCAT roadmap and projects'
+scope.
 
 Community engagement
 --------------------
