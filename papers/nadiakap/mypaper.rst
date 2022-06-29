@@ -248,27 +248,52 @@ Our educational software helps users of such optimization packages and may be co
 
 The code is organized in such a way that it allows to pair the algorithm with objective function. The new algorithm may be implmented as method of class Minimize. Newly created algorithm can be paired with test objectivve function supplied with a library or with externally supplied objective function (implemented in separate python module). New algorithms can be made more  or less universal, that is, may have different number of parameters that user can specify. For example, it is possible to create Nelder and Mead algorithm (NM) using basic modules, and this would be an example of the most specific algorithm. It is also possible to create Stochastic Extention of NM (more generic than classic NM, similar to Simplicial Homology Global Optimisation [ESF]_ method) and with certain settings of adjustable parameters it may work identical to classic NM.
 
-The following algorithm demonstrates steps of Stochastic Extention of NM. It resembles Nelder and Mead algorithm but selects only those points with objective function values smaller or equal to mean level of objective funtion. Such an improvement to NM assures its convergence [KPP]_. 
+The following algorithms demonstrate steps similar to steps in Nelder and Mead algorithm (NM) but select only those points with objective function values smaller or equal to mean level of objective funtion. Such an improvement to NM assures its convergence [KPP]_. Unlike NM, they are derived from the generic approach. First variant (NM-stochastic) resembles NM but corrects some of its drawbacks, and second variant (NM-nonlocal) has some similarity to random search as well as to NM and helps to resolve some other issues of classical NM algorithm.
 
-1. Initialize the search by generating :math:`K \geq n`  separate realizations of  :math:`u_0^i`,i=1,..K of the random vector :math:`U_0`.
+Steps of NM-stochastic:
 
-Set :math:`m_0=\frac{1}{K} \sum_{i=0}^{K} u_0^i`
+1. Initialize the search by generating :math:`K\geq n` separate realizations of :math:`u_0^i`, i=1,..K of the random vector :math:`U_0`, and set :math:`m_0=\frac{1}{K} \sum_{i=0}^{K} u_0^i`
 
-2. On step k = 1, 2, ...
+2. On step j = 1, 2, ...
 
-Compute the mean level :math:`c_{k-1}=\frac{1}{K} \sum_{i=1}^K f(u_{k-1}^i)`
+a.Compute the mean level :math:`c_{j-1}=\frac{1}{K} \sum_{i=1}^K f(u_{j-1}^i)`
 
-Calculate a new set of vertices:
+b.Calculate new set of vertices:
 
-:math:`u_k^i= m_{k-1}+\epsilon_{k-1} (f(u_{k-1}^i)-c_{k-1})\frac{  m_{k-1} -u_{k-1}^i}  {||m_{k-1} -u_{k-1}^i ||^n }`
+.. math::
 
-Set  :math:`m_k=\frac{1}{K} \sum_{i=0}^K u_k^i`
+u_j^i= m_{j-1}+\epsilon_{j-1} (f(u_{j-1}^i)-c_{j-1})\frac{  m_{j-1} -u_{j-1}^i}  {||m_{j-1} -u_{j-1}^i ||^n }
 
-Adjust the step size :math:`\epsilon_{k-1}` so that :math:`f(m_k)<f(m_{k-1})`.
+c.Set  :math:`m_j=\frac{1}{K} \sum_{i=0}^K u_j^i`
 
-If approximate :math:`\epsilon _{k-1}` cannot be obtained within the specified number of trails, then set :math:`m_k=m_{k-1}`
+d.Adjust the step size :math:`\epsilon_{j-1}` so that :math:`f(m_j)<f(m_{j-1})`. If approximate :math:`\epsilon _{j-1}` cannot be obtained within the specified number of trails, then set :math:`m_k=m_{j-1}` 
 
-Use the sample standard deviation as the termination criterion: :math:`D_k=(\frac{1}{K-1} \sum_{i=1}^K (f(u_k^i)-c_k)^2)^{1/2}`
+e.Use sample standard deviation as termination criterion: :math:`D_j=(\frac{1}{K-1} \sum_{i=1}^K (f(u_j^i)-c_j)^2)^{1/2}`
+
+Note that classic simplex search methods [NM]_ do not use values of objective function to calculate reflection/expantion/contraction coefficients. Those coefficients are the same for all vertices, whereas in NM-stochastic the distance each vertex will travel depends on the difference between objective function value and average value across all vertices :math:`(f(u_j^i)-c_j)`.
+NM-stochastic shares the following drawbacks with classic simplex methods: a. simlex may collapse into a nearly degenerate figure, and usually proposed remedy is to restart the simlex every once in a while, b. only initial vertices are randomly generated, and the path of all subsequent vertices is deterministic. 
+Next variant of the algorithm (NM-nonlocal) maintains the randomness of vertices on each step, while adjusting the distribution of :math:`U_0` to mimic the pattern of the modified vertices. The corrected algorithm has much higher exploration power than the first algorithm (similar to the exploration power of random search algorithms), and has exploitation power of direct - search algorithms.
+
+
+Steps of NM - nonlocal
+
+1. Choose a starting point :math:`x_0` and set `m_0=x_0`. Compute `(fm_0)`
+
+2. On step j = 1, 2, ...
+Obtain K separate realizations of :math:`u_i^i`, i=1,..K of the random vector `U_j`
+
+a.Compute :math:`f(u_{j-1}^i) , j = 1,2,..K`, and the sample mean level :math:`c_{j-1}=\frac{1}{K} \sum_{i=1}^K f(u_{j-1}^i)`
+
+b.Generate the new estimate of the mean:
+
+
+.. math::
+m_{j}= m_{j-1}+\epsilon_{j}\frac{1}{K} \sum_{i=1}^K[(f(u_{j}^i)-c_{j})\frac{  m_{j-1} -u_{j}^i}  {||m_{j-1} -u_{j}^i ||^n }]
+
+Adjust the step size :math:`\epsilon_{j-1}` so that :math:`f(m_j)<f(m_{j-1})`. If approximate :math:`\epsilon _{j-1}` cannot be obtained within the specified number of trails, then set :math:`m_k=m_{j-1}`
+
+c.Use sample standard deviation as termination criterion: :math:`D_j=(\frac{1}{K-1} \sum_{i=1}^K (f(u_j^i)-c_j)^2)^{1/2}`
+
 
 References
 ----------
