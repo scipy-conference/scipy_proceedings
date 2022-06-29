@@ -47,9 +47,10 @@ The contaminated normal
 
 One of the most striking counterexamples of “N=40 is enough” is shown when sampling from the
 so-called contaminated normal :cite:`20000755025`:cite:`tan1982sampling`.
-This distribution is also bell-shaped
-and symmetrical but it has slightly heavier tails when compared to the standard normal curve.
-That is, it contains outliers. Consider the distributions in Figure :ref:`contnorm`. The variance of the
+This distribution is also bell-shaped and symmetrical but it has slightly heavier tails
+when compared to the standard normal curve.
+That is, it contains outliers and is difficult to distinguish from a normal distribution
+with the naked eye. Consider the distributions in Figure :ref:`contnorm`. The variance of the
 normal distribution is 1 but the variance of the contaminated normal is 10.9!
 
 .. figure:: cont_norm.png
@@ -58,12 +59,25 @@ normal distribution is 1 but the variance of the contaminated normal is 10.9!
 
    Standard normal (orange) and contaminated normal (blue). :label:`contnorm`
 
-Moreover, confidence intervals, based on the sample mean, will be over three times longer
-when sampling from the contaminated curve compared to the normal curve. The point
-here is that even small departures from normality, especially in the tails,
-can have a large impact on commonly used statistics. The problems get even worse when looking
-at the effect of contamination on statistical power and effect sizes but these findings are not
-discussed in this article. Interested readers should see :cite:`wilcox1992can`.
+The consequence of this inflated variance is apparent when examining statistical power.
+To demonstrate, Figure :ref:`power` shows two pairs of distributions: On the left,
+there are two normal distributions (variance 1) and on the right there are
+two contaminated distributions (variance 10.9). Both pairs of distributions
+have a mean difference of 0.8. :cite:`wilcox2013introduction` showed that by taking
+random samples of N=40 from each normal curve, and comparing
+them with Student's t-test, statistical power was approximately 0.94.
+However, when following this same procedure for the contaminated groups,
+statistical power was only 0.25.
+
+.. figure:: power.png
+   :align: center
+
+   Two normal curves (left) and two contaminated normal curves (right). Each group has means separated by 0.08.  :label:`power`
+
+The point here is that even small apparent departures from normality,
+especially in the tails, can have a large impact on commonly used statistics.
+The problems continue to get worse when examining effect sizes but these findings
+are not discussed in this article. Interested readers should see :cite:`wilcox1992can`.
 
 Perhaps one could argue that the contaminated normal distribution actually represents
 an extreme departure from normality and therefore should not be taken seriously; however,
@@ -98,13 +112,14 @@ Figure :ref:`tcurve` shows that the assumption that T follows a t-distribution d
 
    Actual t-distribution (orange) and assumed t-distribution (blue). :label:`tcurve`
 
-One conclusion that can be drawn from this is as follows: When sampling from skewed
-distributions (e.g., lognormal), the t-test leads to increased false positive rates
-(Type I Error) as seen from the left tails in :ref:`tcurve`.
-You can intuit this by comparing the left tails in the chart above. The middle 95% of the blue
-curve is much wider than that of the gray curve. Therefore, when we assume the t
-distribution in these scenarios, we’re much more likely to incorrectly conclude statistical
-significance :cite:`wilcox1998many`.
+With N=20, the assumption is that with a probability of 0.95,
+T will be between -2.09 and 2.09. However, when sampling from a
+lognormal distribution in the manner just described, there is actually
+a 0.95 probability that T will be between approximately -4.2 and 1.4
+(i.e., the middle 95% of the actual t-distribution is much wider than
+the assumed t-distribution). Based on this result we can conclude that
+sampling from skewed distributions (e.g., lognormal) leads to
+increased Type I Error when using Student's t-test :cite:`wilcox1998many`.
 
     “Surely the hallowed bell-shaped curve has cracked from top to bottom. Perhaps,
     like the Liberty Bell, it should be enshrined somewhere as a memorial to
@@ -268,6 +283,58 @@ returns the Winsorized correlation coefficient and other relevant statistics:
     }
 
 
+A case study using real-world data
+**********************************
+
+It is helpful to demonstrate that robust methods in Hypothesize (and in other libraries)
+can make a practical difference when dealing with real-world data. In a study by Miller
+on sexual attitudes, 1327 men and 2282 women were asked how many sexual
+partners they desired over the next 30 years (the data are
+available from `Rand R. Wilcox's site <https://dornsife.usc.edu/labs/rwilcox/datasets/>`_).
+When comparing these groups using Student's t-test, we get the following results:
+
+.. code-block:: python
+
+    {
+    'ci': [-1491.09,  4823.24],
+    't_value': 1.035308,
+    'p_value': 0.300727
+    }
+
+That is, we fail to reject the null hypothesis at the :math:`\alpha=0.05` level
+(two-tailed test for independent groups). However, if we
+switch to a robust analogue of the t-test, one that utilizes bootstrapping and
+trimmed means, we can indeed reject the null hypothesis.
+Here are the corresponding results from Hypothesize's :code:`yuenbt` test
+(based on :cite:`yuen1974two`):
+
+.. code-block:: python
+
+    from hypothesize.compare_groups_with_single_factor \
+        import yuenbt
+
+    results = yuenbt(df.males, df.females, tr=.2, alpha=.05)
+
+    {
+    'ci': [1.41, 2.11],
+    'test_stat': 9.85,
+    'p_value': 0.0
+    }
+
+The point here is that robust statistics can make a practical
+difference with real-world data (even when N is considered large).
+Many other examples of robust statistics making a practical
+difference with real-world data have been documented
+(see :cite:`hill1982robustness`:cite:`wilcox2009robust`:cite:`wilcox2001fundamentals`).
+
+It is important to note that robust methods may also fail to reject when
+a traditional test rejects (remember that traditional
+tests can suffer from increased Type I Error). It is also possible that
+both approaches yield the same or similar conclusions. The exact pattern of results
+depend largely on the characteristics of the underlying population distribution.
+To be able to reason about how robust statistics behave when compared to
+traditional methods the robust statistics simulator has been created
+and is described in the next section.
 
 Robust statistics simulator
 ***************************
@@ -339,4 +406,5 @@ Acknowledgements
 
 The author would like to Karlynn Chan and Rand R. Wilcox as well
 as Elizabeth Dlha and the entire Deepnote team for their support
-of this project.
+of this project. In addition, the author would like to thank
+Kelvin Lee for his insightful review of this manuscript.
