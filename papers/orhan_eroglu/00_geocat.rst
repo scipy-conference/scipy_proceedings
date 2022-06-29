@@ -422,8 +422,8 @@ and attends various community events. First of all, scientific conferences and
 meetings are great venues for such a scientific software engineering project
 to share updates and progress with the community. For instance, the American
 Meteorological Society (AMS) Annual Meeting and American Geophysical Union
-(AGU) Fall Meeting are two significant scientific events that GeoCAT has
-always been presented by one or multiple publications since its birth to
+(AGU) Fall Meeting are two significant scientific events that the GeoCAT team
+presented one or multiple publications every year since its birth to
 inform the community. The annual Scientific Computing with Python (SciPy)
 conference is another great fit to showcase what GeoCAT has been conducting
 in geoscience. The team also attended The International Conference for High
