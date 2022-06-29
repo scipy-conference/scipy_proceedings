@@ -62,7 +62,7 @@ Most studies in phylogeography consider only genetic data without directly consi
 Methods and Python scripts
 --------------------------
 
-In order to achieve our goal, we designed a workflow and then developed a script in Python version 3.9. It interacts with multiple bioinformatic programs, taking nucleotide data as input, and performs multiple phylogenetic analyses using a sliding window approach. The process is divided into three main steps (see Figure 1).
+In order to achieve our goal, we designed a workflow and then developed a script in Python version 3.9 called **aPhylogeo** for phylogeographic analysis (see :cite:`KLLT22` for more details). It interacts with multiple bioinformatic programs, taking nucleotide data as input, and performs multiple phylogenetic analyses using a sliding window approach. The process is divided into three main steps (see Figure 1).
 
 The first step involves collecting data to search for quality viral sequences that are essential for the conditions of our results. All sequences were retrieved from the NCBI Virus website (National Center for Biotechnology Information, https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/). In total, 20 regions were selected to represent 38 gene sequences of SARS-CoV-2. After collecting genetic data, we extracted 5 climatic factors for the 20 regions, i.e., Temperature, Humidity, Precipitation, Wind Speed, and Sky Surface Shortwave Downward Irradiance. This data was obtained from the NASA website (https://power.larc.nasa.gov/).
 
@@ -295,7 +295,7 @@ In addition, we can state that we have made an effort to make our tool as indepe
 
 Conclusions and Future Work
 ---------------------------
-In this paper, a bioinformatics pipeline for phylogeographic analysis is designed to help researchers better understand the distribution of viruses in specific regions using genetic and climate data. We propose a new algorithm called **aPhylogeo** that allows the user to quickly and intuitively create trees from genetic and climate data. Using a sliding window, the algorithm finds specific regions on the viral genetic sequences that can be correlated to the climatic conditions of the region.  To our knowledge, this is the first study of its kind that incorporates climate data into this type of study. It aims to help the scientific community by facilitating research in the field of phylogeography. Our solution runs on Windows®, MacOS X® and GNU/Linux and the code is freely available to researchers and collaborators on GitHub (https://github.com/tahiri-lab/aPhylogeo).
+In this paper, a bioinformatics pipeline for phylogeographic analysis is designed to help researchers better understand the distribution of viruses in specific regions using genetic and climate data. We propose a new algorithm called **aPhylogeo** :cite:`KLLT22` that allows the user to quickly and intuitively create trees from genetic and climate data. Using a sliding window, the algorithm finds specific regions on the viral genetic sequences that can be correlated to the climatic conditions of the region.  To our knowledge, this is the first study of its kind that incorporates climate data into this type of study. It aims to help the scientific community by facilitating research in the field of phylogeography. Our solution runs on Windows®, MacOS X® and GNU/Linux and the code is freely available to researchers and collaborators on GitHub (https://github.com/tahiri-lab/aPhylogeo).
 
 As a future work on the project, we plan to incorporate the following additional features:
 
@@ -318,6 +318,7 @@ References
 .. [E04] Edgar, R. C. (2004). MUSCLE: a multiple sequence alignment method with reduced time and space complexity. BMC bioinformatics, 5(1), 1-19. DOI: https://doi.org/10.1186/1471-2105-5-113 
 .. [F93] Felsenstein, J. (1993). PHYLIP (phylogeny inference package), version 3.5 c. Joseph Felsenstein.
 .. [KM02] Knowles, L. L., & Maddison, W. P. (2002). Statistical phylogeography. Molecular Ecology, 11(12), 2623-2635. DOI: https://doi.org/10.1046/j.1365-294x.2002.01637.x  
+.. [KLLT22] Koshkarov, A., Li, W., Luu, M., & Tahiri, N. (2022). aPhylogeo (1.0). Zenodo. https://doi.org/10.5281/zenodo.6773603
 .. [LFZK06] Lin, K. U. N., Fong, D. Y. T., Zhu, B., & Karlberg, J. (2006). Environmental factors on the SARS epidemic: air temperature, passage of time and multiplicative effect of hospital infection. Epidemiology & Infection, 134(2), 223-230. DOI: https://doi.org/10.1017/S0950268805005054 
 .. [N92] Nagylaki, T. (1992). Rate of evolution of a quantitative character. Proceedings of the National Academy of Sciences, 89(17), 8121-8124. DOI: https://doi.org/10.1073/pnas.89.17.8121  
 .. [OCFC20] Oliveiros, B., Caramelo, L., Ferreira, N. C., & Caramelo, F. (2020). Role of temperature and humidity in the modulation of the doubling time of COVID-19 cases. MedRxiv. DOI: https://doi.org/10.1101/2020.03.05.20031872  
