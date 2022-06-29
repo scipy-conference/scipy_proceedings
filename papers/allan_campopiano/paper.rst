@@ -223,19 +223,22 @@ in R contains many more functions than Hypothesize and its value to researchers
 who use inferential statistics cannot be understated. WRS is best experienced
 in tandem with Wilcox’s book “Introduction to Robust Estimation and Hypothesis Testing”.
 
-Hypothesize brings many of these functions into the Python library ecosystem with
-the goal of lowering the barrier to modern methods—even for those who have not
-had extensive training in statistics or coding. Thanks to modern browser-based
-compute environments (e.g., `Deepnote <https://deepnote.com/>`_), learning to use Hypothesize is relatively
-straightforward. Every statistical test is associated with a hosted interactive notebook,
-pre-filled with example data and code. This means that no time is spent
-copying and pasting code from docs to a locally managed compute environment.
-The library is ready to use immediately and
-is already being used in applied
-research (:cite:`van2021cortical`:cite:`van2022inter`:cite:`elsabbagh2022inter`).
+Hypothesize brings many of these functions into the open-source
+Python library ecosystem with the goal of lowering the barrier
+to modern robust methods—even for those who have not had extensive training in
+statistics or coding. With modern browser-based
+notebook environments (e.g., `Deepnote <https://deepnote.com/>`_), learning to
+use Hypothesize can be relatively straightforward. In fact, every statistical
+test listed `in the docs <https://alcampopiano.github.io/hypothesize/>`_
+is associated with a hosted notebook, pre-filled with
+sample data and code. But certainly, simply `pip install Hypothesize` to
+use Hypothesize in any environment that supports Python.
+For examples of Hypothesize being used in applied
+research, see :cite:`van2021cortical`, :cite:`van2022inter`, and :cite:`elsabbagh2022inter`.
 
 The API for Hypothesize is organized by single- and two-factor tests, as well as
-measures of association. For example, one can compare two independent groups
+measures of association. Data is always in the form of Pandas DataFrame.
+By way of example, one can compare two independent groups
 (e.g., placebo versus treatment)
 using the 20% trimmed mean and the percentile bootstrap test as follows
 (note that Hypothesize uses the naming conventions found in WRS):
