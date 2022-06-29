@@ -260,7 +260,7 @@ the application provides a quality user experience.
 References
 ----------
 
-.. [Leenknecht] David A. Leenknecht, Andre Szuwalski, and Ann R. Sherlock. 1992. Automated Coastal Engineering System -Technical Reference. Technical report.
+.. [Leenknecht] David A. Leenknecht, Andre Szuwalski, and Ann R. Sherlock. 1992. Automated Coastal Engineering System -Technical Reference. Technical report. https://usace.contentdm.oclc.org/digital/collection/p266001coll1/id/2321/
 
 .. [panel] “Panel: A High-Level App and Dashboarding Solution for Python.” Panel 0.12.6 Documentation, Panel Contributors, 2019, https://panel.holoviz.org/.
 
