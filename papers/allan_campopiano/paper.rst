@@ -21,7 +21,7 @@ often using it to conveniently define thresholds beyond which a result is consid
 (e.g., t-test, F-test). Even familiar machine learning models have, buried in their guts,
 an assumption of the normal curve (e.g., LDA, gaussian naive Bayes, logistic & linear regression).
 
-The normal curve has had a grip on us for some time; the aphorism by :cite:`cramer1946mathematical` still rings true for many today:
+The normal curve has had a grip on us for some time; the aphorism by Cramer :cite:`cramer1946mathematical` still rings true for many today:
 
     “Everyone believes in the [normal] law of errors, the experimenters because they think it is a mathematical theorem, the mathematicians because they think it is an experimental fact.”
 
@@ -63,7 +63,7 @@ The consequence of this inflated variance is apparent when examining statistical
 To demonstrate, Figure :ref:`power` shows two pairs of distributions: On the left,
 there are two normal distributions (variance 1) and on the right there are
 two contaminated distributions (variance 10.9). Both pairs of distributions
-have a mean difference of 0.8. :cite:`wilcox2013introduction` showed that by taking
+have a mean difference of 0.8. Wilcox :cite:`wilcox2013introduction` showed that by taking
 random samples of N=40 from each normal curve, and comparing
 them with Student's t-test, statistical power was approximately 0.94.
 However, when following this same procedure for the contaminated groups,
@@ -72,7 +72,8 @@ statistical power was only 0.25.
 The point here is that even small apparent departures from normality,
 especially in the tails, can have a large impact on commonly used statistics.
 The problems continue to get worse when examining effect sizes but these findings
-are not discussed in this article. Interested readers should see :cite:`wilcox1992can`.
+are not discussed in this article. Interested readers should see Wilcox's
+1992 paper :cite:`wilcox1992can`.
 
 .. figure:: power_concat.png
    :align: center
@@ -81,8 +82,8 @@ are not discussed in this article. Interested readers should see :cite:`wilcox19
 
 Perhaps one could argue that the contaminated normal distribution actually represents
 an extreme departure from normality and therefore should not be taken seriously; however,
-distributions that generate outliers are likely common in practice
-(:cite:`hill1982robustness`:cite:`micceri1989unicorn`:cite:`wilcox2009robust`).
+distributions that generate outliers are likely common
+in practice :cite:`hill1982robustness`:cite:`micceri1989unicorn`:cite:`wilcox2009robust`.
 A reasonable goal would then be to choose methods that perform well
 under such situations and continue to perform well under normality.
 In addition, serious issues still exist even when examining
@@ -234,7 +235,8 @@ is associated with a hosted notebook, pre-filled with
 sample data and code. But certainly, simply `pip install Hypothesize` to
 use Hypothesize in any environment that supports Python.
 For examples of Hypothesize being used in applied
-research, see :cite:`van2021cortical`, :cite:`van2022inter`, and :cite:`elsabbagh2022inter`.
+research, see van Noordt and Willoughby :cite:`van2021cortical`,
+van Noordt et al. :cite:`van2022inter`, and Elsabbagh :cite:`elsabbagh2022inter`.
 
 The API for Hypothesize is organized by single- and two-factor tests, as well as
 measures of association. Data is always in the form of Pandas DataFrame.
@@ -330,8 +332,8 @@ Here are the corresponding results from Hypothesize's :code:`yuenbt` test
 The point here is that robust statistics can make a practical
 difference with real-world data (even when N is considered large).
 Many other examples of robust statistics making a practical
-difference with real-world data have been documented
-(see :cite:`hill1982robustness`:cite:`wilcox2009robust`:cite:`wilcox2001fundamentals`).
+difference with real-world data have been
+documented :cite:`hill1982robustness`:cite:`wilcox2009robust`:cite:`wilcox2001fundamentals`.
 
 It is important to note that robust methods may also fail to reject when
 a traditional test rejects (remember that traditional
@@ -410,7 +412,7 @@ to integrate robust statistical methods into their inferential testing repertoir
 Acknowledgements
 ----------------
 
-The author would like to Karlynn Chan and Rand R. Wilcox as well
+The author would like to thank Karlynn Chan and Rand R. Wilcox as well
 as Elizabeth Dlha and the entire Deepnote team for their support
 of this project. In addition, the author would like to thank
 Kelvin Lee for his insightful review of this manuscript.
