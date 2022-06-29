@@ -112,14 +112,32 @@ We have created a function (`create_tree`) to create the climate trees. The func
 
    def create_tree(file_name, names):
        for i in range(1, len(names)):
-           create_matrix(file_name, names[0], names[i], "infile")
+       
+           create_matrix(file_name, 
+                         names[0], 
+                         names[i], 
+                         "infile")
+                         
            os.system("./exec/neighbor < input/input.txt")
-           subprocess.call(["mv", "outtree", "intree"])
-           subprocess.call(["rm", "infile", "outfile"])
-           os.system("./exec/consense < input/input.txt" )
+           
+           subprocess.call(["mv", 
+                            "outtree", 
+                            "intree"])
+                            
+           subprocess.call(["rm", 
+                            "infile", 
+                            "outfile"])
+                            
+           os.system("./exec/consense < input/input.txt")
+           
            newick_file = names[i].replace(" ", "_") + "_newick"
-           subprocess.call(["rm", "outfile"])
-           subprocess.call(["mv", "outtree", newick_file])
+           
+           subprocess.call(["rm", 
+                            "outfile"])
+           
+           subprocess.call(["mv", 
+                            "outtree", 
+                            newick_file])
 
 
 The sliding window strategy can detect genetic fragments depending on environmental parameters, but this work requires time-consuming data preprocessing and the use of several bioinformatics programs. For example, we need to verify that each sequence identifier in the sequencing data always matches the corresponding metadata. If samples are added or removed, we need to check whether the sequencing dataset matches the metadata and make changes accordingly. In the next stage, we need to align the sequences (multiple sequence alignment, MSA) and integrate all step by step into specific software such as MUSCLE :cite:`E04`, Phylip package (i.e. Seqboot, DNADist, Neighbor, and Consense) :cite:`F93`, RF :cite:`RF81`, and raxmlHPC :cite:`S14`. The use of each software requires expertise in bioinformatics. In addition, the intermediate analysis steps inevitably generate many files, the management of which not only consumes the time of the biologist, but is also subject to errors, which reduces the reproducibility of the study. At present, there are only a few systems designed to automate the analysis of phylogeography. In this context, the development of a computer program for a better understanding of the nature and evolution of coronavirus is essential for the advancement of clinical research.
