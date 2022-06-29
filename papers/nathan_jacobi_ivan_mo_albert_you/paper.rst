@@ -54,7 +54,7 @@ Human languages experience continual changes to their semantic structures.
 Natural language processing techniques allow us to examine these semantic alterations through methods such as word embeddings.
 Word embeddings provide low dimension numerical representations of words, mapping lexical meanings into a vector space.
 Words that lie close together in this vector space represent close semantic similarities :cite:`vec13`.
-This numerical vector space allows for quantitative analysis of semantics and contextual meanings, allowing for stronger machine learning models that utilize human language.
+This numerical vector space allows for quantitative analysis of semantics and contextual meanings, allowing for more use in machine learning models that utilize human language.
 
 We hypothesize that disease outbreaks can be predicted faster than traditional methods by studying word embeddings and their semantic shifts during past outbreaks.
 By surveying the context of select medical terms and other words associated with a disease during the initial outbreak,
@@ -204,6 +204,7 @@ The main difference between all of them was the input data itself. The input dat
 On each of these, there were two splits of the training and testing data, as in the prior mentioned "mixed" terms. 
 Additionally, several certainty thresholds for a positive classification were tested on each of the models. The best results from each will be listed in the results section.
 As we begin implementation of these models on other HIV outbreak related data sets, the proper certainty thresholds can be better determined.
+The goal of these models, in addition was to correctly identifying terms we classified as related to the outbreak, was to discover new terms 
 
 Results
 -------
@@ -255,42 +256,6 @@ Analysis of Embeddings
    +--------------+------------------+------------------+-------------------+-----------------+-----------------+------------------+
    | **Average**  | **0.437816**     | **0.567757**     | **0.129941**      | **0.151334**    | **0.155059**    | **0.003725**     |
    +--------------+------------------+------------------+-------------------+-----------------+-----------------+------------------+
-   
-.. table:: The percentage and counts of our vocabulary sharing a given number of closest words (Shared closest words, or SCW for short) between word2vec and our model for time bucket #17. :label:`sharedclosest`
-
-   +----------------+-------------------------+---------------------+
-   | No. of SCW     | Percent Occurrences     | No. Occurrences     |
-   +================+=========================+=====================+
-   | 1              | 0.54913                 | 9970                |
-   +----------------+-------------------------+---------------------+
-   | 2              | 0.157579                | 2861                |
-   +----------------+-------------------------+---------------------+
-   | 3              | 0.0846                  | 1536                |
-   +----------------+-------------------------+---------------------+
-   | 4              | 0.052765                | 958                 |
-   +----------------+-------------------------+---------------------+
-   | 5              | 0.032606                | 592                 |
-   +----------------+-------------------------+---------------------+
-   | 6              | 0.019057                | 346                 |
-   +----------------+-------------------------+---------------------+
-   | 7              | 0.01041                 | 189                 |
-   +----------------+-------------------------+---------------------+
-   | 8              | 0.005398                | 98                  |
-   +----------------+-------------------------+---------------------+
-   | 9              | 0.002258                | 41                  |
-   +----------------+-------------------------+---------------------+
-   | 10             | 0.000551                | 10                  |
-   +----------------+-------------------------+---------------------+
-   | 11             | 0.0000551               | 1                   |
-   +----------------+-------------------------+---------------------+
-   | 12             | 0                       | 0                   |
-   +----------------+-------------------------+---------------------+
-   | 13             | 0                       | 0                   |
-   +----------------+-------------------------+---------------------+
-   | 14             | 0                       | 0                   |
-   +----------------+-------------------------+---------------------+
-   | 15             | 0                       | 0                   |
-   +----------------+-------------------------+---------------------+
 
 .. figure:: plot0.png
    :figclass: w
@@ -307,24 +272,21 @@ Analysis of Embeddings
 To ensure accuracy in word embeddings generated in this model, we utilized word2vec (w2v), a proven neural network method of embeddings :cite:`vec13`.
 For each temporal bucket, a static w2v embedding of d = 100 was generated to compare to the temporal embedding generated from the same bucket.
 These vectors were generated from the same corpus as the ones generated by the dynamic model. 
-As the vectors do not lie within the same embedding space, the vectors cannot be directly compared. Instead, we compare shared nearby words between the vectors.
+As the vectors do not lie within the same embedding space, the vectors cannot be directly compared.
 As the temporal embeddings generated by the alignment model are influenced by other temporal buckets, we hypothesize notably different vectors.
 Methods for testing quality in :cite:`dwe18` rely on a semi-supervised approach: the corpus used is an annotated set of New York Times articles,
 and the section (Sports, Business, Politics, etc.) are given alongside the text, and can be used to assess strength of an embedding.
 Additionally, the corpus used spans over 20 years, allowing for metrics such as checking the closest word to leaders or titles, such as "president" or "NYC mayor" throughout time.
 These methods show that this dynamic word embedding alignment model yields accurate results.
 
-Given that our corpus spans a significantly shorter time period, and does not have annotations, we use a very rudimentary method of analysis,
-comparing the closest n = 15 words between the word2vec embeddings and the temporal embeddings.
-The number of shared closest words (SCW) from the temporal word embedding and the corresponding word2vec embedding was recorded,
-and the overall frequency across all embeddings can be seen in table :ref:`sharedclosest`.
 Major differences can be attributed to the word2vec model only being given a section of the corpus at a time, while our model had access to the entire corpus across all temporal buckets.
 Terms that might not have appeared in the given time bucket might still appear in the embeddings generated by our model, but not at all within the word2vec embeddings.
-For example, most embeddings generated by the word2vec model did not often have hashtagged terms in their top 15 closest terms, while embeddings generated by our model often did.
+For example, most embeddings generated by the word2vec model did not often have hashtagged terms in their top 10 closest terms, while embeddings generated by our model often did.
 As hashtagged terms are very relevant in terms of ongoing events, keeping these terms can give useful information to this outbreak.
 Modern hashtag terms will likely be the most common novel terms that we have no prior knowledge on, and we hypothesize that these terms will be relevant to ongoing outbreaks.
 
-In addition to analyzing the number of shared closest words between our vectors and the w2v vectors, we evaluated the accuracy of both vectors using a baseline sources for the semantic similarity of terms.
+Given that our corpus spans a significantly shorter time period, and does not have annotations, we use existing baseline data sets of word similarities. 
+We evaluated the accuracy of both model's vectors using a baseline sources for the semantic similarity of terms.
 The first source used was SimLex-999, which contains 999 word pairings, and human generated similarity scores, on a scale of 0-10, where 10 is the highest similarity :cite:`sim15`.  
 Cosine similarities for each pair of terms in SimLex-999 were calculated for both the w2v model vectors as well as vectors generated by the dynamic model for each temporal bucket. 
 Pairs containing terms that were not present in the model generated vectors were omitted for that models similarity measurments. 
@@ -362,7 +324,7 @@ The k-means clustering revealed semantic shifts of HIV related terms being clust
 Incidence rates for all terms and HIV terms in each cluster can be seen in table :ref:`hivterm` and figure :ref:`hivplot`.
 This increased incidence rate of HIV related terms in certain clusters leads us to hypothesize that semantic shifts of terms in future datasets can be clustered using the same k-means model,
 and analyzed to search for outbreaks.
-If terms we predict to be possibly linked to an ongoing outbreak begin getting clustered at high rates within the same cluster
+Clustering of terms in future data sets can be compared to these clustering results, and similarities between the data can be recognized.
 
 .. table:: Distribution of HIV terms and all terms within k-means clusters :label:`hivterm`
 
@@ -401,7 +363,11 @@ If terms we predict to be possibly linked to an ongoing outbreak begin getting c
 Neural Network Results
 ======================
 
-Neural network models we generated showed promising results on classification of HIV related terms. 
+Neural network models we generated showed promising results on classification of HIV related terms.
+The goal of the models was to identify and discover terms surrounding the HIV outbreak, therefore we were not concerned about the rate of false positive terms.
+False positive terms likely had semantic shifts very similar to the HIV related terms, and therefore can be related to the outbreak. 
+These terms can be labeled as potentially HIV related while studying future data sets, which can aid the identifying of if an outbreak is ongoing during the time tweets in the corpus were tweeted.
+RESULTS NEED TO BE CONDENSED -- COMING IN THE MORNING
 
 Conclusion
 ----------
