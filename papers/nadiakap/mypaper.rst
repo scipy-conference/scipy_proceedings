@@ -248,7 +248,7 @@ Our educational software helps users of such optimization packages and may be co
 
 The code is organized in such a way that it allows to pair the algorithm with objective function. The new algorithm may be implmented as method of class Minimize. Newly created algorithm can be paired with test objectivve function supplied with a library or with externally supplied objective function (implemented in separate python module). New algorithms can be made more  or less universal, that is, may have different number of parameters that user can specify. For example, it is possible to create Nelder and Mead algorithm (NM) using basic modules, and this would be an example of the most specific algorithm. It is also possible to create Stochastic Extention of NM (more generic than classic NM, similar to Simplicial Homology Global Optimisation [ESF]_ method) and with certain settings of adjustable parameters it may work identical to classic NM.
 
-The following algorithms demonstrate steps similar to steps in Nelder and Mead algorithm (NM) but select only those points with objective function values smaller or equal to mean level of objective funtion. Such an improvement to NM assures its convergence [KPP]_. Unlike NM, they are derived from the generic approach. First variant (NM-stochastic) resembles NM but corrects some of its drawbacks, and second variant (NM-nonlocal) has some similarity to random search as well as to NM and helps to resolve some other issues of classical NM algorithm.
+The following algorithms demonstrate steps similar to steps of Nelder and Mead algorithm (NM) but select only those points with objective function values smaller or equal to mean level of objective funtion. Such an improvement to NM assures its convergence [KPP]_. Unlike NM, they are derived from the generic approach. First variant (NM-stochastic) resembles NM but corrects some of its drawbacks, and second variant (NM-nonlocal) has some similarity to random search as well as to NM and helps to resolve some other issues of classical NM algorithm.
 
 Steps of NM-stochastic:
 
@@ -277,22 +277,23 @@ Next variant of the algorithm (NM-nonlocal) maintains the randomness of vertices
 
 Steps of NM - nonlocal
 
-1. Choose a starting point :math:`x_0` and set `m_0=x_0`. Compute `(fm_0)`
+1. Choose a starting point :math:`x_0` and set :math:`m_0=x_0`. Compute :math:`(fm_0)`
 
 2. On step j = 1, 2, ...
-Obtain K separate realizations of :math:`u_i^i`, i=1,..K of the random vector `U_j`
+Obtain K separate realizations of :math:`u_i^i`, i=1,..K of the random vector :math:`U_j`
 
-a.Compute :math:`f(u_{j-1}^i) , j = 1,2,..K`, and the sample mean level :math:`c_{j-1}=\frac{1}{K} \sum_{i=1}^K f(u_{j-1}^i)`
+a.Compute :math:`f(u_{j-1}^i) , j = 1,2,..K`, and the sample mean level :math:`c_{j-1}=\frac{1}{K}\sum_{i=1}^K f(u_{j-1}^i)`
 
 b.Generate the new estimate of the mean:
 
 
 .. math::
+
 m_{j}= m_{j-1}+\epsilon_{j}\frac{1}{K} \sum_{i=1}^K[(f(u_{j}^i)-c_{j})\frac{  m_{j-1} -u_{j}^i}  {||m_{j-1} -u_{j}^i ||^n }]
 
 Adjust the step size :math:`\epsilon_{j-1}` so that :math:`f(m_j)<f(m_{j-1})`. If approximate :math:`\epsilon _{j-1}` cannot be obtained within the specified number of trails, then set :math:`m_k=m_{j-1}`
 
-c.Use sample standard deviation as termination criterion: :math:`D_j=(\frac{1}{K-1} \sum_{i=1}^K (f(u_j^i)-c_j)^2)^{1/2}`
+c.Use sample standard deviation as termination criterion :math:`D_j=(\frac{1}{K-1} \sum_{i=1}^K (f(u_j^i)-c_j)^2)^{1/2}`
 
 
 References
