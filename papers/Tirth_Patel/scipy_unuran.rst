@@ -410,7 +410,8 @@ the UNU.RAN C benchmarks. As explained above, the use of PCG64 is recommended,
 and MT19937 is only included to compare the speed of the Python implementation
 and the C library by relying on the same uniform number generator
 (i.e., differences in the performance of the uniform number generation are not
-taken into account).
+taken into account). The code for all the benchmarks can be found on
+https://github.com/tirthasheshpatel/unuran_benchmarks.
 
 .. By default, UNU.RAN relies on combined multiple recursive generator
    \cite{l2000fast}.
