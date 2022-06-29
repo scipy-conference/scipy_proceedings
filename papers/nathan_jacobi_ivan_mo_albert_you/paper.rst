@@ -369,11 +369,67 @@ Neural network models we generated showed promising results on classification of
 The goal of the models was to identify and discover terms surrounding the HIV outbreak, therefore we were not concerned about the rate of false positive terms.
 False positive terms likely had semantic shifts very similar to the HIV related terms, and therefore can be related to the outbreak.
 These terms can be labeled as potentially HIV related while studying future data sets, which can aid the identifying of if an outbreak is ongoing during the time tweets in the corpus were tweeted.
-We looked for a balance of finding false positive terms without lowering our certainty threshold to include too many terms. This threshold will be fine tuned as this model is tested on other data sets. 
+We looked for a balance of finding false positive terms without lowering our certainty threshold to include too many terms.
+Results of the data_201 set can be seen in :ref:`nn201`, and results of the data_121 set can be seen in :ref:`nn121`.
+The epochs column shows the number of training epochs on the models, as well as if the words were mixed between the training and testing data, denoted by "Mix".
+The certainty threshold for the unmixed split in both was .01, and .1 for the mixed split in the data_201 results.
+
+.. table:: Results of the neural network run on the data_201 set. :label:`nn201`
+   :class: w
+
+   +--------+--------------------------------------------------------------+-------------------------------------------------------------+
+   |        |                      With K-Means Label                      |                    Without K-Means Label                    |
+   +========+==========+===========+=========+======+=======+=======+======+==========+===========+========+======+=======+=======+======+
+   | Epochs | Accuracy | Precision |  Recall |  TP  |   FP  |   TN  |  FN  | Accuracy | Precision | Recall |  TP  |   FP  |   TN  |  FN  |
+   +--------+----------+-----------+---------+------+-------+-------+------+----------+-----------+--------+------+-------+-------+------+
+   |   50   |  0.9589  |   0.0513  |  0.0041 |   8  |  148  | 48897 | 1947 |  0.9571  |   0.1538  | 0.0266 |  52  |  286  | 48759 | 1903 |
+   +--------+----------+-----------+---------+------+-------+-------+------+----------+-----------+--------+------+-------+-------+------+
+   |   100  |  0.9589  |   0.0824  |  0.0072 |  14  |  156  | 48889 | 1941 |  0.9608  |   0.0893  | 0.0026 |   5  |   51  | 48994 | 1950 |
+   +--------+----------+-----------+---------+------+-------+-------+------+----------+-----------+--------+------+-------+-------+------+
+   |   150  |  0.6915  |   0.0535  |  0.422  |  825 | 14602 | 34443 | 1330 |  0.7187  |   0.0451  | 0.3141 |  614 | 13006 | 36039 | 1341 |
+   +--------+----------+-----------+---------+------+-------+-------+------+----------+-----------+--------+------+-------+-------+------+
+   |   200  |  0.7397  |   0.0388  |  0.2435 |  476 | 11797 | 37428 | 1479 |  0.7566  |   0.0399  | 0.2317 |  453 | 10912 | 38133 | 1502 |
+   +--------+----------+-----------+---------+------+-------+-------+------+----------+-----------+--------+------+-------+-------+------+
+   |  50Mix |  0.9881  |   0.9107  |  0.7967 | 1724 |  169  | 48667 |  440 |  0.9811  |   0.9417  | 0.5901 | 1277 |   79  | 48757 |  887 |
+   +--------+----------+-----------+---------+------+-------+-------+------+----------+-----------+--------+------+-------+-------+------+
+   | 100Mix |  0.9814  |   0.9418  |  0.0598 | 1294 |   80  | 48756 |  870 |  0.9823  |   0.909   | 0.6465 | 1399 |  140  | 48696 |  765 |
+   +--------+----------+-----------+---------+------+-------+-------+------+----------+-----------+--------+------+-------+-------+------+
+   | 150Mix |  0.9798  |   0.9595  | 0.05471 | 1184 |   50  | 48786 |  980 |  0.9752  |   0.9934  | 0.4191 |  907 |   6   | 48830 | 1257 |
+   +--------+----------+-----------+---------+------+-------+-------+------+----------+-----------+--------+------+-------+-------+------+
+   | 200Mix |  0.9736  |   0.9846  |  0.3835 |  83  |   14  | 48823 | 1334 |   0.977  |   0.9834  | 0.4658 | 1008 |   17  | 48819 | 1156 |
+   +--------+----------+-----------+---------+------+-------+-------+------+----------+-----------+--------+------+-------+-------+------+
+
+.. table:: Results of the neural network on the data_121 set. :label:`nn121`
+   :class: w
+
+   +--------+------------------------------------------------------------+------------------------------------------------------------+
+   |        |                     With K-Means Label                     |                    Without K-Means Label                   |
+   +========+==========+===========+========+======+======+=======+======+==========+===========+========+======+======+=======+======+
+   | Epochs | Accuracy | Precision | Recall |  TP  |  FP  |   TN  |  FN  | Accuracy | Precision | Recall |  TP  |  FP  |   TN  |  FN  |
+   +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
+   |   50   |  0.9049  |   0.0461  | 0.0752 |  147 | 3041 | 46004 | 1808 |   0.935  |   0.0652  | 0.0522 |  102 | 1463 | 47582 | 1853 |
+   +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
+   |   100  |  0.9555  |   0.1133  | 0.0235 |  46  |  360 | 48685 | 1909 |  0.8251  |   0.0834  | 0.3565 |  697 | 7663 | 41382 | 1258 |
+   +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
+   |   150  |  0.9554  |   0.0897  | 0.0179 |  35  |  355 | 48838 | 1935 |  0.9572  |   0.0957  | 0.0138 |  27  |  255 | 48790 | 1928 |
+   +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
+   |   200  |  0.9496  |   0.0335  | 0.0113 |  22  |  635 | 48410 | 1933 |  0.9525  |   0.0906  | 0.0266 |  52  |  522 | 48631 | 1905 |
+   +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
+   |  50Mix |  0.9285  |   0.2973  | 0.5018 | 1086 | 2567 | 46269 | 1078 |   0.974  |   0.4062  | 0.4501 |  974 | 1424 | 47412 | 1190 |
+   +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
+   | 100Mix |  0.9475  |   0.3949  | 0.4464 |  966 | 1480 | 47356 | 1198 |  0.9493  |   0.4192  | 0.5134 | 1111 | 1539 | 47297 | 1053 |
+   +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
+   | 150Mix |  0.9344  |   0.3112  | 0.4496 |  973 | 2154 | 46682 | 1191 |  0.9514  |   0.4291  |  0.439 |  950 | 1264 | 47572 | 1214 |
+   +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
+   | 200Mix |  0.9449  |   0.3779  | 0.4635 | 1003 | 1651 | 47185 | 1161 |   0.95   |   0.4156  | 0.4395 |  951 | 1337 | 47499 | 1213 |
+   +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
 
 These results show that classification of terms surrounding the Scott County HIV outbreak is achievable, but the model will need to be refined on more data.
-It can be seen that the mixed term split of data led to a high rate of true positives, however it quickly became overfit with false positives dropping to low rates on models with higher epochs.
+It can be seen that the mixed term split of data led to a high rate of true positives, however it quickly became overfit to the training data with false positives dropping to low rates on models with higher epochs.
 Additionally, accuracy begins to increase between 150 and 200 epoch models on the no mixed split, so even higher epoch models might improve results further on the no mixed split.
+Outliers, such as in the true positives in data_121 with 100 epochs without k-means labels, can be explained by the certainty threshold. If the certainty threshold was .05 on that model, true positives would have been 86, and false positives would have been 1129.
+A precise certainty threshold can be found as we test this model on other HIV related data sets and control data sets. 
+With enough experimentation and data, a set can be run through our pipeline and a certainty of there being a potential HIV outbreak can be generated by a future model.
 
 Conclusion
 ----------
@@ -385,6 +441,7 @@ Additionally, sparsity of data in earlier temporal buckets may lead to some loss
 Fine tuning hyperparameters of the alignment model through grid searching would likely even further improve these results.
 We predict that given more data sets, containing tweets from areas and times that had similar HIV/AIDS outbreaks to Scott County, as well control data sets that are not directly related to an HIV outbreak,
 we could determine a threshold of words that would define a county as potentially undergoing an HIV outbreak.
+With a refined pipeline and model such as this, we hope to be able to begin biosurveillance to try to prevent future outbreaks.
 
 Future Work
 -----------
@@ -395,7 +452,8 @@ One potent example of data could be from the 220 United States counties determin
 similar to the outbreak that occurred in Scott County :cite:`vul16`.
 Our next data set that is being studied are tweets from Cabell County, West Virginia, from January of 2018 through 2020. During this time a very similar HIV outbreak to the one that took place in Scott County in 2014 :cite:`cwv20`. 
 The end goal is to create a pipeline that can perform live semantic shift analysis at set intervals of time within these counties, and classify these shifts as they happen.
-If enough of terms classified by our model as potentially indicative of an outbreak become detected, public health officials can be notified and the severity of a possible outbreak can mitigated if properly handled.
+A future model can predict whether or not the number of terms classified as HIV related is indicative of an outbreak.
+If enough of terms classified by our model as potentially indicative of an outbreak become detected, or if this future model predicts a possible outbreak, public health officials can be notified and the severity of a possible outbreak can mitigated if properly handled.
 
 Additionally, we would like to resasses our embedding model to try and improve embeddings generated and understanding of the semantic shifts.
 This project has been ongoing for several years, and new models, such as the use of bidrectional encoders, as in BERT :cite:`bdt18`, have proven to have high performance. BERT based models have also been used for temporal embedding studies, such as in :cite:`ctr19`, a study focused on clincal corpora. 
