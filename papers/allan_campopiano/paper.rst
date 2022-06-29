@@ -230,7 +230,9 @@ compute environments (e.g., `Deepnote <https://deepnote.com/>`_), learning to us
 straightforward. Every statistical test is associated with a hosted interactive notebook,
 pre-filled with example data and code. This means that no time is spent
 copying and pasting code from docs to a locally managed compute environment.
-The library is ready to use immediately.
+The library is ready to use immediately and
+is already being used in applied
+research (:cite:`van2021cortical`:cite:`van2022inter`:cite:`elsabbagh2022inter`).
 
 The API for Hypothesize is organized by single- and two-factor tests, as well as
 measures of association. For example, one can compare two independent groups
