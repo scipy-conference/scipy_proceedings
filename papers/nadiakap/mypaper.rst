@@ -262,7 +262,7 @@ b.Calculate new set of vertices:
 
 .. math::
 
-u_j^i= m_{j-1}+\epsilon_{j-1} (f(u_{j-1}^i)-c_{j-1})\frac{  m_{j-1} -u_{j-1}^i}  {||m_{j-1} -u_{j-1}^i ||^n }
+   u_j^i= m_{j-1}+\epsilon_{j-1} (f(u_{j-1}^i)-c_{j-1})\frac{  m_{j-1} -u_{j-1}^i}  {||m_{j-1} -u_{j-1}^i ||^n }
 
 c.Set  :math:`m_j=\frac{1}{K} \sum_{i=0}^K u_j^i`
 
@@ -270,7 +270,7 @@ d.Adjust the step size :math:`\epsilon_{j-1}` so that :math:`f(m_j)<f(m_{j-1})`.
 
 e.Use sample standard deviation as termination criterion: :math:`D_j=(\frac{1}{K-1} \sum_{i=1}^K (f(u_j^i)-c_j)^2)^{1/2}`
 
-Note that classic simplex search methods [NM]_ do not use values of objective function to calculate reflection/expantion/contraction coefficients. Those coefficients are the same for all vertices, whereas in NM-stochastic the distance each vertex will travel depends on the difference between objective function value and average value across all vertices :math:`(f(u_j^i)-c_j)`.
+Note that classic simplex search methods do not use values of objective function to calculate reflection/expantion/contraction coefficients. Those coefficients are the same for all vertices, whereas in NM-stochastic the distance each vertex will travel depends on the difference between objective function value and average value across all vertices :math:`(f(u_j^i)-c_j)`.
 NM-stochastic shares the following drawbacks with classic simplex methods: a. simlex may collapse into a nearly degenerate figure, and usually proposed remedy is to restart the simlex every once in a while, b. only initial vertices are randomly generated, and the path of all subsequent vertices is deterministic. 
 Next variant of the algorithm (NM-nonlocal) maintains the randomness of vertices on each step, while adjusting the distribution of :math:`U_0` to mimic the pattern of the modified vertices. The corrected algorithm has much higher exploration power than the first algorithm (similar to the exploration power of random search algorithms), and has exploitation power of direct - search algorithms.
 
@@ -289,7 +289,7 @@ b.Generate the new estimate of the mean:
 
 .. math::
 
-m_{j}= m_{j-1}+\epsilon_{j}\frac{1}{K} \sum_{i=1}^K[(f(u_{j}^i)-c_{j})\frac{  m_{j-1} -u_{j}^i}  {||m_{j-1} -u_{j}^i ||^n }]
+   m_{j}= m_{j-1}+\epsilon_{j}\frac{1}{K} \sum_{i=1}^K[(f(u_{j}^i)-c_{j})\frac{  m_{j-1} -u_{j}^i}  {||m_{j-1} -u_{j}^i ||^n }]
 
 Adjust the step size :math:`\epsilon_{j-1}` so that :math:`f(m_j)<f(m_{j-1})`. If approximate :math:`\epsilon _{j-1}` cannot be obtained within the specified number of trails, then set :math:`m_k=m_{j-1}`
 
