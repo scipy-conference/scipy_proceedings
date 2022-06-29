@@ -182,7 +182,7 @@ we arrive at Poisson's equation for potential function:
 
 .. math::
 
-   \nabla \varphi_0 (x) = -L [f(x)-C]p_u (x)
+   \Delta \varphi_0 (x) = -L [f(x)-C]p_u (x)
 
 where L is a constant
 
@@ -268,7 +268,11 @@ c.Set  :math:`m_j=\frac{1}{K} \sum_{i=0}^K u_j^i`
 
 d.Adjust the step size :math:`\epsilon_{j-1}` so that :math:`f(m_j)<f(m_{j-1})`. If approximate :math:`\epsilon _{j-1}` cannot be obtained within the specified number of trails, then set :math:`m_k=m_{j-1}` 
 
-e.Use sample standard deviation as termination criterion: :math:`D_j=(\frac{1}{K-1} \sum_{i=1}^K (f(u_j^i)-c_j)^2)^{1/2}`
+e.Use sample standard deviation as termination criterion: 
+
+.. math::
+
+   D_j=(\frac{1}{K-1} \sum_{i=1}^K (f(u_j^i)-c_j)^2)^{1/2}
 
 Note that classic simplex search methods do not use values of objective function to calculate reflection/expantion/contraction coefficients. Those coefficients are the same for all vertices, whereas in NM-stochastic the distance each vertex will travel depends on the difference between objective function value and average value across all vertices :math:`(f(u_j^i)-c_j)`.
 NM-stochastic shares the following drawbacks with classic simplex methods: a. simlex may collapse into a nearly degenerate figure, and usually proposed remedy is to restart the simlex every once in a while, b. only initial vertices are randomly generated, and the path of all subsequent vertices is deterministic. 
@@ -277,12 +281,16 @@ Next variant of the algorithm (NM-nonlocal) maintains the randomness of vertices
 
 Steps of NM - nonlocal
 
-1. Choose a starting point :math:`x_0` and set :math:`m_0=x_0`. Compute :math:`(fm_0)`
+1. Choose a starting point :math:`x_0` and set :math:`m_0=x_0`. 
 
 2. On step j = 1, 2, ...
 Obtain K separate realizations of :math:`u_i^i`, i=1,..K of the random vector :math:`U_j`
 
-a.Compute :math:`f(u_{j-1}^i) , j = 1,2,..K`, and the sample mean level :math:`c_{j-1}=\frac{1}{K}\sum_{i=1}^K f(u_{j-1}^i)`
+a.Compute :math:`f(u_{j-1}^i) , j = 1,2,..K`, and the sample mean level 
+
+.. math::
+
+   c_{j-1}=\frac{1}{K}\sum_{i=1}^K f(u_{j-1}^i)
 
 b.Generate the new estimate of the mean:
 
@@ -293,7 +301,11 @@ b.Generate the new estimate of the mean:
 
 Adjust the step size :math:`\epsilon_{j-1}` so that :math:`f(m_j)<f(m_{j-1})`. If approximate :math:`\epsilon _{j-1}` cannot be obtained within the specified number of trails, then set :math:`m_k=m_{j-1}`
 
-c.Use sample standard deviation as termination criterion :math:`D_j=(\frac{1}{K-1} \sum_{i=1}^K (f(u_j^i)-c_j)^2)^{1/2}`
+c.Use sample standard deviation as termination criterion 
+
+.. math::
+
+   D_j=(\frac{1}{K-1} \sum_{i=1}^K (f(u_j^i)-c_j)^2)^{1/2}
 
 
 References
