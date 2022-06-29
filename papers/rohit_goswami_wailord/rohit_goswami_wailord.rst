@@ -54,12 +54,21 @@ calculations on "benchmark" datasets and results
 :cite:`hojaQM7XComprehensiveDataset2020,seniorProteinStructurePrediction2019`.
 
 Compute is expensive, and the reproduction of data which is openly available is
-not a valid scientific endeavor. In the following sections, we will outline
-``wailord``, a library which implements a two level structure for interacting
-with ORCA :cite:``neeseORCAProgramSystem2012` to implement an end-to-end
-workflow to analyze and prepare datasets.
+often hard to justify as a valid scientific endeavor. Rather than focus on the
+observable outputs of calculations, instead we assert that it is best to be able
+to have reproducible confidence in the elements of the workflow. In the
+following sections, we will outline ``wailord``, a library which implements a
+two level structure for interacting with ORCA :cite:`neeseORCAProgramSystem2012`
+to implement an end-to-end workflow to analyze and prepare datasets. Our focus
+on ORCA is due to its rapid and responsive development cycles, that it is free
+to use (but not open source) and also because of its large repertoire of
+computational chemistry calculations. Notably, the black-box nature of ORCA (in
+that the source is not available) mirrors that of many other packages (which are
+not free) like VASP :cite:`hafnerAbinitioSimulationsMaterials2008`. Using ORCA
+then, allows us to design a workflow which is best suited for working with many
+software suites in the community.
 
-In particular, we shall understand this library from the lens of what is often
+We shall understand this ``wailord`` from the lens of what is often
 known as a design pattern in the practice of computational science and
 engineering. That is, a template or description to solve commonly occurring
 problems in the design of programs.
@@ -135,11 +144,15 @@ at the ``orcaVis`` level, and the ``orcaExp`` level.
 
 Software industry practices have been followed throughout the development
 process. In particular, the entire package is written in a
-test-driven-development fashion, where each feature is accompanied by a
-test-case. This is meant to ensure that once the end-user is able to run the
-test-suite, they are guaranteed the features promised by the software.
-Additionally, this means that potential bugs can be submitted as a test case
-which helps isolate errors for fixes.
+test-driven-development (TDD) fashion which has been proven many times over for
+academia :cite:`desaiSurveyEvidenceTestdriven2008` and industry
+:cite:`bhatEvaluatingEfficacyTestdriven2006`. In essence, each feature is
+accompanied by a test-case. This is meant to ensure that once the end-user is
+able to run the test-suite, they are guaranteed the features promised by the
+software.  Additionally, this means that potential bugs can be submitted as a
+test case which helps isolate errors for fixes. Furthermore, software testing
+allows for coverage metrics, thereby enhancing user and development confidence
+in different components of any large code-base.
 
 User Interface
 ++++++++++++++
@@ -170,8 +183,24 @@ A simulation study can be broken into:
 - Outputs per run
 - Post-processing and aggregation
 
-Of the inputs, structured data like configurations (XYZ formats) are best
-handled by concrete grammars:
+From a software design perspective, it is important to recognize the right level
+of abstraction for the given problem. An object-oriented pattern is seen to be
+the correct design paradigm. However, though combining test driven development
+and object oriented design is robust and extensible, the design of ``wailord``
+is meant to tackle the problem at the level of a domain specific language.
+Recall from formal language theory :cite:`ahoCompilersPrinciplesTechniques2007`
+the fact that a grammar is essentially meant to specify the entire possible set
+of inputs and outputs for a given language. A grammar can be expressed as a
+series of tokens (terminal symbols) and non-terminal (syntactic variables)
+symbols along with rules defining valid combinations of these.
+
+It may appear that there is little but splitting hairs between parsing data line
+by line as is traditionally done in libraries, compared to defining the exact
+structural relations between allowed symbols. However, this design, apart from
+disallowing invalid inputs, also makes sense from a pedagogical perspective.
+
+For example, of the inputs, structured data like configurations (XYZ formats)
+are best handled by concrete grammars, where each rule is followed in order:
 
 .. code-block:: python
 
@@ -189,6 +218,24 @@ handled by concrete grammars:
         ws              = ~"\\s*"
         """
     )
+
+This definition maps neatly into the exact specification of an ``xyz`` file:
+
+.. code-block:: tcl
+
+    2
+
+    H   -2.84570571633331      2.83330382582159      0.13872665116004
+    H   -3.21555428366668      3.45093617417841      0.25949334883996
+
+Where we recognize that the overarching structure is of the number of atoms,
+followed by multiple coordinate blocks followed by optional whitespace. We move
+on to define each coordinate block as a line of one or many ``aline``
+constructs, each of which is an ``atype`` with whitespace and three float values
+representing coordinates. Finally we define the positive, negative, numeric and
+whitespace symbols to round out the grammar. This is the exact form of every
+valid ``xyz`` file. The ``parsimonious`` library allows handling grammatical
+constructs in a Pythonic manner.
 
 However, the generation of inputs is facilitated through the use of generalized
 templates for "experiments" controlled by ``cookiecutter``. This allows for
@@ -412,7 +459,10 @@ harvesting, we are able to leverage tidy-data principles to analyze the results
 of a large number of single-shot runs.
 
 Taken together, this tool-set and methodology can be used to generate elegant
-reports combining code and concepts together in a seamless whole.
+reports combining code and concepts together in a seamless whole. Beyond this,
+the interpretation of each computational experiment in terms of a concrete
+domain specific language is expected to reduce the requirement of having to
+re-run benchmark calculations.
 
 Acknowledgments
 ----------------
