@@ -54,8 +54,6 @@ In a phylogeographic study, three major processes should be considered (see :cit
 
 Populations living in different environments with varying climatic conditions are subject to pressures that can lead to evolutionary divergence and reproductive isolation (:cite:`OS98` and :cite:`S01`). Phylogeny and geography are then correlated. This study, therefore, aims to present an algorithm to show the possible correlation between certain genes or gene fragments and the geographical distribution of species.
 
-In this paper, we focused on SARS-CoV-2 to understand the correlation between the occurrence of different variants and the climate environment. Identifying ways in which patterns of divergence within SARS-CoV-2 variants coincide with geographic features can be difficult for several reasons. 
-
 Most studies in phylogeography consider only genetic data without directly considering climatic data. They indirectly take this information as a basis for locating the habitat of the species. We have developed the first version of a phylogeography that integrates climate data. The sliding window strategy provides more robust results, as it particularly highlights the areas sensitive to climate adaptation. 
 
 
