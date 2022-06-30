@@ -150,12 +150,12 @@ A summary of the process and data flow:
 2) Add input variables to the sim with specified probability distributions.
 3) Run the simulation. This executes the following:    
 
- a) Random percentiles :math:`p_i \in U[0,1]` are drawn `ndraws` times for each of the input variables.
- b) These percentiles are transformed into random values via the inverse cumulative density function of the target probability distribution :math:`x_i = F^{-1}(p_i)`.
- c) If nonnumeric inputs are desired, the numbers are converted to objects via a `nummap` dict.
- d) `Case` objects are created and populated with the input values for each case.
- e) Each case is run by structuring the inputs values with the `preprocess` function, passing them to the `run` function, and collecting the output values with the `postprocess` function.
- f) The output values are collected into output variables and saved back to the sim. If the values are nonnumeric, a `valmap` dict assigning numbers to each unique value is automatically generated.
+   a) Random percentiles :math:`p_i \in U[0,1]` are drawn `ndraws` times for each of the input variables.
+   b) These percentiles are transformed into random values via the inverse cumulative density function of the target probability distribution :math:`x_i = F^{-1}(p_i)`.
+   c) If nonnumeric inputs are desired, the numbers are converted to objects via a `nummap` dict.
+   d) `Case` objects are created and populated with the input values for each case.
+   e) Each case is run by structuring the inputs values with the `preprocess` function, passing them to the `run` function, and collecting the output values with the `postprocess` function.
+   f) The output values are collected into output variables and saved back to the sim. If the values are nonnumeric, a `valmap` dict assigning numbers to each unique value is automatically generated.
 
 4) Calculate statistics & sensitivities for input & output variables.
 5) Plot variables, their statistics, and sensitivities.
