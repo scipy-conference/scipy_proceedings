@@ -449,7 +449,7 @@ The Scikit-HEP project started in Autumn 2016 and has grown to be a core compone
 many HEP analyses. It has also provided packages that are growing in usage
 outside of HEP, like AwkwardArray, boost-histogram/Hist, and iMinuit. The
 tooling developed and improved by Scikit-HEP has helped Scikit-HEP developers
-as well as the broader Python ecosystem. 
+as well as the broader Python community.
 
 
 
