@@ -427,7 +427,7 @@ Finally, the resulting data can be plotted using tidy principles.
     )
     p1a.save(imgname, width=10, height=10, dpi=300)
 
-Which gives rise to the concise representation :ref:`ph2a` from which all
+Which gives rise to the concise representation Fig. :ref:`ph2a` from which all
 required inference can be drawn.
 
 .. figure:: plotH2A.png
