@@ -107,8 +107,8 @@ In 2016, the ecosystem for Python in HEP was rather fragmented. There were
 a handful of popular packages that were useful in HEP spread around among
 different authors. The ROOTPy project had several packages that made the
 ROOT-Python bridge a little easier than the built-in PyROOT, such as the
-``root-numpy`` and related ``root-pandas`` packages. The C++ MINUIT fitting
-library was integrated into ROOT, but the ``iminuit`` package :cite:`iminuit`
+root-numpy and related root-pandas packages. The C++ MINUIT fitting
+library was integrated into ROOT, but the iminuit package :cite:`iminuit`
 provided an easy to install standalone Python package with an extracted copy of
 MINUIT. Several other specialized standalone C++ packages had bindings as well.
 Many of the initial authors were transitioning to a less-code centric role or
@@ -116,9 +116,9 @@ leaving for industry, leaving projects like ROOTPy and iminuit without
 maintainers.
 
 Eduardo Rodrigues, a scientist working on the LHCb experiment for the
-University of Cincinnati, started working on a package called ``scikit-hep``
+University of Cincinnati, started working on a package called scikit-hep
 that would provide a set to tools useful for physicists working on HEP analysis.
-The initial version of the ``scikit-hep`` package had a simple vector library,
+The initial version of the scikit-hep package had a simple vector library,
 HEP related units and conversions, several useful statistical tools, and provenance recording
 functionality,
 
@@ -128,14 +128,14 @@ project was ending, with the primary author moving on, and so several of the
 then-popular packages [#]_ that were included in the ROOTPy organization were
 happily transferred to Scikit-HEP. Several other existing HEP libraries,
 primarily interfacing to existing C++ simulation and tracking frameworks, also
-joined, like ``PyJet`` and ``NumPythia``. Some of these libraries have been
+joined, like PyJet and NumPythia. Some of these libraries have been
 retired or replaced today, but were an important part of Scikit-HEP's initial
 growth.
 
 .. [#] The primary package of the ROOTPy project, also called ROOTPy, was not
    transferred, but instead had a final release and then died. It was an
    inspiration for the new PyROOT bindings, and influenced later Scikit-HEP
-   packages like ``mplhep``. The transferred libraries have since been replaced
+   packages like mplhep. The transferred libraries have since been replaced
    by integrated ROOT functionality. All these packages required ROOT, which is
    not on PyPI, so were not suited for a Python-centric ecosystem.
 
@@ -150,7 +150,7 @@ to read ROOT files and convert them to a Python friendly format like HDF5. Then
 the bulk of the analysis would use reproducible Python virtual environments or
 Conda environments.
 
-This changed when Jim Pivarski introduced the ``Uproot`` package (originally envisioned as
+This changed when Jim Pivarski introduced the Uproot package (originally envisioned as
 "µroot"). This was a pure-Python implementation of a ROOT file reader (and
 later writer) that could remove the initial conversion environment by simply
 pip installing a package. It also had a simple, Pythonic interface and produced
@@ -207,7 +207,7 @@ C++14 templating, using composable axes and storage types. It originally had an 
 Python binding, written in Boost::Python. Henry Schreiner proposed the creation
 of a standalone binding to be written with pybind11 in Scikit-HEP. The original
 bindings were removed, Boost::Histogram was accepted into the Boost libraries,
-and work began on ``boost-histogram``. IRIS-HEP, a multi-institution
+and work began on boost-histogram. IRIS-HEP, a multi-institution
 project for sustainable HEP software, had just started, which was providing
 funding for several developers to work on Scikit-HEP project packages such as
 this one. This project would pioneer standalone C++ library development and
@@ -238,19 +238,19 @@ could take several minutes and required several gigabytes of memory to resolve
 the heavy C++ templating in the Boost libraries and pybind11.
 
 
-The first stand-alone development was ``azure-wheel-helpers``, a set of files
+The first stand-alone development was azure-wheel-helpers, a set of files
 that helped produce wheels on the new Azure Pipelines platform. Building
 redistributable wheels requires a variety of techniques, even without shared
 libraries, that vary dramatically between platforms and were/are poorly
 documented. On Linux, everything needs to be built inside a controlled manylinux image,
-and post-processed by the ``auditwheel`` tool. On macOS, this includes
+and post-processed by the auditwheel tool. On macOS, this includes
 downloading an official CPython binary for Python to allow older versions of
 macOS to be targeted (10.9+), several special environment variables, especially
 when cross compiling to Apple Silicon, and post processing with the
-``develwheel`` tool. Windows is the simplest, as most versions of CPython work
-identically there. ``azure-wheel-helpers`` worked well, and was quickly adapted
+develwheel tool. Windows is the simplest, as most versions of CPython work
+identically there. azure-wheel-helpers worked well, and was quickly adapted
 for the other packages in Scikit-HEP that included non-ROOT binary components.
-Work here would eventually be merged into the existing and general ``cibuildwheel``
+Work here would eventually be merged into the existing and general cibuildwheel
 package, which would become the build tool for all non-ROOT binary packages in
 Scikit-HEP, as well as over 600 other packages like matplotlib and numpy, and
 was accepted into the PyPA (Python Packaging Authority).
@@ -263,7 +263,7 @@ language to C (or C++), and just happened to support bindings since you can
 call C and C++ from it, but it was not what it was designed for. Benefits
 of pybind11 included reduced code complexity and duplication, no pre-process
 step (cythonize), no need to pin NumPy when building, and a cross-package API.
-The ``iMinuit`` package was later moved from Cython to pybind11 as well, and
+The iMinuit package was later moved from Cython to pybind11 as well, and
 pybind11 became the Scikit-HEP recommended binding tool. We
 contributed a variety of fixes and features to pybind11, including positional-only
 and keyword-only arguments, the option to prepending to the overload chain, and an API
@@ -271,7 +271,7 @@ for type access and manipulation. We also completely redesigned CMake integratio
 new pure-Setuptools helpers file, and completely redesigned the  CI using GitHub
 Actions, running over 70 jobs on a variety of systems and compilers. We also helped
 modernize and improve all the example projects with simpler builds, new CI, and
-``cibuildwheel`` support.
+cibuildwheel support.
 
 This example of a project with binary components being usable everywhere then
 encouraged the development of Awkward 1.0, a rewrite of AwkwardArray replacing
@@ -291,9 +291,9 @@ like ROOT, which is one monopackage that tries to provide everything
 :cite:`Rodrigues:2020syo`.  A toolset is more natural in the Python ecosystem,
 where we have good packaging tools and many existing libraries. Scikit-HEP only
 needed to fill existing gaps, instead of covering every possible aspect of an
-analysis like ROOT did. The original ``scikit-hep`` package had it's
+analysis like ROOT did. The original scikit-hep package had it's
 functionality was pulled out into existing or new separate packages like
-HEPUnits and Vector, and the core ``scikit-hep`` package instead became a
+HEPUnits and Vector, and the core scikit-hep package instead became a
 metapackage with no unique functionality on its own, but instead installs a
 useful subset of our libraries for a physicist wanting to quickly get started
 on a new analysis.
@@ -317,7 +317,7 @@ particular need for the community.  Scikit-HEP doesn't have to, or need to,
 attempt to develop a package that others are providing, but rather tries to
 ensure that the externally provided package works well with the broader HEP
 ecosystem. The affiliated classification is also used on broader ecosystem
-packages like ``pybind11`` and ``cibuildwheel`` that we recommend and share
+packages like pybind11 and cibuildwheel that we recommend and share
 maintainers with.
 
 Histogramming was designed to be a collection of specialized packages
@@ -340,7 +340,7 @@ expect Protocols to continue to be used in more places in the ecosystem.
 
 The design for scikit-hep as a toolset is of many parts that all work well
 together. One example of a package pulling together many components is
-``uproot-browser``, a tool that combines uproot, Hist, and Python libraries
+uproot-browser, a tool that combines uproot, Hist, and Python libraries
 like textual and plotext to provide a terminal browser for ROOT files.
 
 .. figure:: histogram-convergence.pdf
@@ -351,7 +351,7 @@ like textual and plotext to provide a terminal browser for ROOT files.
 Scikit-HEP's external contributions continued to grow. One of the most notable
 ones was our work on cibuildwheel. This was a Python package that supported
 building redistributable wheels on multiple CI systems. Unlike our own
-``azure-wheel-helpers`` or the competing multibuild package, it was written in
+azure-wheel-helpers or the competing multibuild package, it was written in
 Python, so good practices in Python package design could apply, like unit and
 integration tests, static checks, and it was easy to remain independent of the
 underlying CI system.  Building wheels on Linux requires a docker image, macOS
@@ -361,20 +361,20 @@ depending on the CI's support for a particular Python version. We merged our
 improvements to cibuildwheel, like better Windows support, VCS versioning
 support, and better PEP 518 support. We dropped azure-wheel-helpers, and
 eventually a scikit-build maintainer joined the cibuildwheel project.
-``cibuildwheel`` would go on to join the PyPA, and is now in use in over 600
-packages, including ``numpy``, ``matplotlib``, ``mypy``, and ``scikit-learn``.
+cibuildwheel would go on to join the PyPA, and is now in use in over 600
+packages, including numpy, matplotlib, mypy, and scikit-learn.
 
 Our continued contributions to cibuildwheel included a TOML-based configuration
 system for cibuildwheel 2.0, an override system to make supporting multiple
 manylinux and musllinux targets easier, a way to build directly from SDists, an
-option to use ``build`` instead of ``pip``, the automatic detection of Python
+option to use build instead of pip, the automatic detection of Python
 version requirements, and better globbing support for build specifiers.  We
 also helped improve the code quality in various ways, including fully
 statically typing the codebase, applying various checks and style controls,
 automating CI processes, and improving support for special platforms like
 CPython 3.8 on macOS Apple Silicon.
 
-We also have helped with ``build``, ``nox``, ``pyodide``, and many other
+We also have helped with build, nox, pyodide, and many other
 packages, improving the tooling we depend on to develop scikit-build and giving
 back to the community.
 
@@ -386,7 +386,7 @@ work, supporting both ease of installation for users as well as various static
 checks and styling to keep the package easy to maintain and reduce bugs. These
 techniques would also be useful apply to Scikit-HEP's nearly thirty other
 packages, but applying them one-by-one was not scalable. The development and
-adoption of ``azure-wheel-helpers`` included a series of blog posts that
+adoption of azure-wheel-helpers included a series of blog posts that
 covered the Azure Pipelines platform and wheel building details. This ended up
 serving as the inspiration for a new set of pages on the Scikit-HEP website for
 developers interested in making Python packages. Unlike blog posts, these would
@@ -413,7 +413,7 @@ based backend for pybind11 in addition to the classic Setuptools one.  This has
 helped work out bugs and influence the design of several PEP 621 packages,
 including helping with the addition of PEP 621 to Setuptools.
 
-The most recent addition to the pages was based on a new ``repo-review`` package
+The most recent addition to the pages was based on a new repo-review package
 which evaluates and existing repository to see what parts of the guidelines are
 being followed. This was helpful for monitoring adoption of the developer
 pages, especially newer additions, across the Scikit-HEP packages. This package
