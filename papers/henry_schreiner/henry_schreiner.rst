@@ -22,15 +22,15 @@ Awkward Packaging: building Scikit-HEP
    needs of the High Energy Physics (HEP) community, but in many ways, the
    Python ecosystem at large. AwkwardArray, boost-histogram/hist, and iminuit
    are examples of libraries that are used beyond the original HEP focus. In
-   this talk, we will look key packages in the ecosystem, at how the collection
-   of 30+ packages was developed and maintained, and the software ecosystem
-   contributions made to packages like cibuildwheel, pybind11, nox,
+   these proceedings, we will look key packages in the ecosystem, at how the
+   collection of 30+ packages was developed and maintained, and the software
+   ecosystem contributions made to packages like cibuildwheel, pybind11, nox,
    scikit-build, build, and pipx that support this effort, and the Scikit-HEP
    developer pages, and initial WebAssembly support.
 
 .. class:: keywords
 
-   packaging, ecosystem, high energy physics
+   packaging, ecosystem, high energy physics, community project
 
 Introduction
 ------------
@@ -38,35 +38,42 @@ Introduction
 ..
    High Energy Physics needs. Info about dataset size, etc. Historical ROOT info.
 
-High Energy Physics (HEP) has always had intense computing needs. The World
-Wide Web was invented at CERN in 1989 :cite:`leiner2009brief`. Today, we have
-the largest machine in the world at CERN: the Large Hadron Collider (LHC), 27
-km in circumference :cite:`evans2008lhc`. We have one of the largest scientific
-dataset in the world of exabyte scale :cite:`peters2011exabyte`.
+High Energy Physics (HEP) has always had intense computing needs due to the
+size and scale of the data collected. The World Wide Web was invented at CERN in
+1989 when scientists at CERN in the EU were trying to communicate results with
+scientist in the US :cite:`leiner2009brief`.  Today, we have the largest
+machine in the world at CERN: the Large Hadron Collider (LHC), 27 km in
+circumference :cite:`evans2008lhc`, with multiple experiments with thousands of
+collaborators processing over a petabyte of raw data every day, with 100
+petabytes being stored per year at CERN. This is one of the largest scientific
+dataset in the world of exabyte scale :cite:`peters2011exabyte`, which is roughly
+comparable in order of magnitude to all of astronomy or YouTube :cite:`stephens2015big`.
 
 HEP scientists have been interested in Python since 1993
 :cite:`templon_jeffrey_2022_6353621`. With the release of Python 1.0.0 in 1994,
-physicists started writing code in Python. It was not able to provide the
-performance required to become the main language for HEP.  In 1995, the ROOT
-project for an analysis toolkit (and framework) was released, making C++ the main language for HEP.  The ROOT project
-also needed an "extension language" - this is the language driving the
-analysis. Python was rejected for this role due to being "exotic", and because
-it was considered too much to ask Physicists to code in two languages. Instead,
-ROOT provided a C++ interpreter, called CINT, which later was replaced with
-Cling, which is the basis for the clang-repl project in LLVM today :cite:`ifrim2022gpu`.
+a few physicists started using Python. A year later, the ROOT project
+for an analysis toolkit (and framework) was released, making C++ the main
+language for HEP. The ROOT project also needed an interpreted language to
+driving analysis code. Python was rejected for this role due to being "exotic"
+at the time, and because it was considered too much to ask physicists to code
+in two languages. Instead, ROOT provided a C++ interpreter, called CINT, which
+later was replaced with Cling, which is the basis for the clang-repl project in
+LLVM today :cite:`ifrim2022gpu`.
 
-Python would start showing up a few years later in experiment frameworks as a
+Python would start showing up in the late 90's in experiment frameworks as a
 configuration language. These frameworks were primarily written in C++, but
-were made of many configurable parts; the glueing together of the system was
-done in Python - a model still popular today, though some experiments are now
-using Python + Numba as an alternative, enhanced, model, like Xenon1T :cite:`remenska2017giving,rousselle2021fast`.
+were made of many configurable parts :cite:`LAMMEL199832`; the glueing together
+of the system was done in Python - a model still popular today, though some
+experiments are now using Python + Numba as an alternative model,
+like Xenon1T :cite:`remenska2017giving,rousselle2021fast`.
 
 In the early 2000s, the use of Python HEP exploded, heavily driven by
 experiments like LHCb at CERN developing frameworks and user tools for
 scripting. ROOT started providing Python bindings in 2004
-:cite:`generowicz2004reflection` that were not considered Pythonic, and still
-required a complex multi-hour build of ROOT to use [#]_. Analyses
-still consisted largely of ROOT, with Python sometimes showing up.
+:cite:`generowicz2004reflection` that were not considered Pythonic
+:cite:`galli2020new`, and still required a complex multi-hour build of ROOT to
+use [#]_. Analyses still consisted largely of ROOT, with Python sometimes
+showing up.
 
 .. [#] Almost 20 years later ROOT's Python bindings have been rewritten for
    easier Pythonizations, and installing ROOT in Conda is now much easier,
@@ -75,14 +82,14 @@ still consisted largely of ROOT, with Python sometimes showing up.
 By the mid 2010's, a marked change had occurred. Many students were coming in
 with little or no C++ experience, but had existing knowledge of Python and the
 growing Python data science ecosystem, like NumPy and Pandas. Several analyses
-were made driven by Python, with ROOT only being used for things that were not
+were performed driven by Python, with ROOT only being used for things that were not
 available in the Python ecosystem. Some of these were HEP specific: ROOT was
-also a data format, so users needed to be able to read data files. Others were
-less specific: HEP users have intense histogram requirements due to the data
-sizes, large portions of HEP data is "jagged" rather than rectangular, vectors
-manipulation was important (especially Lorenz Vectors, a four dimensional
-relativistic vector with a non-Euclidean metric), and data fitting was
-important, especially with complex models and excellent error estimation.
+also a data format, so users needed to be able to read data from ROOT files.
+Others were less specific: HEP users have intense histogram requirements due to
+the data sizes, large portions of HEP data is "jagged" rather than rectangular,
+vectors manipulation was important (especially Lorenz Vectors, a four
+dimensional relativistic vector with a non-Euclidean metric), and data fitting
+was important, especially with complex models and excellent error estimation.
 
 
 .. figure:: shells-hep.pdf
@@ -98,25 +105,38 @@ Beginnings of a scikit
 
 In 2016, the ecosystem for Python in HEP was rather fragmented. There were
 a handful of popular packages that were useful in HEP spread around among
-different authors. The rootpy project had several packages that made the ROOT-Python bridge
-a little easier, such as the ``root-numpy`` and related ``root-pandas`` packages. The
-C++ MINUIT fitting library was integrated into ROOT, but the ``iminuit`` package :cite:`iminuit`
-provided a standalone Python package with an extracted copy of MINUIT. Several
-other specialized standalone C++ packages had bindings as well.
+different authors. The rootpy project had several packages that made the
+ROOT-Python bridge a little easier, such as the ``root-numpy`` and related
+``root-pandas`` packages. The C++ MINUIT fitting library was integrated into
+ROOT, but the ``iminuit`` package :cite:`iminuit` provided an easy to install
+standalone Python package with an extracted copy of MINUIT. Several other
+specialized standalone C++ packages had bindings as well. Many of the initial
+authors were transitioning to a less-code centric role or leaving for industry,
+leaving projects like rootpy and iminuit without maintainers.
 
-Eduardo Rodrigues, a scientist working in the LHCb project at CERN for the
+Eduardo Rodrigues, a scientist working on the LHCb experiment at CERN for the
 University of Cincinnati, started working on a package called ``scikit-hep``
 that would provide a set to tools useful for physicists working on an analysis.
 The initial version of the ``scikit-hep`` package had a simple vector library,
 unit conversions, several useful statistical tools, and provenance recording
-functionality - interesting, but not yet transformational for most analyses.
+functionality,
 
 He also placed the GitHub repository into a GitHub organization of the same
 name, and asked several of the other HEP related packages to join. The ROOTPy
 project was ending, with the primary author moving on, and so several of the
-then-popular packages that were included in the rootpy organization were happily
-transferred to Scikit-HEP. Several other existing HEP libraries, primarily
-interfacing to existing C++ simulation and tracking frameworks, also joined.
+then-popular packages [#]_ that were included in the rootpy organization were
+happily transferred to Scikit-HEP. Several other existing HEP libraries,
+primarily interfacing to existing C++ simulation and tracking frameworks, also
+joined, like IMinuit, Probfit, PyJet, and NumPythia. Some of these libraries
+have been retired or replaced today, but were an important part of Scikit-HEP's
+initial growth.
+
+.. [#] The primary package rootpy was not transferred, but instead had a final
+   release and then died. It was an insperation for the new PyROOT bindings,
+   and influenced later Scikit-HEP packages like mplhep. The transferred
+   libraries have since been replaced by integrated ROOT functionality. All
+   three packages required ROOT, which is not on PyPI, so were not suited for a
+   Python-centric ecosystem.
 
 First initial success
 ---------------------
