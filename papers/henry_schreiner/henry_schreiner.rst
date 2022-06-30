@@ -105,14 +105,15 @@ Beginnings of a scikit
 
 In 2016, the ecosystem for Python in HEP was rather fragmented. There were
 a handful of popular packages that were useful in HEP spread around among
-different authors. The rootpy project had several packages that made the
-ROOT-Python bridge a little easier, such as the ``root-numpy`` and related
-``root-pandas`` packages. The C++ MINUIT fitting library was integrated into
-ROOT, but the ``iminuit`` package :cite:`iminuit` provided an easy to install
-standalone Python package with an extracted copy of MINUIT. Several other
-specialized standalone C++ packages had bindings as well. Many of the initial
-authors were transitioning to a less-code centric role or leaving for industry,
-leaving projects like rootpy and iminuit without maintainers.
+different authors. The ROOTPy project had several packages that made the
+ROOT-Python bridge a little easier than the built-in PyROOT, such as the
+``root-numpy`` and related ``root-pandas`` packages. The C++ MINUIT fitting
+library was integrated into ROOT, but the ``iminuit`` package :cite:`iminuit`
+provided an easy to install standalone Python package with an extracted copy of
+MINUIT. Several other specialized standalone C++ packages had bindings as well.
+Many of the initial authors were transitioning to a less-code centric role or
+leaving for industry, leaving projects like ROOTPy and iminuit without
+maintainers.
 
 Eduardo Rodrigues, a scientist working on the LHCb experiment for the
 University of Cincinnati, started working on a package called ``scikit-hep``
@@ -124,19 +125,19 @@ functionality,
 He also placed the GitHub repository into a GitHub organization of the same
 name, and asked several of the other HEP related packages to join. The ROOTPy
 project was ending, with the primary author moving on, and so several of the
-then-popular packages [#]_ that were included in the rootpy organization were
+then-popular packages [#]_ that were included in the ROOTPy organization were
 happily transferred to Scikit-HEP. Several other existing HEP libraries,
 primarily interfacing to existing C++ simulation and tracking frameworks, also
-joined, like ``IMinuit``, ``Probfit``, ``PyJet``, and ``NumPythia``. Some of these libraries
-have been retired or replaced today, but were an important part of Scikit-HEP's
-initial growth.
+joined, like ``PyJet`` and ``NumPythia``. Some of these libraries have been
+retired or replaced today, but were an important part of Scikit-HEP's initial
+growth.
 
-.. [#] The primary package rootpy was not transferred, but instead had a final
-   release and then died. It was an inspiration for the new PyROOT bindings,
-   and influenced later Scikit-HEP packages like ``mplhep``. The transferred
-   libraries have since been replaced by integrated ROOT functionality. All
-   three packages required ROOT, which is not on PyPI, so were not suited for a
-   Python-centric ecosystem.
+.. [#] The primary package of the ROOTPy project, also called ROOTPy, was not
+   transferred, but instead had a final release and then died. It was an
+   inspiration for the new PyROOT bindings, and influenced later Scikit-HEP
+   packages like ``mplhep``. The transferred libraries have since been replaced
+   by integrated ROOT functionality. All these packages required ROOT, which is
+   not on PyPI, so were not suited for a Python-centric ecosystem.
 
 First initial success
 ---------------------
@@ -187,8 +188,8 @@ way. DecayLanguage originally provided tooling for decay definitions, but was
 quickly expanded to include tools to read and validate "DEC" decay files, an
 existing text format used to configure simulations in HEP.
 
-Building better
----------------
+Building compiled packages
+--------------------------
 
 .. figure:: github-histogram-libraries.pdf
    :figclass: w
@@ -199,108 +200,146 @@ Building better
    :label:`fig-github-histogram`
 
 In 2018, HEP physicist and programmer Hans Dembinski proposed a histogram
-library to the Boost libraries, the most respected C++ library collection. It
-provided a histogram-as-an-object concept from HEP, but rethought histograms in
-C++14, using composable axes and storage types. It originally had an initial
+library to the Boost libraries, the most influential C++ library collection;
+many additions to the standard library are based on Boost. Boost.Histogram
+provided a histogram-as-an-object concept from HEP, but was designed around 
+C++14 templating, using composable axes and storage types. It originally had an initial
 Python binding, written in Boost::Python. Henry Schreiner proposed the creation
 of a standalone binding to be written with pybind11 in Scikit-HEP. The original
 bindings were removed, Boost::Histogram was accepted into the Boost libraries,
-and work began on ``boost-histogram``. The IRIS-HEP grant had just started,
-which was providing funding for several developers to work on Scikit-HEP
-project packages such as this one.
+and work began on ``boost-histogram``. IRIS-HEP, a multi-institution
+project for sustainable HEP software, had just started, which was providing
+funding for several developers to work on Scikit-HEP project packages such as
+this one. This project would pioneer standalone C++ library development and
+deployment for Scikit-HEP.
 
 There were already a variety of attempts at histogram libraries, but none of
-them filled the requirements of HEP physicists fully, and most of them were not easy
-to install or use. Any new attempt here would have to be clearly better than
-the existing collection of diverse attempts (see Fig
-:ref:`fig-github-histogram`). The development of a library with compiled
-components intended to be usable everywhere required good support for building
-libraries.  Advancements in the packaging ecosystem, such as the wheel format
-and the manylinux specification and docker image had made redistributable
-Python wheels possible, but there still were many challenges to making a new
-library that could be used anywhere.
+them filled the requirements of HEP physicists: fills on pre-existing
+histograms, simple manipulation of multidimensional histograms, competitive
+performance, and easy to install in clusters or for students. Any new attempt
+here would have to be clearly better than the existing collection of diverse
+attempts (see Fig :ref:`fig-github-histogram`).  The development of a library
+with compiled components intended to be usable everywhere required good support
+for building libraries that was lacking both in Scikit-HEP and to an extent the
+broader Python ecosystem.  Previous advancements in the packaging ecosystem,
+such as the wheel format for distributing binary platform dependent Python
+packages and the manylinux specification and docker image had that allowed a
+single compiled wheel to target many distributions of Linux, but there still
+were many challenges to making a library redistrubtable on all platforms.
 
 The boost-histogram library only depended on header-only components of the
-Boost libraries, and the header only pybind11 package, and all needed files
-were packed into the SDist, and everything was possible using only setuptools,
-making build-from-source simple on any system supporting C++14 (which did not
-include RHEL 7 or manylinux1).
+Boost libraries, and the header-only pybind11 package, so it was able to avoid
+linking to external dependencies, which simplified the initial process. All
+needed files were collected from git submodules and packed into a source
+distribution (SDist), and everything was built using only setuptools, making
+build-from-source simple on any system supporting C++14. This did not include
+RHEL 7, a popular platform in HEP at the time, and on any platform building
+could take several minutes and required several gigabytes of memory to resolve
+the heavy C++ templating in the Boost libraries and pybind11.
+
 
 The first stand-alone development was ``azure-wheel-helpers``, a set of files
 that helped produce wheels on the new Azure Pipelines platform. Building
 redistributable wheels requires a variety of techniques, even without shared
 libraries, that vary dramatically between platforms and were/are poorly
-documented. This worked well, and was quickly adapted for the other packages in
-Scikit-HEP that included non-ROOT binary components. Work here would eventually
-be merged into ``cibuildwheel``, which would become the build tool for all
-non-ROOT binary packages in Scikit-HEP.
+documented. On Linux, everything needs to be built inside a controlled manylinux image,
+and post-processed by the ``auditwheel`` tool. On macOS, this includes
+downloading an official CPython binary for Python to allow older versions of
+macOS to be targeted (10.9+), several special environment variables, especially
+when cross compiling to Apple Silicon, and post processing with the
+``develwheel`` tool. Windows is the simplest, as most versions of CPython work
+identically there. ``azure-wheel-helpers`` worked well, and was quickly adapted
+for the other packages in Scikit-HEP that included non-ROOT binary components.
+Work here would eventually be merged into the existing and general ``cibuildwheel``
+package, which would become the build tool for all non-ROOT binary packages in
+Scikit-HEP, as well as over 600 other packages like matplotlib and numpy, and
+was accepted into the PyPA (Python Packaging Authority).
 
 The second major development was the upstreaming of CI and build system
-developments to pybind11. Pybind11 provided significant benefits to our
-packages over (mis)-using Cython for bindings: reduced maintenance, simpler
-builds, no need to pin NumPy when building, and a cross-package API. The
-``iMinuit`` package was later moved to pybind11 as well, and pybind11 became
-the Scikit-HEP recommended binding tool. Scikit-HEP developers, notably Henry Schreiner, contributed a
-variety of fixes and features to pybind11, including positional and keyword
-arguments, prepending to the overload chain, type access and manipulation,
-completely redesigned CMake integration, a new pure-Setuptools helpers, and a
-complete CI redesign based on GitHub Actions, with over 70 jobs, and expanded
-compiler support. We also helped improve all the example projects.
+developments to pybind11. Pybind11 is a C++ API for Python designed for writing
+a binding to C++, and provided significant benefits to our packages over
+(mis)-using Cython for bindings; Cython was designed to transpile a Python-like
+language to C (or C++), and just happened to support bindings since you can
+call C and C++ from it, but it was not what it was designed for. Benefits
+of pybind11 included reduced code complexity and duplication, no pre-process
+step (cythonize), no need to pin NumPy when building, and a cross-package API.
+The ``iMinuit`` package was later moved from Cython to pybind11 as well, and
+pybind11 became the Scikit-HEP recommended binding tool. We
+contributed a variety of fixes and features to pybind11, including positional-only
+and keyword-only arguments, the option to prepending to the overload chain, and an API
+for type access and manipulation. We also completely redesigned CMake integration, added a
+new pure-Setuptools helpers file, and completely redesigned the  CI using GitHub
+Actions, running over 70 jobs on a variety of systems and compilers. We also helped
+modernize and improve all the example projects with simpler builds, new CI, and
+``cibuildwheel`` support.
 
 This example of a project with binary components being usable everywhere then
 encouraged the development of Awkward 1.0, a rewrite of AwkwardArray replacing
-the Python-only code with compiled code, fixing some long-standing limitations
-and enabling further developments in backends :cite:`pivarski2020awkward`.
-
-Scikit-HEP had become a reasonably popular "toolset" for HEP analysis in Python, a collection of packages that worked together,
-instead of a "toolkit" like ROOT, which is one monopackage that tries to
-provide everything :cite:`Rodrigues:2020syo`.  A toolset is more natural in the
-Python ecosystem, where we have good packaging tools and many existing
-libraries. Scikit-HEP only needed to fill existing gaps, instead of covering
-every possible aspect of an analysis like ROOT (from 1994) did. The
-``scikit-hep`` package started to be pulled out into separate packages, and
-instead simply was becoming a metapackage that would install a useful subset of
-libraries for a physicist starting a new analysis.
+the Python-only code with compiled code using pybind11, fixing some
+long-standing limitations, like an inability to slice past two dimensions or
+select "n choose k" for :math:`k>5`; these simply could not be expressed using
+Awkward 0's NumPy expressions, but can be solved with custom compiled kernels.
+This also enabled further developments in backends :cite:`pivarski2020awkward`.
 
 
 Broader ecosystem
 -----------------
 
-Scikit-HEP was quickly becoming the center of Python focused analysis in HEP
-(see Fig. :ref:`fig-shells`).  Several other projects or packages joined Scikit-HEP, like
-iMinuit, a popular HEP and astrophysics fitting library, probably the most
-popular single package to have joined. PyHF and cabinetry also joined; these were
-larger frameworks built on Scikit-HEP packages.
+Scikit-HEP had become a "toolset" for HEP analysis in
+Python, a collection of packages that worked together, instead of a "toolkit"
+like ROOT, which is one monopackage that tries to provide everything
+:cite:`Rodrigues:2020syo`.  A toolset is more natural in the Python ecosystem,
+where we have good packaging tools and many existing libraries. Scikit-HEP only
+needed to fill existing gaps, instead of covering every possible aspect of an
+analysis like ROOT did. The original ``scikit-hep`` package had it's
+functionality was pulled out into existing or new separate packages like
+HEPUnits and Vector, and the core ``scikit-hep`` package instead became a
+metapackage with no unique functionality on its own, but instead installs a
+useful subset of our libraries for a physicist wanting to quickly get started
+on a new analysis.
 
-Other packages, like Coffea and zFit, were not added, but were built on
-Scikit-HEP packages and had developers working closely with Scikit-HEP
-maintainers. Scikit-HEP introduced an "affiliated" classification, which
-allowed an external package to be listed on the Scikit-HEP website. Currently
-all affiliated packages have at least one Scikit-HEP developer as a maintainer,
+Scikit-HEP was quickly becoming the center of HEP specific Python software (see
+Fig. :ref:`fig-shells`).  Several other projects or packages joined Scikit-HEP
+iMinuit, a popular HEP and astrophysics fitting library, was probably the most
+widely used single package to have joined. PyHF and cabinetry also joined; these
+were larger frameworks that could drive a significant part of an analysis internally
+using other Scikit-HEP tools.
+
+Other packages, like GooFit, Coffea, and zFit, were not added, but were built
+on Scikit-HEP packages and had developers working closely with Scikit-HEP
+maintainers. Scikit-HEP introduced an "affiliated" classification for these
+packages, which allowed an external package to be listed on the Scikit-HEP
+website and encouraged collaboration. Coffea had a strong influence on
+histogram design, and zFit has contributed code to Scikit-HEP. Currently all
+affiliated packages have at least one Scikit-HEP developer as a maintainer,
 though that is currently not a requirement.  An affiliated package fills a
-particular need for the community. Scikit-HEP doesn't have to, or need to, attempt to develop a package that others are providing, but rather tries to ensure that the externally provided package
-works well with the broader HEP ecosystem.
-
-Scikit-HEP continues to grow with new packages: for example, vector manipulation,
-which had been part of the original scikit-hep "package", and had been
-rewritten (as the unreleased HEPVector and also in uproot-methods) was finally
-put together into a package "Vector", and include Awkward and Numba backends.
-Mplhep added important matplotlib plot types and style for HEP usage.
+particular need for the community.  Scikit-HEP doesn't have to, or need to,
+attempt to develop a package that others are providing, but rather tries to
+ensure that the externally provided package works well with the broader HEP
+ecosystem. The affiliated classification is also used on broader ecosystem
+packages like ``pybind11`` and ``cibuildwheel`` that we recommend and share
+maintainers with.
 
 Histogramming was designed to be a collection of specialized packages
 (see Fig. :ref:`fig-histogram`); boost-histogram for manipulation and filling,
 Hist for a user-friendly interface and simple plotting tools, histoprint for
 displaying histograms, and the existing mplhep and uproot packages also needed
-to be able to work with histograms. This ecosystem was build and is held
-together with UHI, which is a formal specification, backed by a statically
-typed Protocol, for a PlottableHistogram object. Producers of histograms, like
-boost-histogram/hist and uproot provide objects that follow this specification,
-and users of histograms, such as mplhep and histoprint take any object that
-follows this specification. UHI is not required at runtime, though it does
+to be able to work with histograms. This ecosystem was built and is held
+together with UHI, which is a formal specification agreed upon by several
+developers of different libraries, backed by a statically typed Protocol, for a
+PlottableHistogram object. Producers of histograms, like boost-histogram/hist
+and uproot provide objects that follow this specification, and users of
+histograms, such as mplhep and histoprint take any object that follows this
+specification. The UHI library is not required at runtime, though it does also
 provide a few simple utilities to help a library also accept ROOT histograms,
-which do not (currently) follow the Protocol.
+which do not (currently) follow the Protocol, so several libraries have decided
+to include it at runtime too. By using a static type checker like MyPy to
+statically enforce a Protocol, libraries that can communicate without depending
+on each other or on a shared runtime dependency and class inheritance. We
+expect Protocols to continue to be used in more places in the ecosystem.
 
-One example of a package pulling together many components is
+The design for scikit-hep as a toolset is of many parts that all work well
+together. One example of a package pulling together many components is
 ``uproot-browser``, a tool that combines uproot, Hist, and Python libraries
 like textual and plotext to provide a terminal browser for ROOT files.
 
@@ -313,27 +352,31 @@ Scikit-HEP's external contributions continued to grow. One of the most notable
 ones was our work on cibuildwheel. This was a Python package that supported
 building redistributable wheels on multiple CI systems. Unlike our own
 ``azure-wheel-helpers`` or the competing multibuild package, it was written in
-Python, so good practices in package design could apply, and it was easy to
-remain independent of the underlying CI system. Building wheels on Linux
-requires a docker image, macOS requires the python.org Python, and Windows can
-use any copy of Python - cibuildwheel uses this to supply Python in all cases,
-which keeps it from depending on the CI's support for a particular Python
-version. We merged our improvments to cibuildwheel, dropped
-azure-wheel-helpers, and eventually joined the cibuildwheel project.
+Python, so good practices in Python package design could apply, like unit and
+integration tests, static checks, and it was easy to remain independent of the
+underlying CI system.  Building wheels on Linux requires a docker image, macOS
+requires the python.org Python, and Windows can use any copy of Python -
+cibuildwheel uses this to supply Python in all cases, which keeps it from
+depending on the CI's support for a particular Python version. We merged our
+improvements to cibuildwheel, like better Windows support, VCS versioning
+support, and better PEP 518 support. We dropped azure-wheel-helpers, and
+eventually a scikit-build maintainer joined the cibuildwheel project.
 ``cibuildwheel`` would go on to join the PyPA, and is now in use in over 600
-packages, including ``numpy``, ``matplotlib``, ``mypy``, ``scikit-learn``, and
-more.
+packages, including ``numpy``, ``matplotlib``, ``mypy``, and ``scikit-learn``.
 
-Our continued contributions to cibuildwheel included a new TOML-based
-configuration system for cibuildwheel 2.0, an override system to make
-supporting multiple manylinux and musllinux targets easier, build directly from
-SDists, option to use ``build`` instead of ``pip``, automatic detection of
-python version requirements, better globbing support, and more. We also helped
-fully statically type the codebase, apply various checks and style controls,
-automate CI processes, improve support for special platforms like CPython 3.8
-on macOS Apple Silicon, and much more.
+Our continued contributions to cibuildwheel included a TOML-based configuration
+system for cibuildwheel 2.0, an override system to make supporting multiple
+manylinux and musllinux targets easier, a way to build directly from SDists, an
+option to use ``build`` instead of ``pip``, the automatic detection of Python
+version requirements, and better globbing support for build specifiers.  We
+also helped improve the code quality in various ways, including fully
+statically typing the codebase, applying various checks and style controls,
+automating CI processes, and improving support for special platforms like
+CPython 3.8 on macOS Apple Silicon.
 
-We also have helped with ``build``, ``nox``, ``pyodide``, and many other packages.
+We also have helped with ``build``, ``nox``, ``pyodide``, and many other
+packages, improving the tooling we depend on to develop scikit-build and giving
+back to the community.
 
 The Scikit-HEP Developer Pages
 ------------------------------
