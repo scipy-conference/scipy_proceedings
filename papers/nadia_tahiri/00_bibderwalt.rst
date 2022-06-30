@@ -176,7 +176,7 @@ The following sliding window function illustrates moving the sliding window thro
    :figclass: w
    :scale: 30%
 
-   The workflow of the algorithm. The operations within this workflow include several blocks. The blocks are highlighted by three different colors. The first block (the light pink color) is responsible for creating the trees based on the climate data. The second block (the dark yellow color) performs the function of input parameter validation. The third block (the light-yellow color) allows the creation of phylogenetic trees. This is the most important block and the basis of this study, through the results of which the user receives the output data with the necessary calculations. :label:`fig1`
+   The workflow of the algorithm. The operations within this workflow include several blocks. The blocks are highlighted by three different colors. The first block (grey color) is responsible for creating the trees based on the climate data. The second block (green color) performs the function of input parameter validation. The third block (blue color) allows the creation of phylogenetic trees. This is the most important block and the basis of this study, through the results of which the user receives the output data with the necessary calculations. :label:`fig1`
 
 
 Algorithmic complexity
@@ -272,7 +272,7 @@ In accordance with the above principles, we selected 38 lineages with regional c
 
    \end{table*}
 
-Based on the sampling locations (consistent with the most common country, but accurate to specific cities) of each lineage sequence in Table 1, combined with the time when the lineage was first discovered, we obtained data on climatic conditions at the time each lineage was first discovered. The meteorological parameters include Temperature at 2 meters, Specific humidity at 2 meters, Precipitation corrected, Wind speed at 10 meters, and All sky surface shortwave Downward irradiance. The daily data for the above parameters were collected from the NASA website (https://power.larc.nasa.gov/). Considering that the spread of the virus in a country and the data statistics are time-consuming, we collected climatological data for the three days before the earliest reporting date corresponding to each lineage and averaged them for analysis (Fig 2).
+Based on the sampling locations (consistent with the most common country, but accurate to specific cities) of each lineage sequence in Table 1, combined with the time when the lineage was first discovered, we obtained data on climatic conditions at the time each lineage was first discovered. The meteorological parameters include Temperature at 2 meters, Specific humidity at 2 meters, Precipitation corrected, Wind speed at 10 meters, and All sky surface shortwave Downward irradiance. The daily data for the above parameters were collected from the NASA website (https://power.larc.nasa.gov/). Considering that the spread of the virus in a country and the data statistics are time-consuming, we collected climatological data for the three days before the earliest reporting date corresponding to each lineage and averaged them for analysis (Fig. 2).
 
 .. figure:: Fig2.png
 
