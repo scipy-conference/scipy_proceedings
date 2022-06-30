@@ -141,39 +141,49 @@ initial growth.
 First initial success
 ---------------------
 
-In 2016, the largest barrier to using Python in HEP in a Pythonic way was
-ROOT. It was a challenging compile, a huge "library", not very Pythonic,
-and didn't play well with packaging. Many analyses started with a "convert data"
-step and worked with a Python friendly format like HDF5.
+In 2016, the largest barrier to using Python in HEP in a Pythonic way was ROOT.
+It was challenging to compile, had many non-Python dependencies, was huge
+compared to most Python libraries, not very Pythonic, and didn't play well with
+packaging. Many Python analyses started with a "convert data" step using PyROOT
+to read ROOT files and convert them to a Python friendly format like HDF5. Then
+the bulk of the analysis would use reproducible Python virtual environments or
+Conda environments.
 
 This changed when Jim Pivarski introduced Uproot (originally envisioned as
 "µroot"). This was a pure-Python implementation of a ROOT file reader (and
-later writer) that could remove the initial conversions step by simply
+later writer) that could remove the initial conversion environment by simply
 pip installing a package. It also had a simple, Pythonic interface and produced
-"nice" outputs, like NumPy arrays.
+outputs Python users could immediately use, like NumPy arrays, instead of
+PyROOT's wrapped C++ pointers.
 
-Uproot was not just a file format reader; it quickly split into three packages.
-One, uproot-methods, included Pythonic access to functionality provided by ROOT
-for its classes, like vectors. The other was AwkwardArray, which would grow to
-become one of the most important and most general packages in Scikit-HEP. This
-package allowed NumPy-like idioms for array-at-a-time manipulation and access
-to jagged data structures. These are very common and relevant in HEP; events have a variable
-number of tracks, tracks have a variable number of hits in the detector, etc.
-Many other fields also have jagged data structures; while there are formats to
-store such structures, computations on jagged structures have usually been
-closer to SQL than NumPy.
+Uproot needed to do more than just be file format reader/writer; it needed to
+provide a way to represent the special structure and common objects that ROOT
+files could contain. This lead to the development of two related packages that
+would support uproot. One, uproot-methods, included Pythonic access to
+functionality provided by ROOT for its core classes, like spacial and Lorentz
+vectors. The other was AwkwardArray, which would grow to become one of the most
+important and most general packages in Scikit-HEP. This package allows
+NumPy-like idioms for array-at-a-time manipulation on jagged data structures. A
+jagged array is a (possibly structured) array with a variable length dimension.
+These are very common and relevant in HEP; events have a variable number of
+tracks, tracks have a variable number of hits in the detector, etc.  Many other
+fields also have jagged data structures. While there are formats to store such
+structures, computations on jagged structures have usually been closer to SQL
+queries on multiple tables than direct object manipulation. Pandas handles this
+through multiple indexing and a lot of duplication.
 
 Uproot was a huge hit with incoming HEP students; suddenly they could access
-HEP data using pip or conda, use tools they already knew like Pandas and the
+HEP data using a library installed with pip or conda and no external compiler
+or library requirements, use tools they already knew like Pandas and the
 rapidly growing machine learning frameworks. There were still some gaps and
 pain points in the ecosystem, but an analysis without C++ or compiling ROOT was
-finally possible. Scikit-HEP did not and does not intend to "replace" ROOT, but
-it provides alternative solutions that work natively in the Python "Big Data" ecosystem, which in this
-case was to remove the ROOT requirement from reading data files.
+finally possible. Scikit-HEP did not and does not intend to replace ROOT, but
+it provides alternative solutions that work natively in the Python "Big Data"
+ecosystem.
 
-Several other useful HEP libraries were also written.For example: Particle for accessing
-the Particle Data Group (PDG) particle data in a simple and Pythonic way.
-DecayLanguage originally provided tooling for decay definitions, but was
+Several other useful HEP libraries were also written. Particle was written for
+accessing the Particle Data Group (PDG) particle data in a simple and Pythonic
+way. DecayLanguage originally provided tooling for decay definitions, but was
 quickly expanded to include tools to read and validate "DEC" decay files, an
 existing text format used to configure simulations in HEP.
 
