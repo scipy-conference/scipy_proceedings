@@ -226,8 +226,8 @@ This definition maps neatly into the exact specification of an ``xyz`` file:
 
     2
 
-    H   -2.84570571633331      2.83330382582159      0.13872665116004
-    H   -3.21555428366668      3.45093617417841      0.25949334883996
+    H   -2.8   2.8   0.1
+    H   -3.2   3.4   0.2
 
 Where we recognize that the overarching structure is of the number of atoms,
 followed by multiple coordinate blocks followed by optional whitespace. We move
