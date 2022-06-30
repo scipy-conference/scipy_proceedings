@@ -90,7 +90,7 @@ plots that enable features such as pan and zoom on fine-resolution, unstructured
 geoscience data (e.g. ~3 km data rendered within a few tens of seconds to a few
 minutes on personal laptops). This is achieved by making use of the connectivity
 information in the unstructured grid and rendering data via the Datashader and
-Holoviews ecosystem. GeoCAT-viz enables higher-level implementation of Matplotlib
+Holoviews ecosystem :cite:`datashader`. GeoCAT-viz enables higher-level implementation of Matplotlib
 and Cartopy plotting capabilities through its variety of easy to use visualization
 convenience functions for GeoCAT-examples. GeoCAT also maintains WRF-Python
 (Weather Research and Forecasting), which works with WRF-ARW model output and
@@ -440,10 +440,11 @@ through participation in NCAR's Summer Internships in Parallel Computational
 Science (SIParCS). Such programs are quite beneficial for both students and
 scientific software development teams. To exemplify, GeoCAT-examples and
 GeoCAT-viz in particular has received significant contributions through
-NCAR's Summer SIParCS in 2020 and 2021 summers (i.e. tens of visualization
-examples as well as improtant infrastructural changes were made available
-by our interns). Furthermore, the team has created three essential and one
-collaboration project through SIParCS 2022 summer through which advanced
+SIParCS in 2020 and 2021 summers (i.e. tens of visualization
+examples as well as important infrastructural changes were made available
+by our interns) :cite:`ams22craker` :cite:`lincoln2021expanding`
+:cite:`ams21craker`. Furthermore, the team has created three essential and
+one collaboration project through SIParCS 2022 summer through which advanced
 geoscientific visualization, unstructured grid visualization and data
 analysis, Fortran to Python algorithm and code development, as well as
 GPU optimization for GeoCAT-comp routines will be investigated.
