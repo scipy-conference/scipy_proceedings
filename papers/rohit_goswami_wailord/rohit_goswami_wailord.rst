@@ -52,7 +52,7 @@ at all, as the training data can often be labeled without human intervention.
 This is especially true when simulations are carried out at varying levels of
 accuracy. However, this also leads to a heavy reliance on high accuracy
 calculations on "benchmark" datasets and results
-:cite:`hojaQM7XComprehensiveDataset2020,seniorProteinStructurePrediction2019`.
+:cite:`hojaQM7XComprehensiveDataset2021,seniorProteinStructurePrediction2019`.
 
 Compute is expensive, and the reproduction of data which is openly available is
 often hard to justify as a valid scientific endeavor. Rather than focus on the
