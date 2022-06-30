@@ -39,14 +39,14 @@ Introduction
    High Energy Physics needs. Info about dataset size, etc. Historical ROOT info.
 
 High Energy Physics (HEP) has always had intense computing needs due to the
-size and scale of the data collected. The World Wide Web was invented at CERN in
-1989 when scientists at CERN in the EU were trying to communicate results with
-scientist in the US :cite:`leiner2009brief`.  Today, we have the largest
-machine in the world at CERN: the Large Hadron Collider (LHC), 27 km in
+size and scale of the data collected. The World Wide Web was invented at the CERN Physics laboratory in Switzerland in
+1989 when scientists in the EU were trying to communicate results with
+scientist in the US, and vice-versa :cite:`leiner2009brief`.  Today, HEP has the largest
+scientific machine in the world, at CERN: the Large Hadron Collider (LHC), 27 km in
 circumference :cite:`evans2008lhc`, with multiple experiments with thousands of
 collaborators processing over a petabyte of raw data every day, with 100
 petabytes being stored per year at CERN. This is one of the largest scientific
-dataset in the world of exabyte scale :cite:`peters2011exabyte`, which is roughly
+datasets in the world of exabyte scale :cite:`peters2011exabyte`, which is roughly
 comparable in order of magnitude to all of astronomy or YouTube :cite:`stephens2015big`.
 
 HEP scientists have been interested in Python since 1993
@@ -65,10 +65,10 @@ configuration language. These frameworks were primarily written in C++, but
 were made of many configurable parts :cite:`LAMMEL199832`; the glueing together
 of the system was done in Python - a model still popular today, though some
 experiments are now using Python + Numba as an alternative model,
-like Xenon1T :cite:`remenska2017giving,rousselle2021fast`.
+such as for example the Xenon1T experiment :cite:`remenska2017giving,rousselle2021fast`.
 
 In the early 2000s, the use of Python HEP exploded, heavily driven by
-experiments like LHCb at CERN developing frameworks and user tools for
+experiments like LHCb developing frameworks and user tools for
 scripting. ROOT started providing Python bindings in 2004
 :cite:`generowicz2004reflection` that were not considered Pythonic
 :cite:`galli2020new`, and still required a complex multi-hour build of ROOT to
@@ -81,15 +81,15 @@ showing up.
 
 By the mid 2010's, a marked change had occurred. Many students were coming in
 with little or no C++ experience, but had existing knowledge of Python and the
-growing Python data science ecosystem, like NumPy and Pandas. Several analyses
+growing Python data science ecosystem, like NumPy and Pandas. Several HEP experiment analyses
 were performed driven by Python, with ROOT only being used for things that were not
-available in the Python ecosystem. Some of these were HEP specific: ROOT was
+available in the Python ecosystem. Some of these were HEP specific: ROOT is
 also a data format, so users needed to be able to read data from ROOT files.
 Others were less specific: HEP users have intense histogram requirements due to
 the data sizes, large portions of HEP data is "jagged" rather than rectangular,
 vectors manipulation was important (especially Lorenz Vectors, a four
 dimensional relativistic vector with a non-Euclidean metric), and data fitting
-was important, especially with complex models and excellent error estimation.
+was important, especially with complex models and accurate error estimation.
 
 
 .. figure:: shells-hep.pdf
@@ -114,11 +114,11 @@ specialized standalone C++ packages had bindings as well. Many of the initial
 authors were transitioning to a less-code centric role or leaving for industry,
 leaving projects like rootpy and iminuit without maintainers.
 
-Eduardo Rodrigues, a scientist working on the LHCb experiment at CERN for the
+Eduardo Rodrigues, a scientist working on the LHCb experiment for the
 University of Cincinnati, started working on a package called ``scikit-hep``
-that would provide a set to tools useful for physicists working on an analysis.
+that would provide a set to tools useful for physicists working on HEP analysis.
 The initial version of the ``scikit-hep`` package had a simple vector library,
-unit conversions, several useful statistical tools, and provenance recording
+HEP related units and conversions, several useful statistical tools, and provenance recording
 functionality,
 
 He also placed the GitHub repository into a GitHub organization of the same
@@ -127,13 +127,13 @@ project was ending, with the primary author moving on, and so several of the
 then-popular packages [#]_ that were included in the rootpy organization were
 happily transferred to Scikit-HEP. Several other existing HEP libraries,
 primarily interfacing to existing C++ simulation and tracking frameworks, also
-joined, like IMinuit, Probfit, PyJet, and NumPythia. Some of these libraries
+joined, like ``IMinuit``, ``Probfit``, ``PyJet``, and ``NumPythia``. Some of these libraries
 have been retired or replaced today, but were an important part of Scikit-HEP's
 initial growth.
 
 .. [#] The primary package rootpy was not transferred, but instead had a final
-   release and then died. It was an insperation for the new PyROOT bindings,
-   and influenced later Scikit-HEP packages like mplhep. The transferred
+   release and then died. It was an inspiration for the new PyROOT bindings,
+   and influenced later Scikit-HEP packages like ``mplhep``. The transferred
    libraries have since been replaced by integrated ROOT functionality. All
    three packages required ROOT, which is not on PyPI, so were not suited for a
    Python-centric ecosystem.
@@ -149,7 +149,7 @@ to read ROOT files and convert them to a Python friendly format like HDF5. Then
 the bulk of the analysis would use reproducible Python virtual environments or
 Conda environments.
 
-This changed when Jim Pivarski introduced Uproot (originally envisioned as
+This changed when Jim Pivarski introduced the ``Uproot`` package (originally envisioned as
 "µroot"). This was a pure-Python implementation of a ROOT file reader (and
 later writer) that could remove the initial conversion environment by simply
 pip installing a package. It also had a simple, Pythonic interface and produced
