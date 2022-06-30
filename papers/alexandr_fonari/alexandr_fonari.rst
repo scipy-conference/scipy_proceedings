@@ -49,19 +49,19 @@ As a result, such a complementary approach improves the performance of computati
 The Schrödinger Materials Science Suite [Schr]_ is a proprietary computational chemistry/physics platform that streamlines materials discovery workflows into a single graphical user interface (Materials Science Maestro).
 The interface is a single portal for structure building and enumeration, physics-based modeling and machine learning, visualization and analysis.
 Tying together the various modules are a wide variety of scientific packages, some of which are proprietary to Schrödinger, Inc., some of which are open-source and many of which blend the two to optimize capabilities and efficiency.
-For example, the main simulation engine for molecular quantum mechanics is Jaguar [Jaguar]_ proprietary code.
-Proprietary classical molecular dynamics code Desmond (distributed by Schrödinger, Inc.) [Desmond]_ is used to obtain physical properties of soft materials, surfaces and polymers.
-For periodic quantum mechanics, the main simulation engine is Quantum ESPRESSO (QE) [QE]_ open source code.
-One of the co-authors of this proceedings (A. Fonari) contributes to the QE code in order to make integration with the Materials suite more seamless and less error-prone.
-Also there is a push to use portable ``XML`` format as the input/output format for QE, this has been implemented in the Python open source qeschema code [qeschema]_.
+For example, the main simulation engine for molecular quantum mechanics is the Jaguar [Jaguar]_ proprietary code.
+The proprietary classical molecular dynamics code Desmond (distributed by Schrödinger, Inc.) [Desmond]_ is used to obtain physical properties of soft materials, surfaces and polymers.
+For periodic quantum mechanics, the main simulation engine is the open source code Quantum ESPRESSO (QE) [QE]_.
+One of the co-authors of this proceedings (A. Fonari) contributes to the QE code in order to make integration with the Materials Suite more seamless and less error-prone.
+As part of this integration, support for using the portable ``XML`` format for input and output in QE has been implemented in the open source Python package qeschema [qeschema]_.
 
 Figure :ref:`fig2` gives an overview of some of the various products that compose the Schrödinger Materials Science Suite.
-The various workflows are implemented mainly in Python (some of them described below), calling on proprietary or open-source code where appropriate, again, to improve the performance of the software and reduce overall maintenance.
+The various workflows are implemented mainly in Python (some of them described below), calling on proprietary or open-source code where appropriate, to improve the performance of the software and reduce overall maintenance.
 
 The materials discovery cycle can be run in a high-throughput manner, enumerating different structure modifications in a systematic fashion, such as doping ratio in a semiconductor or depositing different adsorbates.
 As we will detail herein, there are several open source packages that allow the user to generate a large number of structures, run calculations in high throughput manner and analyze the results.
-For example, pymatgen open source package [pymatgen]_ facilitates generation and analysis of periodic structures.
-It can generate inputs and read outputs of several packages, such as QE and also commercial VASP and Gaussian codes, etc.
+For example, the open source package pymatgen [pymatgen]_ facilitates generation and analysis of periodic structures.
+It can generate inputs for and read outputs of QE, the commercial codes VASP and Gaussian, and several other formats.
 To run and manage workflow jobs in a high-throughput manner, open source packages such as Custodian [pymatgen]_ and AiiDA [AiiDA]_ can be used.
 
 .. figure:: fig_product.png
@@ -75,14 +75,14 @@ To run and manage workflow jobs in a high-throughput manner, open source package
 Materials import and generation
 -------------------------------
 
-For reading and writing of material structures, several open source packages (*e.g.* OpenBabel [Obabel]_, RDKit [RDKit]_) have implemented functionality for working with several commonly used formats (e.g. CIF, PDB, mol, xyz).
-Experimental periodic structures of materials, mainly determined by single crystal X-ray diffraction, are distributed in CIF (Crystallographic Information File), PDB (Protein Data Bank) and lately, mmCIF formats [Formats]_.
+For reading and writing of material structures, several open source packages (e.g. OpenBabel [Obabel]_, RDKit [RDKit]_) have implemented functionality for working with several commonly used formats (e.g. CIF, PDB, mol, xyz).
+Periodic structures of materials, mainly coming from single crystal X-ray/neutron diffraction experiments, are distributed in CIF (Crystallographic Information File), PDB (Protein Data Bank) and lately mmCIF formats [Formats]_.
 Correctly reading experimental structures is of significant importance, since the rest of the materials discovery workflow depends on it.
 In addition to atom coordinates and periodic cell information, structural data also contains symmetry operations (listed explicitly or by the means of providing a space group) that can be used to decrease the number of computations required for a particular system by accounting for symmetry.
 This can be important, especially when scaling high-throughput calculations.
 From file, structure is read in a structure object through which atomic coordinates (as a NumPy array) and chemical information of the material can be accessed and updated.
 Structure object is similar to the one implemented in open source packages such as pymatgen [pymatgen]_ and ASE [ASE]_.
-All the structure manipulations during the workflows are done using structure object interface.
+All the structure manipulations during the workflows are done by using structure object interface (see structure deformation example below).
 Example of Structure object definition in pymatgen:
 
 .. code-block:: python
@@ -90,25 +90,22 @@ Example of Structure object definition in pymatgen:
    class Structure:
 
       def __init__(self, lattice, species, coords, ...):
-          """
-          Create a periodic structure.
-          ...
-          """
+          """Create a periodic structure."""
 
-One consideration of note is that PBD, CIF and mmCIF structure formats allow description of the positional disorder (for example, a solvent molecule without a stable position within the cell which can be described by multiple sets of coordinates).
-Another complication is that experimental data spans an interval of almost a century, one of the oldest crystal structures deposited in the Cambridge Structural Database (CSD) [CSD]_, dates to 1924 [Grph]_.
+One consideration of note is that PDB, CIF and mmCIF structure formats allow description of the positional disorder (for example, a solvent molecule without a stable position within the cell which can be described by multiple sets of coordinates).
+Another complication is that experimental data spans an interval of almost a century: one of the oldest crystal structures deposited in the Cambridge Structural Database (CSD) [CSD]_ dates to 1924 [Grph]_.
 These nuances  and others present nontrivial technical challenges for developers.
 Thus, it has been a continuous effort by Schrödinger, Inc. (at least 39 commits and several weeks of work went into this project) and others to correctly read and convert periodic structures in OpenBabel.
-By version 3.1.1 (the most recent at writing time), there are no known structures read incorrectly by OpenBabel that the authors are aware of.
-In general, non-periodic molecular formats are simpler to handle because they only contain atom coordinates and no cell or symmetry information.
-OpenBabel has Python bindings but due to the GPL license limitation, it is called as a subprocess from the Schrödinger suite.
+By version 3.1.1 (the most recent at writing time), the authors are not aware of any structures read incorrectly by OpenBabel.
+In general, non-periodic molecular formats are simpler to handle because they only contain atom coordinates but no cell or symmetry information.
+OpenBabel has Python bindings but due to the GPL license limitation, it is called as a subprocess from the Schrödinger Materials Suite.
 
 Another important consideration in structure generation is modeling of substitutional disorder in solid alloys and materials with point defects (intermetallics, semiconductors, oxides and their crystalline surfaces).
 In such cases, the unit cell and atomic sites of the crystal or surface slab are well defined while the chemical species occupying the site may vary.
 In order to simulate substitutional disorder, one must generate the ensemble of structures that includes all statistically significant atomic distributions in a given unit cell.
 This can be achieved by a brute force enumeration of all symmetrically unique atomic structures with a given number of vacancies, impurities or solute atoms.
-Open source enumlib library [Enumlib]_ implements algorithms for such a systematic enumeration of periodic structures.
-enumlib consists of several Fortran binaries and Python scripts that can be run as a subprocess (no Python bindings).
+The open source library enumlib [Enumlib]_ implements algorithms for such a systematic enumeration of periodic structures.
+The enumlib package consists of several Fortran binaries and Python scripts that can be run as a subprocess (no Python bindings).
 This allows the user to generate a large set of symmetrically nonequivalent materials with different compositions (e.g. doping or defect concentration).
 
 Recently, we applied this approach in simultaneous study of the activity and stability of Pt based core-shell type catalysts for the oxygen reduction reaction [TM]_.
@@ -131,14 +128,14 @@ In order to accommodate job dependencies in workflows, for each job, a parent jo
 
    Example of the job submission process. :label:`fig3`
 
-There could be several reasons for a job to fail and there are several restart and recovery mechanisms in place.
-The lowest level is the restart mechanism (in SLURM it is called *requeue*) which is performed by the queuing system itself.
+There could be several reasons for a job to fail. Depending on the reason of failure, there are several restart and recovery mechanisms in place.
+The lowest level is the restart mechanism (in SLURM it is called ``requeue``) which is performed by the queuing system itself.
 This is triggered when a node goes down.
 On the cloud, preemptible instances (nodes) can go offline at any moment.
 In addition, workflows implemented in the proprietary Schrödinger Materials Science Suite have built-in methods for handling various types of failure.
-For example, in case when the simulation is not converging to a requested energy accuracy, it is wasteful to blindly restart the calculation without changing some input parameters.
-However, in the case of full disk space failure, it is reasonable to try restart with hopes to get a node with more empty disk space.
-If a job fails (and can not be restarted), all its children (if any) will not start, thus saving queuing and computational time.
+For example, if the simulation is not converging to a requested energy accuracy, it is wasteful to blindly restart the calculation without changing some input parameters.
+However, in the case of a failure due to full disk space, it is reasonable to try restart with hopes to get a node with more empty disk space.
+If a job fails (and cannot be restarted), all its children (if any) will not start, thus saving queuing and computational time.
 
 Having developed robust systems for running calculations, job queuing and troubleshooting (autonomously, when applicable), the developed workflows have allowed us and our customers to perform massive screenings of materials and their properties.
 For example, we reported a massive screening of 250,000 charge-conducting organic materials, totaling approximately 3,619,000 DFT SCF (self-consistent field) single-molecule calculations using Jaguar that took 457,265 CPU hours (~52 years) [CScreen]_.
@@ -155,9 +152,10 @@ We utilized the aforementioned deposition workflow in the study of organic light
 Both vacuum and solution deposition processes have been used to prepare these films, primarily as amorphous thin film active layers lacking long-range order.
 Each of these deposition techniques introduces changes to the film structure and consequently, different charge-transfer and luminescent properties [Deposition]_.
 
-As can be seen from above a workflow is usually some sort of structure modification through the structure object with a subsequent call to a backend code and analysis of its output (input for the next iteration depends on the output of the previous iteration is some workflows) after it successful (or not) exit.
+As can be seen from above, a workflow is usually some sort of structure modification through the structure object with a subsequent call to a backend code and analysis of its output if it succeeds.
+Input for the next iteration depends on the output of the previous iteration in some workflows.
 Due to the large chemical and manipulation space of the materials, sometimes it very tricky to keep code for all workflows follow the same code logic.
-For every workflow and/or functionality, some sort of peer reviewed material (publication, conference presentation) is created where implemented algorithms are described to facilitate reproducibility.
+For every workflow and/or functionality in the Materials Science Suite, some sort of peer reviewed material (publication, conference presentation) is created where implemented algorithms are described to facilitate reproducibility.
 
 Data fitting algorithms and use cases
 -------------------------------------
@@ -172,7 +170,7 @@ Recently we implemented convex analysis of the stress strain curve (as described
 The stress strain curve is obtained from a series of MD simulations on deformed cells (cell deformations are defined by strain type and deformation step).
 The pressure tensor of a deformed cell is related to stress.
 This analysis allowed prediction of elongation at yield for high density polyethylene polymer.
-Figure :ref:`fig4` shows obtained calculated yield of 10% *vs.* experimental value within 9-18% range [Convex]_.
+Figure :ref:`fig4` shows obtained calculated yield of 10% vs. experimental value within 9-18% range [Convex]_.
 
 .. figure:: fig_stress_strain.png
    :align: center
@@ -187,6 +185,10 @@ An example of deformation applied to a structure in pymatgen:
 
 .. code-block:: python
 
+   from pymatgen.analysis.elasticity.strain import Deformation
+   from pymatgen.core.lattice import Lattice
+   from pymatgen.core.structure import Structure
+
    deform = Deformation([
       [1.0, 0.02, 0.02],
       [0.0, 1.0, 0.0],
@@ -197,6 +199,7 @@ An example of deformation applied to a structure in pymatgen:
       [1.92, 3.326, 0.00],
       [0.00, -2.22, 3.14],
    ])
+
    st = Structure(
       latt,
       ["Si", "Si"],
@@ -206,13 +209,13 @@ An example of deformation applied to a structure in pymatgen:
 
 This is also an example of loosely coupled (embarrassingly parallel) jobs.
 In particular, calculations of the deformed cells only depend on the bulk calculation and do not depend on each other.
-Thus, all the deformation jobs can be submitted in parallel, greatly facilitating high-throughput runs.
+Thus, all the deformation jobs can be submitted in parallel, facilitating high-throughput runs.
 
-Experimental structure refinement from powder diffraction is another example where more complex optimization is used.
+Structure refinement from powder diffraction experiment is another example where more complex optimization is used.
 Powder diffraction is a widely used method in drug discovery to assess purity of the material and discover known or unknown crystal polymorphs [Powder]_.
 In particular, there is interest in fitting of the experimental powder diffraction intensity peaks to the indexed peaks (Pawley refinement) [Jansen]_.
-Here we employed the open source ``lmfit`` package [Lmfit]_ to perform a minimization of the multivariable Voigt-like function that represents the entire diffraction spectrum.
-This allows the user to refine (optimize) unit cell parameters coming from the indexing data as a result goodness of fit (:math:`R`-factor) between experimental and simulated spectrum is reported.
+Here we employed the open source lmfit package [Lmfit]_ to perform a minimization of the multivariable Voigt-like function that represents the entire diffraction spectrum.
+This allows the user to refine (optimize) unit cell parameters coming from the indexing data and as the result, goodness of fit (:math:`R`-factor) between experimental and simulated spectrum is minimized.
 
 Machine learning techniques
 ---------------------------
@@ -222,8 +225,10 @@ There are several components required to perform machine learning assisted mater
 In order to train a model, benchmark data from simulation and/or experimental data is required.
 Besides benchmark data, computation of the relevant descriptors is required (see below).
 Finally, a model based on benchmark data and descriptors is generated that allows prediction of properties for novel materials.
-There are several techniques to generate the model, spawning from linear or non-linear fitting to neural networks, open source DeepChem [DeepChem]_ and AutoQSAR [AutoQSAR]_ from the Schrödinger suite.
+There are several techniques to generate the model, such as linear or non-linear fitting to neural networks.
+Tools include the open source DeepChem [DeepChem]_ and AutoQSAR [AutoQSAR]_ from the Schrödinger suite.
 Depending on the type of materials, benchmark data can be obtained using different codes available in the Schrödinger suite:
+
 - small molecules and finite systems -  Jaguar
 - periodic systems - Quantum ESPRESSO
 - larger polymeric and similar systems - Desmond
@@ -233,13 +238,13 @@ For example, for crystalline periodic systems, we have implemented several sets 
 Generation of these descriptors again uses a mix of open source and Schrödinger proprietary tools.
 Specifically:
 
-- elemental features such as atomic weight, number of valence electrons in *s*, *p* and *d*-shells, electronegativity
+- elemental features such as atomic weight, number of valence electrons in *s*, *p* and *d*-shells, and electronegativity
 - structural features such as density, volume per atom, and packing fraction descriptors implemented in the open source matminer package [Matminer]_
-- intercalation descriptors such as cation and anion counts, crystal packing fraction, average neighbor ionicity [Sendek]_ implemented in the Schrödinger suite
+- intercalation descriptors such as cation and anion counts, crystal packing fraction, and average neighbor ionicity [Sendek]_ implemented in the Schrödinger suite
 - three-dimensional smooth overlap of atomic positions (SOAP) descriptors implemented in the open source DScribe package [DScribe]_.
 
 We are currently training models that use these descriptors to predict properties, such as bulk modulus, of a set of Li-containing battery related compounds [Chandrasekaran]_.
-Several methods to generate model will be compared, such as kernel regression methods (as implemented in the open source scikit-learn code [SkLearn]_) and AutoQSAR.
+Several models will be compared, such as kernel regression methods (as implemented in the open source scikit-learn code [SkLearn]_) and AutoQSAR.
 
 For isolated small molecules and extended non-periodic systems, RDKit can be used to generate a large number of atomic and molecular descriptors.
 A lot of effort has been devoted to ensure that RDKit can be used on a wide variety of materials that are supported by the Schrödinger suite.
@@ -295,11 +300,11 @@ We hope that this report will inspire other scientific companies to give back to
 
 References
 ----------
-.. [Schr] Schrödinger Release (2021). Schrödinger Release 2021-2: Materials Science Suite. New York, NY: Schrödinger, LLC. http://www.schrodinger.com/materials/
+.. [Schr] Schrödinger Release (2021). Schrödinger Release 2021-2: Materials Science Suite. New York, NY: Schrödinger, LLC. https://www.schrodinger.com/platform/materials-science
 .. [pymatgen] S. P. Ong, et al. *Python Materials Genomics (pymatgen): A Robust, Open-Source Python Library for Materials Analysis*, Computational Materials Science, 68: 314–319 (2013). https://pymatgen.org/
 .. [AiiDA] S. P. Huber et al., *AiiDA 1.0, a scalable computational infrastructure for automated reproducible workflows and data provenance*, Scientific Data 7: 300 (2020). https://www.aiida.net/
 .. [Obabel] N. M. O'Boyle, et al. *Open Babel: An open chemical toolbox*, Journal of cheminformatics 3.1 (2011): 1-14. https://openbabel.org/
-.. [RDKit] G. Landrum. *RDKit: A software suite for cheminformatics, computational chemistry, and predictive modeling*, (2013). http://www.rdkit.org/
+.. [RDKit] G. Landrum. *RDKit: A software suite for cheminformatics, computational chemistry, and predictive modeling*, (2013). https://www.rdkit.org/
 .. [Formats] J. D. Westbrook, and P. MD Fitzgerald. *The PDB format, mmCIF formats, and other data formats*, Structural bioinformatics 2: 271-291 (2003).
 .. [ASE] A. H. Larsen et al. *The atomic simulation environment—a Python library for working with atoms.* J. Phys. Cond. Matt. 29 (27): 273002 (2017). https://wiki.fysik.dtu.dk/ase/
 .. [CSD] C. R. Groom, I. J. Bruno, M. P. Lightfoot and S. C. Ward. *The Cambridge Structural Database*, Acta Cryst. B72: 171-179 (2016).
