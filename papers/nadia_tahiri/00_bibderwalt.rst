@@ -330,7 +330,7 @@ References
 .. [CRADD22] Cascella, M., Rajnik, M., Aleem, A., Dulebohn, S. C., & Di Napoli, R. (2022). Features, evaluation, and treatment of coronavirus (COVID-19). Statpearls [internet]. 
 .. [E04] Edgar, R. C. (2004). MUSCLE: a multiple sequence alignment method with reduced time and space complexity. BMC bioinformatics, 5(1), 1-19. DOI: https://doi.org/10.1186/1471-2105-5-113 
 .. [F93] Felsenstein, J. (1993). PHYLIP (phylogeny inference package), version 3.5 c. Joseph Felsenstein.
-.. [KLLT22] Koshkarov, A., Li, W., Luu, M., & Tahiri, N. (2022). aPhylogeo (1.0). Zenodo. https://doi.org/10.5281/zenodo.6773603
+.. [KLLT22] Koshkarov, A., Li, W., Luu, M., & Tahiri, N. (2022). aPhylogeo (1.0). Zenodo. DOI: https://doi.org/10.5281/zenodo.6773603
 .. [KM02] Knowles, L. L., & Maddison, W. P. (2002). Statistical phylogeography. Molecular Ecology, 11(12), 2623-2635. DOI: https://doi.org/10.1046/j.1365-294x.2002.01637.x  
 .. [LFZK06] Lin, K. U. N., Fong, D. Y. T., Zhu, B., & Karlberg, J. (2006). Environmental factors on the SARS epidemic: air temperature, passage of time and multiplicative effect of hospital infection. Epidemiology & Infection, 134(2), 223-230. DOI: https://doi.org/10.1017/S0950268805005054 
 .. [N92] Nagylaki, T. (1992). Rate of evolution of a quantitative character. Proceedings of the National Academy of Sciences, 89(17), 8121-8124. DOI: https://doi.org/10.1073/pnas.89.17.8121  
