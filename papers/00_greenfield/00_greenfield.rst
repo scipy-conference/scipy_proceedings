@@ -6,7 +6,7 @@
 :author: Edward Slavich
 :email: edward.j.slavich@gmail.com
 :institution: Space Telescope Science Insitute
-
+:equal-contributor:
 
 :author: William Jamieson
 :email: wjamieson@stsci.edu
@@ -185,10 +185,6 @@ related to time and unit standards, both of obvious generality, but the
 implementation must be based on some standards,
 and currently the astropy-based ones are as good or better than any.
 
-Added documentation on how ASDF library internals work
-......................................................
-
-These appear in the readthedocs under the heading "Developer Overview".
 
 Changes for 1.6
 ...............
@@ -304,6 +300,11 @@ This allows the library that converts the YAML to Python objects
 to expose a summary of the contents of the object by supplying an
 optional "dunder" method that the info mechanism can take advantage
 of.
+
+Added documentation on how ASDF library internals work
+......................................................
+
+These appear in the readthedocs under the heading "Developer Overview".
 
 Plugin API for block compressors (2.8.0)
 ........................................
@@ -592,7 +593,7 @@ IDL support
 While Python is rapidly surpassing the use of IDL in astronomy,
 there is still much IDL code being used, and many of those still
 using IDL are in more senior and thus influential positions (they
-aren't quite dead yet https://www.youtube.com/watch?v=QcbR1J_4ICg). 
+aren't quite dead yet). 
 So making ASDF data at least readable to
 IDL is a useful goal. 
 
