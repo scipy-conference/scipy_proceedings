@@ -176,7 +176,7 @@ Figure :ref:`fig4` shows obtained calculated yield of 10% vs. experimental value
 
 .. figure:: fig_stress_strain.png
    :align: center
-   :scale: 70%
+   :scale: 80%
    :figclass: w
 
    Left: The uniaxial stress/strain curve of a polymer calculated using Desmond through the stress strain workflow. The dark grey band indicates an inflection that marks the yield point. Right: Constant strain simulation with convex analysis indicates elongation at yield. The red curve shows simulated stress versus strain. The blue curve shows convex analysis. :label:`fig4`
@@ -259,7 +259,7 @@ In the framework of AL, the predicted value with associated uncertainty is consi
 .. figure:: fig_al.png
    :align: center
    :figclass: w
-   :scale: 60%
+   :scale: 40%
 
    Active learning workflow for the design and discovery of novel optoelectronics molecules. :label:`figal`
 
