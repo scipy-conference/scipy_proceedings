@@ -402,7 +402,7 @@ This visualisation allows user to asses the stability of a small region in the i
 e.g. an astronomical point source during the MCMC sampling process. Due to the correlation with
 neighbouring pixels the actual value of a pixel might vary in the sampling process, which appears
 as "dips" in the trace of the pixel of interested and anti-correlated "peaks" in the one or mutiple
-of the surrounding pixels. In the this example a stable state of the pixels of interest
+of the surrounding pixels. In the example a stable state of the pixels of interest
 is reached after approximately 1000 iterations. This suggests the number of burn-in iterations, which
 were defined beforehand, should be increased.
 
