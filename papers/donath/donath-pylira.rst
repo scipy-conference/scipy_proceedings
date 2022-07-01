@@ -210,18 +210,21 @@ background component :math:`b_i`:
    \lambda_i = \sum_k \left( e_i \cdot (x_i + b_i) \right) p_{i - k}
 
 The background :math:`b_i` can be more generally understood
-as a "baseline" image and thus e.g. include known structures,
+as a "baseline" image and thus include known structures,
 which are not of interested for the deconvolution process.
+E.g., a bright point source to model the core of an AGN
+while studying its jets.
+
 
 Second the authors proposed to extend the Poisson log-likelihood
 function (Equation :ref:`cash`) by a log-prior term that controls the
 smoothness of the reconstructed image on multiple spatial scales.
 For this the image :math:`x_i` is transformed into a multi-scale representation:
-starting from the full resolution the image is divided into groups
-of 2x2 pixels :math:`Q_k`. Each of the groups of 2x2 pixels is
+starting from the full resolution the image is grouped into
+2x2 pixels :math:`Q_k`. Each of the groups of 2x2 pixels is
 then divided by their total sum. This results in an image containing
 the "split proportions" with respect to the image down-sized
-by a factor of two. The process is continued to further reduce the
+by a factor of two. This process is continued to further reduce the
 resolution of the image until only one pixel, containing the total
 sum of the full-resolution image is left. This multi-scale
 decomposition is illustrated in Fig. :ref:`ms-levels`.
@@ -234,18 +237,19 @@ a Dirichlet distribution is introduced as a prior:
 
     \phi_k \propto \mathrm{Dirichlet}(\alpha_k, \alpha_k, \alpha_k, \alpha_k)
 
-And multiplied across all 2x2 groups and resolution levels :math:`k`.
-For each resolution level a parameter :math:`\alpha_k` is introduced,
-which represents the number of "prior counts" added to this resolution level,
-equally to each pixel, which effectively results in a smoothing
+and multiplied across all 2x2 groups and resolution levels :math:`k`.
+For each resolution level a smoothing parameter :math:`\alpha_k` is introduced.
+These hyperparametes can be interpreted as having am information
+content equivalent of adding :math:`\alpha_k` "hallucinated" counts
+in each grouping. This effectively results in a smoothing
 of the image at the given resolution level. The distribution
-of `\alpha` values at each resolution level is described
+of `\alpha` values at each resolution level is the further described
 by a hyper-prior distribution:
 
 .. math::
    :label: hyperprior
 
-    p(\alpha_k) = \exp{-\delta \alpha^3 / 3}
+    p(\alpha_k) = \exp{(-\delta \alpha^3 / 3)}
 
 Resulting in a fully hierarchical Bayesian model. A more complete and
 detailed description of the prior definition is given in :cite:`Esch2004`.
@@ -260,14 +264,13 @@ detailed description of the prior definition is given in :cite:`Esch2004`.
    :math:`Q_N`. The sub-pixels in each quadrant are labelled :math:`\Lambda_{ij}`.
    :label:`ms-levels`.
 
-The problem is then solved by using a "hybrid" Gibbs MCMC sampling approach. For
-each iteration of sampling an image :math:`x_i`, the :math:`\alpha_k` parameters are optimized
-using a Newton method and thus "marginalized". After a "burn-in" phase the sampling
+The problem is then solved by using a Gibbs MCMC sampling approach.
+After a "burn-in" phase the sampling
 process typically reaches convergence and starts sampling from the
-posterior distribution. The reconstructed image is then computed from the mean of the
-posterior samples. As for each pixels a full distribution of its values is available,
-the information can also be used to compute and associated error of the reconstructed
-value. This is another main advantage over RL or MAP algorithms.
+posterior distribution. The reconstructed image is then computed as the mean of the
+posterior samples. As for each pixel a full distribution of its values is available,
+the information can also be used to compute the associated error of the reconstructed
+value. This is another main advantage over RL or Maxium A-Postori (MAP) algorithms.
 
 
 The Pylira Package
