@@ -165,7 +165,7 @@ The per-class evaluation metrics are shown in :ref:`speech-music`.
 2. Audio type classifier to determine speech versus music versus bird sounds:
 Trained Support Vector Machine (SVM) classifier for classifying audio into three possible classes -
 music, speech, birds. This classifier was trained using Mel Frequency Cepstral Coefficients (MFCC), spectral features, and
-chroma features. The per-class evaluation metrics are shown in :ref:`speech-music-birds`.
+chroma features. The per-class evaluation metrics are shown in Table :ref:`speech-music-birds`.
 
 .. table:: Per-class evaluation metrics for audio type (speech vs music vs bird sound) classification pre-trained model. :label:`speech-music-birds`
 
