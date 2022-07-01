@@ -18,7 +18,7 @@ pyAudioProcessing: Audio Processing, Feature Extraction, and Machine Learning Mo
     research in the audio and speech processing domain. On the contrary, Python remains
     the language of choice for a vast majority of machine learning research and
     functionality. This library contains features built in Python that were originally
-    published in MATLAB as a part of the original research. PyAudioProcessing allows the user to
+    published in MATLAB. PyAudioProcessing allows the user to
     compute various features from audio files including Gammatone Frequency Cepstral
     Coefficients (GFCC), Mel Frequency Cepstral Coefficients (MFCC), spectral features,
     chroma features, and others such as beat-based and cepstrum-based features from audio.
@@ -66,7 +66,7 @@ them to a classification backend.
 
 PyAudioProcessing includes the capability of computing spectrograms, but
 focusses most functionalities around the latter for building audio models. This tool contains implementations
-of various widely used audio feature extraction techniques, and integrates with popular scikit-learn classifiers.
+of various widely used audio feature extraction techniques, and integrates with popular scikit-learn classifiers including support vector machine (SVM), SVM radial basis function kernel (RBF), random forest, logistic regression, k-nearest neighbors (k-NN), gradient boosting, and extra trees.
 Audio data can be cleaned, trained, tested, and classified using pyAudioProcessing :cite:`pAP`.
 
 Some other useful libraries for the domain of audio processing include librosa
@@ -248,10 +248,10 @@ followed by computing mean and standard deviation of all the signal segments.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
 
-The Mel scale relates perceived frequency, or pitch, of a pure tone to its actual measured
+The mel scale relates perceived frequency, or pitch, of a pure tone to its actual measured
 frequency. Humans are much better at discerning small changes in pitch at low frequencies
 compared to high frequencies. Incorporating this scale makes our features match more
-closely what humans hear. The Mel-frequency scale is approximately linear for frequencies
+closely what humans hear. The mel-frequency scale is approximately linear for frequencies
 below 1 kHz and logarithmic for frequencies above 1 kHz, as shown in Figure :ref:`S1Fig`.
 This is motivated by the fact that the human auditory system becomes less frequency-selective as
 frequency increases above 1 kHz.
@@ -264,10 +264,10 @@ frequency increases above 1 kHz.
 
 The signal is divided into segments and a spectrum is computed.
 Passing a spectrum through the Mel filter bank, followed by taking the log magnitude and a
-discrete cosine transform (DCT) produces the Mel cepstrum. DCT extracts the signal's main
+discrete cosine transform (DCT) produces the mel cepstrum. DCT extracts the signal's main
 information and peaks. For this very property, DCT is also widely used in applications such as
 JPEG and MPEG compressions. The peaks after DCT contain the gist of the audio information.
-Typically, the first 13-20 coefficients extracted from the Mel cepstrum are called the MFCCs.
+Typically, the first 13-20 coefficients extracted from the mel cepstrum are called the MFCCs.
 These hold very useful information about audio and are often used to train machine learning models.
 The process of developing these coefficients can be seen in the form of an illustration in Figure :ref:`S1Fig`.
 MFCC for a sample speech audio can be seen in Figure :ref:`mfccspeech`.
@@ -284,9 +284,9 @@ MFCC for a sample speech audio can be seen in Figure :ref:`mfccspeech`.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
 
-Another filter inspired by human hearing is the Gammatone filter bank. The
-gammatone filterbank shape looks similar to the Mel filter bank, expect the peaks
-are smoother than the triangular shape of the mel filters. Gammatone filters
+Another filter inspired by human hearing is the gammatone filter bank. The
+gammatone filterbank shape looks similar to the mel filter bank, expect the peaks
+are smoother than the triangular shape of the mel filters. gammatone filters
 are conceived to be a good approximation to the human auditory filters and are used as a
 front-end simulation of the cochlea. Since a human ear is the perfect receiver and distinguisher
 of speakers in the presence of noise or no noise, construction of gammatone filters that mimic
