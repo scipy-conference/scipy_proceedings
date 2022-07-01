@@ -295,7 +295,14 @@ functions from this library in GeoCAT-examples significantly reduces the
 LOC requirements for most of the visualization examples to comparable
 numbers to those of NCL's. Figure :ref:`fig5viz` shows Taylor diagram
 and curly vector examples that have been created with the help of
-GeoCAT-viz.
+GeoCAT-viz. To exemplify how GeoCAT-viz helps keep the LOC comparable
+to NCL, one of the Taylor diagrams (i.e. Taylor_6) took 80 LOC in NCL,
+and its Python implementation in GeoCAT-examples takes 72 LOC. If many
+of the Matplotlib functions (e.g. figure and axes initialization,
+adjustment of several axes parameters, call to plotting functions for
+Taylor diagram, management of grids, addition of titles, contours, etc.)
+used in this example weren't wrapped up in GeoCAT-viz :cite:`geocatvizrepo`,
+the same visualization would easily end up in around two hundred LOC.
 
 .. figure:: figures/fig5_viz.png
    :scale: 28%
