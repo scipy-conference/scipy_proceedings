@@ -6,8 +6,8 @@
   <ul>
       {{for entry in slides}}
         <li>{{html_quote(entry['title']) | html}},
-        <em>{{html_quote(', and '.join(entry['authors'])) | html}}
-            {{if entry.get('doi')}} 
+        <em>{{html_quote(', and '.join(i['name'] for i in entry['authors'])) | html}}
+            {{if entry.get('doi')}}
             <p><a href="https://doi.org/{{html_quote(entry['doi']) | html}}">doi.org/{{html_quote(entry['doi']) | html}}</a></p>{{endif}}
             </em>
         </li>
@@ -25,8 +25,8 @@
   <ul>
       {{for entry in posters}}
         <li>{{html_quote(entry['title']) | html}},
-        <em>{{html_quote(', and '.join(entry['authors'])) | html}}
-            {{if entry.get('doi')}} 
+        <em>{{html_quote(', and '.join(i['name'] for i in entry['authors'])) | html}}
+            {{if entry.get('doi')}}
             <p><a href="https://doi.org/{{html_quote(entry['doi']) | html}}">doi.org/{{html_quote(entry['doi']) | html}}</a></p>{{endif}}
             </em>
         </li>
@@ -44,8 +44,8 @@
   <ul>
       {{for entry in tools}}
         <li>{{html_quote(entry['title']) | html}},
-        <em>{{html_quote(', and'.join(entry['authors'])) | html}}
-            {{if entry.get('doi')}} 
+        <em>{{html_quote(', and '.join(i['name'] for i in entry['authors'])) | html}}
+            {{if entry.get('doi')}}
             <p><a href="https://doi.org/{{html_quote(entry['doi']) | html}}">doi.org/{{html_quote(entry['doi']) | html}}</a></p>{{endif}}
             </em>
         </li>
@@ -63,8 +63,8 @@
   <ul>
       {{for entry in lightning}}
         <li>{{html_quote(entry['title']) | html}},
-        <em>{{html_quote(', and '.join(entry['authors'])) | html}}
-            {{if entry.get('doi')}} 
+        <em>{{html_quote(', and '.join(i['name'] for i in entry['authors'])) | html}}
+            {{if entry.get('doi')}}
             <p><a href="https://doi.org/{{html_quote(entry['doi']) | html}}">doi.org/{{html_quote(entry['doi']) | html}}</a></p>{{endif}}
             </em>
         </li>
