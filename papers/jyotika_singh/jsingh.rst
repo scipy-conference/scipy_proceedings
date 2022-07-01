@@ -185,7 +185,7 @@ chroma features. The per-class evaluation metrics are shown in :ref:`speech-musi
 Trained on SVM classifier using Gammatone Frequency Cepstral Coefficients (GFCC),
 Mel Frequency Cepstral Coefficients (MFCC), spectral features, and chroma features to classify
 music into 10 genre classes - blues, classical, country, disco, hiphop,
-jazz, metal, pop, reggae, rock. The per-class evaluation metrics are shown in :ref:`music-class-genre`.
+jazz, metal, pop, reggae, rock. The per-class evaluation metrics are shown in Table :ref:`music-class-genre`.
 
 .. table:: Per-class evaluation metrics for music genre classification pre-trained model. :label:`music-class-genre`
     :class: w
