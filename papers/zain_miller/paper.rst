@@ -27,6 +27,10 @@ Low Level Feature Extraction for Cilia Segmentation
 .. role:: raw-latex(raw)
    :format: latex
 
+.. |--| unicode:: U+2013   .. en dash
+.. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
+   :trim:
+
 .. class:: abstract
 
    Cilia are organelles found on the surface of some cells in the human body that sweep rhythmically to transport substances. Dysfunction of ciliary motion is often indicative of diseases known as ciliopathies, which disrupt the functionality of macroscopic structures within the lungs, kidneys and other organs :cite:`li2018composite`. Phenotyping ciliary motion is an essential step towards understanding ciliopathies; however, this is generally an expert-intensive process :cite:`quinn2015automated`. A means of automatically parsing recordings of cilia to determine useful information would greatly reduce the amount of expert intervention required. This would not only improve overall throughput, but also mitigate human error, and greatly improve the accessibility of cilia-based insights. Such automation is difficult to achieve due to the noisy, partially occluded and potentially out-of-phase imagery used to represent cilia, as well as the fact that cilia occupy a minority of any given image. Segmentation of cilia mitigates these issues, and is thus a critical step in enabling a powerful pipeline. However, cilia are notoriously difficult to properly segment in most imagery, imposing a bottleneck on the pipeline. In this paper, we use and evaluate alternative methods of feature extraction for cilia imagery to build a potent segmentation model. Current experiments show up to a 10\% improvement over base segmentation models using a novel combination of feature extractors.
@@ -44,13 +48,13 @@ body that sweep rhythmically to transport substances
 often indicates diseases known as ciliopathies, which on a larger scale
 disrupt the functionality of structures within the lungs, kidneys and
 other organs. Phenotyping ciliary motion is an essential step towards
-understanding ciliopathies; however, this is generally an
+understanding ciliopathies. However, this is generally an
 expert-intensive process
 :cite:`li2018composite, quinn2015automated`. A means of
 automatically parsing recordings of cilia to determine useful
 information would greatly reduce the amount of expert intervention
 required, thus increasing throughput while alleviating the potential for
-human error. Hence, Zain et. al. (2020) discuss the construction of a
+human error. Hence, Zain et al. (2020) discuss the construction of a
 generative pipeline to model and analyze ciliary motion, a prevalent
 field of investigation in the Quinn Research Group at the University of
 Georgia :cite:`cilia`.
@@ -85,7 +89,7 @@ reliable access to such clinicians in the first place, such as many
 developing nations and rural populations. Not only can automated
 segmentation mitigate these barriers to entry, but it can also simplify
 existing treatment and analysis infrastructure. In particular, it has
-the potential to reduce magnitude of work required by an expert
+the potential to reduce the magnitude of work required by an expert
 clinician, thereby decreasing costs and increasing clinician throughput
 :cite:`quinn2015automated, cilia`. Furthermore, manual
 segmentation imparts clinician-specific bias which reduces the
@@ -106,7 +110,7 @@ Related Works
 =============
 
 Lu et. al. (2018) utilized a Dense Net segmentation model as an upstream
-to a CNN based Long Short-Term Memory (LSTM) time-series model for
+to a CNN-based Long Short-Term Memory (LSTM) time-series model for
 classifying cilia based on spatiotemporal patterns
 :cite:`charles`. While the model reports good classification
 accuracy and a high F-1 score, the underlying dataset only contains 75
@@ -119,7 +123,7 @@ they first augment the underlying images with the calculated optical
 flow. In this way, their segmentation strategy employs both spatial
 *and* temporal information. To compare against
 :cite:`charles`, the authors evaluated their segmentation
-model in the same way — as an upstream to an CNN/LSTM classification
+model in the same way  |---|  as an upstream to an CNN/LSTM classification
 network. Their model improved the classification accuracy two points
 above that of Charles et. al. (2018). Their reported
 intersection-over-union (IoU) score is :math:`33.06\%` and marks the
@@ -140,8 +144,8 @@ follows the standard strategy of most convolutional neural networks
 activation functions and max pooling layers. While max pooling
 downsamples the images, the convolutions double the number of channels.
 Upon expansion, up-convolutions are applied to up-sample the image while
-reducing the number of channels, and at each stage, the up-sampled image
-is concatenated with the image of corresponding size (cropped to account
+reducing the number of channels. At each stage, the network concatenates the up-sampled image
+with the image of corresponding size (cropped to account
 for border pixels) from a layer in the contracting path. A final layer
 uses pixel-wise (:math:`1\times1`) convolutions to map each pixel to a
 corresponding class, building a segmentation. Before training, data is
@@ -154,7 +158,7 @@ experiments with cilia data, the U-Net architecture has had low
 segmentation accuracy :cite:`charles`. Difficulties modeling
 cilia with CNN-based architectures include their fine high-variance
 structure, spatial sparsity, color homogeneity (with respect to the
-background and ambient cells) as well as inconsistent shape and
+background and ambient cells), as well as inconsistent shape and
 distribution across samples. Hence, we seek to test various enhancements
 to the pure U-Net model for cilia segmentation.
 
@@ -164,7 +168,7 @@ Methodology
 To construct the model, we start with a backbone U-Net model due to its
 well-established performance in the biomedical image analysis domain.
 The focus of this paper is on extracting and highlighting the underlying
-features in the image through various means, therefore optimization of
+features in the image through various means. Therefore, optimization of
 the U-Net backbone is not a major consideration of this project. Indeed,
 we believe the relative performance of the various modified U-Nets
 sufficiently communicate the efficacy of the underlying methods. Each
@@ -225,14 +229,14 @@ matrix :math:`X` with rows representing samples and columns for each
 feature, a sphering (or whitening) transformation :math:`W` is one which
 decorrelates :math:`X`. That is, the covariance of :math:`WX` must be
 equal to the identity matrix. By the spectral theorem, the symmetric
-matrix :math:`XX^T`—the covariance matrix corresponding to the data,
-assuming the data is centered—can be decomposed into :math:`PDP^T`,
+matrix :math:`XX^T` |---| the covariance matrix corresponding to the data,
+assuming the data is centered |---| can be decomposed into :math:`PDP^T`,
 where :math:`P` is an orthogonal matrix of eigenvectors and :math:`D` a
 diagonal matrix of corresponding eigenvalues of the covariance matrix.
 ZCA uses the sphering matrix :math:`W=PD^{-1/2}P^T` and can be thought
 of as a transformation into the eigenspace of its covariance
-matrix—projection onto the data’s principal axes, as the minimal
-projection residual is onto the axes with maximal variance—followed by
+matrix |---| projection onto the data’s principal axes, as the minimal
+projection residual is onto the axes with maximal variance |---| followed by
 normalization of variance along every axis and rotation back into the
 original image space. In order to reduce the amount of two-way
 correlation in images, Krizhevsky applies ZCA whitening to preprocess
@@ -247,9 +251,8 @@ normal ZCA is calculated by selecting a whitening matrix
 :math:`W=PD^{-\frac{1}{2}}P^T`, we instead choose
 :math:`W=P\sqrt{(D+\epsilon I)^{-1}}P^T` where :math:`\epsilon` is a
 hyperparameter which attenuates eigenvalue sensitivity. This new
-“whitnening” is actually not a proper whitening since it doesn’t
-guarantee an identity covariance matrix (this can be easily verified by
-the reader) however it serves a similar purpose and actually lends some
+"whitening" is actually not a proper whitening since it does not
+guarantee an identity covariance matrix. It does however serve a similar purpose and actually lends some
 benefits.
 
 Most importantly, it is indeed a generalization of canonical ZCA. That
@@ -295,7 +298,7 @@ constraint, usually via the loss function, that encourages sparsity
 (i.e., less activation) in hidden layers of the network. Xu et. al. use
 the SAE architecture for breast cancer nuclear detection and show that
 the architecture preserves essential, high-level, and often nonlinear
-aspects of the initial imagery—even when unlabelled—such as shape and
+aspects of the initial imagery |---| even when unlabelled |---| such as shape and
 color :cite:`sae`. We adapt the first two terms of their
 loss function to enforce sparsity:
 
@@ -329,7 +332,7 @@ A significant amount of freedom can be found in potential architectural
 choices for SAE. We focus on low-medium complexity models for both
 efficiency, and to minimize overfitting and artifacts as consequence of
 degenerate autoencoding. One important danger to be aware of is that
-SAEs—and indeed, *all* AEs—are at risk of a degenerate solution wherein
+SAEs |---| and indeed, *all* AEs |---| are at risk of a degenerate solution wherein
 a sufficiently complex decoder essentially learns to become a hashmap of
 arbitrary (and potentially random) encodings.
 
@@ -389,10 +392,9 @@ Figures :ref:`fig:basetrain`, :ref:`fig:zcatrain`,
 on validation data from instances of the four model types. While the
 former three show results near the end of training (about 200-250
 epochs), figure :ref:`fig:comptrain` was taken only 10 epochs into
-the training process. We note that this model—the composite
-pipeline—produced usable artifacts in mere minutes of training, whereas
-other models did not produce similar results until about 10-40 epochs
-in.
+the training process. We note that this model, the composite
+pipeline, produced usable artifacts in mere minutes of training, whereas
+other models did not produce similar results until after about 10-40 epochs.
 
 .. figure:: unet_only.png
    :scale: 35%
@@ -513,11 +515,11 @@ Conclusions
 In this paper, we discussed the current shortcomings of automated,
 deep-learning based segmentation models for cilia, specifically on the
 data provided to the Quinn Research Group, and provided two additional
-methods—Zero-Phase PCA Sphering (ZCA) and Sparse Autoencoders (SAE)—for
-providing feature extracting augmentations with the purpose of aiding a
+methods, Zero-Phase PCA Sphering (ZCA) and Sparse Autoencoders (SAE), for
+performing feature extracting augmentations with the purpose of aiding a
 U-Net model in segmentation. We evaluate the performance of U-Nets with
 various combinations of these feature extraction and parameters to
-evaluate the feasibility of low-level feature extraction in improving
+evaluate the feasibility for low-level feature extraction in improving
 cilia segmentation, and results from our initial experiments show up to
 :math:`10\%` increases in relevant metrics.
 
@@ -571,23 +573,23 @@ particular, a novel and still-developing alternative to the convolution
 layer known as a Sharpened Cosine Similarity (SCS) layer has begun to
 attract some attention. While regular CNNs are proficient at filtering,
 developing invariance to certain forms of noise and perturbation, they
-are notoriously poor at serving as a spatial indicator for features —
-convolution activations can be high due to changes in luminosity, and do
+are notoriously poor at serving as a spatial indicator for features.
+Convolution activations can be high due to changes in luminosity and do
 not necessarily imply the *distribution* of the underlying luminosity,
 therefore losing precise spatial information. SCS is designed to avoid
 these faults by considering the mathematical case of a “normalized”
 convolution, wherein neither the magnitude of the input, nor of the
-kernel, affect the final output — instead, SCS activations are dictated
+kernel, affect the final output. Instead, SCS activations are dictated
 purely by the *relative* magnitudes of weights in the kernel, which is
 to say by the *spatial distribution* of features in the input
 :cite:`scs`. Domain knowledge suggests that cilia, while
 able to vary greatly, all share relatively unique spatial distributions
-when compared to non-cilia, e.g. cells, out-of-phase structures,
+when compared to non-cilia such as cells, out-of-phase structures,
 microscopy artifacts, etc. Therefore, we believe that SCS may provide a
 strong augmentation to the backbone U-Net model by acting as an
 additional layer *in tandem with* the already existing convolution
-layers — this way the model is a true generalization of the canonical
-U-Net, and is less likely to suffer poor performance due to the
+layers. This way, the model is a true generalization of the canonical
+U-Net and is less likely to suffer poor performance due to the
 introduction of SCS.
 
 Another avenue of exploration would be a more robust ablation study on
