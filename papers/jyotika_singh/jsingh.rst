@@ -375,7 +375,7 @@ For most applications, those low activity segments make up the irrelevant inform
 of the signal.
 
 The audio clip shown in Figure :ref:`S3Fig` is a human saying the word "london" and represents
-the audio plotted in the time-domain, with signal amplitude as y-axis and sample number as x-axis. The
+the audio plotted in the time domain, with signal amplitude as y-axis and sample number as x-axis. The
 areas where the signal looks closer to zero/low in amplitude are areas where speech is absent and
 represents the pauses the speaker took while saying the word "london".
 
