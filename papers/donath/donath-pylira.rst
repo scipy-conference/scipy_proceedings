@@ -372,7 +372,7 @@ following:
 The main interface is exposed via the :code:`LIRADeconvolver` class, which takes the configuration of
 the algorithm on initialisation. Typical configuration parameters include the total number of
 iterations :code:`n_iter_max` and the number of "burn-in" iterations, to be excluded from the
-posterior mean computation. The data, which represented by a simple Python :code:`dict` data structure,
+posterior mean computation. The data, represented by a simple Python :code:`dict` data structure,
 contains a :code:`"counts"`, :code:`"psf"` and optionally :code:`"exposure"` and :code:`"background"` array.
 The dataset is then passed to the :code:`LIRADeconvolver.run()` method to execute the deconvolution.
 The result is a :code:`LIRADeconvolverResult` object, which features the possibility to write the
