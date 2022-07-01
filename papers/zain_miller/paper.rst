@@ -27,10 +27,6 @@ Low Level Feature Extraction for Cilia Segmentation
 .. role:: raw-latex(raw)
    :format: latex
 
-.. |--| unicode:: U+2013   .. en dash
-.. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
-   :trim:
-
 .. class:: abstract
 
    Cilia are organelles found on the surface of some cells in the human body that sweep rhythmically to transport substances. Dysfunction of ciliary motion is often indicative of diseases known as ciliopathies, which disrupt the functionality of macroscopic structures within the lungs, kidneys and other organs :cite:`li2018composite`. Phenotyping ciliary motion is an essential step towards understanding ciliopathies; however, this is generally an expert-intensive process :cite:`quinn2015automated`. A means of automatically parsing recordings of cilia to determine useful information would greatly reduce the amount of expert intervention required. This would not only improve overall throughput, but also mitigate human error, and greatly improve the accessibility of cilia-based insights. Such automation is difficult to achieve due to the noisy, partially occluded and potentially out-of-phase imagery used to represent cilia, as well as the fact that cilia occupy a minority of any given image. Segmentation of cilia mitigates these issues, and is thus a critical step in enabling a powerful pipeline. However, cilia are notoriously difficult to properly segment in most imagery, imposing a bottleneck on the pipeline. In this paper, we use and evaluate alternative methods of feature extraction for cilia imagery to build a potent segmentation model. Current experiments show up to a 10\% improvement over base segmentation models using a novel combination of feature extractors.
