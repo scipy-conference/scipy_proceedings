@@ -156,7 +156,7 @@ Each of these deposition techniques introduces changes to the film structure and
 
 As can be seen from above, a workflow is usually some sort of structure modification through the structure object with a subsequent call to a backend code and analysis of its output if it succeeds.
 Input for the next iteration depends on the output of the previous iteration in some workflows.
-Due to the large chemical and manipulation space of the materials, sometimes it is difficult to use the same program logic for all workflows.
+Due to the large chemical and manipulation space of the materials, sometimes it very tricky to keep code for all workflows follow the same code logic.
 For every workflow and/or functionality in the Materials Science Suite, some sort of peer reviewed material (publication, conference presentation) is created where implemented algorithms are described to facilitate reproducibility.
 
 Data fitting algorithms and use cases
@@ -179,7 +179,7 @@ Figure :ref:`fig4` shows obtained calculated yield of 10% vs. experimental value
    :scale: 40%
    :figclass: w
 
-   Left: The uniaxial stress/strain curve of a polymer calculated using Desmond through the stress strain workflow. The dark grey band indicates an inflection that marks the yield point. Right: Constant strain simulation with convex analysis indicates elongation at yield. The red curve shows simulated stress versus strain. The blue curve shows convex analysis. :label:`fig4`
+   Left: The uniaxial stress/strain curve of a polymer calculated using Desmond through the stress strain workflow, grey band indicates inflection point (yield)). Right: Constant strain simulation with convex analysis indicates elongation at yield. Red curve - simulated stress versus strain. Blue curve - convex analysis. :label:`fig4`
 
 The ``scipy.optimize`` package is used for a least-squares fit of the bulk energies at different cell volumes (compressed and expanded) in order to obtain the bulk modulus and equation of state (EOS) of a material.
 In the Schrödinger suite this was implemented as a part of an EOS workflow, in which fitting is performed on the results obtained from a series of QE calculations performed on the original as well as compressed and expanded (deformed) cells.
@@ -282,7 +282,7 @@ Figure :ref:`figalplot` (B) presents MPO scores of the materials used in the tra
    :figclass: w
    :scale: 110%
 
-   A: MPO score of all materials in the HTL dataset. B: Those used in the training set as a function of the hole reorganization energy ( :math:`\lambda_h` ). :label:`figalplot`
+   A: MPO score of all materials in the HTL dataset. B: Those used in the training set as a function of the hole reorganization energy - :math:`\lambda_h`. :label:`figalplot`
 
 To appreciate the computational efficiency of such an approach, it is worth noting that performing DFT calculations for all of the 9,000 molecules in the dataset would increase the computational cost by a factor of 15 versus the AL workflow.
 It seems that AL approach can be useful in the cases where problem space is broad (like chemical space), but there are many clusters of similar items (similar molecules).
