@@ -147,7 +147,7 @@ Some of the pre-trained models include the following.
 1. Audio type classifier to determine speech versus music:
 Trained a Support Vector Machine (SVM) classifier for classifying audio into two possible classes - music,
 speech. This classifier was trained using Mel Frequency Cepstral Coefficients (MFCC), spectral features, and chroma features. This model was trained on manually curated custom samples for speech and music.
-The per-class evaluation metrics are shown in :ref:`speech-music`.
+The per-class evaluation metrics are shown in Table :ref:`speech-music`.
 
 .. table:: Per-class evaluation metrics for audio type (speech vs music) classification pre-trained model. :label:`speech-music`
 
