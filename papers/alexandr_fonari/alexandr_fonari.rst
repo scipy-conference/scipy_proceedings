@@ -298,3 +298,8 @@ Where possible, we report issues to the package authors and submit improvements 
 We are thankful to all who have contributed to open source libraries, and have made it possible for us to develop a platform for accelerating innovation in materials and drug discovery.
 We will continue contributing to these projects and we hope to further give back to the scientific community by facilitating research in both academia and industry.
 We hope that this report will inspire other scientific companies to give back to the open source community in order to improve the computational materials field and make science more reproducible.
+
+Acknowledgments
+---------------
+
+The authors acknowledge Bradley Dice and Wenduo Zhou for their valuable comments during the review of the manuscript.
