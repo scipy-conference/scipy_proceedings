@@ -74,9 +74,10 @@ whole software stack open-sourced.
 
 GeoCAT has seven Python tools for geoscientific computation and visualization.
 These tools are built upon the Pangeo :cite:`pangeo18` ecosystem. In particular,
-they rely upon Xarray :cite:`xarray17`, and Dask :cite:`dask15`, as well as
-Jupyter Notebooks. Dask compatibility allows the GeoCAT functions to scale from
-personal laptops to high performance computing (HPC) systems such as NCAR’s Casper,
+they rely on Xarray :cite:`xarray17`, and Dask :cite:`dask15`, as well as they are
+compatible with Numpy and use Jupyter Notebooks for demonstration purposes. Dask
+compatibility allows the GeoCAT functions to scale from personal laptops to high
+performance computing (HPC) systems such as NCAR’s Casper,
 Cheyenne, and upcoming Derecho clusters :cite:`ams22craker`. Additionally, GeoCAT
 also utilizes Numba, an open source just-in-time (JIT) compiler :cite:`numba`, to
 translate Python and NumPy code into machine codes in order to get faster
