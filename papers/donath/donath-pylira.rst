@@ -453,7 +453,7 @@ The typical angular resolution is 0.5 arcsecond and the covered energy ranges fr
 
 Figure :ref:`chandra-gc` shows the result of the *Pylira* algorithm applied to Chandra data
 of the Galactic Center region between 0.5 and 7 keV. The PSF was obtained from simulations
-using the official Chandra science tools *ciao 4.14* and the *simulate_psf* tool.
+using the *simulate_psf* tool from the official Chandra science tools *ciao 4.14* :cite:`Fruscione2006`.
 The algorithm achieves both an improved spatial resolution as well as a reduced noise
 level and higher contrast of the image in the right panel compared to the unprocessed
 counts data shown in the left panel.
@@ -475,7 +475,7 @@ from 0.1 to >10 degree [#]_.
 
 Figure :ref:`fermi-gc` shows the result of the *Pylira* algorithm applied to Fermi-LAT data
 above 1 GeV to the region around the Galactic Center. The PSF
-was obtained from the official Fermitools v2.0.19 and the *gtpsf* tool.
+was obtained from simulations using the *gtpsf* tool from the official *Fermitools v2.0.19* :cite:`Fermitools2019`.
 First one can see that the algorithm achieves again a considerable improvement of the spatial resolution
 compared to the raw counts. It clearly resolves multiple point sources left to the
 the bright Galactic Center source.
