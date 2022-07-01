@@ -139,7 +139,7 @@ Richardson Lucy (RL)
 ++++++++++++++++++++
 To obtain the most likely model given the data one searches a minimum of the total likelihood
 function, or equivalently of :math:`\mathcal{C}`. This high dimensional optimization problem
-can e.g., be solved by a classic gradient decent approach. Assuming the pixels values :math:`x_i`
+can e.g., be solved by a classic gradient descent approach. Assuming the pixels values :math:`x_i`
 of the true image as independent parameters, one can take the derivative of the Eq.  :ref:`cash`
 with respect to the individual :math:`x_i`. This way one obtains a rule for how to update the
 current set of pixels :math:`\mathbf{x}_n` in each iteration of the optimization:
