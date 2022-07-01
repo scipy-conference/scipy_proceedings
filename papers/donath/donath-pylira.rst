@@ -258,7 +258,7 @@ detailed description of the prior definition is given in :cite:`Esch2004`.
    :math:`Q_N`. The sub-pixels in each quadrant are labelled :math:`\Lambda_{ij}`.
    :label:`ms-levels`.
 
-The problem is then solved by using a "hyprid" Gibbs MCMC sampling approach. For
+The problem is then solved by using a "hybrid" Gibbs MCMC sampling approach. For
 each iteration of sampling an image :math:`x_i`, the :math:`\alpha_k` parameters are optimized
 using a Newton method and thus "marginalized". After a "burn-in" phase the sampling
 process typically reaches convergence and starts sampling from the
