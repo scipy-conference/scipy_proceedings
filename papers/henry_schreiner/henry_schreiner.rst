@@ -150,8 +150,8 @@ to read ROOT files and convert them to a Python friendly format like HDF5. Then
 the bulk of the analysis would use reproducible Python virtual environments or
 Conda environments.
 
-This changed when Jim Pivarski introduced the Uproot package (originally envisioned as
-"µroot"). This was a pure-Python implementation of a ROOT file reader (and
+This changed when Jim Pivarski introduced the Uproot package, a pure-Python
+implementation of a ROOT file reader (and
 later writer) that could remove the initial conversion environment by simply
 pip installing a package. It also had a simple, Pythonic interface and produced
 outputs Python users could immediately use, like NumPy arrays, instead of
@@ -173,7 +173,8 @@ structures, computations on jagged structures have usually been closer to SQL
 queries on multiple tables than direct object manipulation. Pandas handles this
 through multiple indexing and a lot of duplication.
 
-Uproot was a huge hit with incoming HEP students; suddenly they could access
+Uproot was a huge hit with incoming HEP students (see Fig :ref:`fig-scikit-hep-growth`);
+suddenly they could access
 HEP data using a library installed with pip or conda and no external compiler
 or library requirements, use tools they already knew like Pandas and the
 rapidly growing machine learning frameworks. There were still some gaps and
@@ -181,6 +182,18 @@ pain points in the ecosystem, but an analysis without C++ or compiling ROOT was
 finally possible. Scikit-HEP did not and does not intend to replace ROOT, but
 it provides alternative solutions that work natively in the Python "Big Data"
 ecosystem.
+
+.. figure:: github-package-fullstudy-for-review.pdf
+   :figclass: w
+   :scale: 43%
+
+   Adoption of scientific Python libraries and Scikit-HEP among members of the
+   CMS experiment (one of the four major LHC experiments). CMS requires users to fork
+   ``github:cms-sw/cmssw``, which can be used to identify 3484 physicist users,
+   who created 16656 non-fork repos. This plot quantifies adoption by counting
+   "``#include X``", "``import X``", and "``from X import``" strings in the users'
+   code to measure adoption of various libraries (most popular by category are shown).
+   :label:`fig-scikit-hep-growth`
 
 Several other useful HEP libraries were also written. Particle was written for
 accessing the Particle Data Group (PDG) particle data in a simple and Pythonic
@@ -193,10 +206,11 @@ Building compiled packages
 
 .. figure:: github-histogram-libraries.pdf
    :figclass: w
-   :scale: 65%
+   :scale: 43%
 
-   The landscape of different libraries for Histograms in HEP.
-   From the HEP Software Foundation Analysis Ecosystems II Workshop, May 2022.
+   Developer activity on histogram libraries in HEP: number of unique committers
+   to each library per month, smoothed (derived from git logs). Illustrates the
+   convergence of a fractured community (around 2017) into a unified one (now).
    :label:`fig-github-histogram`
 
 In 2018, HEP physicist and programmer Hans Dembinski proposed a histogram
