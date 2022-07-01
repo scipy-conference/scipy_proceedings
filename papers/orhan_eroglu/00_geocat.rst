@@ -88,8 +88,9 @@ executions wherever possible. GeoCAT's visualization components rely on Matplotl
 technologies with their essential roles around GeoCAT.
 
 .. figure:: figures/fig1_coretech.png
-   :scale: 35%
-   :figclass: bht
+   :align: center
+   :scale: 30%
+   :figclass: w
 
    The core Python technologies on which GeoCAT relies on :label:`fig1coretech`
 
