@@ -529,7 +529,7 @@ In practice, the criteria for normality are hardly ever met. Typically
 the distribution is wider with larger tails. Yet, approximately
 normal behaviour is exhibited. Chebyshev’s
 inequality :cite:`chebyshev1867valeurs` guarantees that, for
-a wide class of distributions, no more than :math:`1/k^2` of the
+a wide class of distributions, no more than :math:`\frac{1}{k^2}` of the
 distribution’s values can be :math:`k` or more standard deviations away
 from the mean. For example, a minimum of 75% (88.9%) of values must lie
 within two (three) standard deviations of the mean. These boundaries
@@ -617,7 +617,6 @@ Reporting
 ---------
 
 .. figure:: report_overview.png
-   :scale: 20%
 
    A snapshot of part of the HTML stability report. It shows the aggregated traffic light overview.
    This view can be used to prioritize features for inspection.
@@ -649,15 +648,15 @@ Synthetic datasets
 
 In the literature synthetic datasets are commonly used to test the
 effectiveness of dataset shift monitoring approaches
-:cite:`lu2018learning`. Since the generation process
-controls when and how the shift happens, one can test the detection for
-all kinds of shifts. ``popmon`` has been tested on multiple of such
+:cite:`lu2018learning`. One can test the detection for
+all kinds of shifts, as the generation process
+controls when and how the shift happens. ``popmon`` has been tested on multiple of such
 artificial datasets: Sine1, Sine2, Mixed, Stagger, Circles, LED, SEA and
 Hyperplane
 :cite:`pesaranghader2018reservoir, street2001streaming, fan2004systematic`.
 These datasets cover myriad dataset shift characteristics: sudden and
-gradual drifts, order of the relation (dependency of the label on just
-one, or multiple features), binary and multiclass labels, and containing
+gradual drifts, dependency of the label on just
+one or multiple features, binary and multiclass labels, and containing
 unrelated features. The dataset descriptions and sample ``popmon``
 configurations are available in the code repository.
 
