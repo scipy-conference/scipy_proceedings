@@ -93,7 +93,7 @@ Core Functionalities
 PyAudioProcessing aims to provide an end-to-end processing solution for converting between audio file
 formats, visualizing time and frequency domain representations, cleaning with silence and low-activity
 segments removal from audio, building features from raw audio samples, and training a
-machine learning model that can then be used to classify unseen raw audio samples (e.g., into categories such a music, speech, etc.).
+machine learning model that can then be used to classify unseen raw audio samples (e.g., into categories such as music, speech, etc.).
 This library allows the user to extract features such as Mel Frequency Cepstral Coefficients (MFCC) :cite:`6921394`,
 Gammatone Frequency Cepstral Coefficients (GFCC) :cite:`inbook`, spectral features,
 chroma features and other beat-based and cepstrum based features from audio to use
