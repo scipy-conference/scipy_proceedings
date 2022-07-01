@@ -89,7 +89,7 @@ technologies with their essential roles around GeoCAT.
 
 .. figure:: figures/fig1_coretech.png
    :align: center
-   :scale: 60%
+   :scale: 45%
    :figclass: w
 
    The core Python technologies on which GeoCAT relies on :label:`fig1coretech`
