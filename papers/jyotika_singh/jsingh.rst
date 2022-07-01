@@ -146,7 +146,7 @@ Some of the pre-trained models include the following.
 
 1. Audio type classifier to determine speech versus music:
 Trained a Support Vector Machine (SVM) classifier for classifying audio into two possible classes - music,
-speech. This classifier was trained using Mel Frequency Cepstral Coefficients (MFCC), spectral features, and chroma features. This model was trained on manually curated custom samples for speech and music.
+speech. This classifier was trained using Mel Frequency Cepstral Coefficients (MFCC), spectral features, and chroma features. This model was trained on manually created and curated samples for speech and music.
 The per-class evaluation metrics are shown in Table :ref:`speech-music`.
 
 .. table:: Per-class evaluation metrics for audio type (speech vs music) classification pre-trained model. :label:`speech-music`
@@ -285,7 +285,7 @@ MFCC for a sample speech audio can be seen in Figure :ref:`mfccspeech`.
 |
 
 Another filter inspired by human hearing is the gammatone filter bank. The
-gammatone filterbank shape looks similar to the mel filter bank, expect the peaks
+gammatone filter bank shape looks similar to the mel filter bank, expect the peaks
 are smoother than the triangular shape of the mel filters. gammatone filters
 are conceived to be a good approximation to the human auditory filters and are used as a
 front-end simulation of the cochlea. Since a human ear is the perfect receiver and distinguisher
@@ -431,7 +431,7 @@ using the library.
 
 A spoken location name classification problem was considered for this evaluation.
 The dataset consisted of 23 samples for training per class and 17 samples for testing per class.
-The total number of classes is 2 - london and boston. This dataset was manually curated and can be found linked in the project
+The total number of classes is 2 - london and boston. This dataset was manually created and can be found linked in the project
 readme of pyAudioProcessing. For comparative purposes, the classifier is kept constant
 at SVM, and the parameter C is chosen based on grid search for each experiment based
 on best precision, recall and F1 score. Results in table :ref:`clean` show the impact of
