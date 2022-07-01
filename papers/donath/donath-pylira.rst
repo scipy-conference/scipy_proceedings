@@ -84,7 +84,7 @@ Besides correction for non-uniform exposure and background
 noise this also includes the correction for the "blurring"
 introduced by the point spread function (PSF) of the
 instrument. Where the latter process is often called "deconvolution".
-Depending on whether the PSF of the instrument is known,
+Depending on whether the PSF of the instrument is known or not,
 one distinguishes between the "blind deconvolution" and
 "non blind deconvolution" process. For astronomical
 observations the PSF can often either be
