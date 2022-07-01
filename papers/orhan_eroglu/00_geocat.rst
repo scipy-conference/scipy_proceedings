@@ -81,7 +81,17 @@ performance computing (HPC) systems such as NCAR’s Casper,
 Cheyenne, and upcoming Derecho clusters :cite:`ams22craker`. Additionally, GeoCAT
 also utilizes Numba, an open source just-in-time (JIT) compiler :cite:`numba`, to
 translate Python and NumPy code into machine codes in order to get faster
-executions wherever possible.
+executions wherever possible. GeoCAT's visualization components rely on Matplotlib
+:cite:`matplotlib` for most of the plotting functionalities, Cartopy
+:cite:`cartopy` for projections, as well as the Datashader and Holoviews stack
+:cite:`datashader` for big data rendering. Figure :ref:`fig1coretech` shows these
+technologies with their essential roles around GeoCAT.
+
+.. figure:: figures/fig1_coretech.png
+   :scale: 35%
+   :figclass: bht
+
+   The core Python technologies on which GeoCAT relies on :label:`fig1coretech`
 
 Briefly, GeoCAT-comp houses computational operators for applications ranging from
 regridding and interpolation, to climatology and meteorology. GeoCAT-examples
@@ -91,11 +101,11 @@ plots that enable features such as pan and zoom on fine-resolution, unstructured
 geoscience data (e.g. ~3 km data rendered within a few tens of seconds to a few
 minutes on personal laptops). This is achieved by making use of the connectivity
 information in the unstructured grid and rendering data via the Datashader and
-Holoviews ecosystem :cite:`datashader`. GeoCAT-viz enables higher-level implementation of Matplotlib
-and Cartopy plotting capabilities through its variety of easy to use visualization
-convenience functions for GeoCAT-examples. GeoCAT also maintains WRF-Python
-(Weather Research and Forecasting), which works with WRF-ARW model output and
-provides diagnostic and interpolation routines.
+Holoviews ecosystem :cite:`datashader`. GeoCAT-viz enables higher-level
+implementation of Matplotlib and Cartopy plotting capabilities through its
+variety of easy to use visualization convenience functions for GeoCAT-examples.
+GeoCAT also maintains WRF-Python (Weather Research and Forecasting), which works
+with WRF-ARW model output and provides diagnostic and interpolation routines.
 
 GeoCAT was recently awarded Project Raijin, which is an NSF EarthCube-funded
 effort :cite:`raijinaward21`. Its goal is to enhance the open-source analysis
@@ -127,14 +137,14 @@ package management systems and package indexes such as Conda :cite:`conda` and P
 they are implemented and address potential errors quickly. To assist this process,
 the team utilizes multiple tools throughout GitHub assets to ensure automation,
 unit testing and code coverage, as well as licensing and reproducibility. Figure
-:ref:`fig1badges`, for example, shows the set of badges displaying the near
+:ref:`fig2badges`, for example, shows the set of badges displaying the near
 real-time status of each CI/CD implementation in the GitHub repository homepage
 from one of our software tools.
 
 CI build tests of our repositories are implemented and
 automated (for pushed commits, pull requests, and daily scheduled execution) via
 GitHub Actions workflows :cite:`githubactions`, with the `CI` badge shown in Figure
-:ref:`fig1badges` displaying the status (i.e. pass or fail) of those workflows.
+:ref:`fig2badges` displaying the status (i.e. pass or fail) of those workflows.
 Similarly, the `CONDA-BUILDS` badge shows if the conda recipe works successfully for
 the repository. The Python package "codecov" :cite:`codecov` analyzes the percentage
 of code coverage from unit tests in the repository. Additionally, the overall results
@@ -144,7 +154,7 @@ mostly-automatically through the Sphinx Python documentation generator :cite:`sp
 and published through ReadTheDocs :cite:`readthedocs` via an automated building and
 versioning schema. The `DOCS` badge provides a link to the documentation page along
 with showing failures, if any, with the documentation rendering process. Figure
-:ref:`fig2rtd` shows the documentation homepage of GeoCAT-comp. The `NCAR` and `PYPI`
+:ref:`fig3rtd` shows the documentation homepage of GeoCAT-comp. The `NCAR` and `PYPI`
 badges in the `Package` row shows and links to the latest versions of the software
 tool distributed through NCAR's Conda channel and PyPI, respectively. The `LICENSE`
 badge provides a link to our software licenses, Apache License version 2.0
@@ -155,26 +165,26 @@ version-specific Digital Object Identifiers (DOIs), which can be accessed throug
 the `DOI` badge. This allows the end-user to accurately cite the specific version
 of the GeoCAT tools they used for science or research purposes.
 
-.. figure:: figures/fig1_badges.png
+.. figure:: figures/fig2_badges.png
    :scale: 35%
    :figclass: bht
 
    GeoCAT-comp's badges in the beginning of its README file (i.e. the home page of
-   the Githug repository) :cite:`geocatcomprepo` :label:`fig1badges`
+   the Githug repository) :cite:`geocatcomprepo` :label:`fig2badges`
 
-.. figure:: figures/fig2_rtd.png
+.. figure:: figures/fig3_rtd.png
    :align: center
    :scale: 30%
    :figclass: w
 
    GeoCAT-comp documentation homepage built with Sphinx using a theme provided by
-   ReadTheDocs :cite:`geocatcomprtd` :label:`fig2rtd`
+   ReadTheDocs :cite:`geocatcomprtd` :label:`fig3rtd`
 
 GeoCAT-comp (and GeoCAT-f2py)
 =============================
 
 GeoCAT-comp is the computational component of the GeoCAT project as can be seen in
-Figure :ref:`fig3structure`. GeoCAT-comp houses implementations of geoscience data
+Figure :ref:`fig4structure`. GeoCAT-comp houses implementations of geoscience data
 analysis functions. Novel research and development is conducted for analyzing both
 structured and unstructured grid data from various research fields such as climate,
 weather, atmosphere, ocean, among others. In addition, some of the functionalities
@@ -211,13 +221,13 @@ descriptions as well as links to the usage examples:
 - Empirical orthogonal function (EOF) analysis
 
 
-.. figure:: figures/fig3_structure.png
+.. figure:: figures/fig4_structure.png
    :align: center
    :scale: 50%
    :figclass: w
 
    GeoCAT project structure with all of the software tools
-   :cite:`geocatcontribguide` :label:`fig3structure`
+   :cite:`geocatcontribguide` :label:`fig4structure`
 
 Many of the computational functions in GeoCAT are implemented in pure Python.
 However, there are others that were originally implemented in Fortran but are
@@ -259,17 +269,17 @@ and several other scientists and developers from various NCAR labs/groups. It
 has since grown to house novel visualization examples and showcase the
 capabilities of other GeoCAT components, like GeoCAT-comp, along with
 newer technologies like interactive plotting notebooks. Figure
-:ref:`fig4cmap` illustrates one of the unique GeoCAT-examples cases that
+:ref:`fig5cmap` illustrates one of the unique GeoCAT-examples cases that
 was aimed at exploring the best practices for data visualization
 like choosing color blind friendly colormaps.
 
-.. figure:: figures/fig4_cmap.png
+.. figure:: figures/fig5_cmap.png
    :scale: 28%
    :figclass: bht
 
    Comparison between NCL (left) and Python (right) when choosing a
    colormap; GeoCAT-examples aiming at choosing color blind friendly
-   colormaps :cite:`ams22sizemore` :label:`fig4cmap`
+   colormaps :cite:`ams22sizemore` :label:`fig5cmap`
 
 The GeoCAT-examples :cite:`geocatexamplesrtd` gallery contains over 140
 example Python plotting scripts, demonstrating functionalities from Python
@@ -294,7 +304,7 @@ changes such as font sizes, color schemes, etc. that resemble NCL plots),
 the GeoCAT-viz library :cite:`geocatvizrepo` was implemented. Use of
 functions from this library in GeoCAT-examples significantly reduces the
 LOC requirements for most of the visualization examples to comparable
-numbers to those of NCL's. Figure :ref:`fig5viz` shows Taylor diagram
+numbers to those of NCL's. Figure :ref:`fig6viz` shows Taylor diagram
 and curly vector examples that have been created with the help of
 GeoCAT-viz. To exemplify how GeoCAT-viz helps keep the LOC comparable
 to NCL, one of the Taylor diagrams (i.e. Taylor_6) took 80 LOC in NCL,
@@ -305,12 +315,12 @@ Taylor diagram, management of grids, addition of titles, contours, etc.)
 used in this example weren't wrapped up in GeoCAT-viz :cite:`geocatvizrepo`,
 the same visualization would easily end up in around two hundred LOC.
 
-.. figure:: figures/fig5_viz.png
+.. figure:: figures/fig6_viz.png
    :scale: 28%
    :figclass: bht
 
    Taylor diagram and curly vector examples that created with the help
-   of GeoCAT-viz :label:`fig5viz`
+   of GeoCAT-viz :label:`fig6viz`
 
 GeoCAT-datafiles
 ================
@@ -373,14 +383,14 @@ groups. UXarray is built on top of the built-in Xarray Dataset functionalities
 while recognizing several unstructured grid formats (UGRID, SCRIP, and Exodus
 for now). Since there are more unstructured mesh models in the community than
 UXarray natively supports, its architecture will also support addition of new
-models. Figure :ref:`fig6raijin` shows the regularly structured
+models. Figure :ref:`fig7raijin` shows the regularly structured
 “latitude-longitude” grids versus a few unstructured grid models.
 
-.. figure:: figures/fig6_raijin.png
+.. figure:: figures/fig7_raijin.png
    :scale: 20%
    :figclass: bht
 
-   Regular grid (left) vs MPAS-A & CAM-SE grids :label:`fig6raijin`
+   Regular grid (left) vs MPAS-A & CAM-SE grids :label:`fig7raijin`
 
 The UXarray project has implemented data input/output functions for UGRID,
 SCRIP, and Exodus, as well as methods for surface area and integration
