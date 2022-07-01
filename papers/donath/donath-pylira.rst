@@ -63,8 +63,9 @@ measurement noise and non-uniform exposure.
 For short wavelengths and associated low intensities
 of the signal, the imaging process consists of recording individual photons
 (often called "events") originating from a source of interest.
-This imaging process is typical for X-ray and gamma-ray telescopes, but is also found
-in magnetic resonance imaging or fluorescence microscopy.
+This imaging process is typical for X-ray and gamma-ray telescopes,
+but images taken by magnetic resonance imaging or fluorescence microscopy
+show Poisson noise too.
 For each individual photon, the incident direction, energy
 and arrival time is measured. Based on this information the
 event can be binned into two dimensional data structures to
@@ -75,7 +76,7 @@ the measured signal follows Poisson statistics. This imposes
 a non-linear relationship between the measured signal and true
 underlying intensity as well as a coupling of the signal intensity
 to the the signal variance. Any statistically correct post-processing
-or reconstruction method of thus requires a careful treatment of
+or reconstruction method thus requires a careful treatment of
 the Poisson nature of the measured image.
 
 To maximise the scientific use of the data, it is often desired
@@ -98,7 +99,7 @@ by :cite:`Hogbom1974`, this
 is not the case for X-ray and gamma-ray astronomy. As any deconvolution method
 aims to enhance small scale structures in an image it becomes increasingly
 hard to solve for the regime of low signal to noise ratio, where small
-scale structures are stronger affected by noise.
+scale structures are more affected by noise.
 
 
 The Deconvolution Problem
@@ -195,12 +196,13 @@ and :cite:`Fish95`.
    package :cite:`skimage`.  :label:`rl`
 
 
-LIRA Multi-Scale Prior
-++++++++++++++++++++++
-One possible solution to this problem was described in :cite:`Esch2004`
+Multi-Scale Prior & LIRA
+++++++++++++++++++++++++
+One solution to this problem was described in :cite:`Esch2004`
 and :cite:`Connors2011`. First the simple forward folded model described
 in Eq. :ref:`simplemodel` can be extended by taking into account the
-non-uniform exposure :math:`e_i` and a background estimate :math:`b_i`:
+non-uniform exposure :math:`e_i` and an additional known
+background component :math:`b_i`:
 
 .. math::
    :label: model
@@ -265,7 +267,7 @@ process typically reaches convergence and starts sampling from the
 posterior distribution. The reconstructed image is then computed from the mean of the
 posterior samples. As for each pixels a full distribution of its values is available,
 the information can also be used to compute and associated error of the reconstructed
-value. This is another main advantages over e.g. the standard RL algorithms.
+value. This is another main advantage over RL or MAP algorithms.
 
 
 The Pylira Package
@@ -289,7 +291,7 @@ to build and deploy the documentation. The online documentation can be found on 
 *Pylira* implements a set of unit tests to assure compatibility and reproducibility of the
 results with different versions of the dependencies and across different platforms.
 As *Pylira* relies on random sampling for the MCMC process an exact reproducibility
-of results is hard to achieve on different platforms, however the agreement of results
+of results is hard to achieve on different platforms; however the agreement of results
 is at least guaranteed in the statistical limit of drawing many samples.
 
 
@@ -391,11 +393,12 @@ Diagnostic Plots
    The curves show the traces of value the pixel of interest for a simulated point source and its neighboring
    pixels (see code example). The image on the left shows the posterior mean. The white circle in the image
    shows the circular region defining the neighboring pixels. The blue line on the right plot shows the trace
-   of the pixel of interest. The solid horizontal orange lines show the mean value, the shaded orange area
-   the :math:`1~\sigma` error region. The burn in phase is shown in transparent blue and ignored while computing
-   the mean. The shaded gray lines show the traces of the neighboring pixels.  :label:`diagnosis1`
+   of the pixel of interest. The solid horizontal orange line shows the mean value (excluding burn-in) of the pixel across
+   all iterations and the shaded orange area the :math:`1~\sigma` error region. The burn in phase is shown
+   in transparent blue and ignored while computing the mean. The shaded gray lines show the traces of the
+   neighboring pixels.  :label:`diagnosis1`
 
-To validate the quality of the results *Pylira* provide many built-in diagnostic plots.
+To validate the quality of the results *Pylira* provides many built-in diagnostic plots.
 One of these diagnostic plot is shown in the right panel of Fig. :ref:`diagnosis1`. The plot shows the
 image sampling trace for a single pixel of interest and its surrounding circular region of interest.
 This visualisation allows user to asses the stability of a small region in the image
@@ -425,7 +428,7 @@ important to visualise the sampling traces of both the sampled images as well as
 
 Figure :ref:`diagnosis2` shows another typical diagnostic plot created by the code example above.
 In a multi-panel figure user can inspect the traces of the total log-posteriror as well as the
-traces of th smoothing parameters. Each panel corresponds smoothing hyper parameter
+traces of the smoothing parameters. Each panel corresponds to the smoothing hyper parameter
 introduced for each level of the multi-scale representation of the reconstructed image.
 The figure also shows the mean value along with the :math:`1~\sigma` error
 region. In this case the algorithm show stable convergence after a burn-in phase of approximately 200
@@ -435,18 +438,18 @@ iterations for the log-posterior as well as all of the multi-scale smoothing par
 Astronomical Analysis Examples
 ++++++++++++++++++++++++++++++
 
-Both in the X-ray as well as gamma-ray regime the The Galactic Center is a complex emission
-region. It shows point sources, extended sources as well as underlying diffuse emission and
-thus represents a challenge for any astronomical data analysis. *Chandra* is a spaced based
-X-ray observatory, which is in operation since 1999. It consists of nested cylindrical paraboloid
-and hyperboloid surfaces, which form an imaging optical system for X-rays. In the focal plane
-it has multiple instruments for different scientific purposes. This includes a high resolution
-camera (HRC) and an Advanced CCD Imaging Spectrometer (ACIS). The typical angular resolution
-is 0.5 arcsecond and the covered energy ranges from 0.1 - 10 keV.
+Both in the X-ray as well as gamma-ray regime the Galactic Center is a complex emission
+region. It shows point sources, extended sources, as well as underlying diffuse emission and
+thus represents a challenge for any astronomical data analysis.
 
+*Chandra* is a spaced based X-ray observatory, which is in operation since 1999. It consists
+of nested cylindrical paraboloid and hyperboloid surfaces, which form an imaging optical system
+for X-rays. In the focal plane it has multiple instruments for different scientific purposes.
+This includes a high resolution camera (HRC) and an Advanced CCD Imaging Spectrometer (ACIS).
+The typical angular resolution is 0.5 arcsecond and the covered energy ranges from 0.1 - 10 keV.
 
 Figure :ref:`chandra-gc` shows the result of the *Pylira* algorithm applied to Chandra data
-of the Galactic center region between 0.5 and 7 keV. The PSF was obtained from simulations
+of the Galactic Center region between 0.5 and 7 keV. The PSF was obtained from simulations
 using the official Chandra science tools *ciao 4.14* and the *simulate_psf* tool.
 The algorithm achieves both an improved spatial resolution as well as a reduced noise
 level and higher contrast of the image in the right panel compared to the unprocessed
@@ -456,23 +459,23 @@ counts data shown in the left panel.
    :scale: 70%
    :figclass: w
 
-   Pylira applied to Chandra data from the Galactic center region, using the observation IDs
+   Pylira applied to Chandra ACIS data of the Galactic Center region, using the observation IDs
    *4684* and *4684*. The image on the left shows the raw observed counts between
    0.5 and 7 keV. The image on the right shows the deconvolved version. The LIRA hyperprior
    values were chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
-   No baseline background model was taken into account.  :label:`chandra-gc`
+   No baseline background model was included.  :label:`chandra-gc`
 
-As second example we use data from the Fermi Large Area Telescope (LAT). The Fermi-LAT
-is a satellite-based an imaging gamma-ray detector, which covers and energy range
+As a second example we use data from the Fermi Large Area Telescope (LAT). The Fermi-LAT
+is a satellite-based imaging gamma-ray detector, which covers an energy range
 of 20 MeV to >300 GeV. The angular resolution varies strongly with energy and ranges
 from 0.1 to >10 degree [#]_.
 
-Figure :ref:`fermi-gc` shows the result of the *Pylira*
-algorithm applied to Fermi-LAT data above 1 GeV to the region around the Galactic Center. The PSF
-was obtained form the official Fermitools v2.0.19 and the *gtpsf* tool.
+Figure :ref:`fermi-gc` shows the result of the *Pylira* algorithm applied to Fermi-LAT data
+above 1 GeV to the region around the Galactic Center. The PSF
+was obtained from the official Fermitools v2.0.19 and the *gtpsf* tool.
 First one can see that the algorithm achieves again a considerable improvement of the spatial resolution
 compared to the raw counts. It clearly resolves multiple point sources left to the
-the bright Galactic center source.
+the bright Galactic Center source.
 
 .. [#] https://www.slac.stanford.edu/exp/glast/groups/canda/lat_Performance.htm
 
@@ -481,7 +484,7 @@ the bright Galactic center source.
    :scale: 70%
    :figclass: w
 
-   Pylira applied to Fermi-LAT data from the Galactic center region. The image on
+   Pylira applied to Fermi-LAT data from the Galactic Center region. The image on
    the left shows the raw measured counts between 5 and 1000 GeV. The image on the right
    shows the deconvolved version. The LIRA hyperprior values were chosen as
    *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*. A baseline background model
@@ -490,13 +493,13 @@ the bright Galactic center source.
 
 Summary & Outlook
 -----------------
-The *Pylira* package provides Python wrappers for the LIRA algorithm. It allows to deconvolve low-counts data
+The *Pylira* package provides Python wrappers for the LIRA algorithm. It allows the deconvolution of low-counts data
 following Poisson statistics using a Bayesian sampling approach and a multi-scale smoothing prior assumption.
 The results can be easily written to FITS files and inspected by plotting the trace of the sampling process.
-This allows to check for general convergence as well as pixel to pixel correlations for selected regions of
+This allows users to check for general convergence as well as pixel to pixel correlations for selected regions of
 interest. The package is openly developed on GitHub and includes tests and documentation, such that it can be
-maintained and improved in future, while ensuring consistency of the results. It comes with multiple built-in
-test datasets and explanatory tutorials in form of Jupyter notebooks. Future plans include the support
+maintained and improved in the future, while ensuring consistency of the results. It comes with multiple built-in
+test datasets and explanatory tutorials in the form of Jupyter notebooks. Future plans include the support
 for parallelisation or distributed computing, more flexible prior definitions and the
 possibility to account for systematic errors on the PSF during the sampling process.
 
