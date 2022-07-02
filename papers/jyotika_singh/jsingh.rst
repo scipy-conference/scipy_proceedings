@@ -136,8 +136,8 @@ classifiers.
 Methods and Results
 ===================
 
-Pre-trained models
-------------------
+**Pre-trained models**
+----------------------
 
 pyAudioProcessing offers pre-trained audio classification models for the Python community to aid in quick baseline establishment.
 This is an evolving feature as new datasets and classification problems gain prominence in the field.
@@ -222,8 +222,8 @@ classifiers using similar features and different machine learning backend for re
 and exploring improvements.
 
 
-Audio features
---------------
+**Audio features**
+------------------
 
 There are multiple types of features one can extract from audio. Information about
 getting started with audio processing is well described in :cite:`opensource`.
@@ -366,8 +366,8 @@ Some sample mean chroma features can be seen in Figure :ref:`chroma`.
 
    Chroma features from a sample speech audio. :label:`chroma`
 
-Audio data cleaning
--------------------
+**Audio data cleaning/de-noising**
+----------------------------------
 
 Often times an audio sample has multiple segments present in the same signal that do not contain anything but
 silence or a slight degree of background noise compared to the rest of the audio.
@@ -452,8 +452,8 @@ audio do not contribute to the predictions and act as noise in the signal.
    | **clean+mfcc**   | **0.823**        | **0.471**        |
    +------------------+------------------+------------------+
 
-Integrations
-------------
+**Integrations**
+----------------
 
 pyAudioProcessing integrates with third-party tools such as scikit-learn, matplotlib, and pydub to offer additional functionalities.
 
