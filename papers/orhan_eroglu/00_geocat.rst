@@ -353,8 +353,9 @@ require to run much costly Delaunay triangulation. The notebook provides
 a comparison between these two approaches as well.
 
 .. figure:: figures/fig7_mpas.png
-   :scale: 20%
-   :figclass: bht
+   :align: center
+   :scale: 45%
+   :figclass: w
 
    The interactive plot interface from the MPAS visualization
    notebook in GeoCAT-examples :label:`fig7mpas`
