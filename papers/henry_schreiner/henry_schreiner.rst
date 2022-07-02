@@ -173,15 +173,16 @@ structures, computations on jagged structures have usually been closer to SQL
 queries on multiple tables than direct object manipulation. Pandas handles this
 through multiple indexing and a lot of duplication.
 
-Uproot was a huge hit with incoming HEP students (see Fig :ref:`fig-scikit-hep-growth`);
-suddenly they could access
-HEP data using a library installed with pip or conda and no external compiler
-or library requirements, use tools they already knew like Pandas and the
-rapidly growing machine learning frameworks. There were still some gaps and
-pain points in the ecosystem, but an analysis without C++ or compiling ROOT was
-finally possible. Scikit-HEP did not and does not intend to replace ROOT, but
-it provides alternative solutions that work natively in the Python "Big Data"
-ecosystem.
+Uproot was a huge hit with incoming HEP students (see Fig
+:ref:`fig-scikit-hep-growth`); suddenly they could access HEP data using a
+library installed with pip or conda and no external compiler or library
+requirements, use tools they already knew that were compatible with the Python
+buffer protocol, like NumPy, Pandas and the rapidly growing machine learning
+frameworks. There were still some gaps and pain points in the ecosystem, but an
+analysis without writing C++ (interpreted or compiled) and compiling ROOT
+manually was finally possible. Scikit-HEP did not and does not intend to
+replace ROOT, but it provides alternative solutions that work natively in the
+Python "Big Data" ecosystem.
 
 .. figure:: github-package-fullstudy-for-review.pdf
    :figclass: w
@@ -243,13 +244,14 @@ were many challenges to making a library redistrubtable on all platforms.
 
 The boost-histogram library only depended on header-only components of the
 Boost libraries, and the header-only pybind11 package, so it was able to avoid
-linking to external dependencies, which simplified the initial process. All
-needed files were collected from git submodules and packed into a source
-distribution (SDist), and everything was built using only setuptools, making
-build-from-source simple on any system supporting C++14. This did not include
-RHEL 7, a popular platform in HEP at the time, and on any platform building
-could take several minutes and required several gigabytes of memory to resolve
-the heavy C++ templating in the Boost libraries and pybind11.
+a separate compile step or linking to external dependencies, which simplified
+the initial build process. All needed files were collected from git submodules
+and packed into a source distribution (SDist), and everything was built using
+only setuptools, making build-from-source simple on any system supporting
+C++14.  This did not include RHEL 7, a popular platform in HEP at the time, and
+on any platform building could take several minutes and required several
+gigabytes of memory to resolve the heavy C++ templating in the Boost libraries
+and pybind11.
 
 
 The first stand-alone development was azure-wheel-helpers, a set of files
@@ -334,25 +336,26 @@ ecosystem. The affiliated classification is also used on broader ecosystem
 packages like pybind11 and cibuildwheel that we recommend and share
 maintainers with.
 
-Histogramming was designed to be a collection of specialized packages
-(see Fig. :ref:`fig-histogram`); boost-histogram for manipulation and filling,
-Hist for a user-friendly interface and simple plotting tools, histoprint for
-displaying histograms, and the existing mplhep and uproot packages also needed
-to be able to work with histograms. This ecosystem was built and is held
-together with UHI, which is a formal specification agreed upon by several
-developers of different libraries, backed by a statically typed Protocol, for a
-PlottableHistogram object. Producers of histograms, like boost-histogram/hist
-and uproot provide objects that follow this specification, and users of
-histograms, such as mplhep and histoprint take any object that follows this
-specification. The UHI library is not required at runtime, though it does also
-provide a few simple utilities to help a library also accept ROOT histograms,
-which do not (currently) follow the Protocol, so several libraries have decided
-to include it at runtime too. By using a static type checker like MyPy to
-statically enforce a Protocol, libraries that can communicate without depending
-on each other or on a shared runtime dependency and class inheritance. We
-expect Protocols to continue to be used in more places in the ecosystem.
+Histogramming was designed to be a collection of specialized packages (see Fig.
+:ref:`fig-histogram`) with carefully defined interoperability; boost-histogram
+for manipulation and filling, Hist for a user-friendly interface and simple
+plotting tools, histoprint for displaying histograms, and the existing mplhep
+and uproot packages also needed to be able to work with histograms. This
+ecosystem was built and is held together with UHI, which is a formal
+specification agreed upon by several developers of different libraries, backed
+by a statically typed Protocol, for a PlottableHistogram object. Producers of
+histograms, like boost-histogram/hist and uproot provide objects that follow
+this specification, and users of histograms, such as mplhep and histoprint take
+any object that follows this specification. The UHI library is not required at
+runtime, though it does also provide a few simple utilities to help a library
+also accept ROOT histograms, which do not (currently) follow the Protocol, so
+several libraries have decided to include it at runtime too. By using a static
+type checker like MyPy to statically enforce a Protocol, libraries that can
+communicate without depending on each other or on a shared runtime dependency
+and class inheritance. This has been a great success story for Scikit-HEP, and
+We expect Protocols to continue to be used in more places in the ecosystem.
 
-The design for scikit-hep as a toolset is of many parts that all work well
+The design for Scikit-HEP as a toolset is of many parts that all work well
 together. One example of a package pulling together many components is
 uproot-browser, a tool that combines uproot, Hist, and Python libraries
 like textual and plotext to provide a terminal browser for ROOT files.
@@ -497,16 +500,16 @@ as well as the broader Python community.
     boost-histogram has prompted a variety of tooling improvements affecting the
     whole Python binary packaging ecosystem. Pybind11 gained much better CMake and
     setuptools support. Cibuildwheel received improvements for supporting static,
-    overridable configuration and local builds. 
+    overridable configuration and local builds.
 
     Possibly the most general tool in Scikit-HEP is the developer pages, which
     helps guide the design and packaging of the family of libraries for our
     different developers, as well as has influenced the python.packaging.org
     webpages. We will look at the process of making a new package using
-    scikit-hep/cookie, which supports 9 build backends including binary builds with
-    C++ and Rust and dozens of useful correctness and style checking additions, all
-    explicitly explained and kept in sync with the developer pages. This has
-    enabled consistency across the package ecosystem. 
+    scikit-hep/cookie, which supports 9+ build backends including binary builds
+    with C++ and Rust and dozens of useful correctness and style checking
+    additions, all explicitly explained and kept in sync with the developer
+    pages. This has enabled consistency across the package ecosystem. 
 
     We will finish with a few of the cutting edge ventures of the Scikit-HEP
     project, including pyodide WebAssembly support, plans for integration with
