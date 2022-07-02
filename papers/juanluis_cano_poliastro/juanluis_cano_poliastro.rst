@@ -90,15 +90,19 @@ the existence of convergent solutions for a few restricted with :math:`n = 3`.
 In 1903 Tsiokovsky evaluated the conditions
 required for artificial objects to leave the orbit of the earth;
 this is considered as a foundational contribution to the field of astrodynamics.
-Further developments by Kondratyuk, Hohmann, and Oberth in the early 20th century
-all added to the growing field of orbital mechanics,
-which in turn enabled the development of space flight in the USSR and the United States
-in the 1950s and 1960s.
+Tsiokovsky devised equation :ref:`eq:tsiolkovsky` which relates the increase in
+velocity with the effective exhaust velocity of thrusted gases and the fraction
+of used propellant.
 
 .. math::
    :label: eq:tsiolkovsky
 
    \Delta v = v_e \ln \frac{m_0}{m_f}
+
+Further developments by Kondratyuk, Hohmann, and Oberth in the early 20th century
+all added to the growing field of orbital mechanics,
+which in turn enabled the development of space flight in the USSR and the United States
+in the 1950s and 1960s.
 
 The two-body problem
 --------------------
