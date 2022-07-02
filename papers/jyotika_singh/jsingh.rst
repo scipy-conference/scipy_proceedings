@@ -244,8 +244,8 @@ followed by computing mean and standard deviation of all the signal segments.
 
 |
 
-**Mel Frequency Cepstral Coefficients (MFCC)**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mel Frequency Cepstral Coefficients (MFCC)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
 
 The mel scale relates perceived frequency, or pitch, of a pure tone to its actual measured
@@ -280,8 +280,8 @@ MFCC for a sample speech audio can be seen in Figure :ref:`mfccspeech`.
 
 |
 
-**Gammatone Frequency Cepstral Coefficients (GFCC)**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Gammatone Frequency Cepstral Coefficients (GFCC)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
 
 Another filter inspired by human hearing is the gammatone filter bank. The
@@ -313,8 +313,8 @@ speech audio can be seen in Figure :ref:`gfccspeech`.
 
 |
 
-**Temporal Features**
-^^^^^^^^^^^^^^^^^^^^^
+Temporal Features
+^^^^^^^^^^^^^^^^^
 |
 
 Temporal features from audio are extracted from the signal information in its time domain representations.
@@ -329,8 +329,8 @@ Some sample mean temporal features can be seen in Figure :ref:`temp`.
 
 |
 
-**Spectral features**
-^^^^^^^^^^^^^^^^^^^^^
+Spectral features
+^^^^^^^^^^^^^^^^^
 |
 
 Spectral features on the other hand derive information contained in the frequency domain representation of an audio signal.
@@ -347,8 +347,8 @@ Some sample mean spectral features can be seen in Figure :ref:`spec`.
 
 |
 
-**Chroma Features**
-^^^^^^^^^^^^^^^^^^^
+Chroma Features
+^^^^^^^^^^^^^^^
 |
 
 Chroma features are highly popular for music audio data.
@@ -425,8 +425,8 @@ using the library.
 
 |
 
-**Impact of cleaning on feature formations for a classification task**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Impact of cleaning on feature formations for a classification task
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
 
 A spoken location name classification problem was considered for this evaluation.
@@ -457,8 +457,8 @@ audio do not contribute to the predictions and act as noise in the signal.
 
 pyAudioProcessing integrates with third-party tools such as scikit-learn, matplotlib, and pydub to offer additional functionalities.
 
-**Training, classification, and evaluation**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Training, classification, and evaluation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
 
 The library contains integrations with scikit-learn classifiers for passing audio
@@ -468,8 +468,8 @@ with hyperparameter tuning details.
 
 |
 
-**Audio format conversion**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Audio format conversion
+^^^^^^^^^^^^^^^^^^^^^^^
 |
 
 Some applications and integrations work best with .wav data format. pyAudioProcessing
@@ -478,8 +478,8 @@ via the library.
 
 |
 
-**Audio visualization**
-^^^^^^^^^^^^^^^^^^^^^^^
+Audio visualization
+^^^^^^^^^^^^^^^^^^^
 |
 
 Spectrograms are 2-D images representing sequences of spectra with time along one axis,
