@@ -247,7 +247,6 @@ followed by computing mean and standard deviation of all the signal segments.
 Mel Frequency Cepstral Coefficients (MFCC)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
-
 The mel scale relates perceived frequency, or pitch, of a pure tone to its actual measured
 frequency. Humans are much better at discerning small changes in pitch at low frequencies
 compared to high frequencies. Incorporating this scale makes our features match more
@@ -283,7 +282,6 @@ MFCC for a sample speech audio can be seen in Figure :ref:`mfccspeech`.
 Gammatone Frequency Cepstral Coefficients (GFCC)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
-
 Another filter inspired by human hearing is the gammatone filter bank. The
 gammatone filter bank shape looks similar to the mel filter bank, expect the peaks
 are smoother than the triangular shape of the mel filters. gammatone filters
@@ -316,7 +314,6 @@ speech audio can be seen in Figure :ref:`gfccspeech`.
 Temporal Features
 ^^^^^^^^^^^^^^^^^
 |
-
 Temporal features from audio are extracted from the signal information in its time domain representations.
 Examples include signal energy, entropy, zero crossing rate, etc.
 Some sample mean temporal features can be seen in Figure :ref:`temp`.
@@ -332,7 +329,6 @@ Some sample mean temporal features can be seen in Figure :ref:`temp`.
 Spectral features
 ^^^^^^^^^^^^^^^^^
 |
-
 Spectral features on the other hand derive information contained in the frequency domain representation of an audio signal.
 The signal can be converted from time domain to frequency domain using the Fourier transform. Useful
 features from the signal spectrum include fundamental frequency, spectral entropy, spectral spread, spectral flux,
@@ -350,7 +346,6 @@ Some sample mean spectral features can be seen in Figure :ref:`spec`.
 Chroma Features
 ^^^^^^^^^^^^^^^
 |
-
 Chroma features are highly popular for music audio data.
 In Western music, the term chroma feature or chromagram closely relates to the twelve different pitch classes.
 Chroma-based features, which are also referred to as "pitch class profiles", are a powerful tool for analyzing
@@ -428,7 +423,6 @@ using the library.
 Impact of cleaning on feature formations for a classification task
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
-
 A spoken location name classification problem was considered for this evaluation.
 The dataset consisted of 23 samples for training per class and 17 samples for testing per class.
 The total number of classes is 2 - london and boston. This dataset was manually created and can be found linked in the project
@@ -460,7 +454,6 @@ pyAudioProcessing integrates with third-party tools such as scikit-learn, matplo
 Training, classification, and evaluation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 |
-
 The library contains integrations with scikit-learn classifiers for passing audio
 through feature extraction followed by classification directly using the raw audio samples
 as input. Training results include computation of cross-validation results along
@@ -471,7 +464,6 @@ with hyperparameter tuning details.
 Audio format conversion
 ^^^^^^^^^^^^^^^^^^^^^^^
 |
-
 Some applications and integrations work best with .wav data format. pyAudioProcessing
 integrates with tools that perform format conversion and presents them as a functionality
 via the library.
@@ -481,7 +473,6 @@ via the library.
 Audio visualization
 ^^^^^^^^^^^^^^^^^^^
 |
-
 Spectrograms are 2-D images representing sequences of spectra with time along one axis,
 frequency along the other, and brightness or color representing the strength of a frequency
 component at each time frame :cite:`spectro`. Not only can one see whether there is more or less energy at,
