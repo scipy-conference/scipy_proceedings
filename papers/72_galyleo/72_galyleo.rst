@@ -34,7 +34,7 @@ Galyleo is an open-source, extensible dashboarding solution integrated with Jupy
 .. class:: keywords
 
   	
-JupyterLab, JupyterLab extension, Dashboard construction, Data visualization
+JupyterLab, JupyterLab extension,  Data visualization
 
 Introduction
 ------------
@@ -43,23 +43,21 @@ Current dashboarding solutions :cite:`holoviz` :cite:`holoviews` :cite:`plotly` 
 
 In contrast, Jupyter is simply a superior analytics environment in every respect over a standalone visualization tool: its various kernels and their libraries provide a much broader range of analytics capabilities; its programming interface is a much cleaner and simpler way to perform complex operations; hardware resources can scale far more easily than they can for a visualization tool; and connectors to data sources are both plentiful and extensible.
 
-Both standalone visualization tools and Jupyter libraries have a limited set of visualization options.  Jupyter is fundamentally a *server-side platform*.  Jupyter's web interface is primarily to offer textboxes for code entry. Entered code is sent to the server for evaluation and text/HTML results returned.  Visualization in a Jupyter Notebook is either given by images rendered server-side and returned as inline image tags, or by JavaScript/HTML5 libraries which have a corresponding server-side Python library.  The Python library generates HTML5/JavaScript code for rendering.
+Both standalone visualization tools and Jupyter libraries have a limited set of visualizations.  Jupyter is  a *server-side platform*.  Jupyter's web interface is primarily to offer textboxes for code entry. Entered code is sent to the server for evaluation and text/HTML results returned.  Visualization in a Jupyter Notebook is either given by images rendered server-side and returned as inline image tags, or by JavaScript/HTML5 libraries which have a corresponding server-side Python library.  The Python library generates HTML5/JavaScript code for rendering.
 
-The limiting factor here is that the visualization library must be integrated with the Python backend by a developer, and only a subset of the rich array of visualization, charting, and mapping libraries available on the HTML5/JavaScript platform is integrated.  The HTML5/JavaScript platform is as rich a client-side visualization platform as Python is a server-side platform.  
+The limiting factor  is that the visualization library must be integrated with the Python backend by a developer, and only a subset of the rich array of visualization, charting, and mapping libraries available on the HTML5/JavaScript platform is integrated.  The HTML5/JavaScript platform is as rich a client-side visualization platform as Python is a server-side platform.  
 
-Galyleo set out to offer the best of both worlds: Python (and R, and Julia) as a rich, scalable analytics platform coupled with a rich, extensible JavaScript/HTML5 visualization and interaction platform.
+Galyleo set out to offer the best of both worlds: Python, R, and Julia as a scalable analytics platform coupled with an extensible JavaScript/HTML5 visualization and interaction platform.  It offers a *no-code* client-side environment, for several reasons.
 
-Galyleo set out to offer a *no-code* client-side environment, for several reasons.
+1. The Jupyter analytics community is  comfortable with server-side analytics environments (the 100+ kernels available in Jupyter, including Python, R and Julia) but less so with the JavaScript visualization platform.
 
-1. The Jupyter analytics community is in general comfortable with server-side analytics environments (the over-100 kernels available in Jupyter, including Python, R and Julia) but less so with the JavaScript visualization platform.
+2. Configuration of graphical objects takes a lot of low-value configuration code; conversely, it is relatively easy to do by hand.  
 
-2. As mentioned above, configuration of graphical objects takes a lot of low-value configuration code; conversely, it is relatively easy to do by hand.  
+These insights lead to a mixed interface, combining a drag-and-drop interface for the design and configuration of visual objects, and a coding, server-side  interface for analytics programs.  
 
-These insights lead to a mixed interface, combining a graphical, drag-and-drop interface for the design and configuration of visual objects, and a coding, server-side  interface for analytics programs.  
+Extension of the widget set was  an important consideration. A widget  is a client-side object with a physical component.  Galyleo is designed to be extensible both by adding new visualization libraries and components and by adding new widgets.
 
-Extension of the widget set was also an important consideration. A widget  is a client-side object with a graphical, physical component.  Galyleo is designed to be extensible both by adding new visualization libraries and components and by adding new widgets.
-
-Publication of interactive dashboards has been a further challenge.  A design goal of Galyleo was to offer a simple, easy publish to the web scheme, where a dashboard could be published with a single click.
+Publication of interactive dashboards has been a further challenge.  A design goal of Galyleo was to offer a simple scheme, where a dashboard could be published to the web with a single click.
 
 These then, are the goals of Galyleo
 
@@ -85,7 +83,7 @@ A new Galyleo Dashboard can be launched from the JupyterLab launcher or from the
 
 An existing dashboard is saved as a .gd.json file, and is denoted with the Galyleo star logo. It can be opened in the usual way, with a double-click.
 
-Once a file is opened, or a new file created, a new  Galyleo tab opens onto it.  It resembles a simplified form of a Tableau, Looker, or PowerBI editor.  The right-hand sidebar, which collapse or expands by clicking on the arrow control, offers the ability to view Tables, and view, edit, or create Views, Filters, and Charts.  The bottom half of the right sidebar gives controls for styling of text and shapes.
+Once a file is opened, or a new file created, a new  Galyleo tab opens onto it.  It resembles a simplified form of a Tableau, Looker, or PowerBI editor.  The collapsible right-hand sidebar offers the ability to view Tables, and view, edit, or create Views, Filters, and Charts.  The bottom half of the right sidebar gives controls for styling of text and shapes.
 
 .. figure:: galyleo.png
 
@@ -227,12 +225,12 @@ Each morph can be individually programmed as a JavaScript object, or can inherit
 
 In lively.next, each morph turns into a snippet of HTML, CSS, and JavaScript code and the entire application turns into a web page.  The programmer  doesn't see the HTML and CSS code directly; these are auto-generated.  Instead, the programmer writes  JavaScript code for both logic and configuration (to the extent that the configuration isn't done by hand).  The code is bundled with the object and integrated in the web page.
 
-Morphs can be set as reusable components by a simple declaration.  Once so published, they can be reused in any lively design.  
+Morphs can be set as reusable components by a simple declaration.  They can then be reused in any lively design.  
 
 Incorporating New Libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Libraries are typically incorporated into lively.next by attaching them to a convenient physical object, importing the library from a package manager such as npm or jspm, and then writing a small amount of convenience code to expose the object's API.  The simplest form of this is to assign the module to an instance variable so it has an addressable name, but typically a few convenience methods are written as well.  In this way, a large number of libraries have been incorporated as reusable components in lively.next, including Google Maps, Google Charts :cite:`google-charts`, Chartjs :cite:`chartjs`, D3 :cite:`bostock`, Leaflet.js :cite:`leaflet`, OpenLayers :cite:`openlayers`, cytoscape:`ono` and many more.
+Libraries are typically incorporated into lively.next by attaching them to a convenient physical object, importing the library from a package manager such as npm, and then writing a small amount of  code to expose the object's API.  The simplest form of this is to assign the module to an instance variable so it has an addressable name, but typically a few convenience methods are written as well.  In this way, a large number of libraries have been incorporated as reusable components in lively.next, including Google Maps, Google Charts :cite:`google-charts`, Chartjs :cite:`chartjs`, D3 :cite:`bostock`, Leaflet.js :cite:`leaflet`, OpenLayers :cite:`openlayers`, cytoscape:`ono` and many more.
 
 Extending Galyleo's Charting and Visualization capabilities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -260,13 +258,13 @@ A widget is a graphical item used to filter data.  It operates on a single colum
 
 1. `valueChanged`: a signal, which is fired whenever the value of the widget is changed
 
-2. `value`: a read-write property, the current value of the widget
+2. `value`: read-write.  The current value of the widget
 
 3. `filter`: read-only.  The current filter function, as a JSON structure
 
 4. `allValues`: read-write, select filters only.
 
-5. `column`: read-only.  The name of the column of this widget.  Set when the widget is created, and then read-only
+5. `column`: read-only.  The name of the column of this widget.  Set when the widget is created
 
 6. `numericSpec`: read-write.  A dictionary containing the numeric specification for a numeric or date filter
 
