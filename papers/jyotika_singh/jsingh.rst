@@ -18,7 +18,7 @@ pyAudioProcessing: Audio Processing, Feature Extraction, and Machine Learning Mo
     research in the audio and speech processing domain. On the contrary, Python remains
     the language of choice for a vast majority of machine learning research and
     functionality. This library contains features built in Python that were originally
-    published in MATLAB. PyAudioProcessing allows the user to
+    published in MATLAB. pyAudioProcessing allows the user to
     compute various features from audio files including Gammatone Frequency Cepstral
     Coefficients (GFCC), Mel Frequency Cepstral Coefficients (MFCC), spectral features,
     chroma features, and others such as beat-based and cepstrum-based features from audio.
