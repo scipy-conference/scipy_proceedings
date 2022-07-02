@@ -11,7 +11,7 @@ pyAudioProcessing: Audio Processing, Feature Extraction, and Machine Learning Mo
 
 .. class:: abstract
 
-    PyAudioProcessing is a Python based library for processing audio data, constructing
+    pyAudioProcessing is a Python based library for processing audio data, constructing
     and extracting numerical features from audio, building and testing machine learning
     models, and classifying data with existing pre-trained audio classification models or
     custom user-built models. MATLAB is a popular language of choice for a vast amount of
@@ -64,7 +64,7 @@ pipeline for the remainder.
 2. Computing features from audio files directly as numerical vectors and applying
 them to a classification backend.
 
-PyAudioProcessing includes the capability of computing spectrograms, but
+pyAudioProcessing includes the capability of computing spectrograms, but
 focusses most functionalities around the latter for building audio models. This tool contains implementations
 of various widely used audio feature extraction techniques, and integrates with popular scikit-learn classifiers including support vector machine (SVM), SVM radial basis function kernel (RBF), random forest, logistic regression, k-nearest neighbors (k-NN), gradient boosting, and extra trees.
 Audio data can be cleaned, trained, tested, and classified using pyAudioProcessing :cite:`pAP`.
@@ -90,7 +90,7 @@ students :cite:`paper`, and more. There are thus far 16000+ downloads via pip fo
 Core Functionalities
 ====================
 
-PyAudioProcessing aims to provide an end-to-end processing solution for converting between audio file
+pyAudioProcessing aims to provide an end-to-end processing solution for converting between audio file
 formats, visualizing time and frequency domain representations, cleaning with silence and low-activity
 segments removal from audio, building features from raw audio samples, and training a
 machine learning model that can then be used to classify unseen raw audio samples (e.g., into categories such as music, speech, etc.).
@@ -102,7 +102,7 @@ built into pyAudioProcessing. The classifier implementation examples that are a 
 a sample solution to audio classification problems and help build the foundation to
 tackle new and unseen problems.
 
-PyAudioProcessing provides seven core functionalities comprising different stages of audio signal processing.
+pyAudioProcessing provides seven core functionalities comprising different stages of audio signal processing.
 
 1. Converting audio files to .wav  format to give the users the ability to work with different types of audio
 to increase compatibility with code and processes that work best with .wav audio type.
@@ -454,6 +454,8 @@ audio do not contribute to the predictions and act as noise in the signal.
 
 Integrations
 ------------
+
+pyAudioProcessing integrates with third-party tools such as scikit-learn, matplotlib, and pydub to offer additional functionalities.
 
 **Training, classification, and evaluation**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
