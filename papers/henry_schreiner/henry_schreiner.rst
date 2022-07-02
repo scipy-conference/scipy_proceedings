@@ -51,7 +51,7 @@ comparable in order of magnitude to all of astronomy or YouTube :cite:`stephens2
 
 HEP scientists have been interested in Python since 1993
 :cite:`templon_jeffrey_2022_6353621`. With the release of Python 1.0.0 in 1994,
-a few physicists started using Python. A year later, the ROOT project
+a few physicists started exploring the use of Python. A year later, the ROOT project
 for an analysis toolkit (and framework) was released, making C++ the main
 language for HEP. The ROOT project also needed an interpreted language to
 driving analysis code. Python was rejected for this role due to being "exotic"
