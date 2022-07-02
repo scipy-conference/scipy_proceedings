@@ -107,7 +107,7 @@ The Deconvolution Problem
 
 Basic Statistical Model
 +++++++++++++++++++++++
-Assuming the noise in each pixel :math:`d_i` in the recorded counts image
+Assuming the data in each pixel :math:`d_i` in the recorded counts image
 follows a Poisson distribution, the total likelihood of obtaining the
 measured image from a model image of the expected counts :math:`\lambda_i` with
 :math:`N` pixels is given by:
@@ -117,14 +117,14 @@ measured image from a model image of the expected counts :math:`\lambda_i` with
 
    \mathcal{L}\left( \mathbf{d} | \mathbf{\lambda} \right) = \prod_i^N \frac{{e^{ - d_i } \lambda_i ^ {d_i}}}{{d_i!}}
 
-By taking the logarithm and dropping the constant terms one can transform the
+By taking the logarithm, dropping the constant terms and inverting the sign one can transform the
 product into a sum over pixels, which is also often called the *Cash* :cite:`Cash1979`
 fit statistics:
 
 .. math::
    :label: cash
 
-   \mathcal{C}\left( \mathbf{d} | \mathbf{\lambda} \right) = \sum_i^N \lambda_i - d_i \log{\lambda_i}
+   \mathcal{C}\left(\mathbf{\lambda} | \mathbf{d} \right) = \sum_i^N (\lambda_i - d_i \log{\lambda_i})
 
 Where the expected counts :math:`\lambda_i` are given by the convolution of the true underlying
 flux distribution :math:`x_i` with the PSF :math:`p_k`:
@@ -138,8 +138,8 @@ This operation is often called "forward modelling" or "forward folding" with the
 
 Richardson Lucy (RL)
 ++++++++++++++++++++
-To obtain the most likely model given the data one searches a minimum of the total likelihood
-function, or equivalently of :math:`\mathcal{C}`. This high dimensional optimization problem
+To obtain the most likely value of :math:`\mathbf{x}_n` given the data one searches a maximum of the total likelihood
+function, or equivalently a of minimum :math:`\mathcal{C}`. This high dimensional optimization problem
 can e.g., be solved by a classic gradient descent approach. Assuming the pixels values :math:`x_i`
 of the true image as independent parameters, one can take the derivative of the Eq.  :ref:`cash`
 with respect to the individual :math:`x_i`. This way one obtains a rule for how to update the
@@ -160,8 +160,8 @@ likelihood solution of Eq. :ref:`cash`. A Python implementation of the standard 
 is available e.g. in the `Scikit-Image` package :cite:`skimage`.
 
 Instead of the iterative, gradient decent based optimization it is also possible to sample from
-the likelihood function using a simple Metropolis-Hastings approach. This is demonstrated
-in one of the *Pylira* online tutorials (`Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__).
+the posterior distribution using a simple Metropolis-Hastings approach and uniform
+prior. This is demonstrated in one of the *Pylira* online tutorials (`Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__).
 
 
 RL Reconstruction Quality
@@ -219,15 +219,15 @@ while studying its jets.
 Second the authors proposed to extend the Poisson log-likelihood
 function (Equation :ref:`cash`) by a log-prior term that controls the
 smoothness of the reconstructed image on multiple spatial scales.
-For this the image :math:`x_i` is transformed into a multi-scale representation:
-starting from the full resolution the image is grouped into
-2x2 pixels :math:`Q_k`. Each of the groups of 2x2 pixels is
-then divided by their total sum. This results in an image containing
-the "split proportions" with respect to the image down-sized
-by a factor of two. This process is continued to further reduce the
-resolution of the image until only one pixel, containing the total
-sum of the full-resolution image is left. This multi-scale
-decomposition is illustrated in Fig. :ref:`ms-levels`.
+Starting from the full resolution, the image pixels :math:`x_i` are collected
+into 2 by 2 groups :math:`Q_k`. The four pixel values associated with each group
+are divided by their sum to obtain a grid of “split proportions”
+with respect to the image down-sized by a factor of two along both
+axes. This process is repeated using the down sized image with pixel
+values equal to the sums over the 2 by 2 groups from the full-resolution
+image, and the the process continues until the resolution of the image
+is only a single pixel, containing the total sum of the full-resolution
+image. This multi-scale representation is illustrated in Fig. :ref:`ms-levels`.
 
 For each of the 2x2 groups of the re-normalized images
 a Dirichlet distribution is introduced as a prior:
@@ -239,7 +239,7 @@ a Dirichlet distribution is introduced as a prior:
 
 and multiplied across all 2x2 groups and resolution levels :math:`k`.
 For each resolution level a smoothing parameter :math:`\alpha_k` is introduced.
-These hyperparametes can be interpreted as having am information
+These hyper-parametes can be interpreted as having an information
 content equivalent of adding :math:`\alpha_k` "hallucinated" counts
 in each grouping. This effectively results in a smoothing
 of the image at the given resolution level. The distribution
