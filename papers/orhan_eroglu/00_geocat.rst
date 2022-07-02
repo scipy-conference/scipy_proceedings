@@ -323,42 +323,6 @@ the same visualization would easily end up in around two hundred LOC.
    Taylor diagram and curly vector examples that created with the help
    of GeoCAT-viz :label:`fig6viz`
 
-Recently, the GeoCAT team has been focused on interactive plotting
-technologies, especially for larger data sets that contain millions of
-data points. This effort was centered on unstructured grid visualization
-as part of Project Raijin, which is detailed in a later section in this
-manuscript. That is because unstructured meshes are a great research and
-application field for big data and interactivity such as zoom in/out for
-regions of interest. As a result of this effort, we created a new
-notebooks gallery under GeoCAT-examples to house such interactive data
-visualizations. The first notebook, a screenshot from which is shown in
-Figure Figure :ref:`fig7mpas`, in this gallery is implemented via the
-Datashader and Holoviews ecosystem :cite:`datashader`, and it provides
-a high-performance, interactive visualization of a Model for Prediction
-Across Scales (MPAS) Global Storm-Resolving Model weather simulation
-dataset.  The interactivity features are pan and zoom to reveal greater
-data fidelity globally and regionally. The data used in this work is
-the courtesy of the DYAMOND effort :cite:`stevens2019dyamond` and has
-varying resolutions from 30 km to 3.75 km. Our notebook in the gallery
-uses the 30 km resolution data for the users to be able to download and
-work on it in their local configuration. However, our work with the
-3.75 km resolution data (i.e. about 42 million hexagonal cells globally)
-showed that rendering the data took only a few minutes on a decent
-laptop, even without any parallelization. The main reason behind such
-a high performance was that we used the cell-to-node connectivity
-information in the MPAS data to render the native grid directly (i.e.
-without remapping to the structured grid) along with utilizing the
-Datashader stack. Without using the connectivity information, it would
-require to run much costly Delaunay triangulation. The notebook provides
-a comparison between these two approaches as well.
-
-.. figure:: figures/fig7_mpas.png
-   :scale: 20%
-   :figclass: bht
-
-   The interactive plot interface from the MPAS visualization
-   notebook in GeoCAT-examples :label:`fig7mpas`
-
 GeoCAT-datafiles
 ================
 
