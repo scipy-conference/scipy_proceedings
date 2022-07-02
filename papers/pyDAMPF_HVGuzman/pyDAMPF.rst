@@ -387,11 +387,11 @@ Figure :ref:`fig7a` shows the average run time for the serial and parallel impl
 
 .. figure:: tab1.png
 
-    Data used for Figs. :ref:`fig2a`, :ref:`fig3a` and :ref:`fig4a` with an :math:`A_0=10[nm]` . Observe that the quality factor and Young's modulus have three different values respectively for RH1 = 29.5\%, RH2 = 39.9\% y RH3 = 60.1\%. $^{**}$ The values presented for Quality Factor :math:`Q` were calculated at  `Google Colaboratory notebook Q calculation <https://colab.research.google.com/drive/1O1xjLfmMoL6J4EwVods95zfelzr8GDUQ?usp=sharing>`__, using the method proposed by :cite:`Sader, Sader2`. :label:`tab1`
+    Data used for Figs. :ref:`fig2a`, :ref:`fig3a` and :ref:`fig4a` with an :math:`A_0=10[nm]` . Observe that the quality factor and Young's modulus have three different values respectively for RH1 = 29.5\%, RH2 = 39.9\% y RH3 = 60.1\%. :math:`^{**}` The values presented for Quality Factor :math:`Q` were calculated at  `Google Colaboratory notebook Q calculation <https://colab.research.google.com/drive/1O1xjLfmMoL6J4EwVods95zfelzr8GDUQ?usp=sharing>`__, using the method proposed by :cite:`Sader, Sader2`. :label:`tab1`
 
 .. figure:: tab2.png
 
-    Computers used to run pyDAMPF and Former work :cite:`dForce`, $^*$ the free version of Colab provides this capability, there are two paid versions which provide much greater capacity, these versions known as Colab Pro and Colab Pro+ are only available in some countries. :label:`tab2`
+    Computers used to run pyDAMPF and Former work :cite:`dForce`, :math:`^{*}` the free version of Colab provides this capability, there are two paid versions which provide much greater capacity, these versions known as Colab Pro and Colab Pro+ are only available in some countries. :label:`tab2`
 
 
 .. figure:: tab3.png
