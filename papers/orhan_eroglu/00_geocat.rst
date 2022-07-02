@@ -109,13 +109,13 @@ GeoCAT also maintains WRF-Python (Weather Research and Forecasting), which works
 with WRF-ARW model output and provides diagnostic and interpolation routines.
 
 GeoCAT was recently awarded Project Raijin, which is an NSF EarthCube-funded
-effort :cite:`raijinaward21`. Its goal is to enhance the open-source analysis
-and visualization tool landscape by developing community-owned, sustainable,
-scalable tools that facilitate operating on unstructured climate and global
-weather data in the SPE. Throughout this three-year project, GeoCAT will work
-on the development of data analysis and visualization functions that operate
-directly on the native grid as well as establish an active community of
-user-contributors.
+effort :cite:`raijinaward21` :cite:`clyne2021project`. Its goal is to enhance
+the open-source analysis and visualization tool landscape by developing
+community-owned, sustainable, scalable tools that facilitate operating on
+unstructured climate and global weather data in the SPE. Throughout this
+three-year project, GeoCAT will work on the development of data analysis and
+visualization functions that operate directly on the native grid as well as
+establish an active community of user-contributors.
 
 This paper will provide insights about GeoCAT's software stack and current
 status, team scope and near-term plans, open development methodology, as well
