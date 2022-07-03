@@ -263,7 +263,7 @@ frequency increases above 1 kHz.
    MFCC from audio spectrum. :label:`S1Fig`
 
 The signal is divided into segments and a spectrum is computed.
-Passing a spectrum through the Mel filter bank, followed by taking the log magnitude and a
+Passing a spectrum through the mel filter bank, followed by taking the log magnitude and a
 discrete cosine transform (DCT) produces the mel cepstrum. DCT extracts the signal's main
 information and peaks. For this very property, DCT is also widely used in applications such as
 JPEG and MPEG compressions. The peaks after DCT contain the gist of the audio information.
