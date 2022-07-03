@@ -4,5 +4,4 @@ output
 _build
 *.pyc
 *.swp
-/.devcontainer
 *~
