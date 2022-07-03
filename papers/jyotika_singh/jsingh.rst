@@ -480,6 +480,8 @@ via the library.
 
 |
 
+|
+
 Audio visualization
 ^^^^^^^^^^^^^^^^^^^
 |
