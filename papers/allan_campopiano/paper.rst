@@ -236,7 +236,7 @@ notebook environments (e.g., `Deepnote <https://deepnote.com/>`_), learning to
 use Hypothesize can be relatively straightforward. In fact, every statistical
 test listed `in the docs <https://alcampopiano.github.io/hypothesize/>`_
 is associated with a hosted notebook, pre-filled with
-sample data and code. But certainly, simply `pip install Hypothesize` to
+sample data and code. But certainly, simply :code:`pip install Hypothesize` to
 use Hypothesize in any environment that supports Python.
 For examples of Hypothesize being used in applied
 research, see van Noordt and Willoughby :cite:`van2021cortical`,
