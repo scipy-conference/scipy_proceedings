@@ -86,7 +86,7 @@ are not discussed in this article. Interested readers should see Wilcox's
    :align: center
 
    Two normal curves (left) and two contaminated normal curves (right).
-   Despite the obvious effect sizes (:math:`\delta=0.8`)
+   Despite the obvious effect sizes (:math:`\Delta=0.8`)
    as well as the visual similarities of the distributions,
    power is only ~0.25 under contamination; however,
    power is ~0.94 under normality (using Student's t-test). :label:`power`
