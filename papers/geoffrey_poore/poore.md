@@ -130,7 +130,7 @@ Overview of Codebraid Preview
 =============================
 
 Codebraid Preview can be installed through the VS Code extension manager.
-Development is at https://github.com/gpoore/vscode-codebraid-preview.  Pandoc
+Development is at https://github.com/gpoore/codebraid-preview-vscode.  Pandoc
 must be installed separately (https://pandoc.org/).  For code execution
 capabilities, Codebraid must also be installed
 (https://github.com/gpoore/codebraid).
