@@ -61,7 +61,10 @@ normal distribution is 1 but the variance of the contaminated normal is 10.9!
    :scale: 50%
    :align: center
 
-   Standard normal (orange) and contaminated normal (blue). :label:`contnorm`
+   Standard normal (orange) and contaminated normal (blue). The variance
+   of the contaminated curve is more than 10 times that of the standard normal curve.
+   This causes serious issues with statistical power when using traditional hypothesis
+   testing methods. :label:`contnorm`
 
 The consequence of this inflated variance is apparent when examining statistical power.
 To demonstrate, Figure :ref:`power` shows two pairs of distributions: On the left,
@@ -82,7 +85,12 @@ are not discussed in this article. Interested readers should see Wilcox's
 .. figure:: power_concat.png
    :align: center
 
-   Two normal curves (left) and two contaminated normal curves (right). Each pair has a mean difference of 0.8.  :label:`power`
+   Two normal curves (left) and two contaminated normal curves (right).
+   Despite the obvious effect sizes (:math:`\delta=0.8`)
+   as well as the visual similarities of the distributions,
+   power is only ~0.25 when testing for differences
+   using the contaminated distributions; however,
+   power is ~0.94 under normality. :label:`power`
 
 Perhaps one could argue that the contaminated normal distribution actually represents
 an extreme departure from normality and therefore should not be taken seriously; however,
@@ -115,7 +123,10 @@ Figure :ref:`tcurve` shows that the assumption that T follows a t-distribution d
    :scale: 50%
    :align: center
 
-   Actual t-distribution (orange) and assumed t-distribution (blue). :label:`tcurve`
+   Actual t-distribution (orange) and assumed t-distribution (blue).
+   When simulating a t-distribution based on a lognormal curve,
+   T does not follow the assumed shape. This causes practical concerns
+   with poor probability coverage and increased Type I Error. :label:`tcurve`
 
 With N=20, the assumption is that with a probability of 0.95,
 T will be between -2.09 and 2.09. However, when sampling from a
