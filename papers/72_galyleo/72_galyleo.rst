@@ -29,7 +29,7 @@ Galyleo: A General-Purpose Extensible Visualization Solution
 
 .. class:: abstract
 
-Galyleo is an open-source, extensible dashboarding solution integrated with JupyterLab :cite:`jupyterlab`.  Galyleo is a standalone web application integrated as an iframe :cite:`lawson2011introducing` into a JupyterLab tab.  Users generate data for the dashboard inside a Jupyter Notebook :cite:`kluyver2016jupyter`, which transmits the data through message passing :cite:p`mdnMessage` to the dashboard;  users use drag-and-drop operations to add widgets to filter, and charts to display the data,  shapes, text, and images.   The dashboard is saved as a JSON :cite:`crockford2006application` file in the user’s filesystem in the same directory as the Notebook.
+Galyleo is an open-source, extensible dashboarding solution integrated with JupyterLab :cite:`jupyterlab`.  Galyleo is a standalone web application integrated as an iframe :cite:`lawson2011introducing` into a JupyterLab tab.  Users generate data for the dashboard inside a Jupyter Notebook :cite:`kluyver2016jupyter`, which transmits the data through message passing :cite:`mdnMessage` to the dashboard;  users use drag-and-drop operations to add widgets to filter, and charts to display the data,  shapes, text, and images.   The dashboard is saved as a JSON :cite:`crockford2006application` file in the user’s filesystem in the same directory as the Notebook.
 
 .. class:: keywords
 
@@ -334,7 +334,7 @@ The World-Wide Web and email comprised  the first generation of Internet computi
 
     Generations of Internet Computing
 
-The Word Processor era was due to technological limitations -- the processing power, and especially memory, to run multiple programs simply wasn't available on low-end hardware, and PC operating systems didn't yet exist.  In some sense, the current second generation of Internet Computing suffers from similar technological constraints.  The "Operating System" for Internet Computing doesn't yet exist.  The Jupyter Computer can provide it.
+The Word Processor era was due to technological limitations -- the processing power and  memory to run multiple programs simply wasn't available on low-end hardware, and PC operating systems didn't yet exist.  In some sense, the current second generation of Internet Computing suffers from similar technological constraints.  The "Operating System" for Internet Computing doesn't yet exist.  The Jupyter Computer can provide it.
 
 To see the difference that this can make, consider LaTeX (perhaps preceded by Docutils, as is the case for SciPy) preparation of a document.  On a personal computer, it's fairly straightforward; the user uses any of a wide variety of text editors to prepare the document, any of a wide variety of productivity and illustrator programs to prepare the images, runs this through a local sequence  of commands (e.g., `pdflatex paper; bibtex paper; pdflatex paper`.  Usually Github or another repository is used for storage and collaboration.
 
