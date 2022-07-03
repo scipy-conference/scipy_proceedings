@@ -147,7 +147,7 @@ This study took advantage of GPU (graphics processing unit) support as implement
 
 Other workflows implemented in the Schrödinger Materials Science Suite utilize open source packages as well.
 For soft materials (polymers, organic small molecules and substrates composed of soft molecules), convex hull and related mathematical methods are important for finding possible accessible solvent voids (during submerging or sorption) and adsorbate sites (during molecular deposition).
-These methods are conveniently implemented in the open source SciPy package :cite:`Scipy`.
+These methods are conveniently implemented in the open source SciPy :cite:`Scipy` and NumPy :cite:`Numpy` packages.
 Thus, we implemented molecular deposition and evaporation workflows by using the Desmond MD engine as the backend in tandem with the convex hull functionality.
 This workflow enables simulation of the deposition and evaporation of the small molecules on a substrate.
 We utilized the aforementioned deposition workflow in the study of organic light-emitting diodes (OLEDs), which are fabricated using a stepwise process, where new layers are deposited on top of previous layers.
