@@ -620,18 +620,13 @@ Future Work
 
 In the future, it would be worthwhile to evaluate these improvement proposals using a different training routine. We have
 stated previously that perhaps the extremely poor performance of the DML with a prior and MVAE models 
-may be due to the training regimen of alternating on training against a supervised and unsupervised loss.
-Further research could look to develop or compare several different training regimens. One alternative
-would simply be to keep alternating between losses but at the level of each batch instead of each epoch.
+may be due to alternating on training against a supervised and unsupervised loss.
+Further research could look to develop or compare several different training routines. One alternative
+would be alternating between losses at each batch instead of each epoch.
 Another alternative, specifically for the MVAE, may be first training DML on labelled data, training a
-GMM on it’s outputs, and then using the GMM as the prior distribution for the VAE. Grosnit et al.
-(:cite:`grosnit2021high`) has defined a more complex training routines to balance the DML and unsupervised loss. If this
-line of research is pursued, it may be worthwhile to review the field of auxiliary task learning, in which a
-model trains against an additional task or tasks, to find a solution to how to optimize the training routine
-of the modified DML models.
+GMM on it’s outputs, and then using the GMM as the prior distribution for the VAE. 
 
-Another potentially interesting avenue for future study is in investigating a fourth improvement proposal for a possible
-benefit to combining DML and VAE methodology: the ability to define a Riemannian metric on the
+Another potentially interesting avenue for future study is in investigating a fourth improvement proposal: the ability to define a Riemannian metric on the
 latent space. Previous research has shown a Riemannian metric can be computed on the latent space
 of the VAE by computing the pull-back metric of the VAE’s decoder function (:cite:`arvanitidis2020geometrically`).
 Through the Riemannian metric we could calculate metric losses such as triplet loss with a geodesic instead
