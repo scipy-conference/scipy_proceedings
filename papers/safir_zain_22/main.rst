@@ -121,8 +121,11 @@ for unlabelled data, effectively transforming unlabelled data into
 labelled data. Dutta et al. (:cite:`dutta2021semi`) and Li et al. (:cite:`li2019semi`)
 propose a model which uses affinity propagation on a
 k-Nearest-Neighbors graph to label partitions of unlabelled data based
-on their closest neighbors in the latent space. Wu et al.
-(:cite:`wu2020metric`) also look to assign
+on their closest neighbors in the latent space. 
+Li et. al.'s paper provides a benchmark for semi-supervised as they state
+their methods achieve 89.6 to 94.2 percent clustering accuracy 
+on the MNIST dataset, outperforming two similar state-of-the-art methods. 
+Wu et al. (:cite:`wu2020metric`) also look to assign
 pseudo-labels to unlabelled data, but not through a graph-based
 approach. Instead, the proposed model looks to approximate "soft"
 pseudo-labels for unlabelled data from the metric learning similarity
