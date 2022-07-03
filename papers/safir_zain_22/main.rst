@@ -217,7 +217,7 @@ regime and loss function may be adapted to assist the performance of a
 DML method for a semi-supervised dataset.
 
 .. figure:: figs/alg_base.PNG
-   :scale: 90%
+   :scale: 65%
    :figclass: w
    :align: center
 
@@ -261,7 +261,7 @@ produces an output :math:`\hat{x}`. The unsupervised loss :math:`L_{U}`
 is equal to the reconstruction loss. 
 
 .. figure:: figs/alg_claim1.PNG
-   :scale: 90%
+   :scale: 65%
    :figclass: w
    :align: center
 
@@ -318,12 +318,12 @@ Divergence is calculated with a monte carlo approximation for the GMM
 and analytically with the unit prior.
 
 .. figure:: figs/alg_claim2.PNG
-   :scale: 90%
+   :scale: 65%
    :figclass: w
    :align: center
 
 .. figure:: figs/alg_monte_carlo.PNG
-   :scale: 90%
+   :scale: 65%
    :figclass: w
    :align: center
 
@@ -343,7 +343,7 @@ and DML task on the VAE latent space. The unsupervised loss is set to the VAE lo
 The implementation uses the VAE with VampPrior model instead of the vanilla VAE.
 
 .. figure:: figs/alg_claim3.PNG
-   :scale: 90%
+   :scale: 65%
    :figclass: w
    :align: center
 
@@ -359,8 +359,7 @@ Experimental Configuration
 ++++++++++++++++++++++++++++
 Each set of experiments shares a similar hyperparameter search space.
 Below we describe the hyperparameters that are included in the search
-space of each experiment. We also discuss the hardware used and the the
-evaluation method.
+space of each experiment and the evaluation method.
 
 Learning Rate (lr)
 ===================
@@ -439,13 +438,6 @@ similar in dimensionality (1 x 28 x 28), number of samples (60,000 and
    :align: center
 
    Sample images from the MNIST (left) and OrganAMNIST of MedMNIST (right) datasets
-
-Hardware
-=========
-
-The server used for running the experiments contains 4 NVIDIA GeForce RTX 2080 Ti GPUs.
-Using the Weights and Biases sweep API, we parallelize the experiments
-such that four experiments run simletaneously on one GPU each.
 
 Evaluation
 ===========
