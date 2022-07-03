@@ -397,7 +397,8 @@ particular estimators and statistical tests have been chosen.
 .. figure:: sim.png
    :align: center
 
-   An example of the robust stats simulator in Deepnote's hosted notebook environment :label:`sim`
+   An example of the robust stats simulator in Deepnote's hosted notebook environment.
+   A minimalist UI can lower the barrier-to-entry to robust statistics concepts. :label:`sim`
 
 Conclusion
 ----------
