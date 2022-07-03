@@ -243,7 +243,8 @@ research, see van Noordt and Willoughby :cite:`van2021cortical`,
 van Noordt et al. :cite:`van2022inter`, and Elsabbagh :cite:`elsabbagh2022inter`.
 
 The API for Hypothesize is organized by single- and two-factor tests, as well as
-measures of association. Data is always in the form of Pandas DataFrame.
+measures of association. Input data for the groups, conditions, and measures
+are given in the form of a Pandas DataFrame :cite:`reback2020pandas`:cite:`mckinney-proc-scipy-2010`.
 By way of example, one can compare two independent groups
 (e.g., placebo versus treatment)
 using the 20% trimmed mean and the percentile bootstrap test as follows
