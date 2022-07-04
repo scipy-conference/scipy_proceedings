@@ -155,7 +155,11 @@ Let’s build the pipeline (this will take ~30 seconds):
 We can see which are the tasks that ran during this command, how long they took to execute,
 and the contributions of each task to the overall pipeline execution runtime.
 
-.. image:: images/build-output.png
+.. figure:: images/build-output.png
+   :alt: post-build-artifacts
+
+   Here we can see the build outputs
+
 
 Navigate to ``playground/output/`` and you’ll see all the outputs: the
 executed notebooks, data files and trained model.
@@ -164,7 +168,11 @@ executed notebooks, data files and trained model.
 
    ls playground/output
 
-.. image:: images/post-build-artifacts.png
+.. figure:: images/post-build-artifacts.png
+   :alt: post-build-artifacts
+
+   These are the post build artifacts
+
 
 In this figure, we can see all of the data that was collected during the pipeline,
 any artifacts that might be useful to the user, and some of the execution history
@@ -203,12 +211,12 @@ that is saved on the notebook's context.
     assert 'pkl' in upstream['train-test-split']['X_test']
 
 Adding these snippets will allow us to validate that the data we're looking for exists
-as well as the quality we expect. For instance, in the first test we're checking
+and has the quality we expect. For instance, in the first test we're checking
 there are no missing rows, and that the data sample we have are for houses up to 100
 years old.
 
 In the second snippet, we're checking that there are train and test inputs which
-are crucial to us before training the model.
+are crucial for training the model.
 
 6. Maintaining the pipeline
 ---------------------------
@@ -219,13 +227,14 @@ Let’s look again at our pipeline plot:
 
    Image('playground/pipeline.png')
 
-.. image:: images/executed-pipeline.png
+.. figure:: images/executed-pipeline.png
+   :alt: executed-pipeline
 
 
-The arrows in the diagram represent input/output dependencies, hence,
-determine execution order. For example, the first task (``load``) loads
-some data, then ``clean`` uses such data as input and process it, then
-``train-test-split`` splits our dataset in training and test, finally,
+The arrows in the diagram represent input/output dependencies
+and depict the execution order. For example, the first task (``load``) loads
+some data, then ``clean`` uses such data as input and processes it, then
+``train-test-split`` splits our dataset into training and test sets. Finally,
 we use those datasets to train a linear regression and a random forest
 regressor.
 
@@ -263,8 +272,8 @@ Now, let’s create a base file by executing ``ploomber scaffold``:
 This is the output of the command:
 ```
 Found spec at 'pipeline.yaml'
-Adding /Users/ido/ploomber-workshop/
-playground/tasks/
+Adding /Users/ido/ploomber-workshop/playground/
+tasks/
 gradient-boosting-regressor.py...
 Created 1 new task sources.
 ```
@@ -280,8 +289,10 @@ Let's see how the plot looks now:
    cd playground
    ploomber plot
 
-.. image:: images/new-task.png
+.. figure:: images/new-task.png
+   :alt: new-task
 
+   Now we see an independent new task
 
 You can see that Ploomber recognizes the new file, but it does not have
 any dependency, so let’s tell Ploomber that it should execute after
@@ -371,7 +382,10 @@ You can see that only the ``gradient-boosting-regressor`` task ran!
 Incremental builds allow us to iterate faster without keeping track of
 task changes.
 
-Check out ``playground/output/gradient-boosting-regressor.ipynb``,
+Check out
+``playground/output/
+gradient-boosting-regressor.ipynb``,
+
 which contains the output notebooks with the model evaluation plot.
 
 
@@ -460,6 +474,7 @@ Here are a few resources to dig deeper:
 -  `JupyterCon 2020 talk <https://www.youtube.com/watch?v=M6mtgPfsA3M>`_
 -  `Argo Community Meeting talk <https://youtu.be/FnpXyg-5W_c>`_
 -  `Pangeo Showcase talk (AWS Batch demo) <https://youtu.be/XCgX1AszVF4>`_
+-  `Jupyter project <https://jupyter.org/>`_
 
 10. Contact
 -----------
