@@ -42,6 +42,7 @@ By viewing the semantic changes of words during notable events, contexts of exis
 By studying the initial outbreak of a disease and the associated semantic shifts of select words,
 we hope to be able to spot social media trends to prevent future outbreaks faster than traditional methods.
 To explore this idea, we generate a temporal word embedding model that allows us to study word semantics evolving over time.
+Using these temporal word embeddings, we use machine learning models to predict words associated with the disease outbreak.
 
 .. class:: keywords
 
