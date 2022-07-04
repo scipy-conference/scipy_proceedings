@@ -159,7 +159,7 @@ method. It was shown by :cite:`Richardson1972` that this converges to a maximum
 likelihood solution of Eq. :ref:`cash`. A Python implementation of the standard RL method
 is available e.g. in the `Scikit-Image` package :cite:`skimage`.
 
-Instead of the iterative, gradient decent based optimization it is also possible to sample from
+Instead of the iterative, gradient descent based optimization it is also possible to sample from
 the posterior distribution using a simple Metropolis-Hastings approach and uniform
 prior. This is demonstrated in one of the *Pylira* online tutorials (`Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__).
 
