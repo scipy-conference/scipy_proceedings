@@ -14,13 +14,13 @@ Monaco: A Monte Carlo Library for Performing Uncertainty and Sensitivity Analyse
 
 .. class:: keywords
 
-   Monte Carlo, Modeling, Uncertainty Quantification, Uncertainty Analysis, Sensitivity Analysis, Ensemble Prediction, VARS, D-VARS
+   Monte Carlo, Modeling, Uncertainty Quantification, Uncertainty Analysis, Sensitivity Analysis, Decision-Making, Ensemble Prediction, VARS, D-VARS
 
 
 Introduction
 ============
 
-Computational models form the backbone of decision-making processes in science, engineering, and public policy. However, our increased reliance on these models stands in contrast to the difficulty in understanding them as we add increasing complexity to try and capture ever more of the fine details of real-world interactions. Practitioners will often take the results of their large, complex model as a point estimate, with no knowledge of how uncertain those results are :cite:`ferretti2016trends`. Multiple-scenario modeling (e.g. looking at a worst-case, most-likely, and best-case scenario) is an improvement, but what is needed is a complete global exploration of the input space. That gives insight into the overall distribution of results (UA) as well as the relative influence of the different input factors on the ouput variance (SA). This complete understanding is critical for effective and responsible use of models in any decision-making process, and policy papers have identified UA and SA as key modeling practices :cite:`azzini2020uncertainty` :cite:`us2009guidance`.
+Computational models form the backbone of decision-making processes in science, engineering, and public policy. However, our increased reliance on these models stands in contrast to the difficulty in understanding them as we add increasing complexity to try and capture ever more of the fine details of real-world interactions. Practitioners will often take the results of their large, complex model as a point estimate, with no knowledge of how uncertain those results are :cite:`ferretti2016trends`. Multiple-scenario modeling (e.g. looking at a worst-case, most-likely, and best-case scenario) is an improvement, but a complete global exploration of the input space is needed. That gives insight into the overall distribution of results (UA) as well as the relative influence of the different input factors on the ouput variance (SA). This complete understanding is critical for effective and responsible use of models in any decision-making process, and policy papers have identified UA and SA as key modeling practices :cite:`azzini2020uncertainty` :cite:`us2009guidance`.
 
 Despite the importance of UA and SA, recent literature reviews show that they are uncommon – in 2014 only 1.3% of all published papers :cite:`ferretti2016trends` using modeling performed any SA. And even when performed, best practices are usually lacking – amongst papers which specifically claimed to perform sensitivity analysis, a 2019 review found only 21% performed global (as opposed to local or zero) UA, and 41% performed global SA :cite:`saltelli2019so`. 
 
@@ -60,7 +60,7 @@ Benefits and Drawbacks of Basic Monte Carlo Sampling
 
 However, basic Monte Carlo sampling is subject to the classical drawbacks of the method such as poor sampling of rare events and the slow :math:`\sigma / \sqrt{n}` convergence on quantities of interest. If the outputs and regions of interest are firmly known at the outset, then other sampling methods will be more efficient :cite:`kroese2013handbook`.
 
-Additionally, given that any conclusions are conditional on the correctness of the underlying model and input parameters, the task of validation is critical to confidence in the UA and SA results. However, this is currently out of scope for the library and must be performed with other tools. In a data-poor domain, hypothesis testing or probablistic prediction measures like loss scores can be used to anchor the outputs against a small number of real-life test data. More generally, the "inverse problem" of model and parameter validation is a deep field unto itself and :cite:`national2012assessing` and :cite:`shiffrin2008survey` are recommended as overviews of some methods. If *monaco*'s scope is too limited for the reader's needs, the author recommends `UQpy` :cite:`OLIVIER2020101204` for UA and SA, and `PyMC` :cite:`salvatier2016probabilistic` or `Stan` :cite:`carpenter2017stan` as good general-purpose probablistic programming Python libraries.
+Additionally, given that any conclusions are conditional on the correctness of the underlying model and input parameters, the task of validation is critical to confidence in the UA and SA results. However, this is currently out of scope for the library and must be performed with other tools. In a data-poor domain, hypothesis testing or probabilistic prediction measures like loss scores can be used to anchor the outputs against a small number of real-life test data. More generally, the "inverse problem" of model and parameter validation is a deep field unto itself and :cite:`national2012assessing` and :cite:`shiffrin2008survey` are recommended as overviews of some methods. If *monaco*'s scope is too limited for the reader's needs, the author recommends `UQpy` :cite:`OLIVIER2020101204` for UA and SA, and `PyMC` :cite:`salvatier2016probabilistic` or `Stan` :cite:`carpenter2017stan` as good general-purpose probabilistic programming Python libraries.
 
 
 Workflow
@@ -170,7 +170,7 @@ If the user wants to use existing workflows for generating, running, post-proces
 Resource Usage
 --------------
 
-Note that *monaco*'s computational and storage overhead in creating easily-iterrogatable objects for each variable, value, and case makes it an inefficient choice for computationally simple applications with high :math:`n`, such as Monte Carlo integration. If the preprocessed sim input and raw output for each case (which for some models may dominate storage) is not retained, then the storage bottleneck will be the creation of a `Val` object for each case's input and output values with minimum size 0.5 kB. The maximum :math:`n` will be driven by the size of the RAM on the host machine being capable of holding at least :math:`0.5 * n(k_{in} + k_{out})` kB. On the computational bottleneck side, *monaco* is best suited for models where the model runtime dominates the random variate generation and the few hundred microseconds of `dask.delayed` task switching time. 
+Note that *monaco*'s computational and storage overhead in creating easily-interrogatable objects for each variable, value, and case makes it an inefficient choice for computationally simple applications with high :math:`n`, such as Monte Carlo integration. If the preprocessed sim input and raw output for each case (which for some models may dominate storage) is not retained, then the storage bottleneck will be the creation of a `Val` object for each case's input and output values with minimum size 0.5 kB. The maximum :math:`n` will be driven by the size of the RAM on the host machine being capable of holding at least :math:`0.5 * n(k_{in} + k_{out})` kB. On the computational bottleneck side, *monaco* is best suited for models where the model runtime dominates the random variate generation and the few hundred microseconds of `dask.delayed` task switching time. 
 
 
 Technical Features
@@ -193,7 +193,7 @@ Random sampling of the percentiles for each variable can be done using scipy's p
 Order Statistics, or, How Many Cases to Run?
 --------------------------------------------
 
-How many Monte Carlo cases should one run? One answer would be to choose :math:`n \geq 2^k` with a sampling method that implements a (t,m,s) digital net (such as a Sobol or Halton sequence), which guarentees that there will be at least one sample point in every hyperoctant of the input space :cite:`joe2008constructing`. This should be considered a lower bound for SA, with the number of cases run being some integer multiple of :math:`2^k`.
+How many Monte Carlo cases should one run? One answer would be to choose :math:`n \geq 2^k` with a sampling method that implements a (t,m,s) digital net (such as a Sobol or Halton sequence), which guarantees that there will be at least one sample point in every hyperoctant of the input space :cite:`joe2008constructing`. This should be considered a lower bound for SA, with the number of cases run being some integer multiple of :math:`2^k`.
 
 Along a similar vein, :cite:`dyer1992volumes` suggests that with random sampling :math:`n \geq 2.136^k` is sufficient to ensure that the volume fraction :math:`V` approaches 1. The author hypothesizes that for a digital net, the :math:`n \geq \lambda^k` condition will be satisfied with some :math:`\lambda \leq 2`, and so :math:`n \geq 2^k` will suffice for this condition to hold. However, these methods of choosing the number of cases may undersample for low :math:`k` and be infeasible for high :math:`k`.
 
@@ -232,7 +232,7 @@ The plotting module will automatically plot size :math:`(1, s)` arrays against t
 Parallel Processing
 -------------------
 
-*monaco* uses *dask distributed* :cite:`rocklin2015dask` as a parallel processing backend, and supports preprocessing, running, and postprocessing cases in a parallel arrangement. Users familiar with *dask* can extend the parallelization of their simulation from their single machine to a distributed cluster.
+*monaco* uses *dask.distributed* :cite:`rocklin2015dask` as a parallel processing backend, and supports preprocessing, running, and postprocessing cases in a parallel arrangement. Users familiar with *dask* can extend the parallelization of their simulation from their single machine to a distributed cluster.
 
 For simple simulations such as the example code at the end of the paper, the overhead of setting up a *dask* server may outweigh the speedup from parallel computation, and in those cases *monaco* also supports running single-threaded in a single for-loop.
 
