@@ -88,7 +88,7 @@ To study semantic shifts through time, the corpus was split into 18 temporal buc
 The corpus within each bucket is represented by :math:`D_{t}`, with *t* representing the temporal slice. Within each 2 month period, tweets were split into 12 pre-processed output csv files.
 Pre-processing steps first removed retweets, links, images, emojis, and punctuation.
 Common stop words were removed from the tweets using the NLTK Python package, and each tweet was tokenized.
-A vocabularfy dictionary was then generated for each of the 18 temporal buckets, containing each unique word and a count of its occurrences within its respective bucket.
+A vocabulary dictionary was then generated for each of the 18 temporal buckets, containing each unique word and a count of its occurrences within its respective bucket.
 The vocabulary dictionaries for each bucket were then combined into a global vocabulary dictionary, containing the total counts for each unique word across all 18 buckets.
 Our experiments utilized two vocabulary dictionaries: the first being the 10,000 most frequently occurring words from the global vocabulary for ensuring proper generation of embedding vectors, 
 the second being a combined vocabulary of 15,000 terms, including our target HIV/AIDS related terms.
@@ -103,7 +103,7 @@ and other terms we thought were pertinent to include, such as HIV medications an
 Temporally Aligned Vector Generation
 ====================================
 
-Generating word embeddings is typically done through 2 primary methods: continuous bag-of-words (CBOW) and skip-gram, however many other various models exist :cite:`vec13`.
+Generating word2vec embeddings is typically done through 2 primary methods: continuous bag-of-words (CBOW) and skip-gram, however many other various models exist :cite:`vec13`.
 Our methods use a CBOW approach at generating embeddings, which generates a word’s vector embedding based on the context the word appears in,
 i.e. the words in a window range surrounding the target word. Following pre-processing of our corpus, steps for generating word embeddings were
 applied to each temporal bucket. For each time bucket, co-occurrence matrices were first created, with a window size w = 5. These matrices contained
@@ -196,7 +196,7 @@ Our target class was terms that we hypothesized were closely related to the HIV 
 Several iterations with varying number of layers, activation functions, and nodes within each layer were attempted to maximize performance. 
 Each model used an 80% training, 20% testing split on these data, with two variations performed of this split on training and testing data.
 The first was randomly splitting all 255,000 observations, without care of some observations for a term being in both training set and some being in the testing set.
-This split of data will be reffered to as "mixed" data, as the terms are mixed between the splits. The second split of data split the 15,000 words into 80% training and 20% testing.
+This split of data will be referred to as "mixed" data, as the terms are mixed between the splits. The second split of data split the 15,000 words into 80% training and 20% testing.
 After the vocabulary was split, the corresponding observations in the data were split accordingly, leaving all observations for each term within the same split. 
 Additionally, we tested a neural network that would accept the same data as the input, either data_201 or data_121, with the addition of the label assigned to that observation by the k-means model as a feature. 
 The goal of these models, in addition was to correctly identifying terms we classified as related to the outbreak, was to discover new terms that shift in similar ways to the HIV terms we labeled. 
@@ -425,7 +425,7 @@ The difference in certainty thresholds was due to data_121 having an extremely l
    +--------+----------+-----------+--------+------+------+-------+------+----------+-----------+--------+------+------+-------+------+
 
 These results show that classification of terms surrounding the Scott County HIV outbreak is achievable, but the model will need to be refined on more data.
-It can be seen that the mixed term split of data led to a high rate of true positives, however it quickly became much more sensitive to terms outside of our target class on higher epochs, with false positives dropping to lower rates.
+It can be seen that the mixed term split of data led to a high rate of true positives, however it quickly became much more specific on terms outside of our target class on higher epochs, with false positives dropping to lower rates.
 Additionally, accuracy begins to increase between 150 and 200 epoch models on the no mixed split, so even higher epoch models might improve results further on the no mixed split.
 Outliers, such as in the true positives in data_121 with 100 epochs without k-means labels, can be explained by the certainty threshold. If the certainty threshold was .05 on that model, there would have been 86 true positives, and 1,129 false positives.
 A precise certainty threshold can be found as we test this model on other HIV related data sets and control data sets. 
