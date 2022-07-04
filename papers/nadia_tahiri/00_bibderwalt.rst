@@ -324,26 +324,3 @@ As a future work on the project, we plan to incorporate the following additional
 Acknowledgements
 ----------------
 The authors thank SciPy conference and reviewers for their valuable comments on this paper. This work was supported by Natural Sciences and Engineering Research Council of Canada and the University of Sherbrooke grant.
-
-
-References
-----------
-.. [A00] Avise, J. C. (2000). Phylogeography: the history and formation of species. Harvard university press. DOI: https://doi.org/10.1093/icb/41.1.134  
-.. [CPKGWBB21] Chen, S., Prettner, K., Kuhn, M., Geldsetzer, P., Wang, C., Bärnighausen, T., & Bloom, D. E. (2021). Climate and the spread of COVID-19. Scientific Reports, 11(1), 1-6. DOI: https://doi.org/10.1038/s41598-021-87692-z  
-.. [CRADD22] Cascella, M., Rajnik, M., Aleem, A., Dulebohn, S. C., & Di Napoli, R. (2022). Features, evaluation, and treatment of coronavirus (COVID-19). Statpearls [internet]. 
-.. [E04] Edgar, R. C. (2004). MUSCLE: a multiple sequence alignment method with reduced time and space complexity. BMC bioinformatics, 5(1), 1-19. DOI: https://doi.org/10.1186/1471-2105-5-113 
-.. [F05] Felsenstein, J. (2005). PHYLIP (Phylogeny Inference Package) version 3.6. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
-.. [KLLT22] Koshkarov, A., Li, W., Luu, M., & Tahiri, N. (2022). aPhylogeo (version 1.0). Zenodo. DOI: https://doi.org/10.5281/zenodo.6773603
-.. [KM02] Knowles, L. L., & Maddison, W. P. (2002). Statistical phylogeography. Molecular Ecology, 11(12), 2623-2635. DOI: https://doi.org/10.1046/j.1365-294x.2002.01637.x  
-.. [LFZK06] Lin, K. U. N., Fong, D. Y. T., Zhu, B., & Karlberg, J. (2006). Environmental factors on the SARS epidemic: air temperature, passage of time and multiplicative effect of hospital infection. Epidemiology & Infection, 134(2), 223-230. DOI: https://doi.org/10.1017/S0950268805005054 
-.. [N92] Nagylaki, T. (1992). Rate of evolution of a quantitative character. Proceedings of the National Academy of Sciences, 89(17), 8121-8124. DOI: https://doi.org/10.1073/pnas.89.17.8121  
-.. [OCFC20] Oliveiros, B., Caramelo, L., Ferreira, N. C., & Caramelo, F. (2020). Role of temperature and humidity in the modulation of the doubling time of COVID-19 cases. MedRxiv. DOI: https://doi.org/10.1101/2020.03.05.20031872  
-.. [OHPWBKU21] O'Toole, Á., Hill, V., Pybus, O. G., Watts, A., Bogoch, I. I., Khan, K., ... & UK, G. (2021). Tracking the international spread of SARS-CoV-2 lineages B. 1.1. 7 and B. 1.351/501Y-V2 with grinch. Wellcome open research, 6. DOI: https://doi.org/10.12688/wellcomeopenres.16661.2   
-.. [OS98] Orr, M. R., & Smith, T. B. (1998). Ecology and speciation. Trends in Ecology & Evolution, 13(12), 502-506. DOI: https://doi.org/10.1016/s0169-5347(98)01511-0 
-.. [OSUJHMR21] O’Toole, Á., Scher, E., Underwood, A., Jackson, B., Hill, V., McCrone, J. T., ... & Rambaut, A. (2021). Assignment of epidemiological lineages in an emerging pandemic using the pangolin tool. Virus Evolution, 7(2), veab064. DOI: https://doi.org/10.1093/ve/veab064  
-.. [RF81] Robinson, D. F., & Foulds, L. R. (1981). Comparison of phylogenetic trees. Mathematical biosciences, 53(1-2), 131-147. DOI: https://doi.org/10.1016/0025-5564(81)90043-2  
-.. [RHOHMRP20] Rambaut, A., Holmes, E. C., O’Toole, Á., Hill, V., McCrone, J. T., Ruis, C., ... & Pybus, O. G. (2020). A dynamic nomenclature proposal for SARS-CoV-2 lineages to assist genomic epidemiology. Nature microbiology, 5(11), 1403-1407. DOI: https://doi.org/10.1038/s41564-020-0770-5 
-.. [S01] Schluter, D. (2001). Ecology and the origin of species. Trends in ecology & evolution, 16(7), 372-380. DOI: https://doi.org/10.1016/s0169-5347(01)02198-x  
-.. [S14] Stamatakis, A. (2014). RAxML version 8: a tool for phylogenetic analysis and post-analysis of large phylogenies. Bioinformatics, 30(9), 1312-1313. DOI: https://doi.org/10.1093/bioinformatics/btu033 
-.. [SDPMS20] Sobral, M. F. F., Duarte, G. B., da Penha Sobral, A. I. G., Marinho, M. L. M., & de Souza Melo, A. (2020). Association between climate variables and global transmission oF SARS-CoV-2. Science of The Total Environment, 729, 138997. DOI: https://doi.org/10.1016/j.scitotenv.2020.138997 
-.. [SMSKSGB22] Sabarathinam, C., Mohan Viswanathan, P., Senapathi, V., Karuppannan, S., Samayamanthula, D. R., Gopalakrishnan, G., ... & Bhattacharya, P. (2022). SARS-CoV-2 phase I transmission and mutability linked to the interplay of climatic variables: a global observation on the pandemic spread. Environmental Science and Pollution Research, 1-18. DOI: https://doi.org/10.1007/s11356-021-17481-8  
