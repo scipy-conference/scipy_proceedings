@@ -26,7 +26,6 @@
 
 :author: Tim Heckman
 :email: heckman@uga.edu
-:institution: Computer Science Department, University of Georgia
 :institution: Public Health Department, University of Georgia
 
 :bibliography: mybib
