@@ -161,11 +161,11 @@ The following sliding window function illustrates moving the sliding window thro
                   for line in f:
                      if line != "\n":
                         espece = list_names[index]
-                        nbr_espaces = 11 - len(espece)
+                        nb_espace = 11 - len(espece)
                         out.write(espece)
-                        for i in range(nbr_espaces):
+                        for i in range(nb_espace):
                               out.write(" ")
-                        out.write(line[debut:fin] + "\n")
+                        out.write(line[debut:fin])
                         index = index + 1
             out.close()
             f.close()
