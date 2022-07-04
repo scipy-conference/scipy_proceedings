@@ -14,11 +14,9 @@ Experience report of physics-informed neural networks in fluid simulations: pitf
 
 .. class:: abstract
 
-The deep learning boom motivates researchers and practitioners of computational fluid dynamics eager to integrate the two areas.
-The PINN (physics-informed neural network) method is one such attempt.
-Though PINN is now deemed as a complement to traditional CFD (computational fluid dynamics) solvers rather than a replacement, its capability to solve the Navier-Stokes equations without given data is still of great interest.
+Though PINNs (physics-informed neural networks) are now deemed as a complement to traditional CFD (computational fluid dynamics) solvers rather than a replacement, its capability to solve the Navier-Stokes equations without given data is still of great interest.
 This report presents our not-so-successful experiments of solving the Navier-Stokes equations with PINN as a replacement to traditional solvers.
-We aim to, with our experiments, prepare readers for the difficulties and issues they may face if they are interested in such an use case of PINN.
+We aim to, with our experiments, prepare readers for the challenges they may face if they are interested in data-free PINN.
 In this work, we used two standard flow problems: 2D Taylor-Green vortex at :math:`Re = 100` and 2D cylinder flow at :math:`Re = 200`.
 The PINN method solved the 2D Taylor-Green vortex problem with acceptable results, and we used this flow as an accuracy and performance benchmark.
 About 32 hours of training were required for the PINN method's accuracy to match the accuracy of a :math:`16 \times 16` finite-difference simulation, which took less than 20 seconds.
@@ -42,16 +40,23 @@ Another example is the work of Lagaris and his/her colleagues (:cite:`lagaris_ar
 Similar work with radial basis function networks can be found in reference :cite:`Li2003`.
 Nevertheless, deep learning applications in CFD did not get much attention until this decade, thanks to modern computing technology, including GPUs, cloud computing, high-level libraries like PyTorch and TensorFlow, and their Python APIs.
 
-Solving partial differential equations with neural networks is particularly interesting to CFD researchers and practitioners.
-The name physics-informed neural network (PINN) was coined by Raissi et al. (:cite:`raissi_physics-informed_2019`) to describe such an application of deep learning.
+Solving partial differential equations with deep learning is particularly interesting to CFD researchers and practitioners.
+The PINN (physics-informed neural network) method denotes an approach to incorporate deep learning in CFD applications, where solving partial differential equations plays the key role.
 These partial differential equations include the well-known Navier-Stokes equations—one of the Millennium Prize Problems.
 The universal approximation theorem (:cite:`hornik_approximation_1991`) implies that neural networks can model the solution to the Navier-Stokes equations with high fidelity and capture complicated flow details as long as networks are big enough.
-This deep learning application is sometimes branded as unsupervised learning—it does not rely on human-provided data, making it sounds very *"AI."*
+The concept of PINN can be dated back to :cite:`dissanayake_neural-network-based_1994`, and the name of PINN was coined in :cite:`raissi_physics-informed_2019`.
+Human-provided data are not necessity in PINN's algorithm :cite:`lu_deepxde:_2021`, making it a potential alternative to traditional CFD solvers.
+Sometimes it is branded as unsupervised learning—it does not rely on human-provided data, making it sounds very *"AI."*
 It is unsurprising to see headlines like *"AI has cracked the Navier-Stokes equations"* in recent popular science articles (:cite:`hao_ai_2020`).
 
-The PINN method promises several advantages over traditional numerical methods (such as finite volume methods).
-First, it is a mesh-free scheme.
-A mesh-free scheme benefits engineering problems in which fluid flows interact with objects of complicated geometries.
+Data-free PINN and an alternative to traditional CFD solvers may sound attractive.
+However, PINN can also be used under data-driven configurations, and data-driven PINN may perform better than the data-free setting.
+In fact, as stated by Cai et al. :cite:`cai_physics-informed_2021`, PINN is not meant to be a replacement of the existing CFD solvers due to its inferior accuracy and efficiency.
+The most useful applications of PINN should be those with some given data, and thus the models are trained against the data.
+For example, when we have experimental measurements or partial simulation results (coarse-grid data, limited numbers of snapshots, etc.) from traditional CFD solvers, PINN may be useful to reconstruct the flow or to be a surrogate model.
+
+Nevertheless, data-free PINN promises several advantages over traditional solvers, and using data-free PINN to replace traditional solvers is still of great interest to researchers (e.g., :cite:`karali_novel_2021`).
+First, it is a mesh-free scheme, which benefits engineering problems where fluid flows interact with objects of complicated geometries.
 Simulating these fluid flows with traditional numerical methods usually requires high-quality unstructured meshes.
 Such meshes need time-consuming human intervention in the pre-processing stage before actual simulations.
 The second benefit of PINN is that the trained models approximate the governing equations' general solutions, meaning there is no need to solve the equations repeatedly for different flow parameters.
@@ -59,17 +64,20 @@ For example, a flow model taking boundary velocity profiles as its input argumen
 Conventional numerical methods, on the contrary, require several simulations, with each one covering one boundary velocity profile.
 This advantage helps in situations like engineering design optimization.
 Traditionally, design optimization relies on sets of experiments to conduct parameter sweeps and find optimal parameters or geometries for products.
+Given these benefits, researchers continue studying and improving the usability of data-free PINN (e.g., :cite:`wang_when_2022,du_evolutional_2021,wang_understanding_2021,sirignano_dgm:_2018`).
 
-Given the stated benefits of PINN, enthusiasts have endeavored to show PINN's potential in real-world applications by reporting success stories of solving simple CFD problems with PINNs. 
-However, despite the optimism shown in the literature, important information concerning the feasibility of PINN in practical applications is often missing from these success stories.
-For example, few reports discuss the required computing resources, the computational performance, the convergence, or the error analysis of PINN.
+Data-free is not ready nor meant to replace traditional CFD solvers.
+This claim may be obvious to researchers experienced in PINN, but it may not be clear to others, especially to CFD end-users who do not hold expertise in numerical methods. 
+Even in literature that tries to improve PINN, it's common to see only the success stories with simple CFD problems.
+Important information concerning the feasibility of PINN in practical and real-world applications is often missing from these success stories.
+For example, few reports discuss the required computing resources, the computational cost, the convergence properties, or the error analysis of PINN.
 PINN suffers from performance and solvability issues due to the need for high-order automatic differentiation and multi-objective nonlinear optimization.
-For example, solving a second-order nonlinear differential equation requires at least three back-propagation passes for automatic differentiation (two for derivatives against model inputs and one for gradients against model parameters).
-The training process needs to reduce all the residuals of differential equations, initial conditions, and boundary conditions.
+Evaluating high-order derivatives using automatic differentiation increases the computational graphs of neural networks.
+And multi-objective optimization, which reduces all the residuals of differential equations, initial conditions, and boundary conditions, makes the training difficult to converge to small-enough loss values.
 Fluid flows are sensitive nonlinear dynamical systems in which a small change or error in inputs may produce a very different flow field.
-So to get correct solutions, the optimization in PINN must minimize the loss to values extremely close to zero, further compromising the method's solvability and performance.
+So to get correct solutions, the optimization in PINN needs to minimize the loss to values extremely close to zero, further compromising the method's solvability and performance.
 
-This paper provides our not-so-successful PINN story as a lesson learned to readers.
+This paper provides our not-so-successful PINN story as a lesson learned to readers, so readers can be well-notified the challenges they may face if they consider using data-free PINN in real-world applications.
 Our story includes two computational experiments as case studies to benchmark the PINN method's accuracy and computational performance.
 The first case study, a Taylor-Green vortex, worked out, though not to our satisfaction.
 We will discuss the performance of PINN using this case study.
