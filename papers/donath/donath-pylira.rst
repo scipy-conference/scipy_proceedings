@@ -151,7 +151,7 @@ current set of pixels :math:`\mathbf{x}_n` in each iteration of the optimization
    \mathbf{x}_{n + 1}  = \mathbf{x}_{n} -\alpha \cdot \frac{\partial \mathcal{C}\left( \mathbf{d} | \mathbf{x} \right)}{\partial x_i}
 
 Where :math:`\alpha` is a factor to define the step size. This method is in general
-equivalent to the gradient decent and backpropagation methods used in modern machine
+equivalent to the gradient descent and backpropagation methods used in modern machine
 learning techniques. This basic principle of solving the deconvolution problem for
 images with Poisson noise was proposed by :cite:`Richardson1972` and :cite:`Lucy1974`.
 Their method, named after the original authors, is often known as the *Richardson & Lucy* (RL)
