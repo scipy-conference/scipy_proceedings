@@ -160,7 +160,7 @@ likelihood solution of Eq. :ref:`cash`. A Python implementation of the standard 
 is available e.g. in the `Scikit-Image` package :cite:`skimage`.
 
 Instead of the iterative, gradient descent based optimization it is also possible to sample from
-the posterior distribution using a simple Metropolis-Hastings approach and uniform
+the posterior distribution using a simple Metropolis-Hastings :cite:`Hastings1970` approach and uniform
 prior. This is demonstrated in one of the *Pylira* online tutorials (`Introduction to Deconvolution using MCMC Methods <https://pylira.readthedocs.io/en/latest/pylira/user/tutorials/notebooks/mcmc-deconvolution-intro.html>`__).
 
 
@@ -211,7 +211,7 @@ background component :math:`b_i`:
 
 The background :math:`b_i` can be more generally understood
 as a "baseline" image and thus include known structures,
-which are not of interested for the deconvolution process.
+which are not of interest for the deconvolution process.
 E.g., a bright point source to model the core of an AGN
 while studying its jets.
 
@@ -407,7 +407,7 @@ image sampling trace for a single pixel of interest and its surrounding circular
 This visualisation allows user to asses the stability of a small region in the image
 e.g. an astronomical point source during the MCMC sampling process. Due to the correlation with
 neighbouring pixels the actual value of a pixel might vary in the sampling process, which appears
-as "dips" in the trace of the pixel of interested and anti-correlated "peaks" in the one or mutiple
+as "dips" in the trace of the pixel of interest and anti-correlated "peaks" in the one or mutiple
 of the surrounding pixels. In the example a stable state of the pixels of interest
 is reached after approximately 1000 iterations. This suggests the number of burn-in iterations, which
 were defined beforehand, should be increased.
