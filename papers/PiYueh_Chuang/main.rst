@@ -16,14 +16,16 @@ Experience report of physics-informed neural networks in fluid simulations: pitf
 
 The deep learning boom motivates researchers and practitioners of computational fluid dynamics eager to integrate the two areas.
 The PINN (physics-informed neural network) method is one such attempt.
-While most reports in the literature show positive outcomes of applying the PINN method, our experiments with it stifled such optimism.
-This report presents our not-so-successful experiments with PINN to solve two fundamental flow problems: 2D Taylor-Green vortex at :math:`Re = 100` and 2D cylinder flow at :math:`Re = 200`.
+Though PINN is now deemed as a complement to traditional CFD (computational fluid dynamics) solvers rather than a replacement, its capability to solve the Navier-Stokes equations without given data is still of great interest.
+This report presents our not-so-successful experiments of solving the Navier-Stokes equations with PINN as a replacement to traditional solvers.
+We aim to, with our experiments, prepare readers for the difficulties and issues they may face if they are interested in such an use case of PINN.
+In this work, we used two standard flow problems: 2D Taylor-Green vortex at :math:`Re = 100` and 2D cylinder flow at :math:`Re = 200`.
 The PINN method solved the 2D Taylor-Green vortex problem with acceptable results, and we used this flow as an accuracy and performance benchmark.
 About 32 hours of training were required for the PINN method's accuracy to match the accuracy of a :math:`16 \times 16` finite-difference simulation, which took less than 20 seconds.
-The 2D cylinder flow, on the other hand, did not even result in a physical solution.
+The 2D cylinder flow, on the other hand, did not produce a physical solution.
 The PINN method behaved like a steady-flow solver and did not capture the vortex shedding phenomenon.
-By sharing our experience, we would like to emphasize that the PINN method is still a work-in-progress.
-More work is needed to make PINN feasible for real-world problems.
+By sharing our experience, we would like to emphasize that the PINN method is still a work-in-progress, especially in terms of solving flow problems without any given data.
+More work is needed to make PINN feasible for real-world problems in such applications.
 (Reproducibility package: :cite:`pi_yueh_chuang_2022_6592457`.)
 
 .. class:: keywords
