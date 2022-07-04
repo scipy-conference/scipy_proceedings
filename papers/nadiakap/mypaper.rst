@@ -312,7 +312,7 @@ c.Use sample standard deviation as termination criterion
 References
 ----------
 .. [KAP] Kaplinskij, A.I.,Pesin, A.M.,Propoj, A.I.(1994). Analysis of search methods of optimization based on potential theory. I: Nonlocal properties. Automation and Remote Control. N.9, pp.97-105
-.. [KP] Kaplinskiĭ, A. I. Propoĭ, A.I , First-order nonlocal optimization methods that use potential theory, Automation and Remote Control,1994
+.. [KP] Kaplinskii, A.I. and Propoi, A.I., First-Order Nonlocal Optimization Methods based on Potential Theory, Avtom.Telemekh., 1994, no. 7, pp. 94–103
 .. [KPP] Kaplinskij, A.I., Pesin, A.M.,Propoj, A.I. (1994). Analysis of search methods of optimization based on potential theory. III: Convergence of methods. Automation and Remote Control.
 .. [NBAG] Nikhil Bansal, Anupam Gupta, Potential-function proofs for gradient methods, Theory of Computing, 2019
 .. [ATFB] Adrien Taylor, Francis Bach, Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions, 2019
