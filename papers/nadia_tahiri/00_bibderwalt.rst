@@ -60,7 +60,7 @@ Most studies in phylogeography consider only genetic data without directly consi
 Methods and Python scripts
 --------------------------
 
-In order to achieve our goal, we designed a workflow and then developed a script in Python version 3.9 called **aPhylogeo** for phylogeographic analysis (see :cite:`KLLT22` for more details). It interacts with multiple bioinformatic programs, taking climatic data and nucleotide data as input, and performs multiple phylogenetic analyses on nucleotide sequencing data using a sliding window approach. The process is divided into three main steps (see Figure 1).
+In order to achieve our goal, we designed a workflow and then developed a script in Python version 3.9 called **aPhylogeo** for phylogeographic analysis (see  :cite:`KLLT22` for more details). It interacts with multiple bioinformatic programs, taking climatic data and nucleotide data as input, and performs multiple phylogenetic analyses on nucleotide sequencing data using a sliding window approach. The process is divided into three main steps (see Figure 1).
 
 The first step involves collecting data to search for quality viral sequences that are essential for the conditions of our results. All sequences were retrieved from the NCBI Virus website (National Center for Biotechnology Information, https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/). In total, 20 regions were selected to represent 38 gene sequences of SARS-CoV-2. After collecting genetic data, we extracted 5 climatic factors for the 20 regions, i.e., Temperature, Humidity, Precipitation, Wind speed, and Sky surface shortwave downward irradiance. This data was obtained from the NASA website (https://power.larc.nasa.gov/).
 
@@ -333,7 +333,7 @@ References
 .. [CRADD22] Cascella, M., Rajnik, M., Aleem, A., Dulebohn, S. C., & Di Napoli, R. (2022). Features, evaluation, and treatment of coronavirus (COVID-19). Statpearls [internet]. 
 .. [E04] Edgar, R. C. (2004). MUSCLE: a multiple sequence alignment method with reduced time and space complexity. BMC bioinformatics, 5(1), 1-19. DOI: https://doi.org/10.1186/1471-2105-5-113 
 .. [F05] Felsenstein, J. (2005). PHYLIP (Phylogeny Inference Package) version 3.6. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
-.. [KLLT22] Koshkarov, A., Li, W., Luu, M., & Tahiri, N. (2022). aPhylogeo (1.0). Zenodo. DOI: https://doi.org/10.5281/zenodo.6773603
+.. [KLLT22] Koshkarov, A., Li, W., Luu, M., & Tahiri, N. (2022). aPhylogeo (version 1.0). Zenodo. DOI: https://doi.org/10.5281/zenodo.6773603
 .. [KM02] Knowles, L. L., & Maddison, W. P. (2002). Statistical phylogeography. Molecular Ecology, 11(12), 2623-2635. DOI: https://doi.org/10.1046/j.1365-294x.2002.01637.x  
 .. [LFZK06] Lin, K. U. N., Fong, D. Y. T., Zhu, B., & Karlberg, J. (2006). Environmental factors on the SARS epidemic: air temperature, passage of time and multiplicative effect of hospital infection. Epidemiology & Infection, 134(2), 223-230. DOI: https://doi.org/10.1017/S0950268805005054 
 .. [N92] Nagylaki, T. (1992). Rate of evolution of a quantitative character. Proceedings of the National Academy of Sciences, 89(17), 8121-8124. DOI: https://doi.org/10.1073/pnas.89.17.8121  
