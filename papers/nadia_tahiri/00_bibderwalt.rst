@@ -116,7 +116,8 @@ We have created a function (`create_tree`) to create the climate trees. The func
                          names[i], 
                          "infile")
                          
-           os.system("./exec/neighbor < input/input.txt")
+           os.system("./exec/neighbor " + 
+                     "< input/input.txt")
            
            subprocess.call(["mv", 
                             "outtree", 
@@ -126,9 +127,11 @@ We have created a function (`create_tree`) to create the climate trees. The func
                             "infile", 
                             "outfile"])
                             
-           os.system("./exec/consense < input/input.txt")
+           os.system("./exec/consense "+ 
+                     "< input/input.txt")
            
-           newick_file = names[i].replace(" ", "_") + "_newick"
+           newick_file = names[i].replace(" ", "_") + 
+                        "_newick"
            
            subprocess.call(["rm", 
                             "outfile"])
