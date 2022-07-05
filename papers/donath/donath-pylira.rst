@@ -468,7 +468,7 @@ counts data shown in the left panel.
    values were chosen as *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*.
    No baseline background model was included.  :label:`chandra-gc`
 
-As a second example we use data from the Fermi Large Area Telescope (LAT). The Fermi-LAT
+As a second example, we use data from the Fermi Large Area Telescope (LAT). The Fermi-LAT
 is a satellite-based imaging gamma-ray detector, which covers an energy range
 of 20 MeV to >300 GeV. The angular resolution varies strongly with energy and ranges
 from 0.1 to >10 degree [#]_.
