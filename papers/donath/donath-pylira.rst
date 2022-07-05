@@ -476,9 +476,9 @@ from 0.1 to >10 degree [#]_.
 Figure :ref:`fermi-gc` shows the result of the *Pylira* algorithm applied to Fermi-LAT data
 above 1 GeV to the region around the Galactic Center. The PSF
 was obtained from simulations using the *gtpsf* tool from the official *Fermitools v2.0.19* :cite:`Fermitools2019`.
-First one can see that the algorithm achieves again a considerable improvement of the spatial resolution
+First, one can see that the algorithm achieves again a considerable improvement in the spatial resolution
 compared to the raw counts. It clearly resolves multiple point sources left to the
-the bright Galactic Center source.
+bright Galactic Center source.
 
 .. [#] https://www.slac.stanford.edu/exp/glast/groups/canda/lat_Performance.htm
 
