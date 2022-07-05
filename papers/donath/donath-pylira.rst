@@ -43,7 +43,7 @@ Pylira: deconvolution of images in the presence of Poisson noise
     of noise and poorly reconstructed images. However, the results in this regime can be improved
     by making use of physically meaningful prior assumptions and statistically principled
     modeling techniques. One proposed method is the LIRA algorithm, which
-    requires smoothness of the reconstructed image at multiple scales. In this contribution we
+    requires smoothness of the reconstructed image at multiple scales. In this contribution, we
     introduce a new python package called *Pylira*, which exposes the original C implementation
     of the LIRA algorithm to Python users. We briefly describe the package structure, development
     setup and show a Chandra as well as Fermi-LAT analysis example.
