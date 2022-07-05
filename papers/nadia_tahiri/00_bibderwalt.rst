@@ -1,11 +1,13 @@
-:author:	Aleksandr Koshkarov*
+:author:	Aleksandr Koshkarov
 :email:	Nadia.Tahiri@USherbrooke.ca
 :institution:	Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 :institution:	Center of Artificial Intelligence, Astrakhan State University, Astrakhan, 414056, Russia
+:institution:	Contributed equally
 
-:author: Wanlin Li*
+:author: Wanlin Li
 :email: Wanlin.Li@USherbrooke.ca
 :institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
+:institution:	Contributed equally
 
 :author:	My-Linh Luu
 :email:	luu.my-linh@courrier.uqam.ca
