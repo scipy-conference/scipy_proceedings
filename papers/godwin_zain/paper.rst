@@ -25,22 +25,27 @@
 
 :bibliography: references
 
----------------------------------------------------------------------------------------------------
-Boosting Task-Based Active Learning with Task-Agnostic Information Using a Variational Autoencoder
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+Incorporating Task-Agnostic Information in Task-Based Active Learning Using a Variational Autoencoder
+-----------------------------------------------------------------------------------------------------
 .. class:: abstract
 
 It is often much easier and less expensive to collect data than to
-label it. Active learning (AL) responds to this issue by selecting
+label it. Active learning (AL) (:cite:`settles2009active`) responds to this issue by selecting
 which unlabeled data are best to label next. Standard approaches
 utilize task-aware AL, which identifies informative samples based on
 a trained supervised model. Task-agnostic AL
 ignores the task model and instead makes selections based on learned
 properties of the dataset. We seek to combine these approaches and
 measure the contribution of incorporating task-agnostic information
-into standard AL. We test this on various AL methods using a ResNet
+into standard AL, with the suspicion that the extra information in 
+the task-agnostic features may improve the selection process. 
+We test this on various AL methods using a ResNet
 classifier with and without added unsupervised information from a
-variational autoencoder (VAE).
+variational autoencoder (VAE). Although the results do not show a 
+significant improvement, we investigate the effects on the
+acquisition function and suggest potential approaches for 
+extending the work.
 
 .. class:: keywords
    
@@ -60,7 +65,7 @@ ultimately limit the contribution of deep learning to many crucial
 research problems.
 
 This labeling issue has compelled advancements in the field of active
-learning (AL). In a typical AL setting, there is a set of labeled
+learning (AL) (:cite:`settles2009active`). In a typical AL setting, there is a set of labeled
 data and a (usually larger) set of unlabeled data. A model is trained
 on the labeled data, then the model is analyzed to evaluate which
 unlabeled points should be labeled to best improve the loss objective
@@ -86,7 +91,7 @@ this purpose, we opt to use a variational autoencoder
 (VAE) (:cite:`kingma2013auto`) , which is a prominent method
 for unsupervised representation learning. Our main contributions are
 (a) a new methodology for extending AL methods using VAE features and
-(b) a demonstration of improved AL performance across two recent
+(b) an experiment comparing AL performance across two recent
 feature-based AL methods using the new method.
 
 Related Literature
@@ -99,21 +104,15 @@ Much of the early active learning (AL) literature is based on
 shallower, less computationally demanding networks since deeper
 architectures were not well-developed at the time.
 Settles (:cite:`settles2009active`) provides a review of
-these early methods, with the main branches being membership query
-synthesis (:cite:`angluin1988queries`), stream-based
-sampling (:cite:`atlas1989training`), and pool-based
-sampling (:cite:`lewis1994sequential`). The latter method
-takes a holistic approach of ranking all available unlabeled points
-by some chosen heuristic :math:`\mathcal{H}` and choosing to label
-the points of highest ranking. This is the current default AL
-approach, as technological advancements have made it a less demanding
-task in terms of processing and memory.
+these early methods. The modern approach uses an acquisition function,
+which involves ranking all available unlabeled points by some chosen 
+heuristic :math:`\mathcal{H}` and choosing to label the points of highest ranking.
 
 .. figure:: algorithm_1.png
    :scale: 10%
    :figclass: bht
 
-The popularity of the pool-based method has led to a widely-used
+The popularity of the acquisition approach has led to a widely-used
 evaluation procedure, which we describe in Algorithm 1. This
 procedure trains a task model :math:`\mathcal{T}` on the initial
 labeled data, records its test accuracy, then uses
@@ -122,13 +121,13 @@ again train :math:`\mathcal{T}` on the labeled data and record its
 accuracy. This is repeated until a desired number of labels is
 reached, and then the accuracies can be graphed against the number of
 available labels to demonstrate performance over the course of
-labeling. We can separately pass multiple heuristics through this
-evaluation algorithm to compare their performance based on the
-resulting accuracy graphs. This is utilized in many AL papers to show
-the efficacy of their methods in comparison to
+labeling. We can use this evaluation algorithm to separately evaluate
+multiple acquisition functions on their resulting accuracy graphs. 
+This is utilized in many AL papers to show
+the efficacy of their suggested heuristics in comparison to
 others (:cite:`wang2016cost,sener2018active,smailagic2018medal,yoo2019learning`).
 
-The prevailing approach to the pool-based method has been to choose
+The prevailing approach to point selection has been to choose
 unlabeled points for which the model is most uncertain, the
 assumption being that uncertain points will be the most
 informative (:cite:`budd2021survey`). A popular early
@@ -137,7 +136,7 @@ entropy (:cite:`shannon1948mathematical`) under the task
 model, which is a measure of uncertainty between the classes of the
 data. This method is now more commonly used in combination with a
 representativeness measure (:cite:`wang2016cost`) to
-encourage that very similar samples are not successively selected.
+avoid selecting condensed clusters of very similar points.
 
 Recent heuristics using deep features
 -------------------------------------
@@ -257,9 +256,9 @@ Variational Autoencoders
 Variational autoencoders (VAEs) (:cite:`kingma2013auto`)
 are an unsupervised method for modeling data using Bayesian posterior
 inference. We begin with the Bayesian assumption that the data is
-well-modeled by some distribution, namely a multivariate Gaussian. We
+well-modeled by some distribution, often a multivariate Gaussian. We
 also assume that this data distribution can be inferred reasonably
-well by a lower dimensional random variable, also modeled by a
+well by a lower dimensional random variable, also often modeled by a
 multivariate Gaussian.
 
 The inference process then consists of an encoding into the lower
@@ -342,74 +341,109 @@ except the selection heuristic :math:`\mathcal{H}`. We then
 compare the performance of the core-set and loss prediction heuristics
 with their VAE-augmented counterparts.
 
-We use ResNet-18 as the task model, using the SGD optimizer with
-learning rate 0.001 and momentum 0.9. We train on the MNIST dataset (:cite:`deng2012mnist`),
-beginning with 2500 initial labels and labeling 2500 points per
-active learning step. We opt to retrain the task model after each
-labeling step instead of fine-tuning. 
+We use ResNet-18 pretrained on ImageNet as the task model, using the SGD optimizer with
+learning rate 0.001 and momentum 0.9. We train on the 
+MNIST (:cite:`deng2012mnist`) and ChestMNIST (:cite:`yang2021class`) datasets. 
+ChestMNIST consists of 112,120 chest X-ray images resized to 28x28 and is 
+one of several benchmark medical image datasets introduced in (:cite:`yang2021class`).
+
+For both datasets we experiment on randomly selected subsets, using 25000
+points for MNIST and 30000 points for ChestMNIST. In both cases we begin 
+with 3000 initial labels and label 3000 points per active learning step. 
+We opt to retrain the task model after each labeling step instead of fine-tuning. 
 
 We use a similar training strategy as in (:cite:`smailagic2018medal`), 
-training the task model until 100% train accuracy before selecting
-new points to label. This is implemented by training for 10 epochs
-on the initial training set and increasing the training epochs by 5
-after each labeling iteration.
+training the task model until >99% train accuracy before selecting
+new points to label. This ensures that the ResNet is similarly well fit
+to the labeled data at each labeling iteration. This is implemented by training 
+for 10 epochs on the initial training set and increasing the training epochs 
+by 5 after each labeling iteration.
 
-To reduce runtime for the experiments, we use a randomly selected
-25000-point subset of MNIST, using the remaining 35000 points for
-accuracy measurements. The VAE used for the experiment is trained
-on the same training subset of MNIST for 20 epochs using an Adam
-optimizer with learning rate 0.001 and weight decay 0.005.
+The VAEs used for the experiments are trained for 20 epochs using an Adam optimizer 
+with learning rate 0.001 and weight decay 0.005. The VAE encoder architecture consists 
+of four convolutional downsampling filters and two linear layers to learn the low dimensional 
+mean and log variance. The decoder consists of an upsampling convolution and four size-preserving 
+convolutions to learn the reconstruction.
 
 Experiments were run five times, each with a separate set of randomly
 chosen initial labels, with the displayed results showing the average
-validation accuracies across all runs. Figure :ref:`coreset` shows the core-set
-results, while Figure :ref:`lp` shows the loss prediction results. In both
-cases, shared random seeds were used to ensure that the task models
-being compared were supplied with the same initial set of labels.
+validation accuracies across all runs. Figures :ref:`mnistcoreset` and
+:ref:`chestmnistcoreset` show the core-set
+results, while Figures :ref:`mnistlp` and  :ref:`chestmnistlp` show the 
+loss prediction results. In all cases, shared random seeds were used to 
+ensure that the task models being compared were supplied with the same initial set of labels.
 
-Note that the first dots on each of Figures :ref:`coreset` and 
-:ref:`lp` reflect the average accuracies after the first labeling
-iteration, not to be confused with the accuracy after training on the
-initial labels.
+With four NVIDIA 2080 GPUs, the total runtime for the MNIST experiments was 
+5113s for core-set and 4955s for loss prediction; for ChestMNIST, the total runtime
+was 7085s for core-set and 7209s for loss prediction.
 
-
-.. figure:: coreset_vs_vae.png
-   :scale: 55%
+.. figure:: mnist_coreset.png
+   :scale: 56%
    :figclass: bht
 
-   The results of Algorithm 1 using the core-set heuristic versus the
-   VAE-augmented core-set heuristic. :label:`coreset`
+   The average MNIST results using the core-set heuristic versus the
+   VAE-augmented core-set heuristic for Algorithm 1 over 5 runs. :label:`mnistcoreset`
 
-.. figure:: lp_vs_vae.png
-   :scale: 55%
+.. figure:: mnist_lp.png
+   :scale: 56%
    :figclass: bht
 
-   The results of Algorithm 1 using the loss prediction heuristic
-   versus the VAE-augmented loss prediction heuristic. :label:`lp`
+   The average MNIST results using the loss prediction heuristic versus the
+   VAE-augmented loss prediction heuristic for Algorithm 1 over 5 runs. :label:`mnistlp`
+
+.. figure:: chestmnist_coreset.png
+   :scale: 56%
+   :figclass: bht
+
+   The average ChestMNIST results using the core-set heuristic versus the
+   VAE-augmented core-set heuristic for Algorithm 1 over 5 runs. :label:`chestmnistcoreset`
+
+.. figure:: chestmnist_lp.png
+   :scale: 56%
+   :figclass: bht
+
+   The average ChestMNIST results using the loss prediction heuristic versus the
+   VAE-augmented loss prediction heuristic for Algorithm 1 over 5 runs. :label:`chestmnistlp`
+
+To investigate the qualitative difference between the VAE and non-VAE approaches, 
+we performed an additional experiment to visualize an example of core-set selection. 
+We first trained the ResNet-18 with the same hyperparameter settings on 1000 initial labels,
+then randomly selected 900 unlabeled points from which to label 100 points.
+These smaller sizes were chosen to promote visual clarity in the output graphs.
+
+We use t-SNE (:cite:`van2008visualizing`) dimensionality reduction to show the ResNet
+features of the labeled set, the unlabeled set, and the points chosen to be labeled
+by core-set.
+
+.. figure:: coreset_tsne.png
+   :scale: 50%
+   :figclass: bht
+
+   A t-SNE visualization of the points chosen by core-set. :label:`tsne`
+
+.. figure:: vae_tsne.png
+   :scale: 50%
+   :figclass: bht
+
+   A t-SNE visualization of the points chosen by core-set when the ResNet features are
+   augmented with VAE features. :label:`vaetsne`
 
 Discussion
 ==========
 
-Both VAE methods showed clear accuracy spikes over their counterpart
-methods early in training, which may be a reflection of the information
-advantage provided by the unsupervised features, namely that they represent
-the entire trainset rather than the small subset afforded to the task model
-features. As the labeled set grows in size over the course of active 
-learning, this information advantage shrinks, which may explain the
-reduced performance margin between the two loss prediction methods
-towards the end of training.
+Overall, the VAE-augmented active learning heuristics did not exhibit
+a significant performance difference when compared with their counterparts. 
+The only case of a significant p-value (<0.05) occurred during loss prediction
+on the MNIST dataset at 21000 labels.
 
-While the addition of VAE features in the core-set method did not
-result in a consistent improvement in the accuracy, the VAE-augmented
-loss prediction heuristic showed improved average results across
-the entirety of the active learning process. 
-
-Since the core-set method only incorporates the distance between the
-VAE features, it may not take significant advantage of their extra
-information. On the other hand, since loss prediction trains a fully
-connected layer where the VAE features are included, it can
-potentially learn higher order relationships between the VAE features
-and the predicted loss, resulting in a boost to active learning.
+The t-SNE visualizations in Figures :ref:`tsne` and :ref:`vaetsne` show some 
+of the influence that the VAE features have on the core-set selection process.
+In :ref:`tsne`, the selected points tend to be more clustered at the outer
+ends of the latent space, while in :ref:`vaetsne` they appear more spread out.
+This appears to mirror the transformation of the labeled set, which is more spread out 
+without the VAE features, but becomes condensed in the center when they are introduced.
+This may be due to the VAE producing a more homogenized representation than the 
+ResNet, since its optimization goal is reconstruction rather than classification.
 
 Conclusion
 ==========
@@ -417,10 +451,11 @@ Conclusion
 Our original intuition was that additional unsupervised information
 may improve established active learning methods, especially when
 using a modern unsupervised representation method such as a VAE.
-The experimental results indicated that VAE features may not be
-suitable when used directly in distance-based methods, but that
-loss prediction approaches may benefit from their inclusion in the
-learning process.
+The experimental results did not indicate this hypothesis, but
+additional investigation of the VAE features showed a notable
+change in the task model latent space. Though this did not result
+in superior point selections in our case, it is of interest whether different
+approaches to latent space augmentation in active learning may fare better.
 
 Future work may explore the use of conditional VAEs in a similar
 application, since a VAE trained on the available labeled data
