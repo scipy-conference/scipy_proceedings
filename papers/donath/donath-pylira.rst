@@ -425,7 +425,7 @@ was defined beforehand, should be increased.
    while estimating the mean.  :label:`diagnosis2`
 
 *Pylira* relies on an MCMC sampling approach to sample a series of reconstructed images from the posterior
-likelihood defined by Eq. :ref:`cash`. Along with the sampling it marginalises over the smoothing
+likelihood defined by Eq. :ref:`cash`. Along with the sampling, it marginalises over the smoothing
 hyper-parameters and optimizes them in the same process. To diagnose the validity of the results it is
 important to visualise the sampling traces of both the sampled images as well as hyper-parameters.
 
