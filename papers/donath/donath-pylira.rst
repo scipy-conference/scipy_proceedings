@@ -75,7 +75,7 @@ As a consequence of the low intensities associated to the recording of individua
 the measured signal follows Poisson statistics. This imposes
 a non-linear relationship between the measured signal and true
 underlying intensity as well as a coupling of the signal intensity
-to the the signal variance. Any statistically correct post-processing
+to the signal variance. Any statistically correct post-processing
 or reconstruction method thus requires a careful treatment of
 the Poisson nature of the measured image.
 
