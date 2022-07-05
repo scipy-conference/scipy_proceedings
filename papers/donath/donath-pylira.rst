@@ -239,7 +239,7 @@ a Dirichlet distribution is introduced as a prior:
 
 and multiplied across all 2x2 groups and resolution levels :math:`k`.
 For each resolution level a smoothing parameter :math:`\alpha_k` is introduced.
-These hyper-parametes can be interpreted as having an information
+These hyper-parameters can be interpreted as having an information
 content equivalent of adding :math:`\alpha_k` "hallucinated" counts
 in each grouping. This effectively results in a smoothing
 of the image at the given resolution level. The distribution
