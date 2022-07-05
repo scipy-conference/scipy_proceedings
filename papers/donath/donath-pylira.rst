@@ -115,7 +115,7 @@ measured image from a model image of the expected counts :math:`\lambda_i` with
 .. math::
    :label: poisson
 
-   \mathcal{L}\left( \mathbf{d} | \mathbf{\lambda} \right) = \prod_i^N \frac{{e^{ - d_i } \lambda_i ^ {d_i}}}{{d_i!}}
+   \mathcal{L}\left( \mathbf{d} | \mathbf{\lambda} \right) = \prod_i^N \frac{{\exp{ - d_i } \lambda_i ^ {d_i}}}{{d_i!}}
 
 By taking the logarithm, dropping the constant terms and inverting the sign one can transform the
 product into a sum over pixels, which is also often called the *Cash* :cite:`Cash1979`
