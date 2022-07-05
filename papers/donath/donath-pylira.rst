@@ -67,7 +67,7 @@ This imaging process is typical for X-ray and gamma-ray telescopes,
 but images taken by magnetic resonance imaging or fluorescence microscopy
 show Poisson noise too.
 For each individual photon, the incident direction, energy
-and arrival time is measured. Based on this information the
+and arrival time is measured. Based on this information, the
 event can be binned into two dimensional data structures to
 form an actual image.
 
