@@ -98,8 +98,8 @@ of the standard analysis, such as the CLEAN algorithm for radio data, developed
 by :cite:`Hogbom1974`, this
 is not the case for X-ray and gamma-ray astronomy. As any deconvolution method
 aims to enhance small-scale structures in an image, it becomes increasingly
-hard to solve for the regime of low signal to noise ratio, where small
-scale structures are more affected by noise.
+hard to solve for the regime of low signal-to-noise ratio, where small-scale
+ structures are more affected by noise.
 
 
 The Deconvolution Problem
