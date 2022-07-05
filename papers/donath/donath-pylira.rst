@@ -490,8 +490,8 @@ bright Galactic Center source.
    Pylira applied to Fermi-LAT data from the Galactic Center region. The image on
    the left shows the raw measured counts between 5 and 1000 GeV. The image on the right
    shows the deconvolved version. The LIRA hyperprior values were chosen as
-   *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*. A baseline background model
-   was not included.  :label:`fermi-gc`
+   *ms\_al\_kap1=1, ms\_al\_kap2=0.02, ms\_al\_kap3=1*. No baseline background model
+   was included.  :label:`fermi-gc`
 
 
 Summary & Outlook
