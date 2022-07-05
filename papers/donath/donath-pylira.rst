@@ -404,7 +404,7 @@ Diagnostic Plots
 To validate the quality of the results *Pylira* provides many built-in diagnostic plots.
 One of these diagnostic plot is shown in the right panel of Fig. :ref:`diagnosis1`. The plot shows the
 image sampling trace for a single pixel of interest and its surrounding circular region of interest.
-This visualisation allows user to asses the stability of a small region in the image
+This visualisation allows the user to assess the stability of a small region in the image
 e.g. an astronomical point source during the MCMC sampling process. Due to the correlation with
 neighbouring pixels the actual value of a pixel might vary in the sampling process, which appears
 as "dips" in the trace of the pixel of interest and anti-correlated "peaks" in the one or mutiple
