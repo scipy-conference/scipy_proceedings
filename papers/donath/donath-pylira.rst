@@ -406,7 +406,7 @@ One of these diagnostic plot is shown in the right panel of Fig. :ref:`diagnosis
 image sampling trace for a single pixel of interest and its surrounding circular region of interest.
 This visualisation allows the user to assess the stability of a small region in the image
 e.g. an astronomical point source during the MCMC sampling process. Due to the correlation with
-neighbouring pixels the actual value of a pixel might vary in the sampling process, which appears
+neighbouring pixels, the actual value of a pixel might vary in the sampling process, which appears
 as "dips" in the trace of the pixel of interest and anti-correlated "peaks" in the one or mutiple
 of the surrounding pixels. In the example a stable state of the pixels of interest
 is reached after approximately 1000 iterations. This suggests the number of burn-in iterations, which
