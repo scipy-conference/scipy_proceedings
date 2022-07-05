@@ -15,7 +15,6 @@
 :email: Nadia.Tahiri@USherbrooke.ca
 :institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada
 
-* Contributed equally.
 
 :bibliography: mybib
 
