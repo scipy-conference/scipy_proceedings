@@ -225,7 +225,7 @@ are divided by their sum to obtain a grid of “split proportions”
 with respect to the image down-sized by a factor of two along both
 axes. This process is repeated using the down sized image with pixel
 values equal to the sums over the 2 by 2 groups from the full-resolution
-image, and the the process continues until the resolution of the image
+image, and the process continues until the resolution of the image
 is only a single pixel, containing the total sum of the full-resolution
 image. This multi-scale representation is illustrated in Fig. :ref:`ms-levels`.
 
