@@ -169,7 +169,7 @@ RL Reconstruction Quality
 While technically the RL method converges to a maximum likelihood solution, it mostly
 still results in poorly restored images, especially if extended emission regions are
 present in the image. The problem is illustrated in Fig. :ref:`rl` using
-a simulated example image. While for a low number of iterations the RL method
+a simulated example image. While for a low number of iterations, the RL method
 still results in a smooth intensity distribution, the structure of the image
 decomposes more and more into a set of point-like sources with growing number
 of iterations.
