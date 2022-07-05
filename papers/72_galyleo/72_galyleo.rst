@@ -59,15 +59,15 @@ Extension of the widget set was  an important consideration. A widget  is a clie
 
 Publication of interactive dashboards has been a further challenge.  A design goal of Galyleo was to offer a simple scheme, where a dashboard could be published to the web with a single click.
 
-These then, are the goals of Galyleo
+These then, are the goals of Galyleo:
 
-1. Simple, drag-and-drop design of interactive dashboards in a visual editor.  The visual design of a Galyleo dashboard should be no more complex than design of a PowerPoint or Google slide, and should involve 
+1. Simple, drag-and-drop design of interactive dashboards in a visual editor.  The visual design of a Galyleo dashboard should be no more complex than design of a PowerPoint or Google slide; 
 
-2. Radically simplify the dashboard-design interface by coupling it to a powerful, Jupyter back end to do the analytics work: separation of visualization and analytics concerns
+2. Radically simplify the dashboard-design interface by coupling it to a powerful, Jupyter back end to do the analytics work, separating visualization and analytics concerns; 
 
-3. Maximimize extensibility on both the client (visualization, widgets) and server (analytics libraries, data sources, hardware resources)
+3. Maximimize extensibility for visualization and  widgets on the client side  and analytics libraries, data sources and  hardware resources on the server side; 
 
-4. Easy, simple publication
+4. Easy, simple publication;
 
 Using Galyleo
 -------------
@@ -134,9 +134,9 @@ Once the dashboard is complete, it can be published to the web simply by moving 
 No-Code, Low-Code, and Appropriate-Code
 ---------------------------------------
 Galyleo is an appropriate-code environment, meaning that it offers efficient creation to developers at every step. 
-It offers What-You-See-Is-What-You-Get (WYSIWYG) design tools where appropriate, low code where appropriate, and full code creation tools where appropriate.
+It offers What-You-See-Is-What-You-Get (WYSIWYG) design tools where appropriate, low-code where appropriate, and full code creation tools where appropriate.
 
-No-code and low-code environments are popular, for a number of reasons.  The first is the assumption that coding is time-consuming and hard, which isn't always or necessarily true; the second is the assumption that coding is a skill known to only a small fraction of the population, which is becoming less true by the day.  40% of Berkeley undergraduates take Data 8, in which every assignment involves programming in a Jupyter Notebook.  The third, particularly for graphics code, is that manual design and configuration gives instant feedback and tight control over appearance.  For example, the authors of a LaTeX paper (including this one) can't control the placement of figures within the text.  The fourth, which is correct, is that configuration code is more verbose, error-prone, and time-consuming than manual configuration.
+No-code and low-code environments, where users construct applications through a visual interface, are popular for several reasons.  The first is the assumption that coding is time-consuming and hard, which isn't always or necessarily true; the second is the assumption that coding is a skill known to only a small fraction of the population, which is becoming less true by the day.  40% of Berkeley undergraduates take Data 8, in which every assignment involves programming in a Jupyter Notebook.  The third, particularly for graphics code, is that manual design and configuration gives instant feedback and tight control over appearance.  For example, the authors of a LaTeX paper (including this one) can't control the placement of figures within the text.  The fourth, which is correct, is that configuration code is more verbose, error-prone, and time-consuming than manual configuration.
 
 What is less often appreciated is that when operations become sufficiently complex, coding is a much simpler interface than manual configuration.  For example, building a pivot table in a spreadsheet using point-and-click operations have "always had a reputation for being complicated" :cite:`devaney-pivot`.  It's three lines of code in Python, even without using the Pandas `pivot_table` method.  Most analytics procedures are far more easily done in code.
 
@@ -145,11 +145,11 @@ analytics paired with fast GUI-based design and configuration for graphical elem
 
 Galyleo Data Model And Architecture
 -----------------------------------
-The Galyleo Data Model and Architecture closely models the dashboard architecture discussed in the previous section.  As with the Dashboard Architecture, it is based on the idea of a few simple, generalizable structures, which are largely independent of each other and communicate through simple interfaces.
+The Galyleo data Model and architecture closely model the dashboard architecture discussed in the previous section.  They are  based on the idea of a few simple, generalizable structures, which are largely independent of each other and communicate through simple interfaces.
 
 The GalyleoTable
 ^^^^^^^^^^^^^^^^
-A GalyleoTable is the fundamental data structure in Galyleo.  It is a logical, not a physical abstraction; it simply responds to the GalyleoTable API.  A GalyleoTable is a pair (columns, rows), where columns is a list of pairs (name, type), where type is one of {string, boolean, number, date}, and rows is a list of lists of primitive values, where the length of each component list is the length of the list of columns and the type of the kth entry in each list is the type specified by  the kth column.
+A GalyleoTable is the fundamental data structure in Galyleo.  It is a logical, not a physical abstraction; it simply responds to the GalyleoTable API.  A GalyleoTable is a pair `(columns, rows)`, where `columns` is a list of pairs `(name, type)`, where `type` is one of `{string, boolean, number, date}`, and `rows` is a list of lists of primitive values, where the length of each component list is the length of the list of columns and the type of the kth entry in each list is the type specified by  the kth column.
 
 Small, public tables may be contained in the dashboard file; these are called *explicit* tables.  However, explicitly representing the table in the dashboard file has a number of disadvantages:
 
@@ -271,7 +271,7 @@ Widgets are typically designed as a standard Lively graphical component, much as
 
 Integration into Jupyter Lab: The Galyleo Extension
 ---------------------------------------------------
-Galyleo is a standalone web application that is integrated into JupyterLab using an iframe inside a JupyterLab tab for physical design.  A small JupyterLab extension was built, that implements the JupyterLab editor API.  The JupyterLab extension has two major functions: to handle read/write/undo requests from the JupyterLab menus and file browser, and receive and transmit messages from the running Jupyter kernels to update tables on the Dashboard Studio, and to handle the reverse messages where the studio requests data from the kernel.  
+Galyleo is a standalone web application that is integrated into JupyterLab using an iframe inside a JupyterLab tab for physical design.  A small JupyterLab extension was built that implements the JupyterLab editor API.  The JupyterLab extension has two major functions: to handle read/write/undo requests from the JupyterLab menus and file browser, and receive and transmit messages from the running Jupyter kernels to update tables on the Dashboard Studio, and to handle the reverse messages where the studio requests data from the kernel.  
 
 .. figure:: extension_architecture.png
 
