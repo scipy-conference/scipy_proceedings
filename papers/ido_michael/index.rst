@@ -299,8 +299,12 @@ any dependency, so let’s tell Ploomber that it should execute after
 ``train-test-split``:
 
 
-Open ``playground/tasks/gradient-boosting-regressor.py`` as a notebook by right-clicking on it and then ``Open With`` -> ``Notebook``:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Open
+
+``playground/tasks/gradient-boosting-regressor.py``
+
+as a notebook by right-clicking on it and then ``Open With`` -> ``Notebook``:
+
 
 .. figure:: images/lab-open-with-notebook.png
    :alt: lab-open-with-notebook
