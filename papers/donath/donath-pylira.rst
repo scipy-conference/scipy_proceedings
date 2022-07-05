@@ -243,7 +243,7 @@ These hyper-parametes can be interpreted as having an information
 content equivalent of adding :math:`\alpha_k` "hallucinated" counts
 in each grouping. This effectively results in a smoothing
 of the image at the given resolution level. The distribution
-of `\alpha` values at each resolution level is the further described
+of :math:`\alpha` values at each resolution level is the further described
 by a hyper-prior distribution:
 
 .. math::
