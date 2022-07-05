@@ -199,7 +199,7 @@ and :cite:`Fish95`.
 Multi-Scale Prior & LIRA
 ++++++++++++++++++++++++
 One solution to this problem was described in :cite:`Esch2004`
-and :cite:`Connors2011`. First the simple forward folded model described
+and :cite:`Connors2011`. First, the simple forward folded model described
 in Eq. :ref:`simplemodel` can be extended by taking into account the
 non-uniform exposure :math:`e_i` and an additional known
 background component :math:`b_i`:
