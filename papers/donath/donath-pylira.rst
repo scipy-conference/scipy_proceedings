@@ -138,7 +138,7 @@ This operation is often called "forward modelling" or "forward folding" with the
 
 Richardson Lucy (RL)
 ++++++++++++++++++++
-To obtain the most likely value of :math:`\mathbf{x}_n` given the data one searches a maximum of the total likelihood
+To obtain the most likely value of :math:`\mathbf{x}_n` given the data, one searches a maximum of the total likelihood
 function, or equivalently a of minimum :math:`\mathcal{C}`. This high dimensional optimization problem
 can e.g., be solved by a classic gradient descent approach. Assuming the pixels values :math:`x_i`
 of the true image as independent parameters, one can take the derivative of the Eq.  :ref:`cash`
