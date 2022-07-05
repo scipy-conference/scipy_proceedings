@@ -216,7 +216,7 @@ E.g., a bright point source to model the core of an AGN
 while studying its jets.
 
 
-Second the authors proposed to extend the Poisson log-likelihood
+Second, the authors proposed to extend the Poisson log-likelihood
 function (Equation :ref:`cash`) by a log-prior term that controls the
 smoothness of the reconstructed image on multiple spatial scales.
 Starting from the full resolution, the image pixels :math:`x_i` are collected
