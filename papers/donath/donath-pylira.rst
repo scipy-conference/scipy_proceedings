@@ -335,8 +335,8 @@ Analysis Examples
 Simple Point Source
 +++++++++++++++++++
 *Pylira* was designed to offer a simple Python class based user interface,
-which allows for a short learning curve of using the package, given that
-users are familiar with Python in general and more specifically *Numpy*.
+which allows for a short learning curve of using the package for
+users who are familiar with Python in general and more specifically with *Numpy*.
 A typical complete usage example of the *Pylira* package is shown in the
 following:
 
