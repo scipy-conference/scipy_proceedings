@@ -310,7 +310,7 @@ this first. So the recommended way to install Pylira is on *MacOS* is:
     $ brew install r
     $ pip install pylira
 
-On *Linux* the *RMath* dependency can be installed using standard package managers:
+On *Linux* the *RMath* dependency can be installed using standard package managers. For example on Ubuntu, one would do
 
 .. code-block:: bash
    :linenos:
