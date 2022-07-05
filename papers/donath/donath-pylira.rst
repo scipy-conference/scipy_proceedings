@@ -445,10 +445,10 @@ Both in the X-ray as well as gamma-ray regime the Galactic Center is a complex e
 region. It shows point sources, extended sources, as well as underlying diffuse emission and
 thus represents a challenge for any astronomical data analysis.
 
-*Chandra* is a spaced based X-ray observatory, which is in operation since 1999. It consists
+*Chandra* is a space-based X-ray observatory, which has been in operation since 1999. It consists
 of nested cylindrical paraboloid and hyperboloid surfaces, which form an imaging optical system
-for X-rays. In the focal plane it has multiple instruments for different scientific purposes.
-This includes a high resolution camera (HRC) and an Advanced CCD Imaging Spectrometer (ACIS).
+for X-rays. In the focal plane, it has multiple instruments for different scientific purposes.
+This includes a high-resolution camera (HRC) and an Advanced CCD Imaging Spectrometer (ACIS).
 The typical angular resolution is 0.5 arcsecond and the covered energy ranges from 0.1 - 10 keV.
 
 Figure :ref:`chandra-gc` shows the result of the *Pylira* algorithm applied to Chandra data
