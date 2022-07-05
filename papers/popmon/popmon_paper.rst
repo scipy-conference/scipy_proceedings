@@ -632,10 +632,12 @@ infrastructure setup, and are possible to create and view in many
 environments: from a local machine, a (restricted) environment, to a public
 cloud. If, however, a certain dashboarding tool is available, then the
 metrics computed by ``popmon`` are exposed and can be exported into
-other databases, for example Kibana. One downside of producing self-contained reports is
-that they can get large as the plots are pre-computed and embedded. This
-may be mitigated by replacing the plots with interactive visualizations
-(e.g. using Bokeh :cite:`bokeh` or plotly express :cite:`plotlypy`).
+that tool, for example Kibana :cite:`kibana`. One downside of producing
+self-contained reports is that they can get large when the plots are
+pre-rendered and embedded. This is mitigated by embedding plots as
+JSON that are (lazily) rendered on the client-side. Plotly express
+:cite:`plotlypy` powers the interactive embedded plots in ``popmon``
+as of v1.0.0.
 
 Note that multiple reference types can be used in the same stability
 report. For instance, ``popmon``\ ’s default reference pipelines always
