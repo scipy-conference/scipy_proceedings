@@ -441,7 +441,7 @@ iterations for the log-posterior as well as all of the multi-scale smoothing par
 Astronomical Analysis Examples
 ++++++++++++++++++++++++++++++
 
-Both in the X-ray as well as gamma-ray regime the Galactic Center is a complex emission
+Both in the X-ray as well as in the gamma-ray regime, the Galactic Center is a complex emission
 region. It shows point sources, extended sources, as well as underlying diffuse emission and
 thus represents a challenge for any astronomical data analysis.
 
