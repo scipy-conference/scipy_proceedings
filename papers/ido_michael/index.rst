@@ -341,8 +341,12 @@ Let's generate the plot again:
 
 Ploomber now recognizes our dependency declaration!
 
-Open ``playground/tasks/gradient-boosting-regressor.py`` as a notebook by right-clicking on it and then ``Open With`` -> ``Notebook`` and add the following code:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Open
+
+``playground/tasks/gradient-boosting-regressor.py``
+
+as a notebook by right-clicking on it and then ``Open With`` -> ``Notebook`` and add the following code:
+
 
 .. code:: python
 
