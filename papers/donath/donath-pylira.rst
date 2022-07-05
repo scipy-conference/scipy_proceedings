@@ -174,7 +174,7 @@ still results in a smooth intensity distribution, the structure of the image
 decomposes more and more into a set of point-like sources with growing number
 of iterations.
 
-Because of the PSF convolution an extended emission region
+Because of the PSF convolution, an extended emission region
 can decompose into multiple nearby point sources and still lead to good model prediction,
 when compared with the data. Those almost equally good solutions correspond
 to many narrow local minima or "spikes" in the global likelihood surface. Depending
