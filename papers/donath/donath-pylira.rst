@@ -430,11 +430,11 @@ hyper-parameters and optimizes them in the same process. To diagnose the validit
 important to visualise the sampling traces of both the sampled images as well as hyper-parameters.
 
 Figure :ref:`diagnosis2` shows another typical diagnostic plot created by the code example above.
-In a multi-panel figure user can inspect the traces of the total log-posteriror as well as the
+In a multi-panel figure, the user can inspect the traces of the total log-posterior as well as the
 traces of the smoothing parameters. Each panel corresponds to the smoothing hyper parameter
 introduced for each level of the multi-scale representation of the reconstructed image.
 The figure also shows the mean value along with the :math:`1~\sigma` error
-region. In this case the algorithm show stable convergence after a burn-in phase of approximately 200
+region. In this case, the algorithm shows stable convergence after a burn-in phase of approximately 200
 iterations for the log-posterior as well as all of the multi-scale smoothing parameters.
 
 
