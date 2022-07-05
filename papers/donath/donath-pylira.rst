@@ -284,7 +284,7 @@ the authors of :cite:`Connors2011`. The original algorithm was implemented in *C
 as a package for the *R Language* :cite:`rmath`. Thus the implementation depends on the *RMath* library,
 which is still a required dependency of *Pylira*.
 The Python wrapper was built using the *Pybind11* :cite:`pybind11` package, which allows to reduce
-the code overhead introduced by the wrapper to a minimum. For the data handling *Pylira*
+the code overhead introduced by the wrapper to a minimum. For the data handling, *Pylira*
 relies on *Numpy* :cite:`numpy` arrays for the serialisation to the *FITS*  data format
 on *Astropy* :cite:`Astropy2018`. The (interactive)
 plotting functionality is achieved via *Matplotlib* :cite:`matplotlib` and *Ipywidgets* :cite:`ipywidgets`,
