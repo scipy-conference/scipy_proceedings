@@ -122,15 +122,14 @@ labelled data. Dutta et al. (:cite:`dutta2021semi`) and Li et al. (:cite:`li2019
 propose a model which uses affinity propagation on a
 k-Nearest-Neighbors graph to label partitions of unlabelled data based
 on their closest neighbors in the latent space. 
-Li et. al.'s paper provides a benchmark for semi-supervised as they state
-their methods achieve 89.6 to 94.2 percent clustering accuracy 
-on the MNIST dataset, outperforming two similar state-of-the-art methods. 
 Wu et al. (:cite:`wu2020metric`) also look to assign
 pseudo-labels to unlabelled data, but not through a graph-based
 approach. Instead, the proposed model looks to approximate "soft"
 pseudo-labels for unlabelled data from the metric learning similarity
 measure between the embedding of unlabelled data and the center of
 each input of each class of the labelled data.
+
+Several of the recent graph based approaches can be considered state-of-the-art for semi supervised metric learning. Li et. al.'s paper states their methods achieve 98.9 percent clustering accuracy on the MNIST dataset with 10% labelled data, outperforming two similar state-of-the-art methods, DFCM (:cite:`arshad2018semi`) and SDEC (:cite:`ren2019semi`), by roughly 8 points. Dutta et. al.'s method also outperforms 5 other state for the R@1 metric (the "percentage of test examples" that have at least one 1 "nearest neighbor from the same class.") by at leat 1.2 on the MNIST dataset, as well as the Fashion-MNIST and CIFAR-10 datasets. It is difficult to compare the two approaches as the evaluation metrics used in each paper differ. Li et al.'s paper has been cited rather heavily relative to other papers in the field and can be considered state of the art for semi-supervised DML on MNIST. The paper also provides a helpful metric (98.9 percent clustering accuracy on the MNIST dataset with 10% labelled data) to use as a reference point for the results in this paper. 
 
 VAEs with Metric Loss
 ++++++++++++++++++++++
