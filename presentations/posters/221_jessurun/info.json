@@ -1,0 +1,26 @@
+{
+    "authors": [
+        {
+            "name": "Nathan Jessurun",
+            "affiliation": "University of Florida",
+        },
+        {
+            "name": "Olivia P. Dizon-Paradis",
+            "affiliation": "University of Florida",
+        },
+        {
+            "name": "Dan E. Capecci",
+            "affiliation": "University of Florida",
+        },
+        {
+            "name": "Damon L. Woodard",
+            "affiliation": "University of Florida",
+        },
+        {
+            "name": "Navid Asadizanjani",
+            "affiliation": "University of Florida",
+        },
+    ],
+    "title": "Semi-Supervised Semantic Annotator (S3A): Toward Efficient Semantic Image Labeling",
+    "description": "Python GUI and library for semantic image segmentation and annotation"
+}
