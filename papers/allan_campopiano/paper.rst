@@ -35,14 +35,14 @@ reached similar conclusions with different methodology :cite:`gleason1993underst
 
 Two practical issues have since been identified based on this early research: (1)
 The distributions under study were light tailed (they did not produce outliers),
-and (2) statistics other than the sample mean were not tested and may behave differently
-(e.g., Student’s t). In the half century following these early findings, many important
+and (2) statistics other than the sample mean were not tested and may behave differently.
+In the half century following these early findings, many important
 discoveries have been made—calling into question the usefulness of
 the normal curve :cite:`wilcox2013introduction`.
 
 The following sections uncover various pitfalls one might encounter when
-assuming normality—especially as it relates
-to hypothesis testing. To help overcome these problems, a new Python library
+assuming normality—especially as they relate
+to hypothesis testing. To help researchers overcome these problems, a new Python library
 for robust hypothesis testing will be introduced along with an interactive tool
 for robust statistics education.
 
@@ -51,7 +51,7 @@ The contaminated normal
 
 One of the most striking counterexamples of “N=40 is enough” is shown when sampling from the
 so-called contaminated normal :cite:`20000755025`:cite:`tan1982sampling`.
-This distribution is also bell-shaped and symmetrical but it has slightly heavier tails
+This distribution is also bell shaped and symmetrical but it has slightly heavier tails
 when compared to the standard normal curve.
 That is, it contains outliers and is difficult to distinguish from a normal distribution
 with the naked eye. Consider the distributions in Figure :ref:`contnorm`. The variance of the
@@ -99,13 +99,13 @@ A reasonable goal would then be to choose methods that perform well
 under such situations and continue to perform well under normality.
 In addition, serious issues still exist even when examining
 light-tailed and skewed distributions (e.g., lognormal), and statistics
-other than the sample mean (e.g., T). These finding will be
+other than the sample mean (e.g., T). These findings will be
 discussed in the following section.
 
 Student’s t-distribution
 ------------------------
 
-Another common statistic is the T-value obtained from Student's t-test.
+Another common statistic is the T value obtained from Student's t-test.
 As will be demonstrated, T is more sensitive to violations
 of normality than the sample mean (which has already been shown to not be robust).
 This is despite the fact that the t-distribution is also bell shaped, light tailed, and
@@ -187,17 +187,20 @@ The percentile bootstrap test
 
 In most traditional parametric tests, there is an assumption that the sampling distribution
 has a particular shape (normal, f-distribution, t-distribution, etc).
-We use these distributions to test the null hypothesis; however, as
-discussed, the theoretical distributions are not approximated well
-when even small violations of assumptions occur.
+We can use these distributions to test the null hypothesis; however, as
+discussed, the theoretical distributions are not always approximated well
+when violations of assumptions occur.
 Non-parametric resampling techniques such as bootstrapping and
 permutation tests build empirical sampling distributions,
 and from these, one can robustly derive p-values and CIs.
 One example is the percentile bootstrap test :cite:`efron1992bootstrap`:cite:`tibshirani1993introduction`.
 
-The percentile bootstrap is simply a computational algorithm that uses the data at hand to estimate
-the underlying sampling distribution of a statistic (again, rather than assuming it
-takes some particular shape).  It works well with small sample sizes,
+The percentile bootstrap test can be thought of as an algorithm that uses
+the data at hand to estimate the underlying sampling distribution
+of a statistic (pulling yourself up by your own bootstraps, as the saying goes).
+This approach is in contrast to traditional methods
+that assume the sampling distribution takes a particular shape).
+The percentile boostrap test works well with small sample sizes,
 under normality, under non-normality, and it easily extends to multi-group tests
 (ANOVA) and measures of association (correlation, regression).
 For a two-sample case, the steps to compute the percentile bootstrap test can be described as follows:
@@ -208,9 +211,6 @@ For a two-sample case, the steps to compute the percentile bootstrap test can be
 4. Store the difference & repeat steps 1-3 many times (say, 1000)
 5. Consider the middle 95% of all differences (the confidence interval)
 6. If the confidence interval contains zero, there is no statistical difference, otherwise, you can reject the null hypothesis (there is a statistical difference)
-
-In the subsequent sections of this paper, software resources will be presented for implementing and teaching robust methods
-such as the percentile bootstrap test.
 
 Implementing and teaching modern robust methods
 -----------------------------------------------
@@ -226,7 +226,7 @@ This may be due to various *false* beliefs. For example,
 
 Perhaps the most obvious reason for the lack of adoption of modern methods
 is a lack of easy-to-use software and training resources. In the following sections,
-two resources will be presented—one for implementing robust methods and one for teaching them.
+two resources will be presented: one for implementing robust methods and one for teaching them.
 
 Robust statistics for Python
 ****************************
@@ -249,16 +249,16 @@ test listed `in the docs <https://alcampopiano.github.io/hypothesize/>`_
 is associated with a hosted notebook, pre-filled with
 sample data and code. But certainly, simply :code:`pip install Hypothesize` to
 use Hypothesize in any environment that supports Python.
-For examples of Hypothesize being used in applied
-research, see van Noordt and Willoughby :cite:`van2021cortical`,
-van Noordt et al. :cite:`van2022inter`, and Elsabbagh :cite:`elsabbagh2022inter`.
+See van Noordt and Willoughby :cite:`van2021cortical`,
+van Noordt et al. :cite:`van2022inter`, and Elsabbagh :cite:`elsabbagh2022inter` for
+examples of Hypothesize being used in applied research.
 
 The API for Hypothesize is organized by single- and two-factor tests, as well as
 measures of association. Input data for the groups, conditions, and measures
 are given in the form of a Pandas DataFrame :cite:`reback2020pandas`:cite:`mckinney-proc-scipy-2010`.
 By way of example, one can compare two independent groups
 (e.g., placebo versus treatment)
-using the 20% trimmed mean and the percentile bootstrap test as follows
+using the 20% trimmed mean and the percentile bootstrap test, as follows
 (note that Hypothesize uses the naming conventions found in WRS):
 
 .. code-block:: python
@@ -325,7 +325,7 @@ When comparing these groups using Student's t-test, we get the following results
     }
 
 That is, we fail to reject the null hypothesis at the :math:`\alpha=0.05` level
-(two-tailed test for independent groups). However, if we
+using Student's test for independent groups. However, if we
 switch to a robust analogue of the t-test, one that utilizes bootstrapping and
 trimmed means, we can indeed reject the null hypothesis.
 Here are the corresponding results from Hypothesize's :code:`yuenbt` test
@@ -355,7 +355,7 @@ It is important to note that robust methods may also fail to reject when
 a traditional test rejects (remember that traditional
 tests can suffer from increased Type I Error). It is also possible that
 both approaches yield the same or similar conclusions. The exact pattern of results
-depend largely on the characteristics of the underlying population distribution.
+depends largely on the characteristics of the underlying population distribution.
 To be able to reason about how robust statistics behave when compared to
 traditional methods the robust statistics simulator has been created
 and is described in the next section.
@@ -364,7 +364,7 @@ Robust statistics simulator
 ***************************
 
 Having a library of robust statistical functions is not enough to make modern methods
-commonplace in applied research. Professors, educators, and practitioners still need
+commonplace in applied research. Educators and practitioners still need
 intuitive training tools that demonstrate the core issues surrounding classical
 methods and how robust analogues compare.
 
@@ -403,7 +403,6 @@ Type I Error is also known as False Positive Rate. We want to choose methods tha
 keep Type I Error close to the nominal rate (usually 0.05). The robust statistics
 simulator can guide these decisions by providing empirical evidence as to why
 particular estimators and statistical tests have been chosen.
-
 
 .. figure:: sim.png
    :align: center
