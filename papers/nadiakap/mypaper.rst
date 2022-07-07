@@ -329,4 +329,4 @@ References
 .. [CWC] Terry Hui-Ye Chiu, Chienwen Wu, Chun-Hao Chen, A Generalized Wine Quality Prediction Framework by Evolutionary Algorithms, International Journal of Interactive Multimedia and Artificial Intelligence, Vol. 6, Nº7,2021
 .. [KHNT] Pascal Kerschke, Holger H. Hoos, Frank Neumann, Heike Trautmann; Automated Algorithm Selection: Survey and Perspectives. Evol Comput, 2019
 .. [SAS] Leandro dos Santos Coelho, Cezar Augusto Sierakowski, A software tool for teaching of particle swarm optimization fundamentals, Advances in Engineering Software, 2008
-.. [ESF] Stefan C. Endres, Carl Sandrock, Walter W. Focke, shgo: Simplicial homology global optimisation , Scipy Proceedings, 2010
+.. [ESF] Endres, S.C., Sandrock, C. & Focke, W.W. A simplicial homology algorithm for Lipschitz optimisation. J Glob Optim 72, 181–217 (2018). https://doi.org/10.1007/s10898-018-0645-y
