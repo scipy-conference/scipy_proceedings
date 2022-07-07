@@ -407,9 +407,10 @@ was 7085s for core-set and 7209s for loss prediction.
 
 To investigate the qualitative difference between the VAE and non-VAE approaches, 
 we performed an additional experiment to visualize an example of core-set selection. 
-We first trained the ResNet-18 with the same hyperparameter settings on 1000 initial labels,
-then randomly selected 900 unlabeled points from which to label 100 points.
-These smaller sizes were chosen to promote visual clarity in the output graphs.
+We first train the ResNet-18 with the same hyperparameter settings on 1000 initial labels
+from the ChestMNIST dataset, then randomly choose 1556 (5%) of the unlabeled points 
+from which to select 100 points to label. These smaller sizes were chosen to promote visual 
+clarity in the output graphs.
 
 We use t-SNE (:cite:`van2008visualizing`) dimensionality reduction to show the ResNet
 features of the labeled set, the unlabeled set, and the points chosen to be labeled
@@ -419,13 +420,13 @@ by core-set.
    :scale: 50%
    :figclass: bht
 
-   A t-SNE visualization of the points chosen by core-set. :label:`tsne`
+   A t-SNE visualization of the ChestMNIST points chosen by core-set. :label:`tsne`
 
 .. figure:: vae_tsne.png
    :scale: 50%
    :figclass: bht
 
-   A t-SNE visualization of the points chosen by core-set when the ResNet features are
+   A t-SNE visualization of the ChestMNIST points chosen by core-set when the ResNet features are
    augmented with VAE features. :label:`vaetsne`
 
 Discussion
@@ -438,12 +439,21 @@ on the MNIST dataset at 21000 labels.
 
 The t-SNE visualizations in Figures :ref:`tsne` and :ref:`vaetsne` show some 
 of the influence that the VAE features have on the core-set selection process.
-In :ref:`tsne`, the selected points tend to be more clustered at the outer
-ends of the latent space, while in :ref:`vaetsne` they appear more spread out.
-This appears to mirror the transformation of the labeled set, which is more spread out 
-without the VAE features, but becomes condensed in the center when they are introduced.
-This may be due to the VAE producing a more homogenized representation than the 
-ResNet, since its optimization goal is reconstruction rather than classification.
+In :ref:`tsne`, the selected points tend to be more spread out, while in 
+:ref:`vaetsne` they cluster at one edge. This appears to mirror the transformation 
+of the rest of the data, which is more spread out without the VAE features, but becomes 
+condensed in the center when they are introduced, approaching the shape of a Gaussian
+distribution.
+
+It seems that with the added VAE features, the selected points are further out of
+distribution in the latent space. This makes sense because points tend to be more 
+sparse at the tails of a Guassian distribution and core-set prioritizes points
+that are well-isolated from other points.
+
+One reason for the lack of performance improvement may be the homogeneous nature of
+the VAE, where the optimization goal is reconstruction rather than 
+classification. This could be improved by using a multimodal prior in the VAE, which
+may do a better job of modeling relevant differences between points.
 
 Conclusion
 ==========
@@ -457,7 +467,7 @@ change in the task model latent space. Though this did not result
 in superior point selections in our case, it is of interest whether different
 approaches to latent space augmentation in active learning may fare better.
 
-Future work may explore the use of conditional VAEs in a similar
-application, since a VAE trained on the available labeled data
+Future work may explore the use of class-conditional VAEs in a similar
+application, since a VAE that can utilize the available class labels
 may produce more effective representations, and it could be retrained
 along with the task model after each labeling iteration.
