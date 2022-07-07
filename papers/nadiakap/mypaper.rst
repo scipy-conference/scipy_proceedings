@@ -51,7 +51,7 @@ As an example, consider variant of simulated annealing (SA) proposed in [FGSB]_ 
 Testing functions are included in the library. They represent broad range of use cases covering above
 mentioned difficult functions. In this paper we describe the approach underlying these optimization methods.
 The distinctive feature of these methods is that they are not heuristic in nature. The algorithms are derived
-based on potential theory, and their convergence is guaranteed by their derivation method [KAP]_.
+based on potential theory [KAP]_, and their convergence is guaranteed by their derivation method [KPP]_.
 Recently potential theory was applied to prove convergence of well known heuristic methods, for example
 see [BIS]_ for convergence of PSO, and to re prove convergence of well known gradient based methods, in particular,
 first order methods   - see  [NBAG]_ for convergence of gradient descent and [ZALO]_ for mirror descent.
@@ -313,6 +313,7 @@ References
 ----------
 .. [KAP] Kaplinskij, A.I.,Pesin, A.M.,Propoj, A.I.(1994). Analysis of search methods of optimization based on potential theory. I: Nonlocal properties. Automation and Remote Control. N.9, pp.97-105
 .. [KP] Kaplinskii, A.I. and Propoi, A.I., First-Order Nonlocal Optimization Methods based on Potential Theory, Avtom.Telemekh., 1994, no. 7, pp. 94–103
+.. [KPP] Kaplinskij, A.I., Pesin, A.M.,Propoj, A.I. Analysis of search methods of optimization based on potential theory. III: Convergence of methods. Automation and remote Control, Volume 55, Number 11, Part 1, November, pp.1604-1611, 1994.
 .. [NBAG] Nikhil Bansal, Anupam Gupta, Potential-function proofs for gradient methods, Theory of Computing, Volume 15, (2019) Article 4 pp. 1-32, DOI: 10.4086/toc.2019.v015a004
 .. [ATFB] Adrien Taylor, Francis Bach, Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions, arXiv:1902.00947 [math.OC], 2019
 .. [ZALO] Zeyuan Allen-Zhu and Lorenzo Orecchia, Linear Coupling: An Ultimate Unification of Gradient and Mirror Descent, Innovations in Theoretical Computer Science Conference (ITCS), 2017, pp. 3:1-3:22.
