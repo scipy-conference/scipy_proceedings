@@ -505,3 +505,15 @@ test datasets and explanatory tutorials in the form of Jupyter notebooks. Future
 for parallelisation or distributed computing, more flexible prior definitions and the
 possibility to account for systematic errors on the PSF during the sampling process.
 
+
+
+Acknowledgements
+----------------
+This work was conducted under the auspices of the CHASC International Astrostatistics Center.
+CHASC is supported by NSF grants DMS-21-13615, DMS-21-13397, and DMS-21-13605; by the UK Engineering
+and Physical Sciences Research Council [EP/W015080/1]; and by NASA 18-APRA18-0019.
+We thank CHASC members for many helpful discussions, especially Xiao-Li Meng and Katy McKeough.
+DvD was also supported in part by a Marie-Skodowska-Curie RISE Grant (H2020-MSCA-RISE-2019-873089)
+provided by the European Commission.
+Aneta Siemiginowska, Vinay Kashyap, and Doug Burke further acknowledge support from NASA
+contract to the Chandra X-ray Center NAS8-03060.
