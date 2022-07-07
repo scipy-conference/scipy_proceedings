@@ -311,9 +311,9 @@ c.Use sample standard deviation as termination criterion
 
 References
 ----------
-.. [KAP] Kaplinskij, A.I.,Pesin, A.M.,Propoj, A.I.(1994). Analysis of search methods of optimization based on potential theory. I: Nonlocal properties. Automation and Remote Control. N.9, pp.97-105
-.. [KP] Kaplinskii, A.I. and Propoi, A.I., First-Order Nonlocal Optimization Methods based on Potential Theory, Avtom.Telemekh., 1994, no. 7, pp. 94–103
-.. [KPP] Kaplinskij, A.I., Pesin, A.M.,Propoj, A.I. Analysis of search methods of optimization based on potential theory. III: Convergence of methods. Automation and remote Control, Volume 55, Number 11, Part 1, November, pp.1604-1611, 1994.
+.. [KAP] Kaplinskii, A.I.,Pesin, A.M.,Propoi, A.I.(1994). Analysis of search methods of optimization based on potential theory. I: Nonlocal properties. Automation and Remote Control. Volume 55, N.9, Part 2, September, pp.1316-1323 (rus. pp.97-105), 1994
+.. [KP] Kaplinskii, A.I. and Propoi, A.I., Nonlocal Optimization Methods ofthe First Order Based on Potential Theory, Automation and Remote Control. Volume 55, N.7, Part 2, July, pp.1004-1011 (rus. pp.97-102), 1994
+.. [KPP] Kaplinskii, A.I., Pesin, A.M.,Propoi, A.I. Analysis of search methods of optimization based on potential theory. III: Convergence of methods. Automation and remote Control, Volume 55, N.11, Part 1, November, pp.1604-1610 (rus. pp.66-72 ), 1994.
 .. [NBAG] Nikhil Bansal, Anupam Gupta, Potential-function proofs for gradient methods, Theory of Computing, Volume 15, (2019) Article 4 pp. 1-32, DOI: 10.4086/toc.2019.v015a004
 .. [ATFB] Adrien Taylor, Francis Bach, Stochastic first-order methods: non-asymptotic and computer-aided analyses via potential functions, arXiv:1902.00947 [math.OC], 2019
 .. [ZALO] Zeyuan Allen-Zhu and Lorenzo Orecchia, Linear Coupling: An Ultimate Unification of Gradient and Mirror Descent, Innovations in Theoretical Computer Science Conference (ITCS), 2017, pp. 3:1-3:22.
