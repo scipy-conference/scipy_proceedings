@@ -78,7 +78,7 @@ Since the early days of the pandemic, Covasim releases have coincided with major
 
 .. figure:: fig_releases.png
 
-   Covasim releases since the start of the pandemic. :label:`releases`
+   Daily reported global COVID-19-related deaths (top; smoothed with a one-week rolling window), relative to the timing of Covasim releases (bottom). :label:`releases`
 
 
 To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, has been used in dozens of academic studies :cite:`kerr2021`, and informed decision-making on every continent (Fig. :ref:`worldmap`), making it one of the most widely used COVID models :cite:`kerr2021covasim`. We believe key elements of its success include (a) the simplicity of its architecture; (b) its high performance, enabled by the use of NumPy arrays and Numba decorators; and (c) our emphasis on prioritizing usability, including flexible type handling and careful choices of default settings. In the remainder of this paper, we outline these principles in more detail, in the hope that this will provide a useful roadmap for other groups wanting to quickly develop high-performance, easy-to-use scientific computing libraries.
@@ -86,7 +86,7 @@ To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, 
 
 .. figure:: fig_worldmap.png
    :align: center
-   :scale: 20%
+   :scale: 60%
    :figclass: w
 
    Locations where Covasim has been used to help produce a paper, report, or policy recommendation. :label:`worldmap`
@@ -156,9 +156,9 @@ To illustrate the tension between these two principles, the following code and F
 
    Illustrative result of a simulation in Covasim focused on exploring an intervention for protecting the elderly. :label:`example`
 
-Similar design philosophies have been articulated for other projects, such as Grails :cite:`abdul2009groovy` [#]_.
+Similar design philosophies have been articulated for other projects, such as Grails :cite:`abdul2009groovy` [1]_.
 
-.. [*] Other similar philosophical statements include "The manifesto of Matplotlib is: simple and common tasks should be simple to perform provide options for more complex tasks" (`Data Processing Using Python <https://pt.coursera.org/lecture/python-data-processing/2-fundamentals-of-python-plotting-xMQeE>`__) and "Simple, common tasks should be simple to perform; Options should be provided to enable more complex tasks" (`Instrumental <https://instrumental-lib.readthedocs.io/en/stable/developer.html>`__).
+.. [1] Other similar philosophical statements include "The manifesto of Matplotlib is: simple and common tasks should be simple to perform provide options for more complex tasks" (`Data Processing Using Python <https://pt.coursera.org/lecture/python-data-processing/2-fundamentals-of-python-plotting-xMQeE>`__) and "Simple, common tasks should be simple to perform; Options should be provided to enable more complex tasks" (`Instrumental <https://instrumental-lib.readthedocs.io/en/stable/developer.html>`__).
 
 
 
@@ -172,7 +172,7 @@ As shown in Fig. :ref:`sciris`, Sciris significantly reduces the number of lines
 
 .. figure:: fig_sciris.png
    :align: center
-   :scale: 25%
+   :scale: 35%
    :figclass: w
 
    Comparison of functionally identical code implemented without Sciris (left) and with (right). Tasks that take 30 lines of code without Sciris can be accomplished in 7 lines with it. :label:`sciris`
