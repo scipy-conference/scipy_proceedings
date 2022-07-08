@@ -1,11 +1,11 @@
 :author: Cliff C. Kerr 
 :email: cliff@covasim.org
-:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation
-:institution: School of Physics, University of Sydney
+:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
+:institution: School of Physics, University of Sydney, Sydney, Australia
 
 :author: Robyn M. Stuart 
 :email: robyn@math.ku.dk
-:institution: Department of Mathematical Sciences, University of Copenhagen
+:institution: Department of Mathematical Sciences, University of Copenhagen, Copenhagen, Denmark
 :institution: Burnet Institute, Melbourne, Australia
 
 :author: Dina Mistry 
@@ -18,7 +18,7 @@
 
 :author: Jamie A. Cohen 
 :email: jamie.cohen@gatesfoundation.org
-:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation
+:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
 
 :author: Lauren George 
 :email: lauren.george@live.com
@@ -26,19 +26,19 @@
 
 :author: Michał Jastrzębski 
 :email: inc007@gmail.com
-:institution: GitHub, San Francisco, CA
+:institution: GitHub, San Francisco, USA
 
 :author: Michael Famulare 
 :email: mike.famulare@gatesfoundation.org
-:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation
+:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
 
 :author: Edward Wenger 
 :email: edward.wenger@gatesfoundation.org
-:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation
+:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
 
 :author: Daniel J. Klein 
 :email: daniel.klein@gatesfoundation.org
-:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation
+:institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
 
 :bibliography: mybib
 
