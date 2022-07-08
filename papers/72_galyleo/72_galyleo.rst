@@ -71,53 +71,53 @@ These then, are the goals of Galyleo:
 
 Using Galyleo
 -------------
-The general use mode of Galyleo is that a Notebook is being edited and executed in one tab of JupyterLab, and a corresponding dashboard file is being edited and executed in another; as the Notebook executes, it uses the Galyleo Client library to send data to the dashboard file. To JupyterLab, the Galyleo Dashboard Studio is just another editor; it reads and writes `.gd.json` files in the current directory. 
+The general usage model of Galyleo is that a Notebook is being edited and executed in one tab of JupyterLab, and a corresponding dashboard file is being edited and executed in another; as the Notebook executes, it uses the Galyleo Client library to send data to the dashboard file. To JupyterLab, the Galyleo Dashboard Studio is just another editor; it reads and writes `.gd.json` files in the current directory. 
 
 The Dashboard Studio
 ^^^^^^^^^^^^^^^^^^^^^
-A new Galyleo Dashboard can be launched from the JupyterLab launcher or from the File>New menu:
+A new Galyleo Dashboard can be launched from the JupyterLab launcher or from the File>New menu, as shown in Figure 1.
 
 .. figure:: new_dashboard.png
 
-    A New Galyleo Dashboard
+    Figure 1. A New Galyleo Dashboard
 
-An existing dashboard is saved as a .gd.json file, and is denoted with the Galyleo star logo. It can be opened in the usual way, with a double-click.
+An existing dashboard is saved as a `.gd.json` file, and is denoted with the Galyleo star logo. It can be opened in the usual way, with a double-click.
 
 Once a file is opened, or a new file created, a new  Galyleo tab opens onto it.  It resembles a simplified form of a Tableau, Looker, or PowerBI editor.  The collapsible right-hand sidebar offers the ability to view Tables, and view, edit, or create Views, Filters, and Charts.  The bottom half of the right sidebar gives controls for styling of text and shapes.
 
 .. figure:: galyleo.png
 
-    The Galyleo Dashboard Studio
+    Figure 2. The Galyleo Dashboard Studio
 
-The top bar handles the introduction of decorative and styling elements to the dashboard: labels and text, simple shapes (ellipses, rectangles, polygons, lines), and images.  All images are referenced by URL.
+The top bar handles the introduction of decorative and styling elements to the dashboard: labels and text, simple shapes such as ellipses, rectangles, polygons, lines, and images.  All images are referenced by URL.
 
 As the user creates and manipulates the visual elements, the editor continuously saves the table as a JSON file, which can also be edited with Jupyter's built-in text editor.
 
 Workflow
 ^^^^^^^^
-The goal of Galyleo is simplicity and transparency.  Data preparation is handled in Jupyter, and the basic abstract item, the `GalyleoTable` is *generally* created and manipulated there, using an open-source Python library.  When a table is ready, the `GalyleoClient` library is invoked to send it to the dashboard, where it appears in the table tab of the sidebar.  The dashboard author then creates visual elements (sliders, lists, dropdowns, etc) which select rows of the table, and uses these filtered lists as inputs to charts.  The general idea is that the author should be able to seamlessly move between manipulating and creating data tables in the Notebook, and filtering and visualizing them in the dashboard.
+The goal of Galyleo is simplicity and transparency.  Data preparation is handled in Jupyter, and the basic abstract item, the `GalyleoTable` is generally created and manipulated there, using an open-source Python library.  When a table is ready, the `GalyleoClient` library is invoked to send it to the dashboard, where it appears in the table tab of the sidebar.  The dashboard author then creates visual elements such as sliders, lists, dropdowns *etc.*,  which select rows of the table, and uses these filtered lists as inputs to charts.  The general idea is that the author should be able to seamlessly move between manipulating and creating data tables in the Notebook, and filtering and visualizing them in the dashboard.
 
 Data Flow and Conceptual Picture
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The Galyleo Data Model and Architecture is discussed in detail below.  The central idea is to have a few, orthogonal, easily-grasped concepts which make data manipulation easy and intuitive.  The basic concepts are as follows:
 
-1. *Table*: A Table is just what it sounds like: a list of records, equivalent to a PANDAS DataFrame or a SQL Table.  In general, in Galyleo, a Table is expected to be produced by an external source, generally a Jupyter Notebook
+1. *Table*: A Table is a list of records, equivalent to a Pandas DataFrame :cite:`reback2020pandas` :cite:`mckinney-proc-scipy-2010` or a SQL Table.  In general, in Galyleo, a Table is expected to be produced by an external source, generally a Jupyter Notebook
 
-2. *Filter*: A Filter is a logical function which applies to a Table, and selects rows from the Table.  Each Filter works on a single column of the table.  Each Filter corresponds to a widget; widgets set the values Filter use to select table rows
+2. *Filter*: A Filter is a logical function which applies to a single column of a Table Table, and selects rows from the Table. Each Filter corresponds to a widget; widgets set the values Filter use to select Table rows
 
-3. *View* A View is a subset of a table selected by one or more filters.  To create a view, the user chooses a table, and then chooses one or more filters to apply to the table to select the rows for the View.  The user can also statically select a subset of the columns  to include in the View.
+3. *View* A View is a subset of a Table selected by one or more Filters.  To create a view, the user chooses a Table, and then chooses one or more Tilters to apply to the Table to select the rows for the View.  The user can also statically select a subset of the columns  to include in the View.
 
 4. *Chart* A Chart is a generic term for an object that displays data graphically.  Its input is a View or a Table.  Each Chart has a single data source.
 
 .. figure:: galyleo_dataflow.png
 
-    Dataflow in Galyleo
+    Figure 3. Dataflow in Galyleo
 
-With this in hand, the data flow is straightforward.  A Table is updated from an external source, or the user manipulates a widget.  When this happens, the affected item signals the dashboard controller that it has been updated.  The controller then signals all charts to redraw themselves.  Each Chart will then request updated data from its source Table or View.  A View then requests its configured filters for their current logic functions, and passes these to the source Table with a request to apply the filters and return the rows which are selected by *all* the filters (in the future, a more general Boolean will be applied; the UI elements to construct this function are under design).  The Table then returns the rows which pass the filters; the View selects the static subset of columns it supports, and passes this to its Charts, which then redraw themselves
+The data flow is straightforward.  A Table is updated from an external source, or the user manipulates a widget.  When this happens, the affected item signals the dashboard controller that it has been updated.  The controller then signals all charts to redraw themselves.  Each Chart will then request updated data from its source Table or View.  A View then requests its configured filters for their current logic functions, and passes these to the source Table with a request to apply the filters and return the rows which are selected by *all* the filters (in the future, a more general Boolean will be applied; the UI elements to construct this function are under design).  The Table then returns the rows which pass the filters; the View selects the static subset of columns it supports, and passes this to its Charts, which then redraw themselves.
 
 Each item in this flow conceptually has a single data source, but multiple data targets.  There can be multiple Views over a Table, but each View has a single Table as a source.  There can be multiple charts fed by a View, but each Chart has a single Table or View as a source.
 
-It's important to note that there are no special cases.  There is no distinction, as there is in most visualization systems, between a "Dimension" or a "Measure"; there are simply columns of data, which can be either a value or category axis for any Chart.  From this simplicity significant generality is achieved. For example, a filter selects values from any column, whether that column is providing value or category.  Applying a range filter to a category column gives natural telescoping and zooming on the x-axis of a chart, without change to the architecture.
+It's important to note that there are no special cases.  There is no distinction, as there is in most visualization systems, between a "Dimension" or a "Measure"; there are simply columns of data, which can be either a value or category axis for any Chart.  From this simplicity, significant generality is achieved. For example, a filter selects values from any column, whether that column is providing value or category.  Applying a range filter to a category column gives natural telescoping and zooming on the x-axis of a chart, without change to the architecture.
 
 Drilldowns
 ^^^^^^^^^^
@@ -129,7 +129,7 @@ Once the dashboard is complete, it can be published to the web simply by moving 
 
 .. figure:: dashboard_screenshot.png
 
-    A Published Galyleo Dashboard
+    Figure 4.  A Published Galyleo Dashboard
 
 No-Code, Low-Code, and Appropriate-Code
 ---------------------------------------
@@ -193,7 +193,7 @@ The data flow of the previous section remains unchanged; it is simply that the f
 
 .. figure:: galyleo_remote_dataflow.png
 
-    Galyleo Dataflow with Remote Tables
+    Figure 5. Galyleo Dataflow with Remote Tables
 
 Comments
 ^^^^^^^^
@@ -218,7 +218,7 @@ Lively abstracts away HTML and CSS tags in graphical objects called "Morphs".  M
 
 .. figure:: lively-screenshot.png
     
-    The lively.next environment
+    Figure 6.  The lively.next environment
 
 In lively.next, each morph turns into a snippet of HTML, CSS, and JavaScript code and the entire application turns into a web page.  The programmer  doesn't see the HTML and CSS code directly; these are auto-generated.  Instead, the programmer writes  JavaScript code for both logic and configuration (to the extent that the configuration isn't done by hand).  The code is bundled with the object and integrated in the web page.
 
@@ -275,7 +275,7 @@ Galyleo is a standalone web application that is integrated into JupyterLab using
 
 .. figure:: extension_architecture.png
 
-    Galyleo Extension Architecture
+    Figure 7. Galyleo Extension Architecture
 
 Standard Jupyter and browser mechanisms are used.  File system requests come to the extension from the standard Jupyter API, exactly the same requests and mechanisms that are sent to a Markdown or Notebook editor.  The extension receives them, and then uses standard browser-based messaging (`window.postMessage`) to signal the standalone web app.  Similarly, when the extension makes a request of JupyterLab, it does so through this mechanism and a receiver in the extension gets it and makes the appropriate method calls within JupyterLab to achieve the objective.
 
@@ -318,11 +318,11 @@ The promise of the Galyleo Extension is that it can be adapted to *any* open-sou
 * URL of an image for the launcher
 * Name of the application for the file menu
 
-The application must implement a small messaging client, using the standard JavaScript messaging interface, and implement the calls the Galyleo Extension makes.  The conceptual picture is shown :
+The application must implement a small messaging client, using the standard JavaScript messaging interface, and implement the calls the Galyleo Extension makes.  The conceptual picture is shown im Figure 8.
 
 .. figure:: messaging_protocol.png
 
-    Galyleo Extension Application-Side messaging
+    Figure 8. Galyleo Extension Application-Side messaging
 
 And it must support (at a minimum) messages to read and write the file being edited.
 
@@ -332,7 +332,7 @@ The World-Wide Web and email comprised  the first generation of Internet computi
 
 .. figure:: generations.png
 
-    Generations of Internet Computing
+    Figure 9. Generations of Internet Computing
 
 The Word Processor era was due to technological limitations -- the processing power and  memory to run multiple programs simply wasn't available on low-end hardware, and PC operating systems didn't yet exist.  In some sense, the current second generation of Internet Computing suffers from similar technological constraints.  The "Operating System" for Internet Computing doesn't yet exist.  The Jupyter Computer can provide it.
 
