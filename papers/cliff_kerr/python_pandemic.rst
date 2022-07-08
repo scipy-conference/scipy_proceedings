@@ -182,9 +182,9 @@ As shown in Fig. :ref:`sciris`, Sciris significantly reduces the number of lines
 Array-based architecture
 ++++++++++++++++++++++++
 
-In a typical agent-based simulation, the outermost loop is over time, while the inner loops iterate over different agents and agent states. For a simulation like Covasim, with roughly 700 (daily) timesteps, tens or hundreds of thousands of agents, and several dozen states, this requires on the order of one billion update steps.
+In a typical agent-based simulation, the outermost loop is over time, while the inner loops iterate over different agents and agent states. For a simulation like Covasim, with roughly 700 (daily) timesteps to represent the first two years of the pandemic, tens or hundreds of thousands of agents, and several dozen states, this requires on the order of one billion update steps.
 
-However, we can take advantage of the fact that each state (such as agent age or their infection status) has the same data type, and thus we can avoid an explicit loop over agents by instead representing agents as entries in NumPy vectors, and performing operations on these vectors. These two architectures are shown in Fig. :ref:`array`. Compared to the explicitly object-oriented implementation of an agent-based model, the array-based version is 1-2 orders of magnitude faster for population sizes larger than 10,000 agents. The relative performance of these two approaches is shown in Fig. :ref:`perf` for FPsim (which, like Covasim, was initially implemented using an object-oriented approach before being converted to an array-based approach). An illustration of how aging and death would be implemented in each of these two approaches is also provided below.
+However, we can take advantage of the fact that each state (such as agent age or their infection status) has the same data type, and thus we can avoid an explicit loop over agents by instead representing agents as entries in NumPy vectors, and performing operations on these vectors. These two architectures are shown in Fig. :ref:`array`. Compared to the explicitly object-oriented implementation of an agent-based model, the array-based version is 1-2 orders of magnitude faster for population sizes larger than 10,000 agents. The relative performance of these two approaches is shown in Fig. :ref:`perf` for FPsim (which, like Covasim, was initially implemented using an object-oriented approach before being converted to an array-based approach). To illustrate the difference between object-based and array-based implementations, the following example shows how aging and death would be implemented in each:
 
 
 .. figure:: fig_array.png
@@ -199,11 +199,10 @@ However, we can take advantage of the fact that each state (such as agent age or
 
 .. code-block:: python
 
-    #%% Object-based agent simulation
+    # Object-based agent simulation
 
     class Person:
 
-        # Person methods
         def age_person(self):
             self.age += 1
             return
@@ -214,21 +213,22 @@ However, we can take advantage of the fact that each state (such as agent age or
                 self.alive = False
             return
 
-        # Object-based sim integration loop
-        for t in self.time_vec:
-            for person in self.people:
-                if person.alive:
-                    person.age_person()
-                    person.check_died()
+    class Sim:
+
+        def run(self):
+            for t in self.time_vec:
+                for person in self.people:
+                    if person.alive:
+                        person.age_person()
+                        person.check_died()
 
 
 .. code-block:: python
 
-    #%% Array-based agent simulation
+    # Array-based agent simulation
 
     class People:
 
-        # People methods
         def age_people(self, inds):
             self.age[inds] += 1
             return
@@ -239,11 +239,13 @@ However, we can take advantage of the fact that each state (such as agent age or
             self.alive[inds[died]] = False
             return
 
-        # Array-based sim integration loop
-        for t in self.time_vec:
-            alive_inds = sc.findinds(self.people.alive)
-            self.people.age_people(inds=alive_inds)
-            self.people.check_died(inds=alive_inds)
+    class Sim:
+
+        def run(self):
+            for t in self.time_vec:
+                alive = sc.findinds(self.people.alive)
+                self.people.age_people(inds=alive)
+                self.people.check_died(inds=alive)
 
 
 
@@ -255,14 +257,17 @@ Numba is a compiler that translates subsets of Python and NumPy into machine cod
 
 .. code-block:: python
 
-   @nb.njit((nb.int32, nb.int32), cache=True)
-   def choose_r(max_n, n):
-       return np.random.choice(max_n, n, replace=True)
+    import numpy as np
+    import numba as nb
+
+    @nb.njit((nb.int32, nb.int32), cache=True)
+    def choose_r(max_n, n):
+        return np.random.choice(max_n, n, replace=True)
 
 
 Since Covasim is stochastic, calculations rarely need to be exact; as a result, most numerical operations are performed as 32-bit operations.
 
-Together, these speed optimizations allow Covasim to run at roughly 5-10 million simulated person-days per second of CPU time -- a speed comparable to agent-based models implemented purely in C or C\+\+ :cite:`hinch2021openabm`. Practically, this means that most users can run Covasim analyses on their laptops without needing to use cloud-based or HPC computing resources.
+Together, these speed optimizations allow Covasim to run at roughly 5-10 million simulated person-days per second of CPU time – a speed comparable to agent-based models implemented purely in C or C\+\+ :cite:`hinch2021openabm`. Practically, this means that most users can run Covasim analyses on their laptops without needing to use cloud-based or HPC computing resources.
 
 
 
