@@ -79,7 +79,7 @@ Since the early days of the pandemic, Covasim releases have coincided with major
 
 .. figure:: fig_releases.png
 
-   Daily reported global COVID-19-related deaths (top; smoothed with a one-week rolling window), relative to the timing of known variants of concern (VOIs) and variants of interest (VOIs), as well as Covasim releases (bottom). :label:`releases`
+   Daily reported global COVID-19-related deaths (top; smoothed with a one-week rolling window), relative to the timing of known variants of concern (VOCs) and variants of interest (VOIs), as well as Covasim releases (bottom). :label:`releases`
 
 
 To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, has been used in dozens of academic studies :cite:`kerr2021`, and informed decision-making on every continent (Fig. :ref:`worldmap`), making it one of the most widely used COVID models :cite:`kerr2021covasim`. We believe key elements of its success include (a) the simplicity of its architecture; (b) its high performance, enabled by the use of NumPy arrays and Numba decorators; and (c) our emphasis on prioritizing usability, including flexible type handling and careful choices of default settings. In the remainder of this paper, we outline these principles in more detail, in the hope that this will provide a useful roadmap for other groups wanting to quickly develop high-performance, easy-to-use scientific computing libraries.
