@@ -60,19 +60,19 @@ Python vs. the pandemic: a case study in high-stakes software development
 Background
 ----------
 
-For decades, scientists have been concerned about the possibility of another global pandemic on the scale of the 1918 flu :cite:`garrett2005next`. Despite a number of "close calls" – including SARS in 2002 :cite:`anderson2004epidemiology`, Ebola in 2014-2016 :cite:`who2014ebola`, and flu outbreaks including 1957, 1968, and H1N1 in 2009 :cite:`saunders2016reviewing`, some of which led to 1 million or more deaths – the world had avoided experiencing a planetary-scale new pathogen since HIV spread globally in the 1980s :cite:`cohen2008spread`. 
+For decades, scientists have been concerned about the possibility of another global pandemic on the scale of the 1918 flu :cite:`garrett2005next`. Despite a number of "close calls" – including SARS in 2002 :cite:`anderson2004epidemiology`; Ebola in 2014-2016 :cite:`who2014ebola`; and flu outbreaks including 1957, 1968, and H1N1 in 2009 :cite:`saunders2016reviewing`, some of which led to 1 million or more deaths – the last time we experienced the emergence of a planetary-scale new pathogen was when HIV spread globally in the 1980s :cite:`cohen2008spread`. 
 
-In 2015, Bill Gates gave a TED talk stating that the world was not ready to deal with another pandemic :cite:`hofman2020global`. While the Bill & Melinda Gates Foundation (BMGF) has not historically focused on pandemic preparedness, its expertise in disease surveillance, modeling, and drug discovery made it well placed to contribute to a global pandemic response plan. Founded in 2008, the Institute for Disease Modeling (IDM) has provided analytical support for BMGF (which it has been part of since 2020) and other global health partners, including efforts to eradicate malaria and polio. Since its creation, IDM has built up a portfolio of computational tools to understand, analyze, and predict the dynamics of different diseases.
+In 2015, Bill Gates gave a TED talk stating that the world was not ready to deal with another pandemic :cite:`hofman2020global`. While the Bill & Melinda Gates Foundation (BMGF) has not historically focused on pandemic preparedness, its expertise in disease surveillance, modeling, and drug discovery made it well placed to contribute to a global pandemic response plan. Founded in 2008, the Institute for Disease Modeling (IDM) has provided analytical support for BMGF (which it has been a part of since 2020) and other global health partners, with a focus on eradicating malaria and polio. Since its creation, IDM has built up a portfolio of computational tools to understand, analyze, and predict the dynamics of different diseases.
 
-When "coronavirus disease 2019" (COVID-19) and the virus that causes it (SARS-CoV-2) were first identified in late 2019, our team began summarizing what was known about the virus :cite:`famulare2019ncov`. By early February 2020, even though it was more than a month before the WHO would declare a pandemic :cite:`medicine2020covid`, it had become clear that COVID-19 was emerging as a major public health threat. The outbreak on the Diamond Princess cruise ship :cite:`rocklov2020covid` was the impetus for us to start modeling COVID in detail. Specifically,  we needed a tool to (a) incorporate new data as soon as it became available, (b) explore policy scenarios, and (c) predict likely future epidemic trajectories.
+When "coronavirus disease 2019" (COVID-19) and the virus that causes it (SARS-CoV-2) were first identified in late 2019, our team began summarizing what was known about the virus :cite:`famulare2019ncov`. By early February 2020, even though it was more than a month before the World Health Organization (WHO) declared a pandemic :cite:`medicine2020covid`, it had become clear that COVID-19 would become a major public health threat. The outbreak on the *Diamond Princess* cruise ship :cite:`rocklov2020covid` was the impetus for us to start modeling COVID in detail. Specifically,  we needed a tool to (a) incorporate new data as soon as it became available, (b) explore policy scenarios, and (c) predict likely future epidemic trajectories.
 
-The first step was to identify which software tool would form the best starting point for our new COVID model. Infectious disease models come in two major types: *agent-based models* track the behavior of individual "people" (agents) in the simulation, with each agent's behavior typically defined as a random (probabilistic) process. *Compartmental models* track populations of people over time, typically using deterministic difference equations. The richest modeling framework used by IDM at the time was EMOD, which is a multi-disease agent-based model written in C++ and based on JSON configuration files :cite:`bershteyn2018implementation`. We also considered Atomica, a multi-disease compartmental model written in Python and based on Excel input files :cite:`kedziora2019cascade`. However, both options had significant drawbacks: as a compartmental model, Atomica was unable to capture the individual level detail necessary for modeling the Diamond Princess outbreak (such as passenger-crew interactions); EMOD had sufficient flexibility, but developing new disease modules had historically required months rather than days. 
+The first step was to identify which software tool would form the best starting point for our new COVID model. Infectious disease models come in two major types: *agent-based models* track the behavior of individual "people" (agents) in the simulation, with each agent's behavior represented by a random (probabilistic) process. *Compartmental models* track populations of people over time, typically using deterministic difference equations. The richest modeling framework used by IDM at the time was EMOD, which is a multi-disease agent-based model written in C++ and based on JSON configuration files :cite:`bershteyn2018implementation`. We also considered Atomica, a multi-disease compartmental model written in Python and based on Excel input files :cite:`kedziora2019cascade`. However, both of these options posed significant challenges: as a compartmental model, Atomica would have been unable to capture the individual-level detail necessary for modeling the *Diamond Princess* outbreak (such as passenger-crew interactions); EMOD had sufficient flexibility, but developing new disease modules had historically required months rather than days. 
 
-As a result, we instead started developing Covasim ("COVID-19 Agent-based Simulator") from a nascent agent-based model written in Python, LEMOD-FP ("Light-EMOD for Family Planning"). LEMOD-FP was used to model reproductive health choices of women in Senegal; this model had in turn been based on an even simpler agent-based model of measles vaccination programs in Nigeria ("Value-of-information simulator" or VoISim). (We subsequently applied the lessons we learned from developing Covasim to turn LEMOD-FP into a new family planning model, "FPsim", which will be launched later this year :cite:`o2022fpsim`.)
+As a result, we instead started developing Covasim ("**COV**\ ID-19 **A**\ gent-based **Sim**\ ulator") :cite:`kerr2021covasim` from a nascent agent-based model written in Python, LEMOD-FP ("Light-EMOD for Family Planning"). LEMOD-FP was used to model reproductive health choices of women in Senegal; this model had in turn been based on an even simpler agent-based model of measles vaccination programs in Nigeria ("Value-of-Information Simulator" or VoISim). We subsequently applied the lessons we learned from developing Covasim to turn LEMOD-FP into a new family planning model, "FPsim", which will be launched later this year :cite:`o2022fpsim`.
 
-Parallel to the development of Covasim, other research teams at IDM developed their own COVID models, including one based on the EMOD framework, and one based on an earlier influenza model :cite:`chao2020modeling`. However, while both of these models saw use in academic contexts :cite:`selvaraj2022rural`:cite:`koo2020interventions`, neither were able to incorporate new features quickly enough, or were easy enough to use, for widespread adoption in a policy context.
+Parallel to the development of Covasim, other research teams at IDM developed their own COVID models, including one based on the EMOD framework :cite:`selvaraj2022rural`, and one based on an earlier influenza model :cite:`chao2020modeling`. However, while both of these models saw use in academic contexts :cite:`koo2020interventions`, neither were able to incorporate new features quickly enough, or were easy enough to use, for widespread external adoption in a policy context.
 
-Covasim, by contrast, had immediate real-world impact :cite:`kerr2021covasim`. The first version was released on 10 March 2020, and on 12 March 2020, its output was presented by Washington State Governor Jay Inslee during a press conference as justification for school closures and social distancing measures :cite:`kerr2021`.
+Covasim, by contrast, had immediate real-world impact. The first version was released on 10 March 2020, and on 12 March 2020, its output was presented by Washington State Governor Jay Inslee during a press conference as justification for school closures and social distancing measures :cite:`kerr2021`.
 
 Since the early days of the pandemic, Covasim releases have coincided with major events in the pandemic, especially the identification of new variants of concern (Fig. :ref:`releases`). Covasim was quickly adopted globally, including applications in the UK regarding school closures :cite:`panovska2020determining`, Australia regarding outbreak control :cite:`stuart2021role`, and Vietnam regarding lockdown measures :cite:`pham2021estimating`. 
 
@@ -82,7 +82,7 @@ Since the early days of the pandemic, Covasim releases have coincided with major
    Daily reported global COVID-19-related deaths (top; smoothed with a one-week rolling window), relative to the timing of known variants of concern (VOCs) and variants of interest (VOIs), as well as Covasim releases (bottom). :label:`releases`
 
 
-To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, has been used in dozens of academic studies :cite:`kerr2021`, and informed decision-making on every continent (Fig. :ref:`worldmap`), making it one of the most widely used COVID models :cite:`kerr2021covasim`. We believe key elements of its success include (a) the simplicity of its architecture; (b) its high performance, enabled by the use of NumPy arrays and Numba decorators; and (c) our emphasis on prioritizing usability, including flexible type handling and careful choices of default settings. In the remainder of this paper, we outline these principles in more detail, in the hope that this will provide a useful roadmap for other groups wanting to quickly develop high-performance, easy-to-use scientific computing libraries.
+To date, Covasim has been downloaded from PyPI over 100,000 times :cite:`pepy`, has been used in dozens of academic studies :cite:`kerr2021`, and informed decision-making on every continent (Fig. :ref:`worldmap`), making it one of the most widely used COVID models :cite:`kerr2021covasim`. We believe key elements of its success include (a) the simplicity of its architecture; (b) its high performance, enabled by the use of NumPy arrays and Numba decorators; and (c) our emphasis on prioritizing usability, including flexible type handling and careful choices of default settings. In the remainder of this paper, we outline these principles in more detail, in the hope that these will provide a useful roadmap for other groups wanting to quickly develop high-performance, easy-to-use scientific computing libraries.
 
 
 .. figure:: fig_worldmap.png
@@ -100,9 +100,9 @@ Software architecture and implementation
 Covasim conceptual design and usage
 +++++++++++++++++++++++++++++++++++
 
-Covasim is a standard susceptible-infected-exposed-recovered (SEIR) model (Fig. :ref:`seir`). It is an agent-based model, meaning that individual people and their interactions with one another are simulated explicitly (rather than implicitly, as in a compartmental model).
+Covasim is a standard susceptible-exposed-infectious-recovered (SEIR) model (Fig. :ref:`seir`). As noted above, it is an agent-based model, meaning that individual people and their interactions with one another are simulated explicitly (rather than implicitly, as in a compartmental model).
 
-The fundamental calculation that Covasim performs is to calculate the probability that a given person, on a given time step, will change from one state to another, such as from susceptible to infected (i.e., that person was infected), from undiagnosed to diagnosed, or from critically ill to dead. Covasim is fully open-source and available on GitHub (http://covasim.org) and PyPI (``pip install covasim``), and comes with comprehensive documentation, including tutorials (http://docs.covasim.org).
+The fundamental calculation that Covasim performs is to determine the probability that a given person, on a given time step, will change from one state to another, such as from susceptible to exposed (i.e., that person was infected), from undiagnosed to diagnosed, or from critically ill to dead. Covasim is fully open-source and available on GitHub (http://covasim.org) and PyPI (``pip install covasim``), and comes with comprehensive documentation, including tutorials (http://docs.covasim.org).
 
 
 .. figure:: fig_seir.png
@@ -111,7 +111,7 @@ The fundamental calculation that Covasim performs is to calculate the probabilit
    Basic Covasim disease model. The blue arrow shows the process of reinfection. :label:`seir`
 
 
-The first principle of Covasim's design philosophy is that "Common tasks should be simple" – for example, defining parameters, running a simulation, and plotting results. The following example illustrates this principle: it creates a simulation with a custom parameter value, runs it, and plots the results:
+The first principle of Covasim's design philosophy is that "Common tasks should be simple" – for example, defining parameters, running a simulation, and plotting results. The following example illustrates this principle; it creates a simulation with a custom parameter value, runs it, and plots the results:
 
 
 .. code-block:: python
@@ -120,9 +120,9 @@ The first principle of Covasim's design philosophy is that "Common tasks should 
    cv.Sim(pop_size=100e3).run().plot()
 
 
-The second principle of the design philosophy is "Uncommon tasks can't always be simple, but they still should be possible". Examples include writing a custom goodness-of-fit function or defining a new population structure. To some extent, the second principle is at odds with the first, since the more flexibility an interface has, typically the more complex it is as well.
+The second principle of Covasim's design philosophy is "Uncommon tasks can't always be simple, but they still should be possible." Examples include writing a custom goodness-of-fit function or defining a new population structure. To some extent, the second principle is at odds with the first, since the more flexibility an interface has, typically the more complex it is as well.
 
-To illustrate the tension between these two principles, the following code and Fig. :ref:`example` show the implementation and result of running two simulations to determine the impact of a custom intervention aimed at protecting the elderly:
+To illustrate the tension between these two principles, the following code shows how to run two simulations to determine the impact of a custom intervention aimed at protecting the elderly in Japan, with results shown in Fig. :ref:`example`:
 
 
 .. code-block:: python
@@ -138,11 +138,10 @@ To illustrate the tension between these two principles, the following code and F
    # Set custom parameters
    pars = dict(
        pop_type = 'hybrid', # More realistic population
-       location = 'japan', # Japan characteristics
+       location = 'japan', # Japan's population pyramid
        pop_size = 50e3, # Have 50,000 people total
        pop_infected = 100, # 100 infected people
        n_days = 90, # Run for 90 days
-       verbose = 0, # Do not print output
    )
 
    # Run multiple sims in parallel and plot key results
@@ -150,16 +149,16 @@ To illustrate the tension between these two principles, the following code and F
    s1 = cv.Sim(pars, label='Default')
    s2 = cv.Sim(pars, interventions=elderly, label=label)
    msim = cv.parallel(s1, s2)
-   fig = msim.plot(['cum_deaths', 'cum_infections'])
+   msim.plot(['cum_deaths', 'cum_infections'])
 
 
 .. figure:: fig_example.png
 
    Illustrative result of a simulation in Covasim focused on exploring an intervention for protecting the elderly. :label:`example`
 
-Similar design philosophies have been articulated for other projects, such as Grails :cite:`abdul2009groovy` [1]_.
+Similar design philosophies have been articulated by previously, such as for Grails :cite:`abdul2009groovy` among others [1]_.
 
-.. [1] Other similar philosophical statements include "The manifesto of Matplotlib is: simple and common tasks should be simple to perform provide options for more complex tasks" (`Data Processing Using Python <https://pt.coursera.org/lecture/python-data-processing/2-fundamentals-of-python-plotting-xMQeE>`__) and "Simple, common tasks should be simple to perform; Options should be provided to enable more complex tasks" (`Instrumental <https://instrumental-lib.readthedocs.io/en/stable/developer.html>`__).
+.. [1] Other similar philosophical statements include "The manifesto of Matplotlib is: simple and common tasks should be simple to perform; provide options for more complex tasks" (`Data Processing Using Python <https://pt.coursera.org/lecture/python-data-processing/2-fundamentals-of-python-plotting-xMQeE>`__) and "Simple, common tasks should be simple to perform; Options should be provided to enable more complex tasks" (`Instrumental <https://instrumental-lib.readthedocs.io/en/stable/developer.html>`__).
 
 
 
@@ -168,7 +167,7 @@ Simplifications using Sciris
 
 A key component of Covasim's architecture is heavy reliance on Sciris (http://sciris.org) :cite:`sciris`, a library of functions for scientific computing that provide additional flexibility and ease-of-use on top of NumPy, SciPy, and Matplotlib, including parallel computing, array operations, and high-performance container datatypes. 
 
-As shown in Fig. :ref:`sciris`, Sciris significantly reduces the number of lines of code required to perform common scientific tasks, allowing the user to focus on the code's scientific logic rather than the low-level implementation. Key Covasim features that rely on Sciris include: ensuring consistent list, dictionary, array types; referencing ordered dictionary elements by index; handling and interconverting dates; saving and loading files; and running simulations in parallel.
+As shown in Fig. :ref:`sciris`, Sciris significantly reduces the number of lines of code required to perform common scientific tasks, allowing the user to focus on the code's scientific logic rather than the low-level implementation. Key Covasim features that rely on Sciris include: ensuring consistent dictionary, list, and array types (e.g., allowing the user to provide inputs as either lists or arrays); referencing ordered dictionary elements by index; handling and interconverting dates (e.g., allowing the user to provide either a date string or a ``datetime`` object); saving and loading files; and running simulations in parallel.
 
 
 .. figure:: fig_sciris.png
@@ -176,7 +175,7 @@ As shown in Fig. :ref:`sciris`, Sciris significantly reduces the number of lines
    :scale: 35%
    :figclass: w
 
-   Comparison of functionally identical code implemented without Sciris (left) and with (right). Tasks that take 30 lines of code without Sciris can be accomplished in 7 lines with it. :label:`sciris`
+   Comparison of functionally identical code implemented without Sciris (left) and with (right). In this example, tasks that together take 30 lines of code without Sciris can be accomplished in 7 lines with it. :label:`sciris`
 
 
 
