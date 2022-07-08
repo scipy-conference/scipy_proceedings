@@ -1,7 +1,7 @@
 .DS_Store
 .ipynb_checkpoints
 output
-_built
+_build
 *.pyc
 *.swp
 *~
