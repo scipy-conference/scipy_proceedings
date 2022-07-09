@@ -293,7 +293,7 @@ References
 
 .. [Hal01] Halstead, M. *Elements of software science.* Elsevier New York. 1977.
 
-.. [Har01] Harris, C., K. Millman, S. van der Walt, et al. Array programming with NumPy. *Nature* 585, 357–62. 2020. DOI: 10.1038/s41586-020-2649-2.
+.. [Har01] Harris, C., K. Millman, S. van der Walt, et al. Array programming with NumPy. *Nature* 585, 357–62. 2020. doi:10.1038/s41586-020-2649-2.
 
 .. [Hin01] Hindle, A, MW Godfrey and RC Holt. "Reading beside the lines: Indentation as a proxy for complexity metric." Program Comprehension. The 16th IEEE International Conference, 133-42. 2008.
 
