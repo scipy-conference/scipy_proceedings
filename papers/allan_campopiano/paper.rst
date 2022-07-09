@@ -249,8 +249,8 @@ test listed `in the docs <https://alcampopiano.github.io/hypothesize/>`_
 is associated with a hosted notebook, pre-filled with
 sample data and code. But certainly, simply :code:`pip install Hypothesize` to
 use Hypothesize in any environment that supports Python.
-See van Noordt and Willoughby :cite:`van2021cortical`,
-van Noordt et al. :cite:`van2022inter`, and Elsabbagh :cite:`elsabbagh2022inter` for
+See van Noordt and Willoughby :cite:`van2021cortical` and
+van Noordt et al. :cite:`van2022inter` for
 examples of Hypothesize being used in applied research.
 
 The API for Hypothesize is organized by single- and two-factor tests, as well as
