@@ -38,7 +38,7 @@ Here is a representative (but far from comprehensive) list of examples:
 
 * Unlike the old API, the new API contains helpful Python type annotations and docstrings.
 * Webots employs many vectors, e.g., for 3D positions, 4D rotations, and RGB colors.  The old API typically treats these as lists or integers (24-bit colors).  In the new API these are Vector objects, with conveniently addressable components (e.g. :code:`vector.x` or :code:`color.red`), convenient helper methods like :code:`vector.magnitude` and :code:`vector.unit_vector`, and overloaded vector arithmetic operations, akin to (and interoperable with) NumPy arrays.
-* The new API also provides easy interfacing between high-resolution Webots sensors (like cameras and Lidar) and Numpy arrays, to make it much more convenient to use Webots with popular Python packages like Numpy [Numpy01]_ [Har01]_, Scipy [Scipy01]_ [Vir01]_, PIL/PILLOW [Pil01]_ or OpenCV [Opencv01]_ [Brad01_].  For example, converting a Webots camera image to a NumPy array is now as simple as :code:`camera.array` and this now allows the array to share memory with the camera, making this extremely fast regardless of image size.
+* The new API also provides easy interfacing between high-resolution Webots sensors (like cameras and Lidar) and Numpy arrays, to make it much more convenient to use Webots with popular Python packages like Numpy [Numpy01]_ [Har01]_, Scipy [Scipy01]_ [Vir01]_, PIL/PILLOW [Pil01]_ or OpenCV [Opencv01]_ [Brad01]_.  For example, converting a Webots camera image to a NumPy array is now as simple as :code:`camera.array` and this now allows the array to share memory with the camera, making this extremely fast regardless of image size.
 * The old API often requires that all function parameters be given explicitly in every call, whereas the new API gives many parameters commonly used default values, allowing them often to be omitted, and keyword arguments to be used where needed.
 * Most attributes are now accessible (and alterable, when applicable) by pythonic properties like :code:`motor.velocity`.
 * Many devices now have Python methods like :code:`__bool__` overloaded in intuitive ways.  E.g., you can now use :code:`if bumper` to detect if a bumper has been pressed, rather than the old :code:`if bumper.getValue()`.
@@ -177,7 +177,7 @@ Brief inspection should reveal that the latter code is much easier to read, writ
 
 This intuitive impression is confirmed by automated metrics for code readability.
 The measures in what follows consider the full :code:`supervisor_draw_trail` sample controller (from which the above snippet was drawn), since this is the Webots sample controller that makes the most sustained use of supervisor functionality to perform a fairly plausible supervisor task (maintaining the position of a streamer that trails behind the robot).
-Webots provides this sample controller in C [SDT01]_, but it was re-implemented using both the Old Python API [SDT02]_ and the New Python API [SDT03]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
+Webots provides this sample controller in C [SDTA01]_, but it was re-implemented using both the Old Python API [SDTB01]_ and the New Python API [SDTC01]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
 (Sample code and computations of metrics are available under additional information below.[*** Rephrase as references])
 
 .. table:: Length and Complexity Metrics. :label:`metrictable`
@@ -323,10 +323,10 @@ References
 
 .. [Scipy01] https://www.scipy.org
 
-.. [SDT01] https://cyberbotics.com/doc/guide/samples-howto#supervisor_draw_trail-wbt
+.. [SDTA01] https://cyberbotics.com/doc/guide/samples-howto#supervisor_draw_trail-wbt
 
-.. [SDT02] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_old_api_bare_bones.py
+.. [SDTB01] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_old_api_bare_bones.py
 
-.. [SDT03] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_new_api_bare_bones.py
+.. [SDTC01] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_new_api_bare_bones.py
 
 .. [Vir01] Virtanen, P, R. Gommers, T. Oliphant, et al. SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. *Nature Methods*, 17(3), 261-72. 2020.
