@@ -278,10 +278,6 @@ Lengthy discussion of the new API and its planned inclusion in Webots: https://g
 
 Webots home page, including free download of Webots: https://cyberbotics.com/
 
-Open Dynamics Engine, used by Webots for physics simulations: https://ode.org
-
-Radon tool used to compute code readability metrics: https://radon.readthedocs.io/en/latest/index.html
-
 References
 ==========
 
