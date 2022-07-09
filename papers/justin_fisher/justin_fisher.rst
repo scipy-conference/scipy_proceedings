@@ -31,7 +31,7 @@ Webots has historically provided a simple Python API, allowing Python programs t
 This Python API is a thin wrapper over a C++ API, which itself is a wrapper over Webots’ core C API.
 These nested layers of API-wrapping are inefficient.
 Furthermore, this API is not very "pythonic" and did not provide many of the conveniences that help to make development in Python be fast, intuitive, and easy to learn.
-This new Python API more efficiently interfaces directly with the Webots C API and provides a more intuitive, easily usable, and "pythonic" interface for controlling Webots robots and simulations.
+This paper presents a new Python API [NewAPI01]_ that more efficiently interfaces directly with the Webots C API and provides a more intuitive, easily usable, and "pythonic" interface for controlling Webots robots and simulations.
 
 In qualitative terms, the old API feels like one is awkwardly using Python to call C and C++ functions, whereas the new API feels much simpler, much easier, and like it is fully intended for Python.
 Here is a representative (but far from comprehensive) list of examples:
@@ -268,7 +268,7 @@ So the mathematics confirm what was likely obvious from visual comparison of cod
 
 A new Python API for Webots robotic simulations was presented.
 It more efficiently interfaces directly with the Webots C API and provides a more intuitive, easily usable, and "pythonic" interface for controlling Webots robots and simulations.
-Motivations for the API and some of its design decisions were discussed.  Advantages of the new API were discussed and quantified using automated code readability metrics.
+Motivations for the API and some of its design decisions were discussed, including decisions use python properties, to add new functionality alongside deprecated backwards compatibility, and to separate robot and supervisor/world functionality.  Advantages of the new API were discussed and quantified using automated code readability metrics.
 
 More Information
 ===================
@@ -302,6 +302,8 @@ References
 .. [Metrics01] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/measure_code_complexity.py
 
 .. [Mic01] Michel, O. "Webots: Professional Mobile Robot Simulation. *Journal of Advanced Robotics Systems.* 1(1): 39-42. 2004.
+
+.. [NewAPI01] https://github.com/Justin-Fisher/new_python_api_for_webots
 
 .. [Numpy01] NumPy. https://www.numpy.org
 
