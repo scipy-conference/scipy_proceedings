@@ -178,7 +178,7 @@ Brief inspection should reveal that the latter code is much easier to read, writ
 
 This intuitive impression is confirmed by automated metrics for code readability.
 The measures in what follows consider the full :code:`supervisor_draw_trail` sample controller (from which the above snippet was drawn), since this is the Webots sample controller that makes the most sustained use of supervisor functionality to perform a fairly plausible supervisor task (maintaining the position of a streamer that trails behind the robot).
-Webots provides this sample controller in C [SDTA01]_, but it was re-implemented using both the Old Python API [SDTB01]_ and the New Python API [SDTC01]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
+Webots provides this sample controller in C [SDTC01]_, but it was re-implemented using both the Old Python API [SDTOld01]_ and the New Python API [SDTNew01]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
 
 .. table:: Length and Complexity Metrics. :label:`metrictable`
 
@@ -195,7 +195,7 @@ Webots provides this sample controller in C [SDTA01]_, but it was re-implemented
   +-------------------------------------------------------+-------------+--------------+
 
 Some raw measures for the two controllers are shown in Table :ref:`metrictable`.
-These were gathered using the Radon code-analysis tools [Radon01]_.  (These metrics may be reproduced by (1) installing Radon [Radon01]_, (2) downloading the source files to compare Source code for computing the metrics [SDTB01]_ [SDTC01]_, (3) downloading the script for computing metrics [Metrics01]_, (4) ensuring that the path at the top of this script refers to the location of the source files to be compared, and (5) running this script.)
+These were gathered using the Radon code-analysis tools [Radon01]_.  (These metrics may be reproduced by (1) installing Radon [Radon01]_, (2) downloading the source files to compare Source code for computing the metrics [SDTOld01]_ [SDTNew01]_, (3) downloading the script for computing metrics [Metrics01]_, (4) ensuring that the path at the top of this script refers to the location of the source files to be compared, and (5) running this script.)
 Multiple metrics are reported because theorists disagree about which are most relevant in assessing code readability, because some of these play a role in computing other metrics discussed below, and because this may help to allay potential worries that a few favorable metrics might have been cherry-picked.
 This paper provides some explanation of these metrics and of their potential significance, while remaining neutral regarding which, if any, of these metrics is best.
 
@@ -323,10 +323,10 @@ References
 
 .. [Scipy01] https://www.scipy.org
 
-.. [SDTA01] https://cyberbotics.com/doc/guide/samples-howto#supervisor_draw_trail-wbt
+.. [SDTC01] https://cyberbotics.com/doc/guide/samples-howto#supervisor_draw_trail-wbt
 
-.. [SDTB01] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_old_api_bare_bones.py
+.. [SDTNew01] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_new_api_bare_bones.py
 
-.. [SDTC01] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_new_api_bare_bones.py
+.. [SDTOld01] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_old_api_bare_bones.py
 
 .. [Vir01] Virtanen, P, R. Gommers, T. Oliphant, et al. SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. *Nature Methods*, 17(3), 261-72. 2020.
