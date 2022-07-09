@@ -289,7 +289,7 @@ References
 
 .. [Bra01] Braitenberg, V. *Vehicles: Experiments in synthetic psychology.* Cambridge, MA: MIT Press. 1984.
 
-.. [Bus01] Buse, R and W Weimer. Learning a metric for code readability. *IEEE Transactions on Software Engineering*, 36(4): 546-58. 2010. doi: 10.1109/TSE.2009.70.
+.. [Bus01] Buse, R and W Weimer. Learning a metric for code readability. *IEEE Transactions on Software Engineering*, 36(4): 546-58. 2010. `doi: 10.1109/TSE.2009.70 <dx.doi.org/10.1109/TSE.2009.70>`_.
 
 .. [Hal01] Halstead, M. *Elements of software science.* Elsevier New York. 1977.
 
