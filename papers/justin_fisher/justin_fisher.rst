@@ -287,7 +287,7 @@ References
 
 .. [Bus01] Buse, R and W Weimer. Learning a metric for code readability. *IEEE Transactions on Software Engineering*, 36(4): 546-58. 2010. `doi: 10.1109/TSE.2009.70 <dx.doi.org/10.1109/TSE.2009.70>`_.
 
-.. [Metrics] Fisher, J. Readability Metrics for a New Python API for Webots Robotics Simulations. 2022. https://doi.org/10.5281/zenodo.6813819
+.. [Metrics] Fisher, J. Readability Metrics for a New Python API for Webots Robotics Simulations. 2022. `doi: 10.5281/zenodo.6813819 <dx.doi.org/10.5281/zenodo.6813819>`_.
 
 .. [Hal01] Halstead, M. *Elements of software science.* Elsevier New York. 1977.
 
