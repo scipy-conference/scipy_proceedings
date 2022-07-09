@@ -178,7 +178,7 @@ Brief inspection should reveal that the latter code is much easier to read, writ
 
 This intuitive impression is confirmed by automated metrics for code readability.
 The measures in what follows consider the full :code:`supervisor_draw_trail` sample controller (from which the above snippet was drawn), since this is the Webots sample controller that makes the most sustained use of supervisor functionality to perform a fairly plausible supervisor task (maintaining the position of a streamer that trails behind the robot).
-Webots provides this sample controller in C [SDTC]_, but it was re-implemented using both the Old Python API [SDTOld]_ and the New Python API [SDTNew]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
+Webots provides this sample controller in C [SDTC]_, but it was re-implemented using both the Old Python API and the New Python API [Metrics]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
 
 .. table:: Length and Complexity Metrics. :label:`metrictable`
 
@@ -195,7 +195,7 @@ Webots provides this sample controller in C [SDTC]_, but it was re-implemented u
   +----------------------------------------------+-------------+--------------+
 
 Some raw measures for the two controllers are shown in Table :ref:`metrictable`.
-These were gathered using the Radon code-analysis tools [Radon]_.  (These metrics may be reproduced by (1) installing Radon [Radon]_, (2) downloading the source files to compare Source code for computing the metrics [SDTOld]_ [SDTNew]_, (3) downloading the script for computing metrics [Metrics]_, (4) ensuring that the path at the top of this script refers to the location of the source files to be compared, and (5) running this script.)
+These were gathered using the Radon code-analysis tools [Radon]_.  (These metrics, as well as those below, may be reproduced by (1) installing Radon [Radon]_, (2) downloading the source files to compare and the script for computing Metrics [Metrics]_, (3) ensuring that the path at the top of the script refers to the local location of the source files to be compared, and (4) running this script.)
 Multiple metrics are reported because theorists disagree about which are most relevant in assessing code readability, because some of these play a role in computing other metrics discussed below, and because this may help to allay potential worries that a few favorable metrics might have been cherry-picked.
 This paper provides some explanation of these metrics and of their potential significance, while remaining neutral regarding which, if any, of these metrics is best.
 
@@ -287,6 +287,8 @@ References
 
 .. [Bus01] Buse, R and W Weimer. Learning a metric for code readability. *IEEE Transactions on Software Engineering*, 36(4): 546-58. 2010. `doi: 10.1109/TSE.2009.70 <dx.doi.org/10.1109/TSE.2009.70>`_.
 
+.. [Metrics] Fisher, J. Readability Metrics for a New Python API for Webots Robotics Simulations. 2022. https://doi.org/10.5281/zenodo.6813819
+
 .. [Hal01] Halstead, M. *Elements of software science.* Elsevier New York. 1977.
 
 .. [Har01] Harris, C., K. Millman, S. van der Walt, et al. Array programming with NumPy. *Nature* 585, 357–62. 2020. `doi: 10.1038/s41586-020-2649-2 <dx.doi.org/10.1038/s41586-020-2649-2>`_.
@@ -294,8 +296,6 @@ References
 .. [Hin01] Hindle, A, MW Godfrey and RC Holt. "Reading beside the lines: Indentation as a proxy for complexity metric." Program Comprehension. The 16th IEEE International Conference, 133-42. 2008. `doi: 10.1109/icpc.2008.13 <dx.doi.org/10.1109/icpc.2008.13>`_.
 
 .. [McC01] McCabe, TJ. "A Complexity Measure" , 2(4): 308-320. 1976.
-
-.. [Metrics] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/measure_code_complexity.py
 
 .. [Mic01] Michel, O. "Webots: Professional Mobile Robot Simulation. *Journal of Advanced Robotics Systems.* 1(1): 39-42. 2004. `doi: 10.5772/5618 <dx.doi.org/10.5772/5618>`_.
 
