@@ -182,17 +182,17 @@ Webots provides this sample controller in C [SDTC01]_, but it was re-implemented
 
 .. table:: Length and Complexity Metrics. :label:`metrictable`
 
-  +-------------------------------------------------------+-------------+--------------+
-  |Metric                                                 | New API     | Old API      |
-  +=======================================================+=============+==============+
-  |Lines of Code (including blanks, comments)             |  43         | 49           |
-  +-------------------------------------------------------+-------------+--------------+
-  |Source Lines of Code (excl. blanks, comments)          |  29         | 35           |
-  +-------------------------------------------------------+-------------+--------------+
-  |Logical Lines of Code (single commands)                |  27         | 38           |
-  +-------------------------------------------------------+-------------+--------------+
-  |Cyclomatic Complexity                                  | 5 (A)       | 8 (B)        |
-  +-------------------------------------------------------+-------------+--------------+
+  +----------------------------------------------------+-------------+--------------+
+  |Metric                                              | New API     | Old API      |
+  +====================================================+=============+==============+
+  |Lines of Code (including blanks, comments)          |  43         | 49           |
+  +----------------------------------------------------+-------------+--------------+
+  |Source Lines of Code (no blanks, comments)          |  29         | 35           |
+  +----------------------------------------------------+-------------+--------------+
+  |Logical Lines of Code (single commands)             |  27         | 38           |
+  +----------------------------------------------------+-------------+--------------+
+  |Cyclomatic Complexity                               | 5 (A)       | 8 (B)        |
+  +----------------------------------------------------+-------------+--------------+
 
 Some raw measures for the two controllers are shown in Table :ref:`metrictable`.
 These were gathered using the Radon code-analysis tools [Radon01]_.  (These metrics may be reproduced by (1) installing Radon [Radon01]_, (2) downloading the source files to compare Source code for computing the metrics [SDTOld01]_ [SDTNew01]_, (3) downloading the script for computing metrics [Metrics01]_, (4) ensuring that the path at the top of this script refers to the location of the source files to be compared, and (5) running this script.)
