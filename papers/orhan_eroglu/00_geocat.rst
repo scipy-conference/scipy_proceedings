@@ -375,7 +375,7 @@ through a lightweight convenience function:
 
 GeoCAT-datafiles fetches the file by simply reading from the local storage,
 if any, or downloading from the GeoCAT-datafiles repository, if not in the
-local storage, with the help of Pooch framework :cite:`geocatvizrepo`.
+local storage, with the help of Pooch framework :cite:`pooch`.
 
 WRF-Python
 ==========
