@@ -177,7 +177,7 @@ Brief inspection should reveal that the latter code is much easier to read, writ
 
 This intuitive impression is confirmed by automated metrics for code readability.
 The measures in what follows consider the full :code:`supervisor_draw_trail` sample controller (from which the above snippet was drawn), since this is the Webots sample controller that makes the most sustained use of supervisor functionality to perform a fairly plausible supervisor task (maintaining the position of a streamer that trails behind the robot).
-Webots provides this sample controller in C, but it was re-implemented using both the Old Python API and the New Python API, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
+Webots provides this sample controller in C [SDT01]_, but it was re-implemented using both the Old Python API [SDT02]_ and the New Python API [SDT03]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
 (Sample code and computations of metrics are available under additional information below.[*** Rephrase as references])
 
 .. table:: Length and Complexity Metrics. :label:`metrictable`
@@ -195,7 +195,7 @@ Webots provides this sample controller in C, but it was re-implemented using bot
   +-------------------------------------------------------+-------------+--------------+
 
 Some raw measures for the two controllers are shown in Table :ref:`metrictable`.
-These were gathered using the Radon code-analysis tools.
+These were gathered using the Radon code-analysis tools [Radon01]_.  (These metrics may be reproduced by (1) installing Radon [Radon01]_, (2) downloading the source files to compare Source code for computing the metrics [SDT02]_ [SDT03]_, (3) downloading the script for computing metrics [Metrics01]_, (4) ensuring that the path at the top of this script refers to the location of the source files to be compared, and (5) running this script.)
 Multiple metrics are reported because theorists disagree about which are most relevant in assessing code readability, because some of these play a role in computing other metrics discussed below, and because this may help to allay potential worries that a few favorable metrics might have been cherry-picked.
 This paper provides some explanation of these metrics and of their potential significance, while remaining neutral regarding which, if any, of these metrics is best.
 
@@ -312,6 +312,8 @@ References
 .. [Pil01] Python Imaging Library. https://python-pillow.org/
 
 .. [Pos01] Posnet, D, A Hindle and P Devanbu. "A simpler model of software readability." *Proceedings of the 8th working conference on mining software repositories*, 73-82. 2011.
+
+.. [Radon01] Radon. https://radon.readthedocs.io/en/latest/index.html
 
 .. [Sca01] Scalabrino, S, M Linares-Vasquez, R Oliveto and D Poshyvanyk. "A Comprehensive Model for Code Readability." *Jounal of Software: Evolution and Process*, 1-29. 2017.
 
