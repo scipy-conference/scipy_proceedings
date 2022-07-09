@@ -49,8 +49,9 @@ As another example illustrating how much easier the new API is to use, here are 
 
 .. code-block:: python
 
-  root_children_field = supervisor.getField(supervisor.getRoot(), "children")
-  root_children_field.importMFNodeFromString(-1, trail_plan)
+  f = supervisor.getField(supervisor.getRoot(),
+                          "children")
+  f.importMFNodeFromString(-1, trail_plan)
 
 And here is how that looks written using the new API:
 
@@ -161,7 +162,9 @@ As another representative example, here are three lines from Webots' included :c
 .. code-block:: python
 
     trail_node = world.getFromDef("TRAIL")
-    point_field = trail_node.getField("coord").getSFNode().getField("point")
+    point_field = trail_node.getField("coord")\
+                            .getSFNode()\
+                            .getField("point")
     index_field = trail_node.getField("coordIndex")
 
 And here is their equivalent in the new API:
