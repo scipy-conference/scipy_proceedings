@@ -134,7 +134,7 @@ Continuous Integration and Continuous Delivery/Deployment (CI/CD)
 
 GeoCAT employs a continuous delivery model, with a monthly package release cycle on
 package management systems and package indexes such as Conda :cite:`conda` and PyPI
-:cite:`conda`. This model helps the team make new functions available as soon as
+:cite:`pypi`. This model helps the team make new functions available as soon as
 they are implemented and address potential errors quickly. To assist this process,
 the team utilizes multiple tools throughout GitHub assets to ensure automation,
 unit testing and code coverage, as well as licensing and reproducibility. Figure
