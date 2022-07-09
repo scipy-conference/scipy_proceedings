@@ -195,7 +195,7 @@ Webots provides this sample controller in C [SDTA01]_, but it was re-implemented
   +-------------------------------------------------------+-------------+--------------+
 
 Some raw measures for the two controllers are shown in Table :ref:`metrictable`.
-These were gathered using the Radon code-analysis tools [Radon01]_.  (These metrics may be reproduced by (1) installing Radon [Radon01]_, (2) downloading the source files to compare Source code for computing the metrics [SDT02]_ [SDT03]_, (3) downloading the script for computing metrics [Metrics01]_, (4) ensuring that the path at the top of this script refers to the location of the source files to be compared, and (5) running this script.)
+These were gathered using the Radon code-analysis tools [Radon01]_.  (These metrics may be reproduced by (1) installing Radon [Radon01]_, (2) downloading the source files to compare Source code for computing the metrics [SDTB01]_ [SDTC01]_, (3) downloading the script for computing metrics [Metrics01]_, (4) ensuring that the path at the top of this script refers to the location of the source files to be compared, and (5) running this script.)
 Multiple metrics are reported because theorists disagree about which are most relevant in assessing code readability, because some of these play a role in computing other metrics discussed below, and because this may help to allay potential worries that a few favorable metrics might have been cherry-picked.
 This paper provides some explanation of these metrics and of their potential significance, while remaining neutral regarding which, if any, of these metrics is best.
 
@@ -203,7 +203,7 @@ The "lines of code" measures reflect that the new API makes it easier to do more
 The measures differ in how they count blank lines, comments, multi-line statements, and multi-statement lines like :code:`if p: q()`.
 Line counts can be misleading, especially when the code with fewer lines has longer lines, though upcoming measures will show that that is not the case here.
 
-Cyclomatic Complexity counts the number of potential branching points that appear within the code, like :code:`if`, :code:`while` and :code:`for`. [McC01]_ Cyclomatic Complexity is strongly correlated with other plausible measures of code readability involving indentation structure. [Hin01]_
+Cyclomatic Complexity counts the number of potential branching points that appear within the code, like :code:`if`, :code:`while` and :code:`for`. [McC01]_ Cyclomatic Complexity is strongly correlated with other plausible measures of code readability involving indentation structure [Hin01]_.
 The new API's score is lower/"better" due to its automatically converting vector-like values to the format needed for importing new nodes into the Webots simulation, and due to its automatic caching allowing a simpler loop to remove unwanted nodes.
 By Radon's reckoning this difference in complexity already gives the old API a "B" grade, as compared to the new API's "A".
 These complexity measures would surely rise in more complex controllers employed in larger simulations, but they would rise less quickly under the new API, since it provides many simpler ways of doing things, and need never do any worse since it provides backwards-compatible options.
