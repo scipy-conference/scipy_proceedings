@@ -83,8 +83,6 @@ The old Webots API makes the use of such supervisor powers tedious and difficult
 These factors led to the development of an interface that would be much easier for novice students to adapt to, and that would make it much easier for an experienced programmer to make much use of supervisor powers to manipulate the simulated world.
 Discussion of this with the core Webots development team then led to the decision to incorporate these improvements into Webots, where they can be of benefit to a much broader community.
 
-[Not sure whether to include more examples or images here of ways in which the new API were relevant to this class?]
-
 3. Design Decisions.
 --------------------
 This section discusses some design decisions that arose in developing this API, and discusses the factors that drove these decisions.
@@ -178,7 +176,6 @@ Brief inspection should reveal that the latter code is much easier to read, writ
 This intuitive impression is confirmed by automated metrics for code readability.
 The measures in what follows consider the full :code:`supervisor_draw_trail` sample controller (from which the above snippet was drawn), since this is the Webots sample controller that makes the most sustained use of supervisor functionality to perform a fairly plausible supervisor task (maintaining the position of a streamer that trails behind the robot).
 Webots provides this sample controller in C [SDTA01]_, but it was re-implemented using both the Old Python API [SDTB01]_ and the New Python API [SDTC01]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
-(Sample code and computations of metrics are available under additional information below.[*** Rephrase as references])
 
 .. table:: Length and Complexity Metrics. :label:`metrictable`
 
