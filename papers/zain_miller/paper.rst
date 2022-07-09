@@ -7,7 +7,6 @@
 :author: Eric Miller
 :email: EricMiller@uga.edu
 :institution: Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA
-:corresponding:
 :equal-contributor:
 
 :author: Shannon P Quinn
