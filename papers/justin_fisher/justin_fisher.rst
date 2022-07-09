@@ -299,6 +299,8 @@ References
 
 .. [McC01] McCabe, TJ. "A Complexity Measure" , 2(4): 308-320. 1976.
 
+.. [Metrics01] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/measure_code_complexity.py
+
 .. [Mic01] Michel, O. "Webots: Professional Mobile Robot Simulation. *Journal of Advanced Robotics Systems.* 1(1): 39-42. 2004.
 
 .. [Numpy01] NumPy. https://www.numpy.org
@@ -318,5 +320,11 @@ References
 .. [Sca01] Scalabrino, S, M Linares-Vasquez, R Oliveto and D Poshyvanyk. "A Comprehensive Model for Code Readability." *Jounal of Software: Evolution and Process*, 1-29. 2017.
 
 .. [Scipy01] https://www.scipy.org
+
+.. [SDT01] https://cyberbotics.com/doc/guide/samples-howto#supervisor_draw_trail-wbt
+
+.. [SDT02] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_old_api_bare_bones.py
+
+.. [SDT03] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_new_api_bare_bones.py
 
 .. [Vir01] Virtanen, P, R. Gommers, T. Oliphant, et al. SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. *Nature Methods*, 17(3), 261-72. 2020.
