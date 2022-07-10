@@ -1,7 +1,6 @@
 :author: Zachary del Rosario
 :email: zdelrosario@olin.edu
 :institution: Assistant Professor of Engineering and Applied Statistics, Olin College of Engineering
-
 :bibliography: references
 
 =====================================================================================
@@ -257,7 +256,7 @@ For example, the following code is unmodified from a student report [#]_. The or
    :scale: 40%
    :figclass: bht
 
-   Input sweep generated from the student code above. The image has been cropped for space, and the results are generated with an older version of grama. The jagged response at higher values of the input are evidence of solver instabilities. :label:`example-sweep`
+   Input sweep generated from the student code above. The image has been cropped for space, and the results are generated with an older version of grama. The jagged response at higher values of the input are evidence of solver instabilities. :label:`student-sweep`
 
 The parameter sweep shown in Figure :ref:`example-sweep` gives an overall impression of the effect of input :code:`"GR"` on the output :code:`"finish_time"`. This particular input tends to dominate the results. However, variable results at higher values of :code:`"GR"` provide evidence of numerical instability in the ODE solver underlying the model. Without this sort of model evaluation, the student author would not have discovered the limitations of the model.
 
