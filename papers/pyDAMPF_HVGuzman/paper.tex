@@ -177,9 +177,11 @@
 \newcommand*\DUrolecode[1]{#1}
 \providecommand*\DUrolecite[1]{\cite{#1}}
 \begin{abstract}
-pyDAMPF is a tool oriented to the Atomic Force Microscopy (AFM) community, which allows the simulation of the physical properties of materials under variable relative humidity (RH). In particular, pyDAMPF is mainly focused on the mechanical properties of polymeric hygroscopic nanofibers that plays an essential role in designing of tissue scaffolds for implants and filtering devices. Those mechanical properties have been mostly studied from a very coarse perspective reaching a micrometer scale. However, at the nanoscale, the mechanical response of polymeric fibers becomes cumbersome due to both experimental and theoretical challenges. For example, the response of polymeric fibers to RH demands advanced models that consider sub-nanometric changes in the local structure of each single polymer chain. While from an experimental viewpoint, choosing the optimal cantilevers to scan the fibers under variable RH is not trivial.
 
-In this article, we show how to use pyDAMPF to choose one optimal nanoprobe for planed experiments with an hygroscopic polymer. Along these lines, We show how to evaluate common and non-trivial operational parameters from an AFM cantilever from several manufacturers. Our results show in a stepwise approach the most relevant parameters to compare the cantilevers based on a non-invasive criterion of measurements. The computing engine is written in Fortran in order to reuse physics code and wrapped to Python to interoperate with high-level packages. We also introduce an in-house and transparent for the user multi-thread approach of the pyDAMPF code, which compares for various computing architectures (PC, Google Colab and an HPC facility) very favorable in comparison to former AFM simulators. 
+pyDAMPF is a tool oriented to the Atomic Force Microscopy (AFM) community, which allows the simulation of the physical properties of materials under variable relative humidity (RH). In particular, pyDAMPF is mainly focused on the mechanical properties of polymeric hygroscopic nanofibers that play an essential role in designing tissue scaffolds for implants and filtering devices. Those mechanical properties have been mostly studied from a very coarse perspective reaching a micrometer scale. However, at the nanoscale, the mechanical response of polymeric fibers becomes cumbersome due to both experimental and theoretical limitations. For example, the response of polymeric fibers to RH demands advanced models that consider sub-nanometric changes in the local structure of each single polymer chain. From an experimental viewpoint, choosing the optimal cantilevers to scan the fibers under variable RH is not trivial.
+
+In this article, we show how to use pyDAMPF to choose one optimal nanoprobe for planned experiments with a hygroscopic polymer. Along these lines, We show how to evaluate common and non-trivial operational parameters from an AFM cantilever of different manufacturers. Our results show in a stepwise approach the most relevant parameters to compare the cantilevers based on a non-invasive criterion of measurements. The computing engine is written in Fortran, and wrapped into Python. This aims to reuse physics code without losing interoperability with high-level packages. We have also introduced an in-house and transparent method for allowing multi-thread computations to the users of the pyDAMPF code, which we benchmarked for various computing architectures (PC, Google Colab and an HPC facility) and results in very favorable speed-up compared to former AFM simulators.
+
 \end{abstract}\begin{IEEEkeywords} Materials science, Nanomechanical properties, AFM, f2py, multi-threading CPUs, numerical simulations, polymers\end{IEEEkeywords}
 
 \subsection{Introduction and Motivation%
@@ -189,6 +191,7 @@ In this article, we show how to use pyDAMPF to choose one optimal nanoprobe for 
 This article provides an overview of pyDAMPF, which is a BSD licensed, Python and Fortran simulation tool that enables AFM users to simulate the interaction between a probe (cantilever) and materials at the nanoscale under diverse environments. The code is packaged in a bundle and hosted on GitHub at \url{https://github.com/govarguz/pyDAMPF}. 
 
 Despite the recent open-source availability of dynamic AFM simulation packages~\cite{dForce,Veda}, a broad usage for the assessment and planning of experiments has yet to come. One of the problems is that it is often hard to simulate several operational parameters at once. For example, most scientists evaluate different AFM cantilevers before starting new experiments. A typical evaluation criterion is the maximum exerted force that prevents invasivity of the nanoprobe into the sample. The variety of AFM cantilevers depends on the geometrical and material characteristics used for its fabrication. Moreover, manufacturers' nanofabrication techniques may change from time to time, according to the necessities of the experiments, like sharper tips and/or higher oscillation frequencies. 
+
 From a simulation perspective, evaluating observables for reaching optimal results on upcoming experiments is nowadays possible for \textit{tens} or \textit{hundreds} of cantilevers. On top of other operational parameters in the case of dynamic AFM like the oscillation amplitude $A_0$, set-point $A_{sp}$, among other materials expected properties that may feed simulations and create simulations batches of easily \textit{thousands} of cases. 
 Given this context, we focus this article on choosing a cantilever out of an initial pyDAMPF database of 30. In fact, many of them are similar in terms of spring constant $k_c$, cantilever volume $V_c$ and also Tip's radius $R_T$. Then we focus on seven archetypical and distinct cases/cantilevers to understand the characteristics of each of the parameters specified in the manufacturers' datasheets, by evaluating the maximum (peak) forces.
 
@@ -198,7 +201,7 @@ The quantitative analysis for these four scenarios is presented and also the adv
 
 Another novelty of pyDAMPF is the detailed~\cite{Sader} calculation of the environmental-related parameters, like the quality factor $Q$. 
 %This computing efficiency and adaptability is not available in any other open source AFM simulation tool. 
-
+https://www.overleaf.com/project/6283bddfec530ddca2606b18
 Here, we summarize the main features of pyDAMPF are:
 \begin{itemize}
 \item 
@@ -258,13 +261,14 @@ This step is only required once and depends on the computer architecture the cod
 f2py -c --fcompiler=gnu95 pyDAMPF.f90 -m mypyDAMPF
 \end{verbatim}
 \end{quote}
+
 This command-line generates mypyDAMPF.so, which will be automatically located in the simulation folders.
 
 Once we have obtained the numerical code as Python modules, we need to choose the execution mode, which can be serial or parallel. Whereby parallel refers to multi-threading capabilities only within this first version of the code.
 
 \paragraph{Serial method}
 
-This method is completely transparent to the user and will execute all the simulation cases found in the file \textit{tempall.txt} by running the script \textit{inputs\_processor.py}. Our in-house development creates an individual folder for each simulation case, which can be executed in one thread.
+This method is completely transparent to the user and will execute all the simulation cases found in the file \textit{tempall.txt} by running the script \textitP{inputs\_processor.py}. Our in-house development creates an individual folder for each simulation case, which can be executed in one thread.
 
 \begin{Verbatim}[commandchars=\\\{\},fontsize=\footnotesize]
 \PY{k}{def} \PY{n+nf}{serial\PYZus{}method}\PY{p}{(}\PY{n}{tcases}\PY{p}{,} \PY{n}{factor}\PY{p}{,} \PY{n}{tempall}\PY{p}{)}\PY{p}{:}
@@ -539,8 +543,8 @@ Figure~\ref{fig7}a shows the average run time for the serial and parallel implem
 Scenario  & Model & $R$[nm] & $Q^{**}$ & $E_s$[MPa] & $k$[N/m] & $f$[kHz] & Volume [$\mu m^3$] & Cantilever\\ \hline
 \textcolor{blue}{Air} & PPP-CONTSCR & 7 & 28.65 & 930 & 0.2 & 25 & 10800 & a\\
 \textcolor{orange}{Humid air}& PPP-CONTSCR & 7 & 28.74 - 28.77 - 28.83 & 595.6 - 477.8 - 247.8 & 0.2 & 25 & 10800 &a \\
-\textcolor{cyan}{Hard} & XCS11-B & 10 & 167.73 - 167.89 - 168.28 & 595.6 - 477.8 - 247.8 & 2.7 & 80 & 17010 & e \\
-\textcolor{magenta}{Soft} & HQ:CSC37-A & 10 & 95.15 - 95.24 - 94.45 & 595.6 - 477.8 - 247.8 & 0.8 & 40 & 17500 & d \\
+\textcolor{magenta}{Hard} & XCS11-B & 10 & 167.73 - 167.89 - 168.28 & 595.6 - 477.8 - 247.8 & 2.7 & 80 & 17010 & e \\
+\textcolor{cyan}{Soft} & HQ:CSC37-A & 10 & 95.15 - 95.24 - 94.45 & 595.6 - 477.8 - 247.8 & 0.8 & 40 & 17500 & d \\
 \textcolor{rebeccapurple}{High vol.} & PPP-XY-CONTR & 10 & 48.37 - 48.41 - 48.51 & 595.6 - 477.8 - 247.8 & 0.2 & 13 & 45000 & g \\
 \textcolor{yellowgreen}{Small vol.} & SD-PXL-CONT-SC & 10 & 23.61 - 23.64 - 23.68 & 595.6 - 477.8 - 247.8 & 0.2 & 8 & 10125 & f \\
 \textcolor{darkviolet}{Wide $R_T$} & SD-CONT-SiN* & 20 & 48.37 - 48.41 - 48.51 & 595.6 - 477.8 - 247.8 & 0.2 & 13 & 45000 & b \\
@@ -647,7 +651,6 @@ Code-wise, the implementation will be also gradually improved. Nonetheless, to m
   \label{future-work}%
 }
 
-
 There are several improvements that are planned for pyDAMPF.
 \begin{itemize}
 \item 
@@ -692,7 +695,7 @@ Moreover, we plan to implement soon semi-empirical analysis and multiscale model
 }
 
 H.V.G thanks the financial support by the Slovenian Research Agency (Funding No. P1-0055).
-We gratefully acknowledge the fruitful discussions with Tomas Corrales. 
+We gratefully acknowledge the fruitful discussions with Tomas Corrales and our joint Fondecyt Regular project 1211901. 
 %Our thanks to the reviewers for their feedback that has significantly improved the manuscript.
 \bibliographystyle{alphaurl}
 \bibliography{references}
