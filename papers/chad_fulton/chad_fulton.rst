@@ -486,7 +486,7 @@ computation introduced above.
    :scale: 50%
    :align: center
 
-   Approximate posterior distribution of variance parameter, random walk model, Metropolis-Hastings; CPI inflation. :label:`mhsamples`
+   Approximate posterior distribution of variance parameter, random walk model, Metropolis-Hastings; U.S. Industrial Production. :label:`mhsamples`
 
 The approximate posterior distribution, constructed from the sample chain,
 is shown in Figure :ref:`mhsamples`.
