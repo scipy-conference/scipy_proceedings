@@ -301,7 +301,9 @@ any dependency, so let’s tell Ploomber that it should execute after
 
 Open
 
-``playground/tasks/gradient-boosting-regressor.py``
+.. code:: sh
+
+   playground/tasks/gradient-boosting-regressor.py
 
 as a notebook by right-clicking on it and then ``Open With`` -> ``Notebook``:
 
@@ -343,7 +345,9 @@ Ploomber now recognizes our dependency declaration!
 
 Open
 
-``playground/tasks/gradient-boosting-regressor.py``
+.. code:: sh
+
+   playground/tasks/gradient-boosting-regressor.py
 
 as a notebook by right-clicking on it and then ``Open With`` -> ``Notebook`` and add the following code:
 
@@ -356,22 +360,14 @@ as a notebook by right-clicking on it and then ``Open With`` -> ``Notebook`` and
    import seaborn as sns
    from sklearn.ensemble import GradientBoostingRegressor
 
-   y_train = pickle.loads(
-
-       Path(upstream['train-test-split']['y_train']).read_bytes()
-   )
-   y_test = pickle.loads(
-
-       Path(upstream['train-test-split']['y_test']).read_bytes()
-   )
-   X_test = pickle.loads(
-
-       Path(upstream['train-test-split']['X_test']).read_bytes()
-   )
-   X_train = pickle.loads(
-
-       Path(upstream['train-test-split']['X_train']).read_bytes()
-   )
+   y_train = pickle.loads(Path(
+      upstream['train-test-split']['y_train']).read_bytes())
+   y_test = pickle.loads(Path(
+      upstream['train-test-split']['y_test']).read_bytes())
+   X_test = pickle.loads(Path(
+      upstream['train-test-split']['X_test']).read_bytes())
+   X_train = pickle.loads(Path(
+      upstream['train-test-split']['X_train']).read_bytes())
 
    gbr = GradientBoostingRegressor()
    gbr.fit(X_train, y_train)
