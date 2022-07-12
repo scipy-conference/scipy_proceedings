@@ -656,10 +656,10 @@ References
            http://fits.gsfc.nasa.gov/fits_standard.html, July 2016.
 .. [Jes13] E. Jeschke. 
            *Ginga: an open-source astronomical image viewer and toolkit*,
-           Proc. of the 12th Python in Science Conference., p58-64,January 2013. DOI:10.25080/Majora-8b375195-00a
+           Proc. of the 12th Python in Science Conference., p58-64,January 2013. https://doi.org/10.25080/Majora-8b375195-00a
 .. [McK10] W. McKinney. *Data structures for statistical computing in python*,
            Proceedigns of the 9th Python in Science Conference, p56-61, 2010.
-           DOI:10.25080/Majora-92bf1922-00a 
+           https://doi.org/10.25080/Majora-92bf1922-00a 
 .. [Pen09] W. Pence, R. Seaman, R. L. White,
            *Lossless Astronomical Image Compression and the Effects of Noise*,
            Publications of the Astronomical Society of the Pacific,
