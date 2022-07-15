@@ -1,0 +1,16 @@
+{
+    "title": "Python Development Schemes for Monte Carlo Neutronics on High Performance Computing",
+    "authors": [
+        {
+            "name": "Jackson P. Morgan",
+            "affiliation": "Oregon State University",
+            "orcid": "0000-0003-1379-5431"
+        },
+        {
+            "name": "Kyle E. Niemeyer",
+            "affiliation": "Oregon State University",
+            "orcid": "0000-0003-4425-7097"
+        }
+    ],
+    "We investigate three methods of hardware accleeration on both GPUs and CPUs for a Monte Carlo neutron transport simulation code writen in Python. Our accelerating schemes like Pykokks, Numba, and hardware code generating libraries like PyCUDA. This work was supported by the Center for Exascale Monte-Carlo Neutron Transport (CEMeNT) a PSAAP-III project funded by the Department of Energy, grant number: DE-NA003967."
+}
