@@ -5,7 +5,7 @@
 
 :author: Edward Slavich
 :email: edward.j.slavich@gmail.com
-:institution: Space Telescope Science Insitute
+:institution: Space Telescope Science Institute
 :equal-contributor:
 
 :author: William Jamieson
