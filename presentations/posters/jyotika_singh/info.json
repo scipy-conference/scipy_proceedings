@@ -1,0 +1,11 @@
+{
+    "authors": [
+        {
+            "name": "Jyotika Singh",
+            "affiliation": "Placemakr",
+            "orcid": "0000-0002-5442-3004"
+        }
+    ],
+    "title": "pyAudioProcessing: Audio Processing, Feature Extraction, and Machine Learning Modeling",
+    "description": "pyAudioProcessing is a Python based library for processing audio data, constructing and extracting numerical features from audio, building and testing machine learning models, and classifying data with existing pre-trained audio classification models or custom user-built models. This library contains features built in Python that were originally published in MATLAB. pyAudioProcessing allows the user to compute various features from audio files including Gammatone Frequency Cepstral Coefficients (GFCC), Mel Frequency Cepstral Coefficients (MFCC), spectral features, chroma features, and others such as beat-based and cepstrum-based features from audio. One can use these features along with one’s own classification backend or any of the popular scikit-learn classifiers that have been integrated into pyAudioProcessing. Cleaning functions to strip unwanted portions from the audio are another offering of the library. It further contains integrations with other audio functionalities such as frequency and time-series visualizations and audio format conversions. This software aims to provide machine learning engineers, data scientists, researchers, and students with a set of baseline models to classify audio. The library is available at https://github.com/jsingh811/pyAudioProcessing and is under GPL-3.0 license."
+}
