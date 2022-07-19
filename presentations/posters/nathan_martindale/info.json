@@ -1,0 +1,26 @@
+{
+	"authors": [
+		{
+			"name": "Nathan Martindale",
+			"affiliation": "Oak Ridge National Laboratory",
+			"orcid": "0000-0002-5036-5433"
+		},
+		{
+			"name": "Jason Hite",
+			"affiliation": "Oak Ridge National Laboratory",
+			"orcid": "0000-0001-8931-5815"
+		},
+		{
+			"name": "Scott Stewart",
+			"affiliation": "Oak Ridge National Laboratory",
+			"orcid": "0000-0003-4320-5818"
+		},
+		{
+			"name": "Mark Adams",
+			"affiliation": "Oak Ridge National Laboratory",
+			"orcid": "0000-0002-5414-2800"
+		}
+	],
+	"title": "Design of a Scientific Data Analysis Support Platform",
+	"description": "Studying the design features necessary for a workflow and experiment management system, and presenting Curifactory: an open source package that meets these design features."
+}
