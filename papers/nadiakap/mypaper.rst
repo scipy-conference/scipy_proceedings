@@ -34,7 +34,7 @@ Introduction
 Optimization lies at the heart of machine learning and data science.
 One of the most relevant problems in machine learning is automatic selection of the algorithm depending on
 the objective. This is necessary in many applications such as robotics, simulating biological or chemical
-processes, trading strategies optimization, to name a few [KHNT]_.
+processes, trading strategies optimization, to name a few [KHNT]_. 
 We developed a library of optimization methods as a first step for self-adapting algorithms. Optimization
 methods in this library work with all objectives including very onerous ones, such as black box functions
 and functions given by computer code, and the convergences of methods is guaranteed. This library allows
@@ -326,7 +326,7 @@ DOI: 10.1016/j.energy.2021.121865
 .. [VNJT] Fath, Verena,  Kockmann, Norbert,  Otto, Jürgen,  Röder, Thorsten,  Self-optimising processes and real-time-optimisation of organic syntheses in a microreactor system using Nelder–Mead and design of experiments, React. Chem. Eng., 2020,5, 1281-1299, https://doi.org/10.1039/D0RE00081G
 .. [ZM] Plüss, T.; Zimmer, F.; Hehn, T.; Murk, A. Characterisation and Comparison of Material Parameters of 3D-Printable Absorbing Materials. Materials 2022, 15, 1503. https://doi.org/10.3390/ma15041503
 .. [TMAACBA] Thoufeili Taufek, Yupiter H.P. Manurung, Mohd Shahriman Adenan, Syidatul Akma, Hui Leng Choo, Borhen Louhichi, Martin Bednardz, and Izhar Aziz.3D Printing and Additive Manufacturing, 2022,  http://doi.org/10.1089/3dp.2021.0197
-.. [CTC] Vismara, P., Coletta, R. & Trombettoni, G. Constrained global optimization for wine blending. Constraints 21, 597–615 (2016). https://doi.org/10.1007/s10601-015-9235-5
+.. [CTC] Vismara, P., Coletta, R. & Trombettoni, G. Constrained global optimization for wine blending. Constraints 21, 597–615  (2016). https://doi.org/10.1007/s10601-015-9235-5
 .. [CWC] Terry Hui-Ye Chiu, Chienwen Wu, Chun-Hao Chen, A Generalized Wine Quality Prediction Framework by Evolutionary Algorithms, International Journal of Interactive Multimedia and Artificial Intelligence, Vol. 6, Nº7,2021, https://doi.org/10.9781/ijimai.2021.04.006
 .. [KHNT] Pascal Kerschke, Holger H. Hoos, Frank Neumann, Heike Trautmann; Automated Algorithm Selection: Survey and Perspectives. Evol Comput 2019; 27 (1): 3–45. doi: https://doi.org/10.1162/evco_a_00242
 .. [SAS] Leandro dos Santos Coelho, Cezar Augusto Sierakowski, A software tool for teaching of particle swarm optimization fundamentals, Advances in Engineering Software, Volume 39, Issue 11, 2008, Pages 877-887, ISSN 0965-9978, https://doi.org/10.1016/j.advengsoft.2008.01.005.
