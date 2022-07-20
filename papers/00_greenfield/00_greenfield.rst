@@ -153,7 +153,6 @@ using ASDF for all the referenced data.
 Vera Rubin Telescope (for World Coordinate System interchange)
 ..............................................................
 
-|
 There have been users outside of astronomy using ASDF, as well as contributors
 to the source code.
 
