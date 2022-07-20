@@ -1,0 +1,31 @@
+{
+    "title": "Scientific Python: From GitHub to TikTok",
+    "authors": [
+        {
+            "name": "Juanita Gomez Romero",
+            "affiliation": "University of California, Santa Cruz",
+            "orcid": "0000-0003-1593-3404"
+        },
+        {
+            "name": "Stéfan van der Walt",
+            "affiliation": "BIDS, UC Berkeley",
+            "orcid": "0000-0001-9276-1891"
+        },
+        {
+            "name": "K. Jarrod Millman",
+            "affiliation": "University of California, Berkeley",
+            "orcid": "0000-0002-5263-5070"
+        },
+        {
+            "name": "Melissa Weber Mendonça",
+            "affiliation": "Quansight",
+            "orcid": "0000-0002-3212-402X"
+        }
+        {
+            "name": "Inessa Pawson",
+            "affiliation": "Albus Code",
+            "orcid": "0000-0001-7294-122X"
+        }
+    ],
+    "description": "The Scientific Python project aims to better coordinate the ecosystem and grow the community. This talk focuses on our efforts to expand our community by generating a welcoming and friendly environment where people collaborate, build, and improve together."
+}
