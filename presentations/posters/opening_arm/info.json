@@ -1,0 +1,31 @@
+{
+    "authors": [
+        {
+            "name": "Zachary Sherman",
+            "affiliation": "Argonne National Laboratory",
+	    "orcid": "0000-0002-6455-8324"
+        },
+        {
+            "name": "Scott Collis",
+            "affiliation": "Argonne National Laboratory",
+	    "orcid": "0000-0002-2303-687X"
+        },
+        {
+            "name": "Max Grover",
+            "affiliation": "Argonne National Laboratory",
+	    "orcid": "0000-0002-0370-8974"
+        },
+        {
+            "name": "Robert Jackson",
+            "affiliation": "Argonne National Laboratory",
+	    "orcid": "0000-0003-2518-1234"
+        },
+        {
+            "name": "Adam Theisen",
+            "affiliation": "Argonne National Laboratory",
+	    "orcid": "0000-0002-7602-1057"
+        }
+    ],
+    "title": "Opening ARM: A pivot to community software to meet the needs of users and stakeholders of the planet’s largest cloud observatory",
+    "description": "This presentation discusses the evolution (and hurdles that came with) of the Atmospheric Radiation Measurement (ARM) program's open source endeavors, starting with the Python ARM Radar Toolkit to the Atmospheric data Community Toolkit in 2018, the expansion of our open-source presence on Github in 2019 and what is planned for the future."
+}
