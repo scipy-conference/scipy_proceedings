@@ -1,0 +1,11 @@
+{
+    "title": "SciPy Tools Plenary – NumPy",
+    "authors": [
+        {
+            "name": "Inessa Pawson",
+            "affiliation": "NumFOCUS",
+            "orcid": "0000-0001-7294-122X"
+        }
+    ],
+    "description": "Annual update on the NumPy project at SciPy 2022"
+}
