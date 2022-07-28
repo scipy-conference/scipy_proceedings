@@ -297,7 +297,7 @@ References
 
 .. [McC01] McCabe, TJ. "A Complexity Measure" , 2(4): 308-320. 1976.
 
-.. [Mic01] Michel, O. "Webots: Professional Mobile Robot Simulation. *Journal of Advanced Robotics Systems.* 1(1): 39-42. 2004. `doi: 10.5772/5618 <dx.doi.org/10.5772/5618>`_.
+.. [Mic01] Michel, O. "Webots: Professional Mobile Robot Simulation. *Journal of Advanced Robotics Systems.* 1(1): 39-42. 2004. `doi: 10.5772/5618 <https://dx.doi.org/10.5772/5618>`_.
 
 .. [NewAPI01] https://github.com/Justin-Fisher/new_python_api_for_webots
 
