@@ -315,7 +315,7 @@ References
 
 .. [Radon] Radon. https://radon.readthedocs.io/en/latest/index.html
 
-.. [Sca01] Scalabrino, S, M Linares-Vasquez, R Oliveto and D Poshyvanyk. "A Comprehensive Model for Code Readability." *Jounal of Software: Evolution and Process*, 1-29. 2017. `doi: 10.1002/smr <https://dx.doi.org/10.1002/smr>`_.
+.. [Sca01] Scalabrino, S, M Linares-Vasquez, R Oliveto and D Poshyvanyk. "A Comprehensive Model for Code Readability." *Jounal of Software: Evolution and Process*, 1-29. 2017. `doi: 10.1002/smr.1958 <https://doi.org/10.1002/smr.1958>`_.
 
 .. [Scipy] https://www.scipy.org
 
