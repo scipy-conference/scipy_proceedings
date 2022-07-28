@@ -247,17 +247,17 @@ Different versions of this measure weight and curve these factors somewhat diffe
 
 .. table:: **Maintainability Index Metrics.** Maintainability Index metrics for :code:`supervisor_draw_trail` as it would be written with the new Python API for webots or the old Python API for Webots, according to different versions of the Maintainability Index. Higher numbers are commonly construed as being better. :label:`maintaintable`
 
-  +--------------------------------------------------------+------------+--------------+
-  |Maintainability Index version                           |    New API |    Old API   |
-  +========================================================+============+==============+
-  |Original (Oman and Hagemeister) [Oman01]_               |  89        |     79       |
-  +--------------------------------------------------------+------------+--------------+
-  |Software Engineering Institute (SEI)                    |  78        |     62       |
-  +--------------------------------------------------------+------------+--------------+
-  |Microsoft Visual Studio                                 |  52        |     46       |
-  +--------------------------------------------------------+------------+--------------+
-  |Radon                                                   |  82        |     75       |
-  +--------------------------------------------------------+------------+--------------+
+  +---------------------------------------------------+------------+--------------+
+  |Maintainability Index version                      |    New API |    Old API   |
+  +===================================================+============+==============+
+  |Original [Oman01]_                                 |  89        |     79       |
+  +---------------------------------------------------+------------+--------------+
+  |Software Engineering Institute (SEI)               |  78        |     62       |
+  +---------------------------------------------------+------------+--------------+
+  |Microsoft Visual Studio                            |  52        |     46       |
+  +---------------------------------------------------+------------+--------------+
+  |Radon                                              |  82        |     75       |
+  +---------------------------------------------------+------------+--------------+
 
 There are potential concerns about each of these measures of code readability, and one can easily imagine playing a form of "code golf" to optimize some of these scores without actually improving readability (though it would be difficult to do this for all scores at once).
 Fortunately, most plausible measures of readability have been observed to be strongly correllated across ordinary cases, [Pos01]_ so the clear and unanimous agreement between these measures is a strong confirmation that the new API is indeed more readable.
