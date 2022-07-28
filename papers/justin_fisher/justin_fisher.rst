@@ -180,7 +180,7 @@ This intuitive impression is confirmed by automated metrics for code readability
 The measures in what follows consider the full :code:`supervisor_draw_trail` sample controller (from which the above snippet was drawn), since this is the Webots sample controller that makes the most sustained use of supervisor functionality to perform a fairly plausible supervisor task (maintaining the position of a streamer that trails behind the robot).
 Webots provides this sample controller in C [SDTC]_, but it was re-implemented using both the Old Python API and the New Python API [Metrics]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
 
-.. table:: **Table 1. Length and Complexity Metrics.** Raw measures for :code:`supervisor_draw_trail` as it would be  written with the new Python API for webots or the old Python API for Webots. The "lines of codes" measures differ with respect to how they count blank lines, comments, and lines that combine multiple commands.  Cyclomatic complexity measures the number of potential branching points in the code. :label:`metrictable`
+.. table:: **Table 1. Length and Complexity Metrics.** Raw measures for :code:`supervisor_draw_trail` as it would be written with the new Python API for Webots or the old Python API for Webots. The "lines of codes" measures differ with respect to how they count blank lines, comments, and lines that combine multiple commands.  Cyclomatic complexity measures the number of potential branching points in the code. :label:`metrictable`
   :align: left
 
   +----------------------------------------------+-------------+--------------+
@@ -218,14 +218,14 @@ E.g. having :code:`motor.velocity` as a unified property involves fewer unique n
 And having :code:`world.children[-1]` access the last child that field in the simulation saves having to count :code:`getField`, and :code:`getMFNode` in the vocabulary, and often also saves forming additional local variables for nodes or fields gotten in this way.
 Both of these factors also help the new API to greatly reduce parentheses counts.
 
-.. table:: **Table 2. Halstead Metrics.** Halstead metrics for :code:`supervisor_draw_trail` as it would be written with the new Python API for webots or the old Python API for Webots. Lower numbers are commonly construed as being better. :label:`halsteadtable`
+.. table:: **Table 2. Halstead Metrics.** Halstead metrics for :code:`supervisor_draw_trail` as it would be written with the new and old Python API's for Webots. Lower numbers are commonly construed as being better. :label:`halsteadtable`
 
   +------------------------------------------------------+------------+--------------+
   |Halstead Metric                                       |  New API   |  Old API     |
   +======================================================+============+==============+
-  |Vocabulary (unique (n1)operators+(n2)operands)        |  18        |  54          |
+  |Vocabulary = unique (n1)operators+(n2)operands        |  18        |  54          |
   +------------------------------------------------------+------------+--------------+
-  |Length ((N1)operator + (N2)operand instances)         |  38        |  99          |
+  |Length = (N1)operator + (N2)operand instances         |  38        |  99          |
   +------------------------------------------------------+------------+--------------+
   |Volume = Length * log\ :sub:`2`\ (Vocabulary)         |  158       |  570         |
   +------------------------------------------------------+------------+--------------+
@@ -245,19 +245,19 @@ These measures combine Halstead Volume, Source Lines of Code, and Cyclomatic Com
 Different versions of this measure weight and curve these factors somewhat differently, but since the new API outperforms the old on each factor, all versions agree that it gets the higher/"better" score, as shown in Table :ref:`maintaintable`.
 (These measures were computed based on the input components as counted by Radon.)
 
-.. table:: **Maintainability Index Metrics.** Maintainability Index metrics for :code:`supervisor_draw_trail` as it would be written with the new Python API for webots or the old Python API for Webots, according to different versions of the Maintainability Index. Higher numbers are commonly construed as being better. :label:`maintaintable`
+.. table:: **Maintainability Index Metrics.** Maintainability Index metrics for :code:`supervisor_draw_trail` as it would be written with the new and old versions of the Python API for Webots, according to different versions of the Maintainability Index. Higher numbers are commonly construed as being better. :label:`maintaintable`
 
-  +---------------------------------------------------+------------+--------------+
-  |Maintainability Index version                      |    New API |    Old API   |
-  +===================================================+============+==============+
-  |Original [Oman01]_                                 |  89        |     79       |
-  +---------------------------------------------------+------------+--------------+
-  |Software Engineering Institute (SEI)               |  78        |     62       |
-  +---------------------------------------------------+------------+--------------+
-  |Microsoft Visual Studio                            |  52        |     46       |
-  +---------------------------------------------------+------------+--------------+
-  |Radon                                              |  82        |     75       |
-  +---------------------------------------------------+------------+--------------+
+  +---------------------------------------+------------+--------------+
+  |Maintainability Index version          |  New API   |  Old API     |
+  +=======================================+============+==============+
+  |Original [Oman01]_                     |  89        |  79          |
+  +---------------------------------------+------------+--------------+
+  |Software Engineering Institute         |  78        |  62          |
+  +---------------------------------------+------------+--------------+
+  |Microsoft Visual Studio                |  52        |  46          |
+  +---------------------------------------+------------+--------------+
+  |Radon                                  |  82        |  75          |
+  +---------------------------------------+------------+--------------+
 
 There are potential concerns about each of these measures of code readability, and one can easily imagine playing a form of "code golf" to optimize some of these scores without actually improving readability (though it would be difficult to do this for all scores at once).
 Fortunately, most plausible measures of readability have been observed to be strongly correllated across ordinary cases, [Pos01]_ so the clear and unanimous agreement between these measures is a strong confirmation that the new API is indeed more readable.
