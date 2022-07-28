@@ -219,7 +219,6 @@ And having :code:`world.children[-1]` access the last child that field in the si
 Both of these factors also help the new API to greatly reduce parentheses counts.
 
 .. table:: **Table 2. Halstead Metrics.** Halstead metrics for :code:`supervisor_draw_trail` as it would be written with the new Python API for webots or the old Python API for Webots. Lower numbers are commonly construed as being better. :label:`halsteadtable`
-  :align: left
 
   +------------------------------------------------------+------------+--------------+
   |Halstead Metric                                       |  New API   |  Old API     |
@@ -247,7 +246,6 @@ Different versions of this measure weight and curve these factors somewhat diffe
 (These measures were computed based on the input components as counted by Radon.)
 
 .. table:: **Maintainability Index Metrics.** Maintainability Index metrics for :code:`supervisor_draw_trail` as it would be written with the new Python API for webots or the old Python API for Webots, according to different versions of the Maintainability Index. Higher numbers are commonly construed as being better. :label:`maintaintable`
-  :align: left
 
   +--------------------------------------------------------+------------+--------------+
   |Maintainability Index version                           |    New API |    Old API   |
