@@ -180,7 +180,7 @@ This intuitive impression is confirmed by automated metrics for code readability
 The measures in what follows consider the full :code:`supervisor_draw_trail` sample controller (from which the above snippet was drawn), since this is the Webots sample controller that makes the most sustained use of supervisor functionality to perform a fairly plausible supervisor task (maintaining the position of a streamer that trails behind the robot).
 Webots provides this sample controller in C [SDTC]_, but it was re-implemented using both the Old Python API and the New Python API [Metrics]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
 
-.. table:: Length and Complexity Metrics. :label:`metrictable`
+.. table:: Length and Complexity Metrics. Raw measures for :code:`supervisor_draw_trail` as it would be  written with the new Python API for webots or the old Python API for Webots. The "lines of codes" measures differ with respect to how they count blank lines, comments, and lines that combine multiple commands.  Cyclomatic complexity measures the number of potential branching points in the code. :label:`metrictable`
 
   +----------------------------------------------+-------------+--------------+
   |Metric                                        | New API     | Old API      |
