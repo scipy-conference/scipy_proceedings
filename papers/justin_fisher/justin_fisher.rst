@@ -223,7 +223,7 @@ Both of these factors also help the new API to greatly reduce parentheses counts
   +------------------------------------------------------+------------+--------------+
   |Halstead Metric                                       |  New API   |  Old API     |
   +======================================================+============+==============+
-  |Vocabulary = unique (n1)operators+(n2)operands        |  18        |  54          |
+  |Vocabulary = (n1)operators+(n2)operands               |  18        |  54          |
   +------------------------------------------------------+------------+--------------+
   |Length = (N1)operator + (N2)operand instances         |  38        |  99          |
   +------------------------------------------------------+------------+--------------+
