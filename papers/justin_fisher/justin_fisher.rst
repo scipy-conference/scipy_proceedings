@@ -305,7 +305,7 @@ References
 
 .. [ODE] Open Dynamics Engine. https://www.ode.org/
 
-.. [Oman01] Oman, P and J Hagemeister. "Metrics for assessing a software system's maintainability," *Proceedings Conference on Software Maintenance*, 337-44. 1992.
+.. [Oman01] Oman, P and J Hagemeister. "Metrics for assessing a software system's maintainability," *Proceedings Conference on Software Maintenance*, 337-44. 1992. `doi: 10.1109/ICSM.1992.242525 <https://doi.org/10.1109/ICSM.1992.242525>`_.
 
 .. [OpenCV] Open Source Computer Vision Library for Python. https://github.com/opencv/opencv-python
 
