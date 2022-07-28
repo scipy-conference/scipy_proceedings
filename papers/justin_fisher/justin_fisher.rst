@@ -285,15 +285,15 @@ References
 
 .. [Bra01] Braitenberg, V. *Vehicles: Experiments in synthetic psychology.* Cambridge, MA: MIT Press. 1984.
 
-.. [Bus01] Buse, R and W Weimer. Learning a metric for code readability. *IEEE Transactions on Software Engineering*, 36(4): 546-58. 2010. `doi: 10.1109/TSE.2009.70 <dx.doi.org/10.1109/TSE.2009.70>`_.
+.. [Bus01] Buse, R and W Weimer. Learning a metric for code readability. *IEEE Transactions on Software Engineering*, 36(4): 546-58. 2010. `doi: 10.1109/TSE.2009.70 <https://dx.doi.org/10.1109/TSE.2009.70>`_.
 
-.. [Metrics] Fisher, J. Readability Metrics for a New Python API for Webots Robotics Simulations. 2022. `doi: 10.5281/zenodo.6813819 <dx.doi.org/10.5281/zenodo.6813819>`_.
+.. [Metrics] Fisher, J. Readability Metrics for a New Python API for Webots Robotics Simulations. 2022. `doi: 10.5281/zenodo.6813819 <https://dx.doi.org/10.5281/zenodo.6813819>`_.
 
 .. [Hal01] Halstead, M. *Elements of software science.* Elsevier New York. 1977.
 
-.. [Har01] Harris, C., K. Millman, S. van der Walt, et al. Array programming with NumPy. *Nature* 585, 357–62. 2020. `doi: 10.1038/s41586-020-2649-2 <dx.doi.org/10.1038/s41586-020-2649-2>`_.
+.. [Har01] Harris, C., K. Millman, S. van der Walt, et al. Array programming with NumPy. *Nature* 585, 357–62. 2020. `doi: 10.1038/s41586-020-2649-2 <https://dx.doi.org/10.1038/s41586-020-2649-2>`_.
 
-.. [Hin01] Hindle, A, MW Godfrey and RC Holt. "Reading beside the lines: Indentation as a proxy for complexity metric." Program Comprehension. The 16th IEEE International Conference, 133-42. 2008. `doi: 10.1109/icpc.2008.13 <dx.doi.org/10.1109/icpc.2008.13>`_.
+.. [Hin01] Hindle, A, MW Godfrey and RC Holt. "Reading beside the lines: Indentation as a proxy for complexity metric." Program Comprehension. The 16th IEEE International Conference, 133-42. 2008. `doi: 10.1109/icpc.2008.13 <https://dx.doi.org/10.1109/icpc.2008.13>`_.
 
 .. [McC01] McCabe, TJ. "A Complexity Measure" , 2(4): 308-320. 1976.
 
@@ -315,7 +315,7 @@ References
 
 .. [Radon] Radon. https://radon.readthedocs.io/en/latest/index.html
 
-.. [Sca01] Scalabrino, S, M Linares-Vasquez, R Oliveto and D Poshyvanyk. "A Comprehensive Model for Code Readability." *Jounal of Software: Evolution and Process*, 1-29. 2017. `doi: 10.1002/smr <dx.doi.org/10.1002/smr>`_.
+.. [Sca01] Scalabrino, S, M Linares-Vasquez, R Oliveto and D Poshyvanyk. "A Comprehensive Model for Code Readability." *Jounal of Software: Evolution and Process*, 1-29. 2017. `doi: 10.1002/smr <https://dx.doi.org/10.1002/smr>`_.
 
 .. [Scipy] https://www.scipy.org
 
@@ -325,6 +325,6 @@ References
 
 .. [SDTOld] https://github.com/Justin-Fisher/new_python_api_for_webots/blob/d180bcc7f505f8168246bee379f8067dfaf373ea/webots_new_python_api_samples/controllers/supervisor_draw_trail_python/supervisor_draw_trail_old_api_bare_bones.py
 
-.. [Vir01] Virtanen, P, R. Gommers, T. Oliphant, et al. SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. *Nature Methods*, 17(3), 261-72. 2020.  `doi: 10.1038/s41592-019-0686-2 <dx.doi.org/10.1038/s41592-019-0686-2>`_.
+.. [Vir01] Virtanen, P, R. Gommers, T. Oliphant, et al. SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. *Nature Methods*, 17(3), 261-72. 2020.  `doi: 10.1038/s41592-019-0686-2 <https://dx.doi.org/10.1038/s41592-019-0686-2>`_.
 
 .. [Webots] Webots Open Source Robotic Simulator. https://cyberbotics.com/
