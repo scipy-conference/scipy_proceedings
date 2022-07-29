@@ -7,7 +7,7 @@
 :institution: Princeton University
 
 :author: Eduardo Rodrigues
-:email: eduardo.rodrigues@cern.ch
+:email: eduardo.rodrigues@liverpool.ac.uk
 :institution: University of Liverpool
 
 :bibliography: mybib
@@ -22,7 +22,7 @@ Awkward Packaging: building Scikit-HEP
    needs of the High Energy Physics (HEP) community, but in many ways, the
    Python ecosystem at large. AwkwardArray, boost-histogram/hist, and iminuit
    are examples of libraries that are used beyond the original HEP focus. In
-   these proceedings, we will look key packages in the ecosystem, at how the
+   this paper we will look at key packages in the ecosystem, at how the
    collection of 30+ packages was developed and maintained, and the software
    ecosystem contributions made to packages like cibuildwheel, pybind11, nox,
    scikit-build, build, and pipx that support this effort, and the Scikit-HEP
@@ -62,8 +62,8 @@ LLVM today :cite:`ifrim2022gpu`.
 
 Python would start showing up in the late 90's in experiment frameworks as a
 configuration language. These frameworks were primarily written in C++, but
-were made of many configurable parts :cite:`LAMMEL199832`; the glueing together
-of the system was done in Python - a model still popular today, though some
+were made of many configurable parts :cite:`LAMMEL199832`. The glueing together
+of the system was done in Python, a model still popular today, though some
 experiments are now using Python + Numba as an alternative model,
 such as for example the Xenon1T experiment :cite:`remenska2017giving,rousselle2021fast`.
 
@@ -82,7 +82,7 @@ showing up.
 By the mid 2010's, a marked change had occurred. Many students were coming in
 with little or no C++ experience, but had existing knowledge of Python and the
 growing Python data science ecosystem, like NumPy and Pandas. Several HEP experiment analyses
-were performed driven by Python, with ROOT only being used for things that were not
+were performed in, or driven by, Python, with ROOT only being used for things that were not
 available in the Python ecosystem. Some of these were HEP specific: ROOT is
 also a data format, so users needed to be able to read data from ROOT files.
 Others were less specific: HEP users have intense histogram requirements due to
@@ -161,7 +161,7 @@ Uproot needed to do more than just be file format reader/writer; it needed to
 provide a way to represent the special structure and common objects that ROOT
 files could contain. This lead to the development of two related packages that
 would support uproot. One, uproot-methods, included Pythonic access to
-functionality provided by ROOT for its core classes, like spacial and Lorentz
+functionality provided by ROOT for its core classes, like spatial and Lorentz
 vectors. The other was AwkwardArray, which would grow to become one of the most
 important and most general packages in Scikit-HEP. This package allows
 NumPy-like idioms for array-at-a-time manipulation on jagged data structures. A
@@ -240,7 +240,7 @@ broader Python ecosystem.  Previous advancements in the packaging ecosystem,
 such as the wheel format for distributing binary platform dependent Python
 packages and the manylinux specification and docker image had that allowed a
 single compiled wheel to target many distributions of Linux, but there still
-were many challenges to making a library redistrubtable on all platforms.
+were many challenges to making a library redistributable on all platforms.
 
 The boost-histogram library only depended on header-only components of the
 Boost libraries, and the header-only pybind11 package, so it was able to avoid
@@ -282,7 +282,7 @@ step (cythonize), no need to pin NumPy when building, and a cross-package API.
 The iMinuit package was later moved from Cython to pybind11 as well, and
 pybind11 became the Scikit-HEP recommended binding tool. We
 contributed a variety of fixes and features to pybind11, including positional-only
-and keyword-only arguments, the option to prepending to the overload chain, and an API
+and keyword-only arguments, the option to prepend to the overload chain, and an API
 for type access and manipulation. We also completely redesigned CMake integration, added a
 new pure-Setuptools helpers file, and completely redesigned the  CI using GitHub
 Actions, running over 70 jobs on a variety of systems and compilers. We also helped
@@ -307,10 +307,10 @@ like ROOT, which is one monopackage that tries to provide everything
 :cite:`Rodrigues:2020syo`.  A toolset is more natural in the Python ecosystem,
 where we have good packaging tools and many existing libraries. Scikit-HEP only
 needed to fill existing gaps, instead of covering every possible aspect of an
-analysis like ROOT did. The original scikit-hep package had it's
-functionality was pulled out into existing or new separate packages like
+analysis like ROOT did. The original scikit-hep package had its
+functionality pulled out into existing or new separate packages such as
 HEPUnits and Vector, and the core scikit-hep package instead became a
-metapackage with no unique functionality on its own, but instead installs a
+metapackage with no unique functionality on its own. Instead, it installs a
 useful subset of our libraries for a physicist wanting to quickly get started
 on a new analysis.
 
