@@ -180,7 +180,7 @@ This intuitive impression is confirmed by automated metrics for code readability
 The measures in what follows consider the full :code:`supervisor_draw_trail` sample controller (from which the above snippet was drawn), since this is the Webots sample controller that makes the most sustained use of supervisor functionality to perform a fairly plausible supervisor task (maintaining the position of a streamer that trails behind the robot).
 Webots provides this sample controller in C [SDTC]_, but it was re-implemented using both the Old Python API and the New Python API [Metrics]_, maintaining straightforward correspondence between the two, with the only differences being directly due to the differences in the API's.
 
-.. table:: **Table 1. Length and Complexity Metrics.** Raw measures for :code:`supervisor_draw_trail` as it would be written with the new Python API for Webots or the old Python API for Webots. The "lines of codes" measures differ with respect to how they count blank lines, comments, and lines that combine multiple commands.  Cyclomatic complexity measures the number of potential branching points in the code. :label:`metrictable`
+.. table:: **Length and Complexity Metrics.** Raw measures for :code:`supervisor_draw_trail` as it would be written with the new Python API for Webots or the old Python API for Webots. The "lines of codes" measures differ with respect to how they count blank lines, comments, and lines that combine multiple commands.  Cyclomatic complexity measures the number of potential branching points in the code. :label:`metrictable`
   :align: left
 
   +----------------------------------------------+-------------+--------------+
@@ -218,7 +218,7 @@ E.g. having :code:`motor.velocity` as a unified property involves fewer unique n
 And having :code:`world.children[-1]` access the last child that field in the simulation saves having to count :code:`getField`, and :code:`getMFNode` in the vocabulary, and often also saves forming additional local variables for nodes or fields gotten in this way.
 Both of these factors also help the new API to greatly reduce parentheses counts.
 
-.. table:: **Table 2. Halstead Metrics.** Halstead metrics for :code:`supervisor_draw_trail` as it would be written with the new and old Python API's for Webots. Lower numbers are commonly construed as being better. :label:`halsteadtable`
+.. table:: **Halstead Metrics.** Halstead metrics for :code:`supervisor_draw_trail` as it would be written with the new and old Python API's for Webots. Lower numbers are commonly construed as being better. :label:`halsteadtable`
 
   +------------------------------------------------------+------------+--------------+
   |Halstead Metric                                       |  New API   |  Old API     |
