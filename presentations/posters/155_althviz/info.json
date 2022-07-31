@@ -1,0 +1,11 @@
+{
+    "title": "Contributing to Open Source Software: From not knowing Python to becoming a Spyder core developer",
+    "authors": [
+        {
+            "name": "Daniel Althviz Moré",
+            "affiliation": "Quansight",
+            "orcid": "0000-0003-1759-4194"
+        }
+    ],
+    "description": "Experience overview of becoming an open source developer and updates on the work being done in the Spyder IDE project for 2022"
+}
