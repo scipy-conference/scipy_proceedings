@@ -1,0 +1,16 @@
+{
+    "title": "MModel: a modular modeling framework for scientific prototyping",
+    "authors": [
+        {
+            "name": "Peter Sun",
+            "affiliation": "Cornell University",
+            "orcid": ""
+        },
+        {
+            "name": "John A. Marohn",
+            "affiliation": "Cornell University",
+            "orcid": ""
+        }
+    ],
+    "description": "MModel is a Python framework that allows for fast and modular prototyping. The library uses networkx graph for workflow construction and provides built-in toolkits such as subgraph modification and graph visualization with rich metadata."
+}
