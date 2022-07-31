@@ -1,0 +1,21 @@
+ {
+     "title": "pyampute: a Python library for data amputation",
+     "authors": [
+         {
+             "name": "Rianne M Schouten",
+             "affiliation": "Eindhoven University of Technology",
+             "orcid": "0000-0001-5026-4256"
+         },
+         {
+             "name": "Davina Zamanzadeh",
+             "affiliation": "University of California, Los Angeles",
+             "orcid": "0000-0002-9360-0069"
+         },
+         {
+             "name": "Prabhant Singh",
+             "affiliation": "Eindhoven University of Technology",
+             "orcid": "0000-0001-7634-2312"
+         }
+     ],
+     "description": "Amputation is the opposite of imputation; it is the creation of a missing data mask for complete datasets. Amputation is useful for evaluating the effect of missing values on the outcome of a statistical or machine learning model. In this talk, we present pyampute: the first open-source Python library for data amputation. Our package is compatible with the scikit-learn-style fit and transform paradigm, which allows for seamless integration of amputation in a larger, more complex data processing pipeline."
+}
