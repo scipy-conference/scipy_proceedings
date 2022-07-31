@@ -51,7 +51,7 @@ PlantSeg uses a variant of 3D U-Net, called Residual 3D U-Net, for preprocessing
 
 Most of the state-of-the-art pipelines are restricted to 2D space which is not a true representative of the actual motion of the organism. Many of them require knowledge and expertise in programming, or in machine learning and deep learning models and frameworks, thus limiting the demographic of users that can use them. All of them solely include a subset of the aforementioned modules (i.e. detection, segmentation, tracking, and classification) :cite:`stringer2021cellpose`. Many pipelines rely on the user to train their own model, hand-tailored for their specific application. This demands high levels of experience and skill in ML/DL and consequently undermines the possibility and feasibility of quickly utilizing an off-the-shelf pipeline and still getting good results.
 
-.. figure:: TSeg overview.png
+.. figure:: TSegOverview.png
    :align: center
 
    The overview of TSeg's architecture. 
