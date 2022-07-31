@@ -1,0 +1,46 @@
+{
+    "title": "Bioframe: Operating on Genomic Interval Dataframes",
+    "authors": [
+        {
+            "name": "Nezar Abdennur",
+            "affiliation": "University of Massachusetts Chan Medical School",
+            "orcid": "0000-0001-5814-0864"
+        },
+        {
+            "name": "Geoffrey Fudenberg",
+            "affiliation": "University of Southern California",
+            "orcid": "0000-0001-5905-6517"
+        },
+        {
+            "name": "Ilya M. Flyamer",
+            "affiliation": "Friedrich Miescher Institute for Biomedical Research",
+            "orcid": "0000-0002-4892-4208"
+        },
+        {
+            "name": "Aleksandra Galitsyna",
+            "affiliation": "Massachusetts Institute of Technology",
+            "orcid": "0000-0001-8969-5694"
+        },
+        {
+            "name": "Anton Goloborodko",
+            "affiliation": "Institute of Molecular Biotechnology of the Austrian Academy of Sciences",
+            "orcid": "0000-0002-2210-8616"
+        },
+        {
+            "name": "Maxim Imakaev",
+            "affiliation": "Massachusetts Institute of Technology",
+            "orcid": "0000-0002-5320-2728"
+        },
+        {
+            "name": "Trevor Manz",
+            "affiliation": "Harvard Medical School",
+            "orcid": "0000-0001-7694-5164"
+        },
+        {
+            "name": "Sergey V. Venev",
+            "affiliation": "University of Massachusetts Chan Medical School",
+            "orcid": "0000-0002-1507-7460"
+        }
+    ],
+    "description": "Python library for working with genomic interval dataframes."
+}
