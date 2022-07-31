@@ -1,0 +1,16 @@
+{
+    "title": "Optimal Review Assignments for the SciPy Conference Using Binary Integer Linear Programming in SciPy 1.9",
+    "authors": [
+        {
+            "name": "Matt Haberland",
+            "affiliation": "California Polytechnic State University, San Luis Obispo",
+            "orcid": "0000-0003-4806-3601"
+        },
+        {
+            "name": "Nicholas McKibben",
+            "affiliation": "Skayl, LLC",
+            "orcid": "0000-0003-0034-2230"
+        }
+    ],
+    "description": "Each year, the SciPy Conference receives hundreds of submissions, and dozens of volunteers offer to review them to help make selections for the conference. How should submissions be assigned to reviewers to distribute the work fairly while 1) ensuring that each submission receives at least three reviews, 2) preventing conflicts of interest, and 3) respecting reviewers' domains of expertise? Binary integer linear programming is an ideal framework for defining and solving "scheduling" or "assignment" problems like this. In this poster, we show how users can formulate and solve problems of this type with new, accessible tools in the scientific Python ecosystem."
+}
