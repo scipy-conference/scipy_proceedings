@@ -1,0 +1,25 @@
+{
+    "title": "Improving random sampling in Python: scipy.stats.sampling and scipy.stats.qmc",
+    "authors": [
+        {
+            "name": "Pamphile T. Roy",
+            "affiliation": "Quansight",
+            "orcid": "0000-0001-9816-1416"
+        },
+        {
+          "name": "Matt Haberland",
+          "affiliation": "BioResource and Agricultural Engineering Department",
+          "orcid": "0000-0003-4806-3601"
+        },
+        {
+          "name": "Christoph Baumgarten",
+          "affiliation": "Unaffiliated",
+          "orcid": "0000-0002-1168-3359"
+        },
+        {
+          "name": "Tirth Patel",
+          "affiliation": "Quansight"
+        }
+    ],
+    "description": "Why and how to use scipy.stats.sampling and scipy.stats.qmc?"
+}
