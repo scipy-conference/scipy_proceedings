@@ -1,0 +1,26 @@
+{
+    "title": "Scientific Python: By maintainers, for maintainers",
+    "authors": [
+        {
+            "name": "Pamphile T. Roy",
+            "affiliation": "Quansight",
+            "orcid": "0000-0001-9816-1416"
+        },
+        {
+            "name": "Stéfan van der Walt",
+            "affiliation": "BIDS, UC Berkeley",
+            "orcid": "0000-0001-9276-1891"
+        },
+        {
+            "name": "K. Jarrod Millman",
+            "affiliation": "University of California, Berkeley",
+            "orcid": "0000-0002-5263-5070"
+        },
+        {
+            "name": "Melissa Weber Mendonça",
+            "affiliation": "Quansight",
+            "orcid": "0000-0002-3212-402X"
+        }
+    ],
+    "description": "Tools for maintainers and how we can help each others."
+}
