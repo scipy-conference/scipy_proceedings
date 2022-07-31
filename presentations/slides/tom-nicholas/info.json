@@ -1,0 +1,21 @@
+{
+    "title": "Petabyte-scale ocean data analytics on staggered grids via the grid ufunc protocol in xGCM",
+    "authors": [
+        {
+            "name": "Thomas Nicholas",
+            "affiliation": "Columbia University",
+            "orcid": "0000-0002-2176-0530"
+        },
+        {
+            "name": "Julius Busecke",
+            "affiliation": "Columbia University",
+            "orcid": "0000-0001-8571-865X"
+        },
+	{
+            "name": "Ryan Abernathey",
+            "affiliation": "Columbia University",
+            "orcid": "0000-0001-5999-4917"
+        }
+    ],
+    "description": "We analysed the highest resolution global ocean simulation to date, using xGCM, xhistogram, and dask."
+}
