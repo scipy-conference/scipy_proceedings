@@ -12,5 +12,5 @@
             "orcid": "0000-0003-4425-7097"
         }
     ],
-    "We investigate three methods of hardware accleeration on both GPUs and CPUs for a Monte Carlo neutron transport simulation code writen in Python. The accelerating schemes we examine are Pykokks, Numba, and hardware code generating libraries like PyCUDA. This work was supported by the Center for Exascale Monte-Carlo Neutron Transport (CEMeNT) a PSAAP-III project funded by the Department of Energy, grant number: DE-NA003967."
+    "description": "We investigate three methods of hardware accleeration on both GPUs and CPUs for a Monte Carlo neutron transport simulation code writen in Python. The accelerating schemes we examine are Pykokks, Numba, and hardware code generating libraries like PyCUDA. This work was supported by the Center for Exascale Monte-Carlo Neutron Transport (CEMeNT) a PSAAP-III project funded by the Department of Energy, grant number: DE-NA003967."
 }

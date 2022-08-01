@@ -30,7 +30,7 @@
             "name": "David van Dyk",
             "affiliation": "Imperial College London",
             "orcid": ""
-        },
+        }
 
     ],
     "description": "Pylira is Python package for deconvolution for images in the presence of Poisson noise. In this presentation I will explain the method in detail, show the setup and API of the Python package as well as show application examples using real astronomical data."

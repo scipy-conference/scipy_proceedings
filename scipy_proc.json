@@ -1,6 +1,6 @@
 {
   "proceedings": {
-    "doi": "",
+    "doi": "10.25080/majora-5d560511-045",
     "xref": {
       "prefix": "10.25080",
       "registrant": "Crossref",
@@ -238,7 +238,163 @@
       "name": "Proceedings Reviewers",
       "members": [
         {
-          "name": ""
+          "name": "Aileen Nielsen"
+        },
+        {
+          "name": "Ajit Dhobale"
+        },
+        {
+          "name": "Alejandro Coca-Castro"
+        },
+        {
+          "name": "Alexander Yang"
+        },
+        {
+          "name": "Bhupendra A Raut"
+        },
+        {
+          "name": "Bradley Dice"
+        },
+        {
+          "name": "Brian Gue"
+        },
+        {
+          "name": "Cadiou Corentin"
+        },
+        {
+          "name": "Carl Simon Adorf"
+        },
+        {
+          "name": "Chen Zhang"
+        },
+        {
+          "name": "Chiara Marmo"
+        },
+        {
+          "name": "Chitaranjan Mahapatra"
+        },
+        {
+          "name": "Chris Calloway"
+        },
+        {
+          "name": "Daniel Wheeler "
+        },
+        {
+          "name": "David Nicholson"
+        },
+        {
+          "name": "David Shupe"
+        },
+        {
+          "name": "Dillon Niederhut"
+        },
+        {
+          "name": "Diptorup Deb"
+        },
+        {
+          "name": "Jelena Milosevic"
+        },
+        {
+          "name": "Michal Maciejewski"
+        },
+        {
+          "name": "Ed Rogers"
+        },
+        {
+          "name": "Himaghna Bhattacharjee"
+        },
+        {
+          "name": "Hongsup Shin"
+        },
+        {
+          "name": "Indraneil Paul"
+        },
+        {
+          "name": "Ivan Marroquin"
+        },
+        {
+          "name": "James Lamb"
+        },
+        {
+          "name": "Jyh-Miin Lin"
+        },
+        {
+          "name": "Jyotika Singh"
+        },
+        {
+          "name": "Karthik Murugadoss"
+        },
+        {
+          "name": "Kehinde Ajayi"
+        },
+        {
+          "name": "Kelly L. Rowland"
+        },
+        {
+          "name": "Kelvin Lee"
+        },
+        {
+          "name": "Kevin Maik Jablonka"
+        },
+        {
+          "name": "Kevin W. Beam"
+        },
+        {
+          "name": "Kuntao Zhao"
+        },
+        {
+          "name": "Maruthi NH"
+        },
+        {
+          "name": "Matt Craig"
+        },
+        {
+          "name": "Matthew Feickert"
+        },
+        {
+          "name": "Meghann Agarwal"
+        },
+        {
+          "name": "Melissa Weber Mendonça"
+        },
+        {
+          "name": "Onuralp Soylemez"
+        },
+        {
+          "name": "Rohit Goswami"
+        },
+        {
+          "name": "Ryan Bunney"
+        },
+        {
+          "name": "Shubham Sharma"
+        },
+        {
+          "name": "Siddhartha Srivastava"
+        },
+        {
+          "name": "Sushant More"
+        },
+        {
+          "name": "Tetsuo Koyama"
+        },
+        {
+          "name": "Thomas Nicholas"
+        },
+        {
+          "name": "Victoria Adesoba"
+        },
+        {
+          "name": "Vidhi Chugh"
+        },
+        {
+          "name": "Vivek Sinha"
+        },
+        {
+          "name": "Wenduo Zhou"
+        },
+        {
+          "name": "Zuhal Cakir"
         }
       ]
     }
@@ -255,22 +411,52 @@
   },
   "scipy_scholarship": [
     {
-      "org": "",
-      "name": ""
+      "org": "University of Delhi",
+      "name": "Aman Goel"
     },
     {
-      "org": "",
-      "name": ""
-    }
-  ],
-  "diversity_scholarship": [
-    {
-      "org": "",
-      "name": ""
+      "org": "Saarland University",
+      "name": "Anurag Saha Roy"
     },
     {
-      "org": "",
-      "name": ""
+      "org": "University of Illinois at Urbana Champaign",
+      "name": "Isuru Fernando"
+    },
+    {
+      "org": "US Forest Service",
+      "name": "Kelly Meehan"
+    },
+    {
+      "org": "University of Rhode Island",
+      "name": "Kadambari Devarajan"
+    },
+    {
+      "org": "Thapar Institute of Engineering and Technology",
+      "name": "Krishna Katyal"
+    },
+    {
+      "org": "Dask",
+      "name": "Matthew Murray"
+    },
+    {
+      "org": "Sympy, LPython",
+      "name": "Naman Gera"
+    },
+    {
+      "org": "University of Iceland",
+      "name": "Rohit Goswami"
+    },
+    {
+      "org": "QuTIP",
+      "name": "Simon Cross"
+    },
+    {
+      "org": "IBM Research",
+      "name": "Tanya Akumu"
+    },
+    {
+      "org": "Purdue University",
+      "name": "Zuhal Cakir"
     }
   ]
 }

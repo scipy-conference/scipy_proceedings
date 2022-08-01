@@ -28,19 +28,19 @@ can use ``__name='tmpl.html'`` to set the name of the template.
 
 If there are syntax errors ``TemplateError`` will be raised.
 """
-from __future__ import unicode_literals 
+from __future__ import unicode_literals
 
 import re
 import sys
-import cgi
+import html as html_module
 import traceback
 import os
 import tokenize
 
-try: 
+try:
     from urllib import quote as url_quote
     from cStringIO import StringIO
-except ImportError: 
+except ImportError:
     from urllib.parse import quote as url_quote
     from io import StringIO
 
@@ -466,10 +466,10 @@ def html_quote(value, force=True):
     if not isinstance(value, basestring_):
         value = coerce_text(value)
     if sys.version >= "3" and isinstance(value, bytes):
-        value = cgi.escape(value.decode('latin1'), 1)
+        value = html_module.escape(value.decode('latin1'), 1)
         value = value.encode('latin1')
     else:
-        value = cgi.escape(value, 1)
+        value = html_module.escape(value, 1)
     if sys.version < "3":
         if is_unicode(value):
             value = value.encode('ascii', 'xmlcharrefreplace')

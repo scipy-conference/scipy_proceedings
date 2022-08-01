@@ -1,42 +1,42 @@
-:author: Cliff C. Kerr 
+:author: Cliff C. Kerr
 :email: cliff@covasim.org
 :institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
 :institution: School of Physics, University of Sydney, Sydney, Australia
 
-:author: Robyn M. Stuart 
+:author: Robyn M. Stuart
 :email: robyn@math.ku.dk
 :institution: Department of Mathematical Sciences, University of Copenhagen, Copenhagen, Denmark
 :institution: Burnet Institute, Melbourne, Australia
 
-:author: Dina Mistry 
+:author: Dina Mistry
 :email: dina.c.mistry@gmail.com
 :institution: Twitter, Seattle, USA
 
-:author: Romesh G. Abeysuriya 
+:author: Romesh G. Abeysuriya
 :email: romesh.abeysuriya@burnet.edu.au
 :institution: Burnet Institute, Melbourne, Australia
 
-:author: Jamie A. Cohen 
+:author: Jamie A. Cohen
 :email: jamie.cohen@gatesfoundation.org
 :institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
 
-:author: Lauren George 
+:author: Lauren George
 :email: lauren.george@live.com
 :institution: Microsoft, Seattle, USA
 
-:author: Michał Jastrzębski 
+:author: Michał Jastrzebski
 :email: inc007@gmail.com
 :institution: GitHub, San Francisco, USA
 
-:author: Michael Famulare 
+:author: Michael Famulare
 :email: mike.famulare@gatesfoundation.org
 :institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
 
-:author: Edward Wenger 
+:author: Edward Wenger
 :email: edward.wenger@gatesfoundation.org
 :institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
 
-:author: Daniel J. Klein 
+:author: Daniel J. Klein
 :email: daniel.klein@gatesfoundation.org
 :institution: Institute for Disease Modeling, Bill & Melinda Gates Foundation, Seattle, USA
 
@@ -60,13 +60,13 @@ Python vs. the pandemic: a case study in high-stakes software development
 Background
 ----------
 
-For decades, scientists have been concerned about the possibility of another global pandemic on the scale of the 1918 flu :cite:`garrett2005next`. Despite a number of "close calls" – including SARS in 2002 :cite:`anderson2004epidemiology`; Ebola in 2014-2016 :cite:`who2014ebola`; and flu outbreaks including 1957, 1968, and H1N1 in 2009 :cite:`saunders2016reviewing`, some of which led to 1 million or more deaths – the last time we experienced the emergence of a planetary-scale new pathogen was when HIV spread globally in the 1980s :cite:`cohen2008spread`. 
+For decades, scientists have been concerned about the possibility of another global pandemic on the scale of the 1918 flu :cite:`garrett2005next`. Despite a number of "close calls" – including SARS in 2002 :cite:`anderson2004epidemiology`; Ebola in 2014-2016 :cite:`who2014ebola`; and flu outbreaks including 1957, 1968, and H1N1 in 2009 :cite:`saunders2016reviewing`, some of which led to 1 million or more deaths – the last time we experienced the emergence of a planetary-scale new pathogen was when HIV spread globally in the 1980s :cite:`cohen2008spread`.
 
 In 2015, Bill Gates gave a TED talk stating that the world was not ready to deal with another pandemic :cite:`hofman2020global`. While the Bill & Melinda Gates Foundation (BMGF) has not historically focused on pandemic preparedness, its expertise in disease surveillance, modeling, and drug discovery made it well placed to contribute to a global pandemic response plan. Founded in 2008, the Institute for Disease Modeling (IDM) has provided analytical support for BMGF (which it has been a part of since 2020) and other global health partners, with a focus on eradicating malaria and polio. Since its creation, IDM has built up a portfolio of computational tools to understand, analyze, and predict the dynamics of different diseases.
 
 When "coronavirus disease 2019" (COVID-19) and the virus that causes it (SARS-CoV-2) were first identified in late 2019, our team began summarizing what was known about the virus :cite:`famulare2019ncov`. By early February 2020, even though it was more than a month before the World Health Organization (WHO) declared a pandemic :cite:`medicine2020covid`, it had become clear that COVID-19 would become a major public health threat. The outbreak on the *Diamond Princess* cruise ship :cite:`rocklov2020covid` was the impetus for us to start modeling COVID in detail. Specifically,  we needed a tool to (a) incorporate new data as soon as it became available, (b) explore policy scenarios, and (c) predict likely future epidemic trajectories.
 
-The first step was to identify which software tool would form the best starting point for our new COVID model. Infectious disease models come in two major types: *agent-based models* track the behavior of individual "people" (agents) in the simulation, with each agent's behavior represented by a random (probabilistic) process. *Compartmental models* track populations of people over time, typically using deterministic difference equations. The richest modeling framework used by IDM at the time was EMOD, which is a multi-disease agent-based model written in C++ and based on JSON configuration files :cite:`bershteyn2018implementation`. We also considered Atomica, a multi-disease compartmental model written in Python and based on Excel input files :cite:`kedziora2019cascade`. However, both of these options posed significant challenges: as a compartmental model, Atomica would have been unable to capture the individual-level detail necessary for modeling the *Diamond Princess* outbreak (such as passenger-crew interactions); EMOD had sufficient flexibility, but developing new disease modules had historically required months rather than days. 
+The first step was to identify which software tool would form the best starting point for our new COVID model. Infectious disease models come in two major types: *agent-based models* track the behavior of individual "people" (agents) in the simulation, with each agent's behavior represented by a random (probabilistic) process. *Compartmental models* track populations of people over time, typically using deterministic difference equations. The richest modeling framework used by IDM at the time was EMOD, which is a multi-disease agent-based model written in C++ and based on JSON configuration files :cite:`bershteyn2018implementation`. We also considered Atomica, a multi-disease compartmental model written in Python and based on Excel input files :cite:`kedziora2019cascade`. However, both of these options posed significant challenges: as a compartmental model, Atomica would have been unable to capture the individual-level detail necessary for modeling the *Diamond Princess* outbreak (such as passenger-crew interactions); EMOD had sufficient flexibility, but developing new disease modules had historically required months rather than days.
 
 As a result, we instead started developing Covasim ("**COV**\ ID-19 **A**\ gent-based **Sim**\ ulator") :cite:`kerr2021covasim` from a nascent agent-based model written in Python, LEMOD-FP ("Light-EMOD for Family Planning"). LEMOD-FP was used to model reproductive health choices of women in Senegal; this model had in turn been based on an even simpler agent-based model of measles vaccination programs in Nigeria ("Value-of-Information Simulator" or VoISim). We subsequently applied the lessons we learned from developing Covasim to turn LEMOD-FP into a new family planning model, "FPsim", which will be launched later this year :cite:`o2022fpsim`.
 
@@ -74,7 +74,7 @@ Parallel to the development of Covasim, other research teams at IDM developed th
 
 Covasim, by contrast, had immediate real-world impact. The first version was released on 10 March 2020, and on 12 March 2020, its output was presented by Washington State Governor Jay Inslee during a press conference as justification for school closures and social distancing measures :cite:`kerr2021`.
 
-Since the early days of the pandemic, Covasim releases have coincided with major events in the pandemic, especially the identification of new variants of concern (Fig. :ref:`releases`). Covasim was quickly adopted globally, including applications in the UK regarding school closures :cite:`panovska2020determining`, Australia regarding outbreak control :cite:`stuart2021role`, and Vietnam regarding lockdown measures :cite:`pham2021estimating`. 
+Since the early days of the pandemic, Covasim releases have coincided with major events in the pandemic, especially the identification of new variants of concern (Fig. :ref:`releases`). Covasim was quickly adopted globally, including applications in the UK regarding school closures :cite:`panovska2020determining`, Australia regarding outbreak control :cite:`stuart2021role`, and Vietnam regarding lockdown measures :cite:`pham2021estimating`.
 
 
 .. figure:: fig_releases.png
@@ -165,7 +165,7 @@ Similar design philosophies have been articulated by previously, such as for Gra
 Simplifications using Sciris
 ++++++++++++++++++++++++++++
 
-A key component of Covasim's architecture is heavy reliance on Sciris (http://sciris.org) :cite:`sciris`, a library of functions for scientific computing that provide additional flexibility and ease-of-use on top of NumPy, SciPy, and Matplotlib, including parallel computing, array operations, and high-performance container datatypes. 
+A key component of Covasim's architecture is heavy reliance on Sciris (http://sciris.org) :cite:`sciris`, a library of functions for scientific computing that provide additional flexibility and ease-of-use on top of NumPy, SciPy, and Matplotlib, including parallel computing, array operations, and high-performance container datatypes.
 
 As shown in Fig. :ref:`sciris`, Sciris significantly reduces the number of lines of code required to perform common scientific tasks, allowing the user to focus on the code's scientific logic rather than the low-level implementation. Key Covasim features that rely on Sciris include: ensuring consistent dictionary, list, and array types (e.g., allowing the user to provide inputs as either lists or arrays); referencing ordered dictionary elements by index; handling and interconverting dates (e.g., allowing the user to provide either a date string or a ``datetime`` object); saving and loading files; and running simulations in parallel.
 
@@ -291,7 +291,7 @@ Finally, since much of our intended audience has little to no Python experience,
 Workflow and team management
 ++++++++++++++++++++++++++++
 
-Covasim was developed by a team of roughly 75 people with widely disparate backgrounds: from those with 20+ years of enterprise-level software development experience and no public health background, through to public health experts with virtually no prior experience in Python. Roughly 45% of Covasim contributors had significant Python expertise, while 60% had public health experience; only about half a dozen contributors (<10%) had significant experience in both areas. 
+Covasim was developed by a team of roughly 75 people with widely disparate backgrounds: from those with 20+ years of enterprise-level software development experience and no public health background, through to public health experts with virtually no prior experience in Python. Roughly 45% of Covasim contributors had significant Python expertise, while 60% had public health experience; only about half a dozen contributors (<10%) had significant experience in both areas.
 
 These half-dozen contributors formed a core group (including the authors of this paper) that oversaw overall Covasim development. Using GitHub for both software and project management, we created issues and assigned them to other contributors based on urgency and skillset match. All pull requests were reviewed by at least one person from this group, and often two, prior to merge. While the danger of accepting changes from contributors with limited Python experience is self-evident, considerable risks were also posed by contributors who lacked epidemiological insight. For example, some of the proposed tests were written based on assumptions that were true for a given time and place, but which were not valid for other geographical contexts.
 
@@ -314,7 +314,7 @@ Future directions
 
 While the need for COVID modeling is hopefully starting to decrease, we and our collaborators are continuing development of Covasim by updating parameters with the latest scientific evidence, implementing new immune dynamics :cite:`cohen2021mechanistic`, and providing other usability and bug-fix updates. We also continue to provide support and training workshops (including in-person workshops, which were not possible earlier in the pandemic).
 
-We are using what we learned during the development of Covasim to build a broader suite of Python-based disease modeling tools (tentatively named "\*-sim" or "Starsim"). The suite of Starsim tools under development includes models for family planning :cite:`o2022fpsim`, polio, respiratory syncytial virus (RSV), and human papillomavirus (HPV). To date, each tool in this suite uses an independent codebase, and is related to Covasim only through the shared design principles described above, and by having used the Covasim codebase as the starting point for development. 
+We are using what we learned during the development of Covasim to build a broader suite of Python-based disease modeling tools (tentatively named "\*-sim" or "Starsim"). The suite of Starsim tools under development includes models for family planning :cite:`o2022fpsim`, polio, respiratory syncytial virus (RSV), and human papillomavirus (HPV). To date, each tool in this suite uses an independent codebase, and is related to Covasim only through the shared design principles described above, and by having used the Covasim codebase as the starting point for development.
 
 A major open question is whether the disease dynamics implemented in Covasim and these related models have sufficient overlap to be refactored into a single disease-agnostic modeling library, which the disease-specific modeling libraries would then import. This "core and specialization" approach was adopted by EMOD and Atomica, and while both frameworks continue to be used, no multi-disease modeling library has yet seen widespread adoption within the disease modeling community. The alternative approach, currently used by the Starsim suite, is for each disease model to be a self-contained library. A shared library would reduce code duplication, and allow new features and bug fixes to be immediately rolled out to multiple models simultaneously. However, it would also increase interdependencies that would have the effect of increasing code complexity, increasing the risk of introducing subtle bugs. Which of these two options is preferable likely depends on the speed with which new disease models need to be implemented. We hope that for the foreseeable future, none will need to be implemented as quickly as Covasim.
 
