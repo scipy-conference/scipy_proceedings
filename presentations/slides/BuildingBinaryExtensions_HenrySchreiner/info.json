@@ -1,0 +1,42 @@
+{
+    "title": "Building Binary Extensions with pybind11, scikit-build, and cibuildwheel",
+    "authors": [
+        {
+            "name": "Henry Schreiner",
+            "affiliation": "Princeton University",
+            "orcid": "0000-0002-7833-783X"
+        },
+        {
+            "name": "Joe Rickerby",
+            "affiliation": "Nord Projects"
+        },
+        {
+            "name": "Ralf Grosse-Kunstleve",
+            "affiliation": "Google"
+        },
+        {
+            "name": "Wenzel Jakob",
+            "affiliation": "Ecole Polytechnique Fédérale de Lausanne",
+            "orcid": "0000-0002-6090-1121"
+        },
+        {
+            "name": "Matthieu Darbois",
+            "affiliation": "PyPA"
+        },
+        {
+            "name": "Aaron Gokaslan",
+            "affiliation": "Facebook Research"
+        },
+        {
+            "name": "Jean-Christophe Fillion-Robin",
+            "affiliation": "Kitware",
+            "orcid": "0000-0002-9688-8950"
+        },
+        {
+            "name": "Matt McCormick",
+            "affiliation": "Kitware",
+            "orcid": "0000-0001-9475-3756"
+        }
+    ],
+    "description": "Building binary extensions is easier than ever thanks to several key libraries. Pybind11 provides a natural C++ language for extensions without requiring pre-processing or special dependencies. Scikit-build ties the premier C++ build system, CMake, into the Python extension build process. And cibuildwheel makes it easy to build highly compatible wheels for over 80 different platforms using CI or on your local machine."
+}
