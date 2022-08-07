@@ -1,0 +1,462 @@
+{
+  "proceedings": {
+    "doi": "10.25080/majora-212e5952-046",
+    "xref": {
+      "prefix": "10.25080",
+      "registrant": "Crossref",
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "depositor_name": "Dillon Niederhut",
+      "depositor_email": "dillon.niederhut@gmail.com"
+    },
+    "copyright": {
+      "proceedings": [
+        "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
+        "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+        "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
+      ],
+      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+      "license": "Creative Commons Attribution License (CCAL)"
+    },
+    "title": {
+      "conference": "Python in Science Conference",
+      "full": "Proceedings of the 21st Python in Science Conference",
+      "short": "PROC. OF THE 21st PYTHON IN SCIENCE CONF. (SCIPY 2022)",
+      "acronym": "SciPy",
+      "ordinal": "21st"
+    },
+    "citation_key": "proc-scipy-2022",
+    "editor_email": [
+      "agarwal.meghann@gmail.com",
+      "cbc@unc.edu",
+      "dillon.niederhut@gmail.com",
+      "dave.shupe@gmail.com"
+    ],
+    "dates": "July 11 - July 17",
+    "editor": [
+      "Meghann Agarwal",
+      "Chris Calloway",
+      "Dillon Niederhut",
+      "David Shupe"
+    ],
+    "location": "Austin, Texas",
+    "volume": 7,
+    "number": 1,
+    "isbn": "noisbn",
+    "year": "2022"
+  },
+  "organization": [
+    {
+      "name": "Conference Chairs",
+      "members": [
+        {
+          "org": "NIST",
+          "name": "Jonathan Guyer"
+        },
+        {
+          "org": "Enthought, Inc.",
+          "name": "Alexandre Chabot-Leclerc"
+        }
+      ]
+    },
+    {
+      "name": "Program Chairs",
+      "members": [
+        {
+          "org": "Cal Poly",
+          "name": "Matt Haberland"
+        },
+        {
+          "org": "Mozilla",
+          "name": "Julie Hollek"
+        },
+        {
+          "org": "University of Illinois",
+          "name": "Madicken Munk"
+        },
+        {
+          "org": "Microsoft Corp",
+          "name": "Guen Prawiroatmodjo"
+        }
+      ]
+    },
+    {
+      "name": "Communications",
+      "members": [
+        {
+          "org": "NumFOCUS",
+          "name": "Arliss Collins"
+        },
+        {
+          "org": "Populus",
+          "name": "Matt Davis"
+        },
+        {
+          "org": "Embedded Intelligence",
+          "name": "David Nicholson"
+        }
+      ]
+    },
+    {
+      "name": "Birds of a Feather",
+      "members": [
+        {
+          "org": "NIST",
+          "name": "Andrew Reid"
+        },
+        {
+          "org": "George Washington University",
+          "name": "Anastasiia Sarmakeeva"
+        }
+      ]
+    },
+    {
+      "name": "Proceedings",
+      "members": [
+        {
+          "org": "Overhaul",
+          "name": "Meghann Agarwal"
+        },
+        {
+          "org": "University of North Carolina",
+          "name": "Chris Calloway"
+        },
+        {
+          "org": "Novi Labs",
+          "name": "Dillon Niederhut"
+        },
+        {
+          "org": "Caltech's IPAC Astronomy Data Center",
+          "name": "David Shupe"
+        }
+      ]
+    },
+    {
+      "name": "Financial Aid",
+      "members": [
+        {
+          "org": "Argonne National Laboratory",
+          "name": "Scott Collis"
+        },
+        {
+          "org": "Université de Montréal",
+          "name": "Nadia Tahiri"
+        }
+      ]
+    },
+    {
+      "name": "Tutorials",
+      "members": [
+        {
+          "org": "USGS",
+          "name": "Mike Hearne"
+        },
+        {
+          "org": "Enthought, Inc.",
+          "name": "Logan Thomas"
+        }
+      ]
+    },
+    {
+      "name": "Sprints",
+      "members": [
+        {
+          "org": "Quansight Labs",
+          "name": "Tania Allard"
+        },
+        {
+          "org": "Caltech/IPAC",
+          "name": "Brigitta Sipőcz"
+        }
+      ]
+    },
+    {
+      "name": "Diversity",
+      "members": [
+        {
+          "org": "IBM Research Africa",
+          "name": "Celia Cintas"
+        },
+        {
+          "org": "O'Reilly Media",
+          "name": "Bonny P McClain"
+        },
+        {
+          "org": "OpenTeams",
+          "name": "Fatma Tarlaci"
+        }
+      ]
+    },
+    {
+      "name": "Activities",
+      "members": [
+        {
+          "org": "Codecov",
+          "name": "Paul Anzel"
+        },
+        {
+          "org": "Albus Code",
+          "name": "Inessa Pawson"
+        }
+      ]
+    },
+    {
+      "name": "Sponsors",
+      "members": [
+        {
+          "org": "Enthought, Inc.",
+          "name": "Kristen Leiser"
+        }
+      ]
+    },
+    {
+      "name": "Financial",
+      "members": [
+        {
+          "org": "Enthought, Inc.",
+          "name": "Chris Chan"
+        },
+        {
+          "org": "Enthought, Inc.",
+          "name": "Bill Cowan"
+        },
+        {
+          "org": "Enthought, Inc.",
+          "name": "Jodi Havranek"
+        }
+      ]
+    },
+    {
+      "name": "Logistics",
+      "members": [
+        {
+          "org": "Enthought, Inc.",
+          "name": "Kristen Leiser"
+        }
+      ]
+    },
+    {
+      "name": "Proceedings Reviewers",
+      "members": [
+        {
+          "name": "Aileen Nielsen"
+        },
+        {
+          "name": "Ajit Dhobale"
+        },
+        {
+          "name": "Alejandro Coca-Castro"
+        },
+        {
+          "name": "Alexander Yang"
+        },
+        {
+          "name": "Bhupendra A Raut"
+        },
+        {
+          "name": "Bradley Dice"
+        },
+        {
+          "name": "Brian Gue"
+        },
+        {
+          "name": "Cadiou Corentin"
+        },
+        {
+          "name": "Carl Simon Adorf"
+        },
+        {
+          "name": "Chen Zhang"
+        },
+        {
+          "name": "Chiara Marmo"
+        },
+        {
+          "name": "Chitaranjan Mahapatra"
+        },
+        {
+          "name": "Chris Calloway"
+        },
+        {
+          "name": "Daniel Wheeler "
+        },
+        {
+          "name": "David Nicholson"
+        },
+        {
+          "name": "David Shupe"
+        },
+        {
+          "name": "Dillon Niederhut"
+        },
+        {
+          "name": "Diptorup Deb"
+        },
+        {
+          "name": "Jelena Milosevic"
+        },
+        {
+          "name": "Michal Maciejewski"
+        },
+        {
+          "name": "Ed Rogers"
+        },
+        {
+          "name": "Himaghna Bhattacharjee"
+        },
+        {
+          "name": "Hongsup Shin"
+        },
+        {
+          "name": "Indraneil Paul"
+        },
+        {
+          "name": "Ivan Marroquin"
+        },
+        {
+          "name": "James Lamb"
+        },
+        {
+          "name": "Jyh-Miin Lin"
+        },
+        {
+          "name": "Jyotika Singh"
+        },
+        {
+          "name": "Karthik Murugadoss"
+        },
+        {
+          "name": "Kehinde Ajayi"
+        },
+        {
+          "name": "Kelly L. Rowland"
+        },
+        {
+          "name": "Kelvin Lee"
+        },
+        {
+          "name": "Kevin Maik Jablonka"
+        },
+        {
+          "name": "Kevin W. Beam"
+        },
+        {
+          "name": "Kuntao Zhao"
+        },
+        {
+          "name": "Maruthi NH"
+        },
+        {
+          "name": "Matt Craig"
+        },
+        {
+          "name": "Matthew Feickert"
+        },
+        {
+          "name": "Meghann Agarwal"
+        },
+        {
+          "name": "Melissa Weber Mendonça"
+        },
+        {
+          "name": "Onuralp Soylemez"
+        },
+        {
+          "name": "Rohit Goswami"
+        },
+        {
+          "name": "Ryan Bunney"
+        },
+        {
+          "name": "Shubham Sharma"
+        },
+        {
+          "name": "Siddhartha Srivastava"
+        },
+        {
+          "name": "Sushant More"
+        },
+        {
+          "name": "Tetsuo Koyama"
+        },
+        {
+          "name": "Thomas Nicholas"
+        },
+        {
+          "name": "Victoria Adesoba"
+        },
+        {
+          "name": "Vidhi Chugh"
+        },
+        {
+          "name": "Vivek Sinha"
+        },
+        {
+          "name": "Wenduo Zhou"
+        },
+        {
+          "name": "Zuhal Cakir"
+        }
+      ]
+    }
+  ],
+  "series": {
+    "title": {
+      "full": "Proceedings of the Python in Science Conference"
+    },
+    "doi": "10.25080/issn.2575-9752",
+    "xref": {
+      "issn": "2575-9752",
+      "resource_url": "https://conference.scipy.org/proceedings"
+    }
+  },
+  "scipy_scholarship": [
+    {
+      "org": "University of Delhi",
+      "name": "Aman Goel"
+    },
+    {
+      "org": "Saarland University",
+      "name": "Anurag Saha Roy"
+    },
+    {
+      "org": "University of Illinois at Urbana Champaign",
+      "name": "Isuru Fernando"
+    },
+    {
+      "org": "US Forest Service",
+      "name": "Kelly Meehan"
+    },
+    {
+      "org": "University of Rhode Island",
+      "name": "Kadambari Devarajan"
+    },
+    {
+      "org": "Thapar Institute of Engineering and Technology",
+      "name": "Krishna Katyal"
+    },
+    {
+      "org": "Dask",
+      "name": "Matthew Murray"
+    },
+    {
+      "org": "Sympy, LPython",
+      "name": "Naman Gera"
+    },
+    {
+      "org": "University of Iceland",
+      "name": "Rohit Goswami"
+    },
+    {
+      "org": "QuTIP",
+      "name": "Simon Cross"
+    },
+    {
+      "org": "IBM Research",
+      "name": "Tanya Akumu"
+    },
+    {
+      "org": "Purdue University",
+      "name": "Zuhal Cakir"
+    }
+  ]
+}

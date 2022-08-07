@@ -1,0 +1,1957 @@
+{
+  "toc": [
+    {
+      "title": "The Advanced Scientific Data Format (ASDF): An Update",
+      "authors": "Perry Greenfield, Edward Slavich, William Jamieson, Nadia Dencheva",
+      "author": [
+        "Perry Greenfield",
+        "Edward Slavich",
+        "William Jamieson",
+        "Nadia Dencheva"
+      ],
+      "author_email": [
+        "perry@stsci.edu",
+        "edward.j.slavich@gmail.com",
+        "wjamieson@stsci.edu",
+        "dencheva@stsci.edu"
+      ],
+      "author_institution": [
+        "Space Telescope Science Institute",
+        "Space Telescope Science Institute",
+        "Space Telescope Science Institute",
+        "Space Telescope Science Institute"
+      ],
+      "author_institution_map": {
+        "Perry Greenfield": [
+          "Space Telescope Science Institute"
+        ],
+        "Edward Slavich": [
+          "Space Telescope Science Institute"
+        ],
+        "William Jamieson": [
+          "Space Telescope Science Institute"
+        ],
+        "Nadia Dencheva": [
+          "Space Telescope Science Institute"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "We report on progress in developing and extending the new (ASDF) format\nwe have developed for the data from the James Webb and Nancy Grace Roman\nSpace Telescopes since we reported on it at a previous Scipy. While the\nformat was developed as a replacement for the long-standard FITS format\nused in astronomy, it is quite generic and not restricted to use with\nastronomical data. We will briefly review the format, and extensions and\nchanges made to the standard itself, as well as to the reference Python\nimplementation we\nhave developed to support it. The standard itself has been clarified in\na number of respects.\nRecent improvements to the Python implementation include an improved\nframework for conversion between complex Python objects and ASDF,\nbetter control of the configuration of\nextensions supported and versioning of extensions, tools for display and\nsearching of the structured metadata, better developer documentation, tutorials,\nand a more maintainable and flexible schema system. This has\nincluded a reorganization of the components to make the standard free\nfrom astronomical assumptions. A important motivator for the format was\nthe ability to support serializing functional transforms in multiple dimensions as well as expressions built out of such transforms, which\nhas now been implemented. More generalized compression schemes are now\nenabled. We are currently working on adding chunking support and will\ndiscuss our plan for further enhancements."
+      ],
+      "keywords": "data formats, standards, world coordinate systems, yaml",
+      "copyright_holder": "Perry Greenfield et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 6,
+      "page": {
+        "start": 1,
+        "stop": 6
+      },
+      "paper_id": "00_greenfield",
+      "doi": "10.25080/majora-212e5952-000"
+    },
+    {
+      "title": "Semi-Supervised Semantic Annotator (S3A): Toward Efficient Semantic Labeling",
+      "authors": "Nathan Jessurun, Daniel E. Capecci, Olivia P. Dizon-Paradis, Damon L. Woodard, Navid Asadizanjani",
+      "author": [
+        "Nathan Jessurun",
+        "Daniel E. Capecci",
+        "Olivia P. Dizon-Paradis",
+        "Damon L. Woodard",
+        "Navid Asadizanjani"
+      ],
+      "author_email": [
+        "njessurun@ufl.edu",
+        "dcapecci@ufl.edu",
+        "paradiso@ufl.edu",
+        "dwoodard@ece.ufl.edu",
+        "nasadi@ece.ufl.edu"
+      ],
+      "author_institution": [
+        "University of Florida",
+        "University of Florida",
+        "University of Florida",
+        "University of Florida",
+        "University of Florida"
+      ],
+      "author_institution_map": {
+        "Nathan Jessurun": [
+          "University of Florida"
+        ],
+        "Daniel E. Capecci": [
+          "University of Florida"
+        ],
+        "Olivia P. Dizon-Paradis": [
+          "University of Florida"
+        ],
+        "Damon L. Woodard": [
+          "University of Florida"
+        ],
+        "Navid Asadizanjani": [
+          "University of Florida"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Most semantic image annotation platforms suffer severe bottlenecks when handling large images, complex regions of interest, or numerous distinct foreground regions in a single image. We have developed the Semi-Supervised Semantic Annotator (S3A) to address each of these issues and facilitate rapid collection of ground truth pixel-level labeled data. Such a feat is accomplished through a robust and easy-to-extend integration of arbitrary python image processing functions into the semantic labeling process. Importantly, the framework devised for this application allows easy visualization and machine learning prediction of arbitrary formats and amounts of per-component metadata. To our knowledge, the ease and flexibility offered are unique to S3A among all open-source alternatives."
+      ],
+      "keywords": "Semantic annotation, Image labeling, Semi-supervised, Region of interest",
+      "copyright_holder": "Nathan Jessurun et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 6,
+      "page": {
+        "start": 7,
+        "stop": 12
+      },
+      "paper_id": "221_jessurun",
+      "doi": "10.25080/majora-212e5952-001"
+    },
+    {
+      "title": "Galyleo: A General-Purpose Extensible Visualization Solution",
+      "authors": "Rick McGeer, Andreas Bergen, Mahdiyar Biazi, Matt Hemmings, Robin Schreiber",
+      "author": [
+        "Rick McGeer",
+        "Andreas Bergen",
+        "Mahdiyar Biazi",
+        "Matt Hemmings",
+        "Robin Schreiber"
+      ],
+      "author_email": [
+        "rick.mcgeer@engageLively.com",
+        "abergen@engageLively.com",
+        "mahdi.biazi@engageLively.com",
+        "mhemmings@engageLively.com",
+        "robin.schreiber@engageLively.com"
+      ],
+      "author_institution": [
+        "engageLively",
+        "engageLively",
+        "engageLively",
+        "engageLively",
+        "engageLively"
+      ],
+      "author_institution_map": {
+        "Rick McGeer": [
+          "engageLively"
+        ],
+        "Andreas Bergen": [
+          "engageLively"
+        ],
+        "Mahdiyar Biazi": [
+          "engageLively"
+        ],
+        "Matt Hemmings": [
+          "engageLively"
+        ],
+        "Robin Schreiber": [
+          "engageLively"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Galyleo is an open-source, extensible dashboarding solution integrated with JupyterLab jupyterlab.  Galyleo is a standalone web application integrated as an iframe lawson2011introducing into a JupyterLab tab.  Users generate data for the dashboard inside a Jupyter Notebook kluyver2016jupyter, which transmits the data through message passing mdnMessage to the dashboard;  users use drag-and-drop operations to add widgets to filter, and charts to display the data,  shapes, text, and images.   The dashboard is saved as a JSON crockford2006application file in the user’s filesystem in the same directory as the Notebook."
+      ],
+      "keywords": "JupyterLab, JupyterLab extension,  Data visualization",
+      "copyright_holder": "Rick McGeer et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 9,
+      "page": {
+        "start": 13,
+        "stop": 21
+      },
+      "paper_id": "72_galyleo",
+      "doi": "10.25080/majora-212e5952-002"
+    },
+    {
+      "title": "USACE Coastal Engineering Toolkit and a Method of Creating a Web-Based Application",
+      "authors": "Amanda Catlett, Theresa R. Coumbe, Scott D. Christensen, Mary A. Byrant",
+      "author": [
+        "Amanda Catlett",
+        "Theresa R. Coumbe",
+        "Scott D. Christensen",
+        "Mary A. Byrant"
+      ],
+      "author_email": [
+        "amanda.r.catlett@erdc.dren.mil",
+        "theresa.r.coumbe@erdc.dren.mil",
+        "scott.d.christensen@erdc.dren.mil",
+        "mary.a.byrant@erdc.dren.mil"
+      ],
+      "author_institution": [
+        "ERDC",
+        "ERDC",
+        "ERDC",
+        "ERDC"
+      ],
+      "author_institution_map": {
+        "Amanda Catlett": [
+          "ERDC"
+        ],
+        "Theresa R. Coumbe": [
+          "ERDC"
+        ],
+        "Scott D. Christensen": [
+          "ERDC"
+        ],
+        "Mary A. Byrant": [
+          "ERDC"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "In the early 1990s the Automated Coastal Engineering Systems, ACES, was created with the goal of providing\nstate-of-the-art computer-based tools to increase the accuracy, reliability, and cost-effectiveness of Corps coastal\nengineering endeavors. Over the past 30 years, ACES has become less and less accessible to engineers. An\nupdated version of ACES was necessary for use in coastal engineering. Our goal was to bring the tools in ACES to a user-friendly\nweb-based dashboard that would allow a wide range of users to be able to easily and quickly visualize results. We will\ndiscuss how we restructured the code using class inheritance and the three libraries Param, Panel, and HoloViews to\ncreate an extensible, interactive, graphical user interface. We have created the USACE Coastal Engineering Toolkit,\nUCET, which is a web-based application that contains 20 of the tools in ACES. UCET serves as an outline for the process\nof taking a model or set of tools and developing web-based application that can produce visualizations of the results."
+      ],
+      "keywords": "GUI, Param, Panel, HoloViews",
+      "copyright_holder": "Amanda Catlett et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 4,
+      "page": {
+        "start": 22,
+        "stop": 25
+      },
+      "paper_id": "Catlett_Amanda",
+      "doi": "10.25080/majora-212e5952-003"
+    },
+    {
+      "title": "Search for Extraterrestrial Intelligence: GPU Accelerated TurboSETI",
+      "authors": "Luigi Cruz, Wael Farah, Richard Elkins",
+      "author": [
+        "Luigi Cruz",
+        "Wael Farah",
+        "Richard Elkins"
+      ],
+      "author_email": [
+        "lfcruz@seti.org",
+        "wfarah@seti.org"
+      ],
+      "author_institution": [
+        "SETI Institute",
+        "SETI Institute",
+        "SETI Institute"
+      ],
+      "author_institution_map": {
+        "Luigi Cruz": [
+          "SETI Institute"
+        ],
+        "Wael Farah": [
+          "SETI Institute"
+        ],
+        "Richard Elkins": [
+          "SETI Institute"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "A common technique adopted by the Search For Extraterrestrial Intelligence (SETI) community is monitoring electromagnetic radiation for signs of extraterrestrial technosignatures using ground-based radio observatories.\nThe analysis is made using a Python-based software called TurboSETI to detect narrowband drifting signals inside the recordings that can mean a technosignature.\nThe data stream generated by a telescope can easily reach the rate of terabits per second.\nOur goal was to improve the processing speeds by writing a GPU-accelerated backend in addition to the original CPU-based implementation of the de-doppler algorithm used to integrate the power of drifting signals.\nWe discuss how we ported a CPU-only program to leverage the parallel capabilities of a GPU using CuPy, Numba, and custom CUDA kernels.\nThe accelerated backend reached a speed-up of an order of magnitude over the CPU implementation."
+      ],
+      "keywords": "gpu, numba, cupy, seti, turboseti",
+      "copyright_holder": "Luigi Cruz et al.",
+      "video": "",
+      "bibliography": "reference",
+      "pages": 2,
+      "page": {
+        "start": 26,
+        "stop": 27
+      },
+      "paper_id": "Luigi_Cruz",
+      "doi": "10.25080/majora-212e5952-004"
+    },
+    {
+      "title": "Experience report of physics-informed neural networks in fluid simulations: pitfalls and frustration",
+      "authors": "Pi-Yueh Chuang, Lorena A. Barba",
+      "author": [
+        "Pi-Yueh Chuang",
+        "Lorena A. Barba"
+      ],
+      "author_email": [
+        "pychuang@gwu.edu",
+        "labarba@gwu.edu"
+      ],
+      "author_institution": [
+        "Department of Mechanical and Aerospace Engineering, The George Washington University, Washington, DC 20052, USA",
+        "Department of Mechanical and Aerospace Engineering, The George Washington University, Washington, DC 20052, USA"
+      ],
+      "author_institution_map": {
+        "Pi-Yueh Chuang": [
+          "Department of Mechanical and Aerospace Engineering, The George Washington University, Washington, DC 20052, USA"
+        ],
+        "Lorena A. Barba": [
+          "Department of Mechanical and Aerospace Engineering, The George Washington University, Washington, DC 20052, USA"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Though PINNs (physics-informed neural networks) are now deemed as a complement to traditional CFD (computational fluid dynamics) solvers rather than a replacement, their ability to solve the Navier-Stokes equations without given data is still of great interest.\nThis report presents our not-so-successful experiments of solving the Navier-Stokes equations with PINN as a replacement to traditional solvers.\nWe aim to, with our experiments, prepare readers for the challenges they may face if they are interested in data-free PINN.\nIn this work, we used two standard flow problems: 2D Taylor-Green vortex at  and 2D cylinder flow at .\nThe PINN method solved the 2D Taylor-Green vortex problem with acceptable results, and we used this flow as an accuracy and performance benchmark.\nAbout 32 hours of training were required for the PINN method's accuracy to match the accuracy of a  finite-difference simulation, which took less than 20 seconds.\nThe 2D cylinder flow, on the other hand, did not produce a physical solution.\nThe PINN method behaved like a steady-flow solver and did not capture the vortex shedding phenomenon.\nBy sharing our experience, we would like to emphasize that the PINN method is still a work-in-progress, especially in terms of solving flow problems without any given data.\nMore work is needed to make PINN feasible for real-world problems in such applications.\n(Reproducibility package: pi\\_yueh\\_chuang\\_2022\\_6592457.)"
+      ],
+      "keywords": "computational fluid dynamics, deep learning, physics-informed neural network",
+      "copyright_holder": "Pi-Yueh Chuang et al.",
+      "video": "",
+      "bibliography": "reference",
+      "pages": 9,
+      "page": {
+        "start": 28,
+        "stop": 36
+      },
+      "paper_id": "PiYueh_Chuang",
+      "doi": "10.25080/majora-212e5952-005"
+    },
+    {
+      "title": "atoMEC: An open-source average-atom Python code",
+      "authors": "Timothy J. Callow, Daniel Kotik, Eli Kraisler, Attila Cangi",
+      "author": [
+        "Timothy J. Callow",
+        "Daniel Kotik",
+        "Eli Kraisler",
+        "Attila Cangi"
+      ],
+      "author_email": [
+        "t.callow@hzdr.de",
+        "d.kotik@hzdr.de",
+        "eli.kraisler@mail.huji.ac.il",
+        "a.cangi@hzdr.de"
+      ],
+      "author_institution": [
+        "Center for Advanced Systems Understanding (CASUS), D-02826 Görlitz, Germany",
+        "Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany",
+        "Center for Advanced Systems Understanding (CASUS), D-02826 Görlitz, Germany",
+        "Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany",
+        "Fritz Haber Center for Molecular Dynamics and Institute of Chemistry, The Hebrew University of Jerusalem, 9091401 Jerusalem, Israel",
+        "Center for Advanced Systems Understanding (CASUS), D-02826 Görlitz, Germany",
+        "Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany"
+      ],
+      "author_institution_map": {
+        "Timothy J. Callow": [
+          "Center for Advanced Systems Understanding (CASUS), D-02826 Görlitz, Germany",
+          "Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany"
+        ],
+        "Daniel Kotik": [
+          "Center for Advanced Systems Understanding (CASUS), D-02826 Görlitz, Germany",
+          "Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany"
+        ],
+        "Eli Kraisler": [
+          "Fritz Haber Center for Molecular Dynamics and Institute of Chemistry, The Hebrew University of Jerusalem, 9091401 Jerusalem, Israel"
+        ],
+        "Attila Cangi": [
+          "Center for Advanced Systems Understanding (CASUS), D-02826 Görlitz, Germany",
+          "Helmholtz-Zentrum Dresden-Rossendorf, D-01328 Dresden, Germany"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Average-atom models are an important tool in studying matter under extreme conditions, such as those conditions experienced in planetary cores, brown and white dwarfs, and during inertial confinement fusion.\nIn the right context, average-atom models can yield results with similar accuracy to simulations which require orders of magnitude more computing time, and thus can greatly reduce financial and environmental costs.\nUnfortunately, due to the wide range of possible models and approximations, and the lack of open-source codes, average-atom models can at times appear inaccessible.\nIn this paper, we present our open-source average-atom code, atoMEC.\nWe explain the aims and structure of atoMEC to illuminate the different stages and options in an average-atom calculation, and to facilitate community contributions.\nWe also discuss the use of various open-source Python packages in atoMEC, which have expedited its development."
+      ],
+      "keywords": "computational physics, plasma physics, atomic physics, materials science",
+      "copyright_holder": "Timothy J. Callow et al.",
+      "video": "",
+      "bibliography": "main",
+      "pages": 9,
+      "page": {
+        "start": 37,
+        "stop": 45
+      },
+      "paper_id": "Timothy_Callow",
+      "doi": "10.25080/majora-212e5952-006"
+    },
+    {
+      "title": "Automatic random variate generation in Python",
+      "authors": "Christoph Baumgarten, Tirth Patel",
+      "author": [
+        "Christoph Baumgarten",
+        "Tirth Patel"
+      ],
+      "author_email": [
+        "christoph.baumgarten@gmail.com",
+        "tirthasheshpatel@gmail.com"
+      ],
+      "author_institution": [
+        "Unaffiliated"
+      ],
+      "author_institution_map": {
+        "Christoph Baumgarten": [
+          "Unaffiliated"
+        ],
+        "Tirth Patel": []
+      },
+      "author_orcid_map": {
+        "Christoph Baumgarten": "0000-0002-1168-3359"
+      },
+      "abstract": [
+        "The generation of random variates is an important tool that is required in\nmany applications. Various software programs or packages contain generators\nfor standard distributions like the normal, exponential or Gamma, e.g., the\nprogramming language R and the packages SciPy and NumPy in Python. However,\nit is not uncommon that sampling from new/non-standard distributions is\nrequired. Instead of deriving specific generators in such situations,\nso-called automatic or black-box methods have been developed. These allow\nthe user to generate random variates from fairly large classes of\ndistributions by only specifying some properties of the distributions (e.g.\nthe density and/or cumulative distribution function). In this note, we\ndescribe the implementation of such methods from the C library UNU.RAN in\nthe Python package SciPy and provide a brief overview of the functionality."
+      ],
+      "keywords": "numerical inversion, generation of random variates",
+      "copyright_holder": "Christoph Baumgarten et al.",
+      "video": "",
+      "bibliography": "bib",
+      "pages": 6,
+      "page": {
+        "start": 46,
+        "stop": 51
+      },
+      "paper_id": "Tirth_Patel",
+      "doi": "10.25080/majora-212e5952-007"
+    },
+    {
+      "title": "Utilizing SciPy and other open source packages to provide a powerful API for materials manipulation in the Schrödinger Materials Suite",
+      "authors": "Alexandr Fonari, Farshad Fallah, Michael Rauch",
+      "author": [
+        "Alexandr Fonari",
+        "Farshad Fallah",
+        "Michael Rauch"
+      ],
+      "author_email": [
+        "sasha.fonari@schrodinger.com",
+        "farshad.fallah@schrodinger.com",
+        "michael.rauch@schrodinger.com"
+      ],
+      "author_institution": [
+        "Schrödinger Inc., 1540 Broadway, 24th Floor. New York, NY 10036",
+        "Schrödinger Inc., 1540 Broadway, 24th Floor. New York, NY 10036",
+        "Schrödinger Inc., 1540 Broadway, 24th Floor. New York, NY 10036"
+      ],
+      "author_institution_map": {
+        "Alexandr Fonari": [
+          "Schrödinger Inc., 1540 Broadway, 24th Floor. New York, NY 10036"
+        ],
+        "Farshad Fallah": [
+          "Schrödinger Inc., 1540 Broadway, 24th Floor. New York, NY 10036"
+        ],
+        "Michael Rauch": [
+          "Schrödinger Inc., 1540 Broadway, 24th Floor. New York, NY 10036"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "The use of several open source scientific packages in the Schrödinger Materials Science Suite will be discussed.\nA typical workflow for materials discovery will be described, discussing how open source packages have been incorporated at every stage.\nSome recent implementations of machine learning for materials discovery will be discussed, as well as how open source packages were leveraged to achieve results faster and more efficiently."
+      ],
+      "keywords": "materials, active learning, OLED, deposition, evaporation",
+      "copyright_holder": "Alexandr Fonari et al.",
+      "video": "",
+      "bibliography": "refs",
+      "pages": 8,
+      "page": {
+        "start": 52,
+        "stop": 59
+      },
+      "paper_id": "alexandr_fonari",
+      "doi": "10.25080/majora-212e5952-008"
+    },
+    {
+      "title": "A Novel Pipeline for Cell Instance Segmentation, Tracking and Motility Classification of Toxoplasma Gondii in 3D Space",
+      "authors": "Seyed Alireza Vaezi, Gianni Orlando, Mojtaba Fazli, Gary Ward, Silvia Moreno, Shannon Quinn",
+      "author": [
+        "Seyed Alireza Vaezi",
+        "Gianni Orlando",
+        "Mojtaba Fazli",
+        "Gary Ward",
+        "Silvia Moreno",
+        "Shannon Quinn"
+      ],
+      "author_email": [
+        "sv22900@uga.edu",
+        "gro68561@uga.edu",
+        "mfazli@meei.harvard.edu",
+        "Gary.Ward@uvm.edu",
+        "smoreno@uga.edu",
+        "spq@uga.edu"
+      ],
+      "author_institution": [
+        "University of Georgia",
+        "University of Georgia",
+        "harvard University",
+        "University of Vermont",
+        "University of Georgia",
+        "University of Georgia"
+      ],
+      "author_institution_map": {
+        "Seyed Alireza Vaezi": [
+          "University of Georgia"
+        ],
+        "Gianni Orlando": [
+          "University of Georgia"
+        ],
+        "Mojtaba Fazli": [
+          "harvard University"
+        ],
+        "Gary Ward": [
+          "University of Vermont"
+        ],
+        "Silvia Moreno": [
+          "University of Georgia"
+        ],
+        "Shannon Quinn": [
+          "University of Georgia"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Toxoplasma gondii is the parasitic protozoan that causes disseminated toxoplasmosis, a disease that is estimated to infect around one-third of the world's population. While the disease is commonly asymptomatic, the success of the parasite is in large part due to its ability to easily spread through nucleated cells. The virulence of T. gondii is predicated on the parasite's motility. Thus the inspection of motility patterns during its lytic cycle has become a topic of keen interest. Current cell tracking projects usually focus on cell images captured in 2D which are not a true representation of the actual motion of a cell. Current 3D tracking projects lack a comprehensive pipeline covering all phases of preprocessing, cell detection, cell instance segmentation, tracking, and motion classification, and merely implement a subset of the phases. Moreover, current 3D segmentation and tracking pipelines are not targeted for users with less experience in deep learning packages. Our pipeline, TSeg, on the other hand, is developed for segmenting, tracking, and classifying the motility phenotypes of T. gondii in 3D microscopic images. Although TSeg is built initially focusing on T. gondii, it provides generic functions to allow users with similar but distinct applications to use it off-the-shelf. Interacting with all of TSeg's modules is possible through our Napari plugin which is developed mainly off the familiar SciPy scientific stack. Additionally, our plugin is designed with a user-friendly GUI in Napari which adds several benefits to each step of the pipeline such as visualization and representation in 3D. TSeg proves to fulfill a better generalization, making it capable of delivering accurate results with images of other cell types."
+      ],
+      "keywords": "",
+      "copyright_holder": "Seyed Alireza Vaezi et al.",
+      "video": "",
+      "bibliography": "paper",
+      "pages": 4,
+      "page": {
+        "start": 60,
+        "stop": 63
+      },
+      "paper_id": "alireza_vaezi",
+      "doi": "10.25080/majora-212e5952-009"
+    },
+    {
+      "title": "The myth of the normal curve and what to do about it",
+      "authors": "Allan Campopiano",
+      "author": [
+        "Allan Campopiano"
+      ],
+      "author_email": [
+        "allan@deepnote.com"
+      ],
+      "author_institution": [],
+      "author_institution_map": {
+        "Allan Campopiano": []
+      },
+      "author_orcid_map": {},
+      "abstract": [],
+      "keywords": "Python, R, robust statistics, bootstrapping, trimmed mean, data science, hypothesis testing",
+      "copyright_holder": "Allan Campopiano.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 5,
+      "page": {
+        "start": 64,
+        "stop": 68
+      },
+      "paper_id": "allan_campopiano",
+      "doi": "10.25080/majora-212e5952-00a"
+    },
+    {
+      "title": "Python for Global Applications:  teaching scientific Python in context to law and diplomacy students",
+      "authors": "Anna Haensch, Karin Knudson",
+      "author": [
+        "Anna Haensch",
+        "Karin Knudson"
+      ],
+      "author_email": [
+        "anna.haensch@tufts.edu",
+        "karin.knudson@tufts.edu"
+      ],
+      "author_institution": [
+        "Tufts University",
+        "Data Intensive Studies Center",
+        "Tufts University",
+        "Data Intensive Studies Center"
+      ],
+      "author_institution_map": {
+        "Anna Haensch": [
+          "Tufts University",
+          "Data Intensive Studies Center"
+        ],
+        "Karin Knudson": [
+          "Tufts University",
+          "Data Intensive Studies Center"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "For students across domains and disciplines, the message has been communicated loud and clear: data skills are an essential qualification for today’s job market.  This includes not only the traditional introductory stats coursework but also machine learning, artificial intelligence, and programming in Python or R. Consequently, there has been significant student-initiated demand for data analytic and computational skills sometimes with very clear objectives in mind, and other times guided by a vague sense of “the work I want to do will require this.”  Now we have options. If we train students using “black box” algorithms without attending to the technical choices involved, then we run the risk of unleashing practitioners who might do more harm than good.  On the other hand, courses that completely unpack the “black box” can be so steeped in theory that the barrier to entry becomes too high for students from social science and policy backgrounds, thereby excluding critical voices.  In sum, both of these options lead to a pitfall that has gained significant media attention over recent years: the harms caused by algorithms that are implemented without sufficient attention to human context. In this paper, we - two mathematicians turned data scientists - present a framework for teaching introductory data science skills in a highly contextualized and domain flexible environment.  We will present example course outlines at the semester, weekly, and daily level, and share materials that we think hold promise."
+      ],
+      "keywords": "computational social science, public policy, data science, teaching with Python",
+      "copyright_holder": "Anna Haensch et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 6,
+      "page": {
+        "start": 69,
+        "stop": 74
+      },
+      "paper_id": "anna_haensch",
+      "doi": "10.25080/majora-212e5952-00b"
+    },
+    {
+      "title": "Papyri: better documentation for the scientific ecosystem in Jupyter",
+      "authors": "Matthias Bussonnier, Camille Carvalho",
+      "author": [
+        "Matthias Bussonnier",
+        "Camille Carvalho"
+      ],
+      "author_email": [
+        "bussonniermatthias@gmail.com",
+        ""
+      ],
+      "author_institution": [
+        "QuanSight, Inc",
+        "Digital Ours Lab, SARL.",
+        "University of California Merced, Merced, CA, USA",
+        "Univ Lyon, INSA Lyon, UJM, UCBL, ECL, CNRS UMR 5208, ICJ, F-69621, France"
+      ],
+      "author_institution_map": {
+        "Matthias Bussonnier": [
+          "QuanSight, Inc",
+          "Digital Ours Lab, SARL."
+        ],
+        "Camille Carvalho": [
+          "University of California Merced, Merced, CA, USA",
+          "Univ Lyon, INSA Lyon, UJM, UCBL, ECL, CNRS UMR 5208, ICJ, F-69621, France"
+        ]
+      },
+      "author_orcid_map": {
+        "Matthias Bussonnier": "0000-0002-7636-8632",
+        "Camille Carvalho": "0000-0002-8426-549X"
+      },
+      "abstract": [
+        "We present here the idea behind Papyri, a framework we are developing to\nprovide a better documentation experience for the scientific ecosystem. In\nparticular, we wish to provide a documentation browser (from within Jupyter or\nother IDEs and Python editors) that gives a unified experience, cross library\nnavigation search and indexing. By decoupling documentation generation from\nrendering we hope this can help address some of the documentation\naccessibility concerns, and allow customisation based on users' preferences."
+      ],
+      "keywords": "Documentation, Jupyter, ecosystem, accessibility",
+      "copyright_holder": "Matthias Bussonnier et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 8,
+      "page": {
+        "start": 75,
+        "stop": 82
+      },
+      "paper_id": "bussonnier",
+      "doi": "10.25080/majora-212e5952-00c"
+    },
+    {
+      "title": "Bayesian Estimation and Forecasting of Time Series in statsmodels",
+      "authors": "Chad Fulton",
+      "author": [
+        "Chad Fulton"
+      ],
+      "author_email": [
+        "chad.t.fulton@frb.gov"
+      ],
+      "author_institution": [
+        "Federal Reserve Board of Governors"
+      ],
+      "author_institution_map": {
+        "Chad Fulton": [
+          "Federal Reserve Board of Governors"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Statsmodels, a Python library for statistical and econometric analysis,\nhas traditionally focused on frequentist inference, including in its\nmodels for time series data. This paper introduces the powerful features\nfor Bayesian inference of time series models that exist in statsmodels, with\napplications to model fitting, forecasting, time series decomposition,\ndata simulation, and impulse response functions."
+      ],
+      "keywords": "time series, forecasting, bayesian inference, Markov chain Monte Carlo,\nstatsmodels",
+      "copyright_holder": "Chad Fulton.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 7,
+      "page": {
+        "start": 83,
+        "stop": 89
+      },
+      "paper_id": "chad_fulton",
+      "doi": "10.25080/majora-212e5952-00d"
+    },
+    {
+      "title": "Python vs. the pandemic: a case study in high-stakes software development",
+      "authors": "Cliff C. Kerr, Robyn M. Stuart, Dina Mistry, Romesh G. Abeysuriya, Jamie A. Cohen, Lauren George, Michał Jastrzebski, Michael Famulare, Edward Wenger, Daniel J. Klein",
+      "author": [
+        "Cliff C. Kerr",
+        "Robyn M. Stuart",
+        "Dina Mistry",
+        "Romesh G. Abeysuriya",
+        "Jamie A. Cohen",
+        "Lauren George",
+        "Michał Jastrzebski",
+        "Michael Famulare",
+        "Edward Wenger",
+        "Daniel J. Klein"
+      ],
+      "author_email": [
+        "cliff@covasim.org",
+        "robyn@math.ku.dk",
+        "dina.c.mistry@gmail.com",
+        "romesh.abeysuriya@burnet.edu.au",
+        "jamie.cohen@gatesfoundation.org",
+        "lauren.george@live.com",
+        "inc007@gmail.com",
+        "mike.famulare@gatesfoundation.org",
+        "edward.wenger@gatesfoundation.org",
+        "daniel.klein@gatesfoundation.org"
+      ],
+      "author_institution": [
+        "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA",
+        "School of Physics, University of Sydney, Sydney, Australia",
+        "Department of Mathematical Sciences, University of Copenhagen, Copenhagen, Denmark",
+        "Burnet Institute, Melbourne, Australia",
+        "Twitter, Seattle, USA",
+        "Burnet Institute, Melbourne, Australia",
+        "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA",
+        "Microsoft, Seattle, USA",
+        "GitHub, San Francisco, USA",
+        "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA",
+        "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA",
+        "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA"
+      ],
+      "author_institution_map": {
+        "Cliff C. Kerr": [
+          "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA",
+          "School of Physics, University of Sydney, Sydney, Australia"
+        ],
+        "Robyn M. Stuart": [
+          "Department of Mathematical Sciences, University of Copenhagen, Copenhagen, Denmark",
+          "Burnet Institute, Melbourne, Australia"
+        ],
+        "Dina Mistry": [
+          "Twitter, Seattle, USA"
+        ],
+        "Romesh G. Abeysuriya": [
+          "Burnet Institute, Melbourne, Australia"
+        ],
+        "Jamie A. Cohen": [
+          "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA"
+        ],
+        "Lauren George": [
+          "Microsoft, Seattle, USA"
+        ],
+        "Michał Jastrzebski": [
+          "GitHub, San Francisco, USA"
+        ],
+        "Michael Famulare": [
+          "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA"
+        ],
+        "Edward Wenger": [
+          "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA"
+        ],
+        "Daniel J. Klein": [
+          "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "When it became clear in early 2020 that COVID-19 was going to be a major public health threat, politicians and public health officials turned to academic disease modelers like us for urgent guidance. Academic software development is typically a slow and haphazard process, and we realized that business-as-usual would not suffice for dealing with this crisis. Here we describe the case study of how we built Covasim (covasim.org), an agent-based model of COVID-19 epidemiology and public health interventions, by using standard Python libraries like NumPy and Numba, along with less common ones like Sciris (sciris.org). Covasim was created in a few weeks, an order of magnitude faster than the typical model development process, and achieves performance comparable to C++ despite being written in pure Python. It has become one of the most widely adopted COVID models, and is used by researchers and policymakers in dozens of countries. Covasim's rapid development was enabled not only by leveraging the Python scientific computing ecosystem, but also by adopting coding practices and workflows that lowered the barriers to entry for scientific contributors without sacrificing either performance or rigor."
+      ],
+      "keywords": "COVID-19, SARS-CoV-2, Epidemiology, Mathematical modeling, NumPy, Numba, Sciris",
+      "copyright_holder": "Cliff C. Kerr et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 8,
+      "page": {
+        "start": 90,
+        "stop": 97
+      },
+      "paper_id": "cliff_kerr",
+      "doi": "10.25080/majora-212e5952-00e"
+    },
+    {
+      "title": "Pylira: deconvolution of images in the presence of Poisson noise",
+      "authors": "Axel Donath, Aneta Siemiginowska, Vinay Kashyap, Douglas Burke, Karthik Reddy Solipuram, David van Dyk",
+      "author": [
+        "Axel Donath",
+        "Aneta Siemiginowska",
+        "Vinay Kashyap",
+        "Douglas Burke",
+        "Karthik Reddy Solipuram",
+        "David van Dyk"
+      ],
+      "author_email": [
+        "axel.donath@cfa.harvard.edu",
+        "asiemiginowska@cfa.harvard.edu",
+        "vkashyap@cfa.harvard.edu",
+        "dburke@cfa.harvard.edu"
+      ],
+      "author_institution": [
+        "Center for Astrophysics | Harvard \\& Smithsonian",
+        "Center for Astrophysics | Harvard \\& Smithsonian",
+        "Center for Astrophysics | Harvard \\& Smithsonian",
+        "Center for Astrophysics | Harvard \\& Smithsonian",
+        "University of Maryland Baltimore County",
+        "Imperial College London"
+      ],
+      "author_institution_map": {
+        "Axel Donath": [
+          "Center for Astrophysics | Harvard \\& Smithsonian"
+        ],
+        "Aneta Siemiginowska": [
+          "Center for Astrophysics | Harvard \\& Smithsonian"
+        ],
+        "Vinay Kashyap": [
+          "Center for Astrophysics | Harvard \\& Smithsonian"
+        ],
+        "Douglas Burke": [
+          "Center for Astrophysics | Harvard \\& Smithsonian"
+        ],
+        "Karthik Reddy Solipuram": [
+          "University of Maryland Baltimore County"
+        ],
+        "David van Dyk": [
+          "Imperial College London"
+        ]
+      },
+      "author_orcid_map": {
+        "Axel Donath": "0000-0003-4568-7005",
+        "Aneta Siemiginowska": "0000-0002-0905-7375",
+        "Vinay Kashyap": "0000-0002-3869-7996"
+      },
+      "abstract": [
+        "All physical and astronomical imaging observations are degraded by the finite angular\nresolution of the camera and telescope systems. The recovery of the true image is limited by\nboth how well the instrument characteristics are known and by the magnitude of measurement noise.\nIn the case of a high signal to noise ratio data, the image can be sharpened or “deconvolved” robustly\nby using established standard methods such as the Richardson-Lucy method. However, the situation changes\nfor sparse data and the low signal to noise regime, such as those frequently encountered in\nX-ray and gamma-ray astronomy, where deconvolution leads inevitably to an amplification\nof noise and poorly reconstructed images. However, the results in this regime can be improved\nby making use of physically meaningful prior assumptions and statistically principled\nmodeling techniques. One proposed method is the LIRA algorithm, which\nrequires smoothness of the reconstructed image at multiple scales. In this contribution, we\nintroduce a new python package called Pylira, which exposes the original C implementation\nof the LIRA algorithm to Python users. We briefly describe the package structure, development\nsetup and show a Chandra as well as Fermi-LAT analysis example."
+      ],
+      "keywords": "deconvolution, point spread function, poisson, low counts, X-ray, gamma-ray",
+      "copyright_holder": "Axel Donath et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 7,
+      "page": {
+        "start": 98,
+        "stop": 104
+      },
+      "paper_id": "donath",
+      "doi": "10.25080/majora-212e5952-00f"
+    },
+    {
+      "title": "Codebraid Preview for VS Code: Pandoc Markdown Preview with Jupyter Kernels",
+      "authors": "Geoffrey M. Poore",
+      "author": [
+        "Geoffrey M. Poore"
+      ],
+      "author_email": [
+        "gpoore@uu.edu"
+      ],
+      "author_institution": [
+        "Union University"
+      ],
+      "author_institution_map": {
+        "Geoffrey M. Poore": [
+          "Union University"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Codebraid Preview is a VS Code extension that provides a live preview of\nPandoc Markdown documents with optional support for executing embedded\ncode.  Unlike typical Markdown previews, all Pandoc features are fully\nsupported because Pandoc itself generates the preview.  The Markdown source\nand the preview are fully integrated with features like bidirectional\nscroll sync.  The preview supports LaTeX math via KaTeX.  Code blocks and\ninline code can be executed with Codebraid, using either its built-in\nexecution system or Jupyter kernels.  For executed code, any combination of\nthe code and its output can be displayed in the preview as well as the\nfinal document.  Code execution is non-blocking, so the preview always\nremains live and up-to-date even while code is still running."
+      ],
+      "keywords": "reproducibility, dynamic report generation, literate programming, Python,\nPandoc, Markdown, Project Jupyter",
+      "copyright_holder": "Geoffrey M. Poore.",
+      "video": "",
+      "bibliography": "poore",
+      "pages": 5,
+      "page": {
+        "start": 105,
+        "stop": 109
+      },
+      "paper_id": "geoffrey_poore",
+      "doi": "10.25080/majora-212e5952-010"
+    },
+    {
+      "title": "Incorporating Task-Agnostic Information in Task-Based Active Learning Using a Variational Autoencoder",
+      "authors": "Curtis Godwin, Meekail Zain, Nathan Safir, Bella Humphrey, Shannon P Quinn",
+      "author": [
+        "Curtis Godwin",
+        "Meekail Zain",
+        "Nathan Safir",
+        "Bella Humphrey",
+        "Shannon P Quinn"
+      ],
+      "author_email": [
+        "cmgodwin263@gmail.com",
+        "meekail.zain@uga.edu",
+        "nssafir@gmail.com",
+        "isabelladhumphrey@gmail.com",
+        "spq@uga.edu"
+      ],
+      "author_institution": [
+        "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA"
+      ],
+      "author_institution_map": {
+        "Curtis Godwin": [
+          "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Meekail Zain": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Nathan Safir": [
+          "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Bella Humphrey": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Shannon P Quinn": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+          "Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "It is often much easier and less expensive to collect data than to\nlabel it. Active learning (AL) (settles2009active) responds to this issue by selecting\nwhich unlabeled data are best to label next. Standard approaches\nutilize task-aware AL, which identifies informative samples based on\na trained supervised model. Task-agnostic AL\nignores the task model and instead makes selections based on learned\nproperties of the dataset. We seek to combine these approaches and\nmeasure the contribution of incorporating task-agnostic information\ninto standard AL, with the suspicion that the extra information in\nthe task-agnostic features may improve the selection process.\nWe test this on various AL methods using a ResNet\nclassifier with and without added unsupervised information from a\nvariational autoencoder (VAE). Although the results do not show a\nsignificant improvement, we investigate the effects on the\nacquisition function and suggest potential approaches for\nextending the work."
+      ],
+      "keywords": "active learning, variational autoencoder, deep learning, pytorch,\nsemi-supervised learning, unsupervised learning",
+      "copyright_holder": "Curtis Godwin et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 5,
+      "page": {
+        "start": 110,
+        "stop": 114
+      },
+      "paper_id": "godwin_zain",
+      "doi": "10.25080/majora-212e5952-011"
+    },
+    {
+      "title": "Awkward Packaging: building Scikit-HEP",
+      "authors": "Henry Schreiner, Jim Pivarski, Eduardo Rodrigues",
+      "author": [
+        "Henry Schreiner",
+        "Jim Pivarski",
+        "Eduardo Rodrigues"
+      ],
+      "author_email": [
+        "henryfs@princeton.edu",
+        "pivarski@princeton.edu",
+        "eduardo.rodrigues@liverpool.ac.uk"
+      ],
+      "author_institution": [
+        "Princeton University",
+        "Princeton University",
+        "University of Liverpool"
+      ],
+      "author_institution_map": {
+        "Henry Schreiner": [
+          "Princeton University"
+        ],
+        "Jim Pivarski": [
+          "Princeton University"
+        ],
+        "Eduardo Rodrigues": [
+          "University of Liverpool"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Scikit-HEP has grown rapidly over the last few years, not just to serve the\nneeds of the High Energy Physics (HEP) community, but in many ways, the\nPython ecosystem at large. AwkwardArray, boost-histogram/hist, and iminuit\nare examples of libraries that are used beyond the original HEP focus. In\nthis paper we will look at key packages in the ecosystem, and how the\ncollection of 30+ packages was developed and maintained. Also we will look\nat some of the software ecosystem contributions made to packages like\ncibuildwheel, pybind11, nox, scikit-build, build, and pipx that support this\neffort. We will also discuss the Scikit-HEP developer pages and initial\nWebAssembly support."
+      ],
+      "keywords": "packaging, ecosystem, high energy physics, community project",
+      "copyright_holder": "Henry Schreiner et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 6,
+      "page": {
+        "start": 115,
+        "stop": 120
+      },
+      "paper_id": "henry_schreiner",
+      "doi": "10.25080/majora-212e5952-012"
+    },
+    {
+      "title": "Keeping your Jupyter notebook code quality bar high (and production ready) with Ploomber",
+      "authors": "Ido Michael",
+      "author": [
+        "Ido Michael"
+      ],
+      "author_email": [
+        "ido@ploomber.io"
+      ],
+      "author_institution": [
+        "Ploomber"
+      ],
+      "author_institution_map": {
+        "Ido Michael": [
+          "Ploomber"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [],
+      "keywords": "",
+      "copyright_holder": "Ido Michael.",
+      "video": "",
+      "bibliography": "",
+      "pages": 4,
+      "page": {
+        "start": 121,
+        "stop": 124
+      },
+      "paper_id": "ido_michael",
+      "doi": "10.25080/majora-212e5952-013"
+    },
+    {
+      "title": "Likeness: a toolkit for connecting the social fabric of place to human dynamics",
+      "authors": "Joseph V. Tuccillo, James D. Gaboardi",
+      "author": [
+        "Joseph V. Tuccillo",
+        "James D. Gaboardi"
+      ],
+      "author_email": [
+        "tuccillojv@ornl.gov",
+        "gaboardijd@ornl.gov"
+      ],
+      "author_institution": [
+        "Oak Ridge National Laboratory",
+        "Oak Ridge National Laboratory"
+      ],
+      "author_institution_map": {
+        "Joseph V. Tuccillo": [
+          "Oak Ridge National Laboratory"
+        ],
+        "James D. Gaboardi": [
+          "Oak Ridge National Laboratory"
+        ]
+      },
+      "author_orcid_map": {
+        "Joseph V. Tuccillo": "0000-0002-5930-0943",
+        "James D. Gaboardi": "0000-0002-4776-6826"
+      },
+      "abstract": [
+        "The ability to produce richly-attributed synthetic populations is key for understanding\nhuman dynamics, responding to emergencies, and preparing for future events, all while\nprotecting individual privacy. The Likeness toolkit accomplishes these goals with a\nsuite of Python packages: pymedm/pymedm\\_legacy, livelike,\nand actlike. This production process is initialized in pymedm (or\npymedm\\_legacy) that utilizes census microdata records as the foundation on\nwhich disaggregated  spatial allocation matrices are built. The next step, performed by\nlivelike, is the generation of a fully autonomous agent population attributed\nwith hundreds of demographic census variables. The agent population synthesized in\nlivelike is then attributed with residential coordinates in actlike\nbased on block assignment and, finally, allocated to an optimal daytime activity\nlocation via the street network. We present a case study in Knox County, Tennessee,\nsynthesizing 30 populations of public K–12 school students \\& teachers and allocating\nthem to schools. Validation of our results shows they are highly promising by\nreplicating reported school enrollment and teacher capacity with a high degree of\nfidelity."
+      ],
+      "keywords": "activity spaces, agent-based modeling, human dynamics, population synthesis",
+      "copyright_holder": "Oak Ridge National Laboratory.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 11,
+      "page": {
+        "start": 125,
+        "stop": 135
+      },
+      "paper_id": "james_gaboardi",
+      "doi": "10.25080/majora-212e5952-014"
+    },
+    {
+      "title": "poliastro: a Python library for interactive astrodynamics",
+      "authors": "Juan Luis Cano Rodríguez, Jorge Martínez Garrido",
+      "author": [
+        "Juan Luis Cano Rodríguez",
+        "Jorge Martínez Garrido"
+      ],
+      "author_email": [
+        "hello@juanlu.space",
+        "contact@jorgemartinez.space"
+      ],
+      "author_institution": [
+        "Unaffiliated",
+        "Unaffiliated"
+      ],
+      "author_institution_map": {
+        "Juan Luis Cano Rodríguez": [
+          "Unaffiliated"
+        ],
+        "Jorge Martínez Garrido": [
+          "Unaffiliated"
+        ]
+      },
+      "author_orcid_map": {
+        "Juan Luis Cano Rodríguez": "0000-0002-2187-161X"
+      },
+      "abstract": [
+        "Space is more popular than ever, with the growing public awareness of interplanetary scientific missions,\nas well as the increasingly large number of satellite companies planning to deploy satellite constellations.\nPython has become a fundamental technology in the astronomical sciences,\nand it has also caught the attention of the Space Engineering community.",
+        "One of the requirements for designing a space mission is\nstudying the trajectories of satellites, probes, and other artificial objects,\nusually ignoring non-gravitational forces or treating them as perturbations:\nthe so-called n-body problem.\nHowever, for preliminary design studies and most practical purposes,\nit is sufficient to consider only two bodies: the object under study and its attractor.",
+        "Even though the two-body problem has many analytical solutions,\norbit propagation (the initial value problem) and targeting (the boundary value problem)\nremain computationally intensive because of long propagation times, tight tolerances, and vast solution spaces.\nOn the other hand, astrodynamics researchers often do not share\nthe source code they used to run analyses and simulations,\nwhich makes it challenging to try out new solutions.",
+        "This paper presents poliastro, an open-source Python library for interactive astrodynamics\nthat features an easy-to-use API and tools for quick visualization.\npoliastro implements core astrodynamics algorithms\n(such as the resolution of the Kepler and Lambert problems)\nand leverages numba, a Just-in-Time compiler for scientific Python,\nto optimize the running time.\nThanks to Astropy, poliastro can perform seamless coordinate frame conversions\nand use proper physical units and timescales.\nAt the moment, poliastro is the longest-lived Python library for astrodynamics,\nhas contributors from all around the world,\nand several New Space companies and people in academia use it."
+      ],
+      "keywords": "astrodynamics, orbital mechanics, orbit propagation, orbit visualization, two-body problem",
+      "copyright_holder": "Juan Luis Cano Rodríguez et al.",
+      "video": "https://www.youtube.com/watch?v=VCpTgU1pb5k",
+      "bibliography": "refs",
+      "pages": 11,
+      "page": {
+        "start": 136,
+        "stop": 146
+      },
+      "paper_id": "juanluis_cano_poliastro",
+      "doi": "10.25080/majora-212e5952-015"
+    },
+    {
+      "title": "A New Python API for Webots Robotics Simulations",
+      "authors": "Justin C. Fisher",
+      "author": [
+        "Justin C. Fisher"
+      ],
+      "author_email": [
+        "fisher@smu.edu"
+      ],
+      "author_institution": [
+        "Southern Methodist University, Department of Philosophy"
+      ],
+      "author_institution_map": {
+        "Justin C. Fisher": [
+          "Southern Methodist University, Department of Philosophy"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Webots is a popular open-source package for 3D robotics simulations.\nIt can also be used as a 3D interactive environment for other physics-based modeling, virtual reality, teaching or games. Webots has provided a simple API allowing Python programs to control robots and/or the simulated world, but this API is inefficient and does not provide many \\textquotedbl{}pythonic\\textquotedbl{} conveniences.\nA new Python API for Webots is presented that is more efficient and provides a more intuitive, easily usable, and \\textquotedbl{}pythonic\\textquotedbl{} interface."
+      ],
+      "keywords": "Webots, Python, Robotics, Robot Operating System (ROS), Open Dynamics Engine (ODE), 3D Physics Simulation",
+      "copyright_holder": "Justin C. Fisher.",
+      "video": "",
+      "bibliography": "",
+      "pages": 5,
+      "page": {
+        "start": 147,
+        "stop": 151
+      },
+      "paper_id": "justin_fisher",
+      "doi": "10.25080/majora-212e5952-016"
+    },
+    {
+      "title": "pyAudioProcessing: Audio Processing, Feature Extraction, and Machine Learning Modeling",
+      "authors": "Jyotika Singh",
+      "author": [
+        "Jyotika Singh"
+      ],
+      "author_email": [
+        "singhjyotika811@gmail.com"
+      ],
+      "author_institution": [
+        "Placemakr"
+      ],
+      "author_institution_map": {
+        "Jyotika Singh": [
+          "Placemakr"
+        ]
+      },
+      "author_orcid_map": {
+        "Jyotika Singh": "0000-0002-5442-3004"
+      },
+      "abstract": [
+        "pyAudioProcessing is a Python based library for processing audio data, constructing\nand extracting numerical features from audio, building and testing machine learning\nmodels, and classifying data with existing pre-trained audio classification models or\ncustom user-built models. MATLAB is a popular language of choice for a vast amount of\nresearch in the audio and speech processing domain. On the contrary, Python remains\nthe language of choice for a vast majority of machine learning research and\nfunctionality. This library contains features built in Python that were originally\npublished in MATLAB. pyAudioProcessing allows the user to\ncompute various features from audio files including Gammatone Frequency Cepstral\nCoefficients (GFCC), Mel Frequency Cepstral Coefficients (MFCC), spectral features,\nchroma features, and others such as beat-based and cepstrum-based features from audio.\nOne can use these features along with one’s own classification backend or any of the\npopular scikit-learn classifiers that have been integrated into pyAudioProcessing.\nCleaning functions to strip unwanted portions from the audio are another offering of the library.\nIt further contains integrations with other audio functionalities such as frequency and time-series\nvisualizations and audio format conversions. This software aims to provide\nmachine learning engineers, data scientists, researchers, and students with a set of baseline models\nto classify audio. The library is available at https://github.com/jsingh811/pyAudioProcessing\nand is under GPL-3.0 license."
+      ],
+      "keywords": "pyAudioProcessing, audio processing, audio data, audio classification, audio feature extraction,\ngfcc, mfcc, spectral features, spectrogram, chroma",
+      "copyright_holder": "Jyotika Singh.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 7,
+      "page": {
+        "start": 152,
+        "stop": 158
+      },
+      "paper_id": "jyotika_singh",
+      "doi": "10.25080/majora-212e5952-017"
+    },
+    {
+      "title": "Phylogeography: Analysis of genetic and climatic data of SARS-CoV-2",
+      "authors": "Aleksandr Koshkarov, Wanlin Li, My-Linh Luu, Nadia Tahiri",
+      "author": [
+        "Aleksandr Koshkarov",
+        "Wanlin Li",
+        "My-Linh Luu",
+        "Nadia Tahiri"
+      ],
+      "author_email": [
+        "Nadia.Tahiri@USherbrooke.ca",
+        "Wanlin.Li@USherbrooke.ca",
+        "luu.my-linh@courrier.uqam.ca",
+        "Nadia.Tahiri@USherbrooke.ca"
+      ],
+      "author_institution": [
+        "Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada",
+        "Center of Artificial Intelligence, Astrakhan State University, Astrakhan, 414056, Russia",
+        "Contributed equally",
+        "Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada",
+        "Contributed equally",
+        "Department of Computer Science, University of Quebec at Montreal, Montreal, QC, Canada",
+        "Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada"
+      ],
+      "author_institution_map": {
+        "Aleksandr Koshkarov": [
+          "Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada",
+          "Center of Artificial Intelligence, Astrakhan State University, Astrakhan, 414056, Russia",
+          "Contributed equally"
+        ],
+        "Wanlin Li": [
+          "Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada",
+          "Contributed equally"
+        ],
+        "My-Linh Luu": [
+          "Department of Computer Science, University of Quebec at Montreal, Montreal, QC, Canada"
+        ],
+        "Nadia Tahiri": [
+          "Department of Computer Science, University of Sherbrooke, Sherbrooke, QC J1K2R1, Canada"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Due to the fact that the SARS-CoV-2 pandemic reaches its peak, researchers around the globe are combining efforts to investigate the genetics of different variants to better deal with its distribution. This paper discusses phylogeographic approaches to examine how patterns of divergence within SARS-CoV-2 coincide with geographic features, such as climatic features.\nFirst, we propose a python-based bioinformatic pipeline called aPhylogeo for phylogeographic analysis written in Python 3 that help researchers better understand the distribution of the virus in specific regions via a configuration file, and then run all the analysis operations in a single run. In particular, the aPhylogeo tool determines which parts of the genetic sequence undergo a high mutation rate depending on geographic conditions, using a sliding window that moves along the genetic sequence alignment in user-defined steps and a window size. As a Python-based cross-platform program, aPhylogeo works on Windows®, MacOS X® and GNU/Linux. The implementation of this pipeline is publicly available on GitHub (https://github.com/tahiri-lab/aPhylogeo).\nSecond, we present an example of analysis of our new aPhylogeo tool on real data (SARS-CoV-2) to understand the occurrence of different variants."
+      ],
+      "keywords": "Phylogeography, SARS-CoV-2, Bioinformatics, Genetic, Climatic Condition",
+      "copyright_holder": "Aleksandr Koshkarov et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 8,
+      "page": {
+        "start": 159,
+        "stop": 166
+      },
+      "paper_id": "nadia_tahiri",
+      "doi": "10.25080/majora-212e5952-018"
+    },
+    {
+      "title": "Global optimization software library for research and education",
+      "authors": "Nadia Udler",
+      "author": [
+        "Nadia Udler"
+      ],
+      "author_email": [
+        "nadiakap@optonline.net"
+      ],
+      "author_institution": [
+        "University of Connecticut (Stamford)"
+      ],
+      "author_institution_map": {
+        "Nadia Udler": [
+          "University of Connecticut (Stamford)"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Machine learning models are often represented by functions given by computer programs. Optimization\nof such functions is a challenging task because traditional derivative based\noptimization methods with guaranteed convergence properties cannot be used.. This software\nallows to create new optimization methods with desired properties, based on basic modules.\nThese basic modules are designed in accordance with approach for constructing global optimization\nmethods based on potential theory KAP. These methods do not use derivatives of objective function\nand as a result work with nondifferentiable functions (or functions given by computer programs,\nor black box functions), but have guaranteed convergence. The software helps to understand\nprinciples of learning algorithms. This software may be used by researchers to design their own\nvariations or hybrids of known heuristic optimization methods. It may be used by students to\nunderstand how known heuristic optimization methods work and how certain parameters affect the behavior of the method."
+      ],
+      "keywords": "global optimization, black-box functions, algorithmically defined functions, potential functions",
+      "copyright_holder": "Nadia Udler.",
+      "video": "",
+      "bibliography": "",
+      "pages": 4,
+      "page": {
+        "start": 167,
+        "stop": 170
+      },
+      "paper_id": "nadiakap",
+      "doi": "10.25080/majora-212e5952-019"
+    },
+    {
+      "title": "Temporal Word Embeddings Analysis for Disease Prevention",
+      "authors": "Nathan Jacobi, Ivan Mo, Albert You, Krishi Kishore, Zane Page, Shannon P. Quinn, Tim Heckman",
+      "author": [
+        "Nathan Jacobi",
+        "Ivan Mo",
+        "Albert You",
+        "Krishi Kishore",
+        "Zane Page",
+        "Shannon P. Quinn",
+        "Tim Heckman"
+      ],
+      "author_email": [
+        "Nathan.Jacobi@uga.edu",
+        "Ivan.Mo@uga.edu",
+        "Albert.You@uga.edu",
+        "krishikishore10@gmail.com",
+        "zaneapage@gmail.com",
+        "spq@uga.edu",
+        "heckman@uga.edu"
+      ],
+      "author_institution": [
+        "Computer Science Department, University of Georgia",
+        "Computer Science Department, University of Georgia",
+        "Linguistics Department, University of Georgia",
+        "Computer Science Department, University of Georgia",
+        "Computer Science Department, University of Georgia",
+        "Computer Science Department, University of Georgia",
+        "Computer Science Department, University of Georgia",
+        "Cellular Biology Department, University of Georgia",
+        "Public Health Department, University of Georgia"
+      ],
+      "author_institution_map": {
+        "Nathan Jacobi": [
+          "Computer Science Department, University of Georgia"
+        ],
+        "Ivan Mo": [
+          "Computer Science Department, University of Georgia",
+          "Linguistics Department, University of Georgia"
+        ],
+        "Albert You": [
+          "Computer Science Department, University of Georgia"
+        ],
+        "Krishi Kishore": [
+          "Computer Science Department, University of Georgia"
+        ],
+        "Zane Page": [
+          "Computer Science Department, University of Georgia"
+        ],
+        "Shannon P. Quinn": [
+          "Computer Science Department, University of Georgia",
+          "Cellular Biology Department, University of Georgia"
+        ],
+        "Tim Heckman": [
+          "Public Health Department, University of Georgia"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Human languages' semantics and structure constantly change over time through mediums such as culturally significant events.\nBy viewing the semantic changes of words during notable events, contexts of existing and novel words can be predicted for similar, current events.\nBy studying the initial outbreak of a disease and the associated semantic shifts of select words,\nwe hope to be able to spot social media trends to prevent future outbreaks faster than traditional methods.\nTo explore this idea, we generate a temporal word embedding model that allows us to study word semantics evolving over time.\nUsing these temporal word embeddings, we use machine learning models to predict words associated with the disease outbreak."
+      ],
+      "keywords": "Natural Language Processing, Word Embeddings, Bioinformatics, Social Media, Disease Prediction",
+      "copyright_holder": "Nathan Jacobi et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 8,
+      "page": {
+        "start": 171,
+        "stop": 178
+      },
+      "paper_id": "nathan_jacobi_ivan_mo_albert_you",
+      "doi": "10.25080/majora-212e5952-01a"
+    },
+    {
+      "title": "Design of a Scientific Data Analysis Support Platform",
+      "authors": "Nathan Martindale, Jason Hite, Scott Stewart, Mark Adams",
+      "author": [
+        "Nathan Martindale",
+        "Jason Hite",
+        "Scott Stewart",
+        "Mark Adams"
+      ],
+      "author_email": [
+        "martindalena@ornl.gov",
+        "hitejm@ornl.gov",
+        "stewartsl@ornl.gov",
+        "adamsmb@ornl.gov"
+      ],
+      "author_institution": [
+        "Oak Ridge National Laboratory",
+        "Oak Ridge National Laboratory",
+        "Oak Ridge National Laboratory",
+        "Oak Ridge National Laboratory"
+      ],
+      "author_institution_map": {
+        "Nathan Martindale": [
+          "Oak Ridge National Laboratory"
+        ],
+        "Jason Hite": [
+          "Oak Ridge National Laboratory"
+        ],
+        "Scott Stewart": [
+          "Oak Ridge National Laboratory"
+        ],
+        "Mark Adams": [
+          "Oak Ridge National Laboratory"
+        ]
+      },
+      "author_orcid_map": {
+        "Nathan Martindale": "0000-0002-5036-5433",
+        "Jason Hite": "0000-0001-8931-5815",
+        "Scott Stewart": "0000-0003-4320-5818",
+        "Mark Adams": "0000-0002-5414-2800"
+      },
+      "abstract": [
+        "Software data analytic workflows are a critical aspect of modern scientific\nresearch and play a crucial role in testing scientific hypotheses. A typical\nscientific data analysis life cycle in a research project must include\nseveral steps that may not be fundamental to testing the hypothesis, but are\nessential for reproducibility. This includes tasks that have analogs to\nsoftware engineering practices such as versioning code, sharing code among\nresearch team members, maintaining a structured codebase, and tracking\nassociated resources such as software environments. Tasks unique to\nscientific research include designing, implementing, and modifying code that\ntests a hypothesis. This work refers to this code as an experiment, which\nis defined as a software analog to physical experiments.",
+        "A software experiment manager should support tracking and reproducing\nindividual experiment runs, organizing and presenting results, and storing\nand reloading intermediate data on long-running computations. A software\nexperiment manager with these features would reduce the time a researcher\nspends on tedious busywork and would enable more effective collaboration.\nThis work discusses the necessary design features in more depth, some of the\nexisting software packages that support this workflow, and a custom\ndeveloped open-source solution to address these needs."
+      ],
+      "keywords": "reproducible research, experiment life cycle, data analysis support",
+      "copyright_holder": "Oak Ridge National Laboratory.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 8,
+      "page": {
+        "start": 179,
+        "stop": 186
+      },
+      "paper_id": "nathan_martindale",
+      "doi": "10.25080/majora-212e5952-01b"
+    },
+    {
+      "title": "The Geoscience Community Analysis Toolkit: An Open Development, Community Driven Toolkit in the Scientific Python Ecosystem",
+      "authors": "Orhan Eroglu, Anissa Zacharias, Michaela Sizemore, Alea Kootz, Heather Craker, John Clyne",
+      "author": [
+        "Orhan Eroglu",
+        "Anissa Zacharias",
+        "Michaela Sizemore",
+        "Alea Kootz",
+        "Heather Craker",
+        "John Clyne"
+      ],
+      "author_email": [
+        "oero@ucar.edu",
+        "anissaz@ucar.edu",
+        "misi1684@ucar.edu",
+        "akootz@ucar.edu",
+        "hcraker@ucar.edu",
+        "clyne@ucar.edu"
+      ],
+      "author_institution": [
+        "National Center for Atmospheric Research",
+        "National Center for Atmospheric Research",
+        "National Center for Atmospheric Research",
+        "National Center for Atmospheric Research",
+        "National Center for Atmospheric Research",
+        "National Center for Atmospheric Research"
+      ],
+      "author_institution_map": {
+        "Orhan Eroglu": [
+          "National Center for Atmospheric Research"
+        ],
+        "Anissa Zacharias": [
+          "National Center for Atmospheric Research"
+        ],
+        "Michaela Sizemore": [
+          "National Center for Atmospheric Research"
+        ],
+        "Alea Kootz": [
+          "National Center for Atmospheric Research"
+        ],
+        "Heather Craker": [
+          "National Center for Atmospheric Research"
+        ],
+        "John Clyne": [
+          "National Center for Atmospheric Research"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "The Geoscience Community Analysis Toolkit (GeoCAT) team develops and maintains\ndata analysis and visualization tools on structured and unstructured grids for\nthe geosciences community in the Scientific Python Ecosystem (SPE). In response to\ndealing with increasing geoscientific data sizes, GeoCAT prioritizes scalability,\nensuring its implementations are scalable from personal laptops to HPC clusters.\nAnother major goal of the GeoCAT team is to ensure community involvement throughout\nthe whole project lifecycle, which is realized through an open development mindset\nby encouraging users and contributors to get involved in decision-making. With this\nmodel, we not only have our project stack open-sourced but also ensure most of the\nproject assets that are directly related to the software development lifecycle are\npublicly accessible."
+      ],
+      "keywords": "data analysis, geocat, geoscience, open development, open source, scalability,\nvisualization",
+      "copyright_holder": "Orhan Eroglu et al.",
+      "video": "https://www.youtube.com/watch?v=34zFGkDwJPc",
+      "bibliography": "references",
+      "pages": 7,
+      "page": {
+        "start": 187,
+        "stop": 193
+      },
+      "paper_id": "orhan_eroglu",
+      "doi": "10.25080/majora-212e5952-01c"
+    },
+    {
+      "title": "popmon: Analysis Package for Dataset Shift Detection",
+      "authors": "Simon Brugman, Tomas Sostak, Pradyot Patil, Max Baak",
+      "author": [
+        "Simon Brugman",
+        "Tomas Sostak",
+        "Pradyot Patil",
+        "Max Baak"
+      ],
+      "author_email": [
+        "simon.brugman@ing.com",
+        "tomas.sostak@vinted.com",
+        "pradyot.patil@ing.com",
+        "max.baak@ing.com"
+      ],
+      "author_institution": [
+        "ING Analytics Wholesale Banking",
+        "Vinted",
+        "ING Analytics Wholesale Banking",
+        "ING Analytics Wholesale Banking"
+      ],
+      "author_institution_map": {
+        "Simon Brugman": [
+          "ING Analytics Wholesale Banking"
+        ],
+        "Tomas Sostak": [
+          "Vinted"
+        ],
+        "Pradyot Patil": [
+          "ING Analytics Wholesale Banking"
+        ],
+        "Max Baak": [
+          "ING Analytics Wholesale Banking"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "popmon is an open-source Python package\nto check the stability of a tabular dataset.\npopmon creates histograms of features binned in time-slices, and compares the stability of its profiles and distributions\nusing statistical tests, both over time and with respect to a reference dataset.\nIt works with numerical, ordinal and categorical features, on both pandas and Spark dataframes,\nand the histograms can be higher-dimensional, e.g. it can also track correlations between sets of features.\npopmon can automatically detect and alert on changes observed over time, such as trends, shifts, peaks, outliers, anomalies, changing correlations, etc.,\nusing monitoring business rules that are either static or dynamic.\npopmon results are presented in a self-contained report."
+      ],
+      "keywords": "dataset shift detection, population shift, covariate shift, histogramming, profiling",
+      "copyright_holder": "Simon Brugman et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 8,
+      "page": {
+        "start": 194,
+        "stop": 201
+      },
+      "paper_id": "popmon",
+      "doi": "10.25080/majora-212e5952-01d"
+    },
+    {
+      "title": "pyDAMPF: a Python package for modeling mechanical properties of hygroscopic materials under interaction with a nanoprobe",
+      "authors": "Willy Menacho, Gonzalo Marcelo Ramírez-Ávila, Horacio V. Guzman",
+      "author": [
+        "Willy Menacho",
+        "Gonzalo Marcelo Ramírez-Ávila",
+        "Horacio V. Guzman"
+      ],
+      "author_email": [
+        "wmenachon2@fcpn.edu.bo",
+        "mramirez@fcpn.edu.bo",
+        "horacio.guzman@ijs.si"
+      ],
+      "author_institution": [
+        "Instituto de Investigaciones Físicas.",
+        "Carrera de Física, Universidad Mayor de San Andrés. Campus Universitario Cota Cota. La Paz, Bolivia",
+        "Instituto de Investigaciones Físicas.",
+        "Carrera de Física, Universidad Mayor de San Andrés. Campus Universitario Cota Cota. La Paz, Bolivia",
+        "Department of Theoretical Physics",
+        "Jožef Stefan Institute, Jamova 39, 1000 Ljubljana, Slovenia",
+        "Instituto de Investigaciones Físicas.",
+        "Carrera de Física, Universidad Mayor de San Andrés. Campus Universitario Cota Cota. La Paz, Bolivia"
+      ],
+      "author_institution_map": {
+        "Willy Menacho": [
+          "Instituto de Investigaciones Físicas.",
+          "Carrera de Física, Universidad Mayor de San Andrés. Campus Universitario Cota Cota. La Paz, Bolivia"
+        ],
+        "Gonzalo Marcelo Ramírez-Ávila": [
+          "Instituto de Investigaciones Físicas.",
+          "Carrera de Física, Universidad Mayor de San Andrés. Campus Universitario Cota Cota. La Paz, Bolivia"
+        ],
+        "Horacio V. Guzman": [
+          "Department of Theoretical Physics",
+          "Jožef Stefan Institute, Jamova 39, 1000 Ljubljana, Slovenia",
+          "Instituto de Investigaciones Físicas.",
+          "Carrera de Física, Universidad Mayor de San Andrés. Campus Universitario Cota Cota. La Paz, Bolivia"
+        ]
+      },
+      "author_orcid_map": {
+        "Horacio V. Guzman": "0000-0003-2564-3005"
+      },
+      "abstract": [
+        "pyDAMPF is a tool oriented to the Atomic Force Microscopy (AFM) community, which allows the simulation of the physical properties of materials under variable relative humidity (RH). In particular, pyDAMPF is mainly focused on the mechanical properties of polymeric hygroscopic nanofibers that play an essential role in designing tissue scaffolds for implants and filtering devices. Those mechanical properties have been mostly studied from a very coarse perspective reaching a micrometer scale. However, at the nanoscale, the mechanical response of polymeric fibers becomes cumbersome due to both experimental and theoretical limitations. For example, the response of polymeric fibers to RH demands advanced models that consider sub-nanometric changes in the local structure of each single polymer chain. From an experimental viewpoint, choosing the optimal cantilevers to scan the fibers under variable RH is not trivial.",
+        "In this article, we show how to use pyDAMPF to choose one optimal nanoprobe for planned experiments with a hygroscopic polymer. Along these lines, We show how to evaluate common and non-trivial operational parameters from an AFM cantilever of different manufacturers. Our results show in a stepwise approach the most relevant parameters to compare the cantilevers based on a non-invasive criterion of measurements. The computing engine is written in Fortran, and wrapped into Python. This aims to reuse physics code without losing interoperability with high-level packages. We have also introduced an in-house and transparent method for allowing multi-thread computations to the users of the pyDAMPF code, which we benchmarked for various computing architectures (PC, Google Colab and an HPC facility) and results in very favorable speed-up compared to former AFM simulators."
+      ],
+      "keywords": "Materials science, Nanomechanical properties, AFM, f2py, multi-threading CPUs, numerical simulations, polymers",
+      "copyright_holder": "Willy Menacho et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 8,
+      "page": {
+        "start": 202,
+        "stop": 209
+      },
+      "paper_id": "pyDAMPF_HVGuzman",
+      "doi": "10.25080/majora-212e5952-01e"
+    },
+    {
+      "title": "Improving PyDDA's atmospheric wind retrievals using automatic differentiation and Augmented Lagrangian methods",
+      "authors": "Robert Jackson, Rebecca Gjini, Sri Hari Krishna Narayanan, Matt Menickelly, Paul Hovland, Jan Hückelheim, Scott Collis",
+      "author": [
+        "Robert Jackson",
+        "Rebecca Gjini",
+        "Sri Hari Krishna Narayanan",
+        "Matt Menickelly",
+        "Paul Hovland",
+        "Jan Hückelheim",
+        "Scott Collis"
+      ],
+      "author_email": [
+        "rjackson@anl.gov",
+        "rgjini@ucsd.edu",
+        "snarayan@anl.gov",
+        "menickelly@anl.gov",
+        "hovland@mcs.anl.gov",
+        "jueckelheim@anl.gov",
+        "scollis@anl.gov"
+      ],
+      "author_institution": [
+        "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439",
+        "University of California at San Diego",
+        "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439",
+        "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439",
+        "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439",
+        "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439"
+      ],
+      "author_institution_map": {
+        "Robert Jackson": [
+          "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439"
+        ],
+        "Rebecca Gjini": [
+          "University of California at San Diego"
+        ],
+        "Sri Hari Krishna Narayanan": [
+          "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439"
+        ],
+        "Matt Menickelly": [],
+        "Paul Hovland": [
+          "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439"
+        ],
+        "Jan Hückelheim": [
+          "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439"
+        ],
+        "Scott Collis": [
+          "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [],
+      "keywords": "",
+      "copyright_holder": "Robert Jackson et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 7,
+      "page": {
+        "start": 210,
+        "stop": 216
+      },
+      "paper_id": "robert_jackson",
+      "doi": "10.25080/majora-212e5952-01f"
+    },
+    {
+      "title": "RocketPy: Combining Open-Source and Scientific Libraries to Make the Space Sector More Modern and Accessible",
+      "authors": "João Lemes Gribel Soares, Mateus Stano Junqueira, Oscar Mauricio Prada Ramirez, Patrick Sampaio dos Santos Brandão, Adriano Augusto Antongiovanni, Guilherme Fernandes Alves, Giovani Hidalgo Ceotto",
+      "author": [
+        "João Lemes Gribel Soares",
+        "Mateus Stano Junqueira",
+        "Oscar Mauricio Prada Ramirez",
+        "Patrick Sampaio dos Santos Brandão",
+        "Adriano Augusto Antongiovanni",
+        "Guilherme Fernandes Alves",
+        "Giovani Hidalgo Ceotto"
+      ],
+      "author_email": [
+        "jgribel@usp.br",
+        "mateusstano@usp.br",
+        "oscarmprada@usp.br",
+        "patricksampaio@usp.br",
+        "adrianoaugusto98@usp.br",
+        "guilherme\\_fernandes@usp.br",
+        "giovani.ceotto@alumni.usp.br"
+      ],
+      "author_institution": [
+        "Escola Politécnica of the University of São Paulo",
+        "Escola Politécnica of the University of São Paulo",
+        "Escola Politécnica of the University of São Paulo",
+        "Escola Politécnica of the University of São Paulo",
+        "École Centrale de Nantes.",
+        "Escola Politécnica of the University of São Paulo",
+        "Escola Politécnica of the University of São Paulo",
+        "Escola Politécnica of the University of São Paulo"
+      ],
+      "author_institution_map": {
+        "João Lemes Gribel Soares": [
+          "Escola Politécnica of the University of São Paulo"
+        ],
+        "Mateus Stano Junqueira": [
+          "Escola Politécnica of the University of São Paulo"
+        ],
+        "Oscar Mauricio Prada Ramirez": [
+          "Escola Politécnica of the University of São Paulo"
+        ],
+        "Patrick Sampaio dos Santos Brandão": [
+          "Escola Politécnica of the University of São Paulo",
+          "École Centrale de Nantes."
+        ],
+        "Adriano Augusto Antongiovanni": [
+          "Escola Politécnica of the University of São Paulo"
+        ],
+        "Guilherme Fernandes Alves": [
+          "Escola Politécnica of the University of São Paulo"
+        ],
+        "Giovani Hidalgo Ceotto": [
+          "Escola Politécnica of the University of São Paulo"
+        ]
+      },
+      "author_orcid_map": {
+        "Oscar Mauricio Prada Ramirez": "0000-0001-6904-8959",
+        "Adriano Augusto Antongiovanni": "0000-0002-3658-0153",
+        "Guilherme Fernandes Alves": "0000-0003-3873-2699",
+        "Giovani Hidalgo Ceotto": "0000-0002-1614-3028"
+      },
+      "abstract": [
+        "In recent years we are seeing exponential growth in the space sector, with new companies emerging in it.\nOn top of that more people are becoming fascinated to participate in the aerospace revolution, which motivates\nstudents and hobbyists to build more High Powered and Sounding Rockets.\nHowever, rocketry is still a very inaccessible field, with high knowledge of entry-level and concrete terms.\nTo make it more accessible, people need an active community with flexible, easy-to-use, and well-documented tools.\nRocketPy is a software solution created to address all those issues, solving the trajectory simulation for High-Power\nrockets being built on top of SciPy and the Python Scientific Environment.\nThe code allows for a sophisticated 6 degrees of freedom simulation of a rocket's flight trajectory, including high\nfidelity variable mass effects as well as descent under parachutes.\nAll of this is packaged into an architecture that facilitates complex simulations, such as multi-stage rockets,\ndesign and trajectory optimization, and dispersion analysis.\nIn this work, the flexibility and usability of RocketPy are indicated in three example simulations:\na basic trajectory simulation, a dynamic stability analysis, and a Monte Carlo dispersion simulation.\nThe code structure and the main implemented methods are also presented."
+      ],
+      "keywords": "rocketry, flight, rocket trajectory, flexibility, Monte Carlo analysis",
+      "copyright_holder": "João Lemes Gribel Soares et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 9,
+      "page": {
+        "start": 217,
+        "stop": 225
+      },
+      "paper_id": "rocketpy_team",
+      "doi": "10.25080/majora-212e5952-020"
+    },
+    {
+      "title": "Wailord: Parsers and Reproducibility for Quantum Chemistry",
+      "authors": "Rohit Goswami",
+      "author": [
+        "Rohit Goswami"
+      ],
+      "author_email": [
+        "rog32@hi.is"
+      ],
+      "author_institution": [
+        "Science Institute, University of Iceland",
+        "Quansight Austin, TX, USA"
+      ],
+      "author_institution_map": {
+        "Rohit Goswami": [
+          "Science Institute, University of Iceland",
+          "Quansight Austin, TX, USA"
+        ]
+      },
+      "author_orcid_map": {
+        "Rohit Goswami": "0000-0002-2393-8056"
+      },
+      "abstract": [
+        "Data driven advances dominate the applied sciences landscape, with quantum chemistry being no exception to the rule. Dataset biases and human error are key bottlenecks in the development of reproducible and generalized insights. At a computational level, we demonstrate how changing the granularity of the abstractions employed in data generation from simulations can aid in reproducible work. In particular, we introduce wailord (https://wailord.xyz), a free-and-open-source python library to shorten the gap between data-analysis and computational chemistry, with a focus on the ORCA suite binaries. A two level hierarchy and exhaustive unit-testing ensure the ability to reproducibly describe and analyze \\textquotedbl{}computational experiments\\textquotedbl{}. wailord offers both input generation, with enhanced analysis, and raw output analysis, for traditionally executed ORCA runs. The design focuses on treating output and input generation in terms of a mini domain specific language instead of more imperative approaches, and we demonstrate how this abstraction facilitates chemical insights."
+      ],
+      "keywords": "quantum chemistry, parsers, reproducible reports, computational inference",
+      "copyright_holder": "Rohit Goswami.",
+      "video": "",
+      "bibliography": "SciPyCon2022",
+      "pages": 5,
+      "page": {
+        "start": 226,
+        "stop": 230
+      },
+      "paper_id": "rohit_goswami_wailord",
+      "doi": "10.25080/majora-212e5952-021"
+    },
+    {
+      "title": "Variational Autoencoders For Semi-Supervised Deep Metric Learning",
+      "authors": "Nathan Safir, Meekail Zain, Curtis Godwin, Eric Miller, Bella Humphrey, Shannon P Quinn",
+      "author": [
+        "Nathan Safir",
+        "Meekail Zain",
+        "Curtis Godwin",
+        "Eric Miller",
+        "Bella Humphrey",
+        "Shannon P Quinn"
+      ],
+      "author_email": [
+        "nssafir@gmail.com",
+        "meekail.zain@uga.edu",
+        "cmgodwin263@gmail.com",
+        "EricMiller@uga.edu",
+        "isabelladhumphrey@gmail.com",
+        "spq@uga.edu"
+      ],
+      "author_institution": [
+        "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA",
+        "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA"
+      ],
+      "author_institution_map": {
+        "Nathan Safir": [
+          "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Meekail Zain": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Curtis Godwin": [
+          "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Eric Miller": [
+          "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Bella Humphrey": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Shannon P Quinn": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+          "Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Deep metric learning (DML) methods generally do not incorporate unlabelled data. We propose\nborrowing components of the variational autoencoder (VAE) methodology to extend DML\nmethods to train on semi-supervised datasets. We experimentally evaluate the atomic benefits to the perform-\ning DML on the VAE latent space such as the enhanced ability to train using unlabelled data and to induce\nbias given prior knowledge. We find that jointly training DML with an autoencoder and VAE may be potentially\nhelpful for some semi-suprevised datasets, but that a training routine of alternating between the DML loss\nand an additional unsupervised loss across epochs is generally unviable."
+      ],
+      "keywords": "Variational Autoencoders, Metric Learning, Deep Learning, Representation\nLearning, Generative Models",
+      "copyright_holder": "Nathan Safir et al.",
+      "video": "",
+      "bibliography": "refs",
+      "pages": 9,
+      "page": {
+        "start": 231,
+        "stop": 239
+      },
+      "paper_id": "safir_zain_22",
+      "doi": "10.25080/majora-212e5952-022"
+    },
+    {
+      "title": "A Python Pipeline for Rapid Application Development (RAD)",
+      "authors": "Scott D. Christensen, Marvin S. Brown, Robert B. Haehnel, Joshua Q. Church, Amanda Catlett, Dallon C. Schofield, Quyen T. Brannon, Stacy T. Smith",
+      "author": [
+        "Scott D. Christensen",
+        "Marvin S. Brown",
+        "Robert B. Haehnel",
+        "Joshua Q. Church",
+        "Amanda Catlett",
+        "Dallon C. Schofield",
+        "Quyen T. Brannon",
+        "Stacy T. Smith"
+      ],
+      "author_email": [
+        "Scott.D.Christensen@usace.army.mil",
+        "Marvin.S.Brown@usace.army.mil",
+        "Robert.B.Haehnel@usace.army.mil",
+        "Joshua.Q.Church@usace.army.mil",
+        "Amanda.Reeder@usace.army.mil",
+        "Dallon.C.Schofield@usace.army.mil",
+        "Quyen.T.Dong@usace.army.mil",
+        "Stacey.T.Smith@usace.army.mil"
+      ],
+      "author_institution": [
+        "US Army Engineer Research and Development Center",
+        "US Army Engineer Research and Development Center",
+        "US Army Engineer Research and Development Center",
+        "US Army Engineer Research and Development Center",
+        "US Army Engineer Research and Development Center",
+        "US Army Engineer Research and Development Center",
+        "US Army Engineer Research and Development Center",
+        "US Army Engineer Research and Development Center"
+      ],
+      "author_institution_map": {
+        "Scott D. Christensen": [
+          "US Army Engineer Research and Development Center"
+        ],
+        "Marvin S. Brown": [
+          "US Army Engineer Research and Development Center"
+        ],
+        "Robert B. Haehnel": [
+          "US Army Engineer Research and Development Center"
+        ],
+        "Joshua Q. Church": [
+          "US Army Engineer Research and Development Center"
+        ],
+        "Amanda Catlett": [
+          "US Army Engineer Research and Development Center"
+        ],
+        "Dallon C. Schofield": [
+          "US Army Engineer Research and Development Center"
+        ],
+        "Quyen T. Brannon": [
+          "US Army Engineer Research and Development Center"
+        ],
+        "Stacy T. Smith": [
+          "US Army Engineer Research and Development Center"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Rapid Application Development (RAD) is the ability to rapidly prototype an interactive\ninterface through frequent feedback, so that it can be quickly deployed and delivered to stakeholders\nand customers. RAD is a critical capability needed to meet the ever-evolving demands in scientific\nresearch and data science. To further this capability in the Python ecosystem, we have curated and\ndeveloped a set of open-source tools, including Panel, Bokeh, and Tethys Platform. These tools enable\nprototyping interfaces in a Jupyter Notebook and facilitate the progression of the interface into\na fully-featured, deployable web-application."
+      ],
+      "keywords": "web app, Panel, Tethys, Tethys Platform, Bokeh, Jupyter",
+      "copyright_holder": "Scott D. Christensen et al.",
+      "video": "",
+      "bibliography": "",
+      "pages": 4,
+      "page": {
+        "start": 240,
+        "stop": 243
+      },
+      "paper_id": "scott_christensen",
+      "doi": "10.25080/majora-212e5952-023"
+    },
+    {
+      "title": "Monaco: A Monte Carlo Library for Performing Uncertainty and Sensitivity Analyses",
+      "authors": "W. Scott Shambaugh",
+      "author": [
+        "W. Scott Shambaugh"
+      ],
+      "author_email": [
+        "wsshambaugh@gmail.com"
+      ],
+      "author_institution": [],
+      "author_institution_map": {
+        "W. Scott Shambaugh": []
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "This paper introduces monaco, a Python library for conducting Monte Carlo simulations of computational models, and performing uncertainty analysis (UA) and sensitivity analysis (SA) on the results. UA and SA are critical to effective and responsible use of models in science, engineering, and public policy, however their use is uncommon. By providing a simple, general, and rigorous-by-default library that wraps around existing models, monaco makes UA and SA easy and accessible to practitioners with a basic knowledge of statistics."
+      ],
+      "keywords": "Monte Carlo, Modeling, Uncertainty Quantification, Uncertainty Analysis, Sensitivity Analysis, Decision-Making, Ensemble Prediction, VARS, D-VARS",
+      "copyright_holder": "W. Scott Shambaugh.",
+      "video": "",
+      "bibliography": "refs",
+      "pages": 7,
+      "page": {
+        "start": 244,
+        "stop": 250
+      },
+      "paper_id": "scott_shambaugh",
+      "doi": "10.25080/majora-212e5952-024"
+    },
+    {
+      "title": "Enabling Active Learning Pedagogy and Insight Mining with a Grammar of Model Analysis",
+      "authors": "Zachary del Rosario",
+      "author": [
+        "Zachary del Rosario"
+      ],
+      "author_email": [
+        "zdelrosario@olin.edu"
+      ],
+      "author_institution": [
+        "Assistant Professor of Engineering and Applied Statistics, Olin College of Engineering"
+      ],
+      "author_institution_map": {
+        "Zachary del Rosario": [
+          "Assistant Professor of Engineering and Applied Statistics, Olin College of Engineering"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Modern engineering models are complex, with dozens of inputs, uncertainties arising from simplifying assumptions, and dense output data. While major strides have been made in the computational scalability of complex models, relatively less attention has been paid to user-friendly, reusable tools to explore and make sense of these models. Grama is a python package aimed at supporting these activities. Grama is a grammar of model analysis: an ontology that specifies data (in tidy form), models (with quantified uncertainties), and the verbs that connect these objects. This definition enables a reusable set of evaluation \\textquotedbl{}verbs\\textquotedbl{} that provide a consistent analysis toolkit across different grama models. This paper presents three case studies that illustrate pedagogy and engineering work with grama: 1. Providing teachable moments through errors for learners, 2. Providing reusable tools to help users self-initiate productive modeling behaviors, and 3. Enabling exploratory model analysis (EMA) – exploratory data analysis augmented with data generation."
+      ],
+      "keywords": "engineering, engineering education, exploratory model analysis, software design, uncertainty quantification",
+      "copyright_holder": "Zachary del Rosario.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 8,
+      "page": {
+        "start": 251,
+        "stop": 258
+      },
+      "paper_id": "zachary_delrosario",
+      "doi": "10.25080/majora-212e5952-025"
+    },
+    {
+      "title": "Low Level Feature Extraction for Cilia Segmentation",
+      "authors": "Meekail Zain, Eric Miller, Shannon P Quinn, Cecilia Lo",
+      "author": [
+        "Meekail Zain",
+        "Eric Miller",
+        "Shannon P Quinn",
+        "Cecilia Lo"
+      ],
+      "author_email": [
+        "meekail.zain@uga.edu",
+        "EricMiller@uga.edu",
+        "spq@uga.edu",
+        "cel36@pitt.edu"
+      ],
+      "author_institution": [
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA",
+        "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+        "Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA",
+        "Department of Developmental Biology, University of Pittsburgh, Pittsburgh, PA 15261 USA"
+      ],
+      "author_institution_map": {
+        "Meekail Zain": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Eric Miller": [
+          "Institute for Artificial Intelligence, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Shannon P Quinn": [
+          "Department of Computer Science, University of Georgia, Athens, GA 30602 USA",
+          "Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA"
+        ],
+        "Cecilia Lo": [
+          "Department of Developmental Biology, University of Pittsburgh, Pittsburgh, PA 15261 USA"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Cilia are organelles found on the surface of some cells in the human body that sweep rhythmically to transport substances. Dysfunction of ciliary motion is often indicative of diseases known as ciliopathies, which disrupt the functionality of macroscopic structures within the lungs, kidneys and other organs li2018composite. Phenotyping ciliary motion is an essential step towards understanding ciliopathies; however, this is generally an expert-intensive process quinn2015automated. A means of automatically parsing recordings of cilia to determine useful information would greatly reduce the amount of expert intervention required. This would not only improve overall throughput, but also mitigate human error, and greatly improve the accessibility of cilia-based insights. Such automation is difficult to achieve due to the noisy, partially occluded and potentially out-of-phase imagery used to represent cilia, as well as the fact that cilia occupy a minority of any given image. Segmentation of cilia mitigates these issues, and is thus a critical step in enabling a powerful pipeline. However, cilia are notoriously difficult to properly segment in most imagery, imposing a bottleneck on the pipeline. Experimentation on and evaluation of alternative methods for feature extraction of cilia imagery hence provide the building blocks of a more potent segmentation model. Current experiments show up to a 10\\% improvement over base segmentation models using a novel combination of feature extractors."
+      ],
+      "keywords": "cilia, segmentation, u-net, deep learning",
+      "copyright_holder": "Meekail Zain et al.",
+      "video": "",
+      "bibliography": "refs",
+      "pages": 6,
+      "page": {
+        "start": 259,
+        "stop": 264
+      },
+      "paper_id": "zain_miller",
+      "doi": "10.25080/majora-212e5952-026"
+    }
+  ]
+}
