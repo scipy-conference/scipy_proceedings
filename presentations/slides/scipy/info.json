@@ -21,5 +21,6 @@
           "affiliation": "Quansight"
         }
     ],
-    "description": "Why and how to use scipy.stats.sampling and scipy.stats.qmc?"
+    "description": "Why and how to use scipy.stats.sampling and scipy.stats.qmc?",
+    "zenodo_url": "https://zenodo.org/record/6946927"
 }

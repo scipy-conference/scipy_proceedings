@@ -42,5 +42,6 @@
             "orcid": "0000-0002-1507-7460"
         }
     ],
-    "description": "Python library for working with genomic interval dataframes."
+    "description": "Python library for working with genomic interval dataframes.",
+    "zenodo_url": "https://zenodo.org/record/6946712"
 }

@@ -1,5 +1,5 @@
 {
-    "title": "SciPy Tools Plenary – NumPy",
+    "title": "SciPy Tools Plenary - NumPy",
     "authors": [
         {
             "name": "Inessa Pawson",
@@ -7,5 +7,6 @@
             "orcid": "0000-0001-7294-122X"
         }
     ],
-    "description": "Annual update on the NumPy project at SciPy 2022"
+    "description": "Annual update on the NumPy project at SciPy 2022",
+    "zenodo_url": "https://zenodo.org/record/6946961"
 }

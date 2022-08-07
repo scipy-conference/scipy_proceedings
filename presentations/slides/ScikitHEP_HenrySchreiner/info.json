@@ -1,5 +1,5 @@
 {
-    "title": "Building Binary Extensions with pybind11, scikit-build, and cibuildwheel",
+    "title": "Awkward Packaging: Building scikit-HEP",
     "authors": [
         {
             "name": "Henry Schreiner",
@@ -17,5 +17,6 @@
             "orcid": "0000-0003-2846-7625"
         }
     ],
-    "description": "Scikit-HEP has grown rapidly over the last few years, not just to serve the needs of the High Energy Physics (HEP) community, but in many ways, the Python ecosystem at large. AwkwardArray, boost-histogram/hist, and iMinuit are examples of libraries that are used beyond the original HEP focus."
+    "description": "Scikit-HEP has grown rapidly over the last few years, not just to serve the needs of the High Energy Physics (HEP) community, but in many ways, the Python ecosystem at large. AwkwardArray, boost-histogram/hist, and iMinuit are examples of libraries that are used beyond the original HEP focus.",
+    "zenodo_url": "https://zenodo.org/record/6946801"
 }

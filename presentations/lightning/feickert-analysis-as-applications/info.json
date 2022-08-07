@@ -7,5 +7,6 @@
             "orcid": "0000-0003-4124-7862"
         }
     ],
-    "description": "An opinionated argument for the use of lockfiles in scientific analysis in a similar manner to Python application deployment. This talk was inspired by Brett Cannon's 'pip-secure-install' project and a Twitter conversation with Dustin Ingram on April 20, 2020."
+    "description": "An opinionated argument for the use of lockfiles in scientific analysis in a similar manner to Python application deployment. This talk was inspired by Brett Cannon's 'pip-secure-install' project and a Twitter conversation with Dustin Ingram on April 20, 2020.",
+    "zenodo_url": "https://zenodo.org/record/6946666"
 }

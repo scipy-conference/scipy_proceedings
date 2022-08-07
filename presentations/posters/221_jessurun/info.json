@@ -22,5 +22,6 @@
         }
     ],
     "title": "Semi-Supervised Semantic Annotator (S3A): Toward Efficient Semantic Image Labeling",
-    "description": "Python GUI and library for semantic image segmentation and annotation"
+    "description": "Python GUI and library for semantic image segmentation and annotation",
+    "zenodo_url": "https://zenodo.org/record/6946702"
 }

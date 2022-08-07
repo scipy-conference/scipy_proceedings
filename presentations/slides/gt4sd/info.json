@@ -7,5 +7,6 @@
             "orcid": ""
         }
     ],
-    "description": "A presentation about GT4SD: an open-source platform to accelerate hypothesis generation in the scientific discovery process. It provides a library for making state-of-the-art generative AI models easier to use."
+    "description": "A presentation about GT4SD: an open-source platform to accelerate hypothesis generation in the scientific discovery process. It provides a library for making state-of-the-art generative AI models easier to use.",
+    "zenodo_url": "https://zenodo.org/record/6946845"
 }
