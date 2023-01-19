@@ -27,5 +27,6 @@
         }
     ],
     "title": "Opening ARM: A pivot to community software to meet the needs of users and stakeholders of the planet's largest cloud observatory",
-    "description": "This presentation discusses the evolution (and hurdles that came with) of the Atmospheric Radiation Measurement (ARM) program's open source endeavors, starting with the Python ARM Radar Toolkit to the Atmospheric data Community Toolkit in 2018, the expansion of our open-source presence on Github in 2019 and what is planned for the future."
+    "description": "This presentation discusses the evolution (and hurdles that came with) of the Atmospheric Radiation Measurement (ARM) program's open source endeavors, starting with the Python ARM Radar Toolkit to the Atmospheric data Community Toolkit in 2018, the expansion of our open-source presence on Github in 2019 and what is planned for the future.",
+    "zenodo_url": "https://zenodo.org/record/6946754"
 }

@@ -12,5 +12,6 @@
         }
     ],
     "title": "Likeness: a toolkit for connecting the social fabric of place to human dynamics",
-    "description": "Richly-attributed synthetic population data are crucial for discerning human dynamics while preserving privacy. The Likeness toolkit provides a solution to this problem with a suite of Python packages that generate population data as individual agents in appropriate nighttime locations and allocates them to probable daytime activity spaces. Through a case study utilizing students and faculty as agents, the results of Likeness simulations are shown to recreate high-fidelity school capacities, comparable to empirical data sources."
+    "description": "Richly-attributed synthetic population data are crucial for discerning human dynamics while preserving privacy. The Likeness toolkit provides a solution to this problem with a suite of Python packages that generate population data as individual agents in appropriate nighttime locations and allocates them to probable daytime activity spaces. Through a case study utilizing students and faculty as agents, the results of Likeness simulations are shown to recreate high-fidelity school capacities, comparable to empirical data sources.",
+    "zenodo_url": "https://zenodo.org/record/6946720"
 }

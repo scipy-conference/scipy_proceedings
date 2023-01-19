@@ -12,5 +12,6 @@
             "orcid": ""
         }
     ],
-    "description": "MModel is a Python framework that allows for fast and modular prototyping. The library uses networkx graph for workflow construction and provides built-in toolkits such as subgraph modification and graph visualization with rich metadata."
+    "description": "MModel is a Python framework that allows for fast and modular prototyping. The library uses networkx graph for workflow construction and provides built-in toolkits such as subgraph modification and graph visualization with rich metadata.",
+    "zenodo_url": "https://zenodo.org/record/6946850"
 }

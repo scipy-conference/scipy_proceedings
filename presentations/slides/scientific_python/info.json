@@ -22,5 +22,6 @@
             "orcid": "0000-0002-3212-402X"
         }
     ],
-    "description": "Tools for maintainers and how we can help each others."
+    "description": "Tools for maintainers and how we can help each others.",
+    "zenodo_url": "https://zenodo.org/record/6946917"
 }

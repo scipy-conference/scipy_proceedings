@@ -38,5 +38,6 @@
             "orcid": "0000-0001-9475-3756"
         }
     ],
-    "description": "Building binary extensions is easier than ever thanks to several key libraries. Pybind11 provides a natural C++ language for extensions without requiring pre-processing or special dependencies. Scikit-build ties the premier C++ build system, CMake, into the Python extension build process. And cibuildwheel makes it easy to build highly compatible wheels for over 80 different platforms using CI or on your local machine."
+    "description": "Building binary extensions is easier than ever thanks to several key libraries. Pybind11 provides a natural C++ language for extensions without requiring pre-processing or special dependencies. Scikit-build ties the premier C++ build system, CMake, into the Python extension build process. And cibuildwheel makes it easy to build highly compatible wheels for over 80 different platforms using CI or on your local machine.",
+    "zenodo_url": "https://zenodo.org/record/6946769"
 }

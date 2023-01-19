@@ -17,7 +17,8 @@
         }
     ],
     "title": "Kiwi: Python Tool for Tex Processing and Classification",
-    "description": "A user-friendly desktop tool for text visualization and classification. This allows users within the field to avoid creating boilerplate code for basic NLP tasks and users new to machine learning to plug and play with various models and methods. Our main goal is to make natural language processing accessible and easy."
+    "description": "A user-friendly desktop tool for text visualization and classification. This allows users within the field to avoid creating boilerplate code for basic NLP tasks and users new to machine learning to plug and play with various models and methods. Our main goal is to make natural language processing accessible and easy.",
+    "zenodo_url": "https://zenodo.org/record/6946734"
 }
 
 

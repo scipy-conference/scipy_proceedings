@@ -27,5 +27,6 @@
             "orcid": "0000-0001-7294-122X"
         }
     ],
-    "description": "The Scientific Python project aims to better coordinate the ecosystem and grow the community. This talk focuses on our efforts to expand our community by generating a welcoming and friendly environment where people collaborate, build, and improve together."
+    "description": "The Scientific Python project aims to better coordinate the ecosystem and grow the community. This talk focuses on our efforts to expand our community by generating a welcoming and friendly environment where people collaborate, build, and improve together.",
+    "zenodo_url": "https://zenodo.org/record/6946897"
 }

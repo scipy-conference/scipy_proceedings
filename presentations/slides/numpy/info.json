@@ -12,5 +12,6 @@
              "orcid": "0000-0001-9276-1891"
         }
     ],
-    "description": "Over the past three years, NumPy has seen large changes to much of its core functionalities including universal functions, casting, and DTypes. The goal of this refactoring was to introduce extensible APIs to improve existing user-defined DTypes and unlock new ones. This refactoring is nearing its conclusion, with the work being surfaced as public-facing API. In this talk we will discuss what has been done, and newly possible applications—such as a custom NumPy DType that is aware of physical units."
+    "description": "Over the past three years, NumPy has seen large changes to much of its core functionalities including universal functions, casting, and DTypes. The goal of this refactoring was to introduce extensible APIs to improve existing user-defined DTypes and unlock new ones. This refactoring is nearing its conclusion, with the work being surfaced as public-facing API. In this talk we will discuss what has been done, and newly possible applications—such as a custom NumPy DType that is aware of physical units.",
+    "zenodo_url": "https://zenodo.org/record/6946863"
 }

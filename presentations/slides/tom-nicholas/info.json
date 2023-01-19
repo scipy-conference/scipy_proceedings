@@ -17,5 +17,6 @@
             "orcid": "0000-0001-5999-4917"
         }
     ],
-    "description": "We analysed the highest resolution global ocean simulation to date, using xGCM, xhistogram, and dask."
+    "description": "We analysed the highest resolution global ocean simulation to date, using xGCM, xhistogram, and dask.",
+    "zenodo_url": "https://zenodo.org/record/6946933"
 }

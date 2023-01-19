@@ -7,5 +7,6 @@
             "orcid": "0000-0002-4436-4215"
         }
     ],
-    "description": "Many types of data visualization, e.g., line plots and scatter plots, utilize a discrete palette of colors, a color sequence, to differentiate between the categories of data being plotted. Unfortunately, many commonly-used color sequences offer poor accessibility to individuals with color-vision deficiencies, using colors that such individuals find difficult to differentiate between. Here, the development of new, accessible color sequences is discussed. As new color sequences must be aesthetically pleasing if they are to see widespread adoption, a crowd-sourced survey was used to estimate aesthetic preference, while accessibility aspects were handled via quantitative analysis."
+    "description": "Many types of data visualization, e.g., line plots and scatter plots, utilize a discrete palette of colors, a color sequence, to differentiate between the categories of data being plotted. Unfortunately, many commonly-used color sequences offer poor accessibility to individuals with color-vision deficiencies, using colors that such individuals find difficult to differentiate between. Here, the development of new, accessible color sequences is discussed. As new color sequences must be aesthetically pleasing if they are to see widespread adoption, a crowd-sourced survey was used to estimate aesthetic preference, while accessibility aspects were handled via quantitative analysis.",
+    "zenodo_url": "https://zenodo.org/record/6946815"
 }

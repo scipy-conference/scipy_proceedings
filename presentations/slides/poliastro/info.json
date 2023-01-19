@@ -7,5 +7,6 @@
             "orcid": "https://orcid.org/0000-0002-2187-161X"
         }
     ],
-    "description": "This talk presents poliastro, an open-source Python library for interactive Astrodynamics that features an easy-to-use API and tools for quick visualization. poliastro implements core Astrodynamics algorithms and leverages numba and Astropy. During the talk, we will describe the two-layer architecture that allows poliastro to offer an approachable API with good performance, discuss the challenges we faced to validate our code, and comment on the successes and failures of the project in trying to build a rich and diverse community. Source code of poliastro is available at https://github.com/poliastro/poliastro/ and documentation is online at https://docs.poliastro.space/."
+    "description": "This talk presents poliastro, an open-source Python library for interactive Astrodynamics that features an easy-to-use API and tools for quick visualization. poliastro implements core Astrodynamics algorithms and leverages numba and Astropy. During the talk, we will describe the two-layer architecture that allows poliastro to offer an approachable API with good performance, discuss the challenges we faced to validate our code, and comment on the successes and failures of the project in trying to build a rich and diverse community. Source code of poliastro is available at https://github.com/poliastro/poliastro/ and documentation is online at https://docs.poliastro.space/.",
+    "zenodo_url": "https://zenodo.org/record/6946871"
  }

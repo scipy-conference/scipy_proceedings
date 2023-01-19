@@ -22,5 +22,6 @@
 		}
 	],
 	"title": "Design of a Scientific Data Analysis Support Platform",
-	"description": "Studying the design features necessary for a workflow and experiment management system, and presenting Curifactory: an open source package that meets these design features."
+	"description": "Studying the design features necessary for a workflow and experiment management system, and presenting Curifactory: an open source package that meets these design features.",
+	"zenodo_url": "https://zenodo.org/record/6946750"
 }
