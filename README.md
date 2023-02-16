@@ -10,10 +10,10 @@ You can find more information about the [proceedings' organising principles](#or
 
 **All** communication between authors and reviewers should be civil and
 respectful. There are no exceptions to this rule. Please see the
-[SciPy2022 Code of Conduct](https://www.scipy2022.scipy.org/code-of-conduct)
+[SciPy Code of Conduct](https://www.scipy2022.scipy.org/code-of-conduct)
 for more info.
 
-You can find the [schedule for 2022](#timeline-for-2022) below.
+You can find the [schedule for 2023](#timeline-for-2023) below.
 
 Please use @-mentions in issues and pull requests(PRs) to [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
 
@@ -109,6 +109,7 @@ The most effective way to contact the Proceedings Co-Chairs for issues related t
 In 2023, the Proceedings Co-Chairs are
 - Meghann Agarwal (@mepa)
 - Chris Calloway (@cbcunc)
+- Rohit Goswami (@HaoZeke)
 - Dillon Niederhut (@deniederhut)
 
 ## Timeline for 2023
