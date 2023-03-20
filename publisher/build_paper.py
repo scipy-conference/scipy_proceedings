@@ -37,27 +37,55 @@ header = r'''
 
 '''
 
-def rst2tex(in_path, out_path):
+
+BUILD_SYSTEM_FILES = (
+    "template.tex",
+    "page_numbers.tex",
+    "scipy.sty",
+    "README.md",
+    "status.sty",
+    "resolve-references.lua",
+    "latex-table.lua"
+)
+
+
+def detect_paper_type(in_path: str) -> str:
+    directory_contents = os.listdir(in_path)
+    rst_count = 0
+    tex_count = 0
+    for path in directory_contents:
+        path = path.lower()
+        if path.endswith(BUILD_SYSTEM_FILES):
+            pass
+        elif path.endswith('.rst'): rst_count += 1
+        elif path.endswith('.tex'): tex_count += 1
+    if rst_count and tex_count:
+        raise RuntimeError("Saw .rst and .tex files -- paper source unclear")
+    if rst_count:
+        return 'rst'
+    elif tex_count:
+        return 'tex'
+    else:
+        raise RuntimeError("No .rst or .tex files -- paper source unclear")
+
+def prepare_dir(in_path, out_path, start):
     # copy the whole source folder to the build directory
     dir_util.copy_tree(in_path, out_path)
     base_dir = os.path.dirname(__file__)
+    # make the page numbers file
+    page_number_file = os.path.join(out_path, 'page_numbers.tex')
+    with io.open(page_number_file, 'w', encoding='utf-8') as f:
+        f.write('\setcounter{page}{%s}' % start)
     # the status style file gets copied separately, since we need to rename it
     out_file = shutil.copy(status_file, out_path)
     os.rename(out_file, os.path.join(out_path, 'status.sty'))
     # then copy the other static files we need into the build dir
-    for filename in ['_static/scipy.sty', '_static/template.tex']:
+    for filename in ['_static/scipy.sty', '_static/template.tex', '_static/resolve-references.lua', '_static/latex-table.lua']:
         scipy_style = os.path.join(base_dir, filename)
         shutil.copy(scipy_style, out_path)
-    # find the paper and add custom rst header stuff
-    try:
-        rst_path, = glob.glob(os.path.join(out_path, '*.rst'))
-    except ValueError:
-        raise RuntimeError("Found more than one input .rst--not sure which "
-                           "one to use.")
-    with io.open(rst_path, mode='r', encoding='utf-8') as f:
-        content = header + f.read()
-    with io.open(rst_path, mode='w', encoding='utf-8') as f:
-        f.write(content)
+
+
+def prepare_metadata(out_path):
     # find the metadata file and preprocess it for pandoc and the stats file
     try:
         metadata_path, = glob.glob(os.path.join(out_path, '*.yaml'))
@@ -67,7 +95,6 @@ def rst2tex(in_path, out_path):
     with io.open(metadata_path, 'r', encoding='utf-8') as f:
         metadata = yaml.safe_load(f)
     metadata = preprocess_metadata(metadata)
-    # import pdb;pdb.set_trace()
     with io.open(metadata_path, 'w', encoding='utf-8') as f:
         yaml.safe_dump(metadata, f)
     # update the stats file based on the metadata we read in
@@ -78,9 +105,46 @@ def rst2tex(in_path, out_path):
         options.dict2cfg(d, stats_file)
     except AttributeError:
         print("Error: no paper configuration found")
+    return metadata_path
+
+
+def rst2tex(out_path, metadata_path):
+    # find the paper and add custom rst header stuff
+    try:
+        paper_path, = glob.glob(os.path.join(out_path, '*.rst'))
+    except ValueError:
+        raise RuntimeError("Found more than one input .rst--not sure which "
+                           "one to use.")
+    with io.open(paper_path, mode='r', encoding='utf-8') as f:
+        content = header + f.read()
+    with io.open(paper_path, mode='w', encoding='utf-8') as f:
+        f.write(content)
     # call pandoc to generate latex input
     command = [
-        'pandoc', '-s', '-o', 'paper.tex', '--metadata-file', metadata_path, '--template', 'template.tex', rst_path
+        'pandoc',
+        '-s',
+        '-o', 'paper.tex',
+        '--metadata-file', metadata_path,
+        '--lua-filter', 'resolve-references.lua',
+        # '--lua-filter', 'latex-table.lua',
+        '--template', 'template.tex',
+        paper_path
+    ]
+    subprocess.run(command, cwd=out_path)
+
+
+def tex2tex(out_path, metadata_path):
+    # find the paper
+    paper_paths = glob.glob(os.path.join(out_path, '*.tex'))
+    paper_paths = [p for p in paper_paths if not (p.endswith(BUILD_SYSTEM_FILES))]
+    if len(paper_paths) > 1:
+        raise RuntimeError("Found more than one input .tex--not sure which "
+                           "one to use.")
+    else:
+        paper_path = paper_paths[0]
+    # call pandoc to generate latex input
+    command = [
+        'cp', paper_path, 'paper.tex'
     ]
     subprocess.run(command, cwd=out_path)
 
@@ -222,15 +286,21 @@ def build_paper(paper_id, start=1):
     in_path = os.path.join(papers_dir, paper_id)
     print("Building:", paper_id)
 
+    # do this early, so we fail before copying anything
+    paper_type = detect_paper_type(in_path)
 
+    # copy a bunch of stuff
     options.mkdir_p(out_path)
-    page_number_file = os.path.join(out_path, 'page_numbers.tex')
-    with io.open(page_number_file, 'w', encoding='utf-8') as f:
-        f.write('\setcounter{page}{%s}' % start)
+    prepare_dir(in_path, out_path, start)
+    metadata_path = prepare_metadata(out_path)
 
-    rst2tex(in_path, out_path)
+    if paper_type == 'rst':
+        rst2tex(out_path, metadata_path)
+    elif paper_type == 'tex':
+        tex2tex(out_path, metadata_path)
     pdflatex_stdout = tex2pdf(out_path)
     page_count(pdflatex_stdout, out_path)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

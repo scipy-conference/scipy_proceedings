@@ -2,7 +2,7 @@ import glob
 import os
 import io
 
-excludes = ['example', 'vanderwalt', 'bibderwalt']
+excludes = ['example']
 # status_file_root possible values: draft, conference, ready
 status_file_base = 'draft'
 status_file_name = ''.join([status_file_base, '.sty'])
