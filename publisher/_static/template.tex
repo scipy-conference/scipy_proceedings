@@ -1,0 +1,73 @@
+\documentclass[letterpaper,compsoc,twoside,onecolumn]{IEEEtran}
+
+%%% Custom LaTeX preamble
+\usepackage{scipy}
+\makeatletter
+
+% TODO can we inject this dynamically?
+\renewcommand{\leftmark}{PROC. OF THE 22nd PYTHON IN SCIENCE CONF. (SCIPY 2023)}
+\renewcommand{\rightmark}{$title/uppercase$}
+% prevent header from colliding with title
+% TODO can we also increase the top margin to make this look less awkward?
+\addtolength{\headsep}{0.1in}
+\addtolength{\topmargin}{-0.1in}
+
+$if(title)$
+\title{$title$}
+$endif$
+
+% process all the author stuff
+$if(authors)$
+% we use the first author for the copyright, so process them first
+$for(authors/first)$
+\author$if(it.institution)$[$it.institution[,]$]$else$[ ]$endif${$it.name$$if(it.corresponding)$\thanks{Corresponding author: \protect\href{mailto:$it.email$}{$it.email$}}$endif$\thanks{\noindent Copyright\,\copyright\,2021 $it.name$ et al. This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.}}$endfor$
+% then process every other author
+$for(authors/rest)$
+\author$if(it.institution)$[$it.institution[,]$]$else$[ ]$endif${$it.name$$if(it.corresponding)$\thanks{Corresponding author: \protect\href{mailto:$it.email$}{$it.email$}}$endif$}
+$endfor$
+% then do the institutions
+% TODO can we get all these back into the 'thanks' section with the fun
+% footnote markers?
+$for(institutions)$
+\affil[$it.order$]{\footnotesize $it.name$}
+$endfor$
+$endif$
+
+
+\begin{document}
+
+$if(title)$
+\maketitle
+$endif$
+
+$if(abstract)$
+\begin{abstract}
+$abstract$
+\end{abstract}
+$endif$
+
+$body$
+
+% $if(natbib)$
+% $if(bibliography)$
+% $if(biblio-title)$
+% $if(book-class)$
+% \renewcommand\bibname{$biblio-title$}
+% $else$
+% \renewcommand\refname{$biblio-title$}
+% $endif$
+% $endif$
+% \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+
+% $endif$
+% $endif$
+% $if(biblatex)$
+% \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+% $endif$
+
+% $if(bibliography)$
+% \bibliography{$bibliography$}
+% \bibliographystyle{ieeetr}
+% $endif$
+
+\end{document}
