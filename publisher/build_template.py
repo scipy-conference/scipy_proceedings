@@ -24,25 +24,28 @@ class TeXTemplate(tempita.Template):
             value = value.replace('&', '\&')
         elif sys.version_info[0] < 3 :
             value = unicode(value)
-        else: 
+        else:
             value = str(value)
         return value
 
-def _from_template(tmpl_basename, config, use_html=True):
+def _from_template(tmpl_basename, config, template_type='raw'):
     tmpl = os.path.join(template_dir, tmpl_basename + '.tmpl')
-    if use_html:
+    if template_type=='html':
         with io.open(tmpl, mode='r', encoding='utf-8') as f:
             template = tempita.HTMLTemplate(f.read())
-    else:
+    elif template_type=='latex':
         with io.open(tmpl, mode='r', encoding='utf-8') as f:
             template = TeXTemplate(f.read())
+    else:
+        with io.open(tmpl, mode='r', encoding='utf-8') as f:
+            template = tempita.Template(f.read())
     return template.substitute(config)
 
 def from_template(tmpl_basename, config, dest_fn):
     extension = os.path.splitext(dest_fn)[1][1:]
 
-    use_html = False if 'tex' in extension else True
-    outfile = _from_template(tmpl_basename, config, use_html=use_html)
+    template_type = 'tex' if 'tex' in extension else 'html'
+    outfile = _from_template(tmpl_basename, config, template_type=template_type)
     outname = os.path.join(build_dir, extension, dest_fn)
 
     with io.open(outname, mode='w', encoding='utf-8') as f:
@@ -57,15 +60,15 @@ def bib_from_tmpl(bib_type, config, target):
     out, err = run.communicate()
 
 def get_html_header(config):
-    return _from_template('header.html', config)
+    return _from_template('header.html', config, template_type='html')
 
 def get_html_content(tmpl, config):
-    return _from_template(tmpl, config)
+    return _from_template(tmpl, config, template_type='html')
 
 def html_from_tmpl(src, config, target):
 
     header = get_html_header(config)
-    content =  _from_template(src, config)
+    content =  _from_template(src, config, template_type='html')
 
     outfile = header+content
     dest_fn = os.path.join(html_dir, target + '.html')

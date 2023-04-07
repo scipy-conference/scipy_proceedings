@@ -2,7 +2,13 @@ import glob
 import os
 import io
 
-excludes = ['example', 'vanderwalt', 'bibderwalt']
+# to test the build process on the example papers / slides
+# comment out the entries in the excludes list
+excludes = [
+    'example',
+    'bibderwalt',
+    'texderwalt',
+]
 # status_file_root possible values: draft, conference, ready
 status_file_base = 'draft'
 status_file_name = ''.join([status_file_base, '.sty'])
