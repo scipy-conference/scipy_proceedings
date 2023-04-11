@@ -131,7 +131,7 @@ In addition to the following list, we break up the deadlines in the respective d
 Please submit your papers by 23:59 PST of the *1st Draft for Submission*
 Deadline.
 
-Submit your papers as an ReStructured Text (rst) or LaTeX file via PR against this repository. Supporting LaTeX submissions is very new this year, so please consider it to be in beta, and please only use this option if you are already familiar with writing papers in LaTeX.
+Submit your papers as a reStructuredText (rst) or LaTeX file via PR against this repository. Supporting LaTeX submissions is very new this year, so please consider it to be in beta, and please only use this option if you are already familiar with writing papers in LaTeX.
 
 During the Open Review Period authors should work with their reviewers to refine
 and improve their submission.
