@@ -32,7 +32,7 @@ from __future__ import unicode_literals
 
 import re
 import sys
-import cgi
+from html import escape as html_escape
 import traceback
 import os
 import tokenize
