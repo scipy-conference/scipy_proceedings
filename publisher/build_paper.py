@@ -49,6 +49,9 @@ header = r'''
 
 '''
 
+
+# explanations for some of this may be found here
+# https://github.com/docutils/docutils/blob/32ab1dbede9f1a93bfde479ea508cf308e0c5e1d/docutils/docs/user/latex.txt
 latex_header = r"""
 \def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
     \let\PY@ul=\relax \let\PY@tc=\relax%
