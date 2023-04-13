@@ -9,3 +9,4 @@ pytest
 testpath
 ##### requirements with version specifiers
 docutils == 0.14
+pyyaml
