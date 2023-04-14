@@ -228,7 +228,7 @@ git clone https://github.com/mpacer/scipy_proceedings
       submission's PR, create a separate PR against `dev`
       ([see below](#creating-build-system-prs) for more details).
 7. Repeat steps 5 and 6, while also responding to reviewer feedback.
-8. **DO NOT** fetch or pull the original `2023` branch after you start your paper.
+8. Unless instructed otherwise by the proceedings team, **DO NOT** fetch or pull the original `2023` branch after you start your paper.
     - Likewise, **DO NOT** update (merge/rebase) your branch with the original `2023` branch.
     - Otherwise, your branch may contain more than one paper, someone else's paper.
     - If you do, you may need to create your branch again and start over.
