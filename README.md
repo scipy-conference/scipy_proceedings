@@ -219,6 +219,8 @@ git clone https://github.com/mpacer/scipy_proceedings
 2. Update your local copy of the `scipy_proceedings` repo.
 3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2023` branch.
     - If you submit multiple papers, you will need a new branch for each.
+    - Your branch should only contain your paper and the example papers.
+    - Do not delete the example papers from your branch.
 4. [Set up your environment](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#build-your-paper)
 6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#push-your-changes) and [check your paper](#check-your-paper) on http://procbuild.scipy.org.
@@ -226,6 +228,11 @@ git clone https://github.com/mpacer/scipy_proceedings
       submission's PR, create a separate PR against `dev`
       ([see below](#creating-build-system-prs) for more details).
 7. Repeat steps 5 and 6, while also responding to reviewer feedback.
+8. **DO NOT** fetch or pull the original `2023` branch after you start your paper.
+    - Likewise, **DO NOT** update (merge/rebase) your branch with the original `2023` branch.
+    - Otherwise, your branch may contain more than one paper, someone else's paper.
+    - If you do, you may need to create your branch again and start over.
+    - All changes to your branch should be confined to only your [paper directory](#setting-up-your-environment).
 
 #### Getting a local copy of the scipy_proceedings repo
 
@@ -253,7 +260,7 @@ upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
     - `git fetch upstream`
 - Check out the upstream `2023` branch
     - `git checkout -b 2023 --track upstream/2023`
-
+.
 #### Creating a new branch
 
 If you are submitting only one paper, you can use the `2023` branch directly.
@@ -271,11 +278,11 @@ git push --set-upstream origin <your_branch_name>
 
 - Create a new environment (using your choice of environment manager, e.g., `pyenv` or `conda`).
 - Install/update the required python libraries (`pip install -U -r requirements.txt`).
-- Install LaTeX and any other non-python dependencies
-- Create a new directory `papers/<your_directory_name>`
-    - if you are submitting one paper, we recommend you use `<firstname_surname>`
-    - if you are submitting more than one paper, you will need to use a different
-      directory name for each paper
+- Install LaTeX and any other non-python dependencies.
+- Create a new directory `papers/<your_directory_name>`.
+    - If you are submitting one paper, we recommend you use `<firstname_surname>`.
+    - If you are submitting more than one paper, you will need to use a different
+      branch and directory name for each paper.
 
 #### Write your paper
 
