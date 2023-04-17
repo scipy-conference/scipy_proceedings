@@ -12,9 +12,11 @@
   {{else}}
   <span class="auth"><b>{{html_quote(auth) | html}}</b></span><br/>
   {{endif}}
+  {{if auth in article['author_institution_map']}}
   {{for inst in article['author_institution_map'][auth]}}
   <span class="authors">{{html_quote(inst) | html}}</span><br/>
   {{endfor}}
+  {{endif}}
   </p>
   <!---------------------------------------------------------->
 {{endfor}}

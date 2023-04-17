@@ -32,7 +32,7 @@ from __future__ import unicode_literals
 
 import re
 import sys
-import cgi
+from html import escape as html_escape
 import traceback
 import os
 import tokenize
@@ -466,10 +466,10 @@ def html_quote(value, force=True):
     if not isinstance(value, basestring_):
         value = coerce_text(value)
     if sys.version >= "3" and isinstance(value, bytes):
-        value = cgi.escape(value.decode('latin1'), 1)
+        value = html_escape(value.decode('latin1'), 1)
         value = value.encode('latin1')
     else:
-        value = cgi.escape(value, 1)
+        value = html_escape(value, 1)
     if sys.version < "3":
         if is_unicode(value):
             value = value.encode('ascii', 'xmlcharrefreplace')
