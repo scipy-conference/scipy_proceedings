@@ -1,0 +1,36 @@
+% package inclusion does not work, need to figure this out
+% \usepackage{url}
+
+% macros for comments
+\newcommand{\maren}[1]{{\color{blue} \textbf{[Maren: #1]}}}
+\newcommand{\andrei}[1]{{\color{red} \textbf{[Andrei: #1]}}}
+
+\subsection{Introduction \label{introduction}}
+A few general words about ML, statistical emulation, UQ, and software for those.
+
+\andrei{Testing out macroses}
+
+\subsection{Background on UQ methods}
+Here we should give a quick intro into BayesOpt, BQ, design of experiments. Also GPs and multi-fidelity modelling.
+
+\subsection{Emukit}
+Introduce the library, workflow (model-method-task)
+
+\subsection{Design}
+Here we can discuss our design choices: interfaces, wrappers, core classes and their extensions. Emphasise modelling backend indepdence. It is ok to use code here.
+
+We can go deep into design of BayesOpt and BQ packages, as the most developed parts of the library.
+
+\subsection{Usage and Adoption}
+Here we discuss how Emukit can be used and and why. We can talk about GPSS, ML for Physical World course, Freiburg course by Aaron Klein (at some point it was the case).
+
+WOuld be nice to maybe discuss concrete examples of problems solved with Emukit. Maybe a quick overview of citing papers, or maybe pick 2-3 and go deep into use cases?
+
+\subsection{Limitations}
+We can be open about limitations: no auto-diff, manual gradients, no easy GPU support. Explain that most of these stem from being model agnostic.
+
+\subsection{Related work}
+Here we talk about related packages: GPyOpt \cite{gpyopt2016}, BoTorch \cite{balandat2020botorch}, Trieste \cite{picheny2023trieste}. Probably not worth covering related work on every method we do.
+
+\subsection{Conclusion}
+we conclude the paper. maybe future work goes here? we don't have anything big planned

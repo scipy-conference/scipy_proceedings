@@ -5,3 +5,4 @@ _build
 *.pyc
 *.swp
 *~
+.venv
