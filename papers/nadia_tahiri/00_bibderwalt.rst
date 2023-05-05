@@ -12,9 +12,9 @@
 
 :video: https://www.youtube.com/watch?v=HHFuTpVvRCI
 
-------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
-------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+aPhyloGeo-Covid: A web interface for phylogeographic analysis of SARS-CoV-2 variation using Neo4j and Snakemake
+----------------------------------------------------------------------------------------------------------------
 
 .. class:: abstract
 
