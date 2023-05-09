@@ -17,13 +17,76 @@ Here we should give a quick intro into BayesOpt, BQ, design of experiments. Also
 Introduce the library, workflow (model-method-task)
 
 \subsection{Design}
-Here we can discuss our design choices: interfaces, wrappers, core classes and their extensions. Emphasise modelling backend indepdence. It is ok to use code here.
+At a conceptual level Bayesian learning methods -- such as optimisation, experimental design and quadrature -- are all cyclic decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also described by Algorithm \ref{alg:emukit_loop}).
 
-We can go deep into design of BayesOpt and BQ packages, as the most developed parts of the library.
+The common goal of all these methods is to learn a behavior of an \textit{objective function} - a black box expensive process. The knowledge available about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. A mechanism employed to propose new data points to evaluate the objective at is called an \textit{acquisition function}. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping criterion} is met. 
+
+\andrei{Still struggling to understand how to add commands to the preamble, could be that the template doesn't allow that at all. That's limiting, e.g. we cannot use packages for algorithms.}
+% Algorithm is taken from the original NeurIPS workshop paper
+% \begin{algorithm}
+    % \While{stopping condition is not met}{
+    %     collect next point(s) for evaluation\;
+    %     evaluate objective function\;
+    %     update model with new observation(s)\;
+    % }
+    % \caption{Decision making loop in Emukit}
+    % \label{alg:emukit_loop}
+% \end{algorithm}
+
+The internal structure of Emukit reflects these abstractions to ensure that fundamental components of the decision making loop could be swapped out and replaced. While some of the basic components in Emukit correspond to the parts of the Bayesian decision making loop exactly, others are more fine-grained to allow for greater flexibility and plug-and-play experience for the researchers using the package. We will now give an overview of these components.
+
+\andrei{Below is largely based on our documentation}
+\textbf{Outer Loop}. The \texttt{emukit.core.loop.OuterLoop} class is the abstract loop where the different components come together. Loops for specific methods, such as Bayesian optimisation and experiment design, should subclass it.
+
+\textbf{Model}. All Emukit loops need a probabilistic model. Emukit does not provide functionality to build models as there are already good modelling frameworks available in Python. Instead, it provides a way of interfacing third part modelling libraries. the interfacing mechanism consists of two parts: interfaces and wrappers. \textit{Interfaces} define functionality required from a model Different models and modelling frameworks will provide different functionality. For instance a Gaussian process will usually have derivatives of the predictions available but random forests will not. These different functionalities are represented by a set of interfaces which a model implements. The basic interface that all models must implement is \texttt{IModel}, which implements functionality to make predictions and update the model but a model may implement any number of other interfaces such as \texttt{IDifferentiable} which indicates a model has prediction derivatives available. Interfaces can also be defined by other components of the decision making loop to indicate that a certain functionality is required from the model. For example, \texttt{ICalculateVarianceReduction} defines methods the user needs to implement with their model to use it with the vadirance reduction technique. \texttt{Model wrappers} adopt third-party models and implement one or more of the interfaces using specific modelling framework. Emukit provides a wrapper for using a model created with \texttt{GPy}.
+
+\textbf{Candidate Point Calculator}. This entity drives the decision on which point(s) to evaluate next. The simplest implementation provided out of the box, \texttt{SequentialPointCalculator}, collects one point at a time by finding where the acquisition is at a maximum by applying the acquisition optimiser to the acquisition function. More complex implementations are possible, for example to enable batches of points to be collected so that the user function can be evaluated in parallel.
+
+\textbf{Acquisition}. The acquisition is a heuristic quantification of how valuable collecting a future point might be. It is used by the candidate point calculator to decide which point(s) to collect next.
+
+\textbf{Acquisition Optimizer}. The \texttt{AcquisitionOptimizer} optimizes the acquisition function to find the point at which the acquisition is at a maximum. If available, the optimizer can use the acquisition function gradients. Otherwise, it will either estimate them numerically, or use a gradient free optimisation.
+
+\textbf{User Function}. This is the component that represents the objective function. It can be evaluated by the user, or it can be passed into the loop and evaluated by Emukit.
+
+\textbf{Model Updater}. The \texttt{ModelUpdater} class updates the model with new training data after a new point is observed and optimizes any hyper-parameters of the model. It can decide whether hyper-parameters need updating based on some internal logic.
+
+\textbf{Stopping Condition}. The \texttt{StoppingCondition} class chooses when the decision making loop should stop collecting points. The most commonly used example is to stop when a set number of iterations have been reached.
+
+These are the core components Emukit defines. Specific methods can also define additional concepts of their own, e.g. cost or integration measures. Table \ref{table:abstraction_mapping} shows the mapping between Bayesian decision making abstractions and Emukit components.
+
+\begin{table}
+    \setlength{\DUtablewidth}{\tablewidth}
+    \begin{longtable}[c]{p{0.4\DUtablewidth}p{0.4\DUtablewidth}}
+        \toprule
+        \textbf{Bayesian decision making abstractions} & \textbf{Emukit components} \\
+        \midrule
+        \endfirsthead
+        Loop & Outer loop \\
+        \midrule
+        Probabilistic model & Model interface \\
+        & Model wrapper \\
+        \midrule
+        Acquisition function & Candidate Point Calculator \\
+        & Acquisition \\
+        & Acquisition optimiser \\
+        \midrule
+        Objective function & User function \\
+        & Model Updater \\
+        \midrule
+        Stopping Condition & Stopping condition \\
+        \bottomrule
+    \end{longtable}
+    \caption{The mapping between abstractions of the Bayesian deciion making process and the components defined in Emukit.}
+    \label{table:abstraction_mapping}
+\end{table}
+
+\andrei{Conclude the section}
 
 \subsection{Usage and Adoption}
+\andrei{I am not sure if we actually want to talk about adoption}
 Here we discuss how Emukit can be used and and why. We can talk about GPSS, ML for Physical World course, Freiburg course by Aaron Klein (at some point it was the case).
 
+\andrei{But this idea i like more}
 WOuld be nice to maybe discuss concrete examples of problems solved with Emukit. Maybe a quick overview of citing papers, or maybe pick 2-3 and go deep into use cases?
 
 \subsection{Limitations}
