@@ -4,8 +4,8 @@ abstract:
 keywords:
   - statistical emulation
   - software
-  - bayesian optimisation
-  - bayesian quadrature
+  - Bayesian optimisation
+  - Bayesian quadrature
   - experimental design
 authors:
 - email: ap2169@cam.ac.uk
@@ -13,13 +13,13 @@ authors:
   - Department of Computer Science and Technology, University of Cambridge
   name: Andrei Paleyes
   corresponding: true
-- email: 
+- email: maren.mahsereci@uni-tuebingen.de
   institution:
-  - Max Plank Institute for Intelligent Systems
+  - University of Tübingen
   name: Maren Mahsereci
 - email: ndl21@cam.ac.uk
   institution:
   - Department of Computer Science and Technology, University of Cambridge
   name: Neil D. Lawrence
 bibliography: mybib
-title: Emukit A Python package for Uncertainty QUantification
+title: 'Emukit: A Python Package for Uncertainty Quantification'
