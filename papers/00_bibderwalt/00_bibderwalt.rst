@@ -118,6 +118,35 @@ wrapping the doi in ``\detokenize`` works to solve the issue.
      doi = \detokenize{10.1017/CBO9780511808432},
    }
 
+Citing software and websites
+++++++++++++++++++++++++++++
+
+Any paper relying on open-source software would surely want to include citations.
+Often you can find a citation in BibTeX format via a web search.
+Authors of software packages may even publish guidelines on how to cite their work.
+
+For convenience, citations to common packages such as
+Jupyter :cite:`jupyter`,
+Matplotlib :cite:`matplotlib`,
+NumPy :cite:`numpy`,
+pandas :cite:`pandas1` :cite:`pandas2`,
+scikit-learn :cite:`sklearn1` :cite:`sklearn2`, and
+SciPy :cite:`scipy`
+are included in this paper's ``.bib`` file.
+
+In this paper we not only terraform a desert using the package terradesert :cite:`terradesert`, we also catch a sandworm with it.
+To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
+
+.. code-block:: bibtex
+
+   @Misc{terradesert,
+     author = {TerraDesert Team},
+     title = {Code for terraforming a desert},
+     year = {2000},
+     url = {https://terradesert.com/code/},
+     note = {Accessed 1 Jan. 2000}
+   }
+
 Source code examples
 --------------------
 
