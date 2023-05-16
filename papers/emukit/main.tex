@@ -10,6 +10,7 @@
 
 
 \maren{Regarding the title of the paper: The UQ comes from the model backend and not from Emukit. Emukit takes a model that is capable of some kind of UQ and uses this capability for active data selection. So Emukit `actifies' the model, yielding an active learning method. The title may suggest that Emukit provide models with UQ capability which is does not. Thoughts on this?}
+\andrei{Makes sense! I don't think we have any leeway with the title though, because this is an approved title of the conference talk.}
 
 A few general words about ML, statistical emulation, UQ, and software for those.
 
@@ -31,11 +32,11 @@ Here we should give a quick intro into BayesOpt, BQ, design of experiments. Also
 \section{Emukit workflow}
 The typical workflow for users of Emukit is as follows (see Figure~\ref{figure:workflow} for a graphical description):
 
-\textbf{Build the model.} Instead of constraining the user to certain model classes, Emukit provides the flexibility of using user-specified models. Generally speaking, Emukit does not provide modelling capabilities, instead, expecting users to define their own models. Because of the variety of modelling frameworks available, Emukit does not mandate or make any assumptions about a particular modelling technique or a library, and suggests to implement a subset of defined model interfaces that are required to use a particular method.
+\textbf{Build the model.} Instead of constraining the user to certain model classes, Emukit provides the flexibility of using user-specified models. Generally speaking, Emukit does not provide modelling capabilities. Instead users are expected to define their own models. Because of the variety of modelling frameworks available, Emukit does not mandate or make any assumptions about a particular modelling technique or a library, and suggests to implement a subset of defined model interfaces that are required to use a particular method.
 
-\textbf{Run the method.} This is the main focus of Emukit. Emukit defines a general structure of a decision making method and offers implementations of several such methods: Bayesian optimization, Bayesian quadrature, experimental design, and sensitivity analysis. All methods in Emukit toolkit are model-agnostic and defining new APIs to accommodate other frameworks is easy.
+\textbf{Run the method.} This is the main focus of Emukit. Emukit defines a general structure of a decision making method and offers implementations of several such methods: Bayesian optimization, Bayesian quadrature, experimental design, and sensitivity analysis. All methods are model-agnostic and only rely model interfaces.
 
-\textbf{Solve the task.} For the end users, Emukit is a way to solve a certain task, which may have research or business value. Emukit comes with a set of examples of how tasks such as hyper-parameter tuning, sensitivity analysis multi-fidelity modelling or benchmarking are accomplished using the library.
+\textbf{Solve the task.} For the end users, Emukit is a way to solve a certain task, which may have research or business value. Emukit provides a set of examples of how tasks such as hyper-parameter tuning, sensitivity analysis multi-fidelity modelling or benchmarking are accomplished using the library.
 
 \begin{figure}[h]
     \centering
