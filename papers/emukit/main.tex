@@ -31,10 +31,25 @@ Here we should give a quick intro into BayesOpt, BQ, design of experiments. Also
 \section{Emukit}
 Introduce the library, workflow (model-method-task)
 
-\subsection{Design}
-\maren{Can we rename the section title to package design or sth like this? To a ML researcher `design' would be the node design. (I know these are not ML proceedings but it's still confusing)}
+The typical workflow for users of Emukit is as follows (see Figure~\ref{fig:workflow} for a graphical description):
+\begin{itemize}
+\item \emph{Build the model:} Instead of constraining the user to certain model classes, Emukit provides the flexibility of using user-specified models. Generally speaking, Emukit does not provide modelling capabilities, instead, expecting users to define their own models. Because of the variety of modelling frameworks available, Emukit does not mandate or make any assumptions about a particular modelling technique or a library, and suggests to implement a subset of defined model interfaces that are required to use a particular method.
+\item \emph{Run the method:} This is the main focus of Emukit. Emukit defines a general structure of a decision making method and offers implementations of several such methods: Bayesian optimization, Bayesian quadrature, experimental design, and sensitivity analysis. All methods in Emukit toolkit are model-agnostic and defining new APIs to accommodate other frameworks is easy.
+\item \emph{Solve the task:} For the end users, Emukit is a way to solve a certain task, which may have research or business value. Emukit comes with a set of examples of how tasks such as hyper-parameter tuning, sensitivity analysis multi-fidelity modelling or benchmarking are accomplished using the library.
+\end{itemize}
 
-At a conceptual level Bayesian learning methods -- such as optimisation, experimental design and quadrature -- are all cyclic decision making processes that follow a similar pattern.\maren{It may be good to simply use the defined names `Bayesian optimization' and `Bayesian quadrature' as not all optimization or quadrature methods are Bayesian. Also, it is not true that e.g., all Bayesian quadrature methods and all exp design methods are cyclic (it is true for BO though). The term Bayesian learning methods seems a bit ill-suited. We could perhaps talk about active learning/active point selection for probabilistic models (some of which are Bayesian).}
+\begin{figure}[h]
+    \centering
+      \includegraphics[scale=0.4]{figs/workflow.png}  
+    \caption{Summary of workflow for the users of Emukit. A model is computed in modelling framework of choice. The model is wrapped using a pre-defined interface and connected to the core components of several methods such as Bayesian optimization, experimental design etc. Specific tasks are then solved using these methods.}
+    \label{fig:workflow}
+\end{figure}
+
+\subsection{Architecture of the Emukit package}
+\maren{Can we rename the section title to package design or sth like this? To a ML researcher `design' would be the node design. (I know these are not ML proceedings but it's still confusing)}
+\andrei{Sure thing, renamed, although this is probably not ideal either.}
+
+At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and quadrature -- are all cyclic decision making processes that follow a similar pattern.\maren{It may be good to simply use the defined names `Bayesian optimization' and `Bayesian quadrature' as not all optimization or quadrature methods are Bayesian. Also, it is not true that e.g., all Bayesian quadrature methods and all exp design methods are cyclic (it is true for BO though). The term Bayesian learning methods seems a bit ill-suited. We could perhaps talk about active learning/active point selection for probabilistic models (some of which are Bayesian).} \andrei{Fair enough, I just invented something on the go. But it would be very convenient to have a collective name.}
 Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also described by Algorithm \ref{alg:emukit_loop}).
 
 The common goal of all these methods is to learn a behavior of an \textit{objective function} - a black box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. A mechanism employed to propose new data points to evaluate the objective at is called an \textit{acquisition function}. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met. 
