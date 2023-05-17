@@ -132,7 +132,11 @@ WOuld be nice to maybe discuss concrete examples of problems solved with Emukit.
 We can be open about limitations: no auto-diff, manual gradients, no easy GPU support. Explain that most of these stem from being model agnostic.
 
 \section{Related work}
-Here we talk about related packages: GPyOpt \cite{gpyopt2016}, BoTorch \cite{balandat2020botorch}, Trieste \cite{picheny2023trieste}. Probably not worth covering related work on every method we do.
+Python ecosystem is rich with powerful scientific packages, including those that cover certain decision making methods. Bayesian optimisation enjoys a particularly wide selection of tools and frameworks. GPyOpt \cite{gpyopt2016} is one of the first Python packages for Bayesian optimisation, and served as an inspiration for the first release of Emukit. BoTorch \cite{balandat2020botorch} is a popular package for Bayesian optimisation based on PyTorch. Similarly, Trieste \cite{picheny2023trieste} also focuses on Bayesian optimisation but uses Tensorflow as a backend. \andrei{Mention Dragonfly, Spearmint, and more.}
+
+\andrei{Say that outside of BO there are fewer packages. bayesquad, Trieste for exp design. What else?}
+
+\andrei{Also consider covering software outside Python}
 
 \section{Conclusion}
 we conclude the paper. maybe future work goes here? we don't have anything big planned
