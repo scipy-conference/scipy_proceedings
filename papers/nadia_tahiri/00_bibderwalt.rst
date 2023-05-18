@@ -1,5 +1,5 @@
 :author: Wanlin Li
-:email: jj@rome.it
+:email: wanlin.li@usherbrooke.ca
 :institution: Senate House, S.P.Q.R.
 
 :author: Nadia Tahiri
