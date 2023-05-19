@@ -1,10 +1,10 @@
 :author: Wanlin Li
-:email: wanlin.li@usherbrooke.ca
-:institution: Senate House, S.P.Q.R.
+:email: Wanlin.Li@USherbrooke.ca
+:institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada
 
 :author: Nadia Tahiri
 :email: Nadia.Tahiri@USherbrooke.ca
-:institution: University of Sherbrooke, 
+:institution: Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada
 
 
 :bibliography: mybib
