@@ -6,7 +6,8 @@ keywords:
   - software
   - Bayesian optimisation
   - Bayesian quadrature
-  - experimental design
+  - Bayesian experimental design
+  - multi-fidelity
 authors:
 - email: ap2169@cam.ac.uk
   institution:
@@ -22,4 +23,4 @@ authors:
   - Department of Computer Science and Technology, University of Cambridge
   name: Neil D. Lawrence
 bibliography: mybib
-title: 'Emukit: A Python Package for Uncertainty Quantification'
+title: 'Emukit: A Python toolkit for decision making under uncertainty'
