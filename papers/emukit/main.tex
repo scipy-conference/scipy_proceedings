@@ -173,6 +173,8 @@ Usage of Bayesian quadrature (BQ) API is more envolved, as even in its most basi
   )
 \end{verbatim}
 
+Once the loop object is created, either for optimisation, quadrature or experiment design, it can be evaluated in one of two modes. If the user has access to the objective function via Python, the loop can be managed by Emukit with the \texttt{run_loop} method that accepts two arguments: the objective function and the stopping criterion. If the objective has to be called externally (e.g. a lab experiment has to be done), Emukit provides \texttt{get_next_points} method that produces the next evaluation point(s) based on the data observed so far. In that latter case user has to manage the decision making loop themselves.
+
 To support research on multi-fidelity emulation methods, Emukit implements both linear and non-linear multi-fidelity models. The user is expected to bring data for each of the fidelities and make the choice of appropriate Gaussian process kernel. Emukit can then be used to define a combined multi-fidelity model. In the example below a define a linear model.
 
 \begin{verbatim}
@@ -182,7 +184,7 @@ To support research on multi-fidelity emulation methods, Emukit implements both 
   # as an input variable
   X, Y = convert_xy_lists_to_arrays(
     [x_low, x_high],
-    [y_low, y_high]#
+    [y_low, y_high]
   )
 
   kernels = [GPy.kern.RBF(dim=1), GPy.kern.RBF(dim=1)]
@@ -194,6 +196,8 @@ To support research on multi-fidelity emulation methods, Emukit implements both 
   )
 \end{verbatim}
 
+In addition to the APIs discussed above, Emukit also provides basic support for sensitivity analysis and benchmarking. Further information about Emukit's functionality, including available implementations of acquisition functions, multi-output models, support for constraints and cost functions, custom events in the outer loop, etc., can be found on library's website\footnote{\url{https://emukit.github.io/}}, documentation\footnote{\url{https://emukit.readthedocs.io/en/latest/}} and tutorial notebooks\footnote{\url{https://nbviewer.org/github/emukit/emukit/blob/main/notebooks/index.ipynb}}. 
+
 \maren{May it be useful to introduce each of the methods (BO, BQ, ExpDesign) with some minimal example code similarly to the webpage? }
 \andrei{Good idea! Did the first pass.}
 
@@ -201,18 +205,18 @@ To support research on multi-fidelity emulation methods, Emukit implements both 
 Since its announcement in 2019 \cite{paleyes2019emulation}, Emukit was used in a wide range of research projects. In this section we review a selection of these projects to showcase the breadth of situations in which the library can be useful.
 
 \subsection{Methodological research}
-Thanks to its flexibility Emukit allows researchers to rapidly experiment with the ways to implement methods in Emukit's suite. In this section we discuss several such papers.
+Because of its flexibility Emukit allows researchers to rapidly experiment with decision making methods in Emukit's suite. In this section we discuss several papers that leverage this fact.
 
-Optimisation of parameters in high dimensional structured data spaces is an increasingly important and challenging task. A common pattern is to use unsupervised learning methods to project parameters into low dimensional continuous representations, also known as latent spaces. In \cite{siivola2021good} the authors study the effect of different search space design choices on the Bayesian optimisation procedure. Namely, the effects of the dimensionality of the latent space, the optimisation bounds, and the choice of acquisition function are analyzed. Emukit's plug-and-play design allowed the researchers to facilitate an efficient comparison ofthese components in isolation, without affecting the rest of the the optimisation loop.
+Optimisation of parameters in high dimensional structured data spaces is an increasingly important and challenging task. A common pattern is to use unsupervised learning methods to project parameters into low dimensional continuous representations, also known as latent spaces. There are multiple ways to approach the design the Bayesian optimisation procedure on such latent spaces. Siivola et al. \cite{siivola2021good} study the effects of various design choices. Namely, the effects of the dimensionality of the latent space, the optimisation bounds, and the choice of acquisition function are analyzed. Emukit's plug-and-play design allowed the researchers to facilitate an efficient comparison of these components in isolation, without affecting the rest of the the optimisation loop.
 
 \andrei{Maren, would you like to write a paragraph about your work on BQ with Alex G.?}
 
 \subsection{Applications}
-In this section we describe a few way Emukit was used to solve a problem in applied domains.
+In this section we describe several cases where Emukit was used to solve a problem in an applied domain.
 
-The authors of \cite{uhrenholt2019efficient} used Emukit's Bayesian optimisation module to solve the problem of finding settings of a musical synthesizer to produce a given sound. A musical synthesizer produces sound by generating waveforms via oscillators. Created audio streams are then routed through a pipeline that consists (not necessary all) of mixing of separate streams, filtering, adding of noise, and saturation. Musicians can control the output sound by changing the configuration of the pipeline. In order to estimate the discrepancy between the produced sound and the target, the authors designed a novel modeling approach, in which Gaussian process is used to model the distribution of the output's L2 norm. The flexibility of Emukit allowed to implement this customization directly, without necessary effort duplication. Emukit's API also facilitated a fair comparison to standard Bayesian optimization baseline.
+Uhrenholt and Jensen used Emukit's Bayesian optimisation module to solve the problem of finding settings of a musical synthesizer to produce a given sound \cite{uhrenholt2019efficient}. A musical synthesizer produces sound by generating waveforms via oscillators. Created audio streams are then routed through a pipeline that consists (not necessary all) of mixing of separate streams, filtering, adding of noise, and saturation. Musicians can control the output sound by changing the configuration of the pipeline. In order to estimate the discrepancy between the produced sound and the target, the authors designed a novel modeling approach, in which Gaussian process is used to model the distribution of the output's L2 norm. The flexibility of Emukit allowed to implement this customization directly, without necessary effort duplication. Emukit's API also facilitated a fair comparison to standard Bayesian optimization baseline.
 
-The authors of \cite{PhysRevC105034910} faced the problem of combining data from multiple particle accelerators, including Large Hadron Collider and Relativistic Heavy Ion Collider, to study the properties of quark-gluon plasma. Nuclear collision experiments generate a large body of measurements with varying levels of uncertainty that would be expensive to quantify with simulations. Instead the authors proposed to use inexpensive statistical emulators and use transfer learning to leverage similarities between different heavy ion collisions systems. This new technique is based on multi-fidelity emulation, making Emukit an obvious implementation choice.
+Liyanage et al. faced the problem of combining data from multiple particle accelerators, including Large Hadron Collider and Relativistic Heavy Ion Collider, to study the properties of quark-gluon plasma \cite{PhysRevC105034910}. Nuclear collision experiments generate a large body of measurements with varying levels of uncertainty that would be expensive to quantify with simulations. Instead the authors proposed to use inexpensive statistical emulators and use transfer learning to leverage similarities between different heavy ion collisions systems. This new technique is based on multi-fidelity emulation, making Emukit an obvious implementation choice.
 
 \section{Related work}
 Python ecosystem is rich with powerful scientific packages, including those that cover decision making methods. In particular, Bayesian optimisation enjoys a wide selection of tools and frameworks. Spearmint \cite{snoek2012practical} and GPyOpt \cite{gpyopt2016} are among the first Python packages for Bayesian optimisation, the latter being an inspiration for the first release of Emukit. BoTorch \cite{balandat2020botorch} is a popular library for Bayesian optimisation based on PyTorch. Similarly, Trieste \cite{picheny2023trieste} also focuses on Bayesian optimisation but uses Tensorflow as a backend. More options, such as pyGPGO \cite{jimenez2017pygpgo}, scikit-optimize \cite{louppe2017bayesian}, RoBO \cite{klein-bayesopt17} are also available. For other methods supported by Emukit the choice of frameworks is more scarce. Namely, bayesquad \cite{Charles2013} appears to be the only other usable Python package for Bayesian quadrature. Optbayesexpt \cite{mcmichael2021optbayesexpt} and NEXTorch \cite{wang2021nextorch} provide Bayesian experimental design functional adopted for their respective fields. Elements of Bayesian experimental design can also be found in Trieste \cite{picheny2023trieste}. The key difference between Emukit and mentioned libraries is the fact that Emukit does not dictate a particular modelling framework, allowing for flexibility in choices of computational backends.
