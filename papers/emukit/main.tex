@@ -74,6 +74,7 @@ The internal structure of Emukit reflects these abstractions to ensure that fund
 \textbf{Parameter space}. Represents parameter space of the objective function. Emukit supports continuous, categorical, discrete, and bandit parameters.
 
 \textbf{Model}. All Emukit loops need a probabilistic model. Emukit does not provide functionality to build models as there are already good modelling frameworks available in Python. Instead, it provides a way of interfacing third part modelling libraries. The interfacing mechanism consists of two parts: interfaces and wrappers. \textit{Interfaces} define functionality required from a model Different models and modelling frameworks will provide different functionality. For instance a Gaussian process will usually have derivatives of the predictions available but random forests will not. These different functionalities are represented by a set of interfaces which a model implements. The basic interface that all models must implement is \texttt{IModel}, which implements functionality to make predictions and update the model but a model may implement any number of other interfaces such as \texttt{IDifferentiable} which indicates a model has prediction derivatives available. Interfaces can also be defined by other components of the decision making loop to indicate that a certain functionality is required from the model. For example, \texttt{ICalculateVarianceReduction} defines methods the user needs to implement with their model to use it with the vadirance reduction technique. \texttt{Model wrappers} adopt third-party models and implement one or more of the interfaces using specific modelling framework. Emukit provides a wrapper for using a model created with \texttt{GPy} \cite{gpy2014}.
+
 \maren{I find the interface capability of Emukit quite unique and a real selling point. It somehow gets lost a bit in between the lines. Shall we make a separate section called `model interfaces' or `custom backends' or sth similar with an example and simply mention here briefly that models are big interfaced?}
 
 \textbf{Candidate Point Calculator}. This entity drives the decision on which point(s) to evaluate next. The simplest implementation provided out of the box, \texttt{SequentialPointCalculator}, collects one point at a time by finding where the acquisition is at a maximum by applying the acquisition optimiser to the acquisition function. More complex implementations are possible, for example to enable batches of points to be collected so that the user function can be evaluated in parallel.
@@ -118,7 +119,7 @@ These are the core components Emukit defines. Specific methods can also define a
 \end{table}
 
 \section{Methods}
-In this section we show case Emukit's high level APIs for all main funcitons of the package: Bayesian optimisation, Bayesian quadrature, experimental design, mutli-fidelity emulation. Unless stated otherwise, we assume some initial data (e.g. three-four data points) is already defined and stored in variables \texttt{X} (inputs) and texttt{Y} (outputs). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude lines that import Emukit classes for brevity.
+In this section we show case Emukit's high level APIs for all main funcitons of the package: Bayesian optimisation, Bayesian quadrature, experimental design, mutli-fidelity emulation. Unless stated otherwise, we assume some initial data (e.g. three-four data points) is already defined and stored in variables \texttt{X} (inputs) and \texttt{Y} (outputs). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude lines that import Emukit classes for brevity.
 
 Interfaces for Bayesian optimisation and experimental design are the most straighforward way to use the library. Both methods require the user to define a model and wrap it in the Emukit's model wrapper. Input space also has to be defined using Emukit's classes. The choice of acquisition function is optional, as reasonable defaults are provided. High level loop objects allow the user to execute the decision making loop and access its properties.
 
@@ -131,21 +132,21 @@ Interfaces for Bayesian optimisation and experimental design are the most straig
   model_emukit = GPyModelWrapper(model_gpy)
 
   expected_improvement_acquisition =
-    ExpectedImprovement(model = model_emukit)
+      ExpectedImprovement(model = model_emukit)
   bayesopt_loop = BayesianOptimizationLoop(
-    model = model_emukit,
-    space = parameter_space,
-    acquisition = expected_improvement_acquisition
+      model = model_emukit,
+      space = parameter_space,
+      acquisition = expected_improvement_acquisition
   )
 
   model_variance_acquisition =
-    ModelVariance(model = model_emukit)
+      ModelVariance(model = model_emukit)
   experimental_design_loop =
-    ExperimentalDesignLoop(
-      model = model_emukit,
-      space = parameter_space,
-      acquisition = model_variance
-    )
+      ExperimentalDesignLoop(
+          model = model_emukit,
+          space = parameter_space,
+          acquisition = model_variance
+      )
 \end{verbatim}
 
 Usage of Bayesian quadrature (BQ) API is more envolved, as even in its most basic form it requires more design choices from the user. First the objective function, also referred to as an integrand, is modelled with a Gaussian process. Since BQ integrates the kernel function, its kernel is then wrapped in a separate Emukit object.  Bundled together, wrappers around the kernel and the model itself represent a base model in the BQ package. This model can be used with several BQ methods, the code below illustrates vanilla Bayesian quadrature where the GP model is directly placed over the integrand function and then integrated analytically.
@@ -157,23 +158,23 @@ Usage of Bayesian quadrature (BQ) API is more envolved, as even in its most basi
 
   emukit_rbf = RBFGPy(gpy_model.kern)
   emukit_qrbf = QuadratureRBF(
-    emukit_rbf,
-    integral_bounds=[(lb, ub)]
+      emukit_rbf,
+      integral_bounds=[(lb, ub)]
   )
   emukit_model = BaseGaussianProcessGPy(
-    kern=emukit_qrbf,
-    gpy_model=gpy_model
+      kern=emukit_qrbf,
+      gpy_model=gpy_model
   )
 
   emukit_method = VanillaBayesianQuadrature(
-    base_gp=emukit_model
+      base_gp=emukit_model
   )
   emukit_loop = VanillaBayesianQuadratureLoop(
-    model=emukit_method
+      model=emukit_method
   )
 \end{verbatim}
 
-Once the loop object is created, either for optimisation, quadrature or experiment design, it can be evaluated in one of two modes. If the user has access to the objective function via Python, the loop can be managed by Emukit with the \texttt{run_loop} method that accepts two arguments: the objective function and the stopping criterion. If the objective has to be called externally (e.g. a lab experiment has to be done), Emukit provides \texttt{get_next_points} method that produces the next evaluation point(s) based on the data observed so far. In that latter case user has to manage the decision making loop themselves.
+Once the loop object is created, either for optimisation, quadrature or experiment design, it can be evaluated in one of two modes. If the user has access to the objective function via Python, the loop can be managed by Emukit with the \texttt{run\_loop} method that accepts two arguments: the objective function and the stopping criterion. If the objective has to be called externally (e.g. a lab experiment has to be done), Emukit provides \texttt{get\_next\_points} method that produces the next evaluation point(s) based on the data observed so far. In that latter case user has to manage the decision making loop themselves.
 
 To support research on multi-fidelity emulation methods, Emukit implements both linear and non-linear multi-fidelity models. The user is expected to bring data for each of the fidelities and make the choice of appropriate Gaussian process kernel. Emukit can then be used to define a combined multi-fidelity model. In the example below a define a linear model.
 
@@ -183,16 +184,21 @@ To support research on multi-fidelity emulation methods, Emukit implements both 
   # to arrays where fidelity is represented
   # as an input variable
   X, Y = convert_xy_lists_to_arrays(
-    [x_low, x_high],
-    [y_low, y_high]
+      [x_low, x_high],
+      [y_low, y_high]
   )
 
-  kernels = [GPy.kern.RBF(dim=1), GPy.kern.RBF(dim=1)]
-  linear_mf_kernel = LinearMultiFidelityKernel(kernels)
-  gpy_linear_mf_model = GPyLinearMultiFidelityModel(
-    X, Y,
-    linear_mf_kernel,
-    n_fidelities = 2
+  kernels = [
+      GPy.kern.RBF(dim=1),
+      GPy.kern.RBF(dim=1)
+  ]
+  linear_mf_kernel =
+      LinearMultiFidelityKernel(kernels)
+  gpy_linear_mf_model =
+      GPyLinearMultiFidelityModel(
+          X, Y,
+          linear_mf_kernel,
+          n_fidelities = 2
   )
 \end{verbatim}
 
