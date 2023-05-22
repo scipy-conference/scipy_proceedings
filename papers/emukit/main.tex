@@ -118,11 +118,87 @@ These are the core components Emukit defines. Specific methods can also define a
 \end{table}
 
 \section{Methods}
+In this section we show case Emukit's high level APIs for all main funcitons of the package: Bayesian optimisation, Bayesian quadrature, experimental design, mutli-fidelity emulation. Unless stated otherwise, we assume some initial data (e.g. three-four data points) is already defined and stored in variables \texttt{X} (inputs) and texttt{Y} (outputs). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude lines that import Emukit classes for brevity.
+
+Interfaces for Bayesian optimisation and experimental design are the most straighforward way to use the library. Both methods require the user to define a model and wrap it in the Emukit's model wrapper. Input space also has to be defined using Emukit's classes. The choice of acquisition function is optional, as reasonable defaults are provided. High level loop objects allow the user to execute the decision making loop and access its properties.
+
+\begin{verbatim}
+  parameter_space = ParameterSpace([
+      ContinuousParameter('x1', -5, 10),
+      ContinuousParameter('x2', 0, 15)
+  ])
+  model_gpy = GPy.models.GPRegression(X,Y)
+  model_emukit = GPyModelWrapper(model_gpy)
+
+  expected_improvement_acquisition =
+    ExpectedImprovement(model = model_emukit)
+  bayesopt_loop = BayesianOptimizationLoop(
+    model = model_emukit,
+    space = parameter_space,
+    acquisition = expected_improvement_acquisition
+  )
+
+  model_variance_acquisition =
+    ModelVariance(model = model_emukit)
+  experimental_design_loop =
+    ExperimentalDesignLoop(
+      model = model_emukit,
+      space = parameter_space,
+      acquisition = model_variance
+    )
+\end{verbatim}
+
+Usage of Bayesian quadrature (BQ) API is more envolved, as even in its most basic form it requires more design choices from the user. First the objective function, also referred to as an integrand, is modelled with a Gaussian process. Since BQ integrates the kernel function, its kernel is then wrapped in a separate Emukit object.  Bundled together, wrappers around the kernel and the model itself represent a base model in the BQ package. This model can be used with several BQ methods, the code below illustrates vanilla Bayesian quadrature where the GP model is directly placed over the integrand function and then integrated analytically.
+
+\begin{verbatim}
+  lb = -3. # lower integral bound
+  ub = 3. # upper integral bound
+  gpy_model = GPy.models.GPRegression(X=X, Y=Y)
+
+  emukit_rbf = RBFGPy(gpy_model.kern)
+  emukit_qrbf = QuadratureRBF(
+    emukit_rbf,
+    integral_bounds=[(lb, ub)]
+  )
+  emukit_model = BaseGaussianProcessGPy(
+    kern=emukit_qrbf,
+    gpy_model=gpy_model
+  )
+
+  emukit_method = VanillaBayesianQuadrature(
+    base_gp=emukit_model
+  )
+  emukit_loop = VanillaBayesianQuadratureLoop(
+    model=emukit_method
+  )
+\end{verbatim}
+
+To support research on multi-fidelity emulation methods, Emukit implements both linear and non-linear multi-fidelity models. The user is expected to bring data for each of the fidelities and make the choice of appropriate Gaussian process kernel. Emukit can then be used to define a combined multi-fidelity model. In the example below a define a linear model.
+
+\begin{verbatim}
+  # This utility method allows to
+  # convert data from different fidelities
+  # to arrays where fidelity is represented
+  # as an input variable
+  X, Y = convert_xy_lists_to_arrays(
+    [x_low, x_high],
+    [y_low, y_high]#
+  )
+
+  kernels = [GPy.kern.RBF(dim=1), GPy.kern.RBF(dim=1)]
+  linear_mf_kernel = LinearMultiFidelityKernel(kernels)
+  gpy_linear_mf_model = GPyLinearMultiFidelityModel(
+    X, Y,
+    linear_mf_kernel,
+    n_fidelities = 2
+  )
+\end{verbatim}
 
 \maren{May it be useful to introduce each of the methods (BO, BQ, ExpDesign) with some minimal example code similarly to the webpage? }
+\andrei{Good idea! Did the first pass.}
 
 \section{Examples of usage}
-Since its announcement in 2019 \cite{paleyes2021emulation}, Emukit was used in a wide range of research projects. In this section we review a selection of these projects to showcase the breadth of situations in which the library can be useful.
+Since its announcement in 2019 \cite{paleyes2019emulation}, Emukit was used in a wide range of research projects. In this section we review a selection of these projects to showcase the breadth of situations in which the library can be useful.
 
 \subsection{Methodological research}
 Thanks to its flexibility Emukit allows researchers to rapidly experiment with the ways to implement methods in Emukit's suite. In this section we discuss several such papers.
