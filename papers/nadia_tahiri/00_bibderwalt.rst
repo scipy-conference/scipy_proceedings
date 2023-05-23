@@ -10,7 +10,7 @@
 :bibliography: mybib
 
 ----------------------------------------------------------------------------------------------------------------
-Reproducible and Interactive Phylogeographic Analysis of SARS-CoV-2 Variation: Leveraging Neo4j Database and Snakemake for an Efficient Interface
+aPhyloGeo-Covid: A Web Interface for Phylogeographic Analysis of SARS-CoV-2 Variation using Neo4j and Snakemake 
 ----------------------------------------------------------------------------------------------------------------
 
 .. class:: abstract
