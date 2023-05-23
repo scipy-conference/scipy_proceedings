@@ -46,7 +46,7 @@ Various data sources related to SARS-CoV-2 were integrated into a Neo4j database
 
 .. figure:: fig1.png
 
-   This is the caption. :label:`fig1`
+   **Fig. 1:** Schema of Neo4j Database for Phylogeographic Analysis of SARS-CoV-2 Variation. The schema includes key entities and relationships essential for organizing and querying data related to samples of protein, samples of nucleotide, locations, lineages, analysis input, output and parameters. Each entity represents a distinct aspect of the analysis process and facilitates efficient data organization and retrieval. :label:`fig1`
 
 2.	Input exploration
 ++++++++++++++++++++++
@@ -62,7 +62,7 @@ The multi-step process is facilitated by the "Neo4j GraphDatabase" Python packag
 
 .. figure:: fig2.png
 
-   This is the caption. :label:`fig2`
+   **Fig. 2:** Spatial and Tempora Specific Sample Exploration in aPhyloGeo-Covid Interface. :label:`fig2`
    
    
 .. code-block:: python
@@ -113,7 +113,7 @@ This approach involved users defining specific locations and a date period throu
 
 .. figure:: fig3.png
 
-   This is the caption. :label:`fig3`
+   **Fig. 3:** Lineage-Specific Sample Exploration in aPhyloGeo-Covid Interface. :label:`fig3`
    
 .. code-block:: python
 
@@ -179,7 +179,7 @@ Subsequently, when the user confirms the start of the analysis with the SUBMIT b
 
 .. figure:: fig4.png
 
-   This is the caption. :label:`fig4`
+   **Fig. 4:** Parameters Tuning in aPhyloGeo-Covid Interface. :label:`fig4`
    
 .. code-block:: python
 
