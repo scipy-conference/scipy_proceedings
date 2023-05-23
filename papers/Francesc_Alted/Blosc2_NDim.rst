@@ -18,17 +18,17 @@
 :institution: Project Blosc
 
 
---------------------------------------------------------------------------------
-Using Blosc2 For A Fast Exploration Of The Milky Way (Or Any Other NDim Dataset)
---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset)
+---------------------------------------------------------------------------------
 
 .. class:: abstract
 
-    One of the latest and more exciting additions in Blosc2 is its Blosc2 NDim layer. It allows to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, allowing to slice and dice arbitrary large (and compressed!) data in a more fine-grained way.
+    N-dimensional datasets are common in many scientific fields, and quickly accessing subsets of these datasets is critical for an efficient exploration experience. Blosc2 is a compression and format library that recently added support for multidimensional datasets. Compression is crucial in effectively dealing with sparse datasets as the zeroed parts can be almost entirely suppressed, while the non-zero parts can still be stored in smaller sizes than their uncompressed counterparts. Moreover, the new double data partition in Blosc2 reduces the need for decompressing unnecessary data, which allows for top-class slicing speed.
 
-    Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels; typically the first partition (aka chunks) should be made to fit in L3 cache, whereas the second partition (aka blocks) should rather fit in L2/L1 caches (depending on whether compression ratio or speed is desired).
+    The Blosc2 NDim layer allows to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, allowing to slice and dice arbitrary large (and compressed!) data in a more fine-grained way. Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels, making compression more efficient.
 
-    As an example, we are going to use the Blosc NDim capabilities to enable a fast exploration of the Milky Way. We will use the Gaia DR3 dataset, which is a catalog of 1.7 billion stars in our galaxy. The dataset is 100 GB in size and it is stored in a 3D array of 1.7 billion rows, 6 columns and 3D coordinates (x, y, z).
+    As an example, we will demonstrate how Blosc2 NDim enables a fast exploration of the Milky Way. We will use the Gaia DR3 dataset, which is a catalog of 1.7 billion stars in our galaxy. The dataset is 100 GB in size and it is stored in a 3D array of 1.7 billion rows, 6 columns and 3D coordinates (x, y, z).
 
 .. class:: keywords
 
@@ -39,8 +39,34 @@ Introduction
 
 Blosc is a high-performance compressor that has been optimized for binary data. Its design allows for faster transmission of data to the processor cache than the traditional, non-compressed, direct memory fetch approach through an memcpy() OS call. This can be useful not only in reducing the size of large datasets on-disk or in-memory, but also in accelerating memory-bound computations, which is typical in vector-vector operations.
 
-Blosc2 is the new iteration of the Blosc 1.x series, which adds more features and better documentation. In particular, Blosc2 NDim (:cite:`BDT23-blosc2-ndim-intro`) excels at reading multi-dimensional slices, thanks to its innovative pineapple-style partitioning. To learn more, see...
+Blosc2 is the new iteration of the Blosc 1.x series, which adds more features and better documentation. In particular, the NDim feature of Blosc2 excels at reading multi-dimensional slices, thanks to its innovative pineapple-style partitioning (:cite:`BDT23-blosc2-ndim-intro`). This allows for a very fast exploration of general n-dim datasets (and in particular, a 3-d Milky Way dataset).
 
+Blosc uses the blocking technique (as described here) to reduce activity on the memory bus as much as possible. The blocking technique divides datasets into blocks small enough to fit in the caches of modern processors and performs compression/decompression there. It also leverages SIMD (SSE2) and multi-threading capabilities present in modern multi-core processors to accelerate the compression/decompression process to the maximum.
+
+.. figure:: sum_openmp-rainfall.png
+   :scale: 40%
+
+   Speed for summing up a vector of real float32 data using a variety of codecs that come with Blosc2. Observe the maximum speed is achieved when using the maximum number of (logical) threads in that computer (28). :label:`sum-precip`
+
+Using Blosc compression can accelerate real computations when enough cores are dedicated to the task. In Figure :ref:`sum-precip` you can see a real example of this.
+
+
+Blosc2 NDim
+-----------
+
+Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, allowing to slice and dice arbitrary large (and compressed!) data in a more fine-grained way. Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels, making compression more efficient.
+
+.. figure:: b2nd-2level-parts.png
+   :scale: 12%
+
+   Blosc2 NDim 2-level partitioning. :label:`b2nd-2level-parts`
+
+.. figure:: b2nd-3d-dset.png
+   :scale: 40%
+
+   Blosc2 NDim 2-level partitioning is flexible: you can specify the dimensions of both partitions in any arbitrary way that fitxs you read access patterns. :label:`b2nd-3d-dset`
+
+With these more fine-grained cubes (aka partitions), it is possible to retrieve arbitrary n-dim slices more rapidly because you don't have to decompress all the data that is necessary for the more coarse-grained partitions typical in other libraries.  See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` on how this works and can be setup.
 
 
 Bibliographies, citations and block quotes
