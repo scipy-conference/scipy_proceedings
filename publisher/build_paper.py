@@ -237,6 +237,8 @@ def detect_paper_type(in_path: str) -> str:
 def prepare_dir(in_path: str, out_path: str, start: int):
     """Copy required files to build dir
     """
+    # clear out whatever cruft might be in the output dir
+    shutil.rmtree(out_path)
     # copy the whole source folder to the build directory
     dir_util.copy_tree(in_path, out_path)
     base_dir = os.path.dirname(__file__)
