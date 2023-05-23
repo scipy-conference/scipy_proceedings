@@ -63,6 +63,48 @@ The multi-step process is facilitated by the "Neo4j GraphDatabase" Python packag
 .. figure:: fig2.png
 
    This is the caption. :label:`fig2`
+   
+   
+.. code-block:: python
+
+   @ app.callback(
+       Output('lineage-table', 'data'),
+       Output('valid-message', 'children'),
+       Input('button-confir-lineage', 'n_clicks'),
+        State('choice-lineage', 'value'),
+        State('type-dropdown', 'value')
+   )
+
+   def update_lineage_table(n, checklist_value, seqType_value):
+       if n is None:
+           return None, None
+       else:
+           if checklist_value and seqType_value:
+           # Query most common country in Neo4j database based on the name of the lineage
+               starts_with_conditions = " OR ".join(
+                   [f'n.lineage STARTS WITH "{char}"' for char in checklist_value])
+               query = f"""
+                   MATCH (n:Lineage) - [r: IN_MOST_COMMON_COUNTRY] -> (l: Location)
+                   WHERE {starts_with_conditions}
+                   RETURN n.lineage as lineage, n.earliest_date as earliest_date, 
+                     n.latest_date as latest_date, l.iso_code as iso_code, 
+                     n.most_common_country as most_common_country,  r.rate as rate
+                   """
+               cols = ['lineage', 'earliest_date', 'latest_date', 'iso_code',
+                       'most_common_country', 'rate']
+                # Transform Cypher results to pandas dataframe
+               df = neoCypher_manager.queryToDataframe(query, cols)
+               ...
+               table_data = df.to_dict('records')
+               return table_data, None
+           elif not checklist_value:
+               message = html.Div(
+                   "Please select at least one option from the checklist.")
+               return None, message
+           elif not seqType_value:
+               message = html.Div(
+                   "Please select sequence type.")
+               return None, message
 
 (2).	Search for lineages that were most common in a specific country during a certain time period, and then retrieve the corresponding sequences.
 
@@ -72,6 +114,57 @@ This approach involved users defining specific locations and a date period throu
 .. figure:: fig3.png
 
    This is the caption. :label:`fig3`
+   
+.. code-block:: python
+
+   @ app.callback(
+       Output('location-table', 'data'),
+       Output('valid-message2', 'children'),
+       Input('button-confir-lineage2', 'n_clicks'),
+       State('date-range-lineage', 'start_date'),
+       State('date-range-lineage', 'end_date'),
+       State('choice-location', 'value'),
+       State('type-dropdown2', 'value')
+   )
+   def update_table(n, start_date_string, end_date_string, checklist_value, seqType_value):
+       if n is None:
+           return None, None
+       else:
+           if start_date_string and end_date_string and checklist_value and seqType_value:
+           # Query lineage data in Neo4j database based on the name of location and date  
+               start_date = datetime.strptime(
+                   start_date_string, '%Y-%m-%d').date()
+               end_date = datetime.strptime(
+                   end_date_string, '%Y-%m-%d').date()
+               query = f"""
+                   MATCH (n:Lineage) - [r: IN_MOST_COMMON_COUNTRY] -> (l: Location)
+                   WHERE n.earliest_date > datetime("{start_date.isoformat()}") 
+                        AND n.earliest_date < datetime("{end_date.isoformat()}")
+                   AND l.location in {checklist_value}
+                   RETURN n.lineage as lineage, n.earliest_date as earliest_date, 
+                           n.latest_date as latest_date, l.iso_code, 
+                        l.location as most_common_country,  r.rate
+                   """
+               cols = ['lineage', 'earliest_date', 'latest_date', 'iso_code',
+                       'most_common_country', 'rate']
+               # Transform Cypher results to pandas dataframe
+               df = neoCypher_manager.queryToDataframe(query, cols)
+               # Convert the 'Date' column to pandas datetime format
+               ...
+               table_data = df.to_dict('records')
+               return table_data, None
+           elif not start_date_string or not end_date_string:
+               message = html.Div("Please select a date range.")
+               return None, message
+           elif not checklist_value:
+               message = html.Div(
+                   "Please select at least one option from the checklist.")
+               return None, message
+           elif not seqType_value:
+               message = html.Div(
+                   "Please select sequence type.")
+               return None, message
+
 
 In summary, these approaches leveraged the "Neo4j GraphDatabase" package and the interactive Dash web page to enable user-driven sequencing searching. Once input sequencing has been defined, an Input node is generated and labelled accordingly in our graph database. 
 This Input node is connected to each sequencing (Nucleotide or Protein) node used in the analysis, establishing relationships between the input data and the corresponding sequences. Each Input node is assigned a unique ID, which is provided to the client for reference.
@@ -87,6 +180,54 @@ Subsequently, when the user confirms the start of the analysis with the SUBMIT b
 .. figure:: fig4.png
 
    This is the caption. :label:`fig4`
+   
+.. code-block:: python
+
+   def generate_unique_name(nodesLabel):
+       driver = GraphDatabase.driver("neo4j+ssc://2bb60b41.databases.neo4j.io:7687",
+                                     auth=("neo4j", password))
+       with driver.session() as session:
+           random_name = generate_short_id()
+
+           result = session.run(
+               "MATCH (u:" + nodesLabel + " {name: $name}) RETURN COUNT(u)", name=random_name)
+           count = result.single()[0]
+
+           while count > 0:
+               random_name = generate_short_id()
+               result = session.run(
+                   "MATCH (u:" + nodesLabel + " {name: $name}) RETURN COUNT(u)", name=random_name)
+               count = result.single()[0]
+
+           return random_name
+
+
+   def addInputNeo(nodesLabel, inputNode_name, id_list):
+       # Execute the Cypher query
+       driver = GraphDatabase.driver("neo4j+ssc://2bb60b41.databases.neo4j.io:7687",
+                                     auth=("neo4j", password))
+
+       # Create a new node for the user
+       with driver.session() as session:
+           session.run(
+               "CREATE (userInput:Input {name: $name})", name=inputNode_name)
+       # Perform MATCH query to retrieve nodes
+       with driver.session() as session:
+           result = session.run(
+               "MATCH (n:" + nodesLabel + ") WHERE n.accession IN $id_lt RETURN n",
+               nodesLabel=nodesLabel,
+               id_lt=id_list)
+           # Create relationship with properties for each matched node
+           with driver.session() as session:
+               for record in result:
+                   other_node = record["n"]
+                   session.run("MATCH (u:Input {name: $name}), 
+                                 (n:" + nodesLabel + " {accession: $id}) "
+                               "CREATE (n)-[r:IN_INPUT]->(u)",
+                               name=inputNode_name, 
+                               nodesLabel=nodesLabel, 
+                               id=other_node["accession"])
+       print("An Input Node has been Added in Neo4j Database!")
 
 4.	Output exploration
 ++++++++++++++++++++++
@@ -133,15 +274,6 @@ The authors thank SciPy conference and reviewers for their valuable comments on 
 
 
 -------------------------------
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-
 
 
 .. [#] On the one hand, a footnote.
