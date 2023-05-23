@@ -201,7 +201,6 @@ Subsequently, when the user confirms the start of the analysis with the SUBMIT b
 
            return random_name
 
-
    def addInputNeo(nodesLabel, inputNode_name, id_list):
        # Execute the Cypher query
        driver = GraphDatabase.driver("neo4j+ssc://2bb60b41.databases.neo4j.io:7687",
@@ -266,41 +265,4 @@ Acknowledgements
 ------------
 
 The authors thank SciPy conference and reviewers for their valuable comments on this paper. This work was supported by the Natural Sciences and Engineering Research Council of Canada, the Université de Sherbrooke grant, and the Centre de recherche en écologie de l’Université de Sherbrooke (CREUS).
-
-
-
-
-
-
-
--------------------------------
-
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: fig11.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: fig11.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: fig11.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
 
