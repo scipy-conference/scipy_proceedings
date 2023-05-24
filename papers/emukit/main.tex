@@ -53,8 +53,6 @@ Decision making with statistical emulation consists of three parts. All starts w
 \end{figure}
 
 \section{Architecture of the Emukit package}
-\maren{Can we rename the section title to package design or sth like this? To a ML researcher `design' would be the node design. (I know these are not ML proceedings but it's still confusing)}
-\andrei{Sure thing, renamed, although this is probably not ideal either.}
 
 At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and quadrature -- are all cyclic decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm \ref{alg:emukit_loop}).
 
