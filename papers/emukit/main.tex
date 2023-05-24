@@ -8,9 +8,18 @@
 
 \section{Introduction}\label{introduction}
 
-A few general words about ML, statistical emulation, UQ, and software for those.
+\andrei{A few general words about ML, statistical emulation, UQ, and software for those.}
 
-\andrei{Testing out macroses}
+\maren{started to draft this. still subject to rapid changes...}
+Efficient data selection is a major challenge in supervised machine learning (ML) especially if the data acquisition is reasonably expensive. Quite often, and especially if data is abundant, it is collected prior to the training process and provided statically, meaning that the machine learning model has not influence on the data collection process. In such cases performance can be suboptimal \maren{cite}. Especially if data is expensive and thus scarce, it is beneficial to carefully select the dataset such that, for example, it is maximally informative under the ML model to achieve the task at hand. This branch of ML is generally called \emph{active learning} \maren{cite} and has attracted attention in various sub-fields such as \emph{experimental design} (the task of predicting an unknown function value from its input), \emph{global optimization} (guessing the global minimizer of a function) and \emph{integration} (guessing the integral of a function from function evaluations). \maren{cite all these in place}\maren{perhaps say here already what emukit does: actify the model}
+%Emukit provides a way to `actify' (make active) the data-acquisiion of custom models written in custom backends that only connect via an interface to Emukit. As such
+%whcih allows the user to 
+
+\maren{The following paragraph needs to be redone}
+Tasks where data is scares usually involve a higher degree of expert knowledge on the modeling side since prior information, such as mechanical or physical knowledge about the system that is being modeled is aimed to be incorporated in the hope to get physically meaningful and more accurate predictions on the task at hand. Not seldom these models are of probabilistic nature and can provide a degree of uncertainty of their prediction to counteract the lack of data. \maren{cite} An example is a \emph{statistical emulator}: A machine learning model that can be used in place of an expensive computer simulation and is trained on input-output pairs of this \emph{simulator} \maren{cite}. Concretely, the simulator could be an involved stochastic weather simulation, and the emulator a predictive machine learning model trained on expensive input-output pairs of the weather simulation.\maren{better example?} The emulator now can be used in place of the simulator to obtain fast predictions when needed. (In the remainder of text, we will use the terms `ML model' and `emulator' interchangeably. The `simulator' will later also be referred to as `user function' \maren{ref section})
+
+The performance of the emulator (the ML model) as mentioned is greatly dependent on the informatively of the data (the simulation results).\maren{say here that emukit enables active learning for custom models}
+
 
 \maren{Let's also briefly introduce and summarize the unique features of Emukit here. These are
   \begin{itemize}
@@ -21,6 +30,8 @@ A few general words about ML, statistical emulation, UQ, and software for those.
   \end{itemize}
 These should/could then be elaborated on later, perhaps in dedicated subsection with example code.
 }
+
+The remainder of the paper refers to tasks in an abstract sense, without a specific application in mind. This is because Emukit is abstracted away from a specific application and can be used for a variety of tasks that obey a certain algorithmic structure (more in this in Section~\maren{?}). 
 
 \section{Background on UQ methods}
 \andrei{Here we should give an introduction to relevant concepts. Starting with statistical emulation, surrogate modelling and GPs. Then we can move to BO, ED and BQ, stressing how they are all similar cyclic processes at the high level. Finishing with a few words on multi-fidelity emulation.}
