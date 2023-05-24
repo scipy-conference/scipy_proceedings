@@ -34,12 +34,12 @@ Methodology
 ------------
 
 Neo4j graph database and Dash platform
-+++++++++++++++++++++++++++++++++++++++++
+------------------------------------------
 
 A graph database is a type of database management system (DBMS) that uses graph structures for data representation and query processing :cite:`timon2021overview`. Unlike traditional relational databases that store data in tables with rows and columns, graph databases organize data as nodes, edges, and properties. In a graph database, nodes represent entities or objects, edges represent the relationships between nodes, and properties provide additional information about nodes and edges. One of the critical advantages of graph databases is their ability to traverse and query interconnected data efficiently. Graph databases excel at handling queries involving relationship patterns, graph algorithms, and path traversals. They enable efficient navigation through complex networks, enabling robust graph-based analyses and insights :cite:`vicknair2010comparison`.
 
 1.	Data Integration 
-++++++++++++++++++++++
+---------------------------
 
 Various data sources related to SARS-CoV-2 were integrated into a Neo4j database, covering the period from January 1, 2020, to December 31, 2022. The data sources include SARS-CoV-2 sequences from the SARS-CoV-2 Data Hub :cite:`brister2015ncbi`, lineage development information from Cov-Lineages :cite:`o2021tracking`, population density by country, positivity rates, vaccination rates, diabetes rates, aging data from Our World in Data :cite:`mathieu2021global`, and climate data from NASA/POWER :cite:`marzouk2021assessment`. Within the Neo4j database, we defined several labels to organize the data. These labels include Lineage, Protein, Nucleotide, Location, and LocationDay (See :ref:`fig1`). The Protein and Nucleotide labels store sequencing data information such as Accession, length, collection date, and collected country. The Lineage label stores lineage development information, including the most common country, latest date, and earliest date associated with each lineage. The LocationDay label stores climate information such as temperature, precipitation, wind speed, humidity and sky shortwave irradiance for each location and specific day. The Location label contains basic information about hospitals, health, and the economy of each country, including GDP, median age, life expectancy, population, the proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index, and more. Lineage nodes are connected to Nucleotide and Protein nodes, representing the relationships between lineages and their associated genetic sequence data. Lineage nodes also have relationships with Location nodes, using the most common occurrence rate as a property. This design allows users to determine the most common countries based on lineage names or search for lineages that were most common in specific countries during a certain time period.
 
@@ -49,7 +49,7 @@ Various data sources related to SARS-CoV-2 were integrated into a Neo4j database
    **Fig. 1:** Schema of Neo4j Database for Phylogeographic Analysis of SARS-CoV-2 Variation. The schema includes key entities and relationships essential for organizing and querying data related to samples of protein, samples of nucleotide, locations, lineages, analysis input, output and parameters. Each entity represents a distinct aspect of the analysis process and facilitates efficient data organization and retrieval. :label:`fig1`
 
 2.	Input exploration
-++++++++++++++++++++++
+----------------------
 
 To provide users with an interactive interface, we developed a web-based platform using Dash-Plotly :cite:`liermann2021dynamic`. Connecting the Dash Web platform to the Neo4j graph database enables quick retrieval of relevant data information from related nodes when users provide keywords about lineages or locations. This functionality allows users to quickly identify and filter the appropriate datasets for further phylogeographic analysis. By combining the power of the Neo4j database and the user-friendly web-based platform, our design facilitates efficient data exploration and selection, supporting researchers in their phylogeographic analysis of SARS-CoV-2 variation.
 
@@ -159,7 +159,7 @@ In summary, these approaches leveraged the "Neo4j GraphDatabase" package and the
 This Input node is connected to each sequencing (Nucleotide or Protein) node used in the analysis, establishing relationships between the input data and the corresponding sequences. Each Input node is assigned a unique ID, which is provided to the client for reference.
 
 3.	Parameters setting and tuning
-+++++++++++++++++++++++++++++++++++
+----------------------------------
 
 Once the input data has been defined, including sequence data and associated location information, the platform guides users to select the parameters for analysis. At this step, a Label named Analysis is created, and the values of the parameters are saved in the node as properties. These parameters include step size, window size, RF distance threshold, bootstrap threshold, and the list of the environmental factors involved in the analysis. Then a connection between the Input Node and the Analysis Node is created, which offers several advantages. Firstly, it enables users to compare the differences in results obtained from the same input samples but with different parameter settings. Secondly, it facilitates the comparison of analysis results obtained using the same parameter settings but different input samples. The networks of Input, Analysis, and Output nodes (:ref:`fig1`) ensure repeatability and comparability of the analysis results.
 
@@ -213,14 +213,14 @@ Subsequently, when the user confirms the start of the analysis with the SUBMIT b
        print("An Input Node has been Added in Neo4j Database!")
 
 4.	Output exploration
-++++++++++++++++++++++
+-----------------------------
 
 At the end of each analysis, an output node with a unique id is created in the Neo4j graph database. The associated nodes containing input and parameter information are connected to it by edges. Therefore, users can retrieve and visualize the analysis results through Output ID. The platform allows users to query individual results but also provides the capability to compare the results of multiple analyses. 
 
 Input, Analysis, and Output nodes created by different users form a network that encompasses numerous combinations of parameter settings and input configurations. As the utilization of the platform expands, this network grows, resulting in an open academic platform that fosters communication and collaboration. This feature enhances the user's ability to gain insights from the data and enables comprehensive analysis of the phylogeographic patterns of SARS-CoV-2 variation.
 
 Snakemake workflow for phylogenetic analysis
-++++++++++++++++++++++++++++++++++++++++++++++
+-----------------------------------------------
 
 In this study, a combination of sliding window strategy and phylogenetic analyses was used to explore the potential correlation between the diversity of specific genes or gene fragments and their geographic distribution. The approach involved partitioning a multiple sequence alignment into windows based on sliding window size and step size. Phylogenetic trees were constructed for each window, and cluster analyses were performed for various geographic factors using distance matrices and the Neighbor-Joining clustering method :cite:`mihaescu2009neighbor`. The correlation between phylogenetic and reference trees was evaluated using Robinson and Foulds (RF) distance calculation. Bootstrap and RF thresholds were applied to identify gene fragments with variation patterns within species that coincided with specific geographic features, providing informative reference points for future studies. The workflow encompassed steps such as reference tree construction, sliding windows, phylogenetic tree construction, preliminary filtering based on bootstrap threshold and RF distance, advanced phylogenetic tree construction, and further filtering based on bootstrap threshold and RF distance. The workflow utilized tools and software like Biopython :cite:`cock2009biopython`, raxml-ng :cite:`kozlov2019raxml`, fasttree :cite:`price2009fasttree`, and Python libraries such as robinson-foulds, NumPy, and pandas for data parsing, phylogenetic inference, RF distance calculation, mutation testing, and filter creation. A manuscript for aPhyloGeo-pipeline is available on Github Wiki (https://github.com/tahiri-lab/aPhyloGeo-pipeline/wiki).
 
