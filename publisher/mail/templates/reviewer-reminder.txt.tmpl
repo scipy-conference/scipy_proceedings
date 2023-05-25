@@ -1,0 +1,15 @@
+Dear {{to_name}},
+
+Thank you again for volunteering to review full papers for the {{proceedings['title']['acronym']}} {{proceedings['year']}}. This is a friendly reminder that you have been invited to review "{{title}}", which can be found at {{url}}.
+
+If you accept, please reply to this email with your GitHub username within the next few days. We ask that you complete an initial review no later than June 16th, and to work with the author through June 30th, or until you feel the paper is ready for inclusion in the proceedings.
+
+Please don't hesitate to contact us with any questions.
+
+Yours,
+The {{proceedings['title']['acronym']}} {{proceedings['year']}} Proceedings Committee
+{{for n in proceedings['editor']}}
+  {{n}}
+{{endfor}}
+
+
