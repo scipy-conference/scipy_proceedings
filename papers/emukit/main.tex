@@ -42,9 +42,9 @@ Decision making with statistical emulation consists of three parts. All starts w
 
 \textbf{Build the model.} Instead of constraining the user to certain model classes, Emukit provides the flexibility of using user-specified models. Generally speaking, Emukit does not provide modelling capabilities. Instead users are expected to define their own models. Because of the variety of modelling frameworks available, Emukit does not mandate or make any assumptions about a particular modelling technique or a library, and suggests to implement a subset of defined model interfaces that are required to use a particular method.
 
-\textbf{Run the method.} This is the main focus of Emukit. Emukit defines a general structure of a decision making method and offers implementations of several such methods: Bayesian optimization, Bayesian quadrature, experimental design, and sensitivity analysis. All methods are model-agnostic and only rely model interfaces.
+\textbf{Run the method.} This is the main focus of Emukit. Emukit defines a general structure of a decision making method and offers implementations of several such methods: Bayesian optimization, Bayesian quadrature, experimental design. All methods are model-agnostic and only rely model interfaces.
 
-\textbf{Solve the task.} For the end users, Emukit is a way to solve a certain task, which may have research or business value. Emukit provides a set of examples of how tasks such as hyper-parameter tuning, sensitivity analysis, multi-fidelity modelling or benchmarking are accomplished using the library.
+\textbf{Solve the task.} For the end users, Emukit is a way to solve a certain task, which may have research or business value. Emukit provides a set of examples of how tasks such as hyperparameter tuning, sensitivity analysis, multi-fidelity modelling or benchmarking are accomplished using the library.
 
 \begin{figure}[h]
     \centering
@@ -53,7 +53,7 @@ Decision making with statistical emulation consists of three parts. All starts w
     \label{figure:workflow}
 \end{figure}
 
-\section{Architecture of the Emukit package}
+\section{Structure of the library}
 
 At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and quadrature -- are all cyclic decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm \ref{alg:emukit_loop}).
 
@@ -122,10 +122,10 @@ These are the core components Emukit defines. Specific methods can also define a
     \label{table:abstraction_mapping}
 \end{table}
 
-\section{Methods}
-In this section we show Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design, mutli-fidelity emulation. Unless stated otherwise, we assume some initial data (e.g. three-four data points) is already defined and stored in variables \texttt{X} (inputs) and \texttt{Y} (outputs). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude lines that import Emukit classes for brevity.
+\section{Usage overview}
+In this section we show Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design, mutli-fidelity emulation. Unless stated otherwise, we assume some initial data (e.g. three-four data points) is already defined and stored in variables \texttt{X} (inputs) and \texttt{Y} (outputs). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude import lines for brevity.
 
-Interfaces for Bayesian optimisation and experimental design are the most straighforward way to use the library. Both methods require the user to define a model and wrap it in the Emukit's model wrapper. Input space also has to be defined using Emukit's classes. The choice of acquisition function is optional, as reasonable defaults are provided. High level loop objects allow the user to execute the decision making loop and access its properties.
+Interfaces for Bayesian optimisation and experimental design are the most straighforward ways to use the library. Both methods require the user to define a model and wrap it in the Emukit's model wrapper. Input space also has to be defined using Emukit's classes. The choice of acquisition function is optional, as reasonable defaults are provided. High level loop objects allow the user to execute the decision making loop and access its properties.
 
 \begin{verbatim}
 parameter_space = ParameterSpace([
@@ -153,7 +153,7 @@ experimental_design_loop =
     )
 \end{verbatim}
 
-Usage of Bayesian quadrature (BQ) API is more envolved, as even in its most basic form it requires more design choices from the user. First the objective function, also referred to as an integrand, is modelled with a Gaussian process (GP). Since BQ integrates the kernel function, the kernel is then wrapped in a separate Emukit object. Bundled together, wrappers around the kernel and the model itself represent a base model in the BQ package. This model can be used with several BQ methods, the code below illustrates vanilla Bayesian quadrature where the GP model is directly placed over the integrand function and then integrated analytically.
+Usage of Bayesian quadrature (BQ) API is more envolved, as even in its most basic form it requires more choices from the user. First the objective function, also referred to as an integrand, is modelled with a Gaussian process (GP). Since BQ integrates the kernel function, the kernel is then wrapped in a separate Emukit object. Bundled together, wrappers around the kernel and the model itself represent a base model in the BQ package. This model can be used with several BQ methods, the code below illustrates vanilla Bayesian quadrature where the GP model is directly placed over the integrand function and then integrated analytically.
 
 \begin{verbatim}
 lb = -3.0 # lower integral bound
@@ -227,7 +227,7 @@ In addition to the APIs discussed above, Emukit also provides basic support for 
 \maren{May it be useful to introduce each of the methods (BO, BQ, ExpDesign) with some minimal example code similarly to the webpage? }
 \andrei{Good idea! Did the first pass.}
 
-\section{Examples of usage}
+\section{Emukit in action}
 Since its announcement in 2019 \cite{paleyes2019emulation}, Emukit was used in a wide range of research projects. In this section we review a selection of these projects to showcase the breadth of situations in which the library can be useful.
 
 \subsection{Methodological research}
@@ -235,7 +235,7 @@ Because of its flexibility Emukit allows researchers to rapidly experiment with 
 
 Optimisation of parameters in high dimensional structured data spaces is an increasingly important and challenging task. A common pattern is to use unsupervised learning methods to project parameters into low dimensional continuous representations, also known as latent spaces. There are multiple ways to approach the design the Bayesian optimisation procedure on such latent spaces. Siivola et al. \cite{siivola2021good} study the effects of various design choices. Namely, the effects of the dimensionality of the latent space, the optimisation bounds, and the choice of acquisition function are analyzed. Emukit's plug-and-play design allowed the researchers to facilitate measurement of these effects in isolation.
 
-Emukit's composability was also leveraged for implementation of BOSH, a novel sampling approach for Bayesian optimisation of functions with stochastic evaluations \cite{moss2020bosh}. Authors used hierarchical Gaussian process as a surrogate and designed novel BOSH acquisition function based on the information-theoretic framework. Emukit was also used to assess BOSH performance against a variety of baselines.
+Emukit's composability was also leveraged for the implementation of BOSH, a sampling approach for Bayesian optimisation of functions with stochastic evaluations \cite{moss2020bosh}. Authors used hierarchical Gaussian process as a surrogate and designed a novel BOSH acquisition function using the information-theoretic framework, incorporating both pieces in Emukit's Bayesian optimisation loop. Emukit was also used to assess BOSH performance against a variety of baselines.
 
 \andrei{Maren, would you like to write a paragraph about your work on BQ with Alex G.? Or the one with Masha? Or both?}
 
@@ -263,9 +263,9 @@ Looking at a wider family of optimisation libraries in Python, Optuna \cite{optu
 \section{Limitations}\label{section:limitations}
 The design choices made in Emukit have proven to be highly beneficial for rapid prototyping and experimentation. However they also led to some of the key limitations of the library.
 
-Emukit does not provide modelling capabilities, and instead requires users to provide their own surrogate models. This requires certain level of proficiency with probabilistic modelling, and can prevent some people from using the library. While we aim to mitigate this with extensive collection of examples and tutorials, and Emukit is successfully used in teaching university courses, the library still cannot be recommended for absolute beginners.
+Emukit does not provide modelling capabilities, and instead requires users to provide their own surrogate models. This requires certain level of proficiency with probabilistic modelling, and can prevent some people from using the library. While we aim to mitigate this with extensive collection of examples and tutorials, and Emukit is successfully used in teaching university-level courses, the library still cannot be recommended for absolute beginners.
 
-Emukit puts a strong emphasis on plug-and-play construction of the decision making loop. All components communicate via interfaces, and they require a common data format to communicate. In the library we have chosen Numpy arrays. On one hand Numpy is a defacto standard in scientific Python which means it is reasonable to expect all Emukit users to be able to use Numpy. On the other hand, linear algebra operations in Numpy cannot be GPU-accelerated. This means that while individual components of the outer loop  (e.g. a model) can run on GPU, the entire end-to-end process in Emukit is CPU-bound. This issue severely limits Emukit's performance comparing to the libraries that have chosen to rely on a fixed computational backend (BoTorch/PyTorch or Trieste/Tensorflow). This issue can be potentially mitigated by using specialized libraries that run Numpy on GPU, such as Numba and CuPy.
+Emukit puts a strong emphasis on plug-and-play construction of the decision making loop. All components interact via interfaces, and they require a common data format to communicate, which in Emukit is a Numpy array. On one hand Numpy is a defacto standard in scientific Python which means it is reasonable to expect all Emukit users to be able to use Numpy. On the other hand, linear algebra operations in Numpy cannot be GPU-accelerated. This means that while individual components of the outer loop  (e.g. a model) can run on GPU, the entire end-to-end process in Emukit is CPU-bound. This issue severely limits Emukit's performance comparing to the libraries that have chosen to rely on a fixed computational backend (BoTorch/PyTorch or Trieste/Tensorflow). This issue can be potentially mitigated by using specialized libraries that run Numpy on GPU, such as Numba and CuPy.
 
 \section{Conclusions}
 Emukit is built on a realisation that common methods for decision making under uncertainty -- such as Bayesian optimisation, Bayesian quadrature and experimental design -- follow the same cyclic pattern, and therefore can be included in a unified high level framework. Emukit provides high level interfaces for these methods that are built on the core set of common abstractions. To enable researchers and practicitioners to iterate and experiment quickly Emukit follows plug-and-play design, allowing users to swap out a single part of the decision making loop without affecting other components. Since its initial release in 2019, Emukit was successfully used in academic research, industry, and teaching.
