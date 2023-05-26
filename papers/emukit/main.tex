@@ -128,54 +128,54 @@ In this section we show Emukit's high level APIs for all main functions of the p
 Interfaces for Bayesian optimisation and experimental design are the most straighforward way to use the library. Both methods require the user to define a model and wrap it in the Emukit's model wrapper. Input space also has to be defined using Emukit's classes. The choice of acquisition function is optional, as reasonable defaults are provided. High level loop objects allow the user to execute the decision making loop and access its properties.
 
 \begin{verbatim}
-  parameter_space = ParameterSpace([
-      ContinuousParameter('x1', -5, 10),
-      ContinuousParameter('x2', 0, 15)
-  ])
-  model_gpy = GPy.models.GPRegression(X,Y)
-  model_emukit = GPyModelWrapper(model_gpy)
+parameter_space = ParameterSpace([
+    ContinuousParameter('x1', -5, 10),
+    ContinuousParameter('x2', 0, 15)
+])
+model_gpy = GPy.models.GPRegression(X,Y)
+model_emukit = GPyModelWrapper(model_gpy)
 
-  expected_improvement_acquisition =
-      ExpectedImprovement(model = model_emukit)
-  bayesopt_loop = BayesianOptimizationLoop(
-      model = model_emukit,
-      space = parameter_space,
-      acquisition = expected_improvement_acquisition
-  )
+expected_improvement_acquisition =
+    ExpectedImprovement(model = model_emukit)
+bayesopt_loop = BayesianOptimizationLoop(
+    model = model_emukit,
+    space = parameter_space,
+    acquisition = expected_improvement_acquisition
+)
 
-  model_variance_acquisition =
-      ModelVariance(model = model_emukit)
-  experimental_design_loop =
-      ExperimentalDesignLoop(
-          model = model_emukit,
-          space = parameter_space,
-          acquisition = model_variance
-      )
+model_variance_acquisition =
+    ModelVariance(model = model_emukit)
+experimental_design_loop =
+    ExperimentalDesignLoop(
+        model = model_emukit,
+        space = parameter_space,
+        acquisition = model_variance
+    )
 \end{verbatim}
 
 Usage of Bayesian quadrature (BQ) API is more envolved, as even in its most basic form it requires more design choices from the user. First the objective function, also referred to as an integrand, is modelled with a Gaussian process (GP). Since BQ integrates the kernel function, the kernel is then wrapped in a separate Emukit object. Bundled together, wrappers around the kernel and the model itself represent a base model in the BQ package. This model can be used with several BQ methods, the code below illustrates vanilla Bayesian quadrature where the GP model is directly placed over the integrand function and then integrated analytically.
 
 \begin{verbatim}
-  lb = -3.0 # lower integral bound
-  ub = 3.0 # upper integral bound
-  gpy_model = GPy.models.GPRegression(X=X, Y=Y)
+lb = -3.0 # lower integral bound
+ub = 3.0 # upper integral bound
+gpy_model = GPy.models.GPRegression(X=X, Y=Y)
 
-  emukit_rbf = RBFGPy(gpy_model.kern)
-  emukit_qrbf = QuadratureRBF(
-      emukit_rbf,
-      integral_bounds=[(lb, ub)]
-  )
-  emukit_model = BaseGaussianProcessGPy(
-      kern=emukit_qrbf,
-      gpy_model=gpy_model
-  )
+emukit_rbf = RBFGPy(gpy_model.kern)
+emukit_qrbf = QuadratureRBF(
+    emukit_rbf,
+    integral_bounds=[(lb, ub)]
+)
+emukit_model = BaseGaussianProcessGPy(
+    kern=emukit_qrbf,
+    gpy_model=gpy_model
+)
 
-  emukit_method = VanillaBayesianQuadrature(
-      base_gp=emukit_model
-  )
-  emukit_loop = VanillaBayesianQuadratureLoop(
-      model=emukit_method
-  )
+emukit_method = VanillaBayesianQuadrature(
+    base_gp=emukit_model
+)
+emukit_loop = VanillaBayesianQuadratureLoop(
+    model=emukit_method
+)
 \end{verbatim}
 
 Once the loop object is created, either for optimisation, quadrature or experiment design, it can be evaluated in one of two modes. If the user has access to the objective function via Python, the loop can be managed by Emukit with the \texttt{run\_loop} method that accepts two arguments: the objective function and the stopping criterion. If the objective has to be called externally (e.g. a lab experiment has to be done), Emukit provides \texttt{get\_next\_points} method that produces the next evaluation point(s) based on the data observed so far. In that latter case user has to manage the decision making loop themselves.
@@ -183,30 +183,46 @@ Once the loop object is created, either for optimisation, quadrature or experime
 To support research on multi-fidelity emulation methods, Emukit implements both linear and non-linear multi-fidelity models. The user is expected to provide data for each of the fidelities and make the choice of appropriate Gaussian process kernel. Emukit can then be used to define a combined multi-fidelity model. In the example below we define a linear multi-fidelity model, where relatioship between low and high fidelities is linear.
 
 \begin{verbatim}
-  # This utility method allows to
-  # convert data from different fidelities
-  # to arrays where fidelity is represented
-  # as an input variable
-  X, Y = convert_xy_lists_to_arrays(
-      [x_low, x_high],
-      [y_low, y_high]
-  )
+# This utility method allows to
+# convert data from different fidelities
+# to arrays where fidelity is represented
+# as an input variable
+X, Y = convert_xy_lists_to_arrays(
+    [x_low, x_high],
+    [y_low, y_high]
+)
 
-  kernels = [
-      GPy.kern.RBF(dim=1),
-      GPy.kern.RBF(dim=1)
-  ]
-  linear_mf_kernel =
-      LinearMultiFidelityKernel(kernels)
-  gpy_linear_mf_model =
-      GPyLinearMultiFidelityModel(
-          X, Y,
-          linear_mf_kernel,
-          n_fidelities = 2
-  )
+kernels = [
+    GPy.kern.RBF(dim=1),
+    GPy.kern.RBF(dim=1)
+]
+linear_mf_kernel =
+    LinearMultiFidelityKernel(kernels)
+gpy_linear_mf_model =
+    GPyLinearMultiFidelityModel(
+        X, Y,
+        linear_mf_kernel,
+        n_fidelities = 2
+)
 \end{verbatim}
 
-In addition to the APIs discussed above, Emukit also provides basic support for sensitivity analysis and benchmarking. Further information about Emukit's functionality, including available implementations of acquisition functions, multi-output models, support for constraints and cost functions, custom events in the outer loop, etc., can be found on library's website\footnote{\url{https://emukit.github.io/}}, documentation\footnote{\url{https://emukit.readthedocs.io/en/latest/}} and tutorial notebooks\footnote{\url{https://nbviewer.org/github/emukit/emukit/blob/main/notebooks/index.ipynb}}. 
+Emukit gives researchers a lot of flexibility in swapping individual pieces in and out of the decision making loop. This is made possible by clearly defined interfaces. We illustrate how this is accomplished in the package with an example of \texttt{IntegratedHyperParameterAcquisition}. This class provides an ability to integrate any acquisition function over hyperparameters of the model. To do that, model needs to support two operations: generate hyperparameter samples and fix hyperparameters to a certain sample value. Consequently, Emukit defines an interface \texttt{IPriorHyperparameters} that declares these operations, and \texttt{IntegratedHyperParameterAcquisition} requires input model to implement this interfaces, as can be seen in the following code snippet:
+
+\begin{verbatim}
+class IPriorHyperparameters:
+    def generate_hyperparameters_samples(...
+
+    def fix_model_hyperparameters(...
+
+
+class IntegratedHyperParameterAcquisition(Acquisition):
+    def __init__(
+        self,
+        model: Union[IModel, IPriorHyperparameters],
+        ...
+\end{verbatim}
+
+In addition to the APIs discussed above, Emukit also provides basic support for sensitivity analysis and benchmarking. Further information about Emukit's functionality, including available implementations of acquisition functions, multi-output models, support for constraints and cost functions, custom events in the outer loop, can be found in library's website\footnote{\url{https://emukit.github.io/}}, documentation\footnote{\url{https://emukit.readthedocs.io/en/latest/}} and tutorial notebooks\footnote{\url{https://nbviewer.org/github/emukit/emukit/blob/main/notebooks/index.ipynb}}. 
 
 \maren{May it be useful to introduce each of the methods (BO, BQ, ExpDesign) with some minimal example code similarly to the webpage? }
 \andrei{Good idea! Did the first pass.}
