@@ -1,0 +1,19 @@
+---
+abstract:
+   - Are you held back by your scientific domain’s legacy tools for reading, processing, plotting, analyzing, modeling, or exploring data? Consider building on dask, xarray, numba, hvplot, jupyter, and other modern domain-independent libraries from the SOSA stack for scalable open-source analysis. SOSA lets you run nearly any scientific data-processing workflow at machine-code speeds from laptops to petaflop-scale supercomputers. We'll show how these libraries work together to support distributed computation all the way from data files up to a final rendered visualization, making it as simple to work with remote cloud clusters as on your own local machine.
+keywords:
+  - distributed computing
+  - data visualization
+  - JIT compilation
+  - workflows
+authors:
+- email: jbednar@anaconda.com
+  institution:
+  - Anaconda, Inc.
+  name: James A. Bednar
+- email: mdurant@anaconda.com
+  institution:
+  - Anaconda, Inc.
+  name: Martin Durant
+bibliography: mybib
+title: SOSA -- The Scalable Open-Source Analysis Stack
