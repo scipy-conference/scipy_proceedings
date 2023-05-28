@@ -55,7 +55,7 @@ Decision making with statistical emulation consists of three parts. All starts w
 
 \section{Structure of the library}
 
-At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and quadrature -- are all cyclic decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm \ref{alg:emukit_loop}).
+At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and Bayesian quadrature -- are all cyclic\maren{`Sequential' may be the better word as the state from one iteration to the next changes. `Cyclic' implies that the states are identical.} decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm \ref{alg:emukit_loop}).
 
 The common goal of all these methods is to learn a behavior of an \textit{objective function} - a black box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. A mechanism employed to propose new data points to evaluate the objective at is called an \textit{acquisition function}. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met. 
 
@@ -123,17 +123,20 @@ These are the core components Emukit defines. Specific methods can also define a
 \end{table}
 
 \section{Usage overview}
-In this section we show Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design, mutli-fidelity emulation. Unless stated otherwise, we assume some initial data (e.g. three-four data points) is already defined and stored in variables \texttt{X} (inputs) and \texttt{Y} (outputs). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude import lines for brevity.
+This section describes Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design and multi-fidelity emulation. Unless stated otherwise, we assume that some initial data (an initial design of reasonable size with corresponding evaluations of the user function) is already defined and stored in the variables \texttt{X} (inputs) and \texttt{Y} (values). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude import lines for brevity.
+
+\subsection{Emukit wraps custom models of arbitrary backends}
 
 Interfaces for Bayesian optimisation and experimental design are the most straighforward ways to use the library. Both methods require the user to define a model and wrap it in the Emukit's model wrapper. Input space also has to be defined using Emukit's classes. The choice of acquisition function is optional, as reasonable defaults are provided. High level loop objects allow the user to execute the decision making loop and access its properties.
 
 \begin{verbatim}
+model_gpy = GPy.models.GPRegression(X,Y)
+model_emukit = GPyModelWrapper(model_gpy)
+
 parameter_space = ParameterSpace([
     ContinuousParameter('x1', -5, 10),
     ContinuousParameter('x2', 0, 15)
 ])
-model_gpy = GPy.models.GPRegression(X,Y)
-model_emukit = GPyModelWrapper(model_gpy)
 
 expected_improvement_acquisition =
     ExpectedImprovement(model = model_emukit)
@@ -180,7 +183,30 @@ emukit_loop = VanillaBayesianQuadratureLoop(
 
 Once the loop object is created, either for optimisation, quadrature or experiment design, it can be evaluated in one of two modes. If the user has access to the objective function via Python, the loop can be managed by Emukit with the \texttt{run\_loop} method that accepts two arguments: the objective function and the stopping criterion. If the objective has to be called externally (e.g. a lab experiment has to be done), Emukit provides \texttt{get\_next\_points} method that produces the next evaluation point(s) based on the data observed so far. In that latter case user has to manage the decision making loop themselves.
 
-To support research on multi-fidelity emulation methods, Emukit implements both linear and non-linear multi-fidelity models. The user is expected to provide data for each of the fidelities and make the choice of appropriate Gaussian process kernel. Emukit can then be used to define a combined multi-fidelity model. In the example below we define a linear multi-fidelity model, where relatioship between low and high fidelities is linear.
+\subsection{Emukit's flexibility enables fast prototyping}
+Emukit gives researchers a lot of flexibility in swapping individual pieces in and out of the decision making loop. This is made possible by clearly defined interfaces. We illustrate how this is accomplished in the package with an example of \texttt{IntegratedHyperParameterAcquisition}. This class provides an ability to integrate any acquisition function over hyperparameters of the model. To do that, model needs to support two operations: generate hyperparameter samples and fix hyperparameters to a certain sample value. Consequently, Emukit defines an interface \texttt{IPriorHyperparameters} that declares these operations, and \texttt{IntegratedHyperParameterAcquisition} requires input model to implement this interfaces, as can be seen in the following code snippet:
+
+\begin{verbatim}
+class IPriorHyperparameters:
+    def generate_hyperparameters_samples(...
+
+    def fix_model_hyperparameters(...
+
+
+class IntegratedHyperParameterAcquisition(Acquisition):
+    def __init__(
+        self,
+        model: Union[IModel, IPriorHyperparameters],
+        ...
+\end{verbatim}
+
+\subsection{Emukit allows to use the same model for several tasks}
+
+\maren{What do you think of this? E.g., we could use a BQ model, use it in a BO loop and integrate it in the end. This is a really cool feature of Emukit as it i) increases consistency of results and ii) lowers implementation overhead iii) may allows sharing of computational resources in the future between tasks. Need to check if it runs though.}
+
+\subsection{Emukit supports data sources of different fidelities}
+
+To support research on multi-fidelity emulation methods, Emukit implements both linear and non-linear multi-fidelity models. \maren{Add a sentence what multi-fidelity means. Add citations.} The user is expected to provide data for each of the fidelities and make the choice of appropriate Gaussian process kernel. Emukit can then be used to define a combined multi-fidelity model. In the example below we define a linear multi-fidelity model, where the relationship between fidelities is linear.
 
 \begin{verbatim}
 # This utility method allows to
@@ -206,22 +232,7 @@ gpy_linear_mf_model =
 )
 \end{verbatim}
 
-Emukit gives researchers a lot of flexibility in swapping individual pieces in and out of the decision making loop. This is made possible by clearly defined interfaces. We illustrate how this is accomplished in the package with an example of \texttt{IntegratedHyperParameterAcquisition}. This class provides an ability to integrate any acquisition function over hyperparameters of the model. To do that, model needs to support two operations: generate hyperparameter samples and fix hyperparameters to a certain sample value. Consequently, Emukit defines an interface \texttt{IPriorHyperparameters} that declares these operations, and \texttt{IntegratedHyperParameterAcquisition} requires input model to implement this interfaces, as can be seen in the following code snippet:
-
-\begin{verbatim}
-class IPriorHyperparameters:
-    def generate_hyperparameters_samples(...
-
-    def fix_model_hyperparameters(...
-
-
-class IntegratedHyperParameterAcquisition(Acquisition):
-    def __init__(
-        self,
-        model: Union[IModel, IPriorHyperparameters],
-        ...
-\end{verbatim}
-
+\subsection{Emukit provides basic support for benchmarking}
 In addition to the APIs discussed above, Emukit also provides basic support for sensitivity analysis and benchmarking. Further information about Emukit's functionality, including available implementations of acquisition functions, multi-output models, support for constraints and cost functions, custom events in the outer loop, can be found in library's website\footnote{\url{https://emukit.github.io/}}, documentation\footnote{\url{https://emukit.readthedocs.io/en/latest/}} and tutorial notebooks\footnote{\url{https://nbviewer.org/github/emukit/emukit/blob/main/notebooks/index.ipynb}}. 
 
 \maren{May it be useful to introduce each of the methods (BO, BQ, ExpDesign) with some minimal example code similarly to the webpage? }
@@ -249,16 +260,25 @@ Uhrenholt and Jensen used Emukit's Bayesian optimisation module to solve the pro
 Liyanage et al. faced the problem of combining data from multiple particle accelerators, including Large Hadron Collider and Relativistic Heavy Ion Collider, to study the properties of quark-gluon plasma \cite{PhysRevC105034910}. Nuclear collision experiments generate a large body of measurements with varying levels of uncertainty that would be expensive to quantify with simulations. Instead the authors proposed to use inexpensive statistical emulators and use transfer learning to leverage similarities between different heavy ion collisions systems. This new technique is based on multi-fidelity emulation, making Emukit an obvious implementation choice.
 
 \section{Related work}
-Python ecosystem is rich with powerful scientific packages, including those for decision making methods. In particular, Bayesian optimisation enjoys a wide selection of tools and frameworks. Spearmint \cite{snoek2012practical} and GPyOpt \cite{gpyopt2016} are among the first Python packages for Bayesian optimisation, the latter being an inspiration for the first release of Emukit. BoTorch \cite{balandat2020botorch} is a popular library for Bayesian optimisation based on PyTorch. Similarly, Trieste \cite{picheny2023trieste} also focuses on Bayesian optimisation but uses Tensorflow as a backend. More options, such as pyGPGO \cite{jimenez2017pygpgo}, scikit-optimize \cite{louppe2017bayesian}, RoBO \cite{klein-bayesopt17}, are also available. For other methods supported by Emukit the choice of frameworks is more scarce. Namely, bayesquad \cite{Charles2013} appears to be the only other usable Python package for Bayesian quadrature. Optbayesexpt \cite{mcmichael2021optbayesexpt} and NEXTorch \cite{wang2021nextorch} provide Bayesian experimental design functional adopted for their respective fields. Elements of experimental design can also be found in Trieste \cite{picheny2023trieste}. The key difference between Emukit and mentioned libraries is the fact that Emukit does not dictate a particular modelling framework, allowing for flexibility in choice of computational backends.
+The Python ecosystem is rich with powerful scientific packages, including those for decision making methods.
 
-Likewise, to the best of our knowledge Emukit remains the only Python library to provide multi-fidelity emulation functionality. Another notable package for research on multi-fidelity methods is MF2 \cite{vanRijn2020} that implements a variety of multi-fidelity benchmark functions, but does not have modelling capabilities.
+In particular, \emph{Bayesian optimisation} enjoys a wide selection of tools and frameworks. Spearmint \cite{snoek2012practical} and GPyOpt \cite{gpyopt2016} are among the first Python packages for Bayesian optimisation, the latter being an inspiration for the first release of Emukit. BoTorch \cite{balandat2020botorch} is a popular library for Bayesian optimisation based on PyTorch. Similarly, Trieste \cite{picheny2023trieste} also focuses on Bayesian optimisation but uses Tensorflow as a backend. More options, such as pyGPGO \cite{jimenez2017pygpgo}, scikit-optimize \cite{louppe2017bayesian}, RoBO \cite{klein-bayesopt17}, are also available.
+
+
+For \emph{Bayesian quadrature} the choice of frameworks is more scarce. Namely, bayesquad \cite{Charles2013} appears to be the only other usable Python package for Bayesian quadrature although we may have missed some lesser known ones. The Python library ProbNum \cite{Wenger21} supports a variety of Bayesian quadrature methods, but it's lack of hyper-parameter tuning capability reduces its practical relevance significantly in its current form. 
+
+Optbayesexpt \cite{mcmichael2021optbayesexpt} and NEXTorch \cite{wang2021nextorch} provide \emph{Bayesian experimental design} functionality adopted for their respective fields. Elements of experimental design can also be found in Trieste \cite{picheny2023trieste}. 
+
+The key difference between Emukit and the mentioned libraries is the fact that Emukit does not dictate a particular modelling framework, allowing for flexibility in the choice of computational backends.
+Likewise, we were not able to locate a Python library other than Emukit that provides multi-fidelity emulation functionality. A notable package for research on multi-fidelity methods is MF2 \cite{vanRijn2020} that implements a variety of multi-fidelity benchmark functions, but does not have modelling capabilities.
 
 Looking at a wider family of optimisation libraries in Python, Optuna \cite{optuna_2019} is a popular choice for hyperparameter optimisation. Similarly to Emukit, Optuna is framework agnostic, however it provides a different set of optimisation methods, focusing on evolutionary, genetic and Monte Carlo based approaches. Finally, Ray Tune \cite{liaw2018tune} is a well known scalable platform in Python on which other model optimisation frameworks can be executed. Emukit can potentially be integrated with Ray Tune as an optimisation library. This work was not carried out yet, and can be a future development direction.
 
+Another difference between Emukit and the mention libraries is that they usually are specific to a single method such as Bayesian optimization \emph{or} Bayesian quadrature \emph{or} experimental design. If the user needs solve two or more tasks on as single model involving different methods, Emukit provides a unique way of using \emph{the same model backend} and the \emph{the same core loop package} for all tasks. This increases consistency between results of different tasks, my reduce implementation overhead and may allow resource sharing between tasks. \maren{Andrei, can you check the last paragraph especially.}
 
-\andrei{Maren, shall we mention Probnum here somehow?}
+\maren{The shared core package may need to be a section on its own as its quite a unique feature of Emukit, perhaps including the diagram/graph that is also in the rtd. I added a placeholder subsection above. What do you think?}
 
-\andrei{I think this section should focus on Python libs only. So no clients for cloud services (e.g. Vizier or SageMaker) and no libraries in R, Julia and such. Sounds good?}
+\andrei{I think this section should focus on Python libs only. So no clients for cloud services (e.g. Vizier or SageMaker) and no libraries in R, Julia and such. Sounds good?}\maren{Yes.}
 
 \section{Limitations}\label{section:limitations}
 The design choices made in Emukit have proven to be highly beneficial for rapid prototyping and experimentation. However they also led to some of the key limitations of the library.
