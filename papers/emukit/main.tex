@@ -6,6 +6,14 @@
 \newcommand{\andrei}[1]{{\color{red} \textbf{[Andrei: #1]}}}
 \newcommand{\rev}[1]{{\color{blue} \textbf{#1}}}
 
+\maren{general comments:
+  \begin{itemize}
+    \item decide on UK or US spelling.
+    \item add citations where missing.
+    \item unify macros and spelling, e.g, decision making or decision-making; Emukit or EmuKit?
+    \item Section referencing does not seem to work.
+  \end{itemize}
+}
 \subsection{Introduction}\label{introduction}
 
 \andrei{A few general words about ML, statistical emulation, UQ, and software for those.}
@@ -36,7 +44,24 @@ The remainder of the paper corroborates on the points above in greater detail. S
 Section~\ref{sec:background}\maren{How to compile section refs correctly??}
 
 \section{Background on UQ methods}\label{sec:background}
-\andrei{Here we should give an introduction to relevant concepts. Starting with statistical emulation, surrogate modelling and GPs. Then we can move to BO, ED and BQ, stressing how they are all similar cyclic processes at the high level. Finishing with a few words on multi-fidelity emulation.}
+%\andrei{Here we should give an introduction to relevant concepts. Starting with statistical emulation, surrogate modelling and GPs. Then we can move to BO, ED and BQ, stressing how they are all similar cyclic processes at the high level. Finishing with a few words on multi-fidelity emulation.}
+
+Emukit mainly contains three high-level methods: Bayesian optimization (BO), Bayesian quadrature (BQ) and experimental design (ED) which this section briefly introduces.
+
+\emph{Bayesian optimization} \maren{cite} is a numerical method that aims to guess the global minimizer of a black-box function by querying function values at nodes and returning the minimizer of the collected set. Corresponding algorithms are inherently sequential and, at every iteration, decide on where to query the objective function next. The decision solves the so called `exploration-exploitation trade-off' between exploring unknown regions of the function's domain, or exploiting rather promising regions of a potential minimizer. This trade-off is encoded in a heuristic called `acquisition function' that quantifies the usefulness of evaluating the function at a certain node. Hence, BO is generally sample-efficient and thus especially useful when the function is expensive to evaluate and the number of allowed evaluations is limited. There exists a large range of heuristics and methods that all fall under the umbrella of BO, out of which Emukit supports several. Bayesian optimization has been successfully applied in various fields \maren{cite a few}, but most notably in the automation of hyper-parameter tuning tasks of neural networks. \maren{cite}
+
+\emph{Bayesian quadrature} \maren{cite} is a numerical method that aims to infer the integral of a black-box function (called the `integrand') given some integration measure and queries of the integrand at nodes. In contrast to Monte Carlo (MC) methods , BQ generally can accept any kind of node design and is especially sample efficient which makes it superior to MC is certain circumstances. \maren{cite} A sub-group of BQ methods are active and follow a similar decision loop as BO; the most notable difference being that acquisition functions are specific to BQ and the class of models is somewhat more restricted. Generally, active BQ methods are algorithmically similar on a high level to BO methods and can use similar modes.
+
+Lastly, \emph{experimental design} \maren{cite} is a method that aims to collect nodes of a black-box function such that the resulting model predicts unseen function values well. \maren{say more here}
+
+Emukit is build on the realization that all three methods (BO, BQ, ED), albeit having different numerical aims and result objects, share the same algorithmic structure: A decision-loop that computes the next node based on the current model, evaluates the user function and then updates the model accordingly. Thus Emukit contains are shared core implementation of the decision loop of all three methods which will be elaborated further on in Section~\ref{sec:lib-structure}.
+
+Further, especially BO and ED can use similar models while BQ is somewhat more restricted. Potential benefits of shared implementation, model and compute among tasks are discussed in Section~\ref{sec:usage}.
+
+Finally, Emukit provides basic support of \emph{multi-fidelity models} \maren{cite} which can combine query results of the black-box function of different quality (from low fidelity to high fidelity). This yields multi-fidelity BO, BQ and ED methods that can be made active again with Emukit's decision loop. \maren{add example}
+
+\maren{A word here on simulation and emulation and wording, depending on how it is handled in the introduction section.}
+
 
 \section{Emukit workflow}\label{sec:workflow}
 Decision making with statistical emulation consists of three parts. All starts with a \textit{task}, a high level goal that we are interested in achieving. It usually involves a complex process that we aim to study and answer a question about. Some examples include finding the best operation mode of a drone, measuring the quality of a weather simulation, explaining behavior of a complex system. In order to solve the task we choose a \textit{method}, a relatively low-level technique that guides our exploration of the targte process and provides the quantifiable way to answer the task's question. Examples include Bayesian optimization, Bayesian quadrature and experimental design. And finally there is a \textit{model}, a probabilistic data-driven representation of the process under study. Examples of such models are a Gaussian process or a Bayesian network. Consequently, the typical workflow for users working with Emukit consists of three steps (see Figure~\ref{figure:workflow} for a graphical description).
@@ -123,7 +148,7 @@ These are the core components Emukit defines. Specific methods can also define a
     \label{table:abstraction_mapping}
 \end{table}
 
-\section{Usage overview}
+\section{Usage overview}\label{sec:usage}
 This section describes Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design and multi-fidelity emulation. Unless stated otherwise, we assume that some initial data (an initial design of reasonable size with corresponding evaluations of the user function) is already defined and stored in the variables \texttt{X} (inputs) and \texttt{Y} (values). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude import lines for brevity.
 
 \subsection{Emukit wraps custom models of arbitrary backends}
