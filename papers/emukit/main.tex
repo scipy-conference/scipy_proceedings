@@ -56,21 +56,21 @@ Decision making with statistical emulation consists of three parts. All starts w
 
 \section{Structure of the library}\label{sec:lib-structure}
 
-At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and Bayesian quadrature -- are all cyclic\maren{`Sequential' may be the better word as the state from one iteration to the next changes. `Cyclic' implies that the states are identical.} decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm \ref{alg:emukit_loop}).
+At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and Bayesian quadrature -- are all cyclic\maren{`Sequential' or `iterative' may be the better word as the state from one iteration to the next changes. `Cyclic' implies that the states are identical.} decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm~\ref{alg:emukit-loop}).
 
 The common goal of all these methods is to learn a behavior of an \textit{objective function} - a black box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. A mechanism employed to propose new data points to evaluate the objective at is called an \textit{acquisition function}. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met. 
 
-\andrei{Still struggling to understand how to add commands to the preamble, could be that the template doesn't allow that at all. That's limiting, e.g. we cannot use packages for algorithms.}\maren{That's annoying. If there is no solution we can compile the code in another tex file and include a figure of the pseudo-code.}
-% Algorithm is taken from the original NeurIPS workshop paper
-% \begin{algorithm}
-    % \While{stopping condition is not met}{
-    %     collect next point(s) for evaluation\;
-    %     evaluate objective function\;
-    %     update model with new observation(s)\;
-    % }
-    % \caption{Decision making loop in Emukit}
-    % \label{alg:emukit_loop}
-% \end{algorithm}
+\begin{algorithm}[H]
+  \caption{Decision making loop in Emukit (taken from the original NeurIPS workshop paper \cite{paleyes2019emulation}).}
+  \label{alg:emukit-loop}
+  \begin{algorithmic}[1]
+    \While{stopping condition is not met}
+      \State collect next point(s) for evaluation
+      \State evaluate objective function
+      \State update model with new observation(s)
+    \EndWhile
+  \end{algorithmic}
+\end{algorithm}
 
 The internal structure of Emukit reflects these abstractions to ensure that fundamental components of the decision making loop could be swapped out and replaced. While some of the basic components in Emukit correspond to the parts of the decision making loop exactly, others are more fine-grained to allow for greater flexibility and plug-and-play experience for the researchers using the package. We will now give an overview of these components.
 
@@ -94,7 +94,7 @@ The internal structure of Emukit reflects these abstractions to ensure that fund
 
 \textbf{Stopping Condition}. The \texttt{StoppingCondition} class chooses when the decision making loop should stop collecting points. The most commonly used example is to stop when a set number of iterations have been reached.
 
-These are the core components Emukit defines. Specific methods can also define additional concepts of their own, e.g. integration measures or costs. Table \ref{table:abstraction_mapping} shows the mapping between Bayesian decision making abstractions and Emukit components.
+These are the core components Emukit defines. Specific methods can also define additional concepts of their own, e.g. integration measures or costs. Table~\ref{table:abstraction_mapping} shows the mapping between Bayesian decision making abstractions and Emukit components.
 
 \begin{table}
     \setlength{\DUtablewidth}{\tablewidth}
@@ -291,7 +291,7 @@ Emukit puts a strong emphasis on plug-and-play construction of the decision maki
 \section{Conclusions}
 Emukit is built on a realisation that common methods for decision making under uncertainty -- such as Bayesian optimisation, Bayesian quadrature and experimental design -- follow the same cyclic pattern, and therefore can be included in a unified high level framework. Emukit provides high level interfaces for these methods that are built on the core set of common abstractions. To enable researchers and practicitioners to iterate and experiment quickly Emukit follows plug-and-play design, allowing users to swap out a single part of the decision making loop without affecting other components. Since its initial release in 2019, Emukit was successfully used in academic research, industry, and teaching.
 
-Emukit has multiple potential growth directions. Mitigation of limitations discussed in Section \ref{section:limitations} can improve user experience and overall quality of the library. Integration with other tools in scientific Python ecosystem (e.g. Ray Tune) can increase Emukit's visibility within the community. New functionality, such as multi-objective Bayesian optimisation, shall expand library's capabilities and give users new ways to do research with Emukit.
+Emukit has multiple potential growth directions. Mitigation of limitations discussed in Section~\ref{section:limitations} can improve user experience and overall quality of the library. Integration with other tools in scientific Python ecosystem (e.g. Ray Tune) can increase Emukit's visibility within the community. New functionality, such as multi-objective Bayesian optimisation, shall expand library's capabilities and give users new ways to do research with Emukit.
 
 We invite researchers and enthusiasts from any scientific or industrial domain to explore the potential of using Emukit for their applications, to contibute new functionality, and to take part in the discussions around the library. We are always open to feedback and comments about how the library could be improved. The Emukit repository is available on GitHub: \url{https://github.com/EmuKit/emukit}.
 
