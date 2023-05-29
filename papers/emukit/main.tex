@@ -81,7 +81,7 @@ Decision making with statistical emulation consists of three parts. All starts w
 
 \section{Structure of the library}\label{sec:lib-structure}
 
-At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and Bayesian quadrature -- are all cyclic\maren{`Sequential' or `iterative' may be the better word as the state from one iteration to the next changes. `Cyclic' implies that the states are identical.} decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm~\ref{alg:emukit-loop}).
+At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and Bayesian quadrature -- are all iterative decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm~\ref{alg:emukit-loop}).
 
 The common goal of all these methods is to learn a behavior of an \textit{objective function} - a black box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. A mechanism employed to propose new data points to evaluate the objective at is called an \textit{acquisition function}. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met. 
 
@@ -150,6 +150,8 @@ These are the core components Emukit defines. Specific methods can also define a
 
 \section{Usage overview}\label{sec:usage}
 This section describes Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design and multi-fidelity emulation. Unless stated otherwise, we assume that some initial data (an initial design of reasonable size with corresponding evaluations of the user function) is already defined and stored in the variables \texttt{X} (inputs) and \texttt{Y} (values). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude import lines for brevity.
+
+\andrei{I am not really keen on these subsection headers. Somehow they break the flow of the section. Are they here to summarize the point in the code below? If so, how about we remove them, and just do these summaries in the text?}
 
 \subsection{Emukit wraps custom models of arbitrary backends}
 
@@ -228,7 +230,7 @@ class IntegratedHyperParameterAcquisition(Acquisition):
 
 \subsection{Emukit allows to use the same model for several tasks}
 
-\maren{What do you think of this? E.g., we could use a BQ model, use it in a BO loop and integrate it in the end. This is a really cool feature of Emukit as it i) increases consistency of results and ii) lowers implementation overhead iii) may allows sharing of computational resources in the future between tasks. Need to check if it runs though.}
+\maren{What do you think of this? E.g., we could use a BQ model, use it in a BO loop and integrate it in the end. This is a really cool feature of Emukit as it i) increases consistency of results and ii) lowers implementation overhead iii) may allows sharing of computational resources in the future between tasks. Need to check if it runs though.} \andrei{That's a good thing to point out, I can do that}
 
 \subsection{Emukit supports data sources of different fidelities}
 
@@ -302,9 +304,7 @@ Looking at a wider family of optimisation libraries in Python, Optuna \cite{optu
 
 Another difference between Emukit and the mention libraries is that they usually are specific to a single method such as Bayesian optimization \emph{or} Bayesian quadrature \emph{or} experimental design. If the user needs solve two or more tasks on as single model involving different methods, Emukit provides a unique way of using \emph{the same model backend} and the \emph{the same core loop package} for all tasks. This increases consistency between results of different tasks, my reduce implementation overhead and may allow resource sharing between tasks. \maren{Andrei, can you check the last paragraph especially.}
 
-\maren{The shared core package may need to be a section on its own as its quite a unique feature of Emukit, perhaps including the diagram/graph that is also in the rtd. I added a placeholder subsection above. What do you think?}
-
-\andrei{I think this section should focus on Python libs only. So no clients for cloud services (e.g. Vizier or SageMaker) and no libraries in R, Julia and such. Sounds good?}\maren{Yes.}
+\maren{The shared core package may need to be a section on its own as its quite a unique feature of Emukit, perhaps including the diagram/graph that is also in the rtd. I added a placeholder subsection above. What do you think?} \andrei{I like that. I'll move this up to code samples section, and briefly reiterate here}
 
 \section{Limitations}\label{section:limitations}
 The design choices made in Emukit have proven to be highly beneficial for rapid prototyping and experimentation. However they also led to some of the key limitations of the library.
