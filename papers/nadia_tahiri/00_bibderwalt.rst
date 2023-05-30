@@ -99,191 +99,117 @@ researchers can analyze the relationship between viral genetic diversity and spe
 This comprehensive approach allows for a deeper understanding of the complex interplay between viral evolution, transmission dynamics, 
 and environmental influences.
 
+Methodology
+-----------
 
-Bibliographies, citations and block quotes
-------------------------------------------
+Neo4j graph database and Dash platform
+---------------------------------------
 
-If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension.
+A graph database is a type of database management system (DBMS) that uses graph structures for data representation and query processing :cite:`timon2021overview`. 
+Unlike traditional relational databases that store data in tables with rows and columns, graph databases organize data as nodes, edges, and properties. In a graph database, 
+nodes represent entities or objects, edges represent the relationships between nodes, and properties provide additional information about nodes and edges. One of the critical advantages of graph databases 
+is their ability to traverse and query interconnected data efficiently. Graph databases excel at handling queries involving relationship patterns, graph algorithms, and path traversals. 
+They enable efficient navigation through complex networks, enabling robust graph-based analyses and insights :cite:`vicknair2010comparison`.
 
-**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work.
+Data Integration 
+++++++++++++++++
 
-To reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`hume48` (which literally is :code:`:cite:`hume48`` in accordance with the ``hume48`` cite-key in the associated ``mybib.bib`` file).
+Various data sources related to SARS-CoV-2 were integrated into a Neo4j database, covering the period from January 1, 2020, to December 31, 2022. The data sources include SARS-CoV-2 sequences from the SARS-CoV-2 Data Hub :cite:`brister2015ncbi`, lineage development information from Cov-Lineages :cite:`o2021tracking`, population density by country, positivity rates, vaccination rates, diabetes rates, aging data from Our World in Data :cite:`mathieu2021global`, and climate data from NASA/POWER :cite:`marzouk2021assessment`. Within the Neo4j database, we defined several labels to organize the data. These labels include Lineage, Protein, Nucleotide, Location, and LocationDay (See :ref:`fig1`). The Protein and Nucleotide labels store sequencing data information such as Accession, length, collection date, and collected country. The Lineage label stores lineage development information, including the most common country, latest date, and earliest date associated with each lineage. The LocationDay label stores climate information such as temperature, precipitation, wind speed, humidity and sky shortwave irradiance for each location and specific day. The Location label contains basic information about hospitals, health, and the economy of each country, including GDP, median age, life expectancy, population, the proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index, and more. Lineage nodes are connected to Nucleotide and Protein nodes, representing the relationships between lineages and their associated genetic sequence data. Lineage nodes also have relationships with Location nodes, using the most common occurrence rate as a property. This design allows users to determine the most common countries based on lineage names or search for lineages that were most common in specific countries during a certain time period.
 
-However, if you use a bibtex file, this will overwrite any manually written references.
-
-So what would previously have registered as a in text reference ``[Atr03]_`` for
-
-::
-
-     [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-what you actually see will be an empty reference rendered as **[?]**.
-
-E.g., :cite:`Atr03`.
-
-
-If you wish to have a block quote, you can just indent the text, as in
-
-    When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
-
-Dois in bibliographies
-++++++++++++++++++++++
-
-In order to include a doi in your bibliography, add the doi to your bibliography
-entry as a string. For example:
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = "10.1017/CBO9780511808432",
-   }
-
-
-If there are errors when adding it due to non-alphanumeric characters, see if
-wrapping the doi in ``\detokenize`` works to solve the issue.
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = \detokenize{10.1017/CBO9780511808432},
-   }
-
-Citing software and websites
-++++++++++++++++++++++++++++
-
-Any paper relying on open-source software would surely want to include citations.
-Often you can find a citation in BibTeX format via a web search.
-Authors of software packages may even publish guidelines on how to cite their work.
-
-For convenience, citations to common packages such as
-Jupyter :cite:`jupyter`,
-Matplotlib :cite:`matplotlib`,
-NumPy :cite:`numpy`,
-pandas :cite:`pandas1` :cite:`pandas2`,
-scikit-learn :cite:`sklearn1` :cite:`sklearn2`, and
-SciPy :cite:`scipy`
-are included in this paper's ``.bib`` file.
-
-In this paper we not only terraform a desert using the package terradesert :cite:`terradesert`, we also catch a sandworm with it.
-To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
-
-.. code-block:: bibtex
-
-   @Misc{terradesert,
-     author = {TerraDesert Team},
-     title = {Code for terraforming a desert},
-     year = {2000},
-     url = {https://terradesert.com/code/},
-     note = {Accessed 1 Jan. 2000}
-   }
-
-Source code examples
---------------------
-
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
-
-Important Part
---------------
-
-It is well known :cite:`Atr03` that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
 
 .. figure:: figure1.png
 
-   This is the caption. :label:`egfig`
+   **Fig. 1:** Schema of Neo4j Database for Phylogeographic Analysis of SARS-CoV-2 Variation. The schema includes key entities and relationships essential for organizing and querying data related to samples of protein, samples of nucleotide, locations, lineages, analysis input, output and parameters. Each entity represents a distinct aspect of the analysis process and facilitates efficient data organization and retrieval. :label:`fig1`
+
+
+Input exploration
++++++++++++++++++
+
+To provide users with an interactive interface, we developed a web-based platform using Dash-Plotly :cite:`liermann2021dynamic`. Connecting the Dash Web platform to the Neo4j graph database enables quick retrieval of relevant data information from related nodes when users provide keywords about lineages or locations. This functionality allows users to quickly identify and filter the appropriate datasets for further phylogeographic analysis. By combining the power of the Neo4j database and the user-friendly web-based platform, our design facilitates efficient data exploration and selection, supporting researchers in their phylogeographic analysis of SARS-CoV-2 variation.
+
+The aPhyloGeo-Covid provids two approaches to select input datasets.
+
+1. Determine the most common country for the lineages based on the name of the lineage, and then retrieve the corresponding sequences.
+
+The multi-step process is facilitated by the "Neo4j GraphDatabase" Python package :cite:`jordan2014neo4j` and the interactive Dash web page. Firstly, users select specific lineages of interest from a checklist on the Dash web page. Next, utilizing the capabilities of the "Neo4j GraphDatabase" package, the selected lineages are used to query the graph database, retrieving relevant location information such as associated locations, earliest and latest detected dates of the lineages in the most common location, and their most common rates. Once these results are obtained from the database, they are presented on the web page as an interactive Dash Table. This table provides a user-friendly interface, allowing users to apply columns and rows filters. This feature enables the removal of study areas or lineages deemed irrelevant, as well as excluding lineages with a most common rate below a predetermined threshold. Finally, based on the filtered table and the selected sequence type, the "Neo4j GraphDatabase" package extracts all the related sequences by accession number. These filtered sequences were then collected as part of the input data for subsequent phylogeographic analysis.
+
+The following "update_lineage_table" function serves as a callback in the application and is triggered when the user clicks the "button-confir-lineage" component. Its purpose is to update the lineage table based on the selected values from the "choice-lineage" and "type-dropdown" components. Upon invocation, the function checks if the callback was triggered and verifies the presence of valid checklist values and sequence type. If these conditions are met, a Cypher query is constructed to retrieve the most common country information associated with the specified lineage. The query results are then processed and transformed into a pandas DataFrame. Further data manipulation can be performed at this stage. Finally, the resulting DataFrame is converted into a list of dictionaries, which serves as the updated data for the lineage table component. By utilizing this function, the application effectively enables users to explore and visualize lineage data in the context of geographic features
+      
+
+
+
+
+
+
+
+2. Search for lineages that were most common in a specific country during a certain time period, and then retrieve the corresponding sequences.
+
+This approach involved users defining specific locations and a date period through the Dash web page. Utilizing the capabilities of the GraphDatabase package, the Neo4j database is queried to identify lineages prevalent in the specified locations during the defined time period. The retrieved information includes the earliest and latest detected dates of the lineages in each country and their most common rates. These results were presented to users through an interactive Dash Table, which facilitated the application of filters to eliminate outside study areas or lineages below a predetermined threshold. Then, the GraphDatabase package is utilized again to filter and extract the accession number of the corresponding sequences, which are then collected for subsequent phylogeographic analysis.
+
+In the following code, the "update_table function" is a callback in the application that responds to the user clicking the "button-confir-lineage2" component. Its purpose is to update the location table based on the selected start and end dates, checklist values, and sequence type. The function constructs a Cypher query to retrieve lineage data from the Neo4j database, filtering it based on the specified location and date criteria. The query results are transformed into a pandas DataFrame and further data manipulation can be performed. The resulting DataFrame is converted to a list of dictionaries, which serves as the updated data for the location table. By utilizing this function, the application enables users to explore and visualize lineage data associated with different geographic regions within a specified date range, facilitating the study of phylogeographic patterns and variations.
+   
+
+
+
+
+
+
+
+In summary, these approaches leveraged the "Neo4j GraphDatabase" package and the interactive Dash web page to enable user-driven sequencing searching. Once input sequencing has been defined, an Input node is generated and labelled accordingly in our graph database. 
+This Input node is connected to each sequencing (Nucleotide or Protein) node used in the analysis, establishing relationships between the input data and the corresponding sequences. Each Input node is assigned a unique ID, which is provided to the client for reference.
+
+The following functions facilitate the generation of unique names for nodes and the addition of input nodes with relationships to other nodes in the Neo4j database, contributing to the organization and management of data in a scientific context. 
+The "generate_unique_name" function generates a unique name for a node in the Neo4j database. It takes the label of the node as input and uses a randomly generated short ID to create a unique name. It utilizes a Neo4j driver to establish a connection with the database, checks if a node with the generated name already exists, and continues generating a new name until a unique one is found. The function returns the unique name.
+The "addInputNeo" function adds an input node and establishes relationships with other nodes in the Neo4j database. It takes the label of the nodes, the name of the input node, and a list of IDs as input. It uses a Neo4j driver to connect to the database and creates a new input node with the specified name. It then performs a MATCH query to retrieve nodes with IDs present in the provided list. For each matched node, a relationship of type "IN_INPUT" is created between the input node and the matched node. The function prints a message to indicate that an input node has been successfully added to the Neo4j database.
+
+
+
+
+
+
+
+
+
+
+
+
+Parameters setting and tuning
+++++++++++++++++++++++++++++++
+
+Once the input data has been defined, including sequence data and associated location information, the platform guides users to select the parameters for analysis. At this step, a Label named Analysis is created, and the values of the parameters are saved in the node as properties. These parameters include step size, window size, RF distance threshold, bootstrap threshold, and the list of the environmental factors involved in the analysis. Then a connection between the Input Node and the Analysis Node is created, which offers several advantages. Firstly, it enables users to compare the differences in results obtained from the same input samples but with different parameter settings. Secondly, it facilitates the comparison of analysis results obtained using the same parameter settings but different input samples. The networks of Input, Analysis, and Output nodes (:ref:`fig1`) ensure repeatability and comparability of the analysis results.
+
+The following "create_Analysisnode" function creates an Analysis node in the Neo4j database by executing a Cypher query with the provided data. On the other hand, the "addAnalysisNeo" function adds an Analysis node to the Neo4j database, sets its properties using values from a YAML file, and establishes a relationship between the Analysis node and an existing Input node. The functions utilize a Neo4j driver to connect to the database and perform the necessary operations. By using these functions together, researchers can easily create Analysis nodes with customized properties and establish connections to relevant Input nodes in the Neo4j database, facilitating the management and analysis of scientific data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Subsequently, when the user confirms the start of the analysis with the SUBMIT button, the corresponding sequences are downloaded from NCBI :cite:`brister2015ncbi` using the Biopython package :cite:`cock2009biopython`, and multiple sequence alignments (MSA) :cite:`edgar2006multiple` are performed using the MAFFT method :cite:`katoh2013mafft`. With alignment results and related environmental data as input, the Snakemake workflow will be triggered in the backend. Once the analysis is completed, the user is assigned a unique output ID, which they can use to query and visualize the results in the web platform.
+   
+
+
+Output exploration
+++++++++++++++++++
+
+At the end of each analysis, an output node with a unique id is created in the Neo4j graph database. The associated nodes containing input and parameter information are connected to it by edges. Therefore, users can retrieve and visualize the analysis results through Output ID. The platform allows users to query individual results but also provides the capability to compare the results of multiple analyses. 
+
+Input, Analysis, and Output nodes created by different users form a network that encompasses numerous combinations of parameter settings and input configurations. As the utilization of the platform expands, this network grows, resulting in an open academic platform that fosters communication and collaboration. This feature enhances the user's ability to gain insights from the data and enables comprehensive analysis of the phylogeographic patterns of SARS-CoV-2 variation.
+
+
+Snakemake workflow for phylogenetic analysis
+---------------------------------------------
+
+In this study, a combination of sliding window strategy and phylogenetic analyses was used to explore the potential correlation between the diversity of specific genes or gene fragments and their geographic distribution. The approach involved partitioning a multiple sequence alignment into windows based on sliding window size and step size. Phylogenetic trees were constructed for each window, and cluster analyses were performed for various geographic factors using distance matrices and the Neighbor-Joining clustering method :cite:`mihaescu2009neighbor`. The correlation between phylogenetic and reference trees was evaluated using Robinson and Foulds (RF) distance calculation. Bootstrap and RF thresholds were applied to identify gene fragments with variation patterns within species that coincided with specific geographic features, providing informative reference points for future studies. The workflow encompassed steps such as reference tree construction, sliding windows, phylogenetic tree construction, preliminary filtering based on bootstrap threshold and RF distance, advanced phylogenetic tree construction, and further filtering based on bootstrap threshold and RF distance. The workflow utilized tools and software like Biopython :cite:`cock2009biopython`, raxml-ng :cite:`kozlov2019raxml`, fasttree :cite:`price2009fasttree`, and Python libraries such as robinson-foulds, NumPy, and pandas for data parsing, phylogenetic inference, RF distance calculation, mutation testing, and filter creation. A manuscript for aPhyloGeo-pipeline is available on Github Wiki (https://github.com/tahiri-lab/aPhyloGeo-pipeline/wiki).
+
+
 
 Acknowledgements
 ----------------
