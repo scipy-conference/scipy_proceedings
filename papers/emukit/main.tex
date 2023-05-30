@@ -14,6 +14,14 @@
     \item Section referencing does not seem to work.
   \end{itemize}
 }
+\andrei{thoughts:
+\begin{itemize}
+    \item we mostly use UK in the docs. let's roll with that
+    \item i can help to some extent with this
+    \item "decision making", "Emukit". are there more?
+    \item that's weird! shall we raise this with the proceedings repo?
+  \end{itemize}
+}
 \subsection{Introduction}\label{introduction}
 
 \andrei{A few general words about ML, statistical emulation, UQ, and software for those.}
@@ -151,7 +159,7 @@ These are the core components Emukit defines. Specific methods can also define a
 \section{Usage overview}\label{sec:usage}
 This section describes Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design and multi-fidelity emulation. Unless stated otherwise, we assume that some initial data (an initial design of reasonable size with corresponding evaluations of the user function) is already defined and stored in the variables \texttt{X} (inputs) and \texttt{Y} (values). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude import lines for brevity.
 
-\andrei{I am not really keen on these subsection headers. Somehow they break the flow of the section. Are they here to summarize the point in the code below? If so, how about we remove them, and just do these summaries in the text?}\maren{We should keep the subsections. We should rather adjust the text to fit the subsections or smooth out the transitions between the subsections.}
+\andrei{I am not really keen on these subsection headers. Somehow they break the flow of the section. Are they here to summarize the point in the code below? If so, how about we remove them, and just do these summaries in the text?}\maren{We should keep the subsections. We should rather adjust the text to fit the subsections or smooth out the transitions between the subsections.}\andrei{Ok, but why? Would be great to know why you find them so helpful here, to make any sort of adjustment!}
 
 \subsection{Emukit wraps custom models of arbitrary backends}
 
@@ -192,19 +200,20 @@ ub = 3.0 # upper integral bound
 gpy_model = GPy.models.GPRegression(X=X, Y=Y)
 
 emukit_rbf = RBFGPy(gpy_model.kern)
-emukit_qrbf = QuadratureRBF(
-    emukit_rbf,
-    integral_bounds=[(lb, ub)]
+emukit_measure = LebesgueMeasure.from_bounds(
+    bounds=[(lb, ub)]
 )
-emukit_model = BaseGaussianProcessGPy(
-    kern=emukit_qrbf,
-    gpy_model=gpy_model
+emukit_qrbf = QuadratureRBFLebesgueMeasure(
+    emukit_rbf, emukit_measure
+)
+bq_model = BaseGaussianProcessGPy(
+    kern=emukit_qrbf, gpy_model=gpy_model
 )
 
-emukit_method = VanillaBayesianQuadrature(
-    base_gp=emukit_model
+bq_method = VanillaBayesianQuadrature(
+    base_gp=emukit_model, X=X, Y=Y
 )
-emukit_loop = VanillaBayesianQuadratureLoop(
+bq_loop = VanillaBayesianQuadratureLoop(
     model=emukit_method
 )
 \end{verbatim}
@@ -230,7 +239,33 @@ class IntegratedHyperParameterAcquisition(Acquisition):
 
 \subsection{Emukit allows to use the same model for several tasks}
 
-\maren{What do you think of this? E.g., we could use a BQ model, use it in a BO loop and integrate it in the end. This is a really cool feature of Emukit as it i) increases consistency of results and ii) lowers implementation overhead iii) may allows sharing of computational resources in the future between tasks. Need to check if it runs though.} \andrei{That's a good thing to point out, I can do that}\maren{Thank you!}
+Emukit's composability allows to reuse components between methods. For example, we can use the quadrature model defined above to perform an optimisation loop, and then integrate it using quadrature API. The ability to reuse components in this way lowers implementation overhead, optimises utilisation of compute resources, and increases consistency.
+
+\begin{verbatim}
+# see BQ snippet for complete
+# definition of the model
+bq_model = BaseGaussianProcessGPy(
+    kern=emukit_qrbf, gpy_model=gpy_model
+)
+bayesopt_loop = BayesianOptimizationLoop(
+    model = bq_model, space = parameter_space
+)
+n_iterations = 20
+bayesopt_loop.run_loop(
+    user_function,
+    stopping_condition=n_iterations
+)
+
+bq_method = VanillaBayesianQuadrature(
+    base_gp = bq_model, X=X, Y=Y
+)
+bq_loop = VanillaBayesianQuadratureLoop(
+    model = bq_method
+)
+
+bq_loop.model.integrate()
+\end{verbatim}
+
 
 \subsection{Emukit supports data sources of different fidelities}
 
@@ -263,9 +298,6 @@ gpy_linear_mf_model =
 \subsection{Emukit provides basic support for benchmarking}
 In addition to the APIs discussed above, Emukit also provides basic support for sensitivity analysis and benchmarking. Further information about Emukit's functionality, including available implementations of acquisition functions, multi-output models, support for constraints and cost functions, custom events in the outer loop, can be found in library's website\footnote{\url{https://emukit.github.io/}}, documentation\footnote{\url{https://emukit.readthedocs.io/en/latest/}} and tutorial notebooks\footnote{\url{https://nbviewer.org/github/emukit/emukit/blob/main/notebooks/index.ipynb}}. 
 
-\maren{May it be useful to introduce each of the methods (BO, BQ, ExpDesign) with some minimal example code similarly to the webpage? }
-\andrei{Good idea! Did the first pass.}
-
 \section{Emukit in action}
 Since its announcement in 2019 \cite{paleyes2019emulation}, Emukit was used in a wide range of research projects. In this section we review a selection of these projects to showcase the breadth of situations in which the library can be useful.
 
@@ -292,19 +324,15 @@ The Python ecosystem is rich with powerful scientific packages, including those 
 
 In particular, \emph{Bayesian optimisation} enjoys a wide selection of tools and frameworks. Spearmint \cite{snoek2012practical} and GPyOpt \cite{gpyopt2016} are among the first Python packages for Bayesian optimisation, the latter being an inspiration for the first release of Emukit. BoTorch \cite{balandat2020botorch} is a popular library for Bayesian optimisation based on PyTorch. Similarly, Trieste \cite{picheny2023trieste} also focuses on Bayesian optimisation but uses Tensorflow as a backend. More options, such as pyGPGO \cite{jimenez2017pygpgo}, scikit-optimize \cite{louppe2017bayesian}, RoBO \cite{klein-bayesopt17}, are also available.
 
+For \emph{Bayesian quadrature} and \emph{Bayesian experimental design} the choice of frameworks is more scarce. Namely, to the best of our knowledge bayesquad \cite{Charles2013} appears to be the only other usable Python package for Bayesian quadrature. The Python library ProbNum \cite{Wenger21} supports a variety of Bayesian quadrature methods, but it's lack of hyper-parameter tuning capability reduces its practical relevance significantly in its current form. Optbayesexpt \cite{mcmichael2021optbayesexpt} and NEXTorch \cite{wang2021nextorch} provide Bayesian experimental design functionality adopted for their respective fields. Elements of experimental design can also be found in Trieste \cite{picheny2023trieste}.
 
-For \emph{Bayesian quadrature} the choice of frameworks is more scarce. Namely, bayesquad \cite{Charles2013} appears to be the only other usable Python package for Bayesian quadrature although we may have missed some lesser known ones. The Python library ProbNum \cite{Wenger21} supports a variety of Bayesian quadrature methods, but it's lack of hyper-parameter tuning capability reduces its practical relevance significantly in its current form. 
+The key difference between Emukit and the mentioned libraries is the fact that Emukit does not dictate a particular modelling framework, allowing for flexibility in the choice of computational backends. In addition, Emukit does not focus on a snigle method and provides a common core set of abstractions for optimisation, quadrature and experimental design. Emukit provides a unique way of using the same model backend for all tasks, which increases consistency, reduces implementation and computing overheads.
 
-Optbayesexpt \cite{mcmichael2021optbayesexpt} and NEXTorch \cite{wang2021nextorch} provide \emph{Bayesian experimental design} functionality adopted for their respective fields. Elements of experimental design can also be found in Trieste \cite{picheny2023trieste}. 
-
-The key difference between Emukit and the mentioned libraries is the fact that Emukit does not dictate a particular modelling framework, allowing for flexibility in the choice of computational backends.
 Likewise, we were not able to locate a Python library other than Emukit that provides multi-fidelity emulation functionality. A notable package for research on multi-fidelity methods is MF2 \cite{vanRijn2020} that implements a variety of multi-fidelity benchmark functions, but does not have modelling capabilities.
 
 Looking at a wider family of optimisation libraries in Python, Optuna \cite{optuna_2019} is a popular choice for hyperparameter optimisation. Similarly to Emukit, Optuna is framework agnostic, however it provides a different set of optimisation methods, focusing on evolutionary, genetic and Monte Carlo based approaches. Finally, Ray Tune \cite{liaw2018tune} is a well known scalable platform in Python on which other model optimisation frameworks can be executed. Emukit can potentially be integrated with Ray Tune as an optimisation library. This work was not carried out yet, and can be a future development direction.
 
-Another difference between Emukit and the mention libraries is that they usually are specific to a single method such as Bayesian optimization \emph{or} Bayesian quadrature \emph{or} experimental design. If the user needs solve two or more tasks on as single model involving different methods, Emukit provides a unique way of using \emph{the same model backend} and the \emph{the same core loop package} for all tasks. This increases consistency between results of different tasks, my reduce implementation overhead and may allow resource sharing between tasks. \maren{Andrei, can you check the last paragraph especially.}
-
-\maren{The shared core package may need to be a section on its own as its quite a unique feature of Emukit, perhaps including the diagram/graph that is also in the rtd. I added a placeholder subsection above. What do you think?} \andrei{I like that. I'll move this up to code samples section, and briefly reiterate here}
+\maren{The shared core package may need to be a section on its own as its quite a unique feature of Emukit, perhaps including the diagram/graph that is also in the rtd. I added a placeholder subsection above. What do you think?} \andrei{I tried it, and bq-bo-bq does work, see snippets. I've added your points, slightly rephrased, there, and briefly repeated them here.}
 
 \section{Limitations}\label{section:limitations}
 The design choices made in Emukit have proven to be highly beneficial for rapid prototyping and experimentation. However they also led to some of the key limitations of the library.
