@@ -40,20 +40,64 @@ aPhyloGeo-Covid: A Web Interface for Reproducible Phylogeographic Analysis of SA
 Introduction
 ------------
 
-Twelve hundred years ago  |---| in a galaxy just across the hill...
+Phylogeography is a field of study that investigates the geographic distribution of genetic lineages within a particular species, 
+including viruses. It combines principles from evolutionary biology and biogeography to understand how genetic variation is distributed 
+across different spatial scales :cite:`dellicour2019using`. In the context of viruses, phylogeography seeks to uncover the evolutionary 
+history and spread of viral lineages by analyzing their genetic sequences and geographical locations. By examining the genetic diversity 
+of viruses collected from various geographic locations, researchers can reconstruct the patterns of viral dispersal and track the movement 
+and transmission dynamics of viral populations over time :cite:`vogels2023phylogeographic` :cite:`franzo2022phylodynamic` :cite:`munsey2021phylogeographic`. 
+For phylogeographic studies in viruses, researchers typically require integrating genetic sequences, geographic information and 
+temporal information. By combining the genetic sequences with geographic information, researchers can analyze the phylogenetic relationships 
+among the viral strains and infer the patterns of viral migration and transmission across different regions. By integrating genetic and 
+temporal information, researchers can infer the timescale of viral evolution, and trace the origins and dispersal patterns of different viral 
+lineages :cite:`holmes2004phylogeography`. Throughout the COVID-19 pandemic, researchers worldwide sequenced the genomes of thousands of SARS-CoV-2 viruses. 
+These efforts have helped researchers study the virus's evolution and spread over time and across different geographic regions, which is critical 
+to informing public health strategies for controlling future outbreaks. However, the abundance of genetic sequences and the accompanying geographic 
+and temporal data are scattered across multiple databases, making it challenging to extract, validate, and integrate the information. For instance, 
+to conduct a phylogeographic study in SARS-CoV-2, a researcher would first need access to data on the geographic distribution of specific lineages, 
+including the most common countries where they are found, as well as the earliest and latest detected dates. This data is provided by the Cov-Lineages.org 
+Lineage Report :cite:`o2021tracking`. Subsequently, based on the most common country and lineage detection dates, the researcher would need to search 
+for sequencing data in databases such as NCBI Virus resource :cite:`brister2015ncbi` or GISAID :cite:`khare2021gisaid`. Climate data can be obtained 
+from references to datasets like NASA/POWER and DailyGridded weather :cite:`marzouk2021assessment`. Additional data, including epidemiological information 
+like COVID-19 testing and vaccination rates, can be retrieved from projects like Our World in Data :cite:`mathieu2021global`. In summary, conducting 
+phylogeographic research in viruses involves not only screening and selecting sequencing data but also managing the associated geographic information and 
+integrating vast amounts of environmental data. This process can be time-consuming and prone to errors. The challenges associated with data collection, 
+extraction, and integration have hindered the advancement of phylogeographic research in the field. To address these challenges, a highly scalable and 
+flexible graph database management system Neo4j :cite:`guia2017graph` was applied to store, manage, and query large-scale SARS-CoV-2 variants-related data. 
+Unlike traditional relational databases that use tables and rows, Neo4j represents data as a network of interconnected nodes and relationships. 
+It leverages graph theory and provides a powerful framework for modelling, storing, and analyzing complex relationships between 
+entities :cite:`angles2012comparison`.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+On the other hand, while recent phylogeographic studies have extensively analyzed the genetic data of species distributed under different 
+geographical locations, many of them have only focused on the distribution of species or provided visual representations without exploring 
+the correlation between specific genes (or gene segments) and environmental factors :cite:`uphyrkina2001phylogenetics` :cite:`luo2004phylogeography` 
+:cite:`taylor2020intercontinental` :cite:`aziz2022phylogeography`. To fill this gap, a novel algorithm applying sliding windows to scan the genetic 
+sequence information related to their climatic conditions was developed by our team :cite:`koshkarov2022phylogeography`. This algorithm utilizes sliding 
+windows to scan genetic sequence information in relation to climatic conditions. Multiple sequences are aligned and segmented into numerous alignment windows 
+based on predefined window size and step size. To assess the relationship between variation patterns within species and geographic features, the Robinson and 
+Foulds metric :cite:`robinson1981comparison` was employed to quantify the dissimilarity between the phylogenetic tree of each window and the topological tree 
+of geographic features. However, this process was computationally intensive as each window needed to be processed independently. Additionally, determining 
+the optimal sliding window size and step size often required multiple parameter settings to optimize the analysis. Thus, reproducibility played a 
+critical role in this process. To address these challenges, we designed a phylogeographic pipeline that leverages Snakemake, a modern computational 
+workflow management system :cite:`koster2012snakemake`. Unlike other workflow management systems such as Galaxy :cite:`jalili2020galaxy` and Nextflow 
+:cite:`spivsakova2023nextflow`, Snakemake stands out for being written in Python, making it highly portable and requiring only a Python installation to 
+run Snakefiles :cite:`wratten2021reproducible`. The Snakemake workflow can harnesses various Python packages, including Biopython :cite:`cock2009biopython` 
+and Pandas :cite:`lemenkova2019processing`, enabling efficient handling of sequencing data reading and writing as well as phylogenetic analysis. 
+This makes Python-based Snakemake the ideal choice for aPhyloGeo-Covid. Furthermore, the Snakemake pipeline seamlessly integrates with other tools 
+through Conda, ensuring efficient dependency and environment management. With a single command, all necessary dependencies can be downloaded and installed. 
+Another significant advantage of Snakemake is its scalability, capable of handling large workflows with numerous rules and dependencies. 
+It can be executed on various computing environments, including workstations, clusters, and cloud computing platforms like Kubernetes, Google 
+Cloud Platform, and Amazon Web Services. Moreover, Snakemake supports parallel execution of jobs, greatly enhancing the pipeline's overall performance and speed.
+
+With these considerations in mind, the main aim of this study is to create an open-source, web-based phylogeographic analysis platform that overcomes 
+the aforementioned limitations. This platform comprises two essential components: data pre-processing and phylogeographical analysis. 
+In the data pre-processing phase, we utilize searchable graph databases to facilitate rapid exploration and provide a visual overview of 
+the SARS-CoV-2 variants and their associated environmental factors. This enables researchers to efficiently navigate through the vast amount of 
+data and extract relevant information for their analyses. In the phylogeographical analysis phase, we employ our modularized Snakemake workflow to 
+investigate how patterns of genetic variation within different SARS-CoV-2 variants align with geographic features. By utilizing this workflow, 
+researchers can analyze the relationship between viral genetic diversity and specific geographic factors in a structured and reproducible manner. 
+This comprehensive approach allows for a deeper understanding of the complex interplay between viral evolution, transmission dynamics, 
+and environmental influences.
 
 
 Bibliographies, citations and block quotes
