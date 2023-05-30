@@ -136,11 +136,39 @@ The multi-step process is facilitated by the "Neo4j GraphDatabase" Python packag
 The following "update_lineage_table" function serves as a callback in the application and is triggered when the user clicks the "button-confir-lineage" component. Its purpose is to update the lineage table based on the selected values from the "choice-lineage" and "type-dropdown" components. Upon invocation, the function checks if the callback was triggered and verifies the presence of valid checklist values and sequence type. If these conditions are met, a Cypher query is constructed to retrieve the most common country information associated with the specified lineage. The query results are then processed and transformed into a pandas DataFrame. Further data manipulation can be performed at this stage. Finally, the resulting DataFrame is converted into a list of dictionaries, which serves as the updated data for the lineage table component. By utilizing this function, the application effectively enables users to explore and visualize lineage data in the context of geographic features
       
 
+.. code-block:: python
 
+   @ app.callback(
+       Output('lineage-table', 'data'),
+       Output('valid-message', 'children'),
+       Input('button-confir-lineage', 'n_clicks'),
+       State('choice-lineage', 'value'),
+       State('type-dropdown', 'value')
+   )
 
-
-
-
+   def update_lineage_table(n, checklist_value, seqType_value):
+       if n is None:
+           return None, None
+       else:
+           if checklist_value and seqType_value:
+           # Query most common country in Neo4j database based on the name of the lineage
+               starts_with_conditions = " OR ".join(
+                   [f'n.lineage STARTS WITH "{char}"' for char in checklist_value])
+               query = f"""
+                   MATCH (n:Lineage) - [r: IN_MOST_COMMON_COUNTRY] -> (l: Location)
+                   WHERE {starts_with_conditions}
+                   RETURN n.lineage as lineage, n.earliest_date as earliest_date, 
+                     n.latest_date as latest_date, l.iso_code as iso_code, 
+                     n.most_common_country as most_common_country,  r.rate as rate
+                   """
+               cols = ['lineage', 'earliest_date', 'latest_date', 'iso_code',
+                       'most_common_country', 'rate']
+                # Transform Cypher results to pandas dataframe
+               df = neoCypher_manager.queryToDataframe(query, cols)
+               ...
+               table_data = df.to_dict('records')
+               return table_data, None
+           ....
 
 2. Search for lineages that were most common in a specific country during a certain time period, and then retrieve the corresponding sequences.
 
