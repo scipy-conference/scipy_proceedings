@@ -177,10 +177,45 @@ This approach involved users defining specific locations and a date period throu
 In the following code, the "update_table function" is a callback in the application that responds to the user clicking the "button-confir-lineage2" component. Its purpose is to update the location table based on the selected start and end dates, checklist values, and sequence type. The function constructs a Cypher query to retrieve lineage data from the Neo4j database, filtering it based on the specified location and date criteria. The query results are transformed into a pandas DataFrame and further data manipulation can be performed. The resulting DataFrame is converted to a list of dictionaries, which serves as the updated data for the location table. By utilizing this function, the application enables users to explore and visualize lineage data associated with different geographic regions within a specified date range, facilitating the study of phylogeographic patterns and variations.
    
 
+.. code-block:: python
 
-
-
-
+   @ app.callback(
+       Output('location-table', 'data'),
+       Output('valid-message2', 'children'),
+       Input('button-confir-lineage2', 'n_clicks'),
+       State('date-range-lineage', 'start_date'),
+       State('date-range-lineage', 'end_date'),
+       State('choice-location', 'value'),
+       State('type-dropdown2', 'value')
+   )
+   def update_table(n, start_date_string, end_date_string, checklist_value, seqType_value):
+       if n is None:
+           return None, None
+       else:
+           if start_date_string and end_date_string and checklist_value and seqType_value:
+           # Query lineage data in Neo4j database based on the name of location and date  
+               start_date = datetime.strptime(
+                   start_date_string, '%Y-%m-%d').date()
+               end_date = datetime.strptime(
+                   end_date_string, '%Y-%m-%d').date()
+               query = f"""
+                   MATCH (n:Lineage) - [r: IN_MOST_COMMON_COUNTRY] -> (l: Location)
+                   WHERE n.earliest_date > datetime("{start_date.isoformat()}") 
+                        AND n.earliest_date < datetime("{end_date.isoformat()}")
+                   AND l.location in {checklist_value}
+                   RETURN n.lineage as lineage, n.earliest_date as earliest_date, 
+                           n.latest_date as latest_date, l.iso_code, 
+                        l.location as most_common_country,  r.rate
+                   """
+               cols = ['lineage', 'earliest_date', 'latest_date', 'iso_code',
+                       'most_common_country', 'rate']
+               # Transform Cypher results to pandas dataframe
+               df = neoCypher_manager.queryToDataframe(query, cols)
+               # Convert the 'Date' column to pandas datetime format
+               ...
+               table_data = df.to_dict('records')
+               return table_data, None
+           ...
 
 
 In summary, these approaches leveraged the "Neo4j GraphDatabase" package and the interactive Dash web page to enable user-driven sequencing searching. Once input sequencing has been defined, an Input node is generated and labelled accordingly in our graph database. 
@@ -190,15 +225,52 @@ The following functions facilitate the generation of unique names for nodes and 
 The "generate_unique_name" function generates a unique name for a node in the Neo4j database. It takes the label of the node as input and uses a randomly generated short ID to create a unique name. It utilizes a Neo4j driver to establish a connection with the database, checks if a node with the generated name already exists, and continues generating a new name until a unique one is found. The function returns the unique name.
 The "addInputNeo" function adds an input node and establishes relationships with other nodes in the Neo4j database. It takes the label of the nodes, the name of the input node, and a list of IDs as input. It uses a Neo4j driver to connect to the database and creates a new input node with the specified name. It then performs a MATCH query to retrieve nodes with IDs present in the provided list. For each matched node, a relationship of type "IN_INPUT" is created between the input node and the matched node. The function prints a message to indicate that an input node has been successfully added to the Neo4j database.
 
+.. code-block:: python
 
+   def generate_unique_name(nodesLabel):
+       driver = GraphDatabase.driver(URI,
+                                     auth=("neo4j", password))
+       with driver.session() as session:
+           random_name = generate_short_id()
 
+           result = session.run(
+               "MATCH (u:" + nodesLabel + " {name: $name}) RETURN COUNT(u)", name=random_name)
+           count = result.single()[0]
 
+           while count > 0:
+               random_name = generate_short_id()
+               result = session.run(
+                   "MATCH (u:" + nodesLabel + " {name: $name}) RETURN COUNT(u)", name=random_name)
+               count = result.single()[0]
 
+           return random_name
 
+   def addInputNeo(nodesLabel, inputNode_name, id_list):
+       # Execute the Cypher query
+       driver = GraphDatabase.driver(URI,
+                                     auth=("neo4j", password))
 
-
-
-
+       # Create a new node for the user
+       with driver.session() as session:
+           session.run(
+               "CREATE (userInput:Input {name: $name})", name=inputNode_name)
+       # Perform MATCH query to retrieve nodes
+       with driver.session() as session:
+           result = session.run(
+               "MATCH (n:" + nodesLabel + ") WHERE n.accession IN $id_lt RETURN n",
+               nodesLabel=nodesLabel,
+               id_lt=id_list)
+           # Create relationship with properties for each matched node
+           with driver.session() as session:
+               for record in result:
+                   other_node = record["n"]
+                   session.run("MATCH (u:Input {name: $name}), 
+                                 (n:" + nodesLabel + " {accession: $id}) "
+                               "CREATE (n)-[r:IN_INPUT]->(u)",
+                               name=inputNode_name, 
+                               nodesLabel=nodesLabel, 
+                               id=other_node["accession"])
+       print("An Input Node has been Added in Neo4j Database!")
 
 
 Parameters setting and tuning
@@ -209,15 +281,34 @@ Once the input data has been defined, including sequence data and associated loc
 The following "create_Analysisnode" function creates an Analysis node in the Neo4j database by executing a Cypher query with the provided data. On the other hand, the "addAnalysisNeo" function adds an Analysis node to the Neo4j database, sets its properties using values from a YAML file, and establishes a relationship between the Analysis node and an existing Input node. The functions utilize a Neo4j driver to connect to the database and perform the necessary operations. By using these functions together, researchers can easily create Analysis nodes with customized properties and establish connections to relevant Input nodes in the Neo4j database, facilitating the management and analysis of scientific data.
 
 
+.. code-block:: python
 
+   def create_Analysisnode(tx, data):
+       query = "CREATE (n:Analysis) SET n = $data"
+       tx.run(query, data=data)
 
+   def addAnalysisNeo():
+       driver = GraphDatabase.driver(URI,
+                                     auth=("neo4j", password))
 
+       properties_dict = {}
+       with open('config/config.yaml', 'r') as file:
+           config = yaml.safe_load(file)
 
-
-
-
-
-
+       # Set the properties of the node using the yaml_data
+       set_properties(config, properties_dict)
+       input_name = properties_dict['input_name']
+       analysis_name = properties_dict['analysis_name']
+       create_time = datetime.now().isoformat()
+       # Create node
+       with driver.session() as session:
+           session.execute_write(create_Analysisnode, properties_dict)
+       # Create relationship
+       with driver.session() as session:
+           session.run("MATCH (u:Input {name: $input_name}), (n:Analysis {analysis_name: $analysis_name}) "
+                       "CREATE (u)-[r:FOR_ANALYSIS {create_time: $create_time}]->(n)",
+                       input_name=input_name, analysis_name=analysis_name, create_time=create_time)
+       print("An Analysis Node has been Added in Neo4j Database!")
 
 
 Subsequently, when the user confirms the start of the analysis with the SUBMIT button, the corresponding sequences are downloaded from NCBI :cite:`brister2015ncbi` using the Biopython package :cite:`cock2009biopython`, and multiple sequence alignments (MSA) :cite:`edgar2006multiple` are performed using the MAFFT method :cite:`katoh2013mafft`. With alignment results and related environmental data as input, the Snakemake workflow will be triggered in the backend. Once the analysis is completed, the user is assigned a unique output ID, which they can use to query and visualize the results in the web platform.
