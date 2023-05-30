@@ -1,6 +1,6 @@
 ---
 abstract:
-   - First to read, last to write
+   - "Andrei, do you want to have a try at this? :)"
 keywords:
   - statistical emulation
   - software
@@ -8,6 +8,7 @@ keywords:
   - Bayesian quadrature
   - Bayesian experimental design
   - multi-fidelity
+  - active learning
 authors:
 - email: ap2169@cam.ac.uk
   institution:
