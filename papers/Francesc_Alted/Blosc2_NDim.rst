@@ -17,6 +17,10 @@
 :email: soscargm98@gmail.com
 :institution: Project Blosc
 
+:author: Sergio Barrachina
+:email: barrachi@uji.es
+:institution: Universitat Jaume I
+
 
 ---------------------------------------------------------------------------------
 Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset)
@@ -37,19 +41,34 @@ Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset
 Introduction
 ------------
 
-Blosc is a high-performance compressor that has been optimized for binary data. Its design allows for faster transmission of data to the processor cache than the traditional, non-compressed, direct memory fetch approach through an memcpy() OS call. This can be useful not only in reducing the size of large datasets on-disk or in-memory, but also in accelerating memory-bound computations, which is typical in vector-vector operations.
+The exploration of n-dimensional datasets is a common practice in many areas of science.  One of its drawbacks is that the size of the datasets can become very large, and this can make the exploration process very slow.  In this paper we will show how Blosc2 NDim can be used to accelerate the exploration of n-dimensional datasets.
 
-Blosc2 is the new iteration of the Blosc 1.x series, which adds more features and better documentation. In particular, the NDim feature of Blosc2 excels at reading multi-dimensional slices, thanks to its innovative pineapple-style partitioning (:cite:`BDT23-blosc2-ndim-intro`). This allows for a very fast exploration of general n-dim datasets (and in particular, a 3-d Milky Way dataset).
+Blosc is a high-performance compressor that has been optimized for binary data. Its design allows for faster transmission of data to the processor cache than the traditional, non-compressed, direct memory fetch approach through an memcpy() OS call. This can be useful not only in reducing the size of large datasets on-disk or in-memory, but also in accelerating memory-bound computations, which is typical in vector-vector operations.
 
 Blosc uses the blocking technique (as described here) to reduce activity on the memory bus as much as possible. The blocking technique divides datasets into blocks small enough to fit in the caches of modern processors and performs compression/decompression there. It also leverages SIMD (SSE2) and multi-threading capabilities present in modern multi-core processors to accelerate the compression/decompression process to the maximum.
 
 .. figure:: sum_openmp-rainfall.png
    :scale: 40%
 
-   Speed for summing up a vector of real float32 data using a variety of codecs that come with Blosc2. Observe the maximum speed is achieved when using the maximum number of (logical) threads in that computer (28). :label:`sum-precip`
+   Speed for summing up a vector of real float32 data using a variety of codecs that come with Blosc2. Observe the maximum speed is achieved when using the maximum number of (logical) threads in this computer (28). :label:`sum-precip`
 
 Using Blosc compression can accelerate real computations when enough cores are dedicated to the task. In Figure :ref:`sum-precip` you can see a real example of this.
 
+Blosc2 is the new iteration of the Blosc 1.x series which is used in many important libraries (HDF5, Zarr, PyTables...). In particular, the NDim feature of Blosc2 excels at reading multi-dimensional slices, thanks to its innovative pineapple-style partitioning :cite:`BDT23-blosc2-ndim-intro`. This allows for a very fast exploration of general n-dim datasets (and in particular, a 3D Milky Way dataset).
+
+The Gaia dataset
+----------------
+
+The Gaia DR3 dataset is a catalog of 1.7 billion stars in our galaxy.  For this work, we have extracted the 3D coordinates and the magnitude of 1.4 billion stars. When stored as a regular binary table the dataset is 22 GB in size.  Here, we have converted this tabular dataset into a 3D array of shape (10_000, 10_000, 10_1000), and every cell containing the magnitude for every star inside it.  In such a cube, there are 700 million of stars (a significant part of the Gaia catalog). As the magnitude is a float32, the size of the dataset is 3.6 TB, although using compression via Blosc2 for storage, we can reduce it to 10 GB.  This is because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost entirely.
+
+.. figure:: 3d-view-milkyway.png
+   :scale: 25%
+
+   Gaia DR3 dataset as a 3D array (preliminary, this is not from the dataset in this paper). :label:`gaia-3d-dset`
+
+In Figure :ref:`gaia-3d-dset` you can see a 3D view of the Milky Way for a different kind of stars.  The color of the points is the magnitude of the star, where the reddest stars are the brightest ones.  In this view, we cannot see the spiral arms of the Milky Way, because the dimensions of the cube are not enough to cover the whole Milky Way.
+
+One advantage of using a 3D array is that we can use the powerful slicing capabilities of Blosc2 NDim to explore the dataset in a very fast way.  For instance, we could explore for star clusters by extracting small cubes as NumPy arrays and counting the number of stars.  A cube containing an anormally high number of counts would be a candidate for a cluster.  We could also extract a 2D slice of the cube and plot it as a 2D image, where the color of the pixels is the magnitude of the stars.  This would allow us to create a cinematic view of a travel over different trajectories in the Milky Way.
 
 Blosc2 NDim
 -----------
@@ -66,260 +85,57 @@ Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensio
 
    Blosc2 NDim 2-level partitioning is flexible: you can specify the dimensions of both partitions in any arbitrary way that fitxs you read access patterns. :label:`b2nd-3d-dset`
 
-With these more fine-grained cubes (aka partitions), it is possible to retrieve arbitrary n-dim slices more rapidly because you don't have to decompress all the data that is necessary for the more coarse-grained partitions typical in other libraries.  See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` on how this works and can be setup.
+With these more fine-grained cubes (aka partitions), it is possible to retrieve arbitrary n-dim slices more rapidly because you don't have to decompress all the data that is necessary for the more coarse-grained partitions typical in other libraries.  See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` on how this works and can be setup.  Also, for a comparison against other libraries using just a single partition (HDF5, Zarr) see Figure :ref:`read-partial-slices` :cite:`BDT23-blosc2-ndim-intro`.
 
+.. figure:: read-partial-slices.png
+   :scale: 70%
 
-Bibliographies, citations and block quotes
+   Speed comparison when reading partial n-dimensional slices of a 4-d dataset. :label:`read-partial-slices`
+
+It is important to note that all the data types in NumPy are supported by Blosc2 NDim; that means that, besides the typical cohort of signed/unsigned int, single and double precision floats, bools or strings, you can also store e.g. datetimes (including units), or arbitrarily nested heterogeneous types (which allows, among other things to create multidimensional tables).
+
+Support for multiple codecs, filters and other compression features
+--------------------------------------------------------------------
+
+Blosc2 is not only a compression library, but also a framework for creating efficient compression pipelines.  A compression pipeline is composed of a sequence of filters, followed by a compression codec.  A filter is a transformation that is applied to the data before compression, and a codec is a compression algorithm that is applied to the data after the filters.  Filters normally allows for better compression ratios, and/or better compression/decompression speeds.
+
+Blosc2 supports a variety of codecs, filters and other compression features.  In particular, out-of-the-box it supports the following codecs:
+
+- BloscLZ (fast codec; the default)
+- LZ4 (a very fast codec)
+- LZ4HC (high compression variant of LZ4)
+- Zlib (Blosc2 uses the Zlib-NG variant)
+- Zstd (high compression)
+- ZFP (lossy compression for n-dimensional datasets of floats)
+
+and the following filters:
+
+- Shuffle (groups equal significant bytes together, useful for ints/floats)
+- Shuffle with bytedelta (same than shuffle, but with a delta of every byte)
+- Bitshuffle (groups equal bits together, useful for ints/floats)
+- Truncation (truncates precision, useful for floats; lossy)
+
+Blosc2 has a pipeline architecture that allows to chain different filters :cite:`BDT22-blosc2-pipeline`, followed by a compression codec.  It also allows for prefilters (user code meant to be performed before the pipeline) and postfilters (user code meant to be performed after the pipeline).  This architecture is very flexible and minimizes the data copies in the different steps, allowing to create very efficient pipelines for a variety of use cases.  See Figure :ref:`blosc2-pipeline` for how this works.
+
+.. figure:: blosc2-pipeline.png
+   :scale: 30%
+
+   The Blosc2 pipeline. During compression the first applied function is the prefilter (if any), then the filters pipeline (with a maximum of six), and last the codec. For decompressing, the order will be reversed: first the codec, then the filters pipeline and finally the postfilter (if any). :label:`blosc2-pipeline`
+
+In addition, Blosc2 supports user-defined codecs and filters, so you can create your own compression algorithms and use them in Blosc2 :cite:`BDT22-blosc2-pipeline`.  Also, these user-defined codecs and filters can be loaded dynamically :cite:`BDT23-dynamic-plugins`, registered globally inside Blosc2 and installed via a Python wheel, so they can be used transparently from any Blosc2 application (C, Python or any other languages that offers a Blosc2 wrapper).
+
+Automatic tuning of compression parameters
 ------------------------------------------
 
-If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension.
+Probably the most difficult part of using a compression library is to find the right compression parameters for your data.  Which combination of code and filter would provide the best compression ratio?  Which one the best compression / decompression speed?
 
-**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work.
+BTune is a dynamic plugin for Blosc2 that helps you find the optimal combination of compression parameters for user's needs. It does so by training a neural network on the most representative datasets.  The neural network is trained on a variety of datasets, and it is able to predict the best combination of codec and filters for a given dataset.  See Figure :ref:`predicted-dparams-example` for an example.
 
-To reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`hume48` (which literally is :code:`:cite:`hume48`` in accordance with the ``hume48`` cite-key in the associated ``mybib.bib`` file).
+.. figure:: predicted-dparams-example.png
+   :scale: 23%
 
-However, if you use a bibtex file, this will overwrite any manually written references.
+   BTune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favor speed only, and 1 means favor compression ration only).  It can be seen that BloscLZ + Suffle is most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the more predicted one when the specified balance is towards optimize for the compression ratio. Based of this table, the user can decide which value for the balance is preferred. :label:`predicted-dparams-example`
 
-So what would previously have registered as a in text reference ``[Atr03]_`` for
-
-::
-
-     [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-what you actually see will be an empty reference rendered as **[?]**.
-
-E.g., :cite:`Atr03`.
-
-
-If you wish to have a block quote, you can just indent the text, as in
-
-    When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
-
-Dois in bibliographies
-++++++++++++++++++++++
-
-In order to include a doi in your bibliography, add the doi to your bibliography
-entry as a string. For example:
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = "10.1017/CBO9780511808432",
-   }
-
-
-If there are errors when adding it due to non-alphanumeric characters, see if
-wrapping the doi in ``\detokenize`` works to solve the issue.
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = \detokenize{10.1017/CBO9780511808432},
-   }
-
-Source code examples
---------------------
-
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
-
-Important Part
---------------
-
-It is well known :cite:`Atr03` that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
-
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-Customised LaTeX packages
--------------------------
-
-Please avoid using this feature, unless agreed upon with the
-proceedings editors.
-
-::
-
-  .. latex::
-     :usepackage: somepackage
-
-     Some custom LaTeX source here.
+After training the neural network, it is possible to use it to automatically tune the compression parameters for a given dataset.
+Blosc2 offers a very simple way to do this via the BTune plugin: just set the :code:`BTUNE_BALANCE` environment variable to a value between 0 and 1 (0 means favor speed only, and 1 means favor compression ration only).  Then, when you create a new Blosc2 data container, the compression parameters will be automatically tuned for your data.  This is a very simple way to get the best compression ratio and/or the best compression/decompression speed for your data.
 
