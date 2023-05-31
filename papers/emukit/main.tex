@@ -5,10 +5,6 @@
 
 \section{Introduction}\label{introduction}
 
-%\andrei{A few general words about ML, statistical emulation, UQ, and software for those.}
-%\maren{started to draft this. still subject to rapid changes...}
-%\andrei{Thanks for breaking the deadlock! One conceptual comment I have now is this. Shall we make a bit more emphasis on decision making under uncertainty? I used the phrase "decision making" a lot in the later sections.}\maren{Yes, it's included now.}
-
 Data selection is a major challenge in supervised machine learning (ML). Quite often when data is abundant, it is collected prior to the training process and provided statically, meaning that the machine learning model has no influence on the data collection process. However, if data is expensive and scarce the performance of a model trained on a static dataset can be suboptimal or even poor. In those cases, it is beneficial to carefully select the dataset such that, for example, it is maximally informative under the ML model to achieve the task at hand. This branch of ML is generally referred to as \emph{active learning} \cite{Settles2009} and has attracted attention in various sub-fields such as \emph{experimental design} (the task of predicting an unknown function value from its input), \emph{global optimisation} (guessing the global minimiser of a function) and \emph{integration} (guessing the integral of a function).
 The Emukit Python library, at core, augments existing machine learning models with active data selection functionality.
 
@@ -27,7 +23,11 @@ Hence, the most prominent features of Emukit can be summarized as follows.
 \item Emukit provides basic functionality for \emph{multi-fidelity modeling} which allows the user to incorporate data sources of different fidelities. Further, Emukit contains a limited number of model wrappers to illustrate their usage and some example applications.
 \end{itemize}
 
-% The remainder of the paper corroborates on the points above in greater detail. Section~\ref{sec:background} briefly introduces the supported machine learning methods, Sections~\ref{sec:workflow} and \ref{sec:lib-structure} sketch Emukit's workflow and library structure and Section~\ref{} exemplifies usage. Sections~\ref{} and \ref{} discuss related libraries and limitations of Emukit respectively. Throughout the text, `tasks' will be referred to in an abstract sense, without a specific application in mind. This is because Emukit is abstracted away from a specific application and can be used for a variety of tasks that obey a certain algorithmic structure (more in this in Section~\ref{}. In the remainder of text, we will use the terms `ML model' and `emulator' interchangeably. The `simulator' or `data source' will later also be referred to as `user function', `black-box function' or `objective function'.
+The remainder of the paper corroborates on the points above in greater detail. The following section briefly introduces the supported machine learning methods before Emukit's workflow and library structure is sketched.
+%and Section~\ref{} exemplifies usage. Sections~\ref{} and \ref{} discuss related libraries and limitations of Emukit respectively.
+Throughout the text, `tasks' will be referred to in an abstract sense, without a specific application in mind.
+%This is because Emukit is abstracted away from a specific application and can be used for a variety of tasks that obey a certain algorithmic structure (more in this in Section~\ref{}.
+In the remainder of text, we will use the terms `ML model' and `emulator' interchangeably. The `simulator' or `data source' will later also be referred to as `user function', `black-box function' or `objective function'.
 
 \section{Background on UQ methods}\label{sec:background}
 
