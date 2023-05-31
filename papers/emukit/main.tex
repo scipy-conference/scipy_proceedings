@@ -12,7 +12,7 @@
 Data selection is a major challenge in supervised machine learning (ML). Quite often when data is abundant, it is collected prior to the training process and provided statically, meaning that the machine learning model has no influence on the data collection process. However, if data is expensive and scarce the performance of a model trained on a static dataset can be suboptimal or even poor. In those cases, it is beneficial to carefully select the dataset such that, for example, it is maximally informative under the ML model to achieve the task at hand. This branch of ML is generally referred to as \emph{active learning} \cite{Settles2009} and has attracted attention in various sub-fields such as \emph{experimental design} (the task of predicting an unknown function value from its input), \emph{global optimisation} (guessing the global minimiser of a function) and \emph{integration} (guessing the integral of a function).
 The Emukit Python library, at core, augments existing machine learning models with active data selection functionality.
 
-Tasks where data is scarce usually involve a higher degree of expert knowledge on the modeling side since prior information, such as mechanical or physical knowledge about the system that is being modeled, is aimed to be incorporated in the hope to get physically meaningful and more accurate predictions on the task at hand. Not seldom these models are of probabilistic nature and can provide a degree of uncertainty of their prediction to counteract the lack of data \cite{RasmussenWilliams2006, Ho1995, MacKay1991APB, Bernardo1998}. Such a model is often referred to as a \emph{statistical emulator}\footnote{The reader might be familiar with the term `emulator' in computing context, where it is understood as a hardware or software that makes one system behave like another. `(Statistical) emulator' we refer to throughout this paper is an unrelated, albeit similar, term from the machine learning literature. \maren{Andrei, I recall there used to be confusion there. Could you finish the sentence with a definition of emulator in SDE language.}\andrei{Good point! Had a go at explaining.}}, which is a machine learning model that can be used in place of an expensive computer simulation (a \emph{simulator}) or real world experiment, and is trained on input-output pairs of the latter. \cite{Kennedy2000, Kennedy2001, Conti2009, Conti2010}. Concretely, the simulator could be an involved stochastic weather simulation, and the emulator a predictive machine learning model trained on expensive input-output pairs of the weather simulation. Alternatively, the emulator may model a real world process. The emulator now can be used in place of the original data source to obtain fast predictions when needed, or to compute auxiliary quantities that cannot be obtained from the data source.
+Tasks where data is scarce usually involve a higher degree of expert knowledge on the modeling side since prior information, such as mechanical or physical knowledge about the system that is being modeled, is aimed to be incorporated in the hope to get physically meaningful and more accurate predictions on the task at hand. Not seldom these models are of probabilistic nature and can provide a degree of uncertainty of their prediction to counteract the lack of data \cite{RasmussenWilliams2006, Ho1995, MacKay1991APB, Bernardo1998}. Such a model is often referred to as a \emph{statistical emulator}\footnote{The reader might be familiar with the term `emulator' in computing context, where it is understood as a hardware or software that makes one system behave like another. `(Statistical) emulator' we refer to throughout this paper is an unrelated, albeit similar, term from the machine learning literature.}, which is a machine learning model that can be used in place of an expensive computer simulation (a \emph{simulator}) or real world experiment, and is trained on input-output pairs of the latter. \cite{Kennedy2000, Kennedy2001, Conti2009, Conti2010}. Concretely, the simulator could be an involved stochastic weather simulation, and the emulator a predictive machine learning model trained on expensive input-output pairs of the weather simulation. Alternatively, the emulator may model a real world process. The emulator now can be used in place of the original data source to obtain fast predictions when needed, or to compute auxiliary quantities that cannot be obtained from the data source.
 \andrei{A lot of time we emulate not a simulator but a process itself. Perhaps note that there is not always a simulator?}\maren{yes, good point. Changed the text a bit to accommodate this.}
 
 Once trained, the performance of the emulator (the ML model), as mentioned, is greatly dependent on the informativity of the data (the simulation results), especially if it is expensive and scarce, and hence active data selection is often desirable for such models. A unique feature of Emukit is that it enables the user to wrap custom emulator models into an interface provided by Emukit and, by doing so, use them in Emukit's decision loop. As such, Emukit `actifies' (makes active) the data-acquisition of custom models written in custom backends that only connect via an interface to Emukit. This may i)~save users time and money to write their own active learning loop, ii)~or to rewrite their custom model in existing decision loop packages with a fixed backend, and iii)~improve performance of the model as it is trained on more informative data.
@@ -135,7 +135,7 @@ These are the core components Emukit defines. Specific methods can also define a
 \section{Usage overview}\label{sec:usage}
 This section describes Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design and multi-fidelity emulation. Unless stated otherwise, we assume that some initial data (an initial design of reasonable size with corresponding evaluations of the user function) is already defined and stored in the variables \texttt{X} (inputs) and \texttt{Y} (values). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude import lines for brevity.
 
-\andrei{I am not really keen on these subsection headers. Somehow they break the flow of the section. Are they here to summarize the point in the code below? If so, how about we remove them, and just do these summaries in the text?}\maren{We should keep the subsections. We should rather adjust the text to fit the subsections or smooth out the transitions between the subsections.}\andrei{Ok, but why? Would be great to know why you find them so helpful here, to make any sort of adjustment!}\maren{It's not related to my personal writing style. Short sections with well-defined titles are known to be easier to comprehend and parse. It's a general rule of paper writing. I know it can feel weird to have your text restructured, but trust me on this, please. The text inside the subsections can then corroborate the main points. For starters I had simply added the subsection headers where it made sense given the current text, but the text in each subsection can be adjusted or smoothed out for better reading flow if you like. I personally think it reads reasonably well as is, but feel free to do that of course!}\andrei{Ok, understood, let them stay. I've udpated the section headings a bit to make them less flashy}
+\andrei{Ok, understood, let them stay. I've udpated the section headings a bit to make them less flashy}\maren{looks good!}
 
 \subsection{Standard methods and models wrapping}
 
@@ -182,15 +182,15 @@ emukit_measure = LebesgueMeasure.from_bounds(
 emukit_qrbf = QuadratureRBFLebesgueMeasure(
     emukit_rbf, emukit_measure
 )
-bq_model = BaseGaussianProcessGPy(
+gp_model = BaseGaussianProcessGPy(
     kern=emukit_qrbf, gpy_model=gpy_model
 )
 
-bq_method = VanillaBayesianQuadrature(
-    base_gp=emukit_model, X=X, Y=Y
+emukit_model = VanillaBayesianQuadrature(
+    base_gp=gp_model, X=X, Y=Y
 )
 bq_loop = VanillaBayesianQuadratureLoop(
-    model=emukit_method
+    model=emukit_model
 )
 \end{verbatim}
 
@@ -220,11 +220,12 @@ Emukit's composability allows to reuse components between methods. For example, 
 \begin{verbatim}
 # see BQ snippet for complete
 # definition of the model
-bq_model = BaseGaussianProcessGPy(
-    kern=emukit_qrbf, gpy_model=gpy_model
+emukit_bq_model = VanillaBayesianQuadrature(
+    base_gp=gp_model, X=X, Y=Y
 )
+
 bayesopt_loop = BayesianOptimizationLoop(
-    model = bq_model, space = parameter_space
+    model = emukit_bq_model, space = parameter_space
 )
 n_iterations = 20
 bayesopt_loop.run_loop(
@@ -232,11 +233,7 @@ bayesopt_loop.run_loop(
     stopping_condition=n_iterations
 )
 
-bq_method = VanillaBayesianQuadrature(
-    base_gp = bq_model, X=X, Y=Y
-)
-
-bq_method.integrate()
+emukit_bq_model.integrate()
 \end{verbatim}
 
 
