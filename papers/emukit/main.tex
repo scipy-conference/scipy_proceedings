@@ -5,6 +5,8 @@
 
 \section{Introduction}\label{introduction}
 
+\maren{we still have about 2 pages of space. Anything else we want to add? There is ample space for diagrams/figures/graphs if we wish to add some (for the more visual readers).}
+
 Data selection is a major challenge in supervised machine learning (ML). Quite often when data is abundant, it is collected prior to the training process and provided statically, meaning that the machine learning model has no influence on the data collection process. However, if data is expensive and scarce the performance of a model trained on a static dataset can be suboptimal or even poor. In those cases, it is beneficial to carefully select the dataset such that, for example, it is maximally informative under the ML model to achieve the task at hand. This branch of ML is generally referred to as \emph{active learning} \cite{Settles2009} and has attracted attention in various sub-fields such as \emph{experimental design} (the task of predicting an unknown function value from its input), \emph{global optimisation} (guessing the global minimiser of a function) and \emph{integration} (guessing the integral of a function).
 The Emukit Python library, at core, augments existing machine learning models with active data selection functionality.
 
@@ -29,7 +31,9 @@ Throughout the text, `tasks' will be referred to in an abstract sense, without a
 %This is because Emukit is abstracted away from a specific application and can be used for a variety of tasks that obey a certain algorithmic structure (more in this in Section~\ref{}.
 In the remainder of text, we will use the terms `ML model' and `emulator' interchangeably. The `simulator' or `data source' will later also be referred to as `user function', `black-box function' or `objective function'.
 
-\section{Background on UQ methods}\label{sec:background}
+\section{Background on probabilistic active methods}\label{sec:background}
+
+\maren{I changed the section title because we do not seem to introduce the term `UQ' anywhere. Feel free to adjust it though.}
 
 This section gives an overview of the machine learning methods provided by Emukit.
 Emukit mainly contains three high-level methods: Bayesian optimisation (BO), Bayesian quadrature (BQ) and experimental design (ED).
