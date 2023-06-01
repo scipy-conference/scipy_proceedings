@@ -36,7 +36,7 @@ Introduction
 
 Phylogeography is a field of study that investigates the geographic distribution of genetic lineages within a particular species, 
 including viruses. It combines principles from evolutionary biology and biogeography to understand how genetic variation is distributed 
-across different spatial scales :cite:`dellicour2019using`. In the context of viruses, phylogeography seeks to uncover the evolutionary 
+across various spatial scales :cite:`dellicour2019using`. In the context of viruses, phylogeography aims to uncover the evolutionary 
 history and spread of viral lineages by analyzing their genetic sequences and geographical locations. By examining the genetic diversity 
 of viruses collected from various geographic locations, researchers can reconstruct the patterns of viral dispersal and track the movement 
 and transmission dynamics of viral populations over time :cite:`vogels2023phylogeographic` :cite:`franzo2022phylodynamic` :cite:`munsey2021phylogeographic`. 
