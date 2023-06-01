@@ -18,19 +18,15 @@ aPhyloGeo-Covid: A Web Interface for Reproducible Phylogeographic Analysis of SA
    The gene sequencing data, along with the associated lineage tracing and research data generated 
    throughout the Coronavirus disease 2019 (COVID-19) pandemic, constitute invaluable resources that profoundly 
    empower phylogeography research. To optimize the utilization of these resources, we have developed a web-based 
-   analysis platform called aPhyloGeo-Covid, leveraging the capabilities of Neo4j, Snakemake, and Python. 
-   
-   This platform enables users to explore and visualize a wide range of diverse data sources specifically relevant to 
-   SARS-CoV-2 for phylogeographic analysis. The integrated Neo4j database acts as a comprehensive repository, 
-   consolidating COVID-19 pandemic-related sequences information, climate data, and demographic data obtained from 
-   public databases, facilitating efficient filtering and organization of input data for phylogeographical studies. 
-   
-   Presently, the database encompasses over 113,774 nodes and 194,381 relationships. Once the input dataset is determined, 
+   analysis platform called aPhyloGeo-Covid, leveraging the capabilities of Neo4j, Snakemake, and Python. This platform enables users 
+   to explore and visualize a wide range of diverse data sources specifically relevant to  SARS-CoV-2 for phylogeographic analysis. 
+   The integrated Neo4j database acts as a comprehensive repository, consolidating COVID-19 pandemic-related sequences information, 
+   climate data, and demographic data obtained from public databases, facilitating efficient filtering and organization of input data for 
+   phylogeographical studies. Presently, the database encompasses over 113,774 nodes and 194,381 relationships. Once the input dataset is determined, 
    aPhyloGeo-Covid provides a scalable and reproducible workflow for investigating the intricate relationship between geographic 
-   features and the patterns of variation in different SARS-CoV-2 variants. 
-   
-   The platform's codebase is publicly accessible on GitHub (https://github.com/tahiri-lab/iPhyloGeo/tree/iPhylooGeo-neo4j), 
-   providing researchers with a valuable tool to analyze and explore the intricate dynamics of SARS-CoV-2 within a phylogeographic context.
+   features and the patterns of variation in different SARS-CoV-2 variants. The platform's codebase is publicly accessible on 
+   GitHub (https://github.com/tahiri-lab/iPhyloGeo/tree/iPhylooGeo-neo4j), providing researchers with a valuable tool to analyze 
+   and explore the intricate dynamics of SARS-CoV-2 within a phylogeographic context.
    
 
 .. class:: keywords
