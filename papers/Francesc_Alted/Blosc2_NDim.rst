@@ -32,7 +32,7 @@ Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset
 
     The Blosc2 NDim layer enables the creation and reading of n-dimensional datasets in an extremely efficient manner. This is due to a completely general n-dim 2-level partitioning, which allows for slicing and dicing of arbitrary large (and compressed) data in a more fine-grained way. Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels, making compression more efficient.
 
-    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that in a sphere of radius of 10 thousand light (centered in the Gaia telescope), and that includes 0.7 billion stars. The total size of the dataset is 3.7 TB, but when compressed, it is reduced to just 10 GB, making it easy to fit into the memory of modern computers for processing.
+    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that are in a sphere of 10 thousand light-years radius (centered in the Gaia telescope), which accounts for 0.7 billion stars. The total size of this partial dataset is 3.7 TB, but when compressed, it is reduced to just 10 GB, making it easy to fit into the memory of modern computers for processing.
 
 .. class:: keywords
 
@@ -41,11 +41,11 @@ Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset
 Introduction
 ------------
 
-The exploration of n-dimensional datasets is a common practice in many areas of science. However, one of its drawbacks is that the size of the datasets can become very large, which can slow down the exploration process significantly. In this paper, we demonstrate how Blosc2 NDim can be used to accelerate the exploration of n-dimensional datasets.
+The exploration of n-dimensional datasets is a common practice in many areas of science. However, one of its drawbacks is that the explored datasets size can become very large, which will slow down the exploration process significantly. In this paper, we demonstrate how Blosc2 NDim can be used to accelerate the exploration of huge n-dimensional datasets.
 
-Blosc is a high-performance compressor optimized for binary data. Its design enables faster transmission of data to the processor cache than the traditional, non-compressed, direct memory fetch approach using an OS call to memcpy(). This can be helpful not only in reducing the size of large datasets on-disk or in-memory, but also in accelerating memory-bound computations, which are typical in modern data processing.
+Blosc is a high-performance compressor optimized for binary data. Its design enables faster transmission of data to the processor cache than the traditional, non-compressed, direct memory fetch approach using an OS call to ``memcpy()``. This can be helpful not only in reducing the size of large datasets on-disk and in-memory, but also in accelerating memory-bound computations, which are typical in big data processing.
 
-Blosc uses the blocking technique :cite:`FA10-starving-cpus` to minimize activity on the memory bus. The technique divides datasets into blocks small enough to fit in the caches of modern processors, where compression/decompression is performed. Blosc also takes advantage of SIMD (SSE2, AVX2, NEON…) and multi-threading capabilities in modern multi-core processors to maximize the speed of compression/decompression.
+Blosc uses the blocking technique :cite:`FA10-starving-cpus` to minimize activity on the memory bus. The technique divides datasets into blocks small enough to fit in the caches of modern processors, where compression/decompression is performed. Blosc also takes advantage of SIMD (SSE2, AVX2, NEON…) and multi-threading capabilities in modern multi-core processors to maximize the compression/decompression speed.
 
 .. figure:: sum_openmp-rainfall.png
    :scale: 40%
@@ -59,21 +59,23 @@ Blosc2 is the latest version of the Blosc 1.x series, which is used in many impo
 The Gaia dataset
 ----------------
 
-The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates and magnitudes of 1.4 billion stars. When stored as a regular binary table, the dataset is 22 GB in size. However, we converted this tabular dataset into a 3D array of shape (10_000, 10_000, 10_000), where each cell represents a cube of 2 light year per side, and contains the magnitude of every star inside it (provided that the average distance between stars in the Milky ways is about 5 light years, very few cells will contain more than 1 star). This cube contains 700 million stars, which is a significant portion of the Gaia catalog. The magnitude is stored as a float32, and the size of the dataset is 3.7 TB. However, by using compression via Blosc2, we can reduce the size to 10 GB. This is because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost entirely.
+**OJO: Los números de esta parte no coinciden con los del resumen, en el resumen se habla de esfera y aquí de cubo, de 0.7 billones y no de 1.4, y ojo que la medida de distancia es ligth-years no ligth (errata en el resumen)**
+
+The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates and magnitudes of 1.4 billion stars. When stored as a regular binary table, the dataset is 22 GB in size. However, we converted this tabular dataset into a 3D array of shape (10_000, 10_000, 10_000), where each cell represents a cube of 2 light year per side, and contains the magnitude of every star inside it (provided that the average distance between stars in the Milky ways is about 5 light years, very few cells will contain more than one star). This 3D array contains 700 million stars, which is a significant portion of the Gaia catalog. The brightness of each start is stored as a float32, and, therefore, the dataset size is 3.7 TB. However, by using compression via Blosc2, we can reduce its size to 10 GB. This is because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost completelly.
 
 .. figure:: 3d-view-milkyway.png
    :scale: 25%
 
    Gaia DR3 dataset as a 3D array (preliminary, this is not from the dataset in this paper). :label:`gaia-3d-dset`
 
-In Figure :ref:`gaia-3d-dset`, you can see a 3D view of the Milky Way for a different type of stars. The color of the points represents the magnitude of the star, with the brightest stars appearing as the reddest points. Although this view provides a unique perspective, the dimensions of the cube are not enough to fully capture the spiral arms of the Milky Way.
+Figure :ref:`gaia-3d-dset` shows a 3D view of the Milky Way different type of stars. Each point is a star, and the color of each point represents the star's brightness, with the brightest stars appearing as the reddest points. Although this view provides a unique perspective, the dimensions of the cube are not enough to fully capture the spiral arms of the Milky Way.
 
-One advantage of using a 3D array is the ability to utilize Blosc2 NDim's powerful slicing capabilities for quickly exploring datasets. For example, we could search for star clusters by extracting small cubes as NumPy arrays, and counting the number of stars. A cube containing an abnormally high number of counts would be a candidate for a cluster. We could also extract a thin 3D slice of the cube and project it as a 2D image, where the color of the pixels represents the magnitude of the stars. This could provide a cinematic view of a journey over different trajectories in the Milky Way.
+One advantage of using a 3D array is the ability to utilize Blosc2 NDim's powerful slicing capabilities for quickly exploring parts of a dataset. For example, we could search for star clusters by extracting small cubes as NumPy arrays, and counting the number of stars in each one. A cube containing an abnormally high number of starts would be a candidate for a cluster. We could also extract a thin 3D slice of the cube and project it as a 2D image, where the pixels colors represent the brightness of the shown stars. This could be used to generate a cinematic view of a journey over different trajectories in the Milky Way.
 
 Blosc2 NDim
 -----------
 
-Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, allowing to slice and dice arbitrary large (and compressed!) data in a more fine-grained way. Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels, making compression more efficient.
+Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, allowing to slice and dice arbitrary large (and compressed!) data in a more fine-grained way. Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels, making compression even more efficient.
 
 .. figure:: b2nd-2level-parts.png
    :scale: 12%
@@ -83,16 +85,16 @@ Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensio
 .. figure:: b2nd-3d-dset.png
    :scale: 40%
 
-   Blosc2 NDim 2-level partitioning is flexible. You can specify the dimensions of both partitions in any arbitrary way that fits your read access patterns. :label:`b2nd-3d-dset`
+   Blosc2 NDim 2-level partitioning is flexible. The dimensions of both partitions can be specified in any arbitrary way that fits the expected read access patterns. :label:`b2nd-3d-dset`
 
-With these finer-grained cubes (also known as partitions), you can retrieve arbitrary n-dimensional slices more quickly because you don't have to decompress all the data necessary for the coarser-grained partitions typically used in other libraries. See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` to learn how this works and how to set it up. Also, see Figure :ref:`read-partial-slices` :cite:`BDT23-blosc2-ndim-intro` for a comparison against other libraries that use just a single partition (e.g., HDF5, Zarr).
+With these finer-grained cubes (also known as partitions), arbitrary n-dimensional slices can be retrieved faster because not all the data necessary for the coarser-grained partition does not need to be decompressed, as usually happens in other libraries. See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` to learn how this works and how to set it up. Also, see Figure :ref:`read-partial-slices` :cite:`BDT23-blosc2-ndim-intro` for a comparison against other libraries that use just a single partition (e.g., HDF5, Zarr).
 
 .. figure:: read-partial-slices.png
    :scale: 70%
 
    Speed comparison for reading partial n-dimensional slices of a 4D dataset. :label:`read-partial-slices`
 
-It is important to note that Blosc2 NDim supports all data types in NumPy. This means that, in addition to the typical data types like signed/unsigned int, single and double-precision floats, bools or strings, you can also store datetimes (including units), and arbitrarily nested heterogeneous types. This allows you to create multidimensional tables and more.
+It is important to note that Blosc2 NDim supports all data types in NumPy. This means that, in addition to the typical data types like signed/unsigned int, single and double-precision floats, bools or strings, it can also store datetimes (including units), and arbitrarily nested heterogeneous types. This allows to create multidimensional tables and more.
 
 Support for multiple codecs, filters and other compression features
 --------------------------------------------------------------------
