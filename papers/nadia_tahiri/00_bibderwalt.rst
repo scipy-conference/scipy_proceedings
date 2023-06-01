@@ -178,7 +178,7 @@ In the following code, the "update_table function" is a callback in the applicat
 
 .. code-block:: python
 
-   @ app.callback(
+   @app.callback(
        Output('location-table', 'data'),
        Input('button-confirm', 'n_clicks'),
        State('date-range-lineage', 'start_date'),
@@ -341,17 +341,15 @@ This project showcases the development of an open-source, web-based platform des
 
 The utilization of the platform results in the accumulation of diverse findings from various analyses in the database. This network of data sources and analysis outputs expands as more researchers contribute to the platform. The centralized database serves as a repository for researchers to access and explore a wide range of results, fostering knowledge sharing and exchange within the scientific community. While the platform is currently in its early stage of development and testing before deployment, it is anticipated that the network of analyses will progressively become more interconnected as its popularity grows and attracts more researchers. Researchers can use this network to compare their results and identify patterns. The platform facilitates the dissemination of research findings, encourages researchers to build on each other's work, and promotes a sense of community and scientific progress.
 
-In summary, as a database-driven network of analyses platform, aPhyloGeo-Covid forms an open academic platform that facilitates communication, collaboration, and knowledge sharing. By providing access to diverse results and encouraging interaction among researchers, the platform strengthens the scientific community and contributes to the advancement of research in the field of phylogeography.
-
-
-
 To further improve aPhyloGeo-Covid, several potential directions can be considered:
 
-1.	Enhancing Data Resources: To enhance data resources and provide a more comprehensive understanding of the spatial and environmental factors influencing the spread and evolution of SARS-CoV-2, it is crucial to expand the available data resources, especially geographic and environmental data. This expansion may involve the incorporation of additional datasets, such as epidemiological information. By increasing the richness and diversity of data, the aPhyloGeo-Covid project can yield valuable insights into the dynamics of SARS-CoV-2 transmission and its relationship with geographical and environmental variables.
+1.	To enhance data resources and provide a more comprehensive understanding of the spatial and environmental factors influencing the spread and evolution of SARS-CoV-2, it is crucial to expand the available data resources, especially geographic and environmental data. This expansion may involve the incorporation of additional datasets, such as epidemiological information. By increasing the richness and diversity of data, the aPhyloGeo-Covid project can yield valuable insights into the dynamics of SARS-CoV-2 transmission and its relationship with geographical and environmental variables.
 
-2.	Expanding Phylogeographic Analysis Workflows: In order to enhance the scope of phylogeographic analysis and investigate the evolutionary dynamics and spatial spread of the virus in a more comprehensive manner, it is advisable to expand the existing pipeline of aPhyloGeo-Covid. Alongside the current pipeline, which explores the correlation between specific genes or gene fragments and their geographic distribution, it is recommended to incorporate additional phylogeographic analysis workflows. By incorporating a broader range of analysis approaches, aPhyloGeo-Covid can provide a more extensive toolkit for studying the evolutionary dynamics and spatial dissemination of SARS-CoV-2. This expanded toolkit will contribute to a more comprehensive understanding of the virus and its transmission patterns.
+2.	In order to enhance the scope of phylogeographic analysis and investigate the evolutionary dynamics and spatial spread of the virus in a more comprehensive manner, it is advisable to expand the existing pipeline of aPhyloGeo-Covid. Alongside the current pipeline, which explores the correlation between specific genes or gene fragments and their geographic distribution, it is recommended to incorporate additional phylogeographic analysis workflows. By incorporating a broader range of analysis approaches, aPhyloGeo-Covid can provide a more extensive toolkit for studying the evolutionary dynamics and spatial dissemination of SARS-CoV-2. This expanded toolkit will contribute to a more comprehensive understanding of the virus and its transmission patterns.
 
-3.	Scalability and Efficiency: To ensure the platform's capability to handle growing user demands and accommodate larger datasets, it is essential to prioritize scalability and efficiency in the development of aPhyloGeo-Covid. Improving scalability and efficiency will result in a platform that can handle larger volumes of data without compromising performance. This will enable researchers and public health practitioners to obtain rapid and reliable analyses, even as the data volumes continue to grow. By ensuring scalability and efficiency, aPhyloGeo-Covid can effectively support decision-making processes and provide valuable insights into the spatial spread and evolution of SARS-CoV-2.
+3.	To ensure the platform's capability to handle growing user demands and accommodate larger datasets, it is essential to prioritize scalability and efficiency in the development of aPhyloGeo-Covid. Improving scalability and efficiency will result in a platform that can handle larger volumes of data without compromising performance. This will enable researchers and public health practitioners to obtain rapid and reliable analyses, even as the data volumes continue to grow. By ensuring scalability and efficiency, aPhyloGeo-Covid can effectively support decision-making processes and provide valuable insights into the spatial spread and evolution of SARS-CoV-2.
+
+In summary, as a database-driven network of analyses platform, aPhyloGeo-Covid forms an open academic platform that facilitates communication, collaboration, and knowledge sharing. By providing access to diverse results and encouraging interaction among researchers, the platform strengthens the scientific community and contributes to the advancement of research in the field of phylogeography.
 
 
 
