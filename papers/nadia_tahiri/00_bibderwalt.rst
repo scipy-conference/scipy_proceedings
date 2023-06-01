@@ -133,7 +133,7 @@ The following "update_lineage_table" function serves as a callback in the applic
 
 .. code-block:: python
 
-   @ app.callback(
+   @app.callback(
        Output('lineage-table', 'data'),
        Output('valid-message', 'children'),
        Input('button-confir-lineage', 'n_clicks'),
