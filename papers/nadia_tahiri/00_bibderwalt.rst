@@ -164,7 +164,7 @@ The following "update_lineage_table" function serves as a callback in the applic
        if checklist_value and seqType_value:
          #Query in Neo4j database
          # Transform Cypher results to dataframe
-          df = neo_manager.queryToDataframe(query,cols)
+          df=neo_manager.queryToDataframe(query,cols)
           table_data = df.to_dict('records')
           return table_data
        ....
@@ -213,7 +213,7 @@ In the following code, the "update_table function" is a callback in the applicat
        if start_date_string and end_date_string 
                and checklist_value and seqType_value:
            # Transform Cypher results dataframe
-           df = neo_manager.queryToDataframe(query,cols)
+           df=neo_manager.queryToDataframe(query,cols)
            table_data = df.to_dict('records')
            return table_data
         ...
@@ -263,27 +263,27 @@ The "addInputNeo" function adds an input node and establishes relationships with
        # Create a new node for the user
        with driver.session() as session:
            session.run(
-               "CREATE (userInput:Input {name: $name})", 
-               name=inputNode_name)
+              "CREATE (userInput:Input {name: $name})", 
+              name=inputNode_name)
        # Perform MATCH query to retrieve nodes
        with driver.session() as session:
            result = session.run(
-               "MATCH (n:" + nodesLabel + ")" +
-               "WHERE n.accession IN $id_lt RETURN n",
-               nodesLabel=nodesLabel,
-               id_lt=id_list)
+              "MATCH (n:" + nodesLabel + ")" +
+              "WHERE n.accession IN $id_lt RETURN n",
+              nodesLabel=nodesLabel,
+              id_lt=id_list)
            # Create relationship for each matched node
            with driver.session() as session:
                for record in result:
                    other_node = record["n"]
-                   session.run("MATCH (u:Input {name: $name}), 
-                              (n:" + nodesLabel + 
-                              " {accession: $id}) "
-                              "CREATE (n)-[r:IN_INPUT]->(u)",
-                               name=inputNode_name, 
-                               nodesLabel=nodesLabel, 
-                               id=other_node["accession"])
-       print("An Input Node has been Added in Neo4j Database!")
+                   session.run(
+                      "MATCH (u:Input {name: $name}), 
+                             (n:" + nodesLabel + 
+                           " {accession: $id}) "
+                       "CREATE (n)-[r:IN_INPUT]->(u)",
+                       name=inputNode_name, 
+                       nodesLabel=nodesLabel, 
+                       id=other_node["accession"])
 
 
 Parameters setting and tuning
