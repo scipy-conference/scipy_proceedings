@@ -91,7 +91,7 @@ And converting the post-processing script to inline script is a one-line change.
    outline of the proceeding
 
 In this proceeding, we will describe the code method, demonstrate how ``libyt`` solve the problem, 
-and conlude with discussions.
+and conlude it with discussions.
 
 
 Code Method
@@ -101,23 +101,89 @@ Code Method
 Overview
 ++++++++
 
-.. figure:: Parallelism.pdf
-   :figclass: bht
+``libyt`` serves as a bridge between simulation processes and Python instances as 
+illustrated in Fig :ref:`parallelism`.
+It is the middle layer that handles data IO between simulations and Python instances.
+When launching *N* MPI processes, each process contains one piece of simulation and 
+one Python interpreter. Each Python interpreter has access to simulation data.  
+A total of *N* Python instances will work together to conduct in situ analysis in the 
+process space of MPI task.
 
-   This is the caption. :label:`parallelism`
+.. figure:: Parallelism.pdf
+   :figclass: thb
+
+   This is the overall structure of ``libyt``, and its relationship with simulation 
+   and Python. It provides an interface for exchanging data between simulations and 
+   Python instances, and between each process, thereby enabling in situ parallel 
+   analysis using multiple MPI processes. ``libyt`` can run arbitrary Python scripts 
+   and Python modules, though here we focus on using ``yt`` as its core analysis 
+   platform. 
+   :label:`parallelism`
 
 
 Connecting Python and Simulation
 ++++++++++++++++++++++++++++++++
 
 
+It stores them in a linear fashion according to global id, so that ``libyt`` can easily 
+look up information later. 
+
+.. figure:: PassInData.pdf
+   :figclass: thb
+
+   This diagram shows how ``libyt`` loads and organizes simulation information and 
+   data that is based on adaptive mesh refinement data structure. 
+   ``libyt`` collects local grid hierarchy information (e.g., levels, parent id, grid 
+   edges) and combines them all, so that each Python instance contains full hierarchy.
+   As for simulation data, ``libyt`` wraps them using NumPy C API, which tells Python 
+   how to interpret block of memory (e.g., shape, type, stride), without duplicating 
+   memory. 
+   :label:`passindata`
+
+.. figure:: PythonAskData.pdf
+   :figclass: thb
+
+   This diagram describes how ``libyt`` requests simulation to generate data using 
+   user-defined function, thus enabling back-communication of simulation information. 
+   Those generated data is freed once it is no longer used by Python.
+   :label:`pythonaskdata`
+
 Executing Python Codes and Handling Errors
 ++++++++++++++++++++++++++++++++++++++++++
+
+.. figure:: REPL.pdf
+   :figclass: thb
+
+   The procedure shows how ``libyt`` supports interactive Python prompt. 
+   It takes user inputs in root process and executes Python codes across whole MPI processes. 
+   The root process handles syntax errors and distinguishes whether or not the error is caused 
+   by user hasn't done inputing yet.
+   :label:`pythonprompt`
 
 
 In Situ Analysis Under Parallel Computing
 +++++++++++++++++++++++++++++++++++++++++
 
+.. 
+   yt parallelism feature, data chunking
+
+.. 
+   RMA
+
+During in situ Python analysis, workloads may be decomposed and rebalanced according 
+to the algorithm in Python packages.
+
+.. figure:: RMA.pdf
+   :figclass: thb
+
+   This is the workflow of how ``libyt`` redistributes data.
+   It is done via one-sided communication (Remote Memory Access in MPI). 
+   Each process prepares requested data by other processes, after this, every process 
+   fetches data located on different processes.
+   This is a collective operation, and data is redistributed during this window epoch. 
+   Since the data fetched is only for analysis purpose, it gets freed once Python doesn't 
+   need it at all. 
+   :label:`rma`
 
 Applications
 ------------
