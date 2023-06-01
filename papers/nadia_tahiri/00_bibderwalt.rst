@@ -331,7 +331,7 @@ The SARS-CoV-2 virus has a genome size of approximately 30kb. The first two-thir
 To identify and filter the appropriate datasets for further phylogeographic analysis around pp1a, 14 lineages starting with the codes AE, AY, B, BA, BE, DL, or XBB were selected from the checklist on the aPhyloGeo-Covid web page. Subsequently, with the Neo4j graph database, eight relevant locations were retrieved, where at least one of selected lineage was most prevalent (:ref:`fig2`). Based on the lineages, their respective countries, the earliest detected date, and the corresponding protein sequences, input node was created. Certain parameters were defined using the aPhyloGeo-Covid web page, including the step size (3 residues), window size (100 residues), RF distance threshold (100%), bootstrap threshold (0%), and a list of climate factors (humidity, wind speed, sky shortwave irradiance, and precipitation). These parameters were associated with a label called "Analysis" and stored as properties in the node. Finally, the Snakemake workflow would be triggered in the backend. At the conclusion of analysis, an output node with a unique identifier would be generated within the Neo4j graph database (:ref:`fig2`).
 
 .. figure:: figure2.png
-   :scale: 21%
+   :scale: 23%
    
    TO BE CONTINUE :label:`fig2`
 
@@ -342,7 +342,7 @@ The aPhyloGeo-Covid analysis workflow generates an dataframe at the end of the a
 .. figure:: figure3.png
    :align: center
    :figclass: w
-   :scale: 29%
+   :scale: 35%
 
    TO BE CONTINUE :label:`fig3`
    
