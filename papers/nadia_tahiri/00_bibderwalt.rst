@@ -114,7 +114,7 @@ Various data sources related to SARS-CoV-2 were integrated into a Neo4j database
 
 .. figure:: figure1.png
 
-   ** Schema of Neo4j Database for Phylogeographic Analysis of SARS-CoV-2 Variation. The schema includes key entities and relationships essential for organizing and querying data related to samples of protein, samples of nucleotide, locations, lineages, analysis input, output and parameters. Each entity represents a distinct aspect of the analysis process and facilitates efficient data organization and retrieval. :label:`fig1`
+   Schema of Neo4j Database for Phylogeographic Analysis of SARS-CoV-2 Variation. The schema includes key entities and relationships essential for organizing and querying data related to samples of protein, samples of nucleotide, locations, lineages, analysis input, output and parameters. Each entity represents a distinct aspect of the analysis process and facilitates efficient data organization and retrieval. :label:`fig1`
 
 
 Input exploration
@@ -326,12 +326,12 @@ In this study, a combination of sliding window strategy and phylogenetic analyse
 
 .. figure:: figure2.png
 
-   ** TO BE CONTINUE :label:`fig2`
+   TO BE CONTINUE :label:`fig2`
 
    
 .. figure:: figure3.png
 
-   ** TO BE CONTINUE :label:`fig3`
+   TO BE CONTINUE :label:`fig3`
 
 
 
