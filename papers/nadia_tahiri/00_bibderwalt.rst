@@ -343,7 +343,7 @@ The aPhyloGeo-Covid analysis workflow generates an dataframe at the end of the a
    TO BE CONTINUE :label:`fig3`
    
 
-Ni et al. (2023) :cite:`ni2023structural` revealed that the Ubl1 protein of SARS-CoV-2 can compete with RNA molecules to bind to the N protein, resulting in the dissociation of viral ribonucleoprotein complexes. Their research team successfully determined the crystal structure of the N-terminal domain (NTD) of the N protein in complex with the ubiquitin-like domain 1 (Ubl1) of Nsp3 from the SARS-CoV-2 virus, with a resolution of 2.6 . Based on these findings, they propose a model that explains how the N protein binding to the Ubl1 domain of Nsp3 leads to the dissociation of viral ribonucleoprotein complexes :cite:`ni2023structural`. Our phylogeography-based exploration pointed to a relatively strong correlation between mutations in the Ubl1 protein and precipitation. As a reproducible phylogeographic platform, aPhyloGeo-Covid aim to provides the possibility to expand the number of samples for further study and makes the analysis results comparable.
+Ni et al. (2023) :cite:`ni2023structural` revealed that the Ubl1 protein of SARS-CoV-2 can compete with RNA molecules to bind to the N protein, resulting in the dissociation of viral ribonucleoprotein complexes. Their research team successfully determined the crystal structure of the N-terminal domain (NTD) of the N protein in complex with the ubiquitin-like domain 1 (Ubl1) of Nsp3 from the SARS-CoV-2 virus, with a resolution of 2.6 .
 
 
 Conclusions and future work
