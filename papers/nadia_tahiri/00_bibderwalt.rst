@@ -342,6 +342,7 @@ The aPhyloGeo-Covid analysis workflow generates an dataframe at the end of the a
 .. figure:: figure3.png
    :align: center
    :figclass: w
+   :scale: 20%
 
    TO BE CONTINUE :label:`fig3`
    
