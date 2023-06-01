@@ -324,6 +324,18 @@ Snakemake workflow for phylogenetic analysis
 In this study, a combination of sliding window strategy and phylogenetic analyses was used to explore the potential correlation between the diversity of specific genes or gene fragments and their geographic distribution. The approach involved partitioning a multiple sequence alignment into windows based on sliding window size and step size. Phylogenetic trees were constructed for each window, and cluster analyses were performed for various geographic factors using distance matrices and the Neighbor-Joining clustering method :cite:`mihaescu2009neighbor`. The correlation between phylogenetic and reference trees was evaluated using Robinson and Foulds (RF) distance calculation. Bootstrap and RF thresholds were applied to identify gene fragments with variation patterns within species that coincided with specific geographic features, providing informative reference points for future studies. The workflow encompassed steps such as reference tree construction, sliding windows, phylogenetic tree construction, preliminary filtering based on bootstrap threshold and RF distance, advanced phylogenetic tree construction, and further filtering based on bootstrap threshold and RF distance. The workflow utilized tools and software like Biopython :cite:`cock2009biopython`, raxml-ng :cite:`kozlov2019raxml`, fasttree :cite:`price2009fasttree`, and Python libraries such as robinson-foulds, NumPy, and pandas for data parsing, phylogenetic inference, RF distance calculation, mutation testing, and filter creation. A manuscript for aPhyloGeo-pipeline is available on Github Wiki (https://github.com/tahiri-lab/aPhyloGeo-pipeline/wiki).
 
 
+Results
+-------
+
+The SARS-CoV-2 virus has a genome size of approximately 30 kb. The first two-thirds of its genome, located at the 5'-terminal, contain instructions for producing two long proteins known as pp1a and pp1ab. These proteins are subsequently broken down by viral enzymes into 16 smaller proteins called non-structural proteins (Nsps), which are important for the virus to replicate and transcribe its genetic material :cite:`khan2021structures`. Consequently, the performance of the aPhyloGeo-Covid platform was tested around pp1a. 
+To identify and filter the appropriate datasets for further phylogeographic analysis around pp1a, 14 lineages starting with the codes AE, AY, B, BA, BE, DL, or XBB were selected from the checklist on the aPhyloGeo-Covid web page. Subsequently, with the Neo4j graph database, eight relevant locations were retrieved, where at least one of selected lineage was most prevalent (:ref:`fig2`). Based on the lineages, their respective countries, the earliest detected date, and the corresponding protein sequences, input node was created. Certain parameters were defined using the aPhyloGeo-Covid web page, including the step size (3 residues), window size (100 residues), RF distance threshold (100%), bootstrap threshold (0%), and a list of climate factors (humidity, wind speed, sky shortwave irradiance, and precipitation). These parameters were associated with a label called "Analysis" and stored as properties in the node. Finally, the Snakemake workflow would be triggered in the backend. At the conclusion of analysis, an output node with a unique identifier would be generated within the Neo4j graph database (:ref:`fig2`).
+
+
+.. figure:: figure2.png
+
+   ** TO BE CONTINUE :label:`fig2`
+
+
 Conclusions and future work
 ---------------------------
 
