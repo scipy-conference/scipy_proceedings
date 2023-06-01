@@ -40,11 +40,9 @@ across various spatial scales :cite:`dellicour2019using`. In the context of viru
 history and spread of viral lineages by analyzing their genetic sequences and geographical locations. By examining the genetic diversity 
 of viruses collected from various geographic locations, researchers can reconstruct the patterns of viral dispersal and track the movement 
 and transmission dynamics of viral populations over time :cite:`vogels2023phylogeographic` :cite:`franzo2022phylodynamic` :cite:`munsey2021phylogeographic`. 
-For phylogeographic studies in viruses, researchers typically require integrating genetic sequences, geographic information and 
-temporal information. By combining the genetic sequences with geographic information, researchers can analyze the phylogenetic relationships 
-among the viral strains and infer the patterns of viral migration and transmission across different regions. By integrating genetic and 
-temporal information, researchers can infer the timescale of viral evolution, and trace the origins and dispersal patterns of different viral 
-lineages :cite:`holmes2004phylogeography`. Throughout the COVID-19 pandemic, researchers worldwide sequenced the genomes of thousands of SARS-CoV-2 viruses. 
+In phylogeographic studies of viruses, the integration of genetic sequences, geographic information, and temporal data is essential. 
+Integrating genetic sequences with geographical data enables researchers to conduct robust analysis of phylogenetic relationships among viral strains and uncover intricate patterns of viral migration and transmission across diverse regions.Through the integration of genetic and temporal information, researchers can derive insights into the timescale of viral evolution and elucidate the origins as well as dispersal patterns of distinct viral lineages :cite:`holmes2004phylogeography`. 
+Throughout the COVID-19 pandemic, researchers worldwide sequenced the genomes of thousands of SARS-CoV-2 viruses. 
 These efforts have helped researchers study the virus's evolution and spread over time and across different geographic regions, which is critical 
 to informing public health strategies for controlling future outbreaks. However, the abundance of genetic sequences and the accompanying geographic 
 and temporal data are scattered across multiple databases, making it challenging to extract, validate, and integrate the information. For instance, 
