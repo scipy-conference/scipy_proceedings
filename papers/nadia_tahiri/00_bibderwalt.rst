@@ -84,8 +84,8 @@ Lineage nodes establish connections with Nucleotide and Protein nodes, represent
 Input exploration
 +++++++++++++++++
 
-An interactive platform using Dash-Plotly :cite:`liermann2021dynamic` was developped or efficient data exploration and selection.  
-The integration of the Dash Web platform with the Neo4j graph database allows for seamless retrieval of pertinent data from interconnected nodes based on user-input keywords related to lineages or locations. This advanced functionality empowers users to swiftly identify and filter the relevant datasets required for subsequent phylogeographic analysis. By leveraging the robust capabilities of the Neo4j database and the user-friendly platform, our design facilitates streamlined data exploration and selection, providing valuable support to researchers in their comprehensive phylogeographic analysis of SARS-CoV-2 variation.
+An interactive platform using Dash-Plotly :cite:`liermann2021dynamic` was developped for efficient data exploration and selection.  
+The integration of the Dash platform with the Neo4j graph database allows for seamless retrieval of pertinent data from interconnected nodes based on user-input keywords related to lineages or locations. This functionality enables efficient identification and filtering of datasets for subsequent phylogeographic analysis. The integration of the powerful Neo4j database with the user-friendly web-based platform facilitates seamless data exploration and selection, supporting researchers in their comprehensive analysis of SARS-CoV-2 variation.
 
 The aPhyloGeo-Covid provids two approaches to select input datasets.
 
@@ -270,7 +270,7 @@ Input, Analysis, and Output nodes created by different users form a network that
 
 
 Snakemake workflow for phylogenetic analysis
----------------------------------------------
++++++++++++++++++++++++++++++++++++++++++++++++
 
 In this study, a combination of sliding window strategy and phylogenetic analyses was used to explore the potential correlation between the diversity of specific genes or gene fragments and their geographic distribution. The approach involved partitioning a multiple sequence alignment into windows based on sliding window size and step size. Phylogenetic trees were constructed for each window, and cluster analyses were performed for various geographic factors using distance matrices and the Neighbor-Joining clustering method :cite:`mihaescu2009neighbor`. The correlation between phylogenetic and reference trees was evaluated using Robinson and Foulds (RF) distance calculation. Bootstrap and RF thresholds were applied to identify gene fragments with variation patterns within species that coincided with specific geographic features, providing informative reference points for future studies. The workflow encompassed steps such as reference tree construction, sliding windows, phylogenetic tree construction, preliminary filtering based on bootstrap threshold and RF distance, advanced phylogenetic tree construction, and further filtering based on bootstrap threshold and RF distance. The workflow utilized tools and software like Biopython :cite:`cock2009biopython`, raxml-ng :cite:`kozlov2019raxml`, fasttree :cite:`price2009fasttree`, and Python libraries such as robinson-foulds, NumPy, and pandas for data parsing, phylogenetic inference, RF distance calculation, mutation testing, and filter creation. A manuscript for aPhyloGeo-pipeline is available on Github Wiki (https://github.com/tahiri-lab/aPhyloGeo-pipeline/wiki).
    
