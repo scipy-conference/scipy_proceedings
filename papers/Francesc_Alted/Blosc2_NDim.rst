@@ -135,63 +135,167 @@ For example, in Table :ref:`predicted-dparams-example` there are the results for
 
 .. table:: BTune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favoring speed only, and 1 means favoring compression ratio only). It can be seen that BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimizing for the compression ratio. :label:`predicted-dparams-example`
 
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | Balance | Most predicted                 |  Mean cratio | Mean cspeed (GB/s) | Mean dspeed (GB/s) |
-   +=========+================================+==============+====================+====================+
-   | 0.0     | blosclz-shuffle-split-5        | 2.09         | 14.47              | 48.93              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.1     | blosclz-shuffle-split-5        | 2.09         | 14.47              | 48.93              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.2     | blosclz-shuffle-split-5        | 2.09         | 14.47              | 48.93              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.3     | blosclz-shuffle-split-5        | 2.09         | 14.47              | 48.93              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.4     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.5     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.6     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.7     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.8     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.9     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 1.0     | zstd-shuffle-bytedelta-split-9 | 3.31         | 0.07               | 11.4               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
+   +---------+-------------------+---------+---------------+---------------+
+   | Balance | Most predicted    |  cratio | cspeed (GB/s) | dspeed (GB/s) |
+   +=========+===================+=========+===============+===============+
+   | 0.0     | blosclz-shuffle-5 | 2.09    | 14.47         | 48.93         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 0.1     | blosclz-shuffle-5 | 2.09    | 14.47         | 48.93         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 0.2     | blosclz-shuffle-5 | 2.09    | 14.47         | 48.93         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 0.3     | blosclz-shuffle-5 | 2.09    | 14.47         | 48.93         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 0.4     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 0.5     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 0.6     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 0.7     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 0.8     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 0.9     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
+   +---------+-------------------+---------+---------------+---------------+
+   | 1.0     | zstd-bytedelta-9  | 3.31    | 0.07          | 11.4          |
+   +---------+-------------------+---------+---------------+---------------+
 
 On the other hand, in Table :ref:`predicted-cparams-example`, we can see an example of predicted compression parameter tuning for compression speed and ratio on a different dataset.
 
 .. table:: BTune prediction of the best compression parameters for compression speed, depending on a balance value.  It can be seen that LZ4 + Bitshuffle is most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimize for the compression ratio. :label:`predicted-cparams-example`
 
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | Balance | Most predicted                 |  Mean cratio | Mean cspeed (GB/s) | Mean dspeed (GB/s) |
-   +=========+================================+==============+====================+====================+
-   | 0.0     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.1     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.2     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.3     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.4     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.5     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.6     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.7     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.8     | zstd-shuffle-bytedelta-split-1 | 3.98         | 9.41               | 18.77              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 0.9     | zstd-shuffle-bytedelta-split-1 | 3.98         | 9.41               | 18.77              |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
-   | 1.0     | zstd-shuffle-bytedelta-split-9 | 4.06         | 0.15               | 14.1               |
-   +---------+--------------------------------+--------------+--------------------+--------------------+
+   +---------+------------------+---------+---------------+---------------+
+   | Balance | Most predicted   |  cratio | cspeed (GB/s) | dspeed (GB/s) |
+   +=========+==================+=========+===============+===============+
+   | 0.0     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
+   +---------+------------------+---------+---------------+---------------+
+   | 0.1     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
+   +---------+------------------+---------+---------------+---------------+
+   | 0.2     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
+   +---------+------------------+---------+---------------+---------------+
+   | 0.3     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
+   +---------+------------------+---------+---------------+---------------+
+   | 0.4     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
+   +---------+------------------+---------+---------------+---------------+
+   | 0.5     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
+   +---------+------------------+---------+---------------+---------------+
+   | 0.6     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
+   +---------+------------------+---------+---------------+---------------+
+   | 0.7     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
+   +---------+------------------+---------+---------------+---------------+
+   | 0.8     | zstd-bytedelta-1 | 3.98    | 9.41          | 18.77         |
+   +---------+------------------+---------+---------------+---------------+
+   | 0.9     | zstd-bytedelta-1 | 3.98    | 9.41          | 18.77         |
+   +---------+------------------+---------+---------------+---------------+
+   | 1.0     | zstd-bytedelta-9 | 4.06    | 0.15          | 14.1          |
+   +---------+------------------+---------+---------------+---------------+
 
 After training the neural network, the BTune plugin can automatically tune the compression parameters for a given dataset. During inference, you can set the preferred balance by setting the :code:`BTUNE_BALANCE` environment variable to a floating point value between 0 and 1. A value of 0 favors speed only, while a value of 1 favors compression ratio only. This setting automatically adjusts the compression parameters to your data whenever a new Blosc2 data container is created.
+
+Ingesting and processing data of Gaia
+-------------------------------------
+
+The raw data of Gaia is stored in CSV files.  The coordinates are stored in the gaia_source directory (http://cdn.gea.esac.esa.int/Gaia/gdr3/gaia_source/).  These can be easily parsed and ingested as Blosc2 files with the following code:
+
+.. code-block:: python
+
+   def load_rawdata(out="gaia.b2nd"):
+       dtype = {"ra": np.float32,
+                "dec": np.float32,
+                "parallax": np.float32,
+                "phot_bp_mean_mag": np.float32}
+       barr = None
+       for file in glob.glob("gaia-source/*.csv*"):
+           # Load raw data
+           df = pd.read_csv(file,
+                            usecols=[
+                                "ra", "dec", "parallax",
+                                "phot_g_mean_mag"],
+                            dtype=dtype, comment='#')
+           # Convert to numpy array and remove NaNs
+           arr = df.to_numpy()
+           arr = arr[~np.isnan(arr[:, 2])]
+           if barr is None:
+               # Create a new Blosc2 file
+               barr = blosc2.asarray(arr,
+                                     chunks=(2**20, 4),
+                                     urlpath=out,
+                                     mode="w")
+           else:
+               # Append to existing Blosc2 file
+               barr.resize((barr.shape[0] + arr.shape[0], 4))
+               barr[-arr.shape[0]:] = arr
+       return barr
+
+Once we have the raw data in a Blosc2 container, we can select the stars in a radius of 10 thousand light years with this function:
+
+.. code-block:: python
+
+   def convert_select_data(fin="gaia.b2nd",
+                           fout="gaia-ly.b2nd"):
+       barr = blosc2.open(fin)
+       ra = barr[:, 0]
+       dec = barr[:, 1]
+       parallax = barr[:, 2]
+       g = barr[:, 3]
+       # 1 parsec = 3.26 light years
+       ly = ne.evaluate("3260 / parallax")
+       # Remove ly < 0 and > 10_000
+       valid_ly = ne.evaluate("(ly > 0) & (ly < 10_000)")
+       ra = ra[valid_ly]
+       dec = dec[valid_ly]
+       ly = ly[valid_ly]
+       g = g[valid_ly]
+       # Cartesian x, y, z from spherical ra, dec, ly
+       x = ne.evaluate("ly * cos(ra) * cos(dec)")
+       y = ne.evaluate("ly * sin(ra) * cos(dec)")
+       z = ne.evaluate("ly * sin(dec)")
+       # Save to a new Blosc2 file
+       out = blosc2.zeros(mode="w", shape=(4, len(x)),
+                          dtype=x.dtype, urlpath=fout)
+       out[0, :] = x
+       out[1, :] = y
+       out[2, :] = z
+       out[3, :] = g
+       return out
+
+
+Finally, we can compute the density of stars in a 3D grid with this script:
+
+.. code-block:: python
+
+   R = 2  # resolution of the 3D cells in ly
+   LY_RADIUS = 10_000  # radius of the sphere in ly
+   CUBE_SIDE = (2 * LY_RADIUS) // R  # side of the cube in ly
+   MAX_STARS = 1000_000_000  # max number of stars to load
+
+   b = blosc2.open("gaia-ly.b2nd")
+   x = b[0, :MAX_STARS]
+   y = b[1, :MAX_STARS]
+   z = b[2, :MAX_STARS]
+   g = b[3, :MAX_STARS]
+
+   # Create 3d array.
+   # Be sure to have enough swap memory (around 4 TB!)
+   a3d = np.zeros((CUBE_SIDE, CUBE_SIDE, CUBE_SIDE),
+                  dtype=np.float32)
+   for i, coords in enumerate(zip(x, y, z)):
+       x_, y_, z_ = coords
+       a3d[(int(x_) + LY_RADIUS) // R,
+           (int(y_) + LY_RADIUS) // R,
+           (int(z_) + LY_RADIUS) // R] += g[i]
+
+   # Save 3d array as Blosc2 NDim file
+   blosc2.asarray(a3d,
+                  urlpath="gaia-3d.b2nd", mode="w",
+                  # experiment with different values for parts
+                  chunks=(200, 200, 200), blocks=(20, 20, 20),
+                  )
+
+With that, we have a 3D array of shape (10_000, 10_000, 10_000) with the magnitudes of stars with a 2 light years resolution.  We can visualize it with the following code:
+
+TBD ...
 
 Conclusions
 -----------
