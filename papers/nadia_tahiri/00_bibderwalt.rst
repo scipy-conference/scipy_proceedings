@@ -10,7 +10,7 @@
 
 
 -----------------------------------------------------------------------------------------------------------------------------
-aPhyloGeo-Covid: A Web Interface for Reproducible Phylogeographic Analysis of SARS-CoV-2 Variation using Neo4j and Snakemake 
+aPhyloGeo-Covid: An Interactive Platform for Reproducible Phylogeographic Analysis of SARS-CoV-2 Variation using Neo4j and Snakemake 
 -----------------------------------------------------------------------------------------------------------------------------
 
 .. class:: abstract
