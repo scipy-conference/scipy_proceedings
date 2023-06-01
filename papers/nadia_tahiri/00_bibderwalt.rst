@@ -85,11 +85,11 @@ Input exploration
 +++++++++++++++++
 
 An interactive platform using Dash-Plotly :cite:`liermann2021dynamic` was developped for efficient data exploration and selection.  
-The integration of the Dash platform with the Neo4j graph database allows for seamless retrieval of pertinent data from interconnected nodes based on user-input keywords related to lineages or locations. This functionality enables efficient identification and filtering of datasets for subsequent phylogeographic analysis. The integration of the powerful Neo4j database with the user-friendly web-based platform facilitates seamless data exploration and selection, supporting researchers in their comprehensive analysis of SARS-CoV-2 variation.
+The integration of the Dash platform with the Neo4j graph database allows for seamless retrieval of pertinent data from interconnected nodes based on user-provided keywords related to lineages or locations. This functionality enables efficient identification and filtering of datasets for subsequent phylogeographic analysis. The integration of the powerful Neo4j database with the user-friendly web-based platform facilitates seamless data exploration and selection, supporting researchers in their comprehensive analysis of SARS-CoV-2 variation.
 
-The aPhyloGeo-Covid provids two approaches to select input datasets.
+The aPhyloGeo-Covid offers two distinct approaches for selecting input datasets.
 
-1. Determine the most common country for the lineages based on the name of the lineage, and then retrieve the corresponding sequences.
+1. Lineage-based approach for retrieving corresponding sequences based on selected lineage name
 
 The multi-step process is facilitated by the "Neo4j GraphDatabase" Python package :cite:`jordan2014neo4j` and the interactive Dash web page. Firstly, users select specific lineages of interest from a checklist on the Dash web page. Next, utilizing the capabilities of the "Neo4j GraphDatabase" package, the selected lineages are used to query the graph database, retrieving relevant location information such as associated locations, earliest and latest detected dates of the lineages in the most common location, and their most common rates. Once these results are obtained from the database, they are presented on the web page as an interactive Dash Table. This table provides a user-friendly interface, allowing users to apply columns and rows filters. This feature enables the removal of study areas or lineages deemed irrelevant, as well as excluding lineages with a most common rate below a predetermined threshold. Finally, based on the filtered table and the selected sequence type, the "Neo4j GraphDatabase" package extracts all the related sequences by accession number. These filtered sequences were then collected as part of the input data for subsequent phylogeographic analysis.
 
@@ -133,7 +133,7 @@ The following "update_lineage_table" function serves as a callback in the applic
           return table_data
        ....
 
-2. Search for lineages that were most common in a specific country during a certain time period, and then retrieve the corresponding sequences.
+2. Country-based approach for retrieving corresponding sequences based on selected location and time period
 
 This approach involved users defining specific locations and a date period through the Dash web page. Utilizing the capabilities of the GraphDatabase package, the Neo4j database is queried to identify lineages prevalent in the specified locations during the defined time period. The retrieved information includes the earliest and latest detected dates of the lineages in each country and their most common rates. These results were presented to users through an interactive Dash Table, which facilitated the application of filters to eliminate outside study areas or lineages below a predetermined threshold. Then, the GraphDatabase package is utilized again to filter and extract the accession number of the corresponding sequences, which are then collected for subsequent phylogeographic analysis.
 
