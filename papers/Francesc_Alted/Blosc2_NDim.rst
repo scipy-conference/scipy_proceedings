@@ -119,21 +119,20 @@ It also supports out-of-the-box the following filters:
 
 Blosc2 utilizes a pipeline architecture that enables the chaining of different filters :cite:`BDT22-blosc2-pipeline` followed by a compression codec. Additionally, it allows for pre-filters (user code meant to be executed before the pipeline) and post-filters (user code meant to be executed after the pipeline). This architecture is highly flexible and minimizes data copies between the different steps, making it possible to create highly efficient pipelines for a variety of use cases. Figure :ref:`blosc2-pipeline` illustrates how this works.
 
-.. figure:: blosc2-pipeline.png
-   :scale: 30%
+.. figure:: blosc2-pipeline-v3.png
 
-   The Blosc2 pipeline. During compression, the first function applied is the prefilter (if any), followed by the filter pipeline (with a maximum of six filters), and finally, the codec. During decompression, the order is reversed: first the codec, then the filter pipeline, and finally the postfilter (if any). :label:`blosc2-pipeline`
+   The Blosc2 pipeline. During compression, the first function applied is the prefilter (if any), followed by the filters' pipeline (with a maximum of six filters), and finally, the codec. During decompression, the order is reversed: first the codec, then the filters' pipeline, and finally the postfilter (if any). :label:`blosc2-pipeline`
 
 Furthermore, Blosc2 supports user-defined codecs and filters, allowing you to create your own compression algorithms and use them within Blosc2 :cite:`BDT22-blosc2-pipeline`. These user-defined codecs and filters can also be dynamically loaded :cite:`BDT23-dynamic-plugins`, registered globally within Blosc2, and installed via a Python wheel so that they can be used seamlessly from any Blosc2 application (whether in C, Python, or any other language that provides a Blosc2 wrapper).
 
 Automatic tuning of compression parameters
 ------------------------------------------
 
-Finding the right compression parameters for your data is probably the most difficult part of using a compression library. Which combination of code and filter would provide the best compression ratio? Which one would provide the best compression/decompression speed?
+Finding the right compression parameters for the data is probably the most difficult part of using a compression library. Which combination of code and filter would provide the best compression ratio? Which one would provide the best compression/decompression speed?
 
-BTune is an AI tool for Blosc2 that helps you find the optimal combination of compression parameters to suit your needs. It uses a neural network that is trained on the most representative datasets to be compressed. This allows it to predict the best compression parameters based on a given balance between compression ratio and compression/decompression speed.
+BTune is an AI tool for Blosc2 that automatically finds the optimal combination of compression parameters to suit the user needs. It uses a neural network that is trained on the most representative datasets to be compressed. This allows it to predict the best compression parameters based on a given balance between compression ratio and compression/decompression speed.
 
-For example, in Table :ref:`predicted-dparams-example` there are the results for the predicted compression parameters tuning for decompression speed.  Curiously, fast decompression does not necessarily imply fast compression.  This table is provided to the user so that he/she can choose the best balance value for his/her needs.
+For example, Table :ref:`predicted-dparams-example` displays the results for the predicted compression parameters tuned for decompression speed. Curiously, fast decompression does not necessarily imply fast compression. This table is provided to the user so that he/she can choose the best balance value for his/her needs.
 
 .. table:: BTune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favoring speed only, and 1 means favoring compression ratio only). It can be seen that BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimizing for the compression ratio. :label:`predicted-dparams-example`
 
@@ -163,9 +162,9 @@ For example, in Table :ref:`predicted-dparams-example` there are the results for
    | 1.0     | zstd-shuffle-bytedelta-split-9 | 3.31         | 0.07               | 11.4               |
    +---------+--------------------------------+--------------+--------------------+--------------------+
 
-On the other hand, in Table :ref:`predicted-cparams-example`, we can see an example of predicted compression parameter tuning for compression speed and ratio on a different dataset.
+On the other hand, in Table :ref:`predicted-cparams-example`, we can see an example of predicted compression parameter tuned for compression speed and ratio on a different dataset.
 
-.. table:: BTune prediction of the best compression parameters for compression speed, depending on a balance value.  It can be seen that LZ4 + Bitshuffle is most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimize for the compression ratio. :label:`predicted-cparams-example`
+.. table:: BTune prediction of the best compression parameters for compression speed, depending on a balanced value. It can be seen that LZ4 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is leverage towards the compression ratio. :label:`predicted-cparams-example`
 
    +---------+--------------------------------+--------------+--------------------+--------------------+
    | Balance | Most predicted                 |  Mean cratio | Mean cspeed (GB/s) | Mean dspeed (GB/s) |
@@ -193,7 +192,7 @@ On the other hand, in Table :ref:`predicted-cparams-example`, we can see an exam
    | 1.0     | zstd-shuffle-bytedelta-split-9 | 4.06         | 0.15               | 14.1               |
    +---------+--------------------------------+--------------+--------------------+--------------------+
 
-After training the neural network, the BTune plugin can automatically tune the compression parameters for a given dataset. During inference, you can set the preferred balance by setting the :code:`BTUNE_BALANCE` environment variable to a floating point value between 0 and 1. A value of 0 favors speed only, while a value of 1 favors compression ratio only. This setting automatically adjusts the compression parameters to your data whenever a new Blosc2 data container is created.
+After training the neural network, the BTune plugin can automatically tune the compression parameters for a given dataset. During inference, the user can set the preferred balance by setting the :code:`BTUNE_BALANCE` environment variable to a floating point value between 0 and 1. A value of 0 favors speed only, while a value of 1 favors compression ratio only. This setting automatically selects the compression parameters most suitable to the current data whenever a new Blosc2 data container is created.
 
 Conclusions
 -----------
