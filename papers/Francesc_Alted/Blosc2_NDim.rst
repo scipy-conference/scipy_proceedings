@@ -50,27 +50,25 @@ Blosc uses the blocking technique :cite:`FA10-starving-cpus` to minimize activit
 .. figure:: sum_openmp-rainfall.png
    :scale: 40%
 
-   Speed for summing up a vector of real float32 data using a variety of codecs that come with Blosc2. Note that the maximum speed is achieved when utilizing the maximum number of (logical) threads available on the computer (28). :label:`sum-precip`
+   Speed for summing up a vector of real float32 data (meteorological precipitation) using a variety of codecs that come with Blosc2. Note that the maximum speed is achieved when utilizing the maximum number of (logical) threads available on the computer (28), where different codecs are allowing faster computation than using regular decompressed data. More info at :cite:`BDT18-breaking-memory-walls`. :label:`sum-precip`
 
 Using Blosc compression can accelerate computations when enough cores are dedicated to the task. Figure :ref:`sum-precip` provides a real example of this.
 
-Blosc2 is the latest version of the Blosc 1.x series, which is used in many important libraries, such as HDF5, Zarr, and PyTables. Its NDim feature excels at reading multi-dimensional slices, thanks to an innovative pineapple-style partitioning technique :cite:`BDT23-blosc2-ndim-intro`. This enables fast exploration of general n-dimensional datasets, including the 3D Gaia dataset.
+Blosc2 is the latest version of the Blosc 1.x series, which is used in many important libraries, such as HDF5 :cite:`hdf5`, Zarr :cite:`zarr`, and PyTables :cite:`pytables`. Its NDim feature excels at reading multi-dimensional slices, thanks to an innovative pineapple-style partitioning technique :cite:`BDT23-blosc2-ndim-intro`. This enables fast exploration of general n-dimensional datasets, including the 3D Gaia dataset.
 
 The Gaia dataset
 ----------------
 
-**OJO: Los números de esta parte no coinciden con los del resumen, en el resumen se habla de esfera y aquí de cubo, de 0.7 billones y no de 1.4, y ojo que la medida de distancia es ligth-years no ligth (errata en el resumen)**
+The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates and magnitudes of 1.4 billion stars (those with parallax not being a NaN). When stored as a regular binary table, the dataset is 22 GB in size (uncompressed). However, we converted this tabular dataset into a sphere of radius 10_000 light years, and frame it into a 3D array of shape (10_000, 10_000, 10_000), where each cell represents a cube of 2 light year per side, and contains the magnitude of every star inside it (provided that the average distance between stars in the Milky ways is about 5 light years, very few cells will contain more than one star). This 3D array contains 0.7 billion stars, which is a significant portion of the Gaia catalog. The magnitude (brightness) of each star is stored as a float32, and, therefore, the total dataset size is 3.7 TB. However, by using compression via Blosc2, we can reduce its size to 10 GB. This is because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost completelly.
 
-The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates and magnitudes of 1.4 billion stars. When stored as a regular binary table, the dataset is 22 GB in size. However, we converted this tabular dataset into a 3D array of shape (10_000, 10_000, 10_000), where each cell represents a cube of 2 light year per side, and contains the magnitude of every star inside it (provided that the average distance between stars in the Milky ways is about 5 light years, very few cells will contain more than one star). This 3D array contains 700 million stars, which is a significant portion of the Gaia catalog. The brightness of each start is stored as a float32, and, therefore, the dataset size is 3.7 TB. However, by using compression via Blosc2, we can reduce its size to 10 GB. This is because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost completelly.
-
-.. figure:: 3d-view-milkyway.png
+.. figure:: 3d-view-milkyway-inverse.png
    :scale: 25%
 
    Gaia DR3 dataset as a 3D array (preliminary, this is not from the dataset in this paper). :label:`gaia-3d-dset`
 
-Figure :ref:`gaia-3d-dset` shows a 3D view of the Milky Way different type of stars. Each point is a star, and the color of each point represents the star's brightness, with the brightest stars appearing as the reddest points. Although this view provides a unique perspective, the dimensions of the cube are not enough to fully capture the spiral arms of the Milky Way.
+Figure :ref:`gaia-3d-dset` shows a 3D view of the Milky Way different type of stars. Each point is a star, and the color of each point represents the star's magnitude, with the brightest stars appearing as the reddest points. Although this view provides a unique perspective, the dimensions of the cube are not enough to fully capture the spiral arms of the Milky Way.
 
-One advantage of using a 3D array is the ability to utilize Blosc2 NDim's powerful slicing capabilities for quickly exploring parts of a dataset. For example, we could search for star clusters by extracting small cubes as NumPy arrays, and counting the number of stars in each one. A cube containing an abnormally high number of starts would be a candidate for a cluster. We could also extract a thin 3D slice of the cube and project it as a 2D image, where the pixels colors represent the brightness of the shown stars. This could be used to generate a cinematic view of a journey over different trajectories in the Milky Way.
+One advantage of using a 3D array is the ability to utilize Blosc2 NDim's powerful slicing capabilities for quickly exploring parts of a dataset. For example, we could search for star clusters by extracting small cubes as NumPy arrays, and counting the number of stars in each one. A cube containing an abnormally high number of stars would be a candidate for a cluster. We could also extract a thin 3D slice of the cube and project it as a 2D image, where the pixels colors represent the magnitude of the shown stars. This could be used to generate a cinematic view of a journey over different trajectories in the Milky Way.
 
 Blosc2 NDim
 -----------
@@ -87,12 +85,12 @@ Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensio
 
    Blosc2 NDim 2-level partitioning is flexible. The dimensions of both partitions can be specified in any arbitrary way that fits the expected read access patterns. :label:`b2nd-3d-dset`
 
-With these finer-grained cubes (also known as partitions), arbitrary n-dimensional slices can be retrieved faster because not all the data necessary for the coarser-grained partition does not need to be decompressed, as usually happens in other libraries. See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` to learn how this works and how to set it up. Also, see Figure :ref:`read-partial-slices` :cite:`BDT23-blosc2-ndim-intro` for a comparison against other libraries that use just a single partition (e.g., HDF5, Zarr).
+With these finer-grained cubes (also known as partitions), arbitrary n-dimensional slices can be retrieved faster because not all the data necessary for the coarser-grained partition does not need to be decompressed, as usually happens in other libraries. See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` to learn how this works and how to set it up. Also, see Figure :ref:`read-partial-slices` for a comparison against other libraries that use just a single partition (e.g., HDF5, Zarr).
 
 .. figure:: read-partial-slices.png
    :scale: 70%
 
-   Speed comparison for reading partial n-dimensional slices of a 4D dataset. :label:`read-partial-slices`
+   Speed comparison for reading partial n-dimensional slices of a 4D dataset :cite:`BDT23-blosc2-ndim-intro`. :label:`read-partial-slices`
 
 It is important to note that Blosc2 NDim supports all data types in NumPy. This means that, in addition to the typical data types like signed/unsigned int, single and double-precision floats, bools or strings, it can also store datetimes (including units), and arbitrarily nested heterogeneous types. This allows to create multidimensional tables and more.
 
@@ -134,63 +132,63 @@ BTune is an AI tool for Blosc2 that automatically finds the optimal combination 
 
 For example, Table :ref:`predicted-dparams-example` displays the results for the predicted compression parameters tuned for decompression speed. Curiously, fast decompression does not necessarily imply fast compression. This table is provided to the user so that he/she can choose the best balance value for his/her needs.
 
-.. table:: BTune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favoring speed only, and 1 means favoring compression ratio only). It can be seen that BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimizing for the compression ratio. :label:`predicted-dparams-example`
+.. table:: BTune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favoring speed only, and 1 means favoring compression ratio only). It can be seen that BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimizing for the compression ratio.  Speeds are in GB/s.  :label:`predicted-dparams-example`
 
-   +---------+-------------------+---------+---------------+---------------+
-   | Balance | Most predicted    |  cratio | cspeed (GB/s) | dspeed (GB/s) |
-   +=========+===================+=========+===============+===============+
-   | 0.0     | blosclz-shuffle-5 | 2.09    | 14.47         | 48.93         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 0.1     | blosclz-shuffle-5 | 2.09    | 14.47         | 48.93         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 0.2     | blosclz-shuffle-5 | 2.09    | 14.47         | 48.93         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 0.3     | blosclz-shuffle-5 | 2.09    | 14.47         | 48.93         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 0.4     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 0.5     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 0.6     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 0.7     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 0.8     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 0.9     | zstd-bytedelta-1  | 3.3     | 17.04         | 21.65         |
-   +---------+-------------------+---------+---------------+---------------+
-   | 1.0     | zstd-bytedelta-9  | 3.31    | 0.07          | 11.4          |
-   +---------+-------------------+---------+---------------+---------------+
+   +---------+-------------------+---------+--------+--------+
+   | Balance | Most predicted    |  Cratio | Cspeed | Dspeed |
+   +=========+===================+=========+========+========+
+   | 0.0     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
+   +---------+-------------------+---------+--------+--------+
+   | 0.1     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
+   +---------+-------------------+---------+--------+--------+
+   | 0.2     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
+   +---------+-------------------+---------+--------+--------+
+   | 0.3     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
+   +---------+-------------------+---------+--------+--------+
+   | 0.4     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
+   | 0.5     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
+   | 0.6     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
+   | 0.7     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
+   | 0.8     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
+   | 0.9     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
+   | 1.0     | zstd-bytedelta-9  | 3.31    | 0.07   | 11.40  |
+   +---------+-------------------+---------+--------+--------+
 
 On the other hand, in Table :ref:`predicted-cparams-example`, we can see an example of predicted compression parameter tuned for compression speed and ratio on a different dataset.
 
-.. table:: BTune prediction of the best compression parameters for compression speed, depending on a balanced value. It can be seen that LZ4 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is leverage towards the compression ratio. :label:`predicted-cparams-example`
+.. table:: BTune prediction of the best compression parameters for compression speed, depending on a balanced value. It can be seen that LZ4 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is leverage towards the compression ratio. Speeds are in GB/s. :label:`predicted-cparams-example`
 
-   +---------+------------------+---------+---------------+---------------+
-   | Balance | Most predicted   |  cratio | cspeed (GB/s) | dspeed (GB/s) |
-   +=========+==================+=========+===============+===============+
-   | 0.0     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
-   +---------+------------------+---------+---------------+---------------+
-   | 0.1     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
-   +---------+------------------+---------+---------------+---------------+
-   | 0.2     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
-   +---------+------------------+---------+---------------+---------------+
-   | 0.3     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
-   +---------+------------------+---------+---------------+---------------+
-   | 0.4     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
-   +---------+------------------+---------+---------------+---------------+
-   | 0.5     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
-   +---------+------------------+---------+---------------+---------------+
-   | 0.6     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
-   +---------+------------------+---------+---------------+---------------+
-   | 0.7     | lz4-bitshuffle-5 | 3.41    | 21.78         | 32.0          |
-   +---------+------------------+---------+---------------+---------------+
-   | 0.8     | zstd-bytedelta-1 | 3.98    | 9.41          | 18.77         |
-   +---------+------------------+---------+---------------+---------------+
-   | 0.9     | zstd-bytedelta-1 | 3.98    | 9.41          | 18.77         |
-   +---------+------------------+---------+---------------+---------------+
-   | 1.0     | zstd-bytedelta-9 | 4.06    | 0.15          | 14.1          |
-   +---------+------------------+---------+---------------+---------------+
+   +---------+------------------+---------+--------+--------+
+   | Balance | Most predicted   |  Cratio | Cspeed | Dspeed |
+   +=========+==================+=========+========+========+
+   | 0.0     | lz4-bitshuffle-5 | 3.41    | 21.78  | 32.0   |
+   +---------+------------------+---------+--------+--------+
+   | 0.1     | lz4-bitshuffle-5 | 3.41    | 21.78  | 32.0   |
+   +---------+------------------+---------+--------+--------+
+   | 0.2     | lz4-bitshuffle-5 | 3.41    | 21.78  | 32.0   |
+   +---------+------------------+---------+--------+--------+
+   | 0.3     | lz4-bitshuffle-5 | 3.41    | 21.78  | 32.0   |
+   +---------+------------------+---------+--------+--------+
+   | 0.4     | lz4-bitshuffle-5 | 3.41    | 21.78  | 32.0   |
+   +---------+------------------+---------+--------+--------+
+   | 0.5     | lz4-bitshuffle-5 | 3.41    | 21.78  | 32.0   |
+   +---------+------------------+---------+--------+--------+
+   | 0.6     | lz4-bitshuffle-5 | 3.41    | 21.78  | 32.0   |
+   +---------+------------------+---------+--------+--------+
+   | 0.7     | lz4-bitshuffle-5 | 3.41    | 21.78  | 32.0   |
+   +---------+------------------+---------+--------+--------+
+   | 0.8     | zstd-bytedelta-1 | 3.98    | 9.41   | 18.8   |
+   +---------+------------------+---------+--------+--------+
+   | 0.9     | zstd-bytedelta-1 | 3.98    | 9.41   | 18.8   |
+   +---------+------------------+---------+--------+--------+
+   | 1.0     | zstd-bytedelta-9 | 4.06    | 0.15   | 14.1   |
+   +---------+------------------+---------+--------+--------+
 
 After training the neural network, the BTune plugin can automatically tune the compression parameters for a given dataset. During inference, the user can set the preferred balance by setting the :code:`BTUNE_BALANCE` environment variable to a floating point value between 0 and 1. A value of 0 favors speed only, while a value of 1 favors compression ratio only. This setting automatically selects the compression parameters most suitable to the current data whenever a new Blosc2 data container is created.
 
