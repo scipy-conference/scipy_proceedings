@@ -154,17 +154,17 @@ The following "update_lineage_table" function serves as a callback in the applic
                 n.earliest_date as earliest_date, 
                 n.latest_date as latest_date, 
                 l.iso_code as iso_code, 
-                n.most_common_country as most_common_country,  
+                n.most_common_country as country,  
                 r.rate as rate
                    """
        cols = ['lineage', 'earliest_date', 
                 'latest_date', 'iso_code',
-                'most_common_country', 'rate']
+                'country', 'rate']
        
        if checklist_value and seqType_value:
          #Query in Neo4j database
          # Transform Cypher results to pandas dataframe
-         df = neoCypher_manager.queryToDataframe(query, cols)
+         df = neo_manager.queryToDataframe(query, cols)
          table_data = df.to_dict('records')
          return table_data
            ....
