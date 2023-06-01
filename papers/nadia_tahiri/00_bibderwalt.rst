@@ -273,39 +273,6 @@ Parameters setting and tuning
 
 Once the input data has been defined, including sequence data and associated location information, the platform guides users to select the parameters for analysis. At this step, a Label named Analysis is created, and the values of the parameters are saved in the node as properties. These parameters include step size, window size, RF distance threshold, bootstrap threshold, and the list of the environmental factors involved in the analysis. Then a connection between the Input Node and the Analysis Node is created, which offers several advantages. Firstly, it enables users to compare the differences in results obtained from the same input samples but with different parameter settings. Secondly, it facilitates the comparison of analysis results obtained using the same parameter settings but different input samples. The networks of Input, Analysis, and Output nodes (See Figure :ref:`fig1`) ensure repeatability and comparability of the analysis results.
 
-The following "create_Analysisnode" function creates an Analysis node in the Neo4j database by executing a Cypher query with the provided data. On the other hand, the "addAnalysisNeo" function adds an Analysis node to the Neo4j database, sets its properties using values from a YAML file, and establishes a relationship between the Analysis node and an existing Input node. The functions utilize a Neo4j driver to connect to the database and perform the necessary operations. By using these functions together, researchers can easily create Analysis nodes with customized properties and establish connections to relevant Input nodes in the Neo4j database, facilitating the management and analysis of scientific data.
-
-
-.. code-block:: python
-
-   def create_Analysisnode(tx, data):
-       query = "CREATE (n:Analysis) SET n = $data"
-       tx.run(query, data=data)
-
-   def addAnalysisNeo():
-       driver = GraphDatabase.driver(URI,
-                                     auth=("neo4j", password))
-
-       properties_dict = {}
-       with open('config/config.yaml', 'r') as file:
-           config = yaml.safe_load(file)
-
-       # Set the properties of the node using the yaml_data
-       set_properties(config, properties_dict)
-       input_name = properties_dict['input_name']
-       analysis_name = properties_dict['analysis_name']
-       create_time = datetime.now().isoformat()
-       # Create node
-       with driver.session() as session:
-           session.execute_write(create_Analysisnode, properties_dict)
-       # Create relationship
-       with driver.session() as session:
-           session.run("MATCH (u:Input {name: $input_name}), (n:Analysis {analysis_name: $analysis_name}) "
-                       "CREATE (u)-[r:FOR_ANALYSIS {create_time: $create_time}]->(n)",
-                       input_name=input_name, analysis_name=analysis_name, create_time=create_time)
-       print("An Analysis Node has been Added in Neo4j Database!")
-
-
 Subsequently, when the user confirms the start of the analysis with the SUBMIT button, the corresponding sequences are downloaded from NCBI :cite:`brister2015ncbi` using the Biopython package :cite:`cock2009biopython`, and multiple sequence alignments (MSA) :cite:`edgar2006multiple` are performed using the MAFFT method :cite:`katoh2013mafft`. With alignment results and related environmental data as input, the Snakemake workflow will be triggered in the backend. Once the analysis is completed, the user is assigned a unique output ID, which they can use to query and visualize the results in the web platform.
    
 
