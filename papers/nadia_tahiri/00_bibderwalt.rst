@@ -124,7 +124,7 @@ The aPhyloGeo-Covid provids two approaches to select input datasets.
 
 The multi-step process is facilitated by the "Neo4j GraphDatabase" Python package :cite:`jordan2014neo4j` and the interactive Dash web page. Firstly, users select specific lineages of interest from a checklist on the Dash web page. Next, utilizing the capabilities of the "Neo4j GraphDatabase" package, the selected lineages are used to query the graph database, retrieving relevant location information such as associated locations, earliest and latest detected dates of the lineages in the most common location, and their most common rates. Once these results are obtained from the database, they are presented on the web page as an interactive Dash Table. This table provides a user-friendly interface, allowing users to apply columns and rows filters. This feature enables the removal of study areas or lineages deemed irrelevant, as well as excluding lineages with a most common rate below a predetermined threshold. Finally, based on the filtered table and the selected sequence type, the "Neo4j GraphDatabase" package extracts all the related sequences by accession number. These filtered sequences were then collected as part of the input data for subsequent phylogeographic analysis.
 
-The following "update_lineage_table" function serves as a callback in the application and is triggered when the user clicks the "button-confir-lineage" component. Its purpose is to update the lineage table based on the selected values from the "choice-lineage" and "type-dropdown" components. Upon invocation, the function checks if the callback was triggered and verifies the presence of valid checklist values and sequence type. If these conditions are met, a Cypher query is constructed to retrieve the most common country information associated with the specified lineage. The query results are then processed and transformed into a pandas DataFrame. Further data manipulation can be performed at this stage. Finally, the resulting DataFrame is converted into a list of dictionaries, which serves as the updated data for the lineage table component. By utilizing this function, the application effectively enables users to explore and visualize lineage data in the context of geographic features
+The following "update_lineage_table" function serves as a callback in the application and is triggered when the user clicks the "button-confir-lineage" component. Its purpose is to update the lineage table based on the selected values from the "choice-lineage" and "type-dropdown" components. Upon invocation, the function checks if the callback was triggered and verifies the presence of valid checklist values and sequence type. If these conditions are met, a Cypher query is constructed to retrieve the most common country information associated with the specified lineage. The query results are then processed and transformed into a pandas DataFrame. Further data manipulation can be performed at this stage. Finally, the resulting DataFrame is converted into a list of dictionaries, which serves as the updated data for the lineage table component. By utilizing this function, the application effectively enables users to explore and visualize lineage data in the context of geographic features.
       
 
 .. code-block:: python
@@ -135,7 +135,6 @@ The following "update_lineage_table" function serves as a callback in the applic
        State('checklist-lineage', 'value'),
        State('dropdown-seqType', 'value')
    )
-
    def update_lineage_table(n_clicks, 
                            checklist_value, 
                            seqType_value):
@@ -247,6 +246,9 @@ The "addInputNeo" function adds an input node and establishes relationships with
                count = result.single()[0]
 
            return random_name
+                       
+                       
+.. code-block:: python
 
    def addInputNeo(nodesLabel, 
                    inputNode_name, 
@@ -280,7 +282,6 @@ The "addInputNeo" function adds an input node and establishes relationships with
                        name=inputNode_name, 
                        nodesLabel=nodesLabel, 
                        id=other_node["accession"])
-
 
 Parameters setting and tuning
 ++++++++++++++++++++++++++++++
