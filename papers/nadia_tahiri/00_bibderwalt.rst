@@ -58,15 +58,9 @@ the optimal sliding window size and step size often required multiple parameter 
 critical role in this process. To address these challenges, we devised a phylogeographic pipeline that harnesses the capabilities of Snakemake, a modern computational workflow management system :cite:`koster2012snakemake`. Distinguishing itself from other workflow management systems such as Galaxy :cite:`jalili2020galaxy` and Nextflow :cite:`spivsakova2023nextflow`, Snakemake stands out as a Python-based solution, guaranteeing exceptional portability and the convenience of executing Snakefiles with a Python installation :cite:`wratten2021reproducible`. Leveraging various Python packages, including Biopython :cite:`cock2009biopython` and Pandas :cite:`lemenkova2019processing`, the Snakemake workflow efficiently handles tasks such as sequencing data reading and writing, as well as conducting phylogenetic analysis. Given these capabilities, Snakemake serves as an optimal choice for aPhyloGeo-Covid. Furthermore, Snakemake supports parallel execution of jobs, significantly enhancing the performance and speed of the pipeline. 
 This pipeline implementation facilitates efficient and reproducible analysis, thereby streamlining the phylogeographic research workflow of the aPhyloGeo-Covid.
 
-With these considerations in mind, the main aim of this study is to create an open-source, web-based phylogeographic analysis platform that overcomes 
-the aforementioned limitations. This platform comprises two essential components: data pre-processing and phylogeographical analysis. 
-In the data pre-processing phase, we utilize searchable graph databases to facilitate rapid exploration and provide a visual overview of 
-the SARS-CoV-2 variants and their associated environmental factors. This enables researchers to efficiently navigate through the vast amount of 
-data and extract relevant information for their analyses. In the phylogeographical analysis phase, we employ our modularized Snakemake workflow to 
-investigate how patterns of genetic variation within different SARS-CoV-2 variants align with geographic features. By utilizing this workflow, 
-researchers can analyze the relationship between viral genetic diversity and specific geographic factors in a structured and reproducible manner. 
-This comprehensive approach allows for a deeper understanding of the complex interplay between viral evolution, transmission dynamics, 
-and environmental influences.
+With a clear focus on addressing the aforementioned limitations, this study aims to develop an integrated, open-source phylogeographic analysis platform. This platform consists of two vital components: data pre-processing and phylogeographical analysis.
+In the data pre-processing phase, we employ searchable graph databases, enabling rapid exploration and offering a visual overview of SARS-CoV-2 lineages and their associated environmental factors. This efficient approach allows researchers to navigate through vast datasets and extract pertinent information for their analyses. 
+In the subsequent phylogeographical analysis phase, our modularized Snakemake workflow is utilized to examine how genetic variation patterns within different SARS-CoV-2 variants align with geographic features. Leveraging this workflow, researchers can systematically and reproducibly investigate the relationship between viral genetic diversity and specific geographic factors. By adopting this comprehensive approach, a deeper understanding of the intricate interplay among viral evolution, transmission dynamics, and environmental influences can be achieved.
 
 Methodology
 -----------
