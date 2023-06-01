@@ -96,33 +96,33 @@ With these finer-grained cubes (also known as partitions), arbitrary n-dimension
 
 It is important to note that Blosc2 NDim supports all data types in NumPy. This means that, in addition to the typical data types like signed/unsigned int, single and double-precision floats, bools or strings, it can also store datetimes (including units), and arbitrarily nested heterogeneous types. This allows to create multidimensional tables and more.
 
-Support for multiple codecs, filters and other compression features
---------------------------------------------------------------------
+Support for multiple codecs, filters, and other compression features
+---------------------------------------------------------------------
 
-Blosc2 is not only a compression library, but also a framework for creating efficient compression pipelines. A compression pipeline is composed of a sequence of filters, followed by a compression codec. A filter is a transformation that is applied to the data before compression, and a codec is a compression algorithm that is applied to the data after the filters. Filters can lead to better compression ratios and/or improved compression/decompression speeds.
+Blosc2 is not only a compression library, but also a framework for creating efficient compression pipelines. A compression pipeline is composed of a sequence of filters, followed by a compression codec. A filter is a transformation that is applied to the data before compression, and a codec is a compression algorithm that is applied to the filtered data. Filters can lead to better compression ratios and improved compression/decompression speeds.
 
 Blosc2 supports a variety of codecs, filters, and other compression features. In particular, it supports the following codecs out-of-the-box:
 
-- BloscLZ (fast codec; the default)
-- LZ4 (a very fast codec)
-- LZ4HC (high compression variant of LZ4)
-- Zlib (Blosc2 uses the Zlib-NG variant)
-- Zstd (high compression)
-- ZFP (lossy compression for n-dimensional datasets of floats)
+- BloscLZ (fast codec, the default),
+- LZ4 (a very fast codec),
+- LZ4HC (high compression variant of LZ4),
+- Zlib (the Zlib-NG variant of Zlib),
+- Zstd (high compression), and
+- ZFP (lossy compression for n-dimensional datasets of floats).
 
-and the following filters:
+It also supports out-of-the-box the following filters:
 
-- Shuffle (groups equal significant bytes together, useful for ints/floats)
-- Shuffle with bytedelta (same than shuffle, but with a delta of every byte)
-- Bitshuffle (groups equal bits together, useful for ints/floats)
-- Truncation (truncates precision, useful for floats; lossy)
+- Shuffle (groups equal significant bytes together, useful for ints/floats),
+- Shuffle with bytedelta (same than shuffle, but storing deltas of the consecutive same significant bytes),
+- Bitshuffle (groups equal significant bits together, useful for ints/floats), and
+- Truncation (truncates precision, useful for floats; lossy).
 
-Blosc2 utilizes a pipeline architecture that enables the chaining of different filters :cite:`BDT22-blosc2-pipeline`, followed by a compression codec. Additionally, it allows for pre-filters (user code meant to be executed before the pipeline) and post-filters (user code meant to be executed after the pipeline). This architecture is highly flexible and minimizes data copies in the different steps, making it possible to create highly efficient pipelines for a variety of use cases. Refer to Figure :ref:`blosc2-pipeline` to see how this works.
+Blosc2 utilizes a pipeline architecture that enables the chaining of different filters :cite:`BDT22-blosc2-pipeline` followed by a compression codec. Additionally, it allows for pre-filters (user code meant to be executed before the pipeline) and post-filters (user code meant to be executed after the pipeline). This architecture is highly flexible and minimizes data copies between the different steps, making it possible to create highly efficient pipelines for a variety of use cases. Figure :ref:`blosc2-pipeline` illustrates how this works.
 
 .. figure:: blosc2-pipeline.png
    :scale: 30%
 
-   The Blosc2 pipeline. During compression, the first function applied is the prefilter (if any), followed by the filter pipeline (with a maximum of six), and finally the codec. During decompression, the order is reversed: first the codec, then the filter pipeline, and finally the postfilter (if any). :label:`blosc2-pipeline`
+   The Blosc2 pipeline. During compression, the first function applied is the prefilter (if any), followed by the filter pipeline (with a maximum of six filters), and finally, the codec. During decompression, the order is reversed: first the codec, then the filter pipeline, and finally the postfilter (if any). :label:`blosc2-pipeline`
 
 Furthermore, Blosc2 supports user-defined codecs and filters, allowing you to create your own compression algorithms and use them within Blosc2 :cite:`BDT22-blosc2-pipeline`. These user-defined codecs and filters can also be dynamically loaded :cite:`BDT23-dynamic-plugins`, registered globally within Blosc2, and installed via a Python wheel so that they can be used seamlessly from any Blosc2 application (whether in C, Python, or any other language that provides a Blosc2 wrapper).
 
