@@ -327,7 +327,7 @@ In this study, a combination of sliding window strategy and phylogenetic analyse
 Results
 -------
 
-The SARS-CoV-2 virus has a genome size of approximately 30 kb. The first two-thirds of its genome, located at the 5'-terminal, contain instructions for producing two long proteins known as pp1a and pp1ab. These proteins are subsequently broken down by viral enzymes into 16 smaller proteins called non-structural proteins (Nsps), which are important for the virus to replicate and transcribe its genetic material :cite:`khan2021structures`. Consequently, the performance of the aPhyloGeo-Covid platform was tested around pp1a. 
+The SARS-CoV-2 virus has a genome size of approximately 30 kb. The first two-thirds of its genome, located at , contain instructions for producing two long proteins known as pp1a and pp1ab. These proteins are subsequently broken down by viral enzymes into 16 smaller proteins called non-structural proteins (Nsps), which are important for the virus to replicate and transcribe its genetic material :cite:`khan2021structures`. Consequently, the performance of the aPhyloGeo-Covid platform was tested around pp1a. 
 
 
 
