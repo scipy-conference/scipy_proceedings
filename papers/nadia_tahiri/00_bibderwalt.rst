@@ -101,6 +101,8 @@ and environmental influences.
 
 Methodology
 -----------
+Various data sources related to SARS-CoV-2 were extracted, transformed, and loaded into a Neo4j graph database. To facilitate querying, analysis parameter configuration, and output writing within the database, a driver object was created using the Neo4j Python driver to establish connections with the Neo4j database. For phylogeographic analysis, a workflow was implemented using the Snakemake workflow management system, ensuring a streamlined and efficient analysis process. Additionally, the Plotly-dash library and its interactive visualization tools were utilized for exploring input data, setting analysis parameters, and visualizing the results in an interactive manner.
+
 
 Neo4j graph database and Dash platform
 ---------------------------------------
