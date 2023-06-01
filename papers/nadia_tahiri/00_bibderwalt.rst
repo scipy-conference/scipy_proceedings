@@ -343,7 +343,7 @@ The aPhyloGeo-Covid analysis workflow generates an dataframe at the end of the a
    TO BE CONTINUE :label:`fig3`
    
 
-
+Ni et al. (2023) :cite:`ni2023structural`revealed that the Ubl1 protein of SARS-CoV-2 can compete with RNA molecules to bind to the N protein, resulting in the dissociation of viral ribonucleoprotein complexes. Their research team successfully determined the crystal structure of the N-terminal domain (NTD) of the N protein in complex with the ubiquitin-like domain 1 (Ubl1) of Nsp3 from the SARS-CoV-2 virus, with a resolution of 2.6 Å. 
 
 
 Conclusions and future work
