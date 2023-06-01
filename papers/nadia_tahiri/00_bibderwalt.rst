@@ -140,13 +140,15 @@ The following "update_lineage_table" function serves as a callback in the applic
        State('dropdown-seqType', 'value')
    )
 
-   def update_lineage_table(n_clicks, checklist_value, seqType_value):
+   def update_lineage_table(n_clicks, 
+                           checklist_value, 
+                           seqType_value):
        ...
        starts_with_conditions = " OR ".join(
                [f'n.lineage STARTS WITH "{char}"' 
                     for char in checklist_value])
        query = f"""
-         MATCH (n:Lineage) - [r: IN_MOST_COMMON_COUNTRY] -> (l: Location)
+         MATCH (n:Lineage) - [r] -> (l: Location)
          WHERE {starts_with_conditions}
          RETURN n.lineage as lineage, 
                 n.earliest_date as earliest_date, 
