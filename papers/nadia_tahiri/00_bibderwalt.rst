@@ -332,6 +332,7 @@ To identify and filter the appropriate datasets for further phylogeographic anal
 
 .. figure:: figure2.png
    :scale: 50%
+   
    TO BE CONTINUE :label:`fig2`
 
 
