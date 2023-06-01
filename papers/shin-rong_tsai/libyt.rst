@@ -76,36 +76,33 @@ under parallel computation.
 Through wrapping ongoing simulation data using NumPy C API :cite:`numpy`, constructing proper Python 
 C-extension methods and Python objects using Python C API :cite:`python3`, we can reuse C++ runtime 
 data and realize back-communication of simulation information, allowing user to define their own 
-data generating function, and use it to conduct analysis inside Python ecosystem. 
-This is like using a normal Python prompt, but with access to simulation data. 
-Using ``libyt`` does not add a time penalty to the analysis, because using Python for in situ analysis 
-and post-processing are exactly the same, except that the former one reads data from memory and the 
-later one reads data from disks. 
-And converting the post-processing script to inline script is a one-line change.
+data generating C function, and use it to conduct analysis inside Python ecosystem. 
+This is like using a normal Python prompt, but with direct access to simulation data. 
 ``libyt`` provides another way for us to interact with simulations.
-
 
 .. [#] `https://github.com/calab-ntu/libyt <https://github.com/calab-ntu/libyt>`_
 
 ..
    outline of the proceeding
 
-In this proceeding, we will describe the code method, demonstrate how ``libyt`` solve the problem, 
-and conlude it with discussions.
+In this proceeding, we will describe the methods in Section `Code Method`_, demonstrate how ``libyt`` 
+solve the problem in Section `Applications`_, and conlude it with Section `Discussions`_.
 
+.. _Code Method:
 
 Code Method
 -----------
 
+.. _Overview of libyt:
 
-Overview
-++++++++
+Overview of libyt
++++++++++++++++++
 
 ``libyt`` serves as a bridge between simulation processes and Python instances as 
 illustrated in Fig :ref:`parallelism`.
 It is the middle layer that handles data IO between simulations and Python instances.
 When launching *N* MPI processes, each process contains one piece of simulation and 
-one Python interpreter. Each Python interpreter has access to simulation data.  
+one Python interpreter. Each Python interpreter has access to simulation data. 
 A total of *N* Python instances will work together to conduct in situ analysis in the 
 process space of MPI task.
 
@@ -120,36 +117,85 @@ process space of MPI task.
    platform. 
    :label:`parallelism`
 
+Simulations use ``libyt`` API to pass in data and run Python codes during runtime, 
+and Python instances use ``libyt`` Python module to request data directly from simulations 
+using C-extension method and access Python objects that contain simulation information. 
+Using ``libyt`` for in situ analysis is very similar to running Python scripts in post-processing 
+under MPI platform, except that data are stored in memory instead of hard drives. 
+``libyt`` is for general-purpose and can launch arbitrary Python scripts and Python modules, 
+though here, we focus on using yt as our core analysis tool.
+
+
+.. _Connecting Python and Simulation:
 
 Connecting Python and Simulation
 ++++++++++++++++++++++++++++++++
 
+We can extend the functionality of Python by calling C/C++ functions, and, likewise, 
+we can also embed Python in a C/C++ application to enhance its capability. 
+Python and NumPy provides C API for users to connect objects in a main C/C++ program to Python. 
 
-It stores them in a linear fashion according to global id, so that ``libyt`` can easily 
-look up information later. 
+Currently, ``libyt`` supports only adaptive mesh refinement (AMR) grid data strucutre. [#]_
+How ``libyt`` organizes simulation with AMR grid data strucutre is illustrated in Fig :ref:`passindata`. 
+It first gathers and combines local adaptive mesh refinement grid information 
+(e.g., levels, parent id, grid edges, etc) in each process, such that every Python instance contains 
+full information.
+Next, it allocates array using ``PyArray_SimpleNew`` and stores those information in a linear 
+fashion according to global grid id.
+The array can be easily looked up and retrieve information by ``libyt`` at C side using ``PyArray_GETPTR2``. 
+The operation involves only reading elements in an array. It can also be accessed at Python side. 
+For simulation data, ``libyt`` wraps those data pointers using NumPy C API ``PyArray_SimpleNewFromData``. 
+This tells Python how to interpret block of memory (e.g., shape, type, stride) and does not make a copy. 
+``libyt`` also marks the wrapped data as read-only to avoid something accidentally alters it, 
+since they are actual data used in simulation's iterative process. 
+
+.. [#] We will support more data structures (e.g., octree, unstrucutred mesh grid, etc) in the future.
 
 .. figure:: PassInData.pdf
-   :figclass: thb
+   :figclass: htb
 
    This diagram shows how ``libyt`` loads and organizes simulation information and 
-   data that is based on adaptive mesh refinement data structure. 
-   ``libyt`` collects local grid hierarchy information (e.g., levels, parent id, grid 
-   edges) and combines them all, so that each Python instance contains full hierarchy.
+   data that is based on adaptive mesh refinement (AMR) grid data structure. 
+   ``libyt`` collects local AMR grid information and combines them all, so that each 
+   Python instance contains whole information.
    As for simulation data, ``libyt`` wraps them using NumPy C API, which tells Python 
-   how to interpret block of memory (e.g., shape, type, stride), without duplicating 
-   memory. 
+   how to interpret block of memory without duplicating it.
    :label:`passindata`
+
+``libyt`` also supports back-communication of simulation information. 
+Fig :ref:`pythonaskdata` shows the mechanism behind it. 
+The process is triggered by Python when it needs the data generated by a user-defined 
+C function. This usually happens when the data is not part of the simulation iterative 
+process and requires simulation to generate it, or the data isn't stored in a contiguous 
+memory block and requires simulation to help collect it. 
+Python first calls C-extension method in ``libyt`` Python module
+
 
 .. figure:: PythonAskData.pdf
    :figclass: thb
 
    This diagram describes how ``libyt`` requests simulation to generate data using 
-   user-defined function, thus enabling back-communication of simulation information. 
+   user-defined C function, thus enabling back-communication of simulation information. 
    Those generated data is freed once it is no longer used by Python.
    :label:`pythonaskdata`
 
+
+Grid information, simulation data, and C-extension methods are properly organized in 
+dictionaries under ``libyt`` Python module. 
+One can easily call it during simulation runtime in Python via:
+
+.. code-block:: python
+
+   import libyt  # Import libyt Python module
+   dir(libyt)
+
+
+.. _Executing Python Codes:
+
 Executing Python Codes and Handling Errors
 ++++++++++++++++++++++++++++++++++++++++++
+
+
 
 .. figure:: REPL.pdf
    :figclass: thb
@@ -160,6 +206,7 @@ Executing Python Codes and Handling Errors
    by user hasn't done inputing yet.
    :label:`pythonprompt`
 
+.. _In Situ Analysis Under Parallel Computing:
 
 In Situ Analysis Under Parallel Computing
 +++++++++++++++++++++++++++++++++++++++++
@@ -185,6 +232,8 @@ to the algorithm in Python packages.
    need it at all. 
    :label:`rma`
 
+.. _Applications:
+
 Applications
 ------------
 
@@ -194,8 +243,25 @@ Analyzing Fuzzy Dark Matter Vortices Simulation
 Analyzing Core-Collapse Supernova Simulation
 ++++++++++++++++++++++++++++++++++++++++++++
 
+.. _Discussions:
+
 Discussions
 -----------
 
+Using ``libyt`` does not add a time penalty to the analysis, because using Python for in situ analysis 
+and post-processing are exactly the same, except that the former one reads data from memory and the 
+later one reads data from disks. 
+And converting the post-processing script to inline script is a one-line change.
 
+.. figure:: Time-Proc-Ideal.pdf
+   :figclass: htb
 
+   Strong scaling of ``libyt``. The test compares the performance between in situ analysis 
+   with ``libyt`` and post-processing for computing 2D profiles on a ``GAMER`` dataset. 
+   The dataset contains seven adaptive mesh refinement levels with a total of :math:`9.9 \times 10^8` 
+   cells. ``libyt`` outperforms post-processing by :math:`\sim 10 \textrm{ -- } 30\%` since the former 
+   avoids loading data from disk to memory. The dotted line is the ideal scaling. 
+   ``libyt`` and post-processing show a similar deviation from the ideal scaling because it directly 
+   borrows the algorithm in ``yt``. Improvements have been made and will be made in ``yt`` to 
+   eliminate the scaling bottleneck.
+   :label:`performance`
