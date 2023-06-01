@@ -164,7 +164,7 @@ The following "update_lineage_table" function serves as a callback in the applic
        if checklist_value and seqType_value:
          #Query in Neo4j database
          # Transform Cypher results to dataframe
-          df = neo_manager.queryToDataframe(query, cols)
+          df = neo_manager.queryToDataframe(query,cols)
           table_data = df.to_dict('records')
           return table_data
        ....
@@ -187,16 +187,19 @@ In the following code, the "update_table function" is a callback in the applicat
        State('dropdown-seqType', 'value')
    )
    def update_table(n_clicks, 
-                     start_date_string, 
-                     end_date_string, 
+                     start_date, 
+                     end_date, 
                      checklist_value, 
                      seqType_value):
        ...
        query = f"""
          MATCH (n:Lineage) - [r] -> (l: Location)
-         WHERE n.earliest_date > datetime("{start_date}") 
-           AND n.earliest_date < datetime("{end_date}")
-           AND l.location in {checklist_value}
+         WHERE 
+           n.earliest_date > datetime("{start_date}") 
+          AND 
+           n.earliest_date < datetime("{end_date}")
+          AND 
+           l.location in {checklist_value}
          RETURN n.lineage as lineage, 
                 n.earliest_date as earliest_date, 
                 n.latest_date as latest_date, 
@@ -210,7 +213,7 @@ In the following code, the "update_table function" is a callback in the applicat
        if start_date_string and end_date_string 
                and checklist_value and seqType_value:
            # Transform Cypher results dataframe
-           df = neo_manager.queryToDataframe(query, cols)
+           df = neo_manager.queryToDataframe(query,cols)
            table_data = df.to_dict('records')
            return table_data
         ...
@@ -227,44 +230,56 @@ The "addInputNeo" function adds an input node and establishes relationships with
 
    def generate_unique_name(nodesLabel):
        driver = GraphDatabase.driver(URI,
-                                     auth=("neo4j", password))
+                                     auth=("neo4j", 
+                                     password))
        with driver.session() as session:
            random_name = generate_short_id()
 
            result = session.run(
-               "MATCH (u:" + nodesLabel + " {name: $name}) RETURN COUNT(u)", name=random_name)
+               "MATCH (u:" + nodesLabel + 
+               " {name: $name}) 
+               RETURN COUNT(u)", 
+               name=random_name)
            count = result.single()[0]
 
            while count > 0:
                random_name = generate_short_id()
                result = session.run(
-                   "MATCH (u:" + nodesLabel + " {name: $name}) RETURN COUNT(u)", name=random_name)
+                   "MATCH (u:" + nodesLabel + 
+                   " {name: $name}) RETURN COUNT(u)", 
+                   name=random_name)
                count = result.single()[0]
 
            return random_name
 
-   def addInputNeo(nodesLabel, inputNode_name, id_list):
+   def addInputNeo(nodesLabel, 
+                   inputNode_name, 
+                   id_list):
        # Execute the Cypher query
        driver = GraphDatabase.driver(URI,
-                                     auth=("neo4j", password))
+                                     auth=("neo4j", 
+                                     password))
 
        # Create a new node for the user
        with driver.session() as session:
            session.run(
-               "CREATE (userInput:Input {name: $name})", name=inputNode_name)
+               "CREATE (userInput:Input {name: $name})", 
+               name=inputNode_name)
        # Perform MATCH query to retrieve nodes
        with driver.session() as session:
            result = session.run(
-               "MATCH (n:" + nodesLabel + ") WHERE n.accession IN $id_lt RETURN n",
+               "MATCH (n:" + nodesLabel + ")" +
+               "WHERE n.accession IN $id_lt RETURN n",
                nodesLabel=nodesLabel,
                id_lt=id_list)
-           # Create relationship with properties for each matched node
+           # Create relationship for each matched node
            with driver.session() as session:
                for record in result:
                    other_node = record["n"]
                    session.run("MATCH (u:Input {name: $name}), 
-                                 (n:" + nodesLabel + " {accession: $id}) "
-                               "CREATE (n)-[r:IN_INPUT]->(u)",
+                              (n:" + nodesLabel + 
+                              " {accession: $id}) "
+                              "CREATE (n)-[r:IN_INPUT]->(u)",
                                name=inputNode_name, 
                                nodesLabel=nodesLabel, 
                                id=other_node["accession"])
