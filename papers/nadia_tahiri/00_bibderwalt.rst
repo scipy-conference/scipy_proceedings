@@ -352,6 +352,14 @@ Based on these findings, they propose a model that explains how the N protein bi
 Conclusions and future work
 ---------------------------
 
+This project showcases the development of an open-source, web-based platform designed to enhance phylogeographic research. By combining graph databases and a modularized Snakemake workflow, the platform overcomes the limitations of manual tools, enabling efficient extraction, validation, and integration of genetic and environmental data. The primary focus of the platform is to advance the analysis of geographic and environmental data associated with SARS-CoV-2. 
+
+The utilization of the platform results in the accumulation of diverse findings from various analyses in the database. This network of data sources and analysis outputs expands as more researchers contribute to the platform. The centralized database serves as a repository for researchers to access and explore a wide range of results, fostering knowledge sharing and exchange within the scientific community. While the platform is currently in its early stage of development and testing before deployment, it is anticipated that the network of analyses will progressively become more interconnected as its popularity grows and attracts more researchers. Researchers can use this network to compare their results and identify patterns. The platform facilitates the dissemination of research findings, encourages researchers to build on each other's work, and promotes a sense of community and scientific progress.
+
+In summary, as a database-driven network of analyses platform, aPhyloGeo-Covid forms an open academic platform that facilitates communication, collaboration, and knowledge sharing. By providing access to diverse results and encouraging interaction among researchers, the platform strengthens the scientific community and contributes to the advancement of research in the field of phylogeography.
+
+
+
 To further improve aPhyloGeo-Covid, several potential directions can be considered:
 
 1.	Enhancing Data Resources: To enhance data resources and provide a more comprehensive understanding of the spatial and environmental factors influencing the spread and evolution of SARS-CoV-2, it is crucial to expand the available data resources, especially geographic and environmental data. This expansion may involve the incorporation of additional datasets, such as epidemiological information. By increasing the richness and diversity of data, the aPhyloGeo-Covid project can yield valuable insights into the dynamics of SARS-CoV-2 transmission and its relationship with geographical and environmental variables.
