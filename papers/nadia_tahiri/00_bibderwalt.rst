@@ -163,11 +163,11 @@ The following "update_lineage_table" function serves as a callback in the applic
        
        if checklist_value and seqType_value:
          #Query in Neo4j database
-         # Transform Cypher results to pandas dataframe
-         df = neo_manager.queryToDataframe(query, cols)
-         table_data = df.to_dict('records')
-         return table_data
-           ....
+         # Transform Cypher results to dataframe
+          df = neo_manager.queryToDataframe(query, cols)
+          table_data = df.to_dict('records')
+          return table_data
+       ....
 
 2. Search for lineages that were most common in a specific country during a certain time period, and then retrieve the corresponding sequences.
 
@@ -180,41 +180,40 @@ In the following code, the "update_table function" is a callback in the applicat
 
    @ app.callback(
        Output('location-table', 'data'),
-       Output('valid-message2', 'children'),
-       Input('button-confir-lineage2', 'n_clicks'),
+       Input('button-confirm', 'n_clicks'),
        State('date-range-lineage', 'start_date'),
        State('date-range-lineage', 'end_date'),
-       State('choice-location', 'value'),
-       State('type-dropdown2', 'value')
+       State('checklist-location', 'value'),
+       State('dropdown-seqType', 'value')
    )
-   def update_table(n, start_date_string, end_date_string, checklist_value, seqType_value):
-       if n is None:
-           return None, None
-       else:
-           if start_date_string and end_date_string and checklist_value and seqType_value:
-           # Query lineage data in Neo4j database based on the name of location and date  
-               start_date = datetime.strptime(
-                   start_date_string, '%Y-%m-%d').date()
-               end_date = datetime.strptime(
-                   end_date_string, '%Y-%m-%d').date()
-               query = f"""
-                   MATCH (n:Lineage) - [r: IN_MOST_COMMON_COUNTRY] -> (l: Location)
-                   WHERE n.earliest_date > datetime("{start_date.isoformat()}") 
-                        AND n.earliest_date < datetime("{end_date.isoformat()}")
-                   AND l.location in {checklist_value}
-                   RETURN n.lineage as lineage, n.earliest_date as earliest_date, 
-                           n.latest_date as latest_date, l.iso_code, 
-                        l.location as most_common_country,  r.rate
+   def update_table(n_clicks, 
+                     start_date_string, 
+                     end_date_string, 
+                     checklist_value, 
+                     seqType_value):
+       ...
+       query = f"""
+         MATCH (n:Lineage) - [r] -> (l: Location)
+         WHERE n.earliest_date > datetime("{start_date}") 
+           AND n.earliest_date < datetime("{end_date}")
+           AND l.location in {checklist_value}
+         RETURN n.lineage as lineage, 
+                n.earliest_date as earliest_date, 
+                n.latest_date as latest_date, 
+                l.iso_code, 
+                l.location as country,  
+                r.rate
                    """
-               cols = ['lineage', 'earliest_date', 'latest_date', 'iso_code',
-                       'most_common_country', 'rate']
-               # Transform Cypher results to pandas dataframe
-               df = neoCypher_manager.queryToDataframe(query, cols)
-               # Convert the 'Date' column to pandas datetime format
-               ...
-               table_data = df.to_dict('records')
-               return table_data, None
-           ...
+               cols = ['lineage', 'earliest_date', 
+                       'latest_date', 'iso_code',
+                       'country', 'rate']
+       if start_date_string and end_date_string 
+               and checklist_value and seqType_value:
+           # Transform Cypher results dataframe
+           df = neo_manager.queryToDataframe(query, cols)
+           table_data = df.to_dict('records')
+           return table_data
+        ...
 
 
 In summary, these approaches leveraged the "Neo4j GraphDatabase" package and the interactive Dash web page to enable user-driven sequencing searching. Once input sequencing has been defined, an Input node is generated and labelled accordingly in our graph database. 
