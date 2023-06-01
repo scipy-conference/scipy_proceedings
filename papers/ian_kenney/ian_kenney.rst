@@ -71,23 +71,21 @@ Introduction
 ~~~~~~~~~~~~
 
 
-.. _`sec:FAIR`:
-
+.. _`sec-FAIR`:
 
 Scientific code frequently fails to meet FAIR tenets, impeding scientific progress
 ----------------------------------------------------------------------------------
 
 
-Software has become increasingly essential to research. In many areas, it underlies fundamental tasks such as generating, processing, analyzing, storing, visualizing, and communicating the key results and insights ultimately published. Despite this, software is typically not central to the publication peer review process in many scientific fields. Consequently, scientific code frequently fails to meet the basic tenets of FAIR: findability, accessibility, interoperability, and reusability :cite:`chue_hong_fair_2021, wilkinson_fair_2016`, 
+Software has become increasingly essential to research. In many areas, it underlies fundamental tasks such as generating, processing, analyzing, storing, visualizing, and communicating the key results and insights ultimately published. Despite this, software is typically not central to the publication peer review process in many scientific fields. Consequently, scientific code frequently fails to meet the basic tenets of FAIR: findability, accessibility, interoperability, and reusability :cite:`chue_hong_fair_2021,wilkinson_fair_2016`. 
+With the publication of “The FAIR Guiding Principles for scientific data management and stewardship” in 2016 and the follow-up FAIR Principles for Research Software in 2022, it has become increasingly acknowledged that abiding by the principles of FAIR is crucial to promoting robust, reproducible, and efficient scientific discovery and innovation  :cite:`chue_hong_fair_2021,wilkinson_fair_2016`. We believe that extending FAIR principles to include open-source software not only significantly advances that goal, but furthermore is necessary for transparent research. Open sharing of code brings a number of substantial benefits to the scientific community. For example, scientists can accurately replicate a given methodology or re-use previous code, reducing duplication of effort and reducing the risk of implementation errors. Indeed, the molecular simulation community in particular has made a concerted effort over recent years to encourage the open sharing of scientific codes :cite:`walters_code_2020`. For example, as of July 2022, over 4700 GitHub repositories containing Python code that makes use of MDAnalysis :cite:`michaud-agrawal_mdanalysis_2011, gowers_mdanalysis_2016` have been made publicly available.
 
-With the publication of “The FAIR Guiding Principles for scientific data management and stewardship” in 2016 and the follow-up FAIR Principles for Research Software in 2022, it has become increasingly acknowledged that abiding by the principles of FAIR is crucial to promoting robust, reproducible, and efficient scientific discovery and innovation  \cite{chue_hong_fair_2021, wilkinson_fair_2016}. We believe that extending FAIR principles to include open-source software not only significantly advances that goal, but furthermore is necessary for transparent research. Open sharing of code brings a number of substantial benefits to the scientific community. For example, scientists can accurately replicate a given methodology or re-use previous code, reducing duplication of effort and reducing the risk of implementation errors. Indeed, the molecular simulation community in particular has made a concerted effort over recent years to encourage the open sharing of scientific codes \cite{walters_code_2020}. For example, as of July 2022, over 4700 GitHub repositories containing Python code that makes use of MDAnalysis \cite{michaud-agrawal_mdanalysis_2011, gowers_mdanalysis_2016} have been made publicly available.
-
-However, simply sharing code is not sufficient to fulfill FAIR guidelines. In fact, making software FAIR compliant requires significant investment and often expert knowledge on the part of the developers, especially if the code was written specifically for a particular research project. For example, the Python ecosystem is so dynamic that it is common for research code to rapidly become obsolete or unusable if a new version of a key library is released. To fulfill the Reusability tenet of FAIR alone, code should include documentation, version control, and dependency management. Ideally, it would also include unit tests, examples, and packaging. Even when code is released in reference to a publication, it often falls short of ideal FAIR standards. A short survey of publications in Scopus \cite{noauthor_scopus_nodate} and the Journal of Open Source Software \cite{noauthor_journal_nodate} over 2017–-2021 identified that out of a total 720 papers citing MDAnalysis \cite{michaud-agrawal_mdanalysis_2011, gowers_mdanalysis_2016}, only 43 linked to code available on a version control platform such as GitHub, GitLab, or Bitbucket. Of these, only 18 met the requirements of best practices: they implemented unit tests, comprehensive documentation, and some means of installation.
+However, simply sharing code is not sufficient to fulfill FAIR guidelines. In fact, making software FAIR compliant requires significant investment and often expert knowledge on the part of the developers, especially if the code was written specifically for a particular research project. For example, the Python ecosystem is so dynamic that it is common for research code to rapidly become obsolete or unusable if a new version of a key library is released. To fulfill the Reusability tenet of FAIR alone, code should include documentation, version control, and dependency management. Ideally, it would also include unit tests, examples, and packaging. Even when code is released in reference to a publication, it often falls short of ideal FAIR standards. A short survey of publications in Scopus :cite:`noauthor_scopus_nodate` and the Journal of Open Source Software :cite:`noauthor_journal_nodate` over 2017–-2021 identified that out of a total 720 papers citing MDAnalysis :cite:`michaud-agrawal_mdanalysis_2011, gowers_mdanalysis_2016`, only 43 linked to code available on a version control platform such as GitHub, GitLab, or Bitbucket. Of these, only 18 met the requirements of best practices: they implemented unit tests, comprehensive documentation, and some means of installation.
 
 Two major factors contribute to the lack of open-source FAIR compliant code. Firstly, code is typically written by scientists with no formal training or support in programming, for whom implementing FAIR principles can pose an intimidating and tedious barrier. Secondly, despite the substantial investment of effort and time required to implement best practices, publishing FAIR software is not typically appreciated with academic recognition or reward. Fostering a culture of open-source FAIR software requires addressing both.
 
 
-.. _`sec:centralization`
+.. _`sec-centralization`:
 
 Centralized open-source packages such as MDAnalysis offer a limited solution
 ----------------------------------------------------------------------------
@@ -112,7 +110,8 @@ However, the many costs of this approach can, under some conditions, result in u
 
 The many disadvantages listed above can severely limit the usefulness of centralizing code around one monolithic package. Indeed, encountering these issues when attempting to expand the core MDAnalysis library attests that this approach is not the most suited for the MDAnalysis community.
 
-.. _`sec:ecosystemadvantages`:
+
+.. _`sec-ecosystemadvantages`:
 
 An ecosystem of downstream packages may yield more sustainable progress
 -----------------------------------------------------------------------
@@ -127,7 +126,9 @@ In part, we hope that this momentum will be driven by users and user expectation
 
 In the rest of this document we detail how MDAnalysis proposes to implement such an ecosystem of toolkits, which we will henceforth call “MDAKits” (MDAnalysis Toolkits). We detail our expectations for MDAKits in terms of best practices and how their registration and continuous validation is anticipated to work.
 
-.. _`sec:mdakitframework`:
+
+.. _`sec-mdakitframework`:
+
 The MDAKit framework
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -139,10 +140,11 @@ The MDAKit framework
    :label:`fig:workflow`
 
 
-The MDAKit framework (Fig.:ref:`fig:workflow`) is designed to be a complete workflow to help and incentivize developers to go from the initial stages of package development all the way through to the long term maintenance of a mature codebase, while adhering to best practices.
+The MDAKit framework (Fig. :ref:`fig:workflow`) is designed to be a complete workflow to help and incentivize developers to go from the initial stages of package development all the way through to the long term maintenance of a mature codebase, while adhering to best practices.
 
 
-.. _`sec:maingoals`:
+.. _`sec-maingoals`:
+
 Main goals
 ----------
 
@@ -153,61 +155,65 @@ As such, the main goals of the proposed MDAKit framework are:
 3. To improve contacts between MDAnalysis core library developers and those developing packages using MDAnalysis.
 4. To encourage participation from the community at all steps of the process.
 
-We wish to state three main points that the framework is \emph{not} designed for early on:
+We wish to state three main points that the framework is *not* designed for early on:
 
 1. The MDAKit framework is not intended to restrict the packages which can participate. It is our view that all packages at any stage of their development are of value to the community. As such, we aim for framework components to be as non-blocking as possible.
 2. It is not the intention of any parts of this framework to take ownership of the packages which participate within it. The original code developers retain full ownership and responsibility for their packages and may optionally participate in any part of this framework.
 3. We also do not want to block future contributions to the core library. If new code in MDAKits prove particularly popular, and the MDAKit developers are amenable to contributing these back into the core library, the MDAnalysis team will work with them to integrate additional functionality into MDAnalysis itself
 
 
-.. _`sec:overviewframework`:   
+.. _`sec-overviewframework`:   
+
 Overview of the framework
 -------------------------
 
-The MDAKit framework (Fig.~:ref:`fig:workflow`) is a multi-step process. In the first step of the MDAKit framework, developers create an initial package which is intended to achieve a set purpose of their choice. To help with this process, MDAnalysis provides a cookiecutter template specifically for MDAKits :cite:`wang_cookiecutter_nodate`, alongside documentation on best practices and how to optimally use the MDAnalysis API. An overview of what we consider to be best practices for the contents of MDAKit packages is included in Section~:ref:`sec:definitions`. We note that at this point MDAKits are not expected to fully adhere to best practices, but should at least meet the minimum requirements defined in Section~:ref:`sec:definitions` before moving to the next step along this process.
+The MDAKit framework (Fig. :ref:`fig:workflow`) is a multi-step process. In the first step of the MDAKit framework, developers create an initial package which is intended to achieve a set purpose of their choice. To help with this process, MDAnalysis provides a cookiecutter template specifically for MDAKits :cite:`wang_cookiecutter_nodate`, alongside documentation on best practices and how to optimally use the MDAnalysis API. An overview of what we consider to be best practices for the contents of MDAKit packages is included in Section :ref:`sec-definitions`. We note that at this point MDAKits are not expected to fully adhere to best practices, but should at least meet the minimum requirements defined in Section :ref:`sec-definitions` before moving to the next step along this process.
 
-Once a package is suitably developed, code owners are encouraged to add the details of their code to the “MDAKit registry” which will advertise their package to the MDAnalysis community and offer continual validation and review tools to help with package maintenance. Section~:ref:`sec:registry` contains more information about the MDAKit registry, including the registration process (Section~:ref:`sec:registration`). Briefly, the registration process involves submitting a metadata file to the registry that contains essential information about the MDAKit, such as where the source code is provided, who the code authors are, and how to install the MDAKit. The contents of this metadata file will be reviewed both by automatic code checks and the MDAnalysis developer team before being  added to the registry. We want to highlight  that this process does not include checks on scientific validity or code health. In fact, none of the processes in this framework account for the scientific validity of the MDAKits. While members of the community are free to offer help, scientific or technical validity is beyond the scope of what is feasible with the MDAnalysis registry.
+Once a package is suitably developed, code owners are encouraged to add the details of their code to the “MDAKit registry” which will advertise their package to the MDAnalysis community and offer continual validation and review tools to help with package maintenance. Section :ref:`sec-registry` contains more information about the MDAKit registry, including the registration process (Section :ref:`sec-registration`). Briefly, the registration process involves submitting a metadata file to the registry that contains essential information about the MDAKit, such as where the source code is provided, who the code authors are, and how to install the MDAKit. The contents of this metadata file will be reviewed both by automatic code checks and the MDAnalysis developer team before being  added to the registry. We want to highlight  that this process does not include checks on scientific validity or code health. In fact, none of the processes in this framework account for the scientific validity of the MDAKits. While members of the community are free to offer help, scientific or technical validity is beyond the scope of what is feasible with the MDAnalysis registry.
 
-Upon registration, the MDAKit will be automatically advertised to the MDAnalysis community (see Section~:ref:`sec:advertising`). In the first instance this will amount to a set of auto-generated pages which will expose the details in the metadata file provided in the registration step. Additional tags and badges will also be included which reflect the current status and health of the package. Examples include:
+Upon registration, the MDAKit will be automatically advertised to the MDAnalysis community (see Section :ref:`sec-advertising`). In the first instance this will amount to a set of auto-generated pages which will expose the details in the metadata file provided in the registration step. Additional tags and badges will also be included which reflect the current status and health of the package. Examples include:
 
 - whether or not it is compatible with the latest versions of MDAnalysis
 - what percentage of the codebase is covered by unit tests
 - what type or extent of documentation is provided
 - what Python versions are currently supported.
 
-This status information will be provided as part of checks done during the continual validation and review steps (see Sections~:ref:`sec:continualvalidation` and :ref:`sec:continualreview`) of the framework. These steps will involve a mix of regularly scheduled automatic (e.g., linters and unit test execution) checks and more infrequent manual (e.g., code reviews) processes. It is our intention that code health analysis will help developers maintain and improve their codes, as well as suitably warn potential users about issues they may encounter when using a given codebase.
+This status information will be provided as part of checks done during the continual validation and review steps (see Sections :ref:`sec-continualvalidation` and :ref:`sec-continualreview`) of the framework. These steps will involve a mix of regularly scheduled automatic (e.g., linters and unit test execution) checks and more infrequent manual (e.g., code reviews) processes. It is our intention that code health analysis will help developers maintain and improve their codes, as well as suitably warn potential users about issues they may encounter when using a given codebase.
 
-Where possible, the framework will encourage a code review process to be carried out by members of the MDAnalysis community. The aim here is to work with developers in identifying potential areas of improvements for both MDAKits and the core MDAnalysis library (see Sections~:ref:`sec:continualreview` and :ref:`sec:feedingback`). We aim to tie this process closely to the review processes of journals such as the Journal of Open Source Software :cite:`noauthor_journal_nodate`, which would help lower the barrier towards and encourage an eventual publication (Section~:ref:`sec:publication`).
+Where possible, the framework will encourage a code review process to be carried out by members of the MDAnalysis community. The aim here is to work with developers in identifying potential areas of improvements for both MDAKits and the core MDAnalysis library (see Sections :ref:`sec-continualreview` and :ref:`sec-feedingback`). We aim to tie this process closely to the review processes of journals such as the Journal of Open Source Software :cite:`noauthor_journal_nodate`, which would help lower the barrier towards and encourage an eventual publication (Section :ref:`sec-publication`).
 
-.. _`sec:definitions`:
+.. _`sec-definitions`:
+
 Defining MDAKits: best practice package features
 ------------------------------------------------
 
-Here we list requirements that we believe MDAKits should strive to fulfill in order to meet best practices in Python package usability and maintenance. To help with implementing these, a cookiecutter is provided which offers a template for potential MDAKits to follow :cite:`wang_cookiecutter_nodate`. We want to emphasize again that the aim of the MDAKit project is to encourage best practices whilst also minimizing barriers to sharing code where possible. Therefore, only a minimal set of requirements listed here as \emph{required} are necessary for MDAKits to be included in the MDAKit registry. Similarly, we do not mean to enforce the label of MDAKit on any package; the process is fully optional and the code owners may choose to associate themselves with it.
+Here we list requirements that we believe MDAKits should strive to fulfill in order to meet best practices in Python package usability and maintenance. To help with implementing these, a cookiecutter is provided which offers a template for potential MDAKits to follow :cite:`wang_cookiecutter_nodate`. We want to emphasize again that the aim of the MDAKit project is to encourage best practices whilst also minimizing barriers to sharing code where possible. Therefore, only a minimal set of requirements listed here as *required* are necessary for MDAKits to be included in the MDAKit registry. Similarly, we do not mean to enforce the label of MDAKit on any package; the process is fully optional and the code owners may choose to associate themselves with it.
 
 All MDAKits will have to implement the features on the list of **required features** in order to become registered:
 
-- Code in the package \emph{uses MDAnalysis} (:ref:`sec:usesmdanalysis`).
-- Open source code is published under an \emph{OSI approved license} (:ref:`sec:opensource`).
-- Code is \emph{versioned} and provided in an \emph{accessible version-controlled repository} (:ref:`sec:versioning`).
-- Code \emph{authors and maintainers are clearly designated} (:ref:`sec:authors`).
-- \emph{Documentation} is provided (:ref:`sec:documentation`).
-- \emph{Tests and continuous integration} are present (:ref:`sec:tests`).
+* Code in the package *uses MDAnalysis* (:ref:`sec-usesmdanalysis`).
+* Open source code is published under an *OSI approved license* (:ref:`sec-opensource`).
+* Code is *versioned* and provided in an *accessible version-controlled repository* (:ref:`sec-versioning`).
+* Code *authors and maintainers are clearly designated* (:ref:`sec-authors`).
+* *Documentation* is provided (:ref:`sec-documentation`).
+* *Tests and continuous integration* are present (:ref:`sec-tests`).
 
 The following are **highly recommended features**:
 
-- Code is \emph{installable as a standard package} (:ref:`sec:packaging`).
-- Information on \emph{bug reporting, user discussions, and community guidelines} is made available (:ref:`sec:community`).
+* Code is *installable as a standard package* (:ref:`sec-packaging`).
+* Information on *bug reporting, user discussions, and community guidelines* is made available (:ref:`sec-community`).
 
 
-  .. _`sec:usesmdanalysis`:
+.. _`sec-usesmdanalysis`:
+
 Code using MDAnalysis (required)
 ++++++++++++++++++++++++++++++++
 
 This is the base requirement of all MDAKits. The intent of the MDAKit framework is to support packages existing downstream from the MDAnalysis core library. MDAKits should therefore contain code using MDAnalysis components which are intended by the package authors to address the MDAKit’s given purpose.
 
 
-.. _`sec:opensource`:
+.. _`sec-opensource`:
+
 Open source code under an OSI approved license (required)
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -216,7 +222,8 @@ The core aim of MDAKits is to encourage the open sharing of codes to potential u
 As of writing, the MDAnalysis library is currently licensed under GPLv2+ :cite:`noauthor_gnu_nodate`. Due to limitations with this license type, we cannot currently recommend other licenses than GPLv2+ for codes importing MDAnalysis. However, we hope to relicense to a less restrictive license. In this event, MDAKits will be able to adopt a wider range of OSI approved licenses.
 
 
-.. _`sec:versioning`:
+.. _`sec-versioning`:
+
 Versioning and provision under an accessible version-controlled repository (required)
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -225,14 +232,16 @@ The ability to clearly identify changes in a codebase is crucial to enabling rep
 Beyond versioning releases, it is also crucial to be able to develop code in a sustainable and collaborative manner. The most popular way of achieving this is through the use of version control through Git :cite:`noauthor_git_nodate`. We require all MDAKits to be held in a publicly facing version controlled repository such as GitHub :cite:`github_inc_github_2022`, GitLab :cite:`gitlab_inc_gitlab_2022`, or Bitbucket :cite:`atlassian_bitbucket_2022`.
 
 
-.. _`sec:authors`:
+.. _`sec-authors`:
+
 Designated code authors and maintainers (required)
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
 In order for users to be able to contact the code owners and maintainers, all MDAKits should clearly list their authors and a means of contacting the persons responsible for maintaining the codebase. To incentivize and recognize contributors throughout the life of a project, we recommend the use of a version controlled “authors” file which lists the authors to a codebase over time.
 
 
-.. _`sec:documentation`:
+.. _`sec-documentation`:
+
 Documentation (required)
 ++++++++++++++++++++++++
 
@@ -241,7 +250,8 @@ Describing what a given code does and how to use it is a key component of open s
 For best practices, we strongly recommend using docstrings (see PEP 257 :cite:`noauthor_pep_nodate`) to document code components and using a tool such as ReadTheDocs :cite:`read_the_docs_inc_read_2022` to build, version and host documentation in a user-friendly manner. We also recommend using duecredit :cite:`halchenko_duecreditduecredit_2021` to provide the correct attributions to a given method if it has been published previously.
 
 
-.. _`sec:tests`:
+.. _`sec-tests`:
+
 Tests and continuous integration (required)
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -252,16 +262,18 @@ Ideally one should do full unit testing of the contents of a code, ensuring that
 To ensure that tests are run regularly, the recommended best practice is to implement a continuous integration pipeline that performs the tests every time new code is introduced. We encourage the use of free pipelines such as GitHub Actions :cite:`github_inc_github_2022-2` to implement continuous integration.
 
 
-.. _`sec:packaging`:
+.. _`sec-packaging`:
+
 Packaging
 +++++++++
 
-Providing a standard means of installing code as a package is important to ensure that other code can correctly link to (i.e., \mintinline{python}{import} in the case of Python) and use its contents. Whilst it can be easy to expect users to simply read a Python script, look at its required dependencies, and install them manually, this can quickly become unreasonable should the code grow beyond a single file. Additionally, the lack of clearly defined versions, including the intended Python versions, can lead to inoperable code.
+Providing a standard means of installing code as a package is important to ensure that other code can correctly link to (i.e., ``import`` in the case of Python) and use its contents. Whilst it can be easy to expect users to simply read a Python script, look at its required dependencies, and install them manually, this can quickly become unreasonable should the code grow beyond a single file. Additionally, the lack of clearly defined versions, including the intended Python versions, can lead to inoperable code.
 
 As best practices we heavily encourage the use of setuptools :cite:`noauthor_pypasetuptools_2022` or an alternative such as poetry :cite:`noauthor_poetry_nodate` for package installation. We also encourage that packages be available on common package repositories such as PyPi :cite:`noauthor_pypi_nodate` and conda-forge :cite:`conda-forge_community_conda-forge_2015`. The use of such repositories and their respective package managers can significantly lower the barrier to installing a package, enabling new users to rapidly get started using it.
 
 
-.. _`sec:community`:
+.. _`sec-community`:
+
 Bug reporting, user discussions, and community guidelines
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -270,29 +282,32 @@ To help maintain and grow the project, it is important to specify where users ca
 Key to successfully building a user community is ensuring that there are proper guidelines in place for how users will interact with a project :cite:`grossfield_how_2021`. As best practices we recommend making a code of conduct available that defines how users should interact with developers and each other within a project. It is also advised to provide information on how users can contribute to the project as part of its documentation.
 
 
-.. _`sec:registry`:
+.. _`sec-registry`:
+
 The MDAKit registry
 ~~~~~~~~~~~~~~~~~~~
 
-As defined in Section~:ref:`sec:mdakitframework`, once MDAKits are created, we encourage that they be added to the MDAKit registry. The registry not only provides a platform to advertise MDAKits to the MDAnalysis user community, but also offers tools and workflows to help packages improve and continue to be maintained. Here we describe the various processes which will occur within the registry. We note that we expect the exact details of how these processes will be implemented to evolve over time based on feedback from MDAKit developers and other members of the MDAnalysis community.
+As defined in Section :ref:`sec-mdakitframework`, once MDAKits are created, we encourage that they be added to the MDAKit registry. The registry not only provides a platform to advertise MDAKits to the MDAnalysis user community at the web page https://mdakits.mdanalysis.org/, but also offers tools and workflows to help packages improve and continue to be maintained. Here we describe the various processes which will occur within the registry. We note that we expect the exact details of how these processes will be implemented to evolve over time based on feedback from MDAKit developers and other members of the MDAnalysis community.
 
 
-.. _`sec:registrycontents`:
+.. _`sec-registrycontents`:
+
 MDAKit registry contents
 ------------------------
 
-The main aim of the registry is to hold information about MDAKits. The contents of the registry will therefore center around a list of packages and the metadata associated with each MDAKit. This metadata will take the form of two files: one containing user-provided information on the package contents (see Section~:ref:`sec:registration`), and the other a set of mostly auto-generated details indicating the code health of the package (see Section~:ref:`sec:advertising`). 
+The main aim of the registry is to hold information about MDAKits. The contents of the registry will therefore center around a list of packages and the metadata associated with each MDAKit. This metadata will take the form of two files: one containing user-provided information on the package contents (see Section :ref:`sec-registration`), and the other a set of mostly auto-generated details indicating the code health of the package (see Section :ref:`sec-advertising`). 
 
 This metadata will be used for two purposes: continuous integration testing and documentation. Continuous testing, helper methods and workflows will be used to regularly install MDAKits and run their test suite (if available) to check if they still work as intended. Should the tests fail, package maintainers will be automatically contacted and failure information will be recorded in the code health metadata to inform users. For the registry documentation, the metadata will be used to provide user-facing information about the various MDAKits in the registry, their contents, how to install them, and their current status as highlighted by continuous integration tests. The registry will also include further information and user guides on the MDAKit framework, helping developers implement the contents of this whitepaper.
 
 
-.. _`sec:registration`:
+.. _`sec-registration`:
+
 Registering MDAKits
 -------------------
 
 A key feature of the MDAKit framework is the process of adding MDAKits to the registry. As previously defined, our intent is to offer a low barrier to entry and have packages be registered early in their development cycles. This allows developers to benefit from the MDAKit registry validation and review processes early on, hopefully lowering the barrier to further improvements and encouraging early user interactions and feedback.
  
-From an MDAKit developer standpoint, the registration process involves opening a pull request against the MDAKit registry adding a new YAML file with metadata about the project. The metadata, as detailed in Listing~:ref:`fig:metadatapropkatraj`, contains information such as the MDAKit description, source code location, install instructions, how to run tests, and where to find usage documentation. Complete details about the metadata file specification will be provided in the MDAKit registry documentation.
+From an MDAKit developer standpoint, the registration process involves opening a pull request against the MDAKit registry adding a new YAML file with metadata about the project. The metadata, as detailed in Listing :ref:`fig:metadatapropkatraj`, contains information such as the MDAKit description, source code location, install instructions, how to run tests, and where to find usage documentation. Complete details about the metadata file specification will be provided in the MDAKit registry documentation.
 
 .. code-block:: yaml
    :linenos:
@@ -332,7 +347,7 @@ From an MDAKit developer standpoint, the registration process involves opening a
 
 After a pull request is opened, the MDAnalysis developers will review the contents of the submission based on the following criteria:
 
-1. If the required features for MDAKits are met (Section~:ref:`sec:definitions`), that is:
+1. If the required features for MDAKits are met (Section :ref:`sec-definitions`), that is:
    
    1. Does the MDAKit contain code using MDAnalysis?
    2. Is the MDAKit license appropriate?
@@ -347,16 +362,18 @@ After a pull request is opened, the MDAnalysis developers will review the conten
 Once the criteria are fulfilled the metadata will be merged and the MDAKit will be considered registered. Updates to the MDAKit metadata can be carried out at any time after registration by opening pull requests to change the metadata file contents.
 
 
-.. _`sec:advertising`:
+.. _`sec-advertising`:
+
 Advertising MDAKits
 -------------------
 
-Registered MDAKits will be automatically added to the registry’s public facing documentation. This involves an indexable list of entries for all registered MDAKits. Each entry will display available information from the provided metadata, e.g., what the MDAKit does, any relevant keywords, how to obtain the source code, how to install the package, and where to find relevant documentation. Alongside this information will also be a set of badges which describe the current health of the codebase, allowing users to rapidly identify which packages are currently active, and their level of code maturity. This will include information such as: which MDAnalysis library versions the package is compatible with, how much test coverage does the package have, what type of MDAnalysis API extensions are provided (e.g., using base classes such as AnalysisBase or ReaderBase), and whether integration tests are currently failing.
+Registered MDAKits will be automatically added to the registry’s public facing documentation at https://mdakits.mdanalysis.org/. This involves an indexable list of entries for all registered MDAKits. Each entry will display available information from the provided metadata, e.g., what the MDAKit does, any relevant keywords, how to obtain the source code, how to install the package, and where to find relevant documentation. Alongside this information will also be a set of badges which describe the current health of the codebase, allowing users to rapidly identify which packages are currently active, and their level of code maturity. This will include information such as: which MDAnalysis library versions the package is compatible with, how much test coverage does the package have, what type of MDAnalysis API extensions are provided (e.g., using base classes such as AnalysisBase or ReaderBase), and whether integration tests are currently failing.
 
-Information about MDAKits will be continually updated, either through automatic checks or manual additions provided by package owners updating the metadata files. As we aim for the MDAKit registry to be immutable (aside from special cases covered by Section~:ref:`sec:removal`), should an MDAKit stop being maintained, it will not be removed from the index but instead labeled as abandoned.
+Information about MDAKits will be continually updated, either through automatic checks or manual additions provided by package owners updating the metadata files. As we aim for the MDAKit registry to be immutable (aside from special cases covered by Section :ref:`sec-removal`), should an MDAKit stop being maintained, it will not be removed from the index but instead labeled as abandoned.
 
 
-.. _`sec:continualvalidation`:
+.. _`sec-continualvalidation`:
+
 Continual validation
 --------------------
 
@@ -365,7 +382,8 @@ The MDAKit registry will implement workflows to validate the code health of regi
 In the future we will hope to expand these tests to include more historical releases of the MDAKits and the MDAnalysis library, checks for different architectures (non-x86), and operating systems. We may also expand the checks to consider the cross-compatibility of MDAKits with each other, offering insights on which packages can be safely used together.
 
 
-.. _`sec:continualreview`:
+.. _`sec-continualreview`:
+
 Continual review
 ----------------
 
@@ -376,41 +394,59 @@ Instead, we aim to use a system of badges and achievements to push packages towa
 MDAKit users will also be encouraged to provide feedback, request improvements, and report bug fixes. However, this should happen outside the scope of the registry; instead, we will ask for users to use the MDAKit’s own issue tracker for these.
 
 
-.. _`sec:feedingback`:
+.. _`sec-feedingback`:
+
 Feeding back into the MDAnalysis library
 ----------------------------------------
 
 The existence of the MDAKits framework does not preclude the addition of new codes and methods to the core MDAnalysis library. The MDAKit registry, and especially the ongoing review process, will provide a platform for MDAnalysis and MDAKit developers to interact and work together to identify common goals and areas of improvements for both upstream and downstream packages. In particular, MDAnalysis developers will work with MDAKit developers to see if any popular MDAKit methods, components or other means to improve core method performance and lower the barrier to downstream package development can and should be implemented back into the core MDAnalysis library.
 
 
-.. _`sec:publication`:
+.. _`sec-publication`:
+
 Towards publication
 -------------------
 
 We have laid out a number of best practices here that we encourage MDAKits to fulfill. These essentially amount to the majority of the contribution criteria for submissions to software-focused journals such as the Journal Open Source Software (JOSS) :cite:`noauthor_journal_nodate`. In order to incentivize developers, we will heavily encourage MDAKits to consider submission to a journal such as JOSS :cite:`noauthor_journal_nodate` once they meet the required levels of best practices. To aid in this process, the MDAnalysis developers will in the first instance work with journal editors at JOSS to create a streamlined process to submit MDAKits as JOSS entries :cite:`noauthor_submitting_2018`. The details of this process are still under development.
 
 
-.. _`sec:removal`:
+.. _`sec-removal`:
+
 Raising issues, concerns, and paths to registry removal
 -------------------------------------------------------
 
 If community members (users, developers or otherwise) have concerns about an MDAKit, we primarily encourage them to raise issues on the MDAKit’s issue tracker. However, in situations where the MDAKit maintainers cannot respond, or if the concern relates to code of conduct breaches, MDAnalysis developers may step in. If an MDAKit has systemic issues with its correctness, the MDAKit may be given special annotations warning users about the issues before using the code. We generally view the MDAKit registry as a permanent record, and will avoid removing packages after registration even if they become fully obsolete. However, we reserve the right to remove packages at our discretion in specific cases, notably code of conduct breaches and violation of the GitHub terms of service :cite:`github_inc_github_2022-1`.
 
 
-.. _`sec:maintenance`:
+.. _`sec-maintenance`:
+
 Long term registry maintenance and support
 ------------------------------------------
 
 As with most MDAnalysis projects, long-term support for the MDAKit framework and especially the registry is expected to be carried out by contributors from the MDAnalysis community. Members of the MDAnalysis core development team will lead the maintenance of the registry and also be responsible for passing judgment on serious events such as code of conduct breaches. In the long term, we hope that any gains in popularity of the MDAKits framework will be accompanied by an increase in community involvement in reviews and other maintenance tasks.
 
 
-.. _`sec:conclusions`:
+Examples of MDAKits
+~~~~~~~~~~~~~~~~~~~
+
+The web frontend of the registry (Fig. :ref:`fig:registryfrontend`) provides a searchable database of packages.
+At the moment, seven MDAKits are registered that already showcase the breadth of specialized tools for the analysis of biomolecular simulations.
+For example, *mdacli* provides a commandline interface to analysis tools in MDAnalysis itself. *openmm-mdanalysis-reporter* enhances the interoperability with the popular OpenMM MD engine. *hole2-mdakit* interfaces with the legacy HOLE2 program for the analysis of pores and tunnels in proteins such as ion channels :cite:`hole_TODO, Stelzl2014_TODO`. The *lipyds* package provides a suite of tools for the analysis of biological membranes in simulations :cite:`lipyds_TODO`. *ProLIF* quantitatively analyzes the interactions between small molecules such as drugs and biomolecules (protein, nucleic acids) :cite:`PROFLIF_TODO`.
+
+.. figure:: figures/mdakit_registry.png
+
+   Web front end of the searchable MDAKit registry with registered MDAKits. Badges indicate code health based on continuous validation against the latest release and development version of the MDAnalysis library.
+   :label:`fig:registryfrontend`
+
+
+.. _`sec-conclusions`:
+
 Conclusions
 ~~~~~~~~~~~
 
 In this document we outline our plans to implement an MDAnalysis framework, termed MDAKits, to assist and incentivize the creation of FAIR-compliant packages that use and extend MDAnalysis. We describe the current state of scientific code, which is typically published either in independent repositories of varying quality, or as additions to a large, monolithic package. We summarize the limitations of each approach that result in code that falls short of FAIR principles, or may end up impractical to sustain as a long-term strategy. We propose the MDAKits framework as an alternative solution to support developers in creating new packages, guiding them through the process of achieving best practices and FAIR compliance.
 
-In Section~:ref:`sec:mdakitframework` we lay out the aims and structure of an MDAKit, summarizing the minimal and optimal requirements that we think necessary to build sustainable, reusable software. These include publishing code under a suitable open-source license, the use of version control, comprehensive documentation, thorough unit tests, and packaging the software following modern best practices. In Section~:ref:`sec:definitions` we outline our vision for the MDAKit registry, a public facing repository that promotes MDAKits to the MDAnalysis community. The MDAKit registry will offer regular checks and reviews in order to help improve and maintain the listed MDAKits. We describe a prospective workflow that begins from the initial registration of MDAKits and reaches as far as eventual publication in software-focused journals such as JOSS.
+In Section :ref:`sec-mdakitframework` we lay out the aims and structure of an MDAKit, summarizing the minimal and optimal requirements that we think necessary to build sustainable, reusable software. These include publishing code under a suitable open-source license, the use of version control, comprehensive documentation, thorough unit tests, and packaging the software following modern best practices. In Section :ref:`sec-definitions` we outline our vision for the MDAKit registry, a public facing repository that promotes MDAKits to the MDAnalysis community. The MDAKit registry will offer regular checks and reviews in order to help improve and maintain the listed MDAKits. We describe a prospective workflow that begins from the initial registration of MDAKits and reaches as far as eventual publication in software-focused journals such as JOSS.
 
 This document is just the first step and broad guide to our vision of developing a rich, diverse software ecosystem, and we are still in the early stages of implementing MDAKits. While we expect that we may need to revisit and refine our strategy to best serve the needs of the community, we believe that the fundamental framework outlined here will bring great benefit to the software written and used by scientists, and thereby empower transparent and reproducible research. 
 
