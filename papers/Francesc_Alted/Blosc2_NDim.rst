@@ -32,7 +32,7 @@ Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset
 
     The Blosc2 NDim layer enables the creation and reading of n-dimensional datasets in an extremely efficient manner. This is due to a completely general n-dim 2-level partitioning, which allows for slicing and dicing of arbitrary large (and compressed) data in a more fine-grained way. Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels, making compression more efficient.
 
-    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, stored in a 3D array with 0.7 billion entries. Each entry contains the magnitude of the stars contained in a cube of 1 light year. The total size of the dataset is 2.9 TB, but when compressed, it is just 10 GB, making it easy to fit into the memory of modern computers for processing.
+    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that in a sphere of radius of 10 thousand light (centered in the Gaia telescope), and that includes 0.7 billion stars. The total size of the dataset is 3.7 TB, but when compressed, it is reduced to just 10 GB, making it easy to fit into the memory of modern computers for processing.
 
 .. class:: keywords
 
@@ -59,7 +59,7 @@ Blosc2 is the latest version of the Blosc 1.x series, which is used in many impo
 The Gaia dataset
 ----------------
 
-The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates and magnitudes of 1.4 billion stars. When stored as a regular binary table, the dataset is 22 GB in size. However, we converted this tabular dataset into a 3D array of shape (20_000, 20_000, 2_000), where each cell represents a 1 cubic light year and contains the magnitude of every star inside it. This cube contains 700 million stars, which is a significant portion of the Gaia catalog. The magnitude is stored as a float32, and the size of the dataset is 3.6 TB. However, by using compression via Blosc2, we can reduce the size to 10 GB. This is because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost entirely.
+The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates and magnitudes of 1.4 billion stars. When stored as a regular binary table, the dataset is 22 GB in size. However, we converted this tabular dataset into a 3D array of shape (10_000, 10_000, 10_000), where each cell represents a cube of 2 light year per side, and contains the magnitude of every star inside it (provided that the average distance between stars in the Milky ways is about 5 light years, very few cells will contain more than 1 star). This cube contains 700 million stars, which is a significant portion of the Gaia catalog. The magnitude is stored as a float32, and the size of the dataset is 3.7 TB. However, by using compression via Blosc2, we can reduce the size to 10 GB. This is because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost entirely.
 
 .. figure:: 3d-view-milkyway.png
    :scale: 25%
@@ -129,14 +129,69 @@ Automatic tuning of compression parameters
 
 Finding the right compression parameters for your data is probably the most difficult part of using a compression library. Which combination of code and filter would provide the best compression ratio? Which one would provide the best compression/decompression speed?
 
-BTune is a dynamic plugin for Blosc2 that helps you find the optimal combination of compression parameters for your needs. It achieves this by training a neural network on the most representative datasets. The neural network is trained on a variety of datasets, and it is capable of predicting the best combination of codec and filters for a given dataset. See Figure :ref:`predicted-dparams-example` for an example.
+BTune is an AI tool for Blosc2 that helps you find the optimal combination of compression parameters to suit your needs. It uses a neural network that is trained on the most representative datasets to be compressed. This allows it to predict the best compression parameters based on a given balance between compression ratio and compression/decompression speed.
 
-.. figure:: predicted-dparams-example.png
-   :scale: 23%
+For example, in Table :ref:`predicted-dparams-example` there are the results for the predicted compression parameters tuning for decompression speed.  Curiously, fast decompression does not necessarily imply fast compression.  This table is provided to the user so that he/she can choose the best balance value for his/her needs.
 
-   BTune predicts the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (where 0 means favoring speed only, and 1 means favoring compression ratio only). BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the more predicted one when the specified balance is optimized for compression ratio. Based on this table, the user can decide which balance value is preferred. :label:`predicted-dparams-example`
+.. table:: BTune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favoring speed only, and 1 means favoring compression ratio only). It can be seen that BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimizing for the compression ratio. :label:`predicted-dparams-example`
 
-Once the neural network has been trained, it can be used to automatically adjust compression parameters for a given dataset. Blosc2 provides a simple method for this using the BTune plugin: simply set the :code:`BTUNE_BALANCE` environment variable to a value between 0 and 1 (where 0 means prioritize speed and 1 means prioritize compression ratio). Then, when creating a new Blosc2 data container, the compression parameters will be automatically tuned for your data. This is a straightforward way to obtain the best compression/decompression speed and/or ratio for your data.
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | Balance | Most predicted                 |  Mean cratio | Mean cspeed (GB/s) | Mean dspeed (GB/s) |
+   +=========+================================+==============+====================+====================+
+   | 0.0     | blosclz-shuffle-split-5        | 2.09         | 14.47              | 48.93              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.1     | blosclz-shuffle-split-5        | 2.09         | 14.47              | 48.93              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.2     | blosclz-shuffle-split-5        | 2.09         | 14.47              | 48.93              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.3     | blosclz-shuffle-split-5        | 2.09         | 14.47              | 48.93              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.4     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.5     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.6     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.7     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.8     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.9     | zstd-shuffle-bytedelta-split-1 | 3.3          | 17.04              | 21.65              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 1.0     | zstd-shuffle-bytedelta-split-9 | 3.31         | 0.07               | 11.4               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+
+On the other hand, in Table :ref:`predicted-cparams-example`, we can see an example of predicted compression parameter tuning for compression speed and ratio on a different dataset.
+
+.. table:: BTune prediction of the best compression parameters for compression speed, depending on a balance value.  It can be seen that LZ4 + Bitshuffle is most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimize for the compression ratio. :label:`predicted-cparams-example`
+
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | Balance | Most predicted                 |  Mean cratio | Mean cspeed (GB/s) | Mean dspeed (GB/s) |
+   +=========+================================+==============+====================+====================+
+   | 0.0     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.1     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.2     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.3     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.4     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.5     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.6     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.7     | lz4-bitshuffle-split-5         | 3.41         | 21.78              | 32.0               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.8     | zstd-shuffle-bytedelta-split-1 | 3.98         | 9.41               | 18.77              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 0.9     | zstd-shuffle-bytedelta-split-1 | 3.98         | 9.41               | 18.77              |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+   | 1.0     | zstd-shuffle-bytedelta-split-9 | 4.06         | 0.15               | 14.1               |
+   +---------+--------------------------------+--------------+--------------------+--------------------+
+
+After training the neural network, the BTune plugin can automatically tune the compression parameters for a given dataset. During inference, you can set the preferred balance by setting the :code:`BTUNE_BALANCE` environment variable to a floating point value between 0 and 1. A value of 0 favors speed only, while a value of 1 favors compression ratio only. This setting automatically adjusts the compression parameters to your data whenever a new Blosc2 data container is created.
 
 Conclusions
 -----------
