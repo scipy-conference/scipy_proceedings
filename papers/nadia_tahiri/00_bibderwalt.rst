@@ -337,11 +337,12 @@ To identify and filter the appropriate datasets for further phylogeographic anal
 
 The aPhyloGeo-Covid analysis workflow generates an dataframe at the end of the analysis, which includes of the RF distance between the phylogenetic tree of that window and the reference tree of a particular environmental feature. Figure :ref:`fig3` presents the distribution of the normalized RF distance resulting from the phylogeographic analysis of the input dataset. Those windows with low RF distance and relatively higher average bootstrap value warrant further research. As shown in Figure :ref:`fig3`, RF distance varies from 87.82% to 100%. Among the six climatic factors involved in the analysis, the sliding window region of lower RF distance was detected only in the integrated analysis with precipitation. In this exploration, a scanning approach was employed to analyze sequence information using a large window size of 100 residues and a small step size of 3 residues. Among the identified low RF distance regions, particular attention should be given to regions 792-940. Notably, a consistently low RF distance value of 81.82% was observed across all 17 windows spanning positions 792 to 840. Additionally, according to SWISS-MODEL :cite:`waterhouse2018swiss`, the previous analysis confirms the presence of a specific region of Nsp3 called Ubl1 (110 residues, position 819-929) within our detected sequence region.
 
-
    
 .. figure:: figure3.png
 
    TO BE CONTINUE :label:`fig3`
+   
+Ni et al. (2023) :cite:`ni2023structural` revealed that the Ubl1 protein of SARS-CoV-2 can compete with RNA molecules to bind to the N protein, resulting in the dissociation of viral ribonucleoprotein complexes. Their research team successfully determined the crystal structure of the N-terminal domain (NTD) of the N protein in complex with the ubiquitin-like domain 1 (Ubl1) of Nsp3 from the SARS-CoV-2 virus, with a resolution of 2.6 Å. Based on these findings, they propose a model that explains how the N protein binding to the Ubl1 domain of Nsp3 leads to the dissociation of viral ribonucleoprotein complexes :cite:`ni2023structural`. Our phylogeography-based exploration pointed to a relatively strong correlation between mutations in the Ubl1 protein and precipitation. As a reproducible phylogeographic platform, aPhyloGeo-Covid aim to provides the possibility to expand the number of samples for further study and makes the analysis results comparable. 
 
 
 
