@@ -95,7 +95,7 @@ The internal structure of Emukit reflects these abstractions to ensure that fund
 
 \textbf{User Function}. This is the component that represents the objective function. It can be evaluated by the user, or it can be passed into the loop and evaluated by Emukit.
 
-\textbf{Model Updater}. The \texttt{ModelUpdater} class updates the model with new training data after a new point is observed and optimises any hyper-parameters of the model. It can decide whether hyper-parameters need updating based on some internal logic.
+\textbf{Model Updater}. The \texttt{ModelUpdater} class updates the model with new training data after a new point is observed and optimises any hyperparameters of the model. It can decide whether hyperparameters need updating based on some internal logic.
 
 \textbf{Stopping Condition}. The \texttt{StoppingCondition} class chooses when the decision making loop should stop collecting points. The most commonly used approach is to stop when a set number of iterations has been reached.
 
@@ -131,7 +131,7 @@ These are the core components Emukit defines. Specific methods can also define a
 \section{Usage overview}\label{sec:usage}
 This section describes Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design and multi-fidelity emulation. Unless stated otherwise, we assume that some initial data (an initial design of reasonable size with corresponding evaluations of the user function) is already defined and stored in the variables \texttt{X} (inputs) and \texttt{Y} (values). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude import lines for brevity.
 
-\subsection{Standard methods and models wrapping}
+\subsection{Standard methods and model wrapping}
 
 Interfaces for Bayesian optimisation and experimental design are the most straighforward ways to use the library. Both methods require the user to define a model and wrap it in the Emukit's model wrapper. An input space also has to be defined using Emukit's classes. The choice of acquisition function is optional, as reasonable defaults are provided. High level loop objects allow the user to execute the decision making loop and access its properties.
 
@@ -288,7 +288,7 @@ The Python ecosystem is rich with powerful scientific packages, including those 
 
 In particular, \emph{Bayesian optimisation} enjoys a wide selection of tools and frameworks. Spearmint \cite{snoek2012practical} and GPyOpt \cite{gpyopt2016} are among the first Python packages for Bayesian optimisation, the latter being an inspiration for the first release of Emukit. BoTorch \cite{balandat2020botorch} is a popular library for Bayesian optimisation based on PyTorch. Similarly, Trieste \cite{picheny2023trieste} also focuses on Bayesian optimisation but uses Tensorflow as a backend. More options, such as pyGPGO \cite{jimenez2017pygpgo}, scikit-optimize \cite{louppe2017bayesian}, RoBO \cite{klein-bayesopt17}, are also available.
 
-For \emph{Bayesian quadrature} and \emph{Bayesian experimental design} the choice of frameworks is more scarce. Namely, bayesquad \cite{Charles2013} appears to be another Python package for Bayesian quadrature. The Python library ProbNum \cite{Wenger21} supports a variety of Bayesian quadrature methods, but it's lack of hyper-parameter tuning capability reduces its practical relevance significantly in its current form. Optbayesexpt \cite{mcmichael2021optbayesexpt} and NEXTorch \cite{wang2021nextorch} provide Bayesian experimental design functionality adopted for their respective fields. Elements of experimental design can also be found in Trieste \cite{picheny2023trieste}.
+For \emph{Bayesian quadrature} and \emph{Bayesian experimental design} the choice of frameworks is more scarce. Namely, bayesquad \cite{Charles2013} appears to be another Python package for Bayesian quadrature. The Python library ProbNum \cite{Wenger21} supports a variety of Bayesian quadrature methods, but it's lack of hyperparameter tuning capability reduces its practical relevance significantly in its current form. Optbayesexpt \cite{mcmichael2021optbayesexpt} and NEXTorch \cite{wang2021nextorch} provide Bayesian experimental design functionality adopted for their respective fields. Elements of experimental design can also be found in Trieste \cite{picheny2023trieste}.
 
 The key difference between Emukit and the mentioned libraries is the fact that Emukit does not dictate a particular modelling framework, allowing for flexibility in the choice of computational backends. In addition, Emukit does not focus on a single method and provides a common core set of abstractions for optimisation, quadrature and experimental design. Emukit provides a unique way of using the same model backend for all tasks, which increases consistency, reduces implementation and computing overheads.
 
