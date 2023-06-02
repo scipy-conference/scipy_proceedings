@@ -63,26 +63,26 @@ Discussion
   These services have the advantage of providing access to computer hardware and software.
   These services can lower barriers for those labs that have limited access to computer hardware or that have trouble with installing software.
   Many of these services supply disk spaces and access to CPUs, GPUs, and sometimes TPUs.
-  Access to basic services is often free with additional services, computing power, and disk space being available for a modest fee. 
+  Access to basic services is often free with additional services, computing power, and disk space being available for a modest fee.
   In principle, consumer computers could be used as an interface for doing all manner of crystallographic computing on the cloud.
 ..
 
 
 What is new
 *************
-..
-  We report a set of code template libraries for doing biomolecular crystallographic computing in Jupyter and on Colab.
-  These template libraries only need to be installed once because they persist between logins.
-  These templates include the code for installing the software required for crystallographic computing.
-  These installation templates save time because the installation process involves as many as seven operations that would be difficult to remember.
-  Once the user adds the installation code to the top of a given notebook, the user only needs to rerun these blocks of code upon logging into Colab to be able to reinstall the software.
-  The user can modify the installation templates to install the software on their local machines.
-  Examples of such adaptations are provided on a dedicated GitHub webpage.
-  The template libraries presented here lower an important barrier to the use of Colab by those interested in crystallographic computing on the cloud.
-..
+
+We report a set of code template libraries for doing biomolecular crystallographic computing in Jupyter.
+These template libraries only need to be installed once because they persist between logins.
+These templates include the code for installing the software required for crystallographic computing.
+These installation templates save time because the installation process involves as many as seven operations that would be difficult to remember.
+Once the user adds the installation code to the top of a given notebook, the user only needs to rerun these blocks of code upon logging into Colab to be able to reinstall the software.
+The user can modify the installation templates to install the software on their local machines.
+Examples of such adaptations are provided on a dedicated GitHub web page.
+The template libraries presented here lower an important barrier to the use of Colab by those interested in crystallographic computing on the cloud.
+
 
 Relation to other work with snippet libraries
-***************************************************
+************************************************
 
 
 To the best of our knowledge, we are the first to provide snippet libraries for crystallographic computing.
@@ -109,7 +109,7 @@ We offer a variant library that inserts a commented out copy of the code that ha
 
 
 Opportunities for Interoperability
-**************************************
+************************************
 
 The set of template libraries can encourage synergistic interoperability between software packages supported by the snippet libraries.
 That is the development of notebooks that use two or more software packages and even programming languages.
