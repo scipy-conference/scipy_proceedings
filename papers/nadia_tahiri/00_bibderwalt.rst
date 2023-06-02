@@ -293,8 +293,12 @@ These parameters were associated with the node of analysis and stored as propert
    
    The networks of one analysis experiment :label:`fig2`
 
-
-The aPhyloGeo-Covid analysis workflow generates an dataframe at the end of the analysis, which includes of the RF distance between the phylogenetic tree of that window and the reference tree of a particular environmental feature. Figure :ref:`fig3` presents the distribution of the normalized RF distance resulting from the phylogeographic analysis of the input dataset. Those windows with low RF distance and relatively higher average bootstrap value warrant further research. As shown in Figure :ref:`fig3`, RF distance varies from 87.82% to 100%. Among the six climatic factors involved in the analysis, the sliding window region of lower RF distance was detected only in the integrated analysis with precipitation. In this exploration, a scanning approach was employed to analyze sequence information using a large window size of 100 residues and a small step size of 3 residues. Among the identified low RF distance regions, particular attention should be given to regions 792-940. Notably, a consistently low RF distance value of 81.82% was observed across all 17 windows spanning positions 792 to 840. Additionally, according to SWISS-MODEL :cite:`waterhouse2018swiss`, the previous analysis confirms the presence of a specific region of Nsp3 called Ubl1 (110 residues, position 819-929) within our detected sequence region.
+At the end of the aPhyloGeo-Covid analysis workflow, a table was generated containing the RF distance between the phylogenetic tree of that window and the reference tree of a particular environmental feature. 
+The distribution of normalized RF distances resulting from the phylogeographic analysis of the input dataset is presented in Figure :ref:`fig3`. 
+Windows exhibiting relatively lower RF distances merit further investigation. As illustrated in Figure :ref:`fig3`, the RF distance range from 87.82% to 100%. Among the six climatic factors involved in the analysis, the sliding window region with the lower RF distance was exclusively identified in the integrated analysis involving precipitation.  
+For this exploration, a scanning approach was employed, utilizing a window size of 100 residues and a step size of 3 residues for sequence analysis. 
+Within the regions identified with low RF distance, special attention should be given to regions 792-940. Notably, a consistently low RF distance value of 81.82% was observed across all 17 windows spanning positions from 792 to 840. 
+Furthermore, in accordance with SWISS-MODEL :cite:`waterhouse2018swiss`, the previous research validates the presence of a specific region of Nsp3 called Ubl1 (110 residues, position 819-929) within the identified sequence region.
 
    
 .. figure:: figure3.png
