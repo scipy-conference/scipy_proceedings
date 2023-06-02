@@ -1,17 +1,13 @@
 % macros for comments
 \newcommand{\maren}[1]{{\color{cyan} \textbf{[Maren: #1]}}}
 \newcommand{\andrei}[1]{{\color{red} \textbf{[Andrei: #1]}}}
-\newcommand{\rev}[1]{{\color{blue} \textbf{#1}}}
 
 \section{Introduction}\label{introduction}
-
-\maren{we still have about 2 pages of space. Anything else we want to add? There is ample space for diagrams/figures/graphs if we wish to add some (for the more visual readers).}
 
 Data selection is a major challenge in supervised machine learning (ML). Quite often when data is abundant, it is collected prior to the training process and provided statically, meaning that the machine learning model has no influence on the data collection process. However, if data is expensive and scarce the performance of a model trained on a static dataset can be suboptimal or even poor. In those cases, it is beneficial to carefully select the dataset such that, for example, it is maximally informative under the ML model to achieve the task at hand. This branch of ML is generally referred to as \emph{active learning} \cite{Settles2009} and has attracted attention in various sub-fields such as \emph{experimental design} (the task of predicting an unknown function value from its input), \emph{global optimisation} (guessing the global minimiser of a function) and \emph{integration} (guessing the integral of a function).
 The Emukit Python library, at core, augments existing machine learning models with active data selection functionality.
 
-Tasks where data is scarce usually involve a higher degree of expert knowledge on the modeling side since prior information, such as mechanical or physical knowledge about the system that is being modeled, is aimed to be incorporated in the hope to get physically meaningful and more accurate predictions on the task at hand. Not seldom these models are of probabilistic nature and can provide a degree of uncertainty of their prediction to counteract the lack of data \cite{RasmussenWilliams2006, Ho1995, MacKay1991APB, Bernardo1998}. Such a model is often referred to as a \emph{statistical emulator}\footnote{The reader might be familiar with the term `emulator' in computing context, where it is understood as a hardware or software that makes one system behave like another. `(Statistical) emulator' we refer to throughout this paper is an unrelated, albeit similar, term from the machine learning literature.}, which is a machine learning model that can be used in place of an expensive computer simulation (a \emph{simulator}) or real world experiment, and is trained on input-output pairs of the latter. \cite{Kennedy2000, Kennedy2001, Conti2009, Conti2010}. Concretely, the simulator could be an involved stochastic weather simulation, and the emulator a predictive machine learning model trained on expensive input-output pairs of the weather simulation. Alternatively, the emulator may model a real world process. The emulator now can be used in place of the original data source to obtain fast predictions when needed, or to compute auxiliary quantities that cannot be obtained from the data source.
-\andrei{A lot of time we emulate not a simulator but a process itself. Perhaps note that there is not always a simulator?}\maren{yes, good point. Changed the text a bit to accommodate this.}
+Tasks where data is scarce usually involve a higher degree of expert knowledge on the modeling side since prior information, such as mechanical or physical knowledge about the system that is being modeled, is aimed to be incorporated in the hope to get physically meaningful and more accurate predictions on the task at hand. Not seldom these models are of probabilistic nature and can provide a degree of uncertainty of their prediction to counteract the lack of data \cite{RasmussenWilliams2006, Ho1995, MacKay1991APB, Smith1998UncertaintyAA}. Such a model is often referred to as a \emph{statistical emulator}\footnote{The reader might be familiar with the term `emulator' in computing context, where it is understood as a hardware or software that makes one system behave like another. `(Statistical) emulator' we refer to throughout this paper is an unrelated, albeit similar, term from the machine learning literature.}, which is a machine learning model that can be used in place of an expensive computer simulation (a \emph{simulator}) or real world experiment, and is trained on input-output pairs of the latter. \cite{Kennedy2000, Kennedy2001, Conti2009, Conti2010}. Concretely, the simulator could be an involved stochastic weather simulation, and the emulator a predictive machine learning model trained on expensive input-output pairs of the weather simulation. Alternatively, the emulator may model a real world process. The emulator now can be used in place of the original data source to obtain fast predictions when needed, or to compute auxiliary quantities that cannot be obtained from the data source.
 
 Once trained, the performance of the emulator (the ML model), as mentioned, is greatly dependent on the informativity of the data (the simulation results), especially if it is expensive and scarce, and hence active data selection is often desirable for such models. A unique feature of Emukit is that it enables the user to wrap custom emulator models into an interface provided by Emukit and, by doing so, use them in Emukit's decision loop. As such, Emukit `actifies' (makes active) the data-acquisition of custom models written in custom backends that only connect via an interface to Emukit. This may i)~save users time and money to write their own active learning loop, ii)~or to rewrite their custom model in existing decision loop packages with a fixed backend, and iii)~improve performance of the model as it is trained on more informative data.
 
@@ -32,8 +28,6 @@ Throughout the text, `tasks' will be referred to in an abstract sense, without a
 In the remainder of text, we will use the terms `ML model' and `emulator' interchangeably. The `simulator' or `data source' will later also be referred to as `user function', `black-box function' or `objective function'.
 
 \section{Background on probabilistic active methods}\label{sec:background}
-
-\maren{I changed the section title because we do not seem to introduce the term `UQ' anywhere. Feel free to adjust it though.}
 
 This section gives an overview of the machine learning methods provided by Emukit.
 Emukit mainly contains three high-level methods: Bayesian optimisation (BO), Bayesian quadrature (BQ) and experimental design (ED).
@@ -71,7 +65,7 @@ Decision making with statistical emulation consists of three parts. All starts w
 
 At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and Bayesian quadrature -- are all iterative decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm~\ref{alg:emukit-loop}).
 
-The common goal of all these methods is to learn a behavior of an \textit{objective function} - a black box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. A mechanism employed to propose new data points to evaluate the objective at is called an \textit{acquisition function}. \maren{Nitpicky: The mechanism would be called the (active learning) policy, i.e., the maximization of an acquisition function, which in Emukit's case is the point calculator. The acquisition function is not a mechanism.} Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met. 
+The common goal of all these methods is to learn a behavior of an \textit{objective function} - a black box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. A mechanism employed to propose new data points to evaluate the objective at is called a \emph{policy} that maximises an \textit{acquisition function}. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met. 
 
 \begin{algorithm}[H]
   \caption{Decision making loop in Emukit.}
@@ -93,17 +87,15 @@ The internal structure of Emukit reflects these abstractions to ensure that fund
 
 \textbf{Model}. All Emukit loops need a probabilistic model. Emukit does not provide functionality to build models as there are already good modelling frameworks available in Python. Instead, it provides a way of interfacing third part modelling libraries. The interfacing mechanism consists of two parts: interfaces and wrappers. \textit{Interfaces} define functionality required from a model. Different models and modelling frameworks will provide different functionality. For instance a Gaussian process will usually have derivatives of the predictions available but random forests will not. These different functionalities are represented by a set of interfaces which a model implements. The basic interface that all models must implement is \texttt{IModel}, which implements functionality to make predictions and update the model but a model may implement any number of other interfaces such as \texttt{IDifferentiable} which indicates a model has prediction derivatives available. Interfaces can also be defined by other components of the decision making loop to indicate that a certain functionality is required from the model. For example, \texttt{ICalculateVarianceReduction} defines methods the user needs to implement with their model to use it with the variance reduction technique. \texttt{Model wrappers} adopt third-party models and implement one or more of the interfaces using specific modelling framework. Emukit provides a wrapper for using a model created with \texttt{GPy} \cite{gpy2014}.
 
-\maren{I find the interface capability of Emukit quite unique and a real selling point. It somehow gets lost a bit in between the lines. Shall we make a separate section called `model interfaces' or `custom backends' or sth similar with an example and simply mention here briefly that models are big interfaced?} \andrei{This is now mentioned a lot in the next section, where we show wrapper examples, and in applications where we stress that Emukit was chosen for this feature. Do you still think we need to separate this a bit more here?}\maren{I think it's good now, thanks!}
-
 \textbf{Candidate Point Calculator}. This entity drives the decision on which point(s) to evaluate next. The simplest implementation provided out of the box, \texttt{SequentialPointCalculator}, collects one point at a time by finding where the acquisition is at a maximum by applying the acquisition optimiser to the acquisition function. More complex implementations are possible, for example to enable batches of points to be collected so that the user function can be evaluated in parallel.
 
 \textbf{Acquisition}. The acquisition is a function defined on the parameter space that produces continuous values. It represents a heuristic quantification of how valuable collecting a future point might be, and produces continuous values. It is used by the candidate point calculator to decide which point(s) to collect next. Acquisition functions balance exploration and explotation of the decision making process.
 
-\textbf{Acquisition Optimizer}. The \texttt{AcquisitionOptimizer} optimizes the acquisition function to find the point at which the acquisition is at a maximum. If available, the optimizer can use the acquisition function gradients. Otherwise, it will either estimate the gradients numerically, or use a gradient free optimisation.
+\textbf{Acquisition Optimiser}. The \texttt{AcquisitionOptimizer} optimises the acquisition function to find the point at which the acquisition is at a maximum. If available, the optimiser can use the acquisition function gradients. Otherwise, it will either estimate the gradients numerically, or use a gradient free optimisation.
 
 \textbf{User Function}. This is the component that represents the objective function. It can be evaluated by the user, or it can be passed into the loop and evaluated by Emukit.
 
-\textbf{Model Updater}. The \texttt{ModelUpdater} class updates the model with new training data after a new point is observed and optimizes any hyper-parameters of the model. It can decide whether hyper-parameters need updating based on some internal logic.
+\textbf{Model Updater}. The \texttt{ModelUpdater} class updates the model with new training data after a new point is observed and optimises any hyper-parameters of the model. It can decide whether hyper-parameters need updating based on some internal logic.
 
 \textbf{Stopping Condition}. The \texttt{StoppingCondition} class chooses when the decision making loop should stop collecting points. The most commonly used example is to stop when a set number of iterations has been reached.
 
@@ -138,8 +130,6 @@ These are the core components Emukit defines. Specific methods can also define a
 
 \section{Usage overview}\label{sec:usage}
 This section describes Emukit's high level APIs for all main functions of the package: Bayesian optimisation, Bayesian quadrature, experimental design and multi-fidelity emulation. Unless stated otherwise, we assume that some initial data (an initial design of reasonable size with corresponding evaluations of the user function) is already defined and stored in the variables \texttt{X} (inputs) and \texttt{Y} (values). We use GPy \cite{gpy2014} in the code snippets below for modelling, and exclude import lines for brevity.
-
-\andrei{Ok, understood, let them stay. I've udpated the section headings a bit to make them less flashy}\maren{looks good!}
 
 \subsection{Standard methods and models wrapping}
 
@@ -298,7 +288,7 @@ The Python ecosystem is rich with powerful scientific packages, including those 
 
 In particular, \emph{Bayesian optimisation} enjoys a wide selection of tools and frameworks. Spearmint \cite{snoek2012practical} and GPyOpt \cite{gpyopt2016} are among the first Python packages for Bayesian optimisation, the latter being an inspiration for the first release of Emukit. BoTorch \cite{balandat2020botorch} is a popular library for Bayesian optimisation based on PyTorch. Similarly, Trieste \cite{picheny2023trieste} also focuses on Bayesian optimisation but uses Tensorflow as a backend. More options, such as pyGPGO \cite{jimenez2017pygpgo}, scikit-optimize \cite{louppe2017bayesian}, RoBO \cite{klein-bayesopt17}, are also available.
 
-For \emph{Bayesian quadrature} and \emph{Bayesian experimental design} the choice of frameworks is more scarce. Namely, bayesquad \cite{Charles2013} \maren{removed `to the best of our knowledge'. Some authors seem to use that phrase but it is generally discouraged. I made the sentence a bit softer instead.} appears to be another Python package for Bayesian quadrature. The Python library ProbNum \cite{Wenger21} supports a variety of Bayesian quadrature methods, but it's lack of hyper-parameter tuning capability reduces its practical relevance significantly in its current form. Optbayesexpt \cite{mcmichael2021optbayesexpt} and NEXTorch \cite{wang2021nextorch} provide Bayesian experimental design functionality adopted for their respective fields. Elements of experimental design can also be found in Trieste \cite{picheny2023trieste}.
+For \emph{Bayesian quadrature} and \emph{Bayesian experimental design} the choice of frameworks is more scarce. Namely, bayesquad \cite{Charles2013} appears to be another Python package for Bayesian quadrature. The Python library ProbNum \cite{Wenger21} supports a variety of Bayesian quadrature methods, but it's lack of hyper-parameter tuning capability reduces its practical relevance significantly in its current form. Optbayesexpt \cite{mcmichael2021optbayesexpt} and NEXTorch \cite{wang2021nextorch} provide Bayesian experimental design functionality adopted for their respective fields. Elements of experimental design can also be found in Trieste \cite{picheny2023trieste}.
 
 The key difference between Emukit and the mentioned libraries is the fact that Emukit does not dictate a particular modelling framework, allowing for flexibility in the choice of computational backends. In addition, Emukit does not focus on a snigle method and provides a common core set of abstractions for optimisation, quadrature and experimental design. Emukit provides a unique way of using the same model backend for all tasks, which increases consistency, reduces implementation and computing overheads.
 
@@ -324,22 +314,3 @@ We invite researchers and enthusiasts from any scientific or industrial domain t
 AP and NL acknowledge the support from the Engineering and Physical Sciences Research Council (EPSRC) and the Alan Turing Institute under grant EP/V030302/1. MM gratefully acknowledges financial support by the European Research Council through ERC StG Action 757275 / PANAMA; the DFG Cluster of Excellence “Machine Learning - New Perspectives for Science”, EXC 2064/1, project number 390727645; the German Federal Ministry of Education and Research (BMBF) through the T\"{u}bingen AI Center (FKZ: 01IS18039A); and funds from the Ministry of Science, Research and Arts of the State of Baden-W\"{u}rttemberg.
 
 We are thankful to every community member for discussions, comments, bug reports, pull requests, as well as everyone who used the library in their work, study or research. The full list of people who contributed code to Emukit can be found at \url{https://github.com/EmuKit/emukit/graphs/contributors}.
-
-
-\maren{final todo's before submitting:
-  \begin{itemize}
-    \item unify to UK spelling: optimiz(s)ation, minimiz(s)er, ...
-    \item add citations where missing.
-    \item unify macros and spelling: decision making, Emukit
-    \item check if references compile correctly and uniformly (e.g., check if first names are handled correctly, ...)
-    \item Section referencing does not seem to work.
-  \end{itemize}
-}
-\andrei{thoughts:
-\begin{itemize}
-    \item we mostly use UK in the docs. let's roll with that \maren{sounds good}
-    \item i can help to some extent with this
-    \item "decision making", "Emukit". are there more? \maren{not sure, let's add them to the list above if we find more}
-    \item that's weird! shall we raise this with the proceedings repo? \maren{If you have time for it, sure. There are no section numbers though which complicates things a bit.}
-  \end{itemize}
-}
