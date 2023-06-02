@@ -329,8 +329,6 @@ To further enhance aPhyloGeo-Covid, several potential avenues for improvement ca
 
 3.	To meet the increasing user demands and accommodate larger datasets, prioritizing scalability and efficiency is crucial in the development of aPhyloGeo-Covid. Enhancing scalability and efficiency will enable the platform to handle substantial volumes of data while maintaining optimal performance. This capability is vital for researchers and public health practitioners, as it ensures fast and reliable analyses, even as the data continues to grow. By ensuring scalability and efficiency, aPhyloGeo-Covid can effectively support decision-making processes and provide valuable insights into the spatial spread and evolution of SARS-CoV-2.
 
-In summary, as a database-driven network of analyses platform, aPhyloGeo-Covid forms an open academic platform that facilitates communication, collaboration, and knowledge sharing. By providing access to diverse results and encouraging interaction among researchers, the platform strengthens the scientific community and contributes to the advancement of research in the field of phylogeography.
-
 
 
 Acknowledgements
