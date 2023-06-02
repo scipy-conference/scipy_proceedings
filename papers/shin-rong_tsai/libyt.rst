@@ -362,6 +362,25 @@ problem of limitation in disk space and improves disk usage efficiency.
 Analyzing Fuzzy Dark Matter Vortices Simulation
 +++++++++++++++++++++++++++++++++++++++++++++++
 
+Fig :ref:`fdmfull`
+
+.. figure:: FDM-VorticesFull.pdf
+   :figclass: htb
+
+   Volume rendering of quantum vortices in a fuzzy dark matter halo with ``GAMER``. Here we use 
+   libyt to extract uniform-resolution data from an AMR simulation on-the-fly and then visualize 
+   it with ParaView in post-processing. The colormap is the logarithm of reciprocal of density 
+   averaging over radial density profile, which highlight the fluctuations and null density. Tick 
+   labels represent cell indices.
+   :label:`fdmfull`
+
+.. figure:: FDM-ZoomIn.pdf
+   :figclass: htb
+
+   Vortex reconnection process in a fuzzy dark matter halo.
+   :label:`fdmzoomin`
+
+
 Analyzing Core-Collapse Supernova Simulation
 ++++++++++++++++++++++++++++++++++++++++++++
 
