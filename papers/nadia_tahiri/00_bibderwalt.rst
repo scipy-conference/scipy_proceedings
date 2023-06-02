@@ -142,8 +142,8 @@ Specific locations and a date period are defined by employing the Dash web page.
 Subsequently, the Neo4j database was queried to identify lineages prevalent in the specified locations during the defined time period. 
 The retrieved information includes the earliest and latest detected dates of the lineages in each country, along with their predominant rates. To present these findings, an interactive Dash Table is employed, facilitating the application of filters to exclude study areas or lineages below a predetermined threshold. Subsequently, the accession numbers of the corresponding sequences are extracted from the graph database. These filtered sequences are then collected for subsequent phylogeographic analysis.
 
-In the following code, the "update_table function" is a callback in the application that responds to the user clicking the "button-confir-lineage2" component. Its purpose is to update the location table based on the selected start and end dates, checklist values, and sequence type. The function constructs a Cypher query to retrieve lineage data from the Neo4j database, filtering it based on the specified location and date criteria. The query results are transformed into a pandas DataFrame and further data manipulation can be performed. The resulting DataFrame is converted to a list of dictionaries, which serves as the updated data for the location table. By utilizing this function, the application enables users to explore and visualize lineage data associated with different geographic regions within a specified date range, facilitating the study of phylogeographic patterns and variations.
-   
+The following function updates the sample table by incorporating selected start and end dates, sequence type and a list of selected locations.
+A Cypher query is employed to retrieve lineage data from the Neo4j database and apply filtering based on specified location and date criteria. This function empowers researchers to explore lineage data associated with diverse geographic regions within a specified date range.
 
 .. code-block:: python
 
