@@ -187,13 +187,9 @@ A Cypher query is employed to retrieve lineage data from the Neo4j database and 
            return table_data
         ...
 
+In summary, these approaches enable user-guided sequencing searches. Once the input sequences are defined, an Input node is generated in our graph database and appropriately labeled. This Input node establishes connections with the relevant sequencing (Nucleotide or Protein) nodes used in the analysis, highlighting relationships between the input data and the corresponding sequences. Each Input node is assigned a unique ID, which is provided for reference and traceability. These user-driven approaches provide a robust framework for sequencing searches, allowing researchers to define and explore input data relationships.
 
-In summary, these approaches leveraged the "Neo4j GraphDatabase" package and the interactive Dash web page to enable user-driven sequencing searching. Once input sequencing has been defined, an Input node is generated and labelled accordingly in our graph database. 
-This Input node is connected to each sequencing (Nucleotide or Protein) node used in the analysis, establishing relationships between the input data and the corresponding sequences. Each Input node is assigned a unique ID, which is provided to the client for reference.
-
-The following functions facilitate the generation of unique names for nodes and the addition of input nodes with relationships to other nodes in the Neo4j database, contributing to the organization and management of data in a scientific context. 
-The "generate_unique_name" function generates a unique name for a node in the Neo4j database. It takes the label of the node as input and uses a randomly generated short ID to create a unique name. It utilizes a Neo4j driver to establish a connection with the database, checks if a node with the generated name already exists, and continues generating a new name until a unique one is found. The function returns the unique name.
-The "addInputNeo" function adds an input node and establishes relationships with other nodes in the Neo4j database. It takes the label of the nodes, the name of the input node, and a list of IDs as input. It uses a Neo4j driver to connect to the database and creates a new input node with the specified name. It then performs a MATCH query to retrieve nodes with IDs present in the provided list. For each matched node, a relationship of type "IN_INPUT" is created between the input node and the matched node. The function prints a message to indicate that an input node has been successfully added to the Neo4j database.
+The generation of unique ID for nodes plays a crucial role in ensuring traceability for each analysis. To address this requirement, the provided function ensures that every new node is assigned a traceable ID.
 
 .. code-block:: python
 
@@ -221,7 +217,9 @@ The "addInputNeo" function adds an input node and establishes relationships with
 
            return random_name
                        
-                       
+
+The following function facilitates the integration of input nodes with relationships to relevant sequence nodes within the Neo4j database, thereby enhancing the organization and management of input data and analysis entities in the network.
+
 .. code-block:: python
 
    def addInputNeo(nodesLabel, 
@@ -232,7 +230,7 @@ The "addInputNeo" function adds an input node and establishes relationships with
                                      auth=("neo4j", 
                                      password))
 
-       # Create a new node for the user
+       # Create a new node 
        with driver.session() as session:
            session.run(
               "CREATE (userInput:Input {name: $name})", 
