@@ -33,7 +33,7 @@
 :bibliography: mybib
 
 -------------------------------------------------
-itk-elastix: medical image registration in Python
+itk-elastix: Medical image registration in Python
 -------------------------------------------------
 
 .. class:: abstract
