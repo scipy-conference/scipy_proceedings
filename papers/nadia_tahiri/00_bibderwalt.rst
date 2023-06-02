@@ -308,7 +308,7 @@ Based on these findings, they propose a model that explains how the N protein bi
    :figclass: w
    :scale: 35%
 
-   TO BE CONTINUE :label:`fig3`
+   Variation of normalized Robinson and Foulds (RF) distance on the Multiple Sequence Alignment (MSA) for different climate facters. X-axis indicates the start position of sliding windows on the MSA. Various colors represent six analysed climate factors which are relative humidity (blue), specific humidity (green), wind speed within 10 meters range (yellow), wind speed within 50 meters range (brown),sky shortwave irradiance (red), and precipitation (purple). :label:`fig3`
    
 Our phylogeography-based exploration revealed a notable correlation between mutations in the Ubl1 protein and precipitation. As a reproducible phylogeographic platform, aPhyloGeo-Covid offers the potential to expand the sample size for further investigation and facilitates the comparability of analysis results.
 
