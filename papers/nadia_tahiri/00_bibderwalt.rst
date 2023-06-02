@@ -295,11 +295,12 @@ These parameters were associated with the node of analysis and stored as propert
 
 In this analysis experiment, we used aPhyloGeo-Covid to query preloaded climatic data from our Neo4j database for each sample connected to the input node. The climatic data was based on the most prevalent country and the time of initial collection.
 The meteorological parameters considered in our analysis included Precipitation Corrected, Relative Humidity at 2 Meters, Specific Humidity at 2 Meters, All Sky Surface Shortwave Downward Irradiance, Wind Speed within a 10-Meter Range, and Wind Speed within a 50-Meter Range. For statistical analysis, a user-defined average calculation interval of 3 days was applied.
-
-
-
-
-
+As shown in Figure :ref:`fig3` the 14 samples exhibited a range of precipitation from 0 mm/day to 8.57 mm/day with an average of 2.13 mm/day. 
+The specific humidity ranged from 2.44 g/kg to 19.33 g/kg, averaging at 9.77 g/kg. 
+The relative humidity ranged from 45.76% to 94.22%, with an average of 73.17%.
+Compared to other parameters, wind speed variability and sky surface shortwave downward irradiance showed relatively small variations across the samples. 
+The sky surface shortwave downward irradiance ranged from 0.67 kW-hr/m2/day to 7.38 kW-hr/m2/day, with an average of 4.25 kW-hr/m2/day. 
+The wind speed at 10 meters ranged from 1.90 m/s to 6.32 m/s, averaging at 3.24 m/s, while the wind speed at 50 meters ranged from 3.22 m/s to 6.40 m/s with an average of 4.39 m/s
 
 
 
