@@ -32,9 +32,9 @@
 
 :bibliography: mybib
 
------------------------------------------------------------------
-Obtain quantitative insights through image registration in Python
------------------------------------------------------------------
+-------------------------------------------------
+itk-elastix: medical image registration in Python
+-------------------------------------------------
 
 .. class:: abstract
 
