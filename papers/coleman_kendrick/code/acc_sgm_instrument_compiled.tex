@@ -1,0 +1,44 @@
+\begin{Verbatim}[commandchars=\\\{\},fontsize=\tiny]
+\PY{n+nd}{@cuda.jit}
+\PY{k}{def} \PY{n+nf}{process\PYZus{}kernel\PYZus{}no\PYZus{}buffer}\PY{p}{(}
+    \PY{n}{rng\PYZus{}states}\PY{p}{,} \PY{n}{N}\PY{p}{,} \PY{n}{n\PYZus{}neutrons\PYZus{}per\PYZus{}thread}\PY{p}{,}
+    \PY{n}{args}
+\PY{p}{)}\PY{p}{:}
+    \PY{n}{args0}\PY{p}{,} \PY{n}{args1}\PY{p}{,} \PY{n}{args2}\PY{p}{,} \PY{n}{offsets}\PY{p}{,} \PY{n}{rotmats}\PY{p}{,} \PY{n}{neutron\PYZus{}counter} \PY{o}{=} \PY{n}{args}
+    \PY{n}{thread\PYZus{}index} \PY{o}{=} \PY{n}{cuda}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{start\PYZus{}index} \PY{o}{=} \PY{n}{thread\PYZus{}index}\PY{o}{*}\PY{n}{n\PYZus{}neutrons\PYZus{}per\PYZus{}thread}
+    \PY{n}{end\PYZus{}index} \PY{o}{=} \PY{n+nb}{min}\PY{p}{(}\PY{n}{start\PYZus{}index}\PY{o}{+}\PY{n}{n\PYZus{}neutrons\PYZus{}per\PYZus{}thread}\PY{p}{,} \PY{n}{N}\PY{p}{)}
+    \PY{n}{neutron} \PY{o}{=} \PY{n}{cuda}\PY{o}{.}\PY{n}{local}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{NB\PYZus{}FLOAT}\PY{p}{)}
+    \PY{n}{r} \PY{o}{=} \PY{n}{cuda}\PY{o}{.}\PY{n}{local}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{NB\PYZus{}FLOAT}\PY{p}{)}
+    \PY{n}{v} \PY{o}{=} \PY{n}{cuda}\PY{o}{.}\PY{n}{local}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{NB\PYZus{}FLOAT}\PY{p}{)}
+    \PY{k}{for} \PY{n}{neutron\PYZus{}index} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{start\PYZus{}index}\PY{p}{,} \PY{n}{end\PYZus{}index}\PY{p}{)}\PY{p}{:}
+        \PY{n}{cuda}\PY{o}{.}\PY{n}{atomic}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{neutron\PYZus{}counter}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+        \PY{n}{propagate0}\PY{p}{(}\PY{n}{thread\PYZus{}index}\PY{p}{,} \PY{n}{rng\PYZus{}states}\PY{p}{,}  \PY{n}{neutron}\PY{p}{,} \PY{o}{*}\PY{n}{args0}\PY{p}{)}
+        \PY{n}{applyTransformation}\PY{p}{(}\PY{n}{neutron}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,} \PY{n}{neutron}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{:}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{,} 
+                            \PY{n}{rotmats}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{offsets}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{v}\PY{p}{)}
+        \PY{n}{propagate1}\PY{p}{(}\PY{n}{neutron}\PY{p}{,} \PY{o}{*}\PY{n}{args1}\PY{p}{)}
+        \PY{n}{applyTransformation}\PY{p}{(}\PY{n}{neutron}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,} \PY{n}{neutron}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{:}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{,} 
+                            \PY{n}{rotmats}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{offsets}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{v}\PY{p}{)}
+        \PY{n}{propagate2}\PY{p}{(}\PY{n}{neutron}\PY{p}{,} \PY{o}{*}\PY{n}{args2}\PY{p}{)}
+
+\PY{k+kn}{from} \PY{n+nn}{mcvine.acc.components.sources.SourceBase} \PY{k+kn}{import} \PY{n}{SourceBase}
+\PY{k}{class} \PY{n+nc}{\PYZus{}Base}\PY{p}{(}\PY{n}{SourceBase}\PY{p}{)}\PY{p}{:} \PY{c+c1}{\PYZsh{} has to be named Base in definition}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{instrument}\PY{p}{)}\PY{p}{:}
+        \PY{n}{offsets}\PY{p}{,} \PY{n}{rotmats} \PY{o}{=} \PY{n}{calcTransformations}\PY{p}{(}\PY{n}{instrument}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{neutron\PYZus{}counter} \PY{o}{=} \PY{n}{neutron\PYZus{}counter} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{int}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{propagate\PYZus{}params} \PY{o}{=} \PY{n+nb}{tuple}\PY{p}{(}
+            \PY{n}{c}\PY{o}{.}\PY{n}{propagate\PYZus{}params} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{instrument}\PY{o}{.}\PY{n}{components}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{propagate\PYZus{}params} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{offsets}\PY{p}{,} \PY{n}{rotmats}\PY{p}{,} \PY{n}{neutron\PYZus{}counter}\PY{p}{)}
+        \PY{k}{return}
+    \PY{k}{def} \PY{n+nf}{propagate}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{)}\PY{p}{:} \PY{k}{return}
+\PY{n}{InstrumentWrapper} \PY{o}{=} \PY{n}{\PYZus{}Base}
+\PY{n}{InstrumentWrapper}\PY{o}{.}\PY{n}{process\PYZus{}kernel\PYZus{}no\PYZus{}buffer} \PY{o}{=} \PY{n}{process\PYZus{}kernel\PYZus{}no\PYZus{}buffer}
+
+\PY{k}{def} \PY{n+nf}{run}\PY{p}{(}\PY{n}{ncount}\PY{p}{,} \PY{n}{ntotalthreads}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{,} \PY{n}{threads\PYZus{}per\PYZus{}block}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{,} \PY{o}{*}\PY{o}{*}\PY{n}{kwds}\PY{p}{)}\PY{p}{:}
+    \PY{n}{instrument} \PY{o}{=} \PY{n}{loadInstrument}\PY{p}{(}\PY{n}{script}\PY{p}{,} \PY{o}{*}\PY{o}{*}\PY{n}{kwds}\PY{p}{)}
+    \PY{n}{iw} \PY{o}{=} \PY{n}{InstrumentWrapper}\PY{p}{(}\PY{n}{instrument}\PY{p}{)}
+    \PY{n}{iw}\PY{o}{.}\PY{n}{process\PYZus{}no\PYZus{}buffer}\PY{p}{(}\PY{n}{ncount}\PY{p}{,} \PY{n}{ntotalthreads}\PY{o}{=}\PY{n}{ntotalthreads}\PY{p}{,}
+                         \PY{n}{threads\PYZus{}per\PYZus{}block}\PY{o}{=}\PY{n}{threads\PYZus{}per\PYZus{}block}\PY{p}{)}
+    \PY{n}{processed} \PY{o}{=} \PY{n}{iw}\PY{o}{.}\PY{n}{neutron\PYZus{}counter}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{saveMonitorOutputs}\PY{p}{(}\PY{n}{instrument}\PY{p}{,} \PY{n}{scale\PYZus{}factor}\PY{o}{=}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{n}{ncount}\PY{p}{)}
+\end{Verbatim}
