@@ -65,7 +65,7 @@ Decision making with statistical emulation consists of three parts. All starts w
 
 At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and Bayesian quadrature -- are all iterative decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm~\ref{alg:emukit-loop}).
 
-The common goal of all these methods is to learn a behavior of an \textit{objective function} - a black box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. A mechanism employed to propose new data points to evaluate the objective at is called a \emph{policy} that maximises an \textit{acquisition function}. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met. 
+The common goal of all these methods is to learn a behavior of an \textit{objective function} - a black box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. New data points are proposed by optimising an \textit{acquisition function} constructed using the model. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met. 
 
 \begin{algorithm}[H]
   \caption{Decision making loop in Emukit.}
