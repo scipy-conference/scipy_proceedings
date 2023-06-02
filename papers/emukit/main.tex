@@ -36,7 +36,7 @@ Emukit mainly contains three high-level methods: Bayesian optimisation (BO), Bay
 
 \emph{Bayesian quadrature} \cite{Diaconis1988, OHagan1992, pnbook22} is a numerical method that aims to infer the integral of a black-box function (called the `integrand') given some integration measure and queries of the integrand at nodes. In contrast to Monte Carlo (MC) methods, BQ generally can accept any kind of node design and is especially sample efficient which makes it superior to MC in certain circumstances \cite{RasmussenGhahramani2002}. A sub-group of BQ methods are active and follow a similar decision loop as BO; the most notable difference being that acquisition functions are specific to BQ and the class of models is somewhat more restricted. Generally, active BQ methods are algorithmically similar on a high level to BO methods and can use similar models.
 
-\emph{Experimental design} \cite{Kennedy2000, Kennedy2001, Conti2009, Conti2010} is a method that aims to collect nodes of a black-box function such that the resulting model predicts unseen function values well. It has traditionally been applied to statistical emulation of complex computer models \maren{cite} but also to \maren{examples?}. Some ED methods, too, obey the structure of an active decision loop similar to BO and BQ.
+\emph{Experimental design} \cite{Kennedy2000, Kennedy2001, Conti2009, Conti2010} is a method that aims to collect nodes of a black-box function such that the resulting model predicts unseen function values well. It has traditionally been applied to statistical emulation of complex computer models but also to \maren{Andrei, I do not know any more from the top of my head. Full feel free to add some. Otherwise the sentence can stop after the word `models'.}. Some ED methods, too, obey the structure of an active decision loop similar to BO and BQ.
 
 Emukit is build on the realization that all three methods (BO, BQ, ED), albeit having different numerical aims and result objects, share the same algorithmic structure: A decision loop that computes the next node based on the current model, evaluates the user function and then updates the model accordingly. This decision loop is contained in Emukit's core package and shared by all three high-level methods.
 %Thus Emukit contains are shared core implementation of the decision loop of all three methods which will be elaborated further on in Section~\ref{sec:lib-structure}.
@@ -56,7 +56,7 @@ Decision making with statistical emulation consists of three parts. All starts w
 
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.4]{workflow.png}  
+    \includegraphics[width=\columnwidth]{workflow.png}  
     \caption{Summary of workflow for the users of Emukit. A model is computed in a modelling framework of choice. The model is wrapped using a pre-defined interface and connected to the core components of several methods such as Bayesian optimisation, experimental design etc. Specific tasks are then solved using these methods.}
     \label{figure:workflow}
 \end{figure}
