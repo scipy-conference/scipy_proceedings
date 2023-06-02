@@ -210,7 +210,7 @@ The GUI from the elyra-code-snippet extension for accessing code snippets is sho
   A tag icon displays all of the available tags in the snippets as separate icons.
   The user can select tags to be used to choose snippets by clicking on the icons.
 
-  Each snippet is displayed with several icons (Figure :ref:`hbondElyra`).
+  Each snippet is displayed with several icons.
   A triangular toggle can trigger the display of the snippet in a textbox.
   A pencil icon enables the editing of the code.
   Other icons enable copying the code to the clipboard, inserting code into the current cell in the notebook, and deleting the snippet.
@@ -221,7 +221,7 @@ The GUI from the elyra-code-snippet extension for accessing code snippets is sho
   There is a save button at the bottom to add the new snippet to the current library.
 
   
-   The GUI from elyra-code-snippet extension for the creation of new snippets. The Learn more link takes the user to the documentation on Read-the-docs. :label:`newElyraSnip`
+ The GUI from elyra-code-snippet extension for the creation of new snippets. The Learn more link takes the user to the documentation on Read-the-docs.
 
 
 ..
@@ -261,7 +261,7 @@ Colab snippet library
   This installation snippet was the only one in a notebook that contained more then one code snippet.
 ..
 
-   Code snippet for installing PyMOL on Colab. The <> icon opens a menu on the left side that lists all of the snippets. The search term 'pymol' was used to reduce the list of candidate snippets. The highlighted snippets name 'Install PyMOL is new Colab notebook'. Selecting this snippets opens the snippet below. The snippet description is displayed followed by the seven blocks of code. The description includes the seven steps for installing the molecular graphics programs. Clicking with the mouse cursor on 'INSERT' in blue inserts the code into in the cells on the notebook on the fight. :label:`ColabPyMOL`
+   Code snippet for installing PyMOL on Colab. The <> icon opens a menu on the left side that lists all of the snippets. The search term 'pymol' was used to reduce the list of candidate snippets. The highlighted snippets name 'Install PyMOL is new Colab notebook'. Selecting this snippets opens the snippet below. The snippet description is displayed followed by the seven blocks of code. The description includes the seven steps for installing the molecular graphics programs. Clicking with the mouse cursor on 'INSERT' in blue inserts the code into in the cells on the notebook on the fight. 
 
 ..   
   I deleted a section here by accident.
