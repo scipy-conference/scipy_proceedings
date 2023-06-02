@@ -1,7 +1,3 @@
-..
-  -*- mode: rst -*-
-..
-
 :author: Blaine H. M. Mooers
 :email: blaine-mooers@ouhsc.edu
 :institution: Dept of Biochemistry and Molecular Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
@@ -583,13 +579,13 @@ Ubiquitous computing platform on the cloud
 
 ==========================
 Acknowledgements
-=========================
+==========================
 
 This work was supported by the Oklahoma Center for the Advancement of Science and Technology: HR20-002 and by these National Institutes of Health grants: R01 CA242845, P20 GM103640, P30 CA225520, and P30 AG050911-07S1.
 
-==============
+===============
 References
-==============
+===============
 
 .. [Kuhlbrandt14] W. K{\"u}hlbrandt
             The resolution revolution.
