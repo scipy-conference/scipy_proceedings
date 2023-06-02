@@ -1,0 +1,20 @@
+---
+abstract:
+   - We suggest the curriculum for teaching machine learning in professional education department. Its special goal is to build deeper understanding of machine learning concepts and provide background for self study. 
+   - Other features include short length, project-based approach, and minimal required math and programming. However, student’s special skills such as advanced math, engineering or natural/social science  background play an important role when selecting individual educational projects. 
+   - Classes based on this curriculum may be considered a supplement to other machine learning or data science education.
+keywords:
+  - machine learning
+  - mathematical modeling
+  - optimization
+  - machone learning education
+authors:
+- email: nadiakap@optonline.net
+  institution:
+  - Norwalk Community College
+  - University of Connecticut (Stamford)
+  name: Nadia Udler
+  corresponding: true
+bibliography: mybib
+video: "https://www.youtube.com/watch?v=Hz1JWzyvv8A"
+title: Teaching Machine Learning in Professional Education Department
