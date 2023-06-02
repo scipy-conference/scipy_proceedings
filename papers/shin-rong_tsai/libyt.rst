@@ -218,7 +218,7 @@ to the algorithm in Python packages.
    :figclass: thb
 
    This is the workflow of how ``libyt`` redistributes data.
-   It is done via one-sided communication (Remote Memory Access in MPI). 
+   It is done via one-sided communication in MPI. 
    Each process prepares requested data by other processes, after this, every process 
    fetches data located on different processes.
    This is a collective operation, and data is redistributed during this window epoch. 
@@ -234,29 +234,37 @@ Executing Python Codes and Handling Errors
 ``libyt`` imports user's Python script at the initialization stage.
 Every Python statement is executed inside the imported script's namespace using ``PyRun_SimpleString``. 
 The namespace holds Python functions and objects. Every change made will also be stored under this 
-namespace and be brought to the following round.
+namespace and will be brought to the following round.
 
 Using ``libyt`` for in situ analysis is just like running Python scripts in post-processing.
 Their only difference lies in how the data is loaded.
 Post-processing has everything store on hard disk, while data in in situ analysis is distributed 
-in different computing nodes.
+in different computing nodes. 
+
+Though ``libyt`` can call arbitrary Python module, here, we focus on using ``yt`` as the core method, 
+which has already supported parallelism feature using ``mpi4py`` for communication.
+This is an example of doing projection plot using ``yt`` function ``ProjectionPlot`` in 
+post-processing:
 
 .. code-block:: python
    :linenos:
 
    import yt
    yt.enable_parallelism()
-   def yt_post(data):
+   def do_prj(data):
        ds = yt.load(data) # Load data from hard disk
        prj = yt.ProjectionPlot(ds, "z", ("gamer", "Dens"))
        if yt.is_root():
            prj.save()
    if __name__ == "__main__":
-       yt_post("Data000000")
+       do_proj("Data000000")
 
+Converting the post-processing script to inline script is a two-line change. 
+We need to import ``yt_libyt`` [#]_, which is the ``yt`` frontend for ``libyt``. 
+And then we change ``yt.load`` to ``yt_libyt.libytDataset()``. That's it!
+The following is the inline Python script:
 
-
-
+.. [#] `https://github.com/data-exp-lab/yt_libyt <https://github.com/data-exp-lab/yt_libyt>`_
 
 .. code-block:: python
    :linenos:
@@ -264,34 +272,41 @@ in different computing nodes.
    import yt_libyt
    import yt
    yt.enable_parallelism()
-   def yt_inline():
+   def do_prj_inline():
        ds = yt_libyt.libytDataset() # Load data from libyt
        prj = yt.ProjectionPlot(ds, "z", ("gamer", "Dens"))
        if yt.is_root():
            prj.save()
 
-Simulation can call Python function using ``libyt`` API ``yt_run_Function`` and ``yt_run_FunctionArguments``.
-For example, this calls the Python function defined above:
+Simulation can call Python function defined in script using ``libyt`` API ``yt_run_Function`` 
+and ``yt_run_FunctionArguments``. For example, this calls the Python function ``do_prj_inline``:
 
 .. code-block:: c
 
-   yt_run_Function("yt_inline");
+   yt_run_Function("do_prj_inline");
 
 
 Beside calling Python function, ``libyt`` also provides interactive prompt for user to update Python 
 function, enter statements, and get feedbacks instantly. [#]_
-This is like running Python prompt inside the ongoing simulation with access to data.
-``libyt`` checks input Python syntax through compiling it to code object. If error occurs, it parses 
-the error to see if this is caused by input not done yet or a real error.
+This is like running Python prompt inside the ongoing simulation with access to data. 
+Fig :ref:`pythonprompt` describes the workflow.
+The root process takes user inputs and checks the syntax through compiling it to code object using 
+``Py_CompileString``. If error occurs, it parses the error to see if this is caused by input not done 
+yet or a real error. 
+If it is indeed caused by user hasn't done yet, for example, when using an ``if`` statement, 
+it continues waiting for user inputs. Otherwise, it simply prints the error to inform the user.
+If the code can be compiled successfully, the root process broadcasts the code to every other MPI 
+process, and then they execute the code simultaneously.
 
 .. [#] Currently, ``libyt`` interactive prompt only works on local machine or submit the job to HPC 
-   platforms using interactive queue like ``qsub -I`` on PBS scheduler.
+   platforms using interactive queue (e.g., ``qsub -I`` on PBS scheduler). We will support accessing 
+   through Jupyter Notebook in the future.
 
 .. figure:: REPL.pdf
-   :figclass: thb
+   :figclass: htb
 
    The procedure shows how ``libyt`` supports interactive Python prompt. 
-   It takes user inputs in root process and executes Python codes across whole MPI processes. 
+   It takes user inputs on root process and executes Python codes across whole MPI processes. 
    The root process handles syntax errors and distinguishes whether or not the error is caused 
    by user hasn't done inputing yet.
    :label:`pythonprompt`
@@ -329,7 +344,7 @@ Discussions
 Using ``libyt`` does not add a time penalty to the analysis, because using Python for in situ analysis 
 and post-processing are exactly the same, except that the former one reads data from memory and the 
 later one reads data from disks. 
-And converting the post-processing script to inline script is a one-line change.
+And converting the post-processing script to inline script is a two-line change.
 
 .. figure:: Time-Proc-Ideal.pdf
    :figclass: htb
