@@ -176,7 +176,7 @@ process and requires simulation to generate it, or the data isn't stored in a co
 memory block and requires simulation to help collect it. 
 When Python needs the data, it first calls C-extension method in ``libyt`` Python module. 
 The C-extension method allocates a new data buffer and passes it to user-defined C function, 
-the function writes data in it. 
+and the function writes data in it. 
 Finally, ``libyt`` wraps the data buffer and returns it back to Python. 
 ``libyt`` makes the data buffer owned by Python [#]_, so that the data gets freed when it is no 
 longer needed.
@@ -205,21 +205,52 @@ Python module. One can easily call it during simulation runtime:
 In Situ Analysis Under Parallel Computing
 +++++++++++++++++++++++++++++++++++++++++
 
-.. 
-   yt parallelism feature, data chunking
+Each MPI process contains one simulation code and one Python instance. 
+Each Python instance only has direct access to the data on local computing nodes, 
+thus all Python instances must work together to make sure everything is in reach. 
+During in situ Python analysis, workloads may be decomposed and rebalanced according 
+to the algorithm in Python packages. 
+It is not necessary to align with how data is distributed in simulation.
+Even though ``libyt`` can call arbitrary Python modules, we focus on how it uses ``yt`` and MPI 
+to do analysis under parallel computation here. 
+
+``yt`` supports parallelism feature [#]_ using ``mpi4py`` [#]_ as communication method. 
+``libyt`` borrows this feature and utilize it directly. 
+The way ``yt`` calculates and distributes jobs to each MPI process is based on data locality, 
+but it does not always guarantee to do so [#]_. 
+In other words, in in situ analysis, the data requested by ``yt`` for each MPI process does not 
+always locate in the same process.
+
+.. [#] See `Parallel Computation With yt <https://yt-project.org/doc/analyzing/parallel_computation.html>`_ for more 
+   details.
+
+.. [#] ``mpi4py`` is Python bindings for MPI. 
+   (`https://mpi4py.readthedocs.io/en/stable/ <https://mpi4py.readthedocs.io/en/stable/>`_)
+
+.. [#] ``yt`` functionalities like ``find_max``, ``ProjectionPlot``, ``create_profile``, ``PhasePlot``, etc are based 
+   on data locality, others like ``OffAxisProjectionPlot``, ``SlicePlot``, ``OffAxisSlicePlot``, etc don't.
 
 .. 
    RMA
 
-During in situ Python analysis, workloads may be decomposed and rebalanced according 
-to the algorithm in Python packages.
+Furthermore, there is no way for ``libyt`` to know what kind of communication pattern a Python script needs 
+for a much more general case, it is difficult to schedule point-to-point communications that fit 
+any kind of algorithms and any number of MPI processes. 
+``libyt`` use one-sided communication in MPI, also known as Remote Memory Access (RMA), 
+by which one no longer needs to explicitly specify senders and receivers. 
+Fig :ref:`rma` describes the data redistribution process in ``libyt``. 
+``libyt`` first collects what data is needed in each process, and the processes prepare the data requested. 
+Then ``libyt`` creates an epoch, for which all MPI processes will enter, and each process can fetch the data 
+located on different processes without explicitly waiting for the remote process to respond.
+The caveat in data exchanging procedure in ``libyt`` is that it is a collective operation, and requires every 
+MPI process to participate.
 
 .. figure:: RMA.pdf
-   :figclass: thb
+   :figclass: hbt
 
    This is the workflow of how ``libyt`` redistributes data.
    It is done via one-sided communication in MPI. 
-   Each process prepares requested data by other processes, after this, every process 
+   Each process prepares the requested data by other processes, after this, every process 
    fetches data located on different processes.
    This is a collective operation, and data is redistributed during this window epoch. 
    Since the data fetched is only for analysis purpose, it gets freed once Python doesn't 
@@ -240,28 +271,26 @@ Using ``libyt`` for in situ analysis is just like running Python scripts in post
 Their only difference lies in how the data is loaded.
 Post-processing has everything store on hard disk, while data in in situ analysis is distributed 
 in different computing nodes. 
-
-Though ``libyt`` can call arbitrary Python module, here, we focus on using ``yt`` as the core method, 
-which has already supported parallelism feature using ``mpi4py`` for communication.
-This is an example of doing projection plot using ``yt`` function ``ProjectionPlot`` in 
-post-processing:
+Though ``libyt`` can call arbitrary Python module, here, we focus on using ``yt`` as the core method.
+This is an example of doing slice plot using ``yt`` function ``SlicePlot`` in post-processing:
 
 .. code-block:: python
    :linenos:
 
    import yt
    yt.enable_parallelism()
-   def do_prj(data):
-       ds = yt.load(data) # Load data from hard disk
-       prj = yt.ProjectionPlot(ds, "z", ("gamer", "Dens"))
+   def do_sliceplot(data):
+       ds = yt.load(data)
+       slc = yt.SlicePlot(ds, "z", ("gamer", "Dens"))
        if yt.is_root():
-           prj.save()
+           slc.save()
    if __name__ == "__main__":
-       do_proj("Data000000")
+       do_sliceplot("Data000000")
 
 Converting the post-processing script to inline script is a two-line change. 
 We need to import ``yt_libyt`` [#]_, which is the ``yt`` frontend for ``libyt``. 
-And then we change ``yt.load`` to ``yt_libyt.libytDataset()``. That's it!
+And then we change ``yt.load`` to ``yt_libyt.libytDataset()``. That's it! 
+Now data is loaded from ``libyt`` instead of loading from hard disk. 
 The following is the inline Python script:
 
 .. [#] `https://github.com/data-exp-lab/yt_libyt <https://github.com/data-exp-lab/yt_libyt>`_
@@ -272,18 +301,18 @@ The following is the inline Python script:
    import yt_libyt
    import yt
    yt.enable_parallelism()
-   def do_prj_inline():
-       ds = yt_libyt.libytDataset() # Load data from libyt
-       prj = yt.ProjectionPlot(ds, "z", ("gamer", "Dens"))
+   def do_sliceplot_inline():
+       ds = yt_libyt.libytDataset()
+       slc = yt.SlicePlot(ds, "z", ("gamer", "Dens"))
        if yt.is_root():
-           prj.save()
+           slc.save()
 
-Simulation can call Python function defined in script using ``libyt`` API ``yt_run_Function`` 
-and ``yt_run_FunctionArguments``. For example, this calls the Python function ``do_prj_inline``:
+Simulation can call Python function using ``libyt`` API ``yt_run_Function`` and 
+``yt_run_FunctionArguments``. For example, this calls the Python function ``do_sliceplot_inline``:
 
 .. code-block:: c
 
-   yt_run_Function("do_prj_inline");
+   yt_run_Function("do_sliceplot_inline");
 
 
 Beside calling Python function, ``libyt`` also provides interactive prompt for user to update Python 
@@ -296,7 +325,7 @@ yet or a real error.
 If it is indeed caused by user hasn't done yet, for example, when using an ``if`` statement, 
 it continues waiting for user inputs. Otherwise, it simply prints the error to inform the user.
 If the code can be compiled successfully, the root process broadcasts the code to every other MPI 
-process, and then they execute the code simultaneously.
+process, and then they execute the code using ``PyEval_EvalCode`` simultaneously.
 
 .. [#] Currently, ``libyt`` interactive prompt only works on local machine or submit the job to HPC 
    platforms using interactive queue (e.g., ``qsub -I`` on PBS scheduler). We will support accessing 
