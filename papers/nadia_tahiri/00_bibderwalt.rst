@@ -291,7 +291,7 @@ These parameters were associated with the node of analysis and stored as propert
 .. figure:: figure2.png
    :scale: 23%
    
-   The networks of one analysis experiment :label:`fig2`
+   The networks of a single analysis experiment. For a specific analysis, the network highlights all entities serving as input data sources and their relationships. The Input node establishes connections between the data source objects and the specific analysis object. The Analysis node captures the parameters associated with the analysis, while the Output node stores the resulting analysis data. :label:`fig2`
 
 At the end of the aPhyloGeo-Covid analysis workflow, a table was generated containing the RF distance between the phylogenetic tree of that window and the reference tree of a particular environmental feature. 
 The distribution of normalized RF distances resulting from the phylogeographic analysis of the input dataset is presented in Figure :ref:`fig3`. 
@@ -308,7 +308,7 @@ Based on these findings, they propose a model that explains how the N protein bi
    :figclass: w
    :scale: 35%
 
-   Variation of normalized Robinson and Foulds (RF) distance on the Multiple Sequence Alignment (MSA) for different climate facters. X-axis indicates the start position of sliding windows on the MSA. Various colors represent six analysed climate factors which are relative humidity (blue), specific humidity (green), wind speed within 10 meters range (yellow), wind speed within 50 meters range (brown),sky shortwave irradiance (red), and precipitation (purple). :label:`fig3`
+   Variation of normalized Robinson and Foulds (RF) distance on the Multiple Sequence Alignment (MSA) for different climate facters. X-axis indicates the start position of sliding windows on the MSA. Various colors represent six analysed climate factors which are relative humidity (blue), specific humidity (green), wind speed within 10 meters range (yellow), wind speed within 50 meters range (brown), sky shortwave irradiance (red), and precipitation (purple). :label:`fig3`
    
 Our phylogeography-based exploration revealed a notable correlation between mutations in the Ubl1 protein and precipitation. As a reproducible phylogeographic platform, aPhyloGeo-Covid offers the potential to expand the sample size for further investigation and facilitates the comparability of analysis results.
 
