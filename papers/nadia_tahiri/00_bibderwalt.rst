@@ -299,6 +299,8 @@ Windows exhibiting relatively lower RF distances merit further investigation. As
 For this exploration, a scanning approach was employed, utilizing a window size of 100 residues and a step size of 3 residues for sequence analysis. 
 Within the regions identified with low RF distance, special attention should be given to regions 792-940. Notably, a consistently low RF distance value of 81.82% was observed across all 17 windows spanning positions from 792 to 840. 
 Furthermore, in accordance with SWISS-MODEL :cite:`waterhouse2018swiss`, the previous research validates the presence of a specific region of Nsp3 called Ubl1 (110 residues, position 819-929) within the identified sequence region.
+Ni et al. (2023) :cite:`ni2023structural` revealed that the Ubl1 protein of SARS-CoV-2 exhibits competitive binding with RNA molecules to the N protein, resulting in the dissociation of viral ribonucleoprotein complexes. 
+Based on these findings, they propose a model that explains how the N protein binding to the Ubl1 domain of Nsp3 leads to the dissociation of viral ribonucleoprotein complexes. 
 
    
 .. figure:: figure3.png
@@ -308,8 +310,8 @@ Furthermore, in accordance with SWISS-MODEL :cite:`waterhouse2018swiss`, the pre
 
    TO BE CONTINUE :label:`fig3`
    
-Ni et al. (2023) :cite:`ni2023structural` revealed that the Ubl1 protein of SARS-CoV-2 can compete with RNA molecules to bind to the N protein, resulting in the dissociation of viral ribonucleoprotein complexes. Their research team successfully determined the crystal structure of the N-terminal domain (NTD) of the N protein in complex with the ubiquitin-like domain 1 (Ubl1) of Nsp3 from the SARS-CoV-2 virus, with a resolution of 2.6 Angstrom.
-Based on these findings, they propose a model that explains how the N protein binding to the Ubl1 domain of Nsp3 leads to the dissociation of viral ribonucleoprotein complexes :cite:`ni2023structural`. Our phylogeography-based exploration pointed to a relatively strong correlation between mutations in the Ubl1 protein and precipitation. As a reproducible phylogeographic platform, aPhyloGeo-Covid aim to provides the possibility to expand the number of samples for further study and makes the analysis results comparable.
+Our phylogeography-based exploration revealed a notable correlation between mutations in the Ubl1 protein and precipitation. As a reproducible phylogeographic platform, aPhyloGeo-Covid offers the potential to expand the sample size for further investigation and facilitates the comparability of analysis results.
+
 
 Conclusions and future work
 ---------------------------
