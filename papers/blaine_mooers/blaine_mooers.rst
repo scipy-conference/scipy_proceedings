@@ -162,20 +162,17 @@ References
             *The resolution revolution.*
             Science 343:1443-1445, March 2014
             doi: 10.1126/science.1
-
-   
+           
 .. [Mirdita21] M. Mirdeita, K. Sch{\"u}tze, Y. Moriwaki, L. Heo, S. Ovchinnikov, and M. Steinegger.
 	        *ColabFold-Making protein folding accessible to all*
              bioRxiv 2021.08.15.456425
              doi: 10.1101/2021.08.15.456425
-
-
-
+           
 .. [Beg21] M. Beg, J. Belin, T. Kluyver, A. Konovalov, M. Ragan-Kelley, N. Thiery, and H. Fangohr.
             *Using Jupyter for reproducible scientific workflows*,
             Computing Sci. \& Eng., 23(2):36-46, April 2021. 
             doi: 10.1109/MCSE.2021.3052101
-
+           
 .. [Berm03] H. Berman, K. Hendrick, and H. Nakamura. 
             *Announcing the worldwide Protein Data Bank*,
             Nature Structural \& Molecular Biology, 10(12):980, December 2003.
@@ -249,7 +246,7 @@ References
            *ATSAS 3.0: expanded functionality and new tools for small-angle scattering data analysis*,
            J. Appl. Cryst., 54(1):343–355, February 2021.
            doi: 10.1107/S1600576720013412
-
+           
 .. [Mott10] S. E. Mottarella, M. Rosa, A. Bangura, H. J. Bernstein, and P. A. Craig.
            *Conscript: RasMol to PyMOL script converter*,
            Biochem. Mol. Biol. Educ., 38(6):419-422, November 2010.
@@ -261,7 +258,7 @@ References
            *Templates for writing PyMOL scripts*,
            Pro. Sci., 30(1):262-269, January 2021.
            doi: 10.1002/pro.3997
-
+           
 .. [Moo21b] B. H. M. Mooers.
            *A PyMOL snippet library for Jupyter to boost researcher productivity*,
            Computing Sci. \& Eng., 23(2):47-53, April 2021.
@@ -273,14 +270,14 @@ References
            doi: 10.1093/bioinformatics/btx78
            
 .. [PyMO21] https://pymol.org/2/
-
+           
 .. [Rese20] https://blog.jupyter.org/reusable-code-snippets-in-jupyterlab-8d75a0f9d207
-
+           
 .. [SciP20] P. Virtanen, R. Gommers, T. E. Oliphant, M. Haberland, T. Reddy, D. Cournapeau, E. Burovski, P. Peterson, W. Weckesser, J. Bright, S. J. {van der Walt}, M. Brett, J. Wilson, K. J. Millman, N. Mayorov, A. R. J.Nelson, E. Jones, R. Kern, E. Larson, C. J. Carey, I. Polat, Y. Feng, E. W. Moore, J. {VanderPlas}, D. Laxalde, J. Perktold, R. Cimrman, I. Henriksen, E. A. Quintero, C. R. Harris, A. M. Archibald, A. H. Ribeiro, F. Pedregosa, P. {van Mulbregt}, Paul and {SciPy 1.0 Contributors}.
            *{{{SciPy} 1.0: Fundamental Algorithms for Scientific Computing in Python}}*,
            Nature Methods, 17(3):261-272, February 2020.
            doi: 10.1038/s41592-019-0686-2
-
+           
 .. [Winn11] M. D. Winn, C. C. Ballard, K. D. Cowtan, E. J. Dodson, P. Emsley, P. R. Evans, R .M. Keegan, E. B. Krissnel, A. G. W. Leslie, A. McCoy, S. J. McNicholas, G .N. Murshudov, N. S. Pannu, E. A. Potteron, H .R. Powell, R. J. Read, A. Vagin, and K. S. Wilson.
            *Overview of the CCP4 suite and current developments*,
            Acta Cryst., D67(4):235-242, April 2011.
