@@ -54,22 +54,12 @@ The user can use the GhostText browser plugin to edit the contents of a Jupyter 
 GhostText enables the user to experience the joy interactive computing in Jupyter while working from the comfort of their favorite text editor.
 
 
-
-
 Discussion
-==============
-..
-  Amazon introduced the first cloud computing service in 2006; there are now over 200 services.
-  These services have the advantage of providing access to computer hardware and software.
-  These services can lower barriers for those labs that have limited access to computer hardware or that have trouble with installing software.
-  Many of these services supply disk spaces and access to CPUs, GPUs, and sometimes TPUs.
-  Access to basic services is often free with additional services, computing power, and disk space being available for a modest fee.
-  In principle, consumer computers could be used as an interface for doing all manner of crystallographic computing on the cloud.
-..
+=============
 
 
 What is new
-*************
+**************
 
 We report a set of code template libraries for doing biomolecular crystallographic computing in Jupyter.
 These template libraries only need to be installed once because they persist between logins.
@@ -118,40 +108,11 @@ The latter package is widely used to run matplotlib in Julia.
 Interoperability already occurs between the CCP4, clipper, and CCTBX projects and to a limited extent between CCTBX and PyMOL, but interoperability could be more widespread if the walls around the software silos were lowered.
 The snippet libraries provided here can prompt interoperability on Colab by their proximity on Colab.
 
-Polyglot snippets
-*******************
-..
-  The unique feature of the Colab snippets is that a given snippet can contain multiple cells.
-  The cells can be a mix of markdown (text cells) and code cells.
-  The cells can also use a mix of programming languages invoked by different cell magics.
-  Cell magics are an alternate method to kernels for switching between programming languages.
-  The code for defining various cell magics are included in our snippet library.
-  The supported compiled programming languages include C, C++, Julia, and Fortran2008.
-  The bash cell magic is built into Colab.
-  This ability to two or more programming languages in one snippet leads to polyglot snippets.
-  Some operations involving two or more programming languages need to be executed sequentially.
-  These can be best grouped together in one snippet.
-  This feature of polyglot snippets save time because the user does not have to reinvent the workflow by finding and inserting into the notebook a series of snippets.
-..
-
-Ubiquitous computing platform on the cloud
-
-
-..
-  Colab provides the user with a ubiquitous instance of Ubuntu.
-  Colab is accessed by opening Jupyter Notebooks stored on the users' Google Drive account.
-  Colab can be accessed from devices that can access the Google Drive account.
-  The opening of the Colab instance is rapid in contrast to the Binder service where the building of a new Ubuntu instance requires a wait of many minutes.
-  In addition, the Colab session remains active for up to 12 hours on the free plan and longer on paid plans whereas a Binder instance closes after ten minutes of inactivity.
-  Binder is an open-source project while Colab is a closed source project.
-  Colab maintains the Ubuntu operating system so the user does not need to spend time on software updates.
-..
-
 
 Acknowledgments
 ======================
 
-This work was supported by the Oklahoma Center for the Advancement of Science and Technology: HR20-002 and by these National Institutes of Health grants: R01 CA242845, P20 GM103640, P30 CA225520, and P30 AG050911-07S1.
+This work was supported by the Oklahoma Center for the Advancement of Science and Technology: HR20-002, the  National Institutes of Health grants: R01 CA242845, P30 CA225520, and P30 AG050911-07S1. In particular, we thank the Biomolecular Structure Core of the COBRE in Structural Biology (PI: Ann West, P20 GM103640, P30 GMXXXXXX).
 
 
 References
