@@ -158,15 +158,15 @@ This work was supported by the Oklahoma Center for the Advancement of Science an
 References
 ===============
 
-.. [Kuhlbrandt14] W. K{\"u}hlbrandt
-            *The resolution revolution.*
+.. [Kuhlbrandt14] W. K{\"u}hlbrandt.
+            *The resolution revolution*,
             Science 343:1443-1445, March 2014
             doi: 10.1126/science.1
            
 .. [Mirdita21] M. Mirdeita, K. Sch{\"u}tze, Y. Moriwaki, L. Heo, S. Ovchinnikov, and M. Steinegger.
 	        *ColabFold-Making protein folding accessible to all*
-             bioRxiv 2021.08.15.456425
-             doi: 10.1101/2021.08.15.456425
+            bioRxiv 2021.08.15.456425
+            doi: 10.1101/2021.08.15.456425
            
 .. [Beg21] M. Beg, J. Belin, T. Kluyver, A. Konovalov, M. Ragan-Kelley, N. Thiery, and H. Fangohr.
             *Using Jupyter for reproducible scientific workflows*,
@@ -204,7 +204,6 @@ References
             
 .. [Elyra]  https://github.com/elyra-ai/elyra/blob/master/docs/source/getting_started/overview.md 
             
-           
 .. [Godd18] T. D. Goddard, C.C. Huang, E.C. Meng, E.F. Pettersen, G.S. Couch, J. H. Morris, and T. E. Ferrin. 
            *UCSF ChimeraX: Meeting modern challenges in visualization and analysis*,
            Protein Sci., 27(1):14-25, January 2018.
