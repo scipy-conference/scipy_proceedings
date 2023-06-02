@@ -7,15 +7,18 @@
 :author: Francesc Alted
 :email: francesc@blosc.org
 :institution: Project Blosc
+:equal-contributor:
 :corresponding:
 
 :author: Marta Iborra
 :email: martaiborra24@gmail.com
 :institution: Project Blosc
+:equal-contributor:
 
 :author: Oscar Guiñón
 :email: soscargm98@gmail.com
 :institution: Project Blosc
+:equal-contributor:
 
 :author: Sergio Barrachina
 :email: barrachi@uji.es
@@ -32,7 +35,7 @@ Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset
 
     The Blosc2 NDim layer enables the creation and reading of n-dimensional datasets in an extremely efficient manner. This is due to a completely general n-dim 2-level partitioning, which allows for slicing and dicing of arbitrary large (and compressed) data in a more fine-grained way. Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels, making compression more efficient.
 
-    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that are in a sphere of 10 thousand light-years radius (centered in the Gaia telescope), which accounts for 0.7 billion stars. The total size of this partial dataset is 3.7 TB, but when compressed, it is reduced to just 10 GB, making it easy to fit into the memory of modern computers for processing.
+    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that are in a sphere of 10 thousand light-years radius (centered in the Gaia telescope), which accounts for 0.7 billion stars. The total size of this partial dataset is 3.7 TB, but when compressed, it is reduced to just 14 GB, making it easy to fit into the memory of modern computers for processing.
 
 .. class:: keywords
 
@@ -50,7 +53,7 @@ Blosc uses the blocking technique :cite:`FA10-starving-cpus` to minimize activit
 .. figure:: sum_openmp-rainfall.png
    :scale: 40%
 
-   Speed for summing up a vector of real float32 data (meteorological precipitation) using a variety of codecs that come with Blosc2. Note that the maximum speed is achieved when utilizing the maximum number of (logical) threads available on the computer (28), where different codecs are allowing faster computation than using regular decompressed data. More info at :cite:`BDT18-breaking-memory-walls`. :label:`sum-precip`
+   Speed for summing up a vector of real float32 data (meteorological precipitation) using a variety of codecs that come with Blosc2. Note that the maximum speed is achieved when utilizing the maximum number of (logical) threads available on the computer (28), where different codecs are allowing faster computation than using regular decompressed data. Benchmark performed on a Intel i9-10940X CPU, with 14 physical cores.  More info at :cite:`BDT18-breaking-memory-walls`. :label:`sum-precip`
 
 Using Blosc compression can accelerate computations when enough cores are dedicated to the task. Figure :ref:`sum-precip` provides a real example of this.
 
@@ -59,7 +62,11 @@ Blosc2 is the latest version of the Blosc 1.x series, which is used in many impo
 The Gaia dataset
 ----------------
 
-The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates and magnitudes of 1.4 billion stars (those with parallax not being a NaN). When stored as a regular binary table, the dataset is 22 GB in size (uncompressed). However, we converted this tabular dataset into a sphere of radius 10_000 light years, and frame it into a 3D array of shape (10_000, 10_000, 10_000), where each cell represents a cube of 2 light year per side, and contains the magnitude of every star inside it (provided that the average distance between stars in the Milky ways is about 5 light years, very few cells will contain more than one star). This 3D array contains 0.7 billion stars, which is a significant portion of the Gaia catalog. The magnitude (brightness) of each star is stored as a float32, and, therefore, the total dataset size is 3.7 TB. However, by using compression via Blosc2, we can reduce its size to 10 GB. This is because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost completelly.
+The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates and magnitudes of 1.4 billion stars (those with non-null parallax values). When stored as a binary table, the dataset is 22 GB in size (uncompressed).
+
+However, we converted the tabular dataset into a sphere with a radius of 10,000 light years and framed it into a 3D array of shape (10,000, 10,000, 10,000). Each cell in the array represents a cube of 2 light years per side and contains the magnitude (brightness) of every star within it. Given that the average distance between stars in the Milky Way is about 5 light years, very few cells will contain more than one star. This 3D array contains 0.7 billion stars, which is a significant portion of the Gaia catalog.
+
+The magnitude of each star is stored as a float32, resulting in a total dataset size of 3.7 TB. However, we can greatly reduce its size to 14 GB by using compression. This is possible because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost entirely. Additionally, by using lossy compression (via the internal :code:`TRUNC_PREC` filter) to retain only 2 significant digits in the star's magnitude, we can further reduce the size to a mere 8 GB.
 
 .. figure:: 3d-view-milkyway-inverse.png
    :scale: 25%
@@ -305,7 +312,7 @@ Conclusions
 
 Working with large, multi-dimensional data cubes can be challenging due to the costly data handling involved. In this document, we demonstrate how the two-partition feature in Blosc2 NDim can help reduce the amount of data movement required when retrieving thin slices of large datasets. Additionally, this feature provides a foundation for leveraging cache hierarchies in modern CPUs.
 
-Blosc2 supports a wide range of compression codecs and filters, making it easier to select the most appropriate ones for the dataset being explored. It also supports storage on either memory or disk, which is crucial for large datasets.
+Blosc2 supports a variety of compression codecs and filters, making it easier to select the most appropriate ones for the dataset being explored. It also supports storage in either memory or on disk, which is crucial for large datasets. Another important feature is the ability to store data in a container format that can be easily shared across different programming languages. Furthermore, Blosc2 has special support for sparse datasets, which greatly improves the compression ratio in this scenario.
 
 We have also shown how the BTune plugin can be used to automatically tune the compression parameters for a given dataset.  This is especially useful when we want to compress data efficiently, but we do not know the best compression parameters beforehand.
 
