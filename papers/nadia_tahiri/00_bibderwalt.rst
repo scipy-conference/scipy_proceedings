@@ -278,11 +278,11 @@ To investigate the potential correlation between the diversity of specific genes
 Various tools and software were utilized to accomplish these analysis tasks, including Biopython :cite:`cock2009biopython`, raxml-ng :cite:`kozlov2019raxml`, fasttree :cite:`price2009fasttree`, and Python libraries such as robinson-foulds, NumPy, and Pandas. A manuscript for aPhyloGeo-pipeline is available on Github Wiki (https://github.com/tahiri-lab/aPhyloGeo-pipeline/wiki).
    
 
-Results
--------
+Results and discussion
+------------------------
 
 The SARS-CoV-2 virus has a genome size of approximately 30kb. The first two-thirds of its genome, located at the 5'-terminal, encodes the instructions for the synthesis of two major proteins, namely pp1a and pp1ab. Viral enzymes subsequently process these proteins into 16 smaller non-structural proteins (Nsps), which play crucial roles in viral replication and transcription :cite:`khan2021structures`. 
-Consequently, the first assessment of the aPhyloGeo-Covid performance focused on the pp1a region.
+Consequently, our first assessment of the aPhyloGeo-Covid performance focused on the pp1a region.
 To identify and filter the appropriate datasets for further phylogeographic analysis around pp1a, 14 lineages starting with the codes AE, AY, B, BA, BE, DL, or XBB were selected from the checklist on the aPhyloGeo-Covid web page. Subsequently, with the Neo4j graph database, eight relevant locations were retrieved, where at least one of selected lineage was most prevalent (See Figure :ref:`fig2`). 
 An input node was created based on the lineages with connections of all the nodes of input sequences.
 The aPhyloGeo-Covid web page facilitated the definition of specific parameters for analysis, including a step size of 3 residues, a window size of 100 residues, an RF distance threshold of 100%, a bootstrap threshold of 0%, and a list of climate factors such as humidity, wind speed, sky shortwave irradiance, and precipitation (See Figure :ref:`fig3`). 
@@ -292,6 +292,14 @@ These parameters were associated with the node of analysis and stored as propert
    :scale: 23%
    
    The networks of a single analysis experiment. For a specific analysis, the network highlights all entities serving as input data sources and their relationships. The Input node establishes connections between the data source objects and the specific analysis object. The Analysis node captures the parameters associated with the analysis, while the Output node stores the resulting analysis data. :label:`fig2`
+
+In this analysis experiment, aPhyloGeo-Covid queried climatic data for each sample connected to the input node in the network based on the most prevalent country and the time of initial collection. The meteorological parameters considered in our analysis included Precipitation Corrected, Relative Humidity at 2 Meters, Specific Humidity at 2 Meters, All Sky Surface Shortwave Downward Irradiance, Wind Speed within a 10-Meter Range, and Wind Speed within a 50-Meter Range. The daily data for these parameters were collected from the NASA/POWER DailyGridded weather :cite:`marzouk2021assessment`. For statistical analysis, a user-defined average calculation interval of 3 days was applied.
+
+
+
+
+
+
 
 
 .. figure:: figure3.png
