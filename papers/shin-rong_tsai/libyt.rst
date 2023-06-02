@@ -104,8 +104,8 @@ It is the middle layer that handles data IO between simulations and Python insta
 and between MPI processes. 
 When launching *N* MPI processes, each process contains one piece of simulation and 
 one Python interpreter. Each Python interpreter has access to simulation data. 
-A total of *N* Python instances will work together to conduct in situ analysis in the 
-process space of MPI task.
+When doing in situ analysis, every simulation process pauses, and a total of *N* Python 
+instances will work together to conduct Python tasks in the process space of MPI. 
 
 .. figure:: Parallelism.pdf
    :figclass: thb
@@ -118,13 +118,16 @@ process space of MPI task.
    platform. 
    :label:`parallelism`
 
-Simulations use ``libyt`` API to pass in data and run Python codes during runtime, 
+Simulations use ``libyt`` API [#]_ to pass in data and run Python codes during runtime, 
 and Python instances use ``libyt`` Python module to request data directly from simulations 
 using C-extension method and access Python objects that contain simulation information. 
 Using ``libyt`` for in situ analysis is very similar to running Python scripts in post-processing 
 under MPI platform, except that data are stored in memory instead of hard drives. 
 ``libyt`` is for general-purpose and can launch arbitrary Python scripts and Python modules, 
 though here, we focus on using yt as our core analysis tool.
+
+.. [#] For more details, please refer to ``libyt`` documents. 
+   (`https://calab-ntu.github.io/libyt/libytAPI <https://calab-ntu.github.io/libyt/libytAPI>`_)
 
 
 .. _Connecting Python and Simulation:
@@ -189,29 +192,13 @@ longer needed.
    :label:`pythonaskdata`
 
 
-Grid information and simulation dataare properly organized in dictionaries under ``libyt`` 
-Python module. One can easily call it during simulation runtime via:
+Grid information and simulation data are properly organized in dictionaries under ``libyt`` 
+Python module. One can easily call it during simulation runtime:
 
 .. code-block:: python
 
    import libyt  # Import libyt Python module
-   dir(libyt)
 
-
-.. _Executing Python Codes:
-
-Executing Python Codes and Handling Errors
-++++++++++++++++++++++++++++++++++++++++++
-
-
-.. figure:: REPL.pdf
-   :figclass: thb
-
-   The procedure shows how ``libyt`` supports interactive Python prompt. 
-   It takes user inputs in root process and executes Python codes across whole MPI processes. 
-   The root process handles syntax errors and distinguishes whether or not the error is caused 
-   by user hasn't done inputing yet.
-   :label:`pythonprompt`
 
 .. _In Situ Analysis Under Parallel Computing:
 
@@ -239,10 +226,94 @@ to the algorithm in Python packages.
    need it at all. 
    :label:`rma`
 
+.. _Executing Python Codes:
+
+Executing Python Codes and Handling Errors
+++++++++++++++++++++++++++++++++++++++++++
+
+``libyt`` imports user's Python script at the initialization stage.
+Every Python statement is executed inside the imported script's namespace using ``PyRun_SimpleString``. 
+The namespace holds Python functions and objects. Every change made will also be stored under this 
+namespace and be brought to the following round.
+
+Using ``libyt`` for in situ analysis is just like running Python scripts in post-processing.
+Their only difference lies in how the data is loaded.
+Post-processing has everything store on hard disk, while data in in situ analysis is distributed 
+in different computing nodes.
+
+.. code-block:: python
+   :linenos:
+
+   import yt
+   yt.enable_parallelism()
+   def yt_post(data):
+       ds = yt.load(data) # Load data from hard disk
+       prj = yt.ProjectionPlot(ds, "z", ("gamer", "Dens"))
+       if yt.is_root():
+           prj.save()
+   if __name__ == "__main__":
+       yt_post("Data000000")
+
+
+
+
+
+.. code-block:: python
+   :linenos:
+
+   import yt_libyt
+   import yt
+   yt.enable_parallelism()
+   def yt_inline():
+       ds = yt_libyt.libytDataset() # Load data from libyt
+       prj = yt.ProjectionPlot(ds, "z", ("gamer", "Dens"))
+       if yt.is_root():
+           prj.save()
+
+Simulation can call Python function using ``libyt`` API ``yt_run_Function`` and ``yt_run_FunctionArguments``.
+For example, this calls the Python function defined above:
+
+.. code-block:: c
+
+   yt_run_Function("yt_inline");
+
+
+Beside calling Python function, ``libyt`` also provides interactive prompt for user to update Python 
+function, enter statements, and get feedbacks instantly. [#]_
+This is like running Python prompt inside the ongoing simulation with access to data.
+``libyt`` checks input Python syntax through compiling it to code object. If error occurs, it parses 
+the error to see if this is caused by input not done yet or a real error.
+
+.. [#] Currently, ``libyt`` interactive prompt only works on local machine or submit the job to HPC 
+   platforms using interactive queue like ``qsub -I`` on PBS scheduler.
+
+.. figure:: REPL.pdf
+   :figclass: thb
+
+   The procedure shows how ``libyt`` supports interactive Python prompt. 
+   It takes user inputs in root process and executes Python codes across whole MPI processes. 
+   The root process handles syntax errors and distinguishes whether or not the error is caused 
+   by user hasn't done inputing yet.
+   :label:`pythonprompt`
+
+
 .. _Applications:
 
 Applications
 ------------
+
+``libyt`` has already been implemented in ``GAMER`` [#]_ :cite:`gamer-2` and ``Enzo`` [#]_ :cite:`enzo`.
+``GAMER`` is a GPU-accelerated adaptive mesh refinement code for astrophysics. 
+It features extremely high performance and parallel scalability and supports a rich set of physics 
+modules. ``Enzo`` is a community-developed adaptive mesh refinement simulation code, 
+designed for rich, multi-physics hydrodynamic astrophysical calculations.
+
+Here, we demonstrate the results from ``GAMER`` using ``libyt``, and we show how ``libyt`` solves the 
+problem of limitation in disk space and improves disk usage efficiency.
+
+.. [#] `https://github.com/gamer-project/gamer <https://github.com/gamer-project/gamer>`_
+
+.. [#] `https://enzo-project.org/ <https://enzo-project.org/>`_
 
 Analyzing Fuzzy Dark Matter Vortices Simulation
 +++++++++++++++++++++++++++++++++++++++++++++++
