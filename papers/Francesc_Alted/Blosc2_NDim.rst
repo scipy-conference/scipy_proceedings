@@ -207,23 +207,26 @@ The raw data of Gaia is stored in CSV files.  The coordinates are stored in the 
        barr = None
        for file in glob.glob("gaia-source/*.csv*"):
            # Load raw data
-           df = pd.read_csv(file,
-                            usecols=[
-                                "ra", "dec", "parallax",
-                                "phot_g_mean_mag"],
-                            dtype=dtype, comment='#')
+           df = pd.read_csv(
+               file,
+               usecols=[
+                        "ra", "dec", "parallax",
+                        "phot_g_mean_mag"],
+               dtype=dtype, comment='#')
            # Convert to numpy array and remove NaNs
            arr = df.to_numpy()
            arr = arr[~np.isnan(arr[:, 2])]
            if barr is None:
                # Create a new Blosc2 file
-               barr = blosc2.asarray(arr,
-                                     chunks=(2**20, 4),
-                                     urlpath=out,
-                                     mode="w")
+               barr = blosc2.asarray(
+                   arr,
+                   chunks=(2**20, 4),
+                   urlpath=out,
+                   mode="w")
            else:
                # Append to existing Blosc2 file
-               barr.resize((barr.shape[0] + arr.shape[0], 4))
+               barr.resize(
+                   (barr.shape[0] + arr.shape[0], 4))
                barr[-arr.shape[0]:] = arr
        return barr
 
@@ -241,7 +244,8 @@ Once we have the raw data in a Blosc2 container, we can select the stars in a ra
        # 1 parsec = 3.26 light years
        ly = ne.evaluate("3260 / parallax")
        # Remove ly < 0 and > 10_000
-       valid_ly = ne.evaluate("(ly > 0) & (ly < 10_000)")
+       valid_ly = ne.evaluate(
+           "(ly > 0) & (ly < 10_000)")
        ra = ra[valid_ly]
        dec = dec[valid_ly]
        ly = ly[valid_ly]
@@ -266,7 +270,7 @@ Finally, we can compute the density of stars in a 3D grid with this script:
 
    R = 2  # resolution of the 3D cells in ly
    LY_RADIUS = 10_000  # radius of the sphere in ly
-   CUBE_SIDE = (2 * LY_RADIUS) // R  # side of the cube in ly
+   CUBE_SIDE = (2 * LY_RADIUS) // R
    MAX_STARS = 1000_000_000  # max number of stars to load
 
    b = blosc2.open("gaia-ly.b2nd")
@@ -288,15 +292,21 @@ Finally, we can compute the density of stars in a 3D grid with this script:
    # Save 3d array as Blosc2 NDim file
    blosc2.asarray(a3d,
                   urlpath="gaia-3d.b2nd", mode="w",
-                  # experiment with different values for parts
-                  chunks=(200, 200, 200), blocks=(20, 20, 20),
+                  chunks=(200, 200, 200),
+                  blocks=(20, 20, 20),
                   )
 
 With that, we have a 3D array of shape (10_000, 10_000, 10_000) with the magnitudes of stars with a 2 light years resolution.  We can visualize it with the following code:
 
-TBD ...
+To be completed ...
 
 Conclusions
 -----------
 
-TBD ...
+Working with large, multi-dimensional data cubes can be challenging due to the costly data handling involved. In this document, we demonstrate how the two-partition feature in Blosc2 NDim can help reduce the amount of data movement required when retrieving thin slices of large datasets. Additionally, this feature provides a foundation for leveraging cache hierarchies in modern CPUs.
+
+Blosc2 supports a wide range of compression codecs and filters, making it easier to select the most appropriate ones for the dataset being explored. It also supports storage on either memory or disk, which is crucial for large datasets.
+
+We have also shown how the BTune plugin can be used to automatically tune the compression parameters for a given dataset.  This is especially useful when we want to compress data efficiently, but we do not know the best compression parameters beforehand.
+
+In conclusion, we have demonstrated how to utilize the Blosc2 library for storing and processing the Gaia dataset. This dataset serves as a prime example of a large, multi-dimensional dataset that can be efficiently stored and processed using Blosc2 NDim.
