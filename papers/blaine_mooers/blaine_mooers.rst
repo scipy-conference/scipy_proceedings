@@ -199,12 +199,9 @@ The elyra-code-snippet extension
   Hovering the mouse cursor over the snippet's name triggers the display of a description of the snippet.
 ..
 
-.. figure:: hbondsElyra.png
-   :align: center
-   :figclass: w
-   :scale: 44%
-
-   The GUI from the elyra-code-snippet extension for accessing code snippets is shown on the left. A preview of the *hbonddash* snippet is shown in the lower left. A Jupyter notebook with the inserted the *hbonddash* snippet is shown on the right. :label:`hbondElyra`
+The GUI from the elyra-code-snippet extension for accessing code snippets is shown on the left.
+ A preview of the *hbonddash* snippet is shown in the lower left.
+ A Jupyter notebook with the inserted the *hbonddash* snippet is shown on the right. :label:`hbondElyra`
 
 ..
   Alternatively, the user can enter a search term in the search box at the top of the menu to reduce the list of snippets.
@@ -223,12 +220,7 @@ The elyra-code-snippet extension
   The GUI has a text box for each kind of metadata: name, description, tags, language, and the snippet code.
   There is a save button at the bottom to add the new snippet to the current library.
 
-
-.. figure:: newElyraSnip.png
-   :align: center
-   :figclass: w
-   :scale: 39%
-
+  
    The GUI from elyra-code-snippet extension for the creation of new snippets. The Learn more link takes the user to the documentation on Read-the-docs. :label:`newElyraSnip`
 
 
@@ -268,11 +260,6 @@ Colab snippet library
   Then a series of code snippets contained the code for carrying out the steps.
   This installation snippet was the only one in a notebook that contained more then one code snippet.
 ..
-
-.. figure:: ColabPyMOL.png 
-   :align: center
-   :figclass: w
-   :scale: 50%
 
    Code snippet for installing PyMOL on Colab. The <> icon opens a menu on the left side that lists all of the snippets. The search term 'pymol' was used to reduce the list of candidate snippets. The highlighted snippets name 'Install PyMOL is new Colab notebook'. Selecting this snippets opens the snippet below. The snippet description is displayed followed by the seven blocks of code. The description includes the seven steps for installing the molecular graphics programs. Clicking with the mouse cursor on 'INSERT' in blue inserts the code into in the cells on the notebook on the fight. :label:`ColabPyMOL`
 
@@ -577,9 +564,9 @@ Ubiquitous computing platform on the cloud
   binary
 
 
-==========================
-Acknowledgements
-==========================
+========================
+Acknowledgments
+========================
 
 This work was supported by the Oklahoma Center for the Advancement of Science and Technology: HR20-002 and by these National Institutes of Health grants: R01 CA242845, P20 GM103640, P30 CA225520, and P30 AG050911-07S1.
 
