@@ -297,7 +297,7 @@ These parameters were associated with the node of analysis and stored as propert
 .. figure:: figure3.png
    :scale: 27%
 
-   Climatic conditions of each sample in most common country at the time of first collection. The climate factors involved include Precipitation Corrected (mm/day), Relative Humidity at 2 Meters (%), Specific Humidity at 2 Meters (g/kg), All Sky Surface Shortwave Downward Irradiance (kW-hr/m^2/day), Wind Speed at 10 Meters Range (m/s), Wind Speed at 50 Meters Range (m/s). :label:`fig3`
+   Climatic conditions of each sample in most common country at the time of first collection. The climate factors involved include Precipitation Corrected (mm/day), Relative Humidity at 2 Meters (%), Specific Humidity at 2 Meters (g/kg), All Sky Surface Shortwave Downward Irradiance (kW-hr/m^2/day), Wind Speed within 10 Meters Range (m/s), Wind Speed within 50 Meters Range (m/s). :label:`fig3`
    
    
    
