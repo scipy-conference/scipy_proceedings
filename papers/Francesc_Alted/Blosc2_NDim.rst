@@ -28,11 +28,11 @@ Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset
 
 .. class:: abstract
 
-    N-dimensional datasets are widely used in many scientific fields. Quickly accessing subsets of these large datasets is critical for an efficient exploration experience. Blosc2 is a compression and format library that recently added support for multidimensional datasets. Compression is crucial for effectively dealing with sparse datasets, as the zeroed parts can be almost entirely suppressed, while the non-zero parts can still be stored in smaller sizes than their uncompressed counterparts. Moreover, the new double data partition in Blosc2 reduces the need for decompressing unnecessary data, which allows for top-class slicing speed.
+    N-dimensional datasets are widely used in many scientific fields. Quickly accessing subsets of these large datasets is critical for an efficient exploration experience. To achieve this goal, we have added support for multidimensional datasets to Blosc2, a compression and format library. This extended library can effectively deal with n-dimensional large sparse datasets, as the zeroed parts are almost entirely suppressed, while the non-zero parts are stored in smaller sizes than their uncompressed counterparts. In addition to this, the new two level data partition used in Blosc2 reduces the need for decompressing unnecessary data, which allows top-class slicing speed.
 
-    The Blosc2 NDim layer enables the creation and reading of n-dimensional datasets in an extremely efficient manner. This is due to a completely general n-dim 2-level partitioning, which allows for slicing and dicing of arbitrary large (and compressed) data in a more fine-grained way. Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels, making compression more efficient.
+    The Blosc2 NDim layer enables the creation and reading of n-dimensional datasets in an extremely efficient manner. This is due to a completely general n-dim 2-level partitioning, which allows for slicing and dicing of arbitrary large (and compressed) data in a more fine-grained way. Having a second partition provides a better flexibility to fit the different partitions at the different CPU cache levels, making compression even more efficient.
 
-    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that are in a sphere of 10 thousand light-years radius (centered in the Gaia telescope), which accounts for 0.7 billion stars. The total size of this partial dataset is 3.7 TB, but when compressed, it is reduced to just 10 GB, making it easy to fit into the memory of modern computers for processing.
+    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that are in a sphere of 10 thousand light-years radius (centered in the Gaia telescope), which accounts for 0.7 billion stars. The total size of this partial dataset is 3.7 TB, but when compressed, it is reduced to just 10 GB, making it easy to fit into the memory of modern computers for being processed.
 
 .. class:: keywords
 
@@ -47,12 +47,13 @@ Blosc is a high-performance compressor optimized for binary data. Its design ena
 
 Blosc uses the blocking technique :cite:`FA10-starving-cpus` to minimize activity on the memory bus. The technique divides datasets into blocks small enough to fit in the caches of modern processors, where compression/decompression is performed. Blosc also takes advantage of SIMD (SSE2, AVX2, NEON…) and multi-threading capabilities in modern multi-core processors to maximize the compression/decompression speed.
 
+In addition, using the Blosc compressed data can accelerate memory-bound computations when enough cores are dedicated to the task. Figure :ref:`sum-precip` provides a real example of this.
+
 .. figure:: sum_openmp-rainfall.png
    :scale: 40%
 
-   Speed for summing up a vector of real float32 data (meteorological precipitation) using a variety of codecs that come with Blosc2. Note that the maximum speed is achieved when utilizing the maximum number of (logical) threads available on the computer (28), where different codecs are allowing faster computation than using regular decompressed data. More info at :cite:`BDT18-breaking-memory-walls`. :label:`sum-precip`
+   Speed for summing up a vector of real float32 data (meteorological precipitation) using a variety of codecs provided by Blosc2. Note that the maximum speed is achieved when utilizing the maximum number of (logical) threads available on the computer (28), where different codecs are allowing faster computation than using uncompressed data. More info at :cite:`BDT18-breaking-memory-walls`. :label:`sum-precip`
 
-Using Blosc compression can accelerate computations when enough cores are dedicated to the task. Figure :ref:`sum-precip` provides a real example of this.
 
 Blosc2 is the latest version of the Blosc 1.x series, which is used in many important libraries, such as HDF5 :cite:`hdf5`, Zarr :cite:`zarr`, and PyTables :cite:`pytables`. Its NDim feature excels at reading multi-dimensional slices, thanks to an innovative pineapple-style partitioning technique :cite:`BDT23-blosc2-ndim-intro`. This enables fast exploration of general n-dimensional datasets, including the 3D Gaia dataset.
 
@@ -68,12 +69,12 @@ The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in
 
 Figure :ref:`gaia-3d-dset` shows a 3D view of the Milky Way different type of stars. Each point is a star, and the color of each point represents the star's magnitude, with the brightest stars appearing as the reddest points. Although this view provides a unique perspective, the dimensions of the cube are not enough to fully capture the spiral arms of the Milky Way.
 
-One advantage of using a 3D array is the ability to utilize Blosc2 NDim's powerful slicing capabilities for quickly exploring parts of a dataset. For example, we could search for star clusters by extracting small cubes as NumPy arrays, and counting the number of stars in each one. A cube containing an abnormally high number of stars would be a candidate for a cluster. We could also extract a thin 3D slice of the cube and project it as a 2D image, where the pixels colors represent the magnitude of the shown stars. This could be used to generate a cinematic view of a journey over different trajectories in the Milky Way.
+One advantage of using a 3D array is the ability to utilize Blosc2 NDim's powerful slicing capabilities for quickly exploring parts of the dataset. For example, we could search for star clusters by extracting small cubes as NumPy arrays, and counting the number of stars in each one. A cube containing an abnormally high number of stars would be a candidate for a cluster. We could also extract a thin 3D slice of the cube and project it as a 2D image, where the pixels colors represent the magnitude of the shown stars. This could be used to generate a cinematic view of a journey over different trajectories in the Milky Way.
 
 Blosc2 NDim
 -----------
 
-Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, allowing to slice and dice arbitrary large (and compressed!) data in a more fine-grained way. Having a second partition means that we have better flexibility to fit the different partitions at the different CPU cache levels, making compression even more efficient.
+Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, allowing to slice and dice arbitrary large (and compressed!) data in a more fine-grained way. Having a second partition provides a better flexibility to fit the different partitions at the different CPU cache levels, making compression even more efficient.
 
 .. figure:: b2nd-2level-parts.png
    :scale: 12%
@@ -85,7 +86,7 @@ Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensio
 
    Blosc2 NDim 2-level partitioning is flexible. The dimensions of both partitions can be specified in any arbitrary way that fits the expected read access patterns. :label:`b2nd-3d-dset`
 
-With these finer-grained cubes (also known as partitions), arbitrary n-dimensional slices can be retrieved faster because not all the data necessary for the coarser-grained partition does not need to be decompressed, as usually happens in other libraries. See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` to learn how this works and how to set it up. Also, see Figure :ref:`read-partial-slices` for a comparison against other libraries that use just a single partition (e.g., HDF5, Zarr).
+With these finer-grained cubes (also known as partitions), arbitrary n-dimensional slices can be retrieved faster because not all the data necessary for the coarser-grained partition has to be decompressed, as usually happens in other libraries. See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` to learn how this works and how to set it up. Also, see Figure :ref:`read-partial-slices` for a comparison against other libraries that use just a single partition (e.g., HDF5, Zarr).
 
 .. figure:: read-partial-slices.png
    :scale: 70%
@@ -108,10 +109,10 @@ Blosc2 supports a variety of codecs, filters, and other compression features. In
 - Zstd (high compression), and
 - ZFP (lossy compression for n-dimensional datasets of floats).
 
-It also supports out-of-the-box the following filters:
+It also supports the following filters out-of-the-box:
 
 - Shuffle (groups equal significant bytes together, useful for ints/floats),
-- Shuffle with bytedelta (same than shuffle, but storing deltas of the consecutive same significant bytes),
+- Shuffle with bytedelta (same than shuffle, but storing deltas of consecutive same significant bytes),
 - Bitshuffle (groups equal significant bits together, useful for ints/floats), and
 - Truncation (truncates precision, useful for floats; lossy).
 
@@ -134,31 +135,19 @@ For example, Table :ref:`predicted-dparams-example` displays the results for the
 
 .. table:: BTune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favoring speed only, and 1 means favoring compression ratio only). It can be seen that BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimizing for the compression ratio.  Speeds are in GB/s.  :label:`predicted-dparams-example`
 
-   +---------+-------------------+---------+--------+--------+
    | Balance | Most predicted    |  Cratio | Cspeed | Dspeed |
-   +=========+===================+=========+========+========+
+   |    ---: | :---              |    ---: |   ---: |   ---: |
    | 0.0     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
-   +---------+-------------------+---------+--------+--------+
    | 0.1     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
-   +---------+-------------------+---------+--------+--------+
    | 0.2     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
-   +---------+-------------------+---------+--------+--------+
    | 0.3     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
-   +---------+-------------------+---------+--------+--------+
    | 0.4     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
-   +---------+-------------------+---------+--------+--------+
    | 0.5     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
-   +---------+-------------------+---------+--------+--------+
    | 0.6     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
-   +---------+-------------------+---------+--------+--------+
    | 0.7     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
-   +---------+-------------------+---------+--------+--------+
    | 0.8     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
-   +---------+-------------------+---------+--------+--------+
    | 0.9     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
-   +---------+-------------------+---------+--------+--------+
    | 1.0     | zstd-bytedelta-9  | 3.31    | 0.07   | 11.40  |
-   +---------+-------------------+---------+--------+--------+
 
 On the other hand, in Table :ref:`predicted-cparams-example`, we can see an example of predicted compression parameter tuned for compression speed and ratio on a different dataset.
 
