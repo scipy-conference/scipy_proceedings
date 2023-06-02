@@ -38,7 +38,7 @@ Emukit mainly contains three high-level methods: Bayesian optimisation (BO), Bay
 
 \emph{Experimental design} \cite{Kennedy2000, Kennedy2001, Conti2009, Conti2010} is a method that aims to collect nodes of a black-box function such that the resulting model predicts unseen function values well. It has traditionally been applied to statistical emulation of complex computer models \maren{cite} but also to \maren{examples?}. Some ED methods, too, obey the structure of an active decision loop similar to BO and BQ.
 
-Emukit is build on the realization that all three methods (BO, BQ, ED), albeit having different numerical aims and result objects, share the same algorithmic structure: a decision loop that computes the next node based on the current model, evaluates the user function and then updates the model accordingly. This decision loop is contained in Emukit's core package and shared by all three high-level methods.
+Emukit is build on the realization that all three methods (BO, BQ, ED), albeit having different numerical aims and result objects, share the same algorithmic structure: A decision loop that computes the next node based on the current model, evaluates the user function and then updates the model accordingly. This decision loop is contained in Emukit's core package and shared by all three high-level methods.
 %Thus Emukit contains are shared core implementation of the decision loop of all three methods which will be elaborated further on in Section~\ref{sec:lib-structure}.
 Further, especially BO and ED can use similar models while BQ is somewhat more restricted. Potential benefits of shared implementation, model and compute among tasks are discussed in later sections.
 
