@@ -135,21 +135,33 @@ For example, Table :ref:`predicted-dparams-example` displays the results for the
 
 .. table:: BTune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favoring speed only, and 1 means favoring compression ratio only). It can be seen that BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimizing for the compression ratio.  Speeds are in GB/s.  :label:`predicted-dparams-example`
 
+   +---------+-------------------+---------+--------+--------+
    | Balance | Most predicted    |  Cratio | Cspeed | Dspeed |
-   |    ---: | :---              |    ---: |   ---: |   ---: |
+   +=========+===================+=========+========+========+
    | 0.0     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
+   +---------+-------------------+---------+--------+--------+
    | 0.1     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
+   +---------+-------------------+---------+--------+--------+
    | 0.2     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
+   +---------+-------------------+---------+--------+--------+
    | 0.3     | blosclz-shuffle-5 | 2.09    | 14.47  | 48.93  |
+   +---------+-------------------+---------+--------+--------+
    | 0.4     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
    | 0.5     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
    | 0.6     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
    | 0.7     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
    | 0.8     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
    | 0.9     | zstd-bytedelta-1  | 3.30    | 17.04  | 21.65  |
+   +---------+-------------------+---------+--------+--------+
    | 1.0     | zstd-bytedelta-9  | 3.31    | 0.07   | 11.40  |
+   +---------+-------------------+---------+--------+--------+
 
-On the other hand, in Table :ref:`predicted-cparams-example`, we can see an example of predicted compression parameter tuned for compression speed and ratio on a different dataset.
+On the other hand, Table :ref:`predicted-cparams-example`, shows an example of predicted compression parameter tuned for compression speed and ratio on a different dataset.
 
 .. table:: BTune prediction of the best compression parameters for compression speed, depending on a balanced value. It can be seen that LZ4 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is leverage towards the compression ratio. Speeds are in GB/s. :label:`predicted-cparams-example`
 
@@ -216,7 +228,7 @@ The raw data of Gaia is stored in CSV files.  The coordinates are stored in the 
                barr[-arr.shape[0]:] = arr
        return barr
 
-Once we have the raw data in a Blosc2 container, we can select the stars in a radius of 10 thousand light years with this function:
+Once we have the raw data in a Blosc2 container, we can select the stars in a radius of 10 thousand light years using this function:
 
 .. code-block:: python
 
