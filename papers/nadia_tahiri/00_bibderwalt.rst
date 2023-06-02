@@ -262,14 +262,13 @@ After defining the input data, which includes sequence data and associated locat
 
 After confirming the parameters, the corresponding sequences are downloaded from NCBI :cite:`brister2015ncbi` using the Biopython package :cite:`cock2009biopython`, followed by performing multiple sequence alignments (MSA) :cite:`edgar2006multiple` using the MAFFT method :cite:`katoh2013mafft`. Subsequently, the Snakemake workflow is triggered in the backend, taking the alignment results and associated environmental data as input. Once the analysis is completed, a unique output ID is generated, enabling the results to be queried on the web platform.
 
-
 Output exploration
 ++++++++++++++++++
 
-At the end of each analysis, an output node with a unique id is created in the Neo4j graph database. The associated nodes containing input and parameter information are connected to it by edges. Therefore, users can retrieve and visualize the analysis results through Output ID. The platform allows users to query individual results but also provides the capability to compare the results of multiple analyses. 
-
-Input, Analysis, and Output nodes created by different users form a network that encompasses numerous combinations of parameter settings and input configurations. As the utilization of the platform expands, this network grows, resulting in an open academic platform that fosters communication and collaboration. This feature enhances the user's ability to gain insights from the data and enables comprehensive analysis of the phylogeographic patterns of SARS-CoV-2 variation.
-
+After each analysis, a unique output node is generated in the Neo4j graph database, connected to interrelated nodes that store input and parameter information, forming an intricate network of relationships. 
+Through the ID of output node, analysis results can be conveniently traced and accessed. 
+The platform not only facilitates querying individual results but also empowers the comparison of multiple analysis outcomes. 
+Furthermore, as the platform is utilized, this network of input, analysis, and output nodes expands, enabling the acquisition of valuable insights from the data and facilitating comprehensive analysis of the phylogeographic patterns of SARS-CoV-2 variation.
 
 Snakemake workflow for phylogenetic analysis
 +++++++++++++++++++++++++++++++++++++++++++++++
