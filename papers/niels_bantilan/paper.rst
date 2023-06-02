@@ -430,7 +430,7 @@ library called ``sloth`` it would look something like:
 
 .. code-block:: python
 
-   import sloth
+   import sloth as sl
    from pandera.api.base.schema import BaseSchema
    from pandera.backends.base import BaseSchemaBackend
 
@@ -442,7 +442,7 @@ library called ``sloth`` it would look something like:
    class DataFrameSchemaBackend(BaseSchemaBackend):
        def validate(
            self,
-           check_obj: sloth.DataFrame,
+           check_obj: sl.DataFrame,
            schema: DataFrameSchema,
            *,
            **kwargs,
@@ -454,6 +454,19 @@ library called ``sloth`` it would look something like:
        sloth.DataFrame,
        DataFrameSchemaBackend,
    )
+
+Similarly, the built-in checks can easily be extended to support ``sloth``
+data structures:
+
+.. code-block:: python
+
+   import sloth as sl
+
+   from pandera.api.extensions import register_builtin_check
+
+   @register_builtin_check(aliases=["eq"], error="equal_to({value})")
+   def equal_to(data: sl.Series, value: Any) -> sl.Series:
+       return data.equals(value)
 
 
 Organizational and Development Challenges
@@ -503,7 +516,7 @@ facilitated the rewrite itself and also reduced the risk of regressions:
 In retrospect, there are additionally things the author would have done
 differently to make pandera more flexible and extensible:
 
-- **Thoughtful Design work**: With some careful design work, it would have been
+- **Thoughtful design work**: With some careful design work, it would have been
   obvious to decouple schema specification from validation backend much sooner.
 - **Library-independent error reporting**: Make error reporting more flexible by
   decoupling error reporting data structures from the specific DataFrame library,
@@ -511,9 +524,9 @@ differently to make pandera more flexible and extensible:
   of pandas DataFrames to report failure cases.
 - **Decoupling metadata from data**: Distinguish between DataFrame metadata schema
   errors (e.g. missing columns) and data value errors (e.g. out-of-range values).
-- **Governance and community**: Invest more in governance and formalize contributor
-  and community RFC processes sooner to help with design and feature enhancement
-  efforts.
+- **Investing in governance and community**: Invest more in governance and formalize
+  contributor and community RFC processes sooner to help with design and feature
+  enhancement efforts.
 
 
 Updated Design Principles
@@ -523,8 +536,8 @@ Given all of the developments and updates that pandera has seen in recent years,
 pandera's design principles also need to be updated with one amendment and one
 additions:
 
-1. **Amendment**: Expressing schemas as code should feel familiar to *users of the
-   associated dataframe library that they're using to write schemas for*.
+1. **Amendment**: Expressing schemas as code should feel familiar to *Python
+   users, regardless of the dataframe library they're using*.
 2. Data validation should be compatible with the different workflows and tools in
    in the data science and ML stack without a lot of setup or configuration.
 3. Defining custom validation rules should be easy.
