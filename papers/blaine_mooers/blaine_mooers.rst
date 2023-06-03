@@ -281,12 +281,12 @@ References
 ==============
 
 .. [Kulhbrandt14] W. Kuhlbrandt.
-            "he resolution revolution",
+            "The resolution revolution",
             *Science* 343:1443-1445, March 2014.
             doi:10.1126/science.1
 
 .. [Jumper2021] J. Jumper, R. Evans, A. Pritzel, T. Green, M. Figurnov, O. Ronneberger, K. Tunyasuvunakool, R. Bates, A. Zidek, A. Potapenko, A. Bridgland, C. Meyer, S. A. A. Kohl, A. J. Ballard, A. Cowie, B. Romera-Paredes, S. Nikolov, R. Jain, J. Adler, T. Back, S. Petersen, D. Reiman, E. Clancy, M. Zielinski, M. Steinegger, M. Pacholska, T. Berghammer, S. Bodenstein, D. Silver, O. Vinyals, A. W. Senior, K. Kavukcuoglu, P. Kohli and D. Hassabis.
-            ""Highly accurate protein structure prediction with AlphaFold,
+            "Highly accurate protein structure prediction with AlphaFold",
             *Nature* 596:583–589, July 2021.
             doi:10.1038/s41586-021-03819-2
 
@@ -297,7 +297,7 @@ References
 
 .. [Beg21] M. Beg, J. Belin, T. Kluyver, A. Konovalov, M. Ragan-Kelley, N. Thiery, and H. Fangohr.
             "Using Jupyter for reproducible scientific workflows",
-            *Computing in Science and Enginering*, 23(2):36-46, April 2021.
+            *Computing in Science and Engineering*, 23(2):36-46, April 2021.
             doi:10.1109/MCSE.2021.3052101
 
 .. [Berm03] H. Berman, K. Hendrick, and H. Nakamura.
@@ -307,16 +307,16 @@ References
 
 .. [Bias13] M. Biasini, T. Schmidt, S. Bienert, V. Mariani, G. Studer, J. Haas, N. Johner, A. D. Schenk, A. Philippsen, and T. Schwede.
             "OpenStructure: an integrated software framework for computational structural biology",
-            *Acta Cryst. D*69(5):701–709, May 2013.
+            *Acta Cryst. D* 69(5):701–709, May 2013.
             doi:10.1107/S0907444913007051
 
 .. [Brun98] A.T. Brünger, P.D. Adams, G.M. Clore, W.L. Delano, P. Gros, R.W. Grosse-Kunstleve, J.-S. Jiang, J. Kuszewski, M. Nilges, N. S. Pannu, R. J. Read, L. M. Rice, T. Simonson, and G. L. Warren.
-            "Crystallography \& NMR system: A new software suite for macromolecular structure determination",
-            *Acta Cryst. D*54(5):905-921, May 1998.
+            "Crystallography and NMR system: A new software suite for macromolecular structure determination",
+            *Acta Cryst. D* 54(5):905-921, May 1998.
             doi:10.1107/S0907444998003254
 
 .. [Burn17] T. Burnley, C.M. Palmer, and M. Winn.
-            "Recent developments in the CCP-EM software suite"
+            "Recent developments in the CCP-EM software suite",
             *Acta Cryst. D* 73(6):469-477, June 2017.
             doi:10.1107/S2059798317007859
 
@@ -371,7 +371,7 @@ References
 .. [Mott10] S. E. Mottarella, M. Rosa, A. Bangura, H. J. Bernstein, and P. A. Craig.
            "Conscript: RasMol to PyMOL script converter",
            *Biochemical and  Molecular Biology Education*, 38(6):419-422, November 2010.
-           doi: 10.1002/bmb.20450
+           doi:10.1002/bmb.20450
 
 .. [MLGH]   https://github.com/MooersLab
 
@@ -400,13 +400,13 @@ References
            doi:10.1038/s41592-019-0686-2
 
 .. [Agirre2023] Agirre, J., Atanasova, M., Bagdonas, H., Ballard, C., Baslé, A., Beilsten-Edmands, J., Borges, R., Brown, D., Burgos-Mármol, J., Berrisford, J. and Others
-          The CCP4 suite: integrative software for macromolecular crystallography.
+          "The CCP4 suite: integrative software for macromolecular crystallography",
           *Acta Crystallographica Section D: Structural Biology*. 79, 449-461, 2023.
          doi:10.1107/S2059798323003595
 
 .. [McNicholas2018] S. McNicholas, T. Croll, T. Burnley, C. Palmer, S. Hoh, H. Jenkins, E.  Dodson, K. Cowtan and J. Agirre
          "Automating tasks in protein structure determination with the clipper python module",
-         *Protein Science*, 27, 207-216,  XXXX 2018.
+         *Protein Science*, 27, 207-216, 2018.
          doi:10.1002/pro.3299
 
 .. [Wojdyr2022] Wojdyr, M.
