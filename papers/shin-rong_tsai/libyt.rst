@@ -27,14 +27,12 @@ libyt: a Tool for Parallel In Situ Analysis with yt
    more important and difficult. 
    We present ``libyt``, an open source C++ library, that allows researchers to analyze and 
    visualize data using ``yt`` or other Python packages in parallel during simulation runtime. 
-   We describe the code method for reading adaptive mesh refinement grid data structure, 
-   handling data transition between Python and simulation with minimal memory overhead, and 
-   conducting analysis with no additional time penalty using Python C API and NumPy C API. 
+   We describe the code method for organizing adaptive mesh refinement grid data structure and 
+   simulation data, handling data transition between Python and simulation with minimal memory 
+   overhead, and conducting analysis with no additional time penalty using Python C API and 
+   NumPy C API. 
    We demonstrate how it solves the problem in astrophysical simulations and increases disk 
-   usage efficiency. Finally, we conclude it with discussions about ``libyt``.
-   
-   (TODO: needs review)
-   
+   usage efficiency. Finally, we conclude it with discussions about ``libyt``.   
 
 .. class:: keywords
 
@@ -484,20 +482,40 @@ without storing any dataset beside the figures on hard disk.
 Discussions
 -----------
 
+``libyt`` is free and open source, which does not depend on any non-free or non-open source software. 
+Converting the post-processing script to inline script is a two-line change, which lowers the barrier.
+
 Using ``libyt`` does not add a time penalty to the analysis, because using Python for in situ analysis 
 and post-processing are exactly the same, except that the former one reads data from memory and the 
-later one reads data from disks. 
-And converting the post-processing script to inline script is a two-line change.
+later one reads data from disks. Fig :ref:`performance` shows the strong scaling of ``libyt``. 
+The test compares the performance between in situ analysis with ``libyt`` and post-processing for 
+computing 2D profiles on a ``GAMER`` dataset. 
+The dataset contains seven adaptive mesh refinement levels with a total of :math:`9.9 \times 10^8` 
+cells. 
+``libyt`` outperforms post-processing by :math:`\sim 10 \textrm{ -- } 30\%` since the former 
+avoids loading data from disk to memory. 
+``libyt`` and post-processing have similar deviation from the ideal scaling since ``libyt`` directly 
+borrows the algorithm in ``yt``. 
+Some improvements have been made in ``yt``, while some are still undergoing to eliminate the scaling 
+bottleneck.
+``libyt`` provides a promising solution that binds simulation to Python with minimal memory overhead 
+and no additional time penalty. It makes analyzing large scale simulation feasible. 
+Though currently, only simulations that use AMR grid data structure are supported, 
+we will extend to more data structure (e.g., octree, particle, unstructured mesh, etc) and hope 
+to engage more simulations and data structures in the future. 
 
 .. figure:: Time-Proc-Ideal.pdf
    :figclass: htb
 
-   Strong scaling of ``libyt``. The test compares the performance between in situ analysis 
-   with ``libyt`` and post-processing for computing 2D profiles on a ``GAMER`` dataset. 
-   The dataset contains seven adaptive mesh refinement levels with a total of :math:`9.9 \times 10^8` 
-   cells. ``libyt`` outperforms post-processing by :math:`\sim 10 \textrm{ -- } 30\%` since the former 
+   Strong scaling of ``libyt``.  
+   ``libyt`` outperforms post-processing by :math:`\sim 10 \textrm{ -- } 30\%` since the former 
    avoids loading data from disk to memory. The dotted line is the ideal scaling. 
    ``libyt`` and post-processing show a similar deviation from the ideal scaling because it directly 
    borrows the algorithm in ``yt``. Improvements have been made and will be made in ``yt`` to 
    eliminate the scaling bottleneck.
    :label:`performance`
+
+``libyt`` focuses on using ``yt`` as its core analytic method, even though it can call other Python 
+modules, and has the ability to enable back-communication of simulation information.
+The advantage of in situ analysis using ``libyt`` provides us another way to interact with simulation. 
+
