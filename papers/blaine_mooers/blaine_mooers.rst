@@ -46,7 +46,7 @@ The lowering of this barrier to the installation of CCTBX has raised interest in
 Nonetheless, many users still find CCTBX to be impenetrable.
 Several online tutorials and workshops have addressed this problem, but the adoption of CCTBX remains low.
 
-To ease the use of CCTBX by my and other labs to develop custom crystallographic analyses, we assembled a collection of CCTBX code snippets for use in Jupyter notebooks.
+To ease the use of CCTBX by my and other labs to develop custom crystallographic Analyses0, we assembled a collection of CCTBX code snippets for use in Jupyter notebooks.
 Jupyter provides an excellent platform for exploring the CCTBX library and developing new analysis tools.
 The Python API of CCTBX simplifies running CCTBX in Jupyter via a kernel specific for its conda environment.
 We formatted the snippet library for several snippet extensions for the Classic Notebook and for Jupyter Lab.
@@ -135,65 +135,97 @@ Thus, it is possible to edit the contents of a computational notebook cell from 
 Changes made in the text editor instantly appear in the notebook and vice versa.
 By applying the power of a text editor to computational notebooks, experienced developers can continue to use familiar editing commands and tools.
 
-As a quick reminder, tab triggers in text editors insert chunks of computer code after the user enters the tab trigger name and hits the TAB key. The tab trigger name can be as short as several letters. Many text editors and IDEs have pop-up menus that aid the selection of the correct tab trigger. Tab stops are sites within the code snippet where the cursor advances to after entering TAB again. These sites often have placeholder values that can be either accepted by entering TAB again or edited. Sites with identical placeholder values can be mirrored so that a change in value at one site is propagated to the other tab stops with the same placeholder value. The absence of tab stops can increase the number of bugs introduced by the developer by overlooking parameter values in the code snippet that need to be changed to adapt the snippet to the current program. The lack of support for tab triggers and tab stops in computational notebooks can dampen the enthusiasm of experienced developers for using computational notebooks. Of course, one solution is to write an extension for Jyptyer Notebook or JuptyerLab in JavaScript that supports tab triggers and tab stops.
+As a quick reminder, tab triggers in text editors insert chunks of computer code after the user enters the tab trigger name and hits the TAB key.
+The tab trigger name can be as short as several letters.
+Many text editors and IDEs have pop-up menus that aid the selection of the correct tab trigger.
+Tab stops are sites within the code snippet where the cursor advances to after entering TAB again.
+These sites often have placeholder values that can be either accepted by entering TAB again or edited.
+Sites with identical placeholder values can be mirrored so that a change in value at one site is propagated to the other tab stops with the same placeholder value.
+The absence of tab stops can increase the number of bugs introduced by the developer by overlooking parameter values in the code snippet that need to be changed to adapt the snippet to the current program.
+The lack of support for tab triggers and tab stops in computational notebooks can dampen the enthusiasm of experienced developers for using computational notebooks.
+Of course, one solution is to write an extension for Jyptyer Notebook or JuptyerLab in JavaScript that supports tab triggers and tab stops.
 
 An easy solution
 ------------------
 
-Another approach is to send the text in the active code cell to a powerful text editor on your local computer via the browser extension known as GhostText (https://ghosttext.fregante.com/). GhostText is a Javascript program developed by Federico Brigante, a prolific JavaScript developer. Versions of the extension are available for the Google Chrome, Firefox, Edge, Opera, and Safari. The extension for the Google Chrome browser works in the Brave browser, and the extension for Firefox works in the Waterfox and Icecat browsers.
+Another approach is to send the text in the active code cell to a powerful text editor on your local computer via the browser extension known as GhostText https://ghosttext.fregante.com/.
+GhostText is a Javascript program developed by Federico Brigante, a prolific JavaScript developer. Versions of the extension are available for the Google Chrome, Firefox, Edge, Opera, and Safari. The extension for the Google Chrome browser works in the Brave browser, and the extension for Firefox works in the Waterfox and Icecat browsers.
 
-The text editor also needs to be extended with a server that enables two-way communication with the web page via a WebSocket. Edits made on the browser side of the WebSocket are immediately sent to an open page in the Text Editor and vice versa; however, the text editor's snippets and other editing tools only work in the text editor (Figure 1). The connection can be closed from either side of the WebSocket. It is closed on the web browser side via an option in GhostTest’s pulldown menu, and it closed on the text editor side by closing the active buffer.
-
-
-.. Figure:: ./figs/Fig5mtzSummary.png
-   :align: center
-   :scale: 45%
-   :figclass: bht
-
-
-   Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets. The list was narrowed to one snippet by the entry of three letters.
-
-A Jupyter notebook with two code snippets from the cctbxsnips library for the Sublime Text 3 editor are shown in Figure 2. The two code cells have been run, and the output from the second cell is printed in the notebook. The first cell is being edited to change the name of the mtz file that is to be read. A pop-up menu in Jupyter has appeared with a list of candidate file names.
-
+The text editor also needs to be extended with a server that enables two-way communication with the web page via a WebSocket.
+Edits made on the browser side of the WebSocket are immediately sent to an open page in the Text Editor and vice versa; however, the text editor's snippets and other editing tools only work in the text editor.
+The connection can be closed from either side of the WebSocket.
+It is closed on the web browser side via an option in GhostTest’s pulldown menu, and it closed on the text editor side by closing the active buffer.
 
 .. Figure:: ./figs/Fig5mtzSummary.png
    :align: center
    :scale: 45%
    :figclass: bht
 
+   Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets.  The list was narrowed to one snippet by the entry of three letters.
+
+A Jupyter notebook with two code snippets from the cctbxsnips library for the Sublime Text 3 editor are shown in Figure 2.
+The two code cells have been run, and the output from the second cell is printed in the notebook.
+The first cell is being edited to change the name of the mtz file that is to be read.
+A pop-up menu in Jupyter has appeared with a list of candidate file names.
+
+.. Figure:: ./figs/Fig5mtzSummary.png
+   :align: center
+   :scale: 45%
+   :figclass: bht
 
    Two code cells with executed Jupyter code cells.
 
-The servers for the editors are editor specific. The following text editors are supported: Visual Studio Code, Vim, NeoVim, Emacs, Atom, and Sublime Text 3. GhostText was developed initially for Sublime Text 3, so Sublime Text 3 can serve as a positive control even if another editor in the list is your favorite editor. (Sublime Text 3 is available for most platforms for a free trial period of infinite length.) For example, the server for Emacs is provided by the atomic-chrome package that is available in the Milkypostman’s Emacs Lisp Package Archive (MELPA) and on GitHub (https://github.com/alpha22jp/atomic-chrome). The configuration for atomic-chrome in my Emacs initialization file (e.g., init.el) is listed in code listing 1 below.
+The servers for the editors are editor specific.
+The following text editors are supported: Visual Studio Code, Vim, NeoVim, Emacs, Atom, and Sublime Text 3. GhostText was developed initially for Sublime Text 3, so Sublime Text 3 can serve as a positive control even if another editor in the list is your favorite editor. (Sublime Text 3 is available for most platforms for a free trial period of infinite length.)
+For example, the server for Emacs is provided by the atomic-chrome package that is available in the Milkypostman’s Emacs Lisp Package Archive (MELPA) and on GitHub (https://github.com/alpha22jp/atomic-chrome).
+The configuration for atomic-chrome in my Emacs initialization file (e.g., init.el) is listed in code listing 1 below.
 
-The third line in Code listing 1 sets the default Emacs mode (equivalent to a programming language scope): I set it to Python for Jupyter code cells. Atomic-chrome uses text-mode by default. You can change the default mode to other programming languages that you may use in Jupyter, like Julia or R. The last three lines specify the Emacs mode to be used when text is imported from the text areas of webpages on github.com, Overleaf.com, and 750words.com. Similar configuration options are available in the other text editors, or you manually change the language scope for the window with the text imported from Jupyter.
+The third line in Code listing 1 sets the default Emacs mode (equivalent to a programming language scope): I set it to Python for Jupyter code cells.
+Atomic-chrome uses text-mode by default. You can change the default mode to other programming languages that you may use inJupyter, like Julia or R.
+The last three lines specify the Emacs mode to be used when text is imported from the text areas of webpages on github.com, Overleaf.com, and 750words.com.
+Similar configuration options are available in the other text editors, or you manually change the language scope for the window with the text imported from Jupyter.
 
    .. Figure:: ./figs/Fig5mtzSummary.png
    :align: center
    :scale: 45%
    :figclass: bht
 
-
    Emacs lisp to configure atomic-chrome.
 
 Keyboard shortcuts
 ----------------------
-Ghost Text provides a keyboard shortcut for the browser to open or close the connection to the text editor. These shortcut keep the developer's hands on the keyboard and avoid breaks in context by moving the hand to the mouse. The shortcut by operating system is as follows: macOS, command-shift-K; Linux, control-shift-H; and Windows, control-shift-K.
+Ghost Text provides a keyboard shortcut for the browser to open or close the connection to the text editor.
+These shortcut keep the developer's hands on the keyboard and avoid breaks in context by moving the hand to the mouse.
+The shortcut by operating system is as follows: macOS, command-shift-K; Linux, control-shift-H; and Windows, control-shift-K.
 
 Troubleshooting GhostText
 -------------------------------
-I have been using GhostText daily since mid-May 2022 with Emacs and either Google Chrome or Firefox; I have infrequently encountered three difficulties. First, other servers inside Emacs can occupy the port for GhostText and block the atomic-chrome server. I have had to kill the offending server or restart Emacs. Second, saving the text in the Emacs buffer to a file can cause the text to become out of sync with the text in the editor and on the web page. The lack of updating can lead to a loss of work; making intermediate saves of the text on the web server is safer than saving to a local file. Of course, the final text can be saved locally. Third, multiple open editors with GhostText servers installed can compete for the same WebSocket. This problem is solved by closing the editor that is not in current use or configuring its server to use an alternate WebSocket.
+I have been using GhostText daily since mid-May 2022 with Emacs and either Google Chrome or Firefox; I have infrequently encountered three difficulties.
+First, other servers inside Emacs can occupy the port for GhostText and block the atomic-chrome server.
+I have had to kill the offending server or restart Emacs. Second, saving the text in the Emacs buffer to a file can cause the text to become out of sync with the text in the editor and on the web page.
+The lack of updating can lead to a loss of work; making intermediate saves of the text on the web server is safer than saving to a local file.
+Of course, the final text can be saved locally.
+Third, multiple open editors with GhostText servers installed can compete for the same WebSocket.
+This problem is solved by closing the editor that is not in current use or configuring its server to use an alternate WebSocket.
 
 Support for using GhostText with CCTBX
 ----------------------------------------------
-To support the use of GhostText to edit electronic notebooks containing code from the CCTBX library, we have made variants of a collection of CCTBX snippets (Mooers 2021) for Visual Studo Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors). I found that Sublime Text 3 had the most effortless setup while Emacs provided the highest degree of customization. This snippet library was previously only available for use Juptyer notebooks via extensions for the Classic Juptyer Notebook application or Juptyer Lab.
+To support the use of GhostText to edit electronic notebooks containing code from the CCTBX library, we have made variants of a collection of CCTBX snippets (Mooers 2021) for Visual Studo Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
+I found that Sublime Text 3 had the most effortless setup while Emacs provided the highest degree of customization.
+This snippet library was previously only available for use Juptyer notebooks via extensions for the Classic Juptyer Notebook application or Juptyer Lab.
 
-Note that the snippet library cannot be used with the program nteract (https://nteract.io/)--an easy-to-install and use desktop application for editing and running Jupyter notebooks offline. The ease of installation makes nteract popular with new users of Jupyter notebooks. Obviously interact is not browser-based, so it cannot work with GhostText. Interact has yet to be extended to support the use of code snippet libraries.
+Note that the snippet library cannot be used with the program nteract (https://nteract.io/).
+The nteract is an easy-to-install and use desktop application for editing and running Jupyter notebooks offline.
+The ease of installation makes nteract popular with new users of Jupyter notebooks. Obviously interact is not browser-based, so it cannot work with GhostText.
+Interact has yet to be extended to support the use of code snippet libraries.
 
 Off-line use of the CCTBX snippet library
 ---------------------------------------------
 
-While the focus of this report was on the use of the GhostText browser plugin to edit Juptyer notebooks hosted in a web browser, the cctbxsnips snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of saner version control. The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the Quarto (http://quarto.org) markdown representation of Jupyter notebooks. Quarto is available for several leading text editors. In the later case, you may have to extend the scope of the editing session in the editor to include Python source code.
+While the focus of this report was on the use of the GhostText browser plugin to edit Juptyer notebooks hosted in a web browser, the cctbxsnips snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of saner version control.
+The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the Quarto (http://quarto.org) markdown representation of Jupyter notebooks.
+Quarto is available for several leading text editors.
+In the later case, you may have to extend the scope of the editing session in the editor to include Python source code.
 
 
 Discussion
@@ -268,7 +300,7 @@ References
          Science 343:1443-1445, March 2014.
          doi: 10.1126/science.1
 
-.. [Jumper2021] J. Jumper, R. Evans, A. Pritzel, T. Green, M. Figurnov, O. Ronneberger, K. Tunyasuvunakool, R. Bates, A. Zidek, A. Potapenko, A. Bridgland, C. Meyer, S. A. A. Kohl, A. J. Ballard, A. Cowie, B. Romera-Paredes, S. Nikolov, R. Jain, J. Adler, T. Back, S. Petersen, D. Reiman, E. Clancy, M. Zielinski, M. Steinegger, M. Pacholska, T. Berghammer, S. Bodenstein, D. Silver, O. Vinyals, A. W. Senior, K. Kavukcuoglu, P. Kohli & D. Hassabis.
+.. [Jumper2021] J. Jumper, R. Evans, A. Pritzel, T. Green, M. Figurnov, O. Ronneberger, K. Tunyasuvunakool, R. Bates, A. Zidek, A. Potapenko, A. Bridgland, C. Meyer, S. A. A. Kohl, A. J. Ballard, A. Cowie, B. Romera-Paredes, S. Nikolov, R. Jain, J. Adler, T. Back, S. Petersen, D. Reiman, E. Clancy, M. Zielinski, M. Steinegger, M. Pacholska, T. Berghammer, S. Bodenstein, D. Silver, O. Vinyals, A. W. Senior, K. Kavukcuoglu, P. Kohli and D. Hassabis.
          *Highly accurate protein structure prediction with AlphaFold*,
          Nature 596:583–589, July 2021.
          doi: 10.1038/s41586-021-03819-2
