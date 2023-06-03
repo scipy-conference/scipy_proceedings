@@ -384,6 +384,50 @@ Fig :ref:`fdmfull`
 Analyzing Core-Collapse Supernova Simulation
 ++++++++++++++++++++++++++++++++++++++++++++
 
+We use ``GAMER`` to simulate core-collapse supernova explosions. The simulations have been 
+performed on a local cluster using 64 CPU cores and 4 GPUs by launching 8 MPI processes with 
+8 OpenMP threads per MPI process, and having two MPI processes access the same GPU. 
+The simulations involve a rich set of physics modules, including 
+hydrodynamics, self-gravity, a parameterized light-bulb scheme for neutrino 
+heating and cooling with a fixed neutrino luminosity :cite:`Couch2013`, 
+a parameterized deleptonization scheme :cite:`Liebendorfer2005`, 
+an effective general relativistic potential :cite:`OConnor2018`, and
+a nuclear equation of state :cite:`NuclearEoS`. 
+For the hydrodynamics scheme, we adopt
+the van Leer predictor-corrector integrator :cite:`Falle1991` :cite:`vanLeer2006`,
+the piecewise parabolic method for spatial data reconstruction :cite:`Colella1984`,
+and the HLLC Riemann solver :cite:`Toro2009`.
+The simulation box size is :math:`2 \times 10^4` km.
+The base-level grid dimension is :math:`160^3` and there are eight refinement levels,
+reaching a maximum spatial resolution of :math:`\sim 0.5` km.
+
+We use ``libyt`` to closely monitor the simulation progress during runtime, 
+such as the grid refinement distribution, the status and location of shock wave (e.g.,
+stalling, revival, breakout), and the evolution of the central proto-neutron star. 
+``libyt`` calls ``yt`` function ``SlicePlot`` to draw entropy distribution every 
+:math:`1.5 \times 10^{-2}` ms. Fig :ref:`ccsn` is the output in a time step. 
+Since entropy is not part of the variable in simulation's iterative process, 
+these entropy data will only be generated through user-defined C function, 
+which in turn calls the nuclear equation of state to get entropy, 
+when they are needed by ``yt``. 
+``libyt`` tries to minimize memory usage by generating relevant data only. 
+We can combine every output figure and animate the actual simulation process [#]_ 
+without storing any dataset beside the figures on hard disk. 
+
+.. [#] `https://youtu.be/6iwHzN-FsHw <https://youtu.be/6iwHzN-FsHw>`_
+
+.. figure:: CCSN.pdf
+   :figclass: htb
+
+   Entropy distribution in a core-collapse supernova simulated by ``GAMER`` and plotted by 
+   ``yt`` function ``SlicePlot`` using ``libyt``.
+   Plot (a) shows a thin slice cut through the central proto-neutron in the post-bounce phase. 
+   The proto-neutron star has a radius of :math:`\sim 10` km and the shock stalls at 
+   :math:`\sim 200` km.
+   Plot (b) shows the underlying AMR grid structure, where each grid consists of :math:`16^3` 
+   cells.
+   :label:`ccsn`
+
 .. _Discussions:
 
 Discussions
