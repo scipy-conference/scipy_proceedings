@@ -68,7 +68,7 @@ The figure below shows part of the cascading menus for the cctbx library after i
 
 .. figure:: ./figs/Fig1Pulldown.png
    :align: center
-   :scale: 45%
+   :scale: 40%
    :figclass: bht
 
    The cascading menus for the cctbx library.
@@ -80,7 +80,7 @@ The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium
 
 .. figure:: ./figs/Fig5mtzSummary.png
    :align: center
-   :scale: 45%
+   :scale: 50%
    :figclass: bht
 
    The output from millerArrayFromMtz.py snippet. 
@@ -89,7 +89,7 @@ The I(+) vs I(-) plot below was made after reading the X-ray data into a cctbx M
 
 .. figure:: ./figs/Fig2IpImPlot.png
    :align: center
-   :scale: 45%
+   :scale: 50%
    :figclass: bht
 
    The Ip Im plot.
@@ -158,7 +158,7 @@ It is closed on the web browser side via an option in GhostTest’s pulldown men
 
 .. Figure:: ./figs/Fig5mtzSummary.png
    :align: center
-   :scale: 45%
+   :scale: 50%
    :figclass: bht
 
    Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets.  The list was narrowed to one snippet by the entry of three letters.
@@ -170,7 +170,7 @@ A pop-up menu in Jupyter has appeared with a list of candidate file names.
 
 .. Figure:: ./figs/Fig5mtzSummary.png
    :align: center
-   :scale: 45%
+   :scale: 50%
    :figclass: bht
 
    Two code cells with executed Jupyter code cells.
@@ -187,7 +187,7 @@ Similar configuration options are available in the other text editors, or you ma
 
 .. Figure:: ./figs/Fig5mtzSummary.png
    :align: center
-   :scale: 45%
+   :scale: 50%
    :figclass: bht
 
    Emacs lisp to configure atomic-chrome.
