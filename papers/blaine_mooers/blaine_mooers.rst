@@ -125,9 +125,6 @@ cctbxsnips for text editors
 Using GhostText to edit Jupyter cells from a favorite text editor
 ***************************************************************************
 
-The problem
---------------
-
 The snippet extensions for the Classic Jupyter Notebook and JuptyerLab lack support for tab triggers to insert snippets was you type and tab stops inside the snippet to advance to sites in the snippet that may need to be edited.
 These two features are standard in the software that supports the use of snippet libraries in most text editors.
 By adding the GhostText extension to the web browser and a server to one of several leading text editors, it is possible to send the text from the browser through a WebSocket to a server in the text editor.
@@ -144,9 +141,6 @@ Sites with identical placeholder values can be mirrored so that a change in valu
 The absence of tab stops can increase the number of bugs introduced by the developer by overlooking parameter values in the code snippet that need to be changed to adapt the snippet to the current program.
 The lack of support for tab triggers and tab stops in computational notebooks can dampen the enthusiasm of experienced developers for using computational notebooks.
 Of course, one solution is to write an extension for Jyptyer Notebook or JuptyerLab in JavaScript that supports tab triggers and tab stops.
-
-An easy solution
-------------------
 
 Another approach is to send the text in the active code cell to a powerful text editor on your local computer via the browser extension known as GhostText https://ghosttext.fregante.com/.
 GhostText is a Javascript program developed by Federico Brigante, a prolific JavaScript developer. Versions of the extension are available for the Google Chrome, Firefox, Edge, Opera, and Safari. The extension for the Google Chrome browser works in the Brave browser, and the extension for Firefox works in the Waterfox and Icecat browsers.
@@ -192,14 +186,10 @@ Similar configuration options are available in the other text editors, or you ma
 
    Emacs lisp to configure atomic-chrome.
 
-Keyboard shortcuts
-----------------------
 Ghost Text provides a keyboard shortcut for the browser to open or close the connection to the text editor.
 These shortcut keep the developer's hands on the keyboard and avoid breaks in context by moving the hand to the mouse.
 The shortcut by operating system is as follows: macOS, command-shift-K; Linux, control-shift-H; and Windows, control-shift-K.
 
-Troubleshooting GhostText
--------------------------------
 I have been using GhostText daily since mid-May 2022 with Emacs and either Google Chrome or Firefox; I have infrequently encountered three difficulties.
 First, other servers inside Emacs can occupy the port for GhostText and block the atomic-chrome server.
 I have had to kill the offending server or restart Emacs. Second, saving the text in the Emacs buffer to a file can cause the text to become out of sync with the text in the editor and on the web page.
@@ -208,8 +198,6 @@ Of course, the final text can be saved locally.
 Third, multiple open editors with GhostText servers installed can compete for the same WebSocket.
 This problem is solved by closing the editor that is not in current use or configuring its server to use an alternate WebSocket.
 
-Support for using GhostText with CCTBX
-----------------------------------------------
 To support the use of GhostText to edit electronic notebooks containing code from the CCTBX library, we have made variants of a collection of CCTBX snippets (Mooers 2021) for Visual Studo Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
 I found that Sublime Text 3 had the most effortless setup while Emacs provided the highest degree of customization.
 This snippet library was previously only available for use Juptyer notebooks via extensions for the Classic Juptyer Notebook application or Juptyer Lab.
@@ -218,9 +206,6 @@ Note that the snippet library cannot be used with the program nteract (https://n
 The nteract is an easy-to-install and use desktop application for editing and running Jupyter notebooks offline.
 The ease of installation makes nteract popular with new users of Jupyter notebooks. Obviously interact is not browser-based, so it cannot work with GhostText.
 Interact has yet to be extended to support the use of code snippet libraries.
-
-Off-line use of the CCTBX snippet library
----------------------------------------------
 
 While the focus of this report was on the use of the GhostText browser plugin to edit Juptyer notebooks hosted in a web browser, the cctbxsnips snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of saner version control.
 The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the Quarto (http://quarto.org) markdown representation of Jupyter notebooks.
