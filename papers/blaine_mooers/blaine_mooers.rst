@@ -35,11 +35,11 @@ Biomolecular crystallography involves the determination of the molecular structu
 The molecular structures determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and to developing new therapies in medicine.
 The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to remain vital because it still supplies the most precise structures [Kulhbrandt14]_ [Jumper2021]_.
 
-Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks.
+Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks [Mirdita21]_.
 Nonetheless, most protein crystallographers continue to use well-developed, user friendly GUIs to run crystallographic software in routine analyses.
 However, these users sometimes need non-routine analyses that require new code.
 
-The Computational Crystallography Toolbox (CCTBX) provides a vast library of computational crystallography software written in C++ and wrapped with Python.
+The Computational Crystallography Toolbox (CCTBX) provides a vast library of computational crystallography software written in C++ and wrapped with Python [Gros02]_.
 This library is used to build new analysis tools.
 CCTBX was hard to install three years ago due to its complex dependencies, but the addition of the CCTBX package to Anaconda dramatically eased the installation of CCTBX.
 The lowering of this barrier to the installation of CCTBX has raised interest in the use of CCTBX for novel structure analyses.
@@ -53,6 +53,69 @@ We formatted the snippet library for several snippet extensions for the Classic 
 To overcome the absence of tab triggers in the Jupyter ecosystem to invoke the insertion of snippets, we also made the snippets available for leading text editors.
 The user can use the GhostText browser plugin to edit the contents of a Jupyter cell in a full-powered external editor.
 GhostText enables the user to experience the joy interactive computing in Jupyter while working from the comfort of their favorite text editor.
+
+
+Results
+=========
+
+
+jupyterlabcctbxsnips
+************************
+
+To ease the running of cctbx in Jupyter notebooks, we developed the jupyterlabcctbxsnips of code templates. Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab , a browser based IDE for Jupyter notebooks. This JupyterLab enables the writing or editing of a document in a pane next to the Jupyter notebook. This is useful for writing up documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described. The document can be plain text, html, markdown, or LaTeX.
+
+The figure below shows part of the cascading menus for the cctbx library after it has been installed successfully. The submenus correspond to the names of subfolders in the cctbx folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library on the Mac). Each ultimate menu item is a Python snippet file. The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell. The *millerArrayFromMtz.py* snippet at the bottom of the pulldown menu was selected and inserted in the figure below. Commented lines have text that describes what this snippet does. The code in this cell would be executed by entering Shift-Enter.
+
+.. figure:: ./figs/Fig1Pulldown.png
+   :align: center
+   :scale: 20%
+   :figclass: bht
+
+
+The mtzObjectSummary.py snippet prints a summary of an mtz file.
+The data in this mtz has columns of I(+) and I(-).
+We use these data to make a I(+) vs I(-) scatter plot below.
+The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
+
+.. figure:: ./figs/Fig5mtzSummary.png
+   :align: center
+   :scale: 20%
+   :figclass: bht
+
+The I(+) vs I(-) plot below was made after reading the X-ray data into a cctbx Miller array, a data structure designed for X-ray data. The I(+) and I(-) were eventually read into separate lists. We plot the two lists against each other in a scatter plot. This plot was adapted from an example in the ReciprocalSpaceship project from the Hekstra Lab. This new project takes a more Pythonic approach. For example, it uses the Pandas package to manage diffraction data whereas cctbx uses a special C++ data structure for diffraction data.
+
+.. figure:: ./figs/Fig2IpImPlot.png
+   :align: center
+   :scale: 20%
+   :figclass: bht
+
+cctbx is most easily installed into its own environment by using Anaconda with the command conda create -n my_env -c conda-forge cctbx-base python=3.8.
+
+
+jupyterlabcctbxsnipsplus
+******************************
+
+This is the variant of the jupyterlabcctbxsnips library with comments to guide editing of the snippets.
+
+taggedcctbxsnips
+*********************
+
+
+
+colabcctbxsnips
+*******************
+
+
+On Colab, the snippets are stored in a Google Colab notebook. See this website for an excellent introduction to CCTBX (Computational Crystallography Toolbox). The colabcctbxsnips library is a collection of the code fragment to aid doing routine and not so routine computational tasks in protein crystallography. The URL for the snippets notebook is unused to access the snippets from a new notebook.
+
+Click on the blue button below to open the notebook on Colab and follow the instructions at the top of the notebook on how to copy the notebook to Google Drive and then make it available to new Colab notebooks. This step has to be done only once. The snippets will be available on your next log-in; however, files and software installed on Colab with not be available on your next login to Colab.
+
+
+
+cctbxsnips for text editors
+******************************
+
+
 
 
 
