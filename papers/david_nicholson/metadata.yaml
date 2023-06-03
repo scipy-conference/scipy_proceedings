@@ -20,7 +20,6 @@ abstract:
   - vak also leverages the lightning framework as a backend, so that researchers and developers can focus on the domain.
   - We provide proof-of-concept results showing how vak can be used with benchmark datasets to compare models.
   - In closing we discuss our roadmap for development and vision for the community of users.
-
 keywords:
   - acoustic communication
   - bioacoustics
@@ -35,6 +34,7 @@ authors:
   institution:
   - Weizmann Institute of Science
   name: Yarden Cohen
+  corresponding: true
 bibliography: mybib
 video: "https://www.youtube.com/watch?v=Hz1JWzyvv8A"
 title: "vak: a neural network framework for researchers studying animal acoustic communication"
