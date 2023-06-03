@@ -98,7 +98,7 @@ We offer a variant library that inserts a commented out copy of the code that ha
 
 
 
-Opportunities for Interoperability
+Opportunities for interoperability
 ************************************
 
 The set of template libraries can encourage synergistic interoperability between software packages supported by the snippet libraries.
@@ -118,12 +118,12 @@ This work was supported by the Oklahoma Center for the Advancement of Science an
 References
 ==============
 
-.. [Kuhlbrandt14] W. Kühlbrandt.
+.. [Kuhlbrandt14] W. Kuhlbrandt.
             *The resolution revolution*,
             Science 343:1443-1445, March 2014
             doi: 10.1126/science.1
            
-.. [Mirdita21] M. Mirdita, K. Schütze, Y. Moriwaki, L. Heo, S. Ovchinnikov, and M. Steinegger.
+.. [Mirdita21] M. Mirdita, K. Schutze, Y. Moriwaki, L. Heo, S. Ovchinnikov, and M. Steinegger.
 	        *ColabFold: making protein folding accessible to all*,
             Nature Methods, 19:679-682, May 2022.
             doi: 10.1038/s41592-022-01488-1
@@ -169,7 +169,7 @@ References
            Protein Sci., 27(1):14-25, January 2018.
            doi: 10.1002/pro.3235.
            
-.. [Gran21] B. E. Granger and F. Pérez.
+.. [Gran21] B. E. Granger and F. Perez.
            *Jupyter: Thinking and Storytelling With Code and Data*,
            Computing in Science & Engineering, 23(2):7-14, March-April 2021.
            doi: 10.1109/MCSE.2021.3059263
@@ -189,7 +189,7 @@ References
            Biotechniques, 26(5):874-876, May 1999.
            doi: 10.2144/99265ir01
            
-.. [Kluy16] T. Kluyver, B. Ragan-Kelley, F. Pèrez, B. Granger, M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout, S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing, and Jupyter Development Team.
+.. [Kluy16] T. Kluyver, B. Ragan-Kelley, F. Perez, B. Granger, M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout, S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing, and Jupyter Development Team.
            *Jupyter Notebooks -- a publishing format for reproducible computational workflows*,
            In F. Loizides and B. Schmidt (Eds.), Positioning and Power in Academic Publishing: Players, Agents and Agendas (pp, 87-90).
            doi: 10.3233/978-1-61499-649-1-87
