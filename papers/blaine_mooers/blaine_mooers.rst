@@ -185,7 +185,7 @@ Atomic-chrome uses text-mode by default. You can change the default mode to othe
 The last three lines specify the Emacs mode to be used when text is imported from the text areas of webpages on github.com, Overleaf.com, and 750words.com.
 Similar configuration options are available in the other text editors, or you manually change the language scope for the window with the text imported from Jupyter.
 
-   .. Figure:: ./figs/Fig5mtzSummary.png
+.. Figure:: ./figs/Fig5mtzSummary.png
    :align: center
    :scale: 45%
    :figclass: bht
