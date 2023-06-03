@@ -64,6 +64,10 @@
 :email: gurwls223@apache.org
 :institution: Databricks
 
+:author: Travis E. Oliphant
+:email: travis@quansight.com
+:institution: Quansight
+
 :author: Consortium for Python Data API Standards
 :email:
 
