@@ -8,18 +8,21 @@
 :corresponding: Blaine H. M. Mooers
 
 
-=======================================================================
+======================================================
  Biomolecular Crystallographic Computing with Jupyter
-=======================================================================
+======================================================
 
 .. class:: abstract
 
-The ease of use of Jupyter notebooks has helped biologists enter scientific computing, especially in protein crystallography, where a collaborative community develops extensive libraries, user-friendly GUIs, and Python APIs.
-The APIs allow users to use the libraries in Jupyter.
-To further advance this use of Jupyter, we developed a collection of code fragments that use the vast Computational Crystallography Toolbox library for novel analyses.
-We made versions of this library for use in JupyterLab and Colab.
-We also made versions of the snippet library for the text editors VS Code, Vim, and Emacs that support editing live code cells in Jupyter notebooks via GhostText.
-Readers of this paper may be inspired to adapt this latter capability to their domains of science.
+   The ease of use of Jupyter notebooks has helped biologists enter scientific computing,
+   especially in protein crystallography, where a collaborative community develops extensive
+   libraries, user-friendly GUIs, and Python APIs. The APIs allow users to use the libraries in Jupyter.
+   To further advance this use of Jupyter, we developed a collection of code fragments that use
+   the vast Computational Crystallography Toolbox library for novel analyses. We made versions
+   of this library for use in JupyterLab and Colab. We also made versions of the snippet library
+   for the text editors VS Code, Vim, and Emacs that support editing live code cells in Jupyter
+   notebooks via GhostText. Readers of this paper may be inspired to adapt this latter capability
+   to their domains of science.
 
 .. class:: keywords
 
