@@ -1,0 +1,18 @@
+---
+abstract:
+   - In this paper, we propose an MLOps architecture for research labs. We then discuss a few scenarios where this architecture can be used.
+keywords:
+  - MLOps
+  - Research Labs
+  - HPC
+authors:
+- email: varchanaiyer139@gmail.com
+  institution:
+  - Women Who Code
+  name: Vaidheeswaran Archana
+- email: 96soham96@gmail.com
+  institution:
+  - Independent Researcher
+  name: Soham Chatterjee
+bibliography: bibliography
+title: MLOps for Research Labs -- latex edition

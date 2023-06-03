@@ -1,0 +1,79 @@
+\subsection{Introduction \label{introduction}}
+
+Machine Learning Operations (MLOps) is a rapidly evolving field that addresses the need for reliable, efficient, and scalable deployment of machine learning models. It applies principles from DevOps to the unique challenges posed by machine learning, such as data versioning, model tracking, and reproducibility. While MLOps practices have been widely adopted in industry settings, they are less prevalent in research labs, where the primary focus is on model development and experimentation rather than deployment. However, the benefits of MLOps - such as improved reproducibility, streamlined workflows, and enhanced collaboration - are equally relevant to research settings. In this paper, we propose an affordable MLOps architecture specifically tailored for research labs and academia.
+
+
+Our proposed architecture is built on research labs' fundamental requirements and constraints. These include minimising engineering overhead, maintaining a flow state for researchers, providing cost-effective solutions, ensuring data security, and managing resources efficiently. The architecture also prioritizes critical aspects such as model management and versioning, reproducibility and hyperparameter tracking, data source and versioning, easy iteration and experiment tracking, sharing and collaboration, and balancing automation and complexity.
+
+We provide a detailed explanation of the proposed architecture, which includes components such as a High-Performance Computing (HPC) system, a data store for versioning and tracking data, and a results store for storing model files, training metadata, and artefacts. The architecture also includes provisions for visualizing training results and deploying models as needed.
+
+
+Finally, we present case studies showing how this architecture can be adapted to different scenarios commonly encountered in research labs. These include scenarios where the lab may not have access to GPU/HPC and wants to fine-tune large language models on a specific task or where a pipeline is needed to deploy the latest model to a particular deployment device automatically. We will also propose an additional scenario of our own, further demonstrating the flexibility and adaptability of the proposed architecture.
+
+The overarching goal of this paper is to demonstrate that with the right architecture and selection of tools, MLOps can be implemented affordably and effectively in a research setting, leading to improved reproducibility, collaboration, and overall efficiency in the machine learning research process.
+
+
+\section{The Necessity and Adaptation of MLOps in Research Labs \label{necessity}}
+
+Machine Learning Operations (MLOps) plays a crucial role in enhancing the efficiency, reproducibility, and scalability of machine learning model deployment in industry settings. Yet, its adoption in research labs remains less prevalent despite offering numerous benefits that could significantly streamline processes and improve collaboration. This section of the paper aims to explore why MLOps is needed in research labs, and how its priorities can be repurposed to suit the unique requirements of such environments.
+
+
+\subsubsection{Why MLOps is Essential for Research Labs \label{why-mlops}}
+
+MLOps addresses the scale and complexity of deploying machine learning models, which is typically necessitated by large businesses catering to vast customer bases. However, research labs, which primarily focus on model development and experimentation, operate on a smaller scale. The challenge then becomes tailoring MLOps principles to meet the needs of these smaller teams without overwhelming them with processes designed for larger corporations.
+
+In research labs, the primary focus is on improving model performance and innovation, rather than deployment. Limited compute resources, which are often a constraint in research labs, necessitate an MLOps framework that optimizes these resources without compromising on the quality and innovativeness of their work.
+
+Furthermore, the engineering overhead in research labs should ideally be minimal, allowing researchers to concentrate more on model development and less on the engineering intricacies of machine learning. A suitably tailored MLOps system should operate largely autonomously, without demanding significant maintenance time, thereby reducing disruptions in the researchers' workflow and facilitating uninterrupted experimentation.
+
+Cost is another significant factor in research labs, which often operate with stringent budgets. The MLOps system in such an environment needs to be as cost-effective as possible, leveraging open-source tools to provide powerful research capabilities without incurring substantial expenses.
+
+Lastly, data security and ownership are of paramount importance in research settings, where data might be private, confidential, or sensitive. MLOps systems must ensure robust data security, control access, and safeguard data ownership.
+
+\subsection{Prioritizing MLOps Elements for Research Labs
+ \label{prioritizing-mlops}}
+
+In the context of a research lab, the focus of MLOps shifts from deployment to efficient model management and versioning. This shift enables researchers to easily track, compare, and analyze their models, thereby improving the lab's overall efficiency. Reproducibility is another crucial priority, requiring thorough tracking of model hyperparameters to ensure consistent and reliable experimental results.
+
+Version control extends beyond models to the data used in experiments. Accurate tracking of data sources and versions plays a crucial role in ensuring that research results are valid and can be reproduced. Tools like DVC can aid researchers in managing their data effectively.
+
+MLOps can also enhance the research process by enabling easy iteration and experiment tracking. By incorporating this feature, researchers can keep a detailed record of their experiments, including data, hyperparameters, and results, aiding in result comparison and model improvement.
+
+Sharing and collaboration is another aspect where MLOps can be beneficial. By facilitating easy sharing of code and research findings, MLOps can stimulate collaboration within and between research labs. Platforms like GitHub can make it easier for researchers to share their work, fostering a collaborative environment that can drive innovation.
+
+While automation can simplify certain aspects of the research process, an effective MLOps system for research labs should balance automation with simplicity. Researchers should be able to use the system without being burdened by excessive complexity that could deter their research efforts.
+
+The proposed MLOps architecture outlined in this paper seeks to cater to these unique requirements and constraints of research labs, offering a cost-effective, efficient, and collaborative environment for machine learning research. By understanding and adhering to the workflow of a typical research project, this architecture ensures that MLOps can be effectively adapted to the needs of research labs, enabling them to leverage the many benefits of MLOps without being overwhelmed by its complexity.
+
+
+\section{Proposed MLOps Architecture for Research Labs \label{proposed}}
+Given research labs' unique requirements and constraints, we propose an MLOps architecture tailored specifically for such settings. This architecture is built around the typical research project workflow, which includes data gathering, analysis, model creation and training, results visualization and analysis, iteration, result sharing, and potential model deployment.
+
+\begin{itemize}
+    \item Data Gathering and Analysis: The first step in the research project workflow involves acquiring and studying the data. The raw data undergoes a process of cleaning and preprocessing for subsequent model training. It's essential to version this data and record the preprocessing steps for reproducibility. As the project evolves, researchers might apply different preprocessing techniques, creating alternative data versions, all of which should be carefully documented.
+    \item Model Creation and Training: Once the data is ready, researchers proceed to construct and train the model architecture. Recording the model hyperparameters, model files, and key metrics throughout the process is crucial. Additionally, each training run should be associated with the data version used.
+    \item Model Creation and Training: Once the data is ready, researchers proceed to construct and train the model architecture. Recording the model hyperparameters, model files, and key metrics throughout the process is crucial. Additionally, each training run should be associated with the data version used.
+    \item Results Visualization and Analysis: Researchers need to visualize and examine the results after training. If the outcomes are not up to expectations, they may iterate the process, either modifying the model or further processing the data.
+    \item Iteration: Iterative cycles form an integral part of the research process. Every step in these cycles - from data preparation, model training, and parameter tuning, to results analysis - should be tracked meticulously to aid further improvements and ensure reproducibility.
+    \item Result Sharing: Whether sharing preliminary or final results, tracing all the steps leading to these outcomes is vital. This includes the data version, preprocessing steps, model files, training parameters, and all analyses and results. Even failed attempts and experiments that guided the researchers to the final model should be readily accessible for sharing.
+    \item Model Deployment: Although not always necessary in a research setting, there might be instances where researchers want to deploy their model as a demonstration. This process should involve retrieving the model files from the model store and deploying them to an appropriate platform.
+\end{itemize}
+
+The proposed MLOps architecture includes several key components:
+
+\begin{itemize}
+    \item High-Performance Computing (HPC): Located centrally, the HPC is where researchers submit their training jobs. The HPC should be capable of fetching data from the data store.
+    \item Data Store: Here, researchers can clean, process, and store data. Any data used for a training run should be versioned and tagged with the corresponding training run.
+    \item Result Store: After training, the model files, along with all training metadata and artifacts, should be stored in the result store. Researchers can then access this store to analyze their results.
+    \item Front-End (Optional): A front-end can be included to visualise training results. If the model is deployed, the front end can also display results from the model.
+\end{itemize}
+
+Based on this architecture, we suggest a sample implementation using popular tools.
+
+DVC is employed for versioning data.
+Perfect is used for orchestrating tasks running on the HPC.
+Jobs can be submitted to the HPC using GitHub Actions.
+Training jobs can write their result to MLFlow, which tracks the experiment metadata and serves as a model registry.
+MLFlow can also deploy models to SageMaker or other deployment platforms.
+Plotly can be used to display the results of model training. It can also query models in SageMaker to display results.
+In summary, the proposed MLOps architecture seeks to provide research labs with an efficient, cost-effective, and easy-to-implement solution that aligns with their unique workflow and requirements. This architecture should help research labs streamline their processes, ensure reproducibility, and facilitate seamless collaboration and sharing of research outcomes.
