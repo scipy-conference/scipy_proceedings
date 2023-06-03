@@ -121,7 +121,6 @@ cctbxsnips for text editors
 ******************************
 
 
-
 Using GhostText to edit Jupyter cells from a favorite text editor
 ***************************************************************************
 
@@ -150,7 +149,7 @@ Edits made on the browser side of the WebSocket are immediately sent to an open 
 The connection can be closed from either side of the WebSocket.
 It is closed on the web browser side via an option in GhostTest’s pulldown menu, and it closed on the text editor side by closing the active buffer.
 
-.. Figure:: ./figs/Fig5mtzSummary.png
+.. Figure:: ./figs/tabtrigger.png
    :align: center
    :scale: 50%
    :figclass: bht
@@ -162,7 +161,7 @@ The two code cells have been run, and the output from the second cell is printed
 The first cell is being edited to change the name of the mtz file that is to be read.
 A pop-up menu in Jupyter has appeared with a list of candidate file names.
 
-.. Figure:: ./figs/Fig5mtzSummary.png
+.. Figure:: ./figs/twoCodeCells.png
    :align: center
    :scale: 50%
    :figclass: bht
@@ -179,7 +178,7 @@ Atomic-chrome uses text-mode by default. You can change the default mode to othe
 The last three lines specify the Emacs mode to be used when text is imported from the text areas of webpages on github.com, Overleaf.com, and 750words.com.
 Similar configuration options are available in the other text editors, or you manually change the language scope for the window with the text imported from Jupyter.
 
-.. Figure:: ./figs/Fig5mtzSummary.png
+.. Figure:: ./figs/atomicChrome.png
    :align: center
    :scale: 50%
    :figclass: bht
