@@ -8,9 +8,9 @@
 :corresponding: Blaine H. M. Mooers
 
 
-======================================================
+=======================================================================
  Biomolecular Crystallographic Computing with Jupyter
-======================================================
+=======================================================================
 
 .. class:: abstract
 
@@ -28,9 +28,7 @@
 
    literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, molecular visualization, scientific communication, molecular artwork, computational molecular biophysics
 
-
-
- Introduction
+Introduction
 ================
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
