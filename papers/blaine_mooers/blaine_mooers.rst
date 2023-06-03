@@ -68,9 +68,10 @@ The figure below shows part of the cascading menus for the cctbx library after i
 
 .. figure:: ./figs/Fig1Pulldown.png
    :align: center
-   :scale: 20%
+   :scale: 45%
    :figclass: bht
 
+   The cascading menus for the cctbx library.
 
 The mtzObjectSummary.py snippet prints a summary of an mtz file.
 The data in this mtz has columns of I(+) and I(-).
@@ -79,17 +80,21 @@ The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium
 
 .. figure:: ./figs/Fig5mtzSummary.png
    :align: center
-   :scale: 20%
+   :scale: 45%
    :figclass: bht
+
+   The output from millerArrayFromMtz.py snippet. 
 
 The I(+) vs I(-) plot below was made after reading the X-ray data into a cctbx Miller array, a data structure designed for X-ray data. The I(+) and I(-) were eventually read into separate lists. We plot the two lists against each other in a scatter plot. This plot was adapted from an example in the ReciprocalSpaceship project from the Hekstra Lab. This new project takes a more Pythonic approach. For example, it uses the Pandas package to manage diffraction data whereas cctbx uses a special C++ data structure for diffraction data.
 
 .. figure:: ./figs/Fig2IpImPlot.png
    :align: center
-   :scale: 20%
+   :scale: 45%
    :figclass: bht
 
-cctbx is most easily installed into its own environment by using Anaconda with the command conda create -n my_env -c conda-forge cctbx-base python=3.8.
+   The Ip Im plot.
+
+CCTBX is most easily installed into its own environment by using Anaconda with the command conda create -n my_env -c conda-forge cctbx-base python=3.8.
 
 
 jupyterlabcctbxsnipsplus
