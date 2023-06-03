@@ -1,0 +1,37 @@
+---
+abstract:
+  - PyQtGraph is a plotting library with high performance, cross-platform support and interactivity as its primary objectives. These goals are achieved by connecting the Qt GUI framework and the scientific Python ecosystem. The end result is a plotting library that supports the use of python and NumPy arrays to drive interactive visualizations on all major operating systems.
+  - Whereas most scientific visualization tools for Python are oriented around publication-quality plotting and browser-based user interaction, PyQtGraph occupies a niche for applications in data analysis and hardware control that require real-time visualization and interactivity in a desktop environment. 
+  - The well-established framework supports line plots, scatter plots, and images, including time-series 3D data represented as 4D arrays, in addition to the basic drawing primitives provided by Qt.
+  - For datasets up to several hundred thousand points, real-time rendering speed is achieved by optimized interaction with the Python bindings of the Qt framework. For enhanced image processing capabilities, PyQtGraph optionally integrates with CUDA. This ensures rendering capabilities are scalable with increasing data demands. Moreover, this improvement is enabled simply by installing the CuPy\cite{cupy_learningsys2017} library, i.e. requiring no in-depth user configurations.
+  - PyQtGraph provides interactivity not only for panning and scaling, but also through mouse hover, click, drag events and other common native interactions. Since PyQtGraph uses the Qt framework, the user can substitute their own intended application behavior to those events if they feel the library defaults are not appropriate.  This flexibility allows the development of customized and streamlined user interfaces for data manipulation.
+  - The included parameter tree framework allows straightforward interactions with arbitrary user functions and configuration settings. Callbacks execute on changing parameter values, even asynchronously if requested.
+  - An active developer community and regular release cycles indicate and encourage further library development. PyQtGraph's support cycle is synchronized with the NEP-29\cite{NEP-29} standard, ensuring most popular scientific python modules are continually compatible with each release.
+  - PyQtGraph is available through pypi.org (\href{https://pypi.org/project/pyqtgraph/}{https://pypi.org/project/pyqtgraph/}), conda-forge ({\href{https://anaconda.org/conda-forge/pyqtgraph}{https:/ anaconda.org/conda-forge/pyqtgraph}}) and GitHub (\href{https://github.com/pyqtgraph/pyqtgraph}{https://github.com/pyqtgraph/pyqtgraph}).
+keywords:
+  - Visualization
+  - Qt
+  - NumPy
+  - PyData
+  - Python
+authors:
+- email: ognyan.moore@gmail.com
+  institution:
+  - Hobu Inc.
+  name: Ognyan Moore
+  corresponding: true
+- email: ntjessu@gmail.com
+  institution: Unaffiliated
+  name: Nathan Jessurun
+- email: lukec@alleninstitute.org
+  institution:
+  - Allen Institute
+  name: Luke Campagnola
+- email: outofculture@gmail.com
+  institution: Unaffiliated
+  name: Martin Chase
+- email: nils.nemitz@gmx.de
+  name: Nils Nemitz
+  institution: Unaffiliated
+bibliography: mybib
+title: PyQtGraph - High Performance Visualization for All Platforms
