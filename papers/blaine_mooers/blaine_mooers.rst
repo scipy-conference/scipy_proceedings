@@ -151,7 +151,7 @@ It is closed on the web browser side via an option in GhostTest’s pulldown men
 
 .. Figure:: ./figs/tabtrigger.png
    :align: center
-   :scale: 57%
+   :scale: 53%
    :figclass: bht
 
    Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets.  The list was narrowed to one snippet by the entry of three letters.
@@ -163,7 +163,7 @@ A pop-up menu in Jupyter has appeared with a list of candidate file names.
 
 .. Figure:: ./figs/twoCodeCells.png
    :align: center
-   :scale: 80%
+   :scale: 70%
    :figclass: bht
 
    Two code cells with executed Jupyter code cells.
@@ -180,7 +180,7 @@ Similar configuration options are available in the other text editors, or you ma
 
 .. Figure:: ./figs/atomicChrome.png
    :align: center
-   :scale: 90%
+   :scale: 92%
    :figclass: bht
 
    Emacs lisp to configure atomic-chrome.
