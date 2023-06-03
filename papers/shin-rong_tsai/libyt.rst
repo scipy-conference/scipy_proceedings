@@ -362,13 +362,61 @@ problem of limitation in disk space and improves disk usage efficiency.
 Analyzing Fuzzy Dark Matter Vortices Simulation
 +++++++++++++++++++++++++++++++++++++++++++++++
 
-Fig :ref:`fdmfull`
+Fuzzy dark matter (FDM) is a promising dark matter candidate :cite:`Schive2014a`. 
+It is best described by a classical scalar field governed by the Schrödinger-Poisson equation, 
+because of the large de Broglie wavelength compared to the mean interparticle separation.
+FDM halos feature a central compact solitonic core surrounded by fluctuating density granules 
+resulting from wave function interference. 
+Quantum vortices can form in density voids caused by fully destructive interference  
+:cite:`Chiueh1998` :cite:`Hui2021`. 
+The dynamics of these vortices in FDM halo have not been investigated thoroughly, 
+due to the very high spatial and temporal resolution is required, which leads to tremendously 
+huge disk space. ``libyt`` provides a promising approach for this study.
+
+We use ``GAMER`` to simulate the evolution of an FDM halo on the Taiwania 3 [#]_.
+We use 560 CPU cores by launching 20 MPI processes with 28 OpenMP threads per MPI process to 
+run the simulation. 
+The simulation box size is :math:`2.5 \times 10^5` pc, covered by a :math:`640^3` base-level grid with 
+six refinement levels. 
+The highest level has a maximum resolution of :math:`6.2` pc, so that it is able to resolve the fine 
+structure and dynamical evolution of vortices within a distance of :math:`3200` pc from the center.
+To properly capture the dynamics, we aim for analyzing vortex properties with a temporal resolution of 
+:math:`3.5 \times 10^{-2}` Myr, corresponding to 321 analysis samples. 
+Each simulation snapshot, including density, real part, imaginary part, gravitational potential, 
+and AMR grid information, takes 116 GB. 
+It will take :math:`\sim 37` TB if we do this in post-processing, which is really expensive.
+However, it is actually unnecessary to dump all these snapshots since our region of interest is only 
+the vortex lines around the halo center. 
+
+.. [#] Supercomputer at the National Center for High-performance Computing in Taiwan. 
+   (`https://www.nchc.org.tw/ <https://www.nchc.org.tw/>`_)
+
+
+We solve this by using ``libyt`` to invoke ``yt`` function ``covering_grid`` to extract a 
+uniform-resolution grid centered at the halo center and store these grid data instead of simulation 
+snapshots on disk. 
+The uniform grid has dimension :math:`1024^3` with spatial resolution :math:`6.2` pc (i.e., the 
+maximum resolution in the simulation), correspnding to the full extracted uniform grid width of 
+:math:`6300` pc. 
+By storing only the imaginary and real parts of the wave function in single precision, 
+each sample step now consumes only 8 GB, which is 15 times smaller than the snapshot required in 
+post-processing. 
+
+We further analyze these uniform grid in post-processing, and do volume rendering and create 
+animation [#]_ using ParaView :cite:`ParaView`. 
+Fig :ref:`fdmfull` is the volume rendering of the result. 
+Vortex lines and rings are manifest in the entire domain. 
+For :ref:`fdmzoomin` show a zoom in version of where the reconnection of vortex lines take place. 
+With the help of ``libyt``, we are able to achieve a very high temporal resolution and very high 
+spatial resolution at the same time.
+
+.. [#] `https://youtu.be/tUjJYGbWgUc <https://youtu.be/tUjJYGbWgUc>`_
 
 .. figure:: FDM-VorticesFull.pdf
    :figclass: htb
 
    Volume rendering of quantum vortices in a fuzzy dark matter halo with ``GAMER``. Here we use 
-   libyt to extract uniform-resolution data from an AMR simulation on-the-fly and then visualize 
+   libyt to extract uniform-resolution data from an AMR simulation on-the-fly, and then visualize 
    it with ParaView in post-processing. The colormap is the logarithm of reciprocal of density 
    averaging over radial density profile, which highlight the fluctuations and null density. Tick 
    labels represent cell indices.
@@ -377,7 +425,10 @@ Fig :ref:`fdmfull`
 .. figure:: FDM-ZoomIn.pdf
    :figclass: htb
 
-   Vortex reconnection process in a fuzzy dark matter halo.
+   Vortex reconnection process in a fuzzy dark matter halo. 
+   This is the result we get if we zoom in to one of the vortex lines in Fig :ref:`fdmfull`. 
+   We are able to clearly capture the dynamics, and at the same time, preserve high spatial 
+   resolution.
    :label:`fdmzoomin`
 
 
