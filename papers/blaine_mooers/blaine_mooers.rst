@@ -36,7 +36,7 @@ The molecular structures determines the protein's biological function, so the ex
 The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to remain vital because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`.
 
 Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks :cite:`Mirdita22`.
-Nonetheless, most protein crystallographers continue to use well-developed, user friendly GUIs to run crystallographic software in routine analyses.
+Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses.
 However, these users sometimes need non-routine analyses that require new code.
 
 The Computational Crystallography Toolbox (CCTBX) provides a vast library of computational crystallography software written in C++ and wrapped with Python :cite:`GrosseKunstleve02`.
@@ -64,9 +64,9 @@ To ease the running of cctbx in Jupyter notebooks, we developed the jupyterlabcc
 Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab , a browser based IDE for Jupyter notebooks.
 This JupyterLab enables the writing or editing of a document in a pane next to the Jupyter notebook.
 This is useful for writing up documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
-The document can be plain text, html, markdown, or LaTeX.
+The document can be plain text, html, markdown, LaTeX, or even org-mode if one activates the text area with GhostText (see below :ref:`ghosttext`) while running Emacs.
 
-The figure below shows part of the cascading menus for the cctbx library after it has been installed successfully.
+The figure below (Figure :ref:`pulldown`) shows part of the cascading menus for the cctbx library after it has been installed successfully.
 The submenus correspond to the names of subfolders in the cctbx folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library on the Mac).
 Each ultimate menu item is a Python snippet file.
 The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
@@ -79,10 +79,17 @@ The code in this cell would be executed by entering Shift-Enter.
    :scale: 40%
    :figclass: bht
 
-   The cascading menus for the cctbx library.
+   The cascading menus for the cctbx library. :label:`pulldown`
 
-The mtzObjectSummary.py snippet prints a summary of an mtz file.
+The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Figure :ref:`mtzsummary`.
 The data in this mtz has columns of I(+) and I(-).
+These are the Bijvoet pairs of diffraction intensities.
+These pairs are related by symmetry and should have equal intensity values within experimental error.
+The differences in intensities are a measure of the presence of anomalous scattering.
+Anomalous scattering can be measurable for elements like sulfur and phosphorous that are part of the native protein and nucleic acid structures and heavier element like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., bromo-5-uracil) during its synthesis.
+
+The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
+Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein. 
 We use these data to make a I(+) vs I(-) scatter plot below.
 The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
 
@@ -91,11 +98,26 @@ The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium
    :scale: 50%
    :figclass: bht
 
-   The output from *millerArrayFromMtz.py* snippet. 
+   The output from *millerArrayFromMtz.py* snippet. :label:`mtzsummary`
 
-The I(+) vs I(-) plot below was made after reading the X-ray data into a cctbx Miller array, a data structure designed for X-ray data.
+The I(+) vs I(-) plot below was made after reading the X-ray data into a cctbx Miller array, a data structure designed for handling X-ray data in cctbx.
 The I(+) and I(-) were eventually read into separate lists.
 We plot the two lists against each other in a scatter plot.
+There is no scatter in this plot if there is no anomalous signal.
+The larger the anomalous signal, the greater the scatter from the $x=y$ line.
+The departure from this line is expected to be greater for intensities of large magnitude.
+
+Plots of this nature are useful for detecting very weak anomalous signals from native anomalous scatters like sulfur and phosphorous.
+The collection of the anomalous signal from native scatters enables structure determination without having to spend the extra time and money to introduce heavier atoms.
+The measurement of the very weak signal from anomalous scatterers is at the edge of what is technically possible by using two million dollar detectors and synchrotron radiation as national laboratories.
+
+Usually, these data are collected at -173 degrees Celcius in a cryostream of nitrogen gas to prolong the life of the crystal while exposed to the X-rays which otherwise rapidly induce radiation damage.
+The typical absorbed radiation dose of a protein crystal in the X-ray beam during a diffraction experiment is sufficient to kill 100,000 humans.
+However, recently, several groups have completed successful native phasing experiments at room temperature by collecting data from large numbers of crystals.
+Data are collected from each crystal briefly before radiation damage degrades the diffraction.
+This is a remarkable achievement because data from different crystals enhances the experimental error.
+
+
 This plot was adapted from an example in the ReciprocalSpaceship project from the Hekstra Lab :cite:`Greisman21`.
 This new project takes a more Pythonic approach.
 For example, it uses the Pandas package to manage diffraction data whereas cctbx uses a special C++ data structure for diffraction data that predates pandas by a decade.
@@ -141,8 +163,9 @@ Drafted me.
 
 
 
-Using GhostText to edit Jupyter cells from a favorite text editor
+Using GhostText to edit Jupyter cells from a favorite text editor 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+:label:`ghosttext`
 
 The snippet extensions for the Classic Jupyter Notebook and JupyterLab lack support for tab triggers to insert snippets was you type and tab stops inside the snippet to advance to sites in the snippet that may need to be edited.
 These two features are standard in the software that supports the use of snippet libraries in most text editors.
