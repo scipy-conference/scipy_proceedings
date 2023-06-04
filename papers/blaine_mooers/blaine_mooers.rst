@@ -33,13 +33,13 @@ Introduction
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structures determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and to developing new therapies in medicine.
-The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to remain vital because it still supplies the most precise structures :cite:`Kulhbrandt14`, :cite:`Jumper2021`.
+The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to remain vital because it still supplies the most precise structures :cite:`Kuelhbrandt14`, :cite:`Jumper21`.
 
 Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks :cite:`Mirdita21`.
 Nonetheless, most protein crystallographers continue to use well-developed, user friendly GUIs to run crystallographic software in routine analyses.
 However, these users sometimes need non-routine analyses that require new code.
 
-The Computational Crystallography Toolbox (CCTBX) provides a vast library of computational crystallography software written in C++ and wrapped with Python :cite:`Gros02`.
+The Computational Crystallography Toolbox (CCTBX) provides a vast library of computational crystallography software written in C++ and wrapped with Python :cite:`GrosseKunstleve02`.
 This library is used to build new analysis tools.
 CCTBX was hard to install three years ago due to its complex dependencies, but the addition of the CCTBX package to Anaconda dramatically eased the installation of CCTBX.
 The lowering of this barrier to the installation of CCTBX has raised interest in the use of CCTBX for novel structure analyses.
@@ -217,7 +217,7 @@ Of course, the final text can be saved locally.
 Third, multiple open editors with GhostText servers installed can compete for the same WebSocket.
 This problem is solved by closing the editor that is not in current use or configuring its server to use an alternate WebSocket.
 
-To support the use of GhostText to edit electronic notebooks containing code from the CCTBX library, we have made variants of a collection of CCTBX snippets for Visual Studo Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
+To support the use of GhostText to edit electronic notebooks containing code from the CCTBX library, we have made variants of a collection of CCTBX snippets for Visual Studio Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
 I found that Sublime Text 3 had the most effortless setup while Emacs provided the highest degree of customization.
 This snippet library was previously only available for use Juptyer notebooks via extensions for the Classic Juptyer Notebook application or Juptyer Lab.
 
@@ -260,9 +260,9 @@ The audience for these libraries are millions of professional programmers and we
 We reasoned that this great tool should be brought to the aid of the thousands of workers in crystallography.
 
 The other area where domain specific snippets have been provided is in molecular graphics.
-The pioneering work on a scripting wizard provided templates for use in the molecular graphics program RasMol  :cite:`Horton99`.
-The conscript program provided a converter from RasMol to PyMOL :cite:`Mott10`.
-We also provided snippets for PyMOL, which has 100,000 users, for use in text editors :cite:`Moo21a` and Jupyter notebooks :cite:`Moo21b`.
+The pioneering work on a scripting wizard provided templates for use in the molecular graphics program RasMol :cite:`Horton99`.
+The conscript program provided a converter from RasMol to PyMOL :cite:`Mottarella10`.
+We also provided snippets for PyMOL, which has 100,000 users, for use in text editors :cite:`Mooers21a` and Jupyter notebooks :cite:`Mooers21b`.
 The former support tab triggers and tab stops; the latter does not.
 
 We have also worked out how to deploy this snippet libraries in OnDemand notebooks at High-Performance Computing centers.
