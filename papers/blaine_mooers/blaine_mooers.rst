@@ -33,20 +33,26 @@ Introduction
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structures determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and to developing new therapies in medicine.
-The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to remain vital because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`.
+The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`.
 
 Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks :cite:`Mirdita22`.
-Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses.
+Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses (e.g., CCP4 :cite:`Agirre23`, Phenix :cite:`Liebschner19`, CNS :cite:`{Brunger98`).
 However, these users sometimes need non-routine analyses that require new code.
 
-The Computational Crystallography Toolbox (CCTBX) provides a vast library of computational crystallography software written in C++ and wrapped with Python :cite:`GrosseKunstleve02`.
-This library is used to build new analysis tools.
-CCTBX was hard to install three years ago due to its complex dependencies, but the addition of the CCTBX package to Anaconda dramatically eased the installation of CCTBX.
-The lowering of this barrier to the installation of CCTBX has raised interest in the use of CCTBX for novel structure analyses.
-Nonetheless, many users still find CCTBX to be impenetrable.
-Several online tutorials and workshops have addressed this problem, but the adoption of CCTBX remains low.
+The Computational Crystallography Toolbox (cctbx) provides a vast library of computational crystallography software written in C++ following an object-oriented programming paradigm and wrapped with Python :cite:`GrosseKunstleve02`.
+This library was designed to contained reusable C++ code.
+It development in the late 1990s was driven by limitations on reusability and error handling in Fortran77, the dominant programming language used in crystllographic computing at the time.
+This cctbx library is used to build build higher order analysis tools.
+The group lead by Paul Adams that developed cctbx used cctbx to develop the Phenix software package that includes a graphical user interface.
+*Phenix* is widely used today and it able to continue to grow and evolve that to the obejct-oriented approach built into cctbx.
 
-To ease the use of CCTBX by my and other labs to develop custom crystallographic analyses, we assembled a collection of CCTBX code snippets for use in Jupyter notebooks.
+CCTBX was hard to install three years ago due to its complex dependencies, but the addition of the CCTBX package to Anaconda dramatically eased the installation of CCTBX.
+The lowering of this barrier to the installation of CCTBX has raised interest in the use of CCTBX for novel data analyses.
+Several online tutorials and workshops have attempted to address this problem, but the adoption of CCTBX remains low.
+This is somewhat surprising considering the widespread adoption of Python in the past decade by the field.
+Difficulty with using *cctbx* has inspired some outside groups to reinvent many capabilities using modules from the SciPy software stack (e.g. *reciprocalspaceship* :cite:`Griesman21`, :GEMMI: :cite:`Wojdyr22`).
+
+To ease the use of CCTBX by my lab and others to develop custom crystallographic analyses, we assembled a collection of CCTBX code snippets for use in Jupyter notebooks.
 Jupyter provides an excellent platform for exploring the CCTBX library and developing new analysis tools.
 The Python API of CCTBX simplifies running CCTBX in Jupyter via a kernel specific for its conda environment.
 We formatted the snippet library for several snippet extensions for the Classic Notebook and for Jupyter Lab.
@@ -309,7 +315,7 @@ The set of template libraries can encourage synergistic interoperability between
 That is the development of notebooks that use two or more software packages and even programming languages.
 More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python, the reticulate package that enables the running of Python code in R , and the PyCall package in Julia that enables the running of the Python packages in Julia.
 The latter package is widely used to run matplotlib in Julia.
-Interoperability already occurs between the CCP4 :cite:`Agirre23`, clipper :cite:`McNicholas18`, gemmi :cite:`Wojdyr22`, reciprocalspaceship :cite:`Greisman21`, CARELESS :cite:`Dalton21`,and CCTBX projects and to a limited extent between CCTBX and PyMOL, but interoperability could be more widespread if the walls around the software silos were lowered.
+Interoperability already occurs between the CCP4 :cite:`Agirre23`, clipper :cite:`McNicholas18`, gemmi :cite:`Wojdyr22`, reciprocalspaceship :cite:`Greisman21`, Careless :cite:`Dalton22`,and CCTBX projects and to a limited extent between CCTBX and PyMOL, but interoperability could be more widespread if the walls around the software silos were lowered.
 The snippet libraries provided here can prompt taking advantage of this interoperability in Jupyter and Colab notebooks.
 
 
