@@ -26,7 +26,7 @@ Biomolecular Crystallographic Computing with Jupyter
 
 .. class:: keywords
 
-   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, molecular visualization, scientific communication, molecular artwork, computational molecular biophysics
+   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, Colab notebook, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, computational molecular biophysics, biomedical research, data visualization, scientific communication, GhostText, text editors, snippet libraries 
 
 Introduction
 -------------
@@ -46,7 +46,7 @@ The lowering of this barrier to the installation of CCTBX has raised interest in
 Nonetheless, many users still find CCTBX to be impenetrable.
 Several online tutorials and workshops have addressed this problem, but the adoption of CCTBX remains low.
 
-To ease the use of CCTBX by my and other labs to develop custom crystallographic Analyses0, we assembled a collection of CCTBX code snippets for use in Jupyter notebooks.
+To ease the use of CCTBX by my and other labs to develop custom crystallographic analyses, we assembled a collection of CCTBX code snippets for use in Jupyter notebooks.
 Jupyter provides an excellent platform for exploring the CCTBX library and developing new analysis tools.
 The Python API of CCTBX simplifies running CCTBX in Jupyter via a kernel specific for its conda environment.
 We formatted the snippet library for several snippet extensions for the Classic Notebook and for Jupyter Lab.
@@ -70,7 +70,7 @@ The figure below shows part of the cascading menus for the cctbx library after i
 The submenus correspond to the names of subfolders in the cctbx folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library on the Mac).
 Each ultimate menu item is a Python snippet file.
 The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
-The **millerArrayFromMtz.py** snippet at the bottom of the pulldown menu was selected and inserted in the figure below.
+The *millerArrayFromMtz.py* snippet at the bottom of the pulldown menu was selected and inserted in the figure below.
 Commented lines have text that describes what this snippet does.
 The code in this cell would be executed by entering Shift-Enter.
 
@@ -91,14 +91,14 @@ The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium
    :scale: 50%
    :figclass: bht
 
-   The output from **millerArrayFromMtz.py** snippet. 
+   The output from *millerArrayFromMtz.py* snippet. 
 
 The I(+) vs I(-) plot below was made after reading the X-ray data into a cctbx Miller array, a data structure designed for X-ray data.
 The I(+) and I(-) were eventually read into separate lists.
 We plot the two lists against each other in a scatter plot.
 This plot was adapted from an example in the ReciprocalSpaceship project from the Hekstra Lab :cite:`Greisman21`.
 This new project takes a more Pythonic approach.
-For example, it uses the Pandas package to manage diffraction data whereas cctbx uses a special C++ data structure for diffraction data.
+For example, it uses the Pandas package to manage diffraction data whereas cctbx uses a special C++ data structure for diffraction data that predates pandas by a decade.
 
 .. figure:: ./figs/Fig2IpImPlot.png
    :align: center
@@ -107,7 +107,7 @@ For example, it uses the Pandas package to manage diffraction data whereas cctbx
 
    The Ip Im plot.
 
-CCTBX is most easily installed into its own environment by using Anaconda with the command conda create -n my_env -c conda-forge cctbx-base python=3.8.
+CCTBX is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
 
 
 jupyterlabcctbxsnipsplus
