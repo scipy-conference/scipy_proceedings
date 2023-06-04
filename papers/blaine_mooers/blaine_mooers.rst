@@ -66,7 +66,7 @@ This JupyterLab enables the writing or editing of a document in a pane next to t
 This is useful for writing up documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
 The document can be plain text, html, markdown, LaTeX, or even org-mode if one activates the text area with GhostText (see below :ref:`ghosttext`) while running Emacs.
 
-The figure below (Figure :ref:`pulldown`) shows part of the cascading menus for the cctbx library after it has been installed successfully.
+The figure below (Fig. :ref:`pulldown`) shows part of the cascading menus for the cctbx library after it has been installed successfully.
 The submenus correspond to the names of subfolders in the cctbx folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library on the Mac).
 Each ultimate menu item is a Python snippet file.
 The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
@@ -81,7 +81,7 @@ The code in this cell would be executed by entering Shift-Enter.
 
    The cascading menus for the cctbx library. :label:`pulldown`
 
-The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Figure :ref:`mtzsummary`.
+The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`mtzsummary`.
 The data in this mtz has columns of I(+) and I(-).
 These are the Bijvoet pairs of diffraction intensities.
 These pairs are related by symmetry and should have equal intensity values within experimental error.
@@ -92,6 +92,7 @@ The anomalous differences can be used to determine the positions of the anomalou
 Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein. 
 We use these data to make a I(+) vs I(-) scatter plot below.
 The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
+The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB21`. 
 
 .. figure:: ./figs/Fig5mtzSummary.png
    :align: center
@@ -100,12 +101,19 @@ The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium
 
    The output from *millerArrayFromMtz.py* snippet. :label:`mtzsummary`
 
-The I(+) vs I(-) plot below was made after reading the X-ray data into a cctbx Miller array, a data structure designed for handling X-ray data in cctbx.
+The I(+) vs I(-) plot below (Fig. :ref:`ipmplot`) was made after reading the X-ray data into a cctbx Miller array, a data structure designed for handling X-ray data in cctbx.
 The I(+) and I(-) were eventually read into separate lists.
 We plot the two lists against each other in a scatter plot.
 There is no scatter in this plot if there is no anomalous signal.
 The larger the anomalous signal, the greater the scatter from the $x=y$ line.
 The departure from this line is expected to be greater for intensities of large magnitude.
+
+.. figure:: ./figs/Fig2IpImPlot.png
+   :align: center
+   :scale: 50%
+   :figclass: bht
+
+   The Ip Im plot. :label:`ipmpplot`
 
 Plots of this nature are useful for detecting very weak anomalous signals from native anomalous scatters like sulfur and phosphorous.
 The collection of the anomalous signal from native scatters enables structure determination without having to spend the extra time and money to introduce heavier atoms.
@@ -117,17 +125,11 @@ However, recently, several groups have completed successful native phasing exper
 Data are collected from each crystal briefly before radiation damage degrades the diffraction.
 This is a remarkable achievement because data from different crystals enhances the experimental error.
 
-
 This plot was adapted from an example in the ReciprocalSpaceship project from the Hekstra Lab :cite:`Greisman21`.
 This new project takes a more Pythonic approach.
 For example, it uses the Pandas package to manage diffraction data whereas cctbx uses a special C++ data structure for diffraction data that predates pandas by a decade.
 
-.. figure:: ./figs/Fig2IpImPlot.png
-   :align: center
-   :scale: 50%
-   :figclass: bht
 
-   The Ip Im plot.
 
 CCTBX is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
 
@@ -174,7 +176,7 @@ Thus, it is possible to edit the contents of a computational notebook cell from 
 Changes made in the text editor instantly appear in the notebook and vice versa.
 By applying the power of a text editor to computational notebooks, experienced developers can continue to use familiar editing commands and tools.
 
-As a quick reminder, tab triggers in text editors insert chunks of computer code after the user enters the tab trigger name and hits the TAB key.
+As a quick reminder, tab triggers in text editors insert chunks of computer code after the user enters the tab trigger name and hits the TAB key (Fig. :ref:`tabtrigger`).
 The tab trigger name can be as short as several letters.
 Many text editors and IDEs have pop-up menus that aid the selection of the correct tab trigger.
 Tab stops are sites within the code snippet where the cursor advances to after entering TAB again.
@@ -184,6 +186,13 @@ The absence of tab stops can increase the number of bugs introduced by the devel
 The lack of support for tab triggers and tab stops in computational notebooks can dampen the enthusiasm of experienced developers for using computational notebooks.
 Of course, one solution is to write an extension for Jyptyer Notebook or JuptyerLab in JavaScript that supports tab triggers and tab stops.
 
+.. Figure:: ./figs/tabtrigger.png
+   :align: center
+   :scale: 53%
+   :figclass: bht
+
+   Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets.  The list was narrowed to one snippet by the entry of three letters. :label:`tabtrigger`
+
 Another approach is to send the text in the active code cell to a powerful text editor on your local computer via the browser extension known as GhostText https://ghosttext.fregante.com/.
 GhostText is a Javascript program developed by Federico Brigante, a prolific JavaScript developer. Versions of the extension are available for the Google Chrome, Firefox, Edge, Opera, and Safari. The extension for the Google Chrome browser works in the Brave browser, and the extension for Firefox works in the Waterfox and Icecat browsers.
 
@@ -192,14 +201,8 @@ Edits made on the browser side of the WebSocket are immediately sent to an open 
 The connection can be closed from either side of the WebSocket.
 It is closed on the web browser side via an option in GhostTest’s pulldown menu, and it closed on the text editor side by closing the active buffer.
 
-.. Figure:: ./figs/tabtrigger.png
-   :align: center
-   :scale: 53%
-   :figclass: bht
 
-   Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets.  The list was narrowed to one snippet by the entry of three letters.
-
-A Jupyter notebook with two code snippets from the cctbxsnips library for the Sublime Text 3 editor are shown in Figure 2.
+A Jupyter notebook with two code snippets from the cctbxsnips library for the Sublime Text 3 editor are shown in Fig. :ref:`twocells`.
 The two code cells have been run, and the output from the second cell is printed in the notebook.
 The first cell is being edited to change the name of the mtz file that is to be read.
 A pop-up menu in Jupyter has appeared with a list of candidate file names.
@@ -209,15 +212,16 @@ A pop-up menu in Jupyter has appeared with a list of candidate file names.
    :scale: 70%
    :figclass: bht
 
-   Two code cells with executed Jupyter code cells.
+   Two code cells with executed Jupyter code cells. :label:`twocells`
 
 The servers for the editors are editor specific.
 The following text editors are supported: Visual Studio Code, Vim, NeoVim, Emacs, Atom, and Sublime Text 3. GhostText was developed initially for Sublime Text 3, so Sublime Text 3 can serve as a positive control even if another editor in the list is your favorite editor. (Sublime Text 3 is available for most platforms for a free trial period of infinite length.)
-For example, the server for Emacs is provided by the atomic-chrome package that is available in the Milkypostman’s Emacs Lisp Package Archive (MELPA) and on GitHub (https://github.com/alpha22jp/atomic-chrome).
-The configuration for atomic-chrome in my Emacs initialization file (e.g., init.el) is listed in code listing 1 below.
 
+For example, the server for Emacs is provided by the atomic-chrome package that is available in the Milkypostman’s Emacs Lisp Package Archive (MELPA) and on GitHub (https://github.com/alpha22jp/atomic-chrome).
+The configuration for atomic-chrome in my Emacs initialization file (e.g., init.el) is listed below (Fig. :ref:`atomicconfig`).
 The third line in Code listing 1 sets the default Emacs mode (equivalent to a programming language scope): I set it to Python for Jupyter code cells.
-Atomic-chrome uses text-mode by default. You can change the default mode to other programming languages that you may use in Jupyter, like Julia or R.
+Atomic-chrome uses text-mode by default.
+You can change the default mode to other programming languages that you may use in Jupyter, like Julia or R.
 The last three lines specify the Emacs mode to be used when text is imported from the text areas of webpages on github.com, Overleaf.com, and 750words.com.
 Similar configuration options are available in the other text editors, or you manually change the language scope for the window with the text imported from Jupyter.
 
@@ -226,7 +230,7 @@ Similar configuration options are available in the other text editors, or you ma
    :scale: 92%
    :figclass: bht
 
-   Emacs lisp to configure atomic-chrome.
+   Emacs lisp to configure atomic-chrome. :label:`atomicconfig`
 
 Ghost Text provides a keyboard shortcut for the browser to open or close the connection to the text editor.
 These shortcut keep the developer's hands on the keyboard and avoid breaks in context by moving the hand to the mouse.
