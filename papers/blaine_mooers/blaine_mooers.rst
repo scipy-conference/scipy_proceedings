@@ -29,13 +29,13 @@ Biomolecular Crystallographic Computing with Jupyter
    literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, Colab notebook, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, computational molecular biophysics, biomedical research, data visualization, scientific communication, GhostText, text editors, snippet libraries 
 
 Introduction
--------------
+--------------
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structures determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and to developing new therapies in medicine.
 The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to remain vital because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`.
 
-Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks :cite:`Mirdita21`.
+Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks :cite:`Mirdita22`.
 Nonetheless, most protein crystallographers continue to use well-developed, user friendly GUIs to run crystallographic software in routine analyses.
 However, these users sometimes need non-routine analyses that require new code.
 
@@ -112,7 +112,7 @@ CCTBX is most easily installed into its own environment by using Anaconda with t
 
 jupyterlabcctbxsnipsplus
 ++++++++++++++++++++++++++++++
-This is the variant of the jupyterlabcctbxsnips library with comments to guide editing of the snippets.
+This is the variant of the *jupyterlabcctbxsnips* library with comments to guide editing of the snippets.
 
 taggedcctbxsnips
 +++++++++++++++++++
@@ -125,7 +125,7 @@ colabcctbxsnips
 
 On Colab, the snippets are stored in a Google Colab notebook.
 See this website for an excellent introduction to CCTBX (Computational Crystallography Toolbox).
-The colabcctbxsnips library is a collection of the code fragment to aid doing routine and not so routine computational tasks in protein crystallography.
+The *colabcctbxsnips* library is a collection of the code fragment to aid doing routine and not so routine computational tasks in protein crystallography.
 The URL for the snippets notebook is unused to access the snippets from a new notebook.
 
 Click on the blue button below to open the notebook on Colab and follow the instructions at the top of the notebook on how to copy the notebook to Google Drive and then make it available to new Colab notebooks.
