@@ -36,7 +36,7 @@ The molecular structures determines the protein's biological function, so the ex
 The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`.
 
 Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks :cite:`Mirdita22`.
-Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses (e.g., CCP4 :cite:`Agirre23`, Phenix :cite:`Liebschner19`, CNS :cite:`{Brunger98`).
+Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses (e.g., CCP4 :cite:`Agirre23`, Phenix :cite:`Liebschner19`, CNS :cite:`Brunger98`).
 However, these users sometimes need non-routine analyses that require new code.
 
 The Computational Crystallography Toolbox (cctbx) provides a vast library of computational crystallography software written in C++ following an object-oriented programming paradigm and wrapped with Python :cite:`GrosseKunstleve02`.
