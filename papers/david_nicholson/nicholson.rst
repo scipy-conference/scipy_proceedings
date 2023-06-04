@@ -75,7 +75,7 @@ to better understand the fit between tasks defined by machine learning researche
 All of these factors have created a real need for a framework that allows researchers to easily benchmark models
 and apply trained models to their own data.
 
-To address this need, we developed vak :cite:`nicholsonVak2022` (\url{https://github.com/vocalpy/vak`),
+To address this need, we developed vak :cite:`nicholsonVak2022` (https://github.com/vocalpy/vak),
 a neural network framework designed for researchers studying animal acoustic communication.
 vak is already in use in at least 10-20 research groups to our knowledge,
 and has played a key role in publications that
@@ -255,8 +255,8 @@ In other words, this abstraction considers the minimum definition of a neural ne
 to include not only the network architecture but additionally the loss function, the optimizer, and metrics. 
 This definition is in line with those adopted by other frameworks, notably the Lightning library itself.
 
-To relate a model as declared with a ``ModelDefinition` to the machine learning tasks that we implement within the vak framework,
-we introduce the concept of model `families`. A model family is represented by a sub-class of the core ``LightningModel`` class, 
+To relate a model as declared with a ``ModelDefinition`` to the machine learning tasks that we implement within the vak framework,
+we introduce the concept of model *families*. A model family is represented by a sub-class of the core ``LightningModel`` class,
 with each class representing a family having set implementations of the training step, validation step, and prediction step. 
 In this way, model families are defined operationally: a model can belong to a family if it accepts the inputs provided by logic 
 within the training, validation, and prediction steps, and the model also produces the appropriate outputs needed within those same steps.
@@ -387,7 +387,7 @@ or when generating predictions for new data.
 
 **Transforms for labeled timebins.**
 Many of the transforms we provide relate to
-what we call `labeled timebins`,
+what we call *labeled timebins*,
 that is, vectors where each element represents
 a label for a time bin from a spectrogram or a sample in an audio signal.
 These vectors of class labels are used as targets
@@ -556,15 +556,15 @@ that were not specified in the labelset option of the configuration file.
 
 **Dataset csv file format.** Very briefly we note the format of the csv file that represents the dataset.
 This csv (and the dataframe loaded from it) has four essential columns:
-``'audio_path'`, ``'spect_path'`, ``'annot_path'`, and ``'split'`.
+``'audio_path'``, ``'spect_path'``, ``'annot_path'``, and ``'split'``.
 Because the primary workflow in vak consists of pairing spectrograms with annotations,
-the ``'audio_path'` does not refer to a file in the dataset directory,
+the ``'audio_path'`` does not refer to a file in the dataset directory,
 but instead allows for tracing provenance back to the source files used to generate the spectograms in the dataset.
 If a user provides pre-computed spectrograms, this column is left empty.
-The ``'spect_path'` contains the relative paths to array files containing spectrograms
+The ``'spect_path'`` contains the relative paths to array files containing spectrograms
 within the split subdirectories created when running vak prep; this is the column used
 when working with models to load the inputs to networks.
-Finally the ``'annot_path'` column points to annotation files,
+Finally the ``'annot_path'`` column points to annotation files,
 which again as just stated may reside in the split sub-directories with the files that each annotates,
 or in the case of a single file will be in the root of the dataset directory,
 meaning that this single path will be repeated for every row in the csv.
@@ -590,12 +590,12 @@ using the transforms described in  :ref:`transformations`.
 
 **WindowDataset.** This dataset class represents all possible time windows of a fixed width
 from a set of audio recordings or spectrograms.
-As with the ``VocalDataset` class, the underlying dataset consists of audio files or spectrogram files of vocalizations, and an optional set of annotations for those vocalizations.
-Distinct from ``VocalDataset`,
+As with the ``VocalDataset`` class, the underlying dataset consists of audio files or spectrogram files of vocalizations, and an optional set of annotations for those vocalizations.
+Distinct from ``VocalDataset``,
 this class returns windows from the audio or spectrograms,
 and when the dataset includes annotations,
 the returned labeled timebins are also windowed.
-The ``WindowDataset` also enables training on a dataset of a specified duration,
+The ``WindowDataset`` also enables training on a dataset of a specified duration,
 without needing to modify the underlying data,
 by virtue of using a set of vectors to represent indices of valid windows from the total dataset.
 
@@ -621,7 +621,7 @@ in  :ref:`fig:cli`.
    and reports metrics during training :label:`fig:cli`
 
 The configuration file follows the TOML format that has been adopted among others by Python and Rust.
-Commands through the CLI take the form of vak command configfile, e.g., ``vak train gy6or6_train.toml`.
+Commands through the CLI take the form of vak command configfile, e.g., ``vak train gy6or6_train.toml``.
 There are five commands: prep, train, eval, predict, and learncurve.
 As their names suggest, the commands train, eval, and predict are used to train a model, evaluate it, and
 generate predictions with it once trained. The prep and learncurve commands require more explanation.
@@ -649,7 +649,7 @@ We first show how vak allows researchers to compare models.
 For this we consider the TweetyNet model in :cite:`cohenAutomatedAnnotationBirdsong2022`.
 We compare the original model, that is trained on batches of spectrogram windows
 drawn at random from an entire training set, to another model that is trained on entire bouts.
-Thus the first is a ``WindowedFrameClassificationModel` and the second is a ``FrameClassificationModel`,
+Thus the first is a ``WindowedFrameClassificationModel`` and the second is a ``FrameClassificationModel``,
 using the naming scheme from above in Section :ref:`model-families`.
 
 As in :cite:`cohenAutomatedAnnotationBirdsong2022`,
