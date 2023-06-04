@@ -96,36 +96,38 @@ with the library.
 Related work
 ============
 
-First, we briefly review related work, to further motivate the need for a framework
-to compare neural network models designed for acoustic communication researchers.
+First, we briefly review related literature, to further motivate the need for a framework
+to compare neural network models developed for animal acoustic communication research.
 We begin by explaining how the study of acoustic communication is distinct from bioacoustics more generally.
 Readers may be familiar with the use of approaches from bioacoustics to identify species present from a sound recording,
 as is done in passive acoustic monitoring. In contrast, the study of acoustic communication
 is often focused on how an individual communicates within a population.
 In species that are capable of vocal learning, such as songbirds, each individual will have a unique vocalization,
-often similar to the song of the tutor it learned from,
-and so many analyses measure the similarity of the vocalizations
-between individuals :cite:`tchernichovskiProcedureAutomatedMeasurement2000, kershenbaumQuantifyingSimilarityAnimal2015`.
-For this reason, a very common workflow is to segment sounds from one animal into a sequence of units,
+Because of this focus on individuals, a very common workflow is to segment sounds from one animal into a sequence of units,
 e.g., the syllables of birdsong, after which further analyses can be done :cite:`kershenbaumAcousticSequencesNonhuman2016`.
-Many such analyses require further annotation of the units to assign them to one of some set of classes,
-e.g. the unique syllables within an individual bird's repertoire.
-An example of segmenting audio and annotating is shown in
-Figure :ref:`fig:annotation`. These analyses include describing the repertoire size of individuals
-and species :cite:`robinsonSpecieslevelRepertoireSize2019, elieVocalRepertoireDomesticated2016`,
-fitting statistical models of the sequences :cite:`markowitz_long-range_2013, kakishitaEthologicalDataMining2009`.
+Some examples of such analyses include: measuring the similarity of the vocalizations
+between individuals :cite:`tchernichovskiProcedureAutomatedMeasurement2000, kershenbaumQuantifyingSimilarityAnimal2015`,
+describing the repertoire size of individuals
+and species :cite:`robinsonSpecieslevelRepertoireSize2019, elieVocalRepertoireDomesticated2016`.
 Such data can also form the basis of further modeling,
 e.g. agent-based models of how birdsong evolves
 in a population :cite:`youngbloodContentBiasCultural2022, hudsonModelingHowPopulation2022`,
 or machine learning models that ask what information is present
 in the calls of individuals :cite:`smith-vidaurreIndividualSignaturesOutweigh2020, pratEverydayBatVocalizations2016`
 or in populations :cite:`barkerCulturalTransmissionVocal2021,petersonUnsupervisedDiscoveryFamily2023`.
-It should be said that in bioacoustics more generally, there is very much interest in identifying
+Some analyses require further annotation of the units to assign them to one of some set of classes,
+e.g. the unique syllables within an individual songbird's song.
+An example of segmenting audio of Bengalese finch song into syllables and annotating those syllables is shown in
+Figure :ref:`fig:annotation`. Analyses that typically require annotation include
+fitting statistical models of the sequences :cite:`markowitz_long-range_2013, kakishitaEthologicalDataMining2009`
+or studies of motor learning where specific units in sequences need to be tracked throughout an experiment,
+e.g., to relate them to neural data
+:cite:`soberCentralContributionsAcoustic2008, sober2009adult, wohlgemuth2010linked, sober2012vocal`.
+It should be noted that in bioacoustics more generally, there is very much interest in identifying
 individual animals :cite:`linhartPotentialAcousticIndividual2022`.
 We recognize that there is probably more overlap than difference between these disciplines,
 and emphasize that we are simply illustrating these questions
 for the benefit of a general reader that may not be acquainted with them.
-
 
 .. figure:: fig-annotation-bengalese-finch.png
 
@@ -181,7 +183,7 @@ clustering vocalizations in latent space, e.g., to efficiently provide a human a
 with an estimate of the number of classes of vocalizations
 in an animal's repertoire :cite:`sainburgFindingVisualizingQuantifying2020`,
 and/or to measure similarity between vocalizations
-of two different animals :cite:`goffinetLowdimensionalLearnedFeature2021`.
+of two different animals :cite:`goffinetLowdimensionalLearnedFeature2021, zandbergBirdSongComparison2022`.
 It is apparent that unsupervised approaches are complementary to supervised models
 that can automate costly human annotations, and this is another reason that a single framework
 should provide access to both supervised and unsupervised models.
