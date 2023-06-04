@@ -119,8 +119,8 @@ Plots of this nature are useful for detecting very weak anomalous signals from n
 The collection of the anomalous signal from native scatters enables structure determination without having to spend the extra time and money to introduce heavier atoms.
 The measurement of the very weak signal from anomalous scatterers is at the edge of what is technically possible by using two million dollar detectors and synchrotron radiation as national laboratories.
 
-Usually, these data are collected at -173 degrees Celcius in a cryostream of nitrogen gas to prolong the life of the crystal while exposed to the X-rays which otherwise rapidly induce radiation damage.
-The typical absorbed radiation dose of a protein crystal in the X-ray beam during a diffraction experiment is sufficient to kill 100,000 humans.
+Usually, these data are collected at -173 degrees Celsius in a cryostream of nitrogen gas to prolong the life of the crystal while exposed to the X-rays which otherwise rapidly induce radiation damage.
+The typical absorbed radiation dose of a large protein crystal in the X-ray beam at synchrotron radiation laboratory during a 10-minute diffraction experiment is sufficient to kill 100,000 adult humans.
 However, recently, several groups have completed successful native phasing experiments at room temperature by collecting data from large numbers of crystals.
 Data are collected from each crystal briefly before radiation damage degrades the diffraction.
 This is a remarkable achievement because data from different crystals enhances the experimental error.
