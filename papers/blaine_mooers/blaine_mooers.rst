@@ -41,20 +41,20 @@ However, these users sometimes need non-routine analyses that require new code.
 
 The Computational Crystallography Toolbox (cctbx) provides a vast library of computational crystallography software written in C++ following an object-oriented programming paradigm and wrapped with Python :cite:`GrosseKunstleve02`.
 This library was designed to contained reusable C++ code.
-It development in the late 1990s was driven by limitations on reusability and error handling in Fortran77, the dominant programming language used in crystllographic computing at the time.
+It development in the late 1990s was driven by limitations on software reusability and error handling in Fortran77, the dominant programming language used in crystllographic computing at the time.
 This cctbx library is used to build build higher order analysis tools.
 The group lead by Paul Adams that developed cctbx used cctbx to develop the Phenix software package that includes a graphical user interface.
 *Phenix* is widely used today and it able to continue to grow and evolve that to the obejct-oriented approach built into cctbx.
 
-CCTBX was hard to install three years ago due to its complex dependencies, but the addition of the CCTBX package to Anaconda dramatically eased the installation of CCTBX.
-The lowering of this barrier to the installation of CCTBX has raised interest in the use of CCTBX for novel data analyses.
-Several online tutorials and workshops have attempted to address this problem, but the adoption of CCTBX remains low.
+The *cctbx* library was hard to install three years ago due to its complex dependencies, but the addition of the *cctbx* package to Anaconda dramatically eased the installation of *cctbx*.
+The lowering of this barrier to the installation of *cctbx* has raised interest in the use of *cctbx* for novel data analyses.
+Several online tutorials and workshops have attempted to address this problem, but the adoption of *cctbx* remains low.
 This is somewhat surprising considering the widespread adoption of Python in the past decade by the field.
 Difficulty with using *cctbx* has inspired some outside groups to reinvent many capabilities using modules from the SciPy software stack (e.g. *reciprocalspaceship* :cite:`Griesman21`, :GEMMI: :cite:`Wojdyr22`).
 
-To ease the use of CCTBX by my lab and others to develop custom crystallographic analyses, we assembled a collection of CCTBX code snippets for use in Jupyter notebooks.
-Jupyter provides an excellent platform for exploring the CCTBX library and developing new analysis tools.
-The Python API of CCTBX simplifies running CCTBX in Jupyter via a kernel specific for its conda environment.
+To ease the use of *cctbx* by my lab and others to develop custom crystallographic analyses, we assembled a collection of *cctbx* code snippets for use in Jupyter notebooks.
+Jupyter provides an excellent platform for exploring the *cctbx* library and developing new analysis tools.
+The Python API of *cctbx* simplifies running *cctbx* in Jupyter via a kernel specific for its conda environment.
 We formatted the snippet library for several snippet extensions for the Classic Notebook and for Jupyter Lab.
 To overcome the absence of tab triggers in the Jupyter ecosystem to invoke the insertion of snippets, we also made the snippets available for leading text editors.
 The user can use the GhostText browser plugin to edit the contents of a Jupyter cell in a full-powered external editor.
@@ -98,7 +98,7 @@ The anomalous differences can be used to determine the positions of the anomalou
 Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein. 
 We use these data to make a I(+) vs I(-) scatter plot below.
 The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
-The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB21`. 
+The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB18`. 
 
 .. figure:: ./figs/Fig5mtzSummary.png
    :align: center
@@ -137,7 +137,7 @@ For example, it uses the Pandas package to manage diffraction data whereas cctbx
 
 
 
-CCTBX is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
+The *cctbx* is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
 
 
 jupyterlabcctbxsnipsplus
@@ -154,7 +154,7 @@ colabcctbxsnips
 ++++++++++++++++++
 
 On Colab, the snippets are stored in a Google Colab notebook.
-See this website for an excellent introduction to CCTBX (Computational Crystallography Toolbox).
+See this website for an excellent introduction to *cctbx* (Computational Crystallography Toolbox).
 The *colabcctbxsnips* library is a collection of the code fragment to aid doing routine and not so routine computational tasks in protein crystallography.
 The URL for the snippets notebook is unused to access the snippets from a new notebook.
 
@@ -250,18 +250,18 @@ Of course, the final text can be saved locally.
 Third, multiple open editors with GhostText servers installed can compete for the same WebSocket.
 This problem is solved by closing the editor that is not in current use or configuring its server to use an alternate WebSocket.
 
-To support the use of GhostText to edit electronic notebooks containing code from the CCTBX library, we have made variants of a collection of CCTBX snippets for Visual Studio Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
+To support the use of GhostText to edit electronic notebooks containing code from the *cctbx* library, we have made variants of a collection of *cctbx* snippets for Visual Studio Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
 I found that Sublime Text 3 had the most effortless setup while Emacs provided the highest degree of customization.
-This snippet library was previously only available for use Juptyer notebooks via extensions for the Classic Juptyer Notebook application or Juptyer Lab.
+This snippet library was previously only available for use Jupyter notebooks via extensions for the Classic Jupyter Notebook application or Jupyter Lab.
 
-Note that the snippet library cannot be used with the program nteract (https://nteract.io/).
+Note that the snippet library cannot be used with the program *nteract* (https://nteract.io/).
 The nteract is an easy-to-install and use desktop application for editing and running Jupyter notebooks offline.
 The ease of installation makes nteract popular with new users of Jupyter notebooks. Obviously interact is not browser-based, so it cannot work with GhostText.
 Interact has yet to be extended to support the use of code snippet libraries.
 
 While the focus of this report was on the use of the GhostText browser plugin to edit Juptyer notebooks hosted in a web browser, the cctbxsnips snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of saner version control.
-The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the Quarto (http://quarto.org) markdown representation of Jupyter notebooks.
-Quarto is available for several leading text editors.
+The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the *Quarto* (http://quarto.org) markdown representation of Jupyter notebooks.
+*Quarto* is available for several leading text editors.
 In the later case, you may have to extend the scope of the editing session in the editor to include Python source code.
 
 
@@ -313,9 +313,9 @@ Opportunities for interoperability
 
 The set of template libraries can encourage synergistic interoperability between software packages supported by the snippet libraries.
 That is the development of notebooks that use two or more software packages and even programming languages.
-More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python, the reticulate package that enables the running of Python code in R , and the PyCall package in Julia that enables the running of the Python packages in Julia.
+More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python, the *reticulate* package that enables the running of Python code in R :cite:`Ushey23`, and the PyCall package in Julia that enables the running of the Python packages in Julia.
 The latter package is widely used to run matplotlib in Julia.
-Interoperability already occurs between the CCP4 :cite:`Agirre23`, clipper :cite:`McNicholas18`, gemmi :cite:`Wojdyr22`, reciprocalspaceship :cite:`Greisman21`, Careless :cite:`Dalton22`,and CCTBX projects and to a limited extent between CCTBX and PyMOL, but interoperability could be more widespread if the walls around the software silos were lowered.
+Interoperability already occurs between the CCP4 :cite:`Agirre23`, clipper :cite:`McNicholas18`, gemmi :cite:`Wojdyr22`, reciprocalspaceship :cite:`Greisman21`, Careless :cite:`Dalton22`,and *cctbx* projects and to a limited extent between *cctbx* and *PyMOL*, but interoperability could be more widespread if the walls around the software silos were lowered.
 The snippet libraries provided here can prompt taking advantage of this interoperability in Jupyter and Colab notebooks.
 
 
