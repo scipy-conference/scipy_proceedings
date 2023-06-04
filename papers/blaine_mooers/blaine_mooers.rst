@@ -6,11 +6,11 @@
 :institution: Biomolecular Structure Core, Oklahoma COBRE in Structural Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
 :orcid: 0000-0001-8181-8987
 :corresponding: Blaine H. M. Mooers
+:bibliography: mybib
 
-
-=======================================================================
- Biomolecular Crystallographic Computing with Jupyter
-=======================================================================
+-----------------------------------------------------------
+Biomolecular Crystallographic Computing with Jupyter
+-----------------------------------------------------------
 
 .. class:: abstract
 
@@ -29,7 +29,7 @@
    literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, biomedical research, protein*drug interactions, RNA*drug interactions, molecular graphics, molecular visualization, scientific communication, molecular artwork, computational molecular biophysics
 
 Introduction
-================
+-------------
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structures determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and to developing new therapies in medicine.
@@ -56,12 +56,14 @@ GhostText enables the user to experience the joy interactive computing in Jupyte
 
 
 Results
-=========
+editor.
 
+
+Results
+---------
 
 jupyterlabcctbxsnips
-************************
-
+++++++++++++++++++++++++
 To ease the running of cctbx in Jupyter notebooks, we developed the jupyterlabcctbxsnips of code templates. Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab , a browser based IDE for Jupyter notebooks. This JupyterLab enables the writing or editing of a document in a pane next to the Jupyter notebook. This is useful for writing up documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described. The document can be plain text, html, markdown, or LaTeX.
 
 The figure below shows part of the cascading menus for the cctbx library after it has been installed successfully. The submenus correspond to the names of subfolders in the cctbx folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library on the Mac). Each ultimate menu item is a Python snippet file. The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell. The *millerArrayFromMtz.py* snippet at the bottom of the pulldown menu was selected and inserted in the figure below. Commented lines have text that describes what this snippet does. The code in this cell would be executed by entering Shift-Enter.
@@ -98,18 +100,17 @@ CCTBX is most easily installed into its own environment by using Anaconda with t
 
 
 jupyterlabcctbxsnipsplus
-******************************
-
+++++++++++++++++++++++++++++++
 This is the variant of the jupyterlabcctbxsnips library with comments to guide editing of the snippets.
 
 taggedcctbxsnips
-*********************
++++++++++++++++++++
 
+Draft me.
 
 
 colabcctbxsnips
-*******************
-
+++++++++++++++++++
 
 On Colab, the snippets are stored in a Google Colab notebook. See this website for an excellent introduction to CCTBX (Computational Crystallography Toolbox). The colabcctbxsnips library is a collection of the code fragment to aid doing routine and not so routine computational tasks in protein crystallography. The URL for the snippets notebook is unused to access the snippets from a new notebook.
 
@@ -118,11 +119,15 @@ Click on the blue button below to open the notebook on Colab and follow the inst
 
 
 cctbxsnips for text editors
-******************************
++++++++++++++++++++++++++++++++
+
+Drafted me. 
+
+
 
 
 Using GhostText to edit Jupyter cells from a favorite text editor
-***************************************************************************
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The snippet extensions for the Classic Jupyter Notebook and JuptyerLab lack support for tab triggers to insert snippets was you type and tab stops inside the snippet to advance to sites in the snippet that may need to be edited.
 These two features are standard in the software that supports the use of snippet libraries in most text editors.
@@ -213,11 +218,11 @@ In the later case, you may have to extend the scope of the editing session in th
 
 
 Discussion
-=============
+-------------
 
 
 What is new
-**************
+++++++++++++++
 
 We report a set of code template libraries for doing biomolecular crystallographic computing in Jupyter.
 These template libraries only need to be installed once because they persist between logins.
@@ -230,8 +235,7 @@ The template libraries presented here lower an important barrier to the use of C
 
 
 Relation to other work with snippet libraries
-***************************************************
-
++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 To the best of our knowledge, we are the first to provide snippet libraries for crystallographic computing.
 This snippet library is among the first that is domain specific.
@@ -257,7 +261,7 @@ We offer a variant library that inserts a commented out copy of the code that ha
 
 
 Opportunities for interoperability
-**************************************
+++++++++++++++++++++++++++++++++++++++
 
 The set of template libraries can encourage synergistic interoperability between software packages supported by the snippet libraries.
 That is the development of notebooks that use two or more software packages and even programming languages.
@@ -269,158 +273,8 @@ The snippet libraries provided here can prompt taking advantage of this interope
 
 
 Acknowledgments
-======================
+----------------------
 
 This work was supported by the Oklahoma Center for the Advancement of Science and Technology: HR20-002, the  National Institutes of Health grants: R01 CA242845, P30 CA225520, and P30 AG050911-07S1. In particular, we thank the Biomolecular Structure Core of the COBRE in Structural Biology (PI: Ann West, P20 GM103640, P30 GM145423).
 
-
-..
-
-
-References
-==============
-
-.. [Kulhbrandt14] W. Kuhlbrandt.
-            "The resolution revolution",
-            *Science* 343:1443-1445, March 2014.
-            doi:10.1126/science.1
-
-.. [Jumper2021] J. Jumper, R. Evans, A. Pritzel, T. Green, M. Figurnov, O. Ronneberger, K. Tunyasuvunakool, R. Bates, A. Zidek, A. Potapenko, A. Bridgland, C. Meyer, S. A. A. Kohl, A. J. Ballard, A. Cowie, B. Romera-Paredes, S. Nikolov, R. Jain, J. Adler, T. Back, S. Petersen, D. Reiman, E. Clancy, M. Zielinski, M. Steinegger, M. Pacholska, T. Berghammer, S. Bodenstein, D. Silver, O. Vinyals, A. W. Senior, K. Kavukcuoglu, P. Kohli and D. Hassabis.
-            "Highly accurate protein structure prediction with AlphaFold",
-            *Nature* 596:583–589, July 2021.
-            doi:10.1038/s41586-021-03819-2
-
-.. [Mirdita21] M. Mirdita, K. Schutze, Y. Moriwaki, L. Heo, S. Ovchinnikov, and M. Steinegger.
-            "ColabFold: making protein folding accessible to all",
-            *Nature Methods*, 19:679-682, May 2022.
-            doi:10.1038/s41592-022-01488-1
-
-.. [Beg21] M. Beg, J. Belin, T. Kluyver, A. Konovalov, M. Ragan-Kelley, N. Thiery, and H. Fangohr.
-            "Using Jupyter for reproducible scientific workflows",
-            *Computing in Science and Engineering*, 23(2):36-46, April 2021.
-            doi:10.1109/MCSE.2021.3052101
-
-.. [Berm03] H. Berman, K. Hendrick, and H. Nakamura.
-            "Announcing the worldwide Protein Data Bank",
-            *Nature Structural and Molecular Biology*, 10(12):980, December 2003.
-.. no doi available
-
-.. [Bias13] M. Biasini, T. Schmidt, S. Bienert, V. Mariani, G. Studer, J. Haas, N. Johner, A. D. Schenk, A. Philippsen, and T. Schwede.
-            "OpenStructure: an integrated software framework for computational structural biology",
-            *Acta Cryst. D* 69(5):701–709, May 2013.
-            doi:10.1107/S0907444913007051
-
-.. [Brun98] A.T. Brünger, P.D. Adams, G.M. Clore, W.L. Delano, P. Gros, R.W. Grosse-Kunstleve, J.-S. Jiang, J. Kuszewski, M. Nilges, N. S. Pannu, R. J. Read, L. M. Rice, T. Simonson, and G. L. Warren.
-            "Crystallography and NMR system: A new software suite for macromolecular structure determination",
-            *Acta Cryst. D* 54(5):905-921, May 1998.
-            doi:10.1107/S0907444998003254
-
-.. [Burn17] T. Burnley, C.M. Palmer, and M. Winn.
-            "Recent developments in the CCP-EM software suite",
-            *Acta Cryst. D* 73(6):469-477, June 2017.
-            doi:10.1107/S2059798317007859
-
-.. [Carn18] T. Carneiro, R. V. M. Da Nóbrega, T. Nepomuceno, G.-B. Bian, V. H. C. De Albuquerque and P. P. Reboucas Filho.
-            "Performance analysis of google colaboratory as a tool for accelerating deep learning applications",
-            *IEEE Access* 6:61677-61685, November 2018.
-            doi:10.1109/ACCESS.2018.2874767
-
-.. [Cola21] https://colab.research.google.com
-
-.. [ELSN]   https://elyra.readthedocs.io/en/latest/user_guide/code-snippets.html
-
-.. [Elyra]  https://github.com/elyra-ai/elyra/blob/master/docs/source/getting_started/overview.md
-
-.. [Godd18] T. D. Goddard, C.C. Huang, E.C. Meng, E.F. Pettersen, G.S. Couch, J. H. Morris, and T. E. Ferrin.
-           "UCSF ChimeraX: Meeting modern challenges in visualization and analysis",
-           *Protein Science*, 27(1):14-25, January 2018.
-           doi:10.1002/pro.3235.
-
-.. [Gran21] B. E. Granger and F. Perez.
-           "Jupyter: Thinking and Storytelling With Code and Data",
-           *Computing in Science & Engineering*, 23(2):7-14, March-April 2021.
-           doi:10.1109/MCSE.2021.3059263
-
-.. [Gros02] R. W. Grosse-Kunstleve, N. K. Sauter, N. W. Moriatry, P. D. Adams.
-           "The Computational Crystallography Toolbox: crystallographic algorithms in a reusable software framework",
-           *Journal of Applied Crystallography*, 35(1):126-136, February 2002.
-           doi:10.1107/S0021889801017824.
-
-.. [Hopk17] J. B. Hopkins, R. E. Gillilan, and S. Skou.
-           "BioXTAS RAW: improvements to a free open-source program for small-angle X-ray scattering data reduction and analysis",
-           *Journal of Applied Crystallography*, 50(5):1545–1553, October 217.
-           doi:10.1107/S1600576717011438
-
-.. [Hort99] R. M. Horton.
-           "Scripting Wizards for Chime and RasMol",
-           *Biotechniques*, 26(5):874-876, May 1999.
-           doi:10.2144/99265ir01
-
-.. [Kluy16] T. Kluyver, B. Ragan-Kelley, F. Perez, B. Granger, M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout, S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing, and Jupyter Development Team.
-           "Jupyter Notebooks -- a publishing format for reproducible computational workflows",
-           In F. Loizides and B. Schmidt (Eds.), *Positioning and Power in Academic Publishing: Players, Agents and Agendas* (pp, 87-90).
-           doi:10.3233/978-1-61499-649-1-87
-
-.. [jLsnip] https://github.com/QuantStack/jupyterlab-snippets
-
-.. [Mana21] K. Manalastas-Cantos, P. V. Konarev, N. R. Hajizadeh, A. G. Kikhney, M. V. Petoukhov, D. S. Molodenskiy, A. Panjkovich, H. D. T. Mertens, A. Gruzinov, C. Borges, M. Jeffries, D. I. Sverguna, and D. Franke.
-           "ATSAS 3.0: expanded functionality and new tools for small-angle scattering data analysis",
-           *Journal of Applied Crystallography*, 54(1):343–355, February 2021.
-           doi:10.1107/S1600576720013412
-
-.. [Mott10] S. E. Mottarella, M. Rosa, A. Bangura, H. J. Bernstein, and P. A. Craig.
-           "Conscript: RasMol to PyMOL script converter",
-           *Biochemical and  Molecular Biology Education*, 38(6):419-422, November 2010.
-           doi:10.1002/bmb.20450
-
-.. [MLGH]   https://github.com/MooersLab
-
-.. [Moo21a] B. H. M. Mooers and M .E. Brown.
-           "Templates for writing PyMOL scripts",
-           *Protein Science*, 30(1):262-269, January 2021.
-           doi:10.1002/pro.3997
-
-.. [Moo21b] B. H. M. Mooers.
-           "A PyMOL snippet library for Jupyter to boost researcher productivity",
-           *Computing in Science and Engineering*, 23(2):47-53, April 2021.
-           doi: 10.1109/mcse.2021.3059536
-
-.. [Nguy17] H. Nguyen, D. A. Case, and A. S. Rose.
-           "NGLview--interactive molecular graphics for Jupyter notebooks",
-           *Bioinformatics*, 34(7):1241-1242, April 2017.
-           doi:10.1093/bioinformatics/btx78
-
-.. [PyMO21] https://pymol.org/2/
-
-.. [Rese20] https://blog.jupyter.org/reusable-code-snippets-in-jupyterlab-8d75a0f9d207
-
-.. [SciP20] P. Virtanen, R. Gommers, T. E. Oliphant, M. Haberland, T. Reddy, D. Cournapeau, E. Burovski, P. Peterson, W. Weckesser, J. Bright, S. J. {van der Walt}, M. Brett, J. Wilson, K. J. Millman, N. Mayorov, A. R. J.Nelson, E. Jones, R. Kern, E. Larson, C. J. Carey, I. Polat, Y. Feng, E. W. Moore, J. {VanderPlas}, D. Laxalde, J. Perktold, R. Cimrman, I. Henriksen, E. A. Quintero, C. R. Harris, A. M. Archibald, A. H. Ribeiro, F. Pedregosa, P. {van Mulbregt}, Paul and {SciPy 1.0 Contributors}.
-           "SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python",
-           *Nature Methods*, 17(3):261-272, February 2020.
-           doi:10.1038/s41592-019-0686-2
-
-.. [Agirre2023] J. Agirre, M. Atanasova, H. Bagdonas, C. Ballard, A. Baslé, J. Beilsten-Edmands, R. Borges, D. Brown, J. Burgos-Mármol, J. Berrisford, and others.
-          "The CCP4 suite: integrative software for macromolecular crystallography",
-          *Acta Crystallographica Section D: Structural Biology*. 79:449-461, 2023.
-          doi:10.1107/S2059798323003595
-
-.. [McNicholas2018] S. McNicholas, T. Croll, T. Burnley, C. Palmer, S. Hoh, H. Jenkins, E.  Dodson, K. Cowtan and J. Agirre
-          "Automating tasks in protein structure determination with the clipper python module",
-          *Protein Science*, 27, 207-216, 2018.
-          doi:10.1002/pro.3299
-
-.. [Wojdyr2022] M. Wojdyr.
-          "GEMMI: A library for structural biology",
-          *Journal Of Open Source Software*, 7, 4200 (2022)
-          doi:10.21105/joss.04200
-
-.. [Greisman2021] Greisman, J., Dalton, K. and D. Hekstra
-          "Reciprocalspaceship: A Python library for crystallographic data analysis",
-          *Journal of Applied Crystallography*. 54:1521-9, October 2021.
-          doi:10.1107/S160057672100755X
-
-.. [Dalton2021] K. Dalton, J. Greisman and D. Hekstra.
-          "Careless: A Variational Bayesian Model for Merging X-ray Diffraction Data."
-          *BioRxiv* (2021)
-          doi:10.1101/2021.01.05.425510
 
