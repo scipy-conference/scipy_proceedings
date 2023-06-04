@@ -282,7 +282,7 @@ The set of template libraries can encourage synergistic interoperability between
 That is the development of notebooks that use two or more software packages and even programming languages.
 More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python, the reticulate package that enables the running of Python code in R , and the PyCall package in Julia that enables the running of the Python packages in Julia.
 The latter package is widely used to run matplotlib in Julia.
-Interoperability already occurs between the CCP4 :cite:`Agirre23`, clipper :cite:`McNicholas18`, gemmi :cite:`Wojdyr2022`, reciprocalspaceship :cite:`Greisman2021`, CARELESS :cite:`Dalton2021`,and CCTBX projects and to a limited extent between CCTBX and PyMOL, but interoperability could be more widespread if the walls around the software silos were lowered.
+Interoperability already occurs between the CCP4 :cite:`Agirre23`, clipper :cite:`McNicholas18`, gemmi :cite:`Wojdyr22`, reciprocalspaceship :cite:`Greisman21`, CARELESS :cite:`Dalton21`,and CCTBX projects and to a limited extent between CCTBX and PyMOL, but interoperability could be more widespread if the walls around the software silos were lowered.
 The snippet libraries provided here can prompt taking advantage of this interoperability in Jupyter and Colab notebooks.
 
 
