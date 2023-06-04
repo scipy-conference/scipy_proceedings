@@ -322,7 +322,7 @@ e.g., with a separate vector that acts as a "padded" flag for each time bin.
 Because more than one model has been developed that uses this post-processing approach to solve the problem of frame classification,
 we define this as a family of models within vak, the ``WindowedFrameClassification`` model.
 Both the TweetyNet model from :cite:`{cohenAutomatedAnnotationBirdsong2022`
-and the Deep Audio Segmenter (DAS) from :cite:`{steinfathFastAccurateAnnotation2021` are examples of such models,
+and the Deep Audio Segmenter (DAS) from :cite:`steinfathFastAccurateAnnotation2021` are examples of such models,
 and we provide implementations of both in vak.
 
 **Frame classification model.**
