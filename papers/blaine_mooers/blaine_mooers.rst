@@ -33,13 +33,13 @@ Introduction
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structures determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and to developing new therapies in medicine.
-The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to remain vital because it still supplies the most precise structures [Kulhbrandt14]_ [Jumper2021]_.
+The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to remain vital because it still supplies the most precise structures :cite:`Kulhbrandt14`, :cite:`Jumper2021`.
 
-Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks [Mirdita21]_.
+Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks :cite:`Mirdita21`.
 Nonetheless, most protein crystallographers continue to use well-developed, user friendly GUIs to run crystallographic software in routine analyses.
 However, these users sometimes need non-routine analyses that require new code.
 
-The Computational Crystallography Toolbox (CCTBX) provides a vast library of computational crystallography software written in C++ and wrapped with Python [Gros02]_.
+The Computational Crystallography Toolbox (CCTBX) provides a vast library of computational crystallography software written in C++ and wrapped with Python :cite:`Gros02`.
 This library is used to build new analysis tools.
 CCTBX was hard to install three years ago due to its complex dependencies, but the addition of the CCTBX package to Anaconda dramatically eased the installation of CCTBX.
 The lowering of this barrier to the installation of CCTBX has raised interest in the use of CCTBX for novel structure analyses.
@@ -56,17 +56,23 @@ GhostText enables the user to experience the joy interactive computing in Jupyte
 
 
 Results
-editor.
-
-
-Results
 ---------
 
 jupyterlabcctbxsnips
 ++++++++++++++++++++++++
-To ease the running of cctbx in Jupyter notebooks, we developed the jupyterlabcctbxsnips of code templates. Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab , a browser based IDE for Jupyter notebooks. This JupyterLab enables the writing or editing of a document in a pane next to the Jupyter notebook. This is useful for writing up documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described. The document can be plain text, html, markdown, or LaTeX.
+To ease the running of cctbx in Jupyter notebooks, we developed the jupyterlabcctbxsnips of code templates.
+Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab , a browser based IDE for Jupyter notebooks.
+This JupyterLab enables the writing or editing of a document in a pane next to the Jupyter notebook.
+This is useful for writing up documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
+The document can be plain text, html, markdown, or LaTeX.
 
-The figure below shows part of the cascading menus for the cctbx library after it has been installed successfully. The submenus correspond to the names of subfolders in the cctbx folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library on the Mac). Each ultimate menu item is a Python snippet file. The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell. The *millerArrayFromMtz.py* snippet at the bottom of the pulldown menu was selected and inserted in the figure below. Commented lines have text that describes what this snippet does. The code in this cell would be executed by entering Shift-Enter.
+The figure below shows part of the cascading menus for the cctbx library after it has been installed successfully.
+The submenus correspond to the names of subfolders in the cctbx folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library on the Mac).
+Each ultimate menu item is a Python snippet file.
+The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
+The **millerArrayFromMtz.py** snippet at the bottom of the pulldown menu was selected and inserted in the figure below.
+Commented lines have text that describes what this snippet does.
+The code in this cell would be executed by entering Shift-Enter.
 
 .. figure:: ./figs/Fig1Pulldown.png
    :align: center
@@ -85,9 +91,14 @@ The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium
    :scale: 50%
    :figclass: bht
 
-   The output from millerArrayFromMtz.py snippet. 
+   The output from **millerArrayFromMtz.py** snippet. 
 
-The I(+) vs I(-) plot below was made after reading the X-ray data into a cctbx Miller array, a data structure designed for X-ray data. The I(+) and I(-) were eventually read into separate lists. We plot the two lists against each other in a scatter plot. This plot was adapted from an example in the ReciprocalSpaceship project from the Hekstra Lab. This new project takes a more Pythonic approach. For example, it uses the Pandas package to manage diffraction data whereas cctbx uses a special C++ data structure for diffraction data.
+The I(+) vs I(-) plot below was made after reading the X-ray data into a cctbx Miller array, a data structure designed for X-ray data.
+The I(+) and I(-) were eventually read into separate lists.
+We plot the two lists against each other in a scatter plot.
+This plot was adapted from an example in the ReciprocalSpaceship project from the Hekstra Lab :cite:`Greisman21`.
+This new project takes a more Pythonic approach.
+For example, it uses the Pandas package to manage diffraction data whereas cctbx uses a special C++ data structure for diffraction data.
 
 .. figure:: ./figs/Fig2IpImPlot.png
    :align: center
@@ -112,9 +123,13 @@ Draft me.
 colabcctbxsnips
 ++++++++++++++++++
 
-On Colab, the snippets are stored in a Google Colab notebook. See this website for an excellent introduction to CCTBX (Computational Crystallography Toolbox). The colabcctbxsnips library is a collection of the code fragment to aid doing routine and not so routine computational tasks in protein crystallography. The URL for the snippets notebook is unused to access the snippets from a new notebook.
+On Colab, the snippets are stored in a Google Colab notebook.
+See this website for an excellent introduction to CCTBX (Computational Crystallography Toolbox).
+The colabcctbxsnips library is a collection of the code fragment to aid doing routine and not so routine computational tasks in protein crystallography.
+The URL for the snippets notebook is unused to access the snippets from a new notebook.
 
-Click on the blue button below to open the notebook on Colab and follow the instructions at the top of the notebook on how to copy the notebook to Google Drive and then make it available to new Colab notebooks. This step has to be done only once. The snippets will be available on your next log-in; however, files and software installed on Colab with not be available on your next login to Colab.
+Click on the blue button below to open the notebook on Colab and follow the instructions at the top of the notebook on how to copy the notebook to Google Drive and then make it available to new Colab notebooks.
+This step has to be done only once. The snippets will be available on your next log-in; however, files and software installed on Colab with not be available on your next login to Colab.
 
 
 
@@ -129,7 +144,7 @@ Drafted me.
 Using GhostText to edit Jupyter cells from a favorite text editor
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-The snippet extensions for the Classic Jupyter Notebook and JuptyerLab lack support for tab triggers to insert snippets was you type and tab stops inside the snippet to advance to sites in the snippet that may need to be edited.
+The snippet extensions for the Classic Jupyter Notebook and JupyterLab lack support for tab triggers to insert snippets was you type and tab stops inside the snippet to advance to sites in the snippet that may need to be edited.
 These two features are standard in the software that supports the use of snippet libraries in most text editors.
 By adding the GhostText extension to the web browser and a server to one of several leading text editors, it is possible to send the text from the browser through a WebSocket to a server in the text editor.
 Thus, it is possible to edit the contents of a computational notebook cell from inside a text editor.
@@ -179,7 +194,7 @@ For example, the server for Emacs is provided by the atomic-chrome package that 
 The configuration for atomic-chrome in my Emacs initialization file (e.g., init.el) is listed in code listing 1 below.
 
 The third line in Code listing 1 sets the default Emacs mode (equivalent to a programming language scope): I set it to Python for Jupyter code cells.
-Atomic-chrome uses text-mode by default. You can change the default mode to other programming languages that you may use inJupyter, like Julia or R.
+Atomic-chrome uses text-mode by default. You can change the default mode to other programming languages that you may use in Jupyter, like Julia or R.
 The last three lines specify the Emacs mode to be used when text is imported from the text areas of webpages on github.com, Overleaf.com, and 750words.com.
 Similar configuration options are available in the other text editors, or you manually change the language scope for the window with the text imported from Jupyter.
 
@@ -202,7 +217,7 @@ Of course, the final text can be saved locally.
 Third, multiple open editors with GhostText servers installed can compete for the same WebSocket.
 This problem is solved by closing the editor that is not in current use or configuring its server to use an alternate WebSocket.
 
-To support the use of GhostText to edit electronic notebooks containing code from the CCTBX library, we have made variants of a collection of CCTBX snippets (Mooers 2021) for Visual Studo Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
+To support the use of GhostText to edit electronic notebooks containing code from the CCTBX library, we have made variants of a collection of CCTBX snippets for Visual Studo Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
 I found that Sublime Text 3 had the most effortless setup while Emacs provided the highest degree of customization.
 This snippet library was previously only available for use Juptyer notebooks via extensions for the Classic Juptyer Notebook application or Juptyer Lab.
 
@@ -245,9 +260,9 @@ The audience for these libraries are millions of professional programmers and we
 We reasoned that this great tool should be brought to the aid of the thousands of workers in crystallography.
 
 The other area where domain specific snippets have been provided is in molecular graphics.
-The pioneering work on a scripting wizard provided templates for use in the molecular graphics program RasMol [Hort99]_.
-The conscript program provided a converter from RasMol to PyMOL [Mott10]_.
-We also provided snippets for PyMOL, which has 100,000 users, for use in text editors [Moo21a]_ and Jupyter notebooks [Moo21b]_.
+The pioneering work on a scripting wizard provided templates for use in the molecular graphics program RasMol  :cite:`Horton99`.
+The conscript program provided a converter from RasMol to PyMOL :cite:`Mott10`.
+We also provided snippets for PyMOL, which has 100,000 users, for use in text editors :cite:`Moo21a` and Jupyter notebooks :cite:`Moo21b`.
 The former support tab triggers and tab stops; the latter does not.
 
 We have also worked out how to deploy this snippet libraries in OnDemand notebooks at High-Performance Computing centers.
@@ -267,7 +282,7 @@ The set of template libraries can encourage synergistic interoperability between
 That is the development of notebooks that use two or more software packages and even programming languages.
 More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python, the reticulate package that enables the running of Python code in R , and the PyCall package in Julia that enables the running of the Python packages in Julia.
 The latter package is widely used to run matplotlib in Julia.
-Interoperability already occurs between the CCP4 [Agirre2023]_, clipper [McNicholas2018]_, gemmi [Wojdyr2022]_, reciprocalspaceship [Greisman2021]_, CARELESS [Dalton2021]_,and CCTBX projects and to a limited extent between CCTBX and PyMOL, but interoperability could be more widespread if the walls around the software silos were lowered.
+Interoperability already occurs between the CCP4 :cite:`Agirre23`, clipper :cite:`McNicholas18`, gemmi :cite:`Wojdyr2022`, reciprocalspaceship :cite:`Greisman2021`, CARELESS :cite:`Dalton2021`,and CCTBX projects and to a limited extent between CCTBX and PyMOL, but interoperability could be more widespread if the walls around the software silos were lowered.
 The snippet libraries provided here can prompt taking advantage of this interoperability in Jupyter and Colab notebooks.
 
 
