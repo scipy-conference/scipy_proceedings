@@ -194,7 +194,7 @@ Of course, one solution is to write an extension for Jyptyer Notebook or Juptyer
 
 .. Figure:: ./figs/tabtrigger.png
    :align: center
-   :scale: 53%
+   :scale: 55%
    :figclass: bht
 
    Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets.  The list was narrowed to one snippet by the entry of three letters. :label:`tabtrigger`
