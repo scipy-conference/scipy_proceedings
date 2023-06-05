@@ -164,7 +164,7 @@ We made a version of the cctbxsnips library for this extension (https://github.c
 
 .. figure:: ./figs/taggedcctbxsnips.png
    :align: center
-   :scale: 27%
+   :scale: 18%
    :figclass: bht
 
    The snippet code with a duplicated copy in a comment. :label:`taggedcctbxsnips`
