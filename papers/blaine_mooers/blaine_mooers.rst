@@ -164,7 +164,7 @@ We made a version of the cctbxsnips library for this extension (https://github.c
 
 .. figure:: ./figs/taggedcctbxsnips.png
    :align: center
-   :scale: 18%
+   :scale: 20%
    :figclass: bht
 
    The snippet code with a duplicated copy in a comment. :label:`taggedcctbxsnips`
@@ -176,7 +176,7 @@ We made a version of the cctbxsnips library for this extension (https://github.c
 
 .. figure:: ./figs/elyra-new-snippet.png
    :align: center
-   :scale: 27%
+   :scale: 20%
    :figclass: bht
 
    The GUI to create a new snippet. :label:`elyra-new-snippet`
