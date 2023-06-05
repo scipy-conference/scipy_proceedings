@@ -130,9 +130,9 @@ Usually, the X- data are collected at -173 degrees Celsius in a cryostream of ni
 The typical absorbed radiation dose of a large protein crystal 200 x 200 x 200 microns in size in the X-ray beam at synchrotron radiation laboratory during a 10-minute diffraction experiment is sufficient to kill 100,000 adult humans.
 While radiation damage sets in upon initial exposure of the crystal, the cooling prolongs the amount of time over which the crystal gives useful data.
 
-However, recently, several groups have completed successful native phasing experiments at room temperature by collecting data from large numbers of crystals.
+However, recently, several groups have completed successful native phasing experiments at room temperature by collecting data from large numbers of crystals :cite:`Yabukarski22`, :cite:`Greisman22`.
 The advantages of room temperature data collection include avoidance of conformational changes in the protein induced by supercooling the crystal.
-The romm temperature data were collected from each crystal briefly before radiation damage degraded the diffraction too much.
+The room temperature data were collected from each crystal briefly before radiation damage degraded the diffraction too much.
 This is a remarkable achievement because the merging of diffraction data from many crystals in various orientations enhances the experimental error; this error can mask the weak anomalous signal that is being sought.
 
 The plot (Fig. :ref:`ipmpplot` was adapted from an example in the *reciprocalspaceship* project from the Hekstra Lab :cite:`Greisman21`.
