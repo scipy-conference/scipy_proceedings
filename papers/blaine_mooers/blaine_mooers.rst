@@ -142,7 +142,6 @@ The utilization of *pandas* enables easier integration with the other components
 
 The *cctbx* is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
 
-
 The *jupyterlabcctbxsnipsplus* is the variant of the *jupyterlabcctbxsnips* library with comments to guide editing of the snippets (https://github.com/MooersLab/jupyterlabcctbxsnipsplus).
 The snippet code contains its duplicate in a comment with the sites of tab stops marked with dollar signs and braces as in a the code for a snippet (Fig. :cite:`snipsplus`).
 Upon insertion of the snippet into a notebook cell, the commented out code is included.
@@ -154,6 +153,12 @@ Upon insertion of the snippet into a notebook cell, the commented out code is in
 
    The snippet code with a duplicated copy in a comment. :label:`snipsplus`
 
+
+The atomic coordinates of the biomolecular structures are the other major type of data that are intimately associated with diffraction data.
+The fixed file format of Protein Data Bank coordinate files with the file extension of *pdb* originated in the 1970s with the birth of the Portein Data Bank, but very large biological macromolecules have been determined oterh the past two decades that exceeded the limits on the number of atoms permitted in one file.
+Structures like the ribosome had to be split acresos multiple files.
+To address this and other shortcomings of the PDB file format, the PDBx/mmCIF (Protein Data Bank Exchange macromolecular Crystallogrpahic Information Framework) file format has become the data standard :cite:`Westbrook22`.
+The *cctbx* has adapted and can read in mmcif files. 
 
 taggedcctbxsnips
 +++++++++++++++++++++
