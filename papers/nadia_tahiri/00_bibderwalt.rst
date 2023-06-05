@@ -320,8 +320,8 @@ At the end of the aPhyloGeo-Covid analysis workflow, a table was generated conta
 The distribution of normalized RF distances resulting from the phylogeographic analysis of the input dataset is presented in Figure :ref:`fig5`. 
 Windows exhibiting relatively lower RF distances merit further investigation. As illustrated in Figure :ref:`fig5`, the RF distance range from 87.82% to 100%. Among the six climatic factors involved in the analysis, the sliding window region with the lower RF distance was exclusively identified in the integrated analysis involving precipitation.  
 For this exploration, a scanning approach was employed, utilizing a window size of 100 residues and a step size of 3 residues for sequence analysis. 
-Within the regions identified with low RF distance, special attention should be given to regions [792-940]. Notably, a consistently low RF distance value of 81.82% was observed across all 17 windows spanning positions from 792 to 840. 
-Furthermore, in accordance with SWISS-MODEL :cite:`waterhouse2018swiss`, the previous research validates the presence of a specific region of Nsp3 called Ubl1 (110 residues, position [819-929]) within the identified sequence region.
+Within the regions identified with low RF distance, special attention should be given to regions 792-940. Notably, a consistently low RF distance value of 81.82% was observed across all 17 windows spanning positions from 792 to 840. 
+Furthermore, in accordance with SWISS-MODEL :cite:`waterhouse2018swiss`, the previous research validates the presence of a specific region of Nsp3 called Ubl1 (110 residues, position 819-929) within the identified sequence region.
 Ni et al. (2023) :cite:`ni2023structural` revealed that the Ubl1 protein of SARS-CoV-2 exhibits competitive binding with RNA molecules to the N protein, resulting in the dissociation of viral ribonucleoprotein complexes. 
 Based on these findings, they propose a model that explains how the N protein binding to the Ubl1 domain of Nsp3 leads to the dissociation of viral ribonucleoprotein complexes. 
 
@@ -335,9 +335,16 @@ Based on these findings, they propose a model that explains how the N protein bi
    
 Our phylogeography-based exploration revealed a notable correlation between mutations in the region [792-940] and precipitation. As a reproducible phylogeographic platform, aPhyloGeo-Covid offers the potential to expand the sample size for further investigation and facilitates the comparability of analysis results.
 
-In addition of correlation analysis between correlation diversity of subfregment of gene and climate condition, we also inferred the ORF1a phylogeny and window regions [792-940] of ORF1a using the RAxML-NG method :cite:`kozlov2019raxml`, and then conducted a detailed horizontal gene transfer-recombination analysis :ref:`fig6` using the HGT-Detection program available on the T-Rex web server :cite:`boc2012t`.
+In addition of correlation analysis between correlation diversity of subfregment of gene and climate condition, we also inferred the ORF1a phylogeny and window regions 792-940 of ORF1a using the RAxML-NG method :cite:`kozlov2019raxml`, and then conducted a detailed horizontal gene transfer-recombination analysis :ref:`fig6` using the HGT-Detection program available on the T-Rex web server :cite:`boc2012t`.
 The HGT-Detection program allows one to infer all possible horizontal gene transfer events for a given group of species by reconciling the species tree (i.e. ORF1a gene tree in our case) with different gene phylogenies built for regions of individual genes :cite:`boc2011towards` :cite:`denamur2000evolutionary`.
 Significantly, every identified horizontal gene transfer event can be understood from three perspectives: Firstly, it may signify a distinct complete or partial HGT occurrence between genetically distant species. Secondly, it could indicate the occurrence of parallel evolution, where the involved species underwent similar genetic changes independently. Lastly, it could also indicate the emergence of a new species (referred to as a gene transfer recipient) resulting from the recombination of the donor species genome with that of a neighboring recipient in the species' evolutionary history.
+
+The minimum-cost transfer scenario with five HGTs necessary to reconcile the variants and gene phylogenies is shown in Figure :ref:`fig6` (HGTs are depicted by numbered arrows). Prior to the analysis, the Robinson and Foulds distance (RF) was measured at 16, indicating the dissimilarity between the phylogenetic tree of ORF1a and inferred phylogenetic trees (phylogenetic tree of the window regions 792-940 of ORF1a). The bipartition dissimilarity was found to be 13.0. During the iterative process, a total of five HGT events were identified. In the first iteration, one HGT was detected from subtree QWP89176 to subtree WAV10885, with an RF of 10 and a bipartition dissimilarity of 7.5. The resulting criteria values after this iteration were RF = 10, LS = 0.000, and BD = 7.5. 
+In the second iteration, another HGT event was found from subtree QLL26045 to subtrees QPJ77309, QWP89176, and WAV10885, with an RF of 6 and a bipartition dissimilarity of 3.5. After this iteration, the criteria values were RF = 6 and BD = 3.5.
+In the third iteration, an HGT was identified from subtree UJS65740 to subtrees QLL26045, QPJ77309, QPN02498, QWP89176, UJW68561, and WAV10885, with an RF of 4 and a bipartition dissimilarity of 2.5. The criteria values after this iteration remained RF = 4 and BD = 2.5.
+In the fourth iteration, an HGT event was detected from subtree UTZ18977 to subtree UNF85490, with an RF of 2 and a bipartition dissimilarity of 1.0. The resulting criteria values were RF = 2 and BD = 1.0.
+Finally, in the fifth iteration, an HGT was found from subtrees UNF85490 and UTZ18977 to subtree UZC43805, resulting in an RF of 0 and a bipartition dissimilarity of 0.0. The criteria values after this iteration were RF = 0 and BD = 0.0.
+Overall, a total of five HGT events were identified throughout the analysis.
 
 
 .. figure:: figure6.png
@@ -345,7 +352,7 @@ Significantly, every identified horizontal gene transfer event can be understood
    :figclass: w
    :scale: 35%
    
-   Putative horizontal gene transfer events found for the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants. (a) presents the phylogenetic tree of the window regions[792-940] of ORF1a. (b) presents the phylogenetic tree of ORF1a (amino acid sequences) with putative horizontal gene transfers mapped into it.  :label:`fig6`
+   Putative horizontal gene transfer events found for the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants. (a) presents the phylogenetic tree of the window regions 792-940 of ORF1a. (b) presents the phylogenetic tree of ORF1a (amino acid sequences) with putative horizontal gene transfers mapped into it.  :label:`fig6`
    
    
 
