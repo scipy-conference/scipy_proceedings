@@ -188,7 +188,7 @@ Unlike the case of the *jupyterlabcctbxsnipsplus* library, marked up copy of the
 
 .. figure:: ./figs/colabplus.png
    :align: center
-   :scale: 31%
+   :scale: 18%
    :figclass: bht
 
    Colab snippet with template code in the preview of the snippet. :label:`colabplus`
