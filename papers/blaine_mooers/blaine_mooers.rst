@@ -156,13 +156,42 @@ Upon insertion of the snippet into a notebook cell, the commented out code is in
 
 
 taggedcctbxsnips
-+++++++++++++++++++
++++++++++++++++++++++
+
+The Elyra-snippets extension for Jupyter Lab supports the use of tagged snippets.
+The tags are used to narrow the list of possible snippets.
+We made a version of the cctbxsnips library for this extension (https://github.com/MooersLab/taggedcctbxsnips). 
+
+.. figure:: ./figs/taggedcctbxsnips.png
+   :align: center
+   :scale: 27%
+   :figclass: bht
+
+   The snippet code with a duplicated copy in a comment. :label:`taggedcctbxsnips`
 
 
+
+
+
+
+.. figure:: ./figs/elyra-new-snippet.png
+   :align: center
+   :scale: 27%
+   :figclass: bht
+
+   The GUI to create a new snippet. :label:`elyra-new-snippet`
+
+To add a new snippet, click on the + in the upper right of the Code Snippets icon (Fig. :ref:`elyra-new-snippet`).
+This will open new GUI (see below) for creating a snippet.
+The Name should be a one word or compound word.
+The Description describes in one or more sentences what the snippet does.
+The Tags are used to narrow the listing of snippets in the menu.
+The Source is Python.
+The Code can be entered by selecting code in a notebook cell or copying and pasting from a script file.
 
 
 colabcctbxsnips
-++++++++++++++++++
++++++++++++++++++++
 
 The Google Colab notebook enables the running of software on Googles's servers in an computational notebook that resembles the Jupyter notebook.
 Colab notebooks are useful for workshop settings where there is no time for installing software on a heterogeneous mix of operating systems when the attendees are using their own computers.
