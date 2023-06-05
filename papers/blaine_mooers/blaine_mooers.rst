@@ -124,7 +124,7 @@ The departure from this line is expected to be greater for intensities of large 
 
 Plots of this nature are useful for detecting very weak anomalous signals from native anomalous scatters like sulfur and phosphorous.
 The collection of the anomalous signal from native scatters enables structure determination without having to spend the extra time and money to introduce heavier atoms that are not native to the protein.
-The measurement of the very weak signal from anomalous scatterers is at the edge of what is technically possible by using two million dollar detectors and synchrotron radiation at one of of the thirty plus synchtrotron radiation laboratories around the world.
+The measurement of the very weak signal from anomalous scatterers is at the edge of what is technically possible by using two million dollar detectors and synchrotron radiation at one of of the thirty plus synchrotron radiation laboratories around the world.
 These facilities provide X-rays that 10,000 times more intense than the X-rays generated with in-house X-ray generators.
 Usually, the X- data are collected at -173 degrees Celsius in a cryostream of nitrogen gas to prolong the life of the crystal while exposed to such intense X-rays.
 The typical absorbed radiation dose of a large protein crystal 200 x 200 x 200 microns in size in the X-ray beam at synchrotron radiation laboratory during a 10-minute diffraction experiment is sufficient to kill 100,000 adult humans.
@@ -138,14 +138,22 @@ This is a remarkable achievement because the merging of diffraction data from ma
 The plot (Fig. :ref:`ipmpplot` was adapted from an example in the *reciprocalspaceship* project from the Hekstra Lab :cite:`Greisman21`.
 This new project takes a more Pythonic approach than *cctbx* by utilizing many of the packages in the SciPy stack that did not exist when cctbx was initiated.
 For example, it uses the *pandas* package to manage diffraction data whereas *cctbx* uses a special C++ data structure for diffraction data that predates *pandas* by almost a decade.
-The utlization of *pandas* enables easier integration with the other components of the SciPy software stack including machine learning packages.
+The utilization of *pandas* enables easier integration with the other components of the SciPy software stack including machine learning packages.
 
 The *cctbx* is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
 
 
-jupyterlabcctbxsnipsplus
-++++++++++++++++++++++++++++++
-This is the variant of the *jupyterlabcctbxsnips* library with comments to guide editing of the snippets.
+The *jupyterlabcctbxsnipsplus* is the variant of the *jupyterlabcctbxsnips* library with comments to guide editing of the snippets (https://github.com/MooersLab/jupyterlabcctbxsnipsplus).
+The snippet code contains its duplicate in a comment with the sites of tab stops marked with dollar signs and braces as in a the code for a snippet (Fig. :cite:`snipsplus`).
+Upon insertion of the snippet into a notebook cell, the commented out code is included.
+
+.. figure:: ./figs/snipsplus.png
+   :align: center
+   :scale: 50%
+   :figclass: bht
+
+   The snippet code with a duplicated copy in a comment. :label:`snipsplus`
+
 
 taggedcctbxsnips
 +++++++++++++++++++
@@ -199,7 +207,7 @@ cctbxsnips for text editors
 +++++++++++++++++++++++++++++++
 
 To support the use of the *cctbx* code snippets in text editors, we make versions of the library for Emacs, Vim, Visual Studio Code, Atom, and Sublime Text3.
-We selected these text editors because they are the most advanced and most popular with software developers and because they are supported by GhostText project described below :ref:`ghsottext`.
+We selected these text editors because they are the most advanced and most popular with software developers and because they are supported by GhostText project described below :ref:`ghosttext`.
 
 For Emacs, we developed a library for use with the yasnippet package (https://github.com/MooersLab/cctbxsnips-Emacs).
 Emacs supports repel-driven software development, which resembles the interactive software development experience in Jupyter notebooks.
@@ -299,7 +307,7 @@ The ease of installation makes nteract popular with new users of Jupyter noteboo
 Obviously *nteract* is not browser-based, so it cannot work with *GhostText*.
 *nteract* has yet to be extended to support the use of code snippet libraries.
 
-While the focus of this report was on the use of the *GhostText* browser plugin to edit Juptyer notebooks hosted in a web browser, the *cctbxsnips* snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of saner version control.
+While the focus of this report was on the use of the *GhostText* browser plugin to edit Jupyter notebooks hosted in a web browser, the *cctbxsnips* snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of saner version control.
 The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the *Quarto* (http://quarto.org) markdown representation of Jupyter notebooks.
 *Quarto* is available for several leading text editors.
 In the later case, you may have to extend the scope of the editing session in the editor to include Python source code.
@@ -307,7 +315,6 @@ In the later case, you may have to extend the scope of the editing session in th
 
 Discussion
 -------------
-
 
 What is new
 ++++++++++++++
@@ -320,7 +327,6 @@ Once the user adds the installation code to the top of a given notebook, the use
 The user can modify the installation templates to install the software on their local machines.
 Examples of such adaptations are provided on a dedicated GitHub web page.
 The template libraries presented here lower an important barrier to the use of Colab by those interested in crystallographic computing on the cloud.
-
 
 Relation to other work with snippet libraries
 +++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -347,18 +353,15 @@ That is, the user enters the start of a name and IPython suggests the remainder 
 We offer a variant library that inserts a commented out copy of the code that has been annotated with the sites that are to be edited by the user.
 
 
-
 Opportunities for interoperability
 ++++++++++++++++++++++++++++++++++++++
 
 The set of template libraries can encourage synergistic interoperability between software packages supported by the snippet libraries.
 That is the development of notebooks that use two or more software packages and even programming languages.
-More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python, the *reticulate* package that enables the running of Python code in R :cite:`Ushey23`, and the PyCall package in Julia that enables the running of the Python packages in Julia.
+More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python, the *reticulate* package that enables the running of Python code in R :cite:`Ushey23`, and the PyCall package in Julia that enables the running of the Python packages in Julia (https://github.com/JuliaPy/PyCall.jl).
 The latter package is widely used to run matplotlib in Julia.
 Interoperability already occurs between the CCP4 :cite:`Agirre23`, clipper :cite:`McNicholas18`, gemmi :cite:`Wojdyr22`, reciprocalspaceship :cite:`Greisman21`, Careless :cite:`Dalton22`,and *cctbx* projects and to a limited extent between *cctbx* and *PyMOL*, but interoperability could be more widespread if the walls around the software silos were lowered.
 The snippet libraries provided here can prompt taking advantage of this interoperability in Jupyter and Colab notebooks.
-
-
 
 Acknowledgments
 ----------------------
