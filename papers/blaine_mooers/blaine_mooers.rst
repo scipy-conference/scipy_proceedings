@@ -167,10 +167,10 @@ While the software installed in a Colab session is lost upon logging out, the sn
 
 .. figure:: ./figs/colab.png
    :align: center
-   :scale: 50%
+   :scale: 33%
    :figclass: bht
 
-   Snippet for installing . :label:`colab`
+   Snippets for installing *cctbx* on Google Colab. :label:`colab`
 
 After the snippet notebook is installed, the user opens a new notebook to use the snippets.
 From that new notebook, the list of snippets will be exposed by clicking on the **<>** icon in the left margin of the notebook.
