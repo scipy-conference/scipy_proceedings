@@ -262,19 +262,21 @@ After defining the input data, which includes sequence data and associated locat
 
 After confirming the parameters, the corresponding sequences are downloaded from NCBI :cite:`brister2015ncbi` using the Biopython package :cite:`cock2009biopython`, followed by performing multiple sequence alignments (MSA) :cite:`edgar2006multiple` using the MAFFT method :cite:`katoh2013mafft`. Subsequently, the Snakemake workflow is triggered in the backend, taking the alignment results and associated environmental data as input. Once the analysis is completed, a unique output ID is generated, enabling the results to be queried on the web platform.
 
+The following function performs the preparation and storage of parameters and input data, subsequently triggering the workflow.
+
 .. code-block:: python
 
    def trigger_workflow(df_params_geo):
-      dff = pd.DataFrame(df_params_geo)
-      analysisNode = neo_manager.generate_unique_name("Analysis")
-      outputNode = neo_manager.generate_unique_name("Output")
+      df = pd.DataFrame(df_params_geo)
+      analysisNode = generate_unique_name("Analysis")
+      outputNode = generate_unique_name("Output")
       
       # record parameters in config file
       with open('config/config.yaml', 'r') as file:
          config = yaml.safe_load(file)
       # Update the values
-      config['accession_lt'] = dff['id'].tolist()  
-      config['feature_names'] = dff.columns.tolist()
+      config['accession_lt'] = df['id'].tolist()  
+      config['feature_names'] = df.columns.tolist()
       config['analysis_name'] = analysisNode
       config['output_name'] = outputNode
       # create geographic input dataset
@@ -296,27 +298,24 @@ After confirming the parameters, the corresponding sequences are downloaded from
          yaml.dump(config, file)
       # (6) download sequences from NCBI 
 
-     seq_manager.downFromNCBI(
+      seq_manager.downFromNCBI(
                      db_type, 
                      accession_list, 
                      seq_beforeMSA_fname)
-     # (6) alignment
-    seq_manager.align_MAFFT(seq_beforeMSA_fname,
+      # (6) alignment
+      seq_manager.align_MAFFT(seq_beforeMSA_fname,
                               aln_file_name)
-    # (7) run aphylogeo snakemake workflow
-    os.system("snakemake --cores all")
-    # (8) In Neo4j create :Analysis node
-    neo_manager.addAnalysisNeo()
+      # (7) run aphylogeo snakemake workflow
+      os.system("snakemake --cores all")
+      # (8) In Neo4j create :Analysis node
+      neo_manager.addAnalysisNeo()
 
-   # (9) When Analysis finished, 
-   #save output dataframe into Output node
-   neo_manager.addOutputNeo()
+      # (9) When Analysis finished, 
+       #save output dataframe into Output node
+      neo_manager.addOutputNeo()
       
             
         ...
-
-
-
 
 
 Output exploration
