@@ -156,14 +156,30 @@ Draft me.
 colabcctbxsnips
 ++++++++++++++++++
 
-On Colab, the snippets are stored in a Google Colab notebook.
-See this website for an excellent introduction to *cctbx* (Computational Crystallography Toolbox).
-The *colabcctbxsnips* library is a collection of the code fragment to aid doing routine and not so routine computational tasks in protein crystallography.
-The URL for the snippets notebook is used to access the snippets from a new notebook.
+The Google Colab notebook enables the running of software on Googles's servers in an computational notebook that resembles the Jupyter notebook.
+This approach is useful for workshop settings where there is no time for installing software on a heterogenous mix of operating systems when the attendees are using their own computers.
 
-Click on the blue button below to open the notebook on Colab and follow the instructions at the top of the notebook on how to copy the notebook to Google Drive and then make it available to new Colab notebooks.
-This step has to be done only once. The snippets will be available on your next log-in; however, files and software installed on Colab with not be available on your next login to Colab.
+In the Colab notebook, that are no external extensions.
+However, the Colab notebook has built-in support for snippets.
+A particular snippet library is stored in a dedicated Google Colab notebook rather than in individual files.
+The notebook of snippets is stored on the user's Google Drive account.
+While the software installed in a Colab session is lost upon logging out, the snippets remain available on the next login.
 
+.. figure:: ./figs/colab.png
+   :align: center
+   :scale: 50%
+   :figclass: bht
+
+   Snippet for installing . :label:`colab`
+
+After the snippet notebook is installed, the user opens a new notebook to use the snippets.
+From that new notebook, the list of snippets will be exposed by clicking on the **<>** icon in the left margin of the notebook.
+This exposes a list of snippets. 
+Click on the `Insert` button in the upper righthand corner of the snippet to copy the snippet to the current code cell in the notebook.
+
+We developed the  *colabcctbxsnips* library and stored it in a Colab Notebook (https://github.com/MooersLab/colabcctbxsnips).
+Two snippets have the code for installing *mamba* and then *cctbx*.
+These code snippets have to be run before cctbx can be accessed.
 
 
 cctbxsnips for text editors
@@ -177,10 +193,6 @@ Emacs supports repel-driven software development, which resembles the interactiv
 Emacs also supports the use of literate programming in several kinds of documents, including the very popular org-mode document.
 Code blocks in these documents can be given a **jupyter** option with a Jupyter kernel name that enables running a specific Jupyter kernel including one mapped to a conda environment that has the *cctbx* package installed.
 A similar examples using the molecular graphics package PyMOL is demonstrated in this short video (https://www.youtube.com/watch?v=ZTocGPS-Uqk&t=2s).
-
-
-
-
 
 
 
