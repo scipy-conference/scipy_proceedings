@@ -184,14 +184,14 @@ The two code fragments take less than two minutes to install the required softwa
 
 The Colab snippet system also lacks support for tab triggers and tab stops.
 We address this problem by supplying a a copy of the snippet with the sites of the tab stops marked up like a yasnippet snippet.
-Unlike the case of the *jupyterlabcctbxsnipsplus* library, marked up copy of the code snippet is displayed only in the preview of the snippet and is not inserted in the code cell along with the active code (Fig. :ref:`colabplus`).
+Unlike the case of the *jupyterlabcctbxsnipsplus* library, the marked up copy of the code snippet is displayed only in the preview of the snippet and is not inserted in the code cell along with the active code (Fig. :ref:`colabplus`).
 
 .. figure:: ./figs/colabplus.png
    :align: center
    :scale: 21%
    :figclass: bht
 
-   Colab snippet with template code in the preview of the snippet. :label:`colabplus`
+   Preview of a Colab snippet with the template code. The dollar sign marks the start of a snippet. :label:`colabplus`
 
 
 
