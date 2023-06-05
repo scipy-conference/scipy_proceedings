@@ -335,6 +335,13 @@ Based on these findings, they propose a model that explains how the N protein bi
    
 Our phylogeography-based exploration revealed a notable correlation between mutations in the Ubl1 protein and precipitation. As a reproducible phylogeographic platform, aPhyloGeo-Covid offers the potential to expand the sample size for further investigation and facilitates the comparability of analysis results.
 
+.. figure:: figure6.png
+   :align: center
+   :figclass: w
+   :scale: 35%
+   
+   Putative horizontal gene transfer events found for the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants. (a) presents the phylogenetic tree of the window regions of 792-940 residue. (b) presents the phylogenetic tree of pp1a gene (amino acid sequences) with putative horizontal gene transfers mapped into it.  :label:`fig6`
+
 
 Conclusions and future work
 ---------------------------
