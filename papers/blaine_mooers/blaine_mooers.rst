@@ -167,7 +167,7 @@ While the software installed in a Colab session is lost upon logging out, the sn
 
 .. figure:: ./figs/colab.png
    :align: center
-   :scale: 33%
+   :scale: 30%
    :figclass: bht
 
    Snippets for installing *cctbx* on Google Colab. :label:`colab`
