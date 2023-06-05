@@ -222,7 +222,7 @@ The following function facilitates the integration of input nodes with relations
 
 .. code-block:: python
 
-   def addInputNeo(nodesLabel, 
+   def add_Input_Neo(nodesLabel, 
                    inputNode_name, 
                    id_list):
        # Execute the Cypher query
@@ -261,6 +261,56 @@ Parameters setting and tuning
 After defining the input data, which includes sequence data and associated location information, researchers can utilize the platform to select the analysis parameters. This pivotal step entails creating an Analysis label, where the parameter values are stored as properties. These parameters encompass the step size, window size, RF distance threshold, bootstrap threshold, and the list of environmental factors involved in the analysis. Furthermore, a connection is established between the Input Node and the Analysis Node, offering several advantages. Firstly, it allows researchers to compare results obtained from the same input samples but with different parameter settings. Secondly, it facilitates the comparison of analysis results obtained using the same parameter settings but different input samples. The interconnected Input, Analysis, and Output nodes (See Figure :ref:`fig1`) ensure the repeatability and comparability of analysis results.
 
 After confirming the parameters, the corresponding sequences are downloaded from NCBI :cite:`brister2015ncbi` using the Biopython package :cite:`cock2009biopython`, followed by performing multiple sequence alignments (MSA) :cite:`edgar2006multiple` using the MAFFT method :cite:`katoh2013mafft`. Subsequently, the Snakemake workflow is triggered in the backend, taking the alignment results and associated environmental data as input. Once the analysis is completed, a unique output ID is generated, enabling the results to be queried on the web platform.
+
+.. code-block:: python
+
+   def trigger_workflow(df_params_geo):
+      dff = pd.DataFrame(df_params_geo)
+      analysisNode_name = neo_manager.generate_unique_name("Analysis")
+      outputNode_name = neo_manager.generate_unique_name("Output")
+      if dff.empty != True and len(dff) > 4:
+            # record parameters in config file
+            with open('config/config.yaml', 'r') as file:
+                config = yaml.safe_load(file)
+                # Update the values
+            config['seqinfo']['accession_lt'] = dff['id'].tolist()  
+            config['params']['feature_names'] = dff.columns.tolist()
+            config['analysis']['analysis_name'] = analysisNode_name
+            config['analysis']['output_name'] = outputNode_name
+            # create geographic input dataset
+            csv_file_name = config['params']['geo_file']
+            dff.to_csv(csv_file_name, index=False, encoding='utf-8')  
+             # create sequence input dataset
+            aln_file_name = config['params']['seq_file']
+            seq_beforeMSA_fname = aln_file_name + '_raw'
+            if config['params']['data_type'] == 'aa':
+                db_type = "protein"
+            else:
+                db_type = "nucleotide"
+            accession_list = config['seqinfo']['accession_lt']
+
+            # Write the updated config dictionary back to the YAML file
+            with open('config/config.yaml', 'w') as file:
+                yaml.dump(config, file)
+            # (6) download sequences from NCBI based on df['id'],
+
+            seq_manager.downFromNCBI(
+                db_type, accession_list, seq_beforeMSA_fname)
+            # (6) alignment
+            seq_manager.align_MAFFT(seq_beforeMSA_fname, aln_file_name)
+            # (7) run aphylogeo snakemake workflow
+            os.system("snakemake --cores all")
+            # (8) In Neo4j create :Analysis node
+            neo_manager.addAnalysisNeo()
+
+            # (9) When Analysis finished, 
+            #save output dataframe into Neo4j :Output node
+            neo_manager.addOutputNeo()
+        ...
+
+
+
+
 
 Output exploration
 ++++++++++++++++++
