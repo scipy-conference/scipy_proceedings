@@ -129,7 +129,7 @@ Blosc2 utilizes a pipeline architecture that enables the chaining of different f
 
    The Blosc2 pipeline. During compression, the first function applied is the prefilter (if any), followed by the filters' pipeline (with a maximum of six filters), and finally, the codec. During decompression, the order is reversed: first the codec, then the filters' pipeline, and finally the postfilter (if any). :label:`blosc2-pipeline`
 
-Furthermore, Blosc2 supports user-defined codecs and filters, allowing you to create your own compression algorithms and use them within Blosc2 :cite:`BDT22-blosc2-pipeline`. These user-defined codecs and filters can also be dynamically loaded :cite:`BDT23-dynamic-plugins`, registered globally within Blosc2, and installed via a Python wheel so that they can be used seamlessly from any Blosc2 application (whether in C, Python, or any other language that provides a Blosc2 wrapper).
+Furthermore, Blosc2 supports user-defined codecs and filters, allowing one to create their own compression algorithms and use them within Blosc2 :cite:`BDT22-blosc2-pipeline`. These user-defined codecs and filters can also be dynamically loaded :cite:`BDT23-dynamic-plugins`, registered globally within Blosc2, and installed via a Python wheel so that they can be used seamlessly from any Blosc2 application (whether in C, Python, or any other language that provides a Blosc2 wrapper).
 
 Automatic tuning of compression parameters
 ------------------------------------------
@@ -170,7 +170,7 @@ For example, Table :ref:`predicted-dparams-example` displays the results for the
 
 On the other hand, Table :ref:`predicted-cparams-example`, shows an example of predicted compression parameter tuned for compression speed and ratio on a different dataset.
 
-.. table:: BTune prediction of the best compression parameters for compression speed, depending on a balanced value. It can be seen that LZ4 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is leverage towards the compression ratio. Speeds are in GB/s. :label:`predicted-cparams-example`
+.. table:: BTune prediction of the best compression parameters for compression speed, depending on a balanced value. It can be seen that LZ4 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is leveraged towards the compression ratio. Speeds are in GB/s. :label:`predicted-cparams-example`
 
    +---------+------------------+---------+--------+--------+
    | Balance | Most predicted   |  Cratio | Cspeed | Dspeed |
@@ -304,7 +304,7 @@ Finally, we can compute the density of stars in a 3D grid with this script:
                   blocks=(20, 20, 20),
                   )
 
-With that, we have a 3D array of shape (10_000, 10_000, 10_000) with the magnitudes of stars with a 2 light years resolution.  We can visualize it with the following code:
+With that, we have a 3D array of shape 10,000 x 10,000 x 10,000 with the magnitudes of stars with a 2 light years resolution.  We can visualize it with the following code:
 
 To be completed ...
 
@@ -317,4 +317,4 @@ Blosc2 supports a variety of compression codecs and filters, making it easier to
 
 We have also shown how the BTune plugin can be used to automatically tune the compression parameters for a given dataset.  This is especially useful when we want to compress data efficiently, but we do not know the best compression parameters beforehand.
 
-In conclusion, we have demonstrated how to utilize the Blosc2 library for storing and processing the Gaia dataset. This dataset serves as a prime example of a large, multi-dimensional dataset that can be efficiently stored and processed using Blosc2 NDim.
+In conclusion, we have shown how to utilize the Blosc2 library for storing and processing the Gaia dataset. This dataset serves as a prime example of a large, multi-dimensional dataset that can be efficiently stored and processed using Blosc2 NDim.
