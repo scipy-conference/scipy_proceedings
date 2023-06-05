@@ -18,7 +18,7 @@ Biomolecular Crystallographic Computing with Jupyter
    especially in protein crystallography, where a collaborative community develops extensive
    libraries, user-friendly GUIs, and Python APIs. The APIs allow users to use the libraries in Jupyter.
    To further advance this use of Jupyter, we developed a collection of code fragments that use
-   the vast Computational Crystallography Toolbox library for novel analyses. We made versions
+   the vast *Computational Crystallography Toolbox* (cctbx) library for novel analyses. We made versions
    of this library for use in JupyterLab and Colab. We also made versions of the snippet library
    for the text editors VS Code, Vim, and Emacs that support editing live code cells in Jupyter
    notebooks via GhostText. Readers of this paper may be inspired to adapt this latter capability
@@ -26,7 +26,7 @@ Biomolecular Crystallographic Computing with Jupyter
 
 .. class:: keywords
 
-   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, Colab notebook, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, computational molecular biophysics, biomedical research, data visualization, scientific communication, GhostText, text editors, snippet libraries 
+   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, Colab notebook, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, computational molecular biophysics, biomedical research, data visualization, scientific communication, GhostText, text editors, snippet libraries, SciPy software stack
 
 Introduction
 --------------
@@ -35,22 +35,23 @@ Biomolecular crystallography involves the determination of the molecular structu
 The molecular structures determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and to developing new therapies in medicine.
 The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`.
 
-Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after ColabFold enabled running AlphaFold2 from Colab notebooks :cite:`Mirdita22`.
-Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses (e.g., CCP4 :cite:`Agirre23`, Phenix :cite:`Liebschner19`, CNS :cite:`Brunger98`).
+Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after *ColabFold* enabled running *AlphaFold2* from *Colab* notebooks :cite:`Mirdita22`.
+Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses (e.g., *CCP4* :cite:`Agirre23`, *Phenix* :cite:`Liebschner19`, *CNS* :cite:`Brunger98`).
 However, these users sometimes need non-routine analyses that require new code.
 
-The Computational Crystallography Toolbox (cctbx) provides a vast library of computational crystallography software written in C++ following an object-oriented programming paradigm and wrapped with Python :cite:`GrosseKunstleve02`.
-This library was designed to contained reusable C++ code.
-It development in the late 1990s was driven by limitations on software reusability and error handling in Fortran77, the dominant programming language used in crystllographic computing at the time.
-This cctbx library is used to build build higher order analysis tools.
-The group lead by Paul Adams that developed cctbx used cctbx to develop the Phenix software package that includes a graphical user interface.
-*Phenix* is widely used today and it able to continue to grow and evolve that to the obejct-oriented approach built into cctbx.
+The Computational Crystallography Toolbox (*cctbx*) provides a vast library of computational crystallography software written in C++ following an object-oriented programming paradigm and wrapped with Python :cite:`GrosseKunstleve02`.
+This library was designed to contain reusable C++ code.
+Its development in the late 1990s was driven by limitations on software reusability and error handling in Fortran77, the dominant programming language used in crystallographic computing at the time.
+The C++ interfaces, classes and functions are exposed to Python via the Boost.Python Library :cite:`Abrahams03` 
+This *cctbx* library is used to build build higher order analysis tools.
+The group lead by Paul Adams that developed *cctbx* and used it to develop the *Phenix* software package that includes a graphical user interface.
+*Phenix* is widely used today and it able to continue to grow and evolve that to the object-oriented approach built into *cctbx*.
 
 The *cctbx* library was hard to install three years ago due to its complex dependencies, but the addition of the *cctbx* package to Anaconda dramatically eased the installation of *cctbx*.
 The lowering of this barrier to the installation of *cctbx* has raised interest in the use of *cctbx* for novel data analyses.
 Several online tutorials and workshops have attempted to address this problem, but the adoption of *cctbx* remains low.
 This is somewhat surprising considering the widespread adoption of Python in the past decade by the field.
-Difficulty with using *cctbx* has inspired some outside groups to reinvent many capabilities using modules from the SciPy software stack (e.g. *reciprocalspaceship* :cite:`Griesman21`, :GEMMI: :cite:`Wojdyr22`).
+Difficulty with using *cctbx* has inspired some outside groups to reinvent many capabilities using modules from the SciPy software stack (e.g. *reciprocalspaceship* :cite:`Griesman21`, *GEMMI* :cite:`Wojdyr22`).
 
 To ease the use of *cctbx* by my lab and others to develop custom crystallographic analyses, we assembled a collection of *cctbx* code snippets for use in Jupyter notebooks.
 Jupyter provides an excellent platform for exploring the *cctbx* library and developing new analysis tools.
@@ -92,7 +93,7 @@ The data in this mtz has columns of I(+) and I(-).
 These are the Bijvoet pairs of diffraction intensities.
 These pairs are related by symmetry and should have equal intensity values within experimental error.
 The differences in intensities are a measure of the presence of anomalous scattering.
-Anomalous scattering can be measurable for elements like sulfur and phosphorous that are part of the native protein and nucleic acid structures and heavier element like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., bromo-5-uracil) during its synthesis.
+Anomalous scattering can be measurable for elements like sulfur and phosphorous that are part of the native protein and nucleic acid structures and heavier element like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., 5-bromouracil) during its synthesis.
 
 The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
 Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein. 
@@ -109,7 +110,7 @@ The diffraction data were retrieved from the Protein Data Bank, a very early ope
 
 The I(+) vs I(-) plot below (Fig. :ref:`ipmplot`) was made after reading the X-ray data into a cctbx Miller array, a data structure designed for handling X-ray data in cctbx.
 The I(+) and I(-) were eventually read into separate lists.
-We plot the two lists against each other in a scatter plot.
+We plot the two lists against each other in a scatter plot using *matplotlib* :cite:`matplotlib`.
 There is no scatter in this plot if there is no anomalous signal.
 The larger the anomalous signal, the greater the scatter from the $x=y$ line.
 The departure from this line is expected to be greater for intensities of large magnitude.
@@ -122,20 +123,22 @@ The departure from this line is expected to be greater for intensities of large 
    The Ip Im plot. :label:`ipmpplot`
 
 Plots of this nature are useful for detecting very weak anomalous signals from native anomalous scatters like sulfur and phosphorous.
-The collection of the anomalous signal from native scatters enables structure determination without having to spend the extra time and money to introduce heavier atoms.
-The measurement of the very weak signal from anomalous scatterers is at the edge of what is technically possible by using two million dollar detectors and synchrotron radiation as national laboratories.
+The collection of the anomalous signal from native scatters enables structure determination without having to spend the extra time and money to introduce heavier atoms that are not native to the protein.
+The measurement of the very weak signal from anomalous scatterers is at the edge of what is technically possible by using two million dollar detectors and synchrotron radiation at one of of the thirty plus synchtrotron radiation laboratories around the world.
+These facilities provide X-rays that 10,000 times more intense than the X-rays generated with in-house X-ray generators.
+Usually, the X- data are collected at -173 degrees Celsius in a cryostream of nitrogen gas to prolong the life of the crystal while exposed to such intense X-rays.
+The typical absorbed radiation dose of a large protein crystal 200 x 200 x 200 microns in size in the X-ray beam at synchrotron radiation laboratory during a 10-minute diffraction experiment is sufficient to kill 100,000 adult humans.
+While radiation damage sets in upon initial exposure of the crystal, the cooling prolongs the amount of time over which the crystal gives useful data.
 
-Usually, these data are collected at -173 degrees Celsius in a cryostream of nitrogen gas to prolong the life of the crystal while exposed to the X-rays which otherwise rapidly induce radiation damage.
-The typical absorbed radiation dose of a large protein crystal in the X-ray beam at synchrotron radiation laboratory during a 10-minute diffraction experiment is sufficient to kill 100,000 adult humans.
 However, recently, several groups have completed successful native phasing experiments at room temperature by collecting data from large numbers of crystals.
-Data are collected from each crystal briefly before radiation damage degrades the diffraction.
-This is a remarkable achievement because data from different crystals enhances the experimental error.
+The advantages of room temperature data collection include avoidance of conformational changes in the protein induced by supercooling the crystal.
+The romm temperature data were collected from each crystal briefly before radiation damage degraded the diffraction too much.
+This is a remarkable achievement because the merging of diffraction data from many crystals in various orientations enhances the experimental error; this error can mask the weak anomalous signal that is being sought.
 
-This plot was adapted from an example in the ReciprocalSpaceship project from the Hekstra Lab :cite:`Greisman21`.
-This new project takes a more Pythonic approach.
-For example, it uses the Pandas package to manage diffraction data whereas cctbx uses a special C++ data structure for diffraction data that predates pandas by a decade.
-
-
+The plot (Fig. :ref:`ipmpplot` was adapted from an example in the *reciprocalspaceship* project from the Hekstra Lab :cite:`Greisman21`.
+This new project takes a more Pythonic approach than *cctbx* by utilizing many of the packages in the SciPy stack that did not exist when cctbx was initiated.
+For example, it uses the *pandas* package to manage diffraction data whereas *cctbx* uses a special C++ data structure for diffraction data that predates *pandas* by almost a decade.
+The utlization of *pandas* enables easier integration with the other components of the SciPy software stack including machine learning packages.
 
 The *cctbx* is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
 
@@ -156,7 +159,7 @@ colabcctbxsnips
 On Colab, the snippets are stored in a Google Colab notebook.
 See this website for an excellent introduction to *cctbx* (Computational Crystallography Toolbox).
 The *colabcctbxsnips* library is a collection of the code fragment to aid doing routine and not so routine computational tasks in protein crystallography.
-The URL for the snippets notebook is unused to access the snippets from a new notebook.
+The URL for the snippets notebook is used to access the snippets from a new notebook.
 
 Click on the blue button below to open the notebook on Colab and follow the instructions at the top of the notebook on how to copy the notebook to Google Drive and then make it available to new Colab notebooks.
 This step has to be done only once. The snippets will be available on your next log-in; however, files and software installed on Colab with not be available on your next login to Colab.
@@ -166,7 +169,17 @@ This step has to be done only once. The snippets will be available on your next 
 cctbxsnips for text editors
 +++++++++++++++++++++++++++++++
 
-Drafted me. 
+To support the use of the *cctbx* code snippets in text editors, we make versions of the library for Emacs, Vim, Visual Studio Code, Atom, and Sublime Text3.
+We selected these text editors because they are the most advanced and most popular with software developers and because they are supported by GhostText project described below :ref:`ghsottext`.
+
+For Emacs, we developed a library for use with the yasnippet package (https://github.com/MooersLab/cctbxsnips-Emacs).
+Emacs supports repel-driven software development, which resembles the interactive software development experience in Jupyter notebooks.
+Emacs also supports the use of literate programming in several kinds of documents, including the very popular org-mode document.
+Code blocks in these documents can be given a **jupyter** option with a Jupyter kernel name that enables running a specific Jupyter kernel including one mapped to a conda environment that has the *cctbx* package installed.
+A similar examples using the molecular graphics package PyMOL is demonstrated in this short video (https://www.youtube.com/watch?v=ZTocGPS-Uqk&t=2s).
+
+
+
 
 
 
@@ -250,16 +263,18 @@ Of course, the final text can be saved locally.
 Third, multiple open editors with GhostText servers installed can compete for the same WebSocket.
 This problem is solved by closing the editor that is not in current use or configuring its server to use an alternate WebSocket.
 
-To support the use of GhostText to edit electronic notebooks containing code from the *cctbx* library, we have made variants of a collection of *cctbx* snippets for Visual Studio Code, Atom, Sublime Text 3, Vim, NeoVim, and Emacs. For Vim and NeoVim, the snippets are available for the UltiSnips, Snipmate, and neosnippets plugins. The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
-I found that Sublime Text 3 had the most effortless setup while Emacs provided the highest degree of customization.
+To support the use of *GhostText* to edit electronic notebooks containing code from the *cctbx* library, we have made variants of a collection of *cctbx* snippets for *Visual Studio Code*, *Atom*, *Sublime Text 3*, *Vim*, *NeoVim*, and *Emacs*. For *Vim* and *NeoVim*, the snippets are available for the *UltiSnips*, *Snipmate*, and *neosnippets* plugins.
+The snippets are available for download on GitHub (https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors).
+I found that *Sublime Text 3* had the most effortless setup while *Emacs* provided the highest degree of customization.
 This snippet library was previously only available for use Jupyter notebooks via extensions for the Classic Jupyter Notebook application or Jupyter Lab.
 
 Note that the snippet library cannot be used with the program *nteract* (https://nteract.io/).
-The nteract is an easy-to-install and use desktop application for editing and running Jupyter notebooks offline.
-The ease of installation makes nteract popular with new users of Jupyter notebooks. Obviously interact is not browser-based, so it cannot work with GhostText.
-Interact has yet to be extended to support the use of code snippet libraries.
+The *nteract* is an easy-to-install and use desktop application for editing and running Jupyter notebooks offline.
+The ease of installation makes nteract popular with new users of Jupyter notebooks.
+Obviously *nteract* is not browser-based, so it cannot work with *GhostText*.
+*nteract* has yet to be extended to support the use of code snippet libraries.
 
-While the focus of this report was on the use of the GhostText browser plugin to edit Juptyer notebooks hosted in a web browser, the cctbxsnips snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of saner version control.
+While the focus of this report was on the use of the *GhostText* browser plugin to edit Juptyer notebooks hosted in a web browser, the *cctbxsnips* snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of saner version control.
 The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the *Quarto* (http://quarto.org) markdown representation of Jupyter notebooks.
 *Quarto* is available for several leading text editors.
 In the later case, you may have to extend the scope of the editing session in the editor to include Python source code.
@@ -294,8 +309,8 @@ We reasoned that this great tool should be brought to the aid of the thousands o
 
 The other area where domain specific snippets have been provided is in molecular graphics.
 The pioneering work on a scripting wizard provided templates for use in the molecular graphics program RasMol :cite:`Horton99`.
-The conscript program provided a converter from RasMol to PyMOL :cite:`Mottarella10`.
-We also provided snippets for PyMOL, which has 100,000 users, for use in text editors :cite:`Mooers21a` and Jupyter notebooks :cite:`Mooers21b`.
+The conscript program provided a converter from *RasMol* to *PyMOL* :cite:`Mottarella10`.
+We also provided snippets for *PyMOL*, which has 100,000 users, for use in text editors :cite:`Mooers21a` and Jupyter notebooks :cite:`Mooers21b`.
 The former support tab triggers and tab stops; the latter does not.
 
 We have also worked out how to deploy this snippet libraries in OnDemand notebooks at High-Performance Computing centers.
