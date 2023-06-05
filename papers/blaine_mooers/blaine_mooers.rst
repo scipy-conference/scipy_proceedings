@@ -165,21 +165,23 @@ A particular snippet library is stored in a dedicated Google Colab notebook rath
 The notebook of snippets is stored on the user's Google Drive account.
 While the software installed in a Colab session is lost upon logging out, the snippets remain available on the next login.
 
-.. figure:: ./figs/colab.png
-   :align: center
-   :scale: 30%
-   :figclass: bht
-
-   Snippets for installing *cctbx* on Google Colab. :label:`colab`
-
 After the snippet notebook is installed, the user opens a new notebook to use the snippets.
 From that new notebook, the list of snippets will be exposed by clicking on the **<>** icon in the left margin of the notebook.
 This exposes a list of snippets. 
 Click on the `Insert` button in the upper righthand corner of the snippet to copy the snippet to the current code cell in the notebook.
 
 We developed the  *colabcctbxsnips* library and stored it in a Colab Notebook (https://github.com/MooersLab/colabcctbxsnips).
-Two snippets have the code for installing *mamba* and then *cctbx*.
+Two snippets have the code for installing *mamba* and then *cctbx* (Fig. :ref:`colab`).
 These code snippets have to be run before cctbx can be accessed.
+
+.. figure:: ./figs/colab.png
+   :align: center
+   :scale: 31%
+   :figclass: bht
+
+   Snippets for installing *cctbx* on Google Colab. :label:`colab`
+
+
 
 
 cctbxsnips for text editors
