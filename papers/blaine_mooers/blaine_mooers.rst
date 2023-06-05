@@ -150,14 +150,14 @@ This is the variant of the *jupyterlabcctbxsnips* library with comments to guide
 taggedcctbxsnips
 +++++++++++++++++++
 
-Draft me.
+
 
 
 colabcctbxsnips
 ++++++++++++++++++
 
 The Google Colab notebook enables the running of software on Googles's servers in an computational notebook that resembles the Jupyter notebook.
-This approach is useful for workshop settings where there is no time for installing software on a heterogenous mix of operating systems when the attendees are using their own computers.
+Colab notebooks are useful for workshop settings where there is no time for installing software on a heterogeneous mix of operating systems when the attendees are using their own computers.
 
 In the Colab notebook, that are no external extensions.
 However, the Colab notebook has built-in support for snippets.
@@ -173,14 +173,25 @@ Click on the `Insert` button in the upper righthand corner of the snippet to cop
 We developed the  *colabcctbxsnips* library and stored it in a Colab Notebook (https://github.com/MooersLab/colabcctbxsnips).
 Two snippets have the code for installing *mamba* and then *cctbx* (Fig. :ref:`colab`).
 These code snippets have to be run before cctbx can be accessed.
+The two code fragments take less than two minutes to install the required software. 
 
 .. figure:: ./figs/colab.png
    :align: center
    :scale: 31%
    :figclass: bht
 
-   Snippets for installing *cctbx* on Google Colab. :label:`colab`
+   Snippets for installing *mamba* and then *cctbx* on Google Colab. :label:`colab`
 
+The Colab snippet system also lacks support for tab triggers and tab stops.
+We address this problem by supplying a a copy of the snippet with the sites of the tab stops marked up like a yasnippet snippet.
+Unlike the case of the *jupyterlabcctbxsnipsplus* library, marked up copy of the code snippet is displayed only in the preview of the snippet and is not inserted in the code cell along with the active code (Fig. :ref:`colabplus`).
+
+.. figure:: ./figs/colabplus.png
+   :align: center
+   :scale: 31%
+   :figclass: bht
+
+   Colab snippet with template code in the preview of the snippet. :label:`colabplus`
 
 
 
