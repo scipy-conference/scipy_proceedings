@@ -266,46 +266,53 @@ After confirming the parameters, the corresponding sequences are downloaded from
 
    def trigger_workflow(df_params_geo):
       dff = pd.DataFrame(df_params_geo)
-      analysisNode_name = neo_manager.generate_unique_name("Analysis")
-      outputNode_name = neo_manager.generate_unique_name("Output")
-      if dff.empty != True and len(dff) > 4:
-            # record parameters in config file
-            with open('config/config.yaml', 'r') as file:
-                config = yaml.safe_load(file)
-                # Update the values
-            config['seqinfo']['accession_lt'] = dff['id'].tolist()  
-            config['params']['feature_names'] = dff.columns.tolist()
-            config['analysis']['analysis_name'] = analysisNode_name
-            config['analysis']['output_name'] = outputNode_name
-            # create geographic input dataset
-            csv_file_name = config['params']['geo_file']
-            dff.to_csv(csv_file_name, index=False, encoding='utf-8')  
-             # create sequence input dataset
-            aln_file_name = config['params']['seq_file']
-            seq_beforeMSA_fname = aln_file_name + '_raw'
-            if config['params']['data_type'] == 'aa':
-                db_type = "protein"
-            else:
-                db_type = "nucleotide"
-            accession_list = config['seqinfo']['accession_lt']
+      analysisNode = neo_manager.generate_unique_name("Analysis")
+      outputNode = neo_manager.generate_unique_name("Output")
+      
+      # record parameters in config file
+      with open('config/config.yaml', 'r') as file:
+         config = yaml.safe_load(file)
+      # Update the values
+      config['accession_lt'] = dff['id'].tolist()  
+      config['feature_names'] = dff.columns.tolist()
+      config['analysis_name'] = analysisNode
+      config['output_name'] = outputNode
+      # create geographic input dataset
+      csv_file_name = config['geo_file']
+      dff.to_csv(csv_file_name, 
+                  index=False, 
+                  encoding='utf-8')  
+      # create sequence input dataset
+      aln_file_name = config['seq_file']
+      seq_beforeMSA_fname = aln_file_name + '_raw'
+      if config['data_type'] == 'aa':
+         db_type = "protein"
+      else:
+         db_type = "nucleotide"
+      accession_list = config['accession_lt']
 
-            # Write the updated config dictionary back to the YAML file
-            with open('config/config.yaml', 'w') as file:
-                yaml.dump(config, file)
-            # (6) download sequences from NCBI based on df['id'],
+      # update config dictionary to the YAML file
+      with open('config/config.yaml', 'w') as file:
+         yaml.dump(config, file)
+      # (6) download sequences from NCBI 
 
-            seq_manager.downFromNCBI(
-                db_type, accession_list, seq_beforeMSA_fname)
-            # (6) alignment
-            seq_manager.align_MAFFT(seq_beforeMSA_fname, aln_file_name)
-            # (7) run aphylogeo snakemake workflow
-            os.system("snakemake --cores all")
-            # (8) In Neo4j create :Analysis node
-            neo_manager.addAnalysisNeo()
+     seq_manager.downFromNCBI(
+                     db_type, 
+                     accession_list, 
+                     seq_beforeMSA_fname)
+     # (6) alignment
+    seq_manager.align_MAFFT(seq_beforeMSA_fname,
+                              aln_file_name)
+    # (7) run aphylogeo snakemake workflow
+    os.system("snakemake --cores all")
+    # (8) In Neo4j create :Analysis node
+    neo_manager.addAnalysisNeo()
 
-            # (9) When Analysis finished, 
-            #save output dataframe into Neo4j :Output node
-            neo_manager.addOutputNeo()
+   # (9) When Analysis finished, 
+   #save output dataframe into Output node
+   neo_manager.addOutputNeo()
+      
+            
         ...
 
 
