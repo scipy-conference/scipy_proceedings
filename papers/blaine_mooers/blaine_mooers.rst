@@ -149,7 +149,7 @@ Upon insertion of the snippet into a notebook cell, the commented out code is in
 
 .. figure:: ./figs/snipsplus.png
    :align: center
-   :scale: 35%
+   :scale: 30%
    :figclass: bht
 
    The snippet code with a duplicated copy in a comment. :label:`snipsplus`
