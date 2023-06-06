@@ -169,7 +169,7 @@ Each snippet is in a separate JavaScript file with the json file extension :ref:
 
 .. figure:: ./figs/taggedcctbxsnips.png
    :align: center
-   :scale: 20%
+   :scale: 38%
    :figclass: bht
 
    The snippet code with a duplicated copy in a comment. :label:`taggedcctbxsnips`
