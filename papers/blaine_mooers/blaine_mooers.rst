@@ -42,7 +42,7 @@ However, these users sometimes need non-routine analyses that require new code.
 The Computational Crystallography Toolbox (*cctbx*) provides a vast library of computational crystallography software written in C++ following an object-oriented programming paradigm and wrapped with Python :cite:`GrosseKunstleve02`.
 This library was designed to contain reusable C++ code.
 Its development in the late 1990s was driven by limitations on software reusability and error handling in Fortran77, the dominant programming language used in crystallographic computing at the time.
-The C++ interfaces, classes and functions are exposed to Python via the Boost.Python Library :cite:`Abrahams03` 
+The C++ interfaces, classes and functions are exposed to Python via the Boost.Python Library :cite:`Abrahams03`.
 This *cctbx* library is used to build build higher order analysis tools.
 The group lead by Paul Adams that developed *cctbx* and used it to develop the *Phenix* software package that includes a graphical user interface.
 *Phenix* is widely used today and it able to continue to grow and evolve that to the object-oriented approach built into *cctbx*.
@@ -96,10 +96,10 @@ The differences in intensities are a measure of the presence of anomalous scatte
 Anomalous scattering can be measurable for elements like sulfur and phosphorous that are part of the native protein and nucleic acid structures and heavier element like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., 5-bromouracil) during its synthesis.
 
 The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
-Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein. 
+Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein.
 We use these data to make a I(+) vs I(-) scatter plot below.
 The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
-The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB18`. 
+The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB18`.
 
 .. figure:: ./figs/Fig5mtzSummary.png
    :align: center
@@ -158,14 +158,14 @@ The atomic coordinates of the biomolecular structures are the other major type o
 The fixed file format of Protein Data Bank coordinate files with the file extension of *pdb* originated in the 1970s with the birth of the Portein Data Bank, but very large biological macromolecules have been determined oterh the past two decades that exceeded the limits on the number of atoms permitted in one file.
 Structures like the ribosome had to be split acresos multiple files.
 To address this and other shortcomings of the PDB file format, the PDBx/mmCIF (Protein Data Bank Exchange macromolecular Crystallogrpahic Information Framework) file format has become the data standard :cite:`Westbrook22`.
-The *cctbx* has adapted and can read in mmcif files. 
+The *cctbx* has adapted and can read in mmcif files.
 
 taggedcctbxsnips
 +++++++++++++++++++++
 
-The Elyra-snippets extension for Jupyter Lab supports the use of tagged snippets.
-The tags are used to narrow the list of possible snippets.
-We made a version of the cctbxsnips library for this extension (https://github.com/MooersLab/taggedcctbxsnips). 
+The Elyra-snippets extension for Jupyter Lab supports the use of tagged snippets (https://elyra.readthedocs.io/en/latest/user_guide/code-snippets.html).
+Each snippet is in a separate JavaScript file with the json file extension :ref:`taggedcctbxsnips`.
+
 
 .. figure:: ./figs/taggedcctbxsnips.png
    :align: center
@@ -174,7 +174,10 @@ We made a version of the cctbxsnips library for this extension (https://github.c
 
    The snippet code with a duplicated copy in a comment. :label:`taggedcctbxsnips`
 
-
+Each snippet file has a set of metadata.
+These data include a list of tags.
+The tags are used to find the snippet while editing a Jupyter notebook in JupyterLab.
+We made a version of the cctbxsnips library for the Elyra-snippets extension (https://github.com/MooersLab/taggedcctbxsnips).
 
 
 
