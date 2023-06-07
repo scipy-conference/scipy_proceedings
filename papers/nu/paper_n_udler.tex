@@ -1,11 +1,9 @@
 
 \subsection{Introduction \label{introduction}}
 
-The focus of the class is on basic machine learning (ML) ideas and concepts. This approach allows students to easily acquire the terminology and continue to study independently after finishing the class -  through books, videos  and software documentation.  The course is project-based. Each time the selection of the projects is different. It depends on the math knowledge of the students. First several projects are demonstrated to the whole class and utilize minimal mathematical background among participants. Students do not have to learn new math but see how their existing math knowledge can be used in ML.   
+The focus of the class is on basic machine learning (ML) ideas and concepts. This approach allows students to easily acquire the terminology and continue to study independently after finishing the class -  through books, videos  and software documentation.  The course is project-based. Each time the selection of the projects is different. It depends on the math knowledge of the students. First several projects are demonstrated to the whole class and utilize minimal mathematical background among participants. Students do not have to learn new math but see how their existing math knowledge can be used in ML.   Many students already have experience with some ML methods. Our class is helpful for understanding similarities between familiar methods.  The minimal mathematical background required for this class is: solving systems of linear equations and inequalities.
 
-Many students already have experience with some ML methods. Our class is helpful for understanding similarities between familiar methods.  For example, first discussion of neural networks is provided after linear and logistic regressions are introduced - as their generalization. Such focus on general principles is indispensable when acquiring skills for designing your own ML methods. The minimal mathematical background required for this class is: solving systems of linear equations and inequalities.
-
-Topics of machine learning are grouped by required mathematical background. Relationship with other disciplines is highlighted - statistics, probability, linear algebra, operations research, optimization, financial engineering. Students work in groups.  Members of the group may have different skills, and the reason is to have a variety of skills present in the group: computer programming, mathematics, mathematical modeling, subject matter expert knowledge. This allows to complete realistic projects. Educational software minpy is used for many projects.
+ Topics of machine learning are grouped by required mathematical background. Relationship with other disciplines is highlighted - statistics, probability, linear algebra, operations research, optimization, financial engineering. Students work in groups.  Members of the group may have different skills, and the reason is to have a variety of skills present in the group: computer programming, mathematics, mathematical modeling, subject matter expert knowledge. This allows to complete realistic projects. Educational software minpy is used for many projects.
 
 \subsection{Objectives and Outcomes \label{objectives and outcomes}}
 
@@ -55,21 +53,22 @@ Project example for group with good programming skills, college-level mathematic
 
 Project example for a group with good programming skills, college-level mathematics  and special interest in optimization may be Applying proximal operator as a step in generalized global optimization algorithm derived from potential theory. See Appendix for the description.
 
-Project example for a group with good programming skills, college-level mathematics, engineering experience and interest in Neural Network may be Neural Network Design using tensorflow. Recommended material for self study: \cite {AG}
-
 \subsection{Appendix \label{appendix}}
 
 \subsubsection{ Demo project  example - The Diet Problem \label{demo project example}}
 
 Diet problem is a classical problem from the field of Operations Research.  It was explored extensively in 1940s, based on the needs of WWII. Linear programs for resource allocation were formulated by Leonid Kantorovich in 1939. The Diet Problem was formulated as a linear program with the objective of minimizing the cost of a daily diet of a person while fulfilling nutritional requirements. First algorithm for solving linear programs, simplex algorithm, was developed by George Dantzig in 1947. Soon after the duality theorem for linear programming was suggested by John von Neumann, extending capabilities of linear program sensitivity analysis. 
-We explore several modifications of the original problem, including the multi objective version, interactive diet selection, taking into account dietitian’s suggestions such as restrictions on certain food combinations, taking into account uncertainty in the input data, etc. We create a framework based on food/nutrition dataset and several Python solvers that allow one to add algorithms and modes easily, analyze data, perform sensitivity analysis on optimization models and store data on typical diet selection and expert data. Such a decision support system can be used for individual diet recommendations and for analysis of typical diets, such as for identifying dietary patterns in certain groups of people. This system can be used by students of AI ,ML,  optimization and simulation to study modeling techniques. Food/nutrition data can be easily understood by beginners as well as students with advanced degrees in different disciplines.  
+
+We explore several modifications of the original problem, including the multi objective version, interactive diet selection, taking into account dietitian’s suggestions such as restrictions on certain food combinations, taking into account uncertainty in the input data, etc. We create a framework based on food/nutrition dataset and several Python solvers that allow one to add algorithms and modes easily, analyze data, perform sensitivity analysis on optimization models and store data on typical diet selection and expert data. Such a decision support system can be used for individual diet recommendations and for analysis of typical diets, such as for identifying dietary patterns in certain groups of people. This system can be used by students of AI ,ML,  optimization and simulation to study modeling techniques. 
+
+Food/nutrition data can be easily understood by beginners as well as students with advanced degrees in different disciplines.  
 
 
 The following subproblems are useful to specify when studying ML concepts. 
 
 1. Exploring food dadtaset and introducing linear classsification of food items into groups. 
 
-Food/nutrition databset \cite{food} consists of food items with their chemical composition (including fat, protein, carbohydrates, calcium, vitamin A, vitamin C, vitamin B, magnesium, copper, etc.). Different sources list approximated values, ranges, mean values or median values of chemical elements in each food item as it is impossible to measure the composition exactly and the composition of elements may be different in the same kind of vegetable grown in different regions, or stored in different conditions. It makes sense to accommodate this uncertainty in the model for the diet problem. One of the variants we consider is minimizing the price of daily diet under conditions that nutritional needs are satisfied with certain (large) probability. It may be useful to know that allowing 0.01 percent  doubt that my breakfast provides all nutritional needs would make it 10 dollars  cheaper. 
+Food/nutrition databset consists of food items with their chemical composition (including fat, protein, carbohydrates, calcium, vitamin A, vitamin C, vitamin B, magnesium, copper, etc.). Different sources list approximated values, ranges, mean values or median values of chemical elements in each food item as it is impossible to measure the composition exactly and the composition of elements may be different in the same kind of vegetable grown in different regions, or stored in different conditions. It makes sense to accommodate this uncertainty in the model for the diet problem. One of the variants we consider is minimizing the price of daily diet under conditions that nutritional needs are satisfied with certain (large) probability. It may be useful to know that allowing 0.01 percent  doubt that my breakfast provides all nutritional needs would make it 10 dollars  cheaper. 
 Sensitivity analysis of the model may reveal the fact that we do not need to run the optimization again for creating several similar diets but need to analyze the result of single optimization run. For example, shadow prices (part of sensitivity analysis output in standard optimization tool) show the change in optimal value when right hand side is changed by one unit. This may correspond to a situation when we computed a cost for a diet with maximum of 1500 calories allowed and want to know how much the 1600 calories diet cost without running the optimization tool again.  
 
 
@@ -97,7 +96,9 @@ We explore different approaches: historical approach (by exhaustive search) and 
 
 One of the interpretations of dual for the diet problem is that certain pharmacy is producing pills such as supplements of protein, fat, calcium, etc., and trying to set the prices for such pills. The pharmacy would like to maximize the price of the pill, however, this price should be in sink with the price of food items that deliver the same chemical elements. If the pill is too expensive many people would prefer to eat real food instead of a supplement. As contemporary diets often include meal replacement shakes or bars, the dual problem can be formulated as maximizing the price of a meal replacement shake. This formulation will be considered in detail. 
 
-This sections introduces the concept of duality necessary in ML models. Historically, essential machine learning tool that used the concept of duality was support vector machines (SVM), see \cite{VC}. Methodologivcally it is sometimes advisable to step back and introduce simpler model whish demonstrates duality such as Morra Game project mentioned in the project list. The only background needed for this section is intermediate algebra. Duality theory opens other ways to analyse the solution of the primal problem intuitevely, but for the purpose of our class we stop here and refer interested students ito additional self-study materials, such as \cite{RV}
+This sections introduces the concept of duality necessary in ML models. Historically, essential machine learning tool that used the concept of duality was support vector machines (SVM), see \cite{VC}
+
+After this sections students should be able to read original paer by Vapnik whcich introduces SVM and software documentation in modern implementations of SVM. Methodologivcally it is sometimes advisable to step back and introduce simpler model whish demonstrates duality such as Morra Game project mentioned in the project list. The only background needed for this section is intermediate algebra. Duality theory opens other ways to analyse the solution of the primal problem intuitevely, but for the purpose of our class we stop here and refer interested students ito additional self-study materials.
 
 7. Formulating the diet problem when nutritional facts about each food item are given as ranges rather than exact numbers.
 
@@ -151,7 +152,7 @@ The bounds on decision variables ( constraining number of portions for each food
 It is a good idea to introduc matrix form of the problem as well, for better understanding of how  Python tools for solving such problems (the linprog function from scipy.optimize) are used.
 
 The dual of the diet problem may be interpreted as problem of revenue maximization so that artificial foods are competitive with the real foods in price, where the variable $U=(u_1,..u_n )$ is interpreted as the unit prices of nutrient pills. 
-Or, think of some pharmaceutical company which is developing the pills for meal replacement and  trying to maximize its profit under the requirement that the price paid for the nutritional value found in the food item (but replaced by a pill) is not exceeding the cost of the food item.
+Or, think of A pharmaceutical company which is developing the pills for meal replacement and  trying to maximize its profit under the requirement that the price paid for the nutritional value found in the food item (but replaced by a pill) is not exceeding the cost of the food item.
 
 Revenue maximization objective:
 
@@ -185,7 +186,7 @@ The new constraint is
 
 This constraint makes the problem integer linear, which may require different solver.
 
-Next we consider probabilistic formulation.
+Next we consoder probabilistic formulation.
 
 Because chemical composition of food items are not known exactly (represented by matrix A), we assume normal distribution of values for each nutrient in each food item, with mean and standard deviation found in food dataset. We solve the following deterministic equivalent of stochastic optimization problem:
 
@@ -209,7 +210,10 @@ $-\sum_{i=1}^{n}{\mu_{ij}x_i}-q \sqrt (\sum_{i=1}^{n}{\sigma_{ij}^2x_i^2}) \le -
 $\sum_{i=1}^{n}{\mu_{ij}x_i}+q \sqrt (\sum_{i=1}^{n}{\sigma_{ij}^2x_i^2}) \ge b_j$ 
 
 
-We used Python linear optimization tool  from ScipPy library (scipy.optimize.linprog) for solving classic formulation of the diet problem. If nonlinear constraints are added the nonlinear solver from scipy library can be used. The new interface for optimization (function minimize) allows to specify constraints, objective function, and solution method.
+We used Python linear optimization tool  from ScipPy library (scipy.optimize.linprog) for solving classical formulationof the diet problem. If nonlinear constraints are added the nonlinear solver from scipy library can be used. The new interface for optimization (function minimize) allows to specify constraints, objective function, and solution method)
+
+The complete example of solving diet problem can be found here \cite{diet}
+
 
       \subsubsection{Advanced project example \label{advannced project example} }
 
