@@ -33,7 +33,7 @@ Introduction
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structures determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and to developing new therapies in medicine.
-The recent *resolution revolution* in cryo-EM and the breakthrough in protein prediction with deep learning models now provide complimentary sources of insights to biomolecular structure, but the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`.
+The recent *resolution revolution* in cryo-EM and the breakthrough in protein structure prediction with large language models now provide complimentary sources of insights into biomolecular structure, but the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`, :cite:`Foerster19`.
 
 Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after *ColabFold* enabled running *AlphaFold2* from *Colab* notebooks :cite:`Mirdita22`.
 Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses (e.g., *CCP4* :cite:`Agirre23`, *Phenix* :cite:`Liebschner19`, *CNS* :cite:`Brunger98`).
@@ -42,10 +42,14 @@ However, these users sometimes need non-routine analyses that require new code.
 The Computational Crystallography Toolbox (*cctbx*) provides a vast library of computational crystallography software written in C++ following an object-oriented programming paradigm and wrapped with Python :cite:`GrosseKunstleve02`.
 This library was designed to contain reusable C++ code.
 Its development in the late 1990s was driven by limitations on software reusability and error handling in Fortran77, the dominant programming language used in crystallographic computing at the time.
-The C++ interfaces, classes and functions are exposed to Python via the Boost.Python Library :cite:`Abrahams03`.
-This *cctbx* library is used to build build higher order analysis tools.
-The group lead by Paul Adams that developed *cctbx* and used it to develop the *Phenix* software package that includes a graphical user interface.
-*Phenix* is widely used today and it able to continue to grow and evolve that to the object-oriented approach built into *cctbx*.
+The development of *cctbx* development with an object-oriented approach also makes the  project more amenable to be development by a team rather than a single developer as in the case of many other contemporary software projects in the protein crystallography.
+The C++ interfaces, classes, and functions of *cctbx* are exposed to Python via the *Boost.Python* Library :cite:`Abrahams03`.
+
+The reusable components of the *cctbx* library are used to build higher order analysis tools.
+For example, the group that developed *cctbx* used it to develop the comprehensive *Phenix* software package for protein structure determination and refinement.
+*Phenix* includes a graphical user interface that eases its use.
+Most users of *Phenix* are barely aware that *Phenix* is built  on top of *cctbx* because it is stays out of the way.
+*Phenix* is able to continue to grow and evolve thanks to the object-oriented approach that was built into *cctbx*.
 
 The *cctbx* library was hard to install three years ago due to its complex dependencies, but the addition of the *cctbx* package to Anaconda dramatically eased the installation of *cctbx*.
 The lowering of this barrier to the installation of *cctbx* has raised interest in the use of *cctbx* for novel data analyses.
