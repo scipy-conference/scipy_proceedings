@@ -108,7 +108,7 @@ Each final menu item is linked to a Python snippet file.
 The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
 
 In contrast, the *mtzOjbectSummary.py* snippet was selected from the *cctbx* submenu and lacks the comment block.
-This code was inserted in the current notebook (Fig. :ref:`Fig5mtzSummary`).
+This code was inserted in the current notebook cell (Fig. :ref:`Fig5mtzSummary`).
 The code in this cell was be executed by entering **Shift-Enter**.
 
 .. figure:: ./figs/Fig5mtzSummary.png
@@ -118,19 +118,13 @@ The code in this cell was be executed by entering **Shift-Enter**.
 
    The code and output from the *mtzObjectSummary.py* snippet in JupyterLab. :label:`Fig5mtzSummary`
 
-The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`Fig5mtzSummary`).
+The *mtzObjectSummary.py* snippet prints a summary of an mtz file.
+A mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`Fig5mtzSummary`).
 The data in this mtz file has columns of I(+) and I(-).
 These are the Bijvoet pairs of diffraction intensities.
 These pairs are related by symmetry and should have equal intensity values within experimental error.
 The differences in intensities are a measure of the presence of anomalous scattering.
 Anomalous scattering can be measurable for elements like sulfur and phosphorous that are part of the native protein and nucleic acid structures and heavier element like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that were incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., 5-bromouracil) during its synthesis.
-
-.. figure:: ./figs/mtzSummaryPlus.png
-   :align: center
-   :scale: 50%
-   :figclass: bht
-
-   The output from *millerArrayFromMtz.py* snippet. :label:`mtzsummary`
 
 The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
 Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein.
