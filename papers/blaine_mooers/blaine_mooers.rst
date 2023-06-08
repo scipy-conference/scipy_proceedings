@@ -95,18 +95,12 @@ The code in this cell would be executed by entering Shift-Enter.
 
    The cascading menus for the *cctbx* library for the jupyterlab_multimenus extension :label:`pulldown`
 
-The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`mtzsummary`.
-The data in this mtz has columns of I(+) and I(-).
+The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`mtzsummary`).
+The data in this mtz file has columns of I(+) and I(-).
 These are the Bijvoet pairs of diffraction intensities.
 These pairs are related by symmetry and should have equal intensity values within experimental error.
 The differences in intensities are a measure of the presence of anomalous scattering.
-Anomalous scattering can be measurable for elements like sulfur and phosphorous that are part of the native protein and nucleic acid structures and heavier element like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., 5-bromouracil) during its synthesis.
-
-The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
-Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein.
-We use these data to make a I(+) vs I(-) scatter plot below.
-The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
-The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB18`.
+Anomalous scattering can be measurable for elements like sulfur and phosphorous that are part of the native protein and nucleic acid structures and heavier element like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that were incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., 5-bromouracil) during its synthesis.
 
 .. figure:: ./figs/Fig5mtzSummary.png
    :align: center
@@ -115,11 +109,17 @@ The diffraction data were retrieved from the Protein Data Bank, a very early ope
 
    The output from *millerArrayFromMtz.py* snippet. :label:`mtzsummary`
 
+The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
+Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein.
+We use these data to make the I(+) vs I(-) scatter plot below (Fig. cite:`ipmpplot`).
+The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
+The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB18`.
+
 The I(+) vs I(-) plot below (Fig. :ref:`ipmplot`) was made after reading the X-ray data into a cctbx Miller array, a data structure designed for handling X-ray data in cctbx.
 The I(+) and I(-) were eventually read into separate lists.
 We plot the two lists against each other in a scatter plot using *matplotlib* :cite:`matplotlib`.
-There is no scatter in this plot if there is no anomalous signal.
-The larger the anomalous signal, the greater the scatter from the $x=y$ line.
+There is no scatter from the $x=y$ line in this plot if there is no anomalous signal.
+The larger the anomalous signal, the greater the scatter.
 The departure from this line is expected to be greater for intensities of large magnitude.
 
 .. figure:: ./figs/Fig2IpImPlot.png
@@ -158,7 +158,7 @@ Upon insertion of the snippet into a notebook cell, the commented out code is in
    :scale: 27%
    :figclass: bht
 
-   The snippet code with a duplicated copy in a comment. :label:`snipsplus`
+   An examples of a *cctbx* snippet with a duplicated copy in a comment. :label:`snipsplus`
 
 
 The atomic coordinates of the biomolecular structures are the other major type of data that are intimately associated with diffraction data.
@@ -179,7 +179,7 @@ Each snippet is in a separate JavaScript file with the json file extension :ref:
    :scale: 41%
    :figclass: bht
 
-   The snippet code with a duplicated copy in a comment. :label:`taggedcctbxsnips`
+   Snapshot of snippet list in JupyterLab supported by the Elyra-snippet extension for JupyterLab. The 250 *cctbx* snippets have been narrowed to seven snippets by entering the `mtz` tag. Additional tags can be entered to narrow the ist  of candidates. :label:`taggedcctbxsnips`
 
 Each snippet file has a set of metadata.
 These data include a list of tags.
@@ -194,15 +194,15 @@ We made a version of the cctbxsnips library for the Elyra-snippets extension (ht
    :scale: 20%
    :figclass: bht
 
-   The GUI to create a new snippet. :label:`elyra-new-snippet`
+   The GUI to create a new snippet via the Elyra-snippet extension for JupyterLab. :label:`elyra-new-snippet`
 
 To add a new snippet, click on the + in the upper right of the Code Snippets icon (Fig. :ref:`elyra-new-snippet`).
 This will open new GUI (see below) for creating a snippet.
-The Name should be a one word or compound word.
-The Description describes in one or more sentences what the snippet does.
-The Tags are used to narrow the listing of snippets in the menu.
-The Source is Python.
-The Code can be entered by selecting code in a notebook cell or copying and pasting from a script file.
+The value of *Name* should be one word or compound word.
+The value of *Description* describes in one or more sentences what the snippet does.
+The values of the *Tags* field are used to narrow the listing of snippets in the menu.
+The value of the *Source* is the programming language; the value is Python in this example.
+The *Code* can be entered by selecting code in a notebook cell or copying and pasting from a script file.
 
 
 colabcctbxsnips
@@ -219,20 +219,20 @@ While the software installed in a Colab session is lost upon logging out, the sn
 
 After the snippet notebook is installed, the user opens a new notebook to use the snippets.
 From that new notebook, the list of snippets will be exposed by clicking on the **<>** icon in the left margin of the notebook.
-This exposes a list of snippets. 
+This exposes a list of snippets.
 Click on the `Insert` button in the upper righthand corner of the snippet to copy the snippet to the current code cell in the notebook.
 
 We developed the  *colabcctbxsnips* library and stored it in a Colab Notebook (https://github.com/MooersLab/colabcctbxsnips).
 Two snippets have the code for installing *mamba* and then *cctbx* (Fig. :ref:`colab`).
 These code snippets have to be run before cctbx can be accessed.
-The two code fragments take less than two minutes to install the required software. 
+The two code fragments take less than two minutes to install the required software.
 
 .. figure:: ./figs/colab.png
    :align: center
    :scale: 31%
    :figclass: bht
 
-   Snippets for installing *mamba* and then *cctbx* on Google Colab. :label:`colab`
+   Snippets from the *cctbx* library for installing *mamba* and then *cctbx* on Google Colab. :label:`colab`
 
 The Colab snippet system also lacks support for tab triggers and tab stops.
 We address this problem by supplying a a copy of the snippet with the sites of the tab stops marked up like a yasnippet snippet.
