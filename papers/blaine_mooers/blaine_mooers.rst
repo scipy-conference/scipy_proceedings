@@ -107,7 +107,8 @@ The submenus correspond to the names of subfolders in the *cctbx+* folder in the
 Each final menu item is linked to a Python snippet file.
 The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
 
-In another example, the *millerArrayFromMtz.py* snippet was selected and inserted in the current notebook (Fig. :ref:`Fig5mtzSummary`).
+In contrast, the *mtzOjbectSummary.py* snippet was selected from the *cctbx* submenu and lacks the comment block.
+This code was inserted in the current notebook (Fig. :ref:`Fig5mtzSummary`).
 The code in this cell was be executed by entering **Shift-Enter**.
 
 .. figure:: ./figs/Fig5mtzSummary.png
@@ -115,9 +116,9 @@ The code in this cell was be executed by entering **Shift-Enter**.
    :scale: 40%
    :figclass: bht
 
-   The code and output from the *millerArrayFromMtz.py* snippet in JuptyerLab. :label:`Fig5mtzSummary`
+   The code and output from the *mtzObjectSummary.py* snippet in JupyterLab. :label:`Fig5mtzSummary`
 
-The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`mtzsummary`).
+The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`Fig5mtzSummary`).
 The data in this mtz file has columns of I(+) and I(-).
 These are the Bijvoet pairs of diffraction intensities.
 These pairs are related by symmetry and should have equal intensity values within experimental error.
