@@ -20,6 +20,10 @@
 :institution: Project Blosc
 :equal-contributor:
 
+:author: David Ibáñez
+:email: jdavid.ibp@gmail.com
+:institution: Freelance
+
 :author: Sergio Barrachina
 :email: barrachi@uji.es
 :institution: Universitat Jaume I
@@ -125,9 +129,9 @@ It also supports the following filters out-of-the-box:
 
 Blosc2 utilizes a pipeline architecture that enables the chaining of different filters :cite:`BDT22-blosc2-pipeline` followed by a compression codec. Additionally, it allows for pre-filters (user code meant to be executed before the pipeline) and post-filters (user code meant to be executed after the pipeline). This architecture is highly flexible and minimizes data copies between the different steps, making it possible to create highly efficient pipelines for a variety of use cases. Figure :ref:`blosc2-pipeline` illustrates how this works.
 
-.. figure:: blosc2-pipeline-v3.png
+.. figure:: blosc2-pipeline-v2.png
 
-   The Blosc2 pipeline. During compression, the first function applied is the prefilter (if any), followed by the filters' pipeline (with a maximum of six filters), and finally, the codec. During decompression, the order is reversed: first the codec, then the filters' pipeline, and finally the postfilter (if any). :label:`blosc2-pipeline`
+   The Blosc2 filter pipeline. During compression, the first function applied is the prefilter (if any), followed by the filter pipeline (with a maximum of six filters), and finally, the codec. During decompression, the order is reversed: first the codec, then the filter pipeline, and finally the postfilter (if any). :label:`blosc2-pipeline`
 
 Furthermore, Blosc2 supports user-defined codecs and filters, allowing one to create their own compression algorithms and use them within Blosc2 :cite:`BDT22-blosc2-pipeline`. These user-defined codecs and filters can also be dynamically loaded :cite:`BDT23-dynamic-plugins`, registered globally within Blosc2, and installed via a Python wheel so that they can be used seamlessly from any Blosc2 application (whether in C, Python, or any other language that provides a Blosc2 wrapper).
 
