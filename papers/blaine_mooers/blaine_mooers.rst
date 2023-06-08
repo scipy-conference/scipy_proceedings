@@ -72,28 +72,48 @@ Results
 
 jupyterlabcctbxsnips
 ++++++++++++++++++++++++
-To ease the running of the *cctbx* library in Jupyter notebooks, we developed the *jupyterlabcctbxsnips* of code templates.
-Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab, a browser based IDE for Jupyter notebooks.
+To ease the running of the *cctbx* library in Jupyter notebooks, we developed the *jupyterlabcctbxsnips* of code templates for the JupyterLab extension jupyter-snippets (https://github.com/QuantStack/jupyterlab-snippets).
+Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab, a browser-based IDE for displaying, editing, and running Jupyter notebooks.
 
-JupyterLab enables the writing or editing of a document in a pane next to the Jupyter notebook.
+JupyterLab supports more comprehensive workflows for academic work than what is possible in the Classic Jupyter Notebook application.
+For example, it enables the writing or editing of a document in a pane next to the Jupyter notebook.
 This is useful for writing documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
 The document can be a plain text, html, markdown, LaTeX, or even an org-mode file if one activates the text area with GhostText while running one of several advanced text editors (see the section below about GhostText :ref:`ghosttext`).
+The editing of a document next to the related Jupyter notebook supports reproducible research and reduces costly context switching.
 
-The figure below (Fig. :ref:`pulldown`) shows part of the cascading menus for the *cctbx* library after it has been installed successfully.
-The submenus correspond to the names of subfolders in the *cctbx* folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library/Jupyter/multimenus_snippets/cctbx on the Mac).
+We made a variant of the library that has a copy of the code in a block comment.
+This is called the plus variant.
+The commented code has tab stops marked with dollar signs.
+These tab stops are at sites to be considered for editing.
 
-Each terminal menu item is a Python snippet file.
-The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
-The *millerArrayFromMtz.py* snippet at the bottom of the pulldown menu was selected (Fig. :ref:`pulldown` and inserted in the current notebook cell (Fig. :ref:`mtzsummary`.
-Commented lines have text that describes what this snippet does.
-The code in this cell would be executed by entering Shift-Enter.
-
-.. figure:: ./figs/Fig1Pulldown.png
+.. figure:: ./figs/codePlus.png
    :align: center
    :scale: 40%
    :figclass: bht
 
-   The cascading menus for the *cctbx* library for the jupyterlab_multimenus extension :label:`pulldown`
+   A snippet from the *jupyterlabcctbxsnipsplus* library with duplicate code in a comment block. The dollar sign marks the start of a tab stop. The comment block guides the editing of the active code. :label: `codePlus` 
+
+
+The figure below (Fig. :ref:`cctbxplusPulldown`) shows part of the cascading menus for the *jupyerlabcctbxsnipsplus* library after it has been installed successfully.
+The submenus correspond to the names of subfolders in the *cctbx+* folder in the snippets folder, which was manually created inside of the Jupyter folder in the local library folder (i.e., ~/Library/Jupyter/multimenus_snippets/cctbx+ on the Mac).
+
+.. figure:: ./figs/cctbxplusPulldown.png
+   :align: center
+   :scale: 40%
+   :figclass: bht
+
+   The cascading menus for the *jupyterlabcctbxsnipsplus* library for the jupyterlab-snippets version 0.4.1 extension in JupyterLab version 3.5.2. :label:`cctbxplusPulldown`
+
+Each final menu item is linked to a Python snippet file.
+The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
+
+In another example, the *millerArrayFromMtz.py* snippet was selected and inserted in the current notebook (Fig. :ref:`mtzObjectSummary`).
+The code in this cell was be executed by entering **Shift-Enter**.
+
+.. figure:: ./figs/mtzObjectSummary.png
+   :align: center
+   :scale: 40%
+   :figclass: bht
 
 The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`mtzsummary`).
 The data in this mtz file has columns of I(+) and I(-).
@@ -102,7 +122,7 @@ These pairs are related by symmetry and should have equal intensity values withi
 The differences in intensities are a measure of the presence of anomalous scattering.
 Anomalous scattering can be measurable for elements like sulfur and phosphorous that are part of the native protein and nucleic acid structures and heavier element like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that were incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., 5-bromouracil) during its synthesis.
 
-.. figure:: ./figs/Fig5mtzSummary.png
+.. figure:: ./figs/mtzSummaryPlus.png
    :align: center
    :scale: 50%
    :figclass: bht
