@@ -22,7 +22,7 @@
 
 :author: David Ibáñez
 :email: jdavid.ibp@gmail.com
-:institution: Freelance
+:institution: Project Blosc
 
 :author: Sergio Barrachina
 :email: barrachi@uji.es
