@@ -48,16 +48,17 @@ The C++ interfaces, classes, and functions of *cctbx* are exposed to Python via 
 The reusable components of the *cctbx* library are used to build higher order analysis tools.
 For example, the group that developed *cctbx* used it to develop the comprehensive *Phenix* software package for protein structure determination and refinement.
 *Phenix* includes a graphical user interface that eases its use.
-Most users of *Phenix* are barely aware that *Phenix* is built  on top of *cctbx* because it is stays out of the way.
-*Phenix* is able to continue to grow and evolve thanks to the object-oriented approach that was built into *cctbx*.
+Most users of *Phenix* are barely aware that *Phenix* is built on top of *cctbx* because it is stays out of the way.
+*Phenix* has been able to continue to grow and evolve* due to the object-oriented approach that was built into *cctbx* :cite:`Liebschner19`.
+For small organic molecules, which generally have diffraction data of higher resolution and therefore opportunities for using more advanced structure refinement methods to generate more precise models, the *Olex2* structure refinement package was extended by incorporating several modules from *cctbx* :cite:`Bourhis15`.
 
 The *cctbx* library was hard to install three years ago due to its complex dependencies, but the addition of the *cctbx* package to Anaconda dramatically eased the installation of *cctbx*.
-The lowering of this barrier to the installation of *cctbx* has raised interest in the use of *cctbx* for novel data analyses.
+The lowering of the barrier to the installation of *cctbx* by Anaconda has raised interest in the use of *cctbx* for novel data analyses.
 Several online tutorials and workshops have attempted to address this problem, but the adoption of *cctbx* remains low.
 This is somewhat surprising considering the widespread adoption of Python in the past decade by the field.
-Difficulty with using *cctbx* has inspired some outside groups to reinvent many capabilities using modules from the SciPy software stack (e.g. *reciprocalspaceship* :cite:`Griesman21`, *GEMMI* :cite:`Wojdyr22`).
+Difficulty with using *cctbx* has inspired some outside groups to reinvent many of its capabilities by using modules from the SciPy software stack (e.g. *reciprocalspaceship* :cite:`Griesman21`, *GEMMI* :cite:`Wojdyr22`).
 
-To ease the use of *cctbx* by my lab and others to develop custom crystallographic analyses, we assembled a collection of *cctbx* code snippets for use in Jupyter notebooks.
+To ease the use of *cctbx* by my lab and others to develop custom crystallographic analyses, we assembled a collection of *cctbx* code snippets for use in Jupyter notebooks :cite:`jupyter`.
 Jupyter provides an excellent platform for exploring the *cctbx* library and developing new analysis tools.
 The Python API of *cctbx* simplifies running *cctbx* in Jupyter via a kernel specific for its conda environment.
 We formatted the snippet library for several snippet extensions for the Classic Notebook and for Jupyter Lab.
@@ -71,17 +72,19 @@ Results
 
 jupyterlabcctbxsnips
 ++++++++++++++++++++++++
-To ease the running of cctbx in Jupyter notebooks, we developed the jupyterlabcctbxsnips of code templates.
-Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab , a browser based IDE for Jupyter notebooks.
-This JupyterLab enables the writing or editing of a document in a pane next to the Jupyter notebook.
-This is useful for writing up documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
-The document can be plain text, html, markdown, LaTeX, or even org-mode if one activates the text area with GhostText (see below :ref:`ghosttext`) while running Emacs.
+To ease the running of the *cctbx* library in Jupyter notebooks, we developed the *jupyterlabcctbxsnips* of code templates.
+Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab, a browser based IDE for Jupyter notebooks.
 
-The figure below (Fig. :ref:`pulldown`) shows part of the cascading menus for the cctbx library after it has been installed successfully.
-The submenus correspond to the names of subfolders in the cctbx folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library on the Mac).
-Each ultimate menu item is a Python snippet file.
+JupyterLab enables the writing or editing of a document in a pane next to the Jupyter notebook.
+This is useful for writing documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
+The document can be a plain text, html, markdown, LaTeX, or even an org-mode file if one activates the text area with GhostText while running one of several advanced text editors (see the section below about GhostText :ref:`ghosttext`).
+
+The figure below (Fig. :ref:`pulldown`) shows part of the cascading menus for the *cctbx* library after it has been installed successfully.
+The submenus correspond to the names of subfolders in the *cctbx* folder in the multimenus_snippets folder, which you create inside of the Jupyter folder in your local library folder (i.e., ~/Library/Jupyter/multimenus_snippets/cctbx on the Mac).
+
+Each terminal menu item is a Python snippet file.
 The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
-The *millerArrayFromMtz.py* snippet at the bottom of the pulldown menu was selected and inserted in the figure below.
+The *millerArrayFromMtz.py* snippet at the bottom of the pulldown menu was selected (Fig. :ref:`pulldown` and inserted in the current notebook cell (Fig. :ref:`mtzsummary`.
 Commented lines have text that describes what this snippet does.
 The code in this cell would be executed by entering Shift-Enter.
 
@@ -90,7 +93,7 @@ The code in this cell would be executed by entering Shift-Enter.
    :scale: 40%
    :figclass: bht
 
-   The cascading menus for the cctbx library. :label:`pulldown`
+   The cascading menus for the *cctbx* library for the jupyterlab_multimenus extension :label:`pulldown`
 
 The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`mtzsummary`.
 The data in this mtz has columns of I(+) and I(-).
