@@ -102,7 +102,7 @@ With these finer-grained cubes (also known as partitions), arbitrary n-dimension
 .. figure:: read-partial-slices.png
    :scale: 70%
 
-   Speed comparison for reading partial n-dimensional slices of a 4D dataset :cite:`BDT23-blosc2-ndim-intro`. :label:`read-partial-slices`
+   Speed comparison for reading partial n-dimensional slices of a 4D dataset. The legends labeled "DIM N" refer to slices taken orthogonally to each dimension. The sizes for the two partitions have been chosen such that the first partition fits comfortably in the L3 cache of the CPU (Intel i9 13900K), and the second partition fits in the L1 cache of the CPU. :cite:`BDT23-blosc2-ndim-intro`. :label:`read-partial-slices`
 
 It is important to note that Blosc2 NDim supports all data types in NumPy. This means that, in addition to the typical data types like signed/unsigned int, single and double-precision floats, bools or strings, it can also store datetimes (including units), and arbitrarily nested heterogeneous types. This allows to create multidimensional tables and more.
 
