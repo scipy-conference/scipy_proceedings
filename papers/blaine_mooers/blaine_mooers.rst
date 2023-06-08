@@ -86,7 +86,7 @@ This is called the plus variant.
 The commented code has tab stops marked with dollar signs.
 These tab stops are at sites to be considered for editing.
 
-.. figure:: ./figs/codePlus.png
+.. figure:: ./figs/plusCode.png
    :align: center
    :scale: 40%
    :figclass: bht
