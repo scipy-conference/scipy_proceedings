@@ -91,7 +91,7 @@ These tab stops are at sites to be considered for editing.
    :scale: 40%
    :figclass: bht
 
-   A snippet from the *jupyterlabcctbxsnipsplus* library with duplicate code in a comment block. The dollar sign marks the start of a tab stop. The comment block guides the editing of the active code. :label: `codePlus` 
+   A snippet from the *jupyterlabcctbxsnipsplus* library with duplicate code in a comment block. The dollar sign marks the start of a tab stop. The comment block guides the editing of the active code. :label:`codePlus`
 
 
 The figure below (Fig. :ref:`cctbxplusPulldown`) shows part of the cascading menus for the *jupyerlabcctbxsnipsplus* library after it has been installed successfully.
@@ -107,13 +107,15 @@ The submenus correspond to the names of subfolders in the *cctbx+* folder in the
 Each final menu item is linked to a Python snippet file.
 The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
 
-In another example, the *millerArrayFromMtz.py* snippet was selected and inserted in the current notebook (Fig. :ref:`mtzObjectSummary`).
+In another example, the *millerArrayFromMtz.py* snippet was selected and inserted in the current notebook (Fig. :ref:`Fig5mtzSummary`).
 The code in this cell was be executed by entering **Shift-Enter**.
 
-.. figure:: ./figs/mtzObjectSummary.png
+.. figure:: ./figs/Fig5mtzSummary.png
    :align: center
    :scale: 40%
    :figclass: bht
+
+   The code and output from the *millerArrayFromMtz.py* snippet in JuptyerLab. :label:`Fig5mtzSummary`
 
 The *mtzObjectSummary.py* snippet prints a summary of an mtz file; a mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`mtzsummary`).
 The data in this mtz file has columns of I(+) and I(-).
