@@ -58,6 +58,7 @@ Project example for a group with good programming skills, college-level mathemat
 \subsubsection{ Demo project  example - The Diet Problem \label{demo project example}}
 
 Diet problem is a classical problem from the field of Operations Research.  It was explored extensively in 1940s, based on the needs of WWII. Linear programs for resource allocation were formulated by Leonid Kantorovich in 1939. The Diet Problem was formulated as a linear program with the objective of minimizing the cost of a daily diet of a person while fulfilling nutritional requirements. First algorithm for solving linear programs, simplex algorithm, was developed by George Dantzig in 1947. Soon after the duality theorem for linear programming was suggested by John von Neumann, extending capabilities of linear program sensitivity analysis. 
+Diet selection demonstration  implemented in Java can be  found here \cite{neos}
 
 We explore several modifications of the original problem, including the multi objective version, interactive diet selection, taking into account dietitian’s suggestions such as restrictions on certain food combinations, taking into account uncertainty in the input data, etc. We create a framework based on food/nutrition dataset and several Python solvers that allow one to add algorithms and modes easily, analyze data, perform sensitivity analysis on optimization models and store data on typical diet selection and expert data. Such a decision support system can be used for individual diet recommendations and for analysis of typical diets, such as for identifying dietary patterns in certain groups of people. This system can be used by students of AI ,ML,  optimization and simulation to study modeling techniques. 
 
@@ -210,9 +211,20 @@ $-\sum_{i=1}^{n}{\mu_{ij}x_i}-q \sqrt (\sum_{i=1}^{n}{\sigma_{ij}^2x_i^2}) \le -
 $\sum_{i=1}^{n}{\mu_{ij}x_i}+q \sqrt (\sum_{i=1}^{n}{\sigma_{ij}^2x_i^2}) \ge b_j$ 
 
 
-We used Python linear optimization tool  from ScipPy library (scipy.optimize.linprog) for solving classical formulationof the diet problem. If nonlinear constraints are added the nonlinear solver from scipy library can be used. The new interface for optimization (function minimize) allows to specify constraints, objective function, and solution method)
+We used Python linear optimization tool  from ScipPy library (scipy.optimize.linprog) for solving classical formulationof the diet problem.
+
+
+\begin{verbatim}
+
+    res=scipy.optimize.linprog(c,A_ub=A_ub,b_ub=b_ub,bounds=bounds)
+
+\end{verbatim}
 
 The complete example of solving diet problem can be found here \cite{diet}
+
+ If nonlinear constraints are added the nonlinear solver from scipy library can be used. The new interface for optimization (function minimize) allows to specify constraints, objective function, and solution method)
+
+
 
 
       \subsubsection{Advanced project example \label{advannced project example} }
