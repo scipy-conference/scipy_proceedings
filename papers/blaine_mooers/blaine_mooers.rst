@@ -9,7 +9,7 @@
 :bibliography: mybib
 
 -----------------------------------------------------------
-Biomolecular Crystallographic Computing with Jupyter
+0465 Biomolecular Crystallographic Computing with Jupyter
 -----------------------------------------------------------
 
 .. class:: abstract
@@ -26,7 +26,7 @@ Biomolecular Crystallographic Computing with Jupyter
 
 .. class:: keywords
 
-   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, Colab notebook, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, computational molecular biophysics, biomedical research, data visualization, scientific communication, GhostText, text editors, snippet libraries, SciPy software stack
+   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, Colab notebook, OnDemand notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, computational molecular biophysics, biomedical research, data visualization, scientific communication, GhostText, text editors, snippet libraries, SciPy software stack, interactive software development
 
 Introduction
 --------------
@@ -37,20 +37,24 @@ The recent *resolution revolution* in cryo-EM and the breakthrough in protein st
 
 Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after *ColabFold* enabled running *AlphaFold2* from *Colab* notebooks :cite:`Mirdita22`.
 Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses (e.g., *CCP4* :cite:`Agirre23`, *Phenix* :cite:`Liebschner19`, *CNS* :cite:`Brunger98`).
-However, these users sometimes need non-routine analyses that require new code.
+However, these users sometimes need non-routine analyses that require new code (e.g., :cite:`DeZitter22`) .
 
 The Computational Crystallography Toolbox (*cctbx*) provides a vast library of computational crystallography software written in C++ following an object-oriented programming paradigm and wrapped with Python :cite:`GrosseKunstleve02`.
 This library was designed to contain reusable C++ code.
 Its development in the late 1990s was driven by limitations on software reusability and error handling in Fortran77, the dominant programming language used in crystallographic computing at the time.
-The development of *cctbx* development with an object-oriented approach also makes the  project more amenable to be development by a team rather than a single developer as in the case of many other contemporary software projects in the protein crystallography.
+The development of *cctbx* development with an object-oriented approach also makes the  project more amenable to be development by a team rather than a single developer as in the case of some contemporary software projects in the protein crystallography.
 The C++ interfaces, classes, and functions of *cctbx* are exposed to Python via the *Boost.Python* Library :cite:`Abrahams03`.
+A similar and contemporary C++ library called *clipper* was developed for the CCP4 suite :cite:`Cowtan03`; *clipper* differs from *cctbx* in that it uses *SWIG* rather than *Boost.Python* to interoperate with Python.
 
 The reusable components of the *cctbx* library are used to build higher order analysis tools.
-For example, the group that developed *cctbx* used it to develop the comprehensive *Phenix* software package for protein structure determination and refinement.
-*Phenix* includes a graphical user interface that eases its use.
+For example, the group that developed *cctbx* used it to develop the comprehensive *Phenix* software package for protein structure determination and refinement :cite:`Liebschner19`.
+*Phenix* includes a graphical user interface that eases its use :cite:`Echols12`.
 Most users of *Phenix* are barely aware that *Phenix* is built on top of *cctbx* because it is stays out of the way.
-*Phenix* has been able to continue to grow and evolve* due to the object-oriented approach that was built into *cctbx* :cite:`Liebschner19`.
-For small organic molecules, which generally have diffraction data of higher resolution and therefore opportunities for using more advanced structure refinement methods to generate more precise models, the *Olex2* structure refinement package was extended by incorporating several modules from *cctbx* :cite:`Bourhis15`.
+*Phenix* has been able to continue to grow and evolve due to the object-oriented approach that was built into *cctbx*.
+For example, the *Phenix* project was extended to refine molecular models against cryo electron microscopy :cite:`Liebschner19`.
+
+For small organic molecules, which generally have diffraction data of higher resolution and, therefore, opportunities for using more advanced structure refinement methods to generate more precise models, the *Olex2* structure refinement package was extended by incorporating several modules from *cctbx* :cite:`Bourhis15`.
+*Olex2* is used to apply advanced structure refinement methods to model subatomic resolution data of small organic molecules, which usually give diffraction data to beyond 0.8 Angstroms while only a few hundred proteins have given data to similar very high resolution.
 
 The *cctbx* library was hard to install three years ago due to its complex dependencies, but the addition of the *cctbx* package to Anaconda dramatically eased the installation of *cctbx*.
 The lowering of the barrier to the installation of *cctbx* by Anaconda has raised interest in the use of *cctbx* for novel data analyses.
@@ -72,12 +76,12 @@ Results
 
 jupyterlabcctbxsnips
 ++++++++++++++++++++++++
-To ease the running of the *cctbx* library in Jupyter notebooks, we developed the *jupyterlabcctbxsnips* of code templates for the JupyterLab extension jupyter-snippets (https://github.com/QuantStack/jupyterlab-snippets).
+To ease the use of the *cctbx* library in Jupyter notebooks, we developed the *jupyterlabcctbxsnips* library of code templates for the JupyterLab extension *jupyterlab-snippets* (https://github.com/QuantStack/jupyterlab-snippets).
 Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab, a browser-based IDE for displaying, editing, and running Jupyter notebooks.
 
 JupyterLab supports more comprehensive workflows for academic work than what is possible in the Classic Jupyter Notebook application.
 For example, it enables the writing or editing of a document in a pane next to the Jupyter notebook.
-This is useful for writing documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
+This variant is useful for writing documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
 The document can be a plain text, html, markdown, LaTeX, or even an org-mode file if one activates the text area with GhostText while running one of several advanced text editors (see the section below about GhostText :ref:`ghosttext`).
 The editing of a document next to the related Jupyter notebook supports reproducible research and reduces costly context switching.
 
@@ -88,7 +92,7 @@ These tab stops are at sites to be considered for editing.
 
 .. figure:: ./figs/plusCode.png
    :align: center
-   :scale: 40%
+   :scale: 32%
    :figclass: bht
 
    A snippet from the *jupyterlabcctbxsnipsplus* library with duplicate code in a comment block. The dollar sign marks the start of a tab stop. The comment block guides the editing of the active code. :label:`codePlus`
@@ -128,14 +132,14 @@ Anomalous scattering can be measurable for elements like sulfur and phosphorous 
 
 The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
 Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein.
-We use these data to make the I(+) vs I(-) scatter plot below (Fig. cite:`ipmpplot`).
+We use these data to make the I(+) vs I(-) scatter plot below (Fig. :ref:`ipmpplot`).
 The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
 The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB18`.
 
-The I(+) vs I(-) plot below (Fig. :ref:`ipmplot`) was made after reading the X-ray data into a cctbx Miller array, a data structure designed for handling X-ray data in cctbx.
+The I(+) vs I(-) plot below (Fig. :ref:`ipmpplot`) was made after reading the X-ray data into a cctbx Miller array, a data structure designed for handling X-ray data in *cctbx*.
 The I(+) and I(-) were eventually read into separate lists.
 We plot the two lists against each other in a scatter plot using *matplotlib* :cite:`matplotlib`.
-There is no scatter from the $x=y$ line in this plot if there is no anomalous signal.
+There is no scatter from the :math:`$x=y$` line in this plot if there is no anomalous signal.
 The larger the anomalous signal, the greater the scatter.
 The departure from this line is expected to be greater for intensities of large magnitude.
 
@@ -149,10 +153,10 @@ The departure from this line is expected to be greater for intensities of large 
 Plots of this nature are useful for detecting very weak anomalous signals from native anomalous scatters like sulfur and phosphorous.
 The collection of the anomalous signal from native scatters enables structure determination without having to spend the extra time and money to introduce heavier atoms that are not native to the protein.
 The measurement of the very weak signal from anomalous scatterers is at the edge of what is technically possible by using two million dollar detectors and synchrotron radiation at one of of the thirty plus synchrotron radiation laboratories around the world.
-These facilities provide X-rays that 10,000 times more intense than the X-rays generated with in-house X-ray generators.
-Usually, the X- data are collected at -173 degrees Celsius in a cryostream of nitrogen gas to prolong the life of the crystal while exposed to such intense X-rays.
-The typical absorbed radiation dose of a large protein crystal 200 x 200 x 200 microns in size in the X-ray beam at synchrotron radiation laboratory during a 10-minute diffraction experiment is sufficient to kill 100,000 adult humans.
-While radiation damage sets in upon initial exposure of the crystal to X-rays, the cooling prolongs the amount of time over that the crystal gives useful data.
+These facilities provide X-rays that are 10,000 times more intense than the X-rays generated with in-house X-ray generators.
+Usually, the X-ray data are collected at -173 degrees Celsius in a cryostream of nitrogen gas to prolong the life of the crystal while exposed to such intense X-rays.
+The typical absorbed radiation dose of a protein crystal 200 x 200 x 200 microns in size in the X-ray beam at synchrotron radiation laboratory during a 10-minute diffraction experiment is sufficient to kill 100,000 adult humans.
+While radiation damage sets in upon initial exposure of the crystal to X-rays, the low temperature prolongs the amount of time that the crystal gives useful data.
 
 However, recently, several groups have completed successful native phasing experiments at room temperature by collecting data from large numbers of crystals and merging the data :cite:`Yabukarski22`, :cite:`Greisman22`.
 The advantages of room temperature data collection include avoidance of conformational changes in the protein induced by supercooling the crystal.
@@ -166,22 +170,23 @@ The utilization of *pandas* enables easier integration with the other components
 
 The *cctbx* is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
 
-The *jupyterlabcctbxsnipsplus* is the variant of the *jupyterlabcctbxsnips* library with comments to guide editing of the snippets (https://github.com/MooersLab/jupyterlabcctbxsnipsplus).
+The *jupyterlabcctbxsnipsplus* is a variant of the *jupyterlabcctbxsnips* library with comments to guide editing of the snippets (https://github.com/MooersLab/jupyterlabcctbxsnipsplus).
 The snippet code contains its duplicate in a comment with the sites of tab stops marked with dollar signs and braces as in a the code for a snippet (Fig. :cite:`snipsplus`).
 Upon insertion of the snippet into a notebook cell, the commented out code is included.
 
 .. figure:: ./figs/snipsplus.png
    :align: center
-   :scale: 27%
+   :scale: 28%
    :figclass: bht
 
    An examples of a *cctbx* snippet with a duplicated copy in a comment. :label:`snipsplus`
 
 The atomic coordinates of the biomolecular structures are the other major type of data that are intimately associated with diffraction data.
-The fixed file format of Protein Data Bank coordinate files with the file extension of *pdb* originated in the 1970s with the birth of the Portein Data Bank, but very large biological macromolecules have been determined over the past two decades that exceeded the limits on the number of atoms permitted in one file.
+The fixed file format of Protein Data Bank coordinate files with the file extension of *pdb* originated in the 1970s with the birth of the Protein Data Bank, but very large biological macromolecules have been determined over the past two decades that exceeded the limits on the number of atoms permitted in one file.
 Structures like the ribosome had to be split across multiple files.
-To address this and other shortcomings of the PDB file format, the PDBx/mmCIF (Protein Data Bank Exchange macromolecular Crystallogrpahic Information Framework) file format has become the data standard :cite:`Westbrook22`.
+To address this and other shortcomings of the PDB file format, the PDBx/mmCIF (Protein Data Bank Exchange macromolecular Crystallogrpahic Information Framework) file format was recently made the new data standard :cite:`Westbrook22`.
 The *cctbx* has been adapted to read mmCIF files.
+
 
 taggedcctbxsnips
 +++++++++++++++++++++
@@ -210,7 +215,7 @@ We made a version of the cctbxsnips library for the Elyra-snippets extension (ht
 
 To add a new snippet, click on the + in the upper right of the Code Snippets icon (Fig. :ref:`elyra-new-snippet`).
 This will open new GUI (see below) for creating a snippet.
-The value of *Name* should be one word or compound word.
+The value of *Name* should be one word or a compound word.
 The value of *Description* describes in one or more sentences what the snippet does.
 The values of the *Tags* field are used to narrow the listing of snippets in the menu.
 The value of the *Source* is the programming language; the value is Python in this example.
@@ -221,9 +226,9 @@ colabcctbxsnips
 +++++++++++++++++++
 
 The Google Colab notebook enables the running of software on Googles's servers in an computational notebook that resembles the Jupyter notebook.
-Colab notebooks are useful for workshop settings where there is no time for installing software on a heterogeneous mix of operating systems when the attendees are using their own computers.
+Colab notebooks are useful for workshop settings where there is no time for installing software on a heterogeneous mix of operating systems when the attendees are following the presentation by using their own computers.
 
-In the Colab notebook, that are no external extensions.
+In the Colab notebook, there are no external extensions.
 However, the Colab notebook has built-in support for snippets.
 A particular snippet library is stored in a dedicated Google Colab notebook rather than in individual files.
 The notebook of snippets is stored on the user's Google Drive account.
@@ -231,17 +236,16 @@ While the software installed in a Colab session is lost upon logging out, the sn
 
 After the snippet notebook is installed, the user opens a new notebook to use the snippets.
 From that new notebook, the list of snippets will be exposed by clicking on the **<>** icon in the left margin of the notebook.
-This exposes a list of snippets.
 Click on the `Insert` button in the upper righthand corner of the snippet to copy the snippet to the current code cell in the notebook.
 
 We developed the  *colabcctbxsnips* library and stored it in a Colab Notebook (https://github.com/MooersLab/colabcctbxsnips).
 Two snippets have the code for installing *mamba* and then *cctbx* (Fig. :ref:`colab`).
-These code snippets have to be run before cctbx can be accessed.
+These code snippets have to be run before *cctbx* can be accessed.
 The two code fragments take less than two minutes to install the required software.
 
 .. figure:: ./figs/colab.png
    :align: center
-   :scale: 31%
+   :scale: 33%
    :figclass: bht
 
    Snippets from the *cctbx* library for installing *mamba* and then *cctbx* on Google Colab. :label:`colab`
@@ -252,13 +256,14 @@ Unlike the case of the *jupyterlabcctbxsnipsplus* library, the marked up copy of
 
 .. figure:: ./figs/colabplus.png
    :align: center
-   :scale: 21%
+   :scale: 23%
    :figclass: bht
 
    Preview of a Colab snippet with the template code. The dollar sign marks the start of a snippet. :label:`colabplus`
 
+
 Snippets for OnDemand Notebooks at HPCs
-++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 We have also worked out how to deploy this snippet library in OnDemand notebooks at High-Performance Computing centers.
 These notebooks resemble Colab notebooks in that JupyterLab extensions cannot be installed.
@@ -268,11 +273,12 @@ This system would also work on Colab and may be preferred by expert users becaus
 That is, the user enters the start of a name and IPython suggests the remainder of the name in a pop-up menu.
 We offer a variant library that inserts a commented out copy of the code that has been annotated with the sites that are to be edited by the user.
 
+
 cctbxsnips for leading text editors
 ++++++++++++++++++++++++++++++++++++++++
 
-To support the use of the *cctbx* code snippets in text editors, we made versions of the library for Emacs, Vim, Visual Studio Code, Atom, and Sublime Text3.
-We selected these text editors because they are the most advanced and most popular with software developers and because they are supported by GhostText project described below :ref:`ghosttext`.
+To support the use of the *cctbx* code snippets in text editors, we made versions of the library for Emacs, Vim, Neovim, Visual Studio Code, Atom, and Sublime Text3.
+We selected these text editors because they are the most advanced and most popular with software developers and because they are supported by the GhostText project described below :ref:`ghosttext`.
 
 For Emacs, we developed a library for use with the yasnippets package (https://github.com/MooersLab/cctbxsnips-Emacs).
 Emacs supports repel-driven software development, which resembles the interactive software development experience in Jupyter notebooks.
@@ -281,29 +287,31 @@ Code blocks in these documents can be given a **jupyter** option with a Jupyter 
 A similar examples using the molecular graphics package PyMOL is demonstrated in this short video (https://www.youtube.com/watch?v=ZTocGPS-Uqk&t=2s).
 
 
-
 Using GhostText to edit Jupyter cells from a favorite text editor
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 :label:`ghosttext`
 
-The snippet extensions for the Classic Jupyter Notebook and JupyterLab lack support for tab triggers to insert snippets as you type and tab stops inside the snippet to advance to sites in the snippet that may need to be edited.
-These two features are standard in the software that supports the use of snippet libraries in most text editors.
-
-By adding the GhostText extension to the web browser and a server to one of several leading text editors, it is possible to send the text from the browser through a WebSocket to a server in the text editor.
+By adding the GhostText extension (https://ghosttext.fregante.com/) to the web browser and a server to one of several leading text editors, it is possible to send the text from the browser through a WebSocket to a server in the text editor.
 Thus, it is possible to edit the contents of a computational notebook cell from inside a text editor.
 Changes made in the text editor instantly appear in the notebook and vice versa.
 By applying the power of a text editor to computational notebooks, experienced developers can continue to use familiar editing commands and tools in their preferred text editor.
+
+GhostText is a Javascript program developed by Federico Brigante, a prolific JavaScript developer.
+Versions of the extension are available for the Google Chrome, Firefox, Edge, Opera, and Safari.
+The extension for the Google Chrome browser works in the Brave browser, and the extension for Firefox works in the Waterfox and Icecat browsers.
+GhostText was developed initially for Sublime Text 3, so Sublime Text 3 can serve as a positive control even if another editor in the list is the favored editor.
+(Sublime Text 3 is available for most platforms for a free trial period of infinite length.)
+
+The snippet extensions for the Classic Jupyter Notebook and JupyterLab lack support for tab triggers to insert snippets as you type and tab stops inside the snippet to advance to sites in the snippet that may need to be edited.
+These two features are standard in the software that supports the use of snippet libraries in most text editors.
 
 As a quick reminder, tab triggers in text editors insert chunks of computer code after the user enters the tab trigger name and hits the TAB key (Fig. :ref:`tabtrigger`).
 The tab trigger name can be as short as several letters.
 Many text editors and IDEs have pop-up menus that aid the selection of the correct tab trigger.
 Tab stops are sites within the code snippet where the cursor advances to after entering TAB again.
-These sites often have placeholder values that can be either accepted by entering TAB again or edited.
+These sites often have placeholder values that can be either edited or accepted by entering TAB again.
 Sites with identical placeholder values can be mirrored so that a change in value at one site is propagated to the other tab stops with the same placeholder value.
 The absence of tab stops can increase the number of bugs introduced by the developer by overlooking parameter values in the code snippet that need to be changed to adapt the snippet to the current program.
-
-The lack of support for tab triggers and tab stops in computational notebooks can dampen the enthusiasm of experienced developers for using computational notebooks.
-Of course, one solution is to write an extension for Jyptyer Notebook or JuptyerLab in JavaScript that supports tab triggers and tab stops.
 
 .. Figure:: ./figs/tabtrigger.png
    :align: center
@@ -312,8 +320,7 @@ Of course, one solution is to write an extension for Jyptyer Notebook or Juptyer
 
    Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets.  The list was narrowed to one snippet by the entry of three letters. :label:`tabtrigger`
 
-Another approach is to send the text in the active code cell to a powerful text editor on your local computer via the browser extension known as GhostText https://ghosttext.fregante.com/.
-GhostText is a Javascript program developed by Federico Brigante, a prolific JavaScript developer. Versions of the extension are available for the Google Chrome, Firefox, Edge, Opera, and Safari. The extension for the Google Chrome browser works in the Brave browser, and the extension for Firefox works in the Waterfox and Icecat browsers.
+
 
 The text editor also needs to be extended with a server that enables two-way communication with the web page via a WebSocket.
 Edits made on the browser side of the WebSocket are immediately sent to an open page in the Text Editor and vice versa; however, the text editor's snippets and other editing tools only work in the text editor.
@@ -321,49 +328,24 @@ Edits made on the browser side of the WebSocket are immediately sent to an open 
 The connection can be closed from either side of the WebSocket.
 It is closed on the web browser side via an option in GhostTest’s pulldown menu, and it closed on the text editor side by closing the active buffer.
 
-A Jupyter notebook with two code snippets from the *cctbxsnips* library for the Sublime Text 3 editor are shown in Fig. :ref:`twocells`.
-The two code cells have been run, and the output from the second cell is printed in the notebook.
-The first cell is being edited to change the name of the mtz file that is to be read from the current directory.
-A pop-up menu in Jupyter has appeared with a list of candidate file names.
-
-.. Figure:: ./figs/twoCodeCells.png
-   :align: center
-   :scale: 70%
-   :figclass: bht
-
-   Output below two code cells with executed in JupyterLab. :label:`twocells`
-
-The servers on the editor side are specific to each editor.
-The following text editors are supported: Visual Studio Code, Vim, NeoVim, Emacs, Atom, and Sublime Text 3. GhostText was developed initially for Sublime Text 3, so Sublime Text 3 can serve as a positive control even if another editor in the list is the favored editor.
-(Sublime Text 3 is available for most platforms for a free trial period of infinite length.)
-
-For example, the server for Emacs is provided by the atomic-chrome package that is available in the Milkypostman’s Emacs Lisp Package Archive (MELPA) and on GitHub (https://github.com/alpha22jp/atomic-chrome).
-The configuration for atomic-chrome in my Emacs initialization file (e.g., init.el) is listed below (Fig. :ref:`atomicconfig`).
+For example, the server for *Emacs* is provided by the *atomic-chrome* package that is available in the Milkypostman’s Emacs Lisp Package Archive (MELPA) and on GitHub (https://github.com/alpha22jp/atomic-chrome).
+The configuration for *atomic-chrome* in my Emacs initialization file (e.g., init.el) is listed below (Fig. :ref:`atomicconfig`).
 The third line in Code listing 1 sets the default Emacs mode (equivalent to a programming language scope): I set it to Python for Jupyter code cells.
 Atomic-chrome uses text-mode by default.
 You can change the default mode to other programming languages that you may use in Jupyter, like Julia or R.
-The last three lines specify the Emacs mode to be used when text is imported from the text areas of webpages on github.com, Overleaf.com, and 750words.com.
+The last three lines specify the Emacs mode to be used when text is imported from the text areas on github.com, Overleaf.com, and 750words.com.
 Similar configuration options are available in the other text editors, or you manually change the language scope for the window with the text imported from Jupyter.
 
 .. Figure:: ./figs/atomicChrome.png
    :align: center
-   :scale: 92%
+   :scale: 98%
    :figclass: bht
 
-   Emacs lisp to configure the atomic-chrome package for Emacs. This configuration opens Jupyter notebooks in the Python major mode and the 750words.com webpage in the LaTeX major mode. :label:`atomicconfig`
+   Emacs lisp code to configure the atomic-chrome package for Emacs. This configuration opens Jupyter notebooks in the Python major mode and the 750words.com webpage in the LaTeX major mode. :label:`atomicconfig`
 
 *GhostText* provides a keyboard shortcut for the browser to open or close the connection to the text editor.
 These shortcut keep the developer's hands on the keyboard and avoid breaks in context by moving the hand to the mouse.
 The shortcut by operating system is as follows: macOS, command-shift-K; Linux, control-shift-H; and Windows, control-shift-K.
-
-I have been using GhostText daily since mid-May 2022 with Emacs and either Google Chrome or Firefox; I have infrequently encountered three difficulties.
-First, other servers inside Emacs can occupy the port for GhostText and block the atomic-chrome server.
-I have had to kill the offending server or restart Emacs. Second, saving the text in the Emacs buffer to a file can cause the text to become out of sync with the text in the editor and on the web page.
-The lack of updating can lead to a loss of work.
-To compensate for this blind spot, we make regular saves of the text on the web server rather than saving to a local file.
-Of course, the final text can be saved locally.
-Third, multiple open editors with GhostText servers installed can compete for the same WebSocket.
-This problem is addressed by closing the editor that is not in current use or configuring its server to use an alternate WebSocket.
 
 To support the use of *GhostText* to edit electronic notebooks containing code from the *cctbx* library, we have made variants of a collection of *cctbx* snippets for *Visual Studio Code*, *Atom*, *Sublime Text 3*, *Vim*, *NeoVim*, and *Emacs*.
 For *Vim* and *NeoVim*, the snippets are available for the *UltiSnips*, *Snipmate*, and *neosnippets* plugins.
@@ -377,7 +359,7 @@ The ease of installation makes the  nteract application popular with new users o
 Obviously *nteract* is not browser-based, so it cannot work with *GhostText*.
 *nteract* has yet to be extended to support the use of code snippet libraries, but nteract allows the switching of jupyter kernels  between  code cells.
 
-While the focus of this report is on Jupyter notebooks, the *cctbxsnips* snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of easier version control.
+While the focus of this report is on Jupyter and Colab notebooks, the *cctbxsnips* snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of easier version control.
 The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the *Quarto* (http://quarto.org) markdown representation of Jupyter notebooks.
 *Quarto* is available for several leading text editors.
 In the later case, you may have to extend the scope of the editing session in the editor to include Python source code.
@@ -396,11 +378,11 @@ We also include support for Colab notebooks where the snippets also persist betw
 The templates include the code for installing the software required for crystallographic computing.
 These installation templates save time because the installation process involves as many as seven operations that would be difficult to remember.
 Once the user inserts the installation snippet code to the top of a given Colab notebook, the user only needs to rerun these blocks of code upon logging into Colab to be able to reinstall the software.
-The Colab notebook  user can also  modify the installation templates to install the crystallographic software on their local machine and run then the notebook in Jupyter Classic and Jupyter Label.
+The Colab notebook  user can also  modify the installation templates to install the crystallographic software on their local machine and run then the notebook in Jupyter Classic and JupyterLab.
 Examples of such adaptations are provided on a dedicated GitHub web page.
 The template libraries presented here lower an important barrier to the use of Colab by those interested in crystallographic computing on the cloud.
 
-We also report the use of GhostText to edit notebook code cells in Jupyter notebooks and text documents in Jupyter Lab.
+We also report the use of GhostText to edit notebook code cells in Jupyter notebooks and text documents in JupyterLab.
 This capability enables a user to use an external text editor to edit code.
 The user can thereby take advantage of the support for tab triggers and tab stops in the external editor.
 This support can ensure faster and more accurate writing and editing of new code.
@@ -413,7 +395,7 @@ This snippet library is among the first that is domain specific.
 Most snippet libraries are for programming languages or for hypertext languages like HTML, markdown, and LaTeX.
 The average snippet also tends to be quite short, and the size of the libraries tends to be quite small.
 The audience for these libraries are the millions of professional programmers and web page developers.
-We reasoned that this great tool should be brought to the aid of the tens of thousands of workers in biological crystallography.
+We reasoned that snippet libraries are a great coding tool that should be brought to the aid of the tens of thousands of workers in biological crystallography.
 
 The other area where domain-specific snippets have been provided is in molecular graphics.
 A pioneering scripting wizard provided templates for use in the molecular graphics program RasMol :cite:`Horton99`.
@@ -429,11 +411,12 @@ That is the development of notebooks that use two or more software packages and 
 More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python :cite:`Behnel11`, the *reticulate* package that enables the running of Python code in R :cite:`Ushey23`, and the PyCall package in Julia that enables the running of the Python packages in Julia (https://github.com/JuliaPy/PyCall.jl).
 The latter package is widely used to run matplotlib in Julia.
 Interoperability already occurs between *CCP4* :cite:`Agirre23`, *clipper* :cite:`McNicholas18`, *GEMMI* :cite:`Wojdyr22`, *reciprocalspaceship* :cite:`Greisman21`, *Careless* :cite:`Dalton22`, and *cctbx* and to a limited extent between *cctbx* and *PyMOL*, but interoperability could be more widespread if there was more support for it.
-The snippet libraries provided here can prompt taking advantage of this interoperability in Jupyter and Colab notebooks.
+The snippet libraries provided here can promote taking advantage of this interoperability in Jupyter and Colab notebooks.
 
 Acknowledgments
 ----------------------
 
-This work was supported in part by the following grants: Oklahoma Center for the Advancement of Science and Technology HR20-002, National Institutes of Health grants R01 CA242845, P30 CA225520, and P30 AG050911-07S1. In addition, we thank the Biomolecular Structure Core of the NIH supported Oklahoma COBRE in Structural Biology (PI: Ann West, P20 GM103640, and P30 GM145423).
+This work was supported in part by the following grants: Oklahoma Center for the Advancement of Science and Technology HR20-002, National Institutes of Health grants R01 CA242845, P30 CA225520, and P30 AG050911-07S1.
+In addition, we thank the Biomolecular Structure Core of the NIH supported Oklahoma COBRE in Structural Biology (PI: Ann West, P20 GM103640, and P30 GM145423).
 
 
