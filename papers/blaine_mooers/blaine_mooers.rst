@@ -171,7 +171,7 @@ The utilization of *pandas* enables easier integration with the other components
 The *cctbx* is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
 
 The *jupyterlabcctbxsnipsplus* is a variant of the *jupyterlabcctbxsnips* library with comments to guide editing of the snippets (https://github.com/MooersLab/jupyterlabcctbxsnipsplus).
-The snippet code contains its duplicate in a comment with the sites of tab stops marked with dollar signs and braces as in a the code for a snippet (Fig. :cite:`snipsplus`).
+The snippet code contains its duplicate in a comment with the sites of tab stops marked with dollar signs and braces as in a the code for a snippet (Fig. :ref:`snipsplus`).
 Upon insertion of the snippet into a notebook cell, the commented out code is included.
 
 .. figure:: ./figs/snipsplus.png
@@ -259,7 +259,7 @@ Unlike the case of the *jupyterlabcctbxsnipsplus* library, the marked up copy of
    :scale: 23%
    :figclass: bht
 
-   Preview of a Colabcode snippet. The preview contains two copies of the code. The bottom copy of the code will be inserted into the current code cell. The top copy of the code serves as a guide to sites to be edited. The dollar sign marks the start of a tab stop where the enclosed placeholder value may need to be changed. :label:`colabplus`
+   Preview of a Colab code snippet. The preview contains two copies of the code. The bottom copy of the code will be inserted into the current code cell. The top copy of the code serves as a guide to sites to be edited. The dollar sign marks the start of a tab stop where the enclosed placeholder value may need to be changed. :label:`colabplus`
 
 
 Snippets for OnDemand Notebooks at HPCs
@@ -318,7 +318,7 @@ The absence of tab stops can increase the number of bugs introduced by the devel
    :scale: 55%
    :figclass: bht
 
-   Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets.  The list was narrowed to one snippet by the entry of three letters. :label:`tabtrigger`
+   Example of a tab trigger being entered in Sublime Text 3 editor and appearing in a Jupyter Notebook cell. A pop-up menu lists the available snippets. The list was narrowed to one snippet by the entry of three letters. :label:`tabtrigger`
 
 
 
@@ -338,7 +338,7 @@ Similar configuration options are available in the other text editors, or you ma
 
 .. Figure:: ./figs/atomicChrome.png
    :align: center
-   :scale: 98%
+   :scale: 97%
    :figclass: bht
 
    Emacs lisp code to configure the atomic-chrome package for Emacs. This configuration opens Jupyter notebooks in the Python major mode and the 750words.com webpage in the LaTeX major mode. :label:`atomicconfig`
