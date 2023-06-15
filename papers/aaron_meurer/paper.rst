@@ -21,6 +21,11 @@
 :equal-contributor:
 :institution: NVIDIA Corporation
 
+:author: John Kirkham
+:email: jkirkham@nvidia.com
+:equal-contributor:
+:institution: NVIDIA Corporation
+
 :author: Matthew Barber
 :email: quitesimplymatt@gmail.com
 :equal-contributor:
@@ -67,11 +72,6 @@
 :author: Travis E. Oliphant
 :email: travis@quansight.com
 :institution: Quansight
-
-:author: John Kirkham
-:email: jkirkham@nvidia.com
-:equal-contributor:
-:institution: NVIDIA Corporation
 
 :author: Consortium for Python Data API Standards
 :email:
