@@ -78,7 +78,7 @@ data generating C function, and use it to conduct analysis inside Python ecosyst
 This is like using a normal Python prompt, but with direct access to simulation data. 
 ``libyt`` provides another way for us to interact with simulations.
 
-.. [#] `https://github.com/calab-ntu/libyt <https://github.com/calab-ntu/libyt>`_
+.. [#] `https://github.com/yt-project/libyt <https://github.com/yt-project/libyt>`_
 
 ..
    outline of the proceeding
@@ -125,7 +125,7 @@ under MPI platform, except that data are stored in memory instead of hard drives
 though here, we focus on using yt as our core analysis tool.
 
 .. [#] For more details, please refer to ``libyt`` documents. 
-   (`https://calab-ntu.github.io/libyt/libytAPI <https://calab-ntu.github.io/libyt/libytAPI>`_)
+   (`https://yt-project.github.io/libyt/libytAPI <https://yt-project.github.io/libyt/libytAPI>`_)
 
 
 .. _Connecting Python and Simulation:
