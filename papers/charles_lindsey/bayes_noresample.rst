@@ -231,7 +231,7 @@ But what if :math:`x` is 0?  This is simple to handle, we just add :math:`\epsil
 
 Now, :cite:`press2007numerical` also suggests performing a final sequence of assignment operations that ensures :math:`x` and :math:`x+h` differ by an exactly representable number. You assign :math:`x+h` to a temporary variable :math:`temp`. Then :math:`h` is assigned the value of :math:`temp-h`.
 
-In Python, the code would look like
+In Python, the code would simply be
 
 .. code-block:: python
 
