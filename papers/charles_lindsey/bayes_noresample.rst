@@ -135,7 +135,7 @@ The derivative of the function :math:`f` with respect to :math:`x` is
 
     f'(x) = \lim_{h\to0}\frac{f(x+h)-f(x)}{h}
 
-To approximate :math:`f'(x)` numerically, couldn't we just plugin a small value for :math:`h` and compute the scaled difference?   Yes. And that is basically what happens.  We do do a little more work to choose :math:`h` and use a second-order approximation instead of a first-order.
+To approximate :math:`f'(x)` numerically, couldn't we just plugin a small value for :math:`h` and compute the scaled difference?   Yes. And that is basically what happens.  We do a little more work to choose :math:`h` and use a second-order approximation instead of a first-order.
 
 We can see that the scaled difference is a first-order approximation by looking at the Taylor series expansion around :math:`x`.
    
@@ -333,7 +333,7 @@ For :math:`\alpha`, we will model an unconstrained parameter, :math:`\alpha^u = 
     dist_dict['unconstrained_alpha'] = \
     tfd.TransformedDistribution(tfd.Chi2(4),tfb.Log())
     
-We can use the **sample** method on the distribution objects we created to see random realizations. Before we do that we should setthe seed, so that we can replicate our work.
+We can use the **sample** method on the distribution objects we created to see random realizations. Before we do that we should set the seed, so that we can replicate our work.
 
 .. code:: python
     
