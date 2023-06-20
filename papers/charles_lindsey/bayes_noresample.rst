@@ -113,6 +113,16 @@ Remembering that the posterior of :math:`\boldsymbol \theta` is approximately no
       & & {\boldsymbol{\theta_c}}\vert x = g({\boldsymbol \theta}) \vert x \approx_D  \\
       & &  N \left\lbrack g(\widehat{\boldsymbol{\theta}}), \left\{\frac{\delta}{\delta \widehat{\boldsymbol{\theta}}} g(\widehat{\boldsymbol{\theta}})\right\}^T \left\{-H(\widehat{\boldsymbol{\theta}})^{-1}\right\} \left\{\frac{\delta}{\delta \widehat{\boldsymbol{\theta}}} g(\widehat{\boldsymbol{\theta}})\right\}\right\rbrack
 
+
+We could use Numpy's **matmul** function to multiply the component matrices together.  The **inv** function in the **lingalg** library could be used to invert the Hessian.  So referring the to the gradient of :math:`g` as **dg**, the following python code could be used to compute the constrained covariance.
+
+.. code-block:: python
+
+    np.matmul(
+	np.matmul(dg,
+		  np.linalg.inv(hessian)),
+	np.transpose(dg))
+
 This involved a first-order approximation of :math:`g`.  Earlier we used a second order approximation for taking the numeric derivative. Why would we just do a first-order here?  Traditionally the delta-method is taught and used as only a first-order method.  Usually the functions used in the delta method are not incredibly complex. It is *good enough* to to use the first-order approximation.
 
 Hessian and Delta Approximation
@@ -295,7 +305,18 @@ Simple calculation shows that the solutions are
     l &=& -z_{\alpha/2}\hat\sigma_\gamma + \hat{\gamma} \\
     u &=& z_{\alpha/2}\hat\sigma_\gamma + \hat{\gamma}
 
-The :math:`z_{\alpha/ 2}` quantile can be easily generated using **scipy.stats** from SciPy :cite:`scipy`.  We can also adjust the intervals for inference on many parameters by using Bonferroni correction :cite:`bonferroni1936teoria`.
+The :math:`z_{\alpha/ 2}` quantile can be easily generated using **scipy.stats** from SciPy :cite:`scipy`. We would use the **norm.ppf** function.
+
+In Python, we would have
+
+.. code-block:: python
+
+    z_alpha_2 = scipy.stats.norm.ppf(1-alpha/2)
+    l = -z_alpha_2*se_gamma_hat + gamma_hat
+    u = z_alpha_2*nsd_gamma_hat + gamma_hat
+
+
+We can also adjust the intervals for inference on many parameters by using Bonferroni correction :cite:`bonferroni1936teoria`.
 
 Now we know how to estimate the posterior mode. We also know how to estimate the posterior variance after computing the posterior mode. And we have seen how confidence intervals are made based on this posterior variance, mode, and the normal approximation to the posterior.  Let's discuss some tools that will enable us to perform these operations.
 
