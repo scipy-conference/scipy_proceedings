@@ -22,7 +22,7 @@ aPhyloGeo-Covid: A Web Interface for Reproducible Phylogeographic Analysis of SA
    to explore and visualize a wide range of diverse data sources specifically relevant to  SARS-CoV-2 for phylogeographic analysis. 
    The integrated Neo4j database acts as a comprehensive repository, consolidating COVID-19 pandemic-related sequences information, 
    climate data, and demographic data obtained from public databases, facilitating efficient filtering and organization of input data for 
-   phylogeographical studies. Presently, the database encompasses over 113,774 nodes and 194,381 relationships. Once the input dataset is determined. Additionally, aPhyloGeo-Covid provides a scalable and reproducible phylogeographic workflow for investigating the intricate relationship between geographic features and the patterns of variation in diverse SARS-CoV-2 variants. The code repository of platform is publicly accessible on 
+   phylogeographical studies. Presently, the database encompasses over 113,774 nodes and 194,381 relationships. Additionally, aPhyloGeo-Covid provides a scalable and reproducible phylogeographic workflow for investigating the intricate relationship between geographic features and the patterns of variation in diverse SARS-CoV-2 variants. The code repository of platform is publicly accessible on 
    GitHub (https://github.com/tahiri-lab/iPhyloGeo/tree/iPhylooGeo-neo4j), providing researchers with a valuable tool to analyze 
    and explore the intricate dynamics of SARS-CoV-2 within a phylogeographic context.
    
