@@ -39,7 +39,7 @@ Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset
 
     The Blosc2 NDim layer enables the creation and reading of n-dimensional datasets in an extremely efficient manner. This is due to a completely general n-dim 2-level partitioning, which allows for slicing and dicing of arbitrary large (and compressed) data in a more fine-grained way. Having a second partition provides a better flexibility to fit the different partitions at the different CPU cache levels, making compression even more efficient.
 
-    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that are in a sphere of 10 thousand light-years radius (centered in the Gaia telescope), which accounts for 0.7 billion stars. The total size of this partial dataset is 3.7 TB, but when compressed, it is reduced to just 14 GB, making it easy to fit into the memory of modern computers for being processed.
+    As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that are in a sphere of 10 thousand light-years radius (centered in the Gaia telescope), which accounts for 0.7 billion stars. The total size of the dataset of star positions is 7.3 TB, but when compressed, it is reduced to just 6.5 GB, making it easy to fit into the memory of modern computers for being processed.
 
 .. class:: keywords
 
@@ -67,11 +67,13 @@ Blosc2 is the latest version of the Blosc 1.x series, which is used in many impo
 The Gaia dataset
 ----------------
 
-The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates and magnitudes of 1.4 billion stars (those with non-null parallax values). When stored as a binary table, the dataset is 22 GB in size (uncompressed).
+The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates of 1.4 billion stars (those with non-null parallax values). When stored as a binary table, the dataset is 22 GB in size (uncompressed).
 
-However, we converted the tabular dataset into a sphere with a radius of 10,000 light years and framed it into a 3D array of shape (10,000, 10,000, 10,000). Each cell in the array represents a cube of 2 light years per side and contains the magnitude (brightness) of every star within it. Given that the average distance between stars in the Milky Way is about 5 light years, very few cells will contain more than one star. This 3D array contains 0.7 billion stars, which is a significant portion of the Gaia catalog.
+However, we converted the tabular dataset into a sphere with a radius of 10,000 light years and framed it into a 3D array of shape (20,000, 20,000, 20,000). Each cell in the array represents a cube of 1 light year per side and contains the number of stars within it. Given that the average distance between stars in the Milky Way is about 5 light years, very few cells will contain more than one star (e.g. the maximum of stars in a single cell in our sphere is 6). This 3D array contains 0.7 billion stars, which is a significant portion of the Gaia catalog.
 
-The magnitude of each star is stored as a float32, resulting in a total dataset size of 3.7 TB. However, we can greatly reduce its size to 14 GB by using compression. This is possible because the 3D array is very sparse, and Blosc2 can compress the zeroed parts almost entirely. Additionally, by using lossy compression (via the internal :code:`TRUNC_PREC` filter) to retain only 2 significant digits in the star's magnitude, we can further reduce the size to a mere 8 GB.
+The number of stars is stored as a uint8, resulting in a total dataset size of 7.3 TB. However, compression can greatly reduce its size to 6.5 GB since the 3D array is very sparse. Blosc2 can compress the zeroed parts almost entirely.
+
+In addition, we store other data about the stars in a separate table indexed with the position of each star (using PyTables). For demonstration purposes, we store the radial velocity, effective temperature, and G-band magnitude using a float32 for each field. The size of the table is 14.1 GB uncompressed, but it can be compressed to 5.6 GB. Adding another 1.5 GB for the index brings the total size to 7.2 GB. Therefore, the 3D array is 6.5 GB, and the table with the additional information and its index are 7.2 GB, making a total of 13.7 GB. This comfortably fits within the storage capacity of any modern laptop.
 
 .. figure:: 3d-view-milkyway-inverse.png
    :scale: 25%
