@@ -78,7 +78,7 @@ In addition, we store other data about the stars in a separate table indexed wit
 .. figure:: 3d-view-milkyway-inverse.png
    :scale: 25%
 
-   Gaia DR3 dataset as a 3D array (preliminary, this is not from the dataset in this paper). :label:`gaia-3d-dset`
+   Gaia DR3 dataset as a 3D array (Gaia collaboration). :label:`gaia-3d-dset`
 
 Figure :ref:`gaia-3d-dset` shows a 3D view of the Milky Way different type of stars. Each point is a star, and the color of each point represents the star's magnitude, with the brightest stars appearing as the reddest points. Although this view provides a unique perspective, the dimensions of the cube are not enough to fully capture the spiral arms of the Milky Way.
 
@@ -303,9 +303,31 @@ Finally, we can compute the density of stars in a 3D grid with this script:
                   blocks=(20, 20, 20),
                   )
 
-With that, we have a 3D array of shape 20,000 x 20,000 x 20,000 with the number of stars with a 1 light year resolution.  We can visualize it with the following code:
+With that, we have a 3D array of shape 20,000 x 20,000 x 20,000 with the number of stars with a 1 light year resolution.  We can visualize the vicinity of our Sun with Plotly with the following code:
 
-To be completed ...
+.. code-block:: python
+
+  import blosc2
+  import numpy as np
+  import plotly.express as px
+
+  nstars_path = '$HOME/Gaia/gaia-3d-windows-int8.b2nd'
+  b3d = blosc2.open(nstars_path)
+  data = b3d[9_975:10_025, 9_975:10_025, 9_975:10_025]
+  idx = np.indices(data.shape)
+  fig = px.scatter_3d(x=idx[0, :, :, :].flatten(),
+                      y=idx[1, :, :, :].flatten(),
+                      z=idx[2, :, :, :].flatten(),
+                      size=data[...].flatten())
+  fig.show()
+
+.. figure:: Sun-50ly-vicinity.png
+   :scale: 50%
+
+   Stars in the vicinity of our Sun (cube of 50 light years). :label:`sun-50ly-vicinity`
+
+Figure :ref:`sun-50ly-vicinity` shows an interactive 3D view of the stars in a 50x50x50 light years cube centered in our Sun. Each point represents a star, and its size represents the number of stars in that location (a cube of 1x1x1 light year). The maximum amount of stars in a single location in this view is 3 (triple star systems are not that uncommon).
+
 
 Conclusions
 -----------
