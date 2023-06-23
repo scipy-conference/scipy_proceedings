@@ -303,7 +303,7 @@ Finally, we can compute the density of stars in a 3D grid with this script:
                   blocks=(20, 20, 20),
                   )
 
-With that, we have a 3D array of shape 20,000 x 20,000 x 20,000 with the number of stars with a 1 light year resolution.  We can visualize the vicinity of our Sun with Plotly with the following code:
+With that, we have a 3D array of shape 20,000 x 20,000 x 20,000 with the number of stars with a 1 light year resolution.  We can visualize the vicinity of our Sun with Plotly :cite:`plotly` making use of the following code:
 
 .. code-block:: python
 
@@ -324,9 +324,9 @@ With that, we have a 3D array of shape 20,000 x 20,000 x 20,000 with the number 
 .. figure:: Sun-50ly-vicinity.png
    :scale: 50%
 
-   Stars in the vicinity of our Sun (cube of 50 light years). :label:`sun-50ly-vicinity`
+   Stars in the vicinity of our Sun (cube of 50 light years). Each point represents a star, and its size represents the number of stars in that location (a cube of 1 x 1 x 1 light year). The maximum amount of stars in a single location for this view is 3 (triple star systems are common). :label:`sun-50ly-vicinity`
 
-Figure :ref:`sun-50ly-vicinity` shows an interactive 3D view of the stars in a 50x50x50 light years cube centered in our Sun. Each point represents a star, and its size represents the number of stars in that location (a cube of 1x1x1 light year). The maximum amount of stars in a single location in this view is 3 (triple star systems are not that uncommon).
+Figure :ref:`sun-50ly-vicinity` displays an interactive 3D view of the stars within a 50 x 50 x 50 light-year cube centered around our Sun. This visualization was generated using the code above.
 
 
 Conclusions
