@@ -216,16 +216,13 @@ The raw data of Gaia is stored in CSV files.  The coordinates are stored in the 
    def load_rawdata(out="gaia.b2nd"):
        dtype = {"ra": np.float32,
                 "dec": np.float32,
-                "parallax": np.float32,
-                "phot_bp_mean_mag": np.float32}
+                "parallax": np.float32}
        barr = None
        for file in glob.glob("gaia-source/*.csv*"):
            # Load raw data
            df = pd.read_csv(
                file,
-               usecols=[
-                        "ra", "dec", "parallax",
-                        "phot_g_mean_mag"],
+               usecols=["ra", "dec", "parallax"],
                dtype=dtype, comment='#')
            # Convert to numpy array and remove NaNs
            arr = df.to_numpy()
@@ -234,13 +231,13 @@ The raw data of Gaia is stored in CSV files.  The coordinates are stored in the 
                # Create a new Blosc2 file
                barr = blosc2.asarray(
                    arr,
-                   chunks=(2**20, 4),
+                   chunks=(2**20, 3),
                    urlpath=out,
                    mode="w")
            else:
                # Append to existing Blosc2 file
                barr.resize(
-                   (barr.shape[0] + arr.shape[0], 4))
+                   (barr.shape[0] + arr.shape[0], 3))
                barr[-arr.shape[0]:] = arr
        return barr
 
@@ -254,7 +251,6 @@ Once we have the raw data in a Blosc2 container, we can select the stars in a ra
        ra = barr[:, 0]
        dec = barr[:, 1]
        parallax = barr[:, 2]
-       g = barr[:, 3]
        # 1 parsec = 3.26 light years
        ly = ne.evaluate("3260 / parallax")
        # Remove ly < 0 and > 10_000
@@ -263,18 +259,16 @@ Once we have the raw data in a Blosc2 container, we can select the stars in a ra
        ra = ra[valid_ly]
        dec = dec[valid_ly]
        ly = ly[valid_ly]
-       g = g[valid_ly]
        # Cartesian x, y, z from spherical ra, dec, ly
        x = ne.evaluate("ly * cos(ra) * cos(dec)")
        y = ne.evaluate("ly * sin(ra) * cos(dec)")
        z = ne.evaluate("ly * sin(dec)")
        # Save to a new Blosc2 file
-       out = blosc2.zeros(mode="w", shape=(4, len(x)),
+       out = blosc2.zeros(mode="w", shape=(3, len(x)),
                           dtype=x.dtype, urlpath=fout)
        out[0, :] = x
        out[1, :] = y
        out[2, :] = z
-       out[3, :] = g
        return out
 
 
@@ -282,7 +276,7 @@ Finally, we can compute the density of stars in a 3D grid with this script:
 
 .. code-block:: python
 
-   R = 2  # resolution of the 3D cells in ly
+   R = 1  # resolution of the 3D cells in ly
    LY_RADIUS = 10_000  # radius of the sphere in ly
    CUBE_SIDE = (2 * LY_RADIUS) // R
    MAX_STARS = 1000_000_000  # max number of stars to load
@@ -291,17 +285,16 @@ Finally, we can compute the density of stars in a 3D grid with this script:
    x = b[0, :MAX_STARS]
    y = b[1, :MAX_STARS]
    z = b[2, :MAX_STARS]
-   g = b[3, :MAX_STARS]
 
    # Create 3d array.
-   # Be sure to have enough swap memory (around 4 TB!)
+   # Be sure to have enough swap memory (around 8 TB!)
    a3d = np.zeros((CUBE_SIDE, CUBE_SIDE, CUBE_SIDE),
                   dtype=np.float32)
    for i, coords in enumerate(zip(x, y, z)):
        x_, y_, z_ = coords
-       a3d[(int(x_) + LY_RADIUS) // R,
-           (int(y_) + LY_RADIUS) // R,
-           (int(z_) + LY_RADIUS) // R] += g[i]
+       a3d[(np.floor(x_) + LY_RADIUS) // R,
+           (np.floor(y_) + LY_RADIUS) // R,
+           (np.floor(z_) + LY_RADIUS) // R] += 1
 
    # Save 3d array as Blosc2 NDim file
    blosc2.asarray(a3d,
@@ -310,7 +303,7 @@ Finally, we can compute the density of stars in a 3D grid with this script:
                   blocks=(20, 20, 20),
                   )
 
-With that, we have a 3D array of shape 10,000 x 10,000 x 10,000 with the magnitudes of stars with a 2 light years resolution.  We can visualize it with the following code:
+With that, we have a 3D array of shape 20,000 x 20,000 x 20,000 with the number of stars with a 1 light year resolution.  We can visualize it with the following code:
 
 To be completed ...
 
