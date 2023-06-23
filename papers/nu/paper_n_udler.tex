@@ -73,7 +73,7 @@ Food/nutrition databset consists of food items with their chemical composition (
 Sensitivity analysis of the model may reveal the fact that we do not need to run the optimization again for creating several similar diets but need to analyze the result of single optimization run. For example, shadow prices (part of sensitivity analysis output in standard optimization tool) show the change in optimal value when right hand side is changed by one unit. This may correspond to a situation when we computed a cost for a diet with maximum of 1500 calories allowed and want to know how much the 1600 calories diet cost without running the optimization tool again.  
 
 
-This section introduces several ML concepts such as classification, and is helpful in explaining th difference between classification and regression by comparing mathematical models that underly the former and the latter. Perceptron algorithm introduced in 1963 in \cite{ABR} may be introduced herer, as an example of online classification. Simpler dataset may be utilized as sub-example, such as Airplanes dataset.
+This section introduces several ML concepts such as classification, and is helpful in explaining th difference between classification and regression by comparing mathematical models that underly the former and the latter. Perceptron algorithm introduced in 1963 in \cite{ABR} may be introduced here, as an example of online classification. Simpler dataset may be utilized as sub-example, such as Airplanes dataset.
 
 Another useful and easily implemented analysis  of food dataset is visualizing food items in the space of principal components,  which shows clearer separation of the food items and is used for identifying dietary patterns in different groups of people (see, for example, \cite{CS}. Principal Component Analysis (PCA) is one of widely used ML techniques, implemented in modern ML software (we use Scikit learn implementation) and all classic scinetific libraries. 
 
@@ -235,5 +235,13 @@ Applying proximal operator as a step in generalized global optimization algorith
 Required background: Python programming, college-level math
 
 Machine learning models are often provided as functions in software packages. Optimization of such functions is a challenging task because traditional derivative based optimization methods with guaranteed convergence properties cannot be used. In \cite{MP} we introduced educational software library minpy that allows to create new optimization methods with desired properties. Those methods include elementary modules designed using the approach for constructing global optimization algorithms based on potential theory \cite{KAP1,KAP2}. They do not use derivatives of objective function and as a result work with nondifferentiable functions (or functions given by computer programs, or black box functions), but have guaranteed convergence. The focus of the library is on the transparency of the generalized optimization method rather than on efficiency of implementation. This is important since this library is intended to be used for educational purposes. To further generalize the optimization algorithms, we suggest replacing certain steps of the algorithms with proximal operator applied to the current point of the search. This does not compromise the convergence of the algorithm  \cite{KAP3}  but allows to write the algorithm in more concise manner, making it more transparent. Suggested reading to learn more about proximal operators and proximal algorithms: \cite{LAKLG,RGMN,SGFLZ}
+
+Introduction to neural network optimization
+
+Required background: Python programming, college-level math
+
+This project introduces most important concepts in artificial neural networks.
+Students implement the perceptron algorithm with linear kernel - famous online classification method introduced in  \cite{ABR}, and explore differences and similarities of this method to SVM. Educational library minpy  \cite{NU} is used to implement neural network optimization approaches described in \cite{YZWQ,YZWQ1.KAPB,KP1}
+
 
 
