@@ -19,7 +19,7 @@ aPhyloGeo-Covid: A Web Interface for Reproducible Phylogeographic Analysis of SA
    throughout the Coronavirus disease 2019 (COVID-19) pandemic, constitute invaluable resources that profoundly 
    empower phylogeography research. To optimize the utilization of these resources, we have developed an interactive 
    analysis platform called aPhyloGeo-Covid, leveraging the capabilities of Neo4j, Snakemake, and Python. This platform enables researchers 
-   to explore and visualize a wide range of diverse data sources specifically relevant to  SARS-CoV-2 for phylogeographic analysis. 
+   to explore and visualize diverse data sources specifically relevant to  SARS-CoV-2 for phylogeographic analysis. 
    The integrated Neo4j database acts as a comprehensive repository, consolidating COVID-19 pandemic-related sequences information, 
    climate data, and demographic data obtained from public databases, facilitating efficient filtering and organization of input data for 
    phylogeographical studies. Presently, the database encompasses over 113,774 nodes and 194,381 relationships. Additionally, aPhyloGeo-Covid provides a scalable and reproducible phylogeographic workflow for investigating the intricate relationship between geographic features and the patterns of variation in diverse SARS-CoV-2 variants. The code repository of platform is publicly accessible on 
