@@ -71,7 +71,7 @@ Methodology
 
 A diverse range of data sources pertaining to SARS-CoV-2, covering the period from January 1, 2020, to December 31, 2022, were meticulously extracted, transformed, and loaded into a Neo4j graph database. These sources encompassed SARS-CoV-2 sequences from the SARS-CoV-2 Data Hub :cite:`hatcher2017virus`, lineage development information from Cov-Lineages :cite:`o2021tracking`, population density by country, positivity rates, vaccination rates, diabetes rates, aging data from Our World in Data :cite:`mathieu2021global`, as well as climate data from NASA/POWER :cite:`marzouk2021assessment`. 
 
-To enable efficient querying, configuration of analysis parameters, and output generation within the database, a driver object was established using the Neo4j Python driver to establish seamless connections with the Neo4j database. For phylogeographic analysis, a streamlined workflow was implemented using the Snakemake workflow management system, ensuring an efficient and structured analysis process. Moreover, the interactive visualization capabilities offered by the Dash-Plotly library :cite:`liermann2021dynamic` were leveraged for data exploration, analysis parameter setting, and interactive visualization of results, enhancing the interpretability and user-friendliness of the platform.
+To enable efficient querying, configuration of analysis parameters, and output generation within the database, a driver object was established using the Neo4j Python driver to establish seamless connections with the Neo4j database. For phylogeographic analysis, a streamlined workflow was implemented using the Snakemake workflow management system, ensuring an efficient and structured analysis process. Moreover, the interactive visualization capabilities offered by the Dash-Plotly library :cite:`hossain2019visualization` :cite:`liermann2021dynamic` were leveraged for data exploration, analysis parameter setting, and interactive visualization of results, enhancing the interpretability and user-friendliness of the platform.
 
 Data Integration 
 ++++++++++++++++
@@ -88,7 +88,7 @@ Lineage nodes establish connections with Nucleotide and Protein nodes, represent
 Input exploration
 +++++++++++++++++
 
-An interactive platform using Dash-Plotly :cite:`liermann2021dynamic` was developed for efficient data exploration and selection.  
+An interactive platform using Dash-Plotly :cite:`hossain2019visualization` :cite:`liermann2021dynamic` was developed for efficient data exploration and selection.  
 The integration of the Dash platform with the Neo4j graph database allows for seamless retrieval of pertinent data from interconnected nodes based on user-provided keywords related to lineages or locations. This functionality enables efficient identification and filtering of datasets for subsequent phylogeographic analysis. The integration of the powerful Neo4j database with the user-friendly interactive platform facilitates seamless data exploration and selection, supporting researchers in their comprehensive analysis of SARS-CoV-2 variation.
 
 The aPhyloGeo-Covid offers two distinct approaches for selecting input datasets.
