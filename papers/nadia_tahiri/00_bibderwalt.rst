@@ -143,7 +143,7 @@ Updating the sample table based on provided lineage names and sequence types, as
 2. Location-based approach for retrieving corresponding sequences based on selected location and time period
 
 Specific locations and a date period are defined by employing the Dash web page.
-Subsequently, the Neo4j database was queried to identify lineages prevalent in the specified locations during the defined time period. 
+Subsequently, the Neo4j database is queried to identify lineages prevalent in the specified locations during the defined time period. 
 The retrieved information includes the earliest and latest detected dates of the lineages in each country, along with their predominant rates. To present these findings, an interactive Dash Table is employed, facilitating the application of filters to exclude study areas or lineages below a predetermined threshold. Subsequently, the accession numbers of the corresponding sequences are extracted from the graph database. These filtered sequences are then collected for subsequent phylogeographic analysis.
 
 The following function updates the sample table by incorporating selected start and end dates, sequence type and a list of selected locations.
