@@ -88,7 +88,7 @@ Lineage nodes establish connections with Nucleotide and Protein nodes, represent
 Input exploration
 +++++++++++++++++
 
-An interactive platform using Dash-Plotly :cite:`liermann2021dynamic` was developped for efficient data exploration and selection.  
+An interactive platform using Dash-Plotly :cite:`liermann2021dynamic` was developed for efficient data exploration and selection.  
 The integration of the Dash platform with the Neo4j graph database allows for seamless retrieval of pertinent data from interconnected nodes based on user-provided keywords related to lineages or locations. This functionality enables efficient identification and filtering of datasets for subsequent phylogeographic analysis. The integration of the powerful Neo4j database with the user-friendly interactive platform facilitates seamless data exploration and selection, supporting researchers in their comprehensive analysis of SARS-CoV-2 variation.
 
 The aPhyloGeo-Covid offers two distinct approaches for selecting input datasets.
