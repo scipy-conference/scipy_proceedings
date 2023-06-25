@@ -78,6 +78,23 @@ Data Integration
 
 Within the Neo4j database, five labels were employed to effectively organize the data, encompassing Lineage, Protein, Nucleotide, Location, and Location Day (See Figure :ref:`fig1`). The Protein and Nucleotide labels serve as repositories for sequencing data information, including accession number, sequence length, collection date, and collected country. The Lineage label stores lineage development information, encompassing the most common country, latest date, and earliest date associated with each lineage. Climate information such as temperature, precipitation, wind speed, humidity, and sky shortwave irradiance for each location and specific day is stored under the LocationDay label. The Location label contains fundamental information regarding hospitals, health, and the economy of each country, encompassing GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index, and other pertinent factors.
 
+.. raw:: latex
+
+   \begin{table*}
+   \label{tab:labelProp}
+   \begin{center}
+        \caption{Neo4j Schema Labels and Properties.}
+       \begin{tabular}{p{2.1cm}|p{7.5cm}}
+            \hline
+            \textbf{Label} & \textbf{Properties List}  \\ \hline
+            Protein & accession number, sequence length, collection date, collected country \\ 
+            Nucleotide & accession number, sequence length, collection date, collected country \\ 
+            Lineage & most common country, latest date, earliest date \\ 
+            Location Day & temperature, precipitation, wind speed, humidity, sky shortwave irradiance \\ 
+            Location & GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index \\ \hline
+        \end{tabular}
+   \end{center}
+   \end{table*}
 
 
 Lineage nodes establish connections with Nucleotide and Protein nodes, representing the relationships between lineages and their corresponding genetic sequence data. Moreover, Lineage nodes establish relationships with Location nodes, utilizing the most common occurrence rate as a property. This design empowers researchers to determine the most common countries based on lineage names or search for lineages that were predominant in specific countries during specific time periods. This well-structured and interconnected design within the Neo4j database enhances the ability to explore, analyze, and extract meaningful insights from the integrated phylogeographic dataset.
