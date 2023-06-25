@@ -76,14 +76,14 @@ To enable efficient querying, configuration of analysis parameters, and output g
 Data Integration 
 ++++++++++++++++
 
-Within the Neo4j database, five labels were employed to effectively organize the data, encompassing Lineage, Protein, Nucleotide, Location, and Location Day (See Figure :ref:`fig1`). The Protein and Nucleotide labels serve as repositories for sequencing data information, including accession number, sequence length, collection date, and collected country. The Lineage label stores lineage development information, encompassing the most common country, latest date, and earliest date associated with each lineage. Climate information such as temperature, precipitation, wind speed, humidity, and sky shortwave irradiance for each location and specific day is stored under the LocationDay label. The Location label contains fundamental information regarding hospitals, health, and the economy of each country, encompassing GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index, and other pertinent factors.
+Within the Neo4j database, five labels were employed to effectively organize the data, encompassing Lineage, Protein, Nucleotide, Location, and Location Day (See Figure :ref:`fig1`). The Protein and Nucleotide labels serve as repositories for sequencing data information, including accession number, sequence length, collection date, and collected country. The Lineage label stores lineage development information, encompassing the most common country, latest date, and earliest date associated with each lineage. Climate information such as temperature, precipitation, wind speed, humidity, and sky shortwave irradiance for each location and specific day is stored under the LocationDay label. The Location label contains fundamental information regarding hospitals, health, and the economy of each country, encompassing GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index, and other pertinent factors (See Table :ref:`labelProp`).
 
 .. raw:: latex
 
    \begin{table*}
    \label{tab:labelProp}
    \begin{center}
-        \caption{Neo4j Schema Labels and Properties.}
+        \caption{Neo4j schema labels and properties for data integration.}
        \begin{tabular}{p{2.1cm}|p{8.5cm}}
             \hline
             \textbf{Label} & \textbf{Properties List}  \\ \hline
@@ -431,9 +431,9 @@ Significantly, every identified horizontal gene transfer event can be understood
 
    \begin{table*}
    \label{tab:HGT}
-   \begin{center}
+ 
         \caption{Putative horizontal gene transfer events in the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants.}
-       \begin{tabular}{p{2.1cm}|p{2.5cm}|p{2.1cm}|p{2cm}|p{2.1cm}}
+       \begin{tabular}{p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2.5cm}}
             \hline
             \textbf{Iteration} & \textbf{RF distance *} & \textbf{BD **} & \textbf{Origin Subtree} & \textbf{Destination Subtree} \\ \hline
             1 & 10 & 7.5 & QWP89176 & WAV10885 \\ 
@@ -445,11 +445,11 @@ Significantly, every identified horizontal gene transfer event can be understood
         
         {\raggedright * RF distance: Robinson and Foulds distance. \par}
         {\raggedright ** BD: Bipartition Dissimilarity. \par}
-   \end{center}
+   
    \end{table*}
 
 
-The minimum-cost transfer scenario with five HGTs necessary to reconcile the variants and gene phylogenies is shown in Figure :ref:`fig7` (HGTs are depicted by numbered arrows). The analysis initially measured the Robinson and Foulds distance (RF) between the phylogenetic tree of ORF1a and the inferred phylogenetic trees of the window regions 792-940 of ORF1a, yielding a dissimilarity of 16. Five iterations led to the identification of HGT events: the first iteration detected an HGT from subtree QWP89176 to subtree WAV10885 (RF = 10 and BD = 7.5), followed by an HGT from subtree QLL26045 to subtrees QPJ77309, QWP89176, and WAV10885 (RF = 6 and BD = 3.5). The third iteration revealed an HGT from subtree UJS65740 to subtrees QLL26045, QPJ77309, QPN02498, QWP89176, UJW68561, and WAV10885 (RF = 4 and BD = 2.5). In the fourth iteration, an HGT event occurred from subtree UTZ18977 to subtree UNF85490 (RF = 2 and BD = 1.0). Finally, the fifth iteration showed an HGT from subtrees UNF85490 and UTZ18977 to subtree UZC43805 (RF = 0 and BD = 0.0). Overall, five HGT events were identified throughout the analysis.
+The minimum-cost transfer scenario with five HGTs necessary to reconcile the variants and gene phylogenies is shown in Figure :ref:`fig7` (HGTs are depicted by numbered arrows). The analysis initially measured the Robinson and Foulds distance (RF) between the phylogenetic tree of ORF1a and the inferred phylogenetic trees of the window regions 792-940 of ORF1a, yielding a dissimilarity of 16. Five iterations led to the identification of HGT events (See Table :ref:`HGT`): the first iteration detected an HGT from subtree QWP89176 to subtree WAV10885 (RF = 10 and BD = 7.5), followed by an HGT from subtree QLL26045 to subtrees QPJ77309, QWP89176, and WAV10885 (RF = 6 and BD = 3.5). The third iteration revealed an HGT from subtree UJS65740 to subtrees QLL26045, QPJ77309, QPN02498, QWP89176, UJW68561, and WAV10885 (RF = 4 and BD = 2.5). In the fourth iteration, an HGT event occurred from subtree UTZ18977 to subtree UNF85490 (RF = 2 and BD = 1.0). Finally, the fifth iteration showed an HGT from subtrees UNF85490 and UTZ18977 to subtree UZC43805 (RF = 0 and BD = 0.0). Overall, five HGT events were identified throughout the analysis.
 
 .. figure:: figure7.png
    :align: center
