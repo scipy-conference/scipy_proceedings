@@ -1,0 +1,46 @@
+{
+    "authors": [
+        {
+            "name": "Konstantinos Ntatsis",
+            "affiliation": "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+            "orcid": ""
+        },
+        {
+            "name": "Niels Dekker",
+            "affiliation": "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+            "orcid": ""
+        },
+        {
+            "name": "Viktor van der Valk",
+            "affiliation": "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+            "orcid": ""
+        },
+        {
+            "name": "Tom Birdsong",
+            "affiliation": "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA",
+            "orcid": ""
+        },
+        {
+            "name": "Dženan Zukić",
+            "affiliation": "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA",
+            "orcid": "0000-0002-9546-9703"
+        },
+        {
+            "name": "Stefan Klein",
+            "affiliation": "Biomedical Imaging Group Rotterdam, Department of Radiology & Nuclear Medicine, Erasmus MC, Rotterdam, the Netherlands",
+            "orcid": "0000-0003-4449-6784"
+        },
+        {
+            "name": "Marius Staring",
+            "affiliation": "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+            "orcid": "0000-0003-2885-5812"
+        },
+        {
+            "name": "Matthew McCormick",
+            "affiliation": "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA",
+            "orcid": "0000-0001-9475-3756"
+        }
+    ],
+    "title": "itk-elastix: Medical image registration in Python",
+    "description": "This SciPy 2023 poster provides an overview of the open-source medical image registration package itk-elastix. "
+}
