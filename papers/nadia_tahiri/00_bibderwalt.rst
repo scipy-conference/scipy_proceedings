@@ -84,7 +84,7 @@ Within the Neo4j database, five labels were employed to effectively organize the
    \label{tab:labelProp}
    \begin{center}
         \caption{Neo4j Schema Labels and Properties.}
-       \begin{tabular}{p{2.1cm}|p{7.5cm}}
+       \begin{tabular}{p{2.1cm}|p{8.5cm}}
             \hline
             \textbf{Label} & \textbf{Properties List}  \\ \hline
             Protein & accession number, sequence length, collection date, collected country \\ 
@@ -427,6 +427,26 @@ In addition of correlation analysis between correlation diversity of subfregment
 The HGT-Detection program allows one to infer all possible horizontal gene transfer events for a given group of species by reconciling the species tree (i.e. ORF1a gene tree in our case) with different gene phylogenies built for regions of individual genes :cite:`boc2011towards` :cite:`denamur2000evolutionary`.
 Significantly, every identified horizontal gene transfer event can be understood from three perspectives: Firstly, it may signify a distinct complete or partial HGT occurrence between genetically distant species. Secondly, it could indicate the occurrence of parallel evolution, where the involved species underwent similar genetic changes independently. Lastly, it could also indicate the emergence of a new species (referred to as a gene transfer recipient) resulting from the recombination of the donor species genome with that of a neighboring recipient in the species' evolutionary history :cite:`makarenkov2021horizontal`.
 
+.. raw:: latex
+
+   \begin{table*}
+   \label{tab:HGT}
+   \begin{center}
+        \caption{Putative horizontal gene transfer events in the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants.}
+       \begin{tabular}{p{2.1cm}|p{2.5cm}|p{2.1cm}|p{2cm}|p{2.1cm}}
+            \hline
+            \textbf{Iteration} & \textbf{RF distance *} & \textbf{BD **} & \textbf{Origin Subtree} & \textbf{Destination Subtree} \\ \hline
+            1 & 10 & 7.5 & QWP89176 & WAV10885 \\ 
+            2 & 6 & 3.5 & QLL26045 & (QPJ77309, QWP89176, WAV10885) \\ 
+            3 & 4 & 2.5 & UJS65740 &  (QLL26045, QPJ77309, QPN02498, QWP89176, UJW68561, WAV10885) \\ 
+            4 & 2 & 1.5 & UTZ18977 &  UNF85490 \\ 
+            5 & 0 & 0.0 & (UNF85490, UTZ18977) & UZC43805\\ \hline
+        \end{tabular}
+        
+        {\raggedright * RF distance: Robinson and Foulds distance. \par}
+        {\raggedright ** BD: Bipartition Dissimilarity. \par}
+   \end{center}
+   \end{table*}
 
 
 The minimum-cost transfer scenario with five HGTs necessary to reconcile the variants and gene phylogenies is shown in Figure :ref:`fig7` (HGTs are depicted by numbered arrows). The analysis initially measured the Robinson and Foulds distance (RF) between the phylogenetic tree of ORF1a and the inferred phylogenetic trees of the window regions 792-940 of ORF1a, yielding a dissimilarity of 16. Five iterations led to the identification of HGT events: the first iteration detected an HGT from subtree QWP89176 to subtree WAV10885 (RF = 10 and BD = 7.5), followed by an HGT from subtree QLL26045 to subtrees QPJ77309, QWP89176, and WAV10885 (RF = 6 and BD = 3.5). The third iteration revealed an HGT from subtree UJS65740 to subtrees QLL26045, QPJ77309, QPN02498, QWP89176, UJW68561, and WAV10885 (RF = 4 and BD = 2.5). In the fourth iteration, an HGT event occurred from subtree UTZ18977 to subtree UNF85490 (RF = 2 and BD = 1.0). Finally, the fifth iteration showed an HGT from subtrees UNF85490 and UTZ18977 to subtree UZC43805 (RF = 0 and BD = 0.0). Overall, five HGT events were identified throughout the analysis.
