@@ -76,7 +76,27 @@ To enable efficient querying, configuration of analysis parameters, and output g
 Data Integration 
 ++++++++++++++++
 
-Within the Neo4j database, five labels were employed to effectively organize the data, encompassing Lineage, Protein, Nucleotide, Location, and LocationDay (See Figure :ref:`fig1`). The Protein and Nucleotide labels serve as repositories for sequencing data information, including Accession, length, collection date, and collected country. The Lineage label stores lineage development information, encompassing the most common country, latest date, and earliest date associated with each lineage. Climate information such as temperature, precipitation, wind speed, humidity, and sky shortwave irradiance for each location and specific day is stored under the LocationDay label. The Location label contains fundamental information regarding hospitals, health, and the economy of each country, encompassing GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index, and other pertinent factors.
+Within the Neo4j database, five labels were employed to effectively organize the data, encompassing Lineage, Protein, Nucleotide, Location, and Location Day (See Figure :ref:`fig1`). The Protein and Nucleotide labels serve as repositories for sequencing data information, including accession number, sequence length, collection date, and collected country. The Lineage label stores lineage development information, encompassing the most common country, latest date, and earliest date associated with each lineage. Climate information such as temperature, precipitation, wind speed, humidity, and sky shortwave irradiance for each location and specific day is stored under the LocationDay label. The Location label contains fundamental information regarding hospitals, health, and the economy of each country, encompassing GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index, and other pertinent factors.
+
+.. raw:: latex
+
+   \begin{table*}
+
+     \begin{longtable*}{|l|l|l|l|}
+         \hline
+         Lineage & Most Common Country                & Earliest Date & Sequence Accession \\ \hline
+         A.2.3 & United Kingdom   100.0\% & 2020-03-12 & OW470304.1 \\ \hline
+         AE.2      & Bahrain 100.0\%          & 2020-06-23 & MW341474  \\ \hline
+         AH.1      & Switzerland 100.0\%      & 2021-01-05 & OD999779  \\ \hline
+         AK.2    & Germany 100.0\%     & 2020-09-19    & OU077014 \\ \hline
+         B.1.1.107 & United Kingdom   100.0\% & 2020-06-06 & OA976647  \\ \hline
+         B.1.1.172 & USA 100.0\%              & 2020-04-06 & MW035925 \\ \hline
+         BA.2.24   & Japan 99.0\%             & 2022-01-27 & BS004276 \\ \hline
+     \end{longtable*}
+
+     \caption{a venir}
+
+   \end{table*}
 
 Lineage nodes establish connections with Nucleotide and Protein nodes, representing the relationships between lineages and their corresponding genetic sequence data. Moreover, Lineage nodes establish relationships with Location nodes, utilizing the most common occurrence rate as a property. This design empowers researchers to determine the most common countries based on lineage names or search for lineages that were predominant in specific countries during specific time periods. This well-structured and interconnected design within the Neo4j database enhances the ability to explore, analyze, and extract meaningful insights from the integrated phylogeographic dataset.
 
