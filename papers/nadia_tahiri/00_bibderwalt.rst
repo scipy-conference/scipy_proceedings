@@ -444,7 +444,7 @@ Significantly, every identified horizontal gene transfer event can be understood
    \small
    \vspace{-6pt}
    \begin{center}
-       \begin{tabular}{r|p{0.7cm}|p{0.7cm}|p{1.5cm}|p{1.5cm}}
+       \begin{tabular}{p{0.9cm}|p{0.9cm}|p{0.9cm}|p{1.5cm}|p{1.5cm}}
             \hline
             \textbf{Iteration} & \textbf{RF distance} & \textbf{BD distance} & \textbf{Origin Subtree} & \textbf{Destination Subtree} \\ \hline
             1 & 10 & 7.5 & QWP89176 & WAV10885 \\ 
