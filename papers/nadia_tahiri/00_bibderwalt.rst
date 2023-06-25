@@ -91,9 +91,10 @@ Input exploration
 An interactive platform using Dash-Plotly :cite:`hossain2019visualization` :cite:`liermann2021dynamic` was developed for efficient data exploration and selection.  
 The integration of the Dash platform with the Neo4j graph database allows for the seamless retrieval of pertinent data from interconnected nodes based on user-provided keywords related to lineages or locations. This functionality enables efficient identification and filtering of datasets for subsequent phylogeographic analysis. The integration of the powerful Neo4j database with the user-friendly interactive platform facilitates seamless data exploration and selection, supporting researchers in their comprehensive analysis of SARS-CoV-2 variation.
 
-The aPhyloGeo-Covid offers two distinct approaches for selecting input datasets.
+The aPhyloGeo-Covid offers two distinct approaches for selecting input datasets: 1) lineage-based approach for retrieving corresponding sequences based on selected lineage name and 2) location-based approach for retrieving corresponding sequences based on selected location and time period.
 
 1. Lineage-based approach for retrieving corresponding sequences based on selected lineage name
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The multi-step process is facilitated by the Neo4j Python package :cite:`jordan2014neo4j` and the interactive Dash web page. 
 Initially, specific lineages of interest are selected from a checklist provided on the Dash web page. 
@@ -141,6 +142,7 @@ Updating the sample table based on provided lineage names and sequence types, as
        ....
 
 2. Location-based approach for retrieving corresponding sequences based on selected location and time period
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Specific locations and a date period are defined by employing the Dash web page.
 Subsequently, the Neo4j database is queried to identify lineages prevalent in the specified locations during the defined time period. 
