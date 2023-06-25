@@ -7,5 +7,5 @@
             "orcid": "0009-0007-5329-9148"
         }
     ],
-    "description": "1-4 sentences explaining what your presentation is about"
+    "description": "The pace of discovery of near-earth asteroids outpaces current abilities to analyze them. Knowledge of an asteroid's physical properties is essential to deflect them. I developed open-source algorithms that combine images from robotic telescopes, open-data, and math to determine asteroids' size, rotation, and strength. I took observations of the Didymos binary asteroid, and my algorithm determined it to be 820m wide, with a 2.26-hour rotation period and rubble-pile strength. I measured a 35-minute decrease in the mutual orbital period after impact by the 2022 NASA DART Mission. External sources validated the findings. Every citizen scientist is now a planetary defender."
 }
