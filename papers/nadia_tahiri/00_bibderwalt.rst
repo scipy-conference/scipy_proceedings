@@ -89,14 +89,15 @@ Within the Neo4j database, five labels were employed to effectively organize the
          Nucleotide & accession number, sequence length, collection date, collected country \\ \hline
          Lineage & most common country, latest date, earliest date \\ \hline
          LocationDay & temperature, precipitation, wind speed, humidity, sky shortwave irradiance \\ \hline
-         Location & GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index \\ \hline
+         Location & GDP, median age, life expectancy, population, proportion of people aged 65 and older, 
+                        proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index \\ \hline
          Input & (id) \\ \hline
          Analysis & id, bootstrap threshold, rf threshold, step size, window size, data type, selected features, input files name, output file name \\ \hline
          Output & id, bootstrap average, normalized rf, window position, feature name \\ \hline
          
      \end{longtable*}
 
-     \caption{Neo4j Schema Labels and Properties. Labels with corresponding properties for each category. Nodes for data integration include Protein, Nucleotide, Lineage, LocationDay, and Location. Nodes for the analysis pipeline include Input, Analysis, Output}
+     \caption{Neo4j Schema Labels and Properties. Nodes for data integration include Protein, Nucleotide, Lineage, LocationDay, and Location. Nodes for the analysis pipeline include Input, Analysis, Output.}
 
    \end{table*}
 
