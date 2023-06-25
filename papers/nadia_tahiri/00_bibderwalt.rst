@@ -91,7 +91,7 @@ Within the Neo4j database, five labels were employed to effectively organize the
    \small
    \vspace{-6pt}
    \begin{center}
-       \begin{tabular}{p{1.7cm}|p{5.5cm}}
+       \begin{tabular}{p{1.9cm}|p{5.3cm}}
             \hline
             \textbf{Label} & \textbf{Properties List}  \\ \hline
             Protein & accession number, sequence length, collection date, collected country \\ 
