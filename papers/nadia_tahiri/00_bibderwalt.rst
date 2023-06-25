@@ -454,8 +454,8 @@ Significantly, every identified horizontal gene transfer event can be understood
             5 & 0 & 0.0 & (UNF85490, UTZ18977) & UZC43805\\ \hline
         \end{tabular}
         
-        {\raggedright RF distance: Robinson and Foulds distance. \par}
-        {\raggedright BD: Bipartition Dissimilarity. \par}
+        {\raggedright During each iteration of the horizontal gene transfer (HGT) algorithm, the Robinson-Foulds distance (RF) and bipartition distance (BD) values are calculated. The HGT transfer occurs from the origin of the subtree to the destination of the subtree. \par}
+        
    \end{center}
    \end{table}
 
