@@ -438,7 +438,7 @@ Significantly, every identified horizontal gene transfer event can be understood
 .. raw:: latex
 
    \begin{table*}
-   \label{tab:HGT1}
+   \label{tab:HGT}
  
         \caption{Putative horizontal gene transfer events in the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants.}
        \begin{tabular}{p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{2cm}}
@@ -455,27 +455,6 @@ Significantly, every identified horizontal gene transfer event can be understood
         {\raggedright BD: Bipartition Dissimilarity. \par}
    
    \end{table*}
-
-.. table:: Putative horizontal gene transfer events in the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants. :label:`HGT`
-
-   +-----------+-------------+-------------+----------------+---------------------+
-   | Iteration | RF distance | BD distance | Origin Subtree | Destination Subtree |
-   +===========+=============+=============+================+=====================+
-   | 1         | 10          | 7.5         | QWP89176       | 3                   |
-   +-----------+-------------+---------- --+----------------+---------------------+
-   | 2         | 6           | 3.5         | QLL26045       | 12                  |         
-   +---------- +-------------+-------- ----+----------------+---------------------+
-   | 3         | 4           | 2.5         | UJS65740       |                     |
-   +-----------+-------------+-------------+----------------+---------------------+
-   | 4         | 2           | 1.0         | UTZ18977       | 12                  |
-   +-----------+-------------+-------------+----------------+---------------------+
-   | 5         | 0           | 0.0         | UNF85490       |                     |
-   |           |             |             | UTZ18977       |                     |
-   +-----------+-------------+-------------+----------------+---------------------+
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
 
 
 The minimum-cost transfer scenario with five HGTs necessary to reconcile the variants and gene phylogenies is shown in Figure :ref:`fig7` (HGTs are depicted by numbered arrows). The analysis initially measured the Robinson and Foulds distance (RF) between the phylogenetic tree of ORF1a and the inferred phylogenetic trees of the window regions 792-940 of ORF1a, yielding a dissimilarity of 16. Five iterations led to the identification of HGT events (See Table :ref:`HGT`): the first iteration detected an HGT from subtree QWP89176 to subtree WAV10885 (RF = 10 and BD = 7.5), followed by an HGT from subtree QLL26045 to subtrees QPJ77309, QWP89176, and WAV10885 (RF = 6 and BD = 3.5). The third iteration revealed an HGT from subtree UJS65740 to subtrees QLL26045, QPJ77309, QPN02498, QWP89176, UJW68561, and WAV10885 (RF = 4 and BD = 2.5). In the fourth iteration, an HGT event occurred from subtree UTZ18977 to subtree UNF85490 (RF = 2 and BD = 1.0). Finally, the fifth iteration showed an HGT from subtrees UNF85490 and UTZ18977 to subtree UZC43805 (RF = 0 and BD = 0.0). Overall, five HGT events were identified throughout the analysis.
