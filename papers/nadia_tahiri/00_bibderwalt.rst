@@ -85,6 +85,25 @@ Within the Neo4j database, five labels were employed to effectively organize the
 
 .. raw:: latex
 
+\begin{table}[htb]
+\caption{Demographic validation}
+\label{tab:demographic-validation}
+\small
+\vspace{-6pt}
+\begin{center}
+\begin{tabular}{l | p{3.25cm} | c}
+\toprule
+\bf PUMA & \bf Name & \bf ACS 90\% MOE Fit Rate\\
+\midrule
+1206300 & Leon County (Central) & 0.992 \\
+1207300 & Leon County (Outer) &  0.998 \\
+1207301 & Apalachee Region (Outside Leon County) & 0.994 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+
    \begin{table*}[htb]
    \label{tab:labelProp}
       
