@@ -85,28 +85,12 @@ Within the Neo4j database, five labels were employed to effectively organize the
 
 .. raw:: latex
 
-\begin{table}[htb]
-\caption{Demographic validation}
-\label{tab:demographic-validation}
-\small
-\vspace{-6pt}
-\begin{center}
-\begin{tabular}{l | p{3.25cm} | c}
-\toprule
-\bf PUMA & \bf Name & \bf ACS 90\% MOE Fit Rate\\
-\midrule
-1206300 & Leon County (Central) & 0.992 \\
-1207300 & Leon County (Outer) &  0.998 \\
-1207301 & Apalachee Region (Outside Leon County) & 0.994 \\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{table}
-
-
-   \begin{table*}[htb]
+   \begin{table}[htb]
+   \caption{Neo4j schema labels and properties for data integration.}
    \label{tab:labelProp}
-      
+   \small
+   \vspace{-6pt}
+   \begin{center}
        \begin{tabular}{p{2cm}|p{3.5cm}}
             \hline
             \textbf{Label} & \textbf{Properties List}  \\ \hline
@@ -116,9 +100,8 @@ Within the Neo4j database, five labels were employed to effectively organize the
             Location Day & temperature, precipitation, wind speed, humidity, sky shortwave irradiance \\ 
             Location & GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index \\ \hline
         \end{tabular}
-   \caption{Neo4j schema labels and properties for data integration.}
-
-   \end{table*}
+   \end{center}
+   \end{table}
 
 
 Lineage nodes establish connections with Nucleotide and Protein nodes, representing the relationships between lineages and their corresponding genetic sequence data. Moreover, Lineage nodes establish relationships with Location nodes, utilizing the most common occurrence rate as a property. This design empowers researchers to determine the most common countries based on lineage names or search for lineages that were predominant in specific countries during specific time periods. This well-structured and interconnected design within the Neo4j database enhances the ability to explore, analyze, and extract meaningful insights from the integrated phylogeographic dataset.
