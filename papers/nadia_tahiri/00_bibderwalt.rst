@@ -439,7 +439,7 @@ Significantly, every identified horizontal gene transfer event can be understood
 .. raw:: latex
 
    \begin{table}[htb]
-   \caption{Putative horizontal gene transfer events in the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants.}
+   \caption{Putative horizontal gene transfer events in the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants. Each iteration of the horizontal gene transfer (HGT) algorithm is accompanied by the Robinson-Foulds distance (RF) and bipartition distance (BD) values calculated. The HGT transfer occurs from the origin of the subtree to the destination of the subtree.}
    \label{tab:HGT}
    \small
    \vspace{-6pt}
@@ -453,8 +453,6 @@ Significantly, every identified horizontal gene transfer event can be understood
             4 & 2 & 1.5 & UTZ18977 &  UNF85490 \\ 
             5 & 0 & 0.0 & (UNF85490, UTZ18977) & UZC43805\\ \hline
         \end{tabular}
-        
-        {\raggedright During each iteration of the horizontal gene transfer (HGT) algorithm, the Robinson-Foulds distance (RF) and bipartition distance (BD) values are calculated. The HGT transfer occurs from the origin of the subtree to the destination of the subtree. \par}
         
    \end{center}
    \end{table}
