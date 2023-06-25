@@ -82,8 +82,10 @@ Within the Neo4j database, five labels were employed to effectively organize the
 
    \begin{table*}
    \label{tab:labelProp}
+   \small
+   \vspace{-6pt}
    \begin{center}
-        \caption{Neo4j schema labels and properties for data integration.}
+      \caption{Neo4j schema labels and properties for data integration.}
        \begin{tabular}{p{2.1cm}|p{8.5cm}}
             \hline
             \textbf{Label} & \textbf{Properties List}  \\ \hline
