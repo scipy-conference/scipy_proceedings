@@ -440,9 +440,9 @@ Significantly, every identified horizontal gene transfer event can be understood
    \label{tab:HGT}
  
         \caption{Putative horizontal gene transfer events in the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants.}
-       \begin{tabular}{p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2.5cm}}
+       \begin{tabular}{p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{2cm}}
             \hline
-            \textbf{Iteration} & \textbf{RF distance *} & \textbf{BD **} & \textbf{Origin Subtree} & \textbf{Destination Subtree} \\ \hline
+            \textbf{Iteration} & \textbf{RF distance} & \textbf{BD distance} & \textbf{Origin Subtree} & \textbf{Destination Subtree} \\ \hline
             1 & 10 & 7.5 & QWP89176 & WAV10885 \\ 
             2 & 6 & 3.5 & QLL26045 & (QPJ77309, QWP89176, WAV10885) \\ 
             3 & 4 & 2.5 & UJS65740 &  (QLL26045, QPJ77309, QPN02498, QWP89176, UJW68561, WAV10885) \\ 
@@ -450,8 +450,8 @@ Significantly, every identified horizontal gene transfer event can be understood
             5 & 0 & 0.0 & (UNF85490, UTZ18977) & UZC43805\\ \hline
         \end{tabular}
         
-        {\raggedright * RF distance: Robinson and Foulds distance. \par}
-        {\raggedright ** BD: Bipartition Dissimilarity. \par}
+        {\raggedright RF distance: Robinson and Foulds distance. \par}
+        {\raggedright BD: Bipartition Dissimilarity. \par}
    
    \end{table*}
 
