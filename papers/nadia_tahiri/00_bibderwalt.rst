@@ -79,7 +79,7 @@ Data Integration
 Within the Neo4j database, five labels were employed to effectively organize the data, encompassing Lineage, Protein, Nucleotide, Location, and Location Day (See Figure :ref:`fig1`). The Protein and Nucleotide labels serve as repositories for sequencing data information, including accession number, sequence length, collection date, and collected country. The Lineage label stores lineage development information, encompassing the most common country, latest date, and earliest date associated with each lineage. Climate information such as temperature, precipitation, wind speed, humidity, and sky shortwave irradiance for each location and specific day is stored under the LocationDay label. The Location label contains fundamental information regarding hospitals, health, and the economy of each country, encompassing GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index, and other pertinent factors.
 
 .. raw:: latex
-   \usepackage{multirow}
+   \usepackage{makecell}
 
    \begin{table*}
 
@@ -90,7 +90,7 @@ Within the Neo4j database, five labels were employed to effectively organize the
          Nucleotide & accession number, sequence length, collection date, collected country \\ \hline
          Lineage & most common country, latest date, earliest date \\ \hline
          LocationDay & temperature, precipitation, wind speed, humidity, sky shortwave irradiance \\ \hline
-         Location & \multirow{2}{*}{GDP, median age, life expectancy, population, proportion of people aged 65 and older, 
+         Location & \makecell{GDP, median age, life expectancy, population, proportion of people aged 65 and older, \\
                         proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index} \\ \hline
          Input & (id) \\ \hline
          Analysis & id, bootstrap threshold, rf threshold, step size, window size, data type, selected features, input files name, output file name \\ \hline
