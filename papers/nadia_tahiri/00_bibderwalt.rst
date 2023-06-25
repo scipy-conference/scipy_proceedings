@@ -87,9 +87,6 @@ Within the Neo4j database, five labels were employed to effectively organize the
 
    \begin{table*}[htb]
    \label{tab:labelProp}
-   \small
-   \vspace{-6pt}
-   \begin{center}
       
        \begin{tabular}{p{2cm}|p{3.5cm}}
             \hline
@@ -101,7 +98,7 @@ Within the Neo4j database, five labels were employed to effectively organize the
             Location & GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index \\ \hline
         \end{tabular}
    \caption{Neo4j schema labels and properties for data integration.}
-   \end{center}
+
    \end{table*}
 
 
