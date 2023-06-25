@@ -85,7 +85,7 @@ Within the Neo4j database, five labels were employed to effectively organize the
 
 .. raw:: latex
 
-   \begin{table*}
+   \begin{table*}[htb]
    \label{tab:labelProp}
    \small
    \vspace{-6pt}
