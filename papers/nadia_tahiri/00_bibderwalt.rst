@@ -90,7 +90,7 @@ Within the Neo4j database, five labels were employed to effectively organize the
    \small
    \vspace{-6pt}
    \begin{center}
-      \caption{Neo4j schema labels and properties for data integration.}
+      
        \begin{tabular}{p{2.1cm}|p{8.5cm}}
             \hline
             \textbf{Label} & \textbf{Properties List}  \\ \hline
@@ -100,6 +100,7 @@ Within the Neo4j database, five labels were employed to effectively organize the
             Location Day & temperature, precipitation, wind speed, humidity, sky shortwave irradiance \\ 
             Location & GDP, median age, life expectancy, population, proportion of people aged 65 and older, proportion of smokers, proportion of extreme poverty, diabetes prevalence, human development index \\ \hline
         \end{tabular}
+   \caption{Neo4j schema labels and properties for data integration.}
    \end{center}
    \end{table*}
 
@@ -437,7 +438,7 @@ Significantly, every identified horizontal gene transfer event can be understood
 .. raw:: latex
 
    \begin{table*}
-   \label{tab:HGT}
+   \label{tab:HGT1}
  
         \caption{Putative horizontal gene transfer events in the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants.}
        \begin{tabular}{p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{2cm}}
@@ -455,25 +456,23 @@ Significantly, every identified horizontal gene transfer event can be understood
    
    \end{table*}
 
-.. table:: This is the caption for the materials table. :label:`mtable`
+.. table:: Putative horizontal gene transfer events in the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants. :label:`HGT`
 
-   +------------+----------------+------------+----------------+----------------+
-   | Material   | Units          |Units       |Units           |Units           |
-   +============+================+============+================+================+
-   | Stone      | 3              |Stone      | 3               | 3              |
-   +------------+----------------+------------+----------------+----------------+
-   | Water      | 12             |Water      | 12              | 12             |         
-   +------------+----------------+------------+----------------+----------------+
-   | Cement     | :math:`\alpha` |Cement     | :math:`\alpha`  | 12             |
-   +------------+----------------+------------+----------------+----------------+
-   | Water      | 12             |Water      | 12              | 12             |
-   +------------+----------------+------------+----------------+----------------+
-   | Cement     | :math:`\alpha` |Water      | 12              | 12             |
-   +------------+----------------+------------+----------------+----------------+
+   +-----------+-------------+-------------+----------------+---------------------+
+   | Iteration | RF distance | BD distance | Origin Subtree | Destination Subtree |
+   +===========+=============+=============+================+=====================+
+   | 1         | 10          | 7.5         | QWP89176       | 3                   |
+   +-----------+-------------+---------- --+----------------+---------------------+
+   | 2         | 6           | 3.5         | QLL26045       | 12                  |         
+   +---------- +-------------+-------- ----+----------------+---------------------+
+   | 3         | 4           | 2.5         | UJS65740       |                     |
+   +-----------+-------------+-------------+----------------+---------------------+
+   | 4         | 2           | 1.0         | UTZ18977       | 12                  |
+   +-----------+-------------+-------------+----------------+---------------------+
+   | 5         | 0           | 0.0         | UNF85490       |                     |
+   |           |             |             | UTZ18977       |                     |
+   +-----------+-------------+-------------+----------------+---------------------+
 
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
 
 
 
