@@ -375,7 +375,7 @@ Various tools and software were utilized to accomplish these analysis tasks, inc
 Results and discussion
 ------------------------
 
-The SARS-CoV-2 virus has a genome size of approximately 30kb (See Figure :ref:`fig3`). The first two-thirds of its genome, located at the 5'-terminal, encodes the instructions for the synthesis of two major proteins, namely pp1a and pp1ab. 
+The SARS-CoV-2 virus has a genome size of approximately 30kb (See Figure :ref:`fig3`). The first two-thirds of its genome, located at the 5'-terminal, encodes the instructions for the synthesis of two major proteins, namely pp1a, and pp1ab. 
 Following viral enzyme processing, these proteins are transformed into 16 smaller non-structural proteins (Nsps). Specifically, ORF1a encodes nsp1–nsp10, while ORF1b encodes nsp1–nsp16, which play pivotal roles in viral replication and transcription :cite:`khan2021structures`. 
 Consequently, our first assessment of the aPhyloGeo-Covid performance focused on the pp1a region.
 
