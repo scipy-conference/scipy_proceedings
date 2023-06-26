@@ -465,7 +465,7 @@ The minimum-cost transfer scenario with five HGTs necessary to reconcile the var
    :figclass: w
    :scale: 35%
    
-   Putative horizontal gene transfer events found for the window regions of 792-940 residue (amino acid sequences) of 14 SARS-Cov-2 variants. (a) presents the phylogenetic tree of the window regions 792-940 of ORF1a. (b) presents the phylogenetic tree of ORF1a (amino acid sequences) with putative horizontal gene transfers mapped into it.  :label:`fig7`
+   Putative horizontal gene transfer events found for the window regions of 792-940 residues (amino acid sequences) of 14 SARS-Cov-2 variants. (a) presents the phylogenetic tree of the window regions 792-940 of ORF1a. (b) presents the phylogenetic tree of ORF1a (amino acid sequences) with putative horizontal gene transfers mapped into it.  :label:`fig7`
    
    
 
