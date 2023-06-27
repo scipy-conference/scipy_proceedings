@@ -32,10 +32,10 @@ Introduction
 ------------
 
 Data validation is the process of falsifying data against a particular set of
-assumptions. Framed differently, it is the act of verifying data against a
-a set of properties and constraints that are explicitly established by the
-data practitioner. In this context, the term "data practitioner" refers to anyone
-who using a programming language to analyze, transform, or otherwise process data.
+assumptions :cite:`van2018statistical`. Framed differently, it is the act of
+verifying data against a a set of properties and constraints that are explicitly
+established by the data practitioner. In this context, the term "data practitioner"
+refers to anyone who using a programming language to analyze, transform, or otherwise process data.
 Is includes, but is not limited to, the data scientists, data engineers,
 data analysts, machine learning engineers, and machine learning researchers.
 This paper describes the trajectory of pandera from a pandas-only Validation
@@ -54,10 +54,10 @@ safer and more robust data pipelines.
 Why Validate Data?
 ++++++++++++++++++
 
-Data validation is the act of falsifying data against a particular set of
-assumptions, expressed as a schema of validation rules. These rules are explicitly
-established by the data practitioner without interference from automated processes, like
-data profiling, and verified at runtime on real-world data.
+As stated in the introduction, data validation is the act of falsifying (or verifying)
+data against a particular set of assumptions, expressed as a schema of validation rules.
+These rules are explicitly established by the data practitioner without interference
+from automated processes, like data profiling, and verified at runtime on real-world data.
 
 In machine learning (ML) and statistical analysis use cases, this is critical
 because invalid data, e.g. incorrect types, invalid values, and otherwise
