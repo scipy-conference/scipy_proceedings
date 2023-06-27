@@ -36,10 +36,10 @@ assumptions :cite:`van2018statistical`. Framed differently, it is the act of
 verifying data against a a set of properties and constraints that are explicitly
 established by the data practitioner. In this context, the term "data practitioner"
 refers to anyone who using a programming language to analyze, transform, or otherwise process data.
-Is includes, but is not limited to, the data scientists, data engineers,
+It includes, but is not limited to, data scientists, data engineers,
 data analysts, machine learning engineers, and machine learning researchers.
-This paper describes the trajectory of pandera from a pandas-only Validation
-library to a more generic framework to validate dataframe-like objects.
+This paper describes the trajectory of pandera from a pandas-only validation
+library to a more generic framework that can validate any dataframe-like object.
 
 Origins
 -------
@@ -62,13 +62,12 @@ from automated processes, like data profiling, and verified at runtime on real-w
 In machine learning (ML) and statistical analysis use cases, this is critical
 because invalid data, e.g. incorrect types, invalid values, and otherwise
 corrupted data, can pass silently along a data pipeline and propagate those
-errors to various endpoints. These endpoints can be models, analyses, and
-visualizations, which cause adverse ripple-effects to the downstream consumers
-that rely on high-quality data. These downstream effects include erosion of trust
-in the results of, for example, the results of an analysis or visualization.
-Though this is especially important in scientific research and business-critical
-applications, data validation ought to be a core part of the quality assurance
-pipeline of data teams.
+errors to various endpoints, which cause adverse ripple-effects to the downstream
+consumers that rely on high-quality data. These endpoints can be models, analyses,
+and visualizations, and errors in any of these artifacts call into question the
+trustworthiness of the conclusions that they entail. Though this is especially
+important in scientific research and business-critical applications, data validation
+ought to be a core part of the quality assurance pipeline of data teams.
 
 The data practitioner can build statistical domain knowledge about the data they
 are working with by inspecting the data via exploratory data analysis (EDA), automatically
@@ -152,7 +151,7 @@ core programming model is simple:
    :figclass: w
    :scale: 100%
 
-   The pandera programming model is an iterative loop between building domain
+   The pandera programming model is an iterative loop between building statistical domain
    knowledge, implementing data transforms and schemas, and verifying data. :label:`fig1`
 
 Pandera embraces the data testing development process, which involves validating
@@ -163,12 +162,12 @@ in your code, or as reusable components in the pipeline's unit test suite.
 
 As depicted in :ref:`fig1`, this process is roughly as follows: by whatever means
 necessary, typically via EDA or data profiling (the programmatic creation
-of summary statistics and visualization), the data practitioner arrives at a schema.
+of summary statistics and visualization), the data practitioner arrives at a schema,
 which states the columns and properties that the data should adhere to. The
 schema is then used to validate data in-line, or at the interface boundary of
-critical functions in the data pipeline. The data practitioner can start with a basic schema
-which may include column names and their expected types, but as they build
-more domain knowledge about what counts as valid data, the can refine the
+critical functions in the data pipeline. The data practitioner can start with a basic schema,
+which may include column names and their expected types. As they build
+more statistical domain knowledge about what counts as valid data, the can refine the
 schemas to better fit the requirements of their analysis using ``Check``\s.
 
 .. code-block:: python
@@ -562,8 +561,8 @@ pull request 1109 :cite:`pandera-pr-1109` on March 13th, 2023. A few factors
 facilitated the rewrite itself and also reduced the risk of regressions:
 
 - **Unit tests**: A comprehensive unit test suite caught many issues, but not
-  all of them. This was partly due to lack of complete test coverage, but also
-  new tests had to be written for abstractions introduced during the re-write process.
+  all of them. This was partly due to lack of complete test coverage, but
+  new tests also had to be written for abstractions introduced during the re-write process.
 - **Localized pandas coupling**: Pandas-specific code was mostly localized in
   easy-to-identify locations in the codebase.
 - **Lessons learned from pandas-compliant integrations**: Earlier integrations
