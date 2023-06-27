@@ -80,7 +80,7 @@ So for large :math:`n`, the posterior distribution of :math:`{\boldsymbol \theta
 
    {\boldsymbol \theta} \vert x \approx_D N(\widehat{\boldsymbol{\theta}}, -H(\widehat{\boldsymbol{\theta}})^{-1})
 
-Another caveat for this result is that the prior should be proper, or at least lead to a proper posterior.  Our asymptotic results are depending on probabilities integrating to 1.
+Another caveat for this result is that the prior should be proper, or at least lead to a proper posterior.  By proper we mean that the function corresponds to a probability density function.  Our asymptotic results are depending on probabilities integrating to 1.
 
 We could get a quantified degree of beief by using resampling methods like Markov chain Monte Carlo (MCMC) :cite:`gelman2013bayesian` directly.  We would have to use fewer assumptions. However, resampling can be computationally intensive.
 
