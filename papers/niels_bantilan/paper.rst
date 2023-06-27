@@ -17,13 +17,29 @@ Pandera: Going Beyond Pandas Data Validation
    new highly performant entrants such as Polars - existing data quality frameworks
    need to catch up to support them, and in some cases, the Python community
    more broadly creates new data validation libraries for these new data frameworks.
-   This paper outlines pandera's journey from being a pandas-only data validation
-   framework to one that is extensible to other non-pandas-compliant dataframe-like
-   libraries.
+   This paper outlines pandera's motivation and challenges that took it from being
+   a pandas-only data validation framework :cite:`niels_bantilan-proc-scipy-2020`
+   to one that is extensible to other non-pandas-compliant dataframe-like libraries.
+   It also provides a informative case study of the technical and organizational
+   challenges associated with expanding the scope of a library beyond its original
+   boundaries.
 
 .. class:: keywords
 
    data validation, data testing, data science, machine learning, data engineering
+
+Introduction
+------------
+
+Data validation is the process of falsifying data against a particular set of
+assumptions. Framed differently, it is the act of verifying data against a
+a set of properties and constraints that are explicitly established by the
+data practitioner. In this context, the term "data practitioner" refers to anyone
+who using a programming language to analyze, transform, or otherwise process data.
+Is includes, but is not limited to, the data scientists, data engineers,
+data analysts, machine learning engineers, and machine learning researchers.
+This paper describes the trajectory of pandera from a pandas-only Validation
+library to a more generic framework to validate dataframe-like objects.
 
 Origins
 -------
@@ -40,7 +56,7 @@ Why Validate Data?
 
 Data validation is the act of falsifying data against a particular set of
 assumptions, expressed as a schema of validation rules. These rules are explicitly
-established by the analyst without interference from automated processes, like
+established by the data practitioner without interference from automated processes, like
 data profiling, and verified at runtime on real-world data.
 
 In machine learning (ML) and statistical analysis use cases, this is critical
@@ -48,16 +64,25 @@ because invalid data, e.g. incorrect types, invalid values, and otherwise
 corrupted data, can pass silently along a data pipeline and propagate those
 errors to various endpoints. These endpoints can be models, analyses, and
 visualizations, which cause adverse ripple-effects to the downstream consumers
-that rely on high-quality data, such as scientific research and business-critical
-applications.
+that rely on high-quality data. These downstream effects include erosion of trust
+in the results of, for example, the results of an analysis or visualization.
+Though this is especially important in scientific research and business-critical
+applications, data validation ought to be a core part of the quality assurance
+pipeline of data teams.
 
-The analyst can build domain knowledge about the data they are working with
-by inspecting the data via exploratory data analysis (EDA), automatically
+The data practitioner can build statistical domain knowledge about the data they
+are working with by inspecting the data via exploratory data analysis (EDA), automatically
 profiling the data with any number of tools at their disposal, or a combination
 of these two approaches. By building a mental model of how their data looks like
 and envisioning a set of constraints that express what the ideal "clean" dataset
-looks like, the analyst can then encode this understanding as a schema that they
-can use to validate new incoming data.
+looks like, the data practitioner can then encode this understanding as a schema that they
+can use to validate new incoming data. This schema then serves not only as documentation
+for themselves and future maintainers, but also as a stateless data drift
+monitoring system for data transformation, model training, and production inference
+pipelines. The benefit of this statelessness is that the data practitioner can
+reason about what counts as valid data through their code and their version control
+system of choice, which captures changes in the assumptions about valid data
+over time.
 
 However, the process of writing down these schemas is a laborious and often
 thankless task and not as exciting as getting to the modeling/analysis/visualization
@@ -72,34 +97,49 @@ pandera was created with the following design principles in mind:
 4. The validation interface should make the debugging process easier.
 5. Integration with existing code should be as seamless as possible.
 
+These principles were codified to guide the development of pandera project towards
+ease of learning and incremental adoption.
+
 Pandera's Programming Model
 +++++++++++++++++++++++++++
 
 With these principles in mind, pandera sought to be minimally invasive, quick to
 integrate into existing data science and ML code-bases, and easy to learn for
-data scientists, data engineers, and ML engineers who use Python. The original
-object-based syntax makes it clear how defining a DataFrameSchema is similar
-to defining pandas DataFrames:
+data scientists, data engineers, and ML engineers who use Python (refer to the
+*Related Tools* section of :cite:`niels_bantilan-proc-scipy-2020` for a
+discussion of similar projects in the Python space). The original object-based
+syntax makes it clear how defining a DataFrameSchema is similar to defining
+pandas DataFrames:
 
 .. code-block:: python
 
    import pandera as pa
 
    schema = pa.DataFrameSchema({
-       "column1": pa.Column(int, pa.Check.gt(0)),
-       "column2": pa.Column(str, pa.Check.isin([*"ABC"])),
+       "column1": pa.Column(
+           int, pa.Check.gt(0)
+       ),
+       "column2": pa.Column(
+           str, pa.Check.isin([*"ABC"])
+       ),
        "column3": pa.Column(
-           float, pa.Check.in_range(0.0, 1.0)
+           float,
+           pa.Check.in_range(
+               min_value=0.0,
+               max_value=1.0,
+           )
        ),
    })
 
 In the example above, we expect our data to have three columns that have
 specific names, data types, and data value constraints. By reading the code
-the analyst themselves or their collaborators can immediately see what the
-minimum requirements are for valid data.
+the data practitioner themselves or their collaborators can immediately see what the
+minimum requirements are for valid data. For example, the `pa.Check.gt(0)` constraint
+indicates that `column1` just alwyas be greater than zero.
 
-Pandera emphasizes code-first schema authoring and maintenance, which lowers
-the barrier for DS/ML practitioners to create and maintain these schemas because
+Pandera emphasizes code-first schema authoring and maintenance. As opposed to
+yaml-, json- or UI-based schema authoring, code-first schemas lower the barrier
+for DS/ML practitioners to create and maintain these schemas because
 they don't have to learn a DSL or a set of entirely new concepts.
 
 The hypothesis was that this would give rise to safer and more robust data
@@ -122,10 +162,11 @@ both data transformations and schemas, which can be used as "fancy assertions"
 in your code, or as reusable components in the pipeline's unit test suite.
 
 As depicted in :ref:`fig1`, this process is roughly as follows: by whatever means
-necessary, typically via EDA or data profiling, the analyst arrives at a schema,
+necessary, typically via EDA or data profiling (the programmatic creation
+of summary statistics and visualization), the data practitioner arrives at a schema.
 which states the columns and properties that the data should adhere to. The
 schema is then used to validate data in-line, or at the interface boundary of
-critical functions in the data pipeline. The analyst can start with a basic schema
+critical functions in the data pipeline. The data practitioner can start with a basic schema
 which may include column names and their expected types, but as they build
 more domain knowledge about what counts as valid data, the can refine the
 schemas to better fit the requirements of their analysis using ``Check``\s.
@@ -164,7 +205,7 @@ being out of range:
        "column2": ["A", "B", "D"],
        "column3": [0.2, 0.41, 100.0],
    })
-   # try to validate as many properties as possible
+   # try to validate as all columns and constraints
    # before raising an error with lazy=True
    try:
        schema.validate(data, lazy=True)
@@ -187,7 +228,7 @@ The exception raised during validation contains several attributes, including
 the original failed data in the ``.data`` attribute, but more importantly, it
 contains a normalized DataFrame view of all the failure cases in the data via
 the ``.failure_cases`` attribute. This is reported at the most granular level
-so that the analyst can quickly understand what's wrong with their data.
+so that the data practitioner can quickly understand what's wrong with their data.
 
 
 Evolution
@@ -195,7 +236,9 @@ Evolution
 
 After its first set of releases, pandera continued to improve with bug fixes,
 feature enhancements, and documentation improvements. This section highlights
-four major events in pandera's development.
+four major events in pandera's development. In chronological order, these
+events were: documentation improvements, support for a class-based API,
+data synthesis strategies, and the pandera type system.
 
 Documentation Improvements
 ++++++++++++++++++++++++++
@@ -206,9 +249,10 @@ documentation is unclear or otherwise difficult to read and navigate, the softwa
 itself will be inaccessible to end users.
 
 The first set of major contributions came with the help of Nigel Markey, who
-helped considerably in documentation efforts, making pandera easy to learn and adopt.
-This helped pandera to become part of pyOpenSci :cite:`pyopensci`, which helped further
-improve its quality and usability through further review and refinement.
+helped considerably in documentation efforts, making pandera easy to learn and
+adopt through examples, tutorials, and a comprehensive API reference. This helped
+pandera to become part of pyOpenSci :cite:`pyopensci`, which helped further improve its
+quality and usability through further review and refinement.
 
 Class-based API
 +++++++++++++++
@@ -260,9 +304,11 @@ Data Synthesis Strategies
 
 The third major improvement was adding support for data synthesis strategies
 using the hypothesis library :cite:`MacIver2019Hypothesis`. This expanded pandera's scope from a data
-validation library to a “data testing” toolkit by allowing the analyst to easily
+validation library to a “data testing” toolkit by allowing the data practitioner to easily
 create mock data for testing not only real data, but the functions that
-produce/clean/transform the data.
+produce/clean/transform the data. Note that the `hypothesis` library for doing property-based
+testing is not to be confused with statistical `Hypothesis` checks, which were
+already supported by pandera.
 
 .. code-block:: python
 
@@ -288,7 +334,8 @@ produce/clean/transform the data.
 Hypothesis handles generating valid data under the pandera schema's constraints,
 which relieves the developer from manually hand-crafting dataframes and allows
 unit tests to catch edge cases that would not otherwise be caught by the
-hand-crafted test cases.
+hand-crafted test cases. This can be seamlessly integrated with `pytest`, since
+one can think of pandera schemas as essentially "fancy assertion" statements.
 
 
 Pandera Type System
@@ -297,7 +344,7 @@ Pandera Type System
 Finally, the fourth major improvement was contributed by Jean-Francois Zinque,
 who implemented pandera's type system, which provides a consistent interface for
 defining semantic and logical types not only for pandas, but also potentially for
-other dataframe libraries.
+other dataframe libraries like pyspark and modin.
 
 This allows pandera users to, for example, implement an ``IPAddress`` type, which
 requires both specifying the data type and checking the actual
@@ -349,13 +396,13 @@ After gaining traction over the years, the author, the contributors, and the
 growing community of pandera users also began to expand pandera's scope to
 support pandas-compliant data frameworks such as GeoPandas :cite:`kelsey_jordahl_2020_3946761`,
 Dask :cite:`matthew_rocklin-proc-scipy-2015`, Modin :cite:`petersohn2020scalable`,
-and Pyspark Pandas :cite:`pyspark-pandas` (formerly Koalas).
+and Pyspark Pandas :cite:`pyspark-pandas` (formerly Koalas). As requests for other
+dataframe-like libraries increased in frequency, it became clear that pandera in
+its existing state was not well-suited for extension beyond Pandas objects.
 
 Design Weaknesses
 +++++++++++++++++
 
-As requests for other dataframe-like libraries increased in frequency, it became clear that
-pandera in its existing state was not well-suited for extension beyond Pandas objects.
 The fundamental design flaw in pandera's internals was that the schema specification
 and validation engine were interleaved through out the code base. This presented the
 following challenges for supporting non-pandas dataframe libraries:
@@ -375,6 +422,10 @@ following challenges for supporting non-pandas dataframe libraries:
 - **Leaky abstractions**: The pandera schema API leaked certain pandas-specific
   abstractions, e.g. Index and MultiIndex, which don't apply to other frameworks,
   e.g. Spark and Polars.
+
+These weaknesses were uncovered after-the-fact, when the author and contributors
+analyzed the existing codebase to determine how to best support other dataframe
+objects.
 
 Design Strengths
 ++++++++++++++++
@@ -405,9 +456,9 @@ were pandas-compliant frameworks such as GeoPandas, Modin, Dask, and Koalas (now
 Even though these libraries do deviate somewhat from the pandas API, they were
 close enough such that the parts of the pandas API that pandera leveraged were just a
 subset of the full API. Therefore, supporting these additional libraries required
-only a few code changes. This approach was the path to least resistance for making data
-validation more scalable, and validating the notion that the community would
-actually find it useful.
+only a few code changes :cite:`pandera-pr-660`. This approach was the path to
+least resistance for making data validation more scalable, and validating the
+notion that the community would actually find it useful.
 
 In contrast, in order to support additional non-pandas-compliant libraries like pyspark,
 polars, and vaex, pandera needed to overhaul the schema objects by decoupling the schema
@@ -464,8 +515,13 @@ data structures:
 
    from pandera.api.extensions import register_builtin_check
 
-   @register_builtin_check(aliases=["eq"], error="equal_to({value})")
-   def equal_to(data: sl.Series, value: Any) -> sl.Series:
+   @register_builtin_check(
+       aliases=["eq"],
+       error="equal_to({value})"
+   )
+   def equal_to(
+       data: sl.Series, value: Any
+   ) -> sl.Series:
        return data.equals(value)
 
 
@@ -505,7 +561,9 @@ pull request 913 :cite:`pandera-pr-913` on January 24th, 2023 and the follow-up
 pull request 1109 :cite:`pandera-pr-1109` on March 13th, 2023. A few factors
 facilitated the rewrite itself and also reduced the risk of regressions:
 
-- **Unit tests**: A comprehensive unit test suite caught many issues, but not all of them.
+- **Unit tests**: A comprehensive unit test suite caught many issues, but not
+  all of them. This was partly due to lack of complete test coverage, but also
+  new tests had to be written for abstractions introduced during the re-write process.
 - **Localized pandas coupling**: Pandas-specific code was mostly localized in
   easy-to-identify locations in the codebase.
 - **Lessons learned from pandas-compliant integrations**: Earlier integrations
