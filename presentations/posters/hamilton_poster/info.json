@@ -1,0 +1,36 @@
+{
+    "authors": [
+        {
+            "name": "Stefan Krawczyk",
+            "affiliation": "DAGWorks Inc.",
+            "orcid": "0009-0006-1112-1459"
+        },
+        {
+            "name": "Elijah ben Izzy",
+            "affiliation": "DAGWorks Inc.",
+            "orcid": "0009-0005-3594-7303"
+        },
+        {
+            "name": "Levi Sweet-Breu",
+            "affiliation": "ORNL",
+            "orcid": "0000-0003-3325-8086"
+        },
+        {
+            "name": "Emily Rexer",
+            "affiliation": "PNNL",
+            "orcid": "0000-0002-0327-183X"
+        },
+        {
+            "name": "Chris Vernon",
+            "affiliation": "PNNL",
+            "orcid": "0000-0002-3406-6214"
+        },
+        {
+            "name": "Melissa Allen-Dumas",
+            "affiliation": "ORNL",
+            "orcid": "0000-0002-3319-0846"
+        },
+    ],
+    "title": "Hamilton: Scalable, Portable, and Self-Documenting Dataflows in Python",
+    "description": "Poster presented at the 2023 SciPy Conference. It describes the Hamilton project, which is a Python library for creating dataflows that are scalable, portable, and self-documenting. It uses the Naturf project as a case study to show before and after Hamilton."
+}
