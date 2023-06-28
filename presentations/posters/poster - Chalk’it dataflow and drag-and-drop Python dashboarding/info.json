@@ -1,0 +1,41 @@
+{
+    "authors": [
+        {
+            "name": "Mongi BEN GAID",
+            "affiliation": "IFP Energies nouvelles, Carnot IFPEN Transport Energie, 1 et 4 avenue de Bois Préau, 92852 Rueil-Malmaison, France",
+            "orcid": ""
+        },
+        {
+            "name": "Abir EL FEKI",
+            "affiliation": "IFP Energies nouvelles, Carnot IFPEN Transport Energie, 1 et 4 avenue de Bois Préau, 92852 Rueil-Malmaison, France",
+            "orcid": ""
+        },
+        {
+            "name": "Bruno LETY",
+            "affiliation": "IFP Energies nouvelles, Carnot IFPEN Transport Energie, 1 et 4 avenue de Bois Préau, 92852 Rueil-Malmaison, France",
+            "orcid": ""
+        },
+        {
+            "name": "Gilles CORDE",
+            "affiliation": "IFP Energies nouvelles, Carnot IFPEN Transport Energie, 1 et 4 avenue de Bois Préau, 92852 Rueil-Malmaison, France",
+            "orcid": ""
+        },
+        {
+            "name": "Tristan BARTEMENT",
+            "affiliation": "IFP Energies nouvelles, Carnot IFPEN Transport Energie, 1 et 4 avenue de Bois Préau, 92852 Rueil-Malmaison, France",
+            "orcid": ""
+        },
+        {
+            "name": "Ghiles HIDEUR",
+            "affiliation": "DEV SERVICES",
+            "orcid": ""
+        },		
+        {
+            "name": "Mathieu FERAILLE",
+            "affiliation": "IFP Energies nouvelles, Carnot IFPEN Transport Energie, 1 et 4 avenue de Bois Préau, 92852 Rueil-Malmaison, France",
+            "orcid": ""
+        }
+    ],
+    "title": "Chalk’it: dataflow and drag-and-drop Python dashboarding",
+    "description": "Chalk'it is an open-source framework that helps to convert Python scripts into shareable web application dashboards. It relies on drag-and-drop widget design to build an interface connected to a dataflow that ties together Python code and other data sources."
+}
