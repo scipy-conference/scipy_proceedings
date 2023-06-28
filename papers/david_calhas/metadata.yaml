@@ -1,6 +1,6 @@
 ---
 abstract:
-   - Recently, EEG to fMRI synthesis has received notable attention by the neuroscience research community. It enables both neuroimaging cross modal synthesis from EEG records to a synthesized fMRI and fMRI augmented EEG diagnostics. EEG to fMRI is a Python package that provides this functionality, being the first open source software enabling neuroimaging synthesis. This package was developed for neuroscience, machine learning, and health care communities. We give a description of the methodology implemented in the package, along with results reported in a previous study.
+   - Recently, EEG to fMRI synthesis has received notable attention from the neuroscience research community. It enables both neuroimaging cross modal synthesis from EEG records to a synthesized fMRI and fMRI augmented EEG diagnostics. EEG to fMRI is a Python package that provides this functionality, being the first open source software enabling neuroimaging synthesis. This package was developed for neuroscience, machine learning, and health care communities. We give a description of the methodology implemented in the package, along with results reported in a previous study.
 keywords:
   - Electroencephalography
   - Functional Magnetic Resonance Imaging
