@@ -229,14 +229,19 @@ The complete example of solving diet problem can be found here \cite{diet}
 
       \subsubsection{Advanced project example \label{advannced project example} }
 
-Applying proximal operator as a step in generalized global optimization algorithm derived from potential theory
+     \subsubsubsection{Applying proximal operator as a step in generalized global optimization algorithm derived from potential theory \label{proximal operator} }
+
+
 
 
 Required background: Python programming, college-level math
 
 Machine learning models are often provided as functions in software packages. Optimization of such functions is a challenging task because traditional derivative based optimization methods with guaranteed convergence properties cannot be used. In \cite{MP} we introduced educational software library minpy that allows to create new optimization methods with desired properties. Those methods include elementary modules designed using the approach for constructing global optimization algorithms based on potential theory \cite{KAP1,KAP2}. They do not use derivatives of objective function and as a result work with nondifferentiable functions (or functions given by computer programs, or black box functions), but have guaranteed convergence. The focus of the library is on the transparency of the generalized optimization method rather than on efficiency of implementation. This is important since this library is intended to be used for educational purposes. To further generalize the optimization algorithms, we suggest replacing certain steps of the algorithms with proximal operator applied to the current point of the search. This does not compromise the convergence of the algorithm  \cite{KAP3}  but allows to write the algorithm in more concise manner, making it more transparent. Suggested reading to learn more about proximal operators and proximal algorithms: \cite{LAKLG,RGMN,SGFLZ}
 
-Introduction to neural network optimization
+
+    \subsubsubsection{Introduction to neural network optimization \label{neural networks} }
+
+
 
 Required background: Python programming, college-level math
 
