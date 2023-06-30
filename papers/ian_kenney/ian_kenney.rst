@@ -331,20 +331,22 @@ A key feature of the MDAKit framework is the process of adding MDAKits to the re
 From an MDAKit developer standpoint, the registration process involves opening a pull request against the MDAKit registry adding a new YAML file with metadata about the project. The metadata, as detailed in the :textref:`fig:metadatapropkatraj|example metadata listing`, contains information such as the MDAKit description, source code location, install instructions, how to run tests, and where to find usage documentation. Complete details about the metadata file specification will be provided in the MDAKit registry documentation.
 
 .. code-block:: yaml
-   :linenos:
-
+   
    ## Required entries
    project_name: propkatraj
-   authors: https://github.com/Becksteinlab/propkatraj/blob/master/AUTHORS
+   authors: |
+      https://github.com/Becksteinlab/propkatraj/blob/master/AUTHORS
    maintainers:
      - orbeckst
      - IAlibay
    description: <
-     Calculate pKa estimates over the length of a trajectory using
-	  PROPKA 3. Currently only handles protein pka.
+     Calculate pKa estimates over the length
+     of a trajectory using PROPKA 3.
+     Currently only handles protein pka.
    license: GPL-3.0
    project_home: https://github.com/Becksteinlab/propkatraj
-   documentation_home: https://github.com/Becksteinlab/propkatraj/blob/master/README.md
+   documentation_home: |
+      https://github.com/Becksteinlab/propkatraj/blob/master/README.md
    documentation_type: README
 
    ## Optional entries
@@ -354,7 +356,8 @@ From an MDAKit developer standpoint, the registration process involves opening a
    test_run: 
      - pip install pytest
      - pytest --pyargs propkatraj.tests
-   codecov: https://codecov.io/gh/Becksteinlab/propkatraj/branch/master
+   codecov: |
+      https://codecov.io/gh/Becksteinlab/propkatraj/branch/master
    development_status: Mature
    changelog: 
    publications:
