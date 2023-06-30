@@ -87,7 +87,7 @@ One advantage of using a 3D array is the ability to utilize Blosc2 NDim's powerf
 Blosc2 NDim
 -----------
 
-Blosc2 NDim is a new feature of Blosc2 that allows to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, allowing to slice and dice arbitrary large (and compressed!) data in a more fine-grained way. Having a second partition provides a better flexibility to fit the different partitions at the different CPU cache levels, making compression even more efficient.
+Blosc2 NDim is a new feature of Blosc2 that allows one to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, letting one slice and dice arbitrary large (and compressed!) data in a more fine-grained way. Having a second partition provides more flexibility to fit different partitions at different CPU cache levels, making compression even more efficient.
 
 .. figure:: b2nd-2level-parts.png
    :scale: 12%
@@ -140,9 +140,9 @@ Furthermore, Blosc2 supports user-defined codecs and filters, allowing one to cr
 Automatic tuning of compression parameters
 ------------------------------------------
 
-Finding the right compression parameters for the data is probably the most difficult part of using a compression library. Which combination of code and filter would provide the best compression ratio? Which one would provide the best compression/decompression speed?
+Finding the right compression parameters for the data is probably the most difficult part of using a compression library. Which combination of code and filters would provide the best compression ratio? Which one would provide the best compression/decompression speed?
 
-BTune is an AI tool for Blosc2 that automatically finds the optimal combination of compression parameters to suit the user needs. It uses a neural network that is trained on the most representative datasets to be compressed. This allows it to predict the best compression parameters based on a given balance between compression ratio and compression/decompression speed.
+BTune is an AI tool for Blosc2 that automatically finds the optimal combination of compression parameters to suit user needs. It uses a neural network trained on representative datasets to be compressed to predict the best compression parameters based on the given tradeoff between compression ratio and compression/decompression speed.
 
 For example, Table :ref:`predicted-dparams-example` displays the results for the predicted compression parameters tuned for decompression speed. Curiously, fast decompression does not necessarily imply fast compression. This table is provided to the user so that he/she can choose the best balance value for his/her needs.
 
