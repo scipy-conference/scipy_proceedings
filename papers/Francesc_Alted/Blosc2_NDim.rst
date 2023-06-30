@@ -87,7 +87,9 @@ One advantage of using a 3D array is the ability to utilize Blosc2 NDim's powerf
 Blosc2 NDim
 -----------
 
-Blosc2 NDim is a new feature of Blosc2 that allows one to create and read n-dimensional datasets in an extremely efficient way thanks to a completely general n-dim 2-level partitioning, letting one slice and dice arbitrary large (and compressed!) data in a more fine-grained way. Having a second partition provides more flexibility to fit different partitions at different CPU cache levels, making compression even more efficient.
+In the plain Blosc and Blosc2 libraries, there are two levels of partitioning: the block and the chunk. The block is the smallest unit of data that can be compressed and decompressed independently. The chunk is a group of blocks that are compressed together. The chunk and block sizes are parameters that can be tuned to fit the different cache levels in modern CPUs. For optimal performance, it is recommended that the block size should fit in the L1 or L2 CPU cache, minimizing contention between worker threads during compression/decompression. The chunk size, on the other hand, should fit in the L3 CPU cache, in order to minimize data movement to RAM and speed up decompression.
+
+With Blosc2 NDim, we are taking this feature a step further and both partitions, known as chunks and blocks, are gaining multidimensional capabilities. This means that one can split a dataset (called a "super-chunk" in Blosc2 terminology) into n-dimensional cubes and sub-cubes. Refer to Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` to learn more about how this works and how to set it up.
 
 .. figure:: b2nd-2level-parts.png
    :scale: 12%
@@ -99,14 +101,21 @@ Blosc2 NDim is a new feature of Blosc2 that allows one to create and read n-dime
 
    Blosc2 NDim 2-level partitioning is flexible. The dimensions of both partitions can be specified in any arbitrary way that fits the expected read access patterns. :label:`b2nd-3d-dset`
 
-With these finer-grained cubes (also known as partitions), arbitrary n-dimensional slices can be retrieved faster because not all the data necessary for the coarser-grained partition has to be decompressed, as usually happens in other libraries. See Figures :ref:`b2nd-2level-parts` and :ref:`b2nd-3d-dset` to learn how this works and how to set it up. Also, see Figure :ref:`read-partial-slices` for a comparison against other libraries that use just a single partition (e.g., HDF5, Zarr).
+With these finer-grained cubes, arbitrary n-dimensional slices can be retrieved faster. This is because not all the data necessary for the coarser-grained partition has to be decompressed, as is typically required in other libraries (see Figure :ref:`Blosc2-vs-Zarr-HDF5`).
+
+For example, for a 4-d array with a shape of (50, 100, 300, 250) with float64 items, we can choose a chunk with shape (10, 25, 50, 50) and a block with shape (3, 5, 10, 20) which makes for about 5 MB and 23 KB respectively. This way, a chunk fits comfortably on a L3 cache in most of modern CPUs, and a block in a L1 cache (we are tuning for speed here). See Figure :ref:`read-partial-slices` for a speed comparison with other libraries supporting just one single n-dimensional partition.
+
+.. figure:: Blosc2-vs-Zarr-HDF5.png
+   :scale: 30%
+
+   Blosc2 NDim can decompress data faster by using double partitioning, which allows for higher data selectivity. This means that less data compression/decompression is required in general. :label:`Blosc2-vs-Zarr-HDF5`
 
 .. figure:: read-partial-slices.png
    :scale: 70%
 
    Speed comparison for reading partial n-dimensional slices of a 4D dataset. The legends labeled "DIM N" refer to slices taken orthogonally to each dimension. The sizes for the two partitions have been chosen such that the first partition fits comfortably in the L3 cache of the CPU (Intel i9 13900K), and the second partition fits in the L1 cache of the CPU. :cite:`BDT23-blosc2-ndim-intro`. :label:`read-partial-slices`
 
-It is important to note that Blosc2 NDim supports all data types in NumPy. This means that, in addition to the typical data types like signed/unsigned int, single and double-precision floats, bools or strings, it can also store datetimes (including units), and arbitrarily nested heterogeneous types. This allows to create multidimensional tables and more.
+Finally, Blosc2 NDim supports all data types in NumPy. This means that, in addition to the typical data types like signed/unsigned int, single and double-precision floats, bools or strings, it can also store datetimes (including units), and arbitrarily nested heterogeneous types. This allows to create multidimensional tables and more.
 
 Support for multiple codecs, filters, and other compression features
 ---------------------------------------------------------------------
