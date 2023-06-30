@@ -39,6 +39,8 @@ Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset
 
     The Blosc2 NDim layer enables the creation and reading of n-dimensional datasets in an extremely efficient manner. This is due to a completely general n-dim 2-level partitioning, which allows for slicing and dicing of arbitrary large (and compressed) data in a more fine-grained way. Having a second partition provides a better flexibility to fit the different partitions at the different CPU cache levels, making compression even more efficient.
 
+    Additionally, Blosc2 includes Btune, a library that automatically finds the optimal combination of compression parameters to suit user needs. Btune employs various techniques, such as a genetic algorithm and a neural network model, to discover the best parameters for a given dataset much more quickly. This approach is a significant improvement over the traditional trial-and-error method, which can take hours or even days to find the best parameters.
+
     As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset. This catalog contains information on 1.7 billion stars in our galaxy, but we have chosen to include just the stars that are in a sphere of 10 thousand light-years radius (centered in the Gaia telescope), which accounts for 0.7 billion stars. The total size of the dataset of star positions is 7.3 TB, but when compressed, it is reduced to just 6.5 GB, making it easy to fit into the memory of modern computers for being processed.
 
 .. class:: keywords
