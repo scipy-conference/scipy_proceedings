@@ -69,22 +69,22 @@ Blosc2 is the latest version of the Blosc 1.x series, which is used in many impo
 The Milky Way dataset
 ---------------------
 
-For the Milky Way dataset, we will be using the Gaia DR3 dataset, a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates of 1.4 billion stars (those with non-null parallax values). When stored as a binary table, the dataset is 22 GB in size (uncompressed).
-
-However, we converted the tabular dataset into a sphere with a radius of 10,000 light years and framed it into a 3D array of shape (20,000, 20,000, 20,000). Each cell in the array represents a cube of 1 light year per side and contains the number of stars within it. Given that the average distance between stars in the Milky Way is about 5 light years, very few cells will contain more than one star (e.g. the maximum of stars in a single cell in our sphere is 6). This 3D array contains 0.7 billion stars, which is a significant portion of the Gaia catalog.
-
-The number of stars is stored as a uint8, resulting in a total dataset size of 7.3 TB. However, compression can greatly reduce its size to 6.5 GB since the 3D array is very sparse. Blosc2 can compress the zeroed parts almost entirely.
-
-In addition, we store other data about the stars in a separate table indexed with the position of each star (using PyTables). For demonstration purposes, we store the radial velocity, effective temperature, and G-band magnitude using a float32 for each field. The size of the table is 14.1 GB uncompressed, but it can be compressed to 5.6 GB. Adding another 1.5 GB for the index brings the total size to 7.2 GB. Therefore, the 3D array is 6.5 GB, and the table with the additional information and its index are 7.2 GB, making a total of 13.7 GB. This comfortably fits within the storage capacity of any modern laptop.
+Figure :ref:`gaia-3d-dset` shows a 3D view of the Milky Way different type of stars. Each point is a star, and the color of each point represents the star's magnitude, with the brightest stars appearing as the reddest points. Although this view provides a unique perspective, the dimensions of the cube are not enough to fully capture the spiral arms of the Milky Way.
 
 .. figure:: 3d-view-milkyway-inverse.png
    :scale: 25%
 
    Gaia DR3 dataset as a 3D array (Gaia collaboration). :label:`gaia-3d-dset`
 
-Figure :ref:`gaia-3d-dset` shows a 3D view of the Milky Way different type of stars. Each point is a star, and the color of each point represents the star's magnitude, with the brightest stars appearing as the reddest points. Although this view provides a unique perspective, the dimensions of the cube are not enough to fully capture the spiral arms of the Milky Way.
-
 One advantage of using a 3D array is the ability to utilize Blosc2 NDim's powerful slicing capabilities for quickly exploring parts of the dataset. For example, we could search for star clusters by extracting small cubes as NumPy arrays, and counting the number of stars in each one. A cube containing an abnormally high number of stars would be a candidate for a cluster. We could also extract a thin 3D slice of the cube and project it as a 2D image, where the pixels colors represent the magnitude of the shown stars. This could be used to generate a cinematic view of a journey over different trajectories in the Milky Way.
+
+For getting the coordinates of the stars in the Milky Way, we will be using the Gaia DR3 dataset, a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates of 1.4 billion stars (those with non-null parallax values). When stored as a binary table, the dataset is 22 GB in size (uncompressed).
+
+We converted the tabular dataset into a sphere with a radius of 10,000 light years and framed it into a 3D array of shape (20,000, 20,000, 20,000). Each cell in the array represents a cube of 1 light year per side and contains the number of stars within it. Given that the average distance between stars in the Milky Way is about 5 light years, very few cells will contain more than one star (e.g. the maximum of stars in a single cell in our sphere is 6). This 3D array contains 0.7 billion stars, which is a significant portion of the Gaia catalog.
+
+The number of stars is stored as a uint8, resulting in a total dataset size of 7.3 TB. However, compression can greatly reduce its size to 6.5 GB since the 3D array is very sparse. Blosc2 can compress the zeroed parts almost entirely.
+
+In addition, we store other data about the stars in a separate table indexed with the position of each star (using PyTables). For demonstration purposes, we store the radial velocity, effective temperature, and G-band magnitude using a float32 for each field. The size of the table is 14.1 GB uncompressed, but it can be compressed to 5.6 GB. Adding another 1.5 GB for the index brings the total size to 7.2 GB. Therefore, the 3D array is 6.5 GB, and the table with the additional information and its index are 7.2 GB, making a total of 13.7 GB. This comfortably fits within the storage capacity of any modern laptop.
 
 Blosc2 NDim
 -----------
