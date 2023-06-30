@@ -151,11 +151,11 @@ Automatic tuning of compression parameters
 
 Finding the right compression parameters for the data is probably the most difficult part of using a compression library. Which combination of code and filters would provide the best compression ratio? Which one would provide the best compression/decompression speed?
 
-BTune is an AI tool for Blosc2 that automatically finds the optimal combination of compression parameters to suit user needs. It uses a neural network trained on representative datasets to be compressed to predict the best compression parameters based on the given tradeoff between compression ratio and compression/decompression speed.
+Btune is an AI tool for Blosc2 that automatically finds the optimal combination of compression parameters to suit user needs. It uses a neural network trained on representative datasets to be compressed to predict the best compression parameters based on the given tradeoff between compression ratio and compression/decompression speed.
 
 For example, Table :ref:`predicted-dparams-example` displays the results for the predicted compression parameters tuned for decompression speed. Curiously, fast decompression does not necessarily imply fast compression. This table is provided to the user so that he/she can choose the best balance value for his/her needs.
 
-.. table:: BTune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favoring speed only, and 1 means favoring compression ratio only). It can be seen that BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimizing for the compression ratio.  Speeds are in GB/s.  :label:`predicted-dparams-example`
+.. table:: Btune prediction of the best compression parameters for decompression speed, depending on a balance value between compression ratio and decompression speed (0 means favoring speed only, and 1 means favoring compression ratio only). It can be seen that BloscLZ + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is towards optimizing for the compression ratio.  Speeds are in GB/s.  :label:`predicted-dparams-example`
 
    +---------+-------------------+---------+--------+--------+
    | Balance | Most predicted    |  Cratio | Cspeed | Dspeed |
@@ -185,7 +185,7 @@ For example, Table :ref:`predicted-dparams-example` displays the results for the
 
 On the other hand, Table :ref:`predicted-cparams-example`, shows an example of predicted compression parameter tuned for compression speed and ratio on a different dataset.
 
-.. table:: BTune prediction of the best compression parameters for compression speed, depending on a balanced value. It can be seen that LZ4 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is leveraged towards the compression ratio. Speeds are in GB/s. :label:`predicted-cparams-example`
+.. table:: Btune prediction of the best compression parameters for compression speed, depending on a balanced value. It can be seen that LZ4 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd + Shuffle + ByteDelta is the most predicted one when the specified balance is leveraged towards the compression ratio. Speeds are in GB/s. :label:`predicted-cparams-example`
 
    +---------+------------------+---------+--------+--------+
    | Balance | Most predicted   |  Cratio | Cspeed | Dspeed |
@@ -213,7 +213,7 @@ On the other hand, Table :ref:`predicted-cparams-example`, shows an example of p
    | 1.0     | zstd-bytedelta-9 | 4.06    | 0.15   | 14.1   |
    +---------+------------------+---------+--------+--------+
 
-After training the neural network, the BTune plugin can automatically tune the compression parameters for a given dataset. During inference, the user can set the preferred balance by setting the :code:`BTUNE_BALANCE` environment variable to a floating point value between 0 and 1. A value of 0 favors speed only, while a value of 1 favors compression ratio only. This setting automatically selects the compression parameters most suitable to the current data whenever a new Blosc2 data container is created.
+After training the neural network, the Btune plugin can automatically tune the compression parameters for a given dataset. During inference, the user can set the preferred balance by setting the :code:`Btune_BALANCE` environment variable to a floating point value between 0 and 1. A value of 0 favors speed only, while a value of 1 favors compression ratio only. This setting automatically selects the compression parameters most suitable to the current data whenever a new Blosc2 data container is created.
 
 Ingesting and processing data of Gaia
 -------------------------------------
@@ -345,6 +345,6 @@ Working with large, multi-dimensional data cubes can be challenging due to the c
 
 Blosc2 supports a variety of compression codecs and filters, making it easier to select the most appropriate ones for the dataset being explored. It also supports storage in either memory or on disk, which is crucial for large datasets. Another important feature is the ability to store data in a container format that can be easily shared across different programming languages. Furthermore, Blosc2 has special support for sparse datasets, which greatly improves the compression ratio in this scenario.
 
-We have also shown how the BTune plugin can be used to automatically tune the compression parameters for a given dataset.  This is especially useful when we want to compress data efficiently, but we do not know the best compression parameters beforehand.
+We have also shown how the Btune plugin can be used to automatically tune the compression parameters for a given dataset.  This is especially useful when we want to compress data efficiently, but we do not know the best compression parameters beforehand.
 
 In conclusion, we have shown how to utilize the Blosc2 library for storing and processing the Gaia dataset. This dataset serves as a prime example of a large, multi-dimensional dataset that can be efficiently stored and processed using Blosc2 NDim.
