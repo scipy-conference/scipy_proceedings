@@ -48,7 +48,7 @@ Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset
 Introduction
 ------------
 
-The exploration of n-dimensional datasets is a common practice in many areas of science. However, one of its drawbacks is that the explored datasets size can become very large, which will slow down the exploration process significantly. In this paper, we demonstrate how Blosc2 NDim can be used to accelerate the exploration of huge n-dimensional datasets.
+The exploration of datasets that are high dimensional is a common practice in various fields of science. However, exploring such n-dimensional datasets is challenging when the memory size of the dataset is extremely large. This can slow down the data exploration process significantly. In this paper, we demonstrate how Blosc2 NDim can be used to accelerate the exploration of huge n-dimensional datasets.
 
 Blosc is a high-performance compressor optimized for binary data. Its design enables faster transmission of data to the processor cache than the traditional, non-compressed, direct memory fetch approach using an OS call to ``memcpy()``. This can be helpful not only in reducing the size of large datasets on-disk and in-memory, but also in accelerating memory-bound computations, which are typical in big data processing.
 
