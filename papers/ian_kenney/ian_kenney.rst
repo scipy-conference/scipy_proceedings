@@ -332,7 +332,7 @@ From an MDAKit developer standpoint, the registration process involves opening a
 
 .. figure:: figures/metadata.png
 
-   YAML metadata file for an MDAKit entry of the propkatraj package, stored as \texttt{mdakits/propkatraj/metadata.yaml} in the registry repository.
+   YAML metadata file for an MDAKit entry of the propkatraj package, stored as ``mdakits/propkatraj/metadata.yaml`` in the registry repository.
    :label:`fig:metadatapropkatraj`
 
 
