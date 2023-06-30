@@ -64,10 +64,10 @@ In addition, using the Blosc compressed data can accelerate memory-bound computa
 
 Blosc2 is the latest version of the Blosc 1.x series, which is used in many important libraries, such as HDF5 :cite:`hdf5`, Zarr :cite:`zarr`, and PyTables :cite:`pytables`. Its NDim feature excels at reading multi-dimensional slices, thanks to an innovative pineapple-style partitioning technique :cite:`BDT23-blosc2-ndim-intro`. This enables fast exploration of general n-dimensional datasets, including the 3D Gaia dataset.
 
-The Gaia dataset
-----------------
+The Milky Way dataset
+---------------------
 
-The Gaia DR3 dataset is a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates of 1.4 billion stars (those with non-null parallax values). When stored as a binary table, the dataset is 22 GB in size (uncompressed).
+For the Milky Way dataset, we will be using the Gaia DR3 dataset, a catalog containing information on 1.7 billion stars in our galaxy. For this work, we extracted the 3D coordinates of 1.4 billion stars (those with non-null parallax values). When stored as a binary table, the dataset is 22 GB in size (uncompressed).
 
 However, we converted the tabular dataset into a sphere with a radius of 10,000 light years and framed it into a 3D array of shape (20,000, 20,000, 20,000). Each cell in the array represents a cube of 1 light year per side and contains the number of stars within it. Given that the average distance between stars in the Milky Way is about 5 light years, very few cells will contain more than one star (e.g. the maximum of stars in a single cell in our sphere is 6). This 3D array contains 0.7 billion stars, which is a significant portion of the Gaia catalog.
 
