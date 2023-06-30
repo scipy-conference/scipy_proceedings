@@ -331,39 +331,43 @@ A key feature of the MDAKit framework is the process of adding MDAKits to the re
 From an MDAKit developer standpoint, the registration process involves opening a pull request against the MDAKit registry adding a new YAML file with metadata about the project. The metadata, as detailed in the :textref:`fig:metadatapropkatraj|example metadata listing`, contains information such as the MDAKit description, source code location, install instructions, how to run tests, and where to find usage documentation. Complete details about the metadata file specification will be provided in the MDAKit registry documentation.
 
 .. code-block:: yaml
-   
+   :linenos:
+
    ## Required entries
    project_name: propkatraj
-   authors: |
-      https://github.com/Becksteinlab/propkatraj/blob/master/AUTHORS
+   authors:
+     - https://github.com/Becksteinlab/propkatraj/blob/main/AUTHORS
    maintainers:
-     - orbeckst
+     - ianmkenney
      - IAlibay
-   description: <
-     Calculate pKa estimates over the length
-     of a trajectory using PROPKA 3.
-     Currently only handles protein pka.
-   license: GPL-3.0
-   project_home: https://github.com/Becksteinlab/propkatraj
-   documentation_home: |
-      https://github.com/Becksteinlab/propkatraj/blob/master/README.md
-   documentation_type: README
-
+     - orbeckst
+   description:
+       pKa estimates for proteins using an ensemble approach
+   keywords:
+     - pKa
+     - protein
+   license: GPL-2.0-or-later
+   project_home: https://github.com/Becksteinlab/propkatraj/
+   documentation_home: https://becksteinlab.github.io/propkatraj/
+   documentation_type: UserGuide + API
+   
    ## Optional entries
-   install: pip install propkatraj
+   install:
+     - pip install propkatraj
+   src_install:
+     - pip install git+https://github.com/Becksteinlab/propkatraj@main
    python_requires: ">=3.8"
    mdanalysis_requires: ">=2.0.0"
-   test_run: 
-     - pip install pytest
+   run_tests:
      - pytest --pyargs propkatraj.tests
-   codecov: |
-      https://codecov.io/gh/Becksteinlab/propkatraj/branch/master
+   test_dependencies:
+     - mamba install pytest MDAnalysisTests
+   project_org: Becksteinlab 
    development_status: Mature
-   changelog: 
    publications:
+     - https://zenodo.org/record/7647010
      - https://doi.org/10.1021/ct200133y
      - https://doi.org/10.1085/jgp.201411219
-     - https://doi.org/10.5281/zenodo.3942720
 
 ..    \caption{YAML metadata file for an MDAKit entry of the propkatraj package, stored as \texttt{mdakits/propkatraj/metadata.yaml} in the registry repository.}
 ..    .. _`fig:metadatapropkatraj`:
