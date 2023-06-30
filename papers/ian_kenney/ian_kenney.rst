@@ -333,34 +333,34 @@ From an MDAKit developer standpoint, the registration process involves opening a
 .. code-block:: yaml
    :linenos:
 
-    ## Required entries
-    project_name: propkatraj
-    authors: https://github.com/Becksteinlab/propkatraj/blob/master/AUTHORS
-    maintainers:
-      - orbeckst
-      - IAlibay
-    description: <
-	Calculate pKa estimates over the length of a trajectory using
-	PROPKA 3. Currently only handles protein pka.
-    license: GPL-3.0
-    project_home: https://github.com/Becksteinlab/propkatraj
-    documentation_home: https://github.com/Becksteinlab/propkatraj/blob/master/README.md
-    documentation_type: README
+   ## Required entries
+   project_name: propkatraj
+   authors: https://github.com/Becksteinlab/propkatraj/blob/master/AUTHORS
+   maintainers:
+     - orbeckst
+     - IAlibay
+   description: <
+     Calculate pKa estimates over the length of a trajectory using
+	  PROPKA 3. Currently only handles protein pka.
+   license: GPL-3.0
+   project_home: https://github.com/Becksteinlab/propkatraj
+   documentation_home: https://github.com/Becksteinlab/propkatraj/blob/master/README.md
+   documentation_type: README
 
-    ## Optional entries
-    install: pip install propkatraj
-    python_requires: >=3.8
-    mdanalysis_requires: >2.0.0
-    test_run: 
-      - pip install pytest
-      - pytest --pyargs propkatraj.tests
-    codecov: https://codecov.io/gh/Becksteinlab/propkatraj/branch/master
-    development_status: Mature
-    changelog: 
-    publications:
-      - https://doi.org/10.1021/ct200133y
-      - https://doi.org/10.1085/jgp.201411219
-      - https://doi.org/10.5281/zenodo.3942720
+   ## Optional entries
+   install: pip install propkatraj
+   python_requires: ">=3.8"
+   mdanalysis_requires: ">=2.0.0"
+   test_run: 
+     - pip install pytest
+     - pytest --pyargs propkatraj.tests
+   codecov: https://codecov.io/gh/Becksteinlab/propkatraj/branch/master
+   development_status: Mature
+   changelog: 
+   publications:
+     - https://doi.org/10.1021/ct200133y
+     - https://doi.org/10.1085/jgp.201411219
+     - https://doi.org/10.5281/zenodo.3942720
 
 ..    \caption{YAML metadata file for an MDAKit entry of the propkatraj package, stored as \texttt{mdakits/propkatraj/metadata.yaml} in the registry repository.}
 ..    .. _`fig:metadatapropkatraj`:
