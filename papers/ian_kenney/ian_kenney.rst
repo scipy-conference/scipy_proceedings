@@ -331,7 +331,6 @@ A key feature of the MDAKit framework is the process of adding MDAKits to the re
 From an MDAKit developer standpoint, the registration process involves opening a pull request against the MDAKit registry adding a new YAML file with metadata about the project. The metadata, as detailed in the :textref:`fig:metadatapropkatraj|example metadata listing`, contains information such as the MDAKit description, source code location, install instructions, how to run tests, and where to find usage documentation. Complete details about the metadata file specification will be provided in the MDAKit registry documentation.
 
 .. code-block:: yaml
-   :linenos:
 
    ## Required entries
    project_name: propkatraj
