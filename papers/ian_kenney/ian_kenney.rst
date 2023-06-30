@@ -433,7 +433,7 @@ Examples of MDAKits
 
 The web frontend of the registry (Fig. :ref:`fig:registryfrontend`) provides a searchable database of packages.
 At the moment, seven MDAKits are registered that already showcase the breadth of specialized tools for the analysis of biomolecular simulations.
-For example, *mdacli* provides a commandline interface to analysis tools in MDAnalysis itself. *openmm-mdanalysis-reporter* enhances the interoperability with the popular OpenMM MD engine. *hole2-mdakit* interfaces with the legacy HOLE2 program for the analysis of pores and tunnels in proteins such as ion channels :cite:`smart_hole_1996, stelzl_flexible_2014`. The *lipyds* package provides a suite of tools for the analysis of biological membranes in simulations :cite:`wilson_investigating_2021`. *ProLIF* quantitatively analyzes the interactions between small molecules such as drugs and biomolecules (protein, nucleic acids) :cite:`bouysset_prolif_2021`.
+For example, *mdacli* provides a commandline interface to analysis tools in MDAnalysis itself. *openmm-mdanalysis-reporter* enhances the interoperability with the popular OpenMM MD engine :cite:`eastman_openmm_2017`. *hole2-mdakit* interfaces with the legacy HOLE2 program for the analysis of pores and tunnels in proteins such as ion channels :cite:`smart_hole_1996, stelzl_flexible_2014`. The *lipyds* package provides a suite of tools for the analysis of biological membranes in simulations :cite:`wilson_investigating_2021`. *ProLIF* quantitatively analyzes the interactions between small molecules such as drugs and biomolecules (protein, nucleic acids) :cite:`bouysset_prolif_2021`.
 
 .. figure:: figures/mdakit_registry.png
 
