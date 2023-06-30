@@ -3,32 +3,43 @@
 :author: Irfan Alibay
 :email: IAlibay@mdanalysis.org 
 :institution: Open Molecular Software Foundation, Irvine, CA, USA
+:orcid: 0000-0001-5787-9130   
+:equal-contributor:
 :corresponding:
 
-:author: Jonathan Barnoud
-:email: jonathan@barnoud.net
-:institution: Centro Singular de Investigación en Tecnoloxías Intelixentes, Santiago de Compostela, Spain
-
-:author: Oliver Beckstein
-:email: obeckste@asu.edu
-:institution: Arizona State University, Tempe, AZ, USA
-
-:author: Richard J Gowers
-:email: richard@mdanalysis.org
+:author: Lily Wang
+:email: lily@mdanalysis.org
 :institution: Open Molecular Software Foundation, Irvine, CA, USA
+:orcid: 0000-0002-6095-6704
+:equal-contributor:
+	
+:author: Fiona Naughton
+:email: fiona@mdanalysis.org
+:institution: Cardiovascular Research Institute, University of California, San Francisco, San Francisco, CA, USA
+:orcid: 0000-0003-0162-1346
+:equal-contributor:
 
 :author: Ian Kenney
 :email: ikenney@asu.edu
 :institution: Arizona State University, Tempe, AZ, USA
+:orcid: 0000-0002-9749-8866
+:equal-contributor:
 	      
-:author: Fiona Naughton
-:email: fiona@mdanalysis.org
-:institution: Cardiovascular Research Institute, University of California, San Francisco, San Francisco, CA, USA
+:author: Jonathan Barnoud
+:email: jonathan@barnoud.net
+:institution: Centro Singular de Investigación en Tecnoloxías Intelixentes, Santiago de Compostela, Spain
+:orcid: 0000-0003-0343-7796
 	      
-:author: Lily Wang
-:email: lily@mdanalysis.org
+:author: Richard J Gowers
+:email: richard@mdanalysis.org
 :institution: Open Molecular Software Foundation, Irvine, CA, USA
-   
+:orcid: 0000-0002-3241-1846
+	      
+:author: Oliver Beckstein
+:email: obeckste@asu.edu
+:institution: Arizona State University, Tempe, AZ, USA
+:orcid: 0000-0003-1340-0831
+	      
 :bibliography: references
 
 .. Standard reST tables do not properly build and the first header column is lost.
@@ -450,7 +461,7 @@ We gratefully acknowledge the 163 developers and countless community members who
 
 This work is made possible thanks to a grant from the Chan-Zuckerberg Initiative (grant number 2021-237663), supporting MDAnalysis and the MDAKit project under an EOSS4 award.
 
-Jonathan Barnoud has received financial support from the Agencia Estatal de Investigación (Spain) (REFERENCIA DEL PROYECTO / AEI / CÓDIGO AXUDA), the Xunta de Galicia - Consellería de Cultura, Educación e Universidade (Centro de investigación de Galicia accreditation 2019-2022 ED431G-2019/04 and Reference Competitive Group accreditation 2021-2024, CÓDIGO AXUDA) and the European Union (European Regional Development Fund - ERDF)
+Jonathan Barnoud has received financial support from the Agencia Estatal de Investigación (Spain) (REFERENCIA DEL PROYECTO / AEI / CÓDIGO AXUDA), the Xunta de Galicia - Consellería de Cultura, Educación e Universidade (Centro de investigación de Galicia accreditation 2019-2022 ED431G-2019/04 and Reference Competitive Group accreditation 2021-2024, CÓDIGO AXUDA) and the European Union (European Regional Development Fund - ERDF).
 
 
 References
