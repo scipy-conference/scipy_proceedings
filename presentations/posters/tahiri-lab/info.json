@@ -1,0 +1,16 @@
+{
+    "authors": [
+        {
+            "name": "Wanlin Li",
+            "affiliation": "Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada",
+            "orcid": ""
+        },
+        {
+            "name": "Nadia Tahiri",
+            "affiliation": "Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada",
+            "orcid": "0000-0002-1818-208X"
+        }
+    ],
+    "title": "aPhyloGeo-Covid: A Web Interface for Reproducible Phylogeographic Analysis of SARS-CoV-2 Variation using Neo4j and Snakemake",
+    "description": "The gene sequencing data, along with the associated lineage tracing and research data generated throughout the Coronavirus disease 2019 (COVID-19) pandemic, constitute invaluable resources that profoundly empower phylogeography research. To optimize the utilization of these resources, we have developed an interactive analysis platform called aPhyloGeo-Covid, leveraging the capabilities of Neo4j, Snakemake, and Python. This platform enables researchers to explore and visualize diverse data sources specifically relevant to SARS-CoV-2 for phylogeographic analysis. The integrated Neo4j database acts as a comprehensive repository, consolidating COVID-19 pandemic-related sequences information, climate data, and demographic data obtained from public databases, facilitating efficient filtering and organization of input data for phylogeographical studies. Presently, the database encompasses over 113,774 nodes and 194,381 relationships. Additionally, aPhyloGeo-Covid provides a scalable and reproducible phylogeographic workflow for investigating the intricate relationship between geographic features and the patterns of variation in diverse SARS-CoV-2 variants. The code repository of platform is publicly accessible on GitHub (https://github.com/tahiri-lab/iPhyloGeo/tree/iPhylooGeo-neo4j), providing researchers with a valuable tool to analyze and explore the intricate dynamics of SARS-CoV-2 within a phylogeographic context."
+}
