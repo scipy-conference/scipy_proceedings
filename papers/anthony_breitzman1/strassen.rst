@@ -22,7 +22,7 @@ A Modified Strassen Algorithm to Accelerate Numpy Large Matrix Multiplication wi
 Introduction
 ------------
 
-A recent article [Arx21]_  suggests that Python is the *Lingua Franca* of machine learning and scientific computing because of powerful frameworks such as Numpy, SciPy, and TensorFlow. These libraries offer great flexibility while boosting the performance of Python because they are written in compiled C and C++.
+A recent article [Arx21]_  suggests that Python is rapidly becoming the *Lingua Franca* of machine learning and scientific computing because of powerful frameworks such as Numpy, SciPy, and TensorFlow. These libraries offer great flexibility while boosting the performance of Python because they are written in compiled C and C++.
 
 In this short paper we present a modified Strassen-based [Stras1]_ algorithm for multiplying
 large matrices of arbitrary sizes containing integer entries.
@@ -33,7 +33,11 @@ hardware and the speed advantage was consistent for cases with integer entries.
 There is no such advantage for matrices with floating point entries however as [Harv18]_ points out,
 there are numerous applications for large matrices with integer entries, including high precision
 evaluation of so-called holonomic functions (e.g. exp, log, sin, Bessel functions, and hypergeometric functions)
-as well as areas of Algebraic Geometry to name just two. It is suggested in [PEP465]_ that Numpy may be the single most-imported non-stdlib module in the entire Pythonverse. Therefore, an algorithm that speeds Numpy for large integer matrices may be of interest to a large audience.
+as well as areas of Algebraic Geometry to name just two. Integer matrices are also frequently used as adjacency matrices in graph theory applications and are also used extensively in combinatorics. 
+
+To give the reader some early perspective, we will see later in the paper that some of the matrix multiplies that we do with the suggested algorithm take approximately two minutes using the new algorithm, but take 44 minutes  using Numpy.matmul.
+
+It is suggested in [PEP465]_ that Numpy may be the single most-imported non-stdlib module in the entire Pythonverse. Therefore, an algorithm that speeds Numpy for large integer matrices may be of interest to a large audience.
 
 
 Motivating Exploration with Baseline Timings
@@ -399,7 +403,7 @@ Since the run-time to compute these last 2 figures is more than several weeks, w
 Conclusions
 -----------
 
-Numpy is a Python library which is widely used in the math and scientific community because of its speed. In this paper we presented a Strassen type algorithm for multiplying large matrices with integer entries.  For integer matrices with row dimension or column dimension in the thousands the algorithm can be 8 to 30 times faster than Numpy. The algorithm is the standard Strassen divide and conquer algorithm but it crosses over to Numpy when either the row or column dimension of one of the matrices drops below 128.  The algorithm was tested on a MacBook, an I7 based Windows machine as well as a Linux machine running a Xeon processor with similar results.  Although there is no apparent advantage for matrices with real entries, there are a number of applications for matrices with integer coefficients.
+Numpy is a Python library which is widely used in the math and scientific community because of its speed. In this paper we presented a Strassen type algorithm that greatly improves on Numpy performance for large matrices with integer entries.  For integer matrices with row dimension or column dimension in the thousands the algorithm can be 8 to 30 times faster than Numpy. The algorithm is the standard Strassen divide and conquer algorithm but it crosses over to Numpy when either the row or column dimension of one of the matrices drops below 128.  The algorithm was tested on a MacBook, an I7 based Windows machine as well as a Linux machine running a Xeon processor with similar results.  Although there is no apparent advantage for matrices with real entries, there are a number of applications for matrices with integer coefficients.
 
 
 
