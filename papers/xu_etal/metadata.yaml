@@ -17,5 +17,7 @@ authors:
   corresponding: true
 - email: junpingco@eng.ucsd.edu
   name: José Unpingco
+  institution:
+  - University of California, San Diego
 bibliography: mybib
 title: Data Reduction Network
