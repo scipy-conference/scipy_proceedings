@@ -1,5 +1,5 @@
 abstract:
-  - "Understanding human security and social equity issues within human systems requires large-scale models of population dynamics that simulate high-fidelity representations of individuals and access to essential activities (work/school, social, errands, health). Likeness is a Python toolkit that provides these capabilities for Oak Ridge National Laboratory's (ORNL) UrbanPop spatial microsimulation project. In step with the initial development phase for Likeness (2021 - 2022), we built out several foundational examples of work/school and health service access. In this paper, we describe expansion and scaling of Likeness capabilities to metropolitan areas in the United States. We then provide an integrated demonstration of our methods based on a case study of Leon County, FL and perform validation exercises on 1) neighborhood demographic composition and 2) visits by demographic cohorts (gender/age) obtained from point of interest (POI) footfall data for essential services (grocery stores). Taking into account lessons learned for our case study, we scope improvements to our model as well as provide a roadmap of the anticipated Likeness development cycle into 2023 - 2024."
+  - "Understanding human security and social equity issues within human systems requires large-scale models of population dynamics that simulate high-fidelity representations of individuals and access to essential activities (work/school, social, errands, health). Likeness is a Python toolkit that provides these capabilities for Oak Ridge National Laboratory's (ORNL) UrbanPop spatial microsimulation project. In step with the initial development phase for Likeness (2021 - 2022), we built out several foundational examples of work/school and health service access. In this paper, we describe expansion and scaling of Likeness capabilities to metropolitan areas in the United States. We then provide an integrated demonstration of our methods based on a case study of Leon County, FL and perform validation exercises on 1) neighborhood demographic composition and 2) visits by demographic cohorts (gender/age) obtained from point of interest (POI) footfall data for essential services (grocery stores). Taking into account lessons learned from our case study, we scope improvements to our model as well as provide a roadmap of the anticipated Likeness development cycle into 2023 - 2024."
 authors:
   - email: tuccillojv@ornl.gov
     name: Joseph V. Tuccillo
@@ -13,8 +13,8 @@ authors:
 bibliography: mybib
 copyright_holder: Oak Ridge National Laboratory
 keywords:
-  - activity spaces
-  - agent-based modeling
-  - human dynamics
-  - population synthesis
+  - activity space
+  - synthetic population
+  - microsimulation
+  - population dynamics
 title: "Spatial Microsimulation and Activity Allocation in Python: An Update on the Likeness Toolkit"
