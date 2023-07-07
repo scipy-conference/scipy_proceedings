@@ -121,7 +121,7 @@ Following the registration process, we load the masks from disk and apply the tr
 
    # Transform the moving mask using the result from the
    # registration
-   rpt.SetParameter(0,
+   rtp.SetParameter(0,
          'ResampleInterpolator',
          'FinalNearestNeighborInterpolator')
    result_mask = itk.transformix_filter(moving_mask, rtp)
