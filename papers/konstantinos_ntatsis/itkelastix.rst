@@ -57,7 +57,7 @@ elastix
 
 For example, when aligning an MRI brain scan with a CT scan using ``elastix``, users can configure the transformation model, such as an affine or B-spline transformation model, to capture the geometric relationships between input images. They can also specify the similarity measure, like mutual information or normalized correlation, to evaluate the quality of alignment. Additionally, users have the flexibility to adjust optimization strategies, including parameters like the maximum number of iterations, to fine-tune the registration process and achieve optimal results. ``elastix`` supports both the more typical pairwise registration but also groupwise registration :cite:`metz2011nonrigid` :cite:`huizinga2016pca`, where no image is specified as fixed but an implicit mean image is used instead as reference. 
 
-The ``elastix`` codebase is implemented in C++ and serves as an extension to the Insight Toolkit (ITK) :cite:`mccormick2014itk`. Through nearly two decades of development, ``elastix`` has achieved a mature state, characterized by stability, practical effectiveness, maintainability, and general backward compatibility. ITK *Image* data structures play a crucial role within ``elastix``, representing multi-dimensional pixel data augmented with spatial information. Acting as a vital link between the digital pixel space and the physical space of the imaged object, ITK Images facilitate accurate registration. By computing transformations that map points from the physical space of one image to corresponding points in another, ``elastix`` achieves precise and meaningful alignment outcomes within the physical space. Complementing ``elastix``, a utility software named ``transformix`` was developed to enable the application of registration results to additional images.
+The ``elastix`` codebase is implemented in C++ and serves as an extension to the Insight Toolkit (ITK) :cite:`mccormick2014itk`. Through nearly two decades of development, ``elastix`` has achieved a mature state, characterized by stability, practical effectiveness, maintainability, and general backward compatibility. ITK Image data structures play a crucial role within ``elastix``, representing multi-dimensional pixel data augmented with spatial information. Acting as a vital link between the digital pixel space and the physical space of the imaged object, ITK Images facilitate accurate registration. By computing transformations that map points from the physical space of one image to corresponding points in another, ``elastix`` achieves precise and meaningful alignment outcomes within the physical space. Complementing ``elastix``, a utility software named ``transformix`` was developed to enable the application of registration results to additional images.
 
 The original and still-supported method to utilize ``elastix`` and ``transformix`` are command line executables. For the end user, this approach has the advantage that it does not require any external dependencies to be installed, which eases deployment. However, one limitation of this executable-based approach is its reliance on file input/output (I/O) operations. To address this limitation and enable more efficient in-memory operations, a C++ API was developed for ``elastix`` and ``transformix``. This API follows the paradigm established by ITK and its processing filters. By adopting this design approach, ``elastix`` and ``transformix`` gained the ability to perform operations directly in memory. This enhancement provides users with greater flexibility and efficiency in their image registration workflows.
 
@@ -134,7 +134,7 @@ Following the registration process, we load the masks from disk and apply the tr
 
    print(initial_dice, result_dice)
 
-The last part of the code above calculates the Dice coefficient between the fixed mask and the transformed moving mask by converting the pixel arrays in the ITK images into NumPy array views and then call ``scipy.distance.dice()`` on them. The initial Dice score was **97.88%** which increased to **99.37%** after registration. Figure :ref:`brain-registration-example` visualizes the fixed, moving and result image as well as an overlay of the fixed image and the transformed mask.
+The last part of the code above calculates the Dice coefficient between the fixed mask and the transformed moving mask by converting the pixel arrays in the ITK Images into NumPy array views and then call ``scipy.distance.dice()`` on them. The initial Dice score was **97.88%** which increased to **99.37%** after registration. Figure :ref:`brain-registration-example` visualizes the fixed, moving and result image as well as an overlay of the fixed image and the transformed mask.
 
 .. figure:: images/brain-registraiton-result.png
    :align: center
@@ -165,7 +165,7 @@ Interoperability with other packages
 ------------------------------------
 ITK Transforms
 ++++++++++++++
-In addition to the fact that ``elastix`` is based on ITK, there is an ongoing effort to increase the compatibility between the two libraries even further. One particular example is the Transform classes. In the following example, we show that ITK transforms can be used directly by ``transformix``:
+In addition to the fact that ``elastix`` is based on ITK, there is an ongoing effort to increase the compatibility between the two libraries even further. One particular example is the Transform classes. In the following example, we show that ITK Transforms can be used directly by ``transformix``:
 
 .. code-block:: python
 
@@ -199,7 +199,7 @@ In addition to the fact that ``elastix`` is based on ITK, there is an ongoing ef
 
 NumPy & SciPy
 +++++++++++++
-Interoperability with NumPy and, consequently, with SciPy libraries, comes from functionality in ITK to convert ITK images to NumPy arrays and vice versa. The relevant code is:
+Interoperability with NumPy and, consequently, with SciPy libraries, comes from functionality in ITK to convert ITK Images to NumPy arrays and vice versa. The relevant code is:
 
 .. code-block:: python
 
@@ -214,7 +214,7 @@ Interoperability with NumPy and, consequently, with SciPy libraries, comes from 
 
 Project MONAI
 +++++++++++++
-More and more people work on the application of deep learning to medical imaging research. To that end, we developed `itk_torch_bridge`__ as module of the MONAI codebase that allows conversion 1) of an ITK Image to a MONAI MetaTensor and the reverse, while making sure that all relevant metadata remain intact, and 2) an ITK Transform to a MONAI Transform and back. The latter is necessary since the ITK transforms are defined in the world coordinate system while MONAI uses the pixel/voxel space. Example of a relevant application is performing deep learning registration (e.g. affine) using MONAI, and passing the Transform as initial Transform for ``itk-elastix``, which can further register the images (e.g. non-linearly). Below, there is a short code snippet on how to use the module:
+More and more people work on the application of deep learning to medical imaging research. To that end, we developed `itk_torch_bridge`__ as module of the MONAI codebase that allows conversion 1) of an ITK Image to a MONAI MetaTensor and the reverse, while making sure that all relevant metadata remain intact, and 2) an ITK Transform to a MONAI Transform and back. The latter is necessary since the ITK Transforms are defined in the world coordinate system while MONAI uses the pixel/voxel space. Example of a relevant application is performing deep learning registration (e.g. affine) using MONAI, and passing the Transform as initial Transform for ``itk-elastix``, which can further register the images (e.g. non-linearly). Below, there is a short code snippet on how to use the module:
 
 __ https://docs.monai.io/en/latest/data.html#module-monai.data.itk_torch_bridge
 
