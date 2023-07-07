@@ -380,3 +380,14 @@ Blosc2 supports a variety of compression codecs and filters, making it easier to
 We have also shown how the Btune plugin can be used to automatically tune the compression parameters for a given dataset.  This is especially useful when we want to compress data efficiently for a tradeoff between compression or decompression speed and compression ratio, but we do not know the best compression parameters beforehand.
 
 In conclusion, we have shown how to utilize the Blosc2 library for storing and processing the Gaia dataset. This dataset serves as a prime example of a large, multi-dimensional dataset that can be efficiently stored and processed using Blosc2 NDim.
+
+Acknowledgments
+---------------
+
+Jordi Portell, a member of the Gaia Collaboration, has been very helpful in answering many questions about the Gaia dataset, and has also proposed possible explorations of it.
+
+NumFOCUS is a non-profit organization with a mission to promote open practices in research, data, and scientific computing. They have provided steady funds to the Blosc Development Team over the past years.
+
+Huawei is a high-tech company that made a significant and selfless donation to the Blosc project.
+
+Sergio Barrachina, an associate professor at University Jaume I, has provided many advice and code during the development of the Btune project.
