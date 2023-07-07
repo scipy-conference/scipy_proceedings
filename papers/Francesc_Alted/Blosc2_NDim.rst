@@ -82,7 +82,7 @@ For getting the coordinates of the stars in the Milky Way, we will be using the 
 
 We converted the tabular dataset into a sphere with a radius of 10,000 light years and framed it into a 3D array of shape (20,000, 20,000, 20,000). Each cell in the array represents a cube of 1 light year per side and contains the number of stars within it. Given that the average distance between stars in the Milky Way is about 5 light years, very few cells will contain more than one star (e.g. the maximum of stars in a single cell in our sphere is 6). This 3D array contains 0.5 billion stars, which is a significant portion of the Gaia catalog.
 
-The number of stars is stored as a uint8, resulting in a total dataset size of 7.3 TB. However, compression can greatly reduce its size to 5.0 GB since the 3D array is very sparse. Blosc2 can compress the zeroed parts almost entirely thanks to a specific algorithm to detect zeros early in the compression pipeline and encoding them efficiently.
+The number of stars is stored as a uint8, resulting in a total dataset size of 7.3 TB. However, compression can greatly reduce its size to 5.0 GB since the 3D array is very sparse, and the Zstandard codec :cite:`zstd` is used. Blosc2 can compress the zeroed parts almost entirely thanks to a specific algorithm to detect zeros early in the compression pipeline and encoding them efficiently.
 
 In addition, we store other data about the stars in a separate table indexed with the position of each star (using PyTables). For demonstration purposes, we store the distance from Sun, radial velocity, effective temperature, and G-band magnitude using a float32 for each field. The size of the table is 10 GB uncompressed, but it can be compressed to 4.8 GB. Adding another 1.0 GB for the index brings the total size to 5.8 GB. Therefore, the 3D array is 5.0 GB, and the table with the additional information and its index are 5.8 GB, making a total of 10.8 GB. This comfortably fits within the storage capacity of any modern laptop.
 
@@ -250,13 +250,21 @@ After training the neural network, the Btune plugin can automatically tune the c
 Results on the Gaia dataset
 ---------------------------
 
-When applying the results of the Btune plugin to the Gaia dataset, we obtain datasets that can be explored more quickly. Figure :ref:`gaia-blosclz` shows the results of slicing a section of the 3D array when applying BloscLZ, the best predicted codec for speed, and we compare that speed against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin and h5py. Results show that the data can be explored significantly faster using Blosc2 NDim with BloscLZ.
+We will use the training results above to compress the big 3D Gaia array so that it can be explored more quickly. Figure :ref:`slicing-speed-filters` displays the speed that can be achieved when getting multiple multidimensional slices of the dataset along different axes, using the most efficient codecs and filters for various tradeoffs.
+
+.. figure:: slicing-speed-filters.png
+
+   Speed of obtaining multiple multidimensional slices of the Gaia dataset along different axes, for different codecs and filters. The speed is measured in GB/s, so a higher value is better. :label:`slicing-speed-filters`
+
+These results indicate that the fastest compression is achieved with BloscLZ (compression level 5, no filters), closely followed by Zstd (compression level 9, no filters), exactly as the neural network model predicted. While decompression speed is not the only metric to consider for fast operation, as obtaining completely general multidimensional slices can be costly due to internal copies, it does provide a good indication of the overall performance of the decompression process.
+
+Now, let's compare the figures above with other libraries that can handle multidimensional data. Figure :ref:`gaia-blosclz` shows the slicing speed of the 3D array when applying BloscLZ, the best predicted codec for speed, and we compare that speed against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin :cite:`hdf5plugin` and h5py. Results show that the data can be explored significantly faster using Blosc2 NDim with the BloscLZ codec. It is also interesting to note that the speed of Blosc2 NDim with BloscLZ is not much affected by the number of threads used, which is a welcome surprise, and probably an indication that the internal zero-suppression mechanism inside Blosc2 works efficiently without the need of multi-threading.
 
 .. figure:: slicing-speed-blosc1-vs-blosc2.png
 
-   Slicing a section of the Gaia dataset with BloscLZ using different libraries. Note how using one single thread is still quite effective for Blosc NDim and BloscLZ. :label:`gaia-blosclz`
+   Slicing a section of the Gaia dataset with BloscLZ using different libraries. Note how using one single thread is still quite effective for Blosc2 NDim and BloscLZ. :label:`gaia-blosclz`
 
-Regarding compression ratio, Figure :ref:`gaia-sizes` shows the results of compressing the Gaia dataset with Blosc2 NDim with BloscLZ, and we compare that ratio against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin and h5py. Results show that the data can be compressed significantly better using Blosc2.  This is because Blosc2 comes with a new and powerful zero-detection mechanism that is able to detect and compress the many zeros that are present in the Gaia dataset.
+Regarding compression ratio, Figure :ref:`gaia-sizes` shows the results of compressing the Gaia dataset with Blosc2 NDim with BloscLZ, and we compare that ratio against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin and h5py. Results show that the data can be compressed significantly better using Blosc2. This is because Blosc2 comes with a new and powerful zero-detection mechanism that is able to efficiently handle and compress the many zeros that are present in the Gaia dataset.
 
 .. figure:: filesizes-blosc2-vs-blosc2.png
 
