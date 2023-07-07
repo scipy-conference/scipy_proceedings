@@ -247,6 +247,21 @@ On the other hand, there are also situations where data have to be compressed at
 
 After training the neural network, the Btune plugin can automatically tune the compression parameters for a given dataset. During inference, the user can set the preferred tradeoff by setting the :code:`BTUNE_TRADEOFF` environment variable to a floating point value between 0 and 1. A value of 0 favors speed only, while a value of 1 favors compression ratio only. This setting automatically selects the compression parameters most suitable to the current data chunk whenever a new Blosc2 data container is being created.
 
+Results on the Gaia dataset
+---------------------------
+
+When applying the results of the Btune plugin to the Gaia dataset, we obtain datasets that can be explored more quickly. Figure :ref:`gaia-blosclz` shows the results of slicing a section of the 3D array when applying BloscLZ, the best predicted codec for speed, and we compare that speed against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin and h5py. Results show that the data can be explored significantly faster using Blosc2 NDim with BloscLZ.
+
+.. figure:: slicing-speed-blosc1-vs-blosc2.png
+
+   Slicing a section of the Gaia dataset with BloscLZ using different libraries. Note how using one single thread is still quite effective for Blosc NDim and BloscLZ. :label:`gaia-blosclz`
+
+Regarding compression ratio, Figure :ref:`gaia-sizes` shows the results of compressing the Gaia dataset with Blosc2 NDim with BloscLZ, and we compare that ratio against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin and h5py. Results show that the data can be compressed significantly better using Blosc2.  This is because Blosc2 comes with a new and powerful zero-detection mechanism that is able to detect and compress the many zeros that are present in the Gaia dataset.
+
+.. figure:: filesizes-blosc2-vs-blosc2.png
+
+   Compressing the Gaia dataset with BloscLZ using different libraries. Note how using Blosc2 provides significantly better compression ratios than using Blosc1 for this Gaia 3D sparse dataset. :label:`gaia-sizes`
+
 Ingesting and processing data of Gaia
 -------------------------------------
 
@@ -384,10 +399,10 @@ In conclusion, we have shown how to utilize the Blosc2 library for storing and p
 Acknowledgments
 ---------------
 
-Jordi Portell, a member of the Gaia Collaboration, has been very helpful in answering many questions about the Gaia dataset, and has also proposed possible explorations of it.
+Jordi Portell, member of the Gaia Collaboration, has been very helpful in answering many questions about the Gaia dataset, and has also proposed possible explorations of it.
 
-NumFOCUS is a non-profit organization with a mission to promote open practices in research, data, and scientific computing. They have provided steady funds to the Blosc Development Team over the past years.
+NumFOCUS, a non-profit organization with a mission to promote open practices in research, data, and scientific computing. They have provided steady funds to the Blosc Development Team over the past years.
 
-Huawei is a high-tech company that made a significant and selfless donation to the Blosc project.
+Huawei, a high-tech company that made a significant and selfless donation to the Blosc project.
 
-Sergio Barrachina, an associate professor at University Jaume I, has provided many advice and code during the development of the Btune project.
+Sergio Barrachina, associate professor at University Jaume I, has provided many advice and code during the development of the Btune project.
