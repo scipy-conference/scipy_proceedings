@@ -167,7 +167,7 @@ Interoperability with other packages
 ------------------------------------
 ITK Transforms
 ++++++++++++++
-In addition to the fact that ``elastix`` is based on ITK, there is an ongoing effort to increase the compatibility between the two libraries even further. One particular example is the Transform classes. In the following example, we show that ITK Transforms can be used directly by ``transformix``:
+In addition to the fact that ``elastix`` is based on ITK, there is an ongoing effort to increase the compatibility between the two libraries even further. One particular example is the Transform classes :cite:`avants2012unified`. In the following example, we show that ITK Transforms can be used directly by ``transformix``:
 
 .. code-block:: python
 
