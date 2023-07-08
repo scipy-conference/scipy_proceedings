@@ -254,9 +254,9 @@ We will use the training results above to compress the big 3D Gaia array so that
 
 .. figure:: slicing-speed-filters.png
 
-   Speed of obtaining multiple multidimensional slices of the Gaia dataset along different axes, for different codecs and filters. The speed is measured in GB/s, so a higher value is better. :label:`slicing-speed-filters`
+   Speed of obtaining multiple multidimensional slices of the Gaia dataset along different axes, for different codecs, filters and different number of threads. The speed is measured in GB/s, so a higher value is better. :label:`slicing-speed-filters`
 
-These results indicate that the fastest compression is achieved with BloscLZ (compression level 5, no filters), closely followed by Zstd (compression level 9, no filters), exactly as the neural network model predicted. While decompression speed is not the only metric to consider for fast operation, as obtaining completely general multidimensional slices can be costly due to internal copies, it does provide a good indication of the overall performance of the decompression process.
+These results indicate that the fastest compression is achieved with BloscLZ (compression level 5, no filters), closely followed by Zstd (compression level 9, no filters), exactly as the neural network model predicted.  Also, note how the fastest decompression codecs, BloscLZ and also Zstd, are not affected very much by the number of threads used, which means that they are not CPU-bound, so small computers or laptops with low core counts will be able to reach good speeds.
 
 Now, let's compare the figures above with other libraries that can handle multidimensional data. Figure :ref:`gaia-blosclz` shows the slicing speed of the 3D array when applying BloscLZ, the best predicted codec for speed, and we compare that speed against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin :cite:`hdf5plugin` and h5py. Results show that the data can be explored significantly faster using Blosc2 NDim with the BloscLZ codec. It is also interesting to note that the speed of Blosc2 NDim with BloscLZ is not much affected by the number of threads used, which is a welcome surprise, and probably an indication that the internal zero-suppression mechanism inside Blosc2 works efficiently without the need of multi-threading.
 
@@ -266,7 +266,7 @@ Now, let's compare the figures above with other libraries that can handle multid
 
 Regarding compression ratio, Figure :ref:`gaia-sizes` shows the results of compressing the Gaia dataset with Blosc2 NDim with BloscLZ, and we compare that ratio against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin and h5py. Results show that the data can be compressed significantly better using Blosc2. This is because Blosc2 comes with a new and powerful zero-detection mechanism that is able to efficiently handle and compress the many zeros that are present in the Gaia dataset.
 
-.. figure:: filesizes-blosc2-vs-blosc2.png
+.. figure:: filesizes-blosc1-vs-blosc2.png
 
    Compressing the Gaia dataset with BloscLZ using different libraries. Note how using Blosc2 provides significantly better compression ratios than using Blosc1 for this Gaia 3D sparse dataset. :label:`gaia-sizes`
 
