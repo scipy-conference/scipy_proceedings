@@ -457,7 +457,7 @@ This document is just the first step and broad guide to our vision of developing
 Acknowledgments
 ~~~~~~~~~~~~~~~
 
-We gratefully acknowledge the 163 developers and countless community members who have contributed to the MDAnalysis project over the last 16 years and NumFOCUS for its support as our fiscal sponsor.
+We gratefully acknowledge the 184 developers and countless community members who have contributed to the MDAnalysis project over the last 16 years and NumFOCUS for its support as our fiscal sponsor.
 
 This work is made possible thanks to a grant from the Chan-Zuckerberg Initiative (grant number 2021-237663), supporting MDAnalysis and the MDAKit project under an EOSS4 award.
 
