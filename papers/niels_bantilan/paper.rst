@@ -20,7 +20,7 @@ Pandera: Going Beyond Pandas Data Validation
    This paper outlines pandera's motivation and challenges that took it from being
    a pandas-only data validation framework :cite:`niels_bantilan-proc-scipy-2020`
    to one that is extensible to other non-pandas-compliant dataframe-like libraries.
-   It also provides a informative case study of the technical and organizational
+   It also provides an informative case study of the technical and organizational
    challenges associated with expanding the scope of a library beyond its original
    boundaries.
 
@@ -33,9 +33,9 @@ Introduction
 
 Data validation is the process of falsifying data against a particular set of
 assumptions :cite:`van2018statistical`. Framed differently, it is the act of
-verifying data against a a set of properties and constraints that are explicitly
+verifying data against a set of properties and constraints that are explicitly
 established by the data practitioner. In this context, the term "data practitioner"
-refers to anyone who using a programming language to analyze, transform, or otherwise process data.
+refers to anyone using a programming language to analyze, transform, or otherwise process data.
 It includes, but is not limited to, data scientists, data engineers,
 data analysts, machine learning engineers, and machine learning researchers.
 This paper describes the trajectory of pandera from a pandas-only validation
@@ -69,19 +69,18 @@ trustworthiness of the conclusions that they entail. Though this is especially
 important in scientific research and business-critical applications, data validation
 ought to be a core part of the quality assurance pipeline of data teams.
 
-The data practitioner can build statistical domain knowledge about the data they
-are working with by inspecting the data via exploratory data analysis (EDA), automatically
-profiling the data with any number of tools at their disposal, or a combination
-of these two approaches. By building a mental model of how their data looks like
-and envisioning a set of constraints that express what the ideal "clean" dataset
-looks like, the data practitioner can then encode this understanding as a schema that they
-can use to validate new incoming data. This schema then serves not only as documentation
-for themselves and future maintainers, but also as a stateless data drift
-monitoring system for data transformation, model training, and production inference
-pipelines. The benefit of this statelessness is that the data practitioner can
-reason about what counts as valid data through their code and their version control
-system of choice, which captures changes in the assumptions about valid data
-over time.
+Data practitioners build statistical domain knowledge about the data they
+are working with by inspecting the data via exploratory data analysis (EDA), data
+profiling tools, or a combination of these two approaches. By building a mental
+model of how their data looks like and envisioning a set of constraints that express
+what the ideal "clean" dataset looks like, the data practitioner can then encode this
+understanding as a schema that they can use to validate new incoming data. This
+schema serves not only as documentation for themselves and future maintainers,
+but also as a stateless data drift monitoring system for data transformation, model
+training, and production inference pipelines. The benefit of this statelessness is
+that the data practitioner can reason about what counts as valid data through their
+code and their version control system of choice, which captures changes in the
+assumptions about valid data over time.
 
 However, the process of writing down these schemas is a laborious and often
 thankless task and not as exciting as getting to the modeling/analysis/visualization
@@ -133,8 +132,8 @@ pandas DataFrames:
 In the example above, we expect our data to have three columns that have
 specific names, data types, and data value constraints. By reading the code
 the data practitioner themselves or their collaborators can immediately see what the
-minimum requirements are for valid data. For example, the `pa.Check.gt(0)` constraint
-indicates that `column1` just alwyas be greater than zero.
+minimum requirements are for valid data. For example, the ``pa.Check.gt(0)`` constraint
+indicates that ``column1`` just always be greater than zero.
 
 Pandera emphasizes code-first schema authoring and maintenance. As opposed to
 yaml-, json- or UI-based schema authoring, code-first schemas lower the barrier
@@ -476,7 +475,7 @@ the following abstractions:
 
 This new architecture allows contributors to implement a schema validator for
 any data structure they want. In pseudo-code, supporting a fictional dataframe
-library called ``sloth`` it would look something like:
+library called ``sloth`` would look something like this:
 
 .. code-block:: python
 
