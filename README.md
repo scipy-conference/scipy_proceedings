@@ -10,10 +10,10 @@ You can find more information about the [proceedings' organising principles](#or
 
 **All** communication between authors and reviewers should be civil and
 respectful. There are no exceptions to this rule. Please see the
-[SciPy2022 Code of Conduct](https://www.scipy2022.scipy.org/code-of-conduct)
+[SciPy Code of Conduct](https://www.scipy2022.scipy.org/code-of-conduct)
 for more info.
 
-You can find the [schedule for 2022](#timeline-for-2022) below.
+You can find the [schedule for 2023](#timeline-for-2023) below.
 
 Please use @-mentions in issues and pull requests(PRs) to [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
 
@@ -106,32 +106,32 @@ which ensures relevance to the community that created them.
 
 The most effective way to contact the Proceedings Co-Chairs for issues related to this GitHub repository is to use GitHub's issues and "@"-mentioning the Co-Chairs.
 
-In 2022, the Proceedings Co-Chairs are
+In 2023, the Proceedings Co-Chairs are
 - Meghann Agarwal (@mepa)
 - Chris Calloway (@cbcunc)
+- Rohit Goswami (@HaoZeke)
 - Dillon Niederhut (@deniederhut)
-- David Shupe (@stargaser)
 
-## Timeline for 2022
+## Timeline for 2023
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
-- April 5: Authors invited to submit full papers
-- May 27: 1st Draft for Submission
-- May 27–June 23: Open Review Period
-- May 27: Reviewers Assigned
-- June 9: Initial Complete Review
-- June 23: Final Recommendation and Comprehensive Review Deadlines
-- June 29: Final Author Revision Deadline
-- July 6: Final Editorial Decisions for Proceedings Contents Deadline
-- July 30: Time Window for Publishing Conference Ready Proceedings
+- April 14: Authors invited to submit full papers
+- June 2: 1st Draft for Submission
+- June 2–July 21: Open Review Period
+- June 2: Reviewers Assigned
+- June 23: Initial Complete Review
+- July 14: Final Author Revision Deadline
+- July 21: Final Recommendation and Comprehensive Review Deadlines
+- August 4: Final Editorial Decisions for Proceedings Contents Deadline
+- August 11: Time Window for Publishing Conference Ready Proceedings
 
 ## Instructions for Authors
 
 Please submit your papers by 23:59 PST of the *1st Draft for Submission*
 Deadline.
 
-Submit your papers as an ReStructured Text file via PR against this repository.
+Submit your papers as a reStructuredText (rst) or LaTeX file via PR against this repository. Supporting LaTeX submissions is very new this year, so please consider it to be in beta, and please only use this option if you are already familiar with writing papers in LaTeX.
 
 During the Open Review Period authors should work with their reviewers to refine
 and improve their submission.
@@ -156,11 +156,11 @@ have final say in whether to accept or reject a paper.
 
 ### Author Deadlines
 
-- April 5: Authors invited to submit full papers
-- May 27: 1st Draft for Submission
-- May 27–June 23: Open Review Period
-- June 29: Final Author Revision Deadline
-- July 6: Final Editorial Decisions for Proceedings Contents Deadline
+- April 14: Authors invited to submit full papers
+- June 2: 1st Draft for Submission
+- June 2–July 21: Open Review Period
+- July 14: Final Author Revision Deadline
+- July 21: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
 
@@ -217,15 +217,22 @@ git clone https://github.com/mpacer/scipy_proceedings
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](#creating-a-new-branch-based-off-of-2022) for your paper based off the latest `2022` branch.
+3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2023` branch.
     - If you submit multiple papers, you will need a new branch for each.
+    - Your branch should only contain your paper and the example papers.
+    - Do not delete the example papers from your branch.
 4. [Set up your environment](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#build-your-paper)
 6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#push-your-changes) and [check your paper](#check-your-paper) on http://procbuild.scipy.org.
     - If you want to alter the build system, do not include it in your
       submission's PR, create a separate PR against `dev`
-      ([see below](creating-build-system-prs) for more details).
+      ([see below](#creating-build-system-prs) for more details).
 7. Repeat steps 5 and 6, while also responding to reviewer feedback.
+8. Unless instructed otherwise by the proceedings team, **DO NOT** fetch or pull the original `2023` branch after you start your paper.
+    - Likewise, **DO NOT** update (merge/rebase) your branch with the original `2023` branch.
+    - Otherwise, your branch may contain more than one paper, someone else's paper.
+    - If you do, you may need to create your branch again and start over.
+    - All changes to your branch should be confined to only your [paper directory](#setting-up-your-environment).
 
 #### Getting a local copy of the scipy_proceedings repo
 
@@ -247,22 +254,22 @@ upstream	https://github.com/scipy-conference/scipy_proceedings.git (fetch)
 upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
 ```
 
-#### Getting the latest `2022` branch
+#### Getting the latest branch
 
 - Fetch the latest version of the `scipy_proceedings` repo
     - `git fetch upstream`
-- Check out the upstream `2022` branch
-    - `git checkout -b 2022 --track upstream/2022`
+- Check out the upstream `2023` branch
+    - `git checkout -b 2023 --track upstream/2023`
+.
+#### Creating a new branch
 
-#### Creating a new branch based off of `2020`
+If you are submitting only one paper, you can use the `2023` branch directly.
 
-If you are submitting only one paper, you can use the `2022` branch directly.
-
-Otherwise, you will need to create a new branch based on `2022` and set its
+Otherwise, you will need to create a new branch based on `2023` and set its
 upstream to origin.
 
 ```
-git checkout 2022
+git checkout 2023
 git checkout -b <your_branch_name>
 git push --set-upstream origin <your_branch_name>
 ```
@@ -271,11 +278,11 @@ git push --set-upstream origin <your_branch_name>
 
 - Create a new environment (using your choice of environment manager, e.g., `pyenv` or `conda`).
 - Install/update the required python libraries (`pip install -U -r requirements.txt`).
-- Install LaTeX and any other non-python dependencies
-- Create a new directory `papers/<your_directory_name>`
-    - if you are submitting one paper, we recommend you use `<firstname_surname>`
-    - if you are submitting more than one paper, you will need to use a different
-      directory name for each paper
+- Install LaTeX and any other non-python dependencies.
+- Create a new directory `papers/<your_directory_name>`.
+    - If you are submitting one paper, we recommend you use `<firstname_surname>`.
+    - If you are submitting more than one paper, you will need to use a different
+      branch and directory name for each paper.
 
 #### Write your paper
 
@@ -290,7 +297,7 @@ git push --set-upstream origin <your_branch_name>
 - Do not commit any changes to files outside of your paper directory.
 
 If you want to change the way the build system works, we use a separate
-submission procedure ([see below](creating-build-system-prs)).
+submission procedure ([see below](#creating-build-system-prs)).
 
 #### Build your paper
 
@@ -303,7 +310,7 @@ submission procedure ([see below](creating-build-system-prs)).
 
 - Once you are ready to submit your paper, make a pull request on GitHub.
   **Please ensure that you file against the correct branch.**
-- Create a pull request against our `2022` branch.
+- Create a pull request against our `2023` branch.
 - Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
 
 #### Creating build system PRs
@@ -363,9 +370,9 @@ change in question, then that change should be requested and made before the
 
 ### Reviewer Deadlines
 
-- May 27: Reviewers Assigned
-- June 9: Initial Complete Review
-- June 23: Final Recommendation and Comprehensive Review Deadlines
+- June 2: Reviewers Assigned
+- June 23: Initial Complete Review
+- July 21: Final Recommendation and Comprehensive Review Deadlines
 
 ### Reviewer Workflow
 
@@ -436,11 +443,11 @@ To information about how to manage the whole proceedings, please see
 `publisher/README.md` and `publisher/Makefile`.
 
 #### Publisher Deadlines
- 
-- April 5: Authors invited to submit full papers
-- May 27–June 23: Open Review Period
+
+- April 14: Authors invited to submit full papers
+- June 2 – July 21: Open Review Period
     - The [build server](#build-server) should be maintained throughout the Open Review Period.
-- July 30: Time Window for Publishing Conference Ready Proceedings
+- August 11: Time Window for Publishing Conference Ready Proceedings
 
 ### Instructions for Editors
 
@@ -455,12 +462,12 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 #### Editor Deadlines
 
-- April 5: Authors invited to submit full papers
-- May 27–June 23: Open Review Period
-- May 27: Reviewers Assigned
-- June 9: Initial Complete Review
+- April 14: Authors invited to submit full papers
+- June 2 – July 21: Open Review Period
+- June 2: Reviewers Assigned
+- June 23: Initial Complete Review
     - Editors should verify that reviews have been completed
-- July 6: Final Editorial Decisions for Proceedings Contents Deadline
+- August 4: Final Editorial Decisions for Proceedings Contents Deadline
 
 ## Instructions for Slides
 
@@ -468,7 +475,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](#creating-a-new-branch-based-off-of-2022) for your paper based off the latest `2022` branch.
+3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2023` branch.
 4. Inside the `presentations` folder, there are directories for:
     1. 3-minute lightning talk slide decks (lightning)
     2. Posters presented at the poster session (posters)

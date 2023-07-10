@@ -7,7 +7,8 @@ TEMPLATES = _templates
 STATIC = _static
 YEARDIR = scipy`date "+%Y"`
 ZIPNAME = draft_proceedings.zip
-DOIXMLNAME = doi_batch.xml
+DOIXMLPAPERS = doi_batch_papers.xml
+DOIXMLSLIDES = doi_batch_slides.xml
 
 BUILDTMPL = ./build_template.py
 TEX2PDF := cd $(TEXDIR) && pdflatex -interaction=batchmode
@@ -50,7 +51,8 @@ html:
 
 zip:
 	cp -r $(HTMLDIR) $(YEARDIR)
-	cp $(BUILDDIR)/$(DOIXMLNAME) $(YEARDIR)/$(DOIXMLNAME)
+	cp $(BUILDDIR)/$(DOIXMLPAPERS) $(YEARDIR)/$(DOIXMLPAPERS)
+	cp $(BUILDDIR)/$(DOIXMLSLIDES) $(YEARDIR)/$(DOIXMLSLIDES)
 	zip -r $(ZIPNAME) $(YEARDIR)
 	rm -rf $(YEARDIR)
 

@@ -18,7 +18,7 @@
 :bibliography: mybib
 
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: https://www.youtube.com/watch?v=HHFuTpVvRCI
 
 ------------------------------------------------
 A Numerical Perspective to Terraforming a Desert
@@ -62,27 +62,27 @@ justo vitae odio tincidunt tempus at vitae tortor.
 Bibliographies, citations and block quotes
 ------------------------------------------
 
-If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension. 
+If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension.
 
-**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work. 
+**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work.
 
 To reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`hume48` (which literally is :code:`:cite:`hume48`` in accordance with the ``hume48`` cite-key in the associated ``mybib.bib`` file).
 
-However, if you use a bibtex file, this will overwrite any manually written references. 
+However, if you use a bibtex file, this will overwrite any manually written references.
 
-So what would previously have registered as a in text reference ``[Atr03]_`` for 
+So what would previously have registered as a in text reference ``[Atr03]_`` for
 
-:: 
+::
 
      [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
 
 what you actually see will be an empty reference rendered as **[?]**.
 
-E.g., [Atr03]_.
+E.g., :cite:`Atr03`.
 
 
-If you wish to have a block quote, you can just indent the text, as in 
+If you wish to have a block quote, you can just indent the text, as in
 
     When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
 
@@ -116,6 +116,35 @@ wrapping the doi in ``\detokenize`` works to solve the issue.
      address =     "Indianapolis, IN",
      publisher =   "Hackett",
      doi = \detokenize{10.1017/CBO9780511808432},
+   }
+
+Citing software and websites
+++++++++++++++++++++++++++++
+
+Any paper relying on open-source software would surely want to include citations.
+Often you can find a citation in BibTeX format via a web search.
+Authors of software packages may even publish guidelines on how to cite their work.
+
+For convenience, citations to common packages such as
+Jupyter :cite:`jupyter`,
+Matplotlib :cite:`matplotlib`,
+NumPy :cite:`numpy`,
+pandas :cite:`pandas1` :cite:`pandas2`,
+scikit-learn :cite:`sklearn1` :cite:`sklearn2`, and
+SciPy :cite:`scipy`
+are included in this paper's ``.bib`` file.
+
+In this paper we not only terraform a desert using the package terradesert :cite:`terradesert`, we also catch a sandworm with it.
+To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
+
+.. code-block:: bibtex
+
+   @Misc{terradesert,
+     author = {TerraDesert Team},
+     title = {Code for terraforming a desert},
+     year = {2000},
+     url = {https://terradesert.com/code/},
+     note = {Accessed 1 Jan. 2000}
    }
 
 Source code examples
@@ -159,11 +188,11 @@ Or a snippet from the above code, starting at the correct line number:
    for (int i = 0; i < 10; i++) {
        /* do something */
    }
- 
+
 Important Part
 --------------
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
+It is well known :cite:`Atr03` that Spice grows on the planet Dune.  Test
 some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
 equation on a separate line:
 
@@ -300,22 +329,16 @@ Perhaps we want to end off with a quote by Lao Tse [#]_:
 
 .. [#] :math:`\mathrm{e^{-i\pi}}`
 
-.. Customised LaTeX packages
-.. -------------------------
+Customised LaTeX packages
+-------------------------
 
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
+Please avoid using this feature, unless agreed upon with the
+proceedings editors.
 
-.. ::
+::
 
-..   .. latex::
-..      :usepackage: somepackage
+  .. latex::
+     :usepackage: somepackage
 
-..      Some custom LaTeX source here.
-
-References
-----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
+     Some custom LaTeX source here.
 

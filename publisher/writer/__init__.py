@@ -109,7 +109,7 @@ class Translator(LaTeXTranslator):
             self.latex_video_url = text
             self.video_url = node.astext() if text else ''
         elif self.current_field == 'bibliography':
-            self.bibtex = ['alphaurl', text]
+            self.bibtex = ['ieeetr', text]
             self._use_latex_citations = True
             self._bibitems = ['', '']
             self.bibliography = text

@@ -1,11 +1,7 @@
-#
-##### scipy_proceedings requirements file for 2017
-#
-##### requirements without version specifiers
+docutils == 0.14
 lxml
 nameparser
 pygments
 pytest
+pyyaml
 testpath
-##### requirements with version specifiers
-docutils == 0.14

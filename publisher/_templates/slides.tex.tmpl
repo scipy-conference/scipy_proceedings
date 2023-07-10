@@ -24,7 +24,7 @@
 {{for entry in slides}}
       \item[] \normalsize\textsc{%
 {{entry['title']}}}, \small{%
-{{", and ".join(entry['authors'])}}}{{if entry.get('doi')}}\\
+{{", and ".join(i['name'] for i in entry['authors'])}}}{{if entry.get('doi')}}\\
 \href{https://doi.org/{{entry['doi']}}}{doi.org/{{entry['doi']}}}{{endif}}
 {{endfor}}
 
@@ -41,7 +41,7 @@
 {{for entry in posters}}
     \item[] \normalsize\textsc{%
 {{entry['title']}}}, \small{%
-{{", and ".join(entry['authors'])}}}{{if entry.get('doi')}}\\
+{{", and ".join(i['name'] for i in entry['authors'])}}}{{if entry.get('doi')}}\\
 \href{https://doi.org/{{entry['doi']}}}{doi.org/{{entry['doi']}}}{{endif}}
 {{endfor}}
 \end{itemize}
@@ -57,7 +57,7 @@
 {{for entry in tools}}
     \item[] \normalsize\textsc{%
 {{entry['title']}}}, \small{%
-{{", and ".join(entry['authors'])}}}{{if entry.get('doi')}}\\
+{{", and ".join(i['name'] for i in entry['authors'])}}}{{if entry.get('doi')}}\\
 \href{https://doi.org/{{entry['doi']}}}{doi.org/{{entry['doi']}}}{{endif}}
 {{endfor}}
 \end{itemize}
@@ -73,7 +73,7 @@
 {{for entry in lightning}}
     \item[] \normalsize\textsc{%
 {{entry['title']}}}, \small{%
-{{", and ".join(entry['authors'])}}}{{if entry.get('doi')}}\\
+{{", and ".join(i['name'] for i in entry['authors'])}}}{{if entry.get('doi')}}\\
 \href{https://doi.org/{{entry['doi']}}}{doi.org/{{entry['doi']}}}{{endif}}
 {{endfor}}
 \end{itemize}
