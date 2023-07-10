@@ -1,0 +1,11 @@
+{
+    "title": "Analyse the uncertainty of your system: Sensitivity Analysis in Python with scipy.stats.sobol_indices",
+    "authors": [
+        {
+            "name": "Pamphile T. Roy",
+            "affiliation": "Quansight",
+            "orcid": "0000-0001-9816-1416"
+        }
+    ],
+    "description": "Use the indices of Sobol' to measure the uncertainty in your system. Starting with SciPy 1.11, you can now use scipy.stats.sobol_indices which provides a simple yet powerful API."
+}
