@@ -134,13 +134,14 @@ Following the registration process, we load the masks from disk and apply the tr
    rtp.SetParameter(0,
          'ResampleInterpolator',
          'FinalNearestNeighborInterpolator')
-   result_mask = itk.transformix_filter(moving_mask, rtp)
+   result_mask = itk.transformix_filter(moving_mask, 
+                                        rtp)
 
    # Compute dice on masks
    initial_dice = 1 - dice(fixed_mask[:].ravel(),
                            moving_mask[:].ravel())
    result_dice = 1 - dice(fixed_mask[:].ravel(),
-                           result_mask[:].ravel())
+                          result_mask[:].ravel())
 
    print(initial_dice, result_dice)
 
