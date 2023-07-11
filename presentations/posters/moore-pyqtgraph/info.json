@@ -1,0 +1,31 @@
+{
+    "title": "PyQtGraph - High Performance Visualization for All Platforms",
+    "authors": [
+        {
+            "name": "Ognyan Moore",
+            "affiliation": "Hobu Inc.",
+            "orcid": ""
+        },
+        {
+            "name": "Nathan Jessurun",
+            "affiliation": "",
+            "orcid": "0000-0003-1693-3641"
+        },
+        {
+            "name": "Nils Nemitz",
+            "affiliation": "",
+            "orcid": ""
+        },
+        {
+            "name": "Martin Chase",
+            "affiliation": "",
+            "orcid": ""
+        },
+        {
+            "name": "Luke Campagnola",
+            "affiliation": "Allen Institute",
+            "orcid": ""
+        }
+    ],
+    "description": "Discuss and showcase the PyQtGraph plotting library.  Special attention will be given to highlight PyQtGraph's primary objectives, its performance, cross-platform support and interactivity and how the library achieves those objectives."
+}
