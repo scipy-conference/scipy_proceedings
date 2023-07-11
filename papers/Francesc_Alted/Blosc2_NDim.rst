@@ -392,6 +392,7 @@ With that, we have a 3D array of shape 20,000 x 20,000 x 20,000 with the number 
 
 Figure :ref:`sun-50ly-vicinity` displays an interactive 3D view of the stars within a 50 x 50 x 50 light-year cube centered around our Sun. This visualization was generated using the code above.
 
+In :cite:`scripts-gaia` you can find the final version of the scripts above, including optimized versions that do not require a machine with more than 32 GB of virtual memory to run.
 
 Conclusions
 -----------
