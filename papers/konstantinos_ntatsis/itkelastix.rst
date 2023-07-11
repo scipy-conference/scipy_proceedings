@@ -78,6 +78,14 @@ Functionality
 Registration/transformation example
 +++++++++++++++++++++++++++++++++++
 
+.. figure:: images/brain-registration-result.png
+   :align: center
+   :figclass: w
+   :scale: 50%
+
+   Synthetic example of 2D brain registration and transformation of masks. :label:`brain-registration-example`
+
+
 The following example demonstrates the registration of 2D MRI brain images using the ``itk.elastix_registration_method`` and subsequent transformation of the corresponding moving mask using the ``itk.transformix_filter``. The objective is to compare the overlap measure between the fixed mask and the transformed moving mask. It is important to note that this is a synthetic example where the fixed image intentionally exhibits significant deformations through an artificial non-linear transformation, solely for illustrative purposes. The masks utilized in this example represent segmentations of the head, including the brain and the skull. The procedure begins by reading the fixed and moving images from disk, followed by configuring a default set of B-spline registration parameters to be used for the registration process.
 
 .. code-block:: python
@@ -137,13 +145,6 @@ Following the registration process, we load the masks from disk and apply the tr
    print(initial_dice, result_dice)
 
 The last part of the code above calculates the Dice coefficient between the fixed mask and the transformed moving mask by converting the pixel arrays in the ITK Images into NumPy array views and then call ``scipy.distance.dice()`` on them. The initial Dice score was **97.88%** which increased to **99.37%** after registration. Figure :ref:`brain-registration-example` visualizes the fixed, moving and result image as well as an overlay of the fixed image and the transformed mask.
-
-.. figure:: images/brain-registration-result.png
-   :align: center
-   :figclass: w
-   :scale: 50%
-
-   Synthetic example of 2D brain registration and transformation of masks. :label:`brain-registration-example`
 
 
 Jupyter Notebook collection
