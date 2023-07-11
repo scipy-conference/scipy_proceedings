@@ -264,11 +264,11 @@ Now, let's compare the figures above with other libraries that can handle multid
 
    Slicing a section of the Gaia dataset with BloscLZ using different libraries. Note how using one single thread is still quite effective for Blosc2 NDim and BloscLZ. :label:`gaia-blosclz`
 
-Regarding compression ratio, Figure :ref:`gaia-sizes` shows the results of compressing the Gaia dataset with Blosc2 NDim with BloscLZ, and we compare that ratio against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin and h5py. Results show that the data can be compressed significantly better using Blosc2. This is because Blosc2 comes with a new and powerful zero-detection mechanism that is able to efficiently handle and compress the many zeros that are present in the Gaia dataset.
+Regarding compression ratio, Figure :ref:`gaia-sizes` shows the results of compressing the Gaia dataset with Blosc2 NDim with BloscLZ and Zstd, and we compare that ratio against other libraries using the same codec but with the previous Blosc1 generation (Zarr and h5py), and also against Blosc2 via the hdf5plugin and h5py. Results show that the data can be compressed significantly better using Blosc2. This is because Blosc2 comes with a new and powerful zero-detection mechanism that is able to efficiently handle and compress the many zeros that are present in the Gaia dataset.
 
 .. figure:: filesizes-blosc1-vs-blosc2.png
 
-   Compressing the Gaia dataset with BloscLZ using different libraries. Note how using Blosc2 provides significantly better compression ratios than using Blosc1 for this Gaia 3D sparse dataset. :label:`gaia-sizes`
+   Compressing the Gaia dataset with BloscLZ and Zstd using different libraries. Blosc2 provides significantly better compression ratios than using Blosc1 . Also, note how Zstd compresses much better than BloscLZ. :label:`gaia-sizes`
 
 Ingesting and processing data of Gaia
 -------------------------------------
