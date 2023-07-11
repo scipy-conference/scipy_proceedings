@@ -1,0 +1,31 @@
+{
+    "authors": [
+        {
+            "name": "Cian Wilson",
+            "affiliation": "Carnegie Institution for Science",
+            "orcid": "0000-0002-4083-6529"
+        },
+        {
+            "name": "Marc Spiegelman",
+            "affiliation": "Columbia University",
+            "orcid": "0000-0002-5218-7466"
+        },
+        {
+            "name": "Owen Evans",
+            "affiliation": "Columbia University (now at Google)",
+            "orcid": ""
+        },
+        {
+            "name": "Mark Ghiorso",
+            "affiliation": "OFM Research",
+            "orcid": "0000-0002-0489-0018"
+        },
+        {
+            "name": "Lucy Tweed",
+            "affiliation": "Columbia University (now at University of Cambridge)",
+            "orcid": "0009-0009-4506-2110"
+        }
+    ],
+    "title": "Moving the Earth with thermodynamics and python",
+    "description": "This poster describes some of the challenges of coupling thermodynamic models to geodynamic simulations and introduces a new python-based tool, ThermoCodegen (TCG), to deal with them.  TCG uses SymPy to symbolically represent thermodynamic models and automatically generate interfaces to a set of consistent thermodynamic parameters for use in geodynamic models.  It can be used quite generally but has been particularly designed for reactive disequilibrium problems in Earth science and we present some examples here."
+}
