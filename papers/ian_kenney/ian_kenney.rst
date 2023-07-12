@@ -1,7 +1,7 @@
 .. -*- mode: rst; mode: visual-line; fill-column: 9999; coding: utf-8 -*-
 
 :author: Irfan Alibay
-:email: IAlibay@mdanalysis.org 
+:email: ialibay@mdanalysis.org 
 :institution: Open Molecular Software Foundation, Irvine, CA, USA
 :orcid: 0000-0001-5787-9130   
 :equal-contributor:
