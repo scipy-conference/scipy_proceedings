@@ -228,65 +228,112 @@ and matplotlib :cite:`Hunter:2007, thomas_a_caswell_2020_4030140`.
 
 .. _models:
 
-Abstraction for declaring a model in vak
-========================================
+Models
+======
 
 In the initial version of vak, we developed a ``Model`` class with methods
-for training and evaluating a neural network model and for generating new predictions for unseen data with a trained model.
-However, this class exhibited some limitations; notably it was designed so that a user would instantiate 
-with a class method that requires a configuration in the form of a Python ``dict``. 
-This works fine when loading the configuration from a declarative file, 
-but it is cumbersome to construct such a configuration in an interactive environment such as a Jupyter notebook. 
-Another limitation was that this model class could only run methods like ``train`` on an entire dataset, 
-and could not for example run inference on a single data sample or a single batch. 
-Furthermore, the class did not fully leverage hardware and the training capabilities of PyTorch, 
+for training and evaluating a neural network model,
+and for generating new predictions for unseen data with a trained model.
+However, this class exhibited some limitations; notably it was designed so that a user would instantiate it
+with a class method that requires a configuration in the form of a Python ``dict``.
+This works fine when loading the configuration from a declarative file,
+but it is cumbersome to construct such a configuration in an interactive environment such as a Jupyter notebook.
+Another limitation was that this model class could only run methods like ``train`` on an entire dataset,
+and could not for example run inference on a single data sample or a single batch.
+Furthermore, the class did not fully leverage hardware and the capabilities of PyTorch,
 as it was simply a lightweight design that abstracted away details of an imperative training script.
-In version 1.0 we have addressed these issues by adopting the lightning library as a backend. 
-This allows us to leverage the engineering strengths of the lightning developers while we focus on the domain-specific details 
-that our framework needs to provide. We additionally sought to make it possible for researchers 
-to make use of this framework as simply as possible. 
-Our design is focused on a user who wants to explore how different architectures impact performance, 
-within an established task and data processing pipeline as defined by our framework. 
-To achieve this, we declare a set of abstractions.
-First, we require that a model be defined using a ``vak.models.ModelDefinition``. 
-This model definition takes the form a dataclass with four required attributes: ``network``, ``loss``, ``optimizer``, and ``metrics``. 
-In other words, this abstraction considers the minimum definition of a neural network model 
-to include not only the network architecture but additionally the loss function, the optimizer, and metrics. 
+In version 1.0 we have addressed these issues by adopting the Lightning library as a backend.
+In this way, we leverage the engineering strengths of the Lightning library
+while we focus on the domain-specific details
+that our framework needs to provide.
+By sub-classing the core `LightningModule` class, we provide users with per-model implementations
+of methods for training, validation, and even for forwarding a single batch or sample through the model.
+
+Abstractions for declaring a model in vak
+=========================================
+
+We additionally sought to make it as easy possible for researchers to make use of vak
+without advanced Python programming ability or expertise in neural networks.
+Our design is focused on a user who wants to benchmark different models
+within an established task and data processing pipeline as defined by our framework.
+In other words, a user should be able to use any of the built-in models,
+and experiment with their own models, without needing to contribute code to vak
+or use a plug-in mechanism like entry points.
+To achieve this, we provide a decorator ``vak.models.model``,
+This decorator is applied to a *model definition* to produce a sub-class
+of a *model family*.
+The ``vak.models.model`` decorator additionally adds any class it decorates to a *registry*.
+In the rest of the section we explain these abstractions and how they make it possible to
+easily test different models.
+
+A model definition takes the form a dataclass with four required attributes:
+``network``, ``loss``, ``optimizer``, and ``metrics``.
+ ``vak.models.ModelDefinition``
+In other words, our abstraction asserts that the definition of a neural network model
+to include the neural network function, the loss function used to optimize the network parameter,
+the optimizer, and the metrics used to assess performance.
 This definition is in line with those adopted by other frameworks, notably the Lightning library itself.
 
-To relate a model as declared with a ``ModelDefinition`` to the machine learning tasks that we implement within the vak framework,
-we introduce the concept of model *families*. A model family is represented by a sub-class of the core ``LightningModel`` class,
-with each class representing a family having set implementations of the training step, validation step, and prediction step. 
-In this way, model families are defined operationally: a model can belong to a family if it accepts the inputs provided by logic 
-within the training, validation, and prediction steps, and the model also produces the appropriate outputs needed within those same steps.
-To link a ``ModelDefinition`` to a family, we provide a decorator, ``vak.models.model``,
-that is applied to the dataclass representing the model definition, 
-and takes as an argument the name of one of the classes representing a family of models. 
-To make this abstraction slightly clearer, we include in the following listing the definition of the TweetyNet model within our framework:
+To relate a model as declared with a definition to the machine learning tasks
+that we implement within the vak framework, we introduce the concept of model *families*.
+A model family is represented by a sub-class of the core ``lightning.LightningModule`` class.
+Each class representing a family implements a family-specific training step, validation step,
+prediction step, and forward method.
+In this way, model families are defined operationally:
+a model can belong to a family if it accepts the inputs provided by logic
+within the training, validation, and prediction steps,
+and the model also produces the appropriate outputs needed within those same steps.
 
+With these two abstractions in hand,
+we can provide a user access to models within vak as follows:
+the decorator creates a new subclass the model family,
+whose name is the same as the class that it decorates,
+the class representing a model definition.
+The decorator adds to this sub-class an attribute, the ``definition``,
+that is used when initializing a new instance of the specific model.
+After creating this sub-class and adding this attribute,
+the ``model`` decorator finally adds the model to the registry
+in ``vak.models.registry``, so that other functions within vak
+can find the model by its name.
+
+We present a listing showing an example of this.
+This example is used in experiments accompanying this paper,
+as described below in :ref:`results`,
+demonstrating how the decorator
+enables models to be declared and used in a script outside vak.
+Here we can notice that we apply the ``model`` decorator to the class
+``TweetyNoLSTMNet``, which is the model definition.
+Notice also that we pass in as an argument to the decorator
+the name of the model family that we wish to sub-class,
+``FrameClassificationModel``.
+When Python's import machinery parses the script,
+the model class will be created and added to vak's registry,
+so that it can be found by other functions
+for training and evaluating models.
+The models built in to vak use the exact same decorator.
 
 .. code-block:: python
 
    from vak.models import (
        model,
-       WindowedFrameClassificationModel
+       FrameClassificationModel
    )
    
-   @model(family=WindowedFrameClassificationModel)
-   class TweetyNet:
-       network = nets.TweetyNet
+   @model(family=FrameClassificationModel)
+   class TweetyNoLSTMNet:
+       """TweetyNet model without LSTM layer"""
+       network = TweetyNetNoLSTM
        loss = torch.nn.CrossEntropyLoss
        optimizer = torch.optim.Adam
-       metrics = {'acc': metrics.Accuracy,
-                  'levenshtein': metrics.Levenshtein,
-                  'segment_error_rate': metrics.SegmentErrorRate,
-                  'loss': torch.nn.CrossEntropyLoss
+       metrics = {
+           'acc': metrics.Accuracy,
+           'levenshtein': metrics.Levenshtein,
+           'segment_error_rate': metrics.SegmentErrorRate,
+           'loss': torch.nn.CrossEntropyLoss}
        default_config = {
            'optimizer':
-               {'lr': 0.003
                {'lr': 0.003}
-           }
-
+       }
 
 .. _model-families:
 
@@ -311,19 +358,26 @@ In contrast, the vast majority of neural network models assume a "rectangular" t
 in part because they were originally developed for computer vision applications applied to batch.
 The simplest fix for this issue is to convert inputs of varying lengths into rectangular batches
 with a combination of windowing and padding.
-E.g., pick a window size $w$, find the minimum number of consecutive non-overlapping strides :math:`s` of that window
-that will cover an entire input :math:`x` of length :math:`T`, :math:`s * w \ge T`, and then pad :math:`x`
-to a new length :math:`T_{padded} = T + ((s * w) - T`.
+E.g., pick a window size $w$, find the minimum number of consecutive non-overlapping strides
+:math:`s` of that window that will cover an entire input :math:`x` of length :math:`T`,
+:math:`s * w \ge T`, and then pad :math:`x` to a new length :math:`T_{padded} = T + ((s * w) - T`.
 This approach then requires a post-processing step where the outputs are stitched back together
-into a single continuous sequence :math:`x_padded`, and the padding is removed by somehow tracking or denoting which time bins are padded,
+into a single continuous sequence :math:`x_padded`,
+and the padding is removed by somehow tracking or denoting which time bins are padded,
 e.g., with a separate vector that acts as a "padded" flag for each time bin.
+Of course there are other ways to address the issue of varying lengths,
+such as using the ``torch.nn.utils.rnn`` API to pad and unpad tensors.
+We leave these other methods for future work.
 
 Because more than one model has been developed that uses this post-processing approach
 to solve the problem of frame classification,
 we define this as a family of models within vak, the ``FrameClassification`` model.
 Both the TweetyNet model from :cite:`cohenAutomatedAnnotationBirdsong2022`
-and the Deep Audio Segmenter (DAS) from :cite:`steinfathFastAccurateAnnotation2021` are examples of such models,
-and we provide implementations of both in vak.
+and the Deep Audio Segmenter (DAS) from :cite:`steinfathFastAccurateAnnotation2021` are examples of such models.
+We provide an implementation of TweetyNet now built directly into vak in version 1.0.
+We also provide a PyTorch implementation of the Encoder Decoder-Temporal Convolutional Network
+previously applied to frames of video features for the action segmentation task :cite:`lea_temporal_2017`.
+Below in results we show how vak can be used to benchmark and compare both models on the same dataset.
 
 Neural network layers and operations
 ====================================
