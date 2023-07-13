@@ -318,32 +318,12 @@ This approach then requires a post-processing step where the outputs are stitche
 into a single continuous sequence :math:`x_padded`, and the padding is removed by somehow tracking or denoting which time bins are padded,
 e.g., with a separate vector that acts as a "padded" flag for each time bin.
 
-Because more than one model has been developed that uses this post-processing approach to solve the problem of frame classification,
-we define this as a family of models within vak, the ``WindowedFrameClassification`` model.
+Because more than one model has been developed that uses this post-processing approach
+to solve the problem of frame classification,
+we define this as a family of models within vak, the ``FrameClassification`` model.
 Both the TweetyNet model from :cite:`cohenAutomatedAnnotationBirdsong2022`
 and the Deep Audio Segmenter (DAS) from :cite:`steinfathFastAccurateAnnotation2021` are examples of such models,
 and we provide implementations of both in vak.
-
-**Frame classification model.**
-
-Of course, one need not assume that inputs are rectangular.
-Many neural network libraries offer functionality for dealing with this in various ways.
-For example, PyTorch provides an API for "packing" and "unpacking" sequences
-that are fed into recurrent neural networks.
-This is mainly meant for NLP researchers
-that are training models on sequences of tokens of varying lengths,
-but the same API can in principle be used for other modalities of data
-such as the audio and spectrogram inputs we are concerned with here.
-To provide a model that can accept inputs of varying lengths,
-and remove the need for post-processing steps that stitch these batches of windows
-back together into single sequences,
-we provide a ``FrameClassificationModel``.
-Below in Section :ref:`results` we compare the original TweetyNet,
-that was trained on batches of random spectrogram windows,
-with a new implementation that operates on entire bouts of song.
-I.e., the original implementation is now a
-``WindowedFrameClassification`` model within version 1.0 of vak,
-and this new version is simply a ``FrameClassification`` model.
 
 Neural network layers and operations
 ====================================
