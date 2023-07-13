@@ -46,8 +46,10 @@ In closing we discuss our roadmap for development and vision for the community o
 Introduction
 ------------
 
-Are humans unique among animals? We seem to be the only species that speak languages :cite:`hauserFacultyLanguageWhat2002`,
-but is speech somehow like other forms of acoustic communication in other animals, such as birdsong :cite:`doupeBIRDSONGHUMANSPEECH1999`?
+Are humans unique among animals?
+We seem to be the only species that speak languages :cite:`hauserFacultyLanguageWhat2002`,
+but is speech somehow like other forms of acoustic communication in other animals,
+such as birdsong :cite:`doupeBIRDSONGHUMANSPEECH1999`?
 How should we even understand the ability of some animals to learn their vocalizations? 
 Is it a spectrum :cite:`petkovBirdsPrimatesSpoken2012`, 
 a multi-dimensional behavior :cite:`vernesMultidimensionalNatureVocal2021`, 
@@ -98,36 +100,12 @@ Related work
 
 First, we briefly review related literature, to further motivate the need for a framework
 to compare neural network models developed for animal acoustic communication research.
-We begin by explaining how the study of acoustic communication is distinct from bioacoustics more generally.
-Readers may be familiar with the use of approaches from bioacoustics to identify species present from a sound recording,
-as is done in passive acoustic monitoring. In contrast, the study of acoustic communication
-is often focused on how an individual communicates within a population.
-In species that are capable of vocal learning, such as songbirds, each individual will have a unique vocalization,
-Because of this focus on individuals, a very common workflow is to segment sounds from one animal into a sequence of units,
-e.g., the syllables of birdsong, after which further analyses can be done :cite:`kershenbaumAcousticSequencesNonhuman2016`.
-Some examples of such analyses include: measuring the similarity of the vocalizations
-between individuals :cite:`tchernichovskiProcedureAutomatedMeasurement2000, kershenbaumQuantifyingSimilarityAnimal2015`,
-describing the repertoire size of individuals
-and species :cite:`robinsonSpecieslevelRepertoireSize2019, elieVocalRepertoireDomesticated2016`.
-Such data can also form the basis of further modeling,
-e.g. agent-based models of how birdsong evolves
-in a population :cite:`youngbloodContentBiasCultural2022, hudsonModelingHowPopulation2022`,
-or machine learning models that ask what information is present
-in the calls of individuals :cite:`smith-vidaurreIndividualSignaturesOutweigh2020, pratEverydayBatVocalizations2016`
-or in populations :cite:`barkerCulturalTransmissionVocal2021,petersonUnsupervisedDiscoveryFamily2023`.
+A very common workflow in studies of acoustic behavior is to segment sounds from one animal into a sequence of units,
+after which further analyses can be done, as reviewed in :cite:`kershenbaumAcousticSequencesNonhuman2016`.
 Some analyses require further annotation of the units to assign them to one of some set of classes,
 e.g. the unique syllables within an individual songbird's song.
 An example of segmenting audio of Bengalese finch song into syllables and annotating those syllables is shown in
-Figure :ref:`fig:annotation`. Analyses that typically require annotation include
-fitting statistical models of the sequences :cite:`markowitz_long-range_2013, kakishitaEthologicalDataMining2009`
-or studies of motor learning where specific units in sequences need to be tracked throughout an experiment,
-e.g., to relate them to neural data
-:cite:`soberCentralContributionsAcoustic2008, sober2009adult, wohlgemuth2010linked, sober2012vocal`.
-It should be noted that in bioacoustics more generally, there is very much interest in identifying
-individual animals :cite:`linhartPotentialAcousticIndividual2022`.
-We recognize that there is probably more overlap than difference between these disciplines,
-and emphasize that we are simply illustrating these questions
-for the benefit of a general reader that may not be acquainted with them.
+Figure :ref:`fig:annotation`.
 
 .. figure:: fig-annotation-bengalese-finch.png
 
@@ -150,36 +128,19 @@ frame classification problem :cite:`graves_framewise_2005, graves_supervised_201
 That is, these models classify every frame in audio or time bin in a spectrogram.
 Sequences of units are received from this series of predictions for each time step in a post-hoc manner.
 Essentially, the post-processing finds the start and stop times of each continuous run of a single label.
-Multiple architectures have been developed for this frame classification approach alone.
-:cite:`koumura_automatic_2016-1` developed a convolutional network with a sliding window,
-and combined this with clean up of the predictions by Hidden Markov Models applied to the sequences of segment labels.
-:cite:`cohenAutomatedAnnotationBirdsong2022` train an end-to-end neural network model with a
-combined convolutional-recurrent neural network architecture to map from spectrogram windows to labeled time bins,
-and show that this provides both segmenting and annotation of new data.
-Importantly, they compare with standard machine learning models such as those in scikit-learn
-that have been applied to features extracted from segments :cite:`nicholson2016comparison, tachibana2014semi`.
-:cite:`steinfathFastAccurateAnnotation` similarly propose a temporal convolutional network
-that maps directly from audio to predictions for each frame, with an optional trainable layer
-for converting audio to spectrograms.
-These authors demonstrate the applicability of their method to a wide range of species.
-Other similar works include those of :cite:`trouvainCanarySongDecoder2021`
+Multiple architectures have been developed for this frame classification approach,
+including :cite:`koumura_automatic_2016-1`, :cite:`cohenAutomatedAnnotationBirdsong2022`,
+and :cite:`steinfathFastAccurateAnnotation`.
+Other works in the same vein include those of :cite:`trouvainCanarySongDecoder2021`
 and :cite:`renteriaBirdsongPhraseVerification2021`.
-We note here that the same problem could of course be solved by
-sequence-to-sequence models :cite:`sutskeverSequenceSequenceLearning2014,vaswaniAttentionAllYou2017`,
-which as the name implies solve the problem of mapping from one sequence to another
-without being limited to the case where each sequence has the same cardinality
-(i.e., one output :math:`y_t` for each input :math:`x_t`).
-A main goal of vak is to provide an experimental testbed to directly compare such models
-for the use cases of acoustic communication researchers.
-Especially for researchers that are working with relatively small datasets :cite:`arnaudImprovingWorkflowCrack2022`
-in resource-constrained environments, it may prove more accessible for them to use well-established models,
-regardless of whether such models are considered state-of-the-art by the neural network research community.
 A separate approach from frame classification models has been to formulate recognition of individual vocalizations
 as an object detection problem. To our knowledge this has been mainly applied to mouse ultrasonic vocalizations
-as in :cite:`coffeyDeepSqueakDeepLearningbased2019`. A related line of research uses unsupervised models
+as in :cite:`coffeyDeepSqueakDeepLearningbased2019`.
+
+Another line of research has investigated the use of unsupervised models
 to learn a latent space of vocalizations. This includes the work of :cite:`sainburgFindingVisualizingQuantifying2020`
 and :cite:`goffinetLowdimensionalLearnedFeature2021`. These unsupervised neural network models allow for
-clustering vocalizations in latent space, e.g., to efficiently provide a human annotator
+clustering vocalizations in the learned latent space, e.g., to efficiently provide a human annotator
 with an estimate of the number of classes of vocalizations
 in an animal's repertoire :cite:`sainburgFindingVisualizingQuantifying2020`,
 and/or to measure similarity between vocalizations
