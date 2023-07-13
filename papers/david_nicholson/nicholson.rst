@@ -228,11 +228,8 @@ and matplotlib :cite:`Hunter:2007, thomas_a_caswell_2020_4030140`.
 
 .. _models:
 
-Models
-======
-
 Abstraction for declaring a model in vak
-++++++++++++++++++++++++++++++++++++++++
+========================================
 
 In the initial version of vak, we developed a ``Model`` class with methods
 for training and evaluating a neural network model and for generating new predictions for unseen data with a trained model.
@@ -294,12 +291,12 @@ To make this abstraction slightly clearer, we include in the following listing t
 .. _model-families:
 
 Model families
-++++++++++++++
+==============
 
 Having introduced the abstraction needed to declare models within the vak framework,
 we now describe the families we have implemented to date.
 
-**Windowed frame classification model.** As described in Section :ref:`related-work`,
+**Frame classification model.** As described in Section :ref:`related-work`,
 one way to formulate the problem of segmenting audio into sequences of units
 so that it can solved by neural networks
 is to classify each frame of audio, or a spectrogram produced from that audio,
@@ -387,9 +384,9 @@ The fit model is saved during training as part of the results
 and then loaded automatically by vak for evaluation
 or when generating predictions for new data.
 
-**Transforms for labeled timebins.**
+**Transforms for frame labels.**
 Many of the transforms we provide relate to
-what we call *labeled timebins*,
+what we call *frame labels*,
 that is, vectors where each element represents
 a label for a time bin from a spectrogram or a sample in an audio signal.
 These vectors of class labels are used as targets
@@ -436,7 +433,8 @@ and we then take the label at the start of each run.
 This transformation can be efficient when evaluating models
 where we want to measure just the segment error rate.
 (Of course we preclude the use of other metrics related to onset and offset times
-when throwing away that information, but for some research questions the main goal is to simply have the correct labels for each segment.)
+when throwing away that information, but for some research questions the main goal is to simply
+have the correct labels for each segment.)
 
 Metrics
 =======
@@ -574,7 +572,7 @@ Logic in vak uses this fact to determine whether annotations can be loaded from 
 or must be loaded separately for each file when working with models.
 
 Types of datasets
-+++++++++++++++++
+=================
 
 **VocalDataset.** This dataset can be thought of the "base" dataset in vak.
 It assumes that the dataset consists of spectrograms of
