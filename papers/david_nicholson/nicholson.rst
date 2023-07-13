@@ -232,7 +232,7 @@ Models
 ======
 
 Abstraction for declaring a model in vak
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++++++++++
 
 In the initial version of vak, we developed a ``Model`` class with methods
 for training and evaluating a neural network model and for generating new predictions for unseen data with a trained model.
@@ -294,7 +294,7 @@ To make this abstraction slightly clearer, we include in the following listing t
 .. _model-families:
 
 Model families
-~~~~~~~~~~~~~~
+++++++++++++++
 
 Having introduced the abstraction needed to declare models within the vak framework,
 we now describe the families we have implemented to date.
@@ -574,7 +574,7 @@ Logic in vak uses this fact to determine whether annotations can be loaded from 
 or must be loaded separately for each file when working with models.
 
 Types of datasets
-~~~~~~~~~~~~~~~~~
++++++++++++++++++
 
 **VocalDataset.** This dataset can be thought of the "base" dataset in vak.
 It assumes that the dataset consists of spectrograms of
