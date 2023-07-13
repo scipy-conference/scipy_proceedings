@@ -283,10 +283,10 @@ To make this abstraction slightly clearer, we include in the following listing t
        metrics = {'acc': metrics.Accuracy,
                   'levenshtein': metrics.Levenshtein,
                   'segment_error_rate': metrics.SegmentErrorRate,
-                  'loss': torch.nn.CrossEntropyLoss`
+                  'loss': torch.nn.CrossEntropyLoss
        default_config = {
            'optimizer':
-               {'lr': 0.003`
+               {'lr': 0.003
                {'lr': 0.003}
            }
 
