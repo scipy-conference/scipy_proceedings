@@ -268,7 +268,6 @@ easily test different models.
 
 A model definition takes the form a dataclass with four required attributes:
 ``network``, ``loss``, ``optimizer``, and ``metrics``.
- ``vak.models.ModelDefinition``
 In other words, our abstraction asserts that the definition of a neural network model
 to include the neural network function, the loss function used to optimize the network parameter,
 the optimizer, and the metrics used to assess performance.
@@ -376,7 +375,7 @@ Both the TweetyNet model from :cite:`cohenAutomatedAnnotationBirdsong2022`
 and the Deep Audio Segmenter (DAS) from :cite:`steinfathFastAccurateAnnotation2021` are examples of such models.
 We provide an implementation of TweetyNet now built directly into vak in version 1.0.
 We also provide a PyTorch implementation of the Encoder Decoder-Temporal Convolutional Network
-previously applied to frames of video features for the action segmentation task :cite:`lea_temporal_2017`.
+previously applied to frames of video features for the action segmentation task :cite:`lea2017temporal`.
 Below in results we show how vak can be used to benchmark and compare both models on the same dataset.
 
 Neural network layers and operations
