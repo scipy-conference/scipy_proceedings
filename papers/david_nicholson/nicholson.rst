@@ -710,7 +710,7 @@ an inflated syllable error rate (right column, right group of bars).
    from all four birds. :label:`fig:ablation-experiment`
 
 This first result is the average across models trained on datasets
-prepared from individual birds in the Bengalese finch song repository dataset :cite:`BengaleseFinchSong2017`,
+prepared from individual birds in the Bengalese finch song repository dataset :cite:`nicholson_bengalese_2017`,
 as we did previously in :cite:`cohenAutomatedAnnotationBirdsong2022`.
 (There are four birds, and five training replicates per bird,
 where each replicate is trained on different subsets from a larger pool of training data.)
