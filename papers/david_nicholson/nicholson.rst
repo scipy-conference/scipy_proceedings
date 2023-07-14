@@ -125,8 +125,9 @@ with any of several methods :cite:`fukuzawaComputationalMethodsGeneralised2022`,
 and those units are then often be labeled by a human annotator.
 The first family of neural network models reduces this segmenting task to a
 frame classification problem :cite:`graves_framewise_2005, graves_supervised_2012`.
-That is, these models classify every frame in audio or time bin in a spectrogram.
-Sequences of units are received from this series of predictions for each time step in a post-hoc manner.
+That is, these models classify a time series of *frames*,
+like the columns in a spectrogram.
+Sequences of units are recovered from this series of predictions for each time step in a post-hoc manner.
 Essentially, the post-processing finds the start and stop times of each continuous run of a single label.
 Multiple architectures have been developed for this frame classification approach,
 including :cite:`koumura_automatic_2016-1`, :cite:`cohenAutomatedAnnotationBirdsong2022`,
@@ -303,7 +304,7 @@ Model families
 Having introduced the abstraction needed to declare models within the vak framework,
 we now describe the families we have implemented to date.
 
-**Frame classification model.** As described in Section :ref:`related-work`,
+**Frame classification.** As stated in Section :ref:`related-work`,
 one way to formulate the problem of segmenting audio into sequences of units
 so that it can solved by neural networks
 is to classify each frame of audio, or a spectrogram produced from that audio,
@@ -338,6 +339,26 @@ We provide an implementation of TweetyNet now built directly into vak in version
 We also provide a PyTorch implementation of the Encoder Decoder-Temporal Convolutional (ED-TCN) Network
 previously applied to frames of video features for the action segmentation task :cite:`lea2017temporal`.
 Below in results we show how vak can be used to benchmark and compare both models on the same dataset.
+
+**Parametric UMAP.**
+To minimally demonstrate that our framework is capable of providing researchers
+with access to multiple families of models,
+we have added an initial implementation of a Parametric UMAP model family.
+The original algorithm for UMAP (Uniform Manifold Approximation and Projection)
+consists of two steps: computing a graph on a dataset,
+and then optimizing an embedding of that graph to a lower dimensional space
+while preserving local distances between points :cite:`mcinnes2018umap`.
+The parametrized version of UMAP replaces the second step
+with optimization of a neural network architecture :cite:`sainburg2021parametric`.
+Because the parametrized version can be used with a wide range
+of neural network functions,
+we declare this as a family,
+and provide an implementation of a single model,
+an encoder with a convolutional front-end
+that can map spectrograms of units extracted from audio
+to a latent space.
+Our implementation is adapted from https://github.com/elyxlz/umap_pytorch
+and https://github.com/lmcinnes/umap/issues/580#issuecomment-1368649550.
 
 Neural network layers and operations
 ====================================
@@ -735,6 +756,36 @@ two models on the exact same dataset.
    Bengalese finch song repository dataset :cite:`BengaleseFinchSong2017`.
    Bar plots show segment error rate without post-processing clean-up (blue, left bar in grouped plots)
    and with the clean-up (orange, right bar in grouped plots). :label:`fig:TweetyNet-v-EDTCN`
+
+Applying Parametric UMAP to Bengalese finch syllables with a convolutional encoder
+==================================================================================
+
+Finally we provide a result demonstrating that a researcher can apply multiple families of models
+to their data with our framework.
+As stated above, the vak framework includes an implementation of a Parametric UMAP family,
+and one model in this family, a simple encoder network with convolutional layers on the front end.
+To demonstrate this model, we train it on the song of an individual bird from
+the Bengalese finch song repository.
+We use a training set with a duration of 40 seconds total, containing clips of
+all syllable classes from the bird's song, taken from songs that were drawn at random
+from a larger data pool by the vak dataset preparation function.
+Here, to show that training works, we visualize the embedding of the training set itself.
+It can be seen in :ref:`fig:parametric-UMAP` that points that are close to each other
+are almost always the same color, indicating that syllables that were given the same label
+by a human annotator are also nearer to each other after mapping to 2-D space
+with the trained parametric UMAP model.
+
+.. figure:: parametric-UMAP.png
+
+   Scatter plot showing syllables from the song of one Bengalese finch,
+   embeeded in a 2-D space using a convolutional encoder
+   trained using the Parametric UMAP algorithm.
+   Each marker is a point produced from a spectrograms
+   of a single syllable rendition, mapped down to the 2-D space,
+   from 40 seconds of training data.
+   Colors indicate the label applied to each syllable
+   by an expert human when annotating the spectrograms
+   with a GUI. :label:`fig:parametric-UMAP`
 
 .. _discussion:
 
