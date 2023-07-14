@@ -25,7 +25,10 @@ have developed multiple models for similar tasks, often implemented as research 
 such as Keras and Pytorch. This situation has created a real need for a framework
 that allows researchers to easily test models with their own data and to benchmark
 and adapt multiple models to their use cases. To address this need, we developed vak (https://github.com/vocalpy/vak),
-a neural network framework designed for acoustic communication researchers. Here we describe the design of the vak,
+a neural network framework designed for acoustic communication researchers.
+(The name "vak" is pronounced like "talk" or "squawk" and was chosen
+for its similarity to the Latin root *voc*, as in "vocal".)
+Here we describe the design of the vak,
 and explain how vak makes it easy for researchers to apply neural network models to their own data.
 We highlight improvements made in version 1.0 that we believe will significantly improve user experience with the library.
 To provide researchers without expertise in deep learning access to these models,
