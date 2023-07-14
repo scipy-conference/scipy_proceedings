@@ -186,7 +186,7 @@ of very large datasets like those that form the basis of acoustic communication 
 This functionality is specifically tailored to the needs of acoustic communication researchers.
 For example, to parse the wide range of annotation formats used by
 acoustic communication researchers across disciplines,
-we use the pyOpenSci package crowsetta :cite:`nicholsonCrowsetta2022`.
+we use the pyOpenSci package crowsetta :cite:`nicholson2023crowsetta`.
 Finally we emphasize that vak depends heavily on the core libraries of the scientific Python stack,
 such as numpy :cite:`walt_numpy_2011,harris2020array`, scipy :cite:`virtanen_scipy_2019`,
 and matplotlib :cite:`Hunter:2007, thomas_a_caswell_2020_4030140`.
