@@ -638,7 +638,9 @@ in  :ref:`fig:cli`.
    In the bottom panel (b) an example is shown of how vak logs progress
    and reports metrics during training :label:`fig:cli`
 
-The configuration file follows the TOML format that has been adopted among others by Python and Rust.
+The configuration file follows the TOML format
+(`Tom's Obvious Minimal Language <https://toml.io/en/>`_)
+that has been adopted by the Python and Rust communities among others.
 Commands through the CLI take the form of vak command configfile, e.g., ``vak train gy6or6_train.toml``.
 There are five commands: prep, train, eval, predict, and learncurve.
 As their names suggest, the commands train, eval, and predict are used to train a model, evaluate it, and
