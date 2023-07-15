@@ -163,16 +163,29 @@ Design
 
 First we describe the design of vak at a high level.
 It relies on PyTorch :cite:`paszkeAutomaticDifferentiationPyTorch2017` for neural networks,
-because that library allows for Pythonic idioms and low-level design when needed.
+because that library allows for Pythonic idioms and low-level control when needed.
 In version 1.0, we have additionally adopted the Lightning framework :cite:`falconPyTorchLightning2023` as a backend,
 freeing us up as developers to focus on the research domain while benefiting
-from the Lightning team's engineering expertise. In terms of its top-level API,
+from the Lightning team's engineering expertise.
+Of course, vak relies heavily on the core libraries of the scientific Python stack,
+such as numpy :cite:`walt_numpy_2011,harris2020array`, scipy :cite:`virtanen_scipy_2019`,
+and matplotlib :cite:`Hunter:2007, thomas_a_caswell_2020_4030140`.
+The built-in workflows for preparing datasets make frequent use of pandas :cite:`team_pandas-devpandas_2020`
+to work with tabular data formats, and dask :cite:`dask_development_team_dask_2016`
+to enable scalable, distributed processing of very large datasets
+like those that form the basis of acoustic communication research.
+Functionality for preparing datasets is specifically tailored to the needs of acoustic communication researchers.
+For example, to parse the wide range of annotation formats used by
+acoustic communication researchers across disciplines,
+we use the pyOpenSci package crowsetta :cite:`nicholson2023crowsetta`.
+
+In terms of its API,
 the design of vak is most similar to other domain-specific libraries developed with torch,
 such as torchvision :cite:`torchvision2016`, but here the domain is animal acoustic communication research.
 (Perhaps surprisingly, many of the models proposed to date in this area are essentially adopted from computer vision,
 and we have not to date found a need to rely on the torchaudio library, although this could change in future versions.)
 Thus, similar to the torchvision API, vak provides modules for
-neural network models, operations, transformations for loading data, and benchmark datasets.
+neural network models, operations, transformations for loading data, and datasets.
 
 In addition to this torchvision-like API, vak provides a command-line interface
 that allows researchers to work with neural network models
@@ -196,8 +209,8 @@ and the ``predict`` command generates predictions
 with a trained model, e.g., annotations like those described above.
 The ``learncurve`` command is similar to the ``train`` command,
 but it generates results for a learning curve,
-where the $x$ axis is training set size (duration in seconds)
-and the $y$ axis is a metric of instance,
+where the :math:`x` axis is training set size (duration in seconds)
+and the :math:`y` axis is a metric of instance,
 measured across some number of training replicates.
 A user makes a separate configuration file for each one of these commands.
 The typical workflow starts with a call to ``vak prep``,
@@ -213,17 +226,6 @@ the user can run the command related to the model.
 
    A chart showing workflows in vak, using an example a frame classification model
    as defined below. See text for description of workflows. :label:`fig:workflows`
-
-Finally we emphasize that vak depends heavily on the core libraries of the scientific Python stack,
-such as numpy :cite:`walt_numpy_2011,harris2020array`, scipy :cite:`virtanen_scipy_2019`,
-and matplotlib :cite:`Hunter:2007, thomas_a_caswell_2020_4030140`.
-By the same token, the built-in workflows for preparing datasets rely heavily on pandas :cite:`team_pandas-devpandas_2020`
-for tabular data formats, and dask :cite:`dask_development_team_dask_2016` for scalable, distributed processing
-of very large datasets like those that form the basis of acoustic communication research.
-This functionality is specifically tailored to the needs of acoustic communication researchers.
-For example, to parse the wide range of annotation formats used by
-acoustic communication researchers across disciplines,
-we use the pyOpenSci package crowsetta :cite:`nicholson2023crowsetta`.
 
 .. _models:
 
@@ -261,18 +263,18 @@ The ``vak.models.model`` decorator additionally adds any class it decorates to a
 In the rest of the section we explain these abstractions and how they make it possible to
 easily test different models.
 
-A model definition takes the form a dataclass with four required attributes:
+A model definition takes the form of a dataclass with four required attributes:
 ``network``, ``loss``, ``optimizer``, and ``metrics``.
 In other words, our abstraction asserts that the definition of a neural network model
-to include the neural network function, the loss function used to optimize the network parameter,
+consists of the neural network function, the loss function used to optimize the network parameter,
 the optimizer, and the metrics used to assess performance.
 This definition is in line with those adopted by other frameworks, notably the Lightning library itself.
 
 To relate a model as declared with a definition to the machine learning tasks
 that we implement within the vak framework, we introduce the concept of model *families*.
 A model family is represented by a sub-class of the core ``lightning.LightningModule`` class.
-Each class representing a family implements a family-specific training step, validation step,
-prediction step, and forward method.
+Each class representing a family implements a family-specific methods:
+the ``training_step``, ``validation_step``, ``prediction_step``, and ``forward``.
 In this way, model families are defined operationally:
 a model can belong to a family if it accepts the inputs provided by logic
 within the training, validation, and prediction steps,
@@ -280,16 +282,18 @@ and the model also produces the appropriate outputs needed within those same ste
 
 With these two abstractions in hand,
 we can provide a user access to models within vak as follows:
-the decorator creates a new subclass the model family,
-whose name is the same as the class that it decorates,
-the class representing a model definition.
-The decorator adds to this sub-class a single attribute, the ``definition``,
+the decorator creates a new subclass of the model family,
+whose name is the same as the name of the class that it decorates,
+which is the class representing a model definition.
+The decorator adds a single attribute to this sub-class, the ``definition``,
 that is used when initializing a new instance of the specific model.
 After creating this sub-class and adding this attribute,
 the ``model`` decorator finally registers the model
-in ``vak.models.registry``, so that other functions within vak
-can find the model by its name in the registry.
-We present a listing showing an example of this.
+in a ``vak.models.registry`` module, that allows other functions within vak
+to find the model by its name in the registry.
+The registry is implemented with its own helper functions
+and module-level ``dict``s that are updated by those functions.
+We present a listing that demonstrates usage of the abstractions just described.
 
 .. code-block:: python
 
@@ -318,7 +322,7 @@ We present a listing showing an example of this.
 This example is used in an experiment accompanying this paper,
 as described below in :ref:`results`.
 That experiment demonstrates how the decorator
-enables models to be declared and used in a script outside vak.
+enables models to be declared and used in a script outside of vak.
 Here we can notice that we apply the ``model`` decorator to the class
 ``TweetyNoLSTMNet``, which is the model definition.
 Notice also that we pass in as an argument to the decorator
@@ -328,7 +332,7 @@ When Python's import machinery parses the script,
 the model class will be created and added to vak's registry,
 so that it can be found by other functions
 for training and evaluating models.
-The models built in to vak use the exact same decorator.
+The models that are built in to vak use the exact same decorator.
 
 
 .. _model-families:
@@ -517,7 +521,7 @@ Essentially a user sets options in the configuration file to control each of the
 
 The initial step is to pair data that will be the source of
 inputs :math:`x` to a neural network model with the annotations that will be the
-source of training targets $y$ for that model.
+source of training targets :math:`y` for that model.
 This is done by collecting audio files or array files containing spectrograms from a "data directory",
 and then optionally pairing
 these files with annotation files.
