@@ -55,15 +55,12 @@ Are humans unique among animals?
 We seem to be the only species that speak languages :cite:`hauserFacultyLanguageWhat2002`,
 but is speech somehow like other forms of acoustic communication in other animals,
 such as birdsong :cite:`doupeBIRDSONGHUMANSPEECH1999`?
-How should we even understand the ability of some animals to learn their vocalizations? 
-Is it a spectrum :cite:`petkovBirdsPrimatesSpoken2012`, 
-a multi-dimensional behavior :cite:`vernesMultidimensionalNatureVocal2021`, 
-a set of modular abilities :cite:`wirthlinModularApproachVocal2019`, 
-or even a continuum :cite:`martinsSoundProductionLearning2020, martinsVocalLearningContinuum2020`? 
+How should we even understand the ability of some animals to learn their vocalizations
+:cite:`petkovBirdsPrimatesSpoken2012, vernesMultidimensionalNatureVocal2021, wirthlinModularApproachVocal2019, martinsSoundProductionLearning2020, martinsVocalLearningContinuum2020`?
 Questions like these are answered by studying how animals communicate with sound :cite:`hopp2012animal`. 
 This research requires cutting edge computational methods and big team science across a wide range of disciplines, 
-including ecology, ethology, bioacoustics, psychology, neuroscience, linguistics, 
-and genomics :cite:`sainburgComputationalNeuroethologyVocal2021, stowellComputationalBioacousticsDeep2022, wirthlinModularApproachVocal2019, hauserFacultyLanguageWhat2002`.
+including ecology, ethology, bioacoustics, psychology, neuroscience, linguistics, and genomics
+:cite:`sainburgComputationalNeuroethologyVocal2021, stowellComputationalBioacousticsDeep2022, wirthlinModularApproachVocal2019, hauserFacultyLanguageWhat2002`.
 
 As in many other domains, this research is being revolutionized by
 deep learning algorithms :cite:`sainburgComputationalNeuroethologyVocal2021, stowellComputationalBioacousticsDeep2022`.
@@ -95,8 +92,8 @@ is impacted by phylogenetic distance between species :cite:`provostImpactsFinetu
 Here we describe the design of the vak framework, and explain how vak makes it easy
 for acoustic communication researchers to work with neural network models.
 We have also recently released version 1.0 of the library (currently in alpha),
-and throughout we highlight improvements made in version 1.0 that we believe will significantly improve user experience
-with the library.
+and throughout we highlight enhancements made in version 1.0
+that we believe will significantly improve user experience with the library.
 
 .. _related-work:
 
