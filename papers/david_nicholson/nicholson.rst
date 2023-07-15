@@ -100,8 +100,7 @@ that we believe will significantly improve user experience with the library.
 Related work
 ============
 
-First, we briefly review related literature, to further motivate the need for a framework
-to compare neural network models developed for animal acoustic communication research.
+First, we briefly review related literature, to further motivate the need for a framework.
 A very common workflow in studies of acoustic behavior is to segment sounds from one animal into a sequence of units,
 after which further analyses can be done, as reviewed in :cite:`kershenbaumAcousticSequencesNonhuman2016`.
 Some analyses require further annotation of the units to assign them to one of some set of classes,
@@ -124,14 +123,14 @@ These are all essentially supervised learning tasks. Some of these models seek t
 with the common workflow just described :cite:`kershenbaumAcousticSequencesNonhuman2016`,
 where audio is segmented into a sequence of units
 with any of several methods :cite:`fukuzawaComputationalMethodsGeneralised2022`,
-and those units are then often be labeled by a human annotator.
-The first family of neural network models reduces this segmenting task to a
+and those units are then often labeled by a human annotator.
+The first family of neural network models reduces this workflow to a
 frame classification problem :cite:`graves_framewise_2005, graves_supervised_2012`.
-That is, these models classify a time series of *frames*,
+That is, these models classify a series of *frames*,
 like the columns in a spectrogram.
-Sequences of units are recovered from this series of predictions for each time step in a post-hoc manner.
+Sequences of units are recovered from this series of frame classifications in a post-hoc manner.
 Essentially, the post-processing finds the start and stop times of each continuous run of a single label.
-Multiple architectures have been developed for this frame classification approach,
+Multiple neural network models have been developed for this frame classification approach,
 including :cite:`koumura_automatic_2016-1`, :cite:`cohenAutomatedAnnotationBirdsong2022`,
 and :cite:`steinfathFastAccurateAnnotation`.
 Other works in the same vein include those of :cite:`trouvainCanarySongDecoder2021`
