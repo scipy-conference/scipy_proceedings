@@ -178,18 +178,54 @@ neural network models, operations, transformations for loading data, and benchma
 
 In addition to this torchvision-like API, vak provides a command-line interface
 that allows researchers to work with neural network models
-without requiring significant coding and deep learning expertise.
-We also provide built-in workflows for preparing datasets for use with neural network models.
-The built-in workflows for preparing datasets rely heavily on pandas :cite:`team_pandas-devpandas_2020`
+without requiring significant expertise in coding or neural network models.
+The command-line interface is limited to a few commands,
+that all take the form of ``vak command configuration-file.toml``.
+This design makes usage simple while preserving configuration options
+in the TOML file that is copied to outputs of commands,
+to help with tracking experiments and aid in reproducibility.
+The commands are shown in :ref:`fig:workflows`
+as part of a chart illustrating the built-in workflows,
+using as an example a frame classification model as we define them below.
+There are four commands that involve working with models,
+shown from top to bottom in the chart:
+``train``, ``eval``, ``predict``, and ``learncurve``,
+and each command follows a similar workflow.
+As might be expected from their names,
+the ``train`` command trains a model,
+the ``eval`` command evaluates a trained model,
+and the ``predict`` command generates predictions
+with a trained model, e.g., annotations like those described above.
+The ``learncurve`` command is similar to the ``train`` command,
+but it generates results for a learning curve,
+where the $x$ axis is training set size (duration in seconds)
+and the $y$ axis is a metric of instance,
+measured across some number of training replicates.
+A user makes a separate configuration file for each one of these commands.
+The typical workflow starts with a call to ``vak prep``,
+which prepares a canonicalized form of a dataset
+for the specific machine learning task associated with a model,
+and then adds the path to that dataset to the configuration file.
+Thus there is a ``prep_frame_classification_dataset`` function
+that will be called for the example model.
+Once any needed dataset is prepared,
+the user can run the command related to the model.
+
+.. figure:: vak-workflow-chart.png
+
+   A chart showing workflows in vak, using an example a frame classification model
+   as defined below. See text for description of workflows. :label:`fig:workflows`
+
+Finally we emphasize that vak depends heavily on the core libraries of the scientific Python stack,
+such as numpy :cite:`walt_numpy_2011,harris2020array`, scipy :cite:`virtanen_scipy_2019`,
+and matplotlib :cite:`Hunter:2007, thomas_a_caswell_2020_4030140`.
+By the same token, the built-in workflows for preparing datasets rely heavily on pandas :cite:`team_pandas-devpandas_2020`
 for tabular data formats, and dask :cite:`dask_development_team_dask_2016` for scalable, distributed processing
 of very large datasets like those that form the basis of acoustic communication research.
 This functionality is specifically tailored to the needs of acoustic communication researchers.
 For example, to parse the wide range of annotation formats used by
 acoustic communication researchers across disciplines,
 we use the pyOpenSci package crowsetta :cite:`nicholson2023crowsetta`.
-Finally we emphasize that vak depends heavily on the core libraries of the scientific Python stack,
-such as numpy :cite:`walt_numpy_2011,harris2020array`, scipy :cite:`virtanen_scipy_2019`,
-and matplotlib :cite:`Hunter:2007, thomas_a_caswell_2020_4030140`.
 
 .. _models:
 
