@@ -21,7 +21,7 @@
    the vast *Computational Crystallography Toolbox* (cctbx) library for novel analyses. We made versions
    of this library for use in JupyterLab and Colab. We also made versions of the snippet library
    for the text editors VS Code, Vim, and Emacs that support editing live code cells in Jupyter
-   notebooks via GhostText. Readers of this paper may be inspired to adapt this latter capability
+   notebooks via the GhostText web browser extension. Readers of this paper may be inspired to adapt this latter capability
    to their domains of science.
 
 .. class:: keywords
@@ -33,7 +33,7 @@ Introduction
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structure determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and to developing new therapies in medicine.
-The recent *resolution revolution* in cryo-EM and the breakthrough in protein structure prediction with large language models now provide complimentary sources of insights into biomolecular structure, but the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`, :cite:`Foerster19`.
+The recent *resolution revolution* in cryo eletron microscropy (cryo-EM) and the breakthrough in protein structure prediction with large language models now provide complimentary sources of insights into biomolecular structure, but the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`, :cite:`Foerster19`.
 
 Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after *ColabFold* enabled running *AlphaFold2* from *Colab* notebooks :cite:`Mirdita22`.
 Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses (e.g., *CCP4* :cite:`Agirre23`, *Phenix* :cite:`Liebschner19`, *CNS* :cite:`Brunger98`).
