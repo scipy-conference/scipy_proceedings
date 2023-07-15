@@ -1,76 +1,82 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """
 Test the speed of rapidly updating multiple plot curves
 """
+import argparse
+import itertools
 
-## Add path to library (just for examples; you do not need this)
-from pyqtgraph.Qt import QtGui, QtCore
 import numpy as np
+from pyqtgraph.examples.utils import FrameCounter
+
 import pyqtgraph as pg
-from pyqtgraph.ptime import time
+from pyqtgraph.Qt import QtCore
+
+from time import perf_counter
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--iterations', default=float('inf'), type=float,
+    help="Number of iterations to run before exiting"
+)
+parser.add_argument('--duration', default=float('inf'), type=float,
+    help="Duration to run the benchmark for before exiting"
+)
+args = parser.parse_args()
+
+iterations_counter = itertools.count()
+# pg.setConfigOptions(useOpenGL=True)
 app = pg.mkQApp("MultiPlot Speed Test")
 
-
-colorSet = "viridis"
-nPlots = 30
-nSamples = 5000
-height = 600
-width = 1000
-penWidth = 1
-
-pg.setConfigOptions(background="w", foreground="k")
-
 plot = pg.plot()
-plot.setWindowTitle('PyQtGraph Example: MultiPlotSpeedTest')
-plot.setLabel('bottom', 'Index', units='B')
-plot.showAxis("left", False)
+plot.setWindowTitle('pyqtgraph example: MultiPlotSpeedTest')
+# plot.setLabel('bottom', 'Index', units='B')
 
-
-colorMap = pg.colormap.get(colorSet, source="matplotlib")
-colors = colorMap.getLookupTable(nPts=nPlots)
-
+nPlots = 100
+nSamples = 1_00
 curves = []
 for idx in range(nPlots):
-    curve = pg.PlotCurveItem(pen={"color": colors[idx], "width": penWidth})
+    # with downsampling
+    curve = pg.PlotDataItem(pen=({'color': (idx, nPlots*1.3), 'width': 1}), skipFiniteCheck=True)
+    # without downsampling
+
     plot.addItem(curve)
     curve.setPos(0,idx*6)
     curves.append(curve)
 
 plot.setYRange(0, nPlots*6)
 plot.setXRange(0, nSamples)
-plot.resize(width, height)
+plot.resize(600,900)
 
-# rgn = pg.LinearRegionItem([nSamples/5.,nSamples/3.])
-# plot.addItem(rgn)
+# will raise an error if using PlotCurveItem's directly
+# plot.getPlotItem().setDownsampling(ds=True, auto=True, mode="peak")
+
+ms_readings = []
 
 data = np.random.normal(size=(nPlots*23,nSamples))
 ptr = 0
-lastTime = time()
-fps = None
-count = 0
+start = perf_counter()
 def update():
-    global curve, data, ptr, plot, lastTime, fps, nPlots, count
-    count += 1
-
+    global ptr
+    if next(iterations_counter) > args.iterations:
+        timer.stop()
+        app.quit()
+        print(np.mean(ms_readings))
+        return None
+    elif perf_counter() - start > args.duration:
+        timer.stop()
+        app.quit()
+        print(np.mean(ms_readings))
+        return None
     for i in range(nPlots):
         curves[i].setData(data[(ptr+i)%data.shape[0]])
 
     ptr += nPlots
-    now = time()
-    dt = now - lastTime
-    lastTime = now
-    if fps is None:
-        fps = 1.0/dt
-    else:
-        s = np.clip(dt*3., 0, 1)
-        fps = fps * (1-s) + (1.0/dt) * s
-    plot.setTitle(f'{nPlots} Lines with {nSamples} Points Each - %0.2f fps' % fps)
-    # print(1_000 / fps)
-    #app.processEvents()  ## force complete redraw for every plot
+    framecnt.update()
+
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
 timer.start(0)
 
+framecnt = FrameCounter()
+framecnt.sigFpsUpdate.connect(lambda fps: plot.setTitle(f'{1000 / fps:.3f} ms'))
+framecnt.sigFpsUpdate.connect(lambda fps: ms_readings.append(1000 / fps))
 if __name__ == '__main__':
-    pg.mkQApp().exec_()
+    pg.exec()

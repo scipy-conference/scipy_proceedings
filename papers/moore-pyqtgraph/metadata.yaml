@@ -23,15 +23,14 @@ authors:
 - email: ntjessu@gmail.com
   institution: Unaffiliated
   name: Nathan Jessurun
-- email: lukec@alleninstitute.org
-  institution:
-  - Allen Institute
-  name: Luke Campagnola
 - email: outofculture@gmail.com
   institution: Unaffiliated
   name: Martin Chase
 - email: nils.nemitz@gmx.de
   name: Nils Nemitz
   institution: Unaffiliated
+- email: lukec@alleninstitute.org
+  name: Luke Campagnola
+  institution: Allen Institute
 bibliography: mybib
 title: PyQtGraph - High Performance Visualization for All Platforms

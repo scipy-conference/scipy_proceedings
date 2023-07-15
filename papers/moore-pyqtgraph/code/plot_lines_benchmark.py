@@ -1,7 +1,7 @@
-import pyqtgrpah as pg
-from pyqtgraph.Qt import QtGui, QtCore
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtCore
 import numpy as np
-from pyqtgraph.ptime import time
+from time import perf_counter as time
 
 app = pg.mkQApp("Line Plots Benchmark")
 
@@ -15,11 +15,11 @@ nPlotsRange = list(range(1, 501, 100))
 nSamplesRange = list(range(100, 1001, 100))
 
 results = np.empty((len(nSamplesRange), len(nPlotsRange)))
-
+count = 0
 
 
 def getData():
-    global x, y, ptr, lastTime, fps, count, nPlots,
+    global x, y, ptr, lastTime, fps, count, nPlots
     for y, nPlots in enumerate(nPlotsRange):
         for x, nSamples in enumerate(nSamplesRange):
             curves = []
@@ -49,7 +49,7 @@ def update():
 
     for i in range(nPlots):
         curves[i].setData(data[(ptr + i) % data.shape[0]])
-    
+
     ptr += nPlots
     now = time()
     dt = now - lastTime
@@ -68,4 +68,4 @@ timer.start(0)
 
 
 if __name__ == "__main__":
-    pg.mkQApp().exec_()
+    pg.exec()

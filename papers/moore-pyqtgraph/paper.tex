@@ -27,11 +27,10 @@ The Qt framework is a GUI platform written in C++ that allows the creation of cr
 
 
 \subsection{Implementation}
-\texttt{GraphicsView} renders line segments in a freely scaled coordinate system through \texttt{QPainterPath} objects. The rendering performance of PyQtGraph results from optimized code to create such paths directly from NumPy ndarrays describing sets of $x$ and $y$ coordinates. The core function \texttt{arrayToQPath} uses NumPy's structured array functionality to efficiently create a binary compatible structure that can serve as an input stream to a \texttt{QPainterPath} item (see Appendix \autoref{app_arrayToQPath}). This \texttt{QPainterPath} is then drawn to the screen by the Graphics View framework.
+\texttt{GraphicsView} renders line segments in a freely scaled coordinate system through \texttt{QPainterPath} objects. The rendering performance of PyQtGraph results from optimized code to create such paths directly from NumPy ndarrays describing sets of $x$ and $y$ coordinates. One illustrative example tightly interfaces with Qt's internal pointers through \texttt{QPolygonF} objects to offer significant speedups for \texttt{QPainterPath} generation. They use NumPy's structured array functionality to efficiently create a binary compatible structure that can serve as an input stream to a \texttt{QPainterPath} item (see the Appendix \autoref{app_qpolygon} for details). This \texttt{QPainterPath} is then drawn to the screen by the Graphics View framework. Note that while \texttt{arrayToQPolgyonF} is a trivial example of NumPy/Qt integration, a much more complex usage can be found \href{https://github.com/pyqtgraph/pyqtgraph/blob/71bcf3f6d078b07a19b90791d96d27d28cb545d1/pyqtgraph/functions.py#L1967}{here}.
 
 \section{Capabilities}
-
-All 2d line rendering functions that handle large quantities of data are implemented on top of the \texttt{arrayToQPath} conversion. These cover all common plotting requirements. \autoref{fig:basicPlotting} shows a demonstration from the suite of examples. All graphs included in this paper were generated using PyQtGraph's interactive export functions, which can store both bitmaps and vector formats, or provide access to the raw plotted data.
+All 2d line rendering functions that handle large quantities start with NumPy arrays and become painter paths through the powerful \texttt{arrayToQPath} conversion. This generic NumPy-to-Qt data translator covers all common plotting requirements. \autoref{fig:basicPlotting} shows a demonstration from the suite of examples. All graphs included in this paper were generated using PyQtGraph's interactive export functions, which can store both bitmaps and vector formats, or provide access to the raw plotted data.
 
 \subsection{Plot Types}
 
@@ -75,7 +74,7 @@ A common image analysis task is to define a ROI in a larger original image. This
 
 \subsubsection{Performance}
 
-Numerous factors play into the final performance of a video stream. Data type conversions, LUTs, scaling, and any custom pre-processing all need to occur for each frame, and the computational effort typically scales with image size. A minimum of 20 FPS is generally required for a usable interactive video stream, although 60 FPS is preferred in many applications. In some cases, data can be directly passed to the built-in methods of Qt's \texttt{QImage}. Otherwise \texttt{ImageItem} relies on the core function \texttt{makeARGB} to efficiently convert data types, order data properly, rescale levels and apply a LUT if desired (see \autoref{app_makeARGB}). When integrated as a widget in a Qt application (\autoref{fig:mpl}), we typically find \texttt{ImageItem} to display an image 75--150 times faster than the \texttt{FigureCanvas} provided by Matplotlib, a plotting library that emphasizes graphical quality over speed.
+Numerous factors play into the final performance of a video stream. Data type conversions, LUTs, scaling, and any custom pre-processing all need to occur for each frame, and the computational effort typically scales with image size. A minimum of 20 FPS is generally required for a usable interactive video stream, although 60 FPS is preferred in many applications. In some cases, data can be directly passed to the built-in methods of Qt's \texttt{QImage}. Otherwise \texttt{ImageItem} relies on the core function \texttt{makeARGB} to efficiently convert data types, order data properly, rescale levels and apply a LUT if desired (see the Appendix \autoref{app_makeARGB} for details). When integrated as a widget in a Qt application (\autoref{fig:mpl}), we typically find \texttt{ImageItem} to display an image 75--150 times faster than the \texttt{FigureCanvas} provided by Matplotlib, a plotting library that emphasizes graphical quality over speed.
 
 Some share of the image processing is by necessity done in the primary event thread of the Qt application, as that thread requires full access to the data to be displayed. Other calculations can be moved to other threads to improve performance and maintain the responsiveness of the UI. For example, larger images can be down-sampled before handing them to the main thread for display. This multi-threading consideration extends throughout the application, and any excessive use of the event thread will impact image display performance.
 
@@ -92,7 +91,7 @@ Recognizing zoom events enables resolution-aware down-sampling of the plotted da
 
 \subsubsection{Parameter Trees}\label{sec:paramtrees}
 % \color{DarkOrchid}
-Another common requirement for user interaction is a mechanism to interact with for configuration settings or algorithm parameters. PyQtGraph provides this capability through the \texttt{ParameterTree} object which hosts any number of \texttt{Parameter}s. Similar to \texttt[traitlets}, PyQtGraph's \texttt{Parameter} objects encapsulate a value type and allow registering callbacks, performing input validation, and more. However, \texttt{Parameter}s are different in that most are coupled to a widget representation, i.e., allowing users to easily update the values graphically.
+Another common requirement for user interaction is a mechanism to interact with for configuration settings or algorithm parameters. PyQtGraph provides this capability through the \texttt{ParameterTree} object which hosts any number of \texttt{Parameter}s. Similar to \texttt{traitlets}, PyQtGraph's \texttt{Parameter} objects encapsulate a value type and allow registering callbacks, performing input validation, and more. However, \texttt{Parameter}s are different in that most are coupled to a widget representation, i.e., allowing users to easily update the values graphically.
 \texttt{Parameter} objects can be created through a simple Python dictionary listing its specifications (type, value, and traits such as `readonly' or value range). It is then bound to a Qt widget for editing text, numeric, list-like, and custom data depending on the parameter type. Parameters can be grouped, linked, and dynamically instantiated or removed. Callbacks for user actions or value changes allow results to be recalculated immediately (i.e., while a spinbox is changing its value) or after the value has settled. Parameter trees can save and load their states hierarchically to easily create persistent configuration files. Since accessing parameters mimics a Python dictionary, they can function as a drop-in replacement for programmatically adjusted settings rather than forcing users to interface through widgets alone.
 
 % \color{brown}
@@ -125,56 +124,38 @@ The supplementary information contains a similar application of PyQtGraph's capa
 \begin{table*}[!hbt]
 % \inputminted[
 % fontsize=\scriptsize, baselinestretch=0.9, frame=lines, framesep=2mm 
-% ]{python}{figures/arrayToQPath_condensed.py}
+% ]{python}{figures/arrayToQPolygonF_condensed.py}
 \begin{verbatim}
-def arrayToQPath(x, y, connect='all'):
-    """Convert an array of x,y coordinats to QPainterPath as efficiently as possible. The *connect* argument
-    may be 'all', indicating that each point should be connected to the next; 'pairs', indicating that each
-    pair of points should be connected, or an array of int32 values (0 or 1) indicating connections.
-    """
+def ndarray_from_qpolygonf(polyline):
+    # polyline.data() will be None if the pointer was null.
+    # voidptr(None) is the same as voidptr(0).
+    vp = Qt.compat.voidptr(polyline.data(), len(polyline)*2*8, True)
+    return np.frombuffer(vp, dtype=np.float64).reshape((-1, 2))
 
-    # condensed variant, full code at:
-    # https://github.com/pyqtgraph/pyqtgraph/blob/pyqtgraph-0.12.0/pyqtgraph/functions.py#L1558-L1675
-    path = QtGui.QPainterPath()
-    n = x.shape[0]
-    # create empty array, pad with extra space on either end
-    # see: https://github.com/qt/qtbase/blob/dev/src/gui/painting/qpainterpath.cpp
-    # All values are big endian--pack using struct.pack('>d') or struct.pack('>i')
-    arr = np.empty(n+2, dtype=[('c', '>i4'), ('x', '>f8'), ('y', '>f8')])
-    # write first two integers
-    byteview = arr.view(dtype=np.ubyte)
-    byteview[:16] = 0
-    byteview.data[16:20] = struct.pack('>i', n)
-    arr[1:-1]['x'] = x # Fill array with vertex values
-    arr[1:-1]['y'] = y
-
-    # decide which points are connected by lines
-    if eq(connect, 'all'):
-        arr[1:-1]['c'] = 1
-    elif eq(connect, 'pairs'):
-        arr[1:-1]['c'][::2] = 0
-        arr[1:-1]['c'][1::2] = 1  # connect every 2nd point to every 1st one
-    elif eq(connect, 'finite'):
-        isfinite = np.isfinite(x) & np.isfinite(y)
-        arr[2:]['c'] = isfinite
-    elif isinstance(connect, np.ndarray):
-        arr[2:-1]['c'] = connect[:-1]
+def create_qpolygonf(size):
+    polyline = QtGui.QPolygonF()
+    if hasattr(polyline, 'resize'):
+        # (PySide) and (PyQt6 >= 6.3.1)
+        polyline.resize(size)
     else:
-        raise Exception('connect argument must be "all", "pairs", "finite", or array')
-    arr[1]['c'] = 0  # the first vertex has no previous vertex to connect
+        polyline.fill(QtCore.QPointF(), size)
+    return polyline
 
-    byteview.data[-20:-16] = struct.pack('>i', 0)  # cStart
-    byteview.data[-16:-12] = struct.pack('>i', 0)  # fillRule (Qt.OddEvenFill)
-    
-    # create datastream object and stream into path
-    path.strn = byteview.data[16:-12]  # make sure data doesn't run away
-    buf = QtCore.QByteArray.fromRawData(path.strn)
-    ds = QtCore.QDataStream(buf)
-    ds >> path
-    return path
+def arrayToQPolygonF(x, y):
+    """
+    Utility function to convert two 1D-NumPy arrays representing curve data
+    (X-axis, Y-axis data) into a single open polygon (QtGui.PolygonF) object.
+    """
+    # Validation asserts both x and y are same-shaped and 1D, not shown here
+    size = x.size
+    polyline = create_qpolygonf(size)
+    memory = ndarray_from_qpolygonf(polyline)
+    memory[:, 0] = x
+    memory[:, 1] = y
+    return polyline
 \end{verbatim}
-\caption{PyQtGraph source code for the core \texttt{arrayToQPath} function.}
-\label{table:arrayToQPath}
+\caption{PyQtGraph source code for the core \texttt{arrayToQPolygonF} function.}
+\label{table:arrayToQPolygonF}
 \end{table*}
 %-----------------------------------------------------
 
@@ -270,17 +251,13 @@ PyQtGraph was first released in 2012, under the open source MIT license. It is k
 With a growing number of both maintainers and contributors, PyQtGraph is well positioned to take advantage of technological developments. The support of hardware acceleration in recent versions of NumPy has already been used to add CUDA integration to some time-critical code, but there is still plenty of potential for further improvements to performance and capabilities. Increased use of multi-threaded patterns is a goal in this respect, both throughout the library, and in user code supported by appropriate documentation, examples and API design. The growing maturity of the Numba just-in-time compiler \cite{lam2015numba} for Python code provides additional opportunities for acceleration beyond what NumPy's array operations can provide.
 
 
-%% if specified like this the section will be committed in review mode
-% \acknowledgments{
-% The authors wish to thank all prior, present and future contributors to the PyQtGraph project. Their efforts enable all that is presented here.  Furthermore, we would like to thank maintainers and contributors to the NumPy, SciPy and CuPy projects.}
-
 \section{Appendix}
 
-\subsection{Implementation of arrayToQPath}
-\label{app_arrayToQPath}
-The function \texttt{arrayToQPath} is at the core of PyQtGraph's plotting performance and is included as \autoref{table:arrayToQPath} to demonstrate the approach.
+\subsection{Implementation of arrayToQPolygonF}
+\label{app_qpolygon}
+The function \texttt{arrayToQPolygonF} is one of the simpler cases that demonstrates the how PyQtGraph bridges the gap between NumPy and Qt  \autoref{table:arrayToQPolygonF}
 
-Execution takes two \texttt{ndarray} objects of the same length, representing $x$- and $y$-coordinates for a series of line segments. Interruptions are relatively rare for the main application of fast line plots, and are represented by interspersed Not-a-Number values. The data is reshaped as a NumPy structured array composed of fields $c$, $x$, and $y$, where $c$ indicates if a connecting line to this point should be drawn. A NumPy \texttt{view} of this array in \texttt{ubyte} format provides direct memory access. The raw memory structure, wrapped in a \texttt{QByteArray} object, can then be used to initialize a \texttt{QPainterPath} object from a \texttt{QDataStream}. All data conversion is handled by NumPy methods that operate more efficiently on the underlying data structure than is possible from Python itself.
+Execution takes two \texttt{ndarray} objects of the same length, representing $x$- and $y$-coordinates for a series of line segments. A \texttt{QPolygonF} object is instantiated and resized to store enough points that represent the $x$- and $y$-coordinates that were passed in. From there, a void-pointer of the \texttt{QPolygonF}'s internal memory is retrieved in a NumPy format allowing easy assignment of the user data. Lastly, we fill that NumPy array with the $x$- and $y$-coordinates that were initially provided.  In this process, we went from NumPy arrays representing $x$- and $y$- coordinates to a \texttt{QPolygonF} object without performing any serialization, iteration or casting.
 
 \subsection{Implementation of makeARGB}
 \label{app_makeARGB}
@@ -288,3 +265,6 @@ Execution takes two \texttt{ndarray} objects of the same length, representing $x
 The function \texttt{makeARGB} provides the data conversions used in displaying image data. It is included here as \autoref{table:makeARGB} to show the approach and the integration of CUDA GPU support discussed in \autoref{sec:cuda}.
 
 The segment of memory within a \texttt{QImage} object that will ultimately be displayed on the screen can be accessed and written to as a contiguous, row-major, 3-dimensional NumPy \texttt{ndarray} of unsigned 8-bit integers; i.e. the red, green and blue color values and alpha value of each pixel, one row at a time. With this array as the output target, an incoming image data goes through a number of processing steps. Many of the steps are only conditionally executed, depending on the shape and type of the incoming data, as well as the use of LUTs or rescaling. Some of the respective branches and decision trees have been omitted here for brevity. In a best-case scenario, the incoming data is already in the correct format, and the steps converting data type and element order can then also  be omitted. The CuPy library provides CUDA support by replicating large sections of NumPy functionality, allowing for near-identical code paths. The two if-statements seen here address the lack of a 'clip' mode in CuPy's 'take' function, as well as differing behavior for masks as indices.
+
+\section{Acknowledgements}
+The authors wish to thank all prior, present and future contributors to the PyQtGraph project. Their efforts enable all that is presented here. One regular contributor, \href{https://github.com/pijyoi}{@pijyoi}, has made significant contributions to the NumPy and Qt interoperability, as well as reviewed pull requests from other contributors and maintainers and provided countless bug-fixes. Finally, we would like to thank maintainers and contributors to the NumPy, SciPy and CuPy projects.
