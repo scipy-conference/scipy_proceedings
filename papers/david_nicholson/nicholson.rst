@@ -46,8 +46,6 @@ In closing we discuss our roadmap for development and vision for the community o
 
    animal acoustic communication, bioacoustics, neural networks
 
-.. _intro:
-
 Introduction
 ------------
 
@@ -94,8 +92,6 @@ for acoustic communication researchers to work with neural network models.
 We have also recently released version 1.0 of the library (currently in alpha),
 and throughout we highlight enhancements made in version 1.0
 that we believe will significantly improve user experience with the library.
-
-.. _related-work:
 
 Related work
 ============
@@ -151,12 +147,8 @@ It is apparent that unsupervised approaches are complementary to supervised mode
 that can automate costly human annotations, and this is another reason that a single framework
 should provide access to both supervised and unsupervised models.
 
-.. _methods:
-
 Methods
 -------
-
-.. _design:
 
 Design
 ======
@@ -192,8 +184,6 @@ In addition to its torchvision-like API, vak provides a simple command-line inte
 without requiring significant expertise in coding or neural network models.
 We first describe the API so that key concepts have been introduced
 when we explain the usage of the CLI.
-
-.. _models:
 
 Models
 ======
@@ -286,7 +276,7 @@ We present a listing that demonstrates usage of the abstractions just described.
 
 
 This example is used in an experiment accompanying this paper,
-as described below in :ref:`results`.
+as described below in Results.
 That experiment demonstrates how the decorator
 enables models to be declared and used in a script outside of vak.
 Here we can notice that we apply the ``model`` decorator to the class
@@ -300,16 +290,13 @@ so that it can be found by other functions
 for training and evaluating models.
 The models that are built in to vak use the exact same decorator.
 
-
-.. _model-families:
-
 Model families
 ==============
 
 Having introduced the abstraction needed to declare models within the vak framework,
 we now describe the families we have implemented to date.
 
-**Frame classification.** As stated in Section :ref:`related-work`,
+**Frame classification.** As stated in the Related Work section,
 one way to formulate the problem of segmenting audio into sequences of units
 so that it can solved by neural networks
 is to classify each frame of audio, or a spectrogram produced from that audio,
@@ -598,7 +585,7 @@ The class returns audio or spectrograms,
 and when the dataset includes annotations,
 the returned item includes labels for each
 time bin in the window, derived from those annotations,
-using the transforms described in  :ref:`transformations`.
+using the transforms described in the section on transformations.
 
 **WindowDataset.** This dataset class represents all possible time windows of a fixed width
 from a set of audio recordings or spectrograms.
@@ -673,8 +660,6 @@ e.g., looking for evidence of high bias or high variance models.
 Instead, the learning curve functionality allows vak users to answer important practical questions for their research.
 Most importantly, what is the optimal performance that can be achieved
 with the minimum amount of labor-intensive, hand-annotated training data?
-
-.. _results:
 
 Results
 -------
@@ -811,15 +796,13 @@ with the trained parametric UMAP model.
    by an expert human when annotating the spectrograms
    with a GUI. :label:`fig:parametric-UMAP`
 
-.. _discussion:
-
 Discussion
 -----------
 
 Here we presented vak, a neural network framework for researchers studying acoustic communication in animals.
-In Section :ref:`methods` we described its design and development.
-Then in Section :ref:`results` we provide proof-of-concept results demonstrating
-how these researchers can easily use our framework to benchmark and compare neural network models.
+In the Methods we described its design and development.
+Then in the Results we provide proof-of-concept results demonstrating
+how researchers can easily use our framework to benchmark and compare neural network models.
 
 Finally, we summarize the roadmap for further development of version 1.0 of vak.
 In the spirit of taking an open approach,
@@ -835,7 +818,7 @@ to make use of the vocalpy package (cite),
 developed to make acoustic communication research code
 in Python more concise and readable.
 Another key step will be inclusion of additional models
-like those reviewed in Section :ref:`related-work`.
+like those reviewed in the Related Work.
 Along with this expansion of existing functionality,
 the final release of version 1.0 will include several quality-of-life
 improvements, including a revised schema for the configuration file format
