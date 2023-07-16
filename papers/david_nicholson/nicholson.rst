@@ -56,7 +56,7 @@ We seem to be the only species that speak languages :cite:`hauserFacultyLanguage
 but is speech somehow like other forms of acoustic communication in other animals,
 such as birdsong :cite:`doupeBIRDSONGHUMANSPEECH1999`?
 How should we even understand the ability of some animals to learn their vocalizations
-:cite:`petkovBirdsPrimatesSpoken2012, vernesMultidimensionalNatureVocal2021, wirthlinModularApproachVocal2019, martinsSoundProductionLearning2020, martinsVocalLearningContinuum2020`?
+:cite:`vernesMultidimensionalNatureVocal2021, wirthlinModularApproachVocal2019, martinsVocalLearningContinuum2020`?
 Questions like these are answered by studying how animals communicate with sound :cite:`hopp2012animal`. 
 This research requires cutting edge computational methods and big team science across a wide range of disciplines, 
 including ecology, ethology, bioacoustics, psychology, neuroscience, linguistics, and genomics
