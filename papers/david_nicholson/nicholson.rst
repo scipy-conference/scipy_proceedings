@@ -115,7 +115,7 @@ Figure :ref:`fig:annotation`.
    (a continuous period above the threshold), and then a human annotator labels each syllable
    (e.g., with a GUI application).
    Adapted from :cite:`cohenAutomatedAnnotationBirdsong2022`
-   under `CC-BY0 license <https://creativecommons.org/licenses/by/4.0/>`_. :label:`fig:annotation`
+   under `CC BY 4.0 license <https://creativecommons.org/licenses/by/4.0/>`_. :label:`fig:annotation`
 
 Several models have been developed to detect and classify a large dataset of vocalizations from an individual animals.
 These are all essentially supervised machine learning tasks. Some of these models seek to align a neural network task
