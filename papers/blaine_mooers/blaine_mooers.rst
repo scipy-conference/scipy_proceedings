@@ -33,20 +33,21 @@ Introduction
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structure determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and developing new therapies in medicine.
-The recent *resolution revolution* in cryo-electron microscropy (cryo-EM) and the breakthrough in protein structure prediction with large language models now provide complementary sources of insights into biomolecular structure. 
-However, the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`, :cite:`Foerster19`.
+The recent *resolution revolution* in cryo-electron microscropy (cryo-EM) :cite:`Kuehlbrandt14` and the breakthrough in protein structure prediction with neural networks now provide complementary sources of insights into biomolecular structure :cite:`Jumper21`, :cite:`Mirdita22`, :cite:`Chowdhury2022`. 
+However, the crystallographic approach continues to play a vital role because it still supplies the most precise structures, :cite:`Foerster19`.
 
-About half of the crystal structures of protein molecules are refined with the program Phenix :cite:`Liebschner19`. 
-This program has a user-friendly GUI that supports standard analyses.
-Phenix runs on top of *cctbx*.
-*cctbx* provides a transparent API, so that most users of Phenix are barely aware that it relies on *cctbx*.
-However, nonstandard analyses are not avilable in Phenix and require accessing the functions in the *cctbx* library.
+About half of the crystal structures of protein molecules are refined with the program *Phenix* :cite:`Liebschner19`. 
+This program has a user-friendly GUI that supports standard analyses :cite:`Echols12`..
+Phenix runs on top of *cctbx* :cite:`GrosseKunstleve02`.
+The Computational Crystallography Toolbox (*cctbx*) provides a transparent API, so most users of *Phenix* are barely aware that it relies on *cctbx*.
+However, nonstandard analyses are not avilable in *Phenix* and require accessing the functions in the *cctbx* library (e.g., :cite:`DeZitter22`).
 The backend *cctbx* was written in C++ in the early 2000s for speed and to provide customized data structures for crystallography.
-*cctbx* was also wrapped with Python to ease its use.
-Recently, dependency management in *cctbx* was reworked by leveraging the Anaconda infrastructure to ease its installation.
+Likewise, the GUI-driven *Olex2* small molecule refinement program uses *cctbx* for many of its crystallographic computations :cite:`Bourhis15`.
 
-Although there are several on-line tutorials about the use of *cctbx*, many structural biologists still find *cctbx* hard to master and adoption has remained low in in spite of the widespread adoption of Python by field practitioners over the past decade.
-Frustration with cctbx led several groups to develop software libraries (e.g. *reciprocalspaceship* :cite:`Greisman21`, *GEMMI* :cite:`Wojdyr22`) that utilize the more familiar pandas dataframes in place of cctbx's customized data structures. 
+To ease the use of *cctbx* by general users, the C++ interfaces, classes, and functions of *cctbx* are exposed to Python via the *Boost.Python* Library :cite:`Abrahams03`.
+Recently, dependency management in *cctbx* was reworked by leveraging the Anaconda infrastructure to ease its installation.
+Inpsite of these conveniences, the widespread adoption of Python by field practitioners over the past decade, and the presence of several on-line tutorials about *cctbx*, many structural biologists still find *cctbx* hard to master and adoption has remained.
+Frustration with cctbx led several groups to develop software libraries (e.g. *reciprocalspaceship* :cite:`Greisman21`, *GEMMI* :cite:`Wojdyr22`) that utilize the more familiar pandas dataframes in place of *cctbx*'s customized data structures. 
 In contrast to these new competitors, *cctbx* has more extensive coverage of advanced crystallographic data analysis tasks and is more throughly tested as the result running underneath Phenix for almost two decades. 
 *cctbx* remains the utlimate library for building advanced crystallographic data anlayses tools, so the field would benefit if *cctbx* were easier to use.
 
