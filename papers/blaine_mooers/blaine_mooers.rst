@@ -33,60 +33,50 @@ Introduction
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structure determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and developing new therapies in medicine.
-The recent *resolution revolution* in cryo eletron microscropy (cryo-EM) and the breakthrough in protein structure prediction with large language models now provide complimentary sources of insights into biomolecular structure, but the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`, :cite:`Foerster19`.
+The recent *resolution revolution* in cryo-electron microscropy (cryo-EM) and the breakthrough in protein structure prediction with large language models now provide complementary sources of insights into biomolecular structure. 
+However, the crystallographic approach continues to play a vital role because it still supplies the most precise structures :cite:`Kuehlbrandt14`, :cite:`Jumper21`, :cite:`Foerster19`.
 
-Biological crystallographers are familiar with Jupyter's browser-based environment and interactive cells, especially after *ColabFold* enabled running *AlphaFold2* from *Colab* notebooks :cite:`Mirdita22`.
-Nonetheless, most protein crystallographers continue to use well-developed, user-friendly GUIs to run crystallographic software in routine analyses (e.g., *CCP4* :cite:`Agirre23`, *Phenix* :cite:`Liebschner19`, *CNS* :cite:`Brunger98`).
-However, these users sometimes need non-routine analyses that require new code (e.g., :cite:`DeZitter22`) .
+About half of the crystal structures of protein molecules are refined with the program Phenix :cite:`Liebschner19`. 
+This program has a user-friendly GUI that supports standard analyses.
+Phenix runs on top of *cctbx*.
+*cctbx* provides a transparent API, so that most users of Phenix are barely aware that it relies on *cctbx*.
+However, nonstandard analyses are not avilable in Phenix and require accessing the functions in the *cctbx* library.
+The backend *cctbx* was written in C++ in the early 2000s for speed and to provide customized data structures for crystallography.
+*cctbx* was also wrapped with Python to ease its use.
+Recently, dependency management in *cctbx* was reworked by leveraging the Anaconda infrastructure to ease its installation.
 
-The Computational Crystallography Toolbox (*cctbx*) provides a vast library of computational crystallography software written in C++ following an object-oriented programming paradigm and wrapped with Python :cite:`GrosseKunstleve02`.
-This library was designed to contain reusable C++ code.
-Its development in the late 1990s was driven by limitations on software reusability and error handling in Fortran77, the dominant programming language used in crystallographic computing at the time.
-The development of *cctbx* development with an object-oriented approach also makes the  project more amenable to be development by a team rather than a single developer as in the case of some contemporary software projects in the protein crystallography.
-The C++ interfaces, classes, and functions of *cctbx* are exposed to Python via the *Boost.Python* Library :cite:`Abrahams03`.
-A similar and contemporary C++ library called *clipper* was developed for the CCP4 suite :cite:`Cowtan03`; *clipper* differs from *cctbx* in that it uses *SWIG* rather than *Boost.Python* to interoperate with Python.
+Although there are several on-line tutorials about the use of *cctbx*, many structural biologists still find *cctbx* hard to master and adoption has remained low in in spite of the widespread adoption of Python by field practitioners over the past decade.
+Frustration with cctbx led several groups to develop software libraries (e.g. *reciprocalspaceship* :cite:`Greisman21`, *GEMMI* :cite:`Wojdyr22`) that utilize the more familiar pandas dataframes in place of cctbx's customized data structures. 
+In contrast to these new competitors, *cctbx* has more extensive coverage of advanced crystallographic data analysis tasks and is more throughly tested as the result running underneath Phenix for almost two decades. 
+*cctbx* remains the utlimate library for building advanced crystallographic data anlayses tools, so the field would benefit if *cctbx* were easier to use.
 
-The reusable components of the *cctbx* library are used to build higher order analysis tools.
-For example, the group that developed *cctbx* used it to develop the comprehensive *Phenix* software package for protein structure determination and refinement :cite:`Liebschner19`.
-*Phenix* includes a graphical user interface that eases its use :cite:`Echols12`.
-Most users of *Phenix* are barely aware that *Phenix* is built on top of *cctbx* because it is stays out of the way.
-*Phenix* has been able to continue to grow and evolve due to the object-oriented approach that was built into *cctbx*.
-For example, the *Phenix* project was extended to refine molecular models against cryo electron microscopy :cite:`Liebschner19`.
-
-For small organic molecules, which generally have diffraction data of higher resolution and, therefore, opportunities for using more advanced structure refinement methods to generate more precise models, the *Olex2* structure refinement package was extended by incorporating several modules from *cctbx* :cite:`Bourhis15`.
-*Olex2* is used to apply advanced structure refinement methods to model subatomic resolution data of small organic molecules, which usually give diffraction data to beyond 0.8 Angstroms while only a few hundred proteins have given data to similar very high resolution.
-
-The *cctbx* library was hard to install three years ago due to its complex dependencies, but the addition of the *cctbx* package to Anaconda dramatically eased the installation of *cctbx*.
-The lowering of the barrier to the installation of *cctbx* by Anaconda has raised interest in the use of *cctbx* for novel data analyses.
-Several online tutorials and workshops have attempted to address this problem, but the adoption of *cctbx* remains low.
-This is somewhat surprising considering the widespread adoption of Python in the past decade by the field.
-Difficulty with using *cctbx* has inspired some outside groups to reinvent many of its capabilities by using modules from the SciPy software stack (e.g. *reciprocalspaceship* :cite:`Greisman21`, *GEMMI* :cite:`Wojdyr22`).
-
-To ease the use of *cctbx* by my lab and others to develop custom crystallographic analyses, we assembled a collection of *cctbx* code snippets for use in Jupyter notebooks :cite:`jupyter`.
-Jupyter provides an excellent platform for exploring the *cctbx* library and developing new analysis tools.
+To ease the use of *cctbx* by my lab and others, we assembled a collection of *cctbx* code snippets for use in Jupyter notebooks :cite:`jupyter`.
+Jupyter provides an excellent platform for exploring the *cctbx* library and prototyping new analysis tools.
 The Python API of *cctbx* simplifies running *cctbx* in Jupyter via a kernel specific for its conda environment.
 We formatted the snippet library for several snippet extensions for the Classic Notebook and for Jupyter Lab.
 To overcome the absence of tab triggers in the Jupyter ecosystem to invoke the insertion of snippets, we also made the snippets available for leading text editors.
 The user can use the GhostText browser plugin to edit the contents of a Jupyter cell in a full-powered external editor.
 GhostText enables the user to experience the joy interactive computing in Jupyter while working from the comfort of their favorite text editor.
+These multiple modalities of using *cctbx* in Jupyter that we describe below may inspire workers in other domains to build similar snippet libraries for domain-specific software.
 
 
 Results
 ---------
 
+We provide a survey of the snippet library that we have customized for several snippet extensions in JupyterLab and Google Cobalt.
+
 jupyterlabcctbxsnips
 ++++++++++++++++++++++++
-To ease the use of the *cctbx* library in Jupyter notebooks, we developed the *jupyterlabcctbxsnips* library of code templates for the JupyterLab extension *jupyterlab-snippets* (https://github.com/QuantStack/jupyterlab-snippets).
+We developed the *jupyterlabcctbxsnips* library of code templates for the JupyterLab extension *jupyterlab-snippets* (https://github.com/QuantStack/jupyterlab-snippets).
 Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab, a browser-based IDE for displaying, editing, and running Jupyter notebooks.
 
 JupyterLab supports more comprehensive workflows for academic work than what is possible in the Classic Jupyter Notebook application.
 For example, it enables the writing or editing of a document in a pane next to the Jupyter notebook.
 This variant is useful for writing documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
-The document can be a plain text, html, markdown, LaTeX, or even an org-mode file if one activates the text area with GhostText while running one of several advanced text editors (see the section below about GhostText :ref:`ghosttext`).
+The document can be a plain text, html, markdown, LaTeX, or even an org-mode file if one activates the text area with GhostText while running one of several advanced text editors (see the section below about GhostText).
 The editing of a document next to the related Jupyter notebook supports reproducible research and reduces costly context switching.
 
-We made a variant of the library that has a copy of the code in a block comment.
-This is called the plus variant.
+We made a variant of the library, *jupyterlabcctbxsnipsplus* (https://github.com/MooersLab/jupyterlabcctbxsnipsplus), that has a copy of the code in a block comment (Fig. :ref:`plusCode`).
 The commented code has tab stops marked with dollar signs.
 These tab stops are at sites to be considered for editing.
 
@@ -170,16 +160,7 @@ The utilization of *pandas* enables easier integration with the other components
 
 The *cctbx* is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
 
-The *jupyterlabcctbxsnipsplus* is a variant of the *jupyterlabcctbxsnips* library with comments to guide editing of the snippets (https://github.com/MooersLab/jupyterlabcctbxsnipsplus).
-The snippet code contains its duplicate in a comment with the sites of tab stops marked with dollar signs and braces as in a the code for a snippet (Fig. :ref:`snipsplus`).
-Upon insertion of the snippet into a notebook cell, the commented out code is included.
 
-.. figure:: ./figs/snipsplus.png
-   :align: center
-   :scale: 28%
-   :figclass: bht
-
-   An examples of a *cctbx* snippet with a duplicated copy in a comment. :label:`snipsplus`
 
 The atomic coordinates of the biomolecular structures are the other major type of data that are intimately associated with diffraction data.
 The fixed file format of Protein Data Bank coordinate files with the file extension of *pdb* originated in the 1970s with the birth of the Protein Data Bank, but very large biological macromolecules have been determined over the past two decades that exceeded the limits on the number of atoms permitted in one file.
@@ -393,9 +374,9 @@ Relation to other work with snippet libraries
 
 This snippet library is among the first that is domain specific.
 Most snippet libraries are for programming languages or for hypertext languages like HTML, markdown, and LaTeX.
-The average snippet also tends to be quite short, and the size of the libraries tends to be quite small.
+The average snippet in these libraries also tends to be quite short, and the size of the libraries tends to be quite small.
 The audience for these libraries are the millions of professional programmers and web page developers.
-We reasoned that snippet libraries are a great coding tool that should be brought to the aid of the tens of thousands of workers in biological crystallography.
+We reasoned that domain-specific snippet libraries with long code fragments are a great coding tool that should be brought to the aid of the tens of thousands of workers in biological crystallography.
 
 The other area where domain-specific snippets have been provided is in molecular graphics.
 A pioneering scripting wizard provided templates for use in the molecular graphics program RasMol :cite:`Horton99`.
@@ -407,11 +388,23 @@ Opportunities for interoperability
 ++++++++++++++++++++++++++++++++++++++
 
 The set of template libraries can encourage synergistic interoperability between software packages that are supported by the snippet libraries.
-That is the development of notebooks that use two or more software packages and even two or more programming languages.
+That is, the development of notebooks that use two or more software packages and even two or more programming languages.
 More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python :cite:`Behnel11`, the *reticulate* package that enables the running of Python code in R :cite:`Ushey23`, and the PyCall package in Julia that enables the running of the Python packages in Julia (https://github.com/JuliaPy/PyCall.jl).
 The latter package is widely used to run matplotlib in Julia.
 Interoperability already occurs between *CCP4* :cite:`Agirre23`, *clipper* :cite:`McNicholas18`, *GEMMI* :cite:`Wojdyr22`, *reciprocalspaceship* :cite:`Greisman21`, *Careless* :cite:`Dalton22`, and *cctbx* and to a limited extent between *cctbx* and *PyMOL*, but interoperability could be more widespread if there was more support for it.
-The snippet libraries provided here can promote taking advantage of this interoperability in Jupyter and Colab notebooks.
+The snippet libraries reported here can promote taking advantage of this interoperability in Jupyter and Colab notebooks.
+
+Snippets in the age of AI-assisted autocompletion
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Snippet libraries od domain specific software may not be redundant in the age of chotbots because code fragments of domain specific libraries are limited so chatbots are less likely to return useful code fragments and the chatbots are quite slow in returning code fragments, and chatbots were designed for code completion. 
+However, copilot was designed for code completion and is shockingly good at autosuggesting code fragments.
+We tried using the copilot.el plugin in a cctbx environment with the cctbx-emacs library.
+We found that XXXXXX.
+
+Our explorations suggest that snippet libraries for domain-specific libraries with small users bases have a role to play in supporting the more efficient use of the library. 
+
+
 
 Acknowledgments
 ----------------------
