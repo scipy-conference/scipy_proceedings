@@ -142,11 +142,9 @@ The departure from this line is expected to be greater for intensities of large 
 
 Plots of this nature are useful for detecting very weak anomalous signals from native anomalous scatters like sulfur and phosphorous.
 The collection of the anomalous signal from native scatters enables structure determination without having to spend the extra time and money to introduce heavier atoms that are not native to the protein.
-The measurement of the very weak signal from anomalous scatterers is at the edge of what is technically possible by using two million dollar detectors and synchrotron radiation at one of the thirty plus synchrotron radiation laboratories around the world.
-These facilities provide X-rays that are 10,000 times more intense than the X-rays generated with in-house X-ray generators.
-Usually, the X-ray data are collected at -173 degrees Celsius in a cryostream of nitrogen gas to prolong the life of the crystal while exposed to such intense X-rays.
-The typical absorbed radiation dose of a protein crystal 200 x 200 x 200 microns in size in the X-ray beam at synchrotron radiation laboratory during a 10-minute diffraction experiment is sufficient to kill 100,000 adult humans.
-While radiation damage sets in upon initial exposure of the crystal to X-rays, the low temperature prolongs the amount of time that the crystal gives useful data.
+The measurement of the very weak signal from native anomalous scatterers is still at the edge of what is technically possible.
+It has rarely been achieved with in-house intruments.
+Success generally requires the faster multi-million dectectors at beamlines, tunable wavelengths of synchrotron raditation avialble at one of 30+ laboratories around the world, and cryogenic temperatures (-173 C) maintained by a cryo-stream of nitrogen gas that slows radiation damage long enough to collect complete datasets.
 
 However, recently, several groups have completed successful native phasing experiments at room temperature by collecting data from large numbers of crystals and merging the data :cite:`Yabukarski22`, :cite:`Greisman22`.
 The advantages of room temperature data collection include avoidance of conformational changes in the protein induced by supercooling the crystal.
@@ -158,9 +156,7 @@ This new project takes a more Pythonic approach than *cctbx* by utilizing many o
 For example, it uses the *pandas* package to manage diffraction data whereas *cctbx* uses a special C++ data structure for diffraction data that predates *pandas* by almost a decade.
 The utilization of *pandas* enables easier integration with the other components of the SciPy software stack including machine learning packages.
 
-The *cctbx* is most easily installed into its own environment by using Anaconda with the command conda :code:`create -n my_env -c conda-forge cctbx-base python=3.11`.
-
-
+The *cctbx* is most easily installed into its own environment by using Anaconda with the command :code:`conda create -n my_env -c conda-forge cctbx-base python=3.11`.
 
 The atomic coordinates of the biomolecular structures are the other major type of data that are intimately associated with diffraction data.
 The fixed file format of Protein Data Bank coordinate files with the file extension of *pdb* originated in the 1970s with the birth of the Protein Data Bank, but very large biological macromolecules have been determined over the past two decades that exceeded the limits on the number of atoms permitted in one file.
@@ -328,7 +324,7 @@ The shortcut by operating system is as follows: macOS, command-shift-K; Linux, c
 
 To support the use of *GhostText* to edit electronic notebooks containing code from the *cctbx* library, we have made variants of a collection of *cctbx* snippets for *Visual Studio Code*, *Atom*, *Sublime Text 3*, *Vim*, *NeoVim*, and *Emacs*.
 For *Vim* and *NeoVim*, the snippets are available for the *UltiSnips*, *Snipmate*, and *neosnippets* plugins.
-The snippets are available for download on GitHub (`https://github.com/MooersLab/MooersLab/blob/main/README.md#cctbxsnips-for-editors`).
+The snippets are available for download on GitHub (`https://github.com/MooersLab`).
 From our experience, Sublime Text 3 has the easiest setup while Emacs provides the highest degree of customization.
 The *cctbx* snippet library was previously only available for use in Jupyter notebooks via extensions for the Classic Jupyter Notebook application or Jupyter Lab.
 
@@ -339,7 +335,7 @@ Obviously *nteract* is not browser-based, so it cannot work with *GhostText*.
 *nteract* has yet to be extended to support the use of code snippet libraries, but *nteract* allows the switching of jupyter kernels between code cells.
 
 While the focus of this report is on Jupyter and Colab notebooks, the *cctbxsnips* snippet library can be used to aid the development of Python scripts in plain text files, which have the advantage of easier version control.
-The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the *Quarto* (http://quarto.org) markdown representation of Jupyter notebooks.
+The snippets can also be used in other kinds of literate programming documents that operate off-line like org-mode files in Emacs and the *Quarto* (`http://quarto.org`) markdown representation of Jupyter notebooks.
 *Quarto* is available for several leading text editors.
 In the later case, you may have to extend the scope of the editing session in the editor to include Python source code.
 
@@ -387,7 +383,7 @@ Opportunities for interoperability
 
 The set of template libraries can encourage synergistic interoperability between software packages that are supported by the snippet libraries.
 That is, the development of notebooks that use two or more software packages and even two or more programming languages.
-More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python :cite:`Behnel11`, the *reticulate* package that enables the running of Python code in R :cite:`Ushey23`, and the PyCall package in Julia that enables the running of the Python packages in Julia (`https://github.com/JuliaPy/PyCall.jl`).
+More general and well-known examples of interoperability include the Cython packages in Python that enable the running of C++ code inside Python :cite:`Behnel11`, the *reticulate* package that enables the running of Python code in R :cite:`Ushey23`, and the *PyCall* package in Julia that enables the running of the Python packages in Julia (`https://github.com/JuliaPy/PyCall.jl`).
 The latter package is widely used to run matplotlib in Julia.
 Interoperability already occurs between *CCP4* :cite:`Agirre23`, *clipper* :cite:`McNicholas18`, *GEMMI* :cite:`Wojdyr22`, *reciprocalspaceship* :cite:`Greisman21`, *Careless* :cite:`Dalton22`, and *cctbx* and to a limited extent between *cctbx* and *PyMOL*.
 The snippet libraries reported here can promote taking advantage of this interoperability in Jupyter and Colab notebooks.
@@ -398,8 +394,7 @@ Snippets in the age of AI-assisted autocompletion
 
 Snippet libraries od domain specific software may not be redundant in the age of chotbots because code fragments of domain specific libraries are limited so chatbots are less likely to return useful code fragments and the chatbots are quite slow in returning code fragments, and chatbots were designed for code completion. 
 However, copilot was designed for code completion and is shockingly good at autosuggesting code fragments.
-We tried using the copilot.el plugin in a cctbx environment with the cctbx-emacs library.
-We found that XXXXXX.
+We tried using the copilot.el plugin in a *cctbx* environment with the *cctbx-emacs* library.
 
 Our explorations suggest that snippet libraries for domain-specific libraries with small users bases have a role to play in supporting the more efficient use of the library. 
 
@@ -409,6 +404,6 @@ Acknowledgments
 ----------------------
 
 This work was supported in part by the following grants: Oklahoma Center for the Advancement of Science and Technology HR20-002, National Institutes of Health grants R01 CA242845, P30 CA225520, and P30 AG050911-07S1.
-In addition, we thank the Biomolecular Structure Core of the NIH supported Oklahoma COBRE in Structural Biology (PI: Ann West, P20 GM103640, and P30 GM145423).
+In addition, we thank the Biomolecular Structure Core of the NIH supported Oklahoma COBRE in Structural Biology (PI: Ann West, P20 GM103640 and P30 GM145423).
 
 
