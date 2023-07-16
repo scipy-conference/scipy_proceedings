@@ -814,7 +814,7 @@ that a user can download and use
 to benchmark models with publicly shared configuration files.
 Another key goal will be to add models that are pre-trained on these benchmark datasets.
 Additionally we plan to refactor the prep module
-to make use of the vocalpy package (cite),
+to make use of the vocalpy package :cite:`nicholson_vocalpyvocalpy_2023`,
 developed to make acoustic communication research code
 in Python more concise and readable.
 Another key step will be inclusion of additional models
