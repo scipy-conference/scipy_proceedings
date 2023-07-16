@@ -104,33 +104,32 @@ e.g. the unique syllables within an individual songbird's song.
 An example of segmenting audio of Bengalese finch song into syllables and annotating those syllables is shown in
 Figure :ref:`fig:annotation`.
 
-.. figure:: fig-annotation-bengalese-finch.png
+.. figure:: annotation.png
 
-   Representative example of an individual Bengalese finch's song.
-   Top panel shows a spectrogram of the song, consisting of units often called syllables
-   separate by brief silent gaps.
-   Bottom panel shows a typical workflow used to locate syllables and then annotate them:
+   Schematic of analyzing acoustic behavior as a sequence of units.
+   Top panel shows a spectrogram of an individual Bengalese finch's song,
+   consisting of units, often called syllables, separated by brief silent gaps.
+   Bottom panel illustrates one method for segmenting audio into syllables that are annotated:
    a threshold is set on the audio amplitude to segment it into syllables
    (a continuous period above the threshold), and then a human annotator labels each syllable
-   (e.g., with a GUI application) :label:`fig:annotation`
+   (e.g., with a GUI application).
+   Adapted from :cite:`cohenAutomatedAnnotationBirdsong2022`
+   under `CC-BY0 license <https://creativecommons.org/licenses/by/4.0/>`_. :label:`fig:annotation`
 
 Several models have been developed to detect and classify a large dataset of vocalizations from an individual animals.
-These are all essentially supervised learning tasks. Some of these models seek to align a neural network task
+These are all essentially supervised machine learning tasks. Some of these models seek to align a neural network task
 with the common workflow just described :cite:`kershenbaumAcousticSequencesNonhuman2016`,
 where audio is segmented into a sequence of units
 with any of several methods :cite:`fukuzawaComputationalMethodsGeneralised2022`,
-and those units are then often labeled by a human annotator.
+that are then labeled by a human annotator.
 The first family of neural network models reduces this workflow to a
 frame classification problem :cite:`graves_framewise_2005, graves_supervised_2012`.
 That is, these models classify a series of *frames*,
 like the columns in a spectrogram.
-Sequences of units are recovered from this series of frame classifications in a post-hoc manner.
+Sequences of units are recovered from this series of frame classifications with post-processing.
 Essentially, the post-processing finds the start and stop times of each continuous run of a single label.
 Multiple neural network models have been developed for this frame classification approach,
-including :cite:`koumura_automatic_2016-1`, :cite:`cohenAutomatedAnnotationBirdsong2022`,
-and :cite:`steinfathFastAccurateAnnotation`.
-Other works in the same vein include those of :cite:`trouvainCanarySongDecoder2021`
-and :cite:`renteriaBirdsongPhraseVerification2021`.
+including :cite:`cohenAutomatedAnnotationBirdsong2022` and :cite:`steinfathFastAccurateAnnotation`.
 A separate approach from frame classification models has been to formulate recognition of individual vocalizations
 as an object detection problem. To our knowledge this has been mainly applied to mouse ultrasonic vocalizations
 as in :cite:`coffeyDeepSqueakDeepLearningbased2019`.
