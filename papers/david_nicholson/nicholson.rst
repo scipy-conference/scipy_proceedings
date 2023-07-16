@@ -240,7 +240,7 @@ To relate a model as declared with a definition to the machine learning tasks
 that we implement within the vak framework, we introduce the concept of model *families*.
 A model family is represented by a sub-class of the core ``lightning.LightningModule`` class.
 Each class representing a family implements a family-specific methods:
-the ``training_step``, ``validation_step``, ``prediction_step``, and ``forward``.
+``training_step``, ``validation_step``, ``prediction_step``, and ``forward``.
 In this way, model families are defined operationally:
 a model can belong to a family if it accepts the inputs provided by logic
 within the training, validation, and prediction steps,
@@ -258,7 +258,7 @@ the ``model`` decorator finally registers the model
 in a ``vak.models.registry`` module, that allows other functions within vak
 to find the model by its name in the registry.
 The registry is implemented with its own helper functions
-and module-level ``dict``s that are updated by those functions.
+and module-level ``dict`` variables that are updated by those functions.
 We present a listing that demonstrates usage of the abstractions just described.
 
 .. code-block:: python
