@@ -187,45 +187,11 @@ and we have not to date found a need to rely on the torchaudio library, although
 Thus, similar to the torchvision API, vak provides modules for
 neural network models, operations, transformations for loading data, and datasets.
 
-In addition to this torchvision-like API, vak provides a command-line interface
-that allows researchers to work with neural network models
+In addition to its torchvision-like API, vak provides a simple command-line interface
+(CLI) that allows researchers to work with neural network models
 without requiring significant expertise in coding or neural network models.
-The command-line interface is limited to a few commands,
-that all take the form of ``vak command configuration-file.toml``.
-This design makes usage simple while preserving configuration options
-in the TOML file that is copied to outputs of commands,
-to help with tracking experiments and aid in reproducibility.
-The commands are shown in :ref:`fig:workflows`
-as part of a chart illustrating the built-in workflows,
-using as an example a frame classification model as we define them below.
-There are four commands that involve working with models,
-shown from top to bottom in the chart:
-``train``, ``eval``, ``predict``, and ``learncurve``,
-and each command follows a similar workflow.
-As might be expected from their names,
-the ``train`` command trains a model,
-the ``eval`` command evaluates a trained model,
-and the ``predict`` command generates predictions
-with a trained model, e.g., annotations like those described above.
-The ``learncurve`` command is similar to the ``train`` command,
-but it generates results for a learning curve,
-where the :math:`x` axis is training set size (duration in seconds)
-and the :math:`y` axis is a metric of instance,
-measured across some number of training replicates.
-A user makes a separate configuration file for each one of these commands.
-The typical workflow starts with a call to ``vak prep``,
-which prepares a canonicalized form of a dataset
-for the specific machine learning task associated with a model,
-and then adds the path to that dataset to the configuration file.
-Thus there is a ``prep_frame_classification_dataset`` function
-that will be called for the example model.
-Once any needed dataset is prepared,
-the user can run the command related to the model.
-
-.. figure:: vak-workflow-chart.png
-
-   A chart showing workflows in vak, using an example a frame classification model
-   as defined below. See text for description of workflows. :label:`fig:workflows`
+We first describe the API so that key concepts have been introduced
+when we explain the usage of the CLI.
 
 .. _models:
 
@@ -542,8 +508,8 @@ that should really have been done when preparing the dataset,
 such as validating the timebin size
 in spectrograms or generating multiple random subsets
 from a training set for learning curves.
-An additional goal of standardizing the dataset format,
-and normalizing/canonicalizing user data to this format,
+An additional goal of declaring canonical dataset formats,
+and normalizing user data so that is in in the canonical format,
 is so that we can in the future add the functionality of
 downloading benchmark datasets
 which are prepared by vak itself.
@@ -561,21 +527,13 @@ and some key contents is shown in the following listing.
      val/
          song3.wav.npz
          song3.csv
-     test/
-         song4.wav.npz
-         song4.csv
      dataset.csv
-     learncurve/
-         traindur-30s-replicate-1.csv
-         traindur-30s-replicate-1-source-id.npy
-         traindur-30s-replicate-1-source-inds.npy
-         traindur-30s-replicate-1-window-inds.npy
      config.toml  # config used to generate dataset
      prep.log  # log from run of prep
      metadata.json  # any metadata
 
 
-Briefly we describe key features of this standardized formats.
+Briefly we describe key features of this standardized format.
 We can observe from the listing that, after collating files
 and separating them into splits as just described,
 the files are copied to directories corresponding to each split.
@@ -598,9 +556,9 @@ These include a csv file containing the dataset files and the splits they belong
 Other files also include a metadata.json
 which captures important parameters that do not fit well
 in the tabular data format of the csv file.
-For example, the metadata file contains the duration of the timebin
-in every spectrogram, a value it is not necessary to repeat
-for every row of the dataframe.
+For example, the metadata file for a frame classification dataset
+contains the duration of the timebin in every spectrogram,
+a value it is not necessary to repeat for every row of the dataframe.
 The prep command also copies the configuration file used to generate the dataset
 into the directory, as a form of provenance,
 and finally saves a log file
@@ -644,7 +602,8 @@ using the transforms described in  :ref:`transformations`.
 
 **WindowDataset.** This dataset class represents all possible time windows of a fixed width
 from a set of audio recordings or spectrograms.
-As with the ``VocalDataset`` class, the underlying dataset consists of audio files or spectrogram files of vocalizations, and an optional set of annotations for those vocalizations.
+As with the ``VocalDataset`` class, the underlying dataset consists of audio files or spectrogram files of vocalizations,
+and an optional set of annotations for those vocalizations.
 Distinct from ``VocalDataset``,
 this class returns windows from the audio or spectrograms,
 and when the dataset includes annotations,
@@ -653,19 +612,25 @@ The ``WindowDataset`` also enables training on a dataset of a specified duration
 without needing to modify the underlying data,
 by virtue of using a set of vectors to represent indices of valid windows from the total dataset.
 
+.. _results:
+
 .. _cli-config:
 
 Command-line interface and configuration file
 =============================================
 
-To provide acoustic communication researchers easier access to neural network models,
-vak provides a simple command-line interface (CLI).
-A key design choice is to avoid any sub-commands or even options,
+Having described the API, we now walk through vak's CLI.
+An example screenshot of a training run started from the command line is shown in  :ref:`fig:cli`.
+A key design choice is to avoid any sub-commands or even options for the CLI,
 and instead move all such logic to a configuration file.
+Thus, commands through the CLI all take the form of ``vak command configuration-file.toml``,
+e.g., ``vak train gy6or6_train.toml``.
 This avoids the need for users to understand options and sub-commands,
 and minimizes the likelihood that important metadata about experiments will be lost because
-they were specified as options. An example screenshot of a training run started from the command line is shown
-in  :ref:`fig:cli`.
+they were specified as options.
+The configuration file follows the TOML format
+(`Tom's Obvious Minimal Language <https://toml.io/en/>`_)
+that has been adopted by the Python and Rust communities among others.
 
 .. figure:: vak-cli-screenshot.png
 
@@ -674,24 +639,42 @@ in  :ref:`fig:cli`.
    In the bottom panel (b) an example is shown of how vak logs progress
    and reports metrics during training :label:`fig:cli`
 
-The configuration file follows the TOML format
-(`Tom's Obvious Minimal Language <https://toml.io/en/>`_)
-that has been adopted by the Python and Rust communities among others.
-Commands through the CLI take the form of vak command configfile, e.g., ``vak train gy6or6_train.toml``.
-There are five commands: prep, train, eval, predict, and learncurve.
-As their names suggest, the commands train, eval, and predict are used to train a model, evaluate it, and
-generate predictions with it once trained. The prep and learncurve commands require more explanation.
-The prep command is used to prepare datasets for use with neural networks.
-With this command the user can generate a dataset from any of the built-in workflows,
-that will be saved in the standardized directory format as described above in Section :ref:`datasets`.
-The learncurve command is used to generate results for a learning curve,
-that plots model performance as a function of training set size in seconds.
-Although this is technically a learning curve, its use is distinct from common uses in machine learning,
-e.g., looking for evidence of high bias or high variance models.
-Instead, the learning curve functionality allows our users to answer very important practical questions for their research.
-For example, what is the optimal performance I can achieve with the minimum amount of hand-annotated training data?
+The few commands available through the CLI correspond to built-in,
+model-specific workflows.
+There are five commands: ``prep``, ``train``, ``eval``, ``predict``, and ``learncurve``.
+These commands are shown in :ref:`fig:workflows`
+as part of a chart illustrating the built-in workflows,
+using as an example a frame classification model as we define them below.
+As their names suggest, the commands ``train``, ``eval``, and ``predict``
+are used to train a model, evaluate it, and
+generate predictions with it once trained.
+The ``prep`` and ``learncurve`` commands require more explanation.
+A user makes a separate configuration file for each of the other four commands,
+but ``prep`` can be used with any configuration file.
+As can be seen in the figure,
+the typical workflow starts with a call to ``vak prep``,
+which prepares a canonicalized form of a dataset
+for the specific machine learning task associated with a model,
+and then adds the path to that dataset to the configuration file.
+Thus, there is a ``prep_frame_classification_dataset`` function
+that will be called for the example model in the figure.
+If a dataset has already been prepared and is being re-used for another experiment,
+this step would not be necessary.
+Once any needed dataset is prepared,
+the user can run the command related to the model, using the same configuration file.
 
-.. _results:
+.. figure:: vak-workflow-chart.png
+
+   A chart showing workflows in vak, using an example a frame classification model
+   as defined below. See text for description of workflows. :label:`fig:workflows`
+
+The ``learncurve`` command is used to generate results for a learning curve,
+that plots model performance as a function of training set size in seconds.
+Although technically a learning curve, its use is distinct from common uses in machine learning,
+e.g., looking for evidence of high bias or high variance models.
+Instead, the learning curve functionality allows vak users to answer important practical questions for their research.
+Most importantly, what is the optimal performance that can be achieved
+with the minimum amount of labor-intensive, hand-annotated training data?
 
 Results
 -------
