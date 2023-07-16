@@ -16,7 +16,7 @@ vak: a neural network framework for researchers studying animal acoustic communi
 
 .. class:: abstract
 
-How is speech like birdsong? What does it mean for animal to learn their vocalizations?
+How is speech like birdsong? What do we mean when we say an animal learns their vocalizations?
 Questions like these are answered by studying how animals communicate with sound.
 As in many other fields, the study of acoustic communication is being revolutionized by deep neural network models.
 These models enable answering questions that were previously impossible to address,
@@ -89,16 +89,17 @@ and to study how transfer learning in neural network models trained on bioacoust
 is impacted by phylogenetic distance between species :cite:`provostImpactsFinetuningPhylogenetic2022`.
 Here we describe the design of the vak framework, and explain how vak makes it easy
 for acoustic communication researchers to work with neural network models.
-We have also recently released version 1.0 of the library (currently in alpha),
-and throughout we highlight enhancements made in version 1.0
-that we believe will significantly improve user experience with the library.
+We have also recently published an alpha release of version 1.0 of the library,
+and throughout this article we highlight enhancements made in this version
+that we believe will significantly improve user experience.
 
 Related work
 ============
 
 First, we briefly review related literature, to further motivate the need for a framework.
-A very common workflow in studies of acoustic behavior is to segment sounds from one animal into a sequence of units,
-after which further analyses can be done, as reviewed in :cite:`kershenbaumAcousticSequencesNonhuman2016`.
+A very common workflow in studies of acoustic behavior is to take audio recordings of one individual animal
+and segment them into a sequence of units, after which further analyses can be done,
+as reviewed in :cite:`kershenbaumAcousticSequencesNonhuman2016`.
 Some analyses require further annotation of the units to assign them to one of some set of classes,
 e.g. the unique syllables within an individual songbird's song.
 An example of segmenting audio of Bengalese finch song into syllables and annotating those syllables is shown in
@@ -143,29 +144,31 @@ in an animal's repertoire :cite:`sainburgFindingVisualizingQuantifying2020`,
 and/or to measure similarity between vocalizations
 of two different animals :cite:`goffinetLowdimensionalLearnedFeature2021, zandbergBirdSongComparison2022`.
 It is apparent that unsupervised approaches are complementary to supervised models
-that can automate costly human annotations, and this is another reason that a single framework
+that automate labor-intensive human annotation. This is another reason that a single framework
 should provide access to both supervised and unsupervised models.
 
 Methods
 -------
+In this section we describe the design of vak: its application programming interface (API)
+and its command-line interface (CLI). We begin by introducing the design of vak at the highest level.
 
 Design
 ======
 
-First we describe the design of vak at a high level.
-It relies on PyTorch :cite:`paszkeAutomaticDifferentiationPyTorch2017` for neural networks,
-because that library allows for Pythonic idioms and low-level control when needed.
-In version 1.0, we have additionally adopted the Lightning framework :cite:`falconPyTorchLightning2023` as a backend,
+vak relies on PyTorch :cite:`paszkeAutomaticDifferentiationPyTorch2017` for neural networks,
+because PyTorch accommodates Pythonic idioms and low-level control flow within networks when needed.
+In version 1.0, we have additionally adopted the Lightning library :cite:`falconPyTorchLightning2023` as a backend,
 freeing us up as developers to focus on the research domain while benefiting
 from the Lightning team's engineering expertise.
-Of course, vak relies heavily on the core libraries of the scientific Python stack,
-such as numpy :cite:`walt_numpy_2011,harris2020array`, scipy :cite:`virtanen_scipy_2019`,
+Of course, vak relies heavily on the core libraries of the scientific Python stack.
+Many functions make use of numpy :cite:`walt_numpy_2011,harris2020array`, scipy :cite:`virtanen_scipy_2019`,
 and matplotlib :cite:`Hunter:2007, thomas_a_caswell_2020_4030140`.
-The built-in workflows for preparing datasets make frequent use of pandas :cite:`team_pandas-devpandas_2020`
+In particular, the built-in workflows for preparing datasets make frequent use of pandas :cite:`team_pandas-devpandas_2020`
 to work with tabular data formats, and dask :cite:`dask_development_team_dask_2016`
-to enable scalable, distributed processing of very large datasets
-like those that form the basis of acoustic communication research.
-Functionality for preparing datasets is specifically tailored to the needs of acoustic communication researchers.
+to enable scalable, distributed processing of very large datasets with mixed file formats,
+which are common in acoustic communication research.
+Functionality for preparing datasets is specifically tailored to the needs of acoustic communication researchers
+in other ways as well.
 For example, to parse the wide range of annotation formats used by
 acoustic communication researchers across disciplines,
 we use the pyOpenSci package crowsetta :cite:`nicholson2023crowsetta`.
@@ -173,15 +176,14 @@ we use the pyOpenSci package crowsetta :cite:`nicholson2023crowsetta`.
 In terms of its API,
 the design of vak is most similar to other domain-specific libraries developed with torch,
 such as torchvision :cite:`torchvision2016`, but here the domain is animal acoustic communication research.
-(Perhaps surprisingly, many of the models proposed to date in this area are essentially adopted from computer vision,
-and we have not to date found a need to rely on the torchaudio library, although this could change in future versions.)
+(Perhaps surprisingly, many of the models proposed to date in this area are essentially adopted from computer vision.)
 Thus, similar to the torchvision API, vak provides modules for
 neural network models, operations, transformations for loading data, and datasets.
 
 In addition to its torchvision-like API, vak provides a simple command-line interface
 (CLI) that allows researchers to work with neural network models
-without requiring significant expertise in coding or neural network models.
-We first describe the API so that key concepts have been introduced
+without requiring significant expertise in Python programming or deep learning.
+We first describe the API, so that key concepts have been introduced
 when we explain the usage of the CLI.
 
 Models
@@ -189,28 +191,24 @@ Models
 
 As its name implies, the ``models`` module is where implementations
 of neural network models are found.
+Our design is focused on a user who wants to benchmark different models
+within an established task and data processing pipeline as defined by our framework.
 In version 1.0 of vak, we have introduced abstractions that make it easier
 for researchers to work with the built-in models
 and with models they declare in code outside of the library, e.g. in a script or notebook.
 At a high level, we achieved this by adopting the Lightning library as a backend.
-This allowed us we leverage the engineering strengths of the Lightning library
-while we focus on the domain-specific details that our framework needs to provide.
 By sub-classing the core ``lightning.LightningModule`` class,
 we provide users with per-model implementations of methods for training, validation,
 and even for forwarding a single batch or sample through the model.
-Before introducing the built-in models this module,
-we briefly describe the abstractions we have developed to make it easier to work with models.
+We briefly describe the abstractions we have developed to make it easier to work with models.
 
 Abstractions for declaring a model in vak
 =========================================
 
-We sought to make it as easy possible for researchers to make use of vak
-without advanced Python programming ability or expertise in neural networks.
-Our design is focused on a user who wants to benchmark different models
-within an established task and data processing pipeline as defined by our framework.
-In other words, a user should be able to use any of the built-in models,
+Our goal is to make it so that a scientist-coder should be able to use any of the built-in models,
 and experiment with their own models, without needing to contribute code to vak
-or use a plug-in mechanism like Python packaging entry points.
+or to use a developer-focused mechanism like
+`entry points <https://packaging.python.org/en/latest/specifications/entry-points/>`_.
 To achieve this, we provide a decorator ``vak.models.model``,
 This decorator is applied to a *model definition* to produce a sub-class
 of a *model family*.
@@ -221,9 +219,8 @@ easily test different models.
 A model definition takes the form of a dataclass with four required attributes:
 ``network``, ``loss``, ``optimizer``, and ``metrics``.
 In other words, our abstraction asserts that the definition of a neural network model
-consists of the neural network function, the loss function used to optimize the network parameter,
+consists of the neural network function, the loss function used to optimize the network's parameters,
 the optimizer, and the metrics used to assess performance.
-This definition is in line with those adopted by other frameworks, notably the Lightning library itself.
 
 To relate a model as declared with a definition to the machine learning tasks
 that we implement within the vak framework, we introduce the concept of model *families*.
@@ -237,14 +234,15 @@ and the model also produces the appropriate outputs needed within those same ste
 
 With these two abstractions in hand,
 we can provide a user access to models within vak as follows:
-the decorator creates a new subclass of the model family,
-whose name is the same as the name of the class that it decorates,
-which is the class representing a model definition.
+the decorator creates a new subclass of the model family.
+This new subclass has the same name as the class that it decorates,
+which is the class representing the model definition.
 The decorator adds a single attribute to this sub-class, the ``definition``,
 that is used when initializing a new instance of the specific model.
 After creating this sub-class and adding this attribute,
 the ``model`` decorator finally registers the model
-in a ``vak.models.registry`` module, that allows other functions within vak
+within the ``vak.models.registry`` module.
+This allows other functions within vak
 to find the model by its name in the registry.
 The registry is implemented with its own helper functions
 and module-level ``dict`` variables that are updated by those functions.
@@ -299,7 +297,7 @@ we now describe the families we have implemented to date.
 one way to formulate the problem of segmenting audio into sequences of units
 so that it can solved by neural networks
 is to classify each frame of audio, or a spectrogram produced from that audio,
-and to then recover segments from this series of labeled frames.
+and to then recover segments from this series of labeled frames :cite:`graves_framewise_2005, graves_supervised_2012`.
 
 This problem formulation works,
 but an issue arises from the fact that audio signals used by acoustic communication
@@ -307,19 +305,19 @@ researchers very often vary in length.
 E.g., a bout of Bengalese finch birdsong can vary from 1-10 seconds,
 and bouts of canary song can vary roughly from one to several minutes.
 In contrast, the vast majority of neural network models assume a "rectangular" tensor as input and output,
-in part because they were originally developed for computer vision applications applied to batch.
-The simplest fix for this issue is to convert inputs of varying lengths into rectangular batches
+in part because they were originally developed for computer vision applications applied to batches.
+One way to work around this issue is to convert inputs of varying lengths into rectangular batches
 with a combination of windowing and padding.
 E.g., pick a window size $w$, find the minimum number of consecutive non-overlapping strides
 :math:`s` of that window that will cover an entire input :math:`x` of length :math:`T`,
 :math:`s * w \ge T`, and then pad :math:`x` to a new length :math:`T_{padded} = T + ((s * w) - T`.
 This approach then requires a post-processing step where the outputs are stitched back together
-into a single continuous sequence :math:`x_padded`,
-and the padding is removed by somehow tracking or denoting which time bins are padded,
+into a single continuous sequence :math:`x_padded`.
+The padding is removed by tracking which time bins are padded,
 e.g., with a separate vector that acts as a "padded" flag for each time bin.
 Of course there are other ways to address the issue of varying lengths,
-such as using the ``torch.nn.utils.rnn`` API to pad and unpad tensors.
-We leave these other methods for future work.
+such as using the ``torch.nn.utils.rnn`` API to pad and unpad tensors
+(or using a different family of neural network models).
 
 Because more than one model has been developed that uses this post-processing approach
 to solve the problem of frame classification,
@@ -327,9 +325,9 @@ we define this as a family of models within vak, the ``FrameClassification`` mod
 Both the TweetyNet model from :cite:`cohenAutomatedAnnotationBirdsong2022`
 and the Deep Audio Segmenter (DAS) from :cite:`steinfathFastAccurateAnnotation2021` are examples of such models.
 We provide an implementation of TweetyNet now built directly into vak in version 1.0.
-We also provide a PyTorch implementation of the Encoder Decoder-Temporal Convolutional (ED-TCN) Network
-previously applied to frames of video features for the action segmentation task :cite:`lea2017temporal`.
-Below in results we show how vak can be used to benchmark and compare both models on the same dataset.
+We also provide a PyTorch implementation of the Encoder Decoder-Temporal Convolutional (ED-TCN) Network,
+that was previously applied to frames of video features for an action segmentation task :cite:`lea2017temporal`.
+Below in Results we show how vak can be used to benchmark and compare both models on the same dataset.
 
 **Parametric UMAP.**
 To minimally demonstrate that our framework is capable of providing researchers
@@ -337,31 +335,30 @@ with access to multiple families of models,
 we have added an initial implementation of a Parametric UMAP model family.
 The original algorithm for UMAP (Uniform Manifold Approximation and Projection)
 consists of two steps: computing a graph on a dataset,
-and then optimizing an embedding of that graph to a lower dimensional space
-while preserving local distances between points :cite:`mcinnes2018umap`.
+and then optimizing an embedding of that graph in a lower dimensional space
+that preserves local relationships between points :cite:`mcinnes2018umap`.
 The parametrized version of UMAP replaces the second step
 with optimization of a neural network architecture :cite:`sainburg2021parametric`.
 Because the parametrized version can be used with a wide range
-of neural network functions,
-we declare this as a family,
-and provide an implementation of a single model,
+of neural network functions, we declare this as a family.
+We provide an implementation of a single model,
 an encoder with a convolutional front-end
-that can map spectrograms of units extracted from audio
-to a latent space.
+that can map spectrograms of units extracted from audio to a latent space.
 Our implementation is adapted from https://github.com/elyxlz/umap_pytorch
 and https://github.com/lmcinnes/umap/issues/580#issuecomment-1368649550.
 
 Neural network layers and operations
 ====================================
 
-Like PyTorch, vak provides a module for neural network operations and layers.
-At this time we offer a single operation,
-a specialized cross-entropy loss function,
-``vak.nn.loss.CrossEntropyLoss``.
-This function is standard cross-entropy loss,
-but it is adapted to work with the output of frame classification networks
-that are padded because they use the pad-pack API of PyTorch.
-This is needed for our ``FrameClassification`` family of models.
+Like PyTorch, vak provides a module for neural network operations and layers named ``nn``.
+This module contains layers used by more than one network.
+For example, it includes a 2-D convolutional layer with the `'SAME'` padding provided by Tensorflow
+that is used both by the TweetyNet model :cite:`cohenAutomatedAnnotationBirdsong2022`
+and by our implementation of the ED-TCN model :cite:`lea2017temporal`.
+(PyTorch has added this padding from version 1.10 on, but we maintain our original implementation
+for purposes of replicability.)
+Another example of an operation in ``vak.nn`` is a PyTorch implementation of the normalized ReLu activation
+used by :cite:`lea2017temporal` with their ED-TCN model.
 
 .. _transformations:
 
@@ -457,7 +454,7 @@ that fixes some errors in example implementations
 and that is tailored to use with neural network models.
 In version 1.0 we have additionally adopted as a dependency the
 ``torchmetrics`` library,
-that mmakes it easier to compute metrics
+that makes it easier to compute metrics
 for ``FrameClassification`` models.
 
 .. _datasets:
