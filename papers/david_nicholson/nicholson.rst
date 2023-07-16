@@ -678,7 +678,7 @@ where an operation is removed from a neural network function
 to show that operation plays an important role
 in the model's performance.
 Using a script, we define a version of the TweetyNet model in
-:cite:`Cohen` without the recurrent
+:cite:`cohenAutomatedAnnotationBirdsong2022` without the recurrent
 Long Short Term Memory (LSTM) layer (thus "ablating" it).
 This model without the LSTM makes a prediction for each frame
 using the output of the convolutional layers,
@@ -693,7 +693,7 @@ For all experiments, we prepared a single dataset
 and then trained both models on that same dataset.
 We specifically ran learning curves as described above,
 but here we consider only the performance at 10 minutes,
-because as we previously reported :cite:`Cohen`
+because as we previously reported :cite:`cohenAutomatedAnnotationBirdsong2022`
 this was the minimum amount of training data required
 to achieve the lowest error rates.
 As shown in the top row of :ref:`fig:ablation-experiment`,
@@ -762,7 +762,7 @@ two models on the exact same dataset.
    with ED-TCN model.
    Plots are as in :ref:`fig:ablation-experiment`.
    Each axes shows results for one individual bird from the
-   Bengalese finch song repository dataset :cite:`BengaleseFinchSong2017`.
+   Bengalese finch song repository dataset :cite:`nicholson_bengalese_2017`.
    Bar plots show segment error rate without post-processing clean-up (blue, left bar in grouped plots)
    and with the clean-up (orange, right bar in grouped plots). :label:`fig:TweetyNet-v-EDTCN`
 
