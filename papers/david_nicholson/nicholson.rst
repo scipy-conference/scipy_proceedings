@@ -612,8 +612,6 @@ The ``WindowDataset`` also enables training on a dataset of a specified duration
 without needing to modify the underlying data,
 by virtue of using a set of vectors to represent indices of valid windows from the total dataset.
 
-.. _results:
-
 .. _cli-config:
 
 Command-line interface and configuration file
@@ -675,6 +673,8 @@ e.g., looking for evidence of high bias or high variance models.
 Instead, the learning curve functionality allows vak users to answer important practical questions for their research.
 Most importantly, what is the optimal performance that can be achieved
 with the minimum amount of labor-intensive, hand-annotated training data?
+
+.. _results:
 
 Results
 -------
