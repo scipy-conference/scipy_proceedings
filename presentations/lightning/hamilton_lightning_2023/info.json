@@ -1,0 +1,11 @@
+{
+    "title": " Hamilton: drop procedural scripts in favor of declarative functions",
+    "authors": [
+        {
+            "name": "Stefan Krawczyk",
+            "affiliation": "DAGWorks Inc.",
+            "orcid": "0009-0006-1112-1459"
+        }
+    ],
+    "description": "Lightning Talk on using Hamilton in favor of procedural scripts"
+}
