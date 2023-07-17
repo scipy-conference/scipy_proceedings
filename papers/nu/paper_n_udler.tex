@@ -1,13 +1,15 @@
-
 \subsection{Introduction \label{introduction}}
 
-The focus of the class is on basic machine learning (ML) ideas and concepts. This approach allows students to easily acquire the terminology and continue to study independently after finishing the class -  through books, videos  and software documentation.  The course is project-based. Each time the selection of the projects is different. It depends on the math knowledge of the students. First several projects are demonstrated to the whole class and utilize minimal mathematical background among participants. Students do not have to learn new math but see how their existing math knowledge can be used in ML.   Many students already have experience with some ML methods. Our class is helpful for understanding similarities between familiar methods.  The minimal mathematical background required for this class is: solving systems of linear equations and inequalities.
+The focus of the class is on basic machine learning (ML) ideas and concepts. 
+
+Our approach is borrowed from Operations Research. Topics from Operations Research have been used to teach students with elementary math skills mathematical modeling and foster interest in STEM subjects (see \cite{RG}). This differentiates us both from classes that require a background in hard sciences and from classes that fully rely on ML software and do not require a significant math knowledge from a student.
+
+Due to growing demand in fast ML education many professional education departments started to offer ML classes (see, for example, \cite{MITML,GMUML,UUML}) that do not require full time commitment from a student. However, they usually require decent Python coding skills. We are different in several aspects: we focus on concepts rather than skills and require only minimal coding background. We focus on concepts that underly ML methods rather than specific ML methods. We cater to a wider student audience.
+
+This approach allows students to easily acquire the terminology and continue to study independently after finishing the class -  through books, videos  and software documentation.  The course is project-based. Each time the selection of the projects is different. It depends on the math knowledge of the students. First several projects are demonstrated to the whole class and utilize minimal mathematical background among participants. Students do not have to learn new math but see how their existing math knowledge can be used in ML.   Many students already have experience with some ML methods. Our class is helpful for understanding similarities between familiar methods.  The minimal mathematical background required for this class is: solving systems of linear equations and inequalities.
 
  Topics of machine learning are grouped by required mathematical background. Relationship with other disciplines is highlighted - statistics, probability, linear algebra, operations research, optimization, financial engineering. Students work in groups.  Members of the group may have different skills, and the reason is to have a variety of skills present in the group: computer programming, mathematics, mathematical modeling, subject matter expert knowledge. This allows to complete realistic projects. Educational software minpy is used for many projects.
 
-\subsection{Objectives and Outcomes \label{objectives and outcomes}}
-
-The objective is to give a student enough skills to recognize ML problems around us, continue self-study using online materials, video lectures,  scientific papers,  write professional resume, find job or apply for advanced education program.
 
 \subsection{Projects \label{projects}}
 
@@ -22,7 +24,7 @@ Project consists of five steps:
 2. Creating mathematical model of the problem.
 
 A special focus is on representing the model in a form consistent with API of a software that is used to solve the problem.  We encourage the use of standard software tools to reduce the development time, increase the reliability of the solution, and require less math and programming skills.
-Students  may still choose to implement the solution from scratch , without using standard software, as a useful exercise. We use scikit-learn and scipy for most demonstrations.
+Students  may still choose to implement the solution from scratch , without using standard software, as a useful exercise. We use scikit-learn and scipy for most demonstrations (see \cite{scipy,sklearn1}). Implementation of optimization methods from scratch is dewmonstrated using minpy library(see \cite{MP}).
 
 3. Preparing input data.  
 
@@ -33,19 +35,16 @@ Students  may still choose to implement the solution from scratch , without usin
 
 When working in groups students may divide the responsibilities inside the group and work on subtasks in parallel: preparing data, writing code, preparing the report, etc. Depending on math background a student may be assigned a project where higher level of math is needed.
 
-\subsubsection{Education Library Minpy \label{education library minpy}}
 
-Education library minpy is open-source library developed with this class in mind. See \cite{MP}  to learn more about this library.
+\subsubsection{Demo Projects and self-paced projects \label{demo projects}}
 
-\subsubsection{Demo Projects \label{demo projects}}
+Demonstration projects require minimum math background and programming skills. They are based on classical examples from different fields such as operations research, data science, statistics, engineering, and most recent examples from machine learning field. and student p
+One example of the demo project is considered in detail here. It is based on the Diet Problem, the classical problem from Operations Research. It uses food nutrition datasets  and several toy datasets. The formulation of the problem is becoming more complex gradually, allowing students to participate in the process of building mathematical model. Each modification of the model demonstrates important  ML concept.
 
-Demonstration projects require minimum math background and programming skills. They are based on classical examples from different fields such as operations research, data science, statistics, engineering, and most recent examples from machine learning field. 
-One example of the demo project is considered in detail in the Appendix and is based on the Diet Problem, the classical problem from operations research area. It uses food nutrition datasets  and several toy datasets. The formulation of the problem is becoming more complex gradually, allowing students to participate in the process of building mathematical model. Each modification of the model demonstrates important  ML concept.
-Another example is based on movie dataset and takes students through the building of the simple recommendation system. This is a good starting project  for students interested in Natural Language Processing. 
+Alternatevely first demo may be building movie recommendation system  based on movie dataset. Our experience shows that this is a choice for students interested in Natural Language Processing. 
 
-\subsubsection{Student Projects \label{student projects}}
 
-Students may utilize their subject matter expertise, advanced math and programming skills to work on real-life problems. 
+In self-paced projects students may utilize their subject matter expertise, advanced math and programming skills to work on real-life problems. 
 
 Project example for a group with good programming skills and  college level mathematics would be Comparing Genetic Algorithm with Covariance Matrix Adaptation Evolution Strategy, based on minpy library modules.
 
@@ -53,21 +52,22 @@ Project example for group with good programming skills, college-level mathematic
 
 Project example for a group with good programming skills, college-level mathematics  and special interest in optimization may be Applying proximal operator as a step in generalized global optimization algorithm derived from potential theory. See Appendix for the description.
 
-\subsection{Appendix \label{appendix}}
 
-\subsubsection{ Demo project  example - The Diet Problem \label{demo project example}}
+\subsubsection{Demo project  example - The Diet Problem \label{demo project example}}
 
-Diet problem is a classical problem from the field of Operations Research.  It was explored extensively in 1940s, based on the needs of WWII. Linear programs for resource allocation were formulated by Leonid Kantorovich in 1939. The Diet Problem was formulated as a linear program with the objective of minimizing the cost of a daily diet of a person while fulfilling nutritional requirements. First algorithm for solving linear programs, simplex algorithm, was developed by George Dantzig in 1947. Soon after the duality theorem for linear programming was suggested by John von Neumann, extending capabilities of linear program sensitivity analysis. 
+Diet problem is a classical problem from the field of Operations Research.  It was studied extensively in 1940s, based on the needs of WWII. Linear programs for resource allocation were formulated by Leonid Kantorovich in 1939. The Diet Problem was formulated as a linear program with the objective of minimizing the cost of a daily diet of a person while fulfilling nutritional requirements. First algorithm for solving linear programs, simplex algorithm, was developed by George Dantzig in 1947. Soon after the duality theorem for linear programming was suggested by John von Neumann, extending capabilities of linear program sensitivity analysis. 
 Diet selection demonstration on NEOS server can be found here \cite{neos}
 
 We explore several modifications of the original problem, including the multi objective version, interactive diet selection, taking into account dietitian’s suggestions such as restrictions on certain food combinations, taking into account uncertainty in the input data, etc. We create a framework based on food/nutrition dataset and several Python solvers that allow one to add algorithms and modes easily, analyze data, perform sensitivity analysis on optimization models and store data on typical diet selection and expert data. Such a decision support system can be used for individual diet recommendations and for analysis of typical diets, such as for identifying dietary patterns in certain groups of people. This system can be used by students of AI ,ML,  optimization and simulation to study modeling techniques. 
+
+As advanced demonstration project we show how to solve a task of pricing new food item using ML approach, and how it is connected to dual of the Diet Problem. 
 
 Food/nutrition data can be easily understood by beginners as well as students with advanced degrees in different disciplines.  
 
 
 The following subproblems are useful to specify when studying ML concepts. 
 
-1. Exploring food dadtaset and introducing linear classsification of food items into groups. 
+1. Exploring food dataset and introducing linear classsification of food items into groups. 
 
 Food/nutrition databset consists of food items with their chemical composition (including fat, protein, carbohydrates, calcium, vitamin A, vitamin C, vitamin B, magnesium, copper, etc.). Different sources list approximated values, ranges, mean values or median values of chemical elements in each food item as it is impossible to measure the composition exactly and the composition of elements may be different in the same kind of vegetable grown in different regions, or stored in different conditions. It makes sense to accommodate this uncertainty in the model for the diet problem. One of the variants we consider is minimizing the price of daily diet under conditions that nutritional needs are satisfied with certain (large) probability. It may be useful to know that allowing 0.01 percent  doubt that my breakfast provides all nutritional needs would make it 10 dollars  cheaper. 
 Sensitivity analysis of the model may reveal the fact that we do not need to run the optimization again for creating several similar diets but need to analyze the result of single optimization run. For example, shadow prices (part of sensitivity analysis output in standard optimization tool) show the change in optimal value when right hand side is changed by one unit. This may correspond to a situation when we computed a cost for a diet with maximum of 1500 calories allowed and want to know how much the 1600 calories diet cost without running the optimization tool again.  
@@ -99,7 +99,7 @@ One of the interpretations of dual for the diet problem is that certain pharmacy
 
 This sections introduces the concept of duality necessary in ML models. Historically, essential machine learning tool that used the concept of duality was support vector machines (SVM), see \cite{VC}
 
-After this sections students should be able to read original paer by Vapnik whcich introduces SVM and software documentation in modern implementations of SVM. Methodologivcally it is sometimes advisable to step back and introduce simpler model whish demonstrates duality such as Morra Game project mentioned in the project list. The only background needed for this section is intermediate algebra. Duality theory opens other ways to analyse the solution of the primal problem intuitevely, but for the purpose of our class we stop here and refer interested students ito additional self-study materials.
+After this sections students should be able to read original paper by Vapnik whcich introduces SVM and software documentation in modern implementations of SVM. Methodologivcally it is sometimes advisable to step back and introduce simpler model whish demonstrates duality such as Morra Game project mentioned in the project list. The only background needed for this section is intermediate algebra. Duality theory opens other ways to analyse the solution of the primal problem intuitevely, but for the purpose of our class we stop here and refer interested students ito additional self-study materials.
 
 7. Formulating the diet problem when nutritional facts about each food item are given as ranges rather than exact numbers.
 
@@ -227,12 +227,10 @@ The complete example of solving diet problem can be found here \cite{diet}
 
 
 
-      \subsubsection{Advanced project example \label{advannced project example} }
+   \subsubsection{Advanced project example \label{advannced project example} }
 
 
  \textbf{Applying proximal operator as a step in generalized global optimization algorithm derived from potential theory}
-
-
 
 
 Required background: Python programming, college-level math
@@ -248,9 +246,6 @@ Required background: Python programming, college-level math
 
 This project introduces most important concepts in artificial neural networks.
 Students implement the perceptron algorithm with linear kernel - famous online classification method introduced in  \cite{ABR}, and explore differences and similarities of this method to SVM. Educational library minpy  \cite{MP} is used to implement neural network optimization approaches described in \cite{YZWQ,YZWQ1,KP1}.
-As a real life application of ANN the problem of pris=cing new product in food industry is considered. Many factors affect food prices directly or indirectly, such as productivity, government policies, overall market state, etc.We do not have exact formula to express dependency for computing prices knowing values of factors, besides, there are many unknown or hidden factors.. Such problem is a good candidate for solution by ML methods, such as ANN.We use data ( Nutritional content and prices of different foods ) to train the model and then use it to assign a price to a new product, such as energy drink, given its nutritional content. Full tutorial on this task is given is supporting Jupyter notebook.
+As a real life application of ANN the problem of pricing new product in food industry is considered. Many factors affect food prices directly or indirectly, such as productivity, government policies, overall market state, etc.We do not have exact formula to express dependency for computing prices knowing values of factors, besides, there are many unknown or hidden factors.. Such problem is a good candidate for solution by ML methods, such as ANN.We use data ( Nutritional content and prices of different foods ) to train the model and then use it to assign a price to a new product, such as energy drink, given its nutritional content. Full tutorial on this task is given in supporting Jupyter notebook \cite{anndemo}}.
 
 Prerequisite for this project: familiarity with diet optimization problem
-
-
-
