@@ -415,3 +415,5 @@ NumFOCUS, a non-profit organization with a mission to promote open practices in 
 Huawei, a high-tech company that made a significant and selfless donation to the Blosc project.
 
 Sergio Barrachina, associate professor at University Jaume I, has provided many advice and code during the development of the Btune project.
+
+This work has made use of data from the `European Space Agency (ESA) mission Gaia <https://www.cosmos.esa.int/gaia>`_, processed by the `Gaia Data Processing and Analysis Consortium <DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium>`_. Funding for the DPAC has been provided by national institutions, in particular the institutions participating in the Gaia Multilateral Agreement.
