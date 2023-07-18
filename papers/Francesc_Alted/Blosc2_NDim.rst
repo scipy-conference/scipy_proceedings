@@ -155,9 +155,9 @@ Finding the right compression parameters for the data is probably the most diffi
 
 Btune is an AI tool for Blosc2 that automatically finds the optimal combination of compression parameters to suit user needs. It uses a neural network trained on representative datasets to be compressed to predict the best compression parameters based on the given tradeoff between compression ratio and compression/decompression speed.
 
-For example, Table :ref:`predicted-dparams-example` displays the results for the predicted compression parameters tuned for decompression speed of the 3D Gaia array. This table can be provided to the Btune plugin so that it can choose the best tradeoff value for user's needs (0 means favoring speed only, and 1 means favoring compression ratio only).
+For example, Table :ref:`predicted-dparams-gaia` displays the results for the predicted compression parameters tuned for decompression speed of the 3D Gaia array. This table can be provided to the Btune plugin so that it can choose the best tradeoff value for user's needs (0 means favoring speed only, and 1 means favoring compression ratio only).
 
-.. table:: Btune prediction of the best compression parameters for decompression speed for the 3D Gaia array, depending on a tradeoff value between compression ratio and decompression speed. It can be seen that BloscLZ with compression level 5 is the most predicted category when decompression speed is preferred, whereas Zstd with compression level 9 + BitShuffle is the most predicted one when the specified tradeoff is towards optimizing for the compression ratio.  Speeds are in GB/s.  :label:`predicted-dparams-example`
+.. table:: Btune prediction of the best compression parameters for decompression speed for the 3D Gaia array, depending on a tradeoff value between compression ratio and decompression speed. It can be seen that BloscLZ with compression level 5 is the most predicted category when decompression speed is preferred, whereas Zstd with compression level 9 + BitShuffle is the most predicted one when the specified tradeoff is towards optimizing for the compression ratio.  Speeds are in GB/s.  :label:`predicted-dparams-gaia`
 
    +----------+--------------------+---------+--------+--------+
    | Tradeoff | Most predicted     |  Cratio | Cspeed | Dspeed |
@@ -185,9 +185,9 @@ For example, Table :ref:`predicted-dparams-example` displays the results for the
    | 1.0      | zstd-bitshuffle-9  | 10789.6 | 3.41   | 12.78  |
    +----------+--------------------+---------+--------+--------+
 
-Of course, results will be different for another dataset. For example, Table :ref:`predicted-dparams-example-2` displays the results for the predicted compression parameters tuned for decompression speed for a dataset coming from cancer imaging. Curiously, in this case fast decompression does not necessarily imply fast compression.
+Of course, results will be different for another dataset. For example, Table :ref:`predicted-dparams-cancer` displays the results for the predicted compression parameters tuned for decompression speed for a dataset coming from cancer imaging. Curiously, in this case fast decompression does not necessarily imply fast compression.
 
-.. table:: Btune prediction of the best compression parameters for decompression speed for another dataset (cancer imaging). It can be seen that BloscLZ with compression level 5 + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd (either compression level 1 or 9) + Shuffle + ByteDelta is the most predicted one when the specified tradeoff is towards optimizing for the compression ratio.  Speeds are in GB/s.  :label:`predicted-dparams-example`  :label:`predicted-dparams-example-2`
+.. table:: Btune prediction of the best compression parameters for decompression speed for another dataset (cancer imaging). It can be seen that BloscLZ with compression level 5 + Shuffle is the most predicted category when decompression speed is preferred, whereas Zstd (either compression level 1 or 9) + Shuffle + ByteDelta is the most predicted one when the specified tradeoff is towards optimizing for the compression ratio.  Speeds are in GB/s. :label:`predicted-dparams-cancer`
 
    +----------+-------------------+---------+--------+--------+
    | Tradeoff | Most predicted    |  Cratio | Cspeed | Dspeed |
@@ -215,9 +215,9 @@ Of course, results will be different for another dataset. For example, Table :re
    | 1.0      | zstd-bytedelta-9  | 3.31    | 0.07   | 11.40  |
    +----------+-------------------+---------+--------+--------+
 
-On the other hand, there are also situations where data have to be compressed at a high speed (e.g. consolidating data from high bandwidth detectors). Table :ref:`predicted-cparams-example` shows an example of predicted compression parameter tuned this time for compression speed and ratio on yet another dataset for this scenario (in this case, images coming from synchrotron facilities).
+On the other hand, there are also situations where data have to be compressed at a high speed (e.g. consolidating data from high bandwidth detectors). Table :ref:`predicted-cparams-synchrotron` shows an example of predicted compression parameter tuned this time for compression speed and ratio on yet another dataset for this scenario (in this case, images coming from synchrotron facilities).
 
-.. table:: Btune prediction of the best compression parameters for compression speed (synchrotron imaging). It can be seen that LZ4 with compression level 5 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd (either compression level 1 or 9) + Shuffle + ByteDelta is the most predicted one when the specified tradeoff is leveraged towards the compression ratio. Speeds are in GB/s. :label:`predicted-cparams-example`
+.. table:: Btune prediction of the best compression parameters for compression speed (synchrotron imaging). It can be seen that LZ4 with compression level 5 + Bitshuffle is the most predicted category when compression speed is preferred, whereas Zstd (either compression level 1 or 9) + Shuffle + ByteDelta is the most predicted one when the specified tradeoff is leveraged towards the compression ratio. Speeds are in GB/s. :label:`predicted-cparams-synchrotron`
 
    +----------+------------------+---------+--------+--------+
    | Tradeoff | Most predicted   |  Cratio | Cspeed | Dspeed |
