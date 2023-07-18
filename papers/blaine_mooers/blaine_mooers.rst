@@ -37,7 +37,7 @@ The recent *resolution revolution* in cryo-electron microscropy (cryo-EM) :cite:
 However, the crystallographic approach continues to play a vital role because it still supplies the most precise structures, :cite:`Foerster19`.
 
 About half of the crystal structures of protein molecules are refined with the program *Phenix* :cite:`Liebschner19`. 
-This program has a user-friendly GUI that supports standard analyses :cite:`Echols12`..
+This program has a user-friendly GUI that supports standard analyses :cite:`Echols12`.
 Phenix runs on top of *cctbx* :cite:`GrosseKunstleve02`.
 The Computational Crystallography Toolbox (*cctbx*) provides a transparent API, so most users of *Phenix* are barely aware that it relies on *cctbx*.
 However, nonstandard analyses are not avilable in *Phenix* and require accessing the functions in the *cctbx* library (e.g., :cite:`DeZitter22`).
