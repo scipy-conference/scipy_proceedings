@@ -77,7 +77,7 @@ This variant is useful for writing documentation, protocols, tutorials, blog pos
 The document can be a plain text, html, markdown, LaTeX, or even an org-mode file if one activates the text area with GhostText while running one of several advanced text editors (see the section below about GhostText).
 The editing of a document next to the related Jupyter notebook supports reproducible research and reduces costly context switching.
 
-We made a variant of the library, *jupyterlabcctbxsnipsplus* (`https://github.com/MooersLab/jupyterlabcctbxsnipsplus`), that has a copy of the code in a block comment (Fig. :ref:`plusCode`).
+We made a variant of the library, *jupyterlabcctbxsnipsplus* (`https://github.com/MooersLab/jupyterlabcctbxsnipsplus`), that has a copy of the code in a block comment (Fig. :ref:`codePlus`).
 In the commented code, suggested sites for editing are indicated by tab stops that are marked with dollar signs.
 
 .. figure:: ./figs/plusCode.png
