@@ -376,7 +376,7 @@ The other area where domain-specific snippets have been provided is in molecular
 A pioneering scripting wizard provided templates for use in the molecular graphics program RasMol :cite:`Horton99`.
 In addition, the conscript program provided a converter from *RasMol* to *PyMOL* :cite:`Mottarella10`.
 We also provided snippets for *PyMOL*, which has about 100,000 users, for use in text editors :cite:`Mooers21a` and Jupyter notebooks :cite:`Mooers21b`.
-The former support tab triggers and tab stops; the latter does not.
+The former supports tab triggers and tab stops; the latter does not.
 
 Opportunities for interoperability
 ++++++++++++++++++++++++++++++++++++++
@@ -392,12 +392,19 @@ We hope that our effort will help raise awareness of interoperability issues amo
 Snippets in the age of AI-assisted autocompletion
 +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Snippet libraries od domain specific software may not be redundant in the age of chotbots because code fragments of domain specific libraries are limited so chatbots are less likely to return useful code fragments and the chatbots are quite slow in returning code fragments, and chatbots were designed for code completion. 
-However, copilot was designed for code completion and is shockingly good at autosuggesting code fragments.
-We tried using the copilot.el plugin in a *cctbx* environment with the *cctbx-emacs* library.
+Snippet libraries of domain specific software may not be as redundant as they first appear in the age of chatbots.
+The code fragments of domain-specific libraries have a limited presence on GitHub, so they may be underrepresented in large language models.
+In addition, chatbots are desinged to return text rather than code.
+However, *copilot* and *tabnine* were designed for code completion and are good at autosuggesting code fragments.
+Via GhostText, it is possible to run *copilot* or *tabnine* in a text editor while editing Jupyter notebook cells.
 
-Our explorations suggest that snippet libraries for domain-specific libraries with small users bases have a role to play in supporting the more efficient use of the library. 
 
+Conclusions
+-----------
+Our explorations suggest that code snippets for domain-specific software libraries have several roles to play in supporting the use of such libraries.
+First, the snippets illustrate possible uses of the library, thereby, playing educational and inspirational roles.
+Second, the snippets can speed up the assembly of scripts while reducing the time spent on debugging, thereby, playing a produtivity enhancement role.
+We hope that the *cctbxnsips* library will inspire the creation of similar libraries in other domains.
 
 
 Acknowledgments
