@@ -28,14 +28,12 @@
     "editor_email": [
       "agarwal.meghann@gmail.com",
       "cbc@unc.edu",
-      "rgoswami@quansight.com",
       "dillon.niederhut@gmail.com"
     ],
     "dates": "July 10 - July 16",
     "editor": [
       "Meghann Agarwal",
       "Chris Calloway",
-      "Rohit Goswami",
       "Dillon Niederhut"
     ],
     "location": "Austin, Texas",
@@ -115,10 +113,6 @@
         {
           "org": "University of North Carolina",
           "name": "Chris Calloway"
-        },
-        {
-          "org": "Quansight Labs",
-          "name": "Rohit Goswami"
         },
         {
           "org": "Novi Labs",
@@ -229,7 +223,91 @@
       "name": "Proceedings Reviewers",
       "members": [
         {
-          "name": ""
+          "name": "David Nicholson"
+        },
+        {
+          "name": "Pushkar Sathe"
+        },
+        {
+          "name": "Shubhanshu Mishra"
+        },
+        {
+          "name": "Jonny Saunders"
+        },
+        {
+          "name": "Fernando Julian Chaure"
+        },
+        {
+          "name": "Talha Irfan"
+        },
+        {
+          "name": "Chitaranjan Mahapatra"
+        },
+        {
+          "name": "Shaswat Shah"
+        },
+        {
+          "name": "Ankit Shrivastava"
+        },
+        {
+          "name": "Yuanqing Wang"
+        },
+        {
+          "name": "Sanhita Joshi"
+        },
+        {
+          "name": "Matthew Feickert"
+        },
+        {
+          "name": "Nadia Tahiri"
+        },
+        {
+          "name": "Hongsup Shin"
+        },
+        {
+          "name": "Jim Pivarski"
+        },
+        {
+          "name": "Tetsuo Koyama"
+        },
+        {
+          "name": "Luis Medina Uzcategui"
+        },
+        {
+          "name": "Jyotika Singh"
+        },
+        {
+          "name": "Tolulade Ademisoye"
+        },
+        {
+          "name": "Tanya Akumu"
+        },
+        {
+          "name": "Aditya Singh"
+        },
+        {
+          "name": "Olivia Dizon-Paradis"
+        },
+        {
+          "name": "Saul Shanabrook"
+        },
+        {
+          "name": "Brian McDermott"
+        },
+        {
+          "name": "Kuntao Zhao"
+        },
+        {
+          "name": "Maximilien Colange"
+        },
+        {
+          "name": "John Derek Morgan"
+        },
+        {
+          "name": "Kalyan Prasad"
+        },
+        {
+          "name": "Amey Ambade"
         }
       ]
     }
