@@ -468,7 +468,8 @@ Each family of models has its own dataset class or classes.
 We introduce these below,
 but first we describe our standardized dataset format.
 
-**Dataset directory format.** In version 1.0 of vak we have adopted a standard for datasets
+**Dataset directory format.**
+In version 1.0 of vak we have adopted a standard for datasets
 that includes a directory structure and associated metadata.
 This addressed several limitations from version 0.x:
 datasets were not portable because of absolute paths,
@@ -477,10 +478,6 @@ that should really have been done when preparing the dataset,
 such as validating the timebin size
 in spectrograms or generating multiple random subsets
 from a training set for learning curves.
-An additional goal of declaring canonical dataset formats,
-and normalizing user data to that canonical format,
-is to put in place the foundation for
-downloading benchmark datasets prepared by vak itself.
 A listing that demonstrates the directory structure
 and some key contents is shown below.
 
@@ -501,15 +498,10 @@ and some key contents is shown below.
      metadata.json  # any metadata
 
 
-Briefly we describe key features of this standardized format.
 We can observe from the listing that, after collating files
 and separating them into splits as just described,
-the files are copied to directories corresponding to each split.
-In cases where audio files provide the source data,
-this operation consists of just moving the spectrogram files
-inside the dataset directory where they were generated.
-If a user instead provides array files containing spectrograms,
-we make copies of these inside the directory.
+the files are either moved (if we generated them)
+or copied (if a user supplied them) to directories corresponding to each split.
 For annotation formats where there is a one-to-one mapping from annotation file
 to the file that it annotates, we copy the annotation files to the split
 subdirectories as well.
@@ -519,23 +511,21 @@ After moving these files, we change the paths in the pandas dataframe
 representing the entire dataset so that they are written relative
 to the root of the directory. This makes the dataset portable.
 In addition to these split sub-directories containing the data itself,
-we notice a handful of other files.
+we note a few other files.
 These include a csv file containing the dataset files and the splits they belong to,
 whose format we describe next.
-Other files also include a metadata.json
-which captures important parameters that do not fit well
+They also include the ``metadata.json`` file
+that captures important parameters that do not fit well
 in the tabular data format of the csv file.
 For example, the metadata file for a frame classification dataset
-contains the duration of the timebin in every spectrogram,
-a value it is not necessary to repeat for every row of the dataframe.
-The prep command also copies the configuration file used to generate the dataset
-into the directory, as a form of provenance,
-and finally saves a log file
-that captures any other data about choices made during dataset preparation,
+contains the duration of the timebin in every spectrogram.
+Finally, we note the configuration file used to generate the dataset,
+copied into the dataset as another form of metadata,
+and finally the log file that captures any other data about choices made during dataset preparation,
 e.g., what files were omitted because they contained labels
 that were not specified in the labelset option of the configuration file.
 
-**Dataset csv file format.** Very briefly we note the format of the csv file that represents a dataset.
+**Dataset csv file format.** Next we outlinethe format of the csv file that represents a dataset.
 This csv (and the dataframe loaded from it) has four essential columns:
 ``'audio_path'``, ``'spect_path'``, ``'annot_path'``, and ``'split'``.
 These columns serve as provenance for the prepared dataset.
@@ -564,52 +554,50 @@ There are two generalized dataset classes for frame classification models in vak
 Both these classes can operate on a single dataset prepared
 by the ``vak prep`` command; one class is used for training
 and the other for evaluation.
-Briefly we describe the workflow for preparing this dataset
+We describe the workflow for preparing this dataset
 so that the difference between classes is clearer.
-We assume a supervised learning setting where inputs :math:`x`
-are audio signals or spectrograms, paired with annotations :math:`y`.
 The initial step is to pair data that will be the source of
 inputs :math:`x` to a neural network model with the annotations that will be the
 source of training targets :math:`y` for that model.
 This is done by collecting audio files or array files containing spectrograms from a "data directory",
 and then optionally pairing these files with annotation files.
-If audio files are provided, then vak uses these to generate
-spectrograms that are then saved in array files and paired with any annotations
-in the same way that would be done if a user provided
-pre-computed spectrograms.
+For models that take spectrograms as input,
+vak can use audio files to generate spectrograms that are then saved in array files and paired with any annotations.
+Alternatively a user can provide pre-computed spectrograms.
 This dataset can also be prepared without the targets :math:`y`,
 for the case where a model is used to predict annotations for previously unseen data.
 
 **WindowDataset.**
 This dataset class represents all possible time windows of a fixed width
 from a set of audio recordings or spectrograms.
-This dataset is used for training frame classification models.
-Each call to ``WindowDataset.__getitem__`` returns
+It is used for training frame classification models.
+Each call to ``WindowDataset.__getitem__`` with an ``index`` returns
 one window :math:`x` from an audio signal or a spectrogram loaded into a tensor,
 along with the annotations that will be the target for the model :math:`y`.
 Because this is a frame classification dataset,
 the annotations are converted during dataset preparation to vectors of frame labels,
-and :math:`y` will be the window from the vector of frame labels
-that corresponds to the window :math:`x` from the audio signal or spectrogram.
+and :math:`y` will be the window from this vector
+that corresponds to the window :math:`x`.
 This is achieved by using a set of vectors to represent indices of valid windows from the total dataset,
 as described in detail in the docstring for the class.
 This use of a set of vectors to represent valid windows
 also enables training on a dataset of a specified duration
-without needing to modify the underlying data.
+without modifying the underlying data.
 
 **FramesDataset.** As with the ``WindowDataset``,
 every call to ``FramesDataset.__getitem__`` returns a single sample from the dataset.
 Here though, instead of a window,
 the sample will be the entire audio signal or spectrogram :math:`x`
 and a corresponding vector of frame labels :math:`y`.
-This sample will have additional pre-processing applied to it
-by the default transforms used with this dataset that facilitate evaluation.
+The default transforms used with this dataset
+apply additional pre-processing to the sample that facilitate evaluation.
 Specifically, the frames :math:`x` and the frame labels :math:`y` in a single sample are
 transformed to a batch of consecutive, non-overlapping windows.
 This is done by padding both :math:`x` and :math:`y` so their length
 is an integer multiple :math:`w` of the window size used when training the model,
 and then returning a ``view`` of the sample as a stack of those :math:`w` windows.
-By post-processing this batch of windows we can
+Post-processing the output batch allows us to compute metrics on a per-sample basis,
+to answer questions such as "what is the average segment error rate per bout of vocalizations?".
 
 Parametric UMAP datasets
 ========================
