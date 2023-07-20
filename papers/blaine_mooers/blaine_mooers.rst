@@ -18,115 +18,115 @@
    especially in protein crystallography, where a collaborative community develops extensive
    libraries, user-friendly GUIs, and Python APIs. The APIs allow users to use the libraries in Jupyter.
    To further advance this use of Jupyter, we developed a collection of code fragments that use
-   the vast *Computational Crystallography Toolbox* (cctbx) library for novel analyses. We made versions
+   the vast *Computational Crystallography Toolbox* (*cctbx*) library for novel analyses. We made versions
    of this library for use in JupyterLab and Colab. We also made versions of the snippet library
    for the text editors VS Code, Vim, and Emacs that support editing live code cells in Jupyter
    notebooks via the GhostText web browser extension. Readers of this paper may be inspired to adapt this latter capability
    to their domains of science.
 
-.. class:: keywords
+1. .. class:: keywords
 
-   literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, Colab notebook, OnDemand notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, computational molecular biophysics, biomedical research, data visualization, scientific communication, GhostText, text editors, snippet libraries, SciPy software stack, interactive software development
+      literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, Colab notebook, OnDemand notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, computational molecular biophysics, biomedical research, data visualization, scientific communication, GhostText, text editors, snippet libraries, SciPy software stack, interactive software development
 
-Introduction
---------------
+2. Introduction
+   --------------
 
-Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
-The molecular structure determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and developing new therapies in medicine.
-The recent *resolution revolution* in cryo-electron microscropy (cryo-EM) :cite:`Kuehlbrandt14` and the breakthrough in protein structure prediction with neural networks now provide complementary sources of insights into biomolecular structure :cite:`Jumper21`, :cite:`Mirdita22`, :cite:`Chowdhury2022`. 
-However, the crystallographic approach continues to play a vital role because it still supplies the most precise structures, :cite:`Foerster19`.
+3. Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
+   The molecular structure determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and developing new therapies in medicine.
+   The recent *resolution revolution* in cryo-electron microscropy (cryo-EM) :cite:`Kuehlbrandt14` and the breakthrough in protein structure prediction with neural networks now provide complementary sources of insights into biomolecular structure :cite:`Jumper21`, :cite:`Mirdita22`, :cite:`Chowdhury2022`.
+   However, the crystallographic approach continues to play a vital role because it still supplies the most precise structures, :cite:`Foerster19`.
 
-About half of the crystal structures of protein molecules are refined with the program *Phenix* :cite:`Liebschner19`. 
-This program has a user-friendly GUI that supports standard analyses :cite:`Echols12`.
-Phenix runs on top of *cctbx* :cite:`GrosseKunstleve02`.
-The Computational Crystallography Toolbox (*cctbx*) provides a transparent API, so most users of *Phenix* are barely aware that it relies on *cctbx*.
-However, nonstandard analyses are not avilable in *Phenix* and require accessing the functions in the *cctbx* library (e.g., :cite:`DeZitter22`).
-The backend *cctbx* was written in C++ in the early 2000s for speed and to provide customized data structures for crystallography.
-Likewise, the GUI-driven *Olex2* small molecule refinement program uses *cctbx* for many of its crystallographic computations :cite:`Bourhis15`.
+4. About half of the crystal structures of protein molecules are refined with the program *Phenix* :cite:`Liebschner19`.
+   This program has a user-friendly GUI that supports standard analyses :cite:`Echols12`.
+   Phenix runs on top of *cctbx* :cite:`GrosseKunstleve02`.
+   The Computational Crystallography Toolbox (*cctbx*) provides a transparent API, so most users of *Phenix* are barely aware that it relies on *cctbx*.
+   However, nonstandard analyses are not avilable in *Phenix* and require accessing the functions in the *cctbx* library (e.g., :cite:`DeZitter22`).
+   The backend *cctbx* was written in C++ in the early 2000s for speed and to provide customized data structures for crystallography.
+   Likewise, the GUI-driven *Olex2* small molecule refinement program uses *cctbx* for many of its crystallographic computations :cite:`Bourhis15`.
 
-To ease the use of *cctbx* by general users, the C++ interfaces, classes, and functions of *cctbx* are exposed to Python via the *Boost.Python* Library :cite:`Abrahams03`.
-Recently, dependency management in *cctbx* was reworked by leveraging the Anaconda infrastructure to ease its installation.
-In psite of these conveniences, the widespread adoption of Python by field practitioners over the past decade, and the presence of several on-line tutorials about *cctbx*, many structural biologists still find *cctbx* hard to master and adoption has remained low.
-This difficulty drove several groups to develop software libraries (e.g. *reciprocalspaceship* :cite:`Greisman21`, *GEMMI* :cite:`Wojdyr22`) that reinvent some features of *cctbx* while utilizing the more familiar pandas dataframes in place of *cctbx*'s customized data structures. 
-In contrast to these new competitors, *cctbx* has more extensive coverage of advanced crystallographic data analysis tasks and is more throughly tested as the result running underneath Phenix for almost two decades. 
-*cctbx* remains the utlimate library for building advanced crystallographic data anlayses tools, so the field would benefit if *cctbx* were easier to use.
+5. To ease the use of *cctbx* by general users, the C++ interfaces, classes, and functions of *cctbx* are exposed to Python via the *Boost.Python* Library :cite:`Abrahams03`.
+   Recently, dependency management in *cctbx* was reworked by leveraging the Anaconda infrastructure to ease its installation.
+   In spite of these conveniences, the widespread adoption of Python by field practitioners over the past decade, and the presence of several on-line tutorials about *cctbx*, many structural biologists still find *cctbx* hard to master and adoption has remained low.
+   This difficulty drove several groups to develop software libraries (e.g. *reciprocalspaceship* :cite:`Greisman21`, *GEMMI* :cite:`Wojdyr22`) that reinvent some features of *cctbx* while utilizing the more familiar pandas dataframes in place of *cctbx*'s customized data structures.
+   In contrast to these new competitors, *cctbx* has more extensive coverage of advanced crystallographic data analysis tasks and is more throughly tested as the result running underneath Phenix for almost two decades.
+   *cctbx* remains the utlimate library for building advanced crystallographic data anlayses tools, so the field would benefit if *cctbx* were easier to use.
 
-To foster adoption of cctbx, we present a collection of cctbx code snippets to be used in Jupyter notebooks :cite:`jupyter`.
-Jupyter provides an excellent platform for exploring the *cctbx* library and prototyping new analysis tools.
-The Python API of *cctbx* simplifies running *cctbx* in Jupyter via a kernel specific for its conda environment.
-We formatted the snippet library for several snippet extensions for the Classic Notebook and for Jupyter Lab.
-To overcome the absence of tab triggers in the Jupyter ecosystem to invoke the insertion of snippets, we also made the snippets available for leading text editors.
-The user can use the GhostText browser plugin to edit the contents of a Jupyter cell in a full-powered external editor.
-GhostText enables the user to experience the joy interactive computing in Jupyter while working from the comfort of their favorite text editor.
-These multiple modalities of using *cctbx* in Jupyter that we describe below may inspire workers in other domains to build similar snippet libraries for domain-specific software.
-
-
-Results
----------
-
-We provide a survey of the snippet library that we have customized for several snippet extensions in JupyterLab and Google Cobalt.
-
-jupyterlabcctbxsnips
-++++++++++++++++++++++++
-We developed the *jupyterlabcctbxsnips* library of code templates for the JupyterLab extension *jupyterlab-snippets* (`https://github.com/QuantStack/jupyterlab-snippets`).
-Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab, a browser-based IDE for displaying, editing, and running Jupyter notebooks.
-
-JupyterLab supports more comprehensive workflows for academic work than what is possible in the Classic Jupyter Notebook application.
-For example, it enables the writing or editing of a document in a pane next to the Jupyter notebook.
-This variant is useful for writing documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
-The document can be a plain text, html, markdown, LaTeX, or even an org-mode file if one activates the text area with GhostText while running one of several advanced text editors (see the section below about GhostText).
-The editing of a document next to the related Jupyter notebook supports reproducible research and reduces costly context switching.
-
-We made a variant of the library, *jupyterlabcctbxsnipsplus* (`https://github.com/MooersLab/jupyterlabcctbxsnipsplus`), that has a copy of the code in a block comment (Fig. :ref:`codePlus`).
-In the commented code, suggested sites for editing are indicated by tab stops that are marked with dollar signs.
-
-.. figure:: ./figs/plusCode.png
-   :align: center
-   :scale: 30%
-   :figclass: bht
-
-   A snippet from the *jupyterlabcctbxsnipsplus* library with duplicate code in a comment block. The dollar sign marks the start of a tab stop. The comment block guides the editing of the active code. :label:`codePlus`
+6. To foster adoption of *cctbx*, we present a collection of *cctbx* code snippets to be used in Jupyter notebooks :cite:`jupyter`.
+   Jupyter provides an excellent platform for exploring the *cctbx* library and prototyping new analysis tools.
+   The Python API of *cctbx* simplifies running *cctbx* in Jupyter via a kernel specific for its conda environment.
+   We formatted our snippet library for several snippet extensions for the Classic Notebook and for Jupyter Lab.
+   To overcome the absence of tab triggers in the Jupyter ecosystem to invoke the insertion of snippets, we also made the snippets available for leading text editors.
+   The user can use the GhostText browser plugin to edit the contents of a Jupyter cell in a full-powered external editor.
+   GhostText enables the user to experience the joy interactive computing in Jupyter while working from the comfort of their favorite text editor.
+   These multiple modalities of using *cctbx* in Jupyter that we describe below may inspire workers in other domains to build similar snippet libraries for domain-specific software.
 
 
-The figure below (Fig. :ref:`cctbxplusPulldown`) shows part of the cascading menus for the *jupyerlabcctbxsnipsplus* library after it has been installed successfully.
-The submenus correspond to the names of subfolders in the *cctbx+* folder in the snippets folder, which was manually created inside of the Jupyter folder in the local library folder (i.e., :code:`~/Library/Jupyter/multimenus_snippets/cctbx+` on macOS).
+7. Results
+   ---------
 
-.. figure:: ./figs/cctbxplusPulldown.png
-   :align: center
-   :scale: 38%
-   :figclass: bht
+8. We provide a survey of the snippet library that we have customized for several snippet extensions in JupyterLab and Google Cobalt.
 
-   The cascading menus for the *jupyterlabcctbxsnipsplus* library for the jupyterlab-snippets version 0.4.1 extension in JupyterLab version 3.5.2. :label:`cctbxplusPulldown`
+9. jupyterlabcctbxsnips
+   ++++++++++++++++++++++++
+   We developed the *jupyterlabcctbxsnips* library of code templates for the JupyterLab extension *jupyterlab-snippets* (`https://github.com/QuantStack/jupyterlab-snippets`).
+   Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab, a browser-based IDE for displaying, editing, and running Jupyter notebooks.
 
-Each final menu item is linked to a Python snippet file.
-The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
+10. JupyterLab supports more comprehensive workflows for academic work than what is possible in the Classic Jupyter Notebook application.
+    For example, it enables the writing or editing of a document in a pane next to the Jupyter notebook.
+    This variant is useful for writing documentation, protocols, tutorials, blog posts, and manuscripts next to the notebook that is being described.
+    The document can be a plain text, html, markdown, LaTeX, or even an org-mode file if one activates the text area with GhostText while running one of several advanced text editors (see the section below about GhostText).
+    The editing of a document next to the related Jupyter notebook supports reproducible research and reduces costly context switching.
 
-In contrast, the *mtzOjbectSummary.py* snippet was selected from the *cctbx* submenu and lacks the comment block.
-This code was inserted in the current notebook cell (Fig. :ref:`Fig5mtzSummary`).
-The code in this cell was be executed by entering **Shift-Enter**.
+11. We made a variant of the library, *jupyterlabcctbxsnipsplus* (`https://github.com/MooersLab/jupyterlabcctbxsnipsplus`), that has a copy of the code in a block comment (Fig. :ref:`codePlus`).
+    In the commented code, suggested sites for editing are indicated by tab stops that are marked with dollar signs.
 
-.. figure:: ./figs/Fig5mtzSummary.png
-   :align: center
-   :scale: 40%
-   :figclass: bht
+12. .. figure:: ./figs/plusCode.png
+       :align: center
+       :scale: 30%
+       :figclass: bht
 
-   The code and output from the *mtzObjectSummary.py* snippet in JupyterLab. :label:`Fig5mtzSummary`
+       A snippet from the *jupyterlabcctbxsnipsplus* library with duplicate code in a comment block. The dollar sign marks the start of a tab stop. The comment block guides the editing of the active code. :label:`codePlus`
 
-The *mtzObjectSummary.py* snippet prints a summary of an mtz file.
-A mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`Fig5mtzSummary`).
-The data in this mtz file has columns of I(+) and I(-).
-These are the Bijvoet pairs of diffraction intensities.
-These pairs are related by symmetry and should have equal intensity values within experimental error.
-The differences in intensities are a measure of the presence of anomalous scattering.
-Anomalous scattering can be measured for elements like sulfur and phosphorus that are part of the native protein and nucleic acid structures and heavier elements like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that were incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., 5-bromouracil) during its synthesis.
 
-The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
-Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein.
-We use these data to make the I(+) vs I(-) scatter plot below (Fig. :ref:`ipmpplot`).
-The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
-The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB18`.
+13. The figure below (Fig. :ref:`cctbxplusPulldown`) shows part of the cascading menus for the *jupyerlabcctbxsnipsplus* library after it has been installed successfully.
+    The submenus correspond to the names of subfolders in the *cctbx+* folder in the snippets folder, which was manually created inside of the Jupyter folder in the local library folder (i.e., :code:`~/Library/Jupyter/multimenus_snippets/cctbx+` on macOS).
 
-The I(+) vs I(-) plot below (Fig. :ref:`ipmpplot`) was made after reading the X-ray data into a cctbx Miller array, a data structure designed for handling X-ray data in *cctbx*.
+14. .. figure:: ./figs/cctbxplusPulldown.png
+       :align: center
+       :scale: 38%
+       :figclass: bht
+
+       The cascading menus for the *jupyterlabcctbxsnipsplus* library for the jupyterlab-snippets version 0.4.1 extension in JupyterLab version 3.5.2. :label:`cctbxplusPulldown`
+
+15. Each final menu item is linked to a Python snippet file.
+    The selection of a snippet file by clicking on it with the left-mouse button inserts its content into a new cell below the current cell.
+
+16. In contrast, the *mtzOjbectSummary.py* snippet was selected from the *cctbx* submenu and lacks the comment block.
+    This code was inserted in the current notebook cell (Fig. :ref:`Fig5mtzSummary`).
+    The code in this cell was be executed by entering **Shift-Enter**.
+
+17. .. figure:: ./figs/Fig5mtzSummary.png
+       :align: center
+       :scale: 40%
+       :figclass: bht
+
+       The code and output from the *mtzObjectSummary.py* snippet in JupyterLab. :label:`Fig5mtzSummary`
+
+18. The *mtzObjectSummary.py* snippet prints a summary of an mtz file.
+    A mtz file is a binary file that contains diffraction data in a highly customized data structure (Fig. :ref:`Fig5mtzSummary`).
+    The data in this mtz file has columns of I(+) and I(-).
+    These are the Bijvoet pairs of diffraction intensities.
+    These pairs are related by symmetry and should have equal intensity values within experimental error.
+    The differences in intensities are a measure of the presence of anomalous scattering.
+    Anomalous scattering can be measured for elements like sulfur and phosphorus that are part of the native protein and nucleic acid structures and heavier elements like metals that are naturally occurring as part of metalloproteins or that were purposefully introduced by soaking crystals or that were incorporated covalently into the protein (e.g., selenomethionine) or nucleic acid (e.g., 5-bromouracil) during its synthesis.
+
+19. The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
+    Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein.
+    We use these data to make the I(+) vs I(-) scatter plot below (Fig. :ref:`ipmpplot`).
+    The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
+    The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB18`.
+
+The I(+) vs I(-) plot below (Fig. :ref:`ipmpplot`) was made after reading the X-ray data into a *cctbx* Miller array, a data structure designed for handling X-ray data in *cctbx*.
 The I(+) and I(-) were eventually read into separate lists.
 We plot the two lists against each other in a scatter plot using *matplotlib* :cite:`matplotlib`.
 There is no scatter from the :math:`x=y` line in this plot if there is no anomalous signal.
@@ -152,7 +152,7 @@ The room temperature data were collected from each crystal briefly before radiat
 This is a remarkable achievement because the merging of diffraction data from many crystals in various orientations enhances the experimental error; this error can mask the weak anomalous signal that is being sought.
 
 The plot (Fig. :ref:`ipmpplot`) was adapted from an example in the *reciprocalspaceship* project from the Hekstra Lab :cite:`Greisman21`.
-This new project takes a more Pythonic approach than *cctbx* by utilizing many of the packages in the SciPy stack that did not exist when cctbx was initiated.
+This new project takes a more Pythonic approach than *cctbx* by utilizing many of the packages in the SciPy stack that did not exist when *cctbx* was initiated.
 For example, it uses the *pandas* package to manage diffraction data whereas *cctbx* uses a special C++ data structure for diffraction data that predates *pandas* by almost a decade.
 The utilization of *pandas* enables easier integration with the other components of the SciPy software stack including machine learning packages.
 
@@ -168,14 +168,14 @@ taggedcctbxsnips
 +++++++++++++++++++++
 
 The Elyra-snippets extension for Jupyter Lab supports the use of tagged snippets (`https://elyra.readthedocs.io/en/latest/user_guide/code-snippets.html`).
-Each snippet is in a separate JavaScript file with the *json* file extension :ref:`taggedcctbxsnips`.
+Each snippet is in a separate JavaScript file with the *json* file extension :ref:`taggedcctbxsnipsplain`.
 
 .. figure:: ./figs/taggedcctbxsnips.png
    :align: center
    :scale: 41%
    :figclass: bht
 
-   Snapshot of a list of snippets in JupyterLab supported by the Elyra-snippet extension. The 80 *cctbx* snippets have been narrowed to seven snippets by entering the `mtz` tag. Additional tags can be entered to further narrow the list of candidate snippets. :label:`taggedcctbxsnips`
+   Snapshot of a list of snippets in JupyterLab supported by the Elyra-snippet extension. The 80 *cctbx* snippets have been narrowed to seven snippets by entering the `mtz` tag. Additional tags can be entered to further narrow the list of candidate snippets. :label:`taggedcctbxsnipsplain`
 
 Each snippet file has a set of metadata.
 These data include a list of tags.
