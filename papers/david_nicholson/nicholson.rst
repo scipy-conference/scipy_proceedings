@@ -54,7 +54,7 @@ We seem to be the only species that speaks languages :cite:`hauserFacultyLanguag
 but is speech somehow like other forms of acoustic communication in other animals,
 such as birdsong :cite:`doupeBIRDSONGHUMANSPEECH1999`?
 How should we even understand the ability of some animals to learn their vocalizations
-:cite:`vernesMultidimensionalNatureVocal2021, wirthlinModularApproachVocal2019, martinsVocalLearningContinuum2020`?
+:cite:`wirthlinModularApproachVocal2019`?
 Questions like these are answered by studying how animals communicate with sound :cite:`hopp2012animal`. 
 This research requires cutting edge computational methods and big team science across a wide range of disciplines, 
 including ecology, ethology, bioacoustics, psychology, neuroscience, linguistics, and genomics
@@ -80,13 +80,8 @@ and apply trained models to their own data.
 To address this need, we developed vak :cite:`nicholsonVak2022` (https://github.com/vocalpy/vak),
 a neural network framework designed for researchers studying animal acoustic communication.
 vak is already in use in at least 10-20 research groups to our knowledge,
-and has played a key role in publications that
-benchmark a neural network model for segmenting and annotating birdsong :cite:`cohenAutomatedAnnotationBirdsong2022`;
-develop dimensionality reduction models for animal vocalizations :cite:`goffinetLowdimensionalLearnedFeature2021`
-(where models trained with vak were used to segment song for downstream processing by another model);
-for behavioral experiments studying the basis of vocal learning  :cite:`mcgregorSharedMechanismsAuditory2022`;
-and to study how transfer learning in neural network models trained on bioacoustics data
-is impacted by phylogenetic distance between species :cite:`provostImpactsFinetuningPhylogenetic2022`.
+and has already been used in several publications, including
+:cite:`cohenAutomatedAnnotationBirdsong2022, goffinetLowdimensionalLearnedFeature2021, mcgregorSharedMechanismsAuditory2022, provostImpactsFinetuningPhylogenetic2022`.
 Here we describe the design of the vak framework, and explain how vak makes it easy
 for acoustic communication researchers to work with neural network models.
 We have also recently published an alpha release of version 1.0 of the library,
@@ -789,7 +784,7 @@ the Bengalese finch song repository.
 We use a training set with a duration of 40 seconds total, containing clips of
 all syllable classes from the bird's song, taken from songs that were drawn at random
 from a larger data pool by the vak dataset preparation function.
-Here, to show that training works, we visualize the embedding of the training set itself.
+We then embed a separate test set.
 It can be seen in :ref:`fig:parametric-UMAP` that points that are close to each other
 are almost always the same color, indicating that syllables that were given the same label
 by a human annotator are also nearer to each other after mapping to 2-D space
