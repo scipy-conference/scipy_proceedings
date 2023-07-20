@@ -50,7 +50,7 @@ Introduction
 ------------
 
 Are humans unique among animals?
-We seem to be the only species that speak languages :cite:`hauserFacultyLanguageWhat2002`,
+We seem to be the only species that speaks languages :cite:`hauserFacultyLanguageWhat2002`,
 but is speech somehow like other forms of acoustic communication in other animals,
 such as birdsong :cite:`doupeBIRDSONGHUMANSPEECH1999`?
 How should we even understand the ability of some animals to learn their vocalizations
@@ -195,7 +195,7 @@ Our design is focused on a user who wants to benchmark different models
 within an established task and data processing pipeline as defined by our framework.
 In version 1.0 of vak, we have introduced abstractions that make it easier
 for researchers to work with the built-in models
-and with models they declare in code outside of the library, e.g. in a script or notebook.
+and with models they declare in code outside of the library, e.g., in a script or notebook.
 At a high level, we achieved this by adopting the Lightning library as a backend.
 By sub-classing the core ``lightning.LightningModule`` class,
 we provide users with per-model implementations of methods for training, validation,
@@ -205,18 +205,18 @@ We briefly describe the abstractions we have developed to make it easier to work
 Abstractions for declaring a model in vak
 =========================================
 
-Our goal is to make it so that a scientist-coder should be able to use any of the built-in models,
+Our goal is to make it so that a scientist-coder is able to use any of the built-in models,
 and experiment with their own models, without needing to contribute code to vak
 or to use a developer-focused mechanism like
 `entry points <https://packaging.python.org/en/latest/specifications/entry-points/>`_.
-To achieve this, we provide a decorator ``vak.models.model``,
-This decorator is applied to a *model definition* to produce a sub-class
+To achieve this, we provide a decorator, ``vak.models.model``,
+that is applied to a *model definition* to produce a sub-class
 of a *model family*.
 The ``vak.models.model`` decorator additionally adds any class it decorates to a *registry*.
 In the rest of the section we explain these abstractions and how they make it possible to
 easily test different models.
 
-A model definition takes the form of a dataclass with four required attributes:
+A model definition takes the form of a class with four required class variables:
 ``network``, ``loss``, ``optimizer``, and ``metrics``.
 In other words, our abstraction asserts that the definition of a neural network model
 consists of the neural network function, the loss function used to optimize the network's parameters,
@@ -225,7 +225,7 @@ the optimizer, and the metrics used to assess performance.
 To relate a model as declared with a definition to the machine learning tasks
 that we implement within the vak framework, we introduce the concept of model *families*.
 A model family is represented by a sub-class of the core ``lightning.LightningModule`` class.
-Each class representing a family implements a family-specific methods:
+Each class representing a family implements family-specific methods:
 ``training_step``, ``validation_step``, ``prediction_step``, and ``forward``.
 In this way, model families are defined operationally:
 a model can belong to a family if it accepts the inputs provided by logic
@@ -233,11 +233,12 @@ within the training, validation, and prediction steps,
 and the model also produces the appropriate outputs needed within those same steps.
 
 With these two abstractions in hand,
-we can provide a user access to models within vak as follows:
-the decorator creates a new subclass of the model family.
+we can add models to vak as follows:
+we start by applying the ``model```decorator
+to create a new subclass of a model family.
 This new subclass has the same name as the class that it decorates,
 which is the class representing the model definition.
-The decorator adds a single attribute to this sub-class, the ``definition``,
+The decorator then adds a single attribute to this sub-class, the ``definition``,
 that is used when initializing a new instance of the specific model.
 After creating this sub-class and adding this attribute,
 the ``model`` decorator finally registers the model
@@ -352,7 +353,7 @@ Neural network layers and operations
 
 Like PyTorch, vak provides a module for neural network operations and layers named ``nn``.
 This module contains layers used by more than one network.
-For example, it includes a 2-D convolutional layer with the `'SAME'` padding provided by Tensorflow
+For example, it includes a 2-D convolutional layer with the ``'SAME'`` padding provided by Tensorflow,
 that is used both by the TweetyNet model :cite:`cohenAutomatedAnnotationBirdsong2022`
 and by our implementation of the ED-TCN model :cite:`lea2017temporal`.
 (PyTorch has added this padding from version 1.10 on, but we maintain our original implementation
@@ -383,7 +384,7 @@ Using a scikit-learn-like API,
 this ``StandardizeSpect``
 is fit to a set of spectrograms,
 such as the training set.
-The fit model is saved during training as part of the results
+The fit transform is saved during training as part of the results
 and then loaded automatically by vak for evaluation
 or when generating predictions for new data.
 
@@ -447,40 +448,25 @@ for evaluation metrics that are specific to acoustic communication models.
 The main metric we have found it necessary to implement at this time
 is the (Levenshtein) string edit distance, and its normalized form,
 known in speech recognition as the word error rate.
-Our results have shown that this metric is crucial
-when evaluating frame classification models.
+Our results have shown that edit distances such as this are crucial
+for evaluating frame classification models.
 We provide a well-tested implementation
-that fixes some errors in example implementations
-and that is tailored to use with neural network models.
-In version 1.0 we have additionally adopted as a dependency the
+tailored for use with neural network models.
+In version 1.0 of vak,
+we have additionally adopted as a dependency the
 ``torchmetrics`` library,
-that makes it easier to compute metrics
-for ``FrameClassification`` models.
+that makes it easier to compute a wide array of metrics for models.
 
 .. _datasets:
 
 Datasets
 ========
 
-In this section we describe the current workflow that vak provides for
-preparing datasets for use with neural networks.
-The workflow we now provide assumes a supervised learning setting where inputs :math:`x`
-consisting of spectrograms are paired with annotations :math:`y`, and it consists of several steps.
-Essentially a user sets options in the configuration file to control each of these steps.
-
-The initial step is to pair data that will be the source of
-inputs :math:`x` to a neural network model with the annotations that will be the
-source of training targets :math:`y` for that model.
-This is done by collecting audio files or array files containing spectrograms from a "data directory",
-and then optionally pairing
-these files with annotation files.
-If audio files are provided, then vak uses these to generate
-spectrograms that are then saved in array files and paired with any annotations
-in the same way that would be done if a user provided
-pre-computed spectrograms.
-For the predict command, no annotation files are needed,
-and this command assumes the goal is to generate annotations
-for previously unseen data.
+Lastly, vak provides a ``dataset`` module,
+again similar in spirit to the module of the same name in torchvision.
+Each family of models has its own dataset class or classes.
+We introduce these below,
+but first we describe our standardized dataset format.
 
 **Dataset directory format.** In version 1.0 of vak we have adopted a standard for datasets
 that includes a directory structure and associated metadata.
@@ -492,12 +478,11 @@ such as validating the timebin size
 in spectrograms or generating multiple random subsets
 from a training set for learning curves.
 An additional goal of declaring canonical dataset formats,
-and normalizing user data so that is in in the canonical format,
-is so that we can in the future add the functionality of
-downloading benchmark datasets
-which are prepared by vak itself.
+and normalizing user data to that canonical format,
+is to put in place the foundation for
+downloading benchmark datasets prepared by vak itself.
 A listing that demonstrates the directory structure
-and some key contents is shown in the following listing.
+and some key contents is shown below.
 
 .. code-block:: bash
 
@@ -535,7 +520,8 @@ representing the entire dataset so that they are written relative
 to the root of the directory. This makes the dataset portable.
 In addition to these split sub-directories containing the data itself,
 we notice a handful of other files.
-These include a csv file containing the dataset files and the splits they belong to, whose format we describe next.
+These include a csv file containing the dataset files and the splits they belong to,
+whose format we describe next.
 Other files also include a metadata.json
 which captures important parameters that do not fit well
 in the tabular data format of the csv file.
@@ -546,54 +532,95 @@ The prep command also copies the configuration file used to generate the dataset
 into the directory, as a form of provenance,
 and finally saves a log file
 that captures any other data about choices made during dataset preparation,
-e.g., what files were ommitted because they contained labels
+e.g., what files were omitted because they contained labels
 that were not specified in the labelset option of the configuration file.
 
-**Dataset csv file format.** Very briefly we note the format of the csv file that represents the dataset.
+**Dataset csv file format.** Very briefly we note the format of the csv file that represents a dataset.
 This csv (and the dataframe loaded from it) has four essential columns:
 ``'audio_path'``, ``'spect_path'``, ``'annot_path'``, and ``'split'``.
-Because the primary workflow in vak consists of pairing spectrograms with annotations,
-the ``'audio_path'`` does not refer to a file in the dataset directory,
-but instead allows for tracing provenance back to the source files used to generate the spectograms in the dataset.
-If a user provides pre-computed spectrograms, this column is left empty.
-The ``'spect_path'`` contains the relative paths to array files containing spectrograms
-within the split subdirectories created when running vak prep; this is the column used
-when working with models to load the inputs to networks.
-Finally the ``'annot_path'`` column points to annotation files,
-which again as just stated may reside in the split sub-directories with the files that each annotates,
+These columns serve as provenance for the prepared dataset.
+Each row represents one sample in the dataset,
+where the meaning of sample may vary depending on the model family.
+For example, a sample for a frame classification model is typically an entire bout of vocalizations,
+whereas a sample for a Parametric UMAP model is typically a single unit from the bout.
+The csv format allows for tracing the provenance of each sample
+back to the source files used to generate the dataset.
+Each row must minimally contain either an ``audio_path`` or a ``spectrogram_path``;
+if a user provides pre-computed spectrograms, the ``audio_path`` column is left empty.
+For models that use these files directly,
+the files will be copied into a sub-directory for each split,
+and the paths are written relative to the dataset root.
+The ``'annot_path'`` column points to annotation files.
+These again may be in the split sub-directories with the file that each annotates,
 or in the case of a single file will be in the root of the dataset directory,
 meaning that this single path will be repeated for every row in the csv.
 Logic in vak uses this fact to determine whether annotations can be loaded from a single file
 or must be loaded separately for each file when working with models.
 
-Types of datasets
-=================
+Frame classification datasets
+==============================
 
-**VocalDataset.** This dataset can be thought of the "base" dataset in vak.
-It assumes that the dataset consists of spectrograms of
-vocalizations or other animal sounds and, optionally, annotations
-for those vocalizations.
-This class contains logic for loading the dataframe
-representing a dataset from the csv file saved by the prep command.
-Additionally, the class can load annotations
-using the crowsetta library.
-The class returns audio or spectrograms,
-and when the dataset includes annotations,
-the returned item includes labels for each
-time bin in the window, derived from those annotations,
-using the transforms described in the section on transformations.
+There are two generalized dataset classes for frame classification models in vak.
+Both these classes can operate on a single dataset prepared
+by the ``vak prep`` command; one class is used for training
+and the other for evaluation.
+Briefly we describe the workflow for preparing this dataset
+so that the difference between classes is clearer.
+We assume a supervised learning setting where inputs :math:`x`
+are audio signals or spectrograms, paired with annotations :math:`y`.
+The initial step is to pair data that will be the source of
+inputs :math:`x` to a neural network model with the annotations that will be the
+source of training targets :math:`y` for that model.
+This is done by collecting audio files or array files containing spectrograms from a "data directory",
+and then optionally pairing these files with annotation files.
+If audio files are provided, then vak uses these to generate
+spectrograms that are then saved in array files and paired with any annotations
+in the same way that would be done if a user provided
+pre-computed spectrograms.
+This dataset can also be prepared without the targets :math:`y`,
+for the case where a model is used to predict annotations for previously unseen data.
 
-**WindowDataset.** This dataset class represents all possible time windows of a fixed width
+**WindowDataset.**
+This dataset class represents all possible time windows of a fixed width
 from a set of audio recordings or spectrograms.
-As with the ``VocalDataset`` class, the underlying dataset consists of audio files or spectrogram files of vocalizations,
-and an optional set of annotations for those vocalizations.
-Distinct from ``VocalDataset``,
-this class returns windows from the audio or spectrograms,
-and when the dataset includes annotations,
-the returned labeled timebins are also windowed.
-The ``WindowDataset`` also enables training on a dataset of a specified duration,
-without needing to modify the underlying data,
-by virtue of using a set of vectors to represent indices of valid windows from the total dataset.
+This dataset is used for training frame classification models.
+Each call to ``WindowDataset.__getitem__`` returns
+one window :math:`x` from an audio signal or a spectrogram loaded into a tensor,
+along with the annotations that will be the target for the model :math:`y`.
+Because this is a frame classification dataset,
+the annotations are converted during dataset preparation to vectors of frame labels,
+and :math:`y` will be the window from the vector of frame labels
+that corresponds to the window :math:`x` from the audio signal or spectrogram.
+This is achieved by using a set of vectors to represent indices of valid windows from the total dataset,
+as described in detail in the docstring for the class.
+This use of a set of vectors to represent valid windows
+also enables training on a dataset of a specified duration
+without needing to modify the underlying data.
+
+**FramesDataset.** As with the ``WindowDataset``,
+every call to ``FramesDataset.__getitem__`` returns a single sample from the dataset.
+Here though, instead of a window,
+the sample will be the entire audio signal or spectrogram :math:`x`
+and a corresponding vector of frame labels :math:`y`.
+This sample will have additional pre-processing applied to it
+by the default transforms used with this dataset that facilitate evaluation.
+Specifically, the frames :math:`x` and the frame labels :math:`y` in a single sample are
+transformed to a batch of consecutive, non-overlapping windows.
+This is done by padding both :math:`x` and :math:`y` so their length
+is an integer multiple :math:`w` of the window size used when training the model,
+and then returning a ``view`` of the sample as a stack of those :math:`w` windows.
+By post-processing this batch of windows we can
+
+Parametric UMAP datasets
+========================
+
+For the parametric UMAP model,
+we provide a single dataset class, ``ParametricUMAPDataset``.
+The underlying dataset consists of single units
+extracted from audio with a segmenting algorithm.
+The parameters of the dataset class
+configure the first step in the UMAP algorithm,
+that of building a graph on the dataset before embedding.
 
 .. _cli-config:
 
