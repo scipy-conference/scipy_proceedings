@@ -26,7 +26,7 @@ Finally, we will discuss our experience using Numba for this application.
 
 \subsection{MCViNE Overview}
 
-MCViNE simulations are run from a script that defines an instrument, where an instrument is composed of multiple components. A simple 4 component instrument is shown in Figure \ref{fig:instrument}. Full instruments may have several hundred components. Each instrument script is run with a specified number of probability packets, where each packet has several state variables: position, velocity, spin, probability, and time.
+MCViNE simulations are run from a script that defines an instrument, where an instrument is composed of multiple components. A simple 4 component instrument is shown in Figure~\ref{fig:instrument}. Full instruments may have several hundred components. Each instrument script is run with a specified number of probability packets, where each packet has several state variables: position, velocity, spin, probability, and time.
 
 At a high-level, a component takes a neutron as input and performs some action on the neutron. Components can be attached to the instrument at a specified position and orientation. Some of the main component types are sources, guides, monitors, samples, and detectors. In a full instrument simulation, neutrons are generated from a source component and are propagated through each component in the instrument. Sample components are a special type of component with additional input files to specify geometry and material composition.
 
@@ -80,7 +80,7 @@ Such an Al sphere is an idealized sample, where the sphere matches the scatterin
 Simple shapes can be created easily, but more complex shapes can be created too.
 To create the sample geometry, MCViNE uses Constructive Solid Geometry (CSG). 
 CSG can create complex geometries from operations such as intersection and union, on primitive shapes, such as cubes, spheres, and cylinders. 
-For example, Figure \ref{fig:csg} shows how CSG is used to create an annular sample can from cylindrical primitives. This can is similar to those used in experiment design \cite{PhysRevB.107.094511}.
+For example, Figure~\ref{fig:csg} shows how CSG is used to create an annular sample can from cylindrical primitives. This can is similar to those used in experiment design \cite{PhysRevB.107.094511}.
 First a ring for the outside of the can is made from two cylinders by subtraction, then a ring for the inside of the can is also made from two cylinders.  These two rings are then combined in union with another cylinder that is the bottom of the can. 
 
 \begin{figure}[h]
@@ -104,8 +104,8 @@ Note the format is extensible enough to allow a composite scatterer with multipl
 
 \section{Results}
 
-Two types of comparisons were performed to show the usefulness of \texttt{mcvine.acc}. First, simulations comparing the CPU and GPU shows a significant performance gain by using a GPU (Figures \ref{fig:results_isotropic_sphere} - \ref{fig:results_ms}).
-Second, simulations from a more complete instrument solution showing equivalent outcomes from a CPU and GPU simulation were performed  (Figures \ref{fig:UN_plot} - \ref{fig:UN_cuts}). 
+Two types of comparisons were performed to show the usefulness of \texttt{mcvine.acc}. First, simulations comparing the CPU and GPU shows a significant performance gain by using a GPU (Figures~\hbox{\ref{fig:results_isotropic_sphere} -- \ref{fig:results_ms}}).
+Second, simulations from a more complete instrument solution showing equivalent outcomes from a CPU and GPU simulation were performed (Figure~\ref{fig:UN_plot} and~\ref{fig:UN_cuts}). 
 
 \begin{figure}[h]
     \centering
@@ -123,10 +123,10 @@ The UN structure is the same as  rock salt structure with the light N atoms loca
 The N vibrates as a harmonic oscillator which provides equally spaced lines in energy transfer $E$.
 The lines are modeled in MCViNE with a sample scattering kernel containing a composite of $E(Q)$ kernels with constant $E$ values of a 50 meV spacing from 0 to 350 meV.
 
-Figure \ref{fig:results_isotropic_sphere} shows the performance of the isotropic sphere sample for the CPU version of MCViNE with one and 16 cores (blue and green curves) compared to the GPU version of MCViNE (orange curve). At $10^{12}$ neutrons, \texttt{mcvine.acc} achieves a speedup of 1725x over a single core and 133x over 16 cores.
+Figure~\ref{fig:results_isotropic_sphere} shows the performance of the isotropic sphere sample for the CPU version of MCViNE with one and 16 cores (blue and green curves) compared to the GPU version of MCViNE (orange curve). At $10^{12}$ neutrons, \texttt{mcvine.acc} achieves a speedup of 1725x over a single core and 133x over 16 cores.
 
 
-Two versions of this simulation were run for the UN sample: the first with only single scattering events (Figure \ref{fig:results_ss}), and the second with single and multiple scattering events (Figure \ref{fig:results_ms}).
+Two versions of this simulation were run for the UN sample: the first with only single scattering events (Figure~\ref{fig:results_ss}), and the second with single and multiple scattering events (Figure~\ref{fig:results_ms}).
 Single scattering was implemented first to verify the overall workflow and kernel generation of \texttt{mcvine.acc}. Multiple scattering was then added to fully capture the realistic scattering physics.
 Multiple scattering is much more computationally intensive since each neutron can scatter more than once.
 
@@ -160,7 +160,7 @@ Multiple scattering is much more computationally intensive since each neutron ca
 \end{table}
 
 
-For the UN single scattering case, Figure \ref{fig:results_ss} shows that for $10^{11}$ neutrons, the GPU version obtained a speedup of 383x over a single core, and 33x over 16 cores. For the UN multiple scattering case, Figure \ref{fig:results_ms} shows that for $10^{10}$ neutrons, the GPU version obtained a speedup of 137x over a single core, and 10x over 16 cores. Comparing the speedup achieved for the simple isotropic sphere to the UN with single and multiple scattering shows the additional complexity required for the UN sample. A speedup of 10x over 16-core CPU for the UN multiple scattering case is still significant as some simulations can take on the order of days to months to complete.
+For the UN single scattering case, Figure~\ref{fig:results_ss} shows that for $10^{11}$ neutrons, the GPU version obtained a speedup of 383x over a single core, and 33x over 16 cores. For the UN multiple scattering case, Figure~\ref{fig:results_ms} shows that for $10^{10}$ neutrons, the GPU version obtained a speedup of 137x over a single core, and 10x over 16 cores. Comparing the speedup achieved for the simple isotropic sphere to the UN with single and multiple scattering shows the additional complexity required for the UN sample. A speedup of 10x over 16-core CPU for the UN multiple scattering case is still significant as some simulations can take on the order of days to months to complete.
 
 While the speedup over the CPU version of MCViNE is significant, further optimization is possible. Currently, each GPU thread executes a single large kernel that models the instrument. For large instruments that contain many components, the instrument kernel can use too many registers which limits device occupancy. Additionally, a lot of components involve many conditional statements which do not perform well on the GPU. This can be seen by comparing the performance of complex sample components, such as the UN sample, to the simple isotropic sphere.
 
@@ -179,13 +179,13 @@ In this case, the incident beamline simulation (the simulation up to the sample 
 To configure the incident beam simulation in this workflow a user simply provides an existing experimental data file that provides the necessary parameters.
 Specifically, an ARCS data file with an $E_i = 500$ meV was fed into the workflow which then generates an mcpl \cite{KITTELMANN201717} file \cite{data_doi} for use in MCViNE.
 The rest of the virtual instrument uses \texttt{mcvine.acc} to leverage the GPU acceleration. It consists of a source component that reads the mcpl file to generate neutrons for the neutron source component,  a sample assembly component, and a powder $S(Q, E)$ monitor component for direct-geometry inelastic neutron spectrometers.
-The results are shown in Figure \ref{fig:UN_plot} and \ref{fig:UN_cuts}.
+The results are shown in Figure~\ref{fig:UN_plot} and~\ref{fig:UN_cuts}.
 
-First, note the equally spaced lines in $E$ shown in Figure \ref{fig:UN_plot}. This the expected quantum oscillator behavior.
-Furthermore, Figure \ref{fig:UN_cuts} shows the $Q$ dependence of the scattering intensity along each of the $E$ lines in Figure \ref{fig:UN_plot}.
+First, note the equally spaced lines in $E$ shown in Figure~\ref{fig:UN_plot}. This the expected quantum oscillator behavior.
+Furthermore, Figure~\ref{fig:UN_cuts} shows the $Q$ dependence of the scattering intensity along each of the $E$ lines in Figure~\ref{fig:UN_plot}.
 The expected functional dependence for each successive transition and the overall increase in background expected from multiple scattering are both observed.
 
-As this paper focuses on the GPU implementation, Figure \ref{fig:UN_plot} and \ref{fig:UN_cuts} also show the agreement between the CPU and GPU versions of MCViNE.
+As this paper focuses on the GPU implementation, Figure~\ref{fig:UN_plot} and~\ref{fig:UN_cuts} also show the agreement between the CPU and GPU versions of MCViNE.
 The majority of the speed increase for this particular simulation is in the incident beam line simulation leveraging the McStas GPU implementation, and is now under an hour rather than days.  
 The MCViNE part of the simulation has a speed up similar to the simpler test from $\sim 10^3$s to $\sim 10^2$s.
 For a virtual neutron experiment the incident beam simulation can often be reused in a series of source-sample-detector simulations with various sample and detector configurations.
@@ -198,7 +198,7 @@ For example, a researcher may run the case with and without multiple scattering 
 \includegraphics[width=\columnwidth]{figures/Constant_E_cuts_high_contrast.pdf}
 \caption{Constant-$E$ cuts around the individual energy levels 
 in the $I(Q, E)$ displayed in
-Figure \ref{fig:UN_plot}. Note the functional dependence of each level and the background increase are consistent with the physics and the multiple scattering. The comparisons between the CPU and GPU calculations are shown with the solid line and circles respectively.
+Figure~\ref{fig:UN_plot}. Note the functional dependence of each level and the background increase are consistent with the physics and the multiple scattering. The comparisons between the CPU and GPU calculations are shown with the solid line and circles respectively.
 }
 \label{fig:UN_cuts}
 \end{figure}
