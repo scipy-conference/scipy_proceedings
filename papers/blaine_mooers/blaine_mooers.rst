@@ -1,6 +1,6 @@
 :author: Blaine H. M. Mooers
 :email: blaine-mooers@ouhsc.edu
-:institution: Dept of Biochemistry and Molecular Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
+:institution: Department of Biochemistry and Molecular Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
 :institution: Stephenson Cancer Center, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
 :institution: Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
 :institution: Biomolecular Structure Core, Oklahoma COBRE in Structural Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
@@ -33,7 +33,7 @@ Introduction
 
 Biomolecular crystallography involves the determination of the molecular structure of proteins and nucleic acids and their complexes by using X-rays, neutrons, or electrons.
 The molecular structure determines the protein's biological function, so the experimentally determined structures provide valuable insights vital for understanding biology and developing new therapies in medicine.
-The recent *resolution revolution* in cryo-electron microscropy (cryo-EM) :cite:`Kuehlbrandt14` and the breakthrough in protein structure prediction with neural networks now provide complementary sources of insights into biomolecular structure :cite:`Jumper21`, :cite:`Mirdita22`, :cite:`Chowdhury2022`.
+The recent *resolution revolution* in cryo-electron microscopy (cryo-EM) :cite:`Kuehlbrandt14` and the breakthrough in protein structure prediction with neural networks now provide complementary sources of insights into biomolecular structure :cite:`Jumper21`, :cite:`Mirdita22`, :cite:`Chowdhury2022`.
 However, the crystallographic approach continues to play a vital role because it still supplies the most precise structures, :cite:`Foerster19`.
 
 About half of the crystal structures of protein molecules are refined with the program *Phenix* :cite:`Liebschner19`.
@@ -47,9 +47,9 @@ Likewise, the GUI-driven *Olex2* small molecule refinement program uses *cctbx* 
 To ease the use of *cctbx* by general users, the C++ interfaces, classes, and functions of *cctbx* are exposed to Python via the *Boost.Python* Library :cite:`Abrahams03`.
 Recently, dependency management in *cctbx* was reworked by leveraging the Anaconda infrastructure to ease its installation.
 In spite of these conveniences, the widespread adoption of Python by field practitioners over the past decade, and the presence of several on-line tutorials about *cctbx*, many structural biologists still find *cctbx* hard to master and adoption has remained low.
-This difficulty drove several groups to develop software libraries (e.g. *reciprocalspaceship* :cite:`Greisman21`, *GEMMI* :cite:`Wojdyr22`) that reinvent some features of *cctbx* while utilizing the more familiar pandas dataframes in place of *cctbx*'s customized data structures.
-In contrast to these new competitors, *cctbx* has more extensive coverage of advanced crystallographic data analysis tasks and is more throughly tested as the result running underneath Phenix for almost two decades.
-*cctbx* remains the utlimate library for building advanced crystallographic data anlayses tools, so the field would benefit if *cctbx* were easier to use.
+This difficulty drove several groups to develop software libraries (e.g. *reciprocalspaceship* :cite:`Greisman21`, *GEMMI* :cite:`Wojdyr22`) that reinvent some features of *cctbx* while utilizing the more familiar pandas DataFrames in place of *cctbx*'s customized data structures.
+In contrast to these new competitors, *cctbx* has more extensive coverage of advanced crystallographic data analysis tasks and is more thoroughly tested as the result running underneath Phenix for almost two decades.
+*cctbx* remains the ultimate library for building advanced crystallographic data analyses tools, so the field would benefit if *cctbx* were easier to use.
 
 To foster adoption of *cctbx*, we present a collection of *cctbx* code snippets to be used in Jupyter notebooks :cite:`jupyter`.
 Jupyter provides an excellent platform for exploring the *cctbx* library and prototyping new analysis tools.
@@ -122,7 +122,7 @@ Anomalous scattering can be measured for elements like sulfur and phosphorus tha
 The anomalous differences can be used to determine the positions of the anomalous scattering atoms.
 Once the positions of the anomalous scatterers are known, it is possible to work out the positions of the lighter atoms in the protein.
 We use these data to make the I(+) vs I(-) scatter plot below (Fig. :ref:`ipmpplot`).
-The mtz file contains data for SirA-like protein (DSY4693) from Desultobacterium hafniense, Northeast Structural Genomics Consortium Target DhR2A.
+The mtz file contains data for SirA-like protein (DSY4693) from *Desultobacterium hafniense*, Northeast Structural Genomics Consortium Target DhR2A.
 The diffraction data were retrieved from the Protein Data Bank, a very early open science project that recently celebrated its 50th anniversary :cite:`wwPDB18`.
 
 The I(+) vs I(-) plot was made after reading the X-ray data into a *cctbx* Miller array, a data structure designed for handling X-ray data in *cctbx*.
@@ -142,8 +142,8 @@ The departure from this line is expected to be greater for intensities of large 
 Plots of this nature are useful for detecting very weak anomalous signals from native anomalous scatters like sulfur and phosphorous.
 The collection of the anomalous signal from native scatters enables structure determination without having to spend the extra time and money to introduce heavier atoms that are not native to the protein.
 The measurement of the very weak signal from native anomalous scatterers is still at the edge of what is technically possible.
-It has rarely been achieved with in-house intruments.
-Success generally requires the faster multi-million dectectors at beamlines, tunable wavelengths of synchrotron raditation avialble at one of 30+ laboratories around the world, and cryogenic temperatures (-173 C) maintained by a cryo-stream of nitrogen gas that slows radiation damage long enough to collect complete datasets.
+It has rarely been achieved with in-house instruments.
+Success generally requires the faster multi-million detectors at beamlines, tunable wavelengths of synchrotron radiation available at one of 30+ laboratories around the world, and cryogenic temperatures (-173 C) maintained by a cryostream of nitrogen gas that slows radiation damage long enough to collect complete datasets.
 
 However, recently, several groups have completed successful native phasing experiments at room temperature by collecting data from large numbers of crystals and merging the data :cite:`Yabukarski22`, :cite:`Greisman22`.
 The advantages of room temperature data collection include avoidance of conformational changes in the protein induced by supercooling the crystal.
@@ -159,11 +159,11 @@ The *cctbx* is most easily installed into its own environment by using Anaconda 
 
 The atomic coordinates of the biomolecular structures are the other major type of data that are intimately associated with diffraction data.
 The fixed file format of Protein Data Bank coordinate files with the file extension of *pdb* originated in the 1970s with the birth of the Protein Data Bank, but very large biological macromolecules have been determined over the past two decades that exceeded the limits on the number of atoms permitted in one file.
-To address this and other shortcomings of the PDB file format, the PDBx/mmCIF (Protein Data Bank Exchange macromolecular Crystallogrpahic Information Framework) file format recently became the new data standard :cite:`Westbrook22`.
+To address this and other shortcomings of the PDB file format, the PDBx/mmCIF (Protein Data Bank Exchange macromolecular Crystallographic Information Framework) file format recently became the new data standard :cite:`Westbrook22`.
 The *cctbx* has been adapted to read mmCIF files.
 
 
-taggedcctbxsnips
+*taggedcctbxsnips*
 +++++++++++++++++++++
 
 The Elyra-snippets extension for Jupyter Lab supports the use of tagged snippets (`https://elyra.readthedocs.io/en/latest/user_guide/code-snippets.html`).
@@ -391,7 +391,7 @@ Snippets in the age of AI-assisted autocompletion
 
 Snippet libraries of domain specific software may not be as redundant as they first appear in the age of chatbots.
 The code fragments of domain-specific libraries have a limited presence on GitHub, so they may be underrepresented in large language models.
-In addition, chatbots are desinged to return text rather than code.
+In addition, chatbots are designed to return text rather than code.
 However, *copilot* and *tabnine* were designed for code completion and are good at autosuggesting code fragments.
 Via GhostText, it is possible to run *copilot* or *tabnine* in a text editor while editing Jupyter notebook cells.
 
@@ -400,7 +400,7 @@ Conclusions
 -----------
 Our explorations suggest that code snippets for domain-specific software libraries have several roles to play in supporting the use of such libraries.
 First, the snippets illustrate possible uses of the library, thereby, playing educational and inspirational roles.
-Second, the snippets can speed up the assembly of scripts while reducing the time spent on debugging, thereby, playing a produtivity enhancement role.
+Second, the snippets can speed up the assembly of scripts while reducing the time spent on debugging, thereby, playing a productivity enhancement role.
 We hope that the *cctbxnsips* library will inspire the creation of similar libraries in other domains.
 
 
