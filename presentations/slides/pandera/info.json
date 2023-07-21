@@ -1,0 +1,11 @@
+{
+    "title": "Pandera: Going Beyond Pandas DataFrame Validation",
+    "authors": [
+        {
+            "name": "Niels Bantilan",
+            "affiliation": "Union.ai",
+            "orcid": "0000-0003-1713-5772"
+        }
+    ],
+    "description": "This talk is about how Pandera has evolved to provide a standard schema interface for easily extending and supporting validation backends for arbitrary statistical data containers. Attendees will learn not only about data testing principles such as run-time validation and property-based testing, they will also learn about the challenges of maintaining and evolving an open source project that many people rely on as a critical piece of their data infrastructure. The high-level goal for this talk is to highlight lessons learned from Pandera’s particular journey from supporting only Pandas as a backend to supporting a whole suite of data objects."
+}
