@@ -1,0 +1,12 @@
+{
+    "title": "Open Force Field: next-generation force fields with open data, open software, and open science
+",
+    "authors": [
+        {
+            "name": "Jeffrey Wagner",
+            "affiliation": "Open Force Field.",
+            "orcid": "0000-0001-6448-0873"
+        }
+    ],
+    "description": "The Open Force Field (OpenFF) initiative was formed to produce open and extensible infrastructure to build a new generation of MD force fields. We have now developed many software packages for constructing, applying, and benchmarking force fields. We have also generated several high-quality quantum chemistry datasets. Everything is available freely on GitHub, Zenodo, and the MolSSI QCArchive server. This work has been successfully used to investigate potential improvements to force fields, as well as simplify many previously difficult aspects of preparing MD systems."
+}
