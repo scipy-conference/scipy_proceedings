@@ -1,0 +1,16 @@
+{
+    "title": "Accelerating the Use of Public Geohysical Data for Recharging California's Groundwater",
+    "authors": [
+        {
+            "name": "Seogi Kang",
+            "affiliation": "Geophysics Department, Stanford University",
+            "orcid": "0000-0002-9963-936X"
+        },
+        {
+            "name": "Steve Purves",
+            "affiliation": "Curvenote",
+            "orcid": "0000-0002-0760-5497"
+        }        
+    ],
+    "description": "California's Central Valley is one of the world's most productive farmland, but the region faces a serious threat to groundwater sustainability due to population growth and climate change. Recharging ground aquifers is essential to address this challenge, however a major data gap exists in the subsurface. Geophysical data can provide crucial information about the subsurface, but neither the data nor the analytic tools required to derive subsurface information is readily accessible to those working on the recharge problem. In this talk, we will present our development of a web-application and companion public database for accelerating groundwater recharge in California, which is a part of the Sustainability Accelerator Project funded by Stanford Doerr School of Sustainability. Our application uses electrical resistivity data obtained from electromagnetic geophysical surveys, as well as ancillary data from driller's logs (containing information about sediment/rock) and water level/quality measurements, to create 2D maps of recharge metrics. These maps guide the location of recharge sites, and the public resistivity and ancillary data are compiled into an online database using Redivis and displayed in a custom web-application. The application provides project partners the ability to utilize research codes without requiring knowledge of Python, and is flexible to allow updates by researchers to support rapid changes and feedback from partners to meet their specific needs for a recharge site location. The development of the web-application was a collaborative effort between academic researchers and software engineers at Curvenote. The application enables direct use of research code by front-facing practitioners tackling the recharge problem in California. We utilized open source Python packages, to create Jupyter Notebooks that can execute each stage of the workflow. Rather than exposing users to notebooks directly, the web application interactively executes portions of the notebooks and displays cell output and widgets to the user in a custom web interface driven by a headless Jupyter implementation. Execution is performed on a secure JupyterHub with Jupyter instances launched per user session. Researchers can easily update research code without requiring changes to the web application. This has allowed users to create a very custom experience tailored for this specific workflow that includes GIS viewers, profile and export management features around the core notebook powered workflow. We will also discuss the lessons we learned through this collaboration and present the reusable Jupyter tools we have contributed."
+}
