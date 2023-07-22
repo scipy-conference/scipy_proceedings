@@ -1,10 +1,9 @@
 ---
 abstract:
-   - As the scale of scientific data analysis continues to grow, traditional domain-specific tools often struggle to manage the increasing size and complexity. These tools also face sustainability challenges due to a relatively narrow user base, a limited pool of contributors, and constrained funding sources. We introduce the Scalable Open-Source Analysis (SOSA) stack as a solution, emphasizing the use of domain-independent tools at critical stages of the data life cycle, without compromising the depth of domain-specific analyses. This set of interoperable and compositional tools, including Dask, Xarray, Numba, hvPlot, and Jupyter, provides a versatile and sustainable model for data analysis and scientific computation. Collectively, the SOSA stack covers the landscape of data access, distributed computation, and interactive visualization across any domain or scale.
+   - As the scale of scientific data analysis continues to grow, traditional domain-specific tools often struggle to manage the increasing size and complexity. These tools also face sustainability challenges due to a relatively narrow user base, a limited pool of contributors, and constrained funding sources. We introduce the Pandata open-source software stack as a solution, emphasizing the use of domain-independent tools at critical stages of the data life cycle, without compromising the depth of domain-specific analyses. This set of interoperable and compositional tools, including Dask, Xarray, Numba, hvPlot, Panel, and Jupyter, provides a versatile and sustainable model for data analysis and scientific computation. Collectively, the Pandata stack covers the landscape of data access, distributed computation, and interactive visualization across any domain or scale. See github.com/panstacks/pandata to get started using this stack or to help contribute to it.
 keywords:
   - distributed computing
   - data visualization
-  - JIT compilation
   - workflows
 authors:
 - email: jbednar@anaconda.com
@@ -16,4 +15,4 @@ authors:
   - Anaconda, Inc.
   name: Martin Durant
 bibliography: mybib
-title: SOSA -- The Scalable Open-Source Analysis Stack
+title: The Pandata Scalable Open-Source Analysis Stack
