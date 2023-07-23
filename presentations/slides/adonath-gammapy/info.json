@@ -1,0 +1,16 @@
+{
+    "title": "Gammapy: a Python package for gamma-ray astronomy",
+    "authors": [
+        {
+            "name": "Axel Donath",
+            "affiliation": "Center for Astrophysics | Harvard & Smithsonian",
+            "orcid": "0000-0003-4568-7005"
+        },
+        {
+            "name": "The Gammapy Developer Team (https://gammapy.org/team.html)",
+            "affiliation": "",
+            "orcid": ""
+        }
+    ],
+    "description": "In this contribution we presented the first stable version v1.0 of Gammapy, an openly developed Python package for gamma-ray astronomy. Gammapy provides methods for the analysis of astronomical gamma-ray data, such as measurement of spectra, images and light curves. By relying on standardized data formats and a joint likelihood framework, it allows astronomers to combine data from multiple instruments and constrain underlying astrophysical emission processes across large parts of the electromagnetic spectrum. Finally shared lessons learned during the journey towards version v1.0 for an openly developed scientific Python package."
+}
