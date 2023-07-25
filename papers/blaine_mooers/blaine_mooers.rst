@@ -66,7 +66,7 @@ Results
 
 We provide a survey of the snippet library that we have customized for several snippet extensions in JupyterLab and Google Colab.
 
-jupyterlabcctbxsnips
+*jupyterlabcctbxsnips*
 ++++++++++++++++++++++++
 We developed the *jupyterlabcctbxsnips* library of code templates for the JupyterLab extension *jupyterlab-snippets* (`https://github.com/QuantStack/jupyterlab-snippets`).
 Access to the code templates or snippets requires the editing of the Jupyter notebook from inside of JupyterLab, a browser-based IDE for displaying, editing, and running Jupyter notebooks.
@@ -198,7 +198,7 @@ The *Code* can be entered by selecting code in a notebook cell or copying and pa
 
 
 
-colabcctbxsnips
+*colabcctbxsnips*
 +++++++++++++++++++
 
 The Google Colab notebook enables the running of software on Google's servers in a computational notebook that resembles the Jupyter notebook.
@@ -381,7 +381,7 @@ Opportunities for interoperability
 The code template libraries can encourage synergistic interoperability between software packages.
 That is, the development of notebooks that use two or more software packages and even two or more programming languages.
 More general and well-known examples of interoperability include the Cython module in Python that enables the running of C++ code inside Python :cite:`Behnel11`, the *reticulate* library that enables the running of Python code in R :cite:`Ushey23`, and the *PyCall* package in Julia that enables the running of the Python packages in Julia (`https://github.com/JuliaPy/PyCall.jl`).
-The latter package is widely used to run matplotlib in Julia.
+The latter package is widely used to run *matplotlib* in Julia.
 Interoperability already occurs in computational crystallography between *CCP4* :cite:`Agirre23`, *clipper* :cite:`McNicholas18`, *GEMMI* :cite:`Wojdyr22`, *reciprocalspaceship* :cite:`Greisman21`, *Careless* :cite:`Dalton22`, and *cctbx* and to a limited extent between *cctbx* and *PyMOL*.
 The snippet libraries reported here can promote taking advantage of this interoperability in Jupyter and Colab notebooks.
 We hope that our effort will help raise awareness of interoperability issues among the community.
