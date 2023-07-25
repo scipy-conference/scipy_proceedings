@@ -239,14 +239,7 @@ Project Gutenberg [Fed1]_ has the Federalist Papers stored as a book with the in
     return ""
 
   #Break Federalist papers up into individual texts
-  FedChapters = []
-  snippet = text
-  i = snippet.find('FEDERALIST No.')
-  while(i >= 0):
-    FedChapters.append((left(snippet,i)).strip())
-    snippet = right(snippet,len(text5)-(i+14))
-    i = snippet.find('FEDERALIST No.')
-  FedChapters.append(snippet.strip())
+  FedChapters=re.split('\sFEDERALIST No\. \d*\s',' '+text)
 
 
   #Store Hamilton's Federalist papers in a Hamilton 
@@ -280,7 +273,7 @@ Project Gutenberg [Fed1]_ has the Federalist Papers stored as a book with the in
 Introduction to NLTK Tokenizers
 +++++++++++++++++++++++++++++++
 
-NLTK [nltk02]_ makes it easy to make lists of sentences, lists of words, count sentences, count words in sentences etc.  Here's an example of how to first split a text into sentences and then make a Python list of each word in each sentence.
+NLTK [nltk02]_ makes it easy to make lists of sentences, lists of words, count sentences, count words in sentences etc.  Here's an example of how to first split a text into sentences and then make a Python list of each word in each sentence.  (This could be done with split() but we would need multiple sentence delimiters and we would lose the punctuation if we weren't careful.)
 
 .. code-block:: python
 
@@ -784,7 +777,7 @@ if-then statements, yielding the simple model below.
         else:
                 return('madison')
 				
-The simple model above is 100% accurate on the known documents, and predicts Madison as the author of the 12 disputed documents. In general, it is not recommended that we base an attribution on only three words, but it's interesting that these two authors that are rather similar in style, can be differentiated with such a simple model.
+The simple model above is 100% accurate on the known documents, and predicts Madison as the author of the 12 disputed documents. In general, it is not recommended that we base an attribution on only three words because of a potential of overfitting, but it's interesting that these two authors that are rather similar in style, can be differentiated with such a simple model.
 
 
 Conclusions
