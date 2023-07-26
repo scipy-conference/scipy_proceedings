@@ -770,8 +770,8 @@ two models on the exact same dataset.
    Plots are as in :ref:`fig:ablation-experiment`.
    Each axes shows results for one individual bird from the
    Bengalese finch song repository dataset :cite:`nicholson_bengalese_2017`.
-   Bar plots show segment error rate without post-processing clean-up (blue, left bar in grouped plots)
-   and with the clean-up (orange, right bar in grouped plots). :label:`fig:TweetyNet-v-EDTCN`
+   Bar plots show frame error (left column) and syllable error rate (right column),
+   without post-processing clean-up (blue bars) and with (orange bars). :label:`fig:TweetyNet-v-EDTCN`
 
 Applying Parametric UMAP to Bengalese finch syllables with a convolutional encoder
 ==================================================================================
