@@ -804,8 +804,6 @@ how the Scikit-learn [SKlearn]_ library could be used to build and test numerous
 
 .. [Jur23] D. Jurafsky and J. Martin, "Speech and Language Processing (Draft of 3rd edition)," Draft of January 7, 2023.
 
-.. [TD22] J. Grimmer and M.E. Roberts and B.M. Stewart,"Text as Data: A New Framework for Machine Learning and the Social Sciences," Princeton University Press, 2022.
-
 .. [Fed1] Alexander Hamilton and John Jay and James Madison,"The Project Gutenberg eBook of The Federalist Papers", Available at \url{https://www.gutenberg.org/cache/epub/1404/pg1404.txt, Last Accessed May 1, 2023
 
 .. [SKlearn] F. Pedregosa and others.,"Scikit-learn: Machine Learning in Python," Journal of Machine Learning Research},2011, 2825--2830.
