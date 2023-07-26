@@ -460,7 +460,7 @@ Acknowledgments
 
 We gratefully acknowledge the 184 developers and countless community members who have contributed to the MDAnalysis project since its inception and NumFOCUS for its support as our fiscal sponsor.
 
-This work is made possible thanks to a grant from the Chan-Zuckerberg Initiative (grant number 2021-237663), supporting MDAnalysis and the MDAKit project under an EOSS4 award.
+The work on the MDAKits project and this publication have been made possible in part by CZI grant DAF2021-237663 and grant DOI https://doi.org/10.37921/426590wiobus from the Chan Zuckerberg Initiative DAF, an advised fund of Silicon Valley Community Foundation (funder DOI 10.13039/100014989).
 
 Jonathan Barnoud has received financial support from the Agencia Estatal de Investigación (Spain) (REFERENCIA DEL PROYECTO / AEI / CÓDIGO AXUDA), the Xunta de Galicia - Consellería de Cultura, Educación e Universidade (Centro de investigación de Galicia accreditation 2019-2022 ED431G-2019/04 and Reference Competitive Group accreditation 2021-2024, CÓDIGO AXUDA) and the European Union (European Regional Development Fund - ERDF).
 
