@@ -56,11 +56,12 @@ such as birdsong :cite:`doupeBIRDSONGHUMANSPEECH1999`?
 How should we even understand the ability of some animals to learn their vocalizations
 :cite:`wirthlinModularApproachVocal2019`?
 Questions like these are answered by studying how animals communicate with sound :cite:`hopp2012animal`. 
-This research requires cutting edge computational methods and big team science across a wide range of disciplines, 
+As others have argued, major advances in this research will require
+cutting edge computational methods and big team science across a wide range of disciplines,
 including ecology, ethology, bioacoustics, psychology, neuroscience, linguistics, and genomics
 :cite:`sainburgComputationalNeuroethologyVocal2021, stowellComputationalBioacousticsDeep2022, wirthlinModularApproachVocal2019, hauserFacultyLanguageWhat2002`.
 
-As in many other domains, this research is being revolutionized by
+Research on animal acoustic communication is being revolutionized by
 deep learning algorithms :cite:`sainburgComputationalNeuroethologyVocal2021, stowellComputationalBioacousticsDeep2022, cohen2022recent`.
 Deep neural network models enable answering questions that were previously impossible to address,
 in part because these models automate analysis of very large datasets.
