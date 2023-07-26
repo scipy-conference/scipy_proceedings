@@ -1,10 +1,10 @@
 :author: David Nicholson
 :email: nicholdav@gmail.com
-:institution: Independent researcher
+:institution: Independent researcher, Baltimore, Maryland, USA
 
 :author: Yarden Cohen
 :email: yarden.j.cohen@weizmann.ac.il
-:institution: Weizmann Institute of Science
+:institution: Weizmann Institute of Science, Rehovot, Israel
 
 :bibliography: mybib
 
@@ -61,7 +61,7 @@ including ecology, ethology, bioacoustics, psychology, neuroscience, linguistics
 :cite:`sainburgComputationalNeuroethologyVocal2021, stowellComputationalBioacousticsDeep2022, wirthlinModularApproachVocal2019, hauserFacultyLanguageWhat2002`.
 
 As in many other domains, this research is being revolutionized by
-deep learning algorithms :cite:`sainburgComputationalNeuroethologyVocal2021, stowellComputationalBioacousticsDeep2022`.
+deep learning algorithms :cite:`sainburgComputationalNeuroethologyVocal2021, stowellComputationalBioacousticsDeep2022, cohen2022recent`.
 Deep neural network models enable answering questions that were previously impossible to address,
 in part because these models automate analysis of very large datasets.
 Within the study of animal acoustic communication, multiple models have been proposed
@@ -122,7 +122,7 @@ The first family of neural network models reduces this workflow to a
 frame classification problem :cite:`graves_framewise_2005, graves_supervised_2012`.
 That is, these models classify a series of *frames*,
 like the columns in a spectrogram.
-Sequences of units are recovered from this series of frame classifications with post-processing.
+Sequences of units (e.g., syllables of speech or birdsong) are recovered from this series of frame classifications with post-processing.
 Essentially, the post-processing finds the start and stop times of each continuous run of a single label.
 Multiple neural network models have been developed for this frame classification approach,
 including :cite:`cohenAutomatedAnnotationBirdsong2022` and :cite:`steinfathFastAccurateAnnotation`.
@@ -229,7 +229,7 @@ and the model also produces the appropriate outputs needed within those same ste
 
 With these two abstractions in hand,
 we can add models to vak as follows:
-we start by applying the ``model```decorator
+we start by applying the ``model`` decorator
 to create a new subclass of a model family.
 This new subclass has the same name as the class that it decorates,
 which is the class representing the model definition.
@@ -299,16 +299,16 @@ This problem formulation works,
 but an issue arises from the fact that audio signals used by acoustic communication
 researchers very often vary in length.
 E.g., a bout of Bengalese finch birdsong can vary from 1-10 seconds,
-and bouts of canary song can vary roughly from one to several minutes.
+and bouts of canary song can vary roughly from 10 seconds to several minutes.
 In contrast, the vast majority of neural network models assume a "rectangular" tensor as input and output,
 in part because they were originally developed for computer vision applications applied to batches.
 One way to work around this issue is to convert inputs of varying lengths into rectangular batches
 with a combination of windowing and padding.
-E.g., pick a window size $w$, find the minimum number of consecutive non-overlapping strides
+E.g., pick a window size :math:`w`, find the minimum number of consecutive non-overlapping strides
 :math:`s` of that window that will cover an entire input :math:`x` of length :math:`T`,
-:math:`s * w \ge T`, and then pad :math:`x` to a new length :math:`T_{padded} = T + ((s * w) - T`.
+:math:`s * w \ge T`, and then pad :math:`x` to a new length :math:`T_{padded} = s * w`.
 This approach then requires a post-processing step where the outputs are stitched back together
-into a single continuous sequence :math:`x_padded`.
+into a single continuous sequence :math:`x_{padded}`.
 The padding is removed by tracking which time bins are padded,
 e.g., with a separate vector that acts as a "padded" flag for each time bin.
 Of course there are other ways to address the issue of varying lengths,
@@ -335,7 +335,7 @@ and then optimizing an embedding of that graph in a lower dimensional space
 that preserves local relationships between points :cite:`mcinnes2018umap`.
 The parametrized version of UMAP replaces the second step
 with optimization of a neural network architecture :cite:`sainburg2021parametric`.
-Because the parametrized version can be used with a wide range
+Because the parametrized version can be used with a wide variety
 of neural network functions, we declare this as a family.
 We provide an implementation of a single model,
 an encoder with a convolutional front-end
@@ -514,13 +514,14 @@ that captures important parameters that do not fit well
 in the tabular data format of the csv file.
 For example, the metadata file for a frame classification dataset
 contains the duration of the timebin in every spectrogram.
-Finally, we note the configuration file used to generate the dataset,
-copied into the dataset as another form of metadata,
-and finally the log file that captures any other data about choices made during dataset preparation,
+Finally, we note two other files in a dataset as shown above.
+The first is the configuration file used to generate it,
+copied into the dataset as another form of metadata.
+The second is a log file that captures any other data about choices made during dataset preparation,
 e.g., what files were omitted because they contained labels
 that were not specified in the labelset option of the configuration file.
 
-**Dataset csv file format.** Next we outlinethe format of the csv file that represents a dataset.
+**Dataset csv file format.** Next we outline the format of the csv file that represents a dataset.
 This csv (and the dataframe loaded from it) has four essential columns:
 ``'audio_path'``, ``'spect_path'``, ``'annot_path'``, and ``'split'``.
 These columns serve as provenance for the prepared dataset.
@@ -611,7 +612,7 @@ Command-line interface and configuration file
 =============================================
 
 Having described the API, we now walk through vak's CLI.
-An example screenshot of a training run started from the command line is shown in  :ref:`fig:cli`.
+An example screenshot of a training run started from the command line is shown in Figure :ref:`fig:cli`.
 A key design choice is to avoid any sub-commands or even options for the CLI,
 and instead move all such logic to a configuration file.
 Thus, commands through the CLI all take the form of ``vak command configuration-file.toml``,
@@ -694,15 +695,15 @@ If the hidden state contains features that are useful
 for predicting across time steps,
 we would expect that "ablating" (removing) it would impair performance.
 To show that removing the LSTM layer impairs performance,
-we compare with the full TweetyNet model (now built in to vak).
+we compare with the full TweetyNet model (now built into vak).
 For all experiments, we prepared a single dataset
 and then trained both models on that same dataset.
 We specifically ran learning curves as described above,
-but here we consider only the performance at 10 minutes,
+but here we consider only the performance using 10 minutes of data for training,
 because as we previously reported :cite:`cohenAutomatedAnnotationBirdsong2022`
 this was the minimum amount of training data required
 to achieve the lowest error rates.
-As shown in the top row of :ref:`fig:ablation-experiment`,
+As shown in the top row of Figure :ref:`fig:ablation-experiment`,
 ablating the recurrent layer increased the frame error rate
 (left column, right group of bars), and this produced
 an inflated syllable error rate (right column, right group of bars).
@@ -731,7 +732,7 @@ have trained models on datasets prepared from all four birds
 :cite:`steinfathFastAccurateAnnotation2021` (so that the model predicts 37 classes,
 the syllables from all four birds, instead of 5-10 per bird).
 We provide this result for the TweetyNet model with and without LSTM
-in the bottom row of :ref:`fig:ablation-experiment`.
+in the bottom row of Figure :ref:`fig:ablation-experiment`.
 It can be seen that asking the models to predict a greater number of classes
 further magnified the difference between them (as would be expected).
 TweetyNet without the LSTM layer
@@ -755,7 +756,7 @@ on the right.
 Here we only show performance of models trained on data from all four birds
 (the same dataset we prepared for the ablation experiment above).
 We observed that on this dataset the ED-TCN had a higher frame error and syllable error rate,
-as shown in :ref:`fig:TweetyNet-v-EDTCN`.
+as shown in Figure :ref:`fig:TweetyNet-v-EDTCN`.
 However, there was no clear difference when training models on individual birds
 (results not shown because of limited space).
 Our goal here is not to make any strong claim about either model,
@@ -785,7 +786,7 @@ We use a training set with a duration of 40 seconds total, containing clips of
 all syllable classes from the bird's song, taken from songs that were drawn at random
 from a larger data pool by the vak dataset preparation function.
 We then embed a separate test set.
-It can be seen in :ref:`fig:parametric-UMAP` that points that are close to each other
+It can be seen in Figure :ref:`fig:parametric-UMAP` that points that are close to each other
 are almost always the same color, indicating that syllables that were given the same label
 by a human annotator are also nearer to each other after mapping to 2-D space
 with the trained parametric UMAP model.
@@ -805,10 +806,14 @@ with the trained parametric UMAP model.
 Discussion
 -----------
 
-Here we presented vak, a neural network framework for researchers studying acoustic communication in animals.
+Researchers studying acoustic behavior need to benchmark multiple
+neural network models on their data,
+evaluate training performance for different training set sizes,
+and use trained models to make predictions on newly acquired data.
+Here we presented vak, a neural network framework developed to meet these needs.
 In the Methods we described its design and development.
 Then in the Results we provide proof-of-concept results demonstrating
-how researchers can easily use our framework to benchmark and compare neural network models.
+how researchers can easily use our framework.
 
 Finally, we summarize the roadmap for further development of version 1.0 of vak.
 In the spirit of taking an open approach,
