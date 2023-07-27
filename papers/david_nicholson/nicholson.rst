@@ -113,7 +113,7 @@ Figure :ref:`fig:annotation`.
    Adapted from :cite:`cohenAutomatedAnnotationBirdsong2022`
    under `CC BY 4.0 license <https://creativecommons.org/licenses/by/4.0/>`_. :label:`fig:annotation`
 
-Several models have been developed to detect and classify a large dataset of vocalizations from an individual animals.
+Several models have been developed to detect and classify a large dataset of vocalizations from an individual animal.
 These are all essentially supervised machine learning tasks. Some of these models seek to align a neural network task
 with the common workflow just described :cite:`kershenbaumAcousticSequencesNonhuman2016`,
 where audio is segmented into a sequence of units
@@ -292,7 +292,7 @@ we now describe the families we have implemented to date.
 
 **Frame classification.** As stated in the Related Work section,
 one way to formulate the problem of segmenting audio into sequences of units
-so that it can solved by neural networks
+so that it can be solved by neural networks
 is to classify each frame of audio, or a spectrogram produced from that audio,
 and to then recover segments from this series of labeled frames :cite:`graves_framewise_2005, graves_supervised_2012`.
 
