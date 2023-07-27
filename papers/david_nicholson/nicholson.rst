@@ -408,7 +408,7 @@ and then converting the onset and offsets from indices in the timebins vector
 to times in seconds.
 This post-processing transformation can be configured to perform
 additional clean-up steps:
-removing all segments less than a minimum duration,
+removing all segments shorter than a minimum duration,
 and taking a "majority vote" within each series of labels
 that are bordered by a "background" or "unlabeled" class.
 
