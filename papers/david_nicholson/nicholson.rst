@@ -251,6 +251,11 @@ We present a listing that demonstrates usage of the abstractions just described.
        model,
        FrameClassificationModel
    )
+   from vak.metrics import (
+       Accuracy,
+       Levenshtein,
+       SegmentErrorRate,
+   )
    
    @model(family=FrameClassificationModel)
    class TweetyNoLSTMNet:
@@ -259,9 +264,9 @@ We present a listing that demonstrates usage of the abstractions just described.
        loss = torch.nn.CrossEntropyLoss
        optimizer = torch.optim.Adam
        metrics = {
-           'acc': metrics.Accuracy,
-           'levenshtein': metrics.Levenshtein,
-           'segment_error_rate': metrics.SegmentErrorRate,
+           'acc': Accuracy,
+           'levenshtein': Levenshtein,
+           'segment_error_rate': SegmentErrorRate,
            'loss': torch.nn.CrossEntropyLoss}
        default_config = {
            'optimizer':
