@@ -68,7 +68,8 @@ time.
 
 In situ analysis, which is to analyze simulation data on-site, without intermediate step of writing 
 data to hard disk is a promising solution.
-We introduce ``libyt`` [#]_ , an open source C++ library, that allows researchers to analyze and 
+It also reduces the barrier of analyzing data by using well-developed tools instead of creating our own.
+We introduce in situ analysis tool ``libyt`` [#]_ , an open source C++ library, that allows researchers to analyze and 
 visualize data by directly calling ``yt`` or any other Python packages during simulations runtime 
 under parallel computation. 
 Through wrapping ongoing simulation data using NumPy C API :cite:`numpy`, constructing proper Python 
@@ -137,21 +138,22 @@ We can extend the functionality of Python by calling C/C++ functions, and, likew
 we can also embed Python in a C/C++ application to enhance its capability. 
 Python and NumPy provides C API for users to connect objects in a main C/C++ program to Python. 
 
-Currently, ``libyt`` supports only adaptive mesh refinement (AMR) grid data strucutre. [#]_
-How ``libyt`` organizes simulation with AMR grid data strucutre is illustrated in Fig :ref:`passindata`. 
+Currently, ``libyt`` supports only adaptive mesh refinement (AMR) grid data structure. [#]_
+How ``libyt`` organizes simulation with AMR grid data structure is illustrated in Fig :ref:`passindata`. 
 It first gathers and combines local adaptive mesh refinement grid information 
-(e.g., levels, parent id, grid edges, etc) in each process, such that every Python instance contains 
+(e.g., levels, parent id, grid edges, etc) in each process, so that every Python instance contains 
 full information.
-Next, it allocates array using ``PyArray_SimpleNew`` and stores those information in a linear 
+Next, it allocates array using ``PyArray_SimpleNew`` and stores the information in a linear 
 fashion according to global grid id.
-The array can be easily looked up and retrieve information by ``libyt`` at C side using ``PyArray_GETPTR2``. 
-The operation involves only reading elements in an array. It can also be accessed at Python side. 
+The array can be easily looked up, and we can retrieve information by ``libyt`` at C side using ``PyArray_GETPTR2``. 
+The operation only involves reading elements in an array. 
+The array is accessible both in C/C++ and Python runtimes.
 For simulation data, ``libyt`` wraps those data pointers using NumPy C API ``PyArray_SimpleNewFromData``. 
 This tells Python how to interpret block of memory (e.g., shape, type, stride) and does not make a copy. 
-``libyt`` also marks the wrapped data as read-only [#]_ to avoid something accidentally alters it, 
+``libyt`` also marks the wrapped data as read-only [#]_ to avoid Python accidentally alters it, 
 since they are actual data used in simulation's iterative process. 
 
-.. [#] We will support more data structures (e.g., octree, unstrucutred mesh grid, etc) in the future.
+.. [#] We will support more data structures (e.g., octree, unstructured mesh grid, etc) in the future.
 
 .. [#] This can be done by using ``PyArray_CLEARFLAGS`` to clear writable flag ``NPY_ARRAY_WRITEABLE``.
 
@@ -191,7 +193,7 @@ longer needed.
 
 
 Grid information and simulation data are properly organized in dictionaries under ``libyt`` 
-Python module. One can easily call it during simulation runtime:
+Python module. One can import it during simulation runtime:
 
 .. code-block:: python
 
@@ -213,10 +215,10 @@ Even though ``libyt`` can call arbitrary Python modules, we focus on how it uses
 to do analysis under parallel computation here. 
 
 ``yt`` supports parallelism feature [#]_ using ``mpi4py`` [#]_ as communication method. 
-``libyt`` borrows this feature and utilize it directly. 
+``libyt`` borrows this feature and utilizes it directly. 
 The way ``yt`` calculates and distributes jobs to each MPI process is based on data locality, 
 but it does not always guarantee to do so [#]_. 
-In other words, in in situ analysis, the data requested by ``yt`` for each MPI process does not 
+In other words, in in situ analysis, the data requested by ``yt`` in each MPI process does not 
 always locate in the same process.
 
 .. [#] See `Parallel Computation With yt <https://yt-project.org/doc/analyzing/parallel_computation.html>`_ for more 
@@ -231,13 +233,13 @@ always locate in the same process.
 .. 
    RMA
 
-Furthermore, there is no way for ``libyt`` to know what kind of communication pattern a Python script needs 
-for a much more general case, it is difficult to schedule point-to-point communications that fit 
+Furthermore, there is no way for ``libyt`` to know what kind of communication pattern a Python script needs in advance.
+For a much more general case, it is difficult to schedule point-to-point communications that fit 
 any kind of algorithms and any number of MPI processes. 
-``libyt`` use one-sided communication in MPI, also known as Remote Memory Access (RMA), 
+``libyt`` uses one-sided communication in MPI, also known as Remote Memory Access (RMA), 
 by which one no longer needs to explicitly specify senders and receivers. 
 Fig :ref:`rma` describes the data redistribution process in ``libyt``. 
-``libyt`` first collects what data is needed in each process, and the processes prepare the data requested. 
+``libyt`` first collects requested data in each process and askes each process to prepare it. 
 Then ``libyt`` creates an epoch, for which all MPI processes will enter, and each process can fetch the data 
 located on different processes without explicitly waiting for the remote process to respond.
 The caveat in data exchanging procedure in ``libyt`` is that it is a collective operation, and requires every 
@@ -248,10 +250,10 @@ MPI process to participate.
 
    This is the workflow of how ``libyt`` redistributes data.
    It is done via one-sided communication in MPI. 
-   Each process prepares the requested data by other processes, after this, every process 
+   Each process prepares the requested data from other processes, after this, every process 
    fetches data located on different processes.
    This is a collective operation, and data is redistributed during this window epoch. 
-   Since the data fetched is only for analysis purpose, it gets freed once Python doesn't 
+   Since the data fetched from other processes is only for analysis purpose, it gets freed once Python doesn't 
    need it at all. 
    :label:`rma`
 
@@ -266,10 +268,10 @@ The namespace holds Python functions and objects. Every change made will also be
 namespace and will be brought to the following round.
 
 Using ``libyt`` for in situ analysis is just like running Python scripts in post-processing.
-Their only difference lies in how the data is loaded.
-Post-processing has everything store on hard disk, while data in in situ analysis is distributed 
-in different computing nodes. 
-Though ``libyt`` can call arbitrary Python module, here, we focus on using ``yt`` as the core method.
+The only difference lies in how the data is loaded.
+Post-processing has everything store on hard disk, while data in in situ analysis is distributed in 
+memory space in different computing nodes. 
+Though ``libyt`` can call arbitrary Python modules, here, we focus on using ``yt`` as the core method.
 This is an example of doing slice plot using ``yt`` function ``SlicePlot`` in post-processing:
 
 .. code-block:: python
@@ -321,11 +323,12 @@ The root process takes user inputs and checks the syntax through compiling it to
 ``Py_CompileString``. If error occurs, it parses the error to see if this is caused by input not done 
 yet or a real error. 
 If it is indeed caused by user hasn't done yet, for example, when using an ``if`` statement, 
-it continues waiting for user inputs. Otherwise, it simply prints the error to inform the user.
+the prompt will continue waiting for user inputs. Otherwise, it simply prints the error to inform the user.
 If the code can be compiled successfully, the root process broadcasts the code to every other MPI 
-process, and then they execute the code using ``PyEval_EvalCode`` simultaneously.
+processes.
+Then they evaluate the code using ``PyEval_EvalCode`` inside the script's namespace simultaneously.
 
-.. [#] Currently, ``libyt`` interactive prompt only works on local machine or submit the job to HPC 
+.. [#] Currently, ``libyt`` interactive prompt only works on local machine or submitting the job to HPC 
    platforms using interactive queue (e.g., ``qsub -I`` on PBS scheduler). We will support accessing 
    through Jupyter Notebook in the future.
 
@@ -400,11 +403,11 @@ By storing only the imaginary and real parts of the wave function in single prec
 each sample step now consumes only 8 GB, which is 15 times smaller than the snapshot required in 
 post-processing. 
 
-We further analyze these uniform grid in post-processing, and do volume rendering and create 
+We further analyze these uniform grids in post-processing, and do volume rendering and create 
 animation [#]_ using ParaView :cite:`ParaView`. 
 Fig :ref:`fdmfull` is the volume rendering of the result. 
 Vortex lines and rings are manifest in the entire domain. 
-For :ref:`fdmzoomin` show a zoom in version of where the reconnection of vortex lines take place. 
+Fig :ref:`fdmzoomin` shows a zoom in version of Fig :ref:`fdmfull`, where reconnection of vortex lines take place. 
 With the help of ``libyt``, we are able to achieve a very high temporal resolution and very high 
 spatial resolution at the same time.
 
@@ -414,9 +417,9 @@ spatial resolution at the same time.
    :figclass: htb
 
    Volume rendering of quantum vortices in a fuzzy dark matter halo with ``GAMER``. Here we use 
-   libyt to extract uniform-resolution data from an AMR simulation on-the-fly, and then visualize 
+   ``libyt`` to extract uniform-resolution data from an AMR simulation on-the-fly, and then visualize 
    it with ParaView in post-processing. The colormap is the logarithm of reciprocal of density 
-   averaging over radial density profile, which highlight the fluctuations and null density. Tick 
+   averaging over radial density profile, which highlights the fluctuations and null density. Tick 
    labels represent cell indices.
    :label:`fdmfull`
 
@@ -424,7 +427,8 @@ spatial resolution at the same time.
    :figclass: htb
 
    Vortex reconnection process in a fuzzy dark matter halo. 
-   This is the result we get if we zoom in to one of the vortex lines in Fig :ref:`fdmfull`. 
+   This is the result we get if we zoom in to one of the vortex lines in Fig :ref:`fdmfull` 
+   where reconnection of lines take place. 
    We are able to clearly capture the dynamics, and at the same time, preserve high spatial 
    resolution.
    :label:`fdmzoomin`
@@ -457,11 +461,11 @@ stalling, revival, breakout), and the evolution of the central proto-neutron sta
 :math:`1.5 \times 10^{-2}` ms. Fig :ref:`ccsn` is the output in a time step. 
 Since entropy is not part of the variable in simulation's iterative process, 
 these entropy data will only be generated through user-defined C function, 
-which in turn calls the nuclear equation of state to get entropy, 
+which in turn calls the nuclear equation of state defined inside ``GAMER`` to get entropy, 
 when they are needed by ``yt``. 
 ``libyt`` tries to minimize memory usage by generating relevant data only. 
 We can combine every output figure and animate the actual simulation process [#]_ 
-without storing any dataset beside the figures on hard disk. 
+without storing any datasets. 
 
 .. [#] `https://youtu.be/6iwHzN-FsHw <https://youtu.be/6iwHzN-FsHw>`_
 
@@ -483,31 +487,33 @@ Discussions
 -----------
 
 ``libyt`` is free and open source, which does not depend on any non-free or non-open source software. 
-Converting the post-processing script to inline script is a two-line change, which lowers the barrier.
+Converting the post-processing script to inline script is a two-line change, which lowers the barrier 
+of using this in situ analysis tool.
 
-Using ``libyt`` does not add a time penalty to the analysis, because using Python for in situ analysis 
+Though currently, only simulations that use AMR grid data structure are supported by ``libyt``, 
+we will extend to more data structure (e.g., octree, particle, unstructured mesh, etc) and hope 
+to engage more simulations and data structures in the future. 
+
+Using ``libyt`` does not add time penalty to the analysis process, because using Python for in situ analysis 
 and post-processing are exactly the same, except that the former one reads data from memory and the 
-later one reads data from disks. Fig :ref:`performance` shows the strong scaling of ``libyt``. 
+latter one reads data from disks. Fig :ref:`performance` shows the strong scaling of ``libyt``. 
 The test compares the performance between in situ analysis with ``libyt`` and post-processing for 
 computing 2D profiles on a ``GAMER`` dataset. 
 The dataset contains seven adaptive mesh refinement levels with a total of :math:`9.9 \times 10^8` 
 cells. 
-``libyt`` outperforms post-processing by :math:`\sim 10 \textrm{ -- } 30\%` since the former 
+``libyt`` outperforms post-processing by :math:`\sim 10 \textrm{ -- } 30\%`, since it 
 avoids loading data from disk to memory. 
 ``libyt`` and post-processing have similar deviation from the ideal scaling since ``libyt`` directly 
 borrows the algorithm in ``yt``. 
 Some improvements have been made in ``yt``, while some are still undergoing to eliminate the scaling 
 bottleneck.
-``libyt`` provides a promising solution that binds simulation to Python with minimal memory overhead 
-and no additional time penalty. It makes analyzing large scale simulation feasible. 
-Though currently, only simulations that use AMR grid data structure are supported, 
-we will extend to more data structure (e.g., octree, particle, unstructured mesh, etc) and hope 
-to engage more simulations and data structures in the future. 
+But also, due to some parts cannot be parallelized, like the import of Python and the current data structure, 
+the speed up is saturated at large number of processors and can be described by Amdahl's law.
 
 .. figure:: Time-Proc-Ideal.pdf
    :figclass: htb
 
-   Strong scaling of ``libyt``.  
+   Strong scaling of ``libyt``. 
    ``libyt`` outperforms post-processing by :math:`\sim 10 \textrm{ -- } 30\%` since the former 
    avoids loading data from disk to memory. The dotted line is the ideal scaling. 
    ``libyt`` and post-processing show a similar deviation from the ideal scaling because it directly 
@@ -515,7 +521,15 @@ to engage more simulations and data structures in the future.
    eliminate the scaling bottleneck.
    :label:`performance`
 
+
+
+``libyt`` provides a promising solution that binds simulation to Python with minimal memory overhead 
+and no additional time penalty. 
+It makes analyzing large scale simulation feasible, and it can analyze the data with much higher frequency. 
+It also reduces the barrier of heavy computational jobs written in C/C++ to use Python tools, 
+which are normally well-developed.
 ``libyt`` focuses on using ``yt`` as its core analytic method, even though it can call other Python 
-modules, and has the ability to enable back-communication of simulation information.
-The advantage of in situ analysis using ``libyt`` provides us another way to interact with simulation. 
+modules, and has the ability to enable back-communication of simulation information. 
+A use case of this tool could be using ``yt`` to select data and then make it as an input source for further analysis.
+``libyt`` provides us another way to interact with simulation and data. 
 
