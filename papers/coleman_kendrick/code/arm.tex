@@ -1,0 +1,23 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{mcvine.acc.ComponentBase} \PY{k+kn}{import} \PY{n}{ComponentBase}
+\PY{k}{class} \PY{n+nc}{Arm}\PY{p}{(}\PY{n}{ComponentBase}\PY{p}{)}\PY{p}{:}
+
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{name}\PY{p}{,} \PY{o}{*}\PY{o}{*}\PY{n}{kwargs}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{name} \PY{o}{=} \PY{n}{name}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{propagate\PYZus{}params} \PY{o}{=} \PY{p}{(}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Aim a neutron at this arm to }
+        \PY{c+c1}{\PYZsh{} cause JIT compilation.}
+        \PY{k+kn}{import} \PY{n+nn}{mcni}
+        \PY{n}{neutrons} \PY{o}{=} \PY{n}{mcni}\PY{o}{.}\PY{n}{neutron\PYZus{}buffer}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+        \PY{n}{neutrons}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PYZbs{}
+            \PY{n}{mcni}\PY{o}{.}\PY{n}{neutron}\PY{p}{(}\PY{n}{r}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} 
+                         \PY{n}{v}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} 
+                         \PY{n}{prob}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{time}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{process}\PY{p}{(}\PY{n}{neutrons}\PY{p}{)}
+
+    \PY{n+nd}{@cuda.jit}\PY{p}{(}\PY{n}{void}\PY{p}{(}\PY{n}{NB\PYZus{}FLOAT}\PY{p}{[}\PY{p}{:}\PY{p}{]}\PY{p}{)}\PY{p}{,} 
+              \PY{n}{device}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+    \PY{k}{def} \PY{n+nf}{propagate}\PY{p}{(}\PY{n}{in\PYZus{}neutron}\PY{p}{)}\PY{p}{:}
+        \PY{k}{pass}
+\end{Verbatim}

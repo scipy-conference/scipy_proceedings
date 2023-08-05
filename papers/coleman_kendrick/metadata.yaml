@@ -1,0 +1,24 @@
+abstract:
+- Digital twins of neutron instruments using Monte Carlo ray tracing have proven to be useful in neutron data analysis and verifying instrument and sample designs. However, these simulations can become quite complex and computationally demanding with tens of billions of neutrons. In this paper, we present a GPU accelerated version of MCViNE using Python and Numba to balance user extensibility with performance. Numba is an open-source just-in-time (JIT) compiler for Python using LLVM to generate efficient machine code for CPUs and GPUs with NVIDIA CUDA. The JIT nature of Numba allowed complex instrument kernels to be generated easily. Initial simulations have shown a speedup between 200-1000x over the original CPU implementation. The performance gain with Numba enables more sophisticated data analysis and impacts neutron scattering science and instrument design.
+keywords: 
+  - Monte Carlo
+  - numba
+  - digital twin
+  - Python
+  - neutron
+  - GPU
+  - ray tracing
+  - CUDA
+authors:
+- email: kendrickcj@ornl.gov
+  institution: Oak Ridge National Laboratory
+  name: Coleman J. Kendrick
+  corresponding: true
+- email: jiao.lin@gmail.com
+  institution: Oak Ridge National Laboratory
+  name: Jiao Y. Y. Lin
+- email: granrothge@ornl.gov
+  institution: Oak Ridge National Laboratory
+  name: Garrett E. Granroth
+bibliography: bib
+title: Using Numba for GPU acceleration of Neutron Beamline Digital Twins
