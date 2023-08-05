@@ -1,0 +1,11 @@
+{
+    "authors": [
+        {
+            "name": "Tetsuo Koyama",
+            "affiliation": "PyVista",
+            "orcid": "0000-0001-9859-9565"
+        },
+    ],
+    "title": "PyVista",
+    "description": "Let's plot 3D Pythonic visualization"
+}
