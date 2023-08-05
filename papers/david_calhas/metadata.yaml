@@ -1,0 +1,19 @@
+---
+abstract:
+   - Electroencepholography (EEG) and functional magnetic resonance imaging (fMRI) are two ways of recording brain activity; the former provides good time resolution but poor spatial resolution, while the converse is true for the latter. Recently, deep neural network models have been developed that can synthesize fMRI activity from EEG signals, and vice versa. Because these generative models simulate data, they make it easier for neuroscientists to test ideas about how EEG and fMRI signals relate to each other, and what both signals tell us about how the brain controls behavior. To make it easier for researchers to access these models, and to standardize how they are used, we developed a Python package, EEG-to-fMRI, which provides cross modal neuroimaging synthesis functionalities. This is the first open source software enabling neuroimaging synthesis. Our main focus is for this package to help neuroscience, machine learning, and health care communities. This study gives an in-depth description of this package, along with the theoretical foundations and respective results.
+keywords:
+  - Electroencephalography
+  - Functional Magnetic Resonance Imaging
+  - Synthesis
+  - Deep Learning
+  - Learning
+  - Machine Learning
+  - Computer Vision
+authors:
+- email: david.calhas@tecnico.ulisboa.pt
+  institution:
+  - INESC-ID
+  - Instituto Superior Tecnico
+  name: David Calhas
+bibliography: bibliography
+title: EEG-to-fMRI Neuroimaging Cross Modal Synthesis in Python
