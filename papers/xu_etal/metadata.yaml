@@ -1,0 +1,23 @@
+---
+abstract:
+   - Multidimensional categorical data is widespread but not easily visualized using standard methods. For example, questionnaire (e.g. survey) data generally consists of questions with categorical responses (e.g., yes/no, hate/dislike/neutral/like/love). Thus, a questionnaire with 10 questions, each with five mutually exclusive responses, gives a dataset of $5^{10}$ possible observations, an amount of data that would be hard to reasonably collect. Hence, this type of dataset is necessarily sparse. Popular methods of handling categorical data include one-hot encoding (which exacerbates the dimensionality problem) and enumeration, which applies an unwarranted and potentially misleading notional order to the data. To address this, we introduce a novel visualization method named Data Reduction Network (DRN). Using a network-graph structure, the DRN denotes each categorical feature as a node with interrelationships between nodes denoted by weighted edges. The graph is statistically reduced to reveal the strongest or weakest path-wise relationships between features and to reduce visual clutter. A key advantage is that it does not “lose” features, but rather represents interrelationships across the entire categorical feature set without eliminating weaker relationships or features. Indeed, the graph representation can be inverted so that instead of visualizing the strongest interrelationships, the weakest can be surfaced. The DRN is a powerful visualization tool for multi-dimensional categorical data and in particular data derived from surveys and questionaires.
+keywords:
+  - Data Visualization
+  - Multidimensional Categorical Data
+authors:
+- email: wxu@westhealth.org
+  institution:
+  - Gary and Mary West Health Institute
+  - University of California, San Diego
+  name: Haoyin Xu
+- email: hlu@westhealth.org
+  institution:
+  - Gary and Mary West Health Institute
+  name: Haw-minn Lu
+  corresponding: true
+- email: junpingco@eng.ucsd.edu
+  name: José Unpingco
+  institution:
+  - University of California, San Diego
+bibliography: mybib
+title: Data Reduction Network
