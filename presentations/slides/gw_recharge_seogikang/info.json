@@ -1,0 +1,16 @@
+{
+    "title": "Accelerating the Use of Public Geohysical Data for Recharging California's Groundwater",
+    "authors": [
+        {
+            "name": "Seogi Kang",
+            "affiliation": "Geophysics Department, Stanford University",
+            "orcid": "0000-0002-9963-936X"
+        },
+        {
+            "name": "Steve Purves",
+            "affiliation": "Curvenote",
+            "orcid": "0000-0002-0760-5497"
+        }        
+    ],
+    "description": "Recharging ground aquifers is an urgent task for improving groundwater sustainability in California. Geophysical data can provide a capability to image the subsurface where there are major data gaps. However, neither data nor analytic tools required to derive subsurface information is readily accessible. We present an interactive web application that utilizes a curated, public database, GIS capabilities and directly integrates Jupyter Notebooks and Python packages from researchers to guide recharge site location. Our project showcases a unique combination of open-source tools to help turn research knowledge into actionable insights for practitioners to improve groundwater recharge in California."
+}
