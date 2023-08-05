@@ -1,0 +1,16 @@
+{
+    "title": "DataJoint: Bringing databases back into data science",
+    "authors": [
+        {
+            "name": "Raphael Guzman",
+            "affiliation": "DataJoint Open Source (https://github.com/datajoint/datajoint-python)",
+            "orcid": ""
+        },
+        {
+            "name": "Dimitri Yatsenko",
+            "affiliation": "DataJoint",
+            "orcid": "0000-0002-1844-641X"
+        }
+    ],
+    "description": "Relational databases manage structured data and facilitate queries in collaborative repositories, but using SQL from a scientific programming language is awkward. DataJoint is an open-source framework for managing scientific data supporting data definition, diagramming, and queries. DataJoint makes computation a native part of its data model, bridging the gap between databases and numerical analysis in automated workflows."
+}
