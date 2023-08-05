@@ -1,0 +1,20 @@
+abstract:
+  - "Understanding human security and social equity issues within human systems requires large-scale models of population dynamics that simulate high-fidelity representations of individuals and access to essential activities (work/school, social, errands, health). Likeness is a Python toolkit that provides these capabilities for Oak Ridge National Laboratory's (ORNL) UrbanPop spatial microsimulation project. In step with the initial development phase for Likeness (2021 - 2022), we built out several foundational examples of work/school and health service access. In this paper, we describe expansion and scaling of Likeness capabilities to metropolitan areas in the United States. We then provide an integrated demonstration of our methods based on a case study of Leon County, FL and perform validation exercises on 1) neighborhood demographic composition and 2) visits by demographic cohorts (gender/age) obtained from point of interest (POI) footfall data for essential services (grocery stores). Taking into account lessons learned from our case study, we scope improvements to our model as well as provide a roadmap of the anticipated Likeness development cycle into 2023 - 2024."
+authors:
+  - email: tuccillojv@ornl.gov
+    name: Joseph V. Tuccillo
+    institution: Oak Ridge National Laboratory, Geospatial Sciences and Human Security
+    orcid: 0000-0002-5930-0943
+    corresponding: true
+  - email: gaboardijd@ornl.gov
+    name: James D. Gaboardi
+    institution: Oak Ridge National Laboratory, Geospatial Sciences and Human Security
+    orcid: 0000-0002-4776-6826
+bibliography: mybib
+copyright_holder: Oak Ridge National Laboratory
+keywords:
+  - activity space
+  - synthetic population
+  - microsimulation
+  - population dynamics
+title: "Spatial Microsimulation and Activity Allocation in Python: An Update on the Likeness Toolkit"
