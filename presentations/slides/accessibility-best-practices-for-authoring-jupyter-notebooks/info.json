@@ -1,0 +1,16 @@
+{
+    "title": "Accessibility best practices for authoring Jupyter notebooks",
+    "authors": [
+        {
+            "name": "Isabela Presedo-Floyd",
+            "affiliation": "Quansight Labs",
+            "orcid": ""
+        },
+        {
+            "name": "Stephannie Jimenez Gacha",
+            "affiliation": "Quansight Labs",
+            "orcid": ""
+        }
+    ],
+    "description": "Jupyter notebooks seem like they are for everyone, but how a notebook gets written can greatly impact how usable it is for people with disabilities. Using staple accessibility frameworks, this talk dives into what it means to make a notebook’s content accessible and provide actionable guidance on how authors can improve their notebooks."
+}
