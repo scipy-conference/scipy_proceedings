@@ -1,0 +1,11 @@
+{
+    "authors": [
+        {
+            "name": "David Calhas",
+            "affiliation": "INESC-ID, Instituto Superior Tecnico",
+            "orcid": "0000-0001-6618-9086"
+        } 
+    ],
+    "title": "EEG-to-fMRI Neuroimaging Cross Modal Synthesis in Python",
+    "description": "A Python package for supports EEG to fMRI Synthesis in Python"
+}
