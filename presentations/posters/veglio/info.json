@@ -1,0 +1,36 @@
+{
+    "authors": [
+        {
+            "name": "Paolo Veglio",
+            "affiliation": "Space Science and Engineering Center at UW-Madison",
+            "orcid": "0000-0002-4721-8651"
+        },
+        {
+            "name": "Robert Holz",
+            "affiliation": "Space Science and Engineering Center at UW-Madison",
+            "orcid": "0000-0001-5443-4953"
+        }
+        {
+            "name": "Liam Gumley",
+            "affiliation": "Space Science and Engineering Center at UW-Madison",
+            "orcid": ""
+        }
+        {
+            "name": "Steve Dutcher",
+            "affiliation": "Space Science and Engineering Center at UW-Madison",
+            "orcid": ""
+        }
+        {
+            "name": "Greg Quinn",
+            "affiliation": "Space Science and Engineering Center at UW-Madison",
+            "orcid": ""
+        }
+        {
+            "name": "Bruce Flynn",
+            "affiliation": "Space Science and Engineering Center at UW-Madison",
+            "orcid": ""
+        }
+    ],
+    "title": "Yori: a new, highly customizable tool for Level-3 data production",
+    "description": "Yori is a highly customizable, sensor-agnostic software, developed to support the NASA Atmosphere Science Teams, to spatially/temporally resample geophysical variables from satellite measurements. Out of the box this software outputs common statistics, such as mean, standard deviation and pixel count, of each geophysical variable read, for every grid cell. Additionally, Yori allows users to easily produce additional statistics (e.g. histograms, min/max, median) and filter data to create custom outputs while maintaining a CF-compliant format. Yori has been designed to be easily scalable on a distributed computing environment."
+}
