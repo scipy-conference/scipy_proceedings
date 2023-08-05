@@ -1,0 +1,16 @@
+{
+    "title": "Better (Open Source) Homes and Gardens with Project Pythia",
+    "authors": [
+        {
+            "name": "Drew Camron",
+            "affiliation": "UCAR/Unidata",
+            "orcid": "0000-0001-7246-6502"
+        },
+        {
+            "name": "Kevin Tyle",
+            "affiliation": "University at Albany, State University of New York",
+            "orcid": "0000-0001-5249-9665"
+        }
+    ],
+    "description": "Tending Your Open Source Garden session, SciPy 2023"
+}
