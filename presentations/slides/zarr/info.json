@@ -1,0 +1,22 @@
+{
+    "title": "Zarr: Community specification of large, cloud-optimised, N-dimensional, typed array storage",
+    "authors": [
+        {
+            "name": "Sanket Verma",
+            "affiliation": "Zarr",
+            "orcid": "0009-0008-1455-2136"
+
+        },
+        {
+            "name": "Josh Moore",
+            "affiliation": "German BioImaging",
+            "orcid": "0000-0003-4028-811X"
+        },
+        {
+            "name": "John Kirkham",
+            "affiliation": "NVIDIA",
+            "orcid": "0009-0007-6130-9705"
+        }
+    ],
+    "description": "A key feature of the Python data ecosystem is the reliance on simple but efficient primitives that follow well-defined interfaces to make tools work seamlessly together ( Cf. https://data-apis.org/ ). NumPy provides an in-memory representation for tensors. Dask provides parallelisation of tensor access. Xarray provides metadata linking tensor dimensions. Zarr provides a missing feature, namely the scalable, persistent storage for annotated hierarchies of tensors. Defined through a community process, the Zarr specification enables the storage of large out-of-memory datasets locally and in the cloud. Implementations exist in C++, C, Java, Javascript, Julia, and Python, enabling."
+}
