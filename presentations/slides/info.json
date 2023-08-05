@@ -1,0 +1,11 @@
+{
+    "title": "bayes_mapvar: Bayesian Statistics with Python, No Resampling Necessary",
+    "authors": [
+        {
+            "name": "Charles Lindsey",
+            "affiliation": "Revionics, an Aptos Company",
+            "orcid": "0000-0000-0000-0000"
+        },
+    ],
+    "description": "bayes_mapvar is a Python package that provides tools for Maximum A Posterior (MAP) estimation and posterior variance estimation. TensorFlow Probability and SciPy are leveraged to allow fast and efficient estimation for Bayesian models without using resampling methods."
+}
