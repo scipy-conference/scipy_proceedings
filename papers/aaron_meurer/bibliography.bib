@@ -1,0 +1,942 @@
+% Note: keep in alphabetical order, with entries of the same name ordered in chronological order. Those entries with the same year should be ordered a, b, c, etc.
+
+% TensorFlow
+
+@inproceedings{Abadi2016a,
+	address = {USA},
+	series = {{OSDI}'16},
+	title = {{TensorFlow}: a system for large-scale machine learning},
+	isbn = {978-1-931971-33-1},
+	shorttitle = {{TensorFlow}},
+	abstract = {TensorFlow is a machine learning system that operates at large scale and in heterogeneous environments. Tensor-Flow uses dataflow graphs to represent computation, shared state, and the operations that mutate that state. It maps the nodes of a dataflow graph across many machines in a cluster, and within a machine across multiple computational devices, including multicore CPUs, general-purpose GPUs, and custom-designed ASICs known as Tensor Processing Units (TPUs). This architecture gives flexibility to the application developer: whereas in previous "parameter server" designs the management of shared state is built into the system, TensorFlow enables developers to experiment with novel optimizations and training algorithms. TensorFlow supports a variety of applications, with a focus on training and inference on deep neural networks. Several Google services use TensorFlow in production, we have released it as an open-source project, and it has become widely used for machine learning research. In this paper, we describe the TensorFlow dataflow model and demonstrate the compelling performance that TensorFlow achieves for several real-world applications.},
+	urldate = {2023-05-21},
+	booktitle = {Proceedings of the 12th {USENIX} conference on {Operating} {Systems} {Design} and {Implementation}},
+	publisher = {USENIX Association},
+	author = {Abadi, Martín and Barham, Paul and Chen, Jianmin and Chen, Zhifeng and Davis, Andy and Dean, Jeffrey and Devin, Matthieu and Ghemawat, Sanjay and Irving, Geoffrey and Isard, Michael and Kudlur, Manjunath and Levenberg, Josh and Monga, Rajat and Moore, Sherry and Murray, Derek G. and Steiner, Benoit and Tucker, Paul and Vasudevan, Vijay and Warden, Pete and Wicke, Martin and Yu, Yuan and Zheng, Xiaoqiang},
+	month = nov,
+	year = {2016},
+	pages = {265--283},
+}
+
+% PyData/Sparse
+
+@inproceedings{Abbasi2018a,
+	address = {Austin, Texas},
+	title = {Sparse: {A} more modern sparse array library},
+	shorttitle = {Sparse},
+	booktitle = {{P}roceedings of the 17th {P}ython in {S}cience {C}onference},
+	url = {https://conference.scipy.org/proceedings/scipy2018/hameer_abbasi.html},
+	doi = {10.25080/Majora-4af1f417-00a},
+	abstract = {This paper is about sparse multi-dimensional arrays in Python. We discuss their applications, layouts, and current implementations in the SciPy ecosystem along with strengths and weaknesses. We then introduce a new package for sparse arrays that builds on the legacy of the scipy.sparse implementation, but supports more modern interfaces, dimensions greater than two, and improved integration with newer array packages, like XArray and Dask. We end with performance benchmarks and notes on future work. Additionally, this work provides a concrete implementation of the recent NumPy array protocols to build generic array interfaces for improved interoperability, and so may be useful for broader community discussion.},
+	urldate = {2023-05-22},
+	author = {Abbasi, Hameer},
+	year = {2018},
+	pages = {65--68},
+}
+
+% LAPACK
+
+@book{Anderson1999a,
+	author = {Anderson, Edward and Bai, Zhaojun and Bischof, Christian and Blackford, Susan and Demmel, James and Dongarra, Jack and Du Croz, Jeremy and Greenbaum, Anne and Hammarling, Sven and McKenney, Alan and Sorensen, Danny C.},
+	title = {{LAPACK} Users' Guide},
+	edition = {Third},
+	publisher = {Society for Industrial and Applied Mathematics},
+	year = {1999},
+	address = {Philadelphia, PA},
+	isbn = {0-89871-447-8},
+}
+
+% NumPy 2.0
+
+@misc{Berg2023a,
+	title = {Road to {NumPy} 2.0},
+	url = {https://mail.python.org/archives/list/numpy-discussion@python.org/thread/XYA5KZNL362Q5KWLKS5QFBQNRT5N2ZJO/#XCJU55EXSQPN5W7UWHDKURBU7EKBBTD2},
+	howpublished = {\url{https://mail.python.org/archives/list/numpy-discussion@python.org/thread/XYA5KZNL362Q5KWLKS5QFBQNRT5N2ZJO/#XCJU55EXSQPN5W7UWHDKURBU7EKBBTD2}},
+	abstract = {},
+	language = {en},
+	urldate = {2023-01-1},
+	author = {Berg, Sebastian},
+	month = jan,
+	year = {2023},
+}
+
+% Julia
+
+@article{Bezanson2012a,
+	title = {Julia: {A} {Fast} {Dynamic} {Language} for {Technical} {Computing}},
+	shorttitle = {Julia},
+	url = {http://arxiv.org/abs/1209.5145},
+	doi = {10.48550/arXiv.1209.5145},
+	abstract = {Dynamic languages have become popular for scientific computing. They are generally considered highly productive, but lacking in performance. This paper presents Julia, a new dynamic language for technical computing, designed for performance from the beginning by adapting and extending modern programming language techniques. A design based on generic functions and a rich type system simultaneously enables an expressive programming model and successful type inference, leading to good performance for a wide range of programs. This makes it possible for much of the Julia library to be written in Julia itself, while also incorporating best-of-breed C and Fortran libraries.},
+	urldate = {2023-05-22},
+	publisher = {arXiv},
+	author = {Bezanson, Jeff and Karpinski, Stefan and Shah, Viral B. and Edelman, Alan},
+	month = sep,
+	year = {2012},
+	note = {},
+	keywords = {Computer Science - Computational Engineering, Finance, and Science, Computer Science - Programming Languages, D.3.2},
+}
+
+% Julia
+
+@article{Bezanson2017a,
+	title = {Julia: {A} {Fresh} {Approach} to {Numerical} {Computing}},
+	volume = {59},
+	issn = {0036-1445},
+	shorttitle = {Julia},
+	url = {https://epubs.siam.org/doi/10.1137/141000671},
+	doi = {10.1137/141000671},
+	abstract = {JuMP is an open-source modeling language that allows users to express a wide range of optimization problems (linear, mixed-integer, quadratic, conic-quadratic, semidefinite, and nonlinear) in a high-level, algebraic syntax. JuMP takes advantage of advanced features of the Julia programming language to offer unique functionality while achieving performance on par with commercial modeling tools for standard tasks. In this work we will provide benchmarks, present the novel aspects of the implementation, and discuss how JuMP can be extended to new problem classes and composed with state-of-the-art tools for visualization and interactivity.},
+	number = {1},
+	urldate = {2023-05-22},
+	journal = {SIAM Review},
+	author = {Bezanson, Jeff and Edelman, Alan and Karpinski, Stefan and Shah, Viral B.},
+	month = jan,
+	year = {2017},
+	note = {},
+	pages = {65--98},
+}
+
+% JAX (GitHub repository)
+
+@software{Bradbury2018a,
+  author = {James Bradbury and Roy Frostig and Peter Hawkins and Matthew James Johnson and Chris Leary and Dougal Maclaurin and George Necula and Adam Paszke and Jake Vander{P}las and Skye Wanderman-{M}ilne and Qiao Zhang},
+  title = {{JAX}: composable transformations of {P}ython+{N}um{P}y programs},
+  url = {http://github.com/google/jax},
+  howpublished = {\url{http://github.com/google/jax}},
+  version = {0.3.13},
+  year = {2018},
+}
+
+% MXNet
+
+@article{Chen2015a,
+	title = {{MXNet}: {A} {Flexible} and {Efficient} {Machine} {Learning} {Library} for {Heterogeneous} {Distributed} {Systems}},
+	shorttitle = {{MXNet}},
+	url = {http://arxiv.org/abs/1512.01274},
+	doi = {10.48550/arXiv.1512.01274},
+	abstract = {MXNet is a multi-language machine learning (ML) library to ease the development of ML algorithms, especially for deep neural networks. Embedded in the host language, it blends declarative symbolic expression with imperative tensor computation. It offers auto differentiation to derive gradients. MXNet is computation and memory efficient and runs on various heterogeneous systems, ranging from mobile devices to distributed GPU clusters. This paper describes both the API design and the system implementation of MXNet, and explains how embedding of both symbolic expression and tensor operation is handled in a unified fashion. Our preliminary experiments reveal promising results on large scale deep neural network applications using multiple GPU machines.},
+	urldate = {2023-05-22},
+	publisher = {arXiv},
+	author = {Chen, Tianqi and Li, Mu and Li, Yutian and Lin, Min and Wang, Naiyan and Wang, Minjie and Xiao, Tianjun and Xu, Bing and Zhang, Chiyuan and Zhang, Zheng},
+	month = dec,
+	year = {2015},
+	note = {},
+	keywords = {Computer Science - Distributed, Parallel, and Cluster Computing, Computer Science - Machine Learning, Computer Science - Mathematical Software, Computer Science - Neural and Evolutionary Computing},
+}
+
+% Python Record API (GitHub repository)
+
+@software{Consortium2020a,
+	author = {Consortium for Python Data API Standards},
+	title = {Python {Record} {API}},
+	abstract = {Inferring Python API signatures from tracing usage.},
+	url = {https://github.com/data-apis/python-record-api},
+	howpublished = {\url{https://github.com/data-apis/python-record-api}},
+	urldate = {2023-05-21},
+	version = {1.3.2},
+	year = {2020},
+}
+
+% Array API Standard (GitHub repository)
+
+@software{Consortium2022a,
+	author = {Consortium for Python Data API Standards},
+	title = {Array {API} Standard},
+	url = {https://github.com/data-apis/array-api},
+	howpublished = {\url{https://github.com/data-apis/array-api}},
+	urldate = {2023-05-21},
+	version = {2022.12},
+	year = {2022},
+}
+
+% Array API test suite (GitHub repository)
+
+@software{Consortium2022b,
+	author = {Consortium for Python Data API Standards},
+	title = {Test {Suite} for {Array} {API} {Compliance}},
+	url = {https://github.com/data-apis/array-api-tests},
+	howpublished = {\url{https://github.com/data-apis/array-api-tests}},
+	urldate = {2023-05-21},
+	version = {2022.09.30},
+	year = {2022},
+
+}
+
+% Array API comparison (GitHub repository)
+
+@software{Consortium2022c,
+	author = {Consortium for Python Data API Standards},
+	title = {Array {API} {Comparison}},
+	abstract = {Data and tooling to compare the API surfaces of various array libraries.},
+	url = {https://github.com/data-apis/array-api-comparison},
+	howpublished = {\url{https://github.com/data-apis/array-api-comparison}},
+	urldate = {2023-05-21},
+	version = {},
+	year = {2022},
+}
+
+% Array API compatibility library (GitHub repository)
+
+@software{Consortium2023a,
+	author = {Consortium for Python Data API Standards},
+	title  = {Array {API} compatibility library},
+	url = {https://github.com/data-apis/array-api-compat},
+	howpublished = {\url{https://github.com/data-apis/array-api-compat}},
+	urldate = {2023-05-21},
+	version = {1.1.1},
+	year = {2023},
+}
+
+% DLPack (GitHub repository)
+
+@software{DLPack2023a,
+	author = {DLPack},
+	title = {Open {In} {Memory} {Tensor} {Structure}},
+	url = {https://github.com/dmlc/dlpack},
+	howpublished = {\url{https://github.com/dmlc/dlpack}},
+	urldate = {2023-05-23},
+	version = {0.8},
+	year = {2023},
+}
+
+% DLPack Python specification
+
+@misc{DLPack2023b,
+	author = {DLPack},
+	title = {Python {Specification} for {DLPack}},
+	url = {https://dmlc.github.io/dlpack/latest/python_spec.html},
+	howpublished = {\url{https://dmlc.github.io/dlpack/latest/python_spec.html}},
+	urldate = {2023-05-27},
+	version = {0.8},
+	year = {2023},
+}
+
+% BLAS
+
+@article{Dongarra1988a,
+	title = {An extended set of {FORTRAN} basic linear algebra subprograms},
+	volume = {14},
+	issn = {0098-3500},
+	url = {https://dl.acm.org/doi/10.1145/42288.42291},
+	doi = {10.1145/42288.42291},
+	abstract = {This paper describes an extension to the set of Basic Linear Algebra Subprograms. The extensions are targeted at matrix-vector operations that should provide for efficient and portable implementations of algorithms for high-performance computers.},
+	number = {1},
+	urldate = {2023-05-25},
+	journal = {ACM Transactions on Mathematical Software},
+	author = {Dongarra, Jack J. and Du Croz, Jeremy and Hammarling, Sven and Hanson, Richard J.},
+	month = mar,
+	year = {1988},
+	pages = {1--17},
+}
+
+@article{Dongarra1990a,
+	title = {A set of level 3 basic linear algebra subprograms},
+	volume = {16},
+	issn = {0098-3500},
+	url = {https://dl.acm.org/doi/10.1145/77626.79170},
+	doi = {10.1145/77626.79170},
+	abstract = {This paper describes an extension to the set of Basic Linear Algebra Subprograms. The extensions are targeted at matrix-vector operations that should provide for efficient and portable implementations of algorithms for high-performance computers},
+	number = {1},
+	urldate = {2023-05-25},
+	journal = {ACM Transactions on Mathematical Software},
+	author = {Dongarra, J. J. and Du Croz, Jeremy and Hammarling, Sven and Duff, I. S.},
+	month = mar,
+	year = {1990},
+	pages = {1--17},
+}
+
+% Numeric (Python library for numerical computing)
+
+@article{Dubois1996a,
+	title = {Numerical {Python}},
+	volume = {10},
+	issn = {0894-1866},
+	url = {https://doi.org/10.1063/1.4822400},
+	doi = {10.1063/1.4822400},
+	number = {3},
+	urldate = {2023-05-21},
+	journal = {Computer in Physics},
+	author = {Dubois, Paul F. and Hinsen, Konrad and Hugunin, James},
+	month = may,
+	year = {1996},
+	pages = {262--267},
+}
+
+% Special issue introducing Python as a language for numerical computing
+
+@article{Dubois2007a,
+	title = {{Python}: {Batteries} {Included}},
+	volume = {9},
+	issn = {1558-366X},
+	doi = {10.1109/MCSE.2007.51},
+	abstract = {Our special theme this issue is the computer programming language Python and the increasing role it plays in scientific projects. Free and universally available, Python comes with a vast standard library containing support for nearly every area of computer science. An even more extensive set of third-party tools and modules covers additional tasks, from managing a Web site to doing a fast Fourier transform to distributed or parallel programming. The Python motto "batteries included" is meant to convey the idea that Python comes with everything you need.},
+	number = {3},
+	journal = {Computing in Science \& Engineering},
+	author = {Dubois, Paul F.},
+	month = may,
+	year = {2007},
+	note = {},
+	keywords = {Batteries, computer languages, Computer science, Fast Fourier transforms, Graphics, Java, Laboratories, Libraries, Mathematics, Parallel programming, Prototypes, Python, scientific computing, scientific programming},
+	pages = {7--9},
+}
+
+% Borda count voting system
+
+@article{Emerson2013a,
+	title = {The original {Borda} count and partial voting},
+	volume = {40},
+	issn = {1432-217X},
+	url = {https://doi.org/10.1007/s00355-011-0603-9},
+	doi = {10.1007/s00355-011-0603-9},
+	abstract = {In a Borda count, bc, M. de Borda suggested the last preference cast should receive 1 point, the voter's penultimate ranking should get 2 points, and so on. Today, however, points are often awarded to (first, second,..., last) preferences cast as per (n, n−1, ..., 1) or more frequently, (n −1, n−2,..., 0). If partial voting is allowed, and if a first preference is to be given n or n − 1 points regardless of how many preferences the voter casts, he/she will be incentivised to rank only one option/candidate. If everyone acts in this way, the bc metamorphoses into a plurality vote... which de Borda criticized at length. If all the voters submit full ballots, the outcome—social choice or ranking—will be the same under any of the above three counting procedures. In the event of one or more persons submitting a partial vote, however, outcomes may vary considerably. This preliminary paper suggests research should consider partial voting. The author examines the consequences of the various rules so far advocated and then purports that M. de Borda, in using his formula, was perhaps more astute than the science has hitherto recognised.},
+	language = {en},
+	number = {2},
+	urldate = {2023-05-21},
+	journal = {Social Choice and Welfare},
+	author = {Emerson, Peter},
+	month = feb,
+	year = {2013},
+	keywords = {Approval Vote, Borda Count, Counting Procedure, Plurality Vote, Social Choice},
+	pages = {353--358},
+}
+
+% scikit-learn - Array API adoption
+
+@misc{Fan2022a,
+  title = {Path for {Adopting} the {Array} {API} spec · {Issue} \#22352 · scikit-learn/scikit-learn},
+	url = {https://github.com/scikit-learn/scikit-learn/issues/22352},
+	howpublished = {\url{https://github.com/scikit-learn/scikit-learn/issues/22352}},
+	language = {en},
+	urldate = {2023-05-26},
+	author = {Fan, Thomas},
+	month = jan,
+	year = {2022},
+}
+
+% scikit-learn - Experimental PR adding array API support to LDA
+
+@misc{Fan2022b,
+	title = {Adds {Array} {API} support to {LinearDiscriminantAnalysis} by thomasjpfan · {Pull} {Request} \#22554 · scikit-learn/scikit-learn},
+	url = {https://github.com/scikit-learn/scikit-learn/pull/22554},
+	howpublished = {\url{https://github.com/scikit-learn/scikit-learn/pull/22554}},
+	language = {en},
+	urldate = {2023-05-27},
+	journal = {GitHub},
+	author = {Fan, Thomas},
+	month = feb,
+	year = {2022},
+}
+
+% CuPy - Array API adoption
+
+@misc{Fang2021a,
+	title = {Adopt {Python} {Array} {API} standard · {Issue} \#4789 · cupy/cupy},
+	url = {https://github.com/cupy/cupy/issues/4789},
+	howpublished = {\url{https://github.com/cupy/cupy/issues/4789}},
+	urldate = {2023-05-26},
+	author = {Fang, Yao-Lung L.},
+	month = mar,
+	year = {2021},
+}
+
+% Dowdall variant of the Borda Count voting system
+
+@article{Fraenkel2014a,
+	title = {The {Borda} {Count} and its real-world alternatives: {Comparing} scoring rules in {Nauru} and {Slovenia}},
+	volume = {49},
+	issn = {1036-1146},
+	shorttitle = {The {Borda} {Count} and its real-world alternatives},
+	url = {https://doi.org/10.1080/10361146.2014.900530},
+	doi = {10.1080/10361146.2014.900530},
+	abstract = {This article examines strategic elements of voter behaviour in parliamentary elections where the voting method is a scoring rule other than plurality: the Borda Count, which is used for the election of ethnic minorities in Slovenia, and the Dowdall rule, which is used in the Pacific island state of Nauru in multi-seat districts. After first examining the general properties of scoring rules, and generating theoretical differences between the two rules, we look at empirical evidence from Nauru and Slovenia. This casts a doubt on predictions based simply on a voting rule's mathematical properties and on the accuracy of assumptions of sincere rank ordering.},
+	number = {2},
+	urldate = {2023-05-21},
+	journal = {Australian Journal of Political Science},
+	author = {Fraenkel, Jon and Grofman, Bernard},
+	month = apr,
+	year = {2014},
+	note = {},
+	keywords = {Borda Count, electoral systems, Nauru, preferential voting systems, Slovenia},
+	pages = {186--205},
+}
+
+% JAX
+
+@inproceedings{Frostig2018a,
+	title = {Compiling machine learning programs via high-level tracing},
+	booktitle = {{P}roceedings of {SysML} {C}onference},
+	url = {https://mlsys.org/Conferences/doc/2018/146.pdf},
+	urldate = {2023-05-22},
+	author = {Frostig, Roy and Johnson, Matthew and Leary, Chris},
+	year = {2018},
+}
+
+% NEP 47 - Adopting the array API standard in NumPy
+
+@misc{Gommers2021a,
+	title = {{NEP} 47 — {Adopting} the array {API} standard — {NumPy} {Enhancement} {Proposals}},
+	shorttitle = {{NEP} 47 — {Adopting} the array {API} standard},
+	url = {https://numpy.org/neps/nep-0047-array-api-standard.html},
+	howpublished = {\url{https://numpy.org/neps/nep-0047-array-api-standard.html}},
+	abstract = {We propose to adopt the Python array API standard, developed by the Consortium for Python Data API Standards. Implementing this as a separate new namespace in NumPy will allow authors of libraries which depend on NumPy as well as end users to write code that is portable between NumPy and all other array/tensor libraries that adopt this standard.},
+	language = {English},
+	urldate = {2023-05-25},
+	author = {Gommers, Ralf and Hoyer, Stephan and Meurer, Aaron},
+	month = jan,
+	year = {2021},
+}
+
+% NEP 52 - Python API cleanup for NumPy 2.0
+
+@misc{Gommers2023a,
+	title = {{NEP} 52 — {Python} {API} cleanup for {NumPy} 2.0 — {NumPy} {Enhancement} {Proposals}},
+	shorttitle = {{NEP} 52 — {Python} {API} cleanup for {NumPy} 2.0},
+	url = {https://github.com/numpy/numpy/pull/23537},
+	howpublished = {\url{https://github.com/numpy/numpy/pull/23537}},
+	abstract = {We propose to clean up NumPy's Python API for the NumPy 2.0 release. This includes a more clearly defined split between what is public and what is private, and reducing the size of the main namespace by removing aliases and functions that have better alternatives.},
+	language = {en},
+	urldate = {2023-05-25},
+	journal = {GitHub},
+	author = {Gommers, Ralf and van der Walt, St\'{e}fan J.},
+	month = mar,
+	year = {2023},
+}
+
+% numarray
+
+@inproceedings{Greenfield2003a,
+	title = {numarray: {A} {New} {Scientific} {Array} {Package} for {Python}},
+	booktitle = {{PyCon} {DC}},
+	url = {https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.112.9899},
+	abstract = {Python has long had an array module (Numeric) for science and engineering applications; why a replacement? We explain the motivations for developing numarray, which are primarily, though not entirely focused on enabling the use of larger arrays and data sets that Numeric has difficulty handling. We also describe the design issues in its development and its new features and capabilities. Numarray is highly compatible with Numeric, including the C-API, though there are some differences that are discussed. Numarray is sufficiently well developed that it is being used in production pipelines to reduce and calibrate Hubble Space Telescope (HST) data and is being distributed to HST users along with applications for data reduction. Finally, we outline planned enhancements and improvements. Numarray is available from the Sourceforge numpy project page.},
+	language = {en},
+	author = {Greenfield, Perry and Miller, Jay Todd and Hsu, Jin-chung and White, Richard L},
+	year = {2003},
+}
+
+% NumPy
+
+@article{Harris2020a,
+	title = {Array programming with {NumPy}},
+	volume = {585},
+	copyright = {2020 The Author(s)},
+	issn = {1476-4687},
+	url = {https://www.nature.com/articles/s41586-020-2649-2},
+	doi = {10.1038/s41586-020-2649-2},
+	abstract = {Array programming provides a powerful, compact and expressive syntax for accessing, manipulating and operating on data in vectors, matrices and higher-dimensional arrays. NumPy is the primary array programming library for the Python language. It has an essential role in research analysis pipelines in fields as diverse as physics, chemistry, astronomy, geoscience, biology, psychology, materials science, engineering, finance and economics. For example, in astronomy, NumPy was an important part of the software stack used in the discovery of gravitational waves and in the first imaging of a black hole. Here we review how a few fundamental array concepts lead to a simple and powerful programming paradigm for organizing, exploring and analysing scientific data. NumPy is the foundation upon which the scientific Python ecosystem is constructed. It is so pervasive that several projects, targeting audiences with specialized needs, have developed their own NumPy-like interfaces and array objects. Owing to its central position in the ecosystem, NumPy increasingly acts as an interoperability layer between such array computation libraries and, together with its application programming interface (API), provides a flexible framework to support the next decade of scientific and industrial analysis.},
+	language = {en},
+	number = {7825},
+	urldate = {2023-05-21},
+	journal = {Nature},
+	author = {Harris, Charles R. and Millman, K. Jarrod and van der Walt, St\'{e}fan J. and Gommers, Ralf and Virtanen, Pauli and Cournapeau, David and Wieser, Eric and Taylor, Julian and Berg, Sebastian and Smith, Nathaniel J. and Kern, Robert and Picus, Matti and Hoyer, Stephan and van Kerkwijk, Marten H. and Brett, Matthew and Haldane, Allan and del R\'{i}o, Jaime Fern\'{a}ndez and Wiebe, Mark and Peterson, Pearu and G\'{e}rard-Marchant, Pierre and Sheppard, Kevin and Reddy, Tyler and Weckesser, Warren and Abbasi, Hameer and Gohlke, Christoph and Oliphant, Travis E.},
+	month = sep,
+	year = {2020},
+	note = {},
+	keywords = {Computational neuroscience, Computational science, Computer science, Software, Solar physics},
+	pages = {357--362},
+}
+
+% xarray
+
+@article{Hoyer2017a,
+	title = {xarray: {N}-{D} labeled {Arrays} and {Datasets} in {Python}},
+	volume = {5},
+	issn = {2049-9647},
+	shorttitle = {xarray},
+	url = {https://openresearchsoftware.metajnl.com/articles/10.5334/jors.148},
+	doi = {10.5334/jors.148},
+	abstract = {xarray is an open source project and Python package that provides a toolkit and data structures for N-dimensional labeled arrays. Our approach combines an application programing interface (API) inspired by pandas with the Common Data Model for self-described scientific data. Key features of the xarray package include label-based indexing and arithmetic, interoperability with the core scientific Python packages (e.g., pandas, NumPy, Matplotlib), out-of-core computation on datasets that don’t fit into memory, a wide range of serialization and input/output (I/O) options, and advanced multi-dimensional data manipulation tools such as group-by and resampling. xarray, as a data model and analytics toolkit, has been widely adopted in the geoscience community but is also used more broadly for multi-dimensional data analysis in physics, machine learning and finance.},
+	language = {en-US},
+	number = {1},
+	urldate = {2023-05-22},
+	author = {Hoyer, Stephan and Hamman, Joe},
+	month = apr,
+	year = {2017},
+	note = {},
+	pages = {10},
+}
+
+% Extending Python syntax to allow indexing into multidimensional arrays
+
+@misc{Hugunin1995a,
+	title = {Extending {Python} for {Numerical} {Computation}},
+	url = {http://hugunin.net/papers/hugunin95numpy.html},
+	howpublished = {\url{http://hugunin.net/papers/hugunin95numpy.html}},
+	language = {English},
+	urldate = {2023-05-22},
+	author = {Hugunin, James},
+	year = {1995},
+}
+
+% Matplotlib
+
+@article{Hunter2007a,
+	title = {Matplotlib: {A} {2D} {Graphics} {Environment}},
+	volume = {9},
+	issn = {1558-366X},
+	shorttitle = {Matplotlib},
+	doi = {10.1109/MCSE.2007.55},
+	abstract = {Matplotlib is a 2D graphics package used for Python for application development, interactive scripting,and publication-quality image generation across user interfaces and operating systems},
+	number = {3},
+	journal = {Computing in Science \& Engineering},
+	author = {Hunter, John D.},
+	month = may,
+	year = {2007},
+	note = {},
+	keywords = {application development, Computer languages, Equations, Graphical user interfaces, Graphics, Image generation, Interpolation, Operating systems, Packaging, Programming profession, Python, scientific programming, scripting languages, User interfaces},
+	pages = {90--95},
+}
+
+% IEEE 754 standard for floating-point arithmetic
+
+@article{IEEE754,
+	title = {{IEEE} {Standard} for {Floating}-{Point} {Arithmetic}},
+	doi = {10.1109/IEEESTD.2019.8766229},
+	abstract = {This standard specifies interchange and arithmetic formats and methods for binary and decimal floating-point arithmetic in computer programming environments. This standard specifies exception conditions and their default handling. An implementation of a floating-point system conforming to this standard may be realized entirely in software, entirely in hardware, or in any combination of software and hardware. For operations specified in the normative part of this standard, numerical results and exceptions are uniquely determined by the values of the input data, sequence of operations, and destination formats, all under user control.},
+	journal = {IEEE Std 754-2019 (Revision of IEEE 754-2008)},
+	month = jul,
+	year = {2019},
+	note = {},
+	keywords = {arithmetic, binary, computer, decimal, exponent, floating-point, Floating-point arithmetic, format, IEEE 754, IEEE Standards, interchange, NaN, number, rounding, significand, subnormal.},
+	pages = {1--84},
+}
+
+% Jupyter notebooks
+
+@inproceedings{Kluyver2016a,
+  title={Jupyter Notebooks - a publishing format for reproducible computational workflows},
+  author={Thomas Kluyver and Benjamin Ragan-Kelley and Fernando P{\'e}rez and Brian E. Granger and Matthias Bussonnier and Jonathan Frederic and Kyle Kelley and Jessica B. Hamrick and Jason Grout and Sylvain Corlay and Paul Ivanov and Dami{\'a}n Avila and Safia Abdalla and Carol Willing and Jupyter Development Team},
+  booktitle = {International Conference on Electronic Publishing},
+  doi = {10.3233/978-1-61499-649-1-87},
+  year={2016},
+}
+
+% BLAS
+
+@article{Lawson1979a,
+	title = {Basic {Linear} {Algebra} {Subprograms} for {Fortran} {Usage}},
+	volume = {5},
+	issn = {0098-3500},
+	url = {https://dl.acm.org/doi/10.1145/355841.355847},
+	doi = {10.1145/355841.355847},
+	number = {3},
+	urldate = {2023-05-25},
+	journal = {ACM Transactions on Mathematical Software},
+	author = {Lawson, Charles L. and Hanson, Richard J. and Kincaid, David R. and Krogh, Fred T.},
+	month = sep,
+	year = {1979},
+	pages = {308--323},
+}
+
+% Hypothesis library
+
+@article{MacIver2019a,
+    journal = {Journal of Open Source Software},
+    doi = {10.21105/joss.01891},
+    issn = {2475-9066},
+    number = {43},
+    publisher = {The Open Journal},
+    title = {Hypothesis: A new approach to property-based testing},
+    url = {http://dx.doi.org/10.21105/joss.01891},
+    volume = {4},
+    author = {MacIver, David and Hatfield-Dodds, Zac and Contributors, Many},
+    pages = {1891},
+    date = {2019-11-21},
+    year = {2019},
+    month = {11},
+    day = {21},
+  }
+
+% pandas
+
+@inproceedings{McKinney2010a,
+	address = {Austin, Texas},
+	title = {Data {Structures} for {Statistical} {Computing} in {Python}},
+	booktitle = {Proceedings for the {Annual} {Scientific} {Computing} with {Python} {Conference}},
+	url = {https://conference.scipy.org/proceedings/scipy2010/mckinney.html},
+	doi = {10.25080/Majora-92bf1922-00a},
+	abstract = {In this paper we are concerned with the practical issues of working with data sets common to finance, statistics, and other related fields. pandas is a new library which aims to facilitate working with these data sets and to provide a set of fundamental building blocks for implementing statistical models. We will discuss specific design issues encountered in the course of developing pandas with relevant examples and some comparisons with the R language. We conclude by discussing possible future directions for statistical computing and data analysis using Python.},
+	urldate = {2023-05-22},
+	author = {McKinney, Wes},
+	year = {2010},
+	pages = {56--61},
+}
+
+% pandas
+
+@inproceedings{McKinney2011a,
+	title = {pandas: a {Foundational} {Python} {Library} for {Data} {Analysis} and {Statistics}},
+	shorttitle = {pandas},
+	url = {https://www.semanticscholar.org/paper/pandas:-a-Foundational-Python-Library-for-Data-and-McKinney/1a62eb61b2663f8135347171e30cb9dc0a8931b5},
+	abstract = {In this paper we will discuss pandas, a Python library of rich data structures and tools for working with structured data sets common to statistics, finance, social sciences, and many other fields. The library provides integrated, intuitive routines for performing common data manipulations and analysis on such data sets. It aims to be the foundational layer for the future of statistical computing in Python. It serves as a strong complement to the existing scientific Python stack while implementing and improving upon the kinds of data manipulation tools found in other statistical programming languages such as R. In addition to detailing its design and features of pandas, we will discuss future avenues of work and growth opportunities for statistics and data analysis applications in the Python language.},
+	urldate = {2023-05-22},
+	author = {McKinney, Wes},
+	year = {2011},
+}
+
+% Linear discriminant analysis (LDA)
+
+@book{McLachlan2005a,
+	title = {Discriminant {Analysis} and {Statistical} {Pattern} {Recognition}},
+	isbn = {978-0-471-72528-2},
+	doi = {10.1002/0471725293},
+	abstract = {The Wiley-Interscience Paperback Series consists of selected books that have been made more accessible to consumers in an effort to increase global appeal and general circulation. With these new unabridged softcover volumes, Wiley hopes to extend the lives of these works by making them available to future generations of statisticians, mathematicians, and scientists. "For both applied and theoretical statisticians as well as investigators working in the many areas in which relevant use can be made of discriminant techniques, this monograph provides a modern, comprehensive, and systematic account of discriminant analysis, with the focus on the more recent advances in the field." –SciTech Book News ". . . a very useful source of information for any researcher working in discriminant analysis and pattern recognition." –Computational Statistics Discriminant Analysis and Statistical Pattern Recognition provides a systematic account of the subject. While the focus is on practical considerations, both theoretical and practical issues are explored. Among the advances covered are regularized discriminant analysis and bootstrap-based assessment of the performance of a sample-based discriminant rule, and extensions of discriminant analysis motivated by problems in statistical image analysis. The accompanying bibliography contains over 1,200 references.},
+	language = {en},
+	publisher = {John Wiley \& Sons},
+	author = {McLachlan, Geoffrey J.},
+	month = feb,
+	year = {2005},
+	note = {},
+	keywords = {Mathematics / General, Mathematics / Probability \& Statistics / General, Mathematics / Probability \& Statistics / Stochastic Processes},
+}
+
+% PyTorch - Array API adoption
+
+@misc{Meier2021a,
+	title = {Python {Array} {API} {Compatibility} {Tracker} · {Issue} \#58743 · pytorch/pytorch},
+	url = {https://github.com/pytorch/pytorch/issues/58743},
+	howpublished = {\url{https://github.com/pytorch/pytorch/issues/58743}},
+	abstract = {},
+	language = {en},
+	urldate = {2023-05-26},
+	author = {Meier, Philip},
+	month = may,
+	year = {2021},
+}
+
+% NumPy - Implementation of Array API standard
+
+@misc{Meurer2021a,
+	title = {{Implementation} of the {NEP} 47 (adopting the array {API} standard) by asmeurer · {Pull} {Request} \#18585 · numpy/numpy},
+	url = {https://github.com/numpy/numpy/pull/18585},
+	howpublished = {\url{https://github.com/numpy/numpy/pull/18585}},
+	language = {en},
+	urldate = {2023-05-26},
+	author = {Meurer, Aaron},
+	month = mar,
+	year = {2021},
+}
+
+
+% Python for numerical computing
+
+@article{Millman2011a,
+	title = {Python for {Scientists} and {Engineers}},
+	volume = {13},
+	issn = {1558-366X},
+	doi = {10.1109/MCSE.2011.36},
+	abstract = {Python has arguably become the de facto standard for exploratory, interactive, and computation-driven scientific research. This issue discusses Python's advantages for scientific research and presents several of the core Python libraries and tools used in scientific research.},
+	number = {2},
+	journal = {Computing in Science \& Engineering},
+	author = {Millman, K. Jarrod and Aivazis, Michael},
+	month = mar,
+	year = {2011},
+	note = {},
+	keywords = {Computer languages, interactive research, Numerical models, Programming, Programming languages, Python, Python libraries, Python tools, Scientific computing, Special issues and sections},
+	pages = {9--12},
+}
+
+% MATLAB
+
+@article{Moler2020a,
+	title = {A history of {MATLAB}},
+	volume = {4},
+	url = {https://dl.acm.org/doi/10.1145/3386331},
+	doi = {10.1145/3386331},
+	abstract = {The first MATLAB (the name is short for “Matrix Laboratory”) was not a programming language. Written in Fortran in the late 1970s, it was a simple interactive matrix calculator built on top of about a dozen subroutines from the LINPACK and EISPACK matrix software libraries. There were only 71 reserved words and built-in functions. It could be extended only by modifying the Fortran source code and recompiling it. The programming language appeared in 1984 when MATLAB became a commercial product. The calculator was reimplemented in C and significantly enhanced with the addition of user functions, toolboxes, and graphics. It was available initially on the IBM PC and clones; versions for Unix workstations and the Apple Macintosh soon followed. In addition to the matrix functions from the calculator, the 1984 MATLAB included fast Fourier transforms (FFT). The Control System Toolbox appeared in 1985 and the Signal Processing Toolbox in 1987. Built-in support for the numerical solution of ordinary differential equations also appeared in 1987. The first significant new data structure, the sparse matrix, was introduced in 1992. The Image Processing Toolbox and the Symbolic Math Toolbox were both introduced in 1993. Several new data types and data structures, including single precision floating point, various integer and logical types, cell arrays, structures, and objects were introduced in the late 1990s. Enhancements to the MATLAB computing environment have dominated development in recent years. Included are extensions to the desktop, major enhancements to the object and graphics systems, support for parallel computing and GPUs, and the “Live Editor”, which combines programs, descriptive text, output and graphics into a single interactive, formatted document. Today there are over 60 Toolboxes, many programmed in the MATLAB language, providing extended capabilities in specialized technical fields.},
+	number = {HOPL},
+	urldate = {2023-05-22},
+	journal = {Proceedings of the ACM on Programming Languages},
+	author = {Moler, Cleve and Little, Jack},
+	month = jun,
+	year = {2020},
+	keywords = {linear algebra, MATLAB, matrix computation},
+	pages = {81:1--81:67},
+}
+
+% CuPy
+
+@inproceedings{Okuta2017a,
+	title = {{CuPy}: {A} {NumPy}-{Compatible} {Library} for {NVIDIA} {GPU} {Calculations}},
+	shorttitle = {{CuPy}},
+	booktitle = {{Proceedings} of {Workshop} on {Machine} {Learning} {Systems} ({LearningSys}) in {The} {Thirty}-first {Annual} {Conference} on {Neural} {Information} {Processing} {Systems} ({NIPS})},
+	url = {https://www.semanticscholar.org/paper/CuPy-%3A-A-NumPy-Compatible-Library-for-NVIDIA-GPU-Okuta-Unno/a59da4639436f582e483347a4833e7659fd3e598},
+	abstract = {CuPy is an open-source library with NumPy syntax that increases speed by doing matrix operations on NVIDIA GPUs. It is accelerated with the CUDA platform from NVIDIA and also uses CUDA-related libraries, including cuBLAS, cuDNN, cuRAND, cuSOLVER, cuSPARSE, and NCCL, to make full use of the GPU architecture. CuPy’s interface is highly compatible with NumPy; in most cases it can be used as a drop-in replacement. CuPy supports various methods, data types, indexing, broadcasting, and more.},
+	urldate = {2023-05-22},
+	author = {Okuta, Ryosuke and Unno, Yuya and Nishino, Daisuke and Hido, Shohei and Loomis, Crissman},
+	year = {2017},
+}
+
+% Python for scientific computing
+
+@article{Oliphant2007a,
+	title = {Python for {Scientific} {Computing}},
+	volume = {9},
+	issn = {1558-366X},
+	doi = {10.1109/MCSE.2007.58},
+	abstract = {Python is an excellent "steering" language for scientific codes written in other languages. However, with additional basic tools, Python transforms into a high-level language suited for scientific and engineering code that's often fast enough to be immediately useful but also flexible enough to be sped up with additional extensions.},
+	number = {3},
+	journal = {Computing in Science \& Engineering},
+	author = {Oliphant, Travis E.},
+	month = may,
+	year = {2007},
+	note = {},
+	keywords = {Application software, computer languages, Embedded software, High level languages, Internet, Libraries, Prototypes, Python, scientific computing, Scientific computing, scientific programming, Software standards, Standards development, Writing},
+	pages = {10--20},
+}
+
+% PyTorch
+
+@incollection{Paszke2019a,
+	address = {Red Hook, NY, USA},
+	title = {{PyTorch}: an imperative style, high-performance deep learning library},
+	shorttitle = {{PyTorch}},
+	abstract = {Deep learning frameworks have often focused on either usability or speed, but not both. PyTorch is a machine learning library that shows that these two goals are in fact compatible: it provides an imperative and Pythonic programming style that supports code as a model, makes debugging easy and is consistent with other popular scientific computing libraries, while remaining efficient and supporting hardware accelerators such as GPUs. In this paper, we detail the principles that drove the implementation of PyTorch and how they are reflected in its architecture. We emphasize that every aspect of PyTorch is a regular Python program under the full control of its user. We also explain how the careful and pragmatic implementation of the key components of its runtime enables them to work together to achieve compelling performance. We demonstrate the efficiency of individual subsystems, as well as the overall speed of PyTorch on several common benchmarks.},
+	number = {721},
+	urldate = {2023-05-21},
+	booktitle = {Proceedings of the 33rd {International} {Conference} on {Neural} {Information} {Processing} {Systems}},
+	publisher = {Curran Associates Inc.},
+	author = {Paszke, Adam and Gross, Sam and Massa, Francisco and Lerer, Adam and Bradbury, James and Chanan, Gregory and Killeen, Trevor and Lin, Zeming and Gimelshein, Natalia and Antiga, Luca and Desmaison, Alban and K\"{o}pf, Andreas and Yang, Edward and DeVito, Zach and Raison, Martin and Tejani, Alykhan and Chilamkurthy, Sasank and Steiner, Benoit and Fang, Lu and Bai, Junjie and Chintala, Soumith},
+	month = dec,
+	year = {2019},
+	pages = {8026--8037},
+}
+
+% scikit-learn
+
+@article{Pedregosa2011a,
+	title = {Scikit-learn: machine learning in {Python}},
+	volume = {12},
+	issn = {1532-4435},
+	shorttitle = {Scikit-learn},
+	url = {www.jmlr.org/papers/v12/pedregosa11a.html},
+	abstract = {Scikit-learn is a Python module integrating a wide range of state-of-the-art machine learning algorithms for medium-scale supervised and unsupervised problems. This package focuses on bringing machine learning to non-specialists using a general-purpose high-level language. Emphasis is put on ease of use, performance, documentation, and API consistency. It has minimal dependencies and is distributed under the simplified BSD license, encouraging its use in both academic and commercial settings.},
+	language = {English},
+	urldate = {2023-05-21},
+	journal = {Journal of Machine Learning Research (JMLR)},
+	author = {Pedregosa, Fabian and Varoquaux, Ga\"{e}l and Gramfort, Alexandre and Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and Blondel, Mathieu and Prettenhofer, Peter and Weiss, Ron and Dubourg, Vincent and Vander{P}las, Jake and Passos, Alexandre and Cournapeau, David and Brucher, Matthieu and Perrot, Matthieu and Duchesnay, \'{E}douard},
+	year = {2011},
+	keywords = {68-04, 68T05},
+	pages = {2825--2830},
+}
+
+% IPython
+
+@article{Perez2007a,
+	title = {{IPython}: {A} {System} for {Interactive} {Scientific} {Computing}},
+	volume = {9},
+	issn = {1558-366X},
+	shorttitle = {{IPython}},
+	doi = {10.1109/MCSE.2007.53},
+	abstract = {Python offers basic facilities for interactive work and a comprehensive library on top of which more sophisticated systems can be built. The IPython project provides on enhanced interactive environment that includes, among other features, support for data visualization and facilities for distributed and parallel computation},
+	number = {3},
+	journal = {Computing in Science \& Engineering},
+	author = {P\'{e}rez, Fernando and Granger, Brian E.},
+	month = may,
+	year = {2007},
+	note = {},
+	keywords = {computer languages, Data analysis, Data visualization, Hardware, Libraries, Parallel processing, Production, Python, scientific computing, Scientific computing, scientific programming, Spine, Supercomputers, Testing},
+	pages = {21--29},
+}
+
+% Python for scientific computing
+
+@article{Perez2011a,
+	title = {Python: {An} {Ecosystem} for {Scientific} {Computing}},
+	volume = {13},
+	issn = {1558-366X},
+	shorttitle = {Python},
+	doi = {10.1109/MCSE.2010.119},
+	abstract = {As the relationship between research and computing evolves, new tools are required to not only treat numerical problems, but also to solve various problems that involve large datasets in different formats, new algorithms, and computational systems such as databases and Internet servers. Python can help develop these computational research tools by providing a balance of clarity and flexibility without sacrificing performance.},
+	number = {2},
+	journal = {Computing in Science \& Engineering},
+	author = {P\'{e}rez, Fernando and Granger, Brian E. and Hunter, John D.},
+	month = mar,
+	year = {2011},
+	note = {},
+	keywords = {Algorithms, arrays, data structure, high-level languages, language classifications, Numerical analysis, object-oriented languages, Programming environments, programming languages, Python, Research and development, scientific computing, Scientific computing, software engineering},
+	pages = {13--21},
+}
+
+% Jupyter
+
+@incollection{Perez2014a,
+	title = {Developing {Open}-{Source} {Scientific} {Practice}},
+	isbn = {978-1-315-37346-1},
+	doi = {10.1201/9781315373461-6},
+	abstract = {Computational tools are at the core of modern research. In addition to experiment and theory, the notions of simulation and data-intensive discovery are often referred to as "third and fourth pillars" of science [12]. It is probably more accurate to simply accept that computing is now inextricably woven into the DNA of science, as today, even theory and experiment are computational. Experimental work requires computing (whether in data collection, preprocessing, or analysis), and theoretical work requires symbolic manipulation and numerical exploration to develop and refine models. Scanning the pages of any recent scientific journal, one is hard-pressed to find an article that does not depend on computing for its findings.},
+	booktitle = {Implementing {Reproducible} {Research}},
+	publisher = {Chapman and Hall/CRC},
+	author = {P\'{e}rez, Fernando, K. Jarrod Millman},
+	year = {2014},
+	note = {},
+}
+
+% Dask
+
+@inproceedings{Rocklin2015a,
+	address = {Austin, Texas},
+	title = {Dask: {Parallel} {Computation} with {Blocked} algorithms and {Task} {Scheduling}},
+	shorttitle = {Dask},
+	booktitle = {Proceedings for the {Annual} {Scientific} {Computing} with {Python} {Conference}},
+	url = {https://conference.scipy.org/proceedings/scipy2015/matthew_rocklin.html},
+	doi = {10.25080/Majora-7b98e3ed-013},
+	abstract = {Dask enables parallel and out-of-core computation. We couple blocked algorithms with dynamic and memory aware task scheduling to achieve a parallel and out-of-core NumPy clone. We show how this extends the effective scale of modern hardware to larger datasets and discuss how these ideas can be more broadly applied to other parallel collections.},
+	urldate = {2023-05-22},
+	author = {Rocklin, Matthew},
+	year = {2015},
+	pages = {126--132},
+}
+
+% Statsmodels
+
+@inproceedings{Seabold2010a,
+	address = {Austin, Texas},
+	title = {Statsmodels: {Econometric} and {Statistical} {Modeling} with {Python}},
+	shorttitle = {Statsmodels},
+	booktitle = {Proceedings for the {Annual} {Scientific} {Computing} with {Python} {Conference}},
+	url = {https://conference.scipy.org/proceedings/scipy2010/seabold.html},
+	doi = {10.25080/Majora-92bf1922-011},
+	abstract = {Statsmodels is a library for statistical and econometric analysis in Python. This paper discusses the current relationship between statistics and Python and open source more generally, outlining how the statsmodels package fills a gap in this relationship. An overview of statsmodels is provided, including a discussion of the overarching design and philosophy, what can be found in the package, and some usage examples. The paper concludes with a look at what the future holds.},
+	urldate = {2023-05-22},
+	author = {Seabold, Skipper and Perktold, Josef},
+	year = {2010},
+	pages = {92--96},
+}
+
+% JAX - Array API adoption
+
+@misc{Vanderplas2023a,
+	title = {Initial implementation of the {Python} {Array} {API} standard · {Pull} {Request} \#16099 · google/jax},
+	url = {https://github.com/google/jax/pull/16099},
+	howpublished = {\url{https://github.com/google/jax/pull/16099}},
+	abstract = {},
+	language = {en},
+	urldate = {2023-05-26},
+	author = {Vander{P}las, Jake},
+	month = may,
+	year = {2023},
+}
+
+% NumPy
+
+@article{Vanderwalt2011a,
+	title = {The {NumPy} {Array}: {A} {Structure} for {Efficient} {Numerical} {Computation}},
+	volume = {13},
+	issn = {1558-366X},
+	shorttitle = {The {NumPy} {Array}},
+	doi = {10.1109/MCSE.2011.37},
+	abstract = {In the Python world, NumPy arrays are the standard representation for numerical data and enable efficient implementation of numerical computations in a high-level language. As this effort shows, NumPy performance can be improved through three techniques: vectorizing calculations, avoiding copying data in memory, and minimizing operation counts.},
+	number = {2},
+	journal = {Computing in Science \& Engineering},
+	author = {van der Walt, St\'{e}fan and Colbert, S. Chris and Varoquaux, Gael},
+	month = mar,
+	year = {2011},
+	note = {},
+	keywords = {Arrays, Computational efficiency, Finite element methods, Numerical analysis, numerical computations, NumPy, Performance evaluation, programming libraries, Python, Resource management, scientific programming, Vector quantization},
+	pages = {22--30},
+}
+
+% scikit-image
+
+@article{Vanderwalt2014a,
+	title = {scikit-image: image processing in {Python}},
+	volume = {2},
+	issn = {2167-8359},
+	shorttitle = {scikit-image},
+	url = {https://peerj.com/articles/453},
+	doi = {10.7717/peerj.453},
+	abstract = {scikit-image is an image processing library that implements algorithms and utilities for use in research, education and industry applications. It is released under the liberal Modified BSD open source license, provides a well-documented API in the Python programming language, and is developed by an active, international team of collaborators. In this paper we highlight the advantages of open source to achieve the goals of the scikit-image library, and we showcase several real-world image processing applications that use scikit-image. More information can be found on the project homepage, http://scikit-image.org.},
+	language = {en},
+	urldate = {2023-05-21},
+	journal = {PeerJ},
+	author = {van der Walt, St\'{e}fan J. and Sch\"{o}nberger, Johannes L. and Nunez-Iglesias, Juan and Boulogne, Fran\c cois and Warner, Joshua D. and Yager, Neil and Gouillart, Emmanuelle and Yu, Tony},
+	month = jun,
+	year = {2014},
+	note = {},
+	pages = {e453},
+}
+
+% SciPy
+
+@article{Virtanen2020a,
+	title = {{SciPy} 1.0: fundamental algorithms for scientific computing in {Python}},
+	volume = {17},
+	copyright = {2020 The Author(s)},
+	issn = {1548-7105},
+	shorttitle = {{SciPy} 1.0},
+	url = {https://www.nature.com/articles/s41592-019-0686-2},
+	doi = {10.1038/s41592-019-0686-2},
+	abstract = {SciPy is an open-source scientific computing library for the Python programming language. Since its initial release in 2001, SciPy has become a de facto standard for leveraging scientific algorithms in Python, with over 600 unique code contributors, thousands of dependent packages, over 100,000 dependent repositories and millions of downloads per year. In this work, we provide an overview of the capabilities and development practices of SciPy 1.0 and highlight some recent technical developments.},
+	language = {en},
+	number = {3},
+	urldate = {2023-05-21},
+	journal = {Nature Methods},
+	author = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and Haberland, Matt and Reddy, Tyler and Cournapeau, David and Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and Bright, Jonathan and van der Walt, St\'{e}fan J. and Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and Kern, Robert and Larson, Eric and Carey, C. J. and Polat, \.{I}lhan and Feng, Yu and Moore, Eric W. and VanderPlas, Jake and Laxalde, Denis and Perktold, Josef and Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and Harris, Charles R. and Archibald, Anne M. and Ribeiro, Ant\^{o}nio H. and Pedregosa, Fabian and van Mulbregt, Paul},
+	month = mar,
+	year = {2020},
+	note = {},
+	keywords = {Biophysical chemistry, Computational biology and bioinformatics, Technology},
+	pages = {261--272},
+}
+
+% Welch's method
+
+@article{Welch1967a,
+	title = {The use of fast {Fourier} transform for the estimation of power spectra: {A} method based on time averaging over short, modified periodograms},
+	volume = {15},
+	issn = {1558-2582},
+	shorttitle = {The use of fast {Fourier} transform for the estimation of power spectra},
+	doi = {10.1109/TAU.1967.1161901},
+	abstract = {The use of the fast Fourier transform in power spectrum analysis is described. Principal advantages of this method are a reduction in the number of computations and in required core storage, and convenient application in nonstationarity tests. The method involves sectioning the record and averaging modified periodograms of the sections.},
+	number = {2},
+	journal = {IEEE Transactions on Audio and Electroacoustics},
+	author = {Welch, P.},
+	month = jun,
+	year = {1967},
+	note = {},
+	keywords = {Aging, Demodulation, Fast Fourier transforms, Fourier transforms, Reactive power, Shape, Stochastic processes, Testing, Time measurement},
+	pages = {70--73},
+}
+
+% Dask - Array API adoption
+
+@misc{White2022a,
+	title = {Python {Array} {API} in {Dask} issue tracking · {Issue} \#8917 · dask/dask},
+	url = {https://github.com/dask/dask/issues/8917},
+	howpublished = {\url{https://github.com/dask/dask/issues/8917}},
+	abstract = {},
+	language = {en},
+	urldate = {2023-05-26},
+	author = {White, Tom},
+	month = apr,
+	year = {2022},
+}
+
+% SciPy - Array API adoption
+
+@misc{Yashchuk2022a,
+	title = {Using {Array} {API} standard for functions implemented using pure {Python} and {NumPy} {API} · {Issue} \#15354 · scipy/scipy},
+	url = {https://github.com/scipy/scipy/issues/15354},
+	howpublished = {\url{https://github.com/scipy/scipy/issues/15354}},
+	language = {en},
+	urldate = {2023-05-26},
+	author = {Yashchuk, Ivan},
+	month = jan,
+	year = {2022},
+}
+
+% MXNet - Array API adoption
+
+@misc{Yyc2021a,
+	title = {Python {Array} {API} standardization · {Issue} \#20501 · apache/mxnet},
+	url = {https://github.com/apache/mxnet/issues/20501},
+	howpublished = {\url{https://github.com/apache/mxnet/issues/20501}},
+	abstract = {},
+	language = {en},
+	urldate = {2023-05-26},
+	author = {Yyc, Nathan},
+	month = aug,
+	year = {2021},
+}
