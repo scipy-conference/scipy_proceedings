@@ -1,0 +1,22 @@
+{
+	"title": "Tidy geospatial data cubes",
+	"authors":[
+		{
+			"name":"Emma Marshall",
+			"affiliation":"University of Utah",
+			"orcid":"0000-0001-6348-977X"
+		},
+		{
+			"name":"Deepak Cherian",
+			"affiliation":"National Center for Atmospheric Research",
+			"orcid":"0000-0002-6861-8734"
+		},
+		{
+			"name":"Scott Henderson",
+			"affiliation":"University of Washington",
+			"orcid":"0000-0003-0624-4965"
+		}
+	],
+	"description":"Borrowing from the tidy data principles developed for tabular datasets [Wickham, 2014](https://vita.had.co.nz/papers/tidy-data.pdf), this presentation imagines 'tidy' principles for n-dimensional array data represented by Xarray objects with a specific focus on geospatial datasets."
+}
+
