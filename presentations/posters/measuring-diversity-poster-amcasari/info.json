@@ -1,0 +1,11 @@
+{
+   "title": "Patterns and Anti-Patterns when Measuring Diversity in Open Source",
+   "authors": [
+       {
+          "name": "amanda casari"
+          "affiliation": "Google"
+          "orcid": "000-0002-3201-8964"
+       }
+    ],
+    "description": "If we fundamentally believe that 'Open source is for everyone', how do we know we are actually bringing everyone in, meeting them where they are, and fostering a diverse and inclusive open source ecosystem? Our open source team has evolved our practices for measuring open source communities, and the impact we have on them. This poster presents patterns and anti-patterns we have learned about measuring diversity in global open source communities."
+}
