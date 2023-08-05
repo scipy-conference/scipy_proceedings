@@ -1,0 +1,41 @@
+{
+    "title": "OpenCRUMS: Open Classification of Regimes in the Southeast USA",
+    "authors": [
+        {
+            "name": "Robert Jackson",
+            "affiliation": "Argonne National Laboratory",
+            "orcid": "0000-0003-2518-1234"
+        },
+        {
+            "name": "Maria Zawadowicz",
+            "affiliation": "Brookhaven National Laboratory",
+            "orcid": "0000-0003-4234-0954"
+        }
+        {
+            "name": "Die Wang",
+            "affiliation": "Brookhaven National Laboratory",
+            "orcid": "0000-0002-4175-4306"
+        }
+        {
+            "name": "Chongai Kuang",
+            "affiliation": "Brookhaven National Laboratory",
+            "orcid": "0000-0003-2769-771X"
+        }
+        {  
+            "name": "Minnie Park",
+            "affiliation": "Brookhaven National Laboratory",
+            "orcid": "0000-0001-9380-7126"
+        }
+        {
+            "name": "Michael Jensen",
+            "affiliation": "Brookhaven National Laboratory",
+            "orcid": "0000-0003-4731-6814"
+        }
+        {
+            "name": "Scott Collis",
+            "affiliation": "Argonne National Laboratory",
+            "orcid": "0000-0002-2303-687X"
+        }
+    ],
+    "description": "The U.S. Department of Energy AI for Earth System Predictability program is interested in exploring how machine learning can be used to characterize aerosol conditions over the Atmospheric Radiation Measurement (ARM) facility's measurement sites. In this poster we provide links to cookbooks that show how to use TensorFlow and Keras to produce explainable classifications of aerosol conditions over the Houston region where a recent ARM field campaign, TRacking Aerosol Convection intERactions (TRACER), was conducted. We show that a CNN-based classifier of the EPA PM2.5 Air Quality Index is able to capture the diurnal cycle of aerosols over Houston as well as influence of Dust from the Saharan Desert."
+}
