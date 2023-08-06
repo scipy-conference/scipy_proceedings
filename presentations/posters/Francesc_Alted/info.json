@@ -1,0 +1,16 @@
+{
+    "title": "Fast Exploration of the Milky Way (or any other n-dimensional dataset)",
+    "authors": [
+        {
+            "name": "Francesc Alted",
+            "affiliation": "Blosc Development Team",
+            "orcid": ""
+        },
+        {
+            "name": "Marta Iborra",
+            "affiliation": "Blosc Development Team",
+            "orcid": ""
+        }
+    ],
+    "description": "Efficient representation of sparse 3D dataset for the Milky Way"
+}
