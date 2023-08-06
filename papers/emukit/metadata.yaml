@@ -1,0 +1,27 @@
+---
+abstract:
+   - Emukit is a highly flexible Python toolkit for enriching decision making under uncertainty with statistical emulation. It is particularly pertinent to complex processes and simulations where data are scarce or difficult to acquire. Emukit provides a common framework for a range of iterative methods that propagate well-calibrated uncertainty estimates within a design loop, such as Bayesian optimisation, Bayesian quadrature and experimental design. It also provides multi-fidelity modelling capabilities. We describe the software design of the package, illustrate usage of the main APIs, and showcase the breadth of use cases in which the library already has been used by the research community.
+keywords:
+  - statistical emulation
+  - software
+  - Bayesian optimisation
+  - Bayesian quadrature
+  - Bayesian experimental design
+  - multi-fidelity
+  - active learning
+authors:
+- email: ap2169@cam.ac.uk
+  institution:
+  - Department of Computer Science and Technology, University of Cambridge
+  name: Andrei Paleyes
+  corresponding: true
+- email: maren.mahsereci@uni-tuebingen.de
+  institution:
+  - University of Tübingen
+  name: Maren Mahsereci
+- email: ndl21@cam.ac.uk
+  institution:
+  - Department of Computer Science and Technology, University of Cambridge
+  name: Neil D. Lawrence
+bibliography: mybib
+title: 'Emukit: A Python toolkit for decision making under uncertainty'
