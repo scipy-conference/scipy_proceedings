@@ -324,22 +324,37 @@
   },
   "scipy_scholarship": [
     {
-      "org": "",
-      "name": ""
+      "name": "Arnaud Kayonga",
+      "org": ""
     },
     {
-      "org": "",
-      "name": ""
+      "name": "Caitlin Lewis",
+      "org": ""
+    },
+    {
+      "name": "Emanuel Lima",
+      "org": ""
+    },
+    {
+      "name": "Gajendra Deshpande",
+      "org": ""
+    },
+    {
+      "name": "Micaela Matta",
+      "org": ""
+    },
+    {
+      "name": "Noa Tamir",
+      "org": ""
+    },
+    {
+      "name": "Tetsuo Koyama",
+      "org": ""
+    },
+    {
+      "name": "Wanlin Li",
+      "org": ""
     }
   ],
-  "diversity_scholarship": [
-    {
-      "org": "",
-      "name": ""
-    },
-    {
-      "org": "",
-      "name": ""
-    }
-  ]
+  "diversity_scholarship": []
 }
