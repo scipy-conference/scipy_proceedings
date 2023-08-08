@@ -1,0 +1,1089 @@
+{
+  "toc": [
+    {
+      "title": "Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset)",
+      "authors": "Project Blosc, Francesc Alted, Marta Iborra, Oscar Guiñón, David Ibáñez, Sergio Barrachina",
+      "author": [
+        "Project Blosc",
+        "Francesc Alted",
+        "Marta Iborra",
+        "Oscar Guiñón",
+        "David Ibáñez",
+        "Sergio Barrachina"
+      ],
+      "author_email": [
+        "",
+        "francesc@blosc.org",
+        "martaiborra24@gmail.com",
+        "soscargm98@gmail.com",
+        "jdavid.ibp@gmail.com",
+        "barrachi@uji.es"
+      ],
+      "author_institution": [
+        "Project Blosc",
+        "Project Blosc",
+        "Project Blosc",
+        "Project Blosc",
+        "Project Blosc",
+        "Universitat Jaume I"
+      ],
+      "author_institution_map": {
+        "Project Blosc": [
+          "Project Blosc"
+        ],
+        "Francesc Alted": [
+          "Project Blosc"
+        ],
+        "Marta Iborra": [
+          "Project Blosc"
+        ],
+        "Oscar Guiñón": [
+          "Project Blosc"
+        ],
+        "David Ibáñez": [
+          "Project Blosc"
+        ],
+        "Sergio Barrachina": [
+          "Universitat Jaume I"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Large multidimensional datasets are widely used in various engineering and scientific applications. Prompt access to the subsets of these datasets is crucial for an efficient exploration experience. To facilitate this, we have added support for large dimensional datasets to Blosc2, a compression and format library. The extension enables effective support for large multidimensional datasets, with a special encoding of zeros that allows for efficient handling of sparse datasets. Additionally, the new two-level data partition used in Blosc2 reduces the need for decompressing unnecessary data, further accelerating slicing speed.",
+        "The Blosc2 NDim layer enables the creation and reading of n-dimensional datasets in an extremely efficient manner. This is due to a completely general n-dim 2-level partitioning, which allows for slicing and dicing of arbitrary large (and compressed) data in a more fine-grained way. Having a second partition provides a better flexibility to fit the different partitions at the different CPU cache levels, making compression even more efficient.",
+        "Additionally, Blosc2 can make use of Btune, a library that automatically finds the optimal combination of compression parameters to suit user needs. Btune employs various techniques, such as a genetic algorithm and a neural network model, to discover the best parameters for a given dataset much more quickly. This approach is a significant improvement over the traditional trial-and-error method, which can take hours or even days to find the best parameters.",
+        "As an example, we will demonstrate how Blosc2 NDim enables fast exploration of the Milky Way using the Gaia DR3 dataset."
+      ],
+      "keywords": "explore datasets, n-dimensional datasets, Gaia DR3, Milky Way, Blosc2, compression",
+      "copyright_holder": "Project Blosc et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 7,
+      "page": {
+        "start": 1,
+        "stop": 7
+      },
+      "paper_id": "Francesc_Alted",
+      "doi": "10.25080/gerudo-f2bc6f59-000"
+    },
+    {
+      "title": "Python Array API Standard: Toward Array Interoperability in the Scientific Python Ecosystem",
+      "authors": "Aaron Meurer, Athan Reines, Ralf Gommers, Yao-Lung L. Fang, John Kirkham, Matthew Barber, Stephan Hoyer, Andreas Müller, Sheng Zha, Saul Shanabrook, Stephannie Jiménez Gacha, Mario Lezcano-Casado, Thomas J. Fan, Tyler Reddy, Alexandre Passos, Hyukjin Kwon, Travis Oliphant, Consortium for Python Data API Standards",
+      "author": [
+        "Aaron Meurer",
+        "Athan Reines",
+        "Ralf Gommers",
+        "Yao-Lung L. Fang",
+        "John Kirkham",
+        "Matthew Barber",
+        "Stephan Hoyer",
+        "Andreas Müller",
+        "Sheng Zha",
+        "Saul Shanabrook",
+        "Stephannie Jiménez Gacha",
+        "Mario Lezcano-Casado",
+        "Thomas J. Fan",
+        "Tyler Reddy",
+        "Alexandre Passos",
+        "Hyukjin Kwon",
+        "Travis Oliphant",
+        "Consortium for Python Data API Standards"
+      ],
+      "author_email": [
+        "asmeurer@quansight.com",
+        "kgryte@gmail.com",
+        "ralf.gommers@gmail.com",
+        "leof@nvidia.com",
+        "jkirkham@nvidia.com",
+        "quitesimplymatt@gmail.com",
+        "shoyer@google.com",
+        "amueller@microsoft.com",
+        "zhasheng@apache.org",
+        "s.shanabrook@gmail.com",
+        "sgacha@quansight.com",
+        "mlezcano@quansight.com",
+        "thomasjpfan@gmail.com",
+        "treddy@lanl.gov",
+        "alexandre.tp@gmail.com",
+        "gurwls223@apache.org",
+        "travis@quansight.com",
+        ""
+      ],
+      "author_institution": [
+        "Quansight",
+        "Quansight",
+        "Quansight",
+        "NVIDIA Corporation",
+        "NVIDIA Corporation",
+        "Quansight",
+        "Google",
+        "Microsoft",
+        "Amazon",
+        "Quansight",
+        "Quansight",
+        "Quansight",
+        "LANL",
+        "Databricks",
+        "Quansight"
+      ],
+      "author_institution_map": {
+        "Aaron Meurer": [
+          "Quansight"
+        ],
+        "Athan Reines": [
+          "Quansight"
+        ],
+        "Ralf Gommers": [
+          "Quansight"
+        ],
+        "Yao-Lung L. Fang": [
+          "NVIDIA Corporation"
+        ],
+        "John Kirkham": [
+          "NVIDIA Corporation"
+        ],
+        "Matthew Barber": [
+          "Quansight"
+        ],
+        "Stephan Hoyer": [
+          "Google"
+        ],
+        "Andreas Müller": [
+          "Microsoft"
+        ],
+        "Sheng Zha": [
+          "Amazon"
+        ],
+        "Saul Shanabrook": [],
+        "Stephannie Jiménez Gacha": [
+          "Quansight"
+        ],
+        "Mario Lezcano-Casado": [
+          "Quansight"
+        ],
+        "Thomas J. Fan": [
+          "Quansight"
+        ],
+        "Tyler Reddy": [
+          "LANL"
+        ],
+        "Alexandre Passos": [],
+        "Hyukjin Kwon": [
+          "Databricks"
+        ],
+        "Travis Oliphant": [
+          "Quansight"
+        ],
+        "Consortium for Python Data API Standards": []
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "The Python array API standard specifies standardized application\nprogramming interfaces (APIs) and behaviors for array and tensor objects\nand operations as commonly found in libraries such as NumPy\nHarris2020a, CuPy Okuta2017a, PyTorch Paszke2019a,\nJAX Bradbury2018a, TensorFlow Abadi2016a, Dask\nRocklin2015a, and MXNet Chen2015a. The establishment and\nsubsequent adoption of the standard aims to reduce ecosystem fragmentation\nand facilitate array library interoperability in user code and among\narray-consuming libraries, such as scikit-learn Pedregosa2011a and\nSciPy Virtanen2020a. A key benefit of array interoperability for\ndownstream consumers of the standard is device agnosticism, whereby\npreviously CPU-bound implementations can more readily leverage hardware\nacceleration via graphics processing units (GPUs), tensor processing units\n(TPUs), and other accelerator devices.",
+        "In this paper, we first introduce the Consortium for Python Data API\nStandards and define the scope of the array API standard. We then discuss\nthe current status of standardization and associated tooling (including a\ntest suite and compatibility layer). We conclude by outlining plans for\nfuture work."
+      ],
+      "keywords": "Python, Arrays, Tensors, NumPy, CuPy, PyTorch, JAX, Tensorflow, Dask, MXNet",
+      "copyright_holder": "Aaron Meurer et al.",
+      "video": "",
+      "bibliography": "bibliography",
+      "pages": 10,
+      "page": {
+        "start": 8,
+        "stop": 17
+      },
+      "paper_id": "aaron_meurer",
+      "doi": "10.25080/gerudo-f2bc6f59-001"
+    },
+    {
+      "title": "A Modified Strassen Algorithm to Accelerate Numpy Large Matrix Multiplication with Integer Entries",
+      "authors": "Anthony Breitzman",
+      "author": [
+        "Anthony Breitzman"
+      ],
+      "author_email": [
+        "breitzman@rowan.edu"
+      ],
+      "author_institution": [
+        "Rowan University Department of Computer Science"
+      ],
+      "author_institution_map": {
+        "Anthony Breitzman": [
+          "Rowan University Department of Computer Science"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Numpy is a popular Python library widely used in\nthe math and scientific community because of its speed and convenience.\nWe present a Strassen type algorithm for multiplying large matrices with integer entries.\nThe algorithm is the standard Strassen divide and conquer algorithm but it crosses over to Numpy when either the row or column dimension of one of the matrices drops below 128.  The algorithm was tested on a MacBook, an I7 based Windows machine as well as a Linux machine running a Xeon processor and we found that for matrices with thousands of rows or columns and integer entries, the Strassen based algorithm with crossover performed 8 to 30 times faster than regular Numpy on such matrices.  Although there is no apparent advantage for matrices with real entries, there are a number of applications for matrices with integer coefficients."
+      ],
+      "keywords": "Strassen, Numpy, Integer Matrix",
+      "copyright_holder": "Anthony Breitzman.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 6,
+      "page": {
+        "start": 18,
+        "stop": 23
+      },
+      "paper_id": "anthony_breitzman1",
+      "doi": "10.25080/gerudo-f2bc6f59-002"
+    },
+    {
+      "title": "An Accessible Python based Author Identification Process",
+      "authors": "Anthony Breitzman",
+      "author": [
+        "Anthony Breitzman"
+      ],
+      "author_email": [
+        "breitzman@rowan.edu"
+      ],
+      "author_institution": [
+        "Rowan University Department of Computer Science"
+      ],
+      "author_institution_map": {
+        "Anthony Breitzman": [
+          "Rowan University Department of Computer Science"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Author identification also known as ‘author attribution’ and more recently  ‘forensic linguistics’ involves identifying true authors of anonymous texts. The Federalist Papers are 85 documents written anonymously by a combination of Alexander Hamilton, John Jay, and James Madison in the late\n1780's supporting adoption of the American Constitution.  All but 12 documents have confirmed authors based on lists provided before the\nauthor’s deaths.  Mosteller and Wallace in 1963 provided evidence of authorship for the 12 disputed documents, however the analysis is\nnot readily accessible to non-statisticians.  In this paper we replicate the analysis but in a much more accessible way using modern\ntext mining methods and Python. One surprising result is the usefulness of filler-words in identifying writing styles.  The method\ndescribed here can be applied to other authorship questions such as linking the Unabomber manifesto with Ted Kaczynski,\nidentifying Shakespeare's collaborators, etc.  Although the question of authorship of the Federalist Papers has been studied before, what is new in this paper is we highlight a process and tools that can be easily used by Python programmers, and the methods do not rely on any knowledge of statistics or machine learning."
+      ],
+      "keywords": "Federalist, Author Identification, Attribution, Forensic Linguistics, Text-Mining",
+      "copyright_holder": "Anthony Breitzman.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 8,
+      "page": {
+        "start": 24,
+        "stop": 31
+      },
+      "paper_id": "anthony_breitzman2",
+      "doi": "10.25080/gerudo-f2bc6f59-003"
+    },
+    {
+      "title": "Biomolecular Crystallographic Computing with Jupyter",
+      "authors": "Blaine H. M. Mooers",
+      "author": [
+        "Blaine H. M. Mooers"
+      ],
+      "author_email": [
+        "blaine-mooers@ouhsc.edu"
+      ],
+      "author_institution": [
+        "Department of Biochemistry and Molecular Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+        "Stephenson Cancer Center, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+        "Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+        "Biomolecular Structure Core, Oklahoma COBRE in Structural Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104"
+      ],
+      "author_institution_map": {
+        "Blaine H. M. Mooers": [
+          "Department of Biochemistry and Molecular Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+          "Stephenson Cancer Center, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+          "Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
+          "Biomolecular Structure Core, Oklahoma COBRE in Structural Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104"
+        ]
+      },
+      "author_orcid_map": {
+        "Blaine H. M. Mooers": "0000-0001-8181-8987"
+      },
+      "abstract": [
+        "The ease of use of Jupyter notebooks has helped biologists enter scientific computing,\nespecially in protein crystallography, where a collaborative community develops extensive\nlibraries, user-friendly GUIs, and Python APIs. The APIs allow users to use the libraries in Jupyter.\nTo further advance this use of Jupyter, we developed a collection of code fragments that use\nthe vast Computational Crystallography Toolbox (cctbx) library for novel analyses. We made versions\nof this library for use in JupyterLab and Colab. We also made versions of the snippet library\nfor the text editors VS Code, Vim, and Emacs that support editing live code cells in Jupyter\nnotebooks via the GhostText web browser extension. Readers of this paper may be inspired to adapt this latter capability\nto their domains of science."
+      ],
+      "keywords": "literate programming, reproducible research, scientific rigor, electronic notebooks, JupyterLab, Jupyter notebooks, Colab notebook, OnDemand notebooks, computational structural biology, computational crystallography, biomolecular crystallography, protein crystallography, biomolecular structure, computational molecular biophysics, biomedical research, data visualization, scientific communication, GhostText, text editors, snippet libraries, SciPy software stack, interactive software development",
+      "copyright_holder": "Blaine H. M. Mooers.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 8,
+      "page": {
+        "start": 32,
+        "stop": 39
+      },
+      "paper_id": "blaine_mooers",
+      "doi": "10.25080/gerudo-f2bc6f59-004"
+    },
+    {
+      "title": "Bayesian Statistics with Python, No Resampling Necessary",
+      "authors": "Charles Lindsey",
+      "author": [
+        "Charles Lindsey"
+      ],
+      "author_email": [
+        "charles.lindsey@revionics.com"
+      ],
+      "author_institution": [
+        "Revionics, an Aptos Company"
+      ],
+      "author_institution_map": {
+        "Charles Lindsey": [
+          "Revionics, an Aptos Company"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "TensorFlow Probability is a powerful library for statistical analysis in Python. Using TensorFlow Probability’s implementation of Bayesian methods, modelers can incorporate prior information and obtain parameter estimates and a quantified degree of belief in the results. Resampling methods like Markov Chain Monte Carlo can also be used to perform Bayesian analysis. As an alternative, we show how to use numerical optimization to estimate model parameters, and then show how numerical differentiation can be used to get a quantified degree of belief. How to perform simulation in Python to corroborate our results is also demonstrated."
+      ],
+      "keywords": "Bayesian statistics, resampling, maximum likelihood, numerical differentiation",
+      "copyright_holder": "Charles Lindsey.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 6,
+      "page": {
+        "start": 40,
+        "stop": 45
+      },
+      "paper_id": "charles_lindsey",
+      "doi": "10.25080/gerudo-f2bc6f59-005"
+    },
+    {
+      "abstract": [
+        "Digital twins of neutron instruments using Monte Carlo ray tracing have proven to be useful in neutron data analysis and verifying instrument and sample designs. However, these simulations can become quite complex and computationally demanding with tens of billions of neutrons. In this paper, we present a GPU accelerated version of MCViNE using Python and Numba to balance user extensibility with performance. Numba is an open-source just-in-time (JIT) compiler for Python using LLVM to generate efficient machine code for CPUs and GPUs with NVIDIA CUDA. The JIT nature of Numba allowed complex instrument kernels to be generated easily. Initial simulations have shown a speedup between 200-1000x over the original CPU implementation. The performance gain with Numba enables more sophisticated data analysis and impacts neutron scattering science and instrument design."
+      ],
+      "keywords": "Monte Carlo, numba, digital twin, Python, neutron, GPU, ray tracing, CUDA",
+      "authors": "Coleman J. Kendrick, Jiao Y. Y. Lin, Garrett E. Granroth",
+      "bibliography": "bib",
+      "title": "Using Numba for GPU acceleration of Neutron Beamline Digital Twins",
+      "author": [
+        "Coleman J. Kendrick",
+        "Jiao Y. Y. Lin",
+        "Garrett E. Granroth"
+      ],
+      "author_email": [
+        "kendrickcj@ornl.gov",
+        "jiao.lin@gmail.com",
+        "granrothge@ornl.gov"
+      ],
+      "author_institution": [
+        [
+          "Oak Ridge National Laboratory"
+        ],
+        [
+          "Oak Ridge National Laboratory"
+        ],
+        [
+          "Oak Ridge National Laboratory"
+        ]
+      ],
+      "corresponding": [
+        "Coleman J. Kendrick"
+      ],
+      "equal_contributors": [],
+      "author_institution_map": {
+        "Coleman J. Kendrick": [
+          "Oak Ridge National Laboratory"
+        ],
+        "Jiao Y. Y. Lin": [
+          "Oak Ridge National Laboratory"
+        ],
+        "Garrett E. Granroth": [
+          "Oak Ridge National Laboratory"
+        ]
+      },
+      "author_orcid_map": {},
+      "institutions": [
+        {
+          "name": "Oak Ridge National Laboratory",
+          "order": 1
+        }
+      ],
+      "copyright_holder": "Coleman J. Kendrick et al.",
+      "pages": 7,
+      "page": {
+        "start": 46,
+        "stop": 52
+      },
+      "paper_id": "coleman_kendrick",
+      "doi": "10.25080/gerudo-f2bc6f59-006"
+    },
+    {
+      "abstract": [
+        "Electroencepholography (EEG) and functional magnetic resonance imaging (fMRI) are two ways of recording brain activity; the former provides good time resolution but poor spatial resolution, while the converse is true for the latter. Recently, deep neural network models have been developed that can synthesize fMRI activity from EEG signals, and vice versa. Because these generative models simulate data, they make it easier for neuroscientists to test ideas about how EEG and fMRI signals relate to each other, and what both signals tell us about how the brain controls behavior. To make it easier for researchers to access these models, and to standardize how they are used, we developed a Python package, EEG-to-fMRI, which provides cross modal neuroimaging synthesis functionalities. This is the first open source software enabling neuroimaging synthesis. Our main focus is for this package to help neuroscience, machine learning, and health care communities. This study gives an in-depth description of this package, along with the theoretical foundations and respective results."
+      ],
+      "keywords": "Electroencephalography, Functional Magnetic Resonance Imaging, Synthesis, Deep Learning, Learning, Machine Learning, Computer Vision",
+      "authors": "David Calhas",
+      "bibliography": "bibliography",
+      "title": "EEG-to-fMRI Neuroimaging Cross Modal Synthesis in Python",
+      "author": [
+        "David Calhas"
+      ],
+      "author_email": [
+        "david.calhas@tecnico.ulisboa.pt"
+      ],
+      "author_institution": [
+        [
+          "INESC-ID",
+          "Instituto Superior Tecnico"
+        ]
+      ],
+      "corresponding": [],
+      "equal_contributors": [],
+      "author_institution_map": {
+        "David Calhas": [
+          "INESC-ID",
+          "Instituto Superior Tecnico"
+        ]
+      },
+      "author_orcid_map": {},
+      "institutions": [
+        {
+          "name": "INESC-ID",
+          "order": 1
+        },
+        {
+          "name": "Instituto Superior Tecnico",
+          "order": 2
+        }
+      ],
+      "copyright_holder": "David Calhas.",
+      "pages": 6,
+      "page": {
+        "start": 53,
+        "stop": 58
+      },
+      "paper_id": "david_calhas",
+      "doi": "10.25080/gerudo-f2bc6f59-007"
+    },
+    {
+      "title": "vak: a neural network framework for researchers studying animal acoustic communication",
+      "authors": "David Nicholson, Yarden Cohen",
+      "author": [
+        "David Nicholson",
+        "Yarden Cohen"
+      ],
+      "author_email": [
+        "nicholdav@gmail.com",
+        "yarden.j.cohen@weizmann.ac.il"
+      ],
+      "author_institution": [
+        "Independent researcher, Baltimore, Maryland, USA",
+        "Weizmann Institute of Science, Rehovot, Israel"
+      ],
+      "author_institution_map": {
+        "David Nicholson": [
+          "Independent researcher, Baltimore, Maryland, USA"
+        ],
+        "Yarden Cohen": [
+          "Weizmann Institute of Science, Rehovot, Israel"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "How is speech like birdsong? What do we mean when we say an animal learns their vocalizations?\nQuestions like these are answered by studying how animals communicate with sound.\nAs in many other fields, the study of acoustic communication is being revolutionized by deep neural network models.\nThese models enable answering questions that were previously impossible to address,\nin part because the models automate analysis of very large datasets. Acoustic communication researchers\nhave developed multiple models for similar tasks, often implemented as research code with one of several libraries,\nsuch as Keras and Pytorch. This situation has created a real need for a framework\nthat allows researchers to easily benchmark multiple models,\nand test new models, with their own data. To address this need, we developed vak (https://github.com/vocalpy/vak),\na neural network framework designed for acoustic communication researchers.\n(\\textquotedbl{}vak\\textquotedbl{} is pronounced like \\textquotedbl{}talk\\textquotedbl{} or \\textquotedbl{}squawk\\textquotedbl{} and was chosen\nfor its similarity to the Latin root voc, as in \\textquotedbl{}vocal\\textquotedbl{}.)\nHere we describe the design of the vak,\nand explain how the framework makes it easy for researchers to apply neural network models to their own data.\nWe highlight enhancements made in version 1.0 that significantly improve user experience with the library.\nTo provide researchers without expertise in deep learning access to these models,\nvak can be run via a command-line interface that uses configuration files.\nVak can also be used directly in scripts by scientist-coders. To achieve this, vak adapts design patterns and\nan API from other domain-specific PyTorch libraries such as torchvision, with modules representing\nneural network operations, models, datasets, and transformations for pre- and post-processing.\nvak also leverages the Lightning library as a backend,\nso that vak developers and users can focus on the domain.\nWe provide proof-of-concept results showing how vak can be used to\ntest new models and compare existing models from multiple model families.\nIn closing we discuss our roadmap for development and vision for the community of users."
+      ],
+      "keywords": "animal acoustic communication, bioacoustics, neural networks",
+      "copyright_holder": "David Nicholson et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 9,
+      "page": {
+        "start": 59,
+        "stop": 67
+      },
+      "paper_id": "david_nicholson",
+      "doi": "10.25080/gerudo-f2bc6f59-008"
+    },
+    {
+      "abstract": [
+        "Emukit is a highly flexible Python toolkit for enriching decision making under uncertainty with statistical emulation. It is particularly pertinent to complex processes and simulations where data are scarce or difficult to acquire. Emukit provides a common framework for a range of iterative methods that propagate well-calibrated uncertainty estimates within a design loop, such as Bayesian optimisation, Bayesian quadrature and experimental design. It also provides multi-fidelity modelling capabilities. We describe the software design of the package, illustrate usage of the main APIs, and showcase the breadth of use cases in which the library already has been used by the research community."
+      ],
+      "keywords": "statistical emulation, software, Bayesian optimisation, Bayesian quadrature, Bayesian experimental design, multi-fidelity, active learning",
+      "authors": "Andrei Paleyes, Maren Mahsereci, Neil D. Lawrence",
+      "bibliography": "mybib",
+      "title": "Emukit: A Python toolkit for decision making under uncertainty",
+      "author": [
+        "Andrei Paleyes",
+        "Maren Mahsereci",
+        "Neil D. Lawrence"
+      ],
+      "author_email": [
+        "ap2169@cam.ac.uk",
+        "maren.mahsereci@uni-tuebingen.de",
+        "ndl21@cam.ac.uk"
+      ],
+      "author_institution": [
+        [
+          "Department of Computer Science and Technology, University of Cambridge"
+        ],
+        [
+          "University of Tübingen"
+        ],
+        [
+          "Department of Computer Science and Technology, University of Cambridge"
+        ]
+      ],
+      "corresponding": [
+        "Andrei Paleyes"
+      ],
+      "equal_contributors": [],
+      "author_institution_map": {
+        "Andrei Paleyes": [
+          "Department of Computer Science and Technology, University of Cambridge"
+        ],
+        "Maren Mahsereci": [
+          "University of Tübingen"
+        ],
+        "Neil D. Lawrence": [
+          "Department of Computer Science and Technology, University of Cambridge"
+        ]
+      },
+      "author_orcid_map": {},
+      "institutions": [
+        {
+          "name": "Department of Computer Science and Technology, University of Cambridge",
+          "order": 1
+        },
+        {
+          "name": "University of Tübingen",
+          "order": 2
+        }
+      ],
+      "copyright_holder": "Andrei Paleyes et al.",
+      "pages": 8,
+      "page": {
+        "start": 68,
+        "stop": 75
+      },
+      "paper_id": "emukit",
+      "doi": "10.25080/gerudo-f2bc6f59-009"
+    },
+    {
+      "title": "MDAKits: A Framework for FAIR-Compliant Molecular Simulation Analysis",
+      "authors": "Irfan Alibay, Lily Wang, Fiona Naughton, Ian Kenney, Jonathan Barnoud, Richard J Gowers, Oliver Beckstein",
+      "author": [
+        "Irfan Alibay",
+        "Lily Wang",
+        "Fiona Naughton",
+        "Ian Kenney",
+        "Jonathan Barnoud",
+        "Richard J Gowers",
+        "Oliver Beckstein"
+      ],
+      "author_email": [
+        "ialibay@mdanalysis.org",
+        "lily@mdanalysis.org",
+        "fiona@mdanalysis.org",
+        "ikenney@asu.edu",
+        "jonathan@barnoud.net",
+        "richard@mdanalysis.org",
+        "obeckste@asu.edu"
+      ],
+      "author_institution": [
+        "Open Molecular Software Foundation, Irvine, CA, USA",
+        "Open Molecular Software Foundation, Irvine, CA, USA",
+        "Cardiovascular Research Institute, University of California, San Francisco, San Francisco, CA, USA",
+        "Arizona State University, Tempe, AZ, USA",
+        "Centro Singular de Investigación en Tecnoloxías Intelixentes, Santiago de Compostela, Spain",
+        "Open Molecular Software Foundation, Irvine, CA, USA",
+        "Arizona State University, Tempe, AZ, USA"
+      ],
+      "author_institution_map": {
+        "Irfan Alibay": [
+          "Open Molecular Software Foundation, Irvine, CA, USA"
+        ],
+        "Lily Wang": [
+          "Open Molecular Software Foundation, Irvine, CA, USA"
+        ],
+        "Fiona Naughton": [
+          "Cardiovascular Research Institute, University of California, San Francisco, San Francisco, CA, USA"
+        ],
+        "Ian Kenney": [
+          "Arizona State University, Tempe, AZ, USA"
+        ],
+        "Jonathan Barnoud": [
+          "Centro Singular de Investigación en Tecnoloxías Intelixentes, Santiago de Compostela, Spain"
+        ],
+        "Richard J Gowers": [
+          "Open Molecular Software Foundation, Irvine, CA, USA"
+        ],
+        "Oliver Beckstein": [
+          "Arizona State University, Tempe, AZ, USA"
+        ]
+      },
+      "author_orcid_map": {
+        "Irfan Alibay": "0000-0001-5787-9130",
+        "Lily Wang": "0000-0002-6095-6704",
+        "Fiona Naughton": "0000-0003-0162-1346",
+        "Ian Kenney": "0000-0002-9749-8866",
+        "Jonathan Barnoud": "0000-0003-0343-7796",
+        "Richard J Gowers": "0000-0002-3241-1846",
+        "Oliver Beckstein": "0000-0003-1340-0831"
+      },
+      "abstract": [
+        "The reproducibility and transparency of scientific findings are widely recognized as crucial for promoting scientific progress.\nHowever, when it comes to scientific software, researchers face many barriers and few incentives to ensure that their software is open to the community, thoroughly tested, and easily accessible.\nTo address this issue, the MDAKits framework has been developed, which simplifies the process of creating toolkits for the MDAnalysis simulation analysis package (https://www.mdanalysis.org/) that follow the basic principles of FAIR (findability, accessibility, interoperability, and reusability).\nThe MDAKit framework provides a cookiecutter template, best practices documentation, and a continually validated registry.\nRegistered kits are continually tested against the latest release and development version of the MDAnalysis library and their code health is indicated with badges.\nUsers can browse the registry frontend (https://mdakits.mdanalysis.org/) to find new packages, learn about associated publications, and assess the package health in order to make informed decisions about using a MDAKit in their own research.\nThe criteria for registering an MDAKit (open source, version control, documentation, tests) are similar to the criteria required for publishing a paper in a software journal, so we encourage and support publication in, e.g., the Journal of Open Source Software, creating further academic incentive for researchers to publish code.\nThrough the MDAKits framework, we aim to foster the creation of a diverse ecosystem of sustainable community-driven downstream tools for MDAnalysis and hope to provide a blueprint for a model for growing communities around other scientific packages."
+      ],
+      "keywords": "Molecular Dynamics Simulations, Python, MDAnalysis, eco-system",
+      "copyright_holder": "Irfan Alibay et al.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 9,
+      "page": {
+        "start": 76,
+        "stop": 84
+      },
+      "paper_id": "ian_kenney",
+      "doi": "10.25080/gerudo-f2bc6f59-00a"
+    },
+    {
+      "abstract": [
+        "As the scale of scientific data analysis continues to grow, traditional domain-specific tools often struggle with data of increasing size and complexity. These tools also face sustainability challenges due to a relatively narrow user base, a limited pool of contributors, and constrained funding sources. We introduce the Pandata open-source software stack as a solution, emphasizing the use of domain-independent tools at critical stages of the data life cycle, without compromising the depth of domain-specific analyses. This set of interoperable and compositional tools, including Dask, Xarray, Numba, hvPlot, Panel, and Jupyter, provides a versatile and sustainable model for data analysis and scientific computation. Collectively, the Pandata stack covers the landscape of data access, distributed computation, and interactive visualization across any domain or scale. See github.com/panstacks/pandata to get started using this stack or to help contribute to it."
+      ],
+      "keywords": "distributed computing, data visualization, workflows",
+      "authors": "James A. Bednar, Martin Durant",
+      "bibliography": "mybib",
+      "title": "The Pandata Scalable Open-Source Analysis Stack",
+      "author": [
+        "James A. Bednar",
+        "Martin Durant"
+      ],
+      "author_email": [
+        "jbednar@anaconda.com",
+        "mdurant@anaconda.com"
+      ],
+      "author_institution": [
+        [
+          "Anaconda, Inc."
+        ],
+        [
+          "Anaconda, Inc."
+        ]
+      ],
+      "corresponding": [],
+      "equal_contributors": [],
+      "author_institution_map": {
+        "James A. Bednar": [
+          "Anaconda, Inc."
+        ],
+        "Martin Durant": [
+          "Anaconda, Inc."
+        ]
+      },
+      "author_orcid_map": {},
+      "institutions": [
+        {
+          "name": "Anaconda, Inc.",
+          "order": 1
+        }
+      ],
+      "copyright_holder": "James A. Bednar et al.",
+      "pages": 8,
+      "page": {
+        "start": 85,
+        "stop": 92
+      },
+      "paper_id": "james_bednar",
+      "doi": "10.25080/gerudo-f2bc6f59-00b"
+    },
+    {
+      "abstract": [
+        "Understanding human security and social equity issues within human systems requires large-scale models of population dynamics that simulate high-fidelity representations of individuals and access to essential activities (work/school, social, errands, health). Likeness is a Python toolkit that provides these capabilities for Oak Ridge National Laboratory's (ORNL) UrbanPop spatial microsimulation project. In step with the initial development phase for Likeness (2021 - 2022), we built out several foundational examples of work/school and health service access. In this paper, we describe expansion and scaling of Likeness capabilities to metropolitan areas in the United States. We then provide an integrated demonstration of our methods based on a case study of Leon County, FL and perform validation exercises on 1) neighborhood demographic composition and 2) visits by demographic cohorts (gender/age) obtained from point of interest (POI) footfall data for essential services (grocery stores). Taking into account lessons learned from our case study, we scope improvements to our model as well as provide a roadmap of the anticipated Likeness development cycle into 2023 - 2024."
+      ],
+      "authors": "Joseph V. Tuccillo, James D. Gaboardi",
+      "bibliography": "mybib",
+      "copyright_holder": "Oak Ridge National Laboratory",
+      "keywords": "activity space, synthetic population, microsimulation, population dynamics",
+      "title": "Spatial Microsimulation and Activity Allocation in Python: An Update on the Likeness Toolkit",
+      "author": [
+        "Joseph V. Tuccillo",
+        "James D. Gaboardi"
+      ],
+      "author_email": [
+        "tuccillojv@ornl.gov",
+        "gaboardijd@ornl.gov"
+      ],
+      "author_institution": [
+        [
+          "Oak Ridge National Laboratory, Geospatial Sciences and Human Security"
+        ],
+        [
+          "Oak Ridge National Laboratory, Geospatial Sciences and Human Security"
+        ]
+      ],
+      "corresponding": [
+        "Joseph V. Tuccillo"
+      ],
+      "equal_contributors": [],
+      "author_institution_map": {
+        "Joseph V. Tuccillo": [
+          "Oak Ridge National Laboratory, Geospatial Sciences and Human Security"
+        ],
+        "James D. Gaboardi": [
+          "Oak Ridge National Laboratory, Geospatial Sciences and Human Security"
+        ]
+      },
+      "author_orcid_map": {
+        "Joseph V. Tuccillo": "0000-0002-5930-0943",
+        "James D. Gaboardi": "0000-0002-4776-6826"
+      },
+      "institutions": [
+        {
+          "name": "Oak Ridge National Laboratory, Geospatial Sciences and Human Security",
+          "order": 1
+        }
+      ],
+      "pages": 8,
+      "page": {
+        "start": 93,
+        "stop": 100
+      },
+      "paper_id": "james_gaboardi",
+      "doi": "10.25080/gerudo-f2bc6f59-00c"
+    },
+    {
+      "title": "itk-elastix: Medical image registration in Python",
+      "authors": "Konstantinos Ntatsis, Niels Dekker, Viktor van der Valk, Tom Birdsong, Dženan Zukić, Stefan Klein, Marius Staring, Matthew McCormick",
+      "author": [
+        "Konstantinos Ntatsis",
+        "Niels Dekker",
+        "Viktor van der Valk",
+        "Tom Birdsong",
+        "Dženan Zukić",
+        "Stefan Klein",
+        "Marius Staring",
+        "Matthew McCormick"
+      ],
+      "author_email": [
+        "k.ntatsis@lumc.nl",
+        "c.e.dekker@lumc.nl",
+        "v.o.van\\_der\\_valk@lumc.nl",
+        "tom.birdsong@kitware.com",
+        "dzenan.zukic@kitware.com",
+        "s.klein@erasmusmc.nl",
+        "m.staring@lumc.nl",
+        "matt.mccormick@kitware.com"
+      ],
+      "author_institution": [
+        "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+        "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+        "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+        "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA",
+        "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA",
+        "Biomedical Imaging Group Rotterdam, Department of Radiology \\& Nuclear Medicine, Erasmus MC, Rotterdam, the Netherlands",
+        "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+        "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA"
+      ],
+      "author_institution_map": {
+        "Konstantinos Ntatsis": [
+          "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands"
+        ],
+        "Niels Dekker": [
+          "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands"
+        ],
+        "Viktor van der Valk": [
+          "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands"
+        ],
+        "Tom Birdsong": [
+          "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA"
+        ],
+        "Dženan Zukić": [
+          "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA"
+        ],
+        "Stefan Klein": [
+          "Biomedical Imaging Group Rotterdam, Department of Radiology \\& Nuclear Medicine, Erasmus MC, Rotterdam, the Netherlands"
+        ],
+        "Marius Staring": [
+          "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands"
+        ],
+        "Matthew McCormick": [
+          "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Image registration plays a vital role in understanding changes that occur in 2D and 3D scientific imaging datasets. Registration involves finding a spatial transformation that aligns one image to another by optimizing relevant image similarity metrics. In this paper, we introduce itk-elastix, a user-friendly Python wrapping of the mature elastix registration toolbox. The open-source tool supports rigid, affine, and B-spline deformable registration, making it versatile for various imaging datasets. By utilizing the modular design of itk-elastix, users can efficiently configure and compare different registration methods, and embed these in image analysis workflows."
+      ],
+      "keywords": "medical imaging, image analysis, registration, elastix, ITK, wrapping, Python",
+      "copyright_holder": "Konstantinos Ntatsis et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 5,
+      "page": {
+        "start": 101,
+        "stop": 105
+      },
+      "paper_id": "konstantinos_ntatsis",
+      "doi": "10.25080/gerudo-f2bc6f59-00d"
+    },
+    {
+      "abstract": [
+        "PyQtGraph is a plotting library with high performance, cross-platform support and interactivity as its primary objectives. These goals are achieved by connecting the Qt GUI framework and the scientific Python ecosystem. The end result is a plotting library that supports using native python data types and NumPy arrays to drive interactive visualizations on all major operating systems.",
+        "Whereas most scientific visualization tools for Python are oriented around publication-quality plotting and browser-based user interaction, PyQtGraph occupies a niche for applications in data analysis and hardware control that require real-time visualization and interactivity in a desktop environment.",
+        "The well-established framework supports line plots, scatter plots, and images, including time-series 3D data represented as 4D arrays, in addition to the basic drawing primitives provided by Qt.",
+        "For datasets up to several hundred thousand points, real-time rendering speed is achieved by optimized interaction with the Python bindings of the Qt framework. For enhanced image processing capabilities, PyQtGraph optionally integrates with CUDA. This ensures rendering capabilities are scalable with increasing data demands. Moreover, this improvement is enabled simply by installing the CuPy\\cite{cupy_learningsys2017} library, i.e. requiring no in-depth user configurations.",
+        "PyQtGraph provides interactivity not only for panning and scaling, but also through mouse hover, click, drag events and other common native interactions. Since PyQtGraph uses the Qt framework, the user can substitute their own intended application behavior to those events if they feel the library defaults are not appropriate.  This flexibility allows the development of customized and streamlined user interfaces for data manipulation.",
+        "The included parameter tree framework allows straightforward interactions with arbitrary user functions and configuration settings. Callbacks execute on changing parameter values, even asynchronously if requested.",
+        "An active developer community and regular release cycles indicate and encourage further library development. PyQtGraph's support cycle is synchronized with the NEP-29\\cite{NEP-29} standard, ensuring most popular scientific python modules are continually compatible with each release.",
+        "PyQtGraph is available through pypi.org (\\href{https://pypi.org/project/pyqtgraph/}{https://pypi.org/project/pyqtgraph/}), conda-forge ({\\href{https://anaconda.org/conda-forge/pyqtgraph}{https:/ anaconda.org/conda-forge/pyqtgraph}}) and GitHub (\\href{https://github.com/pyqtgraph/pyqtgraph}{https://github.com/pyqtgraph/pyqtgraph})."
+      ],
+      "keywords": "Visualization, Qt, NumPy, PyData, Python",
+      "authors": "Ognyan Moore, Nathan Jessurun, Martin Chase, Nils Nemitz, Luke Campagnola",
+      "bibliography": "mybib",
+      "title": "PyQtGraph - High Performance Visualization for All Platforms",
+      "author": [
+        "Ognyan Moore",
+        "Nathan Jessurun",
+        "Martin Chase",
+        "Nils Nemitz",
+        "Luke Campagnola"
+      ],
+      "author_email": [
+        "ognyan.moore@gmail.com",
+        "ntjessu@gmail.com",
+        "outofculture@gmail.com",
+        "nils.nemitz@gmx.de",
+        "lukec@alleninstitute.org"
+      ],
+      "author_institution": [
+        [
+          "Hobu Inc."
+        ],
+        [
+          "Unaffiliated"
+        ],
+        [
+          "Unaffiliated"
+        ],
+        [
+          "Unaffiliated"
+        ],
+        [
+          "Allen Institute"
+        ]
+      ],
+      "corresponding": [
+        "Ognyan Moore"
+      ],
+      "equal_contributors": [],
+      "author_institution_map": {
+        "Ognyan Moore": [
+          "Hobu Inc."
+        ],
+        "Nathan Jessurun": [
+          "Unaffiliated"
+        ],
+        "Martin Chase": [
+          "Unaffiliated"
+        ],
+        "Nils Nemitz": [
+          "Unaffiliated"
+        ],
+        "Luke Campagnola": [
+          "Allen Institute"
+        ]
+      },
+      "author_orcid_map": {},
+      "institutions": [
+        {
+          "name": "Hobu Inc.",
+          "order": 1
+        },
+        {
+          "name": "Unaffiliated",
+          "order": 2
+        },
+        {
+          "name": "Allen Institute",
+          "order": 3
+        }
+      ],
+      "copyright_holder": "Ognyan Moore et al.",
+      "pages": 8,
+      "page": {
+        "start": 106,
+        "stop": 113
+      },
+      "paper_id": "moore-pyqtgraph",
+      "doi": "10.25080/gerudo-f2bc6f59-00e"
+    },
+    {
+      "title": "aPhyloGeo-Covid: A Web Interface for Reproducible Phylogeographic Analysis of SARS-CoV-2 Variation using Neo4j and Snakemake",
+      "authors": "Wanlin Li, Nadia Tahiri",
+      "author": [
+        "Wanlin Li",
+        "Nadia Tahiri"
+      ],
+      "author_email": [
+        "Nadia.Tahiri@USherbrooke.ca",
+        "Nadia.Tahiri@USherbrooke.ca"
+      ],
+      "author_institution": [
+        "Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada",
+        "Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada"
+      ],
+      "author_institution_map": {
+        "Wanlin Li": [
+          "Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada"
+        ],
+        "Nadia Tahiri": [
+          "Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "The gene sequencing data, along with the associated lineage tracing and research data generated\nthroughout the Coronavirus disease 2019 (COVID-19) pandemic, constitute invaluable resources that profoundly\nempower phylogeography research. To optimize the utilization of these resources, we have developed an interactive\nanalysis platform called aPhyloGeo-Covid, leveraging the capabilities of Neo4j, Snakemake, and Python. This platform enables researchers\nto explore and visualize diverse data sources specifically relevant to  SARS-CoV-2 for phylogeographic analysis.\nThe integrated Neo4j database acts as a comprehensive repository, consolidating COVID-19 pandemic-related sequences information,\nclimate data, and demographic data obtained from public databases, facilitating efficient filtering and organization of input data for\nphylogeographical studies. Presently, the database encompasses over 113,774 nodes and 194,381 relationships. Additionally, aPhyloGeo-Covid provides a scalable and reproducible phylogeographic workflow for investigating the intricate relationship between geographic features and the patterns of variation in diverse SARS-CoV-2 variants. The code repository of platform is publicly accessible on\nGitHub (https://github.com/tahiri-lab/iPhyloGeo/tree/iPhylooGeo-neo4j), providing researchers with a valuable tool to analyze\nand explore the intricate dynamics of SARS-CoV-2 within a phylogeographic context."
+      ],
+      "keywords": "Phylogeography, Neo4j, Snakemake, Dash, SARS-CoV-2",
+      "copyright_holder": "Wanlin Li et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 10,
+      "page": {
+        "start": 114,
+        "stop": 123
+      },
+      "paper_id": "nadia_tahiri",
+      "doi": "10.25080/gerudo-f2bc6f59-00f"
+    },
+    {
+      "title": "Pandera: Going Beyond Pandas Data Validation",
+      "authors": "Niels Bantilan",
+      "author": [
+        "Niels Bantilan"
+      ],
+      "author_email": [
+        "niels@union.ai"
+      ],
+      "author_institution": [
+        "Union.ai",
+        "pyOpenSci"
+      ],
+      "author_institution_map": {
+        "Niels Bantilan": [
+          "Union.ai",
+          "pyOpenSci"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "Data quality remains a core concern for practitioners in machine learning,\ndata science, and data engineering, and many specialized packages have emerged\nto fulfill the need of validating and monitoring data and models. However, as\nthe open source community creates new data processing frameworks - notably,\nnew highly performant entrants such as Polars - existing data quality frameworks\nneed to catch up to support them, and in some cases, the Python community\nmore broadly creates new data validation libraries for these new data frameworks.\nThis paper outlines pandera's motivation and challenges that took it from being\na pandas-only data validation framework niels\\_bantilan-proc-scipy-2020\nto one that is extensible to other non-pandas-compliant dataframe-like libraries.\nIt also provides an informative case study of the technical and organizational\nchallenges associated with expanding the scope of a library beyond its original\nboundaries."
+      ],
+      "keywords": "data validation, data testing, data science, machine learning, data engineering",
+      "copyright_holder": "Niels Bantilan.",
+      "video": "",
+      "bibliography": "references",
+      "pages": 6,
+      "page": {
+        "start": 124,
+        "stop": 129
+      },
+      "paper_id": "niels_bantilan",
+      "doi": "10.25080/gerudo-f2bc6f59-010"
+    },
+    {
+      "title": "libyt: a Tool for Parallel In Situ Analysis with yt",
+      "authors": "Shin-Rong Tsai, Hsi-Yu Schive, Matthew J. Turk",
+      "author": [
+        "Shin-Rong Tsai",
+        "Hsi-Yu Schive",
+        "Matthew J. Turk"
+      ],
+      "author_email": [
+        "srtsai@illinois.edu",
+        "hyschive@phys.ntu.edu.tw",
+        "mjturk@illinois.edu"
+      ],
+      "author_institution": [
+        "National Taiwan University, Department of Physics",
+        "University of Illinois at Urbana-Champaign, School of Information Sciences",
+        "National Taiwan University, Department of Physics",
+        "National Taiwan University, Institute of Astrophysics",
+        "National Taiwan University, Center for Theoretical Physics",
+        "National Center for Theoretical Sciences, Physics Division",
+        "University of Illinois at Urbana-Champaign, School of Information Sciences"
+      ],
+      "author_institution_map": {
+        "Shin-Rong Tsai": [
+          "National Taiwan University, Department of Physics",
+          "University of Illinois at Urbana-Champaign, School of Information Sciences"
+        ],
+        "Hsi-Yu Schive": [
+          "National Taiwan University, Department of Physics",
+          "National Taiwan University, Institute of Astrophysics",
+          "National Taiwan University, Center for Theoretical Physics",
+          "National Center for Theoretical Sciences, Physics Division"
+        ],
+        "Matthew J. Turk": [
+          "University of Illinois at Urbana-Champaign, School of Information Sciences"
+        ]
+      },
+      "author_orcid_map": {},
+      "abstract": [
+        "In the era of exascale computing, storage and analysis of large scale data have become\nmore important and difficult.\nWe present libyt, an open source C++ library, that allows researchers to analyze and\nvisualize data using yt or other Python packages in parallel during simulation runtime.\nWe describe the code method for organizing adaptive mesh refinement grid data structure and\nsimulation data, handling data transition between Python and simulation with minimal memory\noverhead, and conducting analysis with no additional time penalty using Python C API and\nNumPy C API.\nWe demonstrate how it solves the problem in astrophysical simulations and increases disk\nusage efficiency. Finally, we conclude it with discussions about libyt."
+      ],
+      "keywords": "astronomy data analysis, astronomy data visualization, in situ analysis, open source software",
+      "copyright_holder": "Shin-Rong Tsai et al.",
+      "video": "",
+      "bibliography": "mybib",
+      "pages": 6,
+      "page": {
+        "start": 130,
+        "stop": 135
+      },
+      "paper_id": "shin-rong_tsai",
+      "doi": "10.25080/gerudo-f2bc6f59-011"
+    },
+    {
+      "abstract": [
+        "Multidimensional categorical data is widespread but not easily visualized using standard methods. For example, questionnaire (e.g. survey) data generally consists of questions with categorical responses (e.g., yes/no, hate/dislike/neutral/like/love). Thus, a questionnaire with 10 questions, each with five mutually exclusive responses, gives a dataset of $5^{10}$ possible observations, an amount of data that would be hard to reasonably collect. Hence, this type of dataset is necessarily sparse. Popular methods of handling categorical data include one-hot encoding (which exacerbates the dimensionality problem) and enumeration, which applies an unwarranted and potentially misleading notional order to the data. To address this, we introduce a novel visualization method named Data Reduction Network (DRN). Using a network-graph structure, the DRN denotes each categorical feature as a node with interrelationships between nodes denoted by weighted edges. The graph is statistically reduced to reveal the strongest or weakest path-wise relationships between features and to reduce visual clutter. A key advantage is that it does not “lose” features, but rather represents interrelationships across the entire categorical feature set without eliminating weaker relationships or features. Indeed, the graph representation can be inverted so that instead of visualizing the strongest interrelationships, the weakest can be surfaced. The DRN is a powerful visualization tool for multi-dimensional categorical data and in particular data derived from surveys and questionaires."
+      ],
+      "keywords": "Data Visualization, Multidimensional Categorical Data",
+      "authors": "Haoyin Xu, Haw-minn Lu, José Unpingco",
+      "bibliography": "mybib",
+      "title": "Data Reduction Network",
+      "author": [
+        "Haoyin Xu",
+        "Haw-minn Lu",
+        "José Unpingco"
+      ],
+      "author_email": [
+        "wxu@westhealth.org",
+        "hlu@westhealth.org",
+        "junpingco@eng.ucsd.edu"
+      ],
+      "author_institution": [
+        [
+          "Gary and Mary West Health Institute",
+          "University of California, San Diego"
+        ],
+        [
+          "Gary and Mary West Health Institute"
+        ],
+        [
+          "University of California, San Diego"
+        ]
+      ],
+      "corresponding": [
+        "Haw-minn Lu"
+      ],
+      "equal_contributors": [],
+      "author_institution_map": {
+        "Haoyin Xu": [
+          "Gary and Mary West Health Institute",
+          "University of California, San Diego"
+        ],
+        "Haw-minn Lu": [
+          "Gary and Mary West Health Institute"
+        ],
+        "José Unpingco": [
+          "University of California, San Diego"
+        ]
+      },
+      "author_orcid_map": {},
+      "institutions": [
+        {
+          "name": "Gary and Mary West Health Institute",
+          "order": 1
+        },
+        {
+          "name": "University of California, San Diego",
+          "order": 2
+        }
+      ],
+      "copyright_holder": "Haoyin Xu et al.",
+      "pages": 7,
+      "page": {
+        "start": 136,
+        "stop": 142
+      },
+      "paper_id": "xu_etal",
+      "doi": "10.25080/gerudo-f2bc6f59-012"
+    }
+  ]
+}
