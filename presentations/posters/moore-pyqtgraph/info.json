@@ -27,5 +27,6 @@
             "orcid": ""
         }
     ],
-    "description": "Discuss and showcase the PyQtGraph plotting library.  Special attention will be given to highlight PyQtGraph's primary objectives, its performance, cross-platform support and interactivity and how the library achieves those objectives."
+    "description": "Discuss and showcase the PyQtGraph plotting library.  Special attention will be given to highlight PyQtGraph's primary objectives, its performance, cross-platform support and interactivity and how the library achieves those objectives.",
+    "zenodo_url": "https://zenodo.org/record/8220855"
 }

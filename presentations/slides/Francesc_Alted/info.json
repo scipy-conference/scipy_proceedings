@@ -7,5 +7,6 @@
             "orcid": ""
         }
     ],
-    "description": "A presentation about how to efficiently explore n-dimensional datasets"
+    "description": "A presentation about how to efficiently explore n-dimensional datasets",
+    "zenodo_url": "https://zenodo.org/record/8221023"
 }

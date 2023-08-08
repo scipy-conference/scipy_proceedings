@@ -12,5 +12,6 @@
             "orcid": ""
         }
     ],
-    "description": "In this contribution we presented the first stable version v1.0 of Gammapy, an openly developed Python package for gamma-ray astronomy. Gammapy provides methods for the analysis of astronomical gamma-ray data, such as measurement of spectra, images and light curves. By relying on standardized data formats and a joint likelihood framework, it allows astronomers to combine data from multiple instruments and constrain underlying astrophysical emission processes across large parts of the electromagnetic spectrum. Finally shared lessons learned during the journey towards version v1.0 for an openly developed scientific Python package."
+    "description": "In this contribution we presented the first stable version v1.0 of Gammapy, an openly developed Python package for gamma-ray astronomy. Gammapy provides methods for the analysis of astronomical gamma-ray data, such as measurement of spectra, images and light curves. By relying on standardized data formats and a joint likelihood framework, it allows astronomers to combine data from multiple instruments and constrain underlying astrophysical emission processes across large parts of the electromagnetic spectrum. Finally shared lessons learned during the journey towards version v1.0 for an openly developed scientific Python package.",
+    "zenodo_url": "https://zenodo.org/record/8221050"
 }

@@ -7,5 +7,6 @@
             "orcid": ""
         }
     ],
-    "description": "Modern portfolio theory is a mathematical approach that helps in creating an investment portfolio by considering both the potential risks and returns.Our sample portfolio comprises eight diverse assets, representing exposure to various sectors in the Global Industry Classification Standard (GICS)." 
+    "description": "Modern portfolio theory is a mathematical approach that helps in creating an investment portfolio by considering both the potential risks and returns.Our sample portfolio comprises eight diverse assets, representing exposure to various sectors in the Global Industry Classification Standard (GICS)." ,
+    "zenodo_url": "https://zenodo.org/record/8220722"
 }

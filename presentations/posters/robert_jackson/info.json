@@ -37,5 +37,6 @@
             "orcid": "0000-0002-2303-687X"
         }
     ],
-    "description": "The U.S. Department of Energy AI for Earth System Predictability program is interested in exploring how machine learning can be used to characterize aerosol conditions over the Atmospheric Radiation Measurement (ARM) facility's measurement sites. In this poster we provide links to cookbooks that show how to use TensorFlow and Keras to produce explainable classifications of aerosol conditions over the Houston region where a recent ARM field campaign, TRacking Aerosol Convection intERactions (TRACER), was conducted. We show that a CNN-based classifier of the EPA PM2.5 Air Quality Index is able to capture the diurnal cycle of aerosols over Houston as well as influence of Dust from the Saharan Desert."
+    "description": "The U.S. Department of Energy AI for Earth System Predictability program is interested in exploring how machine learning can be used to characterize aerosol conditions over the Atmospheric Radiation Measurement (ARM) facility's measurement sites. In this poster we provide links to cookbooks that show how to use TensorFlow and Keras to produce explainable classifications of aerosol conditions over the Houston region where a recent ARM field campaign, TRacking Aerosol Convection intERactions (TRACER), was conducted. We show that a CNN-based classifier of the EPA PM2.5 Air Quality Index is able to capture the diurnal cycle of aerosols over Houston as well as influence of Dust from the Saharan Desert.",
+    "zenodo_url": "https://zenodo.org/record/8220870"
 }

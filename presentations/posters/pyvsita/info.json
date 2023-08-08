@@ -7,5 +7,6 @@
         }
     ],
     "title": "PyVista",
-    "description": "Let's plot 3D Pythonic visualization"
+    "description": "Let's plot 3D Pythonic visualization",
+    "zenodo_url": "https://zenodo.org/record/8220865"
 }

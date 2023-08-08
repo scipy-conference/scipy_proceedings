@@ -8,5 +8,6 @@
 
         }
     ],
-    "description": "SciPy tools plenary session updates for Zarr"
+    "description": "SciPy tools plenary session updates for Zarr",
+    "zenodo_url": "https://zenodo.org/record/8221202"
 }

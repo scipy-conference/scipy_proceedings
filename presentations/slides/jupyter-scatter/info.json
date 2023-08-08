@@ -7,5 +7,6 @@
             "orcid": "0000-0001-8432-4835"
         }
     ],
-    "description": "Jupyter Scatter is a scalable, interactive, and interlinked scatter plot widget for exploring datasets with up to several million data points. It focuses on data-driven visual encodings and offers two-way pan+zoom and lasso interactions. Beyond a single instance, Jupyter Scatter can compose multiple scatter plots and synchronize their views and selections. In this presentation, Fritz introduces Jupyter Scatter's API and demonstrates how the widget can be used for exploring large-scale datasets using real-world examples from biology, machine learning, and geospatial data."
+    "description": "Jupyter Scatter is a scalable, interactive, and interlinked scatter plot widget for exploring datasets with up to several million data points. It focuses on data-driven visual encodings and offers two-way pan+zoom and lasso interactions. Beyond a single instance, Jupyter Scatter can compose multiple scatter plots and synchronize their views and selections. In this presentation, Fritz introduces Jupyter Scatter's API and demonstrates how the widget can be used for exploring large-scale datasets using real-world examples from biology, machine learning, and geospatial data.",
+    "zenodo_url": "https://zenodo.org/record/8221129"
 }
