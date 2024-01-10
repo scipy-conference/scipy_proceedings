@@ -27,5 +27,6 @@
         }
     ],
     "title": "Moving the Earth with thermodynamics and python",
-    "description": "This poster describes some of the challenges of coupling thermodynamic models to geodynamic simulations and introduces a new python-based tool, ThermoCodegen (TCG), to deal with them.  TCG uses SymPy to symbolically represent thermodynamic models and automatically generate interfaces to a set of consistent thermodynamic parameters for use in geodynamic models.  It can be used quite generally but has been particularly designed for reactive disequilibrium problems in Earth science and we present some examples here."
+    "description": "This poster describes some of the challenges of coupling thermodynamic models to geodynamic simulations and introduces a new python-based tool, ThermoCodegen (TCG), to deal with them.  TCG uses SymPy to symbolically represent thermodynamic models and automatically generate interfaces to a set of consistent thermodynamic parameters for use in geodynamic models.  It can be used quite generally but has been particularly designed for reactive disequilibrium problems in Earth science and we present some examples here.",
+    "zenodo_url": "https://zenodo.org/record/8220915"
 }

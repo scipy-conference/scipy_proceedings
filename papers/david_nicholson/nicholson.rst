@@ -8,7 +8,6 @@
 
 :bibliography: mybib
 
-:video: "https://www.youtube.com/watch?v=Hz1JWzyvv8A"
 
 --------------------------------------------------------------------------------------
 vak: a neural network framework for researchers studying animal acoustic communication
@@ -55,7 +54,7 @@ but is speech somehow like other forms of acoustic communication in other animal
 such as birdsong :cite:`doupeBIRDSONGHUMANSPEECH1999`?
 How should we even understand the ability of some animals to learn their vocalizations
 :cite:`wirthlinModularApproachVocal2019`?
-Questions like these are answered by studying how animals communicate with sound :cite:`hopp2012animal`. 
+Questions like these are answered by studying how animals communicate with sound :cite:`hopp2012animal`.
 As others have argued, major advances in this research will require
 cutting edge computational methods and big team science across a wide range of disciplines,
 including ecology, ethology, bioacoustics, psychology, neuroscience, linguistics, and genomics
@@ -256,7 +255,7 @@ We present a listing that demonstrates usage of the abstractions just described.
        Levenshtein,
        SegmentErrorRate,
    )
-   
+
    @model(family=FrameClassificationModel)
    class TweetyNoLSTMNet:
        """TweetyNet model without LSTM layer"""

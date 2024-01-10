@@ -42,5 +42,6 @@
         }
     ],
     "title": "itk-elastix: Medical image registration in Python",
-    "description": "This SciPy 2023 poster provides an overview of the open-source medical image registration package itk-elastix. "
+    "description": "This SciPy 2023 poster provides an overview of the open-source medical image registration package itk-elastix. ",
+    "zenodo_url": "https://zenodo.org/record/8220782"
 }

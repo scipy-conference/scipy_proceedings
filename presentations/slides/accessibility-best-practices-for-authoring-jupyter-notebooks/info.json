@@ -12,5 +12,6 @@
             "orcid": ""
         }
     ],
-    "description": "Jupyter notebooks seem like they are for everyone, but how a notebook gets written can greatly impact how usable it is for people with disabilities. Using staple accessibility frameworks, this talk dives into what it means to make a notebook’s content accessible and provide actionable guidance on how authors can improve their notebooks."
+    "description": "Jupyter notebooks seem like they are for everyone, but how a notebook gets written can greatly impact how usable it is for people with disabilities. Using staple accessibility frameworks, this talk dives into what it means to make a notebook's content accessible and provide actionable guidance on how authors can improve their notebooks.",
+    "zenodo_url": "https://zenodo.org/record/8221044"
 }

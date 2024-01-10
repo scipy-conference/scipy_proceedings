@@ -18,5 +18,6 @@
         }
 
     ],
-    "description": "A presentation on the new CUDA package layout for Conda (as included in conda-forge)."
+    "description": "A presentation on the new CUDA package layout for Conda (as included in conda-forge).",
+    "zenodo_url": "https://zenodo.org/record/8221076"
 }

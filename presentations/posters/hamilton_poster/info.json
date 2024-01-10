@@ -29,8 +29,9 @@
             "name": "Melissa Allen-Dumas",
             "affiliation": "ORNL",
             "orcid": "0000-0002-3319-0846"
-        },
+        }
     ],
     "title": "Hamilton: Scalable, Portable, and Self-Documenting Dataflows in Python",
-    "description": "Poster presented at the 2023 SciPy Conference. It describes the Hamilton project, which is a Python library for creating dataflows that are scalable, portable, and self-documenting. It uses the Naturf project as a case study to show before and after Hamilton."
+    "description": "Poster presented at the 2023 SciPy Conference. It describes the Hamilton project, which is a Python library for creating dataflows that are scalable, portable, and self-documenting. It uses the Naturf project as a case study to show before and after Hamilton.",
+    "zenodo_url": "https://zenodo.org/record/8220764"
 }

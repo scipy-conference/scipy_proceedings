@@ -7,5 +7,6 @@
         }
     ],
     "title": "Matchmaker: A Toolkit for Combining Satellite Observations from Multiple Sensors",
-    "description": "Matchmaker constructs multi-sensor datasets that enable scientists to directly compare observations for validation or monitoring purposes, or to fuse measurements from complementary instruments to improve geophysical understanding. Matchmaker leverages SciPy ecosystem tools to perform each of its primary tasks: orbital simulation, geometric collocation of individual observations, and alignment / aggregation of sensor data arrays."
+    "description": "Matchmaker constructs multi-sensor datasets that enable scientists to directly compare observations for validation or monitoring purposes, or to fuse measurements from complementary instruments to improve geophysical understanding. Matchmaker leverages SciPy ecosystem tools to perform each of its primary tasks: orbital simulation, geometric collocation of individual observations, and alignment / aggregation of sensor data arrays.",
+    "zenodo_url": "https://zenodo.org/record/8220821"
 }

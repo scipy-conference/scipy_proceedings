@@ -4,8 +4,9 @@
             "name": "Aman Goel",
             "affiliation": "The University of Manchester",
             "orcid": "0000-0003-3567-2096"
-        },
+        }
     ],
     "title": "TUG-RSE: Pulling Students into Research Software Engineering",
-    "description": "Research Software Engineering (RSE) is a rapidly growing profession within the Scientific Python community, but it can present significant challenges for newcomers, particularly students who may lack the necessary skills or knowledge of the field. The aim of this poster presentation is to discuss the current challenges faced by newcomers to research software engineering, the potential solutions to make the community more inclusive, and an introduction to 'The Undergraduate's Guide To Research Software Engineering' (TUG-RSE)."
+    "description": "Research Software Engineering (RSE) is a rapidly growing profession within the Scientific Python community, but it can present significant challenges for newcomers, particularly students who may lack the necessary skills or knowledge of the field. The aim of this poster presentation is to discuss the current challenges faced by newcomers to research software engineering, the potential solutions to make the community more inclusive, and an introduction to 'The Undergraduate's Guide To Research Software Engineering' (TUG-RSE).",
+    "zenodo_url": "https://zenodo.org/record/8220929"
 }

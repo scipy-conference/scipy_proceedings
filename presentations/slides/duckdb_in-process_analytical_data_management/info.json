@@ -22,5 +22,6 @@
             "orcid": ""
         }
     ],
-    "description": "DuckDB is a novel analytical data management system available under the MIT license. DuckDB supports complex queries in SQL or a relational API, has no external dependencies, and is deeply integrated into the Python ecosystem (reading and writing Numpy, Pandas, and PyArrow objects). DuckDB can also analyze datasets that are too large to fit in main memory."
+    "description": "DuckDB is a novel analytical data management system available under the MIT license. DuckDB supports complex queries in SQL or a relational API, has no external dependencies, and is deeply integrated into the Python ecosystem (reading and writing Numpy, Pandas, and PyArrow objects). DuckDB can also analyze datasets that are too large to fit in main memory.",
+    "zenodo_url": "https://zenodo.org/record/8221094"
 }

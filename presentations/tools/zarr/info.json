@@ -6,7 +6,8 @@
             "affiliation": "German BioImaging",
             "orcid": "0000-0003-4028-811X"
 
-        },
+        }
     ],
-    "description": "SciPy tools plenary session updates for Zarr"
+    "description": "SciPy tools plenary session updates for Zarr",
+    "zenodo_url": "https://zenodo.org/record/8221202"
 }

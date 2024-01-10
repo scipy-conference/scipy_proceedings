@@ -12,5 +12,6 @@
             "orcid": "0000-0002-1844-641X"
         }
     ],
-    "description": "Relational databases manage structured data and facilitate queries in collaborative repositories, but using SQL from a scientific programming language is awkward. DataJoint is an open-source framework for managing scientific data supporting data definition, diagramming, and queries. DataJoint makes computation a native part of its data model, bridging the gap between databases and numerical analysis in automated workflows."
+    "description": "Relational databases manage structured data and facilitate queries in collaborative repositories, but using SQL from a scientific programming language is awkward. DataJoint is an open-source framework for managing scientific data supporting data definition, diagramming, and queries. DataJoint makes computation a native part of its data model, bridging the gap between databases and numerical analysis in automated workflows.",
+    "zenodo_url": "https://zenodo.org/record/8221102"
 }

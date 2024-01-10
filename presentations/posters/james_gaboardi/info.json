@@ -12,5 +12,6 @@
             "orcid": "0000-0002-4776-6826"
         }
     ],
-    "description": "The Likeness toolkit utilizes state-of-the-art spatial microsimulation and activity allocation methods to generate synthetic populations within the US, at the metropolitan scale. These 'parallel universes' of agents are attributed with hundreds of demographic variables, probable nighttime and daytime locations, and plausible routing by commute mode between locations. This functionality is demonstrated for Tallahassee, FL and vicinity, a mid-sized metropolitan area."
+    "description": "The Likeness toolkit utilizes state-of-the-art spatial microsimulation and activity allocation methods to generate synthetic populations within the US, at the metropolitan scale. These 'parallel universes' of agents are attributed with hundreds of demographic variables, probable nighttime and daytime locations, and plausible routing by commute mode between locations. This functionality is demonstrated for Tallahassee, FL and vicinity, a mid-sized metropolitan area.",
+    "zenodo_url": "https://zenodo.org/record/8220813"
 }

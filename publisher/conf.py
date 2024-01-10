@@ -10,7 +10,7 @@ excludes = [
     'texderwalt',
 ]
 # status_file_root possible values: draft, conference, ready
-status_file_base = 'draft'
+status_file_base = 'ready'
 status_file_name = ''.join([status_file_base, '.sty'])
 
 work_dir      = os.path.dirname(__file__)
