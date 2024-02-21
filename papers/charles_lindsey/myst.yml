@@ -1,0 +1,34 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: Bayesian Statistics with Python, No Resampling Necessary
+  description: TensorFlow Probability is a powerful library for statistical analysis in Python. Using TensorFlow Probability’s implementation of Bayesian methods, modelers can incorporate prior information and obtain parameter estimates and a quantified degree of belief in the results.
+  author:
+    name: Charles Lindsey
+    email: charles.lindsey@revionics.com
+    affiliation: Revionics, an Aptos Company
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-005
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - Bayesian statistics
+    - resampling
+    - maximum likelihood
+    - numerical differentiation
+  abbreviations:
+    MCMC: Markov chain Monte Carlo
+    MAP: Maximum A Posteriori
+  biblio:
+    first_page: 40
+    last_page: 45
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: charles_lindsey.pdf
+      static: true
