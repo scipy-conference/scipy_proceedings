@@ -1,0 +1,48 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: EEG-to-fMRI Neuroimaging Cross Modal Synthesis in Python
+  description: Electroencepholography and functional magnetic resonance imaging are two ways of recording brain activity. We developed a Python package, EEG-to-fMRI, which provides cross modal neuroimaging synthesis functionalities.
+  authors:
+    - name: David Calhas
+      email: david.calhas@tecnico.ulisboa.pt
+      affiliations:
+        - INESC-ID
+        - Instituto Superior Tecnico
+  keywords:
+    - Electroencephalography
+    - Functional Magnetic Resonance Imaging
+    - Synthesis
+    - Deep Learning
+    - Learning
+    - Machine Learning
+    - Computer Vision
+  github: https://github.com/eeg-to-fmri/eeg-to-fmri
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  # exports:
+  #   - format: typst
+  #     article: main.tex
+  #     template: https://github.com/myst-templates/scipy.git
+  #     title: EEG-to-fMRI Neuroimaging Cross Modal Synthesis in Python
+  doi: 10.25080/gerudo-f2bc6f59-007
+  banner: banner.png
+  thumbnail: thumbnail.png
+  abbreviations:
+    EEG: electroencephalography
+    fMRI: functional magnetic resonance imaging
+    MRI: magnetic resonance imaging
+    RMSE: root mean squared error
+    MAE: mean absolute error
+  biblio:
+    first_page: 53
+    last_page: 58
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: david_calhas.pdf
+      static: true
