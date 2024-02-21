@@ -1,0 +1,45 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: 'vak: a neural network framework for researchers studying animal acoustic communication'
+  description: The study of acoustic communication is being revolutionized by deep neural network models. To address this need, we developed vak, a neural network framework designed for acoustic communication researchers.
+  authors:
+    - name: David Nicholson
+      orcid: 0000-0002-4261-4719
+      email: nicholdav@gmail.com
+      affiliation: Independent researcher, Baltimore, Maryland, USA
+    - name: Yarden Cohen
+      orcid: 0000-0002-8149-6954
+      email: yarden.j.cohen@weizmann.ac.il
+      affiliation: Weizmann Institute of Science, Rehovot, Israel
+  keywords:
+    - animal acoustic communication
+    - bioacoustics
+    - neural networks
+  github: https://github.com/vocalpy/vak
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-008
+  banner: banner.png
+  thumbnail: thumbnail.png
+  abbreviations:
+    API: Application Programming Interface
+    GUI: Graphical User Interface
+    CLI: Command-Line Interface
+    LSTM: Long Short Term Memory
+    UMAP: Uniform Manifold Approximation and Projection
+    ED-TCN: Encoder Decoder-Temporal Convolutional
+    TOML: Tom's Obvious Minimal Language
+    DAS: Deep Audio Segmenter
+  biblio:
+    first_page: 59
+    last_page: 67
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: david_nicholson.pdf
+      static: true
