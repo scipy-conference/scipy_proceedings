@@ -1,30 +1,30 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{k}{def} \PY{n+nf}{instrument}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-    \PY{n}{instrument} \PY{o}{=} \PY{n}{mcvine}\PY{o}{.}\PY{n}{instrument}\PY{p}{(}\PY{p}{)}
-    \PY{n}{source} \PY{o}{=} \PY{n}{Source\PYZus{}simple}\PY{p}{(}
-        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{src}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-        \PY{n}{radius} \PY{o}{=} \PY{l+m+mf}{0.}\PY{p}{,} \PY{n}{width} \PY{o}{=} \PY{l+m+mf}{0.03}\PY{p}{,} 
-        \PY{n}{height} \PY{o}{=} \PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{dist} \PY{o}{=} \PY{l+m+mf}{1.}\PY{p}{,} 
-        \PY{n}{xw} \PY{o}{=} \PY{l+m+mf}{0.035}\PY{p}{,} \PY{n}{yh} \PY{o}{=} \PY{l+m+mf}{0.035}
-    \PY{p}{)}
-    \PY{n}{instrument}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{source}\PY{p}{,} 
-                      \PY{n}{position}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{0.}\PY{p}{)}\PY{p}{)}
+\begin{lstlisting}[language=python]
+def instrument():
+    instrument = mcvine.instrument()
+    source = Source_simple(
+        'src',
+        radius = 0., width = 0.03,
+        height = 0.03, dist = 1.,
+        xw = 0.035, yh = 0.035
+    )
+    instrument.append(source,
+                      position=(0,0,0.))
 
-    \PY{n}{guide1} \PY{o}{=} \PY{n}{Guide}\PY{p}{(}
-        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{guide}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-        \PY{n}{w1}\PY{o}{=}\PY{l+m+mf}{0.035}\PY{p}{,} \PY{n}{h1}\PY{o}{=}\PY{l+m+mf}{0.035}\PY{p}{,} 
-        \PY{n}{w2}\PY{o}{=}\PY{l+m+mf}{0.035}\PY{p}{,} \PY{n}{h2}\PY{o}{=}\PY{l+m+mf}{0.035}\PY{p}{,} 
-        \PY{n}{l}\PY{o}{=}\PY{l+m+mi}{10}
-    \PY{p}{)}
-    \PY{n}{instrument}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{guide1}\PY{p}{,} 
-                      \PY{n}{position}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{1.}\PY{p}{)}\PY{p}{)}
+    guide1 = Guide(
+        'guide',
+        w1=0.035, h1=0.035,
+        w2=0.035, h2=0.035,
+        l=10
+    )
+    instrument.append(guide1,
+                      position=(0,0,1.))
 
-    \PY{n}{mon} \PY{o}{=} \PY{n}{PosDiv\PYZus{}monitor}\PY{p}{(}
-        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{xwidth}\PY{o}{=}\PY{l+m+mf}{0.08}\PY{p}{,} \PY{n}{yheight}\PY{o}{=}\PY{l+m+mf}{0.08}\PY{p}{,}
-        \PY{n}{maxdiv}\PY{o}{=}\PY{l+m+mf}{2.}\PY{p}{,}
-        \PY{n}{npos}\PY{o}{=}\PY{l+m+mi}{250}\PY{p}{,} \PY{n}{ndiv}\PY{o}{=}\PY{l+m+mi}{251}\PY{p}{,}
-    \PY{p}{)}
-    \PY{n}{instrument}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mon}\PY{p}{,} 
-                      \PY{n}{position}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{12.}\PY{p}{)}\PY{p}{)}
-    \PY{k}{return} \PY{n}{instrument}
-\end{Verbatim}
+    mon = PosDiv_monitor(
+        'mon', xwidth=0.08, yheight=0.08,
+        maxdiv=2.,
+        npos=250, ndiv=251,
+    )
+    instrument.append(mon,
+                      position=(0,0,12.))
+    return instrument
+\end{lstlisting}

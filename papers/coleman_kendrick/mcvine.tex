@@ -1,24 +1,27 @@
+\begin{abstract}
+    Digital twins of neutron instruments using Monte Carlo ray tracing have proven to be useful in neutron data analysis and verifying instrument and sample designs. However, these simulations can become quite complex and computationally demanding with tens of billions of neutrons. In this paper, we present a GPU accelerated version of MCViNE using Python and Numba to balance user extensibility with performance. Numba is an open-source just-in-time (JIT) compiler for Python using LLVM to generate efficient machine code for CPUs and GPUs with NVIDIA CUDA. The JIT nature of Numba allowed complex instrument kernels to be generated easily. Initial simulations have shown a speedup between 200-1000x over the original CPU implementation. The performance gain with Numba enables more sophisticated data analysis and impacts neutron scattering science and instrument design.
+\end{abstract}
 
 % Adds a frame around verbatim environments
-\fvset{frame=single,fontsize=\footnotesize,samepage=false}
+% \fvset{frame=single,fontsize=\footnotesize,samepage=false}
 
 \section{Introduction}
 
-MCViNE \cite{lin2016mcvine,Lin_2019} is a software package for creating digital twins of neutron scattering experiments using a Monte Carlo ray-tracing approach. 
-In this method, randomly generated probability packets (representing neutrons) are propagated through a series of components. 
+MCViNE \cite{lin2016mcvine,Lin_2019} is a software package for creating digital twins of neutron scattering experiments using a Monte Carlo ray-tracing approach.
+In this method, randomly generated probability packets (representing neutrons) are propagated through a series of components.
 Each component changes the probability packets according to the physics of the component.
 As an example of a component, consider a neutron mirror with less than perfect reflectivity. The interaction between the probability packet and the mirror would cause the velocity component perpendicular to the mirror to reverse and would reduce the probability of the packet to take into account that there is a finite probability that the neutron would not be reflected. The physics of each MCViNE component is documented in the code.
 An extensive description of components for a similar package, McStas is provided at \cite{willendrup_components}.
 There is no correlation between packets, so the system is embarrassingly parallel.
-These simulations are useful in performing advanced neutron data analysis \cite{lin2022super,islam2019super,sala2022ferrimagnetic,do2022damped,leiner2019frustrated,lin2014UN} as well as in designing novel neutron instruments \cite{mamontov2022bwaves,an2022menus,sala2022chess,garlea2022verdi,leighton2022ewald,liu2022pioneer,qian2022centaur,changwoo2022expanse,ankner2023cinematic,hassina2023cupi2d,linjiao2023guide_misalignment} and sample environments \cite{stone2019design,niedziela2017design}. Specifically, it has been used in the initial designs for instruments in the Second Target Station at the Spallation Neutron Source (SNS) \cite{mason2006spallation} at Oak Ridge National Laboratory. 
-Currently, MCViNE only runs on CPUs which is a bottleneck in large simulations with tens of billions of neutrons, and in modelling complex multiple scattering, with some simulations taking months to complete. Due to the massively parallel nature of Monte Carlo methods, bringing GPU acceleration to these simulations would offer superior performance and scalability. MCViNE was originally implemented in C++ and parallelized using MPI, with bindings to Python for user interaction. 
+These simulations are useful in performing advanced neutron data analysis \cite{lin2022super,islam2019super,sala2022ferrimagnetic,do2022damped,leiner2019frustrated,lin2014UN} as well as in designing novel neutron instruments \cite{mamontov2022bwaves,an2022menus,sala2022chess,garlea2022verdi,leighton2022ewald,liu2022pioneer,qian2022centaur,changwoo2022expanse,ankner2023cinematic,hassina2023cupi2d,linjiao2023guide_misalignment} and sample environments \cite{stone2019design,niedziela2017design}. Specifically, it has been used in the initial designs for instruments in the Second Target Station at the Spallation Neutron Source (SNS) \cite{mason2006spallation} at Oak Ridge National Laboratory.
+Currently, MCViNE only runs on CPUs which is a bottleneck in large simulations with tens of billions of neutrons, and in modelling complex multiple scattering, with some simulations taking months to complete. Due to the massively parallel nature of Monte Carlo methods, bringing GPU acceleration to these simulations would offer superior performance and scalability. MCViNE was originally implemented in C++ and parallelized using MPI, with bindings to Python for user interaction.
 However, extensibility for the end user can be very difficult.
 
 To further improve performance and to create an easily extensible code base, Python and Numba \cite{lam2015numba} were chosen to create a new package of MCViNE providing GPU acceleration, \texttt{mcvine.acc} \cite{Lin_mcvine_acc}. Numba is an open-source JIT (just-in-time) compiler for Python using LLVM to generate efficient machine code and supports GPUs using NVIDIA CUDA. Numba is designed for scientific computing and can support NumPy arrays and functions. Currently, we are only using Numba for its GPU capabilities as the original version of MCViNE is used to run on CPUs. This accelerated MCViNE package is compatible with existing MCViNE scripts, and using a mixture of CPU and GPU components is supported.
 
-This paper will first describe how MCViNE works at a high-level, how components and instruments are created using Numba to generate CUDA kernels, and how Numba is also used to generate kernels for complex sample geometries and scatterers. 
+This paper will first describe how MCViNE works at a high-level, how components and instruments are created using Numba to generate CUDA kernels, and how Numba is also used to generate kernels for complex sample geometries and scatterers.
 Next, we will compare performance of the CPU version of MCViNE to the Numba GPU version.
-After that we will describe how the MCViNE GPU acceleration will be used in the larger context of a workflow for data analysis. 
+After that we will describe how the MCViNE GPU acceleration will be used in the larger context of a workflow for data analysis.
 Finally, we will discuss our experience using Numba for this application.
 
 
@@ -65,23 +68,23 @@ Depending on the kernel launch configuration, each GPU thread might be responsib
 
 \subsection{Sample Kernels and CSG}
 
-One unique feature of MCViNE is its sample component, which allows for simulation of complex sample/sample environment and detector systems with flexible, sophisticated geometry and scattering physics. 
-This feature has enabled simulations that produce virtual experiment data that closely resemble real experimental data and make MCViNE a useful tool for both instrument design and advanced data analysis. 
+One unique feature of MCViNE is its sample component, which allows for simulation of complex sample/sample environment and detector systems with flexible, sophisticated geometry and scattering physics.
+This feature has enabled simulations that produce virtual experiment data that closely resemble real experimental data and make MCViNE a useful tool for both instrument design and advanced data analysis.
 
 A Sample is made up of a Sample Assembly which has \texttt{Shape} and \texttt{Phase} tags.
 The \texttt{Shape} tag contains the geometry specification. The \texttt{Phase} tag, together with additional XML file(s) named \texttt{\{name\}-scatterer.xml}, contain the scattering physics specification where \texttt{\{name\}} is the name of a scatterer included in the sample assembly.
 A simple example for an aluminum (Al) sphere is shown below.
-Such an Al sphere is an idealized sample, where the sphere matches the scattering condition and Al is the material most transparent to neutron and is used for mounts and sample containers. Therefore it is well studied and well understood. 
+Such an Al sphere is an idealized sample, where the sphere matches the scattering condition and Al is the material most transparent to neutron and is used for mounts and sample containers. Therefore it is well studied and well understood.
 
 \vspace{1mm}
 \input{code/sampleassembly.tex}
 \vspace{1mm}
 
 Simple shapes can be created easily, but more complex shapes can be created too.
-To create the sample geometry, MCViNE uses Constructive Solid Geometry (CSG). 
-CSG can create complex geometries from operations such as intersection and union, on primitive shapes, such as cubes, spheres, and cylinders. 
+To create the sample geometry, MCViNE uses Constructive Solid Geometry (CSG).
+CSG can create complex geometries from operations such as intersection and union, on primitive shapes, such as cubes, spheres, and cylinders.
 For example, Figure~\ref{fig:csg} shows how CSG is used to create an annular sample can from cylindrical primitives. This can is similar to those used in experiment design \cite{PhysRevB.107.094511}.
-First a ring for the outside of the can is made from two cylinders by subtraction, then a ring for the inside of the can is also made from two cylinders.  These two rings are then combined in union with another cylinder that is the bottom of the can. 
+First a ring for the outside of the can is made from two cylinders by subtraction, then a ring for the inside of the can is also made from two cylinders.  These two rings are then combined in union with another cylinder that is the bottom of the can.
 
 \begin{figure}[h]
     \centering
@@ -104,8 +107,8 @@ Note the format is extensible enough to allow a composite scatterer with multipl
 
 \section{Results}
 
-Two types of comparisons were performed to show the usefulness of \texttt{mcvine.acc}. First, simulations comparing the CPU and GPU shows a significant performance gain by using a GPU (Figures~\hbox{\ref{fig:results_isotropic_sphere} -- \ref{fig:results_ms}}).
-Second, simulations from a more complete instrument solution showing equivalent outcomes from a CPU and GPU simulation were performed (Figure~\ref{fig:UN_plot} and~\ref{fig:UN_cuts}). 
+Two types of comparisons were performed to show the usefulness of \texttt{mcvine.acc}. First, simulations comparing the CPU and GPU shows a significant performance gain by using a GPU (Figures~\ref{fig:results_isotropic_sphere} -- \ref{fig:results_ms}).
+Second, simulations from a more complete instrument solution showing equivalent outcomes from a CPU and GPU simulation were performed (Figure~\ref{fig:UN_plot} and~\ref{fig:UN_cuts}).
 
 \begin{figure}[h]
     \centering
@@ -115,11 +118,11 @@ Second, simulations from a more complete instrument solution showing equivalent 
 \end{figure}
 
 For the first study, we focus on the performance gain achieved by the GPU accelerated version of MCViNE.
-We used a simple instrument consisting of a source, sample, and detector to focus on the sample assembly component. 
+We used a simple instrument consisting of a source, sample, and detector to focus on the sample assembly component.
 We performed tests with two different samples: a simple spherical sample with an isotropic scattering kernel, and a second with a more complex Uranium Nitride (UN) sample.
 The UN sample was chosen as it has been experimentally studied and is well modeled by single and multiple scattering of a Quantum Harmonic oscillator model \cite{aczel2012quantum,lin2014UN}.
 The UN sample is treated as a 1 cm polycrystalline cube to match the experimental configuration \cite{aczel2012quantum}.
-The UN structure is the same as  rock salt structure with the light N atoms located between the much heavier U atoms.  
+The UN structure is the same as  rock salt structure with the light N atoms located between the much heavier U atoms.
 The N vibrates as a harmonic oscillator which provides equally spaced lines in energy transfer $E$.
 The lines are modeled in MCViNE with a sample scattering kernel containing a composite of $E(Q)$ kernels with constant $E$ values of a 50 meV spacing from 0 to 350 meV.
 
@@ -165,7 +168,7 @@ For the UN single scattering case, Figure~\ref{fig:results_ss} shows that for $1
 While the speedup over the CPU version of MCViNE is significant, further optimization is possible. Currently, each GPU thread executes a single large kernel that models the instrument. For large instruments that contain many components, the instrument kernel can use too many registers which limits device occupancy. Additionally, a lot of components involve many conditional statements which do not perform well on the GPU. This can be seen by comparing the performance of complex sample components, such as the UN sample, to the simple isotropic sphere.
 
 Next we run a more complete test with the Uranium Nitride sample to verify the same result between the CPU and GPU.
-A study on UN was the first time the multiple-scattering as well as the multiple-scattering physics in the CPU version of MCViNE was used to explain experimental results \cite{lin2014UN}. Specifically, one of the puzzles from the measured data was that the equally spaced lines extend over all $Q$.  It was determined that this was due to multiple scattering. 
+A study on UN was the first time the multiple-scattering as well as the multiple-scattering physics in the CPU version of MCViNE was used to explain experimental results \cite{lin2014UN}. Specifically, one of the puzzles from the measured data was that the equally spaced lines extend over all $Q$.  It was determined that this was due to multiple scattering.
 To more conclusively check this, a CPU simulation using MCViNE was performed \cite{lin2014UN}.  At the time this CPU simulation was run, it took days to do such calculations.  Therefore, this is a good test case to check the speed increase gained from using GPUs with \texttt{mcvine.acc}.
 
 \begin{figure}[h]
@@ -186,7 +189,7 @@ Furthermore, Figure~\ref{fig:UN_cuts} shows the $Q$ dependence of the scattering
 The expected functional dependence for each successive transition and the overall increase in background expected from multiple scattering are both observed.
 
 As this paper focuses on the GPU implementation, Figure~\ref{fig:UN_plot} and~\ref{fig:UN_cuts} also show the agreement between the CPU and GPU versions of MCViNE.
-The majority of the speed increase for this particular simulation is in the incident beam line simulation leveraging the McStas GPU implementation, and is now under an hour rather than days.  
+The majority of the speed increase for this particular simulation is in the incident beam line simulation leveraging the McStas GPU implementation, and is now under an hour rather than days.
 The MCViNE part of the simulation has a speed up similar to the simpler test from $\sim 10^3$s to $\sim 10^2$s.
 For a virtual neutron experiment the incident beam simulation can often be reused in a series of source-sample-detector simulations with various sample and detector configurations.
 For example, a researcher may run the case with and without multiple scattering or a series of related samples. Thus fast sample simulations are critical to the overall speed of experimental analysis which highlights the need for using \texttt{mcvine.acc}.
@@ -196,7 +199,7 @@ For example, a researcher may run the case with and without multiple scattering 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{figures/Constant_E_cuts_high_contrast.pdf}
-\caption{Constant-$E$ cuts around the individual energy levels 
+\caption{Constant-$E$ cuts around the individual energy levels
 in the $I(Q, E)$ displayed in
 Figure~\ref{fig:UN_plot}. Note the functional dependence of each level and the background increase are consistent with the physics and the multiple scattering. The comparisons between the CPU and GPU calculations are shown with the solid line and circles respectively.
 }
@@ -207,7 +210,7 @@ Figure~\ref{fig:UN_plot}. Note the functional dependence of each level and the b
 
 Python and Numba were used successfully to create \texttt{mcvine.acc}, a new GPU accelerated version of MCViNE, which has so far achieved significant performance gains over the original CPU implementation. Using Python for this application has helped increase the usability, extensibility, and maintainability of the codebase, while gaining performance benefits of GPUs by using Numba. Additionally, the JIT nature of Numba allowed complex combinations of CUDA kernels to be generated at runtime, which would have been significantly harder to implement in other languages.
 
-The performance gains from using Numba have shown to be beneficial. For a simple isotropic sphere sample, a speedup of 133x was achieved over a 16-core CPU using a consumer-grade GPU. For the more complex UN sample with multiple scattering, a speedup of 10x was achieved over a 16-core CPU. These performance gains are crucial for current simulations that take on the order of days to weeks to complete. However, there are still opportunities to further optimize these simulations to better leverage the full capability of the GPU. 
+The performance gains from using Numba have shown to be beneficial. For a simple isotropic sphere sample, a speedup of 133x was achieved over a 16-core CPU using a consumer-grade GPU. For the more complex UN sample with multiple scattering, a speedup of 10x was achieved over a 16-core CPU. These performance gains are crucial for current simulations that take on the order of days to weeks to complete. However, there are still opportunities to further optimize these simulations to better leverage the full capability of the GPU.
 
 Using Numba for GPU acceleration has enabled more sophisticated data analysis for neutron scattering and instrument design, while overall lowering the development cost needed to obtain significant performance improvements. The techniques used in this project could also be applied to other scientific computing applications.
 

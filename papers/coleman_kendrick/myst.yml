@@ -1,0 +1,53 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: Using Numba for GPU acceleration of Neutron Beamline Digital Twins
+  description: Digital twins of neutron instruments using Monte Carlo ray tracing have proven to be useful in neutron data analysis and verifying instrument and sample designs. In this paper, we present a GPU accelerated version of MCViNE using Python and Numba to balance user extensibility with performance.
+  authors:
+    - name: Coleman J. Kendrick
+      email: kendrickcj@ornl.gov
+      affiliation: Oak Ridge National Laboratory
+      corresponding: true
+    - name: Jiao Y. Y. Lin
+      email: jiao.lin@gmail.com
+      affiliation: Oak Ridge National Laboratory
+    - name: Garrett E. Granroth
+      email: granrothge@ornl.gov
+      affiliation: Oak Ridge National Laboratory
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-006
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - Bayesian statistics
+    - resampling
+    - maximum likelihood
+    - numerical differentiation
+  abbreviations:
+    JIT: just-in-time
+    CPU: central processing unit
+    GPU: graphics processing unit
+    SNS: Spallation Neutron Source
+    CSG: Constructive Solid Geometry
+    UN: Uranium Nitride
+    HSS: homogeneous single scatterer
+    ARCS: Wide Angular-Range Chopper Spectrometer
+    ORNL: Oak Ridge National Laboratory
+    DOE: Department of Energy
+    LLVM: low level virtual machine
+    CUDA: Compute Unified Device Architecture
+  github: https://github.com/mcvine/acc
+  # bibliography: []
+  biblio:
+    first_page: 46
+    last_page: 52
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: coleman_kendrick.pdf
+      static: true
