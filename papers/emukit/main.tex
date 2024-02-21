@@ -1,3 +1,7 @@
+\begin{abstract}
+    Emukit is a highly flexible Python toolkit for enriching decision making under uncertainty with statistical emulation. It is particularly pertinent to complex processes and simulations where data are scarce or difficult to acquire. Emukit provides a common framework for a range of iterative methods that propagate well-calibrated uncertainty estimates within a design loop, such as Bayesian optimisation, Bayesian quadrature and experimental design. It also provides multi-fidelity modelling capabilities. We describe the software design of the package, illustrate usage of the main APIs, and showcase the breadth of use cases in which the library already has been used by the research community.
+\end{abstract}
+
 \section{Introduction}\label{introduction}
 
 Data selection is a major challenge in supervised machine learning (ML). Quite often when data availability is not an issue, data collection occurs prior to the training process and results in a static dataset, meaning that the machine learning model has no influence on the data collection process. However, if data points are expensive and scarce the performance of a model trained on a static dataset can be suboptimal or even poor. In those cases, it is beneficial to carefully select the dataset such that, for example, it is maximally informative under the ML model to achieve the task at hand. This branch of ML is generally referred to as \emph{active learning} \cite{Settles2009} and has attracted attention in various sub-fields such as \emph{experimental design} (the task of predicting an unknown function value from its input), \emph{global optimisation} (guessing the global minimiser of a function) and \emph{integration} (guessing the integral of a function).
@@ -46,7 +50,7 @@ Decision making with statistical emulation consists of three parts. All starts w
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\columnwidth]{workflow.png}  
+    \includegraphics[width=\columnwidth]{workflow.png}
     \caption{Summary of workflow for the users of Emukit. The user chooses a a modeling framework and defines a model. The model is wrapped using a pre-defined interface and connected to the core components of several methods such as Bayesian optimisation, experimental design etc. Specific tasks are then solved using these methods.}
     \label{figure:workflow}
 \end{figure}
@@ -55,7 +59,7 @@ Decision making with statistical emulation consists of three parts. All starts w
 
 At a conceptual level the methods supported in Emukit -- such as Bayesian optimisation, experimental design and Bayesian quadrature -- are all iterative decision making processes that follow a similar pattern. Algorithmically they can be thought of as instances of a common abstract loop, which we now describe (also see Algorithm~\ref{alg:emukit-loop}).
 
-The common goal of all of these methods is to learn a behavior of an \textit{objective function} - a black-box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. New data points are proposed by optimising an \textit{acquisition function} constructed using the model. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met. 
+The common goal of all of these methods is to learn a behavior of an \textit{objective function} - a black-box expensive process that has certain \textit{parameters}. The knowledge about the objective function (initially available as well as that collected during the learning process) is represented with a \textit{probabilistic model}. New data points are proposed by optimising an \textit{acquisition function} constructed using the model. Finally, the decision making process is done in a \textit{loop} until a certain \textit{stopping condition} is met.
 
 \begin{algorithm}[H]
   \caption{Decision making loop in Emukit.}
@@ -92,8 +96,8 @@ The internal structure of Emukit reflects these abstractions to enable swapping 
 These are the core components Emukit defines. Specific methods may also define additional concepts of their own, e.g. integration measures or costs. Table~\ref{table:abstraction_mapping} shows the mapping between decision making abstractions and Emukit components.
 
 \begin{table}
-    \setlength{\DUtablewidth}{\tablewidth}
-    \begin{longtable}[c]{p{0.4\DUtablewidth}p{0.4\DUtablewidth}}
+    % \setlength{\DUtablewidth}{\tablewidth}
+    \begin{tabular}[c]{p{0.4\DUtablewidth}p{0.4\DUtablewidth}}
         \toprule
         \textbf{Decision making abstractions} & \textbf{Emukit components} \\
         \midrule
@@ -113,7 +117,7 @@ These are the core components Emukit defines. Specific methods may also define a
         \midrule
         Stopping Condition & Stopping condition \\
         \bottomrule
-    \end{longtable}
+    \end{tabular}
     \caption{The mapping between abstractions of the decision making process and the components defined in Emukit.}
     \label{table:abstraction_mapping}
 \end{table}
@@ -125,7 +129,7 @@ This section describes Emukit's high level APIs for all main functions of the pa
 
 Interfaces for Bayesian optimisation and experimental design are the most straighforward ways to use the library. Both methods require the user to define a model and wrap it in the Emukit's model wrapper. An input space also has to be defined using Emukit's classes. The choice of acquisition function is optional, as reasonable defaults are provided. High level loop objects allow the user to execute the decision making loop and access its properties.
 
-\begin{verbatim}
+\begin{lstlisting}[language=python]
 model_gpy = GPy.models.GPRegression(X,Y)
 model_emukit = GPyModelWrapper(model_gpy)
 
@@ -150,11 +154,11 @@ experimental_design_loop =
         space = parameter_space,
         acquisition = model_variance_acquisition
     )
-\end{verbatim}
+\end{lstlisting}
 
 Usage of Bayesian quadrature (BQ) API is more involved, as even in its most basic form it requires more choices from the user. First the objective function, also referred to as an integrand, is modeled with a Gaussian process (GP). Since BQ integrates the kernel function, the kernel is then wrapped in a separate Emukit object. Bundled together, wrappers around the kernel and the model itself represent a base model in the BQ package. This model may be used with several BQ methods, the code below illustrates vanilla Bayesian quadrature where the GP model is directly placed over the integrand function and then integrated analytically.
 
-\begin{verbatim}
+\begin{lstlisting}[language=python]
 lb = -3.0 # lower integral bound
 ub = 3.0 # upper integral bound
 gpy_model = GPy.models.GPRegression(X=X, Y=Y)
@@ -176,14 +180,14 @@ emukit_model = VanillaBayesianQuadrature(
 bq_loop = VanillaBayesianQuadratureLoop(
     model=emukit_model
 )
-\end{verbatim}
+\end{lstlisting}
 
 Once the loop object is created, either for optimisation, quadrature or experiment design, it may be evaluated in one of two modes. If the user has access to the objective function via Python, Emukit can manage the loop with the \texttt{run\_loop} method that accepts two arguments: the objective function and the stopping criterion. If the objective has to be called externally (e.g. a lab experiment has to be done), Emukit provides \texttt{get\_next\_points} method that produces the next evaluation point(s) based on the data observed so far. In that latter case user has to manage the decision making loop themselves.
 
 \subsection{Interfaces for fast prototyping}
 Emukit gives researchers a lot of flexibility in swapping individual pieces in and out of the decision making loop. This is made possible by clearly defined interfaces. We illustrate how this is accomplished in the package with an example of \texttt{IntegratedHyperParameterAcquisition}. This class provides an ability to integrate any acquisition function over hyperparameters of the model. To do that, the model needs to support two operations: generate hyperparameter samples and fix hyperparameters to a certain sample value. Consequently, Emukit defines an interface \texttt{IPriorHyperparameters} that declares these operations, and \texttt{IntegratedHyperParameterAcquisition} requires input model to implement this interfaces, as is shown in the following code snippet:
 
-\begin{verbatim}
+\begin{lstlisting}[language=python]
 class IPriorHyperparameters:
     def generate_hyperparameters_samples(...
 
@@ -195,13 +199,13 @@ class IntegratedHyperParameterAcquisition(Acquisition):
         self,
         model: Union[IModel, IPriorHyperparameters],
         ...
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Model reuse across tasks}
 
 Emukit's composability allows to reuse components between methods. For example, we use the quadrature model defined above to perform an optimisation loop, and then integrate it using the quadrature API. The ability to reuse components in this way lowers implementation overhead, optimises utilisation of compute resources, and increases consistency.
 
-\begin{verbatim}
+\begin{lstlisting}[language=python]
 # see BQ snippet for complete
 # definition of the model
 emukit_bq_model = VanillaBayesianQuadrature(
@@ -218,14 +222,14 @@ bayesopt_loop.run_loop(
 )
 
 emukit_bq_model.integrate()
-\end{verbatim}
+\end{lstlisting}
 
 
 \subsection{Multi-fidelity emulation}
 
 To support research on multi-fidelity emulation methods, Emukit implements both linear and non-linear multi-fidelity models. The user needs to provide data for each of the fidelities and make the choice of appropriate Gaussian process kernel. Emukit can then be used to define a combined multi-fidelity model. In the example below we define a linear multi-fidelity model, where the relationship between fidelities is linear.
 
-\begin{verbatim}
+\begin{lstlisting}[language=python]
 # This utility method allows conversion
 # of data from different fidelities
 # to arrays where fidelity is represented
@@ -247,10 +251,10 @@ gpy_linear_mf_model =
         linear_mf_kernel,
         n_fidelities = 2
 )
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Other methods and features}
-In addition to the APIs discussed above, Emukit also provides basic support for sensitivity analysis and benchmarking. Further information about Emukit's functionality, including available implementations of acquisition functions, multi-output models, support for constraints and cost functions, and custom events in the outer loop may be found in library's website\footnote{\url{https://emukit.github.io/}}, documentation\footnote{\url{https://emukit.readthedocs.io/en/latest/}} and tutorial notebooks\footnote{\url{https://nbviewer.org/github/emukit/emukit/blob/main/notebooks/index.ipynb}}. 
+In addition to the APIs discussed above, Emukit also provides basic support for sensitivity analysis and benchmarking. Further information about Emukit's functionality, including available implementations of acquisition functions, multi-output models, support for constraints and cost functions, and custom events in the outer loop may be found in library's website\footnote{\url{https://emukit.github.io/}}, documentation\footnote{\url{https://emukit.readthedocs.io/en/latest/}} and tutorial notebooks\footnote{\url{https://nbviewer.org/github/emukit/emukit/blob/main/notebooks/index.ipynb}}.
 
 \section{Emukit in action}
 Since its announcement in 2019 \cite{paleyes2019emulation}, Emukit was used in a wide range of research projects. In this section we review a selection of these projects to showcase the breadth of situations in which the library may be useful.

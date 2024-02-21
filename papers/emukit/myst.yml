@@ -1,0 +1,57 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: 'Emukit: A Python toolkit for decision making under uncertainty'
+  description: Emukit is a highly flexible Python toolkit for enriching decision making under uncertainty with statistical emulation. It is particularly pertinent to complex processes and simulations where data are scarce or difficult to acquire.
+  authors:
+    - name: Andrei Paleyes
+      email: ap2169@cam.ac.uk
+      affiliation:
+        - Department of Computer Science and Technology, University of Cambridge
+      corresponding: true
+    - name: Maren Mahsereci
+      email: maren.mahsereci@uni-tuebingen.de
+      affiliation:
+        - University of Tübingen
+    - name: Neil D. Lawrence
+      email: ndl21@cam.ac.uk
+      affiliation:
+        - Department of Computer Science and Technology, University of Cambridge
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-009
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - statistical emulation
+    - software
+    - Bayesian optimisation
+    - Bayesian quadrature
+    - Bayesian experimental design
+    - multi-fidelity
+    - active learning
+  abbreviations:
+    ML: machine learning
+    BOSH: Bayesian Optimisation by Sampling Hierarchically
+    BO: bayesian optimisation
+    BQ: bayesian quadrature
+    ED: experimental design
+    MC: Monte Carlo
+    CPU: central processing unit
+    GPU: graphics processing unit
+    GP: Gaussian process
+    API: Application Programming Interface
+    EPSRC: Engineering and Physical Sciences Research Council
+  github: https://github.com/EmuKit/emukit
+  biblio:
+    first_page: 68
+    last_page: 75
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: emukit.pdf
+      static: true
