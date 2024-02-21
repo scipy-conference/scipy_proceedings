@@ -1,0 +1,69 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: 'MDAKits: A Framework for FAIR-Compliant Molecular Simulation Analysis'
+  description: The reproducibility and transparency of scientific findings are widely recognized as crucial for promoting scientific progress. The MDAKits framework provides a cookiecutter template, best practices documentation, and a continually validated registry.
+  authors:
+    - name: Irfan Alibay
+      email: ialibay@mdanalysis.org
+      affiliation: Open Molecular Software Foundation, Irvine, CA, USA
+      orcid: 0000-0001-5787-9130
+      equal-contributor: true
+      corresponding: true
+    - name: Lily Wang
+      email: lily@mdanalysis.org
+      affiliation: Open Molecular Software Foundation, Irvine, CA, USA
+      orcid: 0000-0002-6095-6704
+      equal-contributor: true
+    - name: Fiona Naughton
+      email: fiona@mdanalysis.org
+      affiliation: Cardiovascular Research Institute, University of California, San Francisco, San Francisco, CA, USA
+      orcid: 0000-0003-0162-1346
+      equal-contributor: true
+    - name: Ian Kenney
+      email: ikenney@asu.edu
+      affiliation: Arizona State University, Tempe, AZ, USA
+      orcid: 0000-0002-9749-8866
+      equal-contributor: true
+    - name: Jonathan Barnoud
+      email: jonathan@barnoud.net
+      affiliation: Centro Singular de Investigación en Tecnoloxías Intelixentes, Santiago de Compostela, Spain
+      orcid: 0000-0003-0343-7796
+    - name: Richard J Gowers
+      email: richard@mdanalysis.org
+      affiliation: Open Molecular Software Foundation, Irvine, CA, USA
+      orcid: 0000-0002-3241-1846
+    - name: Oliver Beckstein
+      email: obeckste@asu.edu
+      affiliation: Arizona State University, Tempe, AZ, USA
+      orcid: 0000-0003-1340-0831
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-00a
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - Molecular Dynamics Simulations
+    - Python
+    - MDAnalysis
+    - eco-system
+  abbreviations:
+    FAIR: findable, accessible, interoperable, and reusable
+    FAIR4RS: FAIR Principles for Research Software
+    API: Application Programming Interface
+    MDAKit: MDAnalysis Toolkit
+    MDAKits: MDAnalysis Toolkits
+    MDAnalysis: An object-oriented Python library to analyze trajectories from molecular dynamics
+  github:
+  biblio:
+    first_page: 76
+    last_page: 84
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: ian_kenney.pdf
+      static: true
