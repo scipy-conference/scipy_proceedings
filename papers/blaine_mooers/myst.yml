@@ -1,0 +1,58 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: Biomolecular Crystallographic Computing with Jupyter
+  description: To further advance this use of Jupyter, we developed a collection of code fragments that use the vast Computational Crystallography Toolbox (cctbx) library for novel analyses. We made versions of this library for use in JupyterLab and Colab.
+  author:
+    name: Blaine H. M. Mooers
+    email: blaine-mooers@ouhsc.edu
+    affiliations:
+      - Department of Biochemistry and Molecular Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
+      - Stephenson Cancer Center, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
+      - Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
+      - Biomolecular Structure Core, Oklahoma COBRE in Structural Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104
+    orcid: 0000-0001-8181-8987
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-004
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - literate programming
+    - reproducible research
+    - scientific rigor
+    - electronic notebooks
+    - JupyterLab
+    - Jupyter notebooks
+    - Colab notebook
+    - OnDemand notebooks
+    - computational structural biology
+    - computational crystallography
+    - biomolecular crystallography
+    - protein crystallography
+    - biomolecular structure
+    - computational molecular biophysics
+    - biomedical research
+    - data visualization
+    - scientific communication
+    - GhostText
+    - text editors
+    - snippet libraries
+    - SciPy software stack
+    - interactive software development
+  abbreviations:
+    GUI: graphical user interface
+    IDE: integrated development environment
+    cctbx: Computational Crystallography Toolbox
+  biblio:
+    first_page: 32
+    last_page: 39
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: blaine_mooers.pdf
+      static: true
