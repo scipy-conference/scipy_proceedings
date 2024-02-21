@@ -1,0 +1,32 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: An Accessible Python based Author Identification Process
+  description: Author identification also known as ‘author attribution’ and more recently ‘forensic linguistics’ involves identifying true authors of anonymous texts. In this paper we replicate the analysis but in a much more accessible way using modern text mining methods and Python.
+  author:
+    name: Anthony Breitzman
+    orcid: 0000-0001-9522-9980
+    email: breitzman@rowan.edu
+    affiliation: Rowan University Department of Computer Science
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-003
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - Federalist
+    - Author Identification
+    - Attribution
+    - Forensic Linguistics
+    - Text-Mining
+  abbreviations:
+    NLTK: Natural Language Tool-kit
+  biblio:
+    first_page: 24
+    last_page: 31
+  github: https://github.com/AbreitzmanSr/SciPy2023-AuthorAttribution
+site:
+  template: article-theme
