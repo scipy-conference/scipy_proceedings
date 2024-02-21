@@ -1,0 +1,57 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: Using Blosc2 NDim As A Fast Explorer Of The Milky Way (Or Any Other NDim Dataset)
+  description: Large multidimensional datasets are widely used in various engineering and scientific applications. We have added support for large dimensional datasets to Blosc2, a compression and format library.
+  authors:
+    - name: Project Blosc
+      affiliation: Project Blosc
+      equal-contributor: true
+    - name: Francesc Alted
+      email: francesc@blosc.org
+      affiliation: Project Blosc
+      equal-contributor: true
+      corresponding: true
+    - name: Marta Iborra
+      email: martaiborra24@gmail.com
+      affiliation: Project Blosc
+      equal-contributor: true
+    - name: Oscar Guiñón
+      email: soscargm98@gmail.com
+      affiliation: Project Blosc
+      equal-contributor: true
+    - name: David Ibáñez
+      email: jdavid.ibp@gmail.com
+      affiliation: Project Blosc
+    - name: Sergio Barrachina
+      email: barrachi@uji.es
+      affiliation: Universitat Jaume I
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-000
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - explore datasets
+    - n-dimensional datasets
+    - Gaia DR3
+    - Milky Way
+    - Blosc2
+    - compression
+  abbreviations:
+    CPU: central processing unit
+    ESA: European Space Agency
+    SIMD: single-instruction multiple-data streams
+  # github:
+  biblio:
+    first_page: 1
+    last_page: 7
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: Francesc_Alted.pdf
+      static: true
