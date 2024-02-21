@@ -1,0 +1,28 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: A Modified Strassen Algorithm to Accelerate Numpy Large Matrix Multiplication with Integer Entries
+  description: We present a Strassen type algorithm for multiplying large matrices with integer entries. The algorithm is the standard Strassen divide and conquer algorithm but it crosses over to Numpy when either the row or column dimension of one of the matrices drops below 128.
+  author:
+    name: Anthony Breitzman
+    email: breitzman@rowan.edu
+    affiliation: Rowan University Department of Computer Science
+    orcid: 0000-0001-9522-9980
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-002
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - Strassen
+    - Numpy
+    - Integer Matrix
+  biblio:
+    first_page: 18
+    last_page: 23
+  # github: https://github.com/scipy-conference/scipy_proceedings
+site:
+  template: article-theme
