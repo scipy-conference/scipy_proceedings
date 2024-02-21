@@ -1,0 +1,99 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: 'Python Array API Standard: Toward Array Interoperability in the Scientific Python Ecosystem'
+  description: The Python array API standard specifies standardized application programming interfaces and behaviors for array and tensor objects and operations. The establishment and subsequent adoption of the standard aims to reduce ecosystem fragmentation and facilitate array library interoperability.
+  keywords:
+    - Python
+    - Arrays
+    - Tensors
+    - NumPy
+    - CuPy
+    - PyTorch
+    - JAX
+    - Tensorflow
+    - Dask
+    - MXNet
+  authors:
+    - name: Aaron Meurer
+      email: asmeurer@quansight.com
+      equal-contributor: true
+      affiliation: Quansight
+    - name: Athan Reines
+      email: kgryte@gmail.com
+      equal-contributor: true
+      affiliation: Quansight
+    - name: Ralf Gommers
+      email: ralf.gommers@gmail.com
+      equal-contributor: true
+      affiliation: Quansight
+    - name: Yao-Lung L. Fang
+      email: leof@nvidia.com
+      equal-contributor: true
+      affiliation: NVIDIA Corporation
+    - name: John Kirkham
+      email: jkirkham@nvidia.com
+      equal-contributor: true
+      affiliation: NVIDIA Corporation
+    - name: Matthew Barber
+      email: quitesimplymatt@gmail.com
+      equal-contributor: true
+      affiliation: Quansight
+    - name: Stephan Hoyer
+      email: shoyer@google.com
+      affiliation: Google
+    - name: Andreas Müller
+      email: amueller@microsoft.com
+      affiliation: Microsoft
+    - name: Sheng Zha
+      email: zhasheng@apache.org
+      affiliation: Amazon
+    - name: Saul Shanabrook
+      email: s.shanabrook@gmail.com
+    - name: Stephannie Jiménez Gacha
+      email: sgacha@quansight.com
+      affiliation: Quansight
+    - name: Mario Lezcano-Casado
+      email: mlezcano@quansight.com
+      affiliation: Quansight
+    - name: Thomas J. Fan
+      email: thomasjpfan@gmail.com
+      affiliation: Quansight
+    - name: Tyler Reddy
+      email: treddy@lanl.gov
+      affiliation: LANL
+    - name: Alexandre Passos
+      email: alexandre.tp@gmail.com
+    - name: Hyukjin Kwon
+      email: gurwls223@apache.org
+      affiliation: Databricks
+    - name: Travis Oliphant
+      email: travis@quansight.com
+      affiliation: Quansight
+    - name: Consortium for Python Data API Standards
+      collaboration: true
+  # github:
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-001
+  banner: banner.png
+  thumbnail: thumbnail.png
+  biblio:
+    first_page: 8
+    last_page: 17
+  abbreviations:
+    API: application programming interface
+    CPU: central processing unit
+    GPU: graphics processing unit
+    TPU: tensor processing unit
+    FPGA: field-programmable gate array
+    JIT: just-in-time
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: aaron_meurer.pdf
+      static: true
