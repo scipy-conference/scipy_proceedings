@@ -1,36 +1,3 @@
-:author: Konstantinos Ntatsis
-:email: k.ntatsis@lumc.nl
-:institution: Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands
-
-:author: Niels Dekker
-:email: c.e.dekker@lumc.nl
-:institution: Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands
-
-:author: Viktor van der Valk
-:email: v.o.van_der_valk@lumc.nl
-:institution: Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands
-
-:author: Tom Birdsong
-:email: tom.birdsong@kitware.com
-:institution: Medical Computing Group, Kitware, Inc, Carrboro, NC, USA
-
-:author: Dženan Zukić
-:email: dzenan.zukic@kitware.com
-:institution: Medical Computing Group, Kitware, Inc, Carrboro, NC, USA
-
-:author: Stefan Klein
-:email: s.klein@erasmusmc.nl
-:institution: Biomedical Imaging Group Rotterdam, Department of Radiology & Nuclear Medicine, Erasmus MC, Rotterdam, the Netherlands
-
-:author: Marius Staring
-:email: m.staring@lumc.nl
-:institution: Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands
-
-:author: Matthew McCormick
-:email: matt.mccormick@kitware.com
-:institution: Medical Computing Group, Kitware, Inc, Carrboro, NC, USA
-
-:bibliography: mybib
 
 -------------------------------------------------
 itk-elastix: Medical image registration in Python
@@ -40,9 +7,6 @@ itk-elastix: Medical image registration in Python
 
 Image registration plays a vital role in understanding changes that occur in 2D and 3D scientific imaging datasets. Registration involves finding a spatial transformation that aligns one image to another by optimizing relevant image similarity metrics. In this paper, we introduce ``itk-elastix``, a user-friendly Python wrapping of the mature ``elastix`` registration toolbox. The open-source tool supports rigid, affine, and B-spline deformable registration, making it versatile for various imaging datasets. By utilizing the modular design of ``itk-elastix``, users can efficiently configure and compare different registration methods, and embed these in image analysis workflows.
 
-.. class:: keywords
-
-   medical imaging, image analysis, registration, elastix, ITK, wrapping, Python
 
 Introduction
 ------------

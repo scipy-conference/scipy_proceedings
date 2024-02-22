@@ -1,0 +1,66 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: 'itk-elastix: Medical image registration in Python'
+  description: Image registration plays a vital role in understanding changes that occur in 2D and 3D scientific imaging datasets. In this paper, we introduce itk-elastix, a user-friendly Python wrapping of the mature elastix registration toolbox.
+  authors:
+    - name: Konstantinos Ntatsis
+      email: k.ntatsis@lumc.nl
+      affiliation: Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands
+    - name: Niels Dekker
+      email: c.e.dekker@lumc.nl
+      affiliation: Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands
+    - name: Viktor van der Valk
+      email: v.o.van_der_valk@lumc.nl
+      affiliation: Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands
+    - name: Tom Birdsong
+      email: tom.birdsong@kitware.com
+      affiliation: Medical Computing Group, Kitware, Inc, Carrboro, NC, USA
+    - name: Dženan Zukić
+      email: dzenan.zukic@kitware.com
+      affiliation: Medical Computing Group, Kitware, Inc, Carrboro, NC, USA
+    - name: Stefan Klein
+      email: s.klein@erasmusmc.nl
+      affiliation: Biomedical Imaging Group Rotterdam, Department of Radiology & Nuclear Medicine, Erasmus MC, Rotterdam, the Netherlands
+    - name: Marius Staring
+      email: m.staring@lumc.nl
+      affiliation: Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands
+    - name: Matthew McCormick
+      email: matt.mccormick@kitware.com
+      affiliation: Medical Computing Group, Kitware, Inc, Carrboro, NC, USA
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-00d
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - medical imaging
+    - image analysis
+    - registration
+    - elastix
+    - ITK
+    - wrapping
+    - Python
+  abbreviations:
+    ITK: Insight Toolkit
+    ABM: Agent-based model
+    CZI: Chan Zuckerberg Initiative
+    NIMH: National Institute of Mental Health
+    API: Application programming interface
+    CI: Continuous Integration
+    OS: operating system
+    MRI: magnetic resonance imaging
+    CT: computed tomography
+  github:
+  biblio:
+    first_page: 101
+    last_page: 105
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: konstantinos_ntatsis.pdf
+      static: true
