@@ -1,0 +1,60 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: 'Spatial Microsimulation and Activity Allocation in Python: An Update on the Likeness Toolkit'
+  description: Understanding human security and social equity issues within human systems requires large-scale models of population dynamics that simulate high-fidelity representations of individuals and access to essential activities (work/school, social, errands, health). Likeness is a Python toolkit that provides spatial microsimulation project.
+  authors:
+    - name: Joseph V. Tuccillo
+      email: tuccillojv@ornl.gov
+      affiliation: Oak Ridge National Laboratory, Geospatial Sciences and Human Security
+      orcid: 0000-0002-5930-0943
+      corresponding: true
+    - name: James D. Gaboardi
+      email: gaboardijd@ornl.gov
+      affiliation: Oak Ridge National Laboratory, Geospatial Sciences and Human Security
+      orcid: 0000-0002-4776-6826
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-00c
+  copyright: Oak Ridge National Laboratory
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - activity space
+    - synthetic population
+    - microsimulation
+    - population dynamics
+  abbreviations:
+    ABM: Agent-based model
+    ORNL: Oak Ridge National Laboratory
+    ACS: American Community Survey
+    PUMS: Public-Use Microdata Sample
+    POI: point of interest
+    AOI: area of interest
+    AOIs: areas of interest
+    MOE: Margins of Error
+    MSA: metropolitan statistical area
+    PUMA: Public-Use Microdata Area
+    FIPS: Federal Information Processing Standards
+    SF: Summary File
+    P-MEDM: Penalized Maximum-Entropy Dasymetric Modeling
+    GTFS: General Transit Feed Specification
+    OSM: OpenStreetMap
+    CBSA: Core-Based Statistical Area
+    FEMA: Federal Emergency Management Agency
+    OS: operating system
+    CCA: Canonical Correlation Analysis
+    DOE: Department of Energy
+  github:
+  biblio:
+    first_page: 93
+    last_page: 100
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: james_gaboardi.pdf
+      static: true
