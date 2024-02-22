@@ -1,0 +1,58 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: 'PyQtGraph - High Performance Visualization for All Platforms'
+  description: PyQtGraph is a plotting library with high performance, cross-platform support and interactivity as its primary objectives. These goals are achieved by connecting the Qt GUI framework and the scientific Python ecosystem.
+  authors:
+    - name: Ognyan Moore
+      email: ognyan.moore@gmail.com
+      affiliation: Hobu Inc.
+      corresponding: true
+    - name: Nathan Jessurun
+      email: ntjessu@gmail.com
+      affiliation: Unaffiliated
+    - name: Martin Chase
+      email: outofculture@gmail.com
+      affiliation: Unaffiliated
+    - name: Nils Nemitz
+      email: nils.nemitz@gmx.de
+      affiliation: Unaffiliated
+    - name: Luke Campagnola
+      email: lukec@alleninstitute.org
+      affiliation: Allen Institute
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-00e
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - Visualization
+    - Qt
+    - NumPy
+    - PyData
+    - Python
+  abbreviations:
+    ITK: Insight Toolkit
+    ROI: region of interest
+    ROIs: regions of interest
+    LUT: look-up tables
+    CPU: central processing unit
+    GPU: graphics processing unit
+    FFT: Fast Fourier Transform
+    FPS: Frames per second
+    GUI: graphical user interface
+  github:
+  biblio:
+    first_page: 106
+    last_page: 113
+  numbering:
+    headings: true
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: moore-pyqtgraph.pdf
+      static: true
