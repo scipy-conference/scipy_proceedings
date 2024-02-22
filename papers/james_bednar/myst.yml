@@ -1,0 +1,44 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: The Pandata Scalable Open-Source Analysis Stack
+  description: As the scale of scientific data analysis continues to grow, traditional domain-specific tools often struggle with data of increasing size and complexity. We introduce the Pandata open-source software stack as a solution, emphasizing the use of domain-independent tools at critical stages of the data life cycle, without compromising the depth of domain-specific analyses.
+  authors:
+    - name: James A. Bednar
+      email: jbednar@anaconda.com
+      affiliation:
+        - Anaconda, Inc.
+    - name: Martin Durant
+      email: mdurant@anaconda.com
+      affiliation:
+        - Anaconda, Inc.
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-00b
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - distributed computing
+    - data visualization
+    - workflows
+  abbreviations:
+    FAIR: findable, accessible, interoperable, and reusable
+    UI: user interface
+    GUI: graphical user interface
+    GPU: graphics processing unit
+    CPU: central processing unit
+    OS: operating system
+    API: application programming interface
+  github:
+  biblio:
+    first_page: 85
+    last_page: 92
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: james_bednar.pdf
+      static: true
