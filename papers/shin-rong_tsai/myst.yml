@@ -1,0 +1,50 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: 'libyt: a Tool for Parallel In Situ Analysis with yt'
+  description: In the era of exascale computing, storage and analysis of large scale data have become  more important and difficult.  We present libyt, an open source C++ library, that allows researchers to analyze and  visualize data using yt or other Python packages in parallel during simulation runtime.
+  authors:
+    - name: Shin-Rong Tsai
+      email: srtsai@illinois.edu
+      affiliations:
+        - National Taiwan University, Department of Physics
+        - University of Illinois at Urbana-Champaign, School of Information Sciences
+    - name: Hsi-Yu Schive
+      email: hyschive@phys.ntu.edu.tw
+      affiliations:
+        - National Taiwan University, Department of Physics
+        - National Taiwan University, Institute of Astrophysics
+        - National Taiwan University, Center for Theoretical Physics
+        - National Center for Theoretical Sciences, Physics Division
+    - name: Matthew J. Turk
+      email: mjturk@illinois.edu
+      affiliations: University of Illinois at Urbana-Champaign, School of Information Sciences
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-011
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - astronomy data analysis
+    - astronomy data visualization
+    - in situ analysis
+    - open source software
+  abbreviations:
+    API: application programming interface
+    AMR: adaptive mesh refinement
+    RMA: Remote Memory Access
+    FDM: Fuzzy dark matter
+    MPI: message passing interface
+  github:
+  biblio:
+    first_page: 130
+    last_page: 135
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: shin-rong_tsai.pdf
+      static: true

@@ -2,7 +2,7 @@
 version: 1
 project:
   title: 'Pandera: Going Beyond Pandas Data Validation'
-  description:
+  description: Data quality remains a core concern for practitioners in machine learning, data science, and data engineering, and many specialized packages have emerged to fulfill the need of validating and monitoring data and models. This paper outlines pandera’s motivation and challenges that took it from being a pandas-only data validation framework to one that is extensible to other non-pandas-compliant dataframe-like libraries.
   authors:
     - name: Niels Bantilan
       email: niels@union.ai
