@@ -1,0 +1,38 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: 'aPhyloGeo-Covid: A Web Interface for Reproducible Phylogeographic Analysis of SARS-CoV-2 Variation using Neo4j and Snakemake'
+  description: The gene sequencing data, along with the associated lineage tracing and research data generated throughout the Coronavirus disease 2019 (COVID-19) pandemic, constitute invaluable resources that profoundly empower phylogeography research. To optimize the utilization of these resources, we have developed an interactive analysis platform called aPhyloGeo-Covid.
+  authors:
+    - name: Wanlin Li
+      email: Nadia.Tahiri@USherbrooke.ca
+      affiliation: Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada
+    - name: Nadia Tahiri
+      email: Nadia.Tahiri@USherbrooke.ca
+      affiliation: Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-00f
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - Phylogeography
+    - Neo4j
+    - Snakemake
+    - Dash
+    - SARS-CoV-2
+  abbreviations:
+    COVID-19: Coronavirus disease 2019
+  github:
+  biblio:
+    first_page: 114
+    last_page: 123
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: nadia_tahiri.pdf
+      static: true
