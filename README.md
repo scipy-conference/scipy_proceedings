@@ -10,10 +10,10 @@ You can find more information about the [proceedings' organising principles](#or
 
 **All** communication between authors and reviewers should be civil and
 respectful. There are no exceptions to this rule. Please see the
-[SciPy Code of Conduct](https://www.scipy2022.scipy.org/code-of-conduct)
+[SciPy Code of Conduct](https://www.scipy2024.scipy.org/code-of-conduct)
 for more info.
 
-You can find the [schedule for 2023](#timeline-for-2023) below.
+You can find the [schedule for 2024](#timeline-for-2024) below.
 
 Please use @-mentions in issues and pull requests(PRs) to [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
 
@@ -106,25 +106,28 @@ which ensures relevance to the community that created them.
 
 The most effective way to contact the Proceedings Co-Chairs for issues related to this GitHub repository is to use GitHub's issues and "@"-mentioning the Co-Chairs.
 
-In 2023, the Proceedings Co-Chairs are
+In 2024, the Proceedings Co-Chairs are
 - Meghann Agarwal (@mepa)
+- Amey Ambade (@ameyxd)
 - Chris Calloway (@cbcunc)
-- Rohit Goswami (@HaoZeke)
-- Dillon Niederhut (@deniederhut)
+- Rowan Cockett (@rowanc1)
+- Sanhita Joshi (@sanhitamj)
+- Charles Lindsey (@cdlindsey)
+- Hongsup Shin (@hongsupshin)
 
-## Timeline for 2023
+## Timeline for 2024
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
-- April 14: Authors invited to submit full papers
-- May 26: 1st Draft for Submission
-- May 26–July 21: Open Review Period
-- May 26: Reviewers Assigned
-- June 16: Initial Complete Review
-- July 14: Final Author Revision Deadline
-- July 21: Final Recommendation and Comprehensive Review Deadlines
-- Aug 4: Final Editorial Decisions for Proceedings Contents Deadline
-- Aug 11: Time Window for Publishing Conference Ready Proceedings
+- April 19: Authors invited to submit full papers
+- May 31: 1st Draft for Submission
+- May 31–Aug 9: Open Review Period
+- May 31: Reviewers Assigned
+- June 21: Initial Complete Review
+- July 26: Final Recommendation and Comprehensive Review Deadlines
+- July 31: Final Author Revision Deadline
+- Aug 9: Final Editorial Decisions for Proceedings Contents Deadline
+- Aug 16: Time Window for Publishing Conference Ready Proceedings
 
 ## Instructions for Authors
 
@@ -156,11 +159,11 @@ have final say in whether to accept or reject a paper.
 
 ### Author Deadlines
 
-- April 14: Authors invited to submit full papers
-- May 26: 1st Draft for Submission
-- May 26–July 21: Open Review Period
-- July 14: Final Author Revision Deadline
-- July 21: Final Editorial Decisions for Proceedings Contents Deadline
+- April 19: Authors invited to submit full papers
+- May 31: 1st Draft for Submission
+- May 31–Aug 9: Open Review Period
+- July 31: Final Author Revision Deadline
+- Aug 9: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
 
@@ -217,7 +220,7 @@ git clone https://github.com/mpacer/scipy_proceedings
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2023` branch.
+3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2024` branch.
     - If you submit multiple papers, you will need a new branch for each.
 4. [Set up your environment](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#build-your-paper)
@@ -251,18 +254,18 @@ upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
 
 - Fetch the latest version of the `scipy_proceedings` repo
     - `git fetch upstream`
-- Check out the upstream `2023` branch
-    - `git checkout -b 2023 --track upstream/2023`
+- Check out the upstream `2024` branch
+    - `git checkout -b 2024 --track upstream/2024`
 
 #### Creating a new branch
 
-If you are submitting only one paper, you can use the `2023` branch directly.
+If you are submitting only one paper, you can use the `2024` branch directly.
 
-Otherwise, you will need to create a new branch based on `2023` and set its
+Otherwise, you will need to create a new branch based on `2024` and set its
 upstream to origin.
 
 ```
-git checkout 2023
+git checkout 2024
 git checkout -b <your_branch_name>
 git push --set-upstream origin <your_branch_name>
 ```
@@ -303,7 +306,7 @@ submission procedure ([see below](#creating-build-system-prs)).
 
 - Once you are ready to submit your paper, make a pull request on GitHub.
   **Please ensure that you file against the correct branch.**
-- Create a pull request against our `2023` branch.
+- Create a pull request against our `2024` branch.
 - Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
 
 #### Creating build system PRs
@@ -338,7 +341,7 @@ differences. For best results, please [@-mention the Proceedings Co-Chairs](#con
 You will be reviewing authors' pull requests. While authors should have a proper
 draft of their paper ready for you by *1st Draft Submission* deadline.
 
-We ask that you read [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md) before beginning any reviews.
+We ask that you read [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/2024/review_criteria.md) before beginning any reviews.
 
 **All** communication between authors and reviewers should be civil and respectful at all times.
 
@@ -363,13 +366,13 @@ change in question, then that change should be requested and made before the
 
 ### Reviewer Deadlines
 
-- May 26: Reviewers Assigned
-- Jun 16: Initial Complete Review
-- Jul 21: Final Recommendation and Comprehensive Review Deadlines
+- May 31: Reviewers Assigned
+- Jun 21: Initial Complete Review
+- Jul 26: Final Recommendation and Comprehensive Review Deadlines
 
 ### Reviewer Workflow
 
-- Read [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md)
+- Read [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/2024/review_criteria.md)
 - Click on the Pull Requests Tab and find the papers assigned to you
 - After reading the paper, you can start the review conversation however you prefer
     - You can use line comments (on the paper itself) or high-level comments.
@@ -386,7 +389,7 @@ change in question, then that change should be requested and made before the
 ## Review Criteria
 
 A small subcommittee of the SciPy 2017 organizing committee has created
-[this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md)
+[this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/2024/review_criteria.md)
 to help guide authors and reviewers alike. Suggestions and amendments to these
 review criteria are enthusiastically welcomed via discussion or pull request.
 
@@ -437,10 +440,10 @@ To information about how to manage the whole proceedings, please see
 
 #### Publisher Deadlines
 
-- Apr 14: Authors invited to submit full papers
-- May 26–Jul 21: Open Review Period
+- Apr 19: Authors invited to submit full papers
+- May 31–Aug 8: Open Review Period
     - The [build server](#build-server) should be maintained throughout the Open Review Period.
-- Aug 11: Time Window for Publishing Conference Ready Proceedings
+- Aug 16: Time Window for Publishing Conference Ready Proceedings
 
 ### Instructions for Editors
 
@@ -455,12 +458,12 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 #### Editor Deadlines
 
-- Apr 14: Authors invited to submit full papers
-- May 26–Jul 21: Open Review Period
-- May 26: Reviewers Assigned
-- Jun 16: Initial Complete Review
+- Apr 19: Authors invited to submit full papers
+- May 31–Aug 9: Open Review Period
+- May 31: Reviewers Assigned
+- Jun 21: Initial Complete Review
     - Editors should verify that reviews have been completed
-- Aug 4: Final Editorial Decisions for Proceedings Contents Deadline
+- Aug 9: Final Editorial Decisions for Proceedings Contents Deadline
 
 ## Instructions for Slides
 
@@ -468,7 +471,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2023` branch.
+3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2024` branch.
 4. Inside the `presentations` folder, there are directories for:
     1. 3-minute lightning talk slide decks (lightning)
     2. Posters presented at the poster session (posters)
