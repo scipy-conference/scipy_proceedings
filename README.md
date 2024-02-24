@@ -9,9 +9,8 @@ create the proceedings for the conference.
 You can find more information about the [proceedings' organising principles](#organising-principles-openness) below.
 
 **All** communication between authors and reviewers should be civil and
-respectful. There are no exceptions to this rule. Please see the
-[SciPy Code of Conduct](https://www.scipy2024.scipy.org/code-of-conduct)
-for more info.
+respectful. There are no exceptions to this rule. Please see the [NumFOCUS Code of Conduct](https://numfocus.org/code-of-conduct)
+for more info. Attendees at SciPy 2024 are subject to the NumFOCUS Code of Conduct.
 
 You can find the [schedule for 2024](#timeline-for-2024) below.
 
