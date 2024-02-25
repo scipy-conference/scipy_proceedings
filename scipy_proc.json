@@ -5,8 +5,8 @@
       "prefix": "10.25080",
       "registrant": "Crossref",
       "resource_url": "https://conference.scipy.org/proceedings",
-      "depositor_name": "Dillon Niederhut",
-      "depositor_email": "dillon.niederhut@gmail.com"
+      "depositor_name": "Amey Ambade",
+      "depositor_email": "ameyambade@gmail.com"
     },
     "copyright": {
       "proceedings": [
@@ -19,30 +19,30 @@
     },
     "title": {
       "conference": "Python in Science Conference",
-      "full": "Proceedings of the 22nd Python in Science Conference",
-      "short": "PROC. OF THE 22nd PYTHON IN SCIENCE CONF. (SCIPY 2023)",
+      "full": "Proceedings of the 23nd Python in Science Conference",
+      "short": "PROC. OF THE 23nd PYTHON IN SCIENCE CONF. (SCIPY 2024)",
       "acronym": "SciPy",
-      "ordinal": "22nd"
+      "ordinal": "23nd"
     },
     "citation_key": "proc-scipy-2023",
     "editor_email": [
       "agarwal.meghann@gmail.com",
       "cbc@unc.edu",
       "rgoswami@quansight.com",
-      "dillon.niederhut@gmail.com"
+      "ameyambade@gmail.com"
     ],
     "dates": "July 10 - July 16",
     "editor": [
       "Meghann Agarwal",
       "Chris Calloway",
       "Rohit Goswami",
-      "Dillon Niederhut"
+      "Amey Ambade"
     ],
-    "location": "Austin, Texas",
-    "volume": 8,
+    "location": "Tacoma, Seattle",
+    "volume": 9,
     "number": 1,
     "isbn": "noisbn",
-    "year": "2023"
+    "year": "2024"
   },
   "organization": [
     {
@@ -54,7 +54,7 @@
         },
         {
           "org": "Mozilla",
-          "name": "Julie Hollek"
+          "name": "Julie Krugler Hollek"
         }
       ]
     },
@@ -72,6 +72,14 @@
         {
           "org": "Microsoft Corp",
           "name": "Guen Prawiroatmodjo"
+        },
+        {
+          "org": "University of Wisconsin-Madison",
+          "name": "Matthew Feickert"
+        },
+        {
+          "org": "Tufts University",
+          "name": "Anna Haensch"
         }
       ]
     },
@@ -79,16 +87,12 @@
       "name": "Communications",
       "members": [
         {
-          "org": "NumFOCUS",
-          "name": "Arliss Collins"
+          "org": "",
+          "name": "Matt Davis"
         },
         {
           "org": "Scientific Python",
           "name": "Juanita Gomez"
-        },
-        {
-          "org": "NumFOCUS",
-          "name": "Samina Trachier"
         }
       ]
     },
@@ -96,12 +100,12 @@
       "name": "Birds of a Feather",
       "members": [
         {
-          "org": "NIST",
-          "name": "Andrew Reid"
+          "org": "",
+          "name": "Michael Akerman"
         },
         {
-          "org": "USGS",
-          "name": "Mike Hearne"
+          "org": "",
+          "name": "Mike Droettboom"
         }
       ]
     },
@@ -109,20 +113,32 @@
       "name": "Proceedings",
       "members": [
         {
-          "org": "",
+          "org": "GDI",
           "name": "Meghann Agarwal"
+        },
+        {
+          "org": "SLB",
+          "name": "Amey Ambade"
         },
         {
           "org": "University of North Carolina",
           "name": "Chris Calloway"
         },
         {
-          "org": "Quansight Labs",
-          "name": "Rohit Goswami"
+          "org": "",
+          "name": "Sanhita Joshi"
         },
         {
-          "org": "Novi Labs",
-          "name": "Dillon Niederhut"
+          "org": "",
+          "name": "Charles Lindsey"
+        },
+        {
+          "org": "Arm",
+          "name": "Hongsup Shin"
+        },
+        {
+          "org": "Curvenote",
+          "name": "Rowan Cockett"
         }
       ]
     },
@@ -147,7 +163,7 @@
       "name": "Tutorials",
       "members": [
         {
-          "org": "ARK Information Systems",
+          "org": "PyVista Community",
           "name": "Tetsuo Koyama"
         },
         {
@@ -155,8 +171,12 @@
           "name": "Logan Thomas"
         },
         {
-          "org": "Anaconda",
-          "name": "Sophia Yang"
+          "org": "",
+          "name": "Benoit Hamelin"
+        },
+        {
+          "org": "",
+          "name": "Inessa Pawson"
         }
       ]
     },
@@ -164,12 +184,8 @@
       "name": "Sprints",
       "members": [
         {
-          "org": "Quansight Labs",
-          "name": "Tania Allard"
-        },
-        {
-          "org": "IBM",
-          "name": "Alan Braz"
+          "org": "NVIDIA",
+          "name": "James Lamb"
         },
         {
           "org": "Caltech/IPAC",
@@ -185,8 +201,8 @@
           "name": "Sarah Kaiser"
         },
         {
-          "org": "O'Reilly Media",
-          "name": "Bonny P McClain"
+          "org": "",
+          "name": "Meekail Zain"
         }
       ]
     },
@@ -200,6 +216,10 @@
         {
           "org": "Majesco",
           "name": "Ed Rogers"
+        },
+        {
+          "org": "",
+          "name": "Ana Comesana"
         }
       ]
     },
@@ -220,8 +240,25 @@
           "name": "David Nicholson"
         },
         {
+          "org": "",
+          "name": "Rebecca BurWei"
+        },
+        {
+          "org": "Applied Research Associates, Inc.",
+          "name": "Allen Harvey Jr"
+        },
+        {
           "org": "Ford Motor Company",
           "name": "Neelima Pulagam"
+        }
+      ]
+    },
+    {
+      "name": "DS/ML/AI",
+      "members": [
+        {
+          "org": "Outerbounds",
+          "name": "Hugo Bowne-Anderson"
         }
       ]
     },
