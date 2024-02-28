@@ -52,6 +52,9 @@ project:
   biblio:
     first_page: 93
     last_page: 100
+  exclude:
+    - figures/*
+    - tables/*
 site:
   template: article-theme
   actions:
