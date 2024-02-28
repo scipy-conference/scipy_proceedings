@@ -1,0 +1,43 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: Data Reduction Network
+  description: Multidimensional categorical data is widespread but not easily visualized using standard methods. For example, questionnaire data generally consists of questions with categorical responses. Popular methods of handling categorical data include one-hot encoding and enumeration, which applies an unwarranted and potentially misleading notional order to the data. To address this, we introduce a novel visualization method named Data Reduction Network.
+  authors:
+    - name: Haoyin Xu
+      email: wxu@westhealth.org
+      affiliations:
+        - Gary and Mary West Health Institute
+        - University of California, San Diego
+    - name: Haw-minn Lu
+      email: hlu@westhealth.org
+      affiliations:
+        - Gary and Mary West Health Institute
+      corresponding: true
+    - name: José Unpingco
+      email: junpingco@eng.ucsd.edu
+      affiliations:
+        - University of California, San Diego
+  subject: Research Article
+  open_access: true
+  license: CC-BY-3.0
+  venue: Scipy 2023
+  date: 2023-07-10
+  doi: 10.25080/gerudo-f2bc6f59-012
+  banner: banner.png
+  thumbnail: thumbnail.png
+  keywords:
+    - Data Visualization
+    - Multidimensional Categorical Data
+  abbreviations:
+    DRN: Data Reduction Network
+  github:
+  biblio:
+    first_page: 136
+    last_page: 142
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: xu_etal.pdf
+      static: true
