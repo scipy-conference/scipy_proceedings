@@ -68,7 +68,7 @@ Illustration of Strassen's Algorithm for multiplying 2 Square Matrices (Modified
 
 To get a baseline for our improved algorithms below we show how the standard
 multiplication and the Geeks-for-Geeks implementation of the Strassen algorithm perform compared to Numpy.matmul on several
-large square matrices with integer coefficients. Timings are provided in Table {ref}`baseTiming`.
+large square matrices with integer coefficients. Timings are provided in {ref}`baseTiming`.
 Unsurprisingly, the Numpy implementation of matrix multiply is orders of magnitude faster than the other methods.
 This is expected because Numpy is written in compiled C and as discussed above is known for its speed and efficiency.
 The table contains a column where we compute the current timing divided by the previous timing.
@@ -82,7 +82,6 @@ it would not rival the Numpy multiplication until $N$ reached $10^{16}$
 
 ```{raw} latex
 \begin{table*}[htbp]
-\centering
 \begin{tabular}{|l|r|r|r|r|r|r|}
 \toprule
     & \multicolumn{2}{c|}{Numpy} & \multicolumn{2}{c|}{Strassen 1} & \multicolumn{2}{c|}{Standard Multiply} \\
@@ -97,13 +96,12 @@ it would not rival the Numpy multiplication until $N$ reached $10^{16}$
 \bottomrule
 \end{tabular}%
 \caption{Timing for Base Algorithms on Matrices with Integer Entries. (Intel Core I7-9700 CPU @ 3.00 GHz, 8 Cores)}
-\DUrole{label}{baseTiming}
+\label{baseTiming}
 \end{table*}%
 ```
 
 ```{raw} latex
 \begin{table*}
-\centering
 \begin{tabular}{|l|r|r|r|r|r|r|r|r|r|}
  \toprule
  Matrix Size & Numpy & Strassen & Strassen16 & Strassen32 & Strassen64 & Strassen128 & Strassen256 & Strassen512 & Standard \\
@@ -115,28 +113,27 @@ it would not rival the Numpy multiplication until $N$ reached $10^{16}$
  \midrule
  512 x 512 & 0.27  & 188.09 & 0.90  & 0.19  & 0.09  & 0.08  & 0.11  & 0.20  & 86.63 \\
  \midrule
- 1024 x 1024 & 3.75  & -------- & 6.70  & 1.41  & 0.64  & 0.63  & 0.82  & 1.45  & -------- \\
+ 1024 x 1024 & 3.75  & --------- & 6.70  & 1.41  & 0.64  & 0.63  & 0.82  & 1.45  & --------- \\
  \midrule
- 2048 x 2048 & 82.06 & -------- & 44.03 & 9.29  & 4.24  & 4.23  & 5.44  & 9.84  & -------- \\
+ 2048 x 2048 & 82.06 & --------- & 44.03 & 9.29  & 4.24  & 4.23  & 5.44  & 9.84  & --------- \\
  \midrule
- 4096 x 4096 & 988.12 & -------- & 322.82 & 68.06 & 31.61 & 31.10 & 40.14 & 72.56 & -------- \\
+ 4096 x 4096 & 988.12 & --------- & 322.82 & 68.06 & 31.61 & 31.10 & 40.14 & 72.56 & --------- \\
  \midrule
- 8192 x 8192 & 14722.33 & -------- & 2160.77 & 457.28 & 211.77 & 211.02 & 270.69 & 483.54 & -------- \\
+ 8192 x 8192 & 14722.33 & --------- & 2160.77 & 457.28 & 211.77 & 211.02 & 270.69 & 483.54 & --------- \\
  \bottomrule
  \end{tabular}%
      \caption{Timings (seconds) for Matrix Multiplication on Square Matrices with Integer Entries.  MacBook Pro 16 with Core i7 @ 2.6 GHz}
-\DUrole{label}{TimingMac1}
+\label{TimingMac1}
 \end{table*}%
 ```
 
 ```{raw} latex
 \begin{table*}
-\centering
  \begin{tabular}{|l|r|r|r|r|r|r|r|r|}
  \toprule
  Matrix Size & \multicolumn{2}{c|}{Numpy} & \multicolumn{2}{c|}{Strassen} & \multicolumn{2}{c|}{Strassen128} & \multicolumn{2}{c|}{Standard} \\
  \midrule
-       & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{\centering Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{\centering Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.5em}|}{\centering Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{\centering Current / \\ Previous} \\
+       & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.5em}|}{Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{Current / \\ Previous} \\
  \midrule
  \midrule
  128 x 128 & 0.00  &       & 3.88  &       & 0.00  &       & 1.32  &  \\
@@ -145,28 +142,27 @@ it would not rival the Numpy multiplication until $N$ reached $10^{16}$
  \midrule
  512 x 512 & 0.27  & 10.20 & 188.09 & 7.00  & 0.08  & 7.48  & 86.63 & 8.12 \\
  \midrule
- 1024 x 1024 & 3.75  & 13.69 & -------- &       & 0.63  & 7.72  & -------- &  \\
+ 1024 x 1024 & 3.75  & 13.69 & --------- &       & 0.63  & 7.72  & --------- &  \\
  \midrule
- 2048 x 2048 & 82.06 & 21.89 & -------- &       & 4.23  & 6.67  & -------- &  \\
+ 2048 x 2048 & 82.06 & 21.89 & --------- &       & 4.23  & 6.67  & --------- &  \\
  \midrule
- 4096 x 4096 & 988.12 & 12.04 & -------- &       & 31.10 & 7.35  & -------- &  \\
+ 4096 x 4096 & 988.12 & 12.04 & --------- &       & 31.10 & 7.35  & --------- &  \\
  \midrule
- 8192 x 8192 & 14722.33 & 14.90 & -------- &       & 211.02 & 6.78  & -------- &  \\
+ 8192 x 8192 & 14722.33 & 14.90 & --------- &       & 211.02 & 6.78  & --------- &  \\
  \bottomrule
  \end{tabular}%
 \caption{Timings (seconds) for Matrix Multiplication on Square Matrices with Integer Entries.  MacBook Pro 16 with Core i7 @ 2.6 GHz}
-\DUrole{label}{TimingMac2}%
+\label{TimingMac2}%
 \end{table*}%
 ```
 
 ```{raw} latex
 \begin{table*}
-\centering
  \begin{tabular}{|l|r|r|r|r|r|r|r|r|}
  \toprule
  Matrix Size & \multicolumn{2}{c|}{Numpy} & \multicolumn{2}{c|}{Strassen} & \multicolumn{2}{c|}{Strassen128} & \multicolumn{2}{c|}{Standard} \\
  \midrule
-       & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{\centering Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{\centering Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.5em}|}{\centering Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{\centering Current / \\ Previous} \\
+       & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.5em}|}{Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{Current / \\ Previous} \\
  \midrule
  \midrule
  128 x 128 & 0.00  &       & 3.76  &       & 0.00  &       & 1.96  &  \\
@@ -185,18 +181,17 @@ it would not rival the Numpy multiplication until $N$ reached $10^{16}$
  \bottomrule
  \end{tabular}%
  \caption{Timings (seconds) for Matrix Multiplication on Square Matrices with Integer Entries.  Windows 11 with Core i7 @ 3.0 GHz}
- \DUrole{label}{timingWin1}%
+ \label{timingWin1}%
  \end{table*}%
 ```
 
 ```{raw} latex
 \begin{table*}
-\centering
  \begin{tabular}{|l|r|r|r|r|r|r|r|r|}
  \toprule
  Matrix Size & \multicolumn{2}{c|}{Numpy} & \multicolumn{2}{c|}{Strassen} & \multicolumn{2}{c|}{Strassen128} & \multicolumn{2}{c|}{Standard} \\
   \midrule
-       & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{\centering Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{\centering Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.5em}|}{\centering Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{\centering Current / \\ Previous} \\
+       & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.5em}|}{Current / \\ Previous} & \multicolumn{1}{c|}{Time (s)} & \multicolumn{1}{p{5.43em}|}{Current / \\ Previous} \\
  \midrule
  \midrule
  128 x 128 & 0.00  &       & 4.58  &       & 0.00  &       & 1.82  &  \\
@@ -205,23 +200,23 @@ it would not rival the Numpy multiplication until $N$ reached $10^{16}$
  \midrule
  512 x 512 & 0.45  & 17.77 & 228.34 & 6.98  & 0.11  & 6.76  & 122.98 & 8.14 \\
  \midrule
- 1024 x 1024 & 4.21  & 9.38  & -------- &       & 0.78  & 7.26  & -------- &  \\
+ 1024 x 1024 & 4.21  & 9.38  & --------- &       & 0.78  & 7.26  & --------- &  \\
  \midrule
- 2048 x 2048 & 98.00 & 23.27 & -------- &       & 5.61  & 7.21  & -------- &  \\
+ 2048 x 2048 & 98.00 & 23.27 & --------- &       & 5.61  & 7.21  & --------- &  \\
  \midrule
- 4096 x 4096 & 1029.60 & 10.51 & -------- &       & 41.88 & 7.46  & -------- &  \\
+ 4096 x 4096 & 1029.60 & 10.51 & --------- &       & 41.88 & 7.46  & --------- &  \\
  \midrule
- 8192 x 8192 & 10050.31 & 9.76  & -------- &       & 287.43 & 6.86  & -------- &  \\
+ 8192 x 8192 & 10050.31 & 9.76  & --------- &       & 287.43 & 6.86  & --------- &  \\
  \bottomrule
  \end{tabular}%
  \caption{Timings (seconds) for Matrix Multiplication on Square Matrices with Integer Entries.  Linux with Xeon E5-2680 v3 @ 2.50GHz}
-\DUrole{label}{timingXeon1}
+\label{timingXeon1}
 \end{table*}%
 ```
 
 ## Implementing Strassen with a Crossover to Numpy
 
-It is clear from the initial timings in Table {ref}`baseTiming` that to improve the Strassen implementation we should crossover to Numpy at some level of our recursion rather than go all the way to the base case.
+It is clear from the initial timings in {ref}`baseTiming` that to improve the Strassen implementation we should crossover to Numpy at some level of our recursion rather than go all the way to the base case.
 
 As long as we are modifying the algorithm we should also generalize it so that is will work on any size matrices. The current strassen function described in @StrGG will crash if given a matrix with odd row dimension or odd column dimension. We can easily fix this by padding matrices with a row of zeros in the case of an odd row dimension or by padding with a column of zeros in the case of an odd column dimension. Code for padding a single row or column can be found below.
 
@@ -307,19 +302,19 @@ def strassenGeneral(x, y,crossoverCutoff):
 
 ## Timings of the Strassen Algorithm with Crossover to Numpy for Square Matrices
 
-Before checking the performance on random inputs we check the performance on square matrices of size $2^n \times 2^n$ for various $n$. The results for the first machine which is a MacBook Pro 16 with a 6-Core Intel Core i7 at 2.6 GHz with 16GB of RAM is shown in Table {ref}`TimingMac1`. The column headings are given shorthand names but they can be described as follows. The Numpy column contains timings in seconds for Numpy.matmul. The Strassen column contains timings in seconds for the standard Strassen algorithm shown discussed above modified from [@GG2022]. The Strassen16, Strassen32, etc. columns represent timings from the Python code for `strassenGeneral` shown above with various crossover levels. The Standard column contains timings for the standard matrix multiplication algorithm previously discussed. We see in Table {ref}`TimingMac1` that using a Strassen type algorithm and crossing over to Numpy when Matrix size is 128 gives a very slight advantage over crossing over at 64. Crossing over at larger or smaller values is slower than crossing over at size 128. We also see that not crossing over at all is even slower than the standard matrix multiplication for these sizes. Since the non-crossover Strassen algorithm and the standard matrix multiplication are not competitive and very slow, we stopped timing them after the $512 \times 512$ case because they would have taken a very long time to compute.
+Before checking the performance on random inputs we check the performance on square matrices of size $2^n \times 2^n$ for various $n$. The results for the first machine which is a MacBook Pro 16 with a 6-Core Intel Core i7 at 2.6 GHz with 16GB of RAM is shown in {ref}`TimingMac1`. The column headings are given shorthand names but they can be described as follows. The Numpy column contains timings in seconds for Numpy.matmul. The Strassen column contains timings in seconds for the standard Strassen algorithm shown discussed above modified from [@GG2022]. The Strassen16, Strassen32, etc. columns represent timings from the Python code for `strassenGeneral` shown above with various crossover levels. The Standard column contains timings for the standard matrix multiplication algorithm previously discussed. We see in {ref}`TimingMac1` that using a Strassen type algorithm and crossing over to Numpy when Matrix size is 128 gives a very slight advantage over crossing over at 64. Crossing over at larger or smaller values is slower than crossing over at size 128. We also see that not crossing over at all is even slower than the standard matrix multiplication for these sizes. Since the non-crossover Strassen algorithm and the standard matrix multiplication are not competitive and very slow, we stopped timing them after the $512 \times 512$ case because they would have taken a very long time to compute.
 
-Table {ref}`TimingMac2` is similar to Table {ref}`TimingMac1` except we've removed all but the best crossover case for Strassen (crossover 128) and added columns to show the current time divided by the previous time. These latter columns are instructive because for Strassen we expect that if we double the size of the matrices the timing should increase seven-fold and it does. Similarly for the standard algorithm when we double the input size we expect the timing to increase eight-fold which it does. We don't exactly know what to expect for Numpy without closely examining the code, but we see that for the largest 2 cases when we double the size of the inputs the timing increases 12 to 15-fold. This suggests that if we further increase the size of the matrices that the Strassen type algorithm with a crossover at size 128 will continue to be much faster than the Numpy computation for square matrices with integer entries.
+{ref}`TimingMac2` is similar to {ref}`TimingMac1` except we've removed all but the best crossover case for Strassen (crossover 128) and added columns to show the current time divided by the previous time. These latter columns are instructive because for Strassen we expect that if we double the size of the matrices the timing should increase seven-fold and it does. Similarly for the standard algorithm when we double the input size we expect the timing to increase eight-fold which it does. We don't exactly know what to expect for Numpy without closely examining the code, but we see that for the largest 2 cases when we double the size of the inputs the timing increases 12 to 15-fold. This suggests that if we further increase the size of the matrices that the Strassen type algorithm with a crossover at size 128 will continue to be much faster than the Numpy computation for square matrices with integer entries.
 
 Normally, we would expect a matrix multiplication to increase no more than eight-fold when we double the inputs. This suggests that Numpy is tuned for matrices of size $128 \times 128$ or smaller. Alternatively, perhaps at larger sizes there are more cache misses in the Numpy algorithm. Without a close examination of the Numpy code it is not clear which is the case, but the point is that a divide and conquer algorithm such as Strassen combined with Numpy will perform better than Numpy alone on large matrices with integer entries.
 
-Timings from a second machine are shown in Table {ref}`timingWin1`. These timings are for the same experiment as above on a Windows 11 Machine with 3.0 GHz Core i7-9700 with 8 cores and 32 GB of RAM. In this case we see again that using a Strassen type algorithm that crosses over to Numpy at size 128 is considerably faster than using Numpy alone for large matrices with integer entries. Moreover we see that for the largest cases if we double the matrix size, the timings for the Strassen based algorithm will continue to grow seven-fold while the Numpy timings will grow ten-fold for each doubling of input-size.
+Timings from a second machine are shown in {ref}`timingWin1`. These timings are for the same experiment as above on a Windows 11 Machine with 3.0 GHz Core i7-9700 with 8 cores and 32 GB of RAM. In this case we see again that using a Strassen type algorithm that crosses over to Numpy at size 128 is considerably faster than using Numpy alone for large matrices with integer entries. Moreover we see that for the largest cases if we double the matrix size, the timings for the Strassen based algorithm will continue to grow seven-fold while the Numpy timings will grow ten-fold for each doubling of input-size.
 
-Since both of these trials were based on Intel i7 chips, we ran a third experiment on a Linux machine with an Intel Xeon E5-2680 v3 @ 2.50GHz with 16 GB of RAM. Timings from this machine are in Table {ref}`timingXeon1` and are similar to the previous tables.
+Since both of these trials were based on Intel i7 chips, we ran a third experiment on a Linux machine with an Intel Xeon E5-2680 v3 @ 2.50GHz with 16 GB of RAM. Timings from this machine are in {ref}`timingXeon1` and are similar to the previous tables.
 
 ## Timings of the Strassen Algorithm with Crossover to Numpy for Arbitrary Matrices
 
-Although the Python function `strassenGeneral` shown above will work for Arbitrary sized matrices, to this point we have only shown timings for square matrices $N \times N$ where $N$ is a power of 2. The reason for this is that growth rates in timings when $N$ increases are easier to track for powers of 2. However, to show that the Strassen type algorithm with crossover is viable in general we need to test for a variety of arbitrary sizes. For this experiment it is not possible to show the results in simple tables such as Table {ref}`TimingMac1` through Table {ref}`timingXeon1`.
+Although the Python function `strassenGeneral` shown above will work for Arbitrary sized matrices, to this point we have only shown timings for square matrices $N \times N$ where $N$ is a power of 2. The reason for this is that growth rates in timings when $N$ increases are easier to track for powers of 2. However, to show that the Strassen type algorithm with crossover is viable in general we need to test for a variety of arbitrary sizes. For this experiment it is not possible to show the results in simple tables such as {ref}`TimingMac1` through {ref}`timingXeon1`.
 
 To motivate the next experiment consider the sample output shown below:
 
@@ -366,7 +361,7 @@ To create a good experiment we set three variables $dim1$, $dim2$, $dim3$ to ran
 
 The question is how do we present the results of several hundred such experiments on random sized matrices in a compact manner? Since we have a large number of different dimension multiplies they cannot easily be put into a table so instead we decided to organize the results by elapsed time. To see how consider @figMac5. We bin the `Strassen128` results into round number of seconds and we see the $x$-axis of @figMac5 shows the number of seconds of `Strassen128`. Let us consider the case of 102 seconds. The matrix multiply $(6977 \times 4737)*(4737 \times 7809)$ took 101.56 seconds using `Strassen128` and took 2482.76 seconds using Numpy. Meanwhile the matrix multiply $(7029 \times 7209) * (7209 \times 6283)$ using `Strassen128` took 101.80 seconds compared to 2792.11 seconds using Numpy. These are the only 2 cases that round to 102 seconds for `Strassen128` so they get bucketed together and averaged. The Average `Strassen128` time for these 2 cases is 101.68 seconds and the average Numpy time for these 2 cases is 2637.43 seconds. In the Figure we normalize by `Strassen128` so the `Strassen128` value for 102 seconds is 1.0 and the Numpy value for 102 seconds is $2637.43/101.68 = 25.94$. Thus for matrix multiplies that take 102 seconds for `Strassen128` the Numpy routines take almost 26 times as long which in this case is 44 minutes versus less than 2 for the `Strassen128` routine.
 
-Now that we've described how @figMac5 is derived it is useful to describe several things shown by the Figure. First note that for large matrix multiplies that take at least 15 seconds for the Strassen type algorithm that crosses over at size 128, the regular Numpy algorithms all take at least 8 times as long and in some cases up to 30 times as long. Moreover the general trend is increasing so that if we tested even larger sizes we would expect the disparity to continue to increase. Another item to notice is there is really no difference between Numpy.matmul, Numpy.dot or the infix operator a@b as expected. Also notice that the Strassen algorithms with crossover are almost twice as fast as the more straightforward divide and conquer algorithm discussed above. The last item to notice is the crossing over at size 128 seems to work best, just as in the square cases of Table {ref}`TimingMac1`.
+Now that we've described how @figMac5 is derived it is useful to describe several things shown by the Figure. First note that for large matrix multiplies that take at least 15 seconds for the Strassen type algorithm that crosses over at size 128, the regular Numpy algorithms all take at least 8 times as long and in some cases up to 30 times as long. Moreover the general trend is increasing so that if we tested even larger sizes we would expect the disparity to continue to increase. Another item to notice is there is really no difference between Numpy.matmul, Numpy.dot or the infix operator a@b as expected. Also notice that the Strassen algorithms with crossover are almost twice as fast as the more straightforward divide and conquer algorithm discussed above. The last item to notice is the crossing over at size 128 seems to work best, just as in the square cases of {ref}`TimingMac1`.
 
 @figUpstairs5 is similar to @figMac5 except these timings are done on the Windows 11 machine described above. Here we see that the Numpy algorithms take between 8 and 16 times as long as the Strassen type algorithm that crosses over to Numpy at size 128. One other difference between the Mac and Windows machine is that crossing over at size 64 is better than crossing over at size 128 more frequently on the Windows machine.
 

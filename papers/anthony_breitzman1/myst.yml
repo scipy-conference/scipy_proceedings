@@ -26,3 +26,7 @@ project:
   # github: https://github.com/scipy-conference/scipy_proceedings
 site:
   template: article-theme
+  actions:
+    - title: pdf
+      url: anthony_breitzman1.pdf
+      static: true
