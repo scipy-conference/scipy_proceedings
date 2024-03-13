@@ -30,3 +30,7 @@ project:
   github: https://github.com/AbreitzmanSr/SciPy2023-AuthorAttribution
 site:
   template: article-theme
+  actions:
+    - title: pdf
+      url: anthony_breitzman2.pdf
+      static: true

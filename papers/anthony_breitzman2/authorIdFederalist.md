@@ -170,7 +170,7 @@ Both of those components are easily done using Python’s NLTK (Natural Language
  \bottomrule
  \end{tabular}%
  \caption{Favorite Words of Hamilton and Madison}
- \DUrole{label}{favorite1}%
+ \label{favorite1}%
  \end{table*}%
 ```
 
