@@ -118,13 +118,15 @@ In 2024, the Proceedings Co-Chairs are
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
-- April 19: Authors invited to submit full papers
+- Mar 26: Reviewer invitations sent
+- Apr 2: Deadline to respond to offer to be a reviewer
+- Apr 19: Authors invited to submit full papers
 - May 31: 1st Draft for Submission
 - May 31–Aug 9: Open Review Period
 - May 31: Reviewers Assigned
-- June 21: Initial Complete Review
-- July 26: Final Recommendation and Comprehensive Review Deadlines
-- July 31: Final Author Revision Deadline
+- Jun 21: Initial Complete Review
+- Jul 26: Final Recommendation and Comprehensive Review Deadlines
+- Jul 31: Final Author Revision Deadline
 - Aug 9: Final Editorial Decisions for Proceedings Contents Deadline
 - Aug 16: Time Window for Publishing Conference Ready Proceedings
 
@@ -158,10 +160,10 @@ have final say in whether to accept or reject a paper.
 
 ### Author Deadlines
 
-- April 19: Authors invited to submit full papers
+- Apr 19: Authors invited to submit full papers
 - May 31: 1st Draft for Submission
 - May 31–Aug 9: Open Review Period
-- July 31: Final Author Revision Deadline
+- Jul 31: Final Author Revision Deadline
 - Aug 9: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
@@ -365,6 +367,8 @@ change in question, then that change should be requested and made before the
 
 ### Reviewer Deadlines
 
+- Mar 26: Reviewer invitations sent
+- Apr 2: Deadline to respond to offer to be a reviewer
 - May 31: Reviewers Assigned
 - Jun 21: Initial Complete Review
 - Jul 26: Final Recommendation and Comprehensive Review Deadlines
@@ -457,6 +461,8 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 #### Editor Deadlines
 
+- Mar 26: Reviewer invitations sent
+- Apr 2: Deadline to respond to offer to be a reviewer
 - Apr 19: Authors invited to submit full papers
 - May 31–Aug 9: Open Review Period
 - May 31: Reviewers Assigned
