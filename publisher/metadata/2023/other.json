@@ -1,0 +1,797 @@
+{
+  "lightning": [
+    {
+      "title": "NumFOCUS Academic Consortium and Open Source Pledge",
+      "authors": [
+        {
+          "name": "Arliss Collins",
+          "affiliation": "NumFOCUS",
+          "orcid": "0000-0003-1039-5096"
+        }
+      ],
+      "description": "Announcement of the NumFOCUS Academic Consortium and the Academic Data Science Alliance (ADSA) and NumFOCUS Open Source Pledge.",
+      "zenodo_url": "https://zenodo.org/record/8220688",
+      "slide_id": "collins-numfocus-academic-consortium-open-source-pledge",
+      "doi": "10.25080/gerudo-f2bc6f59-013"
+    },
+    {
+      "title": " Hamilton: drop procedural scripts in favor of declarative functions",
+      "authors": [
+        {
+          "name": "Stefan Krawczyk",
+          "affiliation": "DAGWorks Inc.",
+          "orcid": "0009-0006-1112-1459"
+        }
+      ],
+      "description": "Lightning Talk on using Hamilton in favor of procedural scripts",
+      "zenodo_url": "https://zenodo.org/record/8220704",
+      "slide_id": "hamilton_lightning_2023",
+      "doi": "10.25080/gerudo-f2bc6f59-014"
+    }
+  ],
+  "posters": [
+    {
+      "title": "Unleashing the Power of Modern Portfolio Theory: Maximizing Returns while Managing Risk",
+      "authors": [
+        {
+          "name": "Kalyan Prasad",
+          "affiliation": "",
+          "orcid": ""
+        }
+      ],
+      "description": "Modern portfolio theory is a mathematical approach that helps in creating an investment portfolio by considering both the potential risks and returns.Our sample portfolio comprises eight diverse assets, representing exposure to various sectors in the Global Industry Classification Standard (GICS).",
+      "zenodo_url": "https://zenodo.org/record/8220722",
+      "slide_id": "MPT_in_Action",
+      "doi": "10.25080/gerudo-f2bc6f59-015"
+    },
+    {
+      "authors": [
+        {
+          "name": "Avishek Panigrahi",
+          "affiliation": "Logarithm Labs",
+          "orcid": ""
+        },
+        {
+          "name": "Stefan J Caporale",
+          "affiliation": "Dupont",
+          "orcid": ""
+        },
+        {
+          "name": "Abhishek Shrivastava",
+          "affiliation": "Dupont",
+          "orcid": ""
+        },
+        {
+          "name": "Sumanth Sekar",
+          "affiliation": "Dupont",
+          "orcid": ""
+        }
+      ],
+      "title": "Data engineering and analytics for photolithography manufacturing process at DuPont - A practical approach from lab to fab",
+      "description": "With smaller chips, requirements on chemical suppliers to control material parameters used in semiconductor manufacturing are stricter. DuPont Electronics & Industrial is working to improve the quality of photolithography products. Our goal is to pre-emptively identify failures and minimize defects using data science and statistics. This requires good data engineering practices in a challenging enterprise IT environment with multiple systems. We present a practical approach to overcome these, and collect and organize data using open-source python tools to help domain experts and practitioners. We describe approaches to scale this effort, which should be relevant to chemistry and manufacturing practitioners.",
+      "zenodo_url": "https://zenodo.org/record/8220730",
+      "slide_id": "avishek_data_engineering_photolithography",
+      "doi": "10.25080/gerudo-f2bc6f59-016"
+    },
+    {
+      "authors": [
+        {
+          "name": "David Calhas",
+          "affiliation": "INESC-ID, Instituto Superior Tecnico",
+          "orcid": "0000-0001-6618-9086"
+        }
+      ],
+      "title": "EEG-to-fMRI Neuroimaging Cross Modal Synthesis in Python",
+      "description": "A Python package for supports EEG to fMRI Synthesis in Python",
+      "zenodo_url": "https://zenodo.org/record/8220753",
+      "slide_id": "david_calhas",
+      "doi": "10.25080/gerudo-f2bc6f59-017"
+    },
+    {
+      "authors": [
+        {
+          "name": "Stefan Krawczyk",
+          "affiliation": "DAGWorks Inc.",
+          "orcid": "0009-0006-1112-1459"
+        },
+        {
+          "name": "Elijah ben Izzy",
+          "affiliation": "DAGWorks Inc.",
+          "orcid": "0009-0005-3594-7303"
+        },
+        {
+          "name": "Levi Sweet-Breu",
+          "affiliation": "ORNL",
+          "orcid": "0000-0003-3325-8086"
+        },
+        {
+          "name": "Emily Rexer",
+          "affiliation": "PNNL",
+          "orcid": "0000-0002-0327-183X"
+        },
+        {
+          "name": "Chris Vernon",
+          "affiliation": "PNNL",
+          "orcid": "0000-0002-3406-6214"
+        },
+        {
+          "name": "Melissa Allen-Dumas",
+          "affiliation": "ORNL",
+          "orcid": "0000-0002-3319-0846"
+        }
+      ],
+      "title": "Hamilton: Scalable, Portable, and Self-Documenting Dataflows in Python",
+      "description": "Poster presented at the 2023 SciPy Conference. It describes the Hamilton project, which is a Python library for creating dataflows that are scalable, portable, and self-documenting. It uses the Naturf project as a case study to show before and after Hamilton.",
+      "zenodo_url": "https://zenodo.org/record/8220764",
+      "slide_id": "hamilton_poster",
+      "doi": "10.25080/gerudo-f2bc6f59-018"
+    },
+    {
+      "authors": [
+        {
+          "name": "Konstantinos Ntatsis",
+          "affiliation": "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+          "orcid": ""
+        },
+        {
+          "name": "Niels Dekker",
+          "affiliation": "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+          "orcid": ""
+        },
+        {
+          "name": "Viktor van der Valk",
+          "affiliation": "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+          "orcid": ""
+        },
+        {
+          "name": "Tom Birdsong",
+          "affiliation": "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA",
+          "orcid": "0009-0001-7007-684X"
+        },
+        {
+          "name": "Dženan Zukić",
+          "affiliation": "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA",
+          "orcid": "0000-0002-9546-9703"
+        },
+        {
+          "name": "Stefan Klein",
+          "affiliation": "Biomedical Imaging Group Rotterdam, Department of Radiology & Nuclear Medicine, Erasmus MC, Rotterdam, the Netherlands",
+          "orcid": "0000-0003-4449-6784"
+        },
+        {
+          "name": "Marius Staring",
+          "affiliation": "Division of Image Processing, Department of Radiology, Leiden University Medical Center, Leiden, the Netherlands",
+          "orcid": "0000-0003-2885-5812"
+        },
+        {
+          "name": "Matthew McCormick",
+          "affiliation": "Medical Computing Group, Kitware, Inc, Carrboro, NC, USA",
+          "orcid": "0000-0001-9475-3756"
+        }
+      ],
+      "title": "itk-elastix: Medical image registration in Python",
+      "description": "This SciPy 2023 poster provides an overview of the open-source medical image registration package itk-elastix. ",
+      "zenodo_url": "https://zenodo.org/record/8220782",
+      "slide_id": "itk-elastix-poster",
+      "doi": "10.25080/gerudo-f2bc6f59-019"
+    },
+    {
+      "title": "Spatial Microsimulation and Activity Allocation in Python: An Update on the Likeness Toolkit",
+      "authors": [
+        {
+          "name": "Joseph V. Tuccillo",
+          "affiliation": "Oak Ridge National Laboratory, Geospatial Sciences and Human Security",
+          "orcid": "0000-0002-5930-0943"
+        },
+        {
+          "name": "James D. Gaboardi",
+          "affiliation": "Oak Ridge National Laboratory, Geospatial Sciences and Human Security",
+          "orcid": "0000-0002-4776-6826"
+        }
+      ],
+      "description": "The Likeness toolkit utilizes state-of-the-art spatial microsimulation and activity allocation methods to generate synthetic populations within the US, at the metropolitan scale. These 'parallel universes' of agents are attributed with hundreds of demographic variables, probable nighttime and daytime locations, and plausible routing by commute mode between locations. This functionality is demonstrated for Tallahassee, FL and vicinity, a mid-sized metropolitan area.",
+      "zenodo_url": "https://zenodo.org/record/8220813",
+      "slide_id": "james_gaboardi",
+      "doi": "10.25080/gerudo-f2bc6f59-01a"
+    },
+    {
+      "authors": [
+        {
+          "name": "Greg Quinn",
+          "affiliation": "University of Wisconsin - Madison",
+          "orcid": "0009-0008-9923-4179"
+        }
+      ],
+      "title": "Matchmaker: A Toolkit for Combining Satellite Observations from Multiple Sensors",
+      "description": "Matchmaker constructs multi-sensor datasets that enable scientists to directly compare observations for validation or monitoring purposes, or to fuse measurements from complementary instruments to improve geophysical understanding. Matchmaker leverages SciPy ecosystem tools to perform each of its primary tasks: orbital simulation, geometric collocation of individual observations, and alignment / aggregation of sensor data arrays.",
+      "zenodo_url": "https://zenodo.org/record/8220821",
+      "slide_id": "matchmaker",
+      "doi": "10.25080/gerudo-f2bc6f59-01b"
+    },
+    {
+      "title": "Patterns and Anti-Patterns when Measuring Diversity in Open Source",
+      "authors": [
+        {
+          "name": "amanda casari",
+          "affiliation": "Google",
+          "orcid": "0000-0002-3201-8964"
+        }
+      ],
+      "description": "If we fundamentally believe that 'Open source is for everyone', how do we know we are actually bringing everyone in, meeting them where they are, and fostering a diverse and inclusive open source ecosystem? Our open source team has evolved our practices for measuring open source communities, and the impact we have on them. This poster presents patterns and anti-patterns we have learned about measuring diversity in global open source communities.",
+      "zenodo_url": "https://zenodo.org/record/8220844",
+      "slide_id": "measuring-diversity-poster-amcasari",
+      "doi": "10.25080/gerudo-f2bc6f59-01c"
+    },
+    {
+      "title": "PyQtGraph - High Performance Visualization for All Platforms",
+      "authors": [
+        {
+          "name": "Ognyan Moore",
+          "affiliation": "Hobu Inc.",
+          "orcid": ""
+        },
+        {
+          "name": "Nathan Jessurun",
+          "affiliation": "",
+          "orcid": "0000-0003-1693-3641"
+        },
+        {
+          "name": "Nils Nemitz",
+          "affiliation": "",
+          "orcid": ""
+        },
+        {
+          "name": "Martin Chase",
+          "affiliation": "",
+          "orcid": ""
+        },
+        {
+          "name": "Luke Campagnola",
+          "affiliation": "Allen Institute",
+          "orcid": ""
+        }
+      ],
+      "description": "Discuss and showcase the PyQtGraph plotting library.  Special attention will be given to highlight PyQtGraph's primary objectives, its performance, cross-platform support and interactivity and how the library achieves those objectives.",
+      "zenodo_url": "https://zenodo.org/record/8220855",
+      "slide_id": "moore-pyqtgraph",
+      "doi": "10.25080/gerudo-f2bc6f59-01d"
+    },
+    {
+      "authors": [
+        {
+          "name": "Tetsuo Koyama",
+          "affiliation": "PyVista",
+          "orcid": "0000-0001-9859-9565"
+        }
+      ],
+      "title": "PyVista",
+      "description": "Let's plot 3D Pythonic visualization",
+      "zenodo_url": "https://zenodo.org/record/8220865",
+      "slide_id": "pyvsita",
+      "doi": "10.25080/gerudo-f2bc6f59-01e"
+    },
+    {
+      "title": "OpenCRUMS: Open Classification of Regimes in the Southeast USA",
+      "authors": [
+        {
+          "name": "Robert Jackson",
+          "affiliation": "Argonne National Laboratory",
+          "orcid": "0000-0003-2518-1234"
+        },
+        {
+          "name": "Maria Zawadowicz",
+          "affiliation": "Brookhaven National Laboratory",
+          "orcid": "0000-0003-4234-0954"
+        },
+        {
+          "name": "Die Wang",
+          "affiliation": "Brookhaven National Laboratory",
+          "orcid": "0000-0002-4175-4306"
+        },
+        {
+          "name": "Chongai Kuang",
+          "affiliation": "Brookhaven National Laboratory",
+          "orcid": "0000-0003-2769-771X"
+        },
+        {
+          "name": "Minnie Park",
+          "affiliation": "Brookhaven National Laboratory",
+          "orcid": "0000-0001-9380-7126"
+        },
+        {
+          "name": "Michael Jensen",
+          "affiliation": "Brookhaven National Laboratory",
+          "orcid": "0000-0003-4731-6814"
+        },
+        {
+          "name": "Scott Collis",
+          "affiliation": "Argonne National Laboratory",
+          "orcid": "0000-0002-2303-687X"
+        }
+      ],
+      "description": "The U.S. Department of Energy AI for Earth System Predictability program is interested in exploring how machine learning can be used to characterize aerosol conditions over the Atmospheric Radiation Measurement (ARM) facility's measurement sites. In this poster we provide links to cookbooks that show how to use TensorFlow and Keras to produce explainable classifications of aerosol conditions over the Houston region where a recent ARM field campaign, TRacking Aerosol Convection intERactions (TRACER), was conducted. We show that a CNN-based classifier of the EPA PM2.5 Air Quality Index is able to capture the diurnal cycle of aerosols over Houston as well as influence of Dust from the Saharan Desert.",
+      "zenodo_url": "https://zenodo.org/record/8220870",
+      "slide_id": "robert_jackson",
+      "doi": "10.25080/gerudo-f2bc6f59-01f"
+    },
+    {
+      "title": "Analyse the uncertainty of your system: Sensitivity Analysis in Python with scipy.stats.sobol\\_indices",
+      "authors": [
+        {
+          "name": "Pamphile T. Roy",
+          "affiliation": "Quansight",
+          "orcid": "0000-0001-9816-1416"
+        }
+      ],
+      "description": "Use the indices of Sobol' to measure the uncertainty in your system. Starting with SciPy 1.11, you can now use scipy.stats.sobol_indices which provides a simple yet powerful API.",
+      "zenodo_url": "https://zenodo.org/record/8220894",
+      "slide_id": "sobol_indices",
+      "doi": "10.25080/gerudo-f2bc6f59-020"
+    },
+    {
+      "authors": [
+        {
+          "name": "Wanlin Li",
+          "affiliation": "Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada",
+          "orcid": ""
+        },
+        {
+          "name": "Nadia Tahiri",
+          "affiliation": "Department of Computer Science, University of Sherbrooke, Sherbrooke, Canada",
+          "orcid": "0000-0002-1818-208X"
+        }
+      ],
+      "title": "aPhyloGeo-Covid: A Web Interface for Reproducible Phylogeographic Analysis of SARS-CoV-2 Variation using Neo4j and Snakemake",
+      "description": "The gene sequencing data, along with the associated lineage tracing and research data generated throughout the Coronavirus disease 2019 (COVID-19) pandemic, constitute invaluable resources that profoundly empower phylogeography research. To optimize the utilization of these resources, we have developed an interactive analysis platform called aPhyloGeo-Covid, leveraging the capabilities of Neo4j, Snakemake, and Python. This platform enables researchers to explore and visualize diverse data sources specifically relevant to SARS-CoV-2 for phylogeographic analysis. The integrated Neo4j database acts as a comprehensive repository, consolidating COVID-19 pandemic-related sequences information, climate data, and demographic data obtained from public databases, facilitating efficient filtering and organization of input data for phylogeographical studies. Presently, the database encompasses over 113,774 nodes and 194,381 relationships. Additionally, aPhyloGeo-Covid provides a scalable and reproducible phylogeographic workflow for investigating the intricate relationship between geographic features and the patterns of variation in diverse SARS-CoV-2 variants. The code repository of platform is publicly accessible on GitHub (https://github.com/tahiri-lab/iPhyloGeo/tree/iPhylooGeo-neo4j), providing researchers with a valuable tool to analyze and explore the intricate dynamics of SARS-CoV-2 within a phylogeographic context.",
+      "zenodo_url": "https://zenodo.org/record/8220904",
+      "slide_id": "tahiri-lab",
+      "doi": "10.25080/gerudo-f2bc6f59-021"
+    },
+    {
+      "authors": [
+        {
+          "name": "Cian Wilson",
+          "affiliation": "Carnegie Institution for Science",
+          "orcid": "0000-0002-4083-6529"
+        },
+        {
+          "name": "Marc Spiegelman",
+          "affiliation": "Columbia University",
+          "orcid": "0000-0002-5218-7466"
+        },
+        {
+          "name": "Owen Evans",
+          "affiliation": "Columbia University (now at Google)",
+          "orcid": ""
+        },
+        {
+          "name": "Mark Ghiorso",
+          "affiliation": "OFM Research",
+          "orcid": "0000-0002-0489-0018"
+        },
+        {
+          "name": "Lucy Tweed",
+          "affiliation": "Columbia University (now at University of Cambridge)",
+          "orcid": "0009-0009-4506-2110"
+        }
+      ],
+      "title": "Moving the Earth with thermodynamics and python",
+      "description": "This poster describes some of the challenges of coupling thermodynamic models to geodynamic simulations and introduces a new python-based tool, ThermoCodegen (TCG), to deal with them.  TCG uses SymPy to symbolically represent thermodynamic models and automatically generate interfaces to a set of consistent thermodynamic parameters for use in geodynamic models.  It can be used quite generally but has been particularly designed for reactive disequilibrium problems in Earth science and we present some examples here.",
+      "zenodo_url": "https://zenodo.org/record/8220915",
+      "slide_id": "thermocodegen",
+      "doi": "10.25080/gerudo-f2bc6f59-022"
+    },
+    {
+      "authors": [
+        {
+          "name": "Aman Goel",
+          "affiliation": "The University of Manchester",
+          "orcid": "0000-0003-3567-2096"
+        }
+      ],
+      "title": "TUG-RSE: Pulling Students into Research Software Engineering",
+      "description": "Research Software Engineering (RSE) is a rapidly growing profession within the Scientific Python community, but it can present significant challenges for newcomers, particularly students who may lack the necessary skills or knowledge of the field. The aim of this poster presentation is to discuss the current challenges faced by newcomers to research software engineering, the potential solutions to make the community more inclusive, and an introduction to 'The Undergraduate's Guide To Research Software Engineering' (TUG-RSE).",
+      "zenodo_url": "https://zenodo.org/record/8220929",
+      "slide_id": "tug-rse",
+      "doi": "10.25080/gerudo-f2bc6f59-023"
+    },
+    {
+      "authors": [
+        {
+          "name": "Paolo Veglio",
+          "affiliation": "Space Science and Engineering Center at UW-Madison",
+          "orcid": "0000-0002-4721-8651"
+        },
+        {
+          "name": "Robert Holz",
+          "affiliation": "Space Science and Engineering Center at UW-Madison",
+          "orcid": "0000-0001-5443-4953"
+        },
+        {
+          "name": "Liam Gumley",
+          "affiliation": "Space Science and Engineering Center at UW-Madison",
+          "orcid": ""
+        },
+        {
+          "name": "Steve Dutcher",
+          "affiliation": "Space Science and Engineering Center at UW-Madison",
+          "orcid": ""
+        },
+        {
+          "name": "Greg Quinn",
+          "affiliation": "Space Science and Engineering Center at UW-Madison",
+          "orcid": ""
+        },
+        {
+          "name": "Bruce Flynn",
+          "affiliation": "Space Science and Engineering Center at UW-Madison",
+          "orcid": ""
+        }
+      ],
+      "title": "Yori: a new, highly customizable tool for Level-3 data production",
+      "description": "Yori is a highly customizable, sensor-agnostic software, developed to support the NASA Atmosphere Science Teams, to spatially/temporally resample geophysical variables from satellite measurements. Out of the box this software outputs common statistics, such as mean, standard deviation and pixel count, of each geophysical variable read, for every grid cell. Additionally, Yori allows users to easily produce additional statistics (e.g. histograms, min/max, median) and filter data to create custom outputs while maintaining a CF-compliant format. Yori has been designed to be easily scalable on a distributed computing environment.",
+      "zenodo_url": "https://zenodo.org/record/8220935",
+      "slide_id": "veglio",
+      "doi": "10.25080/gerudo-f2bc6f59-024"
+    }
+  ],
+  "slides": [
+    {
+      "title": "Fast Exploration of the Milky Way (or any other n-dimensional dataset)",
+      "authors": [
+        {
+          "name": "Francesc Alted",
+          "affiliation": "Blosc Development Team",
+          "orcid": ""
+        }
+      ],
+      "description": "A presentation about how to efficiently explore n-dimensional datasets",
+      "zenodo_url": "https://zenodo.org/record/8221023",
+      "slide_id": "Francesc_Alted",
+      "doi": "10.25080/gerudo-f2bc6f59-025"
+    },
+    {
+      "title": "Better (Open Source) Homes and Gardens with Project Pythia",
+      "authors": [
+        {
+          "name": "Drew Camron",
+          "affiliation": "UCAR/Unidata",
+          "orcid": "0000-0001-7246-6502"
+        },
+        {
+          "name": "Kevin Tyle",
+          "affiliation": "University at Albany, State University of New York",
+          "orcid": "0000-0001-5249-9665"
+        }
+      ],
+      "description": "Tending Your Open Source Garden session, SciPy 2023",
+      "zenodo_url": "https://zenodo.org/record/8221039",
+      "slide_id": "ProjectPythia",
+      "doi": "10.25080/gerudo-f2bc6f59-026"
+    },
+    {
+      "title": "Accessibility best practices for authoring Jupyter notebooks",
+      "authors": [
+        {
+          "name": "Isabela Presedo-Floyd",
+          "affiliation": "Quansight Labs",
+          "orcid": ""
+        },
+        {
+          "name": "Stephannie Jimenez Gacha",
+          "affiliation": "Quansight Labs",
+          "orcid": ""
+        }
+      ],
+      "description": "Jupyter notebooks seem like they are for everyone, but how a notebook gets written can greatly impact how usable it is for people with disabilities. Using staple accessibility frameworks, this talk dives into what it means to make a notebook's content accessible and provide actionable guidance on how authors can improve their notebooks.",
+      "zenodo_url": "https://zenodo.org/record/8221044",
+      "slide_id": "accessibility-best-practices-for-authoring-jupyter-notebooks",
+      "doi": "10.25080/gerudo-f2bc6f59-027"
+    },
+    {
+      "title": "Gammapy: a Python package for gamma-ray astronomy",
+      "authors": [
+        {
+          "name": "Axel Donath",
+          "affiliation": "Center for Astrophysics | Harvard & Smithsonian",
+          "orcid": "0000-0003-4568-7005"
+        },
+        {
+          "name": "The Gammapy Developer Team (https://gammapy.org/team.html)",
+          "affiliation": "",
+          "orcid": ""
+        }
+      ],
+      "description": "In this contribution we presented the first stable version v1.0 of Gammapy, an openly developed Python package for gamma-ray astronomy. Gammapy provides methods for the analysis of astronomical gamma-ray data, such as measurement of spectra, images and light curves. By relying on standardized data formats and a joint likelihood framework, it allows astronomers to combine data from multiple instruments and constrain underlying astrophysical emission processes across large parts of the electromagnetic spectrum. Finally shared lessons learned during the journey towards version v1.0 for an openly developed scientific Python package.",
+      "zenodo_url": "https://zenodo.org/record/8221050",
+      "slide_id": "adonath-gammapy",
+      "doi": "10.25080/gerudo-f2bc6f59-028"
+    },
+    {
+      "title": "Python Array API Standard: Toward Array Interoperability in the Scientific Python Ecosystem",
+      "authors": [
+        {
+          "name": "Aaron Meurer",
+          "affiliation": "Quansight",
+          "orcid": "0000-0003-3501-7841"
+        }
+      ],
+      "description": "The array API standard (https://data-apis.org/array-api/) is a common specification for Python array libraries, such as NumPy, PyTorch, CuPy, Dask, and JAX. This standard will make it straightforward for array-consuming libraries, like scikit-learn and SciPy, to write code that uniformly supports all of these libraries. This will allow, for instance, running the same code on the CPU and GPU. This talk covers the scope of the array API standard, supporting tooling which includes a library-independent test suite and compatibility layer, what work has been completed so far, and the plans going forward.",
+      "zenodo_url": "https://zenodo.org/record/8221054",
+      "slide_id": "array_api",
+      "doi": "10.25080/gerudo-f2bc6f59-029"
+    },
+    {
+      "title": "bayes\\_mapvar: Bayesian Statistics with Python, No Resampling Necessary",
+      "authors": [
+        {
+          "name": "Charles Lindsey",
+          "affiliation": "Revionics, an Aptos Company",
+          "orcid": "0000-0000-0000-0000"
+        }
+      ],
+      "description": "bayes_mapvar is a Python package that provides tools for Maximum A Posterior (MAP) estimation and posterior variance estimation. TensorFlow Probability and SciPy are leveraged to allow fast and efficient estimation for Bayesian models without using resampling methods.",
+      "zenodo_url": "https://zenodo.org/record/8221070",
+      "slide_id": "charles_lindsey",
+      "doi": "10.25080/gerudo-f2bc6f59-02a"
+    },
+    {
+      "title": "New CUDA Toolkit packages for Conda",
+      "authors": [
+        {
+          "name": "Rick Ratzel",
+          "affiliation": "NVIDIA",
+          "orcid": "0000-0001-5464-2920"
+        },
+        {
+          "name": "Thomson Comer",
+          "affiliation": "NVIDIA",
+          "orcid": "0009-0005-1246-9257"
+        },
+        {
+          "name": "John Kirkham",
+          "affiliation": "NVIDIA",
+          "orcid": "0009-0007-6130-9705"
+        }
+      ],
+      "description": "A presentation on the new CUDA package layout for Conda (as included in conda-forge).",
+      "zenodo_url": "https://zenodo.org/record/8221076",
+      "slide_id": "cuda_toolkit_conda",
+      "doi": "10.25080/gerudo-f2bc6f59-02b"
+    },
+    {
+      "title": "Taming Black Swans: Long-tailed distributions in the natural and engineered world",
+      "authors": [
+        {
+          "name": "Allen B. Downey",
+          "affiliation": "Brilliant",
+          "orcid": "0000-0001-5809-3797"
+        }
+      ],
+      "description": "Long-tailed distributions are common in natural and engineered systems; as a result, we encounter extreme values more often than we would expect from a short-tailed distribution. If we are not prepared for these 'black swans', they can be disastrous.\n\nBut we have statistical tools for identifying long-tailed distributions, estimating their parameters, and making better predictions about rare events.\n\nIn this talk, I present evidence of long-tailed distributions in a variety of datasets -- including earthquakes, asteroids, and stock market crashes -- discuss statistical methods for dealing with them, and show implementations using scientific Python libraries.",
+      "zenodo_url": "https://zenodo.org/record/8221088",
+      "slide_id": "downey2023taming",
+      "doi": "10.25080/gerudo-f2bc6f59-02c"
+    },
+    {
+      "title": "In-Process Analytical Data Management with DuckDB",
+      "authors": [
+        {
+          "name": "Alexander Monahan",
+          "affiliation": "MotherDuck and the DuckDB Foundation",
+          "orcid": ""
+        },
+        {
+          "name": "Hannes Mülheisen",
+          "affiliation": "DuckDB Labs",
+          "orcid": "0000-0001-8552-0029"
+        },
+        {
+          "name": "Mark Raasveldt",
+          "affiliation": "DuckDB Labs",
+          "orcid": "0000-0001-8552-0029"
+        },
+        {
+          "name": "Pedro Holanda",
+          "affiliation": "DuckDB Labs",
+          "orcid": ""
+        }
+      ],
+      "description": "DuckDB is a novel analytical data management system available under the MIT license. DuckDB supports complex queries in SQL or a relational API, has no external dependencies, and is deeply integrated into the Python ecosystem (reading and writing Numpy, Pandas, and PyArrow objects). DuckDB can also analyze datasets that are too large to fit in main memory.",
+      "zenodo_url": "https://zenodo.org/record/8221094",
+      "slide_id": "duckdb_in-process_analytical_data_management",
+      "doi": "10.25080/gerudo-f2bc6f59-02d"
+    },
+    {
+      "title": "DataJoint: Bringing databases back into data science",
+      "authors": [
+        {
+          "name": "Raphael Guzman",
+          "affiliation": "DataJoint Open Source (https://github.com/datajoint/datajoint-python)",
+          "orcid": ""
+        },
+        {
+          "name": "Dimitri Yatsenko",
+          "affiliation": "DataJoint",
+          "orcid": "0000-0002-1844-641X"
+        }
+      ],
+      "description": "Relational databases manage structured data and facilitate queries in collaborative repositories, but using SQL from a scientific programming language is awkward. DataJoint is an open-source framework for managing scientific data supporting data definition, diagramming, and queries. DataJoint makes computation a native part of its data model, bridging the gap between databases and numerical analysis in automated workflows.",
+      "zenodo_url": "https://zenodo.org/record/8221102",
+      "slide_id": "guzman-raphael_datajoint",
+      "doi": "10.25080/gerudo-f2bc6f59-02e"
+    },
+    {
+      "title": "Accelerating the Use of Public Geohysical Data for Recharging California's Groundwater",
+      "authors": [
+        {
+          "name": "Seogi Kang",
+          "affiliation": "Geophysics Department, Stanford University",
+          "orcid": "0000-0002-9963-936X"
+        },
+        {
+          "name": "Steve Purves",
+          "affiliation": "Curvenote",
+          "orcid": "0000-0002-0760-5497"
+        }
+      ],
+      "description": "Recharging ground aquifers is an urgent task for improving groundwater sustainability in California. Geophysical data can provide a capability to image the subsurface where there are major data gaps. However, neither data nor analytic tools required to derive subsurface information is readily accessible. We present an interactive web application that utilizes a curated, public database, GIS capabilities and directly integrates Jupyter Notebooks and Python packages from researchers to guide recharge site location. Our project showcases a unique combination of open-source tools to help turn research knowledge into actionable insights for practitioners to improve groundwater recharge in California.",
+      "zenodo_url": "https://zenodo.org/record/8221119",
+      "slide_id": "gw_recharge_seogikang",
+      "doi": "10.25080/gerudo-f2bc6f59-02f"
+    },
+    {
+      "title": "Interactive Exploration of Large-Scale Datasets with Jupyter-Scatter",
+      "authors": [
+        {
+          "name": "Fritz Lekschas",
+          "affiliation": "Ozette Technologies",
+          "orcid": "0000-0001-8432-4835"
+        }
+      ],
+      "description": "Jupyter Scatter is a scalable, interactive, and interlinked scatter plot widget for exploring datasets with up to several million data points. It focuses on data-driven visual encodings and offers two-way pan+zoom and lasso interactions. Beyond a single instance, Jupyter Scatter can compose multiple scatter plots and synchronize their views and selections. In this presentation, Fritz introduces Jupyter Scatter's API and demonstrates how the widget can be used for exploring large-scale datasets using real-world examples from biology, machine learning, and geospatial data.",
+      "zenodo_url": "https://zenodo.org/record/8221129",
+      "slide_id": "jupyter-scatter",
+      "doi": "10.25080/gerudo-f2bc6f59-030"
+    },
+    {
+      "title": "vak: a neural network framework for researchers studying animal acoustic communication\n",
+      "authors": [
+        {
+          "name": "David Nicholson",
+          "affiliation": "Independent researcher",
+          "orcid": "0000-0002-4261-4719"
+        },
+        {
+          "name": "Yarden Cohen",
+          "affiliation": "Weizmann Institute of Science",
+          "orcid": "0000-0002-8149-6954"
+        }
+      ],
+      "description": "Research on animal acoustic communication is being revolutionized by deep learning. In this talk we present vak, a framework that allows researchers in this area to easily benchmark deep neural network models and apply them to their own data. We'll demonstrate how research groups are using vak through examples with TweetyNet, a model that automates annotation of birdsong by segmenting spectrograms. Then we'll show how adopting Lightning as a backend in version 1.0 has allowed us to incorporate more models and features, building on the foundation we put in place with help from the scientific Python stack.",
+      "zenodo_url": "https://zenodo.org/record/8221134",
+      "slide_id": "nicholson-cohen-2023-vak",
+      "doi": "10.25080/gerudo-f2bc6f59-031"
+    },
+    {
+      "title": "Open Force Field: next-generation force fields with open data, open software, and open science",
+      "authors": [
+        {
+          "name": "Jeffrey Wagner",
+          "affiliation": "Open Force Field.",
+          "orcid": "0000-0001-6448-0873"
+        }
+      ],
+      "description": "The Open Force Field (OpenFF) initiative was formed to produce open and extensible infrastructure to build a new generation of MD force fields. We have now developed many software packages for constructing, applying, and benchmarking force fields. We have also generated several high-quality quantum chemistry datasets. Everything is available freely on GitHub, Zenodo, and the MolSSI QCArchive server. This work has been successfully used to investigate potential improvements to force fields, as well as simplify many previously difficult aspects of preparing MD systems.",
+      "zenodo_url": "https://zenodo.org/record/8221147",
+      "slide_id": "openforcefield",
+      "doi": "10.25080/gerudo-f2bc6f59-032"
+    },
+    {
+      "title": "Pandera: Going Beyond Pandas DataFrame Validation",
+      "authors": [
+        {
+          "name": "Niels Bantilan",
+          "affiliation": "Union.ai",
+          "orcid": "0000-0003-1713-5772"
+        }
+      ],
+      "description": "This talk is about how Pandera has evolved to provide a standard schema interface for easily extending and supporting validation backends for arbitrary statistical data containers. Attendees will learn not only about data testing principles such as run-time validation and property-based testing, they will also learn about the challenges of maintaining and evolving an open source project that many people rely on as a critical piece of their data infrastructure. The high-level goal for this talk is to highlight lessons learned from Pandera’s particular journey from supporting only Pandas as a backend to supporting a whole suite of data objects.",
+      "zenodo_url": "https://zenodo.org/record/8221155",
+      "slide_id": "pandera",
+      "doi": "10.25080/gerudo-f2bc6f59-033"
+    },
+    {
+      "title": "Tidy geospatial data cubes",
+      "authors": [
+        {
+          "name": "Emma Marshall",
+          "affiliation": "University of Utah",
+          "orcid": "0000-0001-6348-977X"
+        },
+        {
+          "name": "Deepak Cherian",
+          "affiliation": "National Center for Atmospheric Research",
+          "orcid": "0000-0002-6861-8734"
+        },
+        {
+          "name": "Scott Henderson",
+          "affiliation": "University of Washington",
+          "orcid": "0000-0003-0624-4965"
+        }
+      ],
+      "description": "Borrowing from the tidy data principles developed for tabular datasets [Wickham, 2014](https://vita.had.co.nz/papers/tidy-data.pdf), this presentation imagines 'tidy' principles for n-dimensional array data represented by Xarray objects with a specific focus on geospatial datasets.",
+      "zenodo_url": "https://zenodo.org/record/8221167",
+      "slide_id": "tidy_xarray",
+      "doi": "10.25080/gerudo-f2bc6f59-034"
+    },
+    {
+      "title": "Zarr: Community specification of large, cloud-optimised, N-dimensional, typed array storage",
+      "authors": [
+        {
+          "name": "Sanket Verma",
+          "affiliation": "Zarr",
+          "orcid": "0009-0008-1455-2136"
+        },
+        {
+          "name": "Josh Moore",
+          "affiliation": "German BioImaging",
+          "orcid": "0000-0003-4028-811X"
+        },
+        {
+          "name": "John Kirkham",
+          "affiliation": "NVIDIA",
+          "orcid": "0009-0007-6130-9705"
+        }
+      ],
+      "description": "A key feature of the Python data ecosystem is the reliance on simple but efficient primitives that follow well-defined interfaces to make tools work seamlessly together ( Cf. https://data-apis.org/ ). NumPy provides an in-memory representation for tensors. Dask provides parallelisation of tensor access. Xarray provides metadata linking tensor dimensions. Zarr provides a missing feature, namely the scalable, persistent storage for annotated hierarchies of tensors. Defined through a community process, the Zarr specification enables the storage of large out-of-memory datasets locally and in the cloud. Implementations exist in C++, C, Java, Javascript, Julia, and Python, enabling.",
+      "zenodo_url": "https://zenodo.org/record/8221177",
+      "slide_id": "zarr",
+      "doi": "10.25080/gerudo-f2bc6f59-035"
+    }
+  ],
+  "tools": [
+    {
+      "title": "SciPy Tools Plenary on Matplotlib",
+      "authors": [
+        {
+          "name": "Elliott Sales de Andrade",
+          "affiliation": "Matplotlib",
+          "orcid": "0000-0001-7310-8942"
+        }
+      ],
+      "description": "Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python. This presentation summarizes changes over the past year, new features, and future plans.",
+      "zenodo_url": "https://zenodo.org/record/8221189",
+      "slide_id": "matplotlib",
+      "doi": "10.25080/gerudo-f2bc6f59-036"
+    },
+    {
+      "title": "SciPy Tools Plenary on SciPy",
+      "authors": [
+        {
+          "name": "Pamphile T. Roy",
+          "affiliation": "Quansight",
+          "orcid": "0000-0001-9816-1416"
+        }
+      ],
+      "description": "2023 updates in SciPy",
+      "zenodo_url": "https://zenodo.org/record/8221193",
+      "slide_id": "scipy",
+      "doi": "10.25080/gerudo-f2bc6f59-037"
+    },
+    {
+      "title": "Zarr Updates for SciPy 2023",
+      "authors": [
+        {
+          "name": "Josh Moore",
+          "affiliation": "German BioImaging",
+          "orcid": "0000-0003-4028-811X"
+        }
+      ],
+      "description": "SciPy tools plenary session updates for Zarr",
+      "zenodo_url": "https://zenodo.org/record/8221202",
+      "slide_id": "zarr",
+      "doi": "10.25080/gerudo-f2bc6f59-038"
+    }
+  ]
+}
