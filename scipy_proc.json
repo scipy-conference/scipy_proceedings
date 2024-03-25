@@ -5,8 +5,8 @@
       "prefix": "10.25080",
       "registrant": "Crossref",
       "resource_url": "https://conference.scipy.org/proceedings",
-      "depositor_name": "Amey Ambade",
-      "depositor_email": "ameyambade@gmail.com"
+      "depositor_name": "SciPy Proceedings",
+      "depositor_email": "proceedings@scipy.org"
     },
     "copyright": {
       "proceedings": [
@@ -27,16 +27,22 @@
     "citation_key": "proc-scipy-2023",
     "editor_email": [
       "agarwal.meghann@gmail.com",
+      "ameyambade@gmail.com",
       "cbc@unc.edu",
-      "rgoswami@quansight.com",
-      "ameyambade@gmail.com"
+      "rowan@curvenote.com",
+      "sanhita.joshi@gmail.com",
+      "lindseycster@gmail.com",
+      "hongsup.shin@pm.me"
     ],
     "dates": "July 10 - July 16",
     "editor": [
       "Meghann Agarwal",
+      "Amey Ambade",
       "Chris Calloway",
-      "Rohit Goswami",
-      "Amey Ambade"
+      "Rowan Cockett",
+      "Sanhita Joshi",
+      "Charles Lindsey",
+      "Hongsup Shin"
     ],
     "location": "Tacoma, Seattle",
     "volume": 9,
@@ -66,11 +72,11 @@
           "name": "Paul Ivanov"
         },
         {
-          "org": "University of Illinois",
+          "org": "University of Illinois at Urbana-Champaign",
           "name": "Madicken Munk"
         },
         {
-          "org": "Microsoft Corp",
+          "org": "MotherDuck",
           "name": "Guen Prawiroatmodjo"
         },
         {
@@ -91,8 +97,12 @@
           "name": "Matt Davis"
         },
         {
-          "org": "Scientific Python",
+          "org": "University of California, Santa Cruz",
           "name": "Juanita Gomez"
+        },
+        {
+          "org": "Python Core/Spyder",
+          "name": "Cam Gerlach"
         }
       ]
     },
@@ -104,7 +114,7 @@
           "name": "Michael Akerman"
         },
         {
-          "org": "",
+          "org": "Microsoft Corporation",
           "name": "Mike Droettboom"
         }
       ]
@@ -125,11 +135,11 @@
           "name": "Chris Calloway"
         },
         {
-          "org": "",
+          "org": "Deloitte",
           "name": "Sanhita Joshi"
         },
         {
-          "org": "",
+          "org": "Aptos",
           "name": "Charles Lindsey"
         },
         {
@@ -167,15 +177,15 @@
           "name": "Tetsuo Koyama"
         },
         {
-          "org": "Enthought, Inc.",
+          "org": "Pattern Bioscience",
           "name": "Logan Thomas"
         },
         {
-          "org": "",
+          "org": "Tutte Institute for Mathematics and Computing",
           "name": "Benoit Hamelin"
         },
         {
-          "org": "",
+          "org": "Albus Code/OpenTeams",
           "name": "Inessa Pawson"
         }
       ]
@@ -201,7 +211,7 @@
           "name": "Sarah Kaiser"
         },
         {
-          "org": "",
+          "org": "Quantsight",
           "name": "Meekail Zain"
         }
       ]
@@ -210,7 +220,7 @@
       "name": "Activities",
       "members": [
         {
-          "org": "Sentry",
+          "org": "California Institute of Technology",
           "name": "Paul Anzel"
         },
         {
@@ -218,7 +228,7 @@
           "name": "Ed Rogers"
         },
         {
-          "org": "",
+          "org": "Lawrence Berkeley National Laboratory",
           "name": "Ana Comesana"
         }
       ]
@@ -240,7 +250,7 @@
           "name": "David Nicholson"
         },
         {
-          "org": "",
+          "org": "Mozilla",
           "name": "Rebecca BurWei"
         },
         {
@@ -259,6 +269,42 @@
         {
           "org": "Outerbounds",
           "name": "Hugo Bowne-Anderson"
+        }
+      ]
+    },
+    {
+      "name": "Tool Plenary",
+      "members": [
+        {
+          "org": "Zarr",
+          "name": "Sanket Verma"
+        }
+      ]
+    },
+    {
+      "name": "Earth, Geosciences, Ocean, and Atmosphere",
+      "members": [
+        {
+          "org": "ACCESS NRI/Australian National University",
+          "name": "Paige Martin"
+        }
+      ]
+    },
+    {
+      "name": "Human Networks, Social Sciences, and Economics",
+      "members": [
+        {
+          "org": "Seattle University",
+          "name": "Ariana Mendible"
+        }
+      ]
+    },
+    {
+      "name": "Data Visualization and Image Processing",
+      "members": [
+        {
+          "org": "NVIDIA",
+          "name": "John Kirkham"
         }
       ]
     },
