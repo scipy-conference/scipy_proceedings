@@ -164,7 +164,7 @@
           "name": "Eric Ma"
         },
         {
-          "org": "Université de Montréal",
+          "org": "University of Sherbrooke",
           "name": "Nadia Tahiri"
         }
       ]
@@ -246,7 +246,7 @@
       "name": "Hybrid",
       "members": [
         {
-          "org": "Embedded Intelligence",
+          "org": "Independent Researcher",
           "name": "David Nicholson"
         },
         {
@@ -263,6 +263,46 @@
         }
       ]
     },
+    {
+      "name": "Proceedings Reviewers",
+      "members": [
+        {
+          "name": ""
+        }
+      ]
+    }
+  ],
+  "series": {
+    "title": {
+      "full": "Proceedings of the Python in Science Conference"
+    },
+    "doi": "10.25080/issn.2575-9752",
+    "xref": {
+      "issn": "2575-9752",
+      "resource_url": "https://conference.scipy.org/proceedings"
+    }
+  },
+  "scipy_scholarship": [
+    {
+      "org": "",
+      "name": ""
+    },
+    {
+      "org": "",
+      "name": ""
+    }
+  ],
+  "diversity_scholarship": [
+    {
+      "org": "",
+      "name": ""
+    },
+    {
+      "org": "",
+      "name": ""
+    }
+  ], 
+  "track_mini_symposia_chairs": [
     {
       "name": "DS/ML/AI",
       "members": [
@@ -307,44 +347,6 @@
           "name": "John Kirkham"
         }
       ]
-    },
-    {
-      "name": "Proceedings Reviewers",
-      "members": [
-        {
-          "name": ""
-        }
-      ]
-    }
-  ],
-  "series": {
-    "title": {
-      "full": "Proceedings of the Python in Science Conference"
-    },
-    "doi": "10.25080/issn.2575-9752",
-    "xref": {
-      "issn": "2575-9752",
-      "resource_url": "https://conference.scipy.org/proceedings"
-    }
-  },
-  "scipy_scholarship": [
-    {
-      "org": "",
-      "name": ""
-    },
-    {
-      "org": "",
-      "name": ""
-    }
-  ],
-  "diversity_scholarship": [
-    {
-      "org": "",
-      "name": ""
-    },
-    {
-      "org": "",
-      "name": ""
     }
   ]
 }
