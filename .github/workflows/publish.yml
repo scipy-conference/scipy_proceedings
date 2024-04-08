@@ -13,7 +13,7 @@ jobs:
       id-pattern-regex: '^scipy-2024-(?:[a-zA-Z0-9-_]{3,15})$'
       enforce-single-folder: true
       preview-label: paper
-      submit-label: in-review
+      submit-label: true
       venue: scipy
       collection: '2024'
       kind: Article
