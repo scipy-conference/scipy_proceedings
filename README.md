@@ -217,7 +217,7 @@ git clone https://github.com/mpacer/scipy_proceedings
 2. Update your local copy of the `scipy_proceedings` repo.
 3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2024` branch.
    - If you submit multiple papers, you will need a new branch for each.
-4. [Install MyST Markdown and Node](#setting-up-your-environment).
+4. [Install MyST Markdown and Node](#setting-up-your-environment) and [copy a template](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#preview-your-paper)
 6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#push-your-changes) and [check your paper](#check-your-paper).
    - If you want to alter the build system, do not include it in your
