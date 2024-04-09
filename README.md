@@ -165,7 +165,7 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 
 - Papers are formatted using MyST ([mystmd.org](https://mystmd.org)) or LaTeX (please see notes on LaTeX below)
 - The paper is written and reviewed using the interactive HTML view (i.e. `myst start`), the PDF is built upon acceptance only
-- Example papers are provided in `papers/00_bibderwalt` and `papers/00_vanderwalt`
+- Example papers are provided in `papers/00_bibderwalt` and `papers/00_texderwalt`
   - These papers provide examples of how to:
     - Label figures, equations and tables
     - Use math markup
@@ -276,18 +276,20 @@ git push --set-upstream origin <your_branch_name>
   - if you are submitting one paper, we recommend you use `<firstname_surname>`
   - if you are submitting more than one paper, you will need to use a different
     directory name for each paper
+- Copy an example paper into your directory: either `papers/00_bibderwalt` or `papers/00_texderwalt`
+  - Update the `id` in the `myst.yml` to by `scipy-2024-<your_directory_name>`
 
 #### Write your paper
 
-- Copy an example paper into your directory
-  - Update the `id` in the `myst.yml` to by `scipy-2024-<your_directory_name>`
-  - Update the author information and affiliations in `myst.yml`
-  - The templates are setup for a _single_ MyST/LaTeX file in the top level of `<your_directory_name>`
-    - If you have more than one file run `myst init --write-toc` ([docs](https://mystmd.org/guide/table-of-contents)), ensuring that the `root` is the main file of your manuscript
-- To preview your changes, run `myst start` and open the web-server provided
-- Refer to the syntax in the template papers or online at [mystmd.org](https://mystmd.org/guide/)
+- To have a live preview of your changes:
+  - Change directories `cd papers/<your_directory_name>`
+  - Run `myst start` and open the web-server provided
+- Refer to the syntax in the template papers or online at [mystmd.org](https://mystmd.org/guide)
+- Update the author information and affiliations in `myst.yml`
 - As you make changes to your paper, commit those changes in discrete chunks
 - If you come across any challenges, ask the Proceedings Co-chairs for help via a GitHub issue or comment on your PR
+
+Note: The templates are setup for a _single_ MyST/LaTeX file in the top level of `<your_directory_name>`. If you have more than one file run `myst init --write-toc` ([docs](https://mystmd.org/guide/table-of-contents)), ensuring that the `root` is the main file of your manuscript.
 
 #### Commit your changes
 
