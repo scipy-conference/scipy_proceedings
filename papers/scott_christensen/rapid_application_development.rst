@@ -18,6 +18,10 @@
 :email: Amanda.Reeder@usace.army.mil
 :institution: US Army Engineer Research and Development Center
 
+:author: Theresa Coumbe
+:email: Theresa.Coumbe@usace.army.mil
+:institution: US Army Engineer Research and Development Center
+
 :author: Dallon C. Schofield
 :email: Dallon.C.Schofield@usace.army.mil
 :institution: US Army Engineer Research and Development Center
