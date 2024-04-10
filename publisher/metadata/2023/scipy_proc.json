@@ -1,0 +1,267 @@
+{
+  "proceedings": {
+    "doi": "",
+    "xref": {
+      "prefix": "10.25080",
+      "registrant": "Crossref",
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "depositor_name": "Dillon Niederhut",
+      "depositor_email": "dillon.niederhut@gmail.com"
+    },
+    "copyright": {
+      "proceedings": [
+        "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
+        "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+        "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
+      ],
+      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+      "license": "Creative Commons Attribution License (CCAL)"
+    },
+    "title": {
+      "conference": "Python in Science Conference",
+      "full": "Proceedings of the 22nd Python in Science Conference",
+      "short": "PROC. OF THE 22nd PYTHON IN SCIENCE CONF. (SCIPY 2023)",
+      "acronym": "SciPy",
+      "ordinal": "22nd"
+    },
+    "citation_key": "proc-scipy-2023",
+    "editor_email": [
+      "agarwal.meghann@gmail.com",
+      "cbc@unc.edu",
+      "rgoswami@quansight.com",
+      "dillon.niederhut@gmail.com"
+    ],
+    "dates": "July 10 - July 16",
+    "editor": [
+      "Meghann Agarwal",
+      "Chris Calloway",
+      "Rohit Goswami",
+      "Dillon Niederhut"
+    ],
+    "location": "Austin, Texas",
+    "volume": 8,
+    "number": 1,
+    "isbn": "noisbn",
+    "year": "2023"
+  },
+  "organization": [
+    {
+      "name": "Conference Chairs",
+      "members": [
+        {
+          "org": "Enthought, Inc.",
+          "name": "Alexandre Chabot-Leclerc"
+        },
+        {
+          "org": "Mozilla",
+          "name": "Julie Hollek"
+        }
+      ]
+    },
+    {
+      "name": "Program Chairs",
+      "members": [
+        {
+          "org": "Citadel",
+          "name": "Paul Ivanov"
+        },
+        {
+          "org": "University of Illinois",
+          "name": "Madicken Munk"
+        },
+        {
+          "org": "Microsoft Corp",
+          "name": "Guen Prawiroatmodjo"
+        }
+      ]
+    },
+    {
+      "name": "Communications",
+      "members": [
+        {
+          "org": "NumFOCUS",
+          "name": "Arliss Collins"
+        },
+        {
+          "org": "Scientific Python",
+          "name": "Juanita Gomez"
+        },
+        {
+          "org": "NumFOCUS",
+          "name": "Samina Trachier"
+        }
+      ]
+    },
+    {
+      "name": "Birds of a Feather",
+      "members": [
+        {
+          "org": "NIST",
+          "name": "Andrew Reid"
+        },
+        {
+          "org": "USGS",
+          "name": "Mike Hearne"
+        }
+      ]
+    },
+    {
+      "name": "Proceedings",
+      "members": [
+        {
+          "org": "GDI",
+          "name": "Meghann Agarwal"
+        },
+        {
+          "org": "University of North Carolina",
+          "name": "Chris Calloway"
+        },
+        {
+          "org": "Quansight Labs",
+          "name": "Rohit Goswami"
+        },
+        {
+          "org": "Novi Labs",
+          "name": "Dillon Niederhut"
+        }
+      ]
+    },
+    {
+      "name": "Financial Aid",
+      "members": [
+        {
+          "org": "Argonne National Laboratory",
+          "name": "Scott Collis"
+        },
+        {
+          "org": "Moderna",
+          "name": "Eric Ma"
+        },
+        {
+          "org": "Université de Montréal",
+          "name": "Nadia Tahiri"
+        }
+      ]
+    },
+    {
+      "name": "Tutorials",
+      "members": [
+        {
+          "org": "ARK Information Systems",
+          "name": "Tetsuo Koyama"
+        },
+        {
+          "org": "Enthought, Inc.",
+          "name": "Logan Thomas"
+        },
+        {
+          "org": "Anaconda",
+          "name": "Sophia Yang"
+        }
+      ]
+    },
+    {
+      "name": "Sprints",
+      "members": [
+        {
+          "org": "Quansight Labs",
+          "name": "Tania Allard"
+        },
+        {
+          "org": "IBM",
+          "name": "Alan Braz"
+        },
+        {
+          "org": "Caltech/IPAC",
+          "name": "Brigitta Sipőcz"
+        }
+      ]
+    },
+    {
+      "name": "Diversity",
+      "members": [
+        {
+          "org": "Microsoft",
+          "name": "Sarah Kaiser"
+        },
+        {
+          "org": "O'Reilly Media",
+          "name": "Bonny P McClain"
+        }
+      ]
+    },
+    {
+      "name": "Activities",
+      "members": [
+        {
+          "org": "Sentry",
+          "name": "Paul Anzel"
+        },
+        {
+          "org": "Majesco",
+          "name": "Ed Rogers"
+        }
+      ]
+    },
+    {
+      "name": "Sponsors/Financial/Logistics",
+      "members": [
+        {
+          "org": "NumFOCUS",
+          "name": "Jim Weiss"
+        }
+      ]
+    },
+    {
+      "name": "Hybrid",
+      "members": [
+        {
+          "org": "Embedded Intelligence",
+          "name": "David Nicholson"
+        },
+        {
+          "org": "Ford Motor Company",
+          "name": "Neelima Pulagam"
+        }
+      ]
+    },
+    {
+      "name": "Proceedings Reviewers",
+      "members": [
+        {
+          "name": ""
+        }
+      ]
+    }
+  ],
+  "series": {
+    "title": {
+      "full": "Proceedings of the Python in Science Conference"
+    },
+    "doi": "10.25080/issn.2575-9752",
+    "xref": {
+      "issn": "2575-9752",
+      "resource_url": "https://conference.scipy.org/proceedings"
+    }
+  },
+  "scipy_scholarship": [
+    {
+      "org": "",
+      "name": ""
+    },
+    {
+      "org": "",
+      "name": ""
+    }
+  ],
+  "diversity_scholarship": [
+    {
+      "org": "",
+      "name": ""
+    },
+    {
+      "org": "",
+      "name": ""
+    }
+  ]
+}
