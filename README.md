@@ -186,7 +186,7 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 - When using the LaTeX option, please consider:
   - We are supporting _HTML_. LaTeX is not involved in reading or rendering (as of 2024 we use Typst)
   - Custom LaTeX macros are **not** supported and some packages may not be supported
-- The compiled version of the paper should be at most XXX words
+- The compiled version of the paper should be at most 6000 words
   including figures but not including references; this is about 8 pages for the published PDF that will be created upon acceptance.
 
 ### Author Workflow
