@@ -55,7 +55,7 @@ If you wish to have a block quote, use the \verb|\begin{quote}| command, as in:
 In order to include a DOI in your bibliography, add the DOI to your bibliography
 entry as a string. For example:
 
-\begin{verbatim}
+\begin{lstlisting}[language=bibtex]
 @book{hume48,
     author = {David Hume},
     year = 1748,
@@ -64,7 +64,7 @@ entry as a string. For example:
     publisher = {Hackett},
     doi = {10.1017/CBO9780511808432}
 }
-\end{verbatim}
+\end{lstlisting}
 
 
 \section{Citing software and websites}\label{citing-software-and-websites}
@@ -85,17 +85,17 @@ are included in this paper's \texttt{.bib} file.
 
 In this paper we not only terraform a desert using the package terradesert \citep{terradesert}, we also catch a sandworm with it.
 To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
-If you are citing a team, ensure that the author name is wrapped in additional braces \texttt{\{Team Name\}}, so it is not treated as an authors first and last names.
+If you are citing a team, ensure that the author name is wrapped in additional braces \texttt{\{Team Name\}}, so it is not treated as an author's first and last names.
 
-\begin{verbatim}
+\begin{lstlisting}[language=bibtex]
 @misc{terradesert,
     author = {{TerraDesert Team}},
-    title = {Code for terraforming a desert},
-    year = {2000},
-    url = {https://terradesert.com/code/},
-    note = {Accessed 1 Jan. 2000}
+    title  = {Code for terraforming a desert},
+    year   = {2000},
+    url    = {https://terradesert.com/code/},
+    note   = {Accessed 1 Jan. 2000}
 }
-\end{verbatim}
+\end{lstlisting}
 
 
 \section{Source code examples}\label{source-code-examples}
