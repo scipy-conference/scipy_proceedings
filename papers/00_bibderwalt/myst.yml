@@ -1,2 +1,44 @@
+version: 1
 project:
+  # Update this to match `scipy-2024-{folder}`
   id: scipy-2024-00_bibderwalt
+  # Ensure your title is the same as in your `main.md`
+  title: A Numerical Perspective to Terraforming a Desert
+  subtitle: MyST Markdown edition
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Gaius Caesar
+      email: jj@rome.it
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Senate House, S.P.Q.R.
+        - Egyptian Embassy, S.P.Q.R.
+    - name: Mark Anthony
+      email: mark37@rome.it
+      affiliations:
+        - Egyptian Embassy, S.P.Q.R.
+    - name: Jarrod Millman
+      email: millman@rome.it
+      affiliations:
+        - Egyptian Embassy, S.P.Q.R.
+        - Yet another place, S.P.Q.R.
+      corresponding: true
+    - name: Cleopatra
+      email: cleopatra@rome.it
+  keywords:
+    - terraforming
+    - desert
+    - numerical perspective
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
