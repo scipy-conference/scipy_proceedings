@@ -48,7 +48,7 @@ Open Development:
 The systems for running the conference are built on top of open source tools, including:
 
 - MyST Markdown ([mystmd.org](https://mystmd.org))
-- Typst - for fast PDF generation
+- Typst - for fast PDF generation (e.g. [SciPy template](https://github.com/myst-templates/scipy))
 
 ### Open Peer Review meets Open Source Code Review
 
@@ -163,9 +163,9 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 
 ### General Information and Guidelines for Authors
 
-- Papers are formatted using MyST ([mystmd.org](https://mystmd.org)) or LaTeX (please see notes on LaTeX below)
+- Papers are formatted using MyST ([mystmd.org](https://mystmd.org)) or LaTeX (which also uses [MyST](https://mystmd.org), please see notes on LaTeX below)
 - The paper is written and reviewed using the interactive HTML view (i.e. `myst start`), the PDF is built upon acceptance only
-- Example papers are provided in `papers/00_bibderwalt` and `papers/00_texderwalt`
+- Example papers are provided in `papers/00_myst_template` and `papers/00_tex_template`
   - These papers provide examples of how to:
     - Label figures, equations and tables
     - Use math markup
@@ -175,7 +175,7 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 - Authors may include a project or consortium (e.g. [The Jupyter Project](https://raw.githubusercontent.com/scipy-conference/scipy_proceedings/2018/papers/project_jupyter/paper.rst))
 - There must be at least one corresponding author, and this must be a specific person with a valid email address
 - Authors of papers from previous SciPys may change their name on their published work by contacting the Proceedings Co-chairs
-- All citations that have DOIs should include those DOIs in the paper's references section, see [`mybib.bib`](./papers/00_bibderwalt/mybib.bib).
+- All citations that have DOIs should include those DOIs in the paper's references section, see [`mybib.bib`](./papers/00_myst_template/mybib.bib).
 - All figures and tables should have captions.
 - Figures and tables should be positioned close to their explanatory text.
 - All abbreviations should be identified in your `myst.yml` ([docs](https://mystmd.org/guide/glossaries-and-terms#abbreviations))
@@ -184,7 +184,7 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 - Images and figures should be reasonably sized and formatted for viewing online; typically less than 1 MB
 - Do not modify any files outside of your paper directory
 - When using the LaTeX option, please consider:
-  - We are supporting _HTML_. LaTeX is not involved in reading or rendering (as of 2024 we use Typst)
+  - SciPy is supporting _HTML_. LaTeX is not involved in reading or rendering (as of 2024 we use [Typst for building PDFs](https://github.com/myst-templates/scipy))
   - Custom LaTeX macros are **not** supported and some packages may not be supported
 - The compiled version of the paper should be at most 6000 words
   including figures but not including references; this is about 8 pages for the published PDF that will be created upon acceptance.
@@ -276,7 +276,7 @@ git push --set-upstream origin <your_branch_name>
   - if you are submitting one paper, we recommend you use `<firstname_surname>`
   - if you are submitting more than one paper, you will need to use a different
     directory name for each paper
-- Copy an example paper into your directory: either `papers/00_bibderwalt` or `papers/00_texderwalt`
+- Copy an example paper into your directory: either `papers/00_myst_template` or `papers/00_tex_template`
   - Update the `id` in the `myst.yml` to by `scipy-2024-<your_directory_name>`
 
 #### Write your paper
