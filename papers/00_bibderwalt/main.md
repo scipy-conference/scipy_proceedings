@@ -97,10 +97,10 @@ If you are citing a team, ensure that the author name is wrapped in additional b
 :linenos:
 @misc{terradesert,
   author = {{TerraDesert Team}},
-  title = {Code for terraforming a desert},
-  year = {2000},
-  url = {https://terradesert.com/code/},
-  note = {Accessed 1 Jan. 2000}
+  title  = {Code for terraforming a desert},
+  year   = {2000},
+  url    = {https://terradesert.com/code/},
+  note   = {Accessed 1 Jan. 2000}
 }
 ```
 
