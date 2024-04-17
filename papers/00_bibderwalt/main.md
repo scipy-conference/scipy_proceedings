@@ -1,4 +1,5 @@
 ---
+# Ensure that this title is the same as the one in `myst.yml`
 title: A Numerical Perspective to Terraforming a Desert
 abstract: |
   A short version of the long version that is way too long to be written as a
