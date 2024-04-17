@@ -90,7 +90,7 @@ are included in this paper's `.bib` file.
 
 In this paper we not only terraform a desert using the package terradesert [@terradesert], we also catch a sandworm with it.
 To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
-If you are citing a team, ensure that the author name is wrapped in additional braces `{Team Name}`, so it is not treated as an authors first and last names.
+If you are citing a team, ensure that the author name is wrapped in additional braces `{Team Name}`, so it is not treated as an author's first and last names.
 
 ```{code-block} bibtex
 :emphasize-lines: 2
