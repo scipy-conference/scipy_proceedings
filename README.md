@@ -16,15 +16,15 @@ You can find the [schedule for 2024](#timeline-for-2024) below.
 
 Please use @-mentions in issues and pull requests(PRs) to [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
 
-If you are an *Author*, please see [Instructions for Authors](#instructions-for-authors).
+If you are an _Author_, please see [Instructions for Authors](#instructions-for-authors).
 
-If you are a *Reviewer*, please see [Instructions for Reviewers](#instructions-for-reviewers).
+If you are a _Reviewer_, please see [Instructions for Reviewers](#instructions-for-reviewers).
 
-If you are an *Editor*, please see [Instructions for Editors](#instructions-for-editors).
+If you are an _Editor_, please see [Instructions for Editors](#instructions-for-editors).
 
-If you are a *Publisher*, please see [Instructions for Publishers](#instructions-for-publishers).
+If you are a _Publisher_, please see [Instructions for Publishers](#instructions-for-publishers).
 
-If you are *Submitting Slides*, please see [Instructions for Slides](#instructions-for-slides).
+If you are _Submitting Slides_, please see [Instructions for Slides](#instructions-for-slides).
 
 ## Organising Principles: Openness
 
@@ -39,73 +39,57 @@ The technologies used for running the conference are themselves developed in the
 open and built on open source tools.
 
 Open Development:
-- with many people contributing code over more than a decade
-    - many contributors start as authors submitting to the proceedings
-    - provides a natural pathway for new members to join the proceedings committee
-- technologies are managed via public, open source GitHub repositories:
-    - build system: https://github.com/scipy-conference/scipy_proceedings
-    - server: https://github.com/scipy-conference/procbuild
 
-The systems for running the conference are built on top of open source tools:
-- build system:
-    - LaTeX
-    - ReStructured Text (reST)
-    - Python: docutils, lxml, pygments, pytest
-- server:
-    - Flask & waitress
-    - pyzmq
-    - Docker
-    - Python: asyncio
+- with many people contributing code over more than a decade
+  - many contributors start as authors submitting to the proceedings
+  - provides a natural pathway for new members to join the proceedings committee
+- technologies are managed via public, open source GitHub repositories
+
+The systems for running the conference are built on top of open source tools, including:
+
+- MyST Markdown ([mystmd.org](https://mystmd.org))
+- Typst - for fast PDF generation
 
 ### Open Peer Review meets Open Source Code Review
 
 The entire submission and review procedure occurs through public PRs attached to
 identifiable individuals.
 
-- Authors and reviewers are encouraged to work collaboratively to improve
-  submissions throughout the review process, much like open source code-review.
+- Authors and reviewers are encouraged to work collaboratively to improve submissions throughout the review process, much like open source code-review.
 
-- Reviews are collaborative, aiming to improve the publication quality. This is
-  possible because the content was already vetted by the program committee.
+- Reviews are collaborative, aiming to improve the publication quality. This is possible because the content was already vetted by the program committee.
 
-- Conversations occur attached to people's real GitHub usernames and are open to
-  the public.
-    - This allows for a transparent open review process.
-    - This holds authors and reviewers accountable and encourages civil communication practices.
+- Conversations occur attached to people's real GitHub usernames and are open to the public.
+  - This allows for a transparent open review process.
+  - This holds authors and reviewers accountable and encourages civil communication practices.
 
 ### Open Access for an Open Community
 
-The papers are published as true Open Access (OA) articles with Creative Commons
-Attribution (CC By) license.
+The papers are published as true Open Access (OA) articles with Creative Commons Attribution ([CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)) license.
 
 - There are no article processing charges barring authors from submitting papers.
-    - Reviewers and co-chairs volunteer their time.
-    - Services with free tiers (like GitHub and Heroku) allow distributing the
-      underlying technologies with minimal cost.
 
-- Papers are openly available at http://conference.scipy.org/proceedings/, with
-  no pay walls barring consumption or author processing charges.
+  - Reviewers and co-chairs volunteer their time.
+  - Services with free tiers (like GitHub) allow distributing the underlying technologies with minimal cost.
 
-- From 2010 onward, papers have DOIs (making them easily citable) and are also
-  openly available from those DOIs.
+- Papers are openly available at http://proceedings.scipy.org, with no pay walls barring consumption or author processing charges.
 
-The community is involved in the entire process for creating the proceedings,
-which ensures relevance to the community that created them.
+- From 2010 onward, papers have DOIs (making them easily citable) and are also openly available from those DOIs.
 
-- Papers are submitted by authors who will be presenting talks and posters at the
-  annual SciPy conference. Because we know the content is relevant to the SciPy
-  community, review can focus on improving papers, not vetting them.
+- From 2023 onwards, full HTML is the _preferred_ format in addition to the PDF being available.
 
-- Reviewers are invited by the editors, but community members may volunteer to
-  review papers that interest them. The only barrier to participation is having
-  a GitHub account.
+The community is involved in the entire process for creating the proceedings, which ensures relevance to the community that created them.
 
+- Papers are submitted by authors who will be presenting talks and posters at the annual SciPy conference. Because we know the content is relevant to the SciPy community, review can focus on improving papers, not vetting them.
+
+- Reviewers are invited by the editors, but community members may volunteer to review papers that interest them. The only barrier to participation is having a GitHub account.
 
 ## Contacting the Proceedings Co-Chairs
 
 The most effective way to contact the Proceedings Co-Chairs for issues related to this GitHub repository is to use GitHub's issues and "@"-mentioning the Co-Chairs.
 
-In 2024, the Proceedings Co-Chairs are
+In 2024, the Proceedings Co-Chairs are:
+
 - Meghann Agarwal (@mepa)
 - Amey Ambade (@ameyxd)
 - Chris Calloway (@cbcunc)
@@ -132,10 +116,15 @@ In addition to the following list, we break up the deadlines in the respective d
 
 ## Instructions for Authors
 
-Please submit your papers by 23:59 PST of the *1st Draft for Submission*
-Deadline.
+Please submit your papers by 23:59 PST of the _1st Draft for Submission_ Deadline.
 
-Submit your papers as a reStructuredText (rst) or LaTeX file via PR against this repository. Supporting LaTeX submissions is very new this year, so please consider it to be in beta, and please only use this option if you are already familiar with writing papers in LaTeX.
+Submit your papers as a MyST Markdown ([mystmd.org](https://mystmd.org)) or
+LaTeX file via PR against this repository.
+Please only use LaTeX if you are already familiar with writing papers in LaTeX.
+The build process are using the `mystmd` CLI in 2024, which allows us to support
+a web-first reading experience.
+In future years this will allow us to accept notebooks and computational
+environments, however, this is not available in 2024.
 
 During the Open Review Period authors should work with their reviewers to refine
 and improve their submission.
@@ -158,6 +147,12 @@ In the event that authors and reviewers are deadlocked, they should alert the
 Proceedings Co-Chairs to this situation. As always, the Proceedings Co-Chairs
 have final say in whether to accept or reject a paper.
 
+### Getting Help
+
+If you have a challenge with any technical aspect of authoring your paper in MyST or LaTeX,
+please do not hesitate to reach out via your GitHub pull request or issue on this repository.
+A member of the Proceedings Co-chairs will help you directly or identify a work-around.
+
 ### Author Deadlines
 
 - Apr 19: Authors invited to submit full papers
@@ -166,34 +161,33 @@ have final say in whether to accept or reject a paper.
 - Jul 31: Final Author Revision Deadline
 - Aug 9: Final Editorial Decisions for Proceedings Contents Deadline
 
-### General Information and Guidelines for Authors:
+### General Information and Guidelines for Authors
 
-- Papers are formatted using reStructuredText.
-- Example papers are provided in `papers/00_bibderwalt` and `papers/00_vanderwalt`.
-    - These papers provide examples of how to:
-        - Label figures, equations and tables
-        - Use math markup
-        - Include code snippets
-    - `00_bibderwalt` shows how to use a bib file for citations.
-- For your paper to be found by the build system at http://procbuild.scipy.org
-  your PR needs to have a title that begins with "Paper:". If you do not do
-  this, the co-chairs will change your title on your behalf.
+- Papers are formatted using MyST ([mystmd.org](https://mystmd.org)) or LaTeX (please see notes on LaTeX below)
+- The paper is written and reviewed using the interactive HTML view (i.e. `myst start`), the PDF is built upon acceptance only
+- Example papers are provided in `papers/00_bibderwalt` and `papers/00_texderwalt`
+  - These papers provide examples of how to:
+    - Label figures, equations and tables
+    - Use math markup
+    - Include code snippets
+    - Use a BibTeX files and/or DOIs for citations
+- When creating your pull-request, add a pull-request label of `paper` to trigger the build process. If you do not add this, a proceedings chair member will add it for you.
 - Authors may include a project or consortium (e.g. [The Jupyter Project](https://raw.githubusercontent.com/scipy-conference/scipy_proceedings/2018/papers/project_jupyter/paper.rst))
 - There must be at least one corresponding author, and this must be a specific person with a valid email address
 - Authors of papers from previous SciPys may change their name on their published work by contacting the Proceedings Co-chairs
-- All citations that have DOIs should include those DOIs in the paper's
-  references section, see [`mybib.bib`](./papers/00_bibderwalt/mybib.bib).
+- All citations that have DOIs should include those DOIs in the paper's references section, see [`mybib.bib`](./papers/00_bibderwalt/mybib.bib).
 - All figures and tables should have captions.
-- Figures and tables should be positioned inline, close to their explanatory text.
+- Figures and tables should be positioned close to their explanatory text.
+- All abbreviations should be identified in your `myst.yml` ([docs](https://mystmd.org/guide/glossaries-and-terms#abbreviations))
 - License conditions on images and figures must be respected (Creative Commons,
-  etc.).
-- Images and figures should be reasonably sized and formatted for viewing online; typically a few hundred kilobytes and less than 1 MB.
-- Code snippets should be formatted to fit inside a single column without
-  overflow.
-- Avoid custom LaTeX markup where possible.
-- Do not modify any files outside of your paper directory.
-- The compiled version of the paper (PDF) should be at most 8 pages,
-  including figures but not including references.
+  etc.)
+- Images and figures should be reasonably sized and formatted for viewing online; typically less than 1 MB
+- Do not modify any files outside of your paper directory
+- When using the LaTeX option, please consider:
+  - We are supporting _HTML_. LaTeX is not involved in reading or rendering (as of 2024 we use Typst)
+  - Custom LaTeX macros are **not** supported and some packages may not be supported
+- The compiled version of the paper should be at most 6000 words
+  including figures but not including references; this is about 8 pages for the published PDF that will be created upon acceptance.
 
 ### Author Workflow
 
@@ -222,13 +216,13 @@ git clone https://github.com/mpacer/scipy_proceedings
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
 3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2024` branch.
-    - If you submit multiple papers, you will need a new branch for each.
-4. [Set up your environment](#setting-up-your-environment).
-5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#build-your-paper)
-6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#push-your-changes) and [check your paper](#check-your-paper) on http://procbuild.scipy.org.
-    - If you want to alter the build system, do not include it in your
-      submission's PR, create a separate PR against `dev`
-      ([see below](#creating-build-system-prs) for more details).
+   - If you submit multiple papers, you will need a new branch for each.
+4. [Install MyST Markdown and Node](#setting-up-your-environment) and [copy a template](#setting-up-your-environment).
+5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#preview-your-paper)
+6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#push-your-changes) and [check your paper](#check-your-paper).
+   - If you want to alter the build system, do not include it in your
+     submission's PR, create a separate PR against `dev`
+     ([see below](#creating-build-system-prs) for more details).
 7. Repeat steps 5 and 6, while also responding to reviewer feedback.
 
 #### Getting a local copy of the scipy_proceedings repo
@@ -238,12 +232,13 @@ git clone https://github.com/mpacer/scipy_proceedings
   [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
   repository on GitHub.
 - Clone the repo locally
-    - `git clone https://github.com/<username>/scipy_proceedings`
-    - `cd scipy_proceedings/`
+  - `git clone https://github.com/<username>/scipy_proceedings`
+  - `cd scipy_proceedings/`
 - Add the `scipy-conference` repository as your `upstream` remote
-    - `git remote add upstream https://github.com/scipy-conference/scipy_proceedings`
+  - `git remote add upstream https://github.com/scipy-conference/scipy_proceedings`
 
 If you run `git remote -v  ` you should see something like the following:
+
 ```
 origin	https://github.com/<username>/scipy_proceedings.git (fetch)
 origin	https://github.com/<username>/scipy_proceedings.git (push)
@@ -254,9 +249,9 @@ upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
 #### Getting the latest branch
 
 - Fetch the latest version of the `scipy_proceedings` repo
-    - `git fetch upstream`
+  - `git fetch upstream`
 - Check out the upstream `2024` branch
-    - `git checkout -b 2024 --track upstream/2024`
+  - `git checkout -b 2024 --track upstream/2024`
 
 #### Creating a new branch
 
@@ -273,65 +268,75 @@ git push --set-upstream origin <your_branch_name>
 
 #### Setting up your environment
 
-- Create a new environment (using your choice of environment manager, e.g., `pyenv` or `conda`).
-- Install/update the required python libraries (`pip install -U -r requirements.txt`).
-- Install LaTeX and any other non-python dependencies
+- _Optional_: Create a new environment (using your choice of environment manager, e.g., `pyenv` or `conda`).
+- Install MyST Markdown from [mystmd.org](https://mystmd.org/guide/quickstart)
+  - `pip install mystmd`
+  - Install `nodejs` (see [options](https://mystmd.org/guide/installing-prerequisites))
 - Create a new directory `papers/<your_directory_name>`
-    - if you are submitting one paper, we recommend you use `<firstname_surname>`
-    - if you are submitting more than one paper, you will need to use a different
-      directory name for each paper
+  - if you are submitting one paper, we recommend you use `<firstname_surname>`
+  - if you are submitting more than one paper, you will need to use a different
+    directory name for each paper
+- Copy an example paper into your directory: either `papers/00_bibderwalt` or `papers/00_texderwalt`
+  - Update the `id` in the `myst.yml` to by `scipy-2024-<your_directory_name>`
 
 #### Write your paper
 
-- Copy an example paper into your directory.
-    - You must have only one reST file in the top level of `<your_directory_name>`.
-- As you make changes to your paper, commit those changes in discrete chunks.
+- To have a live preview of your changes:
+  - Change directories `cd papers/<your_directory_name>`
+  - Run `myst start` and open the web-server provided
+- Refer to the syntax in the template papers or online at [mystmd.org](https://mystmd.org/guide)
+- Update the author information and affiliations in `myst.yml`
+- As you make changes to your paper, commit those changes in discrete chunks
+- If you come across any challenges, ask the Proceedings Co-chairs for help via a GitHub issue or comment on your PR
+
+Note: The templates are setup for a _single_ MyST/LaTeX file in the top level of `<your_directory_name>`. If you have more than one file run `myst init --write-toc` ([docs](https://mystmd.org/guide/table-of-contents)), ensuring that the `root` is the main file of your manuscript.
 
 #### Commit your changes
 
-- Commit any changes inside the `paper/<your_directory_name>`
-- When you push your commits to your PR's branch, the paper will be autobuilt
-- Do not commit any changes to files outside of your paper directory.
+- Commit any changes inside the `papers/<your_directory_name>`
+- When you push your commits to your PR's branch, the paper will be auto-built in GitHub actions
+- Do not commit any changes to files outside of your paper directory
 
 If you want to change the way the build system works, we use a separate
 submission procedure ([see below](#creating-build-system-prs)).
 
-#### Build your paper
+#### Preview your paper
 
-- Run `./make_paper.sh papers/firstname_surname` to make a PDF of your paper
-- Check the output in `output/<your_directory_name>/paper.pdf`.
-- Check that this output matches what you see on the
-  [build server](http://procbuild.scipy.org).
+Your paper will be **edited and reviewed in HTML**, the PDF will only be built on acceptance.
+
+To preview your paper:
+
+- Ensure `mystmd` is installed ([guide](https://mystmd.org/guide/quickstart))
+- In `papers/<your_directory_name>` run `myst start`
+- Open the web-server from your console
+- Check that this output matches what is built on your PR
 
 #### Create a paper PR
 
-- Once you are ready to submit your paper, make a pull request on GitHub.
-  **Please ensure that you file against the correct branch.**
-- Create a pull request against our `2024` branch.
+Once you are ready to submit your paper, make a pull request on GitHub. **Please ensure that you file against the correct branch.**
+
+- Create a pull request against the `2024` branch
 - Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
+- Ensure that your PR has a `paper` label, if not, one will be added for you
 
 #### Creating build system PRs
 
-If you want to change the way the build system works, we use a separate
-submission procedure.
+If you want to change the way the build system works, the documentation, etc., we use a separate submission procedure.
 
-- Create a new branch against `dev`.
-- Make your changes to the build system.
-- Do **not** commit any changes from your paper PR to this new branch.
-- Make a separate PR against the `dev` branch, it will be reviewed separately.
+- Create a new branch against `dev`
+- Make your changes to the build system
+- Do **not** commit any changes from your paper PR to this new branch
+- Make a separate PR against the `dev` branch, it will be reviewed separately
 
 #### Push to your PR
 
-When you push to your repositories branch it automatically updates the PR. This
-triggers a new build on the provided [build server](http://procbuild.scipy.org).
+When you push to your repositories branch it automatically run GitHub actions on the PR.
+Note that this will require authorization for your first commit only.
+The build process takes about a minute, and then posts or updates a comment on the PR with a link to the build result on Curvenote. The build page has a link to your preview.
 
 #### Check your paper's build
 
-We encourage reviewers to review the PDFs built on our
-[build server](http://procbuild.scipy.org).
-
-You should regularly check to see if the paper(s) that you build locally match the
-paper(s) that you see on the server.
+The review process will be completed on the HTML, and you can check to see if the paper(s) that you preview locally match the paper(s) that you see online. These will be available in a GitHub comment or through the logs in the GitHub action.
 
 If it is not the same, please immediately contact us with a GitHub issue
 describing the discrepancy. Please include screenshots and an explanation of the
@@ -340,7 +345,7 @@ differences. For best results, please [@-mention the Proceedings Co-Chairs](#con
 ## Instructions for Reviewers
 
 You will be reviewing authors' pull requests. While authors should have a proper
-draft of their paper ready for you by *1st Draft Submission* deadline.
+draft of their paper ready for you by _1st Draft Submission_ deadline.
 
 We ask that you read [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/2024/review_criteria.md) before beginning any reviews.
 
@@ -351,19 +356,19 @@ working on. Our aim is to have you and the author collaborate on making their
 better by using an iterative process.
 
 While our basic approach is to have you and the author iterate, we ask you to
-complete an initial review and start that conversation by the *Initial Complete Review
-Deadline*.
+complete an initial review and start that conversation by the _Initial Complete Review
+Deadline_.
 
-We ask that by the *Final Recommendation Deadline* you have a recommendation to
+We ask that by the _Final Recommendation Deadline_ you have a recommendation to
 either **accept** or **reject** the paper at that point and time.
 
 **Note**:
-You many recommend changes after the *Final Recommendation Deadline*. If there
-are any major changes after the *Final Recommendation Deadline* you should
+You many recommend changes after the _Final Recommendation Deadline_. If there
+are any major changes after the _Final Recommendation Deadline_ you should
 immediately contact the Proceedings Committee Co-Chairs. As a heuristic, if you
 think the paper should not be in the proceedings unless the authors make the
 change in question, then that change should be requested and made before the
-*Final Recommendation Deadline*.
+_Final Recommendation Deadline_.
 
 ### Reviewer Deadlines
 
@@ -377,17 +382,18 @@ change in question, then that change should be requested and made before the
 
 - Read [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/2024/review_criteria.md)
 - Click on the Pull Requests Tab and find the papers assigned to you
-- After reading the paper, you can start the review conversation however you prefer
-    - You can use line comments (on the paper itself) or high-level comments.
+- A comment at the top of the PR will have a link to the paper to review online
+- After reading the paper online, you can start the review conversation however you prefer
+  - You can use in-line comments (on the paper itself) or high-level comments.
 - Authors will respond to your comments, possibly via their own comments or by
   modifying their paper.
 - This begins an iterative review process where authors and reviewers can discuss the
   evolving submission.
-- By the *Final Recommendation Deadline*, we ask that you give two things
-    1. A comprehensive review of the paper as it stands. This will act as the final
-       review.
-    2. A final recommendation to include the paper in the proceedings or not.
-        - When you make the Final Recommendation, please [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs) in the PR in question.
+- By the _Final Recommendation Deadline_, we ask that you give two things
+  1. A comprehensive review of the paper as it stands. This will act as the final
+     review.
+  2. A final recommendation to include the paper in the proceedings or not.
+     - When you make the Final Recommendation, please [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs) in the PR in question.
 
 ## Review Criteria
 
@@ -396,43 +402,21 @@ A small subcommittee of the SciPy 2017 organizing committee has created
 to help guide authors and reviewers alike. Suggestions and amendments to these
 review criteria are enthusiastically welcomed via discussion or pull request.
 
-
 ## Requirements
 
- - Install the requirements in the requirements.txt file: `pip install -r requirements.txt`
- - IEEETran (often packaged as ``texlive-publishers``, or download from
-   [CTAN](http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/)) LaTeX
-   class
- - AMSmath LaTeX classes (included in most LaTeX distributions)
- - alphaurl (often packaged as ``texlive-bibtex-extra``, or download from
-   [CTAN](https://www.ctan.org/pkg/urlbst)) urlbst BibTeX style
+- MyST Markdown (`mystmd`) and NodeJS (>18)
+- GitHub actions for the build process
 
-### Debian-like distributions:
+## Build Process
 
-```
-sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
-                     texlive-latex-extra texlive-fonts-recommended \
-                     texlive-bibtex-extra
-```
+The build process is completed through GitHub actions on every commit.
+A comment is posted after the build process completes with a list of checks
+and a link to the built output on Curvenote.
 
-Note you will still need to install `docutils` with `pip` even on a Debian system.
+**Authors**: you should check to ensure that your local builds match the papers
+built online. Please create an issue if they do not match.
 
-### Fedora
-
-On Fedora, the package names are slightly different:
-
-```
-su -c `dnf install python-docutils texlive-collection-basic texlive-collection-fontsrecommended texlive-collection-latex texlive-collection-latexrecommended texlive-collection-latexextra texlive-collection-publishers texlive-collection-bibtexextra`
-```
-
-## Build Server
-
-There will be a server online building open pull requests at http://procbuild.scipy.org.
-
-Authors: you should check to ensure that your local builds match the papers
-built on this site. Please create an issue if they do not match.
-
-Reviewers: You should be able to pull a built PDF for review from there.
+**Reviewers**: You should be able to see the built article from the GitHub comment, and review from the preview link.
 
 ## For organisers
 
@@ -445,17 +429,19 @@ To information about how to manage the whole proceedings, please see
 
 - Apr 19: Authors invited to submit full papers
 - May 31–Aug 8: Open Review Period
-    - The [build server](#build-server) should be maintained throughout the Open Review Period.
+  - The [build process](#build-process) is supported by Curvenote (an SciPy sponsor) and it is maintained throughout the Open Review Period.
 - Aug 16: Time Window for Publishing Conference Ready Proceedings
 
 ### Instructions for Editors
 
 As reviewers review papers, editors should apply **labels** to the PR to flag the
-current state of the review process.
-  - The **labels** in question are:
-    - **needs-more-review** if the paper needs further review,
-    - **pending-comment** if the paper is waiting on an authors' response, or
-    - **unready** if the paper is not ready for the proceedings.
+current state of the review process. All paper PRs must have the `paper` label before the GitHub action will be triggered. Additionally, as editors and reviewers are assigned, the editors should add the reviewers GitHub handles to the PR summary comment.
+
+Other **labels** that should be used are:
+
+- **needs-more-review** if the paper needs further review,
+- **pending-comment** if the paper is waiting on an authors' response, or
+- **unready** if the paper is not ready for the proceedings.
 
 Editors should come to a final 'ready', 'unready' decision before the **Final Editorial Decisions for Proceedings Contents** deadline.
 
@@ -467,7 +453,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 - May 31–Aug 9: Open Review Period
 - May 31: Reviewers Assigned
 - Jun 21: Initial Complete Review
-    - Editors should verify that reviews have been completed
+  - Editors should verify that reviews have been completed
 - Aug 9: Final Editorial Decisions for Proceedings Contents Deadline
 
 ## Instructions for Slides
@@ -478,31 +464,33 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 2. Update your local copy of the `scipy_proceedings` repo.
 3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2024` branch.
 4. Inside the `presentations` folder, there are directories for:
-    1. 3-minute lightning talk slide decks (lightning)
-    2. Posters presented at the poster session (posters)
-    3. 30-minute talk slide decks (slides)
-    4. SciPy tools plenary slide decks (tools)
+   1. 3-minute lightning talk slide decks (lightning)
+   2. Posters presented at the poster session (posters)
+   3. 30-minute talk slide decks (slides)
+   4. SciPy tools plenary slide decks (tools)
 5. Choose the appropriate folder, and make a new directory inside it (it needs a unique name)
 6. Copy your slide deck or poster into the directory, and add a file called `info.json` with the following fields needed for uploading to Zenodo (using an empty string for author orcid or
-affiliation if these cannot be provided):
+   affiliation if these cannot be provided):
+
 ```json
 {
-    "title": "The title of your presentation",
-    "authors": [
-        {
-            "name": "The first author or presenter",
-            "affiliation": "first author's affiliation",
-            "orcid": "0000-0000-0000-0000"
-        },
-        {
-            "name": "The second author or presenter",
-            "affiliation": "second author's affiliation",
-            "orcid": "0000-0000-0000-0001"
-        }
-    ],
-    "description": "1-4 sentences explaining what your presentation is about"
+  "title": "The title of your presentation",
+  "authors": [
+    {
+      "name": "The first author or presenter",
+      "affiliation": "first author's affiliation",
+      "orcid": "0000-0000-0000-0000"
+    },
+    {
+      "name": "The second author or presenter",
+      "affiliation": "second author's affiliation",
+      "orcid": "0000-0000-0000-0001"
+    }
+  ],
+  "description": "1-4 sentences explaining what your presentation is about"
 }
 ```
+
 7. [Create a PR](#create-a-paper-pr)
 
 You can see examples of submissions in the `example` folder in each presentation directory.
