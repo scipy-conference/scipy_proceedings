@@ -1,34 +1,25 @@
 version: 1
 project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
-  id: scipy-2024-00_tex_template
-  title: A Numerical Perspective to Terraforming a Desert
+  id: scipy-2024-test_meghann
+  title: Testing A Numerical Perspective to Terraforming a Desert
   subtitle: LaTeX edition
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: Gaius Caesar
-      email: jj@rome.it
+    - name: Test Meghann
+      email: test@example.com
       orcid: 0000-0000-0000-0000
       affiliations:
-        - Senate House, S.P.Q.R.
-        - Egyptian Embassy, S.P.Q.R.
-    - name: Mark Anthony
-      email: mark37@rome.it
+        - Example LLC
+    - name: Wile E. Coyote
+      email: wile.e.coyote@acme.com
       affiliations:
-        - Egyptian Embassy, S.P.Q.R.
-    - name: Jarrod Millman
-      email: millman@rome.it
-      affiliations:
-        - Egyptian Embassy, S.P.Q.R.
-        - Yet another place, S.P.Q.R.
-      corresponding: true
-    - name: Cleopatra
-      email: cleopatra@rome.it
-      affiliation: Ptolemaic Kingdom
+        - Acme Corporation
   keywords:
     - terraforming
     - desert
     - numerical perspective
+    - anvil
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
