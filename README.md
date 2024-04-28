@@ -26,6 +26,8 @@ If you are a _Publisher_, please see [Instructions for Publishers](#instructions
 
 If you are _Submitting Slides_, please see [Instructions for Slides](#instructions-for-slides).
 
+For all SciPy contributors please see the [Style Guide](https://docs.google.com/document/d/1ygsHICE213Y9HgtCKVrgUQWNo8BJHOz0oZroDxhVOLU/edit).
+
 ## Organising Principles: Openness
 
 Overall, the SciPy proceedings are organised to be a fully open proceedings.
