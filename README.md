@@ -247,7 +247,7 @@ git clone https://github.com/mpacer/scipy_proceedings
 - Clone the repo locally
   - replace `<scheme>` with `git@` or `https://`, for example
   - replace `<username>` with your GitHub username
-  - `git clone <scheme>github.com/<username>/scipy_proceedings`
+  - `git clone <scheme>github.com/<username>/scipy_proceedings.git`
   - `cd scipy_proceedings/`
 - Add the `scipy-conference` repository as your `upstream` remote
   - `git remote add upstream <scheme>github.com/scipy-conference/scipy_proceedings`
