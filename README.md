@@ -233,9 +233,10 @@ git clone https://github.com/mpacer/scipy_proceedings
 4. [Install MyST Markdown and Node](#setting-up-your-environment) and [copy a template](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#preview-your-paper)
 6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#commit-your-changes) and [check your paper](#check-your-papers-build).
-   - If you want to alter the build system, do not include it in your
+   - If you want to alter other parts of the `scipy_proceedings` repo, do not include it in your
      submission's PR, create a separate PR against `dev`
      ([see below](#creating-build-system-prs) for more details).
+   - Creating build system PRs is deprecated in 2024. Curvenote is the build system now.
 7. Repeat steps 5 and 6, while also responding to reviewer feedback.
 
 #### Getting a local copy of the scipy_proceedings repo
@@ -312,7 +313,7 @@ Note: The templates are setup for a _single_ MyST/LaTeX file in the top level of
 - When you push your commits to your PR's branch, the paper will be auto-built in GitHub actions
 - Do not commit any changes to files outside of your paper directory
 
-If you want to change the way the build system works, we use a separate
+If you want to alter other parts of the `scipy_proceedings` repo, we use a separate
 submission procedure ([see below](#creating-build-system-prs)).
 
 #### Preview your paper
@@ -336,10 +337,12 @@ Once you are ready to submit your paper, make a pull request on GitHub. **Please
 
 #### Creating build system PRs
 
-If you want to change the way the build system works, the documentation, etc., we use a separate submission procedure.
+Creating build system PRs is deprecated in 2024. Curvenote is the build system now.
+
+If you want to change documentation, etc., we use a separate submission procedure.
 
 - Create a new branch against `dev`
-- Make your changes to the build system
+- Make your changes
 - Do **not** commit any changes from your paper PR to this new branch
 - Make a separate PR against the `dev` branch, it will be reviewed separately
 
