@@ -215,7 +215,7 @@ the value that applies to you.
 For example, if you typically clone using the web URL, and your GitHub username was `mpacer`, you would transform
 
 ```
-git clone <scheme>github.com/<username>/scipy_proceedings
+git clone <scheme>github.com/<username>/scipy_proceedings.git
 ```
 
 into:
