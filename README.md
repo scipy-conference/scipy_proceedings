@@ -212,10 +212,10 @@ in code examples, you should replace that with your GitHub username.
 More generally, angle brackets with a value inside are meant to be replaced with
 the value that applies to you.
 
-For example, if your GitHub username was `mpacer`, you would transform
+For example, if you typically clone using the web URL, and your GitHub username was `mpacer`, you would transform
 
 ```
-git clone https://github.com/<username>/scipy_proceedings
+git clone <scheme>github.com/<username>/scipy_proceedings.git
 ```
 
 into:
@@ -226,16 +226,21 @@ git clone https://github.com/mpacer/scipy_proceedings
 
 #### Author workflow steps
 
-1. Get a local copy of the `scipy_proceedings` repo.
-2. Update your local copy of the `scipy_proceedings` repo.
+> [!NOTE]
+> There is a [webinar on YouTube](https://www.youtube.com/watch?v=v97nJOCAWHI) that goes through the author submission process for 2024 submissions using [MyST Markdown](https://mystmd.org).
+
+
+1. [Get a local copy](#getting-a-local-copy-of-the-scipy_proceedings-repo) of the `scipy_proceedings` repo.
+2. [Update your local copy](#getting-the-latest-branch) of the `scipy_proceedings` repo.
 3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2024` branch.
    - If you submit multiple papers, you will need a new branch for each.
 4. [Install MyST Markdown and Node](#setting-up-your-environment) and [copy a template](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#preview-your-paper)
-6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#push-your-changes) and [check your paper](#check-your-paper).
-   - If you want to alter the build system, do not include it in your
+6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#commit-your-changes) and [check your paper](#check-your-papers-build).
+   - If you want to alter other parts of the `scipy_proceedings` repo, do not include it in your
      submission's PR, create a separate PR against `dev`
      ([see below](#creating-build-system-prs) for more details).
+   - Creating build system PRs is deprecated in 2024. Curvenote is the build system now.
 7. Repeat steps 5 and 6, while also responding to reviewer feedback.
 
 #### Getting a local copy of the scipy_proceedings repo
@@ -245,18 +250,20 @@ git clone https://github.com/mpacer/scipy_proceedings
   [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
   repository on GitHub.
 - Clone the repo locally
-  - `git clone https://github.com/<username>/scipy_proceedings`
+  - replace `<scheme>` with `git@` or `https://`, for example
+  - replace `<username>` with your GitHub username
+  - `git clone <scheme>github.com/<username>/scipy_proceedings.git`
   - `cd scipy_proceedings/`
 - Add the `scipy-conference` repository as your `upstream` remote
-  - `git remote add upstream https://github.com/scipy-conference/scipy_proceedings`
+  - `git remote add upstream <scheme>github.com/scipy-conference/scipy_proceedings`
 
-If you run `git remote -v  ` you should see something like the following:
+If you run `git remote -v ` you should see something like the following:
 
 ```
-origin	https://github.com/<username>/scipy_proceedings.git (fetch)
-origin	https://github.com/<username>/scipy_proceedings.git (push)
-upstream	https://github.com/scipy-conference/scipy_proceedings.git (fetch)
-upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
+origin	<scheme>github.com/<username>/scipy_proceedings.git (fetch)
+origin	<scheme>github.com/<username>/scipy_proceedings.git (push)
+upstream	<scheme>github.com/scipy-conference/scipy_proceedings.git (fetch)
+upstream	<scheme>github.com/scipy-conference/scipy_proceedings.git (push)
 ```
 
 #### Getting the latest branch
@@ -310,7 +317,7 @@ Note: The templates are setup for a _single_ MyST/LaTeX file in the top level of
 - When you push your commits to your PR's branch, the paper will be auto-built in GitHub actions
 - Do not commit any changes to files outside of your paper directory
 
-If you want to change the way the build system works, we use a separate
+If you want to alter other parts of the `scipy_proceedings` repo, we use a separate
 submission procedure ([see below](#creating-build-system-prs)).
 
 #### Preview your paper
@@ -330,14 +337,16 @@ Once you are ready to submit your paper, make a pull request on GitHub. **Please
 
 - Create a pull request against the `2024` branch
 - Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
-- Ensure that your PR has a `paper` label, if not, one will be added for you
+- Ensure that your PR title begins with `Paper:`. Note: for the **first** commit in your PR, an editor will add the `paper` label, which will start the GitHub actions.
 
 #### Creating build system PRs
 
-If you want to change the way the build system works, the documentation, etc., we use a separate submission procedure.
+Creating build system PRs is deprecated in 2024. Curvenote is the build system now.
+
+If you want to change documentation, etc., we use a separate submission procedure.
 
 - Create a new branch against `dev`
-- Make your changes to the build system
+- Make your changes
 - Do **not** commit any changes from your paper PR to this new branch
 - Make a separate PR against the `dev` branch, it will be reviewed separately
 
@@ -354,6 +363,9 @@ The review process will be completed on the HTML, and you can check to see if th
 If it is not the same, please immediately contact us with a GitHub issue
 describing the discrepancy. Please include screenshots and an explanation of the
 differences. For best results, please [@-mention the Proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
+
+#### A note on notebooks for 2024
+We are interested in working towards full support for publishing computational notebooks as part of the proceedings, and are trialing this part of the submission process for interested authors - please get in touch with the Proceedings Co-Chairs with your interest.
 
 ## Instructions for Reviewers
 
