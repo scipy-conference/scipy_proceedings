@@ -337,7 +337,7 @@ Once you are ready to submit your paper, make a pull request on GitHub. **Please
 
 - Create a pull request against the `2024` branch
 - Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
-- Ensure that your PR title begins with `Paper:`.
+- Ensure that your PR title begins with `Paper:`. Note: for the **first** commit in your PR, an editor will add the `paper` label, which will start the GitHub actions.
 
 #### Creating build system PRs
 
