@@ -61,8 +61,7 @@ Footnotes should be numbered in consecutive order throughout the text. The footn
 
 The ordering of labeling for all lists is 1), 2), 3) followed by a), b), c), and then i), ii), iii).
 
-For example, first list goes as this:
-1) first item; 2) second item; and 3) third item.
+For example, first list goes as this: 1) first item; 2) second item; and 3) third item.
 
 
 #### Editorial style
