@@ -226,6 +226,10 @@ git clone https://github.com/mpacer/scipy_proceedings
 
 #### Author workflow steps
 
+> [!NOTE]
+> There is a [webinar on YouTube](https://www.youtube.com/watch?v=v97nJOCAWHI) that goes through the author submission process for 2024 submissions using [MyST Markdown](https://mystmd.org).
+
+
 1. [Get a local copy](#getting-a-local-copy-of-the-scipy_proceedings-repo) of the `scipy_proceedings` repo.
 2. [Update your local copy](#getting-the-latest-branch) of the `scipy_proceedings` repo.
 3. [Create a new branch](#creating-a-new-branch) for your paper based off the latest `2024` branch.
