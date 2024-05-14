@@ -159,6 +159,8 @@ have final say in whether to accept or reject a paper.
 
 ### Getting Help
 
+An excellent webinar entitled ["SciPy Proceedings 2024: Quickstart and authoring tutorial"](https://www.youtube.com/watch?v=v97nJOCAWHI) is available on YouTube.
+
 If you have a challenge with any technical aspect of authoring your paper in MyST or LaTeX,
 please do not hesitate to reach out via your GitHub pull request or issue on this repository.
 A member of the Proceedings Co-chairs will help you directly or identify a work-around.
