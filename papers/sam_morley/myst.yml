@@ -1,0 +1,53 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: scipy-2024-sam_morley
+  title: RoughPy
+  subtitle: Streaming data is rarely smooth
+  short_title: RoughPy
+
+  authors: 
+    - name: Sam Morley
+      email: sam.morley@maths.ox.ac.uk
+      orcid: 0000-0001-5971-7418
+      affiliations: 
+        - University Of Oxford
+
+  # description:
+  keywords: 
+    - time series 
+    - rough paths
+    - signatures 
+    - data science 
+    - machine learning
+  github: datasig-ac-uk/roughpy
+  bibliography: 
+    - roughpy.bib
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    RFI: Radio frequency interference
+    NLP: Natural Language Processing
+    ODE: Ordinary Differential Equation
+    CDE: Controlled differential equation
+    PDE: Partial differential equation
+
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
