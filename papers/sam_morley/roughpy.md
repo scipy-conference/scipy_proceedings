@@ -7,6 +7,9 @@ exports:
     article_type: Article
 bibliography:
     - roughpy.bib
+numbering:
+    heading_2: true
+    heading_3: true
 abstract: |
   Rough path theory is a branch of mathematics arising out of stochastic
   analysis. One of the main tools of rough path analysis is the signature,
@@ -644,6 +647,7 @@ the word.
 For instance, the term `1(3,9)` indicates that a `c` appears before an `i`.
 
 :::{prf:remark} 
+:nonumber:
 It turns out that most words in the English language can be distinguished 
 using only their level 2 signatures.
 The first level signatures groups words into anagrams.
@@ -699,4 +703,4 @@ extensions are planned.
 
 
 
-<!-- vim: set tw=80 wrap cc=80 -->
+<!-- nvim: set tw=80 wrap cc=80 -->
