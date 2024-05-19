@@ -9,15 +9,15 @@ bibliography:
     - roughpy.bib
 abstract: |
   Rough path theory is a branch of mathematics arising out of stochastic
-  analysis. The principal tool of rough path analysis is the signature, which
-  captures the evolution of a path including the order in which events occurred.
-  This turns out to be a useful tool in data science applications involving
-  sequential data. RoughPy is our new Python package that aims change the way we
-  think about sequential streamed data, by viewing it through the lens of rough
-  paths. In RoughPy, data is wrapped in a stream objects which can be composed
-  and queried to obtain signatures that can be used in analysis. It also
-  provides a platform for further exploration of the connections between rough
-  path theory and data science.
+  analysis. One of the main tools of rough path analysis is the signature,
+  which captures the evolution of an unparametrised path including the order in
+  which events occurred. This turns out to be a useful tool in data science
+  applications involving sequential data. RoughPy is our new Python package
+  that aims change the way we think about sequential streamed data, by viewing
+  it through the lens of rough paths. In RoughPy, data is wrapped in a stream
+  objects which can be composed and queried to obtain signatures that can be
+  used in analysis. It also provides a platform for further exploration of the
+  connections between rough path theory and data science.
 
 acknowledgements: |
   This work was supported in part by EPSRC (NSFC) under Grant EP/S026347/1, in
@@ -32,13 +32,17 @@ acknowledgements: |
 ## Introduction
 Sequential data appears everywhere in the modern world: text, finance, health 
 records, radio (and other electromagnetic spectra), sound (and speech), etc.
-These data are problematic for many traditional methods in data science.
-Many of these difficulties arise because of computational constraints, where the 
-complexity of the model is intrinsically linked to the number of observations, 
-and others arise because the events are not observed at regular intervals.
-In this paper, we introduce a new package *RoughPy* for analysing sequential
-data through the lens of *rough path theory*, which provides useful techniques
-for addressing some of the issues with these data.
+Traditionally, these data are tricky to work with because of the exponential
+complexity and different scales of the underlying process.
+Until recently, with the development of transformers and large language models,
+it has been difficult to capture the long-term pattern whist also capturing the
+short-term fine detail.
+Rough path theory gives us tools to work with sequential, ordered data in a
+mathematically rigorous way, which should provide a means to overcome some of
+the inherent complexity of the data.
+In this paper, we introduce a new package *RoughPy* for working with sequential
+data through the lens of rough path theory, performing rigorous analysis and
+developing new techniques to overcome the difficulties of these data.
 
 Rough paths arise in the study of *controlled differential equations* (CDEs),
 which generalise ordinary differential equations (ODEs) and stochastic
@@ -51,11 +55,12 @@ On simple CDE turns out to be critical to the theory:
 \mathrm{d}S_t = S_t \otimes \mathrm{d}X_t \qquad S_0 = \mathbf{1}.
 ```
 The solution of this equation is called the *signature* of $X$.
-It plays the same role as the exponential function for ordinary differential 
-equations (ODEs).
+It is analogous to the exponential function for ODEs, in that the
+solution of any CDE can be expressed in terms of the signature of the driving
+path.
 When the path $X$ is sufficiently regular, the signature can be computed 
 directly as a sequence of iterated integrals.
-In other cases, we can still solve CDEs if we are given higher-order data that 
+In other cases, we can still solve CDEs if we are given higher order data that 
 can be used in place of the iterated integrals.
 A path equipped with this higher order data is called a *rough path*.
 
@@ -66,14 +71,14 @@ The signature is robust to irregular sampling and provides a fixed-size view of
 the data, regardless of how many observations are used to compute it.
 This means the signature can be a useful feature map to be used in machine
 learning for sequential data.
-There are numerous examples of using signatures for analysing sequential data
+There are numerous examples of using signatures of analysing sequential data
 outlined in @applications-sec.
 
 Besides signatures, there are two other rough path-based methods that have found
 their way into data science in recent years.
 These are the signature kernel and neural CDEs.
-Both of these enjoy the same robustness of the signature, but can be useful in
-some contexts where using the signature transform might not be optimal.
+Both of these enjoy the same robustness of the signature, and expand the range
+of applications of rough path-based methods.
 We give a short overview of these methods in @rp-in-ds-sec.
 
 There are several Python packages for computing signatures of sequential data, 
@@ -88,7 +93,7 @@ arranging the computations that need to be done
 RoughPy is a new package for working with sequential data and rough paths.
 The design philosophy for this package is to shift the emphasis from simply
 computing signatures on data to instead construct streams.
-A stream is a view of some data as if it were a rough path, that can be queried
+A *stream* is a view of some data as if it were a rough path, that can be queried
 over intervals to obtain a signature.
 The actual form of the data is abstracted away in favour of stream objects that
 closely resemble the mathematics.
@@ -96,12 +101,12 @@ The aim is to change the way that users think about sequential data and advance
 the understanding of path-like data analysis.
 
 On top of the streams, RoughPy also provides concrete implementations for
-elements of the various algebras associated with rough path analysis, such as
-free tensor algebras, shuffle tensor algebras, and free Lie algebras [see
-@math-bgd-sec].
+elements of the various algebras associated with rough path analysis.
+These include free tensor algebras, shuffle tensor algebras, and free Lie
+algebras [see @math-bgd-sec].
 This allows the user to easily manipulate signatures, and other objects, in a
-more natural manner, and quickly develop methods following the mathematics.
-
+more natural manner.
+This, in turn, allows us to quickly develop methods following the mathematics.
 
 The paper is organised as follows. In the remainder of this section, we give a
 brief overview of the mathematics associated with rough path theory, and provide
@@ -130,11 +135,11 @@ The value of a path $X$ at some parameter $t\in[a, b]$ is denoted $X_t$.
 <!-- For each $i\in \{1,\dots, d\}$, the $i$th component of $X$ is denoted  -->
 <!-- $X^{(i)}$; each $X^{(i)}:[a, b] \to \mathbb R$ is a path of bounded variation. -->
 
-The siganture of $X$ is an element of the *(free) tensor algebra*.
-For $n > 0$, the $n$th tensor power of $V$ is defined as $V^{\otimes n} = V
-\otimes\dots\otimes V$, where $n$ copies of $V$ appear on the right-hand side.
-By convention, we take $V^{\otimes 0} = \mathbb{R}$.
-For example, $V^{\otimes 1} = V$, $V^{\otimes 2}$ is the space of $d\times d$ 
+The signature of $X$ is an element of the *(free) tensor algebra*.
+For $n \geq 0$, the $n$th tensor power of $V$ is defined recursively by
+$V^{\otimes 0} = \mathbb{R}$, $V^{\otimes 1} = V$, and $V^{\otimes n+1} = V
+\otimes V^{\otimes n}$ for $n > 1$. 
+For example, $V^{\otimes 2}$ is the space of $d\times d$ 
 matrices, and $V^{\otimes 3}$ is the space of $d\times d\times d$ tensors.
 The *tensor algebra over $V$* is the space
 ```{math}
@@ -187,7 +192,7 @@ The multiplication on $\mathrm{Sh}((V))$ is the *shuffle product*, which
 corresponds to point-wise multiplication of functions on the path.
 
 There are several *Lie algebras* associated to $\mathrm{T}((V))$.
-First we define the *Lie bracket* operation $[\mathbf{x}, \mathbf{y}] =
+Define the *Lie bracket* operation $[\mathbf{x}, \mathbf{y}] =
 \mathbf{x} \otimes \mathbf{y} - \mathbf{y}\otimes \mathbf{x}$, for
 $\mathbf{x},\mathbf{y}\in \mathrm{T}((V))$.
 We define subspaces $L_m$ of $\mathrm{T}((V))$ for each $m\geq 0$ inductively as
@@ -196,7 +201,7 @@ follows: $L_0 = \{\mathbf{0}\}$, $L_1 = V$, and, for $m \geq 1$,
 L_{m+1} = \mathrm{span}\{[\mathbf{x}, \mathbf{y}] : \mathbf{x}\in V, \mathbf{y}
 \in L_m\}
 ```
-The space of Lie series $\mathcal{L}((V))$ over $V$ is the subspace of 
+The space of formal Lie series $\mathcal{L}((V))$ over $V$ is the subspace of 
 $\mathrm{T}((V))$ containing sequences of the form $(\ell_0, \ell_1, \cdots)$, 
 where $\ell_j\in L_j$ for each $j\geq 0$.
 Note that $\mathcal{L}((V))\subseteq \mathrm{T}^{>0}(V)$.
