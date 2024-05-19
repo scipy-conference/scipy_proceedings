@@ -11,11 +11,11 @@ abstract: |
   Rough path theory is a branch of mathematics arising out of stochastic
   analysis. One of the main tools of rough path analysis is the signature,
   which captures the evolution of an unparametrised path including the order in
-  which events occurred. This turns out to be a useful tool in data science
+  which events occur. This turns out to be a useful tool in data science
   applications involving sequential data. RoughPy is our new Python package
   that aims change the way we think about sequential streamed data, by viewing
   it through the lens of rough paths. In RoughPy, data is wrapped in a stream
-  objects which can be composed and queried to obtain signatures that can be
+  object, which can be composed and queried to obtain signatures that can be
   used in analysis. It also provides a platform for further exploration of the
   connections between rough path theory and data science.
 
@@ -84,7 +84,7 @@ We give a short overview of these methods in @rp-in-ds-sec.
 There are several Python packages for computing signatures of sequential data, 
 including `esig` [@esig], `iisignature` [@doi.org/10.1145/3371237], and 
 `signatory` [@https://doi.org/10.48550/arXiv.2001.00706].
-These packages simply provide functions for computing signatures from raw, 
+These packages provide functions for computing signatures from raw, 
 structured data presented in an $n\times d$ array, where $d$ is the dimension 
 of the stream and $n$ is the number of samples.
 This means the user is responsible for interpreting the data as a path and 
@@ -92,7 +92,7 @@ arranging the computations that need to be done
 
 RoughPy is a new package for working with sequential data and rough paths.
 The design philosophy for this package is to shift the emphasis from simply
-computing signatures on data to instead construct streams.
+computing signatures on data to instead work with streams.
 A *stream* is a view of some data as if it were a rough path, that can be queried
 over intervals to obtain a signature.
 The actual form of the data is abstracted away in favour of stream objects that
@@ -106,7 +106,7 @@ These include free tensor algebras, shuffle tensor algebras, and free Lie
 algebras [see @math-bgd-sec].
 This allows the user to easily manipulate signatures, and other objects, in a
 more natural manner.
-This, in turn, allows us to quickly develop methods following the mathematics.
+This allows us to quickly develop methods by following the mathematics.
 
 The paper is organised as follows. In the remainder of this section, we give a
 brief overview of the mathematics associated with rough path theory, and provide
