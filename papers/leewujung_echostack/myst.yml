@@ -1,0 +1,62 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-leewujung_echostack
+  # Ensure your title is the same as in your `main.md`
+  title: "Echostack: An open-source Python software toolbox that democratizes water column sonar data and processing"
+  subtitle: ""
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Wu-Jung Lee
+      email: leewj@uw.edu
+      orcid: 0000-0002-4112-2034
+      affiliation: Applied Physics Laboratory, University of Washington
+      corresponding: true
+    - name: Valentina Staneva
+      email: vms16@uw.edu
+      affiliation: eScience Institute, University of Washington
+    - name: Landung “Don” Setiawan
+      email: landungs@uw.edu
+      affiliation: eScience Institute, University of Washington
+    - name: Emilio Mayorga
+      email: emiliom@uw.edu
+      affiliation: Applied Physics Laboratory, University of Washington
+    - name: Soham Butala
+      email: sbutala@uw.edu
+      affiliation: eScience Institute, University of Washington
+    - name: Dingrui Lei
+      email: leidingrui426@gmail.com
+      affiliation: eScience Institute, University of Washington
+    - name: Brandyn Lucca
+      email: blucca@uw.edu
+      affiliation: Applied Physics Laboratory, University of Washington
+    - name: Caesar Tuguinay
+      email: ctuguina@uw.edu
+      affiliation: Applied Physics Laboratory, University of Washington
+  keywords:
+    - ocean sonar
+    - echosounder
+    - openstack
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
