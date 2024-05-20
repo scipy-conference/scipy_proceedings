@@ -1,271 +1,121 @@
----
-# Ensure that this title is the same as the one in `myst.yml`
-title: Mamba Models a replacement for Transformers?
-abstract: |
-  A short version of the long version that is way too long to be written as a
-  short version anyway.  Still, when considering the facts from first
-  principles, we find that the outcomes of this introspective approach is
-  compatible with the guidelines previously established.
+# Style Guide for SciPy Conference Proceedings
 
-  In such an experiment it is then clear that the potential for further
-  development not only depends on previous relationships found but also on
-  connections made during exploitation of this novel new experimental
-  protocol.
----
+Please refer to this guide along with the current [README](https://github.com/scipy-conference/scipy_proceedings/blob/2024/README.md) of the repository for the proceedings.
 
-## Introduction
+There is a page limit of 8 pages on the paper, excluding references.
 
-Twelve hundred years ago — in a galaxy just across the hill...
+For general Style Guide details please check [IEEE style guide](https://www.ieee.org/content/dam/ieee-org/ieee/web/org/conferences/style_references_manual.pdf). For inclusive language, please refer to [American Psychological Association’s style guide](https://www.apa.org/about/apa/equity-diversity-inclusion/language-guidelines). This style guide is based on both these references. Use [Strunk and White 4th edition](https://archive.org/details/TheElementsOfStyle4thEdition) as a grammar reference. We use [Merriam-Webster](https://www.merriam-webster.com/) as the English dictionary.
 
-This document should be rendered with MyST Markdown [mystmd.org](https://mystmd.org),
-which is a markdown variant inspired by reStructuredText. This uses the `mystmd`
-CLI for scientific writing which can be [downloaded here](https://mystmd.org/guide/quickstart).
-When you have installed `mystmd`, run `myst start` in this folder and
-follow the link for a live preview, any changes to this file will be
-reflected immediately.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+### Paper Title
 
-## Bibliographies, citations and block quotes
+In the paper title, capitalize the first letter of the first and last word and all the nouns, pronouns, adjectives, verbs, adverbs, and subordinating conjunctions (If, Because, That, Which). Capitalize abbreviations that are otherwise lowercase (e.g., use DC, not dc or Dc) except for unit abbreviations and acronyms. Articles (a, an, the), coordinating conjunctions (and, but, for, or, nor), and most short prepositions are lowercase unless they are the first or last word. Prepositions of more than three letters (Before, Through, With, Without, Versus, Among, Under, Between) should be capitalized.
 
-Bibliography files and DOIs are automatically included and picked up by `mystmd`.
-These can be added using pandoc-style citations `[@doi:10.1109/MCSE.2007.55]`
-which fetches the citation information automatically and creates: [@doi:10.1109/MCSE.2007.55].
-Additionally, you can use any key in the BibTeX file using `[@citation-key]`,
-as in [@hume48] (which literally is `[@hume48]` in accordance with
-the `hume48` cite-key in the associated `mybib.bib` file).
-Read more about [citations in the MyST documentation](https://mystmd.org/guide/citations).
 
-If you wish to have a block quote, you can just indent the text, as in:
+### Body of a Paper
 
-> When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication.
->
-> -- @hume48
+The body of a paper should contain the following sections; not every paper will have each of these sections.
 
-Other typography information can be found in the [MyST documentation](https://mystmd.org/guide/typography).
 
-### DOIs in bibliographies
+#### Abstract
 
-In order to include a DOI in your bibliography, add the DOI to your bibliography
-entry as a string. For example:
+Every published paper must contain an Abstract. Abstracts shall not contain numbered mathematical equations or numbered references.
 
-```{code-block} bibtex
-:emphasize-lines: 7
-:linenos:
-@book{hume48,
-  author    =  "David Hume",
-  year      = {1748},
-  title     = "An enquiry concerning human understanding",
-  address   = "Indianapolis, IN",
-  publisher = "Hackett",
-  doi       = "10.1017/CBO9780511808432",
-}
-```
+#### Appendix
 
-### Citing software and websites
+Numbering should be (Appending I) or (Appendix A)
 
-Any paper relying on open-source software would surely want to include citations.
-Often you can find a citation in BibTeX format via a web search.
-Authors of software packages may even publish guidelines on how to cite their work.
 
-For convenience, citations to common packages such as
-Jupyter [@jupyter],
-Matplotlib [@matplotlib],
-NumPy [@numpy],
-pandas [@pandas1; @pandas2],
-scikit-learn [@sklearn1; @sklearn2], and
-SciPy [@scipy]
-are included in this paper's `.bib` file.
+#### Acknowledgements
 
-In this paper we not only terraform a desert using the package terradesert [@terradesert], we also catch a sandworm with it.
-To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
-If you are citing a team, ensure that the author name is wrapped in additional braces `{Team Name}`, so it is not treated as an author's first and last names.
+They should appear after the text of the paper, before references, after appendix. Do not use Mr., Mrs., Ms., or Miss (list first initial and last name only). Use the Dr. or Prof. title with each name separately; do not use plural Drs. or Profs. with lists of names.
 
-```{code-block} bibtex
-:emphasize-lines: 2
-:linenos:
-@misc{terradesert,
-  author = {{TerraDesert Team}},
-  title  = {Code for terraforming a desert},
-  year   = {2000},
-  url    = {https://terradesert.com/code/},
-  note   = {Accessed 1 Jan. 2000}
-}
-```
+The acknowledgement sections should be written in the third person.
 
-## Source code examples
 
-No paper would be complete without some source code.
-Code highlighting is completed if the name is given:
+#### Author Affiliations
 
-```python
-def sum(a, b):
-    """Sum two numbers."""
+Abbreviations should be written out in Affiliations (e.g. LANL should be written as Los Alamos National Lab).
 
-    return a + b
-```
 
-Use the `{code-block}` directive if you are getting fancy with line numbers or emphasis. For example, line-numbers in `C` looks like:
+#### References
 
-```{code-block} c
-:linenos: true
+Every reference should be a separate entry. Using one number for more than one reference is not allowed.
 
-int main() {
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-    return 0;
-}
-```
 
-Or a snippet from the above code, starting at the correct line number, and emphasizing a line:
+#### Text Citation of Figures and Tables
 
-```{code-block} c
-:linenos: true
-:lineno-start: 2
-:emphasize-lines: 3
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-```
+All citations of figures and tables in text must be in numerical order. Citations to figures in text always carry the abbreviation "Fig." followed by the figure number. The abbreviation is used even when it begins a sentence.
 
-You can read more about code formatting in the [MyST documentation](https://mystmd.org/guide/code).
 
-## Figures, Equations and Tables
 
-It is well known that Spice grows on the planet Dune [@Atr03].
-Test some maths, for example $e^{\pi i} + 3 \delta$.
-Or maybe an equation on a separate line:
+### Other Text
 
-```{math}
-g(x) = \int_0^\infty f(x) dx
-```
 
-or on multiple, aligned lines:
+#### Footnotes
 
-```{math}
-\begin{aligned}
-g(x) &= \int_0^\infty f(x) dx \\
-     &= \ldots
-\end{aligned}
-```
+Footnotes should be numbered in consecutive order throughout the text. The footnote numbers are superscripts in text and in the actual footnotes. In text, place the superscript footnote numbers after the punctuation such as fullstops, commas, and parentheses, but before colons, dashes, quotation marks, and semicolons in a compound sentence. The footnotes should be placed at the bottom of the text column in which they are cited.
 
-The area of a circle and volume of a sphere are given as
 
-```{math}
-:label: circarea
+#### List in Text
 
-A(r) = \pi r^2.
-```
+The ordering of labeling for all lists is 1), 2), 3) followed by a), b), c), and then i), ii), iii).
 
-```{math}
-:label: spherevol
+For example, first list goes as this: 1) first item; 2) second item; and 3) third item.
 
-V(r) = \frac{4}{3} \pi r^3
-```
 
-We can then refer back to Equation {ref}`circarea` or
-{ref}`spherevol` later.
-The `{ref}` role is another way to cross-reference in your document, which may be familiar to users of Sphinx.
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
+#### Editorial style
 
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas[^footnote-1] diam turpis, placerat[^footnote-2] at adipiscing ac,
-pulvinar id metus.
 
-[^footnote-1]: On the one hand, a footnote.
-[^footnote-2]: On the other hand, another footnote.
+##### Acronyms
 
-:::{figure} figure1.png
-:label: fig:stream
-This is the caption, sandworm vorticity based on storm location in a pleasing stream plot. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/arrays/streamplot.html).
-:::
+Adding abbreviations to the metadata means we have accessible abbreviations across all instances of abbreviations in the manuscript. ([reference](https://mystmd.org/guide/glossaries-and-terms#abbreviations))
 
-:::{figure} figure2.png
-:label: fig:em
-This is the caption, electromagnetic signature of the sandworm based on remote sensing techniques. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/stats/hist2d.html).
-:::
+Define acronyms the first time they appear in the Abstract as well as the first time they appear in the body of the paper, written out as part of the sentence, followed by the acronym in parentheses. If the acronym is not repeated in the Abstract, do not include the acronym in parentheses. Coined plurals or plurals of acronyms do not take the apostrophe (e.g., FETs).
 
-As you can see in @fig:stream and @fig:em, this is how you reference auto-numbered figures.
-To refer to a sub figure use the syntax `@label [a]` in text or `[@label a]` for a parenhetical citation (i.e. @fig:stream [a] vs [@fig:stream a]).
-For even more control, you can simply link to figures using `[Figure %s](#label)`, the `%s` will get filled in with the number, for example [Figure %s](#fig:stream).
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
+Possessive forms of the acronym do take the apostrophe (e.g., CPU’s speed). Indefinite articles are assigned to abbreviations to fit the sound of the first letter (e.g., an FCC regulation; a BRI).
 
-```{list-table} This is the caption for the materials table.
-:label: tbl:materials
-:header-rows: 1
-* - Material
-  - Units
-* - Stone
-  - 3
-* - Water
-  - 12
-* - Cement
-  - {math}`\alpha`
-```
 
-We show the different quantities of materials required in
-@tbl:materials.
+##### Plurals
 
-Unfortunately, markdown can be difficult for defining tables, so if your table is more complex you can try embedding HTML:
+Plurals of units of measure usually do not take the "s". For example, the plural form of 3 mil is 3 mil, but 3 bits/s instead of 3 bit/s. Plural forms of calendar years do not take the apostrophe (e.g., 1990s). To avoid confusion, plural forms of variables in equations do take the apostrophe (e.g., x’s).
 
-:::{table} Area Comparisons (written in html)
-:label: tbl:areas-html
 
-<table>
-<tr><th rowspan="2">Projection</th><th colspan="3" align="center">Area in square miles</th></tr>
-<tr><th align="right">Large Horizontal Area</th><th align="right">Large Vertical Area</th><th align="right">Smaller Square Area<th></tr>
-<tr><td>Albers Equal Area   </td><td align="right"> 7,498.7   </td><td align="right"> 10,847.3  </td><td align="right">35.8</td></tr>
-<tr><td>Web Mercator        </td><td align="right"> 13,410.0  </td><td align="right"> 18,271.4  </td><td align="right">63.0</td></tr>
-<tr><td>Difference          </td><td align="right"> 5,911.3   </td><td align="right"> 7,424.1   </td><td align="right">27.2</td></tr>
-<tr><td>Percent Difference  </td><td align="right"> 44%       </td><td align="right"> 41%       </td><td align="right">43%</td></tr>
-</table>
-:::
+### Inclusive language
 
-or if you prefer LaTeX you can try `tabular` or `longtable` environments:
+This section of the style guide is copied from the APA - [American Psychological Association’s style guide](https://www.apa.org/about/apa/equity-diversity-inclusion/language-guidelines). Refer to that for more details.
 
-```{raw} latex
-\begin{table*}
-  \begin{longtable*}{|l|r|r|r|}
-  \hline
-  \multirow{2}{*}{\bf Projection} & \multicolumn{3}{c|}{\bf Area in square miles} \\
-  \cline{2-4}
-   & \textbf{Large Horizontal Area} & \textbf{Large Vertical Area} & \textbf{Smaller Square Area} \\
-  \hline
-  Albers Equal Area   & 7,498.7   & 10,847.3  & 35.8  \\
-  Web Mercator        & 13,410.0  & 18,271.4  & 63.0  \\
-  Difference          & 5,911.3   & 7,424.1   & 27.2  \\
-  Percent Difference  & 44\%      & 41\%      & 43\%  \\
-  \hline
-  \end{longtable*}
+Avoid using identity-first language while talking about disabilities, either a person is born with or they are imposed later. This is not applicable for chosen identities, e.g, educators, programmers, etc.
 
-  \caption{Area Comparisons (written in LaTeX) \label{tbl:areas-tex}}
-\end{table*}
-```
 
-Perhaps we want to end off with a quote by Lao Tse[^footnote-3]:
+| Terms to avoid      | Suggested alternative        |
+| ------------------- | ---------------------------- |
+| elderly             | senior citizen               |
+| subject             | particiant                   |
+| wheel-chair bound <br> confined to a wheelchair    | person who uses a wheelchair <br> wheelchair user|
+| confined to a wheelchair | wheelchair user         |
+| mentally ill <br>crazy <br>insane <br>mental defect <br>suffers from or is afflected with [condition]| person living with a mental illness <br>person with a preexisting mental health disorder <br>person with a behavioral health disorder <br>person with a diagnosis of a mental illness/mental health disorder/behavioral health disorder |
+| asylum              | psychiatric hospital/facility |
+| drug user / abuser <br>addict  | person who uses drugs <br>person who injects drugs <br> person with substance use disorder|
+| alcoholic <br> alcohol abuser  | person with alcohol use disorder <br> person in recovery from substance use/alcohol disorder |
+| person who relapsed | person who returned to use   |
+| smoker             | person who smokes             |
+| homeless people <br> the homeless <br> transient population | people without housing <br>people experiencing homelessness <br>people experiencing unstable housing/housing insecurity/people who are not securely housed <br>people experiencing unsheltered homelessness <br>clients/guests who are accessing homeless services <br>people experiencing houselessness <br> people experiencing housing or food insecurity |
+| prostitute         | person who engages in sex work <br> sex worker (abbreviated as SWer) |
+| prisoner <br>convict | person who is/has been incarcerated |
+| slave                | person who is/was enslaved |
 
-> Muddy water, let stand, becomes clear.
 
-[^footnote-3]: $\mathrm{e^{-i\pi}}$
+### General Language Suggestions
+
+(Thanks to Chris Calloway and Renci for the following instructions.)
+
+Shortest sentences are the best. Some ways to shorten the sentences and make those professional are as follows:
+
+
+
+1. Avoid "which" and "that". For example, don’t use – "the model that we trained". Instead use – "we trained a model"
+2. Avoid using pronouns like "I", "we", etc. For example, avoid "we trained the model"; instead use "the trained model …"
+3. Avoid passive voice.
+4. Avoid using questions, use statements instead. For example, avoid "which metrics would be useful for success"; instead use "the success metrics here are …"
+5. Avoid words, verbs with emotions. For example, avoid "reflecting on; theme"; use "in short, or summarizing; topic"
