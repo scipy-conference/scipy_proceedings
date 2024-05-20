@@ -14,12 +14,15 @@ project:
       corresponding: true
     - name: Valentina Staneva
       email: vms16@uw.edu
+      orcid: 0000-0002-3412-0364
       affiliation: eScience Institute, University of Washington
     - name: Landung “Don” Setiawan
       email: landungs@uw.edu
+      orcid: 0000-0002-1624-2667
       affiliation: eScience Institute, University of Washington
     - name: Emilio Mayorga
       email: emiliom@uw.edu
+      orcid: 0000-0003-2574-4623
       affiliation: Applied Physics Laboratory, University of Washington
     - name: Soham Butala
       email: sbutala@uw.edu
@@ -29,9 +32,11 @@ project:
       affiliation: eScience Institute, University of Washington
     - name: Brandyn Lucca
       email: blucca@uw.edu
+      orcid: 0000-0003-3145-2969
       affiliation: Applied Physics Laboratory, University of Washington
     - name: Caesar Tuguinay
       email: ctuguina@uw.edu
+      orcid: 0009-0000-6652-1093
       affiliation: Applied Physics Laboratory, University of Washington
   keywords:
     - ocean sonar
