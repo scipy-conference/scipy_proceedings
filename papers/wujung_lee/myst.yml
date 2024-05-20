@@ -1,7 +1,7 @@
 version: 1
 project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
-  id: scipy-2024-leewujung_echostack
+  id: scipy-2024-wujung_lee
   # Ensure your title is the same as in your `main.md`
   title: "Echostack: An open-source Python software toolbox that democratizes water column sonar data and processing"
   subtitle: ""
