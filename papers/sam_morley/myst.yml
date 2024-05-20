@@ -20,6 +20,8 @@ project:
     - signatures 
     - data science 
     - machine learning
+    - signature kernels
+    - Log-ODE method
   github: datasig-ac-uk/roughpy
   bibliography: 
     - roughpy.bib

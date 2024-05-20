@@ -40,12 +40,13 @@ Rough path theory gives us tools to work with sequential, ordered data in a
 mathematically rigorous way, which should provide a means to overcome some of
 the inherent complexity of the data.
 In this paper, we introduce a new package *RoughPy* for working with sequential
-data through the lens of rough path theory, performing rigorous analysis and
-developing new techniques to overcome the difficulties of these data.
+data through the lens of rough path theory, where we can perform rigourous
+analyses and explore different ways to understand sequential data.
 
 Rough paths arise in the study of *controlled differential equations* (CDEs),
 which generalise ordinary differential equations (ODEs) and stochastic
-differential equations [@Lyons1998;@http://dx.doi.org/10.1007/978-3-540-71285-5].
+differential equations
+[@Lyons1998;@http://dx.doi.org/10.1007/978-3-540-71285-5].
 These are equations of the form $\mathrm{d}Y_t = f(Y_t, \mathrm{d}X_t)$, subject 
 to an initial condition $Y_0 = y_0$, that model a non-linear system driven by a 
 input path $X$.
@@ -92,8 +93,8 @@ arranging the computations that need to be done
 RoughPy is a new package for working with sequential data and rough paths.
 The design philosophy for this package is to shift the emphasis from simply
 computing signatures on data to instead work with streams.
-A *stream* is a view of some data as if it were a rough path, that can be queried
-over intervals to obtain a signature.
+A *stream* is a view of some data as if it were a rough path, that can be
+queried over intervals to obtain a signature.
 The actual form of the data is abstracted away in favour of stream objects that
 closely resemble the mathematics.
 The aim is to change the way that users think about sequential data and advance
@@ -123,7 +124,7 @@ In this section we give a very short introduction to signatures and rough path
 theory that should be sufficient to inform the discussion in the sequel.
 For a far more comprehensive and rigorous treatment, we refer the reader to the 
 recent survey [@https://doi.org/10.48550/arXiv.2206.14674].
-In this section, we write $V$ for the vector space
+In the sequel, we write $V$ for the vector space
 $\mathbb{R}^d$, where $d \geq 1$.
 
 A *path* in $V$ is a continuous function $X:[a, b] \to V$, where $a < b$ are
@@ -131,8 +132,6 @@ real numbers.
 For the purposes of this discussion, we shall further impose the condition 
 that all paths are of bounded variation.
 The value of a path $X$ at some parameter $t\in[a, b]$ is denoted $X_t$. 
-<!-- For each $i\in \{1,\dots, d\}$, the $i$th component of $X$ is denoted  -->
-<!-- $X^{(i)}$; each $X^{(i)}:[a, b] \to \mathbb R$ is a path of bounded variation. -->
 
 The signature of $X$ is an element of the *(free) tensor algebra*.
 For $n \geq 0$, the $n$th tensor power of $V$ is defined recursively by
@@ -153,9 +152,9 @@ the antipode.
 The members of $\mathrm{G}(V)$ are called *group-like* elements.
 For each $n \geq 0$, we write $\mathrm{T}^n(V)$ for the *truncated tensor
 algebra* of degree $n$, which is the space of all $\mathbf{x} = (x_0, x_1,
-\dots)$ such that $x_j = \mathbf{0}$ whenever $j > n$.
+\dots)$ such that $x_j = 0$ whenever $j > n$.
 Similarly, we write $\mathrm{T}^{>n}(V)$ for the subspace of elements 
-$\mathbf{x} = (x_0, x_1,\dots)$ where $x_j = \mathbf{0}$ whenever $j \leq n$, 
+$\mathbf{x} = (x_0, x_1,\dots)$ where $x_j = 0$ whenever $j \leq n$, 
 which is an ideal in $\mathrm{T}((V))$ and 
 $\mathrm{T}^n(V) = \mathrm{T}((V)) / \mathrm{T}^{>n}(V)$.
 The truncated tensor algebra is an algebra, when given the *truncated tensor
@@ -191,7 +190,7 @@ The multiplication on $\mathrm{Sh}((V))$ is the *shuffle product*, which
 corresponds to point-wise multiplication of functions on the path.
 
 There are several *Lie algebras* associated to $\mathrm{T}((V))$.
-Define the *Lie bracket* operation $[\mathbf{x}, \mathbf{y}] =
+Define the *Lie bracket* $[\mathbf{x}, \mathbf{y}] =
 \mathbf{x} \otimes \mathbf{y} - \mathbf{y}\otimes \mathbf{x}$, for
 $\mathbf{x},\mathbf{y}\in \mathrm{T}((V))$.
 We define subspaces $L_m$ of $\mathrm{T}((V))$ for each $m\geq 0$ inductively as
@@ -389,9 +388,8 @@ patients from intensive care unit data.
 In this challenge, a team utilising signatures to enhance predictive power
 placed first in the official phase of the challenge.
 Since then, signatures and other rough path based approaches have been used in
-several other clinical contexts 
-[@https://doi.org/10.1038/s41598-024-51989-6; @doi:10.1109/MEDAI59581.2023.00008;
-@tseriotou_etal_2024_sig].
+several other clinical contexts [@https://doi.org/10.1038/s41598-024-51989-6;
+@doi:10.1109/MEDAI59581.2023.00008; @tseriotou_etal_2024_sig].
 Clinical data is often irregularly sampled and often exhibits missing data, but
 it can also be very high-frequency and dense.
 Rough path based methods can handle these data in an elegant way, and retain the
@@ -400,12 +398,12 @@ structure of long and short term dependencies within the data.
 ### Human action recognition
 The task of identifying a specific action performed by a person from a short
 video clip is very challenging. 
-Signatures derived from landmark data extracted from the video has been
-used to train classification models that achieved state-of-the-art performance
-compared with contemporary models [@https://doi.org/10.1007/978-3-030-98519-6_18].
-This work has been continued in numerous additional papers such as 
-[@doi:10.1109/tmm.2023.3318242;@liao2021a]
-(see also preprint papers [@https://doi.org/10.48550/arXiv.2308.12840;
+Signatures derived from landmark data extracted from the video has been used to
+train classification models that achieved state-of-the-art performance compared
+with contemporary models
+[@https://doi.org/10.1007/978-3-030-98519-6_18; @doi:10.1109/tmm.2023.3318242;
+@liao2021a].
+(See also preprint papers [@https://doi.org/10.48550/arXiv.2308.12840;
 @https://doi.org/10.48550/arXiv.2403.15212].) 
 Also in the domain of computer vision, signatures have been used to produce
 lightweight models for image classification
@@ -470,7 +468,7 @@ For most applications, floating point numbers will provide a good balance
 between performance and accuracy.
 When more precision is required, rational coefficients can be used
 instead.
-These are backed by GMPLib rationals for fast, arbitrary precision rational
+These are backed by GMP rationals for fast, arbitrary precision rational
 arithmetic [@Granlund12].
 Polynomial coefficients can be used to derive formulae by performing
 calculations.
@@ -572,8 +570,8 @@ The other main `StreamInterface` implementation is the `PiecewiseAbelianStream`,
 which is an important construction from CDE.
 A piecewise Abelian path, or log-linear path, is an example of a *smooth rough
 path*, which generalises piecewise linear approximations of an arbitrary stream.
-Formally, an *Abelian path* $Y$ is a pair $([a, b), \mathbf{y})$ where $a < b$ and
-$\mathbf{x}\in\mathcal{L}((V))$.
+Formally, an *Abelian path* $Y$ is a pair $([a, b), \mathbf{y})$ where $a < b$
+and $\mathbf{y}\in\mathcal{L}((V))$.
 The log-signature over an arbitrary interval $[u, v) \subseteq [a, b)$ is given
 by
 ```{math}
@@ -586,7 +584,7 @@ is a piecewise Abelian approximation for this path given by
 ```{math}
 \{([t_{j-1}, t_j), \mathrm{LogSig}(X)_{t_{j-1}, t_j}): j=1, \dots, N\}.
 ```
-This construction turns out to be vital for computing signature kernels in
+This construction turns out to be vital for computing signature kernels 
 [@https://doi.org/10.25080/gerudo-f2bc6f59-001] and for solving CDEs
 [@http://dx.doi.org/10.1007/978-3-540-71285-5;
 @https://doi.org/10.48550/arXiv.2402.18512].
