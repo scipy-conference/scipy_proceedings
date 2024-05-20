@@ -36,7 +36,11 @@ project:
   keywords:
     - ocean sonar
     - echosounder
-    - openstack
+    - distributed computing
+    - cloud computing
+    - workflow orchestration
+    - data standardization
+
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text

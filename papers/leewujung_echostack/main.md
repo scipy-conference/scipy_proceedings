@@ -2,15 +2,7 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: A Numerical Perspective to Terraforming a Desert
 abstract: |
-  A short version of the long version that is way too long to be written as a
-  short version anyway.  Still, when considering the facts from first
-  principles, we find that the outcomes of this introspective approach is
-  compatible with the guidelines previously established.
-
-  In such an experiment it is then clear that the potential for further
-  development not only depends on previous relationships found but also on
-  connections made during exploitation of this novel new experimental
-  protocol.
+  Water column sonar data collected by echosounders are essential for marine ecosystem research, allowing the detection, classification, and quantification of fish and zooplankton from many different ocean observing platforms. However, broad usage of these data has been hindered by the lack of software tools that allow intuitive and transparent data access, processing, and interpretation. We address this gap by developing Echostack, a toolbox of open-source packages leveraging distributed computing and cloud-interfacing libraries in the scientific Python ecosystem. These tools can be used individually or orchestrated together, which we will demonstrate in an end-to-end workflow. 
 ---
 
 ## Introduction
