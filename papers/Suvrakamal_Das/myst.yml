@@ -4,15 +4,15 @@ project:
   id: scipy-2024-Suvrakamal_Das
   # Ensure your title is the same as in your `main.md`
   title: Mamba Models a replacement for Transformers?
-  subtitle: MyST Markdown edition
+  subtitle: A Memory-Efficient Approach for Scientific Computing (SciPy'24 Paper)
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Suvrakamal_Das
-      email: subhrokomol@outlook.com
-      orcid: 0000-0000-0000-0000
+      email: subhrokomol@gmail.com
+      orcid: 0009-0002-4791-9244
       affiliations:
-        - Senate House, S.P.Q.R.
-        - Egyptian Embassy, S.P.Q.R.
+        - Maulana Abul Kalam Azad University Institute of Technology, West Bengal
+        - Director, ProjectX Cloud Technologies Private Limited
     - name: Rounak Sen
       email: mark37@rome.it
       affiliations:
@@ -24,9 +24,11 @@ project:
         - Yet another place, S.P.Q.R.
       corresponding: true
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
+    - Mamba Models
+    - Solid State Models
+    - Transformers
+    - Flash Attention
+    - LLMs
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
