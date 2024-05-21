@@ -12,6 +12,10 @@ project:
       orcid: 0000-0001-5971-7418
       affiliations: 
         - University Of Oxford
+      roles:
+        - Conceptualization
+        - Writing - original draft
+        - Software
 
   # description:
   keywords: 
