@@ -1,0 +1,49 @@
+version: 1
+project:
+  id: scipy-2024-theia-proceedings-submission
+  title: "THEIA: an offline tool for tradespace visualization"
+  authors:
+    - name: Samuel Williams
+      email: Samuel.C.Williams@usace.army.mil
+      affiliations: 
+        - U.S. Army Engineer Research & Development Center
+        - U.S. Army Corps of Engineers
+    - name: Scott Christensen
+      email: Scott.D.Christensen@usace.army.mil
+      affiliations:
+        - U.S. Army Engineer Research & Development Center
+        - U.S. Army Corps of Engineers
+    - name: Marvin Brown
+      email: Marvin.S.Brown@usace.army.mil
+      affiliations:
+        - U.S. Army Engineer Research & Development Center
+        - U.S. Army Corps of Engineers
+  keywords:
+    - python
+    - panel
+    - holoviews
+    - holoviz
+    - param
+    - plotly
+    - bokeh
+    - tradespace
+
+  abbreviations:
+    THEIA: Tradespace Holistic Exploration & Insight Application
+    USACE: United States Army Corps of Engineers
+    ERDC: U.S. Army Engineer Research & Development Center
+
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+    
+  banner: banner.png
+
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+
+site:
+  template: article-theme
