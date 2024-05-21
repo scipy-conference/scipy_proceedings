@@ -26,9 +26,11 @@ project:
       affiliation: Applied Physics Laboratory, University of Washington
     - name: Soham Butala
       email: sbutala@uw.edu
+      orcid: 0009-0000-6479-889X
       affiliation: eScience Institute, University of Washington
     - name: Dingrui Lei
       email: leidingrui426@gmail.com
+      orcid: 0009-0003-8543-3138
       affiliation: eScience Institute, University of Washington
     - name: Brandyn Lucca
       email: blucca@uw.edu
