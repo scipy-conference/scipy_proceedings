@@ -16,9 +16,21 @@ project:
         - Conceptualization
         - Writing - original draft
         - Software
+      corresponding: true
+    - name: Terry Lyons
+      email: terry.lyons@maths.ox.ac.uk
+      orcid: 0000-0002-9972-2809
+      affiliations:
+        - University of Oxford
+      roles:
+        - Conceptualization
+        - Supervision
+        - Writing - review & editing
 
   # description:
   keywords: 
+    - sequential data
+    - unparametrised paths
     - time series 
     - rough paths
     - signatures 
