@@ -23,9 +23,10 @@ acknowledgements: |
   part by The Alan Turing Institute under the EPSRC grant EP/N510129/1, the Data
   Centric Engineering Programme (under the Lloyd’s Register Foundation grant
   G0095), and the Defence and Security Programme (funded by the UK Government).
-  For the purpose of Open Access, the author has applied a CC-BY public
-  copyright licence to any Author Accepted Manuscript version arising from this
-  submission.
+  Terry Lyons was additionally supported by the Hong Kong Innovation and
+  Technology Commission (InnoHK project CIMDA). For the purpose of Open Access,
+  the author has applied a CC-BY public copyright licence to any Author Accepted
+  Manuscript version arising from this submission.
 ---
 
 ## Introduction
@@ -180,7 +181,7 @@ reparametrisation.
 
 In some sense, the signature is a *unversal non-linearity* on paths.
 Continuous functions on the path can be approximated (uniformly) by linear
-functionals ($\mathrm{G}(V)\to \mathbb{R}$) on the signature.
+functionals ($\mathrm{G}TL(V)\to \mathbb{R}$) on the signature.
 This is a consequence of the Stone-Weierstrass theorem. 
 The *dual* of $\mathrm{T}((V))$ is $\mathrm{Sh}((V)):=\mathrm{T}((V^{\ast}))
 \cong\mathrm{T}((V))$ 
