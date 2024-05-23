@@ -6,21 +6,19 @@ project:
   subtitle: LaTeX edition
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: Mansour Kebe
-      email: jj@rome.it
-      orcid: 0000-0000-0000-0000
-      affiliations:
-        - Senate House, S.P.Q.R.
-        - Egyptian Embassy, S.P.Q.R.
     - name: Justin Gagnon
-      email: mark37@rome.it
+      email: Justin.Gagnon2@USherbrooke.ca
       affiliations:
-        - Egyptian Embassy, S.P.Q.R.
+        - Department of Computer Science, University of Sherbrooke, 2500, boul. de l'Université, Sherbrooke, Quebec, J1K 2R1 Canada
+    - name: Mansour Kebe
+      email: Mansour.Kebe@USherbrooke.ca
+      affiliations:
+        - Department of Computer Science, University of Sherbrooke, 2500, boul. de l'Université, Sherbrooke, Quebec, J1K 2R1 Canada
     - name: Nadia Tahiri
-      email: millman@rome.it
+      email: Nadia.Tahiri@USherbrooke.ca
+      orcid: 0000-0002-1818-208X
       affiliations:
-        - Egyptian Embassy, S.P.Q.R.
-        - Yet another place, S.P.Q.R.
+        - Department of Computer Science, University of Sherbrooke, 2500, boul. de l'Université, Sherbrooke, Quebec, J1K 2R1 Canada
       corresponding: true
   keywords:
     - Atlantic
