@@ -30,6 +30,7 @@ project:
         - pyright
         - pep646
         - pep484
+        - pep593
 
 
   # A banner will be generated for you on publication, this is a placeholder
