@@ -264,7 +264,6 @@ x = process6(v6, q) # a Frame with three integer columns passes
 ```
 As with NumPy arrays, ``Frame`` annotations can wrap ``Require`` specifications in ``Annotated`` generics, permitting definition of additional of run-time validations.
 
-
 ## Conclusion
 
 Python type annotations can make static analysis of types a valuable check of code quality, discovering errors before code is even executed. Up until recently, an interface might take an array or a DataFrame, but no specification of the types contained in those containers was possible. Now, complete specification of component types is possible in NumPy and StaticFrame, permitting more powerful static analysis of types.
