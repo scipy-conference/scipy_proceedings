@@ -8,8 +8,17 @@ Forest loss due to natural events, such as forest wildfires, presents an increas
 ## Introduction
 
 
-Generally, collecting satellite imagery involved a manual and time-intensive approach. Google Earth Engine (GEE) has changed this process by providing an extensive, cloud-based platform for the efficient collection, processing, and analysis of multiple satellite imagery. GEE’s Python API allows to easily query this platform and automatically download cloud-free large-scale satellite imagery datasets from multiple satellite collections, such as Sentinel-2, using a simple Panda's data-frame. This approach facilitates satellite-based environmental monitoring by providing automatic and timely access to high-quality satellite imagery. However, traditional change detection and forest monitoring methods based on have relied on manually identifying specific features and using predefined algorithms and models, such as differential anal- ysis, thresholding techniques, and clustering and classification algorithms. This approach requires considerable domain expertise and such algorithms and models may not capture the full complexity of the studied data that can be used to detect and respond to ecological changes more effectively.  
+Generally, collecting satellite imagery involved a manual and time-intensive approach. Google Earth Engine (GEE) has changed this process by providing an extensive, cloud-based platform for the efficient collection, processing, and analysis of multiple satellite imagery. GEE’s Python API allows to easily query this platform and automatically download cloud-free large-scale satellite imagery datasets from multiple satellite collections, such as Sentinel-2, using a simple Panda's data-frame. This approach facilitates environmental monitoring by providing automatic and timely access to high-quality satellite imagery. 
 
+Satellite imagery-based change detection and forest monitoring have traditionally depended on manually identifying specific features and applying predefined algorithms and models, including differential analysis, thresholding techniques, and clustering and classification algorithms. However, these algorithms and models often fail to capture the full complexity of the studied data. Thus, integrating deep learning (DL) methods with satellite imagery offers a more dynamic and precise approach, one capable of handling the patterns and variability associated with imagery data.
+
+Now, Python facilitates the use of DL in environmental monitoring by providing a rich ecosystem of libraries and tools, such as Tensorflow, which contains multiple existing DL architectures that can be used with satellite imagery. Nevertheless, the integration of DL and Remote Sensing images requires multiple processing steps, such as smaller imagery tiles, and the use of GeoTIFF data, among others. These steps ensure that the data is in the optimal format for model training and inference, preserving the spatial and spectral integrity of the imagery.
+
+This paper presents a pipeline, entirely implemented in Python, to streamline these processes and enhance the capability of DL models to detect and monitor environmental changes within satellite imagery. The methodology covers the entire workflow: from data acquisition, labelling, and preprocessing to model adaptation, training, and evaluation. Specifically, we apply this approach to create and validate a high-resolution dataset for forest wildfire detection, the California Wildfire GeoImaging Dataset (CWGID).
+
+## Building a Sentinel-2 satellite imagery dataset 
+
+### Gathering and Refining Wildfire Data
 
 
 
