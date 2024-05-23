@@ -1,0 +1,31 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-00_myst_template
+  # Ensure your title is the same as in your `main.md`
+  title: Improving Code Quality with Array and DataFrame Type Hints
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Christopher Ariza
+      email: ariza@flexatone.com
+      orcid: 0009-0000-8549-0210
+      affiliations:
+        - Research Affiliates
+  keywords:
+    - typing
+    - static analysis
+    - runtime validation
+    - variadic generics
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
