@@ -1,7 +1,6 @@
 ---
-# Ensure that this title is the same as the one in `myst.yml`
-title: Development and Application of CWGID: the California Wildfire GeoImaging Dataset for Deep Learning Driven Forest Wildfire Detection.
-abstract: |
+# Title: Development and Application of CWGID: the California Wildfire GeoImaging Dataset for Deep Learning Driven Forest Wildfire Detection.
+## Abstract: |
 Google Earth Engine’s Python API has revolutionized the way we collect, process, and analyze satellite imagery, enabling the seamless creation of large-scale datasets for environmental monitoring. 
 Forest loss due to natural events, such as forest wildfires, presents an increasing global challenge that demands advanced methods for effective and accurate detection and mitigation. Integrating satellite imagery with deep learning (DL) methods has become an effective approach for this purpose, but it requires substantial labeled data. This study outlines the Python methodology used for generating and testing the California Wildfire GeoImaging Dataset (CWGID),a labeled high-resolution Sentinel-2 RGB satellite imagery dataset developed to enhance wildfire detection through advanced machine learning techniques. Created and processed using Python and its Google Earth Engine (GEE) API, the CWGID comprises over 100,000 labeled 'before' and 'after' wildfire image pairs for use in deep-learning applications. An analysis of the dataset using pre-trained Convolutional Neural Network (CNN) architectures, such as VGG16 and EfficientNet, with TensorFlow's Keras API for implementation, achieved accuracies of 82% and 93%, respectively. The Python methodology described in this paper, not only explains how Python can be used to collect, curate, and label a high resolution satellite imagery dataset but how to train existing DL models with it, providing a framework for improving forest change detection. 
 -
@@ -9,7 +8,11 @@ Forest loss due to natural events, such as forest wildfires, presents an increas
 ## Introduction
 
 
-Generally, collecting satellite imagery involved a manual and time-intensive approach. Google Earth Engine (GEE) has changed this process by providing an extensive, cloud-based platform for the efficient collection, processing, and analysis of multiple satellite imagery. GEE’s powerful Python API allows to easily query this platform and automatically download cloud-free large-scale satellite imagery datasets from multiple satellite collections, such as Sentinel-2, using a simple Panda's dataframe. 
+Generally, collecting satellite imagery involved a manual and time-intensive approach. Google Earth Engine (GEE) has changed this process by providing an extensive, cloud-based platform for the efficient collection, processing, and analysis of multiple satellite imagery. GEE’s Python API allows to easily query this platform and automatically download cloud-free large-scale satellite imagery datasets from multiple satellite collections, such as Sentinel-2, using a simple Panda's data-frame. This approach facilitates satellite-based environmental monitoring by providing automatic and timely access to high-quality satellite imagery. However, traditional change detection and forest monitoring methods based on have relied on manually identifying specific features and using predefined algorithms and models, such as differential anal- ysis, thresholding techniques, and clustering and classification algorithms. This approach requires considerable domain expertise and such algorithms and models may not capture the full complexity of the studied data that can be used to detect and respond to ecological changes more effectively.  
+
+
+
+
 This document should be rendered with MyST Markdown [mystmd.org](https://mystmd.org),
 which is a markdown variant inspired by reStructuredText. This uses the `mystmd`
 CLI for scientific writing which can be [downloaded here](https://mystmd.org/guide/quickstart).
