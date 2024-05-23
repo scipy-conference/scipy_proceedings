@@ -1,0 +1,51 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: id: scipy-2024-Valeria_Martin
+  # Ensure your title is the same as in your `main.md`
+  title: Development and Application of CWGID: the California Wildfire GeoImaging Dataset for Deep Learning Driven Forest Wildfire Detection
+  subtitle: MyST Markdown edition
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Valeria Martin
+      email: vm58@students.uwf.edu
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - University of West Florida
+    - name: Kristen Venable
+      email:
+      affiliations:
+        - University of West Florida
+    - name: Derek Morgan
+      email: jmorgan3@uwf.edu
+      affiliations:
+        - University of West Florida
+      corresponding: true
+
+  keywords:
+    - terraforming
+    - desert
+    - numerical perspective
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
