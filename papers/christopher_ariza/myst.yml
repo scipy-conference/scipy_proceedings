@@ -19,6 +19,19 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - staticframe
+        - te
+        - mypy
+        - pyright
+        - pep646
+        - pep484
+
+
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified

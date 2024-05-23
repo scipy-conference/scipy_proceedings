@@ -12,7 +12,7 @@ As tools for Python type annotations (or hints) have evolved, more complex data 
 
 ## Type Hints Improve Code Quality
 
-Type hints improve code quality in a number of ways. Instead of using variable names or comments to communicate types, Python-object-based type annotations provide maintainable and expressive tools for type specification. These type annotations can be tested with type checkers such as ``mypy`` [@mypy] or ``pyright`` [@pyright], quickly discovering potential bugs without executing code.
+Type hints [@pep484] improve code quality in a number of ways. Instead of using variable names or comments to communicate types, Python-object-based type annotations provide maintainable and expressive tools for type specification. These type annotations can be tested with type checkers such as ``mypy`` [@mypy] or ``pyright`` [@pyright], quickly discovering potential bugs without executing code.
 
 The same annotations can be used for runtime validation. While reliance on duck-typing over runtime validation is common in Python, runtime validation is often needed with complex data structures such as arrays and DataFrames.
 
@@ -172,7 +172,7 @@ x = process4(v1, q) # types pass, but Require.Shape fails
 
 Just like a dictionary, a DataFrame is a complex data structure composed of many component types: the type of the index labels, the type of the column labels, and the types of column values.
 
-A challenge of generically specifying a DataFrame is that a DataFrame has a variable number of columns, where each column might be a different type. The Python ``TypeVarTuple`` variadic generic specifier, first released in Python 3.11, permits defining a variable number of column type variables.
+A challenge of generically specifying a DataFrame is that a DataFrame has a variable number of columns, where each column might be a different type. The Python ``TypeVarTuple`` variadic generic specifier [@pep646], first released in Python 3.11, permits defining a variable number of column type variables.
 
 With StaticFrame 2.0, ``Frame``, ``Series``, ``Index`` and related containers become generic. Support for variable column type definitions is provided by ``TypeVarTuple``, back-ported with the implementation in ``typing-extensions`` for compatibility down to Python 3.9.
 
