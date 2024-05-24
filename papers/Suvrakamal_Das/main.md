@@ -215,22 +215,22 @@ Mamba models are based on Selective State Space Models (SSMs), combining aspects
 #### 1. Attention Mechanisms vs. Selective State Space Models
 
 **Transformers** use multi-head self-attention to capture dependencies within the sequence:
-\[ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V \]
-Where \(Q\), \(K\), and \(V\) are the query, key, and value matrices, respectively, and \(d_k\) is the dimension of the key vectors.
+$$ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V $$
+Where \( Q \), \( K \), and \( V \) are the query, key, and value matrices, respectively, and \( d_k \) is the dimension of the key vectors.
 
 **Mamba Models** replace attention with selective state space parameters that change based on the input:
-\[ h'(t) = A h(t) + B x(t) \]
-\[ y(t) = C h(t) \]
-Here, \(A\), \(B\), and \(C\) are state space parameters that vary with the input, allowing for efficient handling of long sequences without the quadratic complexity of attention mechanisms.
+$$ h'(t) = A h(t) + B x(t) $$
+$$ y(t) = C h(t) $$
+Here, \( A \), \( B \), and \( C \) are state space parameters that vary with the input, allowing for efficient handling of long sequences without the quadratic complexity of attention mechanisms.
 
 #### 2. Computational Complexity
 
-**Transformers** have a quadratic complexity with respect to the sequence length \(n\):
-\[ O(n^2 \cdot d) \]
+**Transformers** have a quadratic complexity with respect to the sequence length \( n \):
+$$ O(n^2 \cdot d) $$
 This is due to the dot-product operations in the attention mechanism.
 
 **Mamba Models** achieve linear complexity:
-\[ O(n \cdot d) \]
+$$ O(n \cdot d) $$
 This is facilitated by the recurrent nature of SSMs and the hardware-aware algorithms that optimize memory usage and computation.
 
 #### 3. Sequence Handling and Memory Efficiency
@@ -239,19 +239,17 @@ This is facilitated by the recurrent nature of SSMs and the hardware-aware algor
 
 **Mamba Models** utilize selective state spaces to maintain relevant information over long sequences without the need for extensive memory caches, providing a more memory-efficient solution.
 
-The Transformer consists of an encoder-decoder structure where each layer includes multi-head self-attention and feed-forward networks. Positional encoding is added to retain sequential information.
-
 Mamba integrates selective state spaces directly into the neural network architecture. The selective mechanism allows the model to focus on relevant parts of the input dynamically.
 
 ### Equations
 
 **Transformer Attention Mechanism:**
-\[ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V \]
+$$ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V $$
 
 **Mamba State Space Model:**
-\[ h'(t) = A h(t) + B x(t) \]
-\[ y(t) = C h(t) \]
-
+$$ h'(t) = A h(t) + B x(t) $$
+$$ y(t) = C h(t) $$
+Here, \( h(t) \) is the hidden state, \( x(t) \) is the input, and \( A \), \( B \), and \( C \) are the state space parameters.
 
 ### Other Text
 
