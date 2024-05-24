@@ -192,6 +192,65 @@ Non-linear activation functions are typically added between S4 layers to enhance
 
 In summary, S4 offers a structured and efficient approach to SSMs, overcoming the limitations of previous implementations while preserving their theoretical strengths. Its NPLR parameterization allows for stable and efficient computation, while its efficient algorithms significantly reduce computational complexity. S4's ability to handle multiple features and its resemblance to CNNs further contribute to its versatility and potential as a powerful general sequence modeling solution.
 
+## Key Differences Between Mamba and Transformer Architectures
+
+In this section, we present a detailed comparison of the Mamba and Transformer architectures. We focus on their core components, computational characteristics, and performance implications. Visualizations and equations are provided to illustrate these differences clearly.
+
+### Architecture Overview
+
+#### Transformer Architecture
+Transformers rely heavily on attention mechanisms to model dependencies between input and output sequences. The core components include:
+- **Multi-Head Self-Attention**: Allows the model to focus on different parts of the input sequence.
+- **Position-wise Feed-Forward Networks**: Applied to each position separately.
+- **Positional Encoding**: Adds information about the position of each token in the sequence, as Transformers lack inherent sequential information due to the parallel nature of their processing.
+
+#### Mamba Architecture
+Mamba models are based on Selective State Space Models (SSMs), combining aspects of RNNs, CNNs, and classical state space models. Key features include:
+- **Selective State Space Models**: Allow input-dependent parameterization to selectively propagate or forget information.
+- **Recurrent Mode**: Efficient recurrent computations with linear scaling.
+- **Hardware-aware Algorithm**: Optimized for modern hardware to avoid inefficiencies.
+
+### Key Differences
+
+#### 1. Attention Mechanisms vs. Selective State Space Models
+
+**Transformers** use multi-head self-attention to capture dependencies within the sequence:
+$$ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V $$
+Where \( Q \), \( K \), and \( V \) are the query, key, and value matrices, respectively, and \( d_k \) is the dimension of the key vectors.
+
+**Mamba Models** replace attention with selective state space parameters that change based on the input:
+$$ h'(t) = A h(t) + B x(t) $$
+$$ y(t) = C h(t) $$
+Here, \( A \), \( B \), and \( C \) are state space parameters that vary with the input, allowing for efficient handling of long sequences without the quadratic complexity of attention mechanisms.
+
+#### 2. Computational Complexity
+
+**Transformers** have a quadratic complexity with respect to the sequence length \( n \):
+$$ O(n^2 \cdot d) $$
+This is due to the dot-product operations in the attention mechanism.
+
+**Mamba Models** achieve linear complexity:
+$$ O(n \cdot d) $$
+This is facilitated by the recurrent nature of SSMs and the hardware-aware algorithms that optimize memory usage and computation.
+
+#### 3. Sequence Handling and Memory Efficiency
+
+**Transformers** require a cache of previous elements to handle long-range dependencies, leading to high memory usage.
+
+**Mamba Models** utilize selective state spaces to maintain relevant information over long sequences without the need for extensive memory caches, providing a more memory-efficient solution.
+
+Mamba integrates selective state spaces directly into the neural network architecture. The selective mechanism allows the model to focus on relevant parts of the input dynamically.
+
+### Equations
+
+**Transformer Attention Mechanism:**
+$$ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V $$
+
+**Mamba State Space Model:**
+$$ h'(t) = A h(t) + B x(t) $$
+$$ y(t) = C h(t) $$
+Here, \( h(t) \) is the hidden state, \( x(t) \) is the input, and \( A \), \( B \), and \( C \) are the state space parameters.
+
 ### Other Text
 
 #### Footnotes
