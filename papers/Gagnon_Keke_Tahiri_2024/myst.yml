@@ -28,6 +28,7 @@ project:
     - Cumacea
     - Iceland
     - Phylogeny
+    - Phylogeography
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
