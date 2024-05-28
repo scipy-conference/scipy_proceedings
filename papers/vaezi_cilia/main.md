@@ -21,9 +21,34 @@ The rest of this article is structured as follows: The Background section enumer
 
 ## Methodology
 
-Dynamic textures, such as sea waves, smoke, and foliage, are sequences of images of moving scenes that exhibit certain stationarity properties in time [@doi:10.1023/A:1021669406132]. Similarly, ciliary motion can be considered as dynamic textures for their orderly rhythmic beating. Taking advantage of this temporal regularity in ciliary motion, optical flow (OF) can be used to compute the flow vectors of each pixel of high-speed videos of cilia. In conjunction with OF, autoregressive (AR) parameterization of the optical flow property of the video yields a manifold that quantifies the characteristic motion in the cilia.  The low dimension of this manifold contains the majority of variations within the data, which can then be used to segment the moving ciliary regions.
+Dynamic textures, such as sea waves, smoke, and foliage, are sequences of images of moving scenes that exhibit certain stationarity properties in time [@doi:10.1023/A:1021669406132]. Similarly, ciliary motion can be considered as dynamic textures for their orderly rhythmic beating. Taking advantage of this temporal regularity in ciliary motion, optical flow (OF) can be used to compute the flow vectors of each pixel of high-speed videos of cilia. In conjunction with OF, autoregressive (AR) parameterization of the optical flow property of the video yields a manifold that quantifies the characteristic motion in the cilia. The low dimension of this manifold contains the majority of variations within the data, which can then be used to segment the motile ciliary regions.
 
 ### Optical Flow Properties
+
+Taking advantage of this temporal regularity in ciliary motion, we use OF to compute the flow vectors of each pixel using optical flow to obtain motion vectors of the region where cilia reside. We begin by extracting flow vectors of the video recording of cilia, under the assumption that pixel intensity remains constant throughout the video
+
+```{math}
+I(x,y,t)=I(x+u\delta t,y+v\delta t,t+\delta t)
+```
+
+Where $I(x,y,t)$ is the pixel intensity at position $(x,y)$ a time $t$. Here, $(u\delta t, v\delta t)$ are small changes in the next frame taken after $\delta t$ time, and $(u,v)$, respectively, are the optical flow components that represent the displacement in pixel positions between consecutive frames in the horizontal and vertical directions at pixel location $(x, y)$.
+
+:::{figure} frame_out.png
+:label: fig:frame_out
+A sample frame of a video in our cilia dataset
+:::
+:::{figure} ground_truth.png
+:label: fig:ground_truth
+Manually labeled ground truth
+:::
+:::{figure} sample_OF.png
+:label: fig:sample_OF
+Representation of rotation (curl) component of optical flow at a random time
+:::
+:::{figure} AR matrices.png
+:label: fig:sample_OF
+A 5-order AR modeling of the OF component of the video
+:::
 
 ## WHAT'S BELOW IS PART OF THE TEMPLATE
 
