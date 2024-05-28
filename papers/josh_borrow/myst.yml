@@ -27,6 +27,12 @@ project:
   # github:
   # bibliography: []
   banner: banner.png
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - iRODS2024
+        - GitAnnex2024
   # The rest of the information shouldn't be modified
   subject: Research Article
   open_access: true
