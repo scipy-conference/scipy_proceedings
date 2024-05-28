@@ -498,3 +498,7 @@ Librarian as free, open source, software to the community.
 [^sqlalchemy]: https://www.sqlalchemy.org
 [^argon2]: https://pypi.org/project/argon2-cffi/
 [^xprocess]: https://pytest-xprocess.readthedocs.io/en/latest/
+
+## Acknowledgements
+
+JB acknowledges support from NSF grant AST-2153201. This material is based upon work supported by the National Science Foundation under Grant Nos. 1636646 and 1836019 and institutional support from the HERA collaboration partners. This research is funded in part by the Gordon and Betty Moore Foundation through Grant GBMF5212 to the Massachusetts Institute of Technology.
