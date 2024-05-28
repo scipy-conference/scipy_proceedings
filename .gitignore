@@ -5,3 +5,6 @@ _build
 *.pyc
 *.swp
 *~
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
