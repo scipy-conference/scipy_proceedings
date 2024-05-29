@@ -28,6 +28,7 @@ Dynamic textures, such as sea waves, smoke, and foliage, are sequences of images
 Taking advantage of this temporal regularity in ciliary motion, we use OF to compute the flow vectors of each pixel using optical flow to obtain motion vectors of the region where cilia reside. We begin by extracting flow vectors of the video recording of cilia, under the assumption that pixel intensity remains constant throughout the video
 
 ```{math}
+:label: of_formula
 I(x,y,t)=I(x+u\delta t,y+v\delta t,t+\delta t)
 ```
 
@@ -45,10 +46,50 @@ Manually labeled ground truth
 :label: fig:sample_OF
 Representation of rotation (curl) component of optical flow at a random time
 :::
+
+### Autoregressive Modeling
+
+@fig:sample_OF shows a sample of the optical flow component at a random time. From OF vectors, elemental components such as rotation are derived, which highlights the ciliary motion by capturing twisting and turning movements. To model the temporal evolution of these vectors, an autoregressive (AR) model [@doi:10.5244/C.21.76] is formulated:
+
+```{math}
+:label: AR
+y_t =C\vec{x_t} + \vec{u} 
+```
+
+```{math}
+:label: AR_state
+\vec{x}_t = A_1\vec{x}_{t-1} + A_2\vec{x}_{t-2} + ... + A_d\vec{x}_{t-d} + \vec{v_t}
+```
+
+In equation {ref}`AR`, $\vec{y}_t$ represents the appearance of cilia at time $t$ influenced by noise $\vec{u}$. Equation {ref}`AR_state` represents the state $\vec{x}$ of the ciliary motion in a low-dimensional subspace defined by an orthogonal basis $C$ at time $t$, plus a noise term $\vec{v}_t$
+and how the state changes from $t$ to $t + 1$.
+
+Equation {ref}`AR_state` is a decomposition of each frame of a ciliary motion video $\vec{y}_t$ into a low-dimensional state vector $\vec{x}_t$
+using an orthogonal basis $C$. This equation at position ${x}_t$ is a function of the sum of $d$ of its previous positions $\vec{x}_{t−1}, \vec{x}_{t−2}, \vec{x}_{t−d}$, each multiplied by its corresponding coefficients $A = {A_1, A_2, ..., A_d}$. The noise terms $\vec{u}$ and $\vec{v}$ are used to represent the residual difference between the observed data and the solutions to the linear equations. The variance in the data is predominantly captured by a few dimensions of $C$, simplifying the complex motion into manageable analyses.
+
+In our experiments, we chose $d = 5$ as the order of our autoregressive model.
+We can then create raw masks from this lower-dimensional subspace, and further enhance them with thresholding to remove the remaining noise.
+
 :::{figure} AR matrices.png
-:label: fig:sample_OF
-A 5-order AR modeling of the OF component of the video
+:label: fig:sample_AR
+A 5-order AR model of the OF component of the video
 :::
+In @fig:sample_AR, the first-order AR parameter is showing the most variance in the video, which corresponds to the frequency of motion that cilia exhibit. The remaining orders have correspondence with other different frequencies in the data caused by, for instance, camera shaking. Evidently, simply thresholding the first-order AR parameter is adequate to produce an accurate mask, however, in order to get a more refined result we subtracted the second order from the first one, followed by a normalization of pixel intensities. We used adaptive thresholding to extract the mask on all videos of our dataset. The generated masks exhibited under-segmentation in the ciliary region, and sparse over-segmentation in other regions of the image. To overcome this, we adapted a Gaussian blur filter followed by an Otsu thresholding to restore the under-segmentation and remove the sparse over-segmentation. @fig:thresholding illustrates the steps of the process.
+:::{figure} thresholding.png
+:label: fig:thresholding
+A 5-order AR model of the OF component of the video
+:::
+
+### Training a U-Net model
+
+In this study, we employed a U-Net architecture with a ResNet-34 encoder. The model was configured to handle grayscale images with a single input channel and produce binary segmentation masks. We utilized Binary Cross-Entropy Loss for training and the Adam optimizer with a learning rate of $10^-3$. To evaluate the model's performance, we calculated the Dice score during training and validation. Data augmentation techniques, including resizing, random cropping, and rotation, were applied to enhance the model's generalization capability. The implementation was done using a library [@Iakubovskii:2019] based on PyTorch Lightning to facilitate efficient training and evaluation.
+
+## Results
+
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
 
 ## WHAT'S BELOW IS PART OF THE TEMPLATE
 
