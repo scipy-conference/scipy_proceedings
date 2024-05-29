@@ -6,6 +6,13 @@ There is a page limit of 8 pages on the paper, excluding references.
 
 For general Style Guide details please check [IEEE style guide](https://www.ieee.org/content/dam/ieee-org/ieee/web/org/conferences/style_references_manual.pdf). For inclusive language, please refer to [American Psychological Association’s style guide](https://www.apa.org/about/apa/equity-diversity-inclusion/language-guidelines). This style guide is based on both these references. Use [Strunk and White 4th edition](https://archive.org/details/TheElementsOfStyle4thEdition) as a grammar reference. We use [Merriam-Webster](https://www.merriam-webster.com/) as the English dictionary.
 
+## Abstract
+The quest for more efficient and faster deep learning models has led to the development of various alternatives to Transformers, one of which is the Mamba model. This paper provides a comprehensive comparison between Mamba models and Transformers, focusing on their architectural differences, performance metrics, and underlying mechanisms. We analyze and synthesize findings from extensive research conducted by various authors on these models.
+
+Our comparative study leverages the SciPy library for data analysis and visualization. We utilize SciPy’s statistical tools to perform rigorous comparisons of performance metrics reported in the literature, ensuring robust and reproducible results. Additionally, SciPy’s optimization and signal processing modules are used to interpret and compare the efficiency and effectiveness of the attention mechanisms and state-space models (SSMs) employed by Mamba models and Transformers.
+
+By providing an in-depth comparison using Python and its scientific ecosystem, this paper aims to clarify the strengths and weaknesses of Mamba models relative to Transformers. We conclude with insights on the potential implications for future research and applications in various scientific and industrial domains.
+
 ### Mamba Models a possible replacement for Transformers?
 
 In the paper title, capitalize the first letter of the first and last word and all the nouns, pronouns, adjectives, verbs, adverbs, and subordinating conjunctions (If, Because, That, Which). Capitalize abbreviations that are otherwise lowercase (e.g., use DC, not dc or Dc) except for unit abbreviations and acronyms. Articles (a, an, the), coordinating conjunctions (and, but, for, or, nor), and most short prepositions are lowercase unless they are the first or last word. Prepositions of more than three letters (Before, Through, With, Without, Versus, Among, Under, Between) should be capitalized.
