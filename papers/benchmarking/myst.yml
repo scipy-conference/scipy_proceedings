@@ -7,20 +7,41 @@ project:
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Benedikt Heidrich
-      orcid: 0000-0000-0000-0000
+      orcid: 0000-0002-1923-0848
       affiliations:
         - sktime
+      roles:
+        - Conceptualization
+        - Writing - original draft
+        - Software
+        - Visualization
+        - Writing - review & editing
+        - Investigation
     - name: Sankalp Gilda
-      email: mark37@rome.it
-      orcid: 0000-0000-0000-0000
+      email: sankalp.gilda@gmail.com 
+      orcid: 0000-0002-3645-4501
       affiliations:
-        - Egyptian Embassy, S.P.Q.R.
+        - DevelopYours, LLC
+      roles:
+        - Conceptualization
+        - Writing - original draft
+        - Software
+        - Visualization
+        - Writing - review & editing
+        - Investigation
+      corresponding: true
     - name: Franz Kiraly 
       email: millman@rome.it
       affiliations:
         - sktime
-      corresponding: true
-  keywords:
+      roles:
+        - Conceptualization
+        - Writing - original draft
+        - Software
+        - Visualization
+        - Writing - review & editing
+        - Project administration
+    keywords:
     - time series
     - machine learning
     - benchmarking
