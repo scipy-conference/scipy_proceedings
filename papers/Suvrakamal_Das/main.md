@@ -202,21 +202,25 @@ Non-linear activation functions are typically added between S4 layers to enhance
 
 In summary, S4 offers a structured and efficient approach to SSMs, overcoming the limitations of previous implementations while preserving their theoretical strengths. Its NPLR parameterization allows for stable and efficient computation, while its efficient algorithms significantly reduce computational complexity. S4's ability to handle multiple features and its resemblance to CNNs further contribute to its versatility and potential as a powerful general sequence modeling solution.
 
-![Mamba Architecture](./mamba.drawio.svg)
-
 ## Mamba Model Architecture
 
-One Mamba Layer is composed of one a selective state space module and some other layers as follows. Linear Layer Doubles the dimentionality of the input token embedding. A higher dimentionality gives the network more space to push around more information. Also some inseperable classes in the lower dimension might become seperable in the higher dimension. The authors use the 64 input dimensional embedding so this layers increases dimenionality from 64 to a 128. Then a canonical 1D layers takes in the output of the previous layers. It's role is to push around dimension in the linearly upscaled 128 dimentional vector. It uses the SILU Activation function. Then comes the state space module to process the output of the convolution like a linear RNN. 
-Then Mamba does the gated multiplication, we take the input, and pass it through another linear layer and 
-then pass it through another activation function. And this result of this is multiplied to the output of the selective SSM. The Author's intuition behind this operation is that the multiplication is the measure of similarity between the output of SSM which contains information from the previous tokens and the embedding of the current token. Then a linear layers reduces dimentionality back from 128 to 64. 
-To get mamba , we just need to stack multiple layers on top of each other. 
-And unlike other SSMs achitectures they do not need some other layers in between because they use the same layers all the time. In the same way in which transformers are composed of just Transformer layers on top of one another. 
+One Mamba Layer is composed of one a selective state space module and some other layers as follows. Linear Layer Doubles the dimentionality of the input token embedding. A higher dimentionality gives the network more space to push around more information. Also some inseperable classes in the lower dimension might become seperable in the higher dimension. The authors use the 64 input dimensional embedding so this layers increases dimenionality from 64 to a 128.
+
+Then a canonical 1D layers takes in the output of the previous layers. It's role is to push around dimension in the linearly upscaled 128 dimentional vector. It uses the SILU Activation function. Then comes the state space module to process the output of the convolution like a linear RNN.
+
+![Mamba Architecture](./mamba.drawio.svg)
+
+Then Mamba does the gated multiplication, we take the input, and pass it through another linear layer and
+then pass it through another activation function. And this result of this is multiplied to the output of the selective SSM. The Author's intuition behind this operation is that the multiplication is the measure of similarity between the output of SSM which contains information from the previous tokens and the embedding of the current token. Then a linear layers reduces dimentionality back from 128 to 64.
+
+To get mamba , we just need to stack multiple layers on top of each other.
+And unlike other SSMs achitectures they do not need some other layers in between because they use the same layers all the time. In the same way in which transformers are composed of just Transformer layers on top of one another.
 
 ## Key Differences Between Mamba and Transformer Architectures
 
 In this section, we present a detailed comparison of the Mamba and Transformer architectures. We focus on their core components, computational characteristics, and performance implications. Visualizations and equations are provided to illustrate these differences clearly.
 
-Self attention, feed forward NN, normalization, residual layers and so on. 
+Self attention, feed forward NN, normalization, residual layers and so on.
 
 ### Architecture Overview
 
