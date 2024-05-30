@@ -46,7 +46,7 @@ project:
         - sklearn1
         - sklearn2
   # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
+  banner: banner.jpg
   # The rest of the information shouldn't be modified
   subject: Research Article
   open_access: true
