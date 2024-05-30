@@ -54,7 +54,7 @@ project:
         - ipyvuetify
         - barlowtwins
         - jupyter
-    - rule: links-resolve
+    - rule: link-resolves
       severity: ignore
       keys:
         - https://www.energy.gov/doe-public-access-plan
