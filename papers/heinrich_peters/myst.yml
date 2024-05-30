@@ -51,6 +51,8 @@ project:
         - noauthor_hugging_2023
         - noauthor_tensorflow_2023
         - noauthor_mlflow_2023
+        - zaharia_accelerating_2018
+        - pedregosa_scikit-learn:_2011
 
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
