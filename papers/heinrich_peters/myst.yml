@@ -54,6 +54,8 @@ project:
         - zaharia_accelerating_2018
         - pedregosa_scikit-learn:_2011
         - feurer_efficient_2015
+        - feurer_openml-python_2021
+        - chollet_keras_2015
 
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
