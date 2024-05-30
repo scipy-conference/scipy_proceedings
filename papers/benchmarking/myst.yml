@@ -1,0 +1,51 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-00_tex_template
+  title: A Numerical Perspective to Terraforming a Desert
+  subtitle: LaTeX edition
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Benedikt Heidrich
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - sktime
+    - name: Sankalp Gilda
+      email: mark37@rome.it
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Egyptian Embassy, S.P.Q.R.
+    - name: Franz Kiraly 
+      email: millman@rome.it
+      affiliations:
+        - sktime
+      corresponding: true
+  keywords:
+    - time series
+    - machine learning
+    - benchmarking
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  #banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+  exports: 
+    - format: pdf
+site:
+  template: article-theme
