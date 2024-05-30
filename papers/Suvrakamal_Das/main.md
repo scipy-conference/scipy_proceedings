@@ -199,10 +199,100 @@ Non-linear activation functions are typically added between S4 layers to enhance
 
 In summary, S4 offers a structured and efficient approach to SSMs, overcoming the limitations of previous implementations while preserving their theoretical strengths. Its NPLR parameterization allows for stable and efficient computation, while its efficient algorithms significantly reduce computational complexity. S4's ability to handle multiple features and its resemblance to CNNs further contribute to its versatility and potential as a powerful general sequence modeling solution.
 
-### How Mamba Works
+### How SSMs Works
+SSMs are usually part of larger neural network architecture, because on their own they are not much, from a high level perspective, they work like linear RNNs, where to output representation of the previous token and the embedding of the current input token are transformed and then combined. So Like in RNNs, SSMs process one input token after the other.
 
+SSMs have 4 sets of matrices and parameters to process the input namely
+
+$$
+\Delta, A, B, C
+$$
+
+where:
+
+* $\Delta $ modifies the weight in the $A$ and $B$ matrices
+* $A$ (modified $\overline { A }$) determines how much of the Hidden state $h$ should propagate forward from token to token.
+* $B$ (modified $\overline { B }$) Determines how of the input enters the hidden state.
+* $C$ (modified $\overline { C }$) Determines how the hidden state transforms into output.
+
+![Mamba Architecture](./ssmDiagram.drawio.svg)
+
+SSMs follow these steps
+
+Discretization
+
+$$
+\overline{A} = \exp(\Delta A)
+$$
+
+$$
+\overline{B} = (\Delta A)^{-1} (\exp(\Delta A) - I) \cdot \Delta B
+$$
+
+Linear RNNs
+$$
+h_t = \overline{A} h_{t-1} + \overline{B} X_t
+$$
+
+$$
+Y_t = C h_t
+$$
+
+$$
+h_0 = \overline{A} h_{-1} + \overline{B} x_0 = \overline{B} x_0
+$$
+
+$$
+Y_0 = C h_0 = C \overline{B} x_0
+$$
+
+$$
+h_1 = \overline{A} h_0 + \overline{B} x_1 = \overline{A} \overline{B} x_0 + \overline{B} x_1
+$$
+
+$$
+Y_1 = C h_1 = C \overline{A} \overline{B} x_0 + C \overline{B} x_1
+$$
+
+$$
+Y_2 = C \overline{A}^2 \overline{B} x_0 + C \overline{A} \overline{B} x_1 + C \overline{B} x_2
+$$
+
+$$
+y_t = C \overline{A}^t \overline{B} x_0 + C \overline{A}^{t-1} \overline{B} x_1 + \ldots + C \overline{A} \overline{B} x_{t-1} + C \overline{B} x_t
+$$
+
+$$
+K = \left( C \overline{B}, \, C \overline{A} \overline{B}, \, \ldots, \, C \overline{A}^{L-1} \overline{B} \right)
+$$
+
+$$
+x = \left( \begin{array}{c} x_1 \\ x_2 \\ \vdots \\ x_L \end{array} \right)
+$$
+
+$$
+Y = K \cdot x
+$$
+
+Continuos SSMs are differential equations that tell you how a variable H changes over time.
 
 #### Parallel Associative Scan
+
+Therefore Convolutions become impossible, hence parallel associative scan
+
+##### SSM
+
+$$
+y_t = C \overline{A}^t \overline{B} x_0 + C \overline{A}^{t-1} \overline{B} x_1 + \ldots + C \overline{A} \overline{B} x_{t-1} + C \overline{B} x_t
+$$
+
+##### Selective SSM
+
+$$
+y_t = C_0 \overline{A}^t \overline{B}_0 x_0 + C_1 \overline{A}^{t-1} \overline{B}_1 x_1 + \ldots
+$$
+
+\*input-dependent $\mathbb{Z}$\*
 
 ## Mamba Model Architecture
 
