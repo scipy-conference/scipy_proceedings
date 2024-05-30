@@ -62,7 +62,7 @@ A promising alternative for tackling LRDs in long sequences is **State Space Mod
 
 ### Continuous-time Representation
 
-The continuous-time SSM describes a system's evolution using differential equations. It maps a continuous-time input signal $(u(t)$ to an output signal $y(t)$ through a latent state $x(t)$. The state is an internal representation that captures the system's history and influences its future behavior.
+The continuous-time SSM describes a system's evolution using differential equations. It maps a continuous-time input signal $u(t)$ to an output signal $y(t)$ through a latent state $x(t)$. The state is an internal representation that captures the system's history and influences its future behavior.
 
 The core equations of the continuous-time SSM are:
 
@@ -191,8 +191,6 @@ S4's convolutional representation is computed through a series of steps:
 
 This process reduces the complexity of computing the convolution kernel $K$ to $O(N + L)$ operations and $O(N + L)$ memory, significantly improving upon the LSSL's complexity.
 
-#### Parallel Associative Scan
-
 ### S4 Architecture Details
 
 The S4 layer, as defined by its NPLR parameterization, implements a mapping from a 1-D input sequence to a 1-D output sequence. To handle multiple features, the S4 architecture utilizes $H$ independent copies of the S4 layer, each processing one feature dimension. These outputs are then mixed using a position-wise linear layer, similar to a depthwise-separable convolution. This architecture allows for efficient computation while preserving the ability to capture relationships between different features.
@@ -200,6 +198,11 @@ The S4 layer, as defined by its NPLR parameterization, implements a mapping from
 Non-linear activation functions are typically added between S4 layers to enhance the model's expressivity, further paralleling the structure of CNNs. Thus, the overall deep S4 model resembles a depthwise-separable CNN, but with global convolution kernels that effectively capture long-range dependencies.
 
 In summary, S4 offers a structured and efficient approach to SSMs, overcoming the limitations of previous implementations while preserving their theoretical strengths. Its NPLR parameterization allows for stable and efficient computation, while its efficient algorithms significantly reduce computational complexity. S4's ability to handle multiple features and its resemblance to CNNs further contribute to its versatility and potential as a powerful general sequence modeling solution.
+
+### How Mamba Works
+
+
+#### Parallel Associative Scan
 
 ## Mamba Model Architecture
 
@@ -348,3 +351,10 @@ Shortest sentences are the best. Some ways to shorten the sentences and make tho
 3. Avoid passive voice.
 4. Avoid using questions, use statements instead. For example, avoid "which metrics would be useful for success"; instead use "the success metrics here are …"
 5. Avoid words, verbs with emotions. For example, avoid "reflecting on; theme"; use "in short, or summarizing; topic"
+
+### Conclusion
+
+#### References
+
+1. arXiv:2111.00396 [cs.LG]
+2. ddsf
