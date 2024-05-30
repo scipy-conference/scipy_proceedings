@@ -200,6 +200,8 @@ Non-linear activation functions are typically added between S4 layers to enhance
 
 In summary, S4 offers a structured and efficient approach to SSMs, overcoming the limitations of previous implementations while preserving their theoretical strengths. Its NPLR parameterization allows for stable and efficient computation, while its efficient algorithms significantly reduce computational complexity. S4's ability to handle multiple features and its resemblance to CNNs further contribute to its versatility and potential as a powerful general sequence modeling solution.
 
+![Mamba Architecture](./mamba.drawio.svg)
+
 ## Key Differences Between Mamba and Transformer Architectures
 
 In this section, we present a detailed comparison of the Mamba and Transformer architectures. We focus on their core components, computational characteristics, and performance implications. Visualizations and equations are provided to illustrate these differences clearly.
@@ -211,6 +213,8 @@ Transformers rely heavily on attention mechanisms to model dependencies between 
 * **Multi-Head Self-Attention**: Allows the model to focus on different parts of the input sequence.
 * **Position-wise Feed-Forward Networks**: Applied to each position separately.
 * **Positional Encoding**: Adds information about the position of each token in the sequence, as Transformers lack inherent sequential information due to the parallel nature of their processing.
+
+![Transformer Archtecture](https://imgur.com/ijGq9Z9.jpeg)
 
 #### Mamba Architecture
 Mamba models are based on Selective State Space Models (SSMs), combining aspects of RNNs, CNNs, and classical state space models. Key features include:
