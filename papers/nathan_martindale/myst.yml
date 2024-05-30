@@ -38,11 +38,22 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
+        - ipywidgets
+        - solara
+        - streamlit
+        - LowLevelWidget
+        - ipywidgets_cookiecutter
+        - plotly
+        - mpld3
+        - bqplot
+        - pythreejs
+        - ipyleaflet
+        - ipycytoscape
+        - traitlets
+        - ipyreact
+        - ipyvuetify
+        - barlowtwins
         - jupyter
-        - sklearn1
-        - sklearn2
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
