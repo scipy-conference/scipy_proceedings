@@ -80,11 +80,18 @@ In @fig:sample_AR, the first-order AR parameter is showing the most variance in 
 The process of computing the masks. a) Subtracting the second-order AR parameter from the first-order, followed by b) Adaptive thresholding, which suffers from under/over-segmentation. c) A Gaussian blur filter, followed by d) An Otsu thresholding eliminates the under/over-segmentation.
 :::
 
-### Training a U-Net model
+### Training the model
 
-In this study, we employed a U-Net architecture with a ResNet-34 encoder. The model was configured to handle grayscale images with a single input channel and produce binary segmentation masks. We utilized Binary Cross-Entropy Loss for training and the Adam optimizer with a learning rate of $10^-3$. To evaluate the model's performance, we calculated the Dice score during training and validation. Data augmentation techniques, including resizing, random cropping, and rotation, were applied to enhance the model's generalization capability. The implementation was done using a library [@Iakubovskii:2019] based on PyTorch Lightning to facilitate efficient training and evaluation. The next section discusses the results of the experiment and the performance of the model in detail.
+In this study, we employed a Feature Pyramid Network (FPN) [@kirillov2017unified] architecture with a ResNet-34 encoder. The model was configured to handle grayscale images with a single input channel and produce binary segmentation masks. We utilized Binary Cross-Entropy Loss for training and the Adam optimizer with a learning rate of $10^-3$. To evaluate the model's performance, we calculated the Dice score during training and validation. Data augmentation techniques, including resizing, random cropping, and rotation, were applied to enhance the model's generalization capability. The implementation was done using a library [@Iakubovskii:2019] based on PyTorch Lightning to facilitate efficient training and evaluation. The next section discusses the results of the experiment and the performance of the model in detail.
 
 ## Results
+
+@fig:out_sample shows the predictions of the model on 5 sample videos of dyskinetic cilia. 
+
+:::{figure} out sample.png
+:label: fig:out_sample
+The model predictions on 5 dyskinetic cilia samples. The first column shows a frame of the video, the second column shows the manually labeled ground truth, the third column is the model's prediction, and the last column is a thresholded version of the prediction.
+:::
 
 <!-- ################################################################################# -->
 <!-- ################################################################################# -->
