@@ -1,5 +1,7 @@
 name: curvenote
 on:
+  push:
+    branches: ['benchmark_paper']
   pull_request_target:
     branches: ['2024']
 permissions:
