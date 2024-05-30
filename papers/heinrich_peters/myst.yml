@@ -12,10 +12,24 @@ project:
       affiliations:
         - Columbia University
       corresponding: True
+      roles: 
+        - Conceptualization
+        - Methodology
+        - Software
+        - Writing - Original Draft
     - name: Michael Parrott
       email: mp3675@columbia.edu
       affiliations:
         - Columbia University
+      roles: 
+        - Conceptualization
+        - Methodology
+        - Software
+        - Resources
+        - Writing - Review \& Editing
+        - Supervision
+        - Project administration
+        - Funding acquisition
   keywords:
     - Machine Learning
     - MLOps
@@ -32,11 +46,12 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        - davenport_is_2022
+        - siegel_models_2022
+        - noauthor_hugging_2023
+        - noauthor_tensorflow_2023
+        - noauthor_mlflow_2023
+
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
