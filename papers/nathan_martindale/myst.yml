@@ -54,6 +54,10 @@ project:
         - ipyvuetify
         - barlowtwins
         - jupyter
+    - rule: links-resolve
+      severity: ignore
+      keys:
+        - https://www.energy.gov/doe-public-access-plan
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
