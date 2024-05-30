@@ -7,7 +7,7 @@ project:
   subtitle: A Memory-Efficient Approach for Scientific Computing (SciPy'24 Paper)
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: Suvrakamal_Das
+    - name: Suvrakamal Das
       email: subhrokomol@gmail.com
       orcid: 0009-0002-4791-9244
       affiliations:
@@ -15,6 +15,7 @@ project:
         - Director, ProjectX Cloud Technologies Private Limited
     - name: Rounak Sen
       email: rony000013@gmail.com
+      orcid: 0009-0003-9327-4712
       affiliations:
         - Maulana Abul Kalam Azad University Institute of Technology, West Bengal
     - name: SaiKrishna Devendiran
