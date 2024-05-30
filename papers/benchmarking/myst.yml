@@ -10,11 +10,23 @@ project:
       orcid: 0000-0000-0000-0000
       affiliations:
         - sktime
+      roles:
+        - Conceptualization
+        - Writing - original draft
+        - Software
+        - Visualization
+        - Writing - review & editing
     - name: Sankalp Gilda
       email: mark37@rome.it
       orcid: 0000-0000-0000-0000
       affiliations:
-        - Egyptian Embassy, S.P.Q.R.
+        - tODO
+      roles:
+        - Conceptualization
+        - Writing - original draft
+        - Software
+        - Visualization
+        - Writing - review & editing
     - name: Franz Kiraly 
       email: millman@rome.it
       affiliations:
