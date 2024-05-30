@@ -10,8 +10,7 @@ For general Style Guide details please check [IEEE style guide](https://www.ieee
 
 The quest for more efficient and faster deep learning models has led to the development of various alternatives to Transformers, one of which is the Mamba model. This paper provides a comprehensive comparison between Mamba models and Transformers, focusing on their architectural differences, performance metrics, and underlying mechanisms. We analyze and synthesize findings from extensive research conducted by various authors on these models.
 
-Our comparative study leverages the SciPy library for data analysis and visualization. We utilize SciPy’s statistical tools to perform rigorous comparisons of performance metrics reported in the literature, ensuring robust and reproducible results. Additionally, SciPy’s optimization and signal processing modules are used to interpret and compare the efficiency and effectiveness of the attention mechanisms and state-space models (SSMs) employed by Mamba models and Transformers.
-
+The synergy between Mamba models and the SciPy ecosystem enhances their integration into science.
 By providing an in-depth comparison using Python and its scientific ecosystem, this paper aims to clarify the strengths and weaknesses of Mamba models relative to Transformers. We conclude with insights on the potential implications for future research and applications in various scientific and industrial domains.
 
 ### Mamba Models a possible replacement for Transformers?
@@ -55,7 +54,7 @@ Every reference should be a separate entry. Using one number for more than one r
 
 ## Background: State Space Models
 
-A central goal of machine learning is to develop models capable of efficiently processing sequential data across a range of modalities and tasks. This is particularly challenging when dealing with **long sequences**, especially those exhibiting **long-range dependencies (LRDs)** – where information from distant past time steps significantly influences the current state or future predictions. Examples of such sequences abound in real-world applications, including speech, video, medical, time series, and natural language. However, traditional models struggle to effectively handle such long sequences.
+The central goal of machine learning is to develop models capable of efficiently processing sequential data across a range of modalities and tasks. This is particularly challenging when dealing with **long sequences**, especially those exhibiting **long-range dependencies (LRDs)** – where information from distant past time steps significantly influences the current state or future predictions. Examples of such sequences abound in real-world applications, including speech, video, medical, time series, and natural language. However, traditional models struggle to effectively handle such long sequences.
 
 **Recurrent Neural Networks (RNNs)**, often considered the natural choice for sequential data, are inherently stateful and require only constant computation per time step. However, they are slow to train and suffer from the well-known "**vanishing gradient problem**", which limits their ability to capture LRDs. **Convolutional Neural Networks (CNNs)**, while efficient for parallelizable training, are not inherently sequential and struggle with long context lengths, resulting in more expensive inference. **Transformers**, despite their recent success in various tasks, typically require specialized architectures and attention mechanisms to handle LRDs, which significantly increase computational complexity and memory usage.
 
