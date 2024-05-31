@@ -286,37 +286,31 @@ In the study, these bootstrapping techniques are used to estimate the distributi
 \subsection{Evaluation Metrics}
 Performances are evaluated using the following metrics:
 
-\subsubsection{Continuous Ranked Probability Score (CRPS)}
-CRPS \cite{matheson1976} measures the accuracy of probabilistic forecasts by comparing the predicted distribution to the observed values. The CRPS for a forecast distribution \( F \) and an observation \( y \) is defined as:
-\begin{equation}
-\text{CRPS}(F, y) = \int_{-\infty}^\infty \left[ F(x) - \mathbf{1}(x \ge y) \right]^2 dx,
-\end{equation}
-where \( \mathbf{1} \) is the indicator function.
+\begin{itemize}
+    
+    \item \texttt{CRPS} - Continuous Ranked Probability Score \cite{matheson1976} measures the accuracy of probabilistic forecasts by comparing the predicted distribution to the observed values. The CRPS for a (real-valued forecast distribution d and an observation $y$ can be defined as: $\text{CRPS}(d, y) = \mathbb{E} \left|X - y\right| - \frac{1}{2} \mathbb{E} \left|X - X'\right|$, where $X$ and $X'$ are independent random variables with distribution $d$.
 
-\subsubsection{Pinball Loss}
-Pinball Loss evaluates the accuracy of quantile forecasts by penalizing deviations from the true values based on specified quantiles. For a quantile forecast \( \hat{q}_\tau \) at level \( \tau \) and an observation \( y \), the Pinball Loss is defined as:
-\begin{equation}
-\text{Pinball Loss}(\hat{q}_\tau, y) = \begin{cases}
-\tau (y - \hat{q}_\tau), & \text{if } y \ge \hat{q}_\tau, \\
-(1 - \tau) (\hat{q}_\tau - y), & \text{otherwise}.
-\end{cases}
-\end{equation}
+    \item \texttt{PinballLoss} - the pinball loss, also known as quantile loss, evaluates the accuracy of quantile forecasts by penalizing deviations from the true values based on specified quantiles.
+    For quantile forecasts $\hat{q}_1, dots, \hat{q}_k$ at levels $\tau_1, \dots, \tau_k$ and an observation $y$, the Pinball Loss is defined as:
 
-\subsubsection{Calibration}
-Calibration assesses how well the prediction intervals capture the true values. Well-calibrated intervals should contain the observed values with the specified probability. To assess the calibration quantitatively, we use the Area Under the Calibration curve (AUCalibration):
-\begin{equation}
-AUC = \frac{1}{N} \sum_{i=1}^N c_{(i)} - \frac{i}{N},
-\end{equation}
-where \(c_{(i)}\) represents the calibration value at the \(i\)-th point, and \(N\) is the total number of points.
+    \begin{equation}
+    \text{Pinball Loss}(\hat{q}, y) = \frac{1}{k} \sum_{i=1}^k \max \left(\tau (y - \hat{q}_i), (1 - \tau_i) (\hat{q}_i - y)\right)
+    \end{equation}
 
-\subsubsection{Sharpness}
-Sharpness measures the concentration of the prediction intervals. More concentrated intervals indicate higher confidence in the forecasts. Sharpness is desirable because it indicates precise predictions.
+    The experiment uses the Pinball Loss at quantiles 0.05, and 0.95.
 
-\subsubsection{Empirical Coverage}
-Empirical coverage measures how much of the observations are within the predicted interval. It is computed as the proportion of observations that fall within the prediction intervals, providing a direct measure of the reliability of the intervals.
+    \item \texttt{AUCalibration} - The Area between the calibration curve and the diagonal assesses how well the prediction intervals capture the true values. For observations $y_1, \dots, y_n$ and corresponding distributional predictions with quantile functions $Q_1, \dots, Q_n$ (where $Q_i = F^{-1}_i$ for the cdf $F_i$), the AUCalibration is defined as:
+    \begin{equation}
+    AUC = \frac{1}{N} \sum_{i=1}^N \left| c_{(i)} - \frac{i}{N}\right|,
+    \end{equation}
+    where $c_i := Q_i(y_i),$ and $c_{(i)}$ is the $i$-th order statistic of $c_1, \dots, c_N$.
 
-\subsubsection{Runtime}
-Besides metrics that assess the quality of the forecast, we also consider runtime to estimate the feasibility of the examined approaches. Runtime measures the computational efficiency of the forecasting methods, which is crucial for practical applications.
+    \item \texttt{IntervalWidth} - width of prediction intervals, or sharpness measures the concentration of the prediction intervals. More concentrated intervals indicate higher confidence in the forecasts. Sharpness is desirable because it indicates precise predictions. Sharpness is calculated as the average width of the prediction intervals, at nominal symmetric coverage 0.9.
+    \item \texttt{EmpiricalCoverage} - Empirical coverage measures how much of the observations are within the predicted interval. It is computed as the proportion of observations that fall within the prediction intervals at nominal coverage 0.9, providing a direct measure of the reliability of the intervals.
+    \item runtime. Besides metrics that assess the quality of the forecast, average runtime for an individual fit/interence run is also reported. Runtime measures the computational efficiency of the forecasting methods, which is crucial for practical applications.
+ 
+\end{itemize}
+
 
 \section{Datasets} \label{datasets}
 We conduct our experiments on several diverse time series datasets to evaluate the performance of our forecasting methods and probabilistic wrappers. The datasets used in this study are as follows:
