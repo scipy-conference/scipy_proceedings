@@ -1,9 +1,6 @@
 ## Abstract
 
-The quest for more efficient and faster deep learning models has led to the development of various alternatives to Transformers, one of which is the Mamba model. This paper provides a comprehensive comparison between Mamba models and Transformers, focusing on their architectural differences, performance metrics, and underlying mechanisms. We analyze and synthesize findings from extensive research conducted by various authors on these models.
-
-The synergy between Mamba models and the SciPy ecosystem enhances their integration into science.
-By providing an in-depth comparison using Python and its scientific ecosystem, this paper aims to clarify the strengths and weaknesses of Mamba models relative to Transformers. We conclude with insights on the potential implications for future research and applications in various scientific and industrial domains.
+The quest for more efficient and faster deep learning models has led to the development of various alternatives to Transformers, one of which is the Mamba model. This paper provides a comprehensive comparison between Mamba models and Transformers, focusing on their architectural differences, performance metrics, and underlying mechanisms. It analyzes and synthesizes findings from extensive research conducted by various authors on these models. The synergy between Mamba models and the SciPy ecosystem enhances their integration into science. By providing an in-depth comparison using Python and its scientific ecosystem, this paper aims to clarify the strengths and weaknesses of Mamba models relative to Transformers. It offers the results obtained along with some thoughts on the possible ramifications for future research and applications in a range of academic and professional fields.
 
 ### Introduction
 
@@ -137,13 +134,13 @@ $$
 * $y_t$ is output vector at time t
 * $h_t$ is the Internal hidden state at time t
 
-$$
-y_0 = C h_0 = C \overline{B} x_0 \\
-y_1 = C h_1 = C \overline{A} \overline{B} x_0 + C \overline{B} x_1 \\
-y_2 = C \overline{A}^2 \overline{B} x_0 + C \overline{A} \overline{B} x_1 + C \overline{B} x_2 \\
-\vdots\\
-y_t = C \overline{A}^t \overline{B} x_0 + C \overline{A}^{t-1} \overline{B} x_1 + \ldots + C \overline{A} \overline{B} x_{t-1} + C \overline{B} x_t
-$$
+\begin{align*}
+y_0 &= C h_0 = C \overline{B} x_0 \\ 
+y_1 &= C h_1 = C \overline{A} \overline{B} x_0 + C \overline{B} x_1 \\
+y_2 &= C \overline{A}^2 \overline{B} x_0 + C \overline{A} \overline{B} x_1 + C \overline{B} x_2 \\
+&\vdots\\
+y_t &= C \overline{A}^t \overline{B} x_0 + C \overline{A}^{t-1} \overline{B} x_1 + \ldots + C \overline{A} \overline{B} x_{t-1} + C \overline{B} x_t
+\end{align*}
 
 $$
 Y = K \cdot X
@@ -215,11 +212,10 @@ $$
 
 Selective SSM
 
-$$
-y_t = C_0 \overline{A}^t \overline{B}_0 x_0 + C_1 \overline{A}^{t-1} \overline{B}_1 x_1 + \ldots \\
-\enspace \\
-\text{input-dependent }B\text{ and }C\text{ matrix}
-$$
+\begin{align*}
+y_t &= C_0 \overline{A}^t \overline{B}_0 x_0 + C_1 \overline{A}^{t-1} \overline{B}_1 x_1 + \ldots \\
+    &\quad \text{input-dependent } B \text{ and } C \text{ matrix}
+\end{align*}
 
 By leveraging the parallel associative scan technique [@lim2024parallelizing], the selective SSM formulation can be efficiently implemented on parallel architectures, such as GPUs. This approach enables the exploitation of the inherent parallelism in the computation, leading to significant performance gains, particularly for large-scale applications and time-series data processing tasks.
 
@@ -268,7 +264,7 @@ Transformers @fig:transformer rely heavily on attention mechanisms to model depe
 * **Position-wise Feed-Forward Networks**: Applied to each position separately.
 * **Positional Encoding**: Adds information about the position of each token in the sequence, as Transformers lack inherent sequential information due to the parallel nature of their processing.
 
-:::{figure} transformer.png
+:::{figure} transformer.webp
 :label: fig:transformer
 This diagram illustrates the transformer model architecture, featuring encoder and decoder layers with multi-head attention mechanisms, positional encoding, and feed-forward networks, culminating in output probabilities via a softmax layer.
 :::
@@ -323,8 +319,4 @@ The diverse range of models as U-Mamba [@ma2024umamba], Vision Mamba[@zhu2024vis
 
 ### Conclusion
 
-Mamba models show significant promise as an alternative to Transformers for processing long sequences, especially in scientific computing. Their linear time complexity and memory efficiency, stemming from selective state spaces, make them significantly faster and less resource-intensive than Transformers for lengthy data.  
-
-Mamba's flexible architecture allows easy integration with scientific workflows and scalability through parallelization. However, their complexity necessitates further research to simplify their implementation and broaden adoption.
-
-While not yet a complete replacement for Transformers, Mamba models offer a powerful tool for analyzing complex scientific data, particularly where efficiency and integration with scientific tools are crucial. Continued development is key to unlocking their full potential and solidifying their place in sequence modeling.
+Mamba models present a compelling alternative to Transformers for processing long sequences, particularly in scientific computing. Their use of selective state spaces delivers linear time complexity and superior memory efficiency, making them faster and less resource-intensive than Transformers for lengthy data. Mamba's flexible architecture enables easy integration with scientific workflows and scalability. However, their complexity demands further research to streamline implementation and encourage wider adoption. While not yet a complete replacement for Transformers, Mamba models offer a powerful tool for analyzing complex scientific data where efficiency and integration with scientific tools are paramount, making their continued development crucial.
