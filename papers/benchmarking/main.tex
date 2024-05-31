@@ -276,7 +276,6 @@ In the study, bootstrap algorithms from \texttt{tsbootstrap} are used, an \textt
     The Block Residual Bootstrap is designed for time series data where a model is fit to the data, and the residuals (the difference between the observed and predicted data) are bootstrapped. This method is particularly useful when a good model fit is available for the data. The bootstrapped samples are created by adding the bootstrapped residuals to the model's fitted values.
 
     \item \texttt{BlockStatisticPreservingBootstrap} -
-
     The Block Statistic-Preserving Bootstrap generates bootstrapped time series data while preserving a specific statistic of the original data. This method is beneficial when it is important to maintain the original data's characteristics in the bootstrapped samples. The blocked version handles dependencies by resampling blocks of data while ensuring that the preserved statistic remains consistent.
 
 \end{itemize}
@@ -319,7 +318,6 @@ Empirical coverage measures how much of the observations are within the predicte
 \subsubsection{Runtime}
 Besides metrics that assess the quality of the forecast, we also consider runtime to estimate the feasibility of the examined approaches. Runtime measures the computational efficiency of the forecasting methods, which is crucial for practical applications.
 
-
 \section{Datasets} \label{datasets}
 We conduct our experiments on several diverse time series datasets to evaluate the performance of our forecasting methods and probabilistic wrappers. The datasets used in this study are as follows:
 
@@ -357,15 +355,9 @@ In this section, we describe the experimental setup, including the hardware and 
 
 
 
-% \subsection{Software Setup}
-% The software used in our experiments includes:
+\subsection{Software Setup}
 
-% \begin{itemize}
-%     \item \textbf{sktime:} A library for machine learning with time series data.
-%     \item \textbf{tsbootstrap:} A library for time series bootstrapping methods.
-%     \item \textbf{Statsforecast:} A library for statistical and econometric forecasting methods.
-%     \item \textbf{kotsu:} A library for benchmarking and validating machine learning models.
-% \end{itemize}
+Todo: Mention versions and location of pip freeze for reproducibility.
 
 \subsection{Experimental Setup}
 To perform the benchmarking study, we use the framework described in Section~\ref{methods}. The benchmarking compares different probabilistic wrappers on different datasets and with different forecasters regarding CRPS, Pinball Loss, AUCalibration, and Runtime. 
