@@ -1,18 +1,21 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
 title: "echodataflow: Configurable, Reproducible, and Scalable Fisheries Acoustics Workflows with Prefect"
-abstract: |
+abstract: 
 With the influx of large data from multiple instruments and experiments, scientists are wrangling complex data pipelines that are context-dependent and non-reproducible. We demonstrate how we leverage Prefect, a modern orchestration framework, to facilitate fisheries acoustics data processing. We built a Python package `echodataflow` which 1) wraps common echosounder data processing steps in a few lines of code; 2) allows users to specify workflows and their parameters through editing text “recipes” which provide transparency and reproducibility of the pipelines; 3) supports scaling of the workflows while abstracting the computational infrastructure; 4) provides monitoring and logging of the workflow progress. Under the hood, echodataflow uses Prefect to execute the workflows while providing a domain-friendly interface to facilitate diverse fisheries acoustics use cases. We demonstrate the features through a typical ship survey data processing pipeline. 
 
 ---
 
 ## Fisheries Acoustics Workflows
 
-While traditionally fisheries acoustics scientists have had a go-to tool and procedures for their data processing and analysis, now they are facing a lot of choices in designing their workflows. The field has also become very interdisciplinary and it involves people from different backgrounds (physics, biology, oceanography, acoustics, signal processing, machine learning, software engineering, etc.) and with different levels of experience. [Figure %s](#fig:workflow_variations) shows the many variations of workflows that can be defined based on the data collection scheme, the use case, the data storage and computing infrastructure options. We discuss these in more detail in the next sections.
+While traditionally fisheries acoustics scientists have had a go-to tool and procedures for their data processing and analysis, now they are facing a lot of choices in designing their workflows. The field has also become very interdisciplinary and it involves people from different backgrounds (physics, biology, oceanography, acoustics, signal processing, machine learning, software engineering, etc.) and with different levels of experience. [Figure] shows the many variations of workflows that can be defined based on the data collection scheme, the use case, the data storage and computing infrastructure options. We discuss these in more detail in the next sections.
 
 ## Echodataflow Overview
 At the center of `echodataflow` design is the notion that a workflow can be configured through a set of recipes (.yaml files) that specify the pipeline, data storage, and logging details. The idea draws inspiration from the Pangeo-Forge Project [@pangeo-forge] which facilitates the Extraction, Transformation, Loading (ETL) of earth science geospatial datasets from traditional repositories to analysis-ready, cloud-optimized (ARCO) data stores [ref]. The pangeo-forge recipes provide a model of how the data should be accessed and transformed, and the project has garnered numerous recipes from the community. While Pangeo-Forge’s focus is on transformation from `.netcdf` [ref] and `hdf5` [ref] formats to `zarr`, echodataflow’s aim is to support full echosounder data processing and analysis pipelines: from instrument raw data formats to biological products. Echodataflow leverages Prefect to abstract data and computation management. In [Figure%s](#fig:echodataflow) we provide an overview of echodataflow’s framework. At the center we see several steps from an echosounder data processing pipeline: `open_raw`, `combine_echodata`, `compute_Sv`, `compute_MVBS`. All these functions exist in the echopype package, and are wrapped by echodataflow into predefined stages. Prefect executes the stages on a dask cluster which can be started locally or can be externally set up. These echopype functions already support distributed operations with dask thus the integration with Prefect within echodataflow is natural. Dask clusters can be set up on a variety of platforms: local, cloud, kubernetes [ref], HPC cluster via `dask-jobqueue` [ref], etc. and allow abstraction from the computing infrastructure. Input, intermediate, and final data sets can live in different storage systems (local/cloud, public/private) and Prefect’s block feature provides seamless, provider-agnostic, and secure integration. Workflows can be executed and monitored through Prefect’s dashboard, while logging of each function is handled by echodataflow.
 
+:::{figure} echodataflow.png 
+:label: fig:echodataflow 
+:::
 
 ## Bibliographies, citations and block quotes
 
