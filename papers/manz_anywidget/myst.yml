@@ -1,0 +1,56 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-anywidget
+  # Ensure your title is the same as in your `main.md`
+  title: 'Anywidget: easily author and share reusable interactive widgets for computational notebooks'
+  # subtitle: MyST Markdown edition
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Trevor Manz
+      email: trevor_manz@g.harvard.edu
+      orcid: 0000-0001-7694-5164
+      affiliations:
+        - Department of Biomedical Informatics, Harvard Medical School, Boston, MA, USA
+      corresponding: true
+    - name: Nils Gehlenborg
+      email: nils@hms.harvard.edu
+      orcid: 0000-0003-0327-8297
+      affiliations:
+        - Department of Biomedical Informatics, Harvard Medical School, Boston, MA, USA
+    - name: Nezar Abdennur
+      email: nezar.abdennur@umassmed.edu
+      orcid: 0000-0001-5814-0864
+      affiliations:
+        - Department of Genomics and Computational Biology, UMass Chan Medical School, Worcester, MA, USA
+        - Department of Systems Biology, UMass Chan Medical School, Worcester, MA, USA
+      corresponding: true
+  keywords:
+    - Computational notebooks
+    - Interactive widgets
+    - Jupyter
+    - Python
+    - Data visualization
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
