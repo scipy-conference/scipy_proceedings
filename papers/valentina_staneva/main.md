@@ -1,6 +1,6 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: A Numerical Perspective to Terraforming a Desert
+title: echodataflow: Configurable, Reproducible, and Scalable Fisheries Acoustics Workflows with Prefect
 abstract: |
   A short version of the long version that is way too long to be written as a
   short version anyway.  Still, when considering the facts from first
