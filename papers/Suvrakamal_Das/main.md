@@ -1,11 +1,3 @@
-# Style Guide for SciPy Conference Proceedings
-
-Please refer to this guide along with the current [README](https://github.com/scipy-conference/scipy_proceedings/blob/2024/README.md) of the repository for the proceedings.
-
-There is a page limit of 8 pages on the paper, excluding references.
-
-For general Style Guide details please check [IEEE style guide](https://www.ieee.org/content/dam/ieee-org/ieee/web/org/conferences/style_references_manual.pdf). For inclusive language, please refer to [American Psychological Association’s style guide](https://www.apa.org/about/apa/equity-diversity-inclusion/language-guidelines). This style guide is based on both these references. Use [Strunk and White 4th edition](https://archive.org/details/TheElementsOfStyle4thEdition) as a grammar reference. We use [Merriam-Webster](https://www.merriam-webster.com/) as the English dictionary.
-
 ## Abstract
 
 The quest for more efficient and faster deep learning models has led to the development of various alternatives to Transformers, one of which is the Mamba model. This paper provides a comprehensive comparison between Mamba models and Transformers, focusing on their architectural differences, performance metrics, and underlying mechanisms. We analyze and synthesize findings from extensive research conducted by various authors on these models.
@@ -13,46 +5,9 @@ The quest for more efficient and faster deep learning models has led to the deve
 The synergy between Mamba models and the SciPy ecosystem enhances their integration into science.
 By providing an in-depth comparison using Python and its scientific ecosystem, this paper aims to clarify the strengths and weaknesses of Mamba models relative to Transformers. We conclude with insights on the potential implications for future research and applications in various scientific and industrial domains.
 
-### Mamba Models a possible replacement for Transformers?
+### Introduction
 
-In the paper title, capitalize the first letter of the first and last word and all the nouns, pronouns, adjectives, verbs, adverbs, and subordinating conjunctions (If, Because, That, Which). Capitalize abbreviations that are otherwise lowercase (e.g., use DC, not dc or Dc) except for unit abbreviations and acronyms. Articles (a, an, the), coordinating conjunctions (and, but, for, or, nor), and most short prepositions are lowercase unless they are the first or last word. Prepositions of more than three letters (Before, Through, With, Without, Versus, Among, Under, Between) should be capitalized.
-
-### Body of a Paper
-
-This is the main section of your paper and should be divided into the following subsections with clear headings:
-
-1. Introduction
-  
-      1. Sequence Modeling in Scientific Computing: Briefly explain the importance of sequence modeling in scientific domains like bioinformatics, time series analysis, and physical simulations. Provide examples of tasks like protein structure prediction, gene sequence analysis, and time series forecasting.
-
-      2. Transformers: The Current Standard: Introduce Transformers as the leading architecture for sequence modeling. Briefly mention their core concepts like attention mechanisms. Acknowledge limitations of Transformers such as high computational complexity for scientific computing tasks.
-
-      3. Mamba Models: A Promising Alternative: Briefly introduce Mamba models as a novel architecture with potential advantages for scientific computing. Highlight key features like selective matrix parameters and potential for memory efficiency.
-
-2. Mamba Model Architecture
-    2.1 Core Concepts of Mamba Models: Explain how Mamba models learn selective matrix parameters, reducing memory usage compared to Transformers. Discuss the role of the SRAM cache (if applicable) in improving efficiency for long sequences.
-        2.2 Comparison to Transformers' Architecture: Clearly explain how Mamba models differ from Transformers, particularly the absence of attention mechanisms. Discuss potential trade-offs between the two approaches.
-
-3. Applications in Scientific Computing
-        3.1 Bioinformatics Applications: Explain how Mamba models can be used for tasks like protein structure prediction or gene sequence analysis. Emphasize how their memory efficiency is crucial for handling large biological datasets.
-        3.2 Time Series Analysis Applications: Discuss how Mamba models can be used to analyze long time series data in finance, weather forecasting, or sensor readings. Highlight the advantage of their ability to handle long sequences effectively.
-        3.3 Potential Applications in Physical Simulations (Optional): Briefly explore the potential of using Mamba models for simulating complex physical systems.
-
-4. Comparison and Results
-        4.1 Performance Comparison with Transformers: Compare the performance of Mamba models with Transformers on specific scientific computing tasks mentioned in section 3 (e.g., protein structure prediction, time series forecasting). Utilize relevant metrics like accuracy, memory footprint, and training time. Present results in tables or visualizations for clarity. Discuss potential limitations of Mamba models compared to Transformers in specific scenarios.
-
-5. Conclusion
-        Summarize the key findings on the potential of Mamba models for scientific computing.
-        Discuss the future directions of Mamba model research and potential areas for improvement.
-        Emphasize how Mamba models align with the focus of SciPy'24 by offering memory efficiency and handling long sequences effectively in scientific computing tasks.
-
-6. References
-
-Every reference should be a separate entry. Using one number for more than one reference is not allowed. Please refer to your specific publication guidelines for formatting references.
-
-## Introduction
-
-## Background: State Space Models
+### Background: State Space Models
 
 The central goal of machine learning is to develop models capable of efficiently processing sequential data across a range of modalities and tasks. This is particularly challenging when dealing with **long sequences**, especially those exhibiting **long-range dependencies (LRDs)** – where information from distant past time steps significantly influences the current state or future predictions. Examples of such sequences abound in real-world applications, including speech, video, medical, time series, and natural language. However, traditional models struggle to effectively handle such long sequences.
 
@@ -136,7 +91,7 @@ $$
 { \overline K \in \mathbb{R}^L := \kappa _ L ( \overline A, \overline B, \overline C) : = ( \overline C \overline A ^ i \overline B ) _ { i \in [ L ] }} \ { = ( \overline C \overline B, \overline C \overline A \overline B,..., \overline C \overline { { A } } ^ { L - 1 } \overline B ) } \ \end{array}
 $$
 
-## S4: A Structured State Space Model
+### S4: A Structured State Space Model
 
 The theoretical advantages of State Space Models (SSMs) for handling long sequences, particularly their ability to capture long-range dependencies, make them a promising alternative to traditional sequence models. However, the computational limitations of existing SSM implementations, such as the LSSL, hinder their widespread adoption.
 The Structured State Space (S4) model aims to overcome these limitations by introducing novel parameterization and efficient algorithms that preserve the theoretical strengths of SSMs.
@@ -292,7 +247,7 @@ $$
 y_t = C_0 \overline{A}^t \overline{B}_0 x_0 + C_1 \overline{A}^{t-1} \overline{B}_1 x_1 + \ldots
 $$
 
-\*input-dependent $\mathbb{Z}$\*
+\*input-dependent $\mathbb{Z}$\*f
 
 ## Mamba Model Architecture
 
@@ -308,7 +263,7 @@ then pass it through another activation function. And this result of this is mul
 To get mamba , we just need to stack multiple layers on top of each other.
 And unlike other SSMs achitectures they do not need some other layers in between because they use the same layers all the time. In the same way in which transformers are composed of just Transformer layers on top of one another.
 
-## Key Differences Between Mamba and Transformer Architectures
+### Key Differences Between Mamba and Transformer Architectures
 
 In this section, we present a detailed comparison of the Mamba and Transformer architectures. We focus on their core components, computational characteristics, and performance implications. Visualizations and equations are provided to illustrate these differences clearly.
 
@@ -371,7 +326,7 @@ $$ h'(t) = A h(t) + B x(t) $$
 $$ y(t) = C h(t) $$
 Here, \( h(t) \) is the hidden state, \( x(t) \) is the input, and \( A \), \( B \), and \( C \) are the state space parameters.
 
-## Mamba's Synergy with Scipy
+### Mamba's Synergy with Scipy
 Scipy provides a robust ecosystem for scientific computing in Python, offering a wide range of tools and libraries for numerical analysis, signal processing, optimization, and more. This ecosystem serves as a fertile ground for the development and integration of Mamba, facilitating its training, evaluation, and deployment in scientific applications. Leveraging Scipy's powerful data manipulation and visualization capabilities, Mamba models can be seamlessly integrated into scientific workflows, enabling in-depth analysis, rigorous statistical testing, and clear visualization of results.
 
 The combination of Mamba's language understanding capabilities and Scipy's scientific computing tools opens up new avenues for exploring large-scale scientific datasets commonly encountered in scientific research domains such as astronomy, medicine, and beyond, extracting insights, and advancing scientific discoveries.
@@ -380,67 +335,6 @@ The combination of Mamba's language understanding capabilities and Scipy's scien
 * **Efficient Processing of Large Scientific Datasets:** Mamba's ability to handle long-range dependencies makes it well-suited for analyzing and summarizing vast amounts of scientific data, such as astronomical observations, medical records, or experimental results, thereby reducing the complexity and enabling more efficient analysis.
 * **Enhancing Model Efficiency and Scalability:** Integrating Mamba with Scipy's optimization and parallelization techniques can potentially improve the efficiency and scalability of language models, enabling them to handle increasingly larger datasets and more complex scientific problems.
 * **Advancing Scientific Computing through Interdisciplinary Collaboration:** The synergy between Mamba and Scipy fosters interdisciplinary collaboration between natural language processing researchers, scientific computing experts, and domain-specific scientists, paving the way for novel applications and pushing the boundaries of scientific computing.
-
-### Other Text
-
-#### Footnotes
-
-Footnotes should be numbered in consecutive order throughout the text. The footnote numbers are superscripts in text and in the actual footnotes. In text, place the superscript footnote numbers after the punctuation such as fullstops, commas, and parentheses, but before colons, dashes, quotation marks, and semicolons in a compound sentence. The footnotes should be placed at the bottom of the text column in which they are cited.
-
-#### List in Text
-
-The ordering of labeling for all lists is 1), 2), 3) followed by a), b), c), and then i), ii), iii).
-
-For example, first list goes as this: 1) first item; 2) second item; and 3) third item.
-
-#### Editorial style
-
-##### Acronyms
-
-Adding abbreviations to the metadata means we have accessible abbreviations across all instances of abbreviations in the manuscript. ([reference](https://mystmd.org/guide/glossaries-and-terms#abbreviations))
-
-Define acronyms the first time they appear in the Abstract as well as the first time they appear in the body of the paper, written out as part of the sentence, followed by the acronym in parentheses. If the acronym is not repeated in the Abstract, do not include the acronym in parentheses. Coined plurals or plurals of acronyms do not take the apostrophe (e.g., FETs).
-
-Possessive forms of the acronym do take the apostrophe (e.g., CPU’s speed). Indefinite articles are assigned to abbreviations to fit the sound of the first letter (e.g., an FCC regulation; a BRI).
-
-##### Plurals
-
-Plurals of units of measure usually do not take the "s". For example, the plural form of 3 mil is 3 mil, but 3 bits/s instead of 3 bit/s. Plural forms of calendar years do not take the apostrophe (e.g., 1990s). To avoid confusion, plural forms of variables in equations do take the apostrophe (e.g., x’s).
-
-### Inclusive language
-
-This section of the style guide is copied from the APA - [American Psychological Association’s style guide](https://www.apa.org/about/apa/equity-diversity-inclusion/language-guidelines). Refer to that for more details.
-
-Avoid using identity-first language while talking about disabilities, either a person is born with or they are imposed later. This is not applicable for chosen identities, e.g, educators, programmers, etc.
-
-| Terms to avoid      | Suggested alternative        |
-| ------------------- | ---------------------------- |
-| elderly             | senior citizen               |
-| subject             | particiant                   |
-| wheel-chair bound <br> confined to a wheelchair    | person who uses a wheelchair <br> wheelchair user|
-| confined to a wheelchair | wheelchair user         |
-| mentally ill <br>crazy <br>insane <br>mental defect <br>suffers from or is afflected with [condition]| person living with a mental illness <br>person with a preexisting mental health disorder <br>person with a behavioral health disorder <br>person with a diagnosis of a mental illness/mental health disorder/behavioral health disorder |
-| asylum              | psychiatric hospital/facility |
-| drug user / abuser <br>addict  | person who uses drugs <br>person who injects drugs <br> person with substance use disorder|
-| alcoholic <br> alcohol abuser  | person with alcohol use disorder <br> person in recovery from substance use/alcohol disorder |
-| person who relapsed | person who returned to use   |
-| smoker             | person who smokes             |
-| homeless people <br> the homeless <br> transient population | people without housing <br>people experiencing homelessness <br>people experiencing unstable housing/housing insecurity/people who are not securely housed <br>people experiencing unsheltered homelessness <br>clients/guests who are accessing homeless services <br>people experiencing houselessness <br> people experiencing housing or food insecurity |
-| prostitute         | person who engages in sex work <br> sex worker (abbreviated as SWer) |
-| prisoner <br>convict | person who is/has been incarcerated |
-| slave                | person who is/was enslaved |
-
-### General Language Suggestions
-
-(Thanks to Chris Calloway and Renci for the following instructions.)
-
-Shortest sentences are the best. Some ways to shorten the sentences and make those professional are as follows:
-
-1. Avoid "which" and "that". For example, don’t use – "the model that we trained". Instead use – "we trained a model"
-2. Avoid using pronouns like "I", "we", etc. For example, avoid "we trained the model"; instead use "the trained model …"
-3. Avoid passive voice.
-4. Avoid using questions, use statements instead. For example, avoid "which metrics would be useful for success"; instead use "the success metrics here are …"
-5. Avoid words, verbs with emotions. For example, avoid "reflecting on; theme"; use "in short, or summarizing; topic"
 
 ### Conclusion
 
