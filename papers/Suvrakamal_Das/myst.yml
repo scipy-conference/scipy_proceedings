@@ -34,11 +34,14 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
-    RNN: Recurrent Neural Networks
+    RNNs: Recurrent Neural Networks
+    CNNs: Convolutional Neural Networks
     SSM: State Space Models
-    S4: Selective State Space Models
+    S4: Structured State-Space Sequence Models
     LRD: Long Range Dependencies
-    DLPR: Diagonal Plus Low Rank
+    DPLR: Diagonal Plus Low Rank
+    LSSL: Linear State Space Layer
+    NPLR: Normal Plus Low-Rank
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists

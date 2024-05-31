@@ -67,7 +67,7 @@ HiPPO focuses on finding specific state matrices $A$ that allow the state vector
 
 To apply SSMs on discrete-time data sequences ($u_0$, $u_1$, ...), it's necessary to discretize the continuous-time model. This involves converting the differential equations into difference equations, where the state and input are defined at discrete time steps. One common discretization method is the **bilinear transform**, also known as the **Tustin method**. This transform approximates the derivative $x'(t)$ by a weighted average of the state values at two consecutive time steps, introducing a **step size** $\delta$ that represents the time interval between samples.
 
-SSMs @fig:ssm are usually part of larger neural network architecture, because on their own they are not much, from a high level perspective, they work like linear RNNs, where to output representation of the previous token and the embedding of the current input token are transformed and then combined. So Like in RNNs, SSMs process one input token after the other.
+SSMs @fig:ssm typically require integration within a broader neural network architecture due to their limited inherent capabilities. From a high-level perspective, SSMs exhibit functional similarities to linear Recurrent Neural Networks (RNNs). Both architectures process sequential input tokens, transforming and combining the previous hidden state representation with the embedding of the current input. This iterative processing characteristic aligns SSMs with the sequential nature of RNNs.
 
 SSMs have 4 sets of matrices and parameters to process the input namely
 
@@ -77,10 +77,13 @@ $$
 
 where:
 
-* $\Delta $ modifies the weight in the $A$ and $B$ matrices
-* $A$ (modified $\overline { A }$) determines how much of the Hidden state $h$ should propagate forward from token to token.
-* $B$ (modified $\overline { B }$) Determines how of the input enters the hidden state.
-* $C$ (modified $\overline { C }$) Determines how the hidden state transforms into output.
+* $\Delta$ acts as a gating factor, selectively weighting the contribution of matrices $A$ and $B$ at each step. This allows the model to dynamically adjust the influence of past hidden states and current inputs.
+
+* $A$ represents the state transition matrix. When modulated by $\Delta$, it governs the propagation of information from the previous hidden state to the current hidden state.
+
+* $B$ denotes the input matrix. After modulation by $\Delta$, it determines how the current input is integrated into the hidden state.
+
+* $C$ serves as the output matrix. It maps the hidden state to the model's output, effectively transforming the internal representations into a desired output space.
 
 :::{figure} ssm.svg
 :label: fig:ssm
@@ -99,8 +102,6 @@ $$
 
 This discretization scheme effectively reduces the continuous differential equation to a series of discrete time steps, enabling numerical approximations to be computed iteratively. By segmenting the continuous process into finite increments, the computational burden is alleviated, rendering the problem more tractable for numerical analysis and simulation.
 
-This discrete-time SSM can now be implemented as a **recurrent model**, where the state vector $x_k$ serves as the hidden state, and the discretized state matrix $A$ defines the state transition.
-
 #### Training SSMs
 
 While the recurrent representation provides a computationally efficient way to perform inference with an SSM, it is not optimal for training due to its sequential nature. To overcome this, SSM leverages the connections between linear time-invariant (LTI) SSMs and convolution.
@@ -109,12 +110,12 @@ The convolutional representation allows for efficient parallel training using 
 The state-space models (SSMs) compute the output using a linear recurrent neural network (RNN) architecture, which operates on a hidden state $\Delta$. In this formulation, the hidden state propagates through a linear equation of the following form:
 
 $$
-h_t = \overline{A} h_{t-1} + \overline{B} X_t
+h_t = \overline{A} h_{t-1} + \overline{B} x_t
 $$
 where
 
 * $h_t$ is hidden state matrix at time step t
-* $X_t$ is input vector at time t
+* $x_t$ is input vector at time t
 
 The initial hidden state $h_0$ is computed as:
 $$
@@ -126,15 +127,15 @@ $$
 h_1 = \overline{A} h_0 + \overline{B} x_1 = \overline{A} \overline{B}
 $$
 
-The output $Y_t$ is then calculated from the hidden state $h_t$ and the input $X_t$ using the following linear transformation:
+The output $Y_t$ is then calculated from the hidden state $h_t$ using the following linear transformation:
 
 $$
-Y_t = C h_t
+y_t = C h_t
 $$
 
 * C is the output control matrix
-* $Y_t$ is output vector at time t
-* internal hidden state at time t
+* $y_t$ is output vector at time t
+* $h_t$ is the Internal hidden state at time t
 
 $$
 y_0 = C h_0 = C \overline{B} x_0 \\
@@ -155,12 +156,12 @@ where :
 K = \left( C \overline{B}, \, C \overline{A} \overline{B}, \, \ldots, \, C \overline{A}^{L-1} \overline{B} \right)
 $
 
-This linear RNN architecture effectively captures the temporal dependencies inherent in sequential data, enabling the model to learn and propagate relevant information through the recurrent connections. The linear formulation leverages the computational efficiency of matrix operations, facilitating scalable implementations.Continuos SSMs are differential equations that tell you how a hiddden state changes over time.
+This linear RNN architecture effectively captures the temporal relationships present in sequential data and thus enabling the model to learn and ensure the propagation of the key-relevant information through the recurrent connections. This linear formulation has led to scalable implementations, which in turn take use of matrix operations' computing efficiency.
 
 ### S4: A Structured State Space Model
 
 The theoretical advantages of State Space Models (SSMs) [@gu2022efficiently] for handling long sequences, particularly their ability to capture long-range dependencies, make them a promising alternative to traditional sequence models. However, the computational limitations of existing SSM implementations, such as the LSSL, hinder their widespread adoption.
-The Structured State Space (S4) model aims to overcome these limitations by introducing novel parameterization and efficient algorithms that preserve the theoretical strengths of SSMs.
+The Structured State Space (S4) model aims to overcome these limitations by introducing novel parameterization [@gu2022parameterization] and efficient algorithms that preserve the theoretical strengths of SSMs.
 
 ### Diagonalization Problem
 
@@ -168,7 +169,7 @@ The core computational bottleneck in SSMs stems from repeated matrix multiplicat
 
 Diagonalization involves finding a change of basis that transforms $A$ into a diagonal form. However, this approach faces significant challenges when $A$ is **non-normal**. Non-normal matrices have complex eigenstructures, which can lead to several problems:
 
-* **Numerically unstable diagonalization:** Diagonalizing non-normal matrices can be numerically unstable, especially for large matrices. This is because the eigenvectors may be highly sensitive to small perturbations in the matrix, leading to large errors in the computed eigenvalues and eigenvectors.
+* **Numerically unstable diagonalization:** Diagonalizing non-normal matrices can be numerically unstable, especially for large matrices. This is because the eigenvectors may be highly sensitive to small errors in the matrix, leading to large errors in the computed eigenvalues and eigenvectors.
 * **Exponentially large entries:** The diagonalization of some non-normal matrices, including the HiPPO matrices, can involve matrices with entries that grow exponentially with the dimension $N$. This can lead to overflow issues during computation and render the diagonalization infeasible in practice.
 
 Therefore, naive diagonalization of non-normal matrices in SSMs is not a viable solution for efficient computation.
@@ -200,7 +201,7 @@ S4 leverages its NPLR parameterization to develop efficient algorithms for compu
 
 #### S4 Recurrence
 
-The S4 recurrent representation is computed by discretizing the state matrix $A$ using the bilinear transform. The crucial observation is that the inverse of a DPLR matrix is also DPLR (due to the Woodbury identity). Therefore, the discretized state matrix $A$ is the product of two DPLR matrices, allowing for efficient matrix-vector multiplication in O(N) time.
+The bilinear transform is used to discretize the state matrix in order to construct the S4 recurrent representation. The important thing to note is that, because of the Woodbury identity, the inverse of a DPLR matrix does not result in any change in the matrix. Therefore, the discretized state matrix is the product of two DPLR matrices, allowing for efficient matrix-vector multiplication in O(N) time.
 
 #### Parallel Associative Scan
 
@@ -247,10 +248,10 @@ Subsequently, a canonical 1D convolution layer processes the output of the previ
 
 :::{figure} mamba.svg
 :label: fig:mamba
-This diagram illustrates the architecture of a single Mamba model layer. The input is initially processed by a convolutional layer (Conv) for sequence transformation, followed by the SiLU Activation function (σ) to introduce non-linearity. The transformed sequence is then fed into the Selective State Space Module (SSM) for capturing long-range dependencies. Another SiLU Activation (σ) is applied to the output of the SSM. This output is combined with a linear projection of the input through gated multiplication (⊗), and a final linear projection produces the output. This structure ensures efficient handling of sequential data with non-linear transformations and state space modeling.
+This diagram represents the Mamba architecture, illustrating the flow from input through convolutional and sequence transformation layers, with nonlinear activation functions, to produce the final output via linear projection.
 :::
 
-Mamba then performs a gated multiplication operation. The input is passed through another linear layer and an activation function, and the resulting output is multiplied element-wise with the output of the selective state-space module. The authors' intuition behind this operation is that the multiplication serves as a measure of similarity between the output of the state-space module, which contains information from previous tokens, and the embedding of the current token. Finally, a linear layer reduces the dimensionality from 128 back to 64.
+Mamba then performs a gated multiplication operation. The input is passed through another linear layer and an activation function, and the resulting output is multiplied element-wise with the output of the S4 module. The authors' intuition behind this operation is that the multiplication serves as a measure of similarity between the output of the SSM module, which contains information from previous tokens, and the embedding of the current token. Finally, a linear layer reduces the dimensionality from 128 back to 64.
 To construct the complete Mamba architecture, multiple layers are stacked on top of one another, similar to the Transformer architecture, where Transformer layers are stacked sequentially.
 
 ### Key Differences Between Mamba and Transformer Architectures
@@ -276,7 +277,7 @@ This diagram illustrates the transformer model architecture, featuring encoder a
 Mamba models @fig:mamba are based on Selective State Space Models (SSMs), combining aspects of RNNs, CNNs, and classical state space models. Key features include:
 * **Selective State Space Models**: Allow input-dependent parameterization to selectively propagate or forget information.
 * **Recurrent Mode**: Efficient recurrent computations with linear scaling.
-* **Hardware-aware Algorithm**: Optimized for modern hardware to avoid inefficiencies.
+* **Hardware-aware Algorithm**: Optimized for modern hardware to avoid inefficiencies from the Flash Attention 2 Paper. [@]
 
 #### Key Differences
 
@@ -284,12 +285,12 @@ Mamba models @fig:mamba are based on Selective State Space Models (SSMs), combin
 
 **Transformers** use multi-head self-attention to capture dependencies within the sequence:
 $$ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V $$
-Where \( Q \), \( K \), and \( V \) are the query, key, and value matrices, respectively, and \( d_k \) is the dimension of the key vectors.
+Where $ Q $, $ K $, and $ V $ are the query, key, and value matrices, respectively, and $ d $ is the dimension of the key vectors.
 
 **Mamba Models** replace attention with selective state space parameters that change based on the input:
 $$ h'(t) = A h(t) + B x(t) $$
 $$ y(t) = C h(t) $$
-Here, \( A \), \( B \), and \( C \) are state space parameters that vary with the input, allowing for efficient handling of long sequences without the quadratic complexity of attention mechanisms.
+Here, $ A $, $ B $, and $ C $ are state space parameters that vary with the input, allowing for efficient handling of long sequences without the quadratic complexity of attention mechanisms.
 
 ##### 2. Computational Complexity
 
@@ -305,16 +306,6 @@ Here, \( A \), \( B \), and \( C \) are state space parameters that vary with th
 **Mamba Models** utilize selective state spaces to maintain relevant information over long sequences without the need for extensive memory caches, providing a more memory-efficient solution.
 
 Mamba integrates selective state spaces directly into the neural network architecture. The selective mechanism allows the model to focus on relevant parts of the input dynamically.
-
-#### Equations
-
-**Transformer Attention Mechanism:**
-$$ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V $$
-
-**Mamba State Space Model:**
-$$ h'(t) = A h(t) + B x(t) $$
-$$ y(t) = C h(t) $$
-Here, $ h(t) $ is the hidden state, $ x(t) $ is the input, and $ A $, $ B $, and $ C $ are the state space parameters.
 
 There are other competing architectures that aim to replace or complement Transformers, such as Retentive Network [@sun2023retentive], Griffin [@de2024griffin], Hyena [@poli2023hyena], and RWKV [@peng2023rwkv]. These architectures propose alternative approaches to modeling sequential data, leveraging techniques like gated linear recurrences, local attention, and reinventing recurrent neural networks (RNNs) for the Transformer era.
 
