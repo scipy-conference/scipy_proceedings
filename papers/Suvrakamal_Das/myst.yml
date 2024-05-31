@@ -12,8 +12,7 @@ project:
       orcid: 0009-0002-4791-9244
       affiliations:
         - Maulana Abul Kalam Azad University Institute of Technology, West Bengal
-        - Director, ProjectX Cloud Technologies Private Limited
-    
+        
     - name: Rounak Sen
       email: rony000013@gmail.com
       orcid: 0009-0003-9327-4712
@@ -35,6 +34,11 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    RNN: Recurrent Neural Networks
+    SSM: State Space Models
+    S4: Selective State Space Models
+    LRD: Long Range Dependencies
+    DLPR: Diagonal Plus Low Rank
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
