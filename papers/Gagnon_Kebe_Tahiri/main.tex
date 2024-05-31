@@ -73,6 +73,80 @@ From the IceAGE database, 14 attributes were selected. These consist of the geog
     \caption{Temperature (\( \degree C \)) of the water at sampling depth. \label{fig:fig1d}}
 \end{figure}
 
+\autoref{lst:main}.
+\begin{lstlisting}[label=lst:main,language=Python,caption=aPhyloGeo’s main function]
+    if __name__ == "__main__":
+        print(titleCard + "\n")
+
+        # load params 
+        Params.load_from_file()
+        sequenceFile = utils.loadSequenceFile(Params.reference_gene_filepath)
+        align_sequence = AlignSequences(sequenceFile)
+
+        climatic_data = pd.read_csv(Params.file_name)
+
+        print("\nStarting alignement")
+        start_time = time.time()
+        alignements = align_sequence.align()
+
+        geneticTrees = utils.geneticPipeline(alignements.msa)
+        trees = GeneticTrees(trees_dict=geneticTrees, format="newick")
+        end_time = time.time()
+        elapsed_time = round(end_time - start_time, 3)
+        print(f"Elapsed time: {elapsed_time} seconds")
+
+        climaticTrees = utils.climaticPipeline(climatic_data)
+        utils.filterResults(climaticTrees, geneticTrees, climatic_data)
+
+        alignements.save_to_json(f"./results/aligned_{Params.reference_gene_file}.json")
+        trees.save_trees_to_json("./results/geneticTrees.json")
+\end{lstlisting}
+
+\autoref{lst:LeastSquare}.
+\begin{lstlisting}[label=lst:LeastSquare,language=Python,caption=aPhyloGeo’s leastSquare function]
+    def leastSquare(tree1, tree2):
+        ls = 0.00
+        leaves = tree1.get_terminals()
+
+        leavesName = list(map(lambda x: x.name, leaves))
+        for i in leavesName:
+            leavesName.pop(0)
+            for j in leavesName:
+                d1 = tree1.distance(tree1.find_any(i), tree1.find_any(j))
+                d2 = tree2.distance(tree2.find_any(i), tree2.find_any(j))
+                ls += abs(d1 - d2)
+        return ls
+\end{lstlisting}
+
+
+\autoref{lst:robinsonFoulds}.
+\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=aPhyloGeo’s robinsonFoulds function]
+    def robinsonFoulds(tree1, tree2):
+        rf = 0
+        tree1_newick = ete3.Tree(tree1.format("newick"), format=1)
+        tree2_newick = ete3.Tree(tree2.format("newick"), format=1)
+
+        rf, rf_max, common_leaves, x2, x3, x4, x5 = tree1_newick.robinson_foulds(tree2_newick, unrooted_trees=True)
+        if len(common_leaves) == 0:
+            rf = 0
+
+        return rf, rf / rf_max
+\end{lstlisting}
+
+\autoref{lst:euclideanDist}.
+\begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=aPhyloGeo’s euclideanDist function]
+    def euclideanDist(tree1, tree2):
+        ed = 0
+        tns = dendropy.TaxonNamespace()
+        tree1_tc = dendropy.Tree.get(data=tree1.format("newick"), schema="newick", taxon_namespace=tns)
+        tree2_tc = dendropy.Tree.get(data=tree2.format("newick"), schema="newick", taxon_namespace=tns)
+        tree1_tc.encode_bipartitions()
+        tree2_tc.encode_bipartitions()
+        ed = dendropy.calculate.treecompare.euclidean_distance(tree1_tc, tree2_tc)
+
+        return ed
+\end{lstlisting}
+
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure5.png}
@@ -99,7 +173,7 @@ For our analyses, we use the cross-platform Python software aPhyloGeo designed t
 
     In the second step, the trees were generated with climatic, geographical and genetic data. For the geographic parameters, we calculated the dissimilarity between each pair of data from different geographic conditions, which produced a symmetric square matrix. From this matrix, the neighbor junction algorithm was used to design the climate tree. The same approach was applied to climatic and genetic data. Using the 62 sequences of the gene of mitochondrial 16S rRNA, phylogenetic reconstruction is repeated to build gene trees, considering only the data within a range that moves along the alignment. This displacement can vary depending on the steps and window size set by the user (their length is defined by the number of base pairs (pb)) \citep{koshkarov_phylogeography_2022}.
 
-    In the third step, the phylogenetic trees built in each sliding window are compared to climatic and geographic parameters using the Robinson and Foulds (RF) topological distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}. The distance was normalized by $2n-6$, where $n$ represents the number of taxa. The approach also considers bootstraping. Thus, the use of the sliding window ensures detailed identification of regions with high genetic mutation rates \citep{koshkarov_phylogeography_2022}.
+    In the third step, the phylogenetic trees built in each sliding window are compared to climatic and geographic parameters using the Robinson and Foulds (RF) topological distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}. The distance was normalized by 2n-6, where n represents the number of taxa. The approach also considers bootstraping. Thus, the use of the sliding window ensures detailed identification of regions with high genetic mutation rates \citep{koshkarov_phylogeography_2022}.
 
 In short, we want to demonstrate a potential correlation between parts of the genes containing a high rate of mutations according to the geographical distribution of Cumacea samples.
 
@@ -107,4 +181,4 @@ In short, we want to demonstrate a potential correlation between parts of the ge
 
 The objective of this study is to perform an in-depth analysis of the influence of extreme climatic variables and environmental characteristics around Iceland on Cumacea (crustaceans: Peracarida) based on phylogeographic analysis. To date, we have selected relevant attributes for our study based on data from the IceAGE project, BOLD Systems, and the study by \cite{uhlir_adding_2021} and eliminated those that were not relevant to this study as well as those that had low variance (salinity, \( S^2 = 0.02146629 \)) or abundant missing data (>95\%). Thus, the first part consisted mainly of literature review, data collection, data pre-processing, and data analysis.
 
-For the forthcoming work, we have outlined several crucial initiatives. Initially, we will employ clustering techniques on our dataset to enhance the comprehension of climate data partitioning. Subsequently, we will update our Python package, currently in its beta version, which is designed to facilitate phylogeographic analyses. Furthermore, we will undertake a comprehensive genetic analysis to assess the genetic diversity within our samples. In addition, we will perform an integrative analysis of climate and genetic data to elucidate the interactions between environmental factors and the genetic characteristics of the populations under study. 
+For the upcoming fall semester, we are planning several crucial steps. First, we'll cluster our data to better understand climate data partitioning. Next, we'll update our Python package (in beta), dedicated to simplifying phylogeographic analyses. We also plan to conduct a thorough genetic analysis to examine the genetic diversity of our samples. In addition, we will analyze the cross-integration of climate and genetic data to better understand the interactions between the environment and the genetics of the populations studied. Finally, we plan to submit a scientific paper before the end of November.
