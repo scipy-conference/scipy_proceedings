@@ -36,32 +36,163 @@ Our paper is accompanied by easily reusable code, and we invite the open researc
 
 The remainder of this paper is organized as follows. In Section \ref{methods}, we describe the forecasting methods and probabilistic wrappers used in our experiments. Section \ref{datasets} provides an overview of the datasets used for evaluation. In Section \ref{results}, we present the experimental results and discuss the performance of the combined approaches. Finally, in Section \ref{conclusion}, we conclude the paper and outline directions for future research.
 
-\section{Methodology} \label{methods}
 
+\section{sktime for reproducible experiments}\label{sktime}
+
+In this section we summarize the key design principles used for reproducible benchmarking in sktime.
+
+\subsection{Unified Interface}
+
+Algorithms and mathematical objects are first class citizens. All objects of the same type, e.g., forecasters follow the same interface.
+
+Forecasters are object with a \texttt{fit} and \texttt{predict} method to which endogenous and exogenous data can be passed.
+Every forecaster in \texttt{sktime} is exchangeable with any other.
+
+In the below code, the first line can specify any forecaster.
+
+\begin{verbatim}
+# specifying the forecasting algorithm
+forecaster = NaiveForecaster(strategy="last", sp=12)
+
+# fitting the forecaster
+forecaster.fit(y, fh=[1, 2, 3])  # forecast y into the future, 3 steps ahead
+
+# querying predictions
+y_pred = forecaster.predict()
+\end{verbatim}
+
+At the time of writing, \texttt{sktime} can be used to construct 82 individual forecasters,
+implemented in the package, or from any of the dozen interfaced packages in the ecosystem.
+
+Each forecaster is parametric, e.g., regularization parameters or configurations of the method,
+with between 1 and 47 parameters across forecasters.
+
+A list of forecasters can be obtained or filtered via the \texttt{all\_estimators} utility.
+
+Probabilistic forecasters are tagged with the \texttt{"capability:pred\_int"} tag.
+Currently, 45 of the 82 forecasters support a probabilistic prediction mode.
+
+Probabilistic forecasters can be asked to produce prediction intervals, quantile preductions, or full distributional predictions:
+
+\begin{verbatim}
+# making interval predictions
+y_pred_int = forecaster.predict_interval()
+# making distribution predictions
+y_pred_proba = forecaster.predict_proba()
+\end{verbatim}
+
+More details can be found in the official tutorials.
+
+Creating algorithms in a compatible APIs is easy - \texttt{sktime} provides fill-in extension templates for creating algorithms in a compatible interface, which can be shared in a third party code base and indexed by \texttt{sktime}, or contributed directly to \texttt{sktime} (cite)
+
+\subsection{Reproducible specification language}
+
+All objects in \texttt{sktime} are uniquely specified by their construction string which can be seen as a reproducible blueprint.
+
+Algorithms are intended to be stable and uniquely referenced across versions; full replicability can be achieved by freezing python environment versions and setting random seeds.
+
+For example, the specification string 
+\texttt{NaiveForecaster(strategy="last", sp=12)}
+used in the example above uniquely specifies a native implementation of the seasonal last-value-carried-forecaster, with seasonality parameter 12.
+
+Typical \texttt{sktime} code will specify the forecaster as python code, but it can also be used as a string to store, or share specifications.
+The \texttt{registry.craft} utility can be used to convert a python string into an \texttt{sktime} object, for easy reproducibility, i.e.,
+
+\begin{verbatim}
+from sktime.registry import craft
+
+forecaster = craft('NaiveForecaster(strategy="last", sp=12)')
+\end{verbatim}
+
+which can be used to copy a full specification from a research paper and immediately construct the respective algorithm in a python environment, even if full code has not been shared by the author.
+
+Consequently, \texttt{sktime} makes it extremely easy to share specifications reproducibly - sharing the string is far easier than writing the typical convoluted paragraph found in research papers vaguely describing the various algorithms.
+
+
+\subsection{Meta-algorithms and composability}
+
+\texttt{sktime} provides not just "simple" algorithms as objects in unified interfaces, but also meta-algorithms, such as data processing pipelines, or algorithms that add interval forecast capability to forecasting algorithms that did not have this capability before. Importantly, the resulting composites also follow unified interfaces.
+
+This leads to a compositional specification language with rich combinatorial flexibility.
+Illustrative examples used in the experiments:
+
+\begin{verbatim}
+ConformalIntervals(NaiveForecaster(strategy="last", sp=12))
+\end{verbatim}
+
+adds conformal prediction interval estimates to the \texttt{NaiveForecaster(strategy="last", sp=12)} via a window sliding and residual collection strategy.
+The resulting algorithm possesses \texttt{fit}, \texttt{predict}, and - added by the wrapper - \texttt{predict\_interval}, as well as the \texttt{capability:pred\_int} tag.
+
+Data transformation pipelines can be constructed in similar ways, or with an operator based specification syntax:
+
+\begin{verbatim}
+Differencer() * Deseasonalizer(sp=12) * NaiveForecaster(strategy="last")
+\end{verbatim}
+
+creates a forecasting algorithm that first computes first differences, then deseasonalizes with periodicity 12, then applies last-value-carry-forward, then reseasonalizes, then inverts the first differences.
+
+As before, the resulting forecaster provides the unified interface points an is, interface-wise, exchangeable with other forecasters in \texttt{sktime}.
+
+\subsection{Probabilistic metrics}
+
+Evaluation metrics are first-class citizens in \texttt{sktime}. Probabilistic metrics compare time series - the ground truth - with predictions, representations of probabilistic objects such as predictive intervals or predictive distributions, for instance:
+
+\begin{verbatim}
+y_pred_proba = forecaster.predict_proba()
+crps = CRPS()
+
+crps(y_true, y_pred_proba)
+\end{verbatim}
+
+Tags control the type of probabilistic prediction expected, e.g., \texttt{"scitype:y\_pred"} having value \texttt{"pred\_proba"} for CRPS.
+
+\subsection{Benchmarking and evaluation}
+
+add short example code on adding forecasters and tasks
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth]{Figures/evaluationFramework.png}
     \caption{Caption}
     \label{fig:enter-label}
 \end{figure}
-In this section, we describe the forecasting methods and probabilistic wrappers used in our experiments. Our goal is to combine traditional forecasting models with bootstrapping techniques to generate robust prediction intervals and improve the reliability of forecasts.
 
-\subsection{Forecasting Pipeline}
-We implement a forecasting pipeline that consists of a Differencer and a Deseasonalizer as preprocessing steps. We use both preprocessors since some of the forecasters require that the time series are stationary and non-seasonal.
+\subsection{Prior work}
+
+Design-wise, the first-order specification language, with relevant object orientation patterns, have been pioneered by scikit-learn in python (cite), mlr (cite), and Weka (cite). For a detailed of design patterns in AI framework packages, and innovations in \texttt{sktime}, see (patterns paper).
+
+Specific \texttt{sktime} contributions are: forecasting interfaces, including probabilistic forecasters; metrics interface for probabilistic metrics; reproducibility patterns and APIs; meta-algorithms and inhomogeneous API composition, e.g., adding probability prediction mode.
+
+Similar patterns specific to forecasting are found in the R/fable package (cite), which adapted, or rediscovered, some of the above later.
+
+
+\section{Experiment: Algorithms} \label{methods}
+
+In this section, we describe the forecasting algorithms used in the experiments. The methods combine traditional forecasting models with uncertainty estimation wrappers.
+
+We stress that the study is relatively small and serves primarily as an illustration of benchmarking and model specification capabilities of \texttt{sktime} - and as an invitation to the scientific python community to engage and contribute to a more systematic study with reproducible specifications.
+
+From a software perspective, is also worth noting that \texttt{sktime} provides a unified interface across multiple packages in the time series ecosystem in which time series algorithms are located:
 
 \begin{itemize}
-    \item \textbf{Differencer:} We use the differencer to detrend the time series. The lag used for differencing is one, which means each value in the time series is replaced by the difference between it and the previous value:
-    \begin{equation}
-        y'_t = y_t - y_{t-1}.
-    \end{equation}
-    \item \textbf{Deseasonalizer:} We use the deseasonalizer to remove the seasonality from the time series. The deseasonalizer decomposes the time series and removes the seasonal component. The seasonal periodicity is selected based on the characteristics of the time series. For decomposition, an additional time series model, such as STL (Seasonal-Trend decomposition using LOESS), is assumed. The deseasonalized series is given by:
-    \begin{equation}
-        y''_t = y_t - s_t,
-    \end{equation}
-    where \( s_t \) is the seasonal component.
+    \item \textbf{tsbootstrap} (cite): A library for time series bootstrapping methods. Second party package integrated with \texttt{sktime}.
+    \item \textbf{statsforecast} (cite): A library for statistical and econometric forecasting methods. Location of the Auto-Theta algorithm, interfaced third party.
+    \item \textbf{sktime} (cite zenodo): contains multiple native implementations: naive methods, all probability wrappers, and pipeline composition.
+    \item \textbf{statsmodels} (cite): A foundational library for statistical methods. Location of the deseasonalizer, and indirectly used through various statistical primitives called from \texttt{tsbootstrap}, \texttt{sktime}, and \texttt{statsforecast}.
 \end{itemize}
 
-As the forecaster, we employ one of the considered probabilistic wrappers. These wrappers are applied to the preprocessed time series to generate prediction intervals and probabilistic forecasts.
+The hybrid use of \texttt{sktime} as a framework covering first party (itself), second (\texttt{tsbootstrap}), and third party (\texttt{statsmodels}, \texttt{statsforecast}) locations, should be noted.
+
+Credit hence also goes to the maintainers and implementers of the cited locations.
+
+\subsection{Forecasting Pipeline}
+Every forecaster is wrapped in Differencer and a Deseasonalizer as preprocessing steps to improve stationarity. We use both preprocessors since some of the forecasters require that the time series are stationary and non-seasonal.
+
+\begin{itemize}
+    \item \texttt{Differencer}: This component, with default settings, computes first differences, which are inverted after forecast by cumulative summing.
+    \item \texttt{Deseasonalizer(sp=data\_sp):} naive deseasonalizer from \texttt{statsmodels}. Description from source package: "first estimates the trend by applying a convolution filter to the data. The trend is then removed from the series and the average of this de-trended series for each period is the returned seasonal component.". After forecast, the estimated seasonal component is added back.
+\end{itemize}
+
+All forecasters are point forecasters, composed with one of the considered probabilistic wrappers. These wrappers are applied to the pre-processed time series to generate prediction intervals and probabilistic forecasts.
 
 \begin{figure}
     \centering
@@ -70,113 +201,94 @@ As the forecaster, we employ one of the considered probabilistic wrappers. These
     \label{fig:pipeline}
 \end{figure}
 
-\subsection{Forecasting Models}
-We employ several forecasting models to predict time series data. The models used in this study include:
+The partial pipeline specification, illustrated in Figure \ref{fig:pipeline}, is
+
+\begin{verbatim}
+Differencer() * Deseasonalizer(sp=data\_sp) * wrapper(forecaster)
+\end{verbatim}
+
+where variable parts are \texttt{wrapper}, \texttt{forecaster}, and \texttt{data\_sp}. These are varied across different choices as described below.
+
+We call the \texttt{forecaster} below "component model".
+
+\subsection{Component forecasting models}
+
+The component models used in this study are:
 
 \begin{itemize}
-    \item \textbf{ARIMA Models:} Autoregressive Integrated Moving Average (ARIMA) models are widely used for time series forecasting. They are well-suited for univariate data with trends and seasonality. The general form of an ARIMA(\(p, d, q\)) model is given by:
-    \begin{equation}
-    \Delta^d y_t = c + \phi_1 \Delta^d y_{t-1} + \phi_2 \Delta^d y_{t-2} + \cdots + \phi_p \Delta^d y_{t-p} + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \cdots + \theta_q \epsilon_{t-q} + \epsilon_t,
-    \end{equation}
-    where \(\Delta^d\) denotes differencing, \(\phi_i\) are the autoregressive coefficients, \(\theta_j\) are the moving average coefficients, and \(\epsilon_t\) is the white noise error term.
     
-    \item \textbf{Naive Forecasters:} Naive forecasters make forecasts using simple heuristics. In particular, we use the following three naive forecasters:
+    \item \texttt{NaiveForecaster(strategy, sp)} - Naive forecasters make forecasts using simple heuristics. Thet \texttt{strategy} parameter allows to select the type of algorithm
     \begin{itemize}
-        \item The \textbf{mean} method uses the mean of the last \(N\) values that fit the same seasonality as the value to be forecasted. Formally:
+        \item The \texttt{mean} method uses the mean of the last \(N\) values that fit the same seasonality as the value to be forecast. Formally:
         \begin{equation}
             \hat{y}_t = \frac{1}{N} \sum_{i=1}^N y_{t-s \cdot i},
         \end{equation}
         where \(s\) is the seasonal length.
-        \item The \textbf{last} method uses the last observed value considering the selected seasonal length. Formally:
+        \item The \texttt{last} method uses the last observed value considering the selected seasonal length. Formally:
         \begin{equation}
             \hat{y}_t = y_{t-s},
         \end{equation}
         where \(s\) is the selected seasonal length.
-        \item The \textbf{drift} method fits a line between the first value and the last value of the considered window and projects it forward. Formally:
+        \item The \texttt{drift} method fits a line between the first value and the last value of the considered window and projects it forward. Formally:
         \begin{equation}
             \hat{y}_t = y_{t-1} + \frac{y_{t-1} - y_1}{n-1} \cdot (t - (n-1)),
         \end{equation}
         where \(n\) is the number of points in the window.
     \end{itemize}
 
-    \item \textbf{AutoTheta:} The AutoTheta method automates the Theta model, a robust forecasting method that decomposes the time series into two or more Theta lines. Each Theta line is a transformed version of the original time series. The key steps in the Theta model are:
-    \begin{itemize}
-        \item \textbf{Decomposition:} The time series \(y_t\) is decomposed into Theta lines. A common approach is to use the original series and its second-differenced series, which emphasizes long-term trends and reduces noise:
-        \begin{equation}
-            \theta_1 y_t = y_t,
-        \end{equation}
-        \begin{equation}
-            \theta_2 y_t = 2 y_t - y_{t-1} - y_{t+1}.
-        \end{equation}
-        \item \textbf{Forecasting:} Each Theta line is forecasted independently using simple methods such as exponential smoothing.
-        \item \textbf{Recomposition:} The individual forecasts are then combined to form the final forecast. The combination can be a weighted average of the individual forecasts:
-        \begin{equation}
-            \hat{y}_t = \alpha \hat{\theta_1} y_t + (1 - \alpha) \hat{\theta_2} y_t,
-        \end{equation}
-        where \(\alpha\) is a weighting parameter.
-    \end{itemize}
-    AutoTheta automates the selection of the optimal parameters, ensuring robust and accurate forecasts by combining the strengths of multiple Theta lines.
+    \item \texttt{StatsForecastAutoTheta(sp)} - The AutoTheta method is a variant of the Theta model \cite{Assimakopoulos2000} with automated parameter tuning, from the \texttt{statsmodels} library.
     
 \end{itemize}
 
 
-\subsection{Bootstrapping Techniques}
-Bootstrapping methods generate multiple resampled datasets from the original time series data to enhance prediction intervals. We utilize several bootstrapping techniques, specifically their blocked versions, to handle the dependencies in time series data.
-
-\subsubsection{Moving Block Bootstrap (MBB)}
-The MBB method involves dividing the time series data into overlapping blocks of a fixed size and resampling these blocks to create new datasets. The block size is chosen to capture the dependence structure in the data. For a time series \( \{ y_t \} \) of length \( n \) and block size \( l \), the MBB generates bootstrap samples \( \{ y_t^* \} \) by randomly selecting blocks of length \( l \) and concatenating them.
-
-\subsubsection{Block Distribution Bootstrap}
-The Block Distribution Bootstrap generates bootstrapped samples by fitting a distribution to the residuals of a model and then generating new residuals from the fitted distribution. The new residuals are added to the fitted values to create the bootstrapped samples. This method assumes that the residuals follow a specific distribution, such as Gaussian or Poisson. The blocked version handles dependencies by resampling blocks of residuals:
-\begin{equation}
-    \epsilon_t^* \sim \mathcal{N}(\mu, \sigma^2),
-\end{equation}
-where \(\epsilon_t^*\) are the bootstrapped residuals.
-
-\subsubsection{Block Residual Bootstrap}
-The Block Residual Bootstrap is designed for time series data where a model is fit to the data, and the residuals (the difference between the observed and predicted data) are bootstrapped. This method is particularly useful when a good model fit is available for the data. The bootstrapped samples are created by adding the bootstrapped residuals to the model's fitted values. The blocked version involves resampling blocks of residuals:
-\begin{equation}
-    y_t^* = \hat{y}_t + \epsilon_t^*,
-\end{equation}
-where \(\hat{y}_t\) are the fitted values and \(\epsilon_t^*\) are the bootstrapped residuals.
-
-\subsubsection{Block Statistic-Preserving Bootstrap}
-The Block Statistic-Preserving Bootstrap generates bootstrapped time series data while preserving a specific statistic of the original data. This method is beneficial when it is important to maintain the original data's characteristics in the bootstrapped samples. The blocked version handles dependencies by resampling blocks of data while ensuring that the preserved statistic remains consistent. For instance, if preserving the mean and variance of the original time series is critical, the bootstrapped samples \( \{ y_t^* \} \) are generated such that:
-\begin{equation}
-    \mathbf{E}[y_t^*] = \mathbf{E}[y_t],
-\end{equation}
-\begin{equation}
-    \text{Var}(y_t^*) = \text{Var}(y_t).
-\end{equation}
-
-These bootstrapping techniques allow us to estimate the distribution of forecasts and generate robust prediction intervals. We employ these methods using the BaggingForecaster to enhance the reliability of our time series predictions.
-
-
 \subsection{Probabilistic Wrappers}
-Probabilistic wrappers, such as Conformal Intervals, are used to construct prediction intervals that provide a measure of uncertainty for the forecasts.
+The below components were used as probabilistic wrappers:
 
-\subsubsection{Conformal Intervals}
-Conformal prediction is a framework that provides valid prediction intervals under minimal assumptions. Given a sequence of past observations and a new observation, conformal prediction constructs intervals that contain the new observation with a specified probability. The intervals are computed using the conformity score, which measures how well the new observation conforms to the past observations.
-
-Mathematically, let \( \{ y_t \}_{t=1}^n \) be the observed time series, and let \( \{ y_{t+1}, \ldots, y_{t+h} \} \) be the forecast horizon. The conformity score \( S \) is defined as:
-\begin{equation}
-S(y_{t+h}, \{ y_t \}_{t=1}^n) = | y_{t+h} - \hat{y}_{t+h} |,
-\end{equation}
-where \( \hat{y}_{t+h} \) is the forecast. The prediction interval for \( y_{t+h} \) is then given by:
-\begin{equation}
-\left[ \hat{y}_{t+h} - q_\alpha, \hat{y}_{t+h} + q_\alpha \right],
-\end{equation}
-where \( q_\alpha \) is the \( (1 - \alpha) \)-quantile of the conformity scores. 
 
 \begin{itemize}
-    \item We need to describe the four used approaches!
+    
+    \item \texttt{ConformalIntervals(forecaster, strategy)} - "conformal prediction" is a theoretical framework adjacent to bootstrap and jackknife techniques to produce non-parametric prediction intervals. The \texttt{sktime} estimator implements variants of the method that are selectec by the \texttt{strategy} parameter: \textbf{Empirical} and \textbf{Empirical Residual} are non-conformal, naive predictions using training quantiles, with "residual" using symmetrized residuals method. \textbf{Conformal} implements the method of \cite{Stankeviciute2021}, \textbf{Conformal Bonferroni} additionally applies the Bonferroni correction described in the reference.
+
+    \item \texttt{BaggingForecaster(bootstrap\_transformer, forecaster)} - probabilistic forecasts can be obtained from bootstrapping time series and aggregating the bootstrap forecasts, see \cite{hyndman2018,bergmeir2016}. The \texttt{BaggingForecaster} takes as parameter a bootstrap algorithm \texttt{bootstrap\_transformer}, also a first-class object in \texttt{sktime} (transformation). In the study, various bootstrap algorithms are applied, with their own parameters, as listed in the next section.
+
+    \item \texttt{NaiveVariance(forecaster)} - The naive variance wrapper uses a sliding window to compute backtesting residuals. These residuals are then aggregated by forecasting horizon to a variance estimate, used in a normal prediction where mean is obtained from the wrapped forecaster, and variance from the pooled backtesting estimate.
+
+    \item \texttt{SquaringResiduals(forecaster, residual\_forecaster)} - the "squaring residuals" strategy takes \texttt{forecaster} to obtain backtesting residuals on the training set, squares them, and fits the \texttt{residual\_forecaster} to the squared residuals. Forecasts of \texttt{residual\_forecaster} are then used as variance predictions, with mean predictions from \texttt{forecaster}, to obtain a normal distributed forecast. In the study, \texttt{residual\_forecaster} is always \texttt{NaiveForcaster(strategy="last")}.
+
 \end{itemize}
 
+
+\subsection{Bootstrapping Techniques}
+
+Bootstrapping methods generate multiple resampled datasets from the original time series data, this can be used as part of wrappers to estimate prediction intervals or predictive distributions.
+
+In the study, bootstrap algorithms from \texttt{tsbootstrap} are used, an \texttt{sktime} and \texttt{sklearn} compatible framework library dedicated to time series bootstrap algorithms. \texttt{sktime} adapts bootstrap algorithms to time series transformations via the \texttt{TSBootstrapAdapter}, with \texttt{bootstrap\_transformer} in \texttt{BaggingForecaster} taking the form of \texttt{TSBootstrapAdapter(bootstrap)} where \texttt{bootstrap} is any of the algorithms below.
+
+\begin{itemize}
+    
+    \item \texttt{MovingBlockBootstrap} -
+    The MBB method involves dividing the time series data into overlapping blocks of a fixed size and resampling these blocks to create new datasets. The block size is chosen to capture the dependence structure in the data. 
+
+    \item \texttt{BlockDistributionBootstrap} -
+    The Block Distribution Bootstrap generates bootstrapped samples by fitting a distribution to the residuals of a model and then generating new residuals from the fitted distribution. The new residuals are added to the fitted values to create the bootstrapped samples. This method assumes that the residuals follow a specific distribution, such as Gaussian or Poisson. The blocked version handles dependencies by resampling blocks of residuals.
+
+    \item \texttt{BlockResidualBootstrap} -
+    The Block Residual Bootstrap is designed for time series data where a model is fit to the data, and the residuals (the difference between the observed and predicted data) are bootstrapped. This method is particularly useful when a good model fit is available for the data. The bootstrapped samples are created by adding the bootstrapped residuals to the model's fitted values.
+
+    \item \texttt{BlockStatisticPreservingBootstrap} -
+
+    The Block Statistic-Preserving Bootstrap generates bootstrapped time series data while preserving a specific statistic of the original data. This method is beneficial when it is important to maintain the original data's characteristics in the bootstrapped samples. The blocked version handles dependencies by resampling blocks of data while ensuring that the preserved statistic remains consistent.
+
+\end{itemize}
+
+In the study, these bootstrapping techniques are used to estimate the distribution of forecasts and generate robust prediction intervals and predictive distributions, as part of the \texttt{BaggingForecaster}.
+
+
 \subsection{Evaluation Metrics}
-We evaluate the performance of our forecasting methods using the following metrics:
+Performances are evaluated using the following metrics:
 
 \subsubsection{Continuous Ranked Probability Score (CRPS)}
-CRPS measures the accuracy of probabilistic forecasts by comparing the predicted distribution to the observed values. The CRPS for a forecast distribution \( F \) and an observation \( y \) is defined as:
+CRPS \cite{matheson1976} measures the accuracy of probabilistic forecasts by comparing the predicted distribution to the observed values. The CRPS for a forecast distribution \( F \) and an observation \( y \) is defined as:
 \begin{equation}
 \text{CRPS}(F, y) = \int_{-\infty}^\infty \left[ F(x) - \mathbf{1}(x \ge y) \right]^2 dx,
 \end{equation}
@@ -206,6 +318,7 @@ Empirical coverage measures how much of the observations are within the predicte
 
 \subsubsection{Runtime}
 Besides metrics that assess the quality of the forecast, we also consider runtime to estimate the feasibility of the examined approaches. Runtime measures the computational efficiency of the forecasting methods, which is crucial for practical applications.
+
 
 \section{Datasets} \label{datasets}
 We conduct our experiments on several diverse time series datasets to evaluate the performance of our forecasting methods and probabilistic wrappers. The datasets used in this study are as follows:
