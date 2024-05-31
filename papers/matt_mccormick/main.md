@@ -1,19 +1,28 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: A Numerical Perspective to Terraforming a Desert
+title: ITK-Wasm
 abstract: |
-  A short version of the long version that is way too long to be written as a
-  short version anyway.  Still, when considering the facts from first
-  principles, we find that the outcomes of this introspective approach is
-  compatible with the guidelines previously established.
+  ITK-Wasm combines the Insight Toolkit (ITK) and WebAssembly to enable high-performance spatial analysis across programming languages and hardware architectures. 
 
-  In such an experiment it is then clear that the potential for further
-  development not only depends on previous relationships found but also on
-  connections made during exploitation of this novel new experimental
-  protocol.
+  ITK-Wasm Python packages work in a web browser via Pyodide but also in system-level environments. We describe how ITK-Wasm bridges WebAssembly with Scientific Python through simple fundamental Python and NumPy-based data structures and Pythonic function interfaces. These interfaces can be accelerated through GPU implementations when available.
+
+  We discuss how ITK-Wasm's integration of the WebAssembly Component Model launches Scientific Python into a new world of interoperability, enabling the creation of accessible and sustainable multi-language projects that are easily distributed anywhere.
 ---
 
 ## Introduction
+
+Background/Motivation: In the quest for enhanced interoperability and sustainability in scientific computing, WebAssembly (wasm) emerges as a transformative technology. Wasm offers a universal compilation target, enabling high-performance computing across varied programming languages and hardware architectures. This innovation is pivotal for scientific research, where data interoperability, tool sustainability, and computational efficiency are paramount.
+
+Methods: Enter ITK-Wasm, a pioneering integration that marries the Insight Toolkit (ITK) with WebAssembly. ITK-Wasm is crafted to adhere to wasm community standards, thereby facilitating the creation of wasm modules that are simple, efficient, and easily understandable. It prioritizes performance in handling scientific datasets, especially multi-dimensional spatial data. By offering Pythonic interfaces that utilize native Python and NumPy-based (Array API standard) data structures, ITK-Wasm ensures seamless operation in diverse computational environments, from web browsers with Pyodide to system-level contexts. Any standard C or C++ scientific codebase, whether they are based on ITK or not, can utilize ITK-Wasm to generate extremely portable Python packages that integrate with the Scientific Python ecosystem. Moreover, the generated wasm modules can also be integrated or extended with many other programming languages. This broadens the capabilities of research software engineers who have a strong affinity for a specific language, such as Python, and empowers polyglots.
+
+Results: A notable application of ITK-Wasm is generating OME-Zarr images, a cloud-optimized bioimaging format supported that is an open standard in the international community. Through the Dask-based ngff-zarr package, ITK-Wasm efficiently produces OME-Zarr images in Pyodide, JupyterLite, and traditional native CPython environments. Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
+
+Conclusion: ITK-Wasm stands at the forefront of fostering interoperability, multi-language program support, sustainability, accessibility, and reproducibility in scientific computing. By integrating the WebAssembly Component Model, ITK-Wasm not only enhances scientific Python's capabilities but also sets a new standard for developing and distributing multi-language projects.
+
+Links:
+
+- Documentation: https://wasm.itk.org/
+- Source code: https://github.com/InsightSoftwareConsortium/itk-wasm
 
 Twelve hundred years ago — in a galaxy just across the hill...
 

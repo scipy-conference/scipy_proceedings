@@ -3,36 +3,35 @@ project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-matt_mccormick
   # Ensure your title is the same as in your `main.md`
-  title: A Numerical Perspective to Terraforming a Desert
-  subtitle: MyST Markdown edition
+  title: ITK-Wasm
+  subtitle: Universal spatial analysis and visualization
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: Gaius Caesar
-      email: jj@rome.it
-      orcid: 0000-0000-0000-0000
+    - name: Matthew McCormick
+      email: matt@mmmccormick.com
+      orcid: 0000-0001-9475-3756
       affiliations:
-        - Senate House, S.P.Q.R.
-        - Egyptian Embassy, S.P.Q.R.
-    - name: Mark Anthony
-      email: mark37@rome.it
-      affiliations:
-        - Egyptian Embassy, S.P.Q.R.
-    - name: Jarrod Millman
-      email: millman@rome.it
-      affiliations:
-        - Egyptian Embassy, S.P.Q.R.
-        - Yet another place, S.P.Q.R.
+        - Kitware, Inc.
       corresponding: true
-    - name: Cleopatra
-      email: cleopatra@rome.it
-      affiliation: Ptolemaic Kingdom
+    - name: Insight Software Consortium
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
+    - reproducibility
+    - sustainability
+    - accessibility
+    - interoperability
+    - numpy
+    - spatial analysis
+    - visualization
+    - imaging
+    - meshes
+    - pointsets
+    - itk
+    - webassembly
+    - wasm
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    ITK: Insight Toolkit
+    wasm: WebAssembly
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
