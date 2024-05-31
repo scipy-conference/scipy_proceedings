@@ -14,8 +14,14 @@ At the center of `echodataflow` design is the notion that a workflow can be conf
 
 :::{figure} echodataflow.png 
 :label: fig:echodataflow 
+This is caption
 :::
 
+
+:::{figure} figure2.png
+:label: fig:em
+This is the caption, electromagnetic signature of the sandworm based on remote sensing techniques. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/stats/hist2d.html).
+:::
 ## Bibliographies, citations and block quotes
 
 Bibliography files and DOIs are automatically included and picked up by `mystmd`.
