@@ -14,10 +14,10 @@ Jupyter's widespread adoption are its modular architecture and standardization
 of interacting components, which have fostered an extensive ecosystem of tools
 that reuse these elements. For example, the programs responsible for executing
 code written in notebooks, called **kernels**, can be implemented by following
-the Jupyter Messaging Protocol [@jupmsgprotocol]. This
+the Jupyter Messaging Protocol [@doc_jupmsgprotocol]. This
 design allows users to install kernels for various different languages and types
 of computation. Similarly, Jupyter's open-standard notebook format (`.ipynb`)
-ensures that notebooks can be shared and interpreted across different platforms [@jupnbformat].
+ensures that notebooks can be shared and interpreted across different platforms [@doc_jupnbformat].
 
 Jupyter’s modular architecture has also supported innovation in **notebook front
 ends** — the user interfaces (UIs) for editing and executing code, as well as
@@ -35,7 +35,7 @@ led to significant challenges for one particular component of Jupyter: Jupyter
 Widgets.
 
 Jupyter Widgets extend notebook outputs with interactive views and controls for
-objects residing in the kernel. For instance, [ipywidgets](https://github.com/jupyter-widgets/ipywidgets) provides basic form
+objects residing in the kernel [@doc_juparch]. For instance, [ipywidgets](https://github.com/jupyter-widgets/ipywidgets) provides basic form
 elements like buttons, sliders, and dropdowns to adjust individual variables.
 Other community projects offer interactive visualizations for domain-specific
 needs, such as 3D volume rendering ([ipyvolume](https://github.com/widgetti/ipyvolume)), genome browsing
@@ -56,14 +56,14 @@ as HTML displays, which cannot communicate back and forth with the kernel.
 Jupyter Widget conceptual architecture.
 :::
 
-Widgets are designed to be pluggable components, similar to kernels. However,
+Widgets are intended to be pluggable components, similar to kernels. However,
 only the protocol for communication between kernel and front-end widget code,
 known as the [Jupyter Widgets Message
 Protocol](https://github.com/jupyter-widgets/ipywidgets/blob/main/packages/schema/messages.md),
 is standardized. Critical components, such as the distribution format for
 front-end modules and methods for discovering, loading, and executing these
 modules, remain unspecified. As a result, JCPs have adopted diverse third-party
-module formats, installation procedures, and execution models. These
+module formats, installation procedures, and execution models to support widgets. These
 inconsistencies place the onus on widget authors to ensure cross-platform
 compatibility.
 
@@ -172,7 +172,9 @@ Stub of an anywidget front-end module (AFM) with initialization and rendering li
 Adhering to predictable standards benefits both developers and end users in 
 many other ways beyond cross-platform interoperability.
 
-**Web Over Libraries.** Front-end libraries change rapidly and often introduce
+### Web Over Libraries
+
+Front-end libraries change rapidly and often introduce
 breaking changes, whereas the web platform remains more backward-compatible.
 Traditional Jupyter Widgets require extensions from UI libraries provided by
 JCPs, coupling widget implementations to particular third-party frameworks. In
@@ -184,7 +186,9 @@ free to incorporate third-party JavaScript tooling or frameworks to enhance
 their own widgets or boost their productivity, importantly, no such tools are
 needed for JCP compatibility, user installation, or publishing.
 
-**Rapid Iteration.** The web ecosystem's adoption of ES modules has led to new
+### Rapid Iteration
+
+The web ecosystem's adoption of ES modules has led to new
 technologies that enhance developer experience and enable rapid prototyping. One
 such innovation is hot module replacement (HMR), a method that uses the
 browser’s module graph to dynamically update applications without reloading the
@@ -197,11 +201,13 @@ without any front-end tooling. For example, developers can adjust a widget's
 appearance, like a chart's color scheme, without losing its data or needing a
 page refresh.
 
-**Progressive Development.** Anywidget makes it possible to prototype widgets
+### Progressive Development 
+
+Anywidget makes it possible to prototype widgets
 directly within a notebook since all widget code is loaded from the kernel.
 Custom widgets can start as a few code cells and transition to separate files,
 gradually evolving into standalone scripts or packages – just like kernel-side
-programs [@fig:solution b]. In contrast, developing traditional Jupyter Widgets
+programs [@fig:after-afm]. In contrast, developing traditional Jupyter Widgets
 is a cumbersome process limited to the Jupyter Notebook and JupyterLab
 platforms. It involves using a project generator [@js_cookiecutter; @ts_cookiecutter] to bootstrap a project with
 over 50 files, creating and installing a local Python package with custom-built
@@ -209,7 +215,9 @@ extensions, compiling JavaScript code, and manually linking build assets to
 install extensions. By removing these barriers, anywidget accelerates
 development, and allows prototypes to grow into robust tools over time.
 
-**Simplified Publishing.** Serving AFMs and other static assets from the kernel
+### Simplified Publishing
+
+Serving AFMs and other static assets from the kernel
 removes the need to publish widget kernel-side and front-end code separately and
 coordinate their releases. For example, many JCPs retrieve traditional widget
 Javascript code from the npm registry, misusing the registry for distributing
@@ -293,262 +301,3 @@ We thank ...
 
 TM, NG, and NA acknowledge funding from the NIH Common Fund 4D Nucleome Program
 (UM1 HG011536).
-
-
-<!-- 
-## Introduction
-
-Twelve hundred years ago — in a galaxy just across the hill...
-
-This document should be rendered with MyST Markdown [mystmd.org](https://mystmd.org),
-which is a markdown variant inspired by reStructuredText. This uses the `mystmd`
-CLI for scientific writing which can be [downloaded here](https://mystmd.org/guide/quickstart).
-When you have installed `mystmd`, run `myst start` in this folder and
-follow the link for a live preview, any changes to this file will be
-reflected immediately.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
-
-## Bibliographies, citations and block quotes
-
-Bibliography files and DOIs are automatically included and picked up by `mystmd`.
-These can be added using pandoc-style citations `[@doi:10.1109/MCSE.2007.55]`
-which fetches the citation information automatically and creates: [@doi:10.1109/MCSE.2007.55].
-Additionally, you can use any key in the BibTeX file using `[@citation-key]`,
-as in [@hume48] (which literally is `[@hume48]` in accordance with
-the `hume48` cite-key in the associated `mybib.bib` file).
-Read more about [citations in the MyST documentation](https://mystmd.org/guide/citations).
-
-If you wish to have a block quote, you can just indent the text, as in:
-
-> When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication.
->
-> -- @hume48
-
-Other typography information can be found in the [MyST documentation](https://mystmd.org/guide/typography).
-
-### DOIs in bibliographies
-
-In order to include a DOI in your bibliography, add the DOI to your bibliography
-entry as a string. For example:
-
-```{code-block} bibtex
-:emphasize-lines: 7
-:linenos:
-@book{hume48,
-  author    =  "David Hume",
-  year      = {1748},
-  title     = "An enquiry concerning human understanding",
-  address   = "Indianapolis, IN",
-  publisher = "Hackett",
-  doi       = "10.1017/CBO9780511808432",
-}
-```
-
-### Citing software and websites
-
-Any paper relying on open-source software would surely want to include citations.
-Often you can find a citation in BibTeX format via a web search.
-Authors of software packages may even publish guidelines on how to cite their work.
-
-For convenience, citations to common packages such as
-Jupyter [@jupyter],
-Matplotlib [@matplotlib],
-NumPy [@numpy],
-pandas [@pandas1; @pandas2],
-scikit-learn [@sklearn1; @sklearn2], and
-SciPy [@scipy]
-are included in this paper's `.bib` file.
-
-In this paper we not only terraform a desert using the package terradesert [@terradesert], we also catch a sandworm with it.
-To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
-If you are citing a team, ensure that the author name is wrapped in additional braces `{Team Name}`, so it is not treated as an author's first and last names.
-
-```{code-block} bibtex
-:emphasize-lines: 2
-:linenos:
-@misc{terradesert,
-  author = {{TerraDesert Team}},
-  title  = {Code for terraforming a desert},
-  year   = {2000},
-  url    = {https://terradesert.com/code/},
-  note   = {Accessed 1 Jan. 2000}
-}
-```
-
-## Source code examples
-
-No paper would be complete without some source code.
-Code highlighting is completed if the name is given:
-
-```python
-def sum(a, b):
-    """Sum two numbers."""
-
-    return a + b
-```
-
-Use the `{code-block}` directive if you are getting fancy with line numbers or emphasis. For example, line-numbers in `C` looks like:
-
-```{code-block} c
-:linenos: true
-
-int main() {
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-    return 0;
-}
-```
-
-Or a snippet from the above code, starting at the correct line number, and emphasizing a line:
-
-```{code-block} c
-:linenos: true
-:lineno-start: 2
-:emphasize-lines: 3
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-```
-
-You can read more about code formatting in the [MyST documentation](https://mystmd.org/guide/code).
-
-## Figures, Equations and Tables
-
-It is well known that Spice grows on the planet Dune [@Atr03].
-Test some maths, for example $e^{\pi i} + 3 \delta$.
-Or maybe an equation on a separate line:
-
-```{math}
-g(x) = \int_0^\infty f(x) dx
-```
-
-or on multiple, aligned lines:
-
-```{math}
-\begin{aligned}
-g(x) &= \int_0^\infty f(x) dx \\
-     &= \ldots
-\end{aligned}
-```
-
-The area of a circle and volume of a sphere are given as
-
-```{math}
-:label: circarea
-
-A(r) = \pi r^2.
-```
-
-```{math}
-:label: spherevol
-
-V(r) = \frac{4}{3} \pi r^3
-```
-
-We can then refer back to Equation {ref}`circarea` or
-{ref}`spherevol` later.
-The `{ref}` role is another way to cross-reference in your document, which may be familiar to users of Sphinx.
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas[^footnote-1] diam turpis, placerat[^footnote-2] at adipiscing ac,
-pulvinar id metus.
-
-[^footnote-1]: On the one hand, a footnote.
-[^footnote-2]: On the other hand, another footnote.
-
-:::{figure} figure1.png
-:label: fig:stream
-This is the caption, sandworm vorticity based on storm location in a pleasing stream plot. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/arrays/streamplot.html).
-:::
-
-:::{figure} figure2.png
-:label: fig:em
-This is the caption, electromagnetic signature of the sandworm based on remote sensing techniques. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/stats/hist2d.html).
-:::
-
-As you can see in @fig:stream and @fig:em, this is how you reference auto-numbered figures.
-To refer to a sub figure use the syntax `@label [a]` in text or `[@label a]` for a parenhetical citation (i.e. @fig:stream [a] vs [@fig:stream a]).
-For even more control, you can simply link to figures using `[Figure %s](#label)`, the `%s` will get filled in with the number, for example [Figure %s](#fig:stream).
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
-
-```{list-table} This is the caption for the materials table.
-:label: tbl:materials
-:header-rows: 1
-* - Material
-  - Units
-* - Stone
-  - 3
-* - Water
-  - 12
-* - Cement
-  - {math}`\alpha`
-```
-
-We show the different quantities of materials required in
-@tbl:materials.
-
-Unfortunately, markdown can be difficult for defining tables, so if your table is more complex you can try embedding HTML:
-
-:::{table} Area Comparisons (written in html)
-:label: tbl:areas-html
-
-<table>
-<tr><th rowspan="2">Projection</th><th colspan="3" align="center">Area in square miles</th></tr>
-<tr><th align="right">Large Horizontal Area</th><th align="right">Large Vertical Area</th><th align="right">Smaller Square Area<th></tr>
-<tr><td>Albers Equal Area   </td><td align="right"> 7,498.7   </td><td align="right"> 10,847.3  </td><td align="right">35.8</td></tr>
-<tr><td>Web Mercator        </td><td align="right"> 13,410.0  </td><td align="right"> 18,271.4  </td><td align="right">63.0</td></tr>
-<tr><td>Difference          </td><td align="right"> 5,911.3   </td><td align="right"> 7,424.1   </td><td align="right">27.2</td></tr>
-<tr><td>Percent Difference  </td><td align="right"> 44%       </td><td align="right"> 41%       </td><td align="right">43%</td></tr>
-</table>
-:::
-
-or if you prefer LaTeX you can try `tabular` or `longtable` environments:
-
-```{raw} latex
-\begin{table*}
-  \begin{longtable*}{|l|r|r|r|}
-  \hline
-  \multirow{2}{*}{\bf Projection} & \multicolumn{3}{c|}{\bf Area in square miles} \\
-  \cline{2-4}
-   & \textbf{Large Horizontal Area} & \textbf{Large Vertical Area} & \textbf{Smaller Square Area} \\
-  \hline
-  Albers Equal Area   & 7,498.7   & 10,847.3  & 35.8  \\
-  Web Mercator        & 13,410.0  & 18,271.4  & 63.0  \\
-  Difference          & 5,911.3   & 7,424.1   & 27.2  \\
-  Percent Difference  & 44\%      & 41\%      & 43\%  \\
-  \hline
-  \end{longtable*}
-
-  \caption{Area Comparisons (written in LaTeX) \label{tbl:areas-tex}}
-\end{table*}
-```
-
-Perhaps we want to end off with a quote by Lao Tse[^footnote-3]:
-
-> Muddy water, let stand, becomes clear.
-
-[^footnote-3]: $\mathrm{e^{-i\pi}}$ -->
