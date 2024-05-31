@@ -17,8 +17,9 @@ project:
         - Visualization
         - Writing - review & editing
         - Investigation
+      email: benedikt.heidrich@sktime.net
     - name: Sankalp Gilda
-      email: test@test
+      email: sankalp@developyours.com
       orcid: 0000-0002-3645-4501
       affiliations:
         - DevelopYours, LLC
@@ -31,7 +32,7 @@ project:
         - Investigation
       corresponding: true
     - name: Franz Kiraly 
-      email: millman@rome.it
+      email: franz.kiraly@sktime.net
       affiliations:
         - sktime
       roles:
@@ -49,7 +50,9 @@ project:
   abbreviations:
     CRPS: Continuous Ranked Probability Score
     CI: Conformal Interval
-    AUCalibration: Area Under Calibration Curve
+    AUC: Area Under Calibration Curve
+    SP: Seasonal Periodicity
+    MBB: Moving Block Bootstrap
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
