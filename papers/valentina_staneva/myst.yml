@@ -17,14 +17,14 @@ project:
       affiliations:
         - eScience Institute, University of Washington
     - name: Landung (Don) Setiawan
-      email:landungs@uw.edu
+      email: landungs@uw.edu
       affiliations:
         - Scientific Software Engineering Center, University of Washington
     - name: Wu-Jung Lee
       email: leewj@uw.edu
       affiliation: Applied Physics Laboratory, University of Washington
   keywords:
-    - prefect, 
+    - prefect
     - workflow orchestration 
     - dask 
     - zarr
