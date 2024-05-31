@@ -12,16 +12,7 @@ While traditionally fisheries acoustics scientists have had a go-to tool and pro
 ## Echodataflow Overview
 At the center of `echodataflow` design is the notion that a workflow can be configured through a set of recipes (.yaml files) that specify the pipeline, data storage, and logging details. The idea draws inspiration from the Pangeo-Forge Project [@pangeo-forge] which facilitates the Extraction, Transformation, Loading (ETL) of earth science geospatial datasets from traditional repositories to analysis-ready, cloud-optimized (ARCO) data stores [ref]. The pangeo-forge recipes provide a model of how the data should be accessed and transformed, and the project has garnered numerous recipes from the community. While Pangeo-Forge’s focus is on transformation from `.netcdf` [ref] and `hdf5` [ref] formats to `zarr`, echodataflow’s aim is to support full echosounder data processing and analysis pipelines: from instrument raw data formats to biological products. Echodataflow leverages Prefect to abstract data and computation management. In [Figure%s](#fig:echodataflow) we provide an overview of echodataflow’s framework. At the center we see several steps from an echosounder data processing pipeline: `open_raw`, `combine_echodata`, `compute_Sv`, `compute_MVBS`. All these functions exist in the echopype package, and are wrapped by echodataflow into predefined stages. Prefect executes the stages on a dask cluster which can be started locally or can be externally set up. These echopype functions already support distributed operations with dask thus the integration with Prefect within echodataflow is natural. Dask clusters can be set up on a variety of platforms: local, cloud, kubernetes [ref], HPC cluster via `dask-jobqueue` [ref], etc. and allow abstraction from the computing infrastructure. Input, intermediate, and final data sets can live in different storage systems (local/cloud, public/private) and Prefect’s block feature provides seamless, provider-agnostic, and secure integration. Workflows can be executed and monitored through Prefect’s dashboard, while logging of each function is handled by echodataflow.
 
-:::{figure} echodataflow.png 
-:label: fig:echodataflow 
-This is caption
-:::
 
-
-:::{figure} figure2.png
-:label: fig:em
-This is the caption, electromagnetic signature of the sandworm based on remote sensing techniques. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/stats/hist2d.html).
-:::
 ## Bibliographies, citations and block quotes
 
 Bibliography files and DOIs are automatically included and picked up by `mystmd`.
