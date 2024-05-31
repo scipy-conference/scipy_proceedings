@@ -20,7 +20,8 @@ project:
     - accessibility
     - interoperability
     - numpy
-    - spatial analysis
+    - polyglot
+    - spatial computing
     - visualization
     - imaging
     - meshes
@@ -32,6 +33,14 @@ project:
   abbreviations:
     ITK: Insight Toolkit
     wasm: WebAssembly
+    WASI: WebAssembly System Interface
+    GPU: Graphics Processing Unit
+    CPU: Central Processing Unit
+    SIMD: Single Instruction, Multiple Data
+    API: Application Programming Interface
+    CLI: Command Line Interface
+    GUI: Graphical User Interface
+    NPU: Neural Processing Unit
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists

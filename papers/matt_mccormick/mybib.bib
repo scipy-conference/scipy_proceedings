@@ -128,3 +128,174 @@
   pages     = {108--122},
   title     = {{API} design for machine learning software: experiences from the scikit-learn project},
 }
+
+@report{WebAssemblyCoreSpecification1,
+  title = {{WebAssembly Core Specification}},
+  version = {1.0},
+  editor = {Rossberg, Andreas},
+  date = {2019-12-05},
+  institution = {{W3C}},
+  url = {https://www.w3.org/TR/wasm-core-1/},
+  langid = {english}
+}
+
+@report{WebAssemblyCoreSpecification2,
+  title = {{WebAssembly Core Specification}},
+  version = {2.0},
+  editor = {Rossberg, Andreas},
+  date = {2022-04-19},
+  institution = {{W3C}},
+  url = {https://www.w3.org/TR/wasm-core-2/},
+  langid = {english},
+  note = {https://webassembly.github.io/spec/core/_download/WebAssembly.pdf}
+}
+
+@inproceedings{10.1145/2048147.2048224,
+author = {Zakai, Alon},
+title = {Emscripten: an LLVM-to-JavaScript compiler},
+year = {2011},
+isbn = {9781450309424},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2048147.2048224},
+doi = {10.1145/2048147.2048224},
+abstract = {We present Emscripten, a compiler from LLVM (Low Level Virtual Machine) assembly to JavaScript. This opens up two avenues for running code written in languages other than JavaScript on the web: (1) Compile code directly into LLVM assembly, and then compile that into JavaScript using Emscripten, or (2) Compile a language's entire runtime into LLVM and then JavaScript, as in the previous approach, and then use the compiled runtime to run code written in that language. For example, the former approach can work for C and C++, while the latter can work for Python; all three examples open up new opportunities for running code on the web.Emscripten itself is written in JavaScript and is available under the MIT license (a permissive open source license), at http://www.emscripten.org. As a compiler from LLVM to JavaScript, the challenges in designing Emscripten are somewhat the reverse of the norm - one must go from a low-level assembly into a high-level language, and recreate parts of the original high-level structure of the code that were lost in the compilation to low-level LLVM. We detail the methods used in Emscripten to deal with those challenges, and in particular present and prove the validity of Emscripten's Relooper algorithm, which recreates high-level loop structures from low-level branching data.},
+booktitle = {Proceedings of the ACM International Conference Companion on Object Oriented Programming Systems Languages and Applications Companion},
+pages = {301–312},
+numpages = {12},
+keywords = {llvm, javascript, decompiler},
+location = {Portland, Oregon, USA},
+series = {OOPSLA '11}
+}
+
+@inproceedings{10.1145/3062341.3062363,
+author = {Haas, Andreas and Rossberg, Andreas and Schuff, Derek L. and Titzer, Ben L. and Holman, Michael and Gohman, Dan and Wagner, Luke and Zakai, Alon and Bastien, JF},
+title = {Bringing the web up to speed with WebAssembly},
+year = {2017},
+isbn = {9781450349888},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3062341.3062363},
+doi = {10.1145/3062341.3062363},
+abstract = {The maturation of the Web platform has given rise to sophisticated and demanding Web applications such as interactive 3D visualization, audio and video software, and games. With that, efficiency and security of code on the Web has become more important than ever. Yet JavaScript as the only built-in language of the Web is not well-equipped to meet these requirements, especially as a compilation target. Engineers from the four major browser vendors have risen to the challenge and collaboratively designed a portable low-level bytecode called WebAssembly. It offers compact representation, efficient validation and compilation, and safe low to no-overhead execution. Rather than committing to a specific programming model, WebAssembly is an abstraction over modern hardware, making it language-, hardware-, and platform-independent, with use cases beyond just the Web. WebAssembly has been designed with a formal semantics from the start. We describe the motivation, design and formal semantics of WebAssembly and provide some preliminary experience with implementations.},
+booktitle = {Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation},
+pages = {185–200},
+numpages = {16},
+keywords = {assembly languages, just-in-time compilers, programming languages, type systems, virtual machines},
+location = {Barcelona, Spain},
+series = {PLDI 2017}
+}
+
+@article{10.1145/3140587.3062363,
+author = {Haas, Andreas and Rossberg, Andreas and Schuff, Derek L. and Titzer, Ben L. and Holman, Michael and Gohman, Dan and Wagner, Luke and Zakai, Alon and Bastien, JF},
+title = {Bringing the web up to speed with WebAssembly},
+year = {2017},
+issue_date = {June 2017},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {52},
+number = {6},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/3140587.3062363},
+doi = {10.1145/3140587.3062363},
+abstract = {The maturation of the Web platform has given rise to sophisticated and demanding Web applications such as interactive 3D visualization, audio and video software, and games. With that, efficiency and security of code on the Web has become more important than ever. Yet JavaScript as the only built-in language of the Web is not well-equipped to meet these requirements, especially as a compilation target. Engineers from the four major browser vendors have risen to the challenge and collaboratively designed a portable low-level bytecode called WebAssembly. It offers compact representation, efficient validation and compilation, and safe low to no-overhead execution. Rather than committing to a specific programming model, WebAssembly is an abstraction over modern hardware, making it language-, hardware-, and platform-independent, with use cases beyond just the Web. WebAssembly has been designed with a formal semantics from the start. We describe the motivation, design and formal semantics of WebAssembly and provide some preliminary experience with implementations.},
+journal = {SIGPLAN Not.},
+month = {jun},
+pages = {185–200},
+numpages = {16},
+keywords = {assembly languages, just-in-time compilers, programming languages, type systems, virtual machines}
+}
+
+
+@MISC{McCormickAnisotropicDiffusionLBR,
+  title        = {Anisotropic Diffusion {LBR}},
+  author       = {McCormick, Matthew},
+  year         = {2015},
+  url          = {https://insightsoftwareconsortium.github.io/ITKAnisotropicDiffusionLBR/},
+  howpublished = {\url{https://insightsoftwareconsortium.github.io/ITKAnisotropicDiffusionLBR/}},
+  note         = {Accessed: 2024-5-31},
+  language     = {en}
+}
+
+
+@article{10.1145/3282510,
+author = {Rossberg, Andreas and Titzer, Ben L. and Haas, Andreas and Schuff, Derek L. and Gohman, Dan and Wagner, Luke and Zakai, Alon and Bastien, J. F. and Holman, Michael},
+title = {Bringing the web up to speed with WebAssembly},
+year = {2018},
+issue_date = {December 2018},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {61},
+number = {12},
+issn = {0001-0782},
+url = {https://doi.org/10.1145/3282510},
+doi = {10.1145/3282510},
+journal = {Commun. ACM},
+month = {nov},
+pages = {107–115},
+numpages = {9}
+}
+
+
+@MISC{WasiDev,
+  title        = "The WebAssembly System Interface (WASI)",
+  abstract     = "The WebAssembly System Interface (WASI) is a group of
+                  standard API specifications for software compiled to the W3C
+                  WebAssembly (Wasm) standard. WASI is designed to provide a
+                  secure standard interface for applications that can be
+                  compiled to Wasm from any language, and that may run
+                  anywhere---from browsers to clouds to embedded devices.",
+  url          = "https://wasi.dev/",
+  howpublished = "\url{https://wasi.dev/}",
+  note         = "Accessed: 2024-5-31",
+  language     = "en"
+}
+
+@inproceedings{10.1145/3572848.3577436,
+author = {Chadha, Mohak and Krueger, Nils and John, Jophin and Jindal, Anshul and Gerndt, Michael and Benedict, Shajulin},
+title = {Exploring the Use of WebAssembly in HPC},
+year = {2023},
+isbn = {9798400700156},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3572848.3577436},
+doi = {10.1145/3572848.3577436},
+abstract = {Containerization approaches based on namespaces offered by the Linux kernel have seen an increasing popularity in the HPC community both as a means to isolate applications and as a format to package and distribute them. However, their adoption and usage in HPC systems faces several challenges. These include difficulties in unprivileged running and building of scientific application container images directly on HPC resources, increasing heterogeneity of HPC architectures, and access to specialized networking libraries available only on HPC systems. These challenges of container-based HPC application development closely align with the several advantages that a new universal intermediate binary format called WebAssembly (Wasm) has to offer. These include a lightweight userspace isolation mechanism and portability across operating systems and processor architectures. In this paper, we explore the usage of Wasm as a distribution format for MPI-based HPC applications. To this end, we present MPIWasm, a novel Wasm embedder for MPI-based HPC applications that enables high-performance execution of Wasm code, has low-overhead for MPI calls, and supports high-performance networking interconnects present on HPC systems. We evaluate the performance and overhead of MPIWasm on a production HPC system and AWS Graviton2 nodes using standardized HPC benchmarks. Results from our experiments demonstrate that MPIWasm delivers competitive native application performance across all scenarios. Moreover, we observe that Wasm binaries are 139.5x smaller on average as compared to the statically-linked binaries for the different standardized benchmarks.},
+booktitle = {Proceedings of the 28th ACM SIGPLAN Annual Symposium on Principles and Practice of Parallel Programming},
+pages = {92–106},
+numpages = {15},
+keywords = {HPC, MPI, WebAssembly, wasm, wasmer},
+location = {<conf-loc>, <city>Montreal</city>, <state>QC</state>, <country>Canada</country>, </conf-loc>},
+series = {PPoPP '23}
+}
+
+@ARTICLE{Zhang2024-su,
+  title         = "Research on {WebAssembly} Runtimes: A Survey",
+  author        = "Zhang, Yixuan and Liu, Mugeng and Wang, Haoyu and Ma, Yun
+                   and Huang, Gang and Liu, Xuanzhe",
+  abstract      = "WebAssembly (abbreviated as Wasm) was initially introduced
+                   for the Web but quickly extended its reach into various
+                   domains beyond the Web. To create Wasm applications,
+                   developers can compile high-level programming languages into
+                   Wasm binaries or manually convert equivalent textual formats
+                   into Wasm binaries. Regardless of whether it is utilized
+                   within or outside the Web, the execution of Wasm binaries is
+                   supported by the Wasm runtime. Such a runtime provides a
+                   secure, memory-efficient, and sandboxed execution
+                   environment designed explicitly for Wasm applications. This
+                   paper provides a comprehensive survey of research on
+                   WebAssembly runtimes. It covers 98 articles on WebAssembly
+                   runtimes and characterizes existing studies from two
+                   different angles, including the ``internal'' research of
+                   Wasm runtimes(Wasm runtime design, testing, and analysis)
+                   and the ``external'' research(applying Wasm runtimes to
+                   various domains). This paper also proposes future research
+                   directions about WebAssembly runtimes.",
+  month         =  apr,
+  year          =  2024,
+  url           = "http://arxiv.org/abs/2404.12621",
+  archivePrefix = "arXiv",
+  eprint        = "2404.12621",
+  primaryClass  = "cs.SE",
+  arxivid       = "2404.12621"
+}
