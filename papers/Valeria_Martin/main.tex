@@ -68,13 +68,13 @@ GEE is a cloud-based platform for global environmental data analysis. It combine
 
 Multiple steps are needed to set up the GEE's Python API. First, a project is created in Google Cloud Console and the Earth Engine API is enabled. Authentication and Google Drive editing rights are configured to effectively manage and store the downloaded imagery. Following the setup, the Earth Engine Python API is installed on a local machine, and the necessary authentications are performed to initialize the API. 
 
-Then, a Python script is developed to automate the download of images depicting the pre- or post-wildfire data using GEE's Python API (see Code \ref{lst:fire_processing}). To download three-channel RGB GeoTIFF imagery, the bands B4, B3, and B2 need to be specified (different band compositions can be selected in this step).  
+Then, a Python script is developed to automate the download of images depicting the pre- or post-wildfire data using GEE's Python API (see Code \ref{download}). To download three-channel RGB GeoTIFF imagery, the bands B4, B3, and B2 need to be specified (different band compositions can be selected in this step).  
 
 More specifically, the script is configured with a for loop to iterate through each entry in the DataFrame, extracting necessary parameters such as date ranges, region of interest (ROI) coordinates, and center coordinates of each wildfire polygon. Also, the script is designed to specify parameters such as the desired image collection and a threshold for cloud coverage. Thus, tiles exhibiting more than 10\%  cloud coverage are automatically excluded to maintain data quality.
 
 Finally, the images are downloaded and exported to Google Drive in a GeoTIFF format. 
 
-\begin{lstlisting}[language=Python, label={lst:fire_processing}, caption = Downloading Images using GEE and a DataFrame]
+\begin{lstlisting}[language=Python, label= download, caption = Downloading Images Using GEE and a DataFrame]
 #Authenticate into EE
 ee.Authenticate()
 
@@ -156,7 +156,7 @@ for i in num:
 Ground truth masks are essential in forest wildfire detection and general land cover classifications \citep{8113128}. In this project, masks are generated to label the data.
 
 To do this, Python is used to rasterize the combined geometry of the forest wildfire polygon data and the downloaded post-wildfire RGB satellite imagery. Specifically, the forest wildfire polygons are accessed in Python using GeoPandas \citep{geopandas} and reprojected to match the coordinate system of the satellite imagery (EPSG:4326). Then, each post-wildfire RGB image is locally and temporarily downloaded from Google Drive, with essential properties such as width, height, transform, and bounds extracted using the rasterio library \citep{rasterio}. Next, the geometry column from the forest wildfire polygon data is extracted and intersected with each image bound using Python's shapely \citep{shapely} library. Finally, binary masks are created by rasterizing the combined geometries. These masks match the dimensions of the satellite images, ensuring that each pixel labeled as wildfire damage corresponds directly to the polygon data. The binary masks are saved temporarily in GeoTIFF format and are uploaded to a dedicated Google Drive folder (see Code \ref{lst:fire_polygons_processing}).  All the temporary local files were deleted to clear space and maintain system efficiency.  
-\begin{lstlisting}[language=Python, label={lst:fire_polygons_processing}, caption = Label creation]
+\begin{lstlisting}[language=Python, label= lst:fire_polygons_processing, caption = Building Ground Truth Masks]
 import geopandas as gpd
 import numpy as np
 import rasterio
@@ -233,7 +233,7 @@ To do this, a tile size of 256x256 pixels is specified and each RGB image is dow
 The segmented RGB tiles are then saved as GeoTIFF files using the tifffile Python library \citep{tifffile}. This is a critical step to maintain the integrity of the three-channel RGB data, as the rasterio library alone can alter the color of the images during saving. Additionally, the metadata of the saved tiles is updated to include georeferencing information and to modify parameters such as width, height, and transform (see Code \ref{lst:save_rgb_tiles}).
 
 A similar approach is used to segment the binary masks, specifying that the images contain only one band. 
-\begin{lstlisting}[language=Python, caption={Function to Crop RGB Image Tiles}, label={lst:save_rgb_tiles}]
+\begin{lstlisting}[language=Python, caption={Function to Crop RGB Image Tiles}, label= lst:save_rgb_tiles]
 from rasterio import Window
 from tifffile import imwrite
 
@@ -293,7 +293,7 @@ To use this CNN architecture with GeoTIFF satellite images, which typically stor
 
 The data labeling is established by specifying the base paths to the training and testing directories for damaged and undamaged classes. The function reads batches of 32 GeoTIFF files, shuffles them, and processes them into a three-dimensional array compatible with VGG16. Since the VGG16 model needs to discern the presence or the absence of wildfire damage in the image, the ground-truth masks are not directly used. They are only used to define the imagery file paths.
 Thus, the labeling of this model is based on the presence of "Damaged" (value of 1) in the file paths. All the other files are labeled as "Undamaged" (value of 0), which simplifies the binary classification task.
-\begin{lstlisting}[language=Python, caption={Custom function to feed GeoTIFF Files to the VGG16 model}, label={lst:custom_generator}]
+\begin{lstlisting}[language=Python, caption={Custom Function to Feed GeoTIFF Files to the VGG16 Model}, label= lst:custom_generator]
 from sklearn.utils import shuffle
 
 # Define the base paths for training and testing
@@ -322,7 +322,7 @@ def custom_image_generator(file_paths, batch_size):
 \end{lstlisting}
 
 To detect wildfire-affected areas with VGG16, the model is initiated using the pre-trained weights from the ImageNet dataset. The convolutional base is frozen to preserve the integrity of the learned features and to focus on the training of the added layers. A Flatten operation is applied to the output to transform the two-dimensional feature maps into a one-dimensional vector. Then, a fully connected dense layer with 1024 neurons and ReLU activation is added. Finally, the network becomes a single-neuron dense layer with a sigmoid activation function that produces a probability score of wildfire damage. The complete model is compiled with the Adam optimizer \citep{kingma2014adam}, binary cross-entropy loss \citep{goodfellow2016deep}, and accuracy, precision, and recall as the performance metrics (see Code \ref{lst:vgg16_wildfire_detection}). The Adam optimizer is chosen because it adapts the learning rate during training. In the context of satellite image classification, where the landscape can vary significantly across images, Adam’s ability to adjust the learning rate is important. Also, the binary cross-entropy loss is chosen because it is tailored for binary classification tasks, such as classifying between damaged and undamaged areas in satellite images.
-\begin{lstlisting}[language=Python, caption={Adaptation of VGG16 for Wildfire Damage Detection}, label={lst:vgg16_wildfire_detection}]
+\begin{lstlisting}[language=Python, caption={Adaptation of VGG16 for Wildfire Damage Detection}, label= lst:vgg16_wildfire_detection]
 from keras.models import Model
 from keras.layers import Flatten, Dense
 from keras.optimizers import Adam
@@ -357,12 +357,12 @@ The VGG16 model is trained and validated on 95594 three-channel RGB images (45\%
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{6channel.png}
-    \caption{Representation of a 6 Channel RGB GeoTIFF input. A: Representation of a 3-channel RGB GeoTIFF forested area \textit{before} a wildfire B: Visual example of a 3-channel RGB GeoTIFF forested area \textit{after} a wildfire.}. \label{fig1}
+    \caption{Representation of a 6 Channel RGB GeoTIFF Input. A: Representation of a 3-channel RGB GeoTIFF forested area \textit{before} a wildfire B: Visual example of a 3-channel RGB GeoTIFF forested area \textit{after} a wildfire.}. \label{fig1}
 \end{figure}
 EfficientNet \citep{tan2019} is a CNN architecture that uniformly scales network width, depth, and resolution with a fixed set of scaling coefficients. EfficientNet’s architecture begins with a base model, EfficientNet-B0, designed to find the optimal baseline network configuration. The following versions of the network are further scaled versions of B0, offering multiple models for different computational budgets. 
 
 For this project, Efficient-B0 is adapted, trained, and tested using pre- and post-wildfire RGB GeoTIFF imagery pairs from the CWGID. To do this, an approach commonly known as Early Fusion (EF) is employed, where six-channel GeoTIFF files that combine the image pairs into a single input are built (see Figure \ref{fig1}). To use this, a custom function that allows the use of 6-channel GeoTIFF data with Efficient-B0 is built with the rasterio library and Keras' Sequence function (see Code \ref{lst:six_channel_generator}). 
-\begin{lstlisting}[language=Python, caption={Custom function to feed multi-channel GeoTIFF Files to the EfficientB0 model}, label={lst:six_channel_generator}]
+\begin{lstlisting}[language=Python, caption={Custom Function to Feed Multi-Channel GeoTIFF Files to the EfficientB0 Model}, label= lst:six_channel_generator]
 from keras.utils import Sequence
 # Custom Data Generator for Six-Channel Images
 
@@ -424,7 +424,7 @@ class SixChannelGenerator(Sequence):
 Furthermore, the data labeling and its use are formulated using the same pipeline as VGG16, by specifying the base paths to the training and testing directories for both damaged and undamaged classes. As above, the labeling of this model is based on the presence or the absence of ’Damaged’ in the imagery file paths.
 
 The model is built with an input tensor defined to accept 256px by 256px images with six channels. A standard convolutional layer is applied to this input tensor to perform an initial convolution operation. The base EfficientNet-B0 model is loaded both without the top layers (classification layers) and the pre-trained weights, as these were trained using 3-channel images. A Dropout layer is added, with a specified rate of 30\%, to reduce overfitting. A dense layer is also added with 1024 neurons and ReLU activation (see Code \ref{lst:efficientnet_training}). In the end, the network outputs a probability indicating the likelihood of the image showing ’damaged’ versus ’undamaged’ areas.
-\begin{lstlisting}[language=Python, caption={Initializing and Training EfficientNetB0 for Six-Channel Image Input}, label={lst:efficientnet_training}]
+\begin{lstlisting}[language=Python, caption={Initializing and Training EfficientNetB0 for Six-Channel Image Input}, label= lst:efficientnet_training]
 from keras.layers import Input, Conv2D, Dense, GlobalAveragePooling2D, Dropout
 from keras.models import Model
 from keras.applications import EfficientNetB0
@@ -475,7 +475,7 @@ The 6-channel input EfficientNet achieved the lowest loss (0.178) and highest ac
 
  \begin{table}[H]
     \centering
-    \caption{Performance metrics of the models. \label{tab:1}}
+    \caption{Performance Metrics of the Models. \label{tab:1}}
     \begin{tabular}{ccc}
     \toprule
     \textbf{Model} & \textbf{6-channel input EfficientNet} & \textbf{VGG16} \\

@@ -2,7 +2,7 @@ version: 1
 project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-Valeria_Martin
-  title: Python-based GeoImagery Dataset Development for Deep Learning-Driven Forest Wildfire Detection
+  title: Python-Based GeoImagery Dataset Development for Deep Learning-Driven Forest Wildfire Detection
   subtitle: 
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
