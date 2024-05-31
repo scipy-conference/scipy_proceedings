@@ -19,6 +19,8 @@ The rest of this article is structured as follows: The Background section enumer
 
 ## Background
 
+
+
 ## Methodology
 
 Dynamic textures, such as sea waves, smoke, and foliage, are sequences of images of moving scenes that exhibit certain stationarity properties in time [@doi:10.1023/A:1021669406132]. Similarly, ciliary motion can be considered as dynamic textures for their orderly rhythmic beating. Taking advantage of this temporal regularity in ciliary motion, optical flow (OF) can be used to compute the flow vectors of each pixel of high-speed videos of cilia. In conjunction with OF, autoregressive (AR) parameterization of the optical flow property of the video yields a manifold that quantifies the characteristic motion in the cilia. The low dimension of this manifold contains the majority of variations within the data, which can then be used to segment the motile ciliary regions.
@@ -86,12 +88,57 @@ In this study, we employed a Feature Pyramid Network (FPN) [@kirillov2017unified
 
 ## Results
 
-@fig:out_sample shows the predictions of the model on 5 sample videos of dyskinetic cilia. 
+@fig:out_sample shows the predictions of the model on 5 sample videos of dyskinetic cilia. The dyskinetic samples were not used in the training or validation phases. These predictions were generated after only 5 epochs of training with the FPN architecture.
 
 :::{figure} out sample.png
 :label: fig:out_sample
 The model predictions on 5 dyskinetic cilia samples. The first column shows a frame of the video, the second column shows the manually labeled ground truth, the third column is the model's prediction, and the last column is a thresholded version of the prediction.
 :::
+@tbl:metrics contains a summary of the model's performance.
+
+:::{table} The performance of the model in training, validation, and testing phases.
+:label: tbl:metrics
+<table>
+    <tr>
+        <th rowspan="2">Phases</th>
+        <th colspan="4" align="center">Metrics</th>
+    </tr>
+    <tr>
+        <th align="center">IoU per image</th>
+        <th align="center">IoU over dataset</th>
+        <th align="center">Sensitivity</th>
+        <th align="center">Specificity</th>
+    </tr>
+    <tr>
+        <td align="left">Training </td>
+        <td align="center">0.804</td>
+        <td align="center">0.810</td>
+        <td align="center">0.998</td>
+        <td align="center">0.974</td>
+    </tr>
+    <tr>
+        <td align="left">Validation </td>
+        <td align="center">0.760</td>
+        <td align="center">0.778</td>
+        <td align="center">0.997</td>
+        <td align="center">0.968</td>
+    </tr>
+    <tr>
+        <td align="left">Testing </td>
+        <td align="center">0.760</td>
+        <td align="center">0.778</td>
+        <td align="center">0.997</td>
+        <td align="center">0.968</td>
+</table>
+:::
+
+## Conclusions
+
+In this paper, we introduced a self-supervised framework for cilia segmentation that bypasses the need for expert-labeled ground truth segmentation masks. Our method leverages the inherent visual similarities between healthy and unhealthy cilia to generate pseudolabels from optical flow-based motion segmentation of motile cilia. These pseudolabels serve as the ground truth for training a robust semi-supervised neural network capable of distinguishing motile and dyskinetic cilia regions with high accuracy. The proposed methodology addresses the challenge of automated cilia analysis by mitigating the reliance on labor-intensive and error-prone manual annotations.
+
+Taking advantage of the orderly beating pattern in healthy cilia, we employed a two-stage segmentation process that effectively handles the inconsistencies and noise present in cilia microscopy videos. The deep learning model trained on the generated masks shows improved performance in accurately detecting ciliary regions, thus paving the way for more reliable automated cilia analysis pipelines. This advancement has the potential to significantly accelerate research in ciliopathies, facilitating better diagnostic and therapeutic strategies.
+
+<!--  53244/53244 [35:33<00:00, 24.95it/s, loss=0.79, v_num=26, train_loss=0.732, valid_loss=0.777, valid_per_image_iou=0.854, valid_dataset_iou=0.864, valid_dice_score=0.927, valid_sensitivity=0.998, valid_specificity=0.982, train_per_image_iou=0.837, train_dataset_iou=0.851, train_dice_score=0.919, train_sensitivity=0.998, train_specificity=0.980] -->
 
 <!-- ################################################################################# -->
 <!-- ################################################################################# -->
