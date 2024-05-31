@@ -201,7 +201,7 @@ without any front-end tooling. For example, developers can adjust a widget's
 appearance, like a chart's color scheme, without losing its data or needing a
 page refresh.
 
-### Progressive Development 
+### Progressive Development
 
 Anywidget makes it possible to prototype widgets
 directly within a notebook since all widget code is loaded from the kernel.
@@ -270,22 +270,18 @@ repository project. Projects are tracked at
 https://github.com/manzt/anywidget-usage.
 :::
 
-The portable widget standard enables reuse of the anywidget ecosystem in
-various notebook-inspired platforms and web frameworks. Popular frameworks and
-dashboarding libraries such as
+The portable widget standard extends the anywidget ecosystem to platforms to
+Jupyter. Popular web frameworks and dashboarding libraries such as
 [Voila](https://github.com/voila-dashboards/voila),
 [Panel](https://github.com/holoviz/panel), [Shiny for
 Python](https://github.com/posit-dev/py-shiny), and
-[Solara](https://github.com/widgetti/solara)) support classic Jupyter widgets,
-thereby supporting any anywidget as well. AFM further enhances integration and
-expansion opportunities beyond classic Jupyter widgets. For example,
+[Solara](https://github.com/widgetti/solara)) support Jupyter widgets, allowing
+users to embed anywidgets in standalone web applications. Efforts are underway
+to add more specialized, built-in support for the AFM. For example,
 [Marimo](https://github.com/marimo-team/marimo), a new reactive notebook for
 Python, supports AFM directly, allowing anywidgets to run natively without
-additional "glue code." Additionally, Panel is exploring deeper integration
-AFM-based integration to enable reuse of AFM within Panel's 
-
-widget
-authoring version to unify data app component frameworks.
+additional "glue code." Panel is also exploring deeper integration with AFM to
+enable its reuse with their kernel-side reactivity systems.
 
 Anywidget’s approach allows widgets to serve a wider range of stakeholders. Most
 end users do not need to understand kernel-web communication details when using
@@ -314,9 +310,10 @@ experts.
 
 ## Acknowledgements
 
-We thank ...
+We thank Talley Lambert for his contributions to the project, and David Kouril
+for his suggestions on the manuscript and figures.
 
 ## Funding
 
-TM, NG, and NA acknowledge funding from the NIH Common Fund 4D Nucleome Program
-(UM1 HG011536).
+TM, NG, and NA acknowledge funding from the National Institutes of Health (UM1
+HG011536, OT2 OD033758, R33 CA263666, R01 HG011773).
