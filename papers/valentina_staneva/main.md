@@ -25,7 +25,7 @@ At the center of `echodataflow` design is the notion that a workflow can be conf
 **Log Output:** The leading indicators are: date, process id, log level, followed by the module, function, line number, and message.
 :::
 
-:::{figure} flow-task.png
+:::{figure} flow_task.png
 :label: fig:flow_task
 **Decorating Functions into Flows \& Tasks:** The flow `echdataflow_open_raw` calls the task `process_raw` (processing a single file) within a loop to process all files
 :::
@@ -47,9 +47,9 @@ At the center of `echodataflow` design is the notion that a workflow can be conf
 :::
 
 
-:::{figure} echodata_flow_runs.png
+:::{figure} echodataflow_flow_runs.png
 :label: fig:echodataflow_flow_runs
-**Flow Runs** Log of completed runs in Prefect UI
+**Flow Runs:** Log of completed runs in Prefect UI
 :::
 
 :::{figure} task_progress.png
@@ -60,7 +60,7 @@ At the center of `echodataflow` design is the notion that a workflow can be conf
 
 :::{figure} notebook_start.png
 :label: fig:notebook_start
-**Initiating `echodataflow` in a Jupyter Notebook:** once one has a set of "recipe" configuration files, they can initiate the workflow in a notebook cell with `echodataflow_start` command.
+**Initiating `echodataflow` in a Jupyter Notebook:** Once one has a set of "recipe" configuration files, they can initiate the workflow in a notebook cell with `echodataflow_start` command.
 :::
 
 :::{figure} case_study.png
