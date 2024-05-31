@@ -45,7 +45,7 @@ S^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}
 
 where \( S^2 \) is the variance of the sample, \( x_i \) represents each value in the data set, \( \bar{x} \) the average of all values in the data set, and \( n \) the number of values in the data set.
 
-Of the previously selected numerical attributes, only salinity was removed (\( S^2 = 0.02146629 \)). This selection of attributes and data resulted in a data table containing 62 rows (\( n=62 \)) and 18 columns (number of attributes). Figures \ref{fi@g:fig1a} and \ref{fig:fig1b} were made from Python 3.11.
+Of the previously selected numerical attributes, only salinity was removed (\( S^2 = 0.02146629 \)). This selection of attributes and data resulted in a data table containing 62 rows (\( n=62 \)) and 18 columns (number of attributes). Figures \ref{fig:fig1a} and \ref{fig:fig1b} were made from Python 3.11.
 
 \begin{figure}[]
     \centering
@@ -56,7 +56,7 @@ Of the previously selected numerical attributes, only salinity was removed (\( S
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure2.jpg}
-    \caption{Geographical coordinates at the end of the collection of each sample. \label{fig:fig1b}}
+    \caption{Geographical coordinates at the end of the collection of each sample. \label{fig:fig2}}
 \end{figure}
 
 From the IceAGE database, 14 attributes were selected. These consist of the geographical coordinates such as longitude (decimal) and latitude (decimal) taken at the beginning (see Figure \ref{fig:fig1a} and \ref{fig:fig1b}) and at the end of the collection of each sample. The increase in latitude, in particular, has been highlighted by several studies as being linked to the loss of marine biodiversity on a global scale \citep{rex_global-scale_1993, lambshead_latitudinal_2000, gage_diversity_2004}. These geographic data are divided into five sectors across the seas around Iceland: the Denmark Strait (\( n=28 \)), the Iceland Basin (\( n=15 \)), the Irminger Basin (\( n=12 \)), the Norwegian Sea (\( n=4 \)) and the Norwegian Basin (\( n=3 \)). For the environmental attributes in this database, we included the depth (m) at the beginning and end of sampling (see Figure \ref{fig:fig1c}) as well as the temperature (\( \degree C \)) (see Figure \ref{fig:fig1d}) and oxygen concentration (mg/L) (see Figure \ref{fig:fig1e}) of the water depending on the depth at which the specimens were sampled. These properties of water bodies are drivers of deep-sea biodiversity and biogeography with oxygen being a limiting factor for living organisms \citep{keeling_ocean_2010}. In addition to these contributions, the increase in depth \citep{rex_global_2006, roberts_cold-water_2009, costello_marine_2017} as well as the decrease in water temperature at depth \citep{lambshead_latitudinal_2000} are also factors in the loss of marine biodiversity on a global scale. Meteorological parameters such as speed (m/s) (see Figure \ref{fig:fig1f}) and wind direction at the beginning and end of sampling were also included in our data given the contribution of wind to the restructuring of the benthic ecosystem through water transport \citep{saeedi_environmental_2022, waga_recent_2020}. The wind direction at the start of sampling consists of six orientations: South-West (\( n=22 \)), South (\( n=15 \)), North-East (\( n=9 \)), South-South-East (\( n=9 \)), North-West (\( n=5 \)) and East (\( n=2 \)); while the one at the end of the sampling is made up of seven orientations: South (\( n=15 \)), South-West (\( n=15 \)), North-East (\( n=9 \)), West-South-West (\( n=7 \)), South-East (\( n=6 \)), North-North-West (\( n=5 \)), South-South-East (\( n=3 \)) and East (\( n=2 \)). In addition, we have included the sedimentary characteristics of the sampling sites as factors influencing the distribution of Cumacea \citep{uhlir_adding_2021} and which, for the purposes of this study, fall into six categories: mud (\( n=30 \)), sandy mud (\( n=15 \)), sand (\( n=9 \)), forams (\( n=3 \)), muddy sand (\( n=3 \)) and gravel (\( n=2 \)).
@@ -64,13 +64,13 @@ From the IceAGE database, 14 attributes were selected. These consist of the geog
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure3.png}
-    \caption{Depth at the beginning and end of sampling. \label{fig:fig1c}}
+    \caption{Depth at the beginning and end of sampling. \label{fig:fig3}}
 \end{figure}
 
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure4.png}
-    \caption{Temperature (\( \degree C \)) of the water at sampling depth. \label{fig:fig1d}}
+    \caption{Temperature (\( \degree C \)) of the water at sampling depth. \label{fig:fig4}}
 \end{figure}
 
 \autoref{lst:main}.
@@ -150,13 +150,13 @@ From the IceAGE database, 14 attributes were selected. These consist of the geog
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure5.png}
-    \caption{Oxygen concentration (mg/L) of the water at sampling depth. \label{fig:fig1e}}
+    \caption{Oxygen concentration (mg/L) of the water at sampling depth. \label{fig:fig5}}
 \end{figure}
 
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure6.png}
-    \caption{Wind speed (m/s) at the beginning and end of sampling. \label{fig:fig1f}}
+    \caption{Wind speed (m/s) at the beginning and end of sampling. \label{fig:fig6}}
 \end{figure}
 
 In the BOLD Systems database, taxonomic ranks such as family, genus, and species of the sampled Cumacea were included in our data. These are composed of seven families of Cumacea: Diastylidae (\( n=21 \)), Lampropidae (\( n=13 \)), Leuconidae (\( n=12 \)), Nannastacidae (\( n=7 \)), Bodotriidae (\( n=4 \)), Ceratocumatidae (\( n=3 \)) and Pseudocumatidae (\( n=2 \)). A total of 21 species of Cumacea are found in our sample (see Figure \ref{fig:fig2}).
