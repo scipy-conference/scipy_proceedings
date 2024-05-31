@@ -1,44 +1,86 @@
 version: 1
 project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
-  id: id: scipy-2024-Valeria_Martin
-  # Ensure your title is the same as in your `main.md`
-  title: Development and Application of CWGID: the California Wildfire GeoImaging Dataset for Deep Learning Driven Forest Wildfire Detection
-  subtitle: MyST Markdown edition
+  id: scipy-2024-Valeria_Martin
+  title: Python-based GeoImagery Dataset Development for Deep Learning-Driven Forest Wildfire Detection
+  subtitle: 
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Valeria Martin
       email: vm58@students.uwf.edu
-      orcid: 0000-0000-0000-0000
-      affiliations:
-        - University of West Florida
-    - name: Kristen Venable
-      email:
       affiliations:
         - University of West Florida
     - name: Derek Morgan
       email: jmorgan3@uwf.edu
+      orcid: 0000-0003-2321-3765
+      affiliations:
+        - University of West Florida    
+    - name: K. Brent Venable
+      email: bvenable@uwf.edu
+      orcid: 0000-0002-1092-9759
       affiliations:
         - University of West Florida
-      corresponding: true
+        - Florida Institute of Human Machine Cognition
 
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
+    - Wildfire Detection
+    - Satellite Imagery
+    - Deep Learning
+    - Convolutional Neural Networks (CNN)
+    - California Wildfire GeoImaging Dataset (CWGID)
+    - Google Earth Engine (GEE)
+    - Sentinel-2
+    - Machine Learning
+    - Environmental Monitoring
+    - Geo-spatial Data Analysis
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    API: Application Programming Interface
+    B2, B3, B4: Sentinel-2 Satellite Bands corresponding to Blue, Green, and Red channels
+    CNN: Convolutional Neural Network
+    CWGID: California Wildfire GeoImaging Dataset
+    DL: Deep Learning
+    EE: Earth Engine
+    EF: Early Fusion
+    FCN: Fully Convolutional Network
+    FRAP: Fire and Resource Assessment Program
+    GEE: Google Earth Engine
+    NAD83: North American Datum of 1983
+    RGB: Red, Green, Blue
+    ROI: Region of Interest
+    WGS84: World Geodetic System of 1984
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
+        - gorelick2017google
+        - tensorflow2015-whitepaper
+        - Alzubaidi2021ReviewOD
+        - Adegun2023
+        - california_department_of_forestry_and_fire_protection_2024
+        - pandas1
+        - DRUSCH201225
+        - pyproj2023
+        - geopy
+        - geopandas
+        - rasterio
+        - shapely
+        - hu2015transferring
+        - marmanis2016deep
+        - tifffile
+        - numpy
+        - Simonyan15
         - sklearn1
         - sklearn2
+        - kingma2014adam
+        - goodfellow2016deep
+        - tan2019
+        - al-dabbagh2023uni
+        - SEYDI2022108999
+        - Hunan
+        - 8113128
+        - DBLP:RonnebergerFB15
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
