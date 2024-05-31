@@ -63,6 +63,10 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - Stankeviciute2021
+        - hyndman2018
+        - bergmeir2016
+        - matheson1976
   # A banner will be generated for you on publication, this is a placeholder
   #banner: banner.png
   # The rest of the information shouldn't be modified
