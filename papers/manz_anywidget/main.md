@@ -201,7 +201,7 @@ without any front-end tooling. For example, developers can adjust a widget's
 appearance, like a chart's color scheme, without losing its data or needing a
 page refresh.
 
-### Progressive Development 
+### Progressive Development
 
 Anywidget makes it possible to prototype widgets
 directly within a notebook since all widget code is loaded from the kernel.
@@ -245,28 +245,43 @@ data science ecosystem. End users benefit from standardization because widgets
 are easy to install and behave consistently across different platforms.
 
 Since its release, anywidget has led to a proliferation of widgets and a more
-diverse widget ecosystem [@fig:widgetstats]. New widgets range from educational tools
-for experimenting with toy datasets (e.g., [DrawData](https://drawdata.xyz/)) to high-performance data
-visualization (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/), [Mosaic](https://uwdata.github.io/mosaic/jupyter/), [Jupyter-Scatter](https://jupyter-scatter.dev/)). These visualization
-tools leverage anywidget’s support for binary data transport, enabling efficient
-interactive visualization with minimal serialization overhead. Existing widget
-projects have also migrated to anywidget ([higlass-python](https://github.com/higlass/higlass-python), [ipyaladin](https://github.com/cds-astro/ipyaladin))  and other
-libraries have introduced or refactored existing widget functionality to use
-anywidget ([Altair](https://altair-viz.github.io/), ) due to the simplified distribution and authoring
-capabilities.
+diverse widget ecosystem [@fig:widgetstats]. New widgets range from educational
+tools for experimenting with toy datasets (e.g.,
+[DrawData](https://drawdata.xyz/)) to high-performance data visualization
+libraries (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/),
+[Jupyter-Scatter](https://jupyter-scatter.dev/),
+[Mosaic](https://github.com/uwdata/mosaic) [@Heer2024-rr])) and research
+projects enhancing notebook interactivity (e.g.,
+[Persist](https://github.com/visdesignlab/persist/)[@Gadhave2023-rl]).
+Many of these tools use anywidget's binary data transport to enable efficient
+interactive visualization with minimal overhead by avoiding JSON serialization.
+Existing widget projects have also migrated to anywidget
+([higlass-python](https://github.com/higlass/higlass-python),
+[ipyaladin](https://github.com/cds-astro/ipyaladin)) and other libraries have
+introduced or refactored existing widget functionality to use anywidget
+(e.g., [Altair](https://github.com/vega/altair) [@VanderPlas2018]) due to the
+simplified distribution and authoring capabilities.
 
 :::{figure} widgetstats.png
 :label: fig:widgetstats
-Custom Jupyter Widgets per year as of May 30, 2024. Date for each project is the initial commit or the date of the commit when a widget was added to the repository project. Projects are tracked at https://github.com/manzt/anywidget-usage.
+Custom Jupyter Widgets per year as of May 30, 2024. Date for each project is
+the initial commit or the date of the commit when a widget was added to the
+repository project. Projects are tracked at
+https://github.com/manzt/anywidget-usage.
 :::
 
-The portable widget standard also opens avenues for other emerging
-notebook-inspired platforms to leverage the widget ecosystem. For example,
-Marimo, a new reactive Python notebook that automatically runs dependent cells,
-supports AFM without needing extensions, allowing anywidgets to run natively
-without additional "glue code." Additionally, Panel is exploring a version of
-authoring widgets based on AFM to unify standards for data app component
-frameworks.
+The portable widget standard extends the anywidget ecosystem to platforms to
+Jupyter. Popular web frameworks and dashboarding libraries such as
+[Voila](https://github.com/voila-dashboards/voila),
+[Panel](https://github.com/holoviz/panel), [Shiny for
+Python](https://github.com/posit-dev/py-shiny), and
+[Solara](https://github.com/widgetti/solara)) support Jupyter widgets, allowing
+users to embed anywidgets in standalone web applications. Efforts are underway
+to add more specialized, built-in support for the AFM. For example,
+[Marimo](https://github.com/marimo-team/marimo), a new reactive notebook for
+Python, supports AFM directly, allowing anywidgets to run natively without
+additional "glue code." Panel is also exploring deeper integration with AFM to
+enable its reuse with their kernel-side reactivity systems.
 
 One of the stated goals of the Jupyter Notebook is to minimize the “distance”
 between user and data, and widgets play a key role by allowing users to
@@ -279,9 +294,10 @@ experts.
 
 ## Acknowledgements
 
-We thank ...
+We thank Talley Lambert for his contributions to the project, and David Kouril
+for his suggestions on the manuscript and figures.
 
 ## Funding
 
-TM, NG, and NA acknowledge funding from the NIH Common Fund 4D Nucleome Program
-(UM1 HG011536).
+TM, NG, and NA acknowledge funding from the National Institutes of Health (UM1
+HG011536, OT2 OD033758, R33 CA263666, R01 HG011773).
