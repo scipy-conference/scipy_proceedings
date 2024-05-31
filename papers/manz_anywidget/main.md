@@ -2,7 +2,23 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: 'Any notebook served: authoring and sharing reusable interactive widgets'
 abstract: |
-  The open-source Jupyter project has fostered a robust ecosystem around notebook-based computing, resulting in diverse Jupyter-compatible platforms. Jupyter widgets extend these environments with custom visualizations and interactive elements that communicate directly with user code and data. While this direct communication makes the widget system powerful, its architecture is currently tightly coupled to platforms. As a result, it has become complex, cumbersome, and error-prone to author and distribute portable widgets, which limits the potential of a wider widget ecosystem. Here we describe the approach behind _anywidget_, a new standard for widget-front end modules that are decoupled from notebook platforms. The approach ensures cross-platform compatibility by using the web browser’s native module system to load these front-end modules from the notebook kernel. This design simplifies widget authorship and sharing, consolidates publishing, enables rapid prototyping, and lowers the barrier to entry for newcomers. Its adoption has sparked a widget renaissance, improving reusability and interoperability, and making interactive computing more accessible and efficient.
+  The open-source Jupyter project has fostered a robust ecosystem around
+  notebook-based computing, resulting in diverse Jupyter-compatible platforms
+  (e.g., JupyterLab, Google Colab, VS Code). Jupyter widgets extend these
+  environments with custom visualizations and interactive elements that
+  communicate directly with user code and data. While this direct communication
+  makes the widget system powerful, its architecture is currently tightly coupled
+  to platforms. As a result, it has become complex, cumbersome, and error-prone
+  to author and distribute portable widgets, which limits the potential of a
+  wider widget ecosystem. Here we describe the approach behind _anywidget_, a new
+  standard for widget-front end modules that are decoupled from notebook
+  platforms. The approach ensures cross-platform compatibility by using the web
+  browser’s native module system to load these front-end modules from the
+  notebook kernel. This design simplifies widget authorship and sharing,
+  consolidates publishing, enables rapid prototyping, and lowers the barrier to
+  entry for newcomers. Its adoption has sparked a widget renaissance, improving
+  reusability and interoperability, and making interactive computing more
+  accessible and efficient.
 ---
 
 ## Introduction
@@ -10,7 +26,7 @@ abstract: |
 The Jupyter Notebook interface is the _de facto_ standard for interactive
 computing, combining live code, equations, prose, visualizations, and other
 media within a single environment [@Perez2007-im; @Kluyver2016-xa; @Granger2021-jb]. Key to
-Jupyter's widespread adoption are its modular architecture and standardization
+Jupyter's widespread adoption is its modular architecture and standardization
 of interacting components, which have fostered an extensive ecosystem of tools
 that reuse these elements. For example, the programs responsible for executing
 code written in notebooks, called **kernels**, can be implemented by following
@@ -35,18 +51,23 @@ led to significant challenges for one particular component of Jupyter: Jupyter
 Widgets.
 
 Jupyter Widgets extend notebook outputs with interactive views and controls for
-objects residing in the kernel [@doc_juparch]. For instance, [ipywidgets](https://github.com/jupyter-widgets/ipywidgets) provides basic form
-elements like buttons, sliders, and dropdowns to adjust individual variables.
-Other community projects offer interactive visualizations for domain-specific
-needs, such as 3D volume rendering ([ipyvolume](https://github.com/widgetti/ipyvolume)), genome browsing
-([higlass-python](https://github.com/higlass/higlass-python)), and mapping ([ipyleaflet](https://github.com/jupyter-widgets/ipyleaflet), [lonboard](https://developmentseed.org/lonboard/)), which users can update by
+objects residing in the kernel [@doc_juparch]. For instance, the
+[ipywidgets](https://github.com/jupyter-widgets/ipywidgets) library provides
+basic form elements like buttons, sliders, and dropdowns to adjust individual
+variables. Other community projects offer interactive visualizations for
+domain-specific needs, such as 3D volume rendering
+([ipyvolume](https://github.com/widgetti/ipyvolume)), genome browsing
+([higlass-python](https://github.com/higlass/higlass-python),
+[Gos](https://github.com/gosling-lang/gos) [@manzt2023]), and mapping
+([ipyleaflet](https://github.com/jupyter-widgets/ipyleaflet),
+[lonboard](https://developmentseed.org/lonboard/)), which users can update by
 executing other code cells or interact with in the UI to update properties in
 the kernel. Widgets are unique among Jupyter components in that they consist of
 two separate programs — kernel-side code and front-end code — that communicate
 directly via custom messages [@fig:overview], rather than through a mediating
 Jupyter process. With widgets, communication is bidirectional: a kernel action
-(e.g. the execution of a notebook cell) can update the UI, such as causing a
-slider to move, while a user interaction (e.g. dragging a slider), can drive
+(e.g., the execution of a notebook cell) can update the UI, such as causing a
+slider to move, while a user interaction (e.g., dragging a slider), can drive
 changes in the kernel, like updating a variable. This two-way communication
 distinguishes widgets from other interactive elements in notebook outputs, such
 as HTML displays, which cannot communicate back and forth with the kernel.
@@ -64,8 +85,7 @@ is standardized. Critical components, such as the distribution format for
 front-end modules and methods for discovering, loading, and executing these
 modules, remain unspecified. As a result, JCPs have adopted diverse third-party
 module formats, installation procedures, and execution models to support widgets. These
-inconsistencies place the onus on widget authors to ensure cross-platform
-compatibility.
+inconsistencies place the onus on widget authors to ensure cross-JCP compatibility.
 
 JCPs load front-end widget code by searching in various external sources, such
 as local file systems or Content Distribution Networks (CDNs) while kernel-side
@@ -81,7 +101,9 @@ match with the user’s kernel-side widget code.
 
 :::{figure} dev-before-afm-01.png
 :label: fig:before-afm
-Without anywidget, widget authors must transform their widget JavaScript code for each JCP to ensure compatibility, and distribute and install front-end code separately from kernel-side Python code.
+Without anywidget, widget authors must transform their widget JavaScript code
+for each JCP to ensure compatibility, and distribute and install front-end code
+separately from kernel-side Python code.
 :::
 
 These limitations make widget development complex and time-consuming, demanding
@@ -89,7 +111,7 @@ expertise in multiple domains. They make user experiences across JCPs
 frustrating and unreliable. The high barrier to entry discourages new developers
 and domain scientists from contributing to widgets, limiting growth and
 diversity in the ecosystem. This leaves a small group of authors responsible for
-adapting their code for cross-platform compatibility, hindering widget
+adapting their code for cross-JCP compatibility, hindering widget
 reliability and maintainability.
 
 ## Methodology
@@ -104,13 +126,20 @@ manual installation steps.
 
 :::{figure} dev-after-afm-02.png
 :label: fig:after-afm
-Anywidget simplifies widget authorship and sharing and ensures cross-platform compatibility. With anywidget, developers author a single, standard portable ES module (AFM), which is loaded from the kernel and executed using the browser's native module system. For existing JCPs, anywidget provides a front-end adapter to load and execute these standardized modules, while new platforms can add native AFM support directly. Widget kernel-side code and AFM can be run directly from within notebooks, from source files, or distributed as single Python packages.
+Anywidget simplifies widget authorship and sharing and ensures cross-platform
+compatibility. With anywidget, developers author a single, standard portable ES
+module (AFM), which is loaded from the kernel and executed using the browser's
+native module system. For existing JCPs, anywidget provides a front-end adapter
+to load and execute these standardized modules, while new platforms can add
+native AFM support directly. Widget kernel-side code and AFM can be run
+directly from within notebooks, from source files, or distributed as single
+Python packages.
 :::
 
 Packaging custom Jupyter Widgets is complex due to the need to adapt JavaScript
 source code for various module systems used by JCPs. Initially, JavaScript
 lacked a built-in module system, leading to diverse third-party solutions
-adopted by JCPs. Without a standardized widget front-end format, authors compile
+adopted by JCPs. Without a standardized widget front-end format, authors transform
 their code for each JCP. In the context of Jupyter Notebook and JupyterLab, this
 problem is described in the Jupyter Widgets documentation [@doc_widgets] as follows:
 
@@ -170,7 +199,7 @@ Stub of an anywidget front-end module (AFM) with initialization and rendering li
 ## Features
 
 Adhering to predictable standards benefits both developers and end users in 
-many other ways beyond cross-platform interoperability.
+many other ways beyond cross-platform interoperability, such as...
 
 ### Web Over Libraries
 
@@ -181,10 +210,9 @@ JCPs, coupling widget implementations to particular third-party frameworks. In
 contrast, AFM defines a minimal set of essential interfaces focused on (1)
 communicating with the kernel and (2) modifying notebook output cells, without
 dictating state or UI models. This approach allows widgets to be defined without
-dependencies, reducing boilerplate and preventing lock-in. While authors are
-free to incorporate third-party JavaScript tooling or frameworks to enhance
-their own widgets or boost their productivity, importantly, no such tools are
-needed for JCP compatibility, user installation, or publishing.
+dependencies, reducing boilerplate and preventing lock-in. Authors may still
+use third-party JavaScript libraries or tooling, but these are not necessary
+for JCP compatibility, publishing, or user installation.
 
 ### Rapid Iteration
 
@@ -197,35 +225,37 @@ systems, they cannot benefit from HMR and instead require full page clearance,
 reload, and re-execution to see changes during development. By contrast,
 anywidget is able to provide opt-in HMR, implemented through the Jupyter
 messaging protocol, in order to support live development of custom widgets
-without any front-end tooling. For example, developers can adjust a widget's
-appearance, like a chart's color scheme, without losing its data or needing a
-page refresh.
+without any front-end tooling. For example, adjusting a widget's appearance,
+such as a chart's color scheme, updates the view instantly without re-executing
+cells or refreshing the page.
 
 ### Progressive Development
 
-Anywidget makes it possible to prototype widgets
-directly within a notebook since all widget code is loaded from the kernel.
-Custom widgets can start as a few code cells and transition to separate files,
-gradually evolving into standalone scripts or packages – just like kernel-side
-programs [@fig:after-afm]. In contrast, developing traditional Jupyter Widgets
-is a cumbersome process limited to the Jupyter Notebook and JupyterLab
-platforms. It involves using a project generator [@js_cookiecutter; @ts_cookiecutter] to bootstrap a project with
-over 50 files, creating and installing a local Python package with custom-built
-extensions, compiling JavaScript code, and manually linking build assets to
-install extensions. By removing these barriers, anywidget accelerates
-development, and allows prototypes to grow into robust tools over time.
+Anywidget makes it possible to prototype widgets directly within a notebook
+since all widget code is loaded from the kernel. Custom widgets can start as a
+few code cells and transition to separate files, gradually evolving into
+standalone scripts or packages – just like kernel-side programs
+[@fig:after-afm]. In contrast, developing traditional Jupyter Widgets is a
+cumbersome process limited to the Jupyter Notebook and JupyterLab platforms. It
+involves using a project generator [@js_cookiecutter; @ts_cookiecutter] to
+bootstrap a project with over 50 files, creating and installing a local Python
+package with custom-built extensions, bundling JavaScript code, and manually
+linking build outputs to install extensions. By removing these barriers,
+anywidget accelerates development, and allows prototypes to grow into robust
+tools over time.
 
 ### Simplified Publishing
 
 Serving AFMs and other static assets from the kernel
 removes the need to publish widget kernel-side and front-end code separately and
 coordinate their releases. For example, many JCPs retrieve traditional widget
-Javascript code from the npm registry, misusing the registry for distributing
-specialized programs rather than reusable JavaScript modules. Instead, with
-anywidget, developers can publish a widget (kernel-side module, AFM, and
-stylesheets) as a unified package to the distribution channels relevant to the
-kernel language, such as the Python Package Index (PyPI). Consolidating the
-distribution process this way greatly simplifies publishing and discovery.
+Javascript code from [npm](https://www.npmjs.com/), misusing the registry for
+distributing specialized programs rather than reusable JavaScript modules.
+Instead, with anywidget, developers can publish a widget (kernel-side module,
+AFM, and stylesheets) as a unified package to the distribution channels
+relevant to the kernel language, such as the [Python Package Index](https://pypi.org/).
+Consolidating the distribution process this way greatly simplifies publishing
+and discovery.
 
 ## Impact and Outlook
 
@@ -236,13 +266,14 @@ authorship from JCP runtimes, resulting in multiple downstream benefits. First,
 anywidget—not widget authors—ensures compatibility and interoperability across
 existing JCPs, and authors can focus on important features rather than wrestle
 with build configuration and tooling. Second, by circumventing bespoke JCP
-import systems and loading web-standard ES modules from the kernel, anywidget
-does away with front-end installation steps and delivers a superior developer
-experience to widget authorship. Third, anywidget unifies and simplifies widget
-distribution. Widgets can be prototyped and shared as notebooks, or mature into
-pip-installable packages and distributed just like other tools in the Python
-data science ecosystem. End users benefit from standardization because widgets
-are easy to install and behave consistently across different platforms.
+import systems and loading web-standard ES modules from the kernel, instead,
+anywidget does away with front-end installation steps and delivers a superior
+developer experience during widget authorship. Third, anywidget unifies and
+simplifies widget distribution. Widgets can be prototyped and shared as
+notebooks, or mature into pip-installable packages and distributed just like
+other tools in the Python data science ecosystem. End users benefit from
+standardization because widgets are easy to install and behave consistently
+across different platforms.
 
 Since its release, anywidget has led to a proliferation of widgets and a more
 diverse widget ecosystem [@fig:widgetstats]. New widgets range from educational
@@ -285,12 +316,11 @@ enable its reuse with their kernel-side reactivity systems.
 
 One of the stated goals of the Jupyter Notebook is to minimize the “distance”
 between user and data, and widgets play a key role by allowing users to
-customize the way they view and manipulate data in the kernel through a UI.
-Anywidget advances this goal by removing the primary sources of friction
-associated with widget development and sharing. By making widget authorship
-practical and accessible, anywidget also helps narrow the distance between data
-practitioner and developer, and between machine learning and visualization
-experts.
+customize the way they view and manipulate data. Anywidget advances this goal
+by removing the primary sources of friction associated with widget development
+and sharing. By making widget authorship practical and accessible, anywidget
+also helps narrow the distance between data practitioner and developer, and
+between data scientists and visualization experts.
 
 ## Acknowledgements
 
