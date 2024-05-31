@@ -2,8 +2,7 @@ version: 1
 project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-00_benchmarking_sktime
-  title: A Numerical Perspective to Terraforming a Desert
-  subtitle: LaTeX edition
+  title: Evaluating probabilistic forecasters with sktime - an easy-to-use, highly configurable framework for reproducible science
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Benedikt Heidrich
