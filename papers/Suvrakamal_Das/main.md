@@ -315,7 +315,7 @@ The combination of Mamba's language understanding capabilities and Scipy's scien
 * **Enhancing Model Efficiency and Scalability:** Integrating Mamba with Scipy's optimization and parallelization techniques can potentially improve the efficiency and scalability of language models, enabling them to handle increasingly larger datasets and more complex scientific problems.
 * **Advancing Scientific Computing through Interdisciplinary Collaboration:** The synergy between Mamba and Scipy fosters interdisciplinary collaboration between natural language processing researchers, scientific computing experts, and domain-specific scientists, paving the way for novel applications and pushing the boundaries of scientific computing.
 
-The diverse range of models as U-Mamba [@ma2024umamba], Vision Mamba[@zhu2024vision], VMamba [@liu2024vmamba], MambaByte [@wang2024mambabyte], FourierMamba [@li2024fouriermamba], and Jamba [@lieber2024jamba], highlights the versatility and adaptability of the Mamba architecture. These variants have been designed to enhance efficiency, improve long-range dependency modeling, incorporate visual representations, explore token-free approaches, integrate Fourier learning, and hybridize with Transformer components.
+The diverse range of models as U-Mamba [@ma2024umamba], Vision Mamba[@zhu2024vision], VMamba [@liu2024vmamba], MambaByte [@wang2024mambabyte]and Jamba [@lieber2024jamba], highlights the versatility and adaptability of the Mamba architecture. These variants have been designed to enhance efficiency, improve long-range dependency modeling, incorporate visual representations, explore token-free approaches, integrate Fourier learning, and hybridize with Transformer components.
 
 ### Conclusion
 
