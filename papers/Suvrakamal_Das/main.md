@@ -200,6 +200,7 @@ Non-linear activation functions are typically added between S4 layers to enhance
 In summary, S4 offers a structured and efficient approach to SSMs, overcoming the limitations of previous implementations while preserving their theoretical strengths. Its NPLR parameterization allows for stable and efficient computation, while its efficient algorithms significantly reduce computational complexity. S4's ability to handle multiple features and its resemblance to CNNs further contribute to its versatility and potential as a powerful general sequence modeling solution.
 
 ### How SSMs Works
+
 SSMs are usually part of larger neural network architecture, because on their own they are not much, from a high level perspective, they work like linear RNNs, where to output representation of the previous token and the embedding of the current input token are transformed and then combined. So Like in RNNs, SSMs process one input token after the other.
 
 SSMs have 4 sets of matrices and parameters to process the input namely
@@ -217,68 +218,74 @@ where:
 
 ![Mamba Architecture](./ssmDiagram.drawio.svg)
 
-SSMs follow these steps
+1. **Discretization**
 
-Discretization
+  The discretization technique facilitates the transformation of continuous differential equations into discrete time-step representations, leveraging the $\Delta$ matrix to decompose the infinitely continuous process into a discrete time-stepped process, thereby reducing computational complexity. In this approach, the $A$ and $B$ steps undergo discretization through the following equations:
 
-$$
-\overline{A} = \exp(\Delta A)
-$$
+  $$
+  \overline{A} = \exp(\Delta A)
+  $$
 
-$$
-\overline{B} = (\Delta A)^{-1} (\exp(\Delta A) - I) \cdot \Delta B
-$$
+  $$
+  \overline{B} = (\Delta A)^{-1} (\exp(\Delta A) - I) \cdot \Delta B
+  $$
 
-Linear RNNs
+  This discretization scheme effectively reduces the continuous differential equation to a series of discrete time steps, enabling numerical approximations to be computed iteratively. By segmenting the continuous process into finite increments, the computational burden is alleviated, rendering the problem more tractable for numerical analysis and simulation.
+
+2. **Linear RNNs**
+
+The state-space models (SSMs) compute the output using a linear recurrent neural network (RNN) architecture, which operates on a hidden state $\Delta$. In this formulation, the hidden state propagates through a linear equation of the following form:
+
 $$
 h_t = \overline{A} h_{t-1} + \overline{B} X_t
 $$
+where
+* $h_t$ is hidden state matrix at time step t
+* $X_t$ is input vector at time t
+
+The initial hidden state $h_0$ is computed as:
+$$
+h_0 = \overline{A} h_{-1} + \overline{B} x_0 = \overline{B} x_0
+$$
+
+Subsequently, the hidden state at the next time step, $h_1$, is obtained through the recursion:
+$$
+h_1 = \overline{A} h_0 + \overline{B} x_1 = \overline{A} \overline{B}
+$$
+
+The output $Y_t$ is then calculated from the hidden state $h_t$ and the input $X_t$ using the following linear transformation:
 
 $$
 Y_t = C h_t
 $$
 
-$$
-h_0 = \overline{A} h_{-1} + \overline{B} x_0 = \overline{B} x_0
-$$
+* C is the output control matrix
+* $Y_t$ is output vector at time t
+* internal hidden state at time t
 
 $$
-Y_0 = C h_0 = C \overline{B} x_0
-$$
-
-$$
-h_1 = \overline{A} h_0 + \overline{B} x_1 = \overline{A} \overline{B} x_0 + \overline{B} x_1
-$$
-
-$$
-Y_1 = C h_1 = C \overline{A} \overline{B} x_0 + C \overline{B} x_1
-$$
-
-$$
-Y_2 = C \overline{A}^2 \overline{B} x_0 + C \overline{A} \overline{B} x_1 + C \overline{B} x_2
-$$
-
-$$
+y_0 = C h_0 = C \overline{B} x_0 \\
+y_1 = C h_1 = C \overline{A} \overline{B} x_0 + C \overline{B} x_1 \\
+y_2 = C \overline{A}^2 \overline{B} x_0 + C \overline{A} \overline{B} x_1 + C \overline{B} x_2 \\
+\vdots\\
 y_t = C \overline{A}^t \overline{B} x_0 + C \overline{A}^{t-1} \overline{B} x_1 + \ldots + C \overline{A} \overline{B} x_{t-1} + C \overline{B} x_t
 $$
 
 $$
+Y = K \cdot X
+$$
+
+where :
+* $X$ is the input matrix *i.e.* $[x_0, x_1, \ldots, x_L]$
+* $
 K = \left( C \overline{B}, \, C \overline{A} \overline{B}, \, \ldots, \, C \overline{A}^{L-1} \overline{B} \right)
-$$
+$
 
-$$
-x = \left( \begin{array}{c} x_1 \\ x_2 \\ \vdots \\ x_L \end{array} \right)
-$$
-
-$$
-Y = K \cdot x
-$$
-
-Continuos SSMs are differential equations that tell you how a variable H changes over time.
+This linear RNN architecture effectively captures the temporal dependencies inherent in sequential data, enabling the model to learn and propagate relevant information through the recurrent connections. The linear formulation leverages the computational efficiency of matrix operations, facilitating scalable implementations.Continuos SSMs are differential equations that tell you how a hiddden state changes over time.
 
 #### Parallel Associative Scan
 
-Therefore Convolutions become impossible, hence parallel associative scan
+The linear recurrent behavior inherent in the previous formulation is not efficiently implementable on GPU architectures, which favor parallel computing paradigms. This limitation renders convolutions inefficient in such environments. To address this challenge, the parallel associative scan technique is employed, which introduces a prefix sum-like operation to scan for all prefix sums. Although inherently sequential, this approach leverages an efficient parallel algorithm model to parallelize the SSM convolution, resulting in a significant performance boost. The parallel associative scan method exhibits linear time and space complexity, making it a computationally efficient solution.
 
 ##### SSM
 
@@ -289,10 +296,11 @@ $$
 ##### Selective SSM
 
 $$
-y_t = C_0 \overline{A}^t \overline{B}_0 x_0 + C_1 \overline{A}^{t-1} \overline{B}_1 x_1 + \ldots
+y_t = C_0 \overline{A}^t \overline{B}_0 x_0 + C_1 \overline{A}^{t-1} \overline{B}_1 x_1 + \ldots \\
+\text{input-dependent }B\text{ and }C\text{ matrix}
 $$
 
-\*input-dependent $\mathbb{Z}$\*
+By leveraging the parallel associative scan technique, the selective SSM formulation can be efficiently implemented on parallel architectures, such as GPUs. This approach enables the exploitation of the inherent parallelism in the computation, leading to significant performance gains, particularly for large-scale applications and time-series data processing tasks.
 
 ## Mamba Model Architecture
 
