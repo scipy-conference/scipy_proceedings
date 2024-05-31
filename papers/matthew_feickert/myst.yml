@@ -1,0 +1,94 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-matthew_feickert
+  # Ensure your title is the same as in your `main.md`
+  title: How the Scientific Python ecosystem helps answer fundamental questions of the Universe
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Matthew Feickert
+      email: matthew.feickert@cern.ch
+      orcid: 0000-0003-4124-7862
+      affiliations:
+        - University of Wisconsin--Madison
+      corresponding: true
+    - name: Nikolai Hartmann
+      email: nikolai.hartmann@cern.ch
+      orcid: 0000-0003-0047-2908
+      affiliations:
+        - Ludwig Maximilians Universitat
+    - name: Lukas Heinrich
+      email: lukas.heinrich@cern.ch
+      orcid: 0000-0002-4048-7584
+      affiliations:
+        - Technical University of Munich
+    - name: Alexander Held
+      email: alexander.held@cern.ch
+      orcid: 0000-0002-8924-5885
+      affiliations:
+        - University of Wisconsin--Madison
+    - name: Vangelis Kourlitis
+      email: evangelos.kourlitis@cern.ch
+      orcid: 0000-0001-6568-2047
+      affiliations:
+        - Technical University of Munich
+    - name: Nils Krumnack
+      email: nils.erik.krumnack@cern.ch
+      affiliations:
+        - Iowa State University
+    - name: Giordon Stark
+      email: kratsg@gmail.com
+      orcid: 0000-0001-6616-3433
+      affiliations:
+        - Santa Cruz Institute for Particle Physics
+    - name: Matthias Vigl
+      email: matthias.vigl@cern.ch
+      orcid: 0000-0003-2281-3822
+      affiliations:
+        - Technical University of Munich
+    - name: Gordon Watts
+      email: gwatts@uw.edu
+      orcid: 0000-0002-0753-7308
+      affiliations:
+        - University of Washington
+  keywords:
+    - ATLAS
+    - particle physics
+    - Scikit-HEP
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    CP: Combined Performance
+    EDM: Event Data Model
+    HEP: High Energy Physics
+    IRIS-HEP: Institute for Research and Innovation in Software for High Energy Physics
+    LHC: Large Hadron Collider
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - S2I2HEPSP
+        - PyHEP
+        - nanobind
+        - ATL-SOFT-PUB-2021-001
+        - Dask
+        - Dask-awkward
+        - Dask-histogram
+        - Kourlitis:2890478
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+  # Exclude source files to keep them from appearing as supporting documents
+  exclude:
+    - introduction.md
+    - scientific-python-ecosystem.md
+    - uncovering-higgs.md
+    - conclusions.md
+    - acknowledgements.md
+site:
+  template: article-theme
