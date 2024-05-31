@@ -12,6 +12,101 @@ While traditionally fisheries acoustics scientists have had a go-to tool and pro
 ## Echodataflow Overview
 At the center of `echodataflow` design is the notion that a workflow can be configured through a set of recipes (.yaml files) that specify the pipeline, data storage, and logging details. The idea draws inspiration from the Pangeo-Forge Project [@pangeo-forge] which facilitates the Extraction, Transformation, Loading (ETL) of earth science geospatial datasets from traditional repositories to analysis-ready, cloud-optimized (ARCO) data stores [ref]. The pangeo-forge recipes provide a model of how the data should be accessed and transformed, and the project has garnered numerous recipes from the community. While Pangeo-Forge’s focus is on transformation from `.netcdf` [ref] and `hdf5` [ref] formats to `zarr`, echodataflow’s aim is to support full echosounder data processing and analysis pipelines: from instrument raw data formats to biological products. Echodataflow leverages Prefect to abstract data and computation management. In  we provide an overview of echodataflow’s framework. At the center we see several steps from an echosounder data processing pipeline: `open_raw`, `combine_echodata`, `compute_Sv`, `compute_MVBS`. All these functions exist in the echopype package, and are wrapped by echodataflow into predefined stages. Prefect executes the stages on a dask cluster which can be started locally or can be externally set up. These echopype functions already support distributed operations with dask thus the integration with Prefect within echodataflow is natural. Dask clusters can be set up on a variety of platforms: local, cloud, kubernetes [ref], HPC cluster via `dask-jobqueue` [ref], etc. and allow abstraction from the computing infrastructure. Input, intermediate, and final data sets can live in different storage systems (local/cloud, public/private) and Prefect’s block feature provides seamless, provider-agnostic, and secure integration. Workflows can be executed and monitored through Prefect’s dashboard, while logging of each function is handled by echodataflow.
 
+
+## Workflow Deployment 
+
+### Notebook
+Echodataflow can be directly initiated within a Jupyter notebook, which makes development interactive and provides a work environment familiar to researchers. One can see how the workflow is initiated within the Jupyter cell in [Figure%s](#notebook_start).
+
+
+We provide two demo notebooks: one for execution on a local machine and another one for execution on AWS. 
+
+### Docker
+We facilitate the deployment of echodataflow on various platforms by building a docker image that can be spun up with all required components and the user can access the workflow dashboard on the corresponding port.
+
+```
+docker pull blackdranzer/echodataflow 
+
+prefect server start
+
+docker run --network="host" -e PREFECT_API_URL=http://host.docker.internal:4200/api blackdranzer/echodataflow
+```
+
+## Command Line Interface
+We also provide a command-line interface which supports credential handling, and some additional useful features for managing the workflows.
+
+### Adding Stages
+Currently, most major functionalities in the echopype package are wrapped into stages: `open_raw`, `add_depth`, `add_location`, `compute_Sv`, `compute_TS`, `compute_MVBS`, `combine_echodata`, `frequency_differencing`, `apply_mask`. 
+
+We provide tools to generate boilerplate template configuration based on the existing stages. Here is an example to add a stage:
+
+```
+echodataflow gs <stage_name>
+```
+
+For instance, to generate a boilerplate configuration for the `compute_Sv` stage, you would use:
+
+```
+echodataflow gs compute_Sv
+```
+
+This command creates a template configuration file for the specified stage, allowing you to customize and integrate it into your workflow. The generated file includes:
+* a flow: This orchestrates the execution of all files that need to be processed, either concurrently or in parallel, based on the configuration.
+* a task (helper function): This assists the flow by processing individual files.
+### Rule Validation
+Scientific workflows often have stages that cannot be executed until other stages have completed. Those conditions can be set through `echodataflow` client during the initialization process and are stored in a `echodataflow_rules.txt` file:
+
+```
+echodataflow_open_raw:echodataflow_compute_Sv
+echodataflow_open_raw:echodataflow_combine_echodata
+echodataflow_open_raw:echodataflow_compute_TS
+echodataflow_combine_echodata:echodataflow_compute_Sv
+echodataflow_compute_Sv:echodataflow_compute_MVBS
+```
+
+These rules dictate the sequence in which stages should be executed, ensuring that each stage waits for its dependencies to complete.
+
+#### Adding New Rules with echodataflow Client
+The echodataflow client provides several commands for managing these rules. Users can view, add, or import flow rules interactively or from a file. Here are some examples:
+
+View and Manage Rules
+
+To view, add, or import flow rules, use the rules subcommand:
+
+Add a New Rule Interactively:
+
+```
+echodataflow rules --add
+```
+
+This command will prompt the user to input a new rule in the `parent_flow:child_flow format`, for example `echodataflow_compute_MVBS:echodataflow_frequency_differencing`. 
+
+Import Rules from a File:
+```
+echodataflow rules --add-from-file path/to/rules.txt
+```
+
+This command imports rules from a specified file, where each rule is on a new line in the parent_flow:child_flow format.
+
+#### Aspect-Oriented Programming (AOP) in echodataflow
+
+In echodataflow, we adopt an aspect-oriented programming approach for rule validation. This is achieved using a decorator that can be applied to functions to enforce rules and log function execution details.
+
+Aspect: echodataflow Decorator
+The echodataflow decorator is used for logging and aspect-oriented programming within the echodataflow framework. It logs the entry and exit of a decorated function and modifies the function's arguments based on the execution context. This supports two types of execution: "TASK" and "FLOW".
+
+Example Usage:
+
+```
+@echodataflow(processing_stage="StageA", type="FLOW")
+def my_function(arg1, arg2):
+    # Function code here
+    pass
+```
+
+In the example, the echodataflow decorator ensures that the function `my_function` is executed within the context of "StageA" as a "FLOW", checking for dependencies and logging relevant information.
+
+
 ## Figures
 
 :::{figure} echodataflow.png
