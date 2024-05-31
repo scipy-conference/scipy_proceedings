@@ -2,7 +2,7 @@ version: 1
 project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-00_gagnon_keke_tahiri
-  title: Phylogeographic analysis of the impact of climatic and geographical parameters on the genetic structuring of cumacea in the northern waters of the north atlantic
+  title: Climatic and Geographic Influences on Cumacea Genetics in the Northern North Atlantic
   subtitle: LaTeX edition
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
