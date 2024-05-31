@@ -245,28 +245,47 @@ data science ecosystem. End users benefit from standardization because widgets
 are easy to install and behave consistently across different platforms.
 
 Since its release, anywidget has led to a proliferation of widgets and a more
-diverse widget ecosystem [@fig:widgetstats]. New widgets range from educational tools
-for experimenting with toy datasets (e.g., [DrawData](https://drawdata.xyz/)) to high-performance data
-visualization (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/), [Mosaic](https://uwdata.github.io/mosaic/jupyter/), [Jupyter-Scatter](https://jupyter-scatter.dev/)). These visualization
-tools leverage anywidget’s support for binary data transport, enabling efficient
-interactive visualization with minimal serialization overhead. Existing widget
-projects have also migrated to anywidget ([higlass-python](https://github.com/higlass/higlass-python), [ipyaladin](https://github.com/cds-astro/ipyaladin))  and other
-libraries have introduced or refactored existing widget functionality to use
-anywidget ([Altair](https://altair-viz.github.io/), ) due to the simplified distribution and authoring
-capabilities.
+diverse widget ecosystem [@fig:widgetstats]. New widgets range from educational
+tools for experimenting with toy datasets (e.g.,
+[DrawData](https://drawdata.xyz/)) to high-performance data visualization
+libraries (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/),
+[Jupyter-Scatter](https://jupyter-scatter.dev/),
+[Mosaic](https://github.com/uwdata/mosaic) [@Heer2024-rr])) and research
+projects enhancing notebook interactivity (e.g.,
+[Persist](https://github.com/visdesignlab/persist/)[@Gadhave2023-rl]).
+Many of these tools use anywidget's binary data transport to enable efficient
+interactive visualization with minimal overhead by avoiding JSON serialization.
+Existing widget projects have also migrated to anywidget
+([higlass-python](https://github.com/higlass/higlass-python),
+[ipyaladin](https://github.com/cds-astro/ipyaladin)) and other libraries have
+introduced or refactored existing widget functionality to use anywidget
+(e.g., [Altair](https://github.com/vega/altair) [@VanderPlas2018]) due to the
+simplified distribution and authoring capabilities.
 
 :::{figure} widgetstats.png
 :label: fig:widgetstats
-Custom Jupyter Widgets per year as of May 30, 2024. Date for each project is the initial commit or the date of the commit when a widget was added to the repository project. Projects are tracked at https://github.com/manzt/anywidget-usage.
+Custom Jupyter Widgets per year as of May 30, 2024. Date for each project is
+the initial commit or the date of the commit when a widget was added to the
+repository project. Projects are tracked at
+https://github.com/manzt/anywidget-usage.
 :::
 
-The portable widget standard also opens avenues for other emerging
-notebook-inspired platforms to leverage the widget ecosystem. For example,
-Marimo, a new reactive Python notebook that automatically runs dependent cells,
-supports AFM without needing extensions, allowing anywidgets to run natively
-without additional "glue code." Additionally, Panel is exploring a version of
-authoring widgets based on AFM to unify standards for data app component
-frameworks.
+The portable widget standard enables reuse of the anywidget ecosystem in
+various notebook-inspired platforms and web frameworks. Popular frameworks and
+dashboarding libraries such as
+[Voila](https://github.com/voila-dashboards/voila),
+[Panel](https://github.com/holoviz/panel), [Shiny for
+Python](https://github.com/posit-dev/py-shiny), and
+[Solara](https://github.com/widgetti/solara)) support classic Jupyter widgets,
+thereby supporting any anywidget as well. AFM further enhances integration and
+expansion opportunities beyond classic Jupyter widgets. For example,
+[Marimo](https://github.com/marimo-team/marimo), a new reactive notebook for
+Python, supports AFM directly, allowing anywidgets to run natively without
+additional "glue code." Additionally, Panel is exploring deeper integration
+AFM-based integration to enable reuse of AFM within Panel's 
+
+widget
+authoring version to unify data app component frameworks.
 
 Anywidget’s approach allows widgets to serve a wider range of stakeholders. Most
 end users do not need to understand kernel-web communication details when using
