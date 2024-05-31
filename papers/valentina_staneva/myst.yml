@@ -3,7 +3,7 @@ project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-valentina_staneva
   # Ensure your title is the same as in your `main.md`
-  title: echodataflow: Configurable, Reproducible, and Scalable Fisheries Acoustics Workflows with Prefect
+  title: "echodataflow: Configurable, Reproducible, and Scalable Fisheries Acoustics Workflows with Prefect"
   subtitle: MyST Markdown edition
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
