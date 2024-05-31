@@ -1,8 +1,8 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: 'Anywidget: easily author and share reusable interactive widgets for computational notebooks'
+title: 'Any notebook served: authoring and sharing reusable interactive widgets'
 abstract: |
-  Computational notebooks have become the programming environment of choice for data scientists. The open-source Jupyter Project has fostered a robust ecosystem around notebook-based computing, which has also led to a proliferation of Jupyter-compatible platforms. In Jupyter, widgets serve as a powerful component system to enable custom views and controls within notebooks that interact with data and notebook artifacts bidirectionally. However, they are a less modular component of Jupyter’s architecture. Due to the coupling of widgets to platform-specific internals and the portability challenges this brings, widget authorship and distribution have evolved into complex processes, to the frustration of developers and end users alike. Anywidget addresses these challenges by introducing a standard for widget front-end code that is based on the web browser’s native module system and is decoupled from notebook runtime dependencies. Anywidget serves as an adapter to ensure cross-platform compatibility, loading front-end modules from the notebook kernel, just like complementary Python code, rather than from independent sources. This design simplifies the authorship and sharing of widgets, consolidates widget publishing, enables rapid prototyping, and removes unnecessary installation steps, thereby enhancing overall developer and user experiences. Anywidget also lowers the barrier to entry for widget authorship, leading to a more diverse and robust widget ecosystem. The adoption of anywidget has already sparked a widget renaissance and improved widget reusability and interoperability, making interactive computing more accessible and efficient.
+  The open-source Jupyter project has fostered a robust ecosystem around notebook-based computing, resulting in diverse Jupyter-compatible platforms. Jupyter widgets extend these environments with custom visualizations and interactive elements that communicate directly with user code and data. While this direct communication makes the widget system powerful, its architecture is currently tightly coupled to platforms. As a result, it has become complex, cumbersome, and error-prone to author and distribute portable widgets, which limits the potential of a wider widget ecosystem. Here we describe the approach behind _anywidget_, a new standard for widget-front end modules that are decoupled from notebook platforms. The approach ensures cross-platform compatibility by using the web browser’s native module system to load these front-end modules from the notebook kernel. This design simplifies widget authorship and sharing, consolidates publishing, enables rapid prototyping, and lowers the barrier to entry for newcomers. Its adoption has sparked a widget renaissance, improving reusability and interoperability, and making interactive computing more accessible and efficient.
 ---
 
 ## Introduction
@@ -267,22 +267,6 @@ supports AFM without needing extensions, allowing anywidgets to run natively
 without additional "glue code." Additionally, Panel is exploring a version of
 authoring widgets based on AFM to unify standards for data app component
 frameworks.
-
-Anywidget’s approach allows widgets to serve a wider range of stakeholders. Most
-end users do not need to understand kernel-web communication details when using
-widgets. For example, data scientists can install interactive visualizations,
-link multiple widget instances together, and create custom views and controls
-for their analysis by writing kernel code and executing cells. However,
-anywidget also makes tinkering, learning, and exploring the front-end and
-kernel-web communication layers more approachable for potential widget authors,
-especially non-web developers. By focusing on web standards, the skills learned
-are transferable to general front-end development. Similarly, anywidget-powered
-notebooks provide an ideal environment for evaluating data visualization designs
-and fostering collaboration between data science and visualization teams.
-Instead of investing time and resources into complex standalone web
-applications, anywidget makes it easy to embed high-performance visualizations
-directly into analytical environments, thereby integrating into existing
-workflows and reusing data structures.
 
 One of the stated goals of the Jupyter Notebook is to minimize the “distance”
 between user and data, and widgets play a key role by allowing users to

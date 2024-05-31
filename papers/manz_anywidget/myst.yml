@@ -3,7 +3,7 @@ project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-anywidget
   # Ensure your title is the same as in your `main.md`
-  title: 'Anywidget: easily author and share reusable interactive widgets for computational notebooks'
+  title: 'Any notebook served: authoring and sharing reusable interactive widgets'
   # subtitle: MyST Markdown edition
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
