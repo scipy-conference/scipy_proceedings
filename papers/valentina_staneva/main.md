@@ -12,6 +12,63 @@ While traditionally fisheries acoustics scientists have had a go-to tool and pro
 ## Echodataflow Overview
 At the center of `echodataflow` design is the notion that a workflow can be configured through a set of recipes (.yaml files) that specify the pipeline, data storage, and logging details. The idea draws inspiration from the Pangeo-Forge Project [@pangeo-forge] which facilitates the Extraction, Transformation, Loading (ETL) of earth science geospatial datasets from traditional repositories to analysis-ready, cloud-optimized (ARCO) data stores [ref]. The pangeo-forge recipes provide a model of how the data should be accessed and transformed, and the project has garnered numerous recipes from the community. While Pangeo-Forge’s focus is on transformation from `.netcdf` [ref] and `hdf5` [ref] formats to `zarr`, echodataflow’s aim is to support full echosounder data processing and analysis pipelines: from instrument raw data formats to biological products. Echodataflow leverages Prefect to abstract data and computation management. In  we provide an overview of echodataflow’s framework. At the center we see several steps from an echosounder data processing pipeline: `open_raw`, `combine_echodata`, `compute_Sv`, `compute_MVBS`. All these functions exist in the echopype package, and are wrapped by echodataflow into predefined stages. Prefect executes the stages on a dask cluster which can be started locally or can be externally set up. These echopype functions already support distributed operations with dask thus the integration with Prefect within echodataflow is natural. Dask clusters can be set up on a variety of platforms: local, cloud, kubernetes [ref], HPC cluster via `dask-jobqueue` [ref], etc. and allow abstraction from the computing infrastructure. Input, intermediate, and final data sets can live in different storage systems (local/cloud, public/private) and Prefect’s block feature provides seamless, provider-agnostic, and secure integration. Workflows can be executed and monitored through Prefect’s dashboard, while logging of each function is handled by echodataflow.
 
+## Figures
+
+:::{figure} echodataflow.png
+:label: fig:echodataflow
+**`echodataflow` Framework:** The above diagram provides an overview of the echodataflow framework: the task is to fetch raw files from a local filesystem/cloud archive, process them through several stages of an echosounder data workflow using a cluster infrastructure, and store intermediate and final products. Echodataflow allows the workflow to be executed based on text configurations, and logs are generated for the individual processing stages. Prefect handles the distribution of the tasks on the cluster, and provides tools for monitoring the workflow runs. 
+:::
+
+
+:::{figure} log_output.png
+:label: fig:log_output
+**Log Output:** The leading indicators are: date, process id, log level, followed by the module, function, line number, and message.
+:::
+
+:::{figure} flow-task.png
+:label: fig:flow_task
+**Decorating Functions into Flows \& Tasks:** The flow `echdataflow_open_raw` calls the task `process_raw` (processing a single file) within a loop to process all files
+:::
+
+
+:::{figure} datastore_config.png
+:label: fig:datastore_config
+**Data Storage Configuration:** The input is data from a ship survey data on and S3 data on the NCEA archive. The output goes to an S3 bucket on another AWS account. Credentials are stored in blocks.
+:::
+
+:::{figure} pipeline_config.png
+:label: fig:pipeline_config
+**Pipeline Configuration:** The pipeline consists of two stages: `echodataflow_open_raw` and `echodataflow_compute_TS` and will run on a local cluster
+:::
+
+:::{figure} logging_config.png
+:label: fig:logging_config
+**Logging Configuration:** The logs are written to a local `echodataflow.log` file in a plain text form based on the format specification
+:::
+
+
+:::{figure} echodata_flow_runs.png
+:label: fig:echodataflow_flow_runs
+**Flow Runs** Log of completed runs in Prefect UI
+:::
+
+:::{figure} task_progress.png
+:label: fig:task_progress
+**Task Progress** 
+:::
+
+
+:::{figure} notebook_start.png
+:label: fig:notebook_start
+**Initiating `echodataflow` in a Jupyter Notebook:** once one has a set of "recipe" configuration files, they can initiate the workflow in a notebook cell with `echodataflow_start` command.
+:::
+
+:::{figure} case_study.png
+:label: fig:case_study
+**Hake Survey Processing:** We provide executation times and data product sizes for processing 2017 survey data on an Jetstream machine.
+:::
+
+
 
 ## Bibliographies, citations and block quotes
 
