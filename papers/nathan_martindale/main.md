@@ -20,14 +20,14 @@ abstract: |
 
 As the tech industry and computation-based research continues to gravitate
 toward using more and more data to solve problems, the capability to interact
-with and understand the underlying data that is being used becomes increasingly
-important. As part of this growing need, development of effective
-visualization tools and frameworks has turned into an ecosystem where components
-from different sources all work in unison and developers can piece together what
-they need for their specific goals. For many reasons, including the ease of
-organization and allowing documentation, development, and analysis to all exist
-in the same place, Jupyter notebooks [@jupyter] have become a common platform
-for data science workflows, and by extension have become the common ground where these
+with and understand that underlying data becomes increasingly
+important. Development of effective visualization tools and frameworks to
+address this need has turned into an ecosystem where components from different
+sources all work in unison and developers can piece together what they need for
+their specific goals. For many reasons, including the ease of organization and
+allowing documentation, development, and analysis to all exist in the same
+place, Jupyter notebooks [@jupyter] have become a common platform for data
+science workflows, and by extension have become the common ground where these
 different tools can coexist. This ability to interact with and visualize data
 plays a crucial role in many data science/analysis workflows by allowing users
 to manipulate and explore, thus enhancing comprehension, improving user
@@ -36,13 +36,13 @@ the data.
 
 IPyWidgets [@ipywidgets], a framework for bridging between the IPython kernel
 and HTML widgets within Jupyter, has been particularly influential for enabling
-interactive visualization. Because of its ease of use and extendibility, many
-libraries such as Panel [@10.5281/zenodo.11046027], Solara [@solara], and Streamlit
-[@streamlit] integrate closely with IPyWidgets and thus contribute to
-the greater visualization ecosystem within Python. Although a great deal of
-progress has been made in this community, a missing element is a more
-generalized and flexible approach to aspects of the details-on-demand paradigm.
-To support this approach, the authors have developed a library that
+interactive visualization. Many libraries such as Panel
+[@10.5281/zenodo.11046027], Solara [@solara], and Streamlit [@streamlit]
+integrate closely with IPyWidgets and thus contribute to the greater
+visualization ecosystem within Python. Although a great deal of progress has
+been made in this community, a missing element is a more generalized and
+flexible approach to aspects of the [details-on-demand](#details-on-demand)
+paradigm. To support this approach, the authors have developed a library that
 provides wrapper components that can render any widget as an overlay on top of
 other widgets. These components simplify designing layouts and visualizations
 that would be difficult to implement from scratch.
@@ -57,10 +57,11 @@ use case that motivated its design.
 
 ### Details on Demand
 
-Details on demand is one piece of the "visual information-Seeking mantra"
+Details on demand is one piece of the "visual information-seeking mantra"
 [@shneidermanEyesHaveIt1996], a paper describing an overall design approach to
 building interactive tooling. The general flow of interaction proposed by this
-mantra is "overview first, zoom and filter, then details-on-demand." Overview
+mantra is "overview first, zoom and filter, then details-on-demand"
+[@shneidermanEyesHaveIt1996]. Overview
 first ideally starts with broader aggregate visualizations: something to gain a sense
 of the general scope, complexity, or shape of the data. From there a user can
 identify their own areas of interest to hone in on with whatever zoom and filter
@@ -73,15 +74,15 @@ organically explore the data.
 
 
 A simple and widespread example of details on demand are tooltips. Descriptions
-of interface components or values of data points in visualizations would often
-create an unusably noisy user interface if they are always visible. Instead, a
-more concise view is maintained while providing the necessary information in a
-spatially relevant view when the user specifically requests it. Readers viewing
-the web version of these proceedings can explore a simple example of details on
-demand live by hovering over any of the figure references, such as this one:
-@fig:detailsondemand, which shows how hovering over a reference (the demand)
+of components or data point values in visualizations would often create an
+unusably noisy interface if they were always visible. Instead, a more concise
+view is maintained while providing the necessary information in a spatially
+relevant view when the user specifically requests it. Readers viewing the web
+version of these proceedings can explore a simple example of details on demand
+live by hovering over any of the figure references.
+@fig:detailsondemand shows how hovering over a reference (the demand)
 opens a window at the cursor that displays the target of the reference (the
-details.)
+details).
 
 
 :::{figure} detailsondemand.png 
@@ -110,11 +111,11 @@ Python community and the data science Jupyter workflow with its ability to marry
 the two language ecosystems, each of which include many visualization tools
 and capabilities.
 
-To highlight the simplicity of IPyWidgets, a couple of minimal
+To highlight the simplicity of IPyWidgets, some minimal
 examples are provided here. In the simplest UI cases, IPyWidgets allows wrapping a
 function call that produces a visual output based on some set of input
 parameters with `ipywidgets.interactive()`, which automatically
-constructs an appropriate form widget for each parameter. In this case, the
+constructs an appropriate input widget for each parameter. In this case, the
 developer need not manually initialize any Python widgets, as seen in the below
 code sample @code:interactive and @fig:ipywidgets_example.
 
@@ -201,17 +202,17 @@ parameter3.observe(on_parameter3_change, names=["value"])
 
 ### State Synchronization
 
-One of the primary challenges that IPyWidgets helps solve is the
-problem of state synchronization, which amounts to monitoring for changes to
-variables made on either side of the Python-JavaScript link and communicating those
-changes across when they occur. Thus, changes to variables in Python are
-reflected in the browser's JavaScript and vice versa. Under the hood,
-IPyWidgets makes use of backbone.js [@LowLevelWidget], a model-view-* (MV*) framework for
-JavaScript that implements synchronization between a JavaScript _model_
-(where data/attributes/values for a widget are stored) and a JavaScript
-_view_ (the code that creates the visual UI elements the user sees and
-interacts with in their browser). IPyWidgets connects to this backbone model via
-WebSockets, through which model changes and events are sent as serialized JSON.
+One of the primary challenges that IPyWidgets helps solve is the problem of
+state synchronization, where updates to variables made on either side of the
+Python-JavaScript link are monitored and communicated across when they occur.
+Based on this communication, changes to variables in Python are reflected in the
+browser's JavaScript and vice versa. Under the hood, IPyWidgets makes use of
+backbone.js [@LowLevelWidget], a model-view-* (MV*) framework for JavaScript
+that implements synchronization between a JavaScript _model_ (where
+data/attributes/values for a widget are stored) and a JavaScript _view_ (the
+code that creates the visual UI elements the user sees and interacts with in
+their browser). IPyWidgets connects to this backbone model via WebSockets,
+through which model changes and events are sent as serialized JSON.
 
 
 :::{figure} ipywidgets_state.png
@@ -222,7 +223,7 @@ State mirroring between models and view interaction for an example slider widget
 <!-- first sentence below redundant with figure above? -->
 
 @fig:ipywidgets_state shows a simplified view of the communication channels
-between the Python model and JavaScript model/view for an example slider widget.
+between the Python model and the JavaScript model/view for an example slider widget.
 Modifying an attribute on the Python model sends the modification to the
 JavaScript model, where any changes that would modify the visual aspects of the
 widget are communicated to the JavaScript view (e.g., a change in the slider
@@ -308,7 +309,7 @@ one widget on top of another.
 
 #### Custom IPyWidget Complexity
 
-One of the key benefits of IPyWidgets as a framework is that it allows
+A key benefit of IPyWidgets as a framework is that it allows
 developers to design, build, and publish new components that other people can
 use in place of or alongside the default widgets. However, the complexity of the
 infrastructure required to do this with the base IPyWidgets library still makes
@@ -353,7 +354,7 @@ provide the capabilities from various JavaScript web frameworks. A few
 we briefly touch on here are AnyWidget, IPyReact, and IPyVuetify.
 
 AnyWidget [@10.5281/zenodo.11182005] is a recent library that has become
-influential in the past year or so. New widgets can be created by simply
+influential in the past year. New widgets can be created by simply
 extending the Python `anywidget.AnyWidget` class, defining the class attributes
 that are to be synced between the Python and JavaScript models using the
 `traitlets` library [@traitlets], and providing a string of
@@ -398,7 +399,7 @@ user has pressed enter, rather than restarting the computation on every letter
 the user adds or removes.
 
 All of the default components in IPyWidgets similarly have more flexible
-versions in IPyVuetify, and many additional components. @fig:ipw_ipv 
+versions and many additional components in IPyVuetify. @fig:ipw_ipv 
 shows a small sample of default IPyWidgets on the left with their corresponding
 IPyVuetify versions on the right. Also pictured at the bottom is the Vuetify
 DataTable, which is an example of a component that is not in the default IPyWidgets. The DataTable allows 
@@ -491,7 +492,7 @@ containing any other widget. An example of IPyOverlay in action is shown in
 @fig:example_dashboard. Throughout this section we will discuss an example use
 case where we worked with one of the authors, a seismologist,
 to construct a dashboard for exploring models trained on seismic data. This
-use case was what led to the development of IPyOverlay as a library.
+use case led to the development of IPyOverlay as a library.
 
 [^footnote-1]: https://github.com/ORNL/ipyoverlay
 
@@ -580,7 +581,7 @@ positioned child widgets.
 :::
 
 
-### Embedding Widgets in Container Widgets
+### Embedding IPyWidgets in IPyOverlay Containers
 
 A key enabler is IPyVuetify's ability to embed other IPyWidgets inside
 of the template HTML, allowing us to construct custom layouts of one or more
