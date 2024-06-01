@@ -193,36 +193,36 @@ Stub of an anywidget front-end module (AFM) with initialization and rendering li
 
 ## Features
 
-Adhering to predictable standards benefits both developers and end users in 
-many other ways beyond cross-platform interoperability, such as...
+Adhering to predictable standards benefits both developers and end users in
+many other ways beyond JCP interoperability, such as...
 
 ### Web Over Libraries
 
 Front-end libraries change rapidly and often introduce
 breaking changes, whereas the web platform remains more backward-compatible.
 Traditional Jupyter Widgets require extensions from UI libraries provided by
-JCPs, coupling widget implementations to particular third-party frameworks. In
-contrast, AFM defines a minimal set of essential interfaces focused on (1)
-communicating with the kernel and (2) modifying notebook output cells, without
-dictating state or UI models. This approach allows widgets to be defined without
-dependencies, reducing boilerplate and preventing lock-in. Authors may still
-use third-party JavaScript libraries or tooling, but these are not necessary
-for JCP compatibility, publishing, or user installation.
+JCPs, coupling widget implementations to third-party frameworks. In contrast,
+AFM defines a minimal set of essential interfaces focused on (1) communicating
+with the kernel and (2) modifying notebook output cells, without dictating
+models for state or UI. It allows widgets to be defined without dependencies,
+reducing boilerplate and preventing lock-in. Authors may still use third-party
+JavaScript libraries or tooling, but these are no longer necessary for JCP
+compatibility, publishing, or user installation.
 
 ### Rapid Iteration
 
-The web ecosystem's adoption of ES modules has led to new
-technologies that enhance developer experience and enable rapid prototyping. One
-such innovation is hot module replacement (HMR), a method that uses the
-browser’s module graph to dynamically update applications without reloading the
-page or losing state. Since traditional Jupyter Widgets rely on legacy module
-systems, they cannot benefit from HMR and instead require full page clearance,
-reload, and re-execution to see changes during development. By contrast,
-anywidget is able to provide opt-in HMR, implemented through the Jupyter
-messaging protocol, in order to support live development of custom widgets
-without any front-end tooling. For example, adjusting a widget's appearance,
-such as a chart's color scheme, updates the view instantly without re-executing
-cells or refreshing the page.
+The web ecosystem's adoption of ES modules has led to new technologies that
+enhance developer experience and enable rapid prototyping. One such innovation
+is hot module replacement (HMR), a method that uses the browser’s module graph
+to dynamically update applications without reloading the page or losing state.
+Since traditional Jupyter Widgets rely on legacy module systems, they cannot
+benefit from HMR and instead require full page clearance, reload, and
+re-execution to see changes during development. By contrast, anywidget is able
+to provide opt-in HMR, implemented through the Jupyter messaging protocol, in
+order to support live development of custom widgets without any front-end
+tooling. For example, adjusting a widget's appearance, such as a chart's color
+scheme, updates the view instantly without re-executing cells or refreshing the
+page.
 
 ### Progressive Development
 
@@ -234,10 +234,9 @@ standalone scripts or packages – just like kernel-side programs
 cumbersome process limited to the Jupyter Notebook and JupyterLab platforms. It
 involves using a project generator [@js_cookiecutter; @ts_cookiecutter] to
 bootstrap a project with over 50 files, creating and installing a local Python
-package with custom-built extensions, bundling JavaScript code, and manually
-linking build outputs to install extensions. By removing these barriers,
-anywidget accelerates development, and allows prototypes to grow into robust
-tools over time.
+package, bundling JavaScript code, and manually linking build outputs to
+install extensions. By removing these barriers, anywidget accelerates
+development and allows prototypes to grow into robust tools over time.
 
 ### Simplified Publishing
 
@@ -257,18 +256,17 @@ and discovery.
 Anywidget fills in the specification gaps for Jupyter Widgets by embracing open
 standards and carefully separating developer concerns. It defines an API for
 authoring portable and reusable widget components that decouples widget
-authorship from JCP runtimes, resulting in multiple downstream benefits. First,
+authorship from JCPs, resulting in multiple downstream benefits. First,
 anywidget—not widget authors—ensures compatibility and interoperability across
 existing JCPs, and authors can focus on important features rather than wrestle
 with build configuration and tooling. Second, by circumventing bespoke JCP
-import systems and loading web-standard ES modules from the kernel,
-anywidget does away with front-end installation steps and delivers a superior
-developer experience during widget authorship. Third, anywidget unifies and
-simplifies widget distribution. Widgets can be prototyped and shared as
-notebooks, or mature into `pip`-installable packages and distributed just like
-other tools in the Python data science ecosystem. End users benefit from
-standardization because widgets are easy to install and behave consistently
-across different platforms.
+import systems and loading web-standard ES modules from the kernel, anywidget
+does away with manual installation steps and delivers an improved developer
+experience during widget authorship. Third, anywidget unifies and simplifies
+widget distribution. Widgets can be prototyped and shared as notebooks, or
+mature into `pip`-installable packages and distributed like other tools in the
+Python data science ecosystem. End users benefit from standardization because
+widgets are easy to install and behave consistently across platforms.
 
 Since its release, anywidget has led to a proliferation of widgets and a more
 diverse widget ecosystem [@fig:widgetstats]. New widgets range from educational
@@ -292,24 +290,24 @@ simplified distribution and authoring capabilities.
 :::{figure} widgetstats.png
 :align: center
 :label: fig:widgetstats
-Custom Jupyter Widgets per year as of May 30, 2024. Date for each project is
+Custom Jupyter Widgets per year as of May 31, 2024. Date for each project is
 the initial commit or the date of the commit when a widget was added to the
 repository project. Projects are tracked at
 https://github.com/manzt/anywidget-usage.
 :::
 
-The portable widget standard also extends the anywidget ecosystem to platforms beyond
-Jupyter. Popular web frameworks and dashboarding libraries such as
+The portable widget standard also extends the anywidget ecosystem to platforms
+beyond Jupyter. Popular web frameworks and dashboarding libraries such as
 [Voila](https://github.com/voila-dashboards/voila),
 [Panel](https://github.com/holoviz/panel), [Shiny for
 Python](https://github.com/posit-dev/py-shiny), and
-[Solara](https://github.com/widgetti/solara) support Jupyter Widgets, allowing
-users to embed anywidgets in standalone web applications. Efforts are underway
-to add more specialized, built-in support for AFM. For example,
-[Marimo](https://github.com/marimo-team/marimo), a new reactive notebook for
-Python, supports AFM directly, allowing anywidgets to run natively without
-additional "glue code." Panel is also exploring deeper integration with AFM to
-enable its reuse with their kernel-side reactivity systems.
+[Solara](https://github.com/widgetti/solara) support Jupyter Widgets, and
+therefore also allow users to embed anywidgets in standalone web applications.
+Efforts are underway to add more specialized, built-in support for AFM as well.
+For example, [Marimo](https://github.com/marimo-team/marimo), a new reactive
+notebook for Python, supports AFM directly, allowing anywidgets to run natively
+without additional "glue code." Panel is also exploring deeper integration with
+AFM to enable its reuse with their kernel-side reactivity systems.
 
 Widgets enrich computational notebooks by enabling users to view, manipulate, and interact with their data more intimately. By making widget authorship and use more accessible, the full gamut of web technologies can be brought to bear on data that lives in the kernel. A recent article outlines the challenges and tradeoffs associated with bringing advanced data visualization tools to computational notebooks, advocating for standardized solutions to democratize the creation of notebook visualization tools across notebook platforms [@Wang2024-ki]. Anywidget addresses this call to action by introducing such a standard. By removing the primary sources of friction associated with widget development and sharing, anywidget makes widget authorship practical and accessible to unlock the full power of notebooks.
 
