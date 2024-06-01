@@ -22,14 +22,19 @@ abstract: |
 
 ## Introduction
 
-Computational notebooks combine live code, equations, prose, visualizations, and other media within a single environment. The Jupyter project [@Kluyver2016-xa; @Granger2021-jb] has been instrumental the success of notebooks, which have become the tool of choice for interactive computing in data science, research, and education. Key to Jupyter's widespread adoption is its modular architecture and standardization of interacting components, which have fostered an extensive ecosystem of tools
-that reuse these elements. For example, the programs responsible for executing
-code written in notebooks, called **kernels**, can be implemented by following
-the Jupyter Messaging Protocol [@doc_jupmsgprotocol]. This design allows users
-to install kernels for various different languages and types of computation.
-Similarly, Jupyter's open-standard notebook format (`.ipynb`) ensures that
-notebooks can be shared and interpreted across different platforms
-[@doc_jupnbformat].
+Computational notebooks combine live code, equations, prose, visualizations,
+and other media within a single environment. The Jupyter project
+[@Kluyver2016-xa; @Granger2021-jb] has been instrumental the success of
+notebooks, which have become the tool of choice for interactive computing in
+data science, research, and education. Key to Jupyter's widespread adoption is
+its modular architecture and standardization of interacting components, which
+have fostered an extensive ecosystem of tools that reuse these elements. For
+example, the programs responsible for executing code written in notebooks,
+called **kernels**, can be implemented by following the Jupyter Messaging
+Protocol [@doc_jupmsgprotocol]. This design allows users to install kernels for
+various different languages and types of computation. Similarly, Jupyter's
+open-standard notebook format (`.ipynb`) ensures that notebooks can be shared
+and interpreted across different platforms [@doc_jupnbformat].
 
 Jupyter’s modular architecture has also supported innovation in **notebook
 front ends** — the user interfaces (UIs) for editing and executing code, as
@@ -308,7 +313,17 @@ notebook for Python, supports AFM directly, allowing anywidgets to run natively
 without additional "glue code." Panel is also exploring deeper integration with
 AFM to enable its reuse with their kernel-side reactivity systems.
 
-Tools for data visualization and interactivity have greater impact when compatible with more platforms, but achieving compatibility involves trade-offs [@Wang2024-ki]. The full capabilities of the widget system, such as bidirectional communication, are often inaccessible to authors due to development difficulty and maintenance efforts. Adopting standards can minimize these impediments, enabling both broad compatibility and advanced capabilities for users. A recent article enumerates these challenges and advocates for standardized solutions to democratize the creation of notebook visualization tools across notebook platforms [@Wang2024-ki]. Anywidget addresses this by introducing a standard that removes friction in widget development and sharing, making authorship practical and accessible.
+Tools for data visualization and interactivity have greater impact when
+compatible with more platforms, but achieving compatibility involves trade-offs
+[@Wang2024-ki]. The full capabilities of the widget system, such as
+bidirectional communication, are often inaccessible to authors due to
+development difficulty and maintenance efforts. Adopting standards can minimize
+these impediments, enabling both broad compatibility and advanced capabilities
+for users. A recent article enumerates these challenges and advocates for
+standardized solutions to democratize the creation of notebook visualization
+tools across notebook platforms [@Wang2024-ki]. Anywidget addresses this by
+introducing a standard that removes friction in widget development and sharing,
+making authorship practical and accessible.
 
 ## Acknowledgements
 
