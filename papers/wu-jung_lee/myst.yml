@@ -12,34 +12,69 @@ project:
       orcid: 0000-0002-4112-2034
       affiliation: Applied Physics Laboratory, University of Washington
       corresponding: true
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Project administration
+        - Resources
+        - Software
+        - Supervision
+        - Visualization
+        - Writing - original draft
+        - Writing - review & editing
     - name: Valentina Staneva
       email: vms16@uw.edu
       orcid: 0000-0002-3412-0364
       affiliation: eScience Institute, University of Washington
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Project administration
+        - Resources
+        - Software
+        - Supervision
+        - Writing - review & editing
     - name: Landung “Don” Setiawan
       email: landungs@uw.edu
       orcid: 0000-0002-1624-2667
       affiliation: eScience Institute, University of Washington
+      roles:
+        - Conceptualization
+        - Software
     - name: Emilio Mayorga
       email: emiliom@uw.edu
       orcid: 0000-0003-2574-4623
       affiliation: Applied Physics Laboratory, University of Washington
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Software
     - name: Caesar Tuguinay
       email: ctuguina@uw.edu
       orcid: 0009-0000-6652-1093
       affiliation: Applied Physics Laboratory, University of Washington
+      roles:
+        - Software
+        - Writing - review & editing
     - name: Soham Butala
       email: sbutala@uw.edu
       orcid: 0009-0000-6479-889X
       affiliation: eScience Institute, University of Washington
+      roles:
+        - Software
     - name: Brandyn Lucca
       email: blucca@uw.edu
       orcid: 0000-0003-3145-2969
       affiliation: Applied Physics Laboratory, University of Washington
+      roles:
+        - Software
+        - Writing - review & editing
     - name: Dingrui Lei
       email: leidingrui426@gmail.com
       orcid: 0009-0003-8543-3138
       affiliation: eScience Institute, University of Washington
+      roles:
+        - Software
   keywords:
     - ocean sonar
     - echosounder
