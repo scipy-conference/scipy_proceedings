@@ -1,0 +1,57 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-atharva_rasane
+  # Ensure your title is the same as in your `main.md`
+  title: AI driven Watermarking Technique for Safeguarding Text Integrity in the Digital Age
+  subtitle: 
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Atharva Rasane
+      email: rratharva@gmail.com
+      affiliations:
+        - KLE Technology University
+  keywords:
+    - physical watermark
+    - logical watermark
+    - HuggingFace Transformer Library
+    - BERT
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    BERT: Bidirectional Encoder Representations from Transformers
+    AI:   Artificial Intelligence
+    NLP:  Natural Language Processing
+    NSP:  Next Sentence Prediction
+    GPU:  Graphics Processing Units
+    T-statistics: Test Statistics
+    P-value: Probability Value
+    DRM:  Digital Rights Management
+    CMS:  Content Management Systems
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - book01
+        - book02
+        - book03
+        - book04
+        - book05
+        - book06
+        - book07
+        - book08
+        - book09
+        - book10
+        - Atr01
+        - Atr02
+        - Atr03
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
