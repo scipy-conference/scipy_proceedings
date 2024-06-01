@@ -6,7 +6,7 @@ abstract: |
   notebook-based computing, resulting in diverse Jupyter-compatible platforms
   (e.g., JupyterLab, Google Colab, VS Code). Jupyter Widgets extend these
   environments with custom visualizations and interactive elements that
-  communicate directly with user code and data. While this direct communication
+  communicate directly with user code and data. While this bidirectional communication
   makes the widget system powerful, its architecture is currently tightly coupled
   to platforms. As a result, widgets are complex and error-prone to author and
   distribute, limiting the potential of the wider widget ecosystem. Here we
