@@ -41,6 +41,8 @@ project:
     CLI: Command Line Interface
     GUI: Graphical User Interface
     NPU: Neural Processing Unit
+    FPGA: Field-Programmable Gate Array
+    FAIR: Findable, Accessible, Interoperable, and Reusable
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists

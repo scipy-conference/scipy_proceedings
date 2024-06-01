@@ -41,18 +41,18 @@ This innovation marked a significant leap in web performance, enabling complex a
 
 Key features of Wasm include [@doi:10.1145/3282510]:
 
-#### Security
+_Security_
 
 - Safe to execute
 - Maintains the sandboxing paradigms of web browsers
 
-#### Portability
+_Portability_
 
 - Language-, hardware-, and platform-independent
 - Deterministic and easy to reason about
 - Simple interoperability with the Web platform
 
-#### Speed
+_Speed_
 
 - Fast to execute
 - Maximally compact
@@ -83,35 +83,241 @@ The evolution of WebAssembly from asm.js to Wasm to WASI has been marked by cont
 
 Wasm has been embraced in commercial and industrial contexts for web applications, game development, edge computing, and server-side computing. However, its adoption in scientific computing has been more limited. This is partly due to the established reliance specialized software stacks in the scientific community. Additionally, the integration of Wasm into existing scientific workflows requires overcoming challenges related to data interoperability, toolchain compatibility, and the inertia of entrenched computational practices.
 
-**ITK-Wasm** combines the Insight Toolkit (ITK) and Wasm to enable high-performance spatial analysis in a web browser or system-level environments and reproducible execution across programming languages and hardware architectures [@doi:10.5281/zenodo.3688880].
+Enter **ITK-Wasm**, a pioneering integration that marries the Insight Toolkit (ITK) and Wasm to enable high-performance scientific spatial analysis in a web browser or system-level environments [@doi:10.5281/zenodo.3688880; @doi:10.3389/fninf.2014.00013; @doi:10.5281/zenodo.889843].
+ITK-Wasm is crafted to adhere to Wasm community standards, thereby facilitating the creation of Wasm modules that are _simple, performant, portable, modular, and interoperable_.
 
-ITK-Wasm provides tools to
+ITK-Wasm provides infrastructure that empowers research software engineers to:
 
 - Build scientific C/C++ codes to Wasm
 - Debug scientific Wasm
 - Bridge Wasm with
   - Local filesystems
   - Canonical scientific programming data interfaces such as NumPy arrays
-  - Traditional scientific file formats
+  - Traditional scientific file formats with an emphasis on multi-dimensional spatial data
 - Generate idiomatic programming language bindings, packages, and documentation
 - Transfer data efficiently in and out of the Wasm runtime
 - Support asynchronous and parallel execution of processing pipelines in way that is easy to understand and implement
 
 ## Methods
 
-Methods: Enter ITK-Wasm, a pioneering integration that marries the Insight Toolkit (ITK) with WebAssembly. ITK-Wasm is crafted to adhere to wasm community standards, thereby facilitating the creation of wasm modules that are simple, efficient, and easily understandable. It prioritizes performance in handling scientific datasets, especially multi-dimensional spatial data. By offering Pythonic interfaces that utilize native Python and NumPy-based (Array API standard) data structures, ITK-Wasm ensures seamless operation in diverse computational environments, from web browsers with Pyodide to system-level contexts. Any standard C or C++ scientific codebase, whether they are based on ITK or not, can utilize ITK-Wasm to generate extremely portable Python packages that integrate with the Scientific Python ecosystem. Moreover, the generated wasm modules can also be integrated or extended with many other programming languages. This broadens the capabilities of research software engineers who have a strong affinity for a specific language, such as Python, and empowers polyglots.
+Towards that end, ITK-Wasm provides powerful, joyful tooling for scientific computation in wasm through a number of distinct but related parts.
 
-Enter ITK-Wasm, a pioneering integration that marries the Insight Toolkit (ITK) with WebAssembly. ITK-Wasm is crafted to adhere to wasm community standards, thereby facilitating the creation of wasm modules that are simple, efficient, and easily understandable. It prioritizes performance in handling scientific datasets, especially multi-dimensional spatial data. By offering Pythonic interfaces and leveraging Python and NumPy-based (the data Array API standard) data structures, ITK-Wasm ensures seamless operation in diverse computational environments, from web browsers with Pyodide to system-level contexts. Any standard C or C++ scientific codebase, whether they are based on ITK or not, can utilize ITK-Wasm to generate extremely portable Python packages that integrate with the Scientific Python ecosystem. The generated wasm modules can also be integrated or extended with many other programming languages. This extends the capabilities of research software engineers whose experience may be limited or who have a strong affinity for a specific language, such as Python, and empowers polyglots.
+1. C++ core tooling
+2. Build environment Docker images
+3. A Node.js CLI to build Wasm, generate language bindings, run tests, and publish packages
+4. Small, language-specific libraries that facilicate idiomatic integration
+5. Multi-dimensional scientific file format support
+
+This tooling supports a straightforward programming model that aligns with functional programming paradigms and leverages Wasm's simple stack-based virtual machine and Component Model architecture. ITK-Wasm is built around two key functional concepts:
+
+1. **Interface Types**: High-level, programming-language types for scientific computing, derived from Wasm's low-level types.
+2. **Processing Pipelines**: Functions implemented in Wasm modules that operate on these interface types.
+
+### C++ core
+
+ITK-Wasm's C++ core tooling provides:
+
+1. Fundamental numerical methods and multi-dimensional scientific data structures
+2. An elegant, modern interface to create processing pipelines
+3. A bridge to interoperable web techologies
+4. A bridge to Web3 and traditional desktop computing
+
+These are embodied in the C++ core with:
+
+1. ITK
+2. CLI11
+3. RapidJSON
+4. libcbor
+
+The Insight Toolkit (ITK) is an open-source, cross-platform library that provides developers with an extensive suite of software tools based on a proven, spatially-oriented architecture for processing scientific data in two, three, or more dimensions [@doi:10.3389/fninf.2014.00013;].
+ITK includes fundamental numerical libraries, such as Eigen.
+ITK's C++ template-based architecture inherently helps keep Wasm modules small while enabling the compiler to add extensive performance optimizations.
+The _itk-wasm_ GitHub repository is also an ITK Remote Module, `WebAssemblyInterface`, that implements Wasm-interface specific functionality.
+
+Wasm module C++ processing pipelines are written with CLI11's simple and intuitive interface [@doi:10.5281/zenodo.804964].
+RapidJSON provides JSON-related functionality since it is not only extremely fast but also extremely small, which is critical for efficient WebAssembly deployment.
+The ability to read and write to files, providing a bridge to Web3 and traditional desktop computing, is built on libcbor, which is another tiny footprint library.
+
+### Build environment Docker images
+
+Build environment Docker images encapsulate
+
+1. The ITK-Wasm C++ core
+2. An Emscripten or WASI toolchain
+3. Additional Wasm tools and configurations
+
+These `itkwasm/emscripten` and `itkwasm/wasi` Docker images are _dockcross_ images -- Docker images with pre-configured C++ cross-compiling toolchains that enable easy-application, reproducible builds, and a clean separation of the build environment, source tree, and build artifacts [@dockcross].
+
+These images include not only the CMake pre-configured toolchains, but pre-built versions of the ITK-Wasm C++ core. Moreover, Wasm tools for optimization, debugging, emulation and system execution, testing, are bundled. A number of build and system configurations are included to make optimized and debuggable builds for scientific codebases a breeze.
+
+### Command line interface (CLI)
+
+An `itk-wasm` Node.js _command line interface (CLI)_ drives
+
+- Wasm module builds
+- Generation of language bindings and language package configurations
+- Testing for Wasm binaries
+
+The CLI can be installed via Node.js / NPM:
+
+```sh
+npm install -g itk-wasm
+```
+
+However, new projects are typically created with the `create-itk-wasm` CLI:
+
+```sh
+npx create-itk-wasm
+```
+
+The `create-itk-wasm` tool, which can be used interactively or programmatically, will generate C++ code with the desired ITK-Wasm CLI11 interfaces, other support configuration files such as CMake build configuration scripts and a conda _environment.yml_ file, and a PNPM _package.json_ file that will drive Wasm module builds, language binding generation, and testing. The PNPM workspace internally utilizes the `itk-wasm` CLI to run the build in parallel following its dependency graph.
+
+### Language-specific libraries and idiomatic bindings
+
+Small, language-specific libraries are used by generated bindings to provide simple, clean, performant, and idiomatic interfaces in the host languages.
+
+In TypeScript / JavaScript, this is the NPM `itk-wasm` package and in Python this is the PyPI `itkwasm` package.
+
+TypeScript / JavaScript bindings and packages are generated from Emscripten toolchain builds of ITK-Wasm.
+TypeScript bindings are generated along with an NPM _package.json_ to support package builds and deployment.
+Bindings are generated that support both browser-based execution and server-side execution in Node.js.
+Build scripts are provided to build TypeScript to JavaScript and also generate a demo app with an HTML interface.
+JavaScript bindings load Zstandard-compressed versions the Wasm modules on-demand in a web worker to support progressive and performant execution.
+
+Python packages are generate for both system execution and web brower-execution. In the browser, Pyodide-compatible packages provide client-side web app scripting in Python, including via PyScript, and sustainable, scalable Jupyter deployments via JupyterLite.
+At a system level, Linux, macOS, and Windows operating systems are supported on x86_64 and ARM via wasmtime-py.
+
+#### Python environment dispatch
+
+Bindings produce a primary, pip-installable Python package. In browser environments, this will pull a corresponding Emscripten-enabled Python package. For system Python distributions, this will bring in a corresponding WASI-enabled Python package.
+When GPU-accelerated implementations of functions are available in other packages along with required hardware and software, simply pip-installing the accelerator package will cause function calls to invoke accelerated overrides registered with modern package metadata, @fig:environment-dispatch.
+
+:::{figure} figures/environment-dispatch.png
+:label: fig:environment-dispatch
+Cross-platform, cross-environment support with optional non-Wasm accelerator packages is made possible by a generated environment dispatch Python package, a WASI-based Python package, and a Pyodide package. The Pyodide package does not have typical Pyodide-Emscripten ABI limitations due to the application of principals from the Wasm Component Model.
+:::
+
+### Browser and system APIs
+
+While synchronous functions are available in system packages, browser packages provide asynchronous functions for non-blocking, performant execution in the JavaScript runtime event loop. These functions are called with modern Python's [async / await support](https://docs.python.org/3/library/asyncio-task.html).
+
+For example, to install the [itkwasm-compress-stringify](https://pypi.org/project/itkwasm-compress-stringify/) package:
+
+::::{tab-set}
+
+:::{tab-item} System
+
+```shell
+pip install itkwasm-compress-stringify
+```
+
+:::
+
+:::{tab-item} Browser
+In Pyodide, e.g. the [Pyodide REPL](https://pyodide.org/en/stable/console.html) or [JupyterLite](https://jupyterlite.readthedocs.io/en/latest/try/lab),
+
+````python
+import micropip
+await micropip.install('itkwasm-compress-stringify')
+:::
+
+::::
+
+
+In the browser, call the async `*_async` function with the `await` keyword.
+
+::::{tab-set}
+
+:::{tab-item} System
+```python
+from itkwasm_compress_stringify import compress_stringify
+
+data = bytes([33,44,55])
+compressed = compress_stringify(data)
+````
+
+:::
+
+:::{tab-item} Browser
+
+```python
+from itkwasm_compress_stringify import compress_stringify_async
+
+data = bytes([33,44,55])
+compressed = await compress_stringify_async(data)
+```
+
+:::
+
+::::
+
+### Traditional file format support
+
+Assistance for handling data serialized in file formats plays a crucial role in enabling comprehensive analysis using a variety of software tools.
+
+ITK-Wasm offers IO modules designed to interact with various standard scientific image and mesh file formats. These modules allow for the loading of data into the language-native interface type bindings.
+
+Scientific image file formats supported include:
+
+- [AIM,ISQ](https://www.scanco.ch/en/support/customer-login/faq-customers/faq-customers-import-export.html)
+- [BioRad](https://www.bio-rad.com/)
+- [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
+- [DICOM](https://dicom.nema.org/)
+- [DICOM Series](https://dicom.nema.org/)
+- [ITK HDF5](https://support.hdfgroup.org/HDF5/)
+- [JPEG](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)
+- [GIPL (Guy's Image Processing Lab)](https://www.ncbi.nlm.nih.gov/pubmed/12956259)
+- [LSM](https://www.openwetware.org/wiki/Dissecting_LSM_files)
+- [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)
+- [MGH](https://surfer.nmr.mgh.harvard.edu/fswiki/FsTutorial/MghFormat)
+- [MINC 2.0](https://en.wikibooks.org/wiki/MINC/SoftwareDevelopment/MINC2.0_File_Format_Reference)
+- [MRC](http://www.ccpem.ac.uk/mrc_format/mrc_format.php)
+- [NIfTI](https://nifti.nimh.nih.gov/nifti-1)
+- [NRRD](http://teem.sourceforge.net/nrrd/format.html)
+- [VTK legacy file format for images](https://www.vtk.org/VTK/img/file-formats.pdf)
+- [Varian FDF](https://github.com/InsightSoftwareConsortium/ITKIOFDF)
+
+Scientific mesh file formats supported include:
+
+- [BYU](http://www.eg-models.de/formats/Format_Byu.html)
+- [FreeSurfer surface, binary and ASCII](http://www.grahamwideman.com/gw/brain/fs/surfacefileformats.htm)
+- [OFF](https://en.wikipedia.org/wiki/OFF_%28file_format%29)
+- [STL](https://en.wikipedia.org/wiki/STL_%28file_format%29)
+- [SWC Neuron Morphology](https://swc-specification.readthedocs.io/en/latest/)
+- [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file)
+- [VTK legacy file format for vtkPolyData](https://www.vtk.org/wp-content/uploads/2015/04/file-formats.pdf)
+
+In addition to supporting external file formats, ITK-Wasm also introduces its own file formats. These ITK-Wasm file formats are optimized and offer a direct correspondence to spatial interface types, utilizing a straightforward JSON + binary array buffer format.
+
+Execution pipeline WebAssembly modules only support ITK-Wasm formats by default -- this ensures that size of the WebAssembly pipeline binary is minimal. When using ITK-Wasm pipelines on with the command line interface, Wasm modules from the image-io and mesh-io packages can transform data in other formats into the format supported by all ITK-Wasm modules.
+
+ITK-Wasm formats can be output in a directory or bundled in a single `.cbor` file. The [Concise Binary Object Representation (CBOR)](https://cbor.io/) format supports JSON + binary array data in the data schema, is extremely small and lightweight in implementations, has support across programming languages, is highly performant, and provides a [link to Web3 storage mechanisms](https://ipld.io/docs/codecs/known/dag-cbor/).
+
+ITK-Wasm file formats are available in ITK-Wasm IO functions but also in C++ via the _WebAssemblyInterface_ ITK module. This module can be enabled in an ITK build by setting the `-DModule_WebAssemblyInterface:BOOL=ON` flag in CMake. And, loading and conversion is also available native-binary Python bindings via the [_itk-webassemblyinterface_ Python package](https://pypi.org/project/itk-webassemblyinterface/).
+
+### Artificial Intelligence and the Semantic Web
+
+An ITK-Wasm LinkML [@doi:10.5281/zenodo.5703670] model provides FAIR definitions of the interface types that enable high-performance, portable, sustainable, and reproducible spatial analysis.
+
+The interface types include:
+
+- _BinaryFile_ - Representation of a binary file on a filesystem. For performance reasons, use BinaryStream when possible, instead of BinaryFile.
+- _BinaryStream_ - Representation of a binary stream. For performance reasons, use BinaryStream when possible, instead of BinaryFile.
+- _Image_ - Representation of an N-dimensional scientific image.
+- _JsonCompatible_ - A type that can be represented in JSON.
+- _Mesh_ - Representation of an N-dimensional mesh.
+- _PolyData_ - Representation of a polydata, 3D geometric data for rendering that represents a collection of points, lines, polygons, and/or triangle strips.
+- _TextFile_ - Representation of a text file on a filesystem. For performance reasons, use TextStream when possible, instead of TextFile.
+- _TextStream_ - Representation of a text stream. For performance reasons, use TextStream when possible, instead of TextFile.
+
+This model and ITK-Wasm's architecture has the ability to not only learn about but perform analysis and visualization using natural language inputs to large-language artifical intelligence models.
+LinkML's Pydandic models and TypeScript models enable interfaces like the Bioimage Chatbot [@doi:arXiv:2310.18351; @doi:10.5281/zenodo.10032227] to semantically understand a biologist without programming language knowledge desires, and enables the system to execute desired operations or generate scripts for batch execution.
 
 ## Results
 
 A notable application of ITK-Wasm is generating OME-Zarr images, a cloud-optimized bioimaging format supported by an international community. Through the Dask-based ngff-zarr package, ITK-Wasm efficiently produces OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments. Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
 
-Results: A notable application of ITK-Wasm is generating OME-Zarr images, a cloud-optimized bioimaging format supported that is an open standard in the international community. Through the Dask-based ngff-zarr package, ITK-Wasm efficiently produces OME-Zarr images in Pyodide, JupyterLite, and traditional native CPython environments. Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
-
 ## Discussion
-
-#### Interoperability and Language Support
 
 WebAssembly was designed with interoperability in mind. Initially supporting languages like C and C++, the ecosystem has grown to include Rust, Go, Python, and more. This broad language support makes WebAssembly a versatile tool for developers across different domains.
 
@@ -119,276 +325,13 @@ WebAssembly was designed with interoperability in mind. Initially supporting lan
 2. **WebAssembly Interface Types**: Standardizes the way Wasm modules interact with each other and with host environments, simplifying the integration process.
 3. **Component Model**: An emerging standard that aims to improve modularity and reuse of Wasm components, further enhancing interoperability .
 
-ITK-Wasm provides a robust framework for scientific computing that leverages WebAssembly's strengths. The framework bridges the gap between web-based and native applications, enabling high-performance, cross-platform scientific analysis. By integrating WebAssembly Component Model, ITK-Wasm enhances interoperability and sustainability, allowing scientific Python to thrive in a multi-language ecosystem.
+ITK-Wasm provides a robust framework for scientific computing that leverages WebAssembly's strengths. The framework bridges the gap between web-based and native applications, enabling high-performance, cross-platform scientific analysis. By integrating the principals of the WebAssembly Component Model, ITK-Wasm enhances interoperability and sustainability, allowing scientific Python to thrive in a multi-language ecosystem.
 
 ## Conclusion
 
 ITK-Wasm stands at the forefront of fostering interoperability, multi-language program support, sustainability, accessibility, and reproducibility in scientific computing. By integrating the WebAssembly Component Model, ITK-Wasm not only enhances scientific Python's capabilities but also sets a new standard for developing and distributing multi-language projects. The future of scientific computing is bright with ITK-Wasm's contributions to the field, providing a universal platform for spatial analysis and visualization.
 
-Conclusion: ITK-Wasm stands at the forefront of fostering interoperability, multi-language program support, sustainability, accessibility, and reproducibility in scientific computing. By integrating the WebAssembly Component Model, ITK-Wasm not only enhances scientific Python's capabilities but also sets a new standard for developing and distributing multi-language projects.
-
 Links:
 
 - Documentation: https://wasm.itk.org/
 - Source code: https://github.com/InsightSoftwareConsortium/itk-wasm
-
-## References
-
-1. [ITK-Wasm Documentation](https://itkwasm.readthedocs.io/)
-2. McCormick, M., & Fillion-Robin, J.-C. (2023). ITK-Wasm: Sustainably Deploy Elegant, Modern C++ Everywhere. Monthly KW.js Collaboration.
-3. [GitHub - InsightSoftwareConsortium/itk-wasm](https://github.com/InsightSoftwareConsortium/itk-wasm)
-
-Twelve hundred years ago — in a galaxy just across the hill...
-
-This document should be rendered with MyST Markdown [mystmd.org](https://mystmd.org),
-which is a markdown variant inspired by reStructuredText. This uses the `mystmd`
-CLI for scientific writing which can be [downloaded here](https://mystmd.org/guide/quickstart).
-When you have installed `mystmd`, run `myst start` in this folder and
-follow the link for a live preview, any changes to this file will be
-reflected immediately.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
-
-## Bibliographies, citations and block quotes
-
-Bibliography files and DOIs are automatically included and picked up by `mystmd`.
-These can be added using pandoc-style citations `[@doi:10.1109/MCSE.2007.55]`
-which fetches the citation information automatically and creates: [@doi:10.1109/MCSE.2007.55].
-Additionally, you can use any key in the BibTeX file using `[@citation-key]`,
-as in [@hume48] (which literally is `[@hume48]` in accordance with
-the `hume48` cite-key in the associated `mybib.bib` file).
-Read more about [citations in the MyST documentation](https://mystmd.org/guide/citations).
-
-If you wish to have a block quote, you can just indent the text, as in:
-
-> When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication.
->
-> -- @hume48
-
-Other typography information can be found in the [MyST documentation](https://mystmd.org/guide/typography).
-
-### DOIs in bibliographies
-
-In order to include a DOI in your bibliography, add the DOI to your bibliography
-entry as a string. For example:
-
-```{code-block} bibtex
-:emphasize-lines: 7
-:linenos:
-@book{hume48,
-  author    =  "David Hume",
-  year      = {1748},
-  title     = "An enquiry concerning human understanding",
-  address   = "Indianapolis, IN",
-  publisher = "Hackett",
-  doi       = "10.1017/CBO9780511808432",
-}
-```
-
-### Citing software and websites
-
-Any paper relying on open-source software would surely want to include citations.
-Often you can find a citation in BibTeX format via a web search.
-Authors of software packages may even publish guidelines on how to cite their work.
-
-For convenience, citations to common packages such as
-Jupyter [@jupyter],
-Matplotlib [@matplotlib],
-NumPy [@numpy],
-pandas [@pandas1; @pandas2],
-scikit-learn [@sklearn1; @sklearn2], and
-SciPy [@scipy]
-are included in this paper's `.bib` file.
-
-In this paper we not only terraform a desert using the package terradesert [@terradesert], we also catch a sandworm with it.
-To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
-If you are citing a team, ensure that the author name is wrapped in additional braces `{Team Name}`, so it is not treated as an author's first and last names.
-
-```{code-block} bibtex
-:emphasize-lines: 2
-:linenos:
-@misc{terradesert,
-  author = {{TerraDesert Team}},
-  title  = {Code for terraforming a desert},
-  year   = {2000},
-  url    = {https://terradesert.com/code/},
-  note   = {Accessed 1 Jan. 2000}
-}
-```
-
-## Source code examples
-
-No paper would be complete without some source code.
-Code highlighting is completed if the name is given:
-
-```python
-def sum(a, b):
-    """Sum two numbers."""
-
-    return a + b
-```
-
-Use the `{code-block}` directive if you are getting fancy with line numbers or emphasis. For example, line-numbers in `C` looks like:
-
-```{code-block} c
-:linenos: true
-
-int main() {
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-    return 0;
-}
-```
-
-Or a snippet from the above code, starting at the correct line number, and emphasizing a line:
-
-```{code-block} c
-:linenos: true
-:lineno-start: 2
-:emphasize-lines: 3
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-```
-
-You can read more about code formatting in the [MyST documentation](https://mystmd.org/guide/code).
-
-## Figures, Equations and Tables
-
-It is well known that Spice grows on the planet Dune [@Atr03].
-Test some maths, for example $e^{\pi i} + 3 \delta$.
-Or maybe an equation on a separate line:
-
-```{math}
-g(x) = \int_0^\infty f(x) dx
-```
-
-or on multiple, aligned lines:
-
-```{math}
-\begin{aligned}
-g(x) &= \int_0^\infty f(x) dx \\
-     &= \ldots
-\end{aligned}
-```
-
-The area of a circle and volume of a sphere are given as
-
-```{math}
-:label: circarea
-
-A(r) = \pi r^2.
-```
-
-```{math}
-:label: spherevol
-
-V(r) = \frac{4}{3} \pi r^3
-```
-
-We can then refer back to Equation {ref}`circarea` or
-{ref}`spherevol` later.
-The `{ref}` role is another way to cross-reference in your document, which may be familiar to users of Sphinx.
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas[^footnote-1] diam turpis, placerat[^footnote-2] at adipiscing ac,
-pulvinar id metus.
-
-[^footnote-1]: On the one hand, a footnote.
-[^footnote-2]: On the other hand, another footnote.
-
-<!-- :::{figure} figure1.png
-:label: fig:stream
-This is the caption, sandworm vorticity based on storm location in a pleasing stream plot. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/arrays/streamplot.html).
-:::
-
-:::{figure} figure2.png
-:label: fig:em
-This is the caption, electromagnetic signature of the sandworm based on remote sensing techniques. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/stats/hist2d.html).
-::: -->
-
-<!-- As you can see in @fig:stream and @fig:em, this is how you reference auto-numbered figures.
-To refer to a sub figure use the syntax `@label [a]` in text or `[@label a]` for a parenhetical citation (i.e. @fig:stream [a] vs [@fig:stream a]).
-For even more control, you can simply link to figures using `[Figure %s](#label)`, the `%s` will get filled in with the number, for example [Figure %s](#fig:stream).
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references). -->
-
-```{list-table} This is the caption for the materials table.
-:label: tbl:materials
-:header-rows: 1
-* - Material
-  - Units
-* - Stone
-  - 3
-* - Water
-  - 12
-* - Cement
-  - {math}`\alpha`
-```
-
-We show the different quantities of materials required in
-@tbl:materials.
-
-Unfortunately, markdown can be difficult for defining tables, so if your table is more complex you can try embedding HTML:
-
-:::{table} Area Comparisons (written in html)
-:label: tbl:areas-html
-
-<table>
-<tr><th rowspan="2">Projection</th><th colspan="3" align="center">Area in square miles</th></tr>
-<tr><th align="right">Large Horizontal Area</th><th align="right">Large Vertical Area</th><th align="right">Smaller Square Area<th></tr>
-<tr><td>Albers Equal Area   </td><td align="right"> 7,498.7   </td><td align="right"> 10,847.3  </td><td align="right">35.8</td></tr>
-<tr><td>Web Mercator        </td><td align="right"> 13,410.0  </td><td align="right"> 18,271.4  </td><td align="right">63.0</td></tr>
-<tr><td>Difference          </td><td align="right"> 5,911.3   </td><td align="right"> 7,424.1   </td><td align="right">27.2</td></tr>
-<tr><td>Percent Difference  </td><td align="right"> 44%       </td><td align="right"> 41%       </td><td align="right">43%</td></tr>
-</table>
-:::
-
-or if you prefer LaTeX you can try `tabular` or `longtable` environments:
-
-```{raw} latex
-\begin{table*}
-  \begin{longtable*}{|l|r|r|r|}
-  \hline
-  \multirow{2}{*}{\bf Projection} & \multicolumn{3}{c|}{\bf Area in square miles} \\
-  \cline{2-4}
-   & \textbf{Large Horizontal Area} & \textbf{Large Vertical Area} & \textbf{Smaller Square Area} \\
-  \hline
-  Albers Equal Area   & 7,498.7   & 10,847.3  & 35.8  \\
-  Web Mercator        & 13,410.0  & 18,271.4  & 63.0  \\
-  Difference          & 5,911.3   & 7,424.1   & 27.2  \\
-  Percent Difference  & 44\%      & 41\%      & 43\%  \\
-  \hline
-  \end{longtable*}
-
-  \caption{Area Comparisons (written in LaTeX) \label{tbl:areas-tex}}
-\end{table*}
-```
-
-Perhaps we want to end off with a quote by Lao Tse[^footnote-3]:
-
-> Muddy water, let stand, becomes clear.
-
-[^footnote-3]: $\mathrm{e^{-i\pi}}$
