@@ -27,10 +27,13 @@ project:
       corresponding: true
   keywords:
     - Computational notebooks
-    - Interactive widgets
     - Jupyter
+    - Widgets
     - Python
+    - JavaScript
     - Data visualization
+    - Interactive computing
+
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
