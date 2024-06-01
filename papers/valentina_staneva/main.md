@@ -25,7 +25,7 @@ While traditionally fisheries acoustics scientists have had go-to tools and proc
 :::
 
 
-### User Stories:
+### User Stories
 To understand software requirements of the fisheries acoustics community, below we describe several example user stories.
 
 
@@ -35,7 +35,7 @@ A **data manager** wants to process terabytes of mooring data and serve them to 
 
 A **machine learning engineer** wants to develop an ML algorithm to automatically detect fish on a USV and needs to prepare a large dataset for training but does not know all the necessary preprocessing steps. They are very familiar with ML libraries but do not have the acoustics data processing knowledge, or familiarity with distributed computing libraries.
 
-An **acoustics graduate** student inherited some scripts from a retired scientist but is missing several parameters to reproduce the results.
+An **acoustics graduate student** inherited some scripts from a retired scientist but is missing several parameters to reproduce the results.
 
 We draw attention to the different levels of experience of these users: each one has expertise in a subdomain but to accomplish their goal their workflow needs to integrate tools/knowledge from others. We compile several requirements that stem from these stories:
 
@@ -82,7 +82,7 @@ We next describe in more detail the components of the workflow lifecycle.
 The main goal of echodataflow is to allow users to configure an echosounder data processing pipeline through editing configuration “recipe” templates. Echodataflow can be configured through three templates: datastore.yaml which handles the data storage decisions, pipeline.yml which specifies the processing stages, and logging.yaml which sets the logging format. 
 
 ### Data Storage Configuration
-In [Figure%s](#fig:datastore_config): datstore.yaml we provide an example of a data store configuration for a ship survey. In this scenario we want to process data from the Joint U.S.-Canada Integrated Ecosystem and Pacific Hake Acoustic Trawl Survey which is being publicly shared on an AWS S3 bucket by NOAA National Center for Environmental Information Acoustics Archive (NCEA)[ref]. The archive contains data from many surveys dating back to 1991 and contains ~280TB of data. The additional parameters referring to ship, survey, and sonar model names allow to parse the files to those belonging only to the survey of interest. The output is set to a private S3 bucket belonging to the user (i.e. an AWS account different from the input one), and the credentials are passed through a block_name. The survey contains ~4000 files, and one can set the group option to combine the files into survey-specific groups: based on transect information provided in the transect_group.txt file. One can further use regular expressions to subselect new groups based on needs. 
+In [Figure%s](#fig:datastore_config): datstore.yaml we provide an example of a data store configuration for a ship survey. In this scenario we want to process data from the Joint U.S.-Canada Integrated Ecosystem and Pacific Hake Acoustic Trawl Survey [NWFSC_FRAM_2022]which is being publicly shared on an AWS S3 bucket by NOAA National Cent er for Environmental Information Acoustics Archive (NCEA)[NWFSC_FRAM_2022]. The archive contains data from many surveys dating back to 1991 and contains ~280TB of data. The additional parameters referring to ship, survey, and sonar model names allow to parse the files to those belonging only to the survey of interest. The output is set to a private S3 bucket belonging to the user (i.e. an AWS account different from the input one), and the credentials are passed through a block_name. The survey contains ~4000 files, and one can set the group option to combine the files into survey-specific groups: based on transect information provided in the transect_group.txt file. One can further use regular expressions to subselect new groups based on needs. 
 
 :::{figure} datastore_config.png
 :label: fig:datastore_config
