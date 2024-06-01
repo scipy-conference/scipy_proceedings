@@ -153,11 +153,11 @@ packaging JavaScript code for reuse [@rojas2021modules]. While most JCPs predate
 standardization, ES modules are universally supported by browsers today. By
 adopting ES modules, anywidget is able to use the browser's native import
 mechanism to load and execute widget front-end code from the Jupyter kernel,
-thereby bypassing JCP import systems and eliminating third-party dependencies.
-This approach not only overcomes many development challenges, it also eliminates
-installation procedures for front-end code. Consequently, developers can
-prototype and share widgets directly within notebooks, making them more reliable
-and easier to use across JCPs.
+thereby bypassing those used by JCPs and eliminating third-party dependencies.
+This approach not only overcomes many development challenges, but also
+eliminates installation procedures for front-end code. Consequently, developers
+can prototype and share widgets directly within notebooks, making them more
+reliable and easier to use.
 
 An anywidget front-end module (AFM) is an ES module with a `default` export
 defining widget behavior. This export includes lifecycle methods, or "hooks,"
@@ -165,10 +165,10 @@ for managing a widget's lifecycle stages: initialization, rendering, and
 destruction [@fig:afm]. AFM lifecycle methods receive the interfaces required
 for kernel communication and notebook output modifications as arguments, rather
 than creating them internally or relying on global variables provided by the
-JCP. This practice, known as dependency injection, improves AFM portability by
-making integration interfaces explicit. New runtimes can support AFMs by
-implementing the required APIs, and existing JCPs can refactor their internals
-without breaking existing (any)widgets.
+JCP. This practice, known as dependency injection [@Fowler2004], improves AFM
+portability by making integration interfaces explicit. New runtimes can support
+AFMs by implementing the required APIs, and existing JCPs can refactor their
+internals without breaking existing (any)widgets.
 
 :::{figure}
 :label: fig:afm
