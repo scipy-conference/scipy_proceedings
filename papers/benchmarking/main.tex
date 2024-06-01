@@ -31,14 +31,14 @@ Our paper is accompanied by easily reusable code, and we invite the open researc
 
 The remainder of this paper is organized as follows: In Section \ref{methods}, we describe the forecasting methods and probabilistic wrappers used in our experiments. Section \ref{datasets} provides an overview of the datasets used for evaluation. In Section \ref{results}, we present the experimental results and discuss the performance of the combined approaches. Finally, in Section \ref{conclusion}, we conclude the paper and outline directions for future research.
 
-\section{sktime for Reproducible Experiments}\label{sktime}
+\section{sktime and tsbootstrap for Reproducible Experiments}\label{sktime}
 
 In this section, we summarize the key design principles used for reproducible benchmarking in \texttt{sktime}.
 
 \subsection{Unified Interface}
-In \texttt{sktime}, algorithms and mathematical objects are treated as first-class citizens. All objects of the same type, such as forecasters, follow the same interface. This consistency ensures that every forecaster is exchangeable with any other.
+In \texttt{sktime} and \texttt{tsbootstrap}, algorithms and mathematical objects are treated as first-class citizens. All objects of the same type, such as forecasters, follow the same interface. This consistency ensures that every forecaster is exchangeable with any other.
 
-Forecasters are objects with \texttt{fit} and \texttt{predict} methods, allowing both endogenous and exogenous data to be passed. For example, the following code specifies a forecaster, fits it, and makes predictions:
+Forecasters are objects with \texttt{fit} and \texttt{predict} methods, allowing both endogenous and exogenous data to be passed. For example, the following code specifies a forecaster, fits it, and makes predictions.
 
 \begin{verbatim}
 # specifying the forecasting algorithm
@@ -50,6 +50,11 @@ forecaster.fit(y, fh=[1, 2, 3])
 # querying predictions
 y_pred = forecaster.predict()
 \end{verbatim}
+
+A crucial design element in the above is that the first line can specify any forecaster - for instance, \texttt{ARIMA} or \texttt{ExponentialSmoothing},
+and the rest of the code will work without modification.
+
+This design pattern is consistent across all forecasters in \texttt{sktime}, and called the "strategy pattern" in software engineering.
 
 Currently, \texttt{sktime} supports the construction of 82 individual forecasters, either implemented within the package or interfaced from other packages in the ecosystem. Each forecaster is parametric, with configurations ranging from 1 to 47 parameters across different forecasters. A list of forecasters can be obtained or filtered via the \texttt{all\_estimators} utility.
 
@@ -64,7 +69,9 @@ y_pred_proba = forecaster.predict_proba()
 
 More details can be found in the official tutorials.
 
-Creating algorithms with compatible APIs is straightforward. \texttt{sktime} provides fill-in extension templates for creating algorithms in a compatible interface, which can be shared in a third-party code base and indexed by \texttt{sktime}, or contributed directly to \texttt{sktime}.
+Creating algorithms with compatible APIs is straightforward.
+
+\texttt{sktime} and \texttt{tsbootstrap} provide fill-in extension templates for creating algorithms in a compatible interface, which can be shared in a third-party code base and indexed by \texttt{sktime}, or contributed directly to \texttt{sktime}.
 
 \subsection{Reproducible Specification Language}
 All objects in \texttt{sktime} are uniquely specified by their construction string, which serves as a reproducible blueprint. Algorithms are intended to be stable and uniquely referenced across versions; full replicability can be achieved by freezing Python environment versions and setting random seeds.
@@ -79,6 +86,7 @@ Typical \texttt{sktime} code specifies the forecaster as Python code, but it can
 from sktime.registry import craft
 forecaster = craft('NaiveForecaster(strategy="last", sp=12)')
 \end{verbatim}
+which can be used to copy a full specification from a research paper and immediately construct the respective algorithm in a python environment, even if full code has not been shared by the author.
 
 This approach makes it extremely easy to share specifications reproducibly, simplifying the often convoluted process of describing algorithms in research papers.
 
@@ -91,7 +99,8 @@ This leads to a compositional specification language with rich combinatorial fle
 ConformalIntervals(NaiveForecaster(strategy="last", sp=12))
 \end{verbatim}
 
-This method uses a window sliding and residual collection strategy. The resulting algorithm includes \texttt{fit}, \texttt{predict}, and \texttt{predict\_interval} methods, as well as the \texttt{capability:pred\_int} tag.
+This method uses a window sliding and residual collection strategy.
+The resulting algorithm possesses \texttt{fit}, \texttt{predict}, and - added by the wrapper - \texttt{predict\_interval}, as well as the \texttt{capability:pred\_int} tag.
 
 Data transformation pipelines can be constructed similarly, or with an operator-based specification syntax:
 
@@ -99,7 +108,8 @@ Data transformation pipelines can be constructed similarly, or with an operator-
 Differencer() * Deseasonalizer(sp=12) * NaiveForecaster(strategy="last")
 \end{verbatim}
 
-This creates a forecasting algorithm that first computes first differences, then deseasonalizes with periodicity 12, then applies the last-value-carry-forward method, reseasonalizes, and inverts the first differences. The resulting forecaster provides unified interface points and is interchangeable with other forecasters in \texttt{sktime}.
+This creates a forecasting algorithm that first computes first differences, then deseasonalizes with periodicity 12, then applies the last-value-carry-forward method, reseasonalizes, and inverts the first differences.
+As before, the resulting forecaster provides unified interface points and is interchangeable with other forecasters in \texttt{sktime}.
 
 \subsection{Probabilistic Metrics}
 In \texttt{sktime}, evaluation metrics are first-class citizens. Probabilistic metrics compare the ground truth time series with predictions, representing probabilistic objects such as predictive intervals or distributions. For example:
@@ -107,6 +117,7 @@ In \texttt{sktime}, evaluation metrics are first-class citizens. Probabilistic m
 \begin{verbatim}
 y_pred_proba = forecaster.predict_proba()
 crps = CRPS()
+
 crps(y_true, y_pred_proba)
 \end{verbatim}
 
