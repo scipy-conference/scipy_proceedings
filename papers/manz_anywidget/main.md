@@ -10,7 +10,7 @@ abstract: |
   makes the widget system powerful, its architecture is currently tightly coupled
   to platforms. As a result, widgets are complex and error-prone to author and
   distribute, limiting the potential of the wider widget ecosystem. Here we
-  describe the approach behind _anywidget_, a standard for widget front-end
+  describe the approach behind the _anywidget_ project, a standard for widget front-end
   modules that decouples them from notebook platforms. The approach ensures
   cross-platform compatibility by using the web browser’s built-in module
   system to load these modules from the notebook kernel. This design simplifies
@@ -113,7 +113,7 @@ reliability and maintainability.
 
 ## Methodology
 
-Anywidget simplifies the authoring, sharing, and distribution of Jupyter Widgets
+The **anywidget** project (https://anywidget.dev) simplifies the authoring, sharing, and distribution of Jupyter Widgets
 by (i) introducing a standard for widget front-end code based on the web
 browser’s native module system, (ii) loading these modules from the kernel, and
 (iii) providing the necessary "glue code" to adapt existing JCPs to load and
