@@ -1,13 +1,19 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: "echodataflow: Configurable, Reproducible, and Scalable Fisheries Acoustics Workflows with Prefect"
+title: "echodataflow: Recipe-based Fisheries Acoustics Workflow Orchestration"
 abstract: |
   With the influx of large data from multiple instruments and experiments, scientists are wrangling complex data pipelines that are context-dependent and non-reproducible. We demonstrate how we leverage Prefect, a modern orchestration framework, to facilitate fisheries acoustics data processing. We built a Python package `echodataflow` which 1) wraps common echosounder data processing steps in a few lines of code; 2) allows users to specify workflows and their parameters through editing text “recipes” which provide transparency and reproducibility of the pipelines; 3) supports scaling of the workflows while abstracting the computational infrastructure; 4) provides monitoring and logging of the workflow progress. Under the hood, echodataflow uses Prefect to execute the workflows while providing a domain-friendly interface to facilitate diverse fisheries acoustics use cases. We demonstrate the features through a typical ship survey data processing pipeline. 
 ---
 
 ## Fisheries Acoustics Workflows
 
-While traditionally fisheries acoustics scientists have had a go-to tool and procedures for their data processing and analysis, now they are facing a lot of choices in designing their workflows. The field has also become very interdisciplinary and it involves people from different backgrounds (physics, biology, oceanography, acoustics, signal processing, machine learning, software engineering, etc.) and with different levels of experience. [Figure] shows the many variations of workflows that can be defined based on the data collection scheme, the use case, the data storage and computing infrastructure options. We discuss these in more detail in the next sections.
+While traditionally fisheries acoustics scientists have had a go-to tool and procedures for their data processing and analysis, now they are facing a lot of choices in designing their workflows. The field has also become very interdisciplinary and it involves people from different backgrounds (physics, biology, oceanography, acoustics, signal processing, machine learning, software engineering, etc.) and with different levels of experience. [Figure%s](#fig:workflow_variations) shows the many variations of workflows that can be defined based on the data collection scheme, the use case, the data storage and computing infrastructure options. We discuss these in more detail in the next sections.
+
+:::{figure} workflow_variations.png
+:label: fig:workflow_variations
+**`echodataflow` Workflow_Variations:** Various use cases drive different needs for data storage and computing infrastructure. Options are abundant but adapting workflows across them is not trivial.
+:::
+
 
 ## Echodataflow Overview
 At the center of `echodataflow` design is the notion that a workflow can be configured through a set of recipes (.yaml files) that specify the pipeline, data storage, and logging details. The idea draws inspiration from the Pangeo-Forge Project [@pangeo-forge] which facilitates the Extraction, Transformation, Loading (ETL) of earth science geospatial datasets from traditional repositories to analysis-ready, cloud-optimized (ARCO) data stores [ref]. The pangeo-forge recipes provide a model of how the data should be accessed and transformed, and the project has garnered numerous recipes from the community. While Pangeo-Forge’s focus is on transformation from `.netcdf` [ref] and `hdf5` [ref] formats to `zarr`, echodataflow’s aim is to support full echosounder data processing and analysis pipelines: from instrument raw data formats to biological products. Echodataflow leverages Prefect to abstract data and computation management. In  we provide an overview of echodataflow’s framework. At the center we see several steps from an echosounder data processing pipeline: `open_raw`, `combine_echodata`, `compute_Sv`, `compute_MVBS`. All these functions exist in the echopype package, and are wrapped by echodataflow into predefined stages. Prefect executes the stages on a dask cluster which can be started locally or can be externally set up. These echopype functions already support distributed operations with dask thus the integration with Prefect within echodataflow is natural. Dask clusters can be set up on a variety of platforms: local, cloud, kubernetes [ref], HPC cluster via `dask-jobqueue` [ref], etc. and allow abstraction from the computing infrastructure. Input, intermediate, and final data sets can live in different storage systems (local/cloud, public/private) and Prefect’s block feature provides seamless, provider-agnostic, and secure integration. Workflows can be executed and monitored through Prefect’s dashboard, while logging of each function is handled by echodataflow.
@@ -101,12 +107,7 @@ By default if logging is not configured, all the worker messages are directed to
 ## Workflow Deployment 
 
 ### Notebook
-Echodataflow can be directly initiated within a Jupyter[@Jupyter]notebook, which makes development interactive and provides a work environment familiar to researchers. One can see how the workflow is initiated within the Jupyter cell in [Figure%s](#notebook_start).
-
-:::{figure} notebook_start.png
-:label: fig:notebook_start
-**Initiating `echodataflow` in a Jupyter Notebook:** Once one has a set of "recipe" configuration files, they can initiate the workflow in a notebook cell with `echodataflow_start` command.
-:::
+Echodataflow can be directly initiated within a Jupyter notebook, which makes development interactive and provides a work environment familiar to researchers. One can see how the workflow is initiated within the Jupyter cell in 
 
 We provide two demo notebooks: one for execution on a [local machine](https://github.com/OSOceanAcoustics/echodataflow/blob/1ac65fa0bfcdd01b151b98134b842364311059fd/docs/source/local/notebook.ipynb) and another one for execution on [AWS](https://github.com/OSOceanAcoustics/echodataflow/blob/1ac65fa0bfcdd01b151b98134b842364311059fd/docs/source/local/notebook.ipynb). 
 
@@ -185,7 +186,7 @@ In the example, the echodataflow decorator ensures that the function `my_functio
 
 
 ## Future Development
-Our immediate goal is to provide more example workflow recipes integrating other stages of echosounder data processing such as machine learning prediction, label dataset generation (echoregions), biomass estimation (echopop), interactive visualization integration (echoshader), etc. We plan to explore more use case scenarios such as near-realtime on-ship processing. We will investigate how to improve memory management and caching between flows. We further aim to streamline the stage addition process. We hope that as the community agrees one data processing levels [ref], we can align them with existing stages in echodataflow, which will support building interoperable data sets whose integration will push us to study bigger and more challenging questions in fisheries acoustics.
+Our immediate goal is to provide more example workflow recipes integrating other stages of echosounder data processing such as machine learning prediction, label dataset generation (echoregions[ref]), biomass estimation (echopop[ref]), interactive visualization integration (echoshader), etc. We plan to explore more use case scenarios such as near-realtime on-ship processing. We will investigate how to improve memory management and caching between flows. We further aim to streamline the stage addition process. We hope that as the community agrees one data processing levels [ref], we can align them with existing stages in echodataflow, which will support building interoperable data sets whose integration will push us to study bigger and more challenging questions in fisheries acoustics.
 
 
 ## Beyond Fisheries Acoustics
@@ -196,7 +197,7 @@ Echodataflow was designed to facilitate echosounder data processing workflows, b
 We thank NOAA Fisheries Engineering and Acoustic Technologies team: Julia Clemons, Alicia Billings, Rebecca Thomas, Elizabeth Phillips for introducing us to the Pacific Hake Survey operations and collaborating with us to improve fisheries acoustics workflows.
 
 ## Funding:
-NOAA OAR, NOAA Northwest Fisheries Science Center, eScience Institute
+NOAA Fisheries, eScience Institute
 
 
 
