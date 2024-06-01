@@ -105,7 +105,7 @@ separately by an administrator into the shared environment, widgets often fail
 to work when the complementary front-end code has not been installed or does not
 match with the user’s kernel-side widget code.
 
-:::{figure} dev-before-afm-01.png
+:::{figure} dev-before-afm-01.svg
 :label: fig:before-afm
 Without anywidget, widget authors must transform their widget JavaScript code
 for each JCP to ensure compatibility, and distribute and install front-end code
@@ -130,7 +130,7 @@ execute these components [@fig:after-afm]. This separation of concerns allows
 widget authors to write portable code that runs consistently across JCPs without
 manual installation steps.
 
-:::{figure} dev-after-afm-02.png
+:::{figure} dev-after-afm-02.svg
 :label: fig:after-afm
 Anywidget simplifies widget authorship and sharing and ensures cross-platform
 compatibility. With anywidget, developers author a single, standard portable ES
@@ -289,7 +289,7 @@ libraries (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/),
 [Jupyter-Scatter](https://jupyter-scatter.dev/),
 [Mosaic](https://github.com/uwdata/mosaic) [@Heer2024-rr])) and research
 projects enhancing notebook interactivity (e.g.,
-[Persist](https://github.com/visdesignlab/persist/)[@Gadhave2023-rl]).
+[Persist](https://github.com/visdesignlab/persist/) [@Gadhave2023-rl]).
 Many of these tools use anywidget's binary data transport to enable efficient
 interactive visualization with minimal overhead by avoiding JSON serialization.
 Existing widget projects have also migrated to anywidget
@@ -300,6 +300,7 @@ introduced or refactored existing widget functionality to use anywidget
 simplified distribution and authoring capabilities.
 
 :::{figure} widgetstats.png
+:align: center
 :label: fig:widgetstats
 Custom Jupyter Widgets per year as of May 30, 2024. Date for each project is
 the initial commit or the date of the commit when a widget was added to the
