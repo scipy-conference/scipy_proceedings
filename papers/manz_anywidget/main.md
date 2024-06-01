@@ -320,7 +320,17 @@ notebook for Python, supports AFM directly, allowing anywidgets to run natively
 without additional "glue code." Panel is also exploring deeper integration with
 AFM to enable its reuse with their kernel-side reactivity systems.
 
-Widgets enrich computational notebooks by enabling users to view, manipulate, and interact with their data more intimately. By making widget authorship and use more accessible, the full gamut of web technologies can be brought to bear on data that lives in the kernel. A recent article outlines the challenges and tradeoffs associated with bringing advanced data visualization tools to computational notebooks, advocating for standardized solutions to democratize the creation of notebook visualization tools across notebook platforms [@Wang2024-ki]. Anywidget addresses this call to action by introducing such a standard. By removing the primary sources of friction associated with widget development and sharing, anywidget makes widget authorship practical and accessible to unlock the full power of notebooks.
+Data visualization tools compatible with multiple notebook platforms have
+greater impact, but achieving this compatibility involves trade-offs [@Wang2024-ki].
+Bidirectional communication is essential for operationalizing visualization
+insights in notebooks but is often inaccessible due to development difficulty
+and maintenance needed to add such a feature. Adopting standards can minimize
+these challenges, enabling both broad compatibility and advanced capabilities
+for users. A recent article enumerates these challenges and advocates for
+standardized solutions to democratize the creation of notebook visualization
+tools across notebook platforms [@Wang204-ki]. Anywidget addresses this by
+introducing a standard that removes friction in widget development and sharing,
+making authorship practical and accessible.
 
 ## Acknowledgements
 
