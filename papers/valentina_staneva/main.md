@@ -69,12 +69,12 @@ At the center of `echodataflow` design is the notion that a workflow can be conf
 :::
 
 ### Why Prefect?
-We chose Prefect among other Python workflow orchestration tools such as Apache Airflow[ref], Dagster[ref], Argo[ref], Luigi[ref]. We provide a few reasons for our decision:
-Prefect accepts dynamic workflows which are specified at runtime and do not require to follow a Directed Acyclic Graph, which can be restricting and difficult to implement.
-In Prefect, Python functions are first class citizens, thus building a Prefect workflow does not deviate a lot from traditional science workflows built out of functions.
-Prefect integrates with a dask cluster, and echopype processing functions are already using dask to scale operations
-Prefect’s code runs similarly locally as well as on cloud services. 
-Prefect’s monitoring dashboard is open source, can be run locally, and is intuitive to use.
+We chose Prefect among other Python workflow orchestration tools such as Apache Airflow[ref], Dagster[ref], Argo[ref], Luigi[ref] for the following reasons:
+* Prefect accepts dynamic workflows which are specified at runtime and do not require to follow a Directed Acyclic Graph, which can be restricting and difficult to implement.
+* In Prefect, Python functions are first class citizens, thus building a Prefect workflow does not deviate a lot from traditional science workflows built out of functions.
+* Prefect integrates with a dask cluster, and echopype processing functions are already using dask to scale operations
+* Prefect’s code runs similarly locally as well as on cloud services. 
+* Prefect’s monitoring dashboard is open source, can be run locally, and is intuitive to use.
 
 We next describe in more detail the components of the workflow lifecycle.
 
@@ -235,8 +235,26 @@ def my_function(arg1, arg2):
 In the example, the echodataflow decorator ensures that the function `my_function` is executed within the context of "StageA" as a "FLOW", checking for dependencies and logging relevant information.
 
 
+## Example Use Case: Processing Ship Survey Data from an Archive
+
+We demonstrate a workflow of processing all acoustic data for the 2017 Joint U.S.-Canada Integrated Ecosystem and Pacific Hake Acoustic Trawl Survey through a few routine processing stages. The survey spans a period of 06/15/2017 - 09/13/2017, covering the entire west coast of the US and Canada. Figure 1(a) shows a typical map of the transect schedule of the survey. Raw acoustic data are collected continuously while the ship is in motion, resulting in a total of 3873 files collected with a total size of 93 GB. The raw files are archived by the NOAA NCEI Water Column Sonar Data Archive and are publicly accessible on their Amazon Web Services S3 bucket ([https://registry.opendata.aws/ncei-wcsd-archive/](https://registry.opendata.aws/ncei-wcsd-archive/)). The processing pipeline involves several steps:
+
+* Convert raw files to cloud-native `.zarr` format following closely a community convention [ref]
+* Combine multiple individual `.zarr` files within a continuous transect segment into a single zarr file
+* Compute Sv: calibrate the measured acoustic backscatter data to volume backscattering strength (Sv, unit: dB re 1 m$^{-1}$)
+
+Once data is converted to Sv, they are easy to manipulate, as the data are stored in an xarray data array and are smaller than that of the original data. The final dataset can be served as an analysis-ready data product to the community. It can be beneficial to store also intermediate datasets at different processing stages: for example, preserving the converted raw files in the standardized `.zarr` format allows users to regenerate any of the following stages with different groupings or resolution, without having to fetch and convert raw data again.
+
+The execution of the workflow with echodataflow allowed us to monitor the progress of all files [Figure%s](#fig:one_failed): 3872 files were successfully processed, and 1 failed. Most importantly, that failure did not block the execution of the other files, and a log was generated for the stage and the filename for which this occurred. This experience serves as a confirmation that the transition from local development to a full production pipeline with `echodataflow` can indeed be smooth.
+
+
+:::{figure} one_failed.png
+:label: fig:one_failed
+** Processing full 2017 Survey Data: 1/3873 files failed at the `open_raw` stage, but this did not impact the entire pipeline. As shown, other files were processed until the last stage.
+::: 
+
 ## Future Development
-Our immediate goal is to provide more example workflow recipes integrating other stages of echosounder data processing such as machine learning prediction, label dataset generation (echoregions[ref]), biomass estimation (echopop[ref]), interactive visualization integration (echoshader), etc. We plan to explore more use case scenarios such as near-realtime on-ship processing. We will investigate how to improve memory management and caching between flows. We further aim to streamline the stage addition process. We hope that as the community agrees one data processing levels [ref], we can align them with existing stages in echodataflow, which will support building interoperable data sets whose integration will push us to study bigger and more challenging questions in fisheries acoustics.
+Our immediate goal is to provide more example workflow recipes integrating other stages of echosounder data processing such as machine learning prediction, label dataset generation (e.g. echoregions[ref]), biomass estimation (e.g.chopop[ref]), interactive visualization integration (e.g. echoshader), etc. We plan to explore more use case scenarios such as near-realtime on-ship processing. We will investigate how to improve memory management and caching between flows. We further aim to streamline the stage addition process. We hope that as the community agrees one data processing levels [ref], we can align them with existing stages in echodataflow, which will support building interoperable data sets whose integration will push us to study bigger and more challenging questions in fisheries acoustics.
 
 
 ## Beyond Fisheries Acoustics
