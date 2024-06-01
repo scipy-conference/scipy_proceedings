@@ -11,7 +11,7 @@ abstract: |
   to platforms. As a result, it has become complex, cumbersome, and error-prone
   to author and distribute portable widgets, which limits the potential of a
   wider widget ecosystem. Here we describe the approach behind _anywidget_, a new
-  standard for widget-front end modules that are decoupled from notebook
+  standard for widget front-end modules that decouples them from notebook
   platforms. The approach ensures cross-platform compatibility by using the web
   browser’s native module system to load these front-end modules from the
   notebook kernel. This design simplifies widget authorship and sharing,
@@ -23,11 +23,7 @@ abstract: |
 
 ## Introduction
 
-Computational notebooks are the tools of choice for data scientists, combining
-live code, equations, prose, visualizations, and other media within a single
-environment [@Perez2007-im; @Kluyver2016-xa; @Granger2021-jb]. Key to Jupyter's
-widespread adoption is its modular architecture and standardization of
-interacting components, which have fostered an extensive ecosystem of tools
+Computational notebooks combine live code, equations, prose, visualizations, and other media within a single environment. The Jupyter project [@Kluyver2016-xa; @Granger2021-jb] has been instrumental the success of notebooks, which have become the tool of choice for interactive computing in data science, research, and education. Key to Jupyter's widespread adoption is its modular architecture and standardization of interacting components, which have fostered an extensive ecosystem of tools
 that reuse these elements. For example, the programs responsible for executing
 code written in notebooks, called **kernels**, can be implemented by following
 the Jupyter Messaging Protocol [@doc_jupmsgprotocol]. This design allows users
@@ -39,27 +35,18 @@ notebooks can be shared and interpreted across different platforms
 Jupyter’s modular architecture has also supported innovation in **notebook
 front ends** — the user interfaces (UIs) for editing and executing code, as
 well as inspecting kernel outputs. The success of the classic Jupyter Notebook
-[@Kluyver2016-xa], with its easy installation and ability to connect to local
-and remote kernels, spurred the development of several similar
+[@Kluyver2016-xa] spurred the development of several similar
 Jupyter-compatible platforms (JCPs), such as JupyterLab, Google Colab, and
-Visual Studio Code.
+Visual Studio Code. These platforms provide unique UIs and editing features while reusing Jupyter's other standardized components. This interoperability allows users to choose the platform that best suits their needs, while retaining a familiar interactive
+computing experience with the ability to share notebooks. Furthermore, the separation of computation from UI offers users a wide selection of both front ends and kernels. However, the proliferation of JCPs has led to significant challenges for Jupyter Widgets, a key component of interactive user interfaces in Jupyter.
 
-These platforms provide unique UIs and editing features while reusing Jupyter's
-other standardized components. This interoperability allows users to choose the
-platform that best suits their needs, while retaining a familiar interactive
-computing experience with the ability to share notebooks. The separation of
-computation from UI has largely benefited users by offering a wider selection
-of both front ends and kernels. However, the proliferation of JCPs has led to
-significant challenges for Jupyter Widgets, a key component of interactive user
-interfaces in Jupyter.
-
-Jupyter Widgets extend notebook outputs with interactive views and controls for
+**Jupyter Widgets** extend notebook outputs with interactive views and controls for
 objects residing in the kernel [@doc_juparch]. For instance, the
 [ipywidgets](https://github.com/jupyter-widgets/ipywidgets) library provides
 basic form elements like buttons, sliders, and dropdowns to adjust individual
 variables. Other community projects offer interactive visualizations for
 domain-specific needs, such as 3D volume rendering
-([ipyvolume](https://github.com/widgetti/ipyvolume)), genome browsing
+([ipyvolume](https://github.com/widgetti/ipyvolume)), genomic data visualization
 ([higlass-python](https://github.com/higlass/higlass-python),
 [Gos](https://github.com/gosling-lang/gos) [@manzt2023]), and mapping
 ([ipyleaflet](https://github.com/jupyter-widgets/ipyleaflet),
@@ -272,11 +259,11 @@ authorship from JCP runtimes, resulting in multiple downstream benefits. First,
 anywidget—not widget authors—ensures compatibility and interoperability across
 existing JCPs, and authors can focus on important features rather than wrestle
 with build configuration and tooling. Second, by circumventing bespoke JCP
-import systems and loading web-standard ES modules from the kernel, instead,
+import systems and loading web-standard ES modules from the kernel,
 anywidget does away with front-end installation steps and delivers a superior
 developer experience during widget authorship. Third, anywidget unifies and
 simplifies widget distribution. Widgets can be prototyped and shared as
-notebooks, or mature into pip-installable packages and distributed just like
+notebooks, or mature into `pip`-installable packages and distributed just like
 other tools in the Python data science ecosystem. End users benefit from
 standardization because widgets are easy to install and behave consistently
 across different platforms.
@@ -287,13 +274,13 @@ tools for experimenting with toy datasets (e.g.,
 [DrawData](https://drawdata.xyz/)) to high-performance data visualization
 libraries (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/),
 [Jupyter-Scatter](https://jupyter-scatter.dev/),
-[Mosaic](https://github.com/uwdata/mosaic) [@Heer2024-rr])) and research
+[Mosaic](https://github.com/uwdata/mosaic) [@Heer2024-rr]) and research
 projects enhancing notebook interactivity (e.g.,
 [Persist](https://github.com/visdesignlab/persist/)[@Gadhave2023-rl]).
 Many of these tools use anywidget's binary data transport to enable efficient
 interactive visualization with minimal overhead by avoiding JSON serialization.
 Existing widget projects have also migrated to anywidget
-([higlass-python](https://github.com/higlass/higlass-python),
+(e.g., [higlass-python](https://github.com/higlass/higlass-python),
 [ipyaladin](https://github.com/cds-astro/ipyaladin)) and other libraries have
 introduced or refactored existing widget functionality to use anywidget
 (e.g., [Altair](https://github.com/vega/altair) [@VanderPlas2018]) due to the
@@ -307,26 +294,20 @@ repository project. Projects are tracked at
 https://github.com/manzt/anywidget-usage.
 :::
 
-The portable widget standard extends the anywidget ecosystem to platforms to
+The portable widget standard also extends the anywidget ecosystem to platforms beyond
 Jupyter. Popular web frameworks and dashboarding libraries such as
 [Voila](https://github.com/voila-dashboards/voila),
 [Panel](https://github.com/holoviz/panel), [Shiny for
 Python](https://github.com/posit-dev/py-shiny), and
-[Solara](https://github.com/widgetti/solara)) support Jupyter Widgets, allowing
+[Solara](https://github.com/widgetti/solara) support Jupyter Widgets, allowing
 users to embed anywidgets in standalone web applications. Efforts are underway
-to add more specialized, built-in support for the AFM. For example,
+to add more specialized, built-in support for AFM. For example,
 [Marimo](https://github.com/marimo-team/marimo), a new reactive notebook for
 Python, supports AFM directly, allowing anywidgets to run natively without
 additional "glue code." Panel is also exploring deeper integration with AFM to
 enable its reuse with their kernel-side reactivity systems.
 
-One of the stated goals of the Jupyter Notebook is to minimize the “distance”
-between user and data, and widgets play a key role by allowing users to
-customize the way they view and manipulate data. Anywidget advances this goal
-by removing the primary sources of friction associated with widget development
-and sharing. By making widget authorship practical and accessible, anywidget
-also helps narrow the distance between data practitioner and developer, and
-between data scientists and visualization experts.
+Widgets enrich computational notebooks by enabling users to view, manipulate, and interact with their data more intimately. By making widget authorship and use more accessible, the full gamut of web technologies can be brought to bear on data that lives in the kernel. A recent article outlines the challenges and tradeoffs associated with bringing advanced data visualization tools to computational notebooks, advocating for standardized solutions to democratize the creation of notebook visualization tools across notebook platforms [@wang2024supernova]. Anywidget addresses this call to action by introducing such a standard. By removing the primary sources of friction associated with widget development and sharing, anywidget makes widget authorship practical and accessible to unlock the full power of notebooks.
 
 ## Acknowledgements
 
