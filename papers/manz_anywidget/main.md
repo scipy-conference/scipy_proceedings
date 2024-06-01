@@ -295,7 +295,7 @@ projects enhancing notebook interactivity (e.g.,
 [@manz2024cev]). Many of these tools use anywidget's binary data transport to
 enable efficient interactive visualization with minimal overhead by avoiding
 JSON serialization. Existing widget projects have also migrated to anywidget
-([higlass-python](https://github.com/higlass/higlass-python),
+(e.g., [higlass-python](https://github.com/higlass/higlass-python),
 [ipyaladin](https://github.com/cds-astro/ipyaladin)) and other libraries have
 introduced or refactored existing widget functionality to use anywidget (e.g.,
 [Altair](https://github.com/vega/altair) [@VanderPlas2018]) due to the
