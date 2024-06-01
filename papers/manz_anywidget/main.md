@@ -4,7 +4,7 @@ title: 'Any notebook served: authoring and sharing reusable interactive widgets'
 abstract: |
   The open-source Jupyter project has fostered a robust ecosystem around
   notebook-based computing, resulting in diverse Jupyter-compatible platforms
-  (e.g., JupyterLab, Google Colab, VS Code). Jupyter widgets extend these
+  (e.g., JupyterLab, Google Colab, VS Code). Jupyter Widgets extend these
   environments with custom visualizations and interactive elements that
   communicate directly with user code and data. While this direct communication
   makes the widget system powerful, its architecture is currently tightly coupled
@@ -23,32 +23,35 @@ abstract: |
 
 ## Introduction
 
-The Jupyter Notebook interface is the _de facto_ standard for interactive
-computing, combining live code, equations, prose, visualizations, and other
-media within a single environment [@Perez2007-im; @Kluyver2016-xa; @Granger2021-jb]. Key to
-Jupyter's widespread adoption is its modular architecture and standardization
-of interacting components, which have fostered an extensive ecosystem of tools
+Computational notebooks are the tools of choice for data scientists, combining
+live code, equations, prose, visualizations, and other media within a single
+environment [@Perez2007-im; @Kluyver2016-xa; @Granger2021-jb]. Key to Jupyter's
+widespread adoption is its modular architecture and standardization of
+interacting components, which have fostered an extensive ecosystem of tools
 that reuse these elements. For example, the programs responsible for executing
 code written in notebooks, called **kernels**, can be implemented by following
-the Jupyter Messaging Protocol [@doc_jupmsgprotocol]. This
-design allows users to install kernels for various different languages and types
-of computation. Similarly, Jupyter's open-standard notebook format (`.ipynb`)
-ensures that notebooks can be shared and interpreted across different platforms [@doc_jupnbformat].
+the Jupyter Messaging Protocol [@doc_jupmsgprotocol]. This design allows users
+to install kernels for various different languages and types of computation.
+Similarly, Jupyter's open-standard notebook format (`.ipynb`) ensures that
+notebooks can be shared and interpreted across different platforms
+[@doc_jupnbformat].
 
-Jupyter’s modular architecture has also supported innovation in **notebook front
-ends** — the user interfaces (UIs) for editing and executing code, as well as
-inspecting kernel outputs. The success of the classic Jupyter Notebook web-based
-UI, offering easy installation and the ability to connect to both local and
-remote kernels, spurred the development of several similar Jupyter-compatible
-platforms (JCPs), such as JupyterLab, Google Colab, and Visual Studio Code.
+Jupyter’s modular architecture has also supported innovation in **notebook
+front ends** — the user interfaces (UIs) for editing and executing code, as
+well as inspecting kernel outputs. The success of the classic Jupyter Notebook
+[@Kluyver2016-xa], with its easy installation and ability to connect to local
+and remote kernels, spurred the development of several similar
+Jupyter-compatible platforms (JCPs), such as JupyterLab, Google Colab, and
+Visual Studio Code.
+
 These platforms provide unique UIs and editing features while reusing Jupyter's
 other standardized components. This interoperability allows users to choose the
 platform that best suits their needs, while retaining a familiar interactive
-computing experience and the ability to share notebooks. The separation of
-computation from UI has largely benefited end users by offering a wider
-selection of both front ends and kernels. However, the proliferation of JCPs has
-led to significant challenges for one particular component of Jupyter: Jupyter
-Widgets.
+computing experience with the ability to share notebooks. The separation of
+computation from UI has largely benefited users by offering a wider selection
+of both front ends and kernels. However, the proliferation of JCPs has led to
+significant challenges for Jupyter Widgets, a key component of interactive user
+interfaces in Jupyter.
 
 Jupyter Widgets extend notebook outputs with interactive views and controls for
 objects residing in the kernel [@doc_juparch]. For instance, the
@@ -60,10 +63,13 @@ domain-specific needs, such as 3D volume rendering
 ([higlass-python](https://github.com/higlass/higlass-python),
 [Gos](https://github.com/gosling-lang/gos) [@manzt2023]), and mapping
 ([ipyleaflet](https://github.com/jupyter-widgets/ipyleaflet),
+[pydeck](https://github.com/visgl/deck.gl/tree/master/bindings/pydeck),
 [lonboard](https://developmentseed.org/lonboard/)), which users can update by
 executing other code cells or interact with in the UI to update properties in
-the kernel. Widgets are unique among Jupyter components in that they consist of
-two separate programs — kernel-side code and front-end code — that communicate
+the kernel.
+
+Widgets are unique among Jupyter components in that they consist of two
+separate programs — kernel-side code and front-end code — that communicate
 directly via custom messages [@fig:overview], rather than through a mediating
 Jupyter process. With widgets, communication is bidirectional: a kernel action
 (e.g., the execution of a notebook cell) can update the UI, such as causing a
@@ -306,7 +312,7 @@ Jupyter. Popular web frameworks and dashboarding libraries such as
 [Voila](https://github.com/voila-dashboards/voila),
 [Panel](https://github.com/holoviz/panel), [Shiny for
 Python](https://github.com/posit-dev/py-shiny), and
-[Solara](https://github.com/widgetti/solara)) support Jupyter widgets, allowing
+[Solara](https://github.com/widgetti/solara)) support Jupyter Widgets, allowing
 users to embed anywidgets in standalone web applications. Efforts are underway
 to add more specialized, built-in support for the AFM. For example,
 [Marimo](https://github.com/marimo-team/marimo), a new reactive notebook for
