@@ -98,9 +98,10 @@ CAPTIONS CAPTIONS CAPTIONS CAPTIONS CAPTIONS CAPTIONS
 
 
 ### Packages functionalities
-[ADD] something about the core set of Pandata libraries the Echostack depends on
+The Echostack includes five software packages (Echopype, Echoregions, Echopop, Echoshader, and Echodataflow) that each handles a specific set of functionalities in general echosounder data processing workflows [@fig:echostack_main]. In parallel, Echolevels provides specifications for a cascade of data processing levels from raw to highly processed data, to enhance data sharing and usage. The Echostack packages jointly relies on a set of core dependencies for interfacing with file systems (fsspec), data storage (netCDF and Zarr), and data organization and computation (Xarray, Pandas, and Dask). Additionally, some libraries have specific dependencies to support functionalities like interactive plotting (HoloViz), masking grids based on regions (Regionmask), and workflow configuration (Pydantic) and orchestration (Prefect), as shown in [@fig:package_summary]. 
 
-The sections below provide brief descriptions of the functionalities of the Echostack libraries [@fig:package_summary] and their current development status.
+The sections below provide brief descriptions of the functionalities of the Echostack packages, their current status, and future development plans.
+
 
 
 :::{figure} fig_package_summary.png
