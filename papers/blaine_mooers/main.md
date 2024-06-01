@@ -337,15 +337,13 @@ These pre-existing double quotes have to be replaced with single quotes.
 
 ## Discussion
 
-The following discussion points arise during our implementation of the ASR libraries described above.
-Some discussion points are rows that are in question-and-answer sessions after presentations that we have made about adopting voice computing.
-Other discussion points were inspired by discussions on bulletin boards and blog posts.
+The following discussion points arose during our implementation of the ASR libraries described above.
 We limit the discussion to the software that we have presented above.
 
 ### Independence from breaking changes in Jupyter
 The Jupyter project lacks built-in support for code snippet libraries.
 Instead, third parties have developed several extensions for Jupyter to support code snippets in Jupyter.
-Unfortunately, changes is that occur in the core of Jupyter often break these extensions.
+Unfortunately, changes that occur in the core of Jupyter often break these extensions.
 They have to go through the trouble of setting up specific Python environments for older versions of Jupyter that still work with their favorite extension.
 This can lead to difficulties when one wants to install a more recent version of a module to be run inside Jupyter because there can be dependency conflicts.
 An obvious solution to this problem would be for the developers of Jupyter to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for Snippets is always available.
@@ -375,7 +373,7 @@ The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-v
 Unfortunately, this extension is experimental and not maintained; it does not work with Jupyter 4.2.
 The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments),  relies on the DaVinci large language model to make comments in Markdown cells and request code fragments.
 This program requires clicking on a microphone icon repeatedly, which makes the user vulnerable to repetitive stress injuries.
-The third extension is [jupyter-voicepilot] (https://github.com/JovanVeljanoski/jupyter-voicepilot).
+The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
 Although the name of the extension suggests it uses GitHub's Copilot, it actually uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGP3.
 The robustness of our approach is that the ASR software will always operate within Jupyter Lab as long as it continues to use web browsers.
