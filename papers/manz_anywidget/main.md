@@ -290,14 +290,15 @@ libraries (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/),
 [Jupyter-Scatter](https://jupyter-scatter.dev/),
 [Mosaic](https://github.com/uwdata/mosaic) [@Heer2024-rr])) and research
 projects enhancing notebook interactivity (e.g.,
-[Persist](https://github.com/visdesignlab/persist/) [@Gadhave2023-rl]).
-Many of these tools use anywidget's binary data transport to enable efficient
-interactive visualization with minimal overhead by avoiding JSON serialization.
-Existing widget projects have also migrated to anywidget
+[Persist](https://github.com/visdesignlab/persist/) [@Gadhave2023-rl],
+[cev](https://github.com/OzetteTech/comparative-embedding-visualization)
+[@manz2024cev]). Many of these tools use anywidget's binary data transport to
+enable efficient interactive visualization with minimal overhead by avoiding
+JSON serialization. Existing widget projects have also migrated to anywidget
 ([higlass-python](https://github.com/higlass/higlass-python),
 [ipyaladin](https://github.com/cds-astro/ipyaladin)) and other libraries have
-introduced or refactored existing widget functionality to use anywidget
-(e.g., [Altair](https://github.com/vega/altair) [@VanderPlas2018]) due to the
+introduced or refactored existing widget functionality to use anywidget (e.g.,
+[Altair](https://github.com/vega/altair) [@VanderPlas2018]) due to the
 simplified distribution and authoring capabilities.
 
 :::{figure} widgetstats.png
