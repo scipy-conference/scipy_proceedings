@@ -8,17 +8,16 @@ abstract: |
   environments with custom visualizations and interactive elements that
   communicate directly with user code and data. While this direct communication
   makes the widget system powerful, its architecture is currently tightly coupled
-  to platforms. As a result, it has become complex, cumbersome, and error-prone
-  to author and distribute portable widgets, which limits the potential of a
-  wider widget ecosystem. Here we describe the approach behind _anywidget_, a new
-  standard for widget-front end modules that are decoupled from notebook
-  platforms. The approach ensures cross-platform compatibility by using the web
-  browser’s native module system to load these front-end modules from the
-  notebook kernel. This design simplifies widget authorship and sharing,
-  consolidates publishing, enables rapid prototyping, and lowers the barrier to
-  entry for newcomers. Its adoption has sparked a widget renaissance, improving
-  reusability and interoperability, and making interactive computing more
-  accessible and efficient.
+  to platforms. As a result, widgets are complex and error-prone to author and
+  distribute, limiting the potential of the wider widget ecosystem. Here we
+  describe the approach behind _anywidget_, a standard for widget-front end
+  modules that is decoupled from notebook platforms. The approach ensures
+  cross-platform compatibility by using the web browser’s built-in module
+  system to load these modules from the notebook kernel. This design simplifies
+  widget authorship and distribution, enables rapid prototyping, and lowers the
+  barrier to entry for newcomers. Its adoption has sparked a widget renaissance,
+  improving reusability, interoperability, and making interactive computing
+  more accessible.
 ---
 
 ## Introduction
