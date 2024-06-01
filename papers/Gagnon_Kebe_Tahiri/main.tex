@@ -123,14 +123,14 @@ In short, we want to demonstrate a potential correlation between parts of the ge
 \section{Metrics}\label{metrics}
 Sure, here are more concise versions of the formulas suitable for a scientific paper:
 
-1. **Robinson-Foulds Distance (RF Distance):**
-The Robinson-Foulds distance measures the dissimilarity between two phylogenetic trees. It counts the number of splits (bipartitions) that are present in one tree but not the other (see \ref{lst:robinsonFoulds}).
+\subsection{Robinson-Foulds Distance (RF Distance)}\label{RF}
+The Robinson-Foulds distance measures the dissimilarity between two phylogenetic trees. It counts the number of splits (bipartitions) that are present in one tree but not the other (see \autoref{lst:robinsonFoulds}).
 
 \[ \text{RF}(T_1, T_2) = | \Sigma(T_1) \Delta \Sigma(T_2) | \]
 
 where \( \Sigma(T_1) \) and \( \Sigma(T_2) \) are the sets of splits in trees \( T_1 \) and \( T_2 \).
 
-\autoref{lst:robinsonFoulds}.
+%\autoref{lst:robinsonFoulds}.
 \begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds distance using the ete3 package in aPhyloGeo package]
     def robinsonFoulds(tree1, tree2):
         rf = 0
@@ -145,19 +145,19 @@ where \( \Sigma(T_1) \) and \( \Sigma(T_2) \) are the sets of splits in trees \(
 \end{lstlisting}
 
 
-2. **Normalized Robinson-Foulds Distance:**
+\subsection{Normalized Robinson-Foulds Distance}\label{RFnorm}
 The normalized Robinson-Foulds distance scales the RF distance to account for the size of the trees, giving a value between 0 and 1.
 
 \[ \text{RF}_{\text{norm}}(T_1, T_2) = \frac{| \Sigma(T_1) \Delta \Sigma(T_2) |}{| \Sigma(T_1) | + | \Sigma(T_2) |} \]
 
-3. **Euclidean Distance:**
-The Euclidean distance between two points in a multi-dimensional space is the length of the line segment connecting them (see \ref{euclideanDist}).
+\subsection{Euclidean Distance}\label{euclidean}
+The Euclidean distance between two points in a multi-dimensional space is the length of the line segment connecting them (see \autoref{lst:euclideanDist}).
 
 For points \( \mathbf{p} = (p_1, \ldots, p_n) \) and \( \mathbf{q} = (q_1, \ldots, q_n) \):
 
 \[ d_{\text{Euclidean}}(\mathbf{p}, \mathbf{q}) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2} \]
 
-\autoref{lst:euclideanDist}.
+%\autoref{lst:euclideanDist}.
 \begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the Euclidean distance distance using the ete3 package in aPhyloGeo package]
     def euclideanDist(tree1, tree2):
         ed = 0
@@ -171,8 +171,8 @@ For points \( \mathbf{p} = (p_1, \ldots, p_n) \) and \( \mathbf{q} = (q_1, \ldot
         return ed
 \end{lstlisting}
 
-4. **Least-Squares Distance:**
-The Least-Squares distance measures the discrepancy between observed and estimated values, often used in regression analysis (see \ref{lst:LeastSquare}).
+\subsection{Least-Squares Distance}\label{LS}
+The Least-Squares distance measures the discrepancy between observed and estimated values, often used in regression analysis (see \autoref{lst:LeastSquare}).
 
 For observed values \( y_i \) and estimated values \( \hat{y}_i \):
 
@@ -180,7 +180,7 @@ For observed values \( y_i \) and estimated values \( \hat{y}_i \):
 
 These formulas succinctly describe the methods used to measure distances and dissimilarities in various contexts.
 
-\autoref{lst:LeastSquare}.
+%\autoref{lst:LeastSquare}.
 \begin{lstlisting}[label=lst:LeastSquare,language=Python,caption=Python script for calculating the Least-Square distance using the ete3 package in aPhyloGeo package]
     def leastSquare(tree1, tree2):
         ls = 0.00
