@@ -54,7 +54,7 @@ Python scripts executing the stages can require passing more than ten arguments,
 
 ##### Data Storage
 
-Researchers are faced with decisions of where to store the data from experiments, intermediate products, and final results. Initially, data are usually stored on local hard drive storage associated with the instrument (which on some platforms may have limited capacity), but eventually, these data may be transferred to a data archive if one is maintained by the community. Some agencies (e.g. NCEI [ref]) have adopted cloud storage, and have publicly shared their data, which greatly facilitates data access and reuse. However, those repositories are usually not where researchers can store processed products. Funding models and organizational structure can result in short-term availability of resources and the need to change providers. *Workflows that are agile to those rapid changes and allow to easily switch between different platforms will benefit from a level of abstraction from storage systems.*
+Researchers are faced with decisions of where to store the data from experiments, intermediate products, and final results. Initially, data are usually stored on local hard drive storage associated with the instrument (which on some platforms may have limited capacity), but eventually, these data may be transferred to a data archive if one is maintained by the community. Some agencies (e.g. NOAA NCEI [ref]) have adopted cloud storage, and have publicly shared their data, which greatly facilitates data access and reuse. However, those repositories are usually not where researchers can store processed products. Funding models and organizational structure can result in short-term availability of resources and the need to change providers. *Workflows that are agile to those rapid changes and allow to easily switch between different platforms will benefit from a level of abstraction from storage systems.*
 
 ##### Computing Infrastructure
 
@@ -133,10 +133,11 @@ One of the main advantages of using an orchestration framework is the features i
 **Flow Runs:** Log of completed runs in Prefect UI
 :::
 
+Further, one can also view the progress of the tasks while they are running: in Prefect UI, or in the dask dashboard [Figure%s](fig:task_progress)
 
 :::{figure} task_progress.png
 :label: fig:task_progress
-**Task Progress** 
+**Task Progress:** The progress of the execution can be monitored in the Prefect UI Dashboard (top) or the dask dashboard (bottom)
 :::
 
 
