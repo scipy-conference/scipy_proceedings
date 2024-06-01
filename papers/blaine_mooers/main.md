@@ -9,7 +9,7 @@ abstract: |
 ## Introduction
 
 Jupyter notebooks provide a highly interactive computing environment where Markdown and code cells are run to yield almost instant results [@Perez2015ProjectJupyterComputationalNarrativesAsTheEngineOfCollaborativeDataScience].
-This form of interactive computing provides the instant gratification of seeing the results of the execution of the cells [@Perkel2021TenComputerCodesThatTransformedScience].
+This form of interactive computing provides the instant gratification of seeing the results of the execution of the cells; this might be why Jupyter is so popular [@Perkel2021TenComputerCodesThatTransformedScience].
 The most popular modality for interacting with the Jupyter notebook is to use the keyboard and the computer mouse.
 However, there are opportunities to generate prose and code using one's voice instead of one's hands.
 While those who have lost use of their hands are forced to use only their voice, other users can augment their typing with their voice to enhance their productivity and perhaps give their hands a break when tired of typing.
@@ -72,7 +72,7 @@ All libraries are made available on GitHub for direct download.
 ## Results
 
 First, we describe the contents of the snippet libraries and the kinds of problem they can solve.
-We attempt to group the libraries into several categories to simplify their explanation.
+We group the libraries into several categories to simplify their explanation.
 Second, we describe the deployment of the snippet libraries for the automated speech recognition (ASR) software package Voice In Plus.
 The results section that follows describes the libraries in the same order.
 
@@ -112,7 +112,12 @@ By adding the library that maps contractions to their expansions, the expansion 
 This automated replacement of English contractions saves time during the editing process.
 
 :::{figure} ./images/VoiceInCustomCommandsContractions.png
+:alt: contractions
+:class: bg-primary
+:width: 30 %
+:align: center
 :label: fig:contractions
+
 Webpage of custom commands. The buttons are used to edit existing commands and add new commands. Three English contractions and their expansions are shown.
 :::
 
@@ -381,23 +386,22 @@ Although the name of the extension suggests that it might use GitHub's Copilot, 
 This extension requires an API key for ChatGP3.
 
 ### Fine points about voice computing
-There are several caveats to keep in mind while doing voice computing.
-The first point has to do with the rate of speaking, the second point has to do with coping with incorrectly returned phrase, and the third point has to do with the requirements for a microphone.
-All of these points reflect the imperfect state of the current set of available language models.
-Our tips suggest how one can cope with these limitations and still gain improved productivity.
+We found five caveats to doing voice computing.
+All of these points reflect the imperfect state of available language models.
+We suggest how to cope with these limitations while improving productivity.
 
-The first point to keep in mind is that the rate at which you speak is an important variable.
-If you speak too slowly, your words may not be interpreted as the compound name invokes a voice trigger.
-Instead, the individual words printed to the screen.
+First, the rate at which you speak is an important variable.
+If you speak too slowly a voice trigger that is a compound word, your words may not be interpreted as the intended voice trigger.
+Instead, the individual words will be printed to the screen.
 On the other hand, if you talk too quickly, you may get ahead of the language model and it may stall.
-If it does not seem to be responding, it is best to restart your connection with the language model.
-Due to latency issues,  which vary with the software,  you will need to vary your expectations in terms of the length of verbal discourse that you can record before the system halts.
+If it does not seem to be responding, it is best to restart your connection with the language model by turning off the connection and restaring it via the shortboard cutoff or clicking twice on the plugin's icon in the web browser. 
+Due to latency issues, you will need to modulate your expected length of verbal discourse that you can record before the system fails to keep up and halts.
+I can generally dictate three to five paragraphs every time before the software falls behind and halts.
 
-The second point is that some language models will have a difficult time with a specific word or phrase.
+Second,  language model may have a difficult time with a specific words or phrases.
 This is a common experience, which is rectified by using text replacements.
 A difficult-to-interpret word or phrase may cause the language model to return a series of alternate words or phrases that were not intended.
 The solution to this problem is to map these alternate phrases to the desired phrase to ensure that it is returned correctly.
-
 Invariably, some of your mappings may get invoked when not intended.
 This event is rare enough of an event to be tolerated.
 The large language models are not perfect, and these sorts of difficulties are still widespread.
@@ -405,39 +409,42 @@ It is expected that over the next several years the language models will improve
 Nonetheless, the ability to make the mappings between these alternate phrases and the desired phrase demonstrates the great value of being able to use text replacements to get the desired outcome.
 We showed with our transcripts generated with whisper that it is also possible to apply the text replacements to the transcript after a dictation session rather than live during a dictation session, as is the case with Voice In Plus.
 
-The third point is that the language models vary quite a bit in terms of their requirements for an excellent microphone.
-It is important to realize that the more modern language models often are able to accurately transcribe your words using just the internal microphones that come with your laptop or desktop computer.
-We emphasize this point because the quality of your microphone often suggests that you need to use an external microphone or a certain kind of headphone. 
-This is not a general requirement.
+Third, language models vary quite a bit in terms of their requirements for an excellent microphone.
+Newer language models often can accurately transcribe your words using the internal microphone that comes with your laptop or desktop computer.
+A high quality external microphone may not be required, contrary to the prevailing advice in some quarters.
+The microphone in our 2018 MacBook Pro works well with Voice In Plus.
 
-This expectation may vary from ASR software to software.
-My personal preference is not to need to wear a headset to do voice computing.
-Having access to the headset all the time and needing to wear it while dictating seem to be two barriers to carrying out dictation; such barriers can turn into excuses for task avoidance.
+Fouth, you can inadvertantly change the case of words while dictating in Voice In Plus.
+To switch back to the default case, you need to navigate to the options page and select the text transform button to open a GUI that lets you set the case globally.
+This event occurs about one every 100 hours of dictation.
 
-You can inadvertently change the case of words while dictating in Voice In Plus.
-To switch back to the default case, you need to navigate to the options page and select the text transform button to open a GUI that lets you set the case.
+Fifth, a related problem is the inadvertent activation of other voice computing software on your computer.
+For example, once in about 100 hours of dictation, I will say a word that resembles `Hey, Siri`.
+The *Siri.app* will open and ask what I want.
+One solution is to shut down the Siri.app.
 
-A related problem that occasionally occurs is the inadvertent activation of other voice computing software on your computer.
-For example, from time-to-time, I will say a word that resembles Siri, and the Siri app will open and ask what I want.
+These caveatd are minor annoyances and are relatively infrequent.
+We think that the productivity gains out wiegh the disruptions caused by these annoyances.
 
 
-## Other common hazards when using voice computing
+### Common hazards when voice computing
 
-In my year of using voice control every day, I have had the following mishaps.
-I accidentally recorded a conversation when someone walked into my office while I had one of the ASR software packages activated.
-This led to bits of our conversation being recorded in whatever text area or document happened to be active at the time.
-This means that unwanted text has to be deleted later.
+In my year of using voice control every day, I have encountered two kinds of  mishaps.
+First, I haveI accidentally recorded a conversation when someone walked into my office while doing computing.
+If I fail to turn off the ASR software, bits of our conversation are recorded at the positon of the mouse cursor.
+This inserted text has to be deleted later.
 This is a bigger problem when a code file or code cell is being edited.
-This can lead to the inadvertent introduction of bugs that can take time to remove later.
+The injection of unwanted words can introduce bugs that take time to remove.
 
-Some ASR software may be activated upon restarting the computer.
-If their state is overlooked, our speech forms the sounds from our mouth or from a YouTube video or Zoom meeting could be converted into computer commands that get executed in unintended ways.
-I found that my external microphone will block my external speaker and interfere with the audio in Zoom sessions.
-I also had two voice-control software on at the same time and had clashes occur between them.
+Second, some ASR software may become activated upon restarting the computer.
+If their state is overlooked, words from your speeh, a YouTube video, or a Zoom meeting can be converted into computer commands that get executed in unintended ways.
+If this occurs in the middle of a Zoom meeting, this can be embarrassing.
+Also, two voice-control software can activated at the same time and speach can be transcribed twice in the text area.
 
 
 ## Future directions
 
-One future direction is to build the libraries that have been developed to date.
-This includes the development of a method of facilitating voice stops, in analogy to tab stops in advanced text editors, for the purpose of editing sites that have parameters or parameter values that need to be changed to customize the code snippet.
-The other related advance would be the mirroring of identical voice stops.
+One future direction is to build out the libraries of voice-triggered snippets that have been developed to date.
+Another direction includes the development of a method of facilitating voice stops, in analogy to tab stops in code snippets for advanced text editors.
+These voice stops would advance the cursor to alll sites that should be considered for edting to customize the code snippet for the problem at hand.
+The other related advance would be the mirroring of the parameter values at identical voice stops.
