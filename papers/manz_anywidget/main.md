@@ -188,7 +188,18 @@ export default {
   }
 }
 ```
-Stub of an anywidget front-end module (AFM) with initialization and rendering lifecycle methods.
+An anywidget front-end module (AFM) with initialization and rendering lifecycle
+methods. The `initialize` and `render` methods correspond to different stages
+in the widget's lifecycle. During model initialization, a front-end model is
+created and synced with the kernel. In the rendering stage, each notebook cell
+displaying the widget renders a independent view based on the synced model
+state.
+
+These methods use naming conventions from traditional Jupyter Widgets for
+familiarity but narrow down the APIs. The `model` interface has minimal set of
+methods for communicating with the kernel (retrieving, updating, and responding
+to value changes), and `el` is a standard web
+[`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
 :::
 
 ## Features
