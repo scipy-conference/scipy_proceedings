@@ -1,7 +1,7 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-Title: Training a Supervised Cilia Segmentation Model from Self-Supervision
-Abstract: |
+title: Training a Supervised Cilia Segmentation Model from Self-Supervision
+abstract: |
   Cilia are organelles found on the surface of some cells in the human body that sweep rhythmically to transport substances. Dysfunctional cilia are indicative of diseases that can disrupt organs such as the lungs and kidneys. Understanding cilia behavior is essential in diagnosing and treating such diseases, but is often a labor and time-intensive task. A significant bottleneck to automating cilia analysis is a lack of automated segmentation. We develop a robust, self-supervised framework exploiting the visual similarity of normal and dysfunctional cilia.
 ---
 
