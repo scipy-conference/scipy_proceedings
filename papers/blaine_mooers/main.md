@@ -442,7 +442,7 @@ If this occurs in the middle of a Zoom meeting, this can be embarrassing.
 Also, two voice-control software can activated at the same time and speach can be transcribed twice in the text area.
 
 
-## Future directions
+### Future directions
 
 One future direction is to build out the libraries of voice-triggered snippets that have been developed to date.
 Another direction includes the development of a method of facilitating voice stops, in analogy to tab stops in code snippets for advanced text editors.
