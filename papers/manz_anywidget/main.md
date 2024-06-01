@@ -315,7 +315,7 @@ Jupyter. Popular web frameworks and dashboarding libraries such as
 [Voila](https://github.com/voila-dashboards/voila),
 [Panel](https://github.com/holoviz/panel), [Shiny for
 Python](https://github.com/posit-dev/py-shiny), and
-[Solara](https://github.com/widgetti/solara)) support Jupyter Widgets, allowing
+[Solara](https://github.com/widgetti/solara) support Jupyter Widgets, allowing
 users to embed anywidgets in standalone web applications. Efforts are underway
 to add more specialized, built-in support for the AFM. For example,
 [Marimo](https://github.com/marimo-team/marimo), a new reactive notebook for
