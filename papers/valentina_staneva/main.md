@@ -16,10 +16,10 @@ At the center of `echodataflow` design is the notion that a workflow can be conf
 ## Workflow Deployment 
 
 ### Notebook
-Echodataflow can be directly initiated within a Jupyter notebook, which makes development interactive and provides a work environment familiar to researchers. One can see how the workflow is initiated within the Jupyter cell in [Figure%s](#notebook_start).
+Echodataflow can be directly initiated within a Jupyter[ref]notebook, which makes development interactive and provides a work environment familiar to researchers. One can see how the workflow is initiated within the Jupyter cell in [Figure%s](#notebook_start).
 
 
-We provide two demo notebooks: one for execution on a local machine and another one for execution on AWS. 
+We provide two demo notebooks: one for execution on a [local machine](https://github.com/OSOceanAcoustics/echodataflow/blob/1ac65fa0bfcdd01b151b98134b842364311059fd/docs/source/local/notebook.ipynb) and another one for execution on [AWS](https://github.com/OSOceanAcoustics/echodataflow/blob/1ac65fa0bfcdd01b151b98134b842364311059fd/docs/source/local/notebook.ipynb). 
 
 ### Docker
 We facilitate the deployment of echodataflow on various platforms by building a docker image that can be spun up with all required components and the user can access the workflow dashboard on the corresponding port.
@@ -32,6 +32,7 @@ prefect server start
 docker run --network="host" -e PREFECT_API_URL=http://host.docker.internal:4200/api blackdranzer/echodataflow
 ```
 
+Upon execution, the user can readily access the Prefect UI dashboard and run workflows from there.
 ## Command Line Interface
 We also provide a command-line interface which supports credential handling, and some additional useful features for managing the workflows.
 
@@ -51,8 +52,8 @@ echodataflow gs compute_Sv
 ```
 
 This command creates a template configuration file for the specified stage, allowing you to customize and integrate it into your workflow. The generated file includes:
-* a flow: This orchestrates the execution of all files that need to be processed, either concurrently or in parallel, based on the configuration.
-* a task (helper function): This assists the flow by processing individual files.
+* a flow: this orchestrates the execution of all files that need to be processed, either concurrently or in parallel, based on the configuration.
+* a task (helper function): this assists the flow by processing individual files.
 ### Rule Validation
 Scientific workflows often have stages that cannot be executed until other stages have completed. Those conditions can be set through `echodataflow` client during the initialization process and are stored in a `echodataflow_rules.txt` file:
 
@@ -66,34 +67,21 @@ echodataflow_compute_Sv:echodataflow_compute_MVBS
 
 These rules dictate the sequence in which stages should be executed, ensuring that each stage waits for its dependencies to complete.
 
-#### Adding New Rules with echodataflow Client
-The echodataflow client provides several commands for managing these rules. Users can view, add, or import flow rules interactively or from a file. Here are some examples:
+There are two options:
+* add a rule interactively
+  ```
+  echodataflow rules --add
+  ```
+  This command will prompt the user to input a new rule in the `parent_flow:child_flow format`, for example `echodataflow_compute_MVBS:echodataflow_frequency_differencing`. 
 
-View and Manage Rules
-
-To view, add, or import flow rules, use the rules subcommand:
-
-Add a New Rule Interactively:
-
-```
-echodataflow rules --add
-```
-
-This command will prompt the user to input a new rule in the `parent_flow:child_flow format`, for example `echodataflow_compute_MVBS:echodataflow_frequency_differencing`. 
-
-Import Rules from a File:
-```
-echodataflow rules --add-from-file path/to/rules.txt
-```
-
-This command imports rules from a specified file, where each rule is on a new line in the parent_flow:child_flow format.
+* import rules from a file:
+  ```
+   echodataflow rules --add-from-file path/to/rules.txt
+  ```
 
 #### Aspect-Oriented Programming (AOP) in echodataflow
 
-In echodataflow, we adopt an aspect-oriented programming approach for rule validation. This is achieved using a decorator that can be applied to functions to enforce rules and log function execution details.
-
-Aspect: echodataflow Decorator
-The echodataflow decorator is used for logging and aspect-oriented programming within the echodataflow framework. It logs the entry and exit of a decorated function and modifies the function's arguments based on the execution context. This supports two types of execution: "TASK" and "FLOW".
+In echodataflow, we adopt an aspect-oriented programming approach for rule validation. This is achieved using a decorator that can be applied to functions to enforce rules and log function execution details. The echodataflow decorator logs the entry and exit of a decorated function and modifies the function's arguments based on the execution context. This supports two types of execution: "TASK" and "FLOW".
 
 Example Usage:
 
