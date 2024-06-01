@@ -95,9 +95,7 @@ or does not match with the user’s kernel-side widget code.
 
 :::{figure} dev-before-afm-01.svg
 :label: fig:before-afm
-Without anywidget, widget authors must transform their widget JavaScript code
-for each JCP to ensure compatibility, and distribute and install front-end code
-separately from kernel-side Python code.
+Without anywidget, to ensure compatibility, authors must transform their JavaScript code for each JCP. Since JCPs load front-end widget code from a webserver rather than the kernel, widget front-end and Python code must also be packaged separately and installed consistently on any given platform.
 :::
 
 These limitations make widget development complex and time-consuming, demanding
@@ -120,8 +118,7 @@ manual installation steps.
 
 :::{figure} dev-after-afm-02.svg
 :label: fig:after-afm
-Anywidget simplifies widget authorship and sharing and ensures cross-platform
-compatibility. With anywidget, developers author a single, standard portable ES
+With anywidget, developers author a single, standard portable ES
 module (AFM), which is loaded from the kernel and executed using the browser's
 native module system. For existing JCPs, anywidget provides a front-end adapter
 to load and execute these standardized modules, while new platforms can add
@@ -189,17 +186,8 @@ export default {
 }
 ```
 An anywidget front-end module (AFM) with initialization and rendering lifecycle
-methods. The `initialize` and `render` methods correspond to different stages
-in the widget's lifecycle. During model initialization, a front-end model is
-created and synced with the kernel. In the rendering stage, each notebook cell
-displaying the widget renders a independent view based on the synced model
-state.
-
-These methods use naming conventions from traditional Jupyter Widgets for
-familiarity but narrow down the APIs. The `model` interface has minimal set of
-methods for communicating with the kernel (retrieving, updating, and responding
-to value changes), and `el` is a standard web
-[`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+methods. For familiarity, AFM methods use naming conventions from traditional Jupyter Widgets; however, AFM narrows down the APIs. _Methods_: The `initialize` and `render` methods correspond to different stages in the widget's lifecycle. During model initialization, a front-end model is created and synchronized with the kernel. In the rendering stage, each notebook cell
+displaying a widget object renders an independent view based on the synced model state. _Arguments_: The interface of `model` is restricted to a minimal set of methods for communicating with the kernel (retrieving, updating, and responding to value changes). The `el` argument is a standard web [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
 :::
 
 ## Features
@@ -320,7 +308,7 @@ notebook for Python, supports AFM directly, allowing anywidgets to run natively
 without additional "glue code." Panel is also exploring deeper integration with
 AFM to enable its reuse with their kernel-side reactivity systems.
 
-Widgets enrich computational notebooks by enabling users to view, manipulate, and interact with their data more intimately. By making widget authorship and use more accessible, the full gamut of web technologies can be brought to bear on data that lives in the kernel. A recent article outlines the challenges and tradeoffs associated with bringing advanced data visualization tools to computational notebooks, advocating for standardized solutions to democratize the creation of notebook visualization tools across notebook platforms [@Wang2024-ki]. Anywidget addresses this call to action by introducing such a standard. By removing the primary sources of friction associated with widget development and sharing, anywidget makes widget authorship practical and accessible to unlock the full power of notebooks.
+Tools for data visualization and interactivity have greater impact when compatible with more platforms, but achieving compatibility involves trade-offs. The full capabilities of the widget system, such as bidirectional communication, are often inaccessible to authors due to development difficulty and maintenance efforts. Adopting standards can minimize these impediments, enabling both broad compatibility and advanced capabilities for users. A recent article enumerates these challenges and advocates for standardized solutions to democratize the creation of notebook visualization tools across notebook platforms [@Wang2024-ki]. Anywidget addresses this by introducing a standard that removes friction in widget development and sharing, making authorship practical and accessible.
 
 ## Acknowledgements
 
