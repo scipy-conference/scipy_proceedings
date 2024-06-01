@@ -132,10 +132,11 @@ Python packages.
 
 Packaging custom Jupyter Widgets is complex due to the need to adapt JavaScript
 source code for various module systems used by JCPs. Initially, JavaScript
-lacked a built-in module system, leading to diverse third-party solutions
-adopted by JCPs. Without a standardized widget front-end format, authors transform
-their code for each JCP. In the context of Jupyter Notebook and JupyterLab, this
-problem is described in the Jupyter Widgets documentation [@doc_widgets] as follows:
+lacked a built-in module system, leading JCPs to adopt diverse third-party
+solutions. Without a standardized widget front-end format, authors transform
+their code for each JCP. In the context of Jupyter Notebook and JupyterLab,
+this problem is described in the Jupyter Widgets documentation [@doc_widgets]
+as follows:
 
 > Because the API of any given widget must exist in the kernel, the kernel is
 > the natural place for widgets to be installed. However, kernels, as of now,
