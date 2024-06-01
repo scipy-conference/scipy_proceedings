@@ -89,7 +89,6 @@ ITK-Wasm is crafted to adhere to Wasm community standards, thereby facilitating 
 ITK-Wasm provides infrastructure that empowers research software engineers to:
 
 - Build scientific C/C++ codes to Wasm
-- Debug scientific Wasm
 - Bridge Wasm with
   - Local filesystems
   - Canonical scientific programming data interfaces such as NumPy arrays
@@ -100,15 +99,16 @@ ITK-Wasm provides infrastructure that empowers research software engineers to:
 
 ## Methods
 
-Towards that end, ITK-Wasm provides powerful, joyful tooling for scientific computation in wasm through a number of distinct but related parts.
+ITK-Wasm provides powerful, joyful tooling for scientific computation in Wasm through a number of distinct but related parts.
 
 1. C++ core tooling
 2. Build environment Docker images
 3. A Node.js CLI to build Wasm, generate language bindings, run tests, and publish packages
 4. Small, language-specific libraries that facilicate idiomatic integration
-5. Multi-dimensional scientific file format support
+5. Scientific file format support
+6. Artificial intelligence and the semantic web integration
 
-This tooling supports a straightforward programming model that aligns with functional programming paradigms and leverages Wasm's simple stack-based virtual machine and Component Model architecture. ITK-Wasm is built around two key functional concepts:
+This tooling supports a straightforward programming model that aligns with functional programming paradigms and leverages Wasm's simple stack-based virtual machine and Component Model architecture. All tooling is built around two key concepts:
 
 1. **Interface Types**: High-level, programming-language types for scientific computing, derived from Wasm's low-level types.
 2. **Processing Pipelines**: Functions implemented in Wasm modules that operate on these interface types.
@@ -134,9 +134,14 @@ ITK includes fundamental numerical libraries, such as Eigen.
 ITK's C++ template-based architecture inherently helps keep Wasm modules small while enabling the compiler to add extensive performance optimizations.
 The _itk-wasm_ GitHub repository is also an ITK Remote Module, `WebAssemblyInterface`, that implements Wasm-interface specific functionality.
 
-Wasm module C++ processing pipelines are written with CLI11's simple and intuitive interface [@doi:10.5281/zenodo.804964].
 RapidJSON provides JSON-related functionality since it is not only extremely fast but also extremely small, which is critical for efficient WebAssembly deployment.
-The ability to read and write to files, providing a bridge to Web3 and traditional desktop computing, is built on libcbor, which is another tiny footprint library.
+The ability to read and write interface types to files, providing a bridge to Web3 and traditional desktop computing, is built on libcbor, which is another tiny footprint library.
+
+Wasm module C++ processing pipelines are written with CLI11's simple and intuitive argument parsing interface [@doi:10.5281/zenodo.804964].
+A C++ Wasm processing pipeline is defined with the familiar context of a command line executable.
+Processing pipelines can be built with native binary toolchains into usable command line executables, which facilites development and debugging.
+CLI11 extensions for the interface types and parsing enable an efficient embedding interface in addition to the command line interface.
+All modules support an `--interface-json` flag that outputs a description of the module's interface for binding generation.
 
 ### Build environment Docker images
 
@@ -310,12 +315,16 @@ The interface types include:
 - _TextFile_ - Representation of a text file on a filesystem. For performance reasons, use TextStream when possible, instead of TextFile.
 - _TextStream_ - Representation of a text stream. For performance reasons, use TextStream when possible, instead of TextFile.
 
-This model and ITK-Wasm's architecture has the ability to not only learn about but perform analysis and visualization using natural language inputs to large-language artifical intelligence models.
-LinkML's Pydandic models and TypeScript models enable interfaces like the Bioimage Chatbot [@doi:arXiv:2310.18351; @doi:10.5281/zenodo.10032227] to semantically understand a biologist without programming language knowledge desires, and enables the system to execute desired operations or generate scripts for batch execution.
+This model, combined with ITK-Wasm’s architecture, can perform analysis and visualization using natural language inputs provided to large-language artificial intelligence models. LinkML’s Pydantic models and TypeScript models enable interfaces like the Bioimage Chatbot [@doi:10.48550/arXiv.2310.18351; @doi:10.5281/zenodo.10032227] to semantically understand the needs of biologists without programming knowledge, allowing the system to execute desired operations or generate scripts for batch execution.
 
 ## Results
 
-A notable application of ITK-Wasm is generating OME-Zarr images, a cloud-optimized bioimaging format supported by an international community. Through the Dask-based ngff-zarr package, ITK-Wasm efficiently produces OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments. Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
+A notable application of ITK-Wasm is the generation of multiscale OME-Zarr images, a cloud-optimized bioimaging format with broad international adoption [@doi:10.1007/s00418-023-02209-1; @doi:10.1038/s41592-021-01326-w].
+To generate OME-Zarr's multiscale representation of multidimensional bioimages, anti-aliasing filters must be applied.
+
+In the NGFF-Zarr package, ITK-Wasm anti-aliasing filters efficiently produces OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments [@doi:10.5281/zenodo.8092821].
+Since the interface type's Python representation are Python data classes comprised of standand Python data types and NumPy arrays, they are trivially and efficiently serialized for parallel computing with Dask.
+Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
 
 ## Discussion
 

@@ -43,6 +43,8 @@ project:
     NPU: Neural Processing Unit
     FPGA: Field-Programmable Gate Array
     FAIR: Findable, Accessible, Interoperable, and Reusable
+    NPM: Node Package Manager
+    PNPM: Performant Node Package Manager
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
