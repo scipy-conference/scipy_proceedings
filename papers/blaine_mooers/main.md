@@ -368,22 +368,18 @@ However, the utilization of AI assistance in writing has to be disclosed upon ma
 Some publishers will not accept articles written with the help of AI-writing assistants.
 This could limit the options available for manuscript submission should one use such an assistant and have the manuscripts rejected by a publisher that accepts such assistants.
 
-### Prior art of ASR for Jupyter lab
+### ASR extensions for Jupyter lab
 
-Several extensions have been developed for Jupyter Lab enable the use of speech recognition in Jupyter notebooks.
-These packages were generally developed by individuals who lack the time to maintain the software, so these extensions are quite vulnerable to growing outdated as the Jupyter platform continues to evolve rapidly.
-For example, \emph{jupyterlab-voice-control}, supports the use of custom commands and is most similar to our application of voice-triggered snippets presented here.
-Unfortunately, this package is not actively maintained and does not work with Jupyter 4.1.
-The robustness of our approach is that it applies one of three ASR software packages that are supported by active teams of developers and that operate within Jupyter Lab and beyond Jupyter Lab, so the effort invested in mastering the commands for any of these three ASR software will have general utility beyond Jupyter Lab,
-
-The other packages use large language models to return the transcribed text and requested code.
-The first package,  \emph{jupyter-voice-comments} \footnote{\url{https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments}},  relies on the DaVinci large language model to make comments in Markdown files and request code fragments.
-The latter is fraught with code that does not work, so it is not worth the trouble for those users who are already in the trough of disappointment in the Gartner hype cycle of the current AI craze.
-
-This program is also fairly primitive in that you need to click on a microphone icon repeatedly, which makes the user vulnerable to repetitive stress injuries.
-The second package is \emph{jupyter-voicepilot} \footnote{\url{https://github.com/JovanVeljanoski/jupyter-voicepilot }}.
-Although the name of the extension suggests that it might use GitHub's Copilot, it actually uses whisper-1 and ChatGPT3.
+We found three extensions developed for Jupyter Lab enable the use of speech recognition in Jupyter notebooks.
+The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control) supports the use of custom commands and relies on the language model in the browser; it is similar to our application of voice-triggered snippets.
+Unfortunately, this extension is experimental and not maintained; it does not work with Jupyter 4.2.
+The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments),  relies on the DaVinci large language model to make comments in Markdown cells and request code fragments.
+This program requires clicking on a microphone icon repeatedly, which makes the user vulnerable to repetitive stress injuries.
+The third extension is [jupyter-voicepilot] (https://github.com/JovanVeljanoski/jupyter-voicepilot).
+Although the name of the extension suggests it uses GitHub's Copilot, it actually uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGP3.
+The robustness of our approach is that the ASR software will always operate within Jupyter Lab as long as it continues to use web browsers.
+
 
 ### Fine points about voice computing
 We found five caveats to doing voice computing.
