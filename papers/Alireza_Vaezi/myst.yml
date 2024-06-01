@@ -1,0 +1,48 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-alireza-vaezi
+  # Ensure your title is the same as in your `main.md`
+  title: Training a Supervised Cilia Segmentation Model from Self-Supervision
+  subtitle: University Of Georgia
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+  - name: Seyed Alireza Vaezi
+    email: sv22900@uga.edu
+    orcid: 0000-0000-0000-0000
+    affiliations:
+    - University of Georgia
+    corresponding: true
+  - name: Shannon Quinn
+    email: spq@uga.edu
+    affiliations:
+    - University of Georgia
+  keywords:
+  - Cilia
+  - Unsupervised biomedical Image Segmentation
+  - Optical Flow
+  - Autoregressive
+  - Deep Learning
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+  - rule: doi-exists
+    severity: ignore
+    keys:
+    - Atr03
+    - terradesert
+    - jupyter
+    - sklearn1
+    - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.jpg
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
