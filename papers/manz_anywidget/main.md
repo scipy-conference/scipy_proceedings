@@ -77,7 +77,7 @@ Jupyter Widget conceptual architecture.
 Widgets are intended to be pluggable components, similar to kernels. However,
 only the protocol for communication between kernel and front-end widget code,
 known as the [Jupyter Widgets Message
-Protocol](https://github.com/jupyter-widgets/ipywidgets/blob/main/packages/schema/messages.md),
+Protocol](https://github.com/jupyter-widgets/ipywidgets/blob/c65dc47/packages/schema/messages.md),
 is standardized. Critical components, such as the distribution format for
 front-end modules and methods for discovering, loading, and executing these
 modules, remain unspecified. As a result, JCPs have adopted diverse third-party
