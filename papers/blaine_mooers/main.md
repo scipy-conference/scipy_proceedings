@@ -66,7 +66,7 @@ This PDF enables the printing of a quiz so that the paper version can taken whil
 
 ### Availability of the libraries and quizzes
 The libraries were tested utilizing Jupyter Lab version 4.2 and Python 3.12 installed from Macports.
-All libraries are made available on GitHub for direct download.
+All libraries are made available on GitHub for download.
 
 
 ## Results
@@ -341,42 +341,45 @@ The following discussion points arose during our implementation of the ASR libra
 We limit the discussion to the software that we have presented above.
 
 ### Independence from breaking changes in Jupyter
+
 The Jupyter project lacks built-in support for code snippet libraries.
-Instead, third parties have developed several extensions for Jupyter to support code snippets in Jupyter.
+Instead, third parties have developed several extensions for Jupyter to support code snippets.
 Unfortunately, changes that occur in the core of Jupyter often break these extensions.
-They have to go through the trouble of setting up specific Python environments for older versions of Jupyter that still work with their favorite extension.
-This can lead to difficulties when one wants to install a more recent version of a module to be run inside Jupyter because there can be dependency conflicts.
-An obvious solution to this problem would be for the developers of Jupyter to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for Snippets is always available.
-The use of voice-triggered Snippets overcomes these difficulties with broken extensions because these Snippets are independent of Jupyter.
+Users have to create Python environments for older versions of Jupyter work with the snippets extension while missing out on the new featuers of Juptyer.
+An obvious solution to this problem would be for the developers of Jupyter to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for snippets is always available.
+The use of voice-triggered snippets external  to Jupyter side steps difficulties with broken extensions as Jupyter advances because the software is indpendent of Jupyter.
 
 ### Filling gap in tab-triggered snippets with voice-triggered snippets
+
 Voice-triggered snippets also provided an opportunity to overcome the absence of extensions for Jupyter that support tab-triggered snippets.
-Tab-triggered code snippets are standard in other text editors, whereas voice-triggered snippets have yet to become widespread in standard text editors.
-One advantage of Jupyter Notebooks is that they run in the browser, where several automated Speech Recognition software packages operate.
-We developed our libraries for two of these packages, which differ in the steepness of their learning curves and the extent of their customizability.
-We did this to meet the needs of users operating at different levels of coding skill.
+Tab-triggered code snippets are standard in most text editors, whereas voice-triggered snippets have yet to become widespread in standard text editors.
+One advantage of Jupyter Notebooks is that they run in the browser, where several automated Speech Recognition software packages operate (e.g., Voice-In Plus, Serenade, and Talon Voice).
+We developed our libraries for the software that we found to have the most gentle learning curve while remaining customizable.
+We did this to meet the needs of the widest population of users.
 
 ### The role of AI-assisted voice computing
-The dream of AI-assisted voice computing is to have one's intentions rather than one's words inserted into the document you are working on.
+
+The dream of AI-assisted voice computing is to have one's intentions rather than one's words inserted into the document you are developing.
 Our exposure to what is available through ChatGPT left us with an unfavorable impression due to the high error rate.
-GitHub's copilot can be used in LaTeX to autocomplete sentences.
-Here again, many of the suggested completions are accurate and require editing.
-These autocompleted sentences tend to slow one down, so I think there is a zero net gain.
-However, the utilization of AI assistance in writing has to be disclosed upon manuscript submission.
+GitHub's copilot can also be used in LaTeX to autocomplete sentences.
+Here again, many of the suggested completions are inaccurate and require editing.
+These autocompleted sentences tend to slow down the user by getting in the way and leaving no net gain in productivity.
+
+In addition, the utilization of AI assistance in scientific writing has to be disclosed upon manuscript submission.
 Some publishers will not accept articles written with the help of AI-writing assistants.
 This could limit the options available for manuscript submission should one use such an assistant and have the manuscripts rejected by a publisher that accepts such assistants.
 
 ### ASR extensions for Jupyter lab
 
 We found three extensions developed for Jupyter Lab enable the use of speech recognition in Jupyter notebooks.
-The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control) supports the use of custom commands and relies on the language model in the browser; it is similar to our application of voice-triggered snippets.
+The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control) supports the use of custom commands and relies on the language model in the browser; it is similar to our application of voice-triggered snippets in Voice-In Plus.
 Unfortunately, this extension is experimental and not maintained; it does not work with Jupyter 4.2.
 The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments),  relies on the DaVinci large language model to make comments in Markdown cells and request code fragments.
 This program requires clicking on a microphone icon repeatedly, which makes the user vulnerable to repetitive stress injuries.
 The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
 Although the name of the extension suggests it uses GitHub's Copilot, it actually uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGP3.
-The robustness of our approach is that the ASR software will always operate within Jupyter Lab as long as it continues to use web browsers.
+The robustness of our approach is that the Voice-In Plus software will always operate within Jupyter Lab as long as Jupyter continues to run in web browsers.
 
 
 ### Fine points about voice computing
@@ -387,21 +390,19 @@ We suggest how to cope with these limitations while improving productivity.
 First, the rate at which you speak is an important variable.
 If you speak too slowly a voice trigger that is a compound word, your words may not be interpreted as the intended voice trigger.
 Instead, the individual words will be printed to the screen.
-On the other hand, if you talk too quickly, you may get ahead of the language model and it may stall.
-If it does not seem to be responding, it is best to restart your connection with the language model by turning off the connection and restaring it via the shortboard cutoff or clicking twice on the plugin's icon in the web browser. 
-Due to latency issues, you will need to modulate your expected length of verbal discourse that you can record before the system fails to keep up and halts.
-I can generally dictate three to five paragraphs every time before the software falls behind and halts.
+On the other hand, if you speak too quickly, you may get ahead of the language model and it may stall.
+If the plugin is not responding, it is best to restart your connection with the language model by inactivating the plugin and restarting it. 
+I can generally dictate three to seven paragraphs before the software falls behind and halts.
 
-Second,  language model may have a difficult time with a specific words or phrases.
+Second,  the language model may have a difficult time with a specific words or phrases.
 This is a common experience, which is rectified by using text replacements.
 A difficult-to-interpret word or phrase may cause the language model to return a series of alternate words or phrases that were not intended.
 The solution to this problem is to map these alternate phrases to the desired phrase to ensure that it is returned correctly.
 Invariably, some of your mappings may get invoked when not intended.
-This event is rare enough of an event to be tolerated.
+This event is rare enough to be tolerated.
 The large language models are not perfect, and these sorts of difficulties are still widespread.
 It is expected that over the next several years the language models will improve further and that these difficulties will become less common. 
-Nonetheless, the ability to make the mappings between these alternate phrases and the desired phrase demonstrates the great value of being able to use text replacements to get the desired outcome.
-We showed with our transcripts generated with whisper that it is also possible to apply the text replacements to the transcript after a dictation session rather than live during a dictation session, as is the case with Voice In Plus.
+Nonetheless, the ability to map the alternate phrases to the desired phrase demonstrates the great value of being able to use text replacements to get the desired outcome.
 
 Third, language models vary quite a bit in terms of their requirements for an excellent microphone.
 Newer language models often can accurately transcribe your words using the internal microphone that comes with your laptop or desktop computer.
@@ -413,11 +414,11 @@ To switch back to the default case, you need to navigate to the options page and
 This event occurs about one every 100 hours of dictation.
 
 Fifth, a related problem is the inadvertent activation of other voice computing software on your computer.
-For example, once in about 100 hours of dictation, I will say a word that resembles `Hey, Siri`.
-The *Siri.app* will open and ask what I want.
+For example, once in about 100 hours of dictation, I will say a phrase that resembles `Hey, Siri`.
+The *Siri.app* will open.
 One solution is to shut down the Siri.app.
 
-These caveatd are minor annoyances and are relatively infrequent.
+These caveats are minor annoyances.
 We think that the productivity gains out wiegh the disruptions caused by these annoyances.
 
 
