@@ -1,7 +1,7 @@
 version: 1
 project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
-  id: scipy-2024-00_myst_template
+  id: scipy-2024-eli_knaap
   # Ensure your title is the same as in your `main.md`
   title: Introducing geosnap
   subtitle: The Geospatial Neighborhood Analysis Package
