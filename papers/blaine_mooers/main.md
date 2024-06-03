@@ -8,7 +8,7 @@ abstract: |
 
 ## Introduction
 
-Jupyter notebooks provide a highly interactive computing environment where Markdown and code cells are run to yield almost instant results [@Perez2015ProjectJupyterComputationalNarrativesAsTheEngineOfCollaborativeDataScience].
+Jupyter notebooks provide a highly interactive computing environment where Markdown and code cells are run to yield almost instant results.
 This form of interactive computing provides the instant gratification of seeing the results of the execution of the cells; this might be why Jupyter is so popular [@Perkel2021TenComputerCodesThatTransformedScience].
 The most popular modality for interacting with the Jupyter notebook is to use the keyboard and the computer mouse.
 However, there are opportunities to generate prose and code using one's voice instead of one's hands.
@@ -55,7 +55,6 @@ The quizzes were written in  Python and can be run in the terminal are in Jupyte
 The questions, answers, and exclamations were stored in a tuple.
 The questions in a quiz were stored in a list of these tuples.
 The order of the questions was randomized upon restart of the quiz.
-The inspiration for the quiz came from an example in the book *Automate the boring stuff with Python* [@Sweigart2015AutomateTheBoringStuffWithPythonPracticalProgrammingForTotalBeginners].
 
 The wrongly answered questions were fed back to the user after they failed to correctly answer five questions.
 This recycling of the wrongly answered questions helps to build up the recall of the correct answers.
@@ -224,7 +223,7 @@ An example of an interactive session with a quiz in a Jupyter notebook.
 
 
 To build long-term recall of the commands, one must take the quiz five or more times on alternate days according to the principles of spaced repetition learning.
-These principles were developed by the German psychologist Hermann Ebbinghaus in the last part of the 19th Century [@Ebbinghaus1885MemoryAContributionToExperimentalPsychology].
+These principles were developed by the German psychologist Hermann Ebbinghaus in the last part of the 19th Century.
 They have been validated several times by other researchers.
 Space repetition learning is one of the most firmly established results of research into human psychology.
 
