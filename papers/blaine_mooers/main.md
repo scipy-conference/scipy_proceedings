@@ -2,41 +2,40 @@
 # Voice Computing with Python in Jupyter Notebooks
 title: Voice Computing with Python in Jupyter Notebooks
 abstract: |
-    Jupyter Notebook is a popular platform for writing literate programming documents that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability opens up access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing, and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. Several automated speech recognition software packages operate on Jupyter notebooks and support these three activities. We will provide examples of all three activities as they pertain to applications of Python to our research on the molecular structures of proteins and nucleic acids important in medicine. Several software tools at MooersLab on GitHub facilitate the use of voice computing software in Jupyter.
+    Jupyter is a popular platform for writing literate programming documents that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability opens up access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing, and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. Several automated speech recognition software packages operate on Jupyter notebooks and support these three activities. We will provide examples of all three activities as they pertain to applications of Python to our research on the molecular structures of proteins and nucleic acids important in medicine. Several software tools at MooersLab on GitHub facilitate the use of voice computing software in Jupyter.
 ---
 
 
 ## Introduction
 
 Jupyter notebooks provide a highly interactive computing environment where Markdown and code cells are run to yield almost instant results.
-This form of interactive computing provides the instant gratification of seeing the results of the execution of the cells; this might be why Jupyter is so popular [@Perkel2021TenComputerCodesThatTransformedScience].
-The most popular modality for interacting with the Jupyter notebook is to use the keyboard and the computer mouse.
+This form of interactive computing provides the instant gratification of seeing the results of the execution of the cells; this might be why Jupyter is so popular for data analysis [@Perkel2021TenComputerCodesThatTransformedScience].
+The most popular modality for interacting with the Jupyter notebooks is to use the keyboard and the computer mouse.
 However, there are opportunities to generate prose and code using one's voice instead of one's hands.
 While those who have lost use of their hands are forced to use only their voice, other users can augment their typing with their voice to enhance their productivity and perhaps give their hands a break when tired of typing.
 In other words, most users can use their voice to complement the use of the keyboard.
 For example, dictation of prose in Markdown cells is an obvious application of voice computing in Jupyter.
-The ease of generating prose via speech can help promote more complete descriptions of computations executed in adjacent blocks by lowering the barrier to generating prose.
+The ease of generating prose via speech can help promote more complete descriptions of the computations executed in adjacent code cells.
 
 Some Speech-to-text software also supports the mapping of a word or phrase to a text replacement; there are many ways of exploiting text replacements in Markdown and code cells.
 For Markdown cells, we have mapped the English contractions to their expansions, so whenever we say a contraction, the expansion is automatically inserted.
 This reduces the amount of editing downstream. 
 Another class of text replacements is the expansion of acronyms into the phrase they represent.
-The BibTeX cite keys for common references can mapped to a command like `cite key for scipy`.
-Equations type set in LaTeX for rendering with MathJaX can also be mapped to commands like `inline pythargeous theorem` and `display electron density equation`, depending on whether the equation is to be *in-line* in a sentence or centered and  isolated in *display-mode*.
+The BibTeX cite keys for common references can also be mapped to a command like `cite key for scipy`.
+Equations type set in LaTeX for rendering with MathJaX can be mapped to commands like `inline pythargeous theorem` and `display electron density equation`, depending on whether the equation is to be *in-line* in a sentence or centered and  isolated in *display-mode*.
 Voice commands can be mapped to tables, templates, and even software licenses to be inserted as text replacements. 
 For Jupyter code cells, voice commands can be mapped to chunks of code of various sizes.
 We call these voice commands that trigger a text replacement *voice triggers* in analogy to tab triggers with conventional tab-triggered snippets in advanced text editors.
 
 To ease the use of voice commands in Jupyter notebook cells, we have developed sets of voice-triggered snippets for use in either markdown or code cells.
-We are building our prior experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
+We are building on our prior experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made several libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
 Although the Jupyter environment supports polyglot programming, we have restricted our focus to Python and Markdown.
 While some code snippets are one-liners, most code snippets span many lines and perform a complete task, such as generating a plot from a data file.
 Plot generation is a common data science task that is hindered by difficulties with importing data from external files and by finding the parameters and settings required to generate the desired plot.
-We tried to make these code snippets complete in terms of their ability to perform a function, such as generating standard kinds of plots with Matplotlib.
 The snippets are supplied with example data to ease the adaptation of these plotting codes by beginners.
 These libraries provide code that is known to work, unlike the situation with chatbots, which do not always return working code.
-The high reliability of code snippet libraries suggests that the demand for them will presist through the current AI hypercycle.
+The high reliability of code snippet libraries suggests that the demand for them will presist through the current AI hype cycle.
 
 ## Methods and Materials
 
