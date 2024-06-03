@@ -218,6 +218,7 @@ The latter can be saved to keep a record of one's performance on a quiz.
 
 :::{figure} ./images/quiz.png
 :label: fig:quiz
+:width: 70 %
 An example of an interactive session with a quiz in a Jupyter notebook.
 :::
 
@@ -292,6 +293,7 @@ Obviously, the internal double quotes have to be replaced with single groups; ot
 
 :::{figure} ./images/VoiceInNewSentence.png
 :label: fig:newSentence
+:width: 70 %
 Entering a single voice trigger and the corresponding command in Voice In Plus.
 :::
 
