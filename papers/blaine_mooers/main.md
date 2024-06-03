@@ -415,8 +415,8 @@ This event occurs about one every 100 hours of dictation.
 
 Fifth, a related problem is the inadvertent activation of other voice computing software on your computer.
 For example, once in about 100 hours of dictation, I will say a phrase that resembles `Hey, Siri`.
-The *Siri.app* will open.
-One solution is to shut down the Siri.app.
+*Siri* will then respond.
+One solution is to inactivate *Siri* so that it cannot respond to your speach.
 
 These caveats are minor annoyances.
 We think that the productivity gains out wiegh the disruptions caused by these annoyances.
