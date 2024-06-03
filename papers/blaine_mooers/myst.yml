@@ -17,6 +17,7 @@ project:
             - Department of Biochemistry and Physiology, College of Medicine, University of Oklahoma Health Sciences, Oklahoma City, OK 73104, USA
             - Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences, Oklahoma City, OK 73104, USA
             - Stephenson Cancer Center, University of Oklahoma Health Sciences, Oklahoma City, OK 73104, USA
+        corresponding: true
   github: https://github.com/mooerslab/scipy_proceedings
   # bibliography: []
   # title:
