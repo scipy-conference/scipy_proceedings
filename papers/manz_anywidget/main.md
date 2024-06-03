@@ -39,10 +39,16 @@ and interpreted across different platforms [@doc_jupnbformat].
 Jupyter’s modular architecture has also supported innovation in **notebook
 front ends** — the user interfaces (UIs) for editing and executing code, as
 well as inspecting kernel outputs. The success of the classic Jupyter Notebook
-[@Kluyver2016-xa] spurred the development of several similar
-Jupyter-compatible platforms (JCPs), such as JupyterLab, Google Colab, and
-Visual Studio Code. These platforms provide unique UIs and editing features while reusing Jupyter's other standardized components. This interoperability allows users to choose the platform that best suits their needs, while retaining a familiar interactive
-computing experience with the ability to share notebooks. Furthermore, the separation of computation from UI offers users a wide selection of both front ends and kernels. However, the proliferation of JCPs has led to significant challenges for Jupyter Widgets, a key component of interactive user interfaces in Jupyter.
+[@Kluyver2016-xa] spurred the development of several similar Jupyter-compatible
+platforms (JCPs), such as JupyterLab, Google Colab, and Visual Studio Code.
+These platforms provide unique UIs and editing features while reusing Jupyter's
+other standardized components. This interoperability allows users to choose the
+platform that best suits their needs, while retaining a familiar interactive
+computing experience with the ability to share notebooks. Furthermore, the
+separation of computation from UI offers users a wide selection of both front
+ends and kernels. However, the proliferation of JCPs has led to significant
+challenges for Jupyter Widgets, a key component of interactive user interfaces
+in Jupyter.
 
 **Jupyter Widgets** extend notebook outputs with interactive views and controls for
 objects residing in the kernel [@doc_juparch]. For instance, the
@@ -100,7 +106,10 @@ or does not match with the user’s kernel-side widget code.
 
 :::{figure} dev-before-afm-01.svg
 :label: fig:before-afm
-Without anywidget, to ensure compatibility, authors must transform their JavaScript code for each JCP. Since JCPs load front-end widget code from a webserver rather than the kernel, widget front-end and Python code must also be packaged separately and installed consistently on any given platform.
+Without anywidget, to ensure compatibility, authors must transform their
+JavaScript code for each JCP. Since JCPs load front-end widget code from a
+webserver rather than the kernel, widget front-end and Python code must also be
+packaged separately and installed consistently on any given platform.
 :::
 
 These limitations make widget development complex and time-consuming, demanding
@@ -113,13 +122,14 @@ reliability and maintainability.
 
 ## Methodology
 
-The **anywidget** project (https://anywidget.dev) simplifies the authoring, sharing, and distribution of Jupyter Widgets
-by (i) introducing a standard for widget front-end code based on the web
-browser’s native module system, (ii) loading these modules from the kernel, and
-(iii) providing the necessary "glue code" to adapt existing JCPs to load and
-execute these components [@fig:after-afm]. This separation of concerns allows
-widget authors to write portable code that runs consistently across JCPs without
-manual installation steps.
+The [**anywidget**](https://github.com/manzt/anywidget) project simplifies the
+authoring, sharing, and distribution of Jupyter Widgets by (i) introducing a
+standard for widget front-end code based on the web browser’s native module
+system, (ii) loading these modules from the kernel, and (iii) providing the
+necessary "glue code" to adapt existing JCPs to load and execute these
+components [@fig:after-afm]. This separation of concerns allows widget authors
+to write portable code that runs consistently across JCPs without manual
+installation steps.
 
 :::{figure} dev-after-afm-02.svg
 :label: fig:after-afm
@@ -275,7 +285,7 @@ widgets are easy to install and behave consistently across platforms.
 Since its release, anywidget has led to a proliferation of widgets and a more
 diverse widget ecosystem [@fig:widgetstats]. New widgets range from educational
 tools for experimenting with toy datasets (e.g.,
-[DrawData](https://drawdata.xyz/)) to high-performance data visualization
+[DrawData](https://github.com/koaning/drawdata)) to high-performance data visualization
 libraries (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/),
 [Jupyter-Scatter](https://jupyter-scatter.dev/),
 [Mosaic](https://github.com/uwdata/mosaic) [@Heer2024-rr]) and research
