@@ -34,6 +34,7 @@ project:
         - Department of Genomics and Computational Biology, UMass Chan Medical School, Worcester, MA, USA
         - Department of Systems Biology, UMass Chan Medical School, Worcester, MA, USA
       corresponding: true
+      roles:
         - Conceptualization
         - Funding acquisition
         - Writing - review & editing
