@@ -267,7 +267,7 @@ ITK-Wasm offers IO modules designed to interact with various standard scientific
 
 Scientific image file formats supported include:
 
-- [AIM,ISQ](https://www.scanco.ch/en/support/customer-login/faq-customers/faq-customers-import-export.html)
+- [AIM,ISQ](https://www.scanco.ch/imexport.html)
 - [BioRad](https://www.bio-rad.com/)
 - [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
 - [DICOM](https://dicom.nema.org/)

@@ -13,7 +13,6 @@ project:
       affiliations:
         - Kitware, Inc.
       corresponding: true
-    - name: Insight Software Consortium
   keywords:
     - reproducibility
     - sustainability
@@ -52,6 +51,10 @@ project:
       keys:
         - WebAssemblyCoreSpecification1
         - WebAssemblyCoreSpecification2
+        - McCormickAnisotropicDiffusionLBR
+        - WasiDev
+        - Zhang2024-su
+        - dockcross
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   plugins:
