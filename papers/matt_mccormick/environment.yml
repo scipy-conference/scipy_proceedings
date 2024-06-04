@@ -1,0 +1,10 @@
+name: itk-wasm-scipy-paper
+channels:
+  - conda-forge
+dependencies:
+  - pytest
+  - python=3.11
+  - pip
+  - pip:
+    - mystmd
+    - ngff-zarr

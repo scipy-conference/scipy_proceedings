@@ -1,0 +1,13 @@
+{
+  "name": "itk-wasm-scipy-2024-paper",
+  "version": "1.0.0",
+  "description": "Dependencies for the ITK-Wasm SciPy 2024 paper",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+  }
+}
