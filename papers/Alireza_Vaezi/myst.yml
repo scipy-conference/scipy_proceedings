@@ -36,6 +36,8 @@ project:
     - jupyter
     - sklearn1
     - sklearn2
+    - Iakubovskii:2019
+    - settles2009active
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.jpg
   # The rest of the information shouldn't be modified
