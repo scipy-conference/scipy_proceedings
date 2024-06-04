@@ -36,6 +36,8 @@ project:
   error_rules:
     - rule: doi-exists
       severity: ignore
+        keys: 
+          - plotly
     
   banner: banner.png
 
