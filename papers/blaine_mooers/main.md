@@ -2,7 +2,7 @@
 # Voice Computing with Python in Jupyter Notebooks
 title: Voice Computing with Python in Jupyter Notebooks
 abstract: |
-    Jupyter is a popular platform for writing literate programming documents that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability opens up access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing, and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. Several automated speech recognition software packages operate on Jupyter notebooks and support these three activities. We will provide examples of all three activities as they pertain to applications of Python to our research on the molecular structures of proteins and nucleic acids important in medicine. Several software tools at MooersLab on GitHub facilitate the use of voice computing software in Jupyter.
+    Jupyter is a popular platform for writing literate programming documents that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability opens up access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing, and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. Several automated speech recognition software packages operate on Jupyter notebooks and support these three activities. We will provide examples of these activities as they pertain to applications of Python in our research on the molecular structures of proteins and nucleic acids important in medicine. Several software tools at MooersLab on GitHub facilitate the use of voice computing software in Jupyter.
 ---
 
 
@@ -13,58 +13,53 @@ This form of interactive computing provides the instant gratification of seeing 
 The most popular modality for interacting with the Jupyter notebooks is to use the keyboard and the computer mouse.
 However, there are opportunities to generate prose and code using one's voice instead of one's hands.
 While those who have lost use of their hands are forced to use only their voice, other users can augment their typing with their voice to enhance their productivity and perhaps give their hands a break when tired of typing.
-In other words, most users can use their voice to complement the use of the keyboard.
+In other words, most users can use their voice to complement their use of the keyboard.
 For example, dictation of prose in Markdown cells is an obvious application of voice computing in Jupyter.
 The ease of generating prose via speech can help promote more complete descriptions of the computations executed in adjacent code cells.
 
 Some Speech-to-text software also supports the mapping of a word or phrase to a text replacement; there are many ways of exploiting text replacements in Markdown and code cells.
 For Markdown cells, we have mapped the English contractions to their expansions, so whenever we say a contraction, the expansion is automatically inserted.
-This reduces the amount of editing downstream. 
+This reduces the amount of editing downstream.
 Another class of text replacements is the expansion of acronyms into the phrase they represent.
 The BibTeX cite keys for common references can also be mapped to a command like `cite key for scipy`.
 Equations type set in LaTeX for rendering with MathJaX can be mapped to commands like `inline pythargeous theorem` and `display electron density equation`, depending on whether the equation is to be *in-line* in a sentence or centered and  isolated in *display-mode*.
-Voice commands can be mapped to tables, templates, and even software licenses to be inserted as text replacements. 
+Voice commands can be mapped to tables, templates, and even software licenses to be inserted as text replacements.
 For Jupyter code cells, voice commands can be mapped to chunks of code of various sizes.
 We call these voice commands that trigger a text replacement *voice triggers* in analogy to tab triggers with conventional tab-triggered snippets in advanced text editors.
 
 To ease the use of voice commands in Jupyter notebook cells, we have developed sets of voice-triggered snippets for use in either markdown or code cells.
 We are building on our prior experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
-We have made several libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
+We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
 Although the Jupyter environment supports polyglot programming, we have restricted our focus to Python and Markdown.
 While some code snippets are one-liners, most code snippets span many lines and perform a complete task, such as generating a plot from a data file.
-Plot generation is a common data science task that is hindered by difficulties with importing data from external files and by finding the parameters and settings required to generate the desired plot.
-The snippets are supplied with example data to ease the adaptation of these plotting codes by beginners.
 These libraries provide code that is known to work, unlike the situation with chatbots, which do not always return working code.
 The high reliability of code snippet libraries suggests that the demand for them will presist through the current AI hype cycle.
 
 ## Methods and Materials
 
 ### Construction of the snippet libraries
-Some voice snippets had already been used for a year for the purpose of composing prose by using dictation.
-These snippets were gathered together in modular files to ease their selective use.
-The voice snippets were translated into formats appropriate for the automated speech recognition (ASR) software Voice-In Plus while retaining the voice trigger where possible.
-Universal voice triggers ease moving from one ASR package to another.
-
-The voice snippets were stored in CSV files for the Voice In Plus software.
-The contents of these files can be copied and pasted into the bulk add text area through the Voice In Plus configuration GUI.
+Some of our voice snippets had already been used for a year for the purpose of composing prose by using dictation.
+These snippets are in modular files to ease their selective use.
+The Voice-In Plus software accepts commands in a CSV file.
+The contents of these files can be copied and pasted into the `bulk add` text area of the Voice In Plus configuration GUI.
 
 ### Construction of interactive quizzes
-To aid the mastery of the ASR syntax, we developed interactive quizzes.
+To aid the mastery of the VIP syntax, we developed interactive quizzes.
 The quizzes were written in  Python and can be run in the terminal are in Jupyter notebooks.
-The questions, answers, and exclamations were stored in a tuple.
+The questions, answers, and explanations were stored in a tuple.
 The questions in a quiz were stored in a list of these tuples.
 The order of the questions was randomized upon restart of the quiz.
 
-The wrongly answered questions were fed back to the user after they failed to correctly answer five questions.
-This recycling of the wrongly answered questions helps to build up the recall of the correct answers.
-The number of questions in a quiz is limited to 40 for the purpose of not exhausting the user.
+The wrongly answered questions are fed back to the user after they failed to correctly answer five questions.
+This recycling of the wrongly answered questions builds the recall of the correct answers.
+The number of questions in a quiz is limited to 40 to avoid exhausting the user.
 
 A function writes out the quiz to a PDF file upon completion of the quiz or upon early exiting the quiz.
-This PDF enables the printing of a quiz so that the paper version can taken while away from the computer.
+This PDF enables the printing of a quiz so that the paper version of the quiz can be taken while away from the computer.
 
 ### Availability of the libraries and quizzes
 The libraries were tested utilizing Jupyter Lab version 4.2 and Python 3.12 installed from Macports.
-All libraries are made available on GitHub for download.
+All libraries are made available at MooersLab on GitHub for download.
 
 
 ## Results
@@ -82,14 +77,15 @@ The user can choose the desired server.
 
 We describe the libraries that we have developed to facilitate our own workflows.
 Our descriptions of these libraries are meant to illustrate how voice-triggered snippets are used with automated speech recognition software.
-The developers in our audience will either want to augment the libraries that we have developed with their own commands or they will want to use our libraries as templates to develop their own libraries independently.
+The developers in our audience will either want to augment the libraries that we have developed with their own commands, or they will want to use our libraries as templates to develop their own libraries independently.
 
 The libraries are made available in a modular format so that the user can select sets of commands that are most useful for their workflow.
 In general, our libraries are quite broad in nature, so they meet the needs of most users.
 There are several libraries that are domain-specific.
 These libraries can inspire the development of libraries for other domains.
+
 The contents of the libraries can be divided into two categories.
-One subset of libraries supports carrying out dictation about science in the markdown cells of Jupyter Notebooks while the other subset supports writing scientific Python in code cells.
+One subset of libraries supports carrying out dictation about science in the markdown cells of Jupyter notebooks while the other subset supports writing scientific Python in code cells.
 While some code is specific to Jupyter, such as line and cell magics, most of the voice-triggered snippets can be used in Markdown files and Python scripts that are being edited in Jupyter Lab.
 
 ### Libraries for markdown cells
@@ -105,14 +101,14 @@ There is no opportunity to revise the voice trigger, so the insertion at the wro
 
 The simplest text replacements involved the replacement of English contractions with their expansions.
 English contractions are not used in formal writing for many reasons.
-Many of the automatic speech recognition software packages will default to using contractions because the audience for the software are people who are writing informally on for social media where English contractions are acceptable.
+Many of the automatic speech recognition software packages will default to using contractions because the audience for the software are people who are writing informally for social media where English contractions are acceptable.
 By adding the library that maps contractions to their expansions, the expansion will be inserted whenever the contraction is used otherwise.
 This automated replacement of English contractions saves time during the editing process.
 
 :::{figure} ./images/VoiceInCustomCommandsContractions.png
 :alt: contractions
 :class: bg-primary
-:width: 30 %
+:width: 60 %
 :align: center
 :label: fig:contractions
 
@@ -123,9 +119,10 @@ The contents of the library can be further organized by the first word of the vo
 This first word is often a verb.
 For example, the word `expand' is used to expand acronyms.
 Acronyms must be defined upon their first use.
+
 One's memory is often inaccurate about the words represented by the letters in the acronym.
 The library ensures that the correct expansion of the acronym is used.
-This can save a lot of time by looking up expansions.
+This can save time that would otherwise be spent looking up expansions.
 We have included acronyms widely used in Python programming, scientific computing, data science, statistics, machine learning, and Bayesian data analysis.
 These commands are found in domain-specific libraries, so a user can select which voice triggers they would like to add to their private collection of voice commands.
 
@@ -149,26 +146,21 @@ These libraries are incomplete, but they can provide a source of inspiration.
 They can also be used as templates for making new libraries for one's particular domain.
 
 Some voice triggers start with a noun.
-For example, the voice trigger `URL' is used to insert URLs for important websites.
+For example, the voice trigger `URL` is used to insert URLs for important websites.
 Another example involves the use of the noun `list` in the voice trigger  as in `list <matplotlib color codes>` to generate the list of the color codes used in Matplotlib plots.
 This kind of information is useful when developing plots with Matplotlib because it can save you the trouble looking up this information: The software documentation will literally be at the tip of your tongue.
 Although the documentation is quite accessible, it takes much longer to find information on the Web than is commonly admitted.
 Likewise, each Web search for information goes down a path that is filled with attention-grabbing distractions that can easily led one to be sidetracked from their original task.
 
-We have developed a library specifically for the flavor of markdown utilized in Jupyter notebooks.
-This library can be utilized to use voice commands to insert the appropriate markdown code in markdown cells.
+We have developed a library specifically for the flavor of Markdown utilized in Jupyter notebooks.
+This library can be utilized to use voice commands to insert the appropriate Markdown code in Markdown cells.
 We have included a library for LaTeX because these documents can be composed in tex files that are being edited by Jupyter Lab.
-We have also included a library for the markedly structured text markdown (MyST markdown) that is being developed to integrate the output from Jupyter notebooks into scientific publishing.
+We have also included a library for the Markedly Structured Text markdown (MyST markdown) that is being developed to integrate the output from Jupyter notebooks into scientific publishing.
 
-The markup language code is inserted by using the verb ``insert'' followed by the markup language name and the name of the code.
-For example, the command ``insert markdown itemized list'' will insert five vertically aligned dashes to start an itemized list.
+The markup language code is inserted by using the verb *insert* followed by the markup language name and the name of the code.
+For example, the command `insert markdown itemized list` will insert five vertically aligned dashes to start an itemized list.
 The command `insert latex itemized list` will insert the corresponding code for an itemized list in LaTeX.
 
-While these libraries have voice-triggered snippets, they lack voice stops where one uses their voice to advance to sites that need to be edited in the code fragment.
-These voice stops would be in analogy with the tab stops in conventional snippet libraries where one hits the tab after inserting the snippet for the purpose of advancing the cursor to sites that should be edited in order to adapt the code to the problem at hand.
-Often, the tab stops are mirrored at sites that share the same parameter value.
-Because of the mirroring, a change in the parameter value at one site will be propagated to the other sites.
-The propagation of these changes insures that all the sites were changed; this avoids downstream debugging.
 
 We have not figured out how to use voice commands to advance the cursor to sites where edits should be made
 Voice commands can be utilized in some of the automated speech recognition software for the purpose of moving the cursor forward or backwards and for the purpose of selecting replacing words.
