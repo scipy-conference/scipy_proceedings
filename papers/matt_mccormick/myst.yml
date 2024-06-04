@@ -54,6 +54,8 @@ project:
         - WebAssemblyCoreSpecification2
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
+  plugins:
+    - unsplash.mjs
   # The rest of the information shouldn't be modified
   subject: Research Article
   open_access: true
