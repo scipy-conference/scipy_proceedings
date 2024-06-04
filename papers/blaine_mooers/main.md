@@ -66,12 +66,10 @@ All libraries are made available at MooersLab on GitHub for download.
 
 First, we describe the contents of the snippet libraries and the kinds of problem they can solve.
 We group the libraries into several categories to simplify their explanation.
-Second, we describe the deployment of the snippet libraries for the automated speech recognition (ASR) software package Voice In Plus.
+Second, we describe the deployment of the snippet libraries for Voice In Plus (VIP), a automated speech recognition plugin for the web browsers Google Chrome and Microsoft Edge.
+The Voice In Plus plugin has a gentle learning curve.
+The plugin requires an Internet connection to run.
 The results section that follows describes the libraries in the same order.
-
-The Voice In Plus software runs only in the Web browser, but is the easiest to customize and has the gentlest learning curve.
-The first package requires an Internet connection to run, and the second package can be switched from using a local language model to one of three servers.
-The user can choose the desired server.
 
 ### Composition of the libraries
 
@@ -209,7 +207,7 @@ The latter can be saved to keep a record of one's performance on a quiz.
 
 :::{figure} ./images/quiz.png
 :label: fig:quiz
-:width: 70 %
+:width: 70%
 An example of an interactive session with a quiz in a Jupyter notebook.
 :::
 
@@ -284,7 +282,7 @@ Obviously, the internal double quotes have to be replaced with single groups; ot
 
 :::{figure} ./images/VoiceInNewSentence.png
 :label: fig:newSentence
-:width: 70 %
+:width: 70%
 Entering a single voice trigger and the corresponding command in Voice In Plus.
 :::
 
@@ -417,7 +415,7 @@ We think that the productivity gains out wiegh the disruptions caused by these a
 ### Common hazards when voice computing
 
 In my year of using voice control every day, I have encountered two kinds of  mishaps.
-First, I haveI accidentally recorded a conversation when someone walked into my office while doing computing.
+First, I have accidentally recorded a conversation when someone walked into my office while doing computing.
 If I fail to turn off the ASR software, bits of our conversation are recorded at the positon of the mouse cursor.
 This inserted text has to be deleted later.
 This is a bigger problem when a code file or code cell is being edited.
