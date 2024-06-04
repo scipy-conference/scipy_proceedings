@@ -17,6 +17,16 @@ project:
       github: rowanc1
       twitter: rowancockett
       email: rowan@curvenote.com
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Investigation
+        - Project administration
+        - Software
+        - Supervision
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
     - name: Steve Purves
       orcid: 0000-0002-0760-5497
       affiliation:
@@ -25,17 +35,35 @@ project:
       github: stevejpurves
       twitter: stevejpurves
       email: steve@curvenote.com
+      roles:
+        - Conceptualization
+        - Investigation
+        - Methodology
+        - Project administration
+        - Software
+        - Supervision
+        - Writing – original draft
+        - Writing – review & editing
     - name: Franklin Koch
       orcid: 0000-0002-6393-7058
       affiliation:
         - Curvenote Inc.
         - Executable Books
       github: fwkoch
+      roles:
+        - Investigation
+        - Software
+        - Writing – review & editing
     - name: Mike Morrison
       orcid: 0000-0002-1324-8801
       twitter: mikemorrison
       affiliation:
         - Curvenote Inc.
+      roles:
+        - Investigation
+        - Methodology
+        - Validation
+        - Writing – review & editing
   abbreviations:
     AST: Abstract Syntax Tree
     DOI: Digital Object Identifier
