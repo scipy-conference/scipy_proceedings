@@ -1,0 +1,41 @@
+version: 1
+project:
+  id: scipy-2024-emily_dorne
+  # Ensure your title is the same as in your `main.md`
+  title: Using Satellite Imagery to Identify Harmful Algal Blooms and Protect Public Health
+  subtitle: An introduction to CyFi, a python tool for cyanobacteria detection
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Emily Dorne
+      email: emily@drivendata.org
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - DrivenData
+  keywords:
+    - terraforming
+    - desert
+    - numerical perspective
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    CyFi: Cyanobacteria Finder
+    HAB: Harmful Algal Bloom
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
