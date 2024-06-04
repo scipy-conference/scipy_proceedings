@@ -86,7 +86,7 @@ The contents of the libraries can be divided into two categories.
 One subset of libraries supports carrying out dictation about science in the markdown cells of Jupyter notebooks while the other subset supports writing scientific Python in code cells.
 While some code is specific to Jupyter, such as line and cell magics, most of the voice-triggered snippets can be used in Markdown files and Python scripts that are being edited in Jupyter Lab.
 
-### Libraries for markdown cells
+### Libraries for Markdown cells
 
 These libraries consist of a short phrase that is replaced with another phrase or with computer code.
 The short phrase to be replaced is called the voice-trigger, in analogy to the tab-trigger in text editors.
@@ -134,39 +134,44 @@ These commands are found in domain-specific libraries, so a user can select whic
 - **inline** equation in-line (e.g., inline information entropy equation)
 
 Another example of a verb starting a voice trigger is the command `display  <equation name>`.
-This command is used in markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
+This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
 For example, the voice trigger `display the electron density equation` is shown in the transcription of a Zoom video in figure 1A .
-This is followed by the image in the middle that shows the tax replacement in the form of a LaTeX equation in the display mode.
+This is followed by the image in the middle that shows the text replacement in the form of a LaTeX equation in the display mode.
 This image is followed by the resulting markdown cell after it is rendered.
-Likewise, the command `inline <equation name>` is used to insert equations in sections of prose in markdown cells.
-We have made available voice-snippet libraries of equations commonly found in machine learning, statistics, Bayesian data analysis, physics, chemistry, biophysics, structural biology, and data science.
+
+Likewise, the command `inline <equation name>` is used to insert equations in sections of prose in Markdown cells.
+We have made available voice-triggered snippet libraries of equations commonly found in machine learning, statistics, Bayesian data analysis, physics, chemistry, biophysics, structural biology, and data science.
 These libraries are incomplete, but they can provide a source of inspiration.
 They can also be used as templates for making new libraries for one's particular domain.
 
 Some voice triggers start with a noun.
 For example, the voice trigger `URL` is used to insert URLs for important websites.
-Another example involves the use of the noun `list` in the voice trigger  as in `list <matplotlib color codes>` to generate the list of the color codes used in Matplotlib plots.
+Another example involves the use of the noun `list` in the voice trigger  as in `list matplotlib color codes` to generate the list of the color codes used in Matplotlib plots.
 This kind of information is useful when developing plots with Matplotlib because it can save you the trouble looking up this information: The software documentation will literally be at the tip of your tongue.
-Although the documentation is quite accessible, it takes much longer to find information on the Web than is commonly admitted.
-Likewise, each Web search for information goes down a path that is filled with attention-grabbing distractions that can easily led one to be sidetracked from their original task.
-
-We have developed a library specifically for the flavor of Markdown utilized in Jupyter notebooks.
-This library can be utilized to use voice commands to insert the appropriate Markdown code in Markdown cells.
-We have included a library for LaTeX because these documents can be composed in tex files that are being edited by Jupyter Lab.
-We have also included a library for the Markedly Structured Text markdown (MyST markdown) that is being developed to integrate the output from Jupyter notebooks into scientific publishing.
 
 The markup language code is inserted by using the verb *insert* followed by the markup language name and the name of the code.
 For example, the command `insert markdown itemized list` will insert five vertically aligned dashes to start an itemized list.
 The command `insert latex itemized list` will insert the corresponding code for an itemized list in LaTeX.
 
 
+We have developed a library specifically for the flavor of Markdown utilized in Jupyter notebooks.
+This library is used to insert the appropriate Markdown code in Markdown cells.
+
+
+We have included a library for LaTeX because tex files can be edited by Jupyter Lab.
+
+
+We have also included a library for the Markedly Structured Text markdown (MyST markdown) that is being developed to integrate the output from Jupyter notebooks into scientific publishing.
+
+
+
 We have not figured out how to use voice commands to advance the cursor to sites where edits should be made
 Voice commands can be utilized in some of the automated speech recognition software for the purpose of moving the cursor forward or backwards and for the purpose of selecting replacing words.
-We have left the markup associated with the yasnippet snippet libraries in place to serve as a benchmark for users to recognize the sites that should be considered for modification to  customize the snippet for their purpose.
+We have left the markup associated with the yasnippet snippet libraries in place to serve as a benchmark for users to recognize the sites that should be considered for modification to customize the snippet for their purpose.
 
 ### Libraries for code cells
 
-The libraries for code-cells utilize the ``insert'' command to insert chunks of Python code.
+The libraries for code-cells utilize the `insert` command to insert chunks of Python code.
 We try to avoid making voice commands for small fragments of code that might fit on a single line.
 An exception to this was the inclusion of a collection of one liners that are in the form of several kinds of comprehensions.
 As mentioned above, we have developed chunks of code for the purpose of performing specific functions.
@@ -193,7 +198,7 @@ Although we provide some examples from some of the higher-order plotting program
 We also support the import of external images.
 This is often overlooked, but these externally derived images are often important parts of the story that is being told by the Jupyter notebook.
 
-### Juptyer specific library
+### Jupyter specific library
 
 We provide cell and line magics libraries that enhance the Jupyter notebook's interaction with the rest of the Computing system.
 
@@ -300,8 +305,8 @@ The practical size limit of the library is between 7,000 and 19,000 commands.
 
 Amongst the first customizations to be made are those supporting the generation of nonfiction writing.
 Users may want to install our library of English expansions to avoid the tedium of converting English contractions to their expansions.
-To avoid having to say `period` and ``new line'' at the end of each sentence when writing one sentence per line, the user can develop a custom command called ``new sentence'',  which is a combination of these two built-in commands.
-Likewise, the custom command ``new paragraph'' can include a ``period'' followed by two ``new line'' commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
+To avoid having to say `period` and `new line` at the end of each sentence when writing one sentence per line, the user can develop a custom command called `new sentence`, which is a combination of these two built-in commands.
+Likewise, the custom command `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
 Of course, these phrases will no longer be available for use in dictation because they will be used to trigger text replacements.
 
 The VIP documentation is integrated into the GUI that the user uses to configure VIP and carry out various tasks.
@@ -335,7 +340,7 @@ We limit the discussion to the software that we have presented above.
 The Jupyter project lacks built-in support for code snippet libraries.
 Instead, third parties have developed several extensions for Jupyter to support code snippets.
 Unfortunately, changes that occur in the core of Jupyter often break these extensions.
-Users have to create Python environments for older versions of Jupyter work with the snippets extension while missing out on the new featuers of Juptyer.
+Users have to create Python environments for older versions of Jupyter work with the snippets extension while missing out on the new featuers of Jupyter.
 An obvious solution to this problem would be for the developers of Jupyter to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for snippets is always available.
 The use of voice-triggered snippets external  to Jupyter side steps difficulties with broken extensions as Jupyter advances because the software is indpendent of Jupyter.
 
