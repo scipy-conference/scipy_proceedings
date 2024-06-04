@@ -11,10 +11,14 @@ abstract: |
 
 ## Introduction
 
+### Motivation
+
 In the quest for **enhanced interoperability and sustainability in scientific computing**, _WebAssembly (Wasm)_ emerges as a transformative technology.
 Wasm offers a universal, efficient compilation target, enabling high-performance computing across varied programming languages and hardware architectures [@WebAssemblyCoreSpecification1; @WebAssemblyCoreSpecification2; @doi:10.1145/3140587.3062363].
 This innovation is pivotal for scientific research, where analytical interoperability, tool sustainability, and computational efficiency are paramount.
 Wasm's journey began with asm.js and evolved through Wasm and the WebAssembly System Interface (WASI).
+
+### Brief history of Wasm
 
 Asm.js was introduced by Alon Zakai via the Emscripten toolchain as a subset of JavaScript designed for high performance [@doi:10.1145/2048147.2048224].
 It allowed developers to write code in languages like C and C++, compile it to asm.js, and run it in the browser with near-native performance.
@@ -76,6 +80,8 @@ Key features of WASI include:
 With WASI, WebAssembly can be used to develop portable, high-performance applications that run anywhere.
 A plethora of WASI runtimes are available that vary in their focus, such as embedding in programming languages, specialized hardware such as field-programmable gate arrays (FPGAs), embedded devices, security, speed, or high performance computing (HPC) environments [@WasiDev; @doi:10.1145/3572848.3577436; @Zhang2024-su].
 
+### Wasm and scientific computing
+
 Throughout its evolution, WebAssembly has focused on performance improvements. Some notable advancements relevant to scientific computing include:
 
 - **Bulk memory operations**: efficient copy and movement of data in memory
@@ -86,21 +92,24 @@ The evolution of WebAssembly from asm.js to Wasm to WASI has been marked by cont
 
 Wasm has been embraced in commercial and industrial contexts for web applications, game development, edge computing, and server-side computing. However, its adoption in scientific computing has been more limited. This is partly due to the established reliance specialized software stacks in the scientific community. Additionally, the integration of Wasm into existing scientific workflows requires overcoming challenges related to data interoperability, toolchain compatibility, and the inertia of entrenched computational practices.
 
-Enter **ITK-Wasm**, a pioneering integration that marries the Insight Toolkit (ITK) and Wasm to enable high-performance scientific spatial analysis in a web browser or system-level environments [@doi:10.5281/zenodo.3688880; @doi:10.3389/fninf.2014.00013; @doi:10.5281/zenodo.889843].
-ITK-Wasm is crafted to adhere to Wasm community standards, thereby facilitating the creation of Wasm modules that are _simple, performant, portable, modular, and interoperable_.
+Enter **ITK-Wasm**, a pioneering resource that marries the Insight Toolkit (ITK) and open standards to seemlessly integrate Wasm for high-performance scientific spatial analysis or visualization[@doi:10.5281/zenodo.3688880; @doi:10.3389/fninf.2014.00013; @doi:10.5281/zenodo.889843].
+ITK-Wasm supports both Emscripten-based Wasm in a web browser or WASI-SDK Wasm for system-level environments.
+ITK-Wasm is crafted to adhere to Wasm community standards, thereby facilitating the creation of Wasm modules that are **simple, performant, portable, modular, and interoperable**.
 
 ITK-Wasm provides infrastructure that empowers research software engineers to:
 
-- Build scientific C/C++ codes to Wasm
-- Bridge Wasm with
-  - Local filesystems
-  - Canonical scientific programming data interfaces such as NumPy arrays
-  - Traditional scientific file formats with an emphasis on multi-dimensional spatial data
-- Generate idiomatic programming language bindings, packages, and documentation
-- Transfer data efficiently in and out of the Wasm runtime
-- Support asynchronous and parallel execution of processing pipelines in way that is easy to understand and implement
+- _Build scientific C/C++ codes to Wasm_
+- _Generate idiomatic programming language bindings, packages, and documentation_
+- _Bridge Wasm with_
+  - _Local filesystems_
+  - _Canonical scientific programming data interfaces such as NumPy arrays_
+  - _Traditional scientific file formats with an emphasis on multi-dimensional spatial data_
+- _Transfer data efficiently in and out of the Wasm runtime_
+- _Support asynchronous and parallel execution of processing pipelines in way that is easy to understand and implement_
 
 ## Methods
+
+### Overview
 
 ITK-Wasm provides powerful, joyful tooling for scientific computation in Wasm through a number of distinct but related parts.
 
@@ -166,13 +175,7 @@ An `itk-wasm` Node.js _command line interface (CLI)_ drives
 - Generation of language bindings and language package configurations
 - Testing for Wasm binaries
 
-The CLI can be installed via Node.js / NPM:
-
-```sh
-npm install -g itk-wasm
-```
-
-However, new projects are typically created with the `create-itk-wasm` CLI:
+New projects are typically created with the `create-itk-wasm` CLI:
 
 ```sh
 npx create-itk-wasm
@@ -205,7 +208,7 @@ When GPU-accelerated implementations of functions are available in other package
 Cross-platform, cross-environment support with optional non-Wasm accelerator packages is made possible by a generated environment dispatch Python package, a WASI-based Python package, and a Pyodide package. The Pyodide package does not have typical Pyodide-Emscripten ABI limitations due to the application of principals from the Wasm Component Model.
 :::
 
-### Browser and system APIs
+#### Browser and system APIs
 
 While synchronous functions are available in system packages, browser packages provide asynchronous functions for non-blocking, performant execution in the JavaScript runtime event loop. These functions are called with modern Python's [async / await support](https://docs.python.org/3/library/asyncio-task.html).
 

@@ -9,5 +9,6 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
+    "unist-builder": "^4.0.0"
   }
 }

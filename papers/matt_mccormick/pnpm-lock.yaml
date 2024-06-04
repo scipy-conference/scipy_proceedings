@@ -6,4 +6,24 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      unist-builder:
+        specifier: ^4.0.0
+        version: 4.0.0
+
+packages:
+
+  '@types/unist@3.0.2':
+    resolution: {integrity: sha512-dqId9J8K/vGi5Zr7oo212BGii5m3q5Hxlkwy3WpYuKPklmBEvsbMYYyLxAQpSffdLl/gdW0XUpKWFvYmyoWCoQ==}
+
+  unist-builder@4.0.0:
+    resolution: {integrity: sha512-wmRFnH+BLpZnTKpc5L7O67Kac89s9HMrtELpnNaE6TAobq5DTZZs5YaTQfAZBA9bFPECx2uVAPO31c+GVug8mg==}
+
+snapshots:
+
+  '@types/unist@3.0.2': {}
+
+  unist-builder@4.0.0:
+    dependencies:
+      '@types/unist': 3.0.2
