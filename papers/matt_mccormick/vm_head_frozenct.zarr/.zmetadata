@@ -1,0 +1,201 @@
+{
+    "metadata": {
+        ".zattrs": {
+            "multiscales": [
+                {
+                    "@type": "ngff:Image",
+                    "axes": [
+                        {
+                            "name": "z",
+                            "type": "space"
+                        },
+                        {
+                            "name": "y",
+                            "type": "space"
+                        },
+                        {
+                            "name": "x",
+                            "type": "space"
+                        }
+                    ],
+                    "datasets": [
+                        {
+                            "coordinateTransformations": [
+                                {
+                                    "scale": [
+                                        1.0,
+                                        0.527344,
+                                        0.527344
+                                    ],
+                                    "type": "scale"
+                                },
+                                {
+                                    "translation": [
+                                        -250.0,
+                                        -165.0,
+                                        -135.0
+                                    ],
+                                    "type": "translation"
+                                }
+                            ],
+                            "path": "scale0/image"
+                        },
+                        {
+                            "coordinateTransformations": [
+                                {
+                                    "scale": [
+                                        0.527344,
+                                        1.054688,
+                                        2.0
+                                    ],
+                                    "type": "scale"
+                                },
+                                {
+                                    "translation": [
+                                        -135.0,
+                                        -164.736328,
+                                        -249.5
+                                    ],
+                                    "type": "translation"
+                                }
+                            ],
+                            "path": "scale1/image"
+                        },
+                        {
+                            "coordinateTransformations": [
+                                {
+                                    "scale": [
+                                        4.0,
+                                        2.109376,
+                                        1.054688
+                                    ],
+                                    "type": "scale"
+                                },
+                                {
+                                    "translation": [
+                                        -248.5,
+                                        -164.208984,
+                                        -134.736328
+                                    ],
+                                    "type": "translation"
+                                }
+                            ],
+                            "path": "scale2/image"
+                        }
+                    ],
+                    "name": "image",
+                    "version": "0.4"
+                }
+            ]
+        },
+        ".zgroup": {
+            "zarr_format": 2
+        },
+        "scale0/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "z",
+                "y",
+                "x"
+            ]
+        },
+        "scale0/.zgroup": {
+            "zarr_format": 2
+        },
+        "scale0/image/.zarray": {
+            "chunks": [
+                64,
+                64,
+                64
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dimension_separator": "/",
+            "dtype": "<i2",
+            "fill_value": 0,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                231,
+                512,
+                512
+            ],
+            "zarr_format": 2
+        },
+        "scale1/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "z",
+                "y",
+                "x"
+            ]
+        },
+        "scale1/.zgroup": {
+            "zarr_format": 2
+        },
+        "scale1/image/.zarray": {
+            "chunks": [
+                64,
+                64,
+                64
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dimension_separator": "/",
+            "dtype": "<i2",
+            "fill_value": 0,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                231,
+                256,
+                256
+            ],
+            "zarr_format": 2
+        },
+        "scale2/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "z",
+                "y",
+                "x"
+            ]
+        },
+        "scale2/.zgroup": {
+            "zarr_format": 2
+        },
+        "scale2/image/.zarray": {
+            "chunks": [
+                64,
+                64,
+                64
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dimension_separator": "/",
+            "dtype": "<i2",
+            "fill_value": 0,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                115,
+                128,
+                128
+            ],
+            "zarr_format": 2
+        }
+    },
+    "zarr_consolidated_format": 1
+}
