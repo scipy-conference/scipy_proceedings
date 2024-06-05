@@ -97,7 +97,7 @@ This two-step process has the advantage of allowing the user to select a differe
 Voice triggers differ in that there is no analog of a tab key required to insert the code.
 There is no opportunity to revise the voice trigger, so the insertion at the wrong code will have to be undone with the undo command.
 
-The simplest text replacements involved the replacement of English contractions with their expansions.
+The simplest text replacements involved the replacement of English contractions with their expansions {ref}`fig:contractions`.
 English contractions are not used in formal writing for many reasons.
 Many of the automatic speech recognition software packages will default to using contractions because the audience for the software are people who are writing informally for social media where English contractions are acceptable.
 By adding the library that maps contractions to their expansions, the expansion will be inserted whenever the contraction is used otherwise.
@@ -133,9 +133,21 @@ These commands are found in domain-specific libraries, so a user can select whic
 - **display** equation in display mode (e.g., display electron density equation)
 - **inline** equation in-line (e.g., inline information entropy equation)
 
+
+:::{figure} ./images/DisplayElectronDensityEquation.png
+:alt: display
+:class: bg-primary
+:width: 70 %
+:align: center
+:label: fig:displayeq
+
+Three snapshots of using the voice-trigger *display electron density equation* in a Markdown cell in a Jupyter notebook. A. The transcript with the voice triggered snippet. B. The text replacement in the form of the LaTeX code inserted in the Markdown cell. C. The rendered markdown cell.
+:::
+
+
 Another example of a verb starting a voice trigger is the command `display  <equation name>`.
 This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
-For example, the voice trigger `display the electron density equation` is shown in the transcription of a Zoom video in figure 1A .
+For example, the voice trigger `display the electron density equation` is shown in the transcript of a Zoom video {ref}`fig:displayeq`. .
 This is followed by the image in the middle that shows the text replacement in the form of a LaTeX equation in the display mode.
 This image is followed by the resulting markdown cell after it is rendered.
 
@@ -203,9 +215,10 @@ This is often overlooked, but these externally derived images are often importan
 We provide cell and line magics libraries that enhance the Jupyter notebook's interaction with the rest of the Computing system.
 
 
+
 ### Interactive quizzes
 
-We developed quizzes to improve recall of the voice commands.
+We developed a [quiz](https://github.com/MooersLab/voice-in-basics-quiz) to improve recall of the voice commands .
 These quizzes are interactive and can be run in the terminal or in Jupyter notebooks {ref}`fig:quiz`.
 The latter can be saved to keep a record of one's performance on a quiz.
 
@@ -386,7 +399,7 @@ First, the rate at which you speak is an important variable.
 If you speak too slowly a voice trigger that is a compound word, your words may not be interpreted as the intended voice trigger.
 Instead, the individual words will be printed to the screen.
 On the other hand, if you speak too quickly, you may get ahead of the language model and it may stall.
-If the plugin is not responding, it is best to restart your connection with the language model by inactivating the plugin and restarting it. 
+If the plugin is not responding, it is best to restart your connection with the language model by inactivating the plugin and restarting it.
 I can generally dictate three to seven paragraphs before the software falls behind and halts.
 
 Second,  the language model may have a difficult time with a specific words or phrases.
@@ -396,7 +409,7 @@ The solution to this problem is to map these alternate phrases to the desired ph
 Invariably, some of your mappings may get invoked when not intended.
 This event is rare enough to be tolerated.
 The large language models are not perfect, and these sorts of difficulties are still widespread.
-It is expected that over the next several years the language models will improve further and that these difficulties will become less common. 
+It is expected that over the next several years the language models will improve further and that these difficulties will become less common.
 Nonetheless, the ability to map the alternate phrases to the desired phrase demonstrates the great value of being able to use text replacements to get the desired outcome.
 
 Third, language models vary quite a bit in terms of their requirements for an excellent microphone.
