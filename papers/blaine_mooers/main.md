@@ -106,7 +106,7 @@ This automated replacement of English contractions saves time during the editing
 :::{figure} ./images/VoiceInCustomCommandsContractions.png
 :alt: contractions
 :class: bg-primary
-:width: 60 %
+:width: 60%
 :align: center
 :label: fig:contractions
 
@@ -137,11 +137,11 @@ These commands are found in domain-specific libraries, so a user can select whic
 :::{figure} ./images/DisplayElectronDensityEquation.png
 :alt: display
 :class: bg-primary
-:width: 70 %
+:width: 100%
 :align: center
 :label: fig:displayeq
 
-Three snapshots of using the voice-trigger *display electron density equation* in a Markdown cell in a Jupyter notebook. A. The transcript with the voice triggered snippet. B. The text replacement in the form of the LaTeX code inserted in the Markdown cell. C. The rendered markdown cell.
+Three snapshots of using the voice-trigger *display electron density equation* in a Markdown cell in a Jupyter notebook. A. The transcript with the voice triggered snippet. B. The text replacement in the form of the LaTeX code inserted in the Markdown cell. C. The rendered markdown cell. The green and black tab on the right of each panel indicates that the Voice In plugin is active and listening for speech to transcribe.
 :::
 
 
@@ -216,19 +216,18 @@ We provide cell and line magics libraries that enhance the Jupyter notebook's in
 
 
 
-### Interactive quizzes
+### Interactive quiz
 
 We developed a [quiz](https://github.com/MooersLab/voice-in-basics-quiz) to improve recall of the voice commands .
 These quizzes are interactive and can be run in the terminal or in Jupyter notebooks {ref}`fig:quiz`.
 The latter can be saved to keep a record of one's performance on a quiz.
 
 
-:::{figure} ./images/quiz.png
+:::{figure} ./images/runningQuiz.png
 :label: fig:quiz
-:width: 70%
-An example of an interactive session with a quiz in a Jupyter notebook.
+:width: 100% 
+An example of an interactive session with a quiz in a Jupyter notebook. The code for running the quiz was inserted into the code cell with the voice command `run voice in quiz`.
 :::
-
 
 To build long-term recall of the commands, one must take the quiz five or more times on alternate days according to the principles of spaced repetition learning.
 These principles were developed by the German psychologist Hermann Ebbinghaus in the last part of the 19th Century.
