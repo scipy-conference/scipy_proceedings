@@ -366,15 +366,15 @@ This could limit the options available for manuscript submission should one use 
 
 ### ASR extensions for Jupyter lab
 
-We found three extensions developed for Jupyter Lab enable the use of speech recognition in Jupyter notebooks.
-The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control) supports the use of custom commands and relies on the language model in the browser; it is similar to our application of voice-triggered snippets in Voice-In Plus.
-Unfortunately, this extension is experimental and not maintained; it does not work with Jupyter 4.2.
+We found three extensions developed for Jupyter Lab that enable the use of speech recognition in Jupyter notebooks.
+The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control) supports the use of custom commands and relies on the language model in the browser.
+This extension is experimental and not maintained; it does not work with Jupyter 4.2.
 The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments),  relies on the DaVinci large language model to make comments in Markdown cells and request code fragments.
 This program requires clicking on a microphone icon repeatedly, which makes the user vulnerable to repetitive stress injuries.
 The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
-Although the name of the extension suggests it uses GitHub's Copilot, it actually uses whisper-1 and ChatGPT3.
+Although the name of the extension suggests it uses GitHub's Copilot, it uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGP3.
-The robustness of our approach is that the Voice-In Plus software will always operate within Jupyter Lab as long as Jupyter continues to run in web browsers.
+The robustness of our approach is that the Voice-In Plus software will always operate within Jupyter Lab when Jupyter is run in a web.
 
 
 ### Fine points about voice computing
