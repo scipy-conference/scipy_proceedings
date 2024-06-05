@@ -56,9 +56,8 @@ objects residing in the kernel [@doc_juparch]. For instance, the
 basic form elements like buttons, sliders, and dropdowns to adjust individual
 variables. Other community projects offer interactive visualizations for
 domain-specific needs, such as 3D volume rendering
-([ipyvolume](https://github.com/widgetti/ipyvolume)), genomic data visualization
-([higlass-python](https://github.com/higlass/higlass-python),
-[Gos](https://github.com/gosling-lang/gos) [@manzt2023]), and mapping
+([ipyvolume](https://github.com/widgetti/ipyvolume)), biological data exploration
+[@manzt2023; @viv; @vitessce], and mapping
 ([ipyleaflet](https://github.com/jupyter-widgets/ipyleaflet),
 [pydeck](https://github.com/visgl/deck.gl/tree/master/bindings/pydeck),
 [lonboard](https://developmentseed.org/lonboard/)), which users can update by
@@ -201,8 +200,16 @@ export default {
 }
 ```
 An anywidget front-end module (AFM) with initialization and rendering lifecycle
-methods. For familiarity, AFM methods use naming conventions from traditional Jupyter Widgets; however, AFM narrows down the APIs. _Methods_: The `initialize` and `render` methods correspond to different stages in the widget's lifecycle. During model initialization, a front-end model is created and synchronized with the kernel. In the rendering stage, each notebook cell
-displaying a widget object renders an independent view based on the synced model state. _Arguments_: The interface of `model` is restricted to a minimal set of methods for communicating with the kernel (retrieving, updating, and responding to value changes). The `el` argument is a standard web [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
+methods. For familiarity, AFM methods use naming conventions from traditional
+Jupyter Widgets; however, AFM narrows down the APIs. _Methods_: The
+`initialize` and `render` methods correspond to different stages in the
+widget's lifecycle. During model initialization, a front-end model is created
+and synchronized with the kernel. In the rendering stage, each notebook cell
+displaying a widget object renders an independent view based on the synced
+model state. _Arguments_: The interface of `model` is restricted to a minimal
+set of methods for communicating with the kernel (retrieving, updating, and
+responding to value changes). The `el` argument is a standard web
+[`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
 :::
 
 ## Features
