@@ -1,0 +1,42 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-henry_schreiner
+  # Ensure your title is the same as in your `main.md`
+  title: Scikit-build-core
+  subtitle: A modern build-backend for CPython C/C++/Fortran/Cython extensions
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Henry Schreiner
+      email: henryfs@princeton.edu
+      orcid: 0000-0002-7833-783X
+      affiliations:
+        - Princeton University
+      corresponding: true
+    - name: Jean-Christophe Fillion-Robin
+      email: jcfr@kitware.com
+      orcid: 0000-0002-9688-8950
+      affiliations:
+        - Kitware Inc.
+      corresponding: true
+    - name: Matt McCormick
+      email: matt.mccormick@kitware.com
+      orcid: 0000-0001-9475-3756
+      affiliations:
+        - Kitware Inc.
+  keywords:
+    - Build system
+    - CMake
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
