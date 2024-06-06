@@ -302,7 +302,7 @@ Obviously, the internal double quotes have to be replaced with single groups; ot
 
 :::{figure} ./images/VoiceInNewSentence.png
 :label: fig:newSentence
-:width: 70%
+:width: 50%
 Entering a single voice trigger and the corresponding command in Voice In Plus.
 :::
 
