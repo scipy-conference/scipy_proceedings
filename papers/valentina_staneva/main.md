@@ -7,7 +7,7 @@ abstract: |
 
 
 ## Motivation
-Acoustic fisheries surveys and ocean observing systems collect terabytes of echosounder (water column sonar) data that require custom processing pipelines to obtain the distributions and abundance of fish and zooplankton in the ocean [@ncei_story_map]. The data are collected by sending an acoustic signal into the ocean which then scatters from objects and the returning “echo” is recorded. Although data usually have similar dimensions: range, time, location, andfrequency, and can be stored into multi-dimensional arrays, the exact format varies based on the data collection scheme and the exact instrument used. Fisheries ship surveys, for example, follow pre-defined paths and can span several months ([Figure %s ](fig:data_collection) top-left). Ocean moorings, on the other hand, have instruments at fixed locations and can collect data 24/7 for several years (when wired) ([Figure %s ](#fig:data_collection) bottom). Unmanned Surface Vehicles (USVs) (e.g. Saildrone[@saildrone], DriX[@drix], [Figure %s ](fig:data_collection) top-right) can autonomously collect echosounder data over large spatial regions. Despite that in all these scenarios data are usually collected with the same type of instruments, and some of the initial processing steps are similar, the combination of research needs, data volume, and available computational infrastructure demand different workflows. 
+Acoustic fisheries surveys and ocean observing systems collect terabytes of echosounder (water column sonar) data that require custom processing pipelines to obtain the distributions and abundance of fish and zooplankton in the ocean [@ncei_story_map]. The data are collected by sending an acoustic signal into the ocean which scatters from objects in the water column and the returning “echo” is recorded. Although data usually have similar dimensions: range, time, location, and frequency, and can be stored into multi-dimensional arrays, the exact format varies based on the data collection scheme and the exact instrument used. Fisheries ship surveys, for example, follow pre-defined paths and can span several months ([Figure %s ](fig:data_collection) top-left). Ocean moorings, on the other hand, have instruments at fixed locations and can collect data 24/7 for several years (when wired) ([Figure %s ](#fig:data_collection) bottom). Unmanned Surface Vehicles (USVs) (e.g. Saildrone[@saildrone], DriX[@drix], [Figure %s ](fig:data_collection) top-right) can autonomously collect echosounder data over large spatial regions. Despite that in all these scenarios data are usually collected with the same type of instruments, and there is an overlap between the intial processing procedures, the combination of research needs, data volume, and available computational infrastructure demand different data workflows, which are not trivial to adapt to new scenarios.
 
 
 :::{figure} data_collection.png
@@ -16,11 +16,11 @@ Acoustic fisheries surveys and ocean observing systems collect terabytes of echo
 :::
 
 ## Fisheries Acoustics Workflows
-While traditionally fisheries acoustics scientists have had go-to tools and procedures for their data processing and analysis, now they have a lot of options in designing their workflows. The field has also become very interdisciplinary and includes people from different backgrounds (physics, biology, oceanography, acoustics, signal processing, machine learning, software engineering, etc.) and with different levels of experience. [Figure %s ](#fig:workflow_variations) shows the many variations of workflows that can be defined based on the use cases, the data storage options and computing infrastructure options. We discuss these in more detail in the next sections.
+While traditionally fisheries acoustics scientists have had go-to tools and procedures for their data processing and analysis, now they have more options on how to accomplish their work. While this opens more opportunities for research, it also posed challenges, as  field has also become very interdisciplinary and includes researchers from different backgrounds (physics, biology, oceanography, acoustics, signal processing, machine learning, software engineering, etc.) at different levels of experience. [Figure %s ](#fig:workflow_variations) shows the many variations of workflows that can be defined based on the use cases, the options for data storage and computing infrastructure. We discuss these in more detail in the next sections.
 
 :::{figure} workflow_variations.png
 :label: fig:workflow_variations
-**`echodataflow` Workflow Variations:** Various use cases drive different needs for data storage and computing infrastructure. Options are abundant but adapting workflows across them is not trivial.
+**`echodataflow` Workflow Variations:** Various use cases (fisheries, data management, machine learning, education) drive different needs for data storage and computing infrastructure. Options are abundant but adopting new technology and adapting workflows across use cases is not trivial.
 :::
 
 
@@ -35,20 +35,20 @@ A **machine learning engineer** is developing an ML algorithm to automatically d
 
 An **acoustics graduate student** obtained echosounder data analysis scripts from a retired scientist but is missing several parameters to reproduce the results needed to proceed with their dissertation research.
 
-We draw attention to the different levels of experience of these users: each one has expertise in a subdomain but to accomplish their goal their workflow needs to integrate tools/knowledge from others. We compile several requirements that stem from these stories:
+We draw attention to the different levels of experience of these users: each one has expertise in a subdomain but to accomplish their goal they needs to learn new tools or obtain knowledge from others. We outline several requirements that stem from these stories:
 
 * The system should run both on a local computer and within a cloud environment. 
-* The system should allow processing to be scaled to large datasets, but should not be too complicated so that users with some Python scripting experience can run it locally with predefined stages and parameters.
-* The system should have transparency into the operations that are executed to the files, and those should be interpretable to users without acoustics expertise.
-* The system should preferably be free and open source so that it is easy for members of different institutions to adopt it.
-* Since cloud and distributed computing libraries change often, the system should be able to adapt to those changes and preferably should leverage the existing development within technical communities.
+* The system should allow processing to be scaled to large datasets, but should not be too complicated so that users with Python scripting experience can run it locally with pre-defined stages and parameters.
+* The system should provide visibility into the operations that are executed to the data, and the procedures should be interpretable to users without acoustics expertise.
+* The system should preferably be free and open source so that it is accessible to members of different institutions.
+* The system should adapt to the rapid changes of cloud and distributed computing libraries,and preferably should leverage the existing development within technical communities.
 
 
 ### Software Landscape
-Traditionally echosounder data processing pipelines are executed within a GUI based software (e.g. Echoview[@harrison_echoviewR_2015], LSSS[@korneliussen_lsss_2006], ESP3[@ladroit_esp3_2020], Matecho[perrot_matecho_2018]). These software applications have been invaluable for onboard real-time visualization, and post-survey data screening and annotation. Some of them also support integration with scripting tools which facilitate the reproducible execution of the pipelines. For example, the Echoview software provides the option to visualize the data processing pipeline in the Dataflow Toolbox and provides the Automation Module to automate the pipelines. FurHowever, since the software is neither free nor open source, these pipelines cannot be shared with researchers who do not have the license. Also, the graphics software tools are usually designed for work on a desktop and require downloading the data first, which is becoming challenging with the growth of the datasets. Manual annotation for long-term missions becomes infeasible. Over the last several years there has also been a substantial development of open source Python packages (PyEchoLab [@wall_pyecholab_2018], `echopype`[@lee_echopype_2021], `echopy`[@echopy_2024]), each providing common echosounder processing functionalities. PyEcholab and Echopy represent the data as `numpy`[@numpy] arrays. Echopype converts raw data files into zarr datasets [ref] and supports distributed computing by utilizing dask and xarray [ref]. To orchestrate the function calls in an end-to-end pipeline, one still needs to perform a considerable amount of path and parameter configuration, which is platform-specific. 
+Traditionally echosounder data processing pipelines are executed within a GUI based software (e.g. Echoview[@harrison_echoviewR_2015], LSSS[@korneliussen_lsss_2006], ESP3[@ladroit_esp3_2020], Matecho[perrot_matecho_2018]). These software applications have been invaluable for onboard real-time visualization, and post-survey data screening and annotation. Some of them also support integration with scripting tools which facilitates the reproducible execution of the pipelines. For example, the Echoview software provides the option automate pipelines through the Automation Module and to visualize them in the Dataflow Toolbox. Further, one can script operations through the echoviewR package [ref].However, since Echoview is neither free nor open source, these pipelines cannot be shared with researchers who do not have the license. In general, the graphics software tools are usually designed for work on a desktop and require downloading the data first, which is becoming challenging with the growth of the datasets. Manual annotation for long-term missions becomes infeasible. Over the last several years there has also been a substantial development of open source Python packages (PyEchoLab [@wall_pyecholab_2018], `echopype`[@lee_echopype_2021], `echopy`[@echopy_2024]), each providing common echosounder processing functionalities. PyEcholab and Echopy represent the data as `numpy`[@numpy] arrays. Echopype converts raw data files into zarr datasets [ref] and supports distributed computing by utilizing dask and xarray [ref]. To orchestrate the function calls in an end-to-end pipeline, one still needs to perform a considerable amount of path and parameter configuration, which is platform-specific. 
 
 #### Challenges
-Python scripts executing the stages can require passing more than ten arguments, at which point the letter flags are not interpretable. Bash scripts can wrap the Python scripts but they require their own set of parameters and arguments, and bash syntax can be platform dependent. Although this approach can eventually produce the desired results, it is tedious and prone to error. Adapting an existing procedure to a new setting is usually not trivial, and sometimes even reproducing old results can pose a challenge.
+Python scripts executing the stages can require passing more than ten arguments, at which point the letter flags are not interpretable. Bash scripts can wrap the Python scripts but they require their own set of parameters and arguments, and bash syntax can be platform-dependent. Although this approach can eventually produce the desired results, it is tedious and prone to error. Adapting an existing procedure to a new setting is usually not trivial, and sometimes even reproducing old results can pose a challenge.
 
 ##### Data Storage
 
@@ -204,19 +204,7 @@ echodataflow_combine_echodata:echodataflow_compute_Sv
 echodataflow_compute_Sv:echodataflow_compute_MVBS
 ```
 
-These rules dictate the sequence in which stages should be executed, ensuring that each stage waits for its dependencies to complete.
-
-There are two options:
-* add a rule interactively
-  ```
-  echodataflow rules --add
-  ```
-  This command will prompt the user to input a new rule in the `parent_flow:child_flow format`, for example `echodataflow_compute_MVBS:echodataflow_frequency_differencing`. 
-
-* import rules from a file:
-  ```
-   echodataflow rules --add-from-file path/to/rules.txt
-  ```
+These rules dictate the sequence in which stages should be executed, ensuring that each stage waits for its dependencies to complete. They can be set through the `echodataflow rules -add...` command.
 
 #### Aspect-Oriented Programming (AOP) in echodataflow
 
@@ -232,7 +220,6 @@ def my_function(arg1, arg2):
 ```
 
 In the example, the echodataflow decorator ensures that the function `my_function` is executed within the context of "StageA" as a "FLOW", checking for dependencies and logging relevant information.
-
 
 ## Example Use Case: Processing Ship Survey Data from an Archive
 
@@ -253,15 +240,16 @@ The execution of the workflow with echodataflow allowed us to monitor the progre
 ::: 
 
 ## Future Development
-Our immediate goal is to provide more example workflow recipes integrating other stages of echosounder data processing such as machine learning prediction, label dataset generation (e.g. echoregions[ref]), biomass estimation (e.g. echopop[ref]), interactive visualization integration (e.g. echoshader), etc. We plan to explore more use case scenarios such as near-realtime on-ship processing. We will investigate how to improve memory management and caching between flows. We further aim to streamline the stage addition process. We hope that as the community agrees one data processing levels [ref], we can align them with existing stages in echodataflow, which will support building interoperable data sets whose integration will push us to study bigger and more challenging questions in fisheries acoustics.
+Our immediate goal is to provide more example workflow recipes integrating other stages of echosounder data processing, such as machine learning prediction, training dataset generation, biomass estimation, interactive visualization, etc. We will demonstrate utilizing functionalities from a suite of open source Python packages (echoregions[@echoregions] for reading region annotations and creating corresponding masks, echopop[@echopop] for combining acoustic data with biological "ground truth" into biomass estimation, echoshader[@echoshader] for echogram and map dashboard visualization) in building workflows for the Pacific Hake Survey: both in a historical and near-realtime on-ship data processing context. We aim to streamline the stage addition process. We will further investigate how to improve memory management and caching between and within stages to optimize for different scenarios. There is growing interest in the fisheries acoustics community to share global, accessible, and interoperable (GAIN) datasets[ref], and to agree on community data standards and definitions of processing levels [@levels, @NASA_levels, ref]. As those mature we will align them with existing stages in echodataflow, which will support building interoperable datasets whose integration will push us to study bigger and more challenging questions in fisheries acoustics.
+
 
 
 ## Beyond Fisheries Acoustics
 
-Echodataflow was designed to facilitate echosounder data processing workflows, but the structure can be adapted to data processing pipelines in other scientific communities. The key aspects are to identify the potential stages of the workflow and associated Python packages/steps that implement them, and to design the structure of the configuration files. The other aspects such as logging, deployment, monitoring, new-stage integration are domain-agnostic. Processing pipelines that require manipulation of large labeled arrays can directly benefit from the dask cluster integration and are prevalent in the researrch community. Our use case of regrouping data based on time segments is a common need within scientific pipelines in which the file unit level of the instrument is not aligned with the unit level of analysis, and requires further reorganization and potential resampling and regridding along certain coordinates. We hope it can serve as a guide on how to build configurable, reproducible, and scalable workflows in new scientific areas.
+Echodataflow was designed to facilitate fisheries acoustics workflows, but the structure can be adapted to data processing pipelines in other scientific communities. The key aspects are to identify the potential stages of the workflows and associated Python packages/functions that implement them, and to design the structure of the configuration files. The other aspects such as logging, deployment, monitoring, new-stage integration are domain-agnostic. Processing pipelines that require manipulation of large labeled arrays can directly benefit from the dask cluster integration and are prevalent in the research community. Our use case of regrouping data based on time segments is a common need within scientific pipelines in which the file unit level of the instrument is not aligned with the unit level of analysis, and requires further reorganization and potential resampling and regridding along certain coordinates. We hope it can serve as a guide on how to build configurable, reproducible, and scalable workflows in new scientific areas.
 
 ## Acknowledgements:
-We thank NOAA Fisheries Engineering and Acoustic Technologies team: Julia Clemons, Alicia Billings, Rebecca Thomas, Elizabeth Phillips for introducing us to the Pacific Hake Survey operations and collaborating with us to improve fisheries acoustics workflows.
+We thank NOAA Fisheries Engineering and Acoustic Technologies team: Julia Clemons, Alicia Billings, Rebecca Thomas, Elizabeth Phillips for introducing us to the Pacific Hake Survey operations and biomass estimation workflow.
 
 ## Funding:
 NOAA Fisheries, eScience Institute
