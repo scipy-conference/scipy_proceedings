@@ -354,14 +354,14 @@ Instead, third parties have developed several extensions for Jupyter to support 
 Unfortunately, changes that occur in the core of Jupyter often break these extensions.
 Users have to create Python environments for older versions of Jupyter work with the snippets extension while missing out on the new featuers of Jupyter.
 An obvious solution to this problem would be for the developers of Jupyter to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for snippets is always available.
-The use of voice-triggered snippets external  to Jupyter side steps difficulties with broken extensions as Jupyter advances because the software is indpendent of Jupyter.
+The use of voice-triggered snippets external  to Jupyter side steps difficulties with breaking changes to Jupyter.
 
 ### Filling gap in tab-triggered snippets with voice-triggered snippets
 
 Voice-triggered snippets also provided an opportunity to overcome the absence of extensions for Jupyter that support tab-triggered snippets.
 Tab-triggered code snippets are standard in most text editors, whereas voice-triggered snippets have yet to become widespread in standard text editors.
 One advantage of Jupyter Notebooks is that they run in the browser, where several automated Speech Recognition software packages operate (e.g., Voice-In Plus, Serenade, and Talon Voice).
-We developed our libraries for the software that we found to have the most gentle learning curve while remaining customizable.
+We developed our libraries for Voice In Plus software because of its gentle learning curve and simple customization.
 We did this to meet the needs of the widest population of users.
 
 ### The role of AI-assisted voice computing
@@ -389,9 +389,9 @@ This extension requires an API key for ChatGP3.
 The robustness of our approach is that the Voice-In Plus software will always operate within Jupyter Lab when Jupyter is run in a web.
 
 
-### Fine points about voice computing
+### Caveats about voice computing
 We found five caveats to doing voice computing.
-All of these points reflect the imperfect state of available language models.
+These points reflect the imperfect state of available language models.
 We suggest how to cope with these limitations while improving productivity.
 
 First, the rate at which you speak is an important variable.
