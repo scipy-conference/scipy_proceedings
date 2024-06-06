@@ -29,7 +29,8 @@ project:
     - CMake
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    PEP: Python Enhancement Proposal
+    NSF: National Science Foundation
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
