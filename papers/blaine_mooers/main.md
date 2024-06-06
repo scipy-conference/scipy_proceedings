@@ -217,7 +217,9 @@ This is often overlooked, but these externally derived images are often importan
 
 ### Jupyter specific library
 
-We provide cell and line magics libraries that enhance the Jupyter notebook's interaction with the rest of the Computing system.
+We provide a [library](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) of 85 cell and line magics  that facilitate the Jupyter notebook's interaction with the rest of the operating system.
+The cell magics have the prefix *cell magic*, and the line magics have the preflx *line magic*.
+For example, the voice command *line majic run* insert `%run`; it is used to run script files after supplying the name of the script file as also shown in {fig}`quiz`.
 
 
 
