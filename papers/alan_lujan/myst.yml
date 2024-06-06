@@ -1,0 +1,49 @@
+version: 1
+site:
+  template: article-theme
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-alan_lujan
+  # Ensure your title is the same as in your `main.md`
+  title: multinterp
+  subtitle: A Unified Interface for Multivariate Interpolation in the Scientific Python Ecosystem
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Alan Lujan
+      email: alanlujan91@gmail.com
+      orcid: 0000-0002-5289-7054
+      affiliations:
+        - institution: Johns Hopkins University
+          department: Department of Economics
+        - institution: Econ-ARK
+          url: https://econ-ark.org/
+      corresponding: true
+      github: alanlujan91
+  keywords:
+    - multivariate
+    - interpolation
+    - gpu
+    - rectilinear
+    - curvilinear
+    - scattered
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
