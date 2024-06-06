@@ -10,7 +10,7 @@ abstract: |
 
 Presenting a model or an algorithm as a GUI app is a common need in the scientific and engineering community. 
 For example, a large language model (LLM) is not accessible to the general public until we wrap it with a chat interface, which consists of a text input and a text output. 
-Because most scientists and engineers are not familiar with frontend development which is Javascript/Typescript-centric, there have been many solutions based on Python, one of the most popular programming language in scientific computing -- especially AI, such as ipywidgets,  [Streamlit](), Gradio, Reflex, Dash, and PyWebIO. 
+Because most scientists and engineers are not familiar with frontend development which is Javascript/Typescript-centric, there have been many solutions based on Python, one of the most popular programming languages in scientific computing -- especially AI, such as [ipywidgets](),  [Streamlit](), Gradio, Reflex, Dash, and PyWebIO. 
 Most of them follow the conventional GUI programming philosophy that a developer needs to manually pick widgets from a widget library and associate them with the arguments and returns of an underlying function, which is usually called the "call back function."
 
 This approach has several drawbacks. **First**, it needs continuous manual work to align the GUI code with the callback function. If the signature of the callback function changes, the GUI code needs to be manually updated. In this sense, the developer is manually maintaining two sets of code that are highly overlapping. **Second**, the GUI configuration is low-level, at individual widgets. It is difficult to reuse the design choices and thus laborious to keep the appearance of the GUI consistent across apps. **Third**, the developer is bounded by the widgets provided by the GUI library. If there is an unsupported datatype, the developer most likely has to give up due to the lack of frotend development knowledge. **Fourth**, they do not leverage the features of the Python language itself to reduce the amount of additional work. For example, it is very common in Python development to use docstrings to annotate arguments of a function. However, most of the existing solutions still requires the developer to manually specify the labels of the widgets. **Last** but not least, all existing solutions require the developer to read their documentations before being able to say "hello, world!" 
@@ -23,6 +23,7 @@ Although Funix uses themes to control the UI, customizations that cannot be done
 In summary, Funix has the following distinctive features compared with many existing solutions:
 1. Type-based GUI generation controlled by themes
 2. Exposing the frontend world to Python developers
+3. Leverageing Python's language features to make building apps more intuitively. 
 
 The rest of the paper is organized as follows: 
 
@@ -91,9 +92,9 @@ By default, Funix maps the following basic Python types to the following MUI com
 | `bool`      | Checkbox  |
 | `int`       | TextField |
 | `float`     | TextField |
-| `Literal`   | RadioGroup if number of elements is below 5; MultiSelect otherwise|
+| `Literal`   | RadioGroup if number of elements is below 5; MultiSelect otherwise |
 | `range`     | Slider    |
-| `List[Literal]`  | Yazawazi: What is the bubble select component here?  |
+| `List[Literal]`  | An array of Checkboxes if the number of elements is below 5; AutoComplete otherwise  |
 
 In particular, we leverage the semantics of `Literal` and `List[Literal]` for single-choice and multiple-choice selections. 
 
@@ -203,4 +204,4 @@ If multiple functions are defined in the file passed to the command `funix`, Fun
 ## Future work 
 
 ## Acknowledgments
-Funix is not the first to make use of variable types to automatically generate UIs. [Python Fire by Google](https://github.com/google/python-fire) is a Python library that automatically generates command line interfaces (CLIs) from Python functions. However, it is limited to CLIs and does not support GUIs. ipywidgets also has limited support to certain types. Funix supports way more types than ipywidgets does by introducing the concept of themes which allows users to further expand  the type support.
+Funix is not the first to exploit variable types for automatical UI generation. [Python Fire by Google](https://github.com/google/python-fire) is a Python library that automatically generates command line interfaces (CLIs) from Python functions. However, it is limited to CLIs and does not support GUIs. `interact` in [ipywidgets](https://ipywidgets.readthedocs.io/en/latest/examples/Using%20Interact.html) infers types from default values of keyword arguments and picks widgets accordingly. But it only supports five types/widgets (`bool`, `str`, `int`, `float`, and Dropdown menus). Funix gives users much more freedom in that it supports a lot more types out of the box, requires no modification to the code (vs. calling `ipywidgets.interact`), and supports binding any type to any widget in an existing frontend library.
