@@ -154,23 +154,69 @@ install(TARGETS example LIBRARY DESTINATION .)
 
 And that all that is needed to get started.
 
-### Using binding tools
-
 ### Common needs as simple configuration
+
+Customizing scikit-build-core is done through the `[tool.scikit-build]` table
+in the `pyproject.toml`. An example configuration is shown below:
+
+```{code-block}
+:linenos:
+
+[tool.scikit-build]
+minimum-version = "0.10"
+
+build.verbose = true
+logging.level = "INFO"
+
+wheel.expand-macos-universal-tags = true
+```
+
+On line 2, you can see the `minimum-version` setting. This is a special setting
+that allows scikit-build-core to make changes to default values in the future
+while ensuring your configuration continues to build with the defaults present
+the version you specify. This is very similar to CMake's
+`cmake_minimum_requires` feature.
+
+On line 4-5, you can see an example of increasing the verbosity, both to print
+out build commands as well as see scikit-build-core's logs.
+
+On line 7, you can see that scikit-build-core can expand the macOS universal
+tags to include both ARM and Intel variants for maximum compatibility with
+older Pip versions; this is impossible to do in setuptools unless you use API
+declared private and unstable in wheel.
 
 ## Innovative features of scikit-build-core
 
+Scikit-build-core has some interesting and powerful innovations.
+
 ### Dynamic requirement on CMake/Ninja
+
+Scikit-build-core needs CMake to build, and often ninja as well. Both are
+available as Python wheels, but simply adding them to your
+`build-system.requires` list is not a good idea, because some platforms aren't
+supported by wheels on PyPI, such as WebAssembly, the various BSD's,
+ClearLinux, or Android. But these systems can get CMake other ways, such as
+from a package manager, so users shouldn't have a build fail because they can't
+get a cmake wheel if they have a sufficient version of CMake already. As it
+turns out, PEP 517 is flexible enough to handle this very elegantly.
+
+PEP 517 has an API for a build tool to declare it's dependencies. This was
+initially used for setuptools to only depend on wheel when making wheels, but
+it works perfectly for optional binary dependencies as well. Scikit-build-core
+will check to see if `cmake` is present on the system. If it is, and it reports
+a version sufficient for the package, it will not be added to the requested
+dependencies. This is also done for ninja. This same system was added to
+`meson-python`, as well, since Meson also requires ninja.
 
 ### Integration with external packages
 
 ### Dual editable modes with automatic recompile
 
+### Dynamic metadata
+
 ## Scikit-build-core's design
 
 ### The configuration system
-
-### Dynamic metadata
 
 ### The File API
 
