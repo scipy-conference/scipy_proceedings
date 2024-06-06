@@ -1,0 +1,55 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-funix
+  # Ensure your title is the same as in your `main.md`
+  title: Funix - vivifying (any) Python functions into GUI apps
+  subtitle: The laziest way to build apps by leveraging native features of Python and its ecosystem
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Forrest Sheng Bao
+      email: forrest.bao@gmail.com
+      # orcid: 0000-0000-0000-0000
+      affiliations:
+        - Founder, Textea, Inc.
+        - Co-head of Machine Learning, Vectara, Inc. 
+      corresponding: true
+    - name: Qikai Cheng
+      email: yazawazier@gmail.com
+      affiliations:
+        - Engineer, Textea, Inc.
+    - name: Ruixuan Tu
+      email: turx2003@gmail.com
+      affiliations:
+        - Undergraduate student, Dept. of Computer Sciences, University of Wisconsin-Madison
+    - name: Erana Wan
+      email: erana@gmail.com
+      affiliation: MS student, Dept. of Computer Science, University of Southern California
+  keywords:
+    - type hints
+    - docstrings
+    - transcompiler
+    - frontend development
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
