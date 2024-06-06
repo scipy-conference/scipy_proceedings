@@ -42,15 +42,15 @@ I(x,y,t)=I(x+u\delta t,y+v\delta t,t+\delta t)
 
 Where $I(x,y,t)$ is the pixel intensity at position $(x,y)$ a time $t$. Here, $(u\delta t, v\delta t)$ are small changes in the next frame taken after $\delta t$ time, and $(u,v)$, respectively, are the optical flow components that represent the displacement in pixel positions between consecutive frames in the horizontal and vertical directions at pixel location $(x, y)$.
 
-:::{figure} frame_out.png
+:::{figure} frame_out.webp
 :label: fig:frame_out
 A sample frame of a video in our cilia dataset
 :::
-:::{figure} ground_truth.png
+:::{figure} ground_truth.webp
 :label: fig:ground_truth
 Manually labeled ground truth
 :::
-:::{figure} sample_OF.png
+:::{figure} sample_OF.webp
 :label: fig:sample_OF
 Representation of rotation (curl) component of optical flow at a random time
 :::
@@ -78,12 +78,12 @@ using an orthogonal basis $C$. This equation at position ${x}_t$ is a function o
 In our experiments, we chose $d = 5$ as the order of our autoregressive model.
 We can then create raw masks from this lower-dimensional subspace, and further enhance them with thresholding to remove the remaining noise.
 
-:::{figure} AR matrices.png
+:::{figure} AR matrices.webp
 :label: fig:sample_AR
 A 5-order AR model of the OF component of the video
 :::
 In @fig:sample_AR, the first-order AR parameter is showing the most variance in the video, which corresponds to the frequency of motion that cilia exhibit. The remaining orders have correspondence with other different frequencies in the data caused by, for instance, camera shaking. Evidently, simply thresholding the first-order AR parameter is adequate to produce an accurate mask, however, in order to get a more refined result we subtracted the second order from the first one, followed by a normalization of pixel intensities. We used adaptive thresholding to extract the mask on all videos of our dataset. The generated masks exhibited under-segmentation in the ciliary region, and sparse over-segmentation in other regions of the image. To overcome this, we adapted a Gaussian blur filter followed by an Otsu thresholding to restore the under-segmentation and remove the sparse over-segmentation. @fig:thresholding illustrates the steps of the process.
-:::{figure} thresholding.png
+:::{figure} thresholding.webp
 :label: fig:thresholding
 The process of computing the masks. a) Subtracting the second-order AR parameter from the first-order, followed by b) Adaptive thresholding, which suffers from under/over-segmentation. c) A Gaussian blur filter, followed by d) An Otsu thresholding eliminates the under/over-segmentation.
 :::
@@ -96,7 +96,7 @@ In this study, we employed a Feature Pyramid Network (FPN) [@kirillov2017unified
 
 @fig:out_sample shows the predictions of the model on 5 sample videos of dyskinetic cilia. The dyskinetic samples were not used in the training or validation phases. These predictions were generated after only 5 epochs of training with the FPN architecture.
 
-:::{figure} out sample.png
+:::{figure} out sample.webp
 :label: fig:out_sample
 The model predictions on 5 dyskinetic cilia samples. The first column shows a frame of the video, the second column shows the manually labeled ground truth, the third column is the model's prediction, and the last column is a thresholded version of the prediction.
 :::
