@@ -284,6 +284,23 @@ We evaluate the performance of our forecasting models using the following metric
 \end{table}
 
 
+\begin{table}[h]
+    \centering
+    \footnotesize
+    \caption{The code instantiation of the cross-validation splits used for the evaluation on the three datasets. The parameters are taken from Table \ref{tab:evaluation_splits}.}
+    \label{tab:cv_splits}
+    \begin{tabularx}{\textwidth}{X|X}
+         \toprule
+        Dataset & CV splitter \\ \midrule
+        Australian Electricity Demand & \texttt{SlidingWindowSplitter(step_length=48*30, window_length=48*30,fh=range(48))} \\  
+        Sunspot Activity & \texttt{SlidingWindowSplitter(step_length=395, window_length=365,fh=range(28))}\\
+        US Births & \texttt{SlidingWindowSplitter(step_length=395, window_length=365,fh=range(28))}\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+
+
 \section{Experiments} \label{experiments}
 In this section, we describe the experimental setup, the datasets, the evaluation metrics, and the experimental procedures. We explain how the experiments are designed to compare the performance of different forecasting methods.
 
@@ -300,7 +317,34 @@ In this section, we describe the experimental setup, the datasets, the evaluatio
 \subsection{Experimental Setup}
 To perform the benchmarking study, we use the framework described in Section~\ref{methods}. The benchmarking compares different probabilistic wrappers on different datasets and with different forecasters regarding CRPS, Pinball Loss, AUCalibration, and Runtime. 
 
-To enable easy replication of the experiments, we provide for each used forecaster, and wrapper the hyperparameters by providing the used python object instantiation in Table~\ref{tab:hyperparams}. These hyperparameter depend on the dataset, especially, the seasonal periodicity (sp) is chosen based on the dataset. This parameter as well as the other dataset related parameter required to instantiate the cross validation used for the evaluation are described in Table~\ref{tab:evaluation_splits}.
+To enable easy replication of the experiments, we provide for each used forecaster, and wrapper the hyperparameters by providing the used python object instantiation in Table~\ref{tab:hyperparams}. These hyperparameter depend on the dataset, especially, the seasonal periodicity (sp) is chosen based on the dataset. This parameter as well as the other dataset related parameter required to create the cross validation folds used for the evaluation are described in Table~\ref{tab:evaluation_splits}. To create the cross validation folds, we use the \texttt{SlidingWindowSplitter} from \texttt{sktime}. The instantiation of the splitter for each dataset is shown in Table~\ref{tab:cv_splits}. Figure~\ref{fig:splits} is showing the resulting cross validation folds for the tree datasets.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{1\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/AusElecSplit.png}
+        \caption{Australian Electricity Demand}
+        \label{fig:aus_split}
+    \end{subfigure}
+
+    \begin{subfigure}{1\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/SunspotSplit.png}
+        \caption{Sunspot Activity}
+        \label{fig:sunspot_split}
+    \end{subfigure}
+
+    \begin{subfigure}{1\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/USBirthSplit.png}
+        \caption{US Births}
+        \label{fig:usbirth_split}
+
+    \end{subfigure}
+    \caption{The splits used for the evaluation on the three datasets. Blue indicates the training data, and orange indicates the test data. The splits are created using the parameters from Table~\ref{tab:evaluation_splits} and Table~\ref{tab:cv_splits}}
+    \label{fig:splits}
+\end{figure}
 
 \subsection{Datasets} \label{datasets}
 We evaluate our forecasting methods and probabilistic wrappers on several diverse time series datasets, each offering unique characteristics:
