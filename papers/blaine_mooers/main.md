@@ -27,7 +27,7 @@ Voice commands can be mapped to tables, templates, and even software licenses to
 For Jupyter code cells, voice commands can be mapped to chunks of code of various sizes.
 We call these voice commands that trigger a text replacement *voice triggers* in analogy to tab triggers with conventional tab-triggered snippets in advanced text editors.
 
-To ease the use of voice commands in Jupyter notebook cells, we have developed sets of voice-triggered snippets for use in either markdown or code cells.
+To ease the use of voice commands in Jupyter notebook cells, we have developed sets of voice-triggered snippets for use in either Markdown or code cells.
 We are building on our prior experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
 Although the Jupyter environment supports polyglot programming, we have restricted our focus to Python and Markdown.
@@ -83,7 +83,7 @@ There are several libraries that are domain-specific.
 These libraries can inspire the development of libraries for other domains.
 
 The contents of the libraries can be divided into two categories.
-One subset of libraries supports carrying out dictation about science in the markdown cells of Jupyter notebooks while the other subset supports writing scientific Python in code cells.
+One subset of libraries supports carrying out dictation about science in the Markdown cells of Jupyter notebooks while the other subset supports writing scientific Python in code cells.
 While some code is specific to Jupyter, such as line and cell magics, most of the voice-triggered snippets can be used in Markdown files and Python scripts that are being edited in Jupyter Lab.
 
 ### Libraries for Markdown cells
@@ -113,7 +113,7 @@ This automated replacement of English contractions saves time during the editing
 Webpage of custom commands. The buttons are used to edit existing commands and add new commands. Three English contractions and their expansions are shown.
 :::
 
-The contents of the library can be further organized by the first word of the voice trigger.
+The contents of the library can be further organized by the first word of the voice trigger {ref}`table:commands`.
 This first word is often a verb.
 For example, the word `expand' is used to expand acronyms.
 Acronyms must be defined upon their first use.
@@ -124,15 +124,21 @@ This can save time that would otherwise be spent looking up expansions.
 We have included acronyms widely used in Python programming, scientific computing, data science, statistics, machine learning, and Bayesian data analysis.
 These commands are found in domain-specific libraries, so a user can select which voice triggers they would like to add to their private collection of voice commands.
 
-- **expand** acronyms
-- **the book** title
-- **email** dsw (i.e., inserts list of e-mail addresses)
-- **insert** code blocks (including equations in LaTeX)
-- **list** (e.g., font sizes in \LaTeX, steps in a protocol, members of a committee, etc.)
-- **open** webpage (e.g., open pytexas, open google scholar)
-- **display** equation in display mode (e.g., display electron density equation)
-- **inline** equation in-line (e.g., inline information entropy equation)
+:::{table} Examples of voice commands with the prefix in bold that is used to group commands.
+:label: table:commands
+:align: center
 
+| Voice commands                                                                            |
+|:------------------------------------------------------------------------------------------|
+| **expand** acronyms                                                                       |
+| **the book** title                                                                        |
+| **email** dsw (i.e., inserts list of e-mail addresses)                                    |
+| **insert** code blocks (including equations in LaTeX)                                     |
+| **list** (e.g., font sizes in \LaTeX, steps in a protocol, members of a committee, etc.)  |
+| **open** webpage (e.g., open pytexas, open google scholar)                                |
+g| **display** equation in display mode (e.g., display electron density equation)            |
+| **inline** equation in-line (e.g., inline information entropy equation)                   |
+::::
 
 :::{figure} ./images/DisplayElectronDensityEquation.png
 :alt: display
@@ -141,7 +147,7 @@ These commands are found in domain-specific libraries, so a user can select whic
 :align: center
 :label: fig:displayeq
 
-Three snapshots of using the voice-trigger *display electron density equation* in a Markdown cell in a Jupyter notebook. A. The transcript with the voice triggered snippet. B. The text replacement in the form of the LaTeX code inserted in the Markdown cell. C. The rendered markdown cell. The green and black tab on the right of each panel indicates that the Voice In plugin is active and listening for speech to transcribe.
+Three snapshots from a Zoom video of using the voice-trigger *display electron density equation* in a Markdown cell in a Jupyter notebook. A. The Zoom transcript showing the spoken voice trigger. B. The text replacement in the form of a math equation written in LaTeX in display mode in the Markdown cell. C. The rendered Markdown cell. The green and black tab on the right of each panel indicates that the Voice In plugin is active and listening for speech.
 :::
 
 
@@ -149,10 +155,10 @@ Another example of a verb starting a voice trigger is the command `display  <equ
 This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
 For example, the voice trigger `display the electron density equation` is shown in the transcript of a Zoom video {ref}`fig:displayeq`. .
 This is followed by the image in the middle that shows the text replacement in the form of a LaTeX equation in the display mode.
-This image is followed by the resulting markdown cell after it is rendered.
+This image is followed by the resulting Markdown cell after it is rendered by running the cell.
 
 Likewise, the command `inline <equation name>` is used to insert equations in sections of prose in Markdown cells.
-We have made available voice-triggered snippet libraries of equations commonly found in machine learning, statistics, Bayesian data analysis, physics, chemistry, biophysics, structural biology, and data science.
+We have made available voice-triggered snippet libraries of equations commonly found in Bayesian data analysis and structural biology.
 These libraries are incomplete, but they can provide a source of inspiration.
 They can also be used as templates for making new libraries for one's particular domain.
 
@@ -173,7 +179,7 @@ This library is used to insert the appropriate Markdown code in Markdown cells.
 We have included a library for LaTeX because tex files can be edited by Jupyter Lab.
 
 
-We have also included a library for the Markedly Structured Text markdown (MyST markdown) that is being developed to integrate the output from Jupyter notebooks into scientific publishing.
+We have also included a library for the Markedly Structured Text Markdown (MyST Markdown) that is being developed to integrate the output from Jupyter notebooks into scientific publishing.
 
 
 
@@ -190,17 +196,16 @@ As mentioned above, we have developed chunks of code for the purpose of performi
 These chunks of code could be functions, or they just could be lines of code that produce an output in the form of a table or plot or some form of analysis.
 The idea was to be able to fill a code cell with all the code required to produce the desired output.
 Unfortunately, the user will still have to use their voice or computer mouse to move the cursor back over the code chunk and customize portions of the code chunk as required for the task at hand.
-Wherever possible, we included the boilerplate needed for documenting the code chunk in the function in the class Downstream.
 
 While self-contained examples that utilize fake data are useful for the purpose of illustrating concepts, these examples are very frustrating for beginners who need to read in their own data and who would like to apply the code example to their problem at hand.
 The reading in appropriately cleaned data is a common task in data science, and it is also a common barrier applying Jupyter notebooks to Scientific problems.
-We provide code fragments in a data wrangling library that support the importing of several file types directly for Downstream utilization as well as for the purpose of importing the data into numpy, pandas, and several of the more recently developed programs that is support multidimensional data structures.
+We provide code fragments in a data wrangling library that support the importing of several file types directly for downstream utilization as well as for the purpose of importing the data into numpy, pandas, and several of the more recently developed programs that is support multidimensional data structures.
 
 After the inputting of data, it needs to be displayed in a tabular format for inspection that to check that it was properly imported and also to carry out basic summarization statistics by column and row.
 
 After the data have been verified as being properly imported, there has often the need to explore that data by plotting it to detect relationships between the parameters of a model and the output.
-We strove to focus on the matplotlib library for the purpose of generating a wide diversity of plots.
-The code fragments that we develop cover the most commonly used plots such as Scatter Plots, bar graphs (including horizontal bar graphs), kenisty density fitted distributions, heat Maps, pie charts, contour plots, and so on.
+We strove to focus on the matplotlib library for the purpose of generating a wide diversity of plots [@matplotlib].
+The code fragments that we develop cover the most commonly used plots such as Scatter Plots, bar graphs (including horizontal bar graphs), kernel density fitted distributions, heat Maps, pie charts, contour plots, and so on.
 We also include examples of 3D plots.
 We include a variety of variance in terms of the for batting of the tick marks and access labels as well as the keys and the form of the wines so bad users can use this information as templates to generate plots for their own purpose.
 The generation of plots with lines of different shape in terms of whether they are solid or have dashes are dotted or have combinations thereof is essential because plots generated with just color blinds are vulnerable to having that their information compromised when printed in black and white.
@@ -225,7 +230,7 @@ The latter can be saved to keep a record of one's performance on a quiz.
 
 :::{figure} ./images/runningQuiz.png
 :label: fig:quiz
-:width: 100% 
+:width: 130% 
 An example of an interactive session with a quiz in a Jupyter notebook. The code for running the quiz was inserted into the code cell with the voice command `run voice in quiz`.
 :::
 
@@ -236,42 +241,40 @@ Space repetition learning is one of the most firmly established results of resea
 
 Most people lack the discipline to carry out this kind of learning because they have to schedule the time to do the follow-up sessions.
 Instead, we anticipate that most people will take these quizzes several times in a half hour before they spend many hours utilizing the commands.
-For example, Talon Voice has an alphabet mapped to voice triggers.
-The designers of this alphabet selected single-syllable words to ease the use of the alphabet.
-Recalling this kind of information can be quite difficult, but by taking the quiz 10 times, you can build up the knowledge in a single day.
-Recall of the alphabet will depend on how frequently it is used subsequently.
 If that use occurs on subsequent days, then recall of the alphabet will be reinforced, and it may not be necessary to take the quiz again.
 
 
 ### Voice In Plus
 
-Voice In is a plug-in for Google Chrome and Microsoft Edge web browsers that uses the language model built into these web browsers.
+Voice In is a plug-in for Google Chrome and Microsoft Edge web browsers that uses the Google API.
 The plug-in operates in most text areas of web pages.
 These text areas include those of web-based email packages and online sites that support distraction-free writing.
-These text areas also include the markdown and code cells of Jupyter notebooks.
+These text areas also include the Markdown and code cells of Jupyter notebooks.
 Voice In also works in various plain text documents opened in Jupyter Lab for online writing.
 Obviously, Voice In will not work in standalone applications that support the editing of Jupyter notebooks, such as the Jupyter Lab app, the nteract app, and external text editors, such as VS Code, that support the editing of Jupyter notebooks.
 
 After Voice-In Plus is activated, it will listen for words for 3 minutes before automatically shutting down.
-It is very accurate with a word error rate that is well below 2\%.
+It is very accurate with a word error rate that is well below 10\%.
 It can pick out words in spite of background ambient noise, such as traffic or bird songs.
 The language model is quite robust in that dictation can be performed out without the use of an external microphone.
 For example, the built-in microphone available in the MacBook Pro laptop computer is sufficient.
 In contrast, other VSR software requires high-quality external microphones.
 The need to use an external microphone imposes a motivational barrier.
 
-Because of the way the system is set up to utilize the browser's language model, there is not much of a latency issue.
+Because of the way the system is set up to utilize the Google API, there is not much of a latency issue.
 The spoken words' transcriptions occur nearly in real-time; there is only a minor lag.
-The program can generally keep up with dictation at moderate speed for at least several paragraphs, whereas competing systems tend to quit after one paragraph.
-The program tends to hallucinate only when the dictation has occurred at high speed because then it starts to fall behind.
+The program can generally keep up with dictation occurring at a moderate pace for at least several paragraphs, whereas competing systems tend to quit after one paragraph.
+The program tends to hallucinate only when the dictation has occurred at high speed because the transcribing falls behind.
+As a result, the user has to pay attention to the progress of the transcription.
+If the transcription halts, it is best to deactivate the plugin, activate it, and resume the dictation.
 Great care has to be taken to pronounce the first word of the sentence loudly such that it will be recorded; otherwise, this first word will likely not be recorded.
 This problem is most acute when there has been a pause in the dictation.
 
-The software does not automatically insert punctuation.
-The user has to vocalize the name of the punctuation that they desire.
+The software does not automatically insert punctuation marks.
+The user has to vocalize the name of the punctuation mark that they want inserted.
 These also have to utilize a built-in new-line command to start new lines.
 The user has to develop the habit of using this command if they write one sentence per line.
-This ladder form of writing is very useful for first drafts because it greatly eases the shuffling of the order of sentences during rewriting.
+This latter form of writing is very useful for first drafts because it greatly eases the shuffling of the order of sentences during rewriting.
 This form of writing is also very compatible with Virgin control systems like git because the changes can be tracked more easily by line number.
 
 The program can sometimes be unresponsive.
@@ -291,7 +294,7 @@ This is the version upon which we will focus.
 
 On activation of the VIP version of the plug-in, the settings GUI page for custom commands is displayed for the user to use to enter commands either one by one through a GUI or by adding multiple voice commands though the text area that is opened after clicking on the bulk add button {ref}`fig:newSentence`.
 The first option involves placing the voice trigger in one text area and the text replacement in the second text area.
-The Voice trigger does not need a comma after it, and the text replacement can span multiple lines without adding any markup, except that internal double quotes must be replaced with single quotes.
+The voice trigger does not need a comma after it, and the text replacement can span multiple lines without adding any markup, except that internal double quotes must be replaced with single quotes.
 Any capitalization in the voice trigger will be ignored and written in lowercase.
 The second option involves pasting in one or more lines of pairs of voice triggers and text replacements separated by commas, as you would in a CSV file.
 In this option, text replacements that span more than one line must be enclosed with double quotes.
@@ -310,7 +313,7 @@ Scrolling through the list of these voice commands was painful because it was to
 
 This problem was remedied by exporting the commands to a CSV file.
 Then the stored commands on the website were cleared.
-The exp[ortyed CSV file was opened in a text editor and the unneeded commands were selected and deleted.
+The exported CSV file was opened in a text editor and the unneeded commands were selected and deleted.
 In this case, that left about 7,000 commands.
 The web page with the command library displayed could then be easily scrolled.
 The practical size limit of the library is between 7,000 and 19,000 commands.
@@ -328,17 +331,14 @@ A dictation session with VIP is initiated by activating the plugin by clicking o
 There is a configuration page associated with the icon through which one can select the language are and even dialect of a language.
 
 VIP has several dozen built-in commands, some of which can be used to navigate the web page.
-It operates inside of text areas in web pages/
-It is possible to add custom commands in the form of text replacements/
-This feature requires a paid subscription whereas the remaining features are pretty available.
 
-The Voice triggered Snippets are stored in a exported that is compatible with export to a CSV file.
-The file has two columns separated by a comma.
-This file locks a line of headers to be able to columns.
-The Voice trigger is located in the left column and the corresponding text replacement is listed in the right column.
+The voice-triggered snippets can be exported in a CSV file.
+The file has two columns separated by a comma: the voice-trigger and its text replacement.
+This file lacks a line of headers.
 
+Multiple custom commands can be uploaded from a CSV file to the *bulk add* window of the plugin's configuration GUI.
 Frequently, it is necessary to insert a code fragment that spans multiple lines.
-This code fragment needs to be enclosed with double quotation marks if the contents of a CSV file RBD copied and pasted into the bulk ad window of the GUI.
+This code fragment needs to be enclosed with double quotation marks.
 It is not possible to use a backspace to escape internal pre-existing double quotation marks.
 These pre-existing double quotes have to be replaced with single quotes.
 
