@@ -162,7 +162,7 @@ as follows:
 > to let the webserver know where the assets are.
 
 ECMAScript (ES) modules, introduced in 2015, are an official standard for
-packaging JavaScript code for reuse [@rojas2021modules]. While most JCPs predate its
+packaging JavaScript code for reuse [@ecma]. While most JCPs predate its
 standardization, ES modules are universally supported by browsers today. By
 adopting ES modules, anywidget is able to use the browser's native import
 mechanism to load and execute widget front-end code from the Jupyter kernel,
