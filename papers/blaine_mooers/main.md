@@ -150,7 +150,6 @@ g| **display** equation in display mode (e.g., display electron density equation
 Three snapshots from a Zoom video of using the voice-trigger *display electron density equation* in a Markdown cell in a Jupyter notebook. A. The Zoom transcript showing the spoken voice trigger. B. The text replacement in the form of a math equation written in LaTeX in display mode in the Markdown cell. C. The rendered Markdown cell. The green and black tab on the right of each panel indicates that the Voice In plugin is active and listening for speech.
 :::
 
-
 Another example of a verb starting a voice trigger is the command `display  <equation name>`.
 This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
 For example, the voice trigger `display the electron density equation` is shown in the transcript of a Zoom video {ref}`fig:displayeq`. .
@@ -171,21 +170,17 @@ The markup language code is inserted by using the verb *insert* followed by the 
 For example, the command `insert markdown itemized list` will insert five vertically aligned dashes to start an itemized list.
 The command `insert latex itemized list` will insert the corresponding code for an itemized list in LaTeX.
 
-
-We have developed a library specifically for the flavor of Markdown utilized in Jupyter notebooks.
+We have developed a library specifically for the flavor of [Markdown](https://github.com/MooersLab/markdown-jupyter-voice-in/blob/main/markdown.csv utilized in Jupyter notebooks) []().
 This library is used to insert the appropriate Markdown code in Markdown cells.
 
+We have included a [library for LaTeX](https://github.com/MooersLab/latex-voice-in) because tex files can be edited by Jupyter Lab.
+According to the above rule, we should use `insert latex equation` to insert the code for the equation environment.
+However, we broke this convention by omitting that word latex to make the commands more convenient because this is our default, typesetting language that we use every day.
+We were already comfortable with using the abbreviated commands.
 
-We have included a library for LaTeX because tex files can be edited by Jupyter Lab.
-
-
-We have also included a library for the Markedly Structured Text Markdown (MyST Markdown) that is being developed to integrate the output from Jupyter notebooks into scientific publishing.
-
-
-
-We have not figured out how to use voice commands to advance the cursor to sites where edits should be made
-Voice commands can be utilized in some of the automated speech recognition software for the purpose of moving the cursor forward or backwards and for the purpose of selecting replacing words.
-We have left the markup associated with the yasnippet snippet libraries in place to serve as a benchmark for users to recognize the sites that should be considered for modification to customize the snippet for their purpose.
+We have not figured out how to use voice commands to advance the cursor in a single step to sites where edits should be made in analogy to tab stops in conventional snippets.
+Instead, the built-in voice commands can be utilized to move the cursor forward or backwards and for the purpose of selecting replacing words.
+We included the markup associated with the yasnippet snippet libraries to serve as a benchmark for users to recognize the sites that should be considered for modification to customize the snippet for their purpose.
 
 ### Libraries for code cells
 
