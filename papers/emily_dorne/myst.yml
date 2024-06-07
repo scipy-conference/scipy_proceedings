@@ -52,6 +52,7 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
+        - algae
         - ttb_results
         - ttb_winners_announcement
         - cyfi_docs
