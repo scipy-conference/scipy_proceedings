@@ -129,7 +129,7 @@ To design a package that optimally addresses on-the-ground user needs, we conduc
 
 ## Competition takeaways
 
-The overarching goal of the [Tick Tick Bloom: Harmful Algal Bloom Detection Challenge](#machine-learning-competition) was to identify the most useful data sources, features, and modeling methods for cyanobacteria estimation in small, inland water bodies. There was particular interest around the use of Sentinel-2 data, which is has significantly higher resolution than Sentinel-3 and is more suited to smaller water bodies. However, Sentinel-2 does not contain sensors that can spectrophotometrically measure chlorophyll, which is how most Sentinel-3-based cyanobacteria estimates are derived.
+The overarching goal of the [Tick Tick Bloom: Harmful Algal Bloom Detection Challenge](#machine-learning-competition) was to identify the most useful data sources, features, and modeling methods for cyanobacteria estimation in small, inland water bodies. There was particular interest around the use of Sentinel-2 data, which has significantly higher resolution than Sentinel-3 and is more suited to smaller water bodies. However, Sentinel-2 does not contain sensors that can spectrophotometrically measure chlorophyll, which is how most Sentinel-3-based cyanobacteria estimates are derived.
 
 The competition showed that Sentinel-2 contains sufficient information for generating accurate cyanobacteria estimates. Below is a summary of which datasets were used by winners.
 
@@ -194,7 +194,7 @@ The [model experimentation](#model-experimentation) phase did not explore altern
   </tr>
   <tr>
     <td>Use Sentinel-2 as the sole satellite source</td>
-    <td>Landsat data primarily only added value for time period prior to July 2015, when Sentinel-2 data became available. Most applications of CyFi will be forward looking, meaning Sentinel-2 data will be available. The slowest part of the prediction process is downloading satellite data, imposing a significant efficiency cost for incorporating Landsat as a second source. To rely only on Sentinel-2, any samples prior to the launch of Sentinel-2 were removed from the training and evaluation sets. This decreased the train set size from 11,299 to 8,979, and the test set size from 4,938 to 4,035.</td>
+    <td>Landsat data primarily only added value for the time period prior to July 2015, when Sentinel-2 data became available. Most applications of CyFi will be forward looking, meaning Sentinel-2 data will be available. The slowest part of the prediction process is downloading satellite data, imposing a significant efficiency cost for incorporating Landsat as a second source. To rely only on Sentinel-2, any samples prior to the launch of Sentinel-2 were removed from the training and evaluation sets. This decreased the train set size from 11,299 to 8,979, and the test set size from 4,938 to 4,035.</td>
   </tr>
   <tr>
     <td>Exclude climate and elevation features</td>
@@ -393,7 +393,7 @@ For each sampling point, CyFi downloads recent cloud-free Sentinel-2 data from M
 CyFi also makes it easy to generate cyanobacteria estimates for many points at once. Users can input a CSV with columns for date, latitude, and longitude.
 
 :::{table} Example input csv (`samples.csv`) containing the sampling points where cyanobacteria estimates are needed
-:label: tbl:cyfi_preds
+:label: tbl:cyfi_samples
 <table>
   <thead>
         <tr>
