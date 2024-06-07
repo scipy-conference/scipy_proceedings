@@ -6,18 +6,20 @@ abstract: |
   notebook-based computing, resulting in diverse Jupyter-compatible platforms
   (e.g., JupyterLab, Google Colab, VS Code). Jupyter Widgets extend these
   environments with custom visualizations and interactive elements that
-  communicate directly with user code and data. While this bidirectional communication
-  makes the widget system powerful, its architecture is currently tightly coupled
-  to platforms. As a result, widgets are complex and error-prone to author and
-  distribute, limiting the potential of the wider widget ecosystem. Here we
-  describe the approach behind the _anywidget_ project, a standard for widget front-end
-  modules that decouples them from notebook platforms. The approach ensures
-  cross-platform compatibility by using the web browser’s built-in module
-  system to load these modules from the notebook kernel. This design simplifies
-  widget authorship and distribution, enables rapid prototyping, and lowers the
-  barrier to entry for newcomers. Its adoption has sparked a widget renaissance,
-  improving reusability, interoperability, and making interactive computing
-  more accessible.
+  communicate directly with user code and data. While this bidirectional
+  communication makes the widget system powerful, its architecture is currently
+  tightly coupled to platforms. As a result, widgets are complex and error-prone
+  to author and distribute, limiting the potential of the wider widget ecosystem.
+  Here we describe the motivation and approach behind the _anywidget_ project,
+  a specification and toolset for portable and reusable web-based widgets in
+  interactive computing environments. It ensures cross-platform compatibility
+  by using the web browser’s built-in module system to load these modules from
+  the notebook kernel. This design simplifies widget authorship and distribution,
+  enables rapid prototyping, and lowers the barrier to entry for newcomers.
+  Anywidget is compatible with not just JCPs but any web-based notebook
+  platform or authoring environment and is already adopted by other projects.
+  Its adoption has sparked a widget renaissance, improving reusability,
+  interoperability, and making interactive computing more accessible.
 ---
 
 ## Introduction
@@ -325,10 +327,11 @@ Python](https://github.com/posit-dev/py-shiny), and
 [Solara](https://github.com/widgetti/solara) support Jupyter Widgets, and
 therefore also allow users to embed anywidgets in standalone web applications.
 Efforts are underway to add more specialized, built-in support for AFM as well.
-For example, [Marimo](https://github.com/marimo-team/marimo), a new reactive
-notebook for Python, supports AFM directly, allowing anywidgets to run natively
-without additional "glue code." Panel is also exploring deeper integration with
-AFM to enable its reuse with their kernel-side reactivity systems.
+For example, [marimo](https://github.com/marimo-team/marimo), a new reactive
+notebook for Python, is standardizing its third-party plugin API on AFM,
+allowing anywidgets to run natively without additional "glue code." Developers
+of the Panel web-application framework are also exploring deeper integration
+with AFM to enable reuse with their kernel-side reactivity systems.
 
 Tools for data visualization and interactivity have greater impact when
 compatible with more platforms, but achieving compatibility involves trade-offs
