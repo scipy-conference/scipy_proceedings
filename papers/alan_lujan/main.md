@@ -112,15 +112,10 @@ Unstructured grids are irregular and often require a triangulation step which mi
 
 Multivariate interpolation is a cornerstone of scientific computing, yet the Python ecosystem presents a fragmented landscape of tools. While individually powerful, these packages often lack a unified interface. This fragmentation makes it difficult for researchers to experiment with different interpolation methods, optimize performance across diverse hardware, and handle varying data structures (regular, rectilinear, curvilinear, unstructured).
 
-The multinterp project seeks to change this. Its goal is to provide a comprehensive and flexible framework for multivariate interpolation in Python. This framework will streamline workflows by offering:
+The `multinterp` project seeks to change this. Its goal is to provide a unified, comprehensive, and flexible framework for multivariate interpolation in Python. This framework will streamline workflows by offering:
 
-Unified Interface: A consistent API for interpolation, regardless of data structure or desired backend, reducing the learning curve and promoting code reusability.
-Hardware Adaptability: Seamless support for CPU (NumPy, SciPy), parallel (Numba), and GPU (CuPy, PyTorch, JAX) backends, empowering users to optimize performance based on their computational resources.
-Broad Functionality: Tools for regular/rectilinear interpolation, multivalued interpolation, and derivative calculations, addressing a wide range of scientific problems.
-The multinterp package (<https://github.com/alanlujan91/multinterp>) is currently in its beta stage.  Developed by an economist, it offers a strong foundation but welcomes community contributions to reach its full potential.  We invite collaboration to improve documentation, expand the test suite, and ensure the codebase aligns with the highest standards of Python package development.
+- Unified Interface: A consistent API for interpolation, regardless of data structure or desired backend, reducing the learning curve and promoting code reusability.
+- Hardware Adaptability: Seamless support for CPU (NumPy, SciPy), parallel (Numba), and GPU (CuPy, PyTorch, JAX) backends, empowering users to optimize performance based on their computational resources.
+- Broad Functionality: Tools for regular/rectilinear interpolation, multivalued interpolation, and derivative calculations, addressing a wide range of scientific problems.
 
-Potential Use Cases
-
-Geospatial analysis: Interpolating climate data, terrain models, or pollution measurements.
-Image processing: Resampling, image warping, and reconstruction tasks.
-Simulation and modeling: Filling in missing data, generating smooth function representations in physics, engineering, or economics simulations.
+The multinterp package (<https://github.com/alanlujan91/multinterp>) is currently in its beta stage.  It offers a strong foundation but welcomes community contributions to reach its full potential.  We invite collaboration to improve documentation, expand the test suite, and ensure the codebase aligns with the highest standards of Python package development.
