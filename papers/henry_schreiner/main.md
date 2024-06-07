@@ -187,7 +187,10 @@ declared private and unstable in wheel.
 
 ## Innovative features of scikit-build-core
 
-Scikit-build-core has some interesting and powerful innovations.
+Scikit-build-core has some interesting and powerful innovations. This section
+is by no means exhaustive; it doesn't cover scikit-build-core's over forty
+different configuration options, for example. It is instead just meant to
+highlight some of the most interesting features of scikit-build-core.
 
 ### Dynamic requirement on CMake/Ninja
 
@@ -210,15 +213,126 @@ dependencies. This is also done for ninja. This same system was added to
 
 ### Integration with external packages
 
+Scikit-build-core has several mechanisms to allow packages on PyPI to provide
+CMake configuration and tools. There are three mechanisms provided:
+
+First, the site-packages directory is added to the CMake search path by
+scikit-build-core. Due to the way CMake config file discovery works, this
+allows a package to provide a `<PkgName>Config.cmake` file in any GNU-like
+standard location in the package (like
+`pybind11/share/cmake/pybind11/pybind11Config.cmake`, for example).
+
+The second way is with an entry point `cmake.prefix`, which adds prefix
+dirs, useful for adding module files that don't have to match the installed
+package name or are in arbitrary locations.
+
+And the final way is with the `cmake.module` entry point, which can be used
+to add any CMake helper files.
+
 ### Dual editable modes with automatic recompile
+
+Editable installs are supported in two modes. The default mode installs a
+custom finder that combines the Python files in your development directory (as
+specified by packages) with CMake installed files in site-packages. It is
+important to rely on importlib.resources instead of file manipulation in this
+mode. This mode supports installs into multiple environments.
+
+This mode also supports automatic rebuilds. If you enable it, then importing
+your package will rebuild on any changes to the source files, something that
+could not be done with setuptools.
+
+There is also an opt-in "inplace" mode that uses CMake's inplace build to build
+your files in the source directory. This is very similar to setuptools
+`build_ext --inplace`, and works with tools that can't run Python finders, like
+type checkers. This mode works with a single environment, since the build dir
+_is_ the source dir. There is no dynamic finder in this mode, so automatic
+rebuilds are not supported.
 
 ### Dynamic metadata
 
+A system for allowing custom metadata plugins was contributed and has been one
+of the most successful parts of scikit-build-core. Any metadata field other
+than the `name` can be dynamically specified in Python packaging; the
+dynamic-metadata mechanism provides a way for plugins to be written by anyone,
+including "in-tree" plugins written inside a specific package. This gives authors
+quite a bit of freedom to do things like customize the package description or
+read the version from a file.
+
+This system is being worked on as a standard for other build backends to use
+and a stand-alone namespace. Changes are expected, but the current implementation
+in scikit-build-core uses the following API:
+
+```python
+def dynamic_metadata(
+    field: str,
+    settings: Mapping[str, Any],
+) -> str:
+   ...
+```
+
+Plugins provide this function. Three built-in plugins are provided in
+scikit-build-core: one for regex, one that wraps `setuptools_scm`, and one that
+wraps `hatch-fancy-pypi-readme`. Using one of these looks like this:
+
+```toml
+name = "mypackage"
+dynamic = ["version"]
+
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "src/mypackage/__init__.py"
+```
+
+The `provider` key tells scikit-build-core where to look for the plugin. There
+is also a provider-path`for local plugins. All other keys are implemented by
+the plugin; the regex plugin implements`input`and`regex`, for exmaple.
+
+An extra feature that is not being proposed for broader adoption is a
+genearation mechanim. Scikit-build-core can generate a file for you with
+metadata provided via templating. It looks like this:
+
+```toml
+[[tool.scikit-build.generate]]
+path = "package/_version.py"
+template = '''
+version = "${version}"
+'''
+```
+
+This is extreamly useful due to the `location` key, which defaults to
+`install`, which will put the file only in the built wheel, `build`, which puts
+the file in the build directory, and `source`, which writes it out to the
+source directory and SDist, much like setuptools_scm normally does. In the
+default mode, though, no generated files are placed in your source tree.
+
+### Overrides
+
+Static configuration has many benefits, but it has a significant drawback; you often
+want to configure different situations differently. For example, you might want a higher
+minimum CMake version on Windows, or a pure Python version for unreleaed Python versions.
+These sorts of things can be expressed with overrides, which was designed after
+overrides in cibuildwheel, which in turn were based on mypy's overrides.
+Scikit-build-core has the most powerful version of the system, however, with an
+`.if` table that can do version comparisons and regexs, and supports any/all
+merging of conditions, and inhertance from a prevous override (also added to
+cibuildwheel). It includes conditions for the state of teh build (wheel, sdist,
+editable, or metadata builds) and environment variables. An example is shown below:
+
+```toml
+[[tool.scikit-build.overrides]]
+if.platform-system = "darwin"
+cmake.version = ">=3.18"
+```
+
 ## Scikit-build-core's design
+
+This section is devoted to the internals of scikit-build-core.
 
 ### The configuration system
 
 ### The File API
+
+### Plugins for other systems
 
 ## Adoption
 
