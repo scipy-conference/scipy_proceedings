@@ -45,6 +45,14 @@ As we might imagine, interpolation on regular grids is much easier than interpol
 
 A *rectilinear* grid is a regular grid where the input values are arranged in a *rectangular* (in 2D) or *hyper-rectangular* (in higher dimensions) pattern. Moreover, they can be represented by the tensor product of monotonically increasing vectors along each dimension. For example, a 2D rectilinear grid can be represented by two 1D arrays of increasing values, such as $x = [x_0, x_1, x_2, \cdots, x_n]$ and $y = [y_0, y_1, y_2, \cdots, y_m]$, where $x_i > x_j$ and $y_i > y_j$ $\forall i > j$, and the input grid is then represented by $x \times y$ of dimensions $n \times m$. This allows for a very simple and efficient interpolation algorithm, as we can easily find and use the nearest known values to make predictions about the function's behavior in the unknown space.
 
+```{figure} figures/BilinearInterpolation
+:label: bilinear
+:alt: A non-uniformly spaced rectilinear grid can be transformed into a uniformly spaced coordinate grid (and vice versa).
+:align: center
+
+A non-uniformly spaced rectilinear grid can be transformed into a uniformly spaced coordinate grid (and vice versa).
+```
+
 ### Multilinear Interpolation
 
 `multinterp` provides a simple and efficient implementation of *multilinear interpolation* for various backends (`numpy/scipy`, `numba`, `cupy`, `pytorch`, and `jax`) via its `multinterp` function. From the remaining of this section, `multinterp` refers to the `multinterp` function in `multinterp` package, unless otherwise specified.
@@ -55,31 +63,50 @@ To do this, the `multinterp` package provides the function `get_coordinates`, wh
 
 An additional advantage of `scipy`'s `map_coordinates` is that it has been extended and integrated to various backends, such as `cupy` ([`cupyx.scipy.ndimage.map_coordinates`](https://docs.cupy.dev/en/stable/reference/generated/cupyx.scipy.ndimage.map_coordinates.html)) and `jax` ([`jax.scipy.ndimage.map_coordinates`](https://jax.readthedocs.io/en/latest/_autosummary/jax.scipy.ndimage.map_coordinates.html)). This allows for easy and efficient interpolation on GPUs and TPUs, which can be orders of magnitude faster than CPU interpolation. For wider compatibility, `multinterp` also provides a `numba` and `pytorch` implementation of `map_coordinates`, which broadens the range of hardware that can be used for interpolation.
 
-```{include} Rectilinear/Multivariate_Interpolation.ipynb
+```{include} notebooks/Multivariate_Interpolation.ipynb
 ```
 
 ### Derivatives
 
 The `multinterp` package also allows for the calculation of derivatives of the interpolated function defined on a rectilinear grid. This is done by using the function `get_grad`, which wraps numpy's `gradient` function to calculate the gradient of the interpolated function at the given coordinates.
 
-```{include} Rectilinear/Multivariate_Interpolation_with_Derivatives.ipynb
+```{include} notebooks/Multivariate_Interpolation_with_Derivatives.ipynb
 ```
 
 ### Multivalued Interpolation
 
 Finally, the `multinterp` package allows for multivalued interpolation on rectilinear grids via the `MultivaluedInterp` class.
 
-```{include} Rectilinear/Multivalued_Interpolation.ipynb
+```{include} notebooks/Multivalued_Interpolation.ipynb
 ```
 
 ## Curvilinear Interpolation
 
 A *curvilinear* grid is a regular grid whose input coordinates are *curved* or *warped* in some regular way, but can nevertheless be transformed back into a regular grid by simple transformations. That is, every quadrangle in the grid can be transformed into a rectangle by a remapping of its verteces. There are two approaches to curvilinear interpolation in `multinterp`: the first requires a "point location" algorithm to determine which quadrangle the input point lies in, and the second requires a "dimensional reduction" algorithm to generate an interpolated value from the known values in the quadrangle.
 
-```{include} Curvilinear/Curvilinear_Interpolation.ipynb
+```{figure} figures/CurvilinearInterpolation
+:label: curvilinear
+:alt: A curvilinear grid can be transformed into a rectilinear grid by a simple remapping of its vertices.
+:align: center
+
+A curvilinear grid can be transformed into a rectilinear grid by a simple remapping of its vertices.
+```
+
+```{include} notebooks/Curvilinear_Interpolation.ipynb
 ```
 
 ## Unstructured Interpolation
+
+```{figure} figures/UnstructuredInterpolation
+:label: unstructured
+:alt: Unstructured grids are irregular and often require a triangulation step which might be computationally expensive and time-consuming.
+:align: center
+
+Unstructured grids are irregular and often require a triangulation step which might be computationally expensive and time-consuming.
+```
+
+```{include} notebooks/Unstructured_Interpolation.ipynb
+```
 
 ## Conclusion
 
