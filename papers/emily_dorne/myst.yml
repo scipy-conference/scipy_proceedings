@@ -27,6 +27,8 @@ project:
         - Writing - review & editing
     - name: Trista Brophy
       email: brophy.trista@gmail.com
+      affiliations:
+        - NASA
       roles:
         - Writing - original draft
     - name: Shobhana Gupta
