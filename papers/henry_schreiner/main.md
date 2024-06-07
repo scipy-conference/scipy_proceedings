@@ -71,11 +71,12 @@ the SDist, just in case pip needed to build the wheel. This is when
 standardization efforts, in the form of PEPs, began to change the packaging
 landscape forever.
 
-PEP 517 defined an API for build-frontends (like pip) to talk to build-backends
-(like setuptools). PEP 518 defined an isolated build environment, which would
-allow builders to download build dependencies, like a specific version of
-setuptools or a plugin. Later, PEP 621 would add a standard way to define basic
-package metadata, and PEP 660 would add an API for editable installs.
+PEP 517 [@pep517] defined an API for build-frontends (like pip) to talk to
+build-backends (like setuptools). PEP 518 [@pep518] defined an isolated build
+environment, which would allow builders to download build dependencies, like a
+specific version of setuptools or a plugin. Later, PEP 621 [@pep621] would add a standard
+way to define basic package metadata, and PEP 660 [@pep660] would add an API for editable
+installs.
 
 Python build backends started to appear. Most of the initial build backends
 were were designed for Python only packages. `flit-core`, `poetry-core`,
@@ -91,10 +92,12 @@ historical curiosity at this point.
 
 ## Scikit-build (classic)
 
-The original scikit-build was released as PyCMake at SciPy 2014, and renamed
-two years later, at SciPy 2016. Being developed well before the packaging PEPs,
-it was designed as a wrapper around distutils and/or setuptools. This design
-had flaws, but was the only way this could be done at the time.
+The original scikit-build [@scikit-build] was released as PyCMake at SciPy
+2014, and renamed two years later, at SciPy 2016, following the "scikit"
+convention introduced by SciPy [@scipy]. Being developed well before the
+packaging PEPs, it was designed as a wrapper around distutils and/or
+setuptools. This design had flaws, but was the only way this could be done at
+the time.
 
 Because it was deeply tied to setuptools internals, updates to setuptools or
 wheel often would break scikit-build. There were a lot of limitations of
@@ -514,3 +517,6 @@ from the comfort of a statically configured `pyproject.toml` file. It supports
 a wide variety of innovative controls, including many things not possible with
 a setuptools build, like good config-settings support, wheel tag customization,
 and more.
+
+Support for this work was provided by NSF grant
+[OAC-2209877](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2209877).
