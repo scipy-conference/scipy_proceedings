@@ -1,0 +1,39 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-pryce_turner
+  # Ensure your title is the same as in your `main.md`
+  title: Orchestrating Bioinformatics Workflows Across a Heterogeneous Toolset with Flyte
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Pryce Turner
+      email: pryce.turner@gmail.com
+      affiliations:
+        - Union AI
+  keywords:
+    - flyte
+    - orchestration
+    - bioinformatics
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
