@@ -284,11 +284,11 @@ input = "src/mypackage/__init__.py"
 ```
 
 The `provider` key tells scikit-build-core where to look for the plugin. There
-is also a provider-path`for local plugins. All other keys are implemented by
-the plugin; the regex plugin implements`input`and`regex`, for exmaple.
+is also a provider-path for local plugins. All other keys are implemented by
+the plugin; the regex plugin implements `input` and `regex`, for example.
 
 An extra feature that is not being proposed for broader adoption is a
-genearation mechanim. Scikit-build-core can generate a file for you with
+generation mechanism. Scikit-build-core can generate a file for you with
 metadata provided via templating. It looks like this:
 
 ```toml
@@ -299,23 +299,23 @@ version = "${version}"
 '''
 ```
 
-This is extreamly useful due to the `location` key, which defaults to
+This is extremely useful due to the `location` key, which defaults to
 `install`, which will put the file only in the built wheel, `build`, which puts
 the file in the build directory, and `source`, which writes it out to the
-source directory and SDist, much like setuptools_scm normally does. In the
+source directory and SDist, much like `setuptools_scm` normally does. In the
 default mode, though, no generated files are placed in your source tree.
 
 ### Overrides
 
 Static configuration has many benefits, but it has a significant drawback; you often
 want to configure different situations differently. For example, you might want a higher
-minimum CMake version on Windows, or a pure Python version for unreleaed Python versions.
+minimum CMake version on Windows, or a pure Python version for unreleased Python versions.
 These sorts of things can be expressed with overrides, which was designed after
 overrides in cibuildwheel, which in turn were based on mypy's overrides.
 Scikit-build-core has the most powerful version of the system, however, with an
 `.if` table that can do version comparisons and regexs, and supports any/all
-merging of conditions, and inhertance from a prevous override (also added to
-cibuildwheel). It includes conditions for the state of teh build (wheel, sdist,
+merging of conditions, and inheritance from a previous override (also added to
+cibuildwheel). It includes conditions for the state of the build (wheel, sdist,
 editable, or metadata builds) and environment variables. An example is shown below:
 
 ```toml
@@ -324,26 +324,193 @@ if.platform-system = "darwin"
 cmake.version = ">=3.18"
 ```
 
+This will change the minimum CMake version to `>=3.18` on macOS.
+
 ## Scikit-build-core's design
 
 This section is devoted to the internals of scikit-build-core.
 
 ### The configuration system
 
+Scikit-build-core has over forty options, and each of these options can be
+specified in the `pyproject.toml`, or via config-settings (`-C` in build or
+pip), or via environment variables starting with `SKBUILD`. We also provide a
+JSONSchema for the TOML configuration, and a list of all options in the README.
+All of these are powered by a single dataclass-based configuration system
+developed for scikit-build-core.
+
+All of the configuration lives in dataclasses that look like this:
+
+```toml
+@dataclasses.dataclass
+class LoggingSettings:
+    level: Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = (
+        "WARNING"
+    )
+    """
+    The logging level to display, "DEBUG", "INFO", "WARNING", and "ERROR" are
+    possible options.
+    """
+
+@dataclasses.dataclass
+class ScikitBuildSettings:
+    cmake: CMakeSettings = dataclasses.field(default_factory=CMakeSettings)
+    ninja: NinjaSettings = dataclasses.field(default_factory=NinjaSettings)
+    logging: LoggingSettings = dataclasses.field(default_factory=LoggingSettings)
+    ...
+```
+
+The system is a conversion system, originally based on `cattrs`, but
+reimplemented in pure Python to reduce dependencies and the potential for
+uncontrollable breakage. The system recognised a wide variety of types,
+including nested types and as seen above, literals. A comment in a string
+following the option is also recognised for the JSONSchema/README processors,
+since nothing has been standardized for this yet, and Sphinx understands this
+convention.
+
+Converters are implemented for TOML, config-settings (dict), and environment
+variables. The converters fill the `ScikitBuildSettings` instance with the
+values from the three[^1] sources. Once read in, these are just a normal fully
+typed dataclass, so access and usage is natural and protected by mypy.
+Overrides are currently implemented via pre-processing the TOML. A post
+processing step is also added to validate the settings, and produce
+errors/warnings based on invalid combinations.
+
+[^1]:
+    Converters are combined using a chain converter, which allows any
+    combination of converters; this is used by the hatchling plugin to support
+    four converters, since it includes hatchling's TOML configuration as well as
+    scikit-build-core's.
+
 ### The File API
+
+CMake provides a File API, which allows third party tools to read a variety of
+information about the build process. Scikit-build-core has a full
+implementation of a reader for the File API for use in plugins (currently not
+required for scikit-build-core itself).
+
+The File API was implemented via dataclasses following the official schema. A
+recursive conversion system, similar to the settings system, was implemented to
+convert the written files into dataclass instances.
 
 ### Plugins for other systems
 
+Scikit-build-core 0.9.0 includes two plugins, one for setuptools, and one for
+hatchling. It was designed to support making custom plugins wrapping CMake
+builds, so these two internal plugins are examples of using scikit-build-core
+to make plugins. These will eventually be pulled out into separate packages;
+being internal allowed faster iteration on the scikit-build-core API used by
+plugins.
+
 ## Adoption
+
+Projects moving to scikit-build-core have seen over 800 lines of convoluted
+`setup.py` code turn into 20 lines of CMake and a minimal configuration file.
+Often this adds new platforms, like Windows or PyPy, that were not feasible to
+support before, and faster multithreaded compile times.
+
+### Statistics
+
+Scikit-build-core is currently the most downloaded build backend designed for
+compiled languages other than rust[^rust], with 2.7M monthly downloads[^2]. It is used by a dozen packages in the top
+8,000 PyPI packages, like `pyzmq`, `lightgbm`, `cmake`, `phik`, and
+`clang-format`. Other packages like `ninja` and `boost-histogram` have adopted
+it, but have not made a release with it yet.
+
+It is possible to download every pyproject.toml from PyPI[^3] and perform
+analyses on packages that provided an SDist. You can compute the number of
+packages published using scikit-build-core (TODO), and investigate the details
+of how projects are setting configuration.
+
+[^rust]: The Rust-only Maturin is much older and has 57 packages in the top 8,000.
+
+[^2]: TODO Ref: https://hugovk.github.io/top-pypi-packages
+
+[^3]: `git@github.com:henryiii/pystats.git`
 
 ### Rapids.ai
 
+Rapids.ai moved their package generator to scikit-build-core, affecting all
+their packages, like cudf, cugraph, cuml, and rmm. They have several unusual
+requirements due to the need to support cuda variants. They developed a wrapper
+for scikit-build-core that changes the name of the package based on the current
+cuda version (something explicitly disallowed by PEP 621) and injects modified
+dependencies.
+
 ### Ninja / CMake / clang-format
 
-### ZeroMQ
+One powerful use case for binaries is PyPI redistribution of CLI tools. This is
+used for `ninja` and `cmake`, which are first-party scikit-build-core projects,
+along with many third party projects like clang-format, use this to great
+effect. For example, clang-format provides easily pip-installable wheels that
+are under 2 MB and work on almost any system. We are not aware of any
+easier way to get a working copy of clang-format.
 
-### Smaller projects
+The core idea for most of these projects is to install the binary in the
+`scripts` folder of a wheel, which will be placed directly in a user's path.
+Scikit-build-core sets CMake variables with the various wheel folders; this one
+is `${SKBUILD_SCRIPTS_DIR}`.
+
+The other common need, and one very difficult to handle in a setuptools-based wrapper,
+stems from the fact that these binary packages don't build against Python, so they don't
+need to be build per Python version. This can be easily indicated in scikit-build-core by setting:
+
+```toml
+[tool.scikit-build]
+wheel.py-api = "py3"
+```
+
+This will build a wheel that doesn't depend on the Python API and will only
+depend on the system architecture. This same setting can be used for the
+Limited API / Stable ABI as well, by setting `cp311` or a similar minimum
+value. Pythons before this value will build traditional wheels, and after will
+build Stable ABI wheels.
+
+### PyZMQ
+
+The python wrapper for the ZeroMQ project uses scikit-buid-core. This is their configuration:
+
+```toml
+[tool.scikit-build]
+wheel.packages = ["zmq"]
+wheel.license-files = ["licenses/LICENSE*"]
+# 3.15 is required by scikit-build-core
+cmake.version = ">=3.15"
+# only build/install the pyzmq component
+cmake.targets = ["pyzmq"]
+install.components = ["pyzmq"]
+```
+
+They explicitly list the package name (since it doesn't match the project,
+`pyzmq` and their licences files are in a non-standard location. The
+`cmake.version` setting is superfluous, since that's already scikit-build-core's
+minimum. The `cmake.targets` (will be `build.targets` in future versions, with
+back-compatibility support) and `install.components` are quite powerful, though. The
+target list allows building just the required target for the binding, saving
+time. And then installing just things marked with a specific component gives
+you full control over exactly what goes into the wheel.
 
 ## Related work
 
+As part of this project, a lot of other packages were touched on or improved.
+`pybind11` had some build system improvements, especially related to modern
+FindPython support. Nanobind improved support for the Stable ABI, and the
+`nanobind_example` project moved to scikit-build-core. Cibuildwheel and build
+were improved for all backends with extensive testing and usage in
+scikit-build-core. validate-pyproject was improved and
+validate-pyproject-schema-store was added to make it easier to use the Schema
+Store's schema files, including scikit-build-core's, for validation of
+pyproject.toml's. Scikit-build-core (along with meson-python and maturin) were
+added to the Scientific Python Development Guide. Fixes were made in Pyodide to
+ensure better CMake support for WebAssembly builds (which were also added to
+cibuildwheel). And scikit-build-core was one of the first backends (if not the
+first) to support free-threaded Python 3.13 builds.
+
 ## Summary
+
+Scikit-build-core is one of the best build systems available today for Python
+compiled extensions, allowing access to a powerful compiled build tool (CMake)
+from the comfort of a statically configured `pyproject.toml` file. It supports
+a wide variety of innovative controls, including many things not possible with
+a setuptools build, like good config-settings support, wheel tag customization,
+and more.
