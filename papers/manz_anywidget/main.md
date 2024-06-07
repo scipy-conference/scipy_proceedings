@@ -26,7 +26,7 @@ abstract: |
 
 Computational notebooks combine live code, equations, prose, visualizations,
 and other media within a single environment. The Jupyter project
-[@Kluyver2016-xa; @Granger2021-jb] has been instrumental the success of
+[@Kluyver2016; @Granger2021] has been instrumental the success of
 notebooks, which have become the tool of choice for interactive computing in
 data science, research, and education. Key to Jupyter's widespread adoption is
 its modular architecture and standardization of interacting components, which
@@ -41,7 +41,7 @@ and interpreted across different platforms [@doc_jupnbformat].
 Jupyter’s modular architecture has also supported innovation in **notebook
 front ends** — the user interfaces (UIs) for editing and executing code, as
 well as inspecting kernel outputs. The success of the classic Jupyter Notebook
-[@Kluyver2016-xa] spurred the development of several similar Jupyter-compatible
+[@Kluyver2016] spurred the development of several similar Jupyter-compatible
 platforms (JCPs), such as JupyterLab, Google Colab, and Visual Studio Code.
 These platforms provide unique UIs and editing features while reusing Jupyter's
 other standardized components. This interoperability allows users to choose the
@@ -297,9 +297,9 @@ tools for experimenting with toy datasets (e.g.,
 [DrawData](https://github.com/koaning/drawdata)) to high-performance data visualization
 libraries (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/),
 [Jupyter-Scatter](https://jupyter-scatter.dev/),
-[Mosaic](https://github.com/uwdata/mosaic) [@Heer2024-rr]) and research
+[Mosaic](https://github.com/uwdata/mosaic) [@Heer2024]) and research
 projects enhancing notebook interactivity (e.g.,
-[Persist](https://github.com/visdesignlab/persist/) [@Gadhave2023-rl],
+[Persist](https://github.com/visdesignlab/persist/) [@Gadhave2023],
 [cev](https://github.com/OzetteTech/comparative-embedding-visualization)
 [@manz2024cev]). Many of these tools use anywidget's binary data transport to
 enable efficient interactive visualization with minimal overhead by avoiding
@@ -335,13 +335,13 @@ with AFM to enable reuse with their kernel-side reactivity systems.
 
 Tools for data visualization and interactivity have greater impact when
 compatible with more platforms, but achieving compatibility involves trade-offs
-[@Wang2024-ki]. The full capabilities of the widget system, such as
+[@Wang2024]. The full capabilities of the widget system, such as
 bidirectional communication, are often inaccessible to authors due to
 development difficulty and maintenance efforts. Adopting standards can minimize
 these impediments, enabling both broad compatibility and advanced capabilities
 for users. A recent article enumerates these challenges and advocates for
 standardized solutions to democratize the creation of notebook visualization
-tools across notebook platforms [@Wang2024-ki]. Anywidget addresses this by
+tools across notebook platforms [@Wang2024]. Anywidget addresses this by
 introducing a standard that removes friction in widget development and sharing,
 making authorship practical and accessible.
 
