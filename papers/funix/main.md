@@ -65,7 +65,8 @@ Although Funix uses themes to control the UI, customizations that cannot be done
 Funix also exploits other features or common practices in Python programming to make building apps more intuitive and efficient. default values, Docstring and multiplage app. 
 
 Funix' architecture: a transcompiler that exposes the frontend world to Python developers.
-Funix is more than a GUI generator. As a transcompiler, it produces both the frontend ...
+Funix is more than a GUI generator. As a transcompiler, it produces both the frontend ...The backend can be access programmatically.  It is based on websocket...It's not only the React code or the UI. It is an actual app that can run. 
+The two panels...Y
 
 Funix can be really useful in building what we call "disposable apps" -- apps that are built for a short-live purposes, such as collecting human evaluation of an AI model, collecting human labeling of AI training data, exhibit the capabilities of an API, etc. 
 
@@ -79,12 +80,12 @@ In [Motivation](#motivation-a-balance-between-simplicity-and-versatility), we di
 
 ## Motivation: balancing simplicity and versatility for GUI app development
 
-When it comes to app development, there is a trade-off between simplicity and versatility. 
-JavaScript/TypeScript-based solutions like React, Angular, and Vue.js are versatile. 
+When it comes to GUI app development, there is a trade-off between simplicity and versatility. 
+JavaScript/TypeScript-based web frontend frameworks like React, Angular, and Vue.js are versatile. 
 But that versatility is beyond the reach of most scientists and engineers, except frontend/full-stack engineers, and is usually overkilling for most scientific and engineering apps. 
 
 As machine learning researchers ourselves, we notice that a great (if not overwhemling) amount of scientific apps have the following two features: 
-1. the underlying logic of an GUI app or a page in a multi-page/tab GUI app is a straightforward input-output process -- thus complex interactivity, such as updating the input options based on existing user input, is not needed;
+1. the underlying logic is a straightforward input-output process -- thus complex interactivity, such as updating the input options based on existing user input, is not needed;
 2. the app is not the goal but a necessary step to the goal -- thus it is not worthy to spend time on building the app.
 
 Most existing solutions do a great job for the first feature above but are still too complicated for the second one, requiring a developer to read their documentations and add some code before an app can be fired up. 
@@ -92,13 +93,16 @@ Since versatility is already given up for simplicity in Python-based app buildin
 
 Funix pushes the simplicity to the extreme. 
 In the "hello, world" example ([](#code_hello_world)) above, you get an app without learning anything nor modifying the code. 
-While Funix is a button-push solution, it also leaves the room for low-level customization. 
+To pursue the simplicity goal, Funix squeezes information from what is already common in Python development, such as typing hints (or type inference) and docstrings save developers from extra work or learning. Funix does not need or want to become a Domain Specific Langauge (DSL). The Python programming language itself (including typing hint syntax and docstring styles) is already a surface language for GUI app building.
+
 
 We would also like to argue that the raise of GenAI is simplifying the GUI as natural languages are becoming a prominent interface between humans and computers. Consider text-to-image generation, the app only needs a string input and an image output. In this sense, Funix, and its Python-based peers, will be able to meet a lot of needs, in scientific computing or general, in the future.
 
+
 Because Funix is designed for quickly firing up apps that model a straightforward input-output process, it has one input panel on the left and an output panel on the right. The underlying function will be called after the user plugs in the arguments and click the "Run" button. The result will be displayed in the output panel.
 
-## Transcompilation from Python types to React components
+
+## Funix' default mapping from Python types to React components
 
 Like CSS, Funix controls the GUI appearance based on the types of arguments and returns of a function. 
 Under the hood, Funix transcompiles the signature of a function into React code. 
@@ -156,19 +160,57 @@ becomes the app below:
 
 where both the table and the chart are interactive/editable. As far as we know, no other Python-based solutions supports editable tables as inputs. 
 
-## Expanding or customizing type-to-widget mapping
+## Defining new type-to-widget mappings
 
-Because Funix is a transcompiler, a user can link any type to any widget in any frontend library as s/he wishes. 
-Besides the default type-to-widget mappings provided by the default theme, Funix allows a user to define a new theme or to override any theme in a local scope on-the-fly. 
-In addition to type-based, automatic widget selection, Funix also allows per-variable widget selection. Please refer to the [decorator](#decorator) section for more details.
+:::{note}
+Introducing a new type-to-widget mapping or modifying an existing one should not be the job of most Funix users. Only advanced users or the UI guys should be involved. This is like most scientists who writes papers in LaTeX do not develop the LaTeX classes or macros but just use them. 
+:::
 
-### Themes
+<!-- Funix provides two ways, [the decorator way](#the-decorator-way) and [the theme way](#the-theme+way) to bind a type, whether it is Python-native, from a third party, or user-defined, to a widget.  -->
+<!-- In addition to type-based, automatic widget selection, Funix also allows manual, per-variable widget selection as in its peer solutions. Please refer to the [decorator](#decorator) section for more details. -->
 
-A theme is a nested dictionary in JSON such as the one below which binds `str`, `int`, and `float` to three widgets: 
+As a transcompiler, Funix does not have its own widget library. Instead, it exposes theoretically any React component library to Funix users by giving them full freedom to bind a type to a React component on the street. As to be seen below, it further allows configuring the properties of widgets. 
+All of these can be done without any knowledge of JavaScript/TypeScript or React. 
+In this sense, Funix bridges the Python world with the frontend world and made Python or JSON the surface language for (React-based) frontend development.
 
-```json
+
+### Using the `new_funix_type` decorator
+
+A new type can be introduced as simple as a new class. The mapping from the class to a widget can be then defined via the `widget` parameter of the `new_funix_type` decorator of `funix`. [](#code_new_type) defines a new type `blackout`, which a special case (as indicated by the inheritance) of `str` and binds it with a widget. 
+
+Funix follows the convention in the frontend world to idenfiy a widget by a module specifier in `npm`, the de facto package manager in the frontend world. In [](#code_new_type), the widget is identified as `@mui/material/TextField`. Properties of the widget supported by its library for configuration can be passed into the `new_funix_type` decorator. As mentioned earlier, this allows a Pythonista to tap into a React component library without frontend develoment knowledge. 
+
+```{code} python
+:label: code_new_type
+:caption: An example of introducing a new type, binding it to a widget, and using it. 
+
+from funix import new_funix_type
+@new_funix_type(
+  widget = {
+      "widget": "@mui/material/TextField",
+      "props": {
+          "type": "password",
+          "placeholder": "Enter a secret here."
+      }
+  }
+)
+class blackout(str):
+   def print(self):
+       return self + " is the message."
+
+def hoho(x: blackout = "Funix Rocks!") -> str:
+   return x.print()
+```
+
+### Using the theme
+
+A type-to-widget mapping can be reused and centralized managed via a theme, which is a simple JSON file. An example is given in [](#code_theme) below where the Python's native types `str`, `int`, and `float` are bound to three widgets. In this exmaple, besides using `npm` module specifier, Funix shorthand strings `inputbox` and `slider` are also used. 
+
+```{code} jsonc
+:label: code_theme
+:caption: An example theme. 
 {
- "name": "test_theme",
+ "name": "grandma's secret theme", // space and punctuation allowed
  "widgets": {    
    "str": "inputbox",        // Funix' shorthand, non-parametric
    "int": "slider[0,100,2]", // Funix' shorthand, parametric
@@ -187,50 +229,23 @@ A theme is a nested dictionary in JSON such as the one below which binds `str`, 
 }
 ```
 
-The `widgets` field defines the binding from Python types to frontend widgets. One can use a module specifier (e.g., `@mui/material/Slider`) in `npm`, the de facto package manager for the frontend world, to refer to a widget and modify its `props` in JSON (e.g., `{"min":0, "max": 100, "step": 0.1}`). For convenience, Funix also provides some shortcut strings for frequently used widget families, such as `inputbox` and `slider[0,100,2]` above. Details for the `widgets` field can be found in the Reference manual of Funix. 
-
-From the example above, we can see that Funix exposes the entire frontend world to Python developers, allowing them to pick any component from any frontend library and configure them without any knowledge of JavaScript/TypeScript or React. In this sense, Funix bridges the Python world with the frontend world and made Python or JSON the surface language for frontend development.
-
-### On-the-fly new type definition
-
-Besides themes, Funix supports introducing new types and binding them to wiedgets on-the-fly.
-In the example below, we define a special `str` type called `blackout` that is bounded with `@mui/material/TextField` with `type="password"`. Thus, it will be embodied by a text input box that the content will be hidden while typing unless explicitly toggled to display by the user. 
-
-```python
-from funix import new_funix_type
-
-@new_funix_type(
-   widget = {
-       "widget": "@mui/material/TextField",
-       "props": {
-           "type": "password",
-           "placeholder": "Enter a secret here."
-       }
-   }
-)
-class blackout(str):
-   def print(self):
-       return self + " is the message."
-
-def hoho(x: blackout = "Funix Rocks!") -> str:
-   return x.print()
-
-```
-
 ## Building apps Pythonically
 
-Besides the type-to-widget philosophy, Funix leverages the features and common practices in Python to make building apps more intuitive and efficient.
+Funix leverages the language features of Python and common practices in Python development to make app building in Python more intuitive and efficient.
 
-### Default values
-The most trivial thing is default values. Python allows default values for keyword arguments. Funix directly uses them as the default values for corresponding widgets. In contrast, Funix' peer solutions require developers to provide the default value the second time in the widget initiation. 
+### Default values as placeholders
+Python supports default values for keyword arguments. Funix directly uses them as the placeholder values for corresponding widgets. In contrast, Funix' peer solutions require developers to provide the placeholder values the second time in the widget initiation. 
 
-### Docstring-based GUI augmentation
+### Making use of Docstrings
 
 Docstrings are dominantly common in the Python community. 
-Information in Docstrings is often needed in the GUI of an app. For example, the annotation of each argument can be displayed as a tooltip when the user hovers over the corresponding widget.
-In peer solutions, a developer has to repeat such information in the GUI code.
-Funix makes use of the information in Docstrings. It currently only supports Google-style and Numpy-style docstrings. 
-The Docstring above the first section (e.g., `Args`) will be rendered as Markdown. Argument annotations in the `Args` section will become the tooltips of the corresponding widgets. Finally, the `Examples` section will become prefilled example values for a user to try out. 
+Information in Docstrings is often needed in the GUI of an app. 
+For example, the annotation of each argument can be displayed as a label/tooltip to explain the meaning of the argument to the app user. 
+Therefore, Funix automatically adds selected information from Docstrings into apps, instead of requiring the developer to do it again as in peer solutions. 
+
+Different sections of Docstrings will become different kinds of information on the frontend. 
+The Docstring above the first headed section (`Args` in [](#code_docstring)) will be rendered as Markdown. Argument annotations in the `Args` section will become the labels in the UI. Finally, the `Examples` section will become prefilled example values for a user to try out. 
+Funix currently only supports Google-style and Numpy-style docstrings.
 
 Only information in the `Args` and `Examples` section will be displayed in the GUI.
 
@@ -240,7 +255,7 @@ Only information in the `Args` and `Examples` section will be displayed in the G
 
 def foo(x: str, y: int) -> str:
     """
-    ## What happens when you multiply a string with an integer?    
+    ## What happens when you multiply a string with an integer?
 
     Try it out below. 
 
@@ -251,11 +266,18 @@ def foo(x: str, y: int) -> str:
 
     Examples
     ----------
-    >>> foo("hello ", 3)
-    "hello hello hello "
+    >>> foo("hello, ", 3)
+    "hello, hello, hello, "
     
     """
     return x * y 
+```
+
+```{figure} docstring.png
+:label: fig_docstring
+:align: center
+
+An app with input panel customized by Docstrings. 
 ```
 
 ### Output layout in `print` and `return`
@@ -266,7 +288,7 @@ Markdown and HTML strings must be explicitly specified of the types `IPython.dis
 
 Quite often we need to print out some information before a function reaches its returns.
 `print` is a Python built-in function that is frequently used for this purpose.
-Funix extends this convenience by directing the output of `print` to the output panel of an app. The printout strings in Markdown or HTML syntax and will be automatically rendered after syntax detection. 
+Funix extends this convenience by redirecting the output of `print` to the output panel of an app. The printout strings in Markdown or HTML syntax and will be automatically rendered after syntax detection. 
 To avoid conflicting with the default behavior of printing to `stdout`, printing to the web needs to be explicitly turned on by a decorator.   
 
 ```{code} python
@@ -279,18 +301,21 @@ from funix import funix
 
 @funix(print_to_web=True)
 def foo(income: int = 200000, tax_rate: float= 0.45) -> Tuple[Markdown, HTML]:
-    print (f"## Here is your tax breakdown: ")
+    print (f"## Here is your tax breakdown: \n")
 
-    tax_table = """\
-      | Item | $$$ | 
-      | --- | --- |
-      | Income | {income} |
-      | Tax | -{tax_rate * income : .3f} |
-      | Net Income | {income - tax_rate * income : .3f} |
-    """
+    tax_table = (
+        " | Item | $$$ | \n"
+        " | --- | --- |  \n"
+        f"| Income | {income} | \n"
+        f"| Tax | -{tax_rate * income : .3f} | \n"
+        f"| Net Income | {income - tax_rate * income : .3f} | \n\n"
+    )
   
-    return tax_table, "If you have any question, contact <a href='http://irs.gov'>IRS</a>."
+    return tax_table, "\nIf you have any question, contact <a href='http://irs.gov'>IRS</a>."
 ``` 
+
+```{figure} print_return.png
+```
 
 ### Streaming based on `yield`
 
@@ -322,52 +347,14 @@ def stream() -> str:
 The streaming demo in Funix. Source code in [](#code_stream). 
 ```
 
-### State keeping, sessionizing, and multi-page apps
+### States, sessions, and multi-page apps
 
-A multi-page app is an app of many pages/tabs that share the same variable space. Values of variables set in one page can be accessed in another page. 
-Without reinventing the wheel, Funix supports this need by turning a Python class into a multi-page app, making use of the `self` variable for data passing across pages. Each member function becomes a page in the multi-page app. In particular, the constructor (`__init__`) becomes the landing page of such a multi-page app. Because each instance of a class is independent, the multi-page app is sessionized for different connections from browsers. 
-In this approach, a Funix developer does not have to learn anything new and it aligns well with the OOP principles that most programmers are already familiar with. 
-
-```{code} python
-:label: code_class_multi_page
-:caption: A simple multi-page app in Funix leveraging OOP. The corresponding GUI app is shown in [](#fig_stream).
-
-from funix import funix_method, funix_class
-from IPython.display import Markdown, HTML
-
-@funix_class()
-class A:
-    @funix_method(print_to_web=True)
-    def __init__(self, a: int):
-        """
-        Initialize A
-        """
-        self.a = a
-        print(f"`self.a` has been initialized to {self.a}")
-
-    def set(self, b: int) -> Markdown:
-        """
-        Set the value for `self.a`. 
-        """
-        old_a  = self.a
-        self.a = b
-        return (
-                "| var | value |\n" 
-                "| ----| ------|\n"
-            f"| `a` before | {old_a} |\n" 
-            f"| `a` after | {self.a} |"
-            )
-
-    def get(self) -> HTML:
-        return f"The value of `self.a` is <i>{self.a}</i>. "
-```
-
-To maintain state without sessionization, e.g., sharing the same variable across all sessions, simple declare a global variable using the `global` keyword.
-To force a global variable to be sessionized, i.e., all users have their own copy of the variable, please start Funix with the `-t` flag. 
+In Funix, maintaining states is as simple as updating a `global` variable. 
+By leveraging the semantics of `global` variables which are a native feature of the Python langauge, Funix saves developers the burden of learning something new in Funix. 
 
 ```{code} python
 :label: code_hangman
-:caption: A simple Hangman game in Funix that uses the `global` keyword to maintain the state. This solution is much shorter than using peer solutions, such as in [Gradio](https://www.gradio.app/guides/state-in-blocks). The corresponding GUI app is shown in [](#fig_hangman).
+:caption: A simple Hangman game in Funix that uses the `global` keyword to maintain the state. This solution is much shorter than using peer solutions, such as in [Gradio](https://www.gradio.app/guides/state-in-blocks). 
 
 from IPython.display import Markdown
 
@@ -385,29 +372,157 @@ def guess_letter(Enter_a_letter: str) -> Markdown:
     return f"### Hangman \n `{answer}` \n\n ---- \n ### Used letters \n {', '.join(used_letters)}"
 ```
 
-## Miscellaneous features 
+A security risk is that there is only one backend server for one Funix app and consequently a `global` variable is accessible by all browser sessions of the app. Sessionization can eliminate this risk. Simple start up the Funix app with a `-t` flag. 
 
-### History 
+A special but useful case that needs to maintain states is multi-page apps. A multi-page app is an app of many pages/tabs that share the same variable space. Values of variables set in one page can be accessed in another page. 
+Without reinventing the wheel, Funix supports this need by turning a Python class into a multi-page app, where each member function becomes a page of the multi-page app and pages can exchange data via the `self` variable. In particular, the constructor (`__init__`) becomes the landing page of the multi-page app. Because each instance of the class is independent, the multi-page app is sessionized for different connections from browsers. 
+In this approach, a Funix developer does not have to learn anything new but can start easily from the OOP principles that they are already familiar with. 
+
+```{code} python
+:label: code_class
+:caption: A simple multi-page app in Funix leveraging OOP. The corresponding GUI app is shown in [](#fig_stream).
+
+from funix import funix_method, funix_class
+from IPython.display import Markdown, HTML
+
+@funix_class()
+class A:
+    @funix_method(print_to_web=True)
+    def __init__(self, a: int):
+        self.a = a
+        print(f"`self.a` has been initialized to {self.a}")
+
+    @funix_method()
+    def set(self, b: int) -> Markdown:
+        """Update the value for `self.a`. """
+        old_a  = self.a
+        self.a = b
+        return (
+                "| var | value |\n" 
+                "| ----| ------|\n"
+            f"| `a` before | {old_a} |\n" 
+            f"| `a` after | {self.a} |"
+            )
+
+    @funix_method()
+    def get(self) -> HTML:
+        """Check the value of `self.a`. """
+        return f"The value of <code>self.a</code> is <i>{self.a}</i>. "
+```
+
+```{figure} class.gif
+:label: fig_class
+
+A multiplage app generated by Funix from a class of three member methods including the constructor. Source code in [](#code_class)
+```
+
+## The Funix decorators 
+
+Although Funix relies on the Python language (including type hints and docstrings) itself to define GUI apps, 
+there are still some aspects on the appearance and behavior of an apps uncovered. There is where the `@funix` decorator kicks. One example above is redirecting the `print` from `stdout` to the output panel of an app. Here we just show a few more examples. 
+
+Funix uses types to determine the widgets. However, there may be occasions that modifying the typing-to-widget mapping may  not be worth it, for cases like exceptions. The `@funix` dectorator has a `widgets` parameter for this purpose. The `widgets` parameter takes the same value as in a Funix theme. [](#code_sentence_builder) is an example to temporarily override the widget choice for `List[Literal]`. 
+
+As mentioned earlier, Funix is suitable for straightforward input-output processes. Such a process is triggered once when the "Run" button is clicked. This may work for many cases but in many other cases, we may want the output to be updated following the changes in the input end automatically. 
+To do so, simply toggle on the `autorun` parameter in the `@funix` decorator. This will activate the "continuously run" checkbox on the input panel. 
+
+```{code} 
+:label: code_autorun
+:caption: Auto run. 
+
+import ipywidgets
+import matplotlib.pyplot, matplotlib.figure
+import numpy 
+
+@funix.funix(
+        autorun=True, 
+)
+def sine(omega: ipywidgets.FloatRangeSlider(0, 4, 0.1)) -> matplotlib.figure.Figure:
+    fig = matplotlib.pyplot.figure()
+    x = numpy.linspace(0, 20, 200)
+    y = numpy.sin(x*omega)
+    matplotlib.pyplot.plot(x, y, linewidth=5)
+    return fig
+```
+
+```{figure} autorun.gif
+:label: fig_autorun
+```
+
+Although interactivity is not a strong suit of Funix for reasons aforementioned, Funix still provides some support to simple but frequently interactivity needs. It can reveal some widgets only when certain conditions are met. This is called "conditional visibility" in Funix. 
+
+```{code} 
+:label: code_conditional_visible
+:caption: Conditional visibility in `@funix` decorator 
+
+import typing
+import openai
+import funix
+
+openai.api_key = os.environ.get("OPENAI_KEY")
+
+@funix.funix(
+  conditional_visible=[
+    {
+      "when": {"show_advanced": True,},
+      "show": ["max_tokens", "model", "openai_key"]
+    }
+  ]
+)
+def ChatGPT_advanced(
+  prompt: str,
+  show_advanced: bool = False,
+  model : typing.Literal['gpt-3.5-turbo', 'gpt-3.5-turbo-0301']= 'gpt-3.5-turbo',
+  max_tokens: range(100, 200, 20)=140,
+  openai_key: str = ""
+) -> str:
+  completion = openai.ChatCompletion.create(
+    messages=[{"role": "user", "content": prompt}],
+    model=model,
+    max_tokens=max_tokens,
+  )
+  return completion["choices"][0]["message"]["content"]
+```
+
+```{figure} conditional_visible.gif
+
+```
+
+When an app is exposed, a common concern is how to avoid abuses. Rate limiting is a common measure to this. Funix's `@funix` decorator supports rate limiting based on both browser sessions and time. 
+
+
+Yazawazi: Please add `disable` (just a paragraph, no code no figure), and `reactive` (code and Gif)
+
+Lastly, togging on `show_source` parameter in `@funix` can enable the source code of your app to be displayed. 
+
+## Miscellaneous features  
+
+### History -- to do if having time on Saturday 
 
 ### Jupyter support 
 
-### Decorator
+Jupyter is a popular tool for Python development. Funix supports turning a Python function/class defined in a Jupyter cell into an app interactable in Jupyter. 
 
-Manually pick widgets per-variable
+```{code}
+```
 
-Rate limiting 
-
-### Reactive and continous update
+Yazawazi: please add code and figure. 
 
 ## Showcases
 
-1. Wordle
-2. Dall-E
-3. ChatGPT multi-turn
-4. Continous Sine functions
-5. Drag and drop 
+Lastly, please allow us to use some examples to show how "skeleton" -- not much UI related stuff -- the code can be to use Funix to build apps in Python. 
 
-## Future work 
+1. Wordle -- Need GIF, you can use "funix" as the word.
+2. Dall-E
+3. ChatGPT multi-turn -- Need GIF, just three questions: "tell me a joke", "why is it funny?", "Can you tell me a joke alike?" 
+5. Drag and drop, something multimedia, maybe record a speech from microphone live and transcribe to text. 
+6. Bioinformatics Vector stripping. 
+
+
+Yazawazi: Please add code (if the code is shorter than 20 linues, otherwise pout a link to the source code -- if you don't know the link, leave it there and I will add) and figure for the examples above.
+
+## Conclusion
+In this paper, we introduce the philosophy and designs of Funix. The 
 
 ## Acknowledgments
 Funix is not the first to exploit variable types for automatical UI generation. [Python Fire by Google](https://github.com/google/python-fire) is a Python library that automatically generates command line interfaces (CLIs) from the signatures of Python functions. Funix extends the idea from CLI to GUIs. `interact` in [ipywidgets](https://ipywidgets.readthedocs.io/en/latest/examples/Using%20Interact.html) infers types from default values of keyword arguments and picks widgets accordingly. But it only supports five types/widgets (`bool`, `str`, `int`, `float`, and Dropdown menus) and is not easy to expand the support. Funix supports a lot more types out of the box, requires no modification to the code (vs. calling `ipywidgets.interact`), and exposes the entire frontend ecosystem to users.
