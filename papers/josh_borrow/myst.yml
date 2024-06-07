@@ -24,6 +24,11 @@ project:
       orcid: 0000-0002-4810-666X 
       affiliations:
       - Department of Physics and Astronomy, University of Pennsylvania, 209 South 33rd Street, Philadelphia, PA, USA 19104
+    - name: Peter K. G. Williams
+      email: pwilliams@cfa.harvard.edu
+      orcid: 0000-0003-3734-3587
+      affiliations:
+      - "Center for Astrophysics | Harvard & Smithsonian, 60 Garden St., Cambridge, MA 02138"
   # github:
   # bibliography: []
   banner: banner.png

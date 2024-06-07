@@ -6,10 +6,11 @@ abstract: |
     Traditional commercial solutions are often unsuitable for the decentralized
     infrastructure typical of academic projects. This paper presents the
     Librarian, a custom framework designed for data transfer in large academic
-    collaborations, originally for the Simons Observatory (SO). SO is a
-    new-generation observatory designed for observing the Cosmic Microwave
-    Background, and is located in the Atacama desert in Chile at over 5000
-    meters of elevation.
+    collaborations, designed for the Simons Observatory (SO) as a ground up
+    re-architechture of a previous astronomical data management tool called the
+    'HERA Librarian' from which it takes its name. SO is a new-generation
+    observatory designed for observing the Cosmic Microwave Background, and is
+    located in the Atacama desert in Chile at over 5000 meters of elevation.
 
     Existing tools like Globus Flows, iRODS, Rucio, and Datalad were evaluated
     but were found to be lacking in automation or simplicity. Librarian
@@ -222,14 +223,25 @@ the Simons Observatory.
 ## The Librarian
 After much consideration, the collaboration decided that building an
 orchestration and tracking framework on top of Globus was most appropriate. In
-addition, there was an existing piece of software used for the HERA project
-called the 'HERA Librarian' [@LaPlante2020; @LaPlante2021] that provided some of
-the abstractions that were required, though it was not suitable for production
-use for the much larger Simons Observatory. The HERA Librarian used a
-significant number of shell commands over SSH in its underlying architecture,
-and was designed to be fully synchronous. This lead to a complete re-write of
-the Librarian, primarily to eliminate these deficiencies, but also to migrate
-the application to a more modern web framework.
+addition, there was an existing piece of software used for the Hydrogen Epoch of
+Reionization Array (HERA) [@DeBoer2017], a radio telescope designed to study the
+early Universe, called the 'HERA Librarian' [@LaPlante2020; @LaPlante2021] that
+provided some of the abstractions that were required, though it was not suitable
+for production use for the much larger Simons Observatory. The HERA Librarian
+used a significant number of shell commands over SSH in its underlying
+architecture, and was designed to be fully synchronous. This lead to a complete
+re-write of the Librarian, primarily to eliminate these deficiencies, but also
+to migrate the application to a more modern web framework. There are a few key
+design concepts that were carried over from the HERA Librarian:
+
+- There is a distinction drawn between 'Files' and 'Instances' of files in
+  the Librarian; a given server may know that 'File' exists but not actually
+  have direct access to a copy of the underlying data.
+- Files are immutable, enforced through checksumming, making synchronization
+  between Librarians uni-directional and much simpler.
+- Instances of the Librarian server are free-standing and are loosely-coupled,
+  meaning that long outages or network downtime do not cause significant
+  issues.
 
 The Librarian[^librarian] is made up of five major pieces:
 1. A FastAPI[^fastapi] server that allows access through a REST HTTP API.
@@ -247,11 +259,14 @@ having to interact with the HTTP server. This reduces the level of 'CRUD'
 significantly, by allowing (e.g.) locking of database rows currently being
 transferred directly, rather than having this be handled through a series of API
 calls. These background tasks are scheduled automatically using the lightweight
-schedule library.
+`schedule` library.
+
+The Librarian is open source and available through GitHub[^librarian],
+under the BSD-2-Clause license.
 
 ### Technology Choices
 For this project, it was crucial that we used the Python language, as this is
-the lignua franca of the collaboration; all members have at least some knowledge
+the lingua franca of the collaboration; all members have at least some knowledge
 of Python. No other language comes close (by a significant margin), and all
 analysis tools use Python. In addition, Globus provide a complete source
 development kit for Python[^globussdk]. As our analysis tools will eventually
@@ -286,6 +301,14 @@ unified namespace, and this namespace can be synchronised with other sites using
 Globus. In this section we will give a brief overview of the key abstractions at
 place and the data flow within the application. This process is summarised in
 @fig-ingest.
+
+In contrast to many other tools, and to the 'HERA Librarian' which preceeded the
+Librarian, files carry minimal science metadata along with them through the
+system. We found that metadata systems attached to data flow and management
+systems often lacked necessary features and caused significant complications
+(such as needing frequent database migrations) when coupled. As such, we chose
+to explicitly delegate metadata management to other subsystems within the
+project, focusing only on file transfers.
 
 #### User Management
 During the initial setup of the system, an administrator user is provisioned to
