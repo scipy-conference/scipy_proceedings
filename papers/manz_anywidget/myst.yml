@@ -55,11 +55,14 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        - Fowler2004
+        - doc_juparch
+        - doc_jupmsgprotocol
+        - doc_jupnbformat
+        - doc_widgets
+        - ipywidgets
+        - js_cookiecutter
+        - ts_cookiecutter
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
