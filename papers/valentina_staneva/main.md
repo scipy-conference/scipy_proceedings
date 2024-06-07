@@ -130,19 +130,14 @@ To convert a scientific pipeline into an executable Prefect workflow, one needs 
 
 `
 ## Workflow Monitoring
-One of the main advantages of using an orchestration framework is the features it provides to monitor the workflow execution. The integration with Prefect allows leveraging Prefect’s dashboard for monitoring the execution of the flows: Prefect UI. The dashboard can be run locally and within Prefect’s online managed system (Prefect Cloud). The local version provides an entirely open source framework for running and monitoring workflows. [Figure %s ](#fig:flow_sequence_expanded) shows the view of completed runs within the dashboard. The progress can be monitored while the flows are in progress. 
+One of the main advantages of using an orchestration framework is the features it provides to monitor the workflow execution. The integration with Prefect allows leveraging Prefect’s dashboard for monitoring the execution of the flows: Prefect UI. The dashboard can be run locally and within Prefect’s online managed system (Prefect Cloud). The local version provides an entirely open source framework for running and monitoring workflows. [Figure %s ](@fig:flow_sequence_expanded) shows the view of completed runs within the dashboard. The progress can be monitored while the flows are in progress. 
 
 :::{figure} flow_sequence_expanded.png
-:label: fig:flow_sequence_extended
+:label: fig:flow_sequence_expanded
 **Flow Runs:** Log of completed runs in Prefect UI. The stages (subflows) are executed sequentially. One can expand the view of an individual flow and see the tasks computed (asynchronously) within it.
 :::
 
 Further, one can also view the progress of the execution of the tasks on the dask cluster.
-
-:::{figure} task_progress.png
-:label: fig:task_progress
-**Flow Progress:** The progress of the execution can be monitored in the Prefect UI Dashboard (top) or the dask dashboard (bottom)
-:::
 
 :::{figure} dask_progress.png
 :label: fig: dask_progress
