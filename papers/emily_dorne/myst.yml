@@ -1,37 +1,66 @@
 version: 1
 project:
   id: scipy-2024-emily_dorne
-  # Ensure your title is the same as in your `main.md`
-  title: Using Satellite Imagery to Identify Harmful Algal Blooms and Protect Public Health
-  subtitle: An introduction to CyFi, a python tool for cyanobacteria detection
-  # Authors should have affiliations, emails and ORCIDs if available
+  title: Cyanobacteria detection in small, inland water bodies with CyFi
+  subtitle: Using satellite imagery and machine learning to protect public health
   authors:
     - name: Emily Dorne
       email: emily@drivendata.org
-      orcid: 0000-0000-0000-0000
       affiliations:
         - DrivenData
+      roles:
+        - Methodology
+        - Software
+        - Supervision
+        - Visualization
+        - Writing - original draft
+      corresponding: true
+    - name: Katie Wetstone
+      email: katie@drivendata.org
+      affiliations:
+        - DrivenData
+      roles:
+        - Data curation
+        - Methodology
+        - Software
+        - Visualization
+        - Writing - review & editing
+    - name: Trista Brophy
+      email: brophy.trista@gmail.com
+      roles:
+        - Writing - original draft
+    - name: Shobhana Gupta
+      email: shobhana.gupta@nasa.gov
+      affiliations:
+        - NASA
+      roles:
+        - Project administration
+        - Conceptualization
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
-  # Add the abbreviations that you use in your paper here
+    - Cyanobacteria
+    - Sentinel-2
+    - Machine Learning
+    - Harmful Algal Blooms
+    - Remote Sensing
   abbreviations:
     CyFi: Cyanobacteria Finder
-    HAB: Harmful Algal Bloom
-  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+    HAB: harmful algal bloom
+    HCD: human-centered design
+    CyAN: Cyanobacteria Assessment Network
+    CNN: convolutional neural network
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
-  # A banner will be generated for you on publication, this is a placeholder
+        - ttb_results
+        - ttb_winners_announcement
+        - cyfi_docs
+        - epa_guidelines
+        - who_guidelines
+        - lightgbm
+        - sklearn
+        - dbscan
   banner: banner.png
-  # The rest of the information shouldn't be modified
   subject: Research Article
   open_access: true
   license: CC-BY-4.0
