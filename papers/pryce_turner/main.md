@@ -15,7 +15,7 @@ In short, bioinformatics suffers from the same reproducibility crisis [@doi:10.1
 
 ## Methods
 
-Solving these problems using Flyte is accomplished by capturing dependencies flexibly with dynamically generated container images, defining custom types to enforce at the task boundary, and wrapping tools in Flyte tasks. Before diving into the finer points, a brief primer on Flyte is required. While the [introduction](https://docs.flyte.org/en/latest/introduction.html) in the docs is a worthwhile read before continuing, I'll skip to a more salient *hello world* example.
+Solving these problems using Flyte is accomplished by capturing dependencies flexibly with dynamically generated container images, defining custom types to enforce at the task boundary, and wrapping tools in Flyte tasks. Before diving into the finer points, a brief primer on Flyte is required. While the [introduction](https://docs.flyte.org/en/latest/introduction.html) in the docs is a worthwhile read before continuing, here is a more salient *hello world* example.
 
 ```python
 from flytekit import task, workflow
@@ -39,7 +39,9 @@ Tasks are the most basic unit of work in Flyte. They are pure-python functions a
 
 ### Images
 
-While it's possible to run Flyte tasks and workflows locally in a Python virtual environment, production executions in Flyte run on a Kubernetes cluster. As a k8s native orchestrator, all tasks run in their own (typically single-container) pods using whatever image is specified in the task decorator. Capturing dependencies in container images has been a gold-standard for some time now, but this is taken a step further with [ImageSpec](https://docs.flyte.org/en/latest/user_guide/customizing_dependencies/imagespec.html#imagespec). ImageSpec lets you easily define a base image and additional dependencies right alongside your task and workflow code. These additional dependencies can include apt, python or conda packages. While [envd](https://github.com/tensorchord/envd) is the default builder, other backends like Docker are available should the need arise. These ImageSpec definitions are loosely coupled to your workflow code and are built automatically when tasks are registered or run on a Flyte cluster. ImageSpec reduces the complexity inherent in manually authoring a Dockerfile and enables a more streamlined approach to building images without the need for an additional build step and configuration update to reference the latest image. This coupling and reduced complexity makes it easier to build single-purpose images instead of throwing everything into a single monolith - here are a few:
+While it's possible to run Flyte tasks and workflows locally in a Python virtual environment, production executions in Flyte run on a Kubernetes cluster. As a k8s native orchestrator, all tasks run in their own (typically single-container) pods using whatever image is specified in the task decorator. Capturing dependencies in container images has been a gold-standard for some time now, but this is taken a step further with [ImageSpec](https://docs.flyte.org/en/latest/user_guide/customizing_dependencies/imagespec.html#imagespec). ImageSpec lets you easily define a base image and additional dependencies right alongside your task and workflow code. These additional dependencies can include apt, python or conda packages. While [envd](https://github.com/tensorchord/envd) is the default builder, other backends like Docker are available should the need arise. 
+
+These ImageSpec definitions are loosely coupled to your workflow code and are built automatically when tasks are registered or run on a Flyte cluster. ImageSpec reduces the complexity inherent in manually authoring a Dockerfile and enables a more streamlined approach to building images without the need for an additional build step and configuration update to reference the latest image. This coupling and reduced complexity makes it easier to build single-purpose images instead of throwing everything into one monolithic image - here are a few:
 
 ```python
 main_img = ImageSpec(
@@ -78,21 +80,180 @@ folding_img = ImageSpec(
 )
 ```
 
-The `main` image has a lot of functionality and could arguably be pared down. It contains a number of very common low-level tools, along with GATK and a couple aligners. The `protein` image on the other hand only contains a handful of tools related to a very specific protein folding and visualization workflow.
+The `main` image has a lot of functionality and could arguably be pared down. It contains a number of very common low-level tools, along with GATK and a couple aligners. The `protein` image on the other hand only contains a handful of tools related to a very specific protein folding and visualization workflow. They can be specified in the task decorator:
 
-When a new Flyte project is initialized, a default Dockerfile is created with Flyte dependencies built in. It’s easy to extend this with whatever dependencies you might need. ImageSpec is an extension of this, allowing you to specify dependencies on top of an existing image right inline with your task code. This image will be built and uploaded when your tasks and workflows are registered to a Flyte cluster.
+```python
+@task(container_image=folding_img)
+def predict_structure(seq: str):
+  fold_protein(seq)
+```
+
+This image will be built and uploaded when your tasks and workflows are registered to a Flyte cluster. 
 
 ### Datatypes
 
-Having rich data types to enforce compatibility at the task boundary is essential to these wrapped tools working together. Flyte supports arbitrary data types through Python’s dataclasses library. Data types representing raw reads and alignment files allow us to reason about these files and their metadata more easily across tasks, as well as enforce naming conventions. Importantly, Flyte abstracts the object store, allowing you to load these assets into pods wherever is most convenient for your tool. This not only makes it easier to work with these files, but also safer as you’re working with ephemeral storage during execution instead of a full production filesystem.
+Having rich data types to enforce compatibility at the task boundary is essential to these wrapped tools working together. Flyte supports arbitrary data types through Python’s dataclasses library. Data types representing raw reads and alignment files allow us to reason about these files and their metadata more easily across tasks, as well as enforce naming conventions. Importantly, Flyte abstracts the object store, allowing you to load these assets into pods wherever is most convenient for your tool. This not only makes it easier to work with these files, but also safer as you’re working with ephemeral storage during execution instead of a full production filesystem. Here is the Reads dataclass:
+
+```python
+@dataclass
+class Reads(DataClassJSONMixin):
+
+    sample: str
+    filtered: bool | None = None
+    filt_report: FlyteFile | None = None
+    uread: FlyteFile | None = None
+    read1: FlyteFile | None = None
+    read2: FlyteFile | None = None
+
+    def get_read_fnames(self):
+        filt = "filt." if self.filtered else ""
+        return (
+            f"{self.sample}_1.{filt}fastq.gz",
+            f"{self.sample}_2.{filt}fastq.gz",
+        )
+
+    def get_report_fname(self):
+        return f"{self.sample}_fastq-filter-report.json"
+
+    @classmethod
+    def make_all(cls, dir: Path):
+      ...
+```
+
+We're capturing a few important aspects: whether the reads have been filtered and the results of that operation, as well as if they're [paired-end](https://thesequencingcenter.com/knowledge-base/what-are-paired-end-reads/) reads or not. The `make_all` function body has been omitted for brevity, but it accepts a directory and returns a list of these objects based on it's contents. In the other direction, a `get_read_fnames` method is defined to standardize naming conventions based on The 1000 Genomes Project [guidelines](https://www.internationalgenome.org/faq/what-are-your-filename-conventions). FlyteFile, along with FlyteDirectory, represent a file or directory in a Flyte aware context. These types handle serialization and deserialization into and out of the object store. They re-implement a number of common filesystem operations like `open()`, which returns a streaming handle, for example. Simply returning a FlyteFile from a task will automatically upload it to whatever object store is defined. This unassuming piece of functionality is one of Flyte's key strengths: abstracting data management so researchers can focus on their task code.
+
+Since dataflow in Flyte is a first-class construct, having well defined inputs and outputs at the task boundary makes authoring workflows that much more reliable. Here is another dataclass representing a downstream alignment from the reads above:
+
+```python
+@dataclass
+class Alignment(DataClassJSONMixin):
+
+    sample: str
+    aligner: str
+    format: str | None = None
+    alignment: FlyteFile | None = None
+    alignment_idx: FlyteFile | None = None
+    alignment_report: FlyteFile | None = None
+    sorted: bool | None = None
+    deduped: bool | None = None
+    bqsr_report: FlyteFile | None = None
+
+    def _get_state_str(self):
+        state = f"{self.sample}_{self.aligner}"
+        if self.sorted:
+            state += "_sorted"
+        if self.deduped:
+            state += "_deduped"
+        return state
+
+    def get_alignment_fname(self):
+        return f"{self._get_state_str()}_aligned.{self.format}"
+
+    @classmethod
+    def make_all(cls, dir: Path):
+      ...
+```
+
+More information related to alignments is being captured here. However, the standard methods for interacting with a local filesystem remain. In the next section we'll look at tasks that actually carry out this alignment.
+
 
 ### Tasks
 
-While Flyte tasks are written in Python, there are a couple of ways to wrap arbitrary tools. ShellTasks are one such way, allowing you to define scripts as multi-line strings in Python. For added flexibility around packing and unpacking data types before and after execution, Flyte also ships with a subproc_execute function which can be used in vanilla Python tasks.
+While Flyte tasks are written in Python, there are a couple of ways to wrap arbitrary tools. ShellTasks are one such way, allowing you to define scripts as multi-line strings in Python. For added flexibility around packing and unpacking data types before and after execution, Flyte also ships with a subproc_execute function which can be used in vanilla Python tasks. Finally, arbitrary images can be used via a [ContainerTask](https://docs.flyte.org/en/latest/user_guide/customizing_dependencies/raw_containers.html#raw-containers) and avoid any `flytekit` dependency altogether.
+
+Here is a ShellTask creating a `bowtie2` index directory from a genome reference file.
+
+```python
+bowtie2_index = ShellTask(
+    name="bowtie2-index",
+    debug=True,
+    requests=Resources(cpu="4", mem="10Gi"),
+    metadata=TaskMetadata(retries=3, cache=True, cache_version=ref_hash),
+    container_image=main_img,
+    script="""
+    mkdir {outputs.idx}
+    bowtie2-build {inputs.ref} {outputs.idx}/bt2_idx
+    """,
+    inputs=kwtypes(ref=FlyteFile),
+    output_locs=[
+        OutputLocation(var="idx", var_type=FlyteDirectory, location="/tmp/bt2_idx")
+    ],
+)
+```
+
+This task uses the `main_img` defined above; it also accepts a FlyteFile and outputs a FlyteDirectory. Another important feature to highlight here is [caching](https://docs.flyte.org/en/latest/user_guide/development_lifecycle/caching.html#caching), which saves us valuable compute for inputs that rarely change. Since the alignment index for a particular aligner only needs to be generated once for a given reference, we've set the `cache_version` to a hash of the reference's URI. As long as the reference exists at that URI, this bowtie indexing task will complete immediately and return that index. 
+
+To perform the actual alignment, a regular python task is used with a Flyte-aware subprocess function to call the bowtie CLI. 
+
+```python
+@task(container_image=main_img, requests=Resources(cpu="4", mem="10Gi"))
+def bowtie2_align_paired_reads(idx: FlyteDirectory, fs: Reads) -> Alignment:
+    idx.download()
+    logger.debug(f"Index downloaded to {idx.path}")
+    ldir = Path(current_context().working_directory)
+
+    alignment = Alignment(fs.sample, "bowtie2", "sam")
+    al = ldir.joinpath(alignment.get_alignment_fname())
+    rep = ldir.joinpath(alignment.get_report_fname())
+    logger.debug(f"Writing alignment to {al} and report to {rep}")
+
+    cmd = [
+        "bowtie2",
+        "-x",
+        f"{idx.path}/bt2_idx",
+        "-1",
+        fs.read1,
+        "-2",
+        fs.read2,
+        "-S",
+        al,
+    ]
+    logger.debug(f"Running command: {cmd}")
+
+    result = subproc_execute(cmd)
+
+    with open(rep, "w") as f:
+        f.write(result.error)
+
+    setattr(alignment, "alignment", FlyteFile(path=str(al)))
+    setattr(alignment, "alignment_report", FlyteFile(path=str(rep)))
+    setattr(alignment, "sorted", False)
+    setattr(alignment, "deduped", False)
+
+    return alignment
+```
+
+Since Python tasks are the default task type, they're the most feature rich and stable. The main advantage to using one here is to unpack the inputs and construct the output type. 
 
 ## Results
 
-Tying it all together with a workflow.
+A real world alignment workflow exemplifies how to tie all these disparate parts together. Starting with a directory containing raw FastQ files, we'll perform QC, filtering, index generation, alignment and conclude with a final report of all the steps. Here's the code:
+
+```python
+@workflow
+def simple_alignment_wf(seq_dir: FlyteDirectory = seq_dir_pth) -> FlyteFile:
+    
+    # Generate FastQC reports and check for failures
+    fqc_out = fastqc(seq_dir=seq_dir)
+    samples = prepare_raw_samples(seq_dir=seq_dir)
+
+    # Map out filtering across all samples and generate indices
+    filtered_samples = map_task(pyfastp)(rs=samples)
+
+    fqc_out >> filtered_samples
+
+    bowtie2_idx = bowtie2_index(ref=ref_loc)
+
+    # Compare alignment results using two different aligners in a dynamic task
+    sams = bowtie2_align_samples(idx=bowtie2_idx, samples=filtered_samples)
+
+    # Generate final multiqc report with stats from all steps
+    return render_multiqc(fqc=fqc_out, filt_reps=filtered_samples, sams=sams)
+```
+
+FastQC, an extremely common QC tool written in Java, starts off the workflow by generating a report for all FastQ files in a given directory. That directory is then turned into Reads objects via the `prepare_raw_samples` task. Those samples are then passed to `fastp` for adapter removal and filtering of duplicate or low quality reads. Fastp is a C/C++ tool that is wrapped in a python task which accepts a single Reads object. This task is then used in a `map_task` to parallelize the processing of however many discrete samples were present in the input directory. Since there is no implicit dependency between filtering and QC, we make this relationship explicit with the `>>` operator. Next, bowtie2 generates an index if one is not already cached. Bowtie2 is primarily written in C++, with some parts implemented in Perl. Since the bowtie2 alignment task processes samples one at a time, it was wrapped in a [dynamic workflow](https://docs.flyte.org/en/latest/user_guide/advanced_composition/dynamic_workflows.html#dynamic-workflows) to process a list of inputs. Dynamics are another parallelism construct, similar to map tasks with some key [differences](https://flyte.org/blog/map-tasks-in-flyte). Finally, MultiQC is employed. MultiQC is a common QC report aggregator written in python; it produces a final report of all the different steps in the workflow. Here is the workflow visualized:
+
+{workflow dag}
 
 ## Conclusion
 
@@ -107,6 +268,7 @@ Different steps in a bioinformatics pipeline often require tools with significan
 
 
 
+---
 
 
 
