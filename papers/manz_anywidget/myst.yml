@@ -37,15 +37,16 @@ project:
       roles:
         - Conceptualization
         - Funding acquisition
+        - Supervision
         - Writing - review & editing
   keywords:
-    - Computational notebooks
+    - Computational Notebooks
     - Jupyter
     - Widgets
     - Python
     - JavaScript
-    - Data visualization
-    - Interactive computing
+    - Data Visualization
+    - Interactive Computing
 
   # Add the abbreviations that you use in your paper here
   abbreviations:
