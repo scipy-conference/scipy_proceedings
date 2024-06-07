@@ -140,7 +140,9 @@ native module system. For existing JCPs, anywidget provides a front-end adapter
 to load and execute these standardized modules, while new platforms can add
 native AFM support directly. Widget kernel-side code and AFM can be run
 directly from within notebooks, from source files, or distributed as single
-Python packages.
+Python packages. With anywidget, each JCP consumes the same AFM, and widget 
+authors can compose an AFM directly or target AFM through a build step to 
+take advantage of advanced tools.
 :::
 
 Packaging custom Jupyter Widgets is complex due to the need to adapt JavaScript
@@ -181,7 +183,9 @@ than creating them internally or relying on global variables provided by the
 JCP. This practice, known as dependency injection [@Fowler2004], improves AFM
 portability by making integration interfaces explicit. New runtimes can support
 AFMs by implementing the required APIs, and existing JCPs can refactor their
-internals without breaking existing (any)widgets.
+internals without breaking existing (any)widgets. For projects that want to take
+advantage of advanced front-end tooling, anywidget also provides authoring 
+utilities to write AFMs such as "bridge" libraries for popular web frameworks [@joss].
 
 :::{figure}
 :label: fig:afm
@@ -348,7 +352,9 @@ making authorship practical and accessible.
 ## Acknowledgements
 
 We thank Talley Lambert for his contributions to the project, and David Kouril
-for his suggestions on the manuscript and figures.
+for his suggestions on the manuscript and figures. We also thank the anywidget
+community as well as members of the Abdennur and HIDIVE labs for helpful 
+discussions.
 
 ## Funding
 
