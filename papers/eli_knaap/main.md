@@ -1,18 +1,31 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
 title: "geosnap: The Geospatial Neighborhood Analysis Package"
+subtitle: Open Tools for Urban, Regional, and Neighborhood Science
 abstract: |
-  Understanding neighborhood context is critical for social science research, public policy analysis, and urban planning. The social meaning, formal definition, and formal operationalization of "neighborhood" depends on the study or application, however, so neighborhood analysis and modeling requires both flexibility and adherence to a formal pipeline. Maintaining that balance is challenging for a variety of reasons. To address those challenges, `geosnap`, the Geospatial Neighborhood Analysis Pacakge provides a suite of tools for exploring, modeling, and visualizing the social context and spatial extent of neighborhoods and regions over time. It brings together state-of-the-art techniques from geodemographics, regionalization, spatial data science, and segregation analysis to support social science research, public policy analysis, and urban planning. It provides a simple interface tailored to formal analysis of spatiotemporal urban data.
+  Understanding neighborhood context is critical for social science research, public
+  policy analysis, and urban planning. The social meaning, formal definition, and formal
+  operationalization of "neighborhood" depends on the study or application, however, so
+  neighborhood analysis and modeling requires both flexibility and adherence to a formal
+  pipeline. Maintaining that balance is challenging for a variety of reasons. To address
+  those challenges, `geosnap`, the Geospatial Neighborhood Analysis Pacakge provides a
+  suite of tools for exploring, modeling, and visualizing the social context and spatial
+  extent of neighborhoods and regions over time. It brings together state-of-the-art
+  techniques from geodemographics, regionalization, spatial data science, and
+  segregation analysis to support social science research, public policy analysis, and
+  urban planning. It provides a simple interface tailored to formal analysis of
+  spatiotemporal urban data.
+
 ---
 
 ## Introduction
 
 Quantitative research focusing on cities, neighborhoods, and regions is in high demand.
-On the practical side, city planners, NGOs, and commercial businesses all have
-increasing access to georeferenced datasets and spatial analyses can turn these data
-into more efficient, equitable, and profitable, decision-making
-[@cortes2020OpensourceFramework; @finio2022SmartGrowth; @Kang2021; @Knaap2017;
-@knaap2023SegregatedDesign; @Rey2022a; @wei2022ReducingRacial]. On the
+On the practical side, city planners, Non-Governmental Organizations (NGOs), and
+commercial businesses all have increasing access to georeferenced datasets and spatial
+analyses can turn these data into more efficient, equitable, and profitable,
+decision-making [@cortes2020OpensourceFramework; @finio2022SmartGrowth; @Kang2021;
+@Knaap2017; @knaap2023SegregatedDesign; @Rey2022a; @wei2022ReducingRacial]. On the
 scientific/academic side, many of the era's pressing problems are spatial and or urban
 in form, thus requiring bespoke statistical methods and simulation techniques to produce
 accurate inferences. Thus, while data science teams in industries across the planet race
@@ -20,36 +33,47 @@ to conquer 'geospatial data science' few practitioners have expertise in the app
 data sources, modeling frameworks, or data management techniques necessary for wrangling
 and synthesizing urban data.
 
-To address these challenges we introduce geosnap, the geospatial neighborhood analysis
+To address these challenges we introduce `geosnap`, the geospatial neighborhood analysis
 package, which is a unique Python package sitting at the intersection of spatial science
 and practical application. In doing so, it provides a bridge between formal spatial
 analysis/spatial econometrics and the applied fields of neighborhood change, access to
 opportunity, and the social determinants of health. The package provides extremely fast
 and efficient access to hundreds of socioeconomic, infrastructure, and environmental
 quality indicators that allow researchers to move from zero data to an informative model
-in a few short lines of code. It is organized into layers for data acquisition,
-analysis, and visualization, and it includes tools for harmonizing disparate datasets
-into consistent geographic boundaries, creating "geodemographic typologies" that
-summarize and predict multidimensional segregation over time, and network analysis tools
-that rapidly generate (locally computed) service areas and travel isochrones. We expect
-the tool will be immediately useful for any analyst studying urban areas.
+in a few short lines of code. 
+
+It is organized into layers for data acquisition, analysis, and visualization, and 
+includes tools for harmonizing disparate datasets into consistent geographic boundaries,
+creating "geodemographic typologies" that summarize and predict multidimensional
+segregation over time, and network analysis tools that generate rapid (locally
+computed) service areas and travel isochrones. We expect the tool will be immediately
+useful for any analyst studying urban areas.
 
 ## The Geospatial Neighborhood Analysis Package (geosnap)
 
 `geosnap` provides a suite of tools for exploring, modeling, and visualizing the social
 context and spatial extent of neighborhoods and regions over time. It brings together
 state-of-the-art techniques from geodemographics, regionalization, spatial data science,
-and segregation analysis to support social science research, public policy analysis, and
+and segregation measurement to support social science research, public policy analysis, and
 urban planning. It provides a simple interface tailored to formal analysis of
-spatiotemporal urban data. Its primary features include
+spatiotemporal urban data, and its primary features include
 
-- Quick access to a large database of commonly-used neighborhood indicators from U.S. providers including Census, EPA, LEHD, NCES, and NLCD, streamed from the cloud thanks to quilt and the highly-performant geoparquet file format.
-- Fast, efficient tooling for standardizing data from multiple time periods into a shared geographic representation appropriate for spatiotemporal analysis
-- Analytical methods for understanding sociospatial structure in neighborhoods, cities, and regions, using unsupervised ML from scikit-learn and spatial optimization from PySAL
-- Classic and spatial analytic methods for diagnosing model fit, and locating (spatial) statistical outliers
-- Novel techniques for understanding the evolution of neighborhoods over time, including identifying hotspots of local neighborhood change, as well as modeling and simulating neighborhood conditions into the future
+- Quick access to a large database of commonly-used neighborhood indicators from U.S.
+  providers including Census, EPA, LEHD, NCES, and NLCD, streamed efficiently from the
+  cloud (or stored for repeated use).
+- Fast, efficient tooling for standardizing data from multiple time periods into a
+  shared geographic representation appropriate for spatiotemporal analysis
+- Analytical methods for understanding sociospatial structure in neighborhoods, cities,
+  and regions, using unsupervised ML from scikit-learn and spatial optimization from
+  PySAL
+- Classic and spatial analytic methods for diagnosing model fit, and locating (spatial)
+  statistical outliers
+- Novel techniques for understanding the evolution of neighborhoods over time, including
+  identifying hotspots of local neighborhood change, as well as modeling and simulating
+  neighborhood conditions into the future
 - Unique tools for measuring segregation dynamics over space and time
-- Bespoke visualization methods for understanding travel commute-sheds, business service-areas, and neighborhood change over time
+- Bespoke visualization methods for understanding travel commute-sheds, business
+  service-areas, and neighborhood change over time
 
 The package is organized into four layers providing different aspects of functionality,
 namely `io` for data ingestion and storage, `analyze` for analysis and modeling
@@ -69,13 +93,44 @@ from geosnap.harmonize import harmonize
 
 ### Data
 
-Neighborhoods, cities, and regions are characterized by a variety of data, and to understand how places change over time, or how they affect the people who live there, researchers ofen require information on the social, environmental, institutional, and economic conditions that characterie the area. The geosnap package tries to make the process of collecting and wrangling these various publicly-available datasets simpler, faster, and more reproducible by repackaging the most commonly used into modern formats and serving (those we are allowed to) over fast web protocols. This makes it much faster to conduct, iterate, and share analyses for better urban research and public policy. Of course, these datasets are generally just a starting place, designed to be used alongside additional information unique to each study region.
+Neighborhoods, cities, and regions are characterized by a variety of data, and to
+understand how places change over time, or how they affect the people who live there,
+researchers often require information on the social, environmental, institutional, and
+economic conditions that characterize the area. The geosnap package tries to make the
+process of collecting and wrangling these various publicly-available datasets simpler,
+faster, and more reproducible by repackaging the most commonly used into modern formats
+and serving (those we are allowed to) over fast web protocols. This makes it much faster
+to conduct, iterate, and share analyses for better urban research and public policy. Of
+course, these datasets are generally just a starting place, designed to be used
+alongside additional information unique to each study region.
 
-Toward that end, many of the datasets used in social science and public policy research in the U.S. are drawn from the same set of resources, like the Census, the Environmental Protection Agency (EPA), the Bureau of Labor Statistics (BLS), or the National Center for Education Statistics (NCES), to name a few. As researchers, we found ourselves writing the same code to download [versions of] the same data repeatedly (at different scales or time frames). That works ok in some cases, but it is also cumbersome, and can be extremely slow for even medium-sized datasets. While there are nice tools like [cenpy](https://github.com/cenpy-devs/cenpy) or [pyrgris](https://walker-data.com/pygris/), these tools cannot overcome a basic limitation of many government data providers, namely that they use old technology, e.g., File Transfer Protocol (FTP) and outdated file formats (like shapefiles).
+Toward that end, many of the datasets used in social science and public policy research
+in the U.S. are drawn from the same set of resources, like the Census, the Environmental
+Protection Agency (EPA), the Bureau of Labor Statistics (BLS), or the National Center
+for Education Statistics (NCES), to name a few. As researchers, we found ourselves
+writing the same code to download [versions of] the same data repeatedly (at different
+scales or time frames). That works ok in some cases, but it is also cumbersome, and can
+be extremely slow for even medium-sized datasets. While there are nice tools like
+[cenpy](https://github.com/cenpy-devs/cenpy) or
+[pyrgris](https://walker-data.com/pygris/), these tools cannot overcome a basic
+limitation of many government data providers, namely that they use old technology, e.g.,
+File Transfer Protocol (FTP) and outdated file formats (like shapefiles).
 
-Thus, rather than repetitively querying these slow servers, geosnap takes the position that it is preferable to store repeatedly-used datasets in [highly-performat formats](https://github.com/opengeospatial/geoparquet), because they are usually small and fast enough to store on disk. When not on disk, it makes sense to stream these datasets over [S3]((https://aws.amazon.com/s3/)), where they can be read very quickly (and directly). For that reason, geosnap maintains [a public S3 bucket](https://open.quiltdata.com/b/spatial-ucr), thanks to the [Amazon Open Data Registry](https://github.com/awslabs/open-data-registry), and uses [quilt](https://www.quiltdata.com/) to manage data under the hood.
+Thus, rather than repetitively querying these slow servers, geosnap takes the position
+that it is preferable to store repeatedly-used datasets in
+[highly-performant formats](https://github.com/opengeospatial/geoparquet), because they
+are usually small and fast enough to store on disk. When not on disk, it makes sense to
+stream these datasets over [S3]((https://aws.amazon.com/s3/)), where they can be read
+very quickly (and directly). For that reason, geosnap maintains
+[a public S3 bucket](https://open.quiltdata.com/b/spatial-ucr), thanks to the
+[Amazon Open Data Registry](https://github.com/awslabs/open-data-registry), and uses
+[quilt](https://www.quiltdata.com/) to manage data under the hood.
 
-The `DataStore` class is a quick way to access a large database of social, economic, and environmental variables tablulated at various geographic levels. If you are bringing your own data, or using geosnap outside of the U.S., feel free to skip this section; the DataStore class is not required to use the package. It is just a quick way to load commonly-used data. 
+The `DataStore` class is a quick way to access a large database of social, economic, and
+environmental variables tabulated at various geographic levels. These data are not
+required to use the package, and `geosnap` is capable of conducting analysis anywhere in
+the globe, but these datasets are used so commonly in U.S.-centric research that
+geosnap's developers maintain this database as an additional layer.
 
 ```python
 datasets = DataStore()
@@ -84,11 +139,37 @@ datasets = DataStore()
 
 #### Demographics
 
-Over the last decade, one of the most useful resources for understanding socioeconomic changes in U.S. neighborhoods over time has been the [Longitudinal Tract Database (LTDB)](https://s4.ad.brown.edu/Projects/Diversity/researcher/bridging.htm), which is used in countless studies of neighborhood change [@Logan_2014]. One of the most recognized benefits of this dataset is that it standardizes boundaries for census geographic units over time, providing a consistent set of units for time-series analysis. An under-appreciated benefit of these data is the ease with which researchers have access to hundreds of useful intermediate variables computed from raw Census data (e.g. population rates by race and age). Unfortunately, the LTDB data is only available for a subset of Census releases (and only at the tract level), so geosnap includes tooling that computes the same variable set as LTDB, and it provides access to those data for every release of the 5-year ACS at both the tract and blockgroup levels (variable permitting). Note: following the Census convention, the 5-year releases are labelled by the terminal year.
+Over the last decade, one of the most useful resources for understanding socioeconomic
+changes in U.S. neighborhoods over time has been the
+[Longitudinal Tract Database (LTDB)](https://s4.ad.brown.edu/Projects/Diversity/researcher/bridging.htm),
+which is used in countless studies of neighborhood change [@Logan_2014]. One of the most
+recognized benefits of this dataset is that it standardizes boundaries for census
+geographic units over time, providing a consistent set of units for time-series
+analysis. An under-appreciated benefit of these data is the ease with which researchers
+have access to hundreds of useful intermediate variables computed from raw Census data
+(e.g. population rates by race and age). Unfortunately, the LTDB data is only available
+for a subset of Census releases (and only at the tract level), so geosnap includes
+tooling that computes the same variable set as LTDB, and it provides access to those
+data for every release of the 5-year ACS at both the tract and blockgroup levels
+(variable permitting). Note: following the Census convention, the 5-year releases are
+labelled by the terminal year.
 
-Unlike LTDB or The National Historical Geographic Information System [NHGIS](https://www.nhgis.org/), these datasets are created using code that collects raw data from the Census FTP servers, computes intermediate variables according to the codebook, and saves the original geometries-- and is **[fully open and reproducible](https://github.com/oturns/geosnap/blob/main/tools/process_census_gdb.ipynb)**. This means that all assumptions are exposed, and the full data processing pipeline is visible to any user or contributor to review, update, or send corrections. Geosnap's approach to data provenance reflects our view that open and transparent analysis is always preferable to black boxes, and is a much better way to promote scientific discovery. Further, by formalizing the pipeline using code, the tooling is re-run to generate new datasets each time ACS or decennial Census data is released.
+Unlike LTDB or The National Historical Geographic Information System
+[NHGIS](https://www.nhgis.org/), these datasets are created using code that collects raw
+data from the Census FTP servers, computes intermediate variables according to the
+codebook, and saves the original geometries-- and is
+**[fully open and reproducible](https://github.com/oturns/geosnap/blob/main/tools/process_census_gdb.ipynb)**.
+This means that all assumptions are exposed, and the full data processing pipeline is
+visible to any user or contributor to review, update, or send corrections. Geosnap's
+approach to data provenance reflects our view that open and transparent analysis is
+always preferable to black boxes, and is a much better way to promote scientific
+discovery. Further, by formalizing the pipeline using code, the tooling is re-run to
+generate new datasets each time ACS or decennial Census data is released.
 
-To load a dataset, like the 2010 tract-level census data, just call it as a method, which returns a geodataframe (some datasets, like blocks or `acs` have additional arguments). Geometries are available for all of the commonly used administrative units, many of which have multiple time periods available:
+To load a dataset, like the 2010 tract-level census data, just call it as a method,
+which returns a geodataframe (some datasets, like blocks or `acs` have additional
+arguments). Geometries are available for all of the commonly used administrative units,
+many of which have multiple time periods available:
 
 - metropolitan statistical areas (MSAS)
 - states
@@ -100,8 +181,10 @@ To load a dataset, like the 2010 tract-level census data, just call it as a meth
 There is also a table that maps counties to their constituent MSAs. Note that
 blockgroups are not exposed directly, but are accessible as part of the ACS and EJSCREEN
 data. If the dataset exists in the `DataStore` path, it will be loaded from disk,
-otherwise it will be streamed from S3 (provided an internet connection is available). The geosnap `io` module (aliased here as `gio`) has a set of functions for creating datasets for different geographic regions and different time scales, as well as functions that store remote datasets to disk for repeated use
-
+otherwise it will be streamed from S3 (provided an internet connection is available).
+The geosnap `io` module (aliased here as `gio`) has a set of functions for creating
+datasets for different geographic regions and different time scales, as well as
+functions that store remote datasets to disk for repeated use.
 
 #### Environment
 
@@ -113,7 +196,6 @@ a blockgroup level. For a
 and their metadata, see the EPA page, but this dataset includes important variables like
 air toxics cancer risk, ozone concentration in the air, particulate matter, and proximity
 to superfund sites.
-
 
 #### Education
 
@@ -135,15 +217,31 @@ multiple geographic scales.
 
 #### Employment
 
-The LODES data contain job counts tabulated for home and workplace census block, and broken down by industrial sector, and a handful of demographic characteristics like race and education. LODES also provides flow matrices that show the origin and destination blockgroups, and the number of commuters who travel between the two. 
+The LODES data contain job counts tabulated for home and workplace census block, and
+broken down by industrial sector, and a handful of demographic characteristics like race
+and education. LODES also provides flow matrices that show the origin and destination
+blockgroups, and the number of commuters who travel between the two.
 
 ### Harmonization
 
-A common issue in spatial analysis is that geographic tabulation units can (and often do) change over time. For instance the U.S. census boundary polygons like tracts and blocks are re-drawn with each census to accomodate population growth and change. That means it's impossible to see if tract XZY has changed over time because "tract XYZ" means something different in each time period. To help solve that problem geosnap leverages the pysal [`tobler`](https://pysal.org/tobler) package to harmonize spatial boundaries over time. Doing so is as simple as calling the `harmonize()` function
+A common issue in spatial analysis is that geographic tabulation units can (and often
+do) change over time. For instance the U.S. census boundary polygons like tracts and
+blocks are re-drawn with each census to accomodate population growth and change. That
+means it's impossible to see if tract XZY has changed over time because "tract XYZ"
+means something different in each time period. To help solve that problem geosnap
+leverages the pysal [`tobler`](https://pysal.org/tobler) package to harmonize spatial
+boundaries over time. Doing so is as simple as calling the `harmonize()` function
 
-The simplest way to harmonize boundaries is to use areal interpolation, meaning we use the area of overlap between consecutive years to create a weighted sum of intersecting polygons. This approach assumes each polygon has constant density of each attribute so its most useful when the polygons are small and homogenous
+The simplest way to harmonize boundaries is to use areal interpolation, meaning we use
+the area of overlap between consecutive years to create a weighted sum of intersecting
+polygons. This approach assumes each polygon has constant density of each attribute so
+its most useful when the polygons are small and homogenous
 
-When harmonizing boundaries over time, we need to distinguish between [intensive and extensive](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties) variables because each needs to be handled differently during the interpolation process. Median income is a statistic (so intensive), whereas total population is a count (extensive), so we make sure to pass each to the appropriate list
+When harmonizing boundaries over time, we need to distinguish between
+[intensive and extensive](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties)
+variables because each needs to be handled differently during the interpolation process.
+Median income is a statistic (so intensive), whereas total population is a count
+(extensive), so we make sure to pass each to the appropriate list
 
 
 #### Harmonizing to a Common Census Boundary
@@ -174,7 +272,9 @@ plt.tight_layout()
 
 #### Harmonizing to an Alternative Polygon
 
-In some cases, it can be useful to discard the original boundaries altogether and instead harmonize all time periods to a consistent geographic unit defined elsewhere (like a school district, or congressional district, or a regular hexgrid)
+In some cases, it can be useful to discard the original boundaries altogether and
+instead harmonize all time periods to a consistent geographic unit defined elsewhere
+(like a school district, or congressional district, or a regular hexgrid)
 
 
 ```python
@@ -198,6 +298,13 @@ plt.tight_layout()
 ```
 
 ![Census Boundarized Harmonized to a Hexgrid](harmonize_hexgrid.png)
+
+After the harmonization process, each polygon represents a distinct portion of the study
+area whose boundaries are unchanging, and can be conceived as a discrete unit in
+temporal analyses. That is, unlike the original decennial census data whose polygons are
+different in each time period, the harmonized data can be used directly in studies of
+neighborhood change, for example those using Markov-based methods [@Agovino2019; @gallo_space-time_2004-1; @kang_rey_2018_ars; @rey_2016_jgs; @Rey2014] or
+sequence-analysis methods [@Kang2020a; @Lee2017] (both of which are built into `geosnap`)
 
 ### Analysis
 
@@ -247,7 +354,7 @@ and the number of clusters to fit (though some algorithms require different argu
 and/or discover the number of clusters endogenously. By default, this will z-standardize
 all the input columns, drop observations with missing values for input columns, realign
 the geometries for the input data, and return a geodataframe with the cluster labels as
-a new column (named after the clustering algorithm)
+a new column (named after the clustering algorithm).
 
 
 ```python
@@ -279,7 +386,7 @@ regionalization exercise, we are searching for groups of observations (census tr
 this case) which are similar in socioeconomic and demographic composition. If the goal
 of geodemographics is to identify neighborhood *types*, that could exist anywhere in the
 region, the goal of regionalization is to identify *specific neighborhoods* that exist
-at a distinct place in the region
+at a distinct place in the region.
 
 Following that concept, we can use constrained clustering to develop an empirical
 version of geographically-bounded neighborhoods, where the neighborhoods are defined by
@@ -329,21 +436,23 @@ tends to happen along the periphery and move inward, implying a certain kind of 
 dynamic). Following, we can also use the sequence of labels to create a spatial Markov
 transition model. These models examine how often one neighborhood type transitions into
 another type–then how these transition rates change under different conditions of
-spatial context
+spatial context.
 
 Here, a key question of interest concerns whether there is spatial patterning in the
 observed neighborhood transition. If neighborhood transitions are influenced by what
 occurs nearby, then it suggests the potential influence of spatial spillovers. Although
 there is nothing ‘natural’ about it, this phenomenon would be akin to classic
-sociological models of neighborhood change from the 1920s. Further, if there is evidence
-that space matters fortransitions, then any attempt to understand neighborhood processes
-in this region should also consider the importance of spatial interactionl. A natural
-way to understand the transition matrix between two neighborhood types is the plot the
-observed transition rates as a heatmap. The rows of the matrix define the origin
-neighborhoods (i.e. the neighborhood type at ) and the columns define the “destination”
-neighborhood type (the neighborhood type at ), for each of the types and the values of
-the cells are the fraction of transitions between these two types over all time
-periods.:
+sociological models of neighborhood change from the 1920s
+[@Park1925; @Park1936; @Park1952]. Further, if there is evidence that space matters for
+transitions, then any attempt to understand neighborhood processes in this region
+*should also consider the importance of spatial interaction*.
+
+A natural way to understand the transition matrix between two neighborhood types is the
+plot the observed transition rates as a heatmap. The rows of the matrix define the
+origin neighborhoods (i.e. the neighborhood type at ) and the columns define the
+“destination” neighborhood type (the neighborhood type at ), for each of the types and
+the values of the cells are the fraction of transitions between these two types over all
+time periods:
 
 $$
 \hat{p}_{i,j} = \frac{n_{i,j}}{\sum_{k=1}^k n_{i,k} }
@@ -379,11 +488,24 @@ probabilities update each round.
 
 #### Travel Isochrones
 
-As a package focused on "neighborhoods", much of the functionality in geosnap is organized around the concept of 'endogenous' neighborhoods. That is, it takes a classical perspective on neighborhood formation: a 'neighborhood' is defined loosely by its social composition, and the dynamics of residential mobility mean that these neighborhoods can grow, shrink, or transition entirely. 
+As a package focused on "neighborhoods", much of the functionality in geosnap is
+organized around the concept of 'endogenous' neighborhoods. That is, it takes a
+classical perspective on neighborhood formation: a 'neighborhood' is defined loosely by
+its social composition, and the dynamics of residential mobility mean that these
+neighborhoods can grow, shrink, or transition entirely.
 
-But two alternative concepts of "neighborhood" are also worth considering. The first, posited by social scientists, is that each person or household can be conceptialized as residing in *its own* neighborhood which extends outward from the person's household until some threshold distance. This neighborhood represents the boundary inside which we might expect some social interaction to occur with one's 'neighbors'. The second is a normative concept advocated by architects, urban designers, and planners (arguably still the goal for [new urbanists](http://www.newurbanism.org)): that a neighborhood is [a discrete pocket of infrastructure](https://en.wikipedia.org/wiki/Neighbourhood_unit) organized as a small, self-contained economic unit. A common shorthand today is the "20 minute neighborhood" [@Calafiore2022].
+But two alternative concepts of "neighborhood" are also worth considering. The first,
+posited by social scientists, is that each person or household can be conceptialized as
+residing in *its own* neighborhood which extends outward from the person's household
+until some threshold distance. This neighborhood represents the boundary inside which we
+might expect some social interaction to occur with one's 'neighbors'. The second is a
+normative concept advocated by architects, urban designers, and planners (arguably still
+the goal for [new urbanists](http://www.newurbanism.org)): that a neighborhood is
+[a discrete pocket of infrastructure](https://en.wikipedia.org/wiki/Neighbourhood_unit)
+organized as a small, self-contained economic unit. A common shorthand today is the "20
+minute neighborhood" [@Calafiore2022].
 
-![The 20-Minute Concept via [wikipedis](https://upload.wikimedia.org/wikipedia/en/e/e3/New_York_Regional_Survey%2C_Vol_7.jpg?20170410025533)](https://upload.wikimedia.org/wikipedia/en/e/e3/New_York_Regional_Survey%2C_Vol_7.jpg?20170410025533)
+![The 20-Minute Neighborhood Concept via [wikipedia](https://upload.wikimedia.org/wikipedia/en/e/e3/New_York_Regional_Survey%2C_Vol_7.jpg?20170410025533)](https://upload.wikimedia.org/wikipedia/en/e/e3/New_York_Regional_Survey%2C_Vol_7.jpg?20170410025533)
 
 
 The difference between these two perspectives is what defines the origin of the
@@ -391,15 +513,23 @@ neighborhood (the 'town center' or the person's home), and whether 'neighborhood
 universal to all neighbors or unique for each resident. Both of them rely abstractly on
 the concept of an isochrone: the set of destinations accessible within a specified
 travel budget. Defining an isochrone is a network routing problem, but its spatial
-representation is usually given as a polygon that covers the set of locations. That
-polygon is also sometimes called a walkshed (or *travel shed, depending on the
-particular mode). For the person at the center of the isochrone, whose "neighborhood"
-the isochrone represents, the polygon is sometimes conceptualized as an "egohood" or
-"bespoke neighborhood".
+representation is usually depicted as a polygon that encloses the set of reachable
+locations. That polygon is also sometimes called a walk-shed (or bike/transit/commute
+etc. "shed", depending on the particular mode of travel). For the person at the center
+of the isochrone, whose "neighborhood" the isochrone represents, the polygon is
+sometimes conceived as an "egohood" or "bespoke neighborhood"
+[@hipp2013EGOHOODSWAVES; @Kim2019; @knaap2023SegregatedDesign].
 
-Travel isochrones are a useful method for visualizing bespoke concepts of the 'neighborhood',
-but they can be computationally difficult to create because they require rapid calculation of
-shortest path distances in large travel networks. 
+Travel isochrones are a useful method for visualizing these bespoke concepts of the
+'neighborhood', but they can be computationally difficult to create because they require
+rapid calculation of shortest-path distances in large travel networks. Fortunately, a
+travel network is a special kind of network graph, and routing through the graph can be
+increased dramatically using pre-processing techniques known as contraction hierarchies
+that eliminate inconsequential nodes from the routing problem
+[@geisberger2012ExactRouting]. `geosnap` uses the `pandana` library [@Foti2012] which
+provides a Python interface to the contraction hierarchies routine and works extremely
+fast on large travel networks. This means geosnap can construct isochrones from massive
+network datasets in only a few seconds, thanks to `pandana`.
 
 ```python
 import quilt3 as q3
@@ -413,8 +543,19 @@ iso.explore()
 
 ![20-minute Walking Isochrone](isochrone.png)
 
+These accessibility isochrones can then be used as primitive units of inquiry in further
+spatial analysis. For example the isochrones can be conceived as "service areas" that
+define a reachable threshold accessible from a given provider (e.g., healthcare, social
+services, or healthy food).
+
 ### Conclusion
 
-In this paper we introduce the motivation and foundational design principles of the geospatial
-neighborhood analysis package `geosnap`. Intended for researchers, public policy professionals, urban planners, and spatial market analysts, among others, the package allows for rapid development and exploration of different models of 'neighborhood'. This includes tools for data ingestion and filtering
+In this paper we introduce the motivation and foundational design principles of the
+geospatial neighborhood analysis package `geosnap`. Intended for researchers, public
+policy professionals, urban planners, and spatial market analysts, among others, the
+package allows for rapid development and exploration of different models of
+'neighborhood'. This includes tools for data ingestion and filtering from commonly-used
+public datasets in the U.S., as well as tools for boundary harmonization, transition
+modeling, and travel-time visualization (all of which are applicable anywhere on the
+globe).
 

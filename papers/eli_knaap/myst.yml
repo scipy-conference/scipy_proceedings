@@ -3,18 +3,18 @@ project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-eli_knaap
   # Ensure your title is the same as in your `main.md`
-  title: Introducing geosnap
-  subtitle: The Geospatial Neighborhood Analysis Package
+  title: "geosnap: The Geospatial Neighborhood Analysis Package"
+  subtitle: Open Tools for Urban, Regional, and Neighborhood Science
   authors:
     - name: Elijah Knaap
       email: eknaap@sdsu.edu
-      orcid: 0000-0000-0000-0000
+      orcid: 0000-0001-7520-2238
       affiliations:
         - San Diego State University
         - Center for Open Geographical Science
     - name: Sergio Rey
       email: srey@sdsu.edu
-      orcid: 0000-0000-0000-0000
+      orcid: 0000-0001-5857-9762
       affiliations:
         - San Diego State University
         - Center for Open Geographical Science
@@ -35,6 +35,9 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - DeSabbata2019
+        - green1971SocialArea
+        - Shevky1955
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
