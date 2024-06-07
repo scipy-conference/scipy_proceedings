@@ -62,11 +62,11 @@ Researchers are faced with decisions of where to store the data from experiments
 With the growth of the echosounder datasets, researchers face challenges processing the data on their personal machines: both in terms of memory usage and computational time. A typical first attempt for resolution would be amend the workflow to process smaller chunks of the data and parallelize operations across multiple cores if available. However, today researchers are also presented with a multitude of options for distributed computing: high-performance computing clusters at local or national institutions, cloud provider services: batch computing (e.g. Azure Batch[ref], AWS Batch[ref]), elastic container services (e.g. , serverless options (e.g. Amazon Web Services Lamdba Functions [ref], Google Cloud Functions, Microsoft Azure Functions). The choice may be driven by the storage system: its access fees and retrieval speeds. Data, code and workflow organization usually has to be adapted based on the computing infrastructure. The knowledge required to configure these systems to achieve efficient processing is quite in-depth, and distributing libraries can be hard to debug and can have unexpected performance bottlenecks. *Abstracting the computing infrastructure and distribution of the tasks can allow researchers to focus on the scientific analysis of these large and rich datasets.*
 
 ## Echodataflow Overview
-At the center of `echodataflow`'s design is the notion that a workflow can be configured through a set of recipes (`.yaml` files) that specify the pipeline, data storage, and logging structure. The idea draws inspiration from the Pangeo-Forge Project [ref] which facilitates the Extraction, Transformation, Loading (ETL) of earth science geospatial datasets from traditional repositories to analysis-ready, cloud-optimized (ARCO) data stores [@pangeo-forge].  The pangeo-forge recipes provide a model of how the data should be accessed and transformed, and the project has garnered numerous recipes from the community. While Pangeo-Forge’s focus is on transformation from `.netcdf` [ref] and `hdf5` [ref] formats to `.zarr`, echodataflow’s aim is to support full echosounder data processing and analysis pipelines: from instrument raw data formats to biological products. `echodataflow` leverages Prefect [@prefect] to abstract data and computation management. In  we provide an overview of echodataflow’s framework. At the center we see several steps from an echosounder data processing pipeline: `open_raw`, `combine_echodata`, `compute_Sv`, `compute_MVBS`. All these functions exist in the echopype package, and are wrapped by echodataflow into predefined stages. Prefect executes the stages on a dask cluster which can be started locally or can be externally set up. These echopype functions already support distributed operations with dask thus the integration with Prefect within echodataflow is natural. Dask clusters can be set up on a variety of platforms: local, cloud, kubernetes [@kubernetes], HPC cluster via `dask-jobqueue` [@dask-jobqueue], etc. and allow abstraction from the computing infrastructure. Input, intermediate, and final data sets can live in different storage systems (local/cloud, public/private) and Prefect’s block feature provides seamless, provider-agnostic, and secure integration. Workflows can be executed and monitored through Prefect’s dashboard, while logging of each function is handled by echodataflow.
+At the center of `echodataflow`'s design is the notion that a workflow can be configured through a set of recipes (`.yaml` files) that specify the pipeline, data storage, and logging structure. The idea draws inspiration from the Pangeo-Forge Project [ref] which facilitates the Extraction, Transformation, Loading (ETL) of earth science geospatial datasets from traditional repositories to analysis-ready, cloud-optimized (ARCO) data stores [@pangeo-forge].  The pangeo-forge recipes provide a model of how the data should be accessed and transformed, and the project has garnered numerous recipes from the community. While Pangeo-Forge’s focus is on transformation from `.netcdf` [ref] and `hdf5` [ref] formats to `.zarr`, `echodataflow`’s aim is to support full echosounder data processing and analysis pipelines: from instrument raw data formats to biological products. `echodataflow` leverages Prefect [@prefect] to abstract data and computation management. In [Figure %s ](@echodataflow) we provide an overview of `echodataflow`’s framework. At the center we see several steps from an echosounder data processing pipeline: `open_raw`, `combine_echodata`, `compute_Sv`, `compute_MVBS`. All these functions exist in the `echopype` package, and are wrapped by `echodataflow` into pre-defined stages. Prefect executes the stages on a dask cluster which can be started locally or can be externally set up. These `echopype` functions already support distributed operations with dask thus the integration with Prefect within echodataflow is natural. Dask clusters can be set up on a variety of platforms: local, cloud, kubernetes [@kubernetes], HPC cluster via `dask-jobqueue` [@dask-jobqueue], etc. and allow abstraction from the computing infrastructure. Input, intermediate, and final data sets can live in different storage systems (local/cloud, public/private) and Prefect’s block feature provides seamless, provider-agnostic, and secure integration. Workflows can be executed and monitored through Prefect’s dashboard, while logging of each function is handled by echodataflow.
 
 :::{figure} echodataflow.png
 :label: fig:echodataflow
-**`echodataflow` Framework:** The above diagram provides an overview of the echodataflow framework: the task is to fetch raw files from a local filesystem/cloud archive, process them through several stages of an echosounder data workflow using a cluster infrastructure, and store intermediate and final products. Echodataflow allows the workflow to be executed based on text configurations, and logs are generated for the individual processing stages. Prefect handles the distribution of the tasks on the cluster, and provides tools for monitoring the workflow runs. 
+**`echodataflow` Framework:** The above diagram provides an overview of the `echodataflow` framework: the task is to fetch raw files from a local filesystem/cloud archive, process them through several stages of an echosounder data workflow using a cluster infrastructure, and store intermediate and final products. `echodataflow` allows the workflow to be executed based on text configurations, and logs are generated for the individual processing stages. Prefect handles the distribution of the tasks on the cluster, and provides tools for monitoring the workflow runs. 
 :::
 
 ### Why Prefect?
@@ -83,7 +83,7 @@ We next describe in more detail the components of the workflow lifecycle.
 The main goal of echodataflow is to allow users to configure an echosounder data processing pipeline through editing configuration “recipe” templates. Echodataflow can be configured through three templates: `datastore.yaml` which handles the data storage decisions, `pipeline.yml` which specifies the processing stages, and `logging.yaml` which sets the logging format. 
 
 ### Data Storage Configuration
-In [Figure %s ](#fig:datastore_config): `datstore.yaml` we provide an example of a data store configuration for a ship survey. In this scenario we want to process data from the Joint U.S.-Canada Integrated Ecosystem and Pacific Hake Acoustic Trawl Survey [@NWFSC_FRAM_2022]which is being publicly shared on an AWS S3 bucket by NOAA National Center for Environmental Information Acoustics Archive (NCEA)[@wall_2016]. The archive contains data from many surveys dating back to 1991 and contains ~280TB of data. The additional parameters referring to ship, survey, and sonar model names allow to select the subset of files belonging only to the survey of interest. The output is set to a private S3 bucket belonging to the user (i.e. an AWS account different from the input one), and the credentials are passed through a block_name. The survey contains ~4000 files, and one can set the group option to combine the files into survey-specific groups: based on transect information provided in the transect_group.txt file. One can further use regular expressions to subselect new groups based on needs. 
+In [Figure %s ](#fig:datastore_config): `datstore.yaml` we provide an example of a data store configuration for a ship survey. In this scenario we want to process data from the Joint U.S.-Canada Integrated Ecosystem and Pacific Hake Acoustic Trawl Survey [@NWFSC_FRAM_2022] which is being publicly shared on an AWS S3 bucket by NOAA National Center for Environmental Information Acoustics Archive (NCEA)[@wall_2016]. The archive contains data from many surveys dating back to 1991 and contains ~280TB of data. The additional parameters referring to ship, survey, and sonar model names allow to select the subset of files belonging only to the survey of interest. The output destination is set to a private S3 bucket belonging to the user (i.e. an AWS account different from the input one), and the credentials are passed through a `block_name`. The survey contains ~4000 files, and one can set the group option to combine the files into survey-specific groups: based on the transect information provided in the `transect_group.txt` file. One can further use regular expressions to subselect other subgroups based on needs. 
 
 :::{figure} datastore_config.png
 :label: fig:datastore_config
@@ -92,16 +92,16 @@ In [Figure %s ](#fig:datastore_config): `datstore.yaml` we provide an example of
 
 
 ### Pipeline Configuration
-The pipeline configuration file’s purpose is to list the stages of the processing pipeline and the computational set up for their execution. In [Figure %s ](#fig:pipeline_config) we provide a short example with two stages: `open_raw` (which fetches data from the cloud, converts it from proprietary raw format to a cloud native standardized output) and `compute_TS` (computes target strength: a popular quantity in fisheries acoustics). Each stage is executed as a separate Prefect subflow (a component of a Prefect workflow), and one can specify additional options on whether to store input and output files.  Echodataflow requires access to a dask cluster: one can either create one on the fly by setting the `use_local_dask` to `true`, or one can provide a link to an already running cluster. Individual stages may require different cluster configurations to efficiently execute the tasks. Those can be specified with the additional `prefect_config` option through which the user can set a specific dask task runner or the number of retries. Configuring retries is beneficial for handling transient failures, such as connectivity issues, ensuring the stages can be re-executed without any manual interference if a failure occurs.
+The pipeline configuration file’s purpose is to list the stages of the processing pipeline and the computational set-up for their execution. In [Figure %s ](#fig:pipeline_config) we provide a short example with two stages: `open_raw` (which fetches data from the cloud, converts it from a raw format to a cloud native standardized output) and `compute_TS` (computes target strength: a popular quantity in fisheries acoustics). Each stage is executed as a separate Prefect subflow (a component of a Prefect workflow), and one can specify additional options on whether to store the raw files. `echodataflow` requires access to a dask cluster: one can either create one on the fly by setting the `use_local_dask` to `true`, or one can provide a link to an already running cluster. Individual stages may require different cluster configurations to efficiently execute the tasks. Those can be specified with the additional `prefect_config` option through which the user can set a specific dask task runner or the number of retries. Managing retries is essential for handling transient failures, such as connectivity issues, ensuring the stages can be re-executed without any manual interference if a failure occurs.
 
 :::{figure} pipeline_config.png
 :label: fig:pipeline_config
-**Pipeline Configuration:** The pipeline consists of two stages: `echodataflow_open_raw` and `echodataflow_compute_TS` and will run on a local cluster
+**Pipeline Configuration:** The pipeline consists of two stages: `echodataflow_open_raw` and `echodataflow_compute_TS` and will run on a local cluster.
 :::
 
 ### Logging Configuration
 
-By default, the outcomes of each stage get logged. The logs can be stored in `.json` or plain text files, and the format of the entries can be specified in the configuration file [Figure %s ](#fig:logging_config). The `json` allows searching through the logs for a specific key.
+By default, the outcomes of each stage are logged. The logs can be stored in `.json` or plain text files, and the format of the entries can be specified in the configuration file [Figure %s ](#fig:logging_config). The `json` allows searching through the logs for a specific key.
 
 :::{figure} logging_config.png
 :label: fig:logging_config
@@ -114,11 +114,14 @@ In [Figure %s ](#fig:log_output) we show an example of output logs for different
 
 :::{figure} log_output.png
 :label: fig:log_output
-**Log Output:** The leading indicators are: date, process id, log level, followed by the module, function, line number, and message.
+**Log Output:** An example of an output log of file processing failure. The leading indicators for each entry are: date, process id, log level, followed by the module, function, line number, followed by the message.
 :::
 
+In Section [Workflow Logging](#Workflow-Logging), we provide more information on logging options.
+
+
 ## Workflow Execution
-To convert a scientific pipeline into an executable Prefect workflow, one needs to organize its components into flows, sublfows, and tasks (the key objects of Prefect’s execution logic). Usually, the stages of a pipeline will be organized into flows and subflows, while the individual pieces of work within the stage will be organized into tasks. In practice, flows, subflows, and tasks are all Python functions, and they differ in how we want to execute them (e.g. concurrently/sequentially, w/o retries), and what we want to track during execution (e.g. input/outputs, state logging, etc.). In echodataflow we organize the typical echosounder processing steps into subflows (flows within the main workflow), while the operations on different files are individual tasks. We describe how functions are organized in the `open_raw` stage, which reads the files from raw format, parses the data, and writes them into a `.zarr` format. In [Figure %s ](#fig:flow_task) we show how the `echodataflow_open_raw` function is decorated into a flow, and is one of many subflows of the full workflow. This function processed all files. Within the function we have a loop which goes through all the files and applies the process_raw function which operates on a single file and is decorated as a task. All tasks will be executed on the dask cluster. 
+To convert a scientific pipeline into an executable Prefect workflow, one needs to organize its components into flows, sublfows, and tasks (the key objects of Prefect’s execution logic). Usually, the stages of a pipeline will be organized into flows and subflows, while the individual pieces of work within the stage will be organized into tasks. In practice, flows, subflows, and tasks are all Python functions, and they differ in how we want to execute them (e.g. concurrently/sequentially, w/o retries), and what we want to track during execution (e.g. input/outputs, state logging, etc.). In `echodataflow` we organize the typical echosounder processing steps into subflows (flows within the main workflow), while the operations on different files are individual tasks. We describe how functions are organized in the `open_raw` stage, which reads the files from raw format, parses the data, and writes them into a `.zarr` format. In [Figure %s ](#fig:flow_task) we show how the `echodataflow_open_raw` function is decorated into a flow, and is one of many subflows of the full workflow. This function processes all files. The contains a loop which iterates through all files and applies the `process_raw` function which operates on a single file and is decorated as a task. All tasks will be executed on the dask cluster. 
 
 :::{figure} flow_task.png
 :label: fig:flow_task
@@ -127,19 +130,25 @@ To convert a scientific pipeline into an executable Prefect workflow, one needs 
 
 `
 ## Workflow Monitoring
-One of the main advantages of using an orchestration framework is the features it provides to monitor the workflow execution. The integration with Prefect allows leveraging Prefect’s dashboard for monitoring the execution of the flows: Prefect UI. The dashboard can be run locally and within Prefect’s online managed system (Prefect Cloud). The local version provides an entirely open source framework for running and monitoring workflows. [Figure %s ](#fig:echodataflow_flow_runs) shows the view of completed runs within the dashboard. 
+One of the main advantages of using an orchestration framework is the features it provides to monitor the workflow execution. The integration with Prefect allows leveraging Prefect’s dashboard for monitoring the execution of the flows: Prefect UI. The dashboard can be run locally and within Prefect’s online managed system (Prefect Cloud). The local version provides an entirely open source framework for running and monitoring workflows. [Figure %s ](#fig:flow_sequence_expanded) shows the view of completed runs within the dashboard. The progress can be monitored while the flows are in progress. 
 
-:::{figure} echodataflow_flow_runs.png
-:label: fig:echodataflow_flow_runs
-**Flow Runs:** Log of completed runs in Prefect UI
+:::{figure} flow_sequence_expanded.png
+:label: fig:flow_sequence_extended
+**Flow Runs:** Log of completed runs in Prefect UI. The stages (subflows) are executed sequentially. One can expand the view of an individual flow and see the tasks computed (asynchronously) within it.
 :::
 
-Further, one can also view the progress of the tasks while they are running: in Prefect UI, or in the dask dashboard [Figure %s ](fig:task_progress)
+Further, one can also view the progress of the execution of the tasks on the dask cluster.
 
 :::{figure} task_progress.png
 :label: fig:task_progress
-**Task Progress:** The progress of the execution can be monitored in the Prefect UI Dashboard (top) or the dask dashboard (bottom)
+**Flow Progress:** The progress of the execution can be monitored in the Prefect UI Dashboard (top) or the dask dashboard (bottom)
 :::
+
+:::{figure} dask_progress.png
+:label: fig: dask_progress
+**Dask Dashboard:** The execution of the tasks on the dask cluster can also be monitored through the dask dashboard.
+:::
+
 
 
 ## Workflow Logging
@@ -148,7 +157,7 @@ Processing large data archives requires a robust logging system to identify at w
 * Centralized Logging with AWS CloudWatch [ref]: this approach centralizes all logs for easy access and analysis. It can be useful when users are already utilizing AWS.
 * Advanced Logging with Kafka and Elastic Stack[ref]: this approach leverages Kafka for log aggregation and Elastic Stack for log analysis and visualization, offering a robust solution for those with the necessary infrastructure, for example data center managers.
 
-By default if logging is not configured, all the worker messages are directed to application console. The order of logs may not be preserved since logs are written once control returns from the Dask workers to the main application.
+By default if logging is not configured, all the worker messages are directed to the application console. The order of logs may not be preserved since logs are written once control returns from the Dask workers to the main application.
 
 ## Workflow Deployment 
 
@@ -209,9 +218,9 @@ echodataflow_compute_Sv:echodataflow_compute_MVBS
 
 These rules dictate the sequence in which stages should be executed, ensuring that each stage waits for its dependencies to complete. They can be set through the `echodataflow rules -add...` command.
 
-#### Aspect-Oriented Programming (AOP) in echodataflow
+#### Aspect-Oriented Programming (AOP) for Rule Validation
 
-In echodataflow, we adopt an aspect-oriented programming approach for rule validation. This is achieved using a decorator that can be applied to functions to enforce rules and log function execution details. The echodataflow decorator logs the entry and exit of a decorated function and modifies the function's arguments based on the execution context. This supports two types of execution: "TASK" and "FLOW".
+In `echodataflow`, we adopt an aspect-oriented programming [ref] approach for rule validation. This is achieved using a decorator that can be applied to functions to enforce rules and log function execution details. The echodataflow decorator logs the entry and exit of a decorated function and modifies the function's arguments based on the execution context. This supports two types of execution: "TASK" and "FLOW".
 
 Example Usage:
 
