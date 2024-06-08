@@ -1,8 +1,16 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: Computational Resource Optimisation in Feature Selection under Class Imbalance Conditions
+title: A Numerical Perspective to Terraforming a Desert
 abstract: |
-Feature selection is crucial for reducing data dimensionality as well as enhancing model interpretability and performance in machine learning tasks. However, selecting the most informative features in large dataset, often incurs high computational costs. This study explores the possibility of performing feature selection on a subset of data to reduce the computational burden. The study uses five real-life datasets with substantial sample sizes and severe class imbalance ratios between 0.09 – 0.18. The results illustrate the stability/variability of feature importance with smaller sample fractions in different models. In this study, LightGBM exhibited the most stable performance, even with reduced sample fractions.
+  A short version of the long version that is way too long to be written as a
+  short version anyway.  Still, when considering the facts from first
+  principles, we find that the outcomes of this introspective approach is
+  compatible with the guidelines previously established.
+
+  In such an experiment it is then clear that the potential for further
+  development not only depends on previous relationships found but also on
+  connections made during exploitation of this novel new experimental
+  protocol.
 ---
 
 ## Introduction
