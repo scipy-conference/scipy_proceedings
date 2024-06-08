@@ -37,10 +37,10 @@ As stipulated in the hypothesis of Darwin, individuals best adapted to their env
 In this section, we will describe our data, followed by an outline of the main steps used in data preprocessing and the software aPhyloGeo. 
 
 \subsection{Description of the data}
-The study area is located in a northern region of the North Atlantic, including the Icelandic Sea, the Denmark Strait, and the Norwegian Sea. The specimens examined in this study were gathered during the IceAGE project (Icelandic marine Animals: Genetic and Ecology; Cruise ship M85/3 in 2011; \cite{brix_iceage_2014}), which investigated the deep continental slopes and abyssal waters around Iceland \citep{meisner_prefacebiodiversity_2018}. The sampling period for the specimens included in this study was from August 30 to September 22, 2011, and they were collected at depths ranging from 316 to 2568 m.  Information about the sampling plan, sample processing, the steps of DNA extraction, PCR amplification, sequencing, and the extracted and aligned DNA sequences are available in the article by \cite{uhlir_adding_2021}.
+The study area is located in a northern region of the North Atlantic, including the Icelandic Sea, the Denmark Strait, and the Norwegian Sea. The specimens examined in this study were gathered during the IceAGE project (Icelandic marine Animals: Genetic and Ecology; Cruise ship M85/3 in 2011; \cite{brix_iceage_2014}), which investigated the deep continental slopes and abyssal waters around Iceland \citep{meisner_prefacebiodiversity_2018}. The sampling period for the specimens included in this study was from August 30 to September 22, 2011, and they were collected at depths ranging from 316 to 2568 m.  Information about the sampling plan, sample processing, the steps of DNA extraction, PCR amplification, sequencing, and the extracted and aligned DNA sequences are available in the article by \citep{uhlir_adding_2021}.
 
 \subsection{Data pre-processing}
-We used data from the IceAGE project and related data from the BOLD Systems database, both of which are accessible through the article by \cite{uhlir_adding_2021}. Given the enormous scope of attributes in these databases, we selectively reduced the number of attributes and samples. Specifically, we omitted attributes that were not relevant to the context of this study, were entirely or nearly invariable (non-numerical data), or had abundant missing data (>95\%). From the IceAGE project dataset, we considered 62 specimens out of the 495 available.
+We used data from the IceAGE project and related data from the BOLD Systems database, both of which are accessible through the article by \citep{uhlir_adding_2021}. Given the enormous scope of attributes in these databases, we selectively reduced the number of attributes and samples. Specifically, we omitted attributes that were not relevant to the context of this study, were entirely or nearly invariable (non-numerical data), or had abundant missing data (>95\%). From the IceAGE project dataset, we considered 62 specimens out of the 495 available.
 
 Subsequently, we calculated the variance for each of the selected numeric attributes to eliminate those with zero or low variance (cut-off ≤ 0.1). Equation \ref{variance} provides the formula for variance used in this study.
 
@@ -60,9 +60,9 @@ Meteorological parameters such as wind speed (m/s) (see Figure \ref{fig:fig1}f) 
 
 In the BOLD Systems database, taxonomic ranks such as family, genus, and species of the sampled Cumacea were included in our data. These are composed of seven families of Cumacea: Diastylidae ($n=21$), Lampropidae ($n=13$), Leuconidae ($n=12$), Nannastacidae ($n=7$), Bodotriidae ($n=4$), Ceratocumatidae ($n=3$), and Pseudocumatidae ($n=2$). A total of 21 species of Cumacea are found in our sample (see Figure \ref{fig:fig2}).
 
-The habitat and water mass of the sampling points are the only attributes taken directly via Table 1 of \cite{uhlir_adding_2021}. Thus, the definitions of water bodies described by \cite{hansen_north_2000, brix2010distribution, ostmann_marine_2014} were used as a reference for the GIN seas around Iceland: Arctic Polar Water (APW, $n=15$), Iceland Sea Overflow Water (ISOW, $n=15$), North Atlantic Water (NAW, $n=9$), Arctic Polar Water/Norwegian Sea Arctic Intermediate Water (APW/NSAIW, $n=7$), warm Norwegian Sea Deep Water (NSDWw, $n=8$), Labrador Sea Water (LSW, $n=3$), cold Norwegian Sea Deep Water (NSDWc, $n=3$), and Norwegian Sea Arctic Intermediate Water (NSAIW, $n=2$) (see Figure \ref{fig:fig3}). In terms of habitat, we considered the three categories used in \cite{uhlir_adding_2021}: deep sea ($n=38$), shelf ($n=15$), and slope ($n=9$) (see Figure \ref{fig:fig4}).
+The habitat and water mass of the sampling points are the only attributes taken directly via Table 1 of \citep{uhlir_adding_2021}. Thus, the definitions of water bodies described by \citep{hansen_north_2000, brix2010distribution, ostmann_marine_2014} were used as a reference for the GIN seas around Iceland: Arctic Polar Water (APW, $n=15$), Iceland Sea Overflow Water (ISOW, $n=15$), North Atlantic Water (NAW, $n=9$), Arctic Polar Water/Norwegian Sea Arctic Intermediate Water (APW/NSAIW, $n=7$), warm Norwegian Sea Deep Water (NSDWw, $n=8$), Labrador Sea Water (LSW, $n=3$), cold Norwegian Sea Deep Water (NSDWc, $n=3$), and Norwegian Sea Arctic Intermediate Water (NSAIW, $n=2$) (see Figure \ref{fig:fig3}). In terms of habitat, we considered the three categories used in \citep{uhlir_adding_2021}: deep sea ($n=38$), shelf ($n=15$), and slope ($n=9$) (see Figure \ref{fig:fig4}).
 
-In order to better interpret the relation and evolutionary responses of benthic species, genetic data are needed \citep{wilson_speciation_1987, uhlir_adding_2021}. Thus, the aligned DNA sequence of the mitochondrial 16S rRNA gene region of each of the samples are included in our analyses. We considered 62 of the 306 aligned DNA sequences that were used for phylogenetic analyses by \cite{uhlir_adding_2021}. Since some of the specimens in our sample have their DNA sequence duplicated, or even quadrupled with a difference of one to two nucleotides, we considered the longest aligned DNA sequence of each specimen. Figures \ref{fig:fig1}, \ref{fig:fig2}, \ref{fig:fig5}, and \ref{fig:fig6} were made using Python 3.11, while Figures \ref{fig:fig3} and \ref{fig:fig4} were made using RStudio Desktop 4.3.2.
+In order to better interpret the relation and evolutionary responses of benthic species, genetic data are needed \citep{wilson_speciation_1987, uhlir_adding_2021}. Thus, the aligned DNA sequence of the mitochondrial 16S rRNA gene region of each of the samples are included in our analyses. We considered 62 of the 306 aligned DNA sequences that were used for phylogenetic analyses by \citep{uhlir_adding_2021}. Since some of the specimens in our sample have their DNA sequence duplicated, or even quadrupled with a difference of one to two nucleotides, we considered the longest aligned DNA sequence of each specimen. Figures \ref{fig:fig1}, \ref{fig:fig2}, \ref{fig:fig5}, and \ref{fig:fig6} were made using Python 3.11, while Figures \ref{fig:fig3} and \ref{fig:fig4} were made using RStudio Desktop 4.3.2.
 
 \subsection{aPhyloGeo software}
 
@@ -122,12 +122,12 @@ if __name__ == "__main__":
 Our study investigates the genetic variation of Cumacea populations in relation to environmental factors. We aim to identify genetic regions with high mutation rates and their correlation with geographical distribution patterns. Through robust analytical methods, including dissimilarity calculations and phylogenetic reconstruction, we provide insights into the genetic adaptation of marine crustaceans. Our findings contribute to understanding evolutionary dynamics in marine ecosystems.
 
 \section{Metrics}\label{metrics}
-The following section presents a more concise version of the formulas mentioned in the third step of the previous section :
+The following section presents a more concise version of the formulas mentioned in the third step of the preceding section:
 
 \subsection{Robinson-Foulds Distance (RF distance)}\label{RF}
-The Robinson-Foulds distance measures the dissimilarity between two phylogenetic trees. It counts the quantity of clade pairs present in one tree but absent in the other. This distance is frequently applied to measure topological differences between two phylogenetic trees (see \autoref{lst:robinsonFoulds}).
+The Robinson-Foulds distance measures the dissimilarity between two phylogenetic trees by counting the quantity of clade pairs present in one tree but absent in the other. It is commonly used to quantify topological differences between two phylogenetic trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
 
-\begin{equation}
+\begin{equation}\label{eq:rf}
     \text{RF}(T_1, T_2) = | \Sigma(T_1) \Delta \Sigma(T_2) |
 \end{equation}
 
@@ -149,18 +149,18 @@ where $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of splits in trees $T_1$ and 
 
 
 \subsection{Normalized Robinson-Foulds Distance}\label{RFnorm}
-The normalized Robinson-Foulds distance scales the RF distance to account for the size of the trees to enable a fairer comparison between trees, giving a value between 0 and 1. In this case, the distance was normalized by $2n-6$, where $n$ represents the number of taxa, in order to compare the relative differences between trees \autoref{lst:euclideanDist}).
+The normalized Robinson-Foulds distance scales the RF distance to account for the size of the trees, enabling a fairer comparison between them and resulting in a value between 0 and 1. In this case, the distance was normalized by $2n-6$, where $n$ represents the number of taxa, to facilitate comparison of relative differences between trees (see Equation \eqref{eq:rf_norm} and \autoref{lst:euclideanDist}).
 
-\begin{equation}
+\begin{equation}\label{eq:rf_norm}
     \text{RF}_{\text{norm}}(T_1, T_2) = \frac{| \Sigma(T_1) \Delta \Sigma(T_2) |}{| \Sigma(T_1) | + | \Sigma(T_2) |}
 \end{equation}
 
 \subsection{Euclidean Distance}\label{euclidean}
-The Euclidean distance measures the distance in lenght between two points in a multi-dimensional space. It is adopted to evaluate the global difference between two DNA sequences according to their genetic characteristics (see \autoref{lst:euclideanDist}).
+The Euclidean distance measures the length between two points in a multi-dimensional space. It is adopted to evaluate the overall difference between two nucleotide sequences based on their genetic characteristics (see Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}).
 
 For points $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n)$:
 
-\begin{equation}
+\begin{equation}\label{eq:euclidean}
     d_{\text{Euclidean}}(\mathbf{p}, \mathbf{q}) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}
 \end{equation}
 
@@ -180,11 +180,11 @@ For points $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n
 \end{lstlisting}
 
 \subsection{Least-Squares Distance}\label{LS}
-The Least-Squares distance measures differences by considering the sum of the squares of differences between observed and estimated values provided by the model. In the context of this study, it measures the general dissimilarity between phylogenetic trees built from genetic sequences and environmental characteristics. It is also often used in regression analysis (see \autoref{lst:LeastSquare}).
+The Least-Squares distance measures differences by considering the sum of the squares of differences between observed and estimated values provided by the model. In the context of this study, it quantifies the overall dissimilarity between phylogenetic trees constructed from genetic sequences and environmental characteristics. This metric is also commonly utilized in regression analysis (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
 
 For observed values $y_i$ and estimated values $\hat{y}_i$:
 
-\begin{equation}
+\begin{equation}\label{eq:ls}
     d_{\text{LS}} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
 \end{equation}
 
@@ -206,21 +206,23 @@ These formulas succinctly describe the methods used to measure distances and dis
         return ls
 \end{lstlisting}
 
+Our phylogeography study utilizes the Robinson-Foulds, normalized Robinson-Foulds, Euclidean, and Least-Squares distances to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental characteristics, providing a comprehensive analysis of evolutionary dynamics in Cumacea populations.
+
 \section{Results}\label{results}
 
-Figure \ref{fig:fig1} shows the extent and variability of the dataset for two geographical attributes, namely latitude (decimal) and longitude (decimal) at the start of sampling, as well as six environmental attributes, such as wind speed (m/s) and depth (m) at the start of sampling and temperature ($\degree$C) and the oxygen concentration of the water (mg/L) based on the depth at which the samples were collected.
+Figure \ref{fig:fig1} shows the extent and variability of the dataset for two geographical attributes, namely latitude (decimal) and longitude (decimal) at the start of sampling, as well as six environmental attributes, such as wind speed (m/s) and depth (m) at the start of sampling and temperature ($^\circ$C) and the oxygen concentration of the water (mg/L) based on the depth at which the samples were collected.
 
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure1.jpg}
-    \caption{Violin diagrams of six geographical and environmental attributes in our sample. a) Latitude (decimal) at the beginning of sampling (red); b) Longitude (decimal) at the beginning of sampling (yellow); c) Depth (m) at the start of sampling (green); d) Wind speed (m/s) at the beginning of sampling (light blue); e) Water temperature (°C) according to the depth at which the specimens were collected (dark blue); (f) Oxygen concentration (mg/L) according to the depth at which the specimens were sampled (pink). The mean, median, standard deviation (Std, Dev), 1st quartile (Q1), and 3rd quartile (Q3) of the dataset for each attribute are shown in the top right corner of each chart. \label{fig:fig1}}
+    \caption{Violin diagrams of six geographical and environmental attributes in our sample. a) Latitude (decimal) at the beginning of sampling (red); b) Longitude (decimal) at the beginning of sampling (yellow); c) Depth (m) at the start of sampling (green); d) Wind speed (m/s) at the beginning of sampling (light blue); e) Water temperature ($^\circ$C) according to the depth at which the specimens were collected (dark blue); (f) Oxygen concentration (mg/L) according to the depth at which the specimens were sampled (pink). The mean, median, standard deviation (Std, Dev), 1st quartile (Q1), and 3rd quartile (Q3) of the dataset for each attribute are shown in the top right corner of each chart. \label{fig:fig1}}
 \end{figure}
 
 These digraphs are critical to designing the conditions of the habitats where the samples were collected, as high variability in the data may indicate heterogeneous habitats. In contrast, low variability dictates more homogeneous habitats. These diagrams can provide visual evidence supporting or refuting our hypothesis regarding the relationship between these environmental variables and Cumacea genetics. For example, if a correlation is found between temperature and certain genetic variations, this may support the idea that temperature influences the genetic structure of Cumacea populations. Thus, these violin graphs allow us to highlight rare environmental events or unique habitats that can potentially impact Cumacea genetics. 
 
-The mean, median, standard deviation, 1st and 3rd quartiles are represented in the top right corner of each of the six graphs. These make it possible to identify general trends in the data, irregularities or extreme values in our data and in capturing the diversity of environnemental conditions. For example, a significant dissimilarity between the mean and the median may indicate the presence of extreme values, as is the case for depth (m) at the beginning of sampling (Mean : 1412.57 and median : 1574.70). Unlike the mean, the median is less impacted by extreme values and provides an index of the central disposition of the data. Significant variations in standard deviation may indicate that some environmental parameters are more variable and could possibly impact Cumacea genetics differently, as is the case for depth (m) at the beginning of sampling (881.16) and followed by the oxygen concentration (mg/L) of water where the sample was collected (18.11). 
+The mean, median, standard deviation, 1st and 3rd quartiles are represented in the top right corner of each of the six graphs. These make it possible to identify general trends in the data, irregularities or extreme values in our data and in capturing the diversity of environnemental conditions. For example, a significant dissimilarity between the mean and the median may indicate the presence of extreme values, as is the case for depth (m) at the beginning of sampling (mean: 1412.57 and median: 1574.70). Unlike the mean, the median is less impacted by extreme values and provides an index of the central disposition of the data. Significant variations in standard deviation may indicate that some environmental parameters are more variable and could possibly impact Cumacea genetics differently, as is the case for depth (m) at the beginning of sampling (881.16) and followed by the oxygen concentration (mg/L) of water where the sample was collected (18.11). 
 
-The latitude (decimal) (see Figure \ref{fig:fig1}a) curve at the beginning of sampling has a bimodal asymmetric shape. It shows two peaks, suggesting that the samples stem from two dominant latitudinal regions at the beginning of sampling. This bimodality could refer to a geographical separation of samples into two different groups. This type of curve is also present for the longitude (decimal) at the beginning of the sampling (see Figure \ref{fig:fig1}b) as well as for the temperature ($\degree$C) (see Figure \ref{fig:fig1}e) and oxygen concentration (mg/L) of the water where the samples were collected (see Figure \ref{fig:fig1}f). The wind speed (m/s) at the beginning of the sample collection (see Figure \ref{fig:fig1}d) has a symmetrical shape, similar to a normal distribution, with a high concentration of data around the median (6.00). This indicates that wind conditions at the beginning of sampling must have been relatively stable. The depth (m) at the beginning of the sample collection has a multimodal shape with three prominent peaks. This suggests that the samples were collected at various depths, reflecting the diversity of benthic habitats.
+The latitude (decimal) (see Figure \ref{fig:fig1}a) curve at the beginning of sampling has a bimodal asymmetric shape. It shows two peaks, suggesting that the samples stem from two dominant latitudinal regions at the beginning of sampling. This bimodality could refer to a geographical separation of samples into two different groups. This type of curve is also present for the longitude (decimal) at the beginning of the sampling (see Figure \ref{fig:fig1}b) as well as for the temperature ($^\circ$C) (see Figure \ref{fig:fig1}e) and oxygen concentration (mg/L) of the water where the samples were collected (see Figure \ref{fig:fig1}f). The wind speed (m/s) at the beginning of the sample collection (see Figure \ref{fig:fig1}d) has a symmetrical shape, similar to a normal distribution, with a high concentration of data around the median (6.00). This indicates that wind conditions at the beginning of sampling must have been relatively stable. The depth (m) at the beginning of the sample collection has a multimodal shape with three prominent peaks. This suggests that the samples were collected at various depths, reflecting the diversity of benthic habitats.
 
 \begin{figure}[]
     \centering
