@@ -1,0 +1,68 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-00_amadi_udu
+  # Ensure your title is the same as in your `main.md`
+  title: Computational Resource Optimisation in Feature Selection under Class Imbalance Conditions
+  subtitle: MyST Markdown edition
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Amadi Gabriel Udu
+      email: agu1@le.ac.uk
+      orcid: 0000-0001-8944-4940
+      affiliations:
+        - School of Engineering, University of Leicester, LE1 7RH, Leicester, UK.
+        - Air Force Institute of Technology, Air Force Base, PMB 2104,  Kaduna, Nigeria.
+      corresponding: true
+    - name: Andrea Lecchini-Visintini
+      email: alv1e22@soton.ac.uk
+      orcid: 0000-0002-1654-8877
+      affiliations:
+        - School of Electronics and Computer Science, University of Southampton, SO17 1BJ, Southampton, UK.
+    - name: Stephen R. Gunn3
+      email: srg@ecs.soton.ac.uk
+      affiliations:
+        - School of Electronics and Computer Science, University of Southampton, SO17 1BJ, Southampton, UK.
+    - name: Norman Osa-uwagboe
+      email: n.osa-uwagboe@lboro.ac.uk
+      orcid: 0000-0002-6560-445X
+      affiliations: Wolfson School of Mechanical, Electrical, and Manufacturing Engineering, Loughborough University, LE11 3TU, Loughborough, UK.
+    - name: Maryam Khaksar Ghalati
+      email: mkg18@le.ac.uk
+      orcid: 0000-0002-6009-7946
+      affiliations: School of Engineering, University of Leicester, LE1 7RH, Leicester, UK.
+    - name: Hongbiao Dong
+      email: hd38@le.ac.uk
+      orcid: 0000-0003-1244-0364
+  keywords:
+    - feature selection
+    - class imbalance
+    - machine learning
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    LightGBM: Light Gradient-Boosting Machine
+    SVM: Support Vector Machines
+    RF: Random Forest
+    PFI: Permutation Feature Importance
+    IQR: Interquartile range
+    AUC: area under the Receiver Operator Characteristics (ROC) curve
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
