@@ -1,271 +1,262 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: A Numerical Perspective to Terraforming a Desert
+title: Computational Resource Optimisation in Feature Selection under Class Imbalance Conditions
 abstract: |
-  A short version of the long version that is way too long to be written as a
-  short version anyway.  Still, when considering the facts from first
-  principles, we find that the outcomes of this introspective approach is
-  compatible with the guidelines previously established.
-
-  In such an experiment it is then clear that the potential for further
-  development not only depends on previous relationships found but also on
-  connections made during exploitation of this novel new experimental
-  protocol.
+Feature selection is crucial for reducing data dimensionality as well as enhancing model interpretability and performance in machine learning tasks. However, selecting the most informative features in large dataset, often incurs high computational costs. This study explores the possibility of performing feature selection on a subset of data to reduce the computational burden. The study uses five real-life datasets with substantial sample sizes and severe class imbalance ratios between 0.09 – 0.18. The results illustrate the stability/variability of feature importance with smaller sample fractions in different models. In this study, LightGBM exhibited the most stable performance, even with reduced sample fractions.
 ---
 
 ## Introduction
 
-Twelve hundred years ago — in a galaxy just across the hill...
+In the development of prediction models for real-world applications, two key challenges often arise: high-dimensionality resulting from the numerous features, and class-imbalance due to the rarity of samples in the positive class. Feature selection methods are  utilised to address issues of high-dimensionality by selecting a smaller subset of relevant features, thus reducing noise, increasing interpretability, and enhancing model performance `[@Cai2018; @Dhal2022, @Udu2023]`. 
 
-This document should be rendered with MyST Markdown [mystmd.org](https://mystmd.org),
-which is a markdown variant inspired by reStructuredText. This uses the `mystmd`
-CLI for scientific writing which can be [downloaded here](https://mystmd.org/guide/quickstart).
-When you have installed `mystmd`, run `myst start` in this folder and
-follow the link for a live preview, any changes to this file will be
-reflected immediately.
+Studies `[@Matharaarachchi2021; @Tsai2020; @Yin2013; @deHaro-Garcia2020]` on the performance of feature selections methods with class imbalance data have been undertaken on using synthetic and real-life datasets. A significant drawback noted was the computational cost of their approach on large sample sizes.  While experimental investigations of feature selection amid class imbalance conditions have been studied in the literatures, there is a need to further understand the effect of sample size on performance degradation of feature selection methods. This would offer valuable insights into tackling the associated resource expense involved in undertaking feature selection with respect to large sample sizes where class-imbalance exists, for a wide range of applications. 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+This study investigates the impact of performing feature selection on a reduced dataset on feature importance and model performance, using five real-life datasets characterised by large sample sizes and severe class imbalance structures. We employ a rigorous feature selection process that utilises permutation feature importance (PFI) and evaluate the feature importance on LightGBM, random forest (RF) and SVM models. Evaluation of the feature importance was assessed using the area under the Receiver Operator Characteristics (ROC) curve, commonly referred to as AUC owing to its suitability in class imbalance problems `[@Luque2019; @Temraz2022]`. The development of the machine learning framework and data visualisation in this study was facilitated by several key Python libraries. Pandas `[@pandas1]` and NumPy `[@numpy]` were used for data loading and numerical computations, respectively. Scikit-learn `[@sklearn1]` provided tools for data preprocessing, model development, and evaluation. Matplotlib `[@matplotlib]` was employed for visualising data structures. Additionally, the SciPy `[@scipy]` library's cluster, spatial, and stats modules were crucial for hierarchical clustering, Spearman rank correlation, and distance matrix computations.
 
-## Bibliographies, citations and block quotes
+The rest of the paper is organised as follows: Section II briefly outlines the methodology adopted and present the results in Section III presents the results and discussion. The conclusion of the study is provided in Section IV.
 
-Bibliography files and DOIs are automatically included and picked up by `mystmd`.
-These can be added using pandoc-style citations `[@doi:10.1109/MCSE.2007.55]`
-which fetches the citation information automatically and creates: [@doi:10.1109/MCSE.2007.55].
-Additionally, you can use any key in the BibTeX file using `[@citation-key]`,
-as in [@hume48] (which literally is `[@hume48]` in accordance with
-the `hume48` cite-key in the associated `mybib.bib` file).
-Read more about [citations in the MyST documentation](https://mystmd.org/guide/citations).
+## Methodology
+# Description of datasets
+Five real life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine machine learning repository, including CDC Diabetes Health Indicator, Census Income, Bank Marketing, Statlog (Shuttle) `[@KellyUCI]`.The fifth dataset  is from damage morphology studies, Moisture Absorbed Composite `[@Osa-uwagboe2024]`. The datasets are presented in @tbl:dataset_summary. Notably,  all datasets exhibited high class imbalance ratios from 0.09 to 0.18.
 
-If you wish to have a block quote, you can just indent the text, as in:
-
-> When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication.
->
-> -- @hume48
-
-Other typography information can be found in the [MyST documentation](https://mystmd.org/guide/typography).
-
-### DOIs in bibliographies
-
-In order to include a DOI in your bibliography, add the DOI to your bibliography
-entry as a string. For example:
-
-```{code-block} bibtex
-:emphasize-lines: 7
-:linenos:
-@book{hume48,
-  author    =  "David Hume",
-  year      = {1748},
-  title     = "An enquiry concerning human understanding",
-  address   = "Indianapolis, IN",
-  publisher = "Hackett",
-  doi       = "10.1017/CBO9780511808432",
-}
-```
-
-### Citing software and websites
-
-Any paper relying on open-source software would surely want to include citations.
-Often you can find a citation in BibTeX format via a web search.
-Authors of software packages may even publish guidelines on how to cite their work.
-
-For convenience, citations to common packages such as
-Jupyter [@jupyter],
-Matplotlib [@matplotlib],
-NumPy [@numpy],
-pandas [@pandas1; @pandas2],
-scikit-learn [@sklearn1; @sklearn2], and
-SciPy [@scipy]
-are included in this paper's `.bib` file.
-
-In this paper we not only terraform a desert using the package terradesert [@terradesert], we also catch a sandworm with it.
-To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
-If you are citing a team, ensure that the author name is wrapped in additional braces `{Team Name}`, so it is not treated as an author's first and last names.
-
-```{code-block} bibtex
-:emphasize-lines: 2
-:linenos:
-@misc{terradesert,
-  author = {{TerraDesert Team}},
-  title  = {Code for terraforming a desert},
-  year   = {2000},
-  url    = {https://terradesert.com/code/},
-  note   = {Accessed 1 Jan. 2000}
-}
-```
-
-## Source code examples
-
-No paper would be complete without some source code.
-Code highlighting is completed if the name is given:
-
-```python
-def sum(a, b):
-    """Sum two numbers."""
-
-    return a + b
-```
-
-Use the `{code-block}` directive if you are getting fancy with line numbers or emphasis. For example, line-numbers in `C` looks like:
-
-```{code-block} c
-:linenos: true
-
-int main() {
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-    return 0;
-}
-```
-
-Or a snippet from the above code, starting at the correct line number, and emphasizing a line:
-
-```{code-block} c
-:linenos: true
-:lineno-start: 2
-:emphasize-lines: 3
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-```
-
-You can read more about code formatting in the [MyST documentation](https://mystmd.org/guide/code).
-
-## Figures, Equations and Tables
-
-It is well known that Spice grows on the planet Dune [@Atr03].
-Test some maths, for example $e^{\pi i} + 3 \delta$.
-Or maybe an equation on a separate line:
-
-```{math}
-g(x) = \int_0^\infty f(x) dx
-```
-
-or on multiple, aligned lines:
-
-```{math}
-\begin{aligned}
-g(x) &= \int_0^\infty f(x) dx \\
-     &= \ldots
-\end{aligned}
-```
-
-The area of a circle and volume of a sphere are given as
-
-```{math}
-:label: circarea
-
-A(r) = \pi r^2.
-```
-
-```{math}
-:label: spherevol
-
-V(r) = \frac{4}{3} \pi r^3
-```
-
-We can then refer back to Equation {ref}`circarea` or
-{ref}`spherevol` later.
-The `{ref}` role is another way to cross-reference in your document, which may be familiar to users of Sphinx.
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas[^footnote-1] diam turpis, placerat[^footnote-2] at adipiscing ac,
-pulvinar id metus.
-
-[^footnote-1]: On the one hand, a footnote.
-[^footnote-2]: On the other hand, another footnote.
-
-:::{figure} figure1.png
-:label: fig:stream
-This is the caption, sandworm vorticity based on storm location in a pleasing stream plot. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/arrays/streamplot.html).
-:::
-
-:::{figure} figure2.png
-:label: fig:em
-This is the caption, electromagnetic signature of the sandworm based on remote sensing techniques. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/stats/hist2d.html).
-:::
-
-As you can see in @fig:stream and @fig:em, this is how you reference auto-numbered figures.
-To refer to a sub figure use the syntax `@label [a]` in text or `[@label a]` for a parenhetical citation (i.e. @fig:stream [a] vs [@fig:stream a]).
-For even more control, you can simply link to figures using `[Figure %s](#label)`, the `%s` will get filled in with the number, for example [Figure %s](#fig:stream).
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
-
-```{list-table} This is the caption for the materials table.
-:label: tbl:materials
-:header-rows: 1
-* - Material
-  - Units
-* - Stone
-  - 3
-* - Water
-  - 12
-* - Cement
-  - {math}`\alpha`
-```
-
-We show the different quantities of materials required in
-@tbl:materials.
-
-Unfortunately, markdown can be difficult for defining tables, so if your table is more complex you can try embedding HTML:
-
-:::{table} Area Comparisons (written in html)
-:label: tbl:areas-html
-
+:::{table} Summary of datasets used in the study
+:label: tbl:dataset_summary
 <table>
-<tr><th rowspan="2">Projection</th><th colspan="3" align="center">Area in square miles</th></tr>
-<tr><th align="right">Large Horizontal Area</th><th align="right">Large Vertical Area</th><th align="right">Smaller Square Area<th></tr>
-<tr><td>Albers Equal Area   </td><td align="right"> 7,498.7   </td><td align="right"> 10,847.3  </td><td align="right">35.8</td></tr>
-<tr><td>Web Mercator        </td><td align="right"> 13,410.0  </td><td align="right"> 18,271.4  </td><td align="right">63.0</td></tr>
-<tr><td>Difference          </td><td align="right"> 5,911.3   </td><td align="right"> 7,424.1   </td><td align="right">27.2</td></tr>
-<tr><td>Percent Difference  </td><td align="right"> 44%       </td><td align="right"> 41%       </td><td align="right">43%</td></tr>
+  <thead>
+    <tr>
+      <th>Dataset</th>
+      <th style="text-align: center;">Features</th>
+      <th style="text-align: center;">Instances</th>
+      <th>Subject Area</th>
+      <th style="text-align: center;">Imbalance Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Diabetes health indicator</td>
+      <td style="text-align: center;">20</td>
+      <td style="text-align: center;">253,680</td>
+      <td>Health and Medicine</td>
+      <td style="text-align: center;">0.16</td>
+    </tr>
+    <tr>
+      <td>Census income</td>
+      <td style="text-align: center;">14</td>
+      <td style="text-align: center;">48,842</td>
+      <td>Social Science</td>
+      <td style="text-align: center;">0.09</td>
+    </tr>
+    <tr>
+      <td>Bank marketing</td>
+      <td style="text-align: center;">17</td>
+      <td style="text-align: center;">45,211</td>
+      <td>Business</td>
+      <td style="text-align: center;">0.13</td>
+    </tr>
+    <tr>
+      <td>Statlog (shuttle)</td>
+      <td style="text-align: center;">7</td>
+      <td style="text-align: center;">58,000</td>
+      <td>Physics and Chemistry</td>
+      <td style="text-align: center;">0.18</td>
+    </tr>
+    <tr>
+      <td>Moisture absorbed composite</td>
+      <td style="text-align: center;">9</td>
+      <td style="text-align: center;">295,461</td>
+      <td>Mechanics of Materials</td>
+      <td style="text-align: center;">0.11</td>
+    </tr>
+  </tbody>
 </table>
 :::
 
-or if you prefer LaTeX you can try `tabular` or `longtable` environments:
+Building data-driven models in the presence of  high dimensionality includes several steps such as data preprocessing, feature selection, model training and evaluation. To address class imbalance issues during model training, an additional resampling step may be performed to adjust the uneven distribution of class samples `[@Udu2024; @REZVANI2023110415; @Udu2023]`. This paper, however, focuses on the feature selection method, model training, and  the evaluation metrics adopted.
 
-```{raw} latex
-\begin{table*}
-  \begin{longtable*}{|l|r|r|r|}
-  \hline
-  \multirow{2}{*}{\bf Projection} & \multicolumn{3}{c|}{\bf Area in square miles} \\
-  \cline{2-4}
-   & \textbf{Large Horizontal Area} & \textbf{Large Vertical Area} & \textbf{Smaller Square Area} \\
-  \hline
-  Albers Equal Area   & 7,498.7   & 10,847.3  & 35.8  \\
-  Web Mercator        & 13,410.0  & 18,271.4  & 63.0  \\
-  Difference          & 5,911.3   & 7,424.1   & 27.2  \\
-  Percent Difference  & 44\%      & 41\%      & 43\%  \\
-  \hline
-  \end{longtable*}
+#  Feature selection and model training
+To maintain a model-agnostic approach that is not confined to any specific ML algorithm, this study employed PFI for feature selection. PFI assesses how each feature affects the model's performance by randomly shuffling the values of a feature and noting the resulting decrease in performance. This technique interrupts the link between a feature and its predicted outcome, thus enabling us determine the extent to which a model relies on a particular feature `[@Li2017; @sklearn1; @Kaneko2022]`. It is noteworthy that the effect of permuting one feature could be negligible when features are collinear,  and thus an important feature may report a low score. To tackle this, a hierarchical cluster on a Spearman rank-order correlation can be adopted, with a threshold taking from visual inspection of the dendrograms in grouping features into clusters and selecting the feature to retain.
 
-  \caption{Area Comparisons (written in LaTeX) \label{tbl:areas-tex}}
-\end{table*}
+## Results and Discussions
+Datasets were loaded using pandas, and categorical features were encoded appropriately. The Spearman correlation matrix was computed and then converted into a distance matrix. Hierarchical clustering was subsequently performed using Ward’s linkage method, and  a threshold for grouping features into clusters was determined through visual inspection of the dendrograms, allowing for the selection of features to retain. The hierarchical cluster and spearman’s ranking for moisture absorbed composite dataset is shown in @fig:f_matrix [a] and @fig:f_matrix [b] respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC. 
+
+:::{figure} 
+gsvs_hierclus.png 
+gsvs_cmap.png
+`<!--`pictures should be side by side with height of 5.8cm respectively. `-->`.
+:label: fig:f_matrix
+:alt: Feature relationship for moisture absorbed composite dataset; (a) hierarchical cluster, spearman correlation ranking.
+:::
+
+Subsequently, the investigation proceeded in two steps. In step 1,  the entire samples of the respective dataset was used. The dataset was split into training and test sets based on a test-size of 0.25. The respective classifiers were initialised using their default hyper-parameter settings and fitted on the training data. Thereafter, PFI was computed on the fitted model with number of times a feature is permuted set to 30 repeats. Lastly, the decrease in AUC was evaluated on the test set. @tbl:result_table gives the median and interquartile (IQR) importance scores importance scores based on the decrease in AUC. Values emphasised on the table represent the highest ranked feature for the respective classifier.
+
+In the second step, we initiate three for-loops to handle the different features, fractions of samples, and repetition of the PFI process undertaken in step 1. Sample fraction sizes were taken from 10% – 100% in increments of 10%, with the entire process randomly repeated 10 times. This provided an array of 300 AUC scores for each sample fraction and respective feature of the PFI process. To ensure reproducibility,  the random state for the classifiers, sample fractions, data split, and permutation importance were predefined.  Where possible, computation processes were done in parallel based on a joblib using the Sulis High Performance Computing platform. A sample source code of step 2 is presented:
+
+```python
+# Define the function for parallel execution
+def process_feature(f_no, selected_features, df):
+    for frac in np.round(np.arange(0.1, 1.1, 0.1), 2).tolist():  #loop for sample fractions
+        for rand in range(10): #loop for 10 repeats of the process
+            df_new = df.sample(frac=frac, random_state=rand)
+            X = df_new.drop('label', axis=1)
+            X = X.iloc[:, selected_features]
+            y = df_new['label']
+            X_train, X_val, y_train, y_val = train_test_split(X, y, random_state=rand)
+            lgbm = LGBMClassifier(random_state=random_seed, n_jobs=-1)
+            model= lgbm.fit(X_train, y_train)                
+            r = permutation_importance(model, X_val, y_val, n_repeats=30,
+                                       random_state=rand, scoring='roc_auc', n_jobs=-1)
+            importances.append(r.importances[f_no])
+        fractions.append(frac)
+        importances_all.append(importances)
+    return final_df
 ```
 
-Perhaps we want to end off with a quote by Lao Tse[^footnote-3]:
 
-> Muddy water, let stand, becomes clear.
+As observed in @fig:f_matrix [a], Frequency Centroid and Peak Frequency are in the same cluster with a highly correlated value of 0.957 shown in @fig:f_matrix [b]. Similarly, Rise Time and Initiation Frequency are clustered with a highly negative correlation of -0.862. Amplitude and Absolute Energy also exhibited a high positive correlation of 0.981. 
 
-[^footnote-3]: $\mathrm{e^{-i\pi}}$
+:::{table} Median and IQR importance scores of features.
+:label: tbl:result_table
+<table border="1">
+  <tr>
+    <th colspan="11">Census Income</th>    <th> </th>    <th colspan="11">Bank Marketing</th>
+  </tr>
+  <tr>
+    <th colspan="1">ID</th>    <th colspan="1">Feature</th>    <th colspan="3">LightGBM</th>    <th colspan="3">RF</th>    <th colspan="3">SVM</th>    <th></th>    <th colspan="1">ID</th>    <th colspan="1">Feature</th>    <th colspan="3">LightGBM</th>    <th colspan="3">RF</th>    <th colspan="3">SVM</th>
+  </tr>
+  <tr>
+    <th> </th>    <th> </th>     <th>Med</th>    <th colspan="2">IQR </th>    <th>Med</th>    <th colspan="2">IQR </th>    <th>Med</th>    <th colspan="2">IQR </th>    <th> </th>    <th> </th>    <th> </th> 
+    <th>Med</th>    <th colspan="2">IQR </th>    <th>Med</th>    <th colspan="2">IQR </th>    <th>Med</th>    <th colspan="2">IQR </th>
+  </tr> 
+  <tr>
+    <th> </th>    <th> </th>     <th> </th>     <th>25<sup>th</sup></th>    <th>75<sup>th</sup></th>    <th> </th>    <th>25<sup>th</sup></th>    <th>75<sup>th</sup></th>    <th> </th>    <th>25<sup>th</sup></th>
+    <th>75<sup>th</sup></th>    <th> </th>    <th> </th>    <th> </th>     <th> </th>     <th>25<sup>th</sup></th>    <th>75<sup>th</sup></th>    <th> </th>    <th>25<sup>th</sup></th>    <th>75<sup>th</sup></th>
+    <th> </th>    <th>25<sup>th</sup></th>    <th>75<sup>th</sup></th>  </tr>  
+<tr>
+    <td>0</td>
+    <td>Age</td> <td>0.077</td> <td>0.073</td> <td>0.081</td> <td>0.041</td> <td>0.039</td> <td>0.046</td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td> </td>
+    <td>1</td>   <td>Age</td> <td>0.031</td> <td>0.029</td> <td>0.034</td> <th>0.028</th> <th>0.024</th> <th>0.031</th> <td>-0.011</td> <td>-0.014</td> <td>-0.007</td>
+
+ </tr>
+ <tr>
+    <td>1</td> <td>Work class</td> <td>0.029</td> <td>0.027</td> <td>0.031</td> <td>0.017</td> <td>0.014</td> <td>0.019</td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>
+    <td></td><td>4</td>
+    <td>Job</td>
+    <td>0.005</td>    <td>0.003</td>    <td>0.006</td>    <td>0.005</td>    <td>0.003</td>    <td>0.009</td>    <td>-0.001</td>    <td>-0.002</td>    <td>0.001</td>
+</tr>
+ <tr>
+    <td>2</td><td>Final weight</td><td>0.002</td><td>0.001</td><td>0.002</td><td><10<sup>-3</sup></td><td>-0.003</td><td>0.002</td><td>0.004</td><td>-0.002</td><td>0.010</td><td></td>
+    <td>6</td><td>Default</td><td>-0.002</td><td>-0.003</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td>0.001</td><td>0.001</td><td><10<sup>-3</sup></td> <td>0.001</td>
+ </tr>
+ <tr>
+    <td>3</td><td>Education</td><td>0.047</td><td>0.044</td><td>0.049</td><td>0.041</td><td>0.038</td><td>0.047</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td></td>
+    <td>9</td><td>Housing</td><th>0.042</th><th>0.037</th><th>0.044</th><td>0.026</td><td>0.023</td><td>0.028</td><th>0.025</th><th>0.022</th> <th>0.027</th>
+ </tr>
+ <tr>
+    <td>7</td><td>Relationship</td><th>0.104</th><th>0.101</th><th>0.108</th><th>0.097</th><th>0.093</th><th>0.101</th><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td></td>
+    <td>13</td><td>Day of week</td><td>0.032</td><td>0.029</td><td>0.034</td><td>0.022</td><td>0.019</td><td>0.026</td><td>0.014</td><td>0.010</td> <td>0.017</td>
+ </tr>
+ <tr>
+    <td>8</td><td>Race</td><td>0.003</td><td>0.002</td><td>0.003</td><td>0.001</td><td><10<sup>-3</sup></th><td>0.002</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td></td>
+ </tr>
+ <tr>
+    <td>10</td><td>Capital-gain</td><td>0.043</td><td>0.042</td><td>0.044</td><td>0.042</td><td>0.040</td><td>0.044</td><th>0.034</th><th>0.031</th><th>0.036</th><td></td>
+ </tr>
+  <tr>
+    <th colspan="23"></th>
+  </tr>
+  <tr>
+    <th colspan="11">Statlog (Shuttle)</th>
+    <th> </th>
+    <th colspan="11">Diabetes</th>
+  </tr>
+   <tr>
+     <td>0</td><td>Rad Flow</td><th>0.355</th><th>0.350</th><th>0.360</th><th>0.387</th><th>0.383</th><th>0.389</th><td>0.253</td><td>0.249</td><td>0.259</td><td></td>
+    <td>0</td><td>HighBP</td><th>0.128</th><th>0.127</th><th>0.129</th><th>0.128</th><th>0.128</th><th>0.130</th><th>0.066</th><th>0.065</th><th>0.067</th>
+  </tr>
+  <tr>
+    <td>1</td><td>Fpv Close</td><td>0.005</td><td>0.005</td><td>0.005</td><td>0.012</td><td>0.011</td><td>0.013</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td>0.001</td>
+    <td></td><td>2</td><td>CholCheck</td><td>0.009</td><td>0.009</td><td>0.010</td><td>0.011</td><td>0.010</td><td>0.011</td><td>-0.001</td><td>-0.001</td><td>-0.001</td>
+  </tr>
+  <tr>
+    <td>2</td><td>Fpv Open</td><td>0.241</td><td>0.239</td><td>0.244</td><td>0.274</td><td>0.270</td><td>0.277</td><th>0.319</th><th>0.316</th><th>0.322</th>
+    <td></td><td>3</td><td>BMI</td><td>0.080</td><td>0.078</td><td>0.081</td><td>0.079</td><td>0.077</td><td>0.080</td><td>-0.073</td><td>-0.074</td><td>-0.072</td>
+  </tr>
+  <tr>
+  <td colspan="11"></td><td></td><td>4</td><td>Smoker</td><td>0.004</td><td>0.004</td><td>0.005</td><td>0.004</td><td>0.004</td><td>0.005</td><td>0.026</td><td>0.025</td><td>0.027</td>
+  </tr>
+
+  <tr>
+  <td colspan="23"
+  </tr>
+  
+  <tr>
+  <th colspan="11">Moisture Absorbed Composites</th>
+  </tr>
+
+  <tr>
+   <td>0</td><td>Risetime</td> <td>0.005</td>    <td>0.005</td>    <td>0.005</td>    <td>0.009</td>    <td>0.008</td>    <td>0.009</td><td>0.004</td><td>0.003</td><td>0.004</td>
+  </tr>
+  <tr>
+   <td>1</td><td>Counts</td>    <td>0.037</td>    <td>0.037</td>    <td>0.037</td>    <td>0.075</td>    <td>0.073</td>    <td>0.075</td>    <td>0.009</td>    <td>0.009</td>    <td>0.009</td>
+  </tr>
+  <tr> 
+   <td>4</td>    <td>ASL</td>    <td>0.034</td>    <td>0.034</td>    <td>0.034</td>    <td>0.072</td>    <td>0.071</td>    <td>0.073</td>    <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>    <td><10<sup>-3</sup></td>
+
+  </tr>
+  <tr> 
+   <td>7</td>    <td>Freq. Centroid</td>    <th>0.468</th>    <th>0.466</th>    <th>0.470</th>    <th>0.463</th>    <th>0.461</th>    <th>0.465</th>    <th>0.422</th> <th>0.421</th>    <th>0.425</th>
+
+  </tr>
+</table>
+
+
+:::
+From @tbl:result_table, SVM tended to be have very low scores in some datasets, possibly due to its reliance of support vectors in determining the decision boundaries. Thus, features with strong influence at the decision boundary but not directly affecting the support vectors may seem less important.   For the Moisture Absorbed Composite dataset, the three classifiers reported similar scores for Frequency Centroid of 0.468, 0.466 and 0.422 respectively in @tbl:result_table. 
+
+However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a relatively important feature, while SVM considered it insignificant. The mutability of importance scores for the classifiers considered underscores the need to explore multiple classifiers when undertaking a comprehensive investigation of feature importance for feature selection purposes. 
+
+:::{figure} 
+lgbm_census_income_feature_2.png 
+rf_census_income_feature_2.png
+svm_census_income_feature_2.png
+`<!--`pictures should be side by side with height of 4.85cm respectively. `-->`.
+:label: fig:cif
+:alt: Sample fractions and corresponding decrease in AUC for Final Weight feature of Census Income dataset; (a) LightGBM, (b) RF, (c) SVM.
+:::
+
+:::{figure} 
+lgbm_bank_marketing_feature_5.png 
+rf_bank_marketing_feature_5.png
+svm_bank_marketing_feature_5.png
+`<!--`pictures should be side by side with height of 4.85cm respectively. `-->`.
+:label: fig:bmf
+:alt: Sample fractions and corresponding decrease in AUC for Day of Week feature of Bank Marketing dataset; (a) LightGBM, (b) RF, (c) SVM.
+:::
+
+:::{figure} 
+lgbm_statlog_shuttle_feature_0.png 
+rf_statlog_shuttle_feature_0.png
+svm_statlog_shuttle_feature_0.png
+`<!--`pictures should be side by side with height of 4.85cm respectively. `-->`.
+:label: fig:statf
+:alt: Sample fractions and corresponding decrease in AUC for Rad Flow feature of Statlog dataset; (a) LightGBM, (b) RF, (c) SVM.
+:::
+
+@fig:cif [a] – @fig:cif [c] present the PFI for Final Weight feature of Census Income dataset, evaluated across different sample fractions using LightGBM, RF, and  SVM models, respectively. The decrease in AUC indicates the impact on model performance when Final Weight feature is permuted.  Generally, for smaller sample fractions, there was a higher variability in AUC and prominence of outliers. This could be attributed to the increased influence of randomness, fewer data points, and sampling fluctuations for smaller sample fractions across the datasets. It is noteworthy that reduced fractions also incur sample rarity effects of class imbalance data, which include a low stability of evaluation performance.
+
+For LightGBM model in @fig:cif [a], the median decrease in AUC was close to  zero,  indicating that Final Weight had minimal impact on model performance, as noted in @tbl:result_table. Similar results were recorded in fig:bmf for the Day of Week feature of Bank Marketing dataset, where all models exhibited similarly high feature importance scores on the Day of Week feature. Even for sample fractions of 0.5, LightGBM appeared to give similar importance scores to using the entire data sample. RF showed moderate variability and  outliers  in certain features, indicating  an occasional significant impact when features are permuted. On the other hand, SVM exhibited a higher median decrease in AUC, indicating that the Final Weight feature had a more significant impact on its performance. Additionally, SVM showed the greatest variability and the most prominent outliers, particularly at lower sample fractions. This was noticeable in @fig:statf, where all classifiers reported similar importance scores as noted in @tbl:result_table. This variability and the presence of outliers suggest that the model's performance is less stable when features are permuted. 
+
+PFI can provide insights into the importance of features, but it is susceptible to variability, especially with smaller sample sizes. Thus, complementary feature selection methods, could be explored to validate feature importance. Future work could investigate the variability of features under particular models and sample sizes, with a view to evolving methods of providing a more stable information to the models. 
+
+## Conclusion
+Feature selection for large datasets incurs considerable computational cost in the model development process of various machine learning tasks. This study aimed to optimise computational costs by investigating the influence of sample fractions on feature importance and model performance in datasets characterised by class imbalance. Five real-life datasets with large sample sizes from different subject fields which exhibited high class imbalance ratios of 0.09 – 0.18 were utilised. 
+
+Due to its model-agnostic nature, PFI was adopted for feature selection process. Cluster, spatial, and stats sub-packages of SciPy were instrumental in tackling the multicollinearity effects associated with PFI. Using a rigorous PFI approach, the study revealed the variability of feature importance with smaller sample fractions in LightGBM, random forest and SVM models. LightGBM demonstrated  the most stability, even with smaller sample fractions, suggesting its relative robustness to sample size and permutation across the features and class-imbalanced datasets. SVM exhibited a high variability in feature importance and prominence of outliers.
+
+Other feature selection methods such as shapely additive explanations, could be explored to cross-validate the importance of features. An understanding of the variability of feature importance can inform feature engineering efforts that provides means of alleviating the variability of feature importance in sample samples fractions under class imbalance conditions.
+
+## Acknowledgement
+This work was supported by the Petroleum Technology Development Fund under grant PTDF/ED/OSS/PHD/AGU/1076/17 and NISCO UK Research Centre. Computations were  per-formed using the Sulis Tier 2 HPC platform hosted by the Scientific Computing Research Technology Platform at the University of Warwick. Sulis is funded by EPSRC Grant EP/T022108/1 and the HPC Midlands+ consortium.
+
+## Supplementary Materials
+The supplementary material is also available [here](https://github.com/AmadiGabriel/scipy2024_paper).
