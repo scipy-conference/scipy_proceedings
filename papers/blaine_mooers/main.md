@@ -8,59 +8,60 @@ abstract: |
 
 ## Introduction
 
-Jupyter notebooks provide a highly interactive computing environment where Markdown and code cells are run to yield almost instant results.
-This form of interactive computing provides the instant gratification of seeing the results of the execution of the cells; this might be why Jupyter is so popular for data analysis [@Perkel2021TenComputerCodesThatTransformedScience].
+
+Jupyter notebooks provide a highly interactive computing environment where users run Markdown and code cells to yield almost instant results.
+This form of interactive computing provides the instant gratification of seeing the results of the cells' execution; this might be why Jupyter is so popular for data analysis [@Perkel2021TenComputerCodesThatTransformedScience].
 The most popular modality for interacting with the Jupyter notebooks is to use the keyboard and the computer mouse.
 However, there are opportunities to generate prose and code using one's voice instead of one's hands.
-While those who have lost use of their hands are forced to use only their voice, other users can augment their typing with their voice to enhance their productivity and perhaps give their hands a break when tired of typing.
-In other words, most users can use their voice to complement their use of the keyboard use.
-For example, dictation of prose in Markdown cells is an obvious application of voice computing in Jupyter.
-The ease of generating prose via speech can help promote more complete descriptions of the computations executed in adjacent code cells.
+While those who have lost use of their hands must rely solely on their voice, other users can enhance their prose generation with their voice to boost their productivity and give their hands a rest when fatigued from typing. This inclusive approach enhances the Jupyter notebook experience for all users, regardless of their physical abilities.
+In other words, most users can use their voices to complement their keyboard use.
+For example, dictating prose in Markdown cells is an obvious application of voice computing in Jupyter.
+The ease of generating prose via speech can promote more complete descriptions of the computations executed in adjacent code cells.
 
-Some Speech-to-text software also supports the mapping of a word or phrase to a text replacement; there are many ways of exploiting text replacements in Markdown and code cells.
-For Markdown cells, we have mapped the English contractions to their expansions, so whenever we say a contraction, the expansion is automatically inserted.
-This reduces the amount of editing downstream.
+Some Speech-to-text software also supports mapping a word or phrase to a text replacement; there are many ways of exploiting text replacements in Markdown and code cells.
+For Markdown cells, we have mapped the English contractions to their expansions, so whenever we say a contraction, the expansion automatically replaces the contraction. 
+This automation significantly reduces the need for manual editing, saving you valuable time and effort. By leveraging voice commands and text replacements, you can streamline your workflow and focus on the more critical aspects of your work.
 Another class of text replacements is the expansion of acronyms into the phrase they represent.
-The BibTeX cite keys for common references can also be mapped to a command like `cite key for scipy`.
-Equations type set in LaTeX for rendering with MathJaX can be mapped to commands like `inline pythargeous theorem` and `display electron density equation`, depending on whether the equation is to be *in-line* in a sentence or centered and  isolated in *display-mode*.
-Voice commands can be mapped to tables, templates, and even software licenses to be inserted as text replacements.
-For Jupyter code cells, voice commands can be mapped to chunks of code of various sizes.
-We call these voice commands that trigger a text replacement *voice triggers* in analogy to tab triggers with conventional tab-triggered snippets in advanced text editors.
+The BibTeX cite keys for standard references can also be mapped to a command like `cite key for scipy`.
+Equations type set in LaTeX for rendering with MathJaX can be mapped to commands like `inline pythargeous theorem` and `display electron density equation`, depending on whether the equation is to be *in-line* in a sentence or centered in *display-mode*.
+We also mapped voice commands to tables, templates, and software licenses.
+For Jupyter code cells, we mapped voice commands to chunks of code of various sizes.
+In analogy to tab triggers with conventional tab-triggered snippets in advanced text editors, we call these voice commands that trigger a text replacement *voice triggers*.
 
-To ease the use of voice commands in Jupyter notebook cells, we have developed sets of voice-triggered snippets for use in either Markdown or code cells.
-We are building on our prior experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
+To facilitate voice commands in Jupyter notebook cells, we have developed sets of voice-triggered snippets for use in Markdown or code cells.
+We are building on our prior experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
 Although the Jupyter environment supports polyglot programming, we have restricted our focus to Python and Markdown.
 While some code snippets are one-liners, most code snippets span many lines and perform a complete task, such as generating a plot from a data file.
 These libraries provide code that is known to work, unlike the situation with chatbots, which do not always return working code.
-The high reliability of code snippet libraries suggests that the demand for them will presist through the current AI hype cycle.
+The high reliability of our code snippet libraries assures you that the code you use is proven to work. 
+This trustworthiness suggests that the demand for them will persist through the current AI hype cycle [@Dedehayir2016TheHypeCycleModelAReviewAndFutureDirections], providing you with a stable and dependable tool for your Jupyter notebook projects.
 
 ## Methods and Materials
 
 ### Construction of the snippet libraries
-Some of our voice snippets had already been used for a year for the purpose of composing prose by using dictation.
+Some of our voice snippets had already been used for a year to compose prose using dictation.
 These snippets are in modular files to ease their selective use.
 The Voice-In Plus software accepts commands in a CSV file.
 The contents of these files can be copied and pasted into the `bulk add` text area of the Voice In Plus configuration GUI.
 
 ### Construction of interactive quizzes
-To aid the mastery of the VIP syntax, we developed interactive quizzes.
-The quizzes were written in  Python and can be run in the terminal are in Jupyter notebooks.
-The questions, answers, and explanations were stored in a tuple.
-The questions in a quiz were stored in a list of these tuples.
-The order of the questions was randomized upon restart of the quiz.
+We developed interactive quizzes to aid the mastery of the VIP syntax.
+We wrote the quiz as a Python script that can run in the terminal or in Jupyter notebooks.
+We stored each question, answer, and explanation in a tuple because tuples are immutable. 
+We stored the tuples in a list because lists are sortable.
+The quiz randomizes the order of the questions upon restart, ensuring a fresh and challenging experience every time.
 
-The wrongly answered questions are fed back to the user after they failed to correctly answer five questions.
-This recycling of the wrongly answered questions builds the recall of the correct answers.
+Our quiz is not just a test, it's a learning tool. When you fail to answer a question correctly, the quiz provides feedback, giving you the opportunity to learn from your mistakes and improve.
+Recycling the wrongly answered questions builds the recall of the correct answers.
 The number of questions in a quiz is limited to 40 to avoid exhausting the user.
 
 A function writes out the quiz to a PDF file upon completion of the quiz or upon early exiting the quiz.
-This PDF enables the printing of a quiz so that the paper version of the quiz can be taken while away from the computer.
+This PDF enables the printing of a quiz so a user can take the paper version while away from the computer.
 
 ### Availability of the libraries and quizzes
-The libraries were tested utilizing Jupyter Lab version 4.2 and Python 3.12 installed from Macports.
+We tested the libraries using Jupyter Lab version 4.2 and Python 3.12 installed from MacPorts.
 All libraries are made available at MooersLab on GitHub for download.
-
 
 ## Results
 
