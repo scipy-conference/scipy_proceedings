@@ -115,16 +115,16 @@ This automated replacement of English contractions saves time during the editing
 Webpage of custom commands. The buttons are used to edit existing commands and add new commands. Three English contractions and their expansions are shown.
 :::
 
-The contents of the library can be further organized by the first word of the voice trigger {ref}`table:commands`.
+We grouped the voice triggers by the first word of the voice trigger {ref}`table:commands`.
 This first word is often a verb.
-For example, the word `expand' is used to expand acronyms.
-Acronyms must be defined upon their first use.
+For instance, the word `expand' is a practical and useful command in our library. 
+This command expands acronyms, making it easier for users to understand the content.
 
-One's memory is often inaccurate about the words represented by the letters in the acronym.
-The library ensures that the correct expansion of the acronym is used.
-This can save time that would otherwise be spent looking up expansions.
+One's memory of the words represented by the letters in the acronym often needs to be more accurate.
+The library ensures that one uses the correct expansion of the acronym.
+By providing instant access to the correct acronym expansions, the library significantly reduces the time that would otherwise be spent on manual lookups, allowing you to focus on your work.
 We have included acronyms widely used in Python programming, scientific computing, data science, statistics, machine learning, and Bayesian data analysis.
-These commands are found in domain-specific libraries, so a user can select which voice triggers they would like to add to their private collection of voice commands.
+These commands are found in domain-specific libraries, so users can select which voice triggers to add to their private collection of voice commands.
 
 :::{table} Examples of voice commands with the prefix in bold that is used to group commands.
 :label: table:commands
