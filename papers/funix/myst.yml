@@ -3,7 +3,7 @@ project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-funix
   # Ensure your title is the same as in your `main.md`
-  title: Funix - vivifying (any) Python functions into GUI apps
+  title: Funix - vivifying Python functions into GUI apps
   subtitle: The laziest way to build apps by leveraging native features of Python and its ecosystem
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
