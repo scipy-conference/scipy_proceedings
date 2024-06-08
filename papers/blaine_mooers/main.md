@@ -170,7 +170,7 @@ The markup language code is inserted by using the verb *insert* followed by the 
 For example, the command `insert markdown itemized list` will insert five vertically aligned dashes to start an itemized list.
 The command `insert latex itemized list` will insert the corresponding code for an itemized list in LaTeX.
 
-We have developed a library specifically for the flavor of [Markdown](https://github.com/MooersLab/markdown-jupyter-voice-in/blob/main/markdown.csv utilized in Jupyter notebooks) []().
+We have developed a library specifically for the flavor of [Markdown](https://github.com/MooersLab/markdown-jupyter-voice-in/blob/main/markdown.csv) utilized in Jupyter notebooks.
 This library is used to insert the appropriate Markdown code in Markdown cells.
 
 We have included a [library for LaTeX](https://github.com/MooersLab/latex-voice-in) because tex files can be edited by Jupyter Lab.
