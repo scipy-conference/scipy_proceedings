@@ -34,6 +34,7 @@ project:
     - name: Hongbiao Dong
       email: hd38@le.ac.uk
       orcid: 0000-0003-1244-0364
+      affiliations: School of Engineering, University of Leicester, LE1 7RH, Leicester, UK.
   keywords:
     - feature selection
     - class imbalance
