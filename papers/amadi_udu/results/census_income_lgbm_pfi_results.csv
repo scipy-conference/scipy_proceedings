@@ -1,0 +1,8 @@
+Feature ID,Feature Name,Median Importance,25th Percentile,75th Percentile
+0,age,0.077,0.073,0.081
+1,workclass,0.029,0.027,0.031
+2,fnlwgt,0.002,0.001,0.002
+3,education,0.047,0.044,0.049
+7,relationship,0.104,0.101,0.108
+8,race,0.003,0.002,0.003
+10,capital-gain,0.043,0.042,0.044
