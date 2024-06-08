@@ -229,4 +229,4 @@ Other feature selection methods such as shapely additive explanations, could be 
 This work was supported by the Petroleum Technology Development Fund under grant PTDF/ED/OSS/PHD/AGU/1076/17 and NISCO UK Research Centre. Computations were  per-formed using the Sulis Tier 2 HPC platform hosted by the Scientific Computing Research Technology Platform at the University of Warwick. Sulis is funded by EPSRC Grant EP/T022108/1 and the HPC Midlands+ consortium.
 
 ## Supplementary Materials
-The supplementary material is also available [here](https://github.com/AmadiGabriel/scipy2024_paper).
+The supplementary material is also available...
