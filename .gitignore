@@ -5,5 +5,3 @@ _build
 *.pyc
 *.swp
 *~
-
-.vscode

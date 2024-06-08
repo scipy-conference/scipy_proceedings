@@ -13,7 +13,7 @@ For example, a large language model (LLM) is not accessible to the general publi
 Because most scientists and engineers are not familiar with frontend development which is JavaScript/TypeScript-centric, there have been many solutions based on Python, one of the most popular programming languages in scientific computing -- especially AI, such as [ipywidgets](https://ipywidgets.readthedocs.io/en/stable/), [Streamlit](https://streamlit.io/), [Gradio](https://www.gradio.app/), [Reflex](https://reflex.dev/), [Dash](https://dash.plotly.com/), and [PyWebIO](https://www.pyweb.io/).
 Most of them follow the conventional GUI programming philosophy that a developer needs to manually pick widgets from a widget library and associate them with the arguments and returns of an underlying function, which is usually called the "callback function."
 
-This approach has several drawbacks. **First**, it is a repetitive, manual process. A developer has to manually align and keep aligning the signature of the callback function with the GUI code. The dependency of between the two means that one can be derived from the other and the process could have be automated. **Second**, the developer is bounded by the widgets provided by a GUI library. If there is an unsupported datatype, the developer most likely has to give up due to the lack of frontend development knowledge. **Third**, they do not leverage the features of the Python language itself to automate the process. For example, most existing solutions require developers to manually specify the labels of widgets while such information is usually in the `params` or `args` sections in the docstrings of a function, which are very common in Python development. **Last** but not least, all existing solutions require the developer to read their documentations before being able to say "hello, world!" 
+This approach has several drawbacks. **First**, it is a repetitive, manual process. A developer has to manually align and keep aligning the signature of the callback function with the GUI code. The dependency of between the two means that one can be derived from the other and the process could have be automated. **Second**, the developer is bounded by the widgets provided by a GUI library. **Third**, they do not leverage the features of the Python language itself to automate the process. For example, most existing solutions require developers to manually specify the labels of widgets while such information is usually in the `params` or `args` sections in the docstrings of a function, which are very common in Python development. **Last** but not least, all existing solutions require the developer to read their documentations before being able to create a GUI, even one as simple as for saying "hello, world!”
 
 As a result, scientific developers, such as geophysicists, neurobiologists, or machine learning engineers, whose jobs are not building apps, are not able to quickly fire up apps to present their models, algorithms, or discoveries to the world.
 Every minute they spent on learning and building apps in existing solutions is a bad investment of their time because it does not advance their domain expertise or career goals.
@@ -67,7 +67,8 @@ The input panel of the app generated from [](#code_advanced_input_widgets) by Fu
 ```
 
 A collection of type-to-widget mappings comprise a theme.
-It not only allows firing up apps in a snap, but also makes it easy to keep the GUI appearance consistent across apps. Scientific developers can focus on building the functions that best use their domain knowledge and leave the rest to Funix, and if any, their UI teams that customizes the themes -- just like most scientists just use LaTeX classes or macros developed by others to get properly typeset papers.
+It not only allows firing up apps in a snap, but also makes it easy to keep the GUI appearance consistent across apps. Scientific developers can focus on building the functions that best use their domain knowledge and leave the rest to Funix. 
+If additional customization is desired, a theme can be expanded in the popular JSON format. In many cases, a Funix developer should be able to get support for a new type or a new widget  from themes developed by others -- just like most scientists just use LaTeX classes or macros developed by others to properly typeset their papers.
 <!-- Although Funix uses themes to control the UI, customizations that cannot be done via types, e.g., rate limiting, can be done via a Funix decorator. -->
 
 Besides types, Funix also makes use other features in the Python language or ecosystem to further automate app building. Docstrings are dominantly common in Python. Funix uses the information in Docstrings to control the UI appearance. For example, the annotation of each argument in the `Args` section in Google-style Docstrings or `Parameters` section in Numpy-style Docstrings can become the label/tooltip to explain the meaning of the argument to the app user. 
@@ -77,9 +78,9 @@ Funix is not only a GUI generator. It is a transcompiler that generates both the
 Therefore, Funix allows Python developers to tap into the frontend world without JavaScript/TypeScript knowledge.
 Consequently, Python becomes a surface language for web development. 
 
-Funix can be really useful for what we call "disposable apps" -- apps that are not the goal but a necessary step to the goal, and are not meant for long-term, wide-audience use. 
-Such disposable apps maybe recurrently needed, e.g., for building PoCs or small-scale data quality check. 
-Funix allows such apps to be launched rapidly and massively. 
+Funix can be really useful in building what we call "disposable apps" -- apps that are built for short-term/non-permanent purposes with a small group of audiences, such as demoing PoCs, trying out an AI model, collecting human labeling of AI training data, exhibiting the capabilities of an API, etc.
+Such disposable apps maybe recurrently needed and 
+Funix allows them to be launched rapidly again and again. 
 
 In summary, Funix has the following cool features to make building apps effortless (if not lazy or cheating):
 
@@ -473,7 +474,7 @@ A multiplage app generated by Funix from a class of three member methods includi
 ## The Funix decorators
 
 Although Funix relies on the Python language (including type hints and docstrings) itself to define GUI apps,
-there are still some aspects on the appearance and behavior of an apps uncovered. There is where the `@funix` decorator kicks. One example above is redirecting the `print` from `stdout` to the output panel of an app. Here we just show a few more examples.
+there are still some appearance and behavior aspects of an app uncovered. There is where the `@funix` decorator kicks in. One example above ([](#output-layout-in-print-and-return)) is redirecting the `print` from `stdout` to the output panel of an app. Here we just show a few more examples. For full details of the Funix decorators, please refer to the [Funix reference manual](http://funix.io).
 
 Funix uses types to determine the widgets. However, there may be occasions that modifying the typing-to-widget mapping may  not be worth it, for cases like exceptions. The `@funix` dectorator has a `widgets` parameter for this purpose. The `widgets` parameter takes the same value as in a Funix theme. [](#code_sentence_builder) is an example to temporarily override the widget choice for `List[Literal]`.
 
@@ -541,7 +542,7 @@ def sine(omega: FloatRangeSlider[0, 4, 0.1]) -> matplotlib.figure.Figure:
 A sine wave generator with the `autorun` parameter toggled on. Source code in [](#code_autorun).
 ```
 
-Although interactivity is not a strong suit of Funix for reasons aforementioned, Funix still provides some support to simple but frequently interactivity needs. It can reveal some widgets only when certain conditions are met. This is called "conditional visibility" in Funix.
+Although interactivity is not a strong suit of Funix for reasons aforementioned, Funix still provides some support to simple but frequent interactivity needs. It can reveal some widgets only when certain conditions are met. This is called "conditional visibility" in Funix.
 
 ```{code} python
 :label: code_conditional_visible
@@ -590,7 +591,7 @@ Funix can dynamically prefill widgets based on information from other widgets. W
 
 ```{code} python
 :label: code_reactive
-:caption: Reactive app. 
+:caption: A reactive app. 
 
 from funix import funix
 
