@@ -109,7 +109,6 @@ if __name__ == "__main__":
     trees.save_trees_to_json("./results/geneticTrees.json")
 \end{lstlisting}
 
-
 \begin{enumerate}
 \item \textbf{The first step} is to collect Cumacea DNA sequences of sufficient quality for the requirements of our results \citep{koshkarov_phylogeography_2022}. A total of 62 Cumacea samples were selected to represent 62 sequences of the gene mitochondrial 16S rRNA. Subsequently, we included four climatic factors, namely the temperature and O\textsubscript{2} concentration of the water, as well as the wind speed at the beginning and end of the sampling. We also included six geographical factors, such as the latitude, longitude, and depth of sample collection at the beginning and end of sampling.
 
@@ -117,6 +116,11 @@ if __name__ == "__main__":
 
 \item \textbf{In the third step}, the phylogenetic trees built in each sliding window are compared to environmental and geographical parameters using the Robinson-Foulds (RF) distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}, the normalized Robinson-Foulds distance, the Euclidean distance, and the Least-Squares distance. The distance was normalized by $2n-6$, where $n$ represents the number of taxa. The approach also considers bootstrapping. Thus, the use of the sliding window ensures detailed identification of regions with high genetic mutation rates \citep{koshkarov_phylogeography_2022}.
 \end{enumerate}
+
+
+\section{Our Contribution}
+
+Our study investigates the genetic variation of Cumacea populations in relation to environmental factors. We aim to identify genetic regions with high mutation rates and their correlation with geographical distribution patterns. Through robust analytical methods, including dissimilarity calculations and phylogenetic reconstruction, we provide insights into the genetic adaptation of marine crustaceans. Our findings contribute to understanding evolutionary dynamics in marine ecosystems.
 
 
 \section{Metrics}\label{metrics}
