@@ -3,7 +3,8 @@ Cumacea crustaceans serve as vital indicators of benthic health in marine ecosys
 
 Our analyses reveal significant spatial variation in environmental parameters, particularly depth, temperature, and dissolved oxygen. Cumacean diversity also exhibited variation across habitat types. Interestingly, specific genetic sequences displayed correlations with wind speed and oxygen levels, suggesting potential local adaptations to these fluctuating environmental conditions.
 
-These initial findings necessitate further exploration to elucidate the intricate relationships between Cumacean genetics and their environment. This study lays the groundwork for establishing correlations between specific mitochondrial gene regions and environmental variables. If substantiated, these findings would support the hypothesis of natural selection driving local adaptation of Cumacea to environmental gradients in the face of climate change. The aPhylo Python package is freely and publicly available on [GitHub](https://github.com/tahiri-lab/aPhyloGeo), and it is also available on [PyPi](https://pypi.org/project/aphylogeo/), to facilitate complex analyses.
+These initial findings necessitate further exploration to elucidate the intricate relationships between Cumacean genetics and their environment. This study lays the groundwork for establishing correlations between specific mitochondrial gene regions and environmental variables. If substantiated, these findings would support the hypothesis of natural selection driving local adaptation of Cumacea to environmental gradients in the face of climate change. The aPhyloGeo Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and it is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex analyses.
+
 \end{abstract}
 
 \section{Introduction}\label{introduction}
@@ -65,7 +66,7 @@ In order to better interpret the relation and evolutionary responses of benthic 
 
 \subsection{aPhyloGeo software}
 
-In this study, we use the cross-platform Python software aPhyloGeo for our phylogeographic analyses, which is designed to analyze phylogenetic trees using climate parameters. Developed by Nadia Tahiri, Georges Marceau, and David Beauchemin, the latter offers tools to study the correlations between the genetics of species and their habitats, thus allowing the understanding of the evolution of species under different environmental conditions. The aPhylo Python package is freely and publicly available on [GitHub](https://github.com/tahiri-lab/aPhyloGeo), and it is also available on [PyPi](https://pypi.org/project/aphylogeo/), to facilitate complex analyses. The software process takes place in three main steps. 
+In this study, we use the cross-platform Python software aPhyloGeo for our phylogeographic analyses, which is designed to analyze phylogenetic trees using climate parameters. Developed by Nadia Tahiri, Georges Marceau, and David Beauchemin, the latter offers tools to study the correlations between the genetics of species and their habitats, thus allowing the understanding of the evolution of species under different environmental conditions.The aPhyloGeo Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and it is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex analyses. The software process takes place in three main steps. 
 
     The first step is to collect Cumacea DNA sequences of sufficient quality for the requirements of our results \citep{koshkarov_phylogeography_2022}. A total of 62 Cumacea samples were selected to represent 62 sequences of the gene mitochondrial 16S rRNA. Subsequently, we included four climatic factors, namely the temperature and O2 concentration of the water, as well as the wind speed at the beginning and end of the sampling. We also included six geographical factors, such as the latitude, longitude, and depth of sample collection at the beginning and end of sampling.
 
@@ -150,12 +151,13 @@ For points $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n
 %\autoref{lst:euclideanDist}.
 \begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the Euclidean distance using the ete3 package in the aPhyloGeo package]
     def euclideanDist(tree1, tree2):
-        ed = 0
+        
         tns = dendropy.TaxonNamespace()
         tree1_tc = dendropy.Tree.get(data=tree1.format("newick"), schema="newick", taxon_namespace=tns)
         tree2_tc = dendropy.Tree.get(data=tree2.format("newick"), schema="newick", taxon_namespace=tns)
         tree1_tc.encode_bipartitions()
         tree2_tc.encode_bipartitions()
+
         ed = dendropy.calculate.treecompare.euclidean_distance(tree1_tc, tree2_tc)
 
         return ed
@@ -263,4 +265,3 @@ This study focuses on the effect of climatic variables and environmental charact
 The results show significant variability in the Cumacea environment according to many geographical and climatic factors, such as latitude, longitude, wind depth and speed at the beginning of the sampling as well as the temperature and oxygen concentration of the water. Excluding wind speed at the beginning of sampling, violin diagrams present bimodal or multimodal curves, suggesting a geographical and environmental separation of samples. DNA sequence analyses revealed specific genetic windows exposing high mutation rates in response to climatic variables such as wind speed at the start of sampling and water oxygen concentration. The Euclidean distances of these two parameters showed significant fluctuation across the sequences, indicating sensitive or variable sites about evolution.
 
 The results of this study highlight the importance of understanding the relationships between environmental attributes and genetics for benthic species such as Cumacea. The correlation between genetic variation and environmental characteristics can be used to explain how these organisms acclimatize to climate change as well as to anthropogenic disturbances, such as seabed mining. These notions are essential for the conservation of deep-sea ecosystems and for predicting the future impacts of environmental fluctuations on marine biodiversity. However, further analysis is needed to examine these results in depth. In particular, it would be relevant to study other environmental characteristics as well as other geographic regions in order to further examine the interactions between genotype and the environment.
-
