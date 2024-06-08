@@ -33,7 +33,7 @@ project:
   abbreviations:
     MyST: Markedly Structured Text
     AWS: Amazon Web Services
-    
+
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -53,6 +53,15 @@ project:
         - kafka
         - elastic_stack
         - gain_repo
+        - argo
+        - aop
+        - levels
+        - dagster
+        - dask-jobqueue
+        - hdf5
+        - echopy_2024
+        - korneliussen_lsss_2006
+        - prefect
         
 
 
