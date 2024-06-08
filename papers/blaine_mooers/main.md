@@ -89,14 +89,15 @@ While some code, such as line and cell magic, is specific to Jupyter, most of th
 
 ### Libraries for Markdown cells
 
-These libraries consist of a short phrase that is replaced with another phrase or with computer code.
-The short phrase to be replaced is called the voice-trigger, in analogy to the tab-trigger in text editors.
-Tab-triggers are typed with a keyboard and then the tab key is entered to trigger the insertion of the corresponding snippet of code.
-Often the tab trigger name is under tab completion, so in some text editors the tab key will have to be hit twice: the first tab is used to auto-complete the tab trigger name.
-The second tab then triggers the insertion of the corresponding code.
-This two-step process has the advantage of allowing the user to select a different tab trigger before inserting the code.
-Voice triggers differ in that there is no analog of a tab key required to insert the code.
-There is no opportunity to revise the voice trigger, so the insertion at the wrong code will have to be undone with the undo command.
+These libraries contain a short phrase paired with its replacement: another phrase or a chunk of computer code.
+In analogy to a tab trigger in text editors, we call the first short phrase a voice trigger.
+Tab triggers are initiated by typing, followed by the tab key, which inserts the corresponding snippet of code.
+Some text editors can autocomplete the tab-trigger name, so these text editors require two tab key entries. 
+The first tab auto-completes the tab-trigger name.
+Then, the second tab leads to the insertion of the corresponding code.
+This two-step process of tab triggers empowers users with the flexibility to select a different tab trigger before inserting the code, enhancing the customization potential of text editors.
+It is important to note that voice triggers, while efficient, do not allow for the revision of the voice trigger. 
+In the event of an incorrect code insertion, the undo command must be used, underscoring the need for caution when selecting voice triggers.
 
 The simplest text replacements involved the replacement of English contractions with their expansions {ref}`fig:contractions`.
 English contractions are not used in formal writing for many reasons.
