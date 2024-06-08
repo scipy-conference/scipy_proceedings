@@ -366,6 +366,9 @@ def foo(income: int = 200000, tax_rate: float= 0.45) -> Tuple[Markdown, HTML]:
 ```
 
 ```{figure} print_return.png
+:label: fig_print_return
+
+An app with output panel customized by `print` and `return`. Source code in [](#code_print_return).
 ```
 
 ### Streaming based on `yield`
