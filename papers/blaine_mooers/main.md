@@ -99,9 +99,9 @@ This two-step process of tab triggers empowers users with the flexibility to sel
 It is important to note that voice triggers, while efficient, do not allow for the revision of the voice trigger. 
 In the event of an incorrect code insertion, the undo command must be used, underscoring the need for caution when selecting voice triggers.
 
-The simplest text replacements involved the replacement of English contractions with their expansions {ref}`fig:contractions`.
-English contractions are not used in formal writing for many reasons.
-Many of the automatic speech recognition software packages will default to using contractions because the audience for the software are people who are writing informally for social media where English contractions are acceptable.
+The most straightforward text replacements involved the replacement of English contractions with their expansions {ref}`fig:contractions`.
+Science writers do not use English contractions in formal writing for many reasons.
+Many automatic speech recognition software packages will default to using contractions because the software's audience is people who write informally for social media, where English contractions are acceptable.
 By adding the library that maps contractions to their expansions, the expansion will be inserted whenever the contraction is used otherwise.
 This automated replacement of English contractions saves time during the editing process.
 
