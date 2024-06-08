@@ -109,28 +109,41 @@ Currently, Funix depends on the type hint for every argument or return of a func
 
 By default, Funix maps the following basic Python types to the following MUI components:
 
-| Python type | MUI component |
-|-------------|---------------|
-| `str`       | TextField |
-| `bool`      | Checkbox  |
-| `int`       | TextField |
-| `float`     | TextField |
-| `Literal`   | RadioGroup if number of elements is below 8; MultiSelect otherwise |
-| `range`     | Slider    |
-| `List[Literal]`  | An array of Checkboxes if the number of elements is below 8; AutoComplete otherwise |
+| Python type     | Input or Output | MUI component or HTML                                                                                                                                                                 |
+|-----------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `str`           | Input           | [TextField](https://mui.com/material-ui/react-text-field/)                                                                                                                            |
+| `bool`          | Input           | [Checkbox](https://mui.com/material-ui/react-checkbox/) or [Switch](https://mui.com/material-ui/react-switch/)                                                                        |
+| `int`           | Input           | [TextField](https://mui.com/material-ui/react-text-field/)                                                                                                                            |
+| `float`         | Input           | [TextField](https://mui.com/material-ui/react-text-field/) or [Slider](https://mui.com/material-ui/react-slider/)                                                                     |
+| `Literal`       | Input           | [RadioGroup](https://mui.com/material-ui/react-radio-button/) if number of elements is below 8; [Select](https://mui.com/material-ui/react-select/) otherwise                         |
+| `range`         | Input           | [Slider](https://mui.com/material-ui/react-slider/)                                                                                                                                   |
+| `List[Literal]` | Input           | An array of [Checkboxes](https://mui.com/material-ui/react-checkbox/) if the number of elements is below 8; [AutoComplete](https://mui.com/material-ui/react-autocomplete/) otherwise |
+| `str`           | Output          | Plain text                                                                                                                                                                            |
+| `bool`          | Output          | Plain text                                                                                                                                                                            |
+| `int`           | Output          | Plain text                                                                                                                                                                            |
+| `float`         | Output          | Plain text                                                                                                                                                                            |
 
 In particular, we leverage the semantics of `Literal` and `List[Literal]` for single-choice and multiple-choice selections.
 
 Because Funix is a transcompiler, it benefits from multimedia types defined in popular Python libraries. For example, the following `ipywidgets` and `IPython` types are natively supported by Funix -- although they are mapped to MUI components rather than `ipywidgets` (Jupyter's input widgets) or `IPython` (Jupyter's display system) components:
 
-| Python type | MUI component |
-|-------------|---------------|
-| `ipywidgets.Password` | TextField with `type="password"` |
-| `IPython.display.Image` | CardMedia with `component=img` |
-| `IPython.display.Video` | CardMedia with `component=video` |
-| `IPython.display.Audio` | CardMedia with `component=audio` |
+| Python type                                     | Input or Output | MUI component or HTML                                                             |
+|-------------------------------------------------|-----------------|-----------------------------------------------------------------------------------|
+| `ipywidgets.Password`                           | Input           | [TextField](https://mui.com/material-ui/react-text-field/) with `type="password"` |
+| `ipywidgets.Image`                              | Input           | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components      |
+| `ipywidgets.Video`                              | Input           | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components      |
+| `ipywidgets.Audio`                              | Input           | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components      |
+| `ipywidgets.FileUpload`                         | Input           | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components      |
+| `IPython.display.HTML`                          | Output          | Raw HTML                                                                          |
+| `IPython.display.Markdown`                      | Output          | [React Markdown](https://github.com/remarkjs/react-markdown)                      |
+| `IPython.display.JavaScript`                    | Output          | Raw JavaScript                                                                    |
+| `IPython.display.Image`                         | Output          | [CardMedia](https://mui.com/material-ui/react-card/#media) with `component=img`   |
+| `IPython.display.Video`                         | Output          | [CardMedia](https://mui.com/material-ui/react-card/#media) with `component=video` |
+| `IPython.display.Audio`                         | Output          | [CardMedia](https://mui.com/material-ui/react-card/#media) with `component=audio` |
+| `matplotlib.figure.Figure`                      | Output          | [mpld3](https://mpld3.github.io/)                                                 |
+| `pandas.DataFrame` & `pandera.typing.DataFrame` | Input & Output  | [DataGrid](https://mui.com/x/react-data-grid/)                                    |
 
-Funix also has built-in support to `pandas.DataFrame` and `matplotlib.figure.Figure`, which are mapped to tables and charts. For example, the function below
+Funix also has built-in support to `pandas.DataFrame` and `matplotlib.figure.Figure` as we mentioned above, which are mapped to tables and charts. For example, the function below
 
 ```python
 import pandas, matplotlib.pyplot
