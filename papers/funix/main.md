@@ -533,13 +533,9 @@ def after_tax_income_calculator(
 
 Lastly, togging on `show_source` parameter in `@funix` can enable the source code of your app to be displayed.
 
-## Miscellaneous features  
+## Jupyter support
 
-### History -- to do if having time on Saturday
-
-### Jupyter support
-
-Jupyter is a popular tool for Python development. Funix supports turning a Python function/class defined in a Jupyter cell into an app interactable in Jupyter.
+Jupyter is a popular tool for Python development. Funix supports turning a Python function/class defined in a Jupyter cell into an app inside Jupyter.
 
 ```{code}
 :label: code_jupyter
@@ -560,82 +556,178 @@ def hello(name: str) -> str:
 
 ## Showcases
 
-Lastly, please allow us to use some examples to show how "skeleton" -- not much UI related stuff -- the code can be to use Funix to build apps in Python.
+Lastly, please allow us to use some examples to demonstrate the convenient and power of Funix in quickly prototyping apps. If there is any frontend knowledge needed, it is only HTML. 
 
-1. [Wordle](https://github.com/TexteaInc/funix/blob/develop/examples/games/wordle.py)
+1. Wordle. 
+
+   The source code can be found [here](https://github.com/TexteaInc/funix/blob/develop/examples/games/wordle.py). In Funix, only simple HTML code that changes the background colors for tiles of letters according to the rule of the game Wordle is needed. A GIF showing the game in action is in [](#fig_wordle). 
   
     ```{figure} wordle.gif
     :label: fig_wordle
+
+    The Wordle game implemented in Funix. Source code [here](https://github.com/TexteaInc/funix/blob/develop/examples/games/wordle.py).
     ```
   
-2. Dall-E
+2. Dall-E. 
+
+   This example shows how easy to wrap a GenAI API into a GUI app. Once again, there is nothing special to Funix. Just plain Python code. 
   
-    ```{code}
+    ```{code} python
     :label: code_dalle
-    :caption: Dalle
+    :caption: Source code for the Dall-E app in Funix. The corresponding GUI app is shown in [](#fig_dalle).
     
     import openai  # pip install openai
-    import IPython
-    import funix
+    import IPython 
 
+    def dalle(Prompt: str = "a flying cat on a jet plane") 
+              -> IPython.display.Image:
 
-    cfg = {
-        "title": "OpenAI: Dall-E",
-        "description": "Generate an image with DALL-E in [Funix](http://funix.io), the minimalist way to build apps in Python. An OpenAI key needs to be set. A rate limit is applied. ",
-        "rate_limit": funix.decorator.Limiter.session(max_calls=1, period=60 * 60 * 24),
-        "show_source": True,
-    }
+    client = openai.OpenAI() # defaults to os.environ.get("OPENAI_API_KEY")
 
+    response = client.images.generate(
+        prompt=Prompt,
+    )
 
-    @funix.funix(**cfg)
-    def dalle_create(Prompt: str = "a cat on a red jeep") -> IPython.display.Image:
-        client = openai.OpenAI()  # defaults to os.environ.get("OPENAI_API_KEY")
-        response = client.images.generate(
-            prompt=Prompt,
-        )
-        return response.data[0].url
+    return response.data[0].url
     ```
   
     ```{figure} dalle.png
     :label: fig_dalle
     ```
   
-3. [ChatGPT multi-turn](https://github.com/TexteaInc/funix/blob/develop/examples/AI/chatGPT_muilti_turn.py)
-  
-    ```{figure} gpt.gif
-    :label: fig_gpt
-    ```
-  
-4. Multimedia
-  
-    ```{code}
-    :label: code_multimedia
-    :caption: Multimedia
-    
-    from openai import OpenAI
-    from funix.hint import BytesAudio
+3. ChatGPT multi-turn
 
-    import io
+   Funix does not have a chat widget, because it is so easy to build one by yourself using simple alignment controls in HTML. In this way, a developer has full control rather than being bounded by the widgets provided by a GUI library. [](#code_joke) is a simple example of a multi-turn chatbot using Funix. The corresponding app in action is in [](#fig_joke). The only thing Funix-specific in the code is using the `@funix` decorator to change the arrangement of the input and output panels from the default left-right to top-bottom.
+
+
+    ```{code} python
+    :label: code_joke
+    :caption: Multiturn chatbot using Funix.
+
+    import IPython     
+    from openai import OpenAI
+    import funix
 
     client = OpenAI()
 
+    messages  = []  # list of dicts, dict keys: role, content, system. Maintain the conversation history.
 
-    def audio_to_text(audio: BytesAudio) -> str:
-        buffer = io.BytesIO(audio)
-        buffer.name = "audio.ogg"
-        response = client.audio.transcriptions.create(
-            model="whisper-1",
-            file=buffer,
-            response_format="text",
+    def __print_messages_html(messages):
+        printout = ""
+        for message in messages:
+            if message["role"] == "user":
+                align, left, name = "left", "0%", "You"
+            elif message["role"] == "assistant":
+                align, left, name = "right", "30%", "ChatGPT"
+            printout += f'<div style="position: relative; left: {left}; width: 70%"><b>{name}</b>: {message["content"]}</div>'
+        return printout
+
+    @funix.funix(
+        direction="column-reverse",
+    )
+    def ChatGPT_multi_turn(current_message: str)  -> IPython.display.HTML:
+        current_message = current_message.strip()
+        messages.append({"role": "user", "content": current_message})
+        completion = client.chat.completions.create(messages=messages)
+        chatgpt_response = completion.choices[0].message.content
+        messages.append({"role": "assistant", "content": chatgpt_response})
+
+        return __print_messages_html(messages)
+    ```
+
+  
+    ```{figure} joke.gif
+    :label: fig_joke
+
+    A multi-turn chatbot in Funix in action. Source code in [](#code_joke).
+    ```
+  
+4. Multimodal inputs
+
+   Funix extends the support to `ipywidgets.{Image, Audio, File, Video}` to allow drag-and-drop of multimedia files or push-to-capture audio or video from the computer's microphone or webcam. 
+  
+    ```{code} python
+    :label: code_multimedia
+    :caption: A multimodal input demo in Funix built by simply wrapping OpenAI's GPT-4o demo code into a function with an  `ipywidgets.Image` input and a `str` output. The corresponding GUI app is shown in [](#fig_multimedia).
+    
+    import openai
+    import base64
+    from ipywidgets import Image
+    
+    client = openai.OpenAI()
+
+    def image_reader(image: Image) -> str:
+      """
+      # What's in the image? 
+
+      Drag and drop an image and see what GPT-4o will say about it. 
+      """
+
+      # Based on https://platform.openai.com/docs/guides/vision 
+      # with only one line of change
+      response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+          {
+            "role": "user",
+            "content": [
+               {"type": "text", "text": "What's in this image?"},
+               {"type": "image_url",
+               "image_url": {
+                  "url":f"data:image/png;base64,{base64.b64encode(image).decode()}",
+                },
+                },
+              ],
+          }
+        ],
+      )
+      return response.choices[0].message.content
+    ```
+  
+    ```{figure} drag_and_drop.png
+    :label: fig_multimedia
+
+    Funix maps a `ipywidgets.{Image, Audio, Video, File}`-type arguments to a drag-and-drop file uploader with push-to-capture ability from the microphone or webcam of the computer. The corresponding source code is in [](#code_multimedia).
+    ```
+
+  
+5. Vector stripping in bioinformatics. 
+
+   Vector stripping is a routine task in bioinformatics where appendix sequences (called "vectors") padded onto the nucleotide sequences of interest for easy handling or quality control are removed.
+   A vector stripping app only involves simple data structures, such as strings, lists of strings, and numeric parameters. This is a sweet spot of Funix. 
+   
+   Because the bioinformatics part of vector stripping is lengthy, we only show the interface function in [](#code_vector_stripping) and full source code can be found [here](https://github.com/TexteaInc/funix/blob/develop/examples/bioinformatics/vector_strip.py). `pandas.DataFrame`'s are used in both the input and output of this app, allowing biologists to batch process vector stripping by copy-and-pasting their data to Excel or Google Sheets, or uploading/downloading CSV files. 
+   
+    ```{code} python
+    :label: code_vector_stripping
+    :caption: The function that is turned into a vector stripping app by Funix. 
+
+    def remove_3_prime_adapter(
+        adapter_3_prime: str="TCGTATGCCGTCTTCTGCTT",
+        minimal_match_length: int = 8,
+        sRNAs: pandas.DataFrame = pandas.DataFrame(
+            {
+                "sRNAs": [
+                    "AAGCTCAGGAGGGATAGCGCCTCGTATGCCGTCTTCTGC",  # shorter than full 3' adapter
+                    "AAGCTCAGGAGGGATAGCGCCTCGTATGCCGTCTTCTGCTT",  # full 3' adapter
+                    # additional seq after 3' adapter,
+                    "AAGCTCAGGAGGGATAGCGCCTCGTATGCCGTCTTCTGCTTCTGAATTAATT",
+                    "AAGCTCAGGAGGGATAGCGCCTCGTATG",  # <8 nt io 3' adapter
+                    "AAGCTCAGGAGGGATAGCGCCGTATG",  # no match at all
+                ]
+            }
+        ),
+        # ) -> pandera.typing.DataFrame[OutputSchema]:
+    ) -> pandas.DataFrame:
+
+        ## THE BODY HIDDEN
+
+        return pandas.DataFrame(
+            {"original sRNA": sRNAs["sRNAs"], "adapter removed": list(return_seqs)}
         )
-        return response
+
     ```
-  
-    ```{figure} audio.gif
-    :label: fig_audio
-    ```
-  
-5. [Bioinformatics Vector stripping](https://github.com/TexteaInc/funix/blob/develop/examples/bioinformatics/vector_strip.py)
+
   
     ```{figure} vector_stripping.png
     :label: fig_vector_stripping
@@ -643,7 +735,11 @@ Lastly, please allow us to use some examples to show how "skeleton" -- not much 
 
 ## Conclusion
 
-In this paper, we introduce the philosophy and designs of Funix. The 
+In this paper, we introduce the philosophy and features of Funix. Funix is motivated by the observations in scientific computing that many apps are straightforward  input-output processes and the apps are meant to be disposable at a large volume. Therefore, Funix' goal is to enable developers, who are experts in their scientific domains but not in frontend development, to build apps by continue doing what they are doing, without code modification or learning anything new. 
+To get this goal, Funix leverages the language features of the Python language, including docstrings and keywords, to automatically generate the GUIs for apps and control the behaviors of the app.
+Funix tries to minimize reinventing the wheel by being a transcompiler between the Python word and the React world. 
+Not only does it expose developers to the limitless resources in the frontend world, but it also minimizes the learning curve. 
+Funix is still a very early-stage project. As an open-source project, we welcome feedback and contributions from the community.
 
 ## Acknowledgments
 
