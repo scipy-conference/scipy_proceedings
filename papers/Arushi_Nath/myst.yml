@@ -1,0 +1,40 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-Arushi_Nath
+  # Ensure your title is the same as in your `main.md`
+  title: Algorithms to Determine Asteroid’s Physical Properties using Sparse and Dense Photometry, Robotic Telescopes and Open Data
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Arushi Nath
+      email: Arushi@monitormyplanet.com
+      orcid: 0009-0007-5329-9148
+      affiliations:
+        - Founder, MonitorMyPlanet.com
+  keywords:
+    - Near-Earth Asteroids
+    - Python Algorithms
+    - Open Data
+    - Citizen Scientists
+    - Asteroid Characterization
+
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
