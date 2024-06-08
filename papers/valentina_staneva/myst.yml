@@ -32,6 +32,8 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    AWS: Amazon Web Services
+    
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -40,6 +42,20 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - saildrone_map
+        - kubernetes
+        - ncei_story_map
+        - drix
+        - saildrone
+        - luigi
+        - airflow
+        - cloudwatch
+        - kafka
+        - elastic_stack
+        - gain_repo
+        
+
+
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
@@ -50,3 +66,5 @@ project:
   date: 2024-07-10
 site:
   template: article-theme
+
+
