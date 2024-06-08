@@ -65,27 +65,27 @@ All libraries are made available at MooersLab on GitHub for download.
 
 ## Results
 
-First, we describe the contents of the snippet libraries and the kinds of problem they can solve.
+First, we describe the contents of the snippet libraries and the kinds of problems they can solve.
 We group the libraries into several categories to simplify their explanation.
-Second, we describe the deployment of the snippet libraries for Voice In Plus (VIP), a automated speech recognition plugin for the web browsers Google Chrome and Microsoft Edge.
+Second, we describe the deployment of the snippet libraries for Voice In Plus (VIP), an automated speech recognition plugin for the web browsers Google Chrome and Microsoft Edge.
 The Voice In Plus plugin has a gentle learning curve.
 The plugin requires an Internet connection to run.
 The results section that follows describes the libraries in the same order.
 
 ### Composition of the libraries
 
-We describe the libraries that we have developed to facilitate our own workflows.
-Our descriptions of these libraries are meant to illustrate how voice-triggered snippets are used with automated speech recognition software.
-The developers in our audience will either want to augment the libraries that we have developed with their own commands, or they will want to use our libraries as templates to develop their own libraries independently.
+We present the libraries we crafted to streamline using Jupyter with voice commands.
+Our descriptions of these libraries illustrate how voice-triggered snippets work with automated speech recognition software.
+Developers can leverage our libraries in two ways: by enhancing them with their unique commands or by using them as blueprints to create their libraries from scratch.
 
-The libraries are made available in a modular format so that the user can select sets of commands that are most useful for their workflow.
-In general, our libraries are quite broad in nature, so they meet the needs of most users.
-There are several libraries that are domain-specific.
-These libraries can inspire the development of libraries for other domains.
+The libraries are made available in a modular format so the user can select the most valuable commands for their workflow.
+In general, our libraries are broad in scope, so they meet the needs of most users.
+Several libraries are domain-specific.
+These domain-specific libraries serve as a catalyst for the creation of libraries tailored to other fields, sparking innovation and expanding the reach of voice-triggered snippets.
 
-The contents of the libraries can be divided into two categories.
-One subset of libraries supports carrying out dictation about science in the Markdown cells of Jupyter notebooks while the other subset supports writing scientific Python in code cells.
-While some code is specific to Jupyter, such as line and cell magics, most of the voice-triggered snippets can be used in Markdown files and Python scripts that are being edited in Jupyter Lab.
+We divided the contents of the libraries into two categories.
+One subset of libraries supports dictating about science in the Markdown cells of Jupyter notebooks, while the other subset supports writing scientific Python in code cells.
+While some code, such as line and cell magic, is specific to Jupyter, most of the voice-triggered snippets can be used in Markdown files and Python scripts being edited in Jupyter Lab.
 
 ### Libraries for Markdown cells
 
