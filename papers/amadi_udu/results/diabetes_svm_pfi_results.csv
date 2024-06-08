@@ -1,0 +1,5 @@
+Feature ID,Feature Name,Median Importance,25th Percentile,75th Percentile
+0,HighBP,0.066,0.065,0.067
+2,CholCheck,-0.001,-0.001,-0.001
+3,BMI,-0.073,-0.074,-0.072
+4,Smoker,0.026,0.025,0.027
