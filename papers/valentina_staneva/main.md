@@ -14,7 +14,7 @@ Acoustic fisheries surveys and ocean observing systems collect terabytes of echo
 :::{figure} data_collection.png
 :label: fig:data_collection
 **Data Collection Schemes:** left, ship survey transect map for the Joint U.S.-Canada Integrated Ecosystem and Pacific Hake Acoustic Trawl Survey[@NWFSC_FRAM_2022]; middle, USV path map for Saildrone west coast survey [@saildrone_map]; right, map and instrument diagram for a stationary ocean observing system (Ocean Observatories Initiative Cabled and Endurance Arrays [trowbridge_ooi_2019], Image Credit: Center for Environmental Visualization, University of Washington)
-
+:::
 
 ## Fisheries Acoustics Workflows
 Fisheries acoustics scientists traditionally have had go-to tools and procedures for their data processing and analysis, mostly relying on computation on a local computer. However, as the diversity of computing resources and data storage grows and the field becomes more interdisciplinary, it is becoming more challenging to make decisions on the best combination to accomplish the work. For example, [Figure %s ](#fig:workflow_variations) shows the many variations of workflows that can be defined based on the use cases, the options for data storage and computing infrastructure, which can be executed by scientists with backgrounds in physics, biology, oceanography, acoustics, signal processing, machine learning, software engineering, etc.
