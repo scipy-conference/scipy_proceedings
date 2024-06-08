@@ -19,18 +19,29 @@ The operation is scaled out on a Dask cluster for read performance.
 ### Cleaning and selecting data
 
 Once the data is in Awkward arrays, additional selections need to be applied before it can be analyzed.
-In this particular example, the simulation events need to be normalized to the amount of events in data.
-Event selections that correspond to the physics quantities of interest also need to be enforced.
-The final event topology of interest for the physics decay structure will have four charged leptons grouped in two opposite flavor lepton pairs (so that the total charge is zero, as the Higgs and the $Z$-bosons are electrically neutral).
+Only physics object of adequate quality are kept for further analysis and those should reconstruct the topology of interest.
+In this particular case, due to the decay of the Higgs boson to two leptons, the data selected contain four charged leptons grouped in two opposite flavor lepton pairs (so that the total charge is zero, as the Higgs and the $Z$-bosons are electrically neutral).
+Additionally, in order to compare various kinds of simulated data, the events need to be normalized/weighted given their relative appearance in reality and the amount of actual data collected by the experiment.
 
-These selection can then be implemented in an analysis specific `coffea` processor, and then the processor can be executed used a Dask executor to horizontally scale out the analysis selection across the available compute.
+These selection and weighting can then be implemented in an analysis specific `coffea` processor, and then the processor can be executed used a Dask executor to horizontally scale out the analysis selection across the available compute.
 
 ```{include} code/coffea.py
 :lang: python
 :caption: A `coffea` processor designed to make physics motivated event selections to create accumulators of the 4-lepton invariant mass.
 ```
 
-The example shown uses a simple selection process, but the methods used can use complex feature engineering that involve machine learning methods to calculate optimal discriminants.
+### Feature engineering: The invariant mass
+
+In order to discriminate the events of interest, i.e. candidates of the Higss boson decay, from the vast background which has the same experimental signature, a discriminating feature is constructed.
+The example shown uses a simple, physics-inspired discriminant the "invariant mass" but the methods used can use complex feature engineering that involve machine learning methods to calculate more efficient discriminants.
+The invariant mass is the mass of a system that remains constant regardless of the system's motion or the reference frame in which it is measured. Invariant mass is derived from the energy and momentum of a system of particles and is a fundamental property of the system:
+```{math}
+m = {\frac{\sqrt{E^2 - p(c)^2}}{c^2}}
+```
+where $E$ and $p$ is the total energy and momentum of the particles respectively.
+
+By detecting and measuring the energies and momenta of the detected particles at the experiment, we can reconstruct the invariant mass of the decay system. Particle systems originating from the decay of the Higgs boson will have a characteristic value of the invariant mass, which after the discovery in 2012 we know it is about 125$GeV/c^2$.
+This is the quantity that will allow us to discriminate from particle systems that originate from background processes.
 
 ### Measurement uncertainties
 
