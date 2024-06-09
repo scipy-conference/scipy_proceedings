@@ -83,6 +83,8 @@ project:
     AUC: area under the Receiver Operator Characteristics (ROC) curve
   numbering:
     headings: true
+  bibliography:
+  - mybib.bib
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
