@@ -14,7 +14,6 @@ project:
         - School of Engineering, University of Leicester, LE1 7RH, Leicester, UK.
         - Air Force Institute of Technology, Air Force Base, PMB 2104,  Kaduna, Nigeria.
       github: amadigabriel
-      googlescholar: GIb-Rv0AAAAJ
       roles:
         - Conceptualisation
         - Investigation
@@ -27,7 +26,6 @@ project:
       email: alv1e22@soton.ac.uk
       orcid: 0000-0002-1654-8877
       affiliations: School of Electronics and Computer Science, University of Southampton, SO17 1BJ, Southampton, UK.
-      googlescholar: TmhTYk0AAAAJ
       roles:
         - Conceptualisation
         - Methodology
@@ -36,7 +34,6 @@ project:
         - Validation
     - name: Steve R. Gunn
       email: srg@ecs.soton.ac.uk
-      googlescholar: NUhmjAoAAAAJ
       affiliations: School of Electronics and Computer Science, University of Southampton, SO17 1BJ, Southampton, UK.
       roles:
         - Supervision
@@ -45,7 +42,6 @@ project:
       email: n.osa-uwagboe@lboro.ac.uk
       orcid: 0000-0002-6560-445X
       affiliations: Wolfson School of Mechanical, Electrical, and Manufacturing Engineering, Loughborough University, LE11 3TU, Loughborough, UK.
-      googlescholar: nrqmgIUAAAAJ
       roles:
         - Resources
         - Data curation
@@ -54,7 +50,6 @@ project:
       email: mkg18@le.ac.uk
       orcid: 0000-0002-6009-7946
       affiliations: School of Engineering, University of Leicester, LE1 7RH, Leicester, UK.
-      googlescholar: 732Uq9UAAAAJ
       roles:
         - Conceptualisation
         - Methodology
@@ -63,7 +58,6 @@ project:
       email: hd38@le.ac.uk
       orcid: 0000-0003-1244-0364
       affiliations: School of Engineering, University of Leicester, LE1 7RH, Leicester, UK.
-      googlescholar: XjbU-7IAAAAJ
       roles:
         - Supervision
         - Funding acquisition
