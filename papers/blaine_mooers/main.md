@@ -185,23 +185,21 @@ We included the markup associated with the yasnippet snippet libraries to serve 
 
 
 ### Libraries for code cells
-
-The code-cell libraries utilize the `insert` command to insert chunks of Python code.
+The `insert` command in code-cell libraries is a powerful tool that allows the seamlessly insert of chunks of Python code, enhancing your data science workflow.
 We avoid making voice commands for small code fragments that might fit on a single line.
 An exception to this was the inclusion of a collection of one-liners that are in the form of several kinds of comprehensions.
-As mentioned above, we have developed chunks of code to perform specific functions.
+As mentioned earlier, we have developed practical chunks of code that are designed to perform specific functions, making your data analysis tasks easier and more efficient.
 These chunks of code could be functions or lines of code that produce an output in the form of a table, plot, or analysis.
 The idea was to fill a code cell with all the code required to produce the desired output.
 Unfortunately, the user will still have to use their voice or computer mouse to move the cursor back over the code chunk and customize portions of the code chunk as required for the task at hand.
 
 While self-contained examples that utilize generated data can illustrate concepts, these examples are frustrating for beginners who need to read actual data and would like to apply the code example to their problem.
-Reading appropriately cleaned data is a common task in data science and a common barrier to applying Jupyter notebooks to Scientific problems.
-We provide code fragments in a data wrangling library that support the importing of several file types directly for downstream utilization and for importing the data into numpy, pandas, and several of the more recently developed programs that support multidimensional data structures.
+Reading appropriately cleaned data is a common task in data science and a common barrier to applying Jupyter notebooks to scientific problems.
+Our data wrangling library provides code fragments that directly import various file types, easing the tedious task of data import and allowing focus on downstream utilization and analysis.
 
 After the data is input, it needs to be displayed in a tabular format for inspection to check that it was properly imported and to carry out basic summarization statistics by column and row.
-
 After the data are verified as being correctly imported, it is often necessary to explore them by plotting them to detect relationships between a model's parameters and the output.
-We strove to focus on the matplotlib library, which generates a wide variety of plots [@matplotlib].
+Our focus on the versatile matplotlib library, which generates a wide variety of plots, is designed to inspire creativity in data visualization and analysis.
 Our code fragments cover the most commonly used plots, such as scatter plots, bar graphs (including horizontal bar graphs), kernel density fitted distributions, heat Maps, pie charts, and contour plots.
 We include a variety of examples for the formatting of the tick marks and axis labels as well as the keys and the form of the lines so users can use this information as templates to generate plots for their own purposes.
 The generation of plots with lines of different shapes, whether solid, dashed, dotted, or combinations thereof, is essential because plots generated with just color are vulnerable to having their information compromised when printed in grayscale.
@@ -210,14 +208,11 @@ Although we provide some examples from higher-order plotting programs like Seabo
 We also support the import of external images.
 This is often overlooked, but these externally derived images are often essential parts of the story the Jupyter notebook is telling.
 
-
 ### Jupyter specific library
 
-We provide a [library](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) of 85 cell and line magics  that facilitate the Jupyter notebook's interaction with the rest of the operating system.
-The cell magics have the prefix *cell magic*, and the line magics have the preflx *line magic*.
+We provide a [library](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) of 85 cell and line magics that facilitate the Jupyter notebook's interaction with the rest of the operating system.
+Our cell magics, easily identifiable by their cell magic prefix, and line magics, with the straightforward line magic prefix, are designed to make the Jupyter notebook experience more intuitive.
 For example, the voice command *line majic run* insert `%run`; it is used to run script files after supplying the name of the script file as also shown in {fig}`quiz`.
-
-
 
 ### Interactive quiz
 
