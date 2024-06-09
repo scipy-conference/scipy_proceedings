@@ -216,25 +216,24 @@ For example, the voice command *line majic run* insert `%run`; it is used to run
 
 ### Interactive quiz
 
-We developed a [quiz](https://github.com/MooersLab/voice-in-basics-quiz) to improve recall of the voice commands .
-These quizzes are interactive and can be run in the terminal or in Jupyter notebooks {ref}`fig:quiz`.
-The latter can be saved to keep a record of one's performance on a quiz.
-
+We developed a [quiz](https://github.com/MooersLab/voice-in-basics-quiz) to improve recall of the voice commands.
+These quizzes, designed for your convenience, are interactive and can be run in the terminal or in Jupyter notebooks {ref}`fig:quiz`.
+The latter can store a record of one's performance on a quiz.
 
 :::{figure} ./images/runningQuiz.png
 :label: fig:quiz
 :width: 130% 
-An example of an interactive session with a quiz in a Jupyter notebook. The code for running the quiz was inserted into the code cell with the voice command `run voice in quiz`.
+An example of an interactive session with a quiz in a Jupyter notebook. The code for running the quiz was inserted into the code cell with the voice command `run voice in quiz`. The quiz covers a range of voice commands, including [specific voice commands covered in the quiz].
 :::
 
-To build long-term recall of the commands, one must take the quiz five or more times on alternate days according to the principles of spaced repetition learning.
+To build long-term recall of the commands, one must take the quiz five or more times on alternate days, according to the principles of spaced repetition learning.
 These principles were developed by the German psychologist Hermann Ebbinghaus in the last part of the 19th Century.
 They have been validated several times by other researchers.
 Space repetition learning is one of the most firmly established results of research into human psychology.
 
-Most people lack the discipline to carry out this kind of learning because they have to schedule the time to do the follow-up sessions.
-Instead, we anticipate that most people will take these quizzes several times in a half hour before they spend many hours utilizing the commands.
-If that use occurs on subsequent days, then recall of the alphabet will be reinforced, and it may not be necessary to take the quiz again.
+Most people need more discipline to carry out this kind of learning because they have to schedule the time to do the follow-up sessions.
+Instead, most people will find it more convenient to take these quizzes several times in a half hour before they spend many hours utilizing the commands.
+If that use occurs on subsequent days, then recall of the alphabet will be reinforced, and retaking the quiz may not be necessary.
 
 
 ### Voice In Plus
