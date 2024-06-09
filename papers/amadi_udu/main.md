@@ -82,7 +82,7 @@ Datasets were loaded using pandas, and categorical features were encoded appropr
 
 :::{figure} 
 :alt: Hierarchical cluster and Spearman correlation for GSVS
-:width: 40%
+:width: 30%
 :align: center
 :label: fig:hiercorr
 (hiercorr-a)=
@@ -223,43 +223,43 @@ However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a re
 
 :::{figure} 
 :alt: Sample fractions and corresponding decrease in AUC for Final Weight feature of Census Income dataset
-:width: 30%
+:width: 20%
 :align: center
 :label: fig:ci_boxplot
 (ci_boxplot-a)=
-./images/lgbm_census_income_feature_2.png
+![](./images/lgbm_census_income_feature_2.png)
 (ci_boxplot-b)=
-./images/rf_census_income_feature_2.png
+![](./images/rf_census_income_feature_2.png)
 (ci_boxplot-c)=
-./images/svm_census_income_feature_2.png
+![](./images/svm_census_income_feature_2.png)
 Sample fractions and corresponding decrease in AUC for Final Weight feature of Census Income dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
 
 :::{figure} 
 :alt: Sample fractions and corresponding decrease in AUC for Day of Week feature of Bank Marketing dataset
-:width: 30%
+:width: 20%
 :align: center
 :label: fig:bm_boxplot
 (bm_boxplot-a)=
-./images/lgbm_bank_marketing_feature_5.png
+![](./images/lgbm_bank_marketing_feature_5.png)
 (bm_boxplot-b)=
-./images/rf_bank_marketing_feature_5.png
+![](./images/rf_bank_marketing_feature_5.png)
 (bm_boxplot-c)=
-./images/svm_bank_marketing_feature_5.png
+![](./images/svm_bank_marketing_feature_5.png)
 Sample fractions and corresponding decrease in AUC for Day of Week feature of Bank Marketing dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
 
 :::{figure} 
 :alt: Sample fractions and corresponding decrease in AUC for Rad Flow feature of Statlog
-:width: 30%
+:width: 20%
 :align: center
 :label: fig:ss_boxplot
 (ss_boxplot-a)=
-./images/lgbm_statlog_shuttle_feature_0.png
+![](./images/lgbm_statlog_shuttle_feature_0.png)
 (ss_boxplot-b)=
-./images/rf_statlog_shuttle_feature_0.png
+![](./images/rf_statlog_shuttle_feature_0.png)
 (ss_boxplot-c)=
-./images/svm_statlog_shuttle_feature_0.png
+![](./images/svm_statlog_shuttle_feature_0.png)
 Sample fractions and corresponding decrease in AUC for Rad Flow feature of Statlog (Shuttle) dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
 
