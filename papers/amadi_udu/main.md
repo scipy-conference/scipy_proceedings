@@ -86,9 +86,10 @@ Datasets were loaded using pandas, and categorical features were encoded appropr
 :align: center
 :label: fig:hiercorr
 (hiercorr-a)=
-./images/gsvs_hierclus.png
+![](./images/gsvs_hierclus.png)
 (hiercorr-b)=
-./images/gsvs_cmap.png
+![](./images/gsvs_cmap.png)
+
 Feature relationship for moisture absorbed composite dataset; (a) hierarchical cluster, Spearman correlation ranking.
 :::
 
