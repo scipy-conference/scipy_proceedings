@@ -186,31 +186,30 @@ We included the markup associated with the yasnippet snippet libraries to serve 
 
 ### Libraries for code cells
 
-The libraries for code-cells utilize the `insert` command to insert chunks of Python code.
-We try to avoid making voice commands for small fragments of code that might fit on a single line.
-An exception to this was the inclusion of a collection of one liners that are in the form of several kinds of comprehensions.
-As mentioned above, we have developed chunks of code for the purpose of performing specific functions.
-These chunks of code could be functions, or they just could be lines of code that produce an output in the form of a table or plot or some form of analysis.
-The idea was to be able to fill a code cell with all the code required to produce the desired output.
+The code-cell libraries utilize the `insert` command to insert chunks of Python code.
+We avoid making voice commands for small code fragments that might fit on a single line.
+An exception to this was the inclusion of a collection of one-liners that are in the form of several kinds of comprehensions.
+As mentioned above, we have developed chunks of code to perform specific functions.
+These chunks of code could be functions or lines of code that produce an output in the form of a table, plot, or analysis.
+The idea was to fill a code cell with all the code required to produce the desired output.
 Unfortunately, the user will still have to use their voice or computer mouse to move the cursor back over the code chunk and customize portions of the code chunk as required for the task at hand.
 
-While self-contained examples that utilize fake data are useful for the purpose of illustrating concepts, these examples are very frustrating for beginners who need to read in their own data and who would like to apply the code example to their problem at hand.
-The reading in appropriately cleaned data is a common task in data science, and it is also a common barrier applying Jupyter notebooks to Scientific problems.
-We provide code fragments in a data wrangling library that support the importing of several file types directly for downstream utilization as well as for the purpose of importing the data into numpy, pandas, and several of the more recently developed programs that is support multidimensional data structures.
+While self-contained examples that utilize generated data can illustrate concepts, these examples are frustrating for beginners who need to read actual data and would like to apply the code example to their problem.
+Reading appropriately cleaned data is a common task in data science and a common barrier to applying Jupyter notebooks to Scientific problems.
+We provide code fragments in a data wrangling library that support the importing of several file types directly for downstream utilization and for importing the data into numpy, pandas, and several of the more recently developed programs that support multidimensional data structures.
 
-After the inputting of data, it needs to be displayed in a tabular format for inspection that to check that it was properly imported and also to carry out basic summarization statistics by column and row.
+After the data is input, it needs to be displayed in a tabular format for inspection to check that it was properly imported and to carry out basic summarization statistics by column and row.
 
-After the data have been verified as being properly imported, there has often the need to explore that data by plotting it to detect relationships between the parameters of a model and the output.
-We strove to focus on the matplotlib library for the purpose of generating a wide diversity of plots [@matplotlib].
-The code fragments that we develop cover the most commonly used plots such as Scatter Plots, bar graphs (including horizontal bar graphs), kernel density fitted distributions, heat Maps, pie charts, contour plots, and so on.
-We also include examples of 3D plots.
-We include a variety of variance in terms of the for batting of the tick marks and access labels as well as the keys and the form of the wines so bad users can use this information as templates to generate plots for their own purpose.
-The generation of plots with lines of different shape in terms of whether they are solid or have dashes are dotted or have combinations thereof is essential because plots generated with just color blinds are vulnerable to having that their information compromised when printed in black and white.
-The latter is often done at institutions that are trying to cut costs.
-Although we provide some examples from some of the higher-order plotting programs like Seaborn, we focused on matplotlib because most of the other plotting programs are built on top of it, with the exception of the interactive plotting programs.
+After the data are verified as being correctly imported, it is often necessary to explore them by plotting them to detect relationships between a model's parameters and the output.
+We strove to focus on the matplotlib library, which generates a wide variety of plots [@matplotlib].
+Our code fragments cover the most commonly used plots, such as scatter plots, bar graphs (including horizontal bar graphs), kernel density fitted distributions, heat Maps, pie charts, and contour plots.
+We include a variety of examples for the formatting of the tick marks and axis labels as well as the keys and the form of the lines so users can use this information as templates to generate plots for their own purposes.
+The generation of plots with lines of different shapes, whether solid, dashed, dotted, or combinations thereof, is essential because plots generated with just color are vulnerable to having their information compromised when printed in grayscale.
+Although we provide some examples from higher-order plotting programs like Seaborn, we focused on matplotlib because most of the other plotting programs, with the exception of the interactive plotting programs, are built on top of it.
 
 We also support the import of external images.
-This is often overlooked, but these externally derived images are often important parts of the story that is being told by the Jupyter notebook.
+This is often overlooked, but these externally derived images are often essential parts of the story the Jupyter notebook is telling.
+
 
 ### Jupyter specific library
 
