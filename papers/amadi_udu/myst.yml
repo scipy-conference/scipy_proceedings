@@ -78,7 +78,7 @@ project:
   numbering:
     headings: true
   bibliography:
-  - mybib.bib
+    - mybib.bib
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
