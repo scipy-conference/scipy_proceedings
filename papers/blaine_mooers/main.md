@@ -154,35 +154,35 @@ Three snapshots from a Zoom video of using the voice-trigger *display electron d
 
 Another example of a verb starting a voice trigger is the command `display  <equation name>`.
 This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
-For example, the voice trigger `display the electron density equation` is shown in the transcript of a Zoom video {ref}`fig:displayeq`. .
-This is followed by the image in the middle that shows the text replacement in the form of a LaTeX equation in the display mode.
-This image is followed by the resulting Markdown cell after it is rendered by running the cell.
+For instance, the voice trigger `display the electron density equation` is a testament to the convenience of our system, as shown in the transcript of a Zoom video {ref}`fig:displayeq`. 
+The image in the middle shows the text replacement as a LaTeX equation in the display mode.
+This image is followed by the resulting Markdown cell after rendering by running the cell.
 
-Likewise, the command `inline <equation name>` is used to insert equations in sections of prose in Markdown cells.
-We have made available voice-triggered snippet libraries of equations commonly found in Bayesian data analysis and structural biology.
-These libraries are incomplete, but they can provide a source of inspiration.
-They can also be used as templates for making new libraries for one's particular domain.
+Likewise, the command `inline <equation name>` is used to insert equations in prose sections in Markdown cells.
+We've introduced practical voice-triggered snippet libraries, specifically designed for equations commonly used in Bayesian data analysis and structural biology.
+While the development of libraries are still in progress, they serve as flexible templates that can be adapted for any specific domain.
 
 Some voice triggers start with a noun.
-For example, the voice trigger `URL` is used to insert URLs for important websites.
-Another example involves the use of the noun `list` in the voice trigger  as in `list matplotlib color codes` to generate the list of the color codes used in Matplotlib plots.
-This kind of information is useful when developing plots with Matplotlib because it can save you the trouble looking up this information: The software documentation will literally be at the tip of your tongue.
+For example, the voice trigger `URL` is used to insert URLs for essential websites.
+Another example involves using the noun `list` in the voice trigger, as in `list matplotlib color codes`, to generate a list of the color codes used in Matplotlib plots.
+These voice triggers, such as 'URL' or 'list matplotlib color codes ', provide instant access to essential information, saving you the time and effort of manual searches.
 
-The markup language code is inserted by using the verb *insert* followed by the markup language name and the name of the code.
+The markup language code is inserted using the verb *insert*, followed by the markup language name and the name of the code.
 For example, the command `insert markdown itemized list` will insert five vertically aligned dashes to start an itemized list.
 The command `insert latex itemized list` will insert the corresponding code for an itemized list in LaTeX.
 
 We have developed a library specifically for the flavor of [Markdown](https://github.com/MooersLab/markdown-jupyter-voice-in/blob/main/markdown.csv) utilized in Jupyter notebooks.
 This library is used to insert the appropriate Markdown code in Markdown cells.
 
-We have included a [library for LaTeX](https://github.com/MooersLab/latex-voice-in) because tex files can be edited by Jupyter Lab.
+We have included a [library for LaTeX](https://github.com/MooersLab/latex-voice-in) because Jupyter Lab can edit text files.
 According to the above rule, we should use `insert latex equation` to insert the code for the equation environment.
-However, we broke this convention by omitting that word latex to make the commands more convenient because this is our default, typesetting language that we use every day.
+However, we broke this convention by omitting the word `latex` to make the commands more convenient because this is the default typesetting language we use daily.
 We were already comfortable with using the abbreviated commands.
 
-We have not figured out how to use voice commands to advance the cursor in a single step to sites where edits should be made in analogy to tab stops in conventional snippets.
-Instead, the built-in voice commands can be utilized to move the cursor forward or backwards and for the purpose of selecting replacing words.
+We have not figured out how to use voice commands to advance the cursor in a single step to sites where edits should be made, analogous to tab stops in conventional snippets.
+Instead, the built-in voice commands can move the cursor forward or backward and select replacement words.
 We included the markup associated with the yasnippet snippet libraries to serve as a benchmark for users to recognize the sites that should be considered for modification to customize the snippet for their purpose.
+
 
 ### Libraries for code cells
 
