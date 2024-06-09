@@ -78,15 +78,20 @@ Building data-driven models in the presence of  high dimensionality includes sev
 To maintain a model-agnostic approach that is not confined to any specific ML algorithm, this study employed PFI for feature selection. PFI assesses how each feature affects the model's performance by randomly shuffling the values of a feature and noting the resulting decrease in performance. This technique interrupts the link between a feature and its predicted outcome, thus enabling us determine the extent to which a model relies on a particular feature `[@Li2017; @sklearn1; @Kaneko2022]`. It is noteworthy that the effect of permuting one feature could be negligible when features are collinear,  and thus an important feature may report a low score. To tackle this, a hierarchical cluster on a Spearman rank-order correlation can be adopted, with a threshold taking from visual inspection of the dendrograms in grouping features into clusters and selecting the feature to retain.
 
 # Results and Discussions
-Datasets were loaded using pandas, and categorical features were encoded appropriately. The Spearman correlation matrix was computed and then converted into a distance matrix. Hierarchical clustering was subsequently performed using Ward’s linkage method, and  a threshold for grouping features into clusters was determined through visual inspection of the dendrograms, allowing for the selection of features to retain. The hierarchical cluster and spearman’s ranking for moisture absorbed composite dataset is shown in @fig:hiercorr[a] and @fig:hiercorr[b] respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC. 
+Datasets were loaded using pandas, and categorical features were encoded appropriately. The Spearman correlation matrix was computed and then converted into a distance matrix. Hierarchical clustering was subsequently performed using Ward’s linkage method, and  a threshold for grouping features into clusters was determined through visual inspection of the dendrograms, allowing for the selection of features to retain. The hierarchical cluster and spearman’s ranking for moisture absorbed composite dataset is shown in [](#hiercorr-a) and [](#hiercorr-b) respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC. 
+
+
+
 
 :::{figure} 
-./images/gsvs_hierclus.png
-./images/gsvs_cmap.png
 :alt: Hierarchical cluster and Spearman correlation for GSVS
 :width: 40%
 :align: center
 :label: fig:hiercorr
+(hiercorr-a)=
+./images/gsvs_hierclus.png
+(hiercorr-b)=
+./images/gsvs_cmap.png
 Feature relationship for moisture absorbed composite dataset; (a) hierarchical cluster, Spearman correlation ranking.
 :::
 
