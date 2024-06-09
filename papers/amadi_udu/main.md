@@ -120,7 +120,7 @@ def process_feature(f_no, selected_features, df):
 ```
 
 
-As observed in {ref}`fig:hiercorra`, Frequency Centroid and Peak Frequency are in the same cluster with a highly correlated value of 0.957 shown in {ref}`fig:hiercorrb` Similarly, Rise Time and Initiation Frequency are clustered with a highly negative correlation of -0.862. Amplitude and Absolute Energy also exhibited a high positive correlation of 0.981. 
+As observed in [](#hiercorr-a), Frequency Centroid and Peak Frequency are in the same cluster with a highly correlated value of 0.957 shown in [](#hiercorr-b) Similarly, Rise Time and Initiation Frequency are clustered with a highly negative correlation of -0.862. Amplitude and Absolute Energy also exhibited a high positive correlation of 0.981. 
 
 :::{table} Median and IQR importance scores of features.
 :label: tbl:result_table
