@@ -1,22 +1,21 @@
 #!/usr/bin/env python
 # coding: utf-8
 # %%
-
-# %%
-
-
 #import modules
 import pandas as pd
 from sklearn.preprocessing import  LabelEncoder
 import numpy as np
 from sklearn.model_selection import train_test_split
 from lightgbm import LGBMClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.inspection import permutation_importance
 from joblib import Parallel, delayed
 import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib as mpl
+from time import process_time 
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import squareform
 from scipy.stats import spearmanr
@@ -25,8 +24,6 @@ random_seed = 42
 
 
 # %%
-
-
 #choose dataset and model from list
 datasets = ['census_income', 'bank_marketing', 'statlog_shuttle',  'diabetes',  'gsvs']
 models= ['lgbm', 'rf', 'svm']
@@ -37,8 +34,6 @@ df = pd.read_csv(f'datasets/{dataset}.csv')
 
 
 # %%
-
-
 # encode categorical features
 categorical_cols = [col for col in df.columns if df[col].dtype == 'object']
 label_encoder = LabelEncoder()
@@ -57,15 +52,11 @@ elif dataset == 'statlog_shuttle':
 
 
 # %%
-
-
 X = df.drop('label', axis=1)
 y = df['label']
 
 
 # %%
-
-
 plt.figure()
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
 corr = spearmanr(X).correlation
@@ -92,8 +83,6 @@ _ = fig.tight_layout()
 # ## Step 1
 
 # %%
-
-
 # select threshold from visual inspection of hierarchical cluster
 if dataset == 'census_income':
     threshold = 0.94
@@ -142,8 +131,6 @@ results_df.to_csv(f'results/{dataset}_{model_name}_pfi_results.csv', index=False
 # ## Step 2
 
 # %%
-
-
 # Define the function for parallel execution
 def process_feature(f_no, selected_features, df):
     importances_all = []
