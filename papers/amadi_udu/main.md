@@ -80,7 +80,6 @@ To maintain a model-agnostic approach that is not confined to any specific ML al
 # Results and Discussions
 Datasets were loaded using pandas, and categorical features were encoded appropriately. The Spearman correlation matrix was computed and then converted into a distance matrix. Hierarchical clustering was subsequently performed using Ward’s linkage method, and  a threshold for grouping features into clusters was determined through visual inspection of the dendrograms, allowing for the selection of features to retain. The hierarchical cluster and spearman’s ranking for moisture absorbed composite dataset is shown in [Fig. 1a](#hiercorr-a) and [Fig. 1b](#hiercorr-b) respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC. 
 
-
 :::{figure} 
 :alt: Hierarchical cluster and Spearman correlation for GSVS
 :width: 40%
@@ -240,11 +239,11 @@ Sample fractions and corresponding decrease in AUC for Final Weight feature of C
 :width: 20%
 :align: center
 :label: fig:bm_boxplot
-(ci_boxplot-a)=
+(bm_boxplot-a)=
 ./images/lgbm_bank_marketing_feature_5.png
-(ci_boxplot-b)=
+(bm_boxplot-b)=
 ./images/rf_bank_marketing_feature_5.png
-(ci_boxplot-c)=
+(bm_boxplot-c)=
 ./images/svm_bank_marketing_feature_5.png
 Sample fractions and corresponding decrease in AUC for Day of Week feature of Bank Marketing dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
