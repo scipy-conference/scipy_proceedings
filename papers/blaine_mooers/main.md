@@ -238,17 +238,17 @@ If that use occurs on subsequent days, then recall of the alphabet will be reinf
 
 ### Voice In Plus
 
-Voice In is a plug-in for Google Chrome and Microsoft Edge web browsers that uses the Google API.
-The plug-in operates in most text areas of web pages.
+Voice In, a unique plugin for Google Chrome and Microsoft Edge web browsers, that uses Google API to provide a dictation and voice recognition experience.
+The plugin operates in most text areas of web pages.
 These text areas include those of web-based email packages and online sites that support distraction-free writing.
 These text areas also include the Markdown and code cells of Jupyter notebooks.
-Voice In also works in various plain text documents opened in Jupyter Lab for online writing.
-Obviously, Voice In will not work in standalone applications that support the editing of Jupyter notebooks, such as the Jupyter Lab app, the nteract app, and external text editors, such as VS Code, that support the editing of Jupyter notebooks.
+Voice In also works in plain text documents opened in Jupyter Lab for online writing.
+Voice In will not work in standalone applications that support the editing of Jupyter notebooks, such as the Jupyter Lab app, the nteract app, and external text editors, such as VS Code, that support the editing of Jupyter notebooks.
 
 After Voice-In Plus is activated, it will listen for words for 3 minutes before automatically shutting down.
 It is very accurate with a word error rate that is well below 10\%.
-It can pick out words in spite of background ambient noise, such as traffic or bird songs.
-The language model is quite robust in that dictation can be performed out without the use of an external microphone.
+It can pick out words, such as traffic or bird songs, despite background ambient noise.
+The language model is quite robust in that dictation can be performed without an external microphone.
 For example, the built-in microphone available in the MacBook Pro laptop computer is sufficient.
 In contrast, other VSR software requires high-quality external microphones.
 The need to use an external microphone imposes a motivational barrier.
@@ -259,38 +259,37 @@ The program can generally keep up with dictation occurring at a moderate pace fo
 The program tends to hallucinate only when the dictation has occurred at high speed because the transcribing falls behind.
 As a result, the user has to pay attention to the progress of the transcription.
 If the transcription halts, it is best to deactivate the plugin, activate it, and resume the dictation.
-Great care has to be taken to pronounce the first word of the sentence loudly such that it will be recorded; otherwise, this first word will likely not be recorded.
+Great care must be taken to pronounce the first word of the sentence loudly so that it will be recorded; otherwise, this first word will likely not be recorded.
 This problem is most acute when there has been a pause in the dictation.
 
 The software does not automatically insert punctuation marks.
 The user has to vocalize the name of the punctuation mark that they want inserted.
 These also have to utilize a built-in new-line command to start new lines.
 The user has to develop the habit of using this command if they write one sentence per line.
-This latter form of writing is very useful for first drafts because it greatly eases the shuffling of the order of sentences during rewriting.
+This latter form of writing is very useful for first drafts because it greatly eases the shuffling of sentence order during rewriting.
 This form of writing is also very compatible with Virgin control systems like git because the changes can be tracked more easily by line number.
 
 The program can sometimes be unresponsive.
-In these situations, the plug-in can be turned on and then again.
+In these situations, the plugin can be turned on and then again.
 This act will restore normal behavior.
 
-Voice In has an associated configuration GUI where the user can customize a number of settings.
+The associated configuration GUI for VIP allows customization of several settings, making the dictation experience personalized.
 The first setting to be set is the language that will be used during dictation.
-There is support for a number of foreign languages and for different dialects of English.
-The user can also configure a keyboard shortcut that can be utilized to turn the plug-in on and off.
-I use the option-L key combination to turn the plug-in on and off.
+There is support for several foreign languages and different dialects of English.
+The user can also configure a keyboard shortcut that can be utilized to turn the plugin on and off.
 
 Voice In is offered as a freemium.
 The user has to pay for an annual subscription to be able to add custom text replacements.
 This full-featured version of the plugin is called Voice-In Plus (VIP).
-This is the version upon which we will focus.
+We will focus on VIP.
 
-On activation of the VIP version of the plug-in, the settings GUI page for custom commands is displayed for the user to use to enter commands either one by one through a GUI or by adding multiple voice commands though the text area that is opened after clicking on the bulk add button {ref}`fig:newSentence`.
+On activation of the VIP version of the plugin, the settings GUI page for custom commands is displayed for the user to use to enter commands either one by one through a GUI or by adding multiple voice commands through the text area that is opened after clicking on the bulk add button {ref}`fig:newSentence`.
 The first option involves placing the voice trigger in one text area and the text replacement in the second text area.
 The voice trigger does not need a comma after it, and the text replacement can span multiple lines without adding any markup, except that internal double quotes must be replaced with single quotes.
 Any capitalization in the voice trigger will be ignored and written in lowercase.
-The second option involves pasting in one or more lines of pairs of voice triggers and text replacements separated by commas, as you would in a CSV file.
+The second option involves pasting in one or more lines of pairs of voice triggers and text replacements separated by commas, as in a CSV file.
 In this option, text replacements that span more than one line must be enclosed with double quotes.
-Obviously, the internal double quotes have to be replaced with single groups; otherwise the tex replacement will be truncated at the position of the first internal quote.
+The internal double quotes must be replaced with single quotes; otherwise, the text replacement will be truncated at the position of the first internal double quote.
 
 :::{figure} ./images/VoiceInNewSentence.png
 :label: fig:newSentence
@@ -298,41 +297,41 @@ Obviously, the internal double quotes have to be replaced with single groups; ot
 Entering a single voice trigger and the corresponding command in Voice In Plus.
 :::
 
-
-The carrying capacity for the storage of voice-triggered commands is unclear.
-At one point, I had over 19,000 pairs of voice triggers and the corresponding text replacements.
+The carrying capacity for the storage of voice-triggered commands is still being determined.
+At one point, we had over 19,000 pairs of voice triggers and the corresponding text replacements.
 Scrolling through the list of these voice commands was painful because it was too long.
 
-This problem was remedied by exporting the commands to a CSV file.
-Then the stored commands on the website were cleared.
-The exported CSV file was opened in a text editor and the unneeded commands were selected and deleted.
+This problem was efficiently resolved by exporting the commands to a CSV file, a process that significantly streamlined the management of voice-triggered commands.
+Then, the stored commands on the website were cleared.
+The exported CSV file was opened in a text editor, and the unneeded commands were selected and deleted.
 In this case, that left about 7,000 commands.
 The web page with the command library displayed could then be easily scrolled.
-The practical size limit of the library is between 7,000 and 19,000 commands.
+The practical size limit of the library is between 7,000 and 19,000 commands. This is because exceeding this limit may lead to performance issues, such as slower response times.
 
-Amongst the first customizations to be made are those supporting the generation of nonfiction writing.
+Amongst the first customizations are those supporting the generation of nonfiction writing.
 Users may want to install our library of English expansions to avoid the tedium of converting English contractions to their expansions.
-To avoid having to say `period` and `new line` at the end of each sentence when writing one sentence per line, the user can develop a custom command called `new sentence`, which is a combination of these two built-in commands.
+To avoid having to say `period` and `new line` at the end of each sentence when writing one sentence per line, the user can develop a custom command called `new sentence`, a combination of these two built-in commands. This command is useful when you want to dictate your text one sentence at a time.
 Likewise, the custom command `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
-Of course, these phrases will no longer be available for use in dictation because they will be used to trigger text replacements.
+Of course, these phrases will no longer be available in dictation because they will be used to trigger text replacements.
 
-The VIP documentation is integrated into the GUI that the user uses to configure VIP and carry out various tasks.
+The VIP (Voice-Triggered Interactive Platform) documentation is integrated into the GUI (Graphical User Interface) that the user uses to configure VIP and carry out various tasks. The GUI is a visual interface that allows users to interact with the VIP system.
 
-A dictation session with VIP is initiated by activating the plugin by clicking on its icon.
+A dictation session with VIP is initiated by activating the plugin by clicking its icon.
 
-There is a configuration page associated with the icon through which one can select the language are and even dialect of a language.
+There is a configuration page associated with the icon through which one can select the language and even a language's dialect.
 
 VIP has several dozen built-in commands, some of which can be used to navigate the web page.
 
 The voice-triggered snippets can be exported in a CSV file.
-The file has two columns separated by a comma: the voice-trigger and its text replacement.
+The file has two columns separated by a comma: the voice trigger and its text replacement. Each row represents a single voice-triggered command. The voice trigger is the phrase you say to activate the command, and the text replacement is the text that will be inserted when the command is triggered.
 This file lacks a line of headers.
 
-Multiple custom commands can be uploaded from a CSV file to the *bulk add* window of the plugin's configuration GUI.
+Multiple custom commands can be uploaded from a CSV file to the bulk add window of the plugin's configuration GUI. To create a custom command, you need to define the voice trigger and its corresponding text replacement in the CSV file, and then upload the file to the GUI.
 Frequently, it is necessary to insert a code fragment that spans multiple lines.
 This code fragment needs to be enclosed with double quotation marks.
 It is not possible to use a backspace to escape internal pre-existing double quotation marks.
 These pre-existing double quotes have to be replaced with single quotes.
+
 
 ## Discussion
 
