@@ -55,7 +55,7 @@ A non-uniformly spaced rectilinear grid can be transformed into a uniformly spac
 
 ### Multilinear Interpolation
 
-`multinterp` provides a simple and efficient implementation of *multilinear interpolation* for various backends (`numpy/scipy`, `numba`, `cupy`, `pytorch`, and `jax`) via its `multinterp` function. From the remaining of this section, `multinterp` refers to the `multinterp` function in `multinterp` package, unless otherwise specified.
+`multinterp` provides a simple and efficient implementation of *multilinear interpolation* for various backends (`numpy` (@Harris2020), `scipy` (@Virtanen2020), `numba` (@Lam2015), `cupy` (@Okuta2017), `pytorch` (@Paszke2019), and `jax` (@Bradbury2018)) via its `multinterp` function. From the remaining of this section, `multinterp` refers to the `multinterp` function in `multinterp` package, unless otherwise specified.
 
 The main workhorse of `multinterp` is `scipy.ndimage`'s `map_coordinates` function. This function takes an array of **input** values and an array of **coordinates**, and returns the interpolated values at those coordinates. More specifically, the `input` array is the array of known values on the coordinate (index) grid, such that `input[i,j,k]` is the known value at the coordinate `(i,j,k)`. The `coordinates` array is an array of fractional coordinates at which we wish to know the values of the function, such as `coordinates[0] = (1.5, 2.3, 3.1)`. This indicates that we wish to know the value of the function between input index $i \in [1,2]$, $j \in [2,3]$, and $k \in [3,4]$. While `map_coordinates` is a powerful tool for coordinate grid interpolation, a typical function in question may not be defined on a coordinate grid. For this reason, we first need to find a mapping between the functional input grid and the coordinate grid, and then use `map_coordinates` to interpolate the function on the coordinate grid.
 
@@ -110,7 +110,7 @@ Unstructured grids are irregular and often require a triangulation step which mi
 
 ## Conclusion
 
-Multivariate interpolation is a cornerstone of scientific computing, yet the Python ecosystem presents a fragmented landscape of tools. While individually powerful, these packages often lack a unified interface. This fragmentation makes it difficult for researchers to experiment with different interpolation methods, optimize performance across diverse hardware, and handle varying data structures (regular, rectilinear, curvilinear, unstructured).
+Multivariate interpolation is a cornerstone of scientific computing, yet the Python ecosystem (@Oliphant2007) presents a fragmented landscape of tools. While individually powerful, these packages often lack a unified interface. This fragmentation makes it difficult for researchers to experiment with different interpolation methods, optimize performance across diverse hardware, and handle varying data structures (regular, rectilinear, curvilinear, unstructured).
 
 The `multinterp` project seeks to change this. Its goal is to provide a unified, comprehensive, and flexible framework for multivariate interpolation in Python. This framework will streamline workflows by offering:
 
