@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
+# %%
 
-# In[1]:
+# %%
 
 
 import pandas as pd
@@ -10,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# In[4]:
+# %%
 
 
 #choose dataset and model from list
@@ -21,7 +22,7 @@ model = models[0]
 dataset = datasets[0]
 
 
-# In[7]:
+# %%
 
 
 df = pd.read_csv(f'results/{model}/{model}_{dataset}_combined_importances.csv')
@@ -55,7 +56,7 @@ for _ in range(int(df.shape[0]/10)):
     number += 10
 
 
-# In[ ]:
+# %%
 
 
 
