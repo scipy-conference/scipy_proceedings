@@ -227,7 +227,7 @@ However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a re
 :alt: PFI process time and corresponding sample fractions for the Diabetes dataset.
 :width: 30%
 :align: center
-:label:
+:label: fig:db_time
 (db_time)=
 ![](./images/time_plot.png)
 PFI process time and corresponding sample fractions for the Diabetes dataset.
