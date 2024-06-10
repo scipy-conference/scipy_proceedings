@@ -6,7 +6,7 @@ abstract: |
 
 ---
 
-# Introduction
+## Introduction
 
 In the development of prediction models for real-world applications, two key challenges often arise: high-dimensionality resulting from the numerous features, and class-imbalance due to the rarity of samples in the positive class. Feature selection methods are  utilised to address issues of high-dimensionality by selecting a smaller subset of relevant features, thus reducing noise, increasing interpretability, and enhancing model performance `[@Cai2018; @Dhal2022, @Udu2023]`. 
 
@@ -16,8 +16,8 @@ This study investigates the impact of performing feature selection on a reduced 
 
 The rest of the paper is organised as follows: Section II briefly outlines the methodology adopted and present the results in Section III presents the results and discussion. The conclusion of the study is provided in Section IV.
 
-# Methodology
-## Description of datasets
+## Methodology
+### Description of datasets
 Five real life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine machine learning repository, including CDC Diabetes Health Indicator, Census Income, Bank Marketing, Statlog (Shuttle) `[@KellyUCI]`.The fifth dataset  is from damage morphology studies, Moisture Absorbed Composite `[@Osa-uwagboe2024]`. The datasets are presented in @tbl:dataset_summary. Notably,  all datasets exhibited high class imbalance ratios from 0.09 to 0.18.
 
 :::{table} Summary of datasets used in the study
@@ -74,10 +74,10 @@ Five real life datasets from different subject areas were considered in this stu
 
 Building data-driven models in the presence of  high dimensionality includes several steps such as data preprocessing, feature selection, model training and evaluation. To address class imbalance issues during model training, an additional resampling step may be performed to adjust the uneven distribution of class samples `[@Udu2024; @REZVANI2023110415; @Udu2023]`. This paper, however, focuses on the feature selection method, model training, and  the evaluation metrics adopted.
 
-##  Feature selection and model training
+###  Feature selection and model training
 To maintain a model-agnostic approach that is not confined to any specific ML algorithm, this study employed PFI for feature selection. PFI assesses how each feature affects the model's performance by randomly shuffling the values of a feature and noting the resulting decrease in performance. This technique interrupts the link between a feature and its predicted outcome, thus enabling us determine the extent to which a model relies on a particular feature `[@Li2017; @sklearn1; @Kaneko2022]`. It is noteworthy that the effect of permuting one feature could be negligible when features are collinear,  and thus an important feature may report a low score. To tackle this, a hierarchical cluster on a Spearman rank-order correlation can be adopted, with a threshold taking from visual inspection of the dendrograms in grouping features into clusters and selecting the feature to retain.
 
-# Results and Discussions
+## Results and Discussions
 Datasets were loaded using pandas, and categorical features were encoded appropriately. The Spearman correlation matrix was computed and then converted into a distance matrix. Hierarchical clustering was subsequently performed using Ward’s linkage method, and  a threshold for grouping features into clusters was determined through visual inspection of the dendrograms, allowing for the selection of features to retain. The hierarchical cluster and spearman’s ranking for moisture absorbed composite dataset is shown in [Fig. 1a](#hiercorr-a) and [b](#hiercorr-b) respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC. 
 
 :::{figure} 
@@ -223,11 +223,13 @@ However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a re
 
 [Fig. 2](#ci_time) presents the PFI process time and corresponding sample fractions for the Census Income dataset. The results are based on one independent run, with PFI set at 30 feature-permuted repeats. For LightGBM and RF, PFI process time increased linearly with higher sample fractions; SVM however showed a quadratic increase. LightGBM had the least computational cost with CPU process times of 2.3 sec and 11.8 sec for 10% and 100% sample fractions respectively. Although SVM had a similar process time to RF for 10% sample fraction (i.e., 7.5 sec and 9.8 sec respectively), it exhibited a substantial process time of 795.1 sec using the entire dataset. This represents a 8,002% increase in CPU computational cost compared to a 10% sample fraction.
 
-:::{figure} ./images/time_plot.png
+:::{figure} 
 :alt: PFI process time and corresponding sample fractions for the Census Income dataset.
 :width: 30%
 :align: center
-:label: ci_time
+:label: fig:ci_time
+(ci_time)=
+![](./images/time_plot.png)
 PFI process time and corresponding sample fractions for the Census Income dataset.
 :::
 
@@ -280,15 +282,15 @@ For LightGBM model in [Fig. 3a](#ci_boxplot-a), the median decrease in AUC was c
 
 PFI can provide insights into the importance of features, but it is susceptible to variability, especially with smaller sample sizes. Thus, complementary feature selection methods, could be explored to validate feature importance. Future work could investigate the variability of features under particular models and sample sizes, with a view to evolving methods of providing a more stable information to the models. 
 
-# Conclusion
+## Conclusion
 Feature selection for large datasets incurs considerable computational cost in the model development process of various machine learning tasks. This study aimed to optimise computational costs by investigating the influence of sample fractions on feature importance and model performance in datasets characterised by class imbalance. Five real-life datasets with large sample sizes from different subject fields which exhibited high class imbalance ratios of 0.09 – 0.18 were utilised. 
 
 Due to its model-agnostic nature, PFI was adopted for feature selection process. Cluster, spatial, and stats sub-packages of SciPy were instrumental in tackling the multicollinearity effects associated with PFI. Using a rigorous PFI approach, the study revealed the variability of feature importance with smaller sample fractions in LightGBM, random forest and SVM models. LightGBM demonstrated  the most stability, even with smaller sample fractions, suggesting its relative robustness to sample size and permutation across the features and class-imbalanced datasets. SVM exhibited a high variability in feature importance and prominence of outliers.
 
 Other feature selection methods such as shapely additive explanations, could be explored to cross-validate the importance of features. An understanding of the variability of feature importance can inform feature engineering efforts that provides means of alleviating the variability of feature importance in sample samples fractions under class imbalance conditions.
 
-# Acknowledgement
+## Acknowledgement
 This work was supported by the Petroleum Technology Development Fund under grant PTDF/ED/OSS/PHD/AGU/1076/17 and NISCO UK Research Centre. Computations were  performed using the Sulis Tier 2 HPC platform hosted by the Scientific Computing Research Technology Platform at the University of Warwick. Sulis is funded by EPSRC Grant EP/T022108/1 and the HPC Midlands+ consortium.
 
-# Supplementary Material
+## Supplementary Material
 Supplementary material is available at [Github.com/AmadiGabriel](https://github.com/AmadiGabriel/scipy_proceedings).
