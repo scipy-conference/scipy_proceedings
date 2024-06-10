@@ -19,7 +19,7 @@ The rest of the paper is organised as follows: [@sec:methodology] briefly outlin
 (sec:methodology)=
 ## Methodology
 ### Description of datasets
-Five real life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine machine learning repository, including CDC Diabetes Health Indicator, Census Income, Bank Marketing, Statlog (Shuttle) [@KellyUCI].The fifth dataset  is from damage morphology studies, Moisture Absorbed Composite [@Osa-uwagboe2024]. The datasets are presented in @tbl:dataset_summary. Notably,  all datasets exhibited high class imbalance ratios from 0.09 to 0.18.
+Five real life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine machine learning repository, including CDC Diabetes Health Indicator [@diabetes], Census Income [@census_income], Bank Marketing [@bank_marketing], Statlog (Shuttle) [@statlog].The fifth dataset  is from damage morphology studies, Moisture Absorbed Composite [@Osa-uwagboe2024]. The datasets are presented in @tbl:dataset_summary. Notably,  all datasets exhibited high class imbalance ratios from 0.09 to 0.18.
 
 :::{table} Summary of datasets used in the study
 :label: tbl:dataset_summary
@@ -297,8 +297,8 @@ Due to its model-agnostic nature, PFI was adopted for feature selection process.
 Other feature selection methods such as shapely additive explanations, could be explored to cross-validate the importance of features. An understanding of the variability of feature importance can inform feature engineering efforts that provides means of alleviating the variability of feature importance in sample samples fractions under class imbalance conditions.
 
 
-# Acknowledgement
+## Acknowledgement
 This work was supported by the Petroleum Technology Development Fund under grant PTDF/ED/OSS/PHD/AGU/1076/17 and NISCO UK Research Centre. Computations were  performed using the Sulis Tier 2 HPC platform hosted by the Scientific Computing Research Technology Platform at the University of Warwick. Sulis is funded by EPSRC Grant EP/T022108/1 and the HPC Midlands+ consortium.
 
-# Supplementary Material
+## Supplementary Material
 Supplementary material is available at [Github.com/AmadiGabriel/scipy_proceedings](https://github.com/AmadiGabriel/scipy_proceedings).
