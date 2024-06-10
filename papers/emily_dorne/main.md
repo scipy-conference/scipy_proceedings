@@ -50,9 +50,9 @@ An example of a water body at 10m resolution
 :::
 
 :::{figure} resolution_sentinel_3.webp
-:label: fig:30m
+:label: fig:300m
 :width: 500px
-An example of the @fig:10m image at 30m resolution
+An example of the @fig:10m image at 300m resolution
 :::
 
 The effects the climate change are likely to increase both the frequency and severity of HABs in inland water bodies. Warmer water temperatures, higher concentrations of carbon dioxide, runoff and coastal upswelling related to extreme weather events, and sea level rise can all contribute to making freshwater nutrients levels and environmental conditions more conducive to the growth of harmful algae [@epa_climate_change].
