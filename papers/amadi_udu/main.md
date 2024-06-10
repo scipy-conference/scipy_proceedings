@@ -84,7 +84,7 @@ Datasets were loaded using pandas, and categorical features were encoded appropr
 :alt: Hierarchical cluster and Spearman correlation for GSVS
 :width: 30%
 :align: center
-:label: fig:hiercorr
+:label: 
 (hiercorr-a)=
 ![](./images/gsvs_hierclus.png)
 (hiercorr-b)=
@@ -227,7 +227,7 @@ However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a re
 :alt: PFI process time and corresponding sample fractions for the Diabetes dataset.
 :width: 30%
 :align: center
-:label: fig:db_time
+:label: 
 (db_time)=
 ![](./images/time_plot.png)
 PFI process time and corresponding sample fractions for the Diabetes dataset.
@@ -239,7 +239,7 @@ PFI process time and corresponding sample fractions for the Diabetes dataset.
 :alt: Sample fractions and corresponding decrease in AUC for Final Weight feature of Census Income dataset
 :width: 20%
 :align: center
-:label: fig:ci_boxplot
+:label: 
 (ci_boxplot-a)=
 ![](./images/lgbm_census_income_feature_2.png)
 (ci_boxplot-b)=
@@ -253,7 +253,7 @@ Sample fractions and corresponding decrease in AUC for Final Weight feature of C
 :alt: Sample fractions and corresponding decrease in AUC for Day of Week feature of Bank Marketing dataset
 :width: 20%
 :align: center
-:label: fig:bm_boxplot
+:label: 
 (bm_boxplot-a)=
 ![](./images/lgbm_bank_marketing_feature_5.png)
 (bm_boxplot-b)=
@@ -267,7 +267,7 @@ Sample fractions and corresponding decrease in AUC for Day of Week feature of Ba
 :alt: Sample fractions and corresponding decrease in AUC for Rad Flow feature of Statlog
 :width: 20%
 :align: center
-:label: fig:ss_boxplot
+:label: 
 (ss_boxplot-a)=
 ![](./images/lgbm_statlog_shuttle_feature_0.png)
 (ss_boxplot-b)=
