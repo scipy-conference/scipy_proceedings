@@ -225,8 +225,7 @@ However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a re
 
 [@fig:db_time] shows the PFI process time and corresponding sample fractions for the Diabetes dataset, which has a substantial sample size of 253,680 instances. The results are based on one independent run, with PFI set at 30 feature-permuted repeats. For LightGBM and RF, the PFI process time increased linearly with larger sample fractions, whereas SVM experienced an exponential growth. LightGBM had the lowest computational cost, with CPU process times of 3.9 seconds and 28.8 seconds for 10% and 100% sample fractions, respectively. SVM required 21,263 seconds to process the entire dataset, reflecting a 9,345% increase in CPU computational cost compared to using a 10% sample fraction.
 
-:::{figure} 
-./images/time_plot.png
+:::{figure} ./images/time_plot.png
 :alt: PFI process time and corresponding sample fractions for the Diabetes dataset.
 :label: fig:db_time
 :width: 30%
