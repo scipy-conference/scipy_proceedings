@@ -335,49 +335,49 @@ These pre-existing double quotes have to be replaced with single quotes.
 
 ## Discussion
 
-The following discussion points arose during our implementation of the ASR libraries described above.
+The following discussion points, crucial for understanding the implementation of the ASR libraries we've described, have emerged.
 We limit the discussion to the software that we have presented above.
 
 ### Independence from breaking changes in Jupyter
 
 The Jupyter project lacks built-in support for code snippet libraries.
-Instead, third parties have developed several extensions for Jupyter to support code snippets.
-Unfortunately, changes that occur in the core of Jupyter often break these extensions.
-Users have to create Python environments for older versions of Jupyter work with the snippets extension while missing out on the new featuers of Jupyter.
-An obvious solution to this problem would be for the developers of Jupyter to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for snippets is always available.
-The use of voice-triggered snippets external  to Jupyter side steps difficulties with breaking changes to Jupyter.
+Due to the inherent limitations of the Jupyter project, the development of third-party extensions has become a necessity to support code snippets.
+Unfortunately, changes in the core of Jupyter often break these extensions.
+Users have to create Python environments for older versions of Jupyter to work with the snippets extension while missing out on the new features of Jupyter.
+An obvious solution to this problem would be for the Jupyter developers to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for snippets is always available.
+Using voice-triggered snippets external to Jupyter side steps difficulty with breaking changes to Jupyter.
 
 ### Filling gap in tab-triggered snippets with voice-triggered snippets
 
-Voice-triggered snippets also provided an opportunity to overcome the absence of extensions for Jupyter that support tab-triggered snippets.
+Voice-triggered snippets, a promising innovation, offer a potential solution to the absence of extensions for Jupyter that support tab-triggered snippets.
 Tab-triggered code snippets are standard in most text editors, whereas voice-triggered snippets have yet to become widespread in standard text editors.
 One advantage of Jupyter Notebooks is that they run in the browser, where several automated Speech Recognition software packages operate (e.g., Voice-In Plus, Serenade, and Talon Voice).
-We developed our libraries for Voice In Plus software because of its gentle learning curve and simple customization.
-We did this to meet the needs of the widest population of users.
+We developed our libraries for Voice In Plus software because of its gentle learning curve and straightforward customization.
+We did this to meet the needs of the broadest population of users.
 
 ### The role of AI-assisted voice computing
 
-The dream of AI-assisted voice computing is to have one's intentions rather than one's words inserted into the document you are developing.
+The dream of AI-assisted voice computing is to have one's intentions rather than one's words inserted into the document one is developing.
 Our exposure to what is available through ChatGPT left us with an unfavorable impression due to the high error rate.
 GitHub's copilot can also be used in LaTeX to autocomplete sentences.
-Here again, many of the suggested completions are inaccurate and require editing.
-These autocompleted sentences tend to slow down the user by getting in the way and leaving no net gain in productivity.
+Here again, many of the suggested completions need to be more accurate and require editing.
+These autocompleted sentences slow down the user by getting in the way and leaving no net gain in productivity.
 
-In addition, the utilization of AI assistance in scientific writing has to be disclosed upon manuscript submission.
+In addition, AI assistance in scientific writing has to be disclosed upon manuscript submission.
 Some publishers will not accept articles written with the help of AI-writing assistants.
-This could limit the options available for manuscript submission should one use such an assistant and have the manuscripts rejected by a publisher that accepts such assistants.
+This could limit the options available for manuscript submission if one uses such an assistant and has the manuscripts rejected by a publisher that accepts such assistants.
 
 ### ASR extensions for Jupyter lab
 
-We found three extensions developed for Jupyter Lab that enable the use of speech recognition in Jupyter notebooks.
-The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control) supports the use of custom commands and relies on the language model in the browser.
+We found three extensions developed for Jupyter Lab that enable speech recognition in Jupyter notebooks.
+The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control), supports custom commands and relies on the browser's language model.
 This extension is experimental and not maintained; it does not work with Jupyter 4.2.
 The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments),  relies on the DaVinci large language model to make comments in Markdown cells and request code fragments.
 This program requires clicking on a microphone icon repeatedly, which makes the user vulnerable to repetitive stress injuries.
 The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
-Although the name of the extension suggests it uses GitHub's Copilot, it uses whisper-1 and ChatGPT3.
+Although the extension's name suggests it uses GitHub's Copilot, it uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGP3.
-The robustness of our approach is that the Voice-In Plus software will always operate within Jupyter Lab when Jupyter is run in a web.
+The robustness of our approach is that the Voice-In Plus software will always operate within Jupyter Lab when Jupyter is run on a web server.
 
 
 ### Caveats about voice computing
@@ -385,59 +385,59 @@ We found five caveats to doing voice computing.
 These points reflect the imperfect state of available language models.
 We suggest how to cope with these limitations while improving productivity.
 
-First, the rate at which you speak is an important variable.
-If you speak too slowly a voice trigger that is a compound word, your words may not be interpreted as the intended voice trigger.
-Instead, the individual words will be printed to the screen.
-On the other hand, if you speak too quickly, you may get ahead of the language model and it may stall.
-If the plugin is not responding, it is best to restart your connection with the language model by inactivating the plugin and restarting it.
+First, the rate at which one speaks is a crucial variable.
+If you speak too slowly the words in a voice trigger that is a compound word, your words may not be interpreted as the intended voice trigger.
+Instead, the individual words will be printed on the screen.
+On the other hand, if one speaks too quickly, one may get ahead of the language model, which may stall.
+If the plugin is not responding, it is best to restart your connection with the language model by inactivating and restarting the plugin.
 I can generally dictate three to seven paragraphs before the software falls behind and halts.
 
-Second,  the language model may have a difficult time with a specific words or phrases.
+Second,  the language model may have difficulty with specific words or phrases.
 This is a common experience, which is rectified by using text replacements.
 A difficult-to-interpret word or phrase may cause the language model to return a series of alternate words or phrases that were not intended.
-The solution to this problem is to map these alternate phrases to the desired phrase to ensure that it is returned correctly.
-Invariably, some of your mappings may get invoked when not intended.
+The solution to this problem is to map these alternate phrases to the desired phrase to ensure it is returned correctly.
+Invariably, some of one's mappings may get invoked when not intended.
 This event is rare enough to be tolerated.
-The large language models are not perfect, and these sorts of difficulties are still widespread.
-It is expected that over the next several years the language models will improve further and that these difficulties will become less common.
-Nonetheless, the ability to map the alternate phrases to the desired phrase demonstrates the great value of being able to use text replacements to get the desired outcome.
+The large language models are imperfect, and these difficulties are still widespread.
+It is expected that over the next several years the language models will continue to evolve and improve, making these difficulties less common.
+Nonetheless, the ability to map the alternate phrases to the desired phrase demonstrates the great value of using text replacements to achieve the desired outcome.
 
 Third, language models vary quite a bit in terms of their requirements for an excellent microphone.
-Newer language models often can accurately transcribe your words using the internal microphone that comes with your laptop or desktop computer.
-A high quality external microphone may not be required, contrary to the prevailing advice in some quarters.
+Newer language models can often accurately transcribe your words using the internal microphone from your laptop or desktop computer.
+Contrary to the prevailing advice in some quarters, a high-quality external microphone may not be required.
 The microphone in our 2018 MacBook Pro works well with Voice In Plus.
 
-Fouth, you can inadvertantly change the case of words while dictating in Voice In Plus.
-To switch back to the default case, you need to navigate to the options page and select the text transform button to open a GUI that lets you set the case globally.
-This event occurs about one every 100 hours of dictation.
+Fourth, one can inadvertantly change the case of words while dictating in Voice In Plus.
+To switch back to the default case, one need to navigate to the options page and select the text transform button to open a GUI that lets you set the case globally.
+This event occurs about once every 100 hours of dictation.
 
-Fifth, a related problem is the inadvertent activation of other voice computing software on your computer.
-For example, once in about 100 hours of dictation, I will say a phrase that resembles `Hey, Siri`.
+Fifth, a related problem is the inadvertent activation of other voice computing software on one's computer.
+For example, once in about 100 hours of dictation, one will say a phrase that resembles `Hey, Siri`.
 *Siri* will then respond.
-One solution is to inactivate *Siri* so that it cannot respond to your speach.
+One solution is to inactivate *Siri* so that it cannot respond to one's speach.
 
 These caveats are minor annoyances.
-We think that the productivity gains out wiegh the disruptions caused by these annoyances.
+We think that productivity gains out of the disruptions caused by these annoyances.
 
 
 ### Common hazards when voice computing
 
-In my year of using voice control every day, I have encountered two kinds of  mishaps.
-First, I have accidentally recorded a conversation when someone walked into my office while doing computing.
-If I fail to turn off the ASR software, bits of our conversation are recorded at the positon of the mouse cursor.
+In our year of using voice control daily, we have encountered two mishaps.
+First, we have accidentally recorded a conversation when someone walked into my office while doing computing.
+If we fail to turn off the ASR software, bits of our conversation are recorded at the mouse cursor's position.
 This inserted text has to be deleted later.
-This is a bigger problem when a code file or code cell is being edited.
+This is a bigger problem when editing a code file or code cell.
 The injection of unwanted words can introduce bugs that take time to remove.
 
 Second, some ASR software may become activated upon restarting the computer.
-If their state is overlooked, words from your speeh, a YouTube video, or a Zoom meeting can be converted into computer commands that get executed in unintended ways.
-If this occurs in the middle of a Zoom meeting, this can be embarrassing.
-Also, two voice-control software can activated at the same time and speach can be transcribed twice in the text area.
+If their state is overlooked, words from one's speech, a YouTube video, or a Zoom meeting can be converted into computer commands that get executed in unintended ways.
+It can be embarrassing if it occurs in the middle of a Zoom meeting.
+Also, two voice-control software can be activated simultaneously, and the speech will be transcribed twice in the text area.
 
 
 ### Future directions
 
-One future direction is to build out the libraries of voice-triggered snippets that have been developed to date.
-Another direction includes the development of a method of facilitating voice stops, in analogy to tab stops in code snippets for advanced text editors.
-These voice stops would advance the cursor to alll sites that should be considered for edting to customize the code snippet for the problem at hand.
-The other related advance would be the mirroring of the parameter values at identical voice stops.
+One future direction is to build out the libraries of voice-triggered snippets that have been developed.
+Another direction includes developing a method for facilitating voice stops analogous to tab stops in code snippets for advanced text editors.
+These voice stops would advance the cursor to all sites that should be considered for editing to customize the code snippet for the problem.
+The other related advance would be mirroring the parameter values at identical voice stops.
