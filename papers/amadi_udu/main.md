@@ -221,16 +221,16 @@ From @tbl:result_table, SVM tended to be have very low scores in some datasets, 
 
 However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a relatively important feature, while SVM considered it insignificant. The mutability of importance scores for the classifiers considered underscores the need to explore multiple classifiers when undertaking a comprehensive investigation of feature importance for feature selection purposes. 
 
-[Fig. 2](#ci_time) presents the PFI process time and corresponding sample fractions for the Census Income dataset. The results are based on one independent run, with PFI set at 30 feature-permuted repeats. For LightGBM and RF, PFI process time increased linearly with higher sample fractions; SVM however showed a quadratic increase. LightGBM had the least computational cost with CPU process times of 2.3 sec and 11.8 sec for 10% and 100% sample fractions respectively. Although SVM had a similar process time to RF for 10% sample fraction (i.e., 7.5 sec and 9.8 sec respectively), it exhibited a substantial process time of 795.1 sec using the entire dataset. This represents a 8,002% increase in CPU computational cost compared to a 10% sample fraction.
+[Fig. 2](#db_time) shows the PFI process time and corresponding sample fractions for the Diabetes dataset, which has a substantial sample size of 253,680 instances. The results are based on one independent run, with PFI set at 30 feature-permuted repeats. For LightGBM and RF, the PFI process time increased linearly with larger sample fractions, whereas SVM experienced an exponential growth. LightGBM had the lowest computational cost, with CPU process times of 3.9 seconds and 28.8 seconds for 10% and 100% sample fractions, respectively. SVM required 21,263 seconds to process the entire dataset, reflecting a 9,345% increase in CPU computational cost compared to using a 10% sample fraction.
 
 :::{figure} 
-:alt: PFI process time and corresponding sample fractions for the Census Income dataset.
+:alt: PFI process time and corresponding sample fractions for the Diabetes dataset.
 :width: 30%
 :align: center
-:label: fig:ci_time
+:label: fig:db_time
 (ci_time)=
 ![](./images/time_plot.png)
-PFI process time and corresponding sample fractions for the Census Income dataset.
+PFI process time and corresponding sample fractions for the Diabetes dataset.
 :::
 
 [Fig. 3a](#ci_boxplot-a) - [c](#ci_boxplot-c) present the PFI for Final Weight feature of Census Income dataset, evaluated across different sample fractions using LightGBM, RF, and  SVM models, respectively. The decrease in AUC indicates the impact on model performance when Final Weight feature is permuted.  Generally, for smaller sample fractions, there was a higher variability in AUC and prominence of outliers. This could be attributed to the increased influence of randomness, fewer data points, and sampling fluctuations for smaller sample fractions across the datasets. It is noteworthy that reduced fractions also incur sample rarity effects of class imbalance data, which include a low stability of evaluation performance.
