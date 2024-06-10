@@ -19,7 +19,7 @@ The rest of the paper is organised as follows: @sec:methodology briefly outlines
 (sec:methodology)=
 ## Methodology
 ### Description of datasets
-Five real life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine machine learning repository, including CDC Diabetes Health Indicator [@diabetes], Census Income [@census_income], Bank Marketing [@bank_marketing], Statlog (Shuttle) [@statlog].The fifth dataset  is from damage morphology studies, Moisture Absorbed Composite [@Osa-uwagboe2024]. The datasets are presented in @tbl:dataset_summary. Notably,  all datasets exhibited high class imbalance ratios from 0.09 to 0.18.
+Five real life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine machine learning repository, including CDC Diabetes Health Indicator [@diabetes], Census Income [@census_income], Bank Marketing [@bank_marketing], Statlog (Shuttle) [@statlog]. The fifth dataset is Moisture Absorbed Composite [@Osa-uwagboe2024] from a damage morphology study. The datasets are presented in @tbl:dataset_summary. Notably, all datasets exhibited high class imbalance ratios from 0.09 to 0.18.
 
 :::{table} Summary of datasets used in the study
 :label: tbl:dataset_summary
