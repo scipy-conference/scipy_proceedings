@@ -234,16 +234,16 @@ However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a re
 PFI process time and corresponding sample fractions for the Diabetes dataset.
 :::
 
-[@fig:ci_boxplot-a) - [@fig:ci_boxplot-c] present the PFI for Final Weight feature of Census Income dataset, evaluated across different sample fractions using LightGBM, RF, and  SVM models, respectively. The decrease in AUC indicates the impact on model performance when Final Weight feature is permuted.  Generally, for smaller sample fractions, there was a higher variability in AUC and prominence of outliers. This could be attributed to the increased influence of randomness, fewer data points, and sampling fluctuations for smaller sample fractions across the datasets. It is noteworthy that reduced fractions also incur sample rarity effects of class imbalance data, which include a low stability of evaluation performance.
+[Fig. 3a](#ci_boxplot-a) - [c](#ci_boxplot-c) present the PFI for Final Weight feature of Census Income dataset, evaluated across different sample fractions using LightGBM, RF, and  SVM models, respectively. The decrease in AUC indicates the impact on model performance when Final Weight feature is permuted.  Generally, for smaller sample fractions, there was a higher variability in AUC and prominence of outliers. This could be attributed to the increased influence of randomness, fewer data points, and sampling fluctuations for smaller sample fractions across the datasets. It is noteworthy that reduced fractions also incur sample rarity effects of class imbalance data, which include a low stability of evaluation performance.
 
 :::{figure} 
 :alt: Sample fractions and corresponding decrease in AUC for Final Weight feature of Census Income dataset
 :width: 20%
 :align: center
 :label: fig:ci_boxplot
-./images/lgbm_census_income_feature_2.png
-./images/rf_census_income_feature_2.png
-./images/svm_census_income_feature_2.png
+(ci_boxplot-a) = ![](./images/lgbm_census_income_feature_2.png)
+(ci_boxplot-b) = ![](./images/rf_census_income_feature_2.png)
+(ci_boxplot-c) = ![](./images/svm_census_income_feature_2.png)
 Sample fractions and corresponding decrease in AUC for Final Weight feature of Census Income dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
 
