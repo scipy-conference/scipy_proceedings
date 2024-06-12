@@ -22,11 +22,14 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        - bojarski2016end
+        - yang2024swe
+        - norvig1991techniques
+        - makelov2023practical
+        - git
+        - maymounkov2018koji
+        - semver
+        - lozano2017unison
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
