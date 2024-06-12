@@ -120,7 +120,7 @@ Thus, rather than repetitively querying these slow servers, geosnap takes the po
 that it is preferable to store repeatedly-used datasets in
 [highly-performant formats](https://github.com/opengeospatial/geoparquet), because they
 are usually small and fast enough to store on disk. When not on disk, it makes sense to
-stream these datasets over [S3]((https://aws.amazon.com/s3/)), where they can be read
+stream these datasets over [S3](https://aws.amazon.com/s3/), where they can be read
 very quickly (and directly). For that reason, geosnap maintains
 [a public S3 bucket](https://open.quiltdata.com/b/spatial-ucr), thanks to the
 [Amazon Open Data Registry](https://github.com/awslabs/open-data-registry), and uses
