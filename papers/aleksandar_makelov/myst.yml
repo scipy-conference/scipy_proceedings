@@ -8,8 +8,10 @@ project:
   authors:
     - name: Aleksandar Makelov
       email: aleksandar.makelov@gmail.com
-      orcid: 0000-0000-0000-0000
+      orcid: 0009-0003-5394-112X
       affiliations:
+        - MIT
+        - SERI MATS
         - Independent Researcher
   keywords:
     - data management
