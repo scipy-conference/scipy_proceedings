@@ -240,7 +240,39 @@ Figure \ref{fig:fig2} presents the distribution and diversity of the different C
 
 Figure \ref{fig:fig3} shows the distribution of samples from different Cumacea families according to the variety of water bodies where they were collected. This makes it possible to compare the diversity and potential preferences of the different families in each body of water.
 
-APW (Arctic Polar Water) has a high family diversity, with a significant presence of the Leuconidae, Diastylidae, and Astacidae. APW/NSAIW (Arctic Polar Water/North Sub-Arctic Intermediate Water) shows a high presence of Diastylidae and Leuconidae, with a low density of Lampropidae. ISOW (Iceland Scotland Overflow Water) has a great abundance of specimens, including Lampropidae and Diastylidae. LSW (Labrador Sea Water) shows low family diversity, with a preponder
+APW (Arctic Polar Water) has a high family diversity, with a significant presence of the Leuconidae, Diastylidae, and Astacidae. APW/NSAIW (Arctic Polar Water/North Sub-Arctic Intermediate Water) shows a high presence of Diastylidae and Leuconidae, with a low density of Lampropidae. ISOW (Iceland Scotland Overflow Water) has a great abundance of specimens, including Lampropidae and Diastylidae. LSW (Labrador Sea Water) shows low family diversity, with a preponderance of Astacidae. NAW (North Atlantic Water), like APW (Arctic Polar Water), has a high family diversity, with a predominance of Lampropidae, Ceratocumatidae and Astacidae. NSAIW (North Sub-Arctic Intermediate Water) shows, like LSW (Labrador Sea Water), a low family diversity, represented by the Leuconidae and the Lampropidae. NSWc and NSDWw (North Sub-Atlantic Deep Water, cold and warm), have high abundances of Diastylidae, with the presence of Leuconidae in NSDWw (warm North Sub-Atlantic Deep Water).
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figure4.png}
+    \caption{Histogram of the frequencies of Cumacea families found in our sample according to the habitat where they were collected.\label{fig:fig4}}
+\end{figure}
+
+Figure \ref{fig:fig4} shows the distribution of samples from different families of Cumacea according to the type of habitat where they were collected during sampling. This makes it possible to compare the diversity of the different families in each type of housing.
+
+Deep sea, there is a wide variety of families, dominated by the Diastylidae and the Lampropidae. Shelf, presents a wide variety of family, but less than the deep sea. It is dominated by the Leuconidae. Slope, shows low family diversity, with a greater presence of Diastylidae. 
+
+Figures \ref{fig:fig5} and \ref{fig:fig6} below show the degree of correlation between a portion of the multiple sequence alignment (window) of our samples and two climatic parameters: wind speed at the start of sampling (m/s) and the O2 concentration of the water where the samples were collected (mg/L). This correlation was based on 4 metrics: Least-Square Distance, Robinson-Fouls Distance, Normalised Robinson-Foulds Distance and Euclidean Distance. These results were obtained using the functions leastSquare(tree1, tree2), robinsonFoulds(tree1, tree2), euclideanDist(tree1, tree2) from the aPhyloGeo software and were organised by the main function (see \autoref{lst:main}). 
+
+Sequence correlation raises the question of how variations in sequences (windows) respond to or vary with climatic conditions. Conserved positions (low values) could potentially suggest functionally essential regions that do not readily vary with changing climatic conditions, while fluctuating windows (high values) could present specific adaptations to climatic conditions. Analyzing how sequences do or do not vary under these two different climatic conditions can highlight regions in the sequences (windows) that are sensitive or resistant to fluctuations in these two climatic parameters. In our results, we observe a similar fluctuation of the correlation with these two parameters between Figure \ref{fig:fig5} and \ref{fig:fig6}.
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figure5.png}
+    \caption{Variations in the four metrics (Robinson-Foulds distance, generalized Robinson-Foulds, Euclidean distance, and least-square distance) analyzed to elucidate their correlation with fluctuations in wind speed at the start of the sampling (m/s). \label{fig:fig5}}
+\end{figure}
+
+In Figure \ref{fig:fig5}a, the peaks and troughs suggest that some locations across the sample sequences are more conserved and therefore similar (smaller distance), probably indicating potential functional or structural significance, while other positions show more variability (larger distance). In contrast to Figure \ref{fig:fig5}a, the values in Figure \ref{fig:fig5}b are more concentrated on restricted values, suggesting a more uniform fluctuation. In this context, lower variation may indicate that changes in sequences do not completely affect local phylogeny. The same is true of Figure \ref{fig:fig5}c, where the normalized distances are rather homogeneous, dictating that variations in sequence positions have a fairly constant impact on the phylogenic structure of the trees. The Euclidean distance, shown in Figure \ref{fig:fig5}d, appears to be the most sensitive and disparate distance to our data. A higher Euclidean distance means a greater difference between sequences at position 520_529 (see Figure \ref{fig:fig5}d), suggesting that this site is more variable or evolutionarily susceptible to change. 
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figure6.png}
+    \caption{Variations in the four metrics (Robinson-Foulds distance, generalized Robinson-Foulds, Euclidean distance, and least-square distance) analyzed to elucidate their correlation with fluctuations in O2 saturation ground (mg/L). \label{fig:fig6}}
+\end{figure}
+
+Figure \ref{fig:fig6}a is similar to figure \ref{fig:fig5}a, but shows more variation between different window positions. Windows with smaller mean-squared distances are more likely to be evolutionarily conserved, while windows with larger distances show greater instability. The Robinson-Foulds distances in Figure \ref{fig:fig6}b vary with a restricted range of values (50 to 70). These small variations suggest that fluctuations in sequences do not significantly alter local phylogeny. Like the figure above, Figure \ref{fig:fig6}c has a fairly homogeneous distribution. This means that variations in individual window positions exert a fairly uniform influence on the phylogenetic arrangement of trees following normalization. Like Figure \ref{fig:fig5}d, the Euclidean distance presented in Figure \ref{fig:fig6}d shows the greatest sensitivity and heterogeneity from our data. The position with the highest Euclidean distance (1190_1199, see Figure 5d) shows significant dissimilarity between sequences at this position, which may signify a more fluctuating or evolutionarily unstable site. 
+
+All these results will need to be further investigated and analyzed in order to provide a more complete understanding of these results, and thus enable us to draw solid conclusions.
 
 \section{Conclusion}\label{conclusion}
 
