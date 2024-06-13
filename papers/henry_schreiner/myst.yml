@@ -31,6 +31,7 @@ project:
   abbreviations:
     PEP: Python Enhancement Proposal
     NSF: National Science Foundation
+    PyPI: Python Package Index
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
