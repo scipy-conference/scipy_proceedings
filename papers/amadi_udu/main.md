@@ -2,24 +2,24 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: Computational Resource Optimisation in Feature Selection under Class Imbalance Conditions
 abstract: |
-  Feature selection is crucial for reducing data dimensionality as well as enhancing model interpretability and performance in machine learning tasks. However, selecting the most informative features in large dataset, often incurs high computational costs. This study explores the possibility of performing feature selection on a subset of data to reduce the computational burden. The study uses five real-life datasets with substantial sample sizes and severe class imbalance ratios between 0.09 – 0.18. The results illustrate the stability/variability of feature importance with smaller sample fractions in different models. In this study, LightGBM exhibited the most stable performance, even with reduced sample fractions.
+  Feature selection is crucial for reducing data dimensionality as well as enhancing model interpretability and performance in machine learning tasks. However, selecting the most informative features in large dataset often incurs high computational costs. This study explores the possibility of performing feature selection on a subset of data to reduce the computational burden. The study uses six real-life datasets with substantial sample sizes and severe class imbalance ratios between 0.07 – 0.18. The results illustrate the stability/variability of feature importance with smaller sample fractions in different models. In this study, Light Gradient-Boosting Machine exhibited the most stable performance, even with reduced sample fractions.
 
 ---
 (sec:introduction)=
 ## Introduction
 
-In the development of prediction models for real-world applications, two key challenges often arise: high-dimensionality resulting from the numerous features, and class-imbalance due to the rarity of samples in the positive class. Feature selection methods are  utilised to address issues of high-dimensionality by selecting a smaller subset of relevant features, thus reducing noise, increasing interpretability, and enhancing model performance [@Cai2018; @Dhal2022; @Udu2023]. 
+In the development of prediction models for real-world applications, two key challenges often arise: high-dimensionality resulting from the numerous features, and class-imbalance due to the rarity of samples in the positive class. Feature selection methods are  utilised to address issues of high-dimensionality by selecting a smaller subset of relevant features, thus reducing noise, increasing interpretability, and enhancing model performance [@Cai2018; @Dhal2022; @Udu2023a]. 
 
-Studies [@Matharaarachchi2021; @Tsai2020; @Yin2013; @deHaro-Garcia2020] on the performance of feature selections methods with class imbalance data have been undertaken on using synthetic and real-life datasets. A significant drawback noted was the computational cost of their approach on large sample sizes.  While experimental investigations of feature selection amid class imbalance conditions have been studied in the literatures, there is a need to further understand the effect of sample size on performance degradation of feature selection methods. This would offer valuable insights into tackling the associated resource expense involved in undertaking feature selection with respect to large sample sizes where class-imbalance exists, for a wide range of applications. 
+Studies [@Yin2013; @Tsai2020; @deHaro-Garcia2020; @Matharaarachchi2021] on the performance of feature selection methods with class imbalance data have been undertaken on using synthetic and real-life datasets. A significant drawback noted was the computational cost of their approach on large sample sizes.  While experimental investigations of feature selection amid class imbalance conditions have been studied in the literature, there is a need to further understand the effect of sample size on performance degradation of feature selection methods. This would offer valuable insights into tackling the associated resource expense involved in undertaking feature selection with respect to large sample sizes where class-imbalance exists, for a wide range of applications. 
 
-This study investigates the impact of performing feature selection on a reduced dataset on feature importance and model performance, using five real-life datasets characterised by large sample sizes and severe class imbalance structures. We employ a rigorous feature selection process that utilises permutation feature importance (PFI) and evaluate the feature importance on LightGBM, random forest (RF) and SVM models. Evaluation of the feature importance was assessed using the area under the Receiver Operator Characteristics (ROC) curve, commonly referred to as AUC owing to its suitability in class imbalance problems [@Luque2019; @Temraz2022]. The development of the machine learning framework and data visualisation in this study was facilitated by several key Python libraries. Pandas [@pandas1] and NumPy [@numpy] were used for data loading and numerical computations, respectively. Scikit-learn [@sklearn1] provided tools for data preprocessing, model development, and evaluation. Matplotlib [@matplotlib] was employed for visualising data structures. Additionally, the SciPy [@scipy] library's cluster, spatial, and stats modules were crucial for hierarchical clustering, Spearman rank correlation, and distance matrix computations.
+This study investigates the impact of performing feature selection on a reduced dataset on feature importance and model performance, using six real-life datasets characterised by large sample sizes and severe class imbalance structures. We employ a rigorous feature selection process that utilises permutation feature importance (PFI) and evaluate the feature importance on three selected models; namely Light Gradient-Boosting Machine (Light GBM), random forest (RF) and Support Vector Machines (SVM). These models are popular in real-world machine learning (ML) studies and also serve as a benchmark for comparing novel models [@bonaccorso2018; feng2019; paleyes2022; sarker2021; udu2024]. Feature importance was evaluated using the area under the Receiver Operator Characteristics (ROC) curve, commonly referred to as AUC owing to its suitability in class imbalance problems [@Luque2019; @Temraz2022]. The development of the ML framework and data visualisation in this study was facilitated by several key Python libraries. Pandas [@pandas1] and NumPy [@numpy] were used for data loading and numerical computations, respectively. Scikit-learn [@sklearn1] provided tools for data preprocessing, model development, and evaluation. Matplotlib [@matplotlib] was employed for visualising data structures. Additionally, the SciPy [@scipy] library's cluster, spatial, and stats modules were crucial for hierarchical clustering, Spearman rank correlation, and distance matrix computations.
 
-The rest of the paper is organised as follows: @sec:methodology briefly outlines the methodology adopted while @sec:results presents the results and discussion. The conclusion of the study is provided in @sec:conclusion.
+The rest of the paper is organised as follows: @sec:methodology briefly outlines the methodology adopted, while @sec:results presents the results and discussion. The conclusion of the study is provided in @sec:conclusion.
 
 (sec:methodology)=
 ## Methodology
 ### Description of datasets
-Five real life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine machine learning repository, including CDC Diabetes Health Indicator [@diabetes], Census Income [@census_income], Bank Marketing [@bank_marketing], Statlog (Shuttle) [@statlog]. The fifth dataset is Moisture Absorbed Composite [@Osa-uwagboe2024] from a damage morphology study. The datasets are presented in @tbl:dataset_summary. Notably, all datasets exhibited high class imbalance ratios from 0.09 to 0.18.
+Six real-life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine ML repository, including CDC Diabetes Health Indicator [@diabetes], Census Income [@census_income], Bank Marketing [@bank_marketing], Statlog (Shuttle) [@statlog] and Cover Type [@covertype]. The sixth dataset is Moisture Absorbed Composite [@Osa-uwagboe2024] from a damage morphology study. The datasets are presented in @tbl:dataset_summary. Notably, all datasets exhibited high class imbalance ratios from 0.07 - 0.18 (i.e., the ratio of the number of samples in the minority class over that of the majority class).
 
 :::{table} Summary of datasets used in the study
 :label: tbl:dataset_summary
@@ -63,6 +63,13 @@ Five real life datasets from different subject areas were considered in this stu
       <td style="text-align: center;">0.18</td>
     </tr>
     <tr>
+      <td>Cover type</td>
+      <td style="text-align: center;">55</td>
+      <td style="text-align: center;">581,012</td>
+      <td>Biology</td>
+      <td style="text-align: center;">0.07</td>
+    </tr>
+        <tr>
       <td>Moisture absorbed composite</td>
       <td style="text-align: center;">9</td>
       <td style="text-align: center;">295,461</td>
@@ -73,14 +80,32 @@ Five real life datasets from different subject areas were considered in this stu
 </table>
 :::
 
-Building data-driven models in the presence of  high dimensionality includes several steps such as data preprocessing, feature selection, model training and evaluation. To address class imbalance issues during model training, an additional resampling step may be performed to adjust the uneven distribution of class samples [@Udu2024; @REZVANI2023110415; @Udu2023]. This paper, however, focuses on the feature selection method, model training, and  the evaluation metrics adopted.
+Building data-driven models in the presence of  high dimensionality includes several steps such as data preprocessing, feature selection, model training and evaluation. To address class imbalance issues during model training, an additional resampling step may be performed to adjust the uneven distribution of class samples [@Udu2024; @REZVANI2023110415; @Udu2023b]. This paper, however, focuses on the feature selection method, model training, and  the evaluation metrics adopted.
 
 ###  Feature selection and model training
 To maintain a model-agnostic approach that is not confined to any specific ML algorithm, this study employed PFI for feature selection. PFI assesses how each feature affects the model's performance by randomly shuffling the values of a feature and noting the resulting decrease in performance. This technique interrupts the link between a feature and its predicted outcome, thus enabling us determine the extent to which a model relies on a particular feature [@Li2017; @sklearn1; @Kaneko2022]. It is noteworthy that the effect of permuting one feature could be negligible when features are collinear,  and thus an important feature may report a low score. To tackle this, a hierarchical cluster on a Spearman rank-order correlation can be adopted, with a threshold taking from visual inspection of the dendrograms in grouping features into clusters and selecting the feature to retain.
 
+Datasets were loaded using pandas, and categorical features were encoded using LabelEncoder. The Spearman correlation matrix was computed and then converted into a distance matrix. Hierarchical clustering was subsequently performed using Ward’s linkage method, and  a threshold for grouping features into clusters was determined through visual inspection of the dendrograms, allowing for the selection of features to retain. Subsequently, the investigation proceeded in two steps. In step 1,  all samples of the respective dataset was used. The dataset was split into training and test sets based on a test-size of 0.25. The respective classifiers were initialised using their default hyper-parameter settings and fitted on the training data. Thereafter, PFI was computed on the fitted model with number of times a feature is permuted set to 30 repeats. Lastly, the decrease in AUC was evaluated on the test set.
+
+In the second step, we initiate three for-loops to handle the different features, fractions of samples, and repetition of the PFI process undertaken in step 1. Sample fraction sizes were taken from 10% – 100% in increments of 10%, with the entire process randomly repeated 10 times. This provided an array of 300 AUC scores for each sample fraction and respective feature of the PFI process. To ensure reproducibility,  the random state for the classifiers, sample fractions, data split, and permutation importance were predefined.  Computation processes were accelerated using the joblib parallel library on the Sulis High Performance Computing platform.  A sample source code of step 2 is presented:
+
+```python
+# Define the function for parallel execution
+def process_feature(f_no, selected_features, df):
+    for frac in np.round(np.arange(0.1, 1.1, 0.1), 1).tolist():  #loop for sample fractions
+        for rand in range(10): #loop for 10 repeats of the process
+            df_new = df.sample(frac=frac, random_state=rand)
+...
+            pfi = permutation_importance(model, X_val, y_val, n_repeats=30,
+                                       random_state=rand, scoring='roc_auc', n_jobs=-1)
+    return final_df
+# Parallelise computation 
+results = Parallel(n_jobs=-1)(delayed(process_feature)(f_no, selected_features, df) for f_no in range(len(selected_features)))
+```
+
 (sec:results)=
 ## Results and Discussions
-Datasets were loaded using pandas, and categorical features were encoded appropriately. The Spearman correlation matrix was computed and then converted into a distance matrix. Hierarchical clustering was subsequently performed using Ward’s linkage method, and  a threshold for grouping features into clusters was determined through visual inspection of the dendrograms, allowing for the selection of features to retain. The hierarchical cluster and spearman’s ranking for moisture absorbed composite dataset is shown in [Figure 1a](#hiercorr-a) and [b](#hiercorr-b) respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC. 
+The hierarchical cluster and Spearman’s ranking for moisture absorbed composite dataset is shown in [Figure 1a](#hiercorr-a) and [b](#hiercorr-b) respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC. 
 
 :::{figure} 
 :alt: Hierarchical cluster and Spearman correlation for GSVS
@@ -95,34 +120,11 @@ Datasets were loaded using pandas, and categorical features were encoded appropr
 Feature relationship for moisture absorbed composite dataset; (a) hierarchical cluster, Spearman correlation ranking.
 :::
 
-Subsequently, the investigation proceeded in two steps. In step 1,  the entire samples of the respective dataset was used. The dataset was split into training and test sets based on a test-size of 0.25. The respective classifiers were initialised using their default hyper-parameter settings and fitted on the training data. Thereafter, PFI was computed on the fitted model with number of times a feature is permuted set to 30 repeats. Lastly, the decrease in AUC was evaluated on the test set. @tbl:result_table gives the median and interquartile (IQR) importance scores importance scores based on the decrease in AUC. Values emphasised on the table represent the highest ranked feature for the respective classifier.
+As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency are in the same cluster with a highly correlated value of 0.957 shown in [Figure 1b](#hiercorr-b). Similarly, Rise Time and Initiation Frequency are clustered with a highly negative correlation of -0.862. Amplitude and Absolute Energy also exhibited a high positive correlation of 0.981. 
 
-In the second step, we initiate three for-loops to handle the different features, fractions of samples, and repetition of the PFI process undertaken in step 1. Sample fraction sizes were taken from 10% – 100% in increments of 10%, with the entire process randomly repeated 10 times. This provided an array of 300 AUC scores for each sample fraction and respective feature of the PFI process. To ensure reproducibility,  the random state for the classifiers, sample fractions, data split, and permutation importance were predefined.  Computation processes were accelerated using the joblib parallel library on the Sulis High Performance Computing platform.  A sample source code of step 2 is presented:
+@tbl:result_table gives the median and interquartile (IQR) feature importance scores based on decrease in AUC for the LightGBM, RF and SVM models. These scores were obtained using all samples in the PFI process. Values emphasised in bold fonts represent the  highest ranked feature for the respective models based on their median decrease in AUC.
 
-```python
-# Define the function for parallel execution
-def process_feature(f_no, selected_features, df):
-    for frac in np.round(np.arange(0.1, 1.1, 0.1), 2).tolist():  #loop for sample fractions
-        for rand in range(10): #loop for 10 repeats of the process
-            df_new = df.sample(frac=frac, random_state=rand)
-            X = df_new.drop('label', axis=1)
-            X = X.iloc[:, selected_features]
-            y = df_new['label']
-            X_train, X_val, y_train, y_val = train_test_split(X, y, random_state=rand)
-            lgbm = LGBMClassifier(random_state=random_seed, n_jobs=-1)
-            model= lgbm.fit(X_train, y_train)                
-            r = permutation_importance(model, X_val, y_val, n_repeats=30,
-                                       random_state=rand, scoring='roc_auc', n_jobs=-1)
-            importances.append(r.importances[f_no])
-        fractions.append(frac)
-        importances_all.append(importances)
-    return final_df
-```
-
-
-As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency are in the same cluster with a highly correlated value of 0.957 shown in [Figure 1b](#hiercorr-b) Similarly, Rise Time and Initiation Frequency are clustered with a highly negative correlation of -0.862. Amplitude and Absolute Energy also exhibited a high positive correlation of 0.981. 
-
-:::{table} Median and IQR importance scores of features.
+:::{table} Median and IQR feature importance scores based on decrease in AUC for LightGBM, RF and SVM models.
 :label: tbl:result_table
 <table border="1">
   <tr>
@@ -194,26 +196,49 @@ As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency a
   </tr>
 
   <tr>
-  <td colspan="23"
+  <td colspan="23"> </td>
   </tr>
   
   <tr>
   <th colspan="11">Moisture Absorbed Composites</th>
+      <th> </th>
+    <th colspan="11">Cover Type</th>
   </tr>
 
   <tr>
    <td>0</td><td>Risetime</td> <td>0.005</td>    <td>0.005</td>    <td>0.005</td>    <td>0.009</td>    <td>0.008</td>    <td>0.009</td><td>0.004</td><td>0.003</td><td>0.004</td>
+  <td></td>
+    <td>0</td><td>Elevation</td><th>0.306</th><th>0.305</th><th>0.308</th><th>0.369</th><th>0.368</th><th>0.370</th><th>0.456</th><th>0.453</th><th>0.457</th>
   </tr>
+							
   <tr>
    <td>1</td><td>Counts</td>    <td>0.037</td>    <td>0.037</td>    <td>0.037</td>    <td>0.075</td>    <td>0.073</td>    <td>0.075</td>    <td>0.009</td>    <td>0.009</td>    <td>0.009</td>
+  <td></td>
+   <td>1</td><td>Aspect</td>    <td>0.014</td>    <td>0.014</td>    <td>0.014</td>    <td>0.024</td>    <td>0.024</td>    <td>0.025</td>    <td>0.002</td>    <td>0.002</td>    <td>0.002</td>									
   </tr>
+
   <tr> 
    <td>4</td>    <td>ASL</td>    <td>0.034</td>    <td>0.034</td>    <td>0.034</td>    <td>0.072</td>    <td>0.071</td>    <td>0.073</td>    <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>    <td><10<sup>-3</sup></td>
-
+  <td></td>
+   <td>2</td>    <td>Slope</td>    <td>0.003</td>    <td>0.003</td>    <td>0.003</td>  <td>0.009</td>    <td>0.009</td>    <td>0.009</td>    <td>0.001</td>            <td>0.001</td>    <td>0.001</td>									
   </tr>
+
   <tr> 
    <td>7</td>    <td>Freq. Centroid</td>    <th>0.468</th>    <th>0.466</th>    <th>0.470</th>    <th>0.463</th>    <th>0.461</th>    <th>0.465</th>    <th>0.422</th> <th>0.421</th>    <th>0.425</th>
+  <td></td>
+   <td>3</td>    <td>H. Dist.</td>          <td>0.011</td>    <td>0.011</td>    <td>0.011</td>    <td>0.018</td>    <td>0.018</td>    <td>0.018</td>    <td>0.008</td> <td>0.008</td>    <td>0.008</td>
+  </tr>
+	
+  <tr>
+  <td colspan="11", rowspan="3"></td><td></td><td>10</td><td>Wild. Area</td><td>0.085</td><td>0.085</td><td>0.086</td><td>0.041</td><td>0.040</td><td>0.042</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
+  </tr>
 
+ <tr>
+  </td><td></td><td>11</td><td>Soil Type</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
+  </tr>
+
+ <tr>
+ </td><td></td><td>12</td><td>Soil Type 2</td><td>0.002</td><td>0.002</td><td>0.002</td><td>0.006</td><td>0.006</td><td>0.006</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
   </tr>
 </table>
 
@@ -286,11 +311,11 @@ Sample fractions and corresponding decrease in AUC for Rad Flow feature of Statl
 
 For LightGBM model in [Figure 3a](#ci_boxplot-a), the median decrease in AUC was close to  zero,  indicating that Final Weight had minimal impact on model performance, as noted in @tbl:result_table. Similar results were recorded in [Figure 4a](#bm_boxplot-a) - [c](#bm_boxplot-c) for the Day of Week feature of Bank Marketing dataset, where all models exhibited similarly high feature importance scores on the Day of Week feature. Even for sample fractions of 0.5, LightGBM appeared to give similar importance scores to using the entire data sample. RF showed moderate variability and  outliers  in certain features, indicating  an occasional significant impact when features are permuted. On the other hand, SVM exhibited a higher median decrease in AUC, indicating that the Final Weight feature had a more significant impact on its performance. Additionally, SVM showed the greatest variability and the most prominent outliers, particularly at lower sample fractions. This was noticeable in [Figure 5a](#ss_boxplot-a) - [c](#ss_boxplot-c), where all classifiers reported similar importance scores as noted in @tbl:result_table. This variability and the presence of outliers suggest that the model's performance is less stable when features are permuted. 
 
-PFI can provide insights into the importance of features, but it is susceptible to variability, especially with smaller sample sizes. Thus, complementary feature selection methods, could be explored to validate feature importance. Future work could investigate the variability of features under particular models and sample sizes, with a view to evolving methods of providing a more stable information to the models. 
+PFI can provide insights into the importance of features, but it is susceptible to variability, especially with smaller sample sizes. Thus, complementary feature selection methods could be explored to validate feature importance. Future work could investigate the variability of features under particular models and sample sizes, with a view to evolving methods of providing a more stable information to the models. 
 
 (sec:conclusion)=
 ## Conclusion
-Feature selection for large datasets incurs considerable computational cost in the model development process of various machine learning tasks. This study aimed to optimise computational costs by investigating the influence of sample fractions on feature importance and model performance in datasets characterised by class imbalance. Five real-life datasets with large sample sizes from different subject fields which exhibited high class imbalance ratios of 0.09 – 0.18 were utilised. 
+Feature selection for large datasets incurs considerable computational cost in the model development process of various ML tasks. This study aimed to optimise computational costs by investigating the influence of sample fractions on feature importance and model performance in datasets characterised by class imbalance. Six real-life datasets with large sample sizes from different subject fields which exhibited high class imbalance ratios of 0.07 – 0.18 were utilised. 
 
 Due to its model-agnostic nature, PFI was adopted for feature selection process. Cluster, spatial, and stats sub-packages of SciPy were instrumental in tackling the multicollinearity effects associated with PFI. Using a rigorous PFI approach, the study revealed the variability of feature importance with smaller sample fractions in LightGBM, random forest and SVM models. LightGBM demonstrated  the most stability, even with smaller sample fractions, suggesting its relative robustness to sample size and permutation across the features and class-imbalanced datasets. SVM exhibited a high variability in feature importance and prominence of outliers.
 
@@ -299,6 +324,3 @@ Other feature selection methods such as shapely additive explanations, could be 
 
 ## Acknowledgement
 This work was supported by the Petroleum Technology Development Fund under grant PTDF/ED/OSS/PHD/AGU/1076/17 and NISCO UK Research Centre. Computations were  performed using the Sulis Tier 2 HPC platform hosted by the Scientific Computing Research Technology Platform at the University of Warwick. Sulis is funded by EPSRC Grant EP/T022108/1 and the HPC Midlands+ consortium.
-
-## Supplementary Material
-Supplementary material is available at [Github.com/AmadiGabriel/scipy_proceedings](https://github.com/AmadiGabriel/scipy_proceedings).
