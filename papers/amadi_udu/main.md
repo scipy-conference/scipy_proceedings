@@ -145,7 +145,6 @@ As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency a
     <td>0</td>
     <td>Age</td> <td>0.077</td> <td>0.073</td> <td>0.081</td> <td>0.041</td> <td>0.039</td> <td>0.046</td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td> </td>
     <td>1</td>   <td>Age</td> <td>0.031</td> <td>0.029</td> <td>0.034</td> <th>0.028</th> <th>0.024</th> <th>0.031</th> <td>-0.011</td> <td>-0.014</td> <td>-0.007</td>
-
  </tr>
  <tr>
     <td>1</td> <td>Work class</td> <td>0.029</td> <td>0.027</td> <td>0.031</td> <td>0.017</td> <td>0.014</td> <td>0.019</td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>
@@ -194,54 +193,44 @@ As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency a
   <tr>
   <td colspan="11"></td><td></td><td>4</td><td>Smoker</td><td>0.004</td><td>0.004</td><td>0.005</td><td>0.004</td><td>0.004</td><td>0.005</td><td>0.026</td><td>0.025</td><td>0.027</td>
   </tr>
-
   <tr>
   <td colspan="23"> </td>
   </tr>
-  
   <tr>
   <th colspan="11">Moisture Absorbed Composites</th>
       <th> </th>
     <th colspan="11">Cover Type</th>
   </tr>
-
   <tr>
    <td>0</td><td>Risetime</td> <td>0.005</td>    <td>0.005</td>    <td>0.005</td>    <td>0.009</td>    <td>0.008</td>    <td>0.009</td><td>0.004</td><td>0.003</td><td>0.004</td>
   <td></td>
     <td>0</td><td>Elevation</td><th>0.306</th><th>0.305</th><th>0.308</th><th>0.369</th><th>0.368</th><th>0.370</th><th>0.456</th><th>0.453</th><th>0.457</th>
-  </tr>
-							
+  </tr>							
   <tr>
    <td>1</td><td>Counts</td>    <td>0.037</td>    <td>0.037</td>    <td>0.037</td>    <td>0.075</td>    <td>0.073</td>    <td>0.075</td>    <td>0.009</td>    <td>0.009</td>    <td>0.009</td>
   <td></td>
-   <td>1</td><td>Aspect</td>    <td>0.014</td>    <td>0.014</td>    <td>0.014</td>    <td>0.024</td>    <td>0.024</td>    <td>0.025</td>    <td>0.002</td>    <td>0.002</td>    <td>0.002</td>									
+   <td>1</td><td>Aspect</td>    <td>0.014</td>    <td>0.014</td>    <td>0.014</td>    <td>0.024</td>    <td>0.024</td>    <td>0.025</td>    <td>0.002</td>    <td>0.002</td>    <td>0.002</td>	
   </tr>
-
   <tr> 
    <td>4</td>    <td>ASL</td>    <td>0.034</td>    <td>0.034</td>    <td>0.034</td>    <td>0.072</td>    <td>0.071</td>    <td>0.073</td>    <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>    <td><10<sup>-3</sup></td>
   <td></td>
-   <td>2</td>    <td>Slope</td>    <td>0.003</td>    <td>0.003</td>    <td>0.003</td>  <td>0.009</td>    <td>0.009</td>    <td>0.009</td>    <td>0.001</td>            <td>0.001</td>    <td>0.001</td>									
+   <td>2</td>    <td>Slope</td>    <td>0.003</td>    <td>0.003</td>    <td>0.003</td>  <td>0.009</td>    <td>0.009</td>    <td>0.009</td>    <td>0.001</td>            <td>0.001</td>    <td>0.001</td>		
   </tr>
-
   <tr> 
    <td>7</td>    <td>Freq. Centroid</td>    <th>0.468</th>    <th>0.466</th>    <th>0.470</th>    <th>0.463</th>    <th>0.461</th>    <th>0.465</th>    <th>0.422</th> <th>0.421</th>    <th>0.425</th>
   <td></td>
    <td>3</td>    <td>H. Dist.</td>          <td>0.011</td>    <td>0.011</td>    <td>0.011</td>    <td>0.018</td>    <td>0.018</td>    <td>0.018</td>    <td>0.008</td> <td>0.008</td>    <td>0.008</td>
   </tr>
-	
   <tr>
   <td colspan="11", rowspan="3"></td><td></td><td>10</td><td>Wild. Area</td><td>0.085</td><td>0.085</td><td>0.086</td><td>0.041</td><td>0.040</td><td>0.042</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
   </tr>
-
  <tr>
   </td><td></td><td>11</td><td>Soil Type</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
   </tr>
-
  <tr>
  </td><td></td><td>12</td><td>Soil Type 2</td><td>0.002</td><td>0.002</td><td>0.002</td><td>0.006</td><td>0.006</td><td>0.006</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
   </tr>
 </table>
-
 
 :::
 From @tbl:result_table, SVM tended to be have very low scores in some datasets, possibly due to its reliance of support vectors in determining the decision boundaries. Thus, features with strong influence at the decision boundary but not directly affecting the support vectors may seem less important.   For the Moisture Absorbed Composite dataset, the three classifiers reported similar scores for Frequency Centroid of 0.468, 0.466 and 0.422 respectively in @tbl:result_table. 
