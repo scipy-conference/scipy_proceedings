@@ -13,6 +13,8 @@ project:
       affiliations:
         - Princeton University
       corresponding: true
+      roles:
+        - writing
     - name: Jean-Christophe Fillion-Robin
       email: jcfr@kitware.com
       orcid: 0000-0002-9688-8950
