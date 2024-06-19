@@ -45,5 +45,13 @@ project:
   license: CC-BY-4.0
   venue: Scipy 2024
   date: 2024-07-10
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - pep517
+        - pep518
+        - pep621
+        - pep660
 site:
   template: article-theme
