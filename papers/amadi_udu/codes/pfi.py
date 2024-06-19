@@ -113,7 +113,7 @@ def process_feature(f_no, selected_features, dfXy):
         for rand in range(10):  # Loop for 10 repeats of the process
             df_new = dfXy.sample(frac=frac, random_state=rand).reset_index(drop=True)
 
-            X, y = df_new.iloc[:, selected_features], df_new['label']
+            X, y = df_new.iloc[:, selected_features], df_new['label'].astype('int')
             X_train, X_val, y_train, y_val = train_test_split(X, y, random_state=rand)
             
             if model_name == 'lgbm':
