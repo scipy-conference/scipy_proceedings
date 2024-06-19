@@ -123,7 +123,7 @@ def process_feature(f_no, selected_features, dfXy):
             else:
                 model = SVC(random_state=rand).fit(X_train, y_train)
                 
-            r = permutation_importance(model, X_val, y_val, n_repeats=20,
+            r = permutation_importance(model, X_val, y_val, n_repeats=30,
                                        random_state=rand, scoring='roc_auc', n_jobs=-1)
             importances.append(r.importances[f_no])
         fractions.append(frac)
