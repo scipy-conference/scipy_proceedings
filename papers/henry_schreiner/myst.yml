@@ -21,6 +21,8 @@ project:
       affiliations:
         - Kitware Inc.
       corresponding: true
+      roles:
+        - writing
     - name: Matt McCormick
       email: matt.mccormick@kitware.com
       orcid: 0000-0001-9475-3756
