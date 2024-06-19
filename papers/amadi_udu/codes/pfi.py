@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-# %%
 #import modules
 import pandas as pd
 from sklearn.preprocessing import  LabelEncoder
@@ -22,8 +19,6 @@ from scipy.stats import spearmanr
 from collections import defaultdict
 random_seed = 42
 
-
-# %%
 #choose dataset and model from list
 datasets = ['census_income', 'bank_marketing', 'statlog_shuttle',  'diabetes',  'gsvs']
 models= ['lgbm', 'rf', 'svm']
@@ -32,31 +27,23 @@ model_name = models[0]
 dataset = datasets[0]
 df = pd.read_csv(f'datasets/{dataset}.csv')
 
-
-# %%
-# encode categorical features
-categorical_cols = [col for col in df.columns if df[col].dtype == 'object']
+# encode categorical variables
+categorical_cols = [col for col in df.iloc[:, :-1].columns if df.iloc[:, :-1][col].dtype == 'object']
+dfX = pd.get_dummies(df.iloc[:, :-1], columns=categorical_cols, drop_first=True)
+dfXy = pd.concat([dfX, df.iloc[:, -1]], axis=1)
+dfXy.rename(columns={dfXy.columns[-1]: 'label'}, inplace=True)
 label_encoder = LabelEncoder()
-for col in df.columns:
-    if df[col].dtype == 'object':
-        df[col] = label_encoder.fit_transform(df[col])
-df.rename(columns={df.columns[-1]: 'label'}, inplace=True)
+if dfXy.iloc[:,-1].dtype == 'object':
+    dfXy.iloc[:,-1] = label_encoder.fit_transform(dfXy.iloc[:,-1])
 
-# convert multivariate modules to binary class data
-if dataset == 'census_income':
-    df['label'].replace({1: 0,2:0,3:1}, inplace = True)
-elif dataset == 'gsvs':
-    df['label'].replace({0:1, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0}, inplace = True)
-elif dataset == 'statlog_shuttle':
-    df['label'].replace({1: 0,4:1,5:0,3:0,2:0,7:0,6:0}, inplace = True)
+# convert multivariate modules to binary imbalance class data
+label_map = {datasets[0]: 3, datasets[2]: 4, datasets[4]: 0, datasets[5]: 3}
+if dataset in label_map:
+    labels = label_map[dataset]
+    dfXy['label'] = dfXy['label'].map(lambda x: 1 if x == labels else 0)
+X, y = dfXy.drop('label', axis=1), dfXy['label'].astype('int')
 
 
-# %%
-X = df.drop('label', axis=1)
-y = df['label']
-
-
-# %%
 plt.figure()
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
 corr = spearmanr(X).correlation
@@ -79,21 +66,11 @@ _ = fig.tight_layout()
 # plt.clf() #uncomment to hide plot
 # plt.close() #uncomment to hide plot
 
+## Step 1
 
-# ## Step 1
-
-# %%
 # select threshold from visual inspection of hierarchical cluster
-if dataset == 'census_income':
-    threshold = 0.94
-elif dataset == 'bank_marketing':
-    threshold = 1
-elif dataset == 'statlog_shuttle':
-    threshold = 1
-elif dataset == 'diabetes':
-    threshold = 1.1
-else: 
-    threshold = 0.8
+thresholds = {datasets[0]: 1.25, datasets[1]: 1.1, datasets[2]: 1, datasets[3]: 1.1, datasets[4]: 0.8, datasets[5]: 1.1}
+threshold = thresholds.get(dataset)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
 cluster_ids = hierarchy.fcluster(dist_linkage, threshold, criterion="distance")
@@ -128,9 +105,8 @@ results_df = results_df.round({'Median Importance': 3, '25th Percentile': 3, '75
 results_df.to_csv(f'results/{dataset}_{model_name}_pfi_results.csv', index=False)
 
 
-# ## Step 2
+## Step 2
 
-# %%
 # Define the function for parallel execution
 def process_feature(f_no, selected_features, df):
     importances_all = []
@@ -182,8 +158,7 @@ all_df = pd.DataFrame()
 
 # Parallelise computation
 results = Parallel(n_jobs=-1)(
-    delayed(process_feature)(f_no, selected_features, df) for f_no in range(len(selected_features))
-)
+    delayed(process_feature)(f_no, selected_features, df) for f_no in range(len(selected_features)))
 
 # Concatenate results
 all_df = pd.concat(results)
