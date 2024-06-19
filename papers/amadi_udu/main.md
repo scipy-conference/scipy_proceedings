@@ -142,34 +142,36 @@ As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency a
     <th>75<sup>th</sup></th>    <th> </th>    <th> </th>    <th> </th>     <th> </th>     <th>25<sup>th</sup></th>    <th>75<sup>th</sup></th>    <th> </th>    <th>25<sup>th</sup></th>    <th>75<sup>th</sup></th>
     <th> </th>    <th>25<sup>th</sup></th>    <th>75<sup>th</sup></th>  </tr>  
 <tr>
-    <td>0</td>
-    <td>Age</td> <td>0.077</td> <td>0.073</td> <td>0.081</td> <td>0.041</td> <td>0.039</td> <td>0.046</td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td> </td>
-    <td>1</td>   <td>Age</td> <td>0.031</td> <td>0.029</td> <td>0.034</td> <th>0.028</th> <th>0.024</th> <th>0.031</th> <td>-0.011</td> <td>-0.014</td> <td>-0.007</td>
+    <td>0</td><td>Age</td> <th>0.117</th> <th>0.114</th> <th>0.121</th> <th>0.066</th> <th>0.061</th> <th>0.069</th> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td> </td>
+    <td>0</td><td>Age</td> <td>0.016</td> <td>0.015</td> <td>0.017</td> <td>0.026</td> <td>0.024</td> <td>0.027</td> <td>-0.001</td> <td>-0.001</td> <td>0.002</td>
  </tr>
  <tr>
-    <td>1</td> <td>Work class</td> <td>0.029</td> <td>0.027</td> <td>0.031</td> <td>0.017</td> <td>0.014</td> <td>0.019</td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>
-    <td></td><td>4</td>
-    <td>Job</td>
-    <td>0.005</td>    <td>0.003</td>    <td>0.006</td>    <td>0.005</td>    <td>0.003</td>    <td>0.009</td>    <td>-0.001</td>    <td>-0.002</td>    <td>0.001</td>
+    <td>1</td> <td>Final weight</td> <td>-0.002</td> <td>-0.003</td> <td>-0.001</td> <td><10<sup>-3</sup></td> <td>-0.003</td> <td>0.004</td> <td>0.003</td> <td><10<sup>-3</sup></td> <td>0.011</sup></td>
+    <td></td><td>1</td>
+    <td>Balance</td><td>0.013</td> <td>0.011</td> <td>0.014</td> <td>0.011</td> <td>0.009</td><td>0.012</td><td>0.026</td> <td>0.021</td> <td>0.027</td>
 </tr>
  <tr>
-    <td>2</td><td>Final weight</td><td>0.002</td><td>0.001</td><td>0.002</td><td><10<sup>-3</sup></td><td>-0.003</td><td>0.002</td><td>0.004</td><td>-0.002</td><td>0.010</td><td></td>
-    <td>6</td><td>Default</td><td>-0.002</td><td>-0.003</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td>0.001</td><td>0.001</td><td><10<sup>-3</sup></td> <td>0.001</td>
+    <td>2</td><td>Education-num</td><td>0.085</td><td>0.080</td><td>0.087</td><td>0.063</td><td>0.061</td><td>0.068</td><td><10<sup>-3</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td></td>
+    <td>2</td><td>Day of week</td><td>0.012</td><td>0.011</td><td>0.013</td><td>0.014</td><td>0.014</td><td>0.016</td><td>0.001</td><td>0.001></td> <td>0.001</td>
  </tr>
  <tr>
-    <td>3</td><td>Education</td><td>0.047</td><td>0.044</td><td>0.049</td><td>0.041</td><td>0.038</td><td>0.047</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td></td>
-    <td>9</td><td>Housing</td><th>0.042</th><th>0.037</th><th>0.044</th><td>0.026</td><td>0.023</td><td>0.028</td><th>0.025</th><th>0.022</th> <th>0.027</th>
+    <td>3</td><td>Capital-gain</td><td>0.049</td><td>0.048</td><td>0.052</td><td>0.047</td><td>0.046</td><td>0.050</td><th>0.029</th><th>0.026</th><th>0.030</th><td></td>
+    <td>3</td><td>Duration</td><th>0.256</th><th>0.253</th><th>0.261</th><th>0.211</th><th>0.209</th><th>0.215</th><th>0.154</th><th>0.148</th> <th>0.157</th>
  </tr>
  <tr>
-    <td>7</td><td>Relationship</td><th>0.104</th><th>0.101</th><th>0.108</th><th>0.097</th><th>0.093</th><th>0.101</th><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td></td>
-    <td>13</td><td>Day of week</td><td>0.032</td><td>0.029</td><td>0.034</td><td>0.022</td><td>0.019</td><td>0.026</td><td>0.014</td><td>0.010</td> <td>0.017</td>
+    <td>4</td><td>Workclass</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td>0.001</td><td>0.003</td><td>0.001</td><td>0.004</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td></td>
+    <td>4</td><td>PDays</td><td>0.051</td><td>0.051</td><td>0.052</td><td>0.054</td><td>0.052</td><td>0.055</td><td>0.053</td><td>0.050</td> <td>0.055</td>
  </tr>
  <tr>
-    <td>8</td><td>Race</td><td>0.003</td><td>0.002</td><td>0.003</td><td>0.001</td><td><10<sup>-3</sup></th><td>0.002</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td></td>
+    <td>5</td><td>Race</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td>0.001</td><td>0.001</th><td>0.002</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td></td>
+    <td>5</td><td>Job_b</td><td>0.003</td><td>0.003</td><td>0.004</td><td>0.002</td><td>0.001</th><td>0.002</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
  </tr>
  <tr>
-    <td>10</td><td>Capital-gain</td><td>0.043</td><td>0.042</td><td>0.044</td><td>0.042</td><td>0.040</td><td>0.044</td><th>0.034</th><th>0.031</th><th>0.036</th><td></td>
- </tr>
+    <td colspan="11", rowspan="2"></td><td></td><td>6</td><td>Job_m</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.002</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
+  </tr>
+  <tr>
+    <td></td></td><td>7</td><td>Housing</td><td>0.026</td><td>0.025</td><td>0.027</td><td>0.032</td><td>0.031</td><td>0.034</td><td>0.001</td><td>0.001</td><td>0.001</td>
+  </tr>
   <tr>
     <th colspan="23"></th>
   </tr>
@@ -184,14 +186,14 @@ As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency a
   </tr>
   <tr>
     <td>1</td><td>Fpv Close</td><td>0.005</td><td>0.005</td><td>0.005</td><td>0.012</td><td>0.011</td><td>0.013</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td>0.001</td>
-    <td></td><td>2</td><td>CholCheck</td><td>0.009</td><td>0.009</td><td>0.010</td><td>0.011</td><td>0.010</td><td>0.011</td><td>-0.001</td><td>-0.001</td><td>-0.001</td>
+    <td></td><td>1</td><td>CholCheck</td><td>0.009</td><td>0.009</td><td>0.010</td><td>0.011</td><td>0.010</td><td>0.011</td><td>-0.001</td><td>-0.001</td><td>-0.001</td>
   </tr>
   <tr>
     <td>2</td><td>Fpv Open</td><td>0.241</td><td>0.239</td><td>0.244</td><td>0.274</td><td>0.270</td><td>0.277</td><th>0.319</th><th>0.316</th><th>0.322</th>
-    <td></td><td>3</td><td>BMI</td><td>0.080</td><td>0.078</td><td>0.081</td><td>0.079</td><td>0.077</td><td>0.080</td><td>-0.073</td><td>-0.074</td><td>-0.072</td>
+    <td></td><td>2</td><td>BMI</td><td>0.080</td><td>0.078</td><td>0.081</td><td>0.079</td><td>0.077</td><td>0.080</td><td>-0.073</td><td>-0.074</td><td>-0.072</td>
   </tr>
   <tr>
-  <td colspan="11"></td><td></td><td>4</td><td>Smoker</td><td>0.004</td><td>0.004</td><td>0.005</td><td>0.004</td><td>0.004</td><td>0.005</td><td>0.026</td><td>0.025</td><td>0.027</td>
+  <td colspan="11"></td><td></td><td>3</td><td>Smoker</td><td>0.004</td><td>0.004</td><td>0.005</td><td>0.004</td><td>0.004</td><td>0.005</td><td>0.026</td><td>0.025</td><td>0.027</td>
   </tr>
   <tr>
   <td colspan="23"> </td>
@@ -212,27 +214,27 @@ As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency a
    <td>1</td><td>Aspect</td>    <td>0.014</td>    <td>0.014</td>    <td>0.014</td>    <td>0.024</td>    <td>0.024</td>    <td>0.025</td>    <td>0.002</td>    <td>0.002</td>    <td>0.002</td>	
   </tr>
   <tr> 
-   <td>4</td>    <td>ASL</td>    <td>0.034</td>    <td>0.034</td>    <td>0.034</td>    <td>0.072</td>    <td>0.071</td>    <td>0.073</td>    <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>    <td><10<sup>-3</sup></td>
+   <td>2</td>    <td>ASL</td>    <td>0.034</td>    <td>0.034</td>    <td>0.034</td>    <td>0.072</td>    <td>0.071</td>    <td>0.073</td>    <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>    <td><10<sup>-3</sup></td>
   <td></td>
    <td>2</td>    <td>Slope</td>    <td>0.003</td>    <td>0.003</td>    <td>0.003</td>  <td>0.009</td>    <td>0.009</td>    <td>0.009</td>    <td>0.001</td>            <td>0.001</td>    <td>0.001</td>		
   </tr>
   <tr> 
-   <td>7</td>    <td>Freq. Centroid</td>    <th>0.468</th>    <th>0.466</th>    <th>0.470</th>    <th>0.463</th>    <th>0.461</th>    <th>0.465</th>    <th>0.422</th> <th>0.421</th>    <th>0.425</th>
+   <td>3</td>    <td>Freq. Centroid</td>    <th>0.468</th>    <th>0.466</th>    <th>0.470</th>    <th>0.463</th>    <th>0.461</th>    <th>0.465</th>    <th>0.422</th> <th>0.421</th>    <th>0.425</th>
   <td></td>
    <td>3</td>    <td>H. Dist.</td>          <td>0.011</td>    <td>0.011</td>    <td>0.011</td>    <td>0.018</td>    <td>0.018</td>    <td>0.018</td>    <td>0.008</td> <td>0.008</td>    <td>0.008</td>
   </tr>
   <tr>
-  <td colspan="11", rowspan="3"></td><td></td><td>10</td><td>Wild. Area</td><td>0.085</td><td>0.085</td><td>0.086</td><td>0.041</td><td>0.040</td><td>0.042</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
+  <td colspan="11", rowspan="3"></td><td></td><td>4</td><td>Wild. Area</td><td>0.085</td><td>0.085</td><td>0.086</td><td>0.041</td><td>0.040</td><td>0.042</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
   </tr>
  <tr>
-  </td><td></td><td>11</td><td>Soil Type</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
+  </td><td></td><td>5</td><td>Soil Type</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
   </tr>
  <tr>
- </td><td></td><td>12</td><td>Soil Type 2</td><td>0.002</td><td>0.002</td><td>0.002</td><td>0.006</td><td>0.006</td><td>0.006</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
+ </td><td></td><td>6</td><td>Soil Type 2</td><td>0.002</td><td>0.002</td><td>0.002</td><td>0.006</td><td>0.006</td><td>0.006</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
   </tr>
 </table>
-
 :::
+   
 From @tbl:result_table, SVM tended to be have very low scores in some datasets, possibly due to its reliance of support vectors in determining the decision boundaries. Thus, features with strong influence at the decision boundary but not directly affecting the support vectors may seem less important.   For the Moisture Absorbed Composite dataset, the three classifiers reported similar scores for Frequency Centroid of 0.468, 0.466 and 0.422 respectively in @tbl:result_table. 
 
 However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a relatively important feature, while SVM considered it insignificant. The mutability of importance scores for the classifiers considered underscores the need to explore multiple classifiers when undertaking a comprehensive investigation of feature importance for feature selection purposes. 
