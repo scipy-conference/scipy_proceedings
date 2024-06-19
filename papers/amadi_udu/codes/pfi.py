@@ -10,9 +10,6 @@ from sklearn.inspection import permutation_importance
 from joblib import Parallel, delayed
 import joblib
 import matplotlib.pyplot as plt
-import seaborn as sns
-import matplotlib as mpl
-from time import process_time 
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import squareform
 from scipy.stats import spearmanr
@@ -26,6 +23,7 @@ models= {0: 'lgbm', 1: 'rf', 2: 'svm'}
 model_name = models[0]
 dataset = datasets[0]
 df = pd.read_csv(f'datasets/{dataset}.csv')
+
 
 # encode categorical variables
 categorical_cols = [col for col in df.iloc[:, :-1].columns if df.iloc[:, :-1][col].dtype == 'object']
@@ -43,7 +41,7 @@ if dataset in label_map:
     dfXy['label'] = dfXy['label'].map(lambda x: 1 if x == labels else 0)
 X, y = dfXy.drop('label', axis=1), dfXy['label'].astype('int')
 
-
+# %%
 plt.figure()
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
 corr = spearmanr(X).correlation
@@ -63,11 +61,11 @@ ax2.set_yticks(dendro_idx)
 ax2.set_xticklabels(dendro["ivl"], rotation="vertical")
 ax2.set_yticklabels(dendro["ivl"])
 _ = fig.tight_layout()
-# plt.clf() #uncomment to hide plot
-# plt.close() #uncomment to hide plot
+#plt.clf() #uncomment to hide plot
+#plt.close() #uncomment to hide plot
+
 
 ## Step 1
-
 # select threshold from visual inspection of hierarchical cluster
 thresholds = {datasets[0]: 1.25, datasets[1]: 1.1, datasets[2]: 1, datasets[3]: 1.1, datasets[4]: 0.8, datasets[5]: 1.1}
 threshold = thresholds.get(dataset)
@@ -80,8 +78,7 @@ for idx, cluster_id in enumerate(cluster_ids):
 selected_features = [v[0] for v in cluster_id_to_feature_ids.values()]
 selected_features_names = X.columns[selected_features]
 
-X_train_sel = X_train[selected_features_names]
-X_test_sel = X_test[selected_features_names]
+X_train_sel, X_test_sel = X_train[selected_features_names], X_test[selected_features_names]
 
 if model_name == 'lgbm':
     lgbm = LGBMClassifier(random_state=random_seed, n_jobs=-1)
@@ -92,6 +89,7 @@ elif model_name == 'rf':
 else:
     svm = SVC(random_state=random_seed)
     model= svm.fit(X_train_sel, y_train)
+
 r = permutation_importance(model, X_test_sel, y_test, n_repeats=30, random_state=random_seed, scoring='roc_auc', n_jobs=-1)
 
 importances = r['importances']
@@ -106,33 +104,26 @@ results_df.to_csv(f'results/{dataset}_{model_name}_pfi_results.csv', index=False
 
 
 ## Step 2
-
 # Define the function for parallel execution
-def process_feature(f_no, selected_features, df):
+def process_feature(f_no, selected_features, dfXy):
     importances_all = []
     fractions = []
-    for frac in np.round(np.arange(0.1, 1.1, 0.1), 2).tolist():  #loop for sample fractions
+    for frac in np.round(np.arange(0.1, 1.1, 0.1), 1).tolist():  # Loop for sample fractions
         importances = []
-        for rand in range(10): #loop for 10 repeats of the process
-            df_new = df.sample(frac=frac, random_state=rand)
+        for rand in range(10):  # Loop for 10 repeats of the process
+            df_new = dfXy.sample(frac=frac, random_state=rand).reset_index(drop=True)
 
-            X = df_new.drop('label', axis=1)
-            X = X.iloc[:, selected_features]
-            y = df_new['label']
-
+            X, y = df_new.iloc[:, selected_features], df_new['label']
             X_train, X_val, y_train, y_val = train_test_split(X, y, random_state=rand)
             
             if model_name == 'lgbm':
-                lgbm = LGBMClassifier(random_state=random_seed, n_jobs=-1)
-                model= lgbm.fit(X_train, y_train)
+                model = LGBMClassifier(random_state=rand, n_jobs=-1).fit(X_train, y_train)
             elif model_name == 'rf':
-                rf = RandomForestClassifier(random_state=random_seed, n_jobs=-1)
-                model= rf.fit(X_train, y_train)
+                model = RandomForestClassifier(random_state=rand, n_jobs=-1).fit(X_train, y_train)
             else:
-                svm = SVC(random_state=random_seed)
-                model= svm.fit(X_train, y_train)
+                model = SVC(random_state=rand).fit(X_train, y_train)
                 
-            r = permutation_importance(model, X_val, y_val, n_repeats=30,
+            r = permutation_importance(model, X_val, y_val, n_repeats=20,
                                        random_state=rand, scoring='roc_auc', n_jobs=-1)
             importances.append(r.importances[f_no])
         fractions.append(frac)
@@ -145,7 +136,7 @@ def process_feature(f_no, selected_features, df):
 
     for index, row in importances_df.iterrows():
         combined_list = []
-        for col_name, col_value in row.iteritems():
+        for col_name, col_value in row.items():  # Change from iteritems to items
             if col_name.startswith('Rand_'):
                 combined_list.extend(col_value.tolist())
         combined_lists.append(combined_list)
@@ -153,16 +144,15 @@ def process_feature(f_no, selected_features, df):
     final_df = pd.concat([importances_df['Feature_ID'], output_df, importances_df['Fraction']], axis=1).set_index('Fraction')
     return final_df
 
-# Initialise dataFrame
+# Initialise DataFrame
 all_df = pd.DataFrame()
 
 # Parallelise computation
 results = Parallel(n_jobs=-1)(
-    delayed(process_feature)(f_no, selected_features, df) for f_no in range(len(selected_features)))
+    delayed(process_feature)(f_no, selected_features, dfXy) for f_no in range(len(selected_features)))
 
 # Concatenate results
 all_df = pd.concat(results)
 
 # Save results to csv
 all_df.to_csv(f'results/{model_name}/{model_name}_{dataset}_combined_importances.csv', index=True)
-
