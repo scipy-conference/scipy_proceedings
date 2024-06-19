@@ -37,41 +37,6 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - schnurr_composition_2014
-        - uhlir_adding_2021
-        - meisner_benthic_2014
-        - rogers2007corals
-        - rogers2007corals
-        - mengerink_call_2014
-        - stransky_diversity_2010
-        - jennings_phylogeographic_2014
-        - wilson_historical_1998
-        - havermans_genetic_2013
-        - fc_genomic_2012
-        - balkenhol_identifying_2009
-        - koshkarov_phylogeography_2022
-        - li_aphylogeo-covid_2023
-        - colosimo_widespread_2005
-        - cheviron_genomic_2012
-        - ghalambor_adaptive_2007
-        - hoffmann_climate_2011
-        - manel_perspectives_2010
-        - balkenhol_landscape_2019
-        - shafer_widespread_2013
-        - lambshead_latitudinal_2000
-        - gage_diversity_2004
-        - keeling_ocean_2010
-        - rex_global_2006
-        - costello_marine_2017
-        - waga_recent_2020
-        - saeedi_environmental_2022
-        - hansen_north_2000
-        - brix2010distribution
-        - ostmann_marine_2014
-        - wilson_speciation_1987
-        - robinson_comparison_1981
-        - brix_iceage_2014
-        - meisner_prefacebiodiversity_2018 
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
