@@ -28,6 +28,8 @@ project:
       orcid: 0000-0001-9475-3756
       affiliations:
         - Kitware Inc.
+      roles:
+        - writing
   keywords:
     - Build system
     - CMake
