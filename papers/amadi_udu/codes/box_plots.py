@@ -15,8 +15,8 @@ import numpy as np
 
 
 #choose dataset and model from list
-datasets = ['census_income', 'bank_marketing', 'statlog_shuttle',  'diabetes',  'gsvs']
-models= ['lgbm', 'rf', 'svm']
+datasets = {0: 'census_income', 1: 'bank_marketing', 2: 'statlog_shuttle', 3: 'diabetes', 4:'gsvs', 5: 'cover_type'}
+models= {0: 'lgbm', 1: 'rf', 2: 'svm'}
 
 model = models[0]
 dataset = datasets[0]
