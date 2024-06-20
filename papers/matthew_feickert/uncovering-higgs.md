@@ -12,8 +12,7 @@ Using `coffea`, `uproot`, and Dask, these files can then be efficiently read and
 <!-- https://mystmd.org/guide/directives#directive-include -->
 ```{include} code/read.py
 :lang: python
-:caption: Using `coffea`, tree structured ROOT files are read with `uproot` from an efficient file cache, and the relevant branches for physics are filtered out into Awkward arrays.
-The operation is scaled out on a Dask cluster for read performance.
+:caption: Using `coffea`, tree structured ROOT files are read with `uproot` from an efficient file cache, and the relevant branches for physics are filtered out into Awkward arrays. The operation is scaled out on a Dask cluster for read performance.
 ```
 
 ### Cleaning and selecting data
