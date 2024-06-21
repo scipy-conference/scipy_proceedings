@@ -40,5 +40,7 @@ project:
   license: CC-BY-4.0
   venue: Scipy 2024
   date: 2024-07-10
+  numbering:
+    headings: true
 site:
   template: article-theme
