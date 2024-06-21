@@ -2,7 +2,7 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: Computational Resource Optimisation in Feature Selection under Class Imbalance Conditions
 abstract: |
-  Feature selection is crucial for reducing data dimensionality as well as enhancing model interpretability and performance in machine learning tasks. However, selecting the most informative features in large dataset often incurs high computational costs. This study explores the possibility of performing feature selection on a subset of data to reduce the computational burden. The study uses six real-life datasets with substantial sample sizes and severe class imbalance ratios between 0.07 – 0.18. The results illustrate the stability/variability of feature importance with smaller sample fractions in different models. In this study, light gradient-boosting machine exhibited the most stable performance, even with reduced sample fractions.
+  Feature selection is crucial for reducing data dimensionality as well as enhancing model interpretability and performance in machine learning tasks. However, selecting the most informative features in large dataset often incurs high computational costs. This study explores the possibility of performing feature selection on a subset of data to reduce the computational burden. The study uses five real-life datasets with substantial sample sizes and severe class imbalance ratios between 0.09 – 0.18. The results illustrate the stability/variability of feature importance with smaller sample fractions in different models. In this study, light gradient-boosting machine exhibited the most stable performance, even with reduced sample fractions.
 
 ---
 (sec:introduction)=
@@ -12,14 +12,14 @@ In the development of prediction models for real-world applications, two key cha
 
 Studies [@Yin2013; @Tsai2020; @deHaro-Garcia2020; @Matharaarachchi2021] on the performance of feature selection methods with class imbalance data have been undertaken on using synthetic and real-life datasets. A significant drawback noted was the computational cost of their approach on large sample sizes.  While experimental investigations of feature selection amid class imbalance conditions have been studied in the literature, there is a need to further understand the effect of sample size on performance degradation of feature selection methods. This would offer valuable insights into tackling the associated resource expense involved in undertaking feature selection with respect to large sample sizes where class-imbalance exists, for a wide range of applications. 
 
-This study investigates the impact of performing feature selection on a reduced dataset on feature importance and model performance, using six real-life datasets characterised by large sample sizes and severe class imbalance structures. We employ a rigorous feature selection process that utilises permutation feature importance (PFI) and evaluate the feature importance on three selected models; namely light gradient-boosting machine (Light GBM), random forest (RF) and support vector machines (SVM). These models are popular in real-world machine learning (ML) studies and also serve as a benchmark for comparing novel models [@bonaccorso2018; @feng2019; @sarker2021; @paleyes2022; @udu2024a]. Feature importance was evaluated using the area under the Receiver Operator Characteristics (ROC) curve, commonly referred to as AUC owing to its suitability in class imbalance problems [@Luque2019; @Temraz2022]. The development of the ML framework and data visualisation in this study was facilitated by several key Python libraries. Pandas [@pandas1] and NumPy [@numpy] were used for data loading and numerical computations, respectively. Scikit-learn [@sklearn1] provided tools for data preprocessing, model development, and evaluation. Matplotlib [@matplotlib] was employed for visualising data structures. Additionally, the SciPy [@scipy] library's cluster, spatial, and stats modules were crucial for hierarchical clustering, Spearman rank correlation, and distance matrix computations.
+This study investigates the impact of performing feature selection on a reduced dataset on feature importance and model performance, using five real-life datasets characterised by large sample sizes and severe class imbalance structures. We employ a rigorous feature selection process that utilises permutation feature importance (PFI) and evaluate the feature importance on three selected models; namely light gradient-boosting machine (Light GBM), random forest (RF) and support vector machines (SVM). These models are popular in real-world machine learning (ML) studies and also serve as a benchmark for comparing novel models [@bonaccorso2018; @feng2019; @sarker2021; @paleyes2022; @udu2024a]. Feature importance was evaluated using the area under the Receiver Operator Characteristics (ROC) curve, commonly referred to as AUC owing to its suitability in class imbalance problems [@Luque2019; @Temraz2022]. The development of the ML framework and data visualisation in this study was facilitated by several key Python libraries. Pandas [@pandas1] and NumPy [@numpy] were used for data loading and numerical computations, respectively. Scikit-learn [@sklearn1] provided tools for data preprocessing, model development, and evaluation. Matplotlib [@matplotlib] was employed for visualising data structures. Additionally, the SciPy [@scipy] library's cluster, spatial, and stats modules were crucial for hierarchical clustering, Spearman rank correlation, and distance matrix computations.
 
 The rest of the paper is organised as follows: @sec:methodology briefly outlines the methodology adopted, while @sec:results presents the results and discussion. The conclusion of the study is provided in @sec:conclusion.
 
 (sec:methodology)=
 ## Methodology
 ### Description of datasets
-Six real-life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine ML repository, including CDC Diabetes Health Indicator [@diabetes], Census Income [@census_income], Bank Marketing [@bank_marketing], Statlog (Shuttle) [@statlog] and Cover Type [@covertype]. The sixth dataset is Moisture Absorbed Composite [@Osa-uwagboe2024] from a damage morphology study. The datasets are presented in @tbl:dataset_summary. Notably, all datasets exhibited high class imbalance ratios from 0.07 - 0.18 (i.e., the ratio of the number of samples in the minority class over that of the majority class).
+Five real-life datasets from different subject areas were considered in this study. Four of the datasets were obtained from the UC Irvine ML repository, including CDC Diabetes Health Indicator [@diabetes], Census Income [@census_income], Bank Marketing [@bank_marketing], and Statlog (Shuttle) [@statlog]. The fifth dataset is Moisture Absorbed Composite [@Osa-uwagboe2024] from a damage morphology study. The datasets are presented in @tbl:dataset_summary. Notably, all datasets exhibited high class imbalance ratios from 0.09 - 0.18 (i.e., the ratio of the number of samples in the minority class over that of the majority class).
 
 :::{table} Summary of datasets used in the study
 :label: tbl:dataset_summary
@@ -63,13 +63,6 @@ Six real-life datasets from different subject areas were considered in this stud
       <td style="text-align: center;">0.18</td>
     </tr>
     <tr>
-      <td>Cover type</td>
-      <td style="text-align: center;">55</td>
-      <td style="text-align: center;">581,012</td>
-      <td>Biology</td>
-      <td style="text-align: center;">0.07</td>
-    </tr>
-        <tr>
       <td>Moisture absorbed composite</td>
       <td style="text-align: center;">9</td>
       <td style="text-align: center;">295,461</td>
@@ -201,36 +194,22 @@ As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency a
   <tr>
   <th colspan="11">Moisture Absorbed Composites</th>
       <th> </th>
-    <th colspan="11">Cover Type</th>
   </tr>
   <tr>
    <td>0</td><td>Risetime</td> <td>0.005</td>    <td>0.005</td>    <td>0.005</td>    <td>0.009</td>    <td>0.008</td>    <td>0.009</td><td>0.004</td><td>0.003</td><td>0.004</td>
   <td></td>
-    <td>0</td><td>Elevation</td><th>0.306</th><th>0.305</th><th>0.308</th><th>0.369</th><th>0.368</th><th>0.370</th><th>0.456</th><th>0.453</th><th>0.457</th>
   </tr>							
   <tr>
    <td>1</td><td>Counts</td>    <td>0.037</td>    <td>0.037</td>    <td>0.037</td>    <td>0.075</td>    <td>0.073</td>    <td>0.075</td>    <td>0.009</td>    <td>0.009</td>    <td>0.009</td>
   <td></td>
-   <td>1</td><td>Aspect</td>    <td>0.014</td>    <td>0.014</td>    <td>0.014</td>    <td>0.024</td>    <td>0.024</td>    <td>0.025</td>    <td>0.002</td>    <td>0.002</td>    <td>0.002</td>	
   </tr>
   <tr> 
    <td>2</td>    <td>ASL</td>    <td>0.034</td>    <td>0.034</td>    <td>0.034</td>    <td>0.072</td>    <td>0.071</td>    <td>0.073</td>    <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>    <td><10<sup>-3</sup></td>
   <td></td>
-   <td>2</td>    <td>Slope</td>    <td>0.003</td>    <td>0.003</td>    <td>0.003</td>  <td>0.009</td>    <td>0.009</td>    <td>0.009</td>    <td>0.001</td>            <td>0.001</td>    <td>0.001</td>		
   </tr>
   <tr> 
    <td>3</td>    <td>Freq. Centroid</td>    <th>0.468</th>    <th>0.466</th>    <th>0.470</th>    <th>0.463</th>    <th>0.461</th>    <th>0.465</th>    <th>0.422</th> <th>0.421</th>    <th>0.425</th>
   <td></td>
-   <td>3</td>    <td>H. Dist.</td>          <td>0.011</td>    <td>0.011</td>    <td>0.011</td>    <td>0.018</td>    <td>0.018</td>    <td>0.018</td>    <td>0.008</td> <td>0.008</td>    <td>0.008</td>
-  </tr>
-  <tr>
-  <td colspan="11", rowspan="3"></td><td></td><td>4</td><td>Wild. Area</td><td>0.085</td><td>0.085</td><td>0.086</td><td>0.041</td><td>0.040</td><td>0.042</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
-  </tr>
- <tr>
-  </td><td></td><td>5</td><td>Soil Type</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td>0.001</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
-  </tr>
- <tr>
- </td><td></td><td>6</td><td>Soil Type 2</td><td>0.002</td><td>0.002</td><td>0.002</td><td>0.006</td><td>0.006</td><td>0.006</td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td><td><10<sup>-3</sup></td>
   </tr>
 </table>
 :::
@@ -306,7 +285,7 @@ PFI can provide insights into the importance of features, but it is susceptible 
 
 (sec:conclusion)=
 ## Conclusion
-Feature selection for large datasets incurs considerable computational cost in the model development process of various ML tasks. This study aimed to optimise computational costs by investigating the influence of sample fractions on feature importance and model performance in datasets characterised by class imbalance. Six real-life datasets with large sample sizes from different subject fields which exhibited high class imbalance ratios of 0.07 – 0.18 were utilised. 
+Feature selection for large datasets incurs considerable computational cost in the model development process of various ML tasks. This study aimed to optimise computational costs by investigating the influence of sample fractions on feature importance and model performance in datasets characterised by class imbalance. Five real-life datasets with large sample sizes from different subject fields which exhibited high class imbalance ratios of 0.09 – 0.18 were utilised. 
 
 Due to its model-agnostic nature, PFI was adopted for feature selection process. Cluster, spatial, and stats sub-packages of SciPy were instrumental in tackling the multicollinearity effects associated with PFI. Using a rigorous PFI approach, the study revealed the variability of feature importance with smaller sample fractions in LightGBM, random forest and SVM models. LightGBM demonstrated  the most stability, even with smaller sample fractions, suggesting its relative robustness to sample size and permutation across the features and class-imbalanced datasets. SVM exhibited a high variability in feature importance and prominence of outliers.
 
