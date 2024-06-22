@@ -2,7 +2,7 @@
 \usepackage{arxiv_template}
 
 % Optional math commands from https://github.com/goodfeli/dlbook_notation.
-\input{math_commands.tex}
+% \input{math_commands.tex}
 
 \usepackage{microtype}
 
@@ -80,28 +80,27 @@ Powerful Scientific Data Management}
   Several features implemented on top of the core memoization data structures --
   such as natively and transparently handling Python collections, caching of
   intermediate results, and a flexible versioning system with dynamic dependency
-  tracking -- turn \texttt{mandala} into a practical and radically simpler tool
-  for managing and interacting with computational data.
+  tracking -- turn \texttt{mandala} into a practical and simple tool for
+  managing and interacting with computational data.
 \end{abstract}
 
 \section{Introduction}
 \label{section:}
 
 Numerical experiments and simulations are growing into a central part of many
-areas of science and engineering \citep{hey2009fourth}. Recent trends in
-fields such as machine learning point towards ever-increasing complexity of
-computational pipelines, and increasingly safety-critical application domains
-such as autonomous driving \citep{bojarski2016end}, healthcare
-\citep{ravi2016deep,abramson2024accurate} and large language model autonomous
-agents \citep{yang2024swe}.
+areas of science and engineering \citep{hey2009fourth}. Recent trends in fields
+such as machine learning point towards (1) ever-increasing complexity of
+computational pipelines, and (2) adoption in more safety-critical domains, such
+as autonomous driving \citep{bojarski2016end} and healthcare
+\citep{ravi2016deep,abramson2024accurate}.
 
 These developments impose opposing constraints on the tools used to manage the
 resulting computational artifacts: on the one hand, they should be simple and
 easy to use by researchers, with a minimal learning curve and unobtrusive syntax
 and semantics; on the other hand, they should be powerful enough to enable
-high-level operations \cite{wickham2014tidy}, full data \& code provenance
+high-level operations \citep{wickham2014tidy}, full data \& code provenance
 auditing \citep{davidson2008provenance} and reproducibility
-\cite{ivie2018reproducibility} in complex projects.  Rules and practices that
+\citep{ivie2018reproducibility} in complex projects.  Rules and practices that
 help with these requirements exist and are well-known
 \citep{sandve2013ten,wilkinson2016fair}, but still require manual work,
 attention and discipline to follow. Researchers often operate under time
@@ -494,14 +493,13 @@ the hash of their content (syntax tree, to be exact).
 \section{Conclusion}
 \label{section:}
 
-While \texttt{mandala} is not very mature yet and still very much a work in
-progress, it has the potential to considerably simplify the way scientific data
-is managed and interacted with in Python. The author has already used it
-extensively to manage several multi-month machine learning projects, and has
-found it to be a very powerful tool for managing complex computations. We hope
-that this paper has given a good overview of the core concepts of
-\texttt{mandala}, and that the reader will be interested in exploring the
-library further.
+\texttt{mandala} is being actively developed, and has the potential to
+considerably simplify the way scientific data is managed and interacted with in
+Python. The author has already used it extensively to manage several multi-month
+machine learning projects, and has found it to be a very powerful tool for
+managing complex computations. We hope that this paper has given a good overview
+of the core concepts of \texttt{mandala}, and that the reader will be interested
+in exploring the library further.
 
 
 % bibliography
