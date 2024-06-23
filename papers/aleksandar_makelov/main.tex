@@ -37,8 +37,8 @@
 % \usepackage{floatrow}
 \colmfinalcopy
 
-\def\l{\left}
-\def\r{\right}
+% \def\l{\left}
+% \def\r{\right}
 
 \title{\texttt{mandala}: Compositional Memoization for Simple \&
 Powerful Scientific Data Management}
@@ -85,7 +85,7 @@ Powerful Scientific Data Management}
 \end{abstract}
 
 \section{Introduction}
-\label{section:}
+\label{section:intro}
 
 Numerical experiments and simulations are growing into a central part of many
 areas of science and engineering \citep{hey2009fourth}. Recent trends in fields
@@ -279,7 +279,7 @@ storage the `identity' of a value is its place in the computational graph. We
 discuss practical ways to overcome this in Section \ref{section:cf}.
 
 \subsection{Retracing as a Versatile Imperative Interface to the Stored Computation Graph}
-\label{subsection:}
+\label{subsection:retracing}
 
 The compositional nature of memoization makes it possible to build complex
 computations out of calls to memoized functions, turning the entire computation
@@ -335,7 +335,7 @@ of a \emph{computation frame}, which is a high-level declarative interface to
 the stored computation graph. 
 
 \subsection{Definition}
-\label{subsection:}
+\label{subsection:cf-definition}
 A computation frame (Figure \ref{fig:cf}) consists of the following data:
 \begin{itemize}
 \item \textbf{computation graph}: a directed graph $G=(V,F,E)$ where $V$ are
@@ -364,7 +364,7 @@ edges to edges) from a computation frame's instance data to the full stored
 computation graph.
 
 \subsection{Basic Usage}
-\label{subsection:}
+\label{subsection:cf-basic-usage}
 
 The main advantage of computation frames is that they allow iterative
 exploration of the computation graph, and high-level grouped operations over
@@ -399,7 +399,7 @@ work.
 \label{section:extra-features}
 
 \subsection{Data Structures}
-\label{subsection:}
+\label{subsection:data-structures}
 
 Python's native collections -- lists, dicts, sets -- can be memoized
 transparently by \texttt{mandala}, using customized type annotations, e.g.
@@ -436,7 +436,7 @@ automatically at the end of a \texttt{mandala} context. Similarly, to speed up
 retracing of existing calls, call metadata can be pre-loaded.
 
 \subsection{Versioning}
-\label{subsection:}
+\label{subsection:versioning}
 
 It is crucial to have a flexible and powerful code versioning system in a data
 management tool, as it allows the user to keep track of the evolution of their
@@ -491,7 +491,7 @@ The unison programming language \citep{lozano2017unison} represents functions by
 the hash of their content (syntax tree, to be exact).
 
 \section{Conclusion}
-\label{section:}
+\label{section:conclusion}
 
 \texttt{mandala} is being actively developed, and has the potential to
 considerably simplify the way scientific data is managed and interacted with in
