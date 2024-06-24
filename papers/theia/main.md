@@ -96,8 +96,8 @@ optimal choice because it often provides highly interractive plots by default.
 ### Results
 Together, these scientific Python libraries allowed the Rapid Application Development team at ERDC to develop a 
 robust visualization tool capable of running in the browser without being reliant 
-on an internet connection or requiring any coding experience. Users simply upload a CSV using THEIA's file navigator, 
-and THEIA does the rest. 
+on an internet connection. Additionally, using THEIA requires no coding. Users simply upload a CSV file using
+the built-in navigator, and THEIA does the rest.
 :::{figure} ./assets/upload.png
 :lable: fig:upload
 View of THEIA's file browser.
@@ -118,6 +118,4 @@ for further analysis, and utilize multiple data files simultaneously.
 :label: fig:save_and_export
 A view of the 'download configuration' and 'export plot' options.
 :::
-Ultimately, through the utilization of these scientific Python 
-libraries, the USACE ERDC was able to develop a robust solution to the tradespace
-visualization problem.
+Ultimately, THEIA serves as an excellent example of how open-source libraries can be leveraged to develop robust solutions to emerging problems.
