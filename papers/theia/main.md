@@ -65,7 +65,7 @@ HoloViews are all a part of the HoloViz suite of Python packages, which allows f
 excellent synchronization between them. 
 
 #### Panel
-Panel @panel is an open-source library for easily building tools, dashboards, and complex applications, 
+Panel [@panel] is an open-source library for easily building tools, dashboards, and complex applications, 
 all within Python. Its role in THEIA is to define the layout of the application, in an easy, extensible way.
 This is done by utilizing Panel's built-in visual components. Components are the building blocks of apps built 
 on Panel. The primary components utilized by THEIA are Widgets, Panes, Layouts, and Templates.
@@ -75,21 +75,21 @@ on Panel. The primary components utilized by THEIA are Widgets, Panes, Layouts, 
 - Templates are components that allow the rendering of Panel objects in an HTML document. 
 
 #### Param
-Param @param is an open-source library built for handling user-modifiable parameters, arguments, and attributes 
+Param [@param] is an open-source library built for handling user-modifiable parameters, arguments, and attributes 
 that control your code. These capabilities are used in THEIA to monitor for user 
 inputs and changes while maintaining a far simpler codebase. This is done by leveraging Parameters 
 in special Parameterized classes, which provide features like type-checking and default values. THEIA leverages these 
 classes to define acceptable input types and values as well as handle errors without large amounts of boilerplate code.
 
 #### Holoviews
-HoloViews @holoviews is an open-source library built for data analysis and visualization with small amounts of code. This library is the 
+HoloViews [@holoviews] is an open-source library built for data analysis and visualization with small amounts of code. This library is the 
 backend that provides many of the plots in THEIA. HoloViews takes a different approach to plotting than many other popular libraries.
 Instead of focusing purely on visualization, HoloViews plots are defined in a way that supports analysis in addition to visualization. 
 This is done by coupling raw data with metadata in a way that allows for immediate visualization rendering as data changes. HoloViews
 also leverages some of Bokeh's capabilities when rendering specific plots.
 
 #### Plotly Express
-Plotly Express @plotly is a high-level interface to Plotly. It's built to produce easily styleable figures with minimal code.
+Plotly Express [@plotly] is a high-level interface to Plotly. It's built to produce easily styleable figures with minimal code.
 HoloViews leverages this library within THEIA to render supplementary plots like the parallel plot. Plotly Express is an 
 optimal choice because it often provides highly interractive plots by default. 
 
