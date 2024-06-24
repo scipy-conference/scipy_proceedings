@@ -96,13 +96,18 @@ optimal choice because it often provides highly interractive plots by default.
 ### Results
 Together, these scientific Python libraries allowed the Rapid Application Development team at ERDC to develop a 
 robust visualization tool capable of running in the browser without being reliant 
-on an internet connection. THEIA allows user to select from various plot types and color themes. 
+on an internet connection or requiring any coding experience. Users simply upload a CSV using THEIA's file navigator, 
+and THEIA does the rest. 
+:::{figure} ./assets/upload.png
+:lable: fig:upload
+View of THEIA's file browser.
+:::
+THEIA also allows user to select from various plot types and color themes, which is a vital feature when 
+working with tradespace data because it allows the user to choose the theme which best distinguishes the complex data.
 :::{figure} ./assets/user_inputs.png
 :label: fig:user_inputs
 View of THEIA's plot type options.
 :::
-This is a vital feature when working with tradespace data because it allows the 
-user to choose the theme which best distinguishes the complex data.
 :::{figure} ./assets/colormap.png
 :label: fig:colormap
 View of THEIA's colormap options. 
@@ -113,8 +118,6 @@ for further analysis, and utilize multiple data files simultaneously.
 :label: fig:save_and_export
 A view of the 'download configuration' and 'export plot' options.
 :::
-
-Another key feature THEIA provides is the ability to import 
-tabular data. Ultimately, through the utilization of these scientific Python 
+Ultimately, through the utilization of these scientific Python 
 libraries, the USACE ERDC was able to develop a robust solution to the tradespace
 visualization problem.
