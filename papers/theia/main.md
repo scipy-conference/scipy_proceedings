@@ -97,7 +97,7 @@ optimal choice because it often provides highly interractive plots by default.
 Together, these scientific Python libraries allowed the Rapid Application Development team at ERDC to develop a 
 robust visualization tool capable of running in the browser without being reliant 
 on an internet connection. Additionally, using THEIA requires no coding. Users simply upload a CSV file using
-the built-in navigator, and THEIA does the rest.
+the built-in navigator, and THEIA does the rest. The following screenshots show THEIA's capabilities using the [iris](https://archive.ics.uci.edu/dataset/53/iris) dataset.
 :::{figure} ./assets/upload.png
 :lable: fig:upload
 View of THEIA's file browser.
