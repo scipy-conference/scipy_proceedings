@@ -7,7 +7,8 @@ abstract: |
 
 ## Introduction
 
-Histopathological image analysis reveals insights into disease state and has potential to harness the immensely complex and heterogeneous tumor microenvironment to guide understanding of disease progression, response to treatment, and aid in patient stratification for clinical trials (@doi:10.4132/jptm.2019.12.31, @doi:10.3389/fonc.2022.889886, @doi:10.1016/j.irbm.2019.06.001, @doi:10.3390/cancers15194797, @doi:10.1038/s41379-021-00919-2). However, applying automatic image analysis routines continues to be challenging (@doi:10.3390/cancers13123031, @doi:10.1308/rcsann.2023.0091). Often, human intervention in the form of manual annotation or quality control (QC) is required. Additionally, the data itself varies considerably in available features, size, and shape. Thus, a streamlined and interactive approach is a necessary part of any digital pathology pipeline (@doi:10.1111/his.14356). 
+Histopathological image analysis reveals insights into disease state and has potential to harness the immensely complex and heterogeneous tumor microenvironment to guide understanding of disease progression, response to treatment, and aid in patient stratification for clinical trials {cite:p}`doi:10.4132/jptm.2019.12.31, doi:10.3389/fonc.2022.889886, doi:10.1016/j.irbm.2019.06.001, doi:10.3390/cancers15194797, doi:10.1038/s41379-021-00919-2`. However, applying automatic image analysis routines continues to be challenging {cite:p}`doi:10.3390/cancers13123031, doi:10.1308/rcsann.2023.0091`. Often, human intervention in the form of manual annotation or quality control (QC) is required. Additionally, the data itself varies considerably in available features, size, and shape. Thus, a streamlined and interactive approach is a necessary part of any digital pathology pipeline {cite:p}`doi:10.1111/his.14356`. 
+
 
 We present PredX-Tools, a suite of simple and easy to use python GUI applications which facilitate all parts of a digital pathology pipeline, from image QC and labeling to visualization and analysis of results to allow for a deeper understanding of the data. By utilizing open-source python libraries and utilities, we have created a suite of tools that fit seamlessly into our analysis pipeline, require minimal expertise to run, and are easy to develop new features for, to account for the ever-changing landscape of histopathological image analysis. 
 
@@ -22,8 +23,11 @@ Other tools have been developed to address these needs (see @tbl:comparison), ho
 More specifically, we are addressing 4 separate needs required in our analysis routine. First, we provide an environment for gathering ground truth labels from an expert with `CellLabeler`. Second, we provide a simple hub for analyzing the quality of raw and pre-processed image data with `PixelExplorer`. Third, we created `CellExplorer` for visualizing data tables of cellular object features and phenotypes, as well as the ability to fit models and export modified versions of the data tables. Last, a simple and easy to use app for performing complex spatial analysis of the cellular or nuclear objects is provided in `SpaceExplorer`. All apps were created with PySimpleGUI [@pysimplegui], alongside other open source python libraries Matplotlib [@matplotlib], NumPy [@numpy], pandas [@pandas1; @pandas2],
 scikit-learn [@sklearn1; @sklearn2], SciPy [@scipy], Tifffile [@tifffile], and zarr [@zarr].
 
-```{list-table} Comparison of available softwares.
+
+````{table}
 :label: tbl:comparison
+
+```{list-table} 
 :header-rows: 1
 * - Software
   - View Raw
@@ -75,7 +79,10 @@ scikit-learn [@sklearn1; @sklearn2], SciPy [@scipy], Tifffile [@tifffile], and z
   - Yes
 ```
 
-> "*" = Limitation on image size
+Comparison of available softwares.
+
+"*" = Limitation on image size
+````
 
 
 ## CellLabeler
@@ -101,7 +108,7 @@ Once the experiment begins, the user will first select one or more of the availa
 
 Further, any arbitrary transformation can be performed on the raw pixel values before plotting them. By default, a log2 transform is applied to transform the data from range [0, 2^16] to [0, 16]. However, any valid line of python code can be added to the ‘Data transformations’ tab to be applied to the data prior to plotting. This can be helpful to visualize the effect different transformations have on the underlying distribution. 
 
-Additionally, one can fit a Gaussian Mixture Model to the current distribution using the right panel by simply specifying the number of mixture components and pressing enter. This will fit a model to the data being plotted, meaning the model will be fit to the data after the transformation is applied and after any pixels above or below the desired thresholds are removed. This tool is very useful due to the fact that biomarker distributions in the log space can be effectively modeled by a mixture of gaussians (@doi:10.1038/s43018-023-00576-1, @doi:10.1172/jci.insight.93487). With this, one may derive a model for ‘foreground’ and ‘background’ signals of the images. With this knowledge, the user may want to generate a ‘foreground’ or ‘background’ mask using the Thresholding function available in the app. The user can type in a value, select whether to threshold above or below the value, and then export a binary mask which is 1 for pixels that pass the threshold and 0 elsewhere. This mask may then be used in downstream analysis, where they may be used to focus on parts of the image which may exhibit certain behavior (e.g. thresholding Ki67, a biomarker which  measure cellular proliferation or reproduction, which may be associated with tumoral regions). While these masks may be derived automatically, it may be desirable to define one by thresholding manually.
+Additionally, one can fit a Gaussian Mixture Model to the current distribution using the right panel by simply specifying the number of mixture components and pressing enter. This will fit a model to the data being plotted, meaning the model will be fit to the data after the transformation is applied and after any pixels above or below the desired thresholds are removed. This tool is very useful due to the fact that biomarker distributions in the log space can be effectively modeled by a mixture of gaussians {cite:p}`doi:10.1038/s43018-023-00576-1, doi:10.1172/jci.insight.93487`. With this, one may derive a model for ‘foreground’ and ‘background’ signals of the images. With this knowledge, the user may want to generate a ‘foreground’ or ‘background’ mask using the Thresholding function available in the app. The user can type in a value, select whether to threshold above or below the value, and then export a binary mask which is 1 for pixels that pass the threshold and 0 elsewhere. This mask may then be used in downstream analysis, where they may be used to focus on parts of the image which may exhibit certain behavior (e.g. thresholding Ki67, a biomarker which  measure cellular proliferation or reproduction, which may be associated with tumoral regions). While these masks may be derived automatically, it may be desirable to define one by thresholding manually.
 
 With PixelExplorer, the user obtains a better understanding of the biomarker signal behavior, how it has responded to the various preprocessing steps in the backend pipeline, and can fit models and derive thresholds for further downstream analysis.
 
@@ -128,14 +135,13 @@ An example of a popup window in CellExplorer. This interface allows for bivariat
 
 ## SpaceExplorer
 
-After cells have been assigned a phenotype label, it is advantageous to analyze the spatial composition of the cell types. This involves quantifying the degree with which the cells cluster together or repel each other relative to some background distribution. That is, we may discover that tumor cells are clustered tightly together with other tumor cells, or that immune cells may be surrounded by many tumor cells, but few other immune cells. These spatial relationships reveal the underlying mechanisms driving the tumor microenvironment (@doi:10.3389/fonc.2022.889886). However, biomarker panels may include a large number of biomarkers, and parsing the magnitude of statistics generated by pairwise analysis can be cumbersome. Thus, there is a need for a fast and interactive way of viewing and analyzing the various spatial statistics that can reveal insights into the tumor microenvironment. 
+After cells have been assigned a phenotype label, it is advantageous to analyze the spatial composition of the cell types. This involves quantifying the degree with which the cells cluster together or repel each other relative to some background distribution. That is, we may discover that tumor cells are clustered tightly together with other tumor cells, or that immune cells may be surrounded by many tumor cells, but few other immune cells. These spatial relationships reveal the underlying mechanisms driving the tumor microenvironment {cite:p}`doi:10.3389/fonc.2022.889886`. However, biomarker panels may include a large number of biomarkers, and parsing the magnitude of statistics generated by pairwise analysis can be cumbersome. Thus, there is a need for a fast and interactive way of viewing and analyzing the various spatial statistics that can reveal insights into the tumor microenvironment. 
 
 To this end, we have created SpaceExplorer to enable a user to quickly generate a variety of spatial statistics on singular phenotypes or pairs of phenotypes, and to generate high quality figures. Specifically, SpaceExplorer functions similarly to CellExplorer, in that it reads as input a CSV file, this time containing binary assignments of phenotypes for each cell. That is, each row corresponds to a cell, and each column says whether that cell is positive or negative for that phenotype (IE tumor cell, T cell, etc.). 
 
-Once the data is read in, the user has a few options to explore. The user may select from the samples list one or more samples to compute scores for. Then, the user may select 1 or 2 cell types to perform spatial point-pattern analysis on. This analysis attempts to describe the clustering or dispersing behavior of events relative to a random point pattern, and has shown promise in other fields for describing spatial distributions of events (@doi:10.1186/s13717-021-00314-4
-, @doi:10.1007/978-3-642-01976-0_9, @doi:10.1111/j.2517-6161.1977.tb01615.x).
+Once the data is read in, the user has a few options to explore. The user may select from the samples list one or more samples to compute scores for. Then, the user may select 1 or 2 cell types to perform spatial point-pattern analysis on. This analysis attempts to describe the clustering or dispersing behavior of events relative to a random point pattern, and has shown promise in other fields for describing spatial distributions of events {cite:p}`doi:10.1186/s13717-021-00314-4, doi:10.1007/978-3-642-01976-0_9, doi:10.1111/j.2517-6161.1977.tb01615.x`.
 
-Additional analysis methods include the pointwise mutual information (@doi:10.3115/981623.981633), which analyzes the probability that two events co-occur (in this case, 2 cell types being spatially close together) relative to a background distribution, as well as the spatial neighbors enrichment analysis, which performs permutation tests and computes z-scores to assign a score for how often 2 events are co-occurring (@doi:10.1038/s42003-021-02517-z). 
+Additional analysis methods include the pointwise mutual information {cite:p}`doi:10.3115/981623.981633`, which analyzes the probability that two events co-occur (in this case, 2 cell types being spatially close together) relative to a background distribution, as well as the spatial neighbors enrichment analysis, which performs permutation tests and computes z-scores to assign a score for how often 2 events are co-occurring {cite:p}`doi:10.1038/s42003-021-02517-z`. 
 
 ## Conclusion
 
