@@ -1,5 +1,5 @@
 ---
-title: "THEIA: An offline tool for tradespace visualization"
+title: "THEIA: An Offline Tool for Tradespace Visualization"
 exports:
   - format: pdf
     template: lapreprint-typst
