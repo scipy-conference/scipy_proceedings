@@ -1,7 +1,7 @@
 version: 1
 project:
   id: scipy-2024-theia
-  title: "THEIA: an offline tool for tradespace visualization"
+  title: "THEIA: An Offline Tool for Tradespace Visualization"
   authors:
     - name: Samuel Williams
       email: Samuel.C.Williams@usace.army.mil
