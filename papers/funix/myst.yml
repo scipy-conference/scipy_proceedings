@@ -12,9 +12,9 @@ project:
       # orcid: 0000-0000-0000-0000
       affiliations:
         - Founder, Textea, Inc.
-        - Co-head of Machine Learning, Vectara, Inc. 
+        - Co-head of Machine Learning, Vectara, Inc.
       corresponding: true
-    - name: Qikai Cheng
+    - name: Mike Qi
       email: yazawazier@gmail.com
       affiliations:
         - Engineer, Textea, Inc.
