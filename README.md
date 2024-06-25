@@ -111,7 +111,7 @@ In addition to the following list, we break up the deadlines in the respective d
 - Jun 8:  Open Review Period begins
   - Reviewers comment on papers to authors during this period.
   - Authors also respond to review comments with improvements to papers during this period.
-- Jun 29: Initial complete review
+- Jul 3:  Initial complete review
   - Reviewers continue to comment on paper improvements during this period.
   - Authors also respond to review comments with further improvements to papers during this period.
 - Aug 2:  Final review deadline
@@ -404,7 +404,7 @@ _Final Reviewer Decision_ deadline.
 - Jun 8:  Assignment of reviewers to papers
   - Reviewers comment on papers to authors during this period.
   - Authors also respond to review comments with improvements to papers during this period.
-- Jun 29: Initial complete review
+- Jul 3:  Initial complete review
   - Reviewers continue to comment on paper improvements during this period.
   - Authors also respond to review comments with further improvements to papers during this period.
 - Aug 2:  Final review deadline
@@ -489,7 +489,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 - Jun 8:  Assignment of reviewers to papers
   - Reviewers comment on papers to authors during this period.
   - Authors also respond to review comments with improvements to papers during this period.
-- Jun 29: Initial complete review
+- Jul 3:  Initial complete review
   - Reviewers continue to comment on paper improvements during this period.
   - Authors also respond to review comments with further improvements to papers during this period.
   - Editors should verify that reviews have been completed
