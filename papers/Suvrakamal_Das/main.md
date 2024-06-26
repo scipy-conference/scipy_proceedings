@@ -20,7 +20,7 @@ Finally, we explore the potential applications and future directions of Mamba mo
 
 ### State Space Models
 
-The central goal of machine learning is to develop models capable of efficiently processing sequential data across a range of modalities and tasks. This is particularly challenging when dealing with **long sequences**, especially those exhibiting **long-range dependencies (LRDs)**  – where information from distant past time steps significantly influences the current state or future predictions. Examples of such sequences abound in real-world applications, including speech, video, medical, time series, and natural language. However, traditional models struggle to effectively handle such long sequences.
+The central goal of machine learning is to develop models capable of efficiently processing sequential data across a range of modalities and tasks [@mamba_github]. This is particularly challenging when dealing with **long sequences**, especially those exhibiting **long-range dependencies (LRDs)**  – where information from distant past time steps significantly influences the current state or future predictions. Examples of such sequences abound in real-world applications, including speech, video, medical, time series, and natural language. However, traditional models struggle to effectively handle such long sequences.
 
 **Recurrent Neural Networks (RNNs)** [@Sherstinsky_2020], often considered the natural choice for sequential data, are inherently stateful and require only constant computation per time step. However, they are slow to train and suffer from the well-known "**vanishing gradient problem**", which limits their ability to capture LRDs. **Convolutional Neural Networks (CNNs)** [@oshea2015introduction], while efficient for parallelizable training, are not inherently sequential and struggle with long context lengths, resulting in more expensive inference. **Transformers** [@vaswani2023attention], despite their recent success in various tasks, typically require specialized architectures and attention mechanisms to handle LRDs, which significantly increase computational complexity and memory usage.
 
@@ -158,7 +158,7 @@ This linear RNN architecture effectively captures the temporal relationships pre
 ### S4: A Structured State Space Model
 
 The theoretical advantages of State Space Models (SSMs) [@gu2022efficiently] for handling long sequences, particularly their ability to capture long-range dependencies, make them a promising alternative to traditional sequence models. However, the computational limitations of existing SSM implementations, such as the LSSL, hinder their widespread adoption.
-The Structured State Space (S4) model aims to overcome these limitations by introducing novel parameterization [@gu2022parameterization] and efficient algorithms that preserve the theoretical strengths of SSMs.
+The Structured State Space (S4) model aims to overcome these limitations by introducing novel parameterization [@gu2022parameterization] and efficient algorithms that preserve the theoretical strengths of SSMs [@mamba_s4] .
 
 ### Diagonalization Problem
 
@@ -259,7 +259,9 @@ Self attention, feed forward Neural Networks, normalization, residual layers and
 #### Architecture Overview
 
 ##### Transformer Architecture
-Transformers @fig:transformer rely heavily on attention mechanisms to model dependencies between input and output sequences. The core components include:
+Transformers @fig:transformer rely heavily on attention mechanisms to model dependencies between input and output sequences. A better understanding of the code will be of great help[@transformer.py].
+
+The core components include:
 * **Multi-Head Self-Attention**: Allows the model to focus on different parts of the input sequence.
 * **Position-wise Feed-Forward Networks**: Applied to each position separately.
 * **Positional Encoding**: Adds information about the position of each token in the sequence, as Transformers lack inherent sequential information due to the parallel nature of their processing.
