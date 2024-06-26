@@ -44,7 +44,7 @@ project:
     NPLR: Normal Plus Low-Rank
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
-    # - rule: doi-exists
+    - rule: doi-exists
       severity: ignore
       keys:
         - Atr03
