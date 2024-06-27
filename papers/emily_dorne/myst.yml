@@ -63,6 +63,7 @@ project:
         - lightgbm
         - sklearn
         - dbscan
+        - decimal_degrees
   banner: banner.png
   subject: Research Article
   open_access: true
