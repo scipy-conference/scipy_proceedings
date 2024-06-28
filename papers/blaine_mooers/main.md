@@ -107,7 +107,6 @@ This automated replacement of English contractions saves time during the editing
 
 :::{figure} ./images/VoiceInCustomCommandsContractions.png
 :alt: contractions
-:class: bg-primary
 :width: 60%
 :align: center
 :label: fig:contractions
@@ -144,7 +143,6 @@ g| **display** equation in display mode (e.g., display electron density equation
 
 :::{figure} ./images/DisplayElectronDensityEquation.png
 :alt: display
-:class: bg-primary
 :width: 100%
 :align: center
 :label: fig:displayeq
