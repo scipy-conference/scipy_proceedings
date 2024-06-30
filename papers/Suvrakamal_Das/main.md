@@ -259,7 +259,7 @@ Self attention, feed forward Neural Networks, normalization, residual layers and
 #### Architecture Overview
 
 ##### Transformer Architecture
-Transformers @fig:transformer rely heavily on attention mechanisms to model dependencies between input and output sequences. A better understanding of the code will be of great help[@transformer.py].
+Transformers @fig:transformer rely heavily on attention mechanisms to model dependencies between input and output sequences. A better understanding of the code will be of great help[@transformer_py].
 
 The core components include:
 * **Multi-Head Self-Attention**: Allows the model to focus on different parts of the input sequence.

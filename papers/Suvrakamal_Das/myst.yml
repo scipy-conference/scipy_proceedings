@@ -44,14 +44,17 @@ project:
     NPLR: Normal Plus Low-Rank
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
-    # - rule: doi-exists
-      # severity: ignore
+    - rule: doi-exists
+      severity: ignore
       keys:
         - Atr03
         - terradesert
         - jupyter
         - sklearn1
         - sklearn2
+        - mamba_github
+        - mamba_s4
+        - transformer_py
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.jpg
   # The rest of the information shouldn't be modified
