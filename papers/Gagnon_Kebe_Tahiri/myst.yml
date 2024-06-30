@@ -44,6 +44,6 @@ project:
   open_access: true
   license: CC-BY-4.0
   venue: Scipy 2024
-  date: 2024-07-10
+  date: 2024-06-10
 site:
   template: article-theme
