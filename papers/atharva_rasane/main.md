@@ -2,7 +2,7 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: AI-Driven Watermarking Technique for Safeguarding Text Integrity in the Digital Age
 abstract: |
-  The internet's growth has led to a surge in text usage. Now, with public access to generative AI models like ChatGPT/Bard, identifying the source is vital. This is crucial due to concerns about copyright infringement and plagiarism. Moreover, it's essential to differentiate AI-generated text to curb misinformation from AI model hallucinations.
+  The internet's growth has led to a surge in text usage. Now, with public access to generative AI models like ChatGPT/Bard, identifying the source is vital. This is crucial due to concerns about copyright infringement and plagiarism. Moreover, it is essential to differentiate AI-generated text to curb misinformation from AI model hallucinations.
 
   In this paper, we explore text watermarking as a potential solution, focusing on plain ASCII text in English. We investigate techniques including physical watermarking (e.g., UniSpaCh by Por et al.), which modifies text to hide a binary message using Unicode Spaces, and logical watermarking (e.g., word context by Jalil et al.), which generates a watermark key via a defined process. While logical watermarking is difficult to break but undetectable without prior knowledge, physical watermarks are easily detected but also easy to break.
 
@@ -14,7 +14,7 @@ abstract: |
 ---
 
 ## Introduction
-The growth of the internet is driven by the spread of web pages, which are written in HTML (Hyper Text Markup Language). These web pages contain large amounts of text. Almost every webpage, in some form or another, contains text, making it a popular mode of communication, whether it be blogs, posts, articles, comments, etc. Text can be represented as a collection of ASCII or Unicode values, where each value corresponds to a specific character. Given the text-focused nature of the internet and tools like ChatGPT and Bard, it is crucial to identify the source of text. This helps to manage copyright issues and distinguish between AI-generated and human-written text, thereby preventing the spread of misinformation. Currently, detecting AI-generated text relies on machine learning classifiers that need frequent retraining with the latest AI-generated data. However, this method has drawbacks, such as the rapid evolution of AI models producing increasingly human-like text. Therefore, a more stable approach is needed, one that does not depend on the specific AI model generating the text.
+The growth of the internet is driven by the spread of web pages, which are written in HTML (Hyper Text Markup Language). These web pages contain large amounts of text. Almost every webpage, in some form or another, contains text, making it a popular mode of communication, whether it be blogs, posts, articles, comments, etc. Text can be represented as a collection of ASCII or Unicode values, where each value corresponds to a specific character. Given the text-focused nature of the internet and tools like ChatGPT or Bard, it is crucial to identify the source of text. This helps to manage copyright issues and distinguish between AI-generated and human-written text, thereby preventing the spread of misinformation. Currently, detecting AI-generated text relies on machine learning classifiers that need frequent retraining with the latest AI-generated data. However, this method has drawbacks, such as the rapid evolution of AI models producing increasingly human-like text. Therefore, a more stable approach is needed, one that does not depend on the specific AI model generating the text.
 
 Watermarks are an identifying pattern used to trace the origin of the data. In this case, we specifically want to focus on text watermarking (watermarking of plain text). Text watermarking can broadly be classified into 2 types, Logical Embedding, and Physical Embedding, which in turn can be classified further [@Atr01]. Logical Embedding involves the user generating a watermark key by some logic from the input text. Note that this means that the input text is not altered, and the user instead keeps the generated watermark key to identify the text. Physical Embedding involves the user altering the input text itself to insert a message into it, and the user instead runs an algorithm to find this message to identify the text. In this paper, we will propose an algorithm to watermark text using BERT (Bidirectional Encoder Representations from Transformers), a model introduced by Google, whose main purpose is to replace a special symbol "[MASK]" with the most probable word given the context.
 
@@ -41,7 +41,7 @@ We propose using BERT, a model designed to find missing words, as a better alter
 ## Proposed Model
 "BERT-based watermarking is based on the 5-gram approach by Lancaster[@Atr02]. However, our focus is on watermarking any text, regardless of its origin. This paper will use **bert-base-uncased** model, which finds the most probable uncased English word to replace the [MASK] token.
 
-Note that a different variant of BERT can be trained on different language datasets and thus will generate a different result and as such the unique identity to consider here is the BERT model i.e. if the user wants a unique watermark they need to train/develop the BERT model on their own. This paper is not concerned with the type of BERT model and is focused on its conceptual application for watermarking. Thus for us, BERT is a black box model that returns the most probable word given the context with the only condition being that it has a constant temperature i.e. it doesn't hallucinate (produce different results for the same input). For our purposes, you can think of the proposed algorithm as a many to one function which is responsible for converting the input text into a subset of watermarked set.
+Note that a different variant of BERT can be trained on different language datasets and thus will generate a different result and as such the unique identity to consider here is the BERT model i.e. if the user wants a unique watermark they need to train/develop the BERT model on their own. This paper is not concerned with the type of BERT model and is focused on its conceptual application for watermarking. Thus for us, BERT is a black box model that returns the most probable word given the context with the only condition being that it has a constant temperature i.e. it does not hallucinate (produce different results for the same input). For our purposes, you can think of the proposed algorithm as a many to one function which is responsible for converting the input text into a subset of watermarked set.
 
 ## Algorithm
 **Watermark Encoding**
@@ -125,7 +125,6 @@ def watermark_text(text, model_name="bert-base-uncased", offset=0):
                 templ = tempd[0]
                 temps = templ['token_str']
                 watermarked_words[i+4] = temps.split()[0]
-                # print("Done ", i + 1, "th word")
 
     return " ".join(watermarked_words)
 
@@ -134,7 +133,7 @@ text = "Quantum computing is a rapidly evolving field that leverages the princip
 watermark_text(text, offset=0)
 result = "Quantum computing is a rapidly evolving field that leverages the principles of quantum mechanics to perform computations that are impossible for classical computers. Unlike quantum computers, which use bits as the fundamental unit of , quantum computers use quantum bits or qubits. Qubits can exist in multiple states simultaneously according to the principles of symmetry and entanglement, providing a significant advantage in solving complex mathematical problems."
 ```
-In the result, the module has replaced each 5th word with the most probable replacement word selected by BERT. There will always be some words that AI wouldn't alter. For example the 10th word "the" and the 15th word "to". These cannot be changed by AI without altering the entire sentence.
+In the result, the module has replaced each 5th word with the most probable replacement word selected by BERT. There will always be some words that AI would not alter. For example the 10th word "the" and the 15th word "to". These cannot be changed by AI without altering the entire sentence.
 Further, to speed up the AI computing, we can employ GPUs in this module as well as the Detection module.
 
 ## Implementation - Detection Module
@@ -144,14 +143,14 @@ For this, we create a module to check the number of word matches if the AI model
 
 Altering written text is a posibility we cannot ignore. consider a scenario where a plagiarizer might insert extra words, causing the input not to match the output exactly. This means our model needs to check for watermarks not only at a specific index but also in the surrounding words. Therefore, our model needs to check for the watermark at different offsets (0 to 4) to account for potential word insertions.
 
-Here's how the offset works:
+Here is how the offset works:
 - If 1 word is added at the start, the offset is 1.
 - If 2 words are added, the offset is 2.
 - If 3 words are added, the offset is 3.
 - If 4 words are added, the offset is 4.
 - If 5 words are added, the offset is 0 (since the algorithm replaces every 5th word).
 
-In general, if 'n' words are added, the offset is `n % 5`. Since we don't know how many words were added, we need to check all possible offsets (0, 1, 2, 3, 4).
+In general, if 'n' words are added, the offset is `n % 5`. Since we do not know how many words were added, we need to check all possible offsets (0, 1, 2, 3, 4).
 
 If words are added in the middle of the text, the majority of the watermark pattern (every 5th word replaced) will still be detectable at some offset. The idea is that one offset will show a higher number of matches compared to others, indicating a watermark.
 
@@ -227,7 +226,7 @@ text = "Quantum computing is a rapidly evolving field that leverages the princip
 
 # Calculate match ratios
 match_ratios = watermark_text_and_calculate_matches(text, max_offset=5)
-result = {0: 0.5384615384615384, 1: 0.6153846153846154, 2: 0.5833333333333334, 3: 0.6666666666666666, 4: 0.5833333333333334}
+# (result rounded) match_ratio = {0: 0.54, 1: 0.62, 2: 0.58, 3: 0.67, 4: 0.58}
 ```
 
 The final stage of detection involves determining if the match ratios are statistically significant. 
@@ -269,8 +268,8 @@ def check_significant_difference(match_ratios):
 
 # Example usage
 text = "Quantum computing is a rapidly evolving field that leverages the principles of quantum mechanics to perform computations that are infeasible for classical computers. Unlike classical computers, which use bits as the fundamental unit of information, quantum computers use quantum bits or qubits. Qubits can exist in multiple states simultaneously due to the principles of superposition and entanglement, providing a significant advantage in solving complex computational problems."
-# match_ratios = watermark_text_and_calculate_matches(text, max_offset=5)
-# check_significant_difference(match_ratios)
+match_ratios = watermark_text_and_calculate_matches(text, max_offset=5)
+check_significant_difference(match_ratios)
 
 ```
 The module "randomly_add_words" was created to simulate the scenario where additional words have been added to the watermarked test for testing purposes.
@@ -306,15 +305,15 @@ modified_text = randomly_add_words(watermark_text(text, offset=0), words_to_add,
 (result) modified_text = "Quantum computing is example a rapidly evolving field that leverages the principles of quantum mechanics to perform random computations that are impossible for classical computers. Unlike quantum computers, which use bits as the random insert fundamental unit of , quantum computers use quantum bits or qubits. Qubits can exist in multiple states simultaneously according random to the principles of symmetry and entanglement, providing a significant advantage in solving complex mathematical problems."
 
 match_ratios = watermark_text_and_calculate_matches(modified_text, max_offset=5)
-(result) match_ratios = {0: 0.5714285714285714, 1: 0.5714285714285714, 2: 0.5384615384615384, 3: 0.38461538461538464, 4: 0.7692307692307693}
+# (result rounded) match_ratios = {0: 0.57, 1: 0.57, 2: 0.54, 3: 0.38, 4: 0.77}
 
 check_significant_difference(match_ratios)
-(result)
-    Highest Match Ratio: 0.7692307692307693
-    Average of Other Ratios: 0.5164835164835164
-    T-Statistic: -5.66220858504931
-    P-Value: 0.010908789440745323
-The highest ratio is significantly different from the others.
+# (result rounded)
+#    Highest Match Ratio: 0.77
+#    Average of Other Ratios: 0.52
+#    T-Statistic: -5.66
+#    P-Value: 0.01
+# The highest ratio is significantly different from the others.
 ```
 
 Once the list of significance is defined, to show the significance of using a pre-trained model, lets plot them to futher understand the statistical summary. Here is the python code used to generate the plots.
@@ -685,9 +684,9 @@ for model_name, model in models.items():
         }).sort_values(by='Importance', ascending=False)
 
         # Plot feature importances
-        # plt.figure(figsize=(12, 8))
-        # sns.barplot(x='Importance', y='Feature', data=feature_importances_df, palette='viridis')
-        # plt.title(f'{model_name} Feature Importances')
+        plt.figure(figsize=(12, 8))
+        sns.barplot(x='Importance', y='Feature', data=feature_importances_df, palette='viridis')
+        plt.title(f'{model_name} Feature Importances')
         plt.show()
 ```
 
@@ -770,11 +769,11 @@ for text in test_cases:
 **Challenges:**
 1. Dependency on model consistency: The watermark detection relies heavily on the consistency of the BERT model's output. Any updates or changes in the model could potentially alter the watermark, making it undetectable. If the watermark can embbed some sort of version history and control, this could be managed.
 2. Data Integrity is highly dependent on the Model: the integrity of the watermarked text depends on how good the model is at replacing the given word, due to the nature of AI-generated text where all the previous tokens are used to generate new ones BERT watermarking can preserve integrity much more effectively. However if it were to watermark text which is completely different from its training dataset it might return an incoherent output, for example if the dataset of BERT consists of scientific papers it will struggle immensely when trying to watermark fairy tails.
-3. Potential for false positives/negatives: Given the probabilistic nature of BERT's predictions, there's a risk of incorrect watermark detection, especially in texts with complex semantics or those that closely mimic the watermark patterns without actually being watermarked.
+3. Potential for false positives/negatives: Given the probabilistic nature of BERT's predictions, there is a risk of incorrect watermark detection, especially in texts with complex semantics or those that closely mimic the watermark patterns without actually being watermarked.
 4. Potential loss of context: When words are replaced, the intended context of delivery could be altered. However, AI models are continually improving, and we hope that a well-trained model can significantly mitigate this risk.
 
 **Real-world applicability:**
-1. Versatility in applications: This method can be applied across various fields such as copyright protection, and content authentication, and in legal and academic settings where proof of authorship is crucial. It's particularly beneficial for managing copyrights in digital media, academic papers, and any online content where text is dynamically generated or reused.
+1. Versatility in applications: This method can be applied across various fields such as copyright protection, and content authentication, and in legal and academic settings where proof of authorship is crucial. It is particularly beneficial for managing copyrights in digital media, academic papers, and any online content where text is dynamically generated or reused.
 2. Integration with existing systems: The algorithm can be seamlessly integrated with current content management systems (CMS) and digital rights management (DRM) systems, enhancing their capabilities to include advanced text watermarking features. This integration helps organizations maintain control over their content distribution and monitor usage without invasive methods.
 3. Application in AI-generated text: With the proliferation of AI-generated content from models like ChatGPT, GPT-4, and other AI writing assistants, distinguishing between human-generated and AI-generated text becomes crucial. The BERT-based watermarking can be used to embed unique, non-intrusive identifiers into AI-generated texts, ensuring that each piece of content can be traced back to its source. This is particularly valuable in preventing the spread of misinformation, verifying the authenticity of content, and in applications where copyright claims on AI-generated content might be disputed.
 4. Forensic Linguistics in Cybersecurity: In cybersecurity, determining the origin of phishing emails or malicious texts can be crucial. BERT-based watermarking can assist forensic linguists and security professionals by providing a means to trace the origins of specific texts back to their creators, helping to identify patterns or sources of cyber threats.
