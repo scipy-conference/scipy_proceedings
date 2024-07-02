@@ -116,6 +116,6 @@ THEIA also allows users to easily save plots for future reference, export findin
 for further analysis, and utilize multiple data files simultaneously. 
 :::{figure} ./assets/save_and_export.png
 :label: fig:save_and_export
-A view of the 'download configuration' and 'export plot' options.
+A view of the 'Download Configuration' and 'Export Plot' options. "Download Configuration" can be used to save a YAML file that THEIA can leverage to return to a given state. "Export Plot" is used to save an HTML version of a specific plot. 
 :::
 Ultimately, THEIA serves as an excellent example of how open-source libraries can be leveraged to develop robust solutions to emerging problems.
