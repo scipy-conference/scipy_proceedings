@@ -142,6 +142,20 @@ The Insight Toolkit (ITK) is an open-source, cross-platform library that provide
 ITK includes fundamental numerical libraries, such as Eigen.
 ITK's C++ template-based architecture inherently helps keep Wasm modules small while enabling the compiler to add extensive performance optimizations.
 The _itk-wasm_ GitHub repository is also an ITK Remote Module, `WebAssemblyInterface`, that implements Wasm-interface specific functionality.
+As an ITK Remote Module, wasm interface capabilities are available in an easily consumed library form.
+To access wasm interface functionality in a build configuration,
+
+```cmake
+find_package(ITK
+  COMPONENTS
+    WebAssemblyInterface
+    # Other desired components
+  )
+include(${ITK_USE_FILE})
+
+add_executable(a-wasm-pipeline ${srcs})
+target_link_libraries(a-wasm-pipeline PUBLIC ${ITK_LIBRARIES})
+```
 
 Glaze provides an elegent C++ JSON interface. This library was integrated as it is not only extremely fast but also small as a header-only library, which is critical for efficient WebAssembly deployment.
 The ability to read and write interface types to files, providing a bridge to Web3 and traditional desktop computing, is built on libcbor, which is another tiny footprint library.
