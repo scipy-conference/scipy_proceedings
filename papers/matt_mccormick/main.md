@@ -135,7 +135,7 @@ These are embodied in the C++ core with:
 
 1. ITK
 2. CLI11
-3. RapidJSON
+3. Glaze
 4. libcbor
 
 The Insight Toolkit (ITK) is an open-source, cross-platform library that provides developers with an extensive suite of software tools based on a proven, spatially-oriented architecture for processing scientific data in two, three, or more dimensions [@doi:10.3389/fninf.2014.00013;].
@@ -143,7 +143,7 @@ ITK includes fundamental numerical libraries, such as Eigen.
 ITK's C++ template-based architecture inherently helps keep Wasm modules small while enabling the compiler to add extensive performance optimizations.
 The _itk-wasm_ GitHub repository is also an ITK Remote Module, `WebAssemblyInterface`, that implements Wasm-interface specific functionality.
 
-RapidJSON provides JSON-related functionality since it is not only extremely fast but also extremely small, which is critical for efficient WebAssembly deployment.
+Glaze provides an elegent C++ JSON interface. This library was integrated as it is not only extremely fast but also small as a header-only library, which is critical for efficient WebAssembly deployment.
 The ability to read and write interface types to files, providing a bridge to Web3 and traditional desktop computing, is built on libcbor, which is another tiny footprint library.
 
 Wasm module C++ processing pipelines are written with CLI11's simple and intuitive argument parsing interface [@doi:10.5281/zenodo.804964].
