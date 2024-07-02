@@ -339,7 +339,7 @@ This model, combined with ITK-Wasm’s architecture, can perform analysis and vi
 A notable application of ITK-Wasm is the generation of multiscale OME-Zarr images, a cloud-optimized bioimaging format with broad international adoption [@doi:10.1007/s00418-023-02209-1; @doi:10.1038/s41592-021-01326-w].
 To generate OME-Zarr's multiscale representation of multidimensional bioimages, anti-aliasing filters must be applied.
 
-In the NGFF-Zarr package, ITK-Wasm anti-aliasing filters efficiently produces OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments [@doi:10.5281/zenodo.8092821].
+In the NGFF-Zarr package, ITK-Wasm anti-aliasing filters efficiently produce OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments [@doi:10.5281/zenodo.8092821].
 Since the interface type's Python representation are Python data classes comprised of standand Python data types and NumPy arrays, they are trivially and efficiently serialized for parallel computing with Dask.
 Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
 
