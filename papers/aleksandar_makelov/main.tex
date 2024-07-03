@@ -190,7 +190,7 @@ to avoid redundant computation. \texttt{mandala} uses \emph{automatic}
 memoization \citep{norvig1991techniques} which is applied via the combination of
 a decorator (\texttt{@op}) and a context manager which specifies the
 \texttt{Storage} object to use (Figure \ref{fig:basic-usage}). The memoization
-can optionally be made persistent, which is what you would typically want in a
+can optionally be made persistent to disk, which is what you would typically want in a
 long-running project. Any Python function can be memoized (as long as its inputs
 and outputs are serializable by the \texttt{joblib} library); there is no
 restriction on the type, number or naming scheme (positional, keyword, variadic)
