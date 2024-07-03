@@ -5,7 +5,6 @@
 % \input{math_commands.tex}
 
 \usepackage{microtype}
-
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{graphicx}
@@ -43,7 +42,6 @@
 \title{\texttt{mandala}: Compositional Memoization for Simple \&
 Powerful Scientific Data Management}
 
-
 \newcommand{\fix}{\marginpar{FIX}}
 \newcommand{\new}{\marginpar{NEW}}
 % \newfloatcommand{capbtabbox}{table}[][\FBwidth]
@@ -51,8 +49,11 @@ Powerful Scientific Data Management}
 \usepackage{soul}
 \usepackage{amsthm}
 \usepackage{mathrsfs}
+% \usepackage[outputdir=/home/amakelov/vscode_output/latex-aux]{minted}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
+
+
 
 \begin{document}
 \maketitle
@@ -74,11 +75,10 @@ Powerful Scientific Data Management}
   `interfaces' to their own intermediate results by retracing the memoized
   calls; (2) all computations in a project form a single computational graph,
   which can be explored, queried and manipulated in high-level ways through a
-  \emph{computation frame}, which is a natural generalization of a dataframe in
-  a way made precise in this paper. 
+  \emph{computation frame}, which is a natural generalization of a dataframe that replaces columns by a computation graph, and rows by (partial) executions of this graph.
 
   Several features implemented on top of the core memoization data structures ---
-  such as natively and transparently handling Python collections, caching of
+  such as natively and transparently handling Python collections, in-memory caching of
   intermediate results, and a flexible versioning system with dynamic dependency
   tracking --- turn \texttt{mandala} into a practical and simple tool for
   managing and interacting with computational data.
@@ -88,73 +88,74 @@ Powerful Scientific Data Management}
 \label{section:intro}
 
 Numerical experiments and simulations are growing into a central part of many
-areas of science and engineering \citep{hey2009fourth}. Recent trends in fields
-such as machine learning point towards (1) ever-increasing complexity of
-computational pipelines, and (2) adoption in more safety-critical domains, such
-as autonomous driving \citep{bojarski2016end} and healthcare
-\citep{ravi2016deep,abramson2024accurate}.
+areas of science and engineering \citep{hey2009fourth}. Recent trends in
+computation-intensive fields, such as machine learning, point towards (1)
+ever-increasing complexity of computational pipelines, and (2) adoption in more
+safety-critical domains, such as autonomous driving \citep{bojarski2016end} and
+healthcare \citep{ravi2016deep,abramson2024accurate}.
 
 These developments impose opposing constraints on the tools used to manage the
-resulting computational artifacts: on the one hand, they should be simple and
+resulting computational artifacts. On the one hand, they should be simple and
 easy to use by researchers, with a minimal learning curve and unobtrusive syntax
-and semantics; on the other hand, they should be powerful enough to enable
-high-level operations \citep{wickham2014tidy}, full data \& code provenance
-auditing \citep{davidson2008provenance} and reproducibility
-\citep{ivie2018reproducibility} in complex projects.  Rules and practices that
-help with these requirements exist and are well-known
-\citep{sandve2013ten,wilkinson2016fair}, but still require manual work,
-attention and discipline to follow. Researchers often operate under time
-pressure and/or need to quickly iterate on their code, which makes these best
-`practices' a rather impractical time investment. 
+and semantics. On the other hand, they should deliver a lot of added
+functionality, such as high-level operations \citep{wickham2014tidy}, full data
+\& code provenance auditing \citep{davidson2008provenance} and reproducibility
+\citep{ivie2018reproducibility} in complex projects.  Rules and best practices
+that help with these requirements exist and are well-known
+\citep{sandve2013ten,wilkinson2016fair}, but still require manual effort,
+attention to extraneous details, and discipline to follow. Researchers often
+operate under time pressure and/or the need to quickly iterate on code, which
+makes these best `practices' a rather \emph{impractical} time investment. 
 
-Thus, ideally we would like a system that (1) does not require learning a
-complex new language/semantics/syntax, (2) provides powerful high-level data
-management operations over complex computational projects, and (3) incorporates
-best practices by design and without cognitive overhead.
-
+Thus, ideally we would like a system that (1) does not get in the way by
+imposing a complex new language/semantics/syntax, (2) provides powerful
+high-level data management operations over complex computational projects, and
+(3) incorporates best practices by design and without cognitive overhead.
 
 % a figure with 3 subfigures side by side, each with a caption. Each figure is an imported .pdf file
 \begin{figure}[h]
 \centering
 \begin{subfigure}{0.23\textwidth}
 \centering
-\includegraphics[width=\textwidth]{img/fig1.jpg}
-% \caption{Add the \texttt{@op} decorator to any Python function to make it memoizable}
+\includegraphics[width=\textwidth]{img/fig1.pdf}
+\caption{}
 \end{subfigure}
 \begin{subfigure}{0.35\textwidth}
 \centering
 \includegraphics[width=\textwidth]{img/fig2.pdf}
-% \caption{}
+\caption{}
 \end{subfigure}
 \begin{subfigure}{0.4\textwidth}
 \centering
 \includegraphics[width=\textwidth]{img/fig3.pdf}
-% \caption{}
+\caption{}
 \end{subfigure}
-\caption{Basic imperative usage of \texttt{mandala}. \textbf{Left}: add the \texttt{@op}
-decorator to any Python functions to make them memoizable. \textbf{Middle}:
+\caption{Basic imperative usage of \texttt{mandala}. \textbf{(a)}: add the \texttt{@op}
+decorator to any Python functions to make them memoizable. \textbf{(b)}:
 create a \texttt{Storage}, and use it as a context manager to automatically
 memoize any calls to \texttt{@op}-decorated functions in the block. Memoized
 functions return \texttt{Ref} objects, which wrap a value with two pieces of
 metadata: a \emph{content ID}, which is a hash of the value of the
 object, and a \emph{history ID}, which is a hash of the identity of the
 \texttt{@op} that produced the \texttt{Ref} (if any), and the history IDs of the
-\texttt{@op}'s inputs. \textbf{Right}: the storage context allows simple
+\texttt{@op}'s inputs. \textbf{(c)}: the storage context allows simple
 incremental computation and recovery from failures. Here, we add more
-computations while transparently reusing already computed values.}
+computations while automatically reusing already computed values.}
 \label{fig:basic-usage}
 \end{figure}
 
-In this paper we present \texttt{mandala}, our proposal for such a system. At
-its core, it \textbf{integrates best data management practices} --- such as full
-data provenance tracking, idempotent \& deterministic computation,
-content-addressable versioning of code and its dependencies, and declarative
-high-level data manipulation --- \textbf{into Python's already familiar syntax
-and semantics} (Figures \ref{fig:basic-usage} and \ref{fig:cf}). The integration aims to be
-maximally transparent and unobtrusive, so that the user can focus on the
-\emph{essential complexity} (the scientific problem at hand), rather than on the
-\emph{accidental complexity} (the data management tools used to solve it)
-\citep{Brooks1987NoSB}.
+In this paper we present \texttt{mandala}, our proposal for such a system. It \textbf{integrates data management logic and best practices} such as
+\begin{itemize}
+\item Full data provenance tracking
+\item Idempotent \& reproducible computation
+\item Content-addressable versioning of code and its dependencies
+\item Declarative high-level manipulation of persisted computational graphs
+\end{itemize}
+\textbf{into Python's already familiar syntax and semantics} (Figures
+\ref{fig:basic-usage} and \ref{fig:cf}). The integration aims to be maximally
+transparent and unobtrusive, so that the user can focus on the \emph{essential
+complexity} (the scientific problem at hand), rather than on the
+\emph{accidental complexity} (the data management tools necessary to implement the solution) \citep{Brooks1987NoSB}.
 
 The rest of this paper presents the design and main functionalities of
 \texttt{mandala}, and is organized as follows: 
@@ -167,15 +168,19 @@ pattern of interacting with computational artifacts.
 \emph{computation frame}, which generalizes a dataframe by replacing columns
 with a computational graph, and rows with individual computations that
 (partially) follow this graph. Computation frames allow high-level exploration
-and manipulation of the stored computation graph, such as adding the
-creators/consumers of given values to the graph, deleting all computations that
-depend on the calls captured in the frame, and restricting the frame to a
-particular subgraph or subset of values with given properties.
+and manipulation of the stored computation graph, such as adding the calls that
+produced/used given values to the graph, deleting all computations that depend
+on the calls captured in the frame, and restricting the frame to a particular
+subgraph or subset of values with given properties.
 \item In Section \ref{section:extra-features}, we describe some other features of
-\texttt{mandala} necessary to make it a practical tool, such as optionally
-storing elements of Python collections as separate values (enabling transparent
-reuse of individual elements), caching of intermediate results, and a flexible
-versioning system with dynamic dependency tracking.
+\texttt{mandala} necessary to make it a practical tool, such as:
+\begin{itemize}
+\item Representing Python collections in a way transparent to the storage, so
+that the membership relationships between a collection and its items are
+propagated through the saved computational graph;
+\item Caching of intermediate results to speed up retracing and memoization;
+\item A flexible versioning system with automatic dynamic dependency tracking.
+\end{itemize}
 \end{itemize}
 
 Finally, we give an overview of related work in Section \ref{section:related-work}.
@@ -190,43 +195,51 @@ to avoid redundant computation. \texttt{mandala} uses \emph{automatic}
 memoization \citep{norvig1991techniques} which is applied via the combination of
 a decorator (\texttt{@op}) and a context manager which specifies the
 \texttt{Storage} object to use (Figure \ref{fig:basic-usage}). The memoization
-can optionally be made persistent to disk, which is what you would typically want in a
-long-running project. Any Python function can be memoized (as long as its inputs
-and outputs are serializable by the \texttt{joblib} library); there is no
-restriction on the type, number or naming scheme (positional, keyword, variadic)
-of the arguments or return values.
+can optionally be made persistent to disk, which is what you would typically
+want in a long-running project. Any Python function can be memoized (as long as
+its inputs and outputs are serializable by the \texttt{joblib} library; see the
+limitations section \ref{sec:limitations} for caveats); there is no restriction
+on the type, number or naming scheme (positional, keyword, variadic, or variable
+keyword) of the arguments or return values.
 
 \paragraph{\texttt{Call} and \texttt{Ref} objects, and content/history IDs.}
-\texttt{Ref}s and \texttt{Call}s are the two main data structures in
+\texttt{Ref}s and \texttt{Call}s are the two atomic data structures in
 \texttt{mandala}'s model of computations. When a call to an
 \texttt{@op}-decorated function \texttt{f} is executed inside a storage context,
 this results in the creation of 
 \begin{itemize}
-\item a \texttt{Ref} object for each input to the call. These wrap the `raw'
+\item A \texttt{Ref} object for each input to the call. These wrap the `raw'
 values passed as inputs together with content IDs (hashes of the Python objects)
 and history IDs (hashes of the memoized calls that produced these values, if
-any). If an input to the call is already a \texttt{Ref} object, it is passed
-through as is; if it is a raw value, a new \texttt{Ref} object is created with a
-`empty' history ID that is simply a hash of the content ID itself.
-\item a \texttt{Call} object, which has pointers to the input and output
-\texttt{Ref}s of the call to \texttt{f}, as well as a content ID for the call (a
-hash of the identity of \texttt{f} and the content IDs of the input
-\texttt{Ref}s) and a history ID (by analogy, a hash of the identity of
-\texttt{f} and the history IDs of the inputs).
-\item a \texttt{Ref} object for each output of the call. These are again
+any). 
+\begin{itemize}
+\item If an input to the call is already a \texttt{Ref} object, it is passed
+through as is;
+\item If it is a `raw' (i.e., non-\texttt{Ref}) value, a new \texttt{Ref} object
+is created with a `empty' history ID that is simply a hash of the content ID
+itself.
+\end{itemize}
+\item A \texttt{Call} object, which has pointers to the input and output
+(defined below) \texttt{Ref}s of the call to \texttt{f}, as well as a content ID
+for the call (a hash of the identity of \texttt{f} and the content IDs of the
+input \texttt{Ref}s) and a history ID (by analogy, a hash of the identity of
+\texttt{f} and the history IDs of the inputs). The version of \texttt{f} is also part of the identity of \texttt{f}; see the versioning section \ref{subsection:versioning} for details.
+\item A \texttt{Ref} object for each return value of the call. These are again
 assigned content IDs by value, and history IDs by hashing the tuple (history ID
 of the call, corresponding output name\footnote{Since Python functions don't
 have designated output names, we instead generate output names automatically using the order in the tuple of return values.}).
 \end{itemize}
 
-\begin{wrapfigure}[23]{r}{0.5\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{img/comp-graph.pdf}
-    \caption{A part of the computaitonal graph built up by the calls in Figure
-    \ref{fig:basic-usage}. The nodes are \texttt{Call} and \texttt{Ref} objects,
-    and the edges are the inputs/output names connecting them.}
-    \label{fig:comp-graph}
-\end{wrapfigure}
+% \begin{wrapfigure}[18]{r}{0.5\textwidth}
+%     \centering
+%     \includegraphics[width=\linewidth]{img/comp-graph.pdf}
+%     \caption{A part of the computaitonal graph built up by the calls in Figure
+%     \ref{fig:basic-usage}. 
+%     % The nodes are \texttt{Call} and \texttt{Ref} objects,
+%     % and the edges are the inputs/output names connecting them.
+%     }
+%     \label{fig:comp-graph}
+% \end{wrapfigure}
 
 
 The \texttt{Ref}s and the \texttt{Call} are then stored in the storage backend,
@@ -235,11 +248,14 @@ and the next time \texttt{f} is called on inputs that have the same
 \texttt{Ref}s, which are then returned (possibly with properly updated history
 IDs, if the call exists in storage by content ID only). The combination of all
 stored \texttt{Call}s and \texttt{Ref}s across memoized functions form the
-\textbf{computational graph} represented by the storage (Figure \ref{fig:comp-graph}). Importantly, the
+\textbf{computational graph} represented by the storage. Importantly, the
 `interesting' structure of this graph is built up automatically by the way the
 user composes memoized calls.
 
+\subsection{Motivation for the Design of Memoization}
+\label{subsection:}
 
+\paragraph{Why content and history IDs?}
 The simultaneous use of content and history IDs has a few subtle advantages.
 First, it allows for the \emph{de-duplication} of storage, as the same content
 ID can be used to store the same value produced by different computations. For
@@ -248,9 +264,10 @@ large all-zero array), but only one copy of $42$ is stored in the backend. At
 the same time, the history IDs allow us to distinguish between computations that
 produced the same value, but in different ways. This avoids `parasitic' results
 in declarative queries. For example, a call to \texttt{f} may result in 42, and
-we may be interested in all computations that were called on this particular 42
-returned by \texttt{f} and not on any other 42. Without history IDs, it would be
-impossible to make this distinction in the stored computational graph.
+we may be interested in all calls that were ran on this particular 42 returned
+by \texttt{f} and not on any other \texttt{Ref} whose value happens to be 42.
+Without history IDs, it would be impossible to make this distinction in the
+stored computational graph.
 
 
 \paragraph{Why memoization?} Memoization is an unusual choice for data
@@ -260,12 +277,20 @@ pointing to the value to be saved and the address where it should be saved
 memoization means that the `address' of a value is now implicit in the code that
 produced it, and the value itself is stored in a shared storage backend. This has several advantages:
 \begin{itemize}
-\item it \textbf{eliminates the need to manually name artifacts}. This
+\item It \textbf{eliminates the need to manually name artifacts}. This
 eliminates a major source of accidental complexity: names are arbitrary,
 ambiguous, and can drift away from the actual content of the value they point to
 over time. On the other hand, names are not strictly necessary, because the
-composition of memoized functions that produced a given value --- which must be specified anyway --- is already a canonical reference to it.
-\item it \textbf{organizes storage activities around a familiar and useful
+composition of memoized functions that produced a given value --- which must be
+specified anyway for the computation to take place --- is already an unambiguous
+pointer to it.
+\item Since the \texttt{@op} decorator encourages (and in a sense enforces)
+composition of \texttt{@op}s, it \textbf{automatically builds up a computational
+graph of the project}. Most data management tasks --- e.g., a frequent use case
+is getting a table of relationships between some variables --- are naturally
+expressed as queries over this graph, as we will see in Section
+\ref{section:cf}.
+\item It \textbf{organizes storage functionality around a familiar and flexible
 interface: the function call}. This automatically enforces the good practice
 of partitioning code into functions, and eliminates extra `accidental' code to
 save and load values explicitly. Furthermore, it synchronizes failures between
@@ -273,10 +298,15 @@ computation and storage, as the memoized calls are the natural points to
 recover from.
 \end{itemize}
 
-The trade-off is that referring to values without reference to code that
-produced or used them becomes difficult, because from the point of view of
-storage the `identity' of a value is its place in the computational graph. We
-discuss practical ways to overcome this in Section \ref{section:cf}.
+On the other hand, memoization suffers from the following limitations:
+\begin{itemize}
+\item Referring to values without reference to the code that produced or used
+them becomes difficult, because from the point of view of storage the `identity'
+of a value is its place in the computational graph. We discuss practical ways to
+overcome this in Section \ref{section:cf}.
+\item Modifying \texttt{@op} functions requires care, as changes may invalidate
+the stored computational graph. We discuss a versioning system that automates this process in Section \ref{subsection:versioning}.
+\end{itemize}
 
 \subsection{Retracing as a Versatile Imperative Interface to the Stored Computation Graph}
 \label{subsection:retracing}
@@ -284,100 +314,142 @@ discuss practical ways to overcome this in Section \ref{section:cf}.
 The compositional nature of memoization makes it possible to build complex
 computations out of calls to memoized functions, turning the entire computation
 into an end-to-end-memoized interface to its own intermediate results. The main
-way to interact with such a computation is through \textbf{retracing}, which
-means stepping through memoized code with the purpose of resuming from a
+way to interact with such a persisted computation is through \textbf{retracing},
+which means stepping through memoized code with the purpose of resuming from a
 failure, loading intermediate values, or continuing from a particular point with
 new computations. A small example of retracing is shown in Figure
-\ref{fig:basic-usage} (right). 
+\ref{fig:basic-usage} (c). 
 
 This pattern is simple yet powerful, as it allows the user to interact with the
 stored computation graph in a way that is adapted to their use case, and to
 explore the graph in a way that is natural and familiar to them. It also
 simplifies the management of state in an interactive environment such as a
-Jupyter notebook, because it makes it very cheap to re-run cells.
-
+Jupyter notebook, because it makes it very cheap to re-run cells in order to recreate the intended state of local variables.
 
 \section{Computation Frames}
 \label{section:cf}
 
-\begin{figure}[h]
-\centering
-\begin{subfigure}{0.47\textwidth}
-\centering
-\includegraphics[width=\textwidth]{img/fig4.pdf}
-\end{subfigure}
-\begin{subfigure}{0.47\textwidth}
-\centering
-\includegraphics[width=\textwidth]{img/fig5.pdf}
-\end{subfigure}
-\caption{Basic declarative usage of \texttt{mandala} and an example of
-computation frames. \textbf{Left}: continuing from Figure
-\ref{fig:basic-usage}, we first create a computation frame from a single
-function \texttt{f}, then expand it to include all calls that can be reached
-from the memoized calls to \texttt{f} via their inputs/outputs, and finally
-convert the computation frame into a dataframe. We see that this automatically
-produces a computation graph corresponding to the computations found. \textbf{Right}:
-the output of the call to \texttt{.eval()} from the left subfigure used to turn
-the computaiton frame into a dataframe. The resulting table has columns for all
-variables and functions appearing in the captured computation graph, and each
-row correspond to a partial computation following this graph. The variable
-columns contain values these variables take, whereas function columns contain
-call objects representing the memoized calls to the respective functions. We see
-that, because we call \texttt{g} conditional on the output of \texttt{f}, some
-rows have nulls in the \texttt{g} column.}
-\label{fig:cf}
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \begin{subfigure}[b]{\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/fig4.pdf}
+            \caption{Continuing from Figure \ref{fig:basic-usage}, we first
+            create a computation frame from a single function \texttt{f}, then
+            expand it to include all calls that can be reached from the memoized
+            calls to \texttt{f} via their inputs/outputs, and finally convert
+            the computation frame into a dataframe. We see that this
+            automatically produces a computation graph corresponding to the
+            computations found.}
+            \label{fig:figure1}
+        \end{subfigure}
+        
+        \vspace{1em}
+        
+        \begin{subfigure}[b]{\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/fig5.pdf}
+            \caption{The output of the call to \texttt{.eval()} from the left
+            subfigure used to turn the computaiton frame into a dataframe. The
+            resulting table has columns for all variables and functions
+            appearing in the captured computation graph, and each row correspond
+            to a partial computation following this graph. The variable columns
+            contain values these variables take, whereas function columns
+            contain call objects representing the memoized calls to the
+            respective functions. We see that, because we call \texttt{g}
+            conditional on the output of \texttt{f}, some rows have nulls in the
+            \texttt{g} column.}
+            \label{fig:figure2}
+        \end{subfigure}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.45\textwidth}
+        \begin{subfigure}[b]{\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/cf.pdf}
+            \caption{A visualization of the computation frame from the previous
+            two subfigures. The red nodes indicate functions, and the blue nodes
+            indicate variables in the computation graph. Each edge is labeled
+            with the input/output name of the adjacent function. Nodes and edges
+            also show the number of \texttt{Ref}s and \texttt{Call}s they
+            represent.}
+            \label{fig:figure3}
+        \end{subfigure}
+    \end{minipage}
+    \caption{Basic declarative usage of \texttt{mandala} and an example of
+computation frames.}
+    \label{fig:cf}
 \end{figure}
 
 In order to be able to explore and manipulate the full stored computation graph,
 patterns like retracing are insufficient, because they require the complete code
-producing part of the graph to be available. Instead, we introduce the concept
-of a \emph{computation frame}, which is a high-level declarative interface to
-the stored computation graph. 
+producing part of the graph to be available. To complement retracing, we
+introduce the \texttt{ComputationFrame} data structure, which is a high-level
+declarative interface to the stored computation graph.
 
-\subsection{Definition}
+\subsection{Motivation and Intuition}
+\label{subsection:cf-motivation-intuition}
+
+Intuitively, a computation frame is a way to organize a collection of saved
+\texttt{@op} calls into groups, where the calls in each group have an analogous
+role in the computation, and the groups form a high-level computational graph of
+variables (which represent groups of \texttt{Ref}s) and functions (groups of
+\texttt{Call}s). The illustration in Figure \ref{fig:cf} (c) shows a
+visualization of a computation frame extracted from the computations in Figure
+\ref{fig:basic-usage}.
+
+This kind of organization is useful because it reflects how the user thinks
+about the computation, and allows them to tailor the exploration of the
+computation graph to a particular use case, much like a database view. For
+instance, sometimes it makes sense to group the outputs of several different
+\texttt{@op}s into a single variable because they are treated the same way by
+downstream computations.
+
+From another point of view, computation frames are `views' of the stored
+computation graph, analogous to database views. In particular, they may contain
+multiple references to the same \texttt{Ref} or \texttt{Call} object from
+different nodes of the graph, and do not necessarily contain all calls to a
+given \texttt{@op}.
+
+\subsection{Formal Definition}
 \label{subsection:cf-definition}
+
+
 A computation frame (Figure \ref{fig:cf}) consists of the following data:
 \begin{itemize}
-\item \textbf{computation graph}: a directed graph $G=(V,F,E)$ where $V$ are
-variables, $F$ are \texttt{@op}-decorated functions, and labeled edges $E$
-connect from variables to functions using these variables as input (with the
-edge label being the input name), and from functions to variables that are
-outputs of these functions (with the edge label being the name of the output). An example is shown in Figure \ref{fig:comp-graph}.
-\item \textbf{instance data}: for each variable $v\in V$, a set of history
-IDs $H_v$ of \texttt{Ref}s corresponding to this variable, and for each function
-$f\in F$ a set of history IDs $C_f$ of \texttt{Call}s to $f$ corresponding to
-this node. 
+\item \textbf{Computation graph}: a directed graph $G=(V,F,E)$ where $V$ are
+named variables and $F$ are named instances of \texttt{@op}-decorated functions.
+The edges $E$ are labeled with the input/output names of the adjacent functions.
+An example is shown in Figure \ref{fig:cf} (c);
+\item \textbf{Groups of \texttt{Ref}s and \texttt{Call}s}: for each variable
+$v\in V$, a set of (history IDs of) \texttt{Ref}s $R_v$, and for each function
+$f\in F$ with underlying \texttt{@op} $o_f$, a set of (history IDs of) \texttt{Call}s $C_f$; 
 \end{itemize}
-Most importantly, this data is subject to the constraint that, if there exists a
-call $c\in C_f$ where $f$ is connected via an input/output edge to some variable
-$v$, then the value of $v$ corresponding to this call belongs to $H_v$. In other
-words, when we look at all calls in $f\in F$, their inputs/outputs  must be
-present in the variables connected to $f$ under the same input/output name. 
+subject to the constraint that: for every call $c\in C_f$, if there's an
+input/output edge labeled $l$ connecting $f$ to some variable $v$, then if $c$
+has a \texttt{Ref} $r_l$ corresponding to input/output name $l$, we have $r_l\in
+R_v$. 
 
-Intuitively, computation frames are `views' of the stored computation graph,
-analogous to database views. In particular, they can be organized in a way that
-is natural for a specific use case, may contain multiple references to the same
-\texttt{Ref} or \texttt{Call} object, and do not necessarily contain all calls
-to a given function. Formally speaking, there is a directed graph homomorphism
-(a direction- and adjacency-preserving mapping from vertices to vertices and
-edges to edges) from a computation frame's instance data to the full stored
-computation graph.
+In other words, when we look at all calls in $f\in F$, their inputs/outputs must
+be present in the variables connected to $f$ under the respective input/output
+name. 
 
 \subsection{Basic Usage}
 \label{subsection:cf-basic-usage}
 
 The main advantage of computation frames is that they allow iterative
 exploration of the computation graph, and high-level grouped operations over
-computations with some shared structure. For example, we can use them for 
+computations with some shared structure. For example, we can use them for:
 \begin{itemize}
-\item \textbf{iteratively expanding the frame with functions that generated or
+\item \textbf{Iteratively expanding the frame with functions that generated or
 used existing variables}: this is useful for exploring the computation graph in
 a particular direction, or for adding more context to a particular computation.
-For example, in Figure \ref{fig:cf} (left), we start with a computation frame
+For example, in Figure \ref{fig:cf} (a), we start with a computation frame
 containing only the calls to \texttt{f}, and then expand it to include all calls
 that can be reached from the memoized calls to \texttt{f} via their
 inputs/outputs, which adds the calls to \texttt{g} to the frame.
-\item \textbf{converting the frame into a dataframe}: this is useful at the end
+\item \textbf{Converting the frame into a dataframe}: this is useful at the end
 of an exploration, when we want to get a convenient tabular representation of
 the captured computation graph. The table is obtained by collecting all terminal
 \texttt{Ref}s in the frame's computational graph (i.e., those that are not
@@ -386,7 +458,7 @@ the frame (grouped by variable), and joining the resulting tables over the
 variables. This is shown in Figure \ref{fig:cf} (right). In particular, as shown
 in the example, this step may produce nulls, as the computation frame can
 contain computations that only partially follow the graph.
-\item \textbf{performing high-level storage manipulations}: such as deleting all
+\item \textbf{Performing high-level storage manipulations}: such as deleting all
 calls captured in the frame as well as all calls that depend on them, available
 using the \verb|.delete_calls()| method on the frame.
 \end{itemize}
@@ -395,7 +467,7 @@ Computation frames are a powerful tool for exploring and manipulating the stored
 computation graph, and we're excited to explore their full potential in future
 work.
 
-\section{Some Extra Features}
+\section{Main Extra Features}
 \label{section:extra-features}
 
 \subsection{Data Structures}
@@ -404,9 +476,9 @@ work.
 Python's native collections --- lists, dicts, sets --- can be memoized
 transparently by \texttt{mandala}, using customized type annotations, e.g.
 \texttt{MList[int]} inheriting from \texttt{List[int]}, \ldots. By applying this
-type annotation, the collection is memoized so that its individual elements as
-well as the collection itself are memoized as \texttt{Ref}s (with the collection
-merely pointing to the \texttt{Ref}s of its elements to avoid duplication). 
+type annotation, individual elements as well as the collection itself are
+memoized as \texttt{Ref}s (with the collection merely pointing to the
+\texttt{Ref}s of its elements to avoid duplication). 
 
 \begin{wrapfigure}[18]{l}{0.45\textwidth}
     \centering
@@ -424,16 +496,15 @@ elements of a list as variadic inputs, generates a \texttt{ListRef} (subclass of
 collections are naturally incorporated in the computation graph. These internal
 \texttt{@op}s are applied automatically when a collection is passed as an
 argument to a memoized function, or when a collection is returned from a
-memoized function. The upshot is that collection elements can be reused
-transparently, as shown in Figure \ref{fig:list}.
+memoized function (Figure \ref{fig:list}).
 
-\subsection{Caching}
-To speed up retracing and memoization, it is necessary to avoid frequent reads
-and writes to the database backend. To this end, \texttt{mandala} implements a
-fairly standard caching system that accumulates results in memory, with the
-option to explicitly flush values to disk at once when the user decides, or
-automatically at the end of a \texttt{mandala} context. Similarly, to speed up
-retracing of existing calls, call metadata can be pre-loaded.
+% \subsection{Caching}
+% To speed up retracing and memoization, it is necessary to avoid frequent reads
+% and writes to the database backend. To this end, \texttt{mandala} implements a
+% fairly standard caching system that accumulates results in memory, with the
+% option to explicitly flush values to disk at once when the user decides, or
+% automatically at the end of a \texttt{mandala} context. Similarly, to speed up
+% retracing of existing calls, call metadata can be pre-loaded.
 
 \subsection{Versioning}
 \label{subsection:versioning}
@@ -441,19 +512,21 @@ retracing of existing calls, call metadata can be pre-loaded.
 It is crucial to have a flexible and powerful code versioning system in a data
 management tool, as it allows the user to keep track of the evolution of their
 computations, and to easily recover from mistakes. \texttt{mandala} provides the
-option to use a versioning system with two main features:
+option to use a versioning system with three main features:
 \begin{itemize}
-\item \textbf{content-addressed versioning} \citep{git}, where the version of a
-function is a hash of its source code and the hashes of the functions it calls.
-\item \textbf{dynamic dependency tracking}, where each function call traces the
-functions it calls. This avoids the need for static analysis of the code to find
-dependencies, which can result in many false positives and negatives, especially
-in a dynamic language like Python.
+\item \textbf{Per-function content-addressed versioning} \citep{git,lozano2017unison}, where
+the version of a function is a hash of its source code and the hashes of the
+functions it calls. The storage can determine, based only on the state of the
+codebase, whether a given call is up-to-date or not.
+\item \textbf{Dynamic dependency tracking}, where each function call traces the
+dependencies it calls. This avoids the need for static analysis of the code to
+find dependencies, which can result in many false positives and negatives,
+especially in a dynamic language like Python. Moreover, it provides a stronger
+notion of reusability, as certain changes of the codebase may invalidate only
+a part of all memoized calls to an \texttt{@op}.
+\item \textbf{The flexibility to mark changes as backward-compatible or not},
+which allows the user to maintain a stable interface to computations when performing routine refactoring or adding logging/debugging code.
 \end{itemize}
-
-A full discussion of the versioning system is beyond the scope of this paper,
-but we refer the reader to a blog post by the author
-\citep{makelov2023practical} for details and motivation.
 
 \section{Related Work}
 \label{section:related-work}
@@ -462,33 +535,71 @@ but we refer the reader to a blog post by the author
 the Pythonic way it makes complex memoized computations easy to query,
 manipulate and version.
 
-\paragraph{Memoization.} The \texttt{incpy} project \citep{guo2011using} enables
-automatic persistent memoization of Python functions directly on the interpreter
-level. The \texttt{funsies} project \citep{lavigne2021funsies} is a
-memoization-based distributed workflow executor that uses a similar hashing
-approach to \texttt{mandala} to keep track of which computations have already
-been done. It works on the level of scripts (not functions), and lacks
-queriability and versioning. \texttt{koji} \citep{maymounkov2018koji} is a
-design for an incremental computation data processing framework that unifies
-over different resource types (files or services). It also uses an analogous
-notion of hashing to keep track of computations.
+\textbf{Memoization.} There are several memoization solutions for Python that lack the compositional nature of \texttt{mandala}, as well as the versioning and
+querying tools: the builtin \texttt{functools} module provides decorators such as \texttt{lru\_cache} for memoization; the \texttt{incpy} project \citep{guo2011using} enables automatic
+persistent memoization of Python functions directly on the interpreter level; 
+the \texttt{funsies} project \citep{lavigne2021funsies} is a memoization-based
+distributed workflow executor that uses a similar hashing approach to keep track
+of which computations have already been done; \texttt{koji} \citep{maymounkov2018koji} is a design for an incremental computation data processing framework that unifies over different resource types (files or services), and uses an analogous notion of hashing to keep track of computations.
 
-\paragraph{Computation Frames.} Computation frames are very closely related to
-functors $\mathcal{F}:\mathscr{C}\to \underline{\mathbf{Set}}$ where
-$\mathscr{C}$ is a finite category, and this perspective has been explored in
-e.g. \citep{patterson2022categorical}.
+\textbf{Computation Frames.} Computation frames are closely related to the
+relational model \citep{codd1970relational}, to graph databases, and to certain
+versatile in-memory data structures based on functors
+$\mathcal{F}:\mathscr{C}\to \underline{\mathbf{Set}}$ where $\mathscr{C}$ is a
+finite category \citep{patterson2022categorical}.
 
-\paragraph{Versioning.} The revision history of each function in the codebase is
-organized in a `mini-git repository' that shares only the most basic features
-with \texttt{git} \citep{git}: it is a content-addressable tree, where each edge
-tracks a diff from the content at one endpoint to that at the other. Additional
-metadata indicates equivalence classes of semantically equivalent contents.
-Semantic versioning \citep{semver} is another popular code versioning system.
-mandala is similar to semver in that it allows you to make backward-compatible
-changes to the interface and logic of dependencies. It is different in that
-versions are still labeled by content, instead of by `non-canonical' numbers.
-The unison programming language \citep{lozano2017unison} represents functions by
-the hash of their content (syntax tree, to be exact).
+\textbf{Versioning.} The \texttt{unison} programming language
+\citep{lozano2017unison} uses a content-addressed system for code storage, where
+a function is identified by the hash of its syntax tree. The language shares
+many other features and goals with \texttt{mandala}, such as use of serializable
+values and pure functions to ensure reproducibility.
+
+The dynamic tracing mechanism used to capture dependencies
+is somewhat similar to the \texttt{@tf.function} decorator in the TensorFlow
+library \citep{abadi2016tensorflow}, which traces the function calls to other
+\texttt{@tf.function}-decorated functions made during execution and builds a
+computation graph out of them. Unlike \texttt{@tf.function}, \texttt{mandala}'s
+versioner uses content (code) hashes to automatically detect changes in
+dependencies, and does not build a fine-grained model of a function's execution, but rather only tracks the set of its dependencies.
+
+The revision history of each function in the codebase is
+organized in a bare-bones \texttt{git} repository \citep{git}: it is a
+content-addressed tree, where each edge tracks a diff from the content at one
+endpoint to that at the other. Additional metadata indicates equivalence classes
+of semantically equivalent contents. 
+% Semantic versioning \citep{semver} is another popular code versioning system. 
+% \texttt{mandala} is similar to semver in
+% that it allows you to make backward-compatible changes to the interface and
+% logic of dependencies. It is different in that versions are still labeled by
+% content, instead of `non-canonical' numbers. 
+
+\section{Limitations}
+\label{sec:limitations}
+
+\textbf{Computing deterministic content IDs of any Python object is difficult.} 
+\texttt{mandala} uses the \texttt{joblib} library to serialize Python objects
+into byte strings, and then hashes these strings to get the content ID. This
+approach is not perfect, as it is not always possible to serialize Python
+objects, and even when it is, the serialization may not be unique. For example,
+two Python objects \texttt{x, y} which satisfy \texttt{x == y} may not have the
+same content ID (e.g., \texttt{True} and \texttt{1}). Furthermore, hashing is
+sensitive to small changes in the input, such as numerical precision in floating
+point numbers. Finally, complex Python objects may contain state that is not
+intrinsically part of the object's identity, such as resource utilization data
+(e.g., memory addresses). This can lead to different content IDs before and 
+after a round trip through the storage backend. These issues don't come up often
+as long as all initial \texttt{Ref}s are created from simple Python objects:
+complex objects are hashed and saved once when returned from an \texttt{@op},
+and then referred to by their content ID.
+
+\textbf{Non-breaking versioning is difficult.} The ability to mark code changes
+as backward-compatible or not may lead to situations where the storage
+`believes' that a call is up-to-date, but in reality it is not. For example, a
+function \texttt{f} can be changed by extracting a subroutine \texttt{g} out of
+it. The semantics of \texttt{f} is unchanged, so past calls are still valid,
+but \texttt{g} is now an invisible (to the storage) dependency of \texttt{f}.
+Care should be taken to avoid such situations until an automatic solution is
+implemented.
 
 \section{Conclusion}
 \label{section:conclusion}

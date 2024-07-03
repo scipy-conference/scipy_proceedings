@@ -14,8 +14,8 @@ project:
         - SERI MATS
         - Independent Researcher
   keywords:
-    - data management
-    - framework
+    - scientific data management
+    - machine learning
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
