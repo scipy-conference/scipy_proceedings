@@ -38,6 +38,7 @@ project:
     PEP: Python Enhancement Proposal
     NSF: National Science Foundation
     PyPI: Python Package Index
+    SDist: Source Distribution, the way Python packages distribute source code
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified

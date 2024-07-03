@@ -14,12 +14,13 @@ nearly impossible to rely on, are now the standard, and required for any build
 system, including the original setuptools. And this new system is controlled by
 one central location, the `pyproject.toml` file.
 
-We present scikit-build-core, a new build system based on these standards that
+We present scikit-build-core: a new build system based on these standards that
 brings together Python packaging and the CMake build system, the popular
 general purpose build system for languages like C, C++, Fortran, Cython, and
-CUDA. Together, this provides a simple entry point to building extensions that
-still scales to major projects. This allows everyone to take advantage of
-existing libraries and harness the performance available in these languages.
+CUDA. Together, this new system provides a simple entry point to building
+extensions that still scales to major projects. This allows everyone to take
+advantage of existing libraries and harness the performance available in these
+languages.
 
 We will look at creating a package with scikit-build-core. Then we will cover
 some of it's most interesting and innovative features. Then we will peer into
@@ -47,14 +48,15 @@ wasn't long before setuptools became required; building directly with distutils
 was too buggy, and setuptools was injecting patches into distutils when it
 loaded.
 
-Package installers, originally `easy_install` and then the more full featured
+Package installers, originally `easy_install` and then the more full-featured
 `pip` came along. `pip` was tightly coupled to setuptools, and even helped it
-out by making sure it's injections to distutils were done even if packages
+out by making sure it's injections to distutils were done, even if packages
 didn't import setuptools first or at all. Pip was directly and deeply tied to
 setuptools; if you wanted to build a package, setuptools was the only answer.
-Even if you make the sdist and wheel(s) yourself, which was actually pretty
-easy, as those were standardized, you couldn't make sure that `pip` wouldn't
-try to use setuptools to build a wheel from an SDist.
+Even if you make the SDist (Python's source distribution format) and wheel(s)
+(Python's binary distribution format) yourself, which was actually pretty easy,
+as those were standardized, you couldn't make sure that `pip` wouldn't try to
+use setuptools to build a wheel from an SDist.
 
 Faults in the organically grown distutils/setuptools quickly became apparent.
 You couldn't tell the installer to update setuptools from `setup.py`, because
@@ -79,7 +81,7 @@ way to define basic package metadata, and PEP 660 [@pep660] would add an API for
 installs.
 
 Python build backends started to appear. Most of the initial build backends
-were were designed for Python only packages. `flit-core`, `poetry-core`,
+were were designed for Python-only packages. `flit-core`, `poetry-core`,
 `pdm-backend`, and `hatchling` are some popular build backends that support
 some or all of these PEPs. Setuptools also ended up gaining support for all
 these PEPs, as well.
@@ -111,7 +113,7 @@ install `cmake` and `ninja` anywhere that wheels worked.
 In 2021, a proposal was written and accepted by the NSF to fund development on
 a new package, scikit-build-core, built on top of the packaging standards and
 free from setuptools and other historical cruft. Work started in 2022, and the
-first major package to switch was awkward array, at the end of that year.
+first major package to switch was Awkward Array, at the end of that year.
 
 ## Using scikit-build-core
 
@@ -125,7 +127,7 @@ first major package to switch was awkward array, at the end of that year.
 Binary Python packaging dataflow.
 :::
 
-Once configured, scikit-build-core initiates the native build system, managing the bundling of resulting build artifacts and metadata into a wheel. These wheels may undergo additional processing with post-processing tools to enhance platform compatibility. End-users of the package have the option to directly utilize the wheel via a package manager or generate their own package by invoking the build system from a source distribution (sdist). Typically, both the binary wheels and the source distributions are uploaded to the Python Package Index (PyPI) for broader accessibility.
+Once configured, scikit-build-core initiates the native build system, managing the bundling of resulting build artifacts and metadata into a wheel. These wheels may undergo additional processing with post-processing tools to enhance platform compatibility. End-users of the package have the option to directly utilize the wheel via a package manager or generate their own package by invoking the build system from a source distribution (SDist). Typically, both the binary wheels and the source distributions are uploaded to the Python Package Index (PyPI) for broader accessibility.
 
 
 ### The simplest example
@@ -229,21 +231,19 @@ dependencies. This is also done for ninja. This same system was added to
 
 ### Integration with external packages
 
-Scikit-build-core has several mechanisms to allow packages on PyPI to provide
-CMake configuration and tools. There are three mechanisms provided:
+Scikit-build-core has three mechanisms to allow packages on PyPI to provide
+CMake configuration and tools:
 
-First, the site-packages directory is added to the CMake search path by
-scikit-build-core. Due to the way CMake config file discovery works, this
-allows a package to provide a `<PkgName>Config.cmake` file in any GNU-like
-standard location in the package (like
-`pybind11/share/cmake/pybind11/pybind11Config.cmake`, for example).
-
-The second way is with an entry point `cmake.prefix`, which adds prefix
-dirs, useful for adding module files that don't have to match the installed
-package name or are in arbitrary locations.
-
-And the final way is with the `cmake.module` entry point, which can be used
-to add any CMake helper files.
+* The site-packages directory is added to the CMake search path by
+  scikit-build-core. Due to the way CMake config file discovery works, this
+  allows a package to provide a `<PkgName>Config.cmake` file in any GNU-like
+  standard location in the package (like
+  `pybind11/share/cmake/pybind11/pybind11Config.cmake`, for example).
+* An entry point `cmake.prefix`, which adds prefix dirs, useful for adding
+  module files that don't have to match the installed package name or are in
+  arbitrary locations.
+* An entry point `cmake.module`, which can be used to add any CMake helper
+  files.
 
 ### Dual editable modes with automatic recompile
 
@@ -260,7 +260,7 @@ could not be done with setuptools.
 There is also an opt-in "inplace" mode that uses CMake's inplace build to build
 your files in the source directory. This is very similar to setuptools
 `build_ext --inplace`, and works with tools that can't run Python finders, like
-type checkers. This mode works with a single environment, since the build dir
+type checkers. This mode works with a single environment, because the build dir
 _is_ the source dir. There is no dynamic finder in this mode, so automatic
 rebuilds are not supported.
 
@@ -331,7 +331,7 @@ overrides in cibuildwheel, which in turn were based on mypy's overrides.
 Scikit-build-core has the most powerful version of the system, however, with an
 `.if` table that can do version comparisons and regexs, and supports any/all
 merging of conditions, and inheritance from a previous override (also added to
-cibuildwheel). It includes conditions for the state of the build (wheel, sdist,
+cibuildwheel). It includes conditions for the state of the build (wheel, SDist,
 editable, or metadata builds) and environment variables. An example is shown below:
 
 ```toml
@@ -351,7 +351,7 @@ This section is devoted to the internals of scikit-build-core.
 Scikit-build-core has over forty options, and each of these options can be
 specified in the `pyproject.toml`, or via config-settings (`-C` in build or
 pip), or via environment variables starting with `SKBUILD`. We also provide a
-JSONSchema for the TOML configuration, and a list of all options in the README.
+JSON Schema for the TOML configuration, and a list of all options in the README.
 All of these are powered by a single dataclass-based configuration system
 developed for scikit-build-core.
 
@@ -381,8 +381,8 @@ reimplemented in pure Python to reduce dependencies and the potential for
 uncontrollable breakage. The system recognised a wide variety of types,
 including nested types and as seen above, literals. A comment in a string
 following the option is also recognised for the JSONSchema/README processors,
-since nothing has been standardized for this yet, and Sphinx understands this
-convention.
+because nothing has been standardized for variable docstrings, and Sphinx
+understands this convention.
 
 Converters are implemented for TOML, config-settings (dict), and environment
 variables. The converters fill the `ScikitBuildSettings` instance with the
@@ -428,21 +428,31 @@ support before, and faster multithreaded compile times.
 ### Statistics
 
 Scikit-build-core is currently the most downloaded build backend designed for
-compiled languages other than rust[^rust], with 2.7M monthly downloads[^2]. It is used by a dozen packages in the top
-8,000 PyPI packages, like `pyzmq`, `lightgbm`, `cmake`, `phik`, and
-`clang-format`. Other packages like `ninja` and `boost-histogram` have adopted
-it, but have not made a release with it yet.
+compiled languages other than Rust[^rust], with 2.7M monthly downloads[^2]. It
+is used by a dozen packages in the top 8,000 PyPI packages, like `pyzmq`,
+`lightgbm`, `cmake`, `phik`, and `clang-format`. Other packages like `ninja`
+and `boost-histogram` have adopted it, but have not made a release with it yet.
 
 It is possible to download every pyproject.toml from PyPI[^3] and perform
 analyses on packages that provided an SDist. You can compute the number of
-packages published using scikit-build-core (TODO), and investigate the details
-of how projects are setting configuration.
+packages published using scikit-build-core (255 as of June 25, up from 82 last
+year), and investigate the details of how projects are setting configuration.
+
+We also monitor non-fork mentions of `scikit_build_core` in `pyproject.toml`'s
+using GitHub Code Search, of which there are currently (July 3) 764 results, up
+from 92 on July 1, 2023). This string is required as part of the build backend,
+so serves as a reasonable method to track this info. A search for the more
+precise string `scikit_build_core.build`, which avoids hatchling and setuptools
+plugins, provides 720 results; a similar search was not performed last year for
+comparison, though.
 
 [^rust]: The Rust-only Maturin is much older and has 57 packages in the top 8,000.
 
-[^2]: TODO Ref: https://hugovk.github.io/top-pypi-packages
+[^2]: <https://hugovk.github.io/top-pypi-packages>
 
-[^3]: `git@github.com:henryiii/pystats.git`
+[^3]: <https://github.com/henryiii/pystats>
+
+[^4]: <https://github.com/search?type=code&q=path%3Apyproject.toml+scikit_build_core+NOT+is%3Afork>
 
 ### Rapids.ai
 
