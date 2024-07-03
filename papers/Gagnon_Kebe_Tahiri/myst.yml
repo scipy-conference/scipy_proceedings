@@ -3,7 +3,7 @@ project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-gagnon_kebe_tahiri
   title: Climatic and Geographic Influences on Cumacea Genetics in the Northern North Atlantic
-  subtitle: by *aPhyloGeo* software
+  subtitle: by aPhyloGeo software
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Justin Gagnon
