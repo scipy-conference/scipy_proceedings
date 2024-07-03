@@ -98,7 +98,7 @@ results = Parallel(n_jobs=-1)(delayed(process_feature)(f_no, selected_features, 
 
 (sec:results)=
 ## Results and Discussions
-The hierarchical cluster and Spearman’s ranking for moisture absorbed composite dataset is shown in [Figure 1a](#hiercorr-a) and [b](#hiercorr-b) respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC. 
+The hierarchical cluster and Spearman’s ranking for moisture absorbed composite dataset is shown in [Figure 1a](#hiercorr-a) and [b](#hiercorr-a) respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC. 
 
 :::{figure} 
 :alt: Hierarchical cluster and Spearman correlation for GSVS
@@ -106,14 +106,12 @@ The hierarchical cluster and Spearman’s ranking for moisture absorbed composit
 :align: center
 :label: fig:hiercorr
 (hiercorr-a)=
-![](./images/gsvs_hierclus.png)
-(hiercorr-b)=
-![](./images/gsvs_cmap.png)
+![](./images/gsvs_hierclus_cmap.png)
 
-Feature relationship for moisture absorbed composite dataset; (a) hierarchical cluster, Spearman correlation ranking.
+Feature relationship for moisture absorbed composite dataset; (a) hierarchical cluster, (b) Spearman correlation ranking.
 :::
 
-As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency are in the same cluster with a highly correlated value of 0.957 shown in [Figure 1b](#hiercorr-b). Similarly, Rise Time and Initiation Frequency are clustered with a highly negative correlation of -0.862. Amplitude and Absolute Energy also exhibited a high positive correlation of 0.981. 
+As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency are in the same cluster with a highly correlated value of 0.957 shown in [Figure 1b](#hiercorr-a). Similarly, Rise Time and Initiation Frequency are clustered with a highly negative correlation of -0.862. Amplitude and Absolute Energy also exhibited a high positive correlation of 0.981. 
 
 @tbl:result_table gives the median and interquartile (IQR) feature importance scores based on change in AUC for the LightGBM, RF and SVM models. These scores were obtained using all samples in the PFI process. Values emphasised in bold fonts represent the  highest ranked feature for the respective models based on their median change in AUC.
 
