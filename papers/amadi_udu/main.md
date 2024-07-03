@@ -115,7 +115,7 @@ As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency a
 
 @tbl:result_table gives the median and interquartile (IQR) feature importance scores based on change in AUC for the LightGBM, RF and SVM models. These scores were obtained using all samples in the PFI process. Values emphasised in bold fonts represent the  highest ranked feature for the respective models based on their median change in AUC.
 
-:::{table} Median and IQR feature importance scores based on change in AUC for LightGBM, RF and SVM models, (Values in bold fonts represent the  highest ranked feature for the respective models).
+:::{table} Median and IQR feature importance scores based on change in AUC for LightGBM, RF and SVM models, (values in bold fonts represent the  highest ranked feature for the respective models).
 :label: tbl:result_table
 <table border="1">
   <tr>
