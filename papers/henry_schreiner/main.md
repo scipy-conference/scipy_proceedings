@@ -31,12 +31,16 @@ some of that work.
 
 ## History of packaging
 
-Python has a long history, and packaging isn't something that was considered
-important for quite a while. Python gained a standard library module to help
-with packaging called `distutils` in Python 1.6 and 2.0, in the year 2000. Distribution
-was difficult, leading to packages containing large numbers of unrelated
-modules (SciPy) to reduce the number of packages one had to figure out how to
-install, and "distributions" of Python, such as the Enthought distribution.
+Python has a long history compared to modern languages with first-party
+packaging solutions; packaging wasn't something that was considered important
+for Python for quite a while. Python gained a standard library module to help
+with packaging called `distutils` in Python 1.6 and 2.0, in the year 2000,
+nearly ten years after the initial release.  Distribution was difficult,
+leading to packages containing large numbers of distinct modules (such as SciPy
+[@scipy]) to reduce the number of packages one had to figure out how to
+install, and "distributions" of Python to be created, such as the Enthought
+distribution. This eventually led to the creation of Conda, a modular binary
+package manager that was particularly good at (and written in) Python.
 
 Several developments greatly improved Python's packaging story, such the
 addition of a new binary format, the "wheel" made distributing binaries easier.
@@ -92,11 +96,19 @@ Cargo (Rust) are the most popular. `enscons` for SCons should get a special
 mention as the first binary build backend, even though it is mostly a
 historical curiosity at this point.
 
+A side note on Conda: like most general package managers, it runs arbitrary
+commands from a recipe to build and install the package, then it captures the
+installed files. Many Python packages use the `pip install .` command, but any
+commands can be placed here, including native CMake calls; as long files are
+placed in the right place, the result can be used from conda installed Python.
+Though packages doing this may forget to generate a `<package>.dist-info`
+directory, which is used by things like `importlib.metadata`.
+
 ## Scikit-build (classic)
 
 The original scikit-build [@scikit-build] was released as PyCMake at SciPy
 2014, and renamed two years later, at SciPy 2016, following the "scikit"
-convention introduced by SciPy [@scipy]. Being developed well before the
+convention introduced by SciPy. Being developed well before the
 packaging PEPs, it was designed as a wrapper around distutils and/or
 setuptools. This design had flaws, but was the only way this could be done at
 the time.
@@ -461,7 +473,9 @@ their packages, like cudf, cugraph, cuml, and rmm. They have several unusual
 requirements due to the need to support cuda variants. They developed a wrapper
 for scikit-build-core that changes the name of the package based on the current
 cuda version (something explicitly disallowed by PEP 621) and injects modified
-dependencies.
+dependencies. Discussions on ways to handle external dependencies like CUDA
+without such workarounds was a major topic at the packaging summit in PyCon US
+24.
 
 ### Ninja / CMake / clang-format
 
@@ -529,8 +543,8 @@ Store's schema files, including scikit-build-core's, for validation of
 pyproject.toml's. Scikit-build-core (along with meson-python and maturin) were
 added to the Scientific Python Development Guide. Fixes were made in Pyodide to
 ensure better CMake support for WebAssembly builds (which were also added to
-cibuildwheel). And scikit-build-core was one of the first backends (if not the
-first) to support free-threaded Python 3.13 builds.
+cibuildwheel). And scikit-build-core was one of the first backends to support
+free-threaded Python 3.13 builds.
 
 ## Summary
 
