@@ -266,7 +266,7 @@ ambiguous, and can drift away from the actual content of the value they point to
 over time. On the other hand, names are not strictly necessary, because the
 composition of memoized functions that produced a given value --- which must be specified anyway --- is already a canonical reference to it.
 \item it \textbf{organizes storage activities around a familiar and useful
-interface -- the function call}. This automatically enforces the good practice
+interface: the function call}. This automatically enforces the good practice
 of partitioning code into functions, and eliminates extra `accidental' code to
 save and load values explicitly. Furthermore, it synchronizes failures between
 computation and storage, as the memoized calls are the natural points to
