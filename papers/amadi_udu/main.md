@@ -106,7 +106,7 @@ The hierarchical cluster and Spearman’s ranking for moisture absorbed composit
 :align: center
 :label: fig:hiercorr
 (hiercorr-a)=
-![](./images/gsvs_hierclus_cmap.png)
+![](./images/gsvs_hierclus_cmap.jpg)
 
 Feature relationship for moisture absorbed composite dataset; (a) hierarchical cluster, (b) Spearman correlation ranking.
 :::
