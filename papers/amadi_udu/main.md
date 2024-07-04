@@ -247,18 +247,18 @@ Sample fractions and corresponding change in AUC for Final Weight feature of Cen
 :::
 
 :::{figure} 
-:alt: Sample fractions and corresponding change in AUC for Day of Week feature of Bank Marketing dataset
+:alt: Sample fractions and corresponding change in AUC for Duration feature of Bank Marketing dataset
 :width: 20%
 :align: center
 :label: fig:bm_boxplot
 (bm_boxplot-a)=
-![](./images/lgbm_bank_marketing_feature_5.png)
+![](./images/lgbm_bank_marketing_feature_3.png)
 (bm_boxplot-b)=
-![](./images/rf_bank_marketing_feature_5.png)
+![](./images/rf_bank_marketing_feature_3.png)
 (bm_boxplot-c)=
-![](./images/svm_bank_marketing_feature_5.png)
+![](./images/svm_bank_marketing_feature_3.png)
 
-Sample fractions and corresponding change in AUC for Day of Week feature of Bank Marketing dataset; (a) LightGBM, (b) RF, and (c) SVM.
+Sample fractions and corresponding change in AUC for Duration feature of Bank Marketing dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
 
 :::{figure} 
@@ -277,7 +277,7 @@ Sample fractions and corresponding change in AUC for Rad Flow feature of Statlog
 :::
 
 
-For LightGBM model in [Figure 3a](#ci_boxplot-a), the median change in AUC was close to  zero,  indicating that Final Weight had minimal impact on model performance, as noted in @tbl:result_table. Similar results were recorded in [Figure 4a](#bm_boxplot-a) - [c](#bm_boxplot-c) for the Day of Week feature of Bank Marketing dataset, where all models exhibited similarly high feature importance scores on the Day of Week feature. Even for sample fractions of 0.5, LightGBM appeared to give similar importance scores to using the entire data sample. RF showed moderate variability and  outliers  in certain features, indicating  an occasional significant impact when features are permuted. On the other hand, SVM exhibited a higher median change in AUC, indicating that the Final Weight feature had a more significant impact on its performance. Additionally, SVM showed the greatest variability and the most prominent outliers, particularly at lower sample fractions. This was noticeable in [Figure 5a](#ss_boxplot-a) - [c](#ss_boxplot-c), where all classifiers reported similar importance scores as noted in @tbl:result_table. This variability and the presence of outliers suggest that the model's performance is less stable when features are permuted. 
+For LightGBM model in [Figure 3a](#ci_boxplot-a), the median change in AUC was close to  zero,  indicating that Final Weight had minimal impact on model performance, as noted in @tbl:result_table. Similar results were recorded in [Figure 4a](#bm_boxplot-a) - [c](#bm_boxplot-c) for the Duration feature of Bank Marketing dataset, where all models exhibited similarly high feature importance scores. Even for sample fractions of 0.5, LightGBM and RF appeared to give similar importance scores to using the entire data sample. On the other hand, SVM exhibited a higher median change in AUC, indicating that the Final Weight feature had a more significant impact on its performance. Additionally, SVM showed the greatest variability and the most prominent outliers, particularly at lower sample fractions. This was noticeable in [Figure 5a](#ss_boxplot-a) - [c](#ss_boxplot-c), where all classifiers reported similar importance scores as noted in @tbl:result_table. This variability and the presence of outliers suggest that the model's performance is less stable when features are permuted. 
 
 PFI can provide insights into the importance of features, but it is susceptible to variability, especially with smaller sample sizes. Thus, complementary feature selection methods could be explored to validate feature importance. Future work could investigate the variability of features under particular models and sample sizes, with a view to evolving methods of providing a more stable information to the models. 
 
