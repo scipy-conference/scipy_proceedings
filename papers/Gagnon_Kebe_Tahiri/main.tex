@@ -75,7 +75,7 @@ To better interpret the relation and evolutionary responses of benthic species, 
 In this study, we use the cross-platform Python software \textit{aPhyloGeo} for our phylogeographic analyses, which are designed to analyze phylogenetic trees using climate parameters. Developed by My-Linh Luu, Georges Marceau, David Beauchemin, and Nadia Tahiri, \textit{aPhyloGeo} offers tools to study the correlations between the genetics of species and their habitats, thus allowing the understanding of the evolution of species under different environmental conditions. The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and it is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex analyses. The software process takes place in three main steps (see \autoref{lst:main}).
 
 %\autoref{lst:main}.
-\begin{lstlisting}[label=lst:main,language=Python,caption=Main script for tutorial using the _aPhyloGeo_ package.]
+\begin{lstlisting}[label=lst:main,language=Python,caption=Main script for tutorial using the aPhyloGeo package.]
 if __name__ == "__main__":
 
     # Load parameters from a configuration file
@@ -136,7 +136,7 @@ The Robinson-Foulds distance measures the dissimilarity between two phylogenetic
 where $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of splits in trees $T_1$ and $T_2$.
 
 %\autoref{lst:robinsonFoulds}.
-\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds distance using the ete3 package in the \textit{aPhyloGeo} package]
+\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds distance using the ete3 package in the aPhyloGeo package]
     def robinsonFoulds(tree1, tree2):
         rf = 0
         tree1_newick = ete3.Tree(tree1.format("newick"), format=1)
@@ -167,7 +167,7 @@ For points $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n
 \end{equation}
 
 %\autoref{lst:euclideanDist}.
-\begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the Euclidean distance using the ete3 package in the \textit{aPhyloGeo} package]
+\begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the Euclidean distance using the ete3 package in the aPhyloGeo package]
     def euclideanDist(tree1, tree2):
         
         tns = dendropy.TaxonNamespace()
@@ -193,7 +193,7 @@ For observed values $y_i$ and estimated values $\hat{y}_i$:
 These formulas succinctly describe the methods used to measure distances and dissimilarities in various contexts.
 
 %\autoref{lst:LeastSquare}.
-\begin{lstlisting}[label=lst:LeastSquare,language=Python,caption=Python script for calculating the Least-Square distance using the ete3 package in the \textit{aPhyloGeo} package]
+\begin{lstlisting}[label=lst:LeastSquare,language=Python,caption=Python script for calculating the Least-Square distance using the ete3 package in the aPhyloGeo package]
     def leastSquare(tree1, tree2):
         ls = 0.00
         leaves = tree1.get_terminals()
