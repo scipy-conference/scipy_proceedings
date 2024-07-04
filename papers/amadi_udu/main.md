@@ -237,11 +237,11 @@ PFI process time and corresponding sample fractions for the Diabetes dataset.
 :align: center
 :label: fig:ci_boxplot
 (ci_boxplot-a)=
-![](./images/lgbm_census_income_feature_2.png)
+![](./images/lgbm_census_income_feature_1.png)
 (ci_boxplot-b)=
-![](./images/rf_census_income_feature_2.png)
+![](./images/rf_census_income_feature_1.png)
 (ci_boxplot-c)=
-![](./images/svm_census_income_feature_2.png)
+![](./images/svm_census_income_feature_1.png)
 
 Sample fractions and corresponding change in AUC for Final Weight feature of Census Income dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
