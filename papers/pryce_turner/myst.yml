@@ -16,17 +16,16 @@ project:
     - bioinformatics
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    GATK: Genome Analysis ToolKit
+    DAG: Directed Acyclic Graph
+    QC: Quality Control
+    OCI: Open Container Initiative
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        - andrews2012
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
