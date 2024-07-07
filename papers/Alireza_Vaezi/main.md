@@ -25,7 +25,7 @@ Accurate analysis of ciliary motion is essential but challenging due to the limi
 
 In the biomedical field, where labeled data is often scarce and costly to obtain, several solutions have been proposed to augment and utilize available data effectively. These include semi-supervised learning [@YAKIMOVICH2021100383], [@van2020survey], which utilizes both labeled and unlabeled data to enhance learning accuracy by leveraging the data's underlying distribution. Active learning [@settles2009active] focuses on selectively querying the most informative data points for expert labeling, optimizing the training process by using the most valuable examples. Data augmentation techniques [@10.3389/fcvm.2020.00105], [@Krois2021], [@10.1148/ryai.2020190195], [@Sandfort2019], [@YAKIMOVICH2021100383], [@van2001art], [@krizhevsky2012imagenet], [@ronneberger2015u], such as image transformations and synthetic data generation through Generative Adversarial Networks [@goodfellow2014generative], [@yi2019generative], increase the diversity and volume of training data, enhancing model robustness and reducing overfitting. Transfer learning [@YAKIMOVICH2021100383], [@Sanford2020-yg], [@NEURIPS2019_eb1e7832], [@hutchinson2017overcoming] transfers knowledge from one task to another, minimizing the need for extensive labeled data in new tasks. Self-supervised learning [@kim2019self], [@kolesnikov2019revisiting], [@mahendran2019cross] creates its labels by defining a pretext task, like predicting the position of a randomly cropped image patch, aiding in the learning of useful data representations. Additionally, few-shot, one-shot, and zero-shot learning techniques [@li2006one], [@miller2000learning] are designed to operate with minimal or no labeled examples, relying on generalization capabilities or metadata for making predictions about unseen classes.
 
-A promising approach to overcome the dependency on manually labeled data is the use of unsupervised methods to generate ground truth masks. Unsupervised methods do not require prior knowledge of the data [@khatibi2021proposing]. Using domain-specific cues unsupervised learning techniques can automatically discover patterns and structures in the data without the need for labeled examples, potentially simplifying the process of generating accurate segmentation masks for cilia. In this work, we leverage OF to compute the motion vectors of ciliary regions and apply autoregressive modeling to capture their temporal dynamics. By analyzing the OF vectors, we can identify the characteristic motion of cilia, which allows us to generate pseudolabels as ground truth segmentation masks. These pseudolabels are then used to train a robust semi-supervised neural network, enabling accurate and automated segmentation of both motile and immotile cilia.
+A promising approach to overcome the dependency on manually labeled data is the use of unsupervised methods to generate ground truth masks. Unsupervised methods do not require prior knowledge of the data [@khatibi2021proposing]. Using domain-specific cues unsupervised learning techniques can automatically discover patterns and structures in the data without the need for labeled examples, potentially simplifying the process of generating accurate segmentation masks for cilia. Inspired by advances in unsupervised methods for image segmentation, in this work, we firstly compute the motion vectors using optical flow of the ciliary regions and then apply autoregressive modelling to capture their temporal dynamics. Autoregressive modelling is advantageous since the labels are features themselves. By analyzing the OF vectors, we can identify the characteristic motion of cilia, which allows us to generate pseudolabels as ground truth segmentation masks. These pseudolabels are then used to train a robust semi-supervised neural network, enabling accurate and automated segmentation of both motile and immotile cilia.
 
 ## Methodology
 
@@ -33,7 +33,7 @@ Dynamic textures, such as sea waves, smoke, and foliage, are sequences of images
 
 ### Optical Flow Properties
 
-Taking advantage of this temporal regularity in ciliary motion, we use OF to compute the flow vectors of each pixel to obtain motion vectors of the region where cilia reside. We begin by extracting flow vectors of the video recording of cilia, under the assumption that pixel intensity remains constant throughout the video.
+Taking advantage of this temporal regularity in ciliary motion, we use OF to capture the motion vectors of ciliary regions in high-speed videos. OF provides the horizontal $(u)$ and vertical $(v)$ components of the motion for each pixel. From these motion vectors, several components can be derived such as the magnitude, direction, divergence, and importantly, the curl (rotation). The curl, in this context, represents the rotational motion of the cilia, which is indicative of their rhythmic beating patterns. We extract flow vectors of the video recording of cilia, under the assumption that pixel intensity remains constant throughout the video.
 
 ```{math}
 :label: of_formula
@@ -57,7 +57,7 @@ Representation of rotation (curl) component of OF at a random time
 
 ### Autoregressive Modeling
 
-@fig:sample_OF shows a sample of the OF component at a random time. From OF vectors, elemental components such as rotation are derived, which highlights the ciliary motion by capturing twisting and turning movements. To model the temporal evolution of these vectors, an autoregressive (AR) model [@doi:10.5244/C.21.76] is formulated:
+@fig:sample_OF shows a sample of the OF component at a random time. From OF vectors, elemental components such as rotation are derived, which highlights the ciliary motion by capturing twisting and turning movements. To model the temporal evolution of these motion vectors, we employ an autoregressive (AR) model [@doi:10.5244/C.21.76]. This model captures the dynamics of the flow vectors over time, allowing us to understand how the motion evolves frame by frame. The AR model helps in decomposing the motion into a low-dimensional subspace, which simplifies the complex ciliary motion into more manageable analyses.
 
 ```{math}
 :label: AR
@@ -91,7 +91,24 @@ The process of computing the masks. a) Subtracting the second-order AR parameter
 
 In this study, we employed a Feature Pyramid Network (FPN) [@kirillov2017unified] architecture with a ResNet-34 encoder. The model was configured to handle grayscale images with a single input channel and produce binary segmentation masks. We utilized Binary Cross-Entropy Loss for training and the Adam optimizer with a learning rate of $10^-3$. To evaluate the model's performance, we calculated the Dice score during training and validation. Data augmentation techniques, including resizing, random cropping, and rotation, were applied to enhance the model's generalization capability. The implementation was done using a library [@Iakubovskii:2019] based on PyTorch Lightning to facilitate efficient training and evaluation. The next section discusses the results of the experiment and the performance of the model in detail.
 
-## Results
+:::{table} Summary of model architecture, training setup, and dataset distribution
+:label: tbl:model_specs
+| **Aspect**                      | **Details**                                                                                                                              |
+|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| **Architecture**                | FPN with ResNet-34 encoder                                                                                                               |
+| **Input**                       | Grayscale images with a single input channel                                                                                             |
+| **Output**                      | Binary segmentation masks                                                                                                                |
+| **Number of Epochs**            | 10                                                                                                                                       |
+| **Training Samples**            | 15,662                                                                                                                                   |
+| **Validation Samples**          | 2,763                                                                                                                                    |
+| **Test Samples**                | 325                                                                                                                                      |
+| **Loss Function**               | Binary Cross-Entropy Loss                                                                                                                |
+| **Optimizer**                   | Adam optimizer with a learning rate of $10^{-3}$                                                                                         |
+| **Evaluation Metric**           | Dice score during training and validation                                                                                                |
+| **Data Augmentation Techniques**| Resizing, random cropping, and rotation                                                                                                  |
+| **Implementation**              | Using a Python library with Neural Networks for Image Segmentation based on PyTorch [@Iakubovskii:2019]                                  |
+
+## Results and Discussion
 
 @fig:out_sample shows the predictions of the model on 5 sample videos of dyskinetic cilia. The dyskinetic samples were not used in the training or validation phases. These predictions were generated after only 5 epochs of training with the FPN architecture.
 
