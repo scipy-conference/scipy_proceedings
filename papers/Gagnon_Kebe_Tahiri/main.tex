@@ -147,14 +147,14 @@ if __name__ == "__main__":
 
 \item \textbf{In the second step}, the trees were generated with environmental, geographical, and genetic data. Concerning the geographic parameters, we calculated the dissimilarity between each data pair from different geographic conditions, producing a symmetric square matrix. The neighbor-joining algorithm was used to design the geographic tree from this matrix. The same approach was applied to environmental and genetic data. To construct gene trees based on 62 sequences of mitochondrial 16S rRNA phylogeny, a method involving iterative phylogenetic reconstruction was employed, considering only the data within a range that moves along the alignment. This displacement can vary depending on the steps and window size the user sets (their length is defined by the number of base pairs (bp)) \citep{koshkarov_phylogeography_2022}.
 
-\item \textbf{In the third step}, the phylogenetic trees built in each sliding window are compared to environmental and geographical parameters using the Robinson-Foulds (RF) distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}, the normalized Robinson-Foulds distance, the Euclidean distance, and the Least-Squares distance. The distance was normalized by $2n-6$, where $n$ represents the number of taxa. The approach also considers bootstrapping. Thus, the use of the sliding window ensures detailed identification of regions with high genetic mutation rates \citep{koshkarov_phylogeography_2022}.
+\item \textbf{In the third step}, the phylogenetic trees built in each sliding window are compared to environmental and geographical parameters using the Robinson-Foulds (RF) distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}, the normalized Robinson-Foulds distance, the Euclidean distance, and the Least-Squares distance. The distance was normalized by $2n-6$, where $n$ represents the number of taxa. The approach also considers bootstrapping. Thus, using the sliding window ensures detailed identification of regions with high genetic mutation rates \citep{koshkarov_phylogeography_2022}.
 \end{enumerate}
 
 \section{Metrics}\label{metrics}
 The following section presents a more concise version of the formulas mentioned in the third step of the preceding section:
 
 \subsection{Robinson-Foulds Distance (RF distance)}\label{RF}
-The Robinson-Foulds distance measures the dissimilarity between two phylogenetic trees by counting the quantity of clade pairs present in one tree but absent in the other. It is commonly used to quantify topological differences between two phylogenetic trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
+The Robinson-Foulds distance measures the dissimilarity between two phylogenetic trees by counting the clade pairs present in one tree but absent in the other. It is commonly used to quantify topological differences between two phylogenetic trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
 
 \begin{equation}\label{eq:rf}
     \text{RF}(T_1, T_2) = | \Sigma(T_1) \Delta \Sigma(T_2) |
@@ -274,7 +274,7 @@ Comparing each species' frequency with the mean and median (see top right corner
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.7\textwidth]{figure3.png}
-    \caption{Distribution of Cumacea Families by Water Body. This histogram depicts the frequency of occurrence for various Cumacea families within our samples, categorized by the water body where they were collected. Eight water body categories are represented: APW, APW/NSAIW, ISOW, LSW, NAW, NSAIW, NSDWc, and NSDWw. Seven families are represented: Astracidae (red), Bodotriidae (brown), Ceratocumatidae (green), Diastylidae (turquoise), Lampropidae (blue), Leuconidae (purple), and Pseudocumatidae (pink). \label{fig:fig3}}
+    \caption{Distribution of Cumacea Families by Water Body. This histogram depicts the frequency of occurrence for various Cumacea families within our samples, categorized by the water body where they were collected. Eight water body categories are represented: APW (Arctic Polar Water), APW/NSAIW (Arctic Polar Water/North Sub-Arctic Intermediate Water), ISOW (Iceland Scotland Overflow Water), LSW (Labrador Sea Water), NAW (North Atlantic Water), NSAIW  (North Sub-Arctic Intermediate Water), NSDWc (cold North Sub-Atlantic Deep Water), and NSDWw (warm North Sub-Atlantic Deep Water). Seven families are represented: Astracidae (red), Bodotriidae (brown), Ceratocumatidae (green), Diastylidae (turquoise), Lampropidae (blue), Leuconidae (purple), and Pseudocumatidae (pink). \label{fig:fig3}}
 \end{figure}
 
 Figure \ref{fig:fig3} shows the distribution of samples from different Cumacea families according to the variety of water bodies where they were collected. This makes it possible to compare the diversity and potential preferences of the different families in each body of water.
