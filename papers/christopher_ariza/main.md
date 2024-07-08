@@ -178,7 +178,7 @@ With StaticFrame 2.0, ``Frame``, ``Series``, ``Index`` and related containers be
 
 A generic ``Frame`` requires two or more type variables: the type of the index, the type of the columns, and zero or more specifications of columnar value types specified with NumPy types. A generic ``Series`` requires two type variables: the type of the index and a NumPy type for the values. The ``Index`` is itself generic, also requiring a NumPy type as a type variable.
 
-With generic specification, a ``Series`` of floats, indexed by dates, can be annotated with ``sf.Series[sf.IndexDate, np.float64]``. A ``Frame`` with dates as index labels, strings as column labels, and column values of integers and floats can be annotated with ``sf.Frame[sf.IndexDate, sf.Index[str_], np.int64, np.float64]``.
+With generic specification, a ``Series`` of floats, indexed by dates, can be annotated with ``sf.Series[sf.IndexDate, np.float64]``. A ``Frame`` with dates as index labels, strings as column labels, and column values of integers and floats can be annotated with ``sf.Frame[sf.IndexDate, sf.Index[np.str_], np.int64, np.float64]``.
 
 Given a complex ``Frame``, deriving the annotation might be difficult. StaticFrame offers the ``via_type_clinic`` interface to provide a complete generic specification for any component at runtime:
 
