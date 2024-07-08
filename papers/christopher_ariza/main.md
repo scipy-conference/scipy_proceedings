@@ -246,7 +246,7 @@ x = process5(v6, q)
 #     └── Expected Frame has 2 dtype, provided Frame has 3 dtype
 ```
 
-It might not be practical to annotate every column of every ``Frame``: it is common for interfaces to work with ``Frame`` of variable column sizes. ``TypeVarTuple`` supports this through the usage of ``*tuple[]`` expressions (introduced in Python 3.11, back-ported with the ``Unpack`` annotation). For example, the function above could be defined to take any number of integer columns with that annotation ``Frame[IndexDate, Index[str_], *tuple[np.int64, ...]]``, where ``*tuple[np.int64, ...]]`` means zero or more integer columns.
+It might not be practical to annotate every column of every ``Frame``: it is common for interfaces to work with ``Frame`` of variable column sizes. ``TypeVarTuple`` supports this through the usage of ``*tuple[]`` expressions (introduced in Python 3.11, back-ported with the ``Unpack`` annotation). For example, the function above could be defined to take any number of integer columns with that annotation ``Frame[IndexDate, Index[np.str_], *tuple[np.int64, ...]]``, where ``*tuple[np.int64, ...]]`` means zero or more integer columns.
 
 The same implementation can be annotated with a far more general specification of columnar types. Below, the column values are annotated with ``np.number[Any]`` (permitting any type of numeric NumPy type) and a ``*tuple[]`` expression (permitting any number of columns): ``*tuple[np.number[Any], ...]``. Now neither ``mypy`` nor ``CallGuard`` errors with either previously created ``Frame``.
 
