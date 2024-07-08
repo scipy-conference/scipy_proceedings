@@ -1,6 +1,6 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: Improve Code Quality with Array and DataFrame Type Hints
+title: Improving Code Quality with Array and DataFrame Type Hints
 abstract: |
   This article demonstrates practical approaches to fully type-hinting generic NumPy arrays and StaticFrame DataFrames, and shows how the same annotations can improve code quality with both static analysis and runtime validation.
 ---
@@ -14,7 +14,7 @@ As tools for Python type annotations (or hints) have evolved, more complex data 
 
 Type hints [@pep484] improve code quality in a number of ways. Instead of using variable names or comments to communicate types, Python-object-based type annotations provide maintainable and expressive tools for type specification. These type annotations can be tested with type checkers such as ``mypy`` [@mypy] or ``pyright`` [@pyright], quickly discovering potential bugs without executing code.
 
-The same annotations can be used for runtime validation. While reliance on duck-typing over runtime validation is common in Python, runtime validation is often needed with complex data structures such as arrays and DataFrames.
+The same annotations can be used for runtime validation. While reliance on duck-typing over runtime validation is common in Python, runtime validation is more often needed with complex data structures such as arrays and DataFrames. For example, an interface expecting a DataFrame argument, if given a Series, might not need explicit validation as usage of the wrong type will likely raise. However, an interface expecting a 2D array of floats, if given an array of Booleans, might benefit from validation as usage of the wrong type may not raise.
 
 Many important typing utilities are only available with the most-recent versions of Python. Fortunately, the ``typing-extensions`` [@te] package back-ports standard library utilities for older versions of Python. A related challenge is that type checkers can take time to implement full support for new features: many of the examples shown here require ``mypy`` 1.9.0, released just a few months ago.
 
@@ -170,7 +170,7 @@ x = process4(v1, q) # types pass, but Require.Shape fails
 
 ## DataFrame Type Annotations
 
-Just like a dictionary, a DataFrame is a complex data structure composed of many component types: the type of the index labels, the type of the column labels, and the types of column values.
+Just like a dictionary, a DataFrame is a complex data structure composed of many component types: the index labels, column labels, and the column values are all distinct types.
 
 A challenge of generically specifying a DataFrame is that a DataFrame has a variable number of columns, where each column might be a different type. The Python ``TypeVarTuple`` variadic generic specifier [@pep646], first released in Python 3.11, permits defining a variable number of column type variables.
 
