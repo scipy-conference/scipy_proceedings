@@ -46,7 +46,13 @@ In this section, we will describe our data, followed by an outline of the main s
 The study area is located in a northern region of the North Atlantic, including the Icelandic Sea, the Denmark Strait, and the Norwegian Sea. The specimens examined in this study were gathered during the IceAGE project (Icelandic marine Animals: Genetic and Ecology; Cruise ship M85/3 in 2011; \cite{brix_iceage_2014}), which investigated the deep continental slopes and abyssal waters around Iceland \citep{meisner_prefacebiodiversity_2018}. The sampling period for the specimens included in this study was from August 30 to September 22, 2011, and they were collected at depths ranging from 316 to 2568 m.  Information about the sampling plan, sample processing, the steps of DNA extraction, PCR amplification, sequencing, and the extracted and aligned DNA sequences are available in the article by \citep{uhlir_adding_2021}.
 
 \subsection{Data pre-processing}
-We used data from the IceAGE project and related data from the BOLD Systems database, both of which are accessible through the article by \citep{uhlir_adding_2021}. Given the enormous scope of attributes in these databases, we selectively reduced the number of attributes and samples. Specifically, we omitted attributes that were not relevant to the context of this study, were entirely or nearly invariable (non-numerical data), or had abundant missing data (>95\%). From the IceAGE project dataset, we considered 62 specimens out of the 495 available. Subsequently, we calculated the variance for each of the selected numeric attributes to eliminate those with zero or low variance (cut-off ≤ 0.1). Equation \ref{variance} provides the formula for variance used in this study.
+We used data from the IceAGE project and related data from the BOLD Systems database, both of which are accessible through the article by \citep{uhlir_adding_2021}. Given the enormous scope of attributes in these databases, we selectively reduced the number of attributes and samples. 
+
+1.    Specifically, we omitted attributes that were not relevant to the context of this study, were entirely or nearly invariable (non-numerical data), or had abundant missing data (>95\%). 
+
+From the IceAGE project dataset, we considered 62 specimens out of the 495 available.
+
+2.    Subsequently, we calculated the variance for each of the selected numeric attributes to eliminate those with zero or low variance (cut-off ≤ 0.1). Equation \ref{variance} provides the formula for variance used in this study.
 
 \begin{equation}\label{variance}
     S^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}
@@ -59,29 +65,28 @@ Only salinity was removed from the previously selected numerical attributes ($S^
 From the IceAGE database, 14 attributes were selected. These consist of the geographical coordinates such as: 
 
 \begin{itemize}
-\item The latitude (decimal) and longitude (decimal) taken at the beginning (see Figures \ref{fig:fig1}a and \ref{fig:fig1}b) and at the end of sampling.
-\item These geographic data are divided into five sectors across the seas around Iceland: the Denmark Strait ($n=28$), the Iceland Basin ($n=15$), the Irminger Basin ($n=12$), the Norwegian Sea ($n=4$), and the Norwegian Basin ($n=3$). 
+\item The latitude (decimal) and longitude (decimal) taken at the beginning (see           Figures \ref{fig:fig1}a and \ref{fig:fig1}b) and at the end of sampling.
+\item These geographic data are divided into five sectors across the seas around           Iceland: the Denmark Strait ($n=28$), the Iceland Basin ($n=15$), the Irminger       Basin ($n=12$), the Norwegian Sea ($n=4$), and the Norwegian Basin ($n=3$). 
 \end{itemize}
 
-The increase in latitude, in particular, has been highlighted by several studies as being linked to the decline of marine biodiversity on a global scale \citep{lambshead_latitudinal_2000, gage_diversity_2004}. 
+The increase in latitude, in particular, has been highlighted by several studies   as being linked to the decline of marine biodiversity on a global scale \citep{lambshead_latitudinal_2000, gage_diversity_2004}. 
 
 Concerning the environmental attributes, we included:
 \begin{itemize}
-\item The depth (m) at the beginning (see Figure \ref{fig:fig1}c) and end of sampling as well as the temperature ($^\circ$C) (see Figure \ref{fig:fig1}e) and oxygen concentration (mg/L) (see Figure \ref{fig:fig1}f) of the water depending on the depth at which the specimens were sampled. 
-\item Sedimentary characteristics of sampling sites as factors influencing Cumacea distribution \citep{uhlir_adding_2021} and which, for this study, fall into six categories: mud ($n=30$), sandy mud ($n=15$), sand ($n=9$), forams ($n=3$), muddy sand ($n=3$), and gravel ($n=2$).
+\item The depth (m) at the beginning (see Figure \ref{fig:fig1}c) and end of               sampling as well as the temperature ($^\circ$C) (see Figure \ref{fig:fig1}e)         and oxygen concentration (mg/L) (see Figure \ref{fig:fig1}f) of the water            depending on the depth at which the specimens were sampled. 
+\item Sedimentary characteristics of sampling sites as factors influencing Cumacea         distribution \citep{uhlir_adding_2021} and which, for this study, fall into          six categories: mud ($n=30$), sandy mud ($n=15$), sand ($n=9$), forams               ($n=3$), muddy sand ($n=3$), and gravel ($n=2$).
 \end{itemize}
 
 These properties of water bodies mentioned in the first bullet point are drivers of deep-sea biodiversity and biogeography, with oxygen being a limiting factor for living organisms \citep{keeling_ocean_2010}. In addition to these contributions, the increase in depth \citep{rex_global_2006,costello_marine_2017} and the decrease in water temperature at depth \citep{lambshead_latitudinal_2000} are also driving forces in the loss of marine biodiversity on a global scale.
 
 Climatic parameters such as: 
 \begin{itemize}
-\item Wind speed (m/s) (see Figure \ref{fig:fig1}d) and wind direction at the beginning and end of sampling were also included in our data, given the contribution of wind to the restructuring of the benthic ecosystem through water transport \citep{waga_recent_2020,saeedi_environmental_2022}. 
-The wind direction at the start of sampling consists of six orientations: South-West ($n=22$), South ($n=15$), North-East ($n=9$), South-South-East ($n=9$), North-West ($n=5$), and East ($n=2$); while the one at the end of sampling is made up of seven orientations: South ($n=15$), South-West ($n=15$), North-East ($n=9$), West-South-West ($n=7$), South-East ($n=6$), North-North-West ($n=5$), South-South-East ($n=3$), and East ($n=2$). 
+\item Wind speed (m/s) (see Figure \ref{fig:fig1}d) and wind direction at the              beginning and end of sampling were also included in our data, given the              contribution of wind to the restructuring of the benthic ecosystem through           water transport \citep{waga_recent_2020,saeedi_environmental_2022}. The wind         direction at the start of sampling consists of six orientations: South-West          ($n=22$), South ($n=15$), North-East ($n=9$), South-South-East ($n=9$), North-       West ($n=5$), and East ($n=2$); while the one at the end of sampling is made         up of seven orientations: South ($n=15$), South-West ($n=15$), North-East            ($n=9$), West-South-West ($n=7$), South-East ($n=6$), North-North-West               ($n=5$), South-South-East ($n=3$), and East ($n=2$). 
 \end{itemize}
 
 In the BOLD Systems database, taxonomic ranks such as: 
 \begin{itemize}
-\item Family, genus, and species of the sampled Cumacea were included in our data. These are composed of seven families of Cumacea: Diastylidae ($n=21$), Lampropidae ($n=13$), Leuconidae ($n=12$), Nannastacidae ($n=7$), Bodotriidae ($n=4$), Ceratocumatidae ($n=3$), and Pseudocumatidae ($n=2$). A total of 21 species of Cumacea are found in our sample (see Figure \ref{fig:fig2}).
+\item Family, genus, and species of the sampled Cumacea were included in our data.         These are composed of seven families of Cumacea: Diastylidae ($n=21$),               Lampropidae ($n=13$), Leuconidae ($n=12$), Nannastacidae ($n=7$), Bodotriidae        ($n=4$), Ceratocumatidae ($n=3$), and Pseudocumatidae ($n=2$). A total of 21         species of Cumacea are found in our sample (see Figure \ref{fig:fig2}).
 \end{itemize}
 
 It should be noted that some specimens were identified only to genus (one specimen) or to family (five specimens) in our sample.
@@ -142,14 +147,14 @@ if __name__ == "__main__":
 
 \item \textbf{In the second step}, the trees were generated with environmental, geographical, and genetic data. Concerning the geographic parameters, we calculated the dissimilarity between each data pair from different geographic conditions, producing a symmetric square matrix. The neighbor-joining algorithm was used to design the geographic tree from this matrix. The same approach was applied to environmental and genetic data. To construct gene trees based on 62 sequences of mitochondrial 16S rRNA phylogeny, a method involving iterative phylogenetic reconstruction was employed, considering only the data within a range that moves along the alignment. This displacement can vary depending on the steps and window size the user sets (their length is defined by the number of base pairs (bp)) \citep{koshkarov_phylogeography_2022}.
 
-\item \textbf{In the third step}, the phylogenetic trees built in each sliding window are compared to environmental and geographical parameters using the Robinson-Foulds (RF) distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}, the normalized Robinson-Foulds distance, the Euclidean distance, and the Least-Squares distance. The distance was normalized by $2n-6$, where $n$ represents the number of taxa. The approach also considers bootstrapping. Thus, using the sliding window ensures detailed identification of regions with high genetic mutation rates \citep{koshkarov_phylogeography_2022}.
+\item \textbf{In the third step}, the phylogenetic trees built in each sliding window are compared to environmental and geographical parameters using the Robinson-Foulds (RF) distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}, the normalized Robinson-Foulds distance, the Euclidean distance, and the Least-Squares distance. The distance was normalized by $2n-6$, where $n$ represents the number of taxa. The approach also considers bootstrapping. Thus, the use of the sliding window ensures detailed identification of regions with high genetic mutation rates \citep{koshkarov_phylogeography_2022}.
 \end{enumerate}
 
 \section{Metrics}\label{metrics}
 The following section presents a more concise version of the formulas mentioned in the third step of the preceding section:
 
 \subsection{Robinson-Foulds Distance (RF distance)}\label{RF}
-The Robinson-Foulds distance measures the dissimilarity between two phylogenetic trees by counting the clade pairs present in one tree but absent in the other. It is commonly used to quantify topological differences between two phylogenetic trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
+The Robinson-Foulds distance measures the dissimilarity between two phylogenetic trees by counting the quantity of clade pairs present in one tree but absent in the other. It is commonly used to quantify topological differences between two phylogenetic trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
 
 \begin{equation}\label{eq:rf}
     \text{RF}(T_1, T_2) = | \Sigma(T_1) \Delta \Sigma(T_2) |
@@ -269,7 +274,7 @@ Comparing each species' frequency with the mean and median (see top right corner
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.7\textwidth]{figure3.png}
-    \caption{Distribution of Cumacea Families by Water Body. This histogram depicts the frequency of occurrence for various Cumacea families within our samples, categorized by the water body where they were collected. Eight water body categories are represented: APW (Arctic Polar Water), APW/NSAIW (Arctic Polar Water/North Sub-Arctic Intermediate Water), ISOW (Iceland Scotland Overflow Water), LSW (Labrador Sea Water), NAW (North Atlantic Water), NSAIW  (North Sub-Arctic Intermediate Water), NSDWc (cold North Sub-Atlantic Deep Water), and NSDWw (warm North Sub-Atlantic Deep Water). Seven families are represented: Astracidae (red), Bodotriidae (brown), Ceratocumatidae (green), Diastylidae (turquoise), Lampropidae (blue), Leuconidae (purple), and Pseudocumatidae (pink). \label{fig:fig3}}
+    \caption{Distribution of Cumacea Families by Water Body. This histogram depicts the frequency of occurrence for various Cumacea families within our samples, categorized by the water body where they were collected. Eight water body categories are represented: APW, APW/NSAIW, ISOW, LSW, NAW, NSAIW, NSDWc, and NSDWw. Seven families are represented: Astracidae (red), Bodotriidae (brown), Ceratocumatidae (green), Diastylidae (turquoise), Lampropidae (blue), Leuconidae (purple), and Pseudocumatidae (pink). \label{fig:fig3}}
 \end{figure}
 
 Figure \ref{fig:fig3} shows the distribution of samples from different Cumacea families according to the variety of water bodies where they were collected. This makes it possible to compare the diversity and potential preferences of the different families in each body of water.
