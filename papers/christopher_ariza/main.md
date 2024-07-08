@@ -262,7 +262,7 @@ def process6(v: TFrameDateNums, q: TSeriesYMBool) -> TSeriesDFloat:
 x = process6(v5, q) # a Frame with integer, float columns passes
 x = process6(v6, q) # a Frame with three integer columns passes
 ```
-As with NumPy arrays, ``Frame`` annotations can wrap ``Require`` specifications in ``Annotated`` generics, permitting definition of additional run-time validations.
+As with NumPy arrays, ``Frame`` annotations can wrap ``Require`` specifications in ``Annotated`` generics, permitting the definition of additional run-time validations.
 
 ## Conclusion
 
