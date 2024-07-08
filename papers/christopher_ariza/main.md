@@ -268,7 +268,7 @@ As with NumPy arrays, ``Frame`` annotations can wrap ``Require`` specifications 
 
 Python type annotations can make static analysis of types a valuable check of code quality, discovering errors before code is even executed. Up until recently, an interface might take an array or a DataFrame, but no specification of the types contained in those containers was possible. Now, complete specification of component types is possible in NumPy and StaticFrame, permitting more powerful static analysis of types.
 
-Providing correct type annotations is an investment. Reusing those annotations for runtime checks provides the best of both worlds. The StaticFrame's ``CallGuard`` runtime type checker is specialized to correctly evaluate fully specified generic NumPy types, as well as all generic StaticFrame containers.
+Providing correct type annotations is an investment. Reusing those annotations for runtime checks provides the best of both worlds. StaticFrame's ``CallGuard`` runtime type checker is specialized to correctly evaluate fully specified generic NumPy types, as well as all generic StaticFrame containers.
 
 
 
