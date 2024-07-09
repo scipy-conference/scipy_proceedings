@@ -1,16 +1,15 @@
 {
     "authors": [
         {
-            "name": "First Author",
-            "affiliation": "First Author's Institution",
-            "orcid": "0101-0101-0101-0103"
+            "name": "Justin Gagnon",
+            "affiliation": "Department of Biology, University of Sherbrooke, 2500, boulevard de l'Université, J1K 2R1, QC, Canada"
         },
         {
-            "name": "Second Author",
-            "affiliation": "Second Author's Company",
-            "orcid": "0202-0211-0101-0141"
+            "name": "Nadia Tahiri",
+            "affiliation": "Department of Computer Science, University of Sherbrooke, 2500, boulevard de l'Université, J1K 2R1, QC, Canada",
+            "orcid": "0000-0002-1818-208X"
         }
     ],
-    "title": "A test title",
-    "description": "A brief description of what this object is"
+    "title": "Climatic and Geographic Influences on Cumacea Genetics in the Northern North Atlantic",
+    "description": "Cumacea crustaceans serve as vital indicators of benthic health in marine ecosystems. This study investigates the influence of environmental parameters on their genetic makeup in the North Atlantic, focusing on Icelandic waters. We analyze mitochondrial 16S rRNA gene sequences from 62 Cumacea specimens collected across varying depths."
 }
