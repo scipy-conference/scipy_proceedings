@@ -25,7 +25,7 @@ Another class of text replacements is the expansion of acronyms into the phrase 
 The BibTeX cite keys for standard references can also be mapped to a command like `cite key for scipy`.
 Equations type set in LaTeX for rendering with MathJaX can be mapped to commands like `inline pythargeous theorem` and `display electron density equation`, depending on whether the equation is to be *in-line* in a sentence or centered in *display-mode*.
 We also mapped voice commands to tables, templates, and software licenses.
-For Jupyter code cells, we mapped voice commands to chunks of code of various sizes.
+For Jupyter code cells, we mapped voice commands to chunks of Python code of various sizes.
 In analogy to tab triggers with conventional tab-triggered snippets in advanced text editors, we call these voice commands that trigger a text replacement *voice triggers*.
 
 To facilitate voice commands in Jupyter notebook cells, we have developed sets of voice-triggered snippets for use in Markdown or code cells.
