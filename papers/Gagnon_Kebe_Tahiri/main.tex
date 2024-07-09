@@ -100,41 +100,34 @@ In this study, we used the cross-platform Python software \textit{aPhyloGeo} for
 \begin{lstlisting}[label=lst:main,language=Python,caption=Main script for tutorial using the aPhyloGeo package.]
 if __name__ == "__main__":
 
-    # Load parameters from a configuration file
+    # Load parameters
     Params.load_from_file()
-    # Load the sequence file using the path specified in the parameters
+    # Load the sequence file
     sequenceFile = utils.loadSequenceFile(Params.reference_gene_filepath)
-    # Create an AlignSequences object with the loaded sequences
+    # Create an AlignSequences object
     align_sequence = AlignSequences(sequenceFile)
 
-    # Load climatic data from a CSV file specified in the parameters
+    # Load climatic data 
     climatic_data = pd.read_csv(Params.file_name)
 
-    print("\nStarting alignment")
-    # Record the start time of the alignment process
-    start_time = time.time()
     # Perform the alignment of sequences
     alignments = align_sequence.align()
 
-    # Generate genetic trees using the alignments
+    # Generate genetic trees
     geneticTrees = utils.geneticPipeline(alignments.msa)
-    # Create a GeneticTrees object with the generated genetic trees in Newick format
-    trees = GeneticTrees(trees_dict=geneticTrees, format="newick")
-    # Record the end time of the alignment process
-    end_time = time.time()
-    # Calculate and print the elapsed time for the alignment process
-    elapsed_time = round(end_time - start_time, 3)
-    print(f"Elapsed time: {elapsed_time} seconds")
-
-    # Generate climatic trees using the climatic data
+    
+    # Create a GeneticTrees object
+    trees = GeneticTrees(trees_dict=geneticTrees, 
+                        format="newick")
+   
+    # Generate climatic trees
     climaticTrees = utils.climaticPipeline(climatic_data)
-    # Filter the results based on the climatic and genetic data
-    utils.filterResults(climaticTrees, geneticTrees, climatic_data)
+    
+    # Filter the results
+    utils.filterResults(climaticTrees, 
+                        geneticTrees, 
+                        climatic_data)
 
-    # Save the aligned sequences to a JSON file
-    alignments.save_to_json(f"./results/aligned_{Params.reference_gene_file}.json")
-    # Save the genetic trees to a JSON file
-    trees.save_trees_to_json("./results/geneticTrees.json")
 \end{lstlisting}
 
 \begin{enumerate}
