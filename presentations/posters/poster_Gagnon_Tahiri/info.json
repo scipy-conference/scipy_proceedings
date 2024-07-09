@@ -1,0 +1,16 @@
+{
+    "authors": [
+        {
+            "name": "First Author",
+            "affiliation": "First Author's Institution",
+            "orcid": "0101-0101-0101-0103"
+        },
+        {
+            "name": "Second Author",
+            "affiliation": "Second Author's Company",
+            "orcid": "0202-0211-0101-0141"
+        }
+    ],
+    "title": "A test title",
+    "description": "A brief description of what this object is"
+}
