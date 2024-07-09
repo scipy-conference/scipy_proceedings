@@ -13,7 +13,7 @@ Jupyter notebooks provide a highly interactive computing environment where users
 This form of interactive computing provides the instant gratification of seeing the results of the cells' execution; this might be why Jupyter is so popular for data analysis [@Perkel2021TenComputerCodesThatTransformedScience].
 The most popular modality for interacting with the Jupyter notebooks is to use the keyboard and the computer mouse.
 However, there are opportunities to generate prose and code using one's voice instead of one's hands.
-While those who have lost use of their hands must rely solely on their voice, other users can enhance their prose generation with their voice to boost their productivity and give their hands a rest when fatigued from typing. This inclusive approach enhances the Jupyter notebook experience for all users, regardless of their physical abilities.
+Users can enhance their prose generation with their voice to boost their productivity and give their hands a rest when fatigued from typing.
 In other words, most users can use their voices to complement their keyboard use.
 For example, dictating prose in Markdown cells is an obvious application of voice computing in Jupyter.
 The ease of generating prose via speech can promote more complete descriptions of the computations executed in adjacent code cells.
