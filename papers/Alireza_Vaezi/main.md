@@ -126,9 +126,7 @@ The model predictions on 5 dyskinetic cilia samples. The first column shows a fr
 
 @fig:out_sample provides visual examples of the model's predictions on dyskinetic cilia samples, alongside the manually labeled ground truth and thresholded predictions. The dyskinetic samples were not used in the training or validation phases. These predictions were generated after only 20 epochs of training with a small training data.  The visual comparison reveals that, while the model captures the general structure of ciliary regions, there are instances of under-segmentation and over-segmentation, which are more pronounced in the dyskinetic samples. This observation is consistent with the quantitative metrics, suggesting that further refinement of the pseudolabel generation process or model architecture could enhance segmentation accuracy.
 
-These results show the potential of our approach to reduce the reliance on manually labeled data for cilia segmentation. The use of this unsupervised learning framework allows the model to generalize from the motile cilia domain to the more variable dyskinetic cilia, although with some limitations in accuracy. 
-
-:::{table} The performance of the model in training, validation, and testing phases.
+:::{table} The performance of the model in validation and testing phases.
 :label: tbl:metrics
 <table>
     <tr>
@@ -163,8 +161,8 @@ These results show the potential of our approach to reduce the reliance on manua
 </table>
 :::
 
+These results show the potential of our approach to reduce the reliance on manually labeled data for cilia segmentation. The use of this unsupervised learning framework allows the model to generalize from the motile cilia domain to the more variable dyskinetic cilia, although with some limitations in accuracy. Future work could focus on expanding the dataset and improving the process of generating pseudolabels to enhance the model's accuracy.
+
 ## Conclusions
 
-In this paper, we introduced a self-supervised framework for cilia segmentation that bypasses the need for expert-labeled ground truth segmentation masks. Our method leverages the inherent visual similarities between healthy and unhealthy cilia to generate pseudolabels from optical flow-based motion segmentation of motile cilia. These pseudolabels serve as the ground truth for training a robust semi-supervised neural network capable of distinguishing motile and dyskinetic cilia regions with high accuracy. The proposed methodology addresses the challenge of automated cilia analysis by mitigating the reliance on labor-intensive and error-prone manual annotations.
-
-Taking advantage of the orderly beating pattern in healthy cilia, we employed a two-stage segmentation process that effectively handles the inconsistencies and noise present in cilia microscopy videos. The deep learning model trained on the generated masks shows improved performance in accurately detecting ciliary regions, thus paving the way for more reliable automated cilia analysis pipelines. This advancement has the potential to significantly accelerate research in ciliopathies, facilitating better diagnostic and therapeutic strategies.
+In this paper, we introduced a self-supervised framework for cilia segmentation that eliminates the need for expert-labeled ground truth segmentation masks. Our approach takes advantage of the inherent visual similarities between healthy and unhealthy cilia to generate pseudolabels from optical flow-based motion segmentation of motile cilia. These pseudolabels are then used as ground truth for training a semi-supervised neural network capable of identifying regions containing dyskinetic cilia. Our results indicate that the self-supervised framework is a promising step towards automated cilia analysis. The model's ability to generalize from motile to dyskinetic cilia demonstrates its potential applicability in clinical settings. Although there are areas for improvement, such as enhancing segmentation accuracy and expanding the dataset, the framework sets the foundation for more efficient and reliable cilia analysis pipelines.
