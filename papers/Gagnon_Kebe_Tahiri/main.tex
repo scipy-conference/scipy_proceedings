@@ -94,7 +94,7 @@ Figures \ref{fig:fig1}, \ref{fig:fig2}, \ref{fig:fig5} and \ref{fig:fig6} were m
 
 \subsection{\textit{aPhyloGeo} software}
 
-In this study, we use the cross-platform Python software \textit{aPhyloGeo} for our phylogeographic analyses, which are designed to analyze phylogenetic trees using climate parameters. Developed by My-Linh Luu, Georges Marceau, David Beauchemin, and Nadia Tahiri, \textit{aPhyloGeo} offers tools to study the correlations between the genetics of species and their habitats, thus allowing the understanding of the evolution of species under different environmental conditions. The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and it is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex analyses. The software process takes place in three main steps (see \autoref{lst:main}).
+In this study, we used the cross-platform Python software \textit{aPhyloGeo} for our phylogeographic analyses, designed to analyze phylogenetic trees using climate parameters. Developed by My-Linh Luu, Georges Marceau, David Beauchemin, and Nadia Tahiri, \textit{aPhyloGeo} offers tools to study the correlations between the genetics of species and their habitats, thus allowing the understanding of the evolution of species under different environmental conditions. The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and it is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex analyses. The software process takes three main steps (see \autoref{lst:main}).
 
 %\autoref{lst:main}.
 \begin{lstlisting}[label=lst:main,language=Python,caption=Main script for tutorial using the aPhyloGeo package.]
@@ -230,9 +230,11 @@ These formulas succinctly describe the methods used to measure distances and dis
         return ls
 \end{lstlisting}
 
-Our phylogeography study utilizes the Robinson-Foulds, normalized Robinson-Foulds, Euclidean, and Least-Squares distances to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental characteristics, providing a comprehensive analysis of evolutionary dynamics in Cumacea populations.
+Our phylogeography study utilized the Robinson-Foulds, normalized Robinson-Foulds, Euclidean, and Least-Squares distances to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental characteristics, providing a comprehensive analysis of evolutionary dynamics in Cumacea populations.
 
 \section{Results}\label{results}
+
+To understand the correlation between Cumacea genetics and their habitat, we parameterized the aPhyloGeo software as follows: pairwiseAligner, Hamming distance, Wider Fit by elongating with Gap (starAlignment), windows size: 1 nucleotide (nt) and window step: 10 nt. 
 
 Figure \ref{fig:fig1} shows the extent and variability of the dataset for two geographical attributes, i.e., latitude (decimal) and longitude (decimal) at the start of sampling, as well as six environmental attributes, such as wind speed (m/s) and depth (m) at the start of sampling, and temperature ($^\circ$C) and the oxygen concentration of the water (mg/L) based on the depth at which the samples were collected. Violin diagrams display many of the same summary statistics as box plots: the white dots designate the medians, the thickened black bars in the center represent the interquartile range, and the thin black lines on either side evoke the rest of the distribution, except for the points that are rated as "extreme". On either side of the black lines is an approximation of the kernel density to show the shape of the data distribution. The wider areas of the violin diagrams show a higher probability of the variables taking a given value; the thinner areas indicate a lower probability.
 
