@@ -42,14 +42,14 @@ I(x,y,t)=I(x+u\delta t,y+v\delta t,t+\delta t)
 
 Where $I(x,y,t)$ is the pixel intensity at position $(x,y)$ a time $t$. Here, $(u\delta t, v\delta t)$ are small changes in the next frame taken after $\delta t$ time, and $(u,v)$, respectively, are the OF components that represent the displacement in pixel positions between consecutive frames in the horizontal and vertical directions at pixel location $(x, y)$.
 
-:::{figure} frame_out.png
-:label: fig:frame_out
-A sample frame of a video in our cilia dataset
+:::{figure} sample_vids_with_gt_mask.png
+:label: fig:sample_vids_with_gt_mask
+A sample of three videos in our cilia dataset with their manually annotated ground truth masks.
 :::
-:::{figure} ground_truth.png
+<!-- :::{figure} ground_truth.png
 :label: fig:ground_truth
 Manually labeled ground truth
-:::
+::: -->
 :::{figure} sample_OF.png
 :label: fig:sample_OF
 Representation of rotation (curl) component of OF at a random time
@@ -82,6 +82,7 @@ Each order of the autoregressive model roughly aligns with different frequencies
 The pixel representation of the 5-order AR model of the OF component of a sample video. The $x$ and $y$ axes correspond to the width and height of the video.
 :::
 In @fig:sample_AR, the first-order AR parameter is showing the most variance in the video, which corresponds to the frequency of motion that cilia exhibit. The remaining orders have correspondence with other different frequencies in the data caused by, for instance, camera shaking. Evidently, simply thresholding the first-order AR parameter is adequate to produce an accurate mask, however, in order to get a more refined result we subtracted the second order from the first one, followed by a Min-Max normalization of pixel intensities and scaling to an 8-bit unsigned integer range. We used adaptive thresholding to extract the mask on all videos of our dataset. The generated masks exhibited under-segmentation in the ciliary region, and sparse over-segmentation in other regions of the image. To overcome this, we adapted a Gaussian blur filter followed by an Otsu thresholding to restore the under-segmentation and remove the sparse over-segmentation. @fig:thresholding illustrates the steps of the process.
+
 :::{figure} thresholding.png
 :label: fig:thresholding
 The process of computing the masks. a) Subtracting the second-order AR parameter from the first-order, followed by b) Adaptive thresholding, which suffers from under/over-segmentation. c) A Gaussian blur filter, followed by d) An Otsu thresholding eliminates the under/over-segmentation.
@@ -89,7 +90,11 @@ The process of computing the masks. a) Subtracting the second-order AR parameter
 
 ### Training the model
 
-In this study, we employed a Feature Pyramid Network (FPN) [@kirillov2017unified] architecture with a ResNet-34 encoder. The model was configured to handle grayscale images with a single input channel and produce binary segmentation masks. We utilized Binary Cross-Entropy Loss for training and the Adam optimizer with a learning rate of $10^-3$. To evaluate the model's performance, we calculated the Dice score during training and validation. Data augmentation techniques, including resizing, random cropping, and rotation, were applied to enhance the model's generalization capability. The implementation was done using a library [@Iakubovskii:2019] based on PyTorch Lightning to facilitate efficient training and evaluation. The next section discusses the results of the experiment and the performance of the model in detail.
+Our dataset includes 512 videos, with 437 videos of dyskinetic cilia and 75 videos of healthy motile cilia, referred to as the control group. The control group is split into %85 and %15 for training and validation respectively. 253 videos in the dyskinetic group are manually annotated which are used in the testing step. @fig:sample_vids_with_gt_mask shows annotated samples of our dataset.
+
+In our study, we employed a Feature Pyramid Network (FPN) [@kirillov2017unified] architecture with a ResNet-34 encoder. The model was configured to handle grayscale images with a single input channel and produce binary segmentation masks. For the training input, one mask is generated per video using our methodology, and we use the first 250 frames from each video in the control group making a total of 18,750 input images. We utilized Binary Cross-Entropy Loss for training and the Adam optimizer with a learning rate of $10^-3$. To evaluate the model's performance, we calculated the Dice score during training and validation. Data augmentation techniques, including resizing, random cropping, and rotation, were applied to enhance the model's generalization capability. The implementation was done using a library [@Iakubovskii:2019] based on PyTorch Lightning to facilitate efficient training and evaluation. @tbl:model_specs contains a summary of the model parameters and specifications.
+
+The next section discusses the results of the experiment and the performance of the model in detail.
 
 :::{table} Summary of model architecture, training setup, and dataset distribution
 :label: tbl:model_specs
@@ -97,7 +102,6 @@ In this study, we employed a Feature Pyramid Network (FPN) [@kirillov2017unified
 |---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
 | **Architecture**                | FPN with ResNet-34 encoder                                                                                                               |
 | **Input**                       | Grayscale images with a single input channel                                                                                             |
-| **Output**                      | Binary segmentation masks                                                                                                                |
 | **Number of Epochs**            | 10                                                                                                                                       |
 | **Training Samples**            | 15,662                                                                                                                                   |
 | **Validation Samples**          | 2,763                                                                                                                                    |
