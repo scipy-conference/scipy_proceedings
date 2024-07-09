@@ -158,13 +158,14 @@ The Robinson-Foulds distance measures the dissimilarity between two phylogenetic
 where $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of splits in trees $T_1$ and $T_2$.
 
 %\autoref{lst:robinsonFoulds}.
-\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds distance using the ete3 package in the aPhyloGeo package. The Robinson and Fouls function returns x2 (list of species names), x3 (list of T1 edges), x4 (list of T2 edges), and x5 (discarded T1 edges).]
+\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds distance using the ete3 package in the aPhyloGeo package.]
     def robinsonFoulds(tree1, tree2):
         rf = 0
         tree1_newick = ete3.Tree(tree1.format("newick"), format=1)
         tree2_newick = ete3.Tree(tree2.format("newick"), format=1)
 
-        rf, rf_max, common_leaves, x2, x3, x4, x5 = tree1_newick.robinson_foulds(tree2_newick, unrooted_trees=True)
+        rf, rf_max, common_leaves = tree1_newick.robinson_foulds(tree2_newick, 
+                                                                 unrooted_trees=True)
         if len(common_leaves) == 0:
             rf = 0
 
@@ -193,8 +194,15 @@ For points $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n
     def euclideanDist(tree1, tree2):
         
         tns = dendropy.TaxonNamespace()
-        tree1_tc = dendropy.Tree.get(data=tree1.format("newick"), schema="newick", taxon_namespace=tns)
-        tree2_tc = dendropy.Tree.get(data=tree2.format("newick"), schema="newick", taxon_namespace=tns)
+        
+        tree1_tc = dendropy.Tree.get(data=tree1.format("newick"), 
+                                     schema="newick", 
+                                     taxon_namespace=tns)
+                                     
+        tree2_tc = dendropy.Tree.get(data=tree2.format("newick"), 
+                                     schema="newick", 
+                                     taxon_namespace=tns)
+                                     
         tree1_tc.encode_bipartitions()
         tree2_tc.encode_bipartitions()
 
@@ -215,19 +223,19 @@ For observed values $y_i$ and estimated values $\hat{y}_i$:
 These formulas succinctly describe the methods used to measure distances and dissimilarities in various contexts.
 
 %\autoref{lst:LeastSquare}.
-\begin{lstlisting}[label=lst:LeastSquare,language=Python,caption=Python script for calculating the Least-Square distance using the ete3 package in the aPhyloGeo package]
-    def leastSquare(tree1, tree2):
-        ls = 0.00
-        leaves = tree1.get_terminals()
+\begin{lstlisting}[label=lst:LeastSquare, language=Python, caption=Python script for calculating the Least-Square distance using the ete3 package in the aPhyloGeo package]
+def least_square(tree1, tree2):
+    ls = 0.0
+    leaves = tree1.get_terminals()
 
-        leavesName = list(map(lambda x: x.name, leaves))
-        for i in leavesName:
-            leavesName.pop(0)
-            for j in leavesName:
-                d1 = tree1.distance(tree1.find_any(i), tree1.find_any(j))
-                d2 = tree2.distance(tree2.find_any(i), tree2.find_any(j))
-                ls += abs(d1 - d2)
-        return ls
+    leaves_name = list(map(lambda x: x.name, leaves))
+    for i in leaves_name:
+        leaves_name.pop(0)
+        for j in leaves_name:
+            d1 = tree1.distance(tree1.find_any(i), tree1.find_any(j))
+            d2 = tree2.distance(tree2.find_any(i), tree2.find_any(j))
+            ls += abs(d1 - d2)
+    return ls
 \end{lstlisting}
 
 Our phylogeography study utilized the Robinson-Foulds, normalized Robinson-Foulds, Euclidean, and Least-Squares distances to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental characteristics, providing a comprehensive analysis of evolutionary dynamics in Cumacea populations.
