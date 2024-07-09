@@ -158,7 +158,7 @@ The Robinson-Foulds distance measures the dissimilarity between two phylogenetic
 where $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of splits in trees $T_1$ and $T_2$.
 
 %\autoref{lst:robinsonFoulds}.
-\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds distance using the ete3 package in the aPhyloGeo package]
+\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds distance using the ete3 package in the aPhyloGeo package. The Robinson and Fouls function returns x2 (list of species names), x3 (list of T1 edges), x4 (list of T2 edges), and x5 (discarded T1 edges).]
     def robinsonFoulds(tree1, tree2):
         rf = 0
         tree1_newick = ete3.Tree(tree1.format("newick"), format=1)
