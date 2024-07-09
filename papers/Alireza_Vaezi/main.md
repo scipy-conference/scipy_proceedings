@@ -90,7 +90,7 @@ The process of computing the masks. a) Subtracting the second-order AR parameter
 
 ### Training the model
 
-Our dataset includes 512 videos, with 437 videos of dyskinetic cilia and 75 videos of healthy motile cilia, referred to as the control group. The control group is split into %85 and %15 for training and validation respectively. 253 videos in the dyskinetic group are manually annotated which are used in the testing step. @fig:sample_vids_with_gt_mask shows annotated samples of our dataset.
+Our dataset includes 512 videos, with 437 videos of dyskinetic cilia and 75 videos of healthy motile cilia, referred to as the control group. The control group is split into %85 and %15 for training and validation respectively. 108 videos in the dyskinetic group are manually annotated which are used in the testing step. @fig:sample_vids_with_gt_mask shows annotated samples of our dataset.
 
 In our study, we employed a Feature Pyramid Network (FPN) [@kirillov2017unified] architecture with a ResNet-34 encoder. The model was configured to handle grayscale images with a single input channel and produce binary segmentation masks. For the training input, one mask is generated per video using our methodology, and we use the first 250 frames from each video in the control group making a total of 18,750 input images. We utilized Binary Cross-Entropy Loss for training and the Adam optimizer with a learning rate of $10^-3$. To evaluate the model's performance, we calculated the Dice score during training and validation. Data augmentation techniques, including resizing, random cropping, and rotation, were applied to enhance the model's generalization capability. The implementation was done using a library [@Iakubovskii:2019] based on PyTorch Lightning to facilitate efficient training and evaluation. @tbl:model_specs contains a summary of the model parameters and specifications.
 
@@ -102,25 +102,31 @@ The next section discusses the results of the experiment and the performance of 
 |---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
 | **Architecture**                | FPN with ResNet-34 encoder                                                                                                               |
 | **Input**                       | Grayscale images with a single input channel                                                                                             |
-| **Number of Epochs**            | 10                                                                                                                                       |
+| **Number of Epochs**            | 20                                                                                                                                       |
+| **Batch Size**                  | 4                                                                                                                                        |
 | **Training Samples**            | 15,662                                                                                                                                   |
 | **Validation Samples**          | 2,763                                                                                                                                    |
-| **Test Samples**                | 325                                                                                                                                      |
+| **Test Samples**                | 108                                                                                                                                      |
 | **Loss Function**               | Binary Cross-Entropy Loss                                                                                                                |
 | **Optimizer**                   | Adam optimizer with a learning rate of $10^{-3}$                                                                                         |
 | **Evaluation Metric**           | Dice score during training and validation                                                                                                |
 | **Data Augmentation Techniques**| Resizing, random cropping, and rotation                                                                                                  |
 | **Implementation**              | Using a Python library with Neural Networks for Image Segmentation based on PyTorch [@Iakubovskii:2019]                                  |
 
+:::
+
 ## Results and Discussion
 
-@fig:out_sample shows the predictions of the model on 5 sample videos of dyskinetic cilia. The dyskinetic samples were not used in the training or validation phases. These predictions were generated after only 5 epochs of training with the FPN architecture.
+The model's performance metrics, including IoU, Dice score, sensitivity, and specificity, are summarized in @tbl:metrics. The validation phase achieved an IoU of 0.312 and a Dice score of 0.476, which indicates a moderate overlap between the predicted and ground truth masks. The high sensitivity (0.999) observed during validation suggests that the model is proficient in identifying ciliary regions, albeit with a specificity of 0.813, indicating some degree of false positives. In the testing phase, the IoU and Dice scores decreased to 0.230 and 0.374, respectively, reflecting the challenges posed by the dyskinetic cilia data, which were not included in the training or validation sets. Despite this, the model maintained a reasonable sensitivity of 0.631 and specificity of 0.787.
 
-:::{figure} out sample.png
+:::{figure} out_sample.png
 :label: fig:out_sample
 The model predictions on 5 dyskinetic cilia samples. The first column shows a frame of the video, the second column shows the manually labeled ground truth, the third column is the model's prediction, and the last column is a thresholded version of the prediction.
 :::
-@tbl:metrics contains a summary of the model's performance.
+
+@fig:out_sample provides visual examples of the model's predictions on dyskinetic cilia samples, alongside the manually labeled ground truth and thresholded predictions. The dyskinetic samples were not used in the training or validation phases. These predictions were generated after only 20 epochs of training with a small training data.  The visual comparison reveals that, while the model captures the general structure of ciliary regions, there are instances of under-segmentation and over-segmentation, which are more pronounced in the dyskinetic samples. This observation is consistent with the quantitative metrics, suggesting that further refinement of the pseudolabel generation process or model architecture could enhance segmentation accuracy.
+
+These results show the potential of our approach to reduce the reliance on manually labeled data for cilia segmentation. The use of this unsupervised learning framework allows the model to generalize from the motile cilia domain to the more variable dyskinetic cilia, although with some limitations in accuracy. It is worth noting that the 
 
 :::{table} The performance of the model in training, validation, and testing phases.
 :label: tbl:metrics
@@ -130,31 +136,30 @@ The model predictions on 5 dyskinetic cilia samples. The first column shows a fr
         <th colspan="4" align="center">Metrics</th>
     </tr>
     <tr>
-        <th align="center">IoU per image</th>
         <th align="center">IoU over dataset</th>
+        <th align="center">Dice Score</th>
         <th align="center">Sensitivity</th>
         <th align="center">Specificity</th>
     </tr>
-    <tr>
+    <!-- <tr>
         <td align="left">Training </td>
-        <td align="center">0.804</td>
         <td align="center">0.810</td>
         <td align="center">0.998</td>
         <td align="center">0.974</td>
+    </tr> -->
+    <tr>
+        <td align="left">Validation</td>
+        <td align="center">0.312</td>
+        <td align="center">0.476</td>
+        <td align="center">0.999</td>
+        <td align="center">0.813</td>
     </tr>
     <tr>
-        <td align="left">Validation </td>
-        <td align="center">0.760</td>
-        <td align="center">0.778</td>
-        <td align="center">0.997</td>
-        <td align="center">0.968</td>
-    </tr>
-    <tr>
-        <td align="left">Testing </td>
-        <td align="center">0.760</td>
-        <td align="center">0.778</td>
-        <td align="center">0.997</td>
-        <td align="center">0.968</td>
+        <td align="left">Testing</td>
+        <td align="center">0.230</td>
+        <td align="center">0.374</td>
+        <td align="center">0.631</td>
+        <td align="center">0.787</td>
 </table>
 :::
 
