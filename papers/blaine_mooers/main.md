@@ -8,36 +8,32 @@ abstract: |
 
 ## Introduction
 
+Voice computing includes speech-to-text, speech-to-commands, and speech-to-code. 
+These activities enable you to use your voice to generate prose, operate your computer, and write computer code.
+This use of your voice can partially replace the use of the keyboard when tired of typing, when suffering from repetitive stress injuries, or both.
+Software like Serenade and Talon Voice operate wherever you can place the mouse cursor and support the writing of computer code, but both do a poor job at dictation.
+In addition, these packages have a steep learning curve and take months of effort to master.
+We found that the Voice In Plus plugin for Google Chrome and Microsoft Edge is easier to master, does accurate dictation, and is easy to correct with text replacements.
 
-Jupyter notebooks provide a highly interactive computing environment where users run Markdown and code cells to yield almost instant results.
-This form of interactive computing provides the instant gratification of seeing the results of the cells' execution; this might be why Jupyter is so popular for data analysis [@Perkel2021TenComputerCodesThatTransformedScience].
-The most popular modality for interacting with the Jupyter notebooks is to use the keyboard and the computer mouse.
-However, there are opportunities to generate prose and code using one's voice instead of one's hands.
-Users can enhance their prose generation with their voice to boost their productivity and give their hands a rest when fatigued from typing.
-In other words, most users can use their voices to complement their keyboard use.
-For example, dictating prose in Markdown cells is an obvious application of voice computing in Jupyter.
-The ease of generating prose via speech can promote more complete descriptions of the computations executed in adjacent code cells.
+We discovered that we could map words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
+These *voice-triggered snippets* are easy to install and update in Voice In Plus.
+They are analogous to traditional tab-triggered snippets supported by most text editors.
+(A tab trigger is a placeholder word that is replaced with the corresponding code when the tab key is pressed after entering the tab trigger.)
+The existing extensions for code snippets in Jupyter do not support tab triggers.
+Instead, we found that Voice In Plus can be used to apply voice-triggered snippets in code and markdown cells in Jupyter and Colab notebooks.
+These voice-triggered snippets make it easy to insert equation and code snippets into these computational notebooks.
 
-Some Speech-to-text software also supports mapping a word or phrase to a text replacement; there are many ways of exploiting text replacements in Markdown and code cells.
-For Markdown cells, we have mapped the English contractions to their expansions, so whenever we say a contraction, the expansion automatically replaces the contraction. 
-This automation significantly reduces the need for manual editing, saving you valuable time and effort. By leveraging voice commands and text replacements, you can streamline your workflow and focus on the more critical aspects of your work.
-Another class of text replacements is the expansion of acronyms into the phrase they represent.
-The BibTeX cite keys for standard references can also be mapped to a command like `cite key for scipy`.
-Equations type set in LaTeX for rendering with MathJaX can be mapped to commands like `inline pythargeous theorem` and `display electron density equation`, depending on whether the equation is to be *in-line* in a sentence or centered in *display-mode*.
-We also mapped voice commands to tables, templates, and software licenses.
-For Jupyter code cells, we mapped voice commands to chunks of Python code of various sizes.
-In analogy to tab triggers with conventional tab-triggered snippets in advanced text editors, we call these voice commands that trigger a text replacement *voice triggers*.
-
-To facilitate voice commands in Jupyter notebook cells, we have developed sets of voice-triggered snippets for use in Markdown or code cells.
-We are building on our prior experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
+To facilitate voice commands in Jupyter notebooks, we have developed sets of voice-triggered snippets for use in Markdown or code cells with the Voice-In Plus plugin.
+We are building on our experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
-Although the Jupyter environment supports polyglot programming, we have restricted our focus to Python and Markdown.
-While some code snippets are one-liners, most code snippets span many lines and perform a complete task, such as generating a plot from a data file.
-These libraries provide code that is known to work, unlike the situation with chatbots, which do not always return working code.
-The high reliability of our code snippet libraries assures you that the code you use is proven to work. 
-This trustworthiness suggests that the demand for them will persist through the current AI hype cycle [@Dedehayir2016TheHypeCycleModelAReviewAndFutureDirections], providing you with a stable and dependable tool for your Jupyter notebook projects.
+These voice-triggered snippets are another tool for software engineering that can complement existing tools to enhance productivity.
 
 ## Methods and Materials
+
+### Voice In Plus
+The free version of Voice In does not allow the use of custom text replacements.
+We paid $39 for a year-long subscription to gain access to Voice In Plus which supports the sorting, editing, and use of custom text replacements.
+
 
 ### Construction of the snippet libraries
 Some of our voice snippets had already been used for a year to compose prose using dictation.
