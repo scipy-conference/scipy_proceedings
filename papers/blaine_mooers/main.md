@@ -40,7 +40,7 @@ We used the laptop's built-in microphone to record dictation while sitting or st
 We used the *Voice In Plus* plugin to store the libraries of voice-triggered snippets described in this paper.
 This plugin is provided by Dictanote Inc.
 First, we installed the *Voice In* plugin by navigating to the [Plugin In page](https://chromewebstore.google.com/detail/voice-in-speech-to-text-d) in the Google Chrome Web Store on the World Wide Web.
-Seond, The [Microsoft Edge Add-ons web site](https://microsoftedge.microsoft.com/addons/detail/voice-in-speechtotext) was accessed to install the plugin in Microsoft Edge.
+Seond, the [Microsoft Edge Add-ons web site](https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home) was accessed to install the plugin in Microsoft Edge.
 
 An internet connection was required to use *Voice In* because Dictanote tracks the websites were visited and whether the plugin worked on those websites.
 *Voice In* uses the browser's built-in the Speech-to-Text software to transcribe speech into text.
@@ -383,7 +383,7 @@ This program requires clicking on a microphone icon repeatedly, which makes the 
 The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
 Although the extension's name suggests it uses GitHub's Copilot, it uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGP3.
-The robustness of our approach is that the Voice-In Plus software will always operate within Jupyter Lab when Jupyter is run on a web server.
+The robustness of our approach is that the Voice-In Plus software operates within Jupyter Lab when Jupyter is run on a web server.
 
 
 ### Caveats about voice computing
