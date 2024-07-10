@@ -12,15 +12,16 @@ Voice computing includes speech-to-text, speech-to-commands, and speech-to-code.
 These activities enable you to use your voice to generate prose, operate your computer, and write computer code.
 This use of your voice can partially replace the use of the keyboard when tired of typing, when suffering from repetitive stress injuries, or both.
 Software like Serenade and Talon Voice operate wherever you can place the mouse cursor and support the writing of computer code, but both do a poor job at dictation.
-In addition, these packages have a steep learning curve and take months of effort to master.
-We found that the Voice In Plus plugin for Google Chrome and Microsoft Edge is easier to master, does accurate dictation, and is easy to correct with text replacements.
+In addition, these packages have a steep learning curve and take months to master.
+We found that we could be prodcutive within an hour with the Voice In Plus plugin for Google Chrome and Microsoft Edge.
+This plugin is easy to install, provides accurate dictation, and is easy to modify to correct wrong word insertations with text replacements.
 
 We discovered that we could map words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
 These *voice-triggered snippets* are easy to install and update in Voice In Plus.
 They are analogous to traditional tab-triggered snippets supported by most text editors.
 (A tab trigger is a placeholder word that is replaced with the corresponding code when the tab key is pressed after entering the tab trigger.)
 The existing extensions for code snippets in Jupyter do not support tab triggers.
-Instead, we found that Voice In Plus can be used to apply voice-triggered snippets in code and markdown cells in Jupyter and Colab notebooks.
+Instead, we found that Voice In Plus can be used to apply voice-triggered snippets in code and Markdown cells in Jupyter notebooks.
 These voice-triggered snippets make it easy to insert equation and code snippets into these computational notebooks.
 
 To facilitate voice commands in Jupyter notebooks, we have developed sets of voice-triggered snippets for use in Markdown or code cells with the Voice-In Plus plugin.
@@ -30,10 +31,75 @@ These voice-triggered snippets are another tool for software engineering that ca
 
 ## Methods and Materials
 
-### Voice In Plus
-The free version of Voice In does not allow the use of custom text replacements.
-We paid $39 for a year-long subscription to gain access to Voice In Plus which supports the sorting, editing, and use of custom text replacements.
+### Hardware
+We used a 2018 15-inch MacBook Pro laptop computer.
+It had 32 gigabytes of RAM and one Radeon Pro 560X 4 GB GPU.
+We used the laptop's built-in microphone to record dictation while sitting or standing from up to 20 feet (ca. 6 m) away from the computer.
 
+### Installation of Voice In Plus
+We used the *Voice In Plus* plugin to store the libraries of voice-triggered snippets described in this paper.
+This plugin is provided by Dictanote Inc.
+First, we installed the *Voice In* plugin by navigating to the [Plugin In page](https://chromewebstore.google.com/detail/voice-in-speech-to-text-d) in the Google Chrome Web Store on the World Wide Web.
+Seond, The [Microsoft Edge Add-ons web site](https://microsoftedge.microsoft.com/addons/detail/voice-in-speechtotext) was accessed to install the plugin in Microsoft Edge.
+
+An internet connection was required to use *Voice In* because Dictanote tracks the websites were visited and whether the plugin worked on those websites.
+*Voice In* uses the browser's built-in the Speech-to-Text software to transcribe speech into text.
+Because no remote servers are used for the transcription, the transcription process was essentially instant and able to keep up the dictation of multiple paragraphs.
+Dictanote does not store the audio or the transcripts.
+
+After activating the plugin, we customized it by selecting a dictation language from a pull-down menu.
+We selected **English (United States)** from the 15 dialects of English. 
+The English variants include dialects from Western Europe, Africa, South Asia, and Southeast Asia; many languages other than English are also supported.
+
+Next, we set a keyboard shortcut for activating the plugin.
+We selected command-L on a Mac because this shortcut was not already in use.
+A list of Mac shortcuts can be found [here](https://support.apple.com/en-us/102650).
+The second customization was the limit of the customization that we could make in the free version of *Voice In*.
+
+
+### Deployment of Voice-triggered snippets in Voice In Plus
+The use of customized text replacements is available in *Voice In Plus*.
+*Voice In Plus* is activated by purchasing a $39 annual subscription through the **Subscription** submenu in the *Voice In Settings* sidebar of the *Voice In Options* web page.
+Monthly and lifetime subscription options are available.
+Only one subscription was required to use *Voice In Plus* in both browsers.
+There is not a limit on the number of devices that can be used with a subscription.
+
+After a subscription was purchased, we obtained access to the **Custom Commands** in the *Voice In Settings* sidebar.
+We used the **Add Command** button to enter the voice-trigger and the text replacement {ref}`fig:newSentence`.
+Likewise, the custom command `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
+The phrases making up these voice triggers were no longer be available during dictation because they will be used to trigger text replacements.
+
+:::{figure} ./images/VoiceInNewSentence.png
+:label: fig:newSentence
+:width: 50%
+Entering a single voice trigger and the corresponding command in Voice In Plus.
+:::
+
+We used the **Bulk Add** button to upload multiple commands from a two-column CSV file.
+A comma was the field separator.
+The file contents were selected and pasted in a text box that is opened upon clicking on the **Bulk Add** button.
+The voice-triggers reside in the left column, and the text replacements reside in the right column.
+Any capitalization in the voice trigger was ignored by the software, and the voice trigger was stored in lowercase.
+
+Multiline text replacements had to be enclosed in double quotes.
+Internal double quotes were replaced with single quotes.
+It was not possible to use a backspace to escape internal pre-existing double quotation marks.
+
+The formatting of the text replacement was controlled by inserting built-in *Voice In Plus* commands enclosed in angle brackets.
+For example, the built-in **open** command enables the opening of a webpage with the provided URL (e.g. `open SciPy 2024,<open:https://www.scipy2024.scipy.org/schedule>`).
+
+The transcription of the spoken words appear momentarily in a transitory transcript that hovers about the text box.
+We mapped the misinterpreted words to the desired text replacement.
+For example, we added the mapping of `open syfy` to `<open:https://www.scipy2024.scipy.org/schedule>` to open the webpage for the schedule of SciPy 2024 when we said, "open SciPy 2024".
+We mapped phrases misinterpreted by Voice In Plus to the intended text replacement or command.
+
+The **Export** button opens a text box with the custom commands in CSV file format.
+All the contents of the text box were selected, copied, and pasted into a local CSV file using either the text editor TextMate or Emacs version 29.3.
+The **Synch** button was used to synchronize devices.
+
+A GUI shows all the voice triggers and their text replacements immediately below the row of buttons just mentioned above.
+Each row in the GUI has an edit icon and a delete icon.
+The edit icon opens a pop-up menu similar to the pop-up menu invoked by the **Add Command ** button.
 
 ### Construction of the snippet libraries
 Some of our voice snippets had already been used for a year to compose prose using dictation.
@@ -42,7 +108,7 @@ The Voice-In Plus software accepts commands in a CSV file.
 The contents of these files can be copied and pasted into the `bulk add` text area of the Voice In Plus configuration GUI.
 
 ### Construction of interactive quizzes
-We developed interactive quizzes to aid the mastery of the VIP syntax.
+We developed interactive quizzes to aid the mastery of the *Voice In Plus* syntax.
 We wrote the quiz as a Python script that can run in the terminal or in Jupyter notebooks.
 We stored each question, answer, and explanation in a tuple because tuples are immutable. 
 We stored the tuples in a list because lists are sortable.
@@ -230,102 +296,48 @@ Instead, most people will find it more convenient to take these quizzes several 
 If that use occurs on subsequent days, then recall of the alphabet will be reinforced, and retaking the quiz may not be necessary.
 
 
-### Voice In Plus
+### Limitations on using Voice In Plus
 
-Voice In, a unique plugin for Google Chrome and Microsoft Edge web browsers, that uses Google API to provide a dictation and voice recognition experience.
-The plugin operates in most text areas of web pages.
-These text areas include those of web-based email packages and online sites that support distraction-free writing.
-These text areas also include the Markdown and code cells of Jupyter notebooks.
+The plugin operates in text areas on thousands of web pages.
+These text areas include those of web-based email packages and online sites that support distraction-free writing like [Write Honey](https://app.writehoney.com).
+These text areas also include the Markdown and code cells of Jupyter notebooks and other web-based computational notebooks.
 Voice In also works in plain text documents opened in Jupyter Lab for online writing.
-Voice In will not work in standalone applications that support the editing of Jupyter notebooks, such as the Jupyter Lab app, the nteract app, and external text editors, such as VS Code, that support the editing of Jupyter notebooks.
+It also works in the web-based version of [VS Code](https://vscode.dev/).
+Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the *JupyterLab.app*, the *nteract.app*, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
+*Voice In Plus* is limited to web browsers, whereas other automated speech recognition  software can also operate in the terminal and at the command prompt in GUI-driven applications. 
 
-After Voice-In Plus is activated, it will listen for words for 3 minutes before automatically shutting down.
 It is very accurate with a word error rate that is well below 10\%.
-It can pick out words, such as traffic or bird songs, despite background ambient noise.
-The language model is quite robust in that dictation can be performed without an external microphone.
-For example, the built-in microphone available in the MacBook Pro laptop computer is sufficient.
-In contrast, other VSR software requires high-quality external microphones.
-The need to use an external microphone imposes a motivational barrier.
+Like all other dictation software, word error rate depends on the quality of the microphone using used.
+*Voice-In Plus* can pick out words from among background ambient noise such as load ventilation systems, traffic, and outdoor bird songs.
 
-Because of the way the system is set up to utilize the Google API, there is not much of a latency issue.
+The language model is quite robust in that dictation can be performed without an external microphone.
+We found no reduction in word error rate when using a high-quality Yeti external microphone.
+Our experience might a reflection of our high-end hardware and may not transfer to other low-end computers.
+
+Because of the way*Voice-In Plus*is set up to utilize the Speed-to-Text feature of the Google API, there is not much of a latency issue.
 The spoken words' transcriptions occur nearly in real-time; there is only a minor lag.
-The program can generally keep up with dictation occurring at a moderate pace for at least several paragraphs, whereas competing systems tend to quit after one paragraph.
-The program tends to hallucinate only when the dictation has occurred at high speed because the transcribing falls behind.
-As a result, the user has to pay attention to the progress of the transcription.
+*Voice In Plus* will listen for words for 3 minutes before automatically shutting down.
+*Voice In Plus* can generally keep up with dictation occurring at a moderate pace for at least several paragraphs, whereas competing dictation software packages tend to quit after one paragraph.
+The program tends to hallucinate only when the dictation has occurred at high speed because the transcription has fallen behind.
+You have to pay attention to the progress of the transcription if you want all of your spoken words captured.
+
 If the transcription halts, it is best to deactivate the plugin, activate it, and resume the dictation.
 Great care must be taken to pronounce the first word of the sentence loudly so that it will be recorded; otherwise, this first word will likely not be recorded.
-This problem is most acute when there has been a pause in the dictation.
+This problem of omitted words is most acute when there has been a pause in the dictation.
 
 The software does not automatically insert punctuation marks.
-The user has to vocalize the name of the punctuation mark that they want inserted.
-These also have to utilize a built-in new-line command to start new lines.
-The user has to develop the habit of using this command if they write one sentence per line.
-This latter form of writing is very useful for first drafts because it greatly eases the shuffling of sentence order during rewriting.
-This form of writing is also very compatible with Virgin control systems like git because the changes can be tracked more easily by line number.
+You have to vocalize the name of the punctuation mark where it is required.
+You also have to utilize the built-in new-line command to start new lines.
+We have combined the period command with the new line command to create a new command with the voice trigger of `new sentence`.
 
-The program can sometimes be unresponsive.
-In these situations, the plugin can be turned on and then again.
-This act will restore normal behavior.
+You have to develop the habit of using this command if you like to write one sentence per line.
+This latter form of writing is very useful for first drafts because it greatly eases the shuffling of sentences in a text editor during rewriting.
+This form of writing is also very compatible with Version control systems like git because the changes can be tracked by line number.
 
-The associated configuration GUI for VIP allows customization of several settings, making the dictation experience personalized.
-The first setting to be set is the language that will be used during dictation.
-There is support for several foreign languages and different dialects of English.
-The user can also configure a keyboard shortcut that can be utilized to turn the plugin on and off.
-
-Voice In is offered as a freemium.
-The user has to pay for an annual subscription to be able to add custom text replacements.
-This full-featured version of the plugin is called Voice-In Plus (VIP).
-We will focus on VIP.
-
-On activation of the VIP version of the plugin, the settings GUI page for custom commands is displayed for the user to use to enter commands either one by one through a GUI or by adding multiple voice commands through the text area that is opened after clicking on the bulk add button {ref}`fig:newSentence`.
-The first option involves placing the voice trigger in one text area and the text replacement in the second text area.
-The voice trigger does not need a comma after it, and the text replacement can span multiple lines without adding any markup, except that internal double quotes must be replaced with single quotes.
-Any capitalization in the voice trigger will be ignored and written in lowercase.
-The second option involves pasting in one or more lines of pairs of voice triggers and text replacements separated by commas, as in a CSV file.
-In this option, text replacements that span more than one line must be enclosed with double quotes.
-The internal double quotes must be replaced with single quotes; otherwise, the text replacement will be truncated at the position of the first internal double quote.
-
-:::{figure} ./images/VoiceInNewSentence.png
-:label: fig:newSentence
-:width: 50%
-Entering a single voice trigger and the corresponding command in Voice In Plus.
-:::
-
-The carrying capacity for the storage of voice-triggered commands is still being determined.
-At one point, we had over 19,000 pairs of voice triggers and the corresponding text replacements.
-Scrolling through the list of these voice commands was painful because it was too long.
-
-This problem was efficiently resolved by exporting the commands to a CSV file, a process that significantly streamlined the management of voice-triggered commands.
-Then, the stored commands on the website were cleared.
-The exported CSV file was opened in a text editor, and the unneeded commands were selected and deleted.
-In this case, that left about 7,000 commands.
-The web page with the command library displayed could then be easily scrolled.
-The practical size limit of the library is between 7,000 and 19,000 commands. This is because exceeding this limit may lead to performance issues, such as slower response times.
-
-Amongst the first customizations are those supporting the generation of nonfiction writing.
-Users may want to install our library of English expansions to avoid the tedium of converting English contractions to their expansions.
-To avoid having to say `period` and `new line` at the end of each sentence when writing one sentence per line, the user can develop a custom command called `new sentence`, a combination of these two built-in commands. This command is useful when you want to dictate your text one sentence at a time.
-Likewise, the custom command `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
-Of course, these phrases will no longer be available in dictation because they will be used to trigger text replacements.
-
-The VIP (Voice-Triggered Interactive Platform) documentation is integrated into the GUI (Graphical User Interface) that the user uses to configure VIP and carry out various tasks. The GUI is a visual interface that allows users to interact with the VIP system.
-
-A dictation session with VIP is initiated by activating the plugin by clicking its icon.
-
-There is a configuration page associated with the icon through which one can select the language and even a language's dialect.
-
-VIP has several dozen built-in commands, some of which can be used to navigate the web page.
-
-The voice-triggered snippets can be exported in a CSV file.
-The file has two columns separated by a comma: the voice trigger and its text replacement. Each row represents a single voice-triggered command. The voice trigger is the phrase you say to activate the command, and the text replacement is the text that will be inserted when the command is triggered.
-This file lacks a line of headers.
-
-Multiple custom commands can be uploaded from a CSV file to the bulk add window of the plugin's configuration GUI. To create a custom command, you need to define the voice trigger and its corresponding text replacement in the CSV file, and then upload the file to the GUI.
-Frequently, it is necessary to insert a code fragment that spans multiple lines.
-This code fragment needs to be enclosed with double quotation marks.
-It is not possible to use a backspace to escape internal pre-existing double quotation marks.
-These pre-existing double quotes have to be replaced with single quotes.
-
+The practical limit of on the number of commands it set by the trouble you are willing to tolerate in scrolling up and down the list of commands.
+We had an easy time scrolling through a library of about 7,000 commands, and a hard time with a library of about 19,000 commands.
+Bulk deletion of selected commands required the assistance from the User support at Dictanote Inc.
+They removed our bloated library, and we used the bulk add button to upload a smaller version of our library.
 
 ## Discussion
 
