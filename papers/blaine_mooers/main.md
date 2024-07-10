@@ -303,7 +303,7 @@ These text areas include those of web-based email packages and online sites that
 These text areas also include the Markdown and code cells of Jupyter notebooks and other web-based computational notebooks.
 Voice In also works in plain text documents opened in Jupyter Lab for online writing.
 It also works in the web-based version of [VS Code](https://vscode.dev/).
-Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the *JupyterLab.app*, the *nteract.app*, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
+Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the *JupyterLab", the *nteract*, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
 *Voice In Plus* is limited to web browsers, whereas other automated speech recognition  software can also operate in the terminal and at the command prompt in GUI-driven applications. 
 
 It is very accurate with a word error rate that is well below 10\%.
