@@ -292,8 +292,8 @@ They have been validated several times by other researchers.
 Space repetition learning is one of the most firmly established results of research into human psychology.
 
 Most people need more discipline to carry out this kind of learning because they have to schedule the time to do the follow-up sessions.
-Instead, most people will find it more convenient to take these quizzes several times in a half hour before they spend many hours utilizing the commands.
-If that use occurs on subsequent days, then recall of the alphabet will be reinforced, and retaking the quiz may not be necessary.
+Instead, most people will find it more convenient to take these quizzes several times in 20 minutes before they spend many hours utilizing the commands.
+If that use occurs on subsequent days, then recall will be reinforced, and retaking the quiz may not be necessary.
 
 
 ### Limitations on using Voice In Plus
