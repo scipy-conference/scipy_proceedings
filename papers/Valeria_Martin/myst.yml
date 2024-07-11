@@ -32,7 +32,7 @@ project:
     - Sentinel-2
     - Machine Learning
     - Environmental Monitoring
-    - Geo-spatial Data Analysis
+    - Geospatial Data Analysis
   # Add the abbreviations that you use in your paper here
   abbreviations:
     API: Application Programming Interface
