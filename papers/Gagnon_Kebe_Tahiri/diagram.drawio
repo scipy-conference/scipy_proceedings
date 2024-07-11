@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-07-11T03:01:17.476Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="3AFiAd3BTmwhig5RySRm" version="24.6.4" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-11T12:37:22.009Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="uRvUC3ohnzCPFe54H07C" version="24.6.4" type="github">
   <diagram name="Page-1" id="-rFiT2QOCS_2W7RfbsIS">
-    <mxGraphModel dx="1886" dy="560" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1621" dy="412" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -26,7 +26,7 @@
             <Array as="points" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xGhLzYIq1VaCrZdBams1-12" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Removing numerical attributes with low variance (cut-off 0.1)&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fad9d5;strokeColor=#ae4132;align=center;" parent="1" vertex="1">
+        <mxCell id="xGhLzYIq1VaCrZdBams1-12" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Removing numerical attributes with low variance (cut-off &lt;u&gt;&amp;lt;&lt;/u&gt; 0.1)&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fad9d5;strokeColor=#ae4132;align=center;" parent="1" vertex="1">
           <mxGeometry x="185" y="290" width="130" height="60" as="geometry" />
         </mxCell>
         <mxCell id="xGhLzYIq1VaCrZdBams1-18" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.67;exitY=0.997;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
