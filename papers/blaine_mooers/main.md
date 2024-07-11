@@ -24,7 +24,7 @@ The existing extensions for code snippets in Jupyter do not support tab triggers
 Instead, we found that Voice In Plus can be used to apply voice-triggered snippets in code and Markdown cells in Jupyter notebooks.
 These voice-triggered snippets make it easy to insert equation and code snippets into these computational notebooks.
 
-To facilitate voice commands in Jupyter notebooks, we have developed sets of voice-triggered snippets for use in Markdown or code cells with the Voice-In Plus plugin.
+To facilitate voice commands in Jupyter notebooks, we have developed sets of voice-triggered snippets for use in Markdown or code cells with the *Voice-In Plus* plugin.
 We are building on our experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
 These voice-triggered snippets are another tool for software engineering that can complement existing tools to enhance productivity.
@@ -104,7 +104,7 @@ The edit icon opens a pop-up menu similar to the pop-up menu invoked by the **Ad
 ### Construction of the snippet libraries
 Some of our voice snippets had already been used for a year to compose prose using dictation.
 These snippets are in modular files to ease their selective use.
-The Voice-In Plus software accepts commands in a CSV file.
+The *Voice-In Plus* software accepts commands in a CSV file.
 The contents of these files can be copied and pasted into the `bulk add` text area of the Voice In Plus configuration GUI.
 
 ### Construction of interactive quizzes
@@ -373,7 +373,7 @@ This program requires clicking on a microphone icon repeatedly, which makes the 
 The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
 Although the extension's name suggests it uses GitHub's Copilot, it uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGP3.
-The robustness of our approach is that the Voice-In Plus should work in all versions of  Jupyter Lab and Jupyter Notebook.
+The robustness of our approach is that the *Voice-In Plus* should work in all versions of  Jupyter Lab and Jupyter Notebook.
 
 
 
