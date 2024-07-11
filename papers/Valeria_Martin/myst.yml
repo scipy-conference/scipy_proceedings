@@ -36,7 +36,7 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     API: Application Programming Interface
-    B2, B3, B4: Sentinel-2 Satellite Bands corresponding to Blue, Green, and Red channels
+    B2, B3, B4: Sentinel-2 spectral bands corresponding to blue (B2), green (B3), and red (B4)
     CNN: Convolutional Neural Network
     CWGID: California Wildfire GeoImaging Dataset
     DL: Deep Learning
