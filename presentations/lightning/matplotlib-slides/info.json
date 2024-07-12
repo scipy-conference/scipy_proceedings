@@ -1,0 +1,11 @@
+{
+    "title": "Plotting Slides in Matplotlib",
+    "authors": [
+        {
+            "name": "Elliott Sales de Andrade",
+            "affiliation": "Matplotlib",
+            "orcid": "0000-0001-7310-8942"
+        }
+    ],
+    "description": "Matplotlib makes easy things easy and hard things possible, like this silly idea of making slides in it."
+}
