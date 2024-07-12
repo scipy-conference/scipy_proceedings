@@ -1,0 +1,11 @@
+{
+  "title": "anywidget: custom Jupyter Widgets made easy",
+  "authors": [
+    {
+      "name": "Trevor Manz",
+      "affiliation": "Harvard Medical School",
+      "orcid": "0000-0001-7694-5164"
+    }
+  ],
+  "description": "anywidget simplifies the creation and distribution of Jupyter Widgets by providing a portable and reusable specification and toolset. It ensures cross-platform compatibility with notebook platforms, lowers the barrier to entry, and improves reusability and interoperability in interactive computing environments. This talk highlights the motivation to bring the web and Python ecosystems closer together, showcasing community-driven anywidgets and new widgets that push the boundaries of these platforms."
+}
