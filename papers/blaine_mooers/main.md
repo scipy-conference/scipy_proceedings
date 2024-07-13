@@ -375,26 +375,25 @@ Although the extension's name suggests it uses GitHub's Copilot, it uses whisper
 This extension requires an API key for ChatGP3.
 The robustness of our approach is that the *Voice-In Plus* should work in all versions of  Jupyter Lab and Jupyter Notebook.
 
+### Coping with the imperfections of the language model
 
+One aspect of speech-to-text that it is important to bring up are some persistent errors in translation.
+These persistent errors may be due to the language model having difficulties interpreting your speech.
+For example, the language model often misinterprets for me the *word'* write as *right*'.
+Likewise, the letter R is frequently returned as *are* or *our*'.
+I have had trouble enunciating the letters *w* and *r* clearly since I was a child.
+I do find myself trying to enunciate more clearly while I am dictating, so eventually, a side effect of doing dictation regularly may be improved clarity of my speech in general.
+The remedy for the situations is to map the misinterpreted phrase to the intended phrase.
 
-### Common hazards when voice computing
-
-In our year of using voice control daily, we have encountered two mishaps.
-First, we have accidentally recorded a conversation when someone walked into my office while doing computing.
-If we fail to turn off the ASR software, bits of our conversation are recorded at the mouse cursor's position.
-This inserted text has to be deleted later.
-This is a bigger problem when editing a code file or code cell.
-The injection of unwanted words can introduce bugs that take time to remove.
-
-Second, some ASR software may become activated upon restarting the computer.
-If their state is overlooked, words from one's speech, a YouTube video, or a Zoom meeting can be converted into computer commands that get executed in unintended ways.
-It can be embarrassing if it occurs in the middle of a Zoom meeting.
-Also, two voice-control software can be activated simultaneously, and the speech will be transcribed twice in the text area.
+This remedy might be the best that can be done in for those users who have a heavy accent and are from a country that is not represented by the selection of English dialects.
+People originating from Eastern Europe, Middle East, and northeast Asia fall into this category.
+Users in this situation may have to add several hundred to several thousand text replacements.
+As their customized library of text replacements grows, the frequency of further wrong word insertions should go down exponentially.
 
 
 ### Future directions
 
 One future direction is to build out the libraries of voice-triggered snippets that have been developed.
-Another direction includes developing a method for facilitating voice stops analogous to tab stops in code snippets for advanced text editors.
+Another direction includes the development of voice stops analogous to tab stops in code snippets for advanced text editors.
 These voice stops would advance the cursor to all sites that should be considered for editing to customize the code snippet for the problem.
-The other related advance would be mirroring the parameter values at identical voice stops.
+The other related advance would be the mirroring of the parameter values at identical voice stops.
