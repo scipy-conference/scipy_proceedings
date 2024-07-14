@@ -1,0 +1,11 @@
+{
+    "title": "Domovyk: Multilingual Transliteration for Cyrillic Text",
+    "authors": [
+        {
+            "name": "Ian Goodale",
+            "affiliation": "UT-Austin",
+            "orcid": "0000-0002-6685-2949"
+        }
+    ],
+    "description": "Mamba models leverage State Space Models and the HiPPO framework to efficiently handle long-range dependencies, reducing computational complexity compared to traditional transformers."
+  }
