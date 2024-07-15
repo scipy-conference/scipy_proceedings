@@ -34,23 +34,47 @@
 
 
 \begin{abstract}
-In recent years, integrating satellite imagery with deep learning (DL) architectures has become an effective approach for environmental monitoring tasks, including forest wildfire detection. Nevertheless, this integration requires substantial high-quality labeled data to train the DL models accurately. Leveraging the capabilities of Google Earth Engine’s Python API, this study introduces a streamlined Python-based methodology to efficiently build, label, process, and evaluate a large-scale bi-temporal high-resolution satellite imagery dataset for DL-driven forest wildfire detection. Known as the California Wildfire GeoImaging Dataset (CWGID), this dataset comprises over 100,000 labeled 'before' and 'after' wildfire image pairs. An analysis of the dataset using pre-trained and adapted Convolutional Neural Network (CNN) architectures, such as VGG16 and EfficientNet, achieved accuracies of respectively 82\% and 93\%. The pipeline described in this paper explains how Python can be used to build a high-resolution satellite imagery dataset and how to train DL models with it, providing an efficient framework for improving environmental monitoring efforts. 
+
+In recent years, leveraging satellite imagery with deep learning (DL) architectures has become an effective approach for environmental monitoring tasks, including forest wildfire detection. Nevertheless, this integration requires substantial high-quality labeled data to train the DL models accurately. Leveraging the capabilities of multiple Python libraries, such as rasterio and GeoPandas, and Google Earth Engine’s Python API, this study introduces a streamlined methodology to efficiently gather, label, augment, process, and evaluate a large-scale bi-temporal high-resolution satellite imagery dataset for DL-driven forest wildfire detection. Known as the California Wildfire GeoImaging Dataset (CWGID), this dataset comprises over 100,000 labeled 'before' and 'after' wildfire image pairs, created from pre-existing satellite imagery. An analysis of the dataset using pre-trained and adapted Convolutional Neural Network (CNN) architectures, such as VGG16 and EfficientNet, achieved accuracies of respectively 82\% and 93\%. The pipeline outlined in this paper demonstrates how Python can be used to gather and process high-resolution satellite imagery datasets, leading to accurate wildfire detection and providing a tool for broader environmental monitoring.
+
 \end{abstract}
 
 \section{Introduction}\label{introduction}
-Generally, building a satellite imagery dataset involves a time-intensive approach. Recently, Google Earth Engine (GEE) \citep{gorelick2017google} has revolutionized this process by providing an extensive, cloud-based platform for the efficient collection, processing, and analysis of satellite imagery. Furthermore, GEE’s Python API allows its users to easily query their platform and automatically download cloud-free large-scale satellite imagery datasets from multiple satellite collections, such as Sentinel-2. This technology has facilitated environmental monitoring by providing automatic and timely access to high-quality satellite imagery. 
+ 
 
-Satellite imagery-based change detection and forest monitoring have traditionally depended on manually identifying specific features and applying predefined algorithms and models, including differential analysis, thresholding techniques, and clustering and classification algorithms. However, these algorithms and models often fail to capture the full complexity of the studied data. Thus, integrating deep learning (DL) methods with satellite imagery offers a more dynamic and precise approach, one capable of handling the patterns and variability associated with imagery data. 
+This paper presents a Python-based methodology for gathering and using a labeled high-resolution satellite imagery dataset for forest wildfire detection. 
+Generally, building a satellite imagery dataset is a time-intensive process. However, Google Earth Engine (GEE) Gorelick et al., 2017 has recently revolutionized this process by providing an extensive, cloud-based platform for the efficient collection, processing, and analysis of satellite imagery. GEE’s Python API allows its users to programmatically query their platform and download cloud-free large-scale satellite imagery datasets from multiple satellite collections, such as Sentinel-2. For example, while traditional methods might require manual search and download of images, GEE can automate this process, significantly reducing the time needed to find suitable satellite images. This technology makes data collection and processing faster and easier, facilitating environmental monitoring by providing reliable and easily accessible high-quality satellite imagery.
 
-Python facilitates the use of DL in environmental monitoring by providing a rich ecosystem of libraries and tools, such as TensorFlow \citep{tensorflow2015-whitepaper}, which contains multiple existing DL architectures that can be adapted and used with satellite imagery. Nevertheless, the integration of DL and Remote Sensing images requires multiple processing steps, such as having smaller imagery tiles and adapting the models to use GeoTIFF data, among others. 
+Satellite imagery-based change detection and forest monitoring have traditionally relied on manually identifying specific features and using predefined algorithms and models, such as differential analysis, thresholding techniques, and clustering and classification algorithms. This approach requires considerable domain expertise and such algorithms and models may not capture the full complexity of the studied data \citep{rs14071552}. 
 
-Furthermore, these DL algorithms require a substantial amount of labeled data to effectively learn and identify change \citep{Alzubaidi2021ReviewOD}. Therefore, the development of labeled high-resolution satellite imagery datasets is important and relevant for addressing environmental problems. Currently, the availability of labeled high-quality satellite imagery datasets is an obstacle to developing DL models for environmental change detection \citep{Adegun2023}. 
+With the emergence of deep learning (DL) algorithms, specifically computer vision methods, such as Convolutional Neural Networks (CNNs) \citep{lecun} and Fully Convolutional Neural  Networks (e.g., U-Nets \citep{DBLP:RonnebergerFB15}), there is a significant opportunity to enhance and facilitate forest change detection efforts. These advanced computational methods can rapidly identify complex patterns within vast datasets. Furthermore, when integrated with Earth Observation  systems they can facilitate near real-time monitoring and detection of multiple forest loss causes, assess their extent, or even predict and evaluate their spread \citep{eleo,al-dabbagh2023uni}. Thus, integrating DL methods with satellite imagery offers a more dynamic and precise approach, capable of handling the patterns and variability associated with imagery data. For instance, DL models can automatically learn complex patterns related to wildfire spread from labeled examples, whereas traditional methods might miss subtle but important indicators. 
 
-This paper presents a methodology, entirely implemented in Python, to streamline the creation and evaluation, via DL, of satellite imagery datasets. The methodology covers the entire workflow: from data acquisition, labelling, and preprocessing to model adaptation, training, and evaluation. Specifically, this approach is applied to create and validate a high-resolution dataset for forest wildfire detection, the California Wildfire GeoImaging Dataset (CWGID).
+Python facilitates the use of DL in environmental monitoring by providing a rich ecosystem of libraries and tools, such as TensorFlow \citep{tensorflow2015-whitepaper}, which contains multiple existing DL architectures that can be adapted and used with satellite imagery. Nevertheless, integrating DL and remotely sensed images requires multiple processing steps, such as having smaller imagery tiles and adapting the models to use GeoTIFF data, among others. These steps include:
+\begin{enumerate}
+    \item Data Acquisition: Collect satellite imagery from sources such as Google Earth Engine or 		 other satellite image providers.
+    \item Preprocessing: Convert satellite images into formats suitable for analysis.
+    \item Image Tiling: Divide large satellite images into smaller tiles to fit the input image size used in DL models.
+    \item Data Annotation: Label the images to create a ground truth dataset for training DL models.
+    \item Data Augmentation: Applying transformations such as rotations and flips to increase the diversity of the training dataset.
+\end{enumerate}
+Python’s tools help manage these steps. For example, libraries like rasterio, Tifffile and GeoPandas, can be used to process and transform satellite imagery data into formats suitable for DL models. This reduces the manual effort required and ensures that the data pipeline is efficient.
+
+
+Furthermore, DL algorithms require a substantial amount of labeled data to effectively learn and identify change \citep{Alzubaidi2021ReviewOD}. Therefore, the development of labeled high-resolution satellite imagery datasets is important and relevant for addressing environmental problems. Currently, the availability of labeled high-quality satellite imagery datasets is an obstacle to developing DL models for environmental change detection \citep{Adegun2023}.  Furthermore, manually labeling data can be time-consuming, but with Python’s tools and leveraging historic and reliable shapefile data, this process can be streamlined.
+
+This paper presents a methodology, entirely implemented in Python, to streamline the creation and evaluation, via DL, of satellite imagery datasets. The methodology covers the entire workflow: from data acquisition, labelling, and preprocessing to model adaptation, training, and evaluation. Specifically, this approach is applied to gather and validate a high-resolution dataset for forest wildfire detection, the California Wildfire GeoImaging Dataset (CWGID). Additionally, this methodology can be adapted for various environmental monitoring tasks, showing its versatility in studying and responding to different environmental changes.
+
+
 \section{Building a Sentinel-2 Satellite Imagery Dataset}
 To construct the CWGID, a multi-step process is needed.
 \subsection{Gathering and Refining Historic Wildfire Polygon Data from California}
-The initial step is to gather geo-referenced forest wildfire polygon data from California, sourced from the Fire and Resource Assessment Program (FRAP) maintained by the California Department of Forestry and Fire Protection \citep{california_department_of_forestry_and_fire_protection_2024}. This FRAP data includes perimeters of past wildfires and serves as the geographic reference needed to select satellite imagery with GEE. 
+The initial step is to gather geo-referenced forest wildfire polygon data from California, sourced from the Fire and Resource Assessment Program (FRAP) maintained by the California Department of Forestry and Fire Protection \citep{california_department_of_forestry_and_fire_protection_2024}. This FRAP data includes perimeters of past wildfires and serves as the geographic reference needed to select satellite imagery with GEE. Figure \ref{fig2} illustrates the polygons from the FRAP. The polygons delineated in purple represent areas affected by wildfires in forested regions. These delineated polygons are used to create the CWGID. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{polygons.png}
+    \caption{Representation of the Polygon Data from the FRAP. Polygons delineated in purple represent wildfires that occurred in forested areas, used for the California Wildfire GeoImaging Dataset (CWGID). \label{fig2}}
+\end{figure}
 
 Then, in Python, the Pandas library \citep{pandas1} is used to organize the forest wildfire attribute data into a Pandas DataFrame, which is then filtered to align with the launch date and operational phase of the Sentinel-2 satellites, selected for their open-source, high-resolution imagery capabilities \citep{DRUSCH201225}. Additionally, the dates are adjusted to fall within the green-up period, avoiding the winter and fall seasons where snow cover could interfere with identifying burnt areas.
 
@@ -68,11 +92,10 @@ GEE is a cloud-based platform for global environmental data analysis. It combine
 
 Multiple steps are needed to set up the GEE's Python API. First, a project is created in Google Cloud Console and the Earth Engine API is enabled. Authentication and Google Drive editing rights are configured to effectively manage and store the downloaded imagery. Following the setup, the Earth Engine Python API is installed on a local machine, and the necessary authentications are performed to initialize the API. 
 
-Then, a Python script is developed to automate the download of images depicting the pre- or post-wildfire data using GEE's Python API (see Code \ref{download}). To download three-channel RGB GeoTIFF imagery, the bands B4, B3, and B2 need to be specified (different band compositions can be selected in this step).  
+Then, a Python script is developed to automate the download of images depicting the pre- or post-wildfire data using GEE's Python API (see Code \ref{download}). To download three-channel RGB GeoTIFF imagery, the bands B4 (red), B3(green), and B2(blue) need to be specified (different band compositions can be selected in this step). In satellite imagery, bands refer to specific wavelength ranges captured by the satellite sensors, and they are used to create composite images that highlight different features of the Earth's surface. These bands correspond to the visible spectrum, which is useful for visual interpretation and analysis.
+The script to download the satellite imagery needed using GEE (see Code \ref{download}) is configured with a for loop to iterate through each entry in the DataFrame, extracting necessary parameters such as date ranges, region of interest (ROI) coordinates, and center coordinates of each wildfire polygon. Also, the script is designed to specify parameters such as the desired image collection and a threshold for cloud coverage. Tiles exhibiting more than 10\%  cloud coverage are automatically excluded to maintain data quality. Finally, the images are downloaded and exported to Google Drive in a GeoTIFF format. 
 
-More specifically, the script is configured with a for loop to iterate through each entry in the DataFrame, extracting necessary parameters such as date ranges, region of interest (ROI) coordinates, and center coordinates of each wildfire polygon. Also, the script is designed to specify parameters such as the desired image collection and a threshold for cloud coverage. Thus, tiles exhibiting more than 10\%  cloud coverage are automatically excluded to maintain data quality.
-
-Finally, the images are downloaded and exported to Google Drive in a GeoTIFF format. 
+Code \ref{download} depicts the script to automate the download of pre- or post-wildfire images using GEE’s Python API. It iterates through a DataFrame, extracting relevant parameters and downloading images with less than 10\% cloud coverage. The images are exported as GeoTIFF files to Google Drive.
 
 \begin{lstlisting}[language=Python, label= download, caption = Downloading Images Using GEE and a DataFrame]
 #Authenticate into EE
@@ -82,7 +105,7 @@ ee.Authenticate()
 ee.Initialize()
 
 # Initialize a list for iteration
-num = []
+indices = []
 for i in range(0, x):  # modify depending on your number of data points
     num.append(i)
 
@@ -91,24 +114,25 @@ bands_rgb = ['B4', 'B3', 'B2']  # Red, Green, Blue
 
 event_type = 'before'  # Toggle this to 'after' as needed
 
-for i in num:
-    # Set the center point
-    point = ee.Geometry.Point(round(data[i][1], 2), round(data[i][2], 2))
+for i in indices:
+    # Set the center point of the wildfire polygon
+    center_point = ee.Geometry.Point(round(data[i][1], 2), round(data[i][2], 2))
 
-    # Call an image for the selected point
-    tile = ee.ImageCollection('COPERNICUS/S2') \
-        .filterBounds(point) \
-        .filterDate(data[i][3], data[i][4]) \
-        .sort('CLOUDY_PIXEL_PERCENTAGE') \
-        .first()
+    # Select an image from the specified satellite collection for the center point
+    tile = ee.ImageCollection('COPERNICUS/S2') \ # Define the satellite imagery you will be working with, in this case Sentinel 2
+        .filterBounds(center_point) \
+        .filterDate(data[i][3], data[i][4]) \ # Define a date range for the satellite image
+        .sort('CLOUDY_PIXEL_PERCENTAGE') \ # Organize the images based on the % cloud cover
+        .first() # Get the image with the lowest cloud cover
+
 
     # Check the properties of the image
     image_properties = tile.getInfo()
     cloudy_percentage = image_properties.get(
-        'properties', {}).get('CLOUDY_PIXEL_PERCENTAGE', 0)
-
-    if cloudy_percentage <= 10:
-        # Define the ROI
+        'properties', {}).get('CLOUDY_PIXEL_PERCENTAGE', 0) # Obtain the exact percentage of cloud cover for each image
+    # Proceed if the image has less than 10% cloud coverage
+    if cloudy_percentage <= 10: 
+        # Define the Region of Interest (ROI) using the provided coordinates
         roi = ee.Geometry.Polygon([[
             [data[i][9], data[i][10]],
             [data[i][11], data[i][12]],
@@ -116,28 +140,28 @@ for i in num:
             [data[i][15], data[i][16]],
             [data[i][17], data[i][18]]]])
 
-        # Select RGB bands
+        # Select the RGB bands from the image
         rgb_tile = tile.select(bands_rgb)
 
         # Export RGB image to Google Drive
         rgb_task = ee.batch.Export.image.toDrive(**{
             'image': rgb_tile,
             'description': f'RGB_{event_type}Fire'
-            + str(data[i][0]),
-            'folder': f'GEE_FireImagesRGB_{event_type}',
+            + str(data[i][0]), # Descriptive name for the task
+            'folder': f'GEE_FireImagesRGB_{event_type}', # Folder in Google Drive to save the image
             'scale': 10,  # Adjust the scale as needed
-            'region': roi.getInfo()['coordinates'],
-            'crs': 'EPSG:4326',
-            'fileFormat': 'GeoTIFF',
+            'region': roi.getInfo()['coordinates'], # Region of Interest for the export 
+            'crs': 'EPSG:4326', # Coordinate reference system
+            'fileFormat': 'GeoTIFF', # File format for the export
         })
         rgb_task.start()
 
-        # Wait for the task to complete
+        # Monitor the task status until it completes or fails
         while not rgb_task.status()['state'] in \
                 ['COMPLETED', 'FAILED', 'CANCELLED']:
             print(f'RGB Task for {event_type} fire is',
                   rgb_task.status()['state'])
-            # before checking again
+            # Add a short wait before checking again
 
         # Check the final task status
         rgb_task_status = rgb_task.status()
@@ -147,11 +171,19 @@ for i in num:
               fire: ", rgb_task_status.get(
             "error_message", "No error message"))
     else:
+        # Skip images with more than 10% cloud coverage
         print(
             f"Skipping image {i} due to cloudy percentage
             ({cloudy_percentage} %) > 10 %")
 
 \end{lstlisting}
+Figure \ref{fig3} presents an example of a pre-and-post RGB Sentinel-2 image pair of a forested area that was impacted by wildfires. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{prepost1.png}
+    \caption{Example of a  pre-and-post RGB image pair of a forested area affected by wildfires downloaded using GEE's Python API. \label{fig3}}
+\end{figure}
 \subsection{Creating the Ground Truth Wildfire Labels}
 Ground truth masks are essential in forest wildfire detection and general land cover classifications \citep{8113128}. In this project, masks are generated to label the data.
 
@@ -224,7 +256,15 @@ for index, row in gdf.iterrows():
                 dst.write(clipped_mask.astype(np.uint8), 1)
 \end{lstlisting}
 
-In the final ground truth masks, the pixel values are set to zero if they are outside of a wildfire polygon, indicating unaffected areas, and set to one if they are within the polygon boundaries, indicating areas affected by a forest wildfire.
+In the final ground truth masks, the pixel values are set to zero if they are outside of a wildfire polygon, indicating unaffected areas, and set to one if they are within the polygon boundaries, indicating areas affected by a forest wildfire. Figure \ref{fig4} displays an example of a resulting ground truth mask.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{label1.png}
+    \caption{Example of a resulting ground truth mask in a forested area affected by wildfires. The mask highlights wildfire-affected areas in yellow and unaffected areas in purple. This binary mask is used to train and validate deep learning models for accurate wildfire detection \label{fig4}}
+\end{figure}
+
+
 \subsection{Image Segmentation and Data Preparation for Deep Learning Architectures}
 Next, the satellite images and their corresponding ground-truth masks are cropped into smaller tiles that maintain the imagery's spatial resolution (10m). Often, satellite imagery needs to be resized and downscaled to accommodate deep learning (DL) architectures, which can result in the loss of essential details such as subtle indicators of early-stage wildfires. Moreover, using smaller images enhances the efficiency of DL models by lowering computational demands and speeding up training times \citep{hu2015transferring,marmanis2016deep}. 
 
@@ -239,42 +279,57 @@ from tifffile import imwrite
 
 # Function to save image tiles without changing the data type
 def save_rgb_tiles(image_path, output_folder, tile_size, parent_name):
+    # Open the source image file 
     with rasterio.open(image_path) as src:
-        height = src.height
-        width = src.width
-
+        height = src.height # Get the height of the source image
+        width = src.width # Get the width of the source image
+        
+        # Calculate the number of tiles in both dimensions
         num_rows = height // tile_size
         num_cols = width // tile_size
 
         tile_counter = 1  # Initialize the tile counter
-
+        
+        # Iterate over the number of rows of tiles
         for i in range(num_rows):
+            # Iterate over the number of columns of tiles
             for j in range(num_cols):
+                # Define the window for the current tile
                 window = Window(j * tile_size, i * tile_size, tile_size, tile_size)
 
                 # Read the original data without modifications
                 # Assuming band order B4, B3, B2
                 tile = src.read((1, 2, 3), window=window)
+                # Create a unique name for the tile
                 tile_name = f"{parent_name}_tile_{tile_counter}.tif"
+                # Define the path to save the tile
                 tile_path = os.path.join(output_folder, tile_name)
 
                 # Save the tile using tifffile without changing
                 # data type
                 imwrite(tile_path, tile)
 
-                # Update metadata with georeferencing information
+                # Copy the metadata from the source image
                 meta = src.meta.copy()
+                # Get the transformation matrix for the current window
                 transform = src.window_transform(window)
+	    	    # Update the metadata with the new dimensions and transformation
                 meta.update({
                     'width': tile_size,
                     'height': tile_size,
                     'transform': transform
                 })
-
+	            # Save the tile with updated metadata using rasterio
                 with rasterio.open(tile_path, 'w', **meta) as dst:
                     dst.write(tile)
                 tile_counter += 1  # Increment the tile counter
 \end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{crop.png}
+    \caption{Example of cropped pre- and post-wildfire images and their corresponding label}. \label{figcrop}
+\end{figure}
 
 By combining the capabilities of rasterio for efficient geospatial data handling and the tifffile library for preserving the RGB data during saving, the original images are cropped into smaller RGB tiles. This approach preserves the resolution and the georeferencing information of the images, preparing them to train DL applications.
 \subsection{Data Augmentation for Wildfire Damage Detection}
@@ -283,11 +338,34 @@ It is essential to have a balanced dataset that includes both forest wildfire-af
 To address this imbalance and enhance the model's accuracy in detecting wildfire-affected areas, data augmentation techniques are implemented. Specifically, functions using the rasterio and NumPy \citep{numpy} libraries are developed to perform image transformations, which include rotating the GeoTIFF tiles by 90°, 180°, and 270°, and flipping them horizontally and vertically. These transformations are applied to the imagery and the mask tiles that contain fire polygons and to their corresponding pre-wildfire RGB GeoTIFF tiles.
 
 Finally, the augmentation process increased the diversity of the training data and resulted in a total of 111,093 pairs of labeled RGB GeoTIFF image tiles. The final dataset consists of 82,011 negative instances (no wildfire damage) and 29,082 positive instances (wildfire damage), significantly improving the class balance and reducing the risk of overfitting.
+Figure X illustrates the data augmentation process applied to the satellite imagery and its labels. The original image tile is shown alongside its augmented versions, which include rotations and flips. This augmentation increases the diversity of the dataset, helping to balance the classes and improve the model's ability to detect wildfire-affected areas accurately.
+
+Figure \ref{fig0} illustrates the data augmentation process applied to the satellite imagery. The original image tile is shown alongside its augmented versions, which include rotations and flips. This augmentation increases the diversity of the dataset, helping to balance the classes and improve the model's ability to detect wildfire-affected areas accurately.
+\begin{figure}[H]
+    \centering
+    \includegraphics{augment.png}
+    \caption{Representation of the data augmentation performed to the 256px*256px tiles to increase positive examples of wildfire damage. \label{fig0}}
+\end{figure}
+
 \section{Evaluating the CWGID Using Convolutional Neural Networks}
 The CWGID is tested for demonstration purposes using the well-known CNN architectures VGG16 and EfficientNet, both implemented using Python's TensorFlow’s Keras API.
 
 \subsection{VGG16 Implementation}
 VGG16 \citep{Simonyan15} is a deep CNN designed for image processing and classification tasks. It consists of 13 convolutional layers, 5 pooling layers, and 3 fully connected layers. This model is adapted to train on the dataset and detect positive and negative instances of forest wildfires. The VGG16 architecture only trains on the post-wildfire 3-channel RGB imagery, which contains both.
+
+To use this CNN architecture with GeoTIFF satellite images, which typically store geographic data not supported by most deep-learning libraries, a custom function is implemented to process and feed the data to the model using the rasterio library and the shuffle function from the Scikit-learn library \citep{sklearn1,sklearn2}. This function (see Code \ref{lst}) is crucial for handling the unique structure of GeoTIFF files and converting them into a format suitable for deep learning. It is designed to read batches of GeoTIFF files, shuffle them to ensure randomness, and process them into a three-dimensional array compatible with VGG16. Here is how it works:
+
+\begin{itemize}
+\item File Paths Initialization: The function starts by taking the file paths of the GeoTIFF images and shuffling them using the shuffle function from Scikit-learn to ensure the batches are randomly ordered.
+
+\item Batch Processing: It processes the images in batches of 32 files. For each batch, the function initializes empty lists for images and labels.
+
+\item Reading and Transforming Images: It reads each GeoTIFF file using rasterio. The images are then transformed to have the channels last (i.e., changing the format from \textbf{(channels, height, width)} to \textbf{(height, width, channels))} to use with Keras.
+
+\item Labels are assigned based on the presence of "Damaged" in the file paths. Specifically, if the file path contains the string "/Damaged/", the image is labeled as 1 (indicating it shows a damaged area). If the file path does not contain this string, the image is labeled as 0 (indicating it shows an undamaged area). In this method, the ground-truth masks are not directly used but are leveraged to define the imagery file paths. Hence, if the mask of an image had at least one pixel with a value of one, the image was redirected to the "Damaged" files.
+
+\item Yielding Batches: Finally, the function yields batches of images and labels as numpy arrays, which are then fed into the VGG16 model for training.
+\end{itemize}
 
 To use this CNN architecture with GeoTIFF satellite images, which typically store geographic data not supported by most deep-learning libraries, a custom function to feed the data to the model is built using the rasterio library and the shuffle function from the Scikit-learn library \citep{sklearn1,sklearn2} (see Code \ref{lst:custom_generator}). 
 
@@ -322,6 +400,9 @@ def custom_image_generator(file_paths, batch_size):
 \end{lstlisting}
 
 To detect wildfire-affected areas with VGG16, the model is initiated using the pre-trained weights from the ImageNet dataset. The convolutional base is frozen to preserve the integrity of the learned features and to focus on the training of the added layers. A Flatten operation is applied to the output to transform the two-dimensional feature maps into a one-dimensional vector. Then, a fully connected dense layer with 1024 neurons and ReLU activation is added. Finally, the network becomes a single-neuron dense layer with a sigmoid activation function that produces a probability score of wildfire damage. The complete model is compiled with the Adam optimizer \citep{kingma2014adam}, binary cross-entropy loss \citep{goodfellow2016deep}, and accuracy, precision, and recall as the performance metrics (see Code \ref{lst:vgg16_wildfire_detection}). The Adam optimizer is chosen because it adapts the learning rate during training. In the context of satellite image classification, where the landscape can vary significantly across images, Adam’s ability to adjust the learning rate is important. Also, the binary cross-entropy loss is chosen because it is tailored for binary classification tasks, such as classifying between damaged and undamaged areas in satellite images.
+
+This model was executed on a MacBook Pro (2019) equipped with a 2.4 GHz Intel Core i9 processor and 16 GB of 2400 MHz DDR4 memory. Satellite image data usually requires significant storage and processing power. Handling and processing such large datasets can be computationally intensive and time-consuming. Moreover, each image contains a large amount of data across the chosen spectral bands and stores geographic information that needs to be preserved. Thus, the scale and speed of model training can be constrained by these factors. 
+
 \begin{lstlisting}[language=Python, caption={Adaptation of VGG16 for Wildfire Damage Detection}, label= lst:vgg16_wildfire_detection]
 from keras.models import Model
 from keras.layers import Flatten, Dense
@@ -352,7 +433,8 @@ model.compile(optimizer=Adam(learning_rate=0.0001),
 \end{lstlisting}
 
 The VGG16 model is trained and validated on 95594 three-channel RGB images (45\% of the data, divided as follows: 80\% for training and
-10\% for validation) and is tested on 10621 images (5\% of the data). Training took 1953 minutes for 10 epochs. 
+10\% for validation) and is tested on 10621 images (5\% of the data). Training took 1953 minutes for 10 epochs.
+
 \subsection{EfficientNet Implementation}
 \begin{figure}[H]
     \centering
@@ -369,14 +451,15 @@ from keras.utils import Sequence
 
 class SixChannelGenerator(Sequence):
     # Change this depending on your own data
+    # Initialize the generator
     def __init__(
         self,
-        file_paths,
-        labels,
-        batch_size=32,
-        dim=(256, 256),
-        n_channels=6,
-        shuffle=True,
+        file_paths, # List of file paths to the six-channel GeoTIFF images
+        labels, # Corresponding labels for the images
+        batch_size=32, # Number of images to be returned in each batch
+        dim=(256, 256), # Dimension of the images
+        n_channels=6, # Number of channels in the images (6 in this case)
+        shuffle=True, # Shuffle the data at the end of each epoch
     ):
         self.file_paths = file_paths
         self.labels = labels
@@ -385,35 +468,37 @@ class SixChannelGenerator(Sequence):
         self.n_channels = n_channels
         self.shuffle = shuffle
         self.on_epoch_end()
-
+    # Define the number of batches 
     def __len__(self):
         return int(np.ceil(len(self.file_paths) / self.batch_size))
-
+    # Generate batch of data
     def __getitem__(self, index):
+        # Generate indices of the batch
         batch_paths = self.file_paths[
             index * self.batch_size: (index + 1) * self.batch_size
         ]
         batch_labels = self.labels[
             index * self.batch_size: (index + 1) * self.batch_size
         ]
+        # Initialize the arrays for the batch data and labels
         batch_x = np.empty(
             (len(batch_paths), *self.dim,
              self.n_channels), dtype=np.float32
         )
         batch_y = np.array(batch_labels, dtype=np.float32)
-
+        # Load and read the data for each file in the batch
         for i, path in enumerate(batch_paths):
             with rasterio.open(path) as src:
+		# Read the image and select the first 'n_channels' channels
                 img = src.read()[: self.n_channels,
                                  : self.dim[0],
                                  : self.dim[1]]
-                # Convert from channels_first to
-                # channels_last format
+		# Convert from channels_first to channels_last format
                 img = np.moveaxis(img, 0, -1)
-                batch_x[i,] = img / 255.0  # Normalize images
+                batch_x[i,] = img / 255.0  # Normalize images to [0, 1] range
 
         return batch_x, batch_y
-
+    # Shuffle the data at the end of each epoch
     def on_epoch_end(self):
         if self.shuffle:
             temp = list(zip(self.file_paths, self.labels))
@@ -464,18 +549,51 @@ model.compile(optimizer='adam',
 
 Before training, class weights are calculated using the Scikit-learn library. Furthermore, Keras callbacks are set up for early stopping, model checkpointing, and reducing the learning rate when the validation loss plateaus, which helps optimize the training process. As VGG16, the model is compiled with the Adam optimizer and binary cross-entropy loss, with accuracy, precision, and recall as performance metrics.
 
-For testing purposes, this EF architecture is trained on 23833 pre- and post-wildfire image pairs (22.5\% of the data, divided as follows: 80\% for training and 10\% for validation) and is tested on 2716 pre- and post-wildfire image pairs (2.5\% of the data). Training took 933 minutes for 13 epochs. 
+For testing purposes, this EF architecture is trained on 23833 pre- and post-wildfire image pairs (22.5\% of the data, divided as follows: 80\% for training and 10\% for validation) and is tested on 2716 pre- and post-wildfire image pairs (2.5\% of the data). Training took 933 minutes for 13 epochs. The detailed training and validation performance metrics for each epoch are provided in Table \ref{tab:1}. 
+
+During the training process, the model's performance on the training set showed a consistent decrease in loss and an increase in accuracy, precision, and recall. Specifically, the training loss decreased from 0.4825 in the first epoch to 0.1020 by the thirteenth epoch. Similarly, the training accuracy improved from 0.7971 to 0.9588, precision increased from 0.7204 to 0.9665, and recall increased from 0.4053 to 0.8776 over the same period.
+
+On the validation (val) set, the performance metrics exhibited positive trends as well. The validation loss decreased overall, starting at 0.6073 in the first epoch and reaching 0.1956 by the thirteenth epoch. The validation accuracy began at 0.7843, peaked at 0.9359 around the eighth epoch, and remained high at 0.9333 by the final epoch. Validation precision and recall also showed improvements, with precision starting at 0.9407 and reaching up to 0.9606, while recall improved from 0.1838 to 0.7959.
+
+\begin{table}[H]
+    \centering
+    \label{tab:1}
+    \caption{Performance Metrics for Training and Validation Sets Using EfficientNetB0 Across Epochs. \label{tab:1}}
+    \begin{tabular}{ccccccccc}
+    \toprule
+\textbf{Epoch} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} & \textbf{Val Accuracy} & \textbf{Val Precision} & \textbf{Val Recall} & \textbf{Val F1 Score} \\
+    \midrule
+    1/20 & 0.7971 & 0.7204 & 0.4053 & 0.5507 & 0.7843 & 0.7688 & 0.4973 & 0.6040 \\
+    2/20 & 0.8803 & 0.8299 & 0.6995 & 0.6796 & 0.8703 & 0.7499 & 0.5754 & 0.6511 \\
+    3/20 & 0.8979 & 0.8599 & 0.7424 & 0.7437 & 0.8152 & 0.8034 & 0.5404 & 0.6462 \\
+    4/20 & 0.9022 & 0.8668 & 0.7531 & 0.7949 & 0.8179 & 0.7222 & 0.6024 & 0.6569 \\
+    5/20 & 0.9187 & 0.9016 & 0.7842 & 0.8367 & 0.9125 & 0.7597 & 0.5647 & 0.6478 \\
+    6/20 & 0.9265 & 0.9156 & 0.8015 & 0.8663 & 0.9310 & 0.7014 & 0.5948 & 0.6437 \\
+    7/20 & 0.9298 & 0.9181 & 0.8121 & 0.8879 & 0.9363 & 0.7289 & 0.5726 & 0.6414 \\
+    8/20 & 0.9346 & 0.9260 & 0.8235 & 0.9014 & 0.9359 & 0.7104 & 0.5946 & 0.6474 \\
+    9/20 & 0.9370 & 0.9274 & 0.8315 & 0.9132 & 0.9057 & 0.7580 & 0.5464 & 0.6350 \\
+    10/20 & 0.9424 & 0.9387 & 0.8416 & 0.9157 & 0.9291 & 0.7522 & 0.5835 & 0.6572 \\
+    11/20 & 0.9537 & 0.9590 & 0.8655 & 0.9500 & 0.9333 & 0.9386 & 0.7959 & 0.8672 \\
+    12/20 & 0.9573 & 0.9644 & 0.8739 & 0.9576 & 0.9363 & 0.9516 & 0.7959 & 0.8650 \\
+    13/20 & 0.9588 & 0.9665 & 0.8776 & 0.9622 & 0.9333 & 0.9606 & 0.7757 & 0.8712 \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+There is a slight decrease in the validation performance metrics when compared to the training performance metrics. However, the validation metrics remain high, which suggests that the model is generalizing well to unseen data but the consistent gap between training and validation performance metrics indicates a slight degree of overfitting for the EfficientNetB0 application. 
+
 
 \subsection{DL Results}
-The results in Table \ref{tab:1} compare the performance of the two neural network architectures used on the CWGID. Each architecture's performance metrics are assessed, including loss, accuracy, precision, recall, and training time. Also, the percentage of the CWGID used to train each architecture is specified. 
+The results in Table \ref{tab:2} compare the performance of the two neural network architectures used on the CWGID. Each architecture's performance metrics are assessed, including loss, accuracy, precision, recall, and training time. Also, the percentage of the CWGID used to train each architecture is specified. 
 
 Both models are trained with subsets of the CWGID dataset, with the 6-channel input EF EfficientNet model using 25\% of the data and the VGG16 model using 50\% of the data. 
 
 The 6-channel input EfficientNet achieved the lowest loss (0.178) and highest accuracy (92.6\%), making it the most effective model in terms of overall performance. Its precision was at 92.5\% and its recall was 81.9\%, indicating a strong ability to identify damaged areas correctly with some missed detections. VGG16, despite processing a larger dataset, had a higher loss (1.220) but maintained an accuracy of 83.2\%. Its precision was 74.9\% and its recall was 58.8\%. This architecture took a longer training time. The EfficientNet model shows a relatively faster training time when considering the epochs and the amount of data used.  The 6-channel input EfficientNet demonstrated superior performance in accurately classifying areas affected by wildfires with high precision and accuracy, making it an efficient choice for applications where quick and accurate assessments are critical. Moreover, it is important to mention that VGG16 was tested with Six-Channel inputs but proved computationally intensive.
+ 
 
  \begin{table}[H]
     \centering
-    \caption{Performance Metrics of the Models. \label{tab:1}}
+    \caption{Performance Metrics of the Models. \label{tab:2}}
     \begin{tabular}{ccc}
     \toprule
     \textbf{Model} & \textbf{6-channel input EfficientNet} & \textbf{VGG16} \\
@@ -500,7 +618,7 @@ On top of that, the dataset's bi-temporal collection of pre- and post-wildfire s
 
 \section{Conclusion}
 
-This paper illustrates a Python methodology that integrates DL with satellite imagery to enhance environmental monitoring. Specifically, the development of the California Wildfire GeoImaging Dataset (CWGID) and its evaluation using DL architectures are outlined. The approach explained throughout this work improves the accurate and timely detection of forest wildfires and can be applied to a broad range of environmental issues, beyond just wildfire detection.
+This paper illustrates a Python methodology that integrates DL with satellite imagery to enhance environmental monitoring. Specifically, the development of the California Wildfire GeoImaging Dataset (CWGID) and its evaluation using DL architectures are outlined. The approach explained throughout this work allows for accurate detection of forest wildfires, as demonstrated using DL architectures, and can be applied to a broad range of environmental issues beyond just wildfire detection.
 Firstly, historical data, Python-based tools, and Google Earth Engine are leveraged to build and label a large, cloud-free Sentinel-2 satellite imagery dataset depicting forest wildfire examples. Then, this dataset is used to train well-known CNN architectures, enabling the effective detection of forest wildfires within the satellite imagery. An accuracy of 92.6 \% with the EfficientNet model was obtained, indicating the potential effectiveness of the methodology.
 Future studies will include using Fully Convolutional Networks (FCNs), like U-Nets \citep{DBLP:RonnebergerFB15}, because they allow pixel-wise classification. It is anticipated that these networks will enhance the accuracy of detecting and mapping wildfire-affected areas, leveraging the detailed ground truth masks included within the CWGID.
 
