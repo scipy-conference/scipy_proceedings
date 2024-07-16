@@ -604,7 +604,7 @@ A simplified example is shown in @code:container.
 ```{code-block} html
 :label: code:container
 :linenos: true
-:caption: A simplified version of the Vue template for `OverlayContainer`. The `<div> tag with `v-for` reactively produces a `<div>` tag for each widget in the `children` list attribute within the Python model. Note, the style attribute is bound and references the position arrays on lines 21--22. Changing the position of each overlay widget is done by modifying the corresponding values in these arrays. We keep these arrays only on the JavaScript side to prevent undue traffic between the Python and JavaScript models from high-frequency events (e.g., mouse movements) that can cause significant lag in the interface.
+:caption: A simplified version of the Vue template for `OverlayContainer`. The `<div>` tag with `v-for` reactively produces a `<div>` tag for each widget in the `children` list attribute within the Python model. Note, the style attribute is bound and references the position arrays on lines 21--22. Changing the position of each overlay widget is done by modifying the corresponding values in these arrays. We keep these arrays only on the JavaScript side to prevent undue traffic between the Python and JavaScript models from high-frequency events (e.g., mouse movements) that can cause significant lag in the interface.
 
 <template>
     <div class="ipyoverlay-container">
