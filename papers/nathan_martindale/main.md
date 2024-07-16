@@ -145,7 +145,7 @@ regenerates/displays the new plot.
 :::
 
 More complex interfaces often require displaying multiple visualizations and
-outputs and may have controls that must interact with each other. Thus, in
+outputs and may have controls that must interact. Thus, in
 practice a more common setup might follow a pattern shown in
 @code:ipywidgets_dashboard, where several user input and output widgets are
 defined and placed into a layout widget. UI code is generally event driven, so
@@ -168,9 +168,9 @@ import ipywidgets as ipw
 graph1_out = ipw.Output()
 graph2_out = ipw.Output()
 
-parameter1 = ipw.FloatSlider(...)
-parameter2 = ipw.IntText(...)
-parameter3 = ipw.IntSlider(...)
+parameter1 = ipw.FloatSlider(min=0, max=10, value=1)
+parameter2 = ipw.IntText(value=1)
+parameter3 = ipw.IntSlider(min=0, max=10, value=1)
 
 # create the dashboard layout, combining all the widgets
 dashboard = ipw.VBox([
@@ -181,22 +181,25 @@ dashboard = ipw.VBox([
 # event handler functions
 def on_parameter1_change(change):
     with graph1_out:
-        graph1_render_function(parameter1.value, parameter2.value)
+        print(f"parameter 1 is {change['new']} and parameter 2 is {parameter2.value}.")
         
 def on_parameter2_change(change):
     with graph1_out:
-        graph1_render_function(parameter1.value, parameter2.value)
+        print(f"parameter 1 is {parameter1.value} and parameter 2 is {change['new']}.")
     with graph2_out:
-        graph2_render_function(parameter2.value, parameter3.value)
+        print(f"parameter 2 is {change['new']} and parameter 3 is {parameter3.value}.")
         
 def on_parameter3_change(change):
     with graph2_out:
-        graph2_render_function(parameter2.value, parameter3.value)
+        print(f"parameter 2 is {parameter2.value} and parameter 3 is {change['new']}.")
 
 # attach event handlers
 parameter1.observe(on_parameter1_change, names=["value"])
 parameter2.observe(on_parameter2_change, names=["value"])
 parameter3.observe(on_parameter3_change, names=["value"])
+
+# render the dashboard
+dashboard
 ```
 
 
@@ -450,7 +453,7 @@ prefixed with `jupyter_` callable from Python.
 ```{code-block} python
 :label: code:ipyvuetify
 :linenos: true
-:caption: An example of a custom IPyVuetify component. `color1`, `color2`, and `state` are all part of the automatically synced models. We can refer to them in the Vue bindings as shown on lines 15 and 16, where line 16 is an inline event handler that modifies the `state` property when the button is clicked.
+:caption: An example of a custom IPyVuetify component. `color1`, `color2`, and `state` are all part of the automatically synced models. We can refer to them in the Vue bindings as shown on lines 15 and 16, where line 16 is an inline event handler that modifies the `state` property when the button is clicked. Updating the traitlets on the Python model updates the referenced values in the Vue bindings, e.g. `button.color2 = "var(--md-green-600)"` changes the second color programmatically.
 import traitlets
 import ipyvuetify as v
 
@@ -470,6 +473,11 @@ class ColoredToggleButton(v.VuetifyTemplate):
             >Press to change color!</v-btn>
         </template>
         """
+
+button = ColoredToggleButton()
+
+# render the button
+button
 ```
 
 :::{figure} ipyvuetify_example.drawio.png
