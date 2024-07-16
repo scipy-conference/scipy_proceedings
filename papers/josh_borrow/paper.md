@@ -310,16 +310,21 @@ systems often lacked necessary features and caused significant complications
 to explicitly delegate metadata management to other subsystems within the
 project, focusing only on file transfers.
 
-#### User Management
+#### User and Librarian Management
 During the initial setup of the system, an administrator user is provisioned to
 facilitate further management tasks. This primary administrator has the ability
 to create additional user accounts through the `librarian` command-line tool.
-These accounts can be configured with different levels of permissions to suit
-various needs. Specifically, accounts can be granted full administrator
-privileges, read and append only privileges, or callback-only privileges. To
-ensure security, user passwords are salted and hashed in the database using the
-Argon2[^argon2] algorithm. The API employs HTTP Basic Authentication for user
-verification and access control.
+
+Both 'users' (i.e. those interacting with the system to ingest data) and
+'librarians' (other copies of the application running on other systems) need
+accounts. These accounts can be configured with different levels of permissions
+to suit various needs. Specifically, accounts can be granted full administrator
+privileges, read and append only privileges, or callback-only privileges.
+Callback-only privalages are crucial for remote sites like telescopes, as they
+ensure that downstream librarians only have extremely limited access to both the
+underlying data and its associated metadata. To ensure security, user passwords
+are salted and hashed in the database using the Argon2[^argon2] algorithm. The
+API employs HTTP Basic Authentication for user verification and access control.
 
 #### Storage Management
 In the Librarian system, storage is abstracted into entities known as 'stores'.
