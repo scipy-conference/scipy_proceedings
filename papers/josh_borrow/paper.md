@@ -73,6 +73,8 @@ corollary, simplicity) that would be incomprehensible in an industrial context.
 This paper is about solving the base-level problem: how to get raw experiment
 data totaling around 1 PB a year from a remote site (in our case, the top of a
 mountain in Chile), to various science consumers distributed across the globe.
+Our data is comprised of folders (termed 'books'), each containing 10-20 GB of
+data, laid out in a pre-determined scheme in a POSIX filesystem.
 
 ## Comparing Data Flows
 ```{figure} ./Display.svg
@@ -261,8 +263,11 @@ transferred directly, rather than having this be handled through a series of API
 calls. These background tasks are scheduled automatically using the lightweight
 `schedule` library.
 
-The Librarian is open source and available through GitHub[^librarian],
-under the BSD-2-Clause license.
+The Librarian is a specialized tool that excels in reproducing the data and
+layout of a POSIX-compatible filesystem on a system with downstream nodes in a
+loosely-coupled manner, all whilst maintaining tight control on _how_ data is
+transferred. The Librarian is open source and available through
+GitHub[^librarian], under the BSD-2-Clause license.
 
 ### Technology Choices
 For this project, it was crucial that we used the Python language, as this is
@@ -316,12 +321,12 @@ facilitate further management tasks. This primary administrator has the ability
 to create additional user accounts through the `librarian` command-line tool.
 
 Both 'users' (i.e. those interacting with the system to ingest data) and
-'librarians' (other copies of the application running on other systems) need
+'Librarians' (other copies of the application running on other systems) need
 accounts. These accounts can be configured with different levels of permissions
 to suit various needs. Specifically, accounts can be granted full administrator
 privileges, read and append only privileges, or callback-only privileges.
 Callback-only privalages are crucial for remote sites like telescopes, as they
-ensure that downstream librarians only have extremely limited access to both the
+ensure that downstream Librarians only have extremely limited access to both the
 underlying data and its associated metadata. To ensure security, user passwords
 are salted and hashed in the database using the Argon2[^argon2] algorithm. The
 API employs HTTP Basic Authentication for user verification and access control.
