@@ -372,17 +372,16 @@ The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter
 This program requires clicking on a microphone icon repeatedly, which makes the user vulnerable to repetitive stress injuries.
 The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
 Although the extension's name suggests it uses GitHub's Copilot, it uses whisper-1 and ChatGPT3.
-This extension requires an API key for ChatGP3.
-The robustness of our approach is that the *Voice-In Plus* should work in all versions of  Jupyter Lab and Jupyter Notebook.
+This extension requires an API key for ChatGPT3.
+The robustness of our approach is that the *Voice-In Plus* should work in all versions of Jupyter Lab and Jupyter Notebook.
 
 ### Coping with the imperfections of the language model
 
-One aspect of speech-to-text that it is important to bring up are some persistent errors in translation.
+One aspect of speech-to-text that it is important to bring up is persistent errors in translation.
 These persistent errors may be due to the language model having difficulties interpreting your speech.
-For example, the language model often misinterprets for me the *word'* write as *right*'.
+For example, the language model often misinterprets the word  *write* as *right*'.
 Likewise, the letter R is frequently returned as *are* or *our*'.
 I have had trouble enunciating the letters *w* and *r* clearly since I was a child.
-I do find myself trying to enunciate more clearly while I am dictating, so eventually, a side effect of doing dictation regularly may be improved clarity of my speech in general.
 The remedy for the situations is to map the misinterpreted phrase to the intended phrase.
 
 This remedy might be the best that can be done in for those users who have a heavy accent and are from a country that is not represented by the selection of English dialects.
