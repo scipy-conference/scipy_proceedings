@@ -341,15 +341,15 @@ They removed our bloated library, and we used the bulk add button to upload a sm
 
 ## Discussion
 
-The following discussion points, crucial for understanding the implementation of the ASR libraries we've described, have emerged.
+The following discussion points are crucial for understanding the implementation of the ASR libraries that we have described.
 We limit the discussion to the software that we have presented above.
 
 ### Independence from breaking changes in Jupyter
 
-The Jupyter project lacks built-in support for code snippet libraries.
+The Jupyter project lacks built-in support for libraries of code snippets.
 The development of third-party extensions is a necessity to support code snippets.
-Unfortunately, changes in the core of Jupyter often break these extensions.
-Users have to create Python environments for older versions of Jupyter to work with the snippets extension while missing out on the new features of Jupyter.
+Unfortunately, changes in the core of Jupyter occasionally break these extensions.
+Users have to create Python environments for older versions of Jupyter to work with their outdated snippet extension while missing out on the new features of Jupyter.
 An obvious solution to this problem would be for the Jupyter developers to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for snippets is always available.
 Using voice-triggered snippets external to Jupyter side steps difficulty with breaking changes to Jupyter.
 
@@ -357,11 +357,11 @@ Using voice-triggered snippets external to Jupyter side steps difficulty with br
 ### Voice-triggered snippets can complement AI-assisted voice computing
 
 The use of voice-triggered snippets requires knowledge of the code that you want to insert.
-The code that is inserted will be inserted quicly and will be correct.
-In contrast, AI assistants can finding code that you do not know about to solve the problem described in your prompt.
+The is the cost that had to be paid to gain access to quickly inserted code snippets that work.
+In contrast, AI assistants can find code that you do not know about to solve the problem described in your prompt.
 From personal experence, the retrieval of the correct code can take multiple iterations of refining the prompt.
 Expert users will find the correct code in several minutes while beginners may take much longer.
-An area of future research is to use AI assistants indexed on snipppet libraries to retrieve the correct voice-triggered snippet.
+An area of future research is to use AI assistants that have libraries indexed on snipppet libraries to retrieve the correct voice-triggered snippet.
 
 ### Automated speech recogination extensions for Jupyter lab
 
