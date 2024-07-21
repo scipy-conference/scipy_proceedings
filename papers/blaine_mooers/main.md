@@ -117,16 +117,15 @@ All libraries are made available at MooersLab on GitHub for download.
 
 ## Results
 
-First, we describe the contents of the snippet libraries and the kinds of problems they can solve.
+First, we describe the contents of the snippet libraries and the kinds of problems they solve.
 We group the libraries into several categories to simplify their explanation.
 Second, we describe the deployment of the snippet libraries for Voice In Plus (VIP), an automated speech recognition plugin for the web browsers Google Chrome and Microsoft Edge.
 The Voice In Plus plugin has a gentle learning curve.
 
 ### Composition of the libraries
 
-We present the libraries we crafted to streamline using Jupyter with voice commands.
-Our descriptions of these libraries illustrate how voice-triggered snippets work with automated speech recognition software.
-Developers can leverage our libraries in two ways: by enhancing them with their unique commands or by using them as blueprints to create their libraries from scratch.
+Our descriptions of these libraries include examples to illustrate how voice-triggered snippets work with automated speech recognition software.
+Developers can leverage our libraries in two ways: by enhancing them with their unique commands or by using them as blueprints to create libraries from scratch.
 
 The libraries are made available in a modular format so the user can select the most valuable commands for their workflow.
 In general, our libraries are broad in scope, so they meet the needs of most users.
@@ -137,9 +136,11 @@ We divided the contents of the libraries into two categories.
 One subset of libraries supports dictating about science in the Markdown cells of Jupyter notebooks, while the other subset supports writing scientific Python in code cells.
 These voice-triggered snippets can also be applied to Markdown and code cells in Colab Notebooks.
 While some code, such as IPython line and cell magics, is specific to Jupyter, most of the voice-triggered snippets can be used in Markdown files and Python scripts being edited in Jupyter Lab.
+
 Likewise, these snippets can be used in other browser-hosted text editors such as the new web version of Visual Studio Code.
 This is because Voice In Plus works in most text areas of web browsers.
-These means that ample text area like that found in Write Honey site can be used to draft documents and Python scripts with the aid of Voice In Plus snippets and then be directly edited by an advanced text editor by using GhostText to connect the web-based text area to a text editor.
+These means that the ample text area like that found in Write Honey website site can be used to draft documents and Python scripts with the aid of Voice In Plus snippets.
+The code or text be directly edited by an advanced text editor by using the GhostText plugin to connect the web-based text area to a text editor.
 Alternately, the draft document or script can be copied and saved to a file that is imported into Jupyter Lab for furtther editing.
 
 ### Libraries for Markdown cells
@@ -171,14 +172,19 @@ Webpage of custom commands. The buttons are used to edit existing commands and a
 
 We grouped the voice triggers by the first word of the voice trigger {ref}`table:commands`.
 This first word is often a verb.
-For instance, the word `expand' is a practical and useful command in our library. 
-This command expands acronyms, making it easier for users to understand the content.
-
+For instance, the word `expand' is used before an acronym that will be replaced with its expansion.
 One's memory of the words represented by the letters in the acronym often needs to be more accurate.
 The library ensures that one uses the correct expansion of the acronym.
 By providing instant access to the correct acronym expansions, the library significantly reduces the time that would otherwise be spent on manual lookups, allowing you to focus on your work.
 We have included acronyms widely used in Python programming, scientific computing, data science, statistics, machine learning, and Bayesian data analysis.
 These commands are found in domain-specific libraries, so users can select which voice triggers to add to their private collection of voice commands.
+
+The customized commands are listed in the Voice-In Plus GUI in alphabetical order with one command and its corresponding text replacement per row.
+The prefixes group like commands.
+This eases the manual look up of the commands.
+
+Some prefixes are two or more words long.
+For example, the compound preflx *insert Python* aids grouping of code by programming language.
 
 :::{table} Examples of voice commands with the prefix in bold that is used to group commands.
 :label: table:commands
@@ -188,14 +194,15 @@ These commands are found in domain-specific libraries, so users can select which
 |:------------------------------------------------------------------------------------------|
 | **expand** acronyms                                                                       |
 | **the book** title                                                                        |
-| **email** colleagues (i.e., inserts list of e-mail addresses)                                    |
-| **insert** code blocks (including equations in LaTeX)                                     |
-| **list** (e.g., font sizes in \LaTeX, steps in a protocol, members of a committee, etc.)  |
-| **open** webpage (e.g., open pytexas, open google scholar)                                |
+| **email** inserts list of e-mail addresses (e.g., email bayesian study group)|
+| **insert Python** (e.g., insert Python for horizontal bar plot)   |
+| **insert Markdown** (e.g., insert Markdown header 3)   |
+| **list** (e.g., list font sizes in beamer slides.)  |
+| **open** webpage (e.g., open google scholar)                                |
 | **display** insert equation in display mode (e.g., display electron density equation)   |
 | **display with terms** above plus list of terms and their definitions  (e.g., display electron density equation)   |
-| **inline** equation in-line (e.g., inline information entropy equation)                   |
-| **citekey** insert corresponding citekey (e.g., citekey Wilson 1942)  |
+| **inline** equation in-line (e.g., inline information entropy)  |
+| **citekey** insert corresponding citekey (e.g., citekey for Jaynes 1957)  |
 ::::
 
 :::{figure} ./images/DisplayElectronDensityEquation.png
@@ -207,20 +214,22 @@ These commands are found in domain-specific libraries, so users can select which
 Three snapshots from a Zoom video of using the voice-trigger *display electron density equation* in a Markdown cell in a Jupyter notebook. A. The Zoom transcript showing the spoken voice trigger. B. The text replacement in the form of a math equation written in LaTeX in display mode in the Markdown cell. C. The rendered Markdown cell. The green and black tab on the right of each panel indicates that the Voice In plugin is active and listening for speech.
 :::
 
-Another example of a verb starting a voice trigger is the command `display  <equation name>`.
+Another example of a verb starting a voice trigger is the command `display <equation name>`.
 This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
 For instance, the voice trigger `display the electron density equation` is a testament to the convenience of our system, as shown in the transcript of a Zoom video {ref}`fig:displayeq`. 
 The image in the middle shows the text replacement as a LaTeX equation in the display mode.
 This image is followed by the resulting Markdown cell after rendering by running the cell.
 
 Likewise, the command `inline <equation name>` is used to insert equations in prose sections in Markdown cells.
-We've introduced practical voice-triggered snippet libraries, specifically designed for equations commonly used in Bayesian data analysis and structural biology.
+We have  introduced voice-triggered snippet libraries for equations commonly used in machine learning and Bayesian data analysis https://github.com/MooersLab/.
+These equations can also be used a templates to generate new equations.
 While the development of libraries are still in progress, they serve as flexible templates that can be adapted for any specific domain.
 
 Some voice triggers start with a noun.
 For example, the voice trigger `URL` is used to insert URLs for essential websites.
-Another example involves using the noun `list` in the voice trigger, as in `list matplotlib color codes`, to generate a list of the color codes used in Matplotlib plots.
-These voice triggers, such as 'URL' or 'list matplotlib color codes ', provide instant access to essential information, saving you the time and effort of manual searches.
+
+Another example involves using the verb `list` in the voice trigger, as in `list matplotlib color codes`, to generate a list of the color codes used in Matplotlib plots.
+These voice triggers provide instant access to essential information, saving you the time and effort of manual searches.
 
 The markup language code is inserted using the verb *insert*, followed by the markup language name and the name of the code.
 For example, the command `insert markdown itemized list` will insert five vertically aligned dashes to start an itemized list.
