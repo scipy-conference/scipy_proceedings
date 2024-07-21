@@ -14,7 +14,7 @@ This use of your voice can partially replace the use of the keyboard when tired 
 We found that we could be productive within an hour with the Voice In Plus plugin for Google Chrome and Microsoft Edge.
 This plugin is easy to install, provides accurate dictation, and is easy to modify to correct wrong word insertations with text replacements.
 
-We discovered that we could map words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
+We discovered that we could map the words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
 These *voice-triggered snippets* are analogous to traditional tab-triggered snippets supported by most text editors.
 (A tab trigger is a placeholder word that is replaced with the corresponding code when the tab key is pressed after entering the tab trigger.)
 The existing extensions for code snippets in Jupyter do not support tab triggers.
@@ -24,24 +24,23 @@ These snippets require customizing to the problem at hand via the keyboard, but 
 To facilitate the use of voice commands in Jupyter notebooks, we have developed libraries of voice-triggered snippets for use in Markdown or code cells with the *Voice-In Plus* plugin.
 We are building on our experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
-These voice-triggered snippets are another tool for software engineering that can complement existing tools to enhance productivity.
+These voice-triggered snippets are another tool for software engineering that complement existing tools for enhancing productivity.
 
 ## Methods and Materials
 
 ### Hardware
 We used a 2018 15-inch MacBook Pro laptop computer.
 It had 32 gigabytes of RAM and one Radeon Pro 560X 4 GB GPU.
-We used the laptop's built-in microphone to record dictation while sitting or standing from up to 20 feet (ca. 6 m) away from the computer.
+We used the laptop's built-in microphone to record dictation while sitting or standing up to 20 feet (ca. 6 m) away from the computer.
 
 ### Installation of Voice In Plus
-We used the *Voice In Plus* plugin to store the libraries of voice-triggered snippets described in this paper.
-This plugin is provided by Dictanote Inc.
+We used the *Voice In* plugin provided by Dictanote Inc.
 First, we installed the *Voice In* plugin by navigating to the [Plugin In page](https://chromewebstore.google.com/detail/voice-in-speech-to-text-d) in the Google Chrome Web Store on the World Wide Web.
 Seond, the [Microsoft Edge Add-ons web site](https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home) was accessed to install the plugin in Microsoft Edge.
 
-An internet connection was required to use *Voice In* because Dictanote tracks the websites were visited and whether the plugin worked on those websites.
+An internet connection was required to use *Voice In* because Dictanote tracks the websites visited and whether the plugin worked on those websites.
 *Voice In* uses the browser's built-in the Speech-to-Text software to transcribe speech into text.
-Because no remote servers are used for the transcription, the transcription process was essentially instant and able to keep up the dictation of multiple paragraphs.
+Because no remote servers were used for the transcription, the transcription process was essentially instant and able to keep up the dictation of multiple paragraphs.
 Dictanote does not store the audio or the transcripts.
 
 After activating the plugin, we customized it by selecting a dictation language from a pull-down menu.
@@ -49,21 +48,19 @@ We selected **English (United States)** from the 15 dialects of English.
 The English variants include dialects from Western Europe, Africa, South Asia, and Southeast Asia; many languages other than English are also supported.
 
 Next, we set a keyboard shortcut for activating the plugin.
-We selected command-L on a Mac because this shortcut was not already in use.
+We selected command-L on our Mac because this shortcut was not already in use.
 A list of Mac shortcuts can be found [here](https://support.apple.com/en-us/102650).
-The second customization was the limit of the customization that we could make in the free version of *Voice In*.
+The second customization was the limit of the customizations that we could make in the free version of *Voice In*.
 
-
-### Deployment of Voice-triggered snippets in Voice In Plus
 The use of customized text replacements is available in *Voice In Plus*.
 *Voice In Plus* is activated by purchasing a $39 annual subscription through the **Subscription** submenu in the *Voice In Settings* sidebar of the *Voice In Options* web page.
 Monthly and lifetime subscription options are available.
-Only one subscription was required to use *Voice In Plus* in both browsers.
-There is not a limit on the number of devices that can be used with a subscription.
+Only one subscription was required to use *Voice In Plus* in both web browsers.
+The library is synched between the browsers.
 
 After a subscription was purchased, we obtained access to the **Custom Commands** in the *Voice In Settings* sidebar.
-We used the **Add Command** button to enter the voice-trigger and the text replacement {ref}`fig:newSentence`.
-Likewise, the custom command `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
+We used the **Add Command** button to enter a voice-trigger to start a new sentence when writing one sentence per line {ref}`fig:newSentence`.
+The custom command for `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
 The phrases making up these voice triggers were no longer be available during dictation because they will be used to trigger text replacements.
 
 :::{figure} ./images/VoiceInNewSentence.png
@@ -72,11 +69,10 @@ The phrases making up these voice triggers were no longer be available during di
 Entering a single voice trigger and the corresponding command in Voice In Plus.
 :::
 
-We used the **Bulk Add** button to upload multiple commands from a two-column CSV file.
-A comma was the field separator.
+We used the **Bulk Add** button to upload multiple commands from a two-column CSV file with commas as the field sepearator.
 The file contents were selected and pasted in a text box that is opened upon clicking on the **Bulk Add** button.
 The voice-triggers reside in the left column, and the text replacements reside in the right column.
-Any capitalization in the voice trigger was ignored by the software, and the voice trigger was stored in lowercase.
+Any capitalization in the voice trigger was ignored by the software.
 
 Multiline text replacements had to be enclosed in double quotes.
 Internal double quotes were replaced with single quotes.
@@ -88,35 +84,32 @@ For example, the built-in **open** command enables the opening of a webpage with
 The transcription of the spoken words appear momentarily in a transitory transcript that hovers about the text box.
 We mapped the misinterpreted words to the desired text replacement.
 For example, we added the mapping of `open syfy` to `<open:https://www.scipy2024.scipy.org/schedule>` to open the webpage for the schedule of SciPy 2024 when we said, "open SciPy 2024".
-We mapped phrases misinterpreted by Voice In Plus to the intended text replacement or command.
 
-The **Export** button opens a text box with the custom commands in CSV file format.
+The **Export** button opened a text box with the custom commands in CSV file format.
 All the contents of the text box were selected, copied, and pasted into a local CSV file using either the text editor TextMate or Emacs version 29.3.
 The **Synch** button was used to synchronize devices.
 
 A GUI shows all the voice triggers and their text replacements immediately below the row of buttons just mentioned above.
 Each row in the GUI has an edit icon and a delete icon.
-The edit icon opens a pop-up menu similar to the pop-up menu invoked by the **Add Command ** button.
+The edit icon opens a pop-up menu similar to the pop-up menu invoked by the **Add Command** button.
 
 ### Construction of the snippet libraries
 Some of our voice snippets had already been used for a year to compose prose using dictation.
-These snippets are in modular files to ease their selective use.
-The *Voice-In Plus* software accepts commands in a CSV file.
+These snippets are in modular CSV files to ease their selective use.
 The contents of these files can be copied and pasted into the `bulk add` text area of the Voice In Plus configuration GUI.
 
 ### Construction of interactive quizzes
 We developed interactive quizzes to aid the mastery of the *Voice In Plus* syntax.
 We wrote the quiz as a Python script that can run in the terminal or in Jupyter notebooks.
-We stored each question, answer, and explanation in a tuple because tuples are immutable. 
+We stored each question, answer, and explanation triple in a tuple because tuples are immutable. 
 We stored the tuples in a list because lists are sortable.
 The quiz randomizes the order of the questions upon restart, ensuring a fresh and challenging experience every time.
-
-Our quiz is not just a test, it's a learning tool. When you fail to answer a question correctly, the quiz provides feedback, giving you the opportunity to learn from your mistakes and improve.
+When you fail to answer a question correctly, the quiz provides feedback, giving you the opportunity to learn from your mistakes and improve.
 Recycling the wrongly answered questions builds the recall of the correct answers.
-The number of questions in a quiz is limited to 40 to avoid exhausting the user.
+The number of questions in a quiz was limited to 40 to avoid exhausting the user.
 
-A function writes out the quiz to a PDF file upon completion of the quiz or upon early exiting the quiz.
-This PDF enables the printing of a quiz so a user can take the paper version while away from the computer.
+A function writes out the quiz to a PDF file upon completion of the quiz or upon early exit from the quiz.
+The user can take a paper version of the quiz while away from the computer.
 
 ### Availability of the libraries and quizzes
 We tested the libraries using Jupyter Lab version 4.2 and Python 3.12 installed from MacPorts.
