@@ -121,8 +121,6 @@ First, we describe the contents of the snippet libraries and the kinds of proble
 We group the libraries into several categories to simplify their explanation.
 Second, we describe the deployment of the snippet libraries for Voice In Plus (VIP), an automated speech recognition plugin for the web browsers Google Chrome and Microsoft Edge.
 The Voice In Plus plugin has a gentle learning curve.
-The plugin requires an Internet connection to run.
-The results section that follows describes the libraries in the same order.
 
 ### Composition of the libraries
 
@@ -133,11 +131,16 @@ Developers can leverage our libraries in two ways: by enhancing them with their 
 The libraries are made available in a modular format so the user can select the most valuable commands for their workflow.
 In general, our libraries are broad in scope, so they meet the needs of most users.
 Several libraries are domain-specific.
-These domain-specific libraries serve as a catalyst for the creation of libraries tailored to other fields, sparking innovation and expanding the reach of voice-triggered snippets.
+These domain-specific libraries serve as a catalyst for the creation of libraries tailored to other fields, sparking innovation, and expanding the reach of voice-triggered snippets.
 
 We divided the contents of the libraries into two categories.
 One subset of libraries supports dictating about science in the Markdown cells of Jupyter notebooks, while the other subset supports writing scientific Python in code cells.
-While some code, such as line and cell magic, is specific to Jupyter, most of the voice-triggered snippets can be used in Markdown files and Python scripts being edited in Jupyter Lab.
+These voice-triggered snippets can also be applied to Markdown and code cells in Colab Notebooks.
+While some code, such as IPython line and cell magics, is specific to Jupyter, most of the voice-triggered snippets can be used in Markdown files and Python scripts being edited in Jupyter Lab.
+Likewise, these snippets can be used in other browser-hosted text editors such as the new web version of Visual Studio Code.
+This is because Voice In Plus works in most text areas of web browsers.
+These means that ample text area like that found in Write Honey site can be used to draft documents and Python scripts with the aid of Voice In Plus snippets and then be directly edited by an advanced text editor by using GhostText to connect the web-based text area to a text editor.
+Alternately, the draft document or script can be copied and saved to a file that is imported into Jupyter Lab for furtther editing.
 
 ### Libraries for Markdown cells
 
@@ -185,12 +188,14 @@ These commands are found in domain-specific libraries, so users can select which
 |:------------------------------------------------------------------------------------------|
 | **expand** acronyms                                                                       |
 | **the book** title                                                                        |
-| **email** dsw (i.e., inserts list of e-mail addresses)                                    |
+| **email** colleagues (i.e., inserts list of e-mail addresses)                                    |
 | **insert** code blocks (including equations in LaTeX)                                     |
 | **list** (e.g., font sizes in \LaTeX, steps in a protocol, members of a committee, etc.)  |
 | **open** webpage (e.g., open pytexas, open google scholar)                                |
-g| **display** equation in display mode (e.g., display electron density equation)            |
+| **display** insert equation in display mode (e.g., display electron density equation)   |
+| **display with terms** above plus list of terms and their definitions  (e.g., display electron density equation)   |
 | **inline** equation in-line (e.g., inline information entropy equation)                   |
+| **citekey** insert corresponding citekey (e.g., citekey Wilson 1942)  |
 ::::
 
 :::{figure} ./images/DisplayElectronDensityEquation.png
