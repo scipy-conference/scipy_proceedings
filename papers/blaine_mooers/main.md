@@ -2,7 +2,7 @@
 # Voice Computing with Python in Jupyter Notebooks
 title: Voice Computing with Python in Jupyter Notebooks
 abstract: |
-    Jupyter is a popular platform for writing literate programming documents that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability opens up access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing, and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. Several automated speech recognition software packages operate on Jupyter notebooks and support these three activities. We will provide examples of the first two activities. Several software tools at MooersLab on GitHub facilitate the use of voice computing software in Jupyter.
+    Jupyter is a popular platform for writing interactive computational narratives that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability improves access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing, and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. We will provide examples of the first two activities with the Voice-In Plus plugin for Google Chrome and Microsoft Edge. To support the editing of Markdown and code cells in Jupyter noteobooks, we provide several libraries of voice commands at MooersLab on GitHub.
 ---
 
 
@@ -11,20 +11,17 @@ abstract: |
 Voice computing includes speech-to-text, speech-to-commands, and speech-to-code. 
 These activities enable you to use your voice to generate prose, operate your computer, and write computer code.
 This use of your voice can partially replace the use of the keyboard when tired of typing, when suffering from repetitive stress injuries, or both.
-Software like Serenade and Talon Voice operate wherever you can place the mouse cursor and support the writing of computer code, but both do a medicore job at dictation.
-In addition, these packages have a steep learning curve and take months to master.
-We found that we could be prodcutive within an hour with the Voice In Plus plugin for Google Chrome and Microsoft Edge.
+We found that we could be productive within an hour with the Voice In Plus plugin for Google Chrome and Microsoft Edge.
 This plugin is easy to install, provides accurate dictation, and is easy to modify to correct wrong word insertations with text replacements.
 
 We discovered that we could map words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
-These *voice-triggered snippets* are easy to install and update in Voice In Plus.
-They are analogous to traditional tab-triggered snippets supported by most text editors.
+These *voice-triggered snippets* are analogous to traditional tab-triggered snippets supported by most text editors.
 (A tab trigger is a placeholder word that is replaced with the corresponding code when the tab key is pressed after entering the tab trigger.)
 The existing extensions for code snippets in Jupyter do not support tab triggers.
-Instead, we found that Voice In Plus can be used to apply voice-triggered snippets in code and Markdown cells in Jupyter notebooks.
-These voice-triggered snippets make it easy to insert equation and code snippets into these computational notebooks.
+Instead, we found that Voice In Plus can be used to insert voice-triggered snippets into code and Markdown cells in Jupyter notebooks.
+These snippets require customizing to the problem at hand via the keyboard, but their insertion by voice command still saves time.
 
-To facilitate voice commands in Jupyter notebooks, we have developed sets of voice-triggered snippets for use in Markdown or code cells with the *Voice-In Plus* plugin.
+To facilitate the use of voice commands in Jupyter notebooks, we have developed libraries of voice-triggered snippets for use in Markdown or code cells with the *Voice-In Plus* plugin.
 We are building on our experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
 These voice-triggered snippets are another tool for software engineering that can complement existing tools to enhance productivity.
