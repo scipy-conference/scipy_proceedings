@@ -86,7 +86,7 @@ Typical \texttt{sktime} code specifies the forecaster as Python code, but it can
 from sktime.registry import craft
 forecaster = craft('NaiveForecaster(strategy="last", sp=12)')
 \end{verbatim}
-which can be used to copy a full specification from a research paper and immediately construct the respective algorithm in a python environment, even if full code has not been shared by the author.
+which can be used to copy a full specification from a research paper and immediately construct the respective algorithm in a Python environment, even if full code has not been shared by the author.
 
 This approach makes it extremely easy to share specifications reproducibly, simplifying the often convoluted process of describing algorithms in research papers.
 
@@ -143,7 +143,7 @@ This approach ensures that our benchmarking process is both comprehensive and re
 \end{figure}
 
 \subsection{Prior Work}
-The design principles of \texttt{sktime} draw inspiration from several established machine learning frameworks. Notably, \texttt{scikit-learn} in \texttt{python} \cite{pedregosa2011scikit}, \texttt{mlr} in \texttt{R} \cite{bischl2016mlr}, and \texttt{Weka} \cite{hall2009weka} have pioneered the use of first-order specification languages and object-oriented design patterns for machine learning algorithms. 
+The design principles of \texttt{sktime} draw inspiration from several established machine learning frameworks. Notably, \texttt{scikit-learn} in \texttt{Python} \cite{pedregosa2011scikit}, \texttt{mlr} in \texttt{R} \cite{bischl2016mlr}, and \texttt{Weka} \cite{hall2009weka} have pioneered the use of first-order specification languages and object-oriented design patterns for machine learning algorithms. 
 
 \texttt{sktime} extends these foundational ideas by introducing specialized interfaces for time series forecasting, including both point and probabilistic forecasts. It also incorporates unique features such as:
 \begin{itemize}
@@ -317,7 +317,7 @@ In this section, we describe the experimental setup, the datasets, the evaluatio
 \subsection{Experimental Setup}
 To perform the benchmarking study, we use the framework described in Section~\ref{methods}. The benchmarking compares different probabilistic wrappers on different datasets and with different forecasters regarding CRPS, Pinball Loss, AUCalibration, and Runtime. 
 
-To enable easy replication of the experiments, we provide for each used forecaster, and wrapper the hyperparameters by providing the used python object instantiation in Table~\ref{tab:hyperparams}. These hyperparameter depend on the dataset, especially, the seasonal periodicity (sp) is chosen based on the dataset. This parameter as well as the other dataset related parameter required to create the cross validation folds used for the evaluation are described in Table~\ref{tab:evaluation_splits}. To create the cross validation folds, we use the \texttt{SlidingWindowSplitter} from \texttt{sktime}. The instantiation of the splitter for each dataset is shown in Table~\ref{tab:cv_splits}. Figure~\ref{fig:splits} is showing the resulting cross validation folds for the tree datasets.
+To enable easy replication of the experiments, we provide for each used forecaster, and wrapper the hyperparameters by providing the used Python object instantiation in Table~\ref{tab:hyperparams}. These hyperparameter depend on the dataset, especially, the seasonal periodicity (sp) is chosen based on the dataset. This parameter as well as the other dataset related parameter required to create the cross validation folds used for the evaluation are described in Table~\ref{tab:evaluation_splits}. To create the cross validation folds, we use the \texttt{SlidingWindowSplitter} from \texttt{sktime}. The instantiation of the splitter for each dataset is shown in Table~\ref{tab:cv_splits}. Figure~\ref{fig:splits} is showing the resulting cross validation folds for the tree datasets.
 
 \begin{figure}
     \centering
