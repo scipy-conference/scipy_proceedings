@@ -237,11 +237,7 @@ The command `insert latex itemized list` will insert the corresponding code for 
 
 We have developed a library specifically for the flavor of [Markdown](https://github.com/MooersLab/markdown-jupyter-voice-in/blob/main/markdown.csv) utilized in Jupyter notebooks.
 This library is used to insert the appropriate Markdown code in Markdown cells.
-
-We have included a [library for LaTeX](https://github.com/MooersLab/latex-voice-in) because Jupyter Lab can edit text files.
-According to the above rule, we should use `insert latex equation` to insert the code for the equation environment.
-However, we broke this convention by omitting the word `latex` to make the commands more convenient because this is the default typesetting language we use daily.
-We were already comfortable with using the abbreviated commands.
+We have included a [library for LaTeX](https://github.com/MooersLab/latex-voice-in) because Jupyter Lab can edit tex files.
 
 We have not figured out how to use voice commands to advance the cursor in a single step to sites where edits should be made, analogous to tab stops in conventional snippets.
 Instead, the built-in voice commands can move the cursor forward or backward and select replacement words.
@@ -249,17 +245,17 @@ We included the markup associated with the yasnippet snippet libraries to serve 
 
 
 ### Libraries for code cells
-The `insert` command in code-cell libraries is a powerful tool that allows the seamlessly insert of chunks of Python code, enhancing your data science workflow.
+The `insert` command in code-cell libraries allows the  insersion of chunks of Python code, enhancing your data science workflow.
 We avoid making voice commands for small code fragments that might fit on a single line.
 An exception to this was the inclusion of a collection of one-liners that are in the form of several kinds of comprehensions.
 As mentioned earlier, we have developed practical chunks of code that are designed to perform specific functions, making your data analysis tasks easier and more efficient.
 These chunks of code could be functions or lines of code that produce an output in the form of a table, plot, or analysis.
 The idea was to fill a code cell with all the code required to produce the desired output.
-Unfortunately, the user will still have to use their voice or computer mouse to move the cursor back over the code chunk and customize portions of the code chunk as required for the task at hand.
+Unfortunately, the user will still have to use the computer mouse to move the cursor back over the code chunk and customize portions of the code chunk as required for the task at hand.
 
 While self-contained examples that utilize generated data can illustrate concepts, these examples are frustrating for beginners who need to read actual data and would like to apply the code example to their problem.
 Reading appropriately cleaned data is a common task in data science and a common barrier to applying Jupyter notebooks to scientific problems.
-Our data wrangling library provides code fragments that directly import various file types, easing the tedious task of data import and allowing focus on downstream utilization and analysis.
+Our data wrangling library provides code fragments that directly import various file types, easing the task of data import and allowing focus on downstream utilization and analysis.
 
 After the data is input, it needs to be displayed in a tabular format for inspection to check that it was properly imported and to carry out basic summarization statistics by column and row.
 After the data are verified as being correctly imported, it is often necessary to explore them by plotting them to detect relationships between a model's parameters and the output.
@@ -276,12 +272,12 @@ This is often overlooked, but these externally derived images are often essentia
 
 We provide a [library](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) of 85 cell and line magics that facilitate the Jupyter notebook's interaction with the rest of the operating system.
 Our cell magics, easily identifiable by their cell magic prefix, and line magics, with the straightforward line magic prefix, are designed to make the Jupyter notebook experience more intuitive.
-For example, the voice command *line majic run* insert `%run`; it is used to run script files after supplying the name of the script file as also shown in {fig}`quiz`.
+For example, the voice command *line majic run* inserts `%run`; it is used to run script files after supplying the name of the script file as also shown in {fig}`quiz`.
 
 ### Interactive quiz
 
 We developed a [quiz](https://github.com/MooersLab/voice-in-basics-quiz) to improve recall of the voice commands.
-These quizzes, designed for your convenience, are interactive and can be run in the terminal or in Jupyter notebooks {ref}`fig:quiz`.
+These quizzes are interactive and can be run in the terminal or in Jupyter notebooks {ref}`fig:quiz`.
 The latter can store a record of one's performance on a quiz.
 
 :::{figure} ./images/runningQuiz.png
@@ -291,38 +287,38 @@ An example of an interactive session with a quiz in a Jupyter notebook. The code
 :::
 
 To build long-term recall of the commands, one must take the quiz five or more times on alternate days, according to the principles of spaced repetition learning.
-These principles were developed by the German psychologist Hermann Ebbinghaus in the last part of the 19th Century.
+These principles were developed by the German psychologist Hermann Ebbinghaus near the end of the 19th Century.
 They have been validated several times by other researchers.
-Space repetition learning is one of the most firmly established results of research into human psychology.
+Spaced repetition learning is one of the most firmly established results of research into human psychology.
 
-Most people need more discipline to carry out this kind of learning because they have to schedule the time to do the follow-up sessions.
-Instead, most people will find it more convenient to take these quizzes several times in 20 minutes before they spend many hours utilizing the commands.
+Most people need discipline to carry out this kind of learning because they have to schedule the time to do the follow-up sessions.
+Instead,t people will find it more convenient to take these quizzes several times in 20 minutes before they spend many hours utilizing the commands.
 If that use occurs on subsequent days, then recall will be reinforced, and retaking the quiz may not be necessary.
 
 
 ### Limitations on using Voice In Plus
 
 The plugin operates in text areas on thousands of web pages.
-These text areas include those of web-based email packages and online sites that support distraction-free writing like [Write Honey](https://app.writehoney.com).
+These text areas include those of web-based email software and online sites that support distraction-free writing like [Write Honey](https://app.writehoney.com).
 These text areas also include the Markdown and code cells of Jupyter notebooks and other web-based computational notebooks.
 Voice In also works in plain text documents opened in Jupyter Lab for online writing.
 It also works in the web-based version of [VS Code](https://vscode.dev/).
-Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the *JupyterLab", the *nteract*, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
-*Voice In Plus* is limited to web browsers, whereas other automated speech recognition  software can also operate in the terminal and at the command prompt in GUI-driven applications. 
+Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the *JupyterLab* application, the *nteract* appication, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
+*Voice In Plus* is limited to web browsers, whereas other automated speech recognition software can also operate in the terminal and at the command prompt in GUI-driven applications. 
 
-It is very accurate with a word error rate that is well below 10\%.
-Like all other dictation software, word error rate depends on the quality of the microphone using used.
+*Voice In Plus*  is very accurate with a word error rate that is well below 10\%.
+Like all other dictation software, the word error rate depends on the quality of the microphone using used.
 *Voice-In Plus* can pick out words from among background ambient noise such as load ventilation systems, traffic, and outdoor bird songs.
 
-The language model is quite robust in that dictation can be performed without an external microphone.
+The language model used by *Voice-In Plus*  is quite robust in that dictation can be performed without an external microphone.
 We found no reduction in word error rate when using a high-quality Yeti external microphone.
-Our experience might a reflection of our high-end hardware and may not transfer to other low-end computers.
+Our experience might be a reflection of our high-end hardware and may not transfer to low-end computers.
 
-Because of the way*Voice-In Plus*is set up to utilize the Speed-to-Text feature of the Google API, there is not much of a latency issue.
+Because of the way*Voice-In Plus* is set up to utilize the Speech-to-Text feature of the Google API, there is not much of a latency issue.
 The spoken words' transcriptions occur nearly in real-time; there is only a minor lag.
 *Voice In Plus* will listen for words for 3 minutes before automatically shutting down.
 *Voice In Plus* can generally keep up with dictation occurring at a moderate pace for at least several paragraphs, whereas competing dictation software packages tend to quit after one paragraph.
-The program tends to hallucinate only when the dictation has occurred at high speed because the transcription has fallen behind.
+The program hallucinates when the dictation has occurred at high speed because the transcription has fallen behind.
 You have to pay attention to the progress of the transcription if you want all of your spoken words captured.
 
 If the transcription halts, it is best to deactivate the plugin, activate it, and resume the dictation.
@@ -336,62 +332,59 @@ We have combined the period command with the new line command to create a new co
 
 You have to develop the habit of using this command if you like to write one sentence per line.
 This latter form of writing is very useful for first drafts because it greatly eases the shuffling of sentences in a text editor during rewriting.
-This form of writing is also very compatible with Version control systems like git because the changes can be tracked by line number.
+This form of writing is also very compatible with version control systems like git because the changes can be tracked by line number.
 
 The practical limit of on the number of commands it set by the trouble you are willing to tolerate in scrolling up and down the list of commands.
-We had an easy time scrolling through a library of about 7,000 commands, and a hard time with a library of about 19,000 commands.
-Bulk deletion of selected commands required the assistance from the User support at Dictanote Inc.
-They removed our bloated library, and we used the bulk add button to upload a smaller version of our library.
+We had an easy time scrolling through a library of about 8,000 commands, and a hard time with a library of about 19,000 commands.
+Bulk deletion of selected commands required the assistance from the user support at Dictanote Inc.
+They removed our bloated library, and we used the **bulk add** button in the GUI to upload a smaller version of our library.
 
 ## Discussion
 
-The following discussion points are crucial for understanding the implementation of the ASR libraries that we have described.
-We limit the discussion to the software that we have presented above.
+The following four discussion points can enhance understanding the use of *Voice-In Plus* with Juputer.
 
 ### Independence from breaking changes in Jupyter
 
 The Jupyter project lacks built-in support for libraries of code snippets.
-The development of third-party extensions is a necessity to support code snippets.
-Unfortunately, changes in the core of Jupyter occasionally break these extensions.
+The development of third-party extensions is a necessity to support the use of code snippets.
+Unfortunately, changes in the core of Jupyter occasionally break these third-party extensions.
 Users have to create Python environments for older versions of Jupyter to work with their outdated snippet extension while missing out on the new features of Jupyter.
 An obvious solution to this problem would be for the Jupyter developers to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for snippets is always available.
-Using voice-triggered snippets external to Jupyter side steps difficulty with breaking changes to Jupyter.
-
+Using voice-triggered snippets external to Jupyter side steps the disruption of snippet extensions by breaking changes in new versions of Jupyter.
 
 ### Voice-triggered snippets can complement AI-assisted voice computing
 
 The use of voice-triggered snippets requires knowledge of the code that you want to insert.
-The is the cost that had to be paid to gain access to quickly inserted code snippets that work.
-In contrast, AI assistants can find code that you do not know about to solve the problem described in your prompt.
+The act of acquiring this knowledge is the up-front cost that the user has to pay to gain access to quickly inserted code snippets that work.
+In contrast, AI coding assistants can find code that you do not know about to solve the problem described in your prompt.
 From personal experence, the retrieval of the correct code can take multiple iterations of refining the prompt.
 Expert users will find the correct code in several minutes while beginners may take much longer.
-An area of future research is to use AI assistants that have libraries indexed on snipppet libraries to retrieve the correct voice-triggered snippet.
+An area of future research is to use AI assistants that have large language models indexed on snipppet libraries to retrieve the correct voice-triggered snippet.
 
-### Automated speech recogination extensions for Jupyter lab
+### Comparision with automated speech recogination extensions for Jupyter lab
 
 We found three extensions developed for Jupyter Lab that enable speech recognition in Jupyter notebooks.
 The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control), supports custom commands and relies on the browser's language model.
 This extension is experimental and not maintained; it does not work with Jupyter 4.2.
-The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments),  relies on the DaVinci large language model to make comments in Markdown cells and request code fragments.
-This program requires clicking on a microphone icon repeatedly, which makes the user vulnerable to repetitive stress injuries.
+The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments), relies on the DaVinci large language model to make comments in Markdown cells and request code fragments.
+This program requires clicking on a microphone icon frequently, which makes the user vulnerable to repetitive stress injuries.
 The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
 Although the extension's name suggests it uses GitHub's Copilot, it uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGPT3.
-The robustness of our approach is that the *Voice-In Plus* should work in all versions of Jupyter Lab and Jupyter Notebook.
+The robustness of our approach is that the *Voice-In Plus* should work in all browser-based versions of Jupyter Lab and Jupyter Notebook.
 
 ### Coping with the imperfections of the language model
 
-One aspect of speech-to-text that it is important to bring up is persistent errors in translation.
+One aspect of speech-to-text that it is important to bring up is persistent errors in transcription.
 These persistent errors may be due to the language model having difficulties interpreting your speech.
 For example, the language model often misinterprets the word  *write* as *right*'.
-Likewise, the letter R is frequently returned as *are* or *our*'.
-I have had trouble enunciating the letters *w* and *r* clearly since I was a child.
+Likewise, the letter *R* is frequently returned as *are* or *our*'.
 The remedy for the situations is to map the misinterpreted phrase to the intended phrase.
 
-This remedy might be the best that can be done in for those users who have a heavy accent and are from a country that is not represented by the selection of English dialects.
+This remedy might be the best that can be done in for those users who are from a country that is not represented by the selection of English dialects.
 People originating from Eastern Europe, Middle East, and northeast Asia fall into this category.
 Users in this situation may have to add several hundred to several thousand text replacements.
-As their customized library of text replacements grows, the frequency of further wrong word insertions should go down exponentially.
+As the customized library of text replacements grows, the frequency of wrong word insertions should deline rapidly.
 
 
 ### Future directions
