@@ -262,8 +262,9 @@ cumbersome process limited to the Jupyter Notebook and JupyterLab platforms. It
 involves using a project generator [@js_cookiecutter; @ts_cookiecutter] to
 bootstrap a project with over 50 files, creating and installing a local Python
 package, bundling JavaScript code, and manually linking build outputs to
-install extensions. By removing these barriers, anywidget accelerates
-development and allows prototypes to grow into robust tools over time.
+install extensions [@cookiecutter_comparison]. By removing these barriers,
+anywidget accelerates development and allows prototypes to grow into robust
+tools over time.
 
 ### Simplified Publishing
 
@@ -286,9 +287,14 @@ authoring portable and reusable widget components that decouples widget
 authorship from JCPs, resulting in multiple downstream benefits. First,
 anywidget—not widget authors—ensures compatibility and interoperability across
 existing JCPs, and authors can focus on important features rather than wrestle
-with build configuration and tooling. Second, by circumventing bespoke JCP
-import systems and loading web-standard ES modules from the kernel, anywidget
-does away with manual installation steps and delivers an improved developer
+with build configuration and tooling. Anywidget’s adapter layer simply loads
+and executes standardized front-end modules, meaning that the compatibility
+afforded does not introduce overhead to the runtime performance of a widget
+itself. A widget authored with anywidget has the same performance
+characteristics as a widget tediously (and correctly) authored using the
+traditional Jupyter Widgets system. Second, by circumventing bespoke JCP import
+systems and loading web-standard ES modules from the kernel, anywidget does
+away with manual installation steps and delivers an improved developer
 experience during widget authorship. Third, anywidget unifies and simplifies
 widget distribution. Widgets can be prototyped and shared as notebooks, or
 mature into `pip`-installable packages and distributed like other tools in the
