@@ -68,10 +68,9 @@ y_pred_proba = forecaster.predict_proba()
 \end{verbatim}
 
 More details can be found in the official tutorials.
-
 Creating algorithms with compatible APIs is straightforward.
 
-\texttt{sktime} and \texttt{tsbootstrap} provide fill-in extension templates for creating algorithms in a compatible interface, which can be shared in a third-party code base and indexed by \texttt{sktime}, or contributed directly to \texttt{sktime}.
+\texttt{sktime} and \texttt{tsbootstrap} provide fill-in extension templates\footnote{\href{https://github.com/sktime/sktime/tree/main/extension_templates}} for creating algorithms in a compatible interface, which can be shared in a third-party code base and indexed by \texttt{sktime}, or contributed directly to \texttt{sktime}.
 
 \subsection{Reproducible Specification Language}
 All objects in \texttt{sktime} are uniquely specified by their construction string, which serves as a reproducible blueprint. Algorithms are intended to be stable and uniquely referenced across versions; full replicability can be achieved by freezing Python environment versions and setting random seeds.
