@@ -41,6 +41,13 @@ In \texttt{sktime} and \texttt{tsbootstrap}, algorithms and mathematical objects
 Forecasters are objects with \texttt{fit} and \texttt{predict} methods, allowing both endogenous and exogenous data to be passed. For example, the following code specifies a forecaster, fits it, and makes predictions.
 
 \begin{verbatim}
+# importing the necessary modules
+from sktime.datasets import load_airline
+from sktime.forecasting.naive import NaiveForecaster
+
+# load exemplary data
+y = load_airline()
+
 # specifying the forecasting algorithm
 forecaster = NaiveForecaster(strategy="last", sp=12)
 
@@ -61,6 +68,19 @@ Currently, \texttt{sktime} supports the construction of 82 individual forecaster
 Probabilistic forecasters are tagged with the \texttt{"capability:pred\_int"} tag. Currently, 45 of the 82 forecasters support probabilistic prediction modes, such as prediction intervals, quantile predictions, or full distributional predictions:
 
 \begin{verbatim}
+# importing the necessary modules
+from sktime.datasets import load_airline
+from sktime.forecasting.naive import NaiveForecaster
+
+# load exemplary data
+y = load_airline()
+
+# specifying the forecasting algorithm
+forecaster = NaiveForecaster(strategy="last", sp=12)
+
+# fitting the forecaster -- forecast y into the future, 3 steps ahead
+forecaster.fit(y, fh=[1, 2, 3])
+
 # making interval predictions
 y_pred_int = forecaster.predict_interval()
 # making distribution predictions
@@ -95,7 +115,22 @@ This approach makes it extremely easy to share specifications reproducibly, simp
 This leads to a compositional specification language with rich combinatorial flexibility. For example, the following code adds conformal prediction interval estimates to the \texttt{NaiveForecaster}:
 
 \begin{verbatim}
-ConformalIntervals(NaiveForecaster(strategy="last", sp=12))
+# importing the necessary modules
+from sktime.datasets import load_airline
+from sktime.forecasting.naive import NaiveForecaster
+from sktime.forecasting.conformal import ConformalIntervals
+
+# load exemplary data
+y = load_airline()
+
+# specifying the forecasting algorithm
+forecaster = ConformalIntervals(NaiveForecaster(strategy="last", sp=12))
+
+# fitting the forecaster -- forecast y into the future, 3 steps ahead
+forecaster.fit(y, fh=[1, 2, 3])
+
+# making interval predictions
+y_pred_int = forecaster.predict_interval()
 \end{verbatim}
 
 This method uses a window sliding and residual collection strategy.
@@ -104,7 +139,22 @@ The resulting algorithm possesses \texttt{fit}, \texttt{predict}, and - added by
 Data transformation pipelines can be constructed similarly, or with an operator-based specification syntax:
 
 \begin{verbatim}
-Differencer() * Deseasonalizer(sp=12) * NaiveForecaster(strategy="last")
+# importing the necessary modules
+from sktime.datasets import load_airline
+from sktime.forecasting.naive import NaiveForecaster
+from sktime.transformations.series.detrend import Deseasonalizer
+from sktime.transformations.series.difference import Differencer
+
+# load exemplary data
+y = load_airline()
+
+pipeline = Differencer() * Deseasonalizer(sp=12) * NaiveForecaster(strategy="last")
+
+# fitting the forecaster -- forecast y into the future, 3 steps ahead
+pipeline.fit(y, fh=[1, 2, 3])
+
+# making interval predictions
+y_pred_int = pipeline.predict()
 \end{verbatim}
 
 This creates a forecasting algorithm that first computes first differences, then deseasonalizes with periodicity 12, then applies the last-value-carry-forward method, reseasonalizes, and inverts the first differences.
@@ -114,10 +164,32 @@ As before, the resulting forecaster provides unified interface points and is int
 In \texttt{sktime}, evaluation metrics are first-class citizens. Probabilistic metrics compare the ground truth time series with predictions, representing probabilistic objects such as predictive intervals or distributions. For example:
 
 \begin{verbatim}
+# importing the necessary modules
+from sktime.datasets import load_airline
+from sktime.forecasting.naive import NaiveForecaster
+from sktime.performance_metrics.forecasting.probabilistic import CRPS
+from sktime.split import temporal_train_test_split
+
+# load exemplary data
+y = load_airline()
+y_train, y_test = temporal_train_test_split(y, test_size=36)
+
+# specifying the forecasting algorithm
+forecaster = NaiveForecaster(strategy="last", sp=12)
+
+# fitting the forecaster -- forecast y into the future, 3 steps ahead
+forecaster.fit(y_train, fh=y_test.index)
+
+# making interval predictions
+y_pred_int = forecaster.predict_interval()
+# making distribution predictions
 y_pred_proba = forecaster.predict_proba()
+
+# Initialise the CRPS metric
 crps = CRPS()
 
-crps(y_true, y_pred_proba)
+# Calculate the CRPS
+crps(y_test, y_pred_proba)
 \end{verbatim}
 
 Tags control the type of probabilistic prediction expected, such as \texttt{"scitype:y\_pred"} with the value \texttt{"pred\_proba"} for CRPS.
@@ -127,9 +199,40 @@ Our benchmarking framework involves a standardized workflow for obtaining benchm
 
 \begin{verbatim}
 # Example code to add forecasters and tasks
-forecaster = NaiveForecaster(strategy="last", sp=12)
-forecaster.fit(y_train)
-y_pred = forecaster.predict(fh)
+
+# Import the necessary modules
+from sktime.benchmarking.forecasting import ForecastingBenchmark
+from sktime.datasets import load_airline
+from sktime.forecasting.naive import NaiveForecaster
+from sktime.performance_metrics.forecasting.probabilistic import CRPS
+from sktime.split import SlidingWindowSplitter
+
+# Initialise the benchmark object
+benchmark = ForecastingBenchmark()
+
+# Add a forecaster to the benchmark
+benchmark.add_estimator(
+    estimator=NaiveForecasster(strategy="last", sp=12),
+    estimator_id="naive_forecaster"
+)     
+
+# Initialise the Splitter
+cv_splitter = SlidingWindowSplitter(
+    step_length=12,
+    window_length=24,
+    fh=range(12)
+)
+
+# Add a task to the benchmark
+# A task is a combination of a dataset loader, a splitter, and a list of metrics
+benchmark.add_task(
+    load_airline,
+    cv_splitter,
+    [CRPS()]
+)
+
+# Run the benchmark
+benchmark.run("result.csv")
 \end{verbatim}
 
 This approach ensures that our benchmarking process is both comprehensive and reproducible. 
@@ -195,6 +298,7 @@ Differencer() * Deseasonalizer(sp=data_sp) * wrapper(forecaster)
 \end{verbatim}
 
 where variable parts are \texttt{wrapper}, \texttt{forecaster}, and \texttt{data\_sp}. These components are varied as described below.
+Note the code for running the whole benchmark is provided in the Section~\ref{experiment}.
 
 \subsection{Component Forecasting Models}
 
