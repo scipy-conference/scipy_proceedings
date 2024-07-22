@@ -66,6 +66,9 @@ project:
         - hyndman2018
         - bergmeir2016
         - matheson1976
+        - hyndman2018
+        - hyndman2020package
+        - garza2022statsforecast
   # A banner will be generated for you on publication, this is a placeholder
   #banner: banner.png
   # The rest of the information shouldn't be modified
