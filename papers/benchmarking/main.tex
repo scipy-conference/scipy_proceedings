@@ -246,7 +246,7 @@ We evaluate the performance of our forecasting models using the following metric
     where $X$ and $X'$ are independent random variables with distribution $d$.
     
     \item \texttt{PinballLoss} - the pinball loss, also known as quantile loss \cite{pinball_loss}, evaluates the accuracy of quantile forecasts by penalizing deviations from the true values based on specified quantiles.
-    For quantile forecasts $\hat{q}_1, dots, \hat{q}_k$ at levels $\tau_1, \dots, \tau_k$ and an observation $y$, the Pinball Loss is defined as:
+    For quantile forecasts $\hat{q}_1, \dots, \hat{q}_k$ at levels $\tau_1, \dots, \tau_k$ and an observation $y$, the Pinball Loss is defined as:
 
     \begin{equation}
     L(\hat{q}, y) = \frac{1}{k} \sum_{i=1}^k \max \left(\tau (y - \hat{q}_i), (1 - \tau_i) (\hat{q}_i - y)\right)
