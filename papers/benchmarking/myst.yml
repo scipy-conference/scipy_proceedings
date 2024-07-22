@@ -76,5 +76,7 @@ project:
   date: 2024-07-10
   exports: 
     - format: pdf
+  numbering:
+      headings: true
 site:
   template: article-theme
