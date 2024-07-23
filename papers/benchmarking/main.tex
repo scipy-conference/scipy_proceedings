@@ -371,7 +371,7 @@ We evaluate the performance of our forecasting models using the following metric
 
     \item \texttt{IntervalWidth} - width of prediction intervals, or sharpness measures the concentration of the prediction intervals. More concentrated intervals indicate higher confidence in the forecasts. Sharpness is desirable because it indicates precise predictions. Sharpness is calculated as the average width of the prediction intervals, at nominal symmetric coverage 0.9.
     \item \texttt{EmpiricalCoverage} - Empirical coverage measures how much of the observations are within the predicted interval. It is computed as the proportion of observations that fall within the prediction intervals at nominal coverage 0.9, providing a direct measure of the reliability of the intervals.
-    \item runtime. Besides metrics that assess the quality of the forecast, average runtime for an individual fit/interence run is also reported. Runtime measures the computational efficiency of the forecasting methods, which is crucial for practical applications.
+    \item \texttt{runtime} - Besides metrics that assess the quality of the forecast, average runtime for an individual fit/interence run is also reported. Runtime measures the computational efficiency of the forecasting methods, which is crucial for practical applications.
  
 \end{itemize}
 
