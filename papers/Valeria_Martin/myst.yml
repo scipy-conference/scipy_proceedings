@@ -36,6 +36,7 @@ project:
     - Geospatial Data Analysis
   # Add the abbreviations that you use in your paper here
   abbreviations:
+    EO: Earth Observation
     API: Application Programming Interface
     B2, B3, B4: Sentinel-2 spectral bands corresponding to blue (B2), green (B3), and red (B4)
     CNN: Convolutional Neural Network
@@ -55,7 +56,9 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - gorelick2017google
+        - IUCN2021
+	- Massey2023
+	- gorelick2017google
         - tensorflow2015-whitepaper
         - Alzubaidi2021ReviewOD
         - Adegun2023
