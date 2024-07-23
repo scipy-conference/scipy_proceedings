@@ -159,7 +159,9 @@ pipeline.fit(y, fh=[1, 2, 3])
 y_pred_int = pipeline.predict()
 \end{verbatim}
 
-This creates a forecasting algorithm that first computes first differences, then deseasonalizes with periodicity 12, then applies the last-value-carry-forward method, reseasonalizes, and inverts the first differences.
+This creates a forecasting algorithm that first computes differences, then remove the seasonality (deseasonalize) by assuming a periodicity of 12, 
+then the \texttt{NaiveForecasster(strategy="last")} uses the last value as prediction for the next values (last-value-carry-forward method), finally it adds the seasonality back
+and inverts the first differences.
 As before, the resulting forecaster provides unified interface points and is interchangeable with other forecasters in \texttt{sktime}.
 
 \subsection{Probabilistic Metrics}
