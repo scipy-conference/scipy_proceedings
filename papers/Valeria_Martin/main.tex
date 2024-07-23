@@ -87,7 +87,7 @@ Then, in Python, the Pandas library \citep{pandas1} is used to organize the fore
 
 Next, the data is formatted to meet GEE’s querying specifications:
 \begin{itemize}
-    \item A 15-day range for pre- and post-fire dates is generated and added to the DataFrame.
+    \item A 15-day range for pre- and post-wildfire dates is generated and added to the DataFrame.
     \item Using Pandas, the date ranges are formatted to meet GEE's requirements.
     \item Using the pyproj library \citep{pyproj2023}, the recorded point coordinates are converted from NAD83 to WGS84 to facilitate the querying process.
     \item With the geopy \citep{geopy} library, the coordinates of the squared region of interest are calculated, featuring a side length of 15 miles.
@@ -102,9 +102,8 @@ Multiple steps are needed to set up the GEE's Python API. First, a project is cr
 Then, a Python script is developed to automate the download of images depicting the pre- or post-wildfire data using GEE's Python API (see Code \ref{download}). To download three-channel RGB GeoTIFF imagery, the bands B4 (red), B3(green), and B2(blue) need to be specified (different band compositions can be selected in this step). In satellite imagery, bands refer to specific wavelength ranges captured by the satellite sensors, and they are used to create composite images that highlight different features of the Earth's surface. These bands correspond to the visible spectrum, which is useful for visual interpretation and analysis.
 The script to download the satellite imagery needed using GEE (see Code \ref{download}) is configured with a for loop to iterate through each entry in the DataFrame, extracting necessary parameters such as date ranges, region of interest (ROI) coordinates, and center coordinates of each wildfire polygon. Also, the script is designed to specify parameters such as the desired image collection and a threshold for cloud coverage. Tiles exhibiting more than 10\%  cloud coverage are automatically excluded to maintain data quality. Finally, the images are downloaded and exported to Google Drive in a GeoTIFF format. 
 
-Code \ref{download} depicts the script to automate the download of pre- or post-wildfire images using GEE’s Python API. It iterates through a DataFrame, extracting relevant parameters and downloading images with less than 10\% cloud coverage. The images are exported as GeoTIFF files to Google Drive.
-
-\begin{lstlisting}[language=Python, label= download, caption = Downloading Images Using GEE and a DataFrame]
+\begin{lstlisting}[language=Python, label= download, caption = Script to automate the download of pre- or post-wildfire images using GEE’s Python API. It iterates through a DataFrame, extracting relevant parameters and downloading images with less than 10\% cloud coverage. The images are exported as GeoTIFF files to Google Drive.
+]
 #Authenticate into EE
 ee.Authenticate()
 
@@ -184,17 +183,18 @@ for i in indices:
             ({cloudy_percentage} %) > 10 %")
 
 \end{lstlisting}
-Figure \ref{fig3} presents an example of a pre-and-post RGB Sentinel-2 image pair of a forested area that was impacted by wildfires. 
+
+Figure \ref{fig3} presents an example of a pre-and post-wildfire imagery pair downloaded from GEE to Google Drive using code \ref{download} . 
 
 \begin{figure}[H]
     \centering
     \includegraphics{prepost1.png}
-    \caption{Example of a  pre-and-post RGB image pair of a forested area affected by wildfires downloaded using GEE's Python API. \label{fig3}}
+    \caption{Example of a  pre and post-wildfire RGB image pair of a forested area downloaded using GEE's Python API. \label{fig3}}
 \end{figure}
 \subsection{Creating the Ground Truth Wildfire Labels}
-Ground truth masks are essential in forest wildfire detection and general land cover classifications \citep{8113128}. In this project, masks are generated to label the data.
+Ground truth masks are essential in forest wildfire detection and general land cover classifications \citep{8113128}. In this project, these type of masks are generated to label the data.
 
-To do this, Python is used to rasterize the combined geometry of the forest wildfire polygon data and the downloaded post-wildfire RGB satellite imagery. Specifically, the forest wildfire polygons are accessed in Python using GeoPandas \citep{geopandas} and reprojected to match the coordinate system of the satellite imagery (EPSG:4326). Then, each post-wildfire RGB image is locally and temporarily downloaded from Google Drive, with essential properties such as width, height, transform, and bounds extracted using the rasterio library \citep{rasterio}. Next, the geometry column from the forest wildfire polygon data is extracted and intersected with each image bound using Python's shapely \citep{shapely} library. Finally, binary masks are created by rasterizing the combined geometries. These masks match the dimensions of the satellite images, ensuring that each pixel labeled as wildfire damage corresponds directly to the polygon data. The binary masks are saved temporarily in GeoTIFF format and are uploaded to a dedicated Google Drive folder (see Code \ref{lst:fire_polygons_processing}).  All the temporary local files were deleted to clear space and maintain system efficiency.  
+First, Python is used to rasterize the combined geometry of the forest wildfire polygon data and the downloaded post-wildfire RGB satellite imagery. Specifically, the forest wildfire polygons are accessed in Python using GeoPandas \citep{geopandas} and reprojected to match the coordinate system of the satellite imagery (EPSG:4326). Then, each post-wildfire RGB image is locally and temporarily downloaded from Google Drive, with essential properties such as width, height, transform, and bounds extracted using the rasterio library \citep{rasterio}. Next, the geometry column from the forest wildfire polygon data is extracted and intersected with each image bound using Python's shapely \citep{shapely} library. Finally, binary masks are created by rasterizing the combined geometries. These masks match the dimensions of the satellite images, ensuring that each pixel labeled as wildfire damage corresponds directly to the polygon data (see Code \ref{lst:fire_polygons_processing}). The binary masks are saved temporarily in GeoTIFF format and are uploaded to a dedicated Google Drive folder.  All the temporary local files were deleted to clear space and maintain system efficiency.  
 \begin{lstlisting}[language=Python, label= lst:fire_polygons_processing, caption = Building Ground Truth Masks]
 import geopandas as gpd
 import numpy as np
@@ -263,7 +263,7 @@ for index, row in gdf.iterrows():
                 dst.write(clipped_mask.astype(np.uint8), 1)
 \end{lstlisting}
 
-In the final ground truth masks, the pixel values are set to zero if they are outside of a wildfire polygon, indicating unaffected areas, and set to one if they are within the polygon boundaries, indicating areas affected by a forest wildfire. Figure \ref{fig4} displays an example of a resulting ground truth mask.
+In the resulting ground truth masks, the pixel values are set to zero if they are outside of a wildfire polygon, indicating unaffected areas, and set to one if they are within the polygon boundaries, indicating areas affected by a forest wildfire. Figure \ref{fig4} displays an example of a resulting ground truth mask.
 
 \begin{figure}[H]
     \centering
@@ -344,7 +344,7 @@ It is essential to have a balanced dataset that includes both forest wildfire-af
 
 To address this imbalance and enhance the model's accuracy in detecting wildfire-affected areas, data augmentation techniques are implemented. Specifically, functions using the rasterio and NumPy \citep{numpy} libraries are developed to perform image transformations, which include rotating the GeoTIFF tiles by 90°, 180°, and 270°, and flipping them horizontally and vertically. These transformations are applied to the imagery and the mask tiles that contain fire polygons and to their corresponding pre-wildfire RGB GeoTIFF tiles.
 
-Finally, the augmentation process increased the diversity of the training data and resulted in a total of 111,093 pairs of labeled RGB GeoTIFF image tiles. The final dataset consists of 82,011 negative instances (no wildfire damage) and 29,082 positive instances (wildfire damage), significantly improving the class balance and reducing the risk of overfitting.
+Finally, the augmentation process increased the diversity of the training data and resulted in a total of 106,317 pairs of labeled RGB GeoTIFF image tiles, with 29,082 positive instances (wildfire damage), improving the class balance.
 
 Figure \ref{fig0} illustrates the data augmentation process applied to the satellite imagery. The original image tile is shown alongside its augmented versions, which include rotations and flips. This augmentation increases the diversity of the dataset, helping to balance the classes and improve the model's ability to detect wildfire-affected areas accurately.
 \begin{figure}[H]
@@ -356,9 +356,9 @@ Figure \ref{fig0} illustrates the data augmentation process applied to the satel
 \section{Evaluating the CWGID Using Convolutional Neural Networks}
 The CWGID is tested for demonstration purposes using the well-known CNN architectures VGG16 and EfficientNet, both implemented using Python's TensorFlow’s Keras API. It is important to mention that both models were executed locally on a MacBook Pro equipped with a 2.4 GHz Intel Core i9 processor and 16 GB of 2400 MHz DDR4 memory.
 
-Satellite image data usually requires significant storage and processing power, as each image contains a large amount of data across the chosen spectral bands and stores geographic information that needs to be preserved. Thus, the scale and speed of model training observed in the results below is constrained by these factors. 
+Satellite image data usually requires significant storage and processing power because each image contains a large amount of data across the chosen spectral bands and stores important geographic information. Hence, the scale and speed of model training observed in the results below is constrained. 
 
-For users with access to high-performance computing clusters or cloud-based GPU instances, processing times can be significantly reduced.
+For users with access to high-performance computing clusters or cloud-based GPU instances, processing times can significantly reduce.
 
 \subsection{VGG16 Implementation}
 VGG16 \citep{Simonyan15} is a deep CNN designed for image processing and classification tasks. It consists of 13 convolutional layers, 5 pooling layers, and 3 fully connected layers. This model is adapted to train on the dataset and detect positive and negative instances of forest wildfires. The VGG16 architecture only trains on the post-wildfire 3-channel RGB imagery, which contains both.
@@ -370,16 +370,15 @@ To use this CNN architecture with GeoTIFF satellite images, which typically stor
 
 \item Batch Processing: It processes the images in batches of 32 files. For each batch, the function initializes empty lists for images and labels.
 
-\item Reading and Transforming Images: It reads each GeoTIFF file using rasterio. The images are then transformed to have the channels last (i.e., changing the format from \textbf{(channels, height, width)} to \textbf{(height, width, channels))} to use with Keras.
+\item Reading and Transforming Images: It reads each GeoTIFF file using rasterio. The images are then transformed to have the channels last (i.e., changing the format from \textbf{channels, height, width} to \textbf{height, width, channels}) to use with Keras.
 
-\item Labels are assigned based on the presence of "Damaged" in the file paths. Specifically, if the file path contains the string "/Damaged/", the image is labeled as 1 (indicating it shows a damaged area). If the file path does not contain this string, the image is labeled as 0 (indicating it shows an undamaged area). In this method, the ground-truth masks are not directly used but are leveraged to define the imagery file paths. Hence, if the mask of an image had at least one pixel with a value of one, the image was redirected to the "Damaged" files.
+\item Labels are assigned based on the presence of "Damaged" in the file paths. Specifically, if the file path contains the string "/Damaged/", the image is labeled as 1 (indicating it shows a damaged area). If the file path does not contain this string, the image is labeled as 0 (indicating it shows an undamaged area). In this method, the ground-truth masks are not directly used but are leveraged to define the imagery file paths. 
 
 \item Yielding Batches: Finally, the function yields batches of images and labels as Numpy arrays, which are then fed into the VGG16 model for training.
 \end{itemize}
 
-The data labeling is established by specifying the base paths to the training and testing directories for damaged and undamaged classes. The function reads batches of 32 GeoTIFF files, shuffles them, and processes them into a three-dimensional array compatible with VGG16. Since the VGG16 model needs to discern the presence or the absence of wildfire damage in the image, the ground-truth masks are not directly used. They are only used to define the imagery file paths.
-Thus, the labeling of this model is based on the presence of "Damaged" (value of 1) in the file paths. All the other files are labeled as "Undamaged" (value of 0), which simplifies the binary classification task.
-\begin{lstlisting}[language=Python, caption={Custom Function to Feed GeoTIFF Files to the VGG16 Model}, label= lst:custom_generator]
+
+\begin{lstlisting}[language=Python, caption={Custom Function to Feed GeoTIFF Files to the VGG16 Model: The function reads batches of 32 GeoTIFF files, shuffles them, and processes them into a three-dimensional array compatible with VGG16.}, label= lst:custom_generator]
 from sklearn.utils import shuffle
 
 # Define the base paths for training and testing
@@ -438,8 +437,7 @@ model.compile(optimizer=Adam(learning_rate=0.0001),
 
 \end{lstlisting}
 
-The VGG16 model is trained and validated on 95594 three-channel RGB images (45\% of the data, divided as follows: 80\% for training and
-10\% for validation) and is tested on 10621 images (5\% of the data). Training took 1953 minutes for 10 epochs.
+The VGG16 model is trained and validated on 95594 three-channel RGB images (divided as follows: 90\% for training and 10\% for validation) and is tested on 10621 images. Training took 1953 minutes for 10 epochs.
 
 \subsection{EfficientNet Implementation}
 \begin{figure}[H]
@@ -555,18 +553,14 @@ model.compile(optimizer='adam',
 
 Before training, class weights are calculated using the Scikit-learn library. Furthermore, Keras callbacks are set up for early stopping, model checkpointing, and reducing the learning rate when the validation loss plateaus, which helps optimize the training process. As VGG16, the model is compiled with the Adam optimizer and binary cross-entropy loss, with accuracy, precision, and recall as performance metrics.
 
-For testing purposes, this EF architecture is trained on 23833 pre- and post-wildfire image pairs (22.5\% of the data, divided as follows: 80\% for training and 10\% for validation) and is tested on 2716 pre- and post-wildfire image pairs (2.5\% of the data). Training took 933 minutes for 13 epochs. The detailed training and validation performance metrics for each epoch are provided in Table \ref{tab:1}. 
-
-During the training process, the model's performance on the training set showed a consistent increase in accuracy, precision, and recall. Specifically, the training accuracy improved from 0.7971 to 0.9588, precision increased from 0.7204 to 0.9665, and recall increased from 0.4053 to 0.8776 over the same period.
-
-On the validation (val) set, the performance metrics exhibited positive trends as well. The validation accuracy began at 0.7843, peaked at 0.9359 around the eighth epoch, and remained high at 0.9333 by the final epoch. Validation, precision, and recall also showed improvements, with precision starting at 0.7688 and reaching up to 0.9606, while recall improved from 0.497 to 0.7757.
+For testing purposes, this EF architecture is trained on 23833 pre- and post-wildfire image pairs (divided as follows: 90\% for training and 10\% for validation) and is tested on 2716 pre- and post-wildfire image pairs. Training took 933 minutes for 13 epochs. The detailed training and validation performance metrics for each epoch are provided in Table \ref{tab:1}. 
 
 \begin{table}[H]
     \centering
     \caption{Performance Metrics for Training and Validation Sets Using EfficientNetB0 Across Epochs. \label{tab:1}}
     \begin{tabular}{ccccccc}
     \toprule
-\textbf{Epoch} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{Val Accuracy} & \textbf{Val Precision} & \textbf{Val Recall} \\
+\textbf{Epoch} & \textbf{Training Accuracy} & \textbf{Training Precision} & \textbf{ Training Recall} & \textbf{Validation Accuracy} & \textbf{Validation Precision} & \textbf{Validation Recall} \\
     \midrule
     1/13 & 0.7971 & 0.7204 & 0.4053 & 0.7843 & 0.7688 & 0.4973 \\
     2/13 & 0.8803 & 0.8299 & 0.6995 & 0.8703 & 0.7499 & 0.5754 \\
@@ -585,6 +579,9 @@ On the validation (val) set, the performance metrics exhibited positive trends a
     \end{tabular}
 \end{table}
 
+During the training process, the model's performance on the training set showed a consistent increase in accuracy, precision, and recall. Specifically, the training accuracy improved from 0.7971 to 0.9588, precision increased from 0.7204 to 0.9665, and recall increased from 0.4053 to 0.8776 over the same period.
+
+On the validation set, the performance metrics exhibited positive trends as well. The validation accuracy began at 0.7843, peaked at 0.9359 around the eighth epoch, and remained high at 0.9333 by the final epoch. Validation, precision, and recall also showed improvements, with precision starting at 0.7688 and reaching up to 0.9606, while recall improved from 0.497 to 0.7757.
 
 There is a slight decrease in the validation performance metrics when compared to the training performance metrics. However, the validation metrics remain high, which suggests that the model is generalizing well to unseen data. However, the consistent gap between training and validation performance metrics indicates a slight degree of overfitting for the EfficientNetB0 application. 
 
