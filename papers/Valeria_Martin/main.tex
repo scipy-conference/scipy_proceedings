@@ -552,36 +552,36 @@ Before training, class weights are calculated using the Scikit-learn library. Fu
 
 For testing purposes, this EF architecture is trained on 23833 pre- and post-wildfire image pairs (22.5\% of the data, divided as follows: 80\% for training and 10\% for validation) and is tested on 2716 pre- and post-wildfire image pairs (2.5\% of the data). Training took 933 minutes for 13 epochs. The detailed training and validation performance metrics for each epoch are provided in Table \ref{tab:1}. 
 
-During the training process, the model's performance on the training set showed a consistent decrease in loss and an increase in accuracy, precision, and recall. Specifically, the training loss decreased from 0.4825 in the first epoch to 0.1020 by the thirteenth epoch. Similarly, the training accuracy improved from 0.7971 to 0.9588, precision increased from 0.7204 to 0.9665, and recall increased from 0.4053 to 0.8776 over the same period.
+During the training process, the model's performance on the training set showed a consistent increase in accuracy, precision, and recall. Specifically, the training accuracy improved from 0.7971 to 0.9588, precision increased from 0.7204 to 0.9665, and recall increased from 0.4053 to 0.8776 over the same period.
 
-On the validation (val) set, the performance metrics exhibited positive trends as well. The validation loss decreased overall, starting at 0.6073 in the first epoch and reaching 0.1956 by the thirteenth epoch. The validation accuracy began at 0.7843, peaked at 0.9359 around the eighth epoch, and remained high at 0.9333 by the final epoch. Validation precision and recall also showed improvements, with precision starting at 0.9407 and reaching up to 0.9606, while recall improved from 0.1838 to 0.7959.
+On the validation (val) set, the performance metrics exhibited positive trends as well. The validation accuracy began at 0.7843, peaked at 0.9359 around the eighth epoch, and remained high at 0.9333 by the final epoch. Validation, precision, and recall also showed improvements, with precision starting at 0.7688 and reaching up to 0.9606, while recall improved from 0.497 to 0.7757.
 
 \begin{table}[H]
     \centering
-    \label{tab:1}
     \caption{Performance Metrics for Training and Validation Sets Using EfficientNetB0 Across Epochs. \label{tab:1}}
-    \begin{tabular}{ccccccccc}
+    \begin{tabular}{ccccccc}
     \toprule
-\textbf{Epoch} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} & \textbf{Val Accuracy} & \textbf{Val Precision} & \textbf{Val Recall} & \textbf{Val F1 Score} \\
+\textbf{Epoch} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{Val Accuracy} & \textbf{Val Precision} & \textbf{Val Recall} \\
     \midrule
-    1/20 & 0.7971 & 0.7204 & 0.4053 & 0.5507 & 0.7843 & 0.7688 & 0.4973 & 0.6040 \\
-    2/20 & 0.8803 & 0.8299 & 0.6995 & 0.6796 & 0.8703 & 0.7499 & 0.5754 & 0.6511 \\
-    3/20 & 0.8979 & 0.8599 & 0.7424 & 0.7437 & 0.8152 & 0.8034 & 0.5404 & 0.6462 \\
-    4/20 & 0.9022 & 0.8668 & 0.7531 & 0.7949 & 0.8179 & 0.7222 & 0.6024 & 0.6569 \\
-    5/20 & 0.9187 & 0.9016 & 0.7842 & 0.8367 & 0.9125 & 0.7597 & 0.5647 & 0.6478 \\
-    6/20 & 0.9265 & 0.9156 & 0.8015 & 0.8663 & 0.9310 & 0.7014 & 0.5948 & 0.6437 \\
-    7/20 & 0.9298 & 0.9181 & 0.8121 & 0.8879 & 0.9363 & 0.7289 & 0.5726 & 0.6414 \\
-    8/20 & 0.9346 & 0.9260 & 0.8235 & 0.9014 & 0.9359 & 0.7104 & 0.5946 & 0.6474 \\
-    9/20 & 0.9370 & 0.9274 & 0.8315 & 0.9132 & 0.9057 & 0.7580 & 0.5464 & 0.6350 \\
-    10/20 & 0.9424 & 0.9387 & 0.8416 & 0.9157 & 0.9291 & 0.7522 & 0.5835 & 0.6572 \\
-    11/20 & 0.9537 & 0.9590 & 0.8655 & 0.9500 & 0.9333 & 0.9386 & 0.7959 & 0.8672 \\
-    12/20 & 0.9573 & 0.9644 & 0.8739 & 0.9576 & 0.9363 & 0.9516 & 0.7959 & 0.8650 \\
-    13/20 & 0.9588 & 0.9665 & 0.8776 & 0.9622 & 0.9333 & 0.9606 & 0.7757 & 0.8712 \\
+    1/13 & 0.7971 & 0.7204 & 0.4053 & 0.7843 & 0.7688 & 0.4973 \\
+    2/13 & 0.8803 & 0.8299 & 0.6995 & 0.8703 & 0.7499 & 0.5754 \\
+    3/13 & 0.8979 & 0.8599 & 0.7424 & 0.8152 & 0.8034 & 0.5404 \\
+    4/13 & 0.9022 & 0.8668 & 0.7531 & 0.8179 & 0.7222 & 0.6024 \\
+    5/13 & 0.9187 & 0.9016 & 0.7842 & 0.9125 & 0.7597 & 0.5647 \\
+    6/13 & 0.9265 & 0.9156 & 0.8015 & 0.9310 & 0.7014 & 0.5948 \\
+    7/13 & 0.9298 & 0.9181 & 0.8121 & 0.9363 & 0.7289 & 0.5726 \\
+    8/13 & 0.9346 & 0.9260 & 0.8235 & 0.9359 & 0.7104 & 0.5946 \\
+    9/13 & 0.9370 & 0.9274 & 0.8315 & 0.9057 & 0.7580 & 0.5464 \\
+    10/13 & 0.9424 & 0.9387 & 0.8416 & 0.9291 & 0.7522 & 0.5835 \\
+    11/13 & 0.9537 & 0.9590 & 0.8655 & 0.9333 & 0.9386 & 0.7959 \\
+    12/13 & 0.9573 & 0.9644 & 0.8739 & 0.9363 & 0.9516 & 0.7959 \\
+    13/13 & 0.9588 & 0.9665 & 0.8776 & 0.9333 & 0.9606 & 0.7757 \\
     \bottomrule
     \end{tabular}
 \end{table}
 
-There is a slight decrease in the validation performance metrics when compared to the training performance metrics. However, the validation metrics remain high, which suggests that the model is generalizing well to unseen data but the consistent gap between training and validation performance metrics indicates a slight degree of overfitting for the EfficientNetB0 application. 
+
+There is a slight decrease in the validation performance metrics when compared to the training performance metrics. However, the validation metrics remain high, which suggests that the model is generalizing well to unseen data. However, the consistent gap between training and validation performance metrics indicates a slight degree of overfitting for the EfficientNetB0 application. 
 
 
 \subsection{DL Results}
