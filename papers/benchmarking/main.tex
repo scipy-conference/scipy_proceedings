@@ -276,7 +276,8 @@ From a software perspective it is worth noting that \textbf{sktime} \cite{loning
     \item \textbf{statsmodels} \cite{seabold2010statsmodels}: A foundational library for statistical methods, used for the deseasonalizer and various statistical primitives.
 \end{itemize}
 
-This hybrid use of \texttt{sktime} as a framework covering first-party (itself), second-party (\texttt{tsbootstrap}), and third-party (\texttt{statsmodels}, \texttt{statsforecast}) locations is significant. Credit goes to the maintainers and implementers of these packages.
+This hybrid use of \texttt{sktime} as a framework covering first-party (itself), second-party (\texttt{tsbootstrap}), and third-party (\texttt{statsmodels}, \texttt{statsforecast}) locations is significant.
+ Credit goes to the maintainers and implementers of these packages for implementing the contained algorithms that we can interface.
 
 \subsection{Forecasting Pipeline}
 Each forecaster is wrapped in a \texttt{Differencer} and a \texttt{Deseasonalizer} as preprocessing steps to improve stationarity. These preprocessors are necessary because some forecasters require the time series to be stationary and non-seasonal.
