@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-07-23T03:02:51.562Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="MtyEiYRyU2L1jUgRC2rt" version="24.6.5" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-23T03:10:26.146Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="FWumKT5PNOVx-J5BtJcw" version="24.6.5" type="github">
   <diagram name="Page-1" id="-rFiT2QOCS_2W7RfbsIS">
-    <mxGraphModel dx="635" dy="330" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="611" dy="317" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -96,6 +96,12 @@
         </mxCell>
         <mxCell id="SzXXKODQA_d7fAglRIwC-47" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/competitive-strategy-and-corporate-training/512/597_Command_computer_function_process_progress_game_gaming_genres_programing-128.png" vertex="1" parent="1">
           <mxGeometry x="1061" y="411" width="68" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="SzXXKODQA_d7fAglRIwC-51" value="" style="sketch=0;points=[[0.015,0.015,0],[0.985,0.015,0],[0.985,0.985,0],[0.015,0.985,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];verticalLabelPosition=bottom;html=1;verticalAlign=top;aspect=fixed;align=center;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=cisco_dna_center;fillColor=#FAFAFA;strokeColor=#005073;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="381" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SzXXKODQA_d7fAglRIwC-50" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.magnifying_glass_2;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="362.5" width="87.5" height="87.5" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
