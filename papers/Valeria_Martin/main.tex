@@ -338,7 +338,6 @@ It is essential to have a balanced dataset that includes both forest wildfire-af
 To address this imbalance and enhance the model's accuracy in detecting wildfire-affected areas, data augmentation techniques are implemented. Specifically, functions using the rasterio and NumPy \citep{numpy} libraries are developed to perform image transformations, which include rotating the GeoTIFF tiles by 90°, 180°, and 270°, and flipping them horizontally and vertically. These transformations are applied to the imagery and the mask tiles that contain fire polygons and to their corresponding pre-wildfire RGB GeoTIFF tiles.
 
 Finally, the augmentation process increased the diversity of the training data and resulted in a total of 111,093 pairs of labeled RGB GeoTIFF image tiles. The final dataset consists of 82,011 negative instances (no wildfire damage) and 29,082 positive instances (wildfire damage), significantly improving the class balance and reducing the risk of overfitting.
-Figure X illustrates the data augmentation process applied to the satellite imagery and its labels. The original image tile is shown alongside its augmented versions, which include rotations and flips. This augmentation increases the diversity of the dataset, helping to balance the classes and improve the model's ability to detect wildfire-affected areas accurately.
 
 Figure \ref{fig0} illustrates the data augmentation process applied to the satellite imagery. The original image tile is shown alongside its augmented versions, which include rotations and flips. This augmentation increases the diversity of the dataset, helping to balance the classes and improve the model's ability to detect wildfire-affected areas accurately.
 \begin{figure}[H]
@@ -348,12 +347,16 @@ Figure \ref{fig0} illustrates the data augmentation process applied to the satel
 \end{figure}
 
 \section{Evaluating the CWGID Using Convolutional Neural Networks}
-The CWGID is tested for demonstration purposes using the well-known CNN architectures VGG16 and EfficientNet, both implemented using Python's TensorFlow’s Keras API.
+The CWGID is tested for demonstration purposes using the well-known CNN architectures VGG16 and EfficientNet, both implemented using Python's TensorFlow’s Keras API. It is important to mention that both models were executed locally on a MacBook Pro equipped with a 2.4 GHz Intel Core i9 processor and 16 GB of 2400 MHz DDR4 memory.
+
+Satellite image data usually requires significant storage and processing power, as each image contains a large amount of data across the chosen spectral bands and stores geographic information that needs to be preserved. Thus, the scale and speed of model training observed in the results below is constrained by these factors. 
+
+For users with access to high-performance computing clusters or cloud-based GPU instances, processing times can be significantly reduced.
 
 \subsection{VGG16 Implementation}
 VGG16 \citep{Simonyan15} is a deep CNN designed for image processing and classification tasks. It consists of 13 convolutional layers, 5 pooling layers, and 3 fully connected layers. This model is adapted to train on the dataset and detect positive and negative instances of forest wildfires. The VGG16 architecture only trains on the post-wildfire 3-channel RGB imagery, which contains both.
 
-To use this CNN architecture with GeoTIFF satellite images, which typically store geographic data not supported by most deep-learning libraries, a custom function is implemented to process and feed the data to the model using the rasterio library and the shuffle function from the Scikit-learn library \citep{sklearn1,sklearn2}. This function (see Code \ref{lst}) is crucial for handling the unique structure of GeoTIFF files and converting them into a format suitable for deep learning. It is designed to read batches of GeoTIFF files, shuffle them to ensure randomness, and process them into a three-dimensional array compatible with VGG16. Here is how it works:
+To use this CNN architecture with GeoTIFF satellite images, which typically store geographic data not supported by most deep-learning libraries, a custom function is implemented to process and feed the data to the model using the rasterio library and the shuffle function from the Scikit-learn library \citep{sklearn1,sklearn2}. This function (see Code \ref{lst:custom_generator}) is crucial for handling the unique structure of GeoTIFF files and converting them into a format suitable for deep learning. It is designed to read batches of GeoTIFF files, shuffle them to ensure randomness, and process them into a three-dimensional array compatible with VGG16. Here is how it works:
 
 \begin{itemize}
 \item File Paths Initialization: The function starts by taking the file paths of the GeoTIFF images and shuffling them using the shuffle function from Scikit-learn to ensure the batches are randomly ordered.
@@ -364,10 +367,8 @@ To use this CNN architecture with GeoTIFF satellite images, which typically stor
 
 \item Labels are assigned based on the presence of "Damaged" in the file paths. Specifically, if the file path contains the string "/Damaged/", the image is labeled as 1 (indicating it shows a damaged area). If the file path does not contain this string, the image is labeled as 0 (indicating it shows an undamaged area). In this method, the ground-truth masks are not directly used but are leveraged to define the imagery file paths. Hence, if the mask of an image had at least one pixel with a value of one, the image was redirected to the "Damaged" files.
 
-\item Yielding Batches: Finally, the function yields batches of images and labels as numpy arrays, which are then fed into the VGG16 model for training.
+\item Yielding Batches: Finally, the function yields batches of images and labels as Numpy arrays, which are then fed into the VGG16 model for training.
 \end{itemize}
-
-To use this CNN architecture with GeoTIFF satellite images, which typically store geographic data not supported by most deep-learning libraries, a custom function to feed the data to the model is built using the rasterio library and the shuffle function from the Scikit-learn library \citep{sklearn1,sklearn2} (see Code \ref{lst:custom_generator}). 
 
 The data labeling is established by specifying the base paths to the training and testing directories for damaged and undamaged classes. The function reads batches of 32 GeoTIFF files, shuffles them, and processes them into a three-dimensional array compatible with VGG16. Since the VGG16 model needs to discern the presence or the absence of wildfire damage in the image, the ground-truth masks are not directly used. They are only used to define the imagery file paths.
 Thus, the labeling of this model is based on the presence of "Damaged" (value of 1) in the file paths. All the other files are labeled as "Undamaged" (value of 0), which simplifies the binary classification task.
@@ -400,8 +401,6 @@ def custom_image_generator(file_paths, batch_size):
 \end{lstlisting}
 
 To detect wildfire-affected areas with VGG16, the model is initiated using the pre-trained weights from the ImageNet dataset. The convolutional base is frozen to preserve the integrity of the learned features and to focus on the training of the added layers. A Flatten operation is applied to the output to transform the two-dimensional feature maps into a one-dimensional vector. Then, a fully connected dense layer with 1024 neurons and ReLU activation is added. Finally, the network becomes a single-neuron dense layer with a sigmoid activation function that produces a probability score of wildfire damage. The complete model is compiled with the Adam optimizer \citep{kingma2014adam}, binary cross-entropy loss \citep{goodfellow2016deep}, and accuracy, precision, and recall as the performance metrics (see Code \ref{lst:vgg16_wildfire_detection}). The Adam optimizer is chosen because it adapts the learning rate during training. In the context of satellite image classification, where the landscape can vary significantly across images, Adam’s ability to adjust the learning rate is important. Also, the binary cross-entropy loss is chosen because it is tailored for binary classification tasks, such as classifying between damaged and undamaged areas in satellite images.
-
-This model was executed on a MacBook Pro (2019) equipped with a 2.4 GHz Intel Core i9 processor and 16 GB of 2400 MHz DDR4 memory. Satellite image data usually requires significant storage and processing power. Handling and processing such large datasets can be computationally intensive and time-consuming. Moreover, each image contains a large amount of data across the chosen spectral bands and stores geographic information that needs to be preserved. Thus, the scale and speed of model training can be constrained by these factors. 
 
 \begin{lstlisting}[language=Python, caption={Adaptation of VGG16 for Wildfire Damage Detection}, label= lst:vgg16_wildfire_detection]
 from keras.models import Model
@@ -588,7 +587,7 @@ The results in Table \ref{tab:2} compare the performance of the two neural netwo
 
 Both models are trained with subsets of the CWGID dataset, with the 6-channel input EF EfficientNet model using 25\% of the data and the VGG16 model using 50\% of the data. 
 
-The 6-channel input EfficientNet achieved the lowest loss (0.178) and highest accuracy (92.6\%), making it the most effective model in terms of overall performance. Its precision was at 92.5\% and its recall was 81.9\%, indicating a strong ability to identify damaged areas correctly with some missed detections. VGG16, despite processing a larger dataset, had a higher loss (1.220) but maintained an accuracy of 83.2\%. Its precision was 74.9\% and its recall was 58.8\%. This architecture took a longer training time. The EfficientNet model shows a relatively faster training time when considering the epochs and the amount of data used.  The 6-channel input EfficientNet demonstrated superior performance in accurately classifying areas affected by wildfires with high precision and accuracy, making it an efficient choice for applications where quick and accurate assessments are critical. Moreover, it is important to mention that VGG16 was tested with Six-Channel inputs but proved computationally intensive.
+The 6-channel input EfficientNet achieved the lowest loss (0.178) and highest accuracy (92.6\%), making it the most effective model in terms of overall performance. Its precision was at 92.5\% and its recall was 81.9\%, indicating a strong ability to identify damaged areas correctly with some missed detections. VGG16, despite processing a larger dataset, had a higher loss (1.220) but maintained an accuracy of 83.2\%. Its precision was 74.9\% and its recall was 58.8\%. This architecture took a longer training time. The EfficientNet model shows a relatively faster training time when considering the epochs and the amount of data used.  The 6-channel input EfficientNet demonstrated superior performance in accurately classifying areas affected by wildfires with high precision and accuracy, making it an efficient choice for applications where quick and accurate assessments are critical. Moreover, it is important to mention that VGG16 was tested with 6-channel inputs but proved computationally intensive.
  
 
  \begin{table}[H]
