@@ -22,7 +22,6 @@ project:
       affiliations:
         - University of West Florida
         - Florida Institute of Human Machine Cognition
-
   keywords:
     - Wildfire Detection
     - Satellite Imagery
@@ -38,7 +37,9 @@ project:
   abbreviations:
     EO: Earth Observation
     API: Application Programming Interface
-    B2, B3, B4: Sentinel-2 spectral bands corresponding to blue (B2), green (B3), and red (B4)
+    B2: Sentinel-2 spectral band corresponding to blue
+    B3: Sentinel-2 spectral band corresponding to green
+    B4: Sentinel-2 spectral band corresponding to red
     CNN: Convolutional Neural Network
     CWGID: California Wildfire GeoImaging Dataset
     DL: Deep Learning
@@ -57,8 +58,8 @@ project:
       severity: ignore
       keys:
         - IUCN2021
-	- Massey2023
-	- gorelick2017google
+        - Massey2023
+        - gorelick2017google
         - tensorflow2015-whitepaper
         - Alzubaidi2021ReviewOD
         - Adegun2023
