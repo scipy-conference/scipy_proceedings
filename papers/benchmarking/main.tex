@@ -133,7 +133,9 @@ forecaster.fit(y, fh=[1, 2, 3])
 y_pred_int = forecaster.predict_interval()
 \end{verbatim}
 
-This method uses a window sliding and residual collection strategy.
+The conformal prediction interval fits multiple instances of the wrapped forecaster on on parts of the time series using window sliding. In particular, each forecaster's instance $i$
+is fit on the time series $y_{1:t_i}$, where $t_i \neq t_j$. Afterwards, the residuals are computed on the remaining time series $y_{t_{i+1}:n}$, where $n$ is the length of the time series.
+Out of these residuals, the prediction intervals are computed.
 The resulting algorithm possesses \texttt{fit}, \texttt{predict}, and - added by the wrapper - \texttt{predict\_interval}, as well as the \texttt{capability:pred\_int} tag.
 
 Data transformation pipelines can be constructed similarly, or with an operator-based specification syntax:
