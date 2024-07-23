@@ -102,18 +102,17 @@ Multiple steps are needed to set up the GEE's Python API. First, a project is cr
 Then, a Python script is developed to automate the download of images depicting the pre- or post-wildfire data using GEE's Python API (see Code \ref{download}). To download three-channel RGB GeoTIFF imagery, the bands B4 (red), B3(green), and B2(blue) need to be specified (different band compositions can be selected in this step). In satellite imagery, bands refer to specific wavelength ranges captured by the satellite sensors, and they are used to create composite images that highlight different features of the Earth's surface. These bands correspond to the visible spectrum, which is useful for visual interpretation and analysis.
 The script to download the satellite imagery needed using GEE (see Code \ref{download}) is configured with a for loop to iterate through each entry in the DataFrame, extracting necessary parameters such as date ranges, region of interest (ROI) coordinates, and center coordinates of each wildfire polygon. Also, the script is designed to specify parameters such as the desired image collection and a threshold for cloud coverage. Tiles exhibiting more than 10\%  cloud coverage are automatically excluded to maintain data quality. Finally, the images are downloaded and exported to Google Drive in a GeoTIFF format. 
 
-\begin{lstlisting}[language=Python, label= download, caption = Script to automate the download of pre- or post-wildfire images using GEE’s Python API. It iterates through a DataFrame, extracting relevant parameters and downloading images with less than 10\% cloud coverage. The images are exported as GeoTIFF files to Google Drive.
-]
-#Authenticate into EE
+\begin{lstlisting}[language=Python, label=download, caption=Script to automate the download of pre- or post-wildfire images using GEE’s Python API. It iterates through a DataFrame, extracting relevant parameters and downloading images with less than 10\% cloud coverage. The images are exported as GeoTIFF files to Google Drive.]
+# Authenticate into EE
 ee.Authenticate()
 
-#Initialize EE
+# Initialize EE
 ee.Initialize()
 
 # Initialize a list for iteration
 indices = []
 for i in range(0, x):  # modify depending on your number of data points
-    num.append(i)
+    indices.append(i)
 
 # Define the bands you want to download
 bands_rgb = ['B4', 'B3', 'B2']  # Red, Green, Blue
@@ -125,17 +124,17 @@ for i in indices:
     center_point = ee.Geometry.Point(round(data[i][1], 2), round(data[i][2], 2))
 
     # Select an image from the specified satellite collection for the center point
-    tile = ee.ImageCollection('COPERNICUS/S2') \ # Define the satellite imagery you will be working with, in this case Sentinel 2
+    tile = ee.ImageCollection('COPERNICUS/S2') \  # Define the satellite imagery you will be working with, in this case Sentinel 2
         .filterBounds(center_point) \
-        .filterDate(data[i][3], data[i][4]) \ # Define a date range for the satellite image
-        .sort('CLOUDY_PIXEL_PERCENTAGE') \ # Organize the images based on the % cloud cover
-        .first() # Get the image with the lowest cloud cover
-
+        .filterDate(data[i][3], data[i][4]) \  # Define a date range for the satellite image
+        .sort('CLOUDY_PIXEL_PERCENTAGE') \  # Organize the images based on the % cloud cover
+        .first()  # Get the image with the lowest cloud cover
 
     # Check the properties of the image
     image_properties = tile.getInfo()
     cloudy_percentage = image_properties.get(
-        'properties', {}).get('CLOUDY_PIXEL_PERCENTAGE', 0) # Obtain the exact percentage of cloud cover for each image
+        'properties', {}).get('CLOUDY_PIXEL_PERCENTAGE', 0)  # Obtain the exact percentage of cloud cover for each image
+
     # Proceed if the image has less than 10% cloud coverage
     if cloudy_percentage <= 10: 
         # Define the Region of Interest (ROI) using the provided coordinates
@@ -153,36 +152,29 @@ for i in indices:
         rgb_task = ee.batch.Export.image.toDrive(**{
             'image': rgb_tile,
             'description': f'RGB_{event_type}Fire'
-            + str(data[i][0]), # Descriptive name for the task
-            'folder': f'GEE_FireImagesRGB_{event_type}', # Folder in Google Drive to save the image
+            + str(data[i][0]),  # Descriptive name for the task
+            'folder': f'GEE_FireImagesRGB_{event_type}',  # Folder in Google Drive to save the image
             'scale': 10,  # Adjust the scale as needed
-            'region': roi.getInfo()['coordinates'], # Region of Interest for the export 
-            'crs': 'EPSG:4326', # Coordinate reference system
-            'fileFormat': 'GeoTIFF', # File format for the export
+            'region': roi.getInfo()['coordinates'],  # Region of Interest for the export 
+            'crs': 'EPSG:4326',  # Coordinate reference system
+            'fileFormat': 'GeoTIFF',  # File format for the export
         })
         rgb_task.start()
 
         # Monitor the task status until it completes or fails
-        while not rgb_task.status()['state'] in \
-                ['COMPLETED', 'FAILED', 'CANCELLED']:
-            print(f'RGB Task for {event_type} fire is',
-                  rgb_task.status()['state'])
+        while not rgb_task.status()['state'] in ['COMPLETED', 'FAILED', 'CANCELLED']:
+            print(f'RGB Task for {event_type} fire is', rgb_task.status()['state'])
             # Add a short wait before checking again
 
         # Check the final task status
         rgb_task_status = rgb_task.status()
-        print(f"RGB Task Status for {event_type} fire:",
-              rgb_task_status)
-        print(f"RGB Task Error Message for {event_type}
-              fire: ", rgb_task_status.get(
-            "error_message", "No error message"))
+        print(f"RGB Task Status for {event_type} fire:", rgb_task_status)
+        print(f"RGB Task Error Message for {event_type} fire:", rgb_task_status.get("error_message", "No error message"))
     else:
         # Skip images with more than 10% cloud coverage
-        print(
-            f"Skipping image {i} due to cloudy percentage
-            ({cloudy_percentage} %) > 10 %")
-
+        print(f"Skipping image {i} due to cloudy percentage ({cloudy_percentage} %) > 10 %")
 \end{lstlisting}
+
 
 Figure \ref{fig3} presents an example of a pre-and post-wildfire imagery pair downloaded from GEE to Google Drive using code \ref{download} . 
 
