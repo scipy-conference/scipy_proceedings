@@ -38,7 +38,7 @@ In this section, we summarize the key design principles used for reproducible be
 \subsection{Unified Interface}
 In \texttt{sktime} and \texttt{tsbootstrap}, algorithms and mathematical objects are treated as first-class citizens. All objects of the same type, such as forecasters, follow the same interface. This consistency ensures that every forecaster is exchangeable with any other.
 
-Forecasters are objects with \texttt{fit} and \texttt{predict} methods, allowing both endogenous and exogenous data to be passed. For example, the following code specifies a forecaster, fits it, and makes predictions.
+Forecasters are objects with \texttt{fit} and \texttt{predict} methods, allowing both the target time series (endogenous data) and the time series that influence the target time series (exogenous data) to be passed. For example, the following code specifies a forecaster, fits it, and makes predictions.
 
 \begin{verbatim}
 # importing the necessary modules
