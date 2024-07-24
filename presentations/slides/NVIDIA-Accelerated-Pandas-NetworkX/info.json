@@ -12,5 +12,5 @@
 	    "orcid": "0000-0001-5181-9532"
         }
     ],
-    "description": "This talk describes new open-source GPU accelerators from the NVIDIA RAPIDS project for Pandas and NetworkX, and will demonstrate how you can enable them for your workflows to experience significant speedups without code changes."
+    "description": "This talk describes new open-source GPU accelerators from the NVIDIA RAPIDS project for Pandas and NetworkX and will demonstrate how you can enable them for your workflows to experience significant speedups without code changes."
 }
