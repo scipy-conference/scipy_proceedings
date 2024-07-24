@@ -1,0 +1,25 @@
+{
+    "title": "Simplifying analysis of hierarchical HDF5 and NetCDF4 files with xarray-datatree",
+    "authors": [
+      {
+        "name": "Eniola Awowale",
+        "affiliation": "NASA Goddard Earth Sciences Data and Information Services Center",
+        "orcid": "0009-0001-8478-8047"
+      },
+      {
+        "name": "Tom Nicholas",
+        "affiliation": "[C]Worthy",
+        "orcid": "0000-0002-2176-0530"
+      },
+      {
+        "name": "Lucas Sterzinger",
+        "affiliation": "NASA Goddard Earth Sciences Data and Information Services Center",
+        "orcid": "0000-0003-3321-4534"
+      },
+      {
+        "name": "Nick Lenssen",
+        "affiliation": "NASA Goddard Earth Sciences Data and Information Services Center"
+      }
+    ],
+    "description": "Xarray-datatree, is a Python package that supports HDFs (Hierarchical Data Format) with hierarchical group structures by creating a tree-like hierarchical data structure in xarray."
+  }
