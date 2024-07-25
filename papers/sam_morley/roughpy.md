@@ -110,7 +110,7 @@ the understanding of path-like data analysis.
 
 On top of the streams, RoughPy also provides concrete implementations for
 elements of the various algebras associated with rough path analysis.
-These include free tensor algebras, shuffle tensor algebras, and free Lie
+These include free tensor algebras, shuffle tensor algebras, and Lie
 algebras [see @math-bgd-sec].
 This allows the user to easily manipulate signatures, and other objects, in a
 more natural manner.
@@ -190,10 +190,9 @@ In some sense, the signature is a *unversal non-linearity* on paths.
 Continuous functions on the path can be approximated (uniformly) by linear
 functionals ($\mathrm{G}(V)\to \mathbb{R}$) on the signature.
 This is a consequence of the Stone-Weierstrass theorem. 
-The *dual* of $\mathrm{T}((V))$ is $\mathrm{Sh}(V):=\mathrm{T}((V^{\ast}))
-\cong\mathrm{T}((V))$ 
-(as a vector space) is the space of these linear functionals on
-$\mathrm{T}((V))$; we call this the *shuffle algebra*.
+The *dual* of $\mathrm{T}((V))$ is $\mathrm{Sh}(V)$ is the space of 
+these linear functionals on $\mathrm{T}((V))$; we call this the *shuffle 
+algebra*. 
 The multiplication on $\mathrm{Sh}(V)$ is the *shuffle product*, which
 corresponds to point-wise multiplication of functions on the path.
 
@@ -458,7 +457,7 @@ code based on mathematical concepts, we provide realisations of several
 algebra types.
 The algebras provided in RoughPy are `FreeTensor`, `ShuffleTensor`, and `Lie`,
 which define elements of a particular free tensor algebra, shuffle tensor
-algebra, and free Lie algebra respectively.
+algebra, and Lie algebra respectively.
 Each of these algebras is initialized with a width, depth, and scalar
 coefficient type, encapsulated in a `Context` object.
 
@@ -706,7 +705,7 @@ It is designed to abstract away the form and source of data so that analysis can
 be performed by querying path-like objects.
 This approach is much closer to the mathematics.
 It also allows users to interact with the various algebras associated with rough
-paths (free tensor algebra, shuffle tensor algebra, free Lie algebra) in a
+paths (free tensor algebra, shuffle tensor algebra, Lie algebra) in a
 natural way.
 RoughPy is under active development, and a long list of improvements and
 extensions are planned.
