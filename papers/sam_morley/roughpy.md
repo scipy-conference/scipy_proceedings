@@ -188,13 +188,13 @@ reparametrisation.
 
 In some sense, the signature is a *unversal non-linearity* on paths.
 Continuous functions on the path can be approximated (uniformly) by linear
-functionals ($\mathrm{G}TL(V)\to \mathbb{R}$) on the signature.
+functionals ($\mathrm{G}(V)\to \mathbb{R}$) on the signature.
 This is a consequence of the Stone-Weierstrass theorem. 
-The *dual* of $\mathrm{T}((V))$ is $\mathrm{Sh}((V)):=\mathrm{T}((V^{\ast}))
+The *dual* of $\mathrm{T}((V))$ is $\mathrm{Sh}(V):=\mathrm{T}((V^{\ast}))
 \cong\mathrm{T}((V))$ 
 (as a vector space) is the space of these linear functionals on
 $\mathrm{T}((V))$; we call this the *shuffle algebra*.
-The multiplication on $\mathrm{Sh}((V))$ is the *shuffle product*, which
+The multiplication on $\mathrm{Sh}(V)$ is the *shuffle product*, which
 corresponds to point-wise multiplication of functions on the path.
 
 There are several *Lie algebras* associated to $\mathrm{T}((V))$.
@@ -207,10 +207,10 @@ follows: $L_0 = \{\mathbf{0}\}$, $L_1 = V$, and, for $m \geq 1$,
 L_{m+1} = \mathrm{span}\{[\mathbf{x}, \mathbf{y}] : \mathbf{x}\in V, \mathbf{y}
 \in L_m\}
 ```
-The space of formal Lie series $\mathcal{L}((V))$ over $V$ is the subspace of 
+The space of formal Lie series $\mathcal{L}(V)$ over $V$ is the subspace of 
 $\mathrm{T}((V))$ containing sequences of the form $(\ell_0, \ell_1, \cdots)$, 
 where $\ell_j\in L_j$ for each $j\geq 0$.
-Note that $\mathcal{L}((V))\subseteq \mathrm{T}^{>0}(V)$.
+Note that $\mathcal{L}(V)\subseteq \mathrm{T}^{>0}(V)$.
 For any $\mathbf{x} \in \mathrm{T}(V)$ we define 
 ```{math}
 \exp(\mathbf{x}) = \sum_{n=0}^\infty \frac{\mathbf{x}^{\otimes n}}{n!}
@@ -218,8 +218,8 @@ For any $\mathbf{x} \in \mathrm{T}(V)$ we define
 \log(\mathbf{1} + \mathbf{x}) = \sum_{n=1}^\infty
 \frac{(-1)^{n-1}}{n}\mathbf{x}^{\otimes n}.
 ```
-For any path $X$, we have $\log(\mathrm{S}(X)_{s, t})\in \mathcal{L}((V))$, and,
-more generally we have $\exp(\mathcal{L}((V))) = \mathrm{G}(V)$.
+For any path $X$, we have $\log(\mathrm{S}(X)_{s, t})\in \mathcal{L}(V)$, and,
+more generally we have $\exp(\mathcal{L}(V)) = \mathrm{G}(V)$.
 We call the quantity $\mathrm{LogSig}(X)_{s, t} := \log(\mathrm{S}(X)_{s,t})$
 the *log-signature* of $X$ over $[s, t)$.
 
@@ -230,7 +230,7 @@ Our first task is to form a bridge between sequential data and paths.
 Consider a finite, ordered sequence $\{(t_1, \mathbf{x}_1,\dots,
 t_N,\mathbf{x}_N)\}$ of observations, where $t_j\in \mathbb{R}$, and
 $\mathbf{x}_j\in V$.
-(More generally, we might consider $\mathbf{x}_j\in\mathcal{L}((V))$ instead.
+(More generally, we might consider $\mathbf{x}_j\in\mathcal{L}(V)$ instead.
 That is, data that already contains higher-order information.)
 We can find numerous paths that interpolate these observations; a path 
 $X:[t_0, t_N]\to V$ such that, for each $j$, $X_{t_j} = \mathbf{x}_j$.
@@ -579,7 +579,7 @@ which is an important construction from CDE.
 A piecewise Abelian path, or log-linear path, is an example of a *smooth rough
 path*, which generalises piecewise linear approximations of an arbitrary stream.
 Formally, an *Abelian path* $Y$ is a pair $([a, b), \mathbf{y})$ where $a < b$
-and $\mathbf{y}\in\mathcal{L}((V))$.
+and $\mathbf{y}\in\mathcal{L}(V)$.
 The log-signature over an arbitrary interval $[u, v) \subseteq [a, b)$ is given
 by
 ```{math}
