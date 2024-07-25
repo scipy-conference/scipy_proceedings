@@ -6,6 +6,13 @@ bibliography:
 numbering:
     heading_2: true
     heading_3: true
+exports:
+  - format: pdf
+    template: arxiv_two_column
+    article_type: Article
+  - format: tex
+    template: arxiv_two_column
+    article_type: Article
 abstract: |
   Rough path theory is a branch of mathematics arising out of stochastic
   analysis. One of the main tools of rough path analysis is the signature,
@@ -35,7 +42,7 @@ records, radio (and other electromagnetic spectra), sound (and speech), etc.
 Traditionally, these data are tricky to work with because of the exponential
 complexity and different scales of the underlying process.
 Until recently, with the development of transformers and large language models,
-it has been difficult to capture the long-term pattern whist also capturing the
+it has been difficult to capture the long-term pattern whilst also capturing the
 short-term fine detail.
 Rough path theory gives us tools to work with sequential, ordered data in a
 mathematically rigorous way, which should provide a means to overcome some of
@@ -597,6 +604,11 @@ In this section we show a very simple example of how to use RoughPy to construct
 a stream and compute a signature.
 This example is similar to the first few steps of the tutorial found in the
 RoughPy documentation.[^roughpydocs]
+RoughPy can be installed using `pip`, where prebuilt wheels are available for
+Windows, Linux, and MacOs:
+```
+pip install roughpy
+```
 We refer the reader to this documentation for much more detail.
 We will construct a stream in $\mathbb{R}^{26}$ by taking each letter in a word,
 "scipy" in this example, as the increments of a path:
