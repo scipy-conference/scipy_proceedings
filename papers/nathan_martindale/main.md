@@ -57,20 +57,19 @@ use case that motivated its design.
 
 ### Details on Demand
 
-Details on demand is one piece of the "visual information-seeking mantra"
-[@shneidermanEyesHaveIt1996], a paper describing an overall design approach to
-building interactive tooling. The general flow of interaction proposed by this
-mantra is "overview first, zoom and filter, then details-on-demand"
-[@shneidermanEyesHaveIt1996]. Overview
-first ideally starts with broader aggregate visualizations: something to gain a sense
-of the general scope, complexity, or shape of the data. From there a user can
-identify their own areas of interest to hone in on with whatever zoom and filter
-tools are applicable for their data's modality. Finally, details on demand
-means that the user can see or interact with more in-depth and specific
-information for pieces of their data, often in the form of a pop-up window or
-similar. This selective detail capability provides a flexible user experience
-that keeps the initial interface uncluttered without sacrificing the ability to
-organically explore the data.
+Details on demand is one piece of the "visual information-seeking mantra" of
+Schneiderman (1996) describing an overall design approach to building
+interactive tooling. The general flow of interaction proposed by this mantra is
+"overview first, zoom and filter, then details-on-demand"
+[@shneidermanEyesHaveIt1996]. Overview ideally starts with broader aggregate
+visualizations: something to gain a sense of the general scope, complexity, or
+shape of the data. From there a user can identify areas of interest to
+hone in on with whatever zoom and filter tools are applicable for their data's
+modality. Finally, details on demand means that the user can see or interact
+with more in-depth and specific information for pieces of their data, often in
+the form of a pop-up window or inset graph. This selective detail capability
+provides a flexible user experience that keeps the initial interface uncluttered
+without sacrificing the ability to organically explore the data.
 
 
 A simple and widespread example of details on demand are tooltips. Descriptions
@@ -96,7 +95,7 @@ reference for @fig:detailsondemand.
 ## IPyWidgets
 
 IPyWidgets is a library that enables implementing user interactivity inside of a
-Jupyter Notebook/Jupyter Lab. A key challenge this framework has to overcome is
+Jupyter Notebook. A key challenge this framework has to overcome is
 the separation between the Python kernel and the browser-based Jupyter frontend,
 which  operates through HTML, CSS, and JavaScript as a web application. Web
 application development is often a challenging software engineering problem in
@@ -244,7 +243,7 @@ framework abstracting away many of the specifics for how communication between a
 kernel, server, and frontend takes place. This framework can be used to design
 new widgets by providing implementations for the models and view code, without
 needing to reinvent the various messaging system mechanisms that solve the state
-synchronization problem discussed above. All of this has allowed many libraries
+synchronization problem discussed previously. All of this has allowed many libraries
 to emerge, providing novel functionality, a great diversity of new types of
 widgets, and other frameworks that can support rendering IPyWidgets within other
 contexts.
@@ -287,7 +286,7 @@ value changes (e.g., a slider is moved, the text in a textbox is changed, or an
 item in a drop-down menu is selected).
 
 These types of events are sufficient for basic interfaces, but often more complex types of
-interactions or responsiveness can greatly enhance the capabilities of a tool.
+interactions can greatly enhance the capabilities of a tool.
 The ability to detect mouse events can be crucial, enabling possibilities
 such as highlighting parts of a visualization when the mouse hovers over a row
 in a dataframe, or running an analysis when a user has highlighted a piece of
@@ -324,8 +323,9 @@ developed by starting from a Jupyter-provided cookie-cutter template
 
 One of the difficulties that comes with a project created in this way is the
 need to include the development infrastructure of both a Python and a JavaScript
-project. JavaScript toolchains and dependency management are somewhat
-notoriously complicated. Prototyping the component can be a slow process as
+project. JavaScript toolchains and dependency management can quickly become
+complicated with the number of packages, build system tools, and config files often
+necessary. Prototyping the component can be a slow process as
 well, requiring a rebuild on every JavaScript change. Setting up Jupyter to
 use these unpublished components requires additional environment management
 to work correctly.
@@ -388,16 +388,16 @@ JavaScript code.
 ### Vuetify Component Library
 
 IPyVuetify is an IPyWidgets port of the Vuetify component library, a set of more
-than 70 premade material design UI widgets. Most of these components support a
+than 70 premade material design [@materialdesign] UI widgets. Most of these components support a
 fairly extensive set of attributes and properties to change both appearance and
-functionality, and more importantly each generally has multiple types of events
+functionality. More importantly, each IPyVuetify widget generally has multiple types of events
 that can be observed. A simple example would be a textbox form input component.
 In IPyWidgets, the `Text` widget can mostly only observe a value change when the
 user changes the text inside. The IPyVuetify `TextField` can additionally raise
 events for key presses, mouse clicks, the element gaining and losing focus, as
 well as any HTML event. This level of control can be useful, for example, when a
 text value change triggers a heavy processing task. The interaction is more
-effective when the computation is delayed until the field loses focus or the
+responsive when the computation is delayed until the field loses focus or the
 user has pressed enter, rather than restarting the computation on every letter
 the user adds or removes.
 
@@ -445,7 +445,7 @@ defining a custom button with a color change on toggle, where the colors can be
 modified from Python as well, shown in @fig:ipyvuetify_example. In this
 particular example, both the `@click` event and `:color` property directly bind
 to the Python attributes, and no explicit JavaScript is necessary. Finally,
-IPyVuetify components make it easy to directly call functions across the
+IPyVuetify makes it easy to directly call functions across the
 Python--JavaScript link by making any Python functions prefixed with `vue_`
 available within JavaScript and any JavaScript functions
 prefixed with `jupyter_` callable from Python.
