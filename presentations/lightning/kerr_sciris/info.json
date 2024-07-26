@@ -1,0 +1,21 @@
+{
+  "title": "Sciris: Simplifying scientific Python",
+  "authors": [
+    {
+      "name": "Cliff Kerr",
+      "affiliation": "Bill & Melinda Gates Foundation",
+      "orcid": "0000-0003-2517-2354"
+    },
+    {
+      "name": "Paula Sanz-Leon",
+      "affiliation": "Bill & Melinda Gates Foundation",
+      "orcid": "0000-0002-1545-6380"
+    },
+    {
+      "name": "Romesh Abeysuriya",
+      "affiliation": "Burnet Institute",
+      "orcid": "0000-0002-9618-6457"
+    },
+  ],
+  "description": "Sciris aims to streamline the development of scientific Python code by making it easier to perform common tasks. This example illustrates how the same block of fairly typical scientific Python code -- which performs tasks like collecting data from a function running in parallel, saving and loading files, and 3D plotting -- looks like when written in 'vanilla Python' compared to using Sciris."
+}
