@@ -54,6 +54,7 @@ project:
         - ipyvuetify
         - barlowtwins
         - jupyter
+        - materialdesign
     - rule: link-resolves
       severity: ignore
       keys:
