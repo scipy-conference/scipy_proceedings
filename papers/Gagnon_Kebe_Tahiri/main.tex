@@ -47,7 +47,7 @@ We used data from the IceAGE project and related data from the BOLD Systems data
 
 where $S^2$ is the sample variance, $x_i$ represents each value in the dataset, $\bar{x}$ the mean of all values in the dataset, and $n$ the number of values in the dataset.
 
-Only salinity was removed from the previously selected numerical attributes ($S^2 = 0.02146629$). We then removed attributes that had high correlations between them (threshold > 0.90). This selection of attributes and data resulted in a table containing 62 rows ($n=62$) and 18 columns (number of attributes). 
+Only salinity was removed from the previously selected numerical attributes ($S^2 = 0.02146629$). We then removed attributes that had high correlations between them (threshold > 0.90). This selection of attributes and data resulted in a table containing 62 rows ($n=62$) and 20 columns (number of attributes). 
 
 In the IceAGE database, 14 attributes were selected. These are the geographic coordinates such as: 
 
@@ -69,10 +69,10 @@ Climatic parameters such as:
 
 In the BOLD Systems database, taxonomic ranks such as: 
 \begin{itemize}
-\item The family, genus, and species of the cumacean sampled have been integrated into our data. These comprise seven families: Diastylidae ($n=21$), Lampropidae ($n=13$), Leuconidae ($n=12$), Astacidae ($n=7$), Bodotriidae ($n=4$), Ceratocumatidae ($n=3$), and Pseudocumatidae ($n=2$). A total of 21 cumacean species were found in our sample (see Figure \ref{fig:fig3}).
+\item The family, genus, and scientific name of the cumacean sampled have been integrated into our data. These comprise seven families: Diastylidae ($n=21$), Lampropidae ($n=13$), Leuconidae ($n=12$), Astacidae ($n=7$), Bodotriidae ($n=4$), Ceratocumatidae ($n=3$), and Pseudocumatidae ($n=2$). A total of 21 cumacean species were found in our sample (see Figure \ref{fig:fig3}).
 \end{itemize}
 
-Some specimens were identified only to genus (one specimen) or family (five specimens) in our sample.
+We also included the sample identity (id) of each cumacean sampled. Some specimens were identified only to genus (one specimen) or family (five specimens) in our sample.
  
 The habitat and water mass of the sampling points were the only attributes taken directly from Table 1 of \citep{uhlir_adding_2021}. Thus, the water mass definitions described by \citep{hansen_north_2000, brix2010distribution, ostmann_marine_2014} were used as a reference for the GIN seas around Iceland: Arctic Polar Water (APW, $n=15$), Iceland Sea Overflow Water (ISOW, $n=15$), North Atlantic Water (NAW, $n=9$), Arctic Polar Water/Norwegian Sea Arctic Intermediate Water (APW/NSAIW, $n=7$), warm Norwegian Sea Deep Water (NSDWw, $n=8$), Labrador Sea Water (LSW, $n=3$), cold Norwegian Sea Deep Water (NSDWc, $n=3$), and Norwegian Sea Arctic Intermediate Water (NSAIW, $n=2$) (see Figure \ref{fig:fig4}). In terms of habitat, we considered the three categories used in \citep{uhlir_adding_2021}: deep sea ($n=38$), shelf ($n=15$), and slope ($n=9$) (see Figure \ref{fig:fig5}).
 
@@ -193,7 +193,7 @@ For points $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n
 \end{lstlisting}
 
 \subsection{Least-Squares Distance}\label{LS}
-The Least-Squares distance measures differences by considering the sum of the squares of the differences between the observed and the estimated values provided by the model. In our context, it quantifies the overall dissimilarity between phylogenetic trees constructed from genetic sequences and ecoclimatic and geographic features (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
+The Least-Squares distance measures differences by considering the sum of the squares of the differences between the observed and the estimated values provided by the model. In our context, it quantifies the overall dissimilarity between phylogenetic trees constructed from genetic sequences and ecological and geographic features (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
 
 For observed values $y_i$ and estimated values $\hat{y}_i$:
 
@@ -285,7 +285,7 @@ We selected relevant attributes from IceAGE project data, BOLD Systems, and the 
 
 The results show variability in the cumacean environment as a function of longitude (DD) at the start of sampling, depth (m) at the start of sampling, temperature ($^\circ$C) and water O\textsubscript{2} concentration (see Figures \ref{fig:fig2}b, \ref{fig:fig2}c, \ref{fig:fig2}e and \ref{fig:fig2}f). If we exclude wind speed (m/s) at the start of sampling (see Figure \ref{fig:fig2}d), the violin diagrams show bimodal or multimodal curves, indicating the geographical and environmental separation of samples. DNA sequence analyses revealed specific genetic windows exposing elevated mutation rates in response to climatic and environmental attributes, such as wind speed (m/s) at the start of sampling and O\textsubscript{2} concentration in water (mg/L) (see Figures \ref{fig:fig6}d and \ref{fig:fig7}d). The Euclidean distances of these two parameters fluctuated from one sequence to the next, indicating sensitive or variable sites in the evolution.
 
-Our results highlight the importance of understanding the relationships between environmental, geographical, and climatic attributes and the genetics of benthic species such as cumaceans. Correlations can be used to explain how these organisms acclimatize to climate change and anthropogenic disturbances, such as seabed mining. Consequently, our results can highlight conservation plans for regions sensitive to environmental and anthropogenic disturbances. For example, the management of fishing and mining activities could use this knowledge to reduce their impact on benthic species. These concepts are essential for the conservation of deep-sea ecosystems and for predicting the future impacts of environmental change on marine biodiversity. In addition, this research can guide future studies into the genetic adaptation processes of cumaceans to fluctuations in their ecoclimatic and geographic conditions.
+Our results highlight the importance of understanding the relationships between environmental, geographical, and climatic attributes and the genetics of benthic species such as cumaceans. Correlations can be used to explain how these organisms acclimatize to climate change and anthropogenic disturbances, such as seabed mining. Consequently, our results can highlight conservation plans for regions sensitive to environmental and anthropogenic disturbances. For example, the management of fishing and mining activities could use this knowledge to reduce their impact on benthic species. These concepts are essential for the conservation of deep-sea ecosystems and for predicting the future impacts of environmental change on marine biodiversity. In addition, this research can guide future studies into the genetic adaptation processes of cumaceans to fluctuations in their ecological and geographic conditions.
 
 However, further analysis is required to examine these results in depth. It should be noted that we are missing three data on O\textsubscript{2} concentration (mg/L) in water from our 62 samples. This lack of data could have an impact on the results as well as on the final interpretations of this correlation. A complete study containing all the data would be required to certify these results. In addition, this study is limited by the number of samples available ($n=62$), the methods used to assess genetic and environmental properties, and the logistical burden of data collection. To consolidate these results, it would be relevant to study other invertebrate species and other geographical regions. In particular, other relevant environmental, geographical, and climatic attributes should be studied to better interpret genotype-environment interactions.
 
