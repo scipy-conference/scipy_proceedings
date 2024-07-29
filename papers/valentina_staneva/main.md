@@ -89,52 +89,202 @@ We next describe in more detail the components of the workflow lifecycle.
 The main goal of echodataflow is to allow users to configure an echosounder data processing pipeline through editing configuration “recipe” templates. Echodataflow can be configured through three templates: `datastore.yaml` which handles the data storage decisions, `pipeline.yml` which specifies the processing stages, and `logging.yaml` which sets the logging format. 
 
 ### Data Storage Configuration
-In [Figure %s ](#fig:datastore_config): `datstore.yaml` we provide an example of a data store configuration for a ship survey. In this scenario we want to process data from the Joint U.S.-Canada Integrated Ecosystem and Pacific Hake Acoustic Trawl Survey [@NWFSC_FRAM_2022] which is being publicly shared on an AWS S3 bucket by NOAA National Centers for Environmental Information Acoustics Archive (NCEA) [@wall_2016]. The archive contains data from many surveys dating back to 1991 and contains ~280TB of data. The additional parameters referring to ship, survey, and sonar model names allow to select the subset of files belonging only to the survey of interest. The output destination is set to a private S3 bucket belonging to the user (i.e. an AWS account different from the input one), and the credentials are passed through a `block_name`. The survey contains ~4000 files, and one can set the group option to combine the files into survey-specific groups: based on the transect information provided in the `transect_group.txt` file. One can further use regular expressions to subselect other subgroups based on needs. 
+Below we show an example file`datastore.yaml` with a data storage configuration for a ship survey. In this scenario we want to process data from the Joint U.S.-Canada Integrated Ecosystem and Pacific Hake Acoustic Trawl Survey [@NWFSC_FRAM_2022] data for which are being publicly shared on an AWS S3 bucket by NOAA National Centers for Environmental Information Acoustics Archive (NCEA) [@wall_2016]. The archive contains data from many surveys dating back to 1991 and contains ~280TB of data. The additional parameters referring to ship, survey, and sonar model names allow to select the subset of files belonging only to the survey of interest. The output destination is set to a private S3 bucket belonging to the user (i.e. an AWS account different from the input one), and the credentials are passed through a `block_name`. The survey contains ~4000 files, and one can set the group option to combine the files into survey-specific groups: based on the transect information provided in the `transect_group.txt` file. One can further use regular expressions to subselect other subgroups based on needs. 
 
-:::{figure} datastore_config.png
+<!-- :::{figure} datastore_config.png
 :label: fig:datastore_config
 **Data Storage Configuration:** The input is data from a ship survey data on and S3 data on the NCEA archive. The output goes to an S3 bucket on another AWS account. Credentials are stored in blocks.
 :::
+-->
+
+
+<!--:name: datastore-config
+Data Storage Configuration 
+-->
+
+
+```yaml
+# datastore.yaml
+
+name: Bell_M._Shimada-SH1707-EK60
+sonar_model: EK60 
+raw_regex: (.*)-?D(?P<date>\w{1,8})-T(?P<time>\w{1,6}) 
+args:
+  urlpath: s3://ncei-wcsd-archive/data/raw/{{ ship_name }}/{{ survey_name }}/{{ sonar_model }}/*.raw 
+  parameters: 
+    ship_name: Bell_M._Shimada
+    survey_name: SH1707
+    sonar_model: EK60
+  storage_options: 
+    anon: true
+  group: 
+    file: ./x0007_fileset.txt 
+    storage_options: 
+      block_name: echodataflow-aws-credentials
+      type: AWS 
+  group_name: default_group 
+  json_export: true 
+  raw_json_path: s3://echodataflow-workground/combined_files/raw_json 
+output: 
+  urlpath: <YOUR-S3-BUCKET>
+  overwrite: true 
+  retention: false 
+  storage_options: 
+    block_name: echodataflow-aws-credentials
+    type: AWS
+```
 
 
 ### Pipeline Configuration
-The pipeline configuration file’s purpose is to list the stages of the processing pipeline and the computational set-up for their execution. In [Figure %s ](#fig:pipeline_config) we provide an example with several stages: `open_raw`, `combine_echodata`, `compute_Sv`, `compute_MVBS`. Each stage is executed as a separate Prefect subflow (a component of a Prefect workflow), and one can specify additional options on whether to store the raw files. `echodataflow` requires access to a dask cluster: one can either create one on the fly by setting the `use_local_dask` to `true`, or one can provide an IP address of an already running cluster. Individual stages may require different cluster configurations to efficiently execute the tasks. Those can be specified with the additional `prefect_config` option through which the user can set a specific dask task runner or the number of retries. Managing retries is essential for handling transient failures, such as connectivity issues, ensuring the stages can be re-executed without any manual interference if a failure occurs.
+The pipeline configuration file’s purpose is to list the stages of the processing pipeline and the computational set-up for their execution. Below we show an example `pipeline_config.yaml` file which cofigures a pipeline with several stages: `open_raw`, `combine_echodata`, `compute_Sv`, `compute_MVBS`. Each stage is executed as a separate Prefect subflow (a component of a Prefect workflow), and one can specify additional options on whether to store the raw files. `echodataflow` requires access to a dask cluster: one can either create one on the fly by setting the `use_local_dask` to `true`, or one can provide an IP address of an already running cluster. Individual stages may require different cluster configurations to efficiently execute the tasks. Those can be specified with the additional `prefect_config` option through which the user can set a specific dask task runner or the number of retries. Managing retries is essential for handling transient failures, such as connectivity issues, ensuring the stages can be re-executed without any manual interference if a failure occurs.
 
+<!--
 :::{figure} pipeline_config.png
 :label: fig:pipeline_config
 **Pipeline Configuration:** The pipeline consists of two stages: `echodataflow_open_raw` and `echodataflow_compute_TS` and will run on a local cluster.
 :::
+-->
+
+```yaml
+# pipeline.yaml
+
+active_recipe: standard 
+use_local_dask: true 
+n_workers: 4 
+scheduler_address: tcp://127.0.0.1:61918 
+pipeline: 
+- recipe_name: standard 
+  stages: 
+  - name: echodataflow_open_raw 
+    module: echodataflow.stages.subflows.open_raw 
+    options: 
+      save_raw_file: true 
+      use_raw_offline: true 
+      use_offline: true 
+    prefect_config:
+      retries: 3
+  - name: echodataflow_combine_echodata
+    module: echodataflow.stages.subflows.combine_echodata
+    options:
+      use_offline: true
+  - name: echodataflow_compute_Sv
+    module: echodataflow.stages.subflows.compute_Sv
+    options:
+      use_offline: true
+  - name: echodataflow_compute_MVBS
+    module: echodataflow.stages.subflows.compute_MVBS
+    options:
+      use_offline: true
+    external_params:
+      range_meter_bin: 20
+      ping_time_bin: 20S
+```
 
 ### Logging Configuration
 
-By default, the outcomes of each stage are logged. The logs can be stored in `.json` or plain text files, and the format of the entries can be specified in the configuration file [Figure %s ](#fig:logging_config). The `json` allows searching through the logs for a specific key.
+By default, the outcomes of each stage are logged. The logs can be stored in `.json` or plain text files, and the format of the entries can be specified in the configuration file as displayed below. The `json` allows searching through the logs for a specific key. 
 
-:::{figure} logging_config.png
+<!-- :::{figure} logging_config.png
 :label: fig:logging_config
 **Logging Configuration:** The logs are written to a local `echodataflow.log` file in a plain text form based on the format specification
 :::
+-->
 
+```yaml
+# logging.yaml
 
+version: 1
+disable_existing_loggers: False
+formatters:
+  json:
+    format: "[%(asctime)s] %(process)d %(levelname)s %(mod_name)s:%(func_name)s:%(lineno)s - %(message)s"
+  plaintext:
+    format: "[%(asctime)s] %(process)d %(levelname)s %(mod_name)s:%(func_name)s:%(lineno)s - %(message)s"
+handlers:
+  logfile:
+    class: logging.handlers.RotatingFileHandler
+    formatter: plaintext
+    level: DEBUG
+    filename: echodataflow.log
+    maxBytes: 1000000
+    backupCount: 3
 
-In [Figure %s ](#fig:log_output) we show an example of output logs for different processing stages.
+loggers:
+  echodataflow:
+    level: DEBUG
+    propagate: False
+    handlers: [logfile]
+```
+
+In this case the logs are stored in the plaintext file `echodataflow.log`. Below we show an example of output logs for different processing stages.
 
 :::{figure} log_output.png
 :label: fig:log_output
 **Log Output:** An example of an output log of file processing failure. The leading indicators for each entry are: date, process id, log level, followed by the module, function, line number, followed by the message.
 :::
 
+```log
+[2024-06-06 17:32:08,945] 51493 ERROR apply_mask.py:EK60_SH1707_Shimada2_applymask.zarr:147 - Computing apply_mask
+[2024-06-06 17:32:08,946] 51493 ERROR file_utils.py:file_utils:147 - Encountered Some Error in EK60_SH1707_Shimada0
+[2024-06-06 17:32:08,946] 51493 ERROR file_utils.py:file_utils:147 - 'source_ds' must have coordinates 'ping_time' and 'range_sample'!
+[2024-06-06 17:32:08,946] 51493 ERROR file_utils.py:file_utils:147 - Encountered Some Error in EK60_SH1707_Shimada1
+[2024-06-06 17:32:08,946] 51493 ERROR file_utils.py:file_utils:147 - 'source_ds' must have coordinates 'ping_time' and 'range_sample'!
+[2024-06-06 17:32:08,946] 51493 ERROR file_utils.py:file_utils:147 - Encountered Some Error in EK60_SH1707_Shimada2
+[2024-06-06 17:32:08,946] 51493 ERROR file_utils.py:file_utils:147 - 'source_ds' must have coordinates 'ping_time' and 'range_sample'!
+```
+
 In Section [Workflow Logging](#Workflow-Logging), we provide more information on logging options.
 
 
 ## Workflow Execution
-To convert a scientific pipeline into an executable Prefect workflow, one needs to organize its components into flows, sublfows, and tasks (the key objects of Prefect’s execution logic). Usually, the stages of a pipeline will be organized into flows and subflows, while the individual pieces of work within the stage will be organized into tasks. In practice, flows, subflows, and tasks are all Python functions, and they differ in how we want to execute them (e.g. concurrently/sequentially, w/o retries), and what we want to track during execution (e.g. input/outputs, state logging, etc.). In `echodataflow` we organize the typical echosounder processing steps into subflows (flows within the main workflow), while the operations on different files are individual tasks. We describe how functions are organized in the `open_raw` stage, which reads the files from raw format, parses the data, and writes them into a `.zarr` format. In [Figure %s ](#fig:flow_task) we show how the `echodataflow_open_raw` function is decorated into a flow, and is one of many subflows of the full workflow. This function processes all files. The contains a loop which iterates through all files and applies the `process_raw` function which operates on a single file and is decorated as a task. All tasks will be executed on the dask cluster. 
-
+To convert a scientific pipeline into an executable Prefect workflow, one needs to organize its components into flows, sublfows, and tasks (the key objects of Prefect’s execution logic). Usually, the stages of a pipeline will be organized into flows and subflows, while the individual pieces of work within the stage will be organized into tasks. In practice, flows, subflows, and tasks are all Python functions, and they differ in how we want to execute them (e.g. concurrently/sequentially, w/o retries), and what we want to track during execution (e.g. input/outputs, state logging, etc.). In `echodataflow` we organize the typical echosounder processing steps into subflows (flows within the main workflow), while the operations on different files are individual tasks. We describe how functions are organized in the `open_raw` stage, which reads the files from raw format, parses the data, and writes them into a `.zarr` format. The `echodataflow_open_raw` function is decorated into a flow, and is one of many subflows of the full workflow. This function processes all files. 
+<!--
 :::{figure} flow_task.png
 :label: fig:flow_task
 **Decorating Functions into Flows \& Tasks:** The flow `echdataflow_open_raw` calls the task `process_raw` (processing a single file) within a loop to process all files
 :::
+-->
 
-`
+```python
+@flow
+@echodataflow(processing_stage="Open-Raw", type="FLOW")
+def echodataflow_open_raw(
+    groups: Dict[str, Group], config: Dataset, stage: Stage, prev_stage: Optional[Stage]
+):
+    """
+    Process raw sonar data files and convert them to zarr format.
+
+    Args:
+        config (Dataset): Configuration for the dataset being processed.
+        stage (Stage): Configuration for the current processing stage.
+        prev_stage (Stage): Configuration for the previous processing stage.
+
+    Returns:
+        List[Output]: List of processed outputs organized based on transects.
+```
+
+`echodataflow_open_raw` contains a loop which iterates through all file groups and applies the `process_raw` function which operates on a single group and is decorated as a task. All tasks will be executed on the dask cluster. 
+```python
+for name, gr in groups.items():
+        for raw in gr.data:
+            new_processed_raw = process_raw.with_options(
+                task_run_name=raw.file_path, name=raw.file_path, retries=3
+            )
+            future = new_processed_raw.submit(raw, gr, working_dir, config, stage)
+            futures[name].append(future)
+
+```
+
+```python
+@task()
+@echodataflow()
+def process_raw(
+    raw: EchodataflowObject, group: Group, working_dir: str, config: Dataset, stage: Stage
+):
+    """
+    Process a single group of raw sonar data files.
+```
+
 ## Workflow Monitoring
 One of the main advantages of using an orchestration framework is the features it provides to monitor the workflow execution. The integration with Prefect allows leveraging Prefect’s dashboard for monitoring the execution of the flows: Prefect UI. The dashboard can be run locally and within Prefect’s online managed system (Prefect Cloud). The local version provides an entirely open source framework for running and monitoring workflows. [Figure %s ](#fig:flow_sequence_expanded) shows the view of completed runs within the dashboard. The progress can be monitored while the flows are in progress. 
 
@@ -230,12 +380,13 @@ In `echodataflow`, we adopt an aspect-oriented programming [@aop] approach for r
 
 Example Usage:
 
-```
+```python
 @echodataflow(processing_stage="StageA", type="FLOW")
 def my_function(arg1, arg2):
     # Function code here
     pass
 ```
+
 
 In the example, the echodataflow decorator ensures that the function `my_function` is executed within the context of "StageA" as a "FLOW", checking for dependencies and logging relevant information.
 
