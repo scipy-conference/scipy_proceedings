@@ -2,8 +2,11 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: Funix - vivifying Python functions into GUI apps
 abstract: |
-  The raise of machine learning (ML) and artificial intelligence (AI), especially the generative AI (GenAI), has brought up the need for wrapping models or algorithms into GUI apps. For example, a large language model (LLM) can be accessed through a string-to-string GUI app with a textbox as the primary input.
-  Most of existing solutions require developers to manually create widgets and link them to arguments/returns of a function individually. This low-level process is laborious and usually intrusive. Funix takes a CSS-like approach by automatically picking widgets based on the types of the arguments and returns of a function according to the type-to-widget mapping defined in a theme, e.g., `bool` to a checkbox. As a result, an existing Python function can be turned into a GUI app without any code change. As a transcompiler, Funix allows such type-to-widget mapping to be defined between any Python type  and any React component and its `props`, liberating Python developers to the frontend world without needing to know JavaScript/TypeScript. Funix further uses the information in Docstrings, which are common in Python development, to control the appearance of the GUI. 
+  The rise of machine learning (ML) and artificial intelligence (AI), especially the generative AI (GenAI), has brought up the need for wrapping models or algorithms into GUI apps. For example, a large language model (LLM) can be accessed through a string-to-string GUI app with a textbox as the primary input.
+  Most of existing solutions require developers to manually create widgets and link them to arguments/returns of a function individually. This low-level process is laborious and usually intrusive. Funix  automatically picks widgets based on the types of the arguments and returns of a function according to the type-to-widget mapping defined in a theme, e.g., `bool` to a checkbox. As a result, an existing Python function can be turned into a GUI app without any code change. As a transcompiler, Funix allows such type-to-widget mapping to be defined between any Python type  and any React component and its `props`, liberating Python developers to the frontend world without needing to know JavaScript/TypeScript. Funix further uses the information in Docstrings, which are common in Python development, to control the appearance of the GUI. 
+- format: pdf
+template: arxiv_two_column
+output: exports/my-document.pdf
 ---
 
 ## Introduction
@@ -16,13 +19,8 @@ Most of them follow the conventional GUI programming philosophy that a developer
 This approach has several drawbacks. **First**, it is a repetitive, manual process. A developer has to manually align and keep aligning the signature of the callback function with the GUI code. The dependency of between the two means that one can be derived from the other and the process could have be automated. **Second**, the developer is bounded by the widgets provided by a GUI library. **Third**, they do not leverage the features of the Python language itself to automate the process. For example, most existing solutions require developers to manually specify the labels of widgets while such information is usually in the `params` or `args` sections in the docstrings of a function, which are very common in Python development. **Last** but not least, all existing solutions require the developer to read their documentations before being able to create a GUI, even one as simple as for saying "hello, world!”
 
 As a result, scientific developers, such as geophysicists, neurobiologists, or machine learning engineers, whose jobs are not building apps, are not able to quickly fire up apps to present their models, algorithms, or discoveries to the world.
-Every minute they spent on learning and building apps in existing solutions is a bad investment of their time because it does not advance their domain expertise or career goals.
 
-<!-- This is a bad investment of time for scientific developers, such as geophysicists, neurobiologists, or machine learning engineers, whose jobs are not building apps. 
-They build apps just like they need to write papers in LaTeX. But they do not make impacts in their fields by mastering  LaTeX. 
-Every minute they spent on learning and building apps in existing solutions is not advancing their domain expertise or career goals. -->
-
-Therefore, [Funix](http://funix.io) was born to automatically launch apps from existing functions. We notice that the choice of a widget has a weak correlation with the type of the function I/O it is associated with. For example, a checkbox is unsuitable for any type other than Boolean. Therefore, Funix takes a CSS-like approach to automatically pick widgets based on the types of the arguments/returns of a function. For example, in the default theme of Funix, the Python native types `str`, `bool`, and `Literal`, respectively, are mapped into an input box, a checkbox, and a set of radio buttons in the MUI library, while the common scientific types `pandas.DataFrame` and `matplotlib.figure.Figure` are mapped to tables (MUI's `DataGrid`) and charts (in `mpld3`). A variable's type can be specified in type hints, which are a good and common practice in Python development, or inferred, which is to be supported in the future by Funix. 
+Therefore, [Funix](http://funix.io) was born to automatically launch apps from existing functions. We notice that the choice of a widget has a weak correlation with the type of the function I/O it is associated with. For example, a checkbox is unsuitable for any type other than Boolean. Therefore, Funix  automatically picks widgets based on the types of the arguments/returns of a function. For example, in the default theme of Funix, the Python native types `str`, `bool`, and `Literal`, respectively, are mapped into an input box, a checkbox, and a set of radio buttons in the [MUI library](https://mui.com/), while the common scientific types `pandas.DataFrame` and `matplotlib.figure.Figure` are mapped to tables (MUI's `DataGrid`) and charts (in `mpld3`). A variable's type can be specified in type hints, which are a good and common practice in Python development, or inferred, which is to be supported in the future by Funix. 
 
 ```{code} python
 :label: code_hello_world
@@ -74,7 +72,7 @@ If additional customization is desired, a theme can be expanded in the popular J
 Besides types, Funix also makes use other features in the Python language or ecosystem to further automate app building. Docstrings are dominantly common in Python. Funix uses the information in Docstrings to control the UI appearance. For example, the annotation of each argument in the `Args` section in Google-style Docstrings or `Parameters` section in Numpy-style Docstrings can become the label/tooltip to explain the meaning of the argument to the app user. 
 Funix also give some keywords/types in Python new meanings in the context of app building, e.g., `global` for states and sessions, `yield` for streaming, and each class becomes a multi-page app where pages share data via the `self` variable. 
 
-Funix is not only a GUI generator. It is a transcompiler that generates both the backend and the frontend of an app. The two ends communicate with each other in websocket. For the backend, Funix wraps a Python function into a Flask app. Thus the Flask app can also be access programmatically. For the frontend, it generates React code. In Funix, a Python type can be bound to any React component and its `props` via a theme. 
+Funix is not only a GUI generator. It is a [transcompiler](https://en.wikipedia.org/wiki/Source-to-source_compiler) -- a program that translates source code in one language to the other -- that generates both the backend and the frontend of an app. The two ends communicate with each other in websocket. For the backend, Funix wraps a Python function into a Flask app. Thus the Flask app can also be access programmatically. For the frontend, it generates React code. In Funix, a Python type can be bound to any React component and its `props` via a theme. 
 Therefore, Funix allows Python developers to tap into the frontend world without JavaScript/TypeScript knowledge.
 Consequently, Python becomes a surface language for web development. 
 
@@ -82,7 +80,7 @@ Funix can be really useful in building what we call "disposable apps" -- apps th
 Such disposable apps maybe recurrently needed and 
 Funix allows them to be launched rapidly again and again. 
 
-In summary, Funix has the following cool features to make building apps effortless (if not lazy or cheating):
+In summary, Funix has the following cool features to make building apps effortless:
 
 1. Automatic, type-based GUI generation controlled by themes
 2. Exposing any React component to Python developers
@@ -104,7 +102,7 @@ As machine learning researchers ourselves, we notice that a great (if not overwh
 1. the underlying logic is a straightforward input-output process -- thus complex interactivity, such as updating the input options based on existing user input, is not needed;
 2. the app is not the goal but a necessary step to the goal -- thus it is not worthy to spend time on building the app.
 
-Existing Python-based solutions such as Streamlit or Grdio, do a great job for the first feature above but are still too complicated for the second one, requiring a developer to read their documentations and add some code before an app can be fired up.
+Existing Python-based solutions such as Streamlit or Gradio, do a great job for the first feature above but are still too complicated for the second one, requiring a developer to read their documentations and add some code before an app can be fired up.
 Since versatility is already given up for simplicity in Python-based app building, why not trade it further for more simplicity?
 
 Funix pushes the simplicity to the extreme.
@@ -114,7 +112,7 @@ To pursue the simplicity goal, Funix squeezes information from what is already c
 Because Funix is designed for quickly firing up apps that model straightforward input-output processes, a Funix-generated app  has one input panel 
 containing arguments and one output panel containing returns and printouts (see [output layout in print and return](#output-layout-in-print-and-return) for details about the output panel). A more complex process can be decomposed into simple input-output processes and embodied into [multi-page apps](#states-sessions-and-multi-page-apps). The underlying or callback function will be called after the user plugs in the arguments and click the "Run" button. The result will be displayed in the output panel.
 
-We would also like to argue that the raise of GenAI is simplifying the GUI as natural languages are becoming a prominent interface between humans and computers. Consider text-to-image generation, the app ([](#fig_dalle)) only needs a string input and an image output. In this sense, Funix, and its Python-based peers, will be able to meet a lot of needs, in scientific computing or general, in the future.
+We would also like to argue that the rise of GenAI is simplifying the GUI as natural languages are becoming a prominent interface between humans and computers. Consider text-to-image generation, the app ([](#fig_dalle)) only needs a string input and an image output. In this sense, Funix, and its Python-based peers, will be able to meet a lot of needs, in scientific computing or general, in the future.
 
 ```{code} python
 :label: code_dalle
@@ -136,7 +134,7 @@ def dalle(Prompt: str = "a flying cat on a jet plane")
 ```{figure} dalle.png
 :label: fig_dalle
 
-A Dall-E app generated by Funix by simply wraping OpenAI's image generation API with a `str`-to-`Image` function. Source code in [](#code_dalle). 
+A Dall-E app generated by Funix by simply wrapping OpenAI's image generation API with a `str`-to-`Image` function. Source code in [](#code_dalle). 
 
 ```
 
@@ -215,7 +213,7 @@ An app generated from [](#code_table_and_chart) by Funix. The input panel contai
 ## Defining new type-to-widget mappings
 
 :::{note}
-Introducing a new type-to-widget mapping or modifying an existing one should not be the job of most Funix users. Only advanced users or the UI guys should be involved. This is like most scientists who write papers in LaTeX do not develop the LaTeX classes or macros but just use them.
+Introducing a new type-to-widget mapping or modifying an existing one should not be the job of most Funix users but advanced users or user interface specialists. This is like most scientists who write papers in LaTeX do not develop the LaTeX classes or macros but just use them.
 :::
 
 <!-- Funix provides two ways, [the decorator way](#the-decorator-way) and [the theme way](#the-theme+way) to bind a type, whether it is Python-native, from a third party, or user-defined, to a widget.  -->
@@ -379,7 +377,7 @@ Instead of inventing something new to support streaming, Funix repurposes the `y
 
 ```{code} python
 :label: code_stream
-:caption: Stremaing using yield in Funix. The corresponding GUI app is shown in [](#fig_stream).
+:caption: Python keyword  `yield` is repurposed for streaming in Funix. The corresponding GUI app is shown in [](#fig_stream).
 import time
 
 def stream() -> str:
