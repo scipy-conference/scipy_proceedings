@@ -73,7 +73,7 @@ can be used in place of the iterated integrals.
 A path equipped with this higher order data is called a *rough path*.
 
 The signature turns out to be a useful summary of sequential data.
-It captures the order of events but not the necessarily the speed at which 
+It captures the order of events but not the necessarily the rate at which 
 these events occur.
 The signature is robust to irregular sampling and provides a fixed-size view of
 the data, regardless of how many observations are used to compute it.
