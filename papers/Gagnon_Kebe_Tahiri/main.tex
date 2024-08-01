@@ -123,14 +123,18 @@ if __name__ == "__main__":
 
 \item \textbf{In the second step}, trees were generated with environmental, geographical, climatic, and genetic data. For geographical parameters, we calculated the dissimilarity between each data pair from different geographical conditions, producing a symmetrical square matrix. The neighbor-joining algorithm was used to design the geographic tree from this matrix. The same approach was applied to environmental, climatic, and genetic data. An iterative phylogenetic reconstruction method was used to build genetic trees based on 62 16S rRNA mitochondrial sequences, taking into account only data located within an interval that moves along the alignment. This displacement can vary according to the steps and the size of the window defined by the user (their length is defined by the number of base pairs (bp)) \citep{koshkarov_phylogeography_2022}.
 
-\item \textbf{In the third step}, the phylogenetic trees constructed in each sliding window are compared to environmental, climatic, and geographical parameters using Robinson-Foulds (RF) distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}, normalized Robinson-Foulds distance, Euclidean distance, and Least-Squares distance. These contribute to our understanding of the similarities and dissimilarities between cumacean genetic sequences. The approach also takes bootstrapping into account. The use of the sliding window allows detailed identification of regions with high genetic mutation rates.
+\item \textbf{In the third step}, the phylogenetic trees constructed in each sliding window are compared with environmental, climatic and geographical parameters using Robinson-Foulds distance (RF) {robinson_comparison_1981, koshkarov_phylogeography_2022}, normalized Robinson-Foulds distance (nRF), Euclidean distance and Least-Squares distance (LS). These contribute to our understanding of the similarities and dissimilarities between cumacean genetic sequences. The approach also takes bootstrapping into account. The use of the sliding window allows detailed identification of regions with high genetic mutation rates.
 \end{enumerate}
 
 \section{Metrics}\label{metrics}
+
 The following section presents a more concise version of the formulas mentioned in the third step of the \autoref{aPhyloGeo-software} section:
 
-\subsection{Robinson-Foulds Distance (RF distance)}\label{RF}
-The Robinson-Foulds distance measures the dissimilarity between two phylogenetic trees by counting the pairs of clades present in one tree but absent in the other. It is commonly used to quantify topological differences between two phylogenetic trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
+\subsection{Robinson-Foulds distance}\label{RF}
+
+The Robinson-Foulds distance measures the dissimilarity between phylogenetic trees by counting the number of clades present in one tree but absent in the other. It is commonly used to quantify topological differences between phylogenetic trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
+
+When a gene tree is compared with other gene trees, all built using different habitat parameters (see the list in the first step of \autoref{aPhyloGeo-software}), the Robinson-Foulds distance can tell us how many clades differ between the initial tree and the others. If the initial genetic tree constructed using one of the attributes shows high dissimilarity to the other genetic trees, this suggests that this parameter exerts a distinct influence from the others on the phylogenetic relationships of cumaceae species.
 
 \begin{equation}\label{eq:rf}
     \text{RF}(T_1, T_2) = | \Sigma(T_1) \Delta \Sigma(T_2) |
@@ -154,15 +158,21 @@ where $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of splits in trees $T_1$ and 
 \end{lstlisting}
 
 
-\subsection{Normalized Robinson-Foulds Distance}\label{RFnorm}
-The normalized Robinson-Foulds distance scales the RF distance to account for the size of the trees, allowing a fairer comparison between them and giving a value between 0 and 1. In this case, the distance has been normalized by $2n-6$, where $n$ represents the number of taxa, to make it easier to compare the relative differences between trees (see Equation \eqref{eq:rf_norm} and \autoref{lst:euclideanDist}).
+\subsection{Normalized Robinson-Foulds distance}\label{RFnorm}
+
+The normalized Robinson-Foulds distance scales the RF distance to account for the size (number of clades) of the trees, allowing a fairer comparison between them and giving a value between 0 and 1. In this case, the distance has been normalized by $2n-6$, where $n$ represents the number of taxa, to make it easier to compare the relative differences between trees (see Equation \eqref{eq:rf_norm} and \autoref{lst:euclideanDist}).
+
+If the gene trees are of different sizes (i.e. if one of them is based on a missing data set or on a reduced number of species or parameters), the nRF distance makes it possible to interpret the relative influence of each habitat feature on the evolutionary relationships of cumaceae, independently of the number of clades in the trees.
 
 \begin{equation}\label{eq:rf_norm}
     \text{RF}_{\text{norm}}(T_1, T_2) = \frac{| \Sigma(T_1) \Delta \Sigma(T_2) |}{| \Sigma(T_1) | + | \Sigma(T_2) |}
 \end{equation}
 
-\subsection{Euclidean Distance}\label{euclidean}
-Euclidean distance measures the length between two points in a multi-dimensional space. It is used to evaluate the overall difference between two nucleotide sequences based on their genetic characteristics (see Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}).
+\subsection{Euclidean distance}\label{euclidean}
+
+Euclidean distance measures the length between two points in a multi-dimensional space. In our study, it is used to parallel the vectors of habitat characteristics between species (see Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}).
+
+When the values of different habitat features are converted into vectors, Euclidean distance allows us to understand how combinations of different habitat attributes integrally affect the phylogenetic trees of cumaceae species. For example, species with similar environmental or climatic vectors (low Euclidean distance) may have close evolutionary relationships, while large dissimilarities in these vectors (high Euclidean distance) may connote significant evolutionary differences.
 
 For points $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n)$:
 
@@ -192,8 +202,11 @@ For points $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n
         return ed
 \end{lstlisting}
 
-\subsection{Least-Squares Distance}\label{LS}
-The Least-Squares distance measures differences by considering the sum of the squares of the differences between the observed and the estimated values provided by the model. In our context, it quantifies the overall dissimilarity between phylogenetic trees constructed from genetic sequences and ecological and geographic features (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
+\subsection{Least-Squares distance}\label{LS}
+
+The Least squares distance measures differences by considering the sum of the squares of the differences between the observed values and the estimated values provided by the model. In our context, when comparing a gene tree to other gene trees, all constructed using different habitat factors, it quantifies the overall topological dissimilarity of the initial phylogenetic tree, taking into account the position of nodes and branches (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
+
+Least-squares distance allows us to elucidate the specific influences of various attributes on tree composition with regard to branch position and length, and to reform evolutionary links between cumaceae species.
 
 For observed values $y_i$ and estimated values $\hat{y}_i$:
 
@@ -217,11 +230,11 @@ def least_square(tree1, tree2):
     return ls
 \end{lstlisting}
 
-Our phylogeographic study used Robinson-Foulds, normalized Robinson-Foulds, Euclidean, and Least-Squares distances to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental, geographical, and climatic features. The result is a comprehensive analysis of the evolutionary dynamics of cumacean populations in different contexts.
+Our phylogeographic study used these four metrics to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental, geographical, and climatic features. The result is a comprehensive analysis of the evolutionary dynamics of cumacean populations in different contexts.
 
 \section{Results}\label{results}
 
-To understand the correlation between cumacean genetics and habitat, we parameterized the software \textit{aPhyloGeo} as follows: pairwiseAligner, Hamming distance, Wider Fit by elongating with Gap (starAlignment), windows size: 1 nucleotide (nt) and window step: 10 nt. The results of the metrics used (Robinson-Fouls, normalized Robinson, Least-Square and Euclidean distances) were obtained using the functions leastSquare(tree1, tree2), robinsonFoulds(tree1, tree2), euclideanDist(tree1, tree2) from the \textit{aPhyloGeo} software and were organized by the main function (see \autoref{lst:main}). A more in-depth analysis of the results presented below is available on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub} in the supplementary file.
+To understand the correlation between cumacean genetics and habitat, we parameterized the software \textit{aPhyloGeo} as follows: pairwiseAligner, Hamming distance, Wider Fit by elongating with Gap (starAlignment), windows size: 1 nucleotide (nt) and window step: 10 nt. The results of the metrics used were obtained using the functions leastSquare(tree1, tree2), robinsonFoulds(tree1, tree2), euclideanDist(tree1, tree2) from the \textit{aPhyloGeo} software and were organized by the main function (see \autoref{lst:main}). A more in-depth analysis of the results presented below is available on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub} in the supplementary file.
 
 The violon diagrams shown in Figure \ref{fig:fig2} are used to display summary statistics similar to box plots, showing medians (white dots), interquartile ranges (thickened black bars), and the rest of the distributions (thin black lines), with the exception of the "extreme" points. Wider areas indicate a greater probability of the variables taking a given value. They illustrate the distribution of geographical (latitude and longitude at the start of sampling (DD)), climatic (wind speed (m/s) at the start of sampling), and environmental (depth (m) at the start of sampling, water temperature ($^\circ$C), and O\textsubscript{2} concentration (mg/L)) data. These diagrams are essential for understanding habitat conditions and highlighting unique habitats that may impact on cumacean genetics. 
 
@@ -264,16 +277,16 @@ The distribution of samples of the different cumacean families according to the 
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure5.png}
-    \caption{Analysis of fluctuations in four distance metrics using multiple sequence alignment (MSA): a) Least-Square distance, b) Robinson-Fouls distance, c) normalised Robinson-Fouls distance, and d) Euclidean distance. These distance variations are studied to establish their correlation with the variation in wind speed (m/s) at the start of sampling. \label{fig:fig6}}
+     \caption{Analysis of fluctuations in four distance metrics using multiple sequence alignment (MSA): a) Least-Squares (LS) distance, b) Robinson-Foulds (RF) distance, c) normalized Robinson-Foulds (nRF) distance, and d) Euclidean distance. These distance variations are studied to establish their correlation with the variation in wind speed (m/s) at the start of sampling. \label{fig:fig6}}
 \end{figure}
 
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure6.png}
-    \caption{Analysis of fluctuations in four distance metrics using multiple sequence alignment (MSA): a) Least-Square distance, b) Robinson-Fouls distance, c) normalised Robinson-Fouls distance, and d) Euclidean distance. These distance variations are studied to establish their correlation with variation of O\textsubscript{2} concentration (mg/L) at the sampling sites. \label{fig:fig7}}
+    \caption{Analysis of fluctuations in four distance metrics using multiple sequence alignment (MSA): a) Least-Squares (LS) distance, b) Robinson-Foulds (RF) distance, c) normalized Robinson-Foulds (nRF) distance, and d) Euclidean distance. These distance variations are studied to establish their correlation with variation of O\textsubscript{2} concentration (mg/L) at the sampling sites. \label{fig:fig7}}
 \end{figure}
 
-The correlation between the genetic sequences and two attributes, one climatic (wind speed (m/s) at the start of sampling) and the other environmental (O\textsubscript{2} concentration (mg/L)) is presented in Figures \ref{fig:fig6} and \ref{fig:fig7}. These correlations are based on four metrics: Least Square Distance, Robinson-Fouls Distance, normalized Robinson-Foulds Distance, and Euclidean Distance. All the attributes presented in the first step of the \textit{aPhyloGeo} software section were analyzed (see \autoref{aPhyloGeo-software}) and are available on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub} in the img and script python file, but only these two parameters showed the most interesting mutation rate. Fluctuations in these parameters seem to reflect an adaptive response of these specific genetic sequences to environmental and climatic conditions. In both Figures, Euclidean distance seems to be the most sensitive and the most heterogeneous according to our data. A higher Euclidean distance means a greater difference between sequences at positions 520 to 529 aa (see Figure \ref{fig:fig6}d) and 1190 to 1199 aa (see Figure \ref{fig:fig7}d), suggesting that these sites are more variable, subject to selection pressures or susceptible to evolutionary change due to numerous mutations. 
+The correlation between the genetic sequences and two attributes, one climatic (wind speed (m/s) at the start of sampling) and the other environmental (O\textsubscript{2} concentration (mg/L)) is presented in Figures \ref{fig:fig6} and \ref{fig:fig7}. These correlations are based on four distance metrics: LS, RF, nRF, and Euclidean. All the attributes presented in the first step of the \textit{aPhyloGeo} software section were analyzed (see \autoref{aPhyloGeo-software}) and are available on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub} in the img and script python file. However, only these two parameters showed the most interesting mutation rate. Fluctuations in these parameters seem to reflect an adaptive response of these specific genetic sequences to environmental and climatic conditions. In both Figures, Euclidean distance seems to be the most sensitive and heterogeneous according to our data. A higher Euclidean distance means a greater difference between sequences at positions 520 to 529 amino acids (aa) (see Figure \ref{fig:fig6}d) and 1190 to 1199 aa (see Figure \ref{fig:fig7}d), suggesting that these sites are more variable due to numerous mutations, subject to selection pressures or susceptible to evolutionary change. 
 
 All these results will need to be further studied and analyzed in greater depth to better understand them and draw sound conclusions.
 
