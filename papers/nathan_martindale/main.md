@@ -20,19 +20,19 @@ abstract: |
 
 As the tech industry and computation-based research continues to gravitate
 toward using more and more data to solve problems, the capability to interact
-with and understand that underlying data becomes increasingly
-important. Development of effective visualization tools and frameworks to
-address this need has turned into an ecosystem where components from different
-sources all work in unison and developers can piece together what they need for
-their specific goals. For many reasons, including the ease of organization and
-allowing documentation, development, and analysis to all exist in the same
-place, Jupyter notebooks [@jupyter] have become a common platform for data
-science workflows, and by extension have become the common ground where these
-different tools can coexist. This ability to interact with and visualize data
-plays a crucial role in many data science/analysis workflows by allowing users
-to manipulate and explore, thus enhancing comprehension, improving user
-engagement, and often providing a faster route to an intuitive understanding of
-the data. 
+with and understand that underlying data becomes increasingly important.
+Development of effective visualization tools and frameworks to address this need
+has turned into an ecosystem where components from different sources all work in
+unison and developers can piece together what they need for their specific
+goals. For many reasons, including the ease of organization and allowing
+documentation, development, and analysis to all exist in the same place, Jupyter
+notebooks [@jupyter] have become a common platform for data science workflows,
+and by extension have become the common ground where these different tools can
+coexist. An important piece to this platform is the ability to interact with and
+visualize data, which is crucial in many data science/analysis workflows.
+Interactive visualization allows users to manipulate and explore data, which
+enhances understanding, improves engagement, and often leads to a quicker
+intuitive grasp of the data.
 
 IPyWidgets [@ipywidgets], a framework for bridging between the IPython kernel
 and HTML widgets within Jupyter, has been particularly influential for enabling
@@ -94,7 +94,7 @@ reference for @fig:detailsondemand.
 
 ## IPyWidgets
 
-IPyWidgets is a library that enables implementing user interactivity inside of a
+IPyWidgets is a library for implementing user interactivity inside of a
 Jupyter Notebook. A key challenge this framework has to overcome is
 the separation between the Python kernel and the browser-based Jupyter frontend,
 which  operates through HTML, CSS, and JavaScript as a web application. Web
@@ -104,11 +104,10 @@ experience or the desire to write custom frontend code in JavaScript. IPyWidgets
 addresses this problem by supporting mechanisms for automatic state
 synchronization between a Python model and a JavaScript model, expanded on
 below, and providing a set of predefined components that a developer
-can initialize and use in their Python code. Although there are limitations to
-using IPyWidgets alone, this library brings a lot of value to the scientific
-Python community and the data science Jupyter workflow with its ability to marry
-the two language ecosystems, each of which include many visualization tools
-and capabilities.
+can initialize and use in their Python code. While IPyWidgets has limitations,
+it is a valuable tool for the scientific Python community by allowing the
+combination of two language ecosystems with many visualization libraries and
+capabilities.
 
 To highlight the simplicity of IPyWidgets, some minimal
 examples are provided here. In the simplest UI cases, IPyWidgets allows wrapping a
