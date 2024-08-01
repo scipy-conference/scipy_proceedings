@@ -321,8 +321,7 @@ for computing signatures.
 
 (ncde-sec)=
 #### Neural controlled differential equations
-Neural CDEs are a method for modelling irregular time series
-.
+Neural CDEs are a method for modelling irregular time series.
 We consider CDEs of the form
 ```{math}
 \mathrm{d}Y_t = f_\theta(Y_t)\,\mathrm{d}X_t
