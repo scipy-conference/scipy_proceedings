@@ -554,9 +554,9 @@ clustering and produce narrow distributions.
 
 Within base IPyWidgets, there is no straightforward way of constructing a
 layout in which one widget is overlaid on top of another. Certain other libraries
-have limited functionality for this within their own widget instances, for
-example Matplotlib can display an axes within another axes, as can plotly, and
-many libraries support basic tooltips with arbitrary textual content. Others
+have limited functionality for this within their own widget instances. For
+example Matplotlib and plotly can display an axes within another axes.
+Furthermore, many libraries support basic tooltips with arbitrary textual content. Others
 such as IPyVuetify support certain types of limited "dialog" overlays, which can
 contain inner widgets and display overtop of the rest of the webpage, but do not
 support the same type of arbitrary positioning necessary for some
@@ -570,7 +570,7 @@ here -->
 These approaches are generally easier to design and work
 with, and abstract away or entirely avoid some of the messier CSS layout rules
 required to render HTML elements that do not follow an ordered top-to-bottom/left-to-right flow.
-Fundamentally, to enable this behavior, we implement
+Fundamentally, to enable overlay layouts, we implement
 custom IPyWidget containers that use specific CSS rules to control for
 nonlinear layouts, namely relying on absolute positioning (by setting
 `position: absolute`), and each child widget setting `left` and `top` CSS
@@ -701,9 +701,9 @@ the container. Then, listening for any events that indicate an axis range has
 changed, handler functions can recalculate pixel locations based on the new
 relative position of the x/y data point within the new range.
 
-Unfortunately, in practice the functions necessary to do this for different
-plotting libraries can vary substantially as a result of implementation differences, and
-at the time of this writing, IPyOverlay only supports autoupdating connections for
+Unfortunately, in practice, the functions necessary to do this for different
+plotting libraries can vary substantially as a result of implementation differences.
+At the time of this writing, IPyOverlay only supports autoupdating connections for
 dynamic content inside of ipympl (Matplotlib) and plotly plots. The authors
 intend to continue expanding the set of supported visualization libraries for
 this particular feature.
@@ -713,7 +713,7 @@ this particular feature.
 
 ### Context Menus
 
-A common feature in UI design across most platforms is the context menu.
+A common form of details-on-demand feature in UI design across most platforms is the context menu.
 Generally initiated from a right-click in desktop operating systems and
 applications, or tapping and holding on a mobile device, context menus provide a
 localized and easy to access palette of possible commands to run at the
@@ -721,7 +721,7 @@ current location. Complex dashboards can often have many different possible
 actions for the user to take, and simply displaying all of these as buttons may
 overwhelm or clutter the interface. Alternately, the actions may be too component/position specific 
 to work well as buttons. Context menus fill this role by hiding these commands until
-the user requests them by right-clicking (another form of details on demand) and supporting different menus when
+the user requests them by right-clicking and supporting different menus when
 over different components. 
 Displaying a context menu similarly requires
 rendering some form of widget over another -- IPyOverlay includes a
@@ -804,7 +804,7 @@ additional data associated with each clicked point in a bar chart.
 
 The prevalence and utility of Jupyter notebooks in data analysis and scientific
 workflows has prompted the development of a community of tools for interactive
-visualization. IPyWidgets, one of the main drivers and the backbone that
+visualization. IPyWidgets, the backbone that
 supports much of this ecosystem, provides the mechanisms for the kernel to
 mediate communication between Python and JavaScript. A multitude of libraries
 have built on top of these mechanisms and IPyVuetify in particular offers a
