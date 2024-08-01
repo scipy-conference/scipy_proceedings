@@ -476,8 +476,9 @@ signature kernels).
 RoughPy algebras are designed around a flexible scalar ring system that allows
 users to perform calculations with different accuracy, or derive expressions by
 using polynomial coefficients.
-For most applications, floating point numbers will provide a good balance
-between performance and accuracy.
+For most applications, single or double precision floating point numbers will 
+provide a good balance between performance and accuracy.
+(Double precision floats are the default.)
 When more precision is required, rational coefficients can be used
 instead.
 These are backed by GMP rationals for fast, arbitrary precision rational
