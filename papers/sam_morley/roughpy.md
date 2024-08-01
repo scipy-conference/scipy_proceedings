@@ -58,7 +58,7 @@ differential equations
 These are equations of the form $\mathrm{d}Y_t = f(Y_t, \mathrm{d}X_t)$, subject 
 to an initial condition $Y_0 = y_0$, that model a non-linear system driven by a 
 input path $X$.
-On simple CDE turns out to be critical to the theory:
+One simple CDE turns out to be critical to the theory:
 ```{math}
 \mathrm{d}S_t = S_t \otimes \mathrm{d}X_t \qquad S_0 = \mathbf{1}.
 ```
