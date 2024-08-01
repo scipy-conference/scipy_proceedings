@@ -35,7 +35,7 @@
 
 \begin{abstract}
 
-In recent years, leveraging satellite imagery with deep learning (DL) architectures has become an effective approach for environmental monitoring tasks, including forest wildfire detection. Nevertheless, this integration requires substantial high-quality labeled data to train the DL models accurately. Leveraging the capabilities of multiple Python libraries, such as rasterio and GeoPandas, and Google Earth Engine’s Python API, this study introduces a streamlined methodology to efficiently gather, label, augment, process, and evaluate a large-scale bi-temporal high-resolution satellite imagery dataset for DL-driven forest wildfire detection. Known as the California Wildfire GeoImaging Dataset (CWGID), this dataset comprises over 100,000 labeled 'before' and 'after' wildfire image pairs, created from pre-existing satellite imagery. An analysis of the dataset using pre-trained and adapted Convolutional Neural Network (CNN) architectures, such as VGG16 and EfficientNet, achieved accuracies of respectively 82\% and 93\%. The pipeline outlined in this paper demonstrates how Python can be used to gather and process high-resolution satellite imagery datasets, leading to accurate wildfire detection and providing a tool for broader environmental monitoring.
+In recent years, leveraging satellite imagery with deep learning (DL) architectures has become an effective approach for environmental monitoring tasks, including forest wildfire detection. Nevertheless, this integration requires substantial high-quality labeled data to train the DL models accurately. Leveraging the capabilities of multiple Python libraries, such as rasterio and GeoPandas, and Google Earth Engine’s Python API, this study introduces a streamlined methodology to efficiently gather, label, augment, process, and evaluate a large-scale bi-temporal high-resolution satellite imagery dataset for DL-driven forest wildfire detection. Known as the California Wildfire GeoImaging Dataset (CWGID), this dataset comprises over 100,000 labeled 'before' and 'after' wildfire image pairs, created from pre-existing satellite imagery. An analysis of the dataset using pre-trained and adapted Convolutional Neural Network (CNN) architectures, such as VGG16 and EfficientNet, achieved accuracies of respectively 76\% and 93\%. The pipeline outlined in this paper demonstrates how Python can be used to gather and process high-resolution satellite imagery datasets, leading to accurate wildfire detection and providing a tool for broader environmental monitoring.
 
 \end{abstract}
 
@@ -257,6 +257,7 @@ for index, row in gdf.iterrows():
 
 In the resulting ground truth masks, the pixel values are set to zero if they are outside of a wildfire polygon, indicating unaffected areas, and set to one if they are within the polygon boundaries, indicating areas affected by a forest wildfire. Figure \ref{fig4} displays an example of a resulting ground truth mask.
 
+
 \begin{figure}[H]
     \centering
     \includegraphics{label1.png}
@@ -353,7 +354,7 @@ Satellite image data usually requires significant storage and processing power b
 For users with access to high-performance computing clusters or cloud-based GPU instances, processing times can significantly reduce.
 
 \subsection{VGG16 Implementation}
-VGG16 \citep{Simonyan15} is a deep CNN designed for image processing and classification tasks. It consists of 13 convolutional layers, 5 pooling layers, and 3 fully connected layers. This model is adapted to train on the dataset and detect positive and negative instances of forest wildfires. The VGG16 architecture only trains on the post-wildfire 3-channel RGB imagery, which contains both.
+VGG16 \citep{Simonyan15} is a deep CNN designed for image processing and classification tasks. It consists of 13 convolutional layers, 5 pooling layers, and 3 fully connected layers. This model is adapted to train on the dataset and detect positive and negative instances of forest wildfires. The VGG16 architecture only trains on the post-wildfire 3-channel RGB imagery (i.e., images collected prior to the wildfire were not used with VGG16), which contains both. 
 
 To use this CNN architecture with GeoTIFF satellite images, which typically store geographic data not supported by most deep-learning libraries, a custom function is implemented to process and feed the data to the model using the rasterio library and the shuffle function from the Scikit-learn library \citep{sklearn1,sklearn2}. This function (see Code \ref{lst:custom_generator}) is crucial for handling the unique structure of GeoTIFF files and converting them into a format suitable for deep learning. It is designed to read batches of GeoTIFF files, shuffle them to ensure randomness, and process them into a three-dimensional array compatible with VGG16. Here is how it works:
 
@@ -398,7 +399,10 @@ def custom_image_generator(file_paths, batch_size):
             yield np.array(images), np.array(labels)
 \end{lstlisting}
 
-To detect wildfire-affected areas with VGG16, the model is initiated using the pre-trained weights from the ImageNet dataset. The convolutional base is frozen to preserve the integrity of the learned features and to focus on the training of the added layers. A Flatten operation is applied to the output to transform the two-dimensional feature maps into a one-dimensional vector. Then, a fully connected dense layer with 1024 neurons and ReLU activation is added. Finally, the network becomes a single-neuron dense layer with a sigmoid activation function that produces a probability score of wildfire damage. The complete model is compiled with the Adam optimizer \citep{kingma2014adam}, binary cross-entropy loss \citep{goodfellow2016deep}, and accuracy, precision, and recall as the performance metrics (see Code \ref{lst:vgg16_wildfire_detection}). The Adam optimizer is chosen because it adapts the learning rate during training. In the context of satellite image classification, where the landscape can vary significantly across images, Adam’s ability to adjust the learning rate is important. Also, the binary cross-entropy loss is chosen because it is tailored for binary classification tasks, such as classifying between damaged and undamaged areas in satellite images.
+To detect wildfire-affected areas with VGG16, the model is initiated using the pre-trained weights from the ImageNet dataset. The convolutional base is frozen to preserve the integrity of the learned features and to focus on the training of the added layers. A Flatten operation is applied to the output to transform the two-dimensional feature maps into a one-dimensional vector. Then, a fully connected dense layer with 512 neurons, L2 regularization, and ReLU activation is added. A Dropout layer with a rate of 0.5 is included to further prevent overfitting. Finally, the network becomes a single-neuron dense layer with a sigmoid activation function that produces a probability score of wildfire damage. Before training, class weights are calculated using the Scikit-learn library. 
+Furthermore, Keras callbacks are set up for early stopping and model checkpointing to avoid overfitting.
+
+The complete model is compiled with the Adam optimizer \citep{kingma2014adam}, binary cross-entropy loss \citep{goodfellow2016deep}, and accuracy, precision, and recall as the performance metrics (see Code \ref{lst:vgg16_wildfire_detection}). The Adam optimizer is chosen because it adapts the learning rate during training. In the context of satellite image classification, where the landscape can vary significantly across images, Adam’s ability to adjust the learning rate is important. Also, the binary cross-entropy loss is chosen because it is tailored for binary classification tasks, such as classifying between damaged and undamaged forested areas in satellite images.
 
 \begin{lstlisting}[language=Python, caption={Adaptation of VGG16 for Wildfire Damage Detection}, label= lst:vgg16_wildfire_detection]
 from keras.models import Model
@@ -416,11 +420,15 @@ for layer in base_model.layers:
 
 # Add custom layers on top of the base model
 x = Flatten()(base_model.output) # Flatten the output to make it suitable for dense layers
-x = Dense(1024, activation='relu')(x) # Add a dense layer with 1024 units and ReLU activation
+x = Dense(512, activation='relu', kernel_regularizer='l2')(x) # Add a dense layer with 512 units, L2 regularization and ReLU activation
 output = Dense(1, activation='sigmoid')(x) # Output layer with a sigmoid activation for binary classification
 
 # Construct the complete model
 model = Model(inputs=base_model.input, outputs=output)
+
+#Callbacks to prevent overfitting
+early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+model_checkpoint = ModelCheckpoint('best_modelVGG16.keras', monitor='val_loss', save_best_only=True)
 
 # Compile the model with Adam optimizer and binary cross-entropy loss
 model.compile(optimizer=Adam(learning_rate=0.0001),
@@ -429,8 +437,36 @@ model.compile(optimizer=Adam(learning_rate=0.0001),
 
 \end{lstlisting}
 
-The VGG16 model is trained and validated on 95594 three-channel RGB images (divided as follows: 90\% for training and 10\% for validation) and is tested on 10621 images. Training took 1953 minutes for 10 epochs.
+The VGG16 model is trained and validated on 49313 three-channel RGB images (divided as follows: 90\% for training and 10\% for validation) and is tested on 5479 images. Training took around 1010 minutes for 10 epochs. The detailed training and validation performance metrics for each epoch are provided in Table \ref{tab:vgg}. The graphs showing the changes of the training and validation metrics over the 10 epochs can be seen in Figure \ref{figvgg}.
 
+\begin{table}[H]
+    \centering
+    \caption{Performance Metrics for Training and Validation Sets Using VGG16 Across Epochs. \label{tab:vgg}}
+    \begin{tabular}{ccccccc}
+    \toprule
+    \textbf{Epoch} & \textbf{Training Accuracy} & \textbf{Training Precision} & \textbf{ Training Recall} & \textbf{Validation Accuracy} & \textbf{Validation Precision} & \textbf{Validation Recall} \\
+    \midrule
+    1/10 & 0.6729 & 0.7241 & 0.6229 & 0.7291 & 0.7689 & 0.6812 \\
+    2/10 & 0.7406 & 0.7892 & 0.6992 & 0.7471 & 0.7716 & 0.7256 \\
+    3/10 & 0.7537 & 0.8079 & 0.7052 & 0.7473 & 0.7729 & 0.7261 \\
+    4/10 & 0.7555 & 0.8306 & 0.6788 & 0.7541 & 0.7899 & 0.7155 \\
+    5/10 & 0.7568 & 0.8354 & 0.6765 & 0.7543 & 0.8070 & 0.6906 \\
+    6/10 & 0.7632 & 0.8439 & 0.6813 & 0.7539 & 0.8226 & 0.6655 \\
+    7/10 & 0.7653 & 0.8514 & 0.6768 & 0.7569 & 0.8049 & 0.6998 \\
+    8/10 & 0.7661 & 0.8504 & 0.6803 & 0.7635 & 0.8228 & 0.6887 \\
+    9/10 & 0.7680 & 0.8536 & 0.6808 & 0.7504 & 0.8771 & 0.6008 \\
+    10/10 & 0.7692 & 0.8622 & 0.6742 & 0.7527 & 0.8164 & 0.6760 \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+During the training process, the model’s performance on the training set showed a consistent increase in accuracy, precision, and recall. Specifically, the training accuracy improved from 0.6729 in the first epoch to 0.7692 in the tenth epoch. The precision increased from 0.7241 to 0.8622, and the recall fluctuated but overall showed an upward trend, starting at 0.6229 and ending at 0.6742.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{wildfire_metrics.png}
+    \caption{Graphic Representation of the Performance Metrics for the Training and Validation Sets Using VGG16 Across 10 Epochs.} \label{figvgg}
+\end{figure}
+On the validation set, the performance metrics also exhibited positive trends. The validation accuracy began at 0.7291 and varied across the epochs, reaching 0.7527 by the final epoch. Validation precision improved from 0.7689 in the first epoch to 0.8164 in the tenth epoch, while validation recall started at 0.6812 and ended at 0.6760.
 \subsection{EfficientNet Implementation}
 \begin{figure}[H]
     \centering
@@ -503,8 +539,11 @@ class SixChannelGenerator(Sequence):
 \end{lstlisting}
 
 Furthermore, the data labeling and its use are formulated using the same pipeline as VGG16, by specifying the base paths to the training and testing directories for both damaged and undamaged classes. As above, the labeling of this model is based on the presence or the absence of ’Damaged’ in the imagery file paths.
+ The base EfficientNet-B0 model is then loaded without its top layers (classification layers) and without pre-trained weights, as the pre-trained weights are specific to 3-channel images. A Global Average Pooling layer is used to reduce the spatial dimensions of the feature maps. To reduce overfitting, a Dropout layer is added with a specified rate of 30%
 
-The model is built with an input tensor defined to accept 256px by 256px images with six channels. A standard convolutional layer is applied to this input tensor to perform an initial convolution operation. The base EfficientNet-B0 model is loaded both without the top layers (classification layers) and the pre-trained weights, as these were trained using 3-channel images. A Dropout layer is added, with a specified rate of 30\%, to reduce overfitting. A dense layer is also added with 1024 neurons and ReLU activation (see Code \ref{lst:efficientnet_training}). In the end, the network outputs a probability indicating the likelihood of the image showing ’damaged’ versus ’undamaged’ areas.
+
+The model is built with an input tensor defined to accept 256px by 256px images with six channels. Initially, a standard convolutional layer is applied to this input tensor to perform an initial convolution operation, reducing it to a three-channel format. The base EfficientNet-B0 model is loaded both without the top layers (classification layers) and the pre-trained weights, as these were trained using 3-channel images. A Global Average Pooling layer is used to reduce the spatial dimensions of the feature maps. To reduce overfitting, a Dropout layer is added with a specified rate of 30\%. Following this, a dense layer is also added with 1024 neurons and ReLU activation (see Code \ref{lst:efficientnet_training}). In the end, the network outputs a probability indicating the likelihood of the image showing ’damaged’ versus ’undamaged’ areas.
+
 \begin{lstlisting}[language=Python, caption={Initializing and Training EfficientNetB0 for Six-Channel Image Input}, label= lst:efficientnet_training]
 from keras.layers import Input, Conv2D, Dense, GlobalAveragePooling2D, Dropout
 from keras.models import Model
@@ -545,7 +584,7 @@ model.compile(optimizer='adam',
 
 Before training, class weights are calculated using the Scikit-learn library. Furthermore, Keras callbacks are set up for early stopping, model checkpointing, and reducing the learning rate when the validation loss plateaus, which helps optimize the training process. As VGG16, the model is compiled with the Adam optimizer and binary cross-entropy loss, with accuracy, precision, and recall as performance metrics.
 
-For testing purposes, this EF architecture is trained on 23833 pre- and post-wildfire image pairs (divided as follows: 90\% for training and 10\% for validation) and is tested on 2716 pre- and post-wildfire image pairs. Training took 933 minutes for 13 epochs. The detailed training and validation performance metrics for each epoch are provided in Table \ref{tab:1}. 
+For testing purposes, this EF architecture is trained on 23833 pre- and post-wildfire image pairs (divided as follows: 90\% for training and 10\% for validation) and is tested on 2716 pre- and post-wildfire image pairs. Training took around 930 minutes for 13 epochs. The detailed training and validation performance metrics for each epoch are provided in Table \ref{tab:1}. Furthermore, the graphs depicting the changes of the training and validation metrics over the 13 epochs can be seen in Figure \ref{figebo}.
 
 \begin{table}[H]
     \centering
@@ -573,17 +612,25 @@ For testing purposes, this EF architecture is trained on 23833 pre- and post-wil
 
 During the training process, the model's performance on the training set showed a consistent increase in accuracy, precision, and recall. Specifically, the training accuracy improved from 0.7971 to 0.9588, precision increased from 0.7204 to 0.9665, and recall increased from 0.4053 to 0.8776 over the same period.
 
-On the validation set, the performance metrics exhibited positive trends as well. The validation accuracy began at 0.7843, peaked at 0.9359 around the eighth epoch, and remained high at 0.9333 by the final epoch. Validation, precision, and recall also showed improvements, with precision starting at 0.7688 and reaching up to 0.9606, while recall improved from 0.497 to 0.7757.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{wildfire_metrics_epoch_20.png}
+    \caption{Graphic Representation of the Fluctuation of the Performance Metrics for the Training and Validation Sets Using EfficientNetb0 Across 13 Epochs.} \label{figebo}
+\end{figure}
 
-There is a slight decrease in the validation performance metrics when compared to the training performance metrics. However, the validation metrics remain high, which suggests that the model is generalizing well to unseen data. However, the consistent gap between training and validation performance metrics indicates a slight degree of overfitting in some epochs for the EfficientNetB0 application. 
+On the validation set, the performance metrics exhibited positive trends as well. The validation accuracy began at 0.7843, peaked at 0.9359 around the eighth epoch, and remained high at 0.9333 by the final epoch. Validation, precision, and recall also showed improvements, with precision starting at 0.7688 and reaching up to 0.9606, while recall improved from 0.497 to 0.7757.
 
 
 \subsection{DL Results}
 The results in Table \ref{tab:2} compare the performance of the two neural network architectures used on the CWGID. Each architecture's performance metrics are assessed, including loss, accuracy, precision, recall, and training time. Also, the percentage of the CWGID used to train each architecture is specified. 
 
-Both models are trained with subsets of the CWGID dataset, with the 6-channel input EF EfficientNet model using 25\% of the data and the VGG16 model using 50\% of the data. 
+Both models are trained with subsets of the CWGID dataset, with the 6-channel input EF EfficientNet model and the VGG16 model using around 25\% of the data. 
 
-The 6-channel input EfficientNet achieved the lowest loss (0.178) and highest accuracy (92.6\%), making it the most effective model in terms of overall performance. Its precision was at 92.5\% and its recall was 81.9\%, indicating a strong ability to identify damaged areas correctly with some missed detections. VGG16, despite processing a larger dataset, had a higher loss (1.220) but maintained an accuracy of 83.2\%. Its precision was 74.9\% and its recall was 58.8\%. This architecture took a longer training time. The EfficientNet model shows a relatively faster training time when considering the epochs and the amount of data used.  The 6-channel input EfficientNet demonstrated superior performance in accurately classifying areas affected by wildfires with high precision and accuracy, making it an efficient choice for applications where quick and accurate assessments are critical. Moreover, it is important to mention that VGG16 was tested with 6-channel inputs but proved computationally intensive.
+The 6-channel input EfficientNet achieved the lowest loss (0.178) and highest accuracy (92.6\%), making it the most effective model in terms of overall performance. Its precision was at 92.5\% and its recall was 81.9\%, indicating a strong ability to identify damaged areas correctly with some missed detections. 
+
+VGG16, had a higher loss (0.718) with an accuracy of 76.4\%. Its precision was 83.7\% and its recall was 68.9\%. This architecture took a longer training time of 1010 minutes compared to 930 minutes for the EfficientNet model. The EfficientNet model shows a slight faster training time when considering the amount of training epochs.
+
+The 6-channel input EfficientNet demonstrated superior performance in accurately classifying areas affected by wildfires with high precision and accuracy, making it an efficient choice for applications where accurate assessments are critical. Moreover, it is important to mention that VGG16 was tested with 6-channel inputs but proved computationally intensive.
  
 
  \begin{table}[H]
@@ -593,12 +640,12 @@ The 6-channel input EfficientNet achieved the lowest loss (0.178) and highest ac
     \toprule
     \textbf{Model} & \textbf{6-channel input EfficientNet} & \textbf{VGG16} \\
     \midrule
-    Data from the CWGID (\%) & 25 & 50 \\
-    Loss & 0.178 & 1.220 \\
-    Accuracy & 0.926 & 0.832 \\
-    Precision & 0.925 & 0.749 \\
-    Recall & 0.819 & 0.588 \\
-    Time (minutes) & 933 & 1953 \\
+    Data from the CWGID (\%) & 25 & 25 \\
+    Loss & 0.178 & 0.718 \\
+    Accuracy & 0.926 & 0.764 \\
+    Precision & 0.925 & 0.837 \\
+    Recall & 0.819 & .689 \\
+    Time (minutes) & 933 & 1010 \\
     \bottomrule
     \end{tabular}
 \end{table}
@@ -614,7 +661,7 @@ On top of that, the dataset's bi-temporal collection of pre- and post-wildfire s
 \section{Conclusion}
 
 This paper illustrates a Python methodology that integrates DL with satellite imagery to enhance environmental monitoring. Specifically, the development of the California Wildfire GeoImaging Dataset (CWGID) and its evaluation using DL architectures are outlined. The approach explained throughout this work allows for accurate detection of forest wildfires, as demonstrated using DL architectures, and can be applied to a broad range of environmental issues beyond just wildfire detection.
-Firstly, historical data, Python-based tools, and Google Earth Engine are leveraged to build and label a large, cloud-free Sentinel-2 satellite imagery dataset depicting forest wildfire examples. Then, this dataset is used to train well-known CNN architectures, enabling the effective detection of forest wildfires within the satellite imagery. An accuracy of 92.6 \% with the EfficientNet model was obtained, indicating the potential effectiveness of the methodology.
+Firstly, historical data, Python-based tools, and Google Earth Engine are leveraged to build and label a large, cloud-free Sentinel-2 satellite imagery dataset depicting forest wildfire examples. Then, this dataset is used to train well-known CNN architectures, enabling the effective detection of forest wildfires within the satellite imagery. An accuracy of 92.6 \% with the EfficientNetB0 model was obtained, indicating the potential effectiveness of the methodology.
 Future studies will include using Fully Convolutional Networks (FCNs), like U-Nets \citep{DBLP:RonnebergerFB15}, because they allow pixel-wise classification. It is anticipated that these networks will enhance the accuracy of detecting and mapping wildfire-affected areas, leveraging the detailed ground truth masks included within the CWGID.
 
 
