@@ -96,7 +96,7 @@ These packages provide functions for computing signatures from raw,
 structured data presented in an $n\times d$ array, where $d$ is the dimension 
 of the stream and $n$ is the number of samples.
 This means the user is responsible for interpreting the data as a path and 
-arranging the computations that need to be done
+arranging the computations that need to be done.
 
 RoughPy is a new package for working with sequential data and rough paths.
 The design philosophy for this package is to shift the emphasis from simply
