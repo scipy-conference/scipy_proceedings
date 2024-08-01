@@ -33,6 +33,10 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    HTML: HyperText Markup Language
+    UMAP: Uniform Manifold Approximation and Projection
+    CSS: Cascading Style Sheets
+    DBSCAN: Density-Based Spatial Clustering of Applications with Noise
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists

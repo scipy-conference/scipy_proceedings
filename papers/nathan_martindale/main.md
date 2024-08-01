@@ -540,11 +540,9 @@ the metadata attributes that are unrelated to the event source properties.
 Additionally, we use the dashboard to help end users understand
 how well the model generalizes to new sources and to explore uncertainty.
 
-The dashboard includes a UMAP plot of signals embedded by the model under
+The dashboard includes a UMAP [@10.48550/arXiv.1802.03426] plot of signals embedded by the model under
 exploration. Each datapoint is a single observed seismic signal, and these
-data points are then clustered with DBSCAN. <!-- the key benefit from IPyOverlay
-is in allowing .... -->
-Metadata attributes aggregated 
+data points are then clustered with DBSCAN [@Ester1996ADA]. Metadata attributes aggregated 
 by cluster can be explored by clicking within the UMAP ipympl plot, which aids
 in determining how much correlation exists for those attributes within that
 cluster. Invariant properties would tend to show as spread out distributions,
