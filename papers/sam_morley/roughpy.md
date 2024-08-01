@@ -656,6 +656,13 @@ The final terms indicate the order in which each pair of letters appear in
 the word.
 For instance, the term `1(3,9)` indicates that a `c` appears before an `i`.
 
+This is only the beginning of the story. 
+From here, we can use the signatures to compute the similarity between streams,
+via the signature kernel for instance, or used as features in a variety of
+machine learning problems.
+More detailed examples of how to use signatures in data science are given on the
+DataSig website [https://datasig.ac.uk/examples](https://datasig.ac.uk/examples).
+
 :::{prf:remark} 
 :nonumber:
 It turns out that most words in the English language can be distinguished 
