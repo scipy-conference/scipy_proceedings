@@ -37,7 +37,7 @@ the data.
 IPyWidgets [@ipywidgets], a framework for bridging between the IPython kernel
 and HTML widgets within Jupyter, has been particularly influential for enabling
 interactive visualization. Many libraries such as Panel
-[@10.5281/zenodo.11046027], Solara [@solara], and Streamlit [@streamlit]
+[@10.5281/zenodo.11046027] and Solara [@solara]
 integrate closely with IPyWidgets and thus contribute to the greater
 visualization ecosystem within Python. Although a great deal of progress has
 been made in this community, a missing element is a more generalized and
@@ -741,6 +741,67 @@ violin plot with the distributions versus the density plots (@fig:context_menu).
 An activated context menu providing a selection of commands, which can be
 expanded well beyond the single possible action that can be taken from a left-click. 
 :::
+
+### Example Usage
+
+A minimal code example using IPyOverlay's containers and connection lines is
+shown in @code:example_ipyoverlay. The example renders an interactive ipympl 
+scatterplot of random data, and clicking on a point renders a connected overlay
+window with a bar chart of additional data associated with the point. A
+screenshot of this output is shown in @fig:ipyoverlay_example.
+
+```{code-block} python
+:label: code:example_ipyoverlay
+:linenos: true
+:caption: This snippet wraps an `ipympl` figure with an `OverlayContainer` and responds to point clicks by adding a floating `DecoratedWidgetWrapper` with an additional plot, connected to the clicked point. Note that `display_output()` is a convenience function provided by IPyOverlay that can render a static plot into a default ipywidgets `Output` widget.
+
+import ipyoverlay as ui
+import matplotlib.pyplot as plt
+import numpy as np
+
+%matplotlib widget
+
+# make random data to plot - the first two dimensions are x and y coords
+# and the latter 3 are associated data we want to see in inset plots
+data = np.random.rand(100, 5)
+
+# plot the scatter data dimensions
+fig, ax = plt.subplots()
+ax.scatter(x=data[:,0], y=data[:,1])
+
+# make an IPyOverlay Container to wrap the ipympl figure to allow inset plots
+container = ui.OverlayContainer(fig.canvas, height="auto", width="auto")
+
+def on_point_click(point_index, event):
+    # get the data associated with selected point
+    data_point = data[point_index]
+    category_bar_data = data_point[2:]
+
+    # create bar chart for selected point
+    inset_fig, inset_ax = plt.subplots(figsize=(2,2))
+    inset_ax.bar(x=[0,1,2], height=category_bar_data)
+
+    # make a floating IPyOverlay window with the plot and connect it 
+    # to the selected point's data location
+    inset_window = ui.DecoratedWidgetWrapper(ui.display_output(inset_fig), title=str(point_index))
+    container.add_child_at_mpl_point(inset_window, ax, data_point[0], data_point[1])
+
+# attach the event handler to add the inset plot when any of the specified 
+# datapoints are clicked
+handler = ui.mpl.event.on_mpl_point_click(ax, on_point_click, data[:,0], data[:,1], tolerance=.1)
+
+container
+```
+
+<!--:width: 800px-->
+
+:::{figure} ipyoverlay_example.png
+:label: fig:ipyoverlay_example
+An `ipympl` scatter plot of random data with two inset plots showing the
+additional data associated with each clicked point in a bar chart.
+:::
+
+
 
 ## Conclusion
 

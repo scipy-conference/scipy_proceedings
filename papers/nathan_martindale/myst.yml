@@ -40,7 +40,6 @@ project:
       keys:
         - ipywidgets
         - solara
-        - streamlit
         - LowLevelWidget
         - ipywidgets_cookiecutter
         - plotly
