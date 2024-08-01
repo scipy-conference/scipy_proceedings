@@ -642,7 +642,7 @@ Now we can compute the signature of the stream over the whole domain of the
 stream $[0, 4]$ by omitting the interval argument:
 ```python
 sig = stream.signature()
-print(sig);
+print(sig)
 # { 1() 1(3) 1(9) 1(16) 1(19) 1(25) 1/2(3,3) 
 #   1(3,9) 1(3,16) 1(3,25) 1/2(9,9) 1(9,16) 
 #   1(9,25) 1/2(16,16) 1(16,25) 1(19,3) 1(19,9) 
