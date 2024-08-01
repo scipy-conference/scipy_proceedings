@@ -134,7 +134,7 @@ In this section we give a very short introduction to signatures and rough path
 theory that should be sufficient to inform the discussion in the sequel.
 For a far more comprehensive and rigorous treatment, we refer the reader to the 
 recent survey [@10.48550/arXiv.2206.14674].
-In the sequel, we write $V$ for the vector space
+For the remainder of the paper, we write $V$ for the vector space 
 $\mathbb{R}^d$, where $d \geq 1$.
 
 A *path* in $V$ is a continuous function $X:[a, b] \to V$, where $a < b$ are
@@ -188,8 +188,7 @@ Two paths have the same signature if and only if they differ by a
 The signature is translation invariant, and it is invariant under 
 reparametrisation.
 
-The *dual* of $\mathrm{T}((V))$ is the 
-*shuffle algebra* $\mathrm{Sh}(V)$.
+The *dual* of $\mathrm{T}((V))$ is the *shuffle algebra* $\mathrm{Sh}(V)$.
 This is the space of linear functionals $\mathrm{T}((V))\to \mathbb{R}$
 and consists of sequences $(\lambda_0, \lambda_1, \dots)$ with
 $\lambda_k\in (V^{\ast})^{\otimes k}$ and where $\lambda_k = 0$ for all $k$
@@ -202,8 +201,9 @@ This is a consequence of the Stone-Weierstrass theorem.
 This property is sometimes referred to as *universal non-lineararity*.
 
 There are several *Lie algebras* associated to $\mathrm{T}((V))$.
-Define the *Lie bracket* $[\mathbf{x}, \mathbf{y}] =
-\mathbf{x} \otimes \mathbf{y} - \mathbf{y}\otimes \mathbf{x}$, for
+Define a *Lie bracket* operation on $\mathrm{T}((V))$ by the formula 
+$[\mathbf{x}, \mathbf{y}] = \mathbf{x} \otimes \mathbf{y} - 
+\mathbf{y}\otimes \mathbf{x}$, for
 $\mathbf{x},\mathbf{y}\in \mathrm{T}((V))$.
 We define subspaces $L_m$ of $\mathrm{T}((V))$ for each $m\geq 0$ inductively as
 follows: $L_0 = \{\mathbf{0}\}$, $L_1 = V$, and, for $m \geq 1$, 
