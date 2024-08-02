@@ -58,6 +58,7 @@ project:
         - barlowtwins
         - jupyter
         - materialdesign
+        - Ester1996ADA
     - rule: link-resolves
       severity: ignore
       keys:
