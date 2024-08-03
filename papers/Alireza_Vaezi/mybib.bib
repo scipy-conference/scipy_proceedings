@@ -1,11 +1,8 @@
 # Feel free to delete these first few references, which are specific to the template:
 
 @article{Hansen2021-fd,
-  title   = {{CiliaQ}: a simple, open-source software for automated
-             quantification of ciliary morphology and fluorescence in 2D, 3D,
-             and {4D} images},
-  author  = {Hansen, Jan Niklas and Rassmann, Sebastian and St{\"u}ven, Birthe
-             and Jurisch-Yaksi, Nathalie and Wachten, Dagmar},
+  title   = {{CiliaQ}: a simple, open-source software for automated quantification of ciliary morphology and fluorescence in 2D, 3D, and {4D} images},
+  author  = {Hansen, Jan Niklas and Rassmann, Sebastian and St{\"u}ven, Birthe and Jurisch-Yaksi, Nathalie and Wachten, Dagmar},
   journal = {The European Physical Journal E},
   volume  = 44,
   number  = 2,
@@ -18,7 +15,7 @@
 @article{lee2011muco,
   title     = {Muco-ciliary transport: effect of mucus viscosity, cilia beat frequency and cilia density},
   author    = {Lee, WL and Jayathilake, PG and Tan, Zhijun and Le, DV and Lee, HP and Khoo, BC},
-  journal   = {Computers \& Fluids},
+  journal   = {Computers {&} Fluids},
   volume    = {49},
   number    = {1},
   pages     = {214--221},
@@ -118,8 +115,7 @@
   url      = {https://www.sciencedirect.com/science/article/pii/S2666389921002506},
   author   = {Artur Yakimovich and Anaël Beaugnon and Yi Huang and Elif Ozkirimli},
   keywords = {machine learning, data labeling, data value, active learning, self-supervised learning, semi-supervised learning, data annotation, zero-shot learning},
-  abstract = {Summary
-              Recent advances in biomedical machine learning demonstrate great potential for data-driven techniques in health care and biomedical research. However, this potential has thus far been hampered by both the scarcity of annotated data in the biomedical domain and the diversity of the domain's subfields. While unsupervised learning is capable of finding unknown patterns in the data by design, supervised learning requires human annotation to achieve the desired performance through training. With the latter performing vastly better than the former, the need for annotated datasets is high, but they are costly and laborious to obtain. This review explores a family of approaches existing between the supervised and the unsupervised problem setting. The goal of these algorithms is to make more efficient use of the available labeled data. The advantages and limitations of each approach are addressed and perspectives are provided.}
+  abstract = {Summary Recent advances in biomedical machine learning demonstrate great potential for data-driven techniques in health care and biomedical research. However, this potential has thus far been hampered by both the scarcity of annotated data in the biomedical domain and the diversity of the domain's subfields. While unsupervised learning is capable of finding unknown patterns in the data by design, supervised learning requires human annotation to achieve the desired performance through training. With the latter performing vastly better than the former, the need for annotated datasets is high, but they are costly and laborious to obtain. This review explores a family of approaches existing between the supervised and the unsupervised problem setting. The goal of these algorithms is to make more efficient use of the available labeled data. The advantages and limitations of each approach are addressed and perspectives are provided.}
 }
 
 @article{van2020survey,
@@ -151,30 +147,22 @@
   abstract = {Background: Convolutional neural network (CNN) based segmentation methods provide an efficient and automated way for clinicians to assess the structure and function of the heart in cardiac MR images. While CNNs can generally perform the segmentation tasks with high accuracy when training and test images come from the same domain (e.g., same scanner or site), their performance often degrades dramatically on images from different scanners or clinical sites.Methods: We propose a simple yet effective way for improving the network generalization ability by carefully designing data normalization and augmentation strategies to accommodate common scenarios in multi-site, multi-scanner clinical imaging data sets. We demonstrate that a neural network trained on a single-site single-scanner dataset from the UK Biobank can be successfully applied to segmenting cardiac MR images across different sites and different scanners without substantial loss of accuracy. Specifically, the method was trained on a large set of 3,975 subjects from the UK Biobank. It was then directly tested on 600 different subjects from the UK Biobank for intra-domain testing and two other sets for cross-domain testing: the ACDC dataset (100 subjects, 1 site, 2 scanners) and the BSCMR-AS dataset (599 subjects, 6 sites, 9 scanners).Results: The proposed method produces promising segmentation results on the UK Biobank test set which are comparable to previously reported values in the literature, while also performing well on cross-domain test sets, achieving a mean Dice metric of 0.90 for the left ventricle, 0.81 for the myocardium, and 0.82 for the right ventricle on the ACDC dataset; and 0.89 for the left ventricle, 0.83 for the myocardium on the BSCMR-AS dataset.Conclusions: The proposed method offers a potential solution to improve CNN-based model generalizability for the cross-scanner and cross-site cardiac MR image segmentation task.}
 }
 @article{Krois2021,
-  author   = {Krois, Joachim
-              and Garcia Cantu, Anselmo
-              and Chaurasia, Akhilanand
-              and Patil, Ranjitkumar
-              and Chaudhari, Prabhat Kumar
-              and Gaudin, Robert
-              and Gehrung, Sascha
-              and Schwendicke, Falk},
-  title    = {Generalizability of deep learning models for dental image analysis},
-  journal  = {Scientific Reports},
-  year     = {2021},
-  month    = {Mar},
-  day      = {17},
-  volume   = {11},
-  number   = {1},
-  pages    = {6102},
-  abstract = {We assessed the generalizability of deep learning models and how to improve it. Our exemplary use-case was the detection of apical lesions on panoramic radiographs. We employed two datasets of panoramic radiographs from two centers, one in Germany (Charit{\'e}, Berlin, n{\thinspace}={\thinspace}650) and one in India (KGMU, Lucknow, n{\thinspace}={\thinspace}650): First, U-Net type models were trained on images from Charit{\'e} (n{\thinspace}={\thinspace}500) and assessed on test sets from Charit{\'e} and KGMU (each n{\thinspace}={\thinspace}150). Second, the relevance of image characteristics was explored using pixel-value transformations, aligning the image characteristics in the datasets. Third, cross-center training effects on generalizability were evaluated by stepwise replacing Charite with KGMU images. Last, we assessed the impact of the dental status (presence of root-canal fillings or restorations). Models trained only on Charit{\'e} images showed a (mean{\thinspace}{\textpm}{\thinspace}SD) F1-score of 54.1{\thinspace}{\textpm}{\thinspace}0.8{\%} on Charit{\'e} and 32.7{\thinspace}{\textpm}{\thinspace}0.8{\%} on KGMU data (p{\thinspace}<{\thinspace}0.001/t-test). Alignment of image data characteristics between the centers did not improve generalizability. However, by gradually increasing the fraction of KGMU images in the training set (from 0 to 100{\%}) the F1-score on KGMU images improved (46.1{\thinspace}{\textpm}{\thinspace}0.9{\%}) at a moderate decrease on Charit{\'e} images (50.9{\thinspace}{\textpm}{\thinspace}0.9{\%}, p{\thinspace}<{\thinspace}0.01). Model performance was good on KGMU images showing root-canal fillings and/or restorations, but much lower on KGMU images without root-canal fillings and/or restorations. Our deep learning models were not generalizable across centers. Cross-center training improved generalizability. Noteworthy, the dental status, but not image characteristics were relevant. Understanding the reasons behind limits in generalizability helps to mitigate generalizability problems.},
-  issn     = {2045-2322},
-  doi      = {http://dx.doi.org/10.1038/s41598-021-85454-5},
-  url      = {10.1038/s41598-021-85454-5}
+  author  = {Krois, Joachim and Garcia Cantu, Anselmo and Chaurasia, Akhilanand and Patil, Ranjitkumar and Chaudhari, Prabhat Kumar and Gaudin, Robert and Gehrung, Sascha and Schwendicke, Falk},
+  title   = {Generalizability of deep learning models for dental image analysis},
+  journal = {Scientific Reports},
+  year    = {2021},
+  month   = {Mar},
+  day     = {17},
+  volume  = {11},
+  number  = {1},
+  pages   = {6102},
+  issn    = {2045-2322},
+  doi     = {http://dx.doi.org/10.1038/s41598-021-85454-5},
+  url     = {10.1038/s41598-021-85454-5}
 }
 @article{10.1148/ryai.2020190195,
   author  = {Yan, Wenjun and Huang, Lu and Xia, Liming and Gu, Shengjia and Yan, Fuhua and Wang, Yuanyuan and Tao, Qian},
-  title   = {MRI Manufacturer Shift and Adaptation: Increasing the                     Generalizability of Deep Learning Segmentation for MR Images Acquired with                     Different Scanners},
+  title   = {MRI Manufacturer Shift and Adaptation: Increasing the           Generalizability of Deep Learning Segmentation for MR Images Acquired with           Different Scanners},
   journal = {Radiology: Artificial Intelligence},
   volume  = {2},
   number  = {4},
@@ -186,21 +174,17 @@
   eprint  = {10.1148/ryai.2020190195}
 }
 @article{Sandfort2019,
-  author   = {Sandfort, Veit
-              and Yan, Ke
-              and Pickhardt, Perry J.
-              and Summers, Ronald M.},
-  title    = {Data augmentation using generative adversarial networks (CycleGAN) to improve generalizability in CT segmentation tasks},
-  journal  = {Scientific Reports},
-  year     = {2019},
-  month    = {Nov},
-  day      = {15},
-  volume   = {9},
-  number   = {1},
-  pages    = {16884},
-  abstract = {Labeled medical imaging data is scarce and expensive to generate. To achieve generalizable deep learning models large amounts of data are needed. Standard data augmentation is a method to increase generalizability and is routinely performed. Generative adversarial networks offer a novel method for data augmentation. We evaluate the use of CycleGAN for data augmentation in CT segmentation tasks. Using a large image database we trained a CycleGAN to transform contrast CT images into non-contrast images. We then used the trained CycleGAN to augment our training using these synthetic non-contrast images. We compared the segmentation performance of a U-Net trained on the original dataset compared to a U-Net trained on the combined dataset of original data and synthetic non-contrast images. We further evaluated the U-Net segmentation performance on two separate datasets: The original contrast CT dataset on which segmentations were created and a second dataset from a different hospital containing only non-contrast CTs. We refer to these 2 separate datasets as the in-distribution and out-of-distribution datasets, respectively. We show that in several CT segmentation tasks performance is improved significantly, especially in out-of-distribution (noncontrast CT) data. For example, when training the model with standard augmentation techniques, performance of segmentation of the kidneys on out-of-distribution non-contrast images was dramatically lower than for in-distribution data (Dice score of 0.09 vs. 0.94 for out-of-distribution vs. in-distribution data, respectively, p{\thinspace}<{\thinspace}0.001). When the kidney model was trained with CycleGAN augmentation techniques, the out-of-distribution (non-contrast) performance increased dramatically (from a Dice score of 0.09 to 0.66, p{\thinspace}<{\thinspace}0.001). Improvements for the liver and spleen were smaller, from 0.86 to 0.89 and 0.65 to 0.69, respectively. We believe this method will be valuable to medical imaging researchers to reduce manual segmentation effort and cost in CT imaging.},
-  issn     = {2045-2322},
-  doi      = {https://doi.org/10.1016/j.imu.2021.100779}
+  author  = {Sandfort, Veit and Yan, Ke and Pickhardt, Perry J. and Summers, Ronald M.},
+  title   = {Data augmentation using generative adversarial networks (CycleGAN) to improve generalizability in CT segmentation tasks},
+  journal = {Scientific Reports},
+  year    = {2019},
+  month   = {Nov},
+  day     = {15},
+  volume  = {9},
+  number  = {1},
+  pages   = {16884},
+  issn    = {2045-2322},
+  doi     = {https://doi.org/10.1016/j.imu.2021.100779}
 }
 @article{YAKIMOVICH2021100383,
   title    = {Labels in a haystack: Approaches beyond supervised learning in biomedical applications},
@@ -214,8 +198,7 @@
   url      = {https://www.sciencedirect.com/science/article/pii/S2666389921002506},
   author   = {Artur Yakimovich and Anaël Beaugnon and Yi Huang and Elif Ozkirimli},
   keywords = {machine learning, data labeling, data value, active learning, self-supervised learning, semi-supervised learning, data annotation, zero-shot learning},
-  abstract = {Summary
-              Recent advances in biomedical machine learning demonstrate great potential for data-driven techniques in health care and biomedical research. However, this potential has thus far been hampered by both the scarcity of annotated data in the biomedical domain and the diversity of the domain's subfields. While unsupervised learning is capable of finding unknown patterns in the data by design, supervised learning requires human annotation to achieve the desired performance through training. With the latter performing vastly better than the former, the need for annotated datasets is high, but they are costly and laborious to obtain. This review explores a family of approaches existing between the supervised and the unsupervised problem setting. The goal of these algorithms is to make more efficient use of the available labeled data. The advantages and limitations of each approach are addressed and perspectives are provided.}
+  abstract = {Summary Recent advances in biomedical machine learning demonstrate great potential for data-driven techniques in health care and biomedical research. However, this potential has thus far been hampered by both the scarcity of annotated data in the biomedical domain and the diversity of the domain's subfields. While unsupervised learning is capable of finding unknown patterns in the data by design, supervised learning requires human annotation to achieve the desired performance through training. With the latter performing vastly better than the former, the need for annotated datasets is high, but they are costly and laborious to obtain. This review explores a family of approaches existing between the supervised and the unsupervised problem setting. The goal of these algorithms is to make more efficient use of the available labeled data. The advantages and limitations of each approach are addressed and perspectives are provided.}
 }
 
 @article{van2001art,
@@ -266,15 +249,8 @@
   doi       = {https://doi.org/10.48550/arXiv.1809.07294}
 }
 @article{Sanford2020-yg,
-  title    = {Data Augmentation and Transfer Learning to Improve
-              Generalizability of an Automated Prostate Segmentation Model},
-  author   = {Sanford, Thomas H and Zhang, Ling and Harmon, Stephanie A and
-              Sackett, Jonathan and Yang, Dong and Roth, Holger and Xu, Ziyue
-              and Kesani, Deepak and Mehralivand, Sherif and Baroni, Ronaldo H
-              and Barrett, Tristan and Girometti, Rossano and Oto, Aytekin and
-              Purysko, Andrei S and Xu, Sheng and Pinto, Peter A and Xu,
-              Daguang and Wood, Bradford J and Choyke, Peter L and Turkbey,
-              Baris},
+  title    = {Data Augmentation and Transfer Learning to Improve Generalizability of an Automated Prostate Segmentation Model},
+  author   = {Sanford, Thomas H and Zhang, Ling and Harmon, Stephanie A and Sackett, Jonathan and Yang, Dong and Roth, Holger and Xu, Ziyue and Kesani, Deepak and Mehralivand, Sherif and Baroni, Ronaldo H and Barrett, Tristan and Girometti, Rossano and Oto, Aytekin and Purysko, Andrei S and Xu, Sheng and Pinto, Peter A and Xu, Daguang and Wood, Bradford J and Choyke, Peter L and Turkbey, Baris},
   journal  = {AJR Am J Roentgenol},
   volume   = 215,
   number   = 6,
@@ -372,15 +348,13 @@
 
 @inbook{Hoyer-Fender2013,
   author    = {Hoyer-Fender, Sigrid},
-  editor    = {Tucker, Kerry L.
-               and Caspary, Tamara},
+  editor    = {Tucker, Kerry L.  and Caspary, Tamara},
   title     = {Primary and Motile Cilia: Their Ultrastructure and Ciliogenesis},
   booktitle = {Cilia and Nervous System Development and Function},
   year      = {2013},
   publisher = {Springer Netherlands},
   address   = {Dordrecht},
   pages     = {1--53},
-  abstract  = {Cilia are microtubule-based organelles surrounded by a specialized ciliary membrane. They emerge from basal bodies situated underneath the cell membrane. Basal bodies not only anchor cilia inside the cytoplasm but also they are essential for ciliary assembly. The basal body either originates from the oldest centriole of a pair of centrioles found at the centrosome, the main microtubule organizing center of the cell, to give rise to one primary cilium, or is generated in large numbers prior to the formation of multiple cilia. Large numbers of motile cilia are generally present on the cell surface of epithelia specialized for fluid movement. Motile cilia have a 9+2 axonemal structure with nine outer microtubule doublets surrounding two centrally-located singlet microtubules, and additional accessory structures. By contrast, primary cilia are found as single entities on most cells of the body. Their axoneme is of a 9+0 organization i.e. the centrally located singlet microtubules as well as the accessory structures are missing. Primary cilia are generally immotile. However, they are essential for sensing and transducing environmental signals. Primary cilia are therefore critical for embryonic and postnatal development, as well as for tissue homeostasis in adulthood. Impaired ciliary function causes a tremendous number of severe and diverse human diseases. Thus, unravelling the molecular mechanisms of cilium generation and maintenance is of crucial importance not only for medical research. In the past decade, pioneering studies have provided important insights into the underlying molecular mechanisms and the different players involved. This chapter addresses the differences and similarities in structure and function of motile and primary cilia as well as their assembly. Electron microscope data of ciliary structure and assembly are combined with molecular data to present an overview of the mechanisms involved in centriole and basal body generation, cilium formation and maintenance, cilium disassembly, and the diverse functions that are ascribed to cilia.},
   isbn      = {978-94-007-5808-7},
   doi       = {10.1007/978-94-007-5808-7_1},
   url       = {https://doi.org/10.1007/978-94-007-5808-7_1}
