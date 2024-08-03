@@ -263,30 +263,25 @@ the these terms, using the multiplicative property of the signature.
 
 #### The signature transform
 Most of the early applications of rough paths in data science, the (truncated)
-signature was used as a feature map [@NEURIPS2019_d2cdf047].
-This provides a summary of the path that is independent of the parameterisation
-and the number of observations.
-Unfortunately, the signature grows geometrically with truncation depth.
-If $d > 1$, then the dimension of $\mathrm{T}^M(V)$ is
+signature was used as a feature map [@NEURIPS2019_d2cdf047]. This provides a
+summary of the path that is independent of the parameterisation and the number
+of observations. Unfortunately, the signature grows geometrically with
+truncation depth. If $d > 1$, then the dimension of $\mathrm{T}^M(V)$ is
 ```{math}
 \sum_{m=0}^M d^m = \frac{d^{M+1} - 1}{d - 1}
 ```
-This generally is a reflection of the complexity of the data, where data with a
-higher complexity generally needs a higher truncation level and thus a larger
-signature. It is worth noting that this still represents a significant
-compression of stream information in many cases. The truncation depth one needs
-depends on the stream and the (relative) length of intervals over which you need
-to query the stream.
+The size of the signature is a reflection of the complexity of the data, where
+data with a higher complexity generally needs a higher truncation level and thus
+a larger signature. It is worth noting that this still represents a significant
+compression of stream information in many cases. 
 
 For some applications, it might be possible to replace the signature with the
-log-signature.
-The log-signature is smaller than the signature, but we lose the universal
-non-linearity property of the signature.
-Alternatively, we might turn to other techniques that don't require a full
-calculation of the signature (such as those mentioned below).
-As the connection between rough paths and data science becomes more
-mathematically mature, we will likely find new ways to use the signature
-without requiring its full size.
+log-signature. The log-signature is smaller than the signature, but we lose the
+universal non-linearity property of the signature. Alternatively, we might turn
+to other techniques that don't require a full calculation of the signature (such
+as the signature kernel below). As the connection between rough paths and data
+science becomes more mathematically mature, we will likely find new ways to use
+the signature without requiring its full size.
 
 (sigker-sec)=
 #### Signature kernels
@@ -323,7 +318,7 @@ solution of a system of PDEs of Goursat type
 [@10.48550/arXiv.2404.02926].
 A critical part of their method involves the adjoint of both left and right
 free tensor multiplication, which are not available in any current package
-for computing signatures.
+for computing signatures. These functions are provided by RoughPy.
 
 (ncde-sec)=
 #### Neural controlled differential equations
