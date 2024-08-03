@@ -163,10 +163,10 @@ The members of $\mathrm{G}(V)$ are called *group-like* elements.
 For each $n \geq 0$, we write $\mathrm{T}^n(V)$ for the *truncated tensor
 algebra* of degree $n$, which is the space of all $\mathbf{x} = (x_0, x_1,
 \dots)$ such that $x_j = 0$ whenever $j > n$.
-Similarly, we write $\mathrm{T}^{>n}(V)$ for the subspace of elements 
+Similarly, we write $\mathrm{T}^{>n}((V))$ for the subspace of elements 
 $\mathbf{x} = (x_0, x_1,\dots)$ where $x_j = 0$ whenever $j \leq n$, 
 which is an ideal in $\mathrm{T}((V))$ and 
-$\mathrm{T}^n(V) = \mathrm{T}((V)) / \mathrm{T}^{>n}(V)$.
+$\mathrm{T}^n(V) = \mathrm{T}((V)) / \mathrm{T}^{>n}((V))$.
 The truncated tensor algebra is an algebra, when given the *truncated tensor
 product*, obtained by truncating the full tensor product. 
 
@@ -183,6 +183,7 @@ where for each $m\geq 1$, $\mathrm{S}_m(X)_{s, t}$ is given by the iterated
 The signature respects concatenation of paths, meaning 
 $\mathrm{S}(X)_{s, t} = \mathrm{S}(X)_{s, u} \otimes \mathrm{S}(X)_{u, t}$ 
 for any $s < u < t$.
+This property is usually called *Chen's relation*.
 Two paths have the same signature if and only if they differ by a 
 *tree-like path* [@10.4007/annals.2010.171.109].
 The signature is translation invariant, and it is invariant under 
@@ -193,7 +194,8 @@ This is the space of linear functionals $\mathrm{T}((V))\to \mathbb{R}$
 and consists of sequences $(\lambda_0, \lambda_1, \dots)$ with
 $\lambda_k\in (V^{\ast})^{\otimes k}$ and where $\lambda_k = 0$ for all $k$
 larger than some $N$.
-The multiplication on $\mathrm{Sh}(V)$ is the *shuffle product*, which
+(Here $V^{\ast}$ denotes the dual space of $V$. In our notation $V^{\ast} \cong
+V$.) The multiplication on $\mathrm{Sh}(V)$ is the *shuffle product*, which
 corresponds to point-wise multiplication of functions on the path.
 Continuous functions on the path can be approximated (uniformly) by shuffle
 tensors acting on $\mathrm{G}(V)$ on the signature.
@@ -201,7 +203,7 @@ This is a consequence of the Stone-Weierstrass theorem.
 This property is sometimes referred to as *universal non-lineararity*.
 
 There are several *Lie algebras* associated to $\mathrm{T}((V))$.
-Define a *Lie bracket* operation on $\mathrm{T}((V))$ by the formula 
+Define a *Lie bracket* on $\mathrm{T}((V))$ by the formula 
 $[\mathbf{x}, \mathbf{y}] = \mathbf{x} \otimes \mathbf{y} - 
 \mathbf{y}\otimes \mathbf{x}$, for
 $\mathbf{x},\mathbf{y}\in \mathrm{T}((V))$.
