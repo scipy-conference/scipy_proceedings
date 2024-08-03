@@ -365,39 +365,34 @@ behaviour learned via training on a corpus of normality.
 ### Tracking mood via natural language processing
 One application of rough paths in natural language processing has been in the
 domain of mental health [@10.18653/v1/2023.findings-acl.310;
-@tseriotou_etal_2024_sig].
-In this work, the authors present a model for identifying changes in a person's 
-mood based on their online textual content. 
+@tseriotou_etal_2024_sig]. In this work, the authors present a model for
+identifying changes in a person's mood based on their online textual content.
 Many mental health conditions have symptoms that manifest in the (textual)
 expression, so this could be a powerful tool for mental health professionals to
-identify changes in patients and intervene before the state develops.
-Their model achieves state-of-the-art performance vs existing models on two
-datasets.
+identify changes in patients and intervene before the state develops. Their
+model achieves state-of-the-art performance vs existing models on two datasets.
 
 ### Predicting battery cell degradation
 Another recent application of signatures is to predict the degradation of
-lithium-ion cells [@10.1016/j.apenergy.2023.121974].
-They use signature features to train a model that can accurately predict the end
-of life of a cell using relatively low-frequency sampling compared to existing
+lithium-ion cells [@10.1016/j.apenergy.2023.121974]. They use signature features
+to train a model that can accurately predict the end of life of a cell using
+relatively low-frequency sampling compared to existing models. They also
+observed that the performance at higher frequency was comparable to other
 models.
-They also observed that the performance at higher frequency was comparable to
-other models.
 
 ### Prediction of sepsis in intensive care data
 One of the first effective demonstrations of the utility of signatures and rough
 paths based methods in healthcare was in the 2019 PhysioNet challenge
-[@10.1097/CCM.0000000000004510].
-In this contest, teams were invited to develop models to predict sepsis in
-patients from intensive care unit data.
-In this challenge, a team utilising signatures to enhance predictive power
-placed first in the official phase of the challenge.
-Since then, signatures and other rough path based approaches have been used in
-several other clinical contexts [@10.1038/s41598-024-51989-6;
-@doi:10.1109/MEDAI59581.2023.00008; @tseriotou_etal_2024_sig].
-Clinical data is often irregularly sampled and often exhibits missing data, but
-it can also be very high-frequency and dense.
-Rough path based methods can handle these data in an elegant way, and retain the
-structure of long and short term dependencies within the data.
+[@10.1097/CCM.0000000000004510]. In this contest, teams were invited to develop
+models to predict sepsis in patients from intensive care unit data. In this
+challenge, a team utilising signatures to enhance predictive power placed first
+in the official phase of the challenge. Since then, signatures and other rough
+path based approaches have been used in several other clinical contexts
+[@10.1038/s41598-024-51989-6; @doi:10.1109/MEDAI59581.2023.00008;
+@tseriotou_etal_2024_sig]. Clinical data is often irregularly sampled and often
+exhibits a high degree of missingness, but it can also be very high-frequency
+and dense. Rough path based methods can handle these data in an elegant way, and
+retain the structure of long and short term dependencies within the data.
 
 ### Human action recognition
 The task of identifying a specific action performed by a person from a short
@@ -417,10 +412,9 @@ tasks [@10.1109/TPAMI.2017.2732978].
 (roughpy-sec)=
 ## RoughPy
 RoughPy is a new library that aims to support the development of connections
-between rough path theory and data science.
-It represents a shift in philosophy from simple computations of signatures for
-sequential data, to a representation of these data as a rough path.
-The design objectives for RoughPy are as follows:
+between rough path theory and data science. It represents a shift in philosophy
+from simple computations of signatures for sequential data, to a representation
+of these data as a rough path. The design objectives for RoughPy are as follows:
 1. provide a class that presents a rough path view of some source of data as a
    rough path, exposing methods for querying the data over intervals to get a
    signature or log-signature;
@@ -439,170 +433,148 @@ These provide part of the picture, but in order for them to be fully supported,
 RoughPy must support a variety of compute backends such as CUDA (NVidia), 
 ROCm/HIP (AMD), and Metal (Apple).
 
-RoughPy is a substantial library with numerous components, mostly written in 
-C++ with a Python interface defined using Pybind11 [@pybind11].
-The original design of the library closely followed the C++ template libraries
-libRDE and libalgebra [@coropa_project], although it has seen many iterations 
-since.
+RoughPy is a substantial library with numerous components, mostly written in C++
+with a Python interface defined using Pybind11 [@pybind11]. The original design
+of the library closely followed the C++ template libraries libRDE and libalgebra
+[@coropa_project], although it has seen many iterations since.
 
 In the remainder of this section, we discuss some of the core components of
 RoughPy, give an example of using RoughPy, and discuss the future of RoughPy.
 
 ### Free tensors, shuffle tensors, and Lie objects
 In order to properly support rough path based methods and allow users to write
-code based on mathematical concepts, we provide realisations of several
-algebra types.
-The algebras provided in RoughPy are `FreeTensor`, `ShuffleTensor`, and `Lie`,
-which define elements of a particular free tensor algebra, shuffle tensor
-algebra, and Lie algebra respectively.
-Each of these algebras is initialized with a width, depth, and scalar
-coefficient type, encapsulated in a `Context` object.
+code based on mathematical concepts, we provide realisations of several algebra
+types. The algebras provided in RoughPy are `FreeTensor`, `ShuffleTensor`, and
+`Lie`, which define elements of a particular free tensor algebra, shuffle tensor
+algebra, and Lie algebra respectively. Each of these algebras is initialized
+with a width, depth, and scalar coefficient type, encapsulated in a `Context`
+object.
 
 In addition to the algebra classes, RoughPy provides a number of supporting
-functions, including half-shuffle products for `FreeTensor`/`ShuffleTensor`
-objects, and adjoint operators for left free tensor multiplication.
-These are operations that are frequently used in the theory of rough paths, and
-will likely be necessary in developing new applications later (as in the
-signature kernels).
+functions, including antipodes and half-shuffle products for
+`FreeTensor`/`ShuffleTensor` objects, and adjoint operators for left free tensor
+multiplication. These are operations that are frequently used in the theory of
+rough paths, and will likely be necessary in developing new applications later
+(as in the signature kernels).
 
 RoughPy algebras are designed around a flexible scalar ring system that allows
 users to perform calculations with different accuracy, or derive expressions by
-using polynomial coefficients.
-For most applications, single or double precision floating point numbers will 
-provide a good balance between performance and accuracy.
-(Double precision floats are the default.)
-When more precision is required, rational coefficients can be used
-instead.
-These are backed by GMP rationals for fast, arbitrary precision rational
-arithmetic [@Granlund12].
+using polynomial coefficients. For most applications, single or double precision
+floating point numbers will provide a good balance between performance and
+accuracy. (Double precision floats are the default.) When more precision is
+required, rational coefficients can be used instead. These are backed by GMP
+rationals for fast, arbitrary precision rational arithmetic [@Granlund12].
 Polynomial coefficients can be used to derive formulae by performing
-calculations.
-This is a powerful technique for understanding the terms that appear in the
-result, particularly whilst testing and debugging.
-
+calculations. This is a powerful technique for understanding the terms that
+appear in the result, particularly whilst testing and debugging.
 
 ### Intervals 
-RoughPy is very careful in the way it handles intervals.
-All intervals in RoughPy are half-open, meaning that they include one end point
-but not the other; they are either *clopen* $[a, b) := \{t: a\leq t < b\}$ or 
-*opencl* $(a, b] := \{t : a < t \leq b\}$.
-Besides the type (clopen or opencl), all intervals must provide methods for
-retrieving the infimum ($a$ in the above notation) and the supremum ($b$ above)
-of the interval as double precision floats.
-This is enforced by means of an abstract base class `Interval`.
-The main concrete interval types are `RealInterval`, an interval with arbitrary 
-real endpoints, and `DyadicInterval`, as described below.
-For brevity, in the sequel we shall only consider clopen intervals.
+RoughPy is very careful in the way it handles intervals. All intervals in
+RoughPy are half-open, meaning that they include one end point but not the
+other; they are either *clopen* $[a, b) := \{t: a\leq t < b\}$ or *opencl* $(a,
+b] := \{t : a < t \leq b\}$. Besides the type (clopen or opencl), all intervals
+must provide methods for retrieving the infimum ($a$ in the above notation) and
+the supremum ($b$ above) of the interval as double precision floats. This is
+enforced by means of an abstract base class `Interval`. The main concrete
+interval types are `RealInterval`, an interval with arbitrary real endpoints,
+and `DyadicInterval`, as described below. For brevity, we shall only consider
+clopen intervals.
 
 A *dyadic interval* is an interval $D_k^n := [k/2^n, (k+1)/2^n)$, where $k$, $n$
-are integers.
-The number $n$ is often described as the *resolution* of the interval.
-The family of dyadic intervals of a fixed resolution $n$ partition the real line 
-so that every real number $t$ belongs to a unique dyadic interval $D_n^k$.
-Moreover, the family of all dyadic intervals have the property that two
+are integers. The number $n$ is often described as the *resolution* of the
+interval. The family of dyadic intervals of a fixed resolution $n$ partition the
+real line so that every real number $t$ belongs to a unique dyadic interval
+$D_n^k$. Moreover, the family of all dyadic intervals have the property that two
 dyadic intervals are either disjoint or one contains the other (including the
 possibility that they are equal).
 
-In many cases, RoughPy will granularise an interval into a dyadic intervals.
-The *dyadic granularisation* of $[a, b)$ with resolution $n$ is 
-$[k_1/2^n, k_2/2^n)$ where $k_1 = \max\{k: k/2^n \leq a\}$ and 
-$k_2 = \max\{k: k/2^n \leq b\}$.
-In effect, the dyadic granularisation is the result of "rounding" each end 
-point to the included end of the unique dyadic interval that contain it.
+In many cases, RoughPy will granularise an interval into a dyadic intervals. The
+*dyadic granularisation* of $[a, b)$ with resolution $n$ is $[k_1/2^n, k_2/2^n)$
+where $k_1 = \max\{k: k/2^n \leq a\}$ and $k_2 = \max\{k: k/2^n \leq b\}$. In
+effect, the dyadic granularisation is the result of "rounding" each end point to
+the included end of the unique dyadic interval that contain it.
 
 ### Streams
-Streams are central to RoughPy.
-A RoughPy `Stream` is a rough path view of some underlying data.
-It provides two key methods to query the object over intervals to retrieve
-either a signature or log-signature.
-Importantly, once constructed, the underlying data is inaccessible except by
-querying via these methods.
+Streams are central to RoughPy. A RoughPy `Stream` is a rough path view of some
+underlying data. It provides two key methods to query the object over intervals
+to retrieve either a signature or log-signature. Importantly, once constructed,
+the underlying data is inaccessible except by querying via these methods.
 `Stream`s are designed to be composed in various ways, such as by concatenation,
-in order to build up more complex streams.
-A `Stream` is actually a (type-erasing) wrapper around a more minimal
-`StreamInterface` abstract class.
+in order to build up more complex streams. A `Stream` is actually a
+(type-erasing) wrapper around a more minimal `StreamInterface` abstract class.
 
 We construct streams by a factory function associated with each different
 `StreamInterface`, which might perform some compression of the underlying data.
 For example, a basic `StreamInterface` is the `LieIncrementStream`, which can be
 constructed using the associated `from_increments` factory function (a static
-method of the class), which accepts an $n \times d$ array of *increment data*. 
-These data will typically be the differences between successive values of the 
-data (but could also include higher-order Lie terms).
-This is similar to the way that libraries such as `esig`, `iisignature`, and
-`signatory` consume data.
+method of the class), which accepts an $n \times d$ array of *increment data*.
+These data will typically be the differences between successive values of the
+data (but could also include higher-order Lie terms). This is similar to the way
+that libraries such as `esig`, `iisignature`, and `signatory` consume data.
 
 RoughPy streams cache the result of log-signature queries over dyadic intervals
-so they can be reused in later calculations.
-To compute the log-signature over any interval $I$, we granularise at a fixed 
-stream resolution $n$ to obtain the interval $\tilde I = [k_1/2^n, k_2/2^n)$, 
-and then compute
+so they can be reused in later calculations. To compute the log-signature over
+any interval $I$, we granularise at a fixed stream resolution $n$ to obtain the
+interval $\tilde I = [k_1/2^n, k_2/2^n)$, and then compute
 :::{math}
 \mathrm{LogSig}(\tilde I) = \log\biggl(\prod_{k=k_1}^{k_2-1} 
 \exp(\mathrm{LogSig}(D_k^n))\biggr).
 :::
-The $\mathrm{LogSig}(D_k^n)$ terms on the right-hand-side are either retrieved 
-from the cache, or computed from the underlying source.
-This is essentially the Campbell-Baker-Hausdorff formula applied to the 
-log-signatures at the finest level.
-In practice, we can actually reduce the number of terms in the product, by
-merging complementary dyadic intervals that appear in the granularisation.
-We further optimise by using a fused multiply-exponential ($A\exp(B)$)
-operation.
+The $\mathrm{LogSig}(D_k^n)$ terms on the right-hand-side are either retrieved
+from the cache, or computed from the underlying source. This is essentially the
+Campbell-Baker-Hausdorff formula applied to the log-signatures at the finest
+level. In practice, we can actually reduce the number of terms in the product,
+by merging complementary dyadic intervals that appear in the granularisation. We
+further optimise by using a fused multiply-exponential ($A\exp(B)$) operation.
 
 Signatures are always computed by first computing the log-signature and then
-exponentiating.
-Directly computing the signature as a product of exponentials of (cached)
-log-signatures might accumulate enough numerical errors to drift slightly from a
-group-like tensor. 
-That is, the result might not actually be a true signature.
-Taking the logarithm and then exponentiating back to obtain the signature has
-the effect of correcting this numerical drift from a true signature.
+exponentiating. Directly computing the signature as a product of exponentials of
+(cached) log-signatures might accumulate enough numerical errors to drift
+slightly from a group-like tensor. That is, the result might not actually be a
+true signature. Taking the logarithm and then exponentiating back to obtain the
+signature has the effect of correcting this numerical drift from a true
+signature.
 
 Aside from the basic `LieIncrementStream`, there are several other
-implementations of the `StreamInterface` currently available in RoughPy.
-The `BrownianStream` approximates Brownian motion by generating normal
-distributed increments over dyadic intervals of arbitrary resolution on demand,
-forming a reasonable approximation of true Brownian motion.
-The `ExternalDataStream` is an interface for loading data from various external
-sources, such as from a database or specialised data format.
-Currently, only sound files are supported but we plan to extend support for
-other sources as the need arises.
-This will certainly include "online" data sources such as computer peripheral
-devices such as microphones.
+implementations of the `StreamInterface` currently available in RoughPy. The
+`BrownianStream` approximates Brownian motion by generating normal distributed
+increments over dyadic intervals of arbitrary resolution on demand, forming a
+reasonable approximation of true Brownian motion. The `ExternalDataStream` is an
+interface for loading data from various external sources, such as from a
+database or specialised data format. Currently, only sound files are supported
+but we plan to extend support for other sources as the need arises. This will
+certainly include "online" data sources such as computer peripheral devices
+(e.g. microphones).
 
 The other main `StreamInterface` implementation is the `PiecewiseAbelianStream`,
-which is an important construction from CDE.
-A piecewise Abelian path, or log-linear path, is an example of a *smooth rough
-path*, which generalises piecewise linear approximations of an arbitrary stream.
-Formally, an *Abelian path* $Y$ is a pair $([a, b), \mathbf{y})$ where $a < b$
-and $\mathbf{y}\in\mathcal{L}(V)$.
-The log-signature over an arbitrary interval $[u, v) \subseteq [a, b)$ is given
-by
+which is an important construction from CDE. A piecewise Abelian path, or
+log-linear path, is an example of a *smooth rough path*, which generalises
+piecewise linear approximations of an arbitrary stream. Formally, an *Abelian
+path* $Y$ is a pair $([a, b), \mathbf{y})$ where $a < b$ and
+$\mathbf{y}\in\mathcal{L}(V)$. The log-signature over an arbitrary interval $[u,
+v) \subseteq [a, b)$ is given by
 ```{math}
 \mathrm{LogSig}(Y)_{u, v} = \frac{v - u}{b - a}\mathbf{y}.
 ```
 A *piecewise Abelian path* is the concatenation of finitely many Abelian paths
-with adjacent intervals.
-For any rough path $X$ and partition $\{a = t_0 < t_1 < \dots < t_N = b\}$ there
-is a piecewise Abelian approximation for this path given by
+with adjacent intervals. For any rough path $X$ and partition $\{a = t_0 < t_1 <
+\dots < t_N = b\}$ there is a piecewise Abelian approximation for this path
+given by
 ```{math}
 \{([t_{j-1}, t_j), \mathrm{LogSig}(X)_{t_{j-1}, t_j}): j=1, \dots, N\}.
 ```
-This construction turns out to be vital for computing signature kernels 
+This construction turns out to be vital for computing signature kernels
 [@10.25080/gerudo-f2bc6f59-001] and for solving CDEs
-[@10.1007/978-3-540-71285-5;
-@10.48550/arXiv.2402.18512].
-In particular, this construction can be used to compress data at some degree,
-which can the be used in computations at a higher degree.
+[@10.1007/978-3-540-71285-5; @10.48550/arXiv.2402.18512]. In particular, this
+construction can be used to compress data at some degree, which can the be used
+in computations at a higher degree.
 
 ### Example
 In this section we show a very simple example of how to use RoughPy to construct
-a stream and compute a signature.
-This example is similar to the first few steps of the tutorial found in the
-RoughPy documentation.[^roughpydocs]
-RoughPy can be installed using `pip`, where prebuilt wheels are available for
-Windows, Linux, and MacOs:
+a stream and compute a signature. This example is similar to the first few steps
+of the tutorial found in the RoughPy documentation.[^roughpydocs] RoughPy can be
+installed using `pip`, where prebuilt wheels are available for Windows, Linux,
+and MacOs:
 ```
 pip install roughpy
 ```
@@ -618,10 +590,9 @@ for i, c in enumerate(text):
     increments[i, ord(c) - 97] = 1
 ```
 Now we import RoughPy and construct a `Stream` using the factory mentioned
-above.
-One other critical ingredient is the algebra `Context`, which is used to set up
-a consistent set of algebra objects with the desired width (26), truncation
-level (2), and coefficient type (`Rational`).
+above. One other critical ingredient is the algebra `Context`, which is used to
+set up a consistent set of algebra objects with the desired width (26),
+truncation level (2), and coefficient type (`Rational`).
 ```python
 import roughpy as rp
 
