@@ -21,7 +21,7 @@ abstract: |
   applications involving sequential data. RoughPy is our new Python package
   that aims change the way we think about sequential streamed data, by viewing
   it through the lens of rough paths. In RoughPy, data is wrapped in a stream
-  object, which can be composed and queried to obtain signatures that can be
+  object which can be composed and queried to obtain signatures that can be
   used in analysis. It also provides a platform for further exploration of the
   connections between rough path theory and data science.
 
