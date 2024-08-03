@@ -80,7 +80,7 @@ the data, regardless of how many observations are used to compute it.
 This means the signature can be a useful feature map to be used in machine
 learning for sequential data.
 There are numerous examples of using signatures of analysing sequential data
-outlined in @applications-sec.
+outlined in [Section %s](#applications-sec).
 
 Besides signatures, there are two other rough path-based methods that have found
 their way into data science in recent years.
