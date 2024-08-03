@@ -238,7 +238,8 @@ Consider a finite, ordered sequence $\{(t_1, \mathbf{x}_1,\dots,
 t_N,\mathbf{x}_N)\}$ of observations, where $t_j\in \mathbb{R}$, and
 $\mathbf{x}_j\in V$.
 (More generally, we might consider $\mathbf{x}_j\in\mathcal{L}(V)$ instead.
-That is, data that already contains higher-order information.)
+That is, data that already contains higher-order information. In our language,
+it is a genuine rough path.)
 We can find numerous paths that interpolate these observations; a path 
 $X:[t_0, t_N]\to V$ such that, for each $j$, $X_{t_j} = \mathbf{x}_j$.
 The simplest interpolation is to take the path that is linear between adjacent
@@ -248,8 +249,8 @@ Once we have a path, we need to be able to compute signatures.
 For practical purposes, we truncate all signatures (and log-signatures) to a
 particular degree $M$, which we typically call the *depth*.
 The dimension of the ambient space $d$ is usually called the *width*.
-Using linear interpolation, we can replace the iterated integrals with a
-tensor exponential of the difference of successive terms:
+Using linear interpolation, we can compute the iterated integrals explicitly 
+using a free tensor exponential of the difference of successive terms:
 ```{math}
 \mathrm{Sig}^M([t_j, t_{j+1})) = \exp_M(\mathbf{x}_{j+1} - \mathbf{x}_j) :=
 \sum_{j=0}^M \frac{1}{j!}(\mathbf{x}_{j+1} - \mathbf{x}_j)^{\otimes j}.
@@ -265,14 +266,17 @@ Most of the early applications of rough paths in data science, the (truncated)
 signature was used as a feature map [@NEURIPS2019_d2cdf047].
 This provides a summary of the path that is independent of the parameterisation
 and the number of observations.
-Unfortunately, the signature is a high-dimensional summary.
+Unfortunately, the signature grows geometrically with truncation depth.
 If $d > 1$, then the dimension of $\mathrm{T}^M(V)$ is
 ```{math}
 \sum_{m=0}^M d^m = \frac{d^{M+1} - 1}{d - 1}
 ```
 This generally is a reflection of the complexity of the data, where data with a
 higher complexity generally needs a higher truncation level and thus a larger
-signature.
+signature. It is worth noting that this still represents a significant
+compression of stream information in many cases. The truncation depth one needs
+depends on the stream and the (relative) length of intervals over which you need
+to query the stream.
 
 For some applications, it might be possible to replace the signature with the
 log-signature.
