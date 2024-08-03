@@ -6,13 +6,6 @@ bibliography:
 numbering:
     heading_2: true
     heading_3: true
-exports:
-  - format: pdf
-    template: arxiv_two_column
-    article_type: Article
-  - format: tex
-    template: arxiv_two_column
-    article_type: Article
 abstract: |
   Rough path theory is a branch of mathematics arising out of stochastic
   analysis. One of the main tools of rough path analysis is the signature,
