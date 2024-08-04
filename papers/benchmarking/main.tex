@@ -394,7 +394,11 @@ In this section, we describe the experimental setup, the datasets, the evaluatio
 \subsection{Experimental Setup}
 To perform the benchmarking study, we use the framework described in Section~\ref{methods}. The benchmarking compares different probabilistic wrappers on different datasets and with different forecasters regarding CRPS, Pinball Loss, AUCalibration, and Runtime. 
 
-To enable easy replication of the experiments, we provide for each used forecaster, and wrapper the hyperparameters by providing the used Python object instantiation in Table~\ref{tab:hyperparams}. These hyperparameter depend on the dataset, especially, the seasonal periodicity (sp) is chosen based on the dataset. This parameter as well as the other dataset related parameter required to create the cross validation folds used for the evaluation are described in Table~\ref{tab:evaluation_splits}. To create the cross validation folds, we use the \texttt{SlidingWindowSplitter} from \texttt{sktime}. The instantiation of the splitter for each dataset is shown in Table~\ref{tab:cv_splits}. Figure~\ref{fig:splits} is showing the resulting cross validation folds for the tree datasets.
+To enable easy replication of the experiments, we provide for each used forecaster, and wrapper the hyperparameters by providing the used Python object instantiation in Table~\ref{tab:hyperparams}. Note, that the parameter seasonal periodicity (sp) is dataset dependent and is set to 48 for the Australian Electricity Dataset and 1 for the other datasets.
+
+To create the cross validation folds, we use the \texttt{SlidingWindowSplitter} from \texttt{sktime}. The instantiation of the splitter for each dataset is shown in Table~\ref{tab:cv_splits}. Figure~\ref{fig:splits} is showing the resulting cross validation folds for the tree datasets. The properties of the datasets are summarized in Table~\ref{tab:datasets}.
+
+
 
 \begin{figure}
     \centering
@@ -419,7 +423,7 @@ To enable easy replication of the experiments, we provide for each used forecast
         \label{fig:usbirth_split}
 
     \end{subfigure}
-    \caption{The splits used for the evaluation on the three datasets. Blue indicates the training data, and orange indicates the test data. The splits are created using the parameters from Table~\ref{tab:evaluation_splits} and Table~\ref{tab:cv_splits}}
+    \caption{The splits used for the evaluation on the three datasets. Blue indicates the training data, and orange indicates the test data. The splits are created using the parameters from Table~\ref{tab:datasets} and Table~\ref{tab:cv_splits}}
     \label{fig:splits}
 \end{figure}
 
@@ -482,10 +486,10 @@ We evaluate our forecasting methods and probabilistic wrappers on several divers
     \centering
     \footnotesize
     \caption{To perform the evaluation, we used three datasets. Due to the different frequencies and lengths, we used different parameters for the Sliding Window Splitter to create the cross-validation folds. This table presents the parameters used for each dataset.}
-    \label{tab:evaluation_splits}
+    \label{tab:datasets}
     \begin{tabularx}{\textwidth}{X|X|X|X|X|X|X}
          \toprule
-        Dataset & Forecast Horizon & Step Width & Window Size & Cutout Period & Number of Folds & Seasonal Length \\ \midrule
+        Dataset & Forecast Horizon & Step Width & Window Size & Cutout Period & Number of Folds & Seasonal Periodicity \\ \midrule
         Australian Electricity Demand & 48 & 1440 & 1440 & Last Year & 12 & 48 \\ 
         Sunspot Activity & 28 & 395 & 365 & Last 40 Years & 12 & 1\\
         US Births & 28 & 395 & 365 & Whole Time Series & 12 & 1 \\
@@ -497,7 +501,7 @@ We evaluate our forecasting methods and probabilistic wrappers on several divers
 \begin{table}[h]
     \centering
     \footnotesize
-    \caption{The code instantiation of the cross-validation splits used for the evaluation on the three datasets. The parameters are taken from Table \ref{tab:evaluation_splits}.}
+    \caption{The code instantiation of the cross-validation splits used for the evaluation on the three datasets. The parameters are taken from Table \ref{tab:datasets}.}
     \label{tab:cv_splits}
     \begin{tabularx}{\textwidth}{X|X}
          \toprule
