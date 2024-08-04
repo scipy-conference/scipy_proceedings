@@ -376,37 +376,6 @@ We evaluate the performance of our forecasting models using the following metric
  
 \end{itemize}
 
-\begin{table}[h]
-    \centering
-    \footnotesize
-    \caption{To perform the evaluation, we used three datasets. Due to the different frequencies and lengths, we used different parameters for the Sliding Window Splitter to create the cross-validation folds. This table presents the parameters used for each dataset.}
-    \label{tab:evaluation_splits}
-    \begin{tabularx}{\textwidth}{X|X|X|X|X|X|X}
-         \toprule
-        Dataset & Forecast Horizon & Step Width & Window Size & Cutout Period & Number of Folds & Seasonal Length \\ \midrule
-        Australian Electricity Demand & 48 & 1440 & 1440 & Last Year & 12 & 48 \\ 
-        Sunspot Activity & 28 & 395 & 365 & Last 40 Years & 12 & 1\\
-        US Births & 28 & 395 & 365 & Whole Time Series & 12 & 1 \\
-        \bottomrule
-    \end{tabularx}
-\end{table}
-
-
-\begin{table}[h]
-    \centering
-    \footnotesize
-    \caption{The code instantiation of the cross-validation splits used for the evaluation on the three datasets. The parameters are taken from Table \ref{tab:evaluation_splits}.}
-    \label{tab:cv_splits}
-    \begin{tabularx}{\textwidth}{X|X}
-         \toprule
-        Dataset & CV splitter \\ \midrule
-        Australian Electricity Demand & \texttt{SlidingWindowSplitter(step_length=48*30, window_length=48*30,fh=range(48))} \\  
-        Sunspot Activity & \texttt{SlidingWindowSplitter(step_length=395, window_length=365,fh=range(28))}\\
-        US Births & \texttt{SlidingWindowSplitter(step_length=395, window_length=365,fh=range(28))}\\
-        \bottomrule
-    \end{tabularx}
-\end{table}
-
 
 
 \section{Experiments} \label{experiments}
@@ -507,6 +476,37 @@ We evaluate our forecasting methods and probabilistic wrappers on several divers
          \bottomrule
          
     \end{tabular}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \footnotesize
+    \caption{To perform the evaluation, we used three datasets. Due to the different frequencies and lengths, we used different parameters for the Sliding Window Splitter to create the cross-validation folds. This table presents the parameters used for each dataset.}
+    \label{tab:evaluation_splits}
+    \begin{tabularx}{\textwidth}{X|X|X|X|X|X|X}
+         \toprule
+        Dataset & Forecast Horizon & Step Width & Window Size & Cutout Period & Number of Folds & Seasonal Length \\ \midrule
+        Australian Electricity Demand & 48 & 1440 & 1440 & Last Year & 12 & 48 \\ 
+        Sunspot Activity & 28 & 395 & 365 & Last 40 Years & 12 & 1\\
+        US Births & 28 & 395 & 365 & Whole Time Series & 12 & 1 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+
+\begin{table}[h]
+    \centering
+    \footnotesize
+    \caption{The code instantiation of the cross-validation splits used for the evaluation on the three datasets. The parameters are taken from Table \ref{tab:evaluation_splits}.}
+    \label{tab:cv_splits}
+    \begin{tabularx}{\textwidth}{X|X}
+         \toprule
+        Dataset & CV splitter \\ \midrule
+        Australian Electricity Demand & \texttt{SlidingWindowSplitter(step_length=48*30, window_length=48*30,fh=range(48))} \\  
+        Sunspot Activity & \texttt{SlidingWindowSplitter(step_length=395, window_length=365,fh=range(28))}\\
+        US Births & \texttt{SlidingWindowSplitter(step_length=395, window_length=365,fh=range(28))}\\
+        \bottomrule
+    \end{tabularx}
 \end{table}
 
 % \subsection{Evaluation Metrics}
