@@ -588,7 +588,7 @@ CI Bonferroni  & 10.50 & 8.00 & 5.75 & 5.50 \\
 \subsubsection{Performance on US Births}
 The results for the US births dataset are presented in Table \ref{table:us_births_results}. This dataset, with its clear seasonal pattern, allows us to assess the models' ability to handle daily data.
 The ranked based evaluation show that BaggingForecaster with the Block Distribution Bootstrap scores best regarding the CRPS and Pinball Loss. 
-Regarding the AUCalibration, the best score is achieved by CI Conformal. Regarding the runtime, the fastest method is the fallback probabilistic prediction of the base forecaster. The slowest methods are NaiveVariance and SquaringResiduals. Furthermore, it seems that the ConformalIntervals are slightly faster than the BasggingForecasters. 
+Regarding the AUCalibration, the best score is achieved by CI Conformal. Regarding the runtime, the fastest method is the fallback probabilistic prediction of the base forecaster. The slowest methods are NaiveVariance and SquaringResiduals. Furthermore, it seems that the ConformalIntervals are slightly faster than the BaggingForecasters. 
 
 \begin{table}[h]
     \centering
