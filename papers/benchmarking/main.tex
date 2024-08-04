@@ -529,7 +529,7 @@ To increase the conciseness, we calculated the rank of each probabilistic wrappe
 \subsubsection{Performance on Australian Electricity Demand}
 The results for the Australian electricity demand dataset are summarized in Table \ref{table:aus_elec_results}. We compare the performance of different forecasting models and probabilistic wrappers using the previously described evaluation metrics. 
 
-The ranked based evaluation show that diverse results regarding the different metrics. E.g. while CI Empirical Residual performs best on CRPS, it is only mediocre regarding the Pinball Loss and the AUCalibration. On PinballLoss, the best method is CI Empirical and on AUCalibration, it is Squaring Residuals. Regarding the runtime, the fastest method is the fallback probabilistic prediction of the base forecaster. The slowest methods are NaiveVariance and SquaringResiduals. Furthermore, it seems that the ConformalIntervals are slightly faster than the BasggingForecasters.
+The ranked based evaluation show that diverse results regarding the different metrics. E.g. while CI Empirical Residual performs best on CRPS, it is only mediocre regarding the Pinball Loss and the AUCalibration. On PinballLoss, the best method is CI Empirical and on AUCalibration, it is Squaring Residuals. Regarding the runtime, the fastest method is the fallback probabilistic prediction of the base forecaster. The slowest methods are NaiveVariance and SquaringResiduals. Furthermore, it seems that the ConformalIntervals are slightly faster than the BaggingForecasters.
 
 \begin{table}[h]
     \centering
