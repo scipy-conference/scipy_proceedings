@@ -281,7 +281,7 @@ This hybrid use of \texttt{sktime} as a framework covering first-party (itself),
  Credit goes to the maintainers and implementers of these packages for implementing the contained algorithms that we can interface.
 
 \subsection{Forecasting Pipeline}
-Each forecaster is wrapped in a \texttt{Differencer} and a \texttt{Deseasonalizer} as preprocessing steps to improve stationarity. These preprocessors are necessary because some forecasters require the time series to be stationary and non-seasonal.
+Each forecaster is wrapped in a \texttt{Differencer} and a \texttt{Deseasonalizer} as preprocessing steps to improve stationarity. These preprocessors are necessary because some forecasters require the time series to be stationary (i.e., the properties of the time series at time $t+1$, $t+2$, ..., $t+n$ do not depend on the observation at time $t$ \cite{hyndman2018}) and non-seasonal.
 
 \begin{itemize}
     \item \texttt{Differencer}: Computes first differences, which are inverted after forecasting by cumulative summing.
