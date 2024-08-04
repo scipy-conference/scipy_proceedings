@@ -358,7 +358,7 @@ We evaluate the performance of our forecasting models using the following metric
     For quantile forecasts $\hat{q}_1, \dots, \hat{q}_k$ at levels $\tau_1, \dots, \tau_k$ and an observation $y$, the Pinball Loss is defined as:
 
     \begin{equation}
-    L(\hat{q}, y) = \frac{1}{k} \sum_{i=1}^k \max \left(\tau (y - \hat{q}_i), (1 - \tau_i) (\hat{q}_i - y)\right)
+    L(\hat{q}, y) = \frac{1}{k} \sum_{i=1}^k \max \left(\tau_i (y - \hat{q}_i), (1 - \tau_i) (\hat{q}_i - y)\right)
     \end{equation}
 
     The experiment uses the Pinball Loss at quantiles 0.05, and 0.95.
