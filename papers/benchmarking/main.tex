@@ -217,7 +217,7 @@ benchmark = ForecastingBenchmark()
 
 # Add a forecaster to the benchmark
 benchmark.add_estimator(
-    estimator=NaiveForecasster(strategy="last", sp=12),
+    estimator=NaiveForecaster(strategy="last", sp=12),
     estimator_id="naive_forecaster"
 )     
 
