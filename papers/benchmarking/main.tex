@@ -559,7 +559,7 @@ CI Bonferroni  & 10.50 & 8.05 & 6.70 & 3.70 \\
 Table \ref{table:sunspot_results} shows the performance of our methods on the sunspot activity dataset. The long-term periodic patterns in this dataset provide a challenging test for our forecasting models.
 
 The ranked based evaluation show that BaggingForecaster with the Block Distribution Bootstrap scores clearly best regarding the CRPS and Pinball Loss, and AUCalibration. Regarding the runtime, the fastest method is the fallback probabilistic prediction of the base forecaster. The slowest methods are NaiveVariance and SquaringResiduals. 
-Furthermore, it seems that the ConformalIntervals are slightly faster than the BasggingForecasters. 
+Furthermore, it seems that the ConformalIntervals are slightly faster than the BaggingForecasters. 
 \begin{table}[h]
     \centering
     \caption{Performance of forecasting methods on the sunspot activity dataset}
