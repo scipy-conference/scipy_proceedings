@@ -33,7 +33,17 @@ The remainder of this paper is organized as follows: In Section \ref{methods}, w
 
 \section{sktime and tsbootstrap for Reproducible Experiments}\label{sktime}
 
-In this section, we summarize the key design principles used for reproducible benchmarking in \texttt{sktime}.
+In this section, we summarize the key design principles used for reproducible benchmarking in \texttt{sktime}. Thereby, from a software perspective, it is  worth noting that \textbf{sktime} \cite{loning2019sktime, franz_kiraly_2024_11095261_sktime} contains multiple native implementations, including naive methods, all probability wrappers, and pipeline composition, but also provides a unified interface across multiple packages in the time series ecosystem, e.g.:
+
+\begin{itemize}
+    \item \textbf{tsbootstrap} \cite{gilda_2024_10866090_tsbootstrap, gilda2024tsbootstrap}: A library for time series bootstrapping methods, integrated with \texttt{sktime}.
+    \item \textbf{statsforecast} \cite{garza2022statsforecast}: A library for statistical and econometric forecasting methods, featuring the Auto-Theta algorithm.
+    \item \textbf{statsmodels} \cite{seabold2010statsmodels}: A foundational library for statistical methods, used for the deseasonalizer and various statistical primitives.
+\end{itemize}
+
+This hybrid use of \texttt{sktime} as a framework covering first-party (itself), second-party (\texttt{tsbootstrap}), and third-party (\texttt{statsmodels}, \texttt{statsforecast}) locations is significant.
+Credit goes to the maintainers and implementers of these packages for implementing the contained algorithms that we can interface.
+
 
 \subsection{Unified Interface}
 In \texttt{sktime} and \texttt{tsbootstrap}, algorithms and mathematical objects are treated as first-class citizens. All objects of the same type, such as forecasters, follow the same interface. This consistency ensures that every forecaster is exchangeable with any other.
@@ -61,7 +71,20 @@ y_pred = forecaster.predict()
 A crucial design element in the above is that the first line can specify any forecaster - for instance, \texttt{ARIMA} or \texttt{ExponentialSmoothing},
 and the rest of the code will work without modification. 
 
-Currently, \texttt{sktime} supports the construction of 82 individual forecasters, either implemented within the package or interfaced from other packages in the ecosystem. Each forecaster is parametric, with configurations ranging from 1 to 47 parameters across different forecasters. A list of forecasters can be obtained or filtered via the \texttt{all\_estimators} utility.
+Currently, \texttt{sktime} supports the construction of 82 individual forecasters.
+Some of these are implemented directly in sktime, but sktime also provides adapters providing a unified API to forecasting routines from other libraries, such as gluonts and prophet.
+Each forecaster is parametric, with configurations ranging from 1 to 47 parameters across different forecasters. A list of forecasters can be obtained or filtered via the \texttt{all\_estimators} utility.
+\begin{verbatim}
+from sktime.registry import all_estimators
+
+# get all forecasters
+all_forecasters = all_estimators("forecaster")
+
+# get all forecasters that support prediction intervals
+all_estimators("forecaster", filter_tags={"capability:pred_int": True})
+
+\end{verbatim}
+
 To better filter the forecasters (as well as the other estimators such as classifiers and regressors) based on their properties and capabilities and to control their behaviour, \texttt{sktime} implements a tag system. Each estimator, such as a forecaster, has a dict \texttt{\_tags}, with a string as a key describing the name and a value of an arbitrary type describing the property.
 
 This type system enables an easy identification of all probabilistic forecasters, since they are tagged with the \texttt{"capability:pred\_int"} tag. Currently, 45 of the 82 forecasters support probabilistic prediction modes, such as prediction intervals, quantile predictions, or full distributional predictions:
@@ -266,17 +289,6 @@ For a detailed analysis of design patterns in AI framework packages and innovati
 \section{Algorithmic Setup} \label{methods}
 
 In this section, we describe the forecasting algorithms used in our experiments. Our methods combine traditional forecasting models with uncertainty estimation wrappers, showcasing the benchmarking and model specification capabilities of \texttt{sktime}. This study serves as an invitation to the scientific Python community to engage and contribute to a more systematic study with reproducible specifications.
-
-From a software perspective it is worth noting that \textbf{sktime} \cite{loning2019sktime, franz_kiraly_2024_11095261_sktime} contains multiple native implementations, including naive methods, all probability wrappers, and pipeline composition, but also provides a unified interface across multiple packages in the time series ecosystem:
-
-\begin{itemize}
-    \item \textbf{tsbootstrap} \cite{gilda_2024_10866090_tsbootstrap, gilda2024tsbootstrap}: A library for time series bootstrapping methods, integrated with \texttt{sktime}.
-    \item \textbf{statsforecast} \cite{garza2022statsforecast}: A library for statistical and econometric forecasting methods, featuring the Auto-Theta algorithm.
-    \item \textbf{statsmodels} \cite{seabold2010statsmodels}: A foundational library for statistical methods, used for the deseasonalizer and various statistical primitives.
-\end{itemize}
-
-This hybrid use of \texttt{sktime} as a framework covering first-party (itself), second-party (\texttt{tsbootstrap}), and third-party (\texttt{statsmodels}, \texttt{statsforecast}) locations is significant.
- Credit goes to the maintainers and implementers of these packages for implementing the contained algorithms that we can interface.
 
 \subsection{Forecasting Pipeline}
 Each forecaster is wrapped in a \texttt{Differencer} and a \texttt{Deseasonalizer} as preprocessing steps to improve stationarity. These preprocessors are necessary because some forecasters require the time series to be stationary (i.e., the properties of the time series at time $t+1$, $t+2$, ..., $t+n$ do not depend on the observation at time $t$ \cite{hyndman2018}) and non-seasonal.
