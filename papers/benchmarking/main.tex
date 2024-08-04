@@ -23,7 +23,9 @@ The key components of this reproducible benchmarking framework are:
   \item A standardized workflow for obtaining benchmark result tables for combinations of algorithms, metrics, and experimental setups.
 \end{itemize}
 
-To demonstrate the efficacy and ease of use of \texttt{sktime} in benchmarking probabilistic forecasters, we conducted a small study exploring the performance of various meta-algorithms (wrappers) that add prediction intervals to point forecasters. We investigated a range of forecasters, including Naive Forecasting and AutoTheta models \cite{autotheta}, along with probabilistic wrappers such as Conformal Intervals and Bootstrapping Methods. The study's goal was to evaluate the effectiveness of these combined approaches in improving prediction accuracy and reliability.
+To demonstrate the efficacy and ease of use of \texttt{sktime} in benchmarking probabilistic forecasters, we conducted a small study exploring the performance of various meta-algorithms (wrappers) that add prediction intervals to point forecasters. We investigated a range of forecasters, including Naive Forecasting and AutoTheta models \cite{autotheta}, along with probabilistic wrappers such as Conformal Intervals and BaggingForecaster with different bootstrapping methods. For the bootstrapping methods, we use the \texttt{tsbootstrap} library \cite{gilda_2024_10866090_tsbootstrap, gilda2024tsbootstrap}.
+
+The study's goal was to evaluate the effectiveness of these combined approaches in improving prediction accuracy and reliability.
 
 We conducted experiments on several common datasets, including Australian electricity demand \cite{Godahewa2021Australian}, sunspot activity \cite{Godahewa2021Sunspot}, and US births \cite{Godahewa2021USBirth}. These datasets represent different time frequencies and characteristics.
 
@@ -46,7 +48,7 @@ Credit goes to the maintainers and implementers of these packages for implementi
 
 
 \subsection{Unified Interface}
-In \texttt{sktime} and \texttt{tsbootstrap}, algorithms and mathematical objects are treated as first-class citizens. All objects of the same type, such as forecasters, follow the same interface. This consistency ensures that every forecaster is exchangeable with any other.
+In \texttt{sktime} and \texttt{tsbootstrap}, algorithms and mathematical objects are treated as first-class citizens. All objects of the same type, such as forecasters, follow the same interface. This consistency ensures that every forecaster is exchangeable with any other. The same holds for all bootstrapping methods in \texttt{tsbootstrap}. Thus, they are easily exchangeable enabling simple and fast experimentation.
 
 Forecasters are objects with \texttt{fit} and \texttt{predict} methods, allowing both the target time series (endogenous data) and the time series that influence the target time series (exogenous data) to be passed. For example, the following code specifies a forecaster, fits it, and makes predictions.
 
