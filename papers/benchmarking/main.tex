@@ -288,7 +288,7 @@ Each forecaster is wrapped in a \texttt{Differencer} and a \texttt{Deseasonalize
     \item \texttt{Deseasonalizer(sp=data\_sp)}: Removes the seasonal component, which is added back after forecasting. It estimates the trend by applying a convolution filter to the data, removing the trend, and then averaging the de-trended series for each period to return the seasonal component.
 \end{itemize}
 
-All forecasters are point forecasters, combined with one of the probabilistic wrappers to generate prediction intervals and probabilistic forecasts.
+All used forecasters are point forecasters, i.e., for each time step they provide one value (point), and no information about the uncertainty of the forecast. Thus, they are combined with one of the probabilistic wrappers to generate prediction intervals or quantile forecasts.
 
 \begin{figure}
     \centering
