@@ -413,9 +413,9 @@ steppers.
 <!-- would potentially be nice to see a searchbox for table --> 
 :::{figure} ipw_ipv.png
 :label: fig:ipw_ipv
-A comparison of a few IPyWidget components on the upper left and their corresponding
+A visual comparison of a few IPyWidget components on the upper left and their corresponding
 IPyVuetify components on the upper right. The table on the bottom is a
-DataTable component, which does not have a default IPyWidgets equivalent.
+DataTable component, an example of a widget which does not have a default IPyWidgets equivalent.
 :::
 
 Finally, the Python API for every IPyVuetify component includes the ability to set CSS 
