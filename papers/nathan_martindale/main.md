@@ -339,7 +339,7 @@ IPyWidgets as a low-level widget framework has allowed an ecosystem of other
 libraries and tools to develop on top of it, dramatically pushing the boundary
 of what can be constructed and incorporated into interactive dashboards with
 relative ease. From general plotting tools like interactive Matplotlib (ipympl)
-[@10.5281/zenodo.10974323], plotly [@plotly], mpld3 [@mpld3], altair
+[@ipympl], plotly [@plotly], mpld3 [@mpld3], altair
 [@altair], and bqplot [@bqplot], to more complex or specialized visualization
 widgets like pythreejs [@pythreejs] and ipyvolume [@10.5281/zenodo.1286976] for
 3D rendering, ipyleaflet [@ipyleaflet] for interactive maps, and ipycytoscape
