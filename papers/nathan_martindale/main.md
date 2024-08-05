@@ -166,35 +166,35 @@ import ipywidgets as ipw
 graph1_out = ipw.Output()
 graph2_out = ipw.Output()
 
-parameter1 = ipw.FloatSlider(min=0, max=10, value=1)
-parameter2 = ipw.IntText(value=1)
-parameter3 = ipw.IntSlider(min=0, max=10, value=1)
+graph1_param = ipw.FloatSlider(min=0, max=10, value=1)  # a parameter only influencing graph 1
+graph2_param = ipw.IntSlider(min=0, max=10, value=1)  # a parameter only influencing graph 2 
+both_graphs_param = ipw.IntText(value=1)  # a parameter that affects both graphs
 
 # create the dashboard layout, combining all the widgets
 dashboard = ipw.VBox([
     ipw.HBox([graph1_out, graph2_out]),
-    ipw.HBox([parameter1, parameter2, parameter3]),
+    ipw.HBox([graph1_param, both_graphs_param, graph2_param]),
 ])
 
 # event handler functions
-def on_parameter1_change(change):
+def on_graph1_param_change(change):
     with graph1_out:
-        print(f"parameter 1 is {change['new']} and parameter 2 is {parameter2.value}.")
-        
-def on_parameter2_change(change):
+        print(f"Updating graph 1 based on: graph1_param={change['new']}, {both_graphs_param.value=}")
+
+def on_graph2_param_change(change):
+    with graph2_out:
+        print(f"Updating graph 2 based on: graph2_param={change['new']}, {both_graphs_param.value=}")
+
+def on_both_graphs_param_change(change):
     with graph1_out:
-        print(f"parameter 1 is {parameter1.value} and parameter 2 is {change['new']}.")
+        print(f"Updating graph 1 based on: {graph1_param.value=}, both_graphs_param={change['new']}")
     with graph2_out:
-        print(f"parameter 2 is {change['new']} and parameter 3 is {parameter3.value}.")
-        
-def on_parameter3_change(change):
-    with graph2_out:
-        print(f"parameter 2 is {parameter2.value} and parameter 3 is {change['new']}.")
+        print(f"Updating graph 2 based on: {graph2_param.value=}, both_graphs_param={change['new']}")
 
 # attach event handlers
-parameter1.observe(on_parameter1_change, names=["value"])
-parameter2.observe(on_parameter2_change, names=["value"])
-parameter3.observe(on_parameter3_change, names=["value"])
+graph1_param.observe(on_graph1_param_change, names=["value"])
+graph2_param.observe(on_graph2_param_change, names=["value"])
+both_graphs_param.observe(on_both_graphs_param_change, names=["value"])
 
 # render the dashboard
 dashboard
