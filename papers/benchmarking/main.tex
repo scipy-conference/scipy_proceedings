@@ -43,7 +43,7 @@ In this section, we summarize the key design principles used for reproducible be
     \item \textbf{statsmodels} \cite{seabold2010statsmodels}: A foundational library for statistical methods, used for the deseasonalizer and various statistical primitives.
 \end{itemize}
 
-This hybrid use of \texttt{sktime} as a framework covering first-party (itself), second-party (\texttt{tsbootstrap}), and third-party (\texttt{statsmodels}, \texttt{statsforecast}) libraries is significant.
+This hybrid use of \texttt{sktime} as a framework covering first-party (itself), second-party (\texttt{tsbootstrap}), and third-party (\texttt{statsmodels}, \texttt{statsforecast}) packages is significant.
 Credit goes to the maintainers and implementers of these packages for implementing the contained algorithms that we can interface.
 
 
@@ -70,7 +70,7 @@ forecaster.fit(y, fh=[1, 2, 3])
 y_pred = forecaster.predict()
 \end{verbatim}
 
-A crucial design element in the above is that the first line can specify any forecaster - for instance, \texttt{ARIMA} or \texttt{ExponentialSmoothing},
+A crucial design element in the above is that line 9 can specify any forecaster - for instance, \texttt{ARIMA} or \texttt{ExponentialSmoothing},
 and the rest of the code will work without modification. 
 
 Currently, \texttt{sktime} supports the construction of 82 individual forecasters.
