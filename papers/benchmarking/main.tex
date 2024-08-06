@@ -84,12 +84,10 @@ all_forecasters = all_estimators("forecaster")
 
 # get all forecasters that support prediction intervals
 all_estimators("forecaster", filter_tags={"capability:pred_int": True})
-
 \end{verbatim}
 
 To better filter the forecasters (as well as the other estimators such as classifiers and regressors) based on their properties and capabilities and to control their behaviour, \texttt{sktime} implements a tag system. Each estimator, such as a forecaster, has a dict \texttt{\_tags}, with a string as a key describing the name and a value of an arbitrary type describing the property.
-
-This type system enables an easy identification of all probabilistic forecasters, since they are tagged with the \texttt{"capability:pred\_int"} tag. Currently, 45 of the 82 forecasters support probabilistic prediction modes, such as prediction intervals, quantile predictions, or full distributional predictions:
+This type system enables an easy identification of all probabilistic forecasters, since they are tagged with the \texttt{"capability:pred\_int"} tag. Currently, 45 of the 82 forecasters support probabilistic prediction modes (line 7 of the above example), such as prediction intervals, quantile predictions, or full distributional predictions:
 
 \begin{verbatim}
 # importing the necessary modules
