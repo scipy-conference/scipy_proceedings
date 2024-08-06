@@ -422,5 +422,7 @@ Our immediate goal is to provide more example workflow recipes integrating other
 ## Acknowledgements:
 We thank the Fisheries Engineering and Acoustic Technologies team at the NOAA Northwest Fisheries Science Center: Julia Clemons, Alicia Billings, Rebecca Thomas, Elizabeth Phillips for introducing us to the Pacific Hake Survey operations and biomass estimation workflow.
 
+This work used cpu compute and storage resources at Jetstream2 through allocation AGR230002 from the Advanced cyberinfrastructure Coordination Ecosystem: Services & Support (ACCESS) program [@10.1145/3437359.3465565, @10.1145/3569951.3597559], which is supported by National Science Foundation grants #2138259, #2138286, #2138307, #2137603, and #2138296.
+
 ## Funding:
-NOAA Fisheries, eScience Institute
+NOAA Award No. NA21OAR0110201, NOAA Award No. NA20OAR4320271 AM43, eScience Institute
