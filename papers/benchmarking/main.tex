@@ -50,9 +50,9 @@ Credit goes to the maintainers and implementers of these packages for implementi
 \subsection{Unified Interface}
 In \texttt{sktime} and \texttt{tsbootstrap}, algorithms and mathematical objects are treated as first-class citizens. All objects of the same type, such as forecasters, follow the same interface. This consistency ensures that every forecaster is exchangeable with any other. The same holds for all bootstrapping methods in \texttt{tsbootstrap}. Thus, they are easily exchangeable enabling simple and fast experimentation.
 
-Forecasters are objects with \texttt{fit} and \texttt{predict} methods, allowing both the target time series (endogenous data) and the time series that influence the target time series (exogenous data) to be passed. For example, the following code specifies a forecaster, fits it, and makes predictions.
+Forecasters are objects with \texttt{fit} and \texttt{predict} methods, allowing both the target time series (endogenous data) and the time series that influence the target time series (exogenous data) to be passed. For example, the following code (Program \ref{lst:fitpredict}) specifies a forecaster, fits it, and makes predictions.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python, caption=Exemplary code for fitting and predicting with a forecaster, label=lst:fitpredict]
 # importing the necessary modules
 from sktime.datasets import load_airline
 from sktime.forecasting.naive import NaiveForecaster
@@ -68,7 +68,7 @@ forecaster.fit(y, fh=[1, 2, 3])
 
 # querying predictions
 y_pred = forecaster.predict()
-\end{verbatim}
+\end{lstlisting}
 
 A crucial design element in the above is that line 9 can specify any forecaster - for instance, \texttt{ARIMA} or \texttt{ExponentialSmoothing},
 and the rest of the code will work without modification. 
@@ -76,7 +76,7 @@ and the rest of the code will work without modification.
 Currently, \texttt{sktime} supports the construction of 82 individual forecasters.
 Some of these are implemented directly in sktime, but sktime also provides adapters providing a unified API to forecasting routines from other libraries, such as gluonts and prophet.
 Each forecaster is parametric, with configurations ranging from 1 to 47 parameters across different forecasters. A list of forecasters can be obtained or filtered via the \texttt{all\_estimators} utility.
-\begin{lstlisting}[language=Python, caption=Code to list all forecaster and all probabilistic forecasters (tag=capability:pred\_int), label=lst:all_forecasters]
+\begin{lstlisting}[language=Python, caption=Code to list all forecaster and all probabilistic forecasters (tag=capability:pred_int), label=lst:allforecasters]
 from sktime.registry import all_estimators
 
 # get all forecasters
@@ -87,9 +87,9 @@ all_estimators("forecaster", filter_tags={"capability:pred_int": True})
 \end{lstlisting}
 
 To better filter the forecasters (as well as the other estimators such as classifiers and regressors) based on their properties and capabilities and to control their behaviour, \texttt{sktime} implements a tag system. Each estimator, such as a forecaster, has a dict \texttt{\_tags}, with a string as a key describing the name and a value of an arbitrary type describing the property.
-This type system enables an easy identification of all probabilistic forecasters, since they are tagged with the \texttt{"capability:pred\_int"} tag. Currently, 45 of the 82 forecasters support probabilistic prediction modes (Listing~\ref{lst:all_forecasters}), such as prediction intervals, quantile predictions, or full distributional predictions:
+This type system enables an easy identification of all probabilistic forecasters, since they are tagged with the \texttt{"capability:pred\_int"} tag. Currently, 45 of the 82 forecasters support probabilistic prediction modes (Program~\ref{lst:allforecasters}), such as prediction intervals, quantile predictions, or full distributional predictions:
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python, caption=Exemplary probabilistic forecast with NaiveForecaster, label=lst:probabilisticforecast]
 # importing the necessary modules
 from sktime.datasets import load_airline
 from sktime.forecasting.naive import NaiveForecaster
@@ -107,7 +107,7 @@ forecaster.fit(y, fh=[1, 2, 3])
 y_pred_int = forecaster.predict_interval()
 # making distribution predictions
 y_pred_proba = forecaster.predict_proba()
-\end{verbatim}
+\end{lstlisting}
 
 More details can be found in the official tutorials (an overview of notebooks and tutorials is provided on our \href{https://www.sktime.net/en/latest/users.html}{homepage}).
 Creating algorithms with compatible APIs is straightforward.
@@ -123,10 +123,10 @@ uniquely specifies a native implementation of the seasonal last-value-carried-fo
 
 Typical \texttt{sktime} code specifies the forecaster as Python code, but it can also be used as a string to store or share specifications. The \texttt{registry.craft} utility converts a Python string into an \texttt{sktime} object, ensuring easy reproducibility:
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python, caption=Code to craft a forecaster from a string]
 from sktime.registry import craft
 forecaster = craft('NaiveForecaster(strategy="last", sp=12)')
-\end{verbatim}
+\end{lstlisting}
 which can be used to copy a full specification from a research paper and immediately construct the respective algorithm in a Python environment, even if full code has not been shared by the author.
 
 This approach makes it extremely easy to share specifications reproducibly, simplifying the often convoluted process of describing algorithms in research papers.
@@ -134,9 +134,9 @@ This approach makes it extremely easy to share specifications reproducibly, simp
 \subsection{Meta-Algorithms and Composability}
 \texttt{sktime} provides not only simple algorithms as objects in unified interfaces but also meta-algorithms, such as data processing pipelines or algorithms that add interval forecast capability to existing forecasting algorithms. Importantly, these composites also follow unified interfaces.
 
-This leads to a compositional specification language with rich combinatorial flexibility. For example, the following code adds conformal prediction interval estimates to the \texttt{NaiveForecaster}:
+This leads to a compositional specification language with rich combinatorial flexibility. For example, the following code adds conformal prediction interval estimates to the \texttt{NaiveForecaster} (Program~\ref{lst:conformalforecaster}):
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python, caption=Code to add conformal prediction intervals to a forecaster, label=lst:conformalforecaster]
 # importing the necessary modules
 from sktime.datasets import load_airline
 from sktime.forecasting.naive import NaiveForecaster
@@ -153,16 +153,16 @@ forecaster.fit(y, fh=[1, 2, 3])
 
 # making interval predictions
 y_pred_int = forecaster.predict_interval()
-\end{verbatim}
+\end{lstlisting}
 
 The conformal prediction interval fits multiple instances of the wrapped forecaster on parts of the time series using window sliding. In particular, each forecaster's instance $i$
 is fit on the time series $y_{1:t_i}$, where $t_i \neq t_j$. Afterwards, the residuals are computed on the remaining time series $y_{t_{i+1}:n}$, where $n$ is the length of the time series.
 Out of these residuals, the prediction intervals are computed.
 The resulting algorithm possesses \texttt{fit}, \texttt{predict}, and - added by the wrapper - \texttt{predict\_interval}, as well as the \texttt{capability:pred\_int} tag.
 
-Data transformation pipelines can be constructed similarly, or with an operator-based specification syntax:
+Data transformation pipelines can be constructed similarly, or with an operator-based specification syntax (Program~\ref{lst:pipeline}).:
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python, caption=Code to construct a pipeline with a differencer and a seasonalizer, label=lst:pipeline]
 # importing the necessary modules
 from sktime.datasets import load_airline
 from sktime.forecasting.naive import NaiveForecaster
@@ -179,7 +179,7 @@ pipeline.fit(y, fh=[1, 2, 3])
 
 # making interval predictions
 y_pred_int = pipeline.predict()
-\end{verbatim}
+\end{lstlisting}
 
 This creates a forecasting algorithm that first computes differences, then remove the seasonality (deseasonalize) by assuming a periodicity of 12, 
 Then the \texttt{NaiveForecaster(strategy="last")} uses the last value as prediction for the next value (last-value-carry-forward method).  Finally it adds the seasonality back
@@ -189,7 +189,7 @@ As before, the resulting forecaster provides unified interface points and is int
 \subsection{Probabilistic Metrics}
 In \texttt{sktime}, evaluation metrics are first-class citizens. Probabilistic metrics compare the ground truth time series with predictions, representing probabilistic objects such as predictive intervals or distributions. For example:
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python, caption=Code to make probabilistic forecasts and calculate the CRPS, label=lst:crps]
 # importing the necessary modules
 from sktime.datasets import load_airline
 from sktime.forecasting.naive import NaiveForecaster
@@ -216,14 +216,14 @@ crps = CRPS()
 
 # Calculate the CRPS
 crps(y_test, y_pred_proba)
-\end{verbatim}
+\end{lstlisting}
 
 Tags control the type of probabilistic prediction expected, such as \texttt{"scitype:y\_pred"} with the value \texttt{"pred\_proba"} for CRPS.
 
 \subsection{Benchmarking and Evaluation}
 Our benchmarking framework involves a standardized workflow for obtaining benchmark result tables for combinations of algorithms, metrics, and experimental setups. Here is an example of how to add forecasters and tasks:
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python, caption=Example usage of the ForecastingBenchmark in sktime., label=lst:benchmark]
 # Example code to add forecasters and tasks
 
 # Import the necessary modules
@@ -259,7 +259,7 @@ benchmark.add_task(
 
 # Run the benchmark
 benchmark.run("result.csv")
-\end{verbatim}
+\end{lstlisting}
 
 This approach ensures that our benchmarking process is both comprehensive and reproducible. 
 
@@ -309,9 +309,9 @@ All used forecasters are point forecasters, i.e., for each time step they provid
 
 The partial pipeline specification, illustrated in Figure \ref{fig:pipeline}, is:
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 Differencer() * Deseasonalizer(sp=data_sp) * wrapper(forecaster)
-\end{verbatim}
+\end{lstlisting}
 
 where variable parts are \texttt{wrapper}, \texttt{forecaster}, and \texttt{data\_sp}. These components are varied as described below.
 Note the code for running the whole benchmark is provided in the Section~\ref{experiments}.
