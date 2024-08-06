@@ -76,7 +76,7 @@ and the rest of the code will work without modification.
 Currently, \texttt{sktime} supports the construction of 82 individual forecasters.
 Some of these are implemented directly in sktime, but sktime also provides adapters providing a unified API to forecasting routines from other libraries, such as gluonts and prophet.
 Each forecaster is parametric, with configurations ranging from 1 to 47 parameters across different forecasters. A list of forecasters can be obtained or filtered via the \texttt{all\_estimators} utility.
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[language=Python, caption=Code to list all forecaster and all probabilistic forecasters (tag=capability:pred\_int), label=lst:all_forecasters]
 from sktime.registry import all_estimators
 
 # get all forecasters
@@ -87,7 +87,7 @@ all_estimators("forecaster", filter_tags={"capability:pred_int": True})
 \end{lstlisting}
 
 To better filter the forecasters (as well as the other estimators such as classifiers and regressors) based on their properties and capabilities and to control their behaviour, \texttt{sktime} implements a tag system. Each estimator, such as a forecaster, has a dict \texttt{\_tags}, with a string as a key describing the name and a value of an arbitrary type describing the property.
-This type system enables an easy identification of all probabilistic forecasters, since they are tagged with the \texttt{"capability:pred\_int"} tag. Currently, 45 of the 82 forecasters support probabilistic prediction modes (line 7 of the above example), such as prediction intervals, quantile predictions, or full distributional predictions:
+This type system enables an easy identification of all probabilistic forecasters, since they are tagged with the \texttt{"capability:pred\_int"} tag. Currently, 45 of the 82 forecasters support probabilistic prediction modes (Listing~\ref{lst:all_forecasters}), such as prediction intervals, quantile predictions, or full distributional predictions:
 
 \begin{verbatim}
 # importing the necessary modules
