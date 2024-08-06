@@ -12,17 +12,39 @@ project:
       affiliations:
         - eScience Institute, University of Washington
       corresponding: true
+      roles:
+        - Funding acquisition
+        - Project administration
+        - Resources
+        - Software
+        - Supervision
+        - Writing - original draft
     - name: Soham Butala
       email: sbutala@uw.edu
       affiliations:
         - eScience Institute, University of Washington
+      roles:
+        - Software
+        - Writing - review & editing
     - name: Landung (Don) Setiawan
       email: landungs@uw.edu
       affiliations:
         - Scientific Software Engineering Center, University of Washington
+      roles:
+        - Conceptualization
+        - Software
     - name: Wu-Jung Lee
       email: leewj@uw.edu
       affiliation: Applied Physics Laboratory, University of Washington
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Project administration
+        - Resources
+        - Software
+        - Supervision
+        - Writing - review & editing
+
   keywords:
     - prefect
     - workflow orchestration 
