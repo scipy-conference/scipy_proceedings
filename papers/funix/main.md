@@ -223,24 +223,25 @@ def table_and_plot(
 A data-plot-from-tablular-data app generated from [](#code_table_and_chart) by Funix. The input panel contains a table (`pandas.DataFrame`) and the output panel contains a chart (`matplotlib.figure.Figure`). Both the table and the chart are interactive/editable. As far as we know, no other Python-based solutions supports editable tables as inputs.
 ```
 
-## Defining new type-to-widget mappings
+## Customizing the type-to-widget mapping
 
 :::{note}
 Introducing a new type-to-widget mapping or modifying an existing one should not be the job of most Funix users but advanced users or user interface specialists. This is like most scientists who write papers in LaTeX do not develop the LaTeX classes or macros but just use them.
 :::
 
-<!-- Funix provides two ways, [the decorator way](#the-decorator-way) and [the theme way](#the-theme+way) to bind a type, whether it is Python-native, from a third party, or user-defined, to a widget.  -->
-<!-- In addition to type-based, automatic widget selection, Funix also allows manual, per-variable widget selection as in its peer solutions. Please refer to the [decorator](#decorator) section for more details. -->
+The default mapping from Python types to React components is detailed in the section above. 
+To expand or modify an existing mapping, Funix provides two approaches: the on-the-fly, [decorator-based approach](#supporting-a-new-type-on-the-fly-using-the-new-funix-type-decorator) and the reusable, [theme-based approach](#defining-and-using-themes).
 
-As a transcompiler, Funix does not have its own widget library. Instead, it exposes theoretically any React component to Funix users by giving them full freedom to bind a type to a React component on the street. As to be seen below, it further allows configuring the properties of widgets.
-All of these can be done without any knowledge of JavaScript/TypeScript or React.
-In this sense, Funix bridges the Python world with the frontend world and made Python or JSON the surface language for (React-based) frontend development.
+As a transcompiler that generates React code, Funix does not have its own widget library. 
+Instead, developers can choose any React component on the market to use as the widget for a Python type. 
+Additionally, Funix allows configuring the properties (`props`) of the frontend widget in Python via JSON. 
+In this way, Funix bridges the Python world with the frontend world, making Python or JSON the surface language for React-based frontend development.
 
-### Using the `new_funix_type` decorator
+### Supporting a new type on the fly using the `new_funix_type` decorator
 
-A new type can be introduced as simple as a new class. The mapping from the class to a widget can be then defined via the `widget` parameter of the `new_funix_type` decorator of `funix`. [](#code_new_type) defines a new type `blackout`, which a special case (as indicated by the inheritance) of `str` and binds it with a widget.
+[](#code_new_type) defines a new type `blackout`, which a special case (as indicated by the inheritance) of `str` and binds it with a widget. Following the convention in the frontend world, Funix identifies a widget by its module specifier in `npm`, the de facto package manager in the frontend world. In [](#code_new_type), the widget is identified as `@mui/material/TextField`. Properties of the widget supported by its library for configuration can be modified in the `new_funix_type` decorator as well. As mentioned earlier, this allows a Pythonista to tap into a React component without frontend development knowledge.
 
-Funix follows the convention in the frontend world to identify a widget by a module specifier in `npm`, the de facto package manager in the frontend world. In [](#code_new_type), the widget is identified as `@mui/material/TextField`. Properties of the widget supported by its library for configuration can be passed into the `new_funix_type` decorator. As mentioned earlier, this allows a Pythonista to tap into a React component library without frontend development knowledge.
+The on-the-fly approach is only applicable when introducing a new type, e.g., a custom class. To modify the widget choice for an existing type, a theme must be used.
 
 ```{code} python
 :label: code_new_type
@@ -264,7 +265,7 @@ def hoho(x: blackout = "Funix Rocks!") -> str:
    return x.print()
 ```
 
-### Using the theme
+### Defining and using themes
 
 A type-to-widget mapping can be reused and centralized managed via a theme, which is a simple JSON file. An example is given in [](#code_theme) below where the Python's native types `str`, `int`, and `float` are bound to three widgets. In this exmaple, besides using `npm` module specifier, Funix shorthand strings `inputbox` and `slider` are also used.
 
@@ -290,6 +291,71 @@ A type-to-widget mapping can be reused and centralized managed via a theme, whic
  }
 }
 ```
+
+There are two ways to apply a theme: script-wide and function-wide. The script-wide approach ([](#code_theme_apply_script)) applies a default theme to all functions in a script. The function-wide approach ([](code_theme_apply_function)) applies a theme to a specific function. In either case, the theme can be referred to by a web URL, a local file path, or a name/alias. If no theme is specified, Funix uses its default theme.
+
+```{code} python
+:label: code_theme_apply_script
+:caption: Three ways to apply a theme script-wide. 
+
+import funix
+
+funix.set_default_theme("http://example.com/sunset_v2.json") # from web URL
+
+funix.set_default_theme("../../sunset_v2.json") # from local file
+
+funix.set_default_theme("grandma's secret theme") # from a name/alias
+```
+
+
+```{code} python
+:label: code_theme_apply_function
+:caption: Three ways to apply a theme function-wide.
+
+import funix
+
+@funix.funix(theme = "http://example.com/sunset.json") # from web URL
+def foo():
+  pass
+
+@funix.funix(theme = "../../themes/sunset.json") # from local file
+def foo():
+  pass
+
+@funix.funix(theme = "grandma's secret theme") # from a name/alias
+def foo():
+  pass
+```
+
+To refer to a theme by its name or alias, it must be imported. The alias can be set when importing. A theme can be imported from a web URL, a local file path, or a JSON dictionary defining a theme ([](#code_theme_import)). 
+
+```{code} python
+:label: code_theme_import
+:caption: Three ways to import a theme. Note that theme importing is optional. The only benefit is to refer to a theme by its name or alias for easy switching. 
+
+funix.import_theme(
+  "http://example.com/my_themes.json",  # from web URL
+  alias = "my_favorite_theme"           # alias is optional
+) 
+
+funix.import_theme(
+  "../../themes/my_themes.json",        # from local file
+  alias = "my_favorite_theme"           # alias is optional
+)
+
+theme_json = { # a Funix theme definition
+  "name": "grandma's secret theme"
+  "widgets" : {
+    "range" : "inputbox"
+  }
+}
+
+funix.import_theme(
+    theme_dict = theme_json,            # from a JSON theme definition
+    alias = "granny's secret theme"    # alias is optional
+    )
+```
+
 
 ## Building apps Pythonically
 
