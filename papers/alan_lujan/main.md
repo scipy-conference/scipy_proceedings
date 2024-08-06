@@ -3,26 +3,26 @@
 title: multinterp
 subtitle: A Unified Interface for Multivariate Interpolation in the Scientific Python Ecosystem
 abstract: |
-  Multivariate interpolation is a fundamental tool in scientific computing, yet the Python ecosystem offers a fragmented landscape of specialized tools. This fragmentation hinders code reusability, experimentation, and efficient deployment across diverse hardware. The `multinterp` package was developed to address this challenge. It provides a unified interface for regular/irregular interpolation, supports serial (NumPy/SciPy), parallel (Numba), and GPU (CuPy, PyTorch, JAX) backends, and includes tools for multivalued interpolation and interpolation of derivatives.
+  Multivariate interpolation is a fundamental tool in scientific computing, yet the Python ecosystem offers a fragmented landscape of specialized tools. This fragmentation hinders code reusability, experimentation, and efficient deployment across diverse hardware. The `multinterp` package was developed to address this challenge. It provides a unified interface for regular/irregular interpolation, supports serial (using `numpy` and `scipy`), parallel (using `numba`), and GPU (using `cupy`, `pytorch`, and `jax`) backends, and includes tools for multivalued interpolation and interpolation of derivatives. This paper introduces `multinterp`, demonstrates its capabilities, and invites the community to contribute to its development.
 exports:
   - format: pdf
 ---
 
 ## Introduction
 
-The scientific Python ecosystem has a number of diverse tools for multivariate interpolation. However, these tools are scattered across multiple packages, each constructed for a specific purpose that prevents them from being easily used in other contexts.
+The scientific Python ecosystem has a number of specialized tools for multivariate interpolation. However, these tools are scattered across multiple packages, each constructed for a specific purpose that prevents them from being easily used in other contexts. For example, `scipy.interpolate` provides a comprehensive set of interpolation tools, but these are limited to data and algorithms running on the CPU, and do not support GPU acceleration. On the other hand, `cupy` and `jax` provide GPU acceleration for some interpolation methods, but lack the comprehensive set of interpolation tools available in `scipy.interpolate`.
 
-Currently, there is no unified and comprehensive interface for interpolation with structured data (such as regular, rectilinear, and curvilinear) and unstructured data (as in irregular or scattered) that can be used with different hardware backends (e.g., serial, in parallel, or on a gpu) and software (numpy, numba, cupy, pytorch, jax) backends. The lack of this common platform makes it difficult for users to switch between different interpolation methods and backends, leading to inefficiencies and inconsistencies in their research.
+Currently, there is no unified and comprehensive interface for interpolation with structured data (such as regular, rectilinear, and curvilinear) and unstructured data (as in irregular or scattered) that can be used with different hardware backends (e.g., serial, in parallel, or on a gpu) and software (`numpy`, `numba`, `cupy`, `pytorch`, `jax`) backends. The lack of this common platform makes it difficult for researchers and practitioners to switch between different interpolation methods and backends, leading to inefficiencies and inconsistencies in their research.
 
 This project aims to develop a comprehensive framework for multivariate interpolation for structured and unstructured data that can be used with different software technologies and hardware backends.
 
 ## Grid Interpolation
 
-Functions are powerful mappings between sets of inputs and outputs, indicating how one set of values is related to another. Functions, however, are also infinitely dimensional, in that the inputs can range over an infinite number of values each mapping 1-to-1 (typically) to an infinite number of outputs. This makes it difficult to represent non-analytic functions in a computational environment, as we can only store a finite number of values in memory. For this reason, interpolation is a powerful tool in scientific computing, as it allows us to represent functions with a finite number of values and to approximate the function's behavior between these values.
+Functions are powerful mappings between sets of inputs and sets of outputs, indicating how one set of values is related to another. Functions, however, can also be thought of as infinitely dimensional, in that the inputs can range over an infinite number of values, each mapping (typically) 1-to-1 to an infinite number of outputs. For example, even the simple function $f(x) = x$ maps the uncontably infinite set of the reals to itself. Fortunately, this function is analytic, and can be represented summarily by the expression $f(x) = x$. This is also true of more general polynomials, trigonometric functions ($\sin$, $\cos$, $\tan$), other trancendental functions ($\log$, $\exp$), and their combinations. However, there are functions that can not be represented symbolicaly, and require explicit mappings. This makes it difficult to represent non-analytic functions in a computational environment, as we can only store a finite number of values in memory. For this reason, interpolation is a powerful tool in scientific computing, as it allows us to represent functions with a finite number of values and to approximate the function's behavior between these values.
 
 The set of input values on which we know the function's output values is called a **grid**. A grid (or input grid) of values can be represented in many ways, depending on its underlying structure. The broadest categories of grids are regular or structured grids, and irregular or unstructured grids. Regular grids are those where the input values are arranged in a regular pattern, such as a triangle or a quadrangle. Irregular grids are those where the input values are not arranged in a particularly structured way and can seem to be scattered randomly across the input space.
 
-As we might imagine, interpolation on regular grids is much easier than interpolation on irregular grids as we are able to exploit the structure of the grid to make predictions about the function's behavior between known values. Irregular grid interpolation is much more difficult, and often requires _regularizing_ and/or _regression_ techniques to make predictions about the function's behavior between known values. `multinterp` aims to provide a comprehensive set of tools for both regular and irregular grid interpolation, and we will discuss some of these tools in the following sections.
+As we might imagine, interpolation on regular grids is much easier than interpolation on irregular grids, as we are able to exploit the structure of the grid to make predictions about the function's behavior between known values. Irregular grid interpolation is much more difficult, and often requires _regularizing_ and/or _regression_ techniques to make predictions about the function's behavior between known values. `multinterp` aims to provide a comprehensive set of tools for both regular and irregular grid interpolation, and we will discuss some of these tools in the following sections.
 
 ```{list-table} Grids and structures implemented in "multinterp".
 :label: tbl:grids
@@ -104,6 +104,10 @@ z_interp = interp(np.column_stack((x_new.ravel(), y_new.ravel()))).reshape(x_new
 z_interp = interp(np.column_stack((x_new.ravel(), y_new.ravel()))).reshape(x_new.shape)
 ```
 
+```{embed} #fig:multivariate_regular
+:remove-input: true
+```
+
 Here we introduce `MultivariateInterp`, which brings additional features and speed improvements. The key feature of `MultivariateInterp` is its `backend` parameter, which can be set to `scipy`, `numba`, or `cupy`, among others. This allows the user to specify the backend device for the interpolation. Using `MultivariateInterp` mirrors the use of `RegularGridInterpolator` very closely.
 
 ```python
@@ -114,6 +118,10 @@ z_mult_interp = mult_interp(x_new, y_new)
 ```python
 %%timeit
 z_mult_interp = mult_interp(x_new, y_new)
+```
+
+```{embed} #fig:multivariate_interp
+:remove-input: true
 ```
 
 As we see above, `MultivariateInterp` is faster than `RegularGridInterpolator`, even with the default `backend="scipy"`. Moreover, the speed of `MultivariateInterp` is highly dependent on the number of points in the grid and the backend device. For example, for a large number of points, `MultivariateInterp` with `backend='numba'` can be shown to be significantly faster than `RegularGridInterpolator`.
@@ -188,6 +196,10 @@ for i, j in product(range(n), repeat=2):
     gpu[i, j] = timeit(gpu_interp, x_approx, y_approx) / time_norm
 ```
 
+```{embed} #fig:multivariate_speed
+:remove-input: true
+```
+
 As we can see from the results, `MultivariateInterp` is faster than `RegularGridInterpolator` depending on the number of points and the backend device. A value of 1 represents the same speed as `RegularGridInterpolator`, while a value less than 1 is faster (in red) and a value greater than 1 is slower (in blue).
 
 For `backend="scipy"`, `MultivariateInterp` is (much) slower when the number of approximation points that need to be interpolated is very small, as seen by the deep blue areas. When the number of approximation points is moderate to large, however, `MultivariateInterp` is about as fast as `RegularGridInterpolator`.
@@ -243,6 +255,10 @@ z_mult_interp = mult_interp(x_new, y_new).get()
 z_true = trig_func(x_new, y_new)
 ```
 
+```{embed} #fig:multivariate
+:remove-input: true
+```
+
 To evaluate the numerical derivatives, we can use the method `.diff(argnum)` of `MultivariateInterp` which provides an object oriented way to compute numerical derivatives. For example, calling `mult_interp.diff(0)` returns a `MultivariateInterp` object that represents the numerical derivative of the function with respect to the first argument on the same input grid.
 
 We can now compare the numerical derivatives with the analytical derivatives, and see that these are indeed very close to each other.
@@ -253,12 +269,20 @@ z_dfdx = dfdx(x_new, y_new).get()
 dfdx_true = trig_func_dx(x_new, y_new)
 ```
 
+```{embed} #fig:multivariate_dx
+:remove-input: true
+```
+
 Similarly, we can compute the derivatives with respect to the second argument, and see that it produces an accurate result.
 
 ```python
 dfdy = mult_interp.diff(1)
 z_dfdy = dfdy(x_new, y_new).get()
 dfdy_true = trig_func_dy(x_new, y_new)
+```
+
+```{embed} #fig:multivariate_dy
+:remove-input: true
 ```
 
 The choice of returning object oriented intepolation functions for the numerical derivatives is very useful, as it allows for re-usability without re-computation and easy chaining of operations. For example, we can compute the second derivative of the function with respect to the first argument by calling `mult_interp.diff(0).diff(0)`.
@@ -306,6 +330,10 @@ from multinterp.rectilinear._multi import MultivaluedInterp
 mult_interp = MultivaluedInterp(z_mat, [x_grid, y_grid], backend="cupy")
 z_mult_interp = mult_interp(x_new, y_new).get()
 z_true = multivalued_func(x_new, y_new)
+```
+
+```{embed} #fig:multivalued
+:remove-input: true
 ```
 
 ## Curvilinear Interpolation
@@ -380,7 +408,15 @@ print(f"Curvilinear interpolation took {time() - start:.5f} seconds")
 
 Now we can compare the results of the interpolation with the original function. Below we plot the original function and the sample points that are known. Notice that the points are almost rectilinear, but have been randomly shifted to create a more challenging interpolation problem.
 
+```{embed} #fig:curvilinear_original
+
+```
+
 Then, we can look at the result for each method of interpolation and compare it to the original function.
+
+```{embed} #fig:curvilinear_result
+
+```
 
 In short, `multinterp`'s `Warped2DInterp` and `Curvilinear2DInterp` classes are useful for interpolating functions on curvilinear grids which have a quadrilateral structure but are not perfectly rectangular.
 
@@ -445,7 +481,15 @@ rbf_grid = rbf_interp(grid_x, grid_y)
 
 Now we can compare the results of the interpolation with the original function. Below we plot the original function and the sample points that are known.
 
+```{embed} #fig:unstructured_original
+:remove-input: true
+```
+
 Then, we can look at the result for each method of interpolation and compare it to the original function.
+
+```{embed} #fig:unstructured_interpolated
+:remove-input: true
+```
 
 Finally, `multinterp` also provides a set of interpolators organized around the concept of _regression_. As a demonstration, below we use a `RegressionUnstructuredInterp` interpolator which uses a Gaussian Process regression model from `scikit-learn` (@Pedregosa2011) to interpolate the function defined on the unstructured grid. The `RegressionUnstructuredInterp` class takes the same arguments as the `UnstructuredInterp` class, but it additionally requires the user to specify the regression `model` to use.
 
@@ -462,6 +506,10 @@ gaussian_interp = RegressionUnstructuredInterp(
 gaussian_grid = gaussian_interp(grid_x, grid_y)
 
 
+```
+
+```{embed} #fig:unstructured_gp
+:remove-input: true
 ```
 
 ## Conclusion
