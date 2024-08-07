@@ -3,8 +3,8 @@ project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-funix
   # Ensure your title is the same as in your `main.md`
-  title: Funix - vivifying Python functions into GUI apps
-  subtitle: The laziest way to build apps by leveraging native features of Python and its ecosystem
+  title: Funix - The laziest way to build GUI apps in Python
+  subtitle: Make it (the app) before they fake it (in Figma or on a napkin)
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Forrest Sheng Bao
@@ -12,7 +12,6 @@ project:
       # orcid: 0000-0000-0000-0000
       affiliations:
         - Founder, Textea, Inc.
-        - Machine Learning Engineer, Vectara, Inc.
       corresponding: true
     - name: Mike Qi
       email: yazawazier@gmail.com
