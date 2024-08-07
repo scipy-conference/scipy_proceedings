@@ -25,6 +25,7 @@ As a result, scientific developers, such as geophysicists, neurobiologists, or m
 To address these drawbacks, [Funix](http://funix.io) was created to automatically launch apps from existing Python functions. We observed that the choice of a widget is correlated with the type of the function's input/output that it is associated with. For example, a checkbox is only suitable for Boolean types. Funix automatically selects widgets based on the types of the function's arguments and returns. In the default theme of Funix, Python native types such as `str`, `bool`, and `Literal` are mapped to an input box, a checkbox, and a set of radio buttons in the [MUI library](https://mui.com/), respectively. Common scientific types like `pandas.DataFrame` and `matplotlib.figure.Figure` are mapped to tables (MUI's `DataGrid`) and charts (in [`mpld3`](https://github.com/mpld3/mpld3)). A variable's type can be specified via type-hinting, which is a common practice in Python development, or inferred, which Funix plans to support in the future.
 
 ```{code} python
+:linenos:
 :label: code_hello_world
 :caption: A hello, world! example in Funix. It is an ordinary Python function with nothing special to Funix. The corresponding GUI app is shown in [](#fig_hello_world).
 
@@ -41,12 +42,12 @@ The app generated from [](#code_hello_world) by the command `funix hello.py` via
 ```
 
 ```{code} python
+:linenos:
 :label: code_advanced_input_widgets
 :caption: An advanced input widgets example in Funix. The input panel of the corresponding GUI app is shown in [](#fig_advanced_input_widgets). In this example, Funix not only uses Python native types but also types from `ipywidgets`, a popular UI library in Jupyter.
 
 # hello.py
 import typing # Python native
-
 import ipywidgets  # popular UI library
 
 def input_widgets_basic(
@@ -120,6 +121,7 @@ We would also like to argue that the rise of Generative AI (GenAI) is simplifyin
 For example, a text-to-image generation app ([](#fig_dalle)) only needs a string input and an image output. In this sense, Funix and its Python-based peers will be able to meet many needs, both in scientific computing and more general applications, in the future.
 
 ```{code} python
+:linenos:
 :label: code_dalle
 :caption: Source code for the Dall-E app in Funix. The corresponding GUI app is shown in [](#fig_dalle).
 
@@ -128,7 +130,6 @@ import IPython
 
 def dalle(Prompt: str = "a flying cat on a jet plane")
             -> IPython.display.Image:
-
     client = openai.OpenAI() # defaults to os.environ.get("OPENAI_API_KEY")
     response = client.images.generate(Prompt)
     return response.data[0].url
@@ -197,6 +198,7 @@ Because Funix is a transcompiler, it leverages multimedia types already defined 
 
 
 ```{code} python
+:linenos:
 :label: code_table_and_chart
 :caption: A Python functions with a `pandas.DataFrame` input and a `matplotlib.figure.Figure` output. The corresponding GUI app is shown in [](#fig_table_and_chart). The default values populate the table with random numbers.
 
@@ -245,6 +247,7 @@ In this way, Funix bridges the Python world with the frontend world, making Pyth
 The on-the-fly approach is only applicable when introducing a new type, e.g., a custom class. To modify the widget choice for an existing type, a theme must be used.
 
 ```{code} python
+:linenos:
 :label: code_new_type
 :caption: An example of introducing a new type, binding it to a widget, and using it.
 
@@ -296,6 +299,7 @@ A type-to-widget mapping can be reused and centralized managed via a theme, whic
 There are two ways to apply a theme: script-wide and function-wide. The script-wide approach ([](#code_theme_apply_script)) applies a default theme to all functions in a script. The function-wide approach ([](code_theme_apply_function)) applies a theme to a specific function. In either case, the theme can be referred to by a web URL, a local file path, or a name/alias. If no theme is specified, Funix uses its default theme.
 
 ```{code} python
+:linenos:
 :label: code_theme_apply_script
 :caption: Three ways to apply a theme script-wide.
 
@@ -310,6 +314,7 @@ funix.set_default_theme("grandma's secret theme") # from a name/alias
 
 
 ```{code} python
+:linenos:
 :label: code_theme_apply_function
 :caption: Three ways to apply a theme function-wide.
 
@@ -331,6 +336,7 @@ def foo():
 To refer to a theme by its name or alias, it must be imported. The alias can be set when importing. A theme can be imported from a web URL, a local file path, or a JSON dictionary defining a theme ([](#code_theme_import)).
 
 ```{code} python
+:linenos:
 :label: code_theme_import
 :caption: Three ways to import a theme. Note that theme importing is optional. The only benefit is to refer to a theme by its name or alias for easy switching.
 
@@ -367,7 +373,7 @@ Funix leverages the language features of Python and common practices in Python d
 Python supports default values for keyword arguments. Funix directly uses them as the placeholder values for corresponding widgets. For example, default values in [](#code_advanced_input_widgets) are prefilled in [](#fig_advanced_input_widgets). A more complex example is the `pandas.DataFrame` initated with `numpy` columns in [](#code_table_and_chart) are prefilled into the table in [](#fig_table_and_chart). In contrast, Funix' peer solutions require developers to provide the placeholder values the second time in the widget initiation.
 
 
-### Making use of Docstrings
+### Making use of docstrings
 
 Docstrings are widely used in the Python community. 
 Information in docstrings is often needed in the GUI of an app. 
@@ -375,13 +381,14 @@ For example, the annotation of each argument can be displayed as a label or tool
 Therefore, Funix automatically incorporates selected information from docstrings into apps, eliminating the need for developers to manually add it, as required by other solutions.
 
 Different sections of docstrings will be transformed into various types of information on the frontend. 
-The docstring above the first headed section (e.g., `Args` in [this example](#code_docstring)) will be rendered as Markdown. 
+The docstring above the first headed section (e.g., `Parameters` in [this example](#code_docstring)) will be rendered as Markdown. 
 Argument annotations in the `Args` section will become labels in the UI. 
 The `Examples` section will provide prefilled example values for users to try out. 
 Funix currently supports only Google-style and Numpy-style docstrings.
-Supports for sections beyond `Args` (or `Parameters`) and `Examples` and styles will be added in the future.
+Supports for sections beyond `Args`/`Parameters` and `Examples` and styles will be added in the future.
 
 ```{code} python
+:linenos:
 :label: code_docstring
 :caption: An example of a function with a Google-style docstring. The corresponding GUI app is shown in [](#fig_docstring).
 
@@ -425,6 +432,7 @@ Funix extends this convenience by redirecting the output of `print` to the outpu
 Printout strings in Markdown or HTML syntax will be automatically rendered after syntax detection. To avoid conflicting with the default behavior of printing to `stdout`, printing to the web needs to be explicitly enabled using a Boolean decorator parameter `print_to_web` (See [](#code_print_return)).
 
 ```{code} python
+:linenos:
 :label: code_print_return
 :caption: Use `print` and `return` to control the output layout. The corresponding GUI app is shown in [](#fig_print_return).
 
@@ -460,6 +468,7 @@ Instead of inventing a new mechanism to support streaming, Funix repurposes the 
 The rationale is that `return` and `yield` are highly similar, and `return` is already used to display the final output in a Funix-powered app.
 
 ```{code} python
+:linenos:
 :label: code_stream
 :caption: Python keyword  `yield` is repurposed for streaming in Funix. The corresponding GUI app is shown in [](#fig_stream).
 import time
@@ -492,6 +501,7 @@ In Funix, maintaining states is as simple as updating a `global` variable.
 By leveraging the semantics of `global` variables which are a native feature of the Python language, Funix saves developers the burden of learning something new in Funix.
 
 ```{code} python
+:linenos:
 :label: code_hangman
 :caption: A simple Hangman game in Funix that uses the `global` keyword to maintain the state. This solution is much shorter than using peer solutions, such as in [Gradio](https://www.gradio.app/guides/state-in-blocks).
 
@@ -531,6 +541,7 @@ Since each instance of the class is independent, the multi-page app is automatic
 In this approach, a Funix developer does not need to learn anything new and can easily build a mulit-page app from the OOP principles they are already familiar with.
 
 ```{code} python
+:linenos:
 :label: code_class
 :caption: A simple multi-page app in Funix leveraging OOP. The corresponding GUI app is shown in [](#fig_class).
 
@@ -579,6 +590,7 @@ Funix uses types to determine the widgets. However, there may be needs to manual
 
 
 ```{code} python
+:linenos:
 :label: code_sentence_builder
 :caption: The Funix implementation of a sentence builder. The `funix` decorator overwrites the theme-based widgets choices of two arguments.
 
@@ -614,15 +626,14 @@ As mentioned earlier, Funix is suitable for straightforward input-output process
 To do so, simply toggle on the `autorun` parameter in the `@funix` decorator. This will activate the "continuously run" checkbox on the input panel.
 
 ```{code} python
+:linenos:
 :label: code_autorun
 :caption: A sine wave plotter that re-visualizes the function whenever input changes, kept on using the `autorun` parameter in `@funix` decorator. The corresponding GUI app is shown in [](#fig_autorun).
-
 
 import matplotlib.pyplot, matplotlib.figure
 from ipywidgets import FloatRangeSlider
 import numpy
 from funix import funix
-
 
 @funix(autorun=True)
 def sine(omega: FloatRangeSlider[0, 4, 0.1]) -> matplotlib.figure.Figure:
@@ -644,6 +655,7 @@ A sine wave generator with the `autorun` parameter toggled on. Source code in []
 Although interactivity is not a strong suit of Funix for reasons aforementioned, Funix still supports some common interactivity features. One of them is "conditional visibility" which reveal some widgets only when certain conditions are met ([](#code_conditional_visible) and [](#fig_conditional_visible)). 
 
 ```{code} python
+:linenos:
 :label: code_conditional_visible
 :caption: Conditional visibility in `@funix` decorator. App in action is shown in [](#fig_conditional_visible).
 
@@ -693,6 +705,7 @@ Funix can dynamically prefill widgets based on information from other widgets. W
 <!-- To use the reactive feature, the function that computes the reactive value must be defined  -->
 
 ```{code} python
+:linenos:
 :label: code_reactive
 :caption: A reactive app.
 
@@ -753,6 +766,8 @@ Funix does not have a chat widget, because it is so easy (less than 10 lines in 
 
 
 ```{code} python
+:linenos:
+:emphasize-lines: 9,10,11,12,13,14,15,16,17
 :label: code_joke
 :caption: Multiturn chatbot using Funix.
 
@@ -799,6 +814,7 @@ A multi-turn chatbot in Funix in action. Source code in [](#code_joke).
 Funix extends the support to `ipywidgets.{Image, Audio, File, Video}` to allow drag-and-drop of multimedia files or push-to-capture audio or video from the computer's microphone or webcam.
 
 ```{code} python
+:linenos:
 :label: code_multimedia
 :caption: A multimodal input demo in Funix built by simply wrapping OpenAI's GPT-4o demo code into a function with an  `ipywidgets.Image` input and a `str` output. The corresponding GUI app is shown in [](#fig_multimedia).
 
@@ -853,6 +869,7 @@ A vector stripping app only involves simple data structures, such as strings, li
 Because the bioinformatics part of vector stripping is lengthy, we only show the interface function in [](#code_vector_stripping) and the full source code can be found [here](https://github.com/TexteaInc/funix/blob/develop/examples/bioinformatics/vector_strip.py). `pandas.DataFrame`'s are used in both the input and output of this app, allowing biologists to batch process vector stripping by copy-and-pasting their data to Excel or Google Sheets, or uploading/downloading CSV files.
 
 ```{code} python
+:linenos:
 :label: code_vector_stripping
 :caption: The function that is turned into a vector stripping app by Funix.
 
