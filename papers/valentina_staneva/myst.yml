@@ -80,6 +80,7 @@ project:
         - aop
         - levels
         - dagster
+        - dask
         - dask-jobqueue
         - hdf5
         - echopy_2024
