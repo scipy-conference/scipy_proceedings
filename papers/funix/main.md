@@ -3,7 +3,7 @@
 title: Funix - The laziest way to build GUI apps in Python
 abstract: |
   The rise of machine learning (ML) and artificial intelligence (AI), especially the generative AI (GenAI), has increased the need for wrapping models or algorithms into GUI apps. For example, a large language model (LLM) can be accessed through a string-to-string GUI app with a textbox as the primary input.
-  Most of existing solutions require developers to manually create widgets and link them to arguments/returns of a function individually. This low-level process is laborious and usually intrusive. Funix automatically selects widgets based on the types of the arguments and returns of a function according to the type-to-widget mapping defined in a theme, e.g., `bool` to a checkbox. Consequently, an existing Python function can be turned into a GUI app without any code changes. As a transcompiler, Funix allows type-to-widget mappings to be defined between any Python type and any React component and its `props`, liberating Python developers to the frontend world without needing to know JavaScript/TypeScript. Funix further leverages features in Python or its ecosystem for building apps in a more Pythonic, intuitive, and effortless manner. With Funix, a developer can make it (a functional app) before they (competitors) fake it (in Figma or on a napkin). 
+  Most of existing solutions require developers to manually create widgets and link them to arguments/returns of a function individually. This low-level process is laborious and usually intrusive. Funix automatically selects widgets based on the types of the arguments and returns of a function according to the type-to-widget mapping defined in a theme, e.g., `bool` to a checkbox. Consequently, an existing Python function can be turned into a GUI app without any code changes. As a transcompiler, Funix allows type-to-widget mappings to be defined between any Python type and any React component and its `props`, liberating Python developers to the frontend world without needing to know JavaScript/TypeScript. Funix further leverages features in Python or its ecosystem for building apps in a more Pythonic, intuitive, and effortless manner. With Funix, a developer can make it (a functional app) before they (competitors) fake it (in Figma or on a napkin).
 format: pdf
 template: arxiv_two_column
 output: exports/my-document.pdf
@@ -69,7 +69,7 @@ The input panel of the app generated from [](#code_advanced_input_widgets) by Fu
 
 Unlike many of its peers, Funix does not have its own widget library.
 Any [React](https://react.dev/) component can be bound to a Python type.
-A type-to-widget mapping can be redefined or created [on-the-fly](#using-the-new_funix_type-decorator) or via a reusable [theme](#using-the-theme).
+A type-to-widget mapping can be redefined or created [on-the-fly](#Supporting a new type on the fly using the new funix type decorator) or via a reusable [theme](#Defining and using themes).
 Additionally, the properties (i.e., `props`) of the frontend widget can be configured in Python via JSON.
 In this sense, Python becomes a surface language for web development.
 The frontend development world, dominated by JavaScript/TypeScript, is now accessible to Python developers who previously couldn't tap into it.
@@ -94,7 +94,7 @@ In summary, Funix has the following cool features for effortless app building in
 3. Leveraging Python's native features to make app building more intuitive, minimizing the need to learn new concepts specific to Funix.
 
 <!-- ## Motivation: scientific apps can be low-interactivity, plain-looking but must be quickly built -->
-## Motivation: the demand to rapidly launch low-interactivity and plain-looking apps at scale 
+## Motivation: the demand to rapidly launch low-interactivity and plain-looking apps at scale
 
 When it comes to GUI app development, there is a trade-off between simplicity and versatility.
 JavaScript/TypeScript-based web frontend frameworks like [React](https://react.dev/), [Angular](https://angular.dev/), and [Vue.js](https://vuejs.org/) offer great versatility.
@@ -375,15 +375,15 @@ Python supports default values for keyword arguments. Funix directly uses them a
 
 ### Making use of docstrings
 
-Docstrings are widely used in the Python community. 
-Information in docstrings is often needed in the GUI of an app. 
-For example, the annotation of each argument can be displayed as a label or tooltip to explain the meaning of the argument to the app user. 
+Docstrings are widely used in the Python community.
+Information in docstrings is often needed in the GUI of an app.
+For example, the annotation of each argument can be displayed as a label or tooltip to explain the meaning of the argument to the app user.
 Therefore, Funix automatically incorporates selected information from docstrings into apps, eliminating the need for developers to manually add it, as required by other solutions.
 
-Different sections of docstrings will be transformed into various types of information on the frontend. 
-The docstring above the first headed section (e.g., `Parameters` in [this example](#code_docstring)) will be rendered as Markdown. 
-Argument annotations in the `Args` section will become labels in the UI. 
-The `Examples` section will provide prefilled example values for users to try out. 
+Different sections of docstrings will be transformed into various types of information on the frontend.
+The docstring above the first headed section (e.g., `Parameters` in [this example](#code_docstring)) will be rendered as Markdown.
+Argument annotations in the `Args` section will become labels in the UI.
+The `Examples` section will provide prefilled example values for users to try out.
 Funix currently supports only Google-style and Numpy-style docstrings.
 Supports for sections beyond `Args`/`Parameters` and `Examples` and styles will be added in the future.
 
@@ -421,14 +421,14 @@ An app with input panel customized by Docstrings.
 
 ### Output layout in `print` and `return`
 
-In Funix, by default, the return value of a function becomes the content of the output panel. 
-A user can control the layout of the output panel by returning strings, including f-strings, in Markdown and HTML syntaxes. 
-Markdown and HTML strings must be explicitly specified as `IPython.display.Markdown` and `IPython.display.HTML`, respectively. 
-Otherwise, the raw strings will be displayed. 
+In Funix, by default, the return value of a function becomes the content of the output panel.
+A user can control the layout of the output panel by returning strings, including f-strings, in Markdown and HTML syntaxes.
+Markdown and HTML strings must be explicitly specified as `IPython.display.Markdown` and `IPython.display.HTML`, respectively.
+Otherwise, the raw strings will be displayed.
 Since Python supports multiple return values, you can mix Markdown and HTML strings in the return statement.
 
-Quite often, we need to print out some information before a function reaches its return statement. The `print` function, a built-in feature of Python, is frequently used for this purpose. 
-Funix extends this convenience by redirecting the output of `print` to the output panel of an app. 
+Quite often, we need to print out some information before a function reaches its return statement. The `print` function, a built-in feature of Python, is frequently used for this purpose.
+Funix extends this convenience by redirecting the output of `print` to the output panel of an app.
 Printout strings in Markdown or HTML syntax will be automatically rendered after syntax detection. To avoid conflicting with the default behavior of printing to `stdout`, printing to the web needs to be explicitly enabled using a Boolean decorator parameter `print_to_web` (See [](#code_print_return)).
 
 ```{code} python
@@ -463,8 +463,8 @@ An app with output panel customized by `print` and `return`. Source code in [](#
 
 ### Streaming based on `yield`
 
-In the GenAI era, streaming is a common method for returning lengthy text output from an AI model. 
-Instead of inventing a new mechanism to support streaming, Funix repurposes the `yield` keyword in Python to stream a function's output. 
+In the GenAI era, streaming is a common method for returning lengthy text output from an AI model.
+Instead of inventing a new mechanism to support streaming, Funix repurposes the `yield` keyword in Python to stream a function's output.
 The rationale is that `return` and `yield` are highly similar, and `return` is already used to display the final output in a Funix-powered app.
 
 ```{code} python
@@ -521,20 +521,20 @@ def guess_letter(Enter_a_letter: str) -> Markdown:
     return f"### Hangman \n `{answer}` \n\n ---- \n ### Used letters \n {', '.join(used_letters)}"
 ```
 
-A security risk is that there is only one backend server for the Funix app and consequently a `global` variable is accessible by all browser sessions of the app. 
+A security risk is that there is only one backend server for the Funix app and consequently a `global` variable is accessible by all browser sessions of the app.
 To eliminate this risk, Funix provides a simple command-line flag `-t` at the launch of  the Funix app to sessionize all `global` variables.
 If the developer on purpose wants to share the data among different connections, the `-t` flag can be omitted.
 
 
 #### Multi-page apps from classes
 
-A special but useful case that requires maintaining states is multi-page apps. 
-A multi-page app consists of multiple pages or tabs that share the same variable space. 
+A special but useful case that requires maintaining states is multi-page apps.
+A multi-page app consists of multiple pages or tabs that share the same variable space.
 Values of variables set on one page can be accessed on another page.
 
-Without reinventing the wheel, Funix supports this need by turning a Python class into a multi-page app. 
-Each member function of the class becomes a page of the multi-page app, and pages can exchange data via the `self` variable. 
-Specifically, the constructor (`__init__`) becomes the landing page of the multi-page app. 
+Without reinventing the wheel, Funix supports this need by turning a Python class into a multi-page app.
+Each member function of the class becomes a page of the multi-page app, and pages can exchange data via the `self` variable.
+Specifically, the constructor (`__init__`) becomes the landing page of the multi-page app.
 Since each instance of the class is independent, the multi-page app is automatically sessionized for different connections from browsers without needing to set the `-t` flag.
 
 [](#code_class) is a Python class of three member methods, which are turned into three pages of the GUI app by Funix ([](#fig_class)). The GIF shows that values of `self.a` set in either the contructor or updated in the `set` method can be accessed in the `get` method.
@@ -578,13 +578,13 @@ A multiplage app generated by Funix from a class of three member methods includi
 
 ## The Funix decorators
 
-Although Funix relies on the Python language (including type hints and docstrings) to define GUI apps, 
-there are still some aspects of an app's appearance and behavior that remain uncovered. 
+Although Funix relies on the Python language (including type hints and docstrings) to define GUI apps,
+there are still some aspects of an app's appearance and behavior that remain uncovered.
 This is where the `@funix` decorator comes into play. One example, as mentioned above ([](#output-layout-in-print-and-return)), is redirecting the `print` output from `stdout` to the output panel of an app. Here, we provide a few more examples. For full details on Funix decorators, please refer to the [Funix reference manual](http://funix.io).
 
-### Overriding the type-based widget choice 
+### Overriding the type-based widget choice
 
-Funix uses types to determine the widgets. However, there may be needs to manually pick a widget. The `@funix` dectorator has a `widgets` parameter for this purpose. 
+Funix uses types to determine the widgets. However, there may be needs to manually pick a widget. The `@funix` dectorator has a `widgets` parameter for this purpose.
 <!-- The input of the `widgets` parameter is a dictionary where keys are names of function arguments and values are .  -->
 [](#code_sentence_builder) is an example to temporarily override the widget choice for two variables of the types `Literal` and `List[Literal]` respectively. The corresponding app ([](#fig_sentence_builder)) is a sentence builder. The Funix-based code is much shorter and more human-readable than its [Gradio-based counterpart](https://www.gradio.app/playground?demo=Sentence_Builder&code=aW1wb3J0IGdyYWRpbyBhcyBncgoKCmRlZiBzZW50ZW5jZV9idWlsZGVyKHF1YW50aXR5LCBhbmltYWwsIGNvdW50cmllcywgcGxhY2UsIGFjdGl2aXR5X2xpc3QsIG1vcm5pbmcpOgogICAgcmV0dXJuIGYiIiJUaGUge3F1YW50aXR5fSB7YW5pbWFsfXMgZnJvbSB7IiBhbmQgIi5qb2luKGNvdW50cmllcyl9IHdlbnQgdG8gdGhlIHtwbGFjZX0gd2hlcmUgdGhleSB7IiBhbmQgIi5qb2luKGFjdGl2aXR5X2xpc3QpfSB1bnRpbCB0aGUgeyJtb3JuaW5nIiBpZiBtb3JuaW5nIGVsc2UgIm5pZ2h0In0iIiIKCgpkZW1vID0gZ3IuSW50ZXJmYWNlKAogICAgc2VudGVuY2VfYnVpbGRlciwKICAgIFsKICAgICAgICBnci5TbGlkZXIoMiwgMjAsIHZhbHVlPTQsIGxhYmVsPSJDb3VudCIsIGluZm89IkNob29zZSBiZXR3ZWVuIDIgYW5kIDIwIiksCiAgICAgICAgZ3IuRHJvcGRvd24oCiAgICAgICAgICAgIFsiY2F0IiwgImRvZyIsICJiaXJkIl0sIGxhYmVsPSJBbmltYWwiLCBpbmZvPSJXaWxsIGFkZCBtb3JlIGFuaW1hbHMgbGF0ZXIhIgogICAgICAgICksCiAgICAgICAgZ3IuQ2hlY2tib3hHcm91cChbIlVTQSIsICJKYXBhbiIsICJQYWtpc3RhbiJdLCBsYWJlbD0iQ291bnRyaWVzIiwgaW5mbz0iV2hlcmUgYXJlIHRoZXkgZnJvbT8iKSwKICAgICAgICBnci5SYWRpbyhbInBhcmsiLCAiem9vIiwgInJvYWQiXSwgbGFiZWw9IkxvY2F0aW9uIiwgaW5mbz0iV2hlcmUgZGlkIHRoZXkgZ28/IiksCiAgICAgICAgZ3IuRHJvcGRvd24oCiAgICAgICAgICAgIFsicmFuIiwgInN3YW0iLCAiYXRlIiwgInNsZXB0Il0sIHZhbHVlPVsic3dhbSIsICJzbGVwdCJdLCBtdWx0aXNlbGVjdD1UcnVlLCBsYWJlbD0iQWN0aXZpdHkiLCBpbmZvPSJMb3JlbSBpcHN1bSBkb2xvciBzaXQgYW1ldCwgY29uc2VjdGV0dXIgYWRpcGlzY2luZyBlbGl0LiBTZWQgYXVjdG9yLCBuaXNsIGVnZXQgdWx0cmljaWVzIGFsaXF1YW0sIG51bmMgbmlzbCBhbGlxdWV0IG51bmMsIGVnZXQgYWxpcXVhbSBuaXNsIG51bmMgdmVsIG5pc2wuIgogICAgICAgICksCiAgICAgICAgZ3IuQ2hlY2tib3gobGFiZWw9Ik1vcm5pbmciLCBpbmZvPSJEaWQgdGhleSBkbyBpdCBpbiB0aGUgbW9ybmluZz8iKSwKICAgIF0sCiAgICAidGV4dCIsCiAgICBleGFtcGxlcz1bCiAgICAgICAgWzIsICJjYXQiLCBbIkphcGFuIiwgIlBha2lzdGFuIl0sICJwYXJrIiwgWyJhdGUiLCAic3dhbSJdLCBUcnVlXSwKICAgICAgICBbNCwgImRvZyIsIFsiSmFwYW4iXSwgInpvbyIsIFsiYXRlIiwgInN3YW0iXSwgRmFsc2VdLAogICAgICAgIFsxMCwgImJpcmQiLCBbIlVTQSIsICJQYWtpc3RhbiJdLCAicm9hZCIsIFsicmFuIl0sIEZhbHNlXSwKICAgICAgICBbOCwgImNhdCIsIFsiUGFraXN0YW4iXSwgInpvbyIsIFsiYXRlIl0sIFRydWVdLAogICAgXQopCgppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOgogICAgZGVtby5sYXVuY2goKQo=), thanks to leveraging the Python-native features like automatic rendering the `return` strings or default values.
 
@@ -652,7 +652,7 @@ A sine wave generator with the `autorun` parameter toggled on. Source code in []
 ```
 
 ### Conditional visibility
-Although interactivity is not a strong suit of Funix for reasons aforementioned, Funix still supports some common interactivity features. One of them is "conditional visibility" which reveal some widgets only when certain conditions are met ([](#code_conditional_visible) and [](#fig_conditional_visible)). 
+Although interactivity is not a strong suit of Funix for reasons aforementioned, Funix still supports some common interactivity features. One of them is "conditional visibility" which reveal some widgets only when certain conditions are met ([](#code_conditional_visible) and [](#fig_conditional_visible)).
 
 ```{code} python
 :linenos:
@@ -738,8 +738,8 @@ Lastly, togging on `show_source` parameter in `@funix` can enable the source cod
 
 ## Jupyter support
 
-Jupyter is a popular tool for Python development. Funix supports turning a Python function/class defined in a Jupyter cell into an app inside Jupyter. 
-To do so, simply add the `@funix` decorator to the function/class definition and run the cell ([](#fig_jupyter)). 
+Jupyter is a popular tool for Python development. Funix supports turning a Python function/class defined in a Jupyter cell into an app inside Jupyter.
+To do so, simply add the `@funix` decorator to the function/class definition and run the cell ([](#fig_jupyter)).
 
 ```{figure} figures/jupyter.png
 :label: fig_jupyter
@@ -863,7 +863,7 @@ Funix maps a `ipywidgets.{Image, Audio, Video, File}`-type arguments to a drag-a
 
 A vector is a nucleotide sequence that is appended to a nucleotide sequence of interest for easy handling or quality control.
 It is added before the sequencing process and should be removed after the sequence is read.
-Vector stripping is the process of removing vectors. 
+Vector stripping is the process of removing vectors.
 A vector stripping app only involves simple data structures, such as strings, lists of strings, and numeric parameters. This is a sweet spot of Funix.
 
 Because the bioinformatics part of vector stripping is lengthy, we only show the interface function in [](#code_vector_stripping) and the full source code can be found [here](https://github.com/TexteaInc/funix/blob/develop/examples/bioinformatics/vector_strip.py). `pandas.DataFrame`'s are used in both the input and output of this app, allowing biologists to batch process vector stripping by copy-and-pasting their data to Excel or Google Sheets, or uploading/downloading CSV files.
