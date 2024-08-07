@@ -20,6 +20,9 @@ project:
     DAG: Directed Acyclic Graph
     QC: Quality Control
     OCI: Open Container Initiative
+    BWT: Burrows-Wheeler Transform
+    SNP: Single Nucleotide Polymorphism
+    VCF: Variant Call Format
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
