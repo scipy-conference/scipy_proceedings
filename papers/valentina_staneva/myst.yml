@@ -55,6 +55,7 @@ project:
   abbreviations:
     MyST: Markedly Structured Text
     AWS: Amazon Web Services
+    ML: Machine Learning
 
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
