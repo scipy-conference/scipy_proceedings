@@ -79,9 +79,9 @@ folding_img = ImageSpec(
 )
 ```
 
-The `main` image has a lot of functionality and could arguably be pared down. It contains a number of very common low-level tools, along with GATK and a couple aligners [@doi:10.1146/annurev-animal-020518-115005]. The `protein` image on the other hand, only contains a handful of tools related to a very specific protein folding and visualization workflow. Unless using a remote builder, these images are built locally and then pushed to the registry specified. They will persist in the builder's local registry and leverage the builder's cache until cleaned-up. Once built, they are Open Container Initiative (OCI) compliant container images like any other, allowing you to compose them as you see fit. The main image could be used as the base for the folding image, for example. Another very simple but powerful usecase would be to *Flytify* any off-the-shelf image by simply specifying a Python version and adding `flytekit` as a package. 
+The `main` image has a lot of functionality and could arguably be pared down. It contains a number of very common low-level tools, along with GATK and a couple aligners [@doi:10.1146/annurev-animal-020518-115005]. The `protein` image on the other hand, only contains a handful of tools related to a very specific protein folding and visualization workflow. Unless using a remote builder, these images are built locally and then pushed to the registry specified. They will persist in the builder's local registry and leverage the builder's cache until cleaned-up. Once built, they are Open Container Initiative (OCI) compliant container images like any other, allowing you to compose them as you see fit. The main image could be used as the base for the folding image, for example. Another very simple but powerful use case would be to *Flytify* any off-the-shelf image by simply specifying a Python version and adding `flytekit` as a package. 
 
-Currently, a subset of the full Dockerfile functionality has been reimplemented in ImageSpec. A typical Dockerfile could include pulling micromamba binaries, creating and activating an environment, before finally installing the relevant packages. ImageSpec's opinionated approach enables a simpler experience by handling this kind of boilerplate code behind-the-scenes. ImageSpec is also context aware in the same way `docker build` is, meaning a `source_root` containing a lock or env file can be specified and installed if you want to keep your local environment in sync. The [images](https://github.com/unionai-oss/unionbio/blob/main/images.py) submodule of the `unionbio` repo puts this in practice, with different source roots used in test and production.
+Currently, a subset of the full Dockerfile functionality has been reimplemented in ImageSpec. A typical Dockerfile could include pulling Micromamba binaries, creating and activating an environment, before finally installing the relevant packages. ImageSpec's opinionated approach enables a simpler experience by handling this kind of boilerplate code behind-the-scenes. ImageSpec is also context aware in the same way `docker build` is, meaning a `source_root` containing a lock or env file can be specified and installed if you want to keep your local environment in sync. The [images](https://github.com/unionai-oss/unionbio/blob/main/images.py) submodule of the `unionbio` repo puts this in practice, with different source roots used in test and production.
 
 ImageSpecs can be specified in the task decorator alongside any [infrastructure requirements](https://docs.flyte.org/en/latest/user_guide/productionizing/customizing_task_resources.html#customizing-task-resources) in a very granular fashion:
 
@@ -103,7 +103,7 @@ Having rich data types to enforce compatibility at the task boundary is essentia
 
 Importantly, Flyte abstracts the object store, allowing you to load these assets into pods wherever is most convenient for your tool. This not only makes it easier to work with these files, but also safer as you’re working with ephemeral storage during execution instead of a shared production filesystem. In a shared filesystem, unintended side-effects could mutate artifacts unrelated to the current production run. This can be mitigated in a number of ways, such as setting up an empty directory for every experiment or restricting permissions to files after a run is complete. In an ephemeral setting however, inputs of interest are materialized at the beginning of the task and any relevant outputs are serialized to a unique prefix in the object store when the task completes. Any unintended modifications disappear when the pod is deleted.
 
-Sequencers typically produce millions of short strings representing DNA fragments called reads. Single-read sequencing produces one sequencing read per DNA fragment. This is appropriate for simpler analyses such as profiling or for analyzing less complex genomes. [Paired-end](https://thesequencingcenter.com/knowledge-base/what-are-paired-end-reads/) sequencing, on the other hand, produces two reads representing both sequencing directions of the DNA fragment. This is essential in applications such as ["de novo"](https://thesequencingcenter.com/knowledge-base/de-novo-assembly/) assembly which involves re-assembling these reads into a whole genome without a known reference as a guide. It also unlocks the detection of larger variations, typically longer insertions or deletions. 
+Sequencers employ different strategies to produce millions of short strings representing DNA fragments called reads. One such strategy is single-read sequencing, which produces one sequencing read per DNA fragment. This is appropriate for simpler analyses such as profiling or for analyzing less complex genomes. [Paired-end](https://thesequencingcenter.com/knowledge-base/what-are-paired-end-reads/) sequencing, on the other hand, produces two reads representing both sequencing directions of the DNA fragment. This is essential in applications such as ["de novo"](https://thesequencingcenter.com/knowledge-base/de-novo-assembly/) assembly which involves re-assembling these reads into a whole genome without a known reference as a guide. It also unlocks the detection of larger variations, typically longer insertions or deletions. 
 
 Regardless of the sequencing strategy, these reads are captured in one or a pair of [FastQ](https://en.wikipedia.org/wiki/FASTQ_format) files, an example of which is given below:
 
@@ -152,7 +152,7 @@ Additionally, the `make_all` function body has been omitted for brevity, but it 
 
 FlyteFile, along with FlyteDirectory, represent a file or directory in a Flyte aware context. These types handle serialization and deserialization into and out of the object store. They re-implement a number of common filesystem operations like `open()`, which returns a streaming handle, for example. Simply returning a FlyteFile from a task will automatically upload it to whatever object store is defined. This unassuming piece of functionality is one of Flyte's key strengths: abstracting data management so researchers can focus on their task code. Since dataflow in Flyte is a first-class construct, having well defined inputs and outputs at the task boundary makes authoring workflows that much more reliable. 
 
-In order to accomplish sequencing in a sensible timeframe, reads generation is massively parallelized [@doi:10.1126/science.280.5369.1540]. This dramatically improves the throughput, but removes crucial information regarding the location of those reads. In order to recover that information, the reads are aligned to a known reference, producing an Alignment file, which we also capture in a dataclass:
+In order to accomplish sequencing in a sensible timeframe, reads generation is massively parallelized [@doi:10.1126/science.280.5369.1540]. This dramatically improves the throughput, but removes crucial information regarding the location of those reads. In order to recover that information, the reads are aligned to a known reference genome, producing an Alignment file, which we also capture in a dataclass:
 
 ```python
 @dataclass
@@ -189,9 +189,9 @@ Compared to the Reads dataclass, the attributes captured here are of course only
 
 ### Tasks
 
-While Flyte tasks are written in Python, there are a couple of ways to wrap arbitrary tools. ShellTasks are one such way, allowing you to define scripts as multi-line strings in Python. For added flexibility around packing and unpacking data types before and after execution, Flyte also ships with a `subproc_execute` function which can be used in vanilla Python tasks. Finally, arbitrary images can be used via a [ContainerTask](https://docs.flyte.org/en/latest/user_guide/customizing_dependencies/raw_containers.html#raw-containers) and avoid any `flytekit` dependency altogether.
+While Flyte tasks are written in Python, there are a few ways to wrap arbitrary tools. ShellTasks are one such way, allowing you to define scripts as multi-line strings in Python. For added flexibility around packing and unpacking data types before and after execution, Flyte also ships with a `subproc_execute` function which can be used in vanilla Python tasks. Finally, arbitrary images can be used via a [ContainerTask](https://docs.flyte.org/en/latest/user_guide/customizing_dependencies/raw_containers.html#raw-containers) and avoid any `flytekit` dependency altogether.
 
-Bowtie2 [@doi:10.1186/gb-2009-10-3-r25], a fast and memory efficient aligner, is used to carry out the aforementioned alignments. Before alignment can be carried out efficiently, an index must be generated from the reference genome. Indices are generated by pre-processing the reference into a data structure that enables rapid lookup of a match with a given read. Bowtie2 uses an [FM-index](https://www.cs.jhu.edu/~langmea/resources/lecture_notes/bwt_and_fm_index.pdf) which combines the Burrows-Wheeler Transform (BWT) with a suffix array. Broadly speaking, BWT enables compression of the data while the suffix array allows for efficient lookup of substrings. Here is a ShellTask creating a `bowtie2` index directory from a genome reference file:
+Bowtie2 [@doi:10.1186/gb-2009-10-3-r25], a fast and memory efficient aligner, is used to carry out the aforementioned alignments. Before alignment can be carried out efficiently, an index must be generated from the reference genome. Indices are generated by pre-processing the reference into a data structure that enables rapid lookup of a match to a given read. Bowtie2 uses an [FM-index](https://www.cs.jhu.edu/~langmea/resources/lecture_notes/bwt_and_fm_index.pdf) which combines the Burrows-Wheeler Transform (BWT) with a suffix array. Broadly speaking, BWT enables compression of the data while the suffix array allows for efficient lookup of substrings. Here is a ShellTask creating a `bowtie2` index directory from a genome reference file:
 
 ```python
 bowtie2_index = ShellTask(
@@ -217,91 +217,88 @@ This task uses the `main_img` defined above; it also accepts a FlyteFile and out
 @task(container_image=main_img, requests=Resources(cpu="4", mem="10Gi"))
 def bowtie2_align_paired_reads(idx: FlyteDirectory, fs: Reads) -> Alignment:
     idx.download()
-    logger.debug(f"Index downloaded to {idx.path}")
     ldir = Path(current_context().working_directory)
 
-    alignment = Alignment(fs.sample, "bowtie2", "sam")
+    alignment = Alignment(fs.sample, "bowtie2", "sam", sorted=False, deduped=False)
     al = ldir.joinpath(alignment.get_alignment_fname())
     rep = ldir.joinpath(alignment.get_report_fname())
-    logger.debug(f"Writing alignment to {al} and report to {rep}")
 
     cmd = [
         "bowtie2",
         "-x",
         f"{idx.path}/bt2_idx",
         "-1",
-        fs.read1,
+        fs.read1.path,
         "-2",
-        fs.read2,
+        fs.read2.path,
         "-S",
         al,
     ]
-    logger.debug(f"Running command: {cmd}")
 
     result = subproc_execute(cmd)
 
-    # Bowtie2 indexing writes stats to stderr
+    # Bowtie2 alignment writes stats to stderr
     with open(rep, "w") as f:
         f.write(result.error)
 
     alignment.alignment = FlyteFile(path=str(al))
     alignment.alignment_report = FlyteFile(path=str(rep))
-    alignment.sorted = False
-    alignment.deduped = False
 
     return alignment
 ```
 
 Since Python tasks are the default task type, they're the most feature rich and stable. The main advantage to using one here is to unpack the inputs and construct the output type.
 
-The resulting alignments are then deduplicated, sorted, recalibrated and reformatted. While [important](https://gatk.broadinstitute.org/hc/en-us/articles/360035535912-Data-pre-processing-for-variant-discovery), these tasks are similarly implemented to the above alignment function and as such are ommitted to focus on the next major step: variant calling. Variant calling has such a diversity of approaches that any meaningful exploration of the landscape is out of scope. However, the central purpose is to distill the aligned reads into a set of likely relevant loci of interest. These variants can range from single-nucleotide polymorphisms (SNPs) to much larger structural variations mentioned above. Furthermore, once variants are called, they can be further filtered downstream for certain characteristics or against one of the many curated databases to arrive at a set of actionable insights.
+The resulting alignments are then deduplicated, sorted, recalibrated and reformatted. While important, these [tasks](https://gatk.broadinstitute.org/hc/en-us/articles/360035535912-Data-pre-processing-for-variant-discovery) are similarly implemented to the above alignment function and as such are omitted to focus on the next major step: variant calling. Variant calling has such a diversity of approaches that any meaningful exploration of the landscape is out of scope. However, the central purpose is to distill the aligned reads into a set of likely relevant loci that deviate from the reference. This is accomplished by aggregating information like quality scores and the number of reads covering a given location, called a pileup, to come to consensus around a most likely call. 
 
 ```python
 @task(container_image=main_img_fqn)
 def haplotype_caller(ref: Reference, al: Alignment) -> VCF:
     ref.aggregate()
     al.aggregate()
-    vcf_out = VCF(
-        sample=al.sample,
-        caller="gatk-hc",
-    )
+    vcf_out = VCF(sample=al.sample, caller="gatk-hc")
     vcf_fn = vcf_out.get_vcf_fname()
     vcf_idx_fn = vcf_out.get_vcf_idx_fname()
+
     hc_cmd = [
         "gatk",
         "HaplotypeCaller",
         "-R",
-        str(ref.get_ref_path()),
+        ref.get_ref_path(),
         "-I",
-        str(al.alignment.path),
+        al.alignment.path,
         "-O",
-        str(vcf_fn),
+        vcf_fn,
     ]
+
     subproc_execute(hc_cmd)
+    
     vcf_out.vcf = FlyteFile(path=vcf_fn)
     vcf_out.vcf_idx = FlyteFile(path=vcf_idx_fn)
+    
     return vcf_out
 ```
 
-GATK's HaplotypeCaller is used to perform variant calling by accepting an Alignment and Reference object and producing a Variant Call Format (VCF) file. VCFs are another common tabular text file, with each row representing a variant present in the input sequences and its expected counterpart in the reference. 
+GATK's HaplotypeCaller is used to perform variant calling by accepting an Alignment and Reference object and producing a Variant Call Format (VCF) file. VCFs are another common tabular text file, with each row representing a variant present in the input sequences and its alternate in the reference, along with a quality score and extensible columns for adding additional information. Variants can range from single-nucleotide polymorphisms (SNPs) to much larger structural variations mentioned above. Once variants are called, they can be further filtered downstream for certain characteristics, or against one of the many curated databases, to arrive at a set of actionable insights.
 
 ## Results
 
-A real world alignment workflow demonstrates how to tie all these disparate parts together. Starting with a directory containing raw FastQ files, we'll perform quality-control (QC), filtering, index generation, alignment and conclude with a final report of all the steps. Here's the code:
+A real world variant discovery workflow demonstrates how to tie all these disparate parts together. Starting with a directory containing raw FastQ files, we'll perform quality-control (QC), filtering, index generation, alignment, calling, and conclude with a final report of all the steps. Here's the code:
 
 ```python
-from unionbio.config import seq_dir_path, ref_path, indels_path
-from unionbio.tasks.utils import prepare_raw_samples, reformat_alignments
+from flytekit import workflow, dynamic, map_task
+from flytekit.types.directory import FlyteDirectory
+from flytekit.types.file import FlyteFile
+from unionbio.tasks.utils import prepare_raw_samples
 from unionbio.tasks.fastqc import fastqc
 from unionbio.tasks.fastp import pyfastp
 from unionbio.tasks.bowtie2 import bowtie2_idx, bowtie2_align_samples
-from unionbio.tasks.base_recal import recalibrate_samples
 from unionbio.tasks.callers import hc_call_variants
 from unionbio.tasks.multiqc import render_multiqc
 
 
 @workflow
-def simple_alignment_wf(seq_dir: FlyteDirectory = seq_dir_pth) -> FlyteFile:
+def variant_discovery_wf(seq_dir: FlyteDirectory, ref_path: FlyteFile) -> FlyteFile:
     
     # Generate FastQC reports and check for failures
     fqc_out = fastqc(seq_dir=seq_dir)
@@ -319,8 +316,8 @@ def simple_alignment_wf(seq_dir: FlyteDirectory = seq_dir_pth) -> FlyteFile:
     # Generate alignments using bowtie2
     sams = bowtie2_align_samples(idx=bowtie2_idx, samples=filtered_samples)
 
-    # Call Variants
-    vcfs = hc_call_variants(ref=ref_path, als=bams)
+    # Call variants
+    vcfs = hc_call_variants(ref=ref_path, als=sams)
 
     # Generate final multiqc report with stats from all steps
     return render_multiqc(fqc=fqc_out, filt_reps=filtered_samples, sams=sams, vcfs=vcfs)
@@ -333,18 +330,18 @@ To help make sense of the flow of tasks, here is a screenshot from the Flyte UI 
 Table listing the various tasks of the workflow alongside task type, status, completion time, and runtime
 :::
 
-FastQC [@andrews2012], an extremely common QC tool, is wrapped in a ShellTask and starts off the workflow by generating a report for all FastQ formatted reads files in a given directory. That directory is then turned into Reads objects via the `prepare_raw_samples` task. Those samples are passed to `fastp` for adapter removal and filtering of duplicate or low quality reads. Fastp [@doi:10.1002/imt2.107] is wrapped in a Python task which accepts a single Reads object. This task is then used in a [map task](https://docs.flyte.org/en/latest/user_guide/advanced_composition/map_tasks.html#map-task) to parallelize the processing of however many discrete samples were present in the input directory. Flyte relies on the flow of strongly-typed inputs and outputs to assemble the workflow; since there is no implicit dependency between filtering and QC, we make this relationship explicit with the `>>` [operator](https://docs.flyte.org/en/latest/flyte_fundamentals/tasks_workflows_and_launch_plans.html#specifying-dependencies-without-passing-data). 
+FastQC [@andrews2012], an extremely common QC tool, is wrapped in a ShellTask and starts off the workflow by generating a report for all FastQ formatted reads files in a given directory. That directory is then turned into Reads objects via the `prepare_raw_samples` task. Those samples are passed to `fastp` for adapter removal and filtering of duplicate or low quality reads. FastP [@doi:10.1002/imt2.107] is wrapped in a Python task which accepts a single Reads object. This task is then used in a [map task](https://docs.flyte.org/en/latest/user_guide/advanced_composition/map_tasks.html#map-task) to parallelize the processing of however many discrete samples were present in the input directory. Flyte relies on the flow of strongly-typed inputs and outputs to assemble the workflow; since there is no implicit dependency between filtering and QC, we make this relationship explicit with the "`>>`" [operator](https://docs.flyte.org/en/latest/flyte_fundamentals/tasks_workflows_and_launch_plans.html#specifying-dependencies-without-passing-data). 
 
-Once pre-processing is complete, alignment can take place. First, `bowtie2_index` generates an index if one is not already cached. Since the bowtie2 alignment task processes samples one at a time, it was wrapped in a [dynamic workflow](https://docs.flyte.org/en/latest/user_guide/advanced_composition/dynamic_workflows.html#dynamic-workflows) to process a list of inputs. Dynamics are another parallelism construct, similar to map tasks with some key [differences](https://flyte.org/blog/map-tasks-in-flyte): they are more flexible than map tasks at the expense of some efficiency. Lastly, MultiQC [@doi:10.1093/bioinformatics/btw354], produces a final report of all the different steps in the workflow. Certain task definitions are omitted for the sake of cogency, they are all fully-defined in the `unionbio` repo.
+Once pre-processing is complete, alignment can take place. First, `bowtie2_index` generates an index if one is not already cached. Since the bowtie2 alignment task processes samples one at a time, it was wrapped in a [dynamic workflow](https://docs.flyte.org/en/latest/user_guide/advanced_composition/dynamic_workflows.html#dynamic-workflows) to process a list of inputs. Dynamics are another parallelism construct, similar to map tasks with some key [differences](https://flyte.org/blog/map-tasks-in-flyte): they are more flexible than map tasks at the expense of some efficiency. Similarly, variant calling is performed across all samples using HaplotypeCaller. Lastly, MultiQC [@doi:10.1093/bioinformatics/btw354], produces a final report of all the different steps in the workflow. Certain task definitions are omitted for the sake of cogency, they are all fully-defined in the `unionbio` repo.
 
-Despite being a fairly parsimonious workflow, it's important to hightlight how many different languages are seamlessly integrated. The preprocessing tools are written in **Java** and **C/C++**. Alignment is carried out with a mix of **Perl** and **C++**. Finally, the reporting tool is implemented purely in **Python**. Additionally, while this simplicity affords easy understanding of task-flow from the code, the Flyte console provides excellent visualizations to best understand it's structure:
+Despite being a fairly parsimonious workflow, it's important to highlight how many different languages are seamlessly integrated. The preprocessing tools are written in **Java** and **C/C++**. Alignment is carried out with a mix of **Perl** and **C++**. HaplotypeCaller is implemented purely in **Java**. Finally, the reporting tool is implemented in **Python**. While this simplicity affords easy understanding of task-flow from the code, the Flyte console provides excellent visualizations to best understand it's structure:
 
 :::{figure} dag.png
 :label: fig:dag
 Workflow DAG showing the tasks as color-coded nodes with connections between them representing dependencies
 :::
 
-Finally, it's helpful to inspect a timeline of the execution which highlights a few things. Since this workflow was run several times over the course of capturing these figures, the `fastqc` and `bowtie2_index` tasks were cached in previous runs. It's also clear from this figure which tasks were run in parallel in contrast to those which had dependencies on upstream outputs. Finally, the overall runtime is broken down into it's separate parts. Since this was run on test data, everything executed fairly quickly. 
+Finally, it's helpful to inspect a timeline of the execution which highlights a few things. Since this workflow was run several times over the course of capturing these figures, the `fastqc` task was cached in previous runs. It's also clear from this figure which tasks were run in parallel in contrast to those which had dependencies on upstream outputs. Finally, the overall runtime is broken down into it's separate parts. Since this was run on test data, everything executed fairly quickly. 
 
 :::{figure} timeline.png
 :label: fig:tl
