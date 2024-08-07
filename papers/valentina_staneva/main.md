@@ -6,7 +6,7 @@ title: 'echodataflow: Recipe-based Fisheries Acoustics Workflow Orchestration'
 ---
 title: "echodataflow: Recipe-based Fisheries Acoustics Workflow Orchestration"
 abstract: |
-  With the influx of large data from multiple instruments and experiments, scientists are wrangling complex data pipelines that are context-dependent and non-reproducible. We demonstrate how we leverage Prefect [@prefect], a modern orchestration framework, to facilitate fisheries acoustics data processing. We built a Python package Echodataflow which 1) allows users to specify workflows and their parameters through editing text “recipes” which provide transparency and reproducibility of the pipelines; 2) supports scaling of the workflows while abstracting the computational infrastructure; 3) provides monitoring and logging of the workflow progress. Under the hood, echodataflow uses Prefect to execute the workflows while providing a domain-friendly interface to facilitate diverse fisheries acoustics use cases. We demonstrate the features through a typical ship survey data processing pipeline. 
+With the influx of large data from multiple instruments and experiments, scientists are wrangling complex data pipelines that are context-dependent and non-reproducible. We demonstrate how we leverage Prefect [@prefect], a modern orchestration framework, to facilitate fisheries acoustics data processing. We built a Python package Echodataflow which 1) allows users to specify workflows and their parameters through editing text “recipes” which provide transparency and reproducibility of the pipelines; 2) supports scaling of the workflows while abstracting the computational infrastructure; 3) provides monitoring and logging of the workflow progress. Under the hood, echodataflow uses Prefect to execute the workflows while providing a domain-friendly interface to facilitate diverse fisheries acoustics use cases. We demonstrate the features through a typical ship survey data processing pipeline. 
 ---
 
 
@@ -118,7 +118,7 @@ args:
   storage_options: 
     anon: true
   group: 
-    file: ./x0007_fileset.txt 
+    file: ./transect_group.txt 
     storage_options: 
       block_name: echodataflow-aws-credentials
       type: AWS 
