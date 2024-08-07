@@ -16,10 +16,10 @@ This plugin is easy to install, provides accurate dictation, and is easy to modi
 
 We discovered that we could map the words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
 These *voice-triggered snippets* are analogous to traditional tab-triggered snippets supported by most text editors.
-(A tab trigger is a placeholder word that is replaced with the corresponding code when the tab key is pressed after entering the tab trigger.)
-The existing extensions for code snippets in Jupyter do not support tab triggers.
-Instead, we found that Voice In Plus can be used to insert voice-triggered snippets into code and Markdown cells in Jupyter notebooks.
-These snippets require customizing to the problem at hand via the keyboard, but their insertion by voice command still saves time.
+(A tab trigger is a placeholder word that is replaced with the corresponding code when the tab key is pressed after entering the tab trigger. 
+The existing extensions for code snippets in Jupyter do not support tab triggers.)
+We found that Voice In Plus can be used to insert voice-triggered snippets into code and Markdown cells in Jupyter notebooks.
+Our voice-triggered snippets still require customizing to the problem at hand via use of the keyboard, but their insertion by voice command saves time.
 
 To facilitate the use of voice commands in Jupyter notebooks, we have developed libraries of voice-triggered snippets for use in Markdown or code cells with the *Voice-In Plus* plugin.
 We are building on our experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
@@ -108,12 +108,9 @@ When you fail to answer a question correctly, the quiz provides feedback, giving
 Recycling the wrongly answered questions builds the recall of the correct answers.
 The number of questions in a quiz was limited to 40 to avoid exhausting the user.
 
-A function writes out the quiz to a PDF file upon completion of the quiz or upon early exit from the quiz.
-The user can take a paper version of the quiz while away from the computer.
-
 ### Availability of the libraries and quizzes
 We tested the libraries using Jupyter Lab version 4.2 and Python 3.12 installed from MacPorts.
-All libraries are made available at MooersLab on GitHub for download.
+All libraries are available at MooersLab on GitHub for download.
 
 ## Results
 
@@ -173,8 +170,8 @@ Webpage of custom commands. The buttons are used to edit existing commands and a
 We grouped the voice triggers by the first word of the voice trigger {ref}`table:commands`.
 This first word is often a verb.
 For instance, the word `expand' is used before an acronym that will be replaced with its expansion.
-One's memory of the words represented by the letters in the acronym often needs to be more accurate.
-The library ensures that one uses the correct expansion of the acronym.
+Your memory of the words represented by the letters in the acronym often needs to be accurate.
+The library ensures that you use the correct expansion of the acronym.
 By providing instant access to the correct acronym expansions, the library significantly reduces the time that would otherwise be spent on manual lookups, allowing you to focus on your work.
 We have included acronyms widely used in Python programming, scientific computing, data science, statistics, machine learning, and Bayesian data analysis.
 These commands are found in domain-specific libraries, so users can select which voice triggers to add to their private collection of voice commands.
@@ -202,7 +199,7 @@ For example, the compound preflx *insert Python* aids grouping of code by progra
 | **display** insert equation in display mode (e.g., display electron density equation)   |
 | **display with terms** above plus list of terms and their definitions  (e.g., display electron density equation)   |
 | **inline** equation in-line (e.g., inline information entropy)  |
-| **citekey** insert corresponding citekey (e.g., citekey for Jaynes 1957)  |
+| **site** insert corresponding citekey (e.g., site Jaynes 1957)  |
 ::::
 
 :::{figure} ./images/DisplayElectronDensityEquation.png
@@ -278,7 +275,7 @@ For example, the voice command *line majic run* inserts `%run`; it is used to ru
 
 We developed a [quiz](https://github.com/MooersLab/voice-in-basics-quiz) to improve recall of the voice commands.
 These quizzes are interactive and can be run in the terminal or in Jupyter notebooks {ref}`fig:quiz`.
-The latter can store a record of one's performance on a quiz.
+The latter can store a record of your performance on a quiz.
 
 :::{figure} ./images/runningQuiz.png
 :label: fig:quiz
@@ -286,7 +283,7 @@ The latter can store a record of one's performance on a quiz.
 An example of an interactive session with a quiz in a Jupyter notebook. The code for running the quiz was inserted into the code cell with the voice command `run voice in quiz`. The quiz covers a range of voice commands, including [specific voice commands covered in the quiz].
 :::
 
-To build long-term recall of the commands, one must take the quiz five or more times on alternate days, according to the principles of spaced repetition learning.
+To build long-term recall of the commands, you must take the quiz five or more times on alternate days, according to the principles of spaced repetition learning.
 These principles were developed by the German psychologist Hermann Ebbinghaus near the end of the 19th Century.
 They have been validated several times by other researchers.
 Spaced repetition learning is one of the most firmly established results of research into human psychology.
@@ -341,7 +338,7 @@ They removed our bloated library, and we used the **bulk add** button in the GUI
 
 ## Discussion
 
-The following four discussion points can enhance understanding the use of *Voice-In Plus* with Juputer.
+The following four discussion points can enhance understanding the use of *Voice-In Plus* with Jupyter.
 
 ### Independence from breaking changes in Jupyter
 
@@ -355,17 +352,17 @@ Using voice-triggered snippets external to Jupyter side steps the disruption of 
 ### Voice-triggered snippets can complement AI-assisted voice computing
 
 The use of voice-triggered snippets requires knowledge of the code that you want to insert.
-The act of acquiring this knowledge is the up-front cost that the user has to pay to gain access to quickly inserted code snippets that work.
+The act of acquiring this knowledge is the up-front cost that the user pays to gain access to quickly inserted code snippets that work.
 In contrast, AI coding assistants can find code that you do not know about to solve the problem described in your prompt.
 From personal experence, the retrieval of the correct code can take multiple iterations of refining the prompt.
-Expert users will find the correct code in several minutes while beginners may take much longer.
+Expert prompt engineers will find the correct code in several minutes while beginners may take much longer.
 An area of future research is to use AI assistants that have large language models indexed on snipppet libraries to retrieve the correct voice-triggered snippet.
 
 ### Comparision with automated speech recogination extensions for Jupyter lab
 
 We found three extensions developed for Jupyter Lab that enable speech recognition in Jupyter notebooks.
 The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control), supports custom commands and relies on the browser's language model.
-This extension is experimental and not maintained; it does not work with Jupyter 4.2.
+This extension is experimental; it does not work with Jupyter 4.2.
 The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments), relies on the DaVinci large language model to make comments in Markdown cells and request code fragments.
 This program requires clicking on a microphone icon frequently, which makes the user vulnerable to repetitive stress injuries.
 The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
@@ -379,11 +376,11 @@ One aspect of speech-to-text that it is important to bring up is persistent erro
 These persistent errors may be due to the language model having difficulties interpreting your speech.
 For example, the language model often misinterprets the word  *write* as *right*'.
 Likewise, the letter *R* is frequently returned as *are* or *our*'.
-The remedy for the situations is to map the misinterpreted phrase to the intended phrase.
+The remedy for these situations is to map the misinterpreted phrase to the intended phrase.
 
-This remedy might be the best that can be done in for those users who are from a country that is not represented by the selection of English dialects.
+This remedy might be the best that can be done in for those users who are from a country that is not represented by the selection of English dialects available in Voice In Plus.
 People originating from Eastern Europe, Middle East, and northeast Asia fall into this category.
-Users in this situation may have to add several hundred to several thousand text replacements.
+Users in this situation may have to add several hundred text replacements.
 As the customized library of text replacements grows, the frequency of wrong word insertions should deline rapidly.
 
 
@@ -392,4 +389,4 @@ As the customized library of text replacements grows, the frequency of wrong wor
 One future direction is to build out the libraries of voice-triggered snippets that have been developed.
 Another direction includes the development of voice stops analogous to tab stops in code snippets for advanced text editors.
 These voice stops would advance the cursor to all sites that should be considered for editing to customize the code snippet for the problem.
-The other related advance would be the mirroring of the parameter values at identical voice stops.
+The other related advance would be the mirroring of the parameter values at identical voice stops in analogy to mirrored tab stops in conventional snippets.
