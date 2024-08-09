@@ -364,6 +364,30 @@ server of the completion. The server then verifies that the checksum matches the
 one provided in the upload request. If the checksums are consistent, the server
 ingests the file into the storage area.
 
+From the client's perspective, the upload is extremely simple:
+```python
+from hera_librarian import LibrarianClient
+from hera_librarian.settings import client_settings
+from pathlib import Path
+
+client_info = client_settings.connections.get(
+    "my_librarian_name"
+)
+
+client = LibrarianClient.from_info(client_info)
+
+client.upload(
+    Path("name_of_a_file_on_disk.txt"),
+    Path("/hello/world/this/is/a/file.txt")
+)
+```
+This then leads to a synchronous uploading of the local file to the global
+namespace, with `upload` returning once this is complete and, crucially, the
+upload is verified (via a checksum) by the server. For most applications,
+this fire-and-forget technique is all that is required; if `upload` returns
+successfully, the file is guaranteed to have been correctly uploaded to
+the server and is ready for use and export.
+
 #### Data Cloning
 Data can be cloned in two main ways: locally and remotely. Local cloning
 involves making a copy to a different store on the same Librarian, which is
