@@ -343,7 +343,7 @@ area whose boundaries are unchanging, and can be conceived as a discrete unit in
 temporal analyses. That is, unlike the original decennial census data whose polygons are
 different in each time period, the harmonized data can be used directly in studies of
 neighborhood change, for example those using Markov-based methods [@Agovino2019; @gallo_space-time_2004-1; @kang_rey_2018_ars; @rey_2016_jgs; @Rey2014] or
-sequence-analysis methods [@Kang2020a; @Lee2017] (both of which are built into `geosnap`).
+sequence-analysis methods [@Kang2021; @Lee2017] (both of which are built into `geosnap`).
 
 ### Analysis
 
