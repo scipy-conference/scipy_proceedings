@@ -18,7 +18,8 @@
       },
       {
         "name": "Nick Lenssen",
-        "affiliation": "NASA Goddard Earth Sciences Data and Information Services Center"
+        "affiliation": "NASA Goddard Earth Sciences Data and Information Services Center",
+        "orcid": ""
       }
     ],
     "description": "Xarray-datatree, is a Python package that supports HDFs (Hierarchical Data Format) with hierarchical group structures by creating a tree-like hierarchical data structure in xarray."
