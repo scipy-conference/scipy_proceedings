@@ -18,7 +18,7 @@ Using `coffea`, `uproot`, and Dask, these files can then be efficiently read and
 ### Cleaning and selecting data
 
 Once the data is in Awkward arrays, additional selections need to be applied before it can be analyzed.
-Only physics object of adequate quality are kept for further analysis and those should reconstruct the topology of interest.
+Only physics objects of adequate quality are kept for further analysis and those should reconstruct the topology of interest.
 In this particular case, due to the decay of the Higgs boson to two leptons, the data selected contain four charged leptons grouped in two opposite flavor lepton pairs (so that the total charge is zero, as the Higgs and the $Z$-bosons are electrically neutral).
 Additionally, in order to compare various kinds of simulated data, the events need to be normalized/weighted given their relative appearance in reality and the amount of actual data collected by the experiment.
 
@@ -31,13 +31,13 @@ These selection and weighting can then be implemented in an analysis specific `c
 
 ### Feature engineering: The invariant mass
 
-In order to discriminate the events of interest, i.e. candidates of the Higss boson decay, from the vast background which has the same experimental signature, a discriminating feature is constructed.
+In order to discriminate the events of interest, i.e. candidates of the Higgs boson decay, from the vast background which has the same experimental signature, a discriminating feature is constructed.
 The example shown uses a simple, physics-inspired discriminant the "invariant mass" but the methods used can use complex feature engineering that involve machine learning methods to calculate more efficient discriminants.
 The invariant mass is the mass of a system that remains constant regardless of the system's motion or the reference frame in which it is measured. Invariant mass is derived from the energy and momentum of a system of particles and is a fundamental property of the system:
 ```{math}
 m = {\frac{\sqrt{E^2 - p(c)^2}}{c^2}}
 ```
-where $E$ and $p$ is the total energy and momentum of the particles respectively.
+where $E$ and $p$ is the total energy and momentum of the particles, respectively.
 
 By detecting and measuring the energies and momenta of the detected particles at the experiment, we can reconstruct the invariant mass of the decay system. Particle systems originating from the decay of the Higgs boson will have a characteristic value of the invariant mass, which after the discovery in 2012 we know it is about 125$GeV/c^2$.
 This is the quantity that will allow us to discriminate from particle systems that originate from background processes.
@@ -82,7 +82,6 @@ Using `mplhep`, `hist`, and `matplotlib` the post-processed histograms of the si
 These histograms are then serialized into files with `uproot` and used by the statistical modeling and inference libraries `pyhf` [@pyhf_zenodo;@pyhf_joss] and `cabinetry` [@cabinetry_zenodo] to build binned statistical models and efficiently fit the models to the observed data using vectorized computations and the optimization library `iminuit` [@iminuit_zenodo] for full uncertainties on all model parameters.
 The resulting best-fit model parameters &mdash; such as the scale factor on the signal component of the model corresponding to the normalization on the Higgs contributions &mdash; are visualized in @fig:postfit_plot, where good agreement between the model predictions and the data is observed.
 The signal component, clearly visible above the additional "background" components of the model, are Higgs boson events, with an observed count in agreement with theoretical expectations.
-_TODO: Quantify results._
 
 ```{include} code/postfit_plot.py
 :lang: python
