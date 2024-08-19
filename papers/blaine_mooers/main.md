@@ -62,12 +62,31 @@ After a subscription was purchased, we obtained access to the **Custom Commands*
 We used the **Add Command** button to enter a voice trigger to start a new sentence when writing one sentence per line {ref}`fig:newSentence`.
 The custom command for `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
 
+:::{figure} ./images/VoiceInNewSentence.png
+:label: fig:newSentence
+:width: 50%
+Entering a single voice trigger and the corresponding command in Voice In Plus.
+:::
+
 The phrases making up these voice triggers were no longer be available during dictation because they will be used to trigger text replacements.
 It is best to pick as voice triggers phrases that are unlikely to be spoken during dictation.
 
 We kept the voice triggers as short as possible to ease accurate recall of the voice triggers.
 We found that we had trouble correctly recalling voice trigger longer than four or five words.
 Three-word voice triggers tend be a good compromise between specficity and success at recall.
+
+An exception to this guideline for shorter voice triggers was the use of two to three words at the beginning of a set of voice trigers to group them together in the on-line *Voice In* library.
+The grouping of related voice-commands eased finding them in the on-line library.
+For example, all Jupyter-related line magic voice triggers start with the phrase *line magic*.
+The prefix *line magic* is easy to remember so it does not add much to the recall problem.
+A snapshot of the CSV file displayed in a pleasant format on GithHub for the Jupyter line magics is shown below {ref}`fig:csvExampleFile`.
+Note that these CSV files are atypical because that do not contain line of column headers because the *Voice In* software does not handle headings
+
+:::{figure} ./images/csvExampleFile.png
+:label: fig:csvExampleFile
+:width: 50%
+Snapshot of CSV file on Github for the [*jupytuer-voice-in*](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) library.
+:::
 
 The accuracy of interpretation of the phrase by the software was another limitation.
 We would replace frequently misinterpreted words with other words that were more often correctly interpreted.
@@ -76,28 +95,27 @@ We had to take care not to make voice triggers that were embedded in longer voic
 For example, when we found a two-word phrase starting a four-word phrase, we would extend the two-word phrase to three words by selecting a third word that would break the overlap between the two voice triggers.
 Otherwise, the two-word phrase would trigger a text replacement that was different from the text replacement that was expected from the four-word phrase.
 
-
-:::{figure} ./images/VoiceInNewSentence.png
-:label: fig:newSentence
-:width: 50%
-Entering a single voice trigger and the corresponding command in Voice In Plus.
-:::
-
 We used the **Bulk Add** button to upload multiple commands from a two-column CSV file with commas as the field sepearator.
 The file contents were selected and pasted in a text box that is opened upon clicking on the **Bulk Add** button.
 The voice-triggers reside in the left column, and the text replacements reside in the right column.
 Any capitalization in the voice trigger was ignored by the software.
 
-Multiline text replacements had to be enclosed in double quotes.
-Internal double quotes were replaced with single quotes.
+Multiline text replacements could be handled in one of two ways.
+First, all of the text could be placed on a single line and the built-in command `<newline>` could be inserted in this line where linebreaks were needed.
+Second, the multiline text could be enclosed by one set of double quotes enclosing the multiline block of text.
+Internal double quotes in these text block had to be replaced with single quotes.
 It was not possible to use a backspace to escape internal pre-existing double quotation marks.
 
+Text replacements consisting of commas also had to be enclosed with double else the commas would be misintrepreted as field separators.
+This also appled on Python code that contained commas.
+
 The formatting of the text replacement was controlled by inserting built-in *Voice In Plus* commands enclosed in angle brackets.
-For example, the built-in **open** command enables the opening of a webpage with the provided URL (e.g. `open SciPy 2024,<open:https://www.scipy2024.scipy.org/schedule>`).
+To ensure that the first letter of a line Python code was not capitalized, we used the built-in command <case:lower> before the Python code: (e.g., `python import numpy,<lower:case>import numpy as np`).
+The command in angle brackets would be applied during insertion of the text replacement, but it would appear in inserted code.
 
 The transcription of the spoken words appear momentarily in a transitory transcript that hovers about the text box.
 We mapped the misinterpreted words to the desired text replacement.
-For example, we added the mapping of `open syfy` to `<open:https://www.scipy2024.scipy.org/schedule>` to open the webpage for the schedule of SciPy 2024 when we said, "open SciPy 2024".
+For example, we mapped `open syfy` to `<open:https://www.scipy2024.scipy.org/schedule>` to open the webpage for the schedule of SciPy 2024 when we said, "open SciPy 2024".
 
 The **Export** button opened a text box with the custom commands in CSV file format.
 All the contents of the text box were selected, copied, and pasted into a local CSV file using either the text editor TextMate or Emacs version 29.3.
@@ -111,6 +129,8 @@ The edit icon opens a pop-up menu similar to the pop-up menu invoked by the **Ad
 Some of our voice snippets had already been used for a year to compose prose using dictation.
 These snippets are in modular CSV files to ease their selective use.
 The contents of these files can be copied and pasted into the `bulk add` text area of the Voice In Plus configuration GUI.
+
+
 
 ### Construction of interactive quizzes
 We developed interactive quizzes to aid the mastery of the *Voice In Plus* syntax.
