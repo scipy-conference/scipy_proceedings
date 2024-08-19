@@ -1,14 +1,12 @@
 \begin{abstract}
+Cumacea (crustaceans: Peracarida) are vital indicators of benthic health in marine ecosystems. This study investigated the influence of ecological and geographic parameters on their genetic variability in the Northern North Atlantic, focusing on Icelandic waters. We analyzed mitochondrial sequences of the 16S rRNA gene from 62 cumaceans specimens. Using the \textit{aPhyloGeo} software, we correlated these sequences with relevant factors such as latitude (decimal degree) at the start of sampling, wind speed (m/s) at the start of sampling, O\textsubscript{2} concentration (mg/L), and depth (m) at the beginning of sampling.
 
-Cumacea (crustaceans: Peracarida) are vital indicators of benthic health in marine ecosystems. This study examined the influence of ecological and geographic parameters on their genetic variability in the Northern North Atlantic, focusing on Icelandic waters. We analyzed mitochondrial sequences of the 16S rRNA gene from 62 cumaceans specimens. Using the \textit{aPhyloGeo} software, we correlated these sequences with relevant factors such as latitude (decimal degree) at the start of sampling, wind speed (m/s) at the start of sampling, O\textsubscript{2} concentration (mg/L) and depth (m) at the beginning of sampling.
-
-Our initial analyses revealed variability in geographic and environmental parameters, reflecting diverse ecological conditions and benthic habitats. The most common cumacean families are Diastylidae and Leuconidae, suggesting they have adapted to various environmental conditions. The phylogeographic analysis showed that specific genetic sequences were correlated with wind speed (m/s) at the start of sampling and O\textsubscript{2} concentration (mg/L), indicating potential local adaptation to these fluctuating conditions.
+Our initial analyses revealed variability in geographic and environmental parameters, reflecting diverse ecological requirements and benthic habitats. The most common cumacean families are Diastylidae and Leuconidae, suggesting they have adapted to various marine environments. Phylogeographic analysis showed that specific genetic sequences were correlated with wind speed (m/s) at the start of sampling and O\textsubscript{2} concentration (mg/L) of the water, indicating potential local adaptation to these fluctuating conditions.
 
 These results highlight the importance of further research into the relationship between cumacean genetics and environmental attributes. Interpreting these relationships is crucial to elucidating evolutionary dynamics in the deep sea and guiding marine conservation strategies. This study serves as an essential insight into the management of deep-water habitats and the acclimatization of invertebrates to climate change. The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub} and \href{https://pypi.org/project/aphylogeo/}{PyPi}, providing an invaluable tool for future research.
 \end{abstract}
 
 \section{Introduction}\label{introduction}
-
 The North Atlantic and Subarctic regions, particularly the Icelandic waters, are of ecological interest due to their diverse water masses and unique oceanographic features \citep{schnurr_composition_2014, meisner_benthic_2014, uhlir_adding_2021}. These surroundings form vital {benthic habitats}\footnote{These are areas on the bottom of the oceans or lakes, including sediments and organisms that live in them.} \citep{levin2009ecological} and strengthen our understanding of deep-sea ecosystems and biodiversity patterns \citep{rogers2007corals, danovaro2008exponential, uhlir_adding_2021}. The IceAGE project and its predecessors, BIOFAR and BIOICE, are invaluable data for studying the impacts of climate change and seabed mining, especially in the Greenland, Iceland, and Norwegian (GIN) seas \citep{meisner_prefacebiodiversity_2018}.  
 These marine areas play a key role in the {thermohaline circulation}\footnote{This is a system of ocean currents produced by differences in seawater density, which are themselves determined by temperature (thermo) and salinity (haline).} which is vital for deep water renewal \citep{johannessen_relationship_1994, talley2013closure}. However, the loss of Arctic sea ice and the slowdown in cold, deep water formation may reshape regional dynamics \citep{meisner_prefacebiodiversity_2018}. Additionally, growing international interest in deep-sea resource extraction \citep{mengerink_call_2014}, particularly on mid-ocean ridges such as the Reykjanes Ridge, requires baseline data to assess the potential damage caused by these activities \citep{meisner_prefacebiodiversity_2018}. 
 
@@ -19,7 +17,6 @@ Considering the current climate emergency, this study aims to analyze the influe
 This paper is structured as follows: Section \autoref{related-works} reviews pertinent studies on the biodiversity and biogeography of deep-sea benthic invertebrates; Section \autoref{contribution} summarizes the aims and contributions of this study, highlighting aspects relating to the conservation and acclimatization of marine invertebrates to climate change; Section \autoref{materials-methods} details the data collection, sampling procedures, and genetic analyses; Section \autoref{metrics} describes the metrics used for evaluating phylogeographic models; Section \autoref{results} presents the findings; and Section \autoref{conclusion}  discusses their implications for future research and conservation efforts.
 
 \section{Related Works}\label{related-works}
-
 Assessing and quantifying the biodiversity of deep-sea benthic invertebrates has become an increasingly crucial issue since it was discovered that their richness may be underestimated \citep{grassle1992deep}. Subsequent research has highlighted the importance of developing and implementing large-scale distribution models for these organisms to interpret their diversity across their ecological and evolutionary origins \citep{rex1997large}. This is why recent efforts have been devoted to mapping, managing, and studying the seabed. Cutting-edge technologies, such as acoustic detection, are being used to improve our knowledge of the complexity of benthic ecosystems \citep{brown2011benthic}. Consequently, an approach integrating their genetic and habitat characteristics would provide a better understanding of how ecological and geographical factors influence the genetic differences, distribution, biodiversity, and resilience of deep-sea benthic organisms \citep{etter1990population, vrijenhoek2009cryptic}.
 
 However, studies have highlighted the complexity of the relationship between genetics and the environment, influenced by genotype-environment interaction and natural selection factors, making it difficult to identify clear causal relationships \citep{balkenhol_identifying_2009}. The distinction between direct and indirect environmental effects on genetics can be equally complex \citep{manel_perspectives_2010, balkenhol_landscape_2019}. The methods available for measuring genetic and ecological properties and logistical constraints often limit the scope of studies \citep{manel_perspectives_2010, shafer_widespread_2013}. This may explain why research into the environment and genetics of cumaceans has been little explored, even though it remains essential for interpreting how these deep-sea invertebrates adapt to fluctuating environmental conditions.
@@ -31,7 +28,6 @@ Our study focuses on the genetic variation in the 16S rRNA mitochondrial gene of
 Our results contribute to the understanding of evolutionary dynamics in aquatic ecosystems. Furthermore, our genetic and environmental information highlights critical habitats of high conservation interest, which can be considered for establishing marine protected areas. Finally, our study paves the way for further research on other invertebrate species in different geographical regions. By extending the research and analysis to various environments and taxonomic groups, scientists will gain a broader view of the adaptation and resilience of marine invertebrates to climate change.
 
 \section{Materials and Methods}\label{materials-methods}
-
 This section describes our data and introduces the main stages of data pre-processing and the \textit{aPhyloGeo} software. A flow chart, constructed with the diagram software draw.io, summarizes this section (see Figure \ref{fig:fig1} below).
 
 \begin{figure}[htbp]
@@ -41,11 +37,9 @@ This section describes our data and introduces the main stages of data pre-proce
 \end{figure}
 
 \subsection{Description of the data}
-
 The study area was located in a northern region of the North Atlantic, including the Icelandic Sea, the Denmark Strait, and the Norwegian Sea. The specimens examined were collected as part of the IceAGE project (Icelandic marine Animals: Genetic and Ecology; Cruise ship M85/3 in 2011), which studied the deep continental slopes and abyssal waters around Iceland \citep{meisner_prefacebiodiversity_2018}. The sampling period for the included specimens was from August 30 to September 22, 2011, and they were collected at depths ranging from 316 to 2568 m. Information on the sampling plan, sample processing, DNA extraction steps, PCR amplification, sequencing, and extracted and aligned DNA sequences is available in the \citep{uhlir_adding_2021} article.
 
 \subsection{Data pre-processing}
-
 We used data from the IceAGE project and related data from the BOLD Systems database, both accessible \emph{via} the \citep{uhlir_adding_2021}. Given these databases' enormous breadth of attributes, we selectively reduced the number of attributes and samples. Specifically, we omitted attributes that were irrelevant in the context of this study, were entirely or nearly invariant (non-numerical data), and had a large number of missing data (>95\%). In the IceAGE dataset, we considered 62 specimens out of the 495 available. Next, we calculated the variance for each of the selected numerical attributes to eliminate those with zero or low variance (threshold ≤ 0.1). The equation \ref{variance} provides the variance formula used in this study.
 
 \begin{equation}\label{variance}
@@ -88,7 +82,6 @@ To better interpret benthic species' relationship and evolutionary responses, ge
 Figure \ref{fig:fig2}, Figure \ref{fig:fig3}, Figure \ref{fig:fig6} and Figure \ref{fig:fig7} were made with Python 3.11, while Figure \ref{fig:fig4} and Figure \ref{fig:fig5} were made with RStudio Desktop 4.3.2.
 
 \subsection{{\textit{aPhyloGeo} software}\label{aPhyloGeo-software}}
-
 We used the cross-platform Python software \textit{aPhyloGeo} for our phylogeographic analyses, designed to analyze phylogenetic trees using ecological and geographic parameters. Developed by My-Linh Luu, Georges Marceau, David Beauchemin, and Nadia Tahiri, \textit{aPhyloGeo} offers tools to study correlations between species genetics and habitat characteristics, enabling us to understand the evolution of species under different environmental conditions. This software was chosen for our analysis because, to our knowledge, it is the first phylogeographic tool to correlate species genetics with climatic, environmental, and geographical attributes, which is the objective of our study. The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex phylogeographic analyses. The software process has three main stages (see \autoref{lst:main}).
 
 %\autoref{lst:main}.
@@ -134,7 +127,6 @@ if __name__ == "__main__":
 \end{enumerate}
 
 \section{Metrics}\label{metrics}
-
 The following section presents a more concise version of the formulas mentioned in the third step of the \autoref{aPhyloGeo-software} section:
 
 \subsection{Robinson-Foulds distance}\label{RF}
@@ -240,7 +232,6 @@ def least_square(tree1, tree2):
 Our phylogeographic study used these four metrics to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental, geographical, and climatic features. The result is a comprehensive analysis of the evolutionary dynamics of cumacean populations in different contexts.
 
 \section{Results}\label{results}
-
 To understand the correlation between cumacean genetics and habitat, we parameterized the software \textit{aPhyloGeo} as follows: pairwiseAligner, Hamming distance, Wider Fit by elongating with Gap (starAlignment), windows size: 1 nucleotide (nt) and window step: 10 nt. The results of the metrics used were obtained using the functions leastSquare(tree1, tree2), robinsonFoulds(tree1, tree2), euclideanDist(tree1, tree2) from the \textit{aPhyloGeo} software and were organized by the main function (see \autoref{lst:main}). A more in-depth analysis of the results presented below is available on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub} in the supplementary file.
 
 The violon diagrams shown in Figure \ref{fig:fig2} are used to display summary statistics similar to box plots, showing medians (white dots), interquartile ranges (thickened black bars), and the rest of the distributions (thin black lines), except the "extreme" points. Wider areas indicate a greater probability of the variables taking a given value. They illustrate the distribution of geographical (latitude and longitude at the start of sampling (DD)), climatic (wind speed (m/s) at the start of sampling), and environmental (depth (m) at the start of sampling, water temperature ($^\circ$C), and O\textsubscript{2} concentration (mg/L)) data. These diagrams are essential for understanding habitat conditions and highlighting unique habitats that may impact cumacean genetics. 
@@ -298,7 +289,6 @@ The correlation between the genetic sequences and two attributes, one climatic (
 All these results will need to be studied and analyzed in greater depth to gain a better understanding and draw firm conclusions. In addition, we would like to know if they support the results of \citep{uhlir_adding_2021} on the influence of climatic and environmental factors on the distribution and genetics of Cumacea.
 
 \section{Conclusion}\label{conclusion}
-
 This study focuses on the effect of climatic, geographical, and environmental characteristics on the genetics of cumacean in the waters around Iceland. Our main objective is to establish whether there is a  correlation between the genetic information of the 16S rRNA mitochondrial gene region (i.e., window) of cumacean species and their habitat characteristics. We seek to identify the attribute most correlated with a specific genetic sequence and the potentially associated protein.
 
 We laboriously selected relevant attributes from IceAGE project data, BOLD Systems, and the \citep{uhlir_adding_2021} article. We eliminated those that were not relevant to this study, as well as those with low variance (e.g., salinity, $S^2 = 0.02146629$), abundant missing data (> 95\%), and high correlation between them (threshold > 0.9). Using this refined dataset, we have integrated phylogeographic studies using \textit{aPhyloGeo} software (see \autoref{lst:main}), allowing us to analyze potential correlations between species genetics and environmental contexts.
