@@ -130,8 +130,6 @@ Some of our voice snippets had already been used for a year to compose prose usi
 These snippets are in modular CSV files to ease their selective use.
 The contents of these files can be copied and pasted into the `bulk add` text area of the Voice In Plus configuration GUI.
 
-
-
 ### Construction of interactive quizzes
 We developed interactive quizzes to aid the mastery of the *Voice In Plus* syntax.
 We wrote the quiz as a Python script that can run in the terminal or in Jupyter notebooks.
@@ -150,8 +148,7 @@ All libraries are available at MooersLab on GitHub for download.
 
 First, we describe the contents of the snippet libraries and the kinds of problems they solve.
 We group the libraries into several categories to simplify their explanation.
-Second, we describe the deployment of the snippet libraries for Voice In Plus (VIP), an automated speech recognition plugin for the web browsers Google Chrome and Microsoft Edge.
-The Voice In Plus plugin has a gentle learning curve.
+Second, we describe the deployment of the snippet libraries for Voice In Plus (VIP).
 
 ### Composition of the libraries
 
@@ -170,7 +167,7 @@ While some code, such as IPython line and cell magics, is specific to Jupyter, m
 
 Likewise, these snippets can be used in other browser-hosted text editors such as the new web version of Visual Studio Code.
 This is because Voice In Plus works in most text areas of web browsers.
-These means that the ample text area like that found in Write Honey website site can be used to draft documents and Python scripts with the aid of Voice In Plus snippets.
+This means that the ample text area like that found in Write Honey website site can be used to draft documents and Python scripts with the aid of Voice In Plus snippets.
 The code or text be directly edited by an advanced text editor by using the GhostText plugin to connect the web-based text area to a text editor.
 Alternately, the draft document or script can be copied and saved to a file that is imported into Jupyter Lab for further editing.
 
@@ -305,6 +302,7 @@ We provide a [library](https://github.com/MooersLab/jupyter-voice-in/blob/main/j
 Our cell magics, easily identifiable by their cell magic prefix, and line magics, with the straightforward line magic prefix, are designed to make the Jupyter notebook experience more intuitive.
 For example, the voice command *line majic run* inserts `%run`; it is used to run script files after supplying the name of the script file as also shown in {fig}`quiz`.
 
+
 ### Interactive quiz
 
 We developed a [quiz](https://github.com/MooersLab/voice-in-basics-quiz) to improve recall of the voice commands.
@@ -318,12 +316,12 @@ An example of an interactive session with a quiz in a Jupyter notebook. The code
 :::
 
 To build long-term recall of the commands, you must take the quiz five or more times on alternate days, according to the principles of spaced repetition learning.
-These principles were developed by the German psychologist Hermann Ebbinghaus near the end of the 19th Century.
-They have been validated several times by other researchers.
+These principles were developed by the German psychologist Hermann Ebbinghaus near the end of the 19th Centur and popularized in English his 1913 book *Memory: A Contribution to Experimental Psychology*.
+They have been validated several times by other researchers, including those developed an alogorithm for optimizing the spacing of the repetitions as function of the probability of recall [@tabibian2019enhancinghumanlearningviaspacedrepetitionoptimization].
 Spaced repetition learning is one of the most firmly established results of research into human psychology.
 
 Most people need discipline to carry out this kind of learning because they have to schedule the time to do the follow-up sessions.
-Instead,t people will find it more convenient to take these quizzes several times in 20 minutes before they spend many hours utilizing the commands.
+Instead, people will find it more convenient to take these quizzes several times in 20 minutes before they spend many hours utilizing the commands.
 If that use occurs on subsequent days, then recall will be reinforced, and retaking the quiz may not be necessary.
 
 
@@ -331,10 +329,15 @@ If that use occurs on subsequent days, then recall will be reinforced, and retak
 
 The plugin operates in text areas on thousands of web pages.
 These text areas include those of web-based email software and online sites that support distraction-free writing like [Write Honey](https://app.writehoney.com).
-These text areas also include the Markdown and code cells of Jupyter notebooks and other web-based computational notebooks.
+These text areas also include the Markdown and code cells of Jupyter notebooks and other web-based computational notebooks such as Colab Notebooks.
 Voice In also works in plain text documents opened in Jupyter Lab for online writing.
+
+Voice In works in Jupyter Lite.
+It also works in streamlit-quill, which uses a python script to generate a text box in the default web browser.
 It also works in the web-based version of [VS Code](https://vscode.dev/).
-Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the *JupyterLab* application, the *nteract* appication, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
+
+Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the *JupyterLab.app* application, the *nteract* application, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
+Likewise, *Voice In Plus* will not work in Python Widgets.
 *Voice In Plus* is limited to web browsers, whereas other automated speech recognition software can also operate in the terminal and at the command prompt in GUI-driven applications.
 
 *Voice In Plus*  is very accurate with a word error rate that is well below 10\%.
@@ -345,7 +348,7 @@ The language model used by *Voice-In Plus*  is quite robust in that dictation ca
 We found no reduction in word error rate when using a high-quality Yeti external microphone.
 Our experience might be a reflection of our high-end hardware and may not transfer to low-end computers.
 
-Because of the way*Voice-In Plus* is set up to utilize the Speech-to-Text feature of the Google API, there is not much of a latency issue.
+Because of the way *Voice-In Plus* is set up to utilize the Speech-to-Text feature of the Google API, there is not much of a latency issue.
 The spoken words' transcriptions occur nearly in real-time; there is only a minor lag.
 *Voice In Plus* will listen for words for 3 minutes before automatically shutting down.
 *Voice In Plus* can generally keep up with dictation occurring at a moderate pace for at least several paragraphs, whereas competing dictation software packages tend to quit after one paragraph.
