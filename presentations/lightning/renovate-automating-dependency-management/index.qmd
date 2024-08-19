@@ -1,0 +1,16 @@
+---
+title: Talks
+format: html
+listing:
+  contents: .
+  date-format: iso
+  exclude:
+    title: Page Not Found
+  fields:
+    - date
+    - subtitle
+    - title
+  page-size: 10
+  sort: date desc
+  type: table
+---
