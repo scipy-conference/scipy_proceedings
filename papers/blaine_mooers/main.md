@@ -8,7 +8,7 @@ abstract: |
 
 ## Introduction
 
-Voice computing includes speech-to-text, speech-to-commands, and speech-to-code. 
+Voice computing includes speech-to-text, speech-to-commands, and speech-to-code.
 These activities enable you to use your voice to generate prose, operate your computer, and write computer code.
 This use of your voice can partially replace the use of the keyboard when tired of typing, when suffering from repetitive stress injuries, or both.
 We found that we could be productive within an hour with the Voice In Plus plugin for Google Chrome and Microsoft Edge.
@@ -16,7 +16,7 @@ This plugin is easy to install, provides accurate dictation, and is easy to modi
 
 We discovered that we could map the words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
 These *voice-triggered snippets* are analogous to traditional tab-triggered snippets supported by most text editors.
-(A tab trigger is a placeholder word that is replaced with the corresponding code when the tab key is pressed after entering the tab trigger. 
+(A tab trigger is a placeholder word that is replaced with the corresponding code when the tab key is pressed after entering the tab trigger.
 The existing extensions for code snippets in Jupyter do not support tab triggers.)
 We found that Voice In Plus can be used to insert voice-triggered snippets into code and Markdown cells in Jupyter notebooks.
 Our voice-triggered snippets still require customizing to the problem at hand via use of the keyboard, but their insertion by voice command saves time.
@@ -34,7 +34,7 @@ It had 32 gigabytes of RAM and one Radeon Pro 560X 4 GB GPU.
 We used the laptop's built-in microphone to record dictation while sitting or standing up to 20 feet (ca. 6 m) away from the computer.
 
 ### Installation of Voice In Plus
-We used the *Voice In* plugin provided by Dictanote Inc.
+We used the *Voice In* [@Dictanote2024VoiceIn] plugin provided by Dictanote Inc.
 First, we installed the *Voice In* plugin by navigating to the [Plugin In page](https://chromewebstore.google.com/detail/voice-in-speech-to-text-d) in the Google Chrome Web Store on the World Wide Web.
 Seond, the [Microsoft Edge Add-ons web site](https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home) was accessed to install the plugin in Microsoft Edge.
 
@@ -44,7 +44,7 @@ Because no remote servers were used for the transcription, the transcription pro
 Dictanote does not store the audio or the transcripts.
 
 After activating the plugin, we customized it by selecting a dictation language from a pull-down menu.
-We selected **English (United States)** from the 15 dialects of English. 
+We selected **English (United States)** from the 15 dialects of English.
 The English variants include dialects from Western Europe, Africa, South Asia, and Southeast Asia; many languages other than English are also supported.
 
 Next, we set a keyboard shortcut for activating the plugin.
@@ -213,7 +213,7 @@ Three snapshots from a Zoom video of using the voice-trigger *display electron d
 
 Another example of a verb starting a voice trigger is the command `display <equation name>`.
 This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
-For instance, the voice trigger `display the electron density equation` is a testament to the convenience of our system, as shown in the transcript of a Zoom video {ref}`fig:displayeq`. 
+For instance, the voice trigger `display the electron density equation` is a testament to the convenience of our system, as shown in the transcript of a Zoom video {ref}`fig:displayeq`.
 The image in the middle shows the text replacement as a LaTeX equation in the display mode.
 This image is followed by the resulting Markdown cell after rendering by running the cell.
 
@@ -279,7 +279,7 @@ The latter can store a record of your performance on a quiz.
 
 :::{figure} ./images/runningQuiz.png
 :label: fig:quiz
-:width: 130% 
+:width: 130%
 An example of an interactive session with a quiz in a Jupyter notebook. The code for running the quiz was inserted into the code cell with the voice command `run voice in quiz`. The quiz covers a range of voice commands, including [specific voice commands covered in the quiz].
 :::
 
@@ -301,7 +301,7 @@ These text areas also include the Markdown and code cells of Jupyter notebooks a
 Voice In also works in plain text documents opened in Jupyter Lab for online writing.
 It also works in the web-based version of [VS Code](https://vscode.dev/).
 Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the *JupyterLab* application, the *nteract* appication, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
-*Voice In Plus* is limited to web browsers, whereas other automated speech recognition software can also operate in the terminal and at the command prompt in GUI-driven applications. 
+*Voice In Plus* is limited to web browsers, whereas other automated speech recognition software can also operate in the terminal and at the command prompt in GUI-driven applications.
 
 *Voice In Plus*  is very accurate with a word error rate that is well below 10\%.
 Like all other dictation software, the word error rate depends on the quality of the microphone using used.
