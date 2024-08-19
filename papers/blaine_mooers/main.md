@@ -2,7 +2,7 @@
 # Voice Computing with Python in Jupyter Notebooks
 title: Voice Computing with Python in Jupyter Notebooks
 abstract: |
-    Jupyter is a popular platform for writing interactive computational narratives that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability improves access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing, and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. We will provide examples of the first two activities with the Voice-In Plus plugin for Google Chrome and Microsoft Edge. To support the editing of Markdown and code cells in Jupyter noteobooks, we provide several libraries of voice commands at MooersLab on GitHub.
+    Jupyter is a popular platform for writing interactive computational narratives that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability improves access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing, and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. We will provide examples of the first two activities with the Voice-In Plus plugin for Google Chrome and Microsoft Edge. To support the editing of Markdown and code cells in Jupyter notebooks, we provide several libraries of voice commands at MooersLab on GitHub.
 ---
 
 
@@ -12,7 +12,7 @@ Voice computing includes speech-to-text, speech-to-commands, and speech-to-code.
 These activities enable you to use your voice to generate prose, operate your computer, and write computer code.
 This use of your voice can partially replace the use of the keyboard when tired of typing, when suffering from repetitive stress injuries, or both.
 We found that we could be productive within an hour with the Voice In Plus plugin for Google Chrome and Microsoft Edge.
-This plugin is easy to install, provides accurate dictation, and is easy to modify to correct wrong word insertations with text replacements.
+This plugin is easy to install, provides accurate dictation, and is easy to modify to correct wrong word insertions with text replacements.
 
 We discovered that we could map the words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
 These *voice-triggered snippets* are analogous to traditional tab-triggered snippets supported by most text editors.
@@ -36,7 +36,7 @@ We used the laptop's built-in microphone to record dictation while sitting or st
 ### Installation of Voice In Plus
 We used the *Voice In* [@Dictanote2024VoiceIn] plugin provided by Dictanote Inc.
 First, we installed the *Voice In* plugin by navigating to the [Plugin In page](https://chromewebstore.google.com/detail/voice-in-speech-to-text-d) in the Google Chrome Web Store on the World Wide Web.
-Seond, the [Microsoft Edge Add-ons web site](https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home) was accessed to install the plugin in Microsoft Edge.
+Second, the [Microsoft Edge Addons web site](https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home) was accessed to install the plugin in Microsoft Edge.
 
 An internet connection was required to use *Voice In* because Dictanote tracks the websites visited and whether the plugin worked on those websites.
 *Voice In* uses the browser's built-in the Speech-to-Text software to transcribe speech into text.
@@ -50,10 +50,10 @@ The English variants include dialects from Western Europe, Africa, South Asia, a
 Next, we set a keyboard shortcut for activating the plugin.
 We selected command-L on our Mac because this shortcut was not already in use.
 A list of Mac shortcuts can be found [here](https://support.apple.com/en-us/102650).
-The second customization was the limit of the customizations that we could make in the free version of *Voice In*.
+This second customization was the last one that we could make for the free version of *Voice In*.
 
 The use of customized text replacements is available in *Voice In Plus*.
-*Voice In Plus* is activated by purchasing a $39 annual subscription through the **Subscription** submenu in the *Voice In Settings* sidebar of the *Voice In Options* web page.
+*Voice In Plus* is activated by purchasing a $39 annual subscription through the **Subscription** sub-menu in the *Voice In Settings* sidebar of the *Voice In Options* web page.
 Monthly and lifetime subscription options are available.
 Only one subscription was required to use *Voice In Plus* in both web browsers.
 The library is synched between the browsers.
@@ -101,7 +101,7 @@ The contents of these files can be copied and pasted into the `bulk add` text ar
 ### Construction of interactive quizzes
 We developed interactive quizzes to aid the mastery of the *Voice In Plus* syntax.
 We wrote the quiz as a Python script that can run in the terminal or in Jupyter notebooks.
-We stored each question, answer, and explanation triple in a tuple because tuples are immutable. 
+We stored each question, answer, and explanation triple in a tuple because tuples are immutable.
 We stored the tuples in a list because lists are sortable.
 The quiz randomizes the order of the questions upon restart, ensuring a fresh and challenging experience every time.
 When you fail to answer a question correctly, the quiz provides feedback, giving you the opportunity to learn from your mistakes and improve.
@@ -138,18 +138,18 @@ Likewise, these snippets can be used in other browser-hosted text editors such a
 This is because Voice In Plus works in most text areas of web browsers.
 These means that the ample text area like that found in Write Honey website site can be used to draft documents and Python scripts with the aid of Voice In Plus snippets.
 The code or text be directly edited by an advanced text editor by using the GhostText plugin to connect the web-based text area to a text editor.
-Alternately, the draft document or script can be copied and saved to a file that is imported into Jupyter Lab for furtther editing.
+Alternately, the draft document or script can be copied and saved to a file that is imported into Jupyter Lab for further editing.
 
 ### Libraries for Markdown cells
 
 These libraries contain a short phrase paired with its replacement: another phrase or a chunk of computer code.
 In analogy to a tab trigger in text editors, we call the first short phrase a voice trigger.
 Tab triggers are initiated by typing, followed by the tab key, which inserts the corresponding snippet of code.
-Some text editors can autocomplete the tab-trigger name, so these text editors require two tab key entries. 
+Some text editors can autocomplete the tab-trigger name, so these text editors require two tab key entries.
 The first tab auto-completes the tab-trigger name.
 Then, the second tab leads to the insertion of the corresponding code.
 This two-step process of tab triggers empowers users with the flexibility to select a different tab trigger before inserting the code, enhancing the customization potential of text editors.
-It is important to note that voice triggers, while efficient, do not allow for the revision of the voice trigger. 
+It is important to note that voice triggers, while efficient, do not allow for the revision of the voice trigger.
 In the event of an incorrect code insertion, the undo command must be used, underscoring the need for caution when selecting voice triggers.
 
 The most straightforward text replacements involved the replacement of English contractions with their expansions {ref}`fig:contractions`.
@@ -187,19 +187,19 @@ For example, the compound preflx *insert Python* aids grouping of code by progra
 :label: table:commands
 :align: center
 
-| Voice commands                                                                            |
-|:------------------------------------------------------------------------------------------|
-| **expand** acronyms                                                                       |
-| **the book** title                                                                        |
-| **email** inserts list of e-mail addresses (e.g., email bayesian study group)|
-| **insert Python** (e.g., insert Python for horizontal bar plot)   |
-| **insert Markdown** (e.g., insert Markdown header 3)   |
-| **list** (e.g., list font sizes in beamer slides.)  |
-| **open** webpage (e.g., open google scholar)                                |
-| **display** insert equation in display mode (e.g., display electron density equation)   |
+| Voice commands                                                                                                     |
+|:-------------------------------------------------------------------------------------------------------------------|
+| **expand** acronyms                                                                                                |
+| **the book** title                                                                                                 |
+| **email** inserts list of e-mail addresses (e.g., email bayesian study group)                                      |
+| **insert Python** (e.g., insert Python for horizontal bar plot)                                                    |
+| **insert Markdown** (e.g., insert Markdown header 3)                                                               |
+| **list** (e.g., list font sizes in beamer slides.)                                                                 |
+| **open** webpage (e.g., open google scholar)                                                                       |
+| **display** insert equation in display mode (e.g., display electron density equation)                              |
 | **display with terms** above plus list of terms and their definitions  (e.g., display electron density equation)   |
-| **inline** equation in-line (e.g., inline information entropy)  |
-| **site** insert corresponding citekey (e.g., site Jaynes 1957)  |
+| **inline** equation in-line (e.g., inline information entropy)                                                     |
+| **site** insert corresponding citekey (e.g., site Jaynes 1957)                                                     |
 ::::
 
 :::{figure} ./images/DisplayElectronDensityEquation.png
