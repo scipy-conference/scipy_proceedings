@@ -59,9 +59,23 @@ Only one subscription was required to use *Voice In Plus* in both web browsers.
 The library is synched between the browsers.
 
 After a subscription was purchased, we obtained access to the **Custom Commands** in the *Voice In Settings* sidebar.
-We used the **Add Command** button to enter a voice-trigger to start a new sentence when writing one sentence per line {ref}`fig:newSentence`.
+We used the **Add Command** button to enter a voice trigger to start a new sentence when writing one sentence per line {ref}`fig:newSentence`.
 The custom command for `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
+
 The phrases making up these voice triggers were no longer be available during dictation because they will be used to trigger text replacements.
+It is best to pick as voice triggers phrases that are unlikely to be spoken during dictation.
+
+We kept the voice triggers as short as possible to ease accurate recall of the voice triggers.
+We found that we had trouble correctly recalling voice trigger longer than four or five words.
+Three-word voice triggers tend be a good compromise between specficity and success at recall.
+
+The accuracy of interpretation of the phrase by the software was another limitation.
+We would replace frequently misinterpreted words with other words that were more often correctly interpreted.
+
+We had to take care not to make voice triggers that were embedded in longer voice triggers to avoid unintended text replacements.
+For example, when we found a two-word phrase starting a four-word phrase, we would extend the two-word phrase to three words by selecting a third word that would break the overlap between the two voice triggers.
+Otherwise, the two-word phrase would trigger a text replacement that was different from the text replacement that was expected from the four-word phrase.
+
 
 :::{figure} ./images/VoiceInNewSentence.png
 :label: fig:newSentence
@@ -331,7 +345,7 @@ You have to develop the habit of using this command if you like to write one sen
 This latter form of writing is very useful for first drafts because it greatly eases the shuffling of sentences in a text editor during rewriting.
 This form of writing is also very compatible with version control systems like git because the changes can be tracked by line number.
 
-The practical limit of on the number of commands it set by the trouble you are willing to tolerate in scrolling up and down the list of commands.
+The practical limit of on the number of commands is set by the trouble you are willing to tolerate in scrolling up and down the list of commands.
 We had an easy time scrolling through a library of about 8,000 commands, and a hard time with a library of about 19,000 commands.
 Bulk deletion of selected commands required the assistance from the user support at Dictanote Inc.
 They removed our bloated library, and we used the **bulk add** button in the GUI to upload a smaller version of our library.
@@ -378,7 +392,7 @@ For example, the language model often misinterprets the word  *write* as *right*
 Likewise, the letter *R* is frequently returned as *are* or *our*'.
 The remedy for these situations is to map the misinterpreted phrase to the intended phrase.
 
-This remedy might be the best that can be done in for those users who are from a country that is not represented by the selection of English dialects available in Voice In Plus.
+This remedy might be the best that can be done for those users who are from a country that is not represented by the selection of English dialects available in Voice In Plus.
 People originating from Eastern Europe, Middle East, and northeast Asia fall into this category.
 Users in this situation may have to add several hundred text replacements.
 As the customized library of text replacements grows, the frequency of wrong word insertions should deline rapidly.
