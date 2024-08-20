@@ -39,29 +39,28 @@ We used the *Voice In* plugin provided by Dictanote Inc.
 First, we installed the *Voice In* plugin by navigating to the [Plugin In page](https://chromewebstore.google.com/detail/voice-in-speech-to-text-d) in the Google Chrome Web Store on the World Wide Web.
 Second, the [Microsoft Edge Addons web site](https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home) was accessed to install the plugin in Microsoft Edge.
 
-An internet connection was required to use *Voice In* because Dictanote tracks the websites visited and whether the plugin worked on those websites.
-*Voice In* uses the browser's built-in the Speech-to-Text software to transcribe speech into text.
-Because no remote servers were used for the transcription, the transcription process was essentially instant and able to keep up the dictation of multiple paragraphs.
+We needed an internet connection to use *Voice In* because Dictanote tracks the websites visited and whether the plugin worked on those websites.
+*Voice In* uses the browser's built-in Speech-to-Text software to transcribe speech into text, so no remote servers are used for the transcription,/ so the transcription process was nearly instant and kept up with the dictation of multiple paragraphs.
 Dictanote does not store the audio or the transcripts.
 
 After activating the plugin, we customized it by selecting a dictation language from a pull-down menu.
 We selected **English (United States)** from the 15 dialects of English.
 The English variants include dialects from Western Europe, Africa, South Asia, and Southeast Asia; many languages other than English are also supported.
 
-Next, we set a keyboard shortcut for activating the plugin.
+Next, we set a keyboard shortcut to activate the plugin.
 We selected command-L on our Mac because this shortcut was not already in use.
 A list of Mac shortcuts can be found [here](https://support.apple.com/en-us/102650).
 This second customization was the last one that we could make for the free version of *Voice In*.
 
-The use of customized text replacements is available in *Voice In Plus*.
+Customized text replacements are available in *Voice In Plus*.
 *Voice In Plus* is activated by purchasing a $39 annual subscription through the **Subscription** sub-menu in the *Voice In Settings* sidebar of the *Voice In Options* web page.
 Monthly and lifetime subscription options are available.
 Only one subscription was required to use *Voice In Plus* in both web browsers.
 The library is synched between the browsers.
 
-After a subscription was purchased, we obtained access to the **Custom Commands** in the *Voice In Settings* sidebar.
+After purchasing a subscription, we accessed the **Custom Commands** in the *Voice In Settings* sidebar.
 We used the **Add Command** button to enter a voice trigger to start a new sentence when writing one sentence per line {ref}`fig:newSentence`.
-The custom command for `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation at the beginning of each paragraph.
+The custom command for `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation.
 
 :::{figure} ./images/VoiceInNewSentence.png
 :label: fig:newSentence
