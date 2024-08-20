@@ -1,31 +1,21 @@
 {
-  "title": "Development and Application of CWGID: the California Wildfire 
-GeoImaging Dataset for Deep Learning Driven Forest Wildfire Detection",
+  "title": "Development and Application of CWGID: the California Wildfire GeoImaging Dataset for Deep Learning Driven Forest Wildfire Detection",
   "authors": [
     {
       "name": "Valeria Martin",
-      "affiliation": "PhD Student, Graduate Research Assistant, 
-Intelligent Systems and Robotics, University of West Florida",
+      "affiliation": "PhD Student, Graduate Research Assistant, Intelligent Systems and Robotics, University of West Florida",
       "orcid": "0009-0000-3668-5003"
     },
     {
       "name": "K. Brent Venable",
-      "affiliation": "Director of the Intelligent Systems and Robotics 
-Doctoral Program, Department of Intelligent Systems and Robotics, 
-University of West Florida",
+      "affiliation": "Director of the Intelligent Systems and Robotics Doctoral Program, Department of Intelligent Systems and Robotics, University of West Florida",
       "orcid": "0000-0002-1092-9759"
     },
     {
       "name": "Derek Morgan",
-      "affiliation": "Associate Professor, Department of Earth and 
-Environmental Sciences, University of West Florida",
+      "affiliation": "Associate Professor, Department of Earth and Environmental Sciences, University of West Florida",
       "orcid": "0000-0003-2321-3765"
     }
   ],
-  "description": "This poster presents the development and application of 
-the CWGID (California Wildfire GeoImaging Dataset), a comprehensive 
-dataset for deep learning-driven forest wildfire detection. The study 
-explores the dataset creation process, its application in wildfire 
-detection using deep learning techniques, and the results obtained."
+  "description": "This poster presents the development and application of the CWGID (California Wildfire GeoImaging Dataset), a comprehensive dataset for deep learning-driven forest wildfire detection. The study explores the dataset creation process, its application in wildfire detection using deep learning techniques, and the results obtained."
 }
-
