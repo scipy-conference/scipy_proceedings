@@ -10,21 +10,21 @@ abstract: |
 
 Voice computing includes speech-to-text, speech-to-commands, and speech-to-code.
 These activities enable you to use your voice to generate prose, operate your computer, and write code.
-Using your voice can partially replace the keyboard when tired of typing, suffering from repetitive stress injuries, or both.
+Using your voice can partially replace use of the keyboard when tired of typing, suffering from repetitive stress injuries, or both.
 With the Voice In Plus plugin for Google Chrome and Microsoft Edge, we could be productive within an hour.
 This plugin is easy to install, provides accurate dictation, and is easy to modify to correct wrong word insertions with text replacements.
 
-We discovered that we could map the words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
+We mapped spoken words to be replaced, called *voice triggers*, to equations set in LaTeX and to code snippets that span one to many lines.
 These *voice-triggered snippets* are analogous to traditional tab-triggered snippets supported by most text editors.
 (A tab trigger is a placeholder word replaced with the corresponding code when the tab key is pressed after entering the tab trigger.
 The existing extensions for code snippets in Jupyter do not support tab triggers.)
 We could use Voice In Plus to insert voice-triggered snippets into code and Markdown cells in Jupyter notebooks.
-Our voice-triggered snippets still require customizing to the problem at hand via keyboard use, but their insertion by voice command saves time.
+Our voice-triggered snippets still require customizing to the problem at hand via some use of the keyboard, but their insertion by voice command saves time.
 
 To facilitate voice commands in Jupyter notebooks, we have developed libraries of voice-triggered snippets for use in Markdown or code cells with the *Voice-In Plus* plugin.
 We are building on our experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
-These voice-triggered snippets are another tool for software engineering that complement existing tools for enhancing productivity.
+These voice-triggered snippets are another tool for software engineering that complements existing tools for enhancing productivity.
 
 
 ## Methods and Materials
