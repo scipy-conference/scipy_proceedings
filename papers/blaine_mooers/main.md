@@ -69,25 +69,25 @@ The custom command for `new paragraph` can include a `period` followed by two `n
 Entering a single voice trigger and the corresponding command in Voice In Plus.
 :::
 
-The phrases making up these voice triggers were no longer be available during dictation because they will be used to trigger text replacements.
+The phrases making up these voice triggers will no longer be available during dictation because they will be used to trigger text replacements.
 It is best to pick as voice triggers phrases that are unlikely to be spoken during dictation.
 
 We kept the voice triggers as short as possible to ease accurate recall of the voice triggers.
-We found that we had trouble correctly recalling voice trigger longer than four or five words.
-Three-word voice triggers tend be a good compromise between specficity and success at recall.
+We had trouble correctly recalling voice triggers longer than four or five words.
+Three-word voice triggers are a good compromise between specificity and success at recall.
 
-An exception to this guideline for shorter voice triggers was the use of two to three words at the beginning of a set of voice trigers to group them together in the on-line *Voice In* library.
-The grouping of related voice-commands eased finding them in the on-line library.
-For example, all Jupyter-related line magic voice triggers start with the phrase *line magic*.
-The prefix *line magic* is easy to remember so it does not add much to the recall problem.
-A snapshot of the CSV file displayed in a pleasant format on GithHub for the Jupyter line magics is shown below {ref}`fig:csvExampleFile`.
-Note that these CSV files are atypical because that do not contain line of column headers because the *Voice In* software does not handle headings
-
-:::{figure} ./images/csvExampleFile.png
-:label: fig:csvExampleFile
+:::{figure} ./images/csvexamplefile.png
+:label: fig:csvexamplefile
 :width: 50%
-Snapshot of CSV file on Github for the [*jupytuer-voice-in*](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) library.
+Snapshot of CSV file on Github for the [*jupyter-voice-in*](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) library.
 :::
+
+An exception to this guideline for shorter voice triggers was using two to three words at the beginning of a set of voice triggers to group them in the online *Voice In* library.
+Grouping related voice commands made it easier to find them in the online library.
+For example, all Jupyter-related line magic voice triggers start with the phrase *line magic*.
+The prefix *line magic* is easy to remember, so it only adds a little to the recall problem.
+We show below a snapshot of the CSV file displayed in a pleasant format on GithHub for the Jupyter line magics {ref}`fig:csvexamplefile`.
+Note that these CSV files are atypical because they do not contain a line of column headers; *Voice In* does not recognize column headings.
 
 The accuracy of interpretation of the phrase by the software was another limitation.
 We would replace frequently misinterpreted words with other words that were more often correctly interpreted.
