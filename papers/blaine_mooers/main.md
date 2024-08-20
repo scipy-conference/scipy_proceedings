@@ -2,29 +2,30 @@
 # Voice Computing with Python in Jupyter Notebooks
 title: Voice Computing with Python in Jupyter Notebooks
 abstract: |
-    Jupyter is a popular platform for writing interactive computational narratives that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability improves access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing, and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. We will provide examples of the first two activities with the Voice-In Plus plugin for Google Chrome and Microsoft Edge. To support the editing of Markdown and code cells in Jupyter notebooks, we provide several libraries of voice commands at MooersLab on GitHub.
+    Jupyter is a popular platform for writing interactive computational narratives that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability improves access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. We will provide examples of the first two activities with the Voice-In Plus plugin for Google Chrome and Microsoft Edge. To support the editing of Markdown and code cells in Jupyter notebooks, we provide several libraries of voice commands at MooersLab on GitHub.
 ---
 
 
 ## Introduction
 
 Voice computing includes speech-to-text, speech-to-commands, and speech-to-code.
-These activities enable you to use your voice to generate prose, operate your computer, and write computer code.
-This use of your voice can partially replace the use of the keyboard when tired of typing, when suffering from repetitive stress injuries, or both.
-We found that we could be productive within an hour with the Voice In Plus plugin for Google Chrome and Microsoft Edge.
+These activities enable you to use your voice to generate prose, operate your computer, and write code.
+Using your voice can partially replace the keyboard when tired of typing, suffering from repetitive stress injuries, or both.
+With the Voice In Plus plugin for Google Chrome and Microsoft Edge, we could be productive within an hour.
 This plugin is easy to install, provides accurate dictation, and is easy to modify to correct wrong word insertions with text replacements.
 
 We discovered that we could map the words to be replaced, what we call *voice triggers*, to equations set in LaTeX and to code snippets that span one-to-many lines.
 These *voice-triggered snippets* are analogous to traditional tab-triggered snippets supported by most text editors.
-(A tab trigger is a placeholder word that is replaced with the corresponding code when the tab key is pressed after entering the tab trigger.
+(A tab trigger is a placeholder word replaced with the corresponding code when the tab key is pressed after entering the tab trigger.
 The existing extensions for code snippets in Jupyter do not support tab triggers.)
-We found that Voice In Plus can be used to insert voice-triggered snippets into code and Markdown cells in Jupyter notebooks.
-Our voice-triggered snippets still require customizing to the problem at hand via use of the keyboard, but their insertion by voice command saves time.
+We could use Voice In Plus to insert voice-triggered snippets into code and Markdown cells in Jupyter notebooks.
+Our voice-triggered snippets still require customizing to the problem at hand via keyboard use, but their insertion by voice command saves time.
 
-To facilitate the use of voice commands in Jupyter notebooks, we have developed libraries of voice-triggered snippets for use in Markdown or code cells with the *Voice-In Plus* plugin.
+To facilitate voice commands in Jupyter notebooks, we have developed libraries of voice-triggered snippets for use in Markdown or code cells with the *Voice-In Plus* plugin.
 We are building on our experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
 These voice-triggered snippets are another tool for software engineering that complement existing tools for enhancing productivity.
+
 
 ## Methods and Materials
 
@@ -233,6 +234,13 @@ For example, the compound preflx *insert Python* aids grouping of code by progra
 | **site** insert corresponding citekey (e.g., site Jaynes 1957)                                                     |
 ::::
 
+
+Another example of a verb starting a voice trigger is the command `display <equation name>`.
+This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
+For instance, the voice trigger `display the electron density equation` is a testament to the convenience of our system, as shown in the transcript of a Zoom video {ref}`fig:displayeq`.
+The image in the middle shows the text replacement as a LaTeX equation in the display mode.
+This image is followed by the resulting Markdown cell after rendering by running the cell.
+
 :::{figure} ./images/DisplayElectronDensityEquation.png
 :alt: display
 :width: 100%
@@ -242,11 +250,6 @@ For example, the compound preflx *insert Python* aids grouping of code by progra
 Three snapshots from a Zoom video of using the voice-trigger *display electron density equation* in a Markdown cell in a Jupyter notebook. A. The Zoom transcript showing the spoken voice trigger. B. The text replacement in the form of a math equation written in LaTeX in display mode in the Markdown cell. C. The rendered Markdown cell. The green and black tab on the right of each panel indicates that the Voice In plugin is active and listening for speech.
 :::
 
-Another example of a verb starting a voice trigger is the command `display <equation name>`.
-This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
-For instance, the voice trigger `display the electron density equation` is a testament to the convenience of our system, as shown in the transcript of a Zoom video {ref}`fig:displayeq`.
-The image in the middle shows the text replacement as a LaTeX equation in the display mode.
-This image is followed by the resulting Markdown cell after rendering by running the cell.
 
 Likewise, the command `inline <equation name>` is used to insert equations in prose sections in Markdown cells.
 We have  introduced voice-triggered snippet libraries for equations commonly used in machine learning and Bayesian data analysis https://github.com/MooersLab/.
@@ -300,7 +303,7 @@ This is often overlooked, but these externally derived images are often essentia
 
 We provide a [library](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) of 85 cell and line magics that facilitate the Jupyter notebook's interaction with the rest of the operating system.
 Our cell magics, easily identifiable by their cell magic prefix, and line magics, with the straightforward line magic prefix, are designed to make the Jupyter notebook experience more intuitive.
-For example, the voice command *line majic run* inserts `%run`; it is used to run script files after supplying the name of the script file as also shown in {fig}`quiz`.
+For example, the voice command *line majic run* inserts `%run`; it is used to run script files after supplying the name of the script file as also shown in {ref}`fig:quiz`.
 
 
 ### Interactive quiz
