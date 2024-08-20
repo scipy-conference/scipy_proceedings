@@ -275,28 +275,29 @@ We included the markup associated with the yasnippet snippet libraries to serve 
 
 
 ### Libraries for code cells
-The `insert` command in code-cell libraries allows the  insersion of chunks of Python code, enhancing your data science workflow.
+
+The `insert` command in code-cell libraries allows the insertion of chunks of Python code, enhancing your data science workflow.
 We avoid making voice commands for small code fragments that might fit on a single line.
-An exception to this was the inclusion of a collection of one-liners that are in the form of several kinds of comprehensions.
-As mentioned earlier, we have developed practical chunks of code that are designed to perform specific functions, making your data analysis tasks easier and more efficient.
-These chunks of code could be functions or lines of code that produce an output in the form of a table, plot, or analysis.
-The idea was to fill a code cell with all the code required to produce the desired output.
-Unfortunately, the user will still have to use the computer mouse to move the cursor back over the code chunk and customize portions of the code chunk as required for the task at hand.
+An exception to this was the inclusion of a collection of one-liners in the form of several kinds of comprehensions.
+As mentioned, we have developed practical chunks of code designed to perform specific functions, making your data analysis tasks more efficient.
+These chunks of code are functions that produce an output item, such as a table or plot.
+The idea was to fill a code cell with the code required to produce the desired output.
+Unfortunately, the user will still have to use the computer mouse to move the cursor back over the code chunk and customize portions of the code chunk as required.
 
 While self-contained examples that utilize generated data can illustrate concepts, these examples are frustrating for beginners who need to read actual data and would like to apply the code example to their problem.
 Reading appropriately cleaned data is a common task in data science and a common barrier to applying Jupyter notebooks to scientific problems.
 Our data wrangling library provides code fragments that directly import various file types, easing the task of data import and allowing focus on downstream utilization and analysis.
 
-After the data is input, it needs to be displayed in a tabular format for inspection to check that it was properly imported and to carry out basic summarization statistics by column and row.
-After the data are verified as being correctly imported, it is often necessary to explore them by plotting them to detect relationships between a model's parameters and the output.
-Our focus on the versatile matplotlib library, which generates a wide variety of plots, is designed to inspire creativity in data visualization and analysis.
+After the data are verified as correctly imported, exploring them by plotting them to detect relationships between a model's parameters and the output is often necessary.
+Our focus on the versatile *matplotlib* library, which generates various plots, is designed to inspire creativity in data visualization and analysis [*matplotlib].
 Our code fragments cover the most commonly used plots, such as scatter plots, bar graphs (including horizontal bar graphs), kernel density fitted distributions, heat Maps, pie charts, and contour plots.
-We include a variety of examples for the formatting of the tick marks and axis labels as well as the keys and the form of the lines so users can use this information as templates to generate plots for their own purposes.
-The generation of plots with lines of different shapes, whether solid, dashed, dotted, or combinations thereof, is essential because plots generated with just color are vulnerable to having their information compromised when printed in grayscale.
-Although we provide some examples from higher-order plotting programs like Seaborn, we focused on matplotlib because most of the other plotting programs, with the exception of the interactive plotting programs, are built on top of it.
+We include a variety of examples for formatting tick marks and axis labels as well as the keys and the form of the lines so users can use this information as templates to generate plots for their purposes.
+Generating plots with lines of different shapes, whether solid, dashed, dotted, or combinations thereof, is essential because plots generated with just color are vulnerable to having their information compromised when printed in grayscale.
+Although we provide some examples from higher-order plotting programs like *seaborn* [@seaborn], we focused on matplotlib because most other plotting programs, except the interactive plotting programs, are built on top of it.
 
 We also support the import of external images.
-This is often overlooked, but these externally derived images are often essential parts of the story the Jupyter notebook is telling.
+These are often overlooked, but these externally derived images are often essential parts of the story the Jupyter notebook is telling.
+
 
 ### Jupyter specific library
 
