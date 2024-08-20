@@ -35,7 +35,7 @@ It had 32 gigabytes of RAM and one Radeon Pro 560X 4 GB GPU.
 We used the laptop's built-in microphone to record dictation while sitting or standing up to 20 feet (ca. 6 m) away from the computer.
 
 ### Installation of Voice In Plus
-We used the *Voice In* [@Dictanote2024VoiceIn] plugin provided by Dictanote Inc.
+We used the *Voice In* plugin provided by Dictanote Inc.
 First, we installed the *Voice In* plugin by navigating to the [Plugin In page](https://chromewebstore.google.com/detail/voice-in-speech-to-text-d) in the Google Chrome Web Store on the World Wide Web.
 Second, the [Microsoft Edge Addons web site](https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home) was accessed to install the plugin in Microsoft Edge.
 
@@ -339,7 +339,7 @@ Voice In works in Jupyter Lite.
 It also works in streamlit-quill, which uses a python script to generate a text box in the default web browser.
 It also works in the web-based version of [VS Code](https://vscode.dev/).
 
-Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the *JupyterLab.app* application, the *nteract* application, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
+Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the [*JupyterLab Desktop*](https://github.com/jupyterlab/jupyterlab-desktop) application, the [*nteract*](https://nteract.io/) application, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
 Likewise, *Voice In Plus* will not work in Python Widgets.
 *Voice In Plus* is limited to web browsers, whereas other automated speech recognition software can also operate in the terminal and at the command prompt in GUI-driven applications.
 
