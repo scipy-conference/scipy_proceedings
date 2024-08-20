@@ -110,7 +110,7 @@ Text replacements consisting of commas also had to be enclosed with double else 
 This also appled on Python code that contained commas.
 
 The formatting of the text replacement was controlled by inserting built-in *Voice In Plus* commands enclosed in angle brackets.
-To ensure that the first letter of a line Python code was not capitalized, we used the built-in command <case:lower> before the Python code: (e.g., `python import numpy,<lower:case>import numpy as np`).
+To ensure that the first letter of a line Python code was not capitalized, we used the built-in command `<case:lower>` before the Python code: (e.g., `python import numpy,<lower:case>import numpy as np`).
 The command in angle brackets would be applied during insertion of the text replacement, but it would appear in inserted code.
 
 The transcription of the spoken words appear momentarily in a transitory transcript that hovers about the text box.
