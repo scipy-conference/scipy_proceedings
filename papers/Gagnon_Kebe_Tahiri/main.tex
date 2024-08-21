@@ -50,11 +50,12 @@ where $S^2$ is the sample variance, $x_i$ represents each value in the dataset, 
 
 Only salinity was removed from the previously selected numerical attributes ($S^2 = 0.02146629$). We then removed attributes that had high correlations between them (threshold > 0.90). This selection of attributes and data resulted in a table containing 62 rows ($n=62$) and 20 columns (number of attributes). 
 
-In the IceAGE database, 14 attributes were selected. These are the geographic coordinates such as: 
+\subsection{Selected attributes in the IceAGE database}
+Geographic attributes such as: 
 
 \begin{itemize}
 \item The latitude and longitude taken at the start (see Figure \ref{fig:fig2}a and Figure \ref{fig:fig2}b) and end of sampling, both in decimal degrees (DD).
-\item The geographical data are divided into five sectors across the seas around Iceland: the Denmark Strait ($n=28$), the Iceland Basin ($n=15$), the Irminger Basin ($n=12$), the Norwegian Sea ($n=4$), and the Norwegian Basin ($n=3$). 
+\item The sectors across the seas around Iceland: the Denmark Strait ($n=28$), the Iceland Basin ($n=15$), the Irminger Basin ($n=12$), the Norwegian Sea ($n=4$), and the Norwegian Basin ($n=3$). 
 \end{itemize}
 
 For environmental features, we have included:
@@ -68,13 +69,15 @@ Climatic parameters such as:
 \item Wind speed (m/s) (see Figure \ref{fig:fig2}d) and wind direction at the start and end of sampling were also included, given the contribution of wind to the restructuring of the benthic ecosystem through water transport \citep{waga_recent_2020,saeedi_environmental_2022}. The wind direction at the start of sampling comprises six orientations: South-West ($n=22$), South ($n=15$), North-East ($n=9$), South-South-East ($n=9$), North-West ($n=5$), and East ($n=2$); while that at the end of sampling is composed of seven orientations: South ($n=15$), South-West ($n=15$), North-East ($n=9$), West-South-West ($n=7$), South-East ($n=6$), North-North-West ($n=5$), South-South-East ($n=3$), and East ($n=2$). 
 \end{itemize}
 
-In the BOLD Systems database, taxonomic ranks such as: 
+\subsection{Selected attributes in the Bold Systems database}
+Taxonomic ranks such as: 
 \begin{itemize}
 \item The family, genus, and scientific name of the cumacean sampled have been integrated into our data. These comprise seven families: Diastylidae ($n=21$), Lampropidae ($n=13$), Leuconidae ($n=12$), Astacidae ($n=7$), Bodotriidae ($n=4$), Ceratocumatidae ($n=3$), and Pseudocumatidae ($n=2$). A total of 21 cumacean species were found in our sample (see Figure \ref{fig:fig3}).
 \end{itemize}
 
 We also included the sample identity (id) of each cumacean sampled. Some specimens were identified only to genus (one specimen) or family (five specimens) in our sample.
- 
+
+\subsection{Selected attributes from article \cite{uhlir_adding_2021}} 
 The habitat and water mass of the sampling points were the only attributes taken directly from Table 1 of \citep{uhlir_adding_2021}. Thus, the water mass definitions described by \citep{hansen_north_2000, brix2010distribution, ostmann_marine_2014} were used as a reference for the GIN seas around Iceland: Arctic Polar Water (APW, $n=15$), Iceland Sea Overflow Water (ISOW, $n=15$), North Atlantic Water (NAW, $n=9$), Arctic Polar Water/Norwegian Sea Arctic Intermediate Water (APW/NSAIW, $n=7$), warm Norwegian Sea Deep Water (NSDWw, $n=8$), Labrador Sea Water (LSW, $n=3$), cold Norwegian Sea Deep Water (NSDWc, $n=3$), and Norwegian Sea Arctic Intermediate Water (NSAIW, $n=2$) (see Figure \ref{fig:fig4}). In terms of habitat, we considered the three categories used in \citep{uhlir_adding_2021}: deep sea ($n=38$), shelf ($n=15$), and slope ($n=9$) (see Figure \ref{fig:fig5}).
 
 To better interpret benthic species' relationship and evolutionary responses, genetic data are required \citep{wilson_speciation_1987, uhlir_adding_2021}. Thus, the aligned DNA sequence of the 16S rRNA mitochondrial gene region from each of the samples was included in our analyses. This region is standard in phylogeny and phylogeography studies \citep{hugenholtz1998impact} and sufficiently conserved over time to guarantee exact alignments between different species or populations \citep{saccone1999evolutionary}. We examined 62 of the 306 aligned DNA sequences used for phylogeographic analyses by \citep{uhlir_adding_2021}. As some specimens in our sample have their DNA sequence duplicated, or even quadruplicated with a difference of one or two nucleotides, we took into account the longest-aligned DNA sequence of each specimen.
@@ -82,7 +85,17 @@ To better interpret benthic species' relationship and evolutionary responses, ge
 Figure \ref{fig:fig2}, Figure \ref{fig:fig3}, Figure \ref{fig:fig6} and Figure \ref{fig:fig7} were made with Python 3.11, while Figure \ref{fig:fig4} and Figure \ref{fig:fig5} were made with RStudio Desktop 4.3.2.
 
 \subsection{{\textit{aPhyloGeo} software}\label{aPhyloGeo-software}}
-We used the cross-platform Python software \textit{aPhyloGeo} for our phylogeographic analyses, designed to analyze phylogenetic trees using ecological and geographic parameters. Developed by My-Linh Luu, Georges Marceau, David Beauchemin, and Nadia Tahiri, \textit{aPhyloGeo} offers tools to study correlations between species genetics and habitat characteristics, enabling us to understand the evolution of species under different environmental conditions. This software was chosen for our analysis because, to our knowledge, it is the first phylogeographic tool to correlate species genetics with climatic, environmental, and geographical attributes, which is the objective of our study. The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex phylogeographic analyses. The software process has three main stages (see \autoref{lst:main}).
+We used the cross-platform Python software \textit{aPhyloGeo} for our phylogeographic analyses, designed to analyze phylogenetic trees using ecological and geographic parameters \citep{koshkarov_phylogeography_2022}. Developed by My-Linh Luu, Georges Marceau, David Beauchemin, and Nadia Tahiri, \textit{aPhyloGeo} offers tools for the study of correlations between species genetics and habitat characteristics, helping to understand the evolution of species under different environmental conditions \citep{koshkarov_phylogeography_2022}. 
+
+We selected this software for our analysis because, to our knowledge, it is the first phylogeographic tool capable of correlating species genetics with climatic, environmental, and geographical attributes - precisely the objective of our study \citep{koshkarov_phylogeography_2022}. \textit{aPhyloGeo} offers several  key functionalities:
+
+\begin{enumerate}[label=\arabic*.]
+\item Phylogeographic tree evaluation: The software elucidates evolutionary relationships between species based on their genetic sequences, which is essential for interpreting phylogeographical patterns \citep{koshkarov_phylogeography_2022}.
+\item Ecological and geographic correlation analysis: It enables correlations between genetic sequences and the mentioned parameters to be tested and visualized. These correlations are crucial for identifying their influence on genetic fluctuations \citep{koshkarov_phylogeography_2022}.
+\item Investigation of genetic diversity: \textit{aPhyloGeo} measures genetic heterogeneity based on geographic variation, enabling the recognition of potential local adaptations and evolutionary processes.
+\end{enumerate}
+
+The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex phylogeographic analyses. The software process has three main stages (see \autoref{lst:main}).
 
 %\autoref{lst:main}.
 \begin{lstlisting}[label=lst:main,language=Python,caption=Main script for tutorial using the aPhyloGeo package.]
