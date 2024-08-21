@@ -28,7 +28,7 @@ can use ``__name='tmpl.html'`` to set the name of the template.
 
 If there are syntax errors ``TemplateError`` will be raised.
 """
-from __future__ import unicode_literals 
+from __future__ import unicode_literals
 
 import re
 import sys
@@ -37,10 +37,10 @@ import traceback
 import os
 import tokenize
 
-try: 
+try:
     from urllib import quote as url_quote
     from cStringIO import StringIO
-except ImportError: 
+except ImportError:
     from urllib.parse import quote as url_quote
     from io import StringIO
 

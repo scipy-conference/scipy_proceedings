@@ -96,7 +96,7 @@ if __name__ == "__main__":
     if not os.path.exists(template_fn):
         print("Cannot find template.")
         sys.exit(-1)
-        
+
     config = get_config()
     from_template(dest_fn, config, dest_fn)
     copy_static_files(dest_fn)

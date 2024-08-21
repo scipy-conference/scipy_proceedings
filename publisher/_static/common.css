@@ -22,8 +22,8 @@ h1, h2, h3, h4, h5 {
 	line-height: 1.2em;
 	border-bottom: 2px solid rgb(100,135,220);
 	border-left: 1px solid rgb(100,135,220);
-}	
- 
+}
+
 h1 {font-size: 1.4em;}
 h2 {font-size: 1.25em;}
 h3 {font-size: 1.15em;}
@@ -123,17 +123,17 @@ hr {
 
 
 /* eye catchers */
-.warning 
+.warning
 {
 	color: red;
 }
 
-.error 
+.error
 {
 	color: red;
 }
 
-strong.highlight 
+strong.highlight
 {
 	background-color: #ffcc99;
 	padding: 1pt;
@@ -143,7 +143,7 @@ strong.highlight
 /* Recent changes */
 
 div.recentchanges table {
-	border: 1px solid #e5e5e5; 
+	border: 1px solid #e5e5e5;
 }
 
 .recentchanges p {

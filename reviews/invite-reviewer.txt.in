@@ -3,7 +3,7 @@ Hello {{ reviewer }}!
 The 2017 Scientific Computing with Python Conference
 (http://scipy2017.scipy.org) is fast approaching, and so too is the deadline
 for proceedings submissions (May 16th) and consequently the start of the
-review process.  
+review process.
 
 We welcome you to be a member of the Proceedings Review Committee this year.
 This should require a little of your time spread out over the review period
@@ -11,15 +11,15 @@ This should require a little of your time spread out over the review period
 areas of expertise.
 
 In the spirit of open source software, the SciPy conference uses a fully open
-and collaborative review process to make proceedings acceptance decisions.  
+and collaborative review process to make proceedings acceptance decisions.
 To learn more about this, you can read about it on the proceedings github page,
-https://github.com/scipy-conference/scipy_proceedings.   
+https://github.com/scipy-conference/scipy_proceedings.
 
-Please let us know if you wish to participate this year and we will include 
+Please let us know if you wish to participate this year and we will include
 you in subsequent communications.  Also, please don't hesitate to connect us
 with any other community members who you think we should consider inviting to
-review.  
+review.
 
-Yours Truly, 
+Yours Truly,
 Your SciPy 2017 Proceedings co-chairs,
 Scott Rostrup and Sebastian Benthall

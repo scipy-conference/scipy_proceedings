@@ -4,7 +4,7 @@ Dry run -> not sending mail to allen.downey@olin.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: allen.downey@olin.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -23,7 +23,7 @@ Dry run -> not sending mail to ankurankan@gmail.com,mailme.abinashpanda@gmail.co
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: ankurankan@gmail.com, mailme.abinashpanda@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -42,7 +42,7 @@ Dry run -> not sending mail to brian.chapman@utah.edu,jeannieirwin@gmail.com
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: brian.chapman@utah.edu, jeannieirwin@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -61,7 +61,7 @@ Dry run -> not sending mail to brian.mcfee@nyu.edu,craffel@gmail.com,dliang@ee.c
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: brian.mcfee@nyu.edu, craffel@gmail.com, dliang@ee.columbia.edu, dpwe@ee.columbia.edu, mattjamesmcvicar@gmail.com, ericbattenberg@baidu.com, oriol@nyu.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -80,7 +80,7 @@ Dry run -> not sending mail to cjdrake@gmail.com
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: cjdrake@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -99,7 +99,7 @@ Dry run -> not sending mail to cory.quammen@kitware.com
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: cory.quammen@kitware.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -118,7 +118,7 @@ Dry run -> not sending mail to david.lippa@realmassive.com,jason.vertrees@realma
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: david.lippa@realmassive.com, jason.vertrees@realmassive.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -137,7 +137,7 @@ Dry run -> not sending mail to bushouse@stsci.edu,mdroe@stsci.edu,perry@stsci.ed
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: bushouse@stsci.edu, mdroe@stsci.edu, perry@stsci.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -156,7 +156,7 @@ Dry run -> not sending mail to iandh@byu.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: iandh@byu.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -175,7 +175,7 @@ Dry run -> not sending mail to david.masad@gmail.com, jackiekazil@gmail.com,jack
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: david.masad@gmail.com, jackiekazil@gmail.com, jackiekazil@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -194,7 +194,7 @@ Dry run -> not sending mail to jlstevens@ed.ac.uk,p.rudiger@ed.ac.uk,jbednar@inf
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: jlstevens@ed.ac.uk, p.rudiger@ed.ac.uk, jbednar@inf.ed.ac.uk
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -213,7 +213,7 @@ Dry run -> not sending mail to jordi.t21@gmail.com,fferraro@iese.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: jordi.t21@gmail.com, fferraro@iese.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -232,7 +232,7 @@ Dry run -> not sending mail to joshwalawender@me.com
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: joshwalawender@me.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -251,7 +251,7 @@ Dry run -> not sending mail to katyhuff@gmail.com
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: katyhuff@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -270,7 +270,7 @@ Dry run -> not sending mail to luke.campagnola@gmail.com,almar.klein@gmail.com,e
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: luke.campagnola@gmail.com, almar.klein@gmail.com, eric.larson.d@gmail.com, cyrille.rossant@gmail.com, Nicolas.Rougier@inria.fr
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -289,7 +289,7 @@ Dry run -> not sending mail to mahan027@umn.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: mahan027@umn.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -308,7 +308,7 @@ Dry run -> not sending mail to mwickert@uccs.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: mwickert@uccs.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -327,7 +327,7 @@ Dry run -> not sending mail to mpu@creare.com,rxc@creare.com,cab@creare.com,wea@
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: mpu@creare.com, rxc@creare.com, cab@creare.com, wea@creare.com, jyb@creare.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -346,7 +346,7 @@ Dry run -> not sending mail to mcraig@mnstate.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: mcraig@mnstate.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -365,7 +365,7 @@ Dry run -> not sending mail to mrocklin@gmail.com
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: mrocklin@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -384,7 +384,7 @@ Dry run -> not sending mail to cros0324@umn.edu, mellissa.cross@gmail.com
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: cros0324@umn.edu, mellissa.cross@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -403,7 +403,7 @@ Dry run -> not sending mail to cros0324@umn.edu, mellissa.cross@gmail.com
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: cros0324@umn.edu, mellissa.cross@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -422,7 +422,7 @@ Dry run -> not sending mail to mpacer@berkeley.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: mpacer@berkeley.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -441,7 +441,7 @@ Dry run -> not sending mail to ncreati@inogs.it,rvidmar@inogs.it,psterzai@inogs.
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: ncreati@inogs.it, rvidmar@inogs.it, psterzai@inogs.it
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -460,7 +460,7 @@ Dry run -> not sending mail to robknight@ucsd.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: robknight@ucsd.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -479,7 +479,7 @@ Dry run -> not sending mail to rcpaffenroth@wpi.edu,xkong@wpi.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: rcpaffenroth@wpi.edu, xkong@wpi.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -498,7 +498,7 @@ Dry run -> not sending mail to scott.james@noblis.org,james.larkin@noblis.org
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: scott.james@noblis.org, james.larkin@noblis.org
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -517,7 +517,7 @@ Dry run -> not sending mail to sb@ischool.berkeley.edu
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: sb@ischool.berkeley.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -536,7 +536,7 @@ Dry run -> not sending mail to ssepulveda.sm@gmail.com,pablo.reyes@uv.cl,alejand
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: ssepulveda.sm@gmail.com, pablo.reyes@uv.cl, alejandro.weinstein@uv.cl
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -555,7 +555,7 @@ Dry run -> not sending mail to yannick.congo@gmail.com
 From: dniederhut@enthought.com
 Subject: Your SciPy 2015 Paper DOI
 To: yannick.congo@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 

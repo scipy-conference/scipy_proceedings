@@ -68,7 +68,7 @@ a {text-decoration: none;
 }
 
 .midHeader a {
-  text-decoration: none;    
+  text-decoration: none;
   color: rgb(39,78,144);
   margin: 5px 0px 5px 10px;
 }
@@ -114,7 +114,7 @@ a {text-decoration: none;
   font-weight: bold;
   margin: 0;
   padding: 0 0.75ex 0 0.5ex;
-}  
+}
 
 .subHeader a:hover {
   text-decoration: underline;
@@ -132,7 +132,7 @@ a {text-decoration: none;
   float: left;
 /*  background-color: green; for debugging IE surprises*/
   width: 212px;
-  padding: 0;	
+  padding: 0;
   overflow: hidden;
   display: inline; /* forces IE to calc correct margin */
 }
@@ -161,7 +161,7 @@ a {text-decoration: none;
 .sidepanel {
   margin: 5px;
   float: left;
-  width: 200px;	
+  width: 200px;
   border: 1px solid #9c9c9c;
   background: #e5e5e5;
   overflow: hidden; /* new 18:11 */
@@ -316,7 +316,7 @@ pre {
   clear: right;
 }
 
-/* for broken IE */ 
+/* for broken IE */
 * html #pagetrail li {
   border-right: 1px solid #AAA;
   padding: 0 0.3em 0 0;
@@ -432,7 +432,7 @@ pre {
   margin: 5px 5px;
   padding: 0px;
   text-align: center;
-  font-size: 1em; 
+  font-size: 1em;
   color: #6C7680;
 }
 
@@ -440,14 +440,14 @@ pre {
   margin: 5px 5px;
   padding: 0px;
   text-align: center;
-  font-size: 1em; 
+  font-size: 1em;
 }
 
 #timings{
   margin: 5px 0px;
   padding: 0;
   text-align: center;
-  font-size: 0.8em; 
+  font-size: 0.8em;
   color: #6C7680;
 }
 #credits li {
@@ -554,7 +554,7 @@ TD.tip {
 #content .sidebar p {text-align: left;}
 #content[dir="rtl"] .sidebar p {text-align: right;}
 /* All headings use darker blue and some white space above */
-#content .sidebar h3, #content .sidebar h4 {margin: 1.5em 0 0 0; 
+#content .sidebar h3, #content .sidebar h4 {margin: 1.5em 0 0 0;
     padding: 2px 8px; background: #B8C5D9;}
 #content .sidebar *:first-child {margin-top: 0}
 /* all block elements use light blue background */
@@ -567,14 +567,13 @@ TD.tip {
 #content .sidebar li { display: block;}
 #content .sidebar li p {margin: 0; padding: 0; border: none;}
 
-/* Content Figures 
+/* Content Figures
 
 Default figure float to the end of the page. Left of right classes float to the left or right :-)
 */
-#content .figure {float: right; margin: 0 0 0 20px; padding: 0; 
+#content .figure {float: right; margin: 0 0 0 20px; padding: 0;
     font-size: 0.85em;}
 #content[dir="rtl"] .figure {float: left; margin: 0 20px 0 0;}
 #content .figure.left {float: left; margin: 0 20px 0 0;}
 #content .figure.right {float: right; margin: 0 0 0 20px;}
 #content .figure p {margin: 0; text-align: center; font-weight: bold;}
-

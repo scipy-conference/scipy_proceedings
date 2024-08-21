@@ -1,7 +1,7 @@
 .. For each conference, update the following section,
    which will be inserted in the template below.
 
-.. |conference| replace:: SciPy 
+.. |conference| replace:: SciPy
 .. |year| replace:: 2010
 .. |abstracts| replace:: 32
 .. |papers| replace:: 19

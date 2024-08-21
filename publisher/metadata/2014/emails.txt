@@ -4,7 +4,7 @@ Dry run -> not sending mail to aterrell@tacc.utexas.edu,jrocher@enthought.com,st
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: aterrell@tacc.utexas.edu, jrocher@enthought.com, stefanv@berkeley.edu, james.bergstra@gmail.com
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -23,7 +23,7 @@ Dry run -> not sending mail to gwb6@psu.edu
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: gwb6@psu.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -42,7 +42,7 @@ Dry run -> not sending mail to davclark@berkeley.edu,aculich@berkeley.edu,maplab
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: davclark@berkeley.edu, aculich@berkeley.edu, maplabs@light42.com, rylo@berkeley.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -61,7 +61,7 @@ Dry run -> not sending mail to scollis@anl.gov,sgrande@bnl.gov,jhelmus@anl.gov,d
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: scollis@anl.gov, sgrande@bnl.gov, jhelmus@anl.gov, di.wu@nasa.gov, ann.fridlind@nasa.gov, marcus.vanlier-walqui@nasa.gov, atheisen@ou.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -80,7 +80,7 @@ Dry run -> not sending mail to david.ketcheson@kaust.edu.sa
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: david.ketcheson@kaust.edu.sa
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -99,7 +99,7 @@ Dry run -> not sending mail to jklay@calpoly.edu
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: jklay@calpoly.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -118,7 +118,7 @@ Dry run -> not sending mail to bjkomer@uwaterloo.ca,james.bergstra@uwaterloo.ca,
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: bjkomer@uwaterloo.ca, james.bergstra@uwaterloo.ca, celiasmith@uwaterloo.ca
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -137,7 +137,7 @@ Dry run -> not sending mail to jkuiper@anl.gov,aayers@anl.gov,mholm@anl.gov,mnow
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: jkuiper@anl.gov, aayers@anl.gov, mholm@anl.gov, mnowak@anl.gov
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -156,7 +156,7 @@ Dry run -> not sending mail to jlaura@asu.edu,srey@asu.edu
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: jlaura@asu.edu, srey@asu.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -175,7 +175,7 @@ Dry run -> not sending mail to kannan@iitb.ac.in
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: kannan@iitb.ac.in
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -194,7 +194,7 @@ Dry run -> not sending mail to pugh@maths.ox.ac.uk
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: pugh@maths.ox.ac.uk
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -213,7 +213,7 @@ Dry run -> not sending mail to dpsanders@ciencias.unam.mx,benet@fis.unam.mx
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: dpsanders@ciencias.unam.mx, benet@fis.unam.mx
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -232,7 +232,7 @@ Dry run -> not sending mail to sarava@tamu.edu
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: sarava@tamu.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -251,7 +251,7 @@ Dry run -> not sending mail to kthyng@tamu.edu,hetland@tamu.edu
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: kthyng@tamu.edu, hetland@tamu.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -270,7 +270,7 @@ Dry run -> not sending mail to jakevdp@cs.washington.edu
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: jakevdp@cs.washington.edu
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -289,7 +289,7 @@ Dry run -> not sending mail to mwiebe@continuum.io,mrocklin@continuum.io,tj.alum
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: mwiebe@continuum.io, mrocklin@continuum.io, tj.alumbaugh@continuum.io, aterrel@continuum.io
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -308,7 +308,7 @@ Dry run -> not sending mail to jzuhone@milkyway.gsfc.nasa.gov,biffi@sissa.it,hal
 From: dillon.niederhut@gmail.com
 Subject: Your SciPy 2014 Paper DOI
 To: jzuhone@milkyway.gsfc.nasa.gov, biffi@sissa.it, hallman13@gmail.com, srandall@cfa.harvard.edu, afoster@cfa.harvard.edu, christian.schmid@sternwarte.uni-erlangen.de
-Cc: 
+Cc:
 MIME-Version: 1.0
 Content-Type: text/plain
 

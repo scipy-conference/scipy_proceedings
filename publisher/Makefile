@@ -32,8 +32,8 @@ $(TEXDIR)/%.pdf: $(TEXDIR)/%.tex
 title-pdf: $(TEXDIR)/title.pdf
 copyright-pdf: $(TEXDIR)/copyright.pdf
 organization-pdf: $(TEXDIR)/organization.pdf
-students-pdf: $(TEXDIR)/students.pdf 
-slides-pdf: $(TEXDIR)/slides.pdf 
+students-pdf: $(TEXDIR)/students.pdf
+slides-pdf: $(TEXDIR)/slides.pdf
 
 front-pdf: title-pdf copyright-pdf organization-pdf students-pdf slides-pdf
 
