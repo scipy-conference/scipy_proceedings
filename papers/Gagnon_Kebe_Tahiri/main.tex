@@ -144,9 +144,9 @@ The following section presents a more concise version of the formulas mentioned 
 
 \subsection{Robinson-Foulds distance}\label{RF}
 
-The Robinson-Foulds distance measures the dissimilarity between phylogenetic trees by counting the number of clades present in one tree but absent in the other. It is commonly used to quantify topological differences between phylogenetic trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
+The Robinson-Foulds distance quantifies dissimilarity between phylogenetic trees by counting the number of clades  (i.e., groups of species with a common origin) present in one tree but absent in the other. This measure can be used to assess topological differences between trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}). 
 
-When a gene tree is compared with other gene trees, all built using different habitat parameters (see the list in the first step of \autoref{aPhyloGeo-software}), the Robinson-Foulds distance can tell us how many clades differ between the initial tree and the others. When the initial phylogenetic tree constructed using one of the attributes shows strong dissimilarity with the other trees, this suggests that this parameter exerts an influence distinct from the others on the phylogenetic relationships of cumacean species.
+In this context, we compare phylogenetic trees constructed from various habitat attributes (see the list in the first step of \autoref{aPhyloGeo-software}). For example, consider one tree based on habitat attribute A and the other trees based on the other habitat attributes (B, C, D, E, ...). The Robinson-Foulds distance measures the number of clades that differ between the initial tree (constructed using the A attribute) and each of the other trees, by calculating the level of topological dissimilarity between the trees. A high distance implies that the habitat attribute has a particular impact on the phylogenetic relationships of cumacean species compared to other attributes.
 
 \begin{equation}\label{eq:rf}
     \text{RF}(T_1, T_2) = | \Sigma(T_1) \Delta \Sigma(T_2) |
@@ -169,12 +169,11 @@ where $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of splits in trees $T_1$ and 
         return rf, rf / rf_max
 \end{lstlisting}
 
-
 \subsection{Normalized Robinson-Foulds distance}\label{RFnorm}
 
-The normalized Robinson-Foulds distance scales the RF distance to account for the size  of the trees (number of clades), allowing a fairer comparison and giving a value between 0 and 1. In this case, the distance has been normalized by $2n-6$, where $n$ represents the number of taxa, to make it easier to compare the relative differences between trees (see Equation \eqref{eq:rf_norm} and \autoref{lst:euclideanDist}).
+The normalized Robinson-Foulds distance scales the Robinson-Foulds distance to account for the size variations in the trees (number of clades), allowing a more equitable comparison. It scales the distance to a range between 0 and 1. In our context, the distance has been normalized by $2n-6$, where $n$ represents the number of taxa. (see Equation \eqref{eq:rf_norm} and \autoref{lst:euclideanDist}).
 
-If the phylogenetic trees are of different sizes (e.g., if one of them is based on a missing data set or a reduced number of species or parameters), the nRF distance makes it possible to interpret the relative influence of each habitat feature on the evolutionary relationships of cumacean, independently of the number of clades in the trees.
+For example, if the size of tree A differs due to missing data, this normalized metric allows us to compare its dissimilarity with that of other trees (B, C, D, ...) in a fairer way. In this case, it reveals the relative influence of habitat parameter A on cumacean phylogenetic relationships, independent of tree size.
 
 \begin{equation}\label{eq:rf_norm}
     \text{RF}_{\text{norm}}(T_1, T_2) = \frac{| \Sigma(T_1) \Delta \Sigma(T_2) |}{| \Sigma(T_1) | + | \Sigma(T_2) |}
