@@ -10,26 +10,18 @@
         "Using data from the National Survey of Family Growth (NSFG),\nwe investigate marriage patterns among women in the United States\nWe describe and predict age at\nfirst marriage for successive generations based on decade of\nbirth. The fraction of women married by age 22 has dropped by 11\npercentage points per decade, from 69\\% for women born in the 1940s\nto 13\\% for women born in the 90s.  The fraction of women married by\nage 42 fell more slowly, from 93\\% for women born in the 40s to 82\\%\nfor women born in the 70s.  Projections suggest that this\nfraction will be substantially lower for later generations, between\n68\\% and 72\\%.  Along with these results, this paper presents an\nintroduction to survival analysis methods and an implementation\nin Python."
       ],
       "title": "Will Millennials Ever Get Married?",
-      "author": [
-        "Allen B. Downey"
-      ],
+      "author": ["Allen B. Downey"],
       "authors": "Allen B. Downey",
       "author_institution_map": {
-        "Allen B. Downey": [
-          "Olin College of Engineering"
-        ]
+        "Allen B. Downey": ["Olin College of Engineering"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-000",
       "keywords": "Survival analysis, marriage patterns, Python.",
-      "author_institution": [
-        "Olin College of Engineering"
-      ],
+      "author_institution": ["Olin College of Engineering"],
       "video": "https://www.youtube.com/watch?v=XHYFNraQEEo",
       "copyright_holder": "Allen B. Downey.",
-      "author_email": [
-        "allen.downey@olin.edu"
-      ],
+      "author_email": ["allen.downey@olin.edu"],
       "pages": 5
     },
     {
@@ -44,10 +36,7 @@
         "This paper first gives a short introduction to PGMs and various other python\npackages available for working with PGMs. Then we discuss about creating and\ndoing inference over Bayesian Networks and Markov Networks using pgmpy."
       ],
       "title": "pgmpy: Probabilistic Graphical Models using Python",
-      "author": [
-        "Ankur Ankan",
-        "Abinash Panda"
-      ],
+      "author": ["Ankur Ankan", "Abinash Panda"],
       "authors": "Ankur Ankan, Abinash Panda",
       "author_institution_map": {
         "Abinash Panda": [],
@@ -59,10 +48,7 @@
       "author_institution": [],
       "video": "https://www.youtube.com/watch?v=Vcmjqx7lht0",
       "copyright_holder": "Ankur Ankan et al.",
-      "author_email": [
-        "ankurankan@gmail.com",
-        "mailme.abinashpanda@gmail.com"
-      ],
+      "author_email": ["ankurankan@gmail.com", "mailme.abinashpanda@gmail.com"],
       "pages": 6
     },
     {
@@ -75,18 +61,13 @@
         "We have been involved with teaching Python to biomedical scientists since 2005. In all, seven courses have been taught: 5 at the University of Pittsburgh, as a required course for biomedical informatics graduate students. Students have primarily been biomedical informatics graduate students with other students coming from human genetics, molecular biology, statistics, and similar fields. The range of prior computing experience has been wide: the majority of students had little or no prior programming experiences while a few students were experienced in other languages such as C/C++ and wanted to learn a scripting language for increased productivity. The semester-long courses have followed a procedural first approach then an introduction to object-oriented programming. By the end of the course students produce an independent programming project on a topic of their own choosing."
       ],
       "title": "Python as a First Programming Language for Biomedical Scientists",
-      "author": [
-        "Brian E. Chapman, Ph.D.",
-        "Jeannie Irwin, Ph.D."
-      ],
+      "author": ["Brian E. Chapman, Ph.D.", "Jeannie Irwin, Ph.D."],
       "authors": "Brian E. Chapman, Ph.D., Jeannie Irwin, Ph.D.",
       "author_institution_map": {
         "Brian E. Chapman, Ph.D.": [
           "Department of Radiology, University of Utah"
         ],
-        "Jeannie Irwin, Ph.D.": [
-          "Unaffiliated"
-        ]
+        "Jeannie Irwin, Ph.D.": ["Unaffiliated"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-002",
@@ -97,10 +78,7 @@
       ],
       "video": "https://www.youtube.com/watch?v=kP_glnbesJ4",
       "copyright_holder": "Brian E. Chapman, Ph.D. et al.",
-      "author_email": [
-        "brian.chapman@utah.edu",
-        "jeannieirwin@gmail.com"
-      ],
+      "author_email": ["brian.chapman@utah.edu", "jeannieirwin@gmail.com"],
       "pages": 6
     },
     {
@@ -124,22 +102,14 @@
       ],
       "authors": "Brian McFee, Colin Raffel, Dawen Liang, Daniel P.W. Ellis, Matt McVicar, Eric Battenberg, Oriol Nieto",
       "author_institution_map": {
-        "Daniel P.W. Ellis": [
-          "LabROSA, Columbia University"
-        ],
+        "Daniel P.W. Ellis": ["LabROSA, Columbia University"],
         "Brian McFee": [
           "Center for Data Science, New York University",
           "Music and Audio Research Laboratory, New York University"
         ],
-        "Colin Raffel": [
-          "LabROSA, Columbia University"
-        ],
-        "Dawen Liang": [
-          "LabROSA, Columbia University"
-        ],
-        "Eric Battenberg": [
-          "Silicon Valley AI Lab, Baidu, Inc."
-        ],
+        "Colin Raffel": ["LabROSA, Columbia University"],
+        "Dawen Liang": ["LabROSA, Columbia University"],
+        "Eric Battenberg": ["Silicon Valley AI Lab, Baidu, Inc."],
         "Oriol Nieto": [
           "Music and Audio Research Laboratory, New York University"
         ],
@@ -183,26 +153,18 @@
         "This paper introduces PyEDA,\na Python library for electronic design automation (EDA).\nPyEDA provides both a high level interface to the representation of\nBoolean functions,\nand blazingly-fast C extensions for fundamental algorithms where\nperformance is essential.\nPyEDA is a hobby project which has the simple but audacious goal of\nimproving the state of digital design by using Python."
       ],
       "title": "PyEDA: Data Structures and Algorithms for Electronic Design Automation",
-      "author": [
-        "Chris Drake"
-      ],
+      "author": ["Chris Drake"],
       "authors": "Chris Drake",
       "author_institution_map": {
-        "Chris Drake": [
-          "Drake Enterprises"
-        ]
+        "Chris Drake": ["Drake Enterprises"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-004",
       "keywords": "",
-      "author_institution": [
-        "Drake Enterprises"
-      ],
+      "author_institution": ["Drake Enterprises"],
       "video": "https://www.youtube.com/watch?v=cljDuK0ouRs",
       "copyright_holder": "Chris Drake.",
-      "author_email": [
-        "cjdrake@gmail.com"
-      ],
+      "author_email": ["cjdrake@gmail.com"],
       "pages": 6
     },
     {
@@ -215,26 +177,18 @@
         "VTK and ParaView are leading software packages for data analysis\nand visualization. Since their early years, Python has played an\nimportant role in each package. In many use cases, VTK and ParaView\nserve as modules used by Python applications. In other use cases,\nPython modules are used to generate visualization components within\nVTK. In this paper, we provide an overview of Python integration in\nVTK and ParaView and give some concrete examples of usage. We also\nprovide a roadmap for additional Python integration in VTK and\nParaView in the future."
       ],
       "title": "Scientific Data Analysis and Visualization with Python, VTK, and ParaView",
-      "author": [
-        "Cory Quammen"
-      ],
+      "author": ["Cory Quammen"],
       "authors": "Cory Quammen",
       "author_institution_map": {
-        "Cory Quammen": [
-          "Kitware, Inc."
-        ]
+        "Cory Quammen": ["Kitware, Inc."]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-005",
       "keywords": "data analysis, scientific visualization, VTK, ParaView",
-      "author_institution": [
-        "Kitware, Inc."
-      ],
+      "author_institution": ["Kitware, Inc."],
       "video": "https://www.youtube.com/watch?v=8ugmkKaYKxM",
       "copyright_holder": "Cory Quammen.",
-      "author_email": [
-        "cory.quammen@kitware.com"
-      ],
+      "author_email": ["cory.quammen@kitware.com"],
       "pages": 8
     },
     {
@@ -247,26 +201,16 @@
         "Built on Google App Engine (GAE), RealMassive encountered challenges while attempting to scale its recommendation engine to match its nationwide, multi-market expansion. To address this problem, we borrowed a conceptual model from spectral data processing to transform our domain-specific problem into one that the GAE's search engine could solve. Rather than using a more traditional heuristics-based relevancy ranking, we filtered and scored results using a modified version of a spectral angle. While this approach seems to have little in common with providing a recommendation based on similarity, there are important parallels: filtering to reduce the search space; independent variables that can be resampled into a signature; a signature library to identify meaningful similarities; and an algorithm that lends itself to an accurate but flexible definition of similarity. We implemented this as a web service that provides recommendations in sub-second time. The RealMassive platform currently covers over 4.5 billion square feet of commercial real estate inventory and is expanding quickly."
       ],
       "title": "Creating a Real-Time Recommendation Engine using Modified K-Means Clustering and Remote Sensing Signature Matching Algorithms",
-      "author": [
-        "David Lippa",
-        "Jason Vertrees"
-      ],
+      "author": ["David Lippa", "Jason Vertrees"],
       "authors": "David Lippa, Jason Vertrees",
       "author_institution_map": {
-        "David Lippa": [
-          "RealMassive, Inc."
-        ],
-        "Jason Vertrees": [
-          "RealMassive, Inc."
-        ]
+        "David Lippa": ["RealMassive, Inc."],
+        "Jason Vertrees": ["RealMassive, Inc."]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-006",
       "keywords": "algorithms, clustering, recommendation engine, remote sensing",
-      "author_institution": [
-        "RealMassive, Inc.",
-        "RealMassive, Inc."
-      ],
+      "author_institution": ["RealMassive, Inc.", "RealMassive, Inc."],
       "video": "",
       "copyright_holder": "RealMassive, Inc.",
       "author_email": [
@@ -286,22 +230,12 @@
         "Individual steps are written as Python classes that can be invoked\nindividually from within Python or from the stpipe command line. Any\nset of step classes can be configured into a pipeline,\nwith stpipe handling the flow of\ndata between steps. The stpipe environment includes the use of standard\ndata models. The data models, defined using json schema, provide a means of\nvalidating the correct format of the data files presented to the pipeline,\nas well as presenting an abstract interface to isolate the calibration\nsteps from details of how the data are stored on disk."
       ],
       "title": "The James Webb Space Telescope Data Calibration Pipeline",
-      "author": [
-        "Howard Bushouse",
-        "Michael Droettboom",
-        "Perry Greenfield"
-      ],
+      "author": ["Howard Bushouse", "Michael Droettboom", "Perry Greenfield"],
       "authors": "Howard Bushouse, Michael Droettboom, Perry Greenfield",
       "author_institution_map": {
-        "Howard Bushouse": [
-          "Space Telescope Science Institute"
-        ],
-        "Perry Greenfield": [
-          "Space Telescope Science Institute"
-        ],
-        "Michael Droettboom": [
-          "Space Telescope Science Institute"
-        ]
+        "Howard Bushouse": ["Space Telescope Science Institute"],
+        "Perry Greenfield": ["Space Telescope Science Institute"],
+        "Michael Droettboom": ["Space Telescope Science Institute"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-007",
@@ -331,26 +265,18 @@
         "Cython has existing machinery that allows C-level declarations to be shared between Cython-compiled extension modules without linking against the original libraries.\nThe Cython BLAS and LAPACK API in SciPy uses this functionality to make it so that the same BLAS and LAPACK libraries that were used to compile SciPy can be used in Python extension modules via Cython.\nThis paper will demonstrate how to create and use these APIs for both Fortran and C libraries in a platform-independent manner."
       ],
       "title": "Circumventing The Linker: Using SciPy's BLAS and LAPACK Within Cython",
-      "author": [
-        "Ian Henriksen"
-      ],
+      "author": ["Ian Henriksen"],
       "authors": "Ian Henriksen",
       "author_institution_map": {
-        "Ian Henriksen": [
-          "Brigham Young University Math Department"
-        ]
+        "Ian Henriksen": ["Brigham Young University Math Department"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-008",
       "keywords": "Cython, BLAS, LAPACK, SciPy",
-      "author_institution": [
-        "Brigham Young University Math Department"
-      ],
+      "author_institution": ["Brigham Young University Math Department"],
       "video": "https://www.youtube.com/watch?v=R4yB-8tB0J0",
       "copyright_holder": "Ian Henriksen.",
-      "author_email": [
-        "iandh@byu.edu"
-      ],
+      "author_email": ["iandh@byu.edu"],
       "pages": 3
     },
     {
@@ -363,10 +289,7 @@
         "Agent-based modeling is a computational methodology used in social science, biology, and other fields, which involves simulating the behavior and interaction of many autonomous entities, or agents, over time. There is currently a hole in this area in  Python’s robust and growing scientific ecosystem. Mesa is a new open-source, Apache 2.0 licensed package meant to fill that gap. It allows users to quickly create agent-based models using built-in core components (such as agent schedulers and spatial grids) or customized implementations; visualize them using a browser-based interface; and analyze their results using Python’s data analysis tools. Its goal is to be a Python 3-based alternative to other popular frameworks based in other languages such as NetLogo, Repast, or MASON. Since the framework is being built from scratch it is able to incorporate lessons from other tools. In this paper, we present Mesa's core features and demonstrate them with a simple example model.1"
       ],
       "title": "Mesa: An Agent-Based Modeling Framework",
-      "author": [
-        "David Masad",
-        "Jacqueline Kazil"
-      ],
+      "author": ["David Masad", "Jacqueline Kazil"],
       "authors": "David Masad, Jacqueline Kazil",
       "author_institution_map": {
         "David Masad": [
@@ -403,11 +326,7 @@
         "HoloViews also provides powerful containers that allow you to\norganize this data for analysis, embedding it whatever\nmultidimensional continuous or discrete space best characterizes\nit. The resulting workflow allows you to focus on exploring,\nanalyzing, and understanding your data and results, while leading\ndirectly to an exportable recipe for reproducible research."
       ],
       "title": "HoloViews: Building Complex Visualizations Easily for Reproducible Science",
-      "author": [
-        "Jean-Luc R. Stevens",
-        "Philipp Rudiger",
-        "James A. Bednar"
-      ],
+      "author": ["Jean-Luc R. Stevens", "Philipp Rudiger", "James A. Bednar"],
       "authors": "Jean-Luc R. Stevens, Philipp Rudiger, James A. Bednar",
       "author_institution_map": {
         "James A. Bednar": [
@@ -447,32 +366,19 @@
         "The structural cohesion model is a powerful sociological conception of cohesion in social groups, but its diffusion in empirical literature has been hampered by computational problems. We present useful heuristics for computing structural cohesion that allow a speed-up of one order of magnitude over the algorithms currently available. Both the heuristics and the exact algorithm have been implemented on NetworkX by the first author. Using as examples three large collaboration networks (co-maintenance of Debian packages, co-authorship in Nuclear Theory, and co-authorship in High-Energy Theory) we illustrate our approach to measure structural cohesion in relatively large networks. We also introduce a novel graphical representation of the structural cohesion analysis to quickly spot differences across networks. It is implemented using matplotlib."
       ],
       "title": "Structural Cohesion: Visualization and Heuristics for Fast Computation with NetworkX and matplotlib",
-      "author": [
-        "Jordi Torrents",
-        "Fabrizio Ferraro"
-      ],
+      "author": ["Jordi Torrents", "Fabrizio Ferraro"],
       "authors": "Jordi Torrents, Fabrizio Ferraro",
       "author_institution_map": {
-        "Jordi Torrents": [
-          "University of Barcelona"
-        ],
-        "Fabrizio Ferraro": [
-          "IESE Business School"
-        ]
+        "Jordi Torrents": ["University of Barcelona"],
+        "Fabrizio Ferraro": ["IESE Business School"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-00b",
       "keywords": "Network Analysis, Sociology, Structural Cohesion, NetworkX, matplotlib",
-      "author_institution": [
-        "University of Barcelona",
-        "IESE Business School"
-      ],
+      "author_institution": ["University of Barcelona", "IESE Business School"],
       "video": "https://www.youtube.com/watch?v=K8RFIdG3g9Y",
       "copyright_holder": "Jordi Torrents et al.",
-      "author_email": [
-        "jordi.t21@gmail.com",
-        "fferraro@iese.edu"
-      ],
+      "author_email": ["jordi.t21@gmail.com", "fferraro@iese.edu"],
       "pages": 10
     },
     {
@@ -485,9 +391,7 @@
         "Automated telescopes are capable of generating images more quickly than they can be inspected by a human, but detailed information on the performance of the telescope is valuable for monitoring and tuning of their operation.  The IQMon (Image Quality Monitor) package1 was developed to provide basic image quality metrics of automated telescopes in near real time."
       ],
       "title": "Automated Image Quality Monitoring with IQMon",
-      "author": [
-        "Josh Walawender"
-      ],
+      "author": ["Josh Walawender"],
       "authors": "Josh Walawender",
       "author_institution_map": {
         "Josh Walawender": [
@@ -502,9 +406,7 @@
       ],
       "video": "https://www.youtube.com/watch?v=dGLkDOvYOHA",
       "copyright_holder": "Josh Walawender.",
-      "author_email": [
-        "joshwalawender@me.com"
-      ],
+      "author_email": ["joshwalawender@me.com"],
       "pages": 7
     },
     {
@@ -517,26 +419,18 @@
         "In this work, a new python package, PyRK (Python for Reactor Kinetics), is\nintroduced.  PyRK has been designed to simulate, in zero\ndimensions, the transient, coupled, thermal-hydraulics and neutronics of\ntime-dependent behavior in nuclear reactors. PyRK is intended for analysis\nof many commonly studied transient scenarios including normal reactor\nstartup and shutdown as well as abnormal scenarios including Beyond Design\nBasis Events (BDBEs) such as Accident Transients Without Scram (ATWS). For\nrobustness, this package employs various tools within the scientific python\necosystem. For additional ease of use, it employs a reactor-agnostic,\nobject-oriented data model, allowing nuclear engineers to rapidly prototype\nnuclear reactor control and safety systems in the context of their novel\nnuclear reactor designs."
       ],
       "title": "PyRK: A Python Package For Nuclear Reactor Kinetics",
-      "author": [
-        "Kathryn Huff"
-      ],
+      "author": ["Kathryn Huff"],
       "authors": "Kathryn Huff",
       "author_institution_map": {
-        "Kathryn Huff": [
-          "University of California, Berkeley"
-        ]
+        "Kathryn Huff": ["University of California, Berkeley"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-00d",
       "keywords": "engineering, nuclear reactor, package",
-      "author_institution": [
-        "University of California, Berkeley"
-      ],
+      "author_institution": ["University of California, Berkeley"],
       "video": "https://www.youtube.com/watch?v=2HToG61wMWI",
       "copyright_holder": "Kathryn Huff.",
-      "author_email": [
-        "katyhuff@gmail.com"
-      ],
+      "author_email": ["katyhuff@gmail.com"],
       "pages": 7
     },
     {
@@ -558,21 +452,13 @@
       ],
       "authors": "Luke Campagnola, Almar Klein, Eric Larson, Cyrille Rossant, Nicolas Rougier",
       "author_institution_map": {
-        "Almar Klein": [
-          "Continuum Analytics"
-        ],
+        "Almar Klein": ["Continuum Analytics"],
         "Nicolas Rougier": [
           "French National Institute for Research in Computer Science and Control"
         ],
-        "Luke Campagnola": [
-          "University of North Carolina at Chapel Hill"
-        ],
-        "Cyrille Rossant": [
-          "University College London"
-        ],
-        "Eric Larson": [
-          "University of Washington"
-        ]
+        "Luke Campagnola": ["University of North Carolina at Chapel Hill"],
+        "Cyrille Rossant": ["University College London"],
+        "Eric Larson": ["University of Washington"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-00e",
@@ -632,9 +518,7 @@
       ],
       "video": "",
       "copyright_holder": "Margaret Y Mahan et al.",
-      "author_email": [
-        "mahan027@umn.edu"
-      ],
+      "author_email": ["mahan027@umn.edu"],
       "pages": 8
     },
     {
@@ -647,26 +531,18 @@
         "This paper will take the audience through the story of how an electrical and computer\nengineering faculty member has come to embrace Python, in particular IPython Notebook\n(IPython kernel for Jupyter),\nas an analysis and simulation tool for both teaching and research in signal processing\nand communications. Legacy tools such as MATLAB are well established (entrenched) in\nthis discipline, but engineers need to be aware of alternatives, especially in the case\nof Python where there is such a vibrant community of developers.\nIn this paper case studies will also be used to describe domain\nspecific code modules that are being developed to support both lecture and lab oriented\ncourses going through the conversion from MATLAB to Python. These modules in particular\naugment scipy.signal in a very positive way and enable rapid prototyping of\ncommunications and signal processing algorithms. Both student and industry team\nmembers in subcontract work, have responded favorably to the use of Python as an\nengineering problem solving platform. In teaching, IPython notebooks are used to augment\nlecture material with live calculations and simulations. These same notebooks are then\nplaced on the course Web Site so students can download and tinker on their own. This\nactivity also encourages learning more about the language core and Numpy, relative to\nMATLAB. The students quickly mature and are able to turn in homework solutions and\ncomplete computer simulation projects, all in the notebook. Rendering notebooks to\nPDF via LaTeX is also quite popular. The next step is to get other signals and systems faculty\ninvolved."
       ],
       "title": "Signal Processing and Communications: Teaching and Research Using IPython Notebook",
-      "author": [
-        "Mark Wickert"
-      ],
+      "author": ["Mark Wickert"],
       "authors": "Mark Wickert",
       "author_institution_map": {
-        "Mark Wickert": [
-          "University of Colorado Colorado Springs"
-        ]
+        "Mark Wickert": ["University of Colorado Colorado Springs"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-010",
       "keywords": "numerical computing, signal processing, communications systems, system modeling",
-      "author_institution": [
-        "University of Colorado Colorado Springs"
-      ],
+      "author_institution": ["University of Colorado Colorado Springs"],
       "video": "https://www.youtube.com/watch?v=xWREmn7EajM",
       "copyright_holder": "Mark Wickert.",
-      "author_email": [
-        "mwickert@uccs.edu"
-      ],
+      "author_email": ["mwickert@uccs.edu"],
       "pages": 8
     },
     {
@@ -689,21 +565,11 @@
       ],
       "authors": "Mattheus P. Ueckermann, Robert D. Chambers, Christopher A. Brooks, William E. Audette III, Jerry Bieszczad",
       "author_institution_map": {
-        "William E. Audette III": [
-          "Creare LLC, Hanover, NH"
-        ],
-        "Christopher A. Brooks": [
-          "Creare LLC, Hanover, NH"
-        ],
-        "Robert D. Chambers": [
-          "Creare LLC, Hanover, NH"
-        ],
-        "Jerry Bieszczad": [
-          "Creare LLC, Hanover, NH"
-        ],
-        "Mattheus P. Ueckermann": [
-          "Creare LLC, Hanover, NH"
-        ]
+        "William E. Audette III": ["Creare LLC, Hanover, NH"],
+        "Christopher A. Brooks": ["Creare LLC, Hanover, NH"],
+        "Robert D. Chambers": ["Creare LLC, Hanover, NH"],
+        "Jerry Bieszczad": ["Creare LLC, Hanover, NH"],
+        "Mattheus P. Ueckermann": ["Creare LLC, Hanover, NH"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-011",
@@ -736,9 +602,7 @@
         "This paper describes a tool for astronomical research implemented as an\nIPython notebook with a widget interface. The notebook uses Astropy, a\ncommunity-developed package of fundamental tools for astronomy, and\nAstropy affiliated packages, as the back end. The widget interface makes\nAstropy a much more useful tool to undergraduates or other non-experts\ndoing research in astronomy, filling a niche for software that connects\nbeginners to research-grade code."
       ],
       "title": "Widgets and Astropy: Accomplishing Productive Research with Undergraduates",
-      "author": [
-        "Matthew Craig"
-      ],
+      "author": ["Matthew Craig"],
       "authors": "Matthew Craig",
       "author_institution_map": {
         "Matthew Craig": [
@@ -753,9 +617,7 @@
       ],
       "video": "https://www.youtube.com/watch?v=hyxCDdBH1Mg",
       "copyright_holder": "Matthew Craig.",
-      "author_email": [
-        "mcraig@mnstate.edu"
-      ],
+      "author_email": ["mcraig@mnstate.edu"],
       "pages": 5
     },
     {
@@ -768,26 +630,18 @@
         "Dask enables parallel and out-of-core computation.  We couple blocked\nalgorithms with dynamic and memory aware task scheduling to achieve a\nparallel and out-of-core NumPy clone.  We show how this extends the\neffective scale of modern hardware to larger datasets and discuss how these\nideas can be more broadly applied to other parallel collections."
       ],
       "title": "Dask: Parallel Computation with Blocked algorithms and Task Scheduling",
-      "author": [
-        "Matthew Rocklin"
-      ],
+      "author": ["Matthew Rocklin"],
       "authors": "Matthew Rocklin",
       "author_institution_map": {
-        "Matthew Rocklin": [
-          "Continuum Analytics"
-        ]
+        "Matthew Rocklin": ["Continuum Analytics"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-013",
       "keywords": "parallelism, NumPy, scheduling",
-      "author_institution": [
-        "Continuum Analytics"
-      ],
+      "author_institution": ["Continuum Analytics"],
       "video": "https://www.youtube.com/watch?v=1kkFZ4P-XHg",
       "copyright_holder": "Matthew Rocklin.",
-      "author_email": [
-        "mrocklin@gmail.com"
-      ],
+      "author_email": ["mrocklin@gmail.com"],
       "pages": 7
     },
     {
@@ -800,9 +654,7 @@
         "The National Oceanic and Atmospheric Administration (NOAA) Air Resources Laboratory's HYSPLIT (HYbrid Single Particle Lagrangian Transport) model Drax98, Drax97 uses a hybrid Langrangian and Eulerian calculation method to compute air parcel trajectories and particle dispersion and deposition simulations.  Air parcels are hypothetical small volumes of air with uniform characteristics.  The HYSPLIT model outputs air parcel paths projected forwards or backwards in time (trajectories) and is used in a variety of scientific contexts.  Here we present the first package in the mainstream scientific Python ecosystem designed to facilitate HYSPLIT trajectory analysis workflow by providing an intuitive API for generating, inspecting, and plotting trajectory paths and data."
       ],
       "title": "PySPLIT: a Package for the Generation, Analysis, and Visualization of HYSPLIT Air Parcel Trajectories",
-      "author": [
-        "Mellissa Cross"
-      ],
+      "author": ["Mellissa Cross"],
       "authors": "Mellissa Cross",
       "author_institution_map": {
         "Mellissa Cross": [
@@ -817,9 +669,7 @@
       ],
       "video": "https://www.youtube.com/watch?v=2mzhTC4Kp-Y",
       "copyright_holder": "Mellissa Cross.",
-      "author_email": [
-        "cros0324@umn.edu, mellissa.cross@gmail.com"
-      ],
+      "author_email": ["cros0324@umn.edu, mellissa.cross@gmail.com"],
       "pages": 5
     },
     {
@@ -832,9 +682,7 @@
         "TrendVis is a plotting package that uses matplotlib to create information-dense, sparkline-like, quantitative visualizations of multiple disparate data sets in a common plot area against a common variable.  This plot type is particularly well-suited for time-series data.  We discuss the rationale behind and the challenges associated with adapting matplotlib to this particular plot style, the TrendVis API and architecture, and various features available for users to customize and enhance the readability of their figures while walking through a sample workflow."
       ],
       "title": "TrendVis: an Elegant Interface for dense, sparkline-like, quantitative visualizations of multiple series using matplotlib",
-      "author": [
-        "Mellissa Cross"
-      ],
+      "author": ["Mellissa Cross"],
       "authors": "Mellissa Cross",
       "author_institution_map": {
         "Mellissa Cross": [
@@ -849,9 +697,7 @@
       ],
       "video": "https://www.youtube.com/watch?v=tklAFsce7eg",
       "copyright_holder": "Mellissa Cross.",
-      "author_email": [
-        "cros0324@umn.edu, mellissa.cross@gmail.com"
-      ],
+      "author_email": ["cros0324@umn.edu, mellissa.cross@gmail.com"],
       "pages": 6
     },
     {
@@ -865,26 +711,18 @@
         "This report provides a brief introduction to the formal tools needed to comprehend Bayesian networks, including probability theory and graph theory. Then, it describes Bayesian networks and causal Bayesian networks. It introduces some of the most basic functionality of the extensive NetworkX python package for working with complex graphs and networks networkx. I introduce some utilities I have build on top of NetworkX including conditional graph enumeration and sampling from discrete valued Bayesian networks encoded in NetworkX graphs pacer2015cbnx. I call this Causal Bayesian NetworkX, or cbnx. I conclude by introducing a formal framework for generating causal Bayesian networks called theory based causal induction griffithst09, out of which these utilities emerged. I discuss the background motivations for frameworks of this sort, their use in computational cognitive science, and the use of computational cognitive science for the machine learning community at large."
       ],
       "title": "Causal Bayesian NetworkX",
-      "author": [
-        "Michael D. Pacer"
-      ],
+      "author": ["Michael D. Pacer"],
       "authors": "Michael D. Pacer",
       "author_institution_map": {
-        "Michael D. Pacer": [
-          "University of California at Berkeley"
-        ]
+        "Michael D. Pacer": ["University of California at Berkeley"]
       },
       "bibliography": "myBibliography",
       "doi": "10.25080/Majora-7b98e3ed-016",
       "keywords": "probabilistic graphical models, causal theories, Bayesian networks, computational cognitive science, networkx",
-      "author_institution": [
-        "University of California at Berkeley"
-      ],
+      "author_institution": ["University of California at Berkeley"],
       "video": "https://www.youtube.com/watch?v=qWAQgWOD_nA",
       "copyright_holder": "Michael D. Pacer.",
-      "author_email": [
-        "mpacer@berkeley.edu"
-      ],
+      "author_email": ["mpacer@berkeley.edu"],
       "pages": 8
     },
     {
@@ -897,11 +735,7 @@
         "The deformation of the Earth surface reflects the action of several forces that act inside the planet. To understand how the Earth surface evolves complex models must be built to reconcile observations with theoretical numerical simulations. Starting from a well known numerical methodology already used among the geodynamic scientific community, PyGmod has been developed from scratch in the last year. The application simulates 2D large scale geodynamic processes by solving the conservation equations of mass, momentum, and energy by a finite difference method with a marker-in-cell technique.\nUnlike common simulation code written in Fortran or C this code is written in Python. The code implements a new approach that takes advantage of the hybrid architecture of the latest HPC machines. In PyGmod the standard MPI is coupled with a threading architecture to speed up some critical computations. Since the OpenMP API cannot be used with Python, threading is implemented in Cython. In addition a realtime visualization library has been developed to inspect the evolution of the model during the computation."
       ],
       "title": "Geodynamic simulations in HPC with Python",
-      "author": [
-        "Nicola Creati",
-        "Roberto Vidmar",
-        "Paolo Sterzai"
-      ],
+      "author": ["Nicola Creati", "Roberto Vidmar", "Paolo Sterzai"],
       "authors": "Nicola Creati, Roberto Vidmar, Paolo Sterzai",
       "author_institution_map": {
         "Roberto Vidmar": [
@@ -943,26 +777,18 @@
         "By providing the database and compute resources at http://qiita.microbio.me\nto the global community of microbiome researchers, Qiita alleviates the\ntechnical burdens, such as familiarity with the command line or access to\ncompute power, that are typically limiting for researchers studying\nmicrobial ecology, while at the same time promoting an open access culture.\nBecause Qiita is entirely open source and highly scalable, developers can\ninspect, customize, and extend it to suit their needs regardless of whether\nit is deployed as a desktop application or as a shared resource."
       ],
       "title": "Qiita: report of progress towards an open access microbiome data analysis and visualization platform",
-      "author": [
-        "The Qiita Development Team"
-      ],
+      "author": ["The Qiita Development Team"],
       "authors": "The Qiita Development Team",
       "author_institution_map": {
-        "The Qiita Development Team": [
-          "University of California, San Diego"
-        ]
+        "The Qiita Development Team": ["University of California, San Diego"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-018",
       "keywords": "Microbiome, multi-omics, open science, metagenomics, metatranscriptomics,\nmetaproteomics, metabolomics",
-      "author_institution": [
-        "University of California, San Diego"
-      ],
+      "author_institution": ["University of California, San Diego"],
       "video": "https://www.youtube.com/watch?v=TQzXwQ9Vx08",
       "copyright_holder": "The Qiita Development Team.",
-      "author_email": [
-        "robknight@ucsd.edu"
-      ],
+      "author_email": ["robknight@ucsd.edu"],
       "pages": 6
     },
     {
@@ -975,10 +801,7 @@
         "In this paper we demonstrate how Python can be used throughout the\nentire life cycle of a graduate program in Data Science.  In\ninterdisciplinary fields, such as Data Science, the students often\ncome from a variety of different backgrounds where, for example,\nsome students may have strong mathematical training but less\nexperience in programming.  Python’s ease of use, open source\nlicense, and access to a vast array of libraries make it\nparticularly suited for such students.  In particular, we will\ndiscuss how Python, IPython notebooks, scikit-learn, NumPy, SciPy,\nand pandas can be used in several phases of graduate Data Science\neducation, starting from introductory classes (covering topics such\nas data gathering, data cleaning, statistics, regression,\nclassification, machine learning, etc.) and culminating in degree\ncapstone research projects using more advanced ideas such as convex\noptimization, non-linear dimension reduction, and compressed\nsensing.  One particular item of note is the scikit-learn library,\nwhich provides numerous routines for machine learning.  Having\naccess to such a library allows interesting problems to be addressed\nearly in the educational process and the experience gained with such\n“black box” routines provides a firm foundation for the students own\nsoftware development, analysis, and research later in their academic\nexperience."
       ],
       "title": "Python in Data Science Research and Education",
-      "author": [
-        "Randy Paffenroth",
-        "Xiangnan Kong"
-      ],
+      "author": ["Randy Paffenroth", "Xiangnan Kong"],
       "authors": "Randy Paffenroth, Xiangnan Kong",
       "author_institution_map": {
         "Randy Paffenroth": [
@@ -997,10 +820,7 @@
       ],
       "video": "https://www.youtube.com/watch?v=EUEHOYl0mRg",
       "copyright_holder": "Randy Paffenroth et al.",
-      "author_email": [
-        "rcpaffenroth@wpi.edu",
-        "xkong@wpi.edu"
-      ],
+      "author_email": ["rcpaffenroth@wpi.edu", "xkong@wpi.edu"],
       "pages": 7
     },
     {
@@ -1011,32 +831,19 @@
       },
       "abstract": [],
       "title": "Relation: The Missing Container",
-      "author": [
-        "Scott James",
-        "James Larkin"
-      ],
+      "author": ["Scott James", "James Larkin"],
       "authors": "Scott James, James Larkin",
       "author_institution_map": {
-        "Scott James": [
-          "Noblis"
-        ],
-        "James Larkin": [
-          "Noblis"
-        ]
+        "Scott James": ["Noblis"],
+        "James Larkin": ["Noblis"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-01a",
       "keywords": "",
-      "author_institution": [
-        "Noblis",
-        "Noblis"
-      ],
+      "author_institution": ["Noblis", "Noblis"],
       "video": "",
       "copyright_holder": "Scott James et al.",
-      "author_email": [
-        "scott.james@noblis.org",
-        "james.larkin@noblis.org"
-      ],
+      "author_email": ["scott.james@noblis.org", "james.larkin@noblis.org"],
       "pages": 4
     },
     {
@@ -1049,26 +856,18 @@
         "We introduce BigBang, a new Python toolkit for analyzing\nonline collaborative communities such as those that\nbuild open source software.\nMailing lists serve as critical communications infrastructure for\nmany communities, including several of the open source software\ndevelopment communities that build scientific Python packages.\nBigBang provides tools for analyzing mailing lists.\nAs a demonstration, in this paper  we test a generative\nmodel of network growth on collaborative communities.\nWe derive social networks from archival mailing list history\nand test the Barabási-Alpert model against this data.\nWe find the model does not fit the data, but that mailing list\nsocial networks share statistical regularities.\nThis suggests room for a new generative model of network formation\nin the open collaborative setting."
       ],
       "title": "Testing Generative Models of Online Collaboration with BigBang",
-      "author": [
-        "Sebastian Benthall"
-      ],
+      "author": ["Sebastian Benthall"],
       "authors": "Sebastian Benthall",
       "author_institution_map": {
-        "Sebastian Benthall": [
-          "UC Berkeley School of Information"
-        ]
+        "Sebastian Benthall": ["UC Berkeley School of Information"]
       },
       "bibliography": "",
       "doi": "10.25080/Majora-7b98e3ed-01b",
       "keywords": "mailing lists, network analysis, assortativity, power law distributions,\ncollaboration",
-      "author_institution": [
-        "UC Berkeley School of Information"
-      ],
+      "author_institution": ["UC Berkeley School of Information"],
       "video": "https://www.youtube.com/watch?v=AQFS_ES7rT0",
       "copyright_holder": "Sebastian Benthall.",
-      "author_email": [
-        "sb@ischool.berkeley.edu"
-      ],
+      "author_email": ["sb@ischool.berkeley.edu"],
       "pages": 7
     },
     {
@@ -1081,11 +880,7 @@
         "This article presents an open-source Python software package, dubbed RTGraph, to visualize, process and record physiological signals (electrocardiography, electromyography, etc.) in real-time. RTGraph has a multiprocess architecture. This allows RTGraph to take advantage of multiple cores and to be able to handle data rates typically encountered during the acquisition and processing of biomedical signals. It also allows RTGraph to have a clean separation between the communication and visualization code. The paper presents the architecture and some programming details of RTGraph. It also includes three examples where RTGraph was adapted to work with (i) signals from a Inertial Measurement Unit (IMU) in the context of a biomechanical experiment; (ii) electromyography signals to estimate muscle fatigue; and (iii) pressure signals from a device used to monitor nutrition disorders in premature infants."
       ],
       "title": "Visualizing physiological signals in real-time",
-      "author": [
-        "Sebastián Sepúlveda",
-        "Pablo Reyes",
-        "Alejandro Weinstein"
-      ],
+      "author": ["Sebastián Sepúlveda", "Pablo Reyes", "Alejandro Weinstein"],
       "authors": "Sebastián Sepúlveda, Pablo Reyes, Alejandro Weinstein",
       "author_institution_map": {
         "Alejandro Weinstein": [
@@ -1127,9 +922,7 @@
         "In this paper we define a reproducibility record atom and the cloud\ninfrastructure to support it. We also provide a use case example with the\nevent based simulation management tool Sumatra and the container system\nDocker."
       ],
       "title": "Building a Cloud Service for Reproducible Simulation Management",
-      "author": [
-        "Faical Yannick Palingwende Congo"
-      ],
+      "author": ["Faical Yannick Palingwende Congo"],
       "authors": "Faical Yannick Palingwende Congo",
       "author_institution_map": {
         "Faical Yannick Palingwende Congo": [
@@ -1144,9 +937,7 @@
       ],
       "video": "https://www.youtube.com/watch?v=euMLYw7SNdk",
       "copyright_holder": "Faical Yannick Palingwende Congo.",
-      "author_email": [
-        "yannick.congo@gmail.com"
-      ],
+      "author_email": ["yannick.congo@gmail.com"],
       "pages": 7
     }
   ]

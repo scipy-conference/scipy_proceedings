@@ -43,9 +43,7 @@
     {
       "slide_id": "carpenter",
       "title": "Open-source bioimage analysis software to accelerate drug discovery",
-      "authors": [
-        "Anne Carpenter"
-      ],
+      "authors": ["Anne Carpenter"],
       "description": "",
       "zenodo_url": "https://zenodo.org/record/3961216",
       "doi": "10.25080/Majora-342d178e-01c"
@@ -66,9 +64,7 @@
     {
       "slide_id": "frictionless_data_slides",
       "title": "Frictionless Data for Reproducible Biology",
-      "authors": [
-        "Lilly Winfree"
-      ],
+      "authors": ["Lilly Winfree"],
       "description": "This talk discusses how biologists can make their data more reproducible using Frictionless Data's open source Python libraries",
       "zenodo_url": "https://zenodo.org/record/3961220",
       "doi": "10.25080/Majora-342d178e-01e"
@@ -95,9 +91,7 @@
     {
       "slide_id": "mjolnir",
       "title": "Project Mjolnir: A Modular, Open-source Platform for Developing Scientific IoT Sensor Networks",
-      "authors": [
-        "C.A.M. Gerlach"
-      ],
+      "authors": ["C.A.M. Gerlach"],
       "description": "From a humble beginning as a side effort using a Raspberry Pi to talk to lightning instruments, Project Mjolnir is evolving into a modular, open source client-server platform for developing scientific IoT sensor networks. Its goal is to enable scientists of many disciplines to employ low-cost hardware to robustly ingest, log and uplink periodic and on-demand science and engineering data and commands, controlled either autonomously or centrally, all with little or no bespoke code. The talk will discuss Mjolnir’s development and future, present examples of current projects built on it, and explore how to leverage it for new applications.",
       "zenodo_url": "https://zenodo.org/record/3961228",
       "doi": "10.25080/Majora-342d178e-020"
@@ -105,9 +99,7 @@
     {
       "slide_id": "pandera",
       "title": "Pandera: Statistical Data Validation of Pandas Dataframes",
-      "authors": [
-        "Niels Bantilan"
-      ],
+      "authors": ["Niels Bantilan"],
       "description": "This talk introduces pandera, an open source Python package for pandas data validation. It covers data validation in theory and practice, and goes through a case study analysis of the Fatal Encounters dataset to demonstrate how pandera can be used to make data analysis and machine learning more reproducible, robust, and reliable.",
       "zenodo_url": "https://zenodo.org/record/3961230",
       "doi": "10.25080/Majora-342d178e-021"
@@ -115,9 +107,7 @@
     {
       "slide_id": "pyF4all",
       "title": "Molecular infrastructure for modeling viruses with pythonic-mediated packages: pyF4all",
-      "authors": [
-        "Horacio V. Guzman"
-      ],
+      "authors": ["Horacio V. Guzman"],
       "description": "We model full viruses by coupling short highly-detailed molecular dynamics simulations with lower-resolution (but faster) continuum electrostatic models. Such multiscale approach enables to model a full virus in a desktop/small cluster-level infrastructure, which are available for most researchers. Here, we propose a first interfacing of the pythonic-like packages in a multiscale approach that automatizes the access to state-of-the-art biomolecular simulations via Jupyter Notebooks.",
       "zenodo_url": "https://zenodo.org/record/3961232",
       "doi": "10.25080/Majora-342d178e-022"
@@ -125,9 +115,7 @@
     {
       "slide_id": "pyhf",
       "title": "pyhf: a pure Python statistical fitting library with tensors and autograd",
-      "authors": [
-        "Matthew Feickert"
-      ],
+      "authors": ["Matthew Feickert"],
       "description": "pyhf is a pure-Python implementation of the HistFactory statistical model for multi-bin histogram-based analysis with asymptotic interval estimation, and part of the Scikit-HEP project ecosystem. pyhf supports modern computational graph libraries as computational backends in order to make use of features such as auto-differentiation and GPU acceleration. Additionally, the statistical models are defined in a declarative JSON schema, readily enabling preservation and distribution through services such as the Durham High-Energy Physics Database (HEPData).",
       "zenodo_url": "https://zenodo.org/record/3961236",
       "doi": "10.25080/Majora-342d178e-023"
@@ -135,9 +123,7 @@
     {
       "slide_id": "rapids_datashader",
       "title": "Bringing GPU Support to Datashader: A RAPIDS Case Study",
-      "authors": [
-        "Jon Mease"
-      ],
+      "authors": ["Jon Mease"],
       "description": "A case study on using RAPIDS technologies to add GPU support to the Datashader Python library",
       "zenodo_url": "https://zenodo.org/record/3961238",
       "doi": "10.25080/Majora-342d178e-024"
@@ -145,9 +131,7 @@
     {
       "slide_id": "scikit-multiflow",
       "title": "Learning from evolving data streams",
-      "authors": [
-        "Jacob Montiel"
-      ],
+      "authors": ["Jacob Montiel"],
       "description": "A brief introduction to machine learning for evolving data streams. In this field data is assumed infinite and can change over time. scikit-multiflow, a package for stream learning in Python is also presented.",
       "zenodo_url": "https://zenodo.org/record/3961242",
       "doi": "10.25080/Majora-342d178e-025"
@@ -155,11 +139,7 @@
     {
       "slide_id": "spatial_algorithms_at_scale_with_spatialpandas",
       "title": "Spatial Algorithms at Scale with spatialpandas",
-      "authors": [
-        "Dharhas Pothina",
-        "Kim Pevey",
-        "Adam Lewis"
-      ],
+      "authors": ["Dharhas Pothina", "Kim Pevey", "Adam Lewis"],
       "description": "How do you analyze 1 trillion rows of geospatial point data?  We recently solved this problem using spatialpandas, dask, and parquet file format to efficiently build and execute spatial algorithms at scale. We compare the spatialpandas solution's performance with other cases, and discuss the tradeoffs with various approaches.",
       "zenodo_url": "https://zenodo.org/record/3961244",
       "doi": "10.25080/Majora-342d178e-026"
@@ -169,9 +149,7 @@
     {
       "slide_id": "holoviz",
       "title": "HoloViz: What's new and what's next",
-      "authors": [
-        "James A. Bednar"
-      ],
+      "authors": ["James A. Bednar"],
       "description": "Updates and roadmaps for Panel, hvPlot, HoloViews, GeoViews, Datashader, Param, and Colorcet. The HoloViz suite of tools together form a unified approach for visualization from exploration to sharing applications and dashboards, building on the SciPy ecosystem to support easy visualization of large multidimensional or columnar datasets.",
       "zenodo_url": "https://zenodo.org/record/3961190",
       "doi": "10.25080/Majora-342d178e-028"
@@ -179,9 +157,7 @@
     {
       "slide_id": "matplotlib",
       "title": "SciPy Tools Plenary on Matplotlib",
-      "authors": [
-        "Elliott Sales de Andrade"
-      ],
+      "authors": ["Elliott Sales de Andrade"],
       "description": "Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python. This presentation summarizes changes over the past year, new features, and future plans.",
       "zenodo_url": "https://zenodo.org/record/3961192",
       "doi": "10.25080/Majora-342d178e-029"
@@ -189,9 +165,7 @@
     {
       "slide_id": "numba",
       "title": "SciPy Tools Plenary on Numba",
-      "authors": [
-        "Siu Kwan Lam"
-      ],
+      "authors": ["Siu Kwan Lam"],
       "description": "Numba is a just-in-time compiler for a subset of Python. This is a short presentation of Numba updates for 2019-2020. ",
       "zenodo_url": "https://zenodo.org/record/3961194",
       "doi": "10.25080/Majora-342d178e-02a"
@@ -216,9 +190,7 @@
     {
       "slide_id": "metalearn",
       "title": "Building an AutoML System for Fun and Non-profit",
-      "authors": [
-        "Niels Bantilan"
-      ],
+      "authors": ["Niels Bantilan"],
       "description": "This talk introduces metalearn, a MetaRL-based AutoML system that learns to learn how to propose hyperparameter selections that produce high validation scores on meta-test datasets.",
       "zenodo_url": "https://zenodo.org/record/3961204",
       "doi": "10.25080/Majora-342d178e-027"

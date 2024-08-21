@@ -3,21 +3,15 @@
     {
       "video": "",
       "title": "Keeping the Chandra Satellite Cool with Python",
-      "author_email": [
-        "aldcroft@head.cfa.harvard.edu"
-      ],
+      "author_email": ["aldcroft@head.cfa.harvard.edu"],
       "doi": "10.25080/Majora-92bf1922-000",
       "pages": 5,
       "bibliography": "",
       "author_institution_map": {
-        "Tom Aldcroft": [
-          "Smithsonian Astrophysical Observatory"
-        ]
+        "Tom Aldcroft": ["Smithsonian Astrophysical Observatory"]
       },
       "copyright_holder": "Tom Aldcroft.",
-      "author_institution": [
-        "Smithsonian Astrophysical Observatory"
-      ],
+      "author_institution": ["Smithsonian Astrophysical Observatory"],
       "authors": "Tom Aldcroft",
       "paper_id": "aldcroft",
       "abstract": [
@@ -28,28 +22,20 @@
         "start": 1,
         "stop": 5
       },
-      "author": [
-        "Tom Aldcroft"
-      ]
+      "author": ["Tom Aldcroft"]
     },
     {
       "video": "",
       "title": "Astrodata",
-      "author_email": [
-        "callen@gemini.edu"
-      ],
+      "author_email": ["callen@gemini.edu"],
       "doi": "10.25080/Majora-92bf1922-001",
       "pages": 6,
       "bibliography": "",
       "author_institution_map": {
-        "Craig Allen": [
-          "Gemini Observatory"
-        ]
+        "Craig Allen": ["Gemini Observatory"]
       },
       "copyright_holder": "Craig Allen.",
-      "author_institution": [
-        "Gemini Observatory"
-      ],
+      "author_institution": ["Gemini Observatory"],
       "authors": "Craig Allen",
       "paper_id": "allen",
       "abstract": [
@@ -60,38 +46,22 @@
         "start": 6,
         "stop": 11
       },
-      "author": [
-        "Craig Allen"
-      ]
+      "author": ["Craig Allen"]
     },
     {
       "video": "",
       "title": "Divisi: Learning from Semantic Networks and Sparse SVD",
-      "author_email": [
-        "rspeer@mit.edu",
-        "kcarnold@mit.edu",
-        "havasi@mit.edu"
-      ],
+      "author_email": ["rspeer@mit.edu", "kcarnold@mit.edu", "havasi@mit.edu"],
       "doi": "10.25080/Majora-92bf1922-002",
       "pages": 6,
       "bibliography": "",
       "author_institution_map": {
-        "Rob Speer": [
-          "MIT Media Lab"
-        ],
-        "Catherine Havasi": [
-          "MIT"
-        ],
-        "Kenneth Arnold": [
-          "MIT"
-        ]
+        "Rob Speer": ["MIT Media Lab"],
+        "Catherine Havasi": ["MIT"],
+        "Kenneth Arnold": ["MIT"]
       },
       "copyright_holder": "Rob Speer et al.",
-      "author_institution": [
-        "MIT Media Lab",
-        "MIT",
-        "MIT"
-      ],
+      "author_institution": ["MIT Media Lab", "MIT", "MIT"],
       "authors": "Rob Speer, Kenneth Arnold, Catherine Havasi",
       "paper_id": "arnold",
       "abstract": [
@@ -104,11 +74,7 @@
         "start": 12,
         "stop": 17
       },
-      "author": [
-        "Rob Speer",
-        "Kenneth Arnold",
-        "Catherine Havasi"
-      ]
+      "author": ["Rob Speer", "Kenneth Arnold", "Catherine Havasi"]
     },
     {
       "video": "",
@@ -128,33 +94,15 @@
       "pages": 7,
       "bibliography": "",
       "author_institution_map": {
-        "Frédéric Bastien": [
-          "Université de Montréal"
-        ],
-        "Pascal Lamblin": [
-          "Université de Montréal"
-        ],
-        "Guillaume Desjardins": [
-          "Université de Montréal"
-        ],
-        "David Warde-Farley": [
-          "Université de Montréal"
-        ],
-        "Yoshua Bengio": [
-          "Université de Montréal"
-        ],
-        "Razvan Pascanu": [
-          "Université de Montréal"
-        ],
-        "Joseph Turian": [
-          "Université de Montréal"
-        ],
-        "Olivier Breuleux": [
-          "Université de Montréal"
-        ],
-        "James Bergstra": [
-          "Université de Montréal"
-        ]
+        "Frédéric Bastien": ["Université de Montréal"],
+        "Pascal Lamblin": ["Université de Montréal"],
+        "Guillaume Desjardins": ["Université de Montréal"],
+        "David Warde-Farley": ["Université de Montréal"],
+        "Yoshua Bengio": ["Université de Montréal"],
+        "Razvan Pascanu": ["Université de Montréal"],
+        "Joseph Turian": ["Université de Montréal"],
+        "Olivier Breuleux": ["Université de Montréal"],
+        "James Bergstra": ["Université de Montréal"]
       },
       "copyright_holder": "James Bergstra et al.",
       "author_institution": [
@@ -207,18 +155,12 @@
         "Konrad Woellhaf": [
           "University of Applied Sciences Ravensburg-Weingarten"
         ],
-        "Steven C. Colbert": [
-          "University of South Florida"
-        ],
-        "Redwan Alqasemi": [
-          "University of South Florida"
-        ],
+        "Steven C. Colbert": ["University of South Florida"],
+        "Redwan Alqasemi": ["University of South Florida"],
         "Gregor Franz": [
           "University of Applied Sciences Ravensburg-Weingarten"
         ],
-        "Rajiv Dubey": [
-          "University of South Florida"
-        ]
+        "Rajiv Dubey": ["University of South Florida"]
       },
       "copyright_holder": "Steven C. Colbert et al.",
       "author_institution": [
@@ -252,25 +194,15 @@
     {
       "video": "",
       "title": "Unusual Relationships: Python and Weaver Birds",
-      "author_email": [
-        "kadambari.devarajan@gmail.com"
-      ],
+      "author_email": ["kadambari.devarajan@gmail.com"],
       "doi": "10.25080/Majora-92bf1922-005",
       "pages": 5,
       "bibliography": "",
       "author_institution_map": {
-        "Rajmonda Sulo": [
-          "University of Illinois at Chicago"
-        ],
-        "Maria A. Echeverry-Galvis": [
-          "Princeton University"
-        ],
-        "Kadambari Devarajan": [
-          "University of Illinois at Chicago"
-        ],
-        "Jennifer K. Peterson": [
-          "Princeton University"
-        ]
+        "Rajmonda Sulo": ["University of Illinois at Chicago"],
+        "Maria A. Echeverry-Galvis": ["Princeton University"],
+        "Kadambari Devarajan": ["University of Illinois at Chicago"],
+        "Jennifer K. Peterson": ["Princeton University"]
       },
       "copyright_holder": "Kadambari Devarajan et al.",
       "author_institution": [
@@ -300,21 +232,15 @@
     {
       "video": "",
       "title": "Weather Forecast Accuracy Analysis",
-      "author_email": [
-        "eric@intellovations.com"
-      ],
+      "author_email": ["eric@intellovations.com"],
       "doi": "10.25080/Majora-92bf1922-006",
       "pages": 4,
       "bibliography": "",
       "author_institution_map": {
-        "Eric Floehr": [
-          "Intellovations, LLC"
-        ]
+        "Eric Floehr": ["Intellovations, LLC"]
       },
       "copyright_holder": "Eric Floehr.",
-      "author_institution": [
-        "Intellovations, LLC"
-      ],
+      "author_institution": ["Intellovations, LLC"],
       "authors": "Eric Floehr",
       "paper_id": "floehr",
       "abstract": [
@@ -325,9 +251,7 @@
         "start": 36,
         "stop": 39
       },
-      "author": [
-        "Eric Floehr"
-      ]
+      "author": ["Eric Floehr"]
     },
     {
       "video": "",
@@ -345,27 +269,13 @@
       "pages": 5,
       "bibliography": "",
       "author_institution_map": {
-        "Todd Miller": [
-          "Space Telescope Science Institute"
-        ],
-        "Mark Sienkiewicz": [
-          "Space Telescope Science Institute"
-        ],
-        "Ivo Busko": [
-          "Space Telescope Science Institute"
-        ],
-        "Vicki Laidler": [
-          "Space Telescope Science Institute"
-        ],
-        "Rosa Diaz": [
-          "Space Telescope Science Institute"
-        ],
-        "Perry Greenfield": [
-          "Space Telescope Science Institute"
-        ],
-        "Megan Sosey": [
-          "Space Telescope Science Institute"
-        ]
+        "Todd Miller": ["Space Telescope Science Institute"],
+        "Mark Sienkiewicz": ["Space Telescope Science Institute"],
+        "Ivo Busko": ["Space Telescope Science Institute"],
+        "Vicki Laidler": ["Space Telescope Science Institute"],
+        "Rosa Diaz": ["Space Telescope Science Institute"],
+        "Perry Greenfield": ["Space Telescope Science Institute"],
+        "Megan Sosey": ["Space Telescope Science Institute"]
       },
       "copyright_holder": "Perry Greenfield et al.",
       "author_institution": [
@@ -412,18 +322,10 @@
       "pages": 4,
       "bibliography": "",
       "author_institution_map": {
-        "Warren J. Hack": [
-          "Space Telescope Science Institute"
-        ],
-        "Babak Saif": [
-          "Space Telescope Science Institute"
-        ],
-        "Perry Greenfield": [
-          "Space Telescope Science Institute"
-        ],
-        "Bente Eegholm": [
-          "Space Telescope Science Institute"
-        ]
+        "Warren J. Hack": ["Space Telescope Science Institute"],
+        "Babak Saif": ["Space Telescope Science Institute"],
+        "Perry Greenfield": ["Space Telescope Science Institute"],
+        "Bente Eegholm": ["Space Telescope Science Institute"]
       },
       "copyright_holder": "Warren J. Hack et al.",
       "author_institution": [
@@ -461,22 +363,12 @@
       "pages": 7,
       "bibliography": "",
       "author_institution_map": {
-        "Sean Davis": [
-          "Berea College"
-        ],
-        "Andrew Smith": [
-          "Berea College"
-        ],
-        "Matthew Henderson": [
-          "Berea College"
-        ]
+        "Sean Davis": ["Berea College"],
+        "Andrew Smith": ["Berea College"],
+        "Matthew Henderson": ["Berea College"]
       },
       "copyright_holder": "Sean Davis et al.",
-      "author_institution": [
-        "Berea College",
-        "Berea College",
-        "Berea College"
-      ],
+      "author_institution": ["Berea College", "Berea College", "Berea College"],
       "authors": "Sean Davis, Matthew Henderson, Andrew Smith",
       "paper_id": "henderson",
       "abstract": [
@@ -488,30 +380,20 @@
         "start": 49,
         "stop": 55
       },
-      "author": [
-        "Sean Davis",
-        "Matthew Henderson",
-        "Andrew Smith"
-      ]
+      "author": ["Sean Davis", "Matthew Henderson", "Andrew Smith"]
     },
     {
       "video": "",
       "title": "Data Structures for Statistical Computing in Python",
-      "author_email": [
-        "wesmckinn@gmail.com"
-      ],
+      "author_email": ["wesmckinn@gmail.com"],
       "doi": "10.25080/Majora-92bf1922-00a",
       "pages": 6,
       "bibliography": "",
       "author_institution_map": {
-        "Wes McKinney": [
-          "AQR Capital Management, LLC"
-        ]
+        "Wes McKinney": ["AQR Capital Management, LLC"]
       },
       "copyright_holder": "Wes McKinney.",
-      "author_institution": [
-        "AQR Capital Management, LLC"
-      ],
+      "author_institution": ["AQR Capital Management, LLC"],
       "authors": "Wes McKinney",
       "paper_id": "mckinney",
       "abstract": [
@@ -522,28 +404,20 @@
         "start": 56,
         "stop": 61
       },
-      "author": [
-        "Wes McKinney"
-      ]
+      "author": ["Wes McKinney"]
     },
     {
       "video": "",
       "title": "Protein Folding with Python on Supercomputers",
-      "author_email": [
-        "j.meinke@fz-juelich.de"
-      ],
+      "author_email": ["j.meinke@fz-juelich.de"],
       "doi": "10.25080/Majora-92bf1922-00b",
       "pages": 5,
       "bibliography": "",
       "author_institution_map": {
-        "Jan H. Meinke": [
-          "Jülich Supercomputing Centre"
-        ]
+        "Jan H. Meinke": ["Jülich Supercomputing Centre"]
       },
       "copyright_holder": "Jan H. Meinke.",
-      "author_institution": [
-        "Jülich Supercomputing Centre"
-      ],
+      "author_institution": ["Jülich Supercomputing Centre"],
       "authors": "Jan H. Meinke",
       "paper_id": "meinke",
       "abstract": [
@@ -556,9 +430,7 @@
         "start": 62,
         "stop": 66
       },
-      "author": [
-        "Jan H. Meinke"
-      ]
+      "author": ["Jan H. Meinke"]
     },
     {
       "video": "",
@@ -575,24 +447,12 @@
       "pages": 6,
       "bibliography": "",
       "author_institution_map": {
-        "Steven K. Morley": [
-          "Los Alamos National Laboratory"
-        ],
-        "Jonathan Niehof": [
-          "Los Alamos National Laboratory"
-        ],
-        "Josef Koller": [
-          "Los Alamos National Laboratory"
-        ],
-        "Daniel T. Welling": [
-          "Los Alamos National Laboratory"
-        ],
-        "Michael G. Henderson": [
-          "Los Alamos National Laboratory"
-        ],
-        "Brian A. Larsen": [
-          "Los Alamos National Laboratory"
-        ]
+        "Steven K. Morley": ["Los Alamos National Laboratory"],
+        "Jonathan Niehof": ["Los Alamos National Laboratory"],
+        "Josef Koller": ["Los Alamos National Laboratory"],
+        "Daniel T. Welling": ["Los Alamos National Laboratory"],
+        "Michael G. Henderson": ["Los Alamos National Laboratory"],
+        "Brian A. Larsen": ["Los Alamos National Laboratory"]
       },
       "copyright_holder": "Steven K. Morley et al.",
       "author_institution": [
@@ -628,21 +488,15 @@
     {
       "video": "",
       "title": "Numerical Pyromaniacs: The Use of Python in Fire Research",
-      "author_email": [
-        "koverholt@gmail.com"
-      ],
+      "author_email": ["koverholt@gmail.com"],
       "doi": "10.25080/Majora-92bf1922-00d",
       "pages": 4,
       "bibliography": "",
       "author_institution_map": {
-        "Kristopher Overholt": [
-          "University of Texas at Austin"
-        ]
+        "Kristopher Overholt": ["University of Texas at Austin"]
       },
       "copyright_holder": "Kristopher Overholt.",
-      "author_institution": [
-        "University of Texas at Austin"
-      ],
+      "author_institution": ["University of Texas at Austin"],
       "authors": "Kristopher Overholt",
       "paper_id": "overholt",
       "abstract": [
@@ -653,27 +507,18 @@
         "start": 73,
         "stop": 76
       },
-      "author": [
-        "Kristopher Overholt"
-      ]
+      "author": ["Kristopher Overholt"]
     },
     {
       "video": "",
       "title": "A Programmatic Interface for Particle Plasma Simulation in Python",
-      "author_email": [
-        "minrk@berkeley.edu",
-        "johnv@nuc.berkeley.edu"
-      ],
+      "author_email": ["minrk@berkeley.edu", "johnv@nuc.berkeley.edu"],
       "doi": "10.25080/Majora-92bf1922-00e",
       "pages": 3,
       "bibliography": "",
       "author_institution_map": {
-        "Min Ragan-Kelley": [
-          "University of California, Berkeley"
-        ],
-        "John Verboncoeur": [
-          "University of California, Berkeley"
-        ]
+        "Min Ragan-Kelley": ["University of California, Berkeley"],
+        "John Verboncoeur": ["University of California, Berkeley"]
       },
       "copyright_holder": "Min Ragan-Kelley et al.",
       "author_institution": [
@@ -690,34 +535,21 @@
         "start": 77,
         "stop": 79
       },
-      "author": [
-        "Min Ragan-Kelley",
-        "John Verboncoeur"
-      ]
+      "author": ["Min Ragan-Kelley", "John Verboncoeur"]
     },
     {
       "video": "",
       "title": "PySPH: A Python Framework for Smoothed Particle Hydrodynamics",
-      "author_email": [
-        "prabhu@aero.iitb.ac.in",
-        "shekhar@zeusnumerix.com"
-      ],
+      "author_email": ["prabhu@aero.iitb.ac.in", "shekhar@zeusnumerix.com"],
       "doi": "10.25080/Majora-92bf1922-00f",
       "pages": 5,
       "bibliography": "",
       "author_institution_map": {
-        "Chandrashekhar Kaushik": [
-          "IIT Bombay"
-        ],
-        "Prabhu Ramachandran": [
-          "IIT Bombay"
-        ]
+        "Chandrashekhar Kaushik": ["IIT Bombay"],
+        "Prabhu Ramachandran": ["IIT Bombay"]
       },
       "copyright_holder": "Prabhu Ramachandran et al.",
-      "author_institution": [
-        "IIT Bombay",
-        "IIT Bombay"
-      ],
+      "author_institution": ["IIT Bombay", "IIT Bombay"],
       "authors": "Prabhu Ramachandran, Chandrashekhar Kaushik",
       "paper_id": "ramachandran",
       "abstract": [
@@ -729,10 +561,7 @@
         "start": 80,
         "stop": 84
       },
-      "author": [
-        "Prabhu Ramachandran",
-        "Chandrashekhar Kaushik"
-      ]
+      "author": ["Prabhu Ramachandran", "Chandrashekhar Kaushik"]
     },
     {
       "video": "",
@@ -748,15 +577,9 @@
       "bibliography": "",
       "author_institution_map": {
         "Helge Reikeras": [],
-        "Ben Herbst": [
-          "Stellenbosch University"
-        ],
-        "Herman Engelbrecht": [
-          "Stellenbosch University"
-        ],
-        "Johan du Preez": [
-          "Stellenbosch University"
-        ]
+        "Ben Herbst": ["Stellenbosch University"],
+        "Herman Engelbrecht": ["Stellenbosch University"],
+        "Johan du Preez": ["Stellenbosch University"]
       },
       "copyright_holder": "Helge Reikeras et al.",
       "author_institution": [
@@ -785,20 +608,13 @@
     {
       "video": "",
       "title": "Statsmodels: Econometric and Statistical Modeling with Python",
-      "author_email": [
-        "jsseabold@gmail.com",
-        "josef.pktd@gmail.com"
-      ],
+      "author_email": ["jsseabold@gmail.com", "josef.pktd@gmail.com"],
       "doi": "10.25080/Majora-92bf1922-011",
       "pages": 5,
       "bibliography": "",
       "author_institution_map": {
-        "Josef Perktold": [
-          "CIRANO, University of North Carolina Chapel Hill"
-        ],
-        "Skipper Seabold": [
-          "American University"
-        ]
+        "Josef Perktold": ["CIRANO, University of North Carolina Chapel Hill"],
+        "Skipper Seabold": ["American University"]
       },
       "copyright_holder": "Skipper Seabold et al.",
       "author_institution": [
@@ -815,10 +631,7 @@
         "start": 92,
         "stop": 96
       },
-      "author": [
-        "Skipper Seabold",
-        "Josef Perktold"
-      ]
+      "author": ["Skipper Seabold", "Josef Perktold"]
     }
   ]
 }

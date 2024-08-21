@@ -28,18 +28,10 @@
         "University of Waterloo"
       ],
       "author_institution_map": {
-        "Andy Terrel": [
-          "Continuum Analytics"
-        ],
-        "Jonathan Rocher": [
-          "Enthought, Inc."
-        ],
-        "James Bergstra": [
-          "University of Waterloo"
-        ],
-        "Stéfan van der Walt": [
-          "University of California, Berkeley"
-        ]
+        "Andy Terrel": ["Continuum Analytics"],
+        "Jonathan Rocher": ["Enthought, Inc."],
+        "James Bergstra": ["University of Waterloo"],
+        "Stéfan van der Walt": ["University of California, Berkeley"]
       },
       "abstract": [],
       "title": "Preface",
@@ -49,12 +41,8 @@
     },
     {
       "pages": 3,
-      "author_email": [
-        "gwb6@psu.edu"
-      ],
-      "author": [
-        "G William Baxter"
-      ],
+      "author_email": ["gwb6@psu.edu"],
+      "author": ["G William Baxter"],
       "copyright_holder": "G William Baxter.",
       "doi": "10.25080/Majora-14bd3278-001",
       "page": {
@@ -87,12 +75,7 @@
         "maplabs@light42.com",
         "rylo@berkeley.edu"
       ],
-      "author": [
-        "Dav Clark",
-        "Aaron Culich",
-        "Brian Hamlin",
-        "Ryan Lovett"
-      ],
+      "author": ["Dav Clark", "Aaron Culich", "Brian Hamlin", "Ryan Lovett"],
       "copyright_holder": "Dav Clark et al.",
       "doi": "10.25080/Majora-14bd3278-002",
       "page": {
@@ -109,18 +92,10 @@
         "UC Berkeley"
       ],
       "author_institution_map": {
-        "Dav Clark": [
-          "UC Berkeley"
-        ],
-        "Brian Hamlin": [
-          "OSGeo California Chapter"
-        ],
-        "Aaron Culich": [
-          "UC Berkeley"
-        ],
-        "Ryan Lovett": [
-          "UC Berkeley"
-        ]
+        "Dav Clark": ["UC Berkeley"],
+        "Brian Hamlin": ["OSGeo California Chapter"],
+        "Aaron Culich": ["UC Berkeley"],
+        "Ryan Lovett": ["UC Berkeley"]
       },
       "abstract": [
         "There are numerous barriers to the use of scientific computing toolsets. These\nbarriers are becoming more apparent as we\nincreasingly see mixing of different academic backgrounds, and compute ranging\nfrom laptops to cloud platforms.\nMembers of the UC\nBerkeley D-Lab, Statistical Computing Facility (SCF), and Berkeley Research\nComputing (BRC) support such use-cases, and have developed\nstrategies that reduce the pain points that arise.\nWe begin by describing the variety of concrete training and research use-cases in which\nour strategy might increase accessibility, productivity, reuse, and reproducibility.\nWe then introduce available tools for the “recipe-based” creation of compute\nenvironments, attempting to demystify and provide a framework for thinking about\nDevOps (along with explaining what “DevOps” means!).\nAs a counterpoint to novel DevOps tools, we'll also examine the success of\nOSGeo-Live OSGL – a project that has\nmanaged to obtain and manage developer contributions for a large number of geospatial projects.\nThis is enabled through the use of commonly\nknown skills like shell scripting, and is a model of complexity that can be\nmanaged without these more recent DevOps tools.\nGiven our evaluation of a variety of technologies and\nuse-cases, we present our current strategy for constructing the Berkeley Common Environment BCE, along with general recommendations for building environments for your own use-cases."
@@ -174,21 +149,15 @@
         "Scott Collis": [
           "Environmental Sciences Division, Argonne National Laboratory."
         ],
-        "Ann Fridlind": [
-          "NASA Goddard Institute of Space Sciences."
-        ],
+        "Ann Fridlind": ["NASA Goddard Institute of Space Sciences."],
         "Jonathan Helmus": [
           "Environmental Sciences Division, Argonne National Laboratory."
         ],
-        "Di Wu": [
-          "NASA Goddard Space Flight Center."
-        ],
+        "Di Wu": ["NASA Goddard Space Flight Center."],
         "Scott Giangrande": [
           "Atmospheric Sciences, Brookhaven National Laboratory."
         ],
-        "Marcus van Lier-Walqui": [
-          "NASA Goddard Institute of Space Sciences."
-        ]
+        "Marcus van Lier-Walqui": ["NASA Goddard Institute of Space Sciences."]
       },
       "abstract": [
         "Remote sensing data is complicated, very complicated! It is not only\ngeometrically tricky but also, unlike in-situ methods,\nindirect as the sensor measures the interaction\nof the scattering media (eg raindrops) with the probing radiation, not the geophysics. However the\nproblem is made tractable by the large number of algorithms available in the\nScientific Python community. While SciPy provides many helpful algorithms for\nsignal processing in this domain, a full software stack from highly specialized\nfile formats from specific sensors to interpretable geospatial analysis requires\na common data model for active remote sensing data that can act as a middle layer\nThis paper\nmotivates this work by asking: How big is a rainshaft? What is the natural\nmorphology of rainfall patterns and how well is this represented in fine\nscale atmospheric models. Rather than being specific to the domain of\nmeteorology, we will break down how we approach this problem in terms of the tools\nused from numerous Python packages to read, correct, map and reduce the data\ninto a form better able to answer our science questions. This is a \"how\" paper,\ncovering the Python-ARM Radar Toolkit (Py-ART) containing\nsignal processing using linear programming methods and mapping using k-d\ntrees. We also cover image analysis using SciPy's ndimage sub-module and graphics using\nmatplotlib."
@@ -199,12 +168,8 @@
     },
     {
       "pages": 6,
-      "author_email": [
-        "david.ketcheson@kaust.edu.sa"
-      ],
-      "author": [
-        "David I. Ketcheson"
-      ],
+      "author_email": ["david.ketcheson@kaust.edu.sa"],
+      "author": ["David I. Ketcheson"],
       "copyright_holder": "David I. Ketcheson.",
       "doi": "10.25080/Majora-14bd3278-004",
       "page": {
@@ -231,12 +196,8 @@
     },
     {
       "pages": 7,
-      "author_email": [
-        "jklay@calpoly.edu"
-      ],
-      "author": [
-        "Jennifer Klay"
-      ],
+      "author_email": ["jklay@calpoly.edu"],
+      "author": ["Jennifer Klay"],
       "copyright_holder": "Jennifer Klay.",
       "doi": "10.25080/Majora-14bd3278-005",
       "page": {
@@ -268,11 +229,7 @@
         "james.bergstra@uwaterloo.ca",
         "celiasmith@uwaterloo.ca"
       ],
-      "author": [
-        "Brent Komer",
-        "James Bergstra",
-        "Chris Eliasmith"
-      ],
+      "author": ["Brent Komer", "James Bergstra", "Chris Eliasmith"],
       "copyright_holder": "Brent Komer et al.",
       "doi": "10.25080/Majora-14bd3278-006",
       "page": {
@@ -335,18 +292,10 @@
         "Argonne National Laboratory"
       ],
       "author_institution_map": {
-        "James A. Kuiper": [
-          "Argonne National Laboratory"
-        ],
-        "Andrew J. Ayers": [
-          "Argonne National Laboratory"
-        ],
-        "Michael J. Nowak": [
-          "Argonne National Laboratory"
-        ],
-        "Michael E. Holm": [
-          "Argonne National Laboratory"
-        ]
+        "James A. Kuiper": ["Argonne National Laboratory"],
+        "Andrew J. Ayers": ["Argonne National Laboratory"],
+        "Michael J. Nowak": ["Argonne National Laboratory"],
+        "Michael E. Holm": ["Argonne National Laboratory"]
       },
       "abstract": [
         "Python has powerful capabilities for coding elements of Web-based\nmapping applications. This paper highlights examples of analytical\ngeospatial processing services that we have implemented for several\nOpen Source-based development projects, including the Eastern\nInterconnection States' Planning Council (EISPC) Energy Zones Mapping\nTool (http://eispctools.anl.gov), the Solar Energy Environmental\nMapper (http://solarmapper.anl.gov), and the Ecological Risk\nCalculator (http://bogi.evs.anl.gov/erc/portal). We used common\nOpen Source tools such as GeoServer, PostGIS, GeoExt, and\nOpenLayers for the basic Web-based portal, then added custom\nanalytical tools to support more advanced functionality. The\nanalytical processes were implemented as Web Processing Services\n(WPSs) running on PyWPS, a Python implementation\nof the Open Geospatial Consortium (OGC) WPS. For report tools,\nareas drawn by the user in the map interface are submitted to a\nservice that utilizes the spatial extensions of PostGIS to\ngenerate buffers for use in querying and analyzing the underlying\ndata. Python code then post-processes the results and outputs\nJavaScript Object Notation (JSON)-formatted data for rendering.\nWe made use of PyWPS's integration with the Geographic Resources\nAnalysis Support System (GRASS) to implement flexible,\nuser-adjustable suitability models for several renewable energy\ngeneration technologies. In this paper, we provide details about\nthe processing methods we used within these project examples."
@@ -357,14 +306,8 @@
     },
     {
       "pages": 6,
-      "author_email": [
-        "jlaura@asu.edu",
-        "srey@asu.edu"
-      ],
-      "author": [
-        "Jason Laura",
-        "Sergio J. Rey"
-      ],
+      "author_email": ["jlaura@asu.edu", "srey@asu.edu"],
+      "author": ["Jason Laura", "Sergio J. Rey"],
       "copyright_holder": "Jason Laura et al.",
       "doi": "10.25080/Majora-14bd3278-008",
       "page": {
@@ -395,12 +338,8 @@
     },
     {
       "pages": 8,
-      "author_email": [
-        "kannan@iitb.ac.in"
-      ],
-      "author": [
-        "Kannan M. Moudgalya"
-      ],
+      "author_email": ["kannan@iitb.ac.in"],
+      "author": ["Kannan M. Moudgalya"],
       "copyright_holder": "Kannan M. Moudgalya.",
       "doi": "10.25080/Majora-14bd3278-009",
       "page": {
@@ -430,12 +369,8 @@
     },
     {
       "pages": 6,
-      "author_email": [
-        "pugh@maths.ox.ac.uk"
-      ],
-      "author": [
-        "David R. Pugh"
-      ],
+      "author_email": ["pugh@maths.ox.ac.uk"],
+      "author": ["David R. Pugh"],
       "copyright_holder": "David R. Pugh.",
       "doi": "10.25080/Majora-14bd3278-00a",
       "page": {
@@ -462,14 +397,8 @@
     },
     {
       "pages": 7,
-      "author_email": [
-        "dpsanders@ciencias.unam.mx",
-        "benet@fis.unam.mx"
-      ],
-      "author": [
-        "David P. Sanders",
-        "Luis Benet"
-      ],
+      "author_email": ["dpsanders@ciencias.unam.mx", "benet@fis.unam.mx"],
+      "author": ["David P. Sanders", "Luis Benet"],
       "copyright_holder": "David P. Sanders et al.",
       "doi": "10.25080/Majora-14bd3278-00b",
       "page": {
@@ -500,12 +429,8 @@
     },
     {
       "pages": 7,
-      "author_email": [
-        "sarava@tamu.edu"
-      ],
-      "author": [
-        "Ramalingam Saravanan"
-      ],
+      "author_email": ["sarava@tamu.edu"],
+      "author": ["Ramalingam Saravanan"],
       "copyright_holder": "Ramalingam Saravanan.",
       "doi": "10.25080/Majora-14bd3278-00c",
       "page": {
@@ -515,13 +440,9 @@
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=LiZJMYxvJbQ",
       "paper_id": "saravanan",
-      "author_institution": [
-        "Texas A\\&M University"
-      ],
+      "author_institution": ["Texas A\\&M University"],
       "author_institution_map": {
-        "Ramalingam Saravanan": [
-          "Texas A\\&M University"
-        ]
+        "Ramalingam Saravanan": ["Texas A\\&M University"]
       },
       "abstract": [
         "With laptops and tablets becoming more powerful and more ubiquitous\nin the classroom, traditional computer labs with rows of expensive\ndesktop computers are slowly beginning to lose their relevance. An\nalternative approach for teaching Python is to use a browser-based\nvirtual computer lab, with a notebook interface. The advantages\nof physical computer labs, such as face-to-face interaction, and\nthe challenge of replicating them in a virtual environment are\ndiscussed. The need for collaborative features like\nterminal/notebook sharing and chatting is emphasized. A virtual computer lab is\nimplemented using the GraphTerm server, with several experimental features\nincluding a virtual dashboard for monitoring tasks and progressively\nfillable notebooks for ensuring step-by-step completion of a\nsequence of tasks."
@@ -532,14 +453,8 @@
     },
     {
       "pages": 6,
-      "author_email": [
-        "kthyng@tamu.edu",
-        "hetland@tamu.edu"
-      ],
-      "author": [
-        "Kristen M. Thyng",
-        "Robert D. Hetland"
-      ],
+      "author_email": ["kthyng@tamu.edu", "hetland@tamu.edu"],
+      "author": ["Kristen M. Thyng", "Robert D. Hetland"],
       "copyright_holder": "Kristen M. Thyng et al.",
       "doi": "10.25080/Majora-14bd3278-00d",
       "page": {
@@ -554,12 +469,8 @@
         "Texas A\\&M University"
       ],
       "author_institution_map": {
-        "Robert D. Hetland": [
-          "Texas A\\&M University"
-        ],
-        "Kristen M. Thyng": [
-          "Texas A\\&M University"
-        ]
+        "Robert D. Hetland": ["Texas A\\&M University"],
+        "Kristen M. Thyng": ["Texas A\\&M University"]
       },
       "abstract": [
         "Numerical Lagrangian trajectory modeling is a natural method of investigating transport in a circulation system and understanding the physics on the wide range of length scales that are actually experienced by a drifter. A previously-developed tool, TRACMASS, written in Fortran, accomplishes this modeling with a clever algorithm that operates natively on the commonly used staggered Arakawa C grid. TracPy is a Python wrapper written to ease running batches of simulations. Some improvements in TracPy include updating to netCDF4-CLASSIC from netCDF3 for saving drifter trajectories, providing an iPython notebook as a usermanual for using the system, and adding unit tests for stable continued development."
@@ -570,12 +481,8 @@
     },
     {
       "pages": 9,
-      "author_email": [
-        "jakevdp@cs.washington.edu"
-      ],
-      "author": [
-        "Jake VanderPlas"
-      ],
+      "author_email": ["jakevdp@cs.washington.edu"],
+      "author": ["Jake VanderPlas"],
       "copyright_holder": "Jake VanderPlas.",
       "doi": "10.25080/Majora-14bd3278-00e",
       "page": {
@@ -585,13 +492,9 @@
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=KhAUfqhLakw",
       "paper_id": "vanderplas",
-      "author_institution": [
-        "eScience Institute, University of Washington"
-      ],
+      "author_institution": ["eScience Institute, University of Washington"],
       "author_institution_map": {
-        "Jake VanderPlas": [
-          "eScience Institute, University of Washington"
-        ]
+        "Jake VanderPlas": ["eScience Institute, University of Washington"]
       },
       "abstract": [
         "This paper presents a brief, semi-technical comparison of the essential features of the frequentist and Bayesian approaches to statistical inference, with several illustrative examples implemented in Python. The differences between frequentism and Bayesianism fundamentally stem from differing definitions of probability, a philosophical divide which leads to distinct approaches to the solution of statistical problems as well as contrasting ways of asking and answering questions about unknown parameters. After an example-driven discussion of these differences, we briefly compare several leading Python statistical packages which implement frequentist inference using classical methods and Bayesian inference using Markov Chain Monte Carlo.1"
@@ -630,18 +533,10 @@
         "Continuum Analytics"
       ],
       "author_institution_map": {
-        "TJ Alumbaugh": [
-          "Continuum Analytics"
-        ],
-        "Mark Wiebe": [
-          "Continuum Analytics"
-        ],
-        "Matthew Rocklin": [
-          "Continuum Analytics"
-        ],
-        "Andy Terrel": [
-          "Continuum Analytics"
-        ]
+        "TJ Alumbaugh": ["Continuum Analytics"],
+        "Mark Wiebe": ["Continuum Analytics"],
+        "Matthew Rocklin": ["Continuum Analytics"],
+        "Andy Terrel": ["Continuum Analytics"]
       },
       "abstract": [
         "We present the motivation and architecture of Blaze, a library for\ncross-backend data-oriented computation.  Blaze provides a standard interface\nto connect users familiar with NumPy and Pandas to other data analytics\nlibraries like SQLAlchemy and Spark.  We motivate the use of these projects\nthrough Blaze and discuss the benefits of standard interfaces on top of an\nincreasingly varied software ecosystem. We give an overview of the Blaze\narchitecture and then demonstrate its use on a typical problem.  We use the\nabstract nature of Blaze to quickly benchmark and compare the performance of a\nvariety of backends on a standard problem."

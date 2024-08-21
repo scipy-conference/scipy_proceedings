@@ -31,10 +31,7 @@
     "volume": 8,
     "number": 1,
     "citation_key": "proc-scipy-2015",
-    "editor": [
-      "Kathryn Huff",
-      "James Bergstra"
-    ],
+    "editor": ["Kathryn Huff", "James Bergstra"],
     "location": "Austin, Texas"
   },
   "organization": [

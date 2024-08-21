@@ -2,16 +2,10 @@
   "toc": [
     {
       "author_institution_map": {
-        "Minesh B. Amin": [
-          "MBA Sciences, Inc"
-        ]
+        "Minesh B. Amin": ["MBA Sciences, Inc"]
       },
-      "author": [
-        "Minesh B. Amin"
-      ],
-      "author_email": [
-        "mamin@mbasciences.com"
-      ],
+      "author": ["Minesh B. Amin"],
+      "author_email": ["mamin@mbasciences.com"],
       "abstract": [
         "SPM.Python is a scalable, parallel fault-tolerant version of the\nserial Python language, and can be deployed to create parallel\ncapabilities to solve problems in domains spanning finance, life\nsciences, electronic design, IT, visualization, and\nresearch. Software developers may use SPM.Python to augment new or\nexisting (Python) serial scripts for scalability across parallel\nhardware. Alternatively, SPM.Python may be used to better manage\nthe execution of stand-alone (non-Python x86 and GPU) applications\nacross compute resources in a fault-tolerant manner taking into\naccount hard deadlines."
       ],
@@ -23,9 +17,7 @@
       "video": "",
       "doi": "10.25080/Majora-ebaa42b7-000",
       "pages": 9,
-      "author_institution": [
-        "MBA Sciences, Inc"
-      ],
+      "author_institution": ["MBA Sciences, Inc"],
       "copyright_holder": "Minesh B. Amin.",
       "page": {
         "start": 1,
@@ -34,18 +26,10 @@
     },
     {
       "author_institution_map": {
-        "Dan Nguyen": [
-          "Smithsonian Astrophysical Observatory"
-        ],
-        "Brian Refsdal": [
-          "Smithsonian Astrophysical Observatory"
-        ],
-        "Aneta Siemiginowska": [
-          "Smithsonian Astrophysical Observatory"
-        ],
-        "Stephen Doe": [
-          "Smithsonian Astrophysical Observatory"
-        ]
+        "Dan Nguyen": ["Smithsonian Astrophysical Observatory"],
+        "Brian Refsdal": ["Smithsonian Astrophysical Observatory"],
+        "Aneta Siemiginowska": ["Smithsonian Astrophysical Observatory"],
+        "Stephen Doe": ["Smithsonian Astrophysical Observatory"]
       },
       "author": [
         "Brian Refsdal",
@@ -84,21 +68,11 @@
     },
     {
       "author_institution_map": {
-        "Ricardo Caspirro": [
-          "Muricoca Labs"
-        ],
-        "Bruno Melo": [
-          "Muricoca Labs"
-        ],
-        "Marcel Caraciolo": [
-          "Muricoca Labs"
-        ]
+        "Ricardo Caspirro": ["Muricoca Labs"],
+        "Bruno Melo": ["Muricoca Labs"],
+        "Marcel Caraciolo": ["Muricoca Labs"]
       },
-      "author": [
-        "Marcel Caraciolo",
-        "Bruno Melo",
-        "Ricardo Caspirro"
-      ],
+      "author": ["Marcel Caraciolo", "Bruno Melo", "Ricardo Caspirro"],
       "author_email": [
         "marcel@muricoca.com",
         "bruno@muricoca.com",
@@ -115,11 +89,7 @@
       "video": "",
       "doi": "10.25080/Majora-ebaa42b7-002",
       "pages": 7,
-      "author_institution": [
-        "Muricoca Labs",
-        "Muricoca Labs",
-        "Muricoca Labs"
-      ],
+      "author_institution": ["Muricoca Labs", "Muricoca Labs", "Muricoca Labs"],
       "copyright_holder": "Marcel Caraciolo et al.",
       "page": {
         "start": 17,
@@ -128,21 +98,11 @@
     },
     {
       "author_institution_map": {
-        "Andrew Cron": [
-          "Duke University"
-        ],
-        "Wes McKinney": [
-          "Duke University"
-        ]
+        "Andrew Cron": ["Duke University"],
+        "Wes McKinney": ["Duke University"]
       },
-      "author": [
-        "Andrew Cron",
-        "Wes McKinney"
-      ],
-      "author_email": [
-        "ajc40@stat.duke.edu",
-        "wesmckinn@gmail.com"
-      ],
+      "author": ["Andrew Cron", "Wes McKinney"],
+      "author_email": ["ajc40@stat.duke.edu", "wesmckinn@gmail.com"],
       "abstract": [
         "In this work we discuss gpustats, a new Python library for\nassisting in \\textquotedbl{}big data\\textquotedbl{} statistical computing applications,\nparticularly Monte Carlo-based inference algorithms. The library\nprovides a general code generation / metaprogramming framework for\neasily implementing discrete and continuous probability density\nfunctions and random variable samplers. These functions can be\nutilized to achieve more than 100x speedup over their CPU\nequivalents. We demonstrate their use in an Bayesian MCMC\napplication and discuss avenues for future work."
       ],
@@ -154,10 +114,7 @@
       "video": "",
       "doi": "10.25080/Majora-ebaa42b7-003",
       "pages": 5,
-      "author_institution": [
-        "Duke University",
-        "Duke University"
-      ],
+      "author_institution": ["Duke University", "Duke University"],
       "copyright_holder": "Andrew Cron et al.",
       "page": {
         "start": 24,
@@ -166,21 +123,11 @@
     },
     {
       "author_institution_map": {
-        "Jeff Daily": [
-          "Pacific Northwest National Laboratory"
-        ],
-        "Robert R. Lewis": [
-          "Washington State University"
-        ]
+        "Jeff Daily": ["Pacific Northwest National Laboratory"],
+        "Robert R. Lewis": ["Washington State University"]
       },
-      "author": [
-        "Jeff Daily",
-        "Robert R. Lewis"
-      ],
-      "author_email": [
-        "jeff.daily@pnnl.gov",
-        "bobl@tricity.wsu.edu"
-      ],
+      "author": ["Jeff Daily", "Robert R. Lewis"],
+      "author_email": ["jeff.daily@pnnl.gov", "bobl@tricity.wsu.edu"],
       "abstract": [
         "Global Arrays (GA) is a software system from Pacific Northwest National\nLaboratory that enables an efficient, portable, and parallel shared-memory\nprogramming interface to manipulate distributed dense arrays. Using a\ncombination of GA and NumPy, we have reimplemented NumPy as a\ndistributed drop-in replacement called Global Arrays in NumPy (GAiN).\nScalability studies will be presented showing the utility of developing\nserial NumPy codes which can later run on more capable clusters or\nsupercomputers."
       ],
@@ -204,16 +151,10 @@
     },
     {
       "author_institution_map": {
-        "Scott Determan": [
-          "Vision Spreadsheet"
-        ]
+        "Scott Determan": ["Vision Spreadsheet"]
       },
-      "author": [
-        "Scott Determan"
-      ],
-      "author_email": [
-        "scott.determan@gmail.com"
-      ],
+      "author": ["Scott Determan"],
+      "author_email": ["scott.determan@gmail.com"],
       "abstract": [
         "Vision Spreadsheet is an environment for computer vision. It combines a\nspreadsheet with computer vision and scientific python. The cells in the\nspreadsheet are images, computations on images, measurements, and plots. There\nare many built in image processing and machine learning algorithms and it\nextensible by writing python functions and importing them into the\nspreadsheet."
       ],
@@ -225,9 +166,7 @@
       "video": "",
       "doi": "10.25080/Majora-ebaa42b7-005",
       "pages": 4,
-      "author_institution": [
-        "Vision Spreadsheet"
-      ],
+      "author_institution": ["Vision Spreadsheet"],
       "copyright_holder": "Scott Determan.",
       "page": {
         "start": 36,
@@ -236,16 +175,10 @@
     },
     {
       "author_institution_map": {
-        "Mark Dewing": [
-          "Intel"
-        ]
+        "Mark Dewing": ["Intel"]
       },
-      "author": [
-        "Mark Dewing"
-      ],
-      "author_email": [
-        "markdewing@gmail.com"
-      ],
+      "author": ["Mark Dewing"],
+      "author_email": ["markdewing@gmail.com"],
       "abstract": [
         "We describe a method for constructing scientific programs where SymPy is\nused to model the mathematical steps in the derivation.  With this workflow,\neach step in the process can be checked by machine, from the derivation of\nthe equations to the generation of the source code.  We present an example\nbased on computing the partition function integrals in statistical mechanics."
       ],
@@ -257,9 +190,7 @@
       "video": "",
       "doi": "10.25080/Majora-ebaa42b7-006",
       "pages": 4,
-      "author_institution": [
-        "Intel"
-      ],
+      "author_institution": ["Intel"],
       "copyright_holder": "Mark Dewing.",
       "page": {
         "start": 40,
@@ -268,17 +199,10 @@
     },
     {
       "author_institution_map": {
-        "Andrew Wilson": [
-          "Texas Water Development Board"
-        ],
-        "Dharhas Pothina": [
-          "Texas Water Development Board"
-        ]
+        "Andrew Wilson": ["Texas Water Development Board"],
+        "Dharhas Pothina": ["Texas Water Development Board"]
       },
-      "author": [
-        "Dharhas Pothina",
-        "Andrew Wilson"
-      ],
+      "author": ["Dharhas Pothina", "Andrew Wilson"],
       "author_email": [
         "dharhas.pothina@twdb.state.tx.us",
         "andrew.wilson@twdb.state.tx.us"
@@ -306,16 +230,10 @@
     },
     {
       "author_institution_map": {
-        "Jonathan Jacky": [
-          "University of Washington"
-        ]
+        "Jonathan Jacky": ["University of Washington"]
       },
-      "author": [
-        "Jonathan Jacky"
-      ],
-      "author_email": [
-        "jon@uw.edu"
-      ],
+      "author": ["Jonathan Jacky"],
+      "author_email": ["jon@uw.edu"],
       "abstract": [
         "In unit testing, the programmer codes the test cases, and also codes\nassertions that check whether each test case passed.  In model-based\ntesting, the programmer codes a \\textquotedbl{}model\\textquotedbl{} that generates as many test\ncases as desired and also acts as the oracle that checks the cases.\nModel-based testing is recommended where so many test cases are needed\nthat it is not feasible to code them all by hand.  This need arises\nwhen testing behaviors that exhibit history-dependence and\nnondeterminism, so that many variations (data values, interleavings,\netc.) should be tested for each scenario (or use case).  Examples\ninclude communication protocols, web applications, control systems,\nand user interfaces.  PyModel is a model-based testing framework in\nPython.  PyModel supports on-the-fly testing, which can generate\nindefinitely long nonrepeating tests as the test run executes.\nPyModel can focus test cases on scenarios of interest by composition,\na versatile technique that combines models by synchronizing shared\nactions and interleaving unshared actions.  PyModel can guide test\ncoverage according to programmable strategies coded by the programmer."
       ],
@@ -327,9 +245,7 @@
       "video": "",
       "doi": "10.25080/Majora-ebaa42b7-008",
       "pages": 5,
-      "author_institution": [
-        "University of Washington"
-      ],
+      "author_institution": ["University of Washington"],
       "copyright_holder": "Jonathan Jacky.",
       "page": {
         "start": 48,
@@ -338,21 +254,11 @@
     },
     {
       "author_institution_map": {
-        "Joseph Koning": [
-          "Lawrence Livermore National Laboratory"
-        ],
-        "Matthew Terry": [
-          "Lawrence Livermore National Laboratory"
-        ]
+        "Joseph Koning": ["Lawrence Livermore National Laboratory"],
+        "Matthew Terry": ["Lawrence Livermore National Laboratory"]
       },
-      "author": [
-        "Matthew Terry",
-        "Joseph Koning"
-      ],
-      "author_email": [
-        "terry10@llnl.gov",
-        "koning1@llnl.gov"
-      ],
+      "author": ["Matthew Terry", "Joseph Koning"],
+      "author_email": ["terry10@llnl.gov", "koning1@llnl.gov"],
       "abstract": [
         "The process of tuning an inertial confinement fusion pulse shape to a\nspecific target design is highly iterative process.  When done manually,\neach iteration has large latency and is consequently time consuming.  We\nhave developed several techniques that can be used to automate much of the\npulse tuning process and significantly accelerate the tuning process by\nremoving the human induced latency.  The automated data analysis techniques\nrequire specialized diagnostics to run within the simulation.  To\nfacilitate these techniques, we have embedded a loosely coupled Python\ninterpreter within a pre-existing radiation-hydrodynamics code, Hydra.  To\nautomate the tuning process we use numerical optimization techniques and\nconstruct objective functions to identify tuned parameters."
       ],
@@ -376,21 +282,11 @@
     },
     {
       "author_institution_map": {
-        "Mark DeMaria": [
-          "NOAA/NESDIS/STAR"
-        ],
-        "Minwoo Lee": [
-          "Colorado State University"
-        ],
-        "Charles W. Anderson": [
-          "Colorado State University"
-        ]
+        "Mark DeMaria": ["NOAA/NESDIS/STAR"],
+        "Minwoo Lee": ["Colorado State University"],
+        "Charles W. Anderson": ["Colorado State University"]
       },
-      "author": [
-        "Minwoo Lee",
-        "Charles W. Anderson",
-        "Mark DeMaria"
-      ],
+      "author": ["Minwoo Lee", "Charles W. Anderson", "Mark DeMaria"],
       "author_email": [
         "lemin@cs.colostate.edu",
         "anderson@cs.colostate.edu",
@@ -420,21 +316,11 @@
     },
     {
       "author_institution_map": {
-        "Alex D. Young": [
-          "University of Edinburgh"
-        ],
-        "Martin J. Ling": [
-          "University of Edinburgh"
-        ]
+        "Alex D. Young": ["University of Edinburgh"],
+        "Martin J. Ling": ["University of Edinburgh"]
       },
-      "author": [
-        "Martin J. Ling",
-        "Alex D. Young"
-      ],
-      "author_email": [
-        "m.j.ling@ed.ac.uk",
-        "ayoung9@inf.ed.ac.uk"
-      ],
+      "author": ["Martin J. Ling", "Alex D. Young"],
+      "author_email": ["m.j.ling@ed.ac.uk", "ayoung9@inf.ed.ac.uk"],
       "abstract": [
         "IMUSim is a new simulation package developed in Python to model Inertial\nMeasurement Units, i.e. devices which include accelerometers, gyroscopes\nand magnetometers. It was developed in the course of our research into\nalgorithms for IMU-based motion capture, and has now been released under\nthe GPL for the benefit of other researchers and users. The software\ngenerates realistic sensor readings based on trajectory, environment,\nsensor and system models. It includes implementaions of various relevant\nprocessing algorithms and mathematical utilities, some of which may be\nuseful elsewhere. The simulator makes extensive use of NumPy, SciPy, SimPy,\nCython, Matplotlib and Mayavi. The rapid development enabled by these tools\nallowed the project to be completed as a side project by two researchers.\nCareful design of an object-oriented API for the various models involved\nin the simulation allows the software to remain flexible and extensible\nwhile requiring users to write a minimum amount of code to use it."
       ],
@@ -458,18 +344,10 @@
     },
     {
       "author_institution_map": {
-        "Amal Alghamdi": [
-          "King Abdullah University of Science and Technology"
-        ],
-        "William Scullin": [
-          "Argonne National Labs"
-        ],
-        "Aron Ahmadia": [
-          "King Abdullah University of Science and Technology"
-        ],
-        "Kyle T. Mandli": [
-          "University of Washington"
-        ],
+        "Amal Alghamdi": ["King Abdullah University of Science and Technology"],
+        "William Scullin": ["Argonne National Labs"],
+        "Aron Ahmadia": ["King Abdullah University of Science and Technology"],
+        "Kyle T. Mandli": ["University of Washington"],
         "David I. Ketcheson": [
           "King Abdullah University of Science and Technology"
         ]
@@ -514,21 +392,11 @@
     },
     {
       "author_institution_map": {
-        "Leif Strand": [
-          "California Institute of Technology"
-        ],
-        "Tim Sullivan": [
-          "California Institute of Technology"
-        ],
-        "Michael A.G. Aivazis": [
-          "California Institute of Technology"
-        ],
-        "Alta Fang": [
-          "California Institute of Technology"
-        ],
-        "Michael M. McKerns": [
-          "California Institute of Technology"
-        ]
+        "Leif Strand": ["California Institute of Technology"],
+        "Tim Sullivan": ["California Institute of Technology"],
+        "Michael A.G. Aivazis": ["California Institute of Technology"],
+        "Alta Fang": ["California Institute of Technology"],
+        "Michael M. McKerns": ["California Institute of Technology"]
       },
       "author": [
         "Michael M. McKerns",
@@ -570,16 +438,10 @@
     },
     {
       "author_institution_map": {
-        "Nick Bray": [
-          "Google"
-        ]
+        "Nick Bray": ["Google"]
       },
-      "author": [
-        "Nick Bray"
-      ],
-      "author_email": [
-        "ncbray@google.com"
-      ],
+      "author": ["Nick Bray"],
+      "author_email": ["ncbray@google.com"],
       "abstract": [
         "PyStream is a static compiler that can radically transform Python code and run it on a Graphics Processing Unit (GPU).  Python compiled to run on the GPU is \\textasciitilde{}100,000x faster than when interpreted on the CPU.  The PyStream compiler is specially designed to simplify the development of real-time rendering systems by allowing the entire rendering system to be written in a single, highly productive language.  Without PyStream, GPU-accelerated real-time rendering systems must contain two separate code bases written in two separate languages: one for the CPU and one for the GPU.  Functions and data structures are not shared between the code bases, and any common functionality must be redundantly written in both languages.  PyStream unifies a rendering system into a single, Python code base, allowing functions and data structures to be transparently shared between the CPU and the GPU.  A single, unified code base makes it easy to create, maintain, and evolve a high-performance GPU-accelerated application."
       ],
@@ -591,9 +453,7 @@
       "video": "",
       "doi": "10.25080/Majora-ebaa42b7-00e",
       "pages": 4,
-      "author_institution": [
-        "Google"
-      ],
+      "author_institution": ["Google"],
       "copyright_holder": "Nick Bray.",
       "page": {
         "start": 87,
@@ -602,21 +462,11 @@
     },
     {
       "author_institution_map": {
-        "Derrick Coetzee": [
-          "University of California, Berkeley"
-        ],
-        "Armando Fox": [
-          "University of California, Berkeley"
-        ],
-        "Shoaib Kamil": [
-          "University of California, Berkeley"
-        ]
+        "Derrick Coetzee": ["University of California, Berkeley"],
+        "Armando Fox": ["University of California, Berkeley"],
+        "Shoaib Kamil": ["University of California, Berkeley"]
       },
-      "author": [
-        "Shoaib Kamil",
-        "Derrick Coetzee",
-        "Armando Fox"
-      ],
+      "author": ["Shoaib Kamil", "Derrick Coetzee", "Armando Fox"],
       "author_email": [
         "skamil@cs.berkeley.edu",
         "dcoetzee@cs.berkeley.edu",
@@ -647,21 +497,11 @@
     },
     {
       "author_institution_map": {
-        "Steven E. Gorrell": [
-          "Brigham Young University"
-        ],
-        "Stephen M. McQuay": [
-          "Brigham Young University"
-        ]
+        "Steven E. Gorrell": ["Brigham Young University"],
+        "Stephen M. McQuay": ["Brigham Young University"]
       },
-      "author": [
-        "Stephen M. McQuay",
-        "Steven E. Gorrell"
-      ],
-      "author_email": [
-        "stephen@mcquay.me",
-        "sgorrell@byu.edu"
-      ],
+      "author": ["Stephen M. McQuay", "Steven E. Gorrell"],
+      "author_email": ["stephen@mcquay.me", "sgorrell@byu.edu"],
       "abstract": [
         "The research contained herein yielded an open source interpolation library\nimplemented in and designed for use with the Python programming language.\nThis library, named smbinterp, yields an interpolation to an arbitrary\ndegree of accuracy. The smbinterp module was designed to be mesh agnostic.\nA plugin system was implemented that allows end users to conveniently and\nconsistently present their numerical results to the library for rapid\nprototyping and integration. The library includes modules that allow for\nits use in high-performance parallel computing environments. These modules\nwere implemented using built-in Python modules to simplify deployment. This\nimplementation was found to scale linearly to approximately 180\nparticipating compute processes."
       ],
@@ -689,12 +529,8 @@
           "University of Memphis - Institute For Intelligent Systems"
         ]
       },
-      "author": [
-        "Douglas A. Starnes"
-      ],
-      "author_email": [
-        "douglas@poweredbyalt.net"
-      ],
+      "author": ["Douglas A. Starnes"],
+      "author_email": ["douglas@poweredbyalt.net"],
       "abstract": [
         "In recent years, one of the fastest growing trends in information technology has been the move towards cloud computing.  The scalable concept of computing resources on demand allows applications to dynamically react to increased usage instead of having to keep resources in reserve that are often not in use but are still paid for.  There are several popular entrants into this market including Google App Engine.  Modeled after Google's own architecture for building applications, Google App Engine (GAE) provides a scalable solution for web-based applications and services including data storage, communications, application deployment and monitoring, and management tools.  With GAE, developers have the option of writing applications using an API exposed to Python.  The same benefits of using Python in other applications are available in the cloud."
       ],
@@ -717,21 +553,11 @@
     },
     {
       "author_institution_map": {
-        "Josef Perktold": [
-          "University of North Carolina, Chapel Hill"
-        ],
-        "Skipper Seabold": [
-          "American University"
-        ],
-        "Wes McKinney": [
-          "Duke University"
-        ]
+        "Josef Perktold": ["University of North Carolina, Chapel Hill"],
+        "Skipper Seabold": ["American University"],
+        "Wes McKinney": ["Duke University"]
       },
-      "author": [
-        "Wes McKinney",
-        "Josef Perktold",
-        "Skipper Seabold"
-      ],
+      "author": ["Wes McKinney", "Josef Perktold", "Skipper Seabold"],
       "author_email": [
         "wesmckinn@gmail.com",
         "josef.pktd@gmail.com",
@@ -761,21 +587,11 @@
     },
     {
       "author_institution_map": {
-        "Solomon Negusse": [
-          "Texas Water Development Board"
-        ],
-        "Tyler McEwen": [
-          "Texas Water Development Board"
-        ],
-        "Dharhas Pothina": [
-          "Texas Water Development Board"
-        ]
+        "Solomon Negusse": ["Texas Water Development Board"],
+        "Tyler McEwen": ["Texas Water Development Board"],
+        "Dharhas Pothina": ["Texas Water Development Board"]
       },
-      "author": [
-        "Tyler McEwen",
-        "Dharhas Pothina",
-        "Solomon Negusse"
-      ],
+      "author": ["Tyler McEwen", "Dharhas Pothina", "Solomon Negusse"],
       "author_email": [
         "tyler.mcewen@twdb.state.tx.us",
         "dharhas.pothina@twdb.state.tx.us",

@@ -1,11 +1,11 @@
 {
-    "title": "SciPy Tools Plenary on Mayavi",
-    "authors": [
-        {
-            "name": "Prabhu Ramachandran",
-            "affiliation": "Department of Aerospace Engineering, IIT, Bombay",
-            "orcid": "0000-0001-6337-1720"
-        }
-    ],
-    "description": "2018 updates in Mayavi, a 3D plotting application"
+  "title": "SciPy Tools Plenary on Mayavi",
+  "authors": [
+    {
+      "name": "Prabhu Ramachandran",
+      "affiliation": "Department of Aerospace Engineering, IIT, Bombay",
+      "orcid": "0000-0001-6337-1720"
+    }
+  ],
+  "description": "2018 updates in Mayavi, a 3D plotting application"
 }

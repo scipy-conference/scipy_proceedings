@@ -19,12 +19,12 @@ body {
 }
 
 .authors {
-   font-style: italic;
-   padding-left: 1em;
+  font-style: italic;
+  padding-left: 1em;
 }
 
 .abstract {
-   width: 80ex;
-   text-align: justify
-   padding-left: 1em;
+  width: 80ex;
+  text-align: justify;
+  padding-left: 1em;
 }
