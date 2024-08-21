@@ -1,0 +1,45 @@
+ci:
+  autoupdate_commit_msg: "chore: [pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: quarterly
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-xml
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+        exclude: >
+          (?x)^(
+              .*\.csv
+          )$
+      - id: mixed-line-ending
+        exclude: >
+          (?x)^(
+              .*\.csv|
+              .*\.css
+          )$
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+        exclude: >
+          (?x)^(
+              .*\.csv
+          )$
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.33.1
+    hooks:
+      - id: check-github-workflows
+        args: ["--verbose"]
+
+  - repo: https://github.com/rbubley/mirrors-prettier
+    rev: "v3.6.1"
+    hooks:
+      - id: prettier
+        types_or: [yaml, html, css, scss, javascript, json, toml]
+        args: [--prose-wrap=always]
