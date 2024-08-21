@@ -1,0 +1,38 @@
+ci:
+  autoupdate_commit_msg: "chore: [pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: quarterly
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-xml
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+        exclude: >
+          (?x)^(
+              .*\.csv
+          )$
+      - id: mixed-line-ending
+        exclude: >
+          (?x)^(
+              .*\.csv|
+              .*\.css
+          )$
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+        exclude: >
+          (?x)^(
+              .*\.csv
+          )$
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.29.1
+    hooks:
+      - id: check-github-workflows
+        args: ["--verbose"]
