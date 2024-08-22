@@ -82,8 +82,6 @@ The habitat and water mass of the sampling points were the only attributes taken
 
 To better interpret benthic species' relationship and evolutionary responses, genetic data are required \citep{wilson_speciation_1987, uhlir_adding_2021}. Thus, the aligned DNA sequence of the 16S rRNA mitochondrial gene region from each of the samples was included in our analyses. This region is standard in phylogeny and phylogeography studies \citep{hugenholtz1998impact} and sufficiently conserved over time to guarantee exact alignments between different species or populations \citep{saccone1999evolutionary}. We examined 62 of the 306 aligned DNA sequences used for phylogeographic analyses by \citep{uhlir_adding_2021}. As some specimens in our sample have their DNA sequence duplicated, or even quadruplicated with a difference of one or two nucleotides, we took into account the longest-aligned DNA sequence of each specimen.
 
-Figure \ref{fig:fig2}, Figure \ref{fig:fig3}, Figure \ref{fig:fig6} and Figure \ref{fig:fig7} were made with Python 3.11, while Figure \ref{fig:fig4} and Figure \ref{fig:fig5} were made with RStudio Desktop 4.3.2.
-
 \subsection{{\textit{aPhyloGeo} software}\label{aPhyloGeo-software}}
 We used the cross-platform Python software \textit{aPhyloGeo} for our phylogeographic analyses, designed to analyze phylogenetic trees using ecological and geographic parameters \citep{koshkarov_phylogeography_2022}. Developed by My-Linh Luu, Georges Marceau, David Beauchemin, and Nadia Tahiri, \textit{aPhyloGeo} offers tools for the study of correlations between species genetics and habitat characteristics, helping to understand the evolution of species under different environmental conditions \citep{koshkarov_phylogeography_2022}. 
 
@@ -136,6 +134,9 @@ if __name__ == "__main__":
 
 \item \textbf{In the third step}, the phylogenetic trees constructed in each sliding window are compared with environmental, climatic and geographical parameters using Robinson-Foulds distance (RF) \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}, normalized Robinson-Foulds distance (nRF), Euclidean distance and Least-Squares distance (LS). These contribute to the understanding of similarities and dissimilarities between cumacean genetic sequences. The approach also takes bootstrapping into account. A sliding window allows detailed identification of regions with high genetic mutation rates.
 \end{enumerate}
+
+\subsection{Figure construction}
+Figure \ref{fig:fig2}, Figure \ref{fig:fig3}, Figure \ref{fig:fig6} and Figure \ref{fig:fig7} were made with Python 3.11, while Figure \ref{fig:fig4} and Figure \ref{fig:fig5} were made with RStudio Desktop 4.3.2.
 
 \section{Metrics}\label{metrics}
 The following section presents a more concise version of the formulas mentioned in the third step of the \autoref{aPhyloGeo-software} section:
