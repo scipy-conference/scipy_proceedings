@@ -181,13 +181,15 @@ For example, if the size of tree A differs due to missing data, this normalized 
 
 Euclidean distance measures the distance between two points in a multi-dimensional space. In our study, it is used to compare vectors of habitat attributes between species (see Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}).
 
-When the values of different habitat features are converted into vectors, Euclidean distance allows us to understand how combinations of various habitat attributes integrally affect the phylogenetic trees of cumacean species. For example, species with similar environmental or climatic vectors (low Euclidean distance) may have close evolutionary relationships. On the other hand, large dissimilarities in these vectors (high Euclidean distance) can signify significant evolutionary differences.
+By converting habitat attribute values into vectors, we use Euclidean distance to assess how combinations of habitat attributes integrally affect the phylogenetic trees of cumacean species. For instance, species with similar habitat attribute vectors (low Euclidean distance) may share closer evolutionary relationships. In contrast, those with a large difference in habitat vectors (high Euclidean distance) may reveal evolutionary divergences.
 
-For points $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n)$:
+For vectors $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n)$, the Euclidean distance between these vectors is calculated as:
 
 \begin{equation}\label{eq:euclidean}
     d_{\text{Euclidean}}(\mathbf{p}, \mathbf{q}) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}
 \end{equation}
+
+where $p_i$ and $q_i$ are the components of the vectors.
 
 %\autoref{lst:euclideanDist}.
 \begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the Euclidean distance using the ete3 package in the aPhyloGeo package]
