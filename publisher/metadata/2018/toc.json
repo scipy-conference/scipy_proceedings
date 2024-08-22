@@ -90,26 +90,16 @@
       "video": "https://youtu.be/D9LPzqoZ3f8",
       "doi": "10.25080/Majora-4af1f417-001",
       "pages": 7,
-      "author_email": [
-        "richiehalford@gmail.com",
-        "arokem@gmail.com"
-      ],
+      "author_email": ["richiehalford@gmail.com", "arokem@gmail.com"],
       "author_institution": [
         "University of Washington, Seattle, WA",
         "University of Washington, Seattle, WA"
       ],
       "copyright_holder": "Adam Richie-Halford et al.",
-      "author": [
-        "Adam Richie-Halford",
-        "Ariel Rokem"
-      ],
+      "author": ["Adam Richie-Halford", "Ariel Rokem"],
       "author_institution_map": {
-        "Adam Richie-Halford": [
-          "University of Washington, Seattle, WA"
-        ],
-        "Ariel Rokem": [
-          "University of Washington, Seattle, WA"
-        ]
+        "Adam Richie-Halford": ["University of Washington, Seattle, WA"],
+        "Ariel Rokem": ["University of Washington, Seattle, WA"]
       },
       "bibliography": "mybib",
       "authors": "Adam Richie-Halford, Ariel Rokem"
@@ -141,25 +131,12 @@
         "University of California, Berkeley"
       ],
       "copyright_holder": "Anthony Suen et al.",
-      "author": [
-        "Anthony Suen",
-        "Laura Norén",
-        "Alan Liang",
-        "Andrea Tu"
-      ],
+      "author": ["Anthony Suen", "Laura Norén", "Alan Liang", "Andrea Tu"],
       "author_institution_map": {
-        "Laura Norén": [
-          "New York University"
-        ],
-        "Andrea Tu": [
-          "University of California, Berkeley"
-        ],
-        "Alan Liang": [
-          "University of California, Berkeley"
-        ],
-        "Anthony Suen": [
-          "University of California, Berkeley"
-        ]
+        "Laura Norén": ["New York University"],
+        "Andrea Tu": ["University of California, Berkeley"],
+        "Alan Liang": ["University of California, Berkeley"],
+        "Anthony Suen": ["University of California, Berkeley"]
       },
       "bibliography": "",
       "authors": "Anthony Suen, Laura Norén, Alan Liang, Andrea Tu"
@@ -198,18 +175,10 @@
         "Terry Wilmarth"
       ],
       "author_institution_map": {
-        "Anton Malakhov": [
-          "Intel Corporation"
-        ],
-        "Anton Gorshkov": [
-          "Intel Corporation"
-        ],
-        "David Liu": [
-          "Intel Corporation"
-        ],
-        "Terry Wilmarth": [
-          "Intel Corporation"
-        ]
+        "Anton Malakhov": ["Intel Corporation"],
+        "Anton Gorshkov": ["Intel Corporation"],
+        "David Liu": ["Intel Corporation"],
+        "Terry Wilmarth": ["Intel Corporation"]
       },
       "bibliography": "",
       "authors": "Anton Malakhov, David Liu, Anton Gorshkov, Terry Wilmarth"
@@ -251,21 +220,11 @@
         "Matthew N. White"
       ],
       "author_institution_map": {
-        "Alexander M. Kaufman": [
-          "Woodrow Wilson School of Public Policy"
-        ],
-        "Nathan M. Palmer": [
-          "Econ-ARK"
-        ],
-        "Matthew N. White": [
-          "University of Delaware"
-        ],
-        "Christopher D. Carroll": [
-          "Johns Hopkins University"
-        ],
-        "Jacqueline L. Kazil": [
-          "Capital One"
-        ]
+        "Alexander M. Kaufman": ["Woodrow Wilson School of Public Policy"],
+        "Nathan M. Palmer": ["Econ-ARK"],
+        "Matthew N. White": ["University of Delaware"],
+        "Christopher D. Carroll": ["Johns Hopkins University"],
+        "Jacqueline L. Kazil": ["Capital One"]
       },
       "bibliography": "",
       "authors": "Christopher D. Carroll, Alexander M. Kaufman, Jacqueline L. Kazil, Nathan M. Palmer, Matthew N. White"
@@ -284,26 +243,13 @@
       "video": "",
       "doi": "10.25080/Majora-4af1f417-005",
       "pages": 10,
-      "author_email": [
-        "clm121@uga.edu",
-        "spq@uga.edu"
-      ],
-      "author_institution": [
-        "University of Georgia",
-        "University of Georgia"
-      ],
+      "author_email": ["clm121@uga.edu", "spq@uga.edu"],
+      "author_institution": ["University of Georgia", "University of Georgia"],
       "copyright_holder": "Christian McDaniel et al.",
-      "author": [
-        "Christian McDaniel",
-        "Shannon Quinn"
-      ],
+      "author": ["Christian McDaniel", "Shannon Quinn"],
       "author_institution_map": {
-        "Christian McDaniel": [
-          "University of Georgia"
-        ],
-        "Shannon Quinn": [
-          "University of Georgia"
-        ]
+        "Christian McDaniel": ["University of Georgia"],
+        "Shannon Quinn": ["University of Georgia"]
       },
       "bibliography": "citations",
       "authors": "Christian McDaniel, Shannon Quinn"
@@ -345,21 +291,11 @@
         "Lee Armus"
       ],
       "author_institution_map": {
-        "Ben Rusholme": [
-          "Caltech/IPAC"
-        ],
-        "Russ Laher": [
-          "Caltech/IPAC"
-        ],
-        "David Shupe": [
-          "Caltech/IPAC"
-        ],
-        "Lee Armus": [
-          "Caltech/IPAC"
-        ],
-        "Frank Masci": [
-          "Caltech/IPAC"
-        ]
+        "Ben Rusholme": ["Caltech/IPAC"],
+        "Russ Laher": ["Caltech/IPAC"],
+        "David Shupe": ["Caltech/IPAC"],
+        "Lee Armus": ["Caltech/IPAC"],
+        "Frank Masci": ["Caltech/IPAC"]
       },
       "bibliography": "mybib",
       "authors": "David Shupe, Frank Masci, Russ Laher, Ben Rusholme, Lee Armus"
@@ -411,30 +347,16 @@
         "Gregory Brener"
       ],
       "author_institution_map": {
-        "Kevin Winters": [
-          "US Army Engineer Research and Development Center"
-        ],
-        "Christopher E. Ball": [
-          "Anaconda, Inc."
-        ],
-        "Gregory Brener": [
-          "Anaconda, Inc."
-        ],
-        "Philipp J. F. Rudiger": [
-          "Anaconda, Inc."
-        ],
+        "Kevin Winters": ["US Army Engineer Research and Development Center"],
+        "Christopher E. Ball": ["Anaconda, Inc."],
+        "Gregory Brener": ["Anaconda, Inc."],
+        "Philipp J. F. Rudiger": ["Anaconda, Inc."],
         "Scott Christensen": [
           "US Army Engineer Research and Development Center"
         ],
-        "James A Bednar": [
-          "Anaconda, Inc."
-        ],
-        "Kimberly Pevey": [
-          "US Army Engineer Research and Development Center"
-        ],
-        "Dharhas Pothina": [
-          "US Army Engineer Research and Development Center"
-        ]
+        "James A Bednar": ["Anaconda, Inc."],
+        "Kimberly Pevey": ["US Army Engineer Research and Development Center"],
+        "Dharhas Pothina": ["US Army Engineer Research and Development Center"]
       },
       "bibliography": "",
       "authors": "Dharhas Pothina, Philipp J. F. Rudiger, James A Bednar, Scott Christensen, Kevin Winters, Kimberly Pevey, Christopher E. Ball, Gregory Brener"
@@ -453,20 +375,12 @@
       "video": "https://youtu.be/2gkw2T5jAfo",
       "doi": "10.25080/Majora-4af1f417-008",
       "pages": 5,
-      "author_email": [
-        "dniederhut@enthought.com"
-      ],
-      "author_institution": [
-        "Enthought, Inc."
-      ],
+      "author_email": ["dniederhut@enthought.com"],
+      "author_institution": ["Enthought, Inc."],
       "copyright_holder": "Dillon Niederhut.",
-      "author": [
-        "Dillon Niederhut"
-      ],
+      "author": ["Dillon Niederhut"],
       "author_institution_map": {
-        "Dillon Niederhut": [
-          "Enthought, Inc."
-        ]
+        "Dillon Niederhut": ["Enthought, Inc."]
       },
       "bibliography": "",
       "authors": "Dillon Niederhut"
@@ -490,24 +404,13 @@
         "mpacer.phd@gmail.com",
         "sebastian.bassi@globant.com"
       ],
-      "author_institution": [
-        "Netflix",
-        "Globant"
-      ],
+      "author_institution": ["Netflix", "Globant"],
       "copyright_holder": "Elizabeth Seiver et al.",
-      "author": [
-        "Elizabeth Seiver",
-        "M Pacer",
-        "Sebastian Bassi"
-      ],
+      "author": ["Elizabeth Seiver", "M Pacer", "Sebastian Bassi"],
       "author_institution_map": {
         "Elizabeth Seiver": [],
-        "Sebastian Bassi": [
-          "Globant"
-        ],
-        "M Pacer": [
-          "Netflix"
-        ]
+        "Sebastian Bassi": ["Globant"],
+        "M Pacer": ["Netflix"]
       },
       "bibliography": "",
       "authors": "Elizabeth Seiver, M Pacer, Sebastian Bassi"
@@ -526,20 +429,12 @@
       "video": "https://youtu.be/xH5eVcb1SlA",
       "doi": "10.25080/Majora-4af1f417-00a",
       "pages": 4,
-      "author_email": [
-        "hameerabbasi@yahoo.com"
-      ],
-      "author_institution": [
-        "TU Darmstadt"
-      ],
+      "author_email": ["hameerabbasi@yahoo.com"],
+      "author_institution": ["TU Darmstadt"],
       "copyright_holder": "Hameer Abbasi.",
-      "author": [
-        "Hameer Abbasi"
-      ],
+      "author": ["Hameer Abbasi"],
       "author_institution_map": {
-        "Hameer Abbasi": [
-          "TU Darmstadt"
-        ]
+        "Hameer Abbasi": ["TU Darmstadt"]
       },
       "bibliography": "references",
       "authors": "Hameer Abbasi"
@@ -558,20 +453,12 @@
       "video": "https://youtu.be/1ndo6C1KWjI",
       "doi": "10.25080/Majora-4af1f417-00b",
       "pages": 8,
-      "author_email": [
-        "jon.mease@jhuapl.edu"
-      ],
-      "author_institution": [
-        "Johns Hopkins Applied Physics Laboratory"
-      ],
+      "author_email": ["jon.mease@jhuapl.edu"],
+      "author_institution": ["Johns Hopkins Applied Physics Laboratory"],
       "copyright_holder": "Jon Mease.",
-      "author": [
-        "Jon Mease"
-      ],
+      "author": ["Jon Mease"],
       "author_institution_map": {
-        "Jon Mease": [
-          "Johns Hopkins Applied Physics Laboratory"
-        ]
+        "Jon Mease": ["Johns Hopkins Applied Physics Laboratory"]
       },
       "bibliography": "mybib",
       "authors": "Jon Mease"
@@ -601,21 +488,11 @@
         "University of Wisconsin-{}-Madison"
       ],
       "copyright_holder": "Kyle F Sunden et al.",
-      "author": [
-        "Kyle F Sunden",
-        "Blaise J Thompson",
-        "John C Wright"
-      ],
+      "author": ["Kyle F Sunden", "Blaise J Thompson", "John C Wright"],
       "author_institution_map": {
-        "Kyle F Sunden": [
-          "University of Wisconsin-{}-Madison"
-        ],
-        "John C Wright": [
-          "University of Wisconsin-{}-Madison"
-        ],
-        "Blaise J Thompson": [
-          "University of Wisconsin-{}-Madison"
-        ]
+        "Kyle F Sunden": ["University of Wisconsin-{}-Madison"],
+        "John C Wright": ["University of Wisconsin-{}-Madison"],
+        "Blaise J Thompson": ["University of Wisconsin-{}-Madison"]
       },
       "bibliography": "bib",
       "authors": "Kyle F Sunden, Blaise J Thompson, John C Wright"
@@ -634,26 +511,16 @@
       "video": "",
       "doi": "10.25080/Majora-4af1f417-00d",
       "pages": 7,
-      "author_email": [
-        "mwickert@uccs.edu",
-        "csiddapp@uccs.edu"
-      ],
+      "author_email": ["mwickert@uccs.edu", "csiddapp@uccs.edu"],
       "author_institution": [
         "University of Colorado Colorado Springs",
         "University of Colorado Colorado Springs"
       ],
       "copyright_holder": "Mark Wickert et al.",
-      "author": [
-        "Mark Wickert",
-        "Chiranth Siddappa"
-      ],
+      "author": ["Mark Wickert", "Chiranth Siddappa"],
       "author_institution_map": {
-        "Mark Wickert": [
-          "University of Colorado Colorado Springs"
-        ],
-        "Chiranth Siddappa": [
-          "University of Colorado Colorado Springs"
-        ]
+        "Mark Wickert": ["University of Colorado Colorado Springs"],
+        "Chiranth Siddappa": ["University of Colorado Colorado Springs"]
       },
       "bibliography": "",
       "authors": "Mark Wickert, Chiranth Siddappa"
@@ -672,20 +539,12 @@
       "video": "",
       "doi": "10.25080/Majora-4af1f417-00e",
       "pages": 8,
-      "author_email": [
-        "mwickert@uccs.edu"
-      ],
-      "author_institution": [
-        "University of Colorado Colorado Springs"
-      ],
+      "author_email": ["mwickert@uccs.edu"],
+      "author_institution": ["University of Colorado Colorado Springs"],
       "copyright_holder": "Mark Wickert.",
-      "author": [
-        "Mark Wickert"
-      ],
+      "author": ["Mark Wickert"],
       "author_institution_map": {
-        "Mark Wickert": [
-          "University of Colorado Colorado Springs"
-        ]
+        "Mark Wickert": ["University of Colorado Colorado Springs"]
       },
       "bibliography": "",
       "authors": "Mark Wickert"
@@ -715,10 +574,7 @@
         "NASA Ames Research Center, MS245-6, Moffett Field, CA 94035-1000"
       ],
       "copyright_holder": "Matthew J. Shannon et al.",
-      "author": [
-        "Matthew J. Shannon",
-        "Christiaan Boersma"
-      ],
+      "author": ["Matthew J. Shannon", "Christiaan Boersma"],
       "author_institution_map": {
         "Matthew J. Shannon": [
           "Universities Space Research Association, Columbia, MD",
@@ -780,9 +636,7 @@
           "Massachusetts Institute of Technology, Cambridge, MA",
           "Woods Hole Oceanographic Institution, Woods Hole, MA"
         ],
-        "Joe Futrelle": [
-          "Woods Hole Oceanographic Institution, Woods Hole, MA"
-        ]
+        "Joe Futrelle": ["Woods Hole Oceanographic Institution, Woods Hole, MA"]
       },
       "bibliography": "",
       "authors": "Noelle A. Held, Jaclyn K. Saunders, Joe Futrelle, Mak A. Saito"
@@ -854,51 +708,21 @@
         "Carol Willing"
       ],
       "author_institution_map": {
-        "Project Jupyter": [
-          "Project Jupyter"
-        ],
-        "Carol Willing": [
-          "Cal Poly, San Luis Obispo"
-        ],
-        "Tim Head": [
-          "Wild Tree Tech, Switzerland"
-        ],
-        "Chris Holdgraf": [
-          "UC Berkeley"
-        ],
-        "Fernando Perez": [
-          "UC Berkeley"
-        ],
-        "Gladys Nalvarte": [
-          "Simula Research Lab"
-        ],
-        "Benjamin Ragan-Kelley": [
-          "Simula Research Lab"
-        ],
-        "Brian Granger": [
-          "Cal Poly, San Luis Obispo"
-        ],
-        "M Pacer": [
-          "Netflix"
-        ],
-        "Matthias Bussonnier": [
-          "UC Berkeley"
-        ],
-        "Yuvi Panda": [
-          "UC Berkeley"
-        ],
-        "Kyle Kelley": [
-          "Netflix"
-        ],
-        "Jessica Forde": [
-          "Project Jupyter"
-        ],
-        "Andrew Osheroff": [
-          ""
-        ],
-        "Jeremy Freeman": [
-          ""
-        ]
+        "Project Jupyter": ["Project Jupyter"],
+        "Carol Willing": ["Cal Poly, San Luis Obispo"],
+        "Tim Head": ["Wild Tree Tech, Switzerland"],
+        "Chris Holdgraf": ["UC Berkeley"],
+        "Fernando Perez": ["UC Berkeley"],
+        "Gladys Nalvarte": ["Simula Research Lab"],
+        "Benjamin Ragan-Kelley": ["Simula Research Lab"],
+        "Brian Granger": ["Cal Poly, San Luis Obispo"],
+        "M Pacer": ["Netflix"],
+        "Matthias Bussonnier": ["UC Berkeley"],
+        "Yuvi Panda": ["UC Berkeley"],
+        "Kyle Kelley": ["Netflix"],
+        "Jessica Forde": ["Project Jupyter"],
+        "Andrew Osheroff": [""],
+        "Jeremy Freeman": [""]
       },
       "bibliography": "binderbib",
       "authors": "Project Jupyter, Matthias Bussonnier, Jessica Forde, Jeremy Freeman, Brian Granger, Tim Head, Chris Holdgraf, Kyle Kelley, Gladys Nalvarte, Andrew Osheroff, M Pacer, Yuvi Panda, Fernando Perez, Benjamin Ragan-Kelley, Carol Willing"
@@ -949,9 +773,7 @@
         "Sergio Rey": [
           "Center for Geospatial Sciences, University of California, Riverside"
         ],
-        "Levi Wolf": [
-          "School of Geographical Sciences, University of Bristol"
-        ],
+        "Levi Wolf": ["School of Geographical Sciences, University of Bristol"],
         "Su Han": [
           "Center for Geospatial Sciences, University of California, Riverside"
         ]
@@ -1001,15 +823,9 @@
           "Chemical and Biomolecular Engineering, University of Delaware",
           "Materials Science and Engineering, University of Delaware"
         ],
-        "Tyler B. Martin": [
-          "National Institute of Standards and Technology"
-        ],
-        "Chad R. Snyder": [
-          "National Institute of Standards and Technology"
-        ],
-        "Ronald L. Jones": [
-          "National Institute of Standards and Technology"
-        ],
+        "Tyler B. Martin": ["National Institute of Standards and Technology"],
+        "Chad R. Snyder": ["National Institute of Standards and Technology"],
+        "Ronald L. Jones": ["National Institute of Standards and Technology"],
         "Thomas E. Gartner III": [
           "Chemical and Biomolecular Engineering, University of Delaware"
         ]
@@ -1040,10 +856,7 @@
         "Institute for Globally Distributed Open Research and Education (IGDORE)"
       ],
       "copyright_holder": "Konstantinos Vamvourellis et al.",
-      "author": [
-        "Konstantinos Vamvourellis",
-        "Marianne Corvellec"
-      ],
+      "author": ["Konstantinos Vamvourellis", "Marianne Corvellec"],
       "author_institution_map": {
         "Konstantinos Vamvourellis": [
           "London School of Economics and Political Science"
@@ -1070,26 +883,13 @@
       "video": "https://youtu.be/3AuRW9kq89g",
       "doi": "10.25080/Majora-4af1f417-015",
       "pages": 7,
-      "author_email": [
-        "virginia@mapbox.com",
-        "hofmann@mapbox.com"
-      ],
-      "author_institution": [
-        "Mapbox",
-        "Mapbox"
-      ],
+      "author_email": ["virginia@mapbox.com", "hofmann@mapbox.com"],
+      "author_institution": ["Mapbox", "Mapbox"],
       "copyright_holder": "Virginia Ng et al.",
-      "author": [
-        "Virginia Ng",
-        "Daniel Hofmann"
-      ],
+      "author": ["Virginia Ng", "Daniel Hofmann"],
       "author_institution_map": {
-        "Daniel Hofmann": [
-          "Mapbox"
-        ],
-        "Virginia Ng": [
-          "Mapbox"
-        ]
+        "Daniel Hofmann": ["Mapbox"],
+        "Virginia Ng": ["Mapbox"]
       },
       "bibliography": "",
       "authors": "Virginia Ng, Daniel Hofmann"
@@ -1197,25 +997,15 @@
         "Hardik Ghaghada"
       ],
       "author_institution_map": {
-        "Ankit Javalkar": [
-          "FOSSEE IIT Bombay, Mumbai, India"
-        ],
-        "Aditya Palaparthy": [
-          "FOSSEE IIT Bombay, Mumbai, India"
-        ],
-        "Hardik Ghaghada": [
-          "FOSSEE IIT Bombay, Mumbai, India"
-        ],
-        "Prathamesh Salunke": [
-          "FOSSEE IIT Bombay, Mumbai, India"
-        ],
+        "Ankit Javalkar": ["FOSSEE IIT Bombay, Mumbai, India"],
+        "Aditya Palaparthy": ["FOSSEE IIT Bombay, Mumbai, India"],
+        "Hardik Ghaghada": ["FOSSEE IIT Bombay, Mumbai, India"],
+        "Prathamesh Salunke": ["FOSSEE IIT Bombay, Mumbai, India"],
         "Prabhu Ramachandran": [
           "Department of Aerospace Engineering",
           "IIT Bombay, Mumbai, India"
         ],
-        "Mahesh Gudi": [
-          "FOSSEE IIT Bombay, Mumbai, India"
-        ]
+        "Mahesh Gudi": ["FOSSEE IIT Bombay, Mumbai, India"]
       },
       "bibliography": "",
       "authors": "Prabhu Ramachandran, Prathamesh Salunke, Ankit Javalkar, Aditya Palaparthy, Mahesh Gudi, Hardik Ghaghada"

@@ -7,7 +7,7 @@
     {{for student in scipy_scholarship}}
       <li>{{html_quote(student['name']) | html}},
       <em>{{html_quote(student['org']) | html}}
-          {{if student.get('location')}}, 
+          {{if student.get('location')}},
           {{html_quote(student['location']) | html}} {{endif}}</em>
       </li>
     {{endfor}}

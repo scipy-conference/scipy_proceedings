@@ -3,10 +3,7 @@
     {
       "authors": "Andy Terrel, Jonathan Rocher",
       "doi": "10.25080/Majora-8b375195-000",
-      "author_email": [
-        "aterrell@tacc.utexas.edu",
-        "jrocher@enthought.com"
-      ],
+      "author_email": ["aterrell@tacc.utexas.edu", "jrocher@enthought.com"],
       "page": {
         "stop": 1,
         "start": 1
@@ -19,29 +16,19 @@
         "University of Texas at Austin",
         "Enthought, Inc."
       ],
-      "author": [
-        "Andy Terrel",
-        "Jonathan Rocher"
-      ],
+      "author": ["Andy Terrel", "Jonathan Rocher"],
       "bibliography": "",
       "video": "",
       "author_institution_map": {
-        "Jonathan Rocher": [
-          "Enthought, Inc."
-        ],
-        "Andy Terrel": [
-          "University of Texas at Austin"
-        ]
+        "Jonathan Rocher": ["Enthought, Inc."],
+        "Andy Terrel": ["University of Texas at Austin"]
       },
       "title": "Preface"
     },
     {
       "authors": "Kapil Arya, Gene Cooperman",
       "doi": "10.25080/Majora-8b375195-001",
-      "author_email": [
-        "kapil@ccs.neu.edu",
-        "gene@ccs.neu.edu"
-      ],
+      "author_email": ["kapil@ccs.neu.edu", "gene@ccs.neu.edu"],
       "page": {
         "stop": 7,
         "start": 2
@@ -57,19 +44,12 @@
         "Northeastern University",
         "Northeastern University"
       ],
-      "author": [
-        "Kapil Arya",
-        "Gene Cooperman"
-      ],
+      "author": ["Kapil Arya", "Gene Cooperman"],
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=1l_wGZz0JEE",
       "author_institution_map": {
-        "Kapil Arya": [
-          "Northeastern University"
-        ],
-        "Gene Cooperman": [
-          "Northeastern University"
-        ]
+        "Kapil Arya": ["Northeastern University"],
+        "Gene Cooperman": ["Northeastern University"]
       },
       "title": "DMTCP: Bringing Checkpoint-Restart to Python"
     },
@@ -109,18 +89,10 @@
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=47LNpvDlKUk",
       "author_institution_map": {
-        "Christopher Beaumont": [
-          "University of Hawaii, Harvard University"
-        ],
-        "Thomas Robitaille": [
-          "Max Planck Institute for Astronomy"
-        ],
-        "Alyssa Goodman": [
-          "Harvard University"
-        ],
-        "Michelle Borkin": [
-          "Harvard University"
-        ]
+        "Christopher Beaumont": ["University of Hawaii, Harvard University"],
+        "Thomas Robitaille": ["Max Planck Institute for Astronomy"],
+        "Alyssa Goodman": ["Harvard University"],
+        "Michelle Borkin": ["Harvard University"]
       },
       "title": "Multidimensional Data Exploration with Glue"
     },
@@ -148,23 +120,13 @@
         "Massachusetts Institute of Technology",
         "Harvard University"
       ],
-      "author": [
-        "James Bergstra",
-        "Dan Yamins",
-        "David D. Cox"
-      ],
+      "author": ["James Bergstra", "Dan Yamins", "David D. Cox"],
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=Mp1xnPfE4PY",
       "author_institution_map": {
-        "James Bergstra": [
-          "University of Waterloo"
-        ],
-        "Dan Yamins": [
-          "Massachusetts Institute of Technology"
-        ],
-        "David D. Cox": [
-          "Harvard University"
-        ]
+        "James Bergstra": ["University of Waterloo"],
+        "Dan Yamins": ["Massachusetts Institute of Technology"],
+        "David D. Cox": ["Harvard University"]
       },
       "title": "Hyperopt: A Python Library for Optimizing the Hyperparameters of Machine Learning Algorithms"
     },
@@ -192,23 +154,13 @@
         "Massachusetts Institute of Technology",
         "Harvard University"
       ],
-      "author": [
-        "James Bergstra",
-        "Nicolas Pinto",
-        "David D. Cox"
-      ],
+      "author": ["James Bergstra", "Nicolas Pinto", "David D. Cox"],
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=u5amehIiImo",
       "author_institution_map": {
-        "James Bergstra": [
-          "University of Waterloo"
-        ],
-        "Nicolas Pinto": [
-          "Massachusetts Institute of Technology"
-        ],
-        "David D. Cox": [
-          "Harvard University"
-        ]
+        "James Bergstra": ["University of Waterloo"],
+        "Nicolas Pinto": ["Massachusetts Institute of Technology"],
+        "David D. Cox": ["Harvard University"]
       },
       "title": "SkData: Data Sets and Algorithm Evaluation Protocols in Python"
     },
@@ -254,21 +206,11 @@
       "bibliography": "",
       "video": "",
       "author_institution_map": {
-        "Thomas Bensby": [
-          "Lund Observatory, Sweden"
-        ],
-        "Simone Daflon": [
-          "Observatório Nacional, Brazil"
-        ],
-        "Sally Oey": [
-          "University of Michigan, U. S. A."
-        ],
-        "Gregory Walth": [
-          "Steward Observatory, U. S. A."
-        ],
-        "Gustavo Bragança": [
-          "Observatório Nacional, Brazil"
-        ],
+        "Thomas Bensby": ["Lund Observatory, Sweden"],
+        "Simone Daflon": ["Observatório Nacional, Brazil"],
+        "Sally Oey": ["University of Michigan, U. S. A."],
+        "Gregory Walth": ["Steward Observatory, U. S. A."],
+        "Gustavo Bragança": ["Observatório Nacional, Brazil"],
         "Katia Cunha": [
           "Observatório Nacional, Brazil; National Optical Astronomy\nObservatory, University of Arizona, U. S. A."
         ]
@@ -278,10 +220,7 @@
     {
       "authors": "Mark E Fenner, Barbara M. Fenner",
       "doi": "10.25080/Majora-8b375195-006",
-      "author_email": [
-        "mfenner@gmail.com",
-        "barb.fenner@gmail.com"
-      ],
+      "author_email": ["mfenner@gmail.com", "barb.fenner@gmail.com"],
       "page": {
         "stop": 37,
         "start": 32
@@ -297,28 +236,19 @@
         "Coveros, Inc., Fairfax, VA",
         "King's College, Wilkes-Barre, PA"
       ],
-      "author": [
-        "Mark E Fenner",
-        "Barbara M. Fenner"
-      ],
+      "author": ["Mark E Fenner", "Barbara M. Fenner"],
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=ar5YtgiXfNI",
       "author_institution_map": {
-        "Barbara M. Fenner": [
-          "King's College, Wilkes-Barre, PA"
-        ],
-        "Mark E Fenner": [
-          "Coveros, Inc., Fairfax, VA"
-        ]
+        "Barbara M. Fenner": ["King's College, Wilkes-Barre, PA"],
+        "Mark E Fenner": ["Coveros, Inc., Fairfax, VA"]
       },
       "title": "Automating Quantitative Confocal Microscopy Analysis"
     },
     {
       "authors": "Patricia Francis-Lyon, Shashank Belvadi, Fu-Yuan Cheng",
       "doi": "10.25080/Majora-8b375195-007",
-      "author_email": [
-        "pfrancislyon@cs.usfca.edu"
-      ],
+      "author_email": ["pfrancislyon@cs.usfca.edu"],
       "page": {
         "stop": 43,
         "start": 38
@@ -337,23 +267,13 @@
         "University of San Francisco",
         "University of San Francisco"
       ],
-      "author": [
-        "Patricia Francis-Lyon",
-        "Shashank Belvadi",
-        "Fu-Yuan Cheng"
-      ],
+      "author": ["Patricia Francis-Lyon", "Shashank Belvadi", "Fu-Yuan Cheng"],
       "bibliography": "",
       "video": "http://www.youtube.com/wa?v=IA09mZRCCA8",
       "author_institution_map": {
-        "Fu-Yuan Cheng": [
-          "University of San Francisco"
-        ],
-        "Patricia Francis-Lyon": [
-          "University of San Francisco"
-        ],
-        "Shashank Belvadi": [
-          "University of San Francisco"
-        ]
+        "Fu-Yuan Cheng": ["University of San Francisco"],
+        "Patricia Francis-Lyon": ["University of San Francisco"],
+        "Shashank Belvadi": ["University of San Francisco"]
       },
       "title": "Detection and characterization of interactions of genetic risk factors in disease"
     },
@@ -397,32 +317,18 @@
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=KT5-uGEpnGw",
       "author_institution_map": {
-        "Alan Raynaud": [
-          "Télécom Bretagne, Plouzané, France"
-        ],
-        "Adrien Merlini": [
-          "Télécom Bretagne, Plouzané, France"
-        ],
-        "Serge Guelton": [
-          "ENS, Paris, France"
-        ],
-        "Pierrick Brunet": [
-          "Télécom Bretagne, Plouzané, France"
-        ],
-        "Mehdi Amini": [
-          "SILKAN, Los Altos, USA"
-        ]
+        "Alan Raynaud": ["Télécom Bretagne, Plouzané, France"],
+        "Adrien Merlini": ["Télécom Bretagne, Plouzané, France"],
+        "Serge Guelton": ["ENS, Paris, France"],
+        "Pierrick Brunet": ["Télécom Bretagne, Plouzané, France"],
+        "Mehdi Amini": ["SILKAN, Los Altos, USA"]
       },
       "title": "Pythran: Enabling Static Optimization of Scientific Python Programs"
     },
     {
       "authors": "Pedro Henrique Hasselmann, Jorge Márcio Carvano, Daniela Lazzaro",
       "doi": "10.25080/Majora-8b375195-009",
-      "author_email": [
-        "hasselmann@on.br",
-        "carvano@on.br",
-        "lazzaro@on.br"
-      ],
+      "author_email": ["hasselmann@on.br", "carvano@on.br", "lazzaro@on.br"],
       "page": {
         "stop": 57,
         "start": 51
@@ -451,9 +357,7 @@
         "Pedro Henrique Hasselmann": [
           "Observatorio Nacional, Rio de Janeiro, Brazil"
         ],
-        "Daniela Lazzaro": [
-          "Observatorio Nacional, Rio de Janeiro, Brazil"
-        ],
+        "Daniela Lazzaro": ["Observatorio Nacional, Rio de Janeiro, Brazil"],
         "Jorge Márcio Carvano": [
           "Observatorio Nacional, Rio de Janeiro, Brazil"
         ]
@@ -463,9 +367,7 @@
     {
       "authors": "Eric Jeschke",
       "doi": "10.25080/Majora-8b375195-00a",
-      "author_email": [
-        "eric@naoj.org"
-      ],
+      "author_email": ["eric@naoj.org"],
       "page": {
         "stop": 64,
         "start": 58
@@ -482,9 +384,7 @@
       "author_institution": [
         "Subaru Telescope, National Astronomical Observatory of Japan"
       ],
-      "author": [
-        "Eric Jeschke"
-      ],
+      "author": ["Eric Jeschke"],
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=nZKy_nYUxCs",
       "author_institution_map": {
@@ -538,21 +438,13 @@
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=ei_pFi2xOUc",
       "author_institution_map": {
-        "Brad Whitlock": [
-          "Lawrence Livermore National Laboratory"
-        ],
-        "David Pugmire": [
-          "Oak Ridge National Laboratory"
-        ],
-        "Hari Krishnan": [
-          "Lawrence Berkeley National Laboratory"
-        ],
+        "Brad Whitlock": ["Lawrence Livermore National Laboratory"],
+        "David Pugmire": ["Oak Ridge National Laboratory"],
+        "Hari Krishnan": ["Lawrence Berkeley National Laboratory"],
         "Hank Childs": [
           "Lawrence Berkeley National Laboratory/The University of Oregon"
         ],
-        "Cyrus Harrison": [
-          "Lawrence Livermore National Laboratory"
-        ]
+        "Cyrus Harrison": ["Lawrence Livermore National Laboratory"]
       },
       "title": "Exploring Collaborative HPC Visualization Workflows using VisIt and Python"
     },
@@ -594,30 +486,18 @@
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=bXPPTCkaVu8",
       "author_institution_map": {
-        "Stuart Mumford": [
-          "The University of Sheffield"
-        ],
-        "Florian Mayer": [
-          "Vienna University of Technology"
-        ],
-        "David Pérez-Suárez": [
-          "Finnish Meteorological Institute"
-        ],
-        "Steven Christe": [
-          "NASA Goddard Space Flight Center"
-        ],
-        "Russell J. Hewett": [
-          "Massachusetts Institute of Technology"
-        ]
+        "Stuart Mumford": ["The University of Sheffield"],
+        "Florian Mayer": ["Vienna University of Technology"],
+        "David Pérez-Suárez": ["Finnish Meteorological Institute"],
+        "Steven Christe": ["NASA Goddard Space Flight Center"],
+        "Russell J. Hewett": ["Massachusetts Institute of Technology"]
       },
       "title": "SunPy: Python for Solar Physicists"
     },
     {
       "authors": "Geoffrey M Poore",
       "doi": "10.25080/Majora-8b375195-00d",
-      "author_email": [
-        "gpoore@uu.edu"
-      ],
+      "author_email": ["gpoore@uu.edu"],
       "page": {
         "stop": 80,
         "start": 74
@@ -629,18 +509,12 @@
       ],
       "keywords": "reproducible science, reproducible documents, dynamic report\ngeneration",
       "pages": 7,
-      "author_institution": [
-        "Union University"
-      ],
-      "author": [
-        "Geoffrey M Poore"
-      ],
+      "author_institution": ["Union University"],
+      "author": ["Geoffrey M Poore"],
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=G-UDHc2UVOg",
       "author_institution_map": {
-        "Geoffrey M Poore": [
-          "Union University"
-        ]
+        "Geoffrey M Poore": ["Union University"]
       },
       "title": "Reproducible Documents with PythonTeX"
     },
@@ -705,9 +579,7 @@
     {
       "authors": "Ramalingam Saravanan",
       "doi": "10.25080/Majora-8b375195-00f",
-      "author_email": [
-        "sarava@tamu.edu"
-      ],
+      "author_email": ["sarava@tamu.edu"],
       "page": {
         "stop": 91,
         "start": 86
@@ -721,18 +593,12 @@
       ],
       "keywords": "GUI, CLI, graphical user interface, command line\ninterface, notebook interface, graphical shell",
       "pages": 6,
-      "author_institution": [
-        "Texas A\\&M University"
-      ],
-      "author": [
-        "Ramalingam Saravanan"
-      ],
+      "author_institution": ["Texas A\\&M University"],
+      "author": ["Ramalingam Saravanan"],
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=nO0ceHmTlDQ",
       "author_institution_map": {
-        "Ramalingam Saravanan": [
-          "Texas A\\&M University"
-        ]
+        "Ramalingam Saravanan": ["Texas A\\&M University"]
       },
       "title": "GraphTerm: A notebook-like graphical terminal interface for collaboration and inline data visualization"
     },
@@ -768,15 +634,9 @@
       "bibliography": "",
       "video": "http://www.youtube.com/watch?v=Ec38h1oB8cc",
       "author_institution_map": {
-        "Vanderlei C. Oliveira Jr": [
-          "Observatorio Nacional"
-        ],
-        "Valéria C. F. Barbosa": [
-          "Observatorio Nacional"
-        ],
-        "Leonardo Uieda": [
-          "Observatorio Nacional"
-        ]
+        "Vanderlei C. Oliveira Jr": ["Observatorio Nacional"],
+        "Valéria C. F. Barbosa": ["Observatorio Nacional"],
+        "Leonardo Uieda": ["Observatorio Nacional"]
       },
       "title": "Modeling the Earth with Fatiando a Terra"
     }

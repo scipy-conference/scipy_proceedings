@@ -22,18 +22,10 @@
         "Space Telescope Science Institute"
       ],
       "author_institution_map": {
-        "Perry Greenfield": [
-          "Space Telescope Science Institute"
-        ],
-        "Edward Slavich": [
-          "Space Telescope Science Institute"
-        ],
-        "William Jamieson": [
-          "Space Telescope Science Institute"
-        ],
-        "Nadia Dencheva": [
-          "Space Telescope Science Institute"
-        ]
+        "Perry Greenfield": ["Space Telescope Science Institute"],
+        "Edward Slavich": ["Space Telescope Science Institute"],
+        "William Jamieson": ["Space Telescope Science Institute"],
+        "Nadia Dencheva": ["Space Telescope Science Institute"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -76,21 +68,11 @@
         "University of Florida"
       ],
       "author_institution_map": {
-        "Nathan Jessurun": [
-          "University of Florida"
-        ],
-        "Daniel E. Capecci": [
-          "University of Florida"
-        ],
-        "Olivia P. Dizon-Paradis": [
-          "University of Florida"
-        ],
-        "Damon L. Woodard": [
-          "University of Florida"
-        ],
-        "Navid Asadizanjani": [
-          "University of Florida"
-        ]
+        "Nathan Jessurun": ["University of Florida"],
+        "Daniel E. Capecci": ["University of Florida"],
+        "Olivia P. Dizon-Paradis": ["University of Florida"],
+        "Damon L. Woodard": ["University of Florida"],
+        "Navid Asadizanjani": ["University of Florida"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -133,21 +115,11 @@
         "engageLively"
       ],
       "author_institution_map": {
-        "Rick McGeer": [
-          "engageLively"
-        ],
-        "Andreas Bergen": [
-          "engageLively"
-        ],
-        "Mahdiyar Biazi": [
-          "engageLively"
-        ],
-        "Matt Hemmings": [
-          "engageLively"
-        ],
-        "Robin Schreiber": [
-          "engageLively"
-        ]
+        "Rick McGeer": ["engageLively"],
+        "Andreas Bergen": ["engageLively"],
+        "Mahdiyar Biazi": ["engageLively"],
+        "Matt Hemmings": ["engageLively"],
+        "Robin Schreiber": ["engageLively"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -180,25 +152,12 @@
         "scott.d.christensen@erdc.dren.mil",
         "mary.a.byrant@erdc.dren.mil"
       ],
-      "author_institution": [
-        "ERDC",
-        "ERDC",
-        "ERDC",
-        "ERDC"
-      ],
+      "author_institution": ["ERDC", "ERDC", "ERDC", "ERDC"],
       "author_institution_map": {
-        "Amanda Catlett": [
-          "ERDC"
-        ],
-        "Theresa R. Coumbe": [
-          "ERDC"
-        ],
-        "Scott D. Christensen": [
-          "ERDC"
-        ],
-        "Mary A. Byrant": [
-          "ERDC"
-        ]
+        "Amanda Catlett": ["ERDC"],
+        "Theresa R. Coumbe": ["ERDC"],
+        "Scott D. Christensen": ["ERDC"],
+        "Mary A. Byrant": ["ERDC"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -219,30 +178,17 @@
     {
       "title": "Search for Extraterrestrial Intelligence: GPU Accelerated TurboSETI",
       "authors": "Luigi Cruz, Wael Farah, Richard Elkins",
-      "author": [
-        "Luigi Cruz",
-        "Wael Farah",
-        "Richard Elkins"
-      ],
-      "author_email": [
-        "lfcruz@seti.org",
-        "wfarah@seti.org"
-      ],
+      "author": ["Luigi Cruz", "Wael Farah", "Richard Elkins"],
+      "author_email": ["lfcruz@seti.org", "wfarah@seti.org"],
       "author_institution": [
         "SETI Institute",
         "SETI Institute",
         "SETI Institute"
       ],
       "author_institution_map": {
-        "Luigi Cruz": [
-          "SETI Institute"
-        ],
-        "Wael Farah": [
-          "SETI Institute"
-        ],
-        "Richard Elkins": [
-          "SETI Institute"
-        ]
+        "Luigi Cruz": ["SETI Institute"],
+        "Wael Farah": ["SETI Institute"],
+        "Richard Elkins": ["SETI Institute"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -263,14 +209,8 @@
     {
       "title": "Experience report of physics-informed neural networks in fluid simulations: pitfalls and frustration",
       "authors": "Pi-Yueh Chuang, Lorena A. Barba",
-      "author": [
-        "Pi-Yueh Chuang",
-        "Lorena A. Barba"
-      ],
-      "author_email": [
-        "pychuang@gwu.edu",
-        "labarba@gwu.edu"
-      ],
+      "author": ["Pi-Yueh Chuang", "Lorena A. Barba"],
+      "author_email": ["pychuang@gwu.edu", "labarba@gwu.edu"],
       "author_institution": [
         "Department of Mechanical and Aerospace Engineering, The George Washington University, Washington, DC 20052, USA",
         "Department of Mechanical and Aerospace Engineering, The George Washington University, Washington, DC 20052, USA"
@@ -359,21 +299,14 @@
     {
       "title": "Automatic random variate generation in Python",
       "authors": "Christoph Baumgarten, Tirth Patel",
-      "author": [
-        "Christoph Baumgarten",
-        "Tirth Patel"
-      ],
+      "author": ["Christoph Baumgarten", "Tirth Patel"],
       "author_email": [
         "christoph.baumgarten@gmail.com",
         "tirthasheshpatel@gmail.com"
       ],
-      "author_institution": [
-        "Unaffiliated"
-      ],
+      "author_institution": ["Unaffiliated"],
       "author_institution_map": {
-        "Christoph Baumgarten": [
-          "Unaffiliated"
-        ],
+        "Christoph Baumgarten": ["Unaffiliated"],
         "Tirth Patel": []
       },
       "author_orcid_map": {
@@ -397,11 +330,7 @@
     {
       "title": "Utilizing SciPy and other open source packages to provide a powerful API for materials manipulation in the Schrödinger Materials Suite",
       "authors": "Alexandr Fonari, Farshad Fallah, Michael Rauch",
-      "author": [
-        "Alexandr Fonari",
-        "Farshad Fallah",
-        "Michael Rauch"
-      ],
+      "author": ["Alexandr Fonari", "Farshad Fallah", "Michael Rauch"],
       "author_email": [
         "sasha.fonari@schrodinger.com",
         "farshad.fallah@schrodinger.com",
@@ -467,24 +396,12 @@
         "University of Georgia"
       ],
       "author_institution_map": {
-        "Seyed Alireza Vaezi": [
-          "University of Georgia"
-        ],
-        "Gianni Orlando": [
-          "University of Georgia"
-        ],
-        "Mojtaba Fazli": [
-          "harvard University"
-        ],
-        "Gary Ward": [
-          "University of Vermont"
-        ],
-        "Silvia Moreno": [
-          "University of Georgia"
-        ],
-        "Shannon Quinn": [
-          "University of Georgia"
-        ]
+        "Seyed Alireza Vaezi": ["University of Georgia"],
+        "Gianni Orlando": ["University of Georgia"],
+        "Mojtaba Fazli": ["harvard University"],
+        "Gary Ward": ["University of Vermont"],
+        "Silvia Moreno": ["University of Georgia"],
+        "Shannon Quinn": ["University of Georgia"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -505,12 +422,8 @@
     {
       "title": "The myth of the normal curve and what to do about it",
       "authors": "Allan Campopiano",
-      "author": [
-        "Allan Campopiano"
-      ],
-      "author_email": [
-        "allan@deepnote.com"
-      ],
+      "author": ["Allan Campopiano"],
+      "author_email": ["allan@deepnote.com"],
       "author_institution": [],
       "author_institution_map": {
         "Allan Campopiano": []
@@ -532,14 +445,8 @@
     {
       "title": "Python for Global Applications:  teaching scientific Python in context to law and diplomacy students",
       "authors": "Anna Haensch, Karin Knudson",
-      "author": [
-        "Anna Haensch",
-        "Karin Knudson"
-      ],
-      "author_email": [
-        "anna.haensch@tufts.edu",
-        "karin.knudson@tufts.edu"
-      ],
+      "author": ["Anna Haensch", "Karin Knudson"],
+      "author_email": ["anna.haensch@tufts.edu", "karin.knudson@tufts.edu"],
       "author_institution": [
         "Tufts University",
         "Data Intensive Studies Center",
@@ -547,14 +454,8 @@
         "Data Intensive Studies Center"
       ],
       "author_institution_map": {
-        "Anna Haensch": [
-          "Tufts University",
-          "Data Intensive Studies Center"
-        ],
-        "Karin Knudson": [
-          "Tufts University",
-          "Data Intensive Studies Center"
-        ]
+        "Anna Haensch": ["Tufts University", "Data Intensive Studies Center"],
+        "Karin Knudson": ["Tufts University", "Data Intensive Studies Center"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -575,14 +476,8 @@
     {
       "title": "Papyri: better documentation for the scientific ecosystem in Jupyter",
       "authors": "Matthias Bussonnier, Camille Carvalho",
-      "author": [
-        "Matthias Bussonnier",
-        "Camille Carvalho"
-      ],
-      "author_email": [
-        "bussonniermatthias@gmail.com",
-        ""
-      ],
+      "author": ["Matthias Bussonnier", "Camille Carvalho"],
+      "author_email": ["bussonniermatthias@gmail.com", ""],
       "author_institution": [
         "QuanSight, Inc",
         "Digital Ours Lab, SARL.",
@@ -590,10 +485,7 @@
         "Univ Lyon, INSA Lyon, UJM, UCBL, ECL, CNRS UMR 5208, ICJ, F-69621, France"
       ],
       "author_institution_map": {
-        "Matthias Bussonnier": [
-          "QuanSight, Inc",
-          "Digital Ours Lab, SARL."
-        ],
+        "Matthias Bussonnier": ["QuanSight, Inc", "Digital Ours Lab, SARL."],
         "Camille Carvalho": [
           "University of California Merced, Merced, CA, USA",
           "Univ Lyon, INSA Lyon, UJM, UCBL, ECL, CNRS UMR 5208, ICJ, F-69621, France"
@@ -621,19 +513,11 @@
     {
       "title": "Bayesian Estimation and Forecasting of Time Series in statsmodels",
       "authors": "Chad Fulton",
-      "author": [
-        "Chad Fulton"
-      ],
-      "author_email": [
-        "chad.t.fulton@frb.gov"
-      ],
-      "author_institution": [
-        "Federal Reserve Board of Governors"
-      ],
+      "author": ["Chad Fulton"],
+      "author_email": ["chad.t.fulton@frb.gov"],
+      "author_institution": ["Federal Reserve Board of Governors"],
       "author_institution_map": {
-        "Chad Fulton": [
-          "Federal Reserve Board of Governors"
-        ]
+        "Chad Fulton": ["Federal Reserve Board of Governors"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -701,21 +585,13 @@
           "Department of Mathematical Sciences, University of Copenhagen, Copenhagen, Denmark",
           "Burnet Institute, Melbourne, Australia"
         ],
-        "Dina Mistry": [
-          "Twitter, Seattle, USA"
-        ],
-        "Romesh G. Abeysuriya": [
-          "Burnet Institute, Melbourne, Australia"
-        ],
+        "Dina Mistry": ["Twitter, Seattle, USA"],
+        "Romesh G. Abeysuriya": ["Burnet Institute, Melbourne, Australia"],
         "Jamie A. Cohen": [
           "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA"
         ],
-        "Lauren George": [
-          "Microsoft, Seattle, USA"
-        ],
-        "Michał Jastrzebski": [
-          "GitHub, San Francisco, USA"
-        ],
+        "Lauren George": ["Microsoft, Seattle, USA"],
+        "Michał Jastrzebski": ["GitHub, San Francisco, USA"],
         "Michael Famulare": [
           "Institute for Disease Modeling, Bill \\& Melinda Gates Foundation, Seattle, USA"
         ],
@@ -768,24 +644,14 @@
         "Imperial College London"
       ],
       "author_institution_map": {
-        "Axel Donath": [
-          "Center for Astrophysics | Harvard \\& Smithsonian"
-        ],
+        "Axel Donath": ["Center for Astrophysics | Harvard \\& Smithsonian"],
         "Aneta Siemiginowska": [
           "Center for Astrophysics | Harvard \\& Smithsonian"
         ],
-        "Vinay Kashyap": [
-          "Center for Astrophysics | Harvard \\& Smithsonian"
-        ],
-        "Douglas Burke": [
-          "Center for Astrophysics | Harvard \\& Smithsonian"
-        ],
-        "Karthik Reddy Solipuram": [
-          "University of Maryland Baltimore County"
-        ],
-        "David van Dyk": [
-          "Imperial College London"
-        ]
+        "Vinay Kashyap": ["Center for Astrophysics | Harvard \\& Smithsonian"],
+        "Douglas Burke": ["Center for Astrophysics | Harvard \\& Smithsonian"],
+        "Karthik Reddy Solipuram": ["University of Maryland Baltimore County"],
+        "David van Dyk": ["Imperial College London"]
       },
       "author_orcid_map": {
         "Axel Donath": "0000-0003-4568-7005",
@@ -810,19 +676,11 @@
     {
       "title": "Codebraid Preview for VS Code: Pandoc Markdown Preview with Jupyter Kernels",
       "authors": "Geoffrey M. Poore",
-      "author": [
-        "Geoffrey M. Poore"
-      ],
-      "author_email": [
-        "gpoore@uu.edu"
-      ],
-      "author_institution": [
-        "Union University"
-      ],
+      "author": ["Geoffrey M. Poore"],
+      "author_email": ["gpoore@uu.edu"],
+      "author_institution": ["Union University"],
       "author_institution_map": {
-        "Geoffrey M. Poore": [
-          "Union University"
-        ]
+        "Geoffrey M. Poore": ["Union University"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -902,11 +760,7 @@
     {
       "title": "Awkward Packaging: building Scikit-HEP",
       "authors": "Henry Schreiner, Jim Pivarski, Eduardo Rodrigues",
-      "author": [
-        "Henry Schreiner",
-        "Jim Pivarski",
-        "Eduardo Rodrigues"
-      ],
+      "author": ["Henry Schreiner", "Jim Pivarski", "Eduardo Rodrigues"],
       "author_email": [
         "henryfs@princeton.edu",
         "pivarski@princeton.edu",
@@ -918,15 +772,9 @@
         "University of Liverpool"
       ],
       "author_institution_map": {
-        "Henry Schreiner": [
-          "Princeton University"
-        ],
-        "Jim Pivarski": [
-          "Princeton University"
-        ],
-        "Eduardo Rodrigues": [
-          "University of Liverpool"
-        ]
+        "Henry Schreiner": ["Princeton University"],
+        "Jim Pivarski": ["Princeton University"],
+        "Eduardo Rodrigues": ["University of Liverpool"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -947,19 +795,11 @@
     {
       "title": "Keeping your Jupyter notebook code quality bar high (and production ready) with Ploomber",
       "authors": "Ido Michael",
-      "author": [
-        "Ido Michael"
-      ],
-      "author_email": [
-        "ido@ploomber.io"
-      ],
-      "author_institution": [
-        "Ploomber"
-      ],
+      "author": ["Ido Michael"],
+      "author_email": ["ido@ploomber.io"],
+      "author_institution": ["Ploomber"],
       "author_institution_map": {
-        "Ido Michael": [
-          "Ploomber"
-        ]
+        "Ido Michael": ["Ploomber"]
       },
       "author_orcid_map": {},
       "abstract": [],
@@ -978,25 +818,15 @@
     {
       "title": "Likeness: a toolkit for connecting the social fabric of place to human dynamics",
       "authors": "Joseph V. Tuccillo, James D. Gaboardi",
-      "author": [
-        "Joseph V. Tuccillo",
-        "James D. Gaboardi"
-      ],
-      "author_email": [
-        "tuccillojv@ornl.gov",
-        "gaboardijd@ornl.gov"
-      ],
+      "author": ["Joseph V. Tuccillo", "James D. Gaboardi"],
+      "author_email": ["tuccillojv@ornl.gov", "gaboardijd@ornl.gov"],
       "author_institution": [
         "Oak Ridge National Laboratory",
         "Oak Ridge National Laboratory"
       ],
       "author_institution_map": {
-        "Joseph V. Tuccillo": [
-          "Oak Ridge National Laboratory"
-        ],
-        "James D. Gaboardi": [
-          "Oak Ridge National Laboratory"
-        ]
+        "Joseph V. Tuccillo": ["Oak Ridge National Laboratory"],
+        "James D. Gaboardi": ["Oak Ridge National Laboratory"]
       },
       "author_orcid_map": {
         "Joseph V. Tuccillo": "0000-0002-5930-0943",
@@ -1020,25 +850,12 @@
     {
       "title": "poliastro: a Python library for interactive astrodynamics",
       "authors": "Juan Luis Cano Rodríguez, Jorge Martínez Garrido",
-      "author": [
-        "Juan Luis Cano Rodríguez",
-        "Jorge Martínez Garrido"
-      ],
-      "author_email": [
-        "hello@juanlu.space",
-        "contact@jorgemartinez.space"
-      ],
-      "author_institution": [
-        "Unaffiliated",
-        "Unaffiliated"
-      ],
+      "author": ["Juan Luis Cano Rodríguez", "Jorge Martínez Garrido"],
+      "author_email": ["hello@juanlu.space", "contact@jorgemartinez.space"],
+      "author_institution": ["Unaffiliated", "Unaffiliated"],
       "author_institution_map": {
-        "Juan Luis Cano Rodríguez": [
-          "Unaffiliated"
-        ],
-        "Jorge Martínez Garrido": [
-          "Unaffiliated"
-        ]
+        "Juan Luis Cano Rodríguez": ["Unaffiliated"],
+        "Jorge Martínez Garrido": ["Unaffiliated"]
       },
       "author_orcid_map": {
         "Juan Luis Cano Rodríguez": "0000-0002-2187-161X"
@@ -1064,12 +881,8 @@
     {
       "title": "A New Python API for Webots Robotics Simulations",
       "authors": "Justin C. Fisher",
-      "author": [
-        "Justin C. Fisher"
-      ],
-      "author_email": [
-        "fisher@smu.edu"
-      ],
+      "author": ["Justin C. Fisher"],
+      "author_email": ["fisher@smu.edu"],
       "author_institution": [
         "Southern Methodist University, Department of Philosophy"
       ],
@@ -1097,19 +910,11 @@
     {
       "title": "pyAudioProcessing: Audio Processing, Feature Extraction, and Machine Learning Modeling",
       "authors": "Jyotika Singh",
-      "author": [
-        "Jyotika Singh"
-      ],
-      "author_email": [
-        "singhjyotika811@gmail.com"
-      ],
-      "author_institution": [
-        "Placemakr"
-      ],
+      "author": ["Jyotika Singh"],
+      "author_email": ["singhjyotika811@gmail.com"],
+      "author_institution": ["Placemakr"],
       "author_institution_map": {
-        "Jyotika Singh": [
-          "Placemakr"
-        ]
+        "Jyotika Singh": ["Placemakr"]
       },
       "author_orcid_map": {
         "Jyotika Singh": "0000-0002-5442-3004"
@@ -1189,19 +994,11 @@
     {
       "title": "Global optimization software library for research and education",
       "authors": "Nadia Udler",
-      "author": [
-        "Nadia Udler"
-      ],
-      "author_email": [
-        "nadiakap@optonline.net"
-      ],
-      "author_institution": [
-        "University of Connecticut (Stamford)"
-      ],
+      "author": ["Nadia Udler"],
+      "author_email": ["nadiakap@optonline.net"],
+      "author_institution": ["University of Connecticut (Stamford)"],
       "author_institution_map": {
-        "Nadia Udler": [
-          "University of Connecticut (Stamford)"
-        ]
+        "Nadia Udler": ["University of Connecticut (Stamford)"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -1252,29 +1049,21 @@
         "Public Health Department, University of Georgia"
       ],
       "author_institution_map": {
-        "Nathan Jacobi": [
-          "Computer Science Department, University of Georgia"
-        ],
+        "Nathan Jacobi": ["Computer Science Department, University of Georgia"],
         "Ivan Mo": [
           "Computer Science Department, University of Georgia",
           "Linguistics Department, University of Georgia"
         ],
-        "Albert You": [
-          "Computer Science Department, University of Georgia"
-        ],
+        "Albert You": ["Computer Science Department, University of Georgia"],
         "Krishi Kishore": [
           "Computer Science Department, University of Georgia"
         ],
-        "Zane Page": [
-          "Computer Science Department, University of Georgia"
-        ],
+        "Zane Page": ["Computer Science Department, University of Georgia"],
         "Shannon P. Quinn": [
           "Computer Science Department, University of Georgia",
           "Cellular Biology Department, University of Georgia"
         ],
-        "Tim Heckman": [
-          "Public Health Department, University of Georgia"
-        ]
+        "Tim Heckman": ["Public Health Department, University of Georgia"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -1314,18 +1103,10 @@
         "Oak Ridge National Laboratory"
       ],
       "author_institution_map": {
-        "Nathan Martindale": [
-          "Oak Ridge National Laboratory"
-        ],
-        "Jason Hite": [
-          "Oak Ridge National Laboratory"
-        ],
-        "Scott Stewart": [
-          "Oak Ridge National Laboratory"
-        ],
-        "Mark Adams": [
-          "Oak Ridge National Laboratory"
-        ]
+        "Nathan Martindale": ["Oak Ridge National Laboratory"],
+        "Jason Hite": ["Oak Ridge National Laboratory"],
+        "Scott Stewart": ["Oak Ridge National Laboratory"],
+        "Mark Adams": ["Oak Ridge National Laboratory"]
       },
       "author_orcid_map": {
         "Nathan Martindale": "0000-0002-5036-5433",
@@ -1377,24 +1158,12 @@
         "National Center for Atmospheric Research"
       ],
       "author_institution_map": {
-        "Orhan Eroglu": [
-          "National Center for Atmospheric Research"
-        ],
-        "Anissa Zacharias": [
-          "National Center for Atmospheric Research"
-        ],
-        "Michaela Sizemore": [
-          "National Center for Atmospheric Research"
-        ],
-        "Alea Kootz": [
-          "National Center for Atmospheric Research"
-        ],
-        "Heather Craker": [
-          "National Center for Atmospheric Research"
-        ],
-        "John Clyne": [
-          "National Center for Atmospheric Research"
-        ]
+        "Orhan Eroglu": ["National Center for Atmospheric Research"],
+        "Anissa Zacharias": ["National Center for Atmospheric Research"],
+        "Michaela Sizemore": ["National Center for Atmospheric Research"],
+        "Alea Kootz": ["National Center for Atmospheric Research"],
+        "Heather Craker": ["National Center for Atmospheric Research"],
+        "John Clyne": ["National Center for Atmospheric Research"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -1415,12 +1184,7 @@
     {
       "title": "popmon: Analysis Package for Dataset Shift Detection",
       "authors": "Simon Brugman, Tomas Sostak, Pradyot Patil, Max Baak",
-      "author": [
-        "Simon Brugman",
-        "Tomas Sostak",
-        "Pradyot Patil",
-        "Max Baak"
-      ],
+      "author": ["Simon Brugman", "Tomas Sostak", "Pradyot Patil", "Max Baak"],
       "author_email": [
         "simon.brugman@ing.com",
         "tomas.sostak@vinted.com",
@@ -1434,18 +1198,10 @@
         "ING Analytics Wholesale Banking"
       ],
       "author_institution_map": {
-        "Simon Brugman": [
-          "ING Analytics Wholesale Banking"
-        ],
-        "Tomas Sostak": [
-          "Vinted"
-        ],
-        "Pradyot Patil": [
-          "ING Analytics Wholesale Banking"
-        ],
-        "Max Baak": [
-          "ING Analytics Wholesale Banking"
-        ]
+        "Simon Brugman": ["ING Analytics Wholesale Banking"],
+        "Tomas Sostak": ["Vinted"],
+        "Pradyot Patil": ["ING Analytics Wholesale Banking"],
+        "Max Baak": ["ING Analytics Wholesale Banking"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -1554,9 +1310,7 @@
         "Robert Jackson": [
           "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439"
         ],
-        "Rebecca Gjini": [
-          "University of California at San Diego"
-        ],
+        "Rebecca Gjini": ["University of California at San Diego"],
         "Sri Hari Krishna Narayanan": [
           "Argonne National Laboratory, 9700 Cass Ave., Argonne, IL, 60439"
         ],
@@ -1664,12 +1418,8 @@
     {
       "title": "Wailord: Parsers and Reproducibility for Quantum Chemistry",
       "authors": "Rohit Goswami",
-      "author": [
-        "Rohit Goswami"
-      ],
-      "author_email": [
-        "rog32@hi.is"
-      ],
+      "author": ["Rohit Goswami"],
+      "author_email": ["rog32@hi.is"],
       "author_institution": [
         "Science Institute, University of Iceland",
         "Quansight Austin, TX, USA"
@@ -1800,27 +1550,21 @@
         "Scott D. Christensen": [
           "US Army Engineer Research and Development Center"
         ],
-        "Marvin S. Brown": [
-          "US Army Engineer Research and Development Center"
-        ],
+        "Marvin S. Brown": ["US Army Engineer Research and Development Center"],
         "Robert B. Haehnel": [
           "US Army Engineer Research and Development Center"
         ],
         "Joshua Q. Church": [
           "US Army Engineer Research and Development Center"
         ],
-        "Amanda Catlett": [
-          "US Army Engineer Research and Development Center"
-        ],
+        "Amanda Catlett": ["US Army Engineer Research and Development Center"],
         "Dallon C. Schofield": [
           "US Army Engineer Research and Development Center"
         ],
         "Quyen T. Brannon": [
           "US Army Engineer Research and Development Center"
         ],
-        "Stacy T. Smith": [
-          "US Army Engineer Research and Development Center"
-        ]
+        "Stacy T. Smith": ["US Army Engineer Research and Development Center"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -1841,12 +1585,8 @@
     {
       "title": "Monaco: A Monte Carlo Library for Performing Uncertainty and Sensitivity Analyses",
       "authors": "W. Scott Shambaugh",
-      "author": [
-        "W. Scott Shambaugh"
-      ],
-      "author_email": [
-        "wsshambaugh@gmail.com"
-      ],
+      "author": ["W. Scott Shambaugh"],
+      "author_email": ["wsshambaugh@gmail.com"],
       "author_institution": [],
       "author_institution_map": {
         "W. Scott Shambaugh": []
@@ -1870,12 +1610,8 @@
     {
       "title": "Enabling Active Learning Pedagogy and Insight Mining with a Grammar of Model Analysis",
       "authors": "Zachary del Rosario",
-      "author": [
-        "Zachary del Rosario"
-      ],
-      "author_email": [
-        "zdelrosario@olin.edu"
-      ],
+      "author": ["Zachary del Rosario"],
+      "author_email": ["zdelrosario@olin.edu"],
       "author_institution": [
         "Assistant Professor of Engineering and Applied Statistics, Olin College of Engineering"
       ],

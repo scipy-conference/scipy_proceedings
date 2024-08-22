@@ -25,11 +25,7 @@
     "volume": 6,
     "doi": "10.25080/Majora-8b375195-011",
     "location": "Austin, Texas",
-    "editor": [
-      "Stéfan van der Walt",
-      "Jarrod Millman",
-      "Katy Huff"
-    ],
+    "editor": ["Stéfan van der Walt", "Jarrod Millman", "Katy Huff"],
     "number": 1,
     "xref": {
       "resource_url": "https://conference.scipy.org/proceedings",

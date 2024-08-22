@@ -3,25 +3,15 @@
     {
       "title": "How PDFrw and fillable forms improves throughput at a Covid-19 Vaccine Clinic",
       "authors": "Haw-minn Lu, José Unpingco",
-      "author": [
-        "Haw-minn Lu",
-        "José Unpingco"
-      ],
-      "author_email": [
-        "hlu@westhealth.org",
-        "jhunpingco@westhealth.org"
-      ],
+      "author": ["Haw-minn Lu", "José Unpingco"],
+      "author_email": ["hlu@westhealth.org", "jhunpingco@westhealth.org"],
       "author_institution": [
         "Gary and Mary West Health Institute",
         "Gary and Mary West Health Institute"
       ],
       "author_institution_map": {
-        "Haw-minn Lu": [
-          "Gary and Mary West Health Institute"
-        ],
-        "José Unpingco": [
-          "Gary and Mary West Health Institute"
-        ]
+        "Haw-minn Lu": ["Gary and Mary West Health Institute"],
+        "José Unpingco": ["Gary and Mary West Health Institute"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -42,25 +32,12 @@
     {
       "title": "Using Python for Analysis and Verification of Mixed-mode Signal Chains",
       "authors": "Mark Thoren, Cristina Suteu",
-      "author": [
-        "Mark Thoren",
-        "Cristina Suteu"
-      ],
-      "author_email": [
-        "mark.thoren@analog.com",
-        "cristina.suteu@analog.com"
-      ],
-      "author_institution": [
-        "Analog Devices, Inc.",
-        "Analog Devices, Inc."
-      ],
+      "author": ["Mark Thoren", "Cristina Suteu"],
+      "author_email": ["mark.thoren@analog.com", "cristina.suteu@analog.com"],
+      "author_institution": ["Analog Devices, Inc.", "Analog Devices, Inc."],
       "author_institution_map": {
-        "Mark Thoren": [
-          "Analog Devices, Inc."
-        ],
-        "Cristina Suteu": [
-          "Analog Devices, Inc."
-        ]
+        "Mark Thoren": ["Analog Devices, Inc."],
+        "Cristina Suteu": ["Analog Devices, Inc."]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -81,12 +58,8 @@
     {
       "title": "Modernizing computing by structural biologists with Jupyter and Colab",
       "authors": "Blaine H. M. Mooers",
-      "author": [
-        "Blaine H. M. Mooers"
-      ],
-      "author_email": [
-        "blaine-mooers@ouhsc.edu"
-      ],
+      "author": ["Blaine H. M. Mooers"],
+      "author_email": ["blaine-mooers@ouhsc.edu"],
       "author_institution": [
         "Dept of Biochemistry and Molecular Biology, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
         "Stephenson Cancer Center, University of Oklahoma Health Sciences Center, Oklahoma City, OK 97104",
@@ -266,25 +239,15 @@
     {
       "title": "MPI-parallel Molecular Dynamics Trajectory Analysis with the H5MD Format in the MDAnalysis Python Package",
       "authors": "Edis Jakupovic, Oliver Beckstein",
-      "author": [
-        "Edis Jakupovic",
-        "Oliver Beckstein"
-      ],
-      "author_email": [
-        "ejakupov@asu.edu",
-        "obeckste@asu.edu"
-      ],
+      "author": ["Edis Jakupovic", "Oliver Beckstein"],
+      "author_email": ["ejakupov@asu.edu", "obeckste@asu.edu"],
       "author_institution": [
         "Arizona State University",
         "Arizona State University"
       ],
       "author_institution_map": {
-        "Edis Jakupovic": [
-          "Arizona State University"
-        ],
-        "Oliver Beckstein": [
-          "Arizona State University"
-        ]
+        "Edis Jakupovic": ["Arizona State University"],
+        "Oliver Beckstein": ["Arizona State University"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -305,11 +268,7 @@
     {
       "title": "Natural Language Processing with Pandas DataFrames",
       "authors": "Frederick Reiss, Bryan Cutler, Zachary Eichenberger",
-      "author": [
-        "Frederick Reiss",
-        "Bryan Cutler",
-        "Zachary Eichenberger"
-      ],
+      "author": ["Frederick Reiss", "Bryan Cutler", "Zachary Eichenberger"],
       "author_email": [
         "frreiss@us.ibm.com",
         "bjcutler@us.ibm.com",
@@ -322,16 +281,9 @@
         "IBM Research"
       ],
       "author_institution_map": {
-        "Frederick Reiss": [
-          "IBM Research"
-        ],
-        "Bryan Cutler": [
-          "IBM"
-        ],
-        "Zachary Eichenberger": [
-          "University of Michigan",
-          "IBM Research"
-        ]
+        "Frederick Reiss": ["IBM Research"],
+        "Bryan Cutler": ["IBM"],
+        "Zachary Eichenberger": ["University of Michigan", "IBM Research"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -354,14 +306,8 @@
     {
       "title": "CLAIMED, a visual and scalable component library for Trusted AI",
       "authors": "Romeo Kienzler, Ivan Nesic",
-      "author": [
-        "Romeo Kienzler",
-        "Ivan Nesic"
-      ],
-      "author_email": [
-        "romeo.kienzler@ch.ibm.com",
-        "ivan.nesic@usb.ch"
-      ],
+      "author": ["Romeo Kienzler", "Ivan Nesic"],
+      "author_email": ["romeo.kienzler@ch.ibm.com", "ivan.nesic@usb.ch"],
       "author_institution": [
         "IBM, Center for Open Source Data and AI Technologies (CODAIT)",
         "University Hospital of Basel"
@@ -370,9 +316,7 @@
         "Romeo Kienzler": [
           "IBM, Center for Open Source Data and AI Technologies (CODAIT)"
         ],
-        "Ivan Nesic": [
-          "University Hospital of Basel"
-        ]
+        "Ivan Nesic": ["University Hospital of Basel"]
       },
       "author_orcid_map": {
         "Ivan Nesic": "0000-0002-4373-8860"
@@ -420,24 +364,12 @@
         "University of Oxford"
       ],
       "author_institution_map": {
-        "James Fox": [
-          "University of Oxford"
-        ],
-        "Tom Everitt": [
-          "DeepMind"
-        ],
-        "Ryan Carey": [
-          "University of Oxford"
-        ],
-        "Eric Langlois": [
-          "University of Toronto"
-        ],
-        "Alessandro Abate": [
-          "University of Oxford"
-        ],
-        "Michael Wooldridge": [
-          "University of Oxford"
-        ]
+        "James Fox": ["University of Oxford"],
+        "Tom Everitt": ["DeepMind"],
+        "Ryan Carey": ["University of Oxford"],
+        "Eric Langlois": ["University of Toronto"],
+        "Alessandro Abate": ["University of Oxford"],
+        "Michael Wooldridge": ["University of Oxford"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -458,19 +390,11 @@
     {
       "title": "Social Media Analysis using Natural Language Processing Techniques",
       "authors": "Jyotika Singh",
-      "author": [
-        "Jyotika Singh"
-      ],
-      "author_email": [
-        "singhjyotika811@gmail.com"
-      ],
-      "author_institution": [
-        "ICX Media, Inc."
-      ],
+      "author": ["Jyotika Singh"],
+      "author_email": ["singhjyotika811@gmail.com"],
+      "author_institution": ["ICX Media, Inc."],
       "author_institution_map": {
-        "Jyotika Singh": [
-          "ICX Media, Inc."
-        ]
+        "Jyotika Singh": ["ICX Media, Inc."]
       },
       "author_orcid_map": {
         "Jyotika Singh": "0000-0002-5442-3004"
@@ -560,10 +484,7 @@
     {
       "title": "Conformal Mappings with SymPy: Towards Python-driven Analytical Modeling in Physics",
       "authors": "Zoufiné Lauer-Baré, Erich Gaertig",
-      "author": [
-        "Zoufiné Lauer-Baré",
-        "Erich Gaertig"
-      ],
+      "author": ["Zoufiné Lauer-Baré", "Erich Gaertig"],
       "author_email": [
         "zoufine.lauer-bare@hilite.com",
         "erich.gaertig@hilite.com"
@@ -618,18 +539,10 @@
         "Lockheed Martin Advanced Technology Laboratories"
       ],
       "author_institution_map": {
-        "Amanda E. Kraft": [
-          "Lockheed Martin Advanced Technology Laboratories"
-        ],
-        "Matthew Widjaja": [
-          "Lockheed Martin Advanced Technology Laboratories"
-        ],
-        "Trevor M. Sands": [
-          "Lockheed Martin Advanced Technology Laboratories"
-        ],
-        "Brad J. Galego": [
-          "Lockheed Martin Advanced Technology Laboratories"
-        ]
+        "Amanda E. Kraft": ["Lockheed Martin Advanced Technology Laboratories"],
+        "Matthew Widjaja": ["Lockheed Martin Advanced Technology Laboratories"],
+        "Trevor M. Sands": ["Lockheed Martin Advanced Technology Laboratories"],
+        "Brad J. Galego": ["Lockheed Martin Advanced Technology Laboratories"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -650,25 +563,15 @@
     {
       "title": "How PDFrw and fillable forms improves throughput at a Covid-19 Vaccine Clinic",
       "authors": "Haw-minn Lu, José Unpingco",
-      "author": [
-        "Haw-minn Lu",
-        "José Unpingco"
-      ],
-      "author_email": [
-        "hlu@westhealth.org",
-        "jhunpingco@westhealth.org"
-      ],
+      "author": ["Haw-minn Lu", "José Unpingco"],
+      "author_email": ["hlu@westhealth.org", "jhunpingco@westhealth.org"],
       "author_institution": [
         "Gary and Mary West Health Institute",
         "Gary and Mary West Health Institute"
       ],
       "author_institution_map": {
-        "Haw-minn Lu": [
-          "Gary and Mary West Health Institute"
-        ],
-        "José Unpingco": [
-          "Gary and Mary West Health Institute"
-        ]
+        "Haw-minn Lu": ["Gary and Mary West Health Institute"],
+        "José Unpingco": ["Gary and Mary West Health Institute"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -689,14 +592,8 @@
     {
       "title": "PyRSB: Portable Performance on Multithreaded Sparse BLAS Operations",
       "authors": "Michele Martone, Simone Bacchio",
-      "author": [
-        "Michele Martone",
-        "Simone Bacchio"
-      ],
-      "author_email": [
-        "michele.martone@lrz.de",
-        "s.bacchio@cyi.ac.cy"
-      ],
+      "author": ["Michele Martone", "Simone Bacchio"],
+      "author_email": ["michele.martone@lrz.de", "s.bacchio@cyi.ac.cy"],
       "author_institution": [
         "Leibniz Supercomputing Centre (LRZ), Garching near Munich, Germany",
         "CaSToRC, The Cyprus Institute, Nicosia, Cyprus"
@@ -705,9 +602,7 @@
         "Michele Martone": [
           "Leibniz Supercomputing Centre (LRZ), Garching near Munich, Germany"
         ],
-        "Simone Bacchio": [
-          "CaSToRC, The Cyprus Institute, Nicosia, Cyprus"
-        ]
+        "Simone Bacchio": ["CaSToRC, The Cyprus Institute, Nicosia, Cyprus"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -867,25 +762,15 @@
     {
       "title": "Training machine learning models faster with Dask",
       "authors": "Joesph Holt, Scott Sievert",
-      "author": [
-        "Joesph Holt",
-        "Scott Sievert"
-      ],
-      "author_email": [
-        "jpholt2@wisc.edu",
-        "stsievert@wisc.com"
-      ],
+      "author": ["Joesph Holt", "Scott Sievert"],
+      "author_email": ["jpholt2@wisc.edu", "stsievert@wisc.com"],
       "author_institution": [
         "University of Wisconsin–Madison",
         "University of Wisconsin–Madison"
       ],
       "author_institution_map": {
-        "Joesph Holt": [
-          "University of Wisconsin–Madison"
-        ],
-        "Scott Sievert": [
-          "University of Wisconsin–Madison"
-        ]
+        "Joesph Holt": ["University of Wisconsin–Madison"],
+        "Scott Sievert": ["University of Wisconsin–Madison"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -906,25 +791,15 @@
     {
       "title": "Multithreaded parallel Python through OpenMP support in Numba",
       "authors": "Todd Anderson, Tim Mattson",
-      "author": [
-        "Todd Anderson",
-        "Tim Mattson"
-      ],
+      "author": ["Todd Anderson", "Tim Mattson"],
       "author_email": [
         "todd.a.anderson@intel.com",
         "timothy.g.mattson@intel.com"
       ],
-      "author_institution": [
-        "Intel Corp.",
-        "Intel Corp."
-      ],
+      "author_institution": ["Intel Corp.", "Intel Corp."],
       "author_institution_map": {
-        "Todd Anderson": [
-          "Intel Corp."
-        ],
-        "Tim Mattson": [
-          "Intel Corp."
-        ]
+        "Todd Anderson": ["Intel Corp."],
+        "Tim Mattson": ["Intel Corp."]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -970,24 +845,12 @@
         "Analog Devices International"
       ],
       "author_institution_map": {
-        "Marian-Leontin Pop": [
-          "Technical University of Cluj-Napoca"
-        ],
-        "Szilard Molnar": [
-          "Technical University of Cluj-Napoca"
-        ],
-        "Alexandru Pop": [
-          "Technical University of Cluj-Napoca"
-        ],
-        "Benjamin Kelenyi": [
-          "Technical University of Cluj-Napoca"
-        ],
-        "Levente Tamas": [
-          "Technical University of Cluj-Napoca"
-        ],
-        "Andrei Cozma": [
-          "Analog Devices International"
-        ]
+        "Marian-Leontin Pop": ["Technical University of Cluj-Napoca"],
+        "Szilard Molnar": ["Technical University of Cluj-Napoca"],
+        "Alexandru Pop": ["Technical University of Cluj-Napoca"],
+        "Benjamin Kelenyi": ["Technical University of Cluj-Napoca"],
+        "Levente Tamas": ["Technical University of Cluj-Napoca"],
+        "Andrei Cozma": ["Analog Devices International"]
       },
       "author_orcid_map": {},
       "abstract": [
@@ -1008,10 +871,7 @@
     {
       "title": "Cell Tracking in 3D using deep learning segmentations",
       "authors": "Varun Kapoor, Claudia Carabaña",
-      "author": [
-        "Varun Kapoor",
-        "Claudia Carabaña"
-      ],
+      "author": ["Varun Kapoor", "Claudia Carabaña"],
       "author_email": [
         "varun.kapoor@curie.fr",
         "claudia.carabana-garcia@curie.fr"

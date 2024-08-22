@@ -1,10 +1,10 @@
 # Getting ready for the new year's proceedings
 
 We're going to assume that you are working in year *x* to set up the proceedings
-system for SciPy *x*. 
+system for SciPy *x*.
 
 This workflow requires a few steps. We will list those steps here, but if you
-don't know what some of the words mean, we highly recommend that you read 
+don't know what some of the words mean, we highly recommend that you read
 [the problem section](#What-problem-are-we-solving).
 
 # Workflow
@@ -22,10 +22,10 @@ All development work should have been occurring on the `dev` branch of the repo.
        - `scipy_proceedings/publisher/README.md`
        - `scipy_proceedings/publisher/getting_ready_for_new_year.md`
 
-## What problem are we solving? 
+## What problem are we solving?
 
 For the purposes of this explanation, we're going to describe the workflow in
-terms of what needs to be done in the repo in the year `x = 2018`. 
+terms of what needs to be done in the repo in the year `x = 2018`.
 
 We organise the repo around git branches, specifically we're going to be thinking about 4 branches:
 
@@ -55,14 +55,14 @@ the proceedings system. Additionally, this keeps `master` as small as possible.
 
 So, we only want to put the changes to the build system in master. But people
 have to submit their proceedings to `2017` in 2017, and `2018` in 2018. How can
-we get the improvements to the system without getting the papers? 
+we get the improvements to the system without getting the papers?
 
 ### `dev` is where build changes go
 
-The solution to the previous section problems is the `dev` branch. 
+The solution to the previous section problems is the `dev` branch.
 
 `dev` specifically exists to house the improvements to the system, without any
-of the papers. 
+of the papers.
 
 That means during the 2018 proceedings any work that is being done to improve
 the system should be in PRs made against `dev`, not `2018`.
@@ -71,7 +71,7 @@ the system should be in PRs made against `dev`, not `2018`.
 
 After merging `dev` into `master`, can branch `2018` off of `master`.
 
-### Merge `dev` into `2018` on an on-going basis. 
+### Merge `dev` into `2018` on an on-going basis.
 
 But as you are developing the system, you will be making changes to address
 specific problems that come up for authors. If we aren't putting any changes in
@@ -92,4 +92,3 @@ TODO: Figure out workflow to move previous year's branch into its own repo.
 
 Once we write up the workflow, this should be added to the todo list under
 [](#Workflow).
-

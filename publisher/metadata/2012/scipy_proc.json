@@ -162,11 +162,7 @@
     "citation_key": "proc-scipy-2012",
     "location": "Austin, Texas",
     "isbn": "value",
-    "editor": [
-      "Aron Ahmadia",
-      "Jarrod Millman",
-      "Stéfan van der Walt"
-    ]
+    "editor": ["Aron Ahmadia", "Jarrod Millman", "Stéfan van der Walt"]
   },
   "diversity_scholarship": [
     {

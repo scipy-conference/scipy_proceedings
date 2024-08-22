@@ -1,29 +1,29 @@
 ---
 abstract:
-   - A short version of the long version that is way too long to be written as a short version anyway. Still, when considering the facts from first principles, we find that the outcomes of this introspective approach is compatible with the guidelines previously established.
-   - In such an experiment it is then clear that the potential for further development not only depends on previous relationships found but also on connections made during exploitation of this novel new experimental protocol.
+  - A short version of the long version that is way too long to be written as a short version anyway. Still, when considering the facts from first principles, we find that the outcomes of this introspective approach is compatible with the guidelines previously established.
+  - In such an experiment it is then clear that the potential for further development not only depends on previous relationships found but also on connections made during exploitation of this novel new experimental protocol.
 keywords:
   - terraforming
   - desert
   - numerical perspective
 authors:
-- email: jj@rome.it
-  institution:
-  - Senate House, S.P.Q.R.
-  - Egyptian Embassy, S.P.Q.R.
-  name: Gaius Caesar
-- email: mark37@rome.it
-  institution:
-  - Egyptian Embassy, S.P.Q.R.
-  name: Mark Anthony
-- email: millman@rome.it
-  institution:
-  - Egyptian Embassy, S.P.Q.R.
-  - Yet another place, S.P.Q.R.
-  name: Jarrod Millman
-  corresponding: true
-- email: cleopatra@rome.it
-  name: Cleopatra
+  - email: jj@rome.it
+    institution:
+      - Senate House, S.P.Q.R.
+      - Egyptian Embassy, S.P.Q.R.
+    name: Gaius Caesar
+  - email: mark37@rome.it
+    institution:
+      - Egyptian Embassy, S.P.Q.R.
+    name: Mark Anthony
+  - email: millman@rome.it
+    institution:
+      - Egyptian Embassy, S.P.Q.R.
+      - Yet another place, S.P.Q.R.
+    name: Jarrod Millman
+    corresponding: true
+  - email: cleopatra@rome.it
+    name: Cleopatra
 bibliography: mybib
 video: "https://www.youtube.com/watch?v=Hz1JWzyvv8A"
 title: A Numerical Perspective to Terraforming a Desert -- latex edition

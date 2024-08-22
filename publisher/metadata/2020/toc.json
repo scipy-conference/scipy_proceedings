@@ -2,15 +2,9 @@
   "toc": [
     {
       "author_institution_map": {
-        "Dillon Niederhut": [
-          "Novi Labs"
-        ],
-        "Julie Hollek": [
-          "Mozilla"
-        ],
-        "Meghann Agarwal": [
-          "Oracle"
-        ]
+        "Dillon Niederhut": ["Novi Labs"],
+        "Julie Hollek": ["Mozilla"],
+        "Meghann Agarwal": ["Oracle"]
       },
       "title": "Preface",
       "doi": "10.25080/Majora-342d178e-000",
@@ -24,17 +18,9 @@
         "start": 1,
         "stop": 1
       },
-      "author": [
-        "Meghann Agarwal",
-        "Julie Hollek",
-        "Dillon Niederhut"
-      ],
+      "author": ["Meghann Agarwal", "Julie Hollek", "Dillon Niederhut"],
       "keywords": "",
-      "author_institution": [
-        "Oracle",
-        "Mozilla",
-        "Novi Labs"
-      ],
+      "author_institution": ["Oracle", "Mozilla", "Novi Labs"],
       "video": "",
       "bibliography": "",
       "author_orcid_map": {},
@@ -44,15 +30,9 @@
     },
     {
       "author_institution_map": {
-        "José Unpingco": [
-          "Gary and Mary West Health Institute"
-        ],
-        "Haw-minn Lu": [
-          "Gary and Mary West Health Institute"
-        ],
-        "Adrian Kwong": [
-          "Gary and Mary West Health Institute"
-        ]
+        "José Unpingco": ["Gary and Mary West Health Institute"],
+        "Haw-minn Lu": ["Gary and Mary West Health Institute"],
+        "Adrian Kwong": ["Gary and Mary West Health Institute"]
       },
       "title": "Securing Your Collaborative Jupyter Notebooks in the Cloud using Container and Load Balancing Services",
       "doi": "10.25080/Majora-342d178e-001",
@@ -67,11 +47,7 @@
         "start": 2,
         "stop": 10
       },
-      "author": [
-        "Haw-minn Lu",
-        "Adrian Kwong",
-        "José Unpingco"
-      ],
+      "author": ["Haw-minn Lu", "Adrian Kwong", "José Unpingco"],
       "keywords": "data science, infrastructure, jupyter, rstudio",
       "author_institution": [
         "Gary and Mary West Health Institute",
@@ -89,28 +65,20 @@
     },
     {
       "author_institution_map": {
-        "Haw-minn Lu": [
-          "Gary and Mary West Health Institute"
-        ]
+        "Haw-minn Lu": ["Gary and Mary West Health Institute"]
       },
       "title": "Quasi-orthonormal Encoding for Machine Learning Applications",
       "doi": "10.25080/Majora-342d178e-002",
       "paper_id": "75_lu",
-      "author_email": [
-        "hlu@westhealth.org"
-      ],
+      "author_email": ["hlu@westhealth.org"],
       "pages": 7,
       "page": {
         "start": 11,
         "stop": 17
       },
-      "author": [
-        "Haw-minn Lu"
-      ],
+      "author": ["Haw-minn Lu"],
       "keywords": "machine learning, classification, categorical encoding",
-      "author_institution": [
-        "Gary and Mary West Health Institute"
-      ],
+      "author_institution": ["Gary and Mary West Health Institute"],
       "video": "",
       "bibliography": "ourbib",
       "author_orcid_map": {},
@@ -210,9 +178,7 @@
       "title": "HOOMD-blue version 3.0 A Modern, Extensible, Flexible, Object-Oriented API for Molecular Simulations",
       "doi": "10.25080/Majora-342d178e-004",
       "paper_id": "brandon_butler",
-      "author_email": [
-        "butlerbr@umich.edu"
-      ],
+      "author_email": ["butlerbr@umich.edu"],
       "pages": 8,
       "page": {
         "start": 24,
@@ -261,19 +227,13 @@
       "title": "Compyle: a Python package for parallel computing",
       "doi": "10.25080/Majora-342d178e-005",
       "paper_id": "compyle_pr_ab",
-      "author_email": [
-        "adityapb1546@gmail.com",
-        "prabhu@aero.iitb.ac.in"
-      ],
+      "author_email": ["adityapb1546@gmail.com", "prabhu@aero.iitb.ac.in"],
       "pages": 8,
       "page": {
         "start": 32,
         "stop": 39
       },
-      "author": [
-        "Aditya Bhosale",
-        "Prabhu Ramachandran"
-      ],
+      "author": ["Aditya Bhosale", "Prabhu Ramachandran"],
       "keywords": "High-performance computing, multi-core CPUs, GPGPU accelerators, parallel\nalgorithms, transpilation",
       "author_institution": [
         "Department of Aerospace Engineering",
@@ -322,11 +282,7 @@
         "start": 40,
         "stop": 47
       },
-      "author": [
-        "Dallin Skouson",
-        "Andrew Keller",
-        "Michael Wirthlin"
-      ],
+      "author": ["Dallin Skouson", "Andrew Keller", "Michael Wirthlin"],
       "keywords": "Hardware Design, Netlists, EDA, CAD",
       "author_institution": [
         "NSF Center for Space, High-Performance, and Resilient Computing (SHREC)",
@@ -350,9 +306,7 @@
     },
     {
       "author_institution_map": {
-        "Nina Miolane": [
-          "Stanford University"
-        ],
+        "Nina Miolane": ["Stanford University"],
         "Xavier Pennec": [],
         "Alice Le Brigant": [],
         "Olivier Peltre": [],
@@ -365,9 +319,7 @@
         "Bernhard Kainz": [],
         "Hadi Zaatiti": [],
         "Johan Mathe": [],
-        "Nicolas Guigui": [
-          "Université Côte d'Azur, Inria"
-        ],
+        "Nicolas Guigui": ["Université Côte d'Azur, Inria"],
         "Yann Thanwerdas": [],
         "Thomas Gerald": [],
         "Stefan Heyder": [],
@@ -446,15 +398,9 @@
     },
     {
       "author_institution_map": {
-        "Jose Unpingco": [
-          "Gary and Mary West Health Institute"
-        ],
-        "Giancarlo Perrone": [
-          "Gary and Mary West Health Institute"
-        ],
-        "Haw-minn Lu": [
-          "Gary and Mary West Health Institute"
-        ]
+        "Jose Unpingco": ["Gary and Mary West Health Institute"],
+        "Giancarlo Perrone": ["Gary and Mary West Health Institute"],
+        "Haw-minn Lu": ["Gary and Mary West Health Institute"]
       },
       "title": "Network visualizations with Pyvis and VisJS",
       "doi": "10.25080/Majora-342d178e-008",
@@ -469,11 +415,7 @@
         "start": 58,
         "stop": 62
       },
-      "author": [
-        "Giancarlo Perrone",
-        "Jose Unpingco",
-        "Haw-minn Lu"
-      ],
+      "author": ["Giancarlo Perrone", "Jose Unpingco", "Haw-minn Lu"],
       "keywords": "networks, graphs, relationship",
       "author_institution": [
         "Gary and Mary West Health Institute",
@@ -491,18 +433,10 @@
     },
     {
       "author_institution_map": {
-        "Jim Pivarski": [
-          "Princeton University"
-        ],
-        "Hans Dembinski": [
-          "TU Dortmund"
-        ],
-        "Shuo Liu": [
-          "Sun Yat-sen University"
-        ],
-        "Henry Schreiner": [
-          "Princeton University"
-        ]
+        "Jim Pivarski": ["Princeton University"],
+        "Hans Dembinski": ["TU Dortmund"],
+        "Shuo Liu": ["Sun Yat-sen University"],
+        "Henry Schreiner": ["Princeton University"]
       },
       "title": "Boost-histogram: High-Performance Histograms as Objects",
       "doi": "10.25080/Majora-342d178e-009",
@@ -554,17 +488,13 @@
       "title": "Learning from evolving data streams",
       "doi": "10.25080/Majora-342d178e-00a",
       "paper_id": "jacob_montiel",
-      "author_email": [
-        "jacob.montiel@waikato.ac.nz"
-      ],
+      "author_email": ["jacob.montiel@waikato.ac.nz"],
       "pages": 8,
       "page": {
         "start": 70,
         "stop": 77
       },
-      "author": [
-        "Jacob Montiel"
-      ],
+      "author": ["Jacob Montiel"],
       "keywords": "machine learning, data streams, concept drift, scikit, open-source",
       "author_institution": [
         "Department of Computer Science, University of Waikato"
@@ -582,21 +512,11 @@
     },
     {
       "author_institution_map": {
-        "Ianna Osborne": [
-          "Princeton University"
-        ],
-        "Jim Pivarski": [
-          "Princeton University"
-        ],
-        "Anish Biswas": [
-          "Manipal Institute of Technology"
-        ],
-        "Pratyush Das": [
-          "Institute of Engineering and Management"
-        ],
-        "Peter Elmer": [
-          "Princeton University"
-        ]
+        "Ianna Osborne": ["Princeton University"],
+        "Jim Pivarski": ["Princeton University"],
+        "Anish Biswas": ["Manipal Institute of Technology"],
+        "Pratyush Das": ["Institute of Engineering and Management"],
+        "Peter Elmer": ["Princeton University"]
       },
       "title": "Awkward Array: JSON-like data, NumPy-like idioms",
       "doi": "10.25080/Majora-342d178e-00b",
@@ -647,18 +567,10 @@
     },
     {
       "author_institution_map": {
-        "Yohann Dudouit": [
-          "Lawrence Livermore National Laboratory"
-        ],
-        "Jeremy Thompson": [
-          "University of Colorado Boulder"
-        ],
-        "Jed Brown": [
-          "University of Colorado Boulder"
-        ],
-        "Valeria Barra": [
-          "University of Colorado Boulder"
-        ]
+        "Yohann Dudouit": ["Lawrence Livermore National Laboratory"],
+        "Jeremy Thompson": ["University of Colorado Boulder"],
+        "Jed Brown": ["University of Colorado Boulder"],
+        "Valeria Barra": ["University of Colorado Boulder"]
       },
       "title": "High-performance operator evaluations with ease of use: libCEED's Python interface",
       "doi": "10.25080/Majora-342d178e-00c",
@@ -800,29 +712,19 @@
     },
     {
       "author_institution_map": {
-        "Mark Wickert": [
-          "University of Colorado Colorado Springs"
-        ],
-        "David Peckham": [
-          "University of Colorado Colorado Springs"
-        ]
+        "Mark Wickert": ["University of Colorado Colorado Springs"],
+        "David Peckham": ["University of Colorado Colorado Springs"]
       },
       "title": "Matched Filter Mismatch Losses in MPSK and MQAM Using Semi-Analytic BEP Modeling",
       "doi": "10.25080/Majora-342d178e-00e",
       "paper_id": "mark_wickert_239",
-      "author_email": [
-        "mwickert@uccs.edu",
-        "dpeckham@uccs.edu"
-      ],
+      "author_email": ["mwickert@uccs.edu", "dpeckham@uccs.edu"],
       "pages": 9,
       "page": {
         "start": 98,
         "stop": 106
       },
-      "author": [
-        "Mark Wickert",
-        "David Peckham"
-      ],
+      "author": ["Mark Wickert", "David Peckham"],
       "keywords": "digital modulation, pulse shaping, phase-shift keying,\nquadrature amplitude modulation",
       "author_institution": [
         "University of Colorado Colorado Springs",
@@ -841,33 +743,20 @@
     },
     {
       "author_institution_map": {
-        "Nick Brown": [
-          "EPCC at the University of Edinburgh"
-        ],
-        "Sihang Liu": [
-          "EPCC at the University of Edinburgh"
-        ],
-        "Maurice Jamieson": [
-          "EPCC at the University of Edinburgh"
-        ]
+        "Nick Brown": ["EPCC at the University of Edinburgh"],
+        "Sihang Liu": ["EPCC at the University of Edinburgh"],
+        "Maurice Jamieson": ["EPCC at the University of Edinburgh"]
       },
       "title": "Having your cake and eating it: Exploiting Python for programmer productivity and performance on micro-core architectures using ePython",
       "doi": "10.25080/Majora-342d178e-00f",
       "paper_id": "maurice_jamieson",
-      "author_email": [
-        "maurice.jamieson@ed.ac.uk",
-        "n.brown@epcc.ed.ac.uk"
-      ],
+      "author_email": ["maurice.jamieson@ed.ac.uk", "n.brown@epcc.ed.ac.uk"],
       "pages": 9,
       "page": {
         "start": 107,
         "stop": 115
       },
-      "author": [
-        "Maurice Jamieson",
-        "Nick Brown",
-        "Sihang Liu"
-      ],
+      "author": ["Maurice Jamieson", "Nick Brown", "Sihang Liu"],
       "keywords": "ePython, micro-cores, RISC-V, MicroBlaze, PicoRV32, Epiphany",
       "author_institution": [
         "EPCC at the University of Edinburgh",
@@ -887,30 +776,20 @@
     },
     {
       "author_institution_map": {
-        "Niels Bantilan": [
-          "Talkspace",
-          "pyOpenSci"
-        ]
+        "Niels Bantilan": ["Talkspace", "pyOpenSci"]
       },
       "title": "pandera: Statistical Data Validation of Pandas Dataframes",
       "doi": "10.25080/Majora-342d178e-010",
       "paper_id": "niels_bantilan",
-      "author_email": [
-        "niels.bantilan@gmail.com"
-      ],
+      "author_email": ["niels.bantilan@gmail.com"],
       "pages": 9,
       "page": {
         "start": 116,
         "stop": 124
       },
-      "author": [
-        "Niels Bantilan"
-      ],
+      "author": ["Niels Bantilan"],
       "keywords": "data validation, data engineering",
-      "author_institution": [
-        "Talkspace",
-        "pyOpenSci"
-      ],
+      "author_institution": ["Talkspace", "pyOpenSci"],
       "video": "https://youtu.be/PxTLD-ueNd4",
       "bibliography": "refs",
       "author_orcid_map": {
@@ -924,29 +803,19 @@
     },
     {
       "author_institution_map": {
-        "Eric van Oort": [
-          "The University of Texas at Austin"
-        ],
-        "Oney Erge": [
-          "The University of Texas at Austin"
-        ]
+        "Eric van Oort": ["The University of Texas at Austin"],
+        "Oney Erge": ["The University of Texas at Austin"]
       },
       "title": "Combining Physics-Based and Data-Driven Modeling for Pressure Prediction in Well Construction",
       "doi": "10.25080/Majora-342d178e-011",
       "paper_id": "oney_erge",
-      "author_email": [
-        "oneyerge@utexas.edu",
-        "vanoort@austin.utexas.edu"
-      ],
+      "author_email": ["oneyerge@utexas.edu", "vanoort@austin.utexas.edu"],
       "pages": 7,
       "page": {
         "start": 125,
         "stop": 131
       },
-      "author": [
-        "Oney Erge",
-        "Eric van Oort"
-      ],
+      "author": ["Oney Erge", "Eric van Oort"],
       "keywords": "deep learning, machine learning, combining physics-based modeling and data-driven modeling, hydraulics modeling, frictional pressure loss modeling.",
       "author_institution": [
         "The University of Texas at Austin",
@@ -978,12 +847,8 @@
         "Nicole Lo": [
           "Massachusetts Institute of Technology, Cambridge, MA, USA"
         ],
-        "Christopher J. Markiewicz": [
-          "Stanford University, Stanford, CA, USA"
-        ],
-        "Oscar Esteban": [
-          "Stanford University, Stanford, CA, USA"
-        ],
+        "Christopher J. Markiewicz": ["Stanford University, Stanford, CA, USA"],
+        "Oscar Esteban": ["Stanford University, Stanford, CA, USA"],
         "Mathias Goncalves": [
           "Stanford University, Stanford, CA, USA",
           "Massachusetts Institute of Technology, Cambridge, MA, USA"
@@ -1052,27 +917,15 @@
         "Jinseop Park": [
           "National Fusion Research Institute, Daejeon 34133, Republic of Korea"
         ],
-        "Jong Youl Choi": [
-          "Oak Ridge National Laboratory"
-        ],
-        "R Michael Churchill": [
-          "Princeton Plasma Physics Laboratory"
-        ],
-        "CS Chang": [
-          "Princeton Plasma Physics Laboratory"
-        ],
-        "Ralph Kube": [
-          "Princeton Plasma Physics Laboratory"
-        ],
-        "Ruonan Wang": [
-          "Oak Ridge National Laboratory"
-        ],
+        "Jong Youl Choi": ["Oak Ridge National Laboratory"],
+        "R Michael Churchill": ["Princeton Plasma Physics Laboratory"],
+        "CS Chang": ["Princeton Plasma Physics Laboratory"],
+        "Ralph Kube": ["Princeton Plasma Physics Laboratory"],
+        "Ruonan Wang": ["Oak Ridge National Laboratory"],
         "Minjun J. Choi": [
           "National Fusion Research Institute, Daejeon 34133, Republic of Korea"
         ],
-        "Scott Klasky": [
-          "Oak Ridge National Laboratory"
-        ]
+        "Scott Klasky": ["Oak Ridge National Laboratory"]
       },
       "title": "Leading magnetic fusion energy science into the big-and-fast data lane",
       "doi": "10.25080/Majora-342d178e-013",
@@ -1124,9 +977,7 @@
     },
     {
       "author_institution_map": {
-        "Mark Reynolds": [
-          "University of Western Australia"
-        ],
+        "Mark Reynolds": ["University of Western Australia"],
         "Andreas Wicenec": [
           "International Centre for Radio Astronomy Research",
           "University of Western Australia"
@@ -1149,11 +1000,7 @@
         "start": 148,
         "stop": 155
       },
-      "author": [
-        "Ryan W. Bunney",
-        "Andreas Wicenec",
-        "Mark Reynolds"
-      ],
+      "author": ["Ryan W. Bunney", "Andreas Wicenec", "Mark Reynolds"],
       "keywords": "",
       "author_institution": [
         "International Centre for Radio Astronomy Research",
@@ -1173,30 +1020,19 @@
     },
     {
       "author_institution_map": {
-        "Mridul Seth": [
-          "Econ-ARK"
-        ],
-        "Sebastian Benthall": [
-          "New York University School of Law",
-          "Econ-ARK"
-        ]
+        "Mridul Seth": ["Econ-ARK"],
+        "Sebastian Benthall": ["New York University School of Law", "Econ-ARK"]
       },
       "title": "Software Engineering as Research Method: Aligning Roles in Econ-ARK",
       "doi": "10.25080/Majora-342d178e-015",
       "paper_id": "sebastian_benthall",
-      "author_email": [
-        "spb413@nyu.edu",
-        "mseth@pm.me"
-      ],
+      "author_email": ["spb413@nyu.edu", "mseth@pm.me"],
       "pages": 6,
       "page": {
         "start": 156,
         "stop": 161
       },
-      "author": [
-        "Sebastian Benthall",
-        "Mridul Seth"
-      ],
+      "author": ["Sebastian Benthall", "Mridul Seth"],
       "keywords": "computational method, computional thinking, constructionist learning, research software engineering",
       "author_institution": [
         "New York University School of Law",
@@ -1216,28 +1052,20 @@
     },
     {
       "author_institution_map": {
-        "Zac Hatfield-Dodds": [
-          "Australian National University"
-        ]
+        "Zac Hatfield-Dodds": ["Australian National University"]
       },
       "title": "Falsify your Software: validating scientific code with property-based testing",
       "doi": "10.25080/Majora-342d178e-016",
       "paper_id": "zac_hatfield-dodds",
-      "author_email": [
-        "zac.hatfield.dodds@anu.edu.au"
-      ],
+      "author_email": ["zac.hatfield.dodds@anu.edu.au"],
       "pages": 4,
       "page": {
         "start": 162,
         "stop": 165
       },
-      "author": [
-        "Zac Hatfield-Dodds"
-      ],
+      "author": ["Zac Hatfield-Dodds"],
       "keywords": "methods, software, validation, property-based testing",
-      "author_institution": [
-        "Australian National University"
-      ],
+      "author_institution": ["Australian National University"],
       "video": "",
       "bibliography": "references",
       "author_orcid_map": {

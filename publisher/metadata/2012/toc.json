@@ -2,18 +2,10 @@
   "toc": [
     {
       "author_institution_map": {
-        "Shoaib Kamil": [
-          "University of California, Berkeley"
-        ],
-        "David Howard": [
-          "University of California, Berkeley"
-        ],
-        "Aakash Prasad": [
-          "University of California, Berkeley"
-        ],
-        "Armando Fox": [
-          "University of California, Berkeley"
-        ]
+        "Shoaib Kamil": ["University of California, Berkeley"],
+        "David Howard": ["University of California, Berkeley"],
+        "Aakash Prasad": ["University of California, Berkeley"],
+        "Armando Fox": ["University of California, Berkeley"]
       },
       "pages": 5,
       "page": {
@@ -50,32 +42,24 @@
     },
     {
       "author_institution_map": {
-        "Adam Hughes": [
-          "The George Washington University"
-        ]
+        "Adam Hughes": ["The George Washington University"]
       },
       "pages": 5,
       "page": {
         "stop": 10,
         "start": 6
       },
-      "author_institution": [
-        "The George Washington University"
-      ],
+      "author_institution": ["The George Washington University"],
       "authors": "Adam Hughes",
       "title": "A Computational Framework for Plasmonic Nanobiosensing",
       "doi": "10.25080/Majora-54c7f2c8-001",
       "bibliography": "",
-      "author_email": [
-        "hugadams@gwmail.gwu.edu"
-      ],
+      "author_email": ["hugadams@gwmail.gwu.edu"],
       "abstract": [
         "Basic principles in biosensing and nanomaterials precede the introduction of a novel fiber optic sensor.  Software limitations in the biosensing domain are presented, followed by the development of a Python-based simulation environment. Finally, the current state of spectral data analysis within the Python ecosystem is discussed."
       ],
       "keywords": "gold nanoparticles, fiber optics, biosensor, Python, immunoassay, plasmonics, proteins, metallic colloids, IPython, Traits, Chaco, Pandas, SEM,",
-      "author": [
-        "Adam Hughes"
-      ],
+      "author": ["Adam Hughes"],
       "paper_id": "adam_hughes",
       "copyright_holder": "Adam Hughes.",
       "video": ""
@@ -85,9 +69,7 @@
         "Alejandro Weinstein": [
           "the EECS department of the Colorado School of Mines"
         ],
-        "Michael Wakin": [
-          "the EECS department of the Colorado School of Mines"
-        ]
+        "Michael Wakin": ["the EECS department of the Colorado School of Mines"]
       },
       "pages": 5,
       "page": {
@@ -102,18 +84,12 @@
       "title": "A Tale of Four Libraries",
       "doi": "10.25080/Majora-54c7f2c8-002",
       "bibliography": "",
-      "author_email": [
-        "aweinste@mines.edu",
-        "mwakin@mines.edu"
-      ],
+      "author_email": ["aweinste@mines.edu", "mwakin@mines.edu"],
       "abstract": [
         "This work describes the use some scientific Python tools to solve information\ngathering problems using Reinforcement Learning. In particular, we focus on the\nproblem of designing an agent able to learn how to gather information in linked\ndatasets. We use four different libraries—RL-Glue, Gensim, NetworkX, and\nscikit-learn—during different stages of our research. We show that, by\nusing NumPy arrays as the default vector/matrix format, it is possible to\nintegrate these libraries with minimal effort."
       ],
       "keywords": "reinforcement learning, latent semantic analysis, machine learning",
-      "author": [
-        "Alejandro Weinstein",
-        "Michael Wakin"
-      ],
+      "author": ["Alejandro Weinstein", "Michael Wakin"],
       "paper_id": "alejandro_weinstein",
       "copyright_holder": "Alejandro Weinstein et al.",
       "video": ""
@@ -136,28 +112,20 @@
       "title": "Total Recall: flmake and the Quest for Reproducibility",
       "doi": "10.25080/Majora-54c7f2c8-003",
       "bibliography": "",
-      "author_email": [
-        "scopatz@flash.uchicago.edu"
-      ],
+      "author_email": ["scopatz@flash.uchicago.edu"],
       "abstract": [
         "FLASH is a high-performance computing (HPC) multi-physics code which is used to perform\nastrophysical and high-energy density physics simulations.\nTo run a FLASH simulation, the user must go through three basic steps: setup, build, and\nexecution.  Canonically, each of these tasks are independently handled by the user.\nHowever, with the recent advent of flmake - a Python workflow management utility for\nFLASH - such tasks may now be performed in a fully reproducible way.\nTo achieve such reproducibility a number of developments and abstractions were needed,\nsome only enabled by Python.  These methods are widely applicable outside of FLASH.\nThe process of writing flmake opens many questions to what precisely is meant\nby reproducibility in computational science.  While posed here, many of these\nquestions remain unanswered."
       ],
       "keywords": "FLASH, reproducibility",
-      "author": [
-        "Anthony Scopatz"
-      ],
+      "author": ["Anthony Scopatz"],
       "paper_id": "anthony_scopatz_flmake",
       "copyright_holder": "Anthony Scopatz.",
       "video": ""
     },
     {
       "author_institution_map": {
-        "Cyrus Harrison": [
-          "Lawrence Livermore National Laboratory"
-        ],
-        "Harinarayan Krishnan": [
-          "Lawrence Berkeley National Laboratory"
-        ]
+        "Cyrus Harrison": ["Lawrence Livermore National Laboratory"],
+        "Harinarayan Krishnan": ["Lawrence Berkeley National Laboratory"]
       },
       "pages": 7,
       "page": {
@@ -172,131 +140,95 @@
       "title": "Python's Role in VisIt",
       "doi": "10.25080/Majora-54c7f2c8-004",
       "bibliography": "",
-      "author_email": [
-        "cyrush@llnl.gov",
-        "hkrishnan@lbl.gov"
-      ],
+      "author_email": ["cyrush@llnl.gov", "hkrishnan@lbl.gov"],
       "abstract": [
         "VisIt is an open source, turnkey application for scientific data analysis and visualization that runs on a wide variety of platforms from desktops to petascale class supercomputers. VisIt's core software infrastructure is written in C++, however Python plays a vital role in enabling custom workflows. Recent work has extended Python's use in VisIt beyond scripting, enabling custom Python UIs and Python filters for low-level data manipulation. The ultimate goal of this work is to evolve Python into a true peer to our core C++ plugin infrastructure. This paper provides an overview of Python’s role in VisIt with a focus on use cases of scripted rendering, data analysis, and custom application development."
       ],
       "keywords": "visualization, hpc, python",
-      "author": [
-        "Cyrus Harrison",
-        "Harinarayan Krishnan"
-      ],
+      "author": ["Cyrus Harrison", "Harinarayan Krishnan"],
       "paper_id": "cyrus_harrison",
       "copyright_holder": "Cyrus Harrison et al.",
       "video": ""
     },
     {
       "author_institution_map": {
-        "Geoffrey M. Poore": [
-          "Union University"
-        ]
+        "Geoffrey M. Poore": ["Union University"]
       },
       "pages": 7,
       "page": {
         "stop": 36,
         "start": 30
       },
-      "author_institution": [
-        "Union University"
-      ],
+      "author_institution": ["Union University"],
       "authors": "Geoffrey M. Poore",
       "title": "PythonTeX:  Fast Access to Python from within LaTeX",
       "doi": "10.25080/Majora-54c7f2c8-005",
       "bibliography": "",
-      "author_email": [
-        "gpoore@uu.edu"
-      ],
+      "author_email": ["gpoore@uu.edu"],
       "abstract": [
         "PythonTeX is a new LaTeX package that provides access\nto the full power of Python from within LaTeX documents. It allows\nPython code entered within a LaTeX document to be executed, and provides\naccess to the output. PythonTeX also provides syntax highlighting for\nany language supported by the Pygments highlighting engine.",
         "PythonTeX is fast and user-friendly. Python code is separated into\nuser-defined sessions.  Each session is only executed when its code\nis modified. When code is executed, sessions run in parallel. The\ncontents of stdout and stderr are synchronized with the LaTeX document,\nso that printed content is easily accessible and error messages have\nmeaningful line numbering.",
         "PythonTeX simplifies scientific document creation with LaTeX.\nPlots can be created with matplotlib and then customized in place.\nCalculations can be performed and automatically typeset with NumPy.\nSymPy can be used to automatically create mathematical tables and\nstep-by-step mathematical derivations."
       ],
       "keywords": "LaTeX, document preparation, document automation,\nmatplotlib, NumPy, SymPy, Pygments",
-      "author": [
-        "Geoffrey M. Poore"
-      ],
+      "author": ["Geoffrey M. Poore"],
       "paper_id": "geoffrey_poore",
       "copyright_holder": "Geoffrey M. Poore.",
       "video": ""
     },
     {
       "author_institution_map": {
-        "Iqbal Mohomed": [
-          "IBM Research"
-        ]
+        "Iqbal Mohomed": ["IBM Research"]
       },
       "pages": 4,
       "page": {
         "stop": 40,
         "start": 37
       },
-      "author_institution": [
-        "IBM Research"
-      ],
+      "author_institution": ["IBM Research"],
       "authors": "Iqbal Mohomed",
       "title": "Self-driving Lego Mindstorms Robot",
       "doi": "10.25080/Majora-54c7f2c8-006",
       "bibliography": "",
-      "author_email": [
-        "iqbal@us.ibm.com"
-      ],
+      "author_email": ["iqbal@us.ibm.com"],
       "abstract": [
         "In this paper, I describe the workings of my personal hobby\nproject - a self-driving lego mindstorms robot. The body of the\nrobot is built with Lego Mindstorms. An Android smartphone is used\nto capture the view in front of the robot. A user first teaches the\nrobot how to drive; this is done by making the robot go around a track\na small number of times. The image data, along with the user action is used\nto train a Neural Network. At run-time, images of what is in front of the\nrobot are fed into the neural network and the appropriate driving action\nis selected. This project showcases the power of python's libraries, as they\nenabled me to put together a sophisticated working system in a very short amount\nof time. Specifically, I made use of the Python Image Library to downsample\nimages, as well as the\nPyBrain neural network library. The robot was controlled using the nxt-python library."
       ],
       "keywords": "self-driving, neural networks, robotics",
-      "author": [
-        "Iqbal Mohomed"
-      ],
+      "author": ["Iqbal Mohomed"],
       "paper_id": "iqbal_mohomed",
       "copyright_holder": "Iqbal Mohomed.",
       "video": ""
     },
     {
       "author_institution_map": {
-        "Jacob Barhak": [
-          "freelancer"
-        ]
+        "Jacob Barhak": ["freelancer"]
       },
       "pages": 5,
       "page": {
         "stop": 45,
         "start": 41
       },
-      "author_institution": [
-        "freelancer"
-      ],
+      "author_institution": ["freelancer"],
       "authors": "Jacob Barhak",
       "title": "The Reference Model for Disease Progression",
       "doi": "10.25080/Majora-54c7f2c8-007",
       "bibliography": "",
-      "author_email": [
-        "jacob.barhak@gmail.com"
-      ],
+      "author_email": ["jacob.barhak@gmail.com"],
       "abstract": [
         "The Reference Model for disease progression is based on a modeling framework written in Python. It is a prototype that demonstrates the use of computing power to aid in chronic disease forecast.  The model uses references to publicly available data as a source of information, hence the name for the model. The Reference Model also holds this name since it is designed to be used by other models as a reference. The model uses parallel processing and computing power to create a competition among hypothesis of disease progression. The system runs on a multi core machine and is scalable to a SLURM cluster."
       ],
       "keywords": "Disease Models, High Performance Computing, Simulation",
-      "author": [
-        "Jacob Barhak"
-      ],
+      "author": ["Jacob Barhak"],
       "paper_id": "jacob_barhak",
       "copyright_holder": "Jacob Barhak.",
       "video": ""
     },
     {
       "author_institution_map": {
-        "Adam Richards": [
-          "Duke University"
-        ],
-        "Cliburn Chan": [
-          "Duke University"
-        ],
-        "Jacob Frelinger": [
-          "Duke University"
-        ]
+        "Adam Richards": ["Duke University"],
+        "Cliburn Chan": ["Duke University"],
+        "Jacob Frelinger": ["Duke University"]
       },
       "pages": 5,
       "page": {
@@ -321,43 +253,31 @@
         "Flow cytometry has the ability to measure multiple parameters of a\nheterogeneous mix of cells at single cell resolution.  This has lead flow\ncytometry to become an integral tool in immunology and biology.  Most flow\ncytometry analysis is performed in expensive proprietary software packages,\nand few opensource tool exist for working with flow cytometry data.\nIn this paper we present fcm, an BSD licensed python library for\ntraditional gating based analysis in addition to newer model based analysis\nmethods."
       ],
       "keywords": "Flow Cytometry, Model-based Analysis, Automation, Biology, Immunology",
-      "author": [
-        "Jacob Frelinger",
-        "Adam Richards",
-        "Cliburn Chan"
-      ],
+      "author": ["Jacob Frelinger", "Adam Richards", "Cliburn Chan"],
       "paper_id": "jacob_frelinger",
       "copyright_holder": "Jacob Frelinger et al.",
       "video": ""
     },
     {
       "author_institution_map": {
-        "Matthew Rocklin": [
-          "University of Chicago, Computer Science"
-        ]
+        "Matthew Rocklin": ["University of Chicago, Computer Science"]
       },
       "pages": 5,
       "page": {
         "stop": 55,
         "start": 51
       },
-      "author_institution": [
-        "University of Chicago, Computer Science"
-      ],
+      "author_institution": ["University of Chicago, Computer Science"],
       "authors": "Matthew Rocklin",
       "title": "Uncertainty Modeling with SymPy Stats",
       "doi": "10.25080/Majora-54c7f2c8-009",
       "bibliography": "",
-      "author_email": [
-        "mrocklin@cs.uchicago.edu"
-      ],
+      "author_email": ["mrocklin@cs.uchicago.edu"],
       "abstract": [
         "We add a random variable type to a mathematical modeling language. We\ndemonstrate through examples how this is a highly separable way to introduce\nuncertainty and produce and query stochastic models. We motivate the use of\nsymbolics and thin compilers in scientific computing."
       ],
       "keywords": "Symbolics, mathematical modeling, uncertainty, SymPy",
-      "author": [
-        "Matthew Rocklin"
-      ],
+      "author": ["Matthew Rocklin"],
       "paper_id": "matthew_rocklin",
       "copyright_holder": "Matthew Rocklin.",
       "video": ""
@@ -384,36 +304,22 @@
       "title": "QuTiP: A framework for the dynamics of open quantum systems using SciPy and Cython",
       "doi": "10.25080/Majora-54c7f2c8-00a",
       "bibliography": "",
-      "author_email": [
-        "robert@riken.jp",
-        "pnation@riken.jp"
-      ],
+      "author_email": ["robert@riken.jp", "pnation@riken.jp"],
       "abstract": [
         "We present QuTiP (http://www.qutip.org), an object-oriented, open-source framework for solving the dynamics of open quantum systems.  Written in Python, and using a combination of Cython, NumPy, SciPy, and matplotlib, QuTiP provides an environment for computational quantum mechanics that is both easy and efficient to use. Arbitrary quantum systems, including time-dependent systems, may be built up from operators and states defined by a quantum object class, and then passed on to a choice of unitary or dissipative evolution solvers. Here we give an overview of the basic structure for the framework, and the techniques used in its implementation. We also present a few selected examples from current research on quantum mechanics that illustrate the strengths of the framework, as well as the types of calculations that can be performed. This framework is particularly well suited to the fields of quantum optics, superconducting circuit devices, nanomechanics, and trapped ions, while also being ideal as an educational tool."
       ],
       "keywords": "quantum mechanics, master equation, monte-carlo",
-      "author": [
-        "Robert J. Johansson",
-        "Paul D. Nation"
-      ],
+      "author": ["Robert J. Johansson", "Paul D. Nation"],
       "paper_id": "robert_johansson",
       "copyright_holder": "Robert J. Johansson et al.",
       "video": ""
     },
     {
       "author_institution_map": {
-        "Mads Ruben Burgdorff Kristensen": [
-          "University of Copenhagen"
-        ],
-        "Simon Andreas Frimann Lund": [
-          "University of Copenhagen"
-        ],
-        "Brian Vinter": [
-          "University of Copenhagen"
-        ],
-        "Troels Blum": [
-          "University of Copenhagen"
-        ]
+        "Mads Ruben Burgdorff Kristensen": ["University of Copenhagen"],
+        "Simon Andreas Frimann Lund": ["University of Copenhagen"],
+        "Brian Vinter": ["University of Copenhagen"],
+        "Troels Blum": ["University of Copenhagen"]
       },
       "pages": 7,
       "page": {

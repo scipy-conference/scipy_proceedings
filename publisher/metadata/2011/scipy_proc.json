@@ -292,10 +292,7 @@
     },
     "volume": 3,
     "citation_key": "proc-scipy-2011",
-    "editor": [
-      "Stéfan van der Walt",
-      "Jarrod Millman"
-    ],
+    "editor": ["Stéfan van der Walt", "Jarrod Millman"],
     "isbn": "noisbn",
     "number": 1,
     "doi": "10.25080/Majora-ebaa42b7-014",

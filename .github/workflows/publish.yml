@@ -1,7 +1,7 @@
 name: curvenote
 on:
   pull_request:
-    branches: ['2024']
+    branches: ["2024"]
 permissions:
   contents: read
   pull-requests: write
@@ -10,12 +10,12 @@ jobs:
     uses: curvenote/actions/.github/workflows/publish.yml@v1
     with:
       monorepo: true
-      id-pattern-regex: '^scipy-2024-(?:[a-zA-Z0-9-_]{3,15})$'
+      id-pattern-regex: "^scipy-2024-(?:[a-zA-Z0-9-_]{3,15})$"
       enforce-single-folder: paper
       preview-label: paper
       submit-label: true
       venue: scipy
-      collection: '2024'
+      collection: "2024"
       kind: Article
       path: papers/*
     secrets:

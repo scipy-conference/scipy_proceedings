@@ -7,10 +7,7 @@
     "dates": "July 6 - 12",
     "year": "2014",
     "location": "Austin, Texas",
-    "editor": [
-      "Stéfan van der Walt",
-      "James Bergstra"
-    ],
+    "editor": ["Stéfan van der Walt", "James Bergstra"],
     "xref": {
       "depositor_email": "dillon.niederhut@gmail.com",
       "registrant": "Crossref",

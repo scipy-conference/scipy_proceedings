@@ -78,4 +78,3 @@ class LaTeXDirective(Directive):
 roles.register_local_role("math", mathRole)
 directives.register_directive("math", MathDirective)
 directives.register_directive("latex", LaTeXDirective)
-

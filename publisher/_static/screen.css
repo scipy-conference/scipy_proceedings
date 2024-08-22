@@ -8,17 +8,17 @@ body {
   color: black;
   margin: 0;
   padding: 0;
-  line-height: 1.0em;
+  line-height: 1em;
 }
 
-a {text-decoration: none;
+a {
+  text-decoration: none;
 }
-
 
 /* ##### Header ##### */
 .superHeader {
   color: white;
-  background-color: rgb(100,135,220);
+  background-color: rgb(100, 135, 220);
   height: 2.4em;
   font-size: 0.8em;
 }
@@ -54,13 +54,13 @@ a {text-decoration: none;
   text-align: right;
   float: right;
   margin: 0.5ex 10px 0.5ex 0px;
-  padding 0;
+  padding: 0;
   display: inline; /* forces IE to calc correct margin */
 }
 
 .midHeader {
-  color: rgb(39,78,144);
-/*  background-color: rgb(140,170,230); */  /* should be color of logo background */
+  color: rgb(39, 78, 144);
+  /*  background-color: rgb(140,170,230); */ /* should be color of logo background */
   margin: 0;
   font-size: 3.2em;
   font-weight: normal;
@@ -68,8 +68,8 @@ a {text-decoration: none;
 }
 
 .midHeader a {
-  text-decoration: none;    
-  color: rgb(39,78,144);
+  text-decoration: none;
+  color: rgb(39, 78, 144);
   margin: 5px 0px 5px 10px;
 }
 
@@ -101,7 +101,7 @@ a {text-decoration: none;
 
 .subHeader {
   color: white;
-  background-color: rgb(0,51,153);
+  background-color: rgb(0, 51, 153);
   font-size: 0.9em;
   margin: 0;
   padding: 1ex 1ex 1ex 1.5mm;
@@ -114,31 +114,31 @@ a {text-decoration: none;
   font-weight: bold;
   margin: 0;
   padding: 0 0.75ex 0 0.5ex;
-}  
+}
 
 .subHeader a:hover {
   text-decoration: underline;
 }
 
-.superHeader .highlight, .subHeader .highlight {
-  color: rgb(253,160,91);
+.superHeader .highlight,
+.subHeader .highlight {
+  color: rgb(253, 160, 91);
 }
-
 
 /* ##### Side Bar ##### */
 
 #sidebar {
-/*  margin: 5px, 0px;*/
+  /*  margin: 5px, 0px;*/
   float: left;
-/*  background-color: green; for debugging IE surprises*/
+  /*  background-color: green; for debugging IE surprises*/
   width: 212px;
-  padding: 0;	
+  padding: 0;
   overflow: hidden;
   display: inline; /* forces IE to calc correct margin */
 }
 
 #sidebar a {
-  color: rgb(0,102,204);
+  color: rgb(0, 102, 204);
   background-color: transparent;
   text-decoration: none;
   margin: 0;
@@ -149,19 +149,19 @@ a {text-decoration: none;
 #sidebar .current {
   color: black;
   background-color: white;
-  border: 1px solid rgb(253,160,91);
+  border: 1px solid rgb(253, 160, 91);
 }
 
 #sidebar a:hover {
   color: white;
-  background-color: rgb(100,135,220);
+  background-color: rgb(100, 135, 220);
   text-decoration: none;
 }
 
 .sidepanel {
   margin: 5px;
   float: left;
-  width: 200px;	
+  width: 200px;
   border: 1px solid #9c9c9c;
   background: #e5e5e5;
   overflow: hidden; /* new 18:11 */
@@ -192,7 +192,6 @@ a {text-decoration: none;
   width: 180px;
 }
 
-
 /* ===== Iconbar ===== */
 #iconbar {
   float: right;
@@ -214,21 +213,19 @@ a {text-decoration: none;
   padding: 1px;
 }
 
-
 /* title of the current wiki-page */
 #pagelocation {
   padding: 10px 0;
-  color: rgb(100,135,220);
+  color: rgb(100, 135, 220);
 }
-
 
 /* ##### Main Copy ##### */
 
 #page {
   color: black;
   background-color: transparent;
-/*  background-color: yellow; for debugging IE surprises*/
-/*  text-align: justify;*/
+  /*  background-color: yellow; for debugging IE surprises*/
+  /*  text-align: justify;*/
   line-height: 1.4em;
   margin: 0 10px 10px 215px;
   padding: 0px 0px 10px 0px;
@@ -246,11 +243,12 @@ a {text-decoration: none;
 }
 
 #page a {
-  color: rgb(0,102,204);
+  color: rgb(0, 102, 204);
   background-color: transparent;
 }
 
-#page a.nonexistent, a.badinterwiki {
+#page a.nonexistent,
+a.badinterwiki {
   color: #900000;
   border-bottom: dotted 1px;
 }
@@ -276,14 +274,14 @@ dd {
 }
 
 pre {
-  background-color: #FFF8ED;
+  background-color: #fff8ed;
 }
 
 /* ##### Footer ##### */
 
 #footer {
   color: white;
-  background-color: rgb(100,135,220);
+  background-color: rgb(100, 135, 220);
   font-size: 0.9em;
   margin: 0;
   padding: 1ex 2.5mm;
@@ -293,13 +291,12 @@ pre {
 #footer a {
   color: white;
   background-color: transparent;
-  text-decoration: underline ;
+  text-decoration: underline;
 }
 
 #footer a:hover {
   text-decoration: none;
 }
-
 
 /* DL addition from rightsidebar/classic/modern screen.css*/
 
@@ -309,20 +306,20 @@ pre {
   padding: 0;
   font-size: 0.8em;
   height: 2em;
-  border-bottom: 1px solid rgb(153,153,153);
+  border-bottom: 1px solid rgb(153, 153, 153);
 }
 
 *[dir="rtl"] #pagetrail {
   clear: right;
 }
 
-/* for broken IE */ 
+/* for broken IE */
 * html #pagetrail li {
-  border-right: 1px solid #AAA;
+  border-right: 1px solid #aaa;
   padding: 0 0.3em 0 0;
 }
 
-#pagetrail li  {
+#pagetrail li {
   float: left;
   display: block;
   margin: 2px 0 3px 5px;
@@ -335,7 +332,7 @@ pre {
 
 #pagetrail a {
   text-decoration: none;
-  color: rgb(0,102,204);
+  color: rgb(0, 102, 204);
 }
 
 /* XXX Warning: non-ascii characters! */
@@ -362,93 +359,98 @@ pre {
   display: inline;
 }
 
-.editbar form, .editbar form div {
-    display: inline;
-    text-align: center;
+.editbar form,
+.editbar form div {
+  display: inline;
+  text-align: center;
 }
 
 #message {
   margin: 10px 10px 5px 215px;
   padding: 0.5ex;
-  background-color: #FFFFA0;
+  background-color: #ffffa0;
   border: 2px solid red;
   line-height: 1.2em;
 }
 
-#message p{
+#message p {
   margin: 0;
 }
 
-#message a{
+#message a {
   margin: 0;
-  color: rgb(0,102,204);
+  color: rgb(0, 102, 204);
 }
 
 /* We use here dumb css1 ids because of IE suckiness */
-#editor-comment {width: 70%;}
-#editor-textarea {width: 99%;}
+#editor-comment {
+  width: 70%;
+}
+#editor-textarea {
+  width: 99%;
+}
 
 #pagebottom {
-/*  clear: both;*/
+  /*  clear: both;*/
 }
 
 #preview {
   border: 2px solid #e5e5e5;
-  padding: .5em;
+  padding: 0.5em;
   background: url(../img/draft.png);
 }
 
 .diff {
-  width:99%;
+  width: 99%;
 }
 
 .diff-title {
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
 }
 
 .diff-added {
-  background-color: #E0FFE0;
+  background-color: #e0ffe0;
   vertical-align: sub;
 }
 
 .diff-removed {
-  background-color: #FFFFE0;
+  background-color: #ffffe0;
   vertical-align: sub;
 }
 
 .diff-added span {
-  background-color: #80FF80;
+  background-color: #80ff80;
 }
 
 .diff-removed span {
-  background-color: #FFFF80;
+  background-color: #ffff80;
 }
 
 .searchresult dd span {
   font-weight: bold;
 }
 
-#version{
+#version {
   margin: 5px 5px;
   padding: 0px;
   text-align: center;
-  font-size: 1em; 
-  color: #6C7680;
+  font-size: 1em;
+  color: #6c7680;
 }
 
-#credits{
+#credits {
   margin: 5px 5px;
   padding: 0px;
   text-align: center;
-  font-size: 1em; 
+  font-size: 1em;
 }
 
-#timings{
+#timings {
   margin: 5px 0px;
   padding: 0;
   text-align: center;
-  font-size: 0.8em; 
-  color: #6C7680;
+  font-size: 0.8em;
+  color: #6c7680;
 }
 #credits li {
   display: inline;
@@ -478,22 +480,22 @@ a.cal-usedday {
 }
 /* general stuff: workdays, weekend, today */
 td.cal-workday {
-  background-color: #DDDDFF;
+  background-color: #ddddff;
   text-align: center;
 }
 td.cal-weekend {
-  background-color: #FFDDDD;
+  background-color: #ffdddd;
   text-align: center;
 }
 td.cal-today {
-  background-color: #CCFFCC;
+  background-color: #ccffcc;
   border-style: solid;
   border-width: 2pt;
   text-align: center;
 }
 /* invalid places on the monthly calendar sheet */
 td.cal-invalidday {
-  background-color: #CCCCCC;
+  background-color: #cccccc;
 }
 /* links to prev/next month/year */
 a.cal-link {
@@ -501,14 +503,14 @@ a.cal-link {
   text-decoration: none;
 }
 th.cal-header {
-  background-color: #DDBBFF;
+  background-color: #ddbbff;
   text-align: center;
 }
 
 /* for MonthCalendar mouseover info boxes */
 TABLE.tip {
   color: black;
-  background-color: #FF8888;
+  background-color: #ff8888;
   font-size: small;
   font-weight: normal;
   border-style: solid;
@@ -516,7 +518,7 @@ TABLE.tip {
 }
 
 TH.tip {
-  background-color: #FF4444;
+  background-color: #ff4444;
   font-weight: bold;
   text-align: center;
 }
@@ -530,11 +532,12 @@ TD.tip {
 
 /* end MonthCalendar stuff */
 
-
 /* Spans for line-anchors - uses * html hack so that the rule only applies to
  * IE (where omitting the "display: none" triggers rendering bugs).
  */
-* html span.anchor { display: none; }
+* html span.anchor {
+  display: none;
+}
 
 /* IE6 has a bug with rendering of float elements. We workaround this bug by
  * assigning those elements a height attribute because we currently don't know
@@ -544,37 +547,93 @@ TD.tip {
  */
 /** html div#page { height: 0.001%; } this breaks sinorca4moin on IE6.0! */
 
-* html div#header, html form#editor { height: 0.001%; }
+* html div#header,
+html form#editor {
+  height: 0.001%;
+}
 
 /* Content Sidebar */
 
-#content .sidebar {float: right; width: 200px; margin: 0 0 20px 20px;
-    padding: 0; font-size: 0.85em;}
-#content[dir="rtl"] .sidebar {float: left; margin: 0 20px 20px 0;}
-#content .sidebar p {text-align: left;}
-#content[dir="rtl"] .sidebar p {text-align: right;}
+#content .sidebar {
+  float: right;
+  width: 200px;
+  margin: 0 0 20px 20px;
+  padding: 0;
+  font-size: 0.85em;
+}
+#content[dir="rtl"] .sidebar {
+  float: left;
+  margin: 0 20px 20px 0;
+}
+#content .sidebar p {
+  text-align: left;
+}
+#content[dir="rtl"] .sidebar p {
+  text-align: right;
+}
 /* All headings use darker blue and some white space above */
-#content .sidebar h3, #content .sidebar h4 {margin: 1.5em 0 0 0; 
-    padding: 2px 8px; background: #B8C5D9;}
-#content .sidebar *:first-child {margin-top: 0}
+#content .sidebar h3,
+#content .sidebar h4 {
+  margin: 1.5em 0 0 0;
+  padding: 2px 8px;
+  background: #b8c5d9;
+}
+#content .sidebar *:first-child {
+  margin-top: 0;
+}
 /* all block elements use light blue background */
-#content .sidebar ul, #content .sidebar ol, #content .sidebar p, #content .sidebar table, #content .sidebar div {
-    background: #F2F4F7;}
-#content .sidebar ul, #content .sidebar ol {margin: 0; padding: 0;}
+#content .sidebar ul,
+#content .sidebar ol,
+#content .sidebar p,
+#content .sidebar table,
+#content .sidebar div {
+  background: #f2f4f7;
+}
+#content .sidebar ul,
+#content .sidebar ol {
+  margin: 0;
+  padding: 0;
+}
 /* Paragraphs and list items separated with bottom border */
-#content .sidebar p, #content .sidebar li {margin: 0; padding: 4px 8px;
-    border-bottom: 1pt solid #E6EAF0;}
-#content .sidebar li { display: block;}
-#content .sidebar li p {margin: 0; padding: 0; border: none;}
+#content .sidebar p,
+#content .sidebar li {
+  margin: 0;
+  padding: 4px 8px;
+  border-bottom: 1pt solid #e6eaf0;
+}
+#content .sidebar li {
+  display: block;
+}
+#content .sidebar li p {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
 
-/* Content Figures 
+/* Content Figures
 
 Default figure float to the end of the page. Left of right classes float to the left or right :-)
 */
-#content .figure {float: right; margin: 0 0 0 20px; padding: 0; 
-    font-size: 0.85em;}
-#content[dir="rtl"] .figure {float: left; margin: 0 20px 0 0;}
-#content .figure.left {float: left; margin: 0 20px 0 0;}
-#content .figure.right {float: right; margin: 0 0 0 20px;}
-#content .figure p {margin: 0; text-align: center; font-weight: bold;}
-
+#content .figure {
+  float: right;
+  margin: 0 0 0 20px;
+  padding: 0;
+  font-size: 0.85em;
+}
+#content[dir="rtl"] .figure {
+  float: left;
+  margin: 0 20px 0 0;
+}
+#content .figure.left {
+  float: left;
+  margin: 0 20px 0 0;
+}
+#content .figure.right {
+  float: right;
+  margin: 0 0 0 20px;
+}
+#content .figure p {
+  margin: 0;
+  text-align: center;
+  font-weight: bold;
+}

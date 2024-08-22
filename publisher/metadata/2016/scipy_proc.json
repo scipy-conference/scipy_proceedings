@@ -303,10 +303,7 @@
     },
     "dates": "July 11 - July 17",
     "year": "2016",
-    "editor": [
-      "Sebastian Benthall",
-      "Scott Rostrup"
-    ],
+    "editor": ["Sebastian Benthall", "Scott Rostrup"],
     "xref": {
       "prefix": "10.25080",
       "resource_url": "https://conference.scipy.org/proceedings",

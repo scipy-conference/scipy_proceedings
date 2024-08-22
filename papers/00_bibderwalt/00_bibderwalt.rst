@@ -341,4 +341,3 @@ proceedings editors.
      :usepackage: somepackage
 
      Some custom LaTeX source here.
-

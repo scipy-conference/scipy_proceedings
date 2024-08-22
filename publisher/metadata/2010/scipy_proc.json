@@ -83,10 +83,7 @@
     }
   },
   "proceedings": {
-    "editor": [
-      "Stéfan van der Walt",
-      "Jarrod Millman"
-    ],
+    "editor": ["Stéfan van der Walt", "Jarrod Millman"],
     "title": {
       "full": "Proceedings of the 9th Python in Science Conference",
       "short": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
