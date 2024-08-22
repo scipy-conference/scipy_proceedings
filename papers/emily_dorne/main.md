@@ -375,7 +375,7 @@ Model accuracy can vary based on bloom severity as well as location and other at
     <td>295,558 cells/mL</td>
   </tr>
 </table>
-This table shows the promise of CyFi in relative ordering of points by severity level as well as the limitations of absolute predicted values. Predicted density correctly increases with the severity of the advisory level, although absolute density is generally overpredicted. The median predicted density for samples categorized as No Bloom falls into the "Moderate" density range based on WHO severity levels. The median densities for Caution and Warning / Danger fall into the "High" WHO severity level. The California data in the training set was heavily biased toward severe blooms due to California's sampling protocols. A promising strategy for mitigating this overestimation is the inclusion of more true negative points in the training data.
+This table shows the promise of CyFi in relative ordering of points by severity level as well as the limitations of absolute predicted values. Predicted density correctly increases with the severity of the advisory level, although absolute density is generally overestimated. For example, the expected density range is 0-20,000 cells/mL for "No bloom" and 20,000-100,000 cells/mL  for "Caution" based on World Health Organization guidelines. California data in the training set was heavily biased toward severe blooms due to California's sampling protocols, likely driving this overestimation. A promising mitigation strategy is the inclusion of more true negative points from California in the training data.
 :::
 
 ### Benchmark comparison
