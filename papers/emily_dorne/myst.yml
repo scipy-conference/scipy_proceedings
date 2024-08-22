@@ -67,6 +67,7 @@ project:
         - sklearn
         - dbscan
         - decimal_degrees
+        - chlorophyll
   banner: banner.png
   subject: Research Article
   open_access: true
