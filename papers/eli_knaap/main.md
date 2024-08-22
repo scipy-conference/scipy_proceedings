@@ -26,7 +26,7 @@ demand. On the practical side, city planners, Non-Governmental Organizations
 datasets and spatial analyses can turn these data into more efficient,
 equitable, and profitable, decision-making [@cortes2020OpensourceFramework;
 @finio2022SmartGrowth; @Kang2021; @Knaap2017; @knaap2023SegregatedDesign;
-@Rey2022a; @wei2022ReducingRacial]. On the scientific/academic side, many of the
+@Rey2022a; @wei2022ReducingRacial]. On the academic side, many of the
 era's pressing problems are spatial or urban in form (e.g. the housing
 affordability crisis, climate change, economic transformation, globalization,
 and continuing processes of segregation and gentrification), thus requiring
