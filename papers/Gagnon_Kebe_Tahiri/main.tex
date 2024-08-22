@@ -103,32 +103,30 @@ if __name__ == "__main__":
 
     # Load parameters
     Params.load_from_file()
-    # Load the sequence file
-    sequenceFile = utils.loadSequenceFile(Params.reference_gene_filepath)
-    # Create an AlignSequences object
-    align_sequence = AlignSequences(sequenceFile)
 
-    # Load climatic data 
-    climatic_data = pd.read_csv(Params.file_name)
+    # Load the sequence file
+    sequence_file = utils.load_sequence_file(Params.reference_gene_filepath)
+
+    # Create an AlignSequences object
+    align_sequence = AlignSequences(sequence_file)
+
+    # Load attribute data 
+    attribute_data = pd.read_csv(Params.file_name)
 
     # Perform the alignment of sequences
     alignments = align_sequence.align()
 
     # Generate phylogenetic trees
-    geneticTrees = utils.geneticPipeline(alignments.msa)
+    genetic_trees = utils.genetic_pipeline(alignments.msa)
     
     # Create a GeneticTrees object
-    trees = GeneticTrees(trees_dict=geneticTrees, 
-                        format="newick")
+    trees = GeneticTrees(trees_dict=genetic_trees, format="newick")
    
-    # Generate climatic trees (combines environmental, geographical, and climatic data)
-    climaticTrees = utils.climaticPipeline(climatic_data)
+    # Generate attribute trees
+    attribute_trees = utils.attribute_pipeline(attribute_data)
     
     # Filter the results
-    utils.filterResults(climaticTrees, 
-                        geneticTrees, 
-                        climatic_data)
-
+    utils.filter_results(attribute_trees, genetic_trees, attribute_data)
 \end{lstlisting}
 
 \begin{enumerate}
@@ -156,17 +154,19 @@ where $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of splits in trees $T_1$ and 
 
 %\autoref{lst:robinsonFoulds}.
 \begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds distance using the ete3 package in the aPhyloGeo package.]
-    def robinsonFoulds(tree1, tree2):
+import ete3
+
+def robinson_foulds(tree1, tree2):
+    rf = 0
+    tree1_newick = ete3.Tree(tree1.format("newick"), format=1)
+    tree2_newick = ete3.Tree(tree2.format("newick"), format=1)
+
+    rf, rf_max, common_leaves = tree1_newick.robinson_foulds(tree2_newick, 
+                                                             unrooted_trees=True)
+    if len(common_leaves) == 0:
         rf = 0
-        tree1_newick = ete3.Tree(tree1.format("newick"), format=1)
-        tree2_newick = ete3.Tree(tree2.format("newick"), format=1)
 
-        rf, rf_max, common_leaves = tree1_newick.robinson_foulds(tree2_newick, 
-                                                                 unrooted_trees=True)
-        if len(common_leaves) == 0:
-            rf = 0
-
-        return rf, rf / rf_max
+    return rf, rf / rf_max
 \end{lstlisting}
 
 \subsection{Normalized Robinson-Foulds distance}\label{RFnorm}
@@ -195,24 +195,29 @@ where $p_i$ and $q_i$ are the components of the vectors.
 
 %\autoref{lst:euclideanDist}.
 \begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the Euclidean distance using the ete3 package in the aPhyloGeo package]
-    def euclideanDist(tree1, tree2):
-        
-        tns = dendropy.TaxonNamespace()
-        
-        tree1_tc = dendropy.Tree.get(data=tree1.format("newick"), 
-                                     schema="newick", 
-                                     taxon_namespace=tns)
-                                     
-        tree2_tc = dendropy.Tree.get(data=tree2.format("newick"), 
-                                     schema="newick", 
-                                     taxon_namespace=tns)
-                                     
-        tree1_tc.encode_bipartitions()
-        tree2_tc.encode_bipartitions()
+import dendropy
 
-        ed = dendropy.calculate.treecompare.euclidean_distance(tree1_tc, tree2_tc)
+def euclidean_dist(tree1, tree2):
+    tns = dendropy.TaxonNamespace()
 
-        return ed
+    tree1_tc = dendropy.Tree.get(
+        data=tree1.format("newick"), 
+        schema="newick", 
+        taxon_namespace=tns
+    )
+    
+    tree2_tc = dendropy.Tree.get(
+        data=tree2.format("newick"), 
+        schema="newick", 
+        taxon_namespace=tns
+    )
+
+    tree1_tc.encode_bipartitions()
+    tree2_tc.encode_bipartitions()
+
+    ed = dendropy.calculate.treecompare.euclidean_distance(tree1_tc, tree2_tc)
+
+    return ed
 \end{lstlisting}
 
 \subsection{Least-Squares distance}\label{LS}
@@ -233,13 +238,15 @@ def least_square(tree1, tree2):
     ls = 0.0
     leaves = tree1.get_terminals()
 
-    leaves_name = list(map(lambda x: x.name, leaves))
+    leaves_name = [leaf.name for leaf in leaves]
+    
     for i in leaves_name:
         leaves_name.pop(0)
         for j in leaves_name:
             d1 = tree1.distance(tree1.find_any(i), tree1.find_any(j))
             d2 = tree2.distance(tree2.find_any(i), tree2.find_any(j))
             ls += abs(d1 - d2)
+    
     return ls
 \end{lstlisting}
 
