@@ -494,7 +494,7 @@ that do transition tend to be those on the edges of large contiguous groups (i.e
 tends to happen along the periphery and move inward, implying a certain kind of spatial
 dynamic). Following, we can also use the sequence of labels to create a spatial Markov
 transition model. These models examine how often one neighborhood type transitions into
-another type–then how these transition rates change under different conditions of
+another type, then how these transition rates change under different conditions of
 spatial context.
 
 Here, a key question of interest concerns whether there is spatial patterning in the
