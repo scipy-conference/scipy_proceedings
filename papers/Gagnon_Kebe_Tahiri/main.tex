@@ -71,11 +71,13 @@ Only salinity was removed from the previously selected numerical attributes ($S^
 Wind speed (m/s) (see Figure \ref{fig:fig2}d) and wind direction at the start and end of sampling were also included, given the contribution of wind to the restructuring of the benthic ecosystem through water transport \citep{waga_recent_2020,saeedi_environmental_2022}. The wind direction at the start of sampling comprises six orientations: South-West ($n=22$), South ($n=15$), North-East ($n=9$), South-South-East ($n=9$), North-West ($n=5$), and East ($n=2$); while that at the end of sampling is composed of seven orientations: South ($n=15$), South-West ($n=15$), North-East ($n=9$), West-South-West ($n=7$), South-East ($n=6$), North-North-West ($n=5$), South-South-East ($n=3$), and East ($n=2$). 
 
 \subsection{Selected attributes in the bold system's database}
+\subsubsection{Taxomic attributes} 
 The family, genus, and scientific name of the cumacean sampled have been integrated into our data. These comprise seven families: Diastylidae ($n=21$), Lampropidae ($n=13$), Leuconidae ($n=12$), Astacidae ($n=7$), Bodotriidae ($n=4$), Ceratocumatidae ($n=3$), and Pseudocumatidae ($n=2$). A total of 21 cumacean species were found in our sample (see Figure \ref{fig:fig3}).
 
 We also included the sample identity (id) of each cumacean sampled. Some specimens were identified only to genus (one specimen) or family (five specimens) in our sample.
 
 \subsection{Selected attributes from article \cite{uhlir_adding_2021}} 
+\subsubsection{Other environmental attributes} 
 The habitat and water mass of the sampling points were the only attributes taken directly from Table 1 of \citep{uhlir_adding_2021}. Thus, the water mass definitions described by \citep{hansen_north_2000, brix2010distribution, ostmann_marine_2014} were used as a reference for the GIN seas around Iceland: Arctic Polar Water (APW, $n=15$), Iceland Sea Overflow Water (ISOW, $n=15$), North Atlantic Water (NAW, $n=9$), Arctic Polar Water/Norwegian Sea Arctic Intermediate Water (APW/NSAIW, $n=7$), warm Norwegian Sea Deep Water (NSDWw, $n=8$), Labrador Sea Water (LSW, $n=3$), cold Norwegian Sea Deep Water (NSDWc, $n=3$), and Norwegian Sea Arctic Intermediate Water (NSAIW, $n=2$) (see Figure \ref{fig:fig4}). In terms of habitat, we considered the three categories used in \citep{uhlir_adding_2021}: deep sea ($n=38$), shelf ($n=15$), and slope ($n=9$) (see Figure \ref{fig:fig5}).
 
 To better interpret benthic species' relationship and evolutionary responses, genetic data are required \citep{wilson_speciation_1987, uhlir_adding_2021}. Thus, the aligned DNA sequence of the 16S rRNA mitochondrial gene region from each of the samples was included in our analyses. This region is standard in phylogeny and phylogeography studies \citep{hugenholtz1998impact} and sufficiently conserved over time to guarantee exact alignments between different species or populations \citep{saccone1999evolutionary}. We examined 62 of the 306 aligned DNA sequences used for phylogeographic analyses by \citep{uhlir_adding_2021}. As some specimens in our sample have their DNA sequence duplicated, or even quadruplicated with a difference of one or two nucleotides, we took into account the longest-aligned DNA sequence of each specimen.
@@ -181,7 +183,7 @@ For example, if the size of tree A differs due to missing data, this normalized 
 
 Euclidean distance measures the distance between two points in a multi-dimensional space. In our study, it is used to compare vectors of habitat attributes between species (see Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}).
 
-By converting habitat attribute values into vectors, we use Euclidean distance to assess how combinations of habitat attributes integrally affect the phylogenetic trees of cumacean species. For instance, species with similar habitat attribute vectors (low Euclidean distance) may share closer evolutionary relationships. In contrast, those with a large difference in habitat vectors (high Euclidean distance) may reveal evolutionary divergences.
+By converting habitat attribute values into vectors, we measure the Euclidean distance between vectors to quantify the dissimilarity between them of different cumacean species. This distance allows us to interpret how these differences influence their evolutionary relationships. For instance, species with similar habitat attribute vectors (low Euclidean distance) may share closer evolutionary relationships. In contrast, those with a large difference in habitat vectors (high Euclidean distance) may reveal evolutionary divergences.
 
 For vectors $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n)$, the Euclidean distance between these vectors is calculated as:
 
@@ -215,15 +217,15 @@ where $p_i$ and $q_i$ are the components of the vectors.
 
 \subsection{Least-Squares distance}\label{LS}
 
-The Least squares distance measures differences by considering the sum of the squares of the differences between the observed values and the estimated values provided by the model. In our context, when comparing a phylogenetic tree with other trees, all constructed using different habitat factors, it quantifies the overall topological dissimilarity of the initial phylogenetic tree, taking into account the position of nodes and branches (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
+The Least squares distance measures the differences between observed and the estimated values by summing the squares of these differences. In the context of phylogeographic trees, it quantifies the overall topological dissimilarity, considering the positions of nodes and branches (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
 
-Least-squares distance allows us to elucidate the specific influences of various attributes on tree composition concerning branch position and length, and to reform evolutionary links between cumacean species.
-
-For observed values $y_i$ and estimated values $\hat{y}_i$:
+This metric allows us to understand how these different habitat attributes influence the topological structure of phylogenetic trees. For example, by comparing a tree constructed from the habitat attribute A with trees built from other attributes, the least-squares distance reveals the impact, high or low, of attribute A on changes in branch position and length.
 
 \begin{equation}\label{eq:ls}
     d_{\text{LS}} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
 \end{equation}
+
+where $y_i$ and $\hat{y}_i$ are the observed and estimated values, respectively.
 
 %\autoref{lst:LeastSquare}.
 \begin{lstlisting}[label=lst:LeastSquare, language=Python, caption=Python script for calculating the Least-Square distance using the ete3 package in the aPhyloGeo package]
