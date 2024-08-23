@@ -53,6 +53,8 @@ project:
     HCD: human-centered design
     CyAN: Cyanobacteria Assessment Network
     CNN: convolutional neural network
+    OLCI: Ocean and Land Colour Instrument
+    MERIS: Medium Resolution Imaging Spectrometer
   error_rules:
     - rule: doi-exists
       severity: ignore
