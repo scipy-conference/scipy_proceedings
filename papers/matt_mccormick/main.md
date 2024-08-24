@@ -328,16 +328,28 @@ The interface types include:
 - _Image_ - Representation of an N-dimensional scientific image.
 - _JsonCompatible_ - A type that can be represented in JSON.
 - _Mesh_ - Representation of an N-dimensional mesh.
+- _PointSet_ - Representation of a set of N-dimension points.
 - _PolyData_ - Representation of a polydata, 3D geometric data for rendering that represents a collection of points, lines, polygons, and/or triangle strips.
 - _TextFile_ - Representation of a text file on a filesystem. For performance reasons, use TextStream when possible, instead of TextFile.
 - _TextStream_ - Representation of a text stream. For performance reasons, use TextStream when possible, instead of TextFile.
+- _Transform_ - Representation of a parametric spatial transformation that can be applied to an Image, Mesh, PointSet, PolyData.
 
 This model, combined with ITK-Wasm’s architecture, can perform analysis and visualization using natural language inputs provided to large-language artificial intelligence models. LinkML’s Pydantic models and TypeScript models enable interfaces like the Bioimage Chatbot [@doi:10.48550/arXiv.2310.18351; @doi:10.5281/zenodo.10032227] to semantically understand the needs of biologists without programming knowledge, allowing the system to execute desired operations or generate scripts for batch execution.
 
 ## Results
 
+### Example application: generation of multiscale OME-Zarr images
+
 A notable application of ITK-Wasm is the generation of multiscale OME-Zarr images, a cloud-optimized bioimaging format with broad international adoption [@doi:10.1007/s00418-023-02209-1; @doi:10.1038/s41592-021-01326-w].
 To generate OME-Zarr's multiscale representation of multidimensional bioimages, anti-aliasing filters must be applied.
+
+:::{figure} figures/OME-Zarr.svg
+:label: fig:ome*zarr
+A comparison of [NRRD (Nearly Raw Raster Data)](http://teem.sourceforge.net/nrrd/format.html), a traditional scientific image file format to the [OME-Zarr](https://ngff.openmicroscopy.org/) scientific image file format, a modern, web-friendly file format.
+NRRD is a single, monolithic file with header and image pixel data formats concatenated. The header has a bespoke format and the pixel data is often compressed with the zlib compression codec.
+In contrast, OME-Zarr has a hierarchical structure, sometimes encoded in folders and files. Metadata is stored in [JSON](https://en.wikipedia.org/wiki/JSON) files. Image pixel data is stored in separate N-dimensional chunks that are compressed with fast, high compression ratio modern codecs like [LZ4](<https://en.wikipedia.org/wiki/LZ4*(compression_algorithm)>) or [Zstd](https://en.wikipedia.org/wiki/Zstd). Additionally, the image is represented at multiple resolutions.
+OME-Zarr's chunk, highly-compressed, multiscale representation makes it ideal for uses cases like cloud-computing or extremely large images. However, this requires generation of the reduced resolution scales.
+:::
 
 In the NGFF-Zarr package, ITK-Wasm anti-aliasing filters efficiently produce OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments [@doi:10.5281/zenodo.8092821].
 Since the interface type's Python representation are Python data classes comprised of standand Python data types and NumPy arrays, they are trivially and efficiently serialized for parallel computing with Dask.
@@ -360,4 +372,4 @@ ITK-Wasm stands at the forefront of fostering interoperability, multi-language p
 Links:
 
 - Documentation: https://wasm.itk.org/
-- Source code: https://github.com/InsightSoftwareConsortium/itk-wasm
+- Source code: https://github.com/InsightSoftwareConsortium/ITK-Wasm

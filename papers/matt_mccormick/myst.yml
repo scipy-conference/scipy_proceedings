@@ -40,10 +40,14 @@ project:
     CLI: Command Line Interface
     GUI: Graphical User Interface
     NPU: Neural Processing Unit
+    NRRD: Nearly Raw Raster Data
     FPGA: Field-Programmable Gate Array
     FAIR: Findable, Accessible, Interoperable, and Reusable
     NPM: Node Package Manager
     PNPM: Performant Node Package Manager
+    JSON: JavaScript Object Notation
+    LZ4: Lempel-Ziv 4
+    Zstd: Zstandard
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
