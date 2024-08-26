@@ -1,43 +1,45 @@
 ---
 title: Transformative Approaches in Scientific Publishing
 abstract: |
-  Difficult problems that are globally relevant and urgent - like climate change, pandemics, and water security - require us to radically rethink how we publish and work on scientific breakthroughs.
+  Difficult problems that are globally relevant and urgent — like climate change, pandemics, and water security — require us to radically rethink how we publish and work towards scientific breakthroughs.
   Advances in technology for data workflows have increased the speed and scope of scientific discovery.
-  However, scientific dialogue still uses outdated technology for communicating and sharing knowledge, relying on static PDFs that are a poor representation of the complexities of science.
+  However, scientific dialogue still uses outdated technology for communicating and sharing knowledge, relying on static PDFs that poorly represent of the complexities of science.
   This gap impedes the speed of research dissemination, reuse, and uptake: we require new mediums to compose ideas and ways to share research findings as early and as often as possible; this gap is even more evident in the computational sciences.
-  In this paper we discuss two tools for scientific dialogue, MyST Markdown and Curvenote, and illustrate examples of improving metadata, the reading experience, and transforming publishing practices for individuals and societies.
+  In this paper we discuss two tools for scientific dialogue, MyST Markdown and Curvenote, and illustrate examples of improving metadata, reimagining the reading experience, and transforming publishing practices for individuals and societies.
 ---
 
 ## Introduction and Motivation
 
 In the face of mounting global challenges such as climate change, pandemics, and water security, the imperative for rapid, effective scientific discovery and dissemination has never been more acute.
 The pace at which these problems evolve and impact societies worldwide demands an equally dynamic and innovative approach to how scientific research is published.
-Despite significant advancements in technology that enhance data collection, analysis, and workflow efficiency, the mechanisms through which scientific knowledge is shared have remained largely unchanged for decades [@10.4230/DagMan.1.1.41].
-The prevalent reliance on static PDF formats for research papers starkly contrasts with the complex, data-driven and increasingly computational nature of modern science, creating bottlenecks in knowledge dissemination and uptake.
+Despite significant advancements in technologies that enhance data collection, analysis, and workflow efficiency, the mechanisms through which scientific knowledge is shared have remained largely unchanged for decades [@10.4230/DagMan.1.1.41].
+The widespread reliance on static PDF formats for research papers starkly contrasts with the complex, data-driven and increasingly computational nature of modern science, creating bottlenecks in knowledge dissemination and uptake.
 
-This paper documents some of the design decisions made to address these challenges within two integrated tools: (1) MyST Markdown (Markedly Structured Text, <https://mystmd.org>), a community-run open-source project[^myst-jep], which is a text-based authoring framework that integrates computational content (e.g. Jupyter Notebooks); and (2) Curvenote (<https://curvenote.com>), which is a set of open-source utilities, command-line tools, actions and services[^curvenote] aimed to improve scientific publishing by journals, societies, lab-groups, and individuals.
+This paper documents some of the design decisions made to address challenges in science communication and publishing in two tools: (1) MyST Markdown (Markedly Structured Text, <https://mystmd.org>), a community-run open-source Jupyter sub-project[^myst-jep], which is a text-based authoring framework that integrates computational content (e.g. Jupyter Notebooks); and (2) Curvenote (<https://curvenote.com>), which is a set of open-source utilities, command-line tools, actions and services[^curvenote] aimed to improve scientific publishing by journals, societies, lab-groups, and individuals.
 In this article we provide background, motivation and perspective for our efforts in developing new open-source tools for science communication, with examples ranging from individual authors to journal administrators.
-We give an overview of MyST Markdown but would like to reiterate that MyST Markdown is a community-run project, we do not speak for all of the participants, and the community has varied goals for the project (including API documentation, community guidelines, educational tutorials).
+Though we present an overview of MyST Markdown, it should be emphasized that MyST Markdown is a community-run project and the authors of this article do not speak for all project participants; the community has varied goals for the project (including API documentation, community guidelines, educational tutorials).
 Our focus in this article is to give our perspectives on scientific writing and publishing and how it intersects with these open-community projects in addition to the open-source efforts that Curvenote is undertaking around scientific publishing.
 
-[^myst-jep]: The MyST Markdown project is currently hosted by Executable Books (<https://executablebooks.org>), and we are in the process of moving this into the Jupyter Community through a Jupyter Enhancement Proposal [](https://github.com/jupyter/enhancement-proposals/pull/123).
+[^myst-jep]: MyST Markdown became a Jupyter Project on June 28, 2024 [](https://github.com/jupyter/enhancement-proposals/pull/123), and was previously hosted by Executable Books (<https://executablebooks.org>).
 [^curvenote]:
     Curvenote is a company that provides many different tools for authoring and publishing content, including a collaborative WYSIWYG online editor that can export to MyST Markdown.
-    In this article we only discuss our open-source tools as well as highlight relevant experiences from Curvenote's partners when they relate to general ideas for improving scientific publishing.
+    In this article we discuss Curvenote's open-source tools and highlight ideas from working with Curvenote's partners when they pertain to improving scientific publishing.
 
-Our goals in developing these integrated tools and workflows address the related challenges of _authoring_ and _publishing_ in the context of computational, open-science documents and lowering the barrier to continuously releasing and iterating on scientific ideas in the open.
-Introducing authoring tools that allow for structured, interactive and computational content as researchers are writing can additionally change the way it is checked, shared and published — enabling faster iterations and direct ties to reproducible, interactive content.
+In developing these integrated tools and workflows, our goal is to lower the barriers to continuously releasing and iterating on scientific ideas in the open and address the related challenges of _authoring_ and _publishing_ in the context of computational, open-science documents.
+Introducing authoring tools that can understand and express structured, interactive, and computational content has the potential to fundamentally change the way scientific writing is checked, shared, and published — enabling faster iterations and direct ties to reproducible, interactive content.
 
 (sec:structured-science)=
 
 ### Authoring Structured Content
 
 There are currently many challenges for individuals or groups to author research information that can be shared in a structured and rigorous way.
-By this we mean the things that _structurally_ set a scientific article apart from, for example, a blog post: structured content, cross-references, valid citations with persistent identifiers (PIDs), and standardized metadata for licensing, funding information, authors and affiliations.
-This structured content and metadata as well as the standards behind them are what defines the "scientific record" and enables archiving, discoverability, accessibility, interoperability and the ability to reuse or cite content [@10.1038/sdata.2016.18].
+By this we mean the things that _structurally_ set a scientific article apart from, for example, a blog post: structured content, cross-references, valid citations with persistent identifiers (PIDs), and standardized metadata for licensing, funding information, authors, and affiliations.
+These structured content and metadata, as well as the standards behind them, are what define the "scientific record" and enable archiving, discoverability, accessibility, interoperability and the ability to reuse or cite content [@10.1038/sdata.2016.18].
 One metric for measuring the difficulty of satisfying these scientific standards is to look at the direct costs that are spent on transforming author submissions (e.g. a PDF or a Word Document) into something that conforms to these standards and is ultimately archived.
-In scientific publishing, about 15% of Article Processing Charges (APCs) go to direct publication costs[^pub-costs] [@10.12688/f1000research.27468.2], which provides a _very_ rough global estimate of over USD\$2 billion dollars[^pub-revenue] that is spent on transforming author submissions (e.g. a word-document, LaTeX, or a PDF) into a copyedited, well-formatted, typeset document that can be archived with appropriate metadata [@10.4045/tidsskr.20.0118]; this estimate does not include the approximately USD\$230 million spent on reformatting articles by scientists _before_ publication [@10.1186/s12916-023-02882-y].
-Many of these processes are hidden from authors[^hidden-processes] as well as actionable access to many of the benefits of structured data beyond citation graphs (e.g. "How many citations did this paper get?").
+In scientific publishing, about 15% of Article Processing Charges (APCs) go to direct publication costs[^pub-costs] [@10.12688/f1000research.27468.2].
+When applied to the global publishing industry[^pub-revenue], this figure suggests that approximately USD\$2 billion dollars is spent on transforming author submissions (e.g. a word-document, LaTeX, or a PDF) into a copyedited, well-formatted, typeset document that can be archived with appropriate metadata [@10.4045/tidsskr.20.0118].
+This estimate does not include the approximately USD\$230 million spent on reformatting articles by scientists _before_ publication [@10.1186/s12916-023-02882-y].
+Many of these processes are hidden from authors[^hidden-processes] as well as actionable access to many of the benefits of structured data beyond citation graphs.
 
 [^pub-revenue]: Global revenue in scientific publishing is around USD$19 billion, with over 50% of the market controlled by Elsevier, Wiley, Taylor & Francis, Springer Nature and SAGE [@10.4045/tidsskr.20.0118].
 [^pub-costs]: Direct publication costs include: checking of manuscript, copyediting, typesetting, formatting figures/graphs/tables, XML and metadata preparation, and handling corrections [@10.12688/f1000research.27468.2].
@@ -45,9 +47,10 @@ Many of these processes are hidden from authors[^hidden-processes] as well as ac
     Much of the production publication processes are hidden from scientific authors, with typesetting focused on cross-references, linking citations, ensuring citations have appropriate IDs (e.g. DOIs) as well as conversion to JATS XML (a NISO standard for archiving scientific articles), metadata preparation to [CrossRef](https://crossref.org), and archiving services like LOCKSS (<https://lockss.org>) and CLOCKSS (<https://clockss.org>).
     Additionally, the many proprietary services and tools to create both online and PDF outputs of the authors work that are nicely typeset for reading on the web or online.
 
-One goal of the MyST Markdown project is to _dramatically_ reduce these direct-publication costs[^zero-cost] and directly provide structured data as an output of authoring as well as the ability to export content in a variety of formats including HTML, PDF and JATS-XML (a NISO standard for archiving scientific articles).
-In this article, we will demonstrate that having structured data throughout authoring leads to a number of novel reading and authoring experiences [e.g. @eg:hover], can provide new opportunities for reuse and quality checks when publishing [e.g. @eg:checks].
-Furthermore, these transformation processes can be run _continuously_ opening the possibilities for faster feedback [See @sec:continuous-science], iterative drafts, small tweaks and versioned improvements that otherwise would not be worth the time and cost.
+One goal of the MyST Markdown project is to _dramatically_ reduce these direct-publication costs[^zero-cost] and directly provide direct unfettered access to structured data as an output of authoring.
+The availability of this structured data directly enables exported content in a variety of formats including HTML, PDF and JATS-XML (a NISO standard for archiving scientific articles).
+In this article, we will demonstrate that having structured data throughout authoring can lead to a number of novel reading and authoring experiences [e.g. @eg:hover], and can provide new opportunities for reuse and quality checks when publishing [e.g. @eg:checks].
+Furthermore, these transformation processes can be run _continuously_, opening the possibilities for faster feedback [See @sec:continuous-science], iterative drafts, small tweaks and versioned improvements that otherwise would not be worth the time and cost.
 
 [^zero-cost]:
     The cost of transforming author submissions to produce structured content and metadata should approach zero, at least for a subset of users.
@@ -63,18 +66,18 @@ There are a host of challenges from user-interface design, to maintenance, to ar
 Many other tools have worked on aspects of integrating computation into scientific articles, notably R-Markdown [@10.1201/9781138359444] and it's successor Quarto (<https://quarto.org>); both of these projects have similar aims to MyST Markdown.
 From a user-experience goals perspective, we are interested in questions such as:
 
-- how to make a change in a notebook figure and have that immediately show up in a document?
-- how to ensure that a p-value, for example, is computed and inserted directly from a computation, rather than through copy-and-paste?
-- how to expose interactivity and exploration that a researcher often has when analyzing a data-set?
-- how to provide and launch archived interactive computing environments?
+- how to make a change in a notebook figure and have that immediately show up in a document;
+- how to ensure computed values are inserted directly, rather than through copy-and-paste;
+- how to expose interactivity and exploration that a researcher often has when analyzing a data-set;
+- how to provide and launch archived interactive computing environments.
 
-These questions require authoring tools to be able to execute content, to integrate and display computational/interactive outputs directly in reading experiences, as well as scientific publishing systems that can understand and archive computational content (e.g. Docker containers).
+These questions require authoring tools to be able to execute content [c.f. @binder], to integrate and display computational/interactive outputs directly in reading experiences, as well as scientific publishing systems that can understand and archive computational content (e.g. Docker containers).
 This deep integration can open up possibilities of embedding interactive visualizations and computational notebooks directly into scientific documents [e.g. @eg:interactivity], transforming articles from static texts into rich, interactive, reproducible narratives.
 In 2023, the authors helped to lead several working groups related to these challenges as part of _Notebooks Now!_, a Sloan Foundation funded project led by the American Geophysical Union.
 Those working groups found that integrating computational documents, via Jupyter Notebooks, into scholarly publishing system requires a re-imagination of the publishing processes (from submission to peer-review to production to reading) and that many existing processes and platforms are ill-equipped to handle computational articles [c.f. @10.1029/2023EA003458].
 The "executable research articles" project out of eLife [@elife-era] has similar aims to _Notebooks Now!_, with some differences in how notebooks and articles are separated which we will discuss in @sec:computational-content.
 
-The ability to deeply link computational content into how we communicate science can improve reproducible practices, and surface more inter-linked content about methods and algorithms in use.
+The ability to deeply link computational content into how we communicate science can improve reproducible practices, and surface more interlinked content about methods and algorithms in use.
 If used to their full extent, these can also fully integrate live computational environments into scientific articles, which provides many exciting possibilities for interrogating and extending scientific data and methods.
 
 (sec:continuous-science)=
@@ -123,7 +126,7 @@ By moving to continuous practices and investing in the appropriate infrastructur
 
 ### Article Outline
 
-For research-communication to be transformative on a similar scale as open-source, researchers require modern tools for authoring and publishing.
+For research-communication to be transformative on a similar scale as open-source software, researchers require modern tools for authoring and publishing.
 There are two inter-related capabilities that are necessary for this transition:
 
 1. authoring mediums that support data, computation and structured content without the need for expensive typesetting; and
@@ -137,12 +140,13 @@ Our motivation is to enhance the _speed_ and _impact_ of research dissemination,
 ## Authoring Tools
 
 MyST Markdown (Markedly Structured Text, <https://mystmd.org>) is a community-driven markup language that is a superset of [CommonMark](https://commonmark.org/) (a standard form of Markdown) with special syntax for citations, cross-references, and block and inline extension points called "directives" and "roles".
-The block-level content provides multi-line containers surrounded by either backticks or colons; examples include callout panels, figures, equations and tables (see [documentation](https://mystmd.org)).
+The block-level content provides multi-line containers surrounded by either backticks or colons; examples include [callout panels](https://mystmd.org/guide/admonitions), [figures](https://mystmd.org/guide/figures), [equations](https://mystmd.org/guide/math) and [tables](https://mystmd.org/guide/tables) (see [documentation](https://mystmd.org)).
 There is also specialized support for the types of metadata that are important to collect for scientific articles (funding, ORCIDs, CRediT Roles, etc.).
 In 2022, the Executable Books project (<https://executablebooks.org>, which hosts Jupyter Book and MyST) started work on the `mystmd` command line interface (CLI), which was initially developed as the [Curvenote CLI](https://github.com/curvenote/curvenote), and later transferred to the ExecutableBooks project.
-This tool allows authors writing in MyST Markdown to easily build websites and documents and supports the JupyterLab MyST plugin.
+In June 2024, MyST Markdown officially became part of Project Jupyter (See [enhancement proposal](https://jupyter.org/enhancement-proposals/122-jupyter-book-incorporation/jupyter-book-incorporation.html)).
+This tool allows authors writing in MyST Markdown to easily build websites and documents and supports the [JupyterLab MyST plugin](https://github.com/jupyter-book/jupyterlab-myst).
 MyST is influenced by [reStructuredText (RST)](https://en.wikipedia.org/wiki/reStructuredText) and [Sphinx](https://www.sphinx-doc.org) – pulling on the nomenclature and introducing additional standards where appropriate.
-There are also many similarities of MyST Markdown to R-Markdown [@10.1201/9781138359444], Pandoc, and Quarto (<https://quarto.org>), especially in citation syntax and frontmatter structure.
+There are also many intentional similarities of MyST Markdown to R-Markdown [@10.1201/9781138359444], Pandoc, and Quarto (<https://quarto.org>), especially in citation syntax and frontmatter structure.
 The initial use case driving the development and design of MyST Markdown has been [JupyterBook](https://jupyterbook.org), which can create educational online textbooks and tutorials with Jupyter Notebooks and narrative content written in MyST.
 
 This article will not attempt to describe the markup syntax directly, for that we suggest browsing the documentation at <https://mystmd.org>, instead we will focus our attention on the use cases for scientific publishing that we are trying to make as easy as possible.
@@ -156,7 +160,7 @@ It is also possible to directly link to DOIs using `@10.5281/zenodo.6476040`, wh
 This enhanced-links concept can be extended to [Wikipedia](https://en.wikipedia.org/wiki/Wikipedia), RRIDs, RORs, GitHub issues or code, and other scientific databases to augment writing.
 For example, the link `<rrid:SCR_008394>` becomes <rrid:SCR_008394>, with rich-metadata and citations created.
 Wikipedia links come with previews, for example, `<wiki:gravitational_waves>` becomes <wiki:gravitational_waves>.
-GitHub links to pull-requests also give hover information (for example, this example admonition was implemented in [#87](https://github.com/executablebooks/myst-theme/pull/87)).
+GitHub links to pull-requests also give hover information (for example, the following link [#87](https://github.com/jupyter-book/myst-theme/pull/87) shows a hover preview of the GitHub pull request in the online-version).
 
 The use of DOIs and other structured scientific metadata can be reused in multiple different formats such as JATS XML and CrossRef deposits to create a DOI.
 Our goal with these integrations is to make the use of persistent identifiers (PIDs) both easy and rewarding to the author as they are writing; this metadata is generally only added at publication time.
@@ -198,7 +202,7 @@ abbreviations:
 ### Integrating Computational Content
 
 Beyond structured typography, integrated metadata and hover-previews, MyST Markdown understands computational content and has been integrated with Jupyter [@jupyter].
-The goal of this is two fold: (1) allowing for updates to computational content, figures, tables and calculations to directly update documents; and (2) to bring interactive figures and integrated computation directly into articles.
+The goal of this is two fold: (1) allowing for updates to computational content, figures, tables, and calculations to directly update documents; and (2) to bring interactive figures and integrated computation directly into articles.
 In the composition of a scientific narrative, scientists often use individual notebooks to create various components of their research (e.g. the preparation of a single figure, table or calculation).
 The outputs of these notebooks (a figure, table, or calculation) can then be used in a main, narrative-driven document — a scientific article or presentation.
 
@@ -234,7 +238,7 @@ Here we are aiming at a much richer, structured information commons that moves b
 :label: eg:interactivity
 MyST allows for the full reproducible environment to be specified (via REES) and reproduced through tools like MyBinder.
 Figures can be integrated directly into articles, pressing a button to launch live and interactive figures that build upon the Jupyter ecosystem.
-These tools build on the Jupyter protocols and reuse components from the JupyterLab ecosystem, extending that into various pages using a package called [`thebe`](https://github.com/executablebooks/thebe).
+These tools build on the Jupyter protocols and reuse components from the JupyterLab ecosystem, extending that into various pages using a package called [`thebe`](https://github.com/jupyter-book/thebe).
 
 ```{figure} ./images/thebe.*
 :label: fig:thebe
@@ -251,7 +255,7 @@ This is referred to as single-source publishing [c.f. @10.1109/MITP.2003.1176491
 
 :::{figure} ./images/myst-build.png
 :label: fig:export
-Export to PDF using LaTeX or Typst is supported for hundreds of different journal templates in addition to Microsoft Word or JATS XML, which is used throughout scientific publishing.
+Export to PDF using LaTeX or Typst is supported for hundreds of different journal templates in addition to Microsoft Word or JATS XML, which is used throughout scientific publishing (showing content from @10.1190/tle35080703.1; CC-BY-SA-4.0).
 :::
 
 With single-source publishing, we can rely on rich transformations of the source content that can create professional PDFs, interactive HTML, and structured metadata such as JATS XML, which is the current standard for scientific archiving and text-mining.
@@ -269,11 +273,11 @@ This is the approach that we take with Curvenote journals, and provide managed s
 
 You can also easily self-host a MyST Markdown site using GitHub Pages.
 To create a GitHub pages output you can run `myst init --gh-pages`, which will walk you through the steps of creating a GitHub action to publish your content as a static website.
-In this scenario, a static HTML site is built from your content which can be hosted as any other static website, while some of he advantages of dynamic hosting are lost, it is an easy and accessible way for individuals to self-publish.
+In this scenario, a static HTML site is built from your content which can be hosted as any other static website, while some of the advantages of dynamic hosting are lost, it is an easy and accessible way for individuals to self-publish.
 
 In 2024, Curvenote was asked to improve our integrations to GitHub to support the SciPy Proceedings and re-imagine a MyST based publishing approach that uses GitHub for open-peer-review, implementing a submission, editorial and peer review process with GitHub issues, PRs and actions as a fabric.
 The process previously used technology shared with the Journal of Open Source Software (JOSS), which popularized this approach [@10.7717/peerj-cs.147].
-The workflow was updated to use MyST Markdown for the authoring process[^also-latex] (previously RST and LaTeX were supported, and the build process was in Sphinx), and the submission process now uses the [Curvenote CLI](https://github.com/curvenote/curvenote) in combination with dedicated Curvenote GitHub Actions to build, check and preview the content of each commit, using GitHub workflows to automate the process, providing immedaite feedback for authors and the conference editorial team.
+The workflow was updated to use MyST Markdown for the authoring process[^also-latex] (previously RST and LaTeX were supported, and the build process was in Sphinx), and the submission process now uses the [Curvenote CLI](https://github.com/curvenote/curvenote) in combination with dedicated Curvenote GitHub Actions to build, check, and preview the content of each commit, using GitHub workflows to automate the process, providing immediate feedback for authors and the conference editorial team.
 
 [^also-latex]: LaTeX is also supported by parsing and rendering directly with the `mystmd` CLI, this is completed through [`@unified-latex`](https://github.com/siefkenj/unified-latex).
 
@@ -282,12 +286,12 @@ The workflow was updated to use MyST Markdown for the authoring process[^also-la
 ### Structural Checks
 
 The open-source Curvenote CLI (https://github.com/curvenote/curvenote) provides checks for the structure of a document to ensure it meets automated quality controls for things like references, valid links, author identifiers (e.g. ORCID), or funding information.
-Executing `curvenote check` in a MyST project will build the project and use the structured data to assess metadata (e.g. do authors provide ORCIDs), structural checks (e.g. does the article have an abstract; is the article below a word count?), and check that references have valid DOIs.
+Executing `curvenote check` in a MyST project will build the project and use the structured data to assess metadata (e.g. do authors provide ORCIDs), structural checks (e.g. does the article have an abstract?; is the article below a word count?), and check that references have valid DOIs.
 
 We have designed these checks in a similar pattern to linting and/or unit tests in scientific software, which continually give feedback on the structural health of a codebase with near immediate feedback to authors [@eg:checks].
-Authors can take action to improve their metadata directly, including DOIs, CRediT Roles, ORCIDs and structural checks such as word count or missing sections.
-For example, in the SciPy Proceedings in 2024, which used Curvenote checks for their submission system, required and optional metadata was improved by authors reacting to these automated checks without any intervention from the proceedings editorial team (e.g. [](https://github.com/scipy-conference/scipy_proceedings/pull/915) added CRediT roles, ORCIDs abbreviations, and DOIs to get a passing check [See @fig:actions]).
-This is a low-friction way of improving metadata at the time of authoring or submission to elevate content to the standards that are required for a certain type of publication (e.g. proceedings vs blog post vs peer-reviewed journal).
+Authors can take action to improve their metadata directly, by including DOIs, CRediT Roles, ORCIDs, and structural checks such as word count or missing sections.
+For example, in the SciPy Proceedings in 2024, which used Curvenote checks for their submission system, required and optional metadata were improved by authors reacting to these automated checks without any intervention from the proceedings editorial team (e.g. [](https://github.com/scipy-conference/scipy_proceedings/pull/915) added CRediT roles, ORCIDs abbreviations, and DOIs to get a passing check [See @fig:actions]).
+This is a low-friction way of improving metadata at the time of authoring or submission to elevate content to the standards that are required for a certain type of publication (e.g. proceedings vs. blog post vs. peer-reviewed journal).
 
 ::::{prf:example} Structural Checks and Metadata Checks
 :label: eg:checks
@@ -321,18 +325,19 @@ The checks in this example have promoted the author to improve metadata, see [](
 ### Enabling Researchers
 
 Although SciPy submissions are made in a central repository, the Curvenote checks can be setup on any repository.
-As MyST Markdown brings a researcher's writing back into a simple text based format, and if they are working with Jupyter notebooks, integrates directly with their computational analysis and results, a researcher's manuscript can be easily created and maintained as an integral part of their research code base and updated in lock step with it.
+As MyST Markdown brings a researcher's writing back into a simple text-based format, and if they are working with Jupyter notebooks, it integrates directly with their computational analysis and results.
+A researcher's manuscript can be easily created and maintained as an integral part of their research code base and updated in lock step with it.
 Imagine writing your next paper for submission to SciPy in a way where your draft was automatically rebuilt with the latest figures and data tables on every push to `main`, and any issues that you would hit on submission are flagged as they happen and so are more easily fixed, in context.
-This is just one of the ways that continuous science practices we spoke about in [@sec:continuous-science] can lead to radically improved efficiencies at scale.
+This is just one of the ways that continuous science practices we spoke about in @sec:continuous-science can lead to radically improved efficiencies at scale.
 
 Curvenote's tools build on this theme of enabling researchers to do more and to have more visibility into how their work will appear when submitted and published.
 The previews generated during the journal submission process, or by the actions on a researchers own repo can also be generated by an author at any time.
-By running `curvenote submit <journal> --draft` researchers can get a set of check results and a preview in the style of that venue, and where submissions of Computational Articles are permitted, authors and reviewers will even get feedback on reproducible environment check that any interactive figures and notebooks execute as expected.
+By running `curvenote submit <journal> --draft` researchers can get a set of check results and a preview in the style of that venue, and where submissions of `Computational Articles` are permitted, authors and reviewers will even get feedback on reproducible environment check that any interactive figures and notebooks execute as expected.
 
 ### Use Cases
 
 The rapid feedback in authoring [@sec:authoring] coupled with structural checks [@sec:checks], automation [@sec:automation], and archiving of the content opens workflows for varied sizes of teams to adopt these _continuous science_ practices.
-Whether it is individuals publishing static MyST Markdown sites, lab-groups creating a better archive to highlight the research contributions of their team (e.g. [Applied Geophysics](https://appliedgeophysics.org)), conference proceedings (e.g. [SciPy Proceedings](https://proceedings.scipy.org)), or more formalized society journals (e.g. [Physiome](https://journal.physiomeproject.org), [American Geophysical Union](https://agu.curve.space), [Elemental Microscopy](https://elementalmicroscopy.com/)) [@fig:use-cases].
+For example, individuals publishing static MyST Markdown sites, lab-groups creating a better archive to highlight the research contributions of their team (e.g. [Applied Geophysics](https://appliedgeophysics.org)), conference proceedings (e.g. [SciPy Proceedings](https://proceedings.scipy.org)), or more formalized society journals (e.g. [Physiome](https://journal.physiomeproject.org), [American Geophysical Union](https://agu.curve.space), [Elemental Microscopy](https://elementalmicroscopy.com/)) [@fig:use-cases].
 
 :::{figure} images/use-cases.png
 :label: fig:use-cases
@@ -346,7 +351,7 @@ Scientific publishing infrastructure is disconnected from the day-to-day workflo
 These misalignments are particularly pronounced in computational disciplines, where rapid evolution of methodologies, software, and data demands equally dynamic and interconnected platforms.
 This gap — between the authoring/doing of research and the communicating/publishing of the research — slows the speed of research dissemination, reuse, and uptake and completely impedes "networked knowledge" and importing/reusing work in a structured way.
 For example, "importing" visualizations, equations or any other deeply-linked content – including provenance information – into new research articles, documentation or educational sites is completely impossible in today’s research ecosystem.
-As a metaphor, compare open-access science to open-source programming: it would be a world without package managers to share, version, reuse and rapidly build upon other peoples work in a structured way.
+As a metaphor, compare open-access science to open-source programming: it would be a world without package managers to share, version, reuse, and rapidly build upon other peoples work in a structured way.
 The open-source ecosystem would not exist without this infrastructure.
 
 Open infrastructure for communicating science also has to be easy to integrate into existing tools, support computational, interactive components, be archivable for the long term, and be adopted by our existing sociotechnical system of societies, journals, and institutions.
@@ -368,5 +373,6 @@ Improvements to scientific publishing require many diverse community efforts to 
 
 Portions of this manuscript have been previously shared in the Curvenote and MyST Markdown documentation.
 The authors would like to thank Lindsey Heagy, Arfon Smith, Chris Holdgraf, Greg Caporaso, Jim Colliander, Fernando Perez, J.J. Allaire, and Kristen Ratan who have provided input on versions of these ideas over the last few years.
+We would also like to thank the reviews Nate Jacobs, Angus Hollands, Lindsey Heagy, Stefan van der Walt, Andy Terrel, and Hongsup Shin who helped improved the manuscript.
 Funding for portions of this work have come from the Sloan Foundation (for MyST Markdown and _Notebooks Now!_) and Alberta Innovates (for the initial version of the Curvenote CLI, which became `mystmd`).
 Thank you to the growing list of MyST Markdown contributors who continue to make MyST a fantastic community project.
