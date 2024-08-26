@@ -365,7 +365,23 @@ OME-Zarr's chunk, highly-compressed, multiscale representation makes it ideal fo
 
 As detailed by the [Nyquist-Shannon Sampling Theorem](https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem), high frequency content in an image must be reduced before downsampling to avoid aliasing artifacts.
 
-In the NGFF-Zarr package, ITK-Wasm anti-aliasing filters efficiently produce OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments [@doi:10.5281/zenodo.8092821].
+In the NGFF-Zarr package, ITK-Wasm anti-aliasing filters efficiently produce OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments [@doi:10.5281/zenodo.8092821]. While ITK-Wasm supports making general scientific C++ codes accessibly in wasm, in this example we will examine how the `itk::DiscreteGaussianImageFilter` is applied to address this problem [@Johnson2015-qc; @Johnson2015-ur; @McCormick2014-od].
+
+We apply the N-dimensional gaussian filter:
+
+```{math}
+G(\mathbf{x}; \sigma) = \frac{1}{(2\pi\sigma^2)^{n/2}} \exp\left(-\frac{\|\mathbf{x}\|^2}{2\sigma^2}\right)
+```
+
+Where:
+
+- $G(\mathbf{x}; \sigma)$ is the Gaussian filter function
+- $\mathbf{x}$ is an n-dimensional vector representing spatial coordinates
+- $\sigma$ is the standard deviation of the Gaussian distribution
+- $n$ is the number of dimensions
+- $|\mathbf{x}|^2$ is the squared Euclidean norm of $\mathbf{x}$
+
+For downsampling, we use $\sigma^2 = (k^2 - 1^2)/(2\sqrt{2\ln(2)})^2$ where $k$ is the downsampling factor, which is optimal [@doi:10.1007/978-3-319-24571-3_81].
 
 Since the interface type's Python representation are Python data classes comprised of standand Python data types and NumPy arrays, they are trivially and efficiently serialized for parallel computing with Dask.
 Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
@@ -378,7 +394,7 @@ WebAssembly was designed with interoperability in mind. Initially supporting lan
 2. **WebAssembly Interface Types**: Standardizes the way Wasm modules interact with each other and with host environments, simplifying the integration process.
 3. **Component Model**: An emerging standard that aims to improve modularity and reuse of Wasm components, further enhancing interoperability .
 
-ITK-Wasm provides a robust framework for scientific computing that leverages WebAssembly's strengths. The framework bridges the gap between web-based and native applications, enabling high-performance, cross-platform scientific analysis. By integrating the principals of the WebAssembly Component Model, ITK-Wasm enhances interoperability and sustainability, allowing scientific Python to thrive in a multi-language ecosystem.
+ITK-Wasm provides a robust framework for scientific computing that leverages WebAssembly's strengths. The framework bridges the gap between web-based and native applications, enabling high-performance, cross-platform scientific analysis. By integrating the principals of the WebAssembly Component Model, ITK-Wasm enhances interoperabnornirility and sustainability, allowing scientific Python to thrive in a multi-language ecosystem.
 
 ## Conclusion
 
