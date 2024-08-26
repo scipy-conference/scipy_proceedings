@@ -13,6 +13,10 @@ project:
       affiliations:
         - Kitware, Inc.
       corresponding: true
+    - name: Paul Elliott
+      email: paul.elliott@kitware.com
+      affiliations:
+        - Kitware, Inc.
   keywords:
     - reproducibility
     - sustainability

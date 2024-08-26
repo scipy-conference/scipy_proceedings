@@ -21,7 +21,7 @@
                     "coordinateTransformations": [
                         {
                             "scale": [
-                                1.0,
+                                1,
                                 0.527344,
                                 0.527344
                             ],
@@ -29,9 +29,9 @@
                         },
                         {
                             "translation": [
-                                -250.0,
-                                -165.0,
-                                -135.0
+                                -250,
+                                -165,
+                                -135
                             ],
                             "type": "translation"
                         }
@@ -42,17 +42,17 @@
                     "coordinateTransformations": [
                         {
                             "scale": [
-                                0.527344,
+                                1,
                                 1.054688,
-                                2.0
+                                1.054688
                             ],
                             "type": "scale"
                         },
                         {
                             "translation": [
-                                -135.0,
+                                -250,
                                 -164.736328,
-                                -249.5
+                                -134.736328
                             ],
                             "type": "translation"
                         }
@@ -63,17 +63,17 @@
                     "coordinateTransformations": [
                         {
                             "scale": [
-                                4.0,
+                                2,
                                 2.109376,
-                                1.054688
+                                2.109376
                             ],
                             "type": "scale"
                         },
                         {
                             "translation": [
-                                -248.5,
+                                -249.5,
                                 -164.208984,
-                                -134.736328
+                                -134.208984
                             ],
                             "type": "translation"
                         }

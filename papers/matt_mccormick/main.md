@@ -30,12 +30,12 @@ Results on a simple webpage, hosted for free on GitHub Pages, are dynamically ge
 Presets load input data and set analysis parameters to dynamically reproduce the article's figures.
 Additionally, readers can modify parameters to observe their effects or run the algorithm on their own image data.
 
-:::{figure} figures/anisotropic_diffusion.png
+::::{figure} figures/anisotropic_diffusion.png
 :label: fig:anisotropic_diffusion
 Open science interactive figures built with ITK.js, the predecessor to ITK-Wasm [@McCormickAnisotropicDiffusionLBR].
 The sustainability and accessibility of this interactive open science figure are remarkable, thanks to the utilization of open web technologies.
 These technologies, based on open standards, ensure compatibility across different systems and long-term support. This web application has continued to function flawlessly for over nine years without any maintenance, demonstrating its resilience and sustainability. It is hosted for free, with computations running directly on the reader's system, eliminating the need for server-side resources. The application requires zero installation and can be accessed with just a few clicks, allowing users to easily reproduce results or apply the technique to their own data.
-:::
+::::
 
 The key performance improvement with asm.js was its ability to utilize the JavaScript engine's just-in-time (JIT) compilation to execute code faster than traditional JavaScript. However, asm.js had limitations, including verbose code and the overhead of JavaScript's garbage collection and dynamic typing.
 
@@ -340,18 +340,33 @@ This model, combined with ITK-Wasm’s architecture, can perform analysis and vi
 
 ### Example application: generation of multiscale OME-Zarr images
 
+::::{figure}
+:label: fig:vm_head_frozenct_ome_zarr
+:placeholder: figures/vm-head-frozenct-ome-zarr-snapshot.png
+
+Visible Male frozen head computed tomography (CT) OME-Zarr volume, generated and visualized with ITK-Wasm. There are three resolution scales, which can be selected with the _Image Scale_ buttons. Reduced resolutions are smoothed with a gaussian filter to avoid aliasing artifacts.
+
+:::{iframe} https://scipy-2024-itk-wasm-vm-head-frozenct-ome-zarr.netlify.app/
+:width: 100%
+:::
+
+::::
+
 A notable application of ITK-Wasm is the generation of multiscale OME-Zarr images, a cloud-optimized bioimaging format with broad international adoption [@doi:10.1007/s00418-023-02209-1; @doi:10.1038/s41592-021-01326-w].
 To generate OME-Zarr's multiscale representation of multidimensional bioimages, anti-aliasing filters must be applied.
 
 :::{figure} figures/OME-Zarr.svg
-:label: fig:ome*zarr
+:label: fig:ome_zarr
 A comparison of [NRRD (Nearly Raw Raster Data)](http://teem.sourceforge.net/nrrd/format.html), a traditional scientific image file format to the [OME-Zarr](https://ngff.openmicroscopy.org/) scientific image file format, a modern, web-friendly file format.
 NRRD is a single, monolithic file with header and image pixel data formats concatenated. The header has a bespoke format and the pixel data is often compressed with the zlib compression codec.
 In contrast, OME-Zarr has a hierarchical structure, sometimes encoded in folders and files. Metadata is stored in [JSON](https://en.wikipedia.org/wiki/JSON) files. Image pixel data is stored in separate N-dimensional chunks that are compressed with fast, high compression ratio modern codecs like [LZ4](<https://en.wikipedia.org/wiki/LZ4*(compression_algorithm)>) or [Zstd](https://en.wikipedia.org/wiki/Zstd). Additionally, the image is represented at multiple resolutions.
 OME-Zarr's chunk, highly-compressed, multiscale representation makes it ideal for uses cases like cloud-computing or extremely large images. However, this requires generation of the reduced resolution scales.
 :::
 
+As detailed by the [Nyquist-Shannon Sampling Theorem](https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem), high frequency content in an image must be reduced before downsampling to avoid aliasing artifacts.
+
 In the NGFF-Zarr package, ITK-Wasm anti-aliasing filters efficiently produce OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments [@doi:10.5281/zenodo.8092821].
+
 Since the interface type's Python representation are Python data classes comprised of standand Python data types and NumPy arrays, they are trivially and efficiently serialized for parallel computing with Dask.
 Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
 

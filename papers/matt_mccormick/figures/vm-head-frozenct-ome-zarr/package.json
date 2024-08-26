@@ -1,0 +1,74 @@
+{
+  "name": "vm-head-frozenct-ome-zarr-figure",
+  "private": true,
+  "version": "1.0.0",
+  "description": "ITK-Wasm Viewer for the VM Head FrozenCT OME-Zarr Figure",
+  "type": "module",
+  "exports": {
+    "./*": "./dist/*"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsightSoftwareConsortium/itk-viewer.git"
+  },
+  "keywords": [
+    "3d",
+    "visualization",
+    "ray-tracing",
+    "webgl",
+    "webgpu",
+    "medical",
+    "scientific",
+    "itk",
+    "wasm",
+    "webassembly",
+    "imjoy",
+    "xstate",
+    "image",
+    "geometry",
+    "point",
+    "cloud",
+    "mesh",
+    "graphics"
+  ],
+  "author": "Matt McCormick",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/InsightSoftwareConsortium/itk-viewer/issues"
+  },
+  "homepage": "https://github.com/InsightSoftwareConsortium/itk-viewer#readme",
+  "devDependencies": {
+    "@itk-wasm/image-io": "^1.1.1",
+    "@shoelace-style/shoelace": "^2.16.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2",
+    "vite-plugin-static-copy": "^0.17.0"
+  },
+  "dependencies": {
+    "@itk-viewer/element": "^0.6.4",
+    "@itk-viewer/io": "^0.4.3",
+    "@lit/context": "^1.1.0",
+    "gl-matrix": "^3.4.3",
+    "itk-wasm": "1.0.0-b.160",
+    "lit": "^3.1.0",
+    "xstate": "5.17.1",
+    "xstate-lit": "^2.0.4"
+  },
+  "peerDependenciesMeta": {
+    "@shoelace-style/shoelace": {
+      "optional": true
+    }
+  },
+  "peerDependencies": {
+    "@shoelace-style/shoelace": "^2.16.0"
+  }
+}
