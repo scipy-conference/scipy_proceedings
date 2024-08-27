@@ -15,6 +15,7 @@ project:
       corresponding: true
     - name: Paul Elliott
       email: paul.elliott@kitware.com
+      orcid: 0009-0000-8749-3327
       affiliations:
         - Kitware, Inc.
   keywords:
