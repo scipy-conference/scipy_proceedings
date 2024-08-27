@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 47843d2e2d22c5bf1d514b1edc8edd56798289d4..9c5738a9cf0b8b6ef4c745f01be369fde4011fad 100644
+--- a/package.json
++++ b/package.json
+@@ -5,6 +5,7 @@
+   "exports": {
+     ".": {
+       "types": "./index.d.ts",
++      "browser": "./dist/eventemitter3.esm.js",
+       "import": "./index.mjs",
+       "require": "./index.js"
+     },

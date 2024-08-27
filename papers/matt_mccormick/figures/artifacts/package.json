@@ -1,13 +1,14 @@
 {
-  "name": "vm-head-frozenct-ome-zarr-figure",
+  "name": "artifacts-figure",
   "private": true,
   "version": "1.0.0",
-  "description": "ITK-Wasm Viewer for the VM Head FrozenCT OME-Zarr Figure",
+  "description": "ITK-Wasm Viewer for the Artifacts Figure",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "build": "vite build"
+    "build": "pnpm build:tsc && vite build",
+    "build:tsc": "tsc"
   },
   "keywords": [
     "3d",
@@ -41,6 +42,7 @@
   "dependencies": {
     "@itk-viewer/element": "^0.6.4",
     "@itk-viewer/io": "^0.4.3",
+    "@itk-viewer/viewer": "^0.6.1",
     "@lit/context": "^1.1.0",
     "gl-matrix": "^3.4.3",
     "itk-wasm": "1.0.0-b.160",
