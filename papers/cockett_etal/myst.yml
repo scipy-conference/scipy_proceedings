@@ -112,6 +112,8 @@ project:
       keys:
         - jupyter
         - elife-era
+        - dora2018
+        - blinde2022
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   # The rest of the information shouldn't be modified
