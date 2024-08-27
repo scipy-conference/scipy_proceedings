@@ -12,8 +12,8 @@ project:
     - name: Rowan Cockett
       orcid: 0000-0002-7859-8394
       affiliation:
-        - Curvenote Inc.
-        - Executable Books
+        - curvenote
+        - Project Jupyter
       github: rowanc1
       twitter: rowancockett
       email: rowan@curvenote.com
@@ -30,8 +30,8 @@ project:
     - name: Steve Purves
       orcid: 0000-0002-0760-5497
       affiliation:
-        - Curvenote Inc.
-        - Executable Books
+        - curvenote
+        - Project Jupyter
       github: stevejpurves
       twitter: stevejpurves
       email: steve@curvenote.com
@@ -47,8 +47,8 @@ project:
     - name: Franklin Koch
       orcid: 0000-0002-6393-7058
       affiliation:
-        - Curvenote Inc.
-        - Executable Books
+        - curvenote
+        - Project Jupyter
       github: fwkoch
       roles:
         - Investigation
@@ -58,12 +58,19 @@ project:
       orcid: 0000-0002-1324-8801
       twitter: mikemorrison
       affiliation:
-        - Curvenote Inc.
+        - curvenote
       roles:
         - Investigation
         - Methodology
         - Validation
         - Writing – review & editing
+  affiliations:
+    - id: curvenote
+      name: Curvenote Inc.
+      ror: https://ror.org/02mz0e468
+      url: https://curvenote.com
+      country: Canada
+      email: support@curvenote.com
   abbreviations:
     AST: Abstract Syntax Tree
     DOI: Digital Object Identifier
