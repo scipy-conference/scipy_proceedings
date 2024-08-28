@@ -12,10 +12,21 @@ project:
       orcid: 0000-0001-9475-3756
       affiliations:
         - Kitware, Inc.
+      roles:
+        - Conceptualization
+        - Software
+        - Data curation
+        - Funding acquisition
+        - Visualization
+        - Methodology
+        - Project administration
       corresponding: true
     - name: Paul Elliott
       email: paul.elliott@kitware.com
       orcid: 0009-0000-8749-3327
+      roles:
+        - Software
+        - Visualization
       affiliations:
         - Kitware, Inc.
   keywords:
@@ -64,6 +75,8 @@ project:
         - WasiDev
         - Zhang2024-su
         - dockcross
+        - Johnson2015-qc
+        - Johnson2015-ur
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   plugins:
