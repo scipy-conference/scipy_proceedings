@@ -14,14 +14,14 @@ importers:
   .:
     dependencies:
       '@itk-viewer/element':
-        specifier: ^0.6.4
-        version: 0.6.4(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@shoelace-style/shoelace@2.16.0(@types/react@18.3.4))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.94.0)(wslink@2.1.2)
+        specifier: ^0.6.6
+        version: 0.6.6(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@shoelace-style/shoelace@2.16.0(@types/react@18.3.4))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.94.0)(wslink@2.1.2)
       '@itk-viewer/io':
         specifier: ^0.4.3
         version: 0.4.3
       '@itk-viewer/viewer':
-        specifier: ^0.6.1
-        version: 0.6.1
+        specifier: ^0.6.2
+        version: 0.6.2
       '@lit/context':
         specifier: ^1.1.0
         version: 1.1.2
@@ -815,8 +815,8 @@ packages:
   '@itk-viewer/blosc-zarr@0.2.3':
     resolution: {integrity: sha512-70CVcQurIEGDxM8nGkFQPtOoARywMIkE6NrBwt2SwsMocLBQ3KXW4/2+KGbqXymf34qrgdzifR7ezg0kWggBpw==}
 
-  '@itk-viewer/element@0.6.4':
-    resolution: {integrity: sha512-ht957h2v/Q1ixsugCZMQ6sHKlIj7V0zoewMG6xdMOZLOcQyRCviaWf+/+eawCJHomhkZv1noZEVDa6GhgxbVfA==}
+  '@itk-viewer/element@0.6.6':
+    resolution: {integrity: sha512-sU8cvGwSp0NCRfGwOP3BO9wLe4UYDDcAL6Dz4RgvQ757S3IRSo+Hh1LwBCg09NCLdBxs8vQvL8AKQOOK5fhOVw==}
     peerDependencies:
       '@shoelace-style/shoelace': ^2.16.0
     peerDependenciesMeta:
@@ -826,20 +826,20 @@ packages:
   '@itk-viewer/io@0.4.3':
     resolution: {integrity: sha512-LKJdmQDTqLodY6CUn0ZSK/lHnwjmbfLGHZV/35er2m3tdX9wXPjIq3E2LNlUXDexJuj5rX/+rrPDKGyybC9gLw==}
 
-  '@itk-viewer/remote-viewport@0.2.20':
-    resolution: {integrity: sha512-NdOvCgR+t3GMimnOTDJa61GhBQqKVxtdR+fzJj6StYBTt7TdoPVas5gJnBwlsrGHJ8SZ/dcH2DkHu2rSdPCR0g==}
+  '@itk-viewer/remote-viewport@0.2.21':
+    resolution: {integrity: sha512-4jUAtqSBw+p52KyQsZZ58mw1HPZ/nYXIsaGQt+B1e0R4mVC9KyCTdGROf7fyg20lJ/IypBiGPb6syub3MrS2Fg==}
 
-  '@itk-viewer/transfer-function-editor@1.8.3':
-    resolution: {integrity: sha512-I4FpmJyFV1U8NA0Kv17Yw0jYRSIrzq7jPv04736ox3QkFRrJQWi7cAWSCcujr/WFOLj+hrMFcloJlgIBo5Apvw==}
+  '@itk-viewer/transfer-function-editor@1.8.5':
+    resolution: {integrity: sha512-g9nTrWvo2H99v+wrNXwEjtezavUaKuG8gojou5tLN2oaVsPA0bPA/5ZxGNk313RagQmUN9xqiMrOaPBmGcKxHA==}
 
   '@itk-viewer/utils@0.1.4':
     resolution: {integrity: sha512-4q7d4nQWPa+CBAr1smlQ2i5qNkGOn10iIPrwwLvmgqDR+9Krwdv4HXHenJayYqA9WFNfRgGVqU9z5/y4UEqP/A==}
 
-  '@itk-viewer/viewer@0.6.1':
-    resolution: {integrity: sha512-9Zrw+de3ybLuQJPKsWSGsys3WMbMXO3FR6BUpzb/Ub/p7k3FW8T2rS+ZolCfjxAG+OTOfXH2gXlxy8zUeIxqAQ==}
+  '@itk-viewer/viewer@0.6.2':
+    resolution: {integrity: sha512-lS5l3+Wr9ZLeFKt9BxGJSjB0ja3BW/fnu5k3M85FVmGwG7mMkDfw4HdFeWQg3iRBmL9J3IyIJHW2BwMThXQ6Og==}
 
-  '@itk-viewer/vtkjs@0.4.4':
-    resolution: {integrity: sha512-Ly/EjLX4FTUPJD/cUg3EFkLpmuBGX2vblyFx7uKFhQnqaew7uoqtMluwYWvti1TCOK1Gn+j4Imoj2VytkOoNqg==}
+  '@itk-viewer/vtkjs@0.4.6':
+    resolution: {integrity: sha512-qB9WtZ1spHgkLw3DftPCSGImYtWh1iIFwSr9WcOVWlj9JttVLuj9bH8FaVZW+lKQMv/l6kl2S3j85mMbFY1Xdw==}
 
   '@itk-wasm/dam@1.1.1':
     resolution: {integrity: sha512-7+9L3lrLMKF4y6B6qjs8GqfbpxT0waOJUM14NdMNEA6M+BoBS8fdHREhQHo2s7QMA5O7I+Jv7m+dyqlisGnbdQ==}
@@ -3251,15 +3251,15 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/element@0.6.4(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@shoelace-style/shoelace@2.16.0(@types/react@18.3.4))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.94.0)(wslink@2.1.2)':
+  '@itk-viewer/element@0.6.6(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@shoelace-style/shoelace@2.16.0(@types/react@18.3.4))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.94.0)(wslink@2.1.2)':
     dependencies:
       '@itk-viewer/arcball': 0.0.1
       '@itk-viewer/io': 0.4.3
-      '@itk-viewer/remote-viewport': 0.2.20
-      '@itk-viewer/transfer-function-editor': 1.8.3
+      '@itk-viewer/remote-viewport': 0.2.21
+      '@itk-viewer/transfer-function-editor': 1.8.5
       '@itk-viewer/utils': 0.1.4
-      '@itk-viewer/viewer': 0.6.1
-      '@itk-viewer/vtkjs': 0.4.4(@babel/preset-env@7.25.4(@babel/core@7.25.2))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.94.0)(wslink@2.1.2)
+      '@itk-viewer/viewer': 0.6.2
+      '@itk-viewer/vtkjs': 0.4.6(@babel/preset-env@7.25.4(@babel/core@7.25.2))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.94.0)(wslink@2.1.2)
       '@lit/context': 1.1.2
       gl-matrix: 3.4.3
       itk-wasm: 1.0.0-b.160
@@ -3291,11 +3291,11 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/remote-viewport@0.2.20':
+  '@itk-viewer/remote-viewport@0.2.21':
     dependencies:
       '@itk-viewer/io': 0.4.3
       '@itk-viewer/utils': 0.1.4
-      '@itk-viewer/viewer': 0.6.1
+      '@itk-viewer/viewer': 0.6.2
       '@itk-wasm/htj2k': 2.1.0
       gl-matrix: 3.4.3
       imjoy-rpc: 0.5.59
@@ -3306,7 +3306,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@itk-viewer/transfer-function-editor@1.8.3': {}
+  '@itk-viewer/transfer-function-editor@1.8.5': {}
 
   '@itk-viewer/utils@0.1.4':
     dependencies:
@@ -3314,7 +3314,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/viewer@0.6.1':
+  '@itk-viewer/viewer@0.6.2':
     dependencies:
       '@itk-viewer/io': 0.4.3
       '@itk-viewer/utils': 0.1.4
@@ -3323,11 +3323,11 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/vtkjs@0.4.4(@babel/preset-env@7.25.4(@babel/core@7.25.2))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.94.0)(wslink@2.1.2)':
+  '@itk-viewer/vtkjs@0.4.6(@babel/preset-env@7.25.4(@babel/core@7.25.2))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.94.0)(wslink@2.1.2)':
     dependencies:
       '@itk-viewer/io': 0.4.3
-      '@itk-viewer/transfer-function-editor': 1.8.3
-      '@itk-viewer/viewer': 0.6.1
+      '@itk-viewer/transfer-function-editor': 1.8.5
+      '@itk-viewer/viewer': 0.6.2
       '@kitware/vtk.js': 30.10.0(@babel/preset-env@7.25.4(@babel/core@7.25.2))(autoprefixer@10.4.20(postcss@8.4.41))(webpack@5.94.0)(wslink@2.1.2)
       gl-matrix: 3.4.3
       itk-viewer-color-maps: 1.2.0

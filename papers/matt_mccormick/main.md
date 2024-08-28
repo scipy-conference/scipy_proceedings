@@ -344,7 +344,7 @@ This model, combined with ITK-Wasm’s architecture, can perform analysis and vi
 :label: fig:vm_head_frozenct_ome_zarr
 :placeholder: figures/vm-head-frozenct-ome-zarr-snapshot.png
 
-Visible Male frozen head computed tomography (CT) OME-Zarr volume, generated and visualized with ITK-Wasm. There are three resolution scales, which can be selected with the _Image Scale_ buttons. Reduced resolutions are smoothed with a gaussian filter to avoid aliasing artifacts.
+Visible Male [@NLM_VisibleHumanMale] frozen head computed tomography (CT) OME-Zarr volume, generated with ITK-Wasm. There are three resolution scales, which can be selected with the _Image Scale_ buttons. Reduced resolutions are smoothed with a gaussian filter to avoid aliasing artifacts.
 
 :::{iframe} https://scipy-2024-itk-wasm-vm-head-frozenct-ome-zarr.netlify.app/
 :width: 100%
@@ -365,7 +365,19 @@ OME-Zarr's chunk, highly-compressed, multiscale representation makes it ideal fo
 
 As detailed by the [Nyquist-Shannon Sampling Theorem](https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem), high frequency content in an image must be reduced before downsampling to avoid aliasing artifacts.
 
-In the NGFF-Zarr package, ITK-Wasm anti-aliasing filters efficiently produce OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments [@doi:10.5281/zenodo.8092821]. While ITK-Wasm supports making general scientific C++ codes accessibly in wasm, in this example we will examine how the `itk::DiscreteGaussianImageFilter` is applied to address this problem [@Johnson2015-qc; @Johnson2015-ur; @McCormick2014-od].
+::::{figure}
+:label: fig:aliasing_artifacts
+:placeholder: figures/artifacts-snapshot.png
+
+Aliasing artifacts at the second resolution scale. With naive subsampling (top) aliasing artifacts introduce noise in the image at frequencies not supported by the sampling frequency. With gaussian anti-aliasing filtering prior to downsampling (bottom), signal fidelity is preserved.
+
+:::{iframe} https://scipy-2024-itk-wasm-aliasing-artifacts.netlify.app/
+:width: 100%
+:::
+
+::::
+
+In the NGFF-Zarr package [@doi:10.5281/zenodo.8092821], ITK-Wasm anti-aliasing filters efficiently produce OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments . While ITK-Wasm supports making general scientific C++ codes accessibly in wasm, in this example we will examine how the `itk::DiscreteGaussianImageFilter` is applied to address this problem [@Johnson2015-qc; @Johnson2015-ur; @McCormick2014-od].
 
 We apply the N-dimensional gaussian filter:
 

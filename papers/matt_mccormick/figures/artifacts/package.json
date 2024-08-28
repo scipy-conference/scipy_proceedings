@@ -40,9 +40,9 @@
     "vite-plugin-static-copy": "^0.17.0"
   },
   "dependencies": {
-    "@itk-viewer/element": "^0.6.4",
+    "@itk-viewer/element": "^0.6.6",
     "@itk-viewer/io": "^0.4.3",
-    "@itk-viewer/viewer": "^0.6.1",
+    "@itk-viewer/viewer": "^0.6.2",
     "@lit/context": "^1.1.0",
     "gl-matrix": "^3.4.3",
     "itk-wasm": "1.0.0-b.160",

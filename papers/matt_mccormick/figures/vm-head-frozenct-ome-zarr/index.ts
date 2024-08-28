@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   const viewerElement = document.querySelector("#viewer");
   if (!viewerElement) throw new Error("Could not find element");
   const viewer = viewerElement.getActor();
+  console.log(viewer);
+  console.log(viewerElement);
   viewer!.send({ type: "setImage", image, name: "image" });
 
   const imageActor = viewer!

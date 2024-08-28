@@ -5,3 +5,6 @@ _build
 *.pyc
 *.swp
 *~
+
+# Local Netlify folder
+.netlify

@@ -2,3 +2,4 @@ node_modules/
 # pixi environments
 .pixi
 *.egg-info
+figures/artifacts/tsconfig.tsbuildinfo

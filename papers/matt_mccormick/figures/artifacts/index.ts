@@ -2,7 +2,7 @@ import "./assetPathSetup.js";
 import { ZarrMultiscaleSpatialImage } from "@itk-viewer/io/ZarrMultiscaleSpatialImage.js";
 
 const aliasedPath = "/aliased.ome.zarr";
-const antialiasedPath = "/antialias.ome.zarr";
+const antiAliasedPath = "/antialias.ome.zarr";
 
 const makeZarrImage = (imagePath: string) => {
   const url = new URL(imagePath, document.location.origin);
@@ -10,33 +10,19 @@ const makeZarrImage = (imagePath: string) => {
 };
 
 document.addEventListener("DOMContentLoaded", async function () {
-  // const image = await makeZarrImage(aliasedPath);
-  const image = await makeZarrImage(antialiasedPath);
+  const aliasedImage = await makeZarrImage(aliasedPath);
+  const antiAliasedImage = await makeZarrImage(antiAliasedPath);
 
   const viewerElement = document.querySelector("#viewer");
   if (!viewerElement) throw new Error("Could not find element");
-  const viewer = viewerElement.getActor();
-  viewer!.send({ type: "setImage", image, name: "image" });
 
-  // const imageActor = viewer!
-  //   .getSnapshot()
-  //   .context.viewports[0].getSnapshot()
-  //   .context.views[0].getSnapshot().context.imageActor;
-  // imageActor.send({ type: "colorMap", colorMap: "CT-Bone", component: 0 });
-  // console.log(imageActor);
-  // const context = viewer!.getSnapshot().context;
-  // const camera = context.viewports[0].getSnapshot().context.camera;
-  // console.log(camera);
+  const viewerLeft = viewerElement.getViewerLeftActor();
+  viewerLeft!.send({ type: "setImage", image: aliasedImage, name: "image" });
 
-  // camera.send({
-  //   type: "setPose",
-  //   pose: {
-  //     center: new Float32Array([-0.263671875, -30.263671875, -135.5]),
-  //     distance: 612.2755605271669,
-  //     rotation: new Float32Array([
-  //       0.5477936267852783, 0.19993622601032257, 0.2401820719242096,
-  //       0.7760542631149292,
-  //     ]),
-  //   },
-  // });
+  const viewerRight = viewerElement.getViewerRightActor();
+  viewerRight!.send({
+    type: "setImage",
+    image: antiAliasedImage,
+    name: "image",
+  });
 });
