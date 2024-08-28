@@ -344,11 +344,11 @@ This model, combined with ITK-Wasm’s architecture, can perform analysis and vi
 :label: fig:vm_head_frozenct_ome_zarr
 :placeholder: figures/vm-head-frozenct-ome-zarr-snapshot.png
 
-Visible Male [@NLM_VisibleHumanMale] frozen head computed tomography (CT) OME-Zarr volume, generated with ITK-Wasm. There are three resolution scales, which can be selected with the _Image Scale_ buttons. Reduced resolutions are smoothed with a gaussian filter to avoid aliasing artifacts.
-
 :::{iframe} https://scipy-2024-itk-wasm-vm-head-frozenct-ome-zarr.netlify.app/
 :width: 100%
 :::
+
+Visible Male [@NLM_VisibleHumanMale] frozen head computed tomography (CT) OME-Zarr volume, generated with ITK-Wasm. There are three resolution scales, which can be selected with the _Image Scale_ buttons. Reduced resolutions are smoothed with a gaussian filter to avoid aliasing artifacts.
 
 ::::
 
@@ -369,11 +369,11 @@ As detailed by the [Nyquist-Shannon Sampling Theorem](https://en.wikipedia.org/w
 :label: fig:aliasing_artifacts
 :placeholder: figures/artifacts-snapshot.png
 
-Aliasing artifacts at the second resolution scale. With naive subsampling (top) aliasing artifacts introduce noise in the image at frequencies not supported by the sampling frequency. With gaussian anti-aliasing filtering prior to downsampling (bottom), signal fidelity is preserved.
-
 :::{iframe} https://scipy-2024-itk-wasm-aliasing-artifacts.netlify.app/
 :width: 100%
 :::
+
+Aliasing artifacts at the second resolution scale. With naive subsampling (top) aliasing artifacts introduce noise in the image at frequencies not supported by the sampling frequency. With gaussian anti-aliasing filtering prior to downsampling (bottom), signal fidelity is preserved.
 
 ::::
 
@@ -394,6 +394,129 @@ Where:
 - $|\mathbf{x}|^2$ is the squared Euclidean norm of $\mathbf{x}$
 
 For downsampling, we use $\sigma^2 = (k^2 - 1^2)/(2\sqrt{2\ln(2)})^2$ where $k$ is the downsampling factor, which is optimal [@doi:10.1007/978-3-319-24571-3_81].
+
+### C++ pipeline definition
+
+The C++ wasm pipeline function, a pure function, is defined as a CLI11 executable [@doi:10.5281/zenodo.804964] uses an `itk::wasm::Pipeline` interface definition that operates on `itk::wasm` interface types.
+
+```cpp
+int main(int argc, char * argv[])
+{
+  itk::wasm::Pipeline pipeline("downsample", "Apply a smoothing anti-alias filter and subsample the input image.", argc, argv);
+
+  return itk::wasm::SupportInputImageTypes<PipelineFunctor,
+    uint8_t,
+    int8_t,
+    uint16_t,
+    int16_t,
+    uint32_t,
+    int32_t,
+    uint64_t,
+    int64_t,
+    float,
+    double
+    >
+  ::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
+}
+```
+
+Here `downsample` defines the name of the pipeline function. A description for the pipeline is also provided -- this propagates to command line and language interface documentation.
+
+In this function, we use the `itk::wasm::SupportInputImageTypes` utility to dispatch compile-time optimized pipeline based on the pixel type and dimension of the input image.
+This ensures excellent performance while limiting the wasm module binary size, critical for performance and distribution, to one the code that is used by the pipeline.
+
+Next, pipeline inputs, outputs, and parameters are defined:
+
+```cpp
+template<typename TImage>
+class PipelineFunctor
+{
+public:
+  int operator()(itk::wasm::Pipeline & pipeline)
+  {
+    using ImageType = TImage;
+    constexpr unsigned int ImageDimension = ImageType::ImageDimension;
+
+    using InputImageType = itk::wasm::InputImage<ImageType>;
+    InputImageType inputImage;
+    pipeline.add_option("input", inputImage, "Input image")
+      ->required()->type_name("INPUT_IMAGE");
+
+    std::vector<unsigned int> shrinkFactors { 2, 2 };
+    pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")
+      ->required()->type_size(ImageDimension);
+
+    std::vector<unsigned int> cropRadius;
+    pipeline.add_option("-r,--crop-radius", cropRadius, "Optional crop radius in pixel units.")
+      ->type_size(ImageDimension);
+
+    using OutputImageType = itk::wasm::OutputImage<ImageType>;
+    OutputImageType downsampledImage;
+    pipeline.add_option("downsampled", downsampledImage, "Output downsampled image")
+      ->required()->type_name("OUTPUT_IMAGE");
+
+    ITK_WASM_PARSE(pipeline);
+```
+
+The types used are integers, floating point numbers, `std` containers of the same, or `itk::wasm` interface types. Long flags define parameter names in their language bindings, and their descriptions are propagated to their documentation.
+
+The pipeline interface syntax can be generated from a set of interactive prompts provided by the `create-itk-wasm` CLI tool.
+
+Once `ITK_WASM_PARSE(pipeline)` is called, input argument parsing and error handling is performed and the input pipeline options are populated with their values. During CLI execution, this means reading input files. When used with language bindings, files are not used and inputs are populated with in-memory content that was *lowered* into the wasm module with internal `itk_wasm*` functions.
+
+Next comes the computational logic of the pipeline:
+
+```cpp
+  using GaussianFilterType = itk::DiscreteGaussianImageFilter<ImageType, ImageType>;
+  auto gaussianFilter = GaussianFilterType::New();
+  gaussianFilter->SetInput(inputImage.Get());
+
+  [...]
+  ITK_WASM_CATCH_EXCEPTION(pipeline, shrinkFilter->UpdateLargestPossibleRegion());
+
+  typename ImageType::ConstPointer result = shrinkFilter->GetOutput();
+  downsampledImage.Set(result);
+
+  return EXIT_SUCCESS;
+```
+
+In this example, we are using ITK library C++ functionality, but this can be arbitrary C++ code.
+
+The `.Get()` and `.Set()` methods on the interface types supply the C++ interface to the input values for computation and outputs. When the output interface type's destructors are called, they are written to files on disk in a CLI context or prepared for wasm module *lifting* in an embedded language context.
+
+The build is configured with simple, standard CMake:
+
+```cmake
+cmake_minimum_required(VERSION 3.16)
+project(itkwasm-downsample LANGUAGES CXX)
+
+find_package(ITK REQUIRED
+ COMPONENTS
+   WebAssemblyInterface
+   ITKSmoothing
+[...]
+
+add_executable(downsample downsample.cxx)
+target_link_libraries(downsample PUBLIC ${ITK_LIBRARIES})
+```
+
+The same C++ and CMake code can be used for a native toolchain along with the wasm toolchain builds. This facilitates rapid development and easy debugging with native development tooling.
+
+Additionally, CTest tests can be defined for native or WASI execution, e.g.:
+
+```cmake
+enable_testing()
+
+add_test(NAME downsample
+  COMMAND downsample
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_downsampled.png
+    --shrink-factors 2 2
+    )
+```
+
+In the WASI case, ITK-Wasm enables execution via a wasm interpreter and by enabling interpreter access to local input and output file directories.
+
 
 Since the interface type's Python representation are Python data classes comprised of standand Python data types and NumPy arrays, they are trivially and efficiently serialized for parallel computing with Dask.
 Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
