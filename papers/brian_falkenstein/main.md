@@ -2,21 +2,20 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: "Predx-Tools: Dispelling the Mystery in Histopathological Image Processing"
 abstract: |
-  Histopathological image contains insights into disease state, but applying automatic image analysis is challenging. Often, human intervention in the form of manual annotation or quality control (QC) is required. Additionally, the data itself vary considerably in available features, size, and shape. Thus, a streamlined and interactive approach is a necessary part of any digital pathology pipeline. We present PredX-Tools, a suite of simple and easy to use python GUI applications which facilitate all parts of a digital pathology pipeline, from image QC and labeling to visualization and analysis of results to allow for a deeper understanding of the data. 
+  Histopathological images, which are digitized images of human or animal tissue, contain insights into disease state. Typically, a pathologist will look at a slide under a microscope to make decisions about prognosis and treatment. Due to the high complexity of the data, applying automatic image analysis is challenging. Often, human intervention in the form of manual annotation or quality control (QC) is required. Additionally, the data itself varies considerably in available features, size, and shape. Thus, a streamlined and interactive approach is a necessary part of any digital pathology pipeline. We present PredX-Tools, a suite of simple and easy to use python GUI applications which facilitate analysis of histopathological images and provide a no-code platform for data scientists and researchers to perform analysis on raw and transformed data. 
 ---
 
 ## Introduction
 
-Histopathological image analysis reveals insights into disease state and has potential to harness the immensely complex and heterogeneous tumor microenvironment to guide understanding of disease progression, response to treatment, and aid in patient stratification for clinical trials {cite:p}`doi:10.4132/jptm.2019.12.31, doi:10.3389/fonc.2022.889886, doi:10.1016/j.irbm.2019.06.001, doi:10.3390/cancers15194797, doi:10.1038/s41379-021-00919-2`. However, applying automatic image analysis routines continues to be challenging {cite:p}`doi:10.3390/cancers13123031, doi:10.1308/rcsann.2023.0091`. Often, human intervention in the form of manual annotation or quality control (QC) is required. Additionally, the data itself varies considerably in available features, size, and shape. Thus, a streamlined and interactive approach is a necessary part of any digital pathology pipeline {cite:p}`doi:10.1111/his.14356`. 
-
+Histopathological image analysis reveals insights into disease state and has potential to harness the immensely complex and heterogeneous tumor microenvironment to guide understanding of disease progression, response to treatment, and aid in patient stratification for clinical trials {cite:p}`doi:10.4132/jptm.2019.12.31, doi:10.3389/fonc.2022.889886, doi:10.1016/j.irbm.2019.06.001, doi:10.3390/cancers15194797, doi:10.1038/s41379-021-00919-2`. However, applying automatic image analysis routines continues to be challenging {cite:p}`doi:10.3390/cancers13123031, doi:10.1308/rcsann.2023.0091`. Often, human intervention in the form of manual annotation or quality control (QC) is required. Additionally, the data itself varies considerably in available features, size, and shape. For example, the available biomarkers vary in quantity between datasets, with some having only a few channels and others having hundreds or more. Images vary from small core samples (~1 MB) to massive whole slides images (~100 GB). Some datasets may contain data of multiple types with additional considerations for aligning the data to a common reference frame. Thus, a streamlined and interactive approach is a necessary part of any digital pathology pipeline {cite:p}`doi:10.1111/his.14356`. 
 
 We present PredX-Tools, a suite of simple and easy to use python GUI applications which facilitate all parts of a digital pathology pipeline, from image QC and labeling to visualization and analysis of results to allow for a deeper understanding of the data. By utilizing open-source python libraries and utilities, we have created a suite of tools that fit seamlessly into our analysis pipeline, require minimal expertise to run, and are easy to develop new features for, to account for the ever-changing landscape of histopathological image analysis. 
 
 ## Background
 
-Raw data takes the form of either brightfield immuno-histochecmical (IHC) or hematoxylin and eosin (H&E) RGB images, or multiplex immunofluorescence (mIF) or imaging mass cytometry (IMC) N-channel images. Although specifics of the routine vary depending on the available data and the underlying biological questions, every experiment follows a similar procedure. Images must be registered, normalized, and denoised. Then, nuclei and or cell segmentation must be performed, where each nuclear and cellular object is assigned a label. Additionally, other objects in the images may be segmented, such as tumor beds or other biological structures present in the image. Next, features are extracted for the segmented objects and stored in data tables. Finally, these tables of features, which include the spatial location of the objects, are used in differential analysis. 
+Raw data takes the form of multi-channel images, ranging in depth from 3 channels (RGB) up to several hundreds or even thousands. Although specifics of the routine vary depending on the available data and the underlying biological questions, every experiment follows a similar procedure. Images must be registered, normalized, and denoised by a data scientist. Registration is the process of aligning subsequent sections of tissue in space via rotation and translation or affine transformation to match keypoints between images. Then, a researcher performs nuclei and or cell segmentation, where each nuclear and cellular object has a boundary automatically drawn around it. Additionally, other objects in the images may be segmented, such as tumor beds or other biological structures present in the image. Next, features are extracted for the segmented objects and stored in data tables. Common cell level features include a measurement of biomarker strength within the cell boundaries, or morphological measurements about the cell object like its area or ellipticity. Finally, these tables of features, which include the spatial location of the objects, may be analyzed by machine learning scientists to derive answers to mechanistic questions or to find differences between populations.
 
-While there have been attempts at fully automating this procedure, it is nearly impossible to design routines that can account for all forms of variation across datasets. Thus, for optimal performance on unseen data,  it is ideal to have a human-in-the-loop to perform manual QC, parameter tuning, and probing of the data to mitigate the error that arises when performing analysis on unseen data. This leads to a higher confidence in any results that may be found. 
+While there have been attempts at fully automating this procedure, it is nearly impossible to design routines that can account for all forms of variation across datasets. As an example, expected size of a cell may vary wildly between different types of cancer, and thus having one threshold for calling a cell 'large' or 'small' is challenging. Thus, for optimal performance on new data, it is ideal to have a human-in-the-loop to perform manual QC, parameter tuning, and probing of the data to mitigate the error that arises when performing analysis on new datasets. This leads to a higher confidence in any results that may be found. 
 To facilitate this, simple and easy to use tools must be developed to allow field experts to interact with the data with minimal effort. Oftentimes users may not be comfortable or familiar with programming, and thus it is far more efficient to design no-code interactive environments to facilitate interaction with the data for non-coding domain experts. 
 
 Other tools have been developed to address these needs (see @tbl:comparison), however none cover all our needs and many are rigid and allow custom integration only through script writing. There is a need for a stripped down suite of modular solutions that both fits specifically our needs for analysis, while also being modular and easy to develop to fit arising needs and challenges that come with new data. Hence, we have developed our own in-house suite of solutions that allows an expert user to plug directly into our highly complex analysis pipelines, both to check quality of generated results and allow deeper exploration of the data. 
@@ -37,7 +36,7 @@ scikit-learn [@sklearn1; @sklearn2], SciPy [@scipy], Tifffile [@tifffile], and z
   - Phenotyping
   - Spatial analysis
   - Easy development
-* - `Fiji`
+* - `Fiji` [@fiji]
   - Yes*
   - Yes
   - Yes
@@ -45,7 +44,7 @@ scikit-learn [@sklearn1; @sklearn2], SciPy [@scipy], Tifffile [@tifffile], and z
   - No
   - No
   - Yes
-* - `QuPath`
+* - `QuPath` [@qupath]
   - Yes
   - Yes
   - Yes
@@ -53,7 +52,7 @@ scikit-learn [@sklearn1; @sklearn2], SciPy [@scipy], Tifffile [@tifffile], and z
   - Yes
   - No
   - Yes
-* - `CellProfiler`
+* - `CellProfiler` [@cellprof]
   - Yes*
   - No
   - Yes
@@ -61,7 +60,7 @@ scikit-learn [@sklearn1; @sklearn2], SciPy [@scipy], Tifffile [@tifffile], and z
   - Yes
   - Yes
   - Yes
-* - `Ilastik`
+* - `Ilastik` [@ilastik]
   - Yes*
   - Yes
   - Yes
@@ -69,7 +68,7 @@ scikit-learn [@sklearn1; @sklearn2], SciPy [@scipy], Tifffile [@tifffile], and z
   - Yes
   - No
   - No
-* - `Predx-Tools`
+* - **Predx-Tools**
   - Yes
   - Yes
   - Yes
@@ -106,7 +105,7 @@ The input data for PixelExplorer is simply a folder containing the .tif (or any 
 
 Once the experiment begins, the user will first select one or more of the available images provided in the data folder. Next, selecting from the list of available biomarkers will populate the histogram in the center of the screen. The histogram can have its parameters easily tweaked, such as setting ranges of the x axis, number of bins, log of the y axis, or density plot. Additionally, the user can choose to hide pixel values above or below a threshold. The subsample rate of pixels can be adjusted to balance the tradeoff between runtime and accuracy (for larger images, it may take several seconds to sample the pixels and plot them). 
 
-Further, any arbitrary transformation can be performed on the raw pixel values before plotting them. By default, a log2 transform is applied to transform the data from range [0, 2^16] to [0, 16]. However, any valid line of python code can be added to the ‘Data transformations’ tab to be applied to the data prior to plotting. This can be helpful to visualize the effect different transformations have on the underlying distribution. 
+Further, any arbitrary transformation can be performed on the raw pixel values before plotting them. By default, a log2 transform is applied to transform the data from range [1, 2^16] to [0, 16]. However, any valid line of python code can be added to the ‘Data transformations’ tab to be applied to the data prior to plotting. This can be helpful to visualize the effect different transformations have on the underlying distribution. 
 
 Additionally, one can fit a Gaussian Mixture Model to the current distribution using the right panel by simply specifying the number of mixture components and pressing enter. This will fit a model to the data being plotted, meaning the model will be fit to the data after the transformation is applied and after any pixels above or below the desired thresholds are removed. This tool is very useful due to the fact that biomarker distributions in the log space can be effectively modeled by a mixture of gaussians {cite:p}`doi:10.1038/s43018-023-00576-1, doi:10.1172/jci.insight.93487`. With this, one may derive a model for ‘foreground’ and ‘background’ signals of the images. With this knowledge, the user may want to generate a ‘foreground’ or ‘background’ mask using the Thresholding function available in the app. The user can type in a value, select whether to threshold above or below the value, and then export a binary mask which is 1 for pixels that pass the threshold and 0 elsewhere. This mask may then be used in downstream analysis, where they may be used to focus on parts of the image which may exhibit certain behavior (e.g. thresholding Ki67, a biomarker which  measure cellular proliferation or reproduction, which may be associated with tumoral regions). While these masks may be derived automatically, it may be desirable to define one by thresholding manually.
 
