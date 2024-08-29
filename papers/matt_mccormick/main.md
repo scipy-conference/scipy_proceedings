@@ -341,7 +341,7 @@ This model, combined with ITK-Wasm’s architecture, can perform analysis and vi
 ### Example application: generation of multiscale OME-Zarr images
 
 ::::{figure}
-:label: fig:vm_head_frozenct_ome_zarr
+:label: fig:vm-head-frozenct-ome-zarr
 :placeholder: figures/vm-head-frozenct-ome-zarr-snapshot.png
 
 :::{iframe} https://scipy-2024-itk-wasm-vm-head-frozenct-ome-zarr.netlify.app/
@@ -352,7 +352,7 @@ Visible Male [@NLM_VisibleHumanMale] frozen head computed tomography (CT) OME-Za
 
 ::::
 
-A notable application of ITK-Wasm is the generation of multiscale OME-Zarr images, a cloud-optimized bioimaging format with broad international adoption [@doi:10.1007/s00418-023-02209-1; @doi:10.1038/s41592-021-01326-w].
+A notable application of ITK-Wasm is the generation of [multiscale OME-Zarr images](#fig:vm-head-frozenct-ome-zarr), a cloud-optimized bioimaging format with broad international adoption [@doi:10.1007/s00418-023-02209-1; @doi:10.1038/s41592-021-01326-w].
 To generate OME-Zarr's multiscale representation of multidimensional bioimages, anti-aliasing filters must be applied.
 
 :::{figure} figures/OME-Zarr.svg
@@ -363,10 +363,10 @@ In contrast, OME-Zarr has a hierarchical structure, sometimes encoded in folders
 OME-Zarr's chunk, highly-compressed, multiscale representation makes it ideal for uses cases like cloud-computing or extremely large images. However, this requires generation of the reduced resolution scales.
 :::
 
-As detailed by the [Nyquist-Shannon Sampling Theorem](https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem), high frequency content in an image must be reduced before downsampling to avoid aliasing artifacts.
+As detailed by the [Nyquist-Shannon Sampling Theorem](https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem), high frequency content in an image must be reduced before downsampling to avoid [aliasing artifacts](#fig:aliasing-artifacts).
 
 ::::{figure}
-:label: fig:aliasing_artifacts
+:label: fig:aliasing-artifacts
 :placeholder: figures/artifacts-snapshot.png
 
 :::{iframe} https://scipy-2024-itk-wasm-aliasing-artifacts.netlify.app/
@@ -517,6 +517,94 @@ add_test(NAME downsample
 
 In the WASI case, ITK-Wasm enables execution via a wasm interpreter and by enabling interpreter access to local input and output file directories.
 
+### Command line invocation
+
+If our example `downsample` pipeline module is built into a native binary, help output is [generated with](#fig:downsample-cli-help):
+
+```shell
+❯ ./downsample --help
+```
+
+The equivalent invocation with the [wasmtime](https://wasmtime.dev/) wasm runtime for the WASI wasm module built from the same sources is:
+
+```shell
+❯ wasmtime run ./downsample.wasi.wasm --help
+```
+
+:::{figure} ./figures/downsample-cli-help.png
+:label: fig:downsample-cli-help
+
+Wasm module help invocation and generated help output.
+:::
+
+Where a native binary invocation is:
+
+```shell
+❯ ./downsample \
+  ./vm_head.iwi.cbor ./downsampled.iwi.cbor \
+  --shrink-factors 4 4 2
+```
+
+The equivalent wasm module invocation is:
+
+```shell
+❯ wasmtime run --dir=./ -- ./downsample.wasi.wasm \
+  ./vm_head.iwi.cbor ./downsampled.iwi.cbor \
+  --shrink-factors 4 4 2
+```
+
+All ITK-Wasm pipeline modules also support an `--interface-json` flag, which allows a module to self-describe its interface for documentation and language binding generation, described in the following sections.
+
+```shell
+❯ wasmtime run ./downsample.wasi.wasm --interface-json
+{                                              
+   "description": "Apply a smoothing anti-alias filter and subsample the input image.",
+   "name": "downsample",       
+   "version": "0.1.0",
+   "inputs": [
+      {
+         "description": "Input image",
+         "name": "input",
+         "type": "INPUT_IMAGE",                                                               
+         "required": true,   
+         "itemsExpected": 1,
+         "itemsExpectedMin": 1,
+         "itemsExpectedMax": 1,
+         "default": ""                         
+      }                                        
+   ],                                          
+   "outputs": [
+      {
+         "description": "Output downsampled image",                    
+         "name": "downsampled",
+         "type": "OUTPUT_IMAGE",
+         "required": true, 
+         "itemsExpected": 1,
+         "itemsExpectedMin": 1,
+         "itemsExpectedMax": 1,
+         "default": ""                         
+      } 
+   ],  
+   "parameters": [                             
+    [...]
+      {
+         "description": "Shrink factors",      
+         "name": "shrink-factors",             
+         "type": "UINT",                                                                      
+         "required": true,   
+         "itemsExpected": 2,
+         "itemsExpectedMin": 2,
+         "itemsExpectedMax": 1073741824,
+         "default": "[2,2]"    
+      },                                       
+    [...]
+   ]                                           
+}   
+```
+
+### TypeScript bindings
+
+### Python bindings
 
 Since the interface type's Python representation are Python data classes comprised of standand Python data types and NumPy arrays, they are trivially and efficiently serialized for parallel computing with Dask.
 Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.

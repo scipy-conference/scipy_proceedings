@@ -3,3 +3,5 @@ node_modules/
 .pixi
 *.egg-info
 figures/artifacts/tsconfig.tsbuildinfo
+vm_head_frozenct.iwi.cbor
+downsampled.iwi.cbor
