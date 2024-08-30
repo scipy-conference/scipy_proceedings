@@ -206,7 +206,7 @@ Bindings are generated that support both browser-based execution and server-side
 Build scripts are provided to build TypeScript to JavaScript and also generate a demo app with an HTML interface.
 JavaScript bindings load Zstandard-compressed versions the Wasm modules on-demand in a web worker to support progressive and performant execution.
 
-Python packages are generate for both system execution and web brower-execution. In the browser, Pyodide-compatible packages provide client-side web app scripting in Python, including via PyScript, and sustainable, scalable Jupyter deployments via JupyterLite.
+Python packages are generated for both system execution and web brower-execution. In the browser, Pyodide-compatible packages provide client-side web app scripting in Python, including via PyScript, and sustainable, scalable Jupyter deployments via JupyterLite.
 At a system level, Linux, macOS, and Windows operating systems are supported on x86_64 and ARM via wasmtime-py.
 
 #### Python environment dispatch
@@ -702,6 +702,8 @@ The `itkwasm-downsample` Python package in a traditional native desktop applicat
 ## Discussion
 
 WebAssembly was designed with interoperability in mind. Initially supporting languages like C and C++, the ecosystem has grown to include Rust, Go, Python, and more. This broad language support makes WebAssembly a versatile tool for developers across different domains.
+
+Our approach excels in sustainability and composability, thanks to small, self-contained, and idiomatic packages that are platform-agnostic and have minimal dependencies. This design enables outstanding computational reproducibility.
 
 1. **Multi-language Support**: Tools like Emscripten and wasm-bindgen facilitate the compilation of various languages to Wasm, broadening its applicability.
 2. **WebAssembly Interface Types**: Standardizes the way Wasm modules interact with each other and with host environments, simplifying the integration process.
