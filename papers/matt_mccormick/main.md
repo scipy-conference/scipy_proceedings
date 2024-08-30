@@ -286,7 +286,7 @@ Scientific image file formats supported include:
 - [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
 - [DICOM](https://dicom.nema.org/)
 - [DICOM Series](https://dicom.nema.org/)
-- [ITK HDF5](https://support.hdfgroup.org/HDF5/)
+- [ITK HDF5](https://www.hdfgroup.org/)
 - [JPEG](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)
 - [GIPL (Guy's Image Processing Lab)](https://www.ncbi.nlm.nih.gov/pubmed/12956259)
 - [LSM](https://www.openwetware.org/wiki/Dissecting_LSM_files)
@@ -602,7 +602,7 @@ All ITK-Wasm pipeline modules also support an `--interface-json` flag, which all
 }   
 ```
 
-### TypeScript bindings
+### Generating TypeScript packages from ITK-Wasm modules
 
 One of the toolchains that ITK-Wasm supports is Emscripten. To facilitate seamless integration with modern web development, we generate TypeScript packages from Emscripten-generated wasm modules. These packages include Node.js bindings for server-side execution and browser-compatible interfaces for client-side execution.
 
@@ -649,6 +649,7 @@ From an ITK-Wasm project, we generate a complete TypeScript/JavaScript package c
 
 Interactive live API demo application.
 :::
+::::
 
 #### Documentation and demo app
 
@@ -660,10 +661,43 @@ To facilitate adoption and ease of use, we generate:
 
 By providing a comprehensive set of tools and configurations, we empower developers to harness the full potential of ITK-Wasm in modern web applications, streamlining the development of scientific imaging and analysis tools.
 
-### Python bindings
+### Seamless Integration with Python Ecosystem
 
-Since the interface type's Python representation are Python data classes comprised of standand Python data types and NumPy arrays, they are trivially and efficiently serialized for parallel computing with Dask.
-Furthermore, a cuCIM accelerator package exemplifies ITK-Wasm's compatibility with GPU acceleration. Its utility extends to desktop applications like 3D Slicer, illustrating its versatility and broad applicability in the scientific computing ecosystem.
+#### Browser-based Pyodide Packages
+
+We leverage the Emscripten toolchain to generate bindings for browser-based Pyodide Python packages. This enables seamless integration of ITK-Wasm with Pyodide, allowing developers to utilize ITK's algorithms in web-based Python applications.
+
+#### Cross-Platform Compatibility with WASI
+
+For system applications, we provide a WASI-based Python package that ensures cross-platform compatibility across all major platforms and architectures. This broadens the reach of ITK-Wasm, enabling developers to deploy ITK-based applications on a wide range of systems.
+
+#### GPU Acceleration with cuCIM
+
+To further enhance performance, we utilize the dispatch Python package's capabilities in conjunction with a [cuCIM](https://github.com/rapidsai/cucim) accelerator package. This enables GPU acceleration, to enable improvements the execution speed, especially in applications where bulk data resides on the GPU
+
+#### API Documentation and Pythonic Interfaces
+
+We generate API documentation for the simple, Pythonic interfaces, ensuring that developers can easily understand and utilize ITK-Wasm's functionality. The interfaces are designed to be intuitive and easy to use, streamlining the development process.
+
+:::{figure} ./figures/downsample-python-docs.png
+:label: fig:python-docs
+
+Generated API documentation describes the Pythonic interfaces.
+:::
+
+#### Efficient Serialization for Parallel Computing
+
+The interface types' Python representation are built using Python data classes, comprising standard Python data types and NumPy arrays. This design enables trivial and efficient serialization, making it ideal for parallel computing with Dask. Developers can leverage this capability to scale their applications and tackle large-scale computing tasks.
+
+#### Broad Applicability in Scientific Computing
+
+The utility of ITK-Wasm extends beyond web applications, as it can be seamlessly integrated into desktop applications like 3D Slicer [@doi:10.1016/j.mri.2012.05.001]. This versatility demonstrates the broad applicability of ITK-Wasm in the scientific computing ecosystem, making it an invaluable tool for researchers and developers alike.
+
+:::{figure} ./figures/downsample-slicer.png
+:label: fig:slicer
+
+The `itkwasm-downsample` Python package in a traditional native desktop application, 3D Slicer.
+:::
 
 ## Discussion
 
@@ -673,13 +707,17 @@ WebAssembly was designed with interoperability in mind. Initially supporting lan
 2. **WebAssembly Interface Types**: Standardizes the way Wasm modules interact with each other and with host environments, simplifying the integration process.
 3. **Component Model**: An emerging standard that aims to improve modularity and reuse of Wasm components, further enhancing interoperability .
 
-ITK-Wasm provides a robust framework for scientific computing that leverages WebAssembly's strengths. The framework bridges the gap between web-based and native applications, enabling high-performance, cross-platform scientific analysis. By integrating the principals of the WebAssembly Component Model, ITK-Wasm enhances interoperabnornirility and sustainability, allowing scientific Python to thrive in a multi-language ecosystem.
+ITK-Wasm provides a robust framework for scientific computing that leverages WebAssembly's strengths. The framework bridges the gap between web-based and native applications, enabling high-performance, cross-platform scientific analysis. By integrating the principals of the WebAssembly Component Model, ITK-Wasm enhances interoperability and sustainability, allowing scientific Python to thrive in a multi-language ecosystem.
 
 ## Conclusion
 
 ITK-Wasm stands at the forefront of fostering interoperability, multi-language program support, sustainability, accessibility, and reproducibility in scientific computing. By integrating the WebAssembly Component Model, ITK-Wasm not only enhances scientific Python's capabilities but also sets a new standard for developing and distributing multi-language projects. The future of scientific computing is bright with ITK-Wasm's contributions to the field, providing a universal platform for spatial analysis and visualization.
 
-Links:
+## Links:
 
 - Documentation: https://wasm.itk.org/
 - Source code: https://github.com/InsightSoftwareConsortium/ITK-Wasm
+
+## Acknowledgments
+
+The development of ITK-Wasm has been supported, in part, by the National Institute of Mental Health (NIMH) of the National Institutes of Health (NIH) under the [BRAIN Initiative](https://braininitiative.nih.gov/) award number [1RF1MH126732](https://projectreporter.nih.gov/project_info_description.cfm?aid=10259930).
