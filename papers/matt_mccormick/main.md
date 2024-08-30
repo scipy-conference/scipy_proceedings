@@ -604,6 +604,62 @@ All ITK-Wasm pipeline modules also support an `--interface-json` flag, which all
 
 ### TypeScript bindings
 
+One of the toolchains that ITK-Wasm supports is Emscripten. To facilitate seamless integration with modern web development, we generate TypeScript packages from Emscripten-generated wasm modules. These packages include Node.js bindings for server-side execution and browser-compatible interfaces for client-side execution.
+
+#### Node.js bindings
+
+For server-side execution, our Node.js bindings provide direct access to the wasm module's functionality. Local filesystem paths are made available to the wasm module, enabling pipelines to operate on files stored on the server. This allows developers to leverage ITK-Wasm pipelines in a Node.js environment, ideal for tasks such as image processing or analysis on a server.
+
+#### Browser bindings
+
+In the browser, our bindings support pipelines that operate on files using the `File` object, as well as a custom `BinaryFile` object. The `BinaryFile` object consists of a string path and a `Uint8Array` binary, enabling efficient binary data transfer between the browser and wasm module. This allows developers to create web applications that interact with ITK-Wasm pipelines, enabling tasks such as image filtering and segmentation in the browser.
+
+:::{figure} ./figures/downsample-npm.png
+:label: fig:downsample-npm
+
+JavaScript and TypeScript [package *README* rendered](https://www.npmjs.com/package/@itk-wasm/downsample) on *npmjs.com*.
+:::
+
+#### TypeScript Interface Types
+
+Our TypeScript interface types are designed to be idiomatic classes comprised of JSON-compatible JavaScript types and TypedArrays. This ensures seamless interaction between the wasm module and TypeScript code, enabling developers to write efficient, natural, and type-safe code.
+
+#### WebWorker-based execution
+
+To prevent interruption of the main user interface thread and support asynchronous background wasm compilation, pipelines are executed in a `WebWorker` when running in the browser. This ensures a responsive user experience while ITK-Wasm pipelines are executing.
+
+#### Parallelism with WebWorkerPool
+
+For tasks that require parallel processing, a compatible `WebWorkerPool` is available. This enables developers to leverage multiple CPU cores to accelerate computationally intensive tasks, such as image registration and segmentation.
+
+#### Automated package configuration
+
+From an ITK-Wasm project, we generate a complete TypeScript/JavaScript package configuration. This includes:
+
+- *TypeScript Bindings*: Generated for both Node.js and browser environments.
+- *TypeScript Compilation Configuration*: Pre-configured for optimal performance and compatibility.
+- *NPM Package Configuration*: Ready for [publication on the npm registry](#fig:downsample-npm).
+
+::::{figure}
+:label: fig:demo-app
+:placeholder: figures/downsample-demo.png
+
+:::{iframe} https://scipy-2024-itk-wasm-downsample-demo.netlify.app/?functionName=downsample
+:width: 100%
+
+Interactive live API demo application.
+:::
+
+#### Documentation and demo app
+
+To facilitate adoption and ease of use, we generate:
+
+- *README*: A concise introduction to the project and its capabilities.
+- *Docsify Documentation*: Detailed API documentation for the pipeline APIs.
+- *Demo App*: An [interactive testing environment](#fig:demo-app) for sample data or user-provided data, allowing developers to experiment with API parameters and visualize results.
+
+By providing a comprehensive set of tools and configurations, we empower developers to harness the full potential of ITK-Wasm in modern web applications, streamlining the development of scientific imaging and analysis tools.
+
 ### Python bindings
 
 Since the interface type's Python representation are Python data classes comprised of standand Python data types and NumPy arrays, they are trivially and efficiently serialized for parallel computing with Dask.
