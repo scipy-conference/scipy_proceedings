@@ -192,7 +192,7 @@ New projects are typically created with the `create-itk-wasm` CLI:
 npx create-itk-wasm
 ```
 
-The `create-itk-wasm` tool, which can be used interactively or programmatically, will generate C++ code with the desired ITK-Wasm CLI11 interfaces, other support configuration files such as CMake build configuration scripts and a conda _environment.yml_ file, and a PNPM _package.json_ file that will drive Wasm module builds, language binding generation, and testing. The PNPM workspace internally utilizes the `itk-wasm` CLI to run the build in parallel following its dependency graph.
+The `create-itk-wasm` tool, which can be used interactively or programmatically, will generate C++ code with the required ITK-Wasm CLI11 interfaces, other support configuration files such as CMake build configuration scripts and a conda _environment.yml_ file, and a PNPM _package.json_ file that will drive Wasm module builds, language binding generation, and testing. The PNPM workspace internally utilizes the `itk-wasm` CLI to run the build in parallel following its dependency graph.
 
 ### Language-specific libraries and idiomatic bindings
 
@@ -206,7 +206,7 @@ Bindings are generated that support both browser-based execution and server-side
 Build scripts are provided to build TypeScript to JavaScript and also generate a demo app with an HTML interface.
 JavaScript bindings load Zstandard-compressed versions the Wasm modules on-demand in a web worker to support progressive and performant execution.
 
-Python packages are generated for both system execution and web brower-execution. In the browser, Pyodide-compatible packages provide client-side web app scripting in Python, including via PyScript, and sustainable, scalable Jupyter deployments via JupyterLite.
+Python packages for new modules are generated for both system execution and web brower-execution. In the browser, Pyodide-compatible packages provide client-side web app scripting in Python, including via PyScript, and sustainable, scalable Jupyter deployments via JupyterLite.
 At a system level, Linux, macOS, and Windows operating systems are supported on x86_64 and ARM via wasmtime-py.
 
 #### Python environment dispatch
