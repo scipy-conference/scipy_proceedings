@@ -44,16 +44,16 @@ The study area was located in a northern region of the North Atlantic, including
 \subsection{Data pre-processing}
 We used data from the IceAGE project and related data from the bold system's database, both accessible \emph{via} the \citep{uhlir_adding_2021}. Given these databases' enormous breadth of attributes, we selectively reduced the number of attributes and samples. Particularly, we have omitted attributes that were not directly relevant to the analysis of correlations between cumacean genetics and habitat attributes, had little to no variability (non-numerical data), and had a large number of missing data (>95\%). In the IceAGE dataset, we considered 62 specimens out of the 495 available, as only these had their mitochondrial DNA sequence of the 16S rRNA gene. 
 
-Next, we calculated the variance using the var() function in RStudio Desktop 4.3.2 for each of the selected numerical attributes to eliminate those with zero or low variance (threshold ≤ 0.1). The formula (equation \ref{variance}) and code (\autoref{lst:variance}) used to calculate the variance of our final attributes are provided below:
+Next, we calculated the variance using the var() function in RStudio Desktop 4.3.2 for each of the selected numerical attributes to eliminate those with zero or low variance (threshold ≤ 0.1). The formula (equation \ref{variance}) and code (\autoref{lst:variance}) used to calculate the variance of our final attributes, available on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}, are provided below:
 
 \begin{equation}\label{variance}
     S^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}
 \end{equation}
 
-where $S^2$ is the variance of the attribute, $x_i$ represents each attribute value, $bar{x}$ is the average of the values for this attribute, and $n$ is the number of values for this attribute in the dataset.
+where $S^2$ is the variance of the attribute, $x_i$ represents each attribute value, $\bar{x}$ is the average of the values for this attribute, and $n$ is the number of values for this attribute in the dataset.
 
 %\autoref{lst:variance}.
-\begin{lstlisting}[label=lst:variance,language=RStudio,caption=RStudio script to calculate the variance of each numerical attributes in our final dataset available in the data file on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}]
+\begin{lstlisting}[label=lst:variance,language=RStudio,caption=RStudio script to calculate the variance of each numerical attributes in our final dataset]
 # Import data
 Data <- read.csv(file = "Final_Data_Article.csv", header = TRUE, sep = ";")
 
@@ -73,13 +73,13 @@ print(variances)
 Only water salinity has been removed from the previously selected numerical attributes ($S^2 = 0.02146629$). We then eliminated attributes that showed strong correlations with each other (threshold > 0.90) using the cor() function in RStudio Desktop 4.3.2 to avoid repetition between attributes and ensure that each was unique and relevant. Since we have three missing data for the attribute of water O\textsubscript{2} concentration, we have used the "pairwise.complete.obs method". This method calculates the Pearson correlation matrix using all accessible pairs of observations, even if some data are missing. The formula (equation \ref{pearson}) and code (\autoref{lst:pearson}) used to calculate the Pearson correlation coefficient of our final attributes are shown below:
 
 \begin{equation}\label{pearson}
-    r = \frac{\sum_{i=1}^{n_x} (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n_y} (x_i - \bar{x})^2 \sum_{i=1}^{n} (y_i - \bar{y})^2}}
+    r = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_i - \bar{x})^2 (y_i - \bar{y})^2}}
 \end{equation}
 
-where $r$ is the Pearson correlation coefficient between two attributes, $x_i$ are the values of an attribute, $y_i$ are the values of another attribute, $bar{x}$ and $bar{y}$ are respectively the averages of the two attributes, and $n_x$ and $n_y$ are the number of values of each of the two attributes.
+where $r$ is the Pearson correlation coefficient between two attributes, $x_i$ are the values of an attribute, $y_i$ are the values of another attribute, $\bar{x}$ and $\bar{y}$ are respectively the averages of the two attributes, and $n$ is the sample size of the two attributes.
 
 %\autoref{lst:pearson}.
-\begin{lstlisting}[label=lst:pearson,language=RStudio,caption=RStudio script to calculate the Pearson correlation coefficient between all the numerical attributes in our final dataset available in the data file on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}]
+\begin{lstlisting}[label=lst:pearson,language=RStudio,caption=RStudio script to calculate the Pearson correlation coefficient between all the numerical attributes in our final dataset]
 # Import data
 Data <- read.csv(file = "Final_Data_Article.csv", header = TRUE, sep = ";")
 
