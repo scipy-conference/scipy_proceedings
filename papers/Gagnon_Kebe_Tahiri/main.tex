@@ -1,9 +1,9 @@
 \begin{abstract}
-Cumacea (crustaceans: Peracarida) are vital indicators of benthic health in marine ecosystems. This study investigated the influence of envirionmental, climatic and geographic parameters on their genetic variability in the Northern North Atlantic, focusing on Icelandic waters. We analyzed mitochondrial sequences of the 16S rRNA gene from 62 cumaceans specimens. Using the \textit{aPhyloGeo} software, we correlated these sequences with relevant factors such as latitude (decimal degree) at the start of sampling, wind speed (m/s) at the start of sampling, O\textsubscript{2} concentration (mg/L), and depth (m) at the beginning of sampling.
+Cumacea (crustaceans: Peracarida) are vital indicators of benthic health in marine ecosystems. This study investigated the influence of envirionmental, climatic and geographic parameters on their genetic variability in the Northern North Atlantic, focusing on Icelandic waters. We analyzed mitochondrial sequences of the 16S rRNA gene from 62 Cumacea specimens. Using the \textit{aPhyloGeo} software, we correlated these sequences with relevant factors such as latitude (decimal degree) at the start of sampling, wind speed (m/s) at the start of sampling, O\textsubscript{2} concentration (mg/L), and depth (m) at the beginning of sampling.
 
-Our analyses revealed variability in geographic and environmental parameters, reflecting diverse ecological requirements and benthic habitats. The most common cumacean families, Diastylidae and Leuconidae, suggest adaptations to various marine environments. Phylogeographic analysis showed that specific genetic sequences were correlated with wind speed (m/s) at the start of sampling and O\textsubscript{2} concentration (mg/L). This indicates potential local adaptation to these fluctuating conditions.
+Our analyses revealed variability in geographic and environmental parameters, reflecting diverse ecological requirements and benthic habitats. The most common Cumacea families, Diastylidae and Leuconidae, suggest adaptations to various marine environments. Phylogeographic analysis showed that specific genetic sequences were correlated with wind speed (m/s) at the start of sampling and O\textsubscript{2} concentration (mg/L). This indicates potential local adaptation to these fluctuating conditions.
 
-These results reinforce the importance of further research into the relationship between cumacean genetics and environmental attributes. Understanding these relationships is crucial for elucidating the evolutionary dynamics in marine ecosystems. This study sheds essential light on invertebrate acclimatization to climate change and deep-sea habitat management. The results can contribute to the evolution of more efficient conservation strategies and inform policies that protect vulnerable marine ecosystems. 
+These results reinforce the importance of further research into the relationship between Cumacea genetics and environmental attributes. Understanding these relationships is crucial for elucidating the evolutionary dynamics and adaptation of deep-sea organisms. This study sheds essential light on invertebrate acclimatization to climate change and deep-sea habitat management. It can contribute to the evolution of more efficient conservation strategies and inform policies that protect vulnerable marine ecosystems. 
 
 The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub} and \href{https://pypi.org/project/aphylogeo/}{PyPi}, providing an invaluable tool for future research.
 \end{abstract}
@@ -11,21 +11,21 @@ The \textit{aPhyloGeo} Python package is freely and publicly available on \href{
 \section{Introduction}\label{introduction}
 The North Atlantic and Subarctic regions, particularly the Icelandic waters, are of ecological interest due to their diverse water masses and unique oceanographic features \citep{schnurr_composition_2014, meisner_benthic_2014, uhlir_adding_2021}. These areas form vital {benthic habitats}\footnote{These are areas on the bottom of the oceans or lakes, including sediments and organisms that live in them.} \citep{levin2009ecological} and enhance our understanding of deep-sea ecosystems and biodiversity patterns \citep{rogers2007corals, danovaro2008exponential, uhlir_adding_2021}. The IceAGE project and its predecessors, BIOFAR and BIOICE, provide invaluable data for studying the impacts of climate change and seabed mining, especially in the Greenland, Iceland, and Norwegian (GIN) seas \citep{meisner_prefacebiodiversity_2018}. 
 
-Cumacea, a crustacean taxon within Peracarida, provide major indicators of marine ecosystem health due to their sensitivity to environmental fluctuations \citep{stransky_diversity_2010} and their contribution to benthic foods webs \citep{rehm2009cumacea}. Despite their ecological importance, deep-sea benthic invertebrates’ evolutionary history and dynamics remain uncharted, notably in the North Atlantic. Understanding these deep-sea organisms' genetic distribution and demography is central for predicting their response to climate change \citep{jennings_phylogeographic_2014}. 
+Cumacea, a crustacean taxon within Peracarida, provide major indicators of marine ecosystem health due to their sensitivity to environmental fluctuations \citep{stransky_diversity_2010} and their contribution to benthic foods webs \citep{rehm2009cumacea}. Despite their ecological importance, deep-sea benthic invertebrates’ evolutionary history and dynamics remain uncharted, notably in the North Atlantic \citep{jennings_phylogeographic_2014}. Interpreting these deep-sea organisms' genetic distribution and demography is central for predicting their response to climate change \citep{jennings_phylogeographic_2014}. 
 
-Considering the current climate emergency, this study aims to analyze the influence of geographic, environmental, and climatic parameters on the genetics of cumacean in the Nothern North Atlantic. Specifically, we will examine whether there is a correlation between the 16S rRNA mitochondrial gene region of cumacean species sampled and their habitat characteristics. If so, we will determine which attributes correlate best with a specific genetic sequence (i.e., window) and identify the potential associated protein. Our approach includes confirming different {phylogeographic models}\footnote{Phylogeographic models are computational tools that analyze relationships between the genetic structures of populations and their geographic distributions. In our case, by incorporating geographic, environmental, and climatic properties, we can interpret their impact on the genetic distribution of cumacean species.} and updating a Python package (currently in beta), \textit{aPhyloGeo}, to simplify these analyses.
+Considering the current climate emergency, this study aims to analyze the influence of geographic, environmental, and climatic parameters on the genetics of Cumacea in the Nothern North Atlantic. Specifically, we will examine whether there is a correlation between the 16S rRNA mitochondrial gene region of Cumacea species sampled and their habitat characteristics. If so, we will determine which attributes correlate best with a specific genetic sequence (i.e., window) and identify the potential associated protein. Our approach includes confirming different {phylogeographic models}\footnote{Phylogeographic models are computational tools that analyze relationships between the genetic structures of populations and their geographic distributions. In our case, by incorporating geographic, environmental, and climatic properties, we can interpret their impact on the genetic distribution of Cumacea species.} and updating a Python package (currently in beta), \textit{aPhyloGeo}, to simplify these analyses.
 
 This paper is structured as follows: Section \autoref{related-works} reviews pertinent studies on the biodiversity and biogeography of deep-sea benthic invertebrates; Section \autoref{contribution} summarizes the aims and contributions of this study, highlighting aspects relating to the conservation and acclimatization of marine invertebrates to climate change; Section \autoref{materials-methods} details the data collection, sampling procedures, and genetic analyses; Section \autoref{metrics} describes the metrics used for evaluating phylogeographic models; Section \autoref{results} presents the findings; and Section \autoref{conclusion}  discusses their implications for future research and conservation efforts.
 
 \section{Related Works}\label{related-works}
-Assessing and quantifying the biodiversity of deep-sea benthic invertebrates has become increasingly crucial since it was discovered that their richness may be underestimated \citep{grassle1992deep}. Subsequent research has highlighted the need for large-scale distribution models to interpret the diversity of these organisms across their ecological and evolutionary contexts \citep{rex1997large}. That is why recent efforts have focused on mapping, managing, and studying the seabed. Advanced technologies such as acoustic detection are improving our knowledge of benthic ecosystem complexity \citep{brown2011benthic}. Integrating genetic and habitat characteristics gives a deeper understanding of how ecological and geographic factors influence the genetic differences, distribution, biodiversity, and resilience of deep-sea benthic organisms \citep{vrijenhoek2009cryptic}.
+Assessing and quantifying the biodiversity of deep-sea benthic invertebrates has become increasingly crucial since it was discovered that their richness may be underestimated \citep{grassle1992deep}. Subsequent research has highlighted the need for large-scale distribution models to interpret the diversity of these organisms across their ecological and evolutionary contexts \citep{rex1997large}. That is why recent efforts have focused on mapping, managing, and studying the seabed \citep{brown2011benthic}. Advanced technologies such as acoustic detection are improving our knowledge of benthic ecosystem complexity \citep{brown2011benthic}. Integrating genetic and habitat characteristics gives a deeper understanding of how ecological and geographic factors influence the genetic differences, distribution, biodiversity, and resilience of deep-sea benthic organisms \citep{vrijenhoek2009cryptic}.
 
-However, the relationship between genetics and the environment is complex, involving gene-environment interactions and natural selection factors, which makes it difficult to identify clear causal relationships \citep{balkenhol_identifying_2009}. In addition, the distinction between the direct and indirect effects of the environment on genetics poses other challenges \citep{manel_perspectives_2010, balkenhol_landscape_2019}. The restrictions of available methods for measuring genetic and ecological attributes, combined with logistical constraints, often limit the scope of such studies \citep{manel_perspectives_2010, shafer_widespread_2013}. This complexity may explain why the environment and genetics of cumaceans have been less studied, even though they are essential for interpreting how these deep-sea invertebrates adapt to fluctuating environmental conditions.
+However, the relationship between genetics and the environment is complex, involving gene-environment interactions and natural selection factors, which makes it difficult to identify clear causal relationships \citep{balkenhol_identifying_2009}. In addition, the distinction between the direct and indirect effects of the environment on genetics poses other challenges \citep{manel_perspectives_2010, balkenhol_landscape_2019}. The restrictions of available methods for measuring genetic and ecological attributes, combined with logistical constraints, often limit the scope of such studies \citep{manel_perspectives_2010, shafer_widespread_2013}. This complexity may explain why the environment and genetics of Cumacea have been less studied, even though they are essential for interpreting how these deep-sea invertebrates adapt to fluctuating environmental conditions.
 
 \section{Our Contribution}\label{contribution}
 Our study focuses on the genetic variation of the 16S rRNA mitochondrial gene in cumacean populations in the face of environmental fluctuations, which has been little explored in previous studies \citep{grassle1992deep, rex2000latitudinal}. We aim to refine the natural selection hypothesis by identifying the genetic region with the highest mutation rate based on the fact that individuals best adapted to their environment are likely to survive and evolve. We then analyze its correlation with geographic and ecological distribution patterns and determine the protein potentially associated with this region. This method represents a major advance over previous research, which often fails to integrate genetic and environmental data in the context of deep-sea invertebrates \citep{etter1990population, vrijenhoek2009cryptic}.
 
-Using robust analytical methods such as dissimilarity calculations and phylogenetic reconstructions, we provide new insights into the genetic adaptation of marine cumaceans. Unlike previous studies, which have encountered difficulties establishing a link between genetics and the environment \citep{manel2003landscape, balkenhol2009statistical}, our results provide a better understanding of evolutionary dynamics in aquatic ecosystems.
+Using robust analytical methods such as dissimilarity calculations and phylogenetic reconstructions, we provide new insights into the genetic adaptation of marine Cumacea. Unlike previous studies, which have encountered difficulties establishing a link between genetics and the environment \citep{manel2003landscape, balkenhol2009statistical}, our results provide a better understanding of evolutionary dynamics in aquatic ecosystems.
 
 Furthermore, our genetic and environmental data highlights critical habitats of high conservation interest, which can be considered for establishing marine protected areas \citep{levin2009ecological}. These results are essential for developing informed conservation strategies in the context of climate change. Finally, our study paves the way for further research on other invertebrate species across different geographic regions. By extending this research to diverse environments and taxonomic groups, scientists will gain a more complete understanding of the adaptation and resilience of marine invertebrates to changing conditions. This work contributes essential insights to the field and supports the development of informed conservation strategies.
 
@@ -35,16 +35,16 @@ This section describes our data and introduces the main stages of data pre-proce
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.7\textwidth]{diagram.drawio.png}
-    \caption{Flow chart summarizing the Materials and Methods section workflow. Six different colors highlight the blocks. The first block (blue) represents our database. The second block (red) is data pre-processing, where we remove attributes. The third and fourth blocks (orange) implement the \textit{aPhyloGeo} software and its parameters for our phylogeographic analyses. The fifth block (grey) calculates phylogenetic tree comparison distances. The sixth block (yellow) compares the distances between the phylogenetic trees produced. The seventh block (purple) identifies regions with high mutation rates based on the results of the tree comparisons. *See YAML file on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}. \label{fig:fig1}}
+    \caption{Flow chart summarizing the Materials and Methods section workflow. Six different colors highlight the blocks. The first block (blue) represents our database. The second block (red) is data pre-processing, where we remove attributes. The third and fourth blocks (orange) implement the \textit{aPhyloGeo} software and its parameters for our phylogeographic analyses. The fifth block (grey) calculates phylogenetic tree comparison distances. The sixth block (yellow) compares the distances between the phylogenetic trees produced. The seventh block (purple) identifies regions with high mutation rates based on the results of the tree comparisons. *See YAML file on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub} for more details on these parameters. \label{fig:fig1}}
 \end{figure}
 
 \subsection{Description of the data}
 The study area was located in a northern region of the North Atlantic, including the Icelandic Sea, the Denmark Strait, and the Norwegian Sea. The specimens examined were collected as part of the IceAGE project (Icelandic marine Animals: Genetic and Ecology; Cruise ship M85/3 in 2011), which focused on the deep continental slopes and abyssal waters around Iceland \citep{meisner_prefacebiodiversity_2018}. The sampling period for the included specimens was from August 30 to September 22, 2011, and they were collected at depths ranging from 316 to 2568 m. Detailed protocols concerning the sampling plan, sample processing, DNA extraction steps, PCR amplification, sequencing, and aligned DNA sequences are available in \citep{uhlir_adding_2021}.
 
 \subsection{Data pre-processing}
-We used data from the IceAGE project and related data from the bold system's database, as described in \citep{uhlir_adding_2021}. Given these databases' enormous breadth of attributes, we applied a selective reduction procedure. Attributes that were not directly relevant to the analysis of correlations between cumacean genetics and habitat attributes, displayed little to no variability (non-numerical data), and had a large number of missing data (>95\%) were omitted from our study. Out of the 495 available in the IceAGE dataset, we considered 62 specimens for which mitochondrial DNA sequences of the 16S rRNA gene were available. 
+We used data from the IceAGE project and related data from the bold system's database, as described in \citep{uhlir_adding_2021}. Given these databases' enormous breadth of attributes, we applied a selective reduction procedure. Attributes that were not directly relevant to the analysis of correlations between Cumacea genetics and habitat attributes, displayed little to no variability (non-numerical data), and had a large number of missing data (>95\%) were omitted from our study. Out of the 495 available in the IceAGE dataset, we considered 62 specimens for which mitochondrial DNA sequences of the 16S rRNA gene were available. 
 
-Next, we calculated the variance using the 'var()' function in RStudio Desktop 4.3.2 for each of the selected numerical attributes. This step aimed to eliminate attributes with low variation, as they are unlikely to provide essential data to the analysis. We set a variance threshold of ≤ 0.1 to exclude uninformative attributes. Only water salinity was eliminated based on this criterion ($S^2 = 0.02146629$). The formula (equation \ref{variance}) and code (\autoref{lst:variance}) used to calculate the variance of our final attributes, available in the data file on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}, are provided below:
+Next, we calculated the variance using the 'var()' function in RStudio Desktop 4.3.2 for each of the selected numerical attributes. This step aimed to eliminate attributes with low variation, as they are unlikely to provide critical data to the analysis. We set a variance threshold of ≤ 0.1 to exclude uninformative attributes. Only water salinity was eliminated based on this criterion ($S^2 = 0.02146629$). The formula (equation \ref{variance}) and code (\autoref{lst:variance}) used to calculate the variance of our final attributes, available in the data file on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}, are provided below:
 
 \begin{equation}\label{variance}
     S^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}
@@ -54,23 +54,30 @@ where $S^2$ is the variance of the attribute, $x_i$ represents each attribute va
 
 %\autoref{lst:variance}.
 \begin{lstlisting}[label=lst:variance,language=RStudio,caption=RStudio script to calculate the variance of each numerical attributes in our final dataset]
-# Import data
+# Import data from CSV file
+# This code reads the dataset "Final_Data_Article.csv" and stores it in a variable called Data.
+# The data is read with semicolon (;) as the delimiter.
 Data <- read.csv(file = "Final_Data_Article.csv", header = TRUE, sep = ";")
 
 # Calculate the variance of numerical attributes only from the dataset
+# This snippet computes the variance for each numerical column in the dataset.
+# Non-numeric columns are excluded from the calculation.
 variances <- sapply(Data, function(x) {
+  # Check if the column is numeric
   if (is.numeric(x)) {
+    # Compute variance, excluding NA values
     var(x, na.rm = TRUE)
   } else {
-    NA
+    NA  # Return NA for non-numeric columns
   }
 })
 
 # Display variances
+# Print the calculated variances for each numerical attribute.
 print(variances)
 \end{lstlisting}
 
-We calculated the Pearson correlation between attributes using the 'cor()' function in RStudio Desktop 4.3.2 to refine our dataset. Attributes exhibiting strong correlations with each other (threshold > 0.90) were removed to avoid repetition and guarantee attribute independence. Since we have three missing data for the attribute of water O\textsubscript{2} concentration, we have used the "pairwise.complete.obs method". This method calculates the Pearson correlation matrix using all accessible pairs of observations, even if some data are missing. The formula (equation \ref{pearson}) and code (\autoref{lst:pearson}) used to calculate the Pearson correlation coefficient of our final attributes are shown below:
+We calculated the Pearson correlation between attributes using the 'cor()' function in RStudio Desktop 4.3.2 to refine our dataset. Attributes exhibiting strong correlations with each other (threshold > 0.90) were removed to avoid repetition and guarantee attribute independence. Since we have three missing data for the attribute of water O\textsubscript{2} concentration, we have used the "pairwise.complete.obs method". This method calculates the Pearson correlation matrix using all accessible pairs of observations, even if some data are missing. The formula (equation \ref{pearson}) and code (\autoref{lst:pearson}) used to calculate the Pearson correlation coefficient between our final numerical attributes are shown below:
 
 \begin{equation}\label{pearson}
     r = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_i - \bar{x})^2 (y_i - \bar{y})^2}}
@@ -80,16 +87,23 @@ where $r$ is the Pearson correlation coefficient between two attributes, $x_i$ a
 
 %\autoref{lst:pearson}.
 \begin{lstlisting}[label=lst:pearson,language=RStudio,caption=RStudio script to calculate the Pearson correlation coefficient between all the numerical attributes in our final dataset]
-# Import data
+# Import data from CSV file
+# This code reads the dataset "Final_Data_Article.csv" and stores it in a variable called Data.
+# The data is read with semicolon (;) as the delimiter.
 Data <- read.csv(file = "Final_Data_Article.csv", header = TRUE, sep = ";")
 
 # Select numeric columns only from the dataset
+# This code filters the dataset to include only numeric columns.
+# It creates a new dataframe called numeric_Data that contains only the columns with numeric data.
 numeric_Data <- Data[sapply(Data, is.numeric)]
 
 # Calculate Pearson correlation matrix
+# This code calculates the Pearson correlation matrix for the numeric columns.
+# The “pairwise.complete.obs” argument is used to ignore missing values.
 correlation_matrix <- cor(numeric_Data, use = "pairwise.complete.obs")
 
 # Display correlation matrix
+# Print the resulting Pearson correlation matrix to the console.
 print(correlation_matrix)
 \end{lstlisting}
 
@@ -115,11 +129,11 @@ Wind speed (m/s) (Figure \ref{fig:fig2}d) and wind direction at the start and en
 
 \subsection{Selected attributes in the bold system's database}
 \subsubsection{Taxomic attributes} 
-The family, genus, and scientific name of the cumacean sampled were integrated into our data in order to study evolutionary relationships and genetic variation in relation to habitat attributes among the specimens in our dataset. These comprise seven families: Diastylidae ($n=21$), Lampropidae ($n=13$), Leuconidae ($n=12$), Astacidae ($n=7$), Bodotriidae ($n=4$), Ceratocumatidae ($n=3$), and Pseudocumatidae ($n=2$). A total of 21 cumacean species were found in our sample (Figure \ref{fig:fig3}). We have also included the sample identity (id), so that each sample retains its uniqueness. Some specimens were identified only to genus (one specimen) or family (five specimens) in our sample.
+The family, genus, and scientific name of the cumacean sampled were integrated into our data to study evolutionary relationships and genetic variation to habitat attributes among the specimens in our dataset. These comprise seven families: Diastylidae ($n=21$), Lampropidae ($n=13$), Leuconidae ($n=12$), Astacidae ($n=7$), Bodotriidae ($n=4$), Ceratocumatidae ($n=3$), and Pseudocumatidae ($n=2$). A total of 21 cumacean species were found in our sample (Figure \ref{fig:fig3}). We have also included the sample identity (id) so that each sample remains unique. Some specimens were identified only to genus (one specimen) or family (five specimens) in our sample.
 
 \subsection{Selected attributes from article \cite{uhlir_adding_2021}} 
 \subsubsection{Other environmental attributes} 
-The habitat and water mass of the sampling points were the only attributes taken directly from Table 1 of \citep{uhlir_adding_2021}, as they can give us insight into how they may effect cumacean genetic diversity and the acclimatation of these species in the GIN seas around Iceland. Thus, the water mass definitions, as described in \citep{uhlir_adding_2021}, were used as a reference: Arctic Polar Water (APW, $n=15$), Iceland Sea Overflow Water (ISOW, $n=15$), North Atlantic Water (NAW, $n=9$), Arctic Polar Water/Norwegian Sea Arctic Intermediate Water (APW/NSAIW, $n=7$), warm Norwegian Sea Deep Water (NSDWw, $n=8$), Labrador Sea Water (LSW, $n=3$), cold Norwegian Sea Deep Water (NSDWc, $n=3$), and Norwegian Sea Arctic Intermediate Water (NSAIW, $n=2$) (Figure \ref{fig:fig4}). In terms of habitat, we considered the three categories used in \citep{uhlir_adding_2021}: deep sea ($n=38$), shelf ($n=15$), and slope ($n=9$) (Figure \ref{fig:fig5}).
+The habitat and water mass of the sampling points were the only attributes taken directly from Table 1 of \citep{uhlir_adding_2021}, as they can give us insight into how they may affect Cumacea genetic diversity and the acclimatization of these species in the GIN seas around Iceland. Thus, the water mass definitions, as described in \citep{uhlir_adding_2021}, were used as a reference: Arctic Polar Water (APW, $n=15$), Iceland Sea Overflow Water (ISOW, $n=15$), North Atlantic Water (NAW, $n=9$), Arctic Polar Water/Norwegian Sea Arctic Intermediate Water (APW/NSAIW, $n=7$), warm Norwegian Sea Deep Water (NSDWw, $n=8$), Labrador Sea Water (LSW, $n=3$), cold Norwegian Sea Deep Water (NSDWc, $n=3$), and Norwegian Sea Arctic Intermediate Water (NSAIW, $n=2$) (Figure \ref{fig:fig4}). In terms of habitat, we considered the three categories used in \citep{uhlir_adding_2021}: deep sea ($n=38$), shelf ($n=15$), and slope ($n=9$) (Figure \ref{fig:fig5}).
 
 To better interpret benthic species' relationship and evolutionary responses, genetic data are required \citep{wilson_speciation_1987, uhlir_adding_2021}. Thus, the aligned DNA sequence of the 16S rRNA mitochondrial gene region from each of the samples was included in our analyses. This region is standard in phylogeny and phylogeography studies \citep{hugenholtz1998impact} and sufficiently conserved over time to guarantee exact alignments between different species or populations \citep{saccone1999evolutionary}. We examined 62 of the 306 aligned DNA sequences used for phylogeographic analyses by \citep{uhlir_adding_2021}. As some specimens in our sample have their DNA sequence duplicated, or even quadruplicated with a difference of one or two nucleotides, we took into account the longest-aligned DNA sequence of each specimen.
 
@@ -138,33 +152,43 @@ The \textit{aPhyloGeo} Python package is freely and publicly available on \href{
 
 %\autoref{lst:main}.
 \begin{lstlisting}[label=lst:main,language=Python,caption=Main script for tutorial using the aPhyloGeo package.]
+# This script outlines the main steps for processing genetic and attribute data using the aPhyloGeo package.
 if __name__ == "__main__":
 
-    # Load parameters
+    # Load parameters from a configuration file
+    # This function call loads parameters necessary for the analysis from a specified file.
     Params.load_from_file()
 
     # Load the sequence file
+    # This function call loads the genetic sequence file specified by the reference gene filepath.
     sequence_file = utils.load_sequence_file(Params.reference_gene_filepath)
 
     # Create an AlignSequences object
+    # This object is responsible for aligning the genetic sequences.
     align_sequence = AlignSequences(sequence_file)
 
-    # Load attribute data 
+    # Load attribute data from a CSV file
+    # This reads the attribute data (e.g., environmental factors) into a pandas DataFrame.
     attribute_data = pd.read_csv(Params.file_name)
 
     # Perform the alignment of sequences
+    # This method aligns the genetic sequences and stores the results.
     alignments = align_sequence.align()
 
-    # Generate phylogenetic trees
+    # Generate phylogenetic trees based on aligned sequences
+    # This function creates phylogenetic trees from the multiple sequence alignments.
     genetic_trees = utils.genetic_pipeline(alignments.msa)
     
     # Create a GeneticTrees object
+    # This object represents the generated phylogenetic trees in Newick format.
     trees = GeneticTrees(trees_dict=genetic_trees, format="newick")
    
-    # Generate attribute trees
+    # Generate attribute trees based on attribute data
+    # This function creates trees representing the relationships between different attributes.
     attribute_trees = utils.attribute_pipeline(attribute_data)
     
-    # Filter the results
+    # Filter the results based on the generated trees
+    # This function filters the results to ensure they meet certain criteria.
     utils.filter_results(attribute_trees, genetic_trees, attribute_data)
 \end{lstlisting}
 
@@ -173,7 +197,7 @@ if __name__ == "__main__":
 
 \item \textbf{In the second step}, trees were generated with environmental, geographic, climatic, and genetic data. Concerning geographic attributes, we calculated the dissimilarity between each data pair from different geographic conditions, producing a symmetrical square matrix. The {neighbor-joining algorithm}\footnote{It is a method used to construct phylogenetic trees using distance matrices.} was used to design the geographic tree from this matrix. The same approach was applied to environmental, climatic, and genetic data. An {iterative phylogenetic reconstruction method}\footnote{This method makes it possible to build phylogenetic trees by progressively reforming them as new data or sequences are added.} was used to construct phylogenetic trees based on 62 16S rRNA mitochondrial sequences, taking into account only data located within an interval that moves along the alignment. This displacement can vary according to the steps and the size of the window defined by the user (their length is determined by the number of base pairs (bp)) \citep{koshkarov_phylogeography_2022}. In our case, we set up the software \textit{aPhyloGeo} as follows: 'pairwiseAligner' for sequence alignment; 'Hamming distance' to measure simple dissimilarities between sequences of identical length; 'Wider Fit by elongating with Gap (starAlignment)' algorithm takes alignment gaps into account, which is often mandatory in the case of major deletions or insertions in the sequences; windows size: 1 nucleotide (nt); and finally, window step: 10 nt. The last two configurations imply that for each 1 nt window, a phylogenetic tree is produced, then the window is moved by 10 nt, creating a new tree.
 
-\item \textbf{In the third step}, the phylogenetic trees constructed in each sliding window are compared with environmental, climatic, and geographic trees using Robinson-Foulds Distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}, normalized Robinson-Foulds Distance, Euclidean Distance, and Least-Squares Distance. These contribute to the understanding of the correspondence between cumacean genetic sequences and their habitat. The results of the metrics used were obtained using the functions leastSquare(tree1, tree2), robinsonFoulds(tree1, tree2), euclideanDist(tree1, tree2) from the \textit{aPhyloGeo} software and were organized by the main function (\autoref{lst:main}). The approach also takes bootstrapping into account. A sliding window allows detailed identification subtle regions with high rates of genetic mutation. This method requires shifting a fixed-size window over the alignment of genetic sequences, allowing phylogenetic trees to be reconstructed for each part of the sequence. As a result, it recognizes changes in evolutionary relationships along the 16S rRNA mitochondrial gene region of the cumaceae species. This method is critical for determining whether specific gene sequences of cumaceans can be affected by certain ecological or geographic conditions of their habitat (see Figure \ref{fig:fig6} and Figure \ref{fig:fig7}).
+\item \textbf{In the third step}, the phylogenetic trees constructed in each sliding window are compared with environmental, climatic, and geographic trees using Robinson-Foulds Distance \citep{robinson_comparison_1981, koshkarov_phylogeography_2022}, normalized Robinson-Foulds Distance, Euclidean Distance, and Least-Squares Distance. These contribute to understanding the correspondence between cumacean genetic sequences and their habitat. The results of the metrics used were obtained using the functions leastSquare(tree1, tree2), robinsonFoulds(tree1, tree2), euclideanDist(tree1, tree2) from the \textit{aPhyloGeo} software and were organized by the main function (\autoref{lst:main}). The approach also takes bootstrapping into account. A sliding window allows detailed identification of subtle regions with high rates of genetic mutation. This method requires shifting a fixed-size window over the alignment of genetic sequences, allowing phylogenetic trees to be reconstructed for each part of the sequence. As a result, it recognizes changes in evolutionary relationships along the 16S rRNA mitochondrial gene region of the Cumacea species. This method is critical for determining whether specific gene sequences of cumaceans can be affected by certain ecological or geographic conditions of their habitat (see Figure \ref{fig:fig6} and Figure \ref{fig:fig7}).
 \end{enumerate}
 
 \subsection{Figure construction}
@@ -184,9 +208,9 @@ The following section presents a more concise version of the formulas mentioned 
 
 \subsection{Robinson-Foulds Distance}\label{RF}
 
-The Robinson-Foulds Distance (RFD) quantifies dissimilarity between phylogenetic trees by counting the number of clades  (i.e., groups of species with a common origin) present in one tree but absent in the other. This measure can be used to assess topological differences between trees (Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}). 
+The Robinson-Foulds Distance (RFD) quantifies dissimilarity between phylogenetic trees by counting the number of clades  (i.e., groups of species with a common origin) present in one tree but absent in the other. This measure can be used to assess topological differences between trees. 
 
-In this context, we compare phylogenetic trees constructed from various habitat attributes (see the list in the first step of \autoref{aPhyloGeo-software}). For example, consider one tree based on habitat attribute A and the other trees based on the other habitat attributes (B, C, D, E, ...). The RFD measures the number of clades that differ between the initial tree (constructed using the A attribute) and each of the other trees, by calculating the level of topological dissimilarity between the trees. A high distance implies that the habitat attribute has a particular impact on the phylogenetic relationships of cumacean species compared to other attributes.
+In this context, we compare phylogenetic trees constructed from various habitat attributes (see the list in the first step of \autoref{aPhyloGeo-software}). For example, consider one tree based on habitat attribute 1 and the other tree based on the habitat attribute 2. The RFD measures the number of clades that differ between the tree constructed using the attribute 1 and the other tree constructed using the attribute 2, by calculating the level of topological dissimilarity between the two trees (see (Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds})). A high distance implies that the habitat attribute has a particular impact on the phylogenetic relationships of cumacean species compared to other attributes.
 
 \begin{equation}\label{eq:rf}
     \text{RF}(T_1, T_2) = | \Sigma(T_1) \Delta \Sigma(T_2) |
@@ -195,19 +219,42 @@ In this context, we compare phylogenetic trees constructed from various habitat 
 where $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of splits in trees $T_1$ and $T_2$.
 
 %\autoref{lst:robinsonFoulds}.
-\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the RFD using the ete3 package in the aPhyloGeo package.]
+\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds Distance using the ete3 package in the aPhyloGeo package.]
+# This script computes the RFD between two phylogenetic trees to assess their topological dissimilarity.
+
 import ete3
 
 def robinson_foulds(tree1, tree2):
+    """
+    Calculate the Robinson-Foulds Distance between two phylogenetic trees.
+
+    Parameters:
+    - tree1: The first phylogenetic tree in Newick format.
+    - tree2: The second phylogenetic tree in Newick format.
+
+    Returns:
+    - rf: The Robinson-Foulds distance between the two trees.
+    - rf_normalized: The normalized Robinson-Foulds distance.
+    """
+    # Initialize the Robinson-Foulds distance
     rf = 0
+
+    # Convert trees from Newick format to ete3.Tree objects
+    # This parsing allows us to use ete3 methods to compare trees.
     tree1_newick = ete3.Tree(tree1.format("newick"), format=1)
     tree2_newick = ete3.Tree(tree2.format("newick"), format=1)
 
-    rf, rf_max, common_leaves = tree1_newick.robinson_foulds(tree2_newick, 
-                                                             unrooted_trees=True)
+    # Calculate the Robinson-Foulds distance
+    # The method returns the RFD, the maximum possible RFD, and the common leaves (or taxa) between the trees.
+    rf, rf_max, common_leaves = tree1_newick.robinson_foulds(tree2_newick, unrooted_trees=True)
+
+    # If there are no common leaves, set the RFD to 0
+    # This ensures that we handle cases where trees may not have overlapping taxa.
     if len(common_leaves) == 0:
         rf = 0
 
+    # Return the RFD and its normalized value
+    # Normalization is done by dividing RFD by the maximum possible RFD.
     return rf, rf / rf_max
 \end{lstlisting}
 
@@ -215,7 +262,7 @@ def robinson_foulds(tree1, tree2):
 
 The normalized Robinson-Foulds Distance (nRFD) scales the RFD to account for the size variations in the trees (number of clades), allowing a more equitable comparison. It scales the distance to a range between 0 and 1. In our context, the distance has been normalized by $2n-6$, where $n$ represents the number of taxa. (Equation \eqref{eq:rf_norm} and \autoref{lst:euclideanDist}).
 
-For example, if the size of tree A differs due to missing data, this normalized metric allows us to compare its dissimilarity with that of other trees (B, C, D, ...) in a fairer way. In this case, it reveals the relative influence of habitat parameter A on cumacean phylogenetic relationships, independent of tree size.
+For example, if the size of tree 1 (constructed using attribute 1) differs due to missing data, this normalized metric allows us to compare its dissimilarity with tree 2 (constructed using attribute 2) in a fairer way. In this case, it reveals the relative influence of habitat attribute 1 on cumacean phylogenetic relationships, independent of tree size.
 
 \begin{equation}\label{eq:rf_norm}
     \text{RF}_{\text{norm}}(T_1, T_2) = \frac{| \Sigma(T_1) \Delta \Sigma(T_2) |}{| \Sigma(T_1) | + | \Sigma(T_2) |}
@@ -236,27 +283,49 @@ For vectors $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_
 where $p_i$ and $q_i$ are the components of the vectors.
 
 %\autoref{lst:euclideanDist}.
-\begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the ED using the ete3 package in the aPhyloGeo package]
+\begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the ED using the ete3 and the dendropy packages in the aPhyloGeo package]
+import ete3
 import dendropy
 
 def euclidean_dist(tree1, tree2):
+    """
+    Calculate the Euclidean Distance (ED) between two phylogenetic trees.
+
+    Parameters:
+    - tree1: The first phylogenetic tree in Newick format.
+    - tree2: The second phylogenetic tree in Newick format.
+
+    Returns:
+    - ed: The Euclidean distance between the two trees.
+    """
+    
+    # Create a TaxonNamespace object to handle taxon information
     tns = dendropy.TaxonNamespace()
 
+    # Load the first tree from Newick format into a dendropy Tree object
+    # This step parses the Newick formatted string and prepares the tree for comparison.
     tree1_tc = dendropy.Tree.get(
         data=tree1.format("newick"), 
         schema="newick", 
         taxon_namespace=tns
     )
     
+    # Load the second tree from Newick format into a dendropy Tree object
+    # Similar to the first tree, this step prepares the second tree for comparison.
     tree2_tc = dendropy.Tree.get(
         data=tree2.format("newick"), 
         schema="newick", 
         taxon_namespace=tns
     )
 
+    # Encode the bipartitions of both trees
+    # This step converts the trees into a format where the presence or absence of 
+    # each bipartition (split) is encoded, which is necessary for calculating distances.
     tree1_tc.encode_bipartitions()
     tree2_tc.encode_bipartitions()
 
+    # Calculate the Euclidean Distance between the two trees
+    # The distance is computed based on the differences in the encoded bipartitions.
     ed = dendropy.calculate.treecompare.euclidean_distance(tree1_tc, tree2_tc)
 
     return ed
@@ -266,7 +335,7 @@ def euclidean_dist(tree1, tree2):
 
 The Least squares Distance (LSD) measures the differences between observed and the estimated values by summing the squares of these differences. In the context of phylogeographic trees, it quantifies the overall topological dissimilarity, considering the positions of nodes and branches (Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
 
-This metric allows us to understand how these different habitat attributes influence the topological structure of phylogenetic trees. For example, by comparing a tree constructed from the habitat attribute A with trees built from other attributes, the LSD reveals the impact, high or low, of attribute A on changes in branch position and length.
+This metric allows us to understand how these different habitat attributes influence the topological structure of phylogenetic trees. For example, by comparing a tree constructed from the habitat attribute 1 with a tree built from attribute 2, the LSD reveals the impact, high or low, of attribute 1 on changes in branch position and length.
 
 \begin{equation}\label{eq:ls}
     d_{\text{LS}} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
@@ -276,23 +345,45 @@ where $y_i$ and $\hat{y}_i$ are the observed and estimated values, respectively.
 
 %\autoref{lst:LeastSquare}.
 \begin{lstlisting}[label=lst:LeastSquare, language=Python, caption=Python script for calculating the LSD using the ete3 package in the aPhyloGeo package]
-def least_square(tree1, tree2):
-    ls = 0.0
-    leaves = tree1.get_terminals()
+import ete3
 
+def least_square(tree1, tree2):
+    """
+    Calculate the Least Squares Distance (LSD) between two phylogenetic trees.
+
+    Parameters:
+    - tree1: The first phylogenetic tree (ete3 Tree object).
+    - tree2: The second phylogenetic tree (ete3 Tree object).
+
+    Returns:
+    - ls: The Least Squares Distance between the two trees.
+    """
+    
+    # Initialize the Least Squares Distance to zero
+    ls = 0.0
+    
+    # Retrieve the list of terminal leaves (tips) from the first tree
+    leaves = tree1.get_terminals()
+    
+    # Extract the names of the terminal leaves
     leaves_name = [leaf.name for leaf in leaves]
     
+    # Iterate over each pair of leaves in the tree
     for i in leaves_name:
+        # Remove the first leaf from the list to avoid redundant comparisons
         leaves_name.pop(0)
         for j in leaves_name:
+            # Calculate the distance between the pair of leaves in the first tree
             d1 = tree1.distance(tree1.find_any(i), tree1.find_any(j))
+            # Calculate the distance between the same pair of leaves in the second tree
             d2 = tree2.distance(tree2.find_any(i), tree2.find_any(j))
+            # Accumulate the absolute difference of distances into the LSD
             ls += abs(d1 - d2)
     
     return ls
 \end{lstlisting}
 
-Our phylogeographic study used these four metrics to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental, geographic, and climatic features. The result is a comprehensive analysis of the evolutionary dynamics of cumacean populations in different contexts.
+Our phylogeographic study used these four metrics to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental, geographic, and climatic features. The result is a comprehensive analysis of the evolutionary dynamics of cumacean populations in different contexts. Note that the results in Figure \ref{fig:fig6} and Figure \ref{fig:fig7} were obtained by comparing a tree constructed from habitat attribute 1 with all other trees constructed from the other attributes (2, 3, 4, 5, ...).
 
 \section{Results}\label{results}
 The violon diagrams shown in Figure \ref{fig:fig2} are used to display summary statistics similar to box plots, showing medians (white dots), interquartile ranges (thickened black bars), and the rest of the distributions (thin black lines), except the "extreme" points. Wider areas indicate a greater probability of the variables taking a given value. They summarize the distribution of geographic (latitude and longitude at the start of sampling (DD)), climatic (wind speed (m/s) at the start of sampling), and environmental (depth (m) at the beginning of sampling, water temperature ($^\circ$C), and O\textsubscript{2} concentration (mg/L)) data. These diagrams are essential for understanding habitat conditions and highlighting unique habitats that can potentially influence cumacean genetic adaptability. 
@@ -300,14 +391,14 @@ The violon diagrams shown in Figure \ref{fig:fig2} are used to display summary s
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.7\textwidth]{figure1.jpg}
-    \caption{Violin diagrams of two geographic attributes, one climatic attribute, and three environmental attributes from our sample that provide essential information about the ecological and geographic conditions of the sampled habitats. a) Latitude (DD) at the start of sampling (red) suggest that the samples come from two dominant latitudinal regions (around 61.64 and 67.64 DD); b) Longitude (DD) at the start of sampling (yellow) implies that the samples come from two dominant longitudinal regions (around -26.77 and -18.14 DD); c) Depth (m) at the start of sampling (green) suggest that the samples were mainly collected and concentrated at three different depths (around 500, 1500 and 2500 m); d) Wind speed (m/s) at start of sampling (light blue) indicate stable wind conditions at the start of sampling (around 6 m/s); e) Water temperature ($^\circ$C) (dark blue) suggest that the samples were mostly collected and concentrated at two different temperature (around 0.06 and 2.66 $^\circ$C); f) O\textsubscript{2} concentration (mg/L) of water (pink) implies that the samples were primarily collected and concentrated at two different O\textsubscript{2} concentration (around 258.39 and 290.90 mg/L). The mean, median, standard deviation (Std Dev), 1st quartile (Q1), and 3rd quartile (Q3) of the dataset for each attribute are shown in the top right-hand corner of each graph. \label{fig:fig2}}
+    \caption{Violin diagrams of two geographic attributes, one climatic attribute, and three environmental attributes from our sample that provide essential information about the ecological and geographic conditions of cumacean habitats. a) Latitude (DD) at the start of sampling (red) suggest that the samples come from two dominant latitudinal regions (around 61.64 and 67.64 DD); b) Longitude (DD) at the start of sampling (yellow) implies that the samples come from two dominant longitudinal regions (around -26.77 and -18.14 DD); c) Depth (m) at the start of sampling (green) suggest that the samples were mainly collected and concentrated at three different depths (around 500, 1500 and 2500 m); d) Wind speed (m/s) at start of sampling (light blue) indicate stable wind conditions at the start of sampling (around 6 m/s); e) Water temperature ($^\circ$C) (dark blue) suggest that the samples were mostly collected and concentrated at two different temperature (around 0.06 and 2.66 $^\circ$C); f) O\textsubscript{2} concentration (mg/L) of water (pink) implies that the samples were primarily collected and concentrated at two different O\textsubscript{2} concentration (around 258.39 and 290.90 mg/L). The mean, median, standard deviation (Std Dev), 1st quartile (Q1), and 3rd quartile (Q3) of the dataset for each attribute are shown in the top right-hand corner of each graph. \label{fig:fig2}}
 \end{figure}
 
 Our results revealed variability in most cumacean habitat attributes, as shown in Figure \ref{fig:fig2}. For instance, the median latitude at the start of sampling (Figure \ref{fig:fig2}a, 67.15 DD) is higher than the mean (64.83 DD), showing an asymmetric distribution skewed towards lower values. This trend is also observed for depth (m) at the start of sampling (Figure \ref{fig:fig2}c ) and water O\textsubscript{2} concentration (mg/L) (Figure \ref{fig:fig2}f), indicating that sampling took place in regions with varied environmental contexts. The bimodal shape of the latitude distribution curve (Figure \ref{fig:fig2}a) suggests that samples came from two dominant latitudinal regions at the start of sampling. This bimodality is reflected in longitude (DD) at the beginning of sampling (Figure \ref{fig:fig2}b), as well as for temperature ($^\circ$C) (Figure \ref{fig:fig2}e) and O\textsubscript{2} concentration (mg/L) of the water (Figure \ref{fig:fig2}f), suggesting fluctuations in climatic and environmental conditions in these areas.  
 
 The median in Figure \ref{fig:fig2}b (-26.21 DD) is lower than the mean (-23.12 DD), indicating asymmetry on the higher sides, as does the water temperature ($^\circ$C) (Figure \ref{fig:fig2}e). The standard deviation (5.52 DD) and quartiles Q1 (-26.77 DD) and Q3 (-18.14 DD) indicate a relatively wide range, around the mean (-23.12 DD), of the longitude distribution at the start of sampling (-31.356 - -12.162 DD). This suggests a strong environmental gradient, geographic distribution and sample diversity from east to west in the region studied. The standard deviation of Figure \ref{fig:fig2}c is quite high (881.16 m), indicating high variability in sample collection depths (316 – 2568 m) and giving a more global overview of benthic habitats. Unlike all the other diagrams in Figure \ref{fig:fig2}, the curve in Figure \ref{fig:fig2}c has a multimodal shape with three prominent peaks, suggesting that the samples were mainly collected and concentrated at three different depths (around 500, 1500 and 2500 m).
 
-The mean (6.26 m/s) and median (6.00 m/s) in Figure \ref{fig:fig2}d are the only ones in Figure \ref{fig:fig2} to be similar, indicating a symmetrical distribution, with a high concentration of data around the median (6.00 m/s). This suggests stable wind conditions (m/s) at the start of sampling. The standard deviation of Figure \ref{fig:fig2}e is relatively high (1.73 $^\circ$C) compared to the mean (1.45 $^\circ$C), indicating a wide range of water temperatures where samples were taken (0.851 – 4.28 $^\circ$C). This suggests the acclimatization of cumacean to a variety of habitat temperatures. The range of O\textsubscript{2} concentration data (Figure \ref{fig:fig2}f) shows some variability (245.53 – 292.97 mg/L) in the environmental conditions of the sampled areas, as shown by the standard deviation (18.11 mg/L) and quartiles Q1 (258.39 mg/L) and Q3 (290.90 mg/L). These latest results reflect a diversity of O\textsubscript{2} requirements, with organisms adapted to low O\textsubscript{2} conditions and potentially influenced by the heterogeneity of biogeochemical cycles, such as photosynthesis, respiration, and organic decomposition, which have an impact on depth-dependent dissolved  O\textsubscript{2} levels.
+The mean (6.26 m/s) and median (6.00 m/s) in Figure \ref{fig:fig2}d are the only ones in Figure \ref{fig:fig2} to be similar, indicating a symmetrical distribution, with a high concentration of data around the median (6.00 m/s). This suggests stable wind conditions (m/s) at the start of sampling. The standard deviation of Figure \ref{fig:fig2}e is relatively high (1.73 $^\circ$C) compared to the mean (1.45 $^\circ$C), indicating a wide range of water temperatures where samples were taken (0.851 – 4.28 $^\circ$C). This suggests the acclimatization of cumaceans to a variety of habitat temperatures. The range of O\textsubscript{2} concentration data (Figure \ref{fig:fig2}f) shows some variability (245.53 – 292.97 mg/L) in the environmental conditions of the sampled areas, as shown by the standard deviation (18.11 mg/L) and quartiles Q1 (258.39 mg/L) and Q3 (290.90 mg/L). These latest results reflect a diversity of O\textsubscript{2} requirements, with organisms adapted to low O\textsubscript{2} conditions and potentially influenced by the heterogeneity of biogeochemical cycles, such as photosynthesis, respiration, and organic decomposition, which have an impact on depth-dependent dissolved  O\textsubscript{2} levels.
 
 \begin{figure}[htbp]
     \centering
@@ -328,10 +419,10 @@ The following figure supports the objective of our study by showing the distribu
 \begin{figure}[]
     \centering
     \includegraphics[width=0.7\textwidth]{figure4.png}
-    \caption{Distribution of cumacean families by habitat. This histogram represents the frequency of occurrence of the different cumacean families in our samples, classified according to the habitat in which they were collected. Three habitat categories are represented: Deep sea, Shelf, and Slope. Seven families are represented: Astacidae (red), Bodotriidae (brown), Ceratocumatidae (green), Diastylidae (turquoise), Lampropidae (blue), Leuconidae (purple), and Pseudocumatidae (pink). The presence of cumacean families in more than one habitat, such as Diastylidae (turquoise), Lampropidae (blue) and Leuconidae (purple), may indicate the development of adaptations, whether morphological, physiological or behavioral, that could favor their persistence in these habitats. \label{fig:fig5}}
+    \caption{Distribution of cumacean families by habitat. This histogram represents the frequency of occurrence of the different cumacean families in our samples, classified according to the habitat in which they were collected. Three habitat categories are represented: Deep sea, Shelf, and Slope. Seven families are represented: Astacidae (red), Bodotriidae (brown), Ceratocumatidae (green), Diastylidae (turquoise), Lampropidae (blue), Leuconidae (purple), and Pseudocumatidae (pink). The presence of cumacean families in more than one habitat, such as Diastylidae (turquoise), Lampropidae (blue), and Leuconidae (purple), may indicate the development of adaptations, whether morphological, physiological, or behavioral, that could favor their persistence in these habitats. \label{fig:fig5}}
 \end{figure}
 
-The distribution of samples of the different cumacean families according to the type of habitat where they were collected during sampling is shown in Figure \ref{fig:fig5}. The deep-sea habitats show the greatest diversity of families, mainly Diastylidae and Lampropidae, suggesting they are well acclimatized to deep-sea conditions. In contrast, the slope has the lowest diversity, with Diastylidae again the most dominant, implying that some cumacean species have fewer ecological niches or are less adapted to this habitat. Although less diverse than the deep sea, the shelf is dominated by Leuconidae, indicating that this family may be specifically well-acclimated to shelf environments. These patterns reinforce the hypothesis that certain cumacean families, such as the Diastylidae, Lampropidae, and Leuconidae, have developed distinct adaptations (physiological, behavioral or morphological) to remain in particular ecological niches, reflecting the impact of habitat conditions on the genetic distribution of cumacean.
+The distribution of samples of the different cumacean families according to the type of habitat where they were collected during sampling is shown in Figure \ref{fig:fig5}. The deep-sea habitats show the greatest diversity of families, mainly Diastylidae and Lampropidae, suggesting they are well acclimatized to deep-sea conditions. In contrast, the slope has the lowest diversity, with Diastylidae again the most dominant, implying that some cumacean species have fewer ecological niches or are less adapted to this habitat. Although less diverse than the deep sea, the shelf is dominated by Leuconidae, indicating that this family may be specifically well-acclimated to shelf environments. These patterns reinforce the hypothesis that certain cumacean families, such as the Diastylidae, Lampropidae, and Leuconidae, have developed distinct adaptations (physiological, behavioral, or morphological) to remain in particular ecological niches, reflecting the impact of habitat conditions on the genetic distribution of cumacean.
 
 \begin{figure}[]
     \centering
@@ -354,7 +445,7 @@ This study examines the effects of climatic, geographic, and environmental chara
 
 We meticulously curated relevant attributes from the IceAGE project data, the bold systems database, and the \citep{uhlir_adding_2021} study. Some attributes have been excluded for lack of relevance, low variance (e.g., salinity, $S^2 = 0.02146629$), abundant missing data (> 95\%), or high inter-correlation (threshold > 0.9) to guarantee the robustness of our analysis. Utilizing this refined dataset, we integrated phylogeographic studies using \textit{aPhyloGeo} software (\autoref{lst:main}), allowing a comprehensive analysis of potential correlations between the genetics of cumacean species and their living environment. Notably, DNA sequence analyses have identified specific genetic windows with high mutation rates in response to climatic and environmental attributes such as wind speed (m/s) at the start of sampling (MSA: 520-529 aa; ED: 0.8 < x < 0.9; Figure \ref{fig:fig6}d) and O\textsubscript{2} concentration in water (mg/L) (MSA: 1190-1199 aa; ED: 1.2 < x < 1.3; Figure \ref{fig:fig7}d). These results imply variable genetic sites that could contribute to the evolutionary acclimatization of cumaceans to their fluctuating environments.
 
-The novelty in our research lies in the exhaustive correlation between habitat attributes and genetic mutability, particularly in identifying genetic windows associated with habitat fluctuations, which has not been widely investigated in previous studies \citep{manel2003landscape, vrijenhoek2009cryptic}. In this case, our integrated method identifies specific genetic regions sensitive to environmental and climatic variations. Thus, by seeking to determine which of these two attributes is most closely correlated with their genetic sequence, the potential evidence of proteins related to one of these variable DNA sequences will enable us to depict the functional effects of this genetic adaptation.
+The novelty in our research lies in the exhaustive correlation between habitat attributes and genetic mutability in cumaceans, particularly in identifying genetic windows associated with habitat fluctuations, which has not been widely investigated in previous studies \citep{manel2003landscape, vrijenhoek2009cryptic}. In this case, our integrated method identifies specific genetic regions sensitive to environmental and climatic variations. Thus, by seeking to determine which of these two attributes is most closely correlated with their genetic sequence, the potential evidence of proteins related to one of these variable DNA sequences will enable us to depict the functional effects of this genetic adaptation.
 
 Interpreting how marine invertebrates genetically adapt to variations in their habitat can help us better predict their responses to climate change and advance conservation plans to protect them. Recognition of these specific attributes that affect the genetic variability of cumaceans can contribute to the designation and supervision of marine protected areas, assuring they include habitats crucial to the survival and acclimatization of these species. Thus, our results can inform the management of fishing and seabed mining companies by revealing ecologically vulnerable areas where these disturbances can seriously affect benthic biodiversity.
 
