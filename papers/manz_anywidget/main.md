@@ -219,14 +219,17 @@ export default {
 ```
 An anywidget front-end module (AFM) with initialization and rendering lifecycle
 methods. For familiarity, AFM methods use naming conventions from traditional
-Jupyter Widgets; however, AFM narrows down the APIs. _Methods_: The
-`initialize` and `render` methods correspond to different stages in the
-widget's lifecycle. During model initialization, a front-end model is created
-and synchronized with the kernel. In the rendering stage, each notebook cell
-displaying a widget object renders an independent view based on the synced
-model state. _Arguments_: The interface of `model` is restricted to a minimal
-set of methods for communicating with the kernel (retrieving, updating, and
-responding to value changes). The `el` argument is a standard web
+Jupyter Widgets; however, AFM [narrows down the
+APIs](https://observablehq.com/@manzt/afm-narrowing-widget-front-end-apis)
+provided to these methods, making it easier to load and execute AFMs in
+new environments. _Methods_: The `initialize` and `render` methods correspond
+to different stages in the widget's lifecycle. During model initialization, a
+front-end model is created and synchronized with the kernel. In the rendering
+stage, each notebook cell displaying a widget object renders an independent
+view based on the synced model state. _Arguments_: The interface of `model` is
+restricted to a minimal set of methods for communicating with the kernel
+(retrieving, updating, and responding to value changes). The `el` argument is a
+standard web
 [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
 :::
 
