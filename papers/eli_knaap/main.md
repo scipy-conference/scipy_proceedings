@@ -268,12 +268,12 @@ its most useful when the polygons are small and homogenous.
 When harmonizing boundaries over time, we need to distinguish between
 [intensive and extensive](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties)
 variables because each needs to be handled differently during the interpolation
-process. An "extensive variable" is one whose "magnitude is additive for
-subsystems", where 'the system' this context, refers to the collection of
+process. An extensive variable is one whose "magnitude is additive for
+subsystems, where "the system" this context, refers to the collection of
 geographic units (which serve as statistical sampling units), and each
-'subsystem' is a single geographic unit. Thus, 'geographically-extensive'
+subsystem is a single geographic unit. Thus, geographically-extensive
 attributes include those such as population counts, land area, or crop yield,
-and 'geographically-intensive' variables typically include ratio or interval
+and geographically-intensive variables typically include ratio or interval
 functions of extensive variables, e.g. density (total population *per unit of
 land*), average income (total income *per person*), or the share of a particular
 population subcategory (total population in category *per unit of population*).
@@ -318,10 +318,13 @@ instead harmonize all time periods to a consistent geographic unit defined elsew
 
 ```python
 from tobler.util import h3fy
+# create a hexgrid that covers the surface of the san diego dataframe
 sd_hex = h3fy(sd[sd.year == 2010], resolution=7)
+# interpolate the census data (source) to the hexgrid (target)
 sd_hex_interp = harmonize(
     sd, target_gdf=sd_hex, intensive_variables=["median_contract_rent"]
 )
+# plot the result
 gvz.plot_timeseries(
     sd_hex_interp,
     "median_contract_rent",
@@ -405,7 +408,9 @@ argument specifies that the underlying object from scikit-learn or PySAL's
 
 
 ```python
+# collect data for the atlanta MSA (12060) at the tract level
 atl = gio.get_acs(datasets, msa_fips="12060", years=2021, level="tract")
+# create a neighborhood typology with 5 clusters via kmeans
 atl_kmeans, atl_k_model = gaz.cluster(
     gdf=atl, method="kmeans", n_clusters=5, columns=columns, return_model=True
 )
@@ -424,6 +429,7 @@ parts of the violin show where the bulk of the observations are located, and the
 skinny “necks” show the long tails.
 
 ```python
+# plot the distribution of each input variable grouped by cluster
 gvz.plot_violins_by_cluster(atl_kmeans, columns, cluster_col="kmeans")
 ```
 
@@ -448,7 +454,10 @@ that are both socially and spatially distinct using a spatially-constrained
 hierarchical clustering algorithm (with Ward's linkage).
 
 ```python
+# collect data for Los Angeles county
 la = gio.get_acs(datasets, county_fips="06037", years=2021, level="tract")
+# generate a regionalization using constrained hierarchical clustering
+# return both the dataframe and the ModelResults class
 la_ward_reg, la_ward_model = gaz.regionalize(
     gdf=la,
     method="ward_spatial",
@@ -457,6 +466,7 @@ la_ward_reg, la_ward_model = gaz.regionalize(
     return_model=True,
     spatial_weights="queen",
 )
+# generate an interactive plot showing the regionalization solution
 la_ward_reg[columns + ["geometry", "ward_spatial"]].explore(
     "ward_spatial", categorical=True, cmap="Accent", tiles="CartoDB Positron"
 )
@@ -480,8 +490,11 @@ change over time for each geographic unit. The `plot_timeseries` function
 arranges the maps of neighborhood category labels in sequential order.
 
 ```python
+# define a set of socioeconomic and demographic variables
 columns = ['median_household_income', 'median_home_value', 'p_asian_persons', 'p_hispanic_persons', 'p_nonhisp_black_persons', 'p_nonhisp_white_persons']
+# create a geodemographic typology using the Chicago data 
 chicago_ward = cluster(gdf=chicago, columns=columns, method='ward', n_clusters=5)
+# plot the result
 plot_timeseries(chicago_ward, 'ward', categorical=True, nrows=2, ncols=2, figsize=(12,16))
 plt.tight_layout()
 ```
@@ -518,6 +531,7 @@ $$
 $$
 
 ```python
+# plot the global and conditional transition matrices
 from geosnap.visualize import plot_transition_matrix
 plot_transition_matrix(chicago_ward, cluster_col='ward')
 ```
@@ -599,11 +613,15 @@ can construct isochrones from massive network datasets in only a few seconds,
 thanks to `pandana`.
 
 ```python
+# download an openstreetmap network of the San Diego region
 import quilt3 as q3
 b = q3.Bucket("s3://spatial-ucr")
 b.fetch("osm/metro_networks_8k/41740.h5", "./41740.h5")
+# create a (routeable) pandana Network object
 sd_network = pdna.Network.from_hdf5("41740.h5")
+# select a single intersection as an example
 example_origin = 1985327805
+# create an isochrone polygon
 iso = isochrones_from_id(example_origin, sd_network, threshold=1600 ) # network is expressed in meters
 iso.explore()
 ```
