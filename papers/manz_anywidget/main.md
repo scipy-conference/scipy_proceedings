@@ -119,6 +119,9 @@ Without anywidget, to ensure compatibility, authors must transform their
 JavaScript code for each JCP. Since JCPs load front-end widget code from a
 webserver rather than the kernel, widget front-end and Python code must also be
 packaged separately and installed consistently on any given platform.
+Missing puzzle pieces represent missing front-end extensions for specific
+target JCPs. The misshapen blue piece represents an incorrectly built or broken
+extension. Both situations contribute to fragmented JCP support.
 :::
 
 These limitations make widget development complex and time-consuming, demanding
