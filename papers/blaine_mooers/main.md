@@ -168,15 +168,15 @@ While some code, such as IPython line and cell magics, is specific to Jupyter, y
 
 Likewise, you can use these snippets in other browser-hosted text editors, such as the web version of Visual Studio Code because Voice In Plus works in most text areas of web browsers.
 You can use web services with ample text areas to draft documents and Python scripts with the help of voice-triggered snippets.
-You can also use Voice In Plus inside text boxes in local html files; however, Voice In Plus still requires an internet connection. 
+You can also use Voice In Plus inside text boxes in local HTML files; however, Voice In Plus still requires an internet connection. 
 You can edit the code or text with an advanced text editor using the GhostText plugin to connect a web-based text area to a text editor. 
-Alternatively, you can save a draft document or script to a file and import it into Jupyter Lab for further editing.
+Alternatively, you can save a draft document or script to a file and import it into Jupyter Lab for further editing off line.
 
 ### Libraries for Markdown cells
 
 These libraries contain a short phrase paired with its replacement: another phrase or a chunk of computer code.
 In analogy to a tab trigger in text editors, we call the first short phrase a voice trigger.
-Tab triggers are initiated by typing, followed by the tab key, which inserts the corresponding snippet of code.
+Tab triggers are initiated by typing the tab trigger, followed by the tab key, which inserts the corresponding code snippet.
 Some text editors can autocomplete the tab-trigger name, so these text editors require two tab key entries.
 The first tab auto-completes the tab-trigger name.
 Then, the second tab leads to the insertion of the corresponding code.
@@ -187,7 +187,7 @@ In the event of an incorrect code insertion, the undo command must be used, unde
 The most straightforward text replacements involved the replacement of English contractions with their expansions {ref}`fig:contractions`.
 Science writers do not use English contractions in formal writing for many reasons.
 Many automatic speech recognition software packages will default to using contractions because the software's audience is people who write informally for social media, where English contractions are acceptable.
-By adding the library that maps contractions to their expansions, the expansion will be inserted whenever the contraction is used otherwise.
+Adding the library that maps contractions to their expansions will insert the expansion whenever the contraction is spoken.
 This automated replacement of English contractions saves time during the editing process.
 
 :::{figure} ./images/VoiceInCustomCommandsContractions.png
@@ -201,19 +201,18 @@ Webpage of custom commands. The buttons are used to edit existing commands and a
 
 We grouped the voice triggers by the first word of the voice trigger {ref}`table:commands`.
 This first word is often a verb.
-For instance, the word `expand' is used before an acronym that will be replaced with its expansion.
-Your memory of the words represented by the letters in the acronym often needs to be accurate.
+For instance, the word `expand' is used before an acronym you want to replace with its expansion.
+Your memory of the words represented by the letters in the acronym often must be accurate.
 The library ensures that you use the correct expansion of the acronym.
 By providing instant access to the correct acronym expansions, the library significantly reduces the time that would otherwise be spent on manual lookups, allowing you to focus on your work.
 We have included acronyms widely used in Python programming, scientific computing, data science, statistics, machine learning, and Bayesian data analysis.
 These commands are found in domain-specific libraries, so users can select which voice triggers to add to their private collection of voice commands.
 
-The customized commands are listed in the Voice-In Plus GUI in alphabetical order with one command and its corresponding text replacement per row.
-The prefixes group like commands.
-This eases the manual look up of the commands.
+The customized commands are listed alphabetically in the Voice-In Plus GUI, with one command and its corresponding text replacement per row.
+The prefixes group like commands and, thereby, ease the manual lookup of the commands.
 
 Some prefixes are two or more words long.
-For example, the compound preflx *insert Python* aids grouping of code by programming language.
+For example, the compound prefix *insert Python* aids the grouping of voice triggers by programming language.
 
 :::{table} Examples of voice commands with the prefix in bold that is used to group commands.
 :label: table:commands
