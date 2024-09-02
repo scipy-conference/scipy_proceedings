@@ -330,20 +330,20 @@ If that use occurs on subsequent days, then the recall will be reinforced and re
 ### Limitations on using Voice In Plus
 
 The plugin operates in text areas on thousands of web pages.
-These text areas include those of web-based email software and online sites that support distraction-free writing like [Write Honey](https://app.writehoney.com).
+These text areas include those of web-based email software and online sites that support distraction-free writing (e.g., [Write Honey](https://app.writehoney.com)).
 These text areas also include the Markdown and code cells of Jupyter notebooks and other web-based computational notebooks such as Colab Notebooks.
 Voice In also works in plain text documents opened in Jupyter Lab for online writing.
 
-Voice In works in Jupyter Lite.
-It also works in streamlit-quill, which uses a python script to generate a text box in the default web browser.
+Voice In Plus works in Jupyter Lite.
+It also works in streamlet-quill, which uses a Python script to generate a text box in the default web browser.
 It also works in the web-based version of [VS Code](https://vscode.dev/).
 
 Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the [*JupyterLab Desktop*](https://github.com/jupyterlab/jupyterlab-desktop) application, the [*nteract*](https://nteract.io/) application, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
 Likewise, *Voice In Plus* will not work in Python Widgets.
 *Voice In Plus* is limited to web browsers, whereas other automated speech recognition software can also operate in the terminal and at the command prompt in GUI-driven applications.
 
-*Voice In Plus*  is very accurate with a word error rate that is well below 10\%.
-Like all other dictation software, the word error rate depends on the quality of the microphone using used.
+*Voice In Plus*  is very accurate, with a word error rate that is well below 10\%.
+Like all other dictation software, the word error rate depends on the quality of the microphone used.
 *Voice-In Plus* can pick out words from among background ambient noise such as load ventilation systems, traffic, and outdoor bird songs.
 
 The language model used by *Voice-In Plus*  is quite robust in that dictation can be performed without an external microphone.
@@ -356,23 +356,24 @@ The spoken words' transcriptions occur nearly in real-time; there is only a mino
 *Voice In Plus* can generally keep up with dictation occurring at a moderate pace for at least several paragraphs, whereas competing dictation software packages tend to quit after one paragraph.
 The program hallucinates when the dictation has occurred at high speed because the transcription has fallen behind.
 You have to pay attention to the progress of the transcription if you want all of your spoken words captured.
-
 If the transcription halts, it is best to deactivate the plugin, activate it, and resume the dictation.
-Great care must be taken to pronounce the first word of the sentence loudly so that it will be recorded; otherwise, this first word will likely not be recorded.
+
+Pronounce the first word of each sentence loudly so that they are recorded. 
+Otherwise, the first words of your sentences will be skipped.
 This problem of omitted words is most acute when there has been a pause in the dictation.
 
 The software does not automatically insert punctuation marks.
 You have to vocalize the name of the punctuation mark where it is required.
 You also have to utilize the built-in new-line command to start new lines.
-We have combined the period command with the new line command to create a new command with the voice trigger of `new sentence`.
+We have combined the `period` command with the `new line` command to create a new command with the voice trigger of `new sentence`.
 
 You have to develop the habit of using this command if you like to write one sentence per line.
-This latter form of writing is very useful for first drafts because it greatly eases the shuffling of sentences in a text editor during rewriting.
-This form of writing is also very compatible with version control systems like git because the changes can be tracked by line number.
+This latter form of writing is helpful for first drafts because it eases the shuffling of sentences in a text editor during rewriting.
+This form of writing is also compatible with version control systems like git, which track changes by line number.
 
-The practical limit of on the number of commands is set by the trouble you are willing to tolerate in scrolling up and down the list of commands.
-We had an easy time scrolling through a library of about 8,000 commands, and a hard time with a library of about 19,000 commands.
-Bulk deletion of selected commands required the assistance from the user support at Dictanote Inc.
+The practical limit on the number of commands is set by the trouble you will tolerate when scrolling up and down the list of commands.
+We had an easy time scrolling through a library of about 8,000 commands and a hard time with a library of about 19,000 commands.
+Bulk deletion of selected commands required assistance from the user support at Dictanote Inc.
 They removed our bloated library, and we used the **bulk add** button in the GUI to upload a smaller version of our library.
 
 ## Discussion
