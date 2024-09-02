@@ -294,8 +294,8 @@ We include a variety of examples for formatting tick marks and axis labels as we
 Generating plots with lines of different shapes, whether solid, dashed, dotted, or combinations thereof, is essential because plots generated with just color are vulnerable to having their information compromised when printed in grayscale.
 Although we provide some examples from higher-order plotting programs like *seaborn* [@seaborn], we focused on matplotlib because most other plotting programs, except the interactive plotting programs, are built on top of it.
 
-We also support the import of external images.
-These are often overlooked, but these externally derived images are often essential parts of the story the Jupyter notebook is telling.
+We also support the import of external images. 
+Images often play essential roles in the stories told with Jupyter notebooks.
 
 
 ### Jupyter specific library
