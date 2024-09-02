@@ -92,6 +92,14 @@ module formats, installation procedures, and execution models to support
 widgets. These inconsistencies place the onus on widget authors to ensure
 cross-JCP compatibility.
 
+:::{note}
+In this paper, we define a Jupyter Widget as consisting of a pair of programs:
+kernel-side and front-end, which communicate via the Jupyter Widget Message
+Protocol. While Python-only widget classes exist, which wrap other Jupyter
+Widgets as dependencies, this paper focuses on those with dedicated front-end
+code, where the challenges described apply.
+:::
+
 JCPs load front-end widget code by searching in various external sources, such
 as local file systems or Content Distribution Networks (CDNs) while kernel-side
 (Python) code loads and runs in the kernel [@fig:before-afm]. These access
