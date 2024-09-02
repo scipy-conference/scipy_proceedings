@@ -342,7 +342,7 @@ This model, combined with ITK-Wasm’s architecture, can perform analysis and vi
 
 ::::{figure}
 :label: fig:vm-head-frozenct-ome-zarr
-:placeholder: figures/vm-head-frozenct-ome-zarr-snapshot.png
+% :placeholder: figures/vm-head-frozenct-ome-zarr-snapshot.png
 
 :::{iframe} https://scipy-2024-itk-wasm-vm-head-frozenct-ome-zarr.netlify.app/
 :width: 100%
@@ -367,7 +367,7 @@ As detailed by the [Nyquist-Shannon Sampling Theorem](https://en.wikipedia.org/w
 
 ::::{figure}
 :label: fig:aliasing-artifacts
-:placeholder: figures/artifacts-snapshot.png
+% :placeholder: figures/artifacts-snapshot.png
 
 :::{iframe} https://scipy-2024-itk-wasm-aliasing-artifacts.netlify.app/
 :width: 100%
@@ -642,7 +642,7 @@ From an ITK-Wasm project, we generate a complete TypeScript/JavaScript package c
 
 ::::{figure}
 :label: fig:demo-app
-:placeholder: figures/downsample-demo.png
+% :placeholder: figures/downsample-demo.png
 
 :::{iframe} https://scipy-2024-itk-wasm-downsample-demo.netlify.app/?functionName=downsample
 :width: 100%
