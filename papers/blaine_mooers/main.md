@@ -425,7 +425,7 @@ As the customized library of text replacements grows, the frequency of wrong wor
 
 ### Future directions
 
-One future direction is to build out the libraries of voice-triggered snippets that have been developed.
+Our future directions include building out the libraries of voice-triggered snippets.
 Another direction includes the development of voice stops analogous to tab stops in code snippets for advanced text editors.
-These voice stops would advance the cursor to all sites that should be considered for editing to customize the code snippet for the problem.
-The other related advance would be the mirroring of the parameter values at identical voice stops in analogy to mirrored tab stops in conventional snippets.
+The cursor would advance to the site of the next voice stop that you should consider editing to customize the code snippet for the project at hand.
+Another related advancement would be the concept of mirroring the parameter values at identical voice stops, similar to the functionality of mirrored tab stops in conventional snippets.
