@@ -411,16 +411,16 @@ The robustness of our approach is that the *Voice-In Plus* should work in all br
 
 ### Coping with the imperfections of the language model
 
-One aspect of speech-to-text that it is important to bring up is persistent errors in transcription.
+One of the most significant challenges in speech-to-text technology is the occurrence of persistent errors in transcription.
 These persistent errors may be due to the language model having difficulties interpreting your speech.
 For example, the language model often misinterprets the word  *write* as *right*'.
 Likewise, the letter *R* is frequently returned as *are* or *our*'.
-The remedy for these situations is to map the misinterpreted phrase to the intended phrase.
+It's crucial to have a remedy for these situations, which involves mapping the misinterpreted phrase to the intended phrase.
 
 This remedy might be the best that can be done for those users who are from a country that is not represented by the selection of English dialects available in Voice In Plus.
-People originating from Eastern Europe, Middle East, and northeast Asia fall into this category.
+People from Eastern Europe, the Middle East, and Northeast Asia fall into this category.
 Users in this situation may have to add several hundred text replacements.
-As the customized library of text replacements grows, the frequency of wrong word insertions should deline rapidly.
+As the customized library of text replacements grows, the frequency of wrong word insertions should decrease significantly, offering hope for improved accuracy in your speech-to-text transcriptions.
 
 
 ### Future directions
