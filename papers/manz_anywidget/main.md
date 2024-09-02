@@ -105,13 +105,13 @@ as local file systems or Content Distribution Networks (CDNs) while kernel-side
 (Python) code loads and runs in the kernel [@fig:before-afm]. These access
 patterns split the distribution of custom widgets between Python and JavaScript
 package registries, complicating releases and requiring widget authors to
-understand both packaging ecosystems. Moreover, this divided system is
-incompatible with shared, multi-user environments like
-[JupyterHub](https://jupyter.org/hub), where users can only install kernel-side
-widget code in their custom kernels. Since front-end widget code must be
-installed separately by an administrator into the shared environment, widgets
-often fail to work when the complementary front-end code has not been installed
-or does not match with the user’s kernel-side widget code.
+understand both packaging ecosystems. This division creates challenges,
+especially in shared, multi-user environments like
+[JupyterHub](https://jupyter.org/hub). Since kernels cannot host static assets,
+users cannot independently install widgets or manage versions. Instead, widget
+front-end code must be pre-installed on the Jupyter webserver, typically by an
+administrator. Consequently, users are restricted to administrator-installed
+widgets and versions, unable to upgrade or add new ones independently.
 
 :::{figure} dev-before-afm-01.svg
 :label: fig:before-afm
