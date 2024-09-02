@@ -251,9 +251,9 @@ Three snapshots from a Zoom video of using the voice-trigger *display electron d
 
 
 Likewise, the command `inline <equation name>` is used to insert equations in prose sections in Markdown cells.
-We have  introduced voice-triggered snippet libraries for equations commonly used in machine learning and Bayesian data analysis https://github.com/MooersLab/.
-These equations can also be used a templates to generate new equations.
-While the development of libraries are still in progress, they serve as flexible templates that can be adapted for any specific domain.
+We have introduced voice-triggered snippet libraries for equations commonly used in machine learning and Bayesian data analysis https://github.com/MooersLab/.
+You can use these equations as templates to generate new equations.
+While the development of libraries is still in progress, they serve as flexible templates that you can adapt to your domain.
 
 Some voice triggers start with a noun.
 For example, the voice trigger `URL` is used to insert URLs for essential websites.
@@ -269,10 +269,9 @@ We have developed a library specifically for the flavor of [Markdown](https://gi
 This library is used to insert the appropriate Markdown code in Markdown cells.
 We have included a [library for LaTeX](https://github.com/MooersLab/latex-voice-in) because Jupyter Lab can edit tex files.
 
-We have not figured out how to use voice commands to advance the cursor in a single step to sites where edits should be made, analogous to tab stops in conventional snippets.
+We have yet to figure out how to use voice commands to advance the cursor in a single step to sites where edits should be made, analogous to tab stops in conventional snippets.
 Instead, the built-in voice commands can move the cursor forward or backward and select replacement words.
 We included the markup associated with the yasnippet snippet libraries to serve as a benchmark for users to recognize the sites that should be considered for modification to customize the snippet for their purpose.
-
 
 ### Libraries for code cells
 
