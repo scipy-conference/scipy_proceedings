@@ -357,10 +357,10 @@ simplified distribution and authoring capabilities.
 :::{figure} widgetstats.png
 :align: center
 :label: fig:widgetstats
-Custom Jupyter Widgets per year as of May 31, 2024. Date for each project is
-the initial commit or the date of the commit when a widget was added to the
-repository project. Projects are tracked at
-https://github.com/manzt/anywidget-usage.
+Custom Jupyter Widgets per year as of September 2, 2024. Projects are tracked
+in a semi-automated process, combining daily code searches against GitHub with
+manual verification, at https://github.com/manzt/anywidget-usage. See
+repository for details and contribution guidelines.
 :::
 
 The portable widget standard also extends the anywidget ecosystem to platforms
