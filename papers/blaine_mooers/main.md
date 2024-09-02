@@ -134,14 +134,12 @@ These snippets are in modular CSV files to ease their selective use.
 The contents of these files can be copied and pasted into the `bulk add` text area of the Voice In Plus configuration GUI.
 
 ### Construction of interactive quizzes
-We developed interactive quizzes to aid the mastery of the *Voice In Plus* syntax.
-We wrote the quiz as a Python script that can run in the terminal or in Jupyter notebooks.
-We stored each question, answer, and explanation triple in a tuple because tuples are immutable.
-We stored the tuples in a list because lists are sortable.
-The quiz randomizes the order of the questions upon restart, ensuring a fresh and challenging experience every time.
-When you fail to answer a question correctly, the quiz provides feedback, giving you the opportunity to learn from your mistakes and improve.
-Recycling the wrongly answered questions builds the recall of the correct answers.
-The number of questions in a quiz was limited to 40 to avoid exhausting the user.
+We developed an interactive quiz to aid the mastery of the *Voice In Plus* syntax.
+We wrote the quiz as a Python script that can run interactively in the terminal or Jupyter notebooks.
+The quiz randomizes the order of the questions upon restart, ensuring a fresh experience every time.
+When you encounter a question you cannot answer, the quiz steps in to provide feedback, empowering you to learn from your mistakes and improve.
+Your wrongly answered questions are recycled during the current quiz session to allow you to answer the question correctly. This repetition helps build recall of the correct answers.
+We set a limit of 40 questions per quiz, allowing you to pace your learning and avoid exhaustion.
 
 ### Availability of the libraries and quizzes
 We tested the libraries using Jupyter Lab version 4.2 and Python 3.12 installed from MacPorts.
@@ -158,21 +156,21 @@ Second, we describe the deployment of the snippet libraries for Voice In Plus (V
 Our descriptions of these libraries include examples to illustrate how voice-triggered snippets work with automated speech recognition software.
 Developers can leverage our libraries in two ways: by enhancing them with their unique commands or by using them as blueprints to create libraries from scratch.
 
-The libraries are made available in a modular format so the user can select the most valuable commands for their workflow.
+The libraries are made available in a modular format, so the user can select the most valuable commands for their workflow.
 In general, our libraries are broad in scope, so they meet the needs of most users.
 Several libraries are domain-specific.
-These domain-specific libraries serve as a catalyst for the creation of libraries tailored to other fields, sparking innovation, and expanding the reach of voice-triggered snippets.
+These domain-specific libraries catalyze the creation of libraries tailored to other fields, sparking innovation and expanding the reach of voice-triggered snippets.
 
 We divided the contents of the libraries into two categories.
-One subset of libraries supports dictating about science in the Markdown cells of Jupyter notebooks, while the other subset supports writing scientific Python in code cells.
-These voice-triggered snippets can also be applied to Markdown and code cells in Colab Notebooks.
-While some code, such as IPython line and cell magics, is specific to Jupyter, most of the voice-triggered snippets can be used in Markdown files and Python scripts being edited in Jupyter Lab.
+One subset of libraries supports dictating about science in the Markdown cells of Jupyter notebooks, while the other subsets support writing scientific Python in code cells.
+You can also apply these voice-triggered snippets to Markdown and code cells in Colab Notebooks.
+While some code, such as IPython line and cell magics, is specific to Jupyter, you can use most voice-triggered snippets to edit Markdown and Python files in Jupyter Lab.
 
-Likewise, these snippets can be used in other browser-hosted text editors such as the new web version of Visual Studio Code.
-This is because Voice In Plus works in most text areas of web browsers.
-This means that the ample text area like that found in Write Honey website site can be used to draft documents and Python scripts with the aid of Voice In Plus snippets.
-The code or text be directly edited by an advanced text editor by using the GhostText plugin to connect the web-based text area to a text editor.
-Alternately, the draft document or script can be copied and saved to a file that is imported into Jupyter Lab for further editing.
+Likewise, you can use these snippets in other browser-hosted text editors, such as the web version of Visual Studio Code because Voice In Plus works in most text areas of web browsers.
+You can use web services with ample text areas to draft documents and Python scripts with the help of voice-triggered snippets.
+You can also use Voice In Plus inside text boxes in local html files; however, Voice In Plus still requires an internet connection. 
+You can edit the code or text with an advanced text editor using the GhostText plugin to connect a web-based text area to a text editor. 
+Alternatively, you can save a draft document or script to a file and import it into Jupyter Lab for further editing.
 
 ### Libraries for Markdown cells
 
