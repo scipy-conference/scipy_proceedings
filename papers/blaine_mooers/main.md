@@ -81,48 +81,51 @@ Three-word voice triggers are a good compromise between specificity and success 
 Snapshot of CSV file on Github for the [*jupyter-voice-in*](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) library.
 :::
 
+
 An exception to this guideline for shorter voice triggers was using two to three words at the beginning of a set of voice triggers to group them in the online *Voice In* library.
-Grouping related voice commands made it easier to find them in the online library.
+Grouping related voice commands made finding them in the online library easier.
 For example, all Jupyter-related line magic voice triggers start with the phrase *line magic*.
 The prefix *line magic* is easy to remember, so it only adds a little to the recall problem.
 We show below a snapshot of the CSV file displayed in a pleasant format on GithHub for the Jupyter line magics {ref}`fig:csvexamplefile`.
 Note that these CSV files are atypical because they do not contain a line of column headers; *Voice In* does not recognize column headings.
 
-The accuracy of interpretation of the phrase by the software was another limitation.
+The accuracy of the software's interpretation of the phrase was another limitation.
 We would replace frequently misinterpreted words with other words that were more often correctly interpreted.
 
-We had to take care not to make voice triggers that were embedded in longer voice triggers to avoid unintended text replacements.
-For example, when we found a two-word phrase starting a four-word phrase, we would extend the two-word phrase to three words by selecting a third word that would break the overlap between the two voice triggers.
-Otherwise, the two-word phrase would trigger a text replacement that was different from the text replacement that was expected from the four-word phrase.
+We had to avoid making voice triggers that overlapped longer voice triggers to avoid unintended text replacements.
+For example, when we found a two-word phrase starting a four-word phrase, we would extend the two-word phrase to three words by selecting a third word to break the overlap between the two voice triggers.
+Otherwise, the two-word phrase would trigger a text replacement different from the text replacement expected from the four-word phrase.
 
-We used the **Bulk Add** button to upload multiple commands from a two-column CSV file with commas as the field sepearator.
-The file contents were selected and pasted in a text box that is opened upon clicking on the **Bulk Add** button.
-The voice-triggers reside in the left column, and the text replacements reside in the right column.
-Any capitalization in the voice trigger was ignored by the software.
+We used the **Bulk Add** button to upload multiple commands from a two-column CSV file with commas as the field separator.
+We selected the file contents and pasted them in the open text box after clicking the **Bulk Add** button.
+The voice triggers reside in the left column, and the text replacements reside in the right column.
+The software ignored any capitalization in the voice trigger.
 
-Multiline text replacements could be handled in one of two ways.
-First, all of the text could be placed on a single line and the built-in command `<newline>` could be inserted in this line where linebreaks were needed.
-Second, the multiline text could be enclosed by one set of double quotes enclosing the multiline block of text.
-Internal double quotes in these text block had to be replaced with single quotes.
-It was not possible to use a backspace to escape internal pre-existing double quotation marks.
-
+We handled multiline text replacements in one of two ways.
+First, we placed all the text on a single line and inserted the built-in command `<newline>` where linebreaks were needed.
+Second, we enclosed the multiline replacement text with one set of double quotes.
+Double quotes inside these text blocks had to be replaced with single quotes.
+We could use a backslash to escape internal pre-existing double quotation marks.
 Text replacements consisting of commas also had to be enclosed with double else the commas would be misintrepreted as field separators.
 This also appled on Python code that contained commas.
 
-The formatting of the text replacement was controlled by inserting built-in *Voice In Plus* commands enclosed in angle brackets.
-To ensure that the first letter of a line Python code was not capitalized, we used the built-in command `<case:lower>` before the Python code: (e.g., `python import numpy,<lower:case>import numpy as np`).
-The command in angle brackets would be applied during insertion of the text replacement, but it would appear in inserted code.
+We used the **Bulk Add** button to upload multiple commands from a two-column CSV file with commas as the field separator.
+We selected the file contents and pasted them in the open text box after clicking the **Bulk Add** button.
+The voice triggers reside in the left column, and the text replacements reside in the right column.
+The software ignored any capitalization in the voice trigger.
 
-The transcription of the spoken words appear momentarily in a transitory transcript that hovers about the text box.
-We mapped the misinterpreted words to the desired text replacement.
-For example, we mapped `open syfy` to `<open:https://www.scipy2024.scipy.org/schedule>` to open the webpage for the schedule of SciPy 2024 when we said, "open SciPy 2024".
+We handled multiline text replacements in one of two ways.
+First, we placed all the text on a single line and inserted the built-in command `<newline>` where linebreaks were needed.
+Second, we enclosed the multiline replacement text with one set of double quotes.
+Double quotes inside these text blocks had to be replaced with single quotes.
+We could not use a backslash to escape internal pre-existing double quotation marks.
 
 The **Export** button opened a text box with the custom commands in CSV file format.
-All the contents of the text box were selected, copied, and pasted into a local CSV file using either the text editor TextMate or Emacs version 29.3.
-The **Synch** button was used to synchronize devices.
+We selected all the text box contents, copied them, and pasted them into a local CSV file using either the text editor TextMate or Emacs version 29.3.
+We used the **Synch** button to synchronize devices.
 
-A GUI shows all the voice triggers and their text replacements immediately below the row of buttons just mentioned above.
-Each row in the GUI has an edit icon and a delete icon.
+A GUI shows all the voice triggers and their text replacements immediately below the row of buttons mentioned above.
+Each row in the GUI has edit and delete icons.
 The edit icon opens a pop-up menu similar to the pop-up menu invoked by the **Add Command** button.
 
 ### Construction of the snippet libraries
