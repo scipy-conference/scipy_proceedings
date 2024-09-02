@@ -176,7 +176,7 @@ Build environment Docker images encapsulate
 
 These `itkwasm/emscripten` and `itkwasm/wasi` Docker images are _dockcross_ images -- Docker images with pre-configured C++ cross-compiling toolchains that enable easy-application, reproducible builds, and a clean separation of the build environment, source tree, and build artifacts [@dockcross].
 
-These images include not only the CMake pre-configured toolchains, but pre-built versions of the ITK-Wasm C++ core. Moreover, Wasm tools for optimization, debugging, emulation and system execution, testing, are bundled. A number of build and system configurations are included to make optimized and debuggable builds for scientific codebases a breeze.
+These images include not only the CMake pre-configured toolchains, but pre-built versions of the ITK-Wasm C++ core. Moreover, Wasm tools for optimization, debugging, system execution, and testing are bundled. A number of build and system configurations are included to for optimized and debuggable builds.
 
 ### Command line interface (CLI)
 
@@ -192,7 +192,7 @@ New projects are typically created with the `create-itk-wasm` CLI:
 npx create-itk-wasm
 ```
 
-The `create-itk-wasm` tool, which can be used interactively or programmatically, will generate C++ code with the required ITK-Wasm CLI11 interfaces, other support configuration files such as CMake build configuration scripts and a conda _environment.yml_ file, and a PNPM _package.json_ file that will drive Wasm module builds, language binding generation, and testing. The PNPM workspace internally utilizes the `itk-wasm` CLI to run the build in parallel following its dependency graph.
+The `create-itk-wasm` tool, which can be used interactively or programmatically, will generate C++ code with the required ITK-Wasm CLI11 interfaces, other support configuration files such as CMake build configuration scripts, a _package.json_ file, language binding generation, and testing.
 
 ### Language-specific libraries and idiomatic bindings
 
@@ -377,9 +377,9 @@ Aliasing artifacts at the second resolution scale. With naive subsampling (top) 
 
 ::::
 
-In the NGFF-Zarr package [@doi:10.5281/zenodo.8092821], ITK-Wasm anti-aliasing filters efficiently produce OME-Zarr images suitable for Pyodide, JupyterLite, and traditional CPython environments . While ITK-Wasm supports making general scientific C++ codes accessibly in wasm, in this example we will examine how the `itk::DiscreteGaussianImageFilter` is applied to address this problem [@Johnson2015-qc; @Johnson2015-ur; @McCormick2014-od].
+In the NGFF-Zarr package [@doi:10.5281/zenodo.8092821], ITK-Wasm anti-aliasing filters efficiently produce OME-Zarr images suitable for Pyodide, JupyterLite, traditional CPython environments, or analysis and visualization with other programming languages. While ITK-Wasm supports making general scientific C++ codes accessibly in wasm, in this example we will examine how the `itk::DiscreteGaussianImageFilter` is applied to address this problem [@Johnson2015-qc; @Johnson2015-ur; @McCormick2014-od].
 
-We apply the N-dimensional gaussian filter:
+We apply the N-dimensional gaussian convolution filter:
 
 ```{math}
 G(\mathbf{x}; \sigma) = \frac{1}{(2\pi\sigma^2)^{n/2}} \exp\left(-\frac{\|\mathbf{x}\|^2}{2\sigma^2}\right)
@@ -397,7 +397,7 @@ For downsampling, we use $\sigma^2 = (k^2 - 1^2)/(2\sqrt{2\ln(2)})^2$ where $k$ 
 
 ### C++ pipeline definition
 
-The C++ wasm pipeline function, a pure function, is defined as a CLI11 executable [@doi:10.5281/zenodo.804964] uses an `itk::wasm::Pipeline` interface definition that operates on `itk::wasm` interface types.
+The C++ wasm pipeline function, a pure function, is defined as a CLI11 executable [@doi:10.5281/zenodo.804964]. It uses an `itk::wasm::Pipeline` interface definition that operates on `itk::wasm` interface types.
 
 ```cpp
 int main(int argc, char * argv[])
@@ -423,7 +423,7 @@ int main(int argc, char * argv[])
 Here `downsample` defines the name of the pipeline function. A description for the pipeline is also provided -- this propagates to command line and language interface documentation.
 
 In this function, we use the `itk::wasm::SupportInputImageTypes` utility to dispatch compile-time optimized pipeline based on the pixel type and dimension of the input image.
-This ensures excellent performance while limiting the wasm module binary size, critical for performance and distribution, to one the code that is used by the pipeline.
+This ensures excellent performance while limiting the wasm module binary size, critical for performance and distribution, to the code that is used by the pipeline.
 
 Next, pipeline inputs, outputs, and parameters are defined:
 
@@ -679,12 +679,12 @@ Downsample example package virtual environment size. ITK-Wasm WASI packages are 
 
 #### GPU Acceleration with cuCIM
 
-To further enhance performance, we utilize the dispatch Python package's capabilities in conjunction with a [cuCIM](https://github.com/rapidsai/cucim) accelerator package. This enables GPU acceleration, to enable improvements the execution speed, especially in applications where bulk data resides on the GPU
+To further enhance performance, we utilize the dispatch Python package's capabilities in conjunction with a [cuCIM](https://github.com/rapidsai/cucim) accelerator package. This enables GPU acceleration, to enable improvements the execution speed, especially in applications where bulk data resides on the GPU, which is often the case for AI-enabled workflows.
 
 :::{figure} ./figures/benchmark_results.svg
 :label: fig:benchmark
 
-Downsample example performance comparison between ITK-Wasm WASI, an equivalent ITK Python native binary implementation, and the ITK-Wasm CuCIM implementation. Executed on an Ryzen 9, 7940HS CPU, NVIDIA RTX 4070 Laptop GPU, Ubuntu 24.04 Linux system. Mean and standard deviation for ten iterations. While the currently single-threaded WASI implementation is significantly slower than the native binary implementation, multi-threaded improvements with the native binaries hold promise for when this is enabled on the WASI binary (future work). NVIDIA CUDA-based ITK-Wasm CuCIM, applied without any other code changes when the `itkwasm-downsample-cucim` package is installed, demonstrates easy access to GPU acceleration when NVIDIA GPUs and CUDA software is available.
+Downsample example performance comparison between ITK-Wasm WASI, an equivalent ITK Python native binary implementation, and the ITK-Wasm CuCIM implementation. Executed on an Ryzen 9, 7940HS CPU, NVIDIA RTX 4070 Laptop GPU, Ubuntu 24.04 Linux system. Mean and standard deviation for ten iterations. While in this particular example the currently single-threaded WASI implementation is significantly slower than the native binary implementation, multi-threaded improvements with the native binaries hold promise for when this is enabled on the WASI binary (future work). NVIDIA CUDA-based ITK-Wasm CuCIM, applied without any other code changes when the `itkwasm-downsample-cucim` package is installed, demonstrates easy access to GPU acceleration when NVIDIA GPUs and CUDA software is available.
 :::
 
 #### API Documentation and Pythonic Interfaces
@@ -715,11 +715,13 @@ The `itkwasm-downsample` Python package in a traditional native desktop applicat
 
 WebAssembly was designed with interoperability in mind. Initially supporting languages like C and C++, the ecosystem has grown to include Rust, Go, Python, and more. This broad language support makes WebAssembly a versatile tool for developers across different domains.
 
-Our approach excels in sustainability and composability, thanks to small, self-contained, and idiomatic packages that are platform-agnostic and have minimal dependencies. This design enables outstanding computational reproducibility.
+ITK-Wasm's approach, which focuses on bringing wasm's capabilities to scientific software, excels in sustainability and composability thanks to small, self-contained, and idiomatic packages that are platform-agnostic and have minimal dependencies. This design enables outstanding computational reproducibility.
 
-1. **Multi-language Support**: Tools like Emscripten and wasm-bindgen facilitate the compilation of various languages to Wasm, broadening its applicability.
-2. **WebAssembly Interface Types**: Standardizes the way Wasm modules interact with each other and with host environments, simplifying the integration process.
-3. **Component Model**: An emerging standard that aims to improve modularity and reuse of Wasm components, further enhancing interoperability .
+Future work will focus on enhanced integration of wasm community tools and standards:
+
+1. **Multi-language Support**: Support for bindings and package generation in additional languages like Java, C#, and Rust, broaden wasm module applicability.
+2. **WebAssembly Interface Types**: Standardizes the way Wasm modules interact with each other and with host environments, simplifying the integration process. We plan to bridge our interface types with the emerging Wasm Interface Type (WIT) definition.
+3. **Component Model**: An emerging standard that aims to improve modularity and reuse of Wasm components, further enhancing interoperability. Further instrumentation with the Component Model standard will enable generation of composite processing pipeline wasm modules that could be built from wasm component modules written in multiple languages.
 
 ITK-Wasm provides a robust framework for scientific computing that leverages WebAssembly's strengths. The framework bridges the gap between web-based and native applications, enabling high-performance, cross-platform scientific analysis. By integrating the principals of the WebAssembly Component Model, ITK-Wasm enhances interoperability and sustainability, allowing scientific Python to thrive in a multi-language ecosystem.
 
