@@ -19,8 +19,7 @@ To expose these `C++` libraries to the Pythonic tooling layer, custom Python bin
 :::{figure} figures/access_layer_diagram.png
 :label: fig:access_layer_diagram
 
-The data access abstract interface from the high level user facing Python API to the ATLAS Event Data Model (EDM) access library that exposes the shared ATLAS combined performance (CP) tools for reconstruction, identification, and measurement of physics objects.
-The interface takes advantage of `nanobind`'s efficient bindings and zero-copy exchange protocols to achieve viable performance. [@Kourlitis:2890478]
+The data access abstract interface from the high level user facing Python API to the ATLAS Event Data Model (EDM) access library that exposes the shared ATLAS combined performance (CP) tools for reconstruction, identification, and measurement of physics objects. [@Kourlitis:2890478]
 :::
 
 To contend with the extreme data volume, efficient distributed computing is an essential requirement.
