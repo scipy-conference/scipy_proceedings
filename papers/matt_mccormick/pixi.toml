@@ -1,24 +1,42 @@
 [project]
-authors = ["Matt McCormick <matt.mccormick@kitware.com>"]
+authors = ["Matt McCormick <matt@mmmccormick.com>"]
 channels = ["conda-forge"]
-description = "Add a short description here"
+description = "ITK-Wasm SciPy 2024 paper figure generation"
 name = "itk-wasm-scipy-paper"
-platforms = ["win-64", "linux-64", "linux-aarch64", "osx-arm64"]
-version = "0.1.0"
+platforms = ["win-64", "linux-64", "osx-arm64"]
+version = "1.0.0"
 
 [tasks]
 start = "myst start"
-gen-ome-zarr = "ngff-zarr -c 64 -i ./vm_head_frozenct.mha -o ./vm_head_frozenct.zarr"
-naive-downsample = "python ./naive_downsample.py"
-gen-iwi-cbor = "python ./gen_iwi_cbor.py"
-python-downsample = "python ./downsample.py"
+gen-ome-zarr = { cmd = "ngff-zarr -c 64 -i ./vm_head_frozenct.mha -o ./vm_head_frozenct.zarr", outputs = ["vm_head_frozenct.zarr"] }
+naive-downsample = { cmd = "python ./naive_downsample.py", depends-on = ["gen-ome-zarr"] }
+gen-iwi-cbor = { cmd = "python ./gen_iwi_cbor.py", outputs = ["vm_head_frozenct.iwi.cbor"] }
+python-downsample = { cmd = "python ./downsample.py", inputs = ["vm_head_frozenct.iwi.cbor"], outputs = ["downsampled.iwi.cbor"], depends-on = ["gen-iwi-cbor"] }
+benchmark = { cmd = "python benchmark_downsample.py", depends-on = ["gen-iwi-cbor"], env = { ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS = "1" } }
+create-wasi-venv = { cmd = "rm -rf wasi-venv && python -m venv wasi-venv && ./wasi-venv/bin/python -m pip install -U pip && ./wasi-venv/bin/pip install itkwasm-downsample", outputs = ["wasi-venv"] }
+create-native-venv = { cmd = "rm -rf native-venv && python -m venv native-venv && ./native-venv/bin/python -m pip install -U pip && ./native-venv/bin/pip install itk-filtering", outputs = ["native-venv"] }
+create-cucim-venv = { cmd = "rm -rf cucim-venv && python -m venv cucim-venv && ./cucim-venv/bin/python -m pip install -U pip && ./cucim-venv/bin/pip install itkwasm-downsample-cucim cucim-cu12 scipy", outputs = ["cucim-venv"] }
+venv-fig = { cmd = "python ./venv_figure.py" }
 
 [dependencies]
 pytest = "*"
 python = "3.11.*"
+scipy = ">=1.14.1,<2"
+matplotlib = ">=3.9.2,<4"
 
 [pypi-dependencies]
 itkwasm-image-io = ">=1.3.0, <2"
 mystmd = ">=1.3.5, <2"
 ngff-zarr = ">=0.8.7, <0.9"
-itkwasm-downsample = ">=1.4.0, <2"
+itkwasm-downsample = ">=1.4.1, <2"
+itkwasm-downsample-cucim = ">=0.2.0, <0.3"
+itk-filtering = ">=5.4.0, <6"
+
+[system-requirements]
+cuda = "12"
+
+[target.linux-64.dependencies]
+cupy = ">=13.3.0,<14"
+
+[target.linux-64.pypi-dependencies]
+cucim = ">=23.10.0, <24"

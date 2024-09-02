@@ -557,49 +557,49 @@ All ITK-Wasm pipeline modules also support an `--interface-json` flag, which all
 
 ```shell
 ❯ wasmtime run ./downsample.wasi.wasm --interface-json
-{                                              
+{
    "description": "Apply a smoothing anti-alias filter and subsample the input image.",
-   "name": "downsample",       
+   "name": "downsample",
    "version": "0.1.0",
    "inputs": [
       {
          "description": "Input image",
          "name": "input",
-         "type": "INPUT_IMAGE",                                                               
-         "required": true,   
+         "type": "INPUT_IMAGE",
+         "required": true,
          "itemsExpected": 1,
          "itemsExpectedMin": 1,
          "itemsExpectedMax": 1,
-         "default": ""                         
-      }                                        
-   ],                                          
+         "default": ""
+      }
+   ],
    "outputs": [
       {
-         "description": "Output downsampled image",                    
+         "description": "Output downsampled image",
          "name": "downsampled",
          "type": "OUTPUT_IMAGE",
-         "required": true, 
+         "required": true,
          "itemsExpected": 1,
          "itemsExpectedMin": 1,
          "itemsExpectedMax": 1,
-         "default": ""                         
-      } 
-   ],  
-   "parameters": [                             
+         "default": ""
+      }
+   ],
+   "parameters": [
     [...]
       {
-         "description": "Shrink factors",      
-         "name": "shrink-factors",             
-         "type": "UINT",                                                                      
-         "required": true,   
+         "description": "Shrink factors",
+         "name": "shrink-factors",
+         "type": "UINT",
+         "required": true,
          "itemsExpected": 2,
          "itemsExpectedMin": 2,
          "itemsExpectedMax": 1073741824,
-         "default": "[2,2]"    
-      },                                       
+         "default": "[2,2]"
+      },
     [...]
-   ]                                           
-}   
+   ]
+}
 ```
 
 ### Generating TypeScript packages from ITK-Wasm modules
@@ -671,9 +671,21 @@ We leverage the Emscripten toolchain to generate bindings for browser-based Pyod
 
 For system applications, we provide a WASI-based Python package that ensures cross-platform compatibility across all major platforms and architectures. This broadens the reach of ITK-Wasm, enabling developers to deploy ITK-based applications on a wide range of systems.
 
+:::{figure} ./figures/venv_fig.svg
+:label: fig:venv-size
+
+Downsample example package virtual environment size. ITK-Wasm WASI packages are simple, small, self-contained, and have minimal dependencies. The associated accessibility and sustainability for software that depends on these packages is reflected by the virtual environment size. When compared to a native binary or CUDA-based implementations, the WASI implementation has significantly reduced size and complexity.
+:::
+
 #### GPU Acceleration with cuCIM
 
 To further enhance performance, we utilize the dispatch Python package's capabilities in conjunction with a [cuCIM](https://github.com/rapidsai/cucim) accelerator package. This enables GPU acceleration, to enable improvements the execution speed, especially in applications where bulk data resides on the GPU
+
+:::{figure} ./figures/benchmark_results.svg
+:label: fig:benchmark
+
+Downsample example performance comparison between ITK-Wasm WASI, an equivalent ITK Python native binary implementation, and the ITK-Wasm CuCIM implementation. Executed on an Ryzen 9, 7940HS CPU, NVIDIA RTX 4070 Laptop GPU, Ubuntu 24.04 Linux system. Mean and standard deviation for ten iterations. While the currently single-threaded WASI implementation is significantly slower than the native binary implementation, multi-threaded improvements with the native binaries hold promise for when this is enabled on the WASI binary (future work). NVIDIA CUDA-based ITK-Wasm CuCIM, applied without any other code changes when the `itkwasm-downsample-cucim` package is installed, demonstrates easy access to GPU acceleration when NVIDIA GPUs and CUDA software is available.
+:::
 
 #### API Documentation and Pythonic Interfaces
 

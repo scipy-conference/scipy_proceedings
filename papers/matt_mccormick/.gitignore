@@ -5,3 +5,6 @@ node_modules/
 figures/artifacts/tsconfig.tsbuildinfo
 vm_head_frozenct.iwi.cbor
 downsampled.iwi.cbor
+cucim-venv/
+native-venv/
+wasi-venv/
