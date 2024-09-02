@@ -40,7 +40,7 @@ To address these challenges we introduce `geosnap`, the geospatial neighborhood 
 package, which is a unique Python package sitting at the intersection of spatial science
 and practical application. In doing so, it provides a bridge between formal spatial
 analysis/spatial econometrics and the applied fields of neighborhood change, access to
-opportunity, and the social determinants of health. The package provides extremely fast
+opportunity, and the social determinants of health. The package provides fast
 and efficient access to hundreds of socioeconomic, infrastructure, and environmental
 quality indicators that allow researchers to move from zero data to an informative model
 in a few short lines of code. 
@@ -117,7 +117,7 @@ Protection Agency (EPA), the Bureau of Labor Statistics (BLS), or the National C
 for Education Statistics (NCES), to name a few. As researchers, we found ourselves
 writing the same code to download [versions of] the same data repeatedly (at different
 scales or time frames). That works ok in some cases, but it is also cumbersome, and can
-be extremely slow for even medium-sized datasets. While there are nice tools like
+be extremely slow for even medium-sized datasets (tables with roughly 75 thousand rows and 400 columns representing Census Tracts in the USA can take several hours or even days to download from Census servers). While there are nice tools like
 [cenpy](https://github.com/cenpy-devs/cenpy) or
 [pyrgris](https://walker-data.com/pygris/), these tools cannot overcome a basic
 limitation of many government data providers, namely that they use old technology, e.g.,
@@ -204,8 +204,8 @@ which uniquely identifies every federally-defined geographic unit in the U.S.
 sd = gio.get_acs(datasets, year=2018, county_fips=['06073'])
 ```
 
-There is also a table that maps counties to their constituent MSAs. Note that
-blockgroups are not exposed directly, but are accessible as part of the ACS and EJSCREEN
+There is also a table that maps counties to their constituent Metropolitan Statistical Areas (MSAs). Note that
+blockgroups are not exposed directly, but are accessible as part of the ACS and the Environmental Protection Agency's  Environmental Justic Screening Tool (EJSCREEN)
 data. If the dataset exists in the `DataStore` path, it will be loaded from disk,
 otherwise it will be streamed from S3 (provided an internet connection is available).
 The geosnap `io` module (aliased here as `gio`) has a set of functions for creating
