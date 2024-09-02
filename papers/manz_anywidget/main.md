@@ -380,6 +380,17 @@ allowing anywidgets to run natively without additional "glue code." Developers
 of the Panel web-application framework are also exploring deeper integration
 with AFM to enable reuse with their kernel-side reactivity systems.
 
+AFM's standardization of widget front-end code extends reusability beyond the
+Python ecosystem. Its API structure is intentionally agnostic to backend
+processing, enabling creative and dynamic ways of hosting AFM-based widgets.
+Many simple widgets can function without any compute backend, while more
+complex ones can be upgraded with a computational backend when necessary. This
+flexibility allows for innovative hosting solutions across diverse platforms,
+from fully static web pages to full-stack web applications. By decoupling
+front-end interactivity from backend complexity, AFM empowers developers to
+create scalable, platform-independent scientific visualizations and tools,
+adaptable to a wide range of computational requirements and user scenarios.
+
 A current limitation of anywidget is that using relative file imports for local
 dependencies requires bundling into a single ES module, which introduces a
 build step and prevents shipping AFM source code directly. This build step can
