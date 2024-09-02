@@ -401,10 +401,10 @@ An area of future research is to use AI assistants that have large language mode
 
 We found three extensions developed for Jupyter Lab that enable speech recognition in Jupyter notebooks.
 The first, [jupyterlab-voice-control](https://github.com/krassowski/jupyterlab-voice-control), supports custom commands and relies on the browser's language model.
-This extension is experimental; it does not work with Jupyter 4.2.
+However, it is important to note that this extension is experimental and does not currently work with Jupyter 4.2.
 The second extension, [jupyter-voice-comments](https://github.com/Banpan-Jupyter-Extensions/jupyter-voice-comments), relies on the DaVinci large language model to make comments in Markdown cells and request code fragments.
 This program requires clicking on a microphone icon frequently, which makes the user vulnerable to repetitive stress injuries.
-The third extension is [jupyter-voicepilot](https://github.com/JovanVeljanoski/jupyter-voicepilot).
+The third extension, jupyter-voicepilot, is designed to provide a unique voice control experience.
 Although the extension's name suggests it uses GitHub's Copilot, it uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGPT3.
 The robustness of our approach is that the *Voice-In Plus* should work in all browser-based versions of Jupyter Lab and Jupyter Notebook.
