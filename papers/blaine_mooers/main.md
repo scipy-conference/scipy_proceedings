@@ -302,8 +302,8 @@ Images often play essential roles in the stories told with Jupyter notebooks.
 
 We provide a [library](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) of 85 cell and line magics that facilitate the Jupyter notebook's interaction with the rest of the operating system.
 Our cell magics, easily identifiable by their cell magic prefix, and line magics, with the straightforward line magic prefix, are designed to make the Jupyter notebook experience more intuitive.
-For example, the voice command *line majic run* inserts `%run`; it is used to run script files after supplying the name of the script file as also shown in {ref}`fig:quiz`.
-
+For example, the voice command *line majic run* inserts `%run`. 
+You use this command to run a script file {ref}`fig:quiz`.
 
 ### Interactive quiz
 
@@ -324,7 +324,7 @@ Spaced repetition learning is one of the most firmly established results of rese
 
 Most people need discipline to carry out this kind of learning because they have to schedule the time to do the follow-up sessions.
 Instead, people will find it more convenient to take these quizzes several times in 20 minutes before they spend many hours utilizing the commands.
-If that use occurs on subsequent days, then recall will be reinforced, and retaking the quiz may not be necessary.
+If that use occurs on subsequent days, then the recall will be reinforced and retaking the quiz may not be necessary.
 
 
 ### Limitations on using Voice In Plus
