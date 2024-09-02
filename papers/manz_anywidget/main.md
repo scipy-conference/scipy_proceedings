@@ -52,14 +52,14 @@ ends and kernels. However, the proliferation of JCPs has led to significant
 challenges for Jupyter Widgets, a key component of interactive user interfaces
 in Jupyter.
 
-**Jupyter Widgets** extend notebook outputs with interactive views and controls for
-objects residing in the kernel [@doc_juparch]. For instance, the
-[ipywidgets](https://github.com/jupyter-widgets/ipywidgets) library provides
-basic form elements like buttons, sliders, and dropdowns to adjust individual
-variables. Other community projects offer interactive visualizations for
-domain-specific needs, such as 3D volume rendering
-([ipyvolume](https://github.com/widgetti/ipyvolume)), biological data exploration
-[@manzt2023; @viv; @vitessce], and mapping
+**Jupyter Widgets** extend notebook outputs with interactive views and controls
+for objects residing in the kernel [@doc_juparch]. For instance, the
+[ipywidgets](https://github.com/jupyter-widgets/ipywidgets) library, besides
+defining the widget communication protocol, provides basic form elements like
+buttons, sliders, and dropdowns to adjust individual variables. Other community
+projects offer interactive visualizations for domain-specific needs, such as 3D
+volume rendering ([ipyvolume](https://github.com/widgetti/ipyvolume)),
+biological data exploration [@manzt2023; @viv; @vitessce], and mapping
 ([ipyleaflet](https://github.com/jupyter-widgets/ipyleaflet),
 [pydeck](https://github.com/visgl/deck.gl/tree/master/bindings/pydeck),
 [lonboard](https://developmentseed.org/lonboard/)), which users can update by
