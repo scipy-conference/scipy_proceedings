@@ -377,6 +377,20 @@ allowing anywidgets to run natively without additional "glue code." Developers
 of the Panel web-application framework are also exploring deeper integration
 with AFM to enable reuse with their kernel-side reactivity systems.
 
+A current limitation of anywidget is that using relative file imports for local
+dependencies requires bundling into a single ES module, which introduces a
+build step and prevents shipping AFM source code directly. This build step can
+be avoided by using a single file and loading third-party dependencies via
+URLs, though larger projects may still benefit from bundling. Notably,
+traditional widgets always require a build step and mandate using a specific
+bundler (Webpack) with a bespoke multi-JCP configuration. In contrast,
+anywidget makes bundling optional and targets a single standard ES module,
+which can be produced easily from a variety of bundlers. Future browser support
+for
+[importmaps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap)
+may enable local dependencies without bundling, simplifying anywidget
+development further as web standards evolve.
+
 Tools for data visualization and interactivity have greater impact when
 compatible with more platforms, but achieving compatibility involves trade-offs
 [@Wang2024]. The full capabilities of the widget system, such as
