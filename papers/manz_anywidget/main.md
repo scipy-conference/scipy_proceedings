@@ -296,7 +296,9 @@ bootstrap a project with over 50 files, creating and installing a local Python
 package, bundling JavaScript code, and manually linking build outputs to
 install extensions [@cookiecutter_comparison]. By removing these barriers,
 anywidget accelerates development and allows prototypes to grow into robust
-tools over time.
+tools over time. In fact, as of January 2024, the JavaScript cookiecutter
+[@js_cookiecutter] project has been deprecated and directs users to use
+anywidget instead.
 
 ### Simplified Publishing
 
