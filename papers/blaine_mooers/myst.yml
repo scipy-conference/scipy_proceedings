@@ -11,6 +11,11 @@ project:
     - human-computer interface
   authors: 
       - name: Blaine H. M. Mooers
+        roles: 
+            - Conceptualization
+            - Code development and testing
+            - Writing and editing
+            - Funding
         email: blaine-mooers@ouhsc.edu
         orcid: 0000-0001-8181-8987
         affiliations:
@@ -28,11 +33,11 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        - markdown
+        - voice-triggered snippets
+        - human-computer interface
+        - speech-to-text
+        - software engineering
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
   subject: Research Article
