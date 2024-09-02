@@ -383,12 +383,11 @@ The following four discussion points can enhance understanding the use of *Voice
 ### Independence from breaking changes in Jupyter
 
 The Jupyter project lacks built-in support for libraries of code snippets.
-The development of third-party extensions is a necessity to support the use of code snippets.
+Developing third-party extensions is not just a choice but a crucial necessity to support using code snippets in the Jupyter environment.
 Unfortunately, changes in the core of Jupyter occasionally break these third-party extensions.
-Users have to create Python environments for older versions of Jupyter to work with their outdated snippet extension while missing out on the new features of Jupyter.
+Users are burdened with the task of creating Python environments for older versions of Jupyter to work with their favorite outdated snippet extension, all the while missing out on the new features of Jupyter.
 An obvious solution to this problem would be for the Jupyter developers to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for snippets is always available.
 Using voice-triggered snippets external to Jupyter side steps the disruption of snippet extensions by breaking changes in new versions of Jupyter.
-
 ### Voice-triggered snippets can complement AI-assisted voice computing
 
 The use of voice-triggered snippets requires knowledge of the code that you want to insert.
