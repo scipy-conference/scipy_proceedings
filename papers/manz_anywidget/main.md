@@ -196,7 +196,8 @@ portability by making integration interfaces explicit. New runtimes can support
 AFMs by implementing the required APIs, and existing JCPs can refactor their
 internals without breaking existing (any)widgets. For projects that want to take
 advantage of advanced front-end tooling, anywidget also provides authoring 
-utilities to write AFMs such as "bridge" libraries for popular web frameworks [@joss].
+utilities to write AFMs such as "bridge" libraries for popular web frameworks
+[@joss].
 
 :::{figure}
 :label: fig:afm
@@ -228,6 +229,26 @@ set of methods for communicating with the kernel (retrieving, updating, and
 responding to value changes). The `el` argument is a standard web
 [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
 :::
+
+
+Widget authorship is particularly challenging due to the need to integrate
+front-end code that communicates with kernel code in a heterogeneous set of
+environments. The anywidget project addresses these challenges by focusing on
+the standardization, development, and distribution of widget front-end modules,
+including the associated API to communicate with a computational kernel. The
+anywidget Python package serves as an adapter library that turns each JCP into
+an AFM-compatible host environment. Finally, the anywidget project provides
+additional tooling to help developers evolve their prototypes into mature
+packages [@joss].
+
+An additional goal for an interactive computing paradigm like widgets is
+composability. For example, ipywidgets provides utilities to link widgets
+together or lay out grids of widgets on the page. These primitives allow
+widgets to derive from others, enabling reuse of front-end and kernel
+integrations in new ways. Importantly, Jupyter Widgets authored with the
+anywidget Python package extend from ipywidgets, making them interoperable with
+core ipywidgets and traditional custom widgets. By aligning with ipywidgets,
+anywidget promotes composability and prevents fragmentation of the ecosystem.
 
 ## Features
 
