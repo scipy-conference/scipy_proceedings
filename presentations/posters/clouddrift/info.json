@@ -1,0 +1,26 @@
+{
+  "title": "Accelerating the use of Lagrngian data with Clouddrift",
+  "authors": [
+        {
+            "orcid": "0009-0003-8383-1212",
+            "affiliation": "Rosenstiel School of Marine, Atmospheric, and Earth Science, University of Miami",
+            "name": "Santana, Kevin"
+        },
+        {
+            "orcid": "0000-0001-6051-5426",
+            "affiliation": "Rosenstiel School of Marine, Atmospheric, and Earth Science, University of Miami",
+            "name": "Elipot, Shane"
+        },
+        {
+            "orcid": "0000-0002-8520-6221",
+            "affiliation": "Florida State University",
+            "name": "Miron, Philippe"
+        },
+        {
+            "orcid": "0000-0002-8822-7749",
+            "affiliation": "Rosenstiel School of Marine, Atmospheric, and Earth Science, University of Miami",
+            "name": "Curcic, Milan"
+        }
+  ],
+  "description": "clouddrift is a python library built to accelerate and simplify the use of lagrangian datasets in science. To achieve this the library adapts datasets into cloud optimized ragged arrays, provides analysis and query methods to work with lagrangian datasets as ragged arrays."
+}
