@@ -39,7 +39,7 @@ necessary for wrangling and synthesizing urban data.
 To address these challenges we introduce `geosnap`, the geospatial neighborhood analysis
 package, which is a unique Python package sitting at the intersection of spatial science
 and practical application. In doing so, it provides a bridge between formal spatial
-analysis/spatial econometrics and the applied fields of neighborhood change, access to
+analysis and the applied fields of neighborhood change, access to
 opportunity, and the social determinants of health. The package provides fast
 and efficient access to hundreds of socioeconomic, infrastructure, and environmental
 quality indicators that allow researchers to move from zero data to an informative model
