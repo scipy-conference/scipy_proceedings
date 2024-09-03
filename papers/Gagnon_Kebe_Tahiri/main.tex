@@ -25,6 +25,15 @@ However, the relationship between genetics and the environment is complex, invol
 \section{Our Contribution}\label{contribution}
 Our study focuses on the genetic variation of the 16S rRNA mitochondrial gene in cumacean populations in the face of environmental fluctuations, which has been little explored in previous studies \citep{grassle1992deep, rex2000latitudinal}. We aim to refine the natural selection hypothesis by identifying the genetic region with the highest mutation rate based on the fact that individuals best adapted to their environment are likely to survive and evolve. We then analyze its correlation with geographic and ecological distribution patterns and determine the protein potentially associated with this region. This method represents a major advance over previous research, which often fails to integrate genetic and environmental data in the context of deep-sea invertebrates \citep{etter1990population, vrijenhoek2009cryptic}.
 
+\begin{tabular}{|c|c|c|}
+\hline
+Colonne 1 & Colonne 2 & Colonne 3 \\
+\hline
+Donnée 1 & Donnée 2 & Donnée 3 \\
+Donnée 4 & Donnée 5 & Donnée 6 \\
+\hline
+\end{tabular}
+
 Using robust analytical methods such as dissimilarity calculations and phylogenetic reconstructions, we provide new insights into the genetic adaptation of marine Cumacea. Unlike previous studies, which have encountered difficulties establishing a link between genetics and the environment \citep{manel2003landscape, balkenhol2009statistical}, our results provide a better understanding of evolutionary dynamics in aquatic ecosystems.
 
 Furthermore, our genetic and environmental data highlights critical habitats of high conservation interest, which can be considered for establishing marine protected areas \citep{levin2009ecological}. These results are essential for developing informed conservation strategies in the context of climate change. Finally, our study paves the way for further research on other invertebrate species across different geographic regions. By extending this research to diverse environments and taxonomic groups, scientists will gain a more complete understanding of the adaptation and resilience of marine invertebrates to changing conditions. This work contributes essential insights to the field and supports the development of informed conservation strategies.
@@ -174,7 +183,7 @@ if __name__ == "__main__":
     alignments = align_sequence.align()
 
     # Generate phylogenetic trees based on aligned sequences
-    # This function creates phylogenetic trees from the multiple sequence alignments.
+    # This function creates phylogenetic trees from the multiple sequence alignments (MSA).
     genetic_trees = utils.genetic_pipeline(alignments.msa)
     
     # Create a GeneticTrees object
@@ -383,7 +392,7 @@ def least_square(tree1, tree2):
     return ls
 \end{lstlisting}
 
-Our phylogeographic study used these four metrics to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental, geographic, and climatic features. The result is a comprehensive analysis of the evolutionary dynamics of cumacean populations in different contexts. Note that the results in Figure \ref{fig:fig6} and Figure \ref{fig:fig7} were obtained by comparing a tree constructed from habitat attribute 1 with all other trees constructed from the other attributes (2, 3, 4, 5, ...).
+Our phylogeographic study used these four metrics to quantify topological differences between phylogenetic trees and assess dissimilarities between genetic sequences and environmental, geographic, and climatic features. The result is a comprehensive analysis of the evolutionary dynamics of cumacean populations in different contexts. 
 
 \section{Results}\label{results}
 The violon diagrams shown in Figure \ref{fig:fig2} are used to display summary statistics similar to box plots, showing medians (white dots), interquartile ranges (thickened black bars), and the rest of the distributions (thin black lines), except the "extreme" points. Wider areas indicate a greater probability of the attributes taking a given value. They summarize the distribution of geographic (latitude and longitude at the start of sampling (DD)), climatic (wind speed (m/s) at the start of sampling), and environmental (depth (m) at the start of sampling, water temperature ($^\circ$C), and O\textsubscript{2} concentration (mg/L)) data. These diagrams are essential for understanding habitat conditions and highlighting unique habitats that can potentially influence cumacean genetic adaptability. 
