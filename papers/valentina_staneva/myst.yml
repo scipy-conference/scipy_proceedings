@@ -95,6 +95,7 @@ project:
         - prefect
         - echoviewr
         - echoview_software_pty_ltd_echoview_nodate
+        - echodataflow
         
 
 
