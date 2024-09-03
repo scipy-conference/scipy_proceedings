@@ -235,7 +235,7 @@ is a collection of standardized achievement data, available at multiple levels (
 state to district to school) with nearly complete national coverage. These data were
 released by researchers at Stanford to "help us—scholars, policymakers, educators,
 parents—learn how to improve educational opportunity for all children," and are an
-incredible resource for social science research.For more information on how to use the
+incredible resource for social science research. For more information on how to use the
 SEDA data, see their website, or the
 [Educational Opportunity Project](https://edopportunity.org/). These can be combined
 quickly to visualize or conduct further spatial analyses of educational achievement at
