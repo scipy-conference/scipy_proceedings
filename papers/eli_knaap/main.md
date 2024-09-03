@@ -61,11 +61,11 @@ and segregation measurement to support social science research, public policy an
 urban planning. It provides a simple interface tailored to formal analysis of
 spatiotemporal urban data, and its primary features include
 
-- Quick access to a large database of commonly-used neighborhood indicators from
+- Quick access to a large database of commonly used neighborhood indicators from
   U.S. providers including the U.S. Census, the Environmental Protection Agency
   (EPA), Longitudinal Household-Employment Dynamics (LEHD), the National Center
   for Education Statistics (NCES), and National Land Cover Database (NLCD),
-  streamed efficiently from the cloud (or stored for repeated use).
+  streamed efficiently from the cloud or stored for repeated use.
 - Fast, efficient tooling for standardizing data from multiple time periods into a
   shared geographic representation appropriate for spatiotemporal analysis
 - Analytical methods for understanding sociospatial structure in neighborhoods, cities,
@@ -98,12 +98,10 @@ from geosnap.harmonize import harmonize
 
 ### Data
 
-Neighborhoods, cities, and regions are characterized by a variety of data, and
-to understand how places change over time, or how they affect the people who
-live there, researchers often require information on the social, environmental,
-institutional, and economic conditions that characterize the area. The geosnap
+Neighborhoods, cities, and regions can be characterized by a variety of data. Researchers use the social, environmental,
+institutional, and economic conditions of the area to understand change in these places and the people who inhabit them. The geosnap
 package tries to make the process of collecting and wrangling these various
-publicly-available datasets simpler, faster, and more reproducible by
+publicly available datasets simpler, faster, and more reproducible by
 repackaging the most commonly used into modern formats and serving (those we are
 allowed to) over fast web protocols. This makes it much faster to conduct,
 iterate, and share analyses for better urban research and public policy than the
@@ -115,8 +113,7 @@ Toward that end, many of the datasets used in social science and public policy r
 in the U.S. are drawn from the same set of resources, like the Census, the Environmental
 Protection Agency (EPA), the Bureau of Labor Statistics (BLS), or the National Center
 for Education Statistics (NCES), to name a few. As researchers, we found ourselves
-writing the same code to download [versions of] the same data repeatedly (at different
-scales or time frames). That works ok in some cases, but it is also cumbersome, and can
+writing the same code to download  the same data repeatedly. That works in some cases, but it is also cumbersome, and can
 be extremely slow for even medium-sized datasets (tables with roughly 75 thousand rows and 400 columns representing Census Tracts in the USA can take several hours or even days to download from Census servers). While there are nice tools like
 [cenpy](https://github.com/cenpy-devs/cenpy) or
 [pyrgris](https://walker-data.com/pygris/), these tools cannot overcome a basic
@@ -145,7 +142,7 @@ The `DataStore` class is a quick way to access a large database of social, econo
 environmental variables tabulated at various geographic levels. These data are not
 required to use the package, and `geosnap` is capable of conducting analysis anywhere in
 the globe, but these datasets are used so commonly in U.S.-centric research that
-geosnap's developers maintain this database as an additional layer.
+the developers of `geosnap` maintain this database as an additional layer.
 
 ```python
 datasets = DataStore()
@@ -157,10 +154,10 @@ datasets = DataStore()
 Over the last decade, one of the most useful resources for understanding socioeconomic
 changes in U.S. neighborhoods over time has been the
 [Longitudinal Tract Database (LTDB)](https://s4.ad.brown.edu/Projects/Diversity/researcher/bridging.htm),
-which is used in countless studies of neighborhood change [@Logan_2014]. One of the most
+which is used in studies of neighborhood change [@Logan_2014]. One of the most
 recognized benefits of this dataset is that it standardizes boundaries for census
 geographic units over time, providing a consistent set of units for time-series
-analysis. An under-appreciated benefit of these data is the ease with which researchers
+analysis. A benefit of these data is the ease with which researchers
 have access to hundreds of useful intermediate variables computed from raw Census data
 (e.g. population rates by race and age). Unfortunately, the LTDB data is only available
 for a subset of Census releases (and only at the tract level), so geosnap includes
@@ -169,11 +166,11 @@ data for every release of the 5-year ACS at both the tract and blockgroup levels
 (variable permitting). Note: following the Census convention, the 5-year releases are
 labelled by the terminal year.
 
-Unlike LTDB or The National Historical Geographic Information System
-[NHGIS](https://www.nhgis.org/), these datasets are created using code that collects raw
+Unlike LTDB or the National Historical Geographic Information System
+([NHGIS](https://www.nhgis.org/)), these datasets are created using code that collects raw
 data from the Census FTP servers, computes intermediate variables according to the
 codebook, and saves the original geometries-- and is
-**[fully open and reproducible](https://github.com/oturns/geosnap/blob/main/tools/process_census_gdb.ipynb)**.
+[fully open and reproducible](https://github.com/oturns/geosnap/blob/main/tools/process_census_gdb.ipynb).
 This means that all assumptions are exposed, and the full data processing pipeline is
 visible to any user or contributor to review, update, or send corrections. Geosnap's
 approach to data provenance reflects our view that open and transparent analysis is
@@ -181,12 +178,10 @@ always preferable to black boxes, and is a much better way to promote scientific
 discovery. Further, by formalizing the pipeline using code, the tooling is re-run to
 generate new datasets each time ACS or decennial Census data is released.
 
-To load a dataset, like the 2010 tract-level census data, just call it as a method,
-which returns a geodataframe (some datasets, like blocks or `acs` have additional
-arguments). Geometries are available for all of the commonly used administrative units,
+To load a dataset, e.g. 2010 tract-level census data, call it as a method to return a geodataframe. Geometries are available for all of the commonly used administrative units,
 many of which have multiple time periods available:
 
-- metropolitan statistical areas (MSAS)
+- metropolitan statistical areas (MSAs)
 - states
 - counties
 - tracts
@@ -196,7 +191,7 @@ many of which have multiple time periods available:
 Datasets can be queried and subset using an appropriate Federal Information Processing
 Series
 [(FIPS) Code](https://www.census.gov/library/reference/code-lists/ansi.html),
-which uniquely identifies every federally-defined geographic unit in the U.S.
+which uniquely identifies every federally defined geographic unit in the U.S.
 
 ```python
 # blockgroups in San Diego county from the 2014-2018 American Community Survey
@@ -218,8 +213,8 @@ The Environmental Protection Agency (EPA)'s
 [envrironmental justice screening tool (EJSCREEN)](https://www.epa.gov/ejscreen) is a
 national dataset that provides a wealth of environmental (and some demographic) data at
 a blockgroup level. For a
-[full list of indicators](https://www.epa.gov/ejscreen/overview-environmental-indicators-ejscreen)
-and their metadata, see the EPA page, but this dataset includes important variables like
+full list of indicators
+and their metadata, see [this EPA page](https://www.epa.gov/ejscreen/overview-environmental-indicators-ejscreen). This dataset includes important variables like
 air toxics cancer risk, ozone concentration in the air, particulate matter, and proximity
 to superfund sites.
 
@@ -244,8 +239,8 @@ multiple geographic scales.
 #### Employment
 
 The LEHD Origin-Destination Employment Statistics (LODES) data contain job
-counts tabulated for home and workplace census block, and broken down by
-industrial sector, and a handful of demographic characteristics like race and
+counts tabulated for home and workplace census block. These data are broken down by
+industrial sector and a handful of demographic characteristics like race and
 education. LODES also provides flow matrices that show the origin and
 destination blockgroups, and the number of commuters who travel between the two.
 
@@ -256,9 +251,9 @@ often do) change over time. For instance the U.S. census boundary polygons like
 tracts and blocks are re-drawn with each census to accomodate population growth
 and change. That means it's impossible to see if a given tract has changed over
 time because the label assigned to each tract means something different in each
-time period. To help solve that problem geosnap leverages the pysal
+time period. To help solve that problem `geosnap` leverages the PySAL
 [`tobler`](https://pysal.org/tobler) package to harmonize spatial boundaries
-over time. Doing so is as simple as calling the `harmonize()` function.
+over time. We do so by calling the `harmonize()` function.
 
 The simplest way to harmonize boundaries is to use areal interpolation, meaning we use
 the area of overlap between consecutive years to create a weighted sum of intersecting
@@ -363,9 +358,9 @@ the results) it is often viewed as a first (if not requisite step) in explorator
 analyses of a particular study area.
 
 The intellectual roots of geodemographics extend from analytical sociology and classic
-studies from Factorial Ecology
+studies from factorial ecology
 [@Berry1971; @Hunter1972; @lebowitz1977CriticalExamination; @Perle1979; @Rees1969] and
-Social Area Analysis
+social area analysis
 [@Bell1962; @Brindley1979; @green1971SocialArea; @Shevky1955; @Spielman2008]. Today,
 geodemographic analysis is routinely applied in academic studies of neighborhood
 segregation and neighborhood change, and used extremely frequently in industry,
@@ -440,12 +435,12 @@ tracts, but also enforces a contiguity constraint so that similar geographic uni
 also be proximate to one another. As with geodemographic clustering, when carrying out a
 regionalization exercise, we are searching for groups of observations (census tracts in
 this case) which are similar in socioeconomic and demographic composition. If the goal
-of geodemographics is to identify neighborhood *types*, that could exist anywhere in the
+of geodemographics is to identify neighborhood *types* that could exist anywhere in the
 region, the goal of regionalization is to identify *specific neighborhoods* that exist
 at a distinct place in the region.
 
 Following that concept, we can use constrained clustering to develop an
-empirical version of geographically-bounded neighborhoods, where the
+empirical version of geographically bounded neighborhoods, where the
 neighborhoods are defined by internal social homogeneity. This is similar to the
 historic and well-defined neighborhood zones in places like Chicago and
 Pittsburgh. Similar to the cluster analysis above, the following cell creates a
@@ -477,13 +472,13 @@ la_ward_reg[columns + ["geometry", "ward_spatial"]].explore(
 #### Transitional Dynamics
 
 With geosnap, it’s possible to look at temporal geodemographics without writing
-much code. Under the hood, the package provides tools for scaling each dataset
+much code. The package provides tools for scaling each dataset
 within its own time period, adjusting currency values for inflation, and
 ensuring that times, variables, and geometries stay aligned properly. Together
 those tools make it easy to explore how different portions of the region
 transition into different neighborhood types over time, and if desired, model
 the evolution of neighborhood change as a spatial Markov process. The following
-cell creates a neighborhood typology in Chicago using four mutually-exclusive
+cell creates a neighborhood typology in Chicago using four mutually exclusive
 race and ethnicity categories (defined by the U.S. Census) along with median
 home values and household incomes, which yields a set of cluster labels that
 change over time for each geographic unit. The `plot_timeseries` function
