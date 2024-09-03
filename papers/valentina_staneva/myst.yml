@@ -58,11 +58,6 @@ project:
     ML: Machine Learning
     ETL: Extraction, Transformation, Loading
     ARCO: analysis-ready, cloud-optimized
-    USV: Uncrewed Surface Vessel
-    GUI: Graphics User Interface
-    AWS: Amazon Web Services
-    NOAA: National Oceanic and Atmospheric Administration
-    NCEI: National Centers for Environmental Information
 
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
