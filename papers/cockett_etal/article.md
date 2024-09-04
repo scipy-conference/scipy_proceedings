@@ -1,5 +1,6 @@
 ---
-title: Transformative Approaches in Scientific Publishing
+title: Continuous Tools for Scientific Publishing
+subtitle: Using MyST Markdown and Curvenote to encourage continuous science practices
 abstract: |
   Advances in technology for data workflows have increased the speed and scope of scientific discovery, however, scientific dialogue still uses outdated technology for communicating and sharing knowledge.
   The widespread reliance on static PDF formats for research papers starkly contrasts with the complex, data-driven and increasingly computational nature of modern science.
@@ -122,7 +123,7 @@ However, the analogy is illustrative in areas where there is a focus on iteratio
 The speed of scientific progress depends _in part_ on the speed of iteration and feedback.
 The time it takes for the peer-review process is over three months, in high profile journals like Nature that time has almost doubled over the past decade [@Powell2016Does].
 Rejections are anywhere from 50-90% [@10.12688/f1000research.27468.2] with valuable reviews and expertise coming months or even years after the work is completed[^time-to-feedback].
-There are wide spread efforts in scientific publishing that focus on sharing smaller components of research (e.g. FigShare [@10.7771/2380-176X.7269], Octopus [@10.17863/CAM.96819], MicroPublications [@10.1186/2041-1480-5-28], NanoPublications [@10.3233/ISU-2010-0613], Protocols [@10.1371/journal.pbio.1002538], PreRegistrations [@10.1073/pnas.1708274114]), automated tools in the publication process [@10.7717/peerj-cs.147], as well as sharing research sooner in the life cycle especially through preprints [@10.1038/d41586-024-00996-8] and "Preprints in Progress" [@10.1371/journal.pgen.1008565].
+There are wide spread efforts in scientific publishing that focus on sharing smaller components of research (e.g. FigShare [@10.7771/2380-176X.7269], Octopus [@10.17863/CAM.96819], MicroPublications [@10.1186/2041-1480-5-28], NanoPublications [@10.3233/ISU-2010-0613], Protocols [@10.1371/journal.pbio.1002538], PreRegistrations [@10.1073/pnas.1708274114]), automated tools in the publication process [@10.7717/peerj-cs.147], as well as sharing research sooner in the life cycle especially through preprints [@10.1038/d41586-024-00996-8], "Preprints in Progress" [@10.1371/journal.pgen.1008565] and getting feedback sooner from a more diverse community [e.g. PREreview @10.1038/d41586-020-00613-4].
 
 [^covid]:
     As an example of the the rapid and timely sharing of in-progress results and data, it is worth reflecting on the COVID-19 pandemic. Improved and more rapid sharing practices through data and preprints helped to develop a vaccine in record time [@10.1038/s41591-021-01654-6]. Researchers published and shared data on the DNA sequence which enabled the design of a vaccine candidate in **two days** and the first manufacturing within **two weeks**.
@@ -149,7 +150,7 @@ This gives us a technical lens to assess, for example:
 - How can you assess and test that the structure of a document applies to editorial rules?
 
 In science there is a highly manual, absurdly expensive and disconnected process between authoring and publishing.
-By moving to continuous practices and investing in the appropriate infrastructure to support _continuous science_ we believe there is an opportunity to accelerate scientific discovery by multiple orders of magnitude while simultaneously increasing reproducibility and robustness of the underlying science.
+By moving to continuous practices and investing in the appropriate infrastructure to support _continuous science_ we believe there is an opportunity to accelerate scientific discovery by multiple orders of magnitude while simultaneously increasing reproducibility, robustness and transparency of the underlying science.
 
 % Current research incentives are focused on article publishing rather than research communication and sharing findings as early and as often as possible.
 

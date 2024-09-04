@@ -2,8 +2,8 @@ version: 1
 project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-cockett_etal
-  title: Transformative Approaches in Scientific Publishing
-  subtitle: Using MyST Markdown and Curvenote tools to encourage continuous science practices
+  title: Continuous Tools for Scientific Publishing
+  subtitle: Using MyST Markdown and Curvenote to encourage continuous science practices
   keywords:
     - scientific communication
     - publishing
