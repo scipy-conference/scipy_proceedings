@@ -30,7 +30,7 @@ equitable, and profitable, decision-making [@cortes2020OpensourceFramework;
 era's pressing problems are spatial or urban in form, requiring
 bespoke statistical methods and simulation techniques to produce accurate
 inferences. Thus, while data science teams in industries across the planet race
-to conquer 'geospatial data science' few practitioners have expertise in the
+to conquer geospatial data science few practitioners have expertise in the
 appropriate data sources, modeling frameworks, or data management techniques
 necessary for wrangling and synthesizing urban data.
 
