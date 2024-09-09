@@ -27,9 +27,7 @@ datasets and spatial analyses can turn these data into more efficient,
 equitable, and profitable, decision-making [@cortes2020OpensourceFramework;
 @finio2022SmartGrowth; @Kang2021; @Knaap2017; @knaap2023SegregatedDesign;
 @Rey2022a; @wei2022ReducingRacial]. On the academic side, many of the
-era's pressing problems are spatial or urban in form (e.g. the housing
-affordability crisis, climate change, economic transformation, globalization,
-and continuing processes of segregation and gentrification), thus requiring
+era's pressing problems are spatial or urban in form, requiring
 bespoke statistical methods and simulation techniques to produce accurate
 inferences. Thus, while data science teams in industries across the planet race
 to conquer 'geospatial data science' few practitioners have expertise in the
