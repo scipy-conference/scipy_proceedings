@@ -343,7 +343,7 @@ diverse widget ecosystem [@fig:widgetstats]. New widgets range from educational
 tools for experimenting with toy datasets (e.g.,
 [DrawData](https://github.com/koaning/drawdata)) to high-performance data visualization
 libraries (e.g., [Lonboard](https://developmentseed.org/lonboard/latest/),
-[Jupyter-Scatter](https://jupyter-scatter.dev/),
+[Jupyter-Scatter](https://jupyter-scatter.dev/) [@jscatter],
 [Mosaic](https://github.com/uwdata/mosaic) [@Heer2024]) and research
 projects enhancing notebook interactivity (e.g.,
 [Persist](https://github.com/visdesignlab/persist/) [@Gadhave2023],
