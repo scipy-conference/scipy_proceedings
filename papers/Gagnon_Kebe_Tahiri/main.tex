@@ -1,7 +1,7 @@
 \begin{abstract}
 Cumacea (crustaceans: Peracarida) are vital indicators of benthic health in marine ecosystems. This study investigated the influence of environmental (i.e., biological or ecosystemic), climatic (i.e., meteorological or atmospheric), and geographic (i.e., spatial or regional) attributes on their genetic variability in the Northern North Atlantic, focusing on Icelandic waters. We analyzed mitochondrial sequences of the 16S rRNA gene from 62 Cumacea specimens. Using the \textit{aPhyloGeo} software, we correlated these sequences with relevant variables such as latitude (decimal degree) at the start of sampling, wind speed (m/s) at the start of sampling, O\textsubscript{2} concentration (mg/L), and depth (m) at the start of sampling.
 
-Our analyses revealed variability in most of spatial and ecosystem attributes, reflecting the diversity of ecological requirements and benthic habitats. The most common Cumacea families, Diastylidae and Leuconidae, suggest adaptations to various marine environments. Phylogeographic analysis showed that specific genetic sequences were correlated with wind speed (m/s) at the start of sampling and O\textsubscript{2} concentration (mg/L). This indicates potential local adaptation to these fluctuating conditions.
+Our analyses revealed variability in most spatial and ecosystem attributes, reflecting the diversity of ecological requirements and benthic habitats. The most common Cumacea families, Diastylidae and Leuconidae, suggest adaptations to various marine environments. Phylogeographic analysis showed that specific genetic sequences were correlated with wind speed (m/s) at the start of sampling and O\textsubscript{2} concentration (mg/L). This indicates potential local adaptation to these fluctuating conditions.
 
 These results reinforce the importance of further research into the relationship between Cumacea genetics and global environmental factors. Understanding these relationships is essential for elucidating the evolutionary dynamics and adaptation of deep-sea Cumacea. This study sheds much-needed light on invertebrate acclimatization to climate change and habitat management in deep waters. It can contribute to the evolution of more efficient conservation strategies and inform policies that protect vulnerable marine ecosystems. 
 
@@ -30,7 +30,7 @@ Using robust analytical methods such as dissimilarity calculations and phylogene
 Furthermore, our genetic and environmental data highlights critical habitats of high conservation interest, which can be considered for establishing marine protected areas \citep{levin2009ecological}. These results are essential for developing informed conservation strategies in the context of climate change. Finally, our study paves the way for further research on other invertebrate species across different geographic regions. By extending this research to diverse environments and taxonomic groups, scientists will gain a more complete understanding of the adaptation and resilience of marine invertebrates to changing conditions. This work contributes essential insights to the field and supports the development of informed conservation strategies.
 
 \section{Materials and Methods}\label{materials-methods}
-This section describes our data and introduces the main stages of data pre-processing and the \textit{aPhyloGeo} software. A flow chart, constructed with the diagram software draw.io, summarizes this section (Figure \ref{fig:fig1}).
+This section describes our data and introduces the main stages of data pre-processing and the \textit{aPhyloGeo} software. A flow chart, constructed with the diagram software \href{https://app.diagrams.net/}{draw.io}, summarizes this section (Figure \ref{fig:fig1}).
 
 \begin{figure}[htbp]
     \centering
@@ -206,7 +206,7 @@ In addition to identifying the specific attribute, a sliding-window approach ena
 \end{enumerate}
 
 \section{Metrics}\label{metrics}
-Our phylogeographic study used four distance metrics to quantify topological differences between phylogenetic trees. It also assesses dissimilarities between genetic sequences and ecological and spatial attributes. The result is a comprehensive analysis of the evolutionary dynamics of cumacean populations in different contexts. 
+Our phylogeographic study used four distance metrics to quantify topological differences between phylogenetic trees. It also assesses dissimilarities between genetic sequences and ecological and spatial attributes. The result is a comprehensive analysis of the evolutionary dynamics of cumacean populations in different environments. 
 
 The following section presents a more concise version of the functions mentioned in the third step of the \autoref{aPhyloGeo-software} section:
 
@@ -214,23 +214,21 @@ The following section presents a more concise version of the functions mentioned
 
 The Robinson-Foulds Distance (RFD) quantifies dissimilarity between phylogenetic trees by counting the number of clades (i.e., groups of species with a common origin) present in one tree but absent in the other. This measure can be used to assess topological differences between trees. 
 
-In this context, we compare phylogenetic trees constructed from various habitat attributes (see the list in the first step of the \autoref{aPhyloGeo-software} section). For example, consider one tree based on habitat attribute A and the other based on habitat attribute B. The RFD measures the number of clades that differ between the tree constructed using the attribute A and the other tree constructed using the attribute B, by calculating the level of topological dissimilarity between the two trees (see (Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds})). A high distance from a specific window (i.e., sequence) implies that habitat feature impacts the phylogenetic relationships of cumacean species relative to our other attributes.
+In this context, we compare phylogenetic trees constructed from various habitat attributes (see the list in the first step of the \autoref{aPhyloGeo-software} section). For example, consider one tree based on habitat attribute A and the other based on habitat attribute B. The RFD measures the number of clades that differ between the tree constructed using the attribute A and the other tree constructed using the attribute B, by calculating the level of topological dissimilarity between the two sets of trees (see (Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds})). A high distance between a specific window (i.e., DNA sequence) and other windows included in the RFD analysis implies that the habitat feature potentially impacts this particular sequence and, consequently, the phylogenetic relationships of cumacean species.
 
 \begin{equation}\label{eq:rf}
     \text{RF}(T_1, T_2) = | \Sigma(T_1) \Delta \Sigma(T_2) |
 \end{equation}
 
-where $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of divisions in trees $T_1$ and $T_2$ and \Delta, the difference between these two sets.
+where $\text{RF}(T_1, T_2)$ is the Robinson-Foulds Distance between the two sets of trees, $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of divisions in trees $T_1$ and $T_2$ and $\Delta$, the difference between these two sets.
 
 %\autoref{lst:robinsonFoulds}.
 \begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds Distance using the ete3 package in the aPhyloGeo package.]
-# This script computes the RFD between two phylogenetic trees to assess their topological dissimilarity.
-
 import ete3
 
 def robinson_foulds(tree1, tree2):
     """
-    Calculate the Robinson-Foulds Distance between two phylogenetic trees.
+    Calculate the Robinson-Foulds Distance between the two sets of trees.
 
     Parameters:
     - tree1: Genetic trees in Newick format.
@@ -272,6 +270,8 @@ For example, if the size of tree A (constructed using attribute A) differs due t
     \text{RF}_{\text{norm}}(T_1, T_2) = \frac{| \Sigma(T_1) \Delta \Sigma(T_2) |}{| \Sigma(T_1) | + | \Sigma(T_2) |}
 \end{equation}
 
+where $ \text{RF}_{\text{norm}}(T_1, T_2)$ is the normalized Robinson-Foulds Distance between the two sets of trees, $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of divisions in trees $T_1$ and $T_2$ and $\Delta$, the difference between these two sets.
+
 \subsection{Euclidean Distance}\label{euclidean}
 
 Euclidean Distance (ED) measures the distance between two points in a multi-dimensional space. In our study, it is used to compare vectors of habitat attributes between species (Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}).
@@ -293,7 +293,7 @@ import dendropy
 
 def euclidean_dist(tree1, tree2):
     """
-    Calculate the Euclidean Distance (ED) between two phylogenetic trees.
+    Calculate the Euclidean Distance (ED) between the two sets of trees.
 
     Parameters:
     - tree1: Genetic trees in Newick format.
