@@ -215,7 +215,7 @@ The following section presents a more concise version of the functions mentioned
 \subsubsection{Robinson-Foulds Distance}\label{RF}
 The Robinson-Foulds Distance (RFD) calculates the distance between phylogenetic trees built in each sliding window ($T_1$) and the attributes (see the list in the first step of the section \autoref{aPhyloGeo-software}) trees ($T_2$) \citep{koshkarov_phylogeography_2022}. This measurement is used to evaluate the topological differences between the two sets of trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
 
-For example, it evaluates the topological differences between a phylogenetic tree built within certain sliding windows defined by the user (see the second step of section \autoref{aPhyloGeo-software}) and a geographic tree built with latitude data (DD) at the start of sampling. A high distance between a specific window and other windows considered in the RFD analysis implies that the habitat feature impacts this particular DNA sequence and, consequently, the phylogenetic relationships of cumacean species.
+For example, it evaluates the topological differences between a phylogenetic trees built within certain sliding windows defined by the user (see the second step of section \autoref{aPhyloGeo-software}) and geographic trees built with latitude data (DD) at the start of sampling. A high distance between a specific window and other windows considered in the RFD analysis implies that the habitat feature impacts this particular DNA sequence and, consequently, the phylogenetic relationships of cumacean species.
 
 \begin{equation}\label{eq:rf}
     \text{RF}(T_1, T_2) = | \Sigma(T_1) \Delta \Sigma(T_2) |
@@ -232,8 +232,8 @@ def robinson_foulds(tree1, tree2):
     Calculate the Robinson-Foulds Distance between the two sets of trees.
 
     Parameters:
-    - tree1: Genetic trees in Newick format.
-    - tree2: Ecological and spatial trees in Newick format.
+    - tree1: Genetic trees in Newick format (represent phylogenetic trees in text form).
+    - tree2: Ecological and spatial trees in Newick format (represent attributes trees in text form).
 
     Returns:
     - rf: The Robinson-Foulds distance between the two sets of trees.
@@ -264,7 +264,7 @@ def robinson_foulds(tree1, tree2):
 \subsubsection{Normalized Robinson-Foulds Distance}\label{RFnorm}
 The normalized Robinson-Foulds Distance (nRFD) scales the RFD to account for the size variations in the trees (number of clades), allowing a more equitable comparison. It scales the distance to a range between 0 and 1. In our context, the distance has been normalized by $2n-6$, where $n$ represents the number of taxa (see Equation \eqref{eq:rf_norm} and the last line of code in \autoref{lst:robinsonFoulds}). 
 
-For example, if the size of tree A (built using attribute A) differs due to missing data, this normalized metric allows us to compare its dissimilarity with tree B (built using attribute B) in a fairer way. In this case, it reveals the relative influence of habitat attribute A on cumacean phylogenetic relationships, independent of tree size.
+Since the size of the environmental trees constructed with O\textsubscript{2} concentration (mg/L) data differs from those of the other attributes due to missing data, this normalized metric allows us to compare its dissimilarity with the phylogenetic trees in a fairer way. It reveals the relative influence of O\textsubscript{2} concentration (mg/L) on cumacean phylogenetic relationships, independent of tree size.
 
 \begin{equation}\label{eq:rf_norm}
     \text{RF}_{\text{norm}}(T_1, T_2) = \frac{| \Sigma(T_1) \Delta \Sigma(T_2) |}{| \Sigma(T_1) | + | \Sigma(T_2) |}
@@ -273,9 +273,9 @@ For example, if the size of tree A (built using attribute A) differs due to miss
 where $ \text{RF}_{\text{norm}}(T_1, T_2)$ is the normalized Robinson-Foulds Distance between the two sets of trees, $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of divisions in trees $T_1$ and $T_2$ and $ \Delta $, the difference between these two sets.
 
 \subsubsection{Euclidean Distance}\label{euclidean}
-Euclidean Distance (ED) measures the distance between two points in a multi-dimensional space. In our study, it is used to compare vectors of habitat attributes between species (Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}).
+Euclidean Distance (ED) measures the distance between two points in a multi-dimensional space. In our study, it is used to compare vectors of habitat attributes between species (see Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}).
 
-By converting habitat attribute values into vectors, we measure the ED between vectors to quantify the dissimilarity between them of different cumacean species. This distance allows us to interpret how these differences influence their evolutionary relationships. For instance, species with similar habitat attribute vectors (low ED) may share closer evolutionary relationships. In contrast, those with a large difference in habitat vectors (high ED) may reveal evolutionary divergences.
+By converting habitat attribute values into vectors, we measure the ED between vectors to quantify the dissimilarity between them of different cumacean species. This distance allows us to interpret how these differences influence their evolutionary relationships. For instance, low ED signifies that cumacean species may share closer evolutionary relationships. On the other hand, a high ED between a specific window and other windows taking into account in the ED analysis may reveal evolutionary divergences (see Figure \ref{fig:fig6}d and Figure \ref{fig:fig7}d).
 
 For vectors $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_n)$, the ED between these vectors is calculated as:
 
@@ -283,7 +283,7 @@ For vectors $\mathbf{p} = (p_1, \ldots, p_n)$ and $\mathbf{q} = (q_1, \ldots, q_
     d_{\text{Euclidean}}(\mathbf{p}, \mathbf{q}) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}
 \end{equation}
 
-where $p_i$ and $q_i$ are the components of the vectors.
+where $d_{\text{Euclidean}}(\mathbf{p}, \mathbf{q}$ $p_i$ and $q_i$ are the components of the vectors.
 
 %\autoref{lst:euclideanDist}.
 \begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the ED using the ete3 and the dendropy packages in the aPhyloGeo package]
@@ -295,8 +295,8 @@ def euclidean_dist(tree1, tree2):
     Calculate the Euclidean Distance (ED) between the two sets of trees.
 
     Parameters:
-    - tree1: Genetic trees in Newick format.
-    - tree2: Meteorological, biological, and regional trees in Newick format.
+    - tree1: Genetic trees in Newick format (represent phylogenetic trees in text form).
+    - tree2: Meteorological, biological, and regional trees in Newick format (represent attributes trees in text form).
 
     Returns:
     - ed: The Euclidean distance between the two set of trees.
@@ -335,9 +335,9 @@ def euclidean_dist(tree1, tree2):
 \end{lstlisting}
 
 \subsubsection{Least-Squares Distance}\label{LS}
-The Least squares Distance (LSD) measures the differences between observed and the estimated values by summing the squares of these differences. In the context of phylogeographic trees, it quantifies the overall topological dissimilarity, considering the positions of nodes and branches (Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
+The Least squares Distance (LSD) measures the differences between observed and the estimated values by summing the squares of these differences. In the context of phylogeographic trees, it quantifies the overall topological dissimilarity, considering the positions of nodes and branches (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}).
 
-This metric allows us to understand how these different habitat attributes influence the topological structure of phylogenetic trees. For example, by comparing a tree constructed from the habitat attribute A with a tree built from attribute B, the LSD reveals the impact, high or low, of attribute A on changes in branch position and length.
+This metric allows us to understand how these different habitat attributes influence the topological structure of the phylogenetic trees. Thus, the LSD reveals the impact, high or low, of an habitat attribute on changes in branch position and length.
 
 \begin{equation}\label{eq:ls}
     d_{\text{LS}} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
