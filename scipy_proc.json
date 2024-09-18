@@ -267,7 +267,7 @@
       "name": "Proceedings Reviewers",
       "members": [
         {
-          "name": "Abhay Paroha"
+          "name": "Abhay Dutt Paroha"
         },
         {
           "name": "Andrei Paleyes"
@@ -277,6 +277,9 @@
         },
         {
           "name": "Andy Terrel"
+        },
+        {
+          "name": "Angus Hollands"
         },
         {
           "name": "Blaine Mooers"
@@ -289,6 +292,9 @@
         },
         {
           "name": "Chuchu Wu"
+        },
+        {
+          "name": "Cliff Kerr"
         },
         {
           "name": "Conrad Koziol"
@@ -318,14 +324,57 @@
           "name": "Kalyan Prasad"
         },
         {
+          "name": "Kevin Lacaille"
+        },
+        {
+          "name": "Lindsey Heagy"
+        },
+        {
+          "name": "Marcus Hill"
+        },
+        {
+          "name": "Matt Craig"
+        },
+        {
           "name": "Matthew Feickert"
+        },
+        {
+          "name": "Mihai Maruseac"
+        },
+        {
+          "name": "Nate Jacobs"
+        },
+        {
+          "name": "Nicole Brewer"
+        },
+        {
+          "name": "Pranoy Ray"
+        },
+        {
+          "name": "Stefan van der Walt"
         },
         {
           "name": "Steve Purves"
         },
         {
           "name": "Sumit Kumar"
-        }
+        },
+        {
+          "name": "Tek Kshetri"
+        },
+        {
+          "name": "Tetsuo Koyama"
+        },
+        {
+          "name": "Tolulade Ademisoye"
+        },
+        {
+          "name": "Veronica Gathoni"
+        },
+        {
+          "name": "Wu-Jung Lee"
+        },
+
       ]
     }
   ],
@@ -358,7 +407,7 @@
       "org": "",
       "name": ""
     }
-  ], 
+  ],
   "track_mini_symposia_chairs": [
     {
       "name": "DS/ML/AI",
