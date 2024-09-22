@@ -42,7 +42,7 @@ This section describes our data and introduces the main stages of data pre-proce
 The study area was located in a northern region of the North Atlantic, including the Icelandic Sea, the Denmark Strait, and the Norwegian Sea. The specimens examined were collected as part of the IceAGE project (Icelandic marine Animals: Genetic and Ecology; Cruise ship M85/3 in 2011), which focused on the deep continental slopes and abyssal waters around Iceland \citep{meisner_prefacebiodiversity_2018}. The sampling period for the included specimens was from August 30 to September 22, 2011, and they were collected at depths ranging from 316 m to 2568 m. Detailed protocols concerning the sampling plan, sample processing, DNA extraction steps, PCR amplification, sequencing, and aligned DNA sequences are available in \citep{uhlir_adding_2021}.
 
 \subsection{Data pre-processing}
-We used data from the article \cite{uhlir_adding_2021}, IceAGE project, and related data from the bold system's database, as described in \citep{uhlir_adding_2021}. Given these databases' enormous breadth of features, we applied a selective reduction procedure. Attributes that were not directly relevant to the analysis of correlations between Cumacea genetics and habitat properties, displayed little to no variability (non-numerical data) and had a large number of missing data (> 95\%) were omitted from our study. Out of the 495 available in the IceAGE dataset, we considered 62 specimens for which mitochondrial DNA sequences of the 16S rRNA gene were available. 
+We used data from the article \cite{uhlir_adding_2021}, IceAGE project, and related data from the bold system's database, as described in \citep{uhlir_adding_2021}. Given these databases' enormous breadth of features, we applied a selective reduction procedure. Attributes that were not directly relevant to the analysis of correlations between Cumacea genetics and habitat properties, displayed little to no variability (non-numerical data), and had a large number of missing data (> 95\%) were omitted from our study. Out of the 495 available in the IceAGE dataset, we considered 62 specimens for which mitochondrial DNA sequences of the 16S rRNA gene were available. 
 
 Next, we calculated the variance using the $var()$ function in RStudio Desktop 4.3.2 for each of the selected numerical attributes. This step aimed to eliminate attributes with low variation, as they are unlikely to provide critical data to the analysis. We set a variance threshold of ≤ 0.1 to exclude uninformative attributes. The latter allows us to retain attributes whose variability is reasonably sufficient for our analyses while rejecting those that vary little. Only water salinity was eliminated based on this criterion ($S^2 = 0.02146629$). The formula (equation \ref{variance}) and code (\autoref{lst:variance}) used to calculate the variance of our final features, available in the data file on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}, are provided below:
 
@@ -213,7 +213,7 @@ Our phylogeographic study used four distance metrics to quantify topological dif
 The following section presents a more concise version of the functions mentioned in the second and third steps of section \autoref{aPhyloGeo-software}:
 
 \subsubsection{Robinson-Foulds distance}\label{RF}
-The Robinson-Foulds (RF) distance calculates the distance between phylogenetic trees built in each sliding window ($T_1$) and the attributes trees ($T_2$) (see the list in the first step of the section \autoref{aPhyloGeo-software}) \citep{koshkarov_phylogeography_2022}. This measurement is used to evaluate the topological differences between the two sets of trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
+The Robinson-Foulds (RF) distance calculates the distance between phylogenetic trees built in each sliding window ($T_1$) and the attributes trees ($T_2$) (see the list in the first step of the section \autoref{aPhyloGeo-software}) \citep{tahiri2018new, koshkarov_phylogeography_2022}. This measurement is used to evaluate the topological differences between the two sets of trees (see Equation \eqref{eq:rf} and \autoref{lst:robinsonFoulds}).
 
 For example, it evaluates the number of division differences between phylogenetic trees built within certain user-defined sliding windows (see the second step of section \autoref{aPhyloGeo-software}) and geographic trees built with latitude data (DD) at the start of sampling. A high distance between a specific window and other windows considered in the RF distance analysis implies that the habitat feature has little to no impact on this particular DNA sequence and that this attribute cannot explain the genetic divergences observed at this DNA site.
 
@@ -262,9 +262,9 @@ def robinson_foulds(tree1, tree2):
 \end{lstlisting}
 
 \subsubsection{Normalized Robinson-Foulds distance}\label{RFnorm}
-The normalized Robinson-Foulds distance scales the RF distance to account for the size variations in the trees (number of clades; i.e., a group of species with a common origin), allowing a more equitable comparison. It scales the distance to a range between 0 and 1. In our context, the distance has been normalized by $2n-6$, where $n$ represents the number of taxa (see Equation \eqref{eq:rf_norm} and the last line of code in \autoref{lst:robinsonFoulds}). 
+The normalized Robinson-Foulds (nRF) distance scales the RF distance to account for the size variations in the trees (number of clades; i.e., a group of species with a common origin), allowing a more equitable comparison. It scales the distance to a range between 0 and 1. In our context, the distance has been normalized by $2n-6$, where $n$ represents the number of taxa (see Equation \eqref{eq:rf_norm} and the last line of code in \autoref{lst:robinsonFoulds}). 
 
-Since the size of the environmental trees constructed with O\textsubscript{2} concentration (mg/L) data differs from those of the other attributes due to missing data, this normalized metric allows us to compare its dissimilarity with the phylogenetic trees in a fairer way. It reveals the relative influence of O\textsubscript{2} concentration (mg/L) on cumacean phylogenetic relationships, independent of tree size. A high value of this metric between a specific window and other windows considered in the normalized RF distance analysis does not allow us to conclude that there is a correlation between this DNA sequence and the attribute. It may indicate structural dissimilarity between the attribute tree and the genetic trees at this position in the alignment. It may indicate a structural dissimilarity between the attribute tree and the genetic trees at that position in the alignment.
+Since the size of the environmental trees constructed with O\textsubscript{2} concentration (mg/L) data differs from those of the other attributes due to missing data, this normalized metric allows us to compare its dissimilarity with the phylogenetic trees in a fairer way. It reveals the relative influence of O\textsubscript{2} concentration (mg/L) on cumacean phylogenetic relationships, independent of tree size. A high value of this metric between a specific window and other windows considered in the nRF distance analysis does not allow us to conclude that there is a correlation between this DNA sequence and the attribute. It may indicate a topological dissimilarity between the habitat attribute tree and the gene trees at that position in the DNA sequence alignments. \citep{tahiri2018new)
 
 \begin{equation}\label{eq:rf_norm}
     \text{RF}_{\text{norm}}(T_1, T_2) = \frac{| \Sigma(T_1) \Delta \Sigma(T_2) |}{| \Sigma(T_1) | + | \Sigma(T_2) |}
@@ -273,7 +273,7 @@ Since the size of the environmental trees constructed with O\textsubscript{2} co
 where $ \text{RF}_{\text{norm}}(T_1, T_2)$ is the normalized Robinson-Foulds distance between the two sets of trees, $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of divisions in trees $T_1$ and $T_2$ and $ \Delta $, the difference between these two sets.
 
 \subsubsection{Euclidean distance}\label{euclidean}
-In our study, the Euclidean distance calculates the distance between two sets of points in a multidimensional space, which designates the divisions of the two sets of trees ($T_1$ and $T_2$). It is used to compare divisions between two respective sets of trees to assess the degree of divergence or similarity of their topologies (see Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}).
+In our study, the Euclidean distance calculates the distance between two sets of points in a multidimensional space, which designates the divisions of the two sets of trees ($T_1$ and $T_2$). It is used to compare divisions between two respective sets of trees to assess the degree of divergence or similarity of their topologies (see Equation \eqref{eq:euclidean} and \autoref{lst:euclideanDist}). Branches are weighted according to their length, which makes it possible to obtain quantitative dissimilarities between leaf (i.e., cumacean species) pairs (i.e., genetic distance) in the two sets of trees \citep{choi2009comparison}. Thus, for each pair of leaves, their distance in the genetic trees and the habitat attribute trees are compared \citep{choi2009comparison}.
 
 By comparing the two sets of trees $T_1$ and $T_2$ using this metric, it is possible to measure the extent to which genetic divergences correspond to fluctuations in habitat attributes. This is crucial for interpreting evolutionary relationships with these factors. A high distance of this metric between a specific window and other windows considered in the Euclidean distance analysis reveals evolutionary divergences between members of the cumacean populations at the level of this DNA sequence (see Figure \ref{fig:fig6}d and Figure \ref{fig:fig7}d). 
 
@@ -299,7 +299,7 @@ def euclidean_dist(tree1, tree2):
     Returns:
     - ed: The Euclidean distance between the two sets of trees.
     """
-    
+
     # Create a TaxonNamespace object to handle taxon information
     tns = dendropy.TaxonNamespace()
 
@@ -333,13 +333,13 @@ def euclidean_dist(tree1, tree2):
 \end{lstlisting}
 
 \subsubsection{Least-Squares distance}\label{LS}
-The Least squares (LS) distance measures the topological dissimilarity between the two sets of trees (($T_1$ and $T_2$) by comparing the sum of squared differences between the phylogenetic distances of each pair of branch terminal leaves (i.e. the “tips” or cumacean species) in the two sets of trees (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}). This metric allows us to understand how these different habitat attributes influence the topological structure of the phylogenetic trees. A high value between a specific window and other windows considered in the LS distance analysis indicates a structural discrepancy between this DNA sequence and the tree built from an attribute.
+The Least-Squares (LS) distance measures the sum of the squares of the differences between the phylogenetic distances of the leaf pairs between the two sets of trees ($T_1$ and $T_2$) (see Equation \eqref{eq:ls} and \autoref{lst:LeastSquare}). As with Euclidean distance, the distance between each pair of leaves in the genetic trees is compared with that of the habitat attribute trees \citep{czarna2006topology, balaban2020apples}. This metric allows us to measure the topological dissimilarity between the two sets of trees and to understand how these different habitat attributes influence the topological structure of phylogenetic trees. A high value between a specific window and other windows considered in the LS distance analysis indicates a structural discrepancy between this DNA sequence and the tree built from a habitat attribute \citep{balaban2020apples}. Furthermore, we cannot conclude with certainty that there is a correlation between them since genetic variations in this window are inconsistent with variations in this habitat parameter \citep{czarna2006topology, balaban2020apples}.
 
 \begin{equation}\label{eq:ls}
     d_{\text{LS}}(T_1, T_2) = \sum_{i=1}^{n-1}\sum_{j=i+1}^{n}(d_T1(i,j) - d_T2(i,j))^2
 \end{equation}
 
-where $d_{\text{LS}}(T_1, T_2)$ is the Least-Square distance between the two sets of trees ($T_1$ and $T_2$), and $d_T1(i,j)$ and $d_T2(i,j)$, the distance between leaves $i$ and $j$ in $T_1$ and $T_2$, respectively.
+where $d_{\text{LS}}(T_1, T_2)$ is the Least-Squares distance between the two sets of trees ($T_1$ and $T_2$), and $d_T1(i,j)$ and $d_T2(i,j)$, the distance between leaves $i$ and $j$ in $T_1$ and $T_2$, respectively.
 
 %\autoref{lst:LeastSquare}.
 \begin{lstlisting}[label=lst:LeastSquare, language=Python, caption=Python script for calculating the LSD using the ete3 package in the aPhyloGeo package]
@@ -356,10 +356,10 @@ def least_square(tree1, tree2):
     - ls: The Least-Squares distance between the two sets of trees.
     """
     
-    # Initialize the Least Squares distance to zero
+    # Initialize the Least-Squares distance to zero
     ls = 0.0
     
-    # Retrieve the list of terminal leaves (tips) from the first tree
+    # Retrieve the list of terminal leaves (species) from the first tree
     leaves = tree1.get_terminals()
     
     # Extract the names of the terminal leaves
@@ -379,6 +379,10 @@ def least_square(tree1, tree2):
     
     return ls
 \end{lstlisting}
+
+Interestingly, Euclidean distance and LS distance are more sensitive to quantitative differences in branch length and subtle tree topology, making them suitable for identifying detailed correlations between genetic fluctuations and those of habitat parameters \citep{czarna2006topology, choi2009comparison}. They can therefore be used to study fine divergences between trees, enabling nuanced identification of the effects of habitat attributes on the genetic structure of species \citep{czarna2006topology, choi2009comparison}.
+
+As for Robinson-Foulds distance (normalized or not), although widely applied in evolutionary biology, they are less sensitive to slight topological dissimilarities, making them less accurate for identifying fine correlations between genetics and habitat parameters \citep{smith2019bayesian, smith2020information}. This is due to their structural nature and the fact that they are not measured by branch length \citep{smith2019bayesian, smith2020information}.
 
 \subsection{Creating Figures}\label{Figures}
 Figure \ref{fig:fig2}, Figure \ref{fig:fig3}, Figure \ref{fig:fig6} and Figure \ref{fig:fig7} were made with Python 3.11, while Figure \ref{fig:fig4} and Figure \ref{fig:fig5} were made with RStudio Desktop 4.3.2.
@@ -447,7 +451,7 @@ These results provide important insight into the genetic adaptation of cumaceans
 \section{Conclusion}\label{conclusion}
 This study examines the effects of meteorological, regional, and ecosystemic attributes on the genetics of cumaceans in the waters surrounding Iceland. Our main objective is to determine whether there is a divergence between precise genetic information of the 16S rRNA mitochondrial gene region (i.e., a window) of cumacean species and their habitat attributes. In addition to data distribution representations (see Figure \ref{fig:fig2}, Figure \ref{fig:fig3}, Figure \ref{fig:fig4} and Figure \ref{fig:fig5}), DNA sequence analyses have identified specific genetic windows with high mutation rates in response to atmospheric and biological attributes such as wind speed (m/s) at the start of sampling (Position in MSA: 520-529 aa; Euclidean distance: 0.8 < x < 0.9; Figure \ref{fig:fig6}d) and O\textsubscript{2} concentration (mg/L) (Position in MSA: 1190-1199 aa; Euclidean distance: 1.2 < x < 1.3; Figure \ref{fig:fig7}d). These results imply variable genetic sites that could contribute to the evolutionary acclimatization of cumaceans to their fluctuating environments and that some cumacean species have diverged from other populations and have genetically adapted to both attributes.
 
-The novelty in our research lies in the exhaustive divergence between habitat attributes and genetic mutability in cumaceans, particularly in identifying genetic windows associated with habitat fluctuations, which has not been widely investigated in previous studies \citep{manel2003landscape, vrijenhoek2009cryptic}. In this case, our integrated method identifies specific genetic regions sensitive to ecosystemic and atmospheric variations. Thus, by seeking to determine which of these two attributes diverges most with the DNA sequences, the eventual identification of proteins linked to one of these variable DNA sequences will make it possible to represent its functional effects in responses to habitat changes. Our future research will focus on verifying the prediction of this protein and assessing its role in the physiological adaptation of cumaceans to fluctuating conditions, add a link between genetic data and ecological function.
+The novelty in our research lies in the exhaustive divergence between habitat attributes and genetic mutability in cumaceans, particularly in identifying genetic windows associated with habitat fluctuations, which has not been widely investigated in previous studies \citep{manel2003landscape, vrijenhoek2009cryptic}. In this case, our integrated method identifies specific genetic regions sensitive to ecosystemic and atmospheric variations. Thus, by seeking to determine which of these two attributes diverges most with the DNA sequences, the eventual identification of proteins linked to one of these variable DNA sequences will make it possible to represent its functional effects in responses to habitat changes. Our future research will focus on verifying the prediction of this protein and assessing its role in the physiological adaptation of cumaceans to fluctuating conditions, adding a link between genetic data and ecological function.
 
 Interpreting how marine invertebrates genetically adapt to variations in their habitat can help us better predict their responses to climate change and advance conservation plans to protect them. Identifying the specific attributes that influence genetic variability of Cumacea can contribute to the designation and supervision of marine protected areas, assuring they include habitats crucial to the survival and acclimatization of these species. Thus, our results can inform the management of fishing and seabed mining companies by revealing ecologically vulnerable areas where these disturbances can seriously affect benthic biodiversity. 
 
