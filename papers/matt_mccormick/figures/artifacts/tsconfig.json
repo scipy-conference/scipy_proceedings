@@ -1,0 +1,34 @@
+{
+  "include": ["./src/*.ts"],
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "target": "ES2022",
+    "declaration": true,
+    "declarationMap": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": false,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "composite": true,
+    "types": ["vite/client"],
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "exclude": [
+    "./**/dist/",
+    "./**/types/",
+    "./**/*.cy.ts",
+    "./**/vite.config.ts"
+  ]
+}
