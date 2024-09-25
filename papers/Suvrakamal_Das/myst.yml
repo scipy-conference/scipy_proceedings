@@ -1,0 +1,67 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-Suvrakamal_Das
+  # Ensure your title is the same as in your `main.md`
+  title: Mamba Models a possible replacement for Transformers?
+  subtitle: A Memory-Efficient Approach for Scientific Computing (SciPy'24 Paper)
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Suvrakamal Das
+      email: subhrokomol@gmail.com
+      orcid: 0009-0002-4791-9244
+      affiliations:
+        - Maulana Abul Kalam Azad University Institute of Technology, West Bengal
+        
+    - name: Rounak Sen
+      email: rony000013@gmail.com
+      orcid: 0009-0003-9327-4712
+      affiliations:
+        - Maulana Abul Kalam Azad University Institute of Technology, West Bengal
+          
+    - name: Saikrishna Devendiran
+      email: dsaikrishna200r@gmail.com
+      orcid: 0009-0003-6153-3177
+      affiliations:
+        - Amrita School of Computing, Amritapuri
+      corresponding: true
+  keywords:
+    - Mamba Models
+    - Solid State Models
+    - Transformers
+    - Flash Attention
+    - LLMs
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    RNNs: Recurrent Neural Networks
+    CNNs: Convolutional Neural Networks
+    SSM: State Space Models
+    S4: Structured State-Space Sequence Models
+    LRD: Long Range Dependencies
+    DPLR: Diagonal Plus Low Rank
+    LSSL: Linear State Space Layer
+    NPLR: Normal Plus Low-Rank
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+        - mamba_github
+        - mamba_s4
+        - transformer_py
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.jpg
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
