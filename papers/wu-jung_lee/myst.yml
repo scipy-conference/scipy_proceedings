@@ -1,0 +1,111 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-wu-jung_lee
+  # Ensure your title is the same as in your `main.md`
+  title: "Echostack: A flexible and scalable open-source software toolbox for echosounder data processing"
+  subtitle: ""
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Wu-Jung Lee
+      email: leewj@uw.edu
+      orcid: 0000-0002-4112-2034
+      affiliation: Applied Physics Laboratory, University of Washington
+      corresponding: true
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Project administration
+        - Resources
+        - Software
+        - Supervision
+        - Visualization
+        - Writing - original draft
+        - Writing - review & editing
+    - name: Valentina Staneva
+      email: vms16@uw.edu
+      orcid: 0000-0002-3412-0364
+      affiliation: eScience Institute, University of Washington
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Project administration
+        - Resources
+        - Software
+        - Supervision
+        - Writing - review & editing
+    - name: Landung “Don” Setiawan
+      email: landungs@uw.edu
+      orcid: 0000-0002-1624-2667
+      affiliation: eScience Institute, University of Washington
+      roles:
+        - Conceptualization
+        - Software
+    - name: Emilio Mayorga
+      email: emiliom@uw.edu
+      orcid: 0000-0003-2574-4623
+      affiliation: Applied Physics Laboratory, University of Washington
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Software
+    - name: Caesar Tuguinay
+      email: ctuguina@uw.edu
+      orcid: 0009-0000-6652-1093
+      affiliation: Applied Physics Laboratory, University of Washington
+      roles:
+        - Software
+        - Writing - review & editing
+    - name: Soham Butala
+      email: sbutala@uw.edu
+      orcid: 0009-0000-6479-889X
+      affiliation: eScience Institute, University of Washington
+      roles:
+        - Software
+    - name: Brandyn Lucca
+      email: blucca@uw.edu
+      orcid: 0000-0003-3145-2969
+      affiliation: Applied Physics Laboratory, University of Washington
+      roles:
+        - Software
+        - Writing - review & editing
+    - name: Dingrui Lei
+      email: leidingrui426@gmail.com
+      orcid: 0009-0003-8543-3138
+      affiliation: eScience Institute, University of Washington
+      roles:
+        - Software
+  keywords:
+    - ocean sonar
+    - echosounder
+    - distributed computing
+    - cloud computing
+    - workflow orchestration
+    - data standardization
+
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    ML: machine learning
+    ARCO: analysis-ready, cloud-optimized
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+        - korneliussen_lsss_2006
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
