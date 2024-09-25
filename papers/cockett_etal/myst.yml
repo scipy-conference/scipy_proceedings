@@ -1,0 +1,126 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-cockett_etal
+  title: Continuous Tools for Scientific Publishing
+  subtitle: Using MyST Markdown and Curvenote to encourage continuous science practices
+  keywords:
+    - scientific communication
+    - publishing
+    - open science
+  authors:
+    - name: Rowan Cockett
+      orcid: 0000-0002-7859-8394
+      affiliation:
+        - curvenote
+        - Project Jupyter
+      github: rowanc1
+      twitter: rowancockett
+      email: rowan@curvenote.com
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Investigation
+        - Project administration
+        - Software
+        - Supervision
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
+    - name: Steve Purves
+      orcid: 0000-0002-0760-5497
+      affiliation:
+        - curvenote
+        - Project Jupyter
+      github: stevejpurves
+      twitter: stevejpurves
+      email: steve@curvenote.com
+      roles:
+        - Conceptualization
+        - Investigation
+        - Methodology
+        - Project administration
+        - Software
+        - Supervision
+        - Writing – original draft
+        - Writing – review & editing
+    - name: Franklin Koch
+      orcid: 0000-0002-6393-7058
+      affiliation:
+        - curvenote
+        - Project Jupyter
+      github: fwkoch
+      roles:
+        - Investigation
+        - Software
+        - Writing – review & editing
+    - name: Mike Morrison
+      orcid: 0000-0002-1324-8801
+      twitter: mikemorrison
+      affiliation:
+        - curvenote
+      roles:
+        - Investigation
+        - Methodology
+        - Validation
+        - Writing – review & editing
+  affiliations:
+    - id: curvenote
+      name: Curvenote Inc.
+      ror: https://ror.org/02mz0e468
+      url: https://curvenote.com
+      country: Canada
+      email: support@curvenote.com
+  abbreviations:
+    AST: Abstract Syntax Tree
+    DOI: Digital Object Identifier
+    MyST: Markedly Structured Text
+    CLI: Command Line Interface
+    HTML: Hypertext Markup Language
+    PDF: Portable Document Format
+    AMS: American Mathematical Society
+    RRID: Research Resource Identifier
+    CSS: Cascading Style Sheet
+    CRediT: Contributor Roles Taxonomy
+    ROR: Research Organization Registry
+    ISNI: International Standard Name Identifier
+    NISO: National Information Standards Organization
+    YAML: Yet Another Markup Language
+    WASM: WebAssembly
+    REES: Reproducible Execution Environment Specification
+    URL: Uniform Resource Locator
+    XML: Extensible Markup Language
+    PID: Persistent Identifier
+    ID: Identifier
+    JATS: Journal Article Tag Suite
+    VoR: Version of Record
+    RST: reStructuredText
+    API: Application Programming Interface
+    JSON: JavaScript Object Notation
+    OA: Open Access
+    LOCKSS: Lots Of Copies Keep Stuff Safe
+    CLOCKSS: Controlled LOCKSS (Lots Of Copies Keep Stuff Safe)
+    APC: Article Processing Charge
+    JOSS: Journal of Open Source Software
+    ORCID: Open Researcher and Contributor ID
+  numbering:
+    headings: true
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - jupyter
+        - elife-era
+        - dora2018
+        - blinde2022
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
