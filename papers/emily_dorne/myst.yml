@@ -1,0 +1,81 @@
+version: 1
+project:
+  id: scipy-2024-emily_dorne
+  title: Cyanobacteria detection in small, inland water bodies with CyFi
+  subtitle: Using satellite imagery and machine learning to protect public health
+  authors:
+    - name: Emily Dorne
+      email: emily@drivendata.org
+      orcid: 0009-0004-6185-7611
+      affiliations:
+        - DrivenData
+      roles:
+        - Methodology
+        - Software
+        - Supervision
+        - Visualization
+        - Writing - original draft
+      corresponding: true
+    - name: Katie Wetstone
+      email: katie@drivendata.org
+      orcid: 0009-0003-3338-7600
+      affiliations:
+        - DrivenData
+      roles:
+        - Data curation
+        - Methodology
+        - Software
+        - Visualization
+        - Writing - review & editing
+    - name: Trista Brophy Cerquera
+      orcid: 0000-0002-4852-6250
+      affiliations:
+        - NASA
+      roles:
+        - Writing - original draft
+    - name: Shobhana Gupta
+      email: shobhana.gupta@nasa.gov
+      orcid: 0000-0002-8896-1353
+      affiliations:
+        - NASA
+      roles:
+        - Project administration
+        - Conceptualization
+  keywords:
+    - Cyanobacteria
+    - Sentinel-2
+    - Machine Learning
+    - Harmful Algal Blooms
+    - Remote Sensing
+  abbreviations:
+    CyFi: Cyanobacteria Finder
+    HAB: harmful algal bloom
+    HCD: human-centered design
+    CyAN: Cyanobacteria Assessment Network
+    CNN: convolutional neural network
+    OLCI: Ocean and Land Colour Instrument
+    MERIS: Medium Resolution Imaging Spectrometer
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - algae
+        - epa_climate_change
+        - ttb_results
+        - ttb_winners_announcement
+        - cyfi_docs
+        - epa_guidelines
+        - who_guidelines
+        - lightgbm
+        - sklearn
+        - dbscan
+        - decimal_degrees
+        - chlorophyll
+  banner: banner.png
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
