@@ -1,0 +1,53 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-eli_knaap
+  # Ensure your title is the same as in your `main.md`
+  title: "geosnap: The Geospatial Neighborhood Analysis Package"
+  subtitle: Open Tools for Urban, Regional, and Neighborhood Science
+  authors:
+    - name: Elijah Knaap
+      email: eknaap@sdsu.edu
+      orcid: 0000-0001-7520-2238
+      affiliations:
+        - San Diego State University
+        - Center for Open Geographical Science
+    - name: Sergio Rey
+      email: srey@sdsu.edu
+      orcid: 0000-0001-5857-9762
+      affiliations:
+        - San Diego State University
+        - Center for Open Geographical Science
+  keywords:
+    - spatial-analysis
+    - geodemographics
+    - boundary-harmonization
+    - neighborhood-dynamics
+    - segregation
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - jupyter
+        - sklearn1
+        - sklearn2
+        - DeSabbata2019
+        - green1971SocialArea
+        - Shevky1955
+        - Park1925
+        - Foti2012
+        - tufte1983visual
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
