@@ -434,22 +434,82 @@
   },
   "scipy_scholarship": [
     {
-      "org": "",
-      "name": ""
+      "org": "Amadi Gabriel Udu",
+      "name": "University of Leicester"
     },
     {
-      "org": "",
-      "name": ""
+      "org": "Ankur Ankan",
+      "name": "Radboud University"
+    },
+    {
+      "org": "Ayush Nag",
+      "name": "University of Washington"
+    },
+    {
+      "org": "C.A.M. Gerlach",
+      "name": "University of Alabama Huntsville"
+    },
+    {
+      "org": "Elliot Salisbury",
+      "name": "University of Southampton"
+    },
+    {
+      "org": "Erick Martins Ratamero",
+      "name": "The Jackson Laboratory"
+    },
+    {
+      "org": "JT Thielen",
+      "name": "Colorado State University"
+    },
+    {
+      "org": "Mohamed El Shorbagy",
+      "name": "Ain Shams University"
+    },
+    {
+      "org": "Sheku Shafeie",
+      "name": "TechPoint"
+    },
+    {
+      "org": "Tek Kshetri",
+      "name": "University of Calgary"
+    },
+    {
+      "org": "Willy Menacho",
+      "name": "Universidad Técnica Federico Santa María"
+    },
+    {
+      "org": "Ying-Jung Chen",
+      "name": "University of Washington eScience"
     }
   ],
   "diversity_scholarship": [
     {
-      "org": "",
-      "name": ""
+      "org": "Atharva Rasane",
+      "name": "DaSouk / GDG Belgaum"
     },
     {
-      "org": "",
-      "name": ""
+      "org": "Hannah Aizenman",
+      "name": "City College of New York"
+    },
+    {
+      "org": "Jacqui Levy",
+      "name": "Environment and Climate Change Canada"
+    },
+    {
+      "org": "Juanita Gomez",
+      "name": "University of California Santa Cruz"
+    },
+    {
+      "org": "Juliana Ferreira Alves",
+      "name": "Itaú Unibanco"
+    },
+    {
+      "org": "Meng Li",
+      "name": "Rice University"
+    },
+    {
+      "org": "Tetsuo Koyama",
+      "name": "ARK Information Systems"
     }
   ],
   "track_mini_symposia_chairs": [
