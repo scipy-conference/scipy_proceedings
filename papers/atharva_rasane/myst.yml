@@ -6,6 +6,7 @@ project:
   id: scipy-2024-atharva_rasane
   # Ensure your title is the same as in your `main.md`
   title: AI-Driven Watermarking Technique for Safeguarding Text Integrity in the Digital Age
+  description: Identifying the sources is vital for generative AI models, like ChatGPT and Bard, due to concerns about copyright infringement and plagiarism. In this paper, we explore text watermarking as a potential solution. We investigate techniques including physical watermarking and logical watermarking.
   subtitle:
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
@@ -29,6 +30,8 @@ project:
     P-value: Probability Value
     DRM: Digital Rights Management
     CMS: Content Management Systems
+    MLM: Masked Language Modeling
+    HTML: Hyper Text Markup Language
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -47,7 +50,5 @@ project:
         - Atr01
         - Atr02
         - Atr03
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
