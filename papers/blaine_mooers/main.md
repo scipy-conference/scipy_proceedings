@@ -2,9 +2,8 @@
 # Voice Computing with Python in Jupyter Notebooks
 title: Voice Computing with Python in Jupyter Notebooks
 abstract: |
-    Jupyter is a popular platform for writing interactive computational narratives that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability improves access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. We will provide examples of the first two activities with the Voice-In Plus plugin for Google Chrome and Microsoft Edge. To support the editing of Markdown and code cells in Jupyter notebooks, we provide several libraries of voice commands at MooersLab on GitHub.
+  Jupyter is a popular platform for writing interactive computational narratives that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one's voice to interact with Jupyter notebooks. This capability improves access to those with impaired use of their hands. Voice computing also increases the productivity of workers who are tired of typing and increases the productivity of those workers who speak faster than they can type. Voice computing can be divided into three activities: speech-to-text, speech-to-command, and speech-to-code. We will provide examples of the first two activities with the Voice-In Plus plugin for Google Chrome and Microsoft Edge. To support the editing of Markdown and code cells in Jupyter notebooks, we provide several libraries of voice commands at MooersLab on GitHub.
 ---
-
 
 ## Introduction
 
@@ -14,33 +13,34 @@ Using your voice can partially replace use of the keyboard when tired of typing,
 With the Voice In Plus plugin for Google Chrome and Microsoft Edge, we could be productive within an hour.
 This plugin is easy to install, provides accurate dictation, and is easy to modify to correct wrong word insertions with text replacements.
 
-We mapped spoken words to be replaced, called *voice triggers*, to equations set in LaTeX and to code snippets that span one to many lines.
-These *voice-triggered snippets* are analogous to traditional tab-triggered snippets supported by most text editors.
+We mapped spoken words to be replaced, called _voice triggers_, to equations set in LaTeX and to code snippets that span one to many lines.
+These _voice-triggered snippets_ are analogous to traditional tab-triggered snippets supported by most text editors.
 (A tab trigger is a placeholder word replaced with the corresponding code when the tab key is pressed after entering the tab trigger.
 The existing extensions for code snippets in Jupyter do not support tab triggers.)
 We could use Voice In Plus to insert voice-triggered snippets into code and Markdown cells in Jupyter notebooks.
 Our voice-triggered snippets still require customizing to the problem at hand via some use of the keyboard, but their insertion by voice command saves time.
 
-To facilitate voice commands in Jupyter notebooks, we have developed libraries of voice-triggered snippets for use in Markdown or code cells with the *Voice-In Plus* plugin.
+To facilitate voice commands in Jupyter notebooks, we have developed libraries of voice-triggered snippets for use in Markdown or code cells with the _Voice-In Plus_ plugin.
 We are building on our experience with tab-triggered code snippets in text editors [@Mooers2021TemplatesForWritingPyMOLScripts] and domain-specific code snippet libraries for Jupyter [@Mooers2021APyMOLSnippetLibraryForJupyterToBoostResearcherProductivity].
 We have made libraries of these voice-triggered snippets for several of the popular modules of the scientific computing stack for Python.
 These voice-triggered snippets are another tool for software engineering that complements existing tools for enhancing productivity.
 
-
 ## Methods and Materials
 
 ### Hardware
+
 We used a 2018 15-inch MacBook Pro laptop computer.
 It had 32 gigabytes of RAM and one Radeon Pro 560X 4 GB GPU.
 We used the laptop's built-in microphone to record dictation while sitting or standing up to 20 feet (ca. 6 m) away from the computer.
 
 ### Installation of Voice In Plus
-We used the *Voice In* plugin provided by Dictanote Inc.
-First, we installed the *Voice In* plugin by navigating to the [Plugin In page](https://chromewebstore.google.com/detail/voice-in-speech-to-text-d) in the Google Chrome Web Store on the World Wide Web.
+
+We used the _Voice In_ plugin provided by Dictanote Inc.
+First, we installed the _Voice In_ plugin by navigating to the [Plugin In page](https://chromewebstore.google.com/detail/voice-in-speech-to-text-d) in the Google Chrome Web Store on the World Wide Web.
 Second, the [Microsoft Edge Addons web site](https://microsoftedge.microsoft.com/addons/Microsoft-Edge-Extensions-Home) was accessed to install the plugin in Microsoft Edge.
 
-We needed an internet connection to use *Voice In* because Dictanote tracks the websites visited and whether the plugin worked on those websites.
-*Voice In* uses the browser's built-in Speech-to-Text software to transcribe speech into text, so no remote servers are used for the transcription,/ so the transcription process was nearly instant and kept up with the dictation of multiple paragraphs.
+We needed an internet connection to use _Voice In_ because Dictanote tracks the websites visited and whether the plugin worked on those websites.
+_Voice In_ uses the browser's built-in Speech-to-Text software to transcribe speech into text, so no remote servers are used for the transcription,/ so the transcription process was nearly instant and kept up with the dictation of multiple paragraphs.
 Dictanote does not store the audio or the transcripts.
 
 After activating the plugin, we customized it by selecting a dictation language from a pull-down menu.
@@ -50,15 +50,15 @@ The English variants include dialects from Western Europe, Africa, South Asia, a
 Next, we set a keyboard shortcut to activate the plugin.
 We selected command-L on our Mac because this shortcut was not already in use.
 A list of Mac shortcuts can be found [here](https://support.apple.com/en-us/102650).
-This second customization was the last one that we could make for the free version of *Voice In*.
+This second customization was the last one that we could make for the free version of _Voice In_.
 
-Customized text replacements are available in *Voice In Plus*.
-*Voice In Plus* is activated by purchasing a $39 annual subscription through the **Subscription** sub-menu in the *Voice In Settings* sidebar of the *Voice In Options* web page.
+Customized text replacements are available in _Voice In Plus_.
+_Voice In Plus_ is activated by purchasing a $39 annual subscription through the **Subscription** sub-menu in the _Voice In Settings_ sidebar of the _Voice In Options_ web page.
 Monthly and lifetime subscription options are available.
-Only one subscription was required to use *Voice In Plus* in both web browsers.
+Only one subscription was required to use _Voice In Plus_ in both web browsers.
 The library is synched between the browsers.
 
-After purchasing a subscription, we accessed the **Custom Commands** in the *Voice In Settings* sidebar.
+After purchasing a subscription, we accessed the **Custom Commands** in the _Voice In Settings_ sidebar.
 We used the **Add Command** button to enter a voice trigger to start a new sentence when writing one sentence per line {ref}`fig:newSentence`.
 The custom command for `new paragraph` can include a `period` followed by two `new line` commands, which works well when writing with blank lines between paragraphs and without indentation.
 
@@ -78,16 +78,15 @@ Three-word voice triggers are a good compromise between specificity and success 
 :::{figure} ./images/csvexamplefile.png
 :label: fig:csvexamplefile
 :width: 50%
-Snapshot of CSV file on Github for the [*jupyter-voice-in*](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) library.
+Snapshot of CSV file on Github for the [_jupyter-voice-in_](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) library.
 :::
 
-
-An exception to this guideline for shorter voice triggers was using two to three words at the beginning of a set of voice triggers to group them in the online *Voice In* library.
+An exception to this guideline for shorter voice triggers was using two to three words at the beginning of a set of voice triggers to group them in the online _Voice In_ library.
 Grouping related voice commands made finding them in the online library easier.
-For example, all Jupyter-related line magic voice triggers start with the phrase *line magic*.
-The prefix *line magic* is easy to remember, so it only adds a little to the recall problem.
-We show below a snapshot of the CSV file displayed in a pleasant format on GithHub for the Jupyter line magics {ref}`fig:csvexamplefile`.
-Note that these CSV files are atypical because they do not contain a line of column headers; *Voice In* does not recognize column headings.
+For example, all Jupyter-related line magic voice triggers start with the phrase _line magic_.
+The prefix _line magic_ is easy to remember, so it only adds a little to the recall problem.
+We show below a snapshot of the CSV file displayed in a pleasant format on GitHub for the Jupyter line magics {ref}`fig:csvexamplefile`.
+Note that these CSV files are atypical because they do not contain a line of column headers; _Voice In_ does not recognize column headings.
 
 The accuracy of the software's interpretation of the phrase was another limitation.
 We would replace frequently misinterpreted words with other words that were more often correctly interpreted.
@@ -106,8 +105,8 @@ First, we placed all the text on a single line and inserted the built-in command
 Second, we enclosed the multiline replacement text with one set of double quotes.
 Double quotes inside these text blocks had to be replaced with single quotes.
 We could use a backslash to escape internal pre-existing double quotation marks.
-Text replacements consisting of commas also had to be enclosed with double else the commas would be misintrepreted as field separators.
-This also appled on Python code that contained commas.
+Text replacements consisting of commas also had to be enclosed with double else the commas would be misinterpreted as field separators.
+This also applied on Python code that contained commas.
 
 We used the **Bulk Add** button to upload multiple commands from a two-column CSV file with commas as the field separator.
 We selected the file contents and pasted them in the open text box after clicking the **Bulk Add** button.
@@ -129,12 +128,14 @@ Each row in the GUI has edit and delete icons.
 The edit icon opens a pop-up menu similar to the pop-up menu invoked by the **Add Command** button.
 
 ### Construction of the snippet libraries
+
 Some of our voice snippets had already been used for a year to compose prose using dictation.
 These snippets are in modular CSV files to ease their selective use.
 The contents of these files can be copied and pasted into the `bulk add` text area of the Voice In Plus configuration GUI.
 
 ### Construction of interactive quizzes
-We developed an interactive quiz to aid the mastery of the *Voice In Plus* syntax.
+
+We developed an interactive quiz to aid the mastery of the _Voice In Plus_ syntax.
 We wrote the quiz as a Python script that can run interactively in the terminal or Jupyter notebooks.
 The quiz randomizes the order of the questions upon restart, ensuring a fresh experience every time.
 When you encounter a question you cannot answer, the quiz steps in to provide feedback, empowering you to learn from your mistakes and improve.
@@ -142,6 +143,7 @@ Your wrongly answered questions are recycled during the current quiz session to 
 We set a limit of 40 questions per quiz, allowing you to pace your learning and avoid exhaustion.
 
 ### Availability of the libraries and quizzes
+
 We tested the libraries using Jupyter Lab version 4.2 and Python 3.12 installed from MacPorts.
 All libraries are available at MooersLab on GitHub for download.
 
@@ -168,8 +170,8 @@ While some code, such as IPython line and cell magics, is specific to Jupyter, y
 
 Likewise, you can use these snippets in other browser-hosted text editors, such as the web version of Visual Studio Code because Voice In Plus works in most text areas of web browsers.
 You can use web services with ample text areas to draft documents and Python scripts with the help of voice-triggered snippets.
-You can also use Voice In Plus inside text boxes in local HTML files; however, Voice In Plus still requires an internet connection. 
-You can edit the code or text with an advanced text editor using the GhostText plugin to connect a web-based text area to a text editor. 
+You can also use Voice In Plus inside text boxes in local HTML files; however, Voice In Plus still requires an internet connection.
+You can edit the code or text with an advanced text editor using the GhostText plugin to connect a web-based text area to a text editor.
 Alternatively, you can save a draft document or script to a file and import it into Jupyter Lab for further editing off line.
 
 ### Libraries for Markdown cells
@@ -212,27 +214,27 @@ The customized commands are listed alphabetically in the Voice-In Plus GUI, with
 The prefixes group like commands and, thereby, ease the manual lookup of the commands.
 
 Some prefixes are two or more words long.
-For example, the compound prefix *insert Python* aids the grouping of voice triggers by programming language.
+For example, the compound prefix _insert Python_ aids the grouping of voice triggers by programming language.
 
 :::{table} Examples of voice commands with the prefix in bold that is used to group commands.
 :label: table:commands
 :align: center
 
-| Voice commands                                                                                                     |
-|:-------------------------------------------------------------------------------------------------------------------|
-| **expand** acronyms                                                                                                |
-| **the book** title                                                                                                 |
-| **email** inserts list of e-mail addresses (e.g., email bayesian study group)                                      |
-| **insert Python** (e.g., insert Python for horizontal bar plot)                                                    |
-| **insert Markdown** (e.g., insert Markdown header 3)                                                               |
-| **list** (e.g., list font sizes in beamer slides.)                                                                 |
-| **open** webpage (e.g., open google scholar)                                                                       |
-| **display** insert equation in display mode (e.g., display electron density equation)                              |
-| **display with terms** above plus list of terms and their definitions  (e.g., display electron density equation)   |
-| **inline** equation in-line (e.g., inline information entropy)                                                     |
-| **site** insert corresponding citekey (e.g., site Jaynes 1957)                                                     |
-::::
+| Voice commands                                                                                                  |
+| :-------------------------------------------------------------------------------------------------------------- |
+| **expand** acronyms                                                                                             |
+| **the book** title                                                                                              |
+| **email** inserts list of e-mail addresses (e.g., email bayesian study group)                                   |
+| **insert Python** (e.g., insert Python for horizontal bar plot)                                                 |
+| **insert Markdown** (e.g., insert Markdown header 3)                                                            |
+| **list** (e.g., list font sizes in beamer slides.)                                                              |
+| **open** webpage (e.g., open google scholar)                                                                    |
+| **display** insert equation in display mode (e.g., display electron density equation)                           |
+| **display with terms** above plus list of terms and their definitions (e.g., display electron density equation) |
+| **inline** equation in-line (e.g., inline information entropy)                                                  |
+| **site** insert corresponding citekey (e.g., site Jaynes 1957)                                                  |
 
+::::
 
 Another example of a verb starting a voice trigger is the command `display <equation name>`.
 This command is used in Markdown cells to insert equations in the display mode of LaTeX in Markdown cells.
@@ -246,9 +248,8 @@ This image is followed by the resulting Markdown cell after rendering by running
 :align: center
 :label: fig:displayeq
 
-Three snapshots from a Zoom video of using the voice-trigger *display electron density equation* in a Markdown cell in a Jupyter notebook. A. The Zoom transcript showing the spoken voice trigger. B. The text replacement in the form of a math equation written in LaTeX in display mode in the Markdown cell. C. The rendered Markdown cell. The green and black tab on the right of each panel indicates that the Voice In plugin is active and listening for speech.
+Three snapshots from a Zoom video of using the voice-trigger _display electron density equation_ in a Markdown cell in a Jupyter notebook. A. The Zoom transcript showing the spoken voice trigger. B. The text replacement in the form of a math equation written in LaTeX in display mode in the Markdown cell. C. The rendered Markdown cell. The green and black tab on the right of each panel indicates that the Voice In plugin is active and listening for speech.
 :::
-
 
 Likewise, the command `inline <equation name>` is used to insert equations in prose sections in Markdown cells.
 We have introduced voice-triggered snippet libraries for equations commonly used in machine learning and Bayesian data analysis https://github.com/MooersLab/.
@@ -261,7 +262,7 @@ For example, the voice trigger `URL` is used to insert URLs for essential websit
 Another example involves using the verb `list` in the voice trigger, as in `list matplotlib color codes`, to generate a list of the color codes used in Matplotlib plots.
 These voice triggers provide instant access to essential information, saving you the time and effort of manual searches.
 
-The markup language code is inserted using the verb *insert*, followed by the markup language name and the name of the code.
+The markup language code is inserted using the verb _insert_, followed by the markup language name and the name of the code.
 For example, the command `insert markdown itemized list` will insert five vertically aligned dashes to start an itemized list.
 The command `insert latex itemized list` will insert the corresponding code for an itemized list in LaTeX.
 
@@ -288,21 +289,20 @@ Reading appropriately cleaned data is a common task in data science and a common
 Our data wrangling library provides code fragments that directly import various file types, easing the task of data import and allowing focus on downstream utilization and analysis.
 
 After the data are verified as correctly imported, exploring them by plotting them to detect relationships between a model's parameters and the output is often necessary.
-Our focus on the versatile *matplotlib* library, which generates various plots, is designed to inspire creativity in data visualization and analysis [*matplotlib].
+Our focus on the versatile _matplotlib_ library, which generates various plots, is designed to inspire creativity in data visualization and analysis [*matplotlib].
 Our code fragments cover the most commonly used plots, such as scatter plots, bar graphs (including horizontal bar graphs), kernel density fitted distributions, heat Maps, pie charts, and contour plots.
 We include a variety of examples for formatting tick marks and axis labels as well as the keys and the form of the lines so users can use this information as templates to generate plots for their purposes.
 Generating plots with lines of different shapes, whether solid, dashed, dotted, or combinations thereof, is essential because plots generated with just color are vulnerable to having their information compromised when printed in grayscale.
-Although we provide some examples from higher-order plotting programs like *seaborn* [@seaborn], we focused on matplotlib because most other plotting programs, except the interactive plotting programs, are built on top of it.
+Although we provide some examples from higher-order plotting programs like _seaborn_ [@seaborn], we focused on matplotlib because most other plotting programs, except the interactive plotting programs, are built on top of it.
 
-We also support the import of external images. 
+We also support the import of external images.
 Images often play essential roles in the stories told with Jupyter notebooks.
-
 
 ### Jupyter specific library
 
 We provide a [library](https://github.com/MooersLab/jupyter-voice-in/blob/main/jupyter.csv) of 85 cell and line magics that facilitate the Jupyter notebook's interaction with the rest of the operating system.
 Our cell magics, easily identifiable by their cell magic prefix, and line magics, with the straightforward line magic prefix, are designed to make the Jupyter notebook experience more intuitive.
-For example, the voice command *line majic run* inserts `%run`. 
+For example, the voice command _line majic run_ inserts `%run`.
 You use this command to run a script file {ref}`fig:quiz`.
 
 ### Interactive quiz
@@ -318,14 +318,13 @@ An example of an interactive session with a quiz in a Jupyter notebook. The code
 :::
 
 To build long-term recall of the commands, you must take the quiz five or more times on alternate days, according to the principles of spaced repetition learning.
-These principles were developed by the German psychologist Hermann Ebbinghaus near the end of the 19th Centur and popularized in English his 1913 book *Memory: A Contribution to Experimental Psychology*.
-They have been validated several times by other researchers, including those developed an alogorithm for optimizing the spacing of the repetitions as function of the probability of recall [@tabibian2019enhancinghumanlearningviaspacedrepetitionoptimization].
+These principles were developed by the German psychologist Hermann Ebbinghaus near the end of the 19th Centur and popularized in English his 1913 book _Memory: A Contribution to Experimental Psychology_.
+They have been validated several times by other researchers, including those developed an algorithm for optimizing the spacing of the repetitions as function of the probability of recall [@tabibian2019enhancinghumanlearningviaspacedrepetitionoptimization].
 Spaced repetition learning is one of the most firmly established results of research into human psychology.
 
 Most people need discipline to carry out this kind of learning because they have to schedule the time to do the follow-up sessions.
 Instead, people will find it more convenient to take these quizzes several times in 20 minutes before they spend many hours utilizing the commands.
 If that use occurs on subsequent days, then the recall will be reinforced and retaking the quiz may not be necessary.
-
 
 ### Limitations on using Voice In Plus
 
@@ -338,27 +337,27 @@ Voice In Plus works in Jupyter Lite.
 It also works in streamlet-quill, which uses a Python script to generate a text box in the default web browser.
 It also works in the web-based version of [VS Code](https://vscode.dev/).
 
-Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the [*JupyterLab Desktop*](https://github.com/jupyterlab/jupyterlab-desktop) application, the [*nteract*](https://nteract.io/) application, and external text editors, such as *VS Code*, that support the editing of Jupyter notebooks.
-Likewise, *Voice In Plus* will not work in Python Widgets.
-*Voice In Plus* is limited to web browsers, whereas other automated speech recognition software can also operate in the terminal and at the command prompt in GUI-driven applications.
+Voice In will not work in desktop applications that support the editing of Jupyter notebooks, such as the [_JupyterLab Desktop_](https://github.com/jupyterlab/jupyterlab-desktop) application, the [_nteract_](https://nteract.io/) application, and external text editors, such as _VS Code_, that support the editing of Jupyter notebooks.
+Likewise, _Voice In Plus_ will not work in Python Widgets.
+_Voice In Plus_ is limited to web browsers, whereas other automated speech recognition software can also operate in the terminal and at the command prompt in GUI-driven applications.
 
-*Voice In Plus*  is very accurate, with a word error rate that is well below 10\%.
+_Voice In Plus_ is very accurate, with a word error rate that is well below 10\%.
 Like all other dictation software, the word error rate depends on the quality of the microphone used.
-*Voice-In Plus* can pick out words from among background ambient noise such as load ventilation systems, traffic, and outdoor bird songs.
+_Voice-In Plus_ can pick out words from among background ambient noise such as load ventilation systems, traffic, and outdoor bird songs.
 
-The language model used by *Voice-In Plus*  is quite robust in that dictation can be performed without an external microphone.
+The language model used by _Voice-In Plus_ is quite robust in that dictation can be performed without an external microphone.
 We found no reduction in word error rate when using a high-quality Yeti external microphone.
 Our experience might be a reflection of our high-end hardware and may not transfer to low-end computers.
 
-Because of the way *Voice-In Plus* is set up to utilize the Speech-to-Text feature of the Google API, there is not much of a latency issue.
+Because of the way _Voice-In Plus_ is set up to utilize the Speech-to-Text feature of the Google API, there is not much of a latency issue.
 The spoken words' transcriptions occur nearly in real-time; there is only a minor lag.
-*Voice In Plus* will listen for words for 3 minutes before automatically shutting down.
-*Voice In Plus* can generally keep up with dictation occurring at a moderate pace for at least several paragraphs, whereas competing dictation software packages tend to quit after one paragraph.
+_Voice In Plus_ will listen for words for 3 minutes before automatically shutting down.
+_Voice In Plus_ can generally keep up with dictation occurring at a moderate pace for at least several paragraphs, whereas competing dictation software packages tend to quit after one paragraph.
 The program hallucinates when the dictation has occurred at high speed because the transcription has fallen behind.
 You have to pay attention to the progress of the transcription if you want all of your spoken words captured.
 If the transcription halts, it is best to deactivate the plugin, activate it, and resume the dictation.
 
-Pronounce the first word of each sentence loudly so that they are recorded. 
+Pronounce the first word of each sentence loudly so that they are recorded.
 Otherwise, the first words of your sentences will be skipped.
 This problem of omitted words is most acute when there has been a pause in the dictation.
 
@@ -378,7 +377,7 @@ They removed our bloated library, and we used the **bulk add** button in the GUI
 
 ## Discussion
 
-The following four discussion points can enhance understanding the use of *Voice-In Plus* with Jupyter.
+The following four discussion points can enhance understanding the use of _Voice-In Plus_ with Jupyter.
 
 ### Independence from breaking changes in Jupyter
 
@@ -388,14 +387,15 @@ Unfortunately, changes in the core of Jupyter occasionally break these third-par
 Users are burdened with the task of creating Python environments for older versions of Jupyter to work with their favorite outdated snippet extension, all the while missing out on the new features of Jupyter.
 An obvious solution to this problem would be for the Jupyter developers to incorporate one of the snippet extensions into the base distribution of Jupyter to ensure that at least one form of support for snippets is always available.
 Using voice-triggered snippets external to Jupyter side steps the disruption of snippet extensions by breaking changes in new versions of Jupyter.
+
 ### Voice-triggered snippets can complement AI-assisted voice computing
 
 The use of voice-triggered snippets requires knowledge of the code that you want to insert.
 The act of acquiring this knowledge is the up-front cost that the user pays to gain access to quickly inserted code snippets that work.
 In contrast, AI coding assistants can find code that you do not know about to solve the problem described in your prompt.
-From personal experence, the retrieval of the correct code can take multiple iterations of refining the prompt.
+From personal experience, the retrieval of the correct code can take multiple iterations of refining the prompt.
 Expert prompt engineers will find the correct code in several minutes while beginners may take much longer.
-An area of future research is to use AI assistants that have large language models indexed on snipppet libraries to retrieve the correct voice-triggered snippet.
+An area of future research is to use AI assistants that have large language models indexed on snippet libraries to retrieve the correct voice-triggered snippet.
 
 ### Comparision with automated speech recogination extensions for Jupyter lab
 
@@ -407,14 +407,14 @@ This program requires clicking on a microphone icon frequently, which makes the 
 The third extension, jupyter-voicepilot, is designed to provide a unique voice control experience.
 Although the extension's name suggests it uses GitHub's Copilot, it uses whisper-1 and ChatGPT3.
 This extension requires an API key for ChatGPT3.
-The robustness of our approach is that the *Voice-In Plus* should work in all browser-based versions of Jupyter Lab and Jupyter Notebook.
+The robustness of our approach is that the _Voice-In Plus_ should work in all browser-based versions of Jupyter Lab and Jupyter Notebook.
 
 ### Coping with the imperfections of the language model
 
 One of the most significant challenges in speech-to-text technology is the occurrence of persistent errors in transcription.
 These persistent errors may be due to the language model having difficulties interpreting your speech.
-For example, the language model often misinterprets the word  *write* as *right*'.
-Likewise, the letter *R* is frequently returned as *are* or *our*'.
+For example, the language model often misinterprets the word _write_ as _right_'.
+Likewise, the letter _R_ is frequently returned as _are_ or _our_'.
 It's crucial to have a remedy for these situations, which involves mapping the misinterpreted phrase to the intended phrase.
 
 This remedy might be the best that can be done for those users who are from a country that is not represented by the selection of English dialects available in Voice In Plus.
@@ -422,8 +422,7 @@ People from Eastern Europe, the Middle East, and Northeast Asia fall into this c
 Users in this situation may have to add several hundred text replacements.
 As the customized library of text replacements grows, the frequency of wrong word insertions should decrease significantly, offering hope for improved accuracy in your speech-to-text transcriptions.
 
-
-### Future directions
+## Future directions
 
 Our future directions include building out the libraries of voice-triggered snippets.
 Another direction includes the development of voice stops analogous to tab stops in code snippets for advanced text editors.

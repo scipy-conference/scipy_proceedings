@@ -6,7 +6,7 @@ project:
   id: scipy-2024-blaine_mooers
   # id: 748163c7-a7d5-41f6-b9a0-337ab3b5f6d6
   title: Voice Computing with Python in Jupyter Notebooks
-  # description:
+  description: Jupyter is a popular platform for writing interactive computational narratives that contain computer code and its output interleaved with prose that describes the code and the output. It is possible to use one’s voice to interact with Jupyter notebooks.
   keywords:
     - accessibility
     - productivity
@@ -15,8 +15,9 @@ project:
     - name: Blaine H. M. Mooers
       roles:
         - Conceptualization
-        - Code development and testing
-        - Writing and editing
+        - Software
+        - Writing
+        - editing
         - Funding
       email: blaine-mooers@ouhsc.edu
       orcid: 0000-0001-8181-8987
@@ -40,7 +41,5 @@ project:
         - human-computer interface
         - speech-to-text
         - software engineering
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
