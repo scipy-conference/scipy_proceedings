@@ -1,5 +1,7 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.62329/XHDR4700
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-Suvrakamal_Das
   # Ensure your title is the same as in your `main.md`
@@ -12,13 +14,13 @@ project:
       orcid: 0009-0002-4791-9244
       affiliations:
         - Maulana Abul Kalam Azad University Institute of Technology, West Bengal
-        
+
     - name: Rounak Sen
       email: rony000013@gmail.com
       orcid: 0009-0003-9327-4712
       affiliations:
         - Maulana Abul Kalam Azad University Institute of Technology, West Bengal
-          
+
     - name: Saikrishna Devendiran
       email: dsaikrishna200r@gmail.com
       orcid: 0009-0003-6153-3177
@@ -57,11 +59,5 @@ project:
         - transformer_py
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.jpg
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

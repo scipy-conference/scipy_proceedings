@@ -1,5 +1,7 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.62329/VPNX1595
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-00_benchmarking_sktime
   title: Evaluating Probabilistic Forecasters with sktime and tsbootstrap -- Easy-to-Use, Configurable Frameworks for Reproducible Science
@@ -30,7 +32,7 @@ project:
         - Writing - review & editing
         - Investigation
       corresponding: true
-    - name: Franz Kiraly 
+    - name: Franz Kiraly
       email: franz.kiraly@sktime.net
       affiliations:
         - sktime
@@ -71,15 +73,9 @@ project:
         - garza2022statsforecast
   # A banner will be generated for you on publication, this is a placeholder
   #banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
-  exports: 
+  exports:
     - format: pdf
   numbering:
-      headings: true
+    headings: true
 site:
   template: article-theme

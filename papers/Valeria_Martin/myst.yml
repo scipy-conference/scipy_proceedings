@@ -1,9 +1,11 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.62329/YADT7194
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-Valeria_Martin
   title: Python-Based GeoImagery Dataset Development for Deep Learning-Driven Forest Wildfire Detection
-  subtitle: 
+  subtitle:
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Valeria Martin
@@ -15,7 +17,7 @@ project:
       email: jmorgan3@uwf.edu
       orcid: 0000-0003-2321-3765
       affiliations:
-        - University of West Florida    
+        - University of West Florida
     - name: K. Brent Venable
       email: bvenable@uwf.edu
       orcid: 0000-0002-1092-9759
@@ -84,16 +86,10 @@ project:
         - al-dabbagh2023uni
         - SEYDI2022108999
         - Hunan
-        - 8113128
+        - '8113128'
         - DBLP:RonnebergerFB15
         - lecun
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

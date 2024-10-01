@@ -1,28 +1,30 @@
 # See docs at: https://mystmd.org/guide/frontmatter
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.62329/MCYV2126
   id: scipy-2024-blaine_mooers
   # id: 748163c7-a7d5-41f6-b9a0-337ab3b5f6d6
   title: Voice Computing with Python in Jupyter Notebooks
   # description:
-  keywords:     
+  keywords:
     - accessibility
     - productivity
     - human-computer interface
-  authors: 
-      - name: Blaine H. M. Mooers
-        roles: 
-            - Conceptualization
-            - Code development and testing
-            - Writing and editing
-            - Funding
-        email: blaine-mooers@ouhsc.edu
-        orcid: 0000-0001-8181-8987
-        affiliations:
-            - Department of Biochemistry and Physiology, College of Medicine, University of Oklahoma Health Sciences, Oklahoma City, OK 73104, USA
-            - Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences, Oklahoma City, OK 73104, USA
-            - Stephenson Cancer Center, University of Oklahoma Health Sciences, Oklahoma City, OK 73104, USA
-        corresponding: true
+  authors:
+    - name: Blaine H. M. Mooers
+      roles:
+        - Conceptualization
+        - Code development and testing
+        - Writing and editing
+        - Funding
+      email: blaine-mooers@ouhsc.edu
+      orcid: 0000-0001-8181-8987
+      affiliations:
+        - Department of Biochemistry and Physiology, College of Medicine, University of Oklahoma Health Sciences, Oklahoma City, OK 73104, USA
+        - Laboratory of Biomolecular Structure and Function, University of Oklahoma Health Sciences, Oklahoma City, OK 73104, USA
+        - Stephenson Cancer Center, University of Oklahoma Health Sciences, Oklahoma City, OK 73104, USA
+      corresponding: true
   github: https://github.com/mooerslab/scipy_proceedings
   # bibliography: []
   # title:
@@ -40,10 +42,5 @@ project:
         - software engineering
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme
