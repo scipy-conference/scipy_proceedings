@@ -6,19 +6,21 @@ project:
   id: scipy-2024-alireza-vaezi
   # Ensure your title is the same as in your `main.md`
   title: Training a Supervised Cilia Segmentation Model from Self-Supervision
-  subtitle: University Of Georgia
+  description: Understanding cilia behavior is essential in diagnosing and treating such diseases, but, the tasks of automatically analyzing cilia are often a labor and time-intensive. In this work we overcome this bottleneck by developing a robust, self-supervised framework exploiting the visual similarity of normal and dysfunctional cilia.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Seyed Alireza Vaezi
       email: sv22900@uga.edu
       orcid: 0009-0000-2089-8362
       affiliations:
-        - University of Georgia
+        - name: University of Georgia
+          ror: https://ror.org/00te3t702
       corresponding: true
     - name: Shannon Quinn
       email: spq@uga.edu
       affiliations:
-        - University of Georgia
+        - name: University of Georgia
+          ror: https://ror.org/00te3t702
   keywords:
     - Cilia
     - Unsupervised biomedical Image Segmentation
@@ -27,7 +29,12 @@ project:
     - Deep Learning
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    OF: optical flow
+    PCD: primary ciliary dyskinesia
+    ZCA: Zero-phase PCA Sphering
+    SAE: Sparse Autoencoders
+    AR: autoregressive
+    FPN: Feature Pyramid Network
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -40,7 +47,5 @@ project:
         - sklearn2
         - Iakubovskii:2019
         - settles2009active
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.jpg
 site:
   template: article-theme
