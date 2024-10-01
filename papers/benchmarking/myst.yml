@@ -4,7 +4,8 @@ project:
   doi: 10.25080/VPNX1595
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-00_benchmarking_sktime
-  title: Evaluating Probabilistic Forecasters with sktime and tsbootstrap -- Easy-to-Use, Configurable Frameworks for Reproducible Science
+  title: Evaluating Probabilistic Forecasters with sktime and tsbootstrap — Easy-to-Use, Configurable Frameworks for Reproducible Science
+  description: Evaluating probabilistic forecasts is complex and essential across various domains, yet no comprehensive software framework exists to simplify this task. Despite extensive literature on evaluation methodologies, current practices are fragmented and often lack reproducibility. To address this gap, we introduce a reproducible experimental workflow for evaluating probabilistic forecasting algorithms using the sktime package.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Benedikt Heidrich
@@ -71,11 +72,5 @@ project:
         - hyndman2018
         - hyndman2020package
         - garza2022statsforecast
-  # A banner will be generated for you on publication, this is a placeholder
-  #banner: banner.png
-  exports:
-    - format: pdf
-  numbering:
-    headings: true
 site:
   template: article-theme
