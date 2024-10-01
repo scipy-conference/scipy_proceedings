@@ -1,7 +1,7 @@
 version: 1
 extends: ../proceedings.yml
 project:
-  doi: 10.62329/RVRR7774
+  doi: 10.25080/RVRR7774
   id: scipy-2024-theia
   title: 'THEIA: An Offline Tool for Tradespace Visualization'
   authors:

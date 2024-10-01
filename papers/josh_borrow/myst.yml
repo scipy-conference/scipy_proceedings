@@ -2,7 +2,7 @@
 version: 1
 extends: ../proceedings.yml
 project:
-  doi: 10.62329/HWGA5253
+  doi: 10.25080/HWGA5253
   id: scipy-2024-josh_borrow
   title: Making Research Data Flow With Python
   keywords:

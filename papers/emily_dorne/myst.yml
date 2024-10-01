@@ -1,7 +1,7 @@
 version: 1
 extends: ../proceedings.yml
 project:
-  doi: 10.62329/PDHK7238
+  doi: 10.25080/PDHK7238
   id: scipy-2024-emily_dorne
   title: Cyanobacteria detection in small, inland water bodies with CyFi
   subtitle: Using satellite imagery and machine learning to protect public health

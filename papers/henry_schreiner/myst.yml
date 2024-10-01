@@ -1,7 +1,7 @@
 version: 1
 extends: ../proceedings.yml
 project:
-  doi: 10.62329/FMKR8387
+  doi: 10.25080/FMKR8387
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-henry_schreiner
   # Ensure your title is the same as in your `main.md`

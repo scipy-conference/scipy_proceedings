@@ -2,7 +2,7 @@
 version: 1
 extends: ../proceedings.yml
 project:
-  doi: 10.62329/DXWY3560
+  doi: 10.25080/DXWY3560
   id: scipy-2024-sam_morley
   title: RoughPy
   subtitle: Streaming data is rarely smooth

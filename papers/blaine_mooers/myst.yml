@@ -2,7 +2,7 @@
 version: 1
 extends: ../proceedings.yml
 project:
-  doi: 10.62329/MCYV2126
+  doi: 10.25080/MCYV2126
   id: scipy-2024-blaine_mooers
   # id: 748163c7-a7d5-41f6-b9a0-337ab3b5f6d6
   title: Voice Computing with Python in Jupyter Notebooks
