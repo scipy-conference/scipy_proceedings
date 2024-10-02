@@ -1,0 +1,21 @@
+{
+    "authors": [
+        {
+            "name": "Meng Li",
+            "affiliation": "School of Information Sciences, University of Illinois at Urbana-Champaign",
+            "orcid": "0000-0002-2542-2141"
+        },
+        {
+            "name": "Timothy McPhillips",
+            "affiliation": "School of Information Sciences, University of Illinois at Urbana-Champaign",
+            "orcid": "0000-0002-8238-2449"
+        },
+        {
+            "name": "Bertram Ludäscher",
+            "affiliation": "School of Information Sciences, University of Illinois at Urbana-Champaign",
+            "orcid": "0000-0001-9140-936X"
+        }
+    ],
+    "title": "Geist: a multimodal data transformation, query, and reporting language",
+    "description": "Geist is a new templating language for declarative data manipulation, query, and report generation. Building on the Jinja template engine, Geist is designed to support diverse data backends and query engines via predefined tags and filters, and may be extended with custom tags. A single Geist template may include multiple queries expressed in different languages, e.g. SQL and SPARQL, to leverage the strengths of each for clarity and ease of maintenance. Because Geist both can generate reports in diverse formats and perform inserts and updates on new or existing databases during template expansion, Geist templates may orchestrate data extraction, transformation, and load operations spanning multiple tools and data storage systems. Geist also enables modularity in query languages and eliminates messy procedural programs. Geist aims to enable developers to use whatever language or tools they like regardless of where the data is stored."
+}
