@@ -1,0 +1,16 @@
+{
+    "authors": [
+        {
+            "name": "Liam Huber",
+            "affiliation": "Grey Haven Solutions",
+            "orcid": "0009-0009-2560-5851"
+        },
+        {
+            "name": "Joerg Neugebauer",
+            "affiliation": "Max Planck Institute fuer Nachhaltige Materialien",
+            "orcid": "0000-0002-7903-2472"
+        }
+    ],
+    "title": "From concept to compute: accelerating research with workflow management in `pyiron`",
+    "description": "`pyiron_workflow` is a python framework for developing research workflows based on composing individual function nodes together into computational graphs. Each node class can be defined by simply applying a decorator to a regular python function, allowing user-developers to extend `pyiron` functionality even without deep knowledge of Object-Oriented Programming. Nodes can be grouped together into macro nodes using the same simple function-and-decorator approach, such that complex workflows can be built up and simply represented by composing and nesting these graphs. In contrast to user workflows being defined via a series of Jupyter notebook cells, this approach rigorously defines workflows by their graph topology and allows them to be easily shared -- and incorporated into new contexts -- by sharing/importing the workflow as a macro node. Interoperability can be controlled with (optional) type checking on data connections between nodes."
+}
