@@ -36,7 +36,7 @@
     "@itk-wasm/image-io": "^1.1.1",
     "@shoelace-style/shoelace": "^2.16.0",
     "typescript": "^5.5.4",
-    "vite": "^5.4.2",
+    "vite": "^5.4.6",
     "vite-plugin-static-copy": "^0.17.0"
   },
   "dependencies": {
