@@ -1,0 +1,21 @@
+{
+    "authors": [
+        {
+            "name": "Daniel E. Kaufman",
+            "affiliation": "NASA Langley Research Center, Atmospheric Science Data Center, Hampton, VA, USA; Booz Allen Hamilton, Inc.",
+            "orcid": "0000-0002-1487-7298"
+        },
+        {
+            "name": "Walter E. Baskin",
+            "affiliation": "NASA Langley Research Center, Atmospheric Science Data Center, Hampton, VA, USA; Adnet Systems, Inc.",
+            "orcid": "0000-0002-2241-3266"
+        },
+        {
+            "name": "Julia S. Lowndes",
+            "affiliation": "Openscapes, Santa Barbara, California, USA",
+            "orcid": "0000-0003-1682-3872"
+        }
+    ],
+    "title": "ncompare: A Python Package for Comparing netCDF Structures",
+    "description": "As netCDF (Network Common Data Form) files are widely used in Earth science — with climate models, oceanographic or atmospheric reanalyses, and observational data — improved means of evaluating netCDF files can help enable a wide range of applications. We have developed a reusable open source approach through `ncompare`, which is a Python package for comparing netCDF structures. `ncompare` facilitates rapid comparisons by generating a formatted display of the matching and non-matching groups, variables, and associated metadata between two NetCDF datasets. The user has the option to colorize the terminal output for ease of viewing, and `ncompare` can optionally save comparison reports in text, comma-separated value (CSV), and/or Microsoft Excel formats."
+}
