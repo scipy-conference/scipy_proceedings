@@ -6,6 +6,7 @@ project:
   id: scipy-2024-cockett_etal
   title: Continuous Tools for Scientific Publishing
   subtitle: Using MyST Markdown and Curvenote to encourage continuous science practices
+  description: Science requires new mediums to compose ideas and ways to share research findings iteratively, as early as possible and connected directly to software and data. In this paper we discuss two tools for scientific authoring and publishing, MyST Markdown and Curvenote, and illustrate examples of improving metadata, reimagining the reading experience, including computational content, and transforming publishing practices for individuals and societies through automation and continuous practices.
   keywords:
     - scientific communication
     - publishing
@@ -116,7 +117,5 @@ project:
         - elife-era
         - dora2018
         - blinde2022
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
