@@ -1,0 +1,12 @@
+{
+    "title": "Introduction to Causal Inference with Machine Learning",
+    "authors": [
+      {
+        "name": "Hajime Takeda",
+        "affiliation": "Individual",
+        "orcid": ""
+      }
+    ],
+    "description": "Causal inference has traditionally been used in fields such as economics, health studies, and social sciences. In recent years, algorithms combining causal inference and machine learning have been a hot topic. Libraries like EconML and CausalML, for instance, are good Python tools that facilitate the easy execution of causal analysis in areas like economics, human behavior, and marketing. In this talk, I will explain key concepts of causal inference with machine learning, show practical examples, and offer some practical tips. Attendees will learn how to apply machine learning to causal analysis effectively, boosting their research and decision-making."
+  }
+  
