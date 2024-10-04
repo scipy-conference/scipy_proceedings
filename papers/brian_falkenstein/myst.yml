@@ -7,6 +7,7 @@ project:
   # Ensure your title is the same as in your `main.md`
   title: Predx-Tools
   subtitle: Dispelling the Mystery in Histopathological Image Processing
+  description: Histopathological images, which are digitized images of human or animal tissue, contain insights into disease state. We present PredX-Tools, a suite of simple and easy to use python GUI applications which facilitate analysis of histopathological images and provide a no-code platform for data scientists and researchers to perform analysis on raw and transformed data.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Brian Falkenstein
@@ -65,7 +66,5 @@ project:
         - tifffile
         - zarr
         - pysimplegui
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
