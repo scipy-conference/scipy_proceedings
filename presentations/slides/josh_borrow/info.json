@@ -1,0 +1,11 @@
+{
+  "title": "Making Research Data Flow with Python",
+  "authors": [
+    {
+      "name": "Josh Borrow",
+      "affiliation": "Department of Physics and Astronomy, University of Pennsylvania, 209 South 33rd Street, Philadelphia, PA, USA 19104",
+      "orcid": "0000-0002-1327-1921"
+    }
+  ],
+  "description": "Telescopes exist in remote environments, and yet produce huge amounts of data. This presentation is about building the data transfer tool Librarian for the Simons Observatory, which enables seamless shifting between internet-enabled transfers and hand-carrying disks down mountains."
+}
