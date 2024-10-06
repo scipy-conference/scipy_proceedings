@@ -2,7 +2,7 @@ version: 1
 project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-gagnon_kebe_tahiri
-  title: Ecological and Spatial Influences on Cumacea Genetics in the Northern North Atlantic
+  title: Ecological and Spatial Influences on Cumacea (Crustacea: Peracarida) Genetics in the Northern North Atlantic
   subtitle: by aPhyloGeo software
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
