@@ -24,7 +24,7 @@
       "acronym": "SciPy",
       "ordinal": "23nd"
     },
-    "citation_key": "proc-scipy-2023",
+    "citation_key": "proc-scipy-2024",
     "editor_email": [
       "agarwal.meghann@gmail.com",
       "ameyambade@gmail.com",
@@ -34,7 +34,7 @@
       "lindseycster@gmail.com",
       "hongsup.shin@pm.me"
     ],
-    "dates": "July 10 - July 16",
+    "dates": "July 8 - July 14",
     "editor": [
       "Meghann Agarwal",
       "Amey Ambade",
@@ -267,7 +267,157 @@
       "name": "Proceedings Reviewers",
       "members": [
         {
-          "name": ""
+          "name": "Abhay Dutt Paroha"
+        },
+        {
+          "name": "Amadi Gabriel Udu"
+        },
+        {
+          "name": "Andrei Paleyes"
+        },
+        {
+          "name": "Andrew James"
+        },
+        {
+          "name": "Andy Terrel"
+        },
+        {
+          "name": "Angus Hollands"
+        },
+        {
+          "name": "Ankur Ankan"
+        },
+        {
+          "name": "Ashwin Hegde"
+        },
+        {
+          "name": "Blaine Mooers"
+        },
+        {
+          "name": "Bobby Jackson"
+        },
+        {
+          "name": "Chong Shen Ng"
+        },
+        {
+          "name": "Chuchu Wu"
+        },
+        {
+          "name": "Cliff Kerr"
+        },
+        {
+          "name": "Conrad Koziol"
+        },
+        {
+          "name": "Drew Camron"
+        },
+        {
+          "name": "Dr. Kirtan Dave"
+        },
+        {
+          "name": "Franklin Koch"
+        },
+        {
+          "name": "James Lamb"
+        },
+        {
+          "name": "Jane Adams"
+        },
+        {
+          "name": "Jennifer E. Yoon"
+        },
+        {
+          "name": "John Drake"
+        },
+        {
+          "name": "Juan Cabanela"
+        },
+        {
+          "name": "Katelyn FitzGerald"
+        },
+        {
+          "name": "Katie Wetstone"
+        },
+        {
+          "name": "Kalyan Prasad"
+        },
+        {
+          "name": "Kevin Lacaille"
+        },
+        {
+          "name": "Kuntao Zhao"
+        },
+        {
+          "name": "Lindsey Heagy"
+        },
+        {
+          "name": "Marcus Hill"
+        },
+        {
+          "name": "Matt Craig"
+        },
+        {
+          "name": "Matthew Feickert"
+        },
+        {
+          "name": "Mihai Maruseac"
+        },
+        {
+          "name": "Mike Sarahan"
+        },
+        {
+          "name": "Nadia Tahiri"
+        },
+        {
+          "name": "Nate Jacobs"
+        },
+        {
+          "name": "Nicole Brewer"
+        },
+        {
+          "name": "Paul Wright"
+        },
+        {
+          "name": "Pranoy Ray"
+        },
+        {
+          "name": "Rithwik Tom"
+        },
+        {
+          "name": "Rohit Goswami"
+        },
+        {
+          "name": "Stefan van der Walt"
+        },
+        {
+          "name": "Steve Purves"
+        },
+        {
+          "name": "Sumit Kumar"
+        },
+        {
+          "name": "Suzana Șerboi"
+        },
+        {
+          "name": "Talha Irfan"
+        },
+        {
+          "name": "Tek Kshetri"
+        },
+        {
+          "name": "Tetsuo Koyama"
+        },
+        {
+          "name": "Tolulade Ademisoye"
+        },
+        {
+          "name": "Veronica Gathoni"
+        },
+        {
+          "name": "Victoria Adesoba"
+        },
+        {
+          "name": "Wu-Jung Lee"
         }
       ]
     }
@@ -284,24 +434,84 @@
   },
   "scipy_scholarship": [
     {
-      "org": "",
-      "name": ""
+      "name": "Amadi Gabriel Udu",
+      "org": "University of Leicester"
     },
     {
-      "org": "",
-      "name": ""
+      "name": "Ankur Ankan",
+      "org": "Radboud University"
+    },
+    {
+      "name": "Ayush Nag",
+      "org": "University of Washington"
+    },
+    {
+      "name": "C.A.M. Gerlach",
+      "org": "University of Alabama Huntsville"
+    },
+    {
+      "name": "Elliot Salisbury",
+      "org": "University of Southampton"
+    },
+    {
+      "name": "Erick Martins Ratamero",
+      "org": "The Jackson Laboratory"
+    },
+    {
+      "name": "JT Thielen",
+      "org": "Colorado State University"
+    },
+    {
+      "name": "Mohamed El Shorbagy",
+      "org": "Ain Shams University"
+    },
+    {
+      "name": "Sheku Shafeie",
+      "org": "TechPoint"
+    },
+    {
+      "name": "Tek Kshetri",
+      "org": "University of Calgary"
+    },
+    {
+      "name": "Willy Menacho",
+      "org": "Universidad Técnica Federico Santa María"
+    },
+    {
+      "name": "Ying-Jung Chen",
+      "org": "University of Washington eScience"
     }
   ],
   "diversity_scholarship": [
     {
-      "org": "",
-      "name": ""
+      "name": "Atharva Rasane",
+      "org": "DaSouk / GDG Belgaum"
     },
     {
-      "org": "",
-      "name": ""
+      "name": "Hannah Aizenman",
+      "org": "City College of New York"
+    },
+    {
+      "name": "Jacqui Levy",
+      "org": "Environment and Climate Change Canada"
+    },
+    {
+      "name": "Juanita Gomez",
+      "org": "University of California Santa Cruz"
+    },
+    {
+      "name": "Juliana Ferreira Alves",
+      "org": "Itaú Unibanco"
+    },
+    {
+      "name": "Meng Li",
+      "org": "Rice University"
+    },
+    {
+      "name": "Tetsuo Koyama",
+      "org": "ARK Information Systems"
     }
-  ], 
+  ],
   "track_mini_symposia_chairs": [
     {
       "name": "DS/ML/AI",

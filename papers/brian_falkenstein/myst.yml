@@ -1,0 +1,75 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-brian_falkenstein
+  # Ensure your title is the same as in your `main.md`
+  title: Predx-Tools
+  subtitle: Dispelling the Mystery in Histopathological Image Processing
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Brian Falkenstein
+      email: brian.falkenstein@predxbio.com
+      orcid: 0000-0002-9629-1409
+      corresponding: true
+      affiliations:
+        - PredxBio, Inc.
+    - name: Shannon Quinn
+      email: shannon.quinn@predxbio.com
+      orcid: 0000-0002-8916-6335
+      affiliations:
+        - PredxBio, Inc.
+        - School of Computer Science, Department of Cellular Biology, University of Georgia
+    - name: Chakra Chennubhotla
+      email: chakra@predxbio.com
+      orcid: 0000-0002-0024-1627
+      affiliations:
+        - PredxBio, Inc.
+        - Dept of Computational and Systems Biology, University of Pittsburgh School of Medicine
+    - name: Filippo Pullara
+      email: filippo@predxbio.com
+      orcid: 0000-0002-2283-4968
+      affiliations:
+        - PredxBio, Inc.
+    - name: Raymond Yan
+      email: raymond.yan@predxbio.com
+      affiliations:
+        - PredxBio, Inc.    
+  keywords:
+    - digital pathology
+    - brightfield
+    - multiplex immunofluorescence 
+    - point process
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    mIF: Multiplex immunofluorescence
+    H&E: Hematoxylin and eosin
+    QC: Quality control
+    GUI: Graphical user interface
+    IHC: Immunohistochemistry
+    IMC: Imaging mass cytometry
+    RGB: Red green blue image type
+    CSV: Comma-separated value (filetype)
+    N-stack: 3 dimensional image array with shape (N, height, width)
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+        - tifffile
+        - zarr
+        - pysimplegui
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme

@@ -1,0 +1,16 @@
+{
+    "authors": [
+        {
+            "name": "Rick Ratzel",
+            "affiliation": "NVIDIA Corporation",
+	    "orcid": "0000-0001-5464-2920"
+        },
+        {
+            "name": "Dan Schult",
+            "affiliation": "Colgate University",
+            "orcid": "0000-0001-9016-0654"
+        }
+    ],
+    "title": "Fast and Easy Graph Analytics with the NetworkX Ecosystem of Backends",
+    "description": "Poster describing the function dispatching features of NetworkX and the various backends currently available."
+}

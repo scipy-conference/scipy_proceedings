@@ -1,0 +1,85 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-00_benchmarking_sktime
+  title: Evaluating Probabilistic Forecasters with sktime and tsbootstrap -- Easy-to-Use, Configurable Frameworks for Reproducible Science
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Benedikt Heidrich
+      orcid: 0000-0002-1923-0848
+      affiliations:
+        - sktime
+      roles:
+        - Conceptualization
+        - Writing - original draft
+        - Software
+        - Visualization
+        - Writing - review & editing
+        - Investigation
+      email: benedikt.heidrich@sktime.net
+    - name: Sankalp Gilda
+      email: sankalp@developyours.com
+      orcid: 0000-0002-3645-4501
+      affiliations:
+        - DevelopYours, LLC
+      roles:
+        - Conceptualization
+        - Writing - original draft
+        - Software
+        - Visualization
+        - Writing - review & editing
+        - Investigation
+      corresponding: true
+    - name: Franz Kiraly 
+      email: franz.kiraly@sktime.net
+      affiliations:
+        - sktime
+      roles:
+        - Conceptualization
+        - Writing - original draft
+        - Software
+        - Visualization
+        - Writing - review & editing
+        - Project administration
+  keywords:
+    - time series
+    - machine learning
+    - benchmarking
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    CRPS: Continuous Ranked Probability Score
+    CI: Conformal Interval
+    AUC: Area Under Calibration Curve
+    SP: Seasonal Periodicity
+    MBB: Moving Block Bootstrap
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+        - Stankeviciute2021
+        - hyndman2018
+        - bergmeir2016
+        - matheson1976
+        - hyndman2018
+        - hyndman2020package
+        - garza2022statsforecast
+  # A banner will be generated for you on publication, this is a placeholder
+  #banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+  exports: 
+    - format: pdf
+  numbering:
+      headings: true
+site:
+  template: article-theme

@@ -1,0 +1,75 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-nathan_martindale
+  # Ensure your title is the same as in your `main.md`
+  title: Supporting Greater Interactivity in the IPython Visualization Ecosystem
+  subtitle: IPyWidgets, IPyVuetify, and beyond
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Nathan Martindale
+      email: martindalena@ornl.gov
+      corresponding: true
+      orcid: 0000-0002-5036-5433
+      affiliations:
+        - Oak Ridge National Laboratory
+    - name: Jacob Smith
+      email: smithjw1@ornl.gov
+      orcid: 0009-0000-4565-2692
+      affiliations:
+        - Oak Ridge National Laboratory
+    - name: Lisa Linville
+      email: llinvil@sandia.gov
+      orcid: 0000-0003-1319-1056
+      affiliations:
+        - Sandia National Laboratories
+  keywords:
+    - interactive visualization
+    - UX
+    - python
+    - javascript
+    - web development
+    - custom visualizations
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    HTML: HyperText Markup Language
+    UMAP: Uniform Manifold Approximation and Projection
+    CSS: Cascading Style Sheets
+    DBSCAN: Density-Based Spatial Clustering of Applications with Noise
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - ipywidgets
+        - solara
+        - LowLevelWidget
+        - ipywidgets_cookiecutter
+        - plotly
+        - mpld3
+        - bqplot
+        - pythreejs
+        - ipyleaflet
+        - ipycytoscape
+        - traitlets
+        - ipyreact
+        - ipyvuetify
+        - barlowtwins
+        - jupyter
+        - materialdesign
+        - Ester1996ADA
+    - rule: link-resolves
+      severity: ignore
+      keys:
+        - https://www.energy.gov/doe-public-access-plan
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme
