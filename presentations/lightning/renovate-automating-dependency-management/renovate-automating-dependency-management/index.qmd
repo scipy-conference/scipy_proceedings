@@ -1,0 +1,247 @@
+---
+author: Patrick J. Roddy
+date: 2023-11-14
+format: revealjs
+subtitle: ARC Collaborations Hour
+title: "Renovate: Automating Dependency Management"
+---
+
+# Introduction
+
+## Dependencies Are Inevitable
+
+![xkcd:2347](figures/dependency.png)
+
+## Automation Saves Time?
+
+![xkcd:1319](figures/automation.png)
+
+## We've All Done This At Some Point
+
+![](figures/bump.png)
+
+## What About Security Updates?
+
+![](figures/dependabot.png)
+
+## Why Should I Update?
+
+![xkcd:2224](figures/updates.png)
+
+# Renovate
+
+![](figures/renovate.jpg)
+
+## Why Use Renovate?
+
+- Get automated Pull Requests to update your dependencies
+  - Reduce noise by running Renovate on a schedule, for example:
+    - on weekends
+    - outside of working hours
+    - each week
+    - each month
+- Relevant package files are discovered automatically
+
+## Why Use Renovate?
+
+- Supports monorepo architectures with workspaces with no extra configuration
+- Bot behavior is customisable via configuration files (config as code)
+- Use ESLint-like shared config presets for ease of use and simplifying
+  configuration (JSON format only)
+- Lock files are supported and updated in the same commit, including immediately
+  resolving conflicts whenever PRs are merged
+
+## Why Use Renovate?
+
+- Get replacement PRs to migrate from a deprecated dependency to the community
+  suggested replacement, works with most managers, see
+  [issue 14149](https://github.com/renovatebot/renovate/issues/14149) for
+  exceptions
+- Open source (installable via npm/Yarn or Docker Hub) so can be self-hosted or
+  used via the Mend Renovate App
+
+## Open Source Projects
+
+- <https://github.com/paddyroddy/talks>
+- <https://github.com/renovatebot/renovate>
+- <https://github.com/astro-informatics/sleplet>
+- <https://github.com/microsoft/lage>
+- <https://github.com/loopbackio/loopback-next>
+- <https://github.com/ampproject/amphtml>
+- ...
+
+# How to Setup
+
+## Install the Application
+
+<https://github.com/apps/renovate>
+
+![](figures/application.png)
+
+## Example Config
+
+```{.json5 code-line-numbers="2|3,16|4|5|6,13|7-10|11|12,18-20|14|15|17|21,38|22-27|28-32|33-37"}
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:best-practices",
+    "schedule:weekdays",
+    ":assignAndReview(paddyroddy)",
+    ":automergeBranch",
+    ":automergeDigest",
+    ":automergeMinor",
+    ":automergePatch",
+    ":disableDependencyDashboard",
+    ":enablePreCommit",
+    ":label(renovate)",
+    ":maintainLockFilesMonthly",
+    ":noUnscheduledUpdates",
+  ],
+  commitMessageAction: "Renovate:",
+  "git-submodules": {
+    enabled: true,
+  },
+  packageRules: [
+    {
+      description: "Only allow major updates",
+      enabled: false,
+      matchDepNames: ["renovatebot/pre-commit-hooks"],
+      matchUpdateTypes: ["minor", "patch", "pin"],
+    },
+    {
+      description: "Combine updates together",
+      groupName: "paddyroddy/.github",
+      matchDepNames: ["paddyroddy/.github"],
+    },
+    {
+      description: "Shorten commit titles",
+      commitMessageTopic: "{{depName}}",
+      matchManagers: ["github-actions", "pre-commit"],
+    },
+  ],
+}
+```
+
+::: footer
+
+See in action:
+<https://github.com/paddyroddy/.github/blob/main/renovate/default-config.json5>
+
+:::
+
+## Config is Reusable!
+
+```{.json5 code-line-numbers="2|4|5|7-13"}
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "github>paddyroddy/.github//renovate/default-config.json5",
+    "schedule:monthly",
+  ],
+  "pre-commit": {
+    fileMatch: [
+      "precommit/general/general-hooks.yaml",
+      "precommit/latex/latex-hooks.yaml",
+      "precommit/python/python-hooks.yaml",
+    ],
+  },
+}
+```
+
+::: footer
+
+See in action:
+<https://github.com/paddyroddy/.github/blob/main/.renovaterc.json5>
+
+:::
+
+## Automerging
+
+The
+[GitHub automerge](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)
+setting is required
+
+![](figures/automerge.png)
+
+::: {.fragment .fade-left}
+
+It is **highly recommended** to ensure you have tests that will operate on the
+Renovate branches.
+
+```yaml
+on:
+  push:
+    branches:
+      - main
+      - "renovate/**"
+  pull_request:
+```
+
+:::
+
+## Rulesets - Status Checks
+
+:::{layout-ncol=2}
+
+![](figures/status_checks_1.png)
+
+::: {.fragment .fade-left}
+
+![](figures/status_checks_2.png)
+
+:::
+
+:::
+
+## Rulesets - Pull Requests
+
+:::{layout-ncol=2}
+
+![](figures/pull_requests_1.png)
+
+::: {.fragment .fade-left}
+
+![](figures/pull_requests_2.png)
+
+:::
+
+:::
+
+## Monitoring
+
+:::{layout-ncol=2}
+
+![](figures/logging_1.png)
+
+::: {.fragment .fade-left}
+
+![](figures/logging_2.png)
+
+:::
+
+:::
+
+::: footer
+
+See in action: <https://developer.mend.io/github/paddyroddy/.github>
+
+:::
+
+# Conclusions
+
+## Summary
+
+- Renovate is massively flexible
+- Maintainers respond incredibly quickly
+- Renovate is widely used
+- If you think it can be automated, it probably can
+- Be careful with CI use in private projects (ask MIRSG 😉)
+- Embrace automerging (if you like inbox zero)
+- Renovate `renovates` itself very frequently
+- There's always more to learn!
+
+## Demo Time
+
+<https://developer.mend.io>
+
+![](figures/demo.jpg)
