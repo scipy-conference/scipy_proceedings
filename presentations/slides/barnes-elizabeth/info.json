@@ -1,0 +1,11 @@
+{
+    "title": "Explainable AI for Climate Science: Opening the Black Box to Reveal Planet Earth",
+    "authors": [
+        {
+            "name": "Elizabeth A. Barnes",
+            "affiliation": "Colorado State University",
+            "orcid": "0000-0003-4284-9320"
+        }
+    ],
+    "description": "Earth’s climate is chaotic and noisy. Finding usable signals amidst all of the noise can be challenging: be it predicting if it will rain, knowing which direction a hurricane will go, understanding the implications of melting Arctic ice, or detecting the impacts of humans on the earth’s surface. Here, I will demonstrate how explainable artificial intelligence (XAI) techniques can sift through vast amounts of climate data and push the bounds of scientific discovery: allowing scientists to ask \"why?\" but now with the power of machine learning."
+}
