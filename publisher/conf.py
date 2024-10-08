@@ -6,8 +6,8 @@ import io
 # comment out the entries in the excludes list
 excludes = [
     'example',
-    'bibderwalt',
-    'texderwalt',
+    '00_myst_template',
+    '00_tex_template',
 ]
 # status_file_root possible values: draft, conference, ready
 status_file_base = 'draft'
