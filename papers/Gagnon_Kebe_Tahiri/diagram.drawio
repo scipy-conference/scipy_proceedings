@@ -41,10 +41,10 @@
           <mxGeometry x="1170.5128205128206" y="230.3370786516854" width="223.46153846153848" height="67.41573033707866" as="geometry" />
         </mxCell>
         <mxCell id="SzXXKODQA_d7fAglRIwC-13" value="Database&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
-          <mxGeometry x="133.01282051282053" y="20.225955056179775" width="63.84615384615385" height="33.70786516853933" as="geometry" />
+          <mxGeometry x="133.01282051282053" y="31.465955056179773" width="63.84615384615385" height="33.70786516853933" as="geometry" />
         </mxCell>
         <mxCell id="SzXXKODQA_d7fAglRIwC-14" value="Data pre-processing" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
-          <mxGeometry x="329.8717948717949" y="8.99" width="159.61538461538464" height="56.17977528089888" as="geometry" />
+          <mxGeometry x="329.8717948717949" y="20.23" width="159.61538461538464" height="56.17977528089888" as="geometry" />
         </mxCell>
         <mxCell id="SzXXKODQA_d7fAglRIwC-15" value="Output" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
           <mxGeometry x="1251.650641025641" y="67.41573033707866" width="61.18589743589744" height="56.17977528089888" as="geometry" />
@@ -53,10 +53,10 @@
           <mxGeometry x="478.84615384615387" y="359.55056179775283" width="95.76923076923077" height="56.17977528089888" as="geometry" />
         </mxCell>
         <mxCell id="SzXXKODQA_d7fAglRIwC-17" value="" style="image;html=1;image=img/lib/clip_art/computers/Database_Minus_128x128.png" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
-          <mxGeometry x="378.55448717948724" y="65.16977528089888" width="62.25" height="58.42696629213483" as="geometry" />
+          <mxGeometry x="374.67999999999995" y="74.17" width="70" height="55.85" as="geometry" />
         </mxCell>
         <mxCell id="SzXXKODQA_d7fAglRIwC-18" value="" style="image;html=1;image=img/lib/clip_art/computers/Database_128x128.png" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
-          <mxGeometry x="135.67307692307693" y="65.16977528089888" width="58.52564102564103" height="56.17977528089888" as="geometry" />
+          <mxGeometry x="133.01307692307694" y="73.02977528089887" width="58.52564102564103" height="56.17977528089888" as="geometry" />
         </mxCell>
         <mxCell id="SzXXKODQA_d7fAglRIwC-19" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.android;fillColor=#205E00;gradientColor=none;" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
           <mxGeometry x="670.3846153846155" y="123.59550561797752" width="42.56410256410256" height="44.943820224719104" as="geometry" />
