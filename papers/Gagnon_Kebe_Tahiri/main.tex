@@ -42,7 +42,7 @@ This section describes our data and introduces the main stages of data pre-proce
 The study area was located in a northern region of the North Atlantic, including the Icelandic Sea, the Denmark Strait, and the Norwegian Sea. The specimens examined were collected as part of the IceAGE project (Icelandic marine Animals: Genetic and Ecology; Cruise ship M85/3 in 2011), which focused on the deep continental slopes and abyssal waters around Iceland \citep{meisner_prefacebiodiversity_2018}. The sampling period for the included specimens was from August 30 to September 22, 2011, and they were collected at depths ranging from 316 m to 2568 m. Detailed protocols concerning the sampling plan, sample processing, DNA extraction steps, PCR amplification, sequencing, and aligned DNA sequences are available in \citep{uhlir_adding_2021}.
 
 \subsection{Data preprocessing}
-We used data from the article \citep{uhlir_adding_2021}, the IceAGE project, and related data from the BOLDSystem database, as described in \citep{uhlir_adding_2021}. Given the enormous variety of parameters offered by these databases, we applied a selective reduction procedure. Attributes with little or no variability (non-numerical data), for which all data were missing and which were not linked to genetic sequences or spatial, environmental, and climatic parameters were excluded from our study. Out of the 495 available in the IceAGE dataset, we considered 62 specimens for which 16S rRNA mitochondrial gene sequences were available. 
+We used data from the article \citep{uhlir_adding_2021}, the IceAGE project, and related data from the BOLDSystem database, as described in \citep{uhlir_adding_2021}. Given these databases' enormous variety of parameters, we applied a selective reduction procedure. Attributes with little or no variability (non-numerical data) were excluded from our study, for which all data were missing and were not linked to genetic sequences or spatial, environmental, and climatic parameters. Out of the 495 available in the IceAGE dataset, we considered 62 specimens for which 16S rRNA mitochondrial gene sequences were available. 
 
 Next, we calculated the variance ($S^2$) using the $var()$ function in RStudio Desktop 4.3.2 for each of the selected numerical attributes. This step aimed to eliminate attributes with low variation, as they are unlikely to provide essential data for analysis. We set a variance threshold of ≤ 0.1 to exclude uninformative attributes. The latter allows us to retain attributes whose variability is reasonably sufficient for our analyses while rejecting those with little variation. Only water salinity was eliminated based on this criterion ($S^2\textsubscript{Salinity} = 0.02146629$). The formula (see Equation \ref{variance}) and code (\autoref{lst:variance}) used to calculate the variance of our final features, available in the data file on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}, are provided below:
 
@@ -152,6 +152,19 @@ We selected this software for our analysis because, to our knowledge, it is the 
 %\autoref{lst:main}.
 \begin{lstlisting}[label=lst:main,language=Python,caption=Main script for tutorial using the aPhyloGeo package.]
 # This script outlines the main steps for processing genetic and attribute data using the aPhyloGeo package.
+# Install aPhylGeo package
+pip install aPhyloGeo
+
+# Install the Poetry package to automatically manage the virtual environment
+
+# Import necessary modules
+import pandas as pd
+import time
+from aphylogeo.alignement import AlignSequences
+from aphylogeo.params import Params
+from aphylogeo import utils
+from aphylogeo.genetic_trees import GeneticTrees
+    
 if __name__ == "__main__":
 
     # Load parameters from a configuration file
@@ -160,11 +173,11 @@ if __name__ == "__main__":
 
     # Load the sequence file
     # Loads the genetic sequence file specified by the reference gene filepath.
-    sequence_file = utils.load_sequence_file(Params.reference_gene_filepath)
+    sequence_file = utils.loadSequenceFile(Params.reference_gene_filepath)
 
     # Create an AlignSequences object
     # This object is responsible for aligning the genetic sequences.
-    align_sequence = AlignSequences(sequence_file)
+    align_sequence = AlignSequences(sequenceFile)
 
     # Load attribute data from a CSV file
     # This reads the attributes data into a pandas DataFrame.
@@ -176,7 +189,7 @@ if __name__ == "__main__":
 
     # Generate phylogenetic trees based on aligned sequences
     # Create phylogenetic trees from the multiple sequence alignments (MSA).
-    genetic_trees = utils.genetic_pipeline(alignments.msa)
+    genetic_trees = utils.geneticPipeline(alignments.msa)
     
     # Create a GeneticTrees object
     # Represent the generated phylogenetic trees in Newick format.
@@ -184,11 +197,11 @@ if __name__ == "__main__":
    
     # Generate attribute trees based on attribute data
     # Create trees representing the relationships between different attributes.
-    attribute_trees = utils.attribute_pipeline(attribute_data)
+    attribute_trees = utils.climaticPipeline(attribute_data)
     
     # Filter the results based on the generated trees
     # Filter the results to ensure they meet certain criteria.
-    utils.filter_results(attribute_trees, genetic_trees, attribute_data)
+    utils.filterResults(attribute_trees, genetic_trees, attribute_data)
 \end{lstlisting}
 
 The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex phylogeographic analyses. The software process has three main stages:
