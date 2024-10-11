@@ -46,7 +46,7 @@
         <mxCell id="SzXXKODQA_d7fAglRIwC-13" value="Database&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
           <mxGeometry x="133.01282051282053" y="31.465955056179773" width="63.84615384615385" height="33.70786516853933" as="geometry" />
         </mxCell>
-        <mxCell id="SzXXKODQA_d7fAglRIwC-14" value="Data pre-processing" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
+        <mxCell id="SzXXKODQA_d7fAglRIwC-14" value="Data preprocessing" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
           <mxGeometry x="329.8717948717949" y="20.23" width="159.61538461538464" height="56.17977528089888" as="geometry" />
         </mxCell>
         <mxCell id="SzXXKODQA_d7fAglRIwC-15" value="Output" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="uiCsQ9Mk5P981hUro8Ao-3" vertex="1">
