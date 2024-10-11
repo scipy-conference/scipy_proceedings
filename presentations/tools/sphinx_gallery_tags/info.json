@@ -1,0 +1,11 @@
+{
+    "title": "Sphinx-gallery and Sphinx-tags",
+    "authors": [
+        {
+            "name": "Hannah Aizenman",
+            "affiliation": "matplotlib",
+            "orcid": "0000-0002-4622-4427"
+        }
+    ],
+    "description": "Sphinx-gallery and sphinx-tags features and updates"
+}

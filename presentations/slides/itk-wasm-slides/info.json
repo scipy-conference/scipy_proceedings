@@ -1,0 +1,11 @@
+{
+    "title": "ITK-Wasm: Universal spatial analysis and visualization",
+    "authors": [
+        {
+            "name": "Matthew McCormick",
+            "affiliation": "Kitware, Inc.",
+            "orcid": "0000-0001-9475-3756"
+        }
+    ],
+    "description": "How WebAssembly makes scientific computing accessible, sustainable, and reproducible"
+}

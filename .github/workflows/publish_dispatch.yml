@@ -1,0 +1,17 @@
+name: Publish all 2024 articles
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  publish:
+    uses: curvenote/actions/.github/workflows/submit.yml@v1
+    with:
+      id-pattern-regex: '^scipy-2024-(?:[a-zA-Z0-9-_]{3,25})$'
+      venue: scipy
+      collection: '2024'
+      kind: Article
+      path: papers/*
+      publish: true
+    secrets:
+      CURVENOTE: ${{ secrets.CURVENOTE_TOKEN }}
+      GITHUB: ${{ secrets.GITHUB_TOKEN }}

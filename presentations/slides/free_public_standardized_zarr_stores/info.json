@@ -1,0 +1,46 @@
+{
+    "title": "Free, public, standardized Zarr stores of geospatial data in the cloud for all! Now in Beta.",
+    "authors": [
+        {
+            "name": "Christine Smit",
+            "affiliation": "National Aeronautics and Space Administration",
+            "orcid": "0000-0002-3135-1191"
+        },
+        {
+            "name": "Hailiang Zhang",
+            "affiliation": "National Aeronautics and Space Administration",
+            "orcid": "0009-0003-6139-5683"
+        },
+        {
+            "name": "Brianna Pagan",
+            "affiliation": "National Aeronautics and Space Administration",
+            "orcid": "0000-0001-8028-0310"
+        },
+        {
+            "name": "Dieu My Nguyen",
+            "affiliation": "National Aeronautics and Space Administration",
+            "orcid": "0000-0002-5653-4891"
+        },
+        {
+            "name": "James Acker",
+            "affiliation": "National Aeronautics and Space Administration",
+            "orcid": "0000-0001-7262-9615"
+        },
+        {
+            "name": "Ashley Heath",
+            "affiliation": "National Aeronautics and Space Administration",
+            "orcid": "0000-0002-7605-1213"
+        },
+        {
+            "name": "Mahabaleshwara Hegde",
+            "affiliation": "National Aeronautics and Space Administration",
+            "orcid": "0000-0003-4756-0796"
+        },
+        {
+            "name": "Long Pham",
+            "affiliation": "National Aeronautics and Space Administration",
+            "orcid": ""
+        }
+    ],
+    "description": "At the NASA Goddard Earth Sciences (GES) Data and Information Services Center (DISC), we're doing the heavy lifting to make large geospatial datasets easily accessible from the cloud. No more downloading data. No more worrying about quirky metadata or missing dimensions. No more concatenating hundreds or thousands of files together. Just fire up your Jupyter notebook somewhere in Amazon Web Services (AWS)'s US-West-2 region, get some free temporary AWS credentials, open our Zarr stores, and start doing your science."
+}

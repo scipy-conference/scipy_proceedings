@@ -1,0 +1,21 @@
+name: Create preview draft for 2024 articles
+on:
+  pull_request_target:
+    branches: ['2024']
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  publish:
+    uses: curvenote/actions/.github/workflows/draft.yml@v1
+    with:
+      id-pattern-regex: '^scipy-2024-(?:[a-zA-Z0-9-_]{3,25})$'
+      enforce-single-folder: true
+      venue: scipy
+      collection: '2024'
+      kind: Article
+      path: papers/*
+      label: draft
+    secrets:
+      CURVENOTE: ${{ secrets.CURVENOTE_TOKEN }}
+      GITHUB: ${{ secrets.GITHUB_TOKEN }}

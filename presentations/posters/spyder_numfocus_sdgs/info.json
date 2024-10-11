@@ -1,0 +1,16 @@
+{
+    "authors": [
+        {
+            "name": "Daniel Althviz Moré",
+            "affiliation": "Quansight",
+            "orcid": "0000-0003-1759-4194"
+        },
+        {
+            "name": "Juan Sebastian Bautista Rojas",
+            "affiliation": "Spyder",
+            "orcid": ""
+        }
+    ],
+    "title": "Spyder and the NumFOCUS SDG program: better UI/UX, improved code completion and lessons learned",
+    "description": "Spyder is a free and open source scientific environment written in Python, for Python, and designed by and for scientists, engineers and data analysts. Thanks to the NumFOCUS Small Development Grants (SDG) program, from late 2022 through the beginning of 2024 we’ve made many improvements to Spyder’s UI/UX and to its support for external code completion plugins. We'd like to share the work we’ve done, and explain the ideas and execution behind two of our proposals, from both a technical and project management perspective."
+}

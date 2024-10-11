@@ -1,0 +1,92 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-matt_mccormick
+  # Ensure your title is the same as in your `main.md`
+  title: ITK-Wasm
+  subtitle: Universal spatial analysis and visualization
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Matthew McCormick
+      email: matt@mmmccormick.com
+      orcid: 0000-0001-9475-3756
+      affiliations:
+        - Kitware, Inc.
+      roles:
+        - Conceptualization
+        - Software
+        - Data curation
+        - Funding acquisition
+        - Visualization
+        - Methodology
+        - Project administration
+      corresponding: true
+    - name: Paul Elliott
+      email: paul.elliott@kitware.com
+      orcid: 0009-0000-8749-3327
+      roles:
+        - Software
+        - Visualization
+      affiliations:
+        - Kitware, Inc.
+  keywords:
+    - reproducibility
+    - sustainability
+    - accessibility
+    - interoperability
+    - numpy
+    - polyglot
+    - spatial computing
+    - visualization
+    - imaging
+    - meshes
+    - pointsets
+    - itk
+    - webassembly
+    - wasm
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    ITK: Insight Toolkit
+    wasm: WebAssembly
+    WASI: WebAssembly System Interface
+    GPU: Graphics Processing Unit
+    CPU: Central Processing Unit
+    SIMD: Single Instruction, Multiple Data
+    API: Application Programming Interface
+    CLI: Command Line Interface
+    GUI: Graphical User Interface
+    NPU: Neural Processing Unit
+    NRRD: Nearly Raw Raster Data
+    FPGA: Field-Programmable Gate Array
+    FAIR: Findable, Accessible, Interoperable, and Reusable
+    NPM: Node Package Manager
+    PNPM: Performant Node Package Manager
+    JSON: JavaScript Object Notation
+    LZ4: Lempel-Ziv 4
+    Zstd: Zstandard
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - WebAssemblyCoreSpecification1
+        - WebAssemblyCoreSpecification2
+        - McCormickAnisotropicDiffusionLBR
+        - WasiDev
+        - Zhang2024-su
+        - dockcross
+        - Johnson2015-qc
+        - Johnson2015-ur
+        - NLM_VisibleHumanMale
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  plugins:
+    - unsplash.mjs
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+site:
+  template: article-theme

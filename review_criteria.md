@@ -54,8 +54,8 @@ via discussion or pull request.
 
 ### Length
 
-- The compiled version should be no longer than 8 pages, including figures, source
-  code, appendices. References are excluded from this limit.
+- The compiled version should be no longer than 6000 words, including figure text,
+  source code, and appendices. References are excluded from this limit.
 
 ### Figures
 

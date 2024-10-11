@@ -1,0 +1,46 @@
+version: 1
+project:
+  # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2024-aleksandar_makelov
+  title: "Mandala: Compositional Memoization for Simple & Powerful Scientific Data Management"
+  subtitle: LaTeX edition
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Aleksandar Makelov
+      email: aleksandar.makelov@gmail.com
+      orcid: 0009-0003-5394-112X
+      affiliations:
+        - MIT
+        - SERI MATS
+        - Independent Researcher
+  keywords:
+    - scientific data management
+    - machine learning
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - bojarski2016end
+        - yang2024swe
+        - norvig1991techniques
+        - makelov2023practical
+        - git
+        - maymounkov2018koji
+        - semver
+        - lozano2017unison
+  # A banner will be generated for you on publication, this is a placeholder
+  banner: banner.png
+  # The rest of the information shouldn't be modified
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue: Scipy 2024
+  date: 2024-07-10
+  numbering:
+    headings: true
+site:
+  template: article-theme
