@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/xwen4438
   id: 3f27f4d7-7bd1-4dde-aa01-e23948d812b8
   title: The Right Tool for the Job
   authors:

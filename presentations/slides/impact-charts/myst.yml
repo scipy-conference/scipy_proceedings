@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/tfaj6588
   id: 8ba921d4-b1eb-4ac6-a7cb-d05c0f93102b
   title: An Introduction to Impact Charts
   authors:

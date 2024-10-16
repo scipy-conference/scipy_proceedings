@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/tpwg2365
   id: ee83edd6-dcc8-43c2-a607-65b5eedd9c94
   title: 'Venturial: Generating CFD Workflows in Python'
   authors:

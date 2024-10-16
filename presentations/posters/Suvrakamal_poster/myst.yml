@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/txwe5647
   id: 450634fe-1473-4032-b0aa-19968a123170
   title: Mamba Models:A Potential Replacement for Transformers?
   authors:

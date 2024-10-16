@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/fpju4745
   id: 314a37bd-24fd-4a2a-830a-a5ce969cfeac
   title: Convolutional Autoencoders for Denoising Solar Images
   authors:

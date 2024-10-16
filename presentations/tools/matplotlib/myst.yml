@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/guwd9846
   id: 79090744-0a05-41c2-a445-cc8f6bb4f0a1
   title: SciPy Tools Plenary on Matplotlib
   authors:

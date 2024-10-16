@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/cdrf9272
   id: 9d110452-754c-4d97-bd5f-4a04a64a4275
   title: 'Monte Carlo/Dynamic Code: Performant and Portable High-Performance Computing at Scale via Python and Numba'
   authors:

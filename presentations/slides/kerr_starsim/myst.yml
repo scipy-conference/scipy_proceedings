@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/ukpu4584
   id: 3e7d6827-b8a0-4b4a-9326-dd5adbf1a53c
   title: 'Starsim: A flexible framework for agent-based modeling of health and disease'
   authors:

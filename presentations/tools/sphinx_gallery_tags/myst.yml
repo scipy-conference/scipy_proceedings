@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/ddee5226
   id: 74ac4b83-3044-47da-8f12-f2a5e000e715
   title: Sphinx-gallery and Sphinx-tags
   authors:

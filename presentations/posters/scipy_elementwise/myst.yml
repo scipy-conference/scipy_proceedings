@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/uyyk2727
   id: 9dc90f15-581f-4798-b77f-65baf2d91e79
   title: Vectorized Quadrature, Series Summation, Differentiation, Optimization, and Rootfinding in SciPy
   authors:

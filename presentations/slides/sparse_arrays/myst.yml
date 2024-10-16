@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/ejft5676
   id: 02c2e984-91c6-4641-9adb-f0d5a2104696
   title: Sparse Arrays in scipy.sparse
   authors:

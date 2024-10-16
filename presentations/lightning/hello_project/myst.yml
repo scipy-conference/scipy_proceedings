@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/hxxk4957
   id: 3d7cb8ab-ca5c-4c6c-87ee-8f651222d1ed
   title: Hello Project!
   authors:

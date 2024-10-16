@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/xwwd2556
   id: 813d7070-6bdc-4fe6-9577-1a1551fa85a0
   title: 'zfit: scalable pythonic likelihood fitting'
   authors:

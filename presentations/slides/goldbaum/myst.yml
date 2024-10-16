@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/wdug2226
   id: bff40d1a-95c6-4f8a-9cb6-83f581113a6b
   title: 'My NumPy year: From no CPython C API experience to shipping a new DType in NumPy 2.0'
   authors:

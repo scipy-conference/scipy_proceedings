@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/kvta3223
   id: 4a97335e-f176-4c77-a4e9-cf1803ec53c9
   title: Introduction to Causal Inference Using pgmpy
   authors:

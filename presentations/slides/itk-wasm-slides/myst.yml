@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/pghc3745
   id: 06a63a3d-6c4f-48bf-a372-cfe3bd7a5baa
   title: 'ITK-Wasm: Universal spatial analysis and visualization'
   authors:

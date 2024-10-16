@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/yfnx8796
   id: c9644ff2-a1c2-4b26-a395-bdaaefae8f13
   title: 'RoughPy: Streaming data is rarely smooth'
   authors:

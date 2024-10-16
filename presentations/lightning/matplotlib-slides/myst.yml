@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/wrvp6756
   id: 0701ae97-90ba-43bd-b9c2-8060940b836b
   title: Plotting Slides in Matplotlib
   authors:

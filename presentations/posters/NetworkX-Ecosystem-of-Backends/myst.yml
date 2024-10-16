@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/ryga7653
   id: 2d6156c3-e8ef-4520-b328-bbe09c804131
   title: Fast and Easy Graph Analytics with the NetworkX Ecosystem of Backends
   authors:

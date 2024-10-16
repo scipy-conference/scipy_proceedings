@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/wdhm9848
   id: 22c88032-4ed6-4a3d-bf2d-dd89ccdebaee
   title: 'anywidget: custom Jupyter Widgets made easy'
   authors:

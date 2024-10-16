@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/afjf2467
   id: 78a7ba3c-75ac-4054-a9ff-11f3ce344206
   title: Python for early-stage design of sustainable aviation fuels
   authors:

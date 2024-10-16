@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/gwcm5548
   id: 62b45147-1aa6-4bca-9cd3-3961bf549694
   title: gravitational lensing simulations made user friendly with Caustics’ three interface levels
   authors:

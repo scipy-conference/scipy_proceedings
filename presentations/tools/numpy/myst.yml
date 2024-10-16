@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/dpha2486
   id: 28c44730-f9ee-482f-97c7-eaa99dacd4fe
   title: NumPy annual update
   authors:

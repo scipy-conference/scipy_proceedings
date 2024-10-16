@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/rrdv2565
   id: 4bc4f18f-f3d4-45de-b6eb-f689a46c4cb4
   title: 'Open Source Farm to Open Science Table: Project Pythia''s Cook-off Hackathons'
   authors:

@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/mtvj6294
   id: e4fb4558-4544-4b55-8d25-57bc7d421bd0
   title: 'SciPy: not just a conference'
   authors:

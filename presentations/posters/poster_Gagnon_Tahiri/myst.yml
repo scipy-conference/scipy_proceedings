@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  doi: 10.25080/eage2654
   id: f009d770-94db-4bc1-9097-4c96ad961b4c
   title: Climatic and Geographic Influences on Cumacea Genetics in the Northern North Atlantic
   authors:
