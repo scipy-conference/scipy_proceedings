@@ -1,0 +1,13 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 0701ae97-90ba-43bd-b9c2-8060940b836b
+  title: Plotting Slides in Matplotlib
+  authors:
+    - name: Elliott Sales de Andrade
+      affiliation: Matplotlib
+      orcid: 0000-0001-7310-8942
+  abstract: Matplotlib makes easy things easy and hard things possible, like this silly idea of making slides in it.
+  downloads:
+    - title: Presentation
+      file: scipy2024-lightning-mpl-slide.pdf

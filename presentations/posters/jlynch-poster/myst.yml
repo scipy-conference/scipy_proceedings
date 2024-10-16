@@ -1,0 +1,12 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 314a37bd-24fd-4a2a-830a-a5ce969cfeac
+  title: Convolutional Autoencoders for Denoising Solar Images
+  authors:
+    - name: Jimmy Lynch
+      affiliation: Lockheed Martin Solar and Astrophysics Lab
+  abstract: Using scientific packages in Python, we trained convolutional autoencoders to improve the quality of solar images taken from the Atmospheric Imaging Array (AIA).
+  downloads:
+    - title: Poster
+      file: james-lynch-scipy-2024-poster.pdf

@@ -1,0 +1,22 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: d1c3ca31-4bd1-4404-b2fc-3afb378d77c4
+  title: Accelerating the use of Lagrangian data with Clouddrift
+  authors:
+    - name: Santana, Kevin
+      affiliation: Rosenstiel School of Marine, Atmospheric, and Earth Science, University of Miami
+      orcid: 0009-0003-8383-1212
+    - name: Elipot, Shane
+      affiliation: Rosenstiel School of Marine, Atmospheric, and Earth Science, University of Miami
+      orcid: 0000-0001-6051-5426
+    - name: Miron, Philippe
+      affiliation: Florida State University
+      orcid: 0000-0002-8520-6221
+    - name: Curcic, Milan
+      affiliation: Rosenstiel School of Marine, Atmospheric, and Earth Science, University of Miami
+      orcid: 0000-0002-8822-7749
+  abstract: clouddrift is a python library built to accelerate and simplify the use of lagrangian datasets in science. To achieve this the library adapts datasets into cloud optimized ragged arrays, provides analysis and query methods to work with lagrangian datasets as ragged arrays.
+  downloads:
+    - title: Poster
+      file: scipy-2024-clouddrift-poster-v1.pdf

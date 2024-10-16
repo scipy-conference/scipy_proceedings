@@ -1,0 +1,19 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: c9c4fdd6-83da-4690-8096-7f9fab032420
+  title: 'scikit-build-core: A modern build-backend for CPython C/C++/Fortran/Cython extensions'
+  authors:
+    - name: Jean-Christophe Fillion-Robin
+      affiliation: Kitware Inc.
+      orcid: 0000-0002-9688-8950
+    - name: Henry Schreiner
+      affiliation: Princeton University
+      orcid: 0000-0002-7833-783X
+    - name: Matt McCormick
+      affiliation: Kitware Inc.
+      orcid: 0000-0001-9475-3756
+  abstract: A presentation about scikit-build-core exploring how it modernizes Python extension building by integrating CMake with Python packaging standards, enabling seamless cross-compilation and multi-platform support. The slides highlight key features such as simplified configuration, support for multiple languages like C++, Fortran, and Cython, and the transition from the classic scikit-build. They also provide insights into how scikit-build-core enhances the development experience and streamlines Python module creation for diverse environments.
+  downloads:
+    - title: Presentation
+      file: scipy-2024-scikit-build-core-slides.pdf

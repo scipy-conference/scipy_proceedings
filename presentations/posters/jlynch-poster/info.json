@@ -5,7 +5,7 @@
       "name": "Jimmy Lynch",
       "affiliation": "Lockheed Martin Solar and Astrophysics Lab",
       "orcid": ""
-    },
+    }
   ],
   "description": "Using scientific packages in Python, we trained convolutional autoencoders to improve the quality of solar images taken from the Atmospheric Imaging Array (AIA)."
 }

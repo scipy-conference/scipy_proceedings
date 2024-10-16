@@ -1,0 +1,16 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 905b3f2c-03ff-4b4a-aad8-1978a6d1463f
+  title: Building a modular simulation platform for magnetic resonance force microscopy (MRFM) experiments (mrfmsim and mmodel)
+  authors:
+    - name: Peter Sun
+      affiliation: Cornell University
+      orcid: 0000-0002-5241-100X
+    - name: John Marohn
+      affiliation: Cornell University
+      orcid: 0000-0003-2364-0847
+  abstract: We present mrfmsim, an open-source framework that not only facilitates the design, simulation, and signal validation of magnetic resonance force microscopy experiments, but also significantly speeds up the development process. In the talk, we present the challenges in building simulation packages for experiments undergoing continuous development in a graduate research setting. We show how we designed mrfmsim and its backend mmodel for modularity, extendibility, and readability, and how these design principles translate into practical benefits for researchers in the field.
+  downloads:
+    - title: Presentation
+      file: Sun_Scipy_2024.pdf

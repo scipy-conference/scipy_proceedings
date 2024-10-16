@@ -1,0 +1,22 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 2e47277d-3761-4332-b232-617cb1d069d8
+  title: Seamless integration across developer ecosystems with python and wasm in VTK
+  authors:
+    - name: Jaswant Panchumarti
+      affiliation: Kitware, Inc.
+      orcid: 0009-0000-9120-5703
+    - name: Sebastien Jourdain
+      affiliation: Kitware, Inc.
+      orcid: 0000-0001-8083-271X
+    - name: Berk Geveci
+      affiliation: Kitware, Inc.
+      orcid: 0000-0003-2477-4855
+    - name: Aashish Chaudhary
+      affiliation: Kitware, Inc.
+      orcid: 0000-0002-4637-8055
+  abstract: Visualizing large-scale simulation datasets is vital for research in scientific and engineering fields. To this end, VTK, an open-source C++ visualization library, and its Python counterparts VTK Python, PyVista and Vedo are streamlining 3D visualization, though shortcomings remain. We significantly improved VTK's automated wrappers and enabled VTK WebAssembly thus simplifying creation of visualizations in Python or on the web using Trame. This also made it easier to execute VTK native code directly in a web browser. We discuss challenges and lessons learned in extending large C++ software  to diverse languages through API wrapping and cross-compilation to ultimately benefit the Python community.
+  downloads:
+    - title: Poster
+      file: trame-vtk-wasm.pdf

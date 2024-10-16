@@ -1,0 +1,16 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: f929195e-5856-4f7e-b778-060138bcc414
+  title: No-Code-Change GPU Acceleration for Your Pandas and NetworkX Workflows
+  authors:
+    - name: Rick Ratzel
+      affiliation: NVIDIA Corporation
+      orcid: 0000-0001-5464-2920
+    - name: Vyas Ramasubramani
+      affiliation: NVIDIA Corporation
+      orcid: 0000-0001-5181-9532
+  abstract: This talk describes new open-source GPU accelerators from the NVIDIA RAPIDS project for Pandas and NetworkX and will demonstrate how you can enable them for your workflows to experience significant speedups without code changes.
+  downloads:
+    - title: Presentation
+      file: SciPy2024-NoCodeChangePandasNetworkX.pdf

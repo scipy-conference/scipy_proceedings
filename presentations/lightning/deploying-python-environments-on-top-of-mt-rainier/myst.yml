@@ -1,0 +1,13 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 5c188d79-98e7-47de-93a4-56004e6fef94
+  title: Deploying Python environments on top of Mt. Rainier
+  authors:
+    - name: Benoit Hamelin
+      affiliation: Tutte Institute for Mathematics and Computing
+      orcid: 0000-0001-7333-5635
+  abstract: A process for building preparing artifacts that enable the deployment of a Python computing environment in a place where there is no Internet access.
+  downloads:
+    - title: Presentation
+      file: Deploying Python Environments on top of Mt. Rainier.pdf

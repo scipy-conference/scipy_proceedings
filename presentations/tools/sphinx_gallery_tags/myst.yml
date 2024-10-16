@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 74ac4b83-3044-47da-8f12-f2a5e000e715
+  title: Sphinx-gallery and Sphinx-tags
+  authors:
+    - name: Hannah Aizenman
+      affiliation: matplotlib
+      orcid: 0000-0002-4622-4427
+  abstract: Sphinx-gallery and sphinx-tags features and updates
+  downloads:
+    - title: Presentation
+      file: sphinx-gallery-tags.pdf
+    - title: Powerpoint File
+      file: sphinx-gallery-tags.pptx

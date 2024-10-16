@@ -1,0 +1,19 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 9dc90f15-581f-4798-b77f-65baf2d91e79
+  title: Vectorized Quadrature, Series Summation, Differentiation, Optimization, and Rootfinding in SciPy
+  authors:
+    - name: Matt Haberland
+      affiliation: Cal Poly, San Luis Obispo
+      orcid: 0000-0003-4806-3601
+    - name: Albert Steppi
+      affiliation: Quansight Labs
+      orcid: 0000-0001-5871-6245
+    - name: Pamphile T. Roy
+      affiliation: Consulting Manao GmbH
+      orcid: 0000-0001-9816-1416
+  abstract: Until recently, SciPy’s best options for scalar quadrature, minimization, and root finding called compiled code, which could not take advantage of a vectorized Python integrand, objective function, or residual function; SciPy offered no functions for accurate numerical differentiation or series summation. These gaps are being filled with a family of pure-Python, array API compatible functions for dramatically faster vectorized calculation of scalar integrals, infinite sums, derivatives, minimizers, and roots.
+  downloads:
+    - title: Poster
+      file: SciPy Poster.pdf

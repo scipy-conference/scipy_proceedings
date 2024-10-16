@@ -1,0 +1,13 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: c82a4af0-dafb-4dd1-804c-5e0cd8aa925f
+  title: 'HyperSpy: Your Multidimensional Data Analysis Toolbox'
+  authors:
+    - name: Joshua Taillon
+      affiliation: National Institute of Standards and Technology
+      orcid: 0000-0002-5185-4503
+  abstract: HyperSpy is a community-developed open-source library providing a framework to facilitate interactive and reproducible analyses of multidimensional datasets. Born out of the electron microscopy scientific community and building on the extensive scientific Python environment, HyperSpy provides tools to efficiently explore, manipulate, and visualize complex datasets of arbitrary dimensionality, including those larger than a system's memory. After 14 years of development, HyperSpy recently celebrated its 2.0 version release. This presentation (re)introduces HyperSpy's features and community, with a focus on recent efforts paring the library into a domain-agnostic core and a robust ecosystem of extensions providing specific scientific functionality.
+  downloads:
+    - title: Presentation
+      file: 2024-07-11 SciPy.pdf

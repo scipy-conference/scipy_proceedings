@@ -1,0 +1,16 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 938979e3-44d3-4ddf-bbc1-fd4736be2e08
+  title: 'Coming Online: Enabling Real-Time and AI-Ready Scientific Discovery'
+  authors:
+    - name: Adam Thompson
+      affiliation: NVIDIA
+      orcid: 0000-0001-9690-6357
+    - name: Luigi Cruz
+      affiliation: SETI Institute
+      orcid: 0000-0001-5576-2254
+  abstract: A framework for building real-time and AI enabled sensor processing applications
+  downloads:
+    - title: Presentation
+      file: SciPy 2024 - Holoscan.pdf

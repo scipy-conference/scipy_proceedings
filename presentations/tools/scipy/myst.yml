@@ -1,0 +1,13 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: e4fb4558-4544-4b55-8d25-57bc7d421bd0
+  title: 'SciPy: not just a conference'
+  authors:
+    - name: Matt Haberland
+      affiliation: Cal Poly, San Luis Obispo
+      orcid: 0000-0003-4806-3601
+  abstract: Besides a conference, 'SciPy' is also a library that provides fundamental building blocks for modeling and solving scientific problems. SciPy includes algorithms for optimization, interpolation, statistics, fast Fourier transforms, and many other classes of problems; it also provides specialized data structures, such as k-dimensional trees and sparse matrices. This presentation summarizes the current status and future plans of the SciPy library.
+  downloads:
+    - title: Presentation
+      file: SciPy - The Library - 2024.pdf

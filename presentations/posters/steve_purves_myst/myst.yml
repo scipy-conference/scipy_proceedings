@@ -1,0 +1,16 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 55d2851b-d3a6-45f0-b2eb-b0bab8b1c10d
+  title: Scientific Publishing with MyST Markdown
+  authors:
+    - name: Steve Purves
+      affiliation: Curvenote
+      orcid: 0000-0002-0760-5497
+    - name: Rowan Cockett
+      affiliation: Curvenote
+      orcid: 0000-0002-7859-8394
+  abstract: Supercharge your scientific writing with MyST Markdown! MyST is designed for technical communication and research publication. Sprinkling in all the typesetting power that you’d get from LaTeX but with the pleasure of lightweight content focussed writing that you get from Markdown, create interactive papers or documentation that link with data, have embedded computation and provide explorable notebooks to your readers. Get your work out to a templated PDF for traditional publication from exactly the same material, all from the command line or with continuous integration. In this talk, we’ll show how MyST works, how to get started and some examples of awesome MyST based publications.
+  downloads:
+    - title: Poster
+      file: poster.pdf

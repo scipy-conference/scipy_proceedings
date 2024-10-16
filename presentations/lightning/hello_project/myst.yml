@@ -1,0 +1,13 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 3d7cb8ab-ca5c-4c6c-87ee-8f651222d1ed
+  title: Hello Project!
+  authors:
+    - name: Hannah Aizenman
+      affiliation: matplotlib
+      orcid: 0000-0002-4622-4427
+  abstract: tips for onboarding into contributing to open source
+  downloads:
+    - title: Presentation
+      file: hello_project.pdf

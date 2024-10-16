@@ -1,0 +1,13 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 8ba921d4-b1eb-4ac6-a7cb-d05c0f93102b
+  title: An Introduction to Impact Charts
+  authors:
+    - name: Darren Vengroff, Ph.D.
+      affiliation: ''
+      orcid: 0009-0006-9542-2565
+  abstract: Impact charts, as implemented in the impactchart package, make it easy to take a data set and visualize the impact of one variable on another in ways that techniques like scatter plots and linear regression can't, especially when there are other variables involved. In this talk, we introduce impact charts, demonstrate how they find easter-egg impacts we embed in synthetic data, show how you can create your first impact chart with just a few lines of code, and show how impact charts can find hidden impacts in a real-world use case.
+  downloads:
+    - title: Presentation
+      file: impact-charts.pdf

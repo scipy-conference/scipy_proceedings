@@ -1,0 +1,13 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  id: 9e80aadb-92e3-466b-a165-38e84ac415df
+  title: Particles, People, and Pull Requests
+  authors:
+    - name: Kyle Cranmer
+      affiliation: University of Wisconsin-Madison
+      orcid: 0000-0002-5769-7094
+  abstract: I will tell the story of how the statistical challenges in the search for the Higgs boson and exotic new physics at the Large Hadron Collider led to new approaches to collaborative, open science. The story centers around computational and sociological challenges where software and cyberinfrastructure play a key role. I will highlight a few important changes in perspective that were critical for progress including embracing declarative specifications, pivoting from reproducibility to reuse, and the abstraction that led to the field of simulation-based inference.
+  downloads:
+    - title: Presentation
+      file: Cranmer-Kyle-Keynote-SciPy-2024.pdf
