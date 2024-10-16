@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942264
   doi: 10.25080/xtng2642
   id: 989fa6b2-e0e2-47d7-a426-627142515523
   title: Employing the strengths of Generative AI supports the execution of time series analysis and forecasting

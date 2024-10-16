@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942380
   doi: 10.25080/xpnp9684
   id: 905b3f2c-03ff-4b4a-aad8-1978a6d1463f
   title: Building a modular simulation platform for magnetic resonance force microscopy (MRFM) experiments (mrfmsim and mmodel)

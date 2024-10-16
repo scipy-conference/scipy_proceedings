@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942292
   doi: 10.25080/xwwj3999
   id: b52cc240-ac21-4d45-b701-7dc1e1a62262
   title: 'From concept to compute: accelerating research with workflow management in `pyiron`'

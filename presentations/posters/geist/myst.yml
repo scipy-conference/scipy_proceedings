@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942280
   doi: 10.25080/geaj2635
   id: a9423e43-d63d-4f0e-801d-e78c634ebbb0
   title: 'Geist: a multimodal data transformation, query, and reporting language'

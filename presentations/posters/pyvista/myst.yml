@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942294
   doi: 10.25080/vxvf4964
   id: fea514d2-2e21-44b5-8523-b2fcbb629078
   title: 3D plotting and mesh analysis through a streamlined interface for the Visualization Toolkit (VTK)

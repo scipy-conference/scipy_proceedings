@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942389
   doi: 10.25080/xfex7842
   id: ff1d7311-ea06-4611-9915-67780953f313
   title: Simplifying analysis of hierarchical HDF5 and NetCDF4 files with xarray-datatree

@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942270
   doi: 10.25080/wnaf9823
   id: a15083c3-7d57-4382-b11f-8a5c53026ae3
   title: Leveraging FAIR principles for efficient management of meteorological radar data

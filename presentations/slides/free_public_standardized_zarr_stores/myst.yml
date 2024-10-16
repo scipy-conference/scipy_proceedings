@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942321
   doi: 10.25080/majr5893
   id: 0f7eae15-6ee7-488a-87bc-b0e3c1ebe5db
   title: Free, public, standardized Zarr stores of geospatial data in the cloud for all! Now in Beta.

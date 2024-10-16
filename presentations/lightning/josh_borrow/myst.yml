@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942236
   doi: 10.25080/uncn2995
   id: e1544942-b8cd-41b0-ad88-5cd4646f5284
   title: 'swiftascmaps: A colour map library for swifties'

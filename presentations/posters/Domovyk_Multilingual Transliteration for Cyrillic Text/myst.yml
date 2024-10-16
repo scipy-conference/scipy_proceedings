@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942250
   doi: 10.25080/udkt5322
   id: b137c86a-4875-4e44-bedd-8847110ee41a
   title: 'Domovyk: Multilingual Transliteration for Cyrillic Text'

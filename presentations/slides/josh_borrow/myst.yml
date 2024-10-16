@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942339
   doi: 10.25080/ttdf6694
   id: 85de0ff4-ec48-4b11-b830-f176f0d43eba
   title: Making Research Data Flow with Python

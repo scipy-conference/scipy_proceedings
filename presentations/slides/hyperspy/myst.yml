@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942327
   doi: 10.25080/gpna7794
   id: c82a4af0-dafb-4dd1-804c-5e0cd8aa925f
   title: 'HyperSpy: Your Multidimensional Data Analysis Toolbox'

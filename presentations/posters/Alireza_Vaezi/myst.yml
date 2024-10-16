@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942248
   doi: 10.25080/hfew4757
   id: 6575c943-0901-4861-9f1a-cf3a5e3f806a
   title: Training a Supervised Cilia Segmentation Model from Self-Supervision

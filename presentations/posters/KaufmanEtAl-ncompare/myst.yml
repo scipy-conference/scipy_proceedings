@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942252
   doi: 10.25080/etnj4973
   id: 5a265c77-7eab-4d75-96dd-57176d13420a
   title: 'ncompare: A Python Package for Comparing netCDF Structures'

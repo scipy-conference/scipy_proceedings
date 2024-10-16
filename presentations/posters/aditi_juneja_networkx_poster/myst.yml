@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942266
   doi: 10.25080/ypkc2577
   id: 36ef6073-aa32-42e2-b5c4-ded40d31336a
   title: Parallel Graph Algorithms and Building Backends with Entry Points

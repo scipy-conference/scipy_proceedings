@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942244
   doi: 10.25080/hcya9443
   id: b0a9bfa5-f253-4dd7-96d0-c7c89a5c3b61
   title: For the python evangelist

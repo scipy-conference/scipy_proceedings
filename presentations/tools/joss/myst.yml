@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942395
   doi: 10.25080/pcna4769
   id: a98a8f5a-15fd-4af1-a906-0338bd920a23
   title: SciPy Tools Plenary on the Journal of Open Source Software (JOSS)

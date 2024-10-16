@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942222
   doi: 10.25080/yhec5334
   id: fc57f03b-55fb-47d7-84e2-05b694a1958e
   title: 'Explainable AI for Climate Science: Opening the Black Box to Reveal Planet Earth'

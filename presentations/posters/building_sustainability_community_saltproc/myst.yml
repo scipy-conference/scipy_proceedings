@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942274
   doi: 10.25080/ercj5799
   id: 3576a729-4b32-4831-9fe8-51f70fe51949
   title: 'Building sustainability and community in a small project: lessons from working on SaltProc'

@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942374
   doi: 10.25080/xjvg7399
   id: c9c4fdd6-83da-4690-8096-7f9fab032420
   title: 'scikit-build-core: A modern build-backend for CPython C/C++/Fortran/Cython extensions'

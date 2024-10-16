@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942329
   doi: 10.25080/fdck7886
   id: 1d96a6cd-bfd8-4b1c-bbec-9ecf2919a397
   title: Ibis and interfaces

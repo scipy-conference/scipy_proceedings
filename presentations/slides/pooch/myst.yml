@@ -1,6 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
+  zenodo: https://zenodo.org/deposit/13942372
   doi: 10.25080/frkj7844
   id: bec6bb22-c2b6-4d8e-a257-afa01814f1f3
   title: 'Pooch: A friend to fetch your data files'
