@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942272
+  doi: 10.25080/mtdn2862
+  id: 31c5b40f-7d37-4b3f-8633-5f250518cdf3
+  title: 'Building Quantum Bridges: Advancing Drug Discovery with QAOA and Explaining Quantum Computing with Building Blocks'
+  authors:
+    - name: B. Maurice Benson
+      affiliation: Polaris Quantum Biotech
+      orcid: 0009-0009-4913-2577
+  abstract: Using quantum computers to solve combinatorial optimization problems
+  downloads:
+    - title: Poster
+      file: scipy_poster_2024.pdf

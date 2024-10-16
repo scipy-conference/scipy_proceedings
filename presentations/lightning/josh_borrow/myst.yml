@@ -1,0 +1,17 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942236
+  doi: 10.25080/uncn2995
+  id: e1544942-b8cd-41b0-ad88-5cd4646f5284
+  title: 'swiftascmaps: A colour map library for swifties'
+  authors:
+    - name: Josh Borrow
+      affiliation: Department of Physics and Astronomy, University of Pennsylvania, 209 South 33rd Street, Philadelphia, PA, USA 19104
+      orcid: 0000-0002-1327-1921
+  abstract: A hopefully comedic talk about the colour map library swiftascmaps.
+  downloads:
+    - title: Presentation
+      file: lightning.pdf
+    - title: Keynote File
+      file: lightning.key

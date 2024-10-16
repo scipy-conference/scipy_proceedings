@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942401
+  doi: 10.25080/dpha2486
+  id: 28c44730-f9ee-482f-97c7-eaa99dacd4fe
+  title: NumPy annual update
+  authors:
+    - name: Inessa Pawson
+      affiliation: OpenTeams
+      orcid: 0000-0001-7294-122X
+  abstract: Comprehensive overview of the latest release and major milestones for the NumPy library and its contributor community
+  downloads:
+    - title: Presentation
+      file: NumPy-ToolsPlenary-SciPy2024-IPawson.pdf

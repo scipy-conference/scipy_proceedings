@@ -508,6 +508,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
    2. Posters presented at the poster session (posters)
    3. 30-minute talk slide decks (slides)
    4. SciPy tools plenary slide decks (tools)
+   5. 45-minute keynote slide decks (keynote)
 5. Choose the appropriate folder, and make a new directory inside it (it needs a unique name)
 6. Copy your slide deck or poster into the directory, and add a file called `info.json` with the following fields needed for uploading to Zenodo (using an empty string for author orcid or
    affiliation if these cannot be provided):

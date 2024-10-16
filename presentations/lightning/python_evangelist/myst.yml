@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942244
+  doi: 10.25080/hcya9443
+  id: b0a9bfa5-f253-4dd7-96d0-c7c89a5c3b61
+  title: For the python evangelist
+  authors:
+    - name: Christine Smit
+      affiliation: National Aeronautics and Space Administration
+      orcid: 0000-0002-3135-1191
+  abstract: Because clearly python needs to make music.
+  downloads:
+    - title: Presentation
+      file: Christine_lightening.pdf

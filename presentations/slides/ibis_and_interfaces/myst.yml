@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942329
+  doi: 10.25080/fdck7886
+  id: 1d96a6cd-bfd8-4b1c-bbec-9ecf2919a397
+  title: Ibis and interfaces
+  authors:
+    - name: Gil Forsyth
+      affiliation: Voltron Data
+      orcid: 0000-0002-4983-1978
+  abstract: 'This talk lays out the current database / data landscape as it relates to the SciPy stack, and explores how Ibis (an open-source, pure Python, dataframe interface library) can help decouple interfaces from engines, to improve both performance and portability. '
+  downloads:
+    - title: Presentation
+      file: SciPy 2024 Ibis and Interfaces for PDF export.pdf

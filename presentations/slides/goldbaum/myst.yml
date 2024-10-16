@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942323
+  doi: 10.25080/wdug2226
+  id: bff40d1a-95c6-4f8a-9cb6-83f581113a6b
+  title: 'My NumPy year: From no CPython C API experience to shipping a new DType in NumPy 2.0'
+  authors:
+    - name: Nathan Goldbaum
+      affiliation: Quansight Labs
+      orcid: 0000-0001-5557-267X
+  abstract: Support for string data in NumPy has long been a sore spot for the community. At the beginning of 2023 I was given the task to solve that problem by writing a new UTF-8 variable-length string DType leveraging the new NumPy DType API. I will offer my personal narrative of how I accomplished that goal over the course of 2023 and offer my experience as a model for others to take on difficult projects in the scientific python ecosystem, offering tips for how to get help when needed and contribute productively to an established open source community.
+  downloads:
+    - title: Presentation
+      file: SciPy2024-goldbaum.pdf

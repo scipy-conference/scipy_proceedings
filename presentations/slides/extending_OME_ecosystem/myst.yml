@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942316
+  doi: 10.25080/wdya6338
+  id: cda7d198-9e9c-499b-af4e-52f168fd778e
+  title: ' Expanding the OME ecosystem for imaging data management'
+  authors:
+    - name: Erick Ratamero
+      affiliation: The Jackson Laboratory
+      orcid: 0000-0002-7545-3675
+  abstract: OMERO is an open-source solution for image data management which can be customized and hosted by individual institutions, based on the widely used OME data model for microscopy data. Multiple OMERO deployments might be used to provide core delivery, facilitate internal research, or serve as a public data repository. The omero-cli-transfer package facilitates data transfer between these OMERO instances and provides new methods for importing datasets. Another open-source package, ezomero, improves the usability of OMERO in a research environment by providing easier access to OMERO's Python interface. Along with existing OMERO plugins built for other analysis and viewing software, this positions OMERO to be a hub for image storage, analysis, and sharing.
+  downloads:
+    - title: Presentation
+      file: Ratamero_Expanding_OME_ecosystem.pdf

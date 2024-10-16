@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942378
+  doi: 10.25080/ejft5676
+  id: 02c2e984-91c6-4641-9adb-f0d5a2104696
+  title: Sparse Arrays in scipy.sparse
+  authors:
+    - name: Dan Schult
+      affiliation: Colgate University.
+      orcid: 0000-0001-9016-0654
+  abstract: The shift from sparse matrices to sparse arrays in SciPy. What's coming, migration and API decisions.
+  downloads:
+    - title: Presentation
+      file: Sparse_Arrays_in_scipy_sparse_Scipy2024.pdf

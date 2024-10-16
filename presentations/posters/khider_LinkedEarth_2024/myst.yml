@@ -1,0 +1,34 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942288
+  doi: 10.25080/jfcn6576
+  id: db14bcab-3940-4021-916d-796d037a9b66
+  title: Facilitating scientific investigations from long-tail data with Python
+  authors:
+    - name: Deborah Khider
+      affiliation: USC Information Sciences Institute
+      orcid: 0000-0001-7501-8430
+    - name: Varun Ratnakar
+      affiliation: USC Information Sciences Institute
+      orcid: 0000-0001-9381-705X
+    - name: Julien Emile-Geay
+      affiliation: University of Southern California
+      orcid: 0000-0001-5920-4751
+    - name: Kim Pevey
+      affiliation: Quansight
+    - name: Marco Gorelli
+      affiliation: Quansight
+    - name: Nicholas McKay
+      affiliation: Northern Arizona University
+      orcid: 0000-0003-3598-5113
+    - name: Alexander James
+      affiliation: University of Southern California
+      orcid: 0000-0001-8561-3188
+    - name: Jordan Landers
+      affiliation: University of Southern California
+      orcid: 0000-0001-9772-7617
+  abstract: This presentation walks through our work on creating a non-nanosecond datetime for Pandas and the development of Python toolboxes to query databases and analyze datasets using Pandas objects for interoperability.
+  downloads:
+    - title: Poster
+      file: Khider_Paleoclimate_SciPy2024.pdf
