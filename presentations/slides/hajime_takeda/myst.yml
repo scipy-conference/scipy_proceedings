@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942325
+  zenodo: https://zenodo.org/records/13942325
   doi: 10.25080/tufy8474
   id: b39a2b81-9d87-4936-a862-562378060e26
   title: Introduction to Causal Inference with Machine Learning

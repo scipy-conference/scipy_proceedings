@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942232
+  zenodo: https://zenodo.org/records/13942232
   doi: 10.25080/pyyu4582
   id: 5c188d79-98e7-47de-93a4-56004e6fef94
   title: Deploying Python environments on top of Mt. Rainier

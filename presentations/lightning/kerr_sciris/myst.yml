@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942240
+  zenodo: https://zenodo.org/records/13942240
   doi: 10.25080/knjj9332
   id: 4aa53d70-2bac-4267-a3ea-767403e22581
   title: 'Sciris: Simplifying scientific Python'

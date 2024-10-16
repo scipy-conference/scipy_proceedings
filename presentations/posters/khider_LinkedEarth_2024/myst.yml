@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942288
+  zenodo: https://zenodo.org/records/13942288
   doi: 10.25080/jfcn6576
   id: db14bcab-3940-4021-916d-796d037a9b66
   title: Facilitating scientific investigations from long-tail data with Python

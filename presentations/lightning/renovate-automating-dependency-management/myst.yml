@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942246
+  zenodo: https://zenodo.org/records/13942246
   doi: 10.25080/tkky5633
   id: 11d24ef3-1f88-4d19-9bfb-63472ddaff14
   title: 'Renovate: Automating Dependency Management'

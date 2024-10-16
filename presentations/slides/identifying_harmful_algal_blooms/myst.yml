@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942331
+  zenodo: https://zenodo.org/records/13942331
   doi: 10.25080/ghpx3574
   id: 797dd213-6f74-4ad4-92c3-ca8b0d3a0e46
   title: Using Satellite Imagery to Identify Harmful Algal Blooms and Protect Public Health

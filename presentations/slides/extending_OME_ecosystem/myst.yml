@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942316
+  zenodo: https://zenodo.org/records/13942316
   doi: 10.25080/wdya6338
   id: cda7d198-9e9c-499b-af4e-52f168fd778e
   title: ' Expanding the OME ecosystem for imaging data management'

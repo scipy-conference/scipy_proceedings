@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942268
+  zenodo: https://zenodo.org/records/13942268
   doi: 10.25080/yyvd5799
   id: 00f76ab3-23f4-4553-b978-6b81c2e22ead
   title: 'Aeromancy: Towards More Reproducible AI and Machine Learning'

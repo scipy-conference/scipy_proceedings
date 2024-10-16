@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942337
+  zenodo: https://zenodo.org/records/13942337
   doi: 10.25080/pghc3745
   id: 06a63a3d-6c4f-48bf-a372-cfe3bd7a5baa
   title: 'ITK-Wasm: Universal spatial analysis and visualization'

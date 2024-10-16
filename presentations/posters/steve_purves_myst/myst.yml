@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942300
+  zenodo: https://zenodo.org/records/13942300
   doi: 10.25080/yrmn7235
   id: 55d2851b-d3a6-45f0-b2eb-b0bab8b1c10d
   title: Scientific Publishing with MyST Markdown

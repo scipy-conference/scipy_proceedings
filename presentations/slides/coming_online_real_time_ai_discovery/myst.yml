@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942314
+  zenodo: https://zenodo.org/records/13942314
   doi: 10.25080/juet4542
   id: 938979e3-44d3-4ddf-bbc1-fd4736be2e08
   title: 'Coming Online: Enabling Real-Time and AI-Ready Scientific Discovery'

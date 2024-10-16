@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942304
+  zenodo: https://zenodo.org/records/13942304
   doi: 10.25080/fyvp8946
   id: 2e47277d-3761-4332-b232-617cb1d069d8
   title: Seamless integration across developer ecosystems with python and wasm in VTK

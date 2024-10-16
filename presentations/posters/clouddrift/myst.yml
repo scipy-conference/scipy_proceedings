@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942278
+  zenodo: https://zenodo.org/records/13942278
   doi: 10.25080/ftyc2662
   id: d1c3ca31-4bd1-4404-b2fc-3afb378d77c4
   title: Accelerating the use of Lagrangian data with Clouddrift

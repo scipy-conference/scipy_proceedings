@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942284
+  zenodo: https://zenodo.org/records/13942284
   doi: 10.25080/fpju4745
   id: 314a37bd-24fd-4a2a-830a-a5ce969cfeac
   title: Convolutional Autoencoders for Denoising Solar Images

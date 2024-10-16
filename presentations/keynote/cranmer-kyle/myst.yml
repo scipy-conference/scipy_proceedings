@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942226
+  zenodo: https://zenodo.org/records/13942226
   doi: 10.25080/rkcg9834
   id: 9e80aadb-92e3-466b-a165-38e84ac415df
   title: Particles, People, and Pull Requests

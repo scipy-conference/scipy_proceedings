@@ -1,10 +1,10 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942276
+  zenodo: https://zenodo.org/records/13942276
   doi: 10.25080/rrdv2565
   id: 4bc4f18f-f3d4-45de-b6eb-f689a46c4cb4
-  title: 'Open Source Farm to Open Science Table: Project Pythia''s Cook-off Hackathons'
+  title: "Open Source Farm to Open Science Table: Project Pythia's Cook-off Hackathons"
   authors:
     - name: M. Drew Camron
       affiliation: UCAR / NSF Unidata

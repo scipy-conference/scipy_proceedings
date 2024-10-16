@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942260
+  zenodo: https://zenodo.org/records/13942260
   doi: 10.25080/yfnx8796
   id: c9644ff2-a1c2-4b26-a395-bdaaefae8f13
   title: 'RoughPy: Streaming data is rarely smooth'

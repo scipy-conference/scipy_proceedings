@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942308
+  zenodo: https://zenodo.org/records/13942308
   doi: 10.25080/jyef9727
   id: f929195e-5856-4f7e-b778-060138bcc414
   title: No-Code-Change GPU Acceleration for Your Pandas and NetworkX Workflows

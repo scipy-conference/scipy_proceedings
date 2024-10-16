@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942242
+  zenodo: https://zenodo.org/records/13942242
   doi: 10.25080/wrvp6756
   id: 0701ae97-90ba-43bd-b9c2-8060940b836b
   title: Plotting Slides in Matplotlib

@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942403
+  zenodo: https://zenodo.org/records/13942403
   doi: 10.25080/mtvj6294
   id: e4fb4558-4544-4b55-8d25-57bc7d421bd0
   title: 'SciPy: not just a conference'

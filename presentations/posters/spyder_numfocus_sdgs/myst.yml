@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942298
+  zenodo: https://zenodo.org/records/13942298
   doi: 10.25080/gdhp7664
   id: f340fb66-d8f2-4a09-b57c-afe11a8e16f0
   title: 'Spyder and the NumFOCUS SDG program: better UI/UX, improved code completion and lessons learned'

@@ -1,7 +1,7 @@
 version: 1
 extends: ../../proceedings.yml
 project:
-  zenodo: https://zenodo.org/deposit/13942256
+  zenodo: https://zenodo.org/records/13942256
   doi: 10.25080/kgpe7737
   id: 8ec54f51-ce5a-4e8e-992f-0f27d2ba6506
   title: 'Development and Application of CWGID: the California Wildfire GeoImaging Dataset for Deep Learning Driven Forest Wildfire Detection'
