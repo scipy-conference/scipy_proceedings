@@ -1,7 +1,7 @@
 version: 1
 extends: ../proceedings.yml
 project:
-  doi: 10.62329/JHPV7385
+  doi: 10.25080/JHPV7385
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-aleksandar_makelov
   title: 'Mandala: Compositional Memoization for Simple & Powerful Scientific Data Management'
