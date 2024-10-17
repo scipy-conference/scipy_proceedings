@@ -1,9 +1,11 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.62329/FVWM4182
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-eli_knaap
   # Ensure your title is the same as in your `main.md`
-  title: "geosnap: The Geospatial Neighborhood Analysis Package"
+  title: 'geosnap: The Geospatial Neighborhood Analysis Package'
   subtitle: Open Tools for Urban, Regional, and Neighborhood Science
   authors:
     - name: Elijah Knaap
@@ -43,11 +45,5 @@ project:
         - tufte1983visual
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

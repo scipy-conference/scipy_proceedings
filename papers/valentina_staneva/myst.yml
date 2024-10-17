@@ -1,9 +1,11 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.62329/JXDK4427
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-valentina_staneva
   # Ensure your title is the same as in your `main.md`
-  title: "Echodataflow: Recipe-based Fisheries Acoustics Workflow Orchestration"
+  title: 'Echodataflow: Recipe-based Fisheries Acoustics Workflow Orchestration'
 
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
@@ -47,8 +49,8 @@ project:
 
   keywords:
     - prefect
-    - workflow orchestration 
-    - dask 
+    - workflow orchestration
+    - dask
     - zarr
     - fisheries acoustics
   # Add the abbreviations that you use in your paper here
@@ -62,7 +64,6 @@ project:
     GUI: Graphics User Interface
     NOAA: National Oceanic and Atmospheric Administration
     NCEI: National Centers for Environmental Information
-
 
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
@@ -96,18 +97,8 @@ project:
         - echoviewr
         - echoview_software_pty_ltd_echoview_nodate
         - echodataflow
-        
-
 
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme
-
-

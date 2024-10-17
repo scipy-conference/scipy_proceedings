@@ -1,11 +1,13 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.62329/RVRR7774
   id: scipy-2024-theia
-  title: "THEIA: An Offline Tool for Tradespace Visualization"
+  title: 'THEIA: An Offline Tool for Tradespace Visualization'
   authors:
     - name: Samuel Williams
       email: Samuel.C.Williams@usace.army.mil
-      affiliations: 
+      affiliations:
         - U.S. Army Engineer Research & Development Center
         - U.S. Army Corps of Engineers
     - name: Scott Christensen
@@ -36,16 +38,10 @@ project:
   error_rules:
     - rule: doi-exists
       severity: ignore
-      keys: 
+      keys:
         - plotly
-    
-  banner: banner.png
 
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
+  banner: banner.png
 
 site:
   template: article-theme

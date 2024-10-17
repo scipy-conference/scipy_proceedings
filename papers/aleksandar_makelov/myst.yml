@@ -1,8 +1,10 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.62329/JHPV7385
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-aleksandar_makelov
-  title: "Mandala: Compositional Memoization for Simple & Powerful Scientific Data Management"
+  title: 'Mandala: Compositional Memoization for Simple & Powerful Scientific Data Management'
   subtitle: LaTeX edition
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
@@ -34,12 +36,6 @@ project:
         - lozano2017unison
   # A banner will be generated for you on publication, this is a placeholder
   banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
   numbering:
     headings: true
 site:
