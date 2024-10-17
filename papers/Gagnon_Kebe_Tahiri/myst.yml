@@ -6,6 +6,7 @@ project:
   id: scipy-2024-gagnon_kebe_tahiri
   title: Ecological and Geographic Influences on Cumacea Genetics in the Northern North Atlantic
   subtitle: by aPhyloGeo software
+  description: Cumacea are vital indicators of benthic health in marine ecosystems. This study investigated the influence of environmental (i.e., biological or ecosystemic), climatic (i.e., meteorological or atmospheric), and geographic (i.e., spatial or regional) attributes on their genetic variability in the Northern North Atlantic, focusing on Icelandic waters.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Justin Gagnon
@@ -29,13 +30,14 @@ project:
     - Phylogeography
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    DD: decimal degrees
+    PCR: Polymerase Chain Reaction
+    rRNA: Ribosomal ribonucleic acid
+    GIN: Greenland, Iceland, and Norwegian
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
