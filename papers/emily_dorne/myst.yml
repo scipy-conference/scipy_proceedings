@@ -5,6 +5,7 @@ project:
   id: scipy-2024-emily_dorne
   title: Cyanobacteria detection in small, inland water bodies with CyFi
   subtitle: Using satellite imagery and machine learning to protect public health
+  description: Harmful algal blooms pose major health risks to human and aquatic life. CyFi is an open-source Python package that enables detection of cyanobacteria in inland water bodies using 10-30m Sentinel-2 imagery and a computationally efficient tree-based machine learning model.
   authors:
     - name: Emily Dorne
       email: emily@drivendata.org
@@ -73,6 +74,5 @@ project:
         - dbscan
         - decimal_degrees
         - chlorophyll
-  banner: banner.png
 site:
   template: article-theme
