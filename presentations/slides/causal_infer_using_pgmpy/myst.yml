@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942312
+  doi: 10.25080/kvta3223
+  id: 4a97335e-f176-4c77-a4e9-cf1803ec53c9
+  title: Introduction to Causal Inference Using pgmpy
+  authors:
+    - name: Ankur Ankan
+      affiliation: Radboud University
+      orcid: 0000-0001-5591-9784
+  abstract: 'In the domain of data science, a significant number of questions are aimed at understanding and quantifying the effects of interventions, such as assessing the efficacy of a vaccine or the impact of price adjustments on the sales volume of a product. Traditional association based methods machine learning methods, predominantly utilized for predictive analytics, prove inadequate for answering these causal questions from observational data, necessitating the use of causal inference methodologies. This talk aims to introduce the audience to the Directed Acyclic Graph (DAG) framework for causal inference. The presentation has two main objectives: firstly, to provide an insight into the types of questions where causal inference methods can be applied; and secondly, to demonstrate a walkthrough of causal analysis on a real dataset, highlighting the various steps of causal analysis and showcasing the use of the pgmpy package.'
+  downloads:
+    - title: Presentation
+      file: slides.pdf

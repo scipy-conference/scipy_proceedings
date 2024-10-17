@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942222
+  doi: 10.25080/yhec5334
+  id: fc57f03b-55fb-47d7-84e2-05b694a1958e
+  title: 'Explainable AI for Climate Science: Opening the Black Box to Reveal Planet Earth'
+  authors:
+    - name: Elizabeth A. Barnes
+      affiliation: Colorado State University
+      orcid: 0000-0003-4284-9320
+  abstract: 'Earth’s climate is chaotic and noisy. Finding usable signals amidst all of the noise can be challenging: be it predicting if it will rain, knowing which direction a hurricane will go, understanding the implications of melting Arctic ice, or detecting the impacts of humans on the earth’s surface. Here, I will demonstrate how explainable artificial intelligence (XAI) techniques can sift through vast amounts of climate data and push the bounds of scientific discovery: allowing scientists to ask "why?" but now with the power of machine learning.'
+  downloads:
+    - title: Presentation
+      file: BARNES_SciPy_July_11_2024.pdf

@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942395
+  doi: 10.25080/pcna4769
+  id: a98a8f5a-15fd-4af1-a906-0338bd920a23
+  title: SciPy Tools Plenary on the Journal of Open Source Software (JOSS)
+  authors:
+    - name: Matthew Feickert
+      affiliation: University of Wisconsin-Madison
+      orcid: 0000-0003-4124-7862
+  abstract: Updates from the Journal of Open Source Software (JOSS) on new work and improvements to the journal in 2023 and 2024.
+  downloads:
+    - title: Presentation
+      file: scipy-2024-tool-plenary_joss_2024-07-10.pdf

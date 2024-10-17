@@ -1,0 +1,22 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942310
+  doi: 10.25080/afjf2467
+  id: 78a7ba3c-75ac-4054-a9ff-11f3ce344206
+  title: Python for early-stage design of sustainable aviation fuels
+  authors:
+    - name: A.M. Martz
+      affiliation: Oregon State University
+      orcid: 0000-0003-4707-1415
+    - name: A.E. Comesana
+      affiliation: Lawrence Berkeley National Laboratory
+    - name: V.H. Rapp
+      affiliation: Lawrence Berkeley National Laboratory
+    - name: K.E. Niemeyer
+      affiliation: Oregon State University
+      orcid: 0000-0003-4425-7097
+  abstract: We develop a multi-objective, multi-parameter optimization methodology applied to designing novel sustainable aviation fuels
+  downloads:
+    - title: Presentation
+      file: AMartz_scipy24_slides.pdf

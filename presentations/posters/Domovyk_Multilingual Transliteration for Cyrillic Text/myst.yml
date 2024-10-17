@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942250
+  doi: 10.25080/udkt5322
+  id: b137c86a-4875-4e44-bedd-8847110ee41a
+  title: 'Domovyk: Multilingual Transliteration for Cyrillic Text'
+  authors:
+    - name: Ian Goodale
+      affiliation: UT-Austin
+      orcid: 0000-0002-6685-2949
+  abstract: The Domovyk package provides transliteration to and from Cyrillic alphabets in a way that addresses some limitations in existing packages, providing multilingual functionality, support for composite Unicode characters, and support for languages not addressed in other packages, such as Church Slavonic and Carpatho-Rusyn. Domovyk aims to increase the accessibility of transliteration technologies for users working in these languages, focusing on use cases that require thorough and accurate transliteration.
+  downloads:
+    - title: Poster
+      file: Goodale_Domovyk_Poster.pdf

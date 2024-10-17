@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942260
+  doi: 10.25080/yfnx8796
+  id: c9644ff2-a1c2-4b26-a395-bdaaefae8f13
+  title: 'RoughPy: Streaming data is rarely smooth'
+  authors:
+    - name: Sam Morley
+      affiliation: University of Oxford
+      orcid: 0000-0001-5971-7418
+  abstract: RoughPy is a library that aims to connect data science with the mathematics of rough paths to provide a new perspective for working with streamed data. The Stream object provided by the library is an abstraction of streamed data so that it can be viewed through the lens of rough path theory. This makes the high order representation of the data (the signature) available as a tool to be used in data science and machine learning applications. This poster outlines the mathematics, the applications and data, and how RoughPy brings both sides together.
+  downloads:
+    - title: Poster
+      file: scipy-2024-roughpy.pdf

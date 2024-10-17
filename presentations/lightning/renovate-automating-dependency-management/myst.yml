@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942246
+  doi: 10.25080/tkky5633
+  id: 11d24ef3-1f88-4d19-9bfb-63472ddaff14
+  title: 'Renovate: Automating Dependency Management'
+  authors:
+    - name: Patrick J. Roddy
+      affiliation: University College London
+      orcid: 0000-0002-6271-1700
+  abstract: A brief introduction to Renovate, a tool for automating dependency management in software projects. The slides can be accessed at https://paddyroddy.github.io/talks/renovate-automating-dependency-management. Two example parent configurations I maintain are available at https://github.com/paddyroddy/.github/tree/main/renovate and https://github.com/UCL-ARC/.github/tree/main/renovate.
+  downloads:
+    - title: Presentation
+      file: renovate_automating_dependency_management.pdf

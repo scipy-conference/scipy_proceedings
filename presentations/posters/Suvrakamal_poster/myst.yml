@@ -1,0 +1,15 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  zenodo: https://zenodo.org/records/13942262
+  doi: 10.25080/txwe5647
+  id: 450634fe-1473-4032-b0aa-19968a123170
+  title: Mamba Models:A Potential Replacement for Transformers?
+  authors:
+    - name: Suvrakamal Das
+      affiliation: Academy of Technology (Maulana Abul Kalam Azad University of Technology)
+      orcid: 0009-0002-4791-9244
+  abstract: Mamba models leverage State Space Models and the HiPPO framework to efficiently handle long-range dependencies, reducing computational complexity compared to traditional transformers.
+  downloads:
+    - title: Poster
+      file: poster.pdf

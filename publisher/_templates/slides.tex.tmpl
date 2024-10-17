@@ -14,6 +14,23 @@
 
 \begin{document}
 
+% section for keynotes
+{{if keynote}}
+\section*{Keynote Slides}
+\vspace{4mm}
+
+\begin{itemize}
+
+{{for entry in keynote}}
+      \item[] \normalsize\textsc{%
+{{entry['title']}}}, \small{%
+{{", and ".join(i['name'] for i in entry['authors'])}}}{{if entry.get('doi')}}\\
+\href{https://doi.org/{{entry['doi']}}}{doi.org/{{entry['doi']}}}{{endif}}
+{{endfor}}
+
+\end{itemize}
+{{endif}}
+
 % section for accepted talks
 {{if slides}}
 \section*{Accepted Talk Slides}
