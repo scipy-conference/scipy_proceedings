@@ -94,6 +94,7 @@ In summary, Funix has the following cool features for effortless app building in
 3. Leveraging Python's native features to make app building more intuitive, minimizing the need to learn new concepts specific to Funix.
 
 <!-- ## Motivation: scientific apps can be low-interactivity, plain-looking but must be quickly built -->
+
 ## Motivation: the demand to rapidly launch low-interactivity and plain-looking apps at scale
 
 When it comes to GUI app development, there is a trade-off between simplicity and versatility.
@@ -101,6 +102,7 @@ JavaScript/TypeScript-based web frontend frameworks like [React](https://react.d
 However, their versatility is often beyond the reach of most scientists and engineers, except for frontend or full-stack developers, and is usually overkill for most scientific and engineering applications.
 
 As machine learning researchers, we have observed that a significant number of scientific applications share two common features:
+
 1. The underlying logic is a straightforward input-output process -- thus complex interactivity, such as dynamically updating an input widget based on user input in another input widget, is not needed.
 2. The app itself is not the end goal but a means to it -- thus it is not worthy to spend time on building the app.
 
@@ -155,22 +157,21 @@ The default mapping from basic Python types to React components is given in [](#
 :align: center
 :label: table_basic_python_types
 
-| Python type     | As an input (argument) or output (return) | Widget                                                                                                                               |
-|-----------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `str`           | Input           | MUI [TextField](https://mui.com/material-ui/react-text-field/)                                                                                                                            |
-| `bool`          | Input           | MUI [Checkbox](https://mui.com/material-ui/react-checkbox/) or [Switch](https://mui.com/material-ui/react-switch/)                                                                        |
-| `int`           | Input           | MUI [TextField](https://mui.com/material-ui/react-text-field/)                                                                                                                            |
-| `float`         | Input           | MUI [TextField](https://mui.com/material-ui/react-text-field/) or [Slider](https://mui.com/material-ui/react-slider/)                                                                     |
-| `Literal`       | Input           | MUI  [RadioGroup](https://mui.com/material-ui/react-radio-button/) if number of elements is below 8; [Select](https://mui.com/material-ui/react-select/) otherwise                         |
-| `range`         | Input           | MUI  [Slider](https://mui.com/material-ui/react-slider/)                                                                                                                                   |
-| `List[Literal]` | Input           | An array of MUI [Checkboxes](https://mui.com/material-ui/react-checkbox/) if the number of elements is below 8; [AutoComplete](https://mui.com/material-ui/react-autocomplete/) otherwise |
-| `str`           | Output          | Plain text                                                                                                                                                                            |
-| `bool`          | Output          | Plain text                                                                                                                                                                            |
-| `int`           | Output          | Plain text                                                                                                                                                                            |
-| `float`         | Output          | Plain text                                                                                                                                                                            |
+| Python type     | As an input (argument) or output (return) | Widget                                                                                                                                                                                    |
+| --------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `str`           | Input                                     | MUI [TextField](https://mui.com/material-ui/react-text-field/)                                                                                                                            |
+| `bool`          | Input                                     | MUI [Checkbox](https://mui.com/material-ui/react-checkbox/) or [Switch](https://mui.com/material-ui/react-switch/)                                                                        |
+| `int`           | Input                                     | MUI [TextField](https://mui.com/material-ui/react-text-field/)                                                                                                                            |
+| `float`         | Input                                     | MUI [TextField](https://mui.com/material-ui/react-text-field/) or [Slider](https://mui.com/material-ui/react-slider/)                                                                     |
+| `Literal`       | Input                                     | MUI [RadioGroup](https://mui.com/material-ui/react-radio-button/) if number of elements is below 8; [Select](https://mui.com/material-ui/react-select/) otherwise                         |
+| `range`         | Input                                     | MUI [Slider](https://mui.com/material-ui/react-slider/)                                                                                                                                   |
+| `List[Literal]` | Input                                     | An array of MUI [Checkboxes](https://mui.com/material-ui/react-checkbox/) if the number of elements is below 8; [AutoComplete](https://mui.com/material-ui/react-autocomplete/) otherwise |
+| `str`           | Output                                    | Plain text                                                                                                                                                                                |
+| `bool`          | Output                                    | Plain text                                                                                                                                                                                |
+| `int`           | Output                                    | Plain text                                                                                                                                                                                |
+| `float`         | Output                                    | Plain text                                                                                                                                                                                |
+
 :::
-
-
 
 Because Funix is a transcompiler, it leverages multimedia types already defined in popular Python libraries such as `ipywidgets` (Jupyter's input widgets), `IPython` (Jupyter's display system), `pandas`, and `matplotlib`. `ipywidgets` and `IPython` types are mapped to MUI components rather than their respective components for being React compatible. [](#fig_table_and_chart) illustrates a data-plot-from-tabular-data app that maps a `pandas.DataFrame` to a table and a `matplotlib.figure.Figure` to a chart.
 
@@ -179,23 +180,23 @@ Because Funix is a transcompiler, it leverages multimedia types already defined 
 :align: center
 :label: table_mime_types
 
-| Python type                                     | As an input (argument) or output (return)|  Widget                                                             |
-|-------------------------------------------------|-----------------|-----------------------------------------------------------------------------------|
-| `ipywidgets.Password`                           | Input           | MUI [TextField](https://mui.com/material-ui/react-text-field/) with `type="password"` |
-| `ipywidgets.Image`                              | Input           | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components      |
-| `ipywidgets.Video`                              | Input           | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components      |
-| `ipywidgets.Audio`                              | Input           | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components      |
-| `ipywidgets.FileUpload`                         | Input           | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components      |
-| `IPython.display.HTML`                          | Output          | Raw HTML                                                                          |
-| `IPython.display.Markdown`                      | Output          | [React Markdown](https://github.com/remarkjs/react-markdown)                      |
-| `IPython.display.JavaScript`                    | Output          | Raw JavaScript                                                                    |
-| `IPython.display.Image`                         | Output          | MUI [CardMedia](https://mui.com/material-ui/react-card/#media) with `component=img`   |
-| `IPython.display.Video`                         | Output          | MUI  [CardMedia](https://mui.com/material-ui/react-card/#media) with `component=video` |
-| `IPython.display.Audio`                         | Output          | MUI [CardMedia](https://mui.com/material-ui/react-card/#media) with `component=audio` |
-| `matplotlib.figure.Figure`                      | Output          | [mpld3](https://mpld3.github.io/)                                                 |
-| `pandas.DataFrame` & `pandera.typing.DataFrame` | Input & Output  | MUI [DataGrid](https://mui.com/x/react-data-grid/)                                    |
-:::
+| Python type                                     | As an input (argument) or output (return) | Widget                                                                                |
+| ----------------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------- |
+| `ipywidgets.Password`                           | Input                                     | MUI [TextField](https://mui.com/material-ui/react-text-field/) with `type="password"` |
+| `ipywidgets.Image`                              | Input                                     | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components          |
+| `ipywidgets.Video`                              | Input                                     | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components          |
+| `ipywidgets.Audio`                              | Input                                     | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components          |
+| `ipywidgets.FileUpload`                         | Input                                     | [React Dropzone](https://react-dropzone.js.org/) combine with MUI Components          |
+| `IPython.display.HTML`                          | Output                                    | Raw HTML                                                                              |
+| `IPython.display.Markdown`                      | Output                                    | [React Markdown](https://github.com/remarkjs/react-markdown)                          |
+| `IPython.display.JavaScript`                    | Output                                    | Raw JavaScript                                                                        |
+| `IPython.display.Image`                         | Output                                    | MUI [CardMedia](https://mui.com/material-ui/react-card/#media) with `component=img`   |
+| `IPython.display.Video`                         | Output                                    | MUI [CardMedia](https://mui.com/material-ui/react-card/#media) with `component=video` |
+| `IPython.display.Audio`                         | Output                                    | MUI [CardMedia](https://mui.com/material-ui/react-card/#media) with `component=audio` |
+| `matplotlib.figure.Figure`                      | Output                                    | [mpld3](https://mpld3.github.io/)                                                     |
+| `pandas.DataFrame` & `pandera.typing.DataFrame` | Input & Output                            | MUI [DataGrid](https://mui.com/x/react-data-grid/)                                    |
 
+:::
 
 ```{code} python
 :linenos:
@@ -312,7 +313,6 @@ funix.set_default_theme("../../sunset_v2.json") # from local file
 funix.set_default_theme("grandma's secret theme") # from a name/alias
 ```
 
-
 ```{code} python
 :linenos:
 :label: code_theme_apply_function
@@ -363,7 +363,6 @@ funix.import_theme(
 )
 ```
 
-
 ## Building apps Pythonically
 
 Funix leverages the language features of Python and common practices in Python development to make app building in Python more intuitive and efficient.
@@ -371,7 +370,6 @@ Funix leverages the language features of Python and common practices in Python d
 ### Default values as placeholders
 
 Python supports default values for keyword arguments. Funix directly uses them as the placeholder values for corresponding widgets. For example, default values in [](#code_advanced_input_widgets) are prefilled in [](#fig_advanced_input_widgets). A more complex example is the `pandas.DataFrame` initated with `numpy` columns in [](#code_table_and_chart) are prefilled into the table in [](#fig_table_and_chart). In contrast, Funix' peer solutions require developers to provide the placeholder values the second time in the widget initiation.
-
 
 ### Making use of docstrings
 
@@ -522,9 +520,8 @@ def guess_letter(Enter_a_letter: str) -> Markdown:
 ```
 
 A security risk is that there is only one backend server for the Funix app and consequently a `global` variable is accessible by all browser sessions of the app.
-To eliminate this risk, Funix provides a simple command-line flag `-t` at the launch of  the Funix app to sessionize all `global` variables.
+To eliminate this risk, Funix provides a simple command-line flag `-t` at the launch of the Funix app to sessionize all `global` variables.
 If the developer on purpose wants to share the data among different connections, the `-t` flag can be omitted.
-
 
 #### Multi-page apps from classes
 
@@ -585,9 +582,10 @@ This is where the `@funix` decorator comes into play. One example, as mentioned 
 ### Overriding the type-based widget choice
 
 Funix uses types to determine the widgets. However, there may be needs to manually pick a widget. The `@funix` dectorator has a `widgets` parameter for this purpose.
-<!-- The input of the `widgets` parameter is a dictionary where keys are names of function arguments and values are .  -->
-[](#code_sentence_builder) is an example to temporarily override the widget choice for two variables of the types `Literal` and `List[Literal]` respectively. The corresponding app ([](#fig_sentence_builder)) is a sentence builder. The Funix-based code is much shorter and more human-readable than its [Gradio-based counterpart](https://www.gradio.app/playground?demo=Sentence_Builder&code=aW1wb3J0IGdyYWRpbyBhcyBncgoKCmRlZiBzZW50ZW5jZV9idWlsZGVyKHF1YW50aXR5LCBhbmltYWwsIGNvdW50cmllcywgcGxhY2UsIGFjdGl2aXR5X2xpc3QsIG1vcm5pbmcpOgogICAgcmV0dXJuIGYiIiJUaGUge3F1YW50aXR5fSB7YW5pbWFsfXMgZnJvbSB7IiBhbmQgIi5qb2luKGNvdW50cmllcyl9IHdlbnQgdG8gdGhlIHtwbGFjZX0gd2hlcmUgdGhleSB7IiBhbmQgIi5qb2luKGFjdGl2aXR5X2xpc3QpfSB1bnRpbCB0aGUgeyJtb3JuaW5nIiBpZiBtb3JuaW5nIGVsc2UgIm5pZ2h0In0iIiIKCgpkZW1vID0gZ3IuSW50ZXJmYWNlKAogICAgc2VudGVuY2VfYnVpbGRlciwKICAgIFsKICAgICAgICBnci5TbGlkZXIoMiwgMjAsIHZhbHVlPTQsIGxhYmVsPSJDb3VudCIsIGluZm89IkNob29zZSBiZXR3ZWVuIDIgYW5kIDIwIiksCiAgICAgICAgZ3IuRHJvcGRvd24oCiAgICAgICAgICAgIFsiY2F0IiwgImRvZyIsICJiaXJkIl0sIGxhYmVsPSJBbmltYWwiLCBpbmZvPSJXaWxsIGFkZCBtb3JlIGFuaW1hbHMgbGF0ZXIhIgogICAgICAgICksCiAgICAgICAgZ3IuQ2hlY2tib3hHcm91cChbIlVTQSIsICJKYXBhbiIsICJQYWtpc3RhbiJdLCBsYWJlbD0iQ291bnRyaWVzIiwgaW5mbz0iV2hlcmUgYXJlIHRoZXkgZnJvbT8iKSwKICAgICAgICBnci5SYWRpbyhbInBhcmsiLCAiem9vIiwgInJvYWQiXSwgbGFiZWw9IkxvY2F0aW9uIiwgaW5mbz0iV2hlcmUgZGlkIHRoZXkgZ28/IiksCiAgICAgICAgZ3IuRHJvcGRvd24oCiAgICAgICAgICAgIFsicmFuIiwgInN3YW0iLCAiYXRlIiwgInNsZXB0Il0sIHZhbHVlPVsic3dhbSIsICJzbGVwdCJdLCBtdWx0aXNlbGVjdD1UcnVlLCBsYWJlbD0iQWN0aXZpdHkiLCBpbmZvPSJMb3JlbSBpcHN1bSBkb2xvciBzaXQgYW1ldCwgY29uc2VjdGV0dXIgYWRpcGlzY2luZyBlbGl0LiBTZWQgYXVjdG9yLCBuaXNsIGVnZXQgdWx0cmljaWVzIGFsaXF1YW0sIG51bmMgbmlzbCBhbGlxdWV0IG51bmMsIGVnZXQgYWxpcXVhbSBuaXNsIG51bmMgdmVsIG5pc2wuIgogICAgICAgICksCiAgICAgICAgZ3IuQ2hlY2tib3gobGFiZWw9Ik1vcm5pbmciLCBpbmZvPSJEaWQgdGhleSBkbyBpdCBpbiB0aGUgbW9ybmluZz8iKSwKICAgIF0sCiAgICAidGV4dCIsCiAgICBleGFtcGxlcz1bCiAgICAgICAgWzIsICJjYXQiLCBbIkphcGFuIiwgIlBha2lzdGFuIl0sICJwYXJrIiwgWyJhdGUiLCAic3dhbSJdLCBUcnVlXSwKICAgICAgICBbNCwgImRvZyIsIFsiSmFwYW4iXSwgInpvbyIsIFsiYXRlIiwgInN3YW0iXSwgRmFsc2VdLAogICAgICAgIFsxMCwgImJpcmQiLCBbIlVTQSIsICJQYWtpc3RhbiJdLCAicm9hZCIsIFsicmFuIl0sIEZhbHNlXSwKICAgICAgICBbOCwgImNhdCIsIFsiUGFraXN0YW4iXSwgInpvbyIsIFsiYXRlIl0sIFRydWVdLAogICAgXQopCgppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOgogICAgZGVtby5sYXVuY2goKQo=), thanks to leveraging the Python-native features like automatic rendering the `return` strings or default values.
 
+<!-- The input of the `widgets` parameter is a dictionary where keys are names of function arguments and values are .  -->
+
+[](#code_sentence_builder) is an example to temporarily override the widget choice for two variables of the types `Literal` and `List[Literal]` respectively. The corresponding app ([](#fig_sentence_builder)) is a sentence builder. The Funix-based code is much shorter and more human-readable than its [Gradio-based counterpart](https://www.gradio.app/playground?demo=Sentence_Builder&code=aW1wb3J0IGdyYWRpbyBhcyBncgoKCmRlZiBzZW50ZW5jZV9idWlsZGVyKHF1YW50aXR5LCBhbmltYWwsIGNvdW50cmllcywgcGxhY2UsIGFjdGl2aXR5X2xpc3QsIG1vcm5pbmcpOgogICAgcmV0dXJuIGYiIiJUaGUge3F1YW50aXR5fSB7YW5pbWFsfXMgZnJvbSB7IiBhbmQgIi5qb2luKGNvdW50cmllcyl9IHdlbnQgdG8gdGhlIHtwbGFjZX0gd2hlcmUgdGhleSB7IiBhbmQgIi5qb2luKGFjdGl2aXR5X2xpc3QpfSB1bnRpbCB0aGUgeyJtb3JuaW5nIiBpZiBtb3JuaW5nIGVsc2UgIm5pZ2h0In0iIiIKCgpkZW1vID0gZ3IuSW50ZXJmYWNlKAogICAgc2VudGVuY2VfYnVpbGRlciwKICAgIFsKICAgICAgICBnci5TbGlkZXIoMiwgMjAsIHZhbHVlPTQsIGxhYmVsPSJDb3VudCIsIGluZm89IkNob29zZSBiZXR3ZWVuIDIgYW5kIDIwIiksCiAgICAgICAgZ3IuRHJvcGRvd24oCiAgICAgICAgICAgIFsiY2F0IiwgImRvZyIsICJiaXJkIl0sIGxhYmVsPSJBbmltYWwiLCBpbmZvPSJXaWxsIGFkZCBtb3JlIGFuaW1hbHMgbGF0ZXIhIgogICAgICAgICksCiAgICAgICAgZ3IuQ2hlY2tib3hHcm91cChbIlVTQSIsICJKYXBhbiIsICJQYWtpc3RhbiJdLCBsYWJlbD0iQ291bnRyaWVzIiwgaW5mbz0iV2hlcmUgYXJlIHRoZXkgZnJvbT8iKSwKICAgICAgICBnci5SYWRpbyhbInBhcmsiLCAiem9vIiwgInJvYWQiXSwgbGFiZWw9IkxvY2F0aW9uIiwgaW5mbz0iV2hlcmUgZGlkIHRoZXkgZ28/IiksCiAgICAgICAgZ3IuRHJvcGRvd24oCiAgICAgICAgICAgIFsicmFuIiwgInN3YW0iLCAiYXRlIiwgInNsZXB0Il0sIHZhbHVlPVsic3dhbSIsICJzbGVwdCJdLCBtdWx0aXNlbGVjdD1UcnVlLCBsYWJlbD0iQWN0aXZpdHkiLCBpbmZvPSJMb3JlbSBpcHN1bSBkb2xvciBzaXQgYW1ldCwgY29uc2VjdGV0dXIgYWRpcGlzY2luZyBlbGl0LiBTZWQgYXVjdG9yLCBuaXNsIGVnZXQgdWx0cmljaWVzIGFsaXF1YW0sIG51bmMgbmlzbCBhbGlxdWV0IG51bmMsIGVnZXQgYWxpcXVhbSBuaXNsIG51bmMgdmVsIG5pc2wuIgogICAgICAgICksCiAgICAgICAgZ3IuQ2hlY2tib3gobGFiZWw9Ik1vcm5pbmciLCBpbmZvPSJEaWQgdGhleSBkbyBpdCBpbiB0aGUgbW9ybmluZz8iKSwKICAgIF0sCiAgICAidGV4dCIsCiAgICBleGFtcGxlcz1bCiAgICAgICAgWzIsICJjYXQiLCBbIkphcGFuIiwgIlBha2lzdGFuIl0sICJwYXJrIiwgWyJhdGUiLCAic3dhbSJdLCBUcnVlXSwKICAgICAgICBbNCwgImRvZyIsIFsiSmFwYW4iXSwgInpvbyIsIFsiYXRlIiwgInN3YW0iXSwgRmFsc2VdLAogICAgICAgIFsxMCwgImJpcmQiLCBbIlVTQSIsICJQYWtpc3RhbiJdLCAicm9hZCIsIFsicmFuIl0sIEZhbHNlXSwKICAgICAgICBbOCwgImNhdCIsIFsiUGFraXN0YW4iXSwgInpvbyIsIFsiYXRlIl0sIFRydWVdLAogICAgXQopCgppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOgogICAgZGVtby5sYXVuY2goKQo=), thanks to leveraging the Python-native features like automatic rendering the `return` strings or default values.
 
 ```{code} python
 :linenos:
@@ -620,6 +618,7 @@ def sentence_builder(
 
 The sentence builder app in Funix. Source code in [](#code_sentence_builder). Gradio-based version [here](https://www.gradio.app/playground?demo=Sentence_Builder&code=aW1wb3J0IGdyYWRpbyBhcyBncgoKCmRlZiBzZW50ZW5jZV9idWlsZGVyKHF1YW50aXR5LCBhbmltYWwsIGNvdW50cmllcywgcGxhY2UsIGFjdGl2aXR5X2xpc3QsIG1vcm5pbmcpOgogICAgcmV0dXJuIGYiIiJUaGUge3F1YW50aXR5fSB7YW5pbWFsfXMgZnJvbSB7IiBhbmQgIi5qb2luKGNvdW50cmllcyl9IHdlbnQgdG8gdGhlIHtwbGFjZX0gd2hlcmUgdGhleSB7IiBhbmQgIi5qb2luKGFjdGl2aXR5X2xpc3QpfSB1bnRpbCB0aGUgeyJtb3JuaW5nIiBpZiBtb3JuaW5nIGVsc2UgIm5pZ2h0In0iIiIKCgpkZW1vID0gZ3IuSW50ZXJmYWNlKAogICAgc2VudGVuY2VfYnVpbGRlciwKICAgIFsKICAgICAgICBnci5TbGlkZXIoMiwgMjAsIHZhbHVlPTQsIGxhYmVsPSJDb3VudCIsIGluZm89IkNob29zZSBiZXR3ZWVuIDIgYW5kIDIwIiksCiAgICAgICAgZ3IuRHJvcGRvd24oCiAgICAgICAgICAgIFsiY2F0IiwgImRvZyIsICJiaXJkIl0sIGxhYmVsPSJBbmltYWwiLCBpbmZvPSJXaWxsIGFkZCBtb3JlIGFuaW1hbHMgbGF0ZXIhIgogICAgICAgICksCiAgICAgICAgZ3IuQ2hlY2tib3hHcm91cChbIlVTQSIsICJKYXBhbiIsICJQYWtpc3RhbiJdLCBsYWJlbD0iQ291bnRyaWVzIiwgaW5mbz0iV2hlcmUgYXJlIHRoZXkgZnJvbT8iKSwKICAgICAgICBnci5SYWRpbyhbInBhcmsiLCAiem9vIiwgInJvYWQiXSwgbGFiZWw9IkxvY2F0aW9uIiwgaW5mbz0iV2hlcmUgZGlkIHRoZXkgZ28/IiksCiAgICAgICAgZ3IuRHJvcGRvd24oCiAgICAgICAgICAgIFsicmFuIiwgInN3YW0iLCAiYXRlIiwgInNsZXB0Il0sIHZhbHVlPVsic3dhbSIsICJzbGVwdCJdLCBtdWx0aXNlbGVjdD1UcnVlLCBsYWJlbD0iQWN0aXZpdHkiLCBpbmZvPSJMb3JlbSBpcHN1bSBkb2xvciBzaXQgYW1ldCwgY29uc2VjdGV0dXIgYWRpcGlzY2luZyBlbGl0LiBTZWQgYXVjdG9yLCBuaXNsIGVnZXQgdWx0cmljaWVzIGFsaXF1YW0sIG51bmMgbmlzbCBhbGlxdWV0IG51bmMsIGVnZXQgYWxpcXVhbSBuaXNsIG51bmMgdmVsIG5pc2wuIgogICAgICAgICksCiAgICAgICAgZ3IuQ2hlY2tib3gobGFiZWw9Ik1vcm5pbmciLCBpbmZvPSJEaWQgdGhleSBkbyBpdCBpbiB0aGUgbW9ybmluZz8iKSwKICAgIF0sCiAgICAidGV4dCIsCiAgICBleGFtcGxlcz1bCiAgICAgICAgWzIsICJjYXQiLCBbIkphcGFuIiwgIlBha2lzdGFuIl0sICJwYXJrIiwgWyJhdGUiLCAic3dhbSJdLCBUcnVlXSwKICAgICAgICBbNCwgImRvZyIsIFsiSmFwYW4iXSwgInpvbyIsIFsiYXRlIiwgInN3YW0iXSwgRmFsc2VdLAogICAgICAgIFsxMCwgImJpcmQiLCBbIlVTQSIsICJQYWtpc3RhbiJdLCAicm9hZCIsIFsicmFuIl0sIEZhbHNlXSwKICAgICAgICBbOCwgImNhdCIsIFsiUGFraXN0YW4iXSwgInpvbyIsIFsiYXRlIl0sIFRydWVdLAogICAgXQopCgppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOgogICAgZGVtby5sYXVuY2goKQo=).
 ```
+
 ### Automatic re-run triggered by input changes
 
 As mentioned earlier, Funix is suitable for straightforward input-output processes. Such a process is triggered once when the "Run" button is clicked. This may work for many cases but in many other cases, we may want the output to be updated following the changes in the input end automatically.
@@ -652,6 +651,7 @@ A sine wave generator with the `autorun` parameter toggled on. Source code in []
 ```
 
 ### Conditional visibility
+
 Although interactivity is not a strong suit of Funix for reasons aforementioned, Funix still supports some common interactivity features. One of them is "conditional visibility" which reveal some widgets only when certain conditions are met ([](#code_conditional_visible) and [](#fig_conditional_visible)).
 
 ```{code} python
@@ -700,7 +700,7 @@ When an app is exposed, a common concern is how to avoid abuses. Rate limiting i
 
 ### Reactive apps
 
-Funix can dynamically prefill widgets based on information from other widgets. We call this "reactive."  An example is given in [](#code_reactive). The `tax` argument of the function is populated automatically based on the values of `salary` and `income_tax_rate` as the user enters.
+Funix can dynamically prefill widgets based on information from other widgets. We call this "reactive." An example is given in [](#code_reactive). The `tax` argument of the function is populated automatically based on the values of `salary` and `income_tax_rate` as the user enters.
 
 <!-- To use the reactive feature, the function that computes the reactive value must be defined  -->
 
@@ -760,10 +760,10 @@ The source code can be found [here](https://github.com/TexteaInc/funix/blob/deve
 
 The Wordle game implemented in Funix. Source code [here](https://github.com/TexteaInc/funix/blob/develop/examples/games/wordle.py).
 ```
+
 ### ChatGPT multi-turn
 
 Funix does not have a chat widget, because it is so easy (less than 10 lines in [](#code_joke)) to build one using simple alignment controls in HTML. The only thing Funix-specific in the code is using the `@funix` decorator to change the arrangement of the input and output panels from the default left-right to top-down for a more natural chat experience.
-
 
 ```{code} python
 :linenos:
@@ -801,7 +801,6 @@ def ChatGPT_multi_turn(current_message: str)  -> IPython.display.HTML:
 
     return __print_messages_html(messages)
 ```
-
 
 ```{figure} figures/joke.gif
 :label: fig_joke
@@ -858,7 +857,6 @@ return response.choices[0].message.content
 Funix maps a `ipywidgets.{Image, Audio, Video, File}`-type arguments to a drag-and-drop file uploader with push-to-capture ability from the microphone or webcam of the computer. The corresponding source code is in [](#code_multimedia).
 ```
 
-
 ### Vector stripping in bioinformatics
 
 A vector is a nucleotide sequence that is appended to a nucleotide sequence of interest for easy handling or quality control.
@@ -899,13 +897,13 @@ def remove_3_prime_adapter(
 
 ```
 
-```{figure} figures/figures/vector_stripping.png
+```{figure} figures/vector_stripping.png
 :label: fig_vector_stripping
 ```
 
 ## Conclusion
 
-In this paper, we introduce the philosophy and features of Funix. Funix is motivated by the observations in scientific computing that many apps are straightforward  input-output processes and the apps are meant to be disposable at a large volume. Therefore, Funix' goal is to enable developers, who are experts in their scientific domains but not in frontend development, to build apps by continue doing what they are doing, without code modification or learning anything new.
+In this paper, we introduce the philosophy and features of Funix. Funix is motivated by the observations in scientific computing that many apps are straightforward input-output processes and the apps are meant to be disposable at a large volume. Therefore, Funix' goal is to enable developers, who are experts in their scientific domains but not in frontend development, to build apps by continue doing what they are doing, without code modification or learning anything new.
 To get this goal, Funix leverages the language features of the Python language, including docstrings and keywords, to automatically generate the GUIs for apps and control the behaviors of the app.
 Funix tries to minimize reinventing the wheel by being a transcompiler between the Python word and the React world.
 Not only does it expose developers to the limitless resources in the frontend world, but it also minimizes the learning curve.
