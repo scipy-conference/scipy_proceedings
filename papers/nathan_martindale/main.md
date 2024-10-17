@@ -1,19 +1,17 @@
 ---
 title: Supporting Greater Interactivity in the IPython Visualization Ecosystem
 abstract: |
-
-    Interactive visualizations are invaluable tools for building intuition and
-    supporting rapid exploration of datasets and models. Numerous libraries in
-    Python support interactivity, and workflows that combine Jupyter and
-    IPyWidgets in particular make it straightforward to build data analysis
-    tools on the fly. However, the field is missing the ability to arbitrarily
-    overlay widgets and plots on top of others to support more flexible
-    details-on-demand techniques. This work discusses some limitations of the
-    base IPyWidgets library, explains the benefits of IPyVuetify and how it
-    addresses these limitations, and finally presents a new open-source solution
-    that builds on IPyVuetify to provide easily integrated widget overlays in
-    Jupyter.
-
+  Interactive visualizations are invaluable tools for building intuition and
+  supporting rapid exploration of datasets and models. Numerous libraries in
+  Python support interactivity, and workflows that combine Jupyter and
+  IPyWidgets in particular make it straightforward to build data analysis
+  tools on the fly. However, the field is missing the ability to arbitrarily
+  overlay widgets and plots on top of others to support more flexible
+  details-on-demand techniques. This work discusses some limitations of the
+  base IPyWidgets library, explains the benefits of IPyVuetify and how it
+  addresses these limitations, and finally presents a new open-source solution
+  that builds on IPyVuetify to provide easily integrated widget overlays in
+  Jupyter.
 ---
 
 ## Introduction
@@ -53,7 +51,7 @@ building only with the base IPyWidgets framework. We then briefly cover some of
 the available libraries that build on top of IPyWidgets, highlighting
 IPyVuetify, which addresses most of the limitations of base IPyWidgets. Finally,
 we discuss a library we have open sourced called IPyOverlay and an example
-use case that motivated its design. 
+use case that motivated its design.
 
 ### Details on Demand
 
@@ -71,7 +69,6 @@ the form of a pop-up window or inset graph. This selective detail capability
 provides a flexible user experience that keeps the initial interface uncluttered
 without sacrificing the ability to organically explore the data.
 
-
 A simple and widespread example of details on demand are tooltips. Descriptions
 of components or data point values in visualizations would often create an
 unusably noisy interface if they were always visible. Instead, a more concise
@@ -83,21 +80,18 @@ live by hovering over any of the figure references.
 opens a window at the cursor that displays the target of the reference (the
 details).
 
-
-:::{figure} detailsondemand.png 
-:label: fig:detailsondemand 
+:::{figure} detailsondemand.png
+:label: fig:detailsondemand
 A figure demonstrating details on demand in action when a user hovers over the figure
-reference for @fig:detailsondemand. 
+reference for @fig:detailsondemand.
 :::
-
-
 
 ## IPyWidgets
 
 IPyWidgets is a library for implementing user interactivity inside of a
 Jupyter Notebook. A key challenge this framework has to overcome is
 the separation between the Python kernel and the browser-based Jupyter frontend,
-which  operates through HTML, CSS, and JavaScript as a web application. Web
+which operates through HTML, CSS, and JavaScript as a web application. Web
 application development is often a challenging software engineering problem in
 its own right, and many Python developers and scientists may not have either the
 experience or the desire to write custom frontend code in JavaScript. IPyWidgets
@@ -116,7 +110,6 @@ parameters with `ipywidgets.interactive()`, which automatically
 constructs an appropriate input widget for each parameter. In this case, the
 developer need not manually initialize any Python widgets, as seen in the below
 code sample @code:interactive and @fig:ipywidgets_example.
-
 
 ```{code-block} python
 :label: code:interactive
@@ -167,7 +160,7 @@ graph1_out = ipw.Output()
 graph2_out = ipw.Output()
 
 graph1_param = ipw.FloatSlider(min=0, max=10, value=1)  # a parameter only influencing graph 1
-graph2_param = ipw.IntSlider(min=0, max=10, value=1)  # a parameter only influencing graph 2 
+graph2_param = ipw.IntSlider(min=0, max=10, value=1)  # a parameter only influencing graph 2
 both_graphs_param = ipw.IntText(value=1)  # a parameter that affects both graphs
 
 # create the dashboard layout, combining all the widgets
@@ -200,7 +193,6 @@ both_graphs_param.observe(on_both_graphs_param_change, names=["value"])
 dashboard
 ```
 
-
 ### State Synchronization
 
 One of the primary challenges that IPyWidgets helps solve is the problem of
@@ -208,13 +200,12 @@ state synchronization, where updates to variables made on either side of the
 Python-JavaScript link are monitored and communicated across when they occur.
 Based on this communication, changes to variables in Python are reflected in the
 browser's JavaScript and vice versa. Under the hood, IPyWidgets makes use of
-backbone.js [@LowLevelWidget], a model-view-* (MV*) framework for JavaScript
+backbone.js [@LowLevelWidget], a model-view-_ (MV_) framework for JavaScript
 that implements synchronization between a JavaScript _model_ (where
 data/attributes/values for a widget are stored) and a JavaScript _view_ (the
 code that creates the visual UI elements the user sees and interacts with in
 their browser). IPyWidgets connects to this backbone model via WebSockets,
 through which model changes and events are sent as serialized JSON.
-
 
 :::{figure} ipywidgets_state.png
 :label: fig:ipywidgets_state
@@ -234,7 +225,6 @@ slider within the track) updates the JavaScript state, which communicates this
 change to the Python model and calls any event handlers listening for
 changes to the value.
 
-
 ### Common Framework
 
 One of the most important benefits of IPyWidgets is that it provides a low-level
@@ -246,7 +236,6 @@ synchronization problem discussed previously. All of this has allowed many libra
 to emerge, providing novel functionality, a great diversity of new types of
 widgets, and other frameworks that can support rendering IPyWidgets within other
 contexts.
-
 
 ### Limitations
 
@@ -261,11 +250,11 @@ IPyOverlay implementation.
 
 The set of default components included in the IPyWidgets library cover all
 standard form elements such as buttons, drop-down menus, and text fields, as well as a
-generic `Output` widget.  The `Output` widget can render any of the MIME-types
+generic `Output` widget. The `Output` widget can render any of the MIME-types
 supported by normal Jupyter cell outputs, including Markdown, images,
 plots, and even raw HTML. Additionally, there are basic layout components to
 stack other widgets vertically, horizontally, or via tabs, all of which can be
-nested to allow grouping widgets. 
+nested to allow grouping widgets.
 Although these components are often more than sufficient for simple visualizations,
 more complex interfaces with richer interaction paradigms can be hard to achieve.
 Some examples of dashboard elements that cannot be created
@@ -292,21 +281,18 @@ in a dataframe, or running an analysis when a user has highlighted a piece of
 text from a document. These types of user actions are not feasible
 with the default widgets.
 
-
 #### Custom Styling and Layout
 
 Web pages and dashboards that need more complicated layouts than conventional
 linear stacks and grids of elements generally need to use CSS to control positioning. More
 than just a mechanism for changing aesthetic and colors, CSS provides rules
-for structuring the interface. However, this often comes at the cost of greater code complexity and 
+for structuring the interface. However, this often comes at the cost of greater code complexity and
 excessive layers of nested elements and rule sets. IPyWidgets components have
 some capability to modify their CSS but are limited to a
 subset of rules available through Python attributes. This makes common
 style changes easier to work with, but the lack of any direct access to arbitrary CSS
 rules limits more complex layouts, namely the ability to float
 one widget on top of another.
-
-
 
 #### Custom IPyWidget Complexity
 
@@ -346,7 +332,7 @@ widgets like pythreejs [@pythreejs] and ipyvolume [@10.5281/zenodo.1286976] for
 [@ipycytoscape] for interactive networks, there are dozens of packages providing
 specific components and bridges to JavaScript visualization libraries. Other
 libraries such as Panel, Solara, and Streamlit provide more holistic
-integrations between IPyWidgets and other visualization techniques, 
+integrations between IPyWidgets and other visualization techniques,
 which can support production-style dashboards for
 use outside of Jupyter alone. Although these libraries address the limited component
 set included with IPyWidgets, another class of Python packages exists in this ecosystem
@@ -361,15 +347,13 @@ extending the Python `anywidget.AnyWidget` class, defining the class attributes
 that are to be synced between the Python and JavaScript models using the
 `traitlets` library [@traitlets], and providing a string of
 JavaScript code that specifies the view rendering logic. Much of the JavaScript
-MV* boilerplate code is abstracted away, and component development can be done without
+MV\* boilerplate code is abstracted away, and component development can be done without
 any JavaScript project infrastructure, specialized cookie cutter, or separate
 environment setup. Fundamentally, this type of approach allows even developing
 widgets directly within a notebook, rather than doing so in a separate project.
 AnyWidget is used in another project called IPyReact [@ipyreact], which brings
 the ReactJS library to support component-based design and allows wrapping
 many existing React components.
-
-
 
 A similar library we focus on in this work that addresses all of the [main
 limitations of IPyWidgets](#limitations) is IPyVuetify [@ipyvuetify], which
@@ -401,16 +385,17 @@ user has pressed enter, rather than restarting the computation on every letter
 the user adds or removes.
 
 All of the default components in IPyWidgets similarly have more flexible
-versions and many additional components in IPyVuetify. @fig:ipw_ipv 
+versions and many additional components in IPyVuetify. @fig:ipw_ipv
 shows a small sample of default IPyWidgets on the left with their corresponding
 IPyVuetify versions on the right. Also pictured at the bottom is the Vuetify
-DataTable, which is an example of a component that is not in the default IPyWidgets. The DataTable allows 
-interactivity to be added to a table supporting filtering, searching, and both client/server 
-side pagination. Other examples of useful UI elements IPyVuetify adds 
+DataTable, which is an example of a component that is not in the default IPyWidgets. The DataTable allows
+interactivity to be added to a table supporting filtering, searching, and both client/server
+side pagination. Other examples of useful UI elements IPyVuetify adds
 are various layout widgets like navigation drawers, dialog windows, and
 steppers.
 
-<!-- would potentially be nice to see a searchbox for table --> 
+<!-- would potentially be nice to see a searchbox for table -->
+
 :::{figure} ipw_ipv.png
 :label: fig:ipw_ipv
 A visual comparison of a few IPyWidget components on the upper left and their corresponding
@@ -418,14 +403,13 @@ IPyVuetify components on the upper right. The table on the bottom is a
 DataTable component, an example of a widget which does not have a default IPyWidgets equivalent.
 :::
 
-Finally, the Python API for every IPyVuetify component includes the ability to set CSS 
+Finally, the Python API for every IPyVuetify component includes the ability to set CSS
 class and style attributes. The former of these provides access to a long list of
 predefined classes for easy and consistent control of colors, spacing, and other
 attributes.
 For anything not covered by these classes or separate attributes already part of the
 Vuetify components, the style attribute controls the raw in-line CSS applied to
 the element.
-
 
 ### Custom Vue Components
 
@@ -441,13 +425,12 @@ in the JavaScript model as well as the function to update the view from the
 model. We discuss this further in the section on [implementing IPyOverlay in
 IPyWidgets](#implementing-in-ipywidgets). @code:ipyvuetify exemplifies this,
 defining a custom button with a color change on toggle, where the colors can be
-modified from Python as well, shown in @fig:ipyvuetify_example. In this
+modified from Python as well, shown in @fig:ipyvuetify*example. In this
 particular example, both the `@click` event and `:color` property directly bind
 to the Python attributes, and no explicit JavaScript is necessary. Finally,
 IPyVuetify makes it easy to directly call functions across the
-Python--JavaScript link by making any Python functions prefixed with `vue_`
-available within JavaScript and any JavaScript functions
-prefixed with `jupyter_` callable from Python.
+Python--JavaScript link by making any Python functions prefixed with `vue*`available within JavaScript and any JavaScript functions
+prefixed with`jupyter\_` callable from Python.
 
 ```{code-block} python
 :label: code:ipyvuetify
@@ -465,7 +448,7 @@ class ColoredToggleButton(v.VuetifyTemplate):
     def _template(self):
         return """
         <template>
-            <v-btn 
+            <v-btn
                 width="300px"
                 :color="state ? color1 : color2"
                 @click="state = !state"
@@ -485,7 +468,6 @@ button
 An instance of the `ColoredToggleButton` from @code:ipyvuetify. Clicking the button switches to color2, and modifying the Python property `color2` immediately updates the button to the new second color.
 :::
 
-
 ## IPyOverlay
 
 IPyOverlay is a Python library the authors have implemented and
@@ -503,8 +485,6 @@ use case led to the development of IPyOverlay as a library.
 
 [^footnote-1]: https://github.com/ORNL/ipyoverlay
 
-
-
 :::{figure} overlay_figures_over_multiple.png
 :label: fig:example_dashboard
 A dashboard for exploring seismic station data embedded with a self-supervised
@@ -513,7 +493,6 @@ geographic map. Pictured are three draggable overlay ("windowed") Matplotlib
 plots (with colored bars on top) that provide additional details for
 user-selected clusters found within the UMAP.
 :::
-
 
 The application in this use case is a tool to assist in evaluating how a model
 internally represents data from seismic events.
@@ -542,13 +521,12 @@ how well the model generalizes to new sources and to explore uncertainty.
 
 The dashboard includes a UMAP [@10.48550/arXiv.1802.03426] plot of signals embedded by the model under
 exploration. Each datapoint is a single observed seismic signal, and these
-data points are then clustered with DBSCAN [@Ester1996ADA]. Metadata attributes aggregated 
+data points are then clustered with DBSCAN [@Ester1996ADA]. Metadata attributes aggregated
 by cluster can be explored by clicking within the UMAP ipympl plot, which aids
 in determining how much correlation exists for those attributes within that
 cluster. Invariant properties would tend to show as spread out distributions,
 while attributes that heavily inform a models' embedding would tend to cause
 clustering and produce narrow distributions.
-
 
 ### Implementing in IPyWidgets
 
@@ -585,7 +563,6 @@ following section) demonstrating how the positioning works for absolutely
 positioned child widgets.
 :::
 
-
 ### Embedding IPyWidgets in IPyOverlay Containers
 
 A key enabler is IPyVuetify's ability to embed other IPyWidgets inside
@@ -604,8 +581,6 @@ declaratively constructing a bound list of child widgets each wrapped in custom
 HTML that reactively responds to list updates and other model property changes.
 A simplified example is shown in @code:container.
 
-
-
 ```{code-block} html
 :label: code:container
 :linenos: true
@@ -613,11 +588,11 @@ A simplified example is shown in @code:container.
 
 <template>
     <div class="ipyoverlay-container">
-        <!-- iterate and create a div container for every child in the python model 
+        <!-- iterate and create a div container for every child in the python model
         (children is a list of IPyWidgets) -->
-        <div v-for="(child, index) in children" 
+        <div v-for="(child, index) in children"
             class="ipyoverlay-child-container"
-            :style="{ left: childPosLeft[index]+'px', top: childPosTop[index]+'px' }" 
+            :style="{ left: childPosLeft[index]+'px', top: childPosTop[index]+'px' }"
         >
             <!-- embed the IPyWidget -->
             <jupyter-widget :widget='child' />
@@ -654,21 +629,21 @@ container `<div>` tag embedding a background (nonoverlay) widget, which can
 consist of a more traditional grid-like layout of nested rows/columns of other
 IPyWidgets, and absolutely positioned floating `<div>` tags for each
 child widget. To support additional functionalities in any of the child
-overlay widgets, such as the ability to click and drag to move them, we 
-provide a `WidgetWrapper` (clicking anywhere within begins the drag) and a 
+overlay widgets, such as the ability to click and drag to move them, we
+provide a `WidgetWrapper` (clicking anywhere within begins the drag) and a
 `DecoratedWidgetWrapper` (a bar is rendered above the widget which can be
-clicked and dragged to move the entire widget.) An example is shown in 
-@fig:overlays, where the background widget is an ipympl Matplotlib plot and 
+clicked and dragged to move the entire widget.) An example is shown in
+@fig:overlays, where the background widget is an ipympl Matplotlib plot and
 three `DecoratedWidgetWrapper`'s that embed additional ipympl Matplotlib plots
 are floating freely above the background.
+
 <!-- probably need more attachment from this to the codeblock to help explain. -->
 
 :::{figure} overlays.png
 :label: fig:overlays
-Three `DecoratedWidgetWrapper` widgets, each wrapping an ipympl widget with more 
-in-depth plots detailing distributions of attributes within selected clusters. 
+Three `DecoratedWidgetWrapper` widgets, each wrapping an ipympl widget with more
+in-depth plots detailing distributions of attributes within selected clusters.
 :::
-
 
 ### Connection Lines
 
@@ -719,10 +694,10 @@ applications, or tapping and holding on a mobile device, context menus provide a
 localized and easy to access palette of possible commands to run at the
 current location. Complex dashboards can often have many different possible
 actions for the user to take, and simply displaying all of these as buttons may
-overwhelm or clutter the interface. Alternately, the actions may be too component/position specific 
+overwhelm or clutter the interface. Alternately, the actions may be too component/position specific
 to work well as buttons. Context menus fill this role by hiding these commands until
 the user requests them by right-clicking and supporting different menus when
-over different components. 
+over different components.
 Displaying a context menu similarly requires
 rendering some form of widget over another -- IPyOverlay includes a
 `ContextMenuArea` component that can wrap any widget within an
@@ -731,18 +706,17 @@ that specific component. In the example use case, we add a context menu to
 the scatter plot to allow a user to optionally choose between displaying a
 violin plot with the distributions versus the density plots (@fig:context_menu).
 
-
 :::{figure} context_menu.png
 :width: 800px
 :label: fig:context_menu
 An activated context menu providing a selection of commands, which can be
-expanded well beyond the single possible action that can be taken from a left-click. 
+expanded well beyond the single possible action that can be taken from a left-click.
 :::
 
 ### Example Usage
 
 A minimal code example using IPyOverlay's containers and connection lines is
-shown in @code:example_ipyoverlay. The example renders an interactive ipympl 
+shown in @code:example_ipyoverlay. The example renders an interactive ipympl
 scatterplot of random data, and clicking on a point renders a connected overlay
 window with a bar chart of additional data associated with the point. A
 screenshot of this output is shown in @fig:ipyoverlay_example.
@@ -778,12 +752,12 @@ def on_point_click(point_index, event):
     inset_fig, inset_ax = plt.subplots(figsize=(2,2))
     inset_ax.bar(x=[0,1,2], height=category_bar_data)
 
-    # make a floating IPyOverlay window with the plot and connect it 
+    # make a floating IPyOverlay window with the plot and connect it
     # to the selected point's data location
     inset_window = ui.DecoratedWidgetWrapper(ui.display_output(inset_fig), title=str(point_index))
     container.add_child_at_mpl_point(inset_window, ax, data_point[0], data_point[1])
 
-# attach the event handler to add the inset plot when any of the specified 
+# attach the event handler to add the inset plot when any of the specified
 # datapoints are clicked
 handler = ui.mpl.event.on_mpl_point_click(ax, on_point_click, data[:,0], data[:,1], tolerance=.1)
 
@@ -798,8 +772,6 @@ An `ipympl` scatter plot of random data with two inset plots showing the
 additional data associated with each clicked point in a bar chart.
 :::
 
-
-
 ## Conclusion
 
 The prevalence and utility of Jupyter notebooks in data analysis and scientific
@@ -810,12 +782,11 @@ mediate communication between Python and JavaScript. A multitude of libraries
 have built on top of these mechanisms and IPyVuetify in particular offers a
 collection of well designed and flexible components to use in dashboards and a
 straightforward abstraction for building custom components in projects based on
-Vue.js. A missing piece of this ecosystem is the ability to flexibly render 
+Vue.js. A missing piece of this ecosystem is the ability to flexibly render
 localized pop-up windows in support of details on demand. We developed
 IPyOverlay to provide this capability through wrapper components that can
 arbitrarily position widgets on top of other widgets, opening the door to more
 types of visualization and dashboard layouts.
-
 
 ## Acknowledgements
 
