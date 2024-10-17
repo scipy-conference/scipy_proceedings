@@ -6,7 +6,8 @@ project:
   id: scipy-2024-Suvrakamal_Das
   # Ensure your title is the same as in your `main.md`
   title: Mamba Models a possible replacement for Transformers?
-  subtitle: A Memory-Efficient Approach for Scientific Computing (SciPy'24 Paper)
+  subtitle: A Memory-Efficient Approach for Scientific Computing
+  description: The quest for more efficient and faster deep learning models has led to the development of various alternatives to Transformers, one of which is the Mamba model. This paper provides a comprehensive comparison between Mamba models and Transformers, focusing on their architectural differences, performance metrics, and underlying mechanisms.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Suvrakamal Das
@@ -57,7 +58,5 @@ project:
         - mamba_github
         - mamba_s4
         - transformer_py
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.jpg
 site:
   template: article-theme
