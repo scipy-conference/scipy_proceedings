@@ -19,7 +19,18 @@ project:
     - Open Data
     - Citizen Scientists
     - Asteroid Characterization
-
+  abbreviations:
+    ATLAS: Asteroid Terrestrial-impact Last Alert System
+    DART: Double Asteroid Redirection Test
+    ZTF: Zwicky Transient Facility
+    LSST: Legacy Survey of Space and Time
+    ALCDEF: Asteroid Lightcurve Database
+    C-type: carbonaceous
+    S-type: siliceous
+    M-type: metallic
+    PDS: Photometric Data Catalog
+    MPC: Minor Planet Center
+    SNR: Signal-to-Noise Ratio
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -30,7 +41,5 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
