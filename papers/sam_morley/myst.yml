@@ -7,7 +7,7 @@ project:
   title: RoughPy
   subtitle: Streaming data is rarely smooth
   short_title: RoughPy
-
+  description: Rough path theory is a branch of mathematics arising out of stochastic analysis. One of the main tools of rough path analysis is the signature, which captures the evolution of an unparametrised path including the order in which events occur. RoughPy is our new Python package that aims change the way we think about sequential streamed data.
   authors:
     - name: Sam Morley
       email: sam.morley@maths.ox.ac.uk
@@ -28,8 +28,6 @@ project:
         - Conceptualization
         - Supervision
         - Writing - review & editing
-
-  # description:
   keywords:
     - sequential data
     - unparametrised paths
@@ -63,8 +61,5 @@ project:
         - coropa_project
         - Granlund12
         - NEURIPS2021_18a9042b
-
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
