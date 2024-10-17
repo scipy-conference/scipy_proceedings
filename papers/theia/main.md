@@ -1,126 +1,134 @@
 ---
-title: "THEIA: An Offline Tool for Tradespace Visualization"
-exports:
-  - format: pdf
-    template: lapreprint-typst
-    output: exports/my-document.pdf
-abstract:
-  Within the Army Corps of Engineers (USACE), there is a need to evaluate tradespaces. 
-  Tradespace datasets are the result of large parameter sweeps run over numerous 
-  design options and can consist of thousands or even millions of design configurations 
-  and the corresponding performance metrics. Because of the immense size of these 
-  datasets, the ability to effectively visualize the data is essential for proper 
-  evaluation. At the USACE Engineer Research & Development Center (ERDC), an 
-  easy-to-use plotting tool known as the Tradespace Holistic Exploration & 
-  Insight Application (THEIA) has been developed for visualizing this complex 
-  tradespace data related to the acquisitions process. THEIA was developed using 
-  Python libraries including Panel, Param, Holoviews, Bokeh, and Plotly. When 
-  combined, these libraries offer a wide range of widgets and plots that allow 
-  the user to visualize their data in multiple ways. Additionally, users can 
-  easily save plots, export findings, and utilize multiple data files at once. 
-  THEIA is also capable of importing tabular data while presenting options to 
+title: 'THEIA: An Offline Tool for Tradespace Visualization'
+abstract: Within the Army Corps of Engineers (USACE), there is a need to evaluate tradespaces.
+  Tradespace datasets are the result of large parameter sweeps run over numerous
+  design options and can consist of thousands or even millions of design configurations
+  and the corresponding performance metrics. Because of the immense size of these
+  datasets, the ability to effectively visualize the data is essential for proper
+  evaluation. At the USACE Engineer Research & Development Center (ERDC), an
+  easy-to-use plotting tool known as the Tradespace Holistic Exploration &
+  Insight Application (THEIA) has been developed for visualizing this complex
+  tradespace data related to the acquisitions process. THEIA was developed using
+  Python libraries including Panel, Param, Holoviews, Bokeh, and Plotly. When
+  combined, these libraries offer a wide range of widgets and plots that allow
+  the user to visualize their data in multiple ways. Additionally, users can
+  easily save plots, export findings, and utilize multiple data files at once.
+  THEIA is also capable of importing tabular data while presenting options to
   customize visualizations and help the end-user make informed decisions.
 ---
 
-### Background/Motivation 
+### Background/Motivation
 
-Within the United States Army Corps of Engineers (USACE) the evaluation of 
-tradespaces has become an important capability. Tradespaces, in essence, are 
-extensive datasets generated from broad parameter sweeps across a multitude of 
-design options. These datasets can encompass thousands, if not millions of 
-design configurations, each accompanied by its respective performance metrics. 
-This process results in an immense amount of data, which, while rich in information, 
-presents a challenge in terms of analysis and interpretation. Because of the 
-colossal size of these datasets, the ability to visualize them effectively is 
-not just beneficial, but essential for comprehensive evaluation. This visualization 
-is particularly crucial when it come to the acquisitions process, where 
-understanding the implications of each design choice can have far-reaching 
-consequences. To address this need, the USACE Engineer Research & Development 
-Center (ERDC) has developed a user-friendly plotting tool, named the Tradespace 
-Holistic Exploration & Insight Application (THEIA). 
+Within the United States Army Corps of Engineers (USACE) the evaluation of
+tradespaces has become an important capability. Tradespaces, in essence, are
+extensive datasets generated from broad parameter sweeps across a multitude of
+design options. These datasets can encompass thousands, if not millions of
+design configurations, each accompanied by its respective performance metrics.
+This process results in an immense amount of data, which, while rich in information,
+presents a challenge in terms of analysis and interpretation. Because of the
+colossal size of these datasets, the ability to visualize them effectively is
+not just beneficial, but essential for comprehensive evaluation. This visualization
+is particularly crucial when it come to the acquisitions process, where
+understanding the implications of each design choice can have far-reaching
+consequences. To address this need, the USACE Engineer Research & Development
+Center (ERDC) has developed a user-friendly plotting tool, named the Tradespace
+Holistic Exploration & Insight Application (THEIA).
 
 ### What is a tradespace?
 
-In the context of this paper, the term tradespace is a combination of the terms "parameter space" 
-and "tradeoff". A tradespace dataset is a dataset that shows tradeoffs associated with 
+In the context of this paper, the term tradespace is a combination of the terms "parameter space"
+and "tradeoff". A tradespace dataset is a dataset that shows tradeoffs associated with
 certain design choices in a parameter space. Oftentimes, these datasets are generated by high
 performance computing (HPC) jobs called parameter sweeps.
 
 :::{figure} ./assets/tradespace.png
 :label: fig:tradespace
-This is a simple example of a tradespace in the context of car shopping. When 
-shopping for a new vehicle, buyers often compile a list of pros and cons based 
-on certain vehicle types. The dataset the buyer creates is, in essence, a tradespace. 
-For example, a buyer may want to maximize potential range, while minimizing vehicle 
-cost. By analyzing this tradespace, the buyer would be able to see that opting for a 
+This is a simple example of a tradespace in the context of car shopping. When
+shopping for a new vehicle, buyers often compile a list of pros and cons based
+on certain vehicle types. The dataset the buyer creates is, in essence, a tradespace.
+For example, a buyer may want to maximize potential range, while minimizing vehicle
+cost. By analyzing this tradespace, the buyer would be able to see that opting for a
 sedan provides both the best price and the best potential range.
 :::
 
 ### Methods
 
-THEIA’s primary function is to provide a means of visualizing intricate tradespace 
-data, thereby facilitating a more thorough understanding of the various design 
-configurations and their corresponding performance metrics. It's a robust 
+THEIA’s primary function is to provide a means of visualizing intricate tradespace
+data, thereby facilitating a more thorough understanding of the various design
+configurations and their corresponding performance metrics. It's a robust
 tool built upon several Python libraries, including [Panel](https://panel.holoviz.org/), [Bokeh](https://bokeh.org/),
-[Param](https://param.holoviz.org/), [HoloViews](https://holoviews.org/), 
-and [Plotly](https://plotly.com/). The integration 
-of these libraries equips THEIA with a diverse array of widgets and plots, enabling 
-users to visualize their data in various ways simultaneously. Panel, Param, and 
-HoloViews are all a part of the HoloViz suite of Python packages, which allows for 
-excellent synchronization between them. 
+[Param](https://param.holoviz.org/), [HoloViews](https://holoviews.org/),
+and [Plotly](https://plotly.com/). The integration
+of these libraries equips THEIA with a diverse array of widgets and plots, enabling
+users to visualize their data in various ways simultaneously. Panel, Param, and
+HoloViews are all a part of the HoloViz suite of Python packages, which allows for
+excellent synchronization between them.
 
 #### Panel
-Panel [@panel] is an open-source library for easily building tools, dashboards, and complex applications, 
+
+Panel [@panel] is an open-source library for easily building tools, dashboards, and complex applications,
 all within Python. Its role in THEIA is to define the layout of the application, in an easy, extensible way.
-This is done by utilizing Panel's built-in visual components. Components are the building blocks of apps built 
+This is done by utilizing Panel's built-in visual components. Components are the building blocks of apps built
 on Panel. The primary components utilized by THEIA are Widgets, Panes, Layouts, and Templates.
-- Widgets are generally small components like sliders, text fields, or checkboxes. 
+
+- Widgets are generally small components like sliders, text fields, or checkboxes.
 - Panes are data wrappers that enable rendering of that data in multiple ways.
 - Layouts allow for the coupling of various components like widgets or panes so that they can be rendered together using the Bokeh library.
-- Templates are components that allow the rendering of Panel objects in an HTML document. 
+- Templates are components that allow the rendering of Panel objects in an HTML document.
 
 #### Param
-Param [@param] is an open-source library built for handling user-modifiable parameters, arguments, and attributes 
-that control your code. These capabilities are used in THEIA to monitor for user 
-inputs and changes while maintaining a far simpler codebase. This is done by leveraging Parameters 
-in special Parameterized classes, which provide features like type-checking and default values. THEIA leverages these 
+
+Param [@param] is an open-source library built for handling user-modifiable parameters, arguments, and attributes
+that control your code. These capabilities are used in THEIA to monitor for user
+inputs and changes while maintaining a far simpler codebase. This is done by leveraging Parameters
+in special Parameterized classes, which provide features like type-checking and default values. THEIA leverages these
 classes to define acceptable input types and values as well as handle errors without large amounts of boilerplate code.
 
 #### Holoviews
-HoloViews [@holoviews] is an open-source library built for data analysis and visualization with small amounts of code. This library is the 
+
+HoloViews [@holoviews] is an open-source library built for data analysis and visualization with small amounts of code. This library is the
 backend that provides many of the plots in THEIA. HoloViews takes a different approach to plotting than many other popular libraries.
-Instead of focusing purely on visualization, HoloViews plots are defined in a way that supports analysis in addition to visualization. 
+Instead of focusing purely on visualization, HoloViews plots are defined in a way that supports analysis in addition to visualization.
 This is done by coupling raw data with metadata in a way that allows for immediate visualization rendering as data changes. HoloViews
 also leverages some of Bokeh's capabilities when rendering specific plots.
 
 #### Plotly Express
+
 Plotly Express [@plotly] is a high-level interface to Plotly. It's built to produce easily styleable figures with minimal code.
-HoloViews leverages this library within THEIA to render supplementary plots like the parallel plot. Plotly Express is an 
-optimal choice because it often provides highly interractive plots by default. 
+HoloViews leverages this library within THEIA to render supplementary plots like the parallel plot. Plotly Express is an
+optimal choice because it often provides highly interactive plots by default.
 
 ### Results
-Together, these scientific Python libraries allowed the Rapid Application Development team at ERDC to develop a 
-robust visualization tool capable of running in the browser without being reliant 
+
+Together, these scientific Python libraries allowed the Rapid Application Development team at ERDC to develop a
+robust visualization tool capable of running in the browser without being reliant
 on an internet connection. Additionally, using THEIA requires no coding. Users simply upload a CSV file using
 the built-in navigator, and THEIA does the rest. The following screenshots show THEIA's capabilities using the [iris](https://archive.ics.uci.edu/dataset/53/iris) dataset.
+
 :::{figure} ./assets/upload.png
-:lable: fig:upload
+:label: fig:upload
 View of THEIA's file browser.
 :::
-THEIA also allows user to select from various plot types and color themes, which is a vital feature when 
+
+THEIA also allows user to select from various plot types and color themes, which is a vital feature when
 working with tradespace data because it allows the user to choose the theme which best distinguishes the complex data.
+
 :::{figure} ./assets/user_inputs.png
 :label: fig:user_inputs
 View of THEIA's plot type options.
 :::
+
 :::{figure} ./assets/colormap.png
 :label: fig:colormap
-View of THEIA's colormap options. 
+View of THEIA's colormap options.
 :::
-THEIA also allows users to easily save plots for future reference, export findings 
-for further analysis, and utilize multiple data files simultaneously. 
+
+THEIA also allows users to easily save plots for future reference, export findings
+for further analysis, and utilize multiple data files simultaneously.
+
 :::{figure} ./assets/save_and_export.png
 :label: fig:save_and_export
-A view of the 'Download Configuration' and 'Export Plot' options. "Download Configuration" can be used to save a YAML file that THEIA can leverage to return to a given state. "Export Plot" is used to save an HTML version of a specific plot. 
+A view of the 'Download Configuration' and 'Export Plot' options. "Download Configuration" can be used to save a YAML file that THEIA can leverage to return to a given state. "Export Plot" is used to save an HTML version of a specific plot.
 :::
+
 Ultimately, THEIA serves as an excellent example of how open-source libraries can be leveraged to develop robust solutions to emerging problems.

@@ -4,6 +4,7 @@ project:
   doi: 10.25080/RVRR7774
   id: scipy-2024-theia
   title: 'THEIA: An Offline Tool for Tradespace Visualization'
+  description: Tradespace datasets are the result of large parameter sweeps run over numerous design options and can consist of thousands or even millions of design configurations and the corresponding performance metrics. THEIA has been developed for visualizing this complex tradespace data related to the acquisitions process.
   authors:
     - name: Samuel Williams
       email: Samuel.C.Williams@usace.army.mil
@@ -34,14 +35,12 @@ project:
     THEIA: Tradespace Holistic Exploration & Insight Application
     USACE: United States Army Corps of Engineers
     ERDC: U.S. Army Engineer Research & Development Center
+    HPC: high performance computing
 
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
         - plotly
-
-  banner: banner.png
-
 site:
   template: article-theme
