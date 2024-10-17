@@ -6,6 +6,7 @@ project:
   id: scipy-2024-amadi_udu
   # Ensure your title is the same as in your `main.md`
   title: Computational Resource Optimisation in Feature Selection under Class Imbalance Conditions
+  description: Feature selection is crucial for reducing data dimensionality as well as enhancing model interpretability and performance in machine learning tasks. This study explores the possibility of performing feature selection on a subset of data to reduce the computational burden.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Amadi Gabriel Udu
@@ -70,12 +71,14 @@ project:
     - machine learning
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    LightGBM: Light Gradient-Boosting Machine
+    Light GBM: Light Gradient-Boosting Machine
+    ROC: Receiver Operator Characteristics
     SVM: Support Vector Machines
     RF: Random Forest
     PFI: Permutation Feature Importance
     IQR: Interquartile range
     AUC: area under the Receiver Operator Characteristics (ROC) curve
+    ML: machine learning
   numbering:
     headings: true
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
@@ -89,7 +92,5 @@ project:
         - sklearn1
         - sklearn2
         - bonaccorso2018
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
