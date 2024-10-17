@@ -6,6 +6,7 @@ project:
   id: scipy-2024-trevor_manz
   # Ensure your title is the same as in your `main.md`
   title: 'Any notebook served: authoring and sharing reusable interactive widgets'
+  description: Jupyter Widgets enable interactive code and data visualization in notebooks, but creating and distributing widgets across the Jupyter ecosystem is challenging. The anywidget project introduces a standard and toolset for portable, web-based widgets in various computing environments, simplifying development and extending compatibility beyond Jupyter. Its approach has fostered a rich widget ecosystem, driving the  creation of new widgets and adoption of the standard by multiple platforms.
   # subtitle: MyST Markdown edition
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
@@ -52,7 +53,13 @@ project:
 
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    JCP: Jupyter-compatible platform
+    UI: user interface
+    CDN: content distribution network
+    API: application programming interface
+    ES: ECMAScript
+    AFM: anywidget front-end module
+    HMR: hot module replacement
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -68,7 +75,5 @@ project:
         - ts_cookiecutter
         - ecma
         - cookiecutter_comparison
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
