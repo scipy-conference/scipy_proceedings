@@ -7,6 +7,7 @@ project:
   # Ensure your title is the same as in your `main.md`
   title: 'geosnap: The Geospatial Neighborhood Analysis Package'
   subtitle: Open Tools for Urban, Regional, and Neighborhood Science
+  description: Understanding neighborhood context is critical for social science research, public policy analysis, and urban planning. We introduce geosnap, the Geospatial Neighborhood Analysis Package, a suite of tools for exploring, modeling, and visualizing the social context and spatial extent of neighborhoods and regions over time.
   authors:
     - name: Elijah Knaap
       email: eknaap@sdsu.edu
@@ -43,7 +44,5 @@ project:
         - Park1925
         - Foti2012
         - tufte1983visual
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
