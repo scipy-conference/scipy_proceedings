@@ -6,7 +6,7 @@ project:
   id: scipy-2024-valentina_staneva
   # Ensure your title is the same as in your `main.md`
   title: 'Echodataflow: Recipe-based Fisheries Acoustics Workflow Orchestration'
-
+  description: With the influx of large data from multiple instruments and experiments, scientists are wrangling complex data pipelines that are context-dependent and non-reproducible. Echodataflow provides transparent reproducible pipelines that can be edited with text "recipes", scaled and monitored.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Valentina Staneva
@@ -64,6 +64,7 @@ project:
     GUI: Graphics User Interface
     NOAA: National Oceanic and Atmospheric Administration
     NCEI: National Centers for Environmental Information
+    AOP: Aspect-Oriented Programming
 
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
@@ -97,8 +98,5 @@ project:
         - echoviewr
         - echoview_software_pty_ltd_echoview_nodate
         - echodataflow
-
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
