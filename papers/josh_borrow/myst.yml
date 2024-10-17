@@ -5,6 +5,7 @@ project:
   doi: 10.25080/HWGA5253
   id: scipy-2024-josh_borrow
   title: Making Research Data Flow With Python
+  description: The increasing volume of research data in fields such as astronomy, biology, and engineering necessitates efficient distributed data management. This paper presents the Librarian, a custom framework designed for data transfer in large academic collaborations, designed for the Simons Observatory.
   keywords:
     - data
     - python
@@ -31,9 +32,6 @@ project:
       orcid: 0000-0003-3734-3587
       affiliations:
         - 'Center for Astrophysics | Harvard & Smithsonian, 60 Garden St., Cambridge, MA 02138'
-  # github:
-  # bibliography: []
-  banner: banner.png
   error_rules:
     - rule: doi-exists
       severity: ignore
