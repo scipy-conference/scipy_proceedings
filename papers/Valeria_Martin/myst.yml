@@ -5,7 +5,7 @@ project:
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-Valeria_Martin
   title: Python-Based GeoImagery Dataset Development for Deep Learning-Driven Forest Wildfire Detection
-  subtitle:
+  description: In recent years, leveraging satellite imagery with deep learning architectures has become an effective approach for environmental monitoring tasks, including forest wildfire detection. This paper presents a Python-based methodology for gathering and using a labeled high-resolution satellite imagery dataset for forest wildfire detection.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Valeria Martin
@@ -89,7 +89,5 @@ project:
         - '8113128'
         - DBLP:RonnebergerFB15
         - lecun
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
 site:
   template: article-theme
