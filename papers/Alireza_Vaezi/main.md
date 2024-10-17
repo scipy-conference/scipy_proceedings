@@ -1,14 +1,11 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
 title: Training a Supervised Cilia Segmentation Model from Self-Supervision
-exports:
-  - format: pdf
-    template: arxiv_two_column
-    output: exports/my-document.pdf
-
 abstract: |
-  Cilia are organelles found on the surface of some cells in the human body that sweep rhythmically to transport substances. Dysfunctional cilia are indicative of diseases that can disrupt organs such as the lungs and kidneys. Understanding cilia behavior is essential in diagnosing and treating such diseases. But, the tasks of automatically analysing cilia are often a labor and time-intensive since there is a lack of automated segmentation. In this work we overcome this bottleneck by developing a robust, self-supervised framework exploiting the visual similarity of normal and dysfunctional cilia. This framework generates pseudolabels from optical flow motion vectors, which serve as training data for a semi-supervised neural network. Our approach eliminates the need for manual annotations, enabling accurate and efficient segmentation of both motile and immotile cilia.
+  Cilia are organelles found on the surface of some cells in the human body that sweep rhythmically to transport substances. Dysfunctional cilia are indicative of diseases that can disrupt organs such as the lungs and kidneys. Understanding cilia behavior is essential in diagnosing and treating such diseases. But, the tasks of automatically analyzing cilia are often a labor and time-intensive since there is a lack of automated segmentation. In this work we overcome this bottleneck by developing a robust, self-supervised framework exploiting the visual similarity of normal and dysfunctional cilia. This framework generates pseudolabels from optical flow motion vectors, which serve as training data for a semi-supervised neural network. Our approach eliminates the need for manual annotations, enabling accurate and efficient segmentation of both motile and immotile cilia.
 ---
+
+(sec:introduction)=
 
 ## Introduction
 
@@ -20,7 +17,9 @@ Video segmentation techniques tend to be more robust to such noise, but still st
 
 To address this challenge, we propose a two-stage image segmentation model designed to obviate the need for expert-drawn masks. We first build a corpus of segmentation masks based on optical flow (OF) thresholding over a subset of healthy training data with guaranteed motility. We then train a semi-supervised neural segmentation model to identify both motile and immotile data as a single segmentation category, using the flow-generated masks as “pseudolabels”. These pseudolabels operate as “ground truth” for the model while acknowledging the intrinsic uncertainty of the labels. The fact that motile and immotile cilia tend to be visually similar in snapshot allows us to generalize the domain of the model from motile cilia to all cilia. Combining these stages results in a semi-supervised framework that does not rely on any expert-drawn ground-truth segmentation masks, paving the way for full automation of a general cilia analysis pipeline.
 
-The rest of this article is structured as follows: The Background section enumerates the studies relevant to our methodology, followed by a detailed description of our approach in the Methodology section. Finally, the next section delineates our experiment and provides a discussion of the results obtained.
+The rest of this article is structured as follows: The [Background section](#sec:background) enumerates the studies relevant to our methodology, followed by a detailed description of our approach in the [Methodology section](#sec:methodology). Finally, the [next section](#sec:results) delineates our experiment and provides a discussion of the results obtained.
+
+(sec:background)=
 
 ## Background
 
@@ -28,9 +27,11 @@ Dysfunction in ciliary motion indicates diseases known as ciliopathies, which ca
 
 Accurate analysis of ciliary motion is essential but challenging due to the limitations of manual analysis, which is labor-intensive, subjective, and prone to error. [@zain2020towards] proposed a modular generative pipeline that automates ciliary motion analysis by segmenting, representing, and modeling the dynamic behavior of cilia, thereby reducing the need for expert intervention and improving diagnostic consistency. [@quinn2015automated] developed a computational pipeline using dynamic texture analysis and machine learning to objectively and quantitatively assess ciliary motion, achieving over 90% classification accuracy in identifying abnormal ciliary motion associated with diseases like primary ciliary dyskinesia (PCD). Additionally, [@zain2022low] explored advanced feature extraction techniques like Zero-phase PCA Sphering (ZCA) and Sparse Autoencoders (SAE) to enhance cilia segmentation accuracy. These methods address challenges posed by noisy, partially occluded, and out-of-phase imagery, ultimately improving the overall performance of ciliary motion analysis pipelines. Collectively, these approaches aim to enhance diagnostic accuracy and efficiency, making ciliary motion analysis more accessible and reliable, thereby improving patient outcomes through early and accurate detection of ciliopathies. However, these studies rely on manually labeled data. The segmentation masks and ground-truth annotations, which are essential for training the models and validating their performance, are generated by expert reviewers. This dependence on manually labeled data is a significant limitation making automated cilia segmentation the bottleneck to automating cilia analysis.
 
-In the biomedical field, where labeled data is often scarce and costly to obtain, several solutions have been proposed to augment and utilize available data effectively. These include semi-supervised learning [@YAKIMOVICH2021100383,@van2020survey], which utilizes both labeled and unlabeled data to enhance learning accuracy by leveraging the data's underlying distribution. Active learning [@settles2009active] focuses on selectively querying the most informative data points for expert labeling, optimizing the training process by using the most valuable examples. Data augmentation techniques [@10.3389/fcvm.2020.00105], [@Krois2021], [@10.1148/ryai.2020190195], [@Sandfort2019], [@YAKIMOVICH2021100383], [@van2001art], [@krizhevsky2012imagenet], [@ronneberger2015u], such as image transformations and synthetic data generation through Generative Adversarial Networks [@goodfellow2014generative], [@yi2019generative], increase the diversity and volume of training data, enhancing model robustness and reducing overfitting. Transfer learning [@YAKIMOVICH2021100383], [@Sanford2020-yg], [@NEURIPS2019_eb1e7832], [@hutchinson2017overcoming] transfers knowledge from one task to another, minimizing the need for extensive labeled data in new tasks. Self-supervised learning [@kim2019self], [@kolesnikov2019revisiting], [@mahendran2019cross] creates its labels by defining a pretext task, like predicting the position of a randomly cropped image patch, aiding in the learning of useful data representations. Additionally, few-shot, one-shot, and zero-shot learning techniques [@li2006one], [@miller2000learning] are designed to operate with minimal or no labeled examples, relying on generalization capabilities or metadata for making predictions about unseen classes.
+In the biomedical field, where labeled data is often scarce and costly to obtain, several solutions have been proposed to augment and utilize available data effectively. These include semi-supervised learning [@YAKIMOVICH2021100383,@van2020survey], which utilizes both labeled and unlabeled data to enhance learning accuracy by leveraging the data's underlying distribution. Active learning [@settles2009active] focuses on selectively querying the most informative data points for expert labeling, optimizing the training process by using the most valuable examples. Data augmentation techniques [@10.3389/fcvm.2020.00105;@Krois2021;@10.1148/ryai.2020190195;@Sandfort2019;@YAKIMOVICH2021100383;@van2001art;@krizhevsky2012imagenet;@ronneberger2015u], such as image transformations and synthetic data generation through Generative Adversarial Networks [@goodfellow2014generative;@yi2019generative], increase the diversity and volume of training data, enhancing model robustness and reducing overfitting. Transfer learning [@YAKIMOVICH2021100383;@Sanford2020-yg;@NEURIPS2019_eb1e7832;@hutchinson2017overcoming] transfers knowledge from one task to another, minimizing the need for extensive labeled data in new tasks. Self-supervised learning [@kim2019self;@kolesnikov2019revisiting;@mahendran2019cross] creates its labels by defining a pretext task, like predicting the position of a randomly cropped image patch, aiding in the learning of useful data representations. Additionally, few-shot, one-shot, and zero-shot learning techniques [@li2006one;@miller2000learning] are designed to operate with minimal or no labeled examples, relying on generalization capabilities or metadata for making predictions about unseen classes.
 
 A promising approach to overcome the dependency on manually labeled data is the use of unsupervised methods to generate ground truth masks. Unsupervised methods do not require prior knowledge of the data [@khatibi2021proposing]. Using domain-specific cues unsupervised learning techniques can automatically discover patterns and structures in the data without the need for labeled examples, potentially simplifying the process of generating accurate segmentation masks for cilia. Inspired by advances in unsupervised methods for image segmentation, in this work, we firstly compute the motion vectors using optical flow of the ciliary regions and then apply autoregressive modelling to capture their temporal dynamics. Autoregressive modelling is advantageous since the labels are features themselves. By analyzing the OF vectors, we can identify the characteristic motion of cilia, which allows us to generate pseudolabels as ground truth segmentation masks. These pseudolabels are then used to train a robust semi-supervised neural network, enabling accurate and automated segmentation of both motile and immotile cilia.
+
+(sec:methodology)=
 
 ## Methodology
 
@@ -51,10 +52,12 @@ Where $I(x,y,t)$ is the pixel intensity at position $(x,y)$ a time $t$. Here, $(
 :label: fig:sample_vids_with_gt_mask
 A sample of three videos in our cilia dataset with their manually annotated ground truth masks.
 :::
+
 <!-- :::{figure} ground_truth.png
 :label: fig:ground_truth
 Manually labeled ground truth
 ::: -->
+
 :::{figure} sample_OF.png
 :label: fig:sample_OF
 Representation of rotation (curl) component of OF at a random time
@@ -66,7 +69,7 @@ Representation of rotation (curl) component of OF at a random time
 
 ```{math}
 :label: AR
-y_t =C\vec{x_t} + \vec{u} 
+y_t =C\vec{x_t} + \vec{u}
 ```
 
 ```{math}
@@ -103,21 +106,24 @@ The next section discusses the results of the experiment and the performance of 
 
 :::{table} Summary of model architecture, training setup, and dataset distribution
 :label: tbl:model_specs
-| **Aspect**                      | **Details**                                                                                                                              |
-|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| **Architecture**                | FPN with ResNet-34 encoder                                                                                                               |
-| **Input**                       | Grayscale images with a single input channel                                                                                             |
-| **Batch Size**                  | 2                                                                                                                                        |
-| **Training Samples**            | 28,869                                                                                                                                   |
-| **Validation Samples**          | 5,095                                                                                                                                    |
-| **Test Samples**                | 108                                                                                                                                      |
-| **Loss Function**               | Binary Cross-Entropy Loss                                                                                                                |
-| **Optimizer**                   | Adam optimizer with a learning rate of $10^{-3}$                                                                                         |
-| **Evaluation Metric**           | Dice score during training, validation, and testing                                                                                                |
-| **Data Augmentation Techniques**| Resizing, random cropping, and rotation                                                                                                  |
-| **Implementation**              | Using a Python library with Neural Networks for Image Segmentation based on PyTorch [@Iakubovskii:2019]                                  |
+
+| **Aspect**                       | **Details**                                                                                             |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Architecture**                 | FPN with ResNet-34 encoder                                                                              |
+| **Input**                        | Grayscale images with a single input channel                                                            |
+| **Batch Size**                   | 2                                                                                                       |
+| **Training Samples**             | 28,869                                                                                                  |
+| **Validation Samples**           | 5,095                                                                                                   |
+| **Test Samples**                 | 108                                                                                                     |
+| **Loss Function**                | Binary Cross-Entropy Loss                                                                               |
+| **Optimizer**                    | Adam optimizer with a learning rate of $10^{-3}$                                                        |
+| **Evaluation Metric**            | Dice score during training, validation, and testing                                                     |
+| **Data Augmentation Techniques** | Resizing, random cropping, and rotation                                                                 |
+| **Implementation**               | Using a Python library with Neural Networks for Image Segmentation based on PyTorch [@Iakubovskii:2019] |
 
 :::
+
+(sec:results)=
 
 ## Results and Discussion
 
@@ -128,15 +134,16 @@ The model's performance metrics, including IoU, Dice score, sensitivity, and spe
 The model predictions on 5 dyskinetic cilia samples. The first column shows a frame of the video, the second column shows the manually labeled ground truth, the third column is the model's prediction, and the last column is a thresholded version of the prediction.
 :::
 
-@fig:out_sample provides visual examples of the model's predictions on dyskinetic cilia samples, alongside the manually labeled ground truth and thresholded predictions. The dyskinetic samples were not used in the training or validation phases. These predictions were generated after only 15 epochs of training with a small training data.  The visual comparison reveals that, while the model captures the general structure of ciliary regions, there are instances of under-segmentation and over-segmentation, which are more pronounced in the dyskinetic samples. This observation is consistent with the quantitative metrics, suggesting that further refinement of the pseudolabel generation process or model architecture could enhance segmentation accuracy.
+@fig:out_sample provides visual examples of the model's predictions on dyskinetic cilia samples, alongside the manually labeled ground truth and thresholded predictions. The dyskinetic samples were not used in the training or validation phases. These predictions were generated after only 15 epochs of training with a small training data. The visual comparison reveals that, while the model captures the general structure of ciliary regions, there are instances of under-segmentation and over-segmentation, which are more pronounced in the dyskinetic samples. This observation is consistent with the quantitative metrics, suggesting that further refinement of the pseudolabel generation process or model architecture could enhance segmentation accuracy.
 
 :::{table} The performance of the model in validation and testing phases after 15 epochs of training.
 :label: tbl:metrics
-| Phases     | Metrics       |             |            |            |
-|------------|---------------|-------------|------------|------------|
-|            | IoU over dataset | Dice Score  | Sensitivity| Specificity|
-| Validation | 0.398         | 0.569       | 0.997      | 0.882      |
-| Testing    | 0.132         | 0.233       | 0.479      | 0.806      |
+
+| Phases     | Metrics          |            |             |             |
+| ---------- | ---------------- | ---------- | ----------- | ----------- |
+|            | IoU over dataset | Dice Score | Sensitivity | Specificity |
+| Validation | 0.398            | 0.569      | 0.997       | 0.882       |
+| Testing    | 0.132            | 0.233      | 0.479       | 0.806       |
 
 :::
 
@@ -146,11 +153,12 @@ Since dyskinetic videos contain cilia that show some degree of movement we gener
 
 :::{table} The performance of the model after retraining with an addition of 283 videos of dyskinetic cilia to the training dataset.
 :label: tbl:exp2_metrics
-| Phases     | Metrics       |             |            |            |
-|------------|---------------|-------------|------------|------------|
-|            | IoU over dataset | Dice Score  | Sensitivity| Specificity|
-| Validation | 0.202         | 0.337       | 0.999      | 0.765      |
-| Testing    | 0.139         | 0.245       | 0.732      | 0.696      |
+
+| Phases     | Metrics          |            |             |             |
+| ---------- | ---------------- | ---------- | ----------- | ----------- |
+|            | IoU over dataset | Dice Score | Sensitivity | Specificity |
+| Validation | 0.202            | 0.337      | 0.999       | 0.765       |
+| Testing    | 0.139            | 0.245      | 0.732       | 0.696       |
 
 :::
 
