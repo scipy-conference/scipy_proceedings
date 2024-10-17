@@ -1,74 +1,13 @@
-\documentclass{article} % For LaTeX2e
-\usepackage{arxiv_template}
-
-% Optional math commands from https://github.com/goodfeli/dlbook_notation.
-% \input{math_commands.tex}
-
-\usepackage{microtype}
-\usepackage{hyperref}
-\usepackage{url}
-\usepackage{graphicx}
-
-\usepackage{pgfplots}
-\usepackage{pgfplotstable}
-\pgfplotsset{compat=1.3}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{pgfplots.groupplots}
-\usepackage{ragged2e}
-\definecolor{mydarkblue}{rgb}{0,0.08,0.85}
-\definecolor{mylightblue}{rgb}{0.06,0.56,1.0}
-\definecolor{mylightorange}{rgb}{1.0,0.62,0.12}
-\definecolor{mylightred}{rgb}{0.99,0.00,0.04}
-\definecolor{mygreen}{HTML}{2F9E44}
-\definecolor{myred}{HTML}{E03131}
-\definecolor{myblue}{HTML}{1971C2}
-
-\usepackage{subcaption}
-\usepackage{booktabs}
-\usepackage{wrapfig}
-\usepackage{changes}
-\definecolor{myred}{HTML}{E03131}
-\makeatletter
-\@namedef{Changes@AuthorColor}{myred}
-\colorlet{Changes@Color}{myred}
-\makeatother
-% \usepackage{floatrow}
-\colmfinalcopy
-
-% \def\l{\left}
-% \def\r{\right}
-
-\title{\texttt{mandala}: Compositional Memoization for Simple \&
-Powerful Scientific Data Management}
-
-\newcommand{\fix}{\marginpar{FIX}}
-\newcommand{\new}{\marginpar{NEW}}
-% \newfloatcommand{capbtabbox}{table}[][\FBwidth]
-
-\usepackage{soul}
-\usepackage{amsthm}
-\usepackage{mathrsfs}
-% \usepackage[outputdir=/home/amakelov/vscode_output/latex-aux]{minted}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-
-
-
-\begin{document}
-\maketitle
-
-
 \begin{abstract}
   We present
-  \texttt{mandala}\footnote{\url{https://github.com/amakelov/mandala}}, a Python
+  \href{https://github.com/amakelov/mandala}{\texttt{mandala}}, a Python
   library that largely eliminates the accidental complexity of scientific data
   management and incremental computing. While most traditional and/or
   popular data management solutions are based on \emph{logging},
   \texttt{mandala} takes a fundamentally different approach, using
   \emph{memoization} of function calls as the fundamental unit of saving,
-  loading, querying and deleting computational artifacts. 
-  
+  loading, querying and deleting computational artifacts.
+
   It does so by implementing a \emph{compositional} form of memoization, which keeps
   track of how memoized functions compose with one another. In this way: (1)
   complex computations are effectively memoized end-to-end, and become
@@ -105,7 +44,7 @@ that help with these requirements exist and are well-known
 \citep{sandve2013ten,wilkinson2016fair}, but still require manual effort,
 attention to extraneous details, and discipline to follow. Researchers often
 operate under time pressure and/or the need to quickly iterate on code, which
-makes these best `practices' a rather \emph{impractical} time investment. 
+makes these best `practices' a rather \emph{impractical} time investment.
 
 Thus, ideally we would like a system that (1) does not get in the way by
 imposing a complex new language/semantics/syntax, (2) provides powerful
@@ -158,7 +97,7 @@ complexity} (the scientific problem at hand), rather than on the
 \emph{accidental complexity} (the data management tools necessary to implement the solution) \citep{Brooks1987NoSB}.
 
 The rest of this paper presents the design and main functionalities of
-\texttt{mandala}, and is organized as follows: 
+\texttt{mandala}, and is organized as follows:
 \begin{itemize}
 \item In Section \ref{section:core-concepts}, we describe how memoization is
 designed, how this allows memoized calls to be composed and memoized results to
@@ -206,12 +145,12 @@ keyword) of the arguments or return values.
 \texttt{Ref}s and \texttt{Call}s are the two atomic data structures in
 \texttt{mandala}'s model of computations. When a call to an
 \texttt{@op}-decorated function \texttt{f} is executed inside a storage context,
-this results in the creation of 
+this results in the creation of
 \begin{itemize}
 \item A \texttt{Ref} object for each input to the call. These wrap the `raw'
 values passed as inputs together with content IDs (hashes of the Python objects)
 and history IDs (hashes of the memoized calls that produced these values, if
-any). 
+any).
 \begin{itemize}
 \item If an input to the call is already a \texttt{Ref} object, it is passed
 through as is;
@@ -234,7 +173,7 @@ have designated output names, we instead generate output names automatically usi
 %     \centering
 %     \includegraphics[width=\linewidth]{img/comp-graph.pdf}
 %     \caption{A part of the computaitonal graph built up by the calls in Figure
-%     \ref{fig:basic-usage}. 
+%     \ref{fig:basic-usage}.
 %     % The nodes are \texttt{Call} and \texttt{Ref} objects,
 %     % and the edges are the inputs/output names connecting them.
 %     }
@@ -253,7 +192,7 @@ stored \texttt{Call}s and \texttt{Ref}s across memoized functions form the
 user composes memoized calls.
 
 \subsection{Motivation for the Design of Memoization}
-\label{subsection:}
+\label{subsection:design}
 
 \paragraph{Why content and history IDs?}
 The simultaneous use of content and history IDs has a few subtle advantages.
@@ -318,7 +257,7 @@ way to interact with such a persisted computation is through \textbf{retracing},
 which means stepping through memoized code with the purpose of resuming from a
 failure, loading intermediate values, or continuing from a particular point with
 new computations. A small example of retracing is shown in Figure
-\ref{fig:basic-usage} (c). 
+\ref{fig:basic-usage} (c).
 
 This pattern is simple yet powerful, as it allows the user to interact with the
 stored computation graph in a way that is adapted to their use case, and to
@@ -344,9 +283,9 @@ Jupyter notebook, because it makes it very cheap to re-run cells in order to rec
             computations found.}
             \label{fig:figure1}
         \end{subfigure}
-        
+
         \vspace{1em}
-        
+
         \begin{subfigure}[b]{\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/fig5.pdf}
@@ -424,16 +363,16 @@ The edges $E$ are labeled with the input/output names of the adjacent functions.
 An example is shown in Figure \ref{fig:cf} (c);
 \item \textbf{Groups of \texttt{Ref}s and \texttt{Call}s}: for each variable
 $v\in V$, a set of (history IDs of) \texttt{Ref}s $R_v$, and for each function
-$f\in F$ with underlying \texttt{@op} $o_f$, a set of (history IDs of) \texttt{Call}s $C_f$; 
+$f\in F$ with underlying \texttt{@op} $o_f$, a set of (history IDs of) \texttt{Call}s $C_f$;
 \end{itemize}
 subject to the constraint that: for every call $c\in C_f$, if there's an
 input/output edge labeled $l$ connecting $f$ to some variable $v$, then if $c$
 has a \texttt{Ref} $r_l$ corresponding to input/output name $l$, we have $r_l\in
-R_v$. 
+R_v$.
 
 In other words, when we look at all calls in $f\in F$, their inputs/outputs must
 be present in the variables connected to $f$ under the respective input/output
-name. 
+name.
 
 \subsection{Basic Usage}
 \label{subsection:cf-basic-usage}
@@ -478,7 +417,7 @@ transparently by \texttt{mandala}, using customized type annotations, e.g.
 \texttt{MList[int]} inheriting from \texttt{List[int]}, \ldots. By applying this
 type annotation, individual elements as well as the collection itself are
 memoized as \texttt{Ref}s (with the collection merely pointing to the
-\texttt{Ref}s of its elements to avoid duplication). 
+\texttt{Ref}s of its elements to avoid duplication).
 
 \begin{wrapfigure}[18]{l}{0.45\textwidth}
     \centering
@@ -537,7 +476,7 @@ manipulate and version.
 
 \textbf{Memoization.} There are several memoization solutions for Python that lack the compositional nature of \texttt{mandala}, as well as the versioning and
 querying tools: the builtin \texttt{functools} module provides decorators such as \texttt{lru\_cache} for memoization; the \texttt{incpy} project \citep{guo2011using} enables automatic
-persistent memoization of Python functions directly on the interpreter level; 
+persistent memoization of Python functions directly on the interpreter level;
 the \texttt{funsies} project \citep{lavigne2021funsies} is a memoization-based
 distributed workflow executor that uses a similar hashing approach to keep track
 of which computations have already been done; \texttt{koji} \citep{maymounkov2018koji} is a design for an incremental computation data processing framework that unifies over different resource types (files or services), and uses an analogous notion of hashing to keep track of computations.
@@ -566,17 +505,17 @@ The revision history of each function in the codebase is
 organized in a bare-bones \texttt{git} repository \citep{git}: it is a
 content-addressed tree, where each edge tracks a diff from the content at one
 endpoint to that at the other. Additional metadata indicates equivalence classes
-of semantically equivalent contents. 
-% Semantic versioning \citep{semver} is another popular code versioning system. 
+of semantically equivalent contents.
+% Semantic versioning \citep{semver} is another popular code versioning system.
 % \texttt{mandala} is similar to semver in
 % that it allows you to make backward-compatible changes to the interface and
 % logic of dependencies. It is different in that versions are still labeled by
-% content, instead of `non-canonical' numbers. 
+% content, instead of `non-canonical' numbers.
 
 \section{Limitations}
 \label{sec:limitations}
 
-\textbf{Computing deterministic content IDs of any Python object is difficult.} 
+\textbf{Computing deterministic content IDs of any Python object is difficult.}
 \texttt{mandala} uses the \texttt{joblib} library to serialize Python objects
 into byte strings, and then hashes these strings to get the content ID. This
 approach is not perfect, as it is not always possible to serialize Python
@@ -586,7 +525,7 @@ same content ID (e.g., \texttt{True} and \texttt{1}). Furthermore, hashing is
 sensitive to small changes in the input, such as numerical precision in floating
 point numbers. Finally, complex Python objects may contain state that is not
 intrinsically part of the object's identity, such as resource utilization data
-(e.g., memory addresses). This can lead to different content IDs before and 
+(e.g., memory addresses). This can lead to different content IDs before and
 after a round trip through the storage backend. These issues don't come up often
 as long as all initial \texttt{Ref}s are created from simple Python objects:
 complex objects are hashed and saved once when returned from an \texttt{@op},
@@ -617,12 +556,12 @@ in exploring the library further.
 \section*{Acknowledgements}
 
 First and foremost, I would like to thank my friend Stefan Krastanov for many
-valuable conversations throughout the evolution and development of 
+valuable conversations throughout the evolution and development of
 \texttt{mandala}. Nobody could ask for a more enthusiastic collaborator and
 champion of their work. Second, I would also like to thank Nicholas Schiefer for
 some helpful feedback on an earlier version of the library, as well as
 suggestions and implementations for features to make it work in a distributed
-setting, and for advertising \texttt{mandala} at his workplace. 
+setting, and for advertising \texttt{mandala} at his workplace.
 
 There have been far too many people over the years who have listened patiently
 to me talk about this project in its earlier stages; in particular, I'm grateful
@@ -633,9 +572,3 @@ I'm also grateful to many friends from grad school and beyond who have listened
 to me talk about this project, and who have given me valuable feedback and
 encouragement. Finally, I would like to thank my reviewers at the SciPy
 conference, especially Andrei Paleyes, for their helpful feedback on this paper.
-
-% bibliography
-\bibliography{scipy}
-\bibliographystyle{arxiv_template}
-
-\end{document}
