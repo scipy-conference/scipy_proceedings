@@ -6,6 +6,7 @@ project:
   id: scipy-2024-matthew_feickert
   # Ensure your title is the same as in your `main.md`
   title: How the Scientific Python ecosystem helps answer fundamental questions of the Universe
+  description: The ATLAS experiment at CERN explores vast amounts of physics data to answer the most fundamental questions of the Universe. This paper will describe to a broad audience how a large scientific collaboration leverages the power of the Scientific Python ecosystem to tackle domain-specific challenges and advance our understanding of the Cosmos.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Matthew Feickert
@@ -64,6 +65,7 @@ project:
     HEP: High Energy Physics
     IRIS-HEP: Institute for Research and Innovation in Software for High Energy Physics
     LHC: Large Hadron Collider
+    NSF: National Science Foundation
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -77,8 +79,6 @@ project:
         - Dask-awkward
         - Dask-histogram
         - Kourlitis:2890478
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
   # Exclude source files to keep them from appearing as supporting documents
   exclude:
     - introduction.md
