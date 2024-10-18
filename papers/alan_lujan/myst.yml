@@ -1,12 +1,15 @@
 version: 1
+extends: ../proceedings.yml
 site:
   template: article-theme
 project:
+  doi: 10.25080/FGCJ9164
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-alan_lujan
   # Ensure your title is the same as in your `main.md`
   title: multinterp
   subtitle: A Unified Interface for Multivariate Interpolation in the Scientific Python Ecosystem
+  description: Multivariate interpolation is a fundamental tool in scientific computing used to approximate the values of a function between known data points in multiple dimensions. Despite its importance, the Python ecosystem offers a fragmented landscape of specialized tools for this task; the multinterp package was developed to address this challenge.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Alan Lujan
@@ -15,6 +18,7 @@ project:
       affiliations:
         - institution: Johns Hopkins University
           department: Department of Economics
+          ror: https://ror.org/00za53h95
         - institution: Econ-ARK
           url: https://econ-ark.org/
       corresponding: true
@@ -29,6 +33,10 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    CPU: Central Processing Unit
+    GPU: Graphics Processing Unit
+    API: Application Programming Interface
+    RBF: Radial Basis Function
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -43,11 +51,3 @@ project:
         - Bradbury2018
         - Pedregosa2011
         - Paszke2019
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10

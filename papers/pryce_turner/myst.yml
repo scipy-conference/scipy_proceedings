@@ -1,9 +1,12 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/DDJJ4932
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-pryce_turner
   # Ensure your title is the same as in your `main.md`
   title: Orchestrating Bioinformatics Workflows Across a Heterogeneous Toolset with Flyte
+  description: While Python excels at prototyping and iterating quickly, it’s not always performant enough for whole-genome scale data processing. Flyte, an open-source Python-based workflow orchestrator, presents an excellent way to tie together the myriad tools required to run bioinformatics workflows.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Pryce Turner
@@ -29,13 +32,5 @@ project:
       severity: ignore
       keys:
         - andrews2012
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

@@ -1,9 +1,12 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/MDCE8355
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-heinrich_peters
   title: Model Share AI
   subtitle: An Integrated Toolkit for Collaborative Machine Learning Model Development, Provenance Tracking, and Deployment in Python
+  description: Machine learning is revolutionizing a wide range of research areas and industries, but many ML projects never progress past the proof-of-concept stage. To address this problem, we introduce Model Share AI, a platform designed to streamline collaborative model development, model provenance tracking, and model deployment.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Heinrich Peters
@@ -12,7 +15,7 @@ project:
       affiliations:
         - Columbia University
       corresponding: True
-      roles: 
+      roles:
         - Conceptualization
         - Methodology
         - Software
@@ -21,7 +24,7 @@ project:
       email: mp3675@columbia.edu
       affiliations:
         - Columbia University
-      roles: 
+      roles:
         - Conceptualization
         - Methodology
         - Software
@@ -56,14 +59,5 @@ project:
         - feurer_efficient_2015
         - feurer_openml-python_2021
         - chollet_keras_2015
-
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

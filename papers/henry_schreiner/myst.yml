@@ -1,10 +1,13 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/FMKR8387
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-henry_schreiner
   # Ensure your title is the same as in your `main.md`
   title: Scikit-build-core
   subtitle: A modern build-backend for CPython C/C++/Fortran/Cython extensions
+  description: Discover how scikit-build-core revolutionizes Python extension building with its seamless integration of CMake and Python packaging standards. Learn about its enhanced features for cross-compilation, multi-platform support, and simplified configuration, which enable writing binary extensions with pybind11, Nanobind, Fortran, Cython, C++, and more.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Henry Schreiner
@@ -39,14 +42,6 @@ project:
     NSF: National Science Foundation
     PyPI: Python Package Index
     SDist: Source Distribution, the way Python packages distribute source code
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
   error_rules:
     - rule: doi-exists
       severity: ignore

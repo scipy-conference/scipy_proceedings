@@ -1,16 +1,18 @@
 # See docs at: https://mystmd.org/guide/frontmatter
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/DXWY3560
   id: scipy-2024-sam_morley
   title: RoughPy
   subtitle: Streaming data is rarely smooth
   short_title: RoughPy
-
-  authors: 
+  description: Rough path theory is a branch of mathematics arising out of stochastic analysis. One of the main tools of rough path analysis is the signature, which captures the evolution of an unparametrised path including the order in which events occur. RoughPy is our new Python package that aims change the way we think about sequential streamed data.
+  authors:
     - name: Sam Morley
       email: sam.morley@maths.ox.ac.uk
       orcid: 0000-0001-5971-7418
-      affiliations: 
+      affiliations:
         - University of Oxford
       roles:
         - Conceptualization
@@ -26,20 +28,18 @@ project:
         - Conceptualization
         - Supervision
         - Writing - review & editing
-
-  # description:
-  keywords: 
+  keywords:
     - sequential data
     - unparametrised paths
-    - time series 
+    - time series
     - rough paths
-    - signatures 
-    - data science 
+    - signatures
+    - data science
     - machine learning
     - signature kernels
     - Log-ODE method
   github: datasig-ac-uk/roughpy
-  bibliography: 
+  bibliography:
     - roughpy.bib
   # Add the abbreviations that you use in your paper here
   abbreviations:
@@ -61,14 +61,5 @@ project:
         - coropa_project
         - Granlund12
         - NEURIPS2021_18a9042b
- 
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

@@ -1,0 +1,59 @@
+version: 1
+project:
+  subject: Research Article
+  open_access: true
+  license: CC-BY-4.0
+  venue:
+    title: Python in Science Conference
+    short_title: SciPy
+    number: 23rd
+    location: Tacoma, Washington
+    date: July 8 - July 14, 2024
+    publisher: SciPy
+    series: Proceedings of the Python in Science Conference
+    issn: 2575-9752
+    doi: 10.25080/issn.2575-9752
+  date: 2024-07-10
+  banner: banner.png
+  thumbnail: thumbnail.png
+  numbering:
+    headings: true
+  volume:
+    title: Proceedings of the 23rd Python in Science Conference
+    subject: Scientific Computing with Python
+    doi: 10.25080/DTVR3553
+  editors:
+    - name: Meghann Agarwal
+      email: agarwal.meghann@gmail.com
+      affiliation: GDI
+      id: meghann
+    - name: Amey Ambade
+      email: ameyambade@gmail.com
+      affiliation: SLB
+      id: amey
+    - name: Chris Calloway
+      email: cbc@unc.edu
+      affiliation: University of North Carolina
+      id: chris
+    - name: Rowan Cockett
+      email: rowan@curvenote.com
+      affiliation: Curvenote
+      id: rowan
+    - name: Sanhita Joshi
+      email: sanhita.joshi@gmail.com
+      affiliation: Deloitte
+      id: sanhita
+    - name: Charles Lindsey
+      email: lindseycster@gmail.com
+      affiliation: Aptos
+      id: charles
+    - name: Hongsup Shin
+      email: hongsup.shin@pm.me
+      affiliation: Arm
+      id: hongsup
+site:
+  template: article-theme
+  actions:
+    - title: pdf
+      url: full_text.pdf
+      static: true

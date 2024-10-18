@@ -1,9 +1,12 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/WPXM6451
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-christopher_ariza
   # Ensure your title is the same as in your `main.md`
   title: Improving Code Quality with Array and DataFrame Type Hints
+  description: This article demonstrates practical approaches to fully type-hinting generic NumPy arrays and StaticFrame DataFrames, and shows how the same annotations can improve code quality with both static analysis and runtime validation.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Christopher Ariza
@@ -19,7 +22,6 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
-
   error_rules:
     - rule: doi-exists
       severity: ignore
@@ -31,15 +33,5 @@ project:
         - pep646
         - pep484
         - pep593
-
-
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

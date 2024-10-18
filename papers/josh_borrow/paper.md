@@ -1,36 +1,33 @@
 ---
-title: "Making Research Data Flow With Python"
+title: 'Making Research Data Flow With Python'
 abstract: |
-    The increasing volume of research data in fields such as astronomy, biology,
-    and engineering necessitates efficient distributed data management.
-    Traditional commercial solutions are often unsuitable for the decentralized
-    infrastructure typical of academic projects. This paper presents the
-    Librarian, a custom framework designed for data transfer in large academic
-    collaborations, designed for the Simons Observatory (SO) as a ground up
-    re-architechture of a previous astronomical data management tool called the
-    'HERA Librarian' from which it takes its name. SO is a new-generation
-    observatory designed for observing the Cosmic Microwave Background, and is
-    located in the Atacama desert in Chile at over 5000 meters of elevation.
+  The increasing volume of research data in fields such as astronomy, biology,
+  and engineering necessitates efficient distributed data management.
+  Traditional commercial solutions are often unsuitable for the decentralized
+  infrastructure typical of academic projects. This paper presents the
+  Librarian, a custom framework designed for data transfer in large academic
+  collaborations, designed for the Simons Observatory (SO) as a ground up
+  re-architechture of a previous astronomical data management tool called the
+  'HERA Librarian' from which it takes its name. SO is a new-generation
+  observatory designed for observing the Cosmic Microwave Background, and is
+  located in the Atacama desert in Chile at over 5000 meters of elevation.
 
-    Existing tools like Globus Flows, iRODS, Rucio, and Datalad were evaluated
-    but were found to be lacking in automation or simplicity. Librarian
-    addresses these gaps by integrating with Globus for efficient data transfer
-    and providing a RESTful API for easy interaction. It also supports transfers
-    through the movement of physical media for environments with intermittent
-    connectivity.
+  Existing tools like Globus Flows, iRODS, Rucio, and Datalad were evaluated
+  but were found to be lacking in automation or simplicity. Librarian
+  addresses these gaps by integrating with Globus for efficient data transfer
+  and providing a RESTful API for easy interaction. It also supports transfers
+  through the movement of physical media for environments with intermittent
+  connectivity.
 
-    Using technologies like Python, FastAPI, and SQLAlchemy, the Librarian
-    ensures robust, scalable, and user-friendly data management tailored to the
-    needs of large-scale scientific projects. This solution demonstrates an
-    effective method for managing the substantial data flows in modern 'big
-    science' endeavors.
-exports:
-  - format: pdf
-    template: arxiv_two_column
-    output: exports/my-document.pdf
+  Using technologies like Python, FastAPI, and SQLAlchemy, the Librarian
+  ensures robust, scalable, and user-friendly data management tailored to the
+  needs of large-scale scientific projects. This solution demonstrates an
+  effective method for managing the substantial data flows in modern 'big
+  science' endeavors.
 ---
 
 ## Introduction
+
 Research data is ever-growing, with even small projects now producing terabytes
 of data. This has been matched by an increase in the typical size of workstation
 storage and compute, but as many fields like astronomy, biology, and engineering
@@ -77,6 +74,7 @@ Our data is comprised of folders (termed 'books'), each containing 10-20 GB of
 data, laid out in a pre-determined scheme in a POSIX filesystem.
 
 ## Comparing Data Flows
+
 ```{figure} ./Display.svg
 :name: fig-display
 Showing a typical layout of a commercial data engineering structure (top) versus
@@ -93,6 +91,7 @@ likely that multiple copies of experimental data must be kept at various sites,
 and tight control needs to be maintained on the specific sub-sets of data stored
 at each.
 ```
+
 In @fig-display, we show two example data flows: one for a commercial enterprise
 (on the top), and one for a typical academic project (bottom; this matches
 closely with the needs of the Simons Observatory).
@@ -136,7 +135,7 @@ maps, etc.), and publications. Both regulation and community standards typically
 leads to these products being _immutable_ and available _forever_, hosted by an
 external service. This reliance on external compute and storage leads to our
 understanding of this workflow through the flow of data into and out of the
-aforementioned providers. 
+aforementioned providers.
 
 Though they may have varied locations and resources, the computing centers are
 all usually organised in a broadly similar way, with dedicated data ingest (or
@@ -157,15 +156,17 @@ and in the form of 'books' (structured directories of binary data), within a
 pre-determined directory structure that must be replicated exactly on all of the
 downstream sites. At certain downstream sites, we have space for all of the data
 from the entire project, but at others only a recent, rolling, sub-set may be
-maintained. 
+maintained.
 
 ### Existing Software
+
 Because of the significantly different constraints in the academic world versus
 the commercial world, there is a relatively limited set of tools that can be
 used to accomplish the goal of automated data management and transfer. In our
 search, we evaluated the following tools:
 
 #### Globus
+
 Globus [@Foster2011;@Allen2012] is a non-profit service from the University of
 Chicago, and specialises in the batch transfer of large data products. Globus
 works by having an 'endpoint server' running at each location, which can
@@ -185,6 +186,7 @@ such, Globus is more of a 'data transfer' tool, than a data management tool. It
 does not have significant cataloguing capability.
 
 #### Rucio and iRODS
+
 Rucio [@Rucio2019] is a distributed data management system that was originally
 designed for the ATLAS high-energy physics experiment at the LHC, and as such is
 extremely scalable (i.e. exabytes or more). Rucio can be backed by different
@@ -192,7 +194,7 @@ levels of storage, from fast (SSD) to slow (tape), and is declarative (meaning
 that one simply asks the system to follow a set of rules, like 'keep three
 copies of the data'), with its own user and permissions management system. Rucio
 is an exceptionally capable piece of software, but this comes with significant
-complexity. Further,  data is managed externally to the underlying filesystem
+complexity. Further, data is managed externally to the underlying filesystem
 and permissions model of the host, potentially causing issues with the user
 agreements at shared facilities, and interacting with data generally requires
 interaction with the Rucio API. Though Rucio is certainly a fantastic tool, we
@@ -208,6 +210,7 @@ rule-based data management, it was discovered to be incompatible with our need
 to tightly control the specific transfers taking place.
 
 #### Datalad and git-annex
+
 The git-annex [@GitAnnex2024] tool is an extension to Git, the version control
 system, to handle large quantities of binary data. Due to its extensive use by
 home and small business users, it explicitly supports SneakerNet transfers
@@ -223,6 +226,7 @@ data over a variety of storage needs, it was unfortunately not appropriate for
 the Simons Observatory.
 
 ## The Librarian
+
 After much consideration, the collaboration decided that building an
 orchestration and tracking framework on top of Globus was most appropriate. In
 addition, there was an existing piece of software used for the Hydrogen Epoch of
@@ -246,6 +250,7 @@ design concepts that were carried over from the HERA Librarian:
   issues.
 
 The Librarian[^librarian] is made up of five major pieces:
+
 1. A FastAPI[^fastapi] server that allows access through a REST HTTP API.
 2. A database server (postgres[^postgres] in production, SQLite[^sqlite] for
    development) to track state and provide atomicity.
@@ -270,6 +275,7 @@ transferred. The Librarian is open source and available through
 GitHub[^librarian], under the BSD-2-Clause license.
 
 ### Technology Choices
+
 For this project, it was crucial that we used the Python language, as this is
 the lingua franca of the collaboration; all members have at least some knowledge
 of Python. No other language comes close (by a significant margin), and all
@@ -289,6 +295,7 @@ sense to use SQLAlchemy[^sqlalchemy] as our object-relational mapping (ORM) to
 translate database operations to object manipulation.
 
 ### Service Layout
+
 ```{figure} ./Ingest.svg
 :name: fig-ingest
 Showing data ingest (green) and cloning between Librarian instances (orange).
@@ -316,6 +323,7 @@ to explicitly delegate metadata management to other subsystems within the
 project, focusing only on file transfers.
 
 #### User and Librarian Management
+
 During the initial setup of the system, an administrator user is provisioned to
 facilitate further management tasks. This primary administrator has the ability
 to create additional user accounts through the `librarian` command-line tool.
@@ -332,6 +340,7 @@ are salted and hashed in the database using the Argon2[^argon2] algorithm. The
 API employs HTTP Basic Authentication for user verification and access control.
 
 #### Storage Management
+
 In the Librarian system, storage is abstracted into entities known as 'stores'.
 These stores are provisioned during the setup process and can be migrated with a
 server restart. Each store comprises two components: a staging area for ingested
@@ -352,6 +361,7 @@ database. Additionally, all files can have 'remote instances', which are known
 instances of files located on another Librarian.
 
 #### Data Ingestion
+
 Data ingestion follows a systematic process using accounts that have read and
 append privileges. Initially, a request to upload is made to the Librarian web
 server prompting it to create a temporary UUID-named directory in the staging
@@ -365,6 +375,7 @@ one provided in the upload request. If the checksums are consistent, the server
 ingests the file into the storage area.
 
 From the client's perspective, the upload is extremely simple:
+
 ```python
 from hera_librarian import LibrarianClient
 from hera_librarian.settings import client_settings
@@ -381,6 +392,7 @@ client.upload(
     Path("/hello/world/this/is/a/file.txt")
 )
 ```
+
 This then leads to a synchronous uploading of the local file to the global
 namespace, with `upload` returning once this is complete and, crucially, the
 upload is verified (via a checksum) by the server. For most applications,
@@ -389,6 +401,7 @@ successfully, the file is guaranteed to have been correctly uploaded to
 the server and is ready for use and export.
 
 #### Data Cloning
+
 Data can be cloned in two main ways: locally and remotely. Local cloning
 involves making a copy to a different store on the same Librarian, which is
 often used for SneakerNet. This process is straightforward and handled by a
@@ -413,6 +426,7 @@ is generated to the source Librarian to complete the transfer and register a new
 remote instance.
 
 #### Data Access
+
 Data can be accessed through the Librarian, by querying it for the location of
 individual instances of a file. However, because our stores generally just wrap
 the POSIX filesystem, users typically already know a-priori where the files that
@@ -421,12 +435,14 @@ such, data access is generally as simple as opening the file; it is where users
 expect it to be.
 
 ### Data Down the Mountain
+
 ```{figure} ./Sneaker.svg
 :name: fig-sneaker
 Showing the SneakerNet flow between two Librarian instances. The sneaker drive
 is physically moved between computing sites, alongside a manifest of all files
 on the drive, to complete transfers in large batches.
 ```
+
 In the specific case of an observatory, there is an additional challenge here:
 lines representing data flows in @fig-ingest no longer simply show bytes sent
 over HTTP connections to highly available services, but instead represent
@@ -444,10 +460,11 @@ offload the data is required. The observatory produces around 20 TB of data a
 week, which is much more than the 50 MBit/s radio link can transfer; either way,
 that bandwidth is required for other uses. This necessitates a more primitive
 solution: so-called 'SneakerNet' transfers, where data is carried by hand on
-physical media. 
+physical media.
 
 SneakerNet transfers are supported natively by the Librarian, and occur through
 the following steps (as shown in @fig-sneaker):
+
 - A new store is provisioned that refers to the mounted drive that will be
   carried in the process.
 - A local clone background task catches up on missing files to this drive and,
@@ -468,6 +485,7 @@ This is an unusual process, but comes in extremely handy in bandwidth
 constrained, remote, environments.
 
 ### Testing
+
 Testing complex data flows like those represented in the Librarian is a
 notoriously difficult task. For instance, testing the components that make up
 the SneakerNet workflow means being able to test two interacting web-servers,
@@ -502,8 +520,9 @@ this approach is that it is not possible to get test coverage for the lines that
 are performed inside the `xprocess` fork.
 
 ### Deployment Details
+
 As we have made a relatively straightforward selection of technologies, and the
-fact that the Librarian is a  small application (less than 10'000 lines),
+fact that the Librarian is a small application (less than 10'000 lines),
 deployment is a simple process. In addition, it makes it straightforward to
 explain the code paths that are taken by the Librarian.
 
@@ -516,7 +535,7 @@ and notifications.
 The focus on simplicity that we have made for the Librarian has made deployment
 simple; system administrators within the academic community are very familiar
 with Globus, and have been happy to assist with deployments of Librarian
-orchestration framework. 
+orchestration framework.
 
 ## Conclusions
 
@@ -542,7 +561,6 @@ Librarian has demonstrated its effectiveness through its deployment at the
 Simons Observatory, highlighting its potential as a versatile and reliable data
 management solution for large-scale scientific collaborations. We provide
 Librarian as free, open source, software to the community.
-
 
 [^librarian]: https://github.com/simonsobs/librarian
 [^fastapi]: https://fastapi.tiangolo.com

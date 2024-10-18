@@ -1,9 +1,11 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/JHPV7385
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-aleksandar_makelov
-  title: "Mandala: Compositional Memoization for Simple & Powerful Scientific Data Management"
-  subtitle: LaTeX edition
+  title: 'Mandala: Compositional Memoization for Simple & Powerful Scientific Data Management'
+  description: We present mandala, a Python library that largely eliminates the accidental complexity of scientific data management and incremental computing. While most traditional and/or popular data management solutions are based on logging, mandala takes a fundamentally different approach, using memoization of function calls as the fundamental unit of saving, loading, querying and deleting computational artifacts.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Aleksandar Makelov
@@ -32,15 +34,5 @@ project:
         - maymounkov2018koji
         - semver
         - lozano2017unison
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
-  numbering:
-    headings: true
 site:
   template: article-theme

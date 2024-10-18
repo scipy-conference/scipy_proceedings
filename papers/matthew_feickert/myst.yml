@@ -1,9 +1,12 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/KMXN4784
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-matthew_feickert
   # Ensure your title is the same as in your `main.md`
   title: How the Scientific Python ecosystem helps answer fundamental questions of the Universe
+  description: The ATLAS experiment at CERN explores vast amounts of physics data to answer the most fundamental questions of the Universe. This paper will describe to a broad audience how a large scientific collaboration leverages the power of the Scientific Python ecosystem to tackle domain-specific challenges and advance our understanding of the Cosmos.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Matthew Feickert
@@ -62,6 +65,7 @@ project:
     HEP: High Energy Physics
     IRIS-HEP: Institute for Research and Innovation in Software for High Energy Physics
     LHC: Large Hadron Collider
+    NSF: National Science Foundation
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -75,14 +79,6 @@ project:
         - Dask-awkward
         - Dask-histogram
         - Kourlitis:2890478
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
   # Exclude source files to keep them from appearing as supporting documents
   exclude:
     - introduction.md
