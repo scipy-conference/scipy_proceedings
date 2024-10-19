@@ -27,14 +27,15 @@ project:
     - Phylogeography
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    DD: decimal degrees
+    PCR: Polymerase Chain Reaction
+    rRNA: Ribosomal ribonucleic acid
+    GIN: Greenland, Iceland, and Norwegian
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
   # The rest of the information shouldn't be modified
   subject: Research Article
   open_access: true
