@@ -36,11 +36,5 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-09-23
 site:
   template: article-theme
