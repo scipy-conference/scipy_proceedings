@@ -3,13 +3,13 @@ The peracarid taxon Cumacea is an essential indicator of benthic quality in mari
 
 Our analyses revealed variability in most spatial and biological attributes, reflecting the diversity of ecological requirements and benthic habitats. The most common Cumacea families, Diastylidae and Leuconidae, suggest adaptations to various marine environments. Phylogeographic analysis showed a divergence between specific genetic sequences and two habitat attributes: wind speed (m/s) at the start of sampling and O\textsubscript{2} concentration (mg/L). This may suggest potential divergent local adaptation to these fluctuating conditions.
 
-These results reinforce the importance of further research into the relationship between Cumacea genetics and global environmental factors. Understanding these relationships is essential for interpreting the evolutionary dynamics and adaptation of deep-sea Cumacea. This study sheds much-needed light on invertebrate acclimatization to climate change, anthropomorphic pressures, and deep-water habitat management. It can contribute to the evolution of more efficient conservation strategies and inform policies that protect vulnerable marine ecosystems. 
+These results reinforce the importance of further research into the relationship between Cumacea genetics and global environmental factors. Understanding these relationships is essential for interpreting the evolutionary dynamics and adaptation of deep-sea Cumacea. This study sheds much-needed light on invertebrate acclimatization to climate change, anthropomorphic pressures, and deep-water habitat management. It can contribute to the evolution of more efficient conservation strategies and inform policies that protect vulnerable marine ecosystems.
 
 The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub} and \href{https://pypi.org/project/aphylogeo/}{PyPi}, providing an invaluable tool for future research.
 \end{abstract}
 
 \section{Introduction}\label{introduction}
-The North Atlantic and Subarctic regions, particularly the Icelandic waters, are of ecological interest due to their diverse water masses and unique oceanographic features \citep{schnurr_composition_2014, meisner_benthic_2014, uhlir_adding_2021}. These areas form vital {benthic habitats}\footnote{These are areas on the bottom of the oceans or lakes, including sediments and organisms that live in them.} \citep{levin2009ecological} and enhance our understanding of deep-sea ecosystems and biodiversity patterns \citep{rogers2007corals, danovaro2008exponential, uhlir_adding_2021}. The IceAGE project and its predecessors, BIOFAR and BIOICE, provide invaluable data for studying the impacts of climate change and seabed mining, especially in the Greenland, Iceland, and Norwegian (GIN) seas \citep{meisner_prefacebiodiversity_2018}. 
+The North Atlantic and Subarctic regions, particularly the Icelandic waters, are of ecological interest due to their diverse water masses and unique oceanographic features \citep{schnurr_composition_2014, meisner_benthic_2014, uhlir_adding_2021}. These areas form vital {benthic habitats}\footnote{These are areas on the bottom of the oceans or lakes, including sediments and organisms that live in them.} \citep{levin2009ecological} and enhance our understanding of deep-sea ecosystems and biodiversity patterns \citep{rogers2007corals, danovaro2008exponential, uhlir_adding_2021}. The IceAGE project and its predecessors, BIOFAR and BIOICE, provide invaluable data for studying the impacts of climate change and seabed mining, especially in the Greenland, Iceland, and Norwegian (GIN) seas \citep{meisner_prefacebiodiversity_2018}.
 
 Cumacea, a crustacean taxon within Peracarida, provide major indicators of marine ecosystem health due to their sensitivity to environmental fluctuations \citep{stransky_diversity_2010} and their contribution to benthic food webs \citep{rehm2009cumacea}. Despite their ecological importance, deep-sea benthic invertebrates’ evolutionary history remains uncharted, notably in the North Atlantic \citep{jennings_phylogeographic_2014}. Interpretation of the genetic distribution and demography of these deep-sea organisms is essential to predict their response to climate change \citep{jennings_phylogeographic_2014} and anthropogenic pressures (e.g., seabed mining) \citep{meisner_prefacebiodiversity_2018}, and to improve our knowledge of their adaptive mechanisms in these deep-sea ecosystems.
 
@@ -30,7 +30,7 @@ Using robust analytical methods such as dissimilarity calculations and phylogene
 Furthermore, our genetic and environmental data highlights habitats of high conservation interest, which can be considered for establishing marine protected areas \citep{levin2009ecological}. These results are essential for drawing up informed conservation strategies in the context of climate change, and for supporting their development. Finally, our study paves the way for further research on other invertebrate species across different geographic regions. By extending this research to diverse environments and taxonomic groups, scientists will gain a more complete understanding of the adaptation and resilience of marine invertebrates to changing conditions. 
 
 \section{Materials and Methods}\label{materials-methods}
-This section describes our data and introduces the main stages of data pre-processing and the \textit{aPhyloGeo} software. A flow chart, constructed with the diagram software draw.io, summarizes this section (see Figure \ref{fig:fig1}).
+This section describes our data and introduces the main stages of data pre-processing and the \textit{aPhyloGeo} software. A flow chart, constructed with the diagram software draw.io, summarizes this section (\autoref{fig:fig1}).
 
 \begin{figure}[htbp]
     \centering
@@ -107,20 +107,20 @@ correlation_matrix <- cor(numeric_Data, use = "pairwise.complete.obs")
 print(correlation_matrix)
 \end{lstlisting}
 
-This selection of attributes and data resulted in a table containing 62 rows ($n=62$) and 16 columns (number of attributes). 
+This selection of attributes and data resulted in a table containing 62 rows ($n=62$) and 16 columns (number of attributes).
 
 \subsection{Selected attributes in the IceAGE database}
 
-\subsubsection{Geographic data} 
+\subsubsection{Geographic data}
 
 \begin{itemize}
 \item The latitude (see Figure \ref{fig:fig2}a) at the end of sampling and longitude (see Figure \ref{fig:fig2}b) at the start of sampling, both in decimal degrees (DD), as they are intimately linked to the environmental gradients and historical mechanisms modeling genetic heterogeneity \citep{gaither2013origins}.
-\item The sectors across the seas around Iceland: the Denmark Strait ($n=28$), the Iceland Basin ($n=15$), the Irminger Basin ($n=12$), the Norwegian Sea ($n=4$), and the Norwegian Basin ($n=3$). 
+\item The sectors across the seas around Iceland: the Denmark Strait ($n=28$), the Iceland Basin ($n=15$), the Irminger Basin ($n=12$), the Norwegian Sea ($n=4$), and the Norwegian Basin ($n=3$).
 \end{itemize}
 
-\subsubsection{Environmental data} 
+\subsubsection{Environmental data}
 \begin{itemize}
-\item Depth (m) at the start of sampling (see Figure \ref{fig:fig2}c), as well as water temperature ($^\circ$C) (see Figure \ref{fig:fig2}e), and O\textsubscript{2} concentration (mg/L) (see Figure \ref{fig:fig2}f), as these are vital elements of the marine ecosystem that have an impact on the distribution and evolutionary acclimatization of marine species \citep{rex2006global, danovaro2010first}. 
+\item Depth (m) at the start of sampling (see Figure \ref{fig:fig2}c), as well as water temperature ($^\circ$C) (see Figure \ref{fig:fig2}e), and O\textsubscript{2} concentration (mg/L) (see Figure \ref{fig:fig2}f), as these are vital elements of the marine ecosystem that have an impact on the distribution and evolutionary acclimatization of marine species \citep{rex2006global, danovaro2010first}.
 \item Since the sedimentary characteristics directly influence the distribution of Cumacea \citep{uhlir_adding_2021}, they were included in our data. In this study, they are divided into six ecological niche categories: mud ($n=30$), sandy mud ($n=15$), sand ($n=9$), forams ($n=3$), muddy sand ($n=3$), and gravel ($n=2$).
 \end{itemize}
 
