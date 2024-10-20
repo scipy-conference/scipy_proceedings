@@ -10,7 +10,7 @@ project:
     - name: Justin Gagnon
       email: Justin.Gagnon2@USherbrooke.ca
       affiliations:
-        - Department of Computer Science, University of Sherbrooke, 2500, boul. de l'Université, Sherbrooke, Quebec, J1K 2R1 Canada
+        - Department of Biology, University of Sherbrooke, 2500, boul. de l'Université, Sherbrooke, Quebec, J1K 2R1 Canada
     - name: Nadia Tahiri
       email: Nadia.Tahiri@USherbrooke.ca
       orcid: 0000-0002-1818-208X
@@ -18,12 +18,12 @@ project:
         - Department of Computer Science, University of Sherbrooke, 2500, boul. de l'Université, Sherbrooke, Quebec, J1K 2R1 Canada
       corresponding: true
   keywords:
+    - Adaptation
     - Atlantic
     - Bioinformatics
     - Biology
     - Cumacea
     - Iceland
-    - Phylogeny
     - Phylogeography
   # Add the abbreviations that you use in your paper here
   abbreviations:
