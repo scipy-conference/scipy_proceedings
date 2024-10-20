@@ -238,14 +238,14 @@ import ete3
 
 def robinson_foulds(tree1, tree2):
     """
-    Calculate the Robinson-Foulds distance between the two sets of trees.
+    Calculate the Robinson-Foulds distance and the normalized Robinson-Foulds distance between the two sets of trees.
 
     Parameters:
     - tree1: Genetic trees in Newick format (represent phylogenetic trees in text form).
     - tree2: Ecological and spatial trees in Newick format (represent variables trees in text form).
 
     Returns:
-    - rf: The Robinson-Foulds distance between the two sets of trees.
+    - rf: The Robinson-Foulds distance.
     - rf_normalized: The normalized Robinson-Foulds distance.
     """
     # Initialize the Robinson-Foulds distance
@@ -258,7 +258,7 @@ def robinson_foulds(tree1, tree2):
 
     # Calculate the Robinson-Foulds distance
     # The method returns RFD, maximum possible RFD, and common leaves (i.e., a taxa) between the trees.
-    rf, rf_max, common_leaves = tree1_newick.robinson_foulds(tree2_newick, unrooted_trees=True)
+    rf, rf_max, common_leaves, x2, x3, x4, x5 = tree1_newick.robinson_foulds(tree2_newick, unrooted_trees=True)
 
     # If there are no common leaves, set the RFD to 0
     # This makes it possible to deal with cases where the trees have no overlapping taxa.
@@ -306,8 +306,11 @@ def euclidean_dist(tree1, tree2):
     - tree2: Meteorological, biological, and regional trees in Newick format (represent variables trees in text form).
 
     Returns:
-    - ed: The Euclidean distance between the two sets of trees.
+    - ed: The Euclidean distance.
     """
+
+    # Initialize the Euclidean distance 
+    ed = 0
 
     # Create a TaxonNamespace object to handle taxon information
     tns = dendropy.TaxonNamespace()
