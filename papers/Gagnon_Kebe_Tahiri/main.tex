@@ -48,7 +48,7 @@ The study area is located in the Northern part of the North Atlantic, including 
 \subsection{Data preprocessing}
 We used data from the article \citep{uhlir_adding_2021}, the IceAGE project, and related data from the BOLDSystem database, as described in \citep{uhlir_adding_2021}. Given these databases' enormous variety of variables, we applied a selective reduction procedure. Variables with no variability (categorical data) were excluded from our study, for which all data were missing and were not linked to genetic sequences or spatial, environmental, and climatic variables. Out of the 495 available in the IceAGE dataset, we considered 62 specimens for which partial 16S rRNA mitochondrial gene sequences were available.
 
-Next, we calculated the variance ($S^2$) using the $var()$ function in RStudio Desktop 4.3.2 for each of the selected variables (numerical and categorical). This step aimed to eliminate variables with low variation, as they are unlikely to provide essential data for analysis. We set a variance threshold of ≤ 0.1 to exclude uninformative variables. The latter allows us to retain variables whose variability is reasonably sufficient for our analyses while rejecting those with little variation. Only water salinity was eliminated based on this criterion ($S^2\textsubscript{Salinity} = 0.02146629$). The formula (see Equation \ref{variance}) and code (\autoref{lst:variance}) used to calculate the variance of our final variables, available in the data file on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}, are provided below:
+Next, we calculated the variance ($S^2$) using the $var()$ function in RStudio Desktop 4.3.2 for each of the selected variables (numerical and categorical). This step aimed to eliminate variables with low variation, as they are unlikely to provide essential data for analysis. We set a variance threshold of ≤ 0.1 to exclude uninformative variables. The latter retains variables whose variability is reasonably sufficient for our analyses while rejecting those with little variation. Only water salinity was eliminated based on this criterion ($S^2\textsubscript{Salinity} = 0.02146629$). The formula (see Equation \ref{variance}) and code (\autoref{lst:variance}) used to calculate the variance of our final variables, available in the data file on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}, are provided below:
 
 \begin{equation}\label{variance}
     S^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}
@@ -57,27 +57,27 @@ Next, we calculated the variance ($S^2$) using the $var()$ function in RStudio D
 where $S^2$ is the variance of the variable, $x_i$ represents each value of the variable, $\bar{x}$ is the average of the values for this variable, and $n$ is the number of values for this variable in the dataset.
 
 %\autoref{lst:variance}.
-\begin{lstlisting}[label=lst:variance,language=R,caption=RStudio script to calculate the variance of each numerical variables in our final dataset]
-# Import data from CSV file
-Data <- read.csv(file = "Final_Data_Article.csv", header = TRUE, sep = ";")
+\begin{lstlisting}[label=lst:variance,language=R,caption=RStudio script to calculate the variance of each numerical and categorical variables in our final dataset.]
+# Import data from the CSV file
+Data <- read.csv(file="Final_Data_Article.csv", header=TRUE, sep=";")
 
 # Define a function to calculate entropy for categorical variables
 calculate_entropy <- function(x) {
-  # Calculate frequency of each category
+  # Calculate the frequency of each category
   freq_table <- table(x)
   # Calculate probabilities
   probabilities <- freq_table / sum(freq_table)
   # Calculate entropy using the probabilities
-  entropy_value <- -sum(probabilities * log(probabilities), na.rm = TRUE)
+  entropy_value <- -sum(probabilities*log(probabilities), na.rm=TRUE)
   return(entropy_value)
 }
 
-# Calculate variance for numerical variables and entropy for categorical variables
+# Calculate variance
 variances <- sapply(Data, function(x) {
   # Check if the column is numeric
   if (is.numeric(x)) {
     # Compute variance, excluding NA values
-    var(x, na.rm = TRUE)
+    var(x, na.rm=TRUE)
   } else if (is.factor(x) || is.character(x)) {
     # If the column is categorical, compute entropy
     calculate_entropy(x)
@@ -99,24 +99,17 @@ We calculated the Pearson correlation ($r$) between variables using the $cor()$ 
 where $r$ is the Pearson correlation coefficient between two variables, $x_i$ are the values of the variable $x$, $y_i$ are the values of the variable $y$, $\bar{x}$ and $\bar{y}$ are respectively the averages of the two variables, and $n$ is the number of values of the two variables in the dataset.
 
 %\autoref{lst:pearson}.
-\begin{lstlisting}[label=lst:pearson,language=R,caption=RStudio script to calculate the Pearson correlation coefficient between all the numerical variables in our final dataset]
-# Import data from the CSV file
-# Read the dataset "Final_Data_Article.csv" and store it in an object called Data.
-# The data is read with semicolon (;) as the delimiter.
-Data <- read.csv(file = "Final_Data_Article.csv", header = TRUE, sep = ";")
+\begin{lstlisting}[label=lst:pearson,language=R,caption=RStudio script to calculate the Pearson correlation coefficient between all the numerical variables in our final dataset.]
+# Import data
+Data <- read.csv(file="Final_Data_Article.csv", header=TRUE, sep=";")
 
 # Select numeric columns only from the dataset
-# This code filters the dataset to include only numeric columns.
-# Create a new DataFrame that contains only the columns with numeric data.
 numeric_Data <- Data[sapply(Data, is.numeric)]
 
 # Calculate Pearson correlation matrix
-# This code calculates the Pearson correlation matrix for the numeric columns.
-# The “pairwise.complete.obs” argument ignores missing values.
-correlation_matrix <- cor(numeric_Data, use = "pairwise.complete.obs")
+correlation_matrix <- cor(numeric_Data, use="pairwise.complete.obs")
 
 # Display correlation matrix
-# Print the resulting Pearson correlation matrix.
 print(correlation_matrix)
 \end{lstlisting}
 
@@ -150,7 +143,7 @@ The habitat and water mass of the sampling points were the only environmental va
 The aligned partial DNA sequence of the 16S rRNA mitochondrial gene was included, as this region is standard in phylogeny and phylogeography studies \citep{hugenholtz1998impact} and sufficiently conserved over time to guarantee exact alignments between different species \citep{saccone1999evolutionary}. We examined 61 of the 306 aligned DNA sequences used for phylogeographic analyses by \citep{uhlir_adding_2021}. As some specimens have their DNA sequence duplicated, or even quadruplicated with a difference of one or two nucleotides, the longest-aligned DNA sequence of each specimen was retained. The ``ICE1-Dia004'' specimen is the only one whose sequence (not aligned) was taken from the BoldSystem database, as it was absent from the \citep{uhlir_adding_2021} aligned DNA database.
 
 \subsection{{\textit{aPhyloGeo} software}\label{aPhyloGeo-software}}
-We used the cross-platform Python software \textit{aPhyloGeo}, developed by My-Linh Luu, Georges Marceau, David Beauchemin, and Nadia Tahiri, for our phylogeographic analyses. This software is designed to analyze phylogenetic trees using ecological and spatial variables (\autoref{lst:main}), enabling us to interpret the evolution of species under different environmental conditions \citep{koshkarov_phylogeography_2022}.
+We used the cross-platform Python software \textit{aPhyloGeo}, developed by My-Linh Luu, Georges Marceau, David Beauchemin, and Nadia Tahiri, for our phylogeographic analyses. This software is designed to analyze phylogenetic trees using ecological and spatial variables (\autoref{lst:main}), to interpret the evolution of species under different environmental conditions \citep{koshkarov_phylogeography_2022}.
 
 We selected this software for our analysis because, to our knowledge, it is the first phylogeographic tool capable of establishing similarity or dissimilarity between species genetics and environmental, climatic, and spatial variables \citep{koshkarov_phylogeography_2022} - precisely the objective of our study. The \textit{aPhyloGeo} software offers several key functionalities:
 
@@ -162,52 +155,38 @@ We selected this software for our analysis because, to our knowledge, it is the 
 
 %\autoref{lst:main}.
 \begin{lstlisting}[label=lst:main,language=Python,caption=Main script for tutorial using the aPhyloGeo package.]
-# This script outlines the main steps for processing genetic and variable data using the aPhyloGeo package.
-# Import necessary modules
-import pandas as pd
-import time
-from aphylogeo.alignement import AlignSequences
-from aphylogeo.params import Params
-from aphylogeo import utils
-from aphylogeo.genetic_trees import GeneticTrees
-    
 if __name__ == "__main__":
 
-    # Load parameters from a configuration file
-    # Load parameters necessary for the analysis from a specified file.
+    # Load parameters
     Params.load_from_file(Params.reference_yaml_filepath)
-
+    
     # Load the sequence file
-    # Loads the genetic sequence file specified by the reference gene filepath.
-    sequence_file = utils.loadSequenceFile(Params.reference_gene_filepath)
-
+    sequence_file = utils.loadSequenceFile(
+                    Params.reference_gene_filepath)
+    
     # Create an AlignSequences object
-    # This object is responsible for aligning the genetic sequences.
     align_sequence = AlignSequences(sequence_file)
 
-    # Load parameter data from a CSV file
-    # This reads the parameter data into a pandas DataFrame.
+    # Load variable data
     variable_data = pd.read_csv(Params.file_name)
 
     # Perform the alignment of sequences
-    # This method aligns the genetic sequences and stores the results.
     alignments = align_sequence.align()
 
-    # Generate phylogenetic trees based on aligned sequences
-    # Create phylogenetic trees from the multiple sequence alignments (MSA).
-    genetic_trees = utils.geneticPipeline(alignments.msa)
+    # Generate genetic trees based on aligned sequences
+    geneticTrees = utils.geneticPipeline(alignments.msa)
 
     # Create a GeneticTrees object
-    # Represent the generated phylogenetic trees in Newick format.
-    trees = GeneticTrees(trees_dict=genetic_trees, format="newick")
+    trees = GeneticTrees(trees_dict=geneticTrees, 
+                        format="newick")
 
-    # Generate  trees based on variable data
-    # Create trees representing the relationships between different variables.
-    variable_trees = utils.climaticPipeline(variable_data)
+    # Generate variable trees
+    variableTrees = utils.climaticPipeline(variable_data)
 
     # Filter the results based on the generated trees
-    # Filter results to ensure they meet certain criteria.
-    utils.filterResults(variable_trees, genetic_trees, variable_data)
+    utils.filterResults(variableTrees, 
+                       geneticTrees, 
+                       variable_data)
 \end{lstlisting}
 
 The \textit{aPhyloGeo} Python package is freely and publicly available on \href{https://github.com/tahiri-lab/aPhyloGeo}{GitHub}, and is also available on \href{https://pypi.org/project/aphylogeo/}{PyPi}, to facilitate complex phylogeographic analyses. The software process has three main stages:
@@ -219,11 +198,11 @@ The \textit{aPhyloGeo} Python package is freely and publicly available on \href{
 
 For the genetic data, phylogenetic reconstruction was repeated to build genetic trees based on 62 partial sequences of the 16S rRNA mitochondrial gene, considering only data within a window that progresses along the alignment \citep{koshkarov_phylogeography_2022}. Each window in the alignment will give a genetic tree. If there are $n$ windows from the sequences, there will be $n$ phylogenetic trees. This displacement can vary according to the steps and the size of the window defined by the user (their length is determined by the number of base pairs (bp)) \citep{koshkarov_phylogeography_2022}.
 
-In our case, we set up the \textit{aPhyloGeo} software as follows: $pairwiseAligner$ for sequence alignment; $\text{Hamming distance}$ to measure simple dissimilarities between sequences; $\text{Wider Fit by elongating with Gap (starAlignment)}$ algorithm takes alignment gaps into account, which is often mandatory in the case of major deletions or insertions in the sequences; $\text{windows\_size}$: 1 nucleotide (nt); and finally, $\text{step\_size}$: 10 nt. The last two configurations imply that for each 1 nt window, a phylogenetic tree is produced using the nucleotide of each Cumacea, then the window is moved by 10 nt, creating a new tree. Genetic trees will be used in an object called $T_1$, while spatial and ecological trees are used in another object called $T_2$.
+In our case, we set up the \textit{aPhyloGeo} software as follows: $pairwiseAligner$ for sequence alignment; $\text{Hamming distance}$ to measure simple dissimilarities between sequences; $\text{Wider Fit by elongating with Gap (starAlignment)}$ algorithm takes alignment gaps into account, which is often mandatory in the case of major deletions or insertions in the sequences; $\text{windows\_size}$: 10 nucleotide (nt); and finally, $\text{step\_size}$: 1 nt. The last two configurations imply that for each 10 nt window, a phylogenetic tree is produced using the 10 nt sequence of each Cumacea. Next, the window is moved by 1 nt, creating a new tree with the next 10 nt, and so on until the end of the alignment. Genetic trees will be stored in an object called $T_1$, while spatial and ecological trees will be stored in another object called $T_2$.
 
-\item \textbf{The third step} is to compare the genetic trees constructed in each sliding window with the ecosystemic, atmospheric, and regional trees using the Robinson-Foulds distance \citep{robinson_comparison_1981}, normalized Robinson-Foulds distance and Euclidean distance. These contribute to understanding the correspondence between Cumacea genetic sequences and their habitat. The approach also takes bootstrapping into account \citep{koshkarov_phylogeography_2022}. The results of these metrics were obtained using the functions $robinson\_foulds(tree1, tree2)$ and $euclidean\_dist(tree1, tree2)$ from the \textit{aPhyloGeo} software and were organized by the main function (\autoref{lst:main}). Those for the normalized Robinson-Foulds distance were obtained with the function $robinson\_foulds(tree1, tree2)$ (see the last line of code in \autoref{lst:robinsonFoulds}). The result of the metrics tells us which of our variables have the greatest divergence of phylogenetic relationships based on the magnitude of the metric distances (see Figure \ref{fig:fig7} and Figure \ref{fig:fig8}).
+\item \textbf{The third step} is to compare the genetic trees constructed in each sliding window with the ecosystemic, atmospheric, and regional trees using the Robinson-Foulds distance \citep{robinson_comparison_1981}, normalized Robinson-Foulds distance and Euclidean distance. These contribute to understanding the correspondence between Cumacea genetic sequences and their habitat variables. The approach also takes bootstrapping into account \citep{koshkarov_phylogeography_2022}. The results of these metrics were obtained using the functions $robinson\_foulds(tree1, tree2)$ and $euclidean\_dist(tree1, tree2)$ from the \textit{aPhyloGeo} software and were organized by the main function (\autoref{lst:main}). Those for the normalized Robinson-Foulds distance were obtained with the function $robinson\_foulds(tree1, tree2)$ (see the last line of code in \autoref{lst:robinsonFoulds}). The result of the metrics indicates which variables show the greatest genetic divergence according to the magnitude of the metric distances (see figures \ref{fig:fig7} and \ref{fig:fig8}).
 
-In addition to identifying the specific variable(s), a sliding-window approach enables the precise location of subtle sequences with high rates of genetic divergence \citep{koshkarov_phylogeography_2022}. This method requires shifting a fixed-size window over the alignment of genetic sequences, allowing phylogenetic trees to be reconstructed for each part of the sequence. It therefore allows us to recognize changes in evolutionary relationships along the partial sequence region of the 16S rRNA mitochondrial gene of Cumacea species. This method is essential for determining whether Cumacea-specific gene sequences in this region of their genome may be affected by certain ecological or spatial variables of their habitat (see Figure \ref{fig:fig7} and Figure \ref{fig:fig8}).
+A sliding-window approach enables the precise location of subtle sequences with high rates of genetic divergence \citep{koshkarov_phylogeography_2022}. This method involves moving a fixed-size window over the alignment of genetic sequences. This allows genetic trees to be built for each part of the aligned sequences, depending on the size of the window and the step size. It therefore makes it possible to recognize changes in evolutionary relationships along the partial sequence region of the 16S rRNA mitochondrial gene of Cumacea species. This method is essential to determine whether this region of the Cumacea genome can be affected by certain ecological or spatial variables in their habitat (see Figure \ref{fig:fig7} and Figure \ref{fig:fig8}).
 \end{enumerate}
 
 \subsection{Metrics}\label{metrics}
@@ -243,47 +222,29 @@ For example, it evaluates the number of division differences between phylogeneti
 where $\text{RF}(T_1, T_2)$ is the Robinson-Foulds distance between the two sets of trees, $\Sigma(T_1)$ and $\Sigma(T_2)$ are the sets of divisions in trees $T_1$ and $T_2$ and $ \Delta $, the difference between these two sets.
 
 %\autoref{lst:robinsonFoulds}.
-\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds Distance using the ete3 package in the aPhyloGeo package.]
-import ete3
-
+\begin{lstlisting}[label=lst:robinsonFoulds,language=Python,caption=Python script for calculating the Robinson-Foulds Distance using the ete3 package in the aPhyloGeo package. The Newick format represents the phylogenetic and variable trees in text form.]
 def robinson_foulds(tree1, tree2):
-    """
-    Calculate the Robinson-Foulds distance and the normalized Robinson-Foulds distance between the two sets of trees.
-
-    Parameters:
-    - tree1: Genetic trees in Newick format (represent phylogenetic trees in text form).
-    - tree2: Ecological and spatial trees in Newick format (represent variables trees in text form).
-
-    Returns:
-    - rf: The Robinson-Foulds distance.
-    - rf_normalized: The normalized Robinson-Foulds distance.
-    """
     # Initialize the Robinson-Foulds distance
     rf = 0
-
     # Convert trees from Newick format to ete3.Tree objects
-    # This parsing allows us to use ete3 methods to compare trees.
     tree1_newick = ete3.Tree(tree1.format("newick"), format=1)
     tree2_newick = ete3.Tree(tree2.format("newick"), format=1)
-
+    
     # Calculate the Robinson-Foulds distance
-    # The method returns RFD, maximum possible RFD, and common leaves (i.e., a taxa) between the trees.
-    rf, rf_max, common_leaves, x2, x3, x4, x5 = tree1_newick.robinson_foulds(tree2_newick, unrooted_trees=True)
-
-    # If there are no common leaves, set the RFD to 0
-    # This makes it possible to deal with cases where the trees have no overlapping taxa.
+    rf, rf_max, common_leaves = tree1_newick.robinson_foulds(
+                                tree2_newick, unrooted_trees=True)
+    # If there are no common leaves, set the RF distance to 0
     if len(common_leaves) == 0:
-        rf = 0
+    rf = 0
 
-    # Return the RFD and its normalized value
-    # Normalization is done by dividing RFD by the maximum possible RFD.
+    # Return the RF distance and its normalized value
     return rf, rf / rf_max
 \end{lstlisting}
 
 \subsubsection{Normalized Robinson-Foulds distance}\label{RFnorm}
 The normalized Robinson-Foulds (nRF) distance scales the RF distance to account for the size variations in the trees (number of clades; i.e., a group of species with a common origin), allowing a more equitable comparison. It scales the distance to a range between 0 and 1. In our context, the distance has been normalized by $2n-6$, where $n$ represents the number of taxa (see Equation \eqref{eq:rf_norm} and the last line of code in \autoref{lst:robinsonFoulds}).
 
-Since the size of environmental trees constructed with O\textsubscript{2} concentration data (mg/L) differs from that of other variables due to missing data, this nRF distance allows us to compare its dissimilarity with the phylogenetic trees in a fairer way \citep{tahiri2018new, koshkarov_phylogeography_2022}. It reveals the relative influence of O\textsubscript{2} concentration (mg/L) on Cumacea phylogenetic relationships, independent of tree size \citep{tahiri2018new, koshkarov_phylogeography_2022}. A high value of this metric between a specific window and other windows considered in the nRF distance analysis suggests that we cannot conclude that there is a correlation between this DNA sequence and the variable. It may indicate a topological dissimilarity between the habitat variable tree and the gene trees at that position in the DNA sequence alignments.
+Since the size of environmental trees constructed with O\textsubscript{2} concentration data (mg/L) differs from that of other variables due to missing data, this nRF distance allows its dissimilarity with phylogenetic trees to be compared more fairly \citep{tahiri2018new, koshkarov_phylogeography_2022}. It reveals the relative influence of O\textsubscript{2} concentration (mg/L) on Cumacea phylogenetic relationships, independent of tree size \citep{tahiri2018new, koshkarov_phylogeography_2022}. A high value of this metric between a specific window and other windows considered in the nRF distance analysis suggests that we cannot conclude that there is a correlation between this DNA sequence and the variable. It may indicate a topological dissimilarity between the habitat variable tree and the gene trees at that position in the DNA sequence alignments.
 
 \begin{equation}\label{eq:rf_norm}
     \text{RF}_{\text{norm}}(T_1, T_2) = \frac{| \Sigma(T_1) \Delta \Sigma(T_2) |}{| \Sigma(T_1) | + | \Sigma(T_2) |}
@@ -303,53 +264,31 @@ By comparing the two sets of trees $T_1$ and $T_2$ using this metric, it is poss
 where $ d_{\text{Euclidean}}(T_1, T_2)$ is the Euclidean distance between the two sets of trees, and $T1_i$ and $T2_i$ represent the respective divisions of trees $T_1$ and $T_2$ for each i-th division.
 
 %\autoref{lst:euclideanDist}.
-\begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the Euclidean distance using the ete3 and the dendropy packages in the aPhyloGeo package]
-import ete3
-import dendropy
-
+\begin{lstlisting}[label=lst:euclideanDist,language=Python,caption=Python script for calculating the Euclidean distance using the ete3 and the dendropy packages in the aPhyloGeo package.  The Newick format represents the phylogenetic and variable trees in text form.]
 def euclidean_dist(tree1, tree2):
-    """
-    Calculate the Euclidean distance between the two sets of trees.
-
-    Parameters:
-    - tree1: Genetic trees in Newick format (represent phylogenetic trees in text form).
-    - tree2: Meteorological, biological, and regional trees in Newick format (represent variables trees in text form).
-
-    Returns:
-    - ed: The Euclidean distance.
-    """
-
     # Initialize the Euclidean distance 
     ed = 0
-
+    
     # Create a TaxonNamespace object to handle taxon information
     tns = dendropy.TaxonNamespace()
 
-    # Load the first tree from Newick format into a dendropy Tree object
-    # Analyzes the string formatted by Newick and prepares the tree for comparison.
-    tree1_tc = dendropy.Tree.get(
-        data=tree1.format("newick"),
-        schema="newick",
-        taxon_namespace=tns
-    )
+    # Load the first tree into a dendropy Tree object
+    tree1_tc = dendropy.Tree.get(data=tree1.format("newick"),
+                                 schema="newick",
+                                 taxon_namespace=tns)
 
-    # Load the second tree from Newick format into a dendropy Tree object
-    # Similar to the first tree, this step prepares the second tree for comparison.
-    tree2_tc = dendropy.Tree.get(
-        data=tree2.format("newick"),
-        schema="newick",
-        taxon_namespace=tns
-    )
+    # Load the second tree into a dendropy Tree object
+    tree2_tc = dendropy.Tree.get(data=tree2.format("newick"),
+                                 schema="newick",
+                                 taxon_namespace=tns)
 
     # Encode the bipartitions of both trees
-    # This step converts the trees into a format where the presence or absence of
-    # Each bipartition (split) is coded, which is necessary to calculate distances.
     tree1_tc.encode_bipartitions()
     tree2_tc.encode_bipartitions()
 
-    # Calculate the Euclidean distance between the two trees
-    # The distance is computed based on the differences in the encoded bipartitions.
-    ed = dendropy.calculate.treecompare.euclidean_distance(tree1_tc, tree2_tc)
+    # Calculate the Euclidean distance
+    ed = dendropy.calculate.treecompare.euclidean_distance(
+         tree1_tc, tree2_tc)
 
     return ed
 \end{lstlisting}
@@ -378,7 +317,7 @@ Our results revealed variability in most habitat variables, as shown in Figure \
 
 The median of the longitude (DD) at the start of sampling (-26.21 DD; Table \ref{fig:tab1}) is lower than the mean (-23.12 DD; Table \ref{fig:tab1}), indicating asymmetry on the higher sides (see Figure \ref{fig:fig3}b), as does the water temperature ($^\circ$C) (Mean: 1.45 $^\circ$C; Median: 0.71 $^\circ$C; see Figure \ref{fig:fig3}e and Table \ref{fig:tab1}). Unlike all the other diagrams in Figure \ref{fig:fig3}, the curve of the depth (m) at the start of sampling (see Figure \ref{fig:fig3}c) has a multimodal shape with three prominent peaks, suggesting that the specimens were mainly collected and concentrated at three different depths (around 500 m, 1500 m and 2500 m; see Figure \ref{fig:fig3}c).
 
-The mean (6.26 m/s; Table \ref{fig:tab1}) and median of wind speed (m/s) at the start of sampling are fairly similar, with a high density of data around the median (6.00 m/s; see Figure \ref{fig:fig3}d and Table \ref{fig:tab1}). This suggests stable wind conditions (m/s) at the start of sampling. The standard deviation of water temperature ($^\circ$C) is relatively high (1.73 $^\circ$C; Table \ref{fig:tab1}) compared to the mean (1.45 $^\circ$C; Table \ref{fig:tab1}), suggesting acclimatization of Cumacea to a variety of habitat temperatures (-0.851 $^\circ$C – 4.28 $^\circ$C; see Figure \ref{fig:fig3}e and Table \ref{fig:tab1}). The range of data for O\textsubscript{2} concentration (mg/L) shows some variability (245.53 mg/L – 292.97 mg/L; see Figure \ref{fig:fig3}f and Table \ref{fig:tab1}) in the environmental conditions. This reflects a diversity of requirements in terms of O\textsubscript{2} concentration (mg/L), with Cumacea potentially affected by the heterogeneity of biogeochemical cycles, such as photosynthesis, respiration, and organic decomposition, which affect depth-dependent dissolved O\textsubscript{2} concentration (mg/L).
+The mean (6.26 m/s; Table \ref{fig:tab1}) and median of wind speed (m/s) at the start of sampling are fairly similar, with a high density of data around the median (6.00 m/s; see Figure \ref{fig:fig3}d and Table \ref{fig:tab1}). This suggests stable wind conditions (m/s) at the start of sampling. The figure for the wind speed (m/s) variable at the end of sampling is quite similar to Figure \ref{fig:fig3}d and is available in the $img$ file on \href{https://github.com/tahiri-lab/Cumacea_aPhyloGeo}{GitHub}. The standard deviation of water temperature ($^\circ$C) is relatively high (1.73 $^\circ$C; Table \ref{fig:tab1}) compared to the mean (1.45 $^\circ$C; Table \ref{fig:tab1}), suggesting acclimatization of Cumacea to a variety of habitat temperatures (-0.851 $^\circ$C – 4.28 $^\circ$C; see Figure \ref{fig:fig3}e and Table \ref{fig:tab1}). The range of data for O\textsubscript{2} concentration (mg/L) shows some variability (245.53 mg/L – 292.97 mg/L; see Figure \ref{fig:fig3}f and Table \ref{fig:tab1}) in the environmental conditions. This reflects a diversity of requirements in terms of O\textsubscript{2} concentration (mg/L), with Cumacea potentially affected by the heterogeneity of biogeochemical cycles, such as photosynthesis, respiration, and organic decomposition, which affect depth-dependent dissolved O\textsubscript{2} concentration (mg/L).
 
 \begin{figure}[htbp]
     \centering
@@ -425,11 +364,11 @@ This study examines the effects of meteorological, regional, and ecosystemic var
 
 The novelty in our research lies in the exhaustive divergence between habitat variables and genetic mutability in Cumacea, particularly in identifying genetic windows associated with habitat fluctuations, which has not been widely investigated in previous studies \citep{manel2003landscape, vrijenhoek2009cryptic}. In this case, our integrated method identifies specific genetic regions sensitive to ecosystemic and atmospheric variations. Thus, by seeking to determine which of these two variables diverges most with the DNA sequences, the eventual identification of proteins linked to one of these variable DNA sequences will make it possible to represent its functional effects in responses to habitat changes. Our future research will focus on verifying the prediction of this protein and assessing its role in the physiological adaptation of Cumacea to fluctuating conditions, adding a link between genetic data and ecological function.
 
-Interpreting how marine invertebrates genetically adapt to variations in their habitat can help us better predict their responses to climate change and advance conservation plans to protect them. Identifying the specific variables that influence genetic variability in Cumacea can contribute to the designation and supervision of marine protected areas, assuring they include habitats crucial to the survival and acclimatization of these species. Thus, our results can inform the management of fishing and seabed mining companies by revealing ecologically vulnerable areas where these disturbances can seriously affect benthic biodiversity.
+Interpreting how marine invertebrates genetically adapt to variations in their habitat can help predict their response to climate change and advance conservation plans to protect them. Identifying the specific variables that influence genetic variability in Cumacea can contribute to the designation and supervision of marine protected areas, assuring they include habitats crucial to the survival and acclimatization of these species. Thus, our results can inform the management of fishing and seabed mining companies by revealing ecologically vulnerable areas where these disturbances can seriously affect benthic biodiversity.
 
-Furthermore, our results provide essential knowledge to guide future studies on the genetic adaptation of Cumacea and other invertebrates to ecological and regional variability. Based on these findings, future research should focus on additional ecosystemic and meteorological variables, such as nutrient accessibility, water pH, ocean currents, and the degree of human disturbance, to further improve the interpretation of the complex interactions between genetics and the environment. Broadening the scope of application to other marine species, not just marine invertebrates, and diverse geographic regions would allow us to generalize the results more effectively. With this in mind, longitudinal study models on these species could reflect long-term climatic and biological fluctuations and improve our knowledge of the dynamics of genetic acclimatization.
+Furthermore, our results provide essential knowledge to guide future studies on the genetic adaptation of Cumacea and other invertebrates to ecological and regional variability. Based on these findings, future research should focus on additional ecosystemic and meteorological variables, such as nutrient accessibility, water pH, ocean currents, and the degree of human disturbance, to further improve the interpretation of the complex interactions between genetics and the environment. Extending the scope of application to other marine species, not just marine invertebrates, and various spatial regions would provide a better means of generalizing the results. With this in mind, longitudinal study models on these species could reflect long-term climatic and biological fluctuations and improve our knowledge of the dynamics of genetic acclimatization.
 
-However, it is important to recognize the limitations of our study. In particular, the three missing data points on O\textsubscript{2} concentration (mg/L) and the relatively small sample size ($n=62$) may have induced a bias, which could impact the validity of our interpretations and restrict the generalizability of our results. Moreover, these missing data could provide partial insight into the relationship between O\textsubscript{2} concentration (mg/L) and genetic fluctuation in Cumacea, and our sample size may reduce the statistical power of our results. Future studies should address these gaps by incorporating larger sample sizes and more complete datasets to confirm and expand our conclusions. Additionally, as our research focuses solely on the partial sequence of the mitochondrial 16S rRNA gene, utilizing more elaborate genomic methods, such as whole-gene or even whole-genome sequencing, could help us better understand marine species' genetic variety and global acclimatization mechanisms. This would provide more comprehensive genetic databases to improve our accuracy and knowledge in identifying existing (and new) marine invertebrate species using DNA barcoding (e.g., mitochondrial DNA cytochrome c oxidase I (COX1)). Finally, multidisciplinary collaborations between ecology, genetics, and oceanography would be essential to enhance knowledge sharing and its application in future research.
+However, it is important to recognize the limitations of our study. In particular, the three missing data points on O\textsubscript{2} concentration (mg/L) and the relatively small sample size ($n=62$) may have induced a bias, which could impact the validity of our interpretations and restrict the generalizability of our results. Moreover, these missing data could provide partial insight into the relationship between O\textsubscript{2} concentration (mg/L) and genetic fluctuation in Cumacea, and our sample size may reduce the statistical power of our results. Future studies should address these gaps by incorporating larger sample sizes and more complete datasets to confirm and expand our conclusions. Additionally, as our research focuses solely on the partial sequence of the mitochondrial 16S rRNA gene, utilizing more elaborate genomic methods, such as whole-gene or even whole-genome sequencing, could help better understand marine species' genetic variety and global acclimatization mechanisms. This would provide more comprehensive genetic databases to improve our accuracy and knowledge in identifying existing (and new) marine invertebrate species using DNA barcoding (e.g., mitochondrial DNA cytochrome c oxidase I (COX1)). Finally, multidisciplinary collaborations between ecology, genetics, and oceanography would be essential to enhance knowledge sharing and its application in future research.
 
 \section{Acknowledgments}\label{acknowledgments}
 The authors thank the SciPy conference and reviewers for their valuable comments on this paper as well as Mansour Kebe for his technical support and Carolin Uhlir for her clarifications and advice on her study \citep{uhlir_adding_2021}. This work was supported by the Natural Sciences and Engineering Research Council of Canada (NSERC), the Fonds de recherche du Québec - Nature et technologies (FRQNT), the Université de Sherbrooke grant, and the Centre de recherche en écologie de l’Université de Sherbrooke (CREUS).
