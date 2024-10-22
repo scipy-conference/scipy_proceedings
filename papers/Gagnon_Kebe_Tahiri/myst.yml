@@ -1,18 +1,16 @@
 version: 1
-extends: ../proceedings.yml
 project:
-  doi: 10.25080/NVYF1037
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-gagnon_kebe_tahiri
-  title: Ecological and Geographic Influences on Cumacea Genetics in the Northern North Atlantic
+  title: Ecological and Spatial Influences on the Genetics of Cumacea (Crustacea: Peracarida) in the Northern North Atlantic
   subtitle: by aPhyloGeo software
-  description: Cumacea are vital indicators of benthic health in marine ecosystems. This study investigated the influence of environmental (i.e., biological or ecosystemic), climatic (i.e., meteorological or atmospheric), and geographic (i.e., spatial or regional) attributes on their genetic variability in the Northern North Atlantic, focusing on Icelandic waters.
+  description: The peracarid taxon Cumacea is an essential indicator of benthic quality in marine ecosystems. This study investigated the influence of environmental (i.e., biological or ecosystemic), climatic (i.e., meteorological or atmospheric), and spatial (i.e., geographic or regional) variables on their genetic variability and adaptability in the Northern North Atlantic, focusing on Icelandic waters.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Justin Gagnon
       email: Justin.Gagnon2@USherbrooke.ca
       affiliations:
-        - Department of Computer Science, University of Sherbrooke, 2500, boul. de l'Université, Sherbrooke, Quebec, J1K 2R1 Canada
+        - Department of Biology, University of Sherbrooke, 2500, boul. de l'Université, Sherbrooke, Quebec, J1K 2R1 Canada
     - name: Nadia Tahiri
       email: Nadia.Tahiri@USherbrooke.ca
       orcid: 0000-0002-1818-208X
@@ -20,13 +18,12 @@ project:
         - Department of Computer Science, University of Sherbrooke, 2500, boul. de l'Université, Sherbrooke, Quebec, J1K 2R1 Canada
       corresponding: true
   keywords:
+    - Adaptation
     - Atlantic
-    - Arctic
     - Bioinformatics
     - Biology
     - Cumacea
     - Iceland
-    - Phylogeny
     - Phylogeography
   # Add the abbreviations that you use in your paper here
   abbreviations:
@@ -34,6 +31,7 @@ project:
     PCR: Polymerase Chain Reaction
     rRNA: Ribosomal ribonucleic acid
     GIN: Greenland, Iceland, and Norwegian
+    bp: base pairs
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
