@@ -1,10 +1,13 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/TCFJ5130
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-matt_mccormick
   # Ensure your title is the same as in your `main.md`
   title: ITK-Wasm
   subtitle: Universal spatial analysis and visualization
+  description: In recent years, WebAssembly has emerged as a widely-supported technology that offers high performance, compact binary size, support for multiple languages, hardware independence, security, and universal platform support.  ITK-Wasm brings WebAssembly’s capabilities to scientific computing by combining the Insight Toolkit (ITK) and WebAssembly to enable high-performance spatial analysis across programming languages and hardware architectures.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Matthew McCormick
@@ -48,6 +51,7 @@ project:
   abbreviations:
     ITK: Insight Toolkit
     wasm: WebAssembly
+    Wasm: WebAssembly
     WASI: WebAssembly System Interface
     GPU: Graphics Processing Unit
     CPU: Central Processing Unit
@@ -78,15 +82,5 @@ project:
         - Johnson2015-qc
         - Johnson2015-ur
         - NLM_VisibleHumanMale
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  plugins:
-    - unsplash.mjs
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

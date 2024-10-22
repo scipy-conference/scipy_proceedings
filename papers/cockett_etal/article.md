@@ -62,7 +62,7 @@ Many of these processes are hidden from authors[^hidden-processes] as well as ac
     Much of the production publication processes are hidden from scientific authors, with typesetting focused on cross-references, linking citations, ensuring citations have appropriate IDs (e.g. DOIs) as well as conversion to JATS XML (a NISO standard for archiving scientific articles), metadata preparation to [CrossRef](https://crossref.org), and archiving services like LOCKSS (<https://lockss.org>) and CLOCKSS (<https://clockss.org>).
     Additionally, the many proprietary services and tools to create both online and PDF outputs of the authors work that are nicely typeset for reading on the web or online.
 
-One goal of the MyST Markdown project is to _dramatically_ reduce these direct-publication costs[^zero-cost] and directly provide direct unfettered access to structured data as an output of authoring.
+One goal of the MyST Markdown project is to _dramatically_ reduce these direct-publication costs[^zero-cost] and provide unfettered access to structured data as an output of authoring.
 The availability of this structured data directly enables exported content in a variety of formats including HTML, PDF and JATS-XML (a NISO standard for archiving scientific articles).
 In this article, we will demonstrate that having structured data throughout authoring can lead to a number of novel reading and authoring experiences [@eg:hover], connect to interactivity and computation [@eg:interactivity], and can provide new opportunities for reuse and quality checks when publishing [@eg:checks].
 Furthermore, these transformation processes can be run _continuously_, opening the possibilities for faster feedback [see @sec:continuous-science], iterative drafts, small tweaks and versioned improvements that otherwise would not be worth the time and cost.
@@ -146,7 +146,7 @@ The mechanisms to support continuous processes are through automation, rapid fee
 This gives us a technical lens to assess, for example:
 
 - How long does it take to get feedback if your metadata or DOI is incorrect?
-- When a computational figures or data output changes, how long does it take to integrate that into your document?
+- When a computational figure or data output changes, how long does it take to integrate that into your document?
 - How can you assess and test that the structure of a document applies to editorial rules?
 
 In science there is a highly manual, absurdly expensive and disconnected process between authoring and publishing.

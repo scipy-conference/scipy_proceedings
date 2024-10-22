@@ -1,11 +1,6 @@
 ---
 title: RoughPy
-subtitle: Streaming data is rarely smooth 
-bibliography:
-    - roughpy.bib
-numbering:
-    heading_2: true
-    heading_3: true
+subtitle: Streaming data is rarely smooth
 abstract: |
   Rough path theory is a branch of mathematics arising out of stochastic
   analysis. One of the main tools of rough path analysis is the signature,
@@ -30,7 +25,8 @@ acknowledgements: |
 ---
 
 ## Introduction
-Sequential data appears everywhere in the modern world: text, finance, health 
+
+Sequential data appears everywhere in the modern world: text, finance, health
 records, radio (and other electromagnetic spectra), sound (and speech), etc.
 Traditionally, these data are tricky to work with because of the exponential
 complexity and different scales of the underlying process.
@@ -40,33 +36,35 @@ short-term fine detail.
 Rough path theory gives us tools to work with sequential, ordered data in a
 mathematically rigorous way, which should provide a means to overcome some of
 the inherent complexity of the data.
-In this paper, we introduce a new package *RoughPy* for working with sequential
+In this paper, we introduce a new package _RoughPy_ for working with sequential
 data through the lens of rough path theory, where we can perform rigourous
 analyses and explore different ways to understand sequential data.
 
-Rough paths arise in the study of *controlled differential equations* (CDEs),
+Rough paths arise in the study of _controlled differential equations_ (CDEs),
 which generalise ordinary differential equations (ODEs) and stochastic
 differential equations
 [@Lyons1998;@10.1007/978-3-540-71285-5].
-These are equations of the form $\mathrm{d}Y_t = f(Y_t, \mathrm{d}X_t)$, subject 
-to an initial condition $Y_0 = y_0$, that model a non-linear system driven by a 
+These are equations of the form $\mathrm{d}Y_t = f(Y_t, \mathrm{d}X_t)$, subject
+to an initial condition $Y_0 = y_0$, that model a non-linear system driven by a
 input path $X$.
 One simple CDE turns out to be critical to the theory:
+
 ```{math}
 \mathrm{d}S_t = S_t \otimes \mathrm{d}X_t \qquad S_0 = \mathbf{1}.
 ```
-The solution of this equation is called the *signature* of $X$.
+
+The solution of this equation is called the _signature_ of $X$.
 It is analogous to the exponential function for ODEs, in that the
 solution of any CDE can be expressed in terms of the signature of the driving
 path.
-When the path $X$ is sufficiently regular, the signature can be computed 
+When the path $X$ is sufficiently regular, the signature can be computed
 directly as a sequence of iterated integrals.
-In other cases, we can still solve CDEs if we are given higher order data that 
+In other cases, we can still solve CDEs if we are given higher order data that
 can be used in place of the iterated integrals.
-A path equipped with this higher order data is called a *rough path*.
+A path equipped with this higher order data is called a _rough path_.
 
 The signature turns out to be a useful summary of sequential data.
-It captures the order of events but not the necessarily the rate at which 
+It captures the order of events but not the necessarily the rate at which
 these events occur.
 The signature is robust to irregular sampling and provides a fixed-size view of
 the data, regardless of how many observations are used to compute it.
@@ -82,19 +80,19 @@ Both of these enjoy the same robustness of the signature, and expand the range
 of applications of rough path-based methods.
 We give a short overview of these methods in @rp-in-ds-sec.
 
-There are several Python packages for computing signatures of sequential data, 
-including `esig` [@esig], `iisignature` [@10.1145/3371237], and 
+There are several Python packages for computing signatures of sequential data,
+including `esig` [@esig], `iisignature` [@10.1145/3371237], and
 `signatory` [@10.48550/arXiv.2001.00706].
-These packages provide functions for computing signatures from raw, 
-structured data presented in an $n\times d$ array, where $d$ is the dimension 
+These packages provide functions for computing signatures from raw,
+structured data presented in an $n\times d$ array, where $d$ is the dimension
 of the stream and $n$ is the number of samples.
-This means the user is responsible for interpreting the data as a path and 
+This means the user is responsible for interpreting the data as a path and
 arranging the computations that need to be done.
 
 RoughPy is a new package for working with sequential data and rough paths.
 The design philosophy for this package is to shift the emphasis from simply
 computing signatures on data to instead work with streams.
-A *stream* is a view of some data as if it were a rough path, that can be
+A _stream_ is a view of some data as if it were a rough path, that can be
 queried over intervals to obtain a signature.
 The actual form of the data is abstracted away in favour of stream objects that
 closely resemble the mathematics.
@@ -122,109 +120,121 @@ RoughPy is open source (BSD 3-Clause) and available on GitHub
 [https://github.com/datasig-ac-uk/roughpy](https://github.com/datasig-ac-uk/roughpy).
 
 (math-bgd-sec)=
+
 ### Mathematical background
-In this section we give a very short introduction to signatures and rough path 
+
+In this section we give a very short introduction to signatures and rough path
 theory that should be sufficient to inform the discussion in the sequel.
-For a far more comprehensive and rigorous treatment, we refer the reader to the 
+For a far more comprehensive and rigorous treatment, we refer the reader to the
 recent survey [@10.48550/arXiv.2206.14674].
-For the remainder of the paper, we write $V$ for the vector space 
+For the remainder of the paper, we write $V$ for the vector space
 $\mathbb{R}^d$, where $d \geq 1$.
 
-A *path* in $V$ is a continuous function $X:[a, b] \to V$, where $a < b$ are
-real numbers. 
-For the purposes of this discussion, we shall further impose the condition 
+A _path_ in $V$ is a continuous function $X:[a, b] \to V$, where $a < b$ are
+real numbers.
+For the purposes of this discussion, we shall further impose the condition
 that all paths are of bounded variation.
-The value of a path $X$ at some parameter $t\in[a, b]$ is denoted $X_t$. 
+The value of a path $X$ at some parameter $t\in[a, b]$ is denoted $X_t$.
 
-The signature of $X$ is an element of the *(free) tensor algebra*.
+The signature of $X$ is an element of the _(free) tensor algebra_.
 For $n \geq 0$, the $n$th tensor power of $V$ is defined recursively by
 $V^{\otimes 0} = \mathbb{R}$, $V^{\otimes 1} = V$, and $V^{\otimes n+1} = V
-\otimes V^{\otimes n}$ for $n > 1$. 
-For example, $V^{\otimes 2}$ is the space of $d\times d$ 
+\otimes V^{\otimes n}$ for $n > 1$.
+For example, $V^{\otimes 2}$ is the space of $d\times d$
 matrices, and $V^{\otimes 3}$ is the space of $d\times d\times d$ tensors.
-The *tensor algebra over $V$* is the space
+The _tensor algebra over $V$_ is the space
+
 ```{math}
 \mathrm{T}((V)) = \{\mathbf{x} = (x_0, x_1, \dots) : x_j \in V^{\otimes j}
 \,\forall j \geq 0\}
 ```
+
 equipped with the tensor product $\otimes$ as multiplication.
-The tensor algebra is a *Hopf algebra*, and comes equipped with an
+The tensor algebra is a _Hopf algebra_, and comes equipped with an
 antipode operation $\alpha_V:\mathrm{T}((V)) \to \mathrm{T}((V))$.
 It contains a group $\mathrm{G}(V)$ of elements under tensor multiplication and
 the antipode.
-The members of $\mathrm{G}(V)$ are called *group-like* elements.
-For each $n \geq 0$, we write $\mathrm{T}^n(V)$ for the *truncated tensor
-algebra* of degree $n$, which is the space of all $\mathbf{x} = (x_0, x_1,
+The members of $\mathrm{G}(V)$ are called _group-like_ elements.
+For each $n \geq 0$, we write $\mathrm{T}^n(V)$ for the _truncated tensor
+algebra_ of degree $n$, which is the space of all $\mathbf{x} = (x_0, x_1,
 \dots)$ such that $x_j = 0$ whenever $j > n$.
-Similarly, we write $\mathrm{T}^{>n}((V))$ for the subspace of elements 
-$\mathbf{x} = (x_0, x_1,\dots)$ where $x_j = 0$ whenever $j \leq n$, 
-which is an ideal in $\mathrm{T}((V))$ and 
+Similarly, we write $\mathrm{T}^{>n}((V))$ for the subspace of elements
+$\mathbf{x} = (x_0, x_1,\dots)$ where $x_j = 0$ whenever $j \leq n$,
+which is an ideal in $\mathrm{T}((V))$ and
 $\mathrm{T}^n(V) = \mathrm{T}((V)) / \mathrm{T}^{>n}((V))$.
-The truncated tensor algebra is an algebra, when given the *truncated tensor
-product*, obtained by truncating the full tensor product. 
+The truncated tensor algebra is an algebra, when given the _truncated tensor
+product_, obtained by truncating the full tensor product.
 
 The signature $\mathrm{S}(X)_{s, t}$ of a path $X:[a,b] \to V$ over a
-subinterval $[s, t)\subseteq [a, b]$ is 
-$\mathrm{S}(X)_{s,t} = (1, \mathrm{S}_1(X)_{s,t}, \dots)\in \mathrm{G}(V)$ 
-where for each $m\geq 1$, $\mathrm{S}_m(X)_{s, t}$ is given by the iterated 
+subinterval $[s, t)\subseteq [a, b]$ is
+$\mathrm{S}(X)_{s,t} = (1, \mathrm{S}_1(X)_{s,t}, \dots)\in \mathrm{G}(V)$
+where for each $m\geq 1$, $\mathrm{S}_m(X)_{s, t}$ is given by the iterated
 (Riemann-Stieltjes) integral
+
 ```{math}
 \mathrm{S}_m(X)_{s, t} = \underset{s < u_1 < u_2 < \dots < u_m < t}
 {\int \dots \int}
 \mathrm{d}X_{u_1}\otimes \mathrm{d}X_{u_2}\otimes\dots\otimes \mathrm{d}X_{u_m}.
 ```
-The signature respects concatenation of paths, meaning 
-$\mathrm{S}(X)_{s, t} = \mathrm{S}(X)_{s, u} \otimes \mathrm{S}(X)_{u, t}$ 
+
+The signature respects concatenation of paths, meaning
+$\mathrm{S}(X)_{s, t} = \mathrm{S}(X)_{s, u} \otimes \mathrm{S}(X)_{u, t}$
 for any $s < u < t$.
-This property is usually called *Chen's relation*.
-Two paths have the same signature if and only if they differ by a 
-*tree-like path* [@10.4007/annals.2010.171.109].
-The signature is translation invariant, and it is invariant under 
+This property is usually called _Chen's relation_.
+Two paths have the same signature if and only if they differ by a
+_tree-like path_ [@10.4007/annals.2010.171.109].
+The signature is translation invariant, and it is invariant under
 reparametrisation.
 
-The *dual* of $\mathrm{T}((V))$ is the *shuffle algebra* $\mathrm{Sh}(V)$.
+The _dual_ of $\mathrm{T}((V))$ is the _shuffle algebra_ $\mathrm{Sh}(V)$.
 This is the space of linear functionals $\mathrm{T}((V))\to \mathbb{R}$
 and consists of sequences $(\lambda_0, \lambda_1, \dots)$ with
 $\lambda_k\in (V^{\ast})^{\otimes k}$ and where $\lambda_k = 0$ for all $k$
 larger than some $N$.
 (Here $V^{\ast}$ denotes the dual space of $V$. In our notation $V^{\ast} \cong
-V$.) The multiplication on $\mathrm{Sh}(V)$ is the *shuffle product*, which
+V$.) The multiplication on $\mathrm{Sh}(V)$ is the _shuffle product_, which
 corresponds to point-wise multiplication of functions on the path.
 Continuous functions on the path can be approximated (uniformly) by shuffle
 tensors acting on $\mathrm{G}(V)$ on the signature.
-This is a consequence of the Stone-Weierstrass theorem. 
-This property is sometimes referred to as *universal non-lineararity*.
+This is a consequence of the Stone-Weierstrass theorem.
+This property is sometimes referred to as _universal non-lineararity_.
 
-There are several *Lie algebras* associated to $\mathrm{T}((V))$.
-Define a *Lie bracket* on $\mathrm{T}((V))$ by the formula 
-$[\mathbf{x}, \mathbf{y}] = \mathbf{x} \otimes \mathbf{y} - 
+There are several _Lie algebras_ associated to $\mathrm{T}((V))$.
+Define a _Lie bracket_ on $\mathrm{T}((V))$ by the formula
+$[\mathbf{x}, \mathbf{y}] = \mathbf{x} \otimes \mathbf{y} -
 \mathbf{y}\otimes \mathbf{x}$, for
 $\mathbf{x},\mathbf{y}\in \mathrm{T}((V))$.
 We define subspaces $L_m$ of $\mathrm{T}((V))$ for each $m\geq 0$ inductively as
-follows: $L_0 = \{\mathbf{0}\}$, $L_1 = V$, and, for $m \geq 1$, 
+follows: $L_0 = \{\mathbf{0}\}$, $L_1 = V$, and, for $m \geq 1$,
+
 ```{math}
 L_{m+1} = \mathrm{span}\{[\mathbf{x}, \mathbf{y}] : \mathbf{x}\in V, \mathbf{y}
 \in L_m\}.
 ```
-The space of formal Lie series $\mathcal{L}(V)$ over $V$ is the subspace of 
-$\mathrm{T}((V))$ containing sequences of the form $(\ell_0, \ell_1, \cdots)$, 
+
+The space of formal Lie series $\mathcal{L}(V)$ over $V$ is the subspace of
+$\mathrm{T}((V))$ containing sequences of the form $(\ell_0, \ell_1, \cdots)$,
 where $\ell_j\in L_j$ for each $j\geq 0$.
 Note that $\mathcal{L}(V)\subseteq \mathrm{T}^{>0}(V)$.
-For any $\mathbf{x} \in \mathrm{T}(V)$ we define 
+For any $\mathbf{x} \in \mathrm{T}(V)$ we define
+
 ```{math}
 \exp(\mathbf{x}) = \sum_{n=0}^\infty \frac{\mathbf{x}^{\otimes n}}{n!}
 \quad\text{and}\quad
 \log(\mathbf{1} + \mathbf{x}) = \sum_{n=1}^\infty
 \frac{(-1)^{n-1}}{n}\mathbf{x}^{\otimes n}.
 ```
-For any path $X$, we have 
-$\mathrm{LogSig}(X)_{s, t} := \log(\mathrm{S}(X)_{s, t})\in \mathcal{L}(V)$, 
-and we call this the *log-signature* of $X$ over $[s, t)$.
+
+For any path $X$, we have
+$\mathrm{LogSig}(X)_{s, t} := \log(\mathrm{S}(X)_{s, t})\in \mathcal{L}(V)$,
+and we call this the _log-signature_ of $X$ over $[s, t)$.
 This is an alternative representation of the path, but doesn't enjoy the same
 unievrsal non-linearity of the signature.
 
 (rp-in-ds-sec)=
-### Rough paths in data science 
+
+### Rough paths in data science
+
 Now we turn to the applications of rough path theory to data science.
 Our first task is to form a bridge between sequential data and paths.
 Consider a finite, ordered sequence $\{(t_1, \mathbf{x}_1,\dots,
@@ -233,21 +243,23 @@ $\mathbf{x}_j\in V$.
 (More generally, we might consider $\mathbf{x}_j\in\mathcal{L}(V)$ instead.
 That is, data that already contains higher-order information. In our language,
 it is a genuine rough path.)
-We can find numerous paths that interpolate these observations; a path 
+We can find numerous paths that interpolate these observations; a path
 $X:[t_0, t_N]\to V$ such that, for each $j$, $X_{t_j} = \mathbf{x}_j$.
 The simplest interpolation is to take the path that is linear between adjacent
 observations.
 
 Once we have a path, we need to be able to compute signatures.
 For practical purposes, we truncate all signatures (and log-signatures) to a
-particular degree $M$, which we typically call the *depth*.
-The dimension of the ambient space $d$ is usually called the *width*.
-Using linear interpolation, we can compute the iterated integrals explicitly 
+particular degree $M$, which we typically call the _depth_.
+The dimension of the ambient space $d$ is usually called the _width_.
+Using linear interpolation, we can compute the iterated integrals explicitly
 using a free tensor exponential of the difference of successive terms:
+
 ```{math}
 \mathrm{Sig}^M([t_j, t_{j+1})) = \exp_M(\mathbf{x}_{j+1} - \mathbf{x}_j) :=
 \sum_{j=0}^M \frac{1}{j!}(\mathbf{x}_{j+1} - \mathbf{x}_j)^{\otimes j}.
 ```
+
 Here, and in the remainder of the paper, we shall denote the empirical signature
 over an interval $I$ by $\mathrm{Sig}(I)$ and the log-signature as
 $\mathrm{LogSig}(I)$.
@@ -255,18 +267,21 @@ We can compute the signature over arbitrary intervals by taking the product of
 the these terms, using the multiplicative property of the signature.
 
 #### The signature transform
+
 Most of the early applications of rough paths in data science, the (truncated)
 signature was used as a feature map [@NEURIPS2019_d2cdf047]. This provides a
 summary of the path that is independent of the parameterisation and the number
 of observations. Unfortunately, the signature grows geometrically with
 truncation depth. If $d > 1$, then the dimension of $\mathrm{T}^M(V)$ is
+
 ```{math}
 \sum_{m=0}^M d^m = \frac{d^{M+1} - 1}{d - 1}
 ```
+
 The size of the signature is a reflection of the complexity of the data, where
 data with a higher complexity generally needs a higher truncation level and thus
 a larger signature. It is worth noting that this still represents a significant
-compression of stream information in many cases. 
+compression of stream information in many cases.
 
 For some applications, it might be possible to replace the signature with the
 log-signature. The log-signature is smaller than the signature, but we lose the
@@ -277,16 +292,18 @@ science becomes more mathematically mature, we will likely find new ways to use
 the signature without requiring its full size.
 
 (sigker-sec)=
+
 #### Signature kernels
+
 Kernel methods are useful tools for learning with sequential data.
-Mathematically, a *kernel* on a set $W$ is a positive-definite function
+Mathematically, a _kernel_ on a set $W$ is a positive-definite function
 $k:W\times W\to \mathbb{R}$. Kernels are often quite easy to evaluate because of
 the kernel trick, which involves embedding the data in a inner product space,
 with a feature map, in which the kernel can be evaluated by simply taking an
 inner product. Informally, kernels measure the similarity between two points.
 They are used in a variety of machine learning tasks such as classification.
 
-The *signature kernel* is a kernel induced on the space of paths by combining
+The _signature kernel_ is a kernel induced on the space of paths by combining
 the signature with an inner product defined on the tensor algebra
 [@JMLR_v20_16_314]. The theory surrounding the signature kernel has been
 expanded several times since their introduction
@@ -297,7 +314,7 @@ to the tensor algebra.
 Signatures are infinite objects, so we can't simply evaluate inner products on
 the tensor algebra. Fortunately, we can approximate the signature kernel by
 taking inner products of truncated signatures. Even better, it turns out that,
-in certain cases, the signature kernel can be realised as  the solution to a
+in certain cases, the signature kernel can be realised as the solution to a
 partial differential equation (PDE) of Goursat type. This means the full
 signature kernel can be computed from raw data without needing to compute full
 signatures [@10.1137/20M1366794].
@@ -310,12 +327,16 @@ which are not available in any current package for computing signatures. These
 functions are provided by RoughPy.
 
 (ncde-sec)=
+
 #### Neural controlled differential equations
+
 Neural CDEs are a method for modelling irregular time series.
 We consider CDEs of the form
+
 ```{math}
 \mathrm{d}Y_t = f_\theta(Y_t)\,\mathrm{d}X_t
 ```
+
 where $f_\theta$ is a neural network.
 We can treat the path $Y$ as "hidden state" that we can tune using data to
 understand the relationship between the driving path $X_t$ and some response.
@@ -326,23 +347,26 @@ Neural CDEs initially showed some promising results on several benchmarks but
 now lag behind current state-of-the-art approaches to time series modelling.
 The latest iteration of neural CDEs are the recently introduced Log-neural
 controlled differential equations [@10.48550/arXiv.2402.18512],
-which make use of the *Log-ODE* method for solving rough differential equations
+which make use of the _Log-ODE_ method for solving rough differential equations
 in order to boost the performance of neural CDEs.
 
 (applications-sec)=
+
 ## Current applications of rough paths
+
 In this section we enumerate several applications where rough paths have been
 used to develop or improve methods. This list presented here is certainly not
 exhaustive. In addition to the literature cited below, there are numerous
 additional references and worked examples, in the form of Jupyter notebooks,
 available on the DataSig website (<https://datasig.ac.uk/examples>).
 
-### Detecting interference in radio astronomy data 
+### Detecting interference in radio astronomy data
+
 Radio frequency interference (RFI) is a substantial problem in the field of
 radio astronomy. Even small amounts of RFI can obscure the faint signals
 generated by distant stellar objects and events. The problem of identifying RFI
 in a signal falls into a class of semi-supervised learning tasks called
-*novelty* (or *anomaly*) *detection*. Rough path methods have been applied to
+_novelty_ (or _anomaly_) _detection_. Rough path methods have been applied to
 develop a novelty detection framework based on rough path methods to detect RFI
 in radio astronomy data from several radio telescopes
 [@doi:10.48550/arXiv.2402.14892]. Their result show that their framework is
@@ -356,6 +380,7 @@ classifier to identify processes that are malicious compared to "normal"
 behaviour learned via training on a corpus of normality.
 
 ### Tracking mood via natural language processing
+
 One application of rough paths in natural language processing has been in the
 domain of mental health [@10.18653/v1/2023.findings-acl.310;
 @tseriotou_etal_2024_sig]. In this work, the authors present a model for
@@ -366,6 +391,7 @@ identify changes in patients and intervene before the state develops. Their
 model achieves state-of-the-art performance vs existing models on two datasets.
 
 ### Predicting battery cell degradation
+
 Another recent application of signatures is to predict the degradation of
 lithium-ion cells [@10.1016/j.apenergy.2023.121974]. They use signature features
 to train a model that can accurately predict the end of life of a cell using
@@ -374,6 +400,7 @@ observed that the performance at higher frequency was comparable to other
 models.
 
 ### Prediction of sepsis in intensive care data
+
 One of the first effective demonstrations of the utility of signatures and rough
 paths based methods in healthcare was in the 2019 PhysioNet challenge
 [@10.1097/CCM.0000000000004510]. In this contest, teams were invited to develop
@@ -388,26 +415,30 @@ and dense. Rough path based methods can handle these data in an elegant way, and
 retain the structure of long and short term dependencies within the data.
 
 ### Human action recognition
+
 The task of identifying a specific action performed by a person from a short
-video clip is very challenging. 
+video clip is very challenging.
 Signatures derived from landmark data extracted from the video has been used to
 train classification models that achieved state-of-the-art performance compared
 with contemporary models
 [@10.1007/978-3-030-98519-6_18; @doi:10.1109/tmm.2023.3318242;
 @liao2021a].
 (See also preprint papers [@10.48550/arXiv.2308.12840;
-@10.48550/arXiv.2403.15212].) 
+@10.48550/arXiv.2403.15212].)
 Also in the domain of computer vision, signatures have been used to produce
 lightweight models for image classification
 [@10.1109/CVPRW56347.2022.00409] and in handwriting recognition
 tasks [@10.1109/TPAMI.2017.2732978].
 
 (roughpy-sec)=
+
 ## RoughPy
+
 RoughPy is a new library that aims to support the development of connections
 between rough path theory and data science. It represents a shift in philosophy
 from simple computations of signatures for sequential data, to a representation
 of these data as a rough path. The design objectives for RoughPy are as follows:
+
 1. provide a class that presents a rough path view of some source of data as a
    rough path, exposing methods for querying the data over intervals to get a
    signature or log-signature;
@@ -420,10 +451,10 @@ The first two objectives are simple design and implementation problems.
 The final objective presents the most difficulty, especially interoperability
 between RoughPy and common machine learning libraries.
 There are array interchange formats for NumPy-like arrays, such as the Python
-Array API standard [@10.25080/gerudo-f2bc6f59-001] and the 
+Array API standard [@10.25080/gerudo-f2bc6f59-001] and the
 DLPack protocol [@dlpack].
 These provide part of the picture, but in order for them to be fully supported,
-RoughPy must support a variety of compute backends such as CUDA (NVidia), 
+RoughPy must support a variety of compute backends such as CUDA (NVidia),
 ROCm/HIP (AMD), and Metal (Apple).
 
 RoughPy is a substantial library with numerous components, mostly written in C++
@@ -435,6 +466,7 @@ In the remainder of this section, we discuss some of the core components of
 RoughPy, give an example of using RoughPy, and discuss the future of RoughPy.
 
 ### Free tensors, shuffle tensors, and Lie objects
+
 In order to properly support rough path based methods and allow users to write
 code based on mathematical concepts, we provide realisations of several algebra
 types. The algebras provided in RoughPy are `FreeTensor`, `ShuffleTensor`, and
@@ -461,10 +493,11 @@ Polynomial coefficients can be used to derive formulae by performing
 calculations. This is a powerful technique for understanding the terms that
 appear in the result, particularly whilst testing and debugging.
 
-### Intervals 
+### Intervals
+
 RoughPy is very careful in the way it handles intervals. All intervals in
 RoughPy are half-open, meaning that they include one end point but not the
-other; they are either *clopen* $[a, b) := \{t: a\leq t < b\}$ or *opencl* $(a,
+other; they are either _clopen_ $[a, b) := \{t: a\leq t < b\}$ or _opencl_ $(a,
 b] := \{t : a < t \leq b\}$. Besides the type (clopen or opencl), all intervals
 must provide methods for retrieving the infimum ($a$ in the above notation) and
 the supremum ($b$ above) of the interval as double precision floats. This is
@@ -473,8 +506,8 @@ interval types are `RealInterval`, an interval with arbitrary real endpoints,
 and `DyadicInterval`, as described below. For brevity, we shall only consider
 clopen intervals.
 
-A *dyadic interval* is an interval $D_k^n := [k/2^n, (k+1)/2^n)$, where $k$, $n$
-are integers. The number $n$ is often described as the *resolution* of the
+A _dyadic interval_ is an interval $D_k^n := [k/2^n, (k+1)/2^n)$, where $k$, $n$
+are integers. The number $n$ is often described as the _resolution_ of the
 interval. The family of dyadic intervals of a fixed resolution $n$ partition the
 real line so that every real number $t$ belongs to a unique dyadic interval
 $D_n^k$. Moreover, the family of all dyadic intervals have the property that two
@@ -482,12 +515,13 @@ dyadic intervals are either disjoint or one contains the other (including the
 possibility that they are equal).
 
 In many cases, RoughPy will granularise an interval into a dyadic intervals. The
-*dyadic granularisation* of $[a, b)$ with resolution $n$ is $[k_1/2^n, k_2/2^n)$
+_dyadic granularisation_ of $[a, b)$ with resolution $n$ is $[k_1/2^n, k_2/2^n)$
 where $k_1 = \max\{k: k/2^n \leq a\}$ and $k_2 = \max\{k: k/2^n \leq b\}$. In
 effect, the dyadic granularisation is the result of "rounding" each end point to
 the included end of the unique dyadic interval that contain it.
 
 ### Streams
+
 Streams are central to RoughPy. A RoughPy `Stream` is a rough path view of some
 underlying data. It provides two key methods to query the object over intervals
 to retrieve either a signature or log-signature. Importantly, once constructed,
@@ -500,7 +534,7 @@ We construct streams by a factory function associated with each different
 `StreamInterface`, which might perform some compression of the underlying data.
 For example, a basic `StreamInterface` is the `LieIncrementStream`, which can be
 constructed using the associated `from_increments` factory function (a static
-method of the class), which accepts an $n \times d$ array of *increment data*.
+method of the class), which accepts an $n \times d$ array of _increment data_.
 These data will typically be the differences between successive values of the
 data (but could also include higher-order Lie terms). This is similar to the way
 that libraries such as `esig`, `iisignature`, and `signatory` consume data.
@@ -510,7 +544,7 @@ so they can be reused in later calculations. To compute the log-signature over
 any interval $I$, we granularise at a fixed stream resolution $n$ to obtain the
 interval $\tilde I = [k_1/2^n, k_2/2^n)$, and then compute
 :::{math}
-\mathrm{LogSig}(\tilde I) = \log\biggl(\prod_{k=k_1}^{k_2-1} 
+\mathrm{LogSig}(\tilde I) = \log\biggl(\prod\_{k=k_1}^{k_2-1}
 \exp(\mathrm{LogSig}(D_k^n))\biggr).
 :::
 The $\mathrm{LogSig}(D_k^n)$ terms on the right-hand-side are either retrieved
@@ -541,21 +575,25 @@ certainly include "online" data sources such as computer peripheral devices
 
 The other main `StreamInterface` implementation is the `PiecewiseAbelianStream`,
 which is an important construction from CDE. A piecewise Abelian path, or
-log-linear path, is an example of a *smooth rough path*, which generalises
-piecewise linear approximations of an arbitrary stream. Formally, an *Abelian
-path* $Y$ is a pair $([a, b), \mathbf{y})$ where $a < b$ and
+log-linear path, is an example of a _smooth rough path_, which generalises
+piecewise linear approximations of an arbitrary stream. Formally, an _Abelian
+path_ $Y$ is a pair $([a, b), \mathbf{y})$ where $a < b$ and
 $\mathbf{y}\in\mathcal{L}(V)$. The log-signature over an arbitrary interval $[u,
 v) \subseteq [a, b)$ is given by
+
 ```{math}
 \mathrm{LogSig}(Y)_{u, v} = \frac{v - u}{b - a}\mathbf{y}.
 ```
-A *piecewise Abelian path* is the concatenation of finitely many Abelian paths
+
+A _piecewise Abelian path_ is the concatenation of finitely many Abelian paths
 with adjacent intervals. For any rough path $X$ and partition $\{a = t_0 < t_1 <
 \dots < t_N = b\}$ there is a piecewise Abelian approximation for this path
 given by
+
 ```{math}
 \{([t_{j-1}, t_j), \mathrm{LogSig}(X)_{t_{j-1}, t_j}): j=1, \dots, N\}.
 ```
+
 This construction turns out to be vital for computing signature kernels
 [@10.25080/gerudo-f2bc6f59-001] and for solving CDEs
 [@10.1007/978-3-540-71285-5; @10.48550/arXiv.2402.18512]. In particular, this
@@ -563,17 +601,21 @@ construction can be used to compress data at some degree, which can the be used
 in computations at a higher degree.
 
 ### Example
+
 In this section we show a very simple example of how to use RoughPy to construct
 a stream and compute a signature. This example is similar to the first few steps
-of the tutorial found in the RoughPy documentation.[^roughpydocs] RoughPy can be
-installed using `pip`, where prebuilt wheels are available for Windows, Linux,
+of the tutorial found in the [RoughPy documentation](https://roughpy.org/user/absolute_beginners.html).
+RoughPy can be installed using `pip`, where prebuilt wheels are available for Windows, Linux,
 and MacOs:
+
 ```
 pip install roughpy
 ```
+
 We refer the reader to this documentation for much more detail.
 We will construct a stream in $\mathbb{R}^{26}$ by taking each letter in a word,
 "scipy" in this example, as the increments of a path:
+
 ```python
 import numpy as np
 
@@ -582,46 +624,51 @@ increments = np.zeros((5, 26), dtype="int8")
 for i, c in enumerate(text):
     increments[i, ord(c) - 97] = 1
 ```
+
 Now we import RoughPy and construct a `Stream` using the factory mentioned
 above. One other critical ingredient is the algebra `Context`, which is used to
 set up a consistent set of algebra objects with the desired width (26),
 truncation level (2), and coefficient type (`Rational`).
+
 ```python
 import roughpy as rp
 
-ctx = rp.get_context(width=26, depth=2, 
+ctx = rp.get_context(width=26, depth=2,
       coeffs=rp.Rational)
 stream = rp.LieIncrementStream.from_increments(
          increments, ctx=ctx)
 ```
+
 Now we can compute the signature of the stream over the whole domain of the
 stream $[0, 4]$ by omitting the interval argument:
+
 ```python
 sig = stream.signature()
 print(sig)
-# { 1() 1(3) 1(9) 1(16) 1(19) 1(25) 1/2(3,3) 
-#   1(3,9) 1(3,16) 1(3,25) 1/2(9,9) 1(9,16) 
-#   1(9,25) 1/2(16,16) 1(16,25) 1(19,3) 1(19,9) 
+# { 1() 1(3) 1(9) 1(16) 1(19) 1(25) 1/2(3,3)
+#   1(3,9) 1(3,16) 1(3,25) 1/2(9,9) 1(9,16)
+#   1(9,25) 1/2(16,16) 1(16,25) 1(19,3) 1(19,9)
 #   1(19,16) 1/2(19,19) 1(19,25) 1/2(25,25) }
 ```
-The first term of the signature is always 1, and the empty parentheses 
+
+The first term of the signature is always 1, and the empty parentheses
 indicate the empty tensor word.
-The next five terms correspond to the counts of each unique letter that 
+The next five terms correspond to the counts of each unique letter that
 appears, the number in parentheses indicates the letter (with `a` being 1).
 The final terms indicate the order in which each pair of letters appear in
 the word.
 For instance, the term `1(3,9)` indicates that a `c` appears before an `i`.
 
-This is only the beginning of the story. 
+This is only the beginning of the story.
 From here, we can use the signatures to compute the similarity between streams,
 via the signature kernel for instance, or used as features in a variety of
 machine learning problems.
 More detailed examples of how to use signatures in data science are given on the
 DataSig website [https://datasig.ac.uk/examples](https://datasig.ac.uk/examples).
 
-:::{prf:remark} 
+:::{prf:remark}
 :nonumber:
-It turns out that most words in the English language can be distinguished 
+It turns out that most words in the English language can be distinguished
 using only their level 2 signatures.
 The first level signatures groups words into anagrams.
 The second level signature counts the occurrences of each ordered pair of
@@ -634,21 +681,20 @@ This is shown in the RoughPy documentation.
 Similar patterns can be observed in other languages too, including French,
 Spanish, German, Russian, and Lithuanian.
 :::
-[^roughpydocs]: <https://roughpy.org/user/absolute_beginners.html>
-
 
 ### The future of RoughPy
+
 RoughPy is continuously evolving.
 At time of writing, the current version uses libalgebra and libalgebra-lite
 (libalgebra with fewer templates) for computations.
-Unfortunately, this made it difficult to achieve the differentiability and 
+Unfortunately, this made it difficult to achieve the differentiability and
 computation device support that we want.
 We are currently changing the way we implement vectors and algebras to provide
 the support for on-device computation that we want.
 Making the operations differentiable is crucial for machine learning, and will
 be the biggest challenge.
 
-Long term, we need to expand support for signature kernels and CDEs. 
+Long term, we need to expand support for signature kernels and CDEs.
 As applications of these tools grow in data science, we will need to devise
 new methods for computing kernels, or solving CDEs.
 We will also build a framework for constructing and working with linear maps,
@@ -656,8 +702,8 @@ and homomorphisms.
 For example, one very useful linear map is the extension of the $\log$ function
 to the whole tensor algebra.
 
-
 ## Conclusions
+
 The use of rough path theory in data science is rapidly expanding and provides a
 different way to view sequential data.
 Signatures, and other methods arising from rough path theory, are already used
@@ -678,5 +724,4 @@ natural way.
 RoughPy is under active development, and a long list of improvements and
 extensions are planned.
 
-
-% vim: tw=80 wrap cc=80 
+% vim: tw=80 wrap cc=80

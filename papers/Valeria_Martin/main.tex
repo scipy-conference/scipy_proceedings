@@ -261,7 +261,7 @@ In the resulting ground truth masks, the pixel values are set to zero if they ar
 \begin{figure}[H]
     \centering
     \includegraphics{label1.png}
-    \caption{Example of a resulting ground truth mask in a forested area affected by wildfires. The mask highlights wildfire-affected areas in yellow and unaffected areas in purple. This binary mask is used to train and validate deep learning models for accurate wildfire detection \label{fig4}}
+    \caption{Example of a resulting ground truth mask in a forested area affected by wildfires. The mask highlights wildfire-affected areas in yellow and unaffected areas in purple. This binary mask is used to train and validate deep learning models for accurate wildfire detection. \label{fig4}}
 \end{figure}
 
 
@@ -328,7 +328,7 @@ def save_rgb_tiles(image_path, output_folder, tile_size, parent_name):
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{crop.png}
-    \caption{Example of cropped pre- and post-wildfire images and their corresponding label}. \label{figcrop}
+    \caption{Example of cropped pre- and post-wildfire images and their corresponding label.} \label{figcrop}
 \end{figure}
 
 By combining the capabilities of rasterio for efficient geospatial data handling and the tifffile library for preserving the RGB data during saving, the original images are cropped into smaller RGB tiles. This approach preserves the resolution and the georeferencing information of the images, preparing them to train DL applications.
@@ -371,7 +371,7 @@ To use this CNN architecture with GeoTIFF satellite images, which typically stor
 \end{itemize}
 
 
-\begin{lstlisting}[language=Python, caption={Custom Function to Feed GeoTIFF Files to the VGG16 Model: The function reads batches of 32 GeoTIFF files, shuffles them, and processes them into a three-dimensional array compatible with VGG16.}, label= lst:custom_generator]
+\begin{lstlisting}[language=Python, caption={Custom Function to Feed GeoTIFF Files to the VGG16 Model: The function reads batches of 32 GeoTIFF files - shuffles them - and processes them into a three-dimensional array compatible with VGG16.}, label= lst:custom_generator]
 from sklearn.utils import shuffle
 
 # Define the base paths for training and testing
@@ -471,7 +471,7 @@ On the validation set, the performance metrics also exhibited positive trends. T
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{6channel.png}
-    \caption{Representation of a 6 Channel RGB GeoTIFF Input. A: Representation of a 3-channel RGB GeoTIFF forested area \textit{before} a wildfire B: Visual example of a 3-channel RGB GeoTIFF forested area \textit{after} a wildfire.}. \label{fig1}
+    \caption{Representation of a 6 Channel RGB GeoTIFF Input. A: Representation of a 3-channel RGB GeoTIFF forested area \textit{before} a wildfire B: Visual example of a 3-channel RGB GeoTIFF forested area \textit{after} a wildfire.} \label{fig1}
 \end{figure}
 EfficientNet \citep{tan2019} is a CNN architecture that uniformly scales network width, depth, and resolution with a fixed set of scaling coefficients. EfficientNet’s architecture begins with a base model, EfficientNet-B0, designed to find the optimal baseline network configuration. The following versions of the network are further scaled versions of B0, offering multiple models for different computational budgets. 
 

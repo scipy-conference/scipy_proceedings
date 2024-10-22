@@ -1,6 +1,9 @@
-## Abstract
-
-The quest for more efficient and faster deep learning models has led to the development of various alternatives to Transformers, one of which is the Mamba model. This paper provides a comprehensive comparison between Mamba models and Transformers, focusing on their architectural differences, performance metrics, and underlying mechanisms. It analyzes and synthesizes findings from extensive research conducted by various authors on these models. The synergy between Mamba models and the SciPy ecosystem enhances their integration into science. By providing an in-depth comparison using Python and its scientific ecosystem, this paper aims to clarify the strengths and weaknesses of Mamba models relative to Transformers. It offers the results obtained along with some thoughts on the possible ramifications for future research and applications in a range of academic and professional fields.
+---
+title: Mamba Models a possible replacement for Transformers?
+subtitle: A Memory-Efficient Approach for Scientific Computing
+abstract: |
+  The quest for more efficient and faster deep learning models has led to the development of various alternatives to Transformers, one of which is the Mamba model. This paper provides a comprehensive comparison between Mamba models and Transformers, focusing on their architectural differences, performance metrics, and underlying mechanisms. It analyzes and synthesizes findings from extensive research conducted by various authors on these models. The synergy between Mamba models and the SciPy ecosystem enhances their integration into science. By providing an in-depth comparison using Python and its scientific ecosystem, this paper aims to clarify the strengths and weaknesses of Mamba models relative to Transformers. It offers the results obtained along with some thoughts on the possible ramifications for future research and applications in a range of academic and professional fields.
+---
 
 ### Introduction
 
@@ -20,11 +23,11 @@ Finally, we explore the potential applications and future directions of Mamba mo
 
 ### State Space Models
 
-The central goal of machine learning is to develop models capable of efficiently processing sequential data across a range of modalities and tasks [@mamba_github]. This is particularly challenging when dealing with **long sequences**, especially those exhibiting **long-range dependencies (LRDs)**  – where information from distant past time steps significantly influences the current state or future predictions. Examples of such sequences abound in real-world applications, including speech, video, medical, time series, and natural language. However, traditional models struggle to effectively handle such long sequences.
+The central goal of machine learning is to develop models capable of efficiently processing sequential data across a range of modalities and tasks [@mamba_github]. This is particularly challenging when dealing with **long sequences**, especially those exhibiting **long-range dependencies (LRDs)** – where information from distant past time steps significantly influences the current state or future predictions. Examples of such sequences abound in real-world applications, including speech, video, medical, time series, and natural language. However, traditional models struggle to effectively handle such long sequences.
 
 **Recurrent Neural Networks (RNNs)** [@Sherstinsky_2020], often considered the natural choice for sequential data, are inherently stateful and require only constant computation per time step. However, they are slow to train and suffer from the well-known "**vanishing gradient problem**", which limits their ability to capture LRDs. **Convolutional Neural Networks (CNNs)** [@oshea2015introduction], while efficient for parallelizable training, are not inherently sequential and struggle with long context lengths, resulting in more expensive inference. **Transformers** [@vaswani2023attention], despite their recent success in various tasks, typically require specialized architectures and attention mechanisms to handle LRDs, which significantly increase computational complexity and memory usage.
 
-A promising alternative for tackling LRDs in long sequences is **State Space Models (SSMs)** [@gu2022efficiently], a foundational mathematical framework deeply rooted in diverse scientific disciplines like control theory and computational neuroscience. SSMs provide a continuous-time representation of a system's state and evolution, offering a powerful paradigm for capturing LRDs.  While SSMs and S4s does not prevent the vanishing gradient problem but it reduces the impact with the help of HiPPO framework and NPLR Parametrization. They represent a system's behavior in terms of its internal **state** and how this state evolves over time. SSMs are widely used in various fields, including control theory, signal processing, and computational neuroscience.
+A promising alternative for tackling LRDs in long sequences is **State Space Models (SSMs)** [@gu2022efficiently], a foundational mathematical framework deeply rooted in diverse scientific disciplines like control theory and computational neuroscience. SSMs provide a continuous-time representation of a system's state and evolution, offering a powerful paradigm for capturing LRDs. While SSMs and S4s does not prevent the vanishing gradient problem but it reduces the impact with the help of HiPPO framework and NPLR Parametrization. They represent a system's behavior in terms of its internal **state** and how this state evolves over time. SSMs are widely used in various fields, including control theory, signal processing, and computational neuroscience.
 
 #### Continuous-time Representation
 
@@ -32,21 +35,21 @@ The continuous-time SSM describes a system's evolution using differential equati
 
 The core equations of the continuous-time SSM are:
 
-* **State Evolution:**
-  $${x'(t) = Ax(t) + Bu(t)}$$
+- **State Evolution:**
+    $${x'(t) = Ax(t) + Bu(t)}$$
 
-* **Output Generation:**
-  $${y(t) = Cx(t) + Du(t)}$$
+- **Output Generation:**
+    $${y(t) = Cx(t) + Du(t)}$$
 
 where:
 
-* $x(t)$ is the state vector at time $t$, belonging to a $N$-dimensional space.
-* $u(t)$ is the input signal at time $t$.
-* $y(t)$ is the output signal at time $t$.
-* $A$ is the state matrix, controlling the evolution of the state vector $x(t)$.
-* $B$ is the control matrix, mapping the input signal $u(t)$ to the state space.
-* $C$ is the output matrix, projecting the state vector $x(t)$ onto the output space.
-* $D$ is the command matrix, directly mapping the input signal $u(t)$ to the output. (For simplicity, we often assume $D$ = 0, as $Du(t)$ can be viewed as a skip connection.)
+- $x(t)$ is the state vector at time $t$, belonging to a $N$-dimensional space.
+- $u(t)$ is the input signal at time $t$.
+- $y(t)$ is the output signal at time $t$.
+- $A$ is the state matrix, controlling the evolution of the state vector $x(t)$.
+- $B$ is the control matrix, mapping the input signal $u(t)$ to the state space.
+- $C$ is the output matrix, projecting the state vector $x(t)$ onto the output space.
+- $D$ is the command matrix, directly mapping the input signal $u(t)$ to the output. (For simplicity, we often assume $D$ = 0, as $Du(t)$ can be viewed as a skip connection.)
 
 This system of equations defines a continuous-time mapping from input $u(t)$ to output $y(t)$ through a latent state $x(t)$. The state matrix $A$ plays a crucial role in determining the dynamics of the system and its ability to capture long-range dependencies.
 
@@ -56,9 +59,9 @@ Despite their theoretical elegance, naive applications of SSMs often struggle wi
 
 HiPPO focuses on finding specific state matrices $A$ that allow the state vector $x(t)$ to effectively memorize the history of the input signal $u(t)$. It achieves this by leveraging the properties of orthogonal polynomials. The HiPPO framework derives several structured state matrices, including:
 
-* **HiPPO-LegT (Translated Legendre):** Based on Legendre polynomials, this matrix enables the state to capture the history of the input within sliding windows of a fixed size.
-* **HiPPO-LagT (Translated Laguerre):** Based on Laguerre polynomials, this matrix allows the state to capture a weighted history of the input, where older information decays exponentially.
-* **HiPPO-LegS (Scaled Legendre):** Based on Legendre polynomials, this matrix captures the history of the input with respect to a linearly decaying weight.
+- **HiPPO-LegT (Translated Legendre):** Based on Legendre polynomials, this matrix enables the state to capture the history of the input within sliding windows of a fixed size.
+- **HiPPO-LagT (Translated Laguerre):** Based on Laguerre polynomials, this matrix allows the state to capture a weighted history of the input, where older information decays exponentially.
+- **HiPPO-LegS (Scaled Legendre):** Based on Legendre polynomials, this matrix captures the history of the input with respect to a linearly decaying weight.
 
 #### Discrete-time SSM: Recurrent Representation
 
@@ -74,13 +77,13 @@ $$
 
 where:
 
-* $\Delta$ acts as a gating factor, selectively weighting the contribution of matrices $A$ and $B$ at each step. This allows the model to dynamically adjust the influence of past hidden states and current inputs.
+- $\Delta$ acts as a gating factor, selectively weighting the contribution of matrices $A$ and $B$ at each step. This allows the model to dynamically adjust the influence of past hidden states and current inputs.
 
-* $A$ represents the state transition matrix. When modulated by $\Delta$, it governs the propagation of information from the previous hidden state to the current hidden state.
+- $A$ represents the state transition matrix. When modulated by $\Delta$, it governs the propagation of information from the previous hidden state to the current hidden state.
 
-* $B$ denotes the input matrix. After modulation by $\Delta$, it determines how the current input is integrated into the hidden state.
+- $B$ denotes the input matrix. After modulation by $\Delta$, it determines how the current input is integrated into the hidden state.
 
-* $C$ serves as the output matrix. It maps the hidden state to the model's output, effectively transforming the internal representations into a desired output space.
+- $C$ serves as the output matrix. It maps the hidden state to the model's output, effectively transforming the internal representations into a desired output space.
 
 :::{figure} ssm.svg
 :label: fig:ssm
@@ -109,17 +112,20 @@ The state-space models (SSMs) compute the output using a linear recurrent neural
 $$
 h_t = \overline{A} h_{t-1} + \overline{B} x_t
 $$
+
 where
 
-* $h_t$ is hidden state matrix at time step t
-* $x_t$ is input vector at time t
+- $h_t$ is hidden state matrix at time step t
+- $x_t$ is input vector at time t
 
 The initial hidden state $h_0$ is computed as:
+
 $$
 h_0 = \overline{A} h_{-1} + \overline{B} x_0 = \overline{B} x_0
 $$
 
 Subsequently, the hidden state at the next time step, $h_1$, is obtained through the recursion:
+
 $$
 h_1 = \overline{A} h_0 + \overline{B} x_1 = \overline{A} \overline{B}
 $$
@@ -130,10 +136,11 @@ $$
 y_t = C h_t
 $$
 
-* C is the output control matrix
-* $y_t$ is output vector at time t
-* $h_t$ is the Internal hidden state at time t
+- C is the output control matrix
+- $y_t$ is output vector at time t
+- $h_t$ is the Internal hidden state at time t
 
+```{math}
 \begin{align*}
 y_0 &= C h_0 = C \overline{B} x_0 \\ 
 y_1 &= C h_1 = C \overline{A} \overline{B} x_0 + C \overline{B} x_1 \\
@@ -141,6 +148,7 @@ y_2 &= C \overline{A}^2 \overline{B} x_0 + C \overline{A} \overline{B} x_1 + C \
 &\vdots\\
 y_t &= C \overline{A}^t \overline{B} x_0 + C \overline{A}^{t-1} \overline{B} x_1 + \ldots + C \overline{A} \overline{B} x_{t-1} + C \overline{B} x_t
 \end{align*}
+```
 
 $$
 Y = K \cdot X
@@ -148,8 +156,8 @@ $$
 
 where :
 
-* $X$ is the input matrix *i.e.* $[x_0, x_1, \ldots, x_L]$
-* $
+- $X$ is the input matrix _i.e._ $[x_0, x_1, \ldots, x_L]$
+- $
 K = \left( C \overline{B}, \, C \overline{A} \overline{B}, \, \ldots, \, C \overline{A}^{L-1} \overline{B} \right)
 $
 
@@ -166,31 +174,31 @@ The core computational bottleneck in SSMs stems from repeated matrix multiplicat
 
 Diagonalization involves finding a change of basis that transforms $A$ into a diagonal form. However, this approach faces significant challenges when $A$ is **non-normal**. Non-normal matrices have complex eigenstructures, which can lead to several problems:
 
-* **Numerically unstable diagonalization:** Diagonalizing non-normal matrices can be numerically unstable, especially for large matrices. This is because the eigenvectors may be highly sensitive to small errors in the matrix, leading to large errors in the computed eigenvalues and eigenvectors.
-* **Exponentially large entries:** The diagonalization of some non-normal matrices, including the HiPPO matrices, can involve matrices with entries that grow exponentially with the dimension $N$. This can lead to overflow issues during computation and render the diagonalization infeasible in practice.
+- **Numerically unstable diagonalization:** Diagonalizing non-normal matrices can be numerically unstable, especially for large matrices. This is because the eigenvectors may be highly sensitive to small errors in the matrix, leading to large errors in the computed eigenvalues and eigenvectors.
+- **Exponentially large entries:** The diagonalization of some non-normal matrices, including the HiPPO matrices, can involve matrices with entries that grow exponentially with the dimension $N$. This can lead to overflow issues during computation and render the diagonalization infeasible in practice.
 
 Therefore, naive diagonalization of non-normal matrices in SSMs is not a viable solution for efficient computation.
 
 ### The S4 Parameterization: Normal Plus Low-Rank (NPLR)
 
-S4 overcomes the challenges of directly diagonalizing non-normal matrices by introducing a novel parameterization [@gu2022parameterization]. It decomposes the state matrix *A* into a sum of a **normal matrix** and a **low-rank term**. This decomposition allows for efficient computation while preserving the structure necessary to handle long-range dependencies. The S4 parameterization is expressed as follows:
+S4 overcomes the challenges of directly diagonalizing non-normal matrices by introducing a novel parameterization [@gu2022parameterization]. It decomposes the state matrix _A_ into a sum of a **normal matrix** and a **low-rank term**. This decomposition allows for efficient computation while preserving the structure necessary to handle long-range dependencies. The S4 parameterization is expressed as follows:
 
-* SSM convolution kernel
+- SSM convolution kernel
 
 $$ ~~~~~~~~
 \overline K = \kappa _L(\overline A, \overline B, \overline C) \text{~~~for~~~} A = V \Lambda V^* − P Q^T$$
 
 where:
 
-* *V* is a unitary matrix that diagonalizes the normal matrix.
-* *Λ* is a diagonal matrix containing the eigenvalues of the normal matrix.
-* *P* and *Q* are low-rank matrices that capture the non-normal component.
-* These matrices HiPPO - $LegS, LegT, LagT$ all satisfy $r$ = 1 or $r$ = 2.
+- _V_ is a unitary matrix that diagonalizes the normal matrix.
+- _Λ_ is a diagonal matrix containing the eigenvalues of the normal matrix.
+- _P_ and _Q_ are low-rank matrices that capture the non-normal component.
+- These matrices HiPPO - $LegS, LegT, LagT$ all satisfy $r$ = 1 or $r$ = 2.
 
 This decomposition allows for efficient computation because:
 
-* **Normal matrices are efficiently diagonalizable:** Normal matrices can be diagonalized stably and efficiently using unitary transformations.
-* **Low-rank corrections are tractable:** The low-rank term can be corrected using the Woodbury identity, a powerful tool for inverting matrices perturbed by low-rank terms.
+- **Normal matrices are efficiently diagonalizable:** Normal matrices can be diagonalized stably and efficiently using unitary transformations.
+- **Low-rank corrections are tractable:** The low-rank term can be corrected using the Woodbury identity, a powerful tool for inverting matrices perturbed by low-rank terms.
 
 ### S4 Algorithms and Complexity
 
@@ -212,10 +220,12 @@ $$
 
 Selective SSM
 
+```{math}
 \begin{align*}
 y_t &= C_0 \overline{A}^t \overline{B}_0 x_0 + C_1 \overline{A}^{t-1} \overline{B}_1 x_1 + \ldots \\
     &\quad \text{input-dependent } B \text{ and } C \text{ matrix}
 \end{align*}
+```
 
 By leveraging the parallel associative scan technique [@lim2024parallelizing], the selective SSM formulation can be efficiently implemented on parallel architectures, such as GPUs. This approach enables the exploitation of the inherent parallelism in the computation, leading to significant performance gains, particularly for large-scale applications and time-series data processing tasks.
 
@@ -239,7 +249,7 @@ In summary, S4 offers a structured and efficient approach to SSMs, overcoming th
 
 ### Mamba Model Architecture
 
-One Mamba Layer [@gu2023mamba] @fig:mamba  is composed of a selective state-space module and several auxiliary layers. Initially, a linear layer doubles the dimensionality of the input token embedding, increasing the dimensionality from 64 to 128. This higher dimensionality provides the network with an expanded representational space, potentially enabling the separation of previously inseparable classes.
+One Mamba Layer [@gu2023mamba] @fig:mamba is composed of a selective state-space module and several auxiliary layers. Initially, a linear layer doubles the dimensionality of the input token embedding, increasing the dimensionality from 64 to 128. This higher dimensionality provides the network with an expanded representational space, potentially enabling the separation of previously inseparable classes.
 Subsequently, a canonical 1D convolution layer processes the output of the previous layer, manipulating the dimensions within the linearly upscaled 128-dimensional vector. This convolution layer employs the **SiLU (Sigmoid-weighted Linear Unit)** activation function [@elfwing2017sigmoidweighted]. The output of the convolution is then processed by the selective state-space module, which operates akin to a linear recurrent neural network (RNN).
 
 :::{figure} mamba.svg
@@ -259,12 +269,14 @@ Self attention, feed forward Neural Networks, normalization, residual layers and
 #### Architecture Overview
 
 ##### Transformer Architecture
-Transformers @fig:transformer rely heavily on attention mechanisms to model dependencies between input and output sequences. A better understanding of the code will be of great help[@transformer_py].
+
+Transformers @fig:transformer rely heavily on attention mechanisms to model dependencies between input and output sequences. A better understanding of the code will be of great help [@transformer_py].
 
 The core components include:
-* **Multi-Head Self-Attention**: Allows the model to focus on different parts of the input sequence.
-* **Position-wise Feed-Forward Networks**: Applied to each position separately.
-* **Positional Encoding**: Adds information about the position of each token in the sequence, as Transformers lack inherent sequential information due to the parallel nature of their processing.
+
+- **Multi-Head Self-Attention**: Allows the model to focus on different parts of the input sequence.
+- **Position-wise Feed-Forward Networks**: Applied to each position separately.
+- **Positional Encoding**: Adds information about the position of each token in the sequence, as Transformers lack inherent sequential information due to the parallel nature of their processing.
 
 :::{figure} transformer.webp
 :label: fig:transformer
@@ -272,10 +284,12 @@ This diagram illustrates the transformer model architecture, featuring encoder a
 :::
 
 ##### Mamba Architecture
+
 Mamba models @fig:mamba are based on Selective State Space Models (SSMs), combining aspects of RNNs, CNNs, and classical state space models. Key features include:
-* **Selective State Space Models**: Allow input-dependent parameterization to selectively propagate or forget information.
-* **Recurrent Mode**: Efficient recurrent computations with linear scaling.
-* **Hardware-aware Algorithm**: Optimized for modern hardware to avoid inefficiencies from the Flash Attention 2 Paper. [@]
+
+- **Selective State Space Models**: Allow input-dependent parameterization to selectively propagate or forget information.
+- **Recurrent Mode**: Efficient recurrent computations with linear scaling.
+- **Hardware-aware Algorithm**: Optimized for modern hardware to avoid inefficiencies from the Flash Attention 2 Paper.
 
 #### Key Differences
 
@@ -292,10 +306,10 @@ Here, $ A $, $ B $, and $ C $ are state space parameters that vary with the inpu
 
 ##### 2. Computational Complexity
 
-| Feature     | Architecture    | Complexity   | Inference Speed   | Training Speed   |
-|------------|:----------------|:-------------|:------------------|:-----------------|
-| Transformer | Attention-based | High         | O(n)              | O(n²)           |
-| Mamba       | SSM-based       | Lower        | O(1)              | O(n)             |
+| Feature     | Architecture    | Complexity | Inference Speed | Training Speed |
+| ----------- | :-------------- | :--------- | :-------------- | :------------- |
+| Transformer | Attention-based | High       | O(n)            | O(n²)          |
+| Mamba       | SSM-based       | Lower      | O(1)            | O(n)           |
 
 ##### 3. Sequence Handling and Memory Efficiency
 
@@ -308,14 +322,16 @@ Mamba integrates selective state spaces directly into the neural network archite
 There are other competing architectures that aim to replace or complement Transformers, such as Retentive Network [@sun2023retentive], Griffin [@de2024griffin], Hyena [@poli2023hyena], and RWKV [@peng2023rwkv]. These architectures propose alternative approaches to modeling sequential data, leveraging techniques like gated linear recurrences, local attention, and reinventing recurrent neural networks (RNNs) for the Transformer era.
 
 ### Mamba's Synergy with Scipy
+
 Scipy [@scipy] provides a robust ecosystem for scientific computing in Python, offering a wide range of tools and libraries for numerical analysis, signal processing, optimization, and more. This ecosystem serves as a fertile ground for the development and integration of Mamba, facilitating its training, evaluation, and deployment in scientific applications. Leveraging Scipy's powerful data manipulation and visualization capabilities, Mamba models can be seamlessly integrated into scientific workflows, enabling in-depth analysis, rigorous statistical testing, and clear visualization of results.
 
 The combination of Mamba's language understanding capabilities and Scipy's scientific computing tools opens up new avenues for exploring large-scale scientific datasets commonly encountered in scientific research domains such as astronomy, medicine, and beyond, extracting insights, and advancing scientific discoveries.
 
 #### Potential Applications and Future Directions:
-* **Efficient Processing of Large Scientific Datasets:** Mamba's ability to handle long-range dependencies makes it well-suited for analyzing and summarizing vast amounts of scientific data, such as astronomical observations, medical records, or experimental results, thereby reducing the complexity and enabling more efficient analysis.
-* **Enhancing Model Efficiency and Scalability:** Integrating Mamba with Scipy's optimization and parallelization techniques can potentially improve the efficiency and scalability of language models, enabling them to handle increasingly larger datasets and more complex scientific problems.
-* **Advancing Scientific Computing through Interdisciplinary Collaboration:** The synergy between Mamba and Scipy fosters interdisciplinary collaboration between natural language processing researchers, scientific computing experts, and domain-specific scientists, paving the way for novel applications and pushing the boundaries of scientific computing.
+
+- **Efficient Processing of Large Scientific Datasets:** Mamba's ability to handle long-range dependencies makes it well-suited for analyzing and summarizing vast amounts of scientific data, such as astronomical observations, medical records, or experimental results, thereby reducing the complexity and enabling more efficient analysis.
+- **Enhancing Model Efficiency and Scalability:** Integrating Mamba with Scipy's optimization and parallelization techniques can potentially improve the efficiency and scalability of language models, enabling them to handle increasingly larger datasets and more complex scientific problems.
+- **Advancing Scientific Computing through Interdisciplinary Collaboration:** The synergy between Mamba and Scipy fosters interdisciplinary collaboration between natural language processing researchers, scientific computing experts, and domain-specific scientists, paving the way for novel applications and pushing the boundaries of scientific computing.
 
 The diverse range of models as U-Mamba [@ma2024umamba], Vision Mamba[@zhu2024vision], VMamba [@liu2024vmamba], MambaByte [@wang2024mambabyte]and Jamba [@lieber2024jamba], highlights the versatility and adaptability of the Mamba architecture. These variants have been designed to enhance efficiency, improve long-range dependency modeling, incorporate visual representations, explore token-free approaches, integrate Fourier learning, and hybridize with Transformer components.
 

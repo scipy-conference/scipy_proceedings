@@ -1,10 +1,13 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/YCFW5807
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-brian_falkenstein
   # Ensure your title is the same as in your `main.md`
   title: Predx-Tools
   subtitle: Dispelling the Mystery in Histopathological Image Processing
+  description: Histopathological images, which are digitized images of human or animal tissue, contain insights into disease state. We present PredX-Tools, a suite of simple and easy to use python GUI applications which facilitate analysis of histopathological images and provide a no-code platform for data scientists and researchers to perform analysis on raw and transformed data.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Brian Falkenstein
@@ -33,11 +36,11 @@ project:
     - name: Raymond Yan
       email: raymond.yan@predxbio.com
       affiliations:
-        - PredxBio, Inc.    
+        - PredxBio, Inc.
   keywords:
     - digital pathology
     - brightfield
-    - multiplex immunofluorescence 
+    - multiplex immunofluorescence
     - point process
   # Add the abbreviations that you use in your paper here
   abbreviations:
@@ -63,13 +66,5 @@ project:
         - tifffile
         - zarr
         - pysimplegui
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

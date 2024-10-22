@@ -1,10 +1,13 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/JFYN3740
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-funix
   # Ensure your title is the same as in your `main.md`
   title: Funix - The laziest way to build GUI apps in Python
   subtitle: Make it (the app) before they fake it (in Figma or on a napkin)
+  description: Presenting a model or algorithm as a GUI application is a common need in the scientific and engineering community.  Funix was created to automatically launch apps from existing Python functions, automatically selecting widgets based on the types of the arguments and returning functions according to the type-to-widget mapping defined in a theme.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Forrest Sheng Bao
@@ -31,7 +34,14 @@ project:
     - frontend development
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
+    ML: machine learning
+    AI: artificial intelligence
+    GenAI: generative artificial intelligence
+    LLM: large language model
+    GUI: graphical user interface
+    DSL: Domain Specific Language
+    MUI: Material UI (User Interface)
+    CLI: command line interface
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -42,13 +52,5 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

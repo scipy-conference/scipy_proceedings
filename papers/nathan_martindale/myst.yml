@@ -1,10 +1,13 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/GVHT1072
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-nathan_martindale
   # Ensure your title is the same as in your `main.md`
   title: Supporting Greater Interactivity in the IPython Visualization Ecosystem
   subtitle: IPyWidgets, IPyVuetify, and beyond
+  description: Interactive visualizations are invaluable tools for building intuition and supporting rapid exploration of datasets and models. This paper explains the benefits of IPyVuetify with the ability to arbitrarily overlay widgets and plots on top of others to support more flexible details-on-demand techniques.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Nathan Martindale
@@ -37,6 +40,7 @@ project:
     UMAP: Uniform Manifold Approximation and Projection
     CSS: Cascading Style Sheets
     DBSCAN: Density-Based Spatial Clustering of Applications with Noise
+    DOE: Department of Energy
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -63,13 +67,5 @@ project:
       severity: ignore
       keys:
         - https://www.energy.gov/doe-public-access-plan
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

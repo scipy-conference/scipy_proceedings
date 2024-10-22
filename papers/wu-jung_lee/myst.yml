@@ -1,10 +1,12 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/WXRH8633
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-wu-jung_lee
   # Ensure your title is the same as in your `main.md`
-  title: "Echostack: A flexible and scalable open-source software toolbox for echosounder data processing"
-  subtitle: ""
+  title: 'Echostack: A flexible and scalable open-source software suite for echosounder data processing'
+  description: Water column sonar data collected by echosounders are essential for fisheries and marine ecosystem research, enabling the detection, classification, and quantification of fish and zooplankton from many different ocean observing platforms. We introduce Echostack, a suite of open-source Python software packages that leverage existing distributed computing and cloud-interfacing libraries to support intuitive and scalable data access, processing, and interpretation.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Wu-Jung Lee
@@ -85,7 +87,6 @@ project:
 
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    MyST: Markedly Structured Text
     ML: machine learning
     ARCO: analysis-ready, cloud-optimized
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
@@ -99,13 +100,5 @@ project:
         - sklearn1
         - sklearn2
         - korneliussen_lsss_2006
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

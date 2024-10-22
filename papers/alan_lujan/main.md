@@ -46,17 +46,17 @@ The arrangement of known data points, called the grid, significantly influences 
 :label: tbl:grids
 :header-rows: 1
 * - Grid
- - Structure
- - Geometry
+  - Structure
+  - Geometry
 * - Rectilinear
- - Regular
- - Rectangular mesh
+  - Regular
+  - Rectangular mesh
 * - Curvilinear
- - Regular
- - Quadrilateral mesh
+  - Regular
+  - Quadrilateral mesh
 * - Unstructured
- - Irregular
- - Random
+  - Irregular
+  - Random
 ```
 
 ### Existing Interpolation Methods

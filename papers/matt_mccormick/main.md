@@ -342,9 +342,9 @@ This model, combined with ITK-Wasm’s architecture, can perform analysis and vi
 
 ::::{figure}
 :label: fig:vm-head-frozenct-ome-zarr
-% :placeholder: figures/vm-head-frozenct-ome-zarr-snapshot.png
 
 :::{iframe} https://scipy-2024-itk-wasm-vm-head-frozenct-ome-zarr.netlify.app/
+:placeholder: figures/vm-head-frozenct-ome-zarr-snapshot.*
 :width: 100%
 :::
 
@@ -367,9 +367,9 @@ As detailed by the [Nyquist-Shannon Sampling Theorem](https://en.wikipedia.org/w
 
 ::::{figure}
 :label: fig:aliasing-artifacts
-% :placeholder: figures/artifacts-snapshot.png
 
 :::{iframe} https://scipy-2024-itk-wasm-aliasing-artifacts.netlify.app/
+:placeholder: figures/artifacts-snapshot.*
 :width: 100%
 :::
 
@@ -462,7 +462,7 @@ The types used are integers, floating point numbers, `std` containers of the sam
 
 The pipeline interface syntax can be generated from a set of interactive prompts provided by the `create-itk-wasm` CLI tool.
 
-Once `ITK_WASM_PARSE(pipeline)` is called, input argument parsing and error handling is performed and the input pipeline options are populated with their values. During CLI execution, this means reading input files. When used with language bindings, files are not used and inputs are populated with in-memory content that was *lowered* into the wasm module with internal `itk_wasm*` functions.
+Once `ITK_WASM_PARSE(pipeline)` is called, input argument parsing and error handling is performed and the input pipeline options are populated with their values. During CLI execution, this means reading input files. When used with language bindings, files are not used and inputs are populated with in-memory content that was _lowered_ into the wasm module with internal `itk_wasm*` functions.
 
 Next comes the computational logic of the pipeline:
 
@@ -482,7 +482,7 @@ Next comes the computational logic of the pipeline:
 
 In this example, we are using ITK library C++ functionality, but this can be arbitrary C++ code.
 
-The `.Get()` and `.Set()` methods on the interface types supply the C++ interface to the input values for computation and outputs. When the output interface type's destructors are called, they are written to files on disk in a CLI context or prepared for wasm module *lifting* in an embedded language context.
+The `.Get()` and `.Set()` methods on the interface types supply the C++ interface to the input values for computation and outputs. When the output interface type's destructors are called, they are written to files on disk in a CLI context or prepared for wasm module _lifting_ in an embedded language context.
 
 The build is configured with simple, standard CMake:
 
@@ -617,7 +617,7 @@ In the browser, our bindings support pipelines that operate on files using the `
 :::{figure} ./figures/downsample-npm.png
 :label: fig:downsample-npm
 
-JavaScript and TypeScript [package *README* rendered](https://www.npmjs.com/package/@itk-wasm/downsample) on *npmjs.com*.
+JavaScript and TypeScript [package _README_ rendered](https://www.npmjs.com/package/@itk-wasm/downsample) on _npmjs.com_.
 :::
 
 #### TypeScript Interface Types
@@ -636,28 +636,28 @@ For tasks that require parallel processing, a compatible `WebWorkerPool` is avai
 
 From an ITK-Wasm project, we generate a complete TypeScript/JavaScript package configuration. This includes:
 
-- *TypeScript Bindings*: Generated for both Node.js and browser environments.
-- *TypeScript Compilation Configuration*: Pre-configured for optimal performance and compatibility.
-- *NPM Package Configuration*: Ready for [publication on the npm registry](#fig:downsample-npm).
+- _TypeScript Bindings_: Generated for both Node.js and browser environments.
+- _TypeScript Compilation Configuration_: Pre-configured for optimal performance and compatibility.
+- _NPM Package Configuration_: Ready for [publication on the npm registry](#fig:downsample-npm).
 
 ::::{figure}
 :label: fig:demo-app
-% :placeholder: figures/downsample-demo.png
 
 :::{iframe} https://scipy-2024-itk-wasm-downsample-demo.netlify.app/?functionName=downsample
+:placeholder: figures/downsample-demo.png
 :width: 100%
+:::
 
 Interactive live API demo application.
-:::
 ::::
 
 #### Documentation and demo app
 
 To facilitate adoption and ease of use, we generate:
 
-- *README*: A concise introduction to the project and its capabilities.
-- *Docsify Documentation*: Detailed API documentation for the pipeline APIs.
-- *Demo App*: An [interactive testing environment](#fig:demo-app) for sample data or user-provided data, allowing developers to experiment with API parameters and visualize results.
+- _README_: A concise introduction to the project and its capabilities.
+- _Docsify Documentation_: Detailed API documentation for the pipeline APIs.
+- _Demo App_: An [interactive testing environment](#fig:demo-app) for sample data or user-provided data, allowing developers to experiment with API parameters and visualize results.
 
 By providing a comprehensive set of tools and configurations, we empower developers to harness the full potential of ITK-Wasm in modern web applications, streamlining the development of scientific imaging and analysis tools.
 

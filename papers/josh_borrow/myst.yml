@@ -1,12 +1,15 @@
 # See docs at: https://mystmd.org/guide/frontmatter
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/HWGA5253
   id: scipy-2024-josh_borrow
   title: Making Research Data Flow With Python
+  description: The increasing volume of research data in fields such as astronomy, biology, and engineering necessitates efficient distributed data management. This paper presents the Librarian, a custom framework designed for data transfer in large academic collaborations, designed for the Simons Observatory.
   keywords:
-   - data
-   - python
-   - research
+    - data
+    - python
+    - research
   authors:
     - name: Josh Borrow
       email: josh@joshborrow.com
@@ -17,32 +20,23 @@ project:
       email: paul.laplante@unlv.edu
       orcid: 0000-0002-4693-0102
       affiliations:
-      - Department of Computer Science, University of Nevada, Las Vegas, NV 89154
-      - Nevada Center for Astrophysics, University of Nevada, Las Vegas, NV 89154
+        - Department of Computer Science, University of Nevada, Las Vegas, NV 89154
+        - Nevada Center for Astrophysics, University of Nevada, Las Vegas, NV 89154
     - name: James Aguirre
       email: jaguirre@sas.upenn.edu
-      orcid: 0000-0002-4810-666X 
+      orcid: 0000-0002-4810-666X
       affiliations:
-      - Department of Physics and Astronomy, University of Pennsylvania, 209 South 33rd Street, Philadelphia, PA, USA 19104
+        - Department of Physics and Astronomy, University of Pennsylvania, 209 South 33rd Street, Philadelphia, PA, USA 19104
     - name: Peter K. G. Williams
       email: pwilliams@cfa.harvard.edu
       orcid: 0000-0003-3734-3587
       affiliations:
-      - "Center for Astrophysics | Harvard & Smithsonian, 60 Garden St., Cambridge, MA 02138"
-  # github:
-  # bibliography: []
-  banner: banner.png
+        - 'Center for Astrophysics | Harvard & Smithsonian, 60 Garden St., Cambridge, MA 02138'
   error_rules:
     - rule: doi-exists
       severity: ignore
       keys:
         - iRODS2024
         - GitAnnex2024
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

@@ -1,10 +1,13 @@
 version: 1
+extends: ../proceedings.yml
 project:
+  doi: 10.25080/DHKD1726
   # Update this to match `scipy-2024-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2024-atharva_rasane
   # Ensure your title is the same as in your `main.md`
   title: AI-Driven Watermarking Technique for Safeguarding Text Integrity in the Digital Age
-  subtitle: 
+  description: Identifying the sources is vital for generative AI models, like ChatGPT and Bard, due to concerns about copyright infringement and plagiarism. In this paper, we explore text watermarking as a potential solution. We investigate techniques including physical watermarking and logical watermarking.
+  subtitle:
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Atharva Rasane
@@ -19,14 +22,16 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     BERT: Bidirectional Encoder Representations from Transformers
-    AI:   Artificial Intelligence
-    NLP:  Natural Language Processing
-    NSP:  Next Sentence Prediction
-    GPU:  Graphics Processing Units
+    AI: Artificial Intelligence
+    NLP: Natural Language Processing
+    NSP: Next Sentence Prediction
+    GPU: Graphics Processing Units
     T-statistics: Test Statistics
     P-value: Probability Value
-    DRM:  Digital Rights Management
-    CMS:  Content Management Systems
+    DRM: Digital Rights Management
+    CMS: Content Management Systems
+    MLM: Masked Language Modeling
+    HTML: Hyper Text Markup Language
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
@@ -45,13 +50,5 @@ project:
         - Atr01
         - Atr02
         - Atr03
-  # A banner will be generated for you on publication, this is a placeholder
-  banner: banner.png
-  # The rest of the information shouldn't be modified
-  subject: Research Article
-  open_access: true
-  license: CC-BY-4.0
-  venue: Scipy 2024
-  date: 2024-07-10
 site:
   template: article-theme

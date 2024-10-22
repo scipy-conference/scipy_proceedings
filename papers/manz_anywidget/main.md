@@ -16,7 +16,7 @@ abstract: |
   by using the web browser’s built-in module system to load these modules from
   the notebook kernel. This design simplifies widget authorship and distribution,
   enables rapid prototyping, and lowers the barrier to entry for newcomers.
-  Anywidget is compatible with not just JCPs but any web-based notebook
+  Anywidget is compatible with not just Jupyter-compatible platforms but any web-based notebook
   platform or authoring environment and is already adopted by other projects.
   Its adoption has sparked a widget renaissance, improving reusability,
   interoperability, and making interactive computing more accessible.
@@ -151,8 +151,8 @@ native module system. For existing JCPs, anywidget provides a front-end adapter
 to load and execute these standardized modules, while new platforms can add
 native AFM support directly. Widget kernel-side code and AFM can be run
 directly from within notebooks, from source files, or distributed as single
-Python packages. With anywidget, each JCP consumes the same AFM, and widget 
-authors can compose an AFM directly or target AFM through a build step to 
+Python packages. With anywidget, each JCP consumes the same AFM, and widget
+authors can compose an AFM directly or target AFM through a build step to
 take advantage of advanced tools.
 :::
 
@@ -195,28 +195,30 @@ JCP. This practice, known as dependency injection [@Fowler2004], improves AFM
 portability by making integration interfaces explicit. New runtimes can support
 AFMs by implementing the required APIs, and existing JCPs can refactor their
 internals without breaking existing (any)widgets. For projects that want to take
-advantage of advanced front-end tooling, anywidget also provides authoring 
+advantage of advanced front-end tooling, anywidget also provides authoring
 utilities to write AFMs such as "bridge" libraries for popular web frameworks
 [@joss].
 
 :::{figure}
 :label: fig:afm
+
 ```{code-block}javascript
 export default {
   initialize({ model }) {
     // Set up shared state or event handlers.
     return () => {
       // Optional: Called when the widget is destroyed.
-    } 
+    }
   },
   render({ model, el }) {
     // Render the widget's view into the el HTMLElement.
     return () => {
       // Optional: Called when the view is destroyed.
-    } 
+    }
   }
 }
 ```
+
 An anywidget front-end module (AFM) with initialization and rendering lifecycle
 methods. For familiarity, AFM methods use naming conventions from traditional
 Jupyter Widgets; however, AFM [narrows down the
@@ -232,7 +234,6 @@ restricted to a minimal set of methods for communicating with the kernel
 standard web
 [`HTMLElement`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element).
 :::
-
 
 Widget authorship is particularly challenging due to the need to integrate
 front-end code that communicates with kernel code in a heterogeneous set of
@@ -421,10 +422,10 @@ making authorship practical and accessible.
 
 We thank Talley Lambert for his contributions to the project, and David Kouril
 for his suggestions on the manuscript and figures. We also thank the anywidget
-community as well as members of the Abdennur and HIDIVE labs for helpful 
+community as well as members of the Abdennur and HIDIVE labs for helpful
 discussions.
 
-## Funding
+**Funding**
 
 TM, NG, and NA acknowledge funding from the National Institutes of Health (UM1
 HG011536, OT2 OD033758, R33 CA263666, R01 HG011773).
