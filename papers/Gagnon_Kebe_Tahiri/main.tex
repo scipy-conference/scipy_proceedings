@@ -65,10 +65,13 @@ Data <- read.csv(file="Final_Data_Article.csv", header=TRUE, sep=";")
 calculate_entropy <- function(x) {
   # Calculate the frequency of each category
   freq_table <- table(x)
+  
   # Calculate probabilities
   probabilities <- freq_table / sum(freq_table)
+  
   # Calculate entropy using the probabilities
   entropy_value <- -sum(probabilities*log(probabilities), na.rm=TRUE)
+  
   return(entropy_value)
 }
 
