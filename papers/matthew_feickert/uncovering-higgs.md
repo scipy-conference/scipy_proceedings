@@ -10,6 +10,7 @@ Given the size of the data, the files used in a real analysis will usually be ca
 Using `coffea`, `uproot`, and Dask, these files can then be efficiently read and the tree structure of the data can populate Awkward arrays.
 
 <!-- https://mystmd.org/guide/directives#directive-include -->
+
 ```{include} code/read.py
 :lang: python
 :caption: Using `coffea`, tree structured ROOT files are read with `uproot` from an efficient file cache, and the relevant branches for physics are filtered out into Awkward arrays. The operation is scaled out on a Dask cluster for read performance.
@@ -24,19 +25,32 @@ Additionally, in order to compare various kinds of simulated data, the events ne
 
 These selection and weighting can then be implemented in an analysis specific `coffea` processor, and then the processor can be executed used a Dask executor to horizontally scale out the analysis selection across the available compute.
 
+```{raw} typst
+#{
+show raw.where(block: true): (it) => {
+  show text: set text(size: 7pt)
+  columns(2, it)
+}
+fullwidth[
+```
+
 ```{include} code/coffea.py
 :lang: python
 :caption: A `coffea` processor designed to make physics motivated event selections to create accumulators of the 4-lepton invariant mass.
 ```
+
+{raw:typst}`]}`
 
 ### Feature engineering: The invariant mass
 
 In order to discriminate the events of interest, i.e. candidates of the Higgs boson decay, from the vast background which has the same experimental signature, a discriminating feature is constructed.
 The example shown uses a simple, physics-inspired discriminant the "invariant mass" but the methods used can use complex feature engineering that involve machine learning methods to calculate more efficient discriminants.
 The invariant mass is the mass of a system that remains constant regardless of the system's motion or the reference frame in which it is measured. Invariant mass is derived from the energy and momentum of a system of particles and is a fundamental property of the system:
+
 ```{math}
 m = {\frac{\sqrt{E^2 - p(c)^2}}{c^2}}
 ```
+
 where $E$ and $p$ is the total energy and momentum of the particles, respectively.
 
 By detecting and measuring the energies and momenta of the detected particles at the experiment, we can reconstruct the invariant mass of the decay system. Particle systems originating from the decay of the Higgs boson will have a characteristic value of the invariant mass, which after the discovery in 2012 we know it is about 125$GeV/c^2$.
@@ -66,7 +80,6 @@ The total variation in the systematic corrections is plotted as a hashed band. [
 ### The "discovery" plot
 
 After running the `coffea` processors, the resulting data from the selections is accumulated into `boost-histogram` objects, as seen visualized in @fig:prefit_plot.
-
 
 ```{include} code/prefit_plot.py
 :lang: python
