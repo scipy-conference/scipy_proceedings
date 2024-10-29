@@ -344,7 +344,7 @@ This model, combined with ITK-Wasm’s architecture, can perform analysis and vi
 :label: fig:vm-head-frozenct-ome-zarr
 
 :::{iframe} https://scipy-2024-itk-wasm-vm-head-frozenct-ome-zarr.netlify.app/
-:placeholder: figures/vm-head-frozenct-ome-zarr-snapshot.*
+:placeholder: figures/vm-head-frozenct-ome-zarr-snapshot
 :width: 100%
 :::
 
@@ -369,7 +369,7 @@ As detailed by the [Nyquist-Shannon Sampling Theorem](https://en.wikipedia.org/w
 :label: fig:aliasing-artifacts
 
 :::{iframe} https://scipy-2024-itk-wasm-aliasing-artifacts.netlify.app/
-:placeholder: figures/artifacts-snapshot.*
+:placeholder: figures/artifacts-snapshot
 :width: 100%
 :::
 
