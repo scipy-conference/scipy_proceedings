@@ -137,6 +137,7 @@ The overarching goal of the [Tick Tick Bloom: Harmful Algal Bloom Detection Chal
 
 The competition showed that Sentinel-2 bands contain sufficient information for generating accurate cyanobacteria estimates with machine learning. Below is a summary of which datasets were used by winners.
 
+{raw:typst}`#fullwidth[`
 :::{table} Data sources used by Tick Tick Bloom competition winners
 :label: tbl:winner-data-sources
 <table>
@@ -174,6 +175,7 @@ The competition showed that Sentinel-2 bands contain sufficient information for 
     </tr>
 </table>
 :::
+{raw:typst}`]`
 
 All winners used Level-2 satellite imagery instead of Level-1, likely because it already includes useful atmospheric corrections. Sentinel-2 data is higher resolution than Landsat, and proved to be more useful in modeling.
 
@@ -462,6 +464,7 @@ SUCCESS  | Cyanobacteria estimates for 4 sample points saved to preds.csv
 
 Cyanobacteria estimates are saved out as a CSV that can be plugged into any existing decision-making process. For each point, the model provides an estimated density in cells per mL for detailed analysis. Densities are also discretized into severity levels based on World Health Organization guidelines [@who_guidelines].
 
+{raw:typst}`#fullwidth[`
 :::{table} CyFi outputted csv (`preds.csv`) containing predictions
 :label: tbl:cyfi_preds
   <table>
@@ -503,6 +506,7 @@ Cyanobacteria estimates are saved out as a CSV that can be plugged into any exis
     </tbody>
   </table>
 :::
+{raw:typst}`]`
 
 :::{table} WHO Recreational Guidance/Action Levels for Cyanobacteria [@who_guidelines]
 :label: tbl:who_guidelines

@@ -6,8 +6,8 @@ project:
   id: scipy-2024-atharva_rasane
   # Ensure your title is the same as in your `main.md`
   title: AI-Driven Watermarking Technique for Safeguarding Text Integrity in the Digital Age
+  short_title: AI-Driven Watermarking Technique for Safeguarding Text Integrity
   description: Identifying the sources is vital for generative AI models, like ChatGPT and Bard, due to concerns about copyright infringement and plagiarism. In this paper, we explore text watermarking as a potential solution. We investigate techniques including physical watermarking and logical watermarking.
-  subtitle:
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Atharva Rasane

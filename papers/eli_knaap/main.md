@@ -1,6 +1,6 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: "geosnap: The Geospatial Neighborhood Analysis Package"
+title: 'geosnap: The Geospatial Neighborhood Analysis Package'
 subtitle: Open Tools for Urban, Regional, and Neighborhood Science
 abstract: |
   Understanding neighborhood context is critical for social science research, public
@@ -15,7 +15,6 @@ abstract: |
   segregation analysis to support social science research, public policy analysis, and
   urban planning. It provides a simple interface tailored to formal analysis of
   spatiotemporal urban data.
-
 ---
 
 ## Introduction
@@ -41,9 +40,9 @@ analysis and the applied fields of neighborhood change, access to
 opportunity, and the social determinants of health. The package provides fast
 and efficient access to hundreds of socioeconomic, infrastructure, and environmental
 quality indicators that allow researchers to move from zero data to an informative model
-in a few short lines of code. 
+in a few short lines of code.
 
-It is organized into layers for data acquisition, analysis, and visualization, and 
+It is organized into layers for data acquisition, analysis, and visualization, and
 includes tools for harmonizing disparate datasets into consistent geographic boundaries,
 creating "geodemographic typologies" that summarize and predict multidimensional
 segregation over time, and network analysis tools that generate rapid (locally
@@ -111,7 +110,7 @@ Toward that end, many of the datasets used in social science and public policy r
 in the U.S. are drawn from the same set of resources, like the Census, the Environmental
 Protection Agency (EPA), the Bureau of Labor Statistics (BLS), or the National Center
 for Education Statistics (NCES), to name a few. As researchers, we found ourselves
-writing the same code to download  the same data repeatedly. That works in some cases, but it is also cumbersome, and can
+writing the same code to download the same data repeatedly. That works in some cases, but it is also cumbersome, and can
 be extremely slow for even medium-sized datasets (tables with roughly 75 thousand rows and 400 columns representing Census Tracts in the USA can take several hours or even days to download from Census servers). While there are nice tools like
 [cenpy](https://github.com/cenpy-devs/cenpy) or
 [pyrgris](https://walker-data.com/pygris/), these tools cannot overcome a basic
@@ -129,7 +128,7 @@ directly). For that reason, geosnap maintains
 [Amazon Open Data Registry](https://github.com/awslabs/open-data-registry), and
 uses [quilt](https://www.quiltdata.com/) to manage data under the hood. A
 national-level dataset of more than 200 Census variables at the blockgroup scale
-(n=220333), *including geometries* can be downloaded in under two minutes,
+(n=220333), _including geometries_ can be downloaded in under two minutes,
 requires only 921MB of disk space, and can be read into GeoPandas in under four
 seconds. A comparable dataset stored on the Census servers takes more than an
 hour to download from the Census FTP servers in compressed format, requires more
@@ -145,7 +144,6 @@ the developers of `geosnap` maintain this database as an additional layer.
 ```python
 datasets = DataStore()
 ```
-
 
 #### Demographics
 
@@ -198,7 +196,7 @@ sd = gio.get_acs(datasets, year=2018, county_fips=['06073'])
 ```
 
 There is also a table that maps counties to their constituent Metropolitan Statistical Areas (MSAs). Note that
-blockgroups are not exposed directly, but are accessible as part of the ACS and the Environmental Protection Agency's  Environmental Justic Screening Tool (EJSCREEN)
+blockgroups are not exposed directly, but are accessible as part of the ACS and the Environmental Protection Agency's Environmental Justic Screening Tool (EJSCREEN)
 data. If the dataset exists in the `DataStore` path, it will be loaded from disk,
 otherwise it will be streamed from S3 (provided an internet connection is available).
 The geosnap `io` module (aliased here as `gio`) has a set of functions for creating
@@ -267,9 +265,9 @@ geographic units (which serve as statistical sampling units), and each
 subsystem is a single geographic unit. Thus, geographically-extensive
 attributes include those such as population counts, land area, or crop yield,
 and geographically-intensive variables typically include ratio or interval
-functions of extensive variables, e.g. density (total population *per unit of
-land*), average income (total income *per person*), or the share of a particular
-population subcategory (total population in category *per unit of population*).
+functions of extensive variables, e.g. density (total population _per unit of
+land_), average income (total income _per person_), or the share of a particular
+population subcategory (total population in category _per unit of population_).
 Median income is a statistic (so intensive), whereas total population is a count
 (extensive), so we make sure to pass each to the appropriate list.
 
@@ -307,7 +305,6 @@ plt.tight_layout()
 In some cases, it can be useful to discard the original boundaries altogether and
 instead harmonize all time periods to a consistent geographic unit defined elsewhere
 (like a school district, or congressional district, or a regular hexgrid).
-
 
 ```python
 from tobler.util import h3fy
@@ -350,7 +347,7 @@ which includes the application of unsupervised learning algorithms to demographi
 socioeconomic data, is a widely-used technique that falls under the broad umbrella of
 "spatial data science"
 [@Abbas2009; @Adnan2010; @anderson2010UsingGeodemographics; @DeSabbata2019; @singleton2009CreatingOpen; @singleton2009GeodemographicsVisualisation].
-Technically there is no formal *spatial analysis* in traditional geodemographics,
+Technically there is no formal _spatial analysis_ in traditional geodemographics,
 however given its emphasis on geographic units of analysis (and subsequent mapping of
 the results) it is often viewed as a first (if not requisite step) in exploratory
 analyses of a particular study area.
@@ -398,8 +395,6 @@ as a new column (named after the clustering algorithm). Using the `return_model`
 argument specifies that the underlying object from scikit-learn or PySAL's
 `spopt` package is returned for further diagnostic inspection.
 
-
-
 ```python
 # collect data for the atlanta MSA (12060) at the tract level
 atl = gio.get_acs(datasets, msa_fips="12060", years=2021, level="tract")
@@ -433,8 +428,8 @@ tracts, but also enforces a contiguity constraint so that similar geographic uni
 also be proximate to one another. As with geodemographic clustering, when carrying out a
 regionalization exercise, we are searching for groups of observations (census tracts in
 this case) which are similar in socioeconomic and demographic composition. If the goal
-of geodemographics is to identify neighborhood *types* that could exist anywhere in the
-region, the goal of regionalization is to identify *specific neighborhoods* that exist
+of geodemographics is to identify neighborhood _types_ that could exist anywhere in the
+region, the goal of regionalization is to identify _specific neighborhoods_ that exist
 at a distinct place in the region.
 
 Following that concept, we can use constrained clustering to develop an
@@ -485,7 +480,7 @@ arranges the maps of neighborhood category labels in sequential order.
 ```python
 # define a set of socioeconomic and demographic variables
 columns = ['median_household_income', 'median_home_value', 'p_asian_persons', 'p_hispanic_persons', 'p_nonhisp_black_persons', 'p_nonhisp_white_persons']
-# create a geodemographic typology using the Chicago data 
+# create a geodemographic typology using the Chicago data
 chicago_ward = cluster(gdf=chicago, columns=columns, method='ward', n_clusters=5)
 # plot the result
 plot_timeseries(chicago_ward, 'ward', categorical=True, nrows=2, ncols=2, figsize=(12,16))
@@ -510,7 +505,7 @@ there is nothing ‘natural’ about it, this phenomenon would be akin to classi
 sociological models of neighborhood change from the 1920s
 [@Park1925; @Park1936; @Park1952]. Further, if there is evidence that space matters for
 transitions, then any attempt to understand neighborhood processes in this region
-*should also consider the importance of spatial interaction*.
+_should also consider the importance of spatial interaction_.
 
 A natural way to understand the transition matrix between two neighborhood types is to
 plot the observed transition rates as a heatmap. The rows of the matrix define the
@@ -551,7 +546,7 @@ spatial context for each unit (determined by its local neighborhood via a PySAL 
 and draw a new label from the conditional transition matrix implied by the units local
 neighborhood. This amounts to a simple cellular automata model on an irregular lattice,
 where there is only a single (stochastic) transition rule, whose transition
-probabilities update each round. 
+probabilities update each round.
 
 ![Simulated Neighborhood Types in Chicago](chicago_predictions.gif)
 
@@ -565,17 +560,16 @@ neighborhoods can grow, shrink, or transition entirely.
 
 But two alternative concepts of "neighborhood" are also worth considering. The first,
 posited by social scientists, is that each person or household can be conceptualized as
-residing in *its own* neighborhood which extends outward from the person's household
+residing in _its own_ neighborhood which extends outward from the person's household
 until some threshold distance. This neighborhood represents the boundary inside which we
 might expect some social interaction to occur with one's "neighbors". The second is a
 normative concept advocated by architects, urban designers, and planners (arguably still
 the goal for [new urbanists](http://www.newurbanism.org)): that a neighborhood is
 [a discrete pocket of infrastructure](https://en.wikipedia.org/wiki/Neighbourhood_unit)
 organized as a small, self-contained economic unit. A common shorthand today is the "20
-minute neighborhood" [@Calafiore2022]. 
+minute neighborhood" [@Calafiore2022].
 
 ![The 20-Minute Neighborhood Concept via [wikipedia](https://upload.wikimedia.org/wikipedia/en/e/e3/New_York_Regional_Survey%2C_Vol_7.jpg?20170410025533)](https://upload.wikimedia.org/wikipedia/en/e/e3/New_York_Regional_Survey%2C_Vol_7.jpg?20170410025533)
-
 
 The difference between these two perspectives is what defines the origin of the
 neighborhood (the "town center" or the person's home), and whether "neighborhood" is
@@ -636,4 +630,3 @@ package allows for rapid development and exploration of different models of
 public datasets in the U.S., as well as tools for boundary harmonization, transition
 modeling, and travel-time visualization (all of which are applicable anywhere on the
 globe).
-

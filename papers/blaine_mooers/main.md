@@ -313,7 +313,7 @@ The latter can store a record of your performance on a quiz.
 
 :::{figure} ./images/runningQuiz.png
 :label: fig:quiz
-:width: 130%
+:width: 100%
 An example of an interactive session with a quiz in a Jupyter notebook. The code for running the quiz was inserted into the code cell with the voice command `run voice in quiz`. The quiz covers a range of voice commands, including [specific voice commands covered in the quiz].
 :::
 

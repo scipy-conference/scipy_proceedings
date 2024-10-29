@@ -1,6 +1,7 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: "Scikit-build-core: A modern build-backend for CPython C/C++/Fortran/Cython extensions"
+title: Scikit-build-core
+subtitle: A modern build-backend for CPython C/C++/Fortran/Cython extensions
 abstract: |
   Discover how scikit-build-core revolutionizes Python extension building with its seamless integration of CMake and Python packaging standards. Learn about its enhanced features for cross-compilation, multi-platform support, and simplified configuration, which enable writing binary extensions with pybind11, Nanobind, Fortran, Cython, C++, and more. Dive into the transition from the classic scikit-build to the robust scikit-build-core and explore its potential to streamline package distribution across various environments.
 ---
@@ -35,7 +36,7 @@ Python has a long history compared to modern languages with first-party
 packaging solutions; packaging wasn't something that was considered important
 for Python for quite a while. Python gained a standard library module to help
 with packaging called `distutils` in Python 1.6 and 2.0, in the year 2000,
-nearly ten years after the initial release.  Distribution was difficult,
+nearly ten years after the initial release. Distribution was difficult,
 leading to packages containing large numbers of distinct modules (such as SciPy
 [@scipy]) to reduce the number of packages one had to figure out how to
 install, and "distributions" of Python to be created, such as the Enthought
@@ -131,7 +132,7 @@ first major package to switch was Awkward Array, at the end of that year.
 
 ### Binary Python package generation overview
 
-@fig:packaging-dataflow provides an overview of modern binary Python package generation. The package developer begins by defining the package structure, incorporating package source files, a CMakeLists.txt CMake configuration, and a pyproject.toml file adhering to PEP 517 specifications. To initiate the package build process, the developer employs a Build Frontend tool, such as `pip` or `build`, and may supply optional configuration parameters. The chosen Build Frontend then triggers the PEP 517 Build Backend, exemplified by scikit-build-core, which in turn employs CMake, managing configuration options appropriately. Utilizing a blend of build system introspection and configured options alongside the *CMakeLists.txt* logic, CMake generates a native build system configuration. This native build system, whether Ninja configuration files, Unix Makefiles, Visual Studio Project Files, etc., defines dependencies for the artifacts produced by the native toolchain, which is responsible for compiling C/C++ source code into native binaries.
+@fig:packaging-dataflow provides an overview of modern binary Python package generation. The package developer begins by defining the package structure, incorporating package source files, a CMakeLists.txt CMake configuration, and a pyproject.toml file adhering to PEP 517 specifications. To initiate the package build process, the developer employs a Build Frontend tool, such as `pip` or `build`, and may supply optional configuration parameters. The chosen Build Frontend then triggers the PEP 517 Build Backend, exemplified by scikit-build-core, which in turn employs CMake, managing configuration options appropriately. Utilizing a blend of build system introspection and configured options alongside the _CMakeLists.txt_ logic, CMake generates a native build system configuration. This native build system, whether Ninja configuration files, Unix Makefiles, Visual Studio Project Files, etc., defines dependencies for the artifacts produced by the native toolchain, which is responsible for compiling C/C++ source code into native binaries.
 
 :::{figure} packaging-dataflow.svg
 :label: fig:packaging-dataflow
@@ -140,7 +141,6 @@ Binary Python packaging dataflow.
 :::
 
 Once configured, scikit-build-core initiates the native build system, managing the bundling of resulting build artifacts and metadata into a wheel. These wheels may undergo additional processing with post-processing tools to enhance platform compatibility. End-users of the package have the option to directly utilize the wheel via a package manager or generate their own package by invoking the build system from a source distribution (SDist). Typically, both the binary wheels and the source distributions are uploaded to the Python Package Index (PyPI) for broader accessibility.
-
 
 ### The simplest example
 
@@ -246,16 +246,9 @@ dependencies. This is also done for ninja. This same system was added to
 Scikit-build-core has three mechanisms to allow packages on PyPI to provide
 CMake configuration and tools:
 
-* The site-packages directory is added to the CMake search path by
-  scikit-build-core. Due to the way CMake config file discovery works, this
-  allows a package to provide a `<PkgName>Config.cmake` file in any GNU-like
-  standard location in the package (like
-  `pybind11/share/cmake/pybind11/pybind11Config.cmake`, for example).
-* An entry point `cmake.prefix`, which adds prefix dirs, useful for adding
-  module files that don't have to match the installed package name or are in
-  arbitrary locations.
-* An entry point `cmake.module`, which can be used to add any CMake helper
-  files.
+- The site-packages directory is added to the CMake search path by scikit-build-core. Due to the way CMake config file discovery works, this allows a package to provide a `<PkgName>Config.cmake` file in any GNU-like standard location in the package (like `pybind11/share/cmake/pybind11/pybind11Config.cmake`, for example).
+- An entry point `cmake.prefix`, which adds prefix dirs, useful for adding module files that don't have to match the installed package name or are in arbitrary locations.
+- An entry point `cmake.module`, which can be used to add any CMake helper files.
 
 ### Dual editable modes with automatic recompile
 
@@ -459,11 +452,8 @@ plugins, provides 720 results; a similar search was not performed last year for
 comparison, though.
 
 [^rust]: The Rust-only Maturin is much older and has 57 packages in the top 8,000.
-
 [^2]: <https://hugovk.github.io/top-pypi-packages>
-
 [^3]: <https://github.com/henryiii/pystats>
-
 [^4]: <https://github.com/search?type=code&q=path%3Apyproject.toml+scikit_build_core+NOT+is%3Afork>
 
 ### Rapids.ai
@@ -474,8 +464,7 @@ requirements due to the need to support cuda variants. They developed a wrapper
 for scikit-build-core that changes the name of the package based on the current
 cuda version (something explicitly disallowed by PEP 621) and injects modified
 dependencies. Discussions on ways to handle external dependencies like CUDA
-without such workarounds was a major topic at the packaging summit in PyCon US
-24.
+without such workarounds was a major topic at the packaging summit in PyCon US 24.
 
 ### Ninja / CMake / clang-format
 

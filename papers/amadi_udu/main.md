@@ -1,6 +1,7 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
 title: Computational Resource Optimisation in Feature Selection under Class Imbalance Conditions
+short_title: Computational Resource Optimisation in Feature Selection
 abstract: |
   Feature selection is crucial for reducing data dimensionality as well as enhancing model interpretability and performance in machine learning tasks. However, selecting the most informative features in large dataset often incurs high computational costs. This study explores the possibility of performing feature selection on a subset of data to reduce the computational burden. The study uses five real-life datasets with substantial sample sizes and severe class imbalance ratios between 0.09 – 0.18. The results illustrate the variability of feature importance with smaller sample fractions in different models. In this cases considered, light gradient-boosting machine exhibited the least variability, even with reduced sample fractions, while also incurring the least computational resource.
 ---
@@ -108,13 +109,10 @@ results = Parallel(n_jobs=-1)(delayed(process_feature)(f_no, selected_features, 
 
 The hierarchical cluster and Spearman’s ranking for moisture absorbed composite dataset is shown in [Figure 1a](#hiercorr-a) and [b](#hiercorr-a) respectively (Frequency Centroid – FC, Peak Frequency – PF, Rise Time – RT, Initiation Frequency – IF, Average Signal Level – ASL, Duration – D, Counts – C, Amplitude – A and Absolute Energy – AE). Based on the visual inspection of the hierarchical cluster, a threshold of 0.8 was selected, thus, retaining features RT, C, ASL, and FC.
 
-:::{figure}
+:::{figure} ./images/gsvs_hierclus_cmap.jpg
 :alt: Hierarchical cluster and Spearman correlation for GSVS
-:width: 30%
 :align: center
-:label: fig:hiercorr
-(hiercorr-a)=
-![](./images/gsvs_hierclus_cmap.jpg)
+:label: hiercorr-a
 
 Feature relationship for moisture absorbed composite dataset; (a) hierarchical cluster, (b) Spearman correlation ranking.
 :::
@@ -122,6 +120,8 @@ Feature relationship for moisture absorbed composite dataset; (a) hierarchical c
 As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency are in the same cluster with a highly correlated value of 0.957 shown in [Figure 1b](#hiercorr-a). Similarly, Rise Time and Initiation Frequency are clustered with a highly negative correlation of -0.862. Amplitude and Absolute Energy also exhibited a high positive correlation of 0.981.
 
 @tbl:result_table gives the median and interquartile (IQR) feature importance scores based on change in AUC for the LightGBM, RF and SVM models. These scores were obtained using all samples in the PFI process. Values emphasised in bold fonts represent the highest ranked feature for the respective models based on their median change in AUC.
+
+{raw:typst}`#{tableStyle = smallTableStyle}#fullwidth[`
 
 :::{table} Median and IQR feature importance scores based on change in AUC for LightGBM, RF and SVM models, (values in bold fonts represent the highest ranked feature for the respective models).
 :label: tbl:result_table
@@ -200,26 +200,28 @@ As observed in [Figure 1a](#hiercorr-a), Frequency Centroid and Peak Frequency a
   </tr>
   <tr>
   <th colspan="11">Moisture Absorbed Composites</th>
-      <th> </th>
+  <td colspan="12"> </td>
   </tr>
   <tr>
    <td>0</td><td>Risetime</td> <td>0.005</td>    <td>0.005</td>    <td>0.005</td>    <td>0.009</td>    <td>0.008</td>    <td>0.009</td><td>0.004</td><td>0.003</td><td>0.004</td>
-  <td></td>
+  <td colspan="12"> </td>
   </tr>
   <tr>
    <td>1</td><td>Counts</td>    <td>0.037</td>    <td>0.037</td>    <td>0.037</td>    <td>0.075</td>    <td>0.073</td>    <td>0.075</td>    <td>0.009</td>    <td>0.009</td>    <td>0.009</td>
-  <td></td>
+  <td colspan="12"> </td>
   </tr>
   <tr>
    <td>2</td>    <td>ASL</td>    <td>0.034</td>    <td>0.034</td>    <td>0.034</td>    <td>0.072</td>    <td>0.071</td>    <td>0.073</td>    <td><10<sup>-3</sup></td> <td><10<sup>-3</sup></td>    <td><10<sup>-3</sup></td>
-  <td></td>
+  <td colspan="12"> </td>
   </tr>
   <tr>
    <td>3</td>    <td>Freq. Centroid</td>    <th>0.468</th>    <th>0.466</th>    <th>0.470</th>    <th>0.463</th>    <th>0.461</th>    <th>0.465</th>    <th>0.422</th> <th>0.421</th>    <th>0.425</th>
-  <td></td>
+  <td colspan="12"> </td>
   </tr>
 </table>
 :::
+
+{raw:typst}`]`
 
 From @tbl:result_table, SVM tended to be have very low scores in some datasets, possibly due to its reliance of support vectors in determining the decision boundaries. Thus, features with strong influence at the decision boundary but not directly affecting the support vectors may seem less important. For the Moisture Absorbed Composite dataset, the three classifiers reported similar scores for Frequency Centroid of 0.468, 0.466 and 0.422 respectively in @tbl:result_table.
 
@@ -227,22 +229,19 @@ However, in Bank Marketing dataset, LightGBM and RF identified Feature 1 as a re
 
 [Figure 2](#db_time-a) shows the PFI process time and corresponding sample fractions for the Diabetes dataset, which has a substantial sample size of 253,680 instances. The results are based on one independent run, with PFI set at 30 feature-permuted repeats. For LightGBM and RF, the PFI process time increased linearly with larger sample fractions, whereas SVM experienced an exponential growth. LightGBM had the lowest computational cost, with CPU process times of 3.9 seconds and 28.8 seconds for 10% and 100% sample fractions, respectively. SVM required 21,263 seconds to process the entire dataset, reflecting a 9,345% increase in CPU computational cost compared to using a 10% sample fraction. SVM's poor performance relative to LightGBM and RF is likely due to its poor CPU parallelisability.
 
-:::{figure}
+:::{figure} ./images/time_plot.png
 :alt: PFI process time and corresponding sample fractions for the Diabetes dataset.
-:label: fig:db_time
-:width: 30%
 :align: center
-(db_time-a)=
-![](./images/time_plot.png)
+:label: db_time-a
 
 PFI process time and corresponding sample fractions for the Diabetes dataset.
 :::
 
 [Figure 3a](#ci_boxplot-a) - [c](#ci_boxplot-c) present the PFI for Final Weight feature of Census Income dataset, evaluated across different sample fractions using LightGBM, RF, and SVM models, respectively. The change in AUC indicates the impact on model performance when Final Weight feature is permuted. Generally, for smaller sample fractions, there was a higher variability in AUC and prominence of outliers. This could be attributed to the increased influence of randomness, fewer data points, and sampling fluctuations for smaller sample fractions across the datasets.
 
+{raw:typst}`#fullwidth[`
 :::{figure}
 :alt: Sample fractions and corresponding change in AUC for Final Weight feature of Census Income dataset
-:width: 20%
 :align: center
 :label: fig:ci_boxplot
 (ci_boxplot-a)=
@@ -254,6 +253,8 @@ PFI process time and corresponding sample fractions for the Diabetes dataset.
 
 Sample fractions and corresponding change in AUC for Final Weight feature of Census Income dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
+
+{raw:typst}`]#fullwidth[`
 
 :::{figure}
 :alt: Sample fractions and corresponding change in AUC for Duration feature of Bank Marketing dataset
@@ -270,6 +271,8 @@ Sample fractions and corresponding change in AUC for Final Weight feature of Cen
 Sample fractions and corresponding change in AUC for Duration feature of Bank Marketing dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
 
+{raw:typst}`]#fullwidth[`
+
 :::{figure}
 :alt: Sample fractions and corresponding change in AUC for Rad Flow feature of Statlog
 :width: 20%
@@ -284,6 +287,8 @@ Sample fractions and corresponding change in AUC for Duration feature of Bank Ma
 
 Sample fractions and corresponding change in AUC for Rad Flow feature of Statlog (Shuttle) dataset; (a) LightGBM, (b) RF, and (c) SVM.
 :::
+
+{raw:typst}`]`
 
 For LightGBM model in [Figure 3a](#ci_boxplot-a), the median change in AUC was close to zero, indicating that Final Weight had minimal impact on model performance, as noted in @tbl:result_table. Similar results were recorded in [Figure 4a](#bm_boxplot-a) - [c](#bm_boxplot-c) for the Duration feature of Bank Marketing dataset, where all models exhibited similarly high feature importance scores. Even for sample fractions of 0.5, LightGBM and RF appeared to give similar importance scores to using the entire data sample. On the other hand, SVM exhibited a higher median change in AUC, indicating that the Final Weight feature had a more significant impact on its performance. Additionally, SVM showed the greatest variability and the most prominent outliers, particularly at lower sample fractions. This was noticeable in [Figure 5a](#ss_boxplot-a) - [c](#ss_boxplot-c), where all classifiers reported similar importance scores as noted in @tbl:result_table. This variability and the presence of outliers suggest that the model's performance is less stable when features are permuted.
 

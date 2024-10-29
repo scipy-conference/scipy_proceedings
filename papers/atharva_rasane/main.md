@@ -1,6 +1,7 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
 title: AI-Driven Watermarking Technique for Safeguarding Text Integrity in the Digital Age
+short_title: AI-Driven Watermarking Technique for Safeguarding Text Integrity
 abstract: |
   The internet's growth has led to a surge in text usage. Now, with public access to generative AI models like ChatGPT/Bard, identifying the source is vital. This is crucial due to concerns about copyright infringement and plagiarism. Moreover, it is essential to differentiate AI-generated text to curb misinformation from AI model hallucinations.
 
@@ -27,15 +28,15 @@ At its core, BERT employs a bi-directional Transformer encoder, which helps unde
 
 In this section, we will review two text watermarking algorithms before introducing our proposed technique. Let's first look at the current standards for text watermarking. Text watermarking algorithms embed unique identifiers in text to protect copyright and verify authenticity. They are important because they help prevent unauthorized use, copying, and distribution of text.
 
-The first algorithm is Word Context, developed by @Proc01. It is a type of logical watermarking that generates a watermark key without altering the original text [@Proc01]. Logical watermarking involves embedding a watermark key without changing the original text. Word Context generates a watermark key by analyzing the structure of the text around selected keywords and creating a pattern based on word lengths [@Proc01]. In Word Context, a keyword is selected. For example, using the keyword 'is' in the text 'Pakistan is a developing country, with Islamabad is the capital of Pakistan. It is located in Asia.' The lengths of the words before and after 'is' are recorded: 'Pakistan' (8) and 'a' (1), 'Islamabad' (9) and 'the' (3), 'It' (2) and 'located' (7). The watermark is then 8-1-9-3-2-7 [@Proc01]. The keyword is chosen based on its significance in the text. Word lengths are used to create the watermark because they provide a unique pattern without altering the text, ensuring the watermark is imperceptible [@Proc01].
+The first algorithm is Word Context, developed by @Proc01. It is a type of logical watermarking that generates a watermark key without altering the original text [@Proc01]. Logical watermarking involves embedding a watermark key without changing the original text. Word Context generates a watermark key by analyzing the structure of the text around selected keywords and creating a pattern based on word lengths [@Proc01]. In Word Context, a keyword is selected. For example, using the keyword `'is'` in the text `'Pakistan is a developing country, with Islamabad is the capital of Pakistan. It is located in Asia.'` The lengths of the words before and after `'is'` are recorded: `'Pakistan'` (8) and `'a'` (1), `'Islamabad'` (9) and `'the'` (3), `'It'` (2) and `'located'` (7). The watermark is then 8-1-9-3-2-7 [@Proc01]. The keyword is chosen based on its significance in the text. Word lengths are used to create the watermark because they provide a unique pattern without altering the text, ensuring the watermark is imperceptible [@Proc01].
 
-The second algorithm, UniSpaCh by Kamaruddin et al. in 2018, modifies the white spaces in text to embed a binary message directly into it [@Atr04]. Modifying white spaces changes the spacing patterns in the text, embedding binary information. A binary message is a sequence of bits (0s and 1s) that represents data. This method uses different types of spaces to encode these bits [@Atr04]. UniSpaCh uses 2-bit categorization to create a binary string (e.g., '10', '01', '00', '11'). Each pair of bits is replaced with a unique type of space (like punctuation space, thin space). These spaces are then placed in areas like between words, sentences, and paragraphs. This method is highly invisible but has low capacity, making it unsuitable for embedding long messages [@Atr04]. 2-bit categorization assigns pairs of bits to specific types of spaces. This method is considered invisible because the changes are subtle and not easily noticeable by readers. It has low capacity because only a few bits can be embedded per space, limiting the amount of information that can be hidden [@Atr04].
+The second algorithm, UniSpaCh by Kamaruddin et al. in 2018, modifies the white spaces in text to embed a binary message directly into it [@Atr04]. Modifying white spaces changes the spacing patterns in the text, embedding binary information. A binary message is a sequence of bits (0s and 1s) that represents data. This method uses different types of spaces to encode these bits [@Atr04]. UniSpaCh uses 2-bit categorization to create a binary string (e.g., `'10'`, `'01'`, `'00'`, `'11'`). Each pair of bits is replaced with a unique type of space (like punctuation space, thin space). These spaces are then placed in areas like between words, sentences, and paragraphs. This method is highly invisible but has low capacity, making it unsuitable for embedding long messages [@Atr04]. 2-bit categorization assigns pairs of bits to specific types of spaces. This method is considered invisible because the changes are subtle and not easily noticeable by readers. It has low capacity because only a few bits can be embedded per space, limiting the amount of information that can be hidden [@Atr04].
 
 The first approach by @Proc01 is not suitable for today's fast-paced generation of AI text, as it is impractical to store a logical watermark for each new text [@Proc01]. It is impractical to store a logical watermark for each text because the volume of generated text is too high, making it difficult to manage and store all watermarks. AI text generation has made it easier and faster to produce large amounts of text, increasing the need for scalable watermarking solutions [@Proc01]. The second approach by Por et al. (2012) is also not suitable because the watermark can be easily removed by reformatting the text. We need a robust and imperceptible watermarking technique [@Atr04]. The watermark can be removed by reformatting because changes in text layout, such as altering spaces or reformatting paragraphs, can disrupt the embedded watermark. A robust watermarking technique can withstand such changes and remain detectable, while an imperceptible technique ensures the watermark is not noticeable to the reader [@Atr04].
 
-Our proposed technique is based on a method by Lancaster (2023) for ChatGPT [@Atr02]. It replaces every fifth word in a sequence of five consecutive words (non-overlapping 5-gram) with a word generated using a fixed random seed. For example, in the sentence 'The friendly robot greeted the visitors with a cheerful beep and a wave of its metal arms,' the non-overlapping 5-grams are 'The friendly robot greeted the,' 'visitors with a cheerful beep,' and 'and a wave of its metal.' We replace the words 'the,' 'visitors,' and 'metal' with words generated by ChatGPT using a fixed random seed [@Atr02]. A non-overlapping 5-gram is a sequence of five consecutive words without any overlap. Replacing every fifth word embeds the watermark without altering the overall meaning of the text, making it a subtle and effective method for embedding the watermark [@Atr02].
+Our proposed technique is based on a method by Lancaster (2023) for ChatGPT [@Atr02]. It replaces every fifth word in a sequence of five consecutive words (non-overlapping 5-gram) with a word generated using a fixed random seed. For example, in the sentence `'The friendly robot greeted the visitors with a cheerful beep and a wave of its metal arms,'` the non-overlapping 5-grams are `'The friendly robot greeted the,'` `'visitors with a cheerful beep,'` and `'and a wave of its metal.'` We replace the words `'the,'` `'visitors,'` and `'metal'` with words generated by ChatGPT using a fixed random seed [@Atr02]. A non-overlapping 5-gram is a sequence of five consecutive words without any overlap. Replacing every fifth word embeds the watermark without altering the overall meaning of the text, making it a subtle and effective method for embedding the watermark [@Atr02].
 
-We check the watermark using overlapping 5-grams, which overlap by four words. For example, 'The friendly robot greeted the,' 'friendly robot greeted the visitors,' 'robot greeted the visitors with,' etc. This method uses ChatGPT to watermark its own text, but it requires running two ChatGPT models to ensure consistency across different outputs from the same seed. Overlapping 5-grams are sequences of five words that overlap by four words. Two models of ChatGPT are needed to ensure consistent watermarking across different outputs because different models might produce different results with the same random seed, and consistency is crucial for verifying the watermark.
+We check the watermark using overlapping 5-grams, which overlap by four words. For example, `'The friendly robot greeted the,'` `'friendly robot greeted the visitors,'` `'robot greeted the visitors with,'` etc. This method uses ChatGPT to watermark its own text, but it requires running two ChatGPT models to ensure consistency across different outputs from the same seed. Overlapping 5-grams are sequences of five words that overlap by four words. Two models of ChatGPT are needed to ensure consistent watermarking across different outputs because different models might produce different results with the same random seed, and consistency is crucial for verifying the watermark.
 
 We propose using BERT, a model designed to find missing words, as a better alternative to ChatGPT. BERT is more precise and smaller. Its bidirectional nature uses more context for word prediction, potentially leading to better results. While ChatGPT-based algorithms are best for ChatGPT text, BERT can be used for any text, regardless of its origin. BERT is better than ChatGPT for this purpose because it is more precise and smaller, making it more efficient. BERT's bidirectional nature means it uses context from both the preceding and following words to predict a missing word, which can lead to more accurate results.
 
@@ -55,10 +56,10 @@ Encoding algorithm to watermark input text
 
 The above is a simple implementation of the algorithm where we are assuming
 
-1. The only white spaces in the text are " ".
+1. The only white spaces in the text are `" "`.
 2. BERT model has infinite context.
 
-This simplified code allows us to grasp the core of the algorithm. First, we split the input text into a list of words using the split() function. Next, we replace every 5th word with the string "[MASK]" which represents a special token indicating where BERT should predict a word. For each [MASK] token, we pass the preceding words and the 4 following words to the BERT model, assuming BERT can handle an infinite context. In reality, BERT has a limited context, so we use up to maximum_context_size - 5 words along with the [MASK] token. The missing_word_form_BERT() function returns the most probable word, which replaces the [MASK] token in the list. We continue this process until all [MASK] tokens are replaced, then convert the list of words back into a string using " ".join()
+This simplified code allows us to grasp the core of the algorithm. First, we split the input text into a list of words using the split() function. Next, we replace every 5th word with the string "[MASK]" which represents a special token indicating where BERT should predict a word. For each [MASK] token, we pass the preceding words and the 4 following words to the BERT model, assuming BERT can handle an infinite context. In reality, BERT has a limited context, so we use up to maximum_context_size - 5 words along with the [MASK] token. The missing_word_form_BERT() function returns the most probable word, which replaces the [MASK] token in the list. We continue this process until all [MASK] tokens are replaced, then convert the list of words back into a string using `" ".join()`.
 
 The beauty of the algorithm is that if we were to run it again on the watermarked text the output that we would get would be the same as the input thus to check if a given text is watermarked we simply need to compare the input and output to determine if a given text is watermarked we simply need to run the above algorithm again, but with a few changes we will have to take in offset as a consideration as the one plagiarizing the text might insert additional words that may lead to the text
 
@@ -239,7 +240,7 @@ match_ratios = watermark_text_and_calculate_matches(text, max_offset=5)
 The final stage of detection involves determining if the match ratios are statistically significant.
 To determine whether the text is watermarked, we rely on a binary classification of whether a text is watermarked. For this, we use a pre-trained model based on metrics including Highest Ratio, Average Others, T-Statistic, and P-Value. This approach is necessary because, as illustrated in the graphs later, there is no discernible or easily observable difference between the T-statistics and P-values of watermarked and non-watermarked texts. Consequently, we resort to using a pre-trained model for classification, which has achieved the highest accuracy of 94%.
 
-The module "check_significant_difference" generates a list of significance.
+The module `check_significant_difference` generates a list of significance.
 
 ```python
 from scipy.stats import ttest_1samp
@@ -280,7 +281,7 @@ check_significant_difference(match_ratios)
 
 ```
 
-The module "randomly_add_words" was created to simulate the scenario where additional words have been added to the watermarked test for testing purposes.
+The module `randomly_add_words` was created to simulate the scenario where additional words have been added to the watermarked test for testing purposes.
 
 ```python
 import random
@@ -752,9 +753,9 @@ list_of_significance_watermarked = []
 count_t = 0
 for text in test_cases:
   count_t+=1
-  print("___________________________________________________________________________________________________________________________")
+  print("______________________________")
   print("Doing", count_t)
-  print("___________________________________________________________________________________________________________________________")
+  print("______________________________")
 
   words_to_add = ["example", "test", "random", "insert"]
   num_words_to_add = 5
@@ -767,9 +768,9 @@ for text in test_cases:
   match_ratios = watermark_text_and_calculate_matches(text, max_offset=5)
   list_of_significance.append(check_significant_difference(match_ratios))
 
-  print("___________________________________________________________________________________________________________________________")
+  print("______________________________")
   print("Done", count_t, )
-  print("___________________________________________________________________________________________________________________________")
+  print("______________________________")
 ```
 
 ## Analysis of the Algorithm

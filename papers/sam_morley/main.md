@@ -439,13 +439,9 @@ between rough path theory and data science. It represents a shift in philosophy
 from simple computations of signatures for sequential data, to a representation
 of these data as a rough path. The design objectives for RoughPy are as follows:
 
-1. provide a class that presents a rough path view of some source of data as a
-   rough path, exposing methods for querying the data over intervals to get a
-   signature or log-signature;
-2. provide classes and functions that allow the users to interact with the
-   signatures and other algebraic objects in a natural, mathematical manner;
-3. all operations should be differentiable and objects should be interoperable
-   with objects from machine learning, such as TensorFlow (JAX) and PyTorch.
+1. provide a class that presents a rough path view of some source of data as a rough path, exposing methods for querying the data over intervals to get a signature or log-signature;
+2. provide classes and functions that allow the users to interact with the signatures and other algebraic objects in a natural, mathematical manner;
+3. all operations should be differentiable and objects should be interoperable with objects from machine learning, such as TensorFlow (JAX) and PyTorch.
 
 The first two objectives are simple design and implementation problems.
 The final objective presents the most difficulty, especially interoperability
@@ -723,5 +719,3 @@ paths (free tensor algebra, shuffle tensor algebra, Lie algebra) in a
 natural way.
 RoughPy is under active development, and a long list of improvements and
 extensions are planned.
-
-% vim: tw=80 wrap cc=80

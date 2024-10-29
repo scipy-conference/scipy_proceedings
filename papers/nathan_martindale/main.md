@@ -425,7 +425,7 @@ in the JavaScript model as well as the function to update the view from the
 model. We discuss this further in the section on [implementing IPyOverlay in
 IPyWidgets](#implementing-in-ipywidgets). @code:ipyvuetify exemplifies this,
 defining a custom button with a color change on toggle, where the colors can be
-modified from Python as well, shown in @fig:ipyvuetify*example. In this
+modified from Python as well, shown in @fig:ipyvuetify_example. In this
 particular example, both the `@click` event and `:color` property directly bind
 to the Python attributes, and no explicit JavaScript is necessary. Finally,
 IPyVuetify makes it easy to directly call functions across the
@@ -707,7 +707,7 @@ the scatter plot to allow a user to optionally choose between displaying a
 violin plot with the distributions versus the density plots (@fig:context_menu).
 
 :::{figure} context_menu.png
-:width: 800px
+:width: 100%
 :label: fig:context_menu
 An activated context menu providing a selection of commands, which can be
 expanded well beyond the single possible action that can be taken from a left-click.

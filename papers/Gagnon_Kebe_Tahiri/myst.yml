@@ -40,5 +40,11 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
+  exports:
+    - id: pdf
+      format: typst
+      template: /Users/rowan/git/typst/scipy
+      article: main.tex
+      output: full_text.pdf
 site:
   template: article-theme

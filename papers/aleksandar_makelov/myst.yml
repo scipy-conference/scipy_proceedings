@@ -34,5 +34,11 @@ project:
         - maymounkov2018koji
         - semver
         - lozano2017unison
+  exports:
+    - id: pdf
+      format: typst
+      template: /Users/rowan/git/typst/scipy
+      article: main.tex
+      output: full_text.pdf
 site:
   template: article-theme

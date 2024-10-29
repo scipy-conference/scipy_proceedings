@@ -72,5 +72,10 @@ project:
         - hyndman2018
         - hyndman2020package
         - garza2022statsforecast
+  exports:
+    - id: pdf
+      format: typst
+      template: /Users/rowan/git/typst/scipy
+      article: main.tex
 site:
   template: article-theme

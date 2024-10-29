@@ -51,9 +51,19 @@ project:
       email: hongsup.shin@pm.me
       affiliation: Arm
       id: hongsup
-site:
-  template: article-theme
-  actions:
-    - title: pdf
+  exports:
+    - id: pdf
+      format: typst
+      template: /Users/rowan/git/typst/scipy
+      article: main.md
+      output: full_text.pdf
+    - format: jats
+      output: _build/exports/jats.xml
+    - format: meca
+      output: meca.zip
+  downloads:
+    - title: Download PDF
       url: full_text.pdf
       static: true
+site:
+  template: article-theme
