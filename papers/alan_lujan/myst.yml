@@ -51,3 +51,10 @@ project:
         - Bradbury2018
         - Pedregosa2011
         - Paszke2019
+  toc:
+    - file: main.md
+    - file: notebooks/Curvilinear_Interpolation.ipynb
+    - file: notebooks/Multivalued_Interpolation.ipynb
+    - file: notebooks/Multivariate_Interpolation.ipynb
+    - file: notebooks/Multivariate_Interpolation_with_Derivatives.ipynb
+    - file: notebooks/Unstructured_Interpolation.ipynb
