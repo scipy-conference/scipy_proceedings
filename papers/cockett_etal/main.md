@@ -210,7 +210,7 @@ Any figure, table, or equation can be referenced in MyST and in addition to auto
 This design feature is important for two reasons: (1) it improves reading comprehension; and (2) it focuses on structured data which can be accessible between papers, creating an open-ecosystem of machine-actionable, reusable content.
 The referenced content can also be interactive or computational.
 
-```{figure} ./images/links.*
+```{figure} ./images/links
 :label: fig:deep-dive
 Instantly accessible information can deep-dive link all the way to interactive figures.
 These practices help with reading comprehension by around 26% by providing information when the reader needs it [@doi:10.1145/3411764.3445648].
@@ -272,7 +272,7 @@ MyST allows for the full reproducible environment to be specified (via REES) and
 Figures can be integrated directly into articles, pressing a button to launch live and interactive figures that build upon the Jupyter ecosystem.
 These tools build on the Jupyter protocols and reuse components from the JupyterLab ecosystem, extending that into various pages using a package called [`thebe`](https://github.com/jupyter-book/thebe).
 
-```{figure} ./images/thebe.*
+```{figure} ./images/thebe
 :label: fig:thebe
 Embedded notebook cells with live computation directly in an articles with computation backed by Jupyter.
 These can be running on BinderHub or directly in your browser through JupyterLite.
@@ -330,8 +330,9 @@ This is a low-friction way of improving metadata at the time of authoring or sub
 Specific checks can be setup for any kind of content being submitted with MyST, for example, a "Short Report" might have different length requirements or metadata standards than a "Research Article" or "Editorial".
 Using Curvenote, these checks can be configured for a specific venue or kind of article, for example, to check specifically for SciPy Proceedings articles, `curvenote check scipy --kind Article --collection 2024` can be run, where the list of checks is configured remotely by journal administrators.
 
-```{figure} ./images/checks.*
+```{figure} ./images/checks
 :label: fig:checks
+:width: 100%
 Running `curvenote check` on a SciPy Proceedings article to check for missing DOIs, author ORCIDs, word-count and specific sections (e.g. abstract).
 These can be run in less than a few seconds both locally and through GitHub actions [@fig:actions], which provides a user interface on the checks.
 ```
