@@ -53,7 +53,7 @@ m = {\frac{\sqrt{E^2 - p(c)^2}}{c^2}}
 
 where $E$ and $p$ is the total energy and momentum of the particles, respectively.
 
-By detecting and measuring the energies and momenta of the detected particles at the experiment, we can reconstruct the invariant mass of the decay system. Particle systems originating from the decay of the Higgs boson will have a characteristic value of the invariant mass, which after the discovery in 2012 we know it is about 125$GeV/c^2$.
+By detecting and measuring the energies and momenta of the detected particles at the experiment, we can reconstruct the invariant mass of the decay system. Particle systems originating from the decay of the Higgs boson will have a characteristic value of the invariant mass, which after the discovery in 2012 we know it is about $125~\mathrm{GeV}/c^2$.
 This is the quantity that will allow us to discriminate from particle systems that originate from background processes.
 
 ### Measurement uncertainties
