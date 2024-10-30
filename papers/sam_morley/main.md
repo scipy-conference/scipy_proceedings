@@ -539,10 +539,10 @@ RoughPy streams cache the result of log-signature queries over dyadic intervals
 so they can be reused in later calculations. To compute the log-signature over
 any interval $I$, we granularise at a fixed stream resolution $n$ to obtain the
 interval $\tilde I = [k_1/2^n, k_2/2^n)$, and then compute
-:::{math}
-\mathrm{LogSig}(\tilde I) = \log\biggl(\prod\_{k=k_1}^{k_2-1}
+```{math}
+\mathrm{LogSig}(\tilde{I}) = \log\biggl(\prod_{k=k_1}^{k_2-1} 
 \exp(\mathrm{LogSig}(D_k^n))\biggr).
-:::
+```
 The $\mathrm{LogSig}(D_k^n)$ terms on the right-hand-side are either retrieved
 from the cache, or computed from the underlying source. This is essentially the
 Campbell-Baker-Hausdorff formula applied to the log-signatures at the finest
