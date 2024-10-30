@@ -25,7 +25,7 @@ Additionally, in order to compare various kinds of simulated data, the events ne
 
 These selection and weighting can then be implemented in an analysis specific `coffea` processor, and then the processor can be executed used a Dask executor to horizontally scale out the analysis selection across the available compute.
 
-```{raw} typst
+```{raw:typst}
 #{
 show raw.where(block: true): (it) => {
   show text: set text(size: 7pt)
