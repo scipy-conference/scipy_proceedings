@@ -1,3 +1,5 @@
+\title[Mandala]{Mandala: Compositional Memoization for Simple & Powerful Scientific Data Management}
+
 \begin{abstract}
   We present
   \href{https://github.com/amakelov/mandala}{\texttt{mandala}}, a Python
@@ -56,17 +58,56 @@ high-level data management operations over complex computational projects, and
 \centering
 \begin{subfigure}{0.23\textwidth}
 \centering
-\includegraphics[width=\textwidth]{img/fig1.pdf}
+% \includegraphics[width=0.23\textwidth]{img/fig1.pdf}
+\begin{lstlisting}[language=python]
+# decorate any
+# Python funcs
+@op
+def f(x):
+  return x**2
+
+@op
+def g(x, y):
+  return x + y
+
+...
+\end{lstlisting}
 \caption{}
 \end{subfigure}
 \begin{subfigure}{0.35\textwidth}
 \centering
-\includegraphics[width=\textwidth]{img/fig2.pdf}
+% \includegraphics[width=0.35\textwidth]{img/fig2.pdf}
+\begin{lstlisting}[language=python]
+storage = Storage()
+
+# memoizing context
+with storage:
+  for x in range(3):
+    y = f(x)
+
+In [1]: y # wrapped value
+Out[1]: AtomRef(4,
+          hid='628...',
+          cid='a82...')
+\end{lstlisting}
 \caption{}
 \end{subfigure}
 \begin{subfigure}{0.4\textwidth}
 \centering
-\includegraphics[width=\textwidth]{img/fig3.pdf}
+% \includegraphics[width=0.4\textwidth]{img/fig3.pdf}
+\begin{lstlisting}[language=python]
+with storage:
+  # just add more calls
+  # & reuse old results
+  for x in range(5):
+    y = f(x)
+    # unwrap for control flow
+    if storage.unwrap(y) > 5:
+      z = g(x, y)
+
+# the "program" is now end-to-end
+# memoized & retraceable
+\end{lstlisting}
 \caption{}
 \end{subfigure}
 \caption{Basic imperative usage of \texttt{mandala}. \textbf{(a)}: add the \texttt{@op}
@@ -99,11 +140,11 @@ complexity} (the scientific problem at hand), rather than on the
 The rest of this paper presents the design and main functionalities of
 \texttt{mandala}, and is organized as follows:
 \begin{itemize}
-\item In Section \ref{section:core-concepts}, we describe how memoization is
+\item In \autoref{section:core-concepts}, we describe how memoization is
 designed, how this allows memoized calls to be composed and memoized results to
 be reused without storage duplication, and how this enables the \emph{retracing}
 pattern of interacting with computational artifacts.
-\item In Section \ref{section:cf}, we introduce the concept of a
+\item In \autoref{section:cf}, we introduce the concept of a
 \emph{computation frame}, which generalizes a dataframe by replacing columns
 with a computational graph, and rows with individual computations that
 (partially) follow this graph. Computation frames allow high-level exploration
@@ -111,7 +152,7 @@ and manipulation of the stored computation graph, such as adding the calls that
 produced/used given values to the graph, deleting all computations that depend
 on the calls captured in the frame, and restricting the frame to a particular
 subgraph or subset of values with given properties.
-\item In Section \ref{section:extra-features}, we describe some other features of
+\item In \autoref{section:extra-features}, we describe some other features of
 \texttt{mandala} necessary to make it a practical tool, such as:
 \begin{itemize}
 \item Representing Python collections in a way transparent to the storage, so
@@ -122,7 +163,7 @@ propagated through the saved computational graph;
 \end{itemize}
 \end{itemize}
 
-Finally, we give an overview of related work in Section \ref{section:related-work}.
+Finally, we give an overview of related work in \autoref{section:related-work}.
 
 \section{Core Concepts}
 \label{section:core-concepts}
@@ -133,7 +174,7 @@ Memoization is a technique that stores the results of expensive function calls
 to avoid redundant computation. \texttt{mandala} uses \emph{automatic}
 memoization \citep{norvig1991techniques} which is applied via the combination of
 a decorator (\texttt{@op}) and a context manager which specifies the
-\texttt{Storage} object to use (Figure \ref{fig:basic-usage}). The memoization
+\texttt{Storage} object to use (\autoref{fig:basic-usage}). The memoization
 can optionally be made persistent to disk, which is what you would typically
 want in a long-running project. Any Python function can be memoized (as long as
 its inputs and outputs are serializable by the \texttt{joblib} library; see the
@@ -227,8 +268,7 @@ pointer to it.
 composition of \texttt{@op}s, it \textbf{automatically builds up a computational
 graph of the project}. Most data management tasks --- e.g., a frequent use case
 is getting a table of relationships between some variables --- are naturally
-expressed as queries over this graph, as we will see in Section
-\ref{section:cf}.
+expressed as queries over this graph, as we will see in \autoref{section:cf}.
 \item It \textbf{organizes storage functionality around a familiar and flexible
 interface: the function call}. This automatically enforces the good practice
 of partitioning code into functions, and eliminates extra `accidental' code to
@@ -242,9 +282,9 @@ On the other hand, memoization suffers from the following limitations:
 \item Referring to values without reference to the code that produced or used
 them becomes difficult, because from the point of view of storage the `identity'
 of a value is its place in the computational graph. We discuss practical ways to
-overcome this in Section \ref{section:cf}.
+overcome this in \autoref{section:cf}.
 \item Modifying \texttt{@op} functions requires care, as changes may invalidate
-the stored computational graph. We discuss a versioning system that automates this process in Section \ref{subsection:versioning}.
+the stored computational graph. We discuss a versioning system that automates this process in \autoref{subsection:versioning}.
 \end{itemize}
 
 \subsection{Retracing as a Versatile Imperative Interface to the Stored Computation Graph}
@@ -256,8 +296,7 @@ into an end-to-end-memoized interface to its own intermediate results. The main
 way to interact with such a persisted computation is through \textbf{retracing},
 which means stepping through memoized code with the purpose of resuming from a
 failure, loading intermediate values, or continuing from a particular point with
-new computations. A small example of retracing is shown in Figure
-\ref{fig:basic-usage} (c).
+new computations. A small example of retracing is shown in \autoref{fig:basic-usage} (c).
 
 This pattern is simple yet powerful, as it allows the user to interact with the
 stored computation graph in a way that is adapted to their use case, and to
@@ -270,52 +309,58 @@ Jupyter notebook, because it makes it very cheap to re-run cells in order to rec
 
 \begin{figure}[htbp]
     \centering
-    \begin{minipage}[b]{0.48\textwidth}
-        \begin{subfigure}[b]{\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/fig4.pdf}
-            \caption{Continuing from Figure \ref{fig:basic-usage}, we first
-            create a computation frame from a single function \texttt{f}, then
-            expand it to include all calls that can be reached from the memoized
-            calls to \texttt{f} via their inputs/outputs, and finally convert
-            the computation frame into a dataframe. We see that this
-            automatically produces a computation graph corresponding to the
-            computations found.}
-            \label{fig:figure1}
-        \end{subfigure}
-
-        \vspace{1em}
-
-        \begin{subfigure}[b]{\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/fig5.pdf}
-            \caption{The output of the call to \texttt{.eval()} from the left
-            subfigure used to turn the computaiton frame into a dataframe. The
-            resulting table has columns for all variables and functions
-            appearing in the captured computation graph, and each row correspond
-            to a partial computation following this graph. The variable columns
-            contain values these variables take, whereas function columns
-            contain call objects representing the memoized calls to the
-            respective functions. We see that, because we call \texttt{g}
-            conditional on the output of \texttt{f}, some rows have nulls in the
-            \texttt{g} column.}
-            \label{fig:figure2}
-        \end{subfigure}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[b]{0.45\textwidth}
-        \begin{subfigure}[b]{\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/cf.pdf}
-            \caption{A visualization of the computation frame from the previous
-            two subfigures. The red nodes indicate functions, and the blue nodes
-            indicate variables in the computation graph. Each edge is labeled
-            with the input/output name of the adjacent function. Nodes and edges
-            also show the number of \texttt{Ref}s and \texttt{Call}s they
-            represent.}
-            \label{fig:figure3}
-        \end{subfigure}
-    \end{minipage}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        % \includegraphics[width=0.45\textwidth]{img/fig4.pdf}
+        \begin{lstlisting}[language=python]
+In [1]:
+# get the computation frame for f
+storage.cf(f).\
+  # add all computations reachable
+  # from calls to f
+  expand().\
+  # extract as a dataframe
+  eval()
+Out[1]: Extracting tuples from the
+computation graph:
+  output_0 = f(x=x)
+  output_1 = g(y=output_0, x=x)
+        \end{lstlisting}
+        \caption{Continuing from \autoref{fig:basic-usage}, we first
+        create a computation frame from a single function \texttt{f}, then
+        expand it to include all calls that can be reached from the memoized
+        calls to \texttt{f} via their inputs/outputs, and finally convert
+        the computation frame into a dataframe. We see that this
+        automatically produces a computation graph corresponding to the
+        computations found.}
+        \label{fig:figure1}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=0.80\linewidth]{img/fig5.pdf}
+        \caption{The output of the call to \texttt{.eval()} from the left
+        subfigure used to turn the computaiton frame into a dataframe. The
+        resulting table has columns for all variables and functions
+        appearing in the captured computation graph, and each row correspond
+        to a partial computation following this graph. The variable columns
+        contain values these variables take, whereas function columns
+        contain call objects representing the memoized calls to the
+        respective functions. We see that, because we call \texttt{g}
+        conditional on the output of \texttt{f}, some rows have nulls in the
+        \texttt{g} column.}
+        \label{fig:figure2}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=0.45\textwidth]{img/cf.pdf}
+        \caption{A visualization of the computation frame from the previous
+        two subfigures. The red nodes indicate functions, and the blue nodes
+        indicate variables in the computation graph. Each edge is labeled
+        with the input/output name of the adjacent function. Nodes and edges
+        also show the number of \texttt{Ref}s and \texttt{Call}s they
+        represent.}
+        \label{fig:figure3}
+    \end{subfigure}
     \caption{Basic declarative usage of \texttt{mandala} and an example of
 computation frames.}
     \label{fig:cf}
@@ -334,9 +379,8 @@ Intuitively, a computation frame is a way to organize a collection of saved
 \texttt{@op} calls into groups, where the calls in each group have an analogous
 role in the computation, and the groups form a high-level computational graph of
 variables (which represent groups of \texttt{Ref}s) and functions (groups of
-\texttt{Call}s). The illustration in Figure \ref{fig:cf} (c) shows a
-visualization of a computation frame extracted from the computations in Figure
-\ref{fig:basic-usage}.
+\texttt{Call}s). The illustration in \autoref{fig:cf} (c) shows a
+visualization of a computation frame extracted from the computations in \autoref{fig:basic-usage}.
 
 This kind of organization is useful because it reflects how the user thinks
 about the computation, and allows them to tailor the exploration of the
@@ -355,12 +399,12 @@ given \texttt{@op}.
 \label{subsection:cf-definition}
 
 
-A computation frame (Figure \ref{fig:cf}) consists of the following data:
+A computation frame (\autoref{fig:cf}) consists of the following data:
 \begin{itemize}
 \item \textbf{Computation graph}: a directed graph $G=(V,F,E)$ where $V$ are
 named variables and $F$ are named instances of \texttt{@op}-decorated functions.
 The edges $E$ are labeled with the input/output names of the adjacent functions.
-An example is shown in Figure \ref{fig:cf} (c);
+An example is shown in \autoref{fig:cf} (c);
 \item \textbf{Groups of \texttt{Ref}s and \texttt{Call}s}: for each variable
 $v\in V$, a set of (history IDs of) \texttt{Ref}s $R_v$, and for each function
 $f\in F$ with underlying \texttt{@op} $o_f$, a set of (history IDs of) \texttt{Call}s $C_f$;
@@ -384,7 +428,7 @@ computations with some shared structure. For example, we can use them for:
 \item \textbf{Iteratively expanding the frame with functions that generated or
 used existing variables}: this is useful for exploring the computation graph in
 a particular direction, or for adding more context to a particular computation.
-For example, in Figure \ref{fig:cf} (a), we start with a computation frame
+For example, in \autoref{fig:cf} (a), we start with a computation frame
 containing only the calls to \texttt{f}, and then expand it to include all calls
 that can be reached from the memoized calls to \texttt{f} via their
 inputs/outputs, which adds the calls to \texttt{g} to the frame.
@@ -394,7 +438,7 @@ the captured computation graph. The table is obtained by collecting all terminal
 \texttt{Ref}s in the frame's computational graph (i.e., those that are not
 inputs to any function in the frame), computing their computational history in
 the frame (grouped by variable), and joining the resulting tables over the
-variables. This is shown in Figure \ref{fig:cf} (right). In particular, as shown
+variables. This is shown in \autoref{fig:cf} (right). In particular, as shown
 in the example, this step may produce nulls, as the computation frame can
 contain computations that only partially follow the graph.
 \item \textbf{Performing high-level storage manipulations}: such as deleting all
@@ -421,7 +465,21 @@ memoized as \texttt{Ref}s (with the collection merely pointing to the
 
 \begin{wrapfigure}[18]{l}{0.45\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{img/list.pdf}
+    % \includegraphics[width=0.45\linewidth]{img/list.pdf}
+    \begin{lstlisting}[language=python]
+@op
+def avg_items(xs: MList[int]) -> float:
+  return sum(xs) / len(xs)
+
+@op
+def get_xs(n) -> MList[int]:
+  return list(range(n))
+
+with storage:
+  xs = get_xs(10)
+  for i in range(2, 10, 2):
+    avg = avg_items(xs[:i])
+    \end{lstlisting}
     \caption{Illustration of native collection memoization in \texttt{mandala}.
     The custom type annotation \texttt{MList[int]} is used to memoize a list of
     integers as a list of pointers to element \texttt{Ref}s.}
@@ -435,7 +493,7 @@ elements of a list as variadic inputs, generates a \texttt{ListRef} (subclass of
 collections are naturally incorporated in the computation graph. These internal
 \texttt{@op}s are applied automatically when a collection is passed as an
 argument to a memoized function, or when a collection is returned from a
-memoized function (Figure \ref{fig:list}).
+memoized function (\autoref{fig:list}).
 
 % \subsection{Caching}
 % To speed up retracing and memoization, it is necessary to avoid frequent reads
