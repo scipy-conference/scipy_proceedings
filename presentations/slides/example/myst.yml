@@ -1,0 +1,9 @@
+version: 1
+extends: ../../proceedings.yml
+project:
+  title: Safe handling instructions for missing data
+  authors:
+    - name: Dillon Niederhut
+      affiliation: Enthought, Inc.
+      orcid: 0000-0002-9995-4378
+  abstract: A presentation about what to do with missing data

@@ -1,0 +1,25 @@
+version: 1
+extends: ../proceedings.yml
+project:
+  subject: Research Article
+  banner: banner.png
+  thumbnail: thumbnail.png
+  numbering:
+    headings: true
+  exports:
+    # TODO: This should be uncommented and working as a template for 2025
+    # - id: pdf
+    #   format: typst
+    #   template: /Users/rowan/git/typst/scipy
+    #   article: main.md
+    #   output: full_text.pdf
+    - format: jats
+      output: _build/exports/jats.xml
+    - format: meca
+      output: meca.zip
+  downloads:
+    - title: Download PDF
+      url: full_text.pdf
+      static: true
+site:
+  template: article-theme
