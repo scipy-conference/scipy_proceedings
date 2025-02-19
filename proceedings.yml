@@ -1,0 +1,45 @@
+version: 1
+project:
+  open_access: true
+  license: CC-BY-4.0
+  venue:
+    title: Python in Science Conference
+    short_title: SciPy
+    number: 24rd
+    location: Tacoma, Washington
+    date: July ** - July **, 2025
+    publisher: SciPy
+    series: Proceedings of the Python in Science Conference
+    issn: 2575-9752
+    doi: 10.25080/issn.2575-9752
+    url: https://proceedings.scipy.org
+  date: 2025-07-10
+  # TODO: Add this at publication time:
+  # volume:
+  #   title: Proceedings of the 24th Python in Science Conference
+  #   subject: Scientific Computing with Python
+  #   doi: 10.25080/DTVR3553
+  editors:
+    - name: Hongsup Shin
+      email: hongsup.shin@pm.me
+      affiliation: Arm
+      id: hongsup
+    - name: Sanhita Joshi
+      email: sanhita.joshi@gmail.com
+      affiliation: Deloitte
+      id: sanhita
+    - name: Rowan Cockett
+      email: rowan@curvenote.com
+      affiliations:
+        - name: Curvenote
+          ror: https://ror.org/02mz0e468
+          url: https://curvenote.com
+      id: rowan
+    - name: Charles Lindsey
+      email: lindseycster@gmail.com
+      affiliation: Aptos
+      id: charles
+    - name: Amey Ambade
+      email: ameyambade@gmail.com
+      affiliation: SLB
+      id: amey

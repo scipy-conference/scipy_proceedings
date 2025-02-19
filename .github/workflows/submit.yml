@@ -1,0 +1,18 @@
+name: Curvenote Submit
+on:
+  push:
+    branches: ['2025']
+permissions:
+  contents: write
+jobs:
+  create-preview:
+    uses: curvenote/actions/.github/workflows/submit.yml@v1
+    with:
+      id-pattern-regex: '^scipy-2025-(?:[a-zA-Z0-9-_]{3,15})$'
+      enforce-single-folder: true
+      venue: scipy
+      collection: '2025'
+      path: papers/*
+    secrets:
+      CURVENOTE: ${{ secrets.CURVENOTE_TOKEN }}
+      GITHUB: ${{ secrets.GITHUB_TOKEN }}
