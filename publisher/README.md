@@ -1,5 +1,7 @@
 # For editors publishing the proceedings.
 
+**Note**: This is changing in 2024 and aspects of this README are out of date.
+
 ## Structure of the proceedings
 
 This section will give you an introduction to the various documents and resources that you will need to create in the course of managing the proceedings.
@@ -44,11 +46,11 @@ The resulting html files will include:
 - `index.html`
 - a page for each article, named ``<article_author>.html`
 - a `bib/`` directory, containing:
-    - a bibfile for each article, named `<article_author>.bib`
-    - a bibfile for the complete proceedings, named `proc-scipy-<year of proceedings>.bib`
+  - a bibfile for each article, named `<article_author>.bib`
+  - a bibfile for the complete proceedings, named `proc-scipy-<year of proceedings>.bib`
 - a `pdf/` directory, containing:
-    - a pdf for each article, named `<article_author>.pdf`
-    - a pdf for the complete proceedings, named `proceedings.pdf`
+  - a pdf for each article, named `<article_author>.pdf`
+  - a pdf for the complete proceedings, named `proceedings.pdf`
 
 ## Building the proceedings: Makefile
 
@@ -86,6 +88,28 @@ NB: You will tend to use `html-zip` if you need to iterate on the portable copy
 of the website without needing to rebuild the entire proceedings. This is most
 useful after authors' PRs are no longer being updated.
 
+## Requirements
+
+These requirements are for installing LaTeX, which should not be necessary for MyST based submissions.
+
+### Debian-like distributions:
+
+```
+sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
+                     texlive-latex-extra texlive-fonts-recommended \
+                     texlive-bibtex-extra
+```
+
+Note you will still need to install `docutils` with `pip` even on a Debian system.
+
+### Fedora
+
+On Fedora, the package names are slightly different:
+
+```
+su -c `dnf install python-docutils texlive-collection-basic texlive-collection-fontsrecommended texlive-collection-latex texlive-collection-latexrecommended texlive-collection-latexextra texlive-collection-publishers texlive-collection-bibtexextra`
+```
+
 ## Build styles
 
 There are three different modes for publishing the proceedings, you will need to
@@ -106,18 +130,18 @@ can be served on the official SciPy organisation website.
   be used to publish the final version of the proceedings. Using "ready" is
   responsible for triggering the creation of DOIs and XML submission files.
 
-  ## DOI metadata
+## DOI metadata
 
 As of 2015, each SciPy conference proceedings and the individual papers in
 one proceedings are assigned DOIs. As of 2018, the conference itself has a
 DOI, such that the linking structure now looks the following:
 
 - ISSN + Series DOI (10.25080/issn.2575-9752)
-    - Conference DOI for SciPy 2018
-    - Conference DOI for SciPy 2017
-        - Paper DOI for Poore 2017
-        - Paper DOI for Niederhut 2017
-        - etc.
+  - Conference DOI for SciPy 2018
+  - Conference DOI for SciPy 2017
+    - Paper DOI for Poore 2017
+    - Paper DOI for Niederhut 2017
+    - etc.
 
 The organization that administers ISSN requests that [the series-level DOI
 be constructed following these guidelines]
@@ -134,6 +158,7 @@ This ends up looking like `10.25080/shinma-7f4c6e7-002`. When displaying DOIs,
 crossref.org asks that we use this format -
 [https://doi.org/10.25080/shinma-7f4c6e7-002]
 (https://doi.org/10.25080/shinma-7f4c6e7-002)
+
 - which resolves the proceedings page where the paper is hosted.
 
 Submitting DOIs and associated metadata about each paper to crossref.org

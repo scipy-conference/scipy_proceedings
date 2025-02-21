@@ -216,17 +216,17 @@ def detect_paper_type(in_path: str) -> str:
     """Figure out if we have RsT or Tex
     """
     directory_contents = os.listdir(in_path)
-    rst_count = 0
+    md_count = 0
     tex_count = 0
     for path in directory_contents:
         path = path.lower()
         if path.endswith(BUILD_SYSTEM_FILES):
             pass
-        elif path.endswith('.rst'): rst_count += 1
+        elif path.endswith('.md'): md_count += 1
         elif path.endswith('.tex'): tex_count += 1
-    if rst_count and tex_count:
+    if md_count and tex_count:
         raise RuntimeError("Saw .rst and .tex files -- paper source unclear")
-    if rst_count:
+    if md_count:
         return 'rst'
     elif tex_count:
         return 'tex'
@@ -380,12 +380,12 @@ def rst2tex(out_path):
                 }
 
     try:
-        rst, = glob.glob(os.path.join(out_path, '*.rst'))
+        md, = glob.glob(os.path.join(out_path, '*.md'))
     except ValueError:
-        raise RuntimeError("Found more than one input .rst--not sure which "
+        raise RuntimeError("Found more than one input .md--not sure which "
                            "one to use.")
 
-    with io.open(rst, mode='r', encoding='utf-8') as f:
+    with io.open(md, mode='r', encoding='utf-8') as f:
         content = header + f.read()
 
     tex = dc.publish_string(source=content, writer=writer,

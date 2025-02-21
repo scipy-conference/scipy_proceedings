@@ -1,6 +1,25 @@
 
+{{if keynote}}
+<h1>Keynote Slides</h1>
+
+<div id="keynote">
+  <ul>
+      {{for entry in keynote}}
+        <li>{{html_quote(entry['title']) | html}},
+        <em>{{html_quote(', and '.join(i['name'] for i in entry['authors'])) | html}}
+            {{if entry.get('doi')}}
+            <p><a href="https://doi.org/{{html_quote(entry['doi']) | html}}">doi.org/{{html_quote(entry['doi']) | html}}</a></p>{{endif}}
+            </em>
+        </li>
+      {{endfor}}
+
+    </ul>
+
+</div>
+{{endif}}
+
 {{if slides}}
-<h1>Accepted Paper Slides</h1>
+<h1>Accepted Talk Slides</h1>
 
 <div id="slides">
   <ul>
