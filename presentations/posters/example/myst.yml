@@ -1,5 +1,5 @@
 version: 1
-extends: ../../proceedings.yml
+extends: ../../../proceedings.yml
 project:
   title: Scientific Publishing with MyST Markdown
   authors:

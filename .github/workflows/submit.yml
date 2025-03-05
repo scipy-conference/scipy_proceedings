@@ -1,11 +1,13 @@
-name: Curvenote Submit
+name: Submit paper
 on:
-  push:
+  pull_request_target:
     branches: ['2025']
+    types: [labeled, opened, synchronize, reopened]
 permissions:
-  contents: write
+  contents: read
+  pull-requests: write
 jobs:
-  create-preview:
+  submit:
     uses: curvenote/actions/.github/workflows/submit.yml@v1
     with:
       id-pattern-regex: '^scipy-2025-(?:[a-zA-Z0-9-_]{3,15})$'
@@ -13,6 +15,7 @@ jobs:
       venue: scipy
       collection: '2025'
       path: papers/*
+      label: approved
     secrets:
       CURVENOTE: ${{ secrets.CURVENOTE_TOKEN }}
       GITHUB: ${{ secrets.GITHUB_TOKEN }}

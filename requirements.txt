@@ -1,7 +1,0 @@
-docutils == 0.14
-lxml
-nameparser
-pygments
-pytest
-pyyaml
-testpath
