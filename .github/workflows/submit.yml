@@ -1,7 +1,7 @@
 name: Submit paper
 on:
   pull_request_target:
-    branches: ['2024']
+    branches: ['2025']
     types: [labeled, opened, synchronize, reopened]
 permissions:
   contents: read
