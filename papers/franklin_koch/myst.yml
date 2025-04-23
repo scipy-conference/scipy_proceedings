@@ -1,0 +1,41 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-test-franklin_koch_1
+  # Ensure your title is the same as in your `main.md`
+  title: My test submission
+  # subtitle:
+  description: Test submission for scipy
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Franklin Koch
+      email: franklin@curvenote.com
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Curvenote
+  keywords:
+    - terraforming
+    - desert
+    - numerical perspective
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  exports:
+    # TODO: This should be uncommented and working as a template for 2025
+    - id: pdf
+      format: typst
+      template: https://github.com/myst-templates/lapreprint-typst.git
+      # template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
