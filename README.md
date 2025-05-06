@@ -84,15 +84,16 @@ The community is involved in the entire process for creating the proceedings, wh
 
 ## Contacting the Proceedings Co-Chairs
 
-The most effective way to contact the Proceedings Co-Chairs for issues related to this GitHub repository is to use GitHub's issues and "@"-mentioning the Co-Chairs.
+The most effective way to contact the Proceedings Co-Chairs for issues related to this GitHub repository is to use GitHub's issues and "@"-mentioning the Co-Chairs, either individually or with the team `@scipy-conference/2025-proceedings`.
 
-In 2024, the Proceedings Co-Chairs are:
+In 2025, the Proceedings Co-Chairs are:
 
-- Meghann Agarwal (@mepa)
 - Amey Ambade (@ameyxd)
-- Chris Calloway (@cbcunc)
 - Rowan Cockett (@rowanc1)
+- Ana Comesana (@anacomesana)
+- Sean Freeman (@freemansw1)
 - Sanhita Joshi (@sanhitamj)
+- Franklin Koch (@fwkoch)
 - Charles Lindsey (@cdlindsey)
 - Hongsup Shin (@hongsupshin)
 
@@ -126,13 +127,16 @@ In addition to the following list, we break up the deadlines in the respective d
 
 Please submit your papers by 23:59 PST of the _Deadline to submit first draft_.
 
-Submit your papers as a MyST Markdown ([mystmd.org](https://mystmd.org)) or
+Submit your papers as a MyST Markdown ([mystmd.org](https://mystmd.org)), narrative Jupyter Notebook, or
 LaTeX file via PR against this repository.
 Please only use LaTeX if you are already familiar with writing papers in LaTeX.
-The build process are using the `mystmd` CLI, which allows us to support
+The build process uses the `mystmd` CLI, which allows us to support
 a web-first reading experience.
-In future years this will allow us to accept notebooks and computational
-environments, however, this is not available in 2024.
+
+This is the first year the SciPy proceedings are accepting interactive notebooks and computational environments.
+These are also supported natively by the `mystmd` tools.
+By submitting a Jupyter Notebook, you are bringing your publication closer to your research, facilitating reproducibility, and allowing for interactive figures that more deeply communicate your results.
+If you are interested in submitting an interactive notebook, please contact the Proceedings Co-chairs using the `@scipy-conference/2025-proceedings` team.
 
 During the Open Review Period authors should work with their reviewers to refine
 and improve their submission.
@@ -183,7 +187,7 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
     - Use math markup
     - Include code snippets
     - Use a BibTeX files and/or DOIs for citations
-- When creating your pull-request, add a pull-request label of `paper` to trigger the build process. If you do not add this, a proceedings chair member will add it for you.
+- When creating your pull-request, add a pull-request label of `draft` to trigger the build process. If you do not add this, a proceedings chair member will add it for you.
 - Authors may include a project or consortium (e.g. [The Jupyter Project](https://raw.githubusercontent.com/scipy-conference/scipy_proceedings/2018/papers/project_jupyter/paper.rst))
 - There must be at least one corresponding author, and this must be a specific person with a valid email address
 - Authors of papers from previous SciPys may change their name on their published work by contacting the Proceedings Co-chairs
@@ -237,7 +241,6 @@ git clone https://github.com/mpacer/scipy_proceedings
    - If you want to alter other parts of the `scipy_proceedings` repo, do not include it in your
      submission's PR, create a separate PR against `dev`
      ([see below](#creating-build-system-prs) for more details).
-   - Creating build system PRs is deprecated; Curvenote is the build system now.
 7. Repeat steps 5 and 6, while also responding to reviewer feedback.
 
 #### Getting a local copy of the scipy_proceedings repo
@@ -359,10 +362,6 @@ The review process will be completed on the HTML, and you can check to see if th
 If it is not the same, please immediately contact us with a GitHub issue
 describing the discrepancy. Please include screenshots and an explanation of the
 differences. For best results, please [@-mention the Proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
-
-#### A note on notebooks for 2024
-
-We are interested in working towards full support for publishing computational notebooks as part of the proceedings, and are trialing this part of the submission process for interested authors - please get in touch with the Proceedings Co-Chairs with your interest.
 
 ## Instructions for Reviewers
 

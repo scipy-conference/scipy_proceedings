@@ -7,12 +7,11 @@ project:
   numbering:
     headings: true
   exports:
-    # TODO: This should be uncommented and working as a template for 2025
-    # - id: pdf
-    #   format: typst
-    #   template: /Users/rowan/git/typst/scipy
-    #   article: main.md
-    #   output: full_text.pdf
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
     - format: jats
       output: _build/exports/jats.xml
     - format: meca
@@ -22,4 +21,4 @@ project:
       url: full_text.pdf
       static: true
 site:
-  template: article-theme
+  template: https://github.com/myst-templates/article-theme.git
