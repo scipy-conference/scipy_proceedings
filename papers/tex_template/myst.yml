@@ -2,10 +2,9 @@ version: 1
 extends: ../papers.yml
 project:
   # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
-  id: scipy-2025-00_myst_template
-  # Ensure your title is the same as in your `main.md`
+  id: scipy-2025-tex_template
+  # Ensure your title is the same as in your `main.tex`
   title: A Numerical Perspective to Terraforming a Desert
-  # subtitle:
   description: Add a two sentence description about your article.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:

@@ -181,7 +181,7 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 
 - Papers are formatted using MyST ([mystmd.org](https://mystmd.org)) or LaTeX (which also uses [MyST](https://mystmd.org), please see notes on LaTeX below)
 - The paper is written and reviewed using the interactive HTML view (i.e. `myst start`), the PDF is built upon acceptance only
-- Example papers are provided in `papers/00_myst_template` and `papers/00_tex_template`
+- Example papers are provided in `papers/myst_template` and `papers/tex_template`
   - These papers provide examples of how to:
     - Label figures, equations and tables
     - Use math markup
@@ -191,7 +191,7 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 - Authors may include a project or consortium (e.g. [The Jupyter Project](https://raw.githubusercontent.com/scipy-conference/scipy_proceedings/2018/papers/project_jupyter/paper.rst))
 - There must be at least one corresponding author, and this must be a specific person with a valid email address
 - Authors of papers from previous SciPys may change their name on their published work by contacting the Proceedings Co-chairs
-- All citations that have DOIs should include those DOIs in the paper's references section, see [`mybib.bib`](./papers/00_myst_template/mybib.bib).
+- All citations that have DOIs should include those DOIs in the paper's references section, see [`mybib.bib`](./papers/myst_template/mybib.bib).
 - All figures and tables should have captions.
 - Figures and tables should be positioned close to their explanatory text.
 - All abbreviations should be identified in your `myst.yml` ([docs](https://mystmd.org/guide/glossaries-and-terms#abbreviations))
@@ -295,7 +295,7 @@ git push --set-upstream origin <your_branch_name>
   - if you are submitting one paper, we recommend you use `<firstname_surname>`
   - if you are submitting more than one paper, you will need to use a different
     directory name for each paper
-- Copy an example paper into your directory: either `papers/00_myst_template` or `papers/00_tex_template`
+- Copy an example paper into your directory: either `papers/myst_template` or `papers/tex_template`
   - Update the `id` in the `myst.yml` to by `scipy-2025-<your_directory_name>`
 
 #### Write your paper

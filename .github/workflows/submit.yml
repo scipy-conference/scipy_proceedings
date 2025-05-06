@@ -16,6 +16,7 @@ jobs:
       collection: '2025'
       kind: article
       path: papers/*
+      exclude: papers/myst_template, papers/tex_template
       label: approved
     secrets:
       CURVENOTE: ${{ secrets.CURVENOTE_TOKEN }}
