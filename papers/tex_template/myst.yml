@@ -44,3 +44,9 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.tex
+      output: full_text.pdf

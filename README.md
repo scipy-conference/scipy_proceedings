@@ -104,7 +104,7 @@ In addition to the following list, we break up the deadlines in the respective d
 - Apr 4: Reviewer invitations sent
 - Apr 18: Deadline to respond to offer to be a reviewer
 - Apr 25: Authors invited to submit full papers
-- May 2: Webinar offered to authors
+- May 9: Webinar offered to authors
 - Jun 6: Deadline to submit first draft by authors, as GitHub pull request
 - Jun 8: Assignment of reviewers to papers
 - Jun 8: Open Review Period begins
@@ -170,7 +170,7 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 ### Author Deadlines
 
 - Apr 25: Authors invited to submit full papers
-- May 2: Webinar offered to authors
+- May 9: Webinar offered to authors
 - Jun 6: Deadline to submit first draft by authors
   - Reviewers comment on papers to authors during this period.
   - Authors also respond to review comments with improvements to papers during this period.
