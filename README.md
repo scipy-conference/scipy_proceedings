@@ -161,7 +161,7 @@ have final say in whether to accept or reject a paper.
 
 ### Getting Help
 
-An excellent webinar entitled ["SciPy Proceedings 2024: Quickstart and authoring tutorial"](https://www.youtube.com/watch?v=v97nJOCAWHI) is available on YouTube.
+An excellent webinar entitled ["SciPy Proceedings 2025: Quickstart and authoring tutorial"](https://www.youtube.com/watch?v=YGzBF-2wAWU) is available on YouTube.
 
 If you have a challenge with any technical aspect of authoring your paper in MyST or LaTeX,
 please do not hesitate to reach out via your GitHub pull request or issue on this repository.
@@ -229,7 +229,7 @@ git clone https://github.com/mpacer/scipy_proceedings
 #### Author workflow steps
 
 > [!NOTE]
-> There is a [webinar on YouTube](https://www.youtube.com/watch?v=v97nJOCAWHI) that goes through the author submission process for 2024 submissions using [MyST Markdown](https://mystmd.org).
+> There is a [webinar on YouTube](https://www.youtube.com/watch?v=YGzBF-2wAWU) that goes through the author submission process for 2025 submissions using [MyST Markdown](https://mystmd.org).
 
 1. [Get a local copy](#getting-a-local-copy-of-the-scipy_proceedings-repo) of the `scipy_proceedings` repo.
 2. [Update your local copy](#getting-the-latest-branch) of the `scipy_proceedings` repo.
