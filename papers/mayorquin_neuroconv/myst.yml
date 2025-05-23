@@ -1,0 +1,64 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-mayorquin_neuroconv
+  # Ensure your title is the same as in your `main.md`
+  title: Neuroconv. Automating the Path to Data Standardization in Neurophysiology
+  # subtitle:
+  description: "TODO"
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Heberto Mayorquin
+      email: h.mayorquin@gmail.com
+      orcid: 0000-0002-5937-7537
+      affiliations:
+        - CatalystNeuro
+    - name: Ben Dichter
+      email: ben.dichter@catalystneuro.com
+      orcid: 0000-0001-5725-6910
+      affiliations:
+        - CatalystNeuro
+    - name: Paul Adkinson
+      email: paul.adkisson@catalystneuro.com
+      orcid: 0009-0005-8943-5450
+      affiliations:
+        - CatalystNeuro
+      corresponding: true
+    - name: Szonja Weigl
+      email: szonja.weigl@catalystneuro.com
+      orcid: 0000-0001-6615-1360
+      affiliation: CatalystNeuro
+    - name: Alessandra Trappani
+      email: alessandra.trappani@catalystneuro.com
+      orcid:
+      affiliations:
+        - CatalystNeuro
+    - name: Luiz Taufer
+      email:
+      orcid:
+      affiliations:
+        - University of Tennessee
+  keywords:
+    - terraforming
+    - desert
+    - numerical perspective
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
