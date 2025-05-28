@@ -101,26 +101,26 @@ In 2025, the Proceedings Co-Chairs are:
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
-- Apr 4: Reviewer invitations sent
-- Apr 18: Deadline to respond to offer to be a reviewer
-- Apr 25: Authors invited to submit full papers
+- May 2: Authors invited to submit full papers
 - May 9: Webinar offered to authors
-- Jun 6: Deadline to submit first draft by authors, as GitHub pull request
-- Jun 8: Assignment of reviewers to papers
-- Jun 8: Open Review Period begins
+- May 16: Reviewer invitations sent
+- May 30: Deadline to respond to offer to be a reviewer
+- Jun 13: Deadline to submit first draft by authors, as GitHub pull request
+- Jun 15: Assignment of reviewers to papers
+- Jun 15: Open Review Period begins
   - Reviewers comment on papers to authors during this period.
   - Authors also respond to review comments with improvements to papers during this period.
-- Jul 3: Initial complete review
+- Jul 10: Initial complete review
   - Reviewers continue to comment on paper improvements during this period.
   - Authors also respond to review comments with further improvements to papers during this period.
-- Aug 2: Final review deadline
+- Aug 9: Final review deadline
   - Authors continue to make revisions in response to final review comments during this period.
-- Aug 8: Final author revision deadline
-- Aug 8: Open Review Period ends
+- Aug 15: Final author revision deadline
+- Aug 15: Open Review Period ends
   - Authors put down their pens.
   - Reviewers make an up or down decision on publication readiness of papers during this period.
-- Aug 16: Final reviewer decision deadline
-- Aug 23: Proceedings final sign-off by editors
+- Aug 23: Final reviewer decision deadline
+- Aug 30: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
 
 ## Instructions for Authors
@@ -169,12 +169,12 @@ A member of the Proceedings Co-chairs will help you directly or identify a work-
 
 ### Author Deadlines
 
-- Apr 25: Authors invited to submit full papers
+- May 2: Authors invited to submit full papers
 - May 9: Webinar offered to authors
-- Jun 6: Deadline to submit first draft by authors
+- Jun 13: Deadline to submit first draft by authors
   - Reviewers comment on papers to authors during this period.
   - Authors also respond to review comments with improvements to papers during this period.
-- Aug 8: Final author revision deadline
+- Aug 15: Final author revision deadline
   - Authors put down their pens.
 
 ### General Information and Guidelines for Authors
@@ -393,20 +393,20 @@ _Final Reviewer Decision_ deadline.
 
 ### Reviewer Deadlines
 
-- Apr 4: Reviewer invitations sent
-- Apr 18: Deadline to respond to offer to be a reviewer
-- Jun 8: Assignment of reviewers to papers
+- May 16: Reviewer invitations sent
+- May 30: Deadline to respond to offer to be a reviewer
+- Jun 15: Assignment of reviewers to papers
   - Reviewers comment on papers to authors during this period.
   - Authors also respond to review comments with improvements to papers during this period.
-- Jul 3: Initial complete review
+- Jul 10: Initial complete review
   - Reviewers continue to comment on paper improvements during this period.
   - Authors also respond to review comments with further improvements to papers during this period.
-- Aug 2: Final review deadline
+- Aug 9: Final review deadline
   - Authors continue to make revisions in response to final review comments during this period.
-- Aug 8: Final author revision deadline
+- Aug 15: Final author revision deadline
   - Authors put down their pens.
   - Reviewers make an up or down decision on publication readiness of papers during this period.
-- Aug 16: Final reviewer decision deadline
+- Aug 23: Final reviewer decision deadline
 
 ### Reviewer Workflow
 
@@ -458,9 +458,9 @@ To information about how to manage the whole proceedings, please see
 
 #### Publisher Deadlines
 
-- Apr 25: Authors invited to submit full papers
+- May 2: Authors invited to submit full papers
   - The [build process](#build-process) is supported by Curvenote (a SciPy sponsor) and it is maintained throughout this period.
-- Aug 23: Proceedings final sign-off by editors
+- Aug 30: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
 
 ### Instructions for Editors
@@ -478,17 +478,17 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 #### Editor Deadlines
 
-- Apr 4: Reviewer invitations sent
-- Apr 18: Deadline to respond to offer to be a reviewer
-- Apr 25: Authors invited to submit full papers
-- Jun 8: Assignment of reviewers to papers
+- May 2: Authors invited to submit full papers
+- May 16: Reviewer invitations sent
+- May 30: Deadline to respond to offer to be a reviewer
+- Jun 15: Assignment of reviewers to papers
   - Reviewers comment on papers to authors during this period.
   - Authors also respond to review comments with improvements to papers during this period.
-- Jul 3: Initial complete review
+- Jul 10: Initial complete review
   - Reviewers continue to comment on paper improvements during this period.
   - Authors also respond to review comments with further improvements to papers during this period.
   - Editors should verify that reviews have been completed
-- Aug 23: Proceedings final sign-off by editors
+- Aug 30: Proceedings final sign-off by editors
   - The publication process begins after final sign-off.
 
 ## Instructions for Slides
