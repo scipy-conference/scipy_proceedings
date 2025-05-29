@@ -1,0 +1,15 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: de90b6d7-7a57-4812-b283-a10336ee05bd
+  # title:
+  # description:
+  # keywords: []
+  # authors: []
+  github: https://github.com/scipy-conference/scipy_proceedings
+  # To autogenerate a Table of Contents, run "myst init --write-toc"
+site:
+  template: book-theme
+  # options:
+  #   favicon: favicon.ico
+  #   logo: site_logo.png
