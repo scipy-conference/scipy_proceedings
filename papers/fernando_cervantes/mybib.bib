@@ -42,19 +42,6 @@
   title     = {Jupyter Notebooks - a publishing format for reproducible computational workflows},
 }
 
-@article{matplotlib,
-  abstract     = {Matplotlib is a 2D graphics package used for Python for application development, interactive scripting, and publication-quality image generation across user interfaces and operating systems.},
-  author       = {Hunter, J. D.},
-  publisher    = {IEEE COMPUTER SOC},
-  year         = {2007},
-	doi          = {https://doi.org/10.1109/MCSE.2007.55},
-  journal      = {Computing in Science \& Engineering},
-  number       = {3},
-  pages        = {90--95},
-  title        = {Matplotlib: A 2D graphics environment},
-  volume       = {9},
-}
-
 @article{numpy,
   author       = {Harris, Charles R. and Millman, K. Jarrod and van der Walt, Stéfan J. and Gommers, Ralf and Virtanen, Pauli and Cournapeau, David and Wieser, Eric and Taylor, Julian and Berg, Sebastian and Smith, Nathaniel J. and Kern, Robert and Picus, Matti and Hoyer, Stephan and van Kerkwijk, Marten H. and Brett, Matthew and Haldane, Allan and del Río, Jaime Fernández and Wiebe, Mark and Peterson, Pearu and Gérard-Marchant, Pierre and Sheppard, Kevin and Reddy, Tyler and Weckesser, Warren and Abbasi, Hameer and Gohlke, Christoph and Oliphant, Travis E.},
   publisher    = {Springer Science and Business Media {LLC}},
@@ -68,63 +55,654 @@
   volume       = {585},
 }
 
-@misc{pandas1,
-  author    = {{The Pandas Development Team}},
-  title     = {pandas-dev/pandas: Pandas},
-  month     = feb,
-  year      = {2020},
-  publisher = {Zenodo},
-  version   = {latest},
-  url       = {https://doi.org/10.5281/zenodo.3509134},
+@article{scikit-image,
+ title = {scikit-image: image processing in {P}ython},
+ author = {van der Walt, {S}t\'efan and {S}ch\"onberger, {J}ohannes {L}. and
+           {Nunez-Iglesias}, {J}uan and {B}oulogne, {F}ran\c{c}ois and {W}arner,
+           {J}oshua {D}. and {Y}ager, {N}eil and {G}ouillart, {E}mmanuelle and
+           {Y}u, {T}ony and the scikit-image contributors},
+ year = {2014},
+ month = {6},
+ keywords = {Image processing, Reproducible research, Education,
+             Visualization, Open source, Python, Scientific programming},
+ volume = {2},
+ pages = {e453},
+ journal = {PeerJ},
+ issn = {2167-8359},
+ url = {https://doi.org/10.7717/peerj.453},
+ doi = {10.7717/peerj.453}
 }
 
-@inproceedings{pandas2,
-  author    = {Wes McKinney},
-  title     = {{D}ata {S}tructures for {S}tatistical {C}omputing in {P}ython},
-  booktitle = {{P}roceedings of the 9th {P}ython in {S}cience {C}onference},
-  pages     = {56 - 61},
-  year      = {2010},
-  editor    = {{S}t\'efan van der {W}alt and {J}arrod {M}illman},
-	doi       = {https://doi.org/10.25080/Majora-92bf1922-00a},
+@software{napari,
+  author       = {Sofroniew, Nicholas and
+                  Lambert, Talley and
+                  Bokota, Grzegorz and
+                  Nunez-Iglesias, Juan and
+                  Sobolewski, Peter and
+                  Sweet, Andrew and
+                  Gaifas, Lorenzo and
+                  Evans, Kira and
+                  Burt, Alister and
+                  Doncila Pop, Draga and
+                  Yamauchi, Kevin and
+                  Weber Mendonça, Melissa and
+                  Liu, Lucy and
+                  Buckley, Genevieve and
+                  Vierdag, Wouter-Michiel and
+                  Monko, Timothy and
+                  Royer, Loic and
+                  Can Solak, Ahmet and
+                  Harrington, Kyle I. S. and
+                  Ahlers, Jannis and
+                  Althviz Moré, Daniel and
+                  Amsalem, Oren and
+                  Anderson, Ashley and
+                  Annex, Andrew and
+                  Aronssohn, Constantin and
+                  Boone, Peter and
+                  Bragantini, Jordão and
+                  Bussonnier, Matthias and
+                  Caporal, Clément and
+                  Eglinger, Jan and
+                  Eisenbarth, Andreas and
+                  Freeman, Jeremy and
+                  Gohlke, Christoph and
+                  Gunalan, Kabilar and
+                  Halchenko, Yaroslav Olegovich and
+                  Har-Gil, Hagai and
+                  Harfouche, Mark and
+                  Hilsenstein, Volker and
+                  Hutchings, Katherine and
+                  Lauer, Jessy and
+                  Lichtner, Gregor and
+                  Liu, Hanjin and
+                  Liu, Ziyang and
+                  Lowe, Alan and
+                  Marconato, Luca and
+                  Martin, Sean and
+                  McGovern, Abigail and
+                  Migas, Lukasz and
+                  Miller, Nadalyn and
+                  Miñano, Sofía and
+                  Muñoz, Hector and
+                  Müller, Jan-Hendrik and
+                  Nauroth-Kreß, Christopher and
+                  Obenhaus, Horst A. and
+                  Palecek, David and
+                  Pape, Constantin and
+                  Perlman, Eric and
+                  Pevey, Kim and
+                  Peña-Castellanos, Gonzalo and
+                  Pierré, Andrea and
+                  Pinto, David and
+                  Rodríguez-Guerra, Jaime and
+                  Ross, David and
+                  Russell, Craig T. and
+                  Ryan, James and
+                  Selzer, Gabriel and
+                  Smith, MB and
+                  Smith, Paul and
+                  Sofiiuk, Konstantin and
+                  Soltwedel, Johannes and
+                  Stansby, David and
+                  Vanaret, Jules and
+                  Wadhwa, Pam and
+                  Weigert, Martin and
+                  Willing, Carol and
+                  Windhager, Jonas and
+                  Winston, Philip and
+                  Zhao, Rubin},
+  title        = {napari: a multi-dimensional image viewer for
+                   Python
+                  },
+  month        = may,
+  year         = 2025,
+  publisher    = {Zenodo},
+  version      = {v0.6.1},
+  doi          = {10.5281/zenodo.15465370},
+  url          = {https://doi.org/10.5281/zenodo.15465370},
+  swhid        = {swh:1:dir:021778f57b4887417693618a4f5a2f3585a8f882
+                   ;origin=https://doi.org/10.5281/zenodo.3555620;vis
+                   it=swh:1:snp:e1ac20865250d11257dcf1f64ad35b9780311
+                   c31;anchor=swh:1:rel:f6a6e951dba55c83308d4e6215c98
+                   7b06ef04c4e;path=napari-napari-16305db
+                  },
 }
 
-@article{scipy,
-  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and
-            Haberland, Matt and Reddy, Tyler and Cournapeau, David and
-            Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and
-            Bright, Jonathan and {van der Walt}, St{\'e}fan J. and
-            Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and
-            Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and
-            Kern, Robert and Larson, Eric and Carey, C J and
-            Polat, {\.I}lhan and Feng, Yu and Moore, Eric W. and
-            {VanderPlas}, Jake and Laxalde, Denis and Perktold, Josef and
-            Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and
-            Harris, Charles R. and Archibald, Anne M. and
-            Ribeiro, Ant{\^o}nio H. and Pedregosa, Fabian and
-            {van Mulbregt}, Paul and {SciPy 1.0 Contributors}},
-  title   = {{{SciPy} 1.0: Fundamental Algorithms for Scientific
-            Computing in Python}},
-  journal = {Nature Methods},
-  year    = {2020},
-  volume  = {17},
-  pages   = {261--272},
-  adsurl  = {https://rdcu.be/b08Wh},
-	doi     = {https://doi.org/10.1038/s41592-019-0686-2},
+@article{Moore2021-we,
+  title    = "{OME-NGFF}: a next-generation file format for expanding
+              bioimaging data-access strategies",
+  author   = "Moore, Josh and Allan, Chris and Besson, S{\'e}bastien and Burel,
+              Jean-Marie and Diel, Erin and Gault, David and Kozlowski, Kevin
+              and Lindner, Dominik and Linkert, Melissa and Manz, Trevor and
+              Moore, Will and Pape, Constantin and Tischer, Christian and
+              Swedlow, Jason R",
+  abstract = "The rapid pace of innovation in biological imaging and the
+              diversity of its applications have prevented the establishment of
+              a community-agreed standardized data format. We propose that
+              complementing established open formats such as OME-TIFF and HDF5
+              with a next-generation file format such as Zarr will satisfy the
+              majority of use cases in bioimaging. Critically, a common
+              metadata format used in all these vessels can deliver truly
+              findable, accessible, interoperable and reusable bioimaging data.",
+  journal  = "Nature Methods",
+  volume   =  18,
+  number   =  12,
+  pages    = "1496--1498",
+  month    =  dec,
+  year     =  2021
 }
 
-@article{sklearn1,
-  author       = {Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V. and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P. and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},
-  year         = {2011},
-  journal      = {Journal of Machine Learning Research},
-  pages        = {2825--2830},
-  title        = {Scikit-learn: Machine Learning in {P}ython},
-  volume       = {12},
+@article{Moore2023-nq,
+  title    = "{OME-Zarr}: a cloud-optimized bioimaging file format with
+              international community support",
+  author   = "Moore, Josh and Basurto-Lozada, Daniela and Besson, S{\'e}bastien
+              and Bogovic, John and Bragantini, Jord{\~a}o and Brown, Eva M and
+              Burel, Jean-Marie and Casas Moreno, Xavier and de Medeiros,
+              Gustavo and Diel, Erin E and Gault, David and Ghosh, Satrajit S
+              and Gold, Ilan and Halchenko, Yaroslav O and Hartley, Matthew and
+              Horsfall, Dave and Keller, Mark S and Kittisopikul, Mark and
+              Kovacs, Gabor and K{\"u}pc{\"u} Yolda{\c s}, Ayb{\"u}ke and
+              Kyoda, Koji and le Tournoulx de la Villegeorges, Albane and Li,
+              Tong and Liberali, Prisca and Lindner, Dominik and Linkert,
+              Melissa and L{\"u}thi, Joel and Maitin-Shepard, Jeremy and Manz,
+              Trevor and Marconato, Luca and McCormick, Matthew and Lange,
+              Merlin and Mohamed, Khaled and Moore, William and Norlin, Nils
+              and Ouyang, Wei and {\"O}zdemir, Bugra and Palla, Giovanni and
+              Pape, Constantin and Pelkmans, Lucas and Pietzsch, Tobias and
+              Preibisch, Stephan and Prete, Martin and Rzepka, Norman and
+              Samee, Sameeul and Schaub, Nicholas and Sidky, Hythem and Solak,
+              Ahmet Can and Stirling, David R and Striebel, Jonathan and
+              Tischer, Christian and Toloudis, Daniel and Virshup, Isaac and
+              Walczysko, Petr and Watson, Alan M and Weisbart, Erin and Wong,
+              Frances and Yamauchi, Kevin A and Bayraktar, Omer and Cimini,
+              Beth A and Gehlenborg, Nils and Haniffa, Muzlifah and Hotaling,
+              Nathan and Onami, Shuichi and Royer, Loic A and Saalfeld, Stephan
+              and Stegle, Oliver and Theis, Fabian J and Swedlow, Jason R",
+  abstract = "A growing community is constructing a next-generation file format
+              (NGFF) for bioimaging to overcome problems of scalability and
+              heterogeneity. Organized by the Open Microscopy Environment
+              (OME), individuals and institutes across diverse modalities
+              facing these problems have designed a format specification
+              process (OME-NGFF) to address these needs. This paper brings
+              together a wide range of those community members to describe the
+              cloud-optimized format itself---OME-Zarr---along with tools and
+              data resources available today to increase FAIR access and remove
+              barriers in the scientific process. The current momentum offers
+              an opportunity to unify a key component of the bioimaging
+              domain---the file format that underlies so many personal,
+              institutional, and global data management and analysis tasks.",
+  journal  = "Histochemistry and Cell Biology",
+  volume   =  160,
+  number   =  3,
+  pages    = "223--251",
+  month    =  sep,
+  year     =  2023
 }
 
-@inproceedings{sklearn2,
-  author    = {Buitinck, Lars and Louppe, Gilles and Blondel, Mathieu and Pedregosa, Fabian and Mueller, Andreas and Grisel, Olivier and Niculae, Vlad and Prettenhofer, Peter and Gramfort, Alexandre and Grobler, Jaques and Layton, Robert and VanderPlas, Jake and Joly, Arnaud and Holt, Brian and Varoquaux, Gaël},
-  booktitle = {ECML PKDD Workshop: Languages for Data Mining and Machine Learning},
-  year      = {2013},
-  pages     = {108--122},
-  title     = {{API} design for machine learning software: experiences from the scikit-learn project},
+@article{Wilkinson2016-bv,
+  title    = "The {FAIR} Guiding Principles for scientific data management and
+              stewardship",
+  author   = "Wilkinson, Mark D and Dumontier, Michel and Aalbersberg, Ijsbrand
+              Jan and Appleton, Gabrielle and Axton, Myles and Baak, Arie and
+              Blomberg, Niklas and Boiten, Jan-Willem and da Silva Santos, Luiz
+              Bonino and Bourne, Philip E and Bouwman, Jildau and Brookes,
+              Anthony J and Clark, Tim and Crosas, Merc{\`e} and Dillo, Ingrid
+              and Dumon, Olivier and Edmunds, Scott and Evelo, Chris T and
+              Finkers, Richard and Gonzalez-Beltran, Alejandra and Gray,
+              Alasdair J G and Groth, Paul and Goble, Carole and Grethe,
+              Jeffrey S and Heringa, Jaap and 't Hoen, Peter A C and Hooft, Rob
+              and Kuhn, Tobias and Kok, Ruben and Kok, Joost and Lusher, Scott
+              J and Martone, Maryann E and Mons, Albert and Packer, Abel L and
+              Persson, Bengt and Rocca-Serra, Philippe and Roos, Marco and van
+              Schaik, Rene and Sansone, Susanna-Assunta and Schultes, Erik and
+              Sengstag, Thierry and Slater, Ted and Strawn, George and Swertz,
+              Morris A and Thompson, Mark and van der Lei, Johan and van
+              Mulligen, Erik and Velterop, Jan and Waagmeester, Andra and
+              Wittenburg, Peter and Wolstencroft, Katherine and Zhao, Jun and
+              Mons, Barend",
+  abstract = "There is an urgent need to improve the infrastructure supporting
+              the reuse of scholarly data. A diverse set of
+              stakeholders---representing academia, industry, funding agencies,
+              and scholarly publishers---have come together to design and
+              jointly endorse a concise and measureable set of principles that
+              we refer to as the FAIR Data Principles. The intent is that these
+              may act as a guideline for those wishing to enhance the
+              reusability of their data holdings. Distinct from peer
+              initiatives that focus on the human scholar, the FAIR Principles
+              put specific emphasis on enhancing the ability of machines to
+              automatically find and use the data, in addition to supporting
+              its reuse by individuals. This Comment is the first formal
+              publication of the FAIR Principles, and includes the rationale
+              behind them, and some exemplar implementations in the community.",
+  journal  = "Scientific Data",
+  volume   =  3,
+  number   =  1,
+  pages    = "160018",
+  month    =  mar,
+  year     =  2016
+}
+
+@article{Allan2012-xf,
+  title    = "{OMERO}: flexible, model-driven data management for experimental
+              biology",
+  author   = "Allan, Chris and Burel, Jean-Marie and Moore, Josh and Blackburn,
+              Colin and Linkert, Melissa and Loynton, Scott and MacDonald,
+              Donald and Moore, William J and Neves, Carlos and Patterson,
+              Andrew and Porter, Michael and Tarkowska, Aleksandra and
+              Loranger, Brian and Avondo, Jerome and Lagerstedt, Ingvar and
+              Lianas, Luca and Leo, Simone and Hands, Katherine and Hay, Ron T
+              and Patwardhan, Ardan and Best, Christoph and Kleywegt, Gerard J
+              and Zanetti, Gianluigi and Swedlow, Jason R",
+  abstract = "The Open Microscopy Environment Remote Objects (OMERO) software
+              platform provides a server-based system for managing and
+              analyzing microscopy images and non-image data.",
+  journal  = "Nature Methods",
+  volume   =  9,
+  number   =  3,
+  pages    = "245--253",
+  month    =  mar,
+  year     =  2012
+}
+
+@article{Stringer2021-od,
+  title    = "Cellpose: a generalist algorithm for cellular segmentation",
+  author   = "Stringer, Carsen and Wang, Tim and Michaelos, Michalis and
+              Pachitariu, Marius",
+  abstract = "Many biological applications require the segmentation of cell
+              bodies, membranes and nuclei from microscopy images. Deep
+              learning has enabled great progress on this problem, but current
+              methods are specialized for images that have large training
+              datasets. Here we introduce a generalist, deep learning-based
+              segmentation method called Cellpose, which can precisely segment
+              cells from a wide range of image types and does not require model
+              retraining or parameter adjustments. Cellpose was trained on a
+              new dataset of highly varied images of cells, containing over
+              70,000 segmented objects. We also demonstrate a three-dimensional
+              (3D) extension of Cellpose that reuses the two-dimensional (2D)
+              model and does not require 3D-labeled data. To support community
+              contributions to the training data, we developed software for
+              manual labeling and for curation of the automated results.
+              Periodically retraining the model on the community-contributed
+              data will ensure that Cellpose improves constantly.",
+  journal  = "Nature Methods",
+  volume   =  18,
+  number   =  1,
+  pages    = "100--106",
+  month    =  jan,
+  year     =  2021
+}
+
+@article{Archit2025-wa,
+  title    = "Segment Anything for Microscopy",
+  author   = "Archit, Anwai and Freckmann, Luca and Nair, Sushmita and Khalid,
+              Nabeel and Hilt, Paul and Rajashekar, Vikas and Freitag, Marei
+              and Teuber, Carolin and Buckley, Genevieve and von Haaren,
+              Sebastian and Gupta, Sagnik and Dengel, Andreas and Ahmed, Sheraz
+              and Pape, Constantin",
+  abstract = "Accurate segmentation of objects in microscopy images remains a
+              bottleneck for many researchers despite the number of tools
+              developed for this purpose. Here, we present Segment Anything for
+              Microscopy ($\mu$SAM), a tool for segmentation and tracking in
+              multidimensional microscopy data. It is based on Segment
+              Anything, a vision foundation model for image segmentation. We
+              extend it by fine-tuning generalist models for light and electron
+              microscopy that clearly improve segmentation quality for a wide
+              range of imaging conditions. We also implement interactive and
+              automatic segmentation in a napari plugin that can speed up
+              diverse segmentation tasks and provides a unified solution for
+              microscopy annotation across different microscopy modalities. Our
+              work constitutes the application of vision foundation models in
+              microscopy, laying the groundwork for solving image analysis
+              tasks in this domain with a small set of powerful deep learning
+              models.",
+  journal  = "Nature Methods",
+  volume   =  22,
+  number   =  3,
+  pages    = "579--591",
+  month    =  mar,
+  year     =  2025
+}
+
+@article{Edlund2021-bi,
+  title    = "{LIVECell---A} large-scale dataset for label-free live cell
+              segmentation",
+  author   = "Edlund, Christoffer and Jackson, Timothy R and Khalid, Nabeel and
+              Bevan, Nicola and Dale, Timothy and Dengel, Andreas and Ahmed,
+              Sheraz and Trygg, Johan and Sj{\"o}gren, Rickard",
+  abstract = "Light microscopy combined with well-established protocols of
+              two-dimensional cell culture facilitates high-throughput
+              quantitative imaging to study biological phenomena. Accurate
+              segmentation of individual cells in images enables exploration of
+              complex biological questions, but can require sophisticated
+              imaging processing pipelines in cases of low contrast and high
+              object density. Deep learning-based methods are considered
+              state-of-the-art for image segmentation but typically require
+              vast amounts of annotated data, for which there is no suitable
+              resource available in the field of label-free cellular imaging.
+              Here, we present LIVECell, a large, high-quality, manually
+              annotated and expert-validated dataset of phase-contrast images,
+              consisting of over 1.6 million cells from a diverse set of cell
+              morphologies and culture densities. To further demonstrate its
+              use, we train convolutional neural network-based models using
+              LIVECell and evaluate model segmentation accuracy with a proposed
+              a suite of benchmarks.",
+  journal  = "Nature Methods",
+  volume   =  18,
+  number   =  9,
+  pages    = "1038--1045",
+  month    =  sep,
+  year     =  2021
+}
+
+@article{Lee2022-ln,
+  title    = "{CellSeg}: a robust, pre-trained nucleus segmentation and pixel
+              quantification software for highly multiplexed fluorescence
+              images",
+  author   = "Lee, Michael Y and Bedia, Jacob S and Bhate, Salil S and Barlow,
+              Graham L and Phillips, Darci and Fantl, Wendy J and Nolan, Garry
+              P and Sch{\"u}rch, Christian M",
+  abstract = "Algorithmic cellular segmentation is an essential step for the
+              quantitative analysis of highly multiplexed tissue images.
+              Current segmentation pipelines often require manual dataset
+              annotation and additional training, significant parameter tuning,
+              or a sophisticated understanding of programming to adapt the
+              software to the researcher's need. Here, we present CellSeg, an
+              open-source, pre-trained nucleus segmentation and signal
+              quantification software based on the Mask region-convolutional
+              neural network (R-CNN) architecture. CellSeg is accessible to
+              users with a wide range of programming skills.",
+  journal  = "BMC Bioinformatics",
+  volume   =  23,
+  number   =  1,
+  pages    = "46",
+  month    =  jan,
+  year     =  2022
+}
+
+@article{Greenwald2021-hj,
+  title    = "Whole-cell segmentation of tissue images with human-level
+              performance using large-scale data annotation and deep learning",
+  author   = "Greenwald, Noah F and Miller, Geneva and Moen, Erick and Kong,
+              Alex and Kagel, Adam and Dougherty, Thomas and Fullaway,
+              Christine Camacho and McIntosh, Brianna J and Leow, Ke Xuan and
+              Schwartz, Morgan Sarah and Pavelchek, Cole and Cui, Sunny and
+              Camplisson, Isabella and Bar-Tal, Omer and Singh, Jaiveer and
+              Fong, Mara and Chaudhry, Gautam and Abraham, Zion and Moseley,
+              Jackson and Warshawsky, Shiri and Soon, Erin and Greenbaum,
+              Shirley and Risom, Tyler and Hollmann, Travis and Bendall, Sean C
+              and Keren, Leeat and Graf, William and Angelo, Michael and Van
+              Valen, David",
+  abstract = "A principal challenge in the analysis of tissue imaging data is
+              cell segmentation-the task of identifying the precise boundary of
+              every cell in an image. To address this problem we constructed
+              TissueNet, a dataset for training segmentation models that
+              contains more than 1 million manually labeled cells, an order of
+              magnitude more than all previously published segmentation
+              training datasets. We used TissueNet to train Mesmer, a
+              deep-learning-enabled segmentation algorithm. We demonstrated
+              that Mesmer is more accurate than previous methods, generalizes
+              to the full diversity of tissue types and imaging platforms in
+              TissueNet, and achieves human-level performance. Mesmer enabled
+              the automated extraction of key cellular features, such as
+              subcellular localization of protein signal, which was challenging
+              with previous approaches. We then adapted Mesmer to harness cell
+              lineage information in highly multiplexed datasets and used this
+              enhanced version to quantify cell morphology changes during human
+              gestation. All code, data and models are released as a community
+              resource.",
+  journal  = "Nat Biotechnol",
+  volume   =  40,
+  number   =  4,
+  pages    = "555--565",
+  month    =  nov,
+  year     =  2021,
+  address  = "United States",
+  language = "en"
+}
+
+@inproceedings{imagenet,
+  author={Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Kai Li and Li Fei-Fei},
+  booktitle={2009 IEEE Conference on Computer Vision and Pattern Recognition}, 
+  title={ImageNet: A large-scale hierarchical image database}, 
+  year={2009},
+  volume={},
+  number={},
+  pages={248-255},
+  keywords={Large-scale systems;Image databases;Explosions;Internet;Robustness;Information retrieval;Image retrieval;Multimedia databases;Ontologies;Spine},
+  doi={10.1109/CVPR.2009.5206848}
+}
+
+@misc{kirillov2023segment,
+      title={Segment Anything}, 
+      author={Alexander Kirillov and Eric Mintun and Nikhila Ravi and Hanzi Mao and Chloe Rolland and Laura Gustafson and Tete Xiao and Spencer Whitehead and Alexander C. Berg and Wan-Yen Lo and Piotr Dollár and Ross Girshick},
+      year={2023},
+      eprint={2304.02643},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2304.02643}, 
+}
+
+@inproceedings{weigert2022,
+  author    = {Martin Weigert and Uwe Schmidt},
+  title     = {Nuclei Instance Segmentation and Classification in Histopathology Images with Stardist},
+  booktitle = {The IEEE International Symposium on Biomedical Imaging Challenges (ISBIC)},
+  year      = {2022},
+  doi       = {10.1109/ISBIC56247.2022.9854534}
+}
+
+@article{Houlsby2011BayesianAL,
+  title={Bayesian Active Learning for Classification and Preference Learning},
+  author={Neil Houlsby and Ferenc Husz{\'a}r and Zoubin Ghahramani and M{\'a}t{\'e} Lengyel},
+  journal={ArXiv},
+  year={2011},
+  volume={abs/1112.5745},
+  url={https://api.semanticscholar.org/CorpusID:13612582}
+}
+
+@inproceedings{Gal2015DropoutAA,
+  title={Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning},
+  author={Yarin Gal and Zoubin Ghahramani},
+  booktitle={International Conference on Machine Learning},
+  year={2015},
+  url={https://api.semanticscholar.org/CorpusID:160705}
+}
+
+@misc{pytorch,
+      title={PyTorch: An Imperative Style, High-Performance Deep Learning Library}, 
+      author={Adam Paszke and Sam Gross and Francisco Massa and Adam Lerer and James Bradbury and Gregory Chanan and Trevor Killeen and Zeming Lin and Natalia Gimelshein and Luca Antiga and Alban Desmaison and Andreas Köpf and Edward Yang and Zach DeVito and Martin Raison and Alykhan Tejani and Sasank Chilamkurthy and Benoit Steiner and Lu Fang and Junjie Bai and Soumith Chintala},
+      year={2019},
+      eprint={1912.01703},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/1912.01703}, 
+}
+
+@article{BUDD2021102062,
+  title = {A survey on active learning and human-in-the-loop deep learning for medical image analysis},
+  journal = {Medical Image Analysis},
+  volume = {71},
+  pages = {102062},
+  year = {2021},
+  issn = {1361-8415},
+  doi = {https://doi.org/10.1016/j.media.2021.102062},
+  url = {https://www.sciencedirect.com/science/article/pii/S1361841521001080},
+  author = {Samuel Budd and Emma C. Robinson and Bernhard Kainz},
+  keywords = {Medical image analysis, Deep Learning, Human-in-the-Loop, Active learning},
+  abstract = {Fully automatic deep learning has become the state-of-the-art technique for many tasks including image acquisition, analysis and interpretation, and for the extraction of clinically useful information for computer-aided detection, diagnosis, treatment planning, intervention and therapy. However, the unique challenges posed by medical image analysis suggest that retaining a human end-user in any deep learning enabled system will be beneficial. In this review we investigate the role that humans might play in the development and deployment of deep learning enabled diagnostic applications and focus on techniques that will retain a significant input from a human end user. Human-in-the-Loop computing is an area that we see as increasingly important in future research due to the safety-critical nature of working in the medical domain. We evaluate four key areas that we consider vital for deep learning in the clinical practice: (1) Active Learning to choose the best data to annotate for optimal model performance; (2) Interaction with model outputs - using iterative feedback to steer models to optima for a given prediction and offering meaningful ways to interpret and respond to predictions; (3) Practical considerations - developing full scale applications and the key considerations that need to be made before deployment; (4) Future Prospective and Unanswered Questions - knowledge gaps and related research fields that will benefit human-in-the-loop computing as they evolve. We offer our opinions on the most promising directions of research and how various aspects of each area might be unified towards common goals.}
+}
+
+@article{Gal2017DeepBA,
+  title={Deep Bayesian Active Learning with Image Data},
+  author={Yarin Gal and Riashat Islam and Zoubin Ghahramani},
+  journal={ArXiv},
+  year={2017},
+  volume={abs/1703.02910},
+  url={https://api.semanticscholar.org/CorpusID:6318455}
+}
+
+@software{zarrpython,
+  author       = {Alistair Miles and
+                  John Kirkham and
+                  Martin Durant and
+                  James Bourbeau and
+                  Tarik Onalan and
+                  Joe Hamman and
+                  Zain Patel and
+                  shikharsg and
+                  Matthew Rocklin and
+                  raphael dussin and
+                  Vincent Schut and
+                  Elliott Sales de Andrade and
+                  Ryan Abernathey and
+                  Charles Noyes and
+                  sbalmer and
+                  pyup.io bot and
+                  Tommy Tran and
+                  Stephan Saalfeld and
+                  Justin Swaney and
+                  Josh Moore and
+                  Joe Jevnik and
+                  Jerome Kelleher and
+                  Jan Funke and
+                  George Sakkis and
+                  Chris Barnes and
+                  Anderson Banihirwe},
+  title        = {zarr-developers/zarr-python: v2.4.0},
+  month        = jan,
+  year         = 2020,
+  publisher    = {Zenodo},
+  version      = {v2.4.0},
+  doi          = {10.5281/zenodo.3773450},
+  url          = {https://doi.org/10.5281/zenodo.3773450},
+}
+
+@article{webKnossos,
+  title    = "webKnossos: efficient online {3D} data annotation for
+              connectomics",
+  author   = "Boergens, Kevin M and Berning, Manuel and Bocklisch, Tom and
+              Br{\"a}unlein, Dominic and Drawitsch, Florian and Frohnhofen,
+              Johannes and Herold, Tom and Otto, Philipp and Rzepka, Norman and
+              Werkmeister, Thomas and Werner, Daniel and Wiese, Georg and
+              Wissler, Heiko and Helmstaedter, Moritz",
+  abstract = "webKnossos is a browser-based tracing and annotation tool for 3D
+              electron microscopy data sets that is optimized for seamless data
+              viewing. The tool's flight-mode view facilitates fast neurite
+              tracing because of its egocentric viewpoint.",
+  journal  = "Nature Methods",
+  volume   =  14,
+  number   =  7,
+  pages    = "691--694",
+  month    =  jul,
+  year     =  2017
+}
+
+@ARTICLE{QuPath,
+  title    = "{QuPath}: Open source software for digital pathology image
+              analysis",
+  author   = "Bankhead, Peter and Loughrey, Maurice B and Fern{\'a}ndez,
+              Jos{\'e} A and Dombrowski, Yvonne and McArt, Darragh G and Dunne,
+              Philip D and McQuaid, Stephen and Gray, Ronan T and Murray, Liam
+              J and Coleman, Helen G and James, Jacqueline A and Salto-Tellez,
+              Manuel and Hamilton, Peter W",
+  abstract = "QuPath is new bioimage analysis software designed to meet the
+              growing need for a user-friendly, extensible, open-source
+              solution for digital pathology and whole slide image analysis. In
+              addition to offering a comprehensive panel of tumor
+              identification and high-throughput biomarker evaluation tools,
+              QuPath provides researchers with powerful batch-processing and
+              scripting functionality, and an extensible platform with which to
+              develop and share new algorithms to analyze complex tissue
+              images. Furthermore, QuPath's flexible design makes it suitable
+              for a wide range of additional image analysis applications across
+              biomedical research.",
+  journal  = "Scientific Reports",
+  volume   =  7,
+  number   =  1,
+  pages    = "16878",
+  month    =  dec,
+  year     =  2017
+}
+
+@software{neuroglancer,
+  author       = {Jeremy Maitin-Shepard and
+                  Alex Baden and
+                  William Silversmith and
+                  Eric Perlman and
+                  Forrest Collman and
+                  Tim Blakely and
+                  Jan Funke and
+                  Chris Jordan and
+                  Ben Falk and
+                  Nico Kemnitz and
+                  tingzhao and
+                  Chris Roat and
+                  Manuel Castro and
+                  Sridhar Jagannathan and
+                  moenigin and
+                  Jody Clements and
+                  Austin Hoag and
+                  Bill Katz and
+                  Dave Parsons and
+                  Jingpeng Wu and
+                  Lee Kamentsky and
+                  Pavel Chervakov and
+                  Philip Hubbard and
+                  Stuart Berg and
+                  John Hoffer and
+                  Akhilesh Halageri and
+                  Christian Machacek and
+                  Kevin Mader and
+                  Lutz Roeder and
+                  Peter H. Li},
+  title        = {google/neuroglancer:},
+  month        = oct,
+  year         = 2021,
+  publisher    = {Zenodo},
+  version      = {v2.23},
+  doi          = {10.5281/zenodo.5573294},
+  url          = {https://doi.org/10.5281/zenodo.5573294},
+}
+
+@article{viv,
+author = {Manz, Trevor and Gold, Ilan and Patterson, Nathan Heath and McCallum, Chuck and Keller, Mark S. and Herr, II, Bruce W. and Börner, Kay and Spraggins, Jeffrey M. and Gehlenborg, Nils},
+doi = {10.1038/s41592-022-01482-7},
+journal = {Nature Methods},
+month = may,
+title = {{Viv: multiscale visualization of high-resolution multiplexed bioimaging data on the web}},
+year = {2022}
+}
+
+@ARTICLE{Fiji,
+  title    = "Fiji: an open-source platform for biological-image analysis",
+  author   = "Schindelin, Johannes and Arganda-Carreras, Ignacio and Frise,
+              Erwin and Kaynig, Verena and Longair, Mark and Pietzsch, Tobias
+              and Preibisch, Stephan and Rueden, Curtis and Saalfeld, Stephan
+              and Schmid, Benjamin and Tinevez, Jean-Yves and White, Daniel
+              James and Hartenstein, Volker and Eliceiri, Kevin and Tomancak,
+              Pavel and Cardona, Albert",
+  abstract = "Presented is an overview of the image-analysis software platform
+              Fiji, a distribution of ImageJ that updates the underlying ImageJ
+              architecture and adds modern software design elements to expand
+              the capabilities of the platform and facilitate collaboration
+              between biologists and computer scientists.",
+  journal  = "Nature Methods",
+  volume   =  9,
+  number   =  7,
+  pages    = "676--682",
+  month    =  jul,
+  year     =  2012
+}
+
+@article{MoBIE,
+	author = {Pape, Constantin and Meechan, Kimberly and Moreva, Ekaterina and Schorb, Martin and Chiaruttini, Nicolas and Zinchenko, Valentyna and Vergara, Hernando and Mizzon, Giulia and Moore, Josh and Arendt, Detlev and Kreshuk, Anna and Schwab, Yannick and Tischer, Christian},
+	title = {MoBIE: A Fiji plugin for sharing and exploration of multi-modal cloud-hosted big image data},
+	elocation-id = {2022.05.27.493763},
+	year = {2022},
+	doi = {10.1101/2022.05.27.493763},
+	publisher = {Cold Spring Harbor Laboratory},
+	abstract = {Facing the challenge of exploring and sharing multi-terabyte, multi-modal and multi-scale image data of heterogeneous dimensionality, we developed MoBIE, a Fiji plugin that provides rich visualization features to enable browsing data from numerous biomedical applications on a standard laptop computer. MoBIE also supports segmentations, associated measurements and annotations. Users can configure complex views of datasets, share them with collaborators, and use them for interactive figure panels. The MoBIE plugin also offers a convenient interface for converting data into compatible data formats; an additional Python library facilitates managing diverse MoBIE projects.Competing Interest StatementThe authors have declared no competing interest.},
+	URL = {https://www.biorxiv.org/content/early/2022/07/19/2022.05.27.493763},
+	eprint = {https://www.biorxiv.org/content/early/2022/07/19/2022.05.27.493763.full.pdf},
+	journal = {bioRxiv}
 }

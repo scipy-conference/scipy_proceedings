@@ -4,12 +4,12 @@ project:
   # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2025-fernando_cervantes
   # Ensure your title is the same as in your `main.md`
-  title: An Active Learning Plugin In Napari To Fine Tune Models For Large-scale Bioimage Analysis
+  title: An Active Learning Plugin In Napari To Fine-Tune Models For Large-scale Bioimage Analysis
   # subtitle:
-  description: A plugin to perform active learning for fine tuning deep learning models for bioimage analysis and understanding, all integrated within the napari viewer and Next-Generation-File-Formats ecosystem for large-scale image analysis.
+  description: A plugin to perform active learning for fine-tuning deep learning models for bioimage analysis and understanding, all integrated within the napari viewer and Next-Generation-File-Formats ecosystem for large-scale image analysis.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: Fernando Cervantes
+    - name: Fernando Cervantes-Sanchez
       email: fernando.cervantes@jax.org
       orcid: 0000-0003-0652-2750
       affiliations:
@@ -21,12 +21,12 @@ project:
     - napari
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    DL: Deep Learning
     NGFF: Next Generation File Formats
-    COCO: Common Object in Context
-    SA-1B: Segment Anything 1 Billion
     FAIR: Findable, Accessible, Interoperable, and Reusable
     OME: Open Microscopy Environment
+    BALD: Bayesian Active Learning by Disagreement
+    WSI: Whole Slide Image
+    API: Application Programming Interfaces
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
