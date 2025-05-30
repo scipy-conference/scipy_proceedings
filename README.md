@@ -133,10 +133,9 @@ Please only use LaTeX if you are already familiar with writing papers in LaTeX.
 The build process uses the `mystmd` CLI, which allows us to support
 a web-first reading experience.
 
-This is the first year the SciPy proceedings are accepting interactive notebooks and computational environments.
-These are also supported natively by the `mystmd` tools.
+If you are submitting a Jupyter Notebook, the SciPy Proceedings supports executable content and interactive widgets.
 By submitting a Jupyter Notebook, you are bringing your publication closer to your research, facilitating reproducibility, and allowing for interactive figures that more deeply communicate your results.
-If you are interested in submitting an interactive notebook, please contact the Proceedings Co-chairs using the `@scipy-conference/2025-proceedings` team.
+If you are interested in submitting an executable, interactive notebook, please contact the Proceedings Co-chairs using the `@scipy-conference/2025-proceedings` team.
 
 During the Open Review Period authors should work with their reviewers to refine
 and improve their submission.
