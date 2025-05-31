@@ -5,6 +5,7 @@
         "jupytext",
         "kernelspec",
         "meca",
+        "operatorname",
         "pygments"
     ]
 }
