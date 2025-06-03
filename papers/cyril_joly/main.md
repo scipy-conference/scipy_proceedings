@@ -72,3 +72,132 @@ rows, cols = OptiMask().solve(x)  # Finds maximal NaN-free submatrix
 ```
 
 The solution adapts to both the matrix's aspect ratio and the specific NaN distribution, whether random or structured.
+
+## Algorithm
+
+### Overview
+OptiMask employs a heuristic approach to efficiently approximate the largest NaN-free submatrix problem. The algorithm combines iterative permutation strategies with randomized restarts to navigate the solution space, avoiding the computational intractability of exact methods while maintaining high solution quality.
+
+### Key Steps
+
+1. **Problem Reduction**:
+   - Isolate rows and columns containing NaN values (reducing the problem size)
+   - Convert the input matrix into a boolean mask where `True` represents NaN positions
+
+2. **Permutation and Frontier Formation**:
+   - Randomly permute rows and columns to redistribute NaN positions
+   - Iteratively sort rows/columns by their "NaN height" (the position of the last NaN in each row/column)
+   - Alternate between row and column permutations until a Pareto-optimal frontier of NaN values emerges (a monotonically decreasing pattern)
+
+3. **Rectangle Identification**:
+   - Once the frontier is established, find the largest contiguous rectangle in the upper-right corner of the permuted matrix that contains no NaN values
+   - This rectangle corresponds to the optimal rows/columns to keep in the original matrix
+
+4. **Random Restarts**:
+   - Repeat the permutation process multiple times (`n_tries`) with different random seeds
+   - Track and return the best solution found across all trials
+
+### Mathematical Formulation
+
+For a matrix `A` with NaN positions marked in boolean matrix `M`:
+
+1. **Height Vectors**:
+   - Column heights: `h_x[j] = max{i | M[i,j] = True}` for each column `j`
+   - Row heights: `h_y[i] = max{j | M[i,j] = True}` for each row `i`
+
+2. **Pareto Condition**:
+   The algorithm seeks permutations where both `h_x` and `h_y` are monotonically decreasing, creating a staircase-like NaN frontier.
+
+3. **Objective Function**:
+   Maximize the area:  
+   `max (m - k) × (n - l)`  
+   where `k` rows and `l` columns are removed, subject to the remaining submatrix being NaN-free.
+
+### Implementation Details
+
+The algorithm leverages several optimizations:
+
+1. **Numba Acceleration**:
+   - Critical operations (permutation applications, height calculations) are compiled via Numba for performance
+   - Parallel processing for independent operations
+
+2. **Efficient Data Structures**:
+   - Sparse representation of NaN positions
+   - In-place permutations to minimize memory usage
+
+3. **Early Termination**:
+   - The iteration stops when either:
+     - The Pareto condition is satisfied
+     - A maximum number of steps (`max_steps`) is reached
+
+### Pseudocode
+
+```python
+def solve(matrix):
+    best_area = 0
+    best_solution = None
+    
+    for trial in range(n_tries):
+        # Random initialization
+        permuted_matrix = random_permutation(matrix)
+        
+        # Iterative optimization
+        while not pareto_optimal(permuted_matrix) and steps < max_steps:
+            if step % 2 == 0:
+                permuted_matrix = sort_columns_by_height(permuted_matrix)
+            else:
+                permuted_matrix = sort_rows_by_height(permuted_matrix)
+            
+            current_area = calculate_max_rectangle(permuted_matrix)
+            
+            if current_area > best_area:
+                best_area = current_area
+                best_solution = extract_solution(permuted_matrix)
+    
+    return best_solution
+```
+
+### Complexity Analysis
+
+- **Time Complexity**:
+  - Each trial requires O(k × max_steps) operations, where k is the number of NaN-containing rows/columns
+  - Typical performance is linear in the number of NaN cells for sparse matrices
+
+- **Space Complexity**:
+  - O(m + n) additional space for tracking permutations and heights
+  - Original matrix is not modified
+
+### Advantages Over Exact Methods
+
+1. **Scalability**:
+   - Handles matrices up to 10^5 × 10^3 efficiently
+   - Memory usage remains practical for large datasets
+
+2. **Adaptability**:
+   - Automatically adjusts to matrix aspect ratios
+   - Effective for both random and structured NaN patterns
+
+3. **Tunable Precision**:
+   - Solution quality can be improved by increasing `n_tries`
+   - Provides explicit control over computation time/quality trade-off
+
+### Visualization of the Process
+
+The algorithm's progression can be visualized through the NaN frontier at each step:
+
+1. **Initial Random Permutation**:
+   ```python
+   plot(xp, title="Initial NaN Distribution")
+   ```
+
+2. **After Column Sorting**:
+   ```python
+   plot(xp, title="After Column Permutation")
+   ```
+
+3. **Final Pareto Frontier**:
+   ```python
+   plot(xp, title="Optimal NaN Frontier")
+   ```
+
+The final frontier shows a clear descending pattern, enabling straightforward identification of the maximal NaN-free rectangle.
