@@ -14,35 +14,38 @@ project:
       orcid: 0000-0002-5937-7537
       affiliations:
         - CatalystNeuro
-    - name: Ben Dichter
-      email: ben.dichter@catalystneuro.com
-      orcid: 0000-0001-5725-6910
-      affiliations:
-        - CatalystNeuro
+      corresponding: true
     - name: Paul Adkinson
       email: paul.adkisson@catalystneuro.com
       orcid: 0009-0005-8943-5450
       affiliations:
         - CatalystNeuro
-      corresponding: true
     - name: Szonja Weigl
       email: szonja.weigl@catalystneuro.com
       orcid: 0000-0001-6615-1360
-      affiliation: CatalystNeuro
+      affiliations: 
+        - CatalystNeuro
     - name: Alessandra Trappani
-      email: alessandra.trappani@catalystneuro.com
-      orcid:
+      email: alessandramaria.trapani@gmail.com
+      orcid: 0000-0001-5182-0541
       affiliations:
         - CatalystNeuro
     - name: Luiz Taufer
-      email:
-      orcid:
+      email: luiz.tauffer@catalystneuro.com
+      orcid: 0000-0003-1147-2954
       affiliations:
-        - University of Tennessee
+        - CatalystNeuro
+    - name: Ben Dichter
+      email: ben.dichter@catalystneuro.com
+      orcid: 0000-0001-5725-6910
+      affiliations:
+        - CatalystNeuro
+      corresponding: true
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
+    - Neurodata without borders
+    - Neurophysiology
+    - Data standardization
+    - Scientific software
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
