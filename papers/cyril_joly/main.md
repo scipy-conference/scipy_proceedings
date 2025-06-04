@@ -72,3 +72,32 @@ rows, cols = OptiMask().solve(x)  # Finds maximal NaN-free submatrix
 ```
 
 The solution adapts to both the matrix's aspect ratio and the specific NaN distribution, whether random or structured.
+
+## Algorithm
+
+### Core Approach
+
+OptiMask employs an iterative permutation-based algorithm to identify the largest NaN-free submatrix through these key steps:
+
+1. **Problem Reduction**:
+   - Isolate rows and columns containing at least one NaN value
+   - Create a boolean mask matrix where True represents NaN positions
+
+2. **Frontier Detection**:
+   - Compute `hx`: column-wise highest NaN index (from bottom)
+   - Compute `hy`: row-wise rightmost NaN index (from left)
+   - These define the current "NaN frontier" of the matrix
+
+3. **Permutation Phase**:
+   - Alternately sort rows and columns to push NaN values toward a Pareto frontier
+   - Even iterations: Sort columns by descending `hx`
+   - Odd iterations: Sort rows by descending `hy`
+   - Track all permutations applied during this process
+
+4. **Convergence Check**:
+   - Repeat until both `hx` and `hy` form non-increasing sequences
+   - This indicates an optimal NaN frontier has been established
+
+5. **Submatrix Extraction**:
+   - Identify largest contiguous NaN-free rectangle in permuted space
+   - Apply inverse permutations to map back to original row/column indices
