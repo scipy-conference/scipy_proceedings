@@ -1,16 +1,19 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: A Numerical Perspective to Terraforming a Desert
+title: Explaining ML predictions with SHAP
 abstract: |
-  A short version of the long version that is way too long to be written as a
-  short version anyway.  Still, when considering the facts from first
-  principles, we find that the outcomes of this introspective approach is
-  compatible with the guidelines previously established.
-
-  In such an experiment it is then clear that the potential for further
-  development not only depends on previous relationships found but also on
-  connections made during exploitation of this novel new experimental
-  protocol.
+  As machine learning models become increasingly accurate and complex, 
+  explainability has become essential to ensure trust, transparency, and informed decision-making. 
+  SHapley Additive exPlanations (SHAP) provide a rigorous and intuitive approach for 
+  interpreting model predictions, delivering consistent and theoretically grounded feature attributions. 
+  This article demonstrates the application of SHAP across two representative model types: 
+  boosted decision trees and neural networks. 
+  
+  We utilize the UCI Adult Income dataset with an XGBoost model to predict if an individual's 
+  annual income exceeds $50,000 and the Human Activity Recognition Using Smartphones dataset 
+  with a convolutional neural network (CNN) to classify activities (e.g., walking, sitting) 
+  based on sensor data. The paper concludes with a discussion of SHAP's practical utility, strengths, 
+  and limitations, guiding readers on effective usage in real-world scenarios.
 ---
 
 ## Introduction
