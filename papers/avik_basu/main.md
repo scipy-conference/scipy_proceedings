@@ -31,11 +31,35 @@ treated as black boxes.
 
 SHapley Additive exPlanations (SHAP [@DBLP:journals/corr/LundbergL17]) is one such explainability method 
 that aims to make models more interpretable. It uses a game-theoretic approach that provides a way to interpret 
-the predictions of any machine learning model. In this article we are going to explore 2 types of models, which are
-very commonly used in the industry: Gradient Boosted Decision Trees (GBDT) and Convolutional Neural Networks (CNNs).
-We will use 2 different datasets to demonstrate the use of SHAP with these 2 types of models. For the GBDT model, we will
-use the Bank Marketing dataset [@bank_marketing_222] and for the CNN model, we will use the Human Activity Recognition
-Using Smartphones dataset [@human_activity_recognition_using_smartphones_240].
+the predictions of any machine learning model. SHAP provides a mechansim to understand the contribution of each feature
+to the prediction of a model. It provides different levels of interpretability ranging from a global view of the model
+to local explanations for individual predictions.
+
+In this article, we demonstrate how SHAP can be used to interpret two classes of models that are especially common in industry:
+
+- **Gradient Boosted Decision Trees** (GBDTs), which are widely used for structured tabular data due to their strong 
+performance and relative robustness
+- **Convolutional Neural Networks** (CNNs), which are popular in domains like image and sensor data where 
+spatial relationships matter.
+
+We illustrate the use of SHAP with two representative datasets:
+
+- The Bank Marketing dataset [@bank_marketing_222] for the GBDT model, where the task is to predict whether a 
+customer will subscribe to a term deposit based on demographic and interaction data.
+
+- The Human Activity Recognition Using Smartphones dataset [@human_activity_recognition_using_smartphones_240] 
+for the CNN model, where the goal is to classify 6 different physical activities from time-series sensor 
+data collected from mobile devices.
+
+Through these use cases, we will demonstrate the application of SHAP to two different model types and data modalities.
+Finally, we will discuss the practical utility, strengths, and limitations of SHAP, and provide guidelines for its effective
+use in real-world scenarios.
+
+
+## Core Concepts
+
+### Shapley Values
+
 
 
 ## Bibliographies, citations and block quotes
