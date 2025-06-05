@@ -9,8 +9,8 @@ abstract: |
   This article demonstrates the application of SHAP across two representative model types: 
   boosted decision trees and neural networks. 
   
-  We utilize the UCI Adult Income dataset with an XGBoost model to predict if an individual's 
-  annual income exceeds $50,000 and the Human Activity Recognition Using Smartphones dataset 
+  We utilize the UCI Adult Income dataset with an XGBoost model to predict if a client will subscribe 
+  to a term deposit in a bank and the Human Activity Recognition Using Smartphones dataset 
   with a convolutional neural network (CNN) to classify activities (e.g., walking, sitting) 
   based on sensor data. The paper concludes with a discussion of SHAP's practical utility, strengths, 
   and limitations, guiding readers on effective usage in real-world scenarios.
@@ -18,27 +18,25 @@ abstract: |
 
 ## Introduction
 
-Twelve hundred years ago — in a galaxy just across the hill...
+Machine Learning models have advanced to the point where they are being used in high-stakes decision-making processes.
+Finance, healthcare and technology are just a few examples of industries that are 
+using machine learning to make decisions that affect people's lives. However, the increase in performance of these 
+models have come at the cost of interpretability. This is especially true for models with complex architectures
+such as deep neural networks.
 
-This document should be rendered with MyST Markdown [mystmd.org](https://mystmd.org),
-which is a markdown variant inspired by reStructuredText. This uses the `mystmd`
-CLI for scientific writing which can be [downloaded here](https://mystmd.org/guide/quickstart).
-When you have installed `mystmd`, run `myst start` in this folder and
-follow the link for a live preview, any changes to this file will be
-reflected immediately.
+In the industry, model decisions can influence loan approvals, medical diagnoses or hiring decisions. Therefore, an
+inability to explain why a model produced a certain output can hinder adoption, erode user trust and raise ethical
+or compliance concerns. Deep neural networks and Large Language Models (LLMs) despite being powerful tools, are often
+treated as black boxes. 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+SHapley Additive exPlanations (SHAP [@DBLP:journals/corr/LundbergL17]) is one such explainability method 
+that aims to make models more interpretable. It uses a game-theoretic approach that provides a way to interpret 
+the predictions of any machine learning model. In this article we are going to explore 2 types of models, which are
+very commonly used in the industry: Gradient Boosted Decision Trees (GBDT) and Convolutional Neural Networks (CNNs).
+We will use 2 different datasets to demonstrate the use of SHAP with these 2 types of models. For the GBDT model, we will
+use the Bank Marketing dataset [@bank_marketing_222] and for the CNN model, we will use the Human Activity Recognition
+Using Smartphones dataset [@human_activity_recognition_using_smartphones_240].
+
 
 ## Bibliographies, citations and block quotes
 

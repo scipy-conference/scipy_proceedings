@@ -23,6 +23,9 @@ project:
   abbreviations:
     MyST: Markedly Structured Text
     SHAP: SHapley Additive exPlanations
+    LLM: Large Language Model
+    CNN: Convolutional Neural Network
+    GBDT: Gradient Boosted Decision Trees
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
