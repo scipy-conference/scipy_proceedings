@@ -4,8 +4,8 @@ project:
   # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2025-tex_template
   # Ensure your title is the same as in your `main.tex`
-  title: This is my new paper
-  description: The description of my paper, which is a short summary of the work.
+  title: On the Path to Seamless Python Serverless Data Analytics
+  description: This work presents Lithops, Dataplug and PyRun.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Enrique Molina-Giménez
@@ -18,10 +18,17 @@ project:
       orcid: 0000-0000-0000-0000
       affiliations:
         - Universitat Rovira i Virgili, Tarragona, Spain
+    - name: Aitor Arjona
+      email: aitor.arjona@qbeast.com
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Qbeast, Barcelona, Spain
   keywords:
-    - terraforming
-    - desert
-    - numerical perspective
+    - serverless
+    - data analytics
+    - cloud computing
+    - partitioning
+    - transparency
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
