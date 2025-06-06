@@ -15,7 +15,7 @@ project:
       affiliations:
         - Technische Universität Dortmund
     - name: Johannes Albrecht
-      email: johannes.albrecht@cern.ch
+      email: johannes.albrecht@tu-dortmund.de
       orcid: 0000-0001-8636-1621
       affiliations:
         - Technische Universität Dortmund
@@ -24,6 +24,11 @@ project:
       orcid: 0000-0001-8153-2719
       affiliations:
         - University of Bonn
+    - name: Lorenz Gartner
+      email: lorenz.gaertner@physik.uni-muenchen.de
+      orcid: 0000-0002-3643-4543
+      affiliations:
+        - Ludwig Maximilian University of Munich
     - name: Abhijit Mathad
       email: abhijit.mathad@cern.ch
       orcid: 0000-0002-9428-4715
