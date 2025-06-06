@@ -84,11 +84,52 @@ where
 
 ### SHAP Values
 
-SHAP values are a specific implementation of Shapley values for machine learning models. They provide a way to 
-attribute the prediction of a model to its input features. SHAP values are calculated for each feature in the input, 
-and the sum of the SHAP values for all features is equal to the difference between the model's prediction for the 
-input and the average prediction of the model.
+SHAP values as introduced by Lundberg and Lee [@DBLP:journals/corr/LundbergL17] are a specific implementation of 
+Shapley values to explain predictions from machine learning models. It defines the SHAP values as a linear model of 
+feature contributions [@molnar2025].
 
+The SHAP explanation model $g$ is defined as:
+
+$$
+g(z) = \phi_0 + \sum_{i=1}^{M} \phi_i(i) z_i
+$$
+
+where 
+- $z_i$ is a binary coalition variable indicating whether feature $i$ is present (1) or absent (0)
+- $\phi_i(i)$ is the SHAP value for feature $i$ when it is present
+- $\phi_0$ is the baseline prediction
+- $M$ is the number of features
+
+For a specific input $x$, the above equation simplifies to:
+
+$$
+g(x) = \phi_0 + \sum_{i=1}^{M} \phi_i(x)
+$$
+
+where 
+- $\phi_0$ is the baseline prediction, typically the mean prediction over the dataset
+- $\phi_i(x)$ is the SHAP value for feature $i$ for input $x$
+- $M$ is the number of features
+
+
+### Estimation of SHAP Values
+
+The exact calculation of SHAP values is computationally infeasible for most models due to the combinatorial 
+nature of the Shapley value formula. The computational complexity is $O(2^M)$, where $M$ is the number of features. 
+Therefore, various approximation methods are used to estimate the SHAP values, each tailored to different model types.
+
+- **Kernel SHAP**: Uses a weighted linear regression to approximate shap values for arbitrary models.
+Although it is applicable to any model type, it can be computationally expensive for large datasets.
+
+- **Tree SHAP**: This method [@DBLP:journals/corr/abs-1802-03888] is specifically designed for tree-based models 
+such as decision trees, random forests, and gradient boosted decision trees. It exploits the herarchical structure of 
+decision trees to efficiently compute SHAP values [@lundberg2020local2global].
+
+- **Deep SHAP**: Approximation method that uses a modified version of the DeepLIFT method [@DBLP:journals/corr/ShrikumarGK17] 
+to estimate SHAP values for deep neural networks including CNNs. It leverages backpropagation to efficiently compute 
+feature attributions.
+
+In this paper, using the `shap` Python library, we will specifically employ Tree SHAP for GBDTs and Deep SHAP for CNNs.
 
 ## SHAP for GBDTs
 
