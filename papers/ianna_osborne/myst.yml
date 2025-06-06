@@ -1,0 +1,44 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2025-ianna_osborne
+  title: Advancing High Energy Physics Data Analysis with Julia -- A Case for JuliaHEP
+  description: The computational challenges in HEP require optimized solutions for 
+    handling complex data structures, parallel computing, and Just-in-Time (JIT) compilation. 
+    While Python and C++ remain the standard, Julia presents an opportunity to improve 
+    performance while maintaining usability.
+  authors:
+    - name: Ianna Osborne
+      email: ianna.osborne@cern.ch
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Princeton University
+      corresponding: true
+  keywords:
+    - Julia
+    - High-Energy Physics
+    - SciPy
+    - Data Analysis
+    - Awkward Array
+    - NumPy
+    - ROOT
+    - Parallel Computing
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    JIT: Just-in-Time compilation
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
