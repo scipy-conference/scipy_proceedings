@@ -1,0 +1,67 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-matthew_feickert
+  # Ensure your title is the same as in your `main.md`
+  title: Reproducible Machine Learning Workflows for Scientists with Pixi
+  # subtitle:
+  description: |
+    Scientific researchers need reproducible software environments for complex applications that can run across heterogeneous computing platforms.
+    Modern open source tools, like Pixi and the CUDA conda-forge packages, provide reproducibility solutions for while providing high level semantics well suited for researchers.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Matthew Feickert
+      email: matthew.feickert@cern.ch
+      orcid: 0000-0003-4124-7862
+      affiliations:
+        - University of Wisconsin–Madison
+      corresponding: true
+      roles:
+        - conceptualisation
+        - writing
+    - name: Ruben Arts
+      affiliations:
+        - Prefix.dev
+      roles:
+        - software
+    - name: John Kirkham
+      affiliations:
+        - NVIDIA
+      roles:
+        - software
+  keywords:
+    - reproducible
+    - machine learning
+    - hardware acceleration
+    - CUDA
+    - conda-forge
+    - Pixi
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    CUDA: Compute Unified Device Architecture
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - pixi
+        - PyPI_website
+        - CUDA_install_guide
+        - conda-forge_github_io_issue_687
+        - anaconda-defaults-channel
+        - conda-recipe-cudatoolkit
+        - staged-recipes-pr-12882
+        - ucx-split-feedstock-pr-14
+        - pixi-docs
+        - pixi-pack
+        - Feickert_Reproducible_Machine_Learning
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
+  # Include only the document with includes to avoid having inputs shown as "supporting documents"
+  toc:
+    - file: main.md
