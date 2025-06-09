@@ -33,6 +33,9 @@ project:
       severity: ignore
       keys:
         - jupyter
+        - Gal2017DeepBA
+        - Gal2015DropoutAA
+        - pytorch
   exports:
     - id: pdf
       format: typst
