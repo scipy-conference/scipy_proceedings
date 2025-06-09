@@ -230,61 +230,72 @@ The test data libraries contain a curated collection of example files spanning a
 
 ## Community and Ecosystem
 
-Converting to NWB
+### NeuroConv in the NWB Conversion Landscape
+
+NeuroConv occupies a strategic position within the broader NWB ecosystem, bridging the gap between low-level programming interfaces and high-level user tools. The conversion landscape offers different approaches suited to varying user needs and technical expertise levels.
 
 :::{figure} assets/conversion_comparisons.png
 :label: fig:assets/conversion_comparisons
-This illustrates where does neuroconv stands in regards to other conversion tools. For low level high precision control you can use the NWB APIs directly (pynwb in Python, matNWB in MATLAB), for a guided GUI based experience the NWB GUIDE is the best option but might be too rigid. Neuroconv stands as a middle ground automatizing the conversion of a large number of formats while still allowing for customization and flexibility.
+This illustrates where NeuroConv stands in regard to other conversion tools. For low-level, high-precision control, users can employ the NWB APIs directly (PyNWB in Python, MatNWB in MATLAB). For a guided GUI-based experience, the NWB GUIDE offers the best option but may be too rigid for complex workflows. NeuroConv stands as a middle ground, automating the conversion of a large number of formats while still allowing for customization and flexibility.
 :::
 
-[add image here] and states how neuroconv stands in regard to the APIs n
+At the foundational level, PyNWB and MatNWB provide direct programmatic access to the NWB specification, offering maximum flexibility but requiring deep understanding of the standard. NWB GUIDE offers a graphical interface that democratizes access to NWB conversion through guided workflows, making it accessible to users without programming experience. NeuroConv complements both approaches by providing programmatic automation while maintaining the flexibility needed for complex, multi-modal experimental setups.
 
-Neuroconv and the [Nwb GUIDE](https://nwb-guide.readthedocs.io/en/stable/) .
+This ecosystem approach ensures that researchers can choose the conversion method that best matches their technical expertise and experimental complexity, while all approaches converge on the same standardized output format.
 
-Neuroconv and the core language APIs
+### Integration with Data Archives and Visualization
 
-Visualizing with neurosift
-Neurosift [@doi:/10.21105/joss.06590]
+The Distributed Archives for [Neurophysiology Data Integration (DANDI)](https://dandiarchive.org/) platform complements NWB by providing free hosting for NWB-formatted datasets up to terabytes in size. DANDI offers researchers a pathway to meet NIH data sharing requirements while effectively archiving their data and leveraging an expanding ecosystem of visualization and analysis tools. The platform supports versioned datasets, comprehensive metadata, and API access, making it an ideal complement to NeuroConv's conversion capabilities.
+
+Neurosift [@doi:10.21105/joss.06590] provides web-based visualization tools specifically designed for NWB files, enabling researchers to explore their converted datasets without requiring local software installation. This browser-based approach facilitates data sharing and collaborative analysis, particularly important for large datasets that benefit from cloud-based access patterns.
+
+Together, NWB, NeuroConv, DANDI, and Neurosift create a comprehensive ecosystem that spans the entire data lifecycle from acquisition to publication and reuse, supporting emerging software domains from electrophysiological spike sorting to calcium imaging segmentation and behavioral pose estimation.
+
+### Integration with the Neuroscience and Wider Software Ecosystem
+
+NeuroConv pursues a “no-wheel-reinvention” strategy: wherever a mature open-source library already parses a file format or implements a preprocessing step, NeuroConv delegates that responsibility instead of duplicating it. This design choice concentrates development effort on the NWB hand-off layer while reducing maintenance burden and maximising compatibility with community standards.
+
+For electrophysiology workflows, NeuroConv relies on NEO[@neo] for format parsing and on SpikeInterface[@spikeinterface] for unified access to raw and spike-sorted data and probe interface [@probeinterface] for selected probe metadata. By layering its NWB exporters directly on top of these libraries, NeuroConv inherits support for acquisition systems ranging from Neuropixels to legacy multi-electrode arrays while ensuring that any preprocessing, sorting, or quality-control metrics performed in SpikeInterface are transferred losslessly to the final NWB file.
+
+For optical physiology, NeuroConv maintains roiextractors to provide a single API spanning Suite2P, CaImAn, EXTRACT, and CNMF-E segmentation outputs. roiextractors, in turn, depends on tifffile[@doi:10.5281/zenodo.6795860] to decode the heterogeneous TIFF variants produced by modern microscopes. This layered approach ensures that raw image stacks, ROI masks, fluorescence traces, and deconvolved events are all represented consistently in NWB.
+
+Behavioural data integration combines several specialised libraries. Key-point trajectories are ingested through the Python APIs of sleap io [@deeplabcut], and neuroconv adapted for DeepLabCut and  Lightning Pose[@lightningpose]; audio waveforms are read with SciPy[@scipy]; and high-definition video frames are handled via OpenCV, which delegates codec support to FFmpeg. We also benefit from the [pymatreader](https://pymatreader.readthedocs.io/en/latest/) library for reading MATLAB .mat files, which are commonly used in neuroscience for storing experimental data and analysis results. This library provides a unified interface for reading MATLAB files, allowing NeuroConv to seamlessly integrate data stored in this format into NWB files.
+
+Crucially, NeuroConv is not a passive consumer of these dependencies. Large-scale conversions expose edge cases—unexpected metadata tags, off-by-one timestamps, floating-point overflows—that formal test suites rarely capture. NeuroConv developers file reproducible issue reports, submit pull requests with fixes, add regression tests, and participate in release discussions across the aforementioned projects. We believe that this reciprocal workflow ensures that improvements made during NWB conversion propagate upstream, strengthening the wider neuroscience software ecosystem while continuously enhancing NeuroConv’s own reliability.
+
+<!-- Additionally, we support specialized neuroscience data types through targeted integrations: TiffFile [@doi:10.5281/zenodo.6795860] for the complex TIFF variants common in microscopy, PyMatReader [@pymatreader] for MATLAB-based analysis outputs, and format-specific readers for acquisition systems like Bruker, ScanImage, and Miniscope. This neuroscience-focused approach ensures that NeuroConv addresses the actual data formats and analysis workflows used in contemporary systems neuroscience.
+
+Our effort is built on the work of other packages in the neuroscience scientific community. Specifcally, for extracellular electrophysiology we leverage [NEO](https://neo.readthedocs.io/en/latest/) [@neo] through [SpikeInterface](https://spikeinterface.readthedocs.io/en/stable/) [@spikeinterface] for raw extracellular electrophysiology and spike-sorted data. For optical imaging, we have developed and maintain [roiextractors](https://roiextractors.readthedocs.io/en/latest/index.html), which provides a unified interface for both raw imaging data and the output of popular processing pipelines like suite2p and CaImAn. Here we also relying strongly on other packagest like the [tifffile](https://github.com/cgohlke/tifffile/) [@doi:10.5281/zenodo.6795860] python library . Behavior, being more heterogenous requires a more scattered approach, for handling audio we relying on scipy [@scipy] and the python standard library, for video we use [opencv](https://opencv.org/) whicn in turns uses [ffmpeg](https://ffmpeg.org/). 
+
+[pymatreader](https://pymatreader.readthedocs.io/en/latest/)  -->
 
 
-The Distributed Archives for [Neurophysiology Data Integration (DANDI)](https://dandiarchive.org/) platform complements NWB by providing free hosting for NWB-formatted datasets up to terabytes in size. DANDI offers researchers a pathway to meet NIH data sharing requirements while effectively archiving their data and leveraging an expanding ecosystem of visualization and analysis tools. Together, NWB and DANDI create an ideal foundation for emerging software domains, from electrophysiological spike sorting to calcium imaging segmentation and behavioral pose estimation.
-
-Upload the data to the archive.
-
-_[Additional content needed: Integration with other Python scientific tools]_
-Neuroconv and SpikeInterface 
-
-
-_[Additional content needed: Contribution guidelines and community involvement]_
-_[Additional content needed: Educational resources and documentation]_
-Neuroconv documentation.
-
-
-## Current Limitations and Future Work
+## Current Limitations
 
 While NeuroConv has significantly improved data standardization processes, some challenges remain:
 
-- Format Coverage: Despite supporting 44 formats, new acquisition systems and format versions continually emerge. While users can develop custom DataInterfaces, these require understanding both the source format and NeuroConv's architecture.
-- Custom Lab Formats: Many labs store data in custom formats, often as MATLAB .mat files or custom csv files. These formats tend to be highly variable and rapidly evolving, making automated conversion challenging. NeuroConv works best with data in its original acquisition format or standardized processing output.
-- Programming Prerequisites: While NeuroConv substantially reduces the coding burden, it still requires basic programming knowledge, including object-oriented concepts. Some features, like temporal alignment, may require advanced numerical computing skills.
+- **Format Coverage**: Despite supporting 44 formats, new acquisition systems and format versions continually emerge. While users can develop custom DataInterfaces, these require understanding both the source format and NeuroConv's architecture.
+- **Custom Lab Formats**: Many labs store data in custom formats, often as MATLAB .mat files or custom csv files. These formats tend to be highly variable and rapidly evolving, making automated conversion challenging. NeuroConv works best with data in its original acquisition format or standardized processing output.
+- **Programming Prerequisites**: While NeuroConv substantially reduces the coding burden, it still requires basic programming knowledge, including object-oriented concepts.
 
-* Improve the user experience by providing more comprehensive examples, tutorials, and documentation to help users understand how to use NeuroConv effectively. We are slowly but surely moving towards a diataxis [@diataxis] structure were...
-* Keep in line with the latest developments of the schema and the NWB standard. The NWB standard has adopted a mechanism for enchacments to the schema the [NWB Extensions Proposals](https://github.com/nwb-extensions/nwbep-review/). At the moment, there is progress on improving the schema description for descriving events, NWBEP00, in experiments, extracellular electrophysiology NWBEP002,  optical physiolog, NWBEP003 and NWBEP004 and . The developers of neuroconv are actively participating in the NWB Extensions Proposals and we aim to support the improved standrads as soon as they are accepeted. This ensure to our users that the data they convert with neuroconv is always up to date with the latest NWB standards.
-* Leverage the latest developments in LLMs's to fullfil the library core mission: automating the conversion of neurophysiology data to NWB. This includes using LLMs to generate DataInterfaces from source format documentation, automatically extracting metadata, and even generating custom conversion pipelines based on user requirements.
-* Improve the chunking patterns for larger data files to improve cloud access performance. This includes experimentation to determine optimal chunk sizes and compression algorithms. The goal is to implement the best knowldged availalble [nwb benchmarks project](https://nwb-benchmarks.readthedocs.io/en/latest/) and implement heuristics that ensure that the data is stored in a way that is efficient and performant [@doi:10.48550/arXiv.1601.07028]
+## Future Directions
+
+* **Enhanced User Experience**: We are implementing comprehensive improvements to examples, tutorials, and documentation. We aim to slowly transition to the Diataxis [@diataxis] framework which will provide clearer learning pathways for users with different backgrounds and goals.* Keep in line with the latest developments of the schema and the NWB standard. 
+* **NWB Standard Evolution**: We maintain alignment with NWB schema developments through active participation and close follow-up of the [NWB Extensions Proposals](https://github.com/nwb-extensions/nwbep-review/). Current developments include improved schemas for describing experimental events (NWBEP001), extracellular electrophysiology (NWBEP002), and optical physiology (NWBEP003, NWBEP004). This ensures that NeuroConv users benefit from the latest standard improvements.
+* **AI-Assisted Conversion**: We are exploring large language model integration to advance our core mission of automating neurophysiology data conversion. This includes using LLMs to generate DataInterfaces from source format documentation, automatically extract metadata from experimental protocols, and generate custom conversion pipelines based on natural language requirements (conversion agent).
+* **Cloud-Optimized Storage**: We are implementing improved chunking patterns and compression strategies for large datasets to enhance cloud access performance. This includes systematic experimentation through the [NWB Benchmarks Project](https://nwb-benchmarks.readthedocs.io/en/latest/) to determine optimal chunk sizes and compression algorithms [@doi:10.48550/arXiv.1601.07028]. Our goal is to implement evidence-based heuristics that ensure efficient and performant data storage as well as having a friendly and clear API that allows cutomization and flexibility for users to adapt to their specific needs.
 
  
 ## Closing Remarks
 
 
-_[Additional content needed: Broader implications for scientific software development]_
+NeuroConv represents a critical step toward realizing the vision of FAIR neurophysiology data. By automating the conversion of diverse data formats into a common standard, we enable researchers to focus on scientific discovery rather than data wrangling. The success of this approach depends not only on technical implementation but on fostering a community that values standardization, reproducibility, and open science.
 
+Our work demonstrates that effective scientific software development requires balancing automation with flexibility, standardization with customization, and ease of use with powerful capabilities. The challenges we have addressed—format diversity, metadata complexity, and scale—are not unique to neurophysiology but represent broader issues in scientific computing that require community-driven solutions.
 
+The broader implications extend beyond neurophysiology to any scientific domain grappling with data heterogeneity and the need for standardization. Our approach of abstracting format complexity through unified interfaces, while maintaining extensibility through modular architecture, provides a template for similar challenges in other fields.
 
-Our effort is built on the work of other packages in the neuroscience scientific community. Specifcally, for extracellular electrophysiology we leverage [NEO](https://neo.readthedocs.io/en/latest/) [@neo] through [SpikeInterface](https://spikeinterface.readthedocs.io/en/stable/) [@spikeinterface] for raw extracellular electrophysiology and spike-sorted data. For optical imaging, we have developed and maintain [roiextractors](https://roiextractors.readthedocs.io/en/latest/index.html), which provides a unified interface for both raw imaging data and the output of popular processing pipelines like suite2p and CaImAn. Here we also relying strongly on other packagest like the [tifffile](https://github.com/cgohlke/tifffile/) [@doi:10.5281/zenodo.6795860] python library . Behavior, being more heterogenous requires a more scattered approach, for handling audio we relying on scipy [@scipy] and the python standard library, for video we use [opencv](https://opencv.org/) whicn in turns uses [ffmpeg](https://ffmpeg.org/). 
-
-[pymatreader](https://pymatreader.readthedocs.io/en/latest/) 
-
+As the neurophysiology community continues to generate increasingly complex and voluminous datasets, tools like NeuroConv become essential infrastructure for scientific progress. By lowering barriers to data standardization and sharing, we contribute to a future where scientific data is truly FAIR—findable, accessible, interoperable, and reusable—accelerating discovery and enhancing reproducibility across the field.
 
 
 
