@@ -32,11 +32,7 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
         - jupyter
-        - sklearn1
-        - sklearn2
   exports:
     - id: pdf
       format: typst

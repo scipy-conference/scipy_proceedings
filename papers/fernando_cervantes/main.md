@@ -72,7 +72,7 @@ The “napari-activelearning” plugin is an open-source project implemented in 
 
 #### Image Groups Manager
 
-This component is used to gather the metadata of the images used for training and fine-tuning into a single data structure called “image group”. The purpose of this structure, shown in @fig: images_mgr, is to define how each layer shown on the napari window will be used in the active learning workflow, such as input data, labels or annotations, and active masks from where the plugin can sample patches to be processed through the fine-tuning process.
+This component is used to gather the metadata of the images used for training and fine-tuning into a single data structure called “image group”. The purpose of this structure, shown in @fig:images_mgr, is to define how each layer shown on the napari window will be used in the active learning workflow, such as input data, labels or annotations, and active masks from where the plugin can sample patches to be processed through the fine-tuning process.
 :::{figure} image_groups_mgr.png
 :label: fig:images_mgr
 Image groups manager widget used to manage metadata of napari's layers to be used for inference and fine-tuning along with the Acquisition Function Manager component.
