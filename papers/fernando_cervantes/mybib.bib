@@ -450,13 +450,21 @@
   journal={ArXiv},
   year={2011},
   volume={abs/1112.5745},
+  doi={https://doi.org/10.48550/arXiv.1112.5745}
 }
 
 @inproceedings{Gal2015DropoutAA,
-  title={Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning},
-  author={Yarin Gal and Zoubin Ghahramani},
-  booktitle={International Conference on Machine Learning},
-  year={2015},
+author = {Gal, Yarin and Ghahramani, Zoubin},
+title = {Dropout as a Bayesian approximation: representing model uncertainty in deep learning},
+year = {2016},
+publisher = {JMLR.org},
+abstract = {Deep learning tools have gained tremendous attention in applied machine learning. However such tools for regression and classification do not capture model uncertainty. In comparison, Bayesian models offer a mathematically grounded framework to reason about model uncertainty, but usually come with a prohibitive computational cost. In this paper we develop a new theoretical framework casting dropout training in deep neural networks (NNs) as approximate Bayesian inference in deep Gaussian processes. A direct result of this theory gives us tools to model uncertainty with dropout NNs - extracting information from existing models that has been thrown away so far. This mitigates the problem of representing uncertainty in deep learning without sacrificing either computational complexity or test accuracy. We perform an extensive study of the properties of dropout's uncertainty. Various network architectures and nonlinearities are assessed on tasks of regression and classification, using MNIST as an example. We show a considerable improvement in predictive log-likelihood and RMSE compared to existing state-of-the-art methods, and finish by using dropout's uncertainty in deep reinforcement learning.},
+booktitle = {Proceedings of the 33rd International Conference on International Conference on Machine Learning - Volume 48},
+pages = {1050–1059},
+numpages = {10},
+location = {New York, NY, USA},
+series = {ICML'16},
+doi = {https://doi.org/10.5555/3045390.3045502},
 }
 
 @inbook{pytorch,
@@ -468,7 +476,8 @@ address = {Red Hook, NY, USA},
 abstract = {Deep learning frameworks have often focused on either usability or speed, but not both. PyTorch is a machine learning library that shows that these two goals are in fact compatible: it provides an imperative and Pythonic programming style that supports code as a model, makes debugging easy and is consistent with other popular scientific computing libraries, while remaining efficient and supporting hardware accelerators such as GPUs.In this paper, we detail the principles that drove the implementation of PyTorch and how they are reflected in its architecture. We emphasize that every aspect of PyTorch is a regular Python program under the full control of its user. We also explain how the careful and pragmatic implementation of the key components of its runtime enables them to work together to achieve compelling performance. We demonstrate the efficiency of individual subsystems, as well as the overall speed of PyTorch on several common benchmarks.},
 booktitle = {Proceedings of the 33rd International Conference on Neural Information Processing Systems},
 articleno = {721},
-numpages = {12}
+numpages = {12},
+doi = {https://doi.org/10.5555/3454287.3455008}
 }
 
 
@@ -486,12 +495,18 @@ numpages = {12}
   abstract = {Fully automatic deep learning has become the state-of-the-art technique for many tasks including image acquisition, analysis and interpretation, and for the extraction of clinically useful information for computer-aided detection, diagnosis, treatment planning, intervention and therapy. However, the unique challenges posed by medical image analysis suggest that retaining a human end-user in any deep learning enabled system will be beneficial. In this review we investigate the role that humans might play in the development and deployment of deep learning enabled diagnostic applications and focus on techniques that will retain a significant input from a human end user. Human-in-the-Loop computing is an area that we see as increasingly important in future research due to the safety-critical nature of working in the medical domain. We evaluate four key areas that we consider vital for deep learning in the clinical practice: (1) Active Learning to choose the best data to annotate for optimal model performance; (2) Interaction with model outputs - using iterative feedback to steer models to optima for a given prediction and offering meaningful ways to interpret and respond to predictions; (3) Practical considerations - developing full scale applications and the key considerations that need to be made before deployment; (4) Future Prospective and Unanswered Questions - knowledge gaps and related research fields that will benefit human-in-the-loop computing as they evolve. We offer our opinions on the most promising directions of research and how various aspects of each area might be unified towards common goals.}
 }
 
-@article{Gal2017DeepBA,
-  title={Deep Bayesian Active Learning with Image Data},
-  author={Yarin Gal and Riashat Islam and Zoubin Ghahramani},
-  journal={ArXiv},
-  year={2017},
-  volume={abs/1703.02910},
+@inproceedings{Gal2017DeepBA,
+author = {Gal, Yarin and Islam, Riashat and Ghahramani, Zoubin},
+title = {Deep Bayesian active learning with image data},
+year = {2017},
+publisher = {JMLR.org},
+abstract = {Even though active learning forms an important pillar of machine learning, deep learning tools are not prevalent within it. Deep learning poses several difficulties when used in an active learning setting. First, active learning (AL) methods generally rely on being able to learn and update models from small amounts of data. Recent advances in deep learning, on the other hand, are notorious for their dependence on large amounts of data. Second, many AL acquisition functions rely on model uncertainty, yet deep learning methods rarely represent such model uncertainty. In this paper we combine recent advances in Bayesian deep learning into the active learning framework in a practical way. We develop an active learning framework for high dimensional data, a task which has been extremely challenging so far, with very sparse existing literature. Taking advantage of specialised models such as Bayesian convolutional neural networks, we demonstrate our active learning techniques with image data, obtaining a significant improvement on existing active learning approaches. We demonstrate this on both the MNIST dataset, as well as for skin cancer diagnosis from lesion images (ISIC2016 task).},
+booktitle = {Proceedings of the 34th International Conference on Machine Learning - Volume 70},
+pages = {1183–1192},
+numpages = {10},
+location = {Sydney, NSW, Australia},
+series = {ICML'17},
+doi = {https://doi.org/10.5555/3305381.3305504}
 }
 
 @software{zarrpython,
