@@ -1,19 +1,19 @@
 ---
-# Ensure that this title is the same as the one in `myst.yml`
-title: "OptiMask: Efficiently Finding the Largest NaN-Free Submatrix"
-abstract: |
-  When working with tabular data, certain processes cannot handle missing values. While imputation strategies can be employed, another approach is to use a NaN-free submatrix. Simply dropping every row or column containing NaN values can result in a significantly reduced dataset, potentially leaving no data at all. OptiMask is a heuristic designed to address the following optimization problem: identifying the largest (in terms of the number of elements) not necessarily contiguous submatrix without missing data. OptiMask calculates the sets of rows and columns to remove from the input matrix, providing a solution or a close approximation to the optimal solution for this problem.
+# Ensure that this title is the same as the one in `myst.yml`  
+title: "OptiMask: Efficiently Finding the Largest NaN-Free Submatrix"  
+abstract: |  
+  When working with tabular data, many processes cannot handle missing values. While imputation strategies are commonly used, another approach is to extract a NaN-free submatrix. Simply dropping every row or column containing NaN values can drastically reduce the dataset, potentially leaving no usable data. OptiMask is a heuristic designed to solve the following optimization problem: identifying the largest (in terms of the number of elements) not necessarily contiguous submatrix without missing data. OptiMask determines the sets of rows and columns to remove from the input matrix, providing either an exact or near-optimal solution.
 ---
 
-## Introduction
+## Introduction  
 
-Missing data is a common challenge in data analysis, often represented as NaN (Not a Number) values in matrices or DataFrames. Many algorithms and statistical methods require complete datasets, necessitating effective handling of missing values. Traditional approaches include imputation (replacing missing values with estimates) or complete-case analysis (discarding rows/columns with any NaN). However, imputation can introduce bias, while complete-case analysis may discard too much data, especially when missing values are widespread.
+Missing data is a common challenge in data analysis, often represented as NaN (Not a Number) values in matrices or DataFrames. Many algorithms and statistical methods require complete datasets, necessitating effective handling of missing values. Traditional approaches include imputation (replacing missing values with estimates) or complete-case analysis (discarding rows/columns with any NaN). However, imputation can introduce bias, while complete-case analysis may discard excessive data, especially when missing values are widespread.  
 
-An alternative strategy is to identify the largest possible submatrix without missing values. This preserves the original data without alteration. The problem reduces to an optimization task: remove the minimal set of rows and columns to yield a NaN-free submatrix of maximum size (i.e., maximizing the product of its dimensions).
+An alternative strategy is to identify the largest possible submatrix without missing values, preserving the original data unaltered. This reduces to an optimization task: remove the minimal set of rows and columns to yield a NaN-free submatrix of maximum size (i.e., maximizing the product of its dimensions).  
 
-This problem is computationally challenging, as the search space grows exponentially with the number of rows and columns containing NaN. Exact solutions (e.g., linear programming) guarantee optimality but are intractable for large matrices. Heuristic methods like OptiMask provide near-optimal solutions efficiently.
+This problem is computationally challenging, as the search space grows exponentially with the number of rows and columns containing NaN. Exact solutions (e.g., linear programming) guarantee optimality but are intractable for large matrices. Heuristic methods like OptiMask provide near-optimal solutions efficiently.  
 
-OptiMask iteratively permutes rows and columns to isolate NaN values along a frontier, simplifying the search for the largest contiguous NaN-free submatrix. By combining randomization with multiple restarts, it reliably finds high-quality solutions. This paper explores OptiMask’s algorithm, theoretical foundations, and practical performance across diverse datasets, including large and structured matrices.
+OptiMask iteratively permutes rows and columns to isolate NaN values along a frontier, simplifying the search for the largest contiguous NaN-free submatrix. By combining randomization with multiple restarts, it reliably finds high-quality solutions. This paper explores OptiMask’s algorithm, theoretical foundations, and practical performance across diverse datasets, including large and structured matrices.  
 
 ## Problem Formalization and Challenges  
 
@@ -24,111 +24,142 @@ Given an $ m \times n $ matrix $ A $ with missing values (NaN), the goal is to f
 - A subset of rows $ \mathcal{R} \subseteq \{1, \dots, m\} $ and columns $ \mathcal{C} \subseteq \{1, \dots, n\} $ such that the submatrix $ A[\mathcal{R}, \mathcal{C}] $ contains no NaN values.  
 - The solution maximizing the size $ |\mathcal{R}| \times |\mathcal{C}| $ of the submatrix.  
 
-This is equivalent to minimizing the number of deleted rows ($ m - |\mathcal{R}| $) and columns ($ n - |\mathcal{C}| $) while ensuring all remaining NaN-free entries are retained.  
+### The Fundamental Trade-off  
 
-### Computational Complexity  
+When handling missing values in a matrix, we must decide whether to remove affected rows, columns, or a combination of both. The optimal choice depends on the matrix's dimensions and NaN distribution:  
 
-The problem is NP-hard, as it generalizes the *Bipartite Vertex Cover* problem. Exhaustive search is infeasible for even modestly sized matrices:  
+1. **Single NaN Case**:  
+   - In tall matrices (rows > columns), removing the problematic row typically preserves more data.  
+   - In wide matrices (columns > rows), removing the affected column is usually preferable.  
 
-- For a matrix with $ k $ NaN-containing rows/columns, there are $ 2^k $ possible removal combinations.  
-- Linear programming (LP) formulations scale poorly due to $ O(mn) $ binary variables.  
+   :::{figure} figures/at_hand_two  
+   :alt: Data to process  
+   :width: 400 px
+   :align: left
+   A toy example: removing the row containing the two NaNs yields the largest submatrix, rather than removing the two columns.  
+   :::  
 
-### Key Challenges  
+2. **Multiple NaNs**:  
+   - When a row contains several NaNs, removing the entire row may be more efficient than removing multiple columns.  
+   - Conversely, if NaNs are clustered in columns, removing those columns could be optimal.  
+   - In complex cases, the optimal solution requires removing specific combinations of rows and columns, necessitating a general algorithmic approach.  
 
-1. **Trade-off Between Rows and Columns**: Removing a row may eliminate multiple NaN values but could discard more data than removing specific columns (and vice versa).  
-2. **Structured Missingness**: Real-world datasets often exhibit structured NaN patterns (e.g., block-wise or periodic), which heuristics must exploit.  
-3. **Scalability**: Solutions must handle large matrices (e.g., $ 10^5 \times 10^3 $) efficiently without exact methods.
+### Linear Programming Formulation  
 
-## Core Problem and Intuition
+The problem can be formulated using integer linear programming, defining decision variables for removing rows, columns, and individual cells, subject to constraints ensuring all NaN values are handled. The objective is to minimize the total number of effectively removed cells, equivalent to maximizing the area of the remaining NaN-free submatrix.  
 
-### The Fundamental Trade-off
+**Given:**  
 
-When facing missing values in a matrix, we must decide whether to remove affected rows, columns, or a combination of both. The optimal choice depends on the matrix's dimensions and NaN distribution:
+- A matrix $A$ of shape $m \times n$ with elements $a_{i,j}$.  
+- Decision variables for $i \in \{1, \dots, m\}$ and $j \in \{1, \dots, n\}$:  
+  - $r_i \in \{0,1\}$: 1 if row $i$ is removed, 0 otherwise.  
+  - $c_j \in \{0,1\}$: 1 if column $j$ is removed, 0 otherwise.  
+  - $e_{i,j} \in \{0,1\}$: 1 if cell $(i,j)$ is effectively removed (i.e., part of a removed row or column), 0 otherwise.  
 
-1. **Single NaN Case**:
-   - In tall matrices (rows > columns), removing the problematic row typically preserves more data
-   - In wide matrices (columns > rows), removing the affected column is usually better
+**Constraints:**  
 
-2. **Multiple NaNs**:
-   - When a row contains several NaNs, removing the entire row may be more efficient than removing multiple columns
-   - Conversely, if NaNs are clustered in certain columns, removing those columns could be optimal
-   - In complex cases, the optimal solution requires removing specific combinations of both rows and columns, necessitating a general algorithmic approach
+For all $i \in \{1, \dots, m\}$ and $j \in \{1, \dots, n\}$:  
 
-### Handling Different Missingness Patterns
+- If $a_{i,j}$ is NaN, then $e_{i,j} = 1$.  
+- $r_i + c_j \geq e_{i,j}$.  
+- $e_{i,j} \geq r_i$.  
+- $e_{i,j} \geq c_j$.  
 
-OptiMask effectively handles various NaN distributions:
+**Objective Function:**  
 
-- **Missing At Random (MAR)**: Randomly scattered missing values
-- **Structured patterns**: Block-wise, periodic, or clustered missing data
-- **Mixed patterns**: Combinations of random and structured missingness
+Minimize the total number of effectively removed cells:  
 
-### Visualizing the Solution
+$$
+\min \sum_{i=1}^{m} \sum_{j=1}^{n} e_{i,j}  
+$$  
 
-The algorithm identifies the optimal combination of rows and columns to remove, maximizing the retained data:
+This formulation can be solved using integer linear programming solvers (e.g., GLPK, Gurobi, CPLEX), often interfaced via modeling languages like Pyomo or PuLP in Python. However, its primary disadvantage is computational cost: for an $m \times n$ matrix, the formulation uses $m \times n + m + n$ binary variables, which becomes prohibitive for large matrices.  
 
-```python
-# For any m×n matrix with arbitrary NaN pattern
-rows, cols = OptiMask().solve(x)  # Finds maximal NaN-free submatrix
-```
+## Algorithm  
 
-The solution adapts to both the matrix's aspect ratio and the specific NaN distribution, whether random or structured.
+OptiMask is a heuristic designed to provide high-quality (and sometimes optimal) solutions to the problem. The core idea is to compute row and column permutations such that the search for the largest non-contiguous NaN-free submatrix reduces to finding a contiguous one.  
 
-## Algorithm
+### Core Approach  
 
-### Core Approach
+:::{figure} figures/algo_data  
+:alt: Data to process  
+:width: 400 px
+:align: left
+An example matrix illustrating the algorithm's steps. Grey cells represent missing values.  
+:::  
 
-```{image} figures/algo_data
-:alt: Data to process
-:class: bg-primary mb-1
-:width: 300px
-:align: center
-```
+OptiMask employs an iterative permutation-based algorithm to identify the largest NaN-free submatrix through these key steps:  
 
-OptiMask employs an iterative permutation-based algorithm to identify the largest NaN-free submatrix through these key steps:
+1. **Problem Reduction**:  
+   - Isolate rows and columns containing at least one NaN value (rows or columns without NaNs are preserved, as there is no reason to remove them).  
+   - Create a boolean mask matrix where True represents NaN positions.  
 
-1. **Problem Reduction**:
-   - Isolate rows and columns containing at least one NaN value
-   - Create a boolean mask matrix where True represents NaN positions
+2. **Frontier Detection**:  
+   - Compute `hx`: column-wise highest NaN index (from the bottom).  
+   - Compute `hy`: row-wise rightmost NaN index (from the left).  
+   - These define the current "NaN frontier" of the matrix.  
 
-2. **Frontier Detection**:
-   - Compute `hx`: column-wise highest NaN index (from bottom)
-   - Compute `hy`: row-wise rightmost NaN index (from left)
-   - These define the current "NaN frontier" of the matrix
-  
-   ```{image} figures/algo_0
-   :alt: Step #1 and #2
-   :class: bg-primary mb-1
-   :width: 300px
-   :align: center
-   ```
+   :::{figure} figures/algo_0  
+   :alt: Step #1 and #2  
+   :width: 400 px
+   :align: left
+   Steps #1 and #2: isolating rows and columns with NaNs and computing `hx` and `hy`.  
+   :::  
 
-3. **Permutation Phase**:
-   - Alternately sort rows and columns to push NaN values toward a Pareto frontier
-   - Even iterations: Sort columns by descending `hx`
-   - Odd iterations: Sort rows by descending `hy`
-   - Track all permutations applied during this process
-   - Repeat until both `hx` and `hy` form non-increasing sequences
-   - This indicates an optimal NaN frontier has been established
+3. **Permutation Phase**:  
+   - Alternately sort rows and columns to push NaN values toward a Pareto frontier.  
+   - Even iterations: Sort columns by descending `hx`.  
+   - Odd iterations: Sort rows by descending `hy`.  
+   - Track all permutations applied during this process.  
+   - Repeat until both `hx` and `hy` form non-increasing sequences, indicating an optimal NaN frontier.  
 
-   | | | |
-   |-|-|-|
-   | ![I1](figures/algo_1) | ![I2](figures/algo_2) | ![I3](figures/algo_3) |
+   :::{figure} figures/algo_iterations  
+   :alt: Permutation steps  
+   :width: 800 px
+   :align: left
+   Three alternate permutations lead to a Pareto frontier of NaNs.  
+   :::  
 
-4. **Submatrix Extraction**:
-   - Identify largest contiguous NaN-free rectangle in permuted space
+4. **Submatrix Extraction**:  
+   - Identify the largest contiguous NaN-free rectangle in the permuted space.  
 
-   ```{image} figures/algo_result_permuted_space
-   :alt: Optimask result in permuted space
-   :class: bg-primary mb-1
-   :width: 300px
-   :align: center
-   ```
+   :::{figure} figures/algo_result_permuted_space  
+   :alt: OptiMask result in permuted space  
+   :width: 400 px
+   :align: left
+   OptiMask result in permuted space: the black-dotted rectangles are candidates for the largest contiguous NaN-free submatrix, with the red-dotted one selected for its maximal area.  
+   :::  
 
-   - Apply inverse permutations to map back to original row/column indices
+   - Apply inverse permutations to map back to original row/column indices.  
 
-   ```{image} figures/algo_result
-   :alt: Optimask result
-   :class: bg-primary mb-1
-   :width: 300px
-   :align: center
-   ```
+   :::{figure} figures/algo_result.png
+   :alt: OptiMask result  
+   :width: 400 px
+   :align: left
+   OptiMask result: red indicates removed rows and columns, blue marks the computed NaN-free submatrix.  
+   :::  
+
+## Python Package  
+
+The algorithm is available on PyPI and conda-forge and can be used as follows:  
+
+```python  
+from optimask.utils import generate_mar  
+from optimask import OptiMask  
+
+# Generate a Missing At Random matrix with 2% NaN values  
+x = generate_mar(m=100_000, n=1_000, ratio=0.02)  
+rows, cols = OptiMask().solve(x)  
+np.isnan(x[rows, cols]).any()  
+# False  
+```  
+
+This computation takes approximately ~200ms on an average personal computer. The package supports NumPy arrays, pandas DataFrames, and Polars DataFrames, leveraging Numba for speed.
+
+## Conclusion
+
+OptiMask provides a scalable heuristic for finding the largest NaN-free submatrix in large datasets where exact methods like linear programming become computationally impractical. By strategically permuting rows and columns to isolate missing values, it offers a practical solution that preserves maximal data without imputation. The implementation supports common data structures (NumPy, pandas, Polars) and delivers results efficiently even for big matrices.
+
+## Aknowledgements
+
+This work was funded by Airparif. I'd like to thank Paul Catala (Université de Lorraine) and Alexis Lebeau (RTE) for their assistance and review.
