@@ -4,7 +4,7 @@ project:
   # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2025-myst_template
   # Ensure your title is the same as in your `main.md`
-  title: A Numerical Perspective to Terraforming a Desert
+  title: Empowering Learners: Teaching Reproducible Research with Open-Source Tools 
   # subtitle:
   description: Add a two sentence description about your article.
   # Authors should have affiliations, emails and ORCIDs if available
