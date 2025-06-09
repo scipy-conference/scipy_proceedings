@@ -17,7 +17,7 @@ project:
       roles:
         - Software
         - Validation
-        - Writing - original draft
+        - "Writing - original draft"
   keywords:
     - deep learning
     - physical dimension
@@ -35,6 +35,8 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - pint
+        - python-quantities
   exports:
     - id: pdf
       format: typst

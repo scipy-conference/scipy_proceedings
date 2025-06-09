@@ -87,7 +87,7 @@ print(pressure)
 
 PhlowerTensor enforces dimensional consistency during tensor operations. 
 
-In the following example, we will demonstrate how PhlowerTensor ensures dimensional consistency when computing kinetic energy, which is defined as {math}` E = 0.5 \cdot m \cdot \bm{v}^2 `, where {math}` m ` is mass and {math}` \bm{v} ` is velocity. Here, we assume that there are 10 observing points, the velocity is a 3-dimensional vector (e.g., in 3D space), and the mass is a scalar value. The resulting kinetic energy will have dimensions {math}` M^1 L^2 T^{-2} `, which corresponds to the physical dimension of energy.
+In the following example, we will demonstrate how PhlowerTensor ensures dimensional consistency when computing kinetic energy, which is defined as {math}` E = 0.5 \cdot m \cdot \mathbf{v}^2 `, where {math}` m ` is mass and {math}` \mathbf{v} ` is velocity. Here, we assume that there are 10 observing points, the velocity is a 3-dimensional vector (e.g., in 3D space), and the mass is a scalar value. The resulting kinetic energy will have dimensions {math}` M^1 L^2 T^{-2} `, which corresponds to the physical dimension of energy.
 
 
 :::{figure} images/figure1.png
@@ -220,8 +220,7 @@ import torch
 
 
 # Example: PhlowerTensor representing pressure.
-# Here, we assume that the number of time steps is 10, the number of spatial points is 100, 
-#  and the number of points is 100
+# Here, we assume that the number of time steps is 10, the number of spatial points is 100.
 time_series_pressure = phlower_tensor(
     torch.rand(10, 100, 1),
     dimension={"M": 1, "T": -2, "L": -1},
