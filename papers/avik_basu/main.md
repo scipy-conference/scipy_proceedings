@@ -131,20 +131,47 @@ feature attributions.
 
 In this paper, using the `shap` Python library, we will specifically employ Tree SHAP for GBDTs and Deep SHAP for CNNs.
 
-## SHAP for GBDTs
+## SHAP for Decision Trees
 
-Gradient Boosted Decision Trees (GBDTs) are a popular class of models in industry due to their strong performance
-and relative robustness. They are also amenable to interpretation using SHAP.
+Gradient Boosted Decision Trees (GBDTs) [@friedman2001greedy; @DBLP:journals/corr/ChenG16; @ke2017lightgbm] are 
+powerful, robust and interpretable models that are widely used in the industry. They are highly effective for 
+structured tabular data, and can handle both numerical and categorical features in a seamless manner. GBDTs in general are 
+interpretable models, and can be interpreted by analyzing the nodes and splits in the decision trees. However, 
+as the complexity of the model as well as the number of features increases, it becomes more valuable to use a 
+more principled approach like SHAP for interpretation.
 
 ### Dataset
 
 The Bank Marketing dataset [@bank_marketing_222] contains information about direct marketing campaigns (phone calls)
-of a Portuguese banking institution. The classification goal is to predict whether the client will subscribe (1/0)
-to a term deposit (variable y).
+of a Portuguese banking institution. It contains customer demographic information, financial details and interation
+history. The goal is to predict whether a customer will subscribe to a term deposit [@Moro2014ADA]. The dataset is 
+available on the UCI Machine Learning Repository.
+
+The key details of the dataset are:
+
+- **Number of samples**: 45,211
+- **Number of features**: 16
+- **Number of classes**: 2 (Binary)
+
+The dataset can be downloaded from the UCI Machine Learning Repository using the `ucimlrepo` Python library.
+
+```{code-block} python
+:linenos: true
+:emphasize-lines: 4
+:caption: Downloading the Bank Marketing dataset
+
+import pandas as pd
+from ucimlrepo import fetch_ucimlrepo
+
+bank_marketing_ds = fetch_ucimlrepo(id=222)
+
+x_df: pd.DataFrame = bank_marketing_ds.data.features
+y_df: pd.DataFrame = bank_marketing_ds.data.targets
+```
 
 ### Model
 
-We use an XGBoost model to predict whether a customer will subscribe to a term deposit based on demographic and 
+We use an XGBoost [@DBLP:journals/corr/ChenG16] model to predict whether a customer will subscribe to a term deposit based on demographic and 
 interaction data. The model is trained on the Bank Marketing dataset.
 
 ### SHAP Explanations
