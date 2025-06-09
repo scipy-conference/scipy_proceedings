@@ -14,6 +14,10 @@ project:
       orcid: 0009-0002-3866-7073
       affiliations:
         - RICOS Co. Ltd.
+      roles:
+        - Software
+        - Validation
+        - Writing - original draft
   keywords:
     - deep learning
     - physical dimension

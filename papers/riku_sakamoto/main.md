@@ -2,14 +2,13 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: "Phlower: A Deep Learning Framework Supporting PyTorch Tensors with Physical Dimensions"
 abstract: |
-  Physics-informed Machine Learning, which integrates machine and deep learning with physical simulations, is gaining attention as a powerful tool for modeling physical phenomena. In physical simulations, we must carefully handle physical dimensions — such as time (T), mass (M), and length (L) — to ensure reliable calculations. Therefore, incorporating physical dimensions into tensors is essential. 
-  To address this challenge, we created [Phlower](https://github.com/ricosjp/phlower), an open-source deep learning library that extends PyTorch tensors to support physical dimensions and enforces dimensional consistency throughout computations. In this talk, we will present Phlower’s core features and demonstrate how it ensures dimensional correctness in deep learning tasks.
+  We created [Phlower](https://github.com/ricosjp/phlower), an open-source deep learning library that extends PyTorch tensors to support physical dimensions — such as time (T), mass (M), and length (L) — and enforces dimensional consistency throughout computations. In this paper, we will present Phlower’s core features and demonstrate how it ensures dimensional correctness in deep learning tasks.
 
 ---
 
 ## Introduction
 
-The simulation of physical phenomena is essential in our daily lives for tasks such as designing vehicles and forecasting weather. As a new paradigm, Physics-informed Machine Learning, which integrates machine and deep learning with physical simulations, is gaining attention as a powerful tool, particularly with the evolution of Physics-Informed Neural Networks (PINNs) @RAISSI2019686 and Graph Neural Networks (GNNs). Compared to existing simulation methods, it is expected to predict physical phenomena faster or uncover new laws that may have never been detected before.
+The simulation of physical phenomena is essential in our daily lives for tasks such as designing vehicles and forecasting weather. As a new paradigm, Physics-informed Machine Learning, integrating machine learning with physical simulations, is gaining attention as a powerful tool, particularly with the evolution of Physics-Informed Neural Networks (PINNs) @RAISSI2019686 and Graph Neural Networks (GNNs). Compared to existing simulation methods, it is expected to predict physical phenomena faster or uncover new laws that may have never been detected before.
 
 When performing numerical simulations of physical phenomena, we must carefully handle physical dimensions — such as time (T), mass (M), and length (L) — to ensure the correctness of computations. To apply this concept to deep learning, handling physical dimensions offers two benefits. First, maintaining consistency of physical dimensions enhances the reliability of the model architecture. Second, physical dimensions themselves can be useful for scaling the inputs to machine learning models.
 
@@ -32,14 +31,14 @@ velocity = phlower_tensor(torch.rand(10, 3, 1), dimension={"L": 1, "T": -1})
 
 kinetic_energy = 0.5 * mass * torch.sum(velocity ** 2, axis=-1)
 
-print(kinetic_energy.dimesion)
+print(kinetic_energy.dimension)
 # Output: PhlowerDimensionTensor(T: -2.0, L: 2.0, M: 1.0, I: 0.0, Theta: 0.0, N: 0.0, J: 0.0)
 ```
 
 
 The rest of this paper is composed as follows:
 
-* In Section 2, we desribe the core concept of Phlower and its key features. Also, we introduce the basic usage of `PhlowerTensor`, which is a wrapper class of PyTorch @NEURIPS2019_bdbca288 Tensor object and enables physical dimension tracking.
+* In Section 2, we describe the core concept of Phlower and its key features. Also, we introduce the basic usage of `PhlowerTensor`, which is a wrapper class of PyTorch @NEURIPS2019_bdbca288 Tensor object and enables physical dimension tracking.
 
 * In Section 3, we explain the use cases of Phlower. Two examples are demonstrated using PhlowerTensor: a simple regression of physical variables and the implementation of Physics-Informed Neural Networks (PINNs).
 
@@ -53,7 +52,7 @@ The rest of this paper is composed as follows:
 
 ### Motivation
 
-PyTorch is a widely used deep learning framework that provides powerful tensor operations and automatic differentiation capabilities. However, it does not inherently support physical dimensions, which are crucial for ensuring the correctness of computations in physics-related applications. This limitation can lead to errors and inconsistencies when performing operations on tensors representing physical quantities.Here, physical dimensions refer to the fundamental quantities that describe physical phenomena, such as time (T), mass (M), length (L), electric current (I), temperature (Theta), amount of substance (N), and luminous intensity (J). 
+PyTorch is a widely used deep learning framework that provides powerful tensor operations and automatic differentiation capabilities. However, it does not inherently support physical dimensions, which are crucial for ensuring the correctness of computations in physics-related applications. This limitation can lead to errors and inconsistencies when performing operations on tensors representing physical quantities. Here, physical dimensions refer to the fundamental quantities that describe physical phenomena, such as time (T), mass (M), length (L), electric current (I), temperature (Theta), amount of substance (N), and luminous intensity (J). 
 
 Therfore, Phlower introduces `PhlowerTensor` which is a wrapper class of PyTorch Tensor object and enables physical dimension tracking. This ensures that tensor operations adhere to dimensional consistency rules. Thanks to its lightweight implementation, converting between torch.Tensor and PhlowerTensor is straightforward. Moreover, PhlowerTensor maintains compatibility with PyTorch’s autograd system and core tensor operations like `sum()`, making it easy to integrate into existing PyTorch-based applications with minimal code modifications.
 
@@ -114,7 +113,7 @@ velocity = phlower_tensor(torch.rand(10, 3, 1), dimension={"L": 1, "T": -1})
 
 kinetic_energy = 0.5 * mass * torch.sum(velocity ** 2, axis=-1)
 
-print(kinetic_energy.dimesion)
+print(kinetic_energy.dimension)
 # Output: PhlowerDimensionTensor(T: -2.0, L: 2.0, M: 1.0, I: 0.0, Theta: 0.0, N: 0.0, J: 0.0)
 
 ```
