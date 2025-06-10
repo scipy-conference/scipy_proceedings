@@ -35,6 +35,10 @@ project:
       orcid: 0000-0003-1147-2954
       affiliations:
         - CatalystNeuro
+    - name: Cody Baker
+      orcid: 0000-0002-0829-4790
+      affiliations:
+        - Dartmouth College, Center for Open Neuroscience
     - name: Benjamin Dichter
       email: ben.dichter@catalystneuro.com
       orcid: 0000-0001-5725-6910
@@ -59,6 +63,35 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - stringer2024analysis
+        - bradski2000opencv
+        - nwb_2015
+        - nwb_2022
+        - MEF3_format_2016
+        - neuropixels_2018
+        - optical_physiology_methods_2022
+        - amazon_scientific_workflows_2009
+        - ome_ngff_2021
+        - alessio_compression_2023
+        - zarr_performance
+        - nguyen2023impact
+        - code_coverage_google
+        - coverage_continuous_integration_theater_2019
+        - neo
+        - spikeinterface
+        - probeinterface
+        - suite2p
+        - caiman
+        - extract_2017
+        - extract_2021
+        - cnmfe_e_2016
+        - cnmf_e_2018
+        - sleap_2022
+        - deep_lab_cut_2018
+        - lightning_pose_2024
+        - scipy
+        - diataxis
+        - cost_effective_scientific_datasets_2016
   exports:
     - id: pdf
       format: typst

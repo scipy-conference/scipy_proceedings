@@ -3,7 +3,7 @@
 title: NeuroConv. Streamlining Neurophysiology Data Conversion to the NWB Standard
 keywords: Neurodata Without Borders, NWB, Neurophysiology, Data standardization, Data conversion, DANDI, Python, Scientific software, Large-scale data
 abstract: |
-  Converting diverse neurophysiology data to the standardized Neurodata Without Borders (NWB) format remains a significant barrier to data sharing and reuse. We present NeuroConv, a software that enables converting 44 distinct data formats while handling high-volume data as well as extracting meaningful metadata. The library has enabled the standardization of over 350 datasets totaling more than 350 TB in the DANDI archive and has been deployed to create automated conversion pipelines for 40 laboratories with unique experimental paradigms. By reducing technical barriers to NWB adoption, our tools accelerate progress toward reproducible neuroscience research through standardized data sharing.
+  Converting diverse neurophysiology data to the standardized Neurodata Without Borders (NWB) format remains a significant barrier to data sharing and reuse. We present NeuroConv, a software that enables converting 47 distinct data formats while handling high-volume data as well as extracting meaningful metadata. The library has enabled the standardization of over 350 datasets totaling more than 350 TB in the DANDI archive and has been deployed to create automated conversion pipelines for 40 laboratories with unique experimental paradigms. By reducing technical barriers to NWB adoption, our tools accelerate progress toward reproducible neuroscience research through standardized data sharing.
 ---
 
 ## Introduction
@@ -44,7 +44,7 @@ To address these multifaceted challenges [NeuroConv](https://neuroconv.readthedo
 * - Challenge
   - Solution Approach
 * - Handling format and metadata diversity
-  - Abstracting the complexity of 44+ distinct data formats while preserving format-specific metadata and ensuring NWB compliance
+  - Abstracting the complexity of 47+ distinct data formats while preserving format-specific metadata and ensuring NWB compliance
 * - Managing high-volume data efficiently  
   - Processing datasets that exceed available RAM through streaming and chunked operations
 * - Supporting complex experimental setups
@@ -55,10 +55,7 @@ The following sections detail how NeuroConv's architecture addresses each of the
 
 
 ### Handling Diverse Data Formats
-
-The challenge of format diversity in neurophysiology extends beyond their sheer number. Many formats, such as Neuralynx, exist in multiple versions, while others, like TIFF, exhibit significant internal variability in how labs use them. NeuroConv addresses this complexity through a modular architecture built around DataInterface classes. Each supported format has a dedicated DataInterface that handles data and metadata extraction, with specialized implementations like SpikeGLXRecordingInterface for raw voltage recordings, PhySortingInterface for spike-sorted data, and DeepLabCutInterface for behavioral tracking data. The critical contribution is a common interface that abstracts the format internal details and allows users to build conversions in a consistent manner, regardless of source format.
-
-NeuroConv addresses format diversity through a unified architecture centered on the DataInterface abstraction. Each supported format has a dedicated DataInterface that encapsulates the format-specific logic for data reading, metadata extraction, and NWB conversion while presenting a consistent API to users. The DataInterface serves as the fundamental building block of NeuroConv, providing a standardized pathway from diverse source formats to NWB output. This abstraction enables users to work with any supported format using identical code patterns, regardless of the underlying format complexity. The minimal conversion pipeline follows a three-step process illustrated in {ref}`fig:assets/minimal_conversion_pipeline`:
+The challenge of format diversity in neurophysiology extends beyond their sheer number. Many formats, such as Neuralynx, exist in multiple versions, while others, like TIFF, exhibit significant internal variability in how labs use them. NeuroConv addresses this complexity through a unified architecture centered on the DataInterface abstraction. Each supported format has a dedicated DataInterface that encapsulates the format-specific logic for data reading, metadata extraction, and NWB conversion while presenting a consistent API to users. The DataInterface serves as the fundamental building block of NeuroConv, providing a standardized pathway from diverse source formats to NWB output. This abstraction enables users to work with any supported format using identical code patterns, regardless of the underlying format complexity or internal details. The minimal conversion pipeline is illustrated in {ref}`fig:assets/minimal_conversion_pipeline`:
 
 :::{figure} assets/minimal_conversion_pipeline.png
 :label: fig:assets/minimal_conversion_pipeline
@@ -68,22 +65,36 @@ The process begins with source data (e.g., binary recordings, metadata, and conf
 Programmatically, this process can be summarized in a few lines of code, as shown below. The DataInterface handles all format-specific complexities internally, from parsing proprietary binary structures to extracting embedded metadata, while ensuring the output adheres to NWB best practices:
 
 ```python
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from neuroconv import DataInterface
 
 # Initialize the DataInterface for a specific format
 interface = DataInterface(file_path="path/to/data/file")
+
 # Extract the metadata from the source format
 metadata = interface.get_metadata()
-# 
-# Code to modify the metadata as needed
-metadata["NWBFile"]["experimenter"] = [Baggins, Bilbo"]
+
+# Modify metadata as needed, add missing or correct existing fields
+metadata["NWBFile"]["experimenter"] = ["Baggins, Bilbo"]
+metadata["NWBFile"]["experiment_description"] = "Example neurophysiology experiment"
+metadata["NWBFile"]["institution"] = "University of Middle Earth"
+# session_start_time is required for conversion
+metadata["NWBFile"]["session_start_time"] = datetime(2020, 1, 1, 12, 30, 0, tzinfo=ZoneInfo("Middle-earth/Shire"))
+
 # Add the data to an NWB File and write it to disk 
 interface.run_conversion(nwbfile_path="path/to/nwbfile.nwb", metadata=metadata)
 ```
 
-This core pattern remains consistent across all supported formats: instantiate the appropriate DataInterface, extract and optionally modify metadata, then execute the conversion. The DataInterface handles all format-specific complexities internally, from parsing proprietary binary structures to extracting embedded metadata, while ensuring the output adheres to NWB best practices.
+This core pattern ensures consistency and simplicity across all supported formats:
 
-Currently supporting 44 distinct input formats (Table 1), each DataInterface is comprehensively documented and demonstrated in the [Conversion Gallery](https://neuroconv.readthedocs.io/en/stable/conversion_examples_gallery/index.html), where users can find complete examples requiring only ~5 lines of code to perform full data conversion. Throughout the conversion process, NeuroConv enforces NWB Best Practices for metadata and data organization while optimizing data storage for both archival purposes and cloud computing requirements.
+1. Instantiate the appropriate DataInterface
+2. Extract and modify metadata as needed  
+3. Execute the conversion
+
+The DataInterface abstracts away format-specific complexities—from parsing proprietary binary structures to extracting embedded metadata—while automatically enforcing NWB best practices for data organization and storage optimization.
+
+Currently supporting 47 distinct input formats (Table 1), each DataInterface is comprehensively documented and demonstrated in the [Conversion Gallery](https://neuroconv.readthedocs.io/en/stable/conversion_examples_gallery/index.html), where users can find complete examples requiring only ~5 lines of code to perform full data conversion. Throughout the conversion process, NeuroConv enforces NWB Best Practices for metadata and data organization while optimizing data storage for both archival purposes and cloud computing requirements.
 
 | **Category** | **Subcategory** | **Format** |
 |--------------|-----------------|------------|
@@ -162,7 +173,7 @@ metadata["NWBFile"].update(session_start_time=session_start_time)
 nwbfile_path = f"{path_to_save_nwbfile}"  # This should be something like: "./saved_file.nwb"
 interface.run_conversion(nwbfile_path=nwbfile_path, metadata=metadata)
 ```
-As NeuroConv's format support has expanded to 44+ formats, dependency management has become increasingly complex. Each format often requires specialized libraries with potentially conflicting version requirements, creating dependency resolution challenges that can make installation difficult or impossible. For example, different electrophysiology formats may depend on incompatible versions of numerical libraries, while imaging formats might require conflicting versions of image processing packages. Additionally, installing all dependencies simultaneously would create an unnecessary and inefficient environment with hundreds of packages, many of which users never need.
+As NeuroConv's format support has expanded to 47+ formats, dependency management has become increasingly complex. Each format often requires specialized libraries with potentially conflicting version requirements, creating dependency resolution challenges that can make installation difficult or impossible. For example, different electrophysiology formats may depend on incompatible versions of numerical libraries, while imaging formats might require conflicting versions of image processing packages. Additionally, installing all dependencies simultaneously would create an unnecessary and inefficient environment with hundreds of packages, many of which users never need.
 
 To address these challenges, we rely on [installation extras](https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-extras) to manage installation complexity. Users can specify only the formats they need during installation:
 
@@ -185,6 +196,8 @@ The Converter orchestrates multiple specialized interfaces (A, B, C), each handl
 The converter pattern enables combining multiple DataInterface instances into a single conversion workflow. This allows users to convert all relevant data streams from an experiment into a single NWB file, ensuring that all data is properly aligned and associated with the correct metadata. The Converter class handles the orchestration of multiple DataInterfaces, managing the order of operations and resolving any conflicts in metadata or data organization. Here's an example of conversion for a multi-modal experimental session:
 
 ```python
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from neuroconv import ConverterPipe
 from neuroconv.datainterfaces import SpikeGLXRecordingInterface, PhySortingInterface, DeepLabCutInterface
 
@@ -195,13 +208,18 @@ behavior_interface = DeepLabCutInterface(file_path="path/to/behavior/file")
 
 # Create the ConverterPipe with the DataInterfaces
 data_interfaces = [recording_interface, sorting_interface, behavior_interface]
-converter = ConverterPipe(
-    data_interfaces=data_interfaces
-)
+converter = ConverterPipe(data_interfaces=data_interfaces)
 
+# Extract metadata from all interfaces
 metadata = converter.get_metadata()
-# Modify metadata as needed
-metadata["NWBFile"]["experimenter"] = [Baggins, Bilbo"]
+
+# Modify metadata as needed, add missing or correct existing fields
+metadata["NWBFile"]["experimenter"] = ["Baggins, Bilbo"]
+metadata["NWBFile"]["experiment_description"] = "Multi-modal neurophysiology experiment"
+metadata["NWBFile"]["institution"] = "University of Middle Earth"
+# session_start_time is required for conversion
+metadata["NWBFile"]["session_start_time"] = datetime(2020, 1, 1, 12, 30, 0, tzinfo=ZoneInfo("Middle-earth/Shire"))
+
 # Run the conversion to create an NWB file
 converter.run_conversion(nwbfile_path="path/to/nwbfile.nwb", metadata=metadata)
 ```
@@ -229,7 +247,7 @@ Ensuring reliable conversion across diverse neurophysiology data formats require
 
 Our continuous integration pipeline ensures code quality and maintains compatibility across operating systems through standard software engineering practices. Failed tests block pull request merging, maintaining code quality standards while facilitating rapid development. The pipeline runs on every pull request and includes several key components: unit tests covering the core functionality of the library; integration tests ensuring the library works as expected with real data; cross-platform testing to verify compatibility across all supported operating systems; documentation builds to ensure up-to-date documentation; [doctest](https://docs.python.org/es/3.13/library/doctest.html) functionality to verify that our conversion gallery works with the current version of the code, preventing documentation drift; code style checks ensuring consistency and adherence to best practices; and test coverage analysis to ensure the code is well-tested and maintainable. The code coverage of NeuroConv stands at 90%, which exceeds standard practices [@code_coverage_google; @coverage_continuous_integration_theater_2019].
 
-Our test data infrastructure comprises carefully curated libraries spanning all supported formats, organized across three specialized domains: [extracellular electrophysiology](https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/) (developed in collaboration with NEO and SpikeInterface teams), [optical physiology](https://gin.g-node.org/CatalystNeuro/ophys_testing_data), and [behavior](https://gin.g-node.org/CatalystNeuro/behavior_testing_data). Each library contains representative files selected to encompass common usage patterns, format variations, edge cases, and diverse experimental configurations. This comprehensive coverage ensures that our testing captures real-world scenarios that users encounter, from legacy format versions to modern acquisition systems with missing data streams or unconventional metadata structures. For continious integreation, we leverage [G-Node](https://gin.g-node.org)'s git-annex technology for efficient large file management, maintaining lightweight repositories while providing full access to the test datasets. During continuous integration, GitHub Actions automatically downloads and caches these libraries, ensuring tests execute with current data while minimizing transfer overhead and maintaining rapid build times.
+Our test data infrastructure comprises carefully curated libraries spanning all supported formats, organized across three specialized domains: [extracellular electrophysiology](https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/) (developed in collaboration with NEO and SpikeInterface teams), [optical physiology](https://gin.g-node.org/CatalystNeuro/ophys_testing_data), and [behavior](https://gin.g-node.org/CatalystNeuro/behavior_testing_data). Each library contains representative files selected to encompass common usage patterns, format variations, edge cases, and diverse experimental configurations. This comprehensive coverage ensures that our testing captures real-world scenarios that users encounter, from legacy format versions to modern acquisition systems with missing data streams or unconventional metadata structures. For continuous integration, we leverage [G-Node](https://gin.g-node.org)'s git-annex technology for efficient large file management, maintaining lightweight repositories while providing full access to the test datasets. During continuous integration, GitHub Actions automatically downloads and caches these libraries, ensuring tests execute with current data while minimizing transfer overhead and maintaining rapid build times.
 
 ## NWB Community and Software Ecosystem
 
@@ -262,7 +280,7 @@ For electrophysiology workflows, NeuroConv leverages NEO [@neo] for format parsi
 
 For optical physiology, NeuroConv maintains [ROIExtractors](https://github.com/catalystneuro/roiextractors), which provides a unified API for optical physiology data across both raw imaging and processed segmentation outputs. For raw imaging data, ROIExtractors relies heavily on TiffFile [@doi:10.5281/zenodo.6795860] to decode the heterogeneous TIFF variants produced by modern microscopy systems, handling diverse acquisition formats and metadata structures. For segmentation data, ROIExtractors integrates outputs from Suite2P [@suite2p], CaImAn [@caiman], EXTRACT [@extract_2017; @extract_2021], and CNMF-E [@cnmfe_e_2016, @cnmf_e_2018] analysis pipelines. This hierarchical approach ensures consistent NWB representation of raw image stacks, ROI masks, fluorescence traces, and deconvolved neural activity signals across different processing workflows.
 
-Behavioral data integration is considerable more heteregenous on its nature and therefore resists a unified API such as the one for electro and optical physiology described previously. To handle this hetereogenity, NeuroConv leverages multiple specialized libraries to handle diverse data types. Pose estimation trajectories are processed through dedicated Python APIs: [SLEAP-IO](https://github.com/talmolab/sleap-io) for SLEAP [@sleap_2022] data, custom adapters for DeepLabCut [@deep_lab_cut_2018] and Lightning Pose [@lightning_pose_2024] outputs. Audio waveforms from auditory experimental setups are processed using SciPy [@scipy], while video streams for behavioral video streams are handled through OpenCV [@bradski2000opencv], which delegates codec operations to [FFmpeg](https://ffmpeg.org/). Additionally, we utilize [PyMatReader](https://pymatreader.readthedocs.io/en/latest/) for MATLAB .mat files, which remain prevalent in neuroscience for storing experimental data and analysis results. This library provides a robust interface for MATLAB file formats, enabling seamless integration of experimental data into NWB files.
+Behavioral data integration is considerably more heterogeneous in nature and therefore resists a unified API such as the one for electro and optical physiology described previously. To handle this heterogeneity, NeuroConv leverages multiple specialized libraries to handle diverse data types. Pose estimation trajectories are processed through dedicated Python APIs: [SLEAP-IO](https://github.com/talmolab/sleap-io) for SLEAP [@sleap_2022] data, custom adapters for DeepLabCut [@deep_lab_cut_2018] and Lightning Pose [@lightning_pose_2024] outputs. Audio waveforms from auditory experimental setups are processed using SciPy [@scipy], while video streams for behavioral video streams are handled through OpenCV [@bradski2000opencv], which delegates codec operations to [FFmpeg](https://ffmpeg.org/). Additionally, we utilize [PyMatReader](https://pymatreader.readthedocs.io/en/latest/) for MATLAB .mat files, which remain prevalent in neuroscience for storing experimental data and analysis results. This library provides a robust interface for MATLAB file formats, enabling seamless integration of experimental data into NWB files.
 
 Crucially, NeuroConv is not a passive consumer of these dependencies. Large-scale conversions expose edge cases in performance, unexpected metadata tags, off-by-one timestamps, floating-point overflows, that are hard to capture in formal test suites. We follow the policy of giving back by filing reproducible issue reports, submitting pull requests with fixes, adding regression tests, and participating in release discussions across the aforementioned projects. We believe that this reciprocal workflow ensures that improvements made during NWB conversion propagate upstream, strengthening the wider neuroscience software ecosystem while continuously enhancing NeuroConv’s own reliability.
 
@@ -270,7 +288,7 @@ Crucially, NeuroConv is not a passive consumer of these dependencies. Large-scal
 
 While NeuroConv has significantly improved data standardization processes, some major challenges remain in the  :
 
-- **Format Coverage**: Despite supporting 44 formats, the neurophysiology ecosystem continues to evolve with new acquisition systems, format versions, and experimental modalities emerging regularly. Each new system often introduces proprietary formats with unique metadata structures and data organization schemes. While NeuroConv's modular architecture allows users to develop custom DataInterfaces for unsupported formats, this process requires substantial technical expertise in both the source format's internal structure and NeuroConv's interface architecture. Additionally, maintaining custom interfaces as both the source format and NeuroConv evolve presents ongoing maintenance challenges for individual laboratories.
+- **Format Coverage**: Despite supporting 47 formats, the neurophysiology ecosystem continues to evolve with new acquisition systems, format versions, and experimental modalities emerging regularly. Each new system often introduces proprietary formats with unique metadata structures and data organization schemes. While NeuroConv's modular architecture allows users to develop custom DataInterfaces for unsupported formats, this process requires substantial technical expertise in both the source format's internal structure and NeuroConv's interface architecture. Additionally, maintaining custom interfaces as both the source format and NeuroConv evolve presents ongoing maintenance challenges for individual laboratories.
 
 - **Custom Laboratory Formats**: Many laboratories develop custom data storage solutions tailored to their specific experimental workflows, often utilizing MATLAB .mat files, custom CSV schemas, or bespoke binary formats. These custom formats frequently exhibit significant variability not only between laboratories but even within the same laboratory over time as experimental protocols evolve. The heterogeneous nature of these formats—ranging from simple tabular data to complex nested structures with laboratory-specific metadata conventions—makes automated conversion particularly challenging. While NeuroConv can handle some standardized custom formats, the diversity of these approaches often requires manual intervention or custom code development. We recommend that laboratories work with data in its original acquisition format whenever possible, as this provides the richest metadata and most reliable conversion pathway.
 
@@ -294,4 +312,4 @@ Our work demonstrates that effective scientific software development requires ba
 
 The broader implications extend beyond neurophysiology to any scientific domain grappling with data heterogeneity and the need for standardization. We believe that our approach of abstracting format complexity through unified interfaces, while maintaining extensibility through modular architecture, provides a template for similar challenges in other fields.
 
-As the neurophysiology community continues to generate increasingly complex and voluminous datasets, tools like NeuroConv become essential infrastructure for scientific progress. By lowering barriers to data standardization and sharing, we contribute to a future where scientific data is truly FAIR accelerating discovery and enhancing reproducibility across the field.
+As the neurophysiology community continues to generate increasingly complex and voluminous datasets, tools like NeuroConv become essential infrastructure for scientific progress. By lowering barriers to data standardization and sharing, we contribute to a future where scientific data is truly FAIR, accelerating discovery and enhancing reproducibility across the field.
