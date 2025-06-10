@@ -159,7 +159,7 @@ The key details of the dataset are:
 - **Objective**: Binary classification
 
 Note that the `duration` feature is removed from the model training since it is not available before the call is made,
-and hence cannot be used for prediction.
+and hence cannot be used for prediction. Moreover, it is highly correlated with the target variable.
 
 The dataset can be downloaded from the UCI Machine Learning Repository using the `ucimlrepo` Python library.
 
@@ -220,7 +220,7 @@ shap_values = explainer.shap_values(x_test)
 
 #### Global Explanations
 
-The global explanations provide a high-level understanding of the model's behavior. They are useful for understanding
+The global explanations provide a high-level summary of the model's behavior. They are useful for understanding
 the overall impact of each feature on the model's predictions.
 
 The shap library provides a number of plotting functions to visualize the SHAP values. The code below uses the
@@ -260,6 +260,108 @@ impact. The further away a point is from zero, the stronger the feature's influe
 
 Thus, features with wide distributions across the X-axis have substantial variation in their impact on 
 different instances, while features tightly clustered near zero exert relatively minor influence on the predictions.
+
+In terms of insights, the beeswarm plot {numref}`fig:beeswarm-xgb` shows some interesting observations. For example,
+customers with more balance (`balance` feature) in their account are more likely to subscribe to a term deposit. 
+On the other hand, customers who have been contacted more frequently in the current compaign (`campaign` feature) 
+are less likely to subscribe to a term deposit. However, the plot is not able to convey a deeper insight into the
+top categorical features and how they affect the model's predictions. For that, we need to look at the dependency
+plots.
+
+#### Dependency Explanations
+
+The dependency plots show the relationship between a feature and the model's predictions. They are useful for
+understanding how the model uses a particular feature to make predictions.
+
+The code block below defines a function to plot the dependency plot for a categorical feature.
+
+```{code-block} python
+:linenos: true
+:caption: Computing categorical dependency plots
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import shap
+
+def plot_shap_categorical(
+  shap_values: shap.Explanation, 
+  x: pd.DataFrame, 
+  feature_name: str
+ ) -> plt.Axes:
+ 
+    # Extract SHAP values and feature values
+    feature_idx = x.columns.tolist().index(feature_name)
+    feature_values = x.iloc[:, feature_idx]
+    shap_values_feature = shap_values[:, feature_idx].values
+
+    # Map categories to numeric values for plotting
+    categories = feature_values.unique()
+    category_to_num = {cat: num for num, cat in enumerate(categories)}
+    feature_values_numeric = feature_values.map(category_to_num)
+
+    # Create scatter plot with categories on x-axis
+    _, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(
+        feature_values_numeric,
+        shap_values_feature,
+        alpha=0.7,
+        s=120,
+    )
+
+    # Replace numeric x-ticks with category labels
+    ax.set_xticks(
+      ticks=np.arange(len(categories)), labels=categories, rotation=45, fontsize=12
+    )
+
+    # Reference line at y=0
+    ax.axhline(y=0, color="gray", linestyle="--")
+
+    # Labels and title
+    ax.grid(True)
+    ax.set_xlabel(f"Categorical Feature: {feature_name}")
+    ax.set_ylabel("SHAP Value")
+    ax.set_title(f"SHAP Dependence Plot for Categorical Feature '{feature_name}'")
+
+    plt.tight_layout()
+    return ax
+```
+
+The dependency plot for the categorical feature `contact` can be plotted as:
+
+```{code-block} python
+:linenos: true
+:caption: Plotting the dependency plot for the categorical feature `contact`
+
+ax = plot_shap_categorical(shap_values, x_test, "contact")
+```
+
+:::{figure} dep_contact_xgb.png
+:label: fig:contact-dependency
+SHAP dependency plot for the categorical feature `contact` on the Bank Marketing dataset.
+:::
+
+The X-axis of the categorical dependency plot represents the categories of the feature, while the y-axis represents the 
+SHAP values. Similar to the beeswarm plot, the positive SHAP values indicate that the feature pushes the model's 
+prediction higher (towards the positive/yes class), while the negative SHAP values imply the feature reduces the 
+model's predicted value (towards the negative/no class).
+
+The {numref}`fig:contact-dependency` shows that the `contact` feature has a considerable impact on the 
+model's predictions. Customers who were contacted via cellular (`cellular`) are more 
+likely to subscribe to a term deposit than those who were contacted via telephone (`telephone`).
+
+:::{figure} dep_categorical_xgb.png
+:label: fig:dep_categorical_xgb
+SHAP dependency plot for some of the other categorical features.
+:::
+
+The {numref}`fig:dep_categorical_xgb` shows the dependency plots for some of the other categorical features. 
+On the top left, we see the dependency plot for the `housing` feature. Interestingly, customers who have a housing
+loan (`yes`) are less likely to subscribe to a term deposit than those who do not have a housing loan (`no`).
+On the bottom right, we see the dependency plot for the feature `poutcome`, which represents the outcome of the 
+previous marketing campaign. Customers who were previously contacted and the outcome was a `success` are 
+more likely to subscribe to a term deposit than those who were previously contacted and the outcome was a `failure`.
+
 
 ## SHAP for CNNs
 
