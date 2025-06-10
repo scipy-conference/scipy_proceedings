@@ -218,7 +218,7 @@ explainer = shap.TreeExplainer(xgb_model)
 shap_values = explainer.shap_values(x_test)
 ```
 
-#### Global Explanations
+#### Global
 
 The global explanations provide a high-level summary of the model's behavior. They are useful for understanding
 the overall impact of each feature on the model's predictions.
@@ -268,7 +268,7 @@ are less likely to subscribe to a term deposit. However, the plot is not able to
 top categorical features and how they affect the model's predictions. For that, we need to look at the dependency
 plots.
 
-#### Dependency Explanations
+#### Dependency
 
 The dependency plots show the relationship between a feature and the model's predictions. They are useful for
 understanding how the model uses a particular feature to make predictions.
@@ -365,8 +365,14 @@ more likely to subscribe to a term deposit than those who were previously contac
 
 ## SHAP for CNNs
 
-Convolutional Neural Networks (CNNs) are a popular class of models for image and sensor data. They are also amenable
-to interpretation using SHAP.
+Convolutional Neural Networks (CNNs) are a powerful class of deep learning models particularly well-suited for 
+tasks involving spatial or temporal data, such as image recognition, speech recognition, and time-series 
+classification. CNNs leverage convolutional operations and hierarchical feature extraction to capture 
+intricate patterns within data, making them exceptionally effective for complex datasets 
+[@lecun1998gradient; @krizhevsky2012imagenet].
+
+However, despite being so effective, CNNs as with most deep learning models, are often treated as black boxes.
+In this section, we will demonstrate how SHAP can be used to interpret the predictions of a one-dimensional CNN model.
 
 ### Dataset
 
