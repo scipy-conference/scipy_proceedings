@@ -36,7 +36,7 @@ While NWB has emerged as a unifying standard that addresses many common pitfalls
 
 ## NeuroConv Architecture and Design
 
-To address these multifaceted challenges [NeuroConv](https://neuroconv.readthedocs.io/en/stable/index.html), a library that automates the ingestion and conversion of neurophysiology data from diverse formats into NWB. The development of NeuroConv required solving the following fundamental challenges:
+To address these multifaceted challenges [NeuroConv](https://neuroconv.readthedocs.io/en/stable/index.html), an open source library that automates the ingestion and conversion of neurophysiology data from diverse formats into NWB. The development of NeuroConv required solving the following fundamental challenges:
 
 ```{list-table} Key technical challenges addressed by NeuroConv's architecture, highlighting the multifaceted requirements for automated neurophysiology data conversion.
 :label: tbl:neuroconv-challenges
