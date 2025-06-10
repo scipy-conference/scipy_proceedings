@@ -234,9 +234,11 @@ A critical feature is the ability to process datasets larger than available RAM.
 For storage optimization, NeuroConv leverages HDF5 and Zarr's -- the current supported backends in NWB -- support for chunked, compressed datasets. Compression algorithms represent a trade-off between storage space and access speed [@alessio_compression_2023]. NeuroConv exposes an easy-to-use [API](https://neuroconv.readthedocs.io/en/stable/user_guide/backend_configuration.html) for configuring chunking and compression settings at the dataset level, allowing for quick experimentation while providing sensible defaults that work for most users.
 
 Determining optimal chunk parameters involves complex tradeoffs [@zarr_performance; @nguyen2023impact]. Large chunks minimize the number of read operations but may require decompressing unnecessary data when accessing small subsets. Small chunks provide more precise access but increase overhead, particularly for cloud storage where each chunk requires a separate HTTP range request. Generally, appropriate chunking requires understanding the most common data access patterns. Since neurophysiology has relatively standardized analysis workflows and visualization patterns, it becomes feasible to implement evidence-based heuristics for chunk sizing across common data types, such as voltage recordings and imaging datasets.
+
 ### Multi-modal time synchronization  
 
 Precise temporal alignment across diverse recording modalities is essential for accurate multi-modal data analysis and reproducibility. NeuroConv streamlines this critical process by providing intuitive, unified methods for time synchronization, leveraging common temporal references like hardware clocks or synchronization pulses. In many cases, it automatically detects and reconciles temporal offsets between devices, reducing manual effort and ensuring NWB files maintain internally consistent timestamps across all modalities. This automation enforces best practices for temporal metadata in NWB and enhances downstream analysis integrity.
+
 ### Cloud Deployment
 
 NeuroConv supports both local installation (Linux, Windows, or macOS) and [cloud deployment](https://neuroconv.readthedocs.io/en/stable/user_guide/aws_demo.html) through a maintained [Docker image](https://neuroconv.readthedocs.io/en/stable/user_guide/docker_demo.html) containing all dependencies. We've developed a YAML-based specification language for defining conversion pipelines, validated through JSON schema. This specification can fully describe multi-subject, multi-session conversions with custom metadata at each level, enabling automated conversion through containerized NeuroConv deployments. 
@@ -255,7 +257,7 @@ Our test data infrastructure comprises carefully curated libraries spanning all 
 
 NeuroConv occupies a strategic position within the broader NWB ecosystem, bridging the gap between low-level programming interfaces and high-level user tools. The conversion landscape offers different approaches suited to varying user needs and technical expertise levels.
 
-:::{figure} assets/conversion_comparisons.png
+:::{figure} assets/conversion_comparisons2.png
 :label: fig:assets/conversion_comparisons
 This illustrates where NeuroConv stands in regard to other conversion tools. For low-level, high-precision control, users can employ the NWB APIs directly ([PyNWB](https://pynwb.readthedocs.io) in Python, [MatNWB](https://matnwb.readthedocs.io/) in MATLAB). For a guided GUI-based experience, the [NWB GUIDE](https://nwb-guide.readthedocs.io/) offers the best option but may be too rigid for complex workflows. NeuroConv stands as a middle ground, automating the conversion of a large number of formats while still allowing for customization and flexibility.
 :::
