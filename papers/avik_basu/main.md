@@ -150,8 +150,16 @@ available on the UCI Machine Learning Repository.
 The key details of the dataset are:
 
 - **Number of samples**: 45,211
-- **Number of features**: 16
-- **Number of classes**: 2 (Binary)
+- **Number of features in the dataset**: 16
+  - Number of features used in the model: 15
+  - Removed feature: `duration` (in seconds)
+- **Number of classes**: 2 (yes: 1, no: 0)
+  - yes: the client will subscribe to a term deposit
+  - no: the client will not subscribe to a term deposit
+- **Objective**: Binary classification
+
+Note that the `duration` feature is removed from the model training since it is not available before the call is made,
+and hence cannot be used for prediction.
 
 The dataset can be downloaded from the UCI Machine Learning Repository using the `ucimlrepo` Python library.
 
@@ -171,13 +179,87 @@ y_df: pd.DataFrame = bank_marketing_ds.data.targets
 
 ### Model
 
-We use an XGBoost [@DBLP:journals/corr/ChenG16] model to predict whether a customer will subscribe to a term deposit based on demographic and 
-interaction data. The model is trained on the Bank Marketing dataset.
+We use an XGBoost [@DBLP:journals/corr/ChenG16] model to predict whether a customer will subscribe to a term deposit
+or not. Specifically, we follow the following steps to train the model:
+
+- Convert the categorical features into pandas [@pandas1; @pandas2] categorical data type
+- Split the dataset into train and test sets
+  - 80% for training and 20% for testing with random shuffling
+- Train an XGBoost model on the train set
+  - Use default hyperparameters
+  - Use categorical features using the `enable_categorical` parameter
+- Evaluate the model on the test set
+
+Note that we do not perform any feature engineering or hyperparameter tuning in this example, since the goal is to
+demonstrate the use of SHAP for interpretation rather than building a high-performing model.
+
+
+:::{figure} roc_xgb.png
+:label: fig:bank-marketing-performance
+Performance of the XGBoost model on the test set.
+:::
+
+The performance of the model on the test set is shown in {numref}`fig:bank-marketing-performance`.
 
 ### SHAP Explanations
 
-TODO: Add SHAP explanations for GBDTs
+We use the `shap` Python library [@lundberg2020local2global] to compute the SHAP values for the XGBoost model.
 
+```{code-block} python
+:linenos: true
+:caption: Computing SHAP values for the XGBoost model
+
+import shap
+
+# xgb_model is the trained XGBoost model
+# x_test is the test set
+
+explainer = shap.TreeExplainer(xgb_model)
+shap_values = explainer.shap_values(x_test)
+```
+
+#### Global Explanations
+
+The global explanations provide a high-level understanding of the model's behavior. They are useful for understanding
+the overall impact of each feature on the model's predictions.
+
+The shap library provides a number of plotting functions to visualize the SHAP values. The code below uses the
+`beeswarm` plot to visualize the global SHAP values.
+
+```{code-block} python
+:linenos: true
+:caption: Computing global SHAP values for the XGBoost model
+
+ax = plt.subplot()
+ax.grid(True)
+ax = shap.plots.beeswarm(shap_values, max_display=16, show=False, log_scale=False)
+ax.set_title("Global SHAP Values for XGBoost Classifier")
+plt.tight_layout()
+```
+
+:::{figure} beeswarm_xgb.png
+:label: fig:beeswarm-xgb
+Global SHAP values for the XGBoost model on the Bank Marketing dataset.
+:::
+
+Note that in the {numref}`fig:beeswarm-xgb`, the features are ordered by their mean absolute SHAP values in
+descending order. The x-axis shows the SHAP values, and the y-axis shows the features. 
+Each point represents a sample from the test set. 
+
+For numerical features (e.g., age and balance), the dots are color-coded based on the feature values—red signifies 
+high values, and blue denotes low values. This color gradient helps visualize the relationship between the 
+actual feature values and their contribution to predictions. For categorical features (e.g., marital and job), 
+dots are typically displayed in gray because categorical variables do not have a natural ordering. Here, the focus 
+is primarily on their SHAP value distribution rather than the specific category value.
+
+The X-axis of the beeswarm plot represents SHAP values, which quantify the impact each feature has on the model's 
+predictions. A positive SHAP value indicates that the feature pushes the model's prediction higher i.e. towards the 
+positive class (yes), while a negative SHAP value implies the feature reduces the model's predicted value, 
+i.e. towards the negative class (no). The distance from the center (zero) indicates the magnitude of this 
+impact. The further away a point is from zero, the stronger the feature's influence on that specific prediction.
+
+Thus, features with wide distributions across the X-axis have substantial variation in their impact on 
+different instances, while features tightly clustered near zero exert relatively minor influence on the predictions.
 
 ## SHAP for CNNs
 
