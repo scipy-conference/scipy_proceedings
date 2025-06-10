@@ -183,11 +183,38 @@ We use an XGBoost [@DBLP:journals/corr/ChenG16] model to predict whether a custo
 or not. Specifically, we follow the following steps to train the model:
 
 - Convert the categorical features into pandas [@pandas1; @pandas2] categorical data type
+  ```{code-block} python
+  :caption: Converting categorical features to pandas categorical data type
+  
+  # x_df is the dataframe containing the features
+  # Convert all columns to categorical type
+  for col in x_df.columns:
+      x_df[col] = pd.Categorical(x_df[col])
+  ```
 - Split the dataset into train and test sets
-  - 80% for training and 20% for testing with random shuffling
+  - 80% for training and 20% for testing with random shuffling using `scikit-learn` [@sklearn1; @sklearn2]
+  ```{code-block} python
+  :caption: Splitting the dataset into train and test sets
+  from sklearn.model_selection import train_test_split
+    
+  x_train, x_test, y_train, y_test = train_test_split(
+      x_df, y_df, test_size=0.2, random_state=42
+  )
+  ```
 - Train an XGBoost model on the train set
   - Use default hyperparameters
   - Use categorical features using the `enable_categorical` parameter
+  ```{code-block} python
+  :caption: Training an XGBoost model
+  from xgboost import XGBClassifier
+
+  xgb_model = XGBClassifier(
+      enable_categorical=True, 
+      objective="binary:logistic", 
+      seed=42
+  )
+  xgb_model.fit(x_train, y_train)
+  ```
 - Evaluate the model on the test set
 
 Note that we do not perform any feature engineering or hyperparameter tuning in this example, since the goal is to
@@ -229,6 +256,8 @@ The shap library provides a number of plotting functions to visualize the SHAP v
 ```{code-block} python
 :linenos: true
 :caption: Computing global SHAP values for the XGBoost model
+
+import matplotlib.pyplot as plt
 
 ax = plt.subplot()
 ax.grid(True)
