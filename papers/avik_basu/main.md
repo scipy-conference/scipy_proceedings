@@ -406,17 +406,76 @@ In this section, we will demonstrate how SHAP can be used to interpret the predi
 ### Dataset
 
 The Human Activity Recognition Using Smartphones dataset [@human_activity_recognition_using_smartphones_240] 
-contains sensor data collected from mobile devices. The goal is to classify 6 different physical activities 
-from time-series sensor data.
+contains sensor data collected from a smartphone. The data has been collected from a group of 30 volunteers
+within the age group of 19-48 years. The goal is to classify 6 different physical activities from 
+multivariate timeseries sensor data.
+
+The key details of the dataset are:
+
+- **Data type**: Multivariate timeseries
+- **Number of training samples**: 7352
+- **Number of testing samples**: 2947
+- **Number of features in the dataset**: 563
+- **Feature types**: Numeric
+- **Number of classes**: 6
+  - Walking
+  - Walking Upstairs
+  - Walking Downstairs
+  - Sitting
+  - Standing
+  - Laying
+- **Objective**: Multi-class classification
 
 ### Model
 
-We use a convolutional neural network to classify activities from time-series sensor data. The model is trained on the 
-Human Activity Recognition Using Smartphones dataset.
+For this task, we are going to be constructing a 1D convolutional network using PyTorch [@paszke2017automatic].
+Prior to model training, we need to perform some important preprocessing steps.
+
+#### Preprocessing
+
+1. Scale the data so that data is centered around zero mean and a unit variance.
+
+   ```{code-block} python
+   :linenos: true
+   :caption: Data scaling
+  
+   from sklearn.preprocessing import StandardScaler
+  
+   scaler = StandardScaler()
+   x_train = scaler.fit_transform(x_train)
+   x_test = scaler.transform(x_test)
+   ```
+
+2. Create sliding window sequences
+
+#### Model Definition
+
+Define the CNN model class
+
+#### Training
+
+1. Define training parameters
+2. Train the model
+
+#### Evaluate performance
+
+Evaluate model performance
 
 ### SHAP Explanations
 
 TODO: Add SHAP explanations for CNNs
+
+#### Global
+
+TODO
+
+#### Dependency
+
+TODO
+
+#### Local
+
+TODO
 
 
 ## Practical Utility, Strengths, and Limitations
