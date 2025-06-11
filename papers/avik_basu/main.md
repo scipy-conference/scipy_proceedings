@@ -482,12 +482,17 @@ Prior to model training, we need to perform some important preprocessing steps.
 
 #### Model Definition
 
+Since we are focused on demonstrating the use of SHAP for interpretation, we are going to skip fine-tuning the
+model for optimal performance. Instead, we are going to use 2 layer CNN architecture with a full connected layer
+at the end for classification.
+
 The following code block defines the CNN model class.
 
 ```{code-block} python
 :linenos: true
 :caption: Defining the CNN model class
 
+import torch
 import torch.nn as nn
 
 class CNNClassifier(nn.Module):
@@ -509,12 +514,66 @@ class CNNClassifier(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.fc(x)
         return x
+        
+model = CNNClassifier(input_dim=x_train_seq.shape[1], num_classes=6)
 ```
 
 #### Training
 
 1. Define training parameters
-2. Train the model
+
+   ```{code-block} python
+   :linenos: true
+   :caption: Defining training parameters
+   
+   NUM_EPOCHS = 50
+   BATCH_SIZE = 32
+   LEARNING_RATE = 1e-3
+   
+   criterion = nn.CrossEntropyLoss()
+   optimizer = torch.optim.SGD(model.parameters(), lr=LEARNING_RATE)
+   ```
+
+2. Create data loaders
+
+   ```{code-block} python
+   :linenos: true
+   :caption: Creating data loaders
+   
+   from torch.utils.data import DataLoader, TensorDataset
+   
+   # Subtract 1 from the labels since the classes are 1-indexed
+   train_ds = TensorDataset(x_train_seq, (y_train_seq - 1).long().squeeze())
+   test_ds = TensorDataset(x_test_seq, (y_test_seq - 1).long().squeeze())
+   
+   # Avoid shuffling since we are using a time series dataset
+   train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=False)
+   test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False)
+   ```
+
+3. Train the model
+
+   ```{code-block} python
+   :linenos: true
+   :caption: Training the CNN model
+  
+   for epoch in range(NUM_EPOCHS):
+       model.train()
+       epoch_loss = 0.0
+   
+       for inputs, labels in train_loader:
+           optimizer.zero_grad()
+           outputs = model(inputs)
+          
+           loss = criterion(outputs, labels)
+           loss.backward()
+          
+           optimizer.step()
+           epoch_loss += loss.item()
+  
+       avg_loss = epoch_loss / len(train_loader)
+       print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {avg_loss:.5f}")
+   ```
 
 #### Evaluate performance
 
