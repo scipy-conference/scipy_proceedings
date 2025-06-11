@@ -448,9 +448,68 @@ Prior to model training, we need to perform some important preprocessing steps.
 
 2. Create sliding window sequences
 
+   ```{code-block} python
+   :linenos: true
+   :caption: Creating sliding window sequences
+   
+   from torch import Tensor
+
+   # Convert to PyTorch tensors
+   x_train = torch.from_numpy(x_train.to_numpy()).float()
+   y_train = torch.from_numpy(y_train.to_numpy()).float()
+   x_test = torch.from_numpy(x_test.to_numpy()).float()
+   y_test = torch.from_numpy(y_test.to_numpy()).float()
+
+
+   def create_sequences(
+       data: Tensor, labels: Tensor, seq_length: int = 64
+   ) -> tuple[Tensor, Tensor]:
+       """Create sequences from the data and labels."""
+
+       sequences = []
+       labels_seq = []
+       for i in range(len(data) - seq_length):
+           sequences.append(data[i : i + seq_length])
+           labels_seq.append(labels[i + seq_length])
+       x_seq, y_seq = torch.stack(sequences), torch.stack(labels_seq)
+       return x_seq.permute(0, 2, 1), y_seq
+
+
+   SEQ_LENGTH = 64
+   x_train_seq, y_train_seq = create_sequences(x_train, y_train, seq_length=SEQ_LENGTH)
+   x_test_seq, y_test_seq = create_sequences(x_test, y_test, seq_length=SEQ_LENGTH)
+   ```
+
 #### Model Definition
 
-Define the CNN model class
+The following code block defines the CNN model class.
+
+```{code-block} python
+:linenos: true
+:caption: Defining the CNN model class
+
+import torch.nn as nn
+
+class CNNClassifier(nn.Module):
+    def __init__(self, input_dim: int, num_classes: int = 6):
+        super().__init__()
+        self.layer1 = nn.Sequential(
+            nn.Conv1d(input_dim, 32, kernel_size=3, stride=2, padding=1),
+            nn.Tanh(),
+        )
+        self.layer2 = nn.Sequential(
+            nn.Conv1d(32, 16, kernel_size=3, stride=2, padding=1),
+            nn.Tanh(),
+        )
+        self.fc = nn.Linear(256, num_classes)
+
+    def forward(self, x: Tensor):
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+        return x
+```
 
 #### Training
 
@@ -478,12 +537,19 @@ TODO
 TODO
 
 
-## Practical Utility, Strengths, and Limitations
+## Strengths and Limitations
 
-SHAP provides a consistent and theoretically grounded way to interpret model predictions. It is applicable to a wide range of
-model types and can provide both global and local explanations. However, it can be computationally expensive to compute
-SHAP values for large models or datasets. Additionally, SHAP values are based on the assumption that the model is a 
-coalitional game, which may not always be the case.
+SHAP is one of the prominent ways to explain ML model predictions. As with any other method, it has its own set of
+strengths and limitations.
+
+### Strengths
+
+1. SHAP offers a consistent framework for interpreting model predictions. 
+
+
+### Limitations
+
+TODO
 
 ## Conclusion
 
