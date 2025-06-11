@@ -9,24 +9,52 @@ project:
   description: Add a two sentence description about your article.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: John Doe
-      email: johndoe@johndoe.edu
-      orcid: sncjk
+    - name: Cassia Cai
+      email: fmc2855@uw.edu
+      orcid: 0009-0007-3540-192X
       affiliations:
-        - Somewhere in the World
-    - name: Mark Anthony
-      email: mark37@rome.it
-      affiliations:
-        - Egyptian Embassy, S.P.Q.R.
-    - name: Jarrod Millman
-      email: millman@rome.it
-      affiliations:
-        - Egyptian Embassy, S.P.Q.R.
-        - Yet another place, S.P.Q.R.
+        - University of Washington, School of Oceanography
       corresponding: true
-    - name: Cleopatra
-      email: cleopatra@rome.it
-      affiliation: Ptolemaic Kingdom
+      roles:
+      - Methodology
+      - Software
+      - Writing
+      - Visualization
+      - Conceptualization
+    - name: Jacob T. Cohen
+      email: jtcohen@uw.edu
+      orcid: 0009-0006-2438-3626
+      affiliations:
+        - University of Washington, School of Oceanography
+      roles:
+      - Methodology
+      - Software
+      - Writing
+      - Visualization
+      - Conceptualization
+    - name: Hillary Scannell
+      email: hillary.scannell@jupiterintel.com
+      affiliation: Jupiter Intelligence
+      orcid: 0000-0002-6604-1695
+      roles:
+      - Methodology
+      - Software
+      - Visualization
+    - name: Valentina Staneva
+      email: vms16@uw.edu
+      orcid: 0000-0002-3412-0364
+      affiliations:
+        - University of Washington, eScience Institute
+      roles:
+      - Software
+      - Writing
+    - name: LuAnne Thompson
+      email: luanne@uw.edu
+      affiliation: University of Washington, School of Oceanography
+      orcid: 0000-0001-8295-0533
+      roles:
+      - Writing
+
   keywords:
     - spatiotemporal tracking
     - morphological operations
