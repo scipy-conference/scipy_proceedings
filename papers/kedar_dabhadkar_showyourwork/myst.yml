@@ -1,0 +1,40 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-showyourwork
+  # Ensure your title is the same as in your `main.md`
+  title: "Show your work: Tutorial on building and hosting web applications"
+  # subtitle:
+  description: Add a two sentence description about your article.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Kedar Dabhadkar
+      email: kdabhadk@gmail.com
+      orcid: 0000-0002-9283-4103
+      affiliations:
+        - Independent Researcher
+  keywords:
+    - web applications
+    - data visualization
+    - communication
+    - showcase
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
