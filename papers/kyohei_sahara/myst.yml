@@ -11,6 +11,7 @@ project:
   authors:
     - name: Kyohei Sahara
       email: schwalbe10@gmail.com
+      orcid: 0009-0003-4407-3738
       affiliations:
         - Kyoto University
       corresponding: true
@@ -26,12 +27,7 @@ project:
   error_rules:
     - rule: doi-exists
       severity: ignore
-      keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+      keys: []
   exports:
     - id: pdf
       format: typst

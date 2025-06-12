@@ -1,271 +1,139 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: A Numerical Perspective to Terraforming a Desert
+title: "Quantum Chemistry Acceleration: Comparative Performance Analysis of Modern DFT Implementations"
 abstract: |
-  A short version of the long version that is way too long to be written as a
-  short version anyway.  Still, when considering the facts from first
-  principles, we find that the outcomes of this introspective approach is
-  compatible with the guidelines previously established.
-
-  In such an experiment it is then clear that the potential for further
-  development not only depends on previous relationships found but also on
-  connections made during exploitation of this novel new experimental
-  protocol.
+  This proceeding examines the acceleration of quantum chemistry calculations through
+  modern implementations of Density Functional Theory (DFT). We provide a
+  comparative performance analysis between traditional frameworks and advanced
+  implementations, demonstrating computational efficiency gains. Applications
+  in electrolyte membrane structure analysis illustrate the practical benefits of
+  these performance improvements. Our benchmarking results show how
+  transitioning from traditional implementations to optimized frameworks
+  enables more extensive quantum chemistry simulations within reduced
+  timeframes, with substantial speedups obtained through modern code
+  optimization techniques in Python-based quantum chemistry environments.
 ---
 
 ## Introduction
 
-Twelve hundred years ago — in a galaxy just across the hill...
+Quantum chemistry calculations have become indispensable tools for understanding
+molecular properties, reaction mechanisms, and material behavior at the atomic
+scale. Density Functional Theory (DFT) has emerged as one of the most
+widely used quantum mechanical methods due to its
+balance between computational efficiency and chemical accuracy. However, as
+research problems become increasingly complex and systems grow larger, the
+computational demands of traditional DFT implementations often become
+prohibitive. Modern scientific computing has witnessed advances in optimization
+techniques, parallel processing, and algorithmic improvements that directly
+benefit quantum chemistry calculations. The Python ecosystem, in particular,
+has seen growth in high-performance scientific libraries that enable
+researchers to leverage these advances more effectively.
 
-This document should be rendered with MyST Markdown [mystmd.org](https://mystmd.org),
-which is a markdown variant inspired by reStructuredText. This uses the `mystmd`
-CLI for scientific writing which can be [downloaded here](https://mystmd.org/guide/quickstart).
-When you have installed `mystmd`, run `myst start` in this folder and
-follow the link for a live preview, any changes to this file will be
-reflected immediately.
+This proceeding presents a performance analysis comparing traditional
+quantum chemistry frameworks with modern optimized implementations. The development of environmentally-friendly materials for electrochemical applications is crucial for sustainable energy storage and electrolysis technologies. This study focuses on chlorinated analogues of phosphoric acid compounds ($\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}$) as alternatives to fluorinated materials for use in electrochemical systems, aiming to reduce environmental impact while maintaining proton conductivity properties for electrolysis processes. Each test system contains 38 atoms with varying water molecule distributions to simulate realistic chemical environments. Our
+analysis demonstrates substantial computational speedups obtained through modern
+code optimization strategies while maintaining chemical accuracy.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+## Methods
 
-## Bibliographies, citations and block quotes
+### Target System
 
-Bibliography files and DOIs are automatically included and picked up by `mystmd`.
-These can be added using pandoc-style citations `[@doi:10.1109/MCSE.2007.55]`
-which fetches the citation information automatically and creates: [@doi:10.1109/MCSE.2007.55].
-Additionally, you can use any key in the BibTeX file using `[@citation-key]`,
-as in [@hume48] (which literally is `[@hume48]` in accordance with
-the `hume48` cite-key in the associated `mybib.bib` file).
-Read more about [citations in the MyST documentation](https://mystmd.org/guide/citations).
+Understanding proton exchange membrane structures represents a particularly challenging
+application for quantum chemistry calculations. The structural analysis involves
+complex multi-component systems including polymer chains, ionic species, and
+interfacial interactions. Traditional DFT implementations require substantial
+computational resources to adequately characterize these structures.
 
-If you wish to have a block quote, you can just indent the text, as in:
+For example, studying environmentally-friendly phosphoric acid structures based on chlorinated analogues of $\text{C}\text{F}_3\text{C}\text{F}_2\text{PO}_3\text{H}$ [@doi:10.1039/D1CP00718A], specifically $\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}$ compounds with water molecules, requires calculations on systems containing 38 atoms total with multiple conformational states. The fluorine-to-chlorine substitution aims to develop non-fluorinated materials for environmental sustainability. To investigate proton conductivity properties, several $\text{H}_2\text{O}$ molecules are included in the computational model to simulate realistic proton-conducting environments. Using conventional frameworks like SIESTA [@siesta], geometry optimization requires substantial computational time on modern computational clusters, making comprehensive structural studies computationally expensive.
 
-> When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication.
->
-> -- @hume48
-
-Other typography information can be found in the [MyST documentation](https://mystmd.org/guide/typography).
-
-### DOIs in bibliographies
-
-In order to include a DOI in your bibliography, add the DOI to your bibliography
-entry as a string. For example:
-
-```{code-block} bibtex
-:emphasize-lines: 7
-:linenos:
-@book{hume48,
-  author    =  "David Hume",
-  year      = {1748},
-  title     = "An enquiry concerning human understanding",
-  address   = "Indianapolis, IN",
-  publisher = "Hackett",
-  doi       = "10.1017/CBO9780511808432",
-}
-```
-
-### Citing software and websites
-
-Any paper relying on open-source software would surely want to include citations.
-Often you can find a citation in BibTeX format via a web search.
-Authors of software packages may even publish guidelines on how to cite their work.
-
-For convenience, citations to common packages such as
-Jupyter [@jupyter],
-Matplotlib [@matplotlib],
-NumPy [@numpy],
-pandas [@pandas1; @pandas2],
-scikit-learn [@sklearn1; @sklearn2], and
-SciPy [@scipy]
-are included in this paper's `.bib` file.
-
-In this paper we not only terraform a desert using the package terradesert [@terradesert], we also catch a sandworm with it.
-To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
-If you are citing a team, ensure that the author name is wrapped in additional braces `{Team Name}`, so it is not treated as an author's first and last names.
-
-```{code-block} bibtex
-:emphasize-lines: 2
-:linenos:
-@misc{terradesert,
-  author = {{TerraDesert Team}},
-  title  = {Code for terraforming a desert},
-  year   = {2000},
-  url    = {https://terradesert.com/code/},
-  note   = {Accessed 1 Jan. 2000}
-}
-```
-
-## Source code examples
-
-No paper would be complete without some source code.
-Code highlighting is completed if the name is given:
-
-```python
-def sum(a, b):
-    """Sum two numbers."""
-
-    return a + b
-```
-
-Use the `{code-block}` directive if you are getting fancy with line numbers or emphasis. For example, line-numbers in `C` looks like:
-
-```{code-block} c
-:linenos: true
-
-int main() {
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-    return 0;
-}
-```
-
-Or a snippet from the above code, starting at the correct line number, and emphasizing a line:
-
-```{code-block} c
-:linenos: true
-:lineno-start: 2
-:emphasize-lines: 3
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-```
-
-You can read more about code formatting in the [MyST documentation](https://mystmd.org/guide/code).
-
-## Figures, Equations and Tables
-
-It is well known that Spice grows on the planet Dune [@Atr03].
-Test some maths, for example $e^{\pi i} + 3 \delta$.
-Or maybe an equation on a separate line:
-
-```{math}
-g(x) = \int_0^\infty f(x) dx
-```
-
-or on multiple, aligned lines:
-
-```{math}
-\begin{aligned}
-g(x) &= \int_0^\infty f(x) dx \\
-     &= \ldots
-\end{aligned}
-```
-
-The area of a circle and volume of a sphere are given as
-
-```{math}
-:label: circarea
-
-A(r) = \pi r^2.
-```
-
-```{math}
-:label: spherevol
-
-V(r) = \frac{4}{3} \pi r^3
-```
-
-We can then refer back to Equation {ref}`circarea` or
-{ref}`spherevol` later.
-The `{ref}` role is another way to cross-reference in your document, which may be familiar to users of Sphinx.
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas[^footnote-1] diam turpis, placerat[^footnote-2] at adipiscing ac,
-pulvinar id metus.
-
-[^footnote-1]: On the one hand, a footnote.
-[^footnote-2]: On the other hand, another footnote.
-
-:::{figure} figure1.png
-:label: fig:stream
-This is the caption, sandworm vorticity based on storm location in a pleasing stream plot. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/arrays/streamplot.html).
+:::{figure} structure.svg
+:label: fig:structure
+:width: 70%
+:align: center
+Chemical structure of the $\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}$ compound with $\text{H}_2\text{O}$ molecules studied in this work, showing the chlorinated analogue design for environmental sustainability and proton conduction pathway investigation.
 :::
 
-:::{figure} figure2.png
-:label: fig:em
-This is the caption, electromagnetic signature of the sandworm based on remote sensing techniques. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/stats/hist2d.html).
+### Computational Frameworks
+
+Traditional quantum chemistry frameworks have provided the foundation for
+decades of molecular modeling research. Packages such as 
+SIESTA have been widely adopted due to their robust implementations and
+extensive feature sets. However, these frameworks often present computational
+bottlenecks when applied to complex systems requiring extensive parameter space
+exploration.
+
+Modern Python-based quantum chemistry environments offer
+computational advantages through optimized algorithms, efficient memory
+management, and leveraging of high-performance numerical libraries. Frameworks
+such as PySCF [@pyscf] and its GPU-accelerated extension GPU4PySCF [@gpu4pyscf] have emerged as powerful
+alternatives that can dramatically reduce computation times while maintaining
+chemical accuracy.
+
+## Experimental Conditions
+
+Our benchmarking study compares computational performance across SIESTA, PySCF, and GPU4PySCF implementations using identical test systems. The benchmark suite consists of 85 individual input files, each being a 38-atom system containing a chlorinated phosphoric acid structure ($\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}$) with water molecules. These configurations feature varying water molecule distributions around the phosphoric acid structure to represent different water-membrane configurations, providing realistic system sizes for environmentally-friendly materials design with statistical reliability.
+
+All calculations were performed using identical computational setups to ensure fair comparison:
+
+- **System**: 38-atom systems containing $\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}$ structures with water molecules
+- **Exchange-correlation functional**: RPBE
+- **Basis set**: DZP (Double-Zeta Polarized)
+- **Convergence criteria**: SCF tolerance of $10^{-6}$ for all calculations
+- **Computational environment**: 
+  - SIESTA (CPU): 16 parallel jobs (2 cores per job)
+  - PySCF (CPU): 16 parallel jobs (2 cores per job)
+  - GPU4PySCF (GPU): 16 parallel jobs
+- **Hardware**: 
+  - CPU: Intel Xeon processors, 32 vCPUs, 256 GiB memory (AWS r7i.8xlarge, $2.117/hr)
+  - GPU: 8x NVIDIA A100 80GB SXM4, 240 vCPUs, 1800 GiB RAM (Lambda, $14.32/hr)
+- **Performance metrics**: Execution times and costs calculated based on cumulative processing time for all 85 configurations divided by parallelization factor (16) to reflect actual wall-clock time and resource usage
+
+## Results and Discussion
+
+### Performance Comparison
+
+@fig:comparison shows the performance differences between the three implementations. SIESTA represents the traditional approach with longer execution times, while PySCF provides acceleration through modern optimization techniques. GPU4PySCF shows the best performance by leveraging GPU acceleration, showing improvement in execution time while maintaining lower computational costs. These performance differences enable researchers to conduct more extensive conformational sampling and statistical analysis within available computational resources.
+
+:::{figure} comparison.svg
+:label: fig:comparison
+:align: center
+Computational performance comparison between SIESTA, PySCF, and GPU4PySCF for 38-atom systems containing phosphoric acid structures, showing both execution time (left) and computational cost (right).
 :::
 
-As you can see in @fig:stream and @fig:em, this is how you reference auto-numbered figures.
-To refer to a sub figure use the syntax `@label [a]` in text or `[@label a]` for a parenhetical citation (i.e. @fig:stream [a] vs [@fig:stream a]).
-For even more control, you can simply link to figures using `[Figure %s](#label)`, the `%s` will get filled in with the number, for example [Figure %s](#fig:stream).
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
+### Impact on Research Methodology
 
-```{list-table} This is the caption for the materials table.
-:label: tbl:materials
-:header-rows: 1
-* - Material
-  - Units
-* - Stone
-  - 3
-* - Water
-  - 12
-* - Cement
-  - {math}`\alpha`
-```
+The performance improvements demonstrated in this study have broader implications beyond phosphoric acid structure analysis. The 3.7× speedup observed with PySCF and 390× speedup with GPU4PySCF can be expected to apply to similar molecule systems with comparable atom counts and electronic structure characteristics.
 
-We show the different quantities of materials required in
-@tbl:materials.
+These computational advantages enable:
 
-Unfortunately, markdown can be difficult for defining tables, so if your table is more complex you can try embedding HTML:
+- **Expanded parameter space exploration**: Systematic investigation of molecular modifications, conformational changes, and environmental conditions across diverse chemical systems through sampling of structural configurations
+- **Enhanced statistical reliability**: Larger sample sizes enabling more robust conclusions and confident predictions in materials design studies through increased sampling of molecular configurations and property distributions
+- **Integration with modern workflows**: Seamless compatibility with machine learning approaches and automated high-throughput computational screening pipelines, facilitating development of predictive models for materials discovery
 
-:::{table} Area Comparisons (written in html)
-:label: tbl:areas-html
+The methodology established here provides a foundation for accelerating quantum chemistry calculations across various molecular systems, particularly those involving compounds with heteroatoms and solvation effects.
 
-<table>
-<tr><th rowspan="2">Projection</th><th colspan="3" align="center">Area in square miles</th></tr>
-<tr><th align="right">Large Horizontal Area</th><th align="right">Large Vertical Area</th><th align="right">Smaller Square Area<th></tr>
-<tr><td>Albers Equal Area   </td><td align="right"> 7,498.7   </td><td align="right"> 10,847.3  </td><td align="right">35.8</td></tr>
-<tr><td>Web Mercator        </td><td align="right"> 13,410.0  </td><td align="right"> 18,271.4  </td><td align="right">63.0</td></tr>
-<tr><td>Difference          </td><td align="right"> 5,911.3   </td><td align="right"> 7,424.1   </td><td align="right">27.2</td></tr>
-<tr><td>Percent Difference  </td><td align="right"> 44%       </td><td align="right"> 41%       </td><td align="right">43%</td></tr>
-</table>
-:::
+## Conclusions
 
-or if you prefer LaTeX you can try `tabular` or `longtable` environments:
+This study demonstrates computational advantages of modern PySCF implementations over traditional SIESTA for DFT calculations.
 
-```{raw} latex
-\begin{table*}
-  \begin{longtable*}{|l|r|r|r|}
-  \hline
-  \multirow{2}{*}{\bf Projection} & \multicolumn{3}{c|}{\bf Area in square miles} \\
-  \cline{2-4}
-   & \textbf{Large Horizontal Area} & \textbf{Large Vertical Area} & \textbf{Smaller Square Area} \\
-  \hline
-  Albers Equal Area   & 7,498.7   & 10,847.3  & 35.8  \\
-  Web Mercator        & 13,410.0  & 18,271.4  & 63.0  \\
-  Difference          & 5,911.3   & 7,424.1   & 27.2  \\
-  Percent Difference  & 44\%      & 41\%      & 43\%  \\
-  \hline
-  \end{longtable*}
+Key findings include:
 
-  \caption{Area Comparisons (written in LaTeX) \label{tbl:areas-tex}}
-\end{table*}
-```
+1. **Performance improvement**: PySCF shows 3.7× speedup and GPU4PySCF demonstrates 390× speedup compared to SIESTA while maintaining chemical accuracy
 
-Perhaps we want to end off with a quote by Lao Tse[^footnote-3]:
+2. **Cost efficiency**: Computational costs reduced from \$460.50 (SIESTA) to \$125.35 (PySCF) and \$7.99 (GPU4PySCF), representing 73% and 98% cost reductions respectively
 
-> Muddy water, let stand, becomes clear.
+3. **Broader applicability**: The methodology extends to similar molecular systems, enabling systematic parameter exploration and integration with modern computational workflows
 
-[^footnote-3]: $\mathrm{e^{-i\pi}}$
+These results provide a foundation for accelerating quantum chemistry calculations across various molecular systems. The demonstrated efficiency gains illustrate the potential for making quantum chemistry calculations more accessible for complex materials science applications.
+
+## Code Availability
+
+The computational scripts, input files, and data processing code used in this study are available at:
+
+https://github.com/schwalbe10/quantum-chemistry-acceleration
+
+The repository includes:
+- SIESTA, PySCF and GPU4PySCF calculation scripts
+- 85 input configurations for phosphoric acid structures
+- Data processing and visualization code
+- Detailed instructions for reproducing the benchmark results
