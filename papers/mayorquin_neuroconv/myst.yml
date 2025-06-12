@@ -4,10 +4,9 @@ project:
   # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
   id: scipy-2025-mayorquin_neuroconv
   # Ensure your title is the same as in your `main.md`
-  title: Neuroconv. Automating the Path to Data Standardization in Neurophysiology
-  # subtitle:
-  description: "TODO"
-  # Authors should have affiliations, emails and ORCIDs if available
+  title: Neuroconv
+  subtitle: Automating the Path to Data Standardization in Neurophysiology
+  description: The field of experimental neurophysiology uses dozens of unique acquisition devices, many of which store data in their own proprietary formats, making data sharing a difficult task. Our library reads these formats and transforms them to the standard NWB format, a FAIR data structure supported by major data archives.
   authors:
     - name: Heberto Mayorquin
       email: h.mayorquin@gmail.com
