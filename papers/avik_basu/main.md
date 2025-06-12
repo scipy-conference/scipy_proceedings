@@ -603,12 +603,31 @@ strengths and limitations.
 
 ### Strengths
 
-1. SHAP offers a consistent framework for interpreting model predictions. 
+1. SHAP offers a consistent framework for interpreting model predictions, which has its roots from game theory. It is
+   model agnostic and can be applied to any machine learning model, whether it is a simple linear regression model, a
+   decision tree or a deep neural network.
+
+2. SHAP can explain predictions for both global and local interpretability. Global explanations provide a high-level
+   summary of the model's behavior, while local explanations provide insights into the factors influencing individual
+   predictions.
+
+3. The python SHAP library provides a number of plotting functions, e.g. beeswarm, force, waterfall, etc. that
+   enable users to visualize the SHAP values in a number of ways. They communicate the insights effectively to
+   both technical and non-technical stakeholders.
 
 
 ### Limitations
 
-TODO
+1. Exact calculation of SHAP values becomes exponentially expensive with increasing feature counts. 
+   Specialized explainers e.g. TreeExplainer, GPUTreeExplainer [@mitchell2022gputreeshapmassivelyparallelexact], 
+   and DeepExplainer mitigate this but can still be resource-intensive for complex models or very large datasets.
+
+2. SHAP values can be misleading when features are highly correlated, and may allocate credit arbitrarily among them. 
+   In such cases, the correct interpretation can be complicated, and may require domain expertise or 
+   additional feature engineering.
+
+3. While SHAP values quantify the impact of features on model predictions, it is important to understand that they 
+   do not directly indicate causality.
 
 ## Conclusion
 
