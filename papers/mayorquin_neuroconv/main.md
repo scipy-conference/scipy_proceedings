@@ -29,6 +29,8 @@ Converting existing datasets to NWB presents several interconnected challenges t
 <tr><td>Metadata complexity</td><td>Metadata requirements vary substantially across experimental paradigms, with critical information often stored inconsistently or incompletely</td></tr>
 <tr><td>Scale challenges</td><td>Dataset sizes frequently reach hundreds of gigabytes to terabytes, requiring specialized handling for memory-efficient processing</td></tr>
 <tr><td>Expertise requirements</td><td>Following NWB best practices requires considerable knowledge of both the source formats and the NWB standard itself</td></tr>
+<tr><td>Multi-modal integration</td><td>Experiments often combine multiple recording systems (electrophysiology, imaging, behavior) each storing data in different formats</td></tr>
+<tr><td>Time synchronization</td><td>Different recording systems may have temporal drift, different start times, or varying sampling rates requiring precise alignment</td></tr>
 </table>
 :::
 
@@ -53,7 +55,7 @@ To address these multifaceted challenges, we developed [NeuroConv](https://neuro
 
 The following sections detail how NeuroConv's architecture addresses each of these challenges through a modular, extensible design that maintains both flexibility and ease of use.
 
-### Handling Diverse Data Formats
+### Handling Format Diversity
 The challenge of format diversity in neurophysiology extends beyond their sheer number (47 supported at the moment). Many formats, such as Neuralynx, have multiple versions, while others, like TIFF, exhibit significant internal variability in how labs use them. NeuroConv addresses this complexity through a unified architecture centered on the DataInterface abstraction. DataInterface is an abstract class for reading data, and each supported format has a dedicated DataInterface that encapsulates the format-specific logic for data reading, metadata extraction, and NWB conversion while presenting a consistent API to users. The DataInterface serves as the fundamental building block of NeuroConv, providing a standardized pathway from diverse source formats to NWB output. This abstraction enables users to work with any supported format using identical code patterns, regardless of the underlying format complexity or internal details. The minimal conversion pipeline is illustrated in {ref}`fig:assets/minimal_conversion_pipeline`:
 
 :::{figure} assets/minimal_conversion_pipeline.png
@@ -93,64 +95,121 @@ This core pattern ensures consistency and simplicity across all supported format
 
 The DataInterface abstracts away format-specific complexities: from parsing proprietary binary structures to extracting embedded metadata.
 
-Currently supporting 47 distinct input formats (Table 1), each DataInterface is comprehensively documented and demonstrated in the [Conversion Gallery](https://neuroconv.readthedocs.io/en/stable/conversion_examples_gallery/index.html), where users can find complete examples requiring only ~5 lines of code to perform full data conversion. Throughout the conversion process, NeuroConv enforces NWB Best Practices for metadata and data organization while optimizing data storage for both archival purposes and cloud computing requirements.
+Currently supporting 47 distinct input formats ({ref}`tbl:supported-formats`), each DataInterface is comprehensively documented and demonstrated in the [Conversion Gallery](https://neuroconv.readthedocs.io/en/stable/conversion_examples_gallery/index.html), where users can find complete examples requiring only ~5 lines of code to perform full data conversion. Throughout the conversion process, NeuroConv enforces NWB Best Practices for metadata and data organization while optimizing data storage for both archival purposes and cloud computing requirements.
 
-| **Category** | **Subcategory** | **Format** |
-|--------------|-----------------|------------|
-| **Extracellular Electrophysiology** | Recording | AlphaOmega |
-| | Recording | Axona |
-| | Recording | Biocam |
-| | Recording | Blackrock |
-| | Recording | European Data Format (EDF) |
-| | Recording | Intan |
-| | Recording | MaxOne |
-| | Recording | MCSRaw |
-| | Recording | MEArec |
-| | Recording | Neuralynx |
-| | Recording | NeuroScope |
-| | Recording | OpenEphys |
-| | Recording | Plexon |
-| | Recording | Plexon2 |
-| | Recording | Spike2 |
-| | Recording | Spikegadgets |
-| | Recording | SpikeGLX |
-| | Recording | Tucker-Davis Technologies (TDT) |
-| | Recording | White Matter |
-| | Sorting | Blackrock |
-| | Sorting | Cell Explorer |
-| | Sorting | KiloSort |
-| | Sorting | Neuralynx |
-| | Sorting | NeuroScope |
-| | Sorting | Phy |
-| | Sorting | Plexon |
-| **Intracellular Electrophysiology** | | ABF |
-| **Optical Physiology** | Imaging | Bruker |
-| | Imaging | HDF5 |
-| | Imaging | Micro-Manager |
-| | Imaging | Miniscope |
-| | Imaging | Scanbox |
-| | Imaging | ScanImage |
-| | Imaging | Thor |
-| | Imaging | Tiff |
-| | Segmentation | Caiman |
-| | Segmentation | CNMFE |
-| | Segmentation | EXTRACT |
-| | Segmentation | Suite2P |
-| | Fiber Photometry | TDT Fiber Photometry |
-| **Behavior** | Motion Tracking | DeepLabCut |
-| | Motion Tracking | FicTrac |
-| | Motion Tracking | LightningPose |
-| | Motion Tracking | Neuralynx NVT |
-| | Motion Tracking | SLEAP |
-| | Audio/Video | Videos |
-| | Operant Conditioning | MedPC |
-| **General Data** | Image | Image (png, jpeg, tiff, etc) |
-| | Text/Tabular | CSV |
-| | Text/Tabular | Excel |
-| | Text/Tabular | Text |
+:::{table} Comprehensive list of data formats supported by NeuroConv, organized by experimental modality and data type.
+:label: tbl:supported-formats
 
-*Table 1: Comprehensive list of data formats supported by NeuroConv, organized by experimental modality and data type.*
+<table style="border-collapse: collapse; width: 100%;">
+<thead>
+<tr style="background-color: #2E5090; color: white;">
+<th style="width: 35%; padding: 12px; text-align: left;">Category</th>
+<th style="width: 25%; padding: 12px; text-align: left;">Subcategory</th>
+<th style="width: 40%; padding: 12px; text-align: left;">Format</th>
+</tr>
+</thead>
+<tbody>
+<!-- Extracellular Electrophysiology -->
+<tr style="background-color: #E8F2FF">
+<td rowspan="26" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Extracellular Electrophysiology</strong></td>
+<td rowspan="19" style="padding: 8px; color: #2E5090;"><em>Recording</em></td>
+<td style="padding: 8px;">AlphaOmega</td>
+</tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Axona</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Biocam</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Blackrock</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">European Data Format (EDF)</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Intan</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">MaxOne</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">MCSRaw</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">MEArec</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Neuralynx</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">NeuroScope</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">OpenEphys</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Plexon</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Plexon2</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Spike2</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Spikegadgets</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">SpikeGLX</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Tucker-Davis Technologies (TDT)</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">White Matter</td></tr>
+<tr style="background-color: #D6E7FF">
+<td rowspan="7" style="padding: 8px; color: #2E5090;"><em>Sorting</em></td>
+<td style="padding: 8px;">Blackrock</td>
+</tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Cell Explorer</td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">KiloSort</td></tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Neuralynx</td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">NeuroScope</td></tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Phy</td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">Plexon</td></tr>
 
+<!-- Intracellular Electrophysiology -->
+<tr style="border-top: 3px solid #2E5090;">
+<td style="background-color: #E8F2FF; padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Intracellular Electrophysiology</strong></td>
+<td style="padding: 8px;">—</td>
+<td style="padding: 8px;">ABF</td>
+</tr>
+
+<!-- Optical Physiology -->
+<tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
+<td rowspan="13" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Optical Physiology</strong></td>
+<td rowspan="8" style="padding: 8px; color: #2E5090;"><em>Imaging</em></td>
+<td style="padding: 8px;">Bruker</td>
+</tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">HDF5</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Micro-Manager</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Miniscope</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Scanbox</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">ScanImage</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Thor</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Tiff</td></tr>
+<tr style="background-color: #D6E7FF">
+<td rowspan="4" style="padding: 8px; color: #2E5090;"><em>Segmentation</em></td>
+<td style="padding: 8px;">Caiman</td>
+</tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">CNMFE</td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">EXTRACT</td></tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Suite2P</td></tr>
+<tr style="background-color: #E8F2FF">
+<td style="padding: 8px; color: #2E5090;"><em>Fiber Photometry</em></td>
+<td style="padding: 8px;">TDT Fiber Photometry</td>
+</tr>
+
+<!-- Behavior -->
+<tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
+<td rowspan="7" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Behavior</strong></td>
+<td rowspan="5" style="padding: 8px; color: #2E5090;"><em>Motion Tracking</em></td>
+<td style="padding: 8px;">DeepLabCut</td>
+</tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">FicTrac</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">LightningPose</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Neuralynx NVT</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">SLEAP</td></tr>
+<tr style="background-color: #D6E7FF">
+<td style="padding: 8px; color: #2E5090;"><em>Audio/Video</em></td>
+<td style="padding: 8px;">Videos</td>
+</tr>
+<tr style="background-color: #F5F9FF">
+<td style="padding: 8px; color: #2E5090;"><em>Operant Conditioning</em></td>
+<td style="padding: 8px;">MedPC</td>
+</tr>
+
+<!-- General Data -->
+<tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
+<td rowspan="4" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>General Data</strong></td>
+<td style="padding: 8px; color: #2E5090;"><em>Image</em></td>
+<td style="padding: 8px;">Image (png, jpeg, tiff, etc)</td>
+</tr>
+<tr style="background-color: #D6E7FF">
+<td rowspan="3" style="padding: 8px; color: #2E5090;"><em>Text/Tabular</em></td>
+<td style="padding: 8px;">CSV</td>
+</tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Excel</td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">Text</td></tr>
+</tbody>
+</table>
+:::
 Each format example in our documentation includes basic code snippets that demonstrate how to use the DataInterface for that specific format, including metadata extraction, modification, and the conversion process. This modular approach allows users to easily adapt examples to their specific needs while providing a consistent interface across different data formats. For example, converting amplifier data acquired with Intan requires only these steps:
 
 ```python
@@ -236,7 +295,7 @@ A critical feature is the ability to process datasets larger than available RAM.
 
 For storage optimization, NeuroConv leverages chunking and compression in HDF5 and Zarr, the currently supported backends in NWB. Chunking allows large datasets to be read in manageable chunk sizes, and lossless compression algorithms allow us to reduce file size without altering the values of the data. There are many options for compression algorithms, and they present a trade-off between storage space and access speed [@alessio_compression_2023]. NeuroConv exposes an easy-to-use [API](https://neuroconv.readthedocs.io/en/stable/user_guide/backend_configuration.html) for configuring chunking and compression settings at the dataset level, allowing for quick experimentation while providing sensible defaults that work for most users.
 
-Determining optimal chunk parameters involves complex tradeoffs [@zarr_performance; @nguyen2023impact]. Large chunks minimize the number of read operations but may require decompressing unnecessary data when accessing small subsets. Small chunks provide more precise access but increase overhead, particularly for cloud storage where each chunk requires a separate HTTP range request. Generally, appropriate chunking requires understanding the most common data access patterns. By understanding common analysis workflows and visualization patterns, it becomes feasible to implement evidence-based heuristics for chunk sizing across common data types, such as voltage recordings and imaging datasets.
+Determining optimal chunk parameters involves complex tradeoffs [@zarr_performance]. Large chunks minimize the number of read operations but may require decompressing unnecessary data when accessing small subsets. Small chunks provide more precise access but increase overhead, particularly for cloud storage where each chunk requires a separate HTTP range request. Generally, appropriate chunking requires understanding the most common data access patterns. By understanding common analysis workflows and visualization patterns, it becomes feasible to implement evidence-based heuristics for chunk sizing across common data types, such as voltage recordings and imaging datasets.
 
 ### Cloud Deployment
 
