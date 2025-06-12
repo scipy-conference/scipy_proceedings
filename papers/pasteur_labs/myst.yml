@@ -10,7 +10,7 @@ project:
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: The team
-      email: p@s.s
+      email: hello@simulation.science
       orcid: 0000-0000-0000-0000
       affiliations:
         - Pasteur Labs

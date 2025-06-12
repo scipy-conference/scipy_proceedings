@@ -2,13 +2,12 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: Pipeline-level differentiable programming for the real world
 abstract: |
-  A short version of the long version that is way too long to be written as a
-  short version anyway.  Still, when considering the facts from first
-  principles, we find that the outcomes of this introspective approach is
-  compatible with the guidelines previously established.
+  TBD
 ---
 
 ## Introduction
+
+Countless problems in science and engineering can be framed as tuning tasks, where parameters of a complex process---such as a physical simulation or a lab experiment---are iteratively tuned to maximize an objective. For such tasks, differentiable programming (DP) has emerged as a powerful tool, due to its ability to automate and accelerate gradient-based operations, enabling "differentiable physics" by codifying the use of gradient information to optimize, correct, or control physical systems. At the core of DP is the technique known as automatic differentiation (autodiff, AD) to compute partial derivatives of computer programs without the need to spell out explicit forms of said derivatives. Autodiff techniques enjoy great success in the fields of artificial intelligence and machine learning (ML) thanks to proliferation of deep learning software frameworks such as TensorFlow, JAX, and PyTorch. However, applications of AD in differentiable physics are largely untested at industrial scale, and ML frameworks are rarely designed for nor tested on practical science and engineering _systems_ (as opposed to single components).
 
 Twelve hundred years ago — in a galaxy just across the hill...
 
