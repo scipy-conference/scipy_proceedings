@@ -80,10 +80,12 @@ mo = obj_Tracker._morphological_operations()
 Here Ocetrac provides basic diagnostics (e.g., initial/final object counts, area retention percentage) to evaluate tracking performance and feature characteristics. 
 
 ### Measures Submodule
-The output of the tracker is a `xarray.Dataset` with many labelled events. The Measures submodule allows users to process large numbers of tracked events by automating repetitive calculations. Its standardized outputs allow for direct comparison across different events and datasets, which streamlines analysis workflows. The submodule supports both individual case studies and ensemble analyses. In brief, the Measures submodule processes the output of Ocetrac’s core tracking algorithm and provides quantitative metrics to characterize detected events. These measures fall into five categories: shape, motion, intensity, and temporal, and contextual and are summarized in [Table %s](#tbl:event-measures). Shape measures quantify geometric properties including area, perimeter, and circularity that are relevant for quantifying structural evolution. Motion measures track movement via centroids and intensity-weighted centers of mass, while also handling longitudinal wrapping. Intensity measures capture magnitude variations through spatial statistics (mean, maximum, percentile extremes) of the underlying anomaly field. Temporal measures record lifecycle characteristics including duration, initiation timing, and timing peaks of intensity and area. Some of the measures can also be used to create contextual measures (e.g., object counts per timestep) which capture splitting and merging objects. Together, these measures enable analysis of event dynamics.
+The output of the tracker is a `xarray.Dataset` with many labelled events. The Measures submodule allows users to process large numbers of tracked events by automating repetitive calculations. Its standardized outputs allow for direct comparison across different events and datasets, which streamlines analysis workflows. The submodule supports both individual case studies and ensemble analyses. In brief, the Measures submodule processes the output of Ocetrac’s core tracking algorithm and provides quantitative metrics to characterize detected events. These measures fall into five categories: shape, motion, intensity, and temporal, and contextual and are summarized in [Table 1](#tbl:event-measures). Shape measures quantify geometric properties including area, perimeter, and circularity that are relevant for quantifying structural evolution. Motion measures track movement via centroids and intensity-weighted centers of mass, while also handling longitudinal wrapping. Intensity measures capture magnitude variations through spatial statistics (mean, maximum, percentile extremes) of the underlying anomaly field. Temporal measures record lifecycle characteristics including duration, initiation timing, and timing peaks of intensity and area. Some of the measures can also be used to create contextual measures (e.g., object counts per timestep) which capture splitting and merging objects. Together, these measures enable analysis of event dynamics.
 
 ```{raw} latex
+:single: true
 \begin{table*}
+\caption{Event measures in the Measures submodule \label{tbl:event-measures}}
   \begin{longtable*}{|l|l|l|l|}
   \hline
   \textbf{Category} & \textbf{Measure} & \textbf{Definition} & \textbf{Interpretation} \\
@@ -139,7 +141,7 @@ The output of the tracker is a `xarray.Dataset` with many labelled events. The M
   CONTEXTUAL & Object counts per timestep & Number of distinct objects detected & Higher counts indicate fragmentation \\
   \hline
   
-   \caption{Event measures in the Measures submodule \label{tbl:event-measures}}
+   
   \end{longtable*}
 \end{table*}
 ```
