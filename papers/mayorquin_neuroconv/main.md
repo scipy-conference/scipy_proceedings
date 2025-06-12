@@ -58,7 +58,7 @@ The challenge of format diversity in neurophysiology extends beyond their sheer 
 
 :::{figure} assets/minimal_conversion_pipeline.png
 :label: fig:assets/minimal_conversion_pipeline
-The process begins with source data (e.g., binary recordings, metadata, and configuration files). A data-specific Interface object is instantiated and used to extract metadata via the .get_metadata() method. The resulting metadata can be optionally edited by the user to fill in missing or corrected fields. The finalized metadata and source data are then passed to the .run_conversion() method, which writes a complete NWB file compliant with the standard.
+The process begins with source data (e.g., binary recordings, metadata, and configuration files). A data-specific DataInterface object is instantiated and used to extract metadata via the .get_metadata() method. The resulting metadata can be optionally edited by the user to fill in missing or corrected fields. The finalized metadata and source data are then passed to the .run_conversion() method, which writes a complete NWB file compliant with the standard.
 :::
 
 Programmatically, this process can be summarized in a few lines of code, as shown below. The DataInterface handles all format-specific complexities internally, from parsing proprietary binary structures to extracting embedded metadata, while ensuring the output adheres to NWB best practices:
