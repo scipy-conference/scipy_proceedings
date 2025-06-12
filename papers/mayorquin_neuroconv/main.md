@@ -13,7 +13,7 @@ Yet several factors still hinder broad NWB adoption. Researchers must first gras
 
 Additional obstacles arise from the intrinsic diversity of neurophysiology. Modalities range from optical microscopy to extracellular and intracellular electrophysiology and varied behavioral-tracking techniques, each with specialized requirements [@nwb_2015; @MEF3_format_2016; @nwb_2022]. Dozens of acquisition systems record in proprietary formats optimized for rapid data capture, not for storage efficiency or cross-platform use. Consequently, formats differ widely in efficiency, longevity of support, metadata depth, and interoperability.
 
-Conversion therefore becomes the main bottleneck. Automated pipelines are essential to prevent repetitive effort and to guarantee that future datasets enter NWB seamlessly, but building such pipelines is hard. A single lab might combine voltage recordings, optical imaging, optogenetics, and behavioral tracking—demanding expertise in experimental design, source formats, and NWB itself, expertise rarely concentrated in one person or even one lab.
+Conversion therefore becomes the main bottleneck. Automated pipelines are essential to prevent repetitive effort and to guarantee that future datasets enter NWB seamlessly, but building such pipelines is hard. A single lab might combine voltage recordings, optical imaging, optogenetics, and behavioral tracking, demanding expertise in experimental design, source formats, and NWB itself, expertise rarely concentrated in one person or even one lab.
 
 :::{table} Key challenges in converting neurophysiology datasets to NWB format.
 :label: tbl:nwb-challenges
@@ -72,10 +72,10 @@ This core pattern ensures consistency and simplicity across all supported format
 
 The DataInterface abstracts away format-specific complexities: from parsing proprietary binary structures to extracting embedded metadata.
 
-Currently supporting 47 distinct input formats ({ref}`tbl:supported-formats`), each DataInterface is comprehensively documented and demonstrated in the [Conversion Gallery](https://neuroconv.readthedocs.io/en/stable/conversion_examples_gallery/index.html), where users can find complete examples requiring only ~5 lines of code to perform full data conversion. Throughout the conversion process, NeuroConv enforces NWB Best Practices for metadata and data organization while optimizing data storage for both archival purposes and cloud computing requirements.
+Currently supporting 47 distinct input formats (@tbl:formats), each DataInterface is comprehensively documented and demonstrated in the [Conversion Gallery](https://neuroconv.readthedocs.io/en/stable/conversion_examples_gallery/index.html), where users can find complete examples requiring only ~5 lines of code to perform full data conversion. Throughout the conversion process, NeuroConv enforces NWB Best Practices for metadata and data organization while optimizing data storage for both archival purposes and cloud computing requirements.
 
 :::{table} Comprehensive list of data formats supported by NeuroConv, organized by experimental modality and data type.
-:label: tbl:supported-formats
+:label: tbl:formats
 
 <table style="border-collapse: collapse; width: 100%;">
 <thead>
@@ -143,8 +143,7 @@ Currently supporting 47 distinct input formats ({ref}`tbl:supported-formats`), e
 <tr style="background-color: #F5F9FF"><td style="padding: 8px;">Tiff</td></tr>
 <tr style="background-color: #D6E7FF">
 <td rowspan="4" style="padding: 8px; color: #2E5090;"><em>Segmentation</em></td>
-<td style="padding: 8px;">Caiman</td>
-</tr>
+<td style="padding: 8px;">CaImAn<sup><a href="#caiman-ref">1</a></sup></td></tr>
 <tr style="background-color: #E2EFFF"><td style="padding: 8px;">CNMFE</td></tr>
 <tr style="background-color: #D6E7FF"><td style="padding: 8px;">EXTRACT</td></tr>
 <tr style="background-color: #E2EFFF"><td style="padding: 8px;">Suite2P</td></tr>
@@ -186,6 +185,10 @@ Currently supporting 47 distinct input formats ({ref}`tbl:supported-formats`), e
 <tr style="background-color: #D6E7FF"><td style="padding: 8px;">Text</td></tr>
 </tbody>
 </table>
+
+**References:**
+<a id="caiman-ref">1.</a> CaImAn [@caiman]
+
 :::
 Each format example in our documentation includes basic code snippets that demonstrate how to use the DataInterface for that specific format, including metadata extraction, modification, and the conversion process. This modular approach allows users to easily adapt examples to their specific needs while providing a consistent interface across different data formats. For example, converting amplifier data acquired with Intan requires only these steps:
 
