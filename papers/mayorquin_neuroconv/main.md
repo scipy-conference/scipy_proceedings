@@ -6,19 +6,15 @@ abstract: |
   Converting diverse neurophysiology data to the standardized Neurodata Without Borders (NWB) format remains a significant barrier to data sharing and reuse. We present NeuroConv, a software that enables converting 47 distinct data formats while handling high-volume data as well as extracting meaningful metadata. The library has enabled the standardization of over 350 datasets totaling more than 350 TB in the DANDI archive and has been deployed to create automated conversion pipelines for 40 laboratories with unique experimental paradigms. By reducing technical barriers to NWB adoption, our tools accelerate progress toward reproducible neuroscience research through standardized data sharing.
 ---
 
-## Introduction
+# Introduction, Background and Motivation
 
 Modern neurophysiology research generates increasingly complex, multimodal, and large-scale datasets that demand robust standards for organization, sharing, and archival. The [Neurodata Without Borders (NWB)](https://nwb.org/) [@nwb_2015; @nwb_2022] format has emerged as a comprehensive solution, storing contextual metadata alongside primary data objects to ensure long-term interpretability. A key strength of NWB is its ability to unify diverse experimental modalities such as simultaneous behavioral and electrophysiology recordings that usually reside in scattered files and formats. By consolidating all relevant information about an experimental session, NWB enables robust reanalysis and improves scientific reproducibility.
 
 Despite these advantages, several significant challenges impede widespread NWB adoption. First, researchers must develop at least a basic understanding of NWB's data organization principles which can be a daunting prospect given the format's comprehensive scope. This learning curve presents a substantial barrier to integrating NWB standards into daily laboratory practices. Additionally, utilizing NWB's data Application Programming Interfaces (APIs), such as [pyNWB](https://pynwb.readthedocs.io/en/stable/) and [MatNWB](https://nwb.org/matnwb/), requires programming expertise that may exceed the capabilities of many researchers. This technical barrier often restricts NWB adoption to those with coding proficiency, dedicated technical staff, or places an outsized burden on junior lab members who possess the necessary skills.
 
-Labs frequently face two distinct conversion challenges: processing existing backlogged data and establishing automated pipelines for future data collection. The latter is particularly crucial for minimizing duplicated work, as labs aim to automatically convert newly generated data into NWB format. However, developing robust conversion pipelines presents significant challenges due to the diversity of neurophysiology data formats. A single lab may employ multiple modalities such as voltage recording, optical imaging, optogenetics, and behavioral tracking, each with its own software-dependent formats lacking standardization.
+Other challengues stem from fundamental characteristics of the neurophysiology data landscape. The field encompasses diverse experimental modalities, including microscopy for optical imaging, extracellular and intracellular electrophysiology for neural activity recording, and a wide array of behavioral tracking approaches, each with its own specialized requirements and methodological considerations [@nwb_2015; @MEF3_format_2016; @nwb_2022]. Across these modality, researchers rely on dozens of acquisition systems, each typically recording data in its own proprietary format. These formats prioritize different aspects of data handling, often optimizing for write speed during acquisition over storage efficiency or cross-platform compatibility. This layered diversity across both modalities and acquisition systems creates a complex landscape where formats vary widely in their efficiency, support longevity, metadata richness, and cross-platform compatibility.
 
-## Background and Motivation
-
-The challenges outlined above stem from fundamental characteristics of the neurophysiology data landscape. The field encompasses diverse experimental modalities, including microscopy for optical imaging, extracellular and intracellular electrophysiology for neural activity recording, and a wide array of behavioral tracking approaches, each with its own specialized requirements and methodological considerations [@nwb_2015; @MEF3_format_2016; @nwb_2022]. Across these modality, researchers rely on dozens of acquisition systems, each typically recording data in its own proprietary format. These formats prioritize different aspects of data handling, often optimizing for write speed during acquisition over storage efficiency or cross-platform compatibility. This layered diversity across both modalities and acquisition systems creates a complex landscape where formats vary widely in their efficiency, support longevity, metadata richness, and cross-platform compatibility.
-
-Converting existing datasets to NWB presents several interconnected challenges that compound the adoption barriers:
+In summary, the conversion process itself remains a significant bottleneck. Developing automated pipelines for future acquisitions is essential to minimize redundant work and ensure that newly generated data can be consistently converted to NWB, yet this presents significant challenges due to the diversity of neurophysiology data formats. A single lab may employ multiple modalities such as voltage recording, optical imaging, optogenetics, and behavioral tracking. This conversion process requires deep knowledge of experimental design, source data formats, and the NWB standard, expertise that is rarely concentrated in a single individual or even within a single laboratory. In {ref}`tbl:nwb-challenges` we summarize the biggest challenges that laboratories face when converting neurophysiology datasets to NWB format. 
 
 :::{table} Key challenges in converting neurophysiology datasets to NWB format, illustrating the multifaceted barriers that laboratories face when adopting data standardization practices.
 :label: tbl:nwb-challenges
@@ -34,28 +30,11 @@ Converting existing datasets to NWB presents several interconnected challenges t
 </table>
 :::
 
-While NWB has emerged as a unifying standard that addresses many common pitfalls of proprietary formats, the conversion process itself remains a significant bottleneck. This process requires deep knowledge of experimental design, source data formats, and the NWB standard, expertise that is rarely concentrated in a single individual or even within a single laboratory.
+# NeuroConv: Architecture and Design
 
-## NeuroConv Architecture and Design
+To address these multifaceted challenges described in the previous section we developed [NeuroConv](https://neuroconv.readthedocs.io/en/stable/index.html), an open source library that automates the ingestion and conversion of neurophysiology data from diverse formats into NWB. This section describes in detail how NeuroConv's architecture addresses each of these challenges through a modular, extensible design that maintains both flexibility and ease of use.
 
-To address these multifaceted challenges, we developed [NeuroConv](https://neuroconv.readthedocs.io/en/stable/index.html), an open source library that automates the ingestion and conversion of neurophysiology data from diverse formats into NWB. The development of NeuroConv required solving the following fundamental challenges:
-
-```{list-table} Key technical challenges addressed by NeuroConv's architecture, highlighting the multifaceted requirements for automated neurophysiology data conversion.
-:label: tbl:neuroconv-challenges
-:header-rows: 1
-* - Challenge
-  - Solution Approach
-* - Handling format and metadata diversity
-  - Abstracting the complexity of 47+ distinct data formats while preserving format-specific metadata and ensuring NWB compliance
-* - Managing high-volume data efficiently  
-  - Processing datasets that exceed available RAM through streaming and chunked operations
-* - Supporting complex experimental setups
-  - Accommodating multi-stream conversions where different modalities are recorded simultaneously in different formats, while preserving time synchronization
-```
-
-The following sections detail how NeuroConv's architecture addresses each of these challenges through a modular, extensible design that maintains both flexibility and ease of use.
-
-### Handling Format Diversity
+## Handling Format Diversity
 The challenge of format diversity in neurophysiology extends beyond their sheer number (47 supported at the moment). Many formats, such as Neuralynx, have multiple versions, while others, like TIFF, exhibit significant internal variability in how labs use them. NeuroConv addresses this complexity through a unified architecture centered on the DataInterface abstraction. DataInterface is an abstract class for reading data, and each supported format has a dedicated DataInterface that encapsulates the format-specific logic for data reading, metadata extraction, and NWB conversion while presenting a consistent API to users. The DataInterface serves as the fundamental building block of NeuroConv, providing a standardized pathway from diverse source formats to NWB output. This abstraction enables users to work with any supported format using identical code patterns, regardless of the underlying format complexity or internal details. The minimal conversion pipeline is illustrated in {ref}`fig:assets/minimal_conversion_pipeline`:
 
 :::{figure} assets/minimal_conversion_pipeline.png
@@ -242,7 +221,7 @@ pip install "neuroconv[spikeglx,phy,deeplabcut]"
 
 This approach aggregates only the required dependencies for selected formats, avoiding dependency conflicts while ensuring that the installation remains lightweight and manageable for end users. Users working with a specific subset of formats can maintain clean, minimal environments without the overhead of unused dependencies.
 
-### Handling Multi Stream Conversions
+## Multi Stream Conversions
 
 Neurophysiology experiments typically involve multiple simultaneous data streams from different modalities, such as raw electrophysiology recordings, spike-sorted data, and behavioral video. Each stream may be stored in a different format, leading to complex conversion requirements. NeuroConv's architecture supports multi-stream conversions through the aggregation of DataInterfaces within a Converter framework as illustrated {ref}`fig:assets/diagram_converter`
 
@@ -283,11 +262,11 @@ converter.run_conversion(nwbfile_path="path/to/nwbfile.nwb", metadata=metadata)
 ```
 Note that the same pattern used for single interfaces extends seamlessly to multi-stream conversions. The user initializes multiple DataInterfaces for each data stream, aggregates them into a ConverterPipe, extracts metadata, modifies it as needed, and then runs the conversion process to create an NWB file. This modular approach allows NeuroConv to handle complex experimental setups with multiple data streams while maintaining a consistent interface for users.
 
-### Multi-modal time synchronization
+## Multi-modal time synchronization
 Precise temporal alignment across diverse recording modalities is essential for accurate multi-modal data analysis and reproducibility. NeuroConv streamlines this critical process by providing intuitive, unified methods for time synchronization, leveraging common temporal references like hardware clocks or synchronization pulses. NeuroConv provides convenience functions for extracting times from pulse signals, and for aligning time using a single starting pulse or for regular pulses sent between systems. These alignment strategies can correct for differences in starting time and for temporal drift between systems, and work for systems with very different sampling rates. This automation enforces best practices for temporal metadata in NWB and enhances downstream analysis integrity.
 
 
-### Handling High-Volume Data
+## Handling High-Volume Data
 
 Modern acquisition systems, such as multi-probe Neuropixel recordings or whole-brain optical imaging, generate massive volumes of data that continue to grow year over year [@neuropixels_2018; @optical_physiology_methods_2022; @stringer2024analysis]. These volumes of data pose a variety of challenges both for conversion and for long-term storage. Moreover, as cloud computing emerges as a solution [@amazon_scientific_workflows_2009; @ome_ngff_2021] for managing and storing large datasets, ensuring efficient accessibility for the scientific community becomes a critical consideration.
 
@@ -297,11 +276,11 @@ For storage optimization, NeuroConv leverages chunking and compression in HDF5 a
 
 Determining optimal chunk parameters involves complex tradeoffs [@zarr_performance]. Large chunks minimize the number of read operations but may require decompressing unnecessary data when accessing small subsets. Small chunks provide more precise access but increase overhead, particularly for cloud storage where each chunk requires a separate HTTP range request. Generally, appropriate chunking requires understanding the most common data access patterns. By understanding common analysis workflows and visualization patterns, it becomes feasible to implement evidence-based heuristics for chunk sizing across common data types, such as voltage recordings and imaging datasets.
 
-### Cloud Deployment
+## Cloud Deployment
 
 NeuroConv supports both local installation (Linux, Windows, or macOS) and [cloud deployment](https://neuroconv.readthedocs.io/en/stable/user_guide/aws_demo.html) through a maintained [Docker image](https://neuroconv.readthedocs.io/en/stable/user_guide/docker_demo.html) containing all dependencies. We've developed a YAML-based specification language for defining conversion pipelines, validated through JSON schema. This specification can fully describe multi-subject, multi-session conversions with custom metadata at each level, enabling automated conversion through containerized NeuroConv deployments. 
 
-### Testing and Quality Assurance
+## Testing and Quality Assurance
 
 Ensuring reliable conversion across diverse neurophysiology data formats requires a robust testing infrastructure. Our testing framework rests on two pillars: an automated continuous integration (CI) pipeline built using [GitHub Actions](https://github.com/features/actions)  and a comprehensive test data library.
 
@@ -309,9 +288,9 @@ Our continuous integration pipeline ensures code quality and maintains compatibi
 
 Our test data infrastructure comprises carefully curated libraries spanning all supported formats, organized across three specialized domains: [extracellular electrophysiology](https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/) (developed in collaboration with NEO and SpikeInterface teams), [optical physiology](https://gin.g-node.org/CatalystNeuro/ophys_testing_data), and [behavior](https://gin.g-node.org/CatalystNeuro/behavior_testing_data). Each library contains representative files selected to encompass common usage patterns, format variations, edge cases, and diverse experimental configurations. This comprehensive coverage ensures that our testing captures real-world scenarios, from legacy format versions to modern acquisition systems with missing data streams or unconventional metadata structures. For continuous integration, we leverage [G-Node](https://gin.g-node.org)'s git-annex technology for efficient large file management, maintaining lightweight repositories while providing full access to the test datasets. During continuous integration, GitHub Actions automatically downloads and caches these libraries, ensuring tests execute with current data while minimizing transfer overhead and maintaining rapid build times.
 
-## NWB Community and Software Ecosystem
+# NWB Community and Software Ecosystem
 
-### NeuroConv and the NWB Conversion Landscape
+## NeuroConv and the NWB Conversion Landscape
 
 NeuroConv occupies a strategic position within the broader NWB ecosystem, bridging the gap between low-level programming interfaces and high-level user tools. The conversion landscape offers different approaches suited to varying user needs and technical expertise levels.
 
@@ -324,13 +303,13 @@ At the foundational level, PyNWB and MatNWB provide direct programmatic access t
 
 This ecosystem approach ensures that researchers can choose the conversion method that best matches their technical expertise and experimental complexity, while all approaches converge on the same standardized output format.
 
-### Integration with Data Archives and Visualization
+## Integration with Data Archives and Visualization
 
 The [Distributed Archives for Neurophysiology Data Integration (DANDI)](https://dandiarchive.org/) Archive complements NWB by providing free hosting for NWB-formatted datasets up to terabytes in size. DANDI offers researchers a pathway to meet NIH data sharing requirements while effectively archiving their data and leveraging an expanding ecosystem of visualization and analysis tools. The platform supports versioned datasets, comprehensive metadata, and API access, making it an ideal complement to NeuroConv's conversion capabilities.
 
 Together, NWB, NeuroConv, DANDI, and Neurosift showcase a comprehensive pipeline that spans the entire data lifecycle from acquisition to publication and reuse, supporting emerging software domains from electrophysiological spike sorting to calcium imaging segmentation and behavioral pose estimation.
 
-### Integration with the Neuroscience and Wider Software Ecosystem
+## Integration with the Neuroscience and Wider Software Ecosystem
 
 NeuroConv pursues a “no-wheel-reinvention” strategy: wherever a mature open-source library already parses a file format or implements a preprocessing step, NeuroConv delegates that responsibility instead of duplicating it. This design choice concentrates development effort on the NWB hand-off layer while reducing maintenance burden and maximising compatibility with community standards.
 
@@ -342,7 +321,7 @@ Behavioral data integration is considerably more heterogeneous in nature and the
 
 Crucially, NeuroConv is not a passive consumer of these dependencies. Large-scale conversions expose edge cases in performance, unexpected metadata tags, off-by-one timestamps, floating-point overflows, that are hard to capture in formal test suites. We follow the policy of giving back by filing reproducible issue reports, submitting pull requests with fixes, adding regression tests, and participating in release discussions across the aforementioned projects. We believe that this reciprocal workflow ensures that improvements made during NWB conversion propagate upstream, strengthening the wider neuroscience software ecosystem while continuously enhancing NeuroConv’s own reliability.
 
-## Current Limitations
+# Current Limitations
 
 While NeuroConv has significantly improved data standardization processes, some major challenges remain:
 
@@ -356,14 +335,14 @@ While NeuroConv has significantly improved data standardization processes, some 
 
 **Programming Prerequisites**: While NeuroConv substantially reduces the coding burden, it still requires basic programming knowledge, including object-oriented concepts. While we aim to make the library as user-friendly as possible, users must still be comfortable with Python programming to effectively utilize NeuroConv. This includes understanding how to install the library, manage dependencies, and write scripts that leverage the DataInterface classes for conversion.
 
-## Future Directions
+# Future Directions
 
 * **Enhanced User Experience**: We are implementing comprehensive improvements to examples, tutorials, and documentation. We aim to slowly transition to the Diataxis [@diataxis] framework which will provide clearer learning pathways for users with different backgrounds and goals.
 * **NWB Standard Evolution**: We actively participate in NWB schema development and maintain close alignment with emerging standards through engagement with [NWB Extensions Proposals](https://github.com/nwb-extensions/nwbep-review/). By monitoring and contributing to current developments—including enhanced schemas for experimental events (NWBEP001), extracellular electrophysiology (NWBEP002), and optical physiology (NWBEP003, NWBEP004)—we ensure that NeuroConv incorporates the latest standard improvements as they become available for the benefit of our users.
 * **AI-Assisted Conversion**: We are exploring large language model integration to advance our core mission of automating neurophysiology data conversion. This includes using LLMs to generate DataInterfaces from source format documentation, automatically extract metadata from experimental protocols, and generate custom conversion pipelines based on natural language requirements (conversion agent).
 * **Cloud-Optimized Storage**: We are implementing improved chunking patterns and compression strategies for large datasets to enhance cloud access performance. This includes systematic experimentation through the [NWB Benchmarks Project](https://nwb-benchmarks.readthedocs.io/en/latest/) to determine optimal chunk sizes and compression algorithms [@alessio_compression_2023]. Our goal is to implement evidence-based heuristics that ensure efficient and performant data storage, as well as having a friendly and clear API that allows customization and flexibility for users to adapt to their specific needs. In the future, we would also like to explore the inclusions of cost optimization considerations for cloud storage [@cost_effective_scientific_datasets_2016].
 
-## Closing Remarks
+# Closing Remarks
 
 We believe that NeuroConv represents a critical step toward realizing the vision of FAIR (Findable, Accessible, Interoperable, and Reusable) neurophysiology data. By automating the conversion of diverse data formats into a common standard, we enable researchers to focus on scientific discovery rather than data wrangling. The success of this approach depends not only on technical implementation but on fostering a community that values standardization, reproducibility, and open science.
 
