@@ -139,14 +139,14 @@ try:
     result = velocity + pressure
 except ValueError as e:
     print(f"Error: {e}")
-    # Output: Error: Incompatible dimensions for addition: L^1 T^-1 vs M^1 T^-2 L^-1
+    # Output: Error: Add operation for different physical dimensions is not allowed.
 
 ```
 
 #### Array Operations
 
 This section demonstrates how `PhlowerTensor` supports array operations while maintaining dimensional consistency.
-Stacking tensors with compatible dimensions is straightforward. For example, [](#-stacking_tensors_example) shows that multiple velocity tensors can be stacked along a new dimension.
+Stacking tensors with compatible dimensions is straightforward. For example, [](#stacking_tensors_example) shows that multiple velocity tensors can be stacked along a new dimension.
 The resulting tensor remains `PhlowerTensor` with appropriate physical dimension, even though the standard `torch.stack` is called.
 
 ```{code} python
@@ -162,8 +162,10 @@ velocity1 = phlower_tensor(torch.rand(10, 3), dimension={"L": 1, "T": -1})
 velocity2 = phlower_tensor(torch.rand(10, 3), dimension={"L": 1, "T": -1})
 
 # Stacking along a new dimension (e.g., time)
-stacked_velocity = torch.stack([velocity1, velocity2], dim=0), dimension={"L": 1, "T": -1}
-print(stacked_velocity)
+stacked_velocity = torch.stack([velocity1, velocity2])
+print(stacked_velocity.shape)
+# Output: torch.Size([2, 10, 3])
+print(stacked_velocity.dimension)
 # Output: PhlowerTensor with dimensions L^1 T^-1 and shape (2, 10, 3)
 
 ```
