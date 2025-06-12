@@ -1,0 +1,38 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-pasteur_labs
+  # Ensure your title is the same as in your `main.md`
+  title: Pipeline-level differentiable programming for the real world
+  # subtitle:
+  description: "We provide an overview of differentiable pipelines: why they matter and the types of optimization problems they address. Using an open-source project Tesseract as a case study, we share lessons learned and best practices for designing AD-friendly APIs with tools like Pydantic and FastAPI, achieving seamless integration with JAX, packaging scientific software, and enabling end-to-end systems-level optimization."
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: The team
+      email: p@s.s
+      orcid: 0000-0000-0000-0000
+      affiliations:
+        - Pasteur Labs
+  keywords:
+    - automatic differentiation
+    - differentiable programming
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    AD: automatic differentiation
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
