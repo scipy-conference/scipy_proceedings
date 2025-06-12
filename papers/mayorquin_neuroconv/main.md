@@ -24,8 +24,7 @@ Conversion therefore becomes the main bottleneck. Automated pipelines are essent
 <tr><td>Metadata complexity</td><td>Metadata requirements vary substantially across experimental paradigms, with critical information often stored inconsistently or incompletely</td></tr>
 <tr><td>Scale challenges</td><td>Dataset sizes frequently reach hundreds of gigabytes to terabytes, requiring specialized handling for memory-efficient processing</td></tr>
 <tr><td>Expertise requirements</td><td>Following NWB best practices requires considerable knowledge of both the source formats and the NWB standard itself</td></tr>
-<tr><td>Multi-modal integration</td><td>Experiments often combine multiple recording systems (electrophysiology, imaging, behavior) each storing data in different formats</td></tr>
-<tr><td>Time synchronization</td><td>Different recording systems may have temporal drift, different start times, or varying sampling rates requiring precise alignment</td></tr>
+<tr><td>Multi-modal integration</td><td>Experiments often combine multiple recording systems (electrophysiology, imaging, behavior) each storing data in different formats. This also introduces the problem of data alignment and synchronization across modalities.</td></tr>
 </table>
 :::
 
