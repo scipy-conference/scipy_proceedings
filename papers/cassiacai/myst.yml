@@ -25,7 +25,7 @@ project:
       email: jtcohen@uw.edu
       orcid: 0009-0006-2438-3626
       affiliations:
-        - University of Washington, School of Oceanography
+        - University of Washington, School of Oceanography, Seattle, WA
       roles:
       - Methodology
       - Software
@@ -34,7 +34,7 @@ project:
       - Conceptualization
     - name: Hillary Scannell
       email: hillary.scannell@jupiterintel.com
-      affiliation: Jupiter Intelligence
+      affiliation: Jupiter Intelligence, Boulder, CO
       orcid: 0000-0002-6604-1695
       roles:
       - Methodology
@@ -44,13 +44,13 @@ project:
       email: vms16@uw.edu
       orcid: 0000-0002-3412-0364
       affiliations:
-        - University of Washington, eScience Institute
+        - University of Washington, eScience Institute, Seattle, WA
       roles:
       - Software
       - Writing
     - name: LuAnne Thompson
       email: luanne@uw.edu
-      affiliation: University of Washington, School of Oceanography
+      affiliation: University of Washington, School of Oceanography, Seattle, WA
       orcid: 0000-0001-8295-0533
       roles:
       - Writing
