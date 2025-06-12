@@ -612,7 +612,12 @@ TODO
 
 ## Conclusion
 
-In this article, we have demonstrated the application of SHAP to two different model types and data modalities.
-We have shown that SHAP can provide both global and local explanations for model predictions. We have also discussed
-the practical utility, strengths, and limitations of SHAP. We hope that this article will serve as a guide for
-practitioners to effectively use SHAP in real-world scenarios.
+In this paper, we demonstrated SHAP’s practical application to two important classes of models: 
+Gradient Boosted Decision Trees (GBDTs) and Convolutional Neural Networks (CNNs). Our case studies highlighted 
+how SHAP facilitates explanations for both structured and unstructured data on a global and local level.
+While SHAP effectively addresses many interpretability needs, users should be aware of challenges related to 
+computational efficiency, correlated features, and the potential for over-interpretation.
+
+Future work might focus on addressing these limitations, particularly through improved computational 
+methods and strategies for handling feature correlations. Enhancing SHAP's usability further will contribute 
+significantly to more transparent, reliable, and trusted machine learning applications in industry.
