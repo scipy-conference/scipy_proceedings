@@ -1,6 +1,6 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: 'Ocetrac: An Object-Based Framework for Tracking and Quantifying Climate Extremes in Gridded Datasets'
+title: 'Ocetrac: An Object-Based Framework for Tracking and Quantifying Climate Events in Gridded Datasets'
 abstract: |
   Climate extremes such as marine heatwaves and ocean acidification events appear as dynamic, irregular structures in gridded datasets. Software tools are available for detecting these events. However, there is a need for standardized methods for tracking their spatiotemporal evolution and evolving characteristics (such as intensity, shape, and duration). Ocetrac is an open-sourced Python package that bridges this gap by integrating morphological image processing (via `scikit-image`) with `xarray`-based data workflows to track and quantify amorphous two-dimensional climate features in space and time. The tracking core identifies and tracks objects that split and merge. A second submodule, Measures, computes shape-, motion-, temporal-, and intensity-based measures. These measures enable comparison between similar events that occur at different times (e.g., via clustering), machine learning integration such as feature extraction for classification/regression (e.g., `scikit-learn`), and process-oriented analysis such as linking object behavior to physical drivers (e.g., surface heat fluxes). Designed for the Scientific Python ecosystem, Ocetrac simplifies workflows from detection to downstream analysis, supporting applications in climate science, oceanography, and atmospheric research. 
 ---
@@ -140,8 +140,6 @@ The output of the tracker is a `xarray.Dataset` with many labelled events. The M
   
   CONTEXTUAL & Object counts per timestep & Number of distinct objects detected & Higher counts indicate fragmentation \\
   \hline
-  
-   
   \end{longtable*}
 \end{table*}
 ```
@@ -207,12 +205,7 @@ Ocetrac workflow for comparing observed and simulated MHWs.
 ### Evaluating Marine Heatwave Predictions Using Object-Based Metrics
 Object-based analysis of MHWs can be applied not only to observations and model output, but also to seasonal forecasts. In recent work, @Coh25 combine Ocetrac with the [Method for Object-based Diagnostic Evaluation (MODE)](https://metplus.readthedocs.io/projects/met/en/latest/Users_Guide/mode.html) to evaluate MHW forecasts. More information about MODE can be found in @Dav06a, @Dav06b, and @Bul16.
 
-
-
 <!-- ## Discussion
---- NEED TO WRITE --- -->
-
-<!-- ### Implications for Use
 --- NEED TO WRITE --- -->
 
 <!-- ### Future Directions
