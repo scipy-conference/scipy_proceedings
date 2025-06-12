@@ -114,8 +114,8 @@ Currently supporting 47 distinct input formats (@tbl:formats), each DataInterfac
 <td rowspan="7" style="padding: 8px; color: #2E5090;"><em>Sorting</em></td>
 <td style="padding: 8px;">Blackrock</td>
 </tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Cell Explorer<sup><a href="#cellexplorer-ref">7</a></sup></td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">KiloSort<sup><a href="#kilosort-ref">8</a></sup></td></tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Cell Explorer (<cite id="cell_explorer_2021"></cite>)</td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">KiloSort (<cite id="kilosort_2024"></cite>)</td></tr>
 <tr style="background-color: #E2EFFF"><td style="padding: 8px;">Neuralynx</td></tr>
 <tr style="background-color: #D6E7FF"><td style="padding: 8px;">NeuroScope</td></tr>
 <tr style="background-color: #E2EFFF"><td style="padding: 8px;">Phy</td></tr>
@@ -130,23 +130,24 @@ Currently supporting 47 distinct input formats (@tbl:formats), each DataInterfac
 
 <!-- Optical Physiology -->
 <tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
-<td rowspan="13" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Optical Physiology</strong></td>
+<td rowspan="14" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Optical Physiology</strong></td>
 <td rowspan="8" style="padding: 8px; color: #2E5090;"><em>Imaging</em></td>
 <td style="padding: 8px;">Bruker</td>
 </tr>
 <tr style="background-color: #F5F9FF"><td style="padding: 8px;">HDF5</td></tr>
 <tr style="background-color: #E8F2FF"><td style="padding: 8px;">Micro-Manager</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Miniscope</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Miniscope (<cite id="miniscope_2023"></cite>)</td></tr>
 <tr style="background-color: #E8F2FF"><td style="padding: 8px;">Scanbox</td></tr>
 <tr style="background-color: #F5F9FF"><td style="padding: 8px;">ScanImage</td></tr>
 <tr style="background-color: #E8F2FF"><td style="padding: 8px;">Thor</td></tr>
 <tr style="background-color: #F5F9FF"><td style="padding: 8px;">Tiff</td></tr>
 <tr style="background-color: #D6E7FF">
-<td rowspan="4" style="padding: 8px; color: #2E5090;"><em>Segmentation</em></td>
-<td style="padding: 8px;">CaImAn<sup><a href="#caiman-ref">1</a></sup></td></tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">CNMFE<sup><a href="#cnmfe-ref">2</a></sup></td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">EXTRACT<sup><a href="#extract-ref">3</a></sup></td></tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Suite2P<sup><a href="#suite2p-ref">4</a></sup></td></tr>
+<td rowspan="5" style="padding: 8px; color: #2E5090;"><em>Segmentation</em></td>
+<td style="padding: 8px;">CaImAn (<cite id="caiman"></cite>)</td></tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">CNMFE (<cite id="cnmfe_e_2016"></cite>)</td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">EXTRACT (<cite id="extract_2017"></cite>)</td></tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Minian (<cite id="minian_2022"></cite>)</td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">Suite2P (<cite id="suite2p"></cite>)</td></tr>
 <tr style="background-color: #E8F2FF">
 <td style="padding: 8px; color: #2E5090;"><em>Fiber Photometry</em></td>
 <td style="padding: 8px;">TDT Fiber Photometry</td>
@@ -156,12 +157,12 @@ Currently supporting 47 distinct input formats (@tbl:formats), each DataInterfac
 <tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
 <td rowspan="7" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Behavior</strong></td>
 <td rowspan="5" style="padding: 8px; color: #2E5090;"><em>Motion Tracking</em></td>
-<td style="padding: 8px;">DeepLabCut<sup><a href="#deeplabcut-ref">5</a></sup></td>
+<td style="padding: 8px;">DeepLabCut (<cite id="deep_lab_cut_2018"></cite>)</td>
 </tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">FicTrac</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">LightningPose</td></tr>
+<tr style="background-color: #F5F9FF"><td style="padding: 8px;">FicTrac (<cite id="fictrac_2014"></cite>)</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">LightningPose (<cite id="lightning_pose_2024"></cite>)</td></tr>
 <tr style="background-color: #F5F9FF"><td style="padding: 8px;">Neuralynx NVT</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">SLEAP<sup><a href="#sleap-ref">6</a></sup></td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">SLEAP (<cite id="sleap_2022"></cite>)</td></tr>
 <tr style="background-color: #D6E7FF">
 <td style="padding: 8px; color: #2E5090;"><em>Audio/Video</em></td>
 <td style="padding: 8px;">Videos</td>
@@ -173,29 +174,17 @@ Currently supporting 47 distinct input formats (@tbl:formats), each DataInterfac
 
 <!-- General Data -->
 <tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
-<td rowspan="4" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>General Data</strong></td>
+<td rowspan="3" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>General Data</strong></td>
 <td style="padding: 8px; color: #2E5090;"><em>Image</em></td>
 <td style="padding: 8px;">Image (png, jpeg, tiff, etc)</td>
 </tr>
 <tr style="background-color: #D6E7FF">
-<td rowspan="3" style="padding: 8px; color: #2E5090;"><em>Text/Tabular</em></td>
+<td rowspan="2" style="padding: 8px; color: #2E5090;"><em>Text/Tabular</em></td>
 <td style="padding: 8px;">CSV</td>
 </tr>
 <tr style="background-color: #E2EFFF"><td style="padding: 8px;">Excel</td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">Text</td></tr>
 </tbody>
 </table>
-
-**References:**
-
-<a id="caiman-ref">1.</a> CaImAn [@caiman]  
-<a id="cnmfe-ref">2.</a> CNMFE [@cnmfe_e_2016; @cnmf_e_2018]  
-<a id="extract-ref">3.</a> EXTRACT [@extract_2017; @extract_2021]  
-<a id="suite2p-ref">4.</a> Suite2P [@suite2p]  
-<a id="deeplabcut-ref">5.</a> DeepLabCut [@deep_lab_cut_2018]  
-<a id="sleap-ref">6.</a> SLEAP [@sleap_2022]  
-<a id="cellexplorer-ref">7.</a> Cell Explorer [@cell_explorer_2021]  
-<a id="kilosort-ref">8.</a> KiloSort [@kilosort_2024]
 
 :::
 Each format example in our documentation includes basic code snippets that demonstrate how to use the DataInterface for that specific format, including metadata extraction, modification, and the conversion process. This modular approach allows users to easily adapt examples to their specific needs while providing a consistent interface across different data formats. For example, converting amplifier data acquired with Intan requires only these steps:
