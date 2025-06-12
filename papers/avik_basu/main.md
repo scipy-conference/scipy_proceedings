@@ -577,7 +577,20 @@ model = CNNClassifier(input_dim=x_train_seq.shape[1], num_classes=6)
 
 #### Evaluate performance
 
-Evaluate model performance
+The performance of the model on the test set is shown below.
+
+
+| Class              | Precision | Recall | F1-Score | Support  |
+|--------------------|-----------|--------|----------|----------|
+| Walking            | 0.94      | 0.94   | 0.94     | 496      |
+| Walking Upstairs   | 0.86      | 0.86   | 0.86     | 471      |
+| Walking Downstairs | 0.83      | 0.81   | 0.82     | 420      |
+| Sitting            | 0.81      | 0.82   | 0.82     | 467      |
+| Standing           | 0.85      | 0.91   | 0.88     | 501      |
+| Laying             | 0.95      | 0.88   | 0.91     | 528      |
+| **Accuracy**       |           |        | **0.87** | **2883** |
+| **Macro Avg**      | 0.87      | 0.87   | 0.87     | 2883     |
+| **Weighted Avg**   | 0.88      | 0.87   | 0.87     | 2883     |
 
 ### SHAP Explanations
 
