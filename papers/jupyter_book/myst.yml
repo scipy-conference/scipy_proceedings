@@ -1,0 +1,203 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-jupyter_book
+  title: Jupyter Book 2 and the MyST Document Stack
+  subtitle: A composable, extensible, machine-readable, next-generation stack for authoring and sharing computational content
+  description: Jupyter Book allows researchers and educators to create books and knowledge bases that are reusable, reproducible, and interactive. This new foundation introduces a scalable way to publish interactive computational content, support structured metadata, and enable content reuse across contexts.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - jupyter
+    - greg
+    - rowan
+    - chris
+    # - angus
+    - franklin
+    - matt
+    - mike
+    - steve
+    # - fernando
+  contributors:
+    - id: jupyter
+      name: Project Jupyter
+      affiliations:
+        - jupyter
+      roles:
+        - Project administration
+    - id: greg
+      name: Greg Caporaso
+      orcid: 0000-0002-8865-1670
+      affiliation:
+        - jupyter
+        - name: Northern Arizona University
+          ror: https://ror.org/0272j5188
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Investigation
+        - Project administration
+        - Supervision
+        - Writing – review & editing
+    - id: rowan
+      name: Rowan Cockett
+      email: rowan@curvenote.com
+      corresponding: true
+      orcid: 0000-0002-7859-8394
+      github: rowanc1
+      affiliations:
+        - id: jupyter
+        - id: curvenote
+        - id: csf
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Investigation
+        - Project administration
+        - Software
+        - Supervision
+        - Visualization
+        - Writing – original draft
+        - Writing – review & editing
+    - id: chris
+      name: Chris Holdgraf
+      orcid: 0000-0002-2391-0678
+      affiliations:
+        - id: jupyter
+        - id: 2i2c
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Investigation
+        - Project administration
+        - Software
+        - Supervision
+        - Writing – original draft
+        - Writing – review & editing
+    - id: steve
+      name: Steve Purves
+      email: steve@curvenote.com
+      orcid: 0000-0002-0760-5497
+      github: stevejpurves
+      affiliations:
+        - id: jupyter
+        - id: curvenote
+        - id: csf
+      roles:
+        - Conceptualization
+        - Funding acquisition
+        - Investigation
+        - Project administration
+        - Software
+        - Supervision
+        - Writing – review & editing
+    - id: franklin
+      name: Franklin Koch
+      orcid: 0000-0002-6393-7058
+      affiliation:
+        - id: jupyter
+        - id: curvenote
+      github: fwkoch
+      roles:
+        - Investigation
+        - Software
+        - Writing – review & editing
+    - id: mike
+      name: Mike Morrison
+      orcid: 0000-0002-1324-8801
+      affiliation:
+        - id: curvenote
+      roles:
+        - Validation
+        - Writing – review & editing
+    - id: angus
+      name: Angus Hollands
+      orcid: 0000-0003-0788-3814
+      affiliations:
+        - id: jupyter
+        - id: 2i2c
+      roles:
+        - Investigation
+        - Software
+        - Writing – review & editing
+    - id: matt
+      name: Matthew McKay
+      affiliations:
+        - name: QuantEcon
+    - id: fernando
+      name: Fernando Perez
+      affiliations:
+        - id: jupyter
+  affiliations:
+    - id: jupyter
+      name: Project Jupyter
+      url: https://jupyter.org
+    - id: curvenote
+      name: Curvenote Inc.
+      ror: https://ror.org/02mz0e468
+      url: https://curvenote.com
+      country: Canada
+      email: support@curvenote.com
+    - id: 2i2c
+      name: 2i2c
+      ror: https://ror.org/050gv4c78
+      url: https://2i2c.org
+    - id: csf
+      name: Continuous Science Foundation
+      url: https://continuousfoundation.org
+  keywords:
+    - open science
+    - jupyter
+    - scientific communication
+    - publishing
+    - authoring
+    - reproducibility
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    AST: Abstract Syntax Tree
+    DOI: Digital Object Identifier
+    MyST: Markedly Structured Text
+    CLI: Command Line Interface
+    HTML: Hypertext Markup Language
+    PDF: Portable Document Format
+    RRID: Research Resource Identifier
+    CSS: Cascading Style Sheet
+    CRediT: Contributor Roles Taxonomy
+    ROR: Research Organization Registry
+    ISNI: International Standard Name Identifier
+    NISO: National Information Standards Organization
+    YAML: Yet Another Markup Language
+    WASM: WebAssembly
+    REES: Reproducible Execution Environment Specification
+    URL: Uniform Resource Locator
+    XML: Extensible Markup Language
+    PID: Persistent Identifier
+    ID: Identifier
+    JATS: Journal Article Tag Suite
+    VoR: Version of Record
+    RST: reStructuredText
+    API: Application Programming Interface
+    JSON: JavaScript Object Notation
+    OA: Open Access
+    APC: Article Processing Charge
+    JOSS: Journal of Open Source Software
+    ORCID: Open Researcher and Contributor ID
+    Q2F: QIIME 2 Framework
+    JB1: Jupyter Book 1
+    JB2: Jupyter Book 2
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
