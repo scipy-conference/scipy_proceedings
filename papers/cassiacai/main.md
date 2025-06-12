@@ -83,7 +83,6 @@ Here Ocetrac provides basic diagnostics (e.g., initial/final object counts, area
 The output of the tracker is a `xarray.Dataset` with many labelled events. The Measures submodule allows users to process large numbers of tracked events by automating repetitive calculations. Its standardized outputs allow for direct comparison across different events and datasets, which streamlines analysis workflows. The submodule supports both individual case studies and ensemble analyses. In brief, the Measures submodule processes the output of Ocetrac’s core tracking algorithm and provides quantitative metrics to characterize detected events. These measures fall into five categories: shape, motion, intensity, and temporal, and contextual and are summarized in [Table 1](#tbl:event-measures). Shape measures quantify geometric properties including area, perimeter, and circularity that are relevant for quantifying structural evolution. Motion measures track movement via centroids and intensity-weighted centers of mass, while also handling longitudinal wrapping. Intensity measures capture magnitude variations through spatial statistics (mean, maximum, percentile extremes) of the underlying anomaly field. Temporal measures record lifecycle characteristics including duration, initiation timing, and timing peaks of intensity and area. Some of the measures can also be used to create contextual measures (e.g., object counts per timestep) which capture splitting and merging objects. Together, these measures enable analysis of event dynamics.
 
 ```{raw} latex
-:single: true
 \begin{table*}
 \caption{Event measures in the Measures submodule \label{tbl:event-measures}}
   \begin{longtable*}{|l|l|l|l|}
@@ -205,14 +204,8 @@ Ocetrac workflow for comparing observed and simulated MHWs.
 ### Evaluating Marine Heatwave Predictions Using Object-Based Metrics
 Object-based analysis of MHWs can be applied not only to observations and model output, but also to seasonal forecasts. In recent work, @Coh25 combine Ocetrac with the [Method for Object-based Diagnostic Evaluation (MODE)](https://metplus.readthedocs.io/projects/met/en/latest/Users_Guide/mode.html) to evaluate MHW forecasts. More information about MODE can be found in @Dav06a, @Dav06b, and @Bul16.
 
-<!-- ## Discussion
---- NEED TO WRITE --- -->
-
-<!-- ### Future Directions
---- NEED TO WRITE --- -->
-
-<!-- ## Conclusion
---- NEED TO WRITE --- -->
+## Discussion
+Ocetrac is an open-source software suite designed to identify, track, and quantify irregular, evolving features in gridded climate data, such as MHWs. It is actively being developed with extensibility in mind. Future plans include: (1) expanding grid compatibility (e.g., [Parallel Ocean Program (POP) grid](https://www.cesm.ucar.edu/models/pop) via helper functions, (2) enhancing tracking to incorporate of vertical structure, (3) customizing analysis (e.g., different kinds of user-defined thresholding and intensity field extraction), and (4) streamlining workflows for improved usability. Beyond MHWs, Ocetrac is being adapted for other spatiotemporal phenomena, including atmospheric blocking, ocean eddies, and biogeochemical extremes, with practical examples to be demonstrated in interactive tutorials. The Measures submodule will also be extended to include new measures (e.g., co-occurring event counts), visualization features, and clearer documentation. Although Ocetrac was originally developed for MHW research, this package is a versatile tool for ocean, atmospheric, and climate sciences. As a Python-based tool, Ocetrac is designed to evolve with both community needs and computational Earth science advancements. We invite collaboration through conferences, workshops, and open development on GitHub, particularly from researchers working on event detection and feature tracking. These efforts will advance Ocetrac's capacity to analyze the  structure of ocean and atmospheric events in observational and model data.
 
 ## Acknowledgments
 We gratefully acknowledge the software and methods contributions to Ocetrac from Ryan Abernathey, Julius Busecke, David John Gagne, and Daniel Whitt (listed alphabetically). The work was supported by funding from NSF, NSF NCAR, the Leonardo DiCaprio Foundation Foundation, Microsoft, the Gordon and Betty Moore Foundation, and the University of Washington eScience Institute.
