@@ -269,8 +269,6 @@ This ecosystem approach ensures that researchers can choose the conversion metho
 
 The [Distributed Archives for Neurophysiology Data Integration (DANDI)](https://dandiarchive.org/) Archive complements NWB by providing free hosting for NWB-formatted datasets up to terabytes in size. DANDI offers researchers a pathway to meet NIH data sharing requirements while effectively archiving their data and leveraging an expanding ecosystem of visualization and analysis tools. The platform supports versioned datasets, comprehensive metadata, and API access, making it an ideal complement to NeuroConv's conversion capabilities.
 
-Neurosift [@doi:10.21105/joss.06590] provides web-based visualization tools specifically designed for NWB files, enabling researchers to explore their converted datasets without requiring local software installation. This browser-based approach facilitates data sharing and collaborative analysis, particularly important for large datasets that benefit from cloud-based access patterns. Neurosift is also automatically integrated with DANDI, allowing users to visualize their datasets directly from the archive. This integration provides a seamless experience for researchers, enabling them to share and explore their data without needing to download large files locally.
-
 Together, NWB, NeuroConv, DANDI, and Neurosift showcase a comprehensive pipeline that spans the entire data lifecycle from acquisition to publication and reuse, supporting emerging software domains from electrophysiological spike sorting to calcium imaging segmentation and behavioral pose estimation.
 
 ### Integration with the Neuroscience and Wider Software Ecosystem
