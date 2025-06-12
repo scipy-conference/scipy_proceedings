@@ -114,8 +114,8 @@ Currently supporting 47 distinct input formats (@tbl:formats), each DataInterfac
 <td rowspan="7" style="padding: 8px; color: #2E5090;"><em>Sorting</em></td>
 <td style="padding: 8px;">Blackrock</td>
 </tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Cell Explorer</td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">KiloSort</td></tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Cell Explorer<sup><a href="#cellexplorer-ref">7</a></sup></td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">KiloSort<sup><a href="#kilosort-ref">8</a></sup></td></tr>
 <tr style="background-color: #E2EFFF"><td style="padding: 8px;">Neuralynx</td></tr>
 <tr style="background-color: #D6E7FF"><td style="padding: 8px;">NeuroScope</td></tr>
 <tr style="background-color: #E2EFFF"><td style="padding: 8px;">Phy</td></tr>
@@ -144,9 +144,9 @@ Currently supporting 47 distinct input formats (@tbl:formats), each DataInterfac
 <tr style="background-color: #D6E7FF">
 <td rowspan="4" style="padding: 8px; color: #2E5090;"><em>Segmentation</em></td>
 <td style="padding: 8px;">CaImAn<sup><a href="#caiman-ref">1</a></sup></td></tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">CNMFE</td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">EXTRACT</td></tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Suite2P</td></tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">CNMFE<sup><a href="#cnmfe-ref">2</a></sup></td></tr>
+<tr style="background-color: #D6E7FF"><td style="padding: 8px;">EXTRACT<sup><a href="#extract-ref">3</a></sup></td></tr>
+<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Suite2P<sup><a href="#suite2p-ref">4</a></sup></td></tr>
 <tr style="background-color: #E8F2FF">
 <td style="padding: 8px; color: #2E5090;"><em>Fiber Photometry</em></td>
 <td style="padding: 8px;">TDT Fiber Photometry</td>
@@ -156,12 +156,12 @@ Currently supporting 47 distinct input formats (@tbl:formats), each DataInterfac
 <tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
 <td rowspan="7" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Behavior</strong></td>
 <td rowspan="5" style="padding: 8px; color: #2E5090;"><em>Motion Tracking</em></td>
-<td style="padding: 8px;">DeepLabCut</td>
+<td style="padding: 8px;">DeepLabCut<sup><a href="#deeplabcut-ref">5</a></sup></td>
 </tr>
 <tr style="background-color: #F5F9FF"><td style="padding: 8px;">FicTrac</td></tr>
 <tr style="background-color: #E8F2FF"><td style="padding: 8px;">LightningPose</td></tr>
 <tr style="background-color: #F5F9FF"><td style="padding: 8px;">Neuralynx NVT</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">SLEAP</td></tr>
+<tr style="background-color: #E8F2FF"><td style="padding: 8px;">SLEAP<sup><a href="#sleap-ref">6</a></sup></td></tr>
 <tr style="background-color: #D6E7FF">
 <td style="padding: 8px; color: #2E5090;"><em>Audio/Video</em></td>
 <td style="padding: 8px;">Videos</td>
@@ -187,7 +187,15 @@ Currently supporting 47 distinct input formats (@tbl:formats), each DataInterfac
 </table>
 
 **References:**
-<a id="caiman-ref">1.</a> CaImAn [@caiman]
+
+<a id="caiman-ref">1.</a> CaImAn [@caiman]  
+<a id="cnmfe-ref">2.</a> CNMFE [@cnmfe_e_2016; @cnmf_e_2018]  
+<a id="extract-ref">3.</a> EXTRACT [@extract_2017; @extract_2021]  
+<a id="suite2p-ref">4.</a> Suite2P [@suite2p]  
+<a id="deeplabcut-ref">5.</a> DeepLabCut [@deep_lab_cut_2018]  
+<a id="sleap-ref">6.</a> SLEAP [@sleap_2022]  
+<a id="cellexplorer-ref">7.</a> Cell Explorer [@cell_explorer_2021]  
+<a id="kilosort-ref">8.</a> KiloSort [@kilosort_2024]
 
 :::
 Each format example in our documentation includes basic code snippets that demonstrate how to use the DataInterface for that specific format, including metadata extraction, modification, and the conversion process. This modular approach allows users to easily adapt examples to their specific needs while providing a consistent interface across different data formats. For example, converting amplifier data acquired with Intan requires only these steps:
