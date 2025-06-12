@@ -1,6 +1,6 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: NeuroConv. Streamlining Neurophysiology Data Conversion to the NWB Standard
+title: "NeuroConv: Streamlining Neurophysiology Data Conversion to the NWB Standard" 
 keywords: Neurodata Without Borders, NWB, Neurophysiology, Data standardization, Data conversion, DANDI, Python, Scientific software, Large-scale data
 abstract: |
   Converting diverse neurophysiology data to the standardized Neurodata Without Borders (NWB) format remains a significant barrier to data sharing and reuse. We present NeuroConv, a software that enables converting 47 distinct data formats while handling high-volume data as well as extracting meaningful metadata. The library has enabled the standardization of over 390 datasets totaling more than 350 TB in the DANDI archive and has been deployed to create automated conversion pipelines for 40 laboratories with unique experimental paradigms. By reducing technical barriers to NWB adoption, our tools accelerate progress toward reproducible neuroscience research through standardized data sharing.
