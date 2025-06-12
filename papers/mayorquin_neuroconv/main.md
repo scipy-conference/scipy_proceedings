@@ -91,7 +91,7 @@ This core pattern ensures consistency and simplicity across all supported format
 2. Extract and modify metadata as needed  
 3. Execute the conversion
 
-The DataInterface abstracts away format-specific complexities—from parsing proprietary binary structures to extracting embedded metadata—while automatically enforcing NWB best practices for data organization and storage optimization.
+The DataInterface abstracts away format-specific complexities: from parsing proprietary binary structures to extracting embedded metadata.
 
 Currently supporting 47 distinct input formats (Table 1), each DataInterface is comprehensively documented and demonstrated in the [Conversion Gallery](https://neuroconv.readthedocs.io/en/stable/conversion_examples_gallery/index.html), where users can find complete examples requiring only ~5 lines of code to perform full data conversion. Throughout the conversion process, NeuroConv enforces NWB Best Practices for metadata and data organization while optimizing data storage for both archival purposes and cloud computing requirements.
 
@@ -172,7 +172,7 @@ metadata["NWBFile"].update(session_start_time=session_start_time)
 nwbfile_path = f"{path_to_save_nwbfile}"  # This should be something like: "./saved_file.nwb"
 interface.run_conversion(nwbfile_path=nwbfile_path, metadata=metadata)
 ```
-As NeuroConv's format support has expanded to 47+ formats, dependency management has become increasingly complex. Each format often requires specialized libraries with potentially conflicting version requirements, creating dependency resolution challenges that can make installation difficult or impossible. For example, different electrophysiology formats may depend on incompatible versions of numerical libraries, while imaging formats might require conflicting versions of image processing packages. Additionally, installing all dependencies simultaneously would create an unnecessary and inefficient environment with hundreds of packages, many of which users never need.
+As NeuroConv's format support has expanded to 47+ formats, dependency management has become increasingly complex. Each format often requires specialized libraries with potentially conflicting version requirements, creating dependency resolution challenges that can make installation difficult or impossible. For example, libraries for reading different formats may require different versions of Python or different versions of common dependencies such as numpy. Additionally, installing the dependencies of every DataInterface would create an unnecessary and inefficient environment with hundreds of packages, many of which users never need for their conversion.
 
 To address these challenges, we rely on [installation extras](https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-extras) to manage installation complexity. Users can specify only the formats they need during installation:
 
