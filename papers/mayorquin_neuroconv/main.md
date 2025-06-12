@@ -32,11 +32,11 @@ Converting existing datasets to NWB presents several interconnected challenges t
 </table>
 :::
 
-While NWB has emerged as a unifying standard that addresses many common pitfalls of proprietary formats, the conversion process itself remains a significant bottleneck. This process requires deep knowledge of experimental design, source data formats, and the NWB standard—expertise that is rarely concentrated in a single individual or even within a single laboratory.
+While NWB has emerged as a unifying standard that addresses many common pitfalls of proprietary formats, the conversion process itself remains a significant bottleneck. This process requires deep knowledge of experimental design, source data formats, and the NWB standard, expertise that is rarely concentrated in a single individual or even within a single laboratory.
 
 ## NeuroConv Architecture and Design
 
-To address these multifaceted challenges [NeuroConv](https://neuroconv.readthedocs.io/en/stable/index.html), an open source library that automates the ingestion and conversion of neurophysiology data from diverse formats into NWB. The development of NeuroConv required solving the following fundamental challenges:
+To address these multifaceted challenges, we developed [NeuroConv](https://neuroconv.readthedocs.io/en/stable/index.html), an open source library that automates the ingestion and conversion of neurophysiology data from diverse formats into NWB. The development of NeuroConv required solving the following fundamental challenges:
 
 ```{list-table} Key technical challenges addressed by NeuroConv's architecture, highlighting the multifaceted requirements for automated neurophysiology data conversion.
 :label: tbl:neuroconv-challenges
