@@ -13,7 +13,7 @@ Here, we describe [Ocetrac](https://ocetrac.readthedocs.io/en/latest/), an open-
 1. Detection: Ocetrac smooths spatially connected regions
 2. Tracking: Ocetrac labels objects across time steps, even when they split or merge
 2. Quantification: Ocetrac computes shape (e.g., compactness), motion (e.g., centroid velocity), and intensity (e.g., thermal anomaly) measures
-3. Integration: Ocetrac is compatible with the Scientific Python ecosystem, including `dask` [@dask] and  `scikit-learn` [@scikit-learn]
+3. Integration: Ocetrac is compatible with the Scientific Python ecosystem, including `dask` [@dask] and  `scikit-learn` [@sklearn1]
 
 Although originally developed for MHW analysis, Ocetrac can be used for other applications, from atmospheric rivers to hypoxic zones and bloom patches in the ocean. Its modular design allows users to customize detection thresholds, tracking logic, and meastures of tracked objects. This paper details its design, demonstrates several use cases, and outlines future directions. 
 
