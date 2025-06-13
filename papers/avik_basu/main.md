@@ -598,11 +598,76 @@ TODO: Add SHAP explanations for CNNs
 
 #### Global
 
-TODO
+Since this is a multiclass classification problem, we will look at the global SHAP values for each class
+separately in a one-vs-all fashion. For the beeswarm plots below, the positive SHAP values indicate that the feature
+pushes the model's prediction towards the positive class (the class in question), while the negative SHAP values
+imply the feature reduces the model's predicted value towards the negative class (other classes).
+
+:::{figure} beeswarm_Walking_cnn.png
+:label: fig:beeswarm-walking-cnn
+:width: 70%
+:align: left
+Global SHAP values for the CNN model for the `Walking` class.
+:::
+
+:::{figure} beeswarm_WalkingUpstairs_cnn.png
+:label: fig:beeswarm-walking-upstairs-cnn
+:width: 70%
+:align: left
+Global SHAP values for the CNN model for the `Walking Upstairs` class.
+:::
+
+:::{figure} beeswarm_WalkingDownstairs_cnn.png
+:label: fig:beeswarm-walking-downstairs-cnn
+:width: 70%
+:align: left
+Global SHAP values for the CNN model for the `Walking Downstairs` class.
+:::
+
+:::{figure} beeswarm_Sitting_cnn.png
+:label: fig:beeswarm-sitting-cnn
+:width: 70%
+:align: left
+Global SHAP values for the CNN model for the `Sitting` class.
+:::
+
+:::{figure} beeswarm_Standing_cnn.png
+:label: fig:beeswarm-standing-cnn
+:width: 70%
+:align: left
+Global SHAP values for the CNN model for the `Standing` class.
+:::
+
+:::{figure} beeswarm_Laying_cnn.png
+:label: fig:beeswarm-laying-cnn
+:width: 70%
+:align: left
+Global SHAP values for the CNN model for the `Laying` class.
+:::
+
 
 #### Dependency
 
-TODO
+For this dataset, all the features are numerical, and hence we can plot the dependency plots directly.
+We shall look at the top 3 features for the classes `Walking`, `Sitting` and `Laying`.
+
+:::{figure} dep_Walking_cnn.png
+:label: fig:dep-walking-cnn
+:width: 80%
+SHAP dependency plot for the CNN model for the `Walking` class.
+:::
+
+:::{figure} dep_Sitting_cnn.png
+:label: fig:dep-sitting-cnn
+:width: 80%
+SHAP dependency plot for the CNN model for the `Sitting` class.
+:::
+
+:::{figure} dep_Laying_cnn.png
+:label: fig:dep-laying-cnn
+:width: 80%
+SHAP dependency plot for the CNN model for the `Laying` class.
+:::
 
 #### Local
 
