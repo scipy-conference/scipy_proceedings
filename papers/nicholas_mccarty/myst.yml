@@ -1,0 +1,38 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-nicholas_mccarty
+  # Ensure your title is the same as in your `main.md`
+  title: Performing Object Detection on Drone Orthomosaics with Meta's Segment Anything Model (SAM)
+  # subtitle:
+  description: This article presents a workflow that utilizes SAM's automatic mask generation skill to effectively perform the task of object detection zero-shot on a high-resolution drone orthomosaic. The generated output is 20% more spatially accurate than that produced using proprietary software, with 400% greater IoU.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Nicholas McCarty
+      email: nick@upskilled.consulting
+      orcid: 0009-0001-3727-9178
+      affiliation: Upskilled Consulting
+  keywords:
+    - object detection
+    - spatial localization
+    - drone orthomosaic
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
