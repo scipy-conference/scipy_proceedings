@@ -2,7 +2,7 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: Pipeline-level differentiable programming for the real world
 abstract: |
-  TBD
+  The tools enabling automatic differentiation are increasingly being adopted beyond machine learning to tackle optimization problems in various scientific and engineering contexts. These tools have catalyzed the development of differentiable simulators, solvers, 3D renderers, and other powerful components, under the umbrella of differentiable programming. However, building pipelines that propagate gradients effortlessly across components introduces unique challenges. Real-world pipelines often span diverse technologies, frameworks, computing environments, and skillsets. We argue for the need to support automatic differentiation on a system level to enable further growth of scientific progress. To that end, we present Tesseract, a software ecosystem that provides pipeline-level automatic differentiation at scale, and demonstrate its utility on a parameteric topology optimisation use case.
 ---
 
 ## Introduction
@@ -65,5 +65,5 @@ Tesseract offers a unique combination of containerised runtime for scientific co
 
 ## Conclusions
 
------ What comes below is the example, to use for markup nits
+Tesseract projects are born out of realisation that modern autodiff tooling is limited in its scaling capabilities. Tesseracts demonstrate how this gap can be addressed by elevating the concept of gradient tracking to a system level. We hope the community will recognise this need, and leverage Tesseract concept to improve efficiency and scalability of scientific data pipelines.
 

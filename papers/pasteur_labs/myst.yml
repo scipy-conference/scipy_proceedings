@@ -6,7 +6,7 @@ project:
   # Ensure your title is the same as in your `main.md`
   title: Pipeline-level differentiable programming for the real world
   # subtitle:
-  description: "We provide an overview of differentiable pipelines: why they matter and the types of optimization problems they address. Using an open-source project Tesseract as a case study, we share lessons learned and best practices for designing AD-friendly APIs with tools like Pydantic and FastAPI, achieving seamless integration with JAX, packaging scientific software, and enabling end-to-end systems-level optimization."
+  description: "We present Tesseract, a software ecosystem that provides pipeline-level automatic differentiation at scale, and demonstrate its utility on a parameteric topology optimisation use case."
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: The Pasteur Labs team
@@ -25,15 +25,15 @@ project:
     API: Applicaiton Programming Interface
     CFD: Computational Fluid Dynamics
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
-  error_rules:
-    - rule: doi-exists
-      severity: ignore
-      keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+  # error_rules:
+  #   - rule: doi-exists
+  #     severity: ignore
+  #     keys:
+  #       - Atr03
+  #       - terradesert
+  #       - jupyter
+  #       - sklearn1
+  #       - sklearn2
   exports:
     - id: pdf
       format: typst
