@@ -9,7 +9,7 @@ project:
   description: "We provide an overview of differentiable pipelines: why they matter and the types of optimization problems they address. Using an open-source project Tesseract as a case study, we share lessons learned and best practices for designing AD-friendly APIs with tools like Pydantic and FastAPI, achieving seamless integration with JAX, packaging scientific software, and enabling end-to-end systems-level optimization."
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: The team
+    - name: The Pasteur Labs team
       email: hello@simulation.science
       orcid: 0000-0000-0000-0000
       affiliations:
