@@ -29,7 +29,21 @@ project:
     AWS: Amazon Web Services
     S3: Simple Storage Service
     GCP: Google Cloud Platform
-    
+    AI/ML:	Artificial Intelligence / Machine Learning
+    API:	Application Programming Interface
+    AWS:	Amazon Web Services
+    COG:	Cloud-Optimized GeoTIFF
+    COPC:	Cloud-Optimized Point Cloud
+    FaaS:	Function-as-a-Service
+    GB/s:	Gigabytes per second
+    HTTP:	Hypertext Transfer Protocol
+    IDE:	Integrated Development Environment
+    imzML:	Imaging Mass Spectrometry Markup Language
+    LLM:	Large Language Model
+    MS:	Mass Spectrometry
+    S3:	Amazon Simple Storage Service
+    URV:	Universitat Rovira i Virgili
+
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
