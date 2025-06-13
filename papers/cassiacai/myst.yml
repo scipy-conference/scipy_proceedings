@@ -37,7 +37,6 @@ project:
       roles:
       - Methodology
       - Software
-      - Visualization
     - name: Valentina Staneva
       email: vms16@uw.edu
       orcid: 0000-0002-3412-0364
