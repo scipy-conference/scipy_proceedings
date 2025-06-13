@@ -43,3 +43,9 @@ project:
       email: ameyambade@gmail.com
       affiliation: SLB
       id: amey
+papers:
+  - name: Allison Ding
+    corresponding_author: allisond@nvidia.com
+    github_user: AllisonDing
+    folder: ding
+
