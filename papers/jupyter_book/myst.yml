@@ -17,7 +17,7 @@ project:
     - matt
     - mike
     - steve
-    # - fernando
+    - fernando
   contributors:
     - id: jupyter
       name: Project Jupyter
@@ -125,8 +125,14 @@ project:
       affiliations:
         - name: QuantEcon
     - id: fernando
-      name: Fernando Perez
+      name: Fernando Pérez
+      orcid: 0000-0002-1725-9815
+      email: fernando.perez@berkeley.edu
       affiliations:
+        - id: berkeley-stats
+        - id: berkeley-bids
+        - id: berkeley-dse
+        - id: lbl
         - id: jupyter
   affiliations:
     - id: jupyter
@@ -145,6 +151,14 @@ project:
     - id: csf
       name: Continuous Science Foundation
       url: https://continuousfoundation.org
+    - id: berkeley-stats
+      institution: Department of Statistics, UC Berkeley
+    - id: berkeley-bids
+      institution: Berkeley Institute for Data Science (BIDS)
+    - id: berkeley-dse
+      institution: Eric and Wendy Schmidt Data Science & Environment Center (DSE), UC Berkeley
+    - id: lbl
+      institution: Data Science and Technology, Lawrence Berkeley National Lab
   keywords:
     - open science
     - jupyter
