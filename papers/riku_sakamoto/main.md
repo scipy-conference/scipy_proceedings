@@ -4,7 +4,7 @@ title: "Phlower: A Deep Learning Framework Supporting PyTorch Tensors with Physi
 abstract: |
   We present [Phlower](https://github.com/ricosjp/phlower), an open-source deep learning library that extends PyTorch tensors to incorporate physical dimensions — such as time ( _T_ ), mass ( _M_ ), and length ( _L_ ) — and enforces dimensional consistency throughout computations. 
   
-  Deep learning models applied to physical phenomena often involve operations on tensors representing physical quantities, where maintaining dimensional correctness is essential. To address this need, Phlower introduces `PhlowerTensor`, a wrapper class around PyTorch tensors that tracks physical dimensions and ensures that tensor operations comply with dimensional consistency rules.
+  When applying deep learning to physical systems, tensors often represent quantities with physical dimensions. Ensuring dimensional correctness in such operations is crucial to maintaining physical validity. To address this challenge, Phlower provides `PhlowerTensor`, a wrapper class of PyTorch tensor that tracks physical dimensions and ensures that tensor operations comply with dimensional consistency rules.
   
   This paper introduces the core features of Phlower and demonstrates its capability to maintain dimensional correctness through representative examples.
 
@@ -18,7 +18,7 @@ In numerical simulations of physical phenomena, it is essential to handle physic
 
 To address these needs, we developed Phlower, an open-source deep learning framework that enables PyTorch [@NEURIPS2019_bdbca288] tensor objects to carry physical dimensions. An example illustrating its usage is shown in the [](#example_phlower_tensor). 
 
-PyTorch is a widely used deep learning framework that provides powerful tensor operations and automatic differentiation capabilities. However, it does not natively support physical dimensions. To fill this gap, Phlower introduces `PhlowerTensor` which is a wrapper class of PyTorch Tensor object and enables physical dimension tracking. This ensures that tensor operations adhere to dimensional consistency rules. Thanks to its lightweight implementation, converting between PyTorch's tensor object and `PhlowerTensor` is straightforward. Moreover, `PhlowerTensor` maintains compatibility with PyTorch’s autograd system and core tensor operations such as `sum()`, enabling seamless integration into existing PyTorch-based workflows with minimal code modifications.
+PyTorch is a widely used deep learning framework that provides powerful tensor operations and automatic differentiation capabilities. However, it does not natively support physical dimensions. To fill this gap, Phlower introduces `PhlowerTensor` which is a wrapper class of PyTorch tensors and enables physical dimension tracking. This ensures that tensor operations adhere to dimensional consistency rules. Thanks to its lightweight implementation, converting between PyTorch's tensor object and `PhlowerTensor` is straightforward. Moreover, `PhlowerTensor` maintains compatibility with PyTorch’s autograd system and core tensor operations such as `sum()`, enabling seamless integration into existing PyTorch-based workflows with minimal code modifications.
 
 :::{table} Physical Dimensions [@newell2019si]
 :label: physical_dimension
@@ -108,8 +108,7 @@ print(pressure)
 
 `PhlowerTensor` enforces dimensional consistency during tensor operations. [](#kinetic_energy_example) demonstrates how `PhlowerTensor` ensures dimensional correctness when computing kinetic energy, defined as {math}` E = 0.5 \cdot m \cdot \mathbf{v}^2 `, where {math}` m ` is mass and {math}` \mathbf{v} ` is velocity. 
 
-As illustrated in [](#fig:fig_points), this example assumes that each point is associated with a three-dimensional velocity vector and a scalar mass.  
-The resulting kinetic energy has dimensions {math}` M^1 L^2 T^{-2} `, corresponding to the physical dimension of energy.
+As illustrated in [](#fig:fig_points), this example assumes that each point is associated with a three-dimensional velocity vector and a scalar mass. The resulting kinetic energy has dimensions {math}` M^1 L^2 T^{-2} `, corresponding to the physical dimension of energy.
 
 
 :::{figure} images/figure1.png
@@ -199,7 +198,7 @@ This section presents potential use cases of PhlowerTensor in scientific machine
 
 ### Preventing Dimensional Inconsistencies in Physics-Informed Models
 
-In physics-informed neural networks (PINNs), the loss function often includes terms derived from differential equations. For example, when modeling a system governed by Navier-Stokes equations, the loss function is composed of terms like the continuity equation and momentum equations. These equations involve derivatives with respect to spatial and temporal dimensions, which can lead to dimensional inconsistencies if not handled correctly.
+In physics-informed neural networks (PINNs), the loss function often includes terms derived from differential equations. For example, when modeling a system governed by Navier-Stokes equations, the loss function is composed of terms like the continuity equation and momentum equations. These equations involve physical quantities such as velocity, pressure, and density, each with specific physical dimensions. PhlowerTensor can be used to ensure that these terms are dimensionally consistent, preventing errors that could arise from mixing quantities with incompatible dimensions.
 
 
 ### Enforcing Dimensional Validity in Feature Engineering
@@ -233,9 +232,7 @@ Phlower provides a YAML-based model definition system that allows users to defin
 
 ### Shape Semantics
 
-Each index in the shape of a `PhlowerTensor` carries semantic meaning, a concept referred to as _shape semantics_ in Phlower.  
-[]( #shape_semantics_example ) illustrates how `PhlowerTensor` can represent time-series pressure using shape semantics.  
-This positional information is crucial for ensuring that tensor operations remain semantically meaningful and consistent with the underlying physical model.
+Each index in the shape of a `PhlowerTensor` carries semantic meaning, a concept referred to as _shape semantics_ in Phlower. []( #shape_semantics_example ) illustrates how `PhlowerTensor` can represent time-series pressure using shape semantics. This positional information is crucial for ensuring that tensor operations remain semantically meaningful and consistent with the underlying physical model.
 
 
 ```{code} python
@@ -300,7 +297,6 @@ In contrast to these libraries, Phlower does not aim to provide unit conversion 
 
 ## Conclusion and Future Work
 
-In traditional numerical simulations of physical phenomena, physical dimensions play a critical role in ensuring the correctness of computations.  
-To bring this advantage into deep learning, Phlower integrates physical dimensional information into PyTorch tensor objects. By enforcing dimensional consistency, Phlower enables users to avoid errors and improve the reliability of their deep learning models. We believe that Phlower will serve as a valuable tool for researchers and engineers working at the intersection of deep learning and physical simulation.
+In traditional numerical simulations of physical phenomena, physical dimensions play a critical role in ensuring the correctness of computations. To bring this advantage into deep learning, Phlower integrates physical dimensional information into PyTorch tensor objects. By enforcing dimensional consistency, Phlower enables users to avoid errors and improve the reliability of their deep learning models. We believe that Phlower will serve as a valuable tool for researchers and engineers working at the intersection of deep learning and physical simulation.
 
 Future work includes extending the library to support more complex physical models and enhancing the YAML-based model definition system.
