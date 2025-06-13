@@ -11,6 +11,26 @@ Countless problems in science and engineering can be framed as tuning tasks, whe
 
 We put forth the design, implementation, and validation of a novel system engineering approach to AD-driven physics: "Differentiable Physics Programming" (DPP). DPP resolves the above challenges via autodiff-native software containerization and dataflow-based orchestration, built to be highly modular and interoperable with physics simulation tools and engineering data types, namely computational fluid dynamics (CFD) and computer-aided engineering (CAE) broadly. Such a system enables scientists and engineers of diverse backgrounds to build complex workflows centered around simulation and data-driven surrogate models, and propagate gradients throughout the entire workflow, thus unleashing the potential of AD on end-to-end applications. We demonstrate the DPP system on a non-trivial class of problems: iterative, closed-loop computation with CFD solvers, namely for experiment design and optimization. Furthermore, we highlight the significant synergy between DPP and several emerging simulation technologies, such as surrogate modelling, learned hybrid / solver-in-the-loop models, and online learning of emulators---each of which has already proven its tremendous worth in experimental applications, but hasn't yet managed to percolate into real-world engineering systems.
 
+## Parametric Topology Optimization
+
+![Figure 1](illustration.png)
+
+As a proof of concept of Tesseract's capabilities, to simplify differentiable physics programing, we present a case study of parametric topology optimization. The idea is to construct a parametric geometry using a standard 3D geometry library. We then compute a SDF (signed distance field) and apply a sigmoid function to transform it into a density field. The density field is then fed into a finite element solver, which then computes the compliance. Since the mapping from the design space parameters to the SDF field is not implemented in way that enables automatic differentiation, we implement a custom AD endpoint using finite differences. Using tesseract-core we implement the parameter to sdf field function and the density field to compliance function as tesseract components. We then leverage tesseract-jax and use the standard gradient computation function from jax to compute the total gradient of the compliance with respect to the design parameters. 
+
+| Parametric Optimization (Ours) | Free Form Topology Optimization |
+|-------------------------|---------------------------------|
+| ![param](rho_optim.gif) | ![param](free_form.gif)         |
+
+We compare our solution with the free form topology optimization solution that is implemented in the jax-fem library [@xue2023jax]. We can observe that our solution constructs a structure that is suprisingly similar to the free form topology optimization solution, even though in our case the design space is parametrized by a small number of parameters. Doing the above without using Tesseract is challenging due to the following reasons:
+
+- **Hetereogeneity of gradient computation**: In this pipeline some components rely on automatic differentiation, while others rely on finite differences. With tesseracts and tesseract-jax we can define the AD endpoints for each component and then use the standard gradient computation function from JAX to compute the total gradient of the compliance with respect to the design parameters.
+
+- **Modularity**: The components of the pipeline are implemented as tesseract components, which allows us to easily swap out components and reuse them in other pipelines. For example, we could replace the design space tesseract relying on PyVista with a design space tesseract relying on OpenSCAD.
+
+- **Dependency management**: Tesseract components are containerized, which allows us to easily manage dependencies and ensure that the pipeline runs in a consistent environment. 
+
+- **Computing ressources**: Tesseract components can be run on different computing resources, which allows us to easily scale the pipeline and run it on different machines. For example, we could run the finite element solver on a GPU machine and the design space tesseract on a CPU.
+
 
 
 ## Related work
