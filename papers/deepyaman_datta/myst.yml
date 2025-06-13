@@ -1,0 +1,67 @@
+version: 1
+extends: ../papers.yml
+project:
+  id: scipy-2025-deepyaman_datta
+  title: "Python is all you need: an overview of the composable, Python-native data stack"
+  description: >
+    For the past decade, tools like dbt have formed a cornerstone of the modern data
+    stack, and Python-first alternatives couldn't compete with the scale and performance
+    of modern SQL—until now. New integrations with Ibis, the portable Python dataframe
+    library, enable building and orchestrating scalable data engineering pipelines using
+    existing open-source libraries like Kedro, Pandera, and more.
+  authors:
+    - name: Deepyaman Datta
+      email: deepyaman.datta@utexas.edu
+      orcid: 0000-0000-0000-0000 # TODO(deepyaman)
+      affiliation:
+        - Kedro
+  keywords:
+    - terraforming
+    - desert
+    - numerical perspective
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    SQL: Structured Query Language
+    dbt: data build tool
+    ELT: extract, load, transform
+    ETL: extract, transform, load
+    BI: business intelligence
+    MDS: modern data stack
+    IR: intermediate representation
+    OLAP: online analytical processing
+    CSV: comma-separated values
+    EL: extract and load
+    dlt: data load tool
+    GUI: graphical user interface
+    DAG: directed acyclic graph
+    AI: artificial intelligence
+    ML: machine learning
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - roundup
+        - modernBI
+        - fivetranETLvsELT
+        - dataWarehousingOnAWS
+        - stackOverflow2023
+        - dbtPythonModels
+        - designingInterfaces
+        - ibis
+        - kedroIbis
+        - ibmModernDataStack
+        - dltHub
+        - dltReverseETL
+        - dbtWhatIs
+        - kedro
+        - lfaidataKedro
+        - dbtJaffleShopDuckDB
+        - dbtProfiles
+        - kedroIbisJaffleShop
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
