@@ -444,6 +444,10 @@ Prior to model training, we need to perform some important preprocessing steps.
    scaler = StandardScaler()
    x_train = scaler.fit_transform(x_train)
    x_test = scaler.transform(x_test)
+   
+   # Zero indexing for the labels
+   y_train = y_train["label"].apply(lambda x: x - 1)
+   y_test = y_test["label"].apply(lambda x: x - 1)
    ```
 
 2. Create sliding window sequences
@@ -542,9 +546,8 @@ model = CNNClassifier(input_dim=x_train_seq.shape[1], num_classes=6)
    
    from torch.utils.data import DataLoader, TensorDataset
    
-   # Subtract 1 from the labels since the classes are 1-indexed
-   train_ds = TensorDataset(x_train_seq, (y_train_seq - 1).long().squeeze())
-   test_ds = TensorDataset(x_test_seq, (y_test_seq - 1).long().squeeze())
+   train_ds = TensorDataset(x_train_seq, y_train_seq.long().squeeze())
+   test_ds = TensorDataset(x_test_seq, y_test_seq.long().squeeze())
    
    # Avoid shuffling since we are using a time series dataset
    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=False)
@@ -594,7 +597,78 @@ The performance of the model on the test set is shown below.
 
 ### SHAP Explanations
 
-TODO: Add SHAP explanations for CNNs
+In this section, we will explore how SHAP can be used to interpret the predictions of the CNN model.
+
+```{code-block} python
+:linenos: true
+:caption: Creating a balanced background dataset
+
+def create_balanced_background(x_data: Tensor, y_data: Tensor, n_per_class: int = 20):
+    """
+    Create a balanced background dataset with equal representation from each class
+
+    Parameters:
+    -----------
+    x_data : torch.Tensor
+        Input features
+    y_data : torch.Tensor
+        Target labels
+    n_per_class : int
+        Number of samples to include per class
+
+    Returns:
+    --------
+    torch.Tensor
+        Balanced background dataset
+    """
+    # Convert to numpy for easier manipulation
+    y_np = y_data.detach().cpu().numpy()
+
+    # Get unique classes
+    unique_classes = np.unique(y_np)
+    print(f"Found {len(unique_classes)} unique classes: {unique_classes}")
+
+    # Create balanced dataset
+    balanced_indices = []
+
+    for cls in unique_classes:
+        # Find indices for this class
+        cls_indices = np.where(y_np == cls)[0]
+
+        # If we have enough samples, randomly select n_per_class
+        if len(cls_indices) >= n_per_class:
+            selected_indices = np.random.choice(cls_indices, n_per_class, replace=False)
+        else:
+            # If not enough samples, use all available with replacement
+            selected_indices = np.random.choice(cls_indices, n_per_class, replace=True)
+            print(
+                f"Warning: Class {cls} has only {len(cls_indices)} samples, using with replacement"
+            )
+        balanced_indices.extend(selected_indices)
+
+    np.random.shuffle(balanced_indices)
+    return x_data[balanced_indices], y_data[balanced_indices]
+
+
+background_data, background_labels = create_balanced_background(
+    x_train_seq, y_train_seq, n_per_class=20
+)
+```
+
+```{code-block} python
+:linenos: true
+:caption: Computing SHAP values for the CNN model
+
+import shap
+
+# Limit the number of samples for faster computation
+MAX_SAMPLES = 1000 
+
+explainer = shap.DeepExplainer(model, background_data)
+shap_values = explainer.shap_values(x_test_seq[:MAX_SAMPLES])
+
+# shap_values shape: (MAX_SAMPLES, num_features, SEQ_LENGTH, num_classes)
+```
 
 #### Global
 
@@ -671,8 +745,29 @@ SHAP dependency plot for the CNN model for the `Laying` class.
 
 #### Local
 
-TODO
+:::{figure} waterfall_Laying_cnn_0.png
+:label: fig:waterfall-laying-cnn
+:width: 70%
+Waterfall plot for the CNN model for the `Laying` class.
+:::
 
+:::{figure} waterfall_Walking_Upstairs_cnn_0.png
+:label: fig:waterfall-walking-upstairs-cnn
+:width: 70%
+Waterfall plot for the CNN model for the `Walking Upstairs` class.
+:::
+
+:::{figure} waterfall_Walking_cnn_20.png
+:label: fig:waterfall-walking-cnn
+:width: 70%
+Waterfall plot for the CNN model for the `Walking` class.
+:::
+
+:::{figure} waterfall_Standing_cnn_20.png
+:label: fig:waterfall-standing-cnn
+:width: 70%
+Waterfall plot for the CNN model for the `Standing` class.
+:::
 
 ## Strengths and Limitations
 
