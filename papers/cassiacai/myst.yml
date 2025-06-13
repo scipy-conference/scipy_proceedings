@@ -2,7 +2,7 @@ version: 1
 extends: ../papers.yml
 project:
   id: scipy-2025-cassiacai
-  title: 'Ocetrac: An Object-Based Framework for Tracking and Quantifying Climate Events in Gridded Datasets'
+  title: 'Ocetrac: An Object-based Framework for Tracking and Quantifying Climate Events in Gridded Datasets'
   subtitle: Introducing the Measures Submodule
   description: Add a two sentence description about your article.
   # Authors should have affiliations, emails and ORCIDs if available
