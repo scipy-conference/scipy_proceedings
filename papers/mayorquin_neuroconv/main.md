@@ -309,9 +309,9 @@ At the foundational level, [PyNWB](https://pynwb.readthedocs.io) and [MatNWB](ht
 
 ## Integration with Data Archives and Visualization
 
-The [Distributed Archives for Neurophysiology Data Integration (DANDI)](https://dandiarchive.org/) Archive complements NWB by providing free hosting for NWB-formatted datasets up to terabytes in size. DANDI offers researchers a pathway to meet NIH data sharing requirements while effectively archiving their data and leveraging an expanding ecosystem of visualization and analysis tools. The platform supports versioned datasets, comprehensive metadata, and API access, making it an ideal complement to NeuroConv's conversion capabilities.
+The [Distributed Archives for Neurophysiology Data Integration (DANDI)](https://dandiarchive.org/)  Archive complements NWB by providing free hosting for terabyte-scale datasets, letting researchers satisfy NIH data-sharing mandates while archiving data in a versioned, API-driven repository connected to a rich ecosystem of visualization and analysis tools. NeuroConv integrates tightly with DANDI through automated upload functionality that validates required metadata, enforces DANDI naming conventions, and automatically uploads NWB files to the archive.
 
-Together, NWB, NeuroConv, DANDI, and Neurosift showcase a comprehensive pipeline that spans the entire data lifecycle from acquisition to publication and reuse, supporting emerging software domains from electrophysiological spike sorting to calcium imaging segmentation and behavioral pose estimation.
+Together, NWB, NeuroConv, and DANDI showcase a comprehensive pipeline that spans the entire data lifecycle from acquisition to publication and reuse, supporting emerging software domains from electrophysiological spike sorting to calcium imaging segmentation and behavioral pose estimation.
 
 # Current Limitations
 
