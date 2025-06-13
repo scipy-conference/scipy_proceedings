@@ -13,6 +13,10 @@ project:
       affiliations:
         - CatalystNeuro
       corresponding: true
+    - name: Oliver Rübel
+      orcid: 0000-0001-9902-1984
+      affiliations:
+        - Lawrence Berkeley National Laboratory
     - name: Paul Adkinson
       email: paul.adkisson@catalystneuro.com
       orcid: 0009-0005-8943-5450
