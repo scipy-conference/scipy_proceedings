@@ -1,0 +1,70 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-sofie
+  # Ensure your title is the same as in your `main.md`
+  title: Challenges and Implementations for ML Inference in High-energy Physics
+  # subtitle:
+  description: Accelerating the inference of learning methods for analysis at the world's largest scientific facility
+  banner: 0510029_02.jpg
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Sanjiban Sengupta
+      email: sanjiban.sengupta@cern.ch
+      orcid: 0009-0005-1281-505X
+      affiliations:
+        - CERN, Switzerland
+        - The University of Manchester, United Kingdom
+      corresponding: true
+    - name: Lorenzo Moneta
+      email: lorenzo.moneta@cern.ch
+      orcid: 0000-0002-0935-0862
+      affiliations:
+        - CERN, Switzerland
+  keywords:
+        - machine learning
+        - optimization
+        - heterogeneous architectures
+        - keras
+        - pytorch
+        - onnx
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    CERN: European Organization for Nuclear Research
+    HEP: High-Energy Physics
+    TMVA: Toolkit for Multi-Variate Analysis
+    SOFIE: System for Optimized Fast Inference code Emit
+    CMS: Compact Muon Solenoid
+    ATLAS: A Toroidal LHC ApparatuS
+    ONNX: Open Neural Network eXchange
+    HL-LHC: High-Luminosity LHC
+    LHC: Large Hadron Collider
+    IaaS: Inference-as-a-Service
+    SONIC: Service for Optimized Network Inference on Coprocessors
+    CMSSW: CMS Software Framework
+    HLS: High-Level Synthesis
+    hls4ml: High-level Synthesis for Machine learning
+    FPGA: Field-Programmable Gate Array
+    ASIC: Application-specific Integrated Circuit
+    VAE: Variational Auto-encoders
+    GPU: Graphics Processing Unit
+    GNN: Graph Neural Network
+
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - machine learning
+        - optimization
+        - heterogeneous architectures
+        - keras
+        - pytorch
+        - onnx
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "nodejs.org": "^10.9.0"
+  }
+}
