@@ -6,17 +6,32 @@ abstract: |
 ---
 
 ## Introduction
-
 Countless problems in science and engineering can be framed as tuning tasks, where parameters of a complex process &mdash; such as a physical simulation or a lab experiment &mdash; are iteratively tuned to maximize an objective. For such tasks, differentiable programming (DP) has emerged as a powerful tool, due to its ability to automate and accelerate gradient-based operations, enabling "differentiable physics" by codifying the use of gradient information to optimize, correct, or control physical systems. At the core of DP is the technique known as automatic differentiation (autodiff, AD) to compute partial derivatives of computer programs without the need to spell out explicit forms of said derivatives. Autodiff techniques enjoy great success in the fields of artificial intelligence and machine learning (ML) thanks to proliferation of deep learning software frameworks such as TensorFlow, JAX, and PyTorch [@baydin2018automatic].
 
 However, applications of AD in differentiable physics are largely untested at industrial scale, and ML frameworks are rarely designed for nor tested on practical science and engineering _systems_ (as opposed to single components). Building pipelines that propagate gradients effortlessly across components introduces unique challenges. Real-world pipelines often span diverse technologies, frameworks (e.g., JAX, TensorFlow, PyTorch, Julia), computing environments (local vs. distributed clusters; CPU vs. GPU), and teams with varying expertise. Additionally, legacy systems and non-differentiable components often need to coexist with modern AD-enabled frameworks.
 
 Recognising the need for a robust system-level software support of Autodiff-capable pipelines, we put forth the design, implementation, and validation of a novel system engineering approach to AD-driven physics: "Differentiable Physics Programming" (DPP). DPP resolves the above challenges via autodiff-native software containerization and dataflow-based orchestration, built to be highly modular and interoperable with physics simulation tools and engineering data types, namely computational fluid dynamics (CFD) and computer-aided engineering (CAE) broadly. Such a system enables scientists and engineers of diverse backgrounds to build complex workflows centered around simulation and data-driven surrogate models, and propagate gradients throughout the entire workflow, thus unleashing the potential of AD on end-to-end applications.
 
-To demonstrate the DPP system in action we present Tesseract, a software ecosystem that provides pipeline-level AD and unlocks DPP at scale. We give detailed description of Tesseract's software design and functionality, and demonstrate its use on a non-trivial problem of the minimization of compliance of a parametric structure made of a linear elastic material. Our aim in developing Tesseract is present the community with tools necessary to scale up the capabilities of Autodiff-native scientific workflows.
+To demonstrate the DPP system in action we leverage Tesseract, a software ecosystem that provides pipeline-level AD and unlocks DPP at scale. We give an overview of Tesseract's software design and functionality, and demonstrate its intended use on a non-trivial problem of the minimization of compliance of a parametric structure made of a linear elastic material. Our aim in developing Tesseract is present the community with tools necessary to scale up the capabilities of Autodiff-native scientific workflows.
 
-## General intro into tesseracts ecosystem
-Maybe transfer from our docs
+## What is a Tesseract
+We have designed Tesseract to enable complex scientific workflows at scale. Tesseracts are components that allow scientists to expose experimental, research-grade software to the world. They are self-contained, self-documenting, and self-executing, via command line and HTTP. They are designed to be easy to create, easy to use, and easy to share, including in a production environment. Crucially, Tesseracts provide built-in support for propagating gradient information at the level of individual components, making it easy to build complex, diverse software pipelines that can be optimized end-to-end.
+
+In its simplest form, every Tesseract has a single entrypoint `apply`, which wraps a software functionality of the user’s choice. Other API functions of a Tesseract all build on `apply`, for example `input_schema` returns expected input structure and types, `jacobian` implements a derivative, and so forth. Tesseract is created and distributed as Docker image, and exposes CLI and HTTP interfaces for communication. A overview of Tesseract creation process is depicted on @fig:tesseract-create-serve We invite interested readers to explore Tesseract API and usage patterns via its [official documentation](https://docs.pasteurlabs.ai/projects/tesseract-core/latest/).
+
+:::{figure} tesseract-scipy-1.png
+:label: fig:tesseract-create-serve
+Creating and serving tesseracts.
+:::
+
+## Scientific pipelines with Tesseracts
+
+Since all Tesseracts can be seen as standalone and stateless components that expose HTTP endpoints, it is possible to build complex pipelines connecting multiple Tesseracts. 
+
+:::{figure} tesseract-scipy-2.png
+:label: fig:tesseract-pipeline
+Tesseract-powered pipelines.
+:::
 
 ## Tessearct core
 Couple of paragraphs about design, API, usage. Nice diagram.
