@@ -1,0 +1,29 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-edson_bomfim
+  # Ensure your title is the same as in your `main.md`
+  title: "A Practical Guide to Data Quality: Problems, Detection, and Strategy"
+  # subtitle:
+  description: Add a two sentence description about your article.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Edson Bomfim
+      email: research@final04.com
+      orcid: 0009-0001-6387-2231
+      affiliations:
+        - Final04
+        - Universidade de São Paulo, USP
+  keywords:
+    - data
+    - data quality
+    - software quality
+  abbreviations:
+    MyST: Markedly Structured Text
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
