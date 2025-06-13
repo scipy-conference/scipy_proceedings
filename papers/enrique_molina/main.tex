@@ -1,0 +1,289 @@
+\title{On the Path to Seamless Python Serverless Data Analytics}
+
+\begin{abstract}
+Traditionally, most data scientists rely heavily on clusters of virtual machines to handle large-scale workloads. While these clusters are effective, they entailed substantial operational and maintenance costs, alongside increasing complexity in configuration and scaling — often demanding dedicated infrastructure specialists.
+
+The rise of the serverless paradigm introduced a radically different model, centered on functions with automatic scaling and pay-per-use billing. To enable data analytics on serverless architectures, Lithops emerges as a powerful Python framework that abstracts away infrastructure complexities, empowering seamless parallel execution through serverless functions and allowing users to focus purely on their code.
+
+Another persistent challenge in serverless data analytics is the efficient partitioning of data, a crucial factor for maximizing parallelism and minimizing latency in data transfer from storage to compute resources. Dataplug addresses this by enabling on-the-fly partitioning for standard data formats, optimizing data distribution among workers.
+
+To further streamline the scientific development experience, PyRun tackles the steep learning curve posed by configuring and managing serverless environments for users without DevOps expertise. By providing a shared, remote browser-based environment seamlessly connected to the cloud provider, PyRun drastically reduces the cognitive burden of setup — delivering a ready-to-execute environment with zero configuration required.
+
+Ultimately, the integration of Lithops, Dataplug, and PyRun forms a compelling stack that unlocks the full potential of serverless data analytics in Python, delivering clear and transformative benefits to scientific workflows.
+\end{abstract}
+
+\section{From Cluster-Centric to Serverless Data Analytics}
+Data analytics has traditionally been conducted on clusters—networks of interconnected servers collaboratively processing and analyzing vast volumes of data. These clusters deliver the computational power, storage capacity, and parallelism necessary to address the growing scale and complexity of datasets across diverse domains such as finance, healthcare, and social media. By distributing workloads across multiple nodes, clusters enable efficient parallel execution, fault tolerance, and scalability, establishing themselves as the backbone of many big data frameworks like Apache Hadoop~\citep{hadoop} and Apache Spark~\citep{spark}. The cluster-centric approach has proven effective for batch processing and iterative algorithms that demand high throughput and sustained computational resources.
+
+Nonetheless, inherent limitations persist within this architecture for data analytics workloads. Resource overprovisioning is commonplace, resulting in suboptimal and inefficient utilization. This inefficiency is particularly pronounced in scenarios with infrequent analytics executions, where users maintain clusters in a ready state without active workloads. Scalability also remains a critical challenge: server provisioning and deprovisioning often incur latencies of several minutes~\citep{burst}, underscoring limited resource elasticity. Furthermore, the operational complexity and maintenance overhead of cluster-based frameworks such as Spark and Hadoop necessitate specialized expertise to configure, optimize, and sustain the computing environment.
+
+Conversely, simpler computing models have emerged, notably with the introduction of Function-as-a-Service (FaaS) by AWS in 2014. This paradigm abstracts infrastructure management entirely, allowing developers to focus solely on their application logic. Additional advantages—including a pay-as-you-go pricing model and low invocation latencies—have sparked significant interest within the scientific community. While FaaS was not originally designed with data analytics workloads in mind, its potential for scalable and parallel computation has motivated investigations into its viability as a core engine for distributed data analytics applications.
+
+\section{Lithops: The Pythonic Serverless Data Analytics Framework}
+Despite the previous suggested potential, leveraging FaaS platforms for large-scale data analytics presents several inherent challenges. These include the lack of direct peer-to-peer communication between functions, the absence of native synchronization mechanisms between stages (like in a MapReduce model), difficulties in managing dependencies and libraries across different cloud environments, and a general lack of portability due to proprietary APIs. The initial efforts on serverless data analytics field partially addressed these issues~\citep{pywren}, but they often fell short of providing a comprehensive solution.
+
+Lithops~\citep{lithops} entered to scene to tackle these challenges in a unified manner. Lithops is a serverless, multi-cloud framework designed for building both embarrassingly parallel and MapReduce-like applications using cloud functions. Lithops empowers users, even those without extensive cloud expertise, to effortlessly port their programs—from Monte Carlo simulations to analytics workflows—to the cloud. By transparently orchestrating hundreds of concurrent function instances, Lithops enables significant performance gains for "occasional" cloud users who might otherwise be daunted by the complexities of cluster resource provisioning.
+
+From the programming perspective, Lithops addresses the aforementioned challenges by implementing a simple MapReduce interface that allows single-machine Python code to be executed as parallel jobs in the cloud. It also includes an intuitive storage API to facilitate communication between functions and with the Lithops client. Synchronization between map and reduce stages, including nested function compositions, is handled implicitly, reducing user burden, and Lithops automatically manages dependencies by leveraging Python's dynamic nature. Finally, its architecture is designed to abstract away cloud provider specifics, ensuring multi-cloud portability and mitigating vendor lock-in across platforms like IBM Cloud, Google Cloud and AWS.
+
+In essence, Lithops provides a unified system to leverage cloud functions for massively-parallel execution of programs, enabling hundreds-way parallelism on short-lived functions and significantly accelerating everyday and scientific computing tasks.
+
+\subsection{Architecture}
+The core design of Lithops is centered around abstracting the complexities of cloud functions and providers to offer a seamless experience for parallel program execution. At its heart, Lithops operates as a multi-cloud framework, capable of deploying and managing functions while abstracting away the underlying cloud interface. This multi-cloud capability is a fundamental architectural choice, that mitigates vendor lock-in and offering users same interface across different choices.
+
+A picture of the Lithops architecture is shown in Figure~\ref{fig:lithops_arch}. The components can be initially splitted into two main categories: local components \textit{(blue)} which run on the user's host, and remote components \textit{(orange)} which run on the cloud provider in the form of serverless functions. On local side, the user uses the \textit{Futures API} to submit jobs, which are then orchestrated by the \textit{Executor}, which push/pull resources to/from the cloud provider, and manages the execution of the functions.
+Meanwhile, the \textit{Invoker} is the component responsible for invoking the remote \textit{Workers}, whose runtime is aware of the Lithops framework and can execute the user code remotely in a transparent way. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{assets/lithops-scipy.pdf}
+\caption{Lithops Architecture Overview}
+\label{fig:lithops_arch}
+\end{figure}
+
+The typical operational flow of Lithops is as follows:
+\begin{enumerate}
+    \item The user submits a job using the \textit{Futures API}, which is handled by the \textit{Executor}.
+    \item The \textit{Executor} partitions the job into smaller tasks and push the necessary data and dependencies to the object storage.
+    \item The \textit{Invoker} creates the remote workers, which pull the user code and dependencies from the object storage.
+    \item The remote \textit{Workers} read the input data from the object storage, execute the user code, and write the results back to the object storage.
+    \item The \textit{Executor} pulls the results from the object storage and returns them to the user.
+    \item The user can then retrieve the results from the\textit{ Futures API}.
+\end{enumerate}
+
+
+Overall, the Lithops architecture follows a layered design, where the (client) framework layer builds on top of the serverless execution layer. This design effectively addresses the constraints of the serverless model by providing a unified and abstracted interface for large-scale parallel computing, enabling users to focus on their code and logic while the framework manages the orchestration and infrastructure transparently.
+
+
+\subsection{Programming Model}
+Lithops exposes a set of high-level APIs that simplify access to both compute and storage backends. The key interfaces are outlined below.
+
+
+\noindent
+\vspace{0.5em} \textbf{Futures API.  } Lithops offers a simple yet powerful programming model that enables users to transform single-machine Python code into massively parallel, cloud-based executions. The primary objective of this model is to substantially lower the entry barrier for adopting cloud Function-as-a-Service (FaaS) platforms, especially for workloads that exhibit natural parallelism, similar to the MapReduce paradigm. To support this, the Lithops Futures API provides the \texttt{map()} function, which launches multiple workers to execute the same function across different data partitions. Building on this, the \texttt{map_reduce()} function extends this functionality by executing a final reduce function that gathers and processes the outputs from the map phase.
+
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\small, commentstyle=\color{gray}]
+"""
+Simple Lithops example using the map() call to estimate PI
+"""
+import lithops
+import random
+
+def is_inside(n):
+    count = 0
+    for i in range(n):
+        x = random.random()
+        y = random.random()
+        if x*x + y*y < 1:
+            count += 1
+    return count
+
+if __name__ == '__main__':
+    np, n = 10, 15000000
+    part_count = [int(n/np)] * np
+    fexec = lithops.FunctionExecutor()
+    fexec.map(is_inside, part_count)
+    results = fexec.get_result()
+    pi = sum(results)/n*4
+    print("Estimated Pi: {}".format(pi))
+\end{lstlisting}
+
+The code snippet above illustrates a straightforward example of using the Lithops framework to estimate the value of $\pi$. First, an instance of \texttt{lithops.FunctionExecutor()} is created. The \texttt{map()} method then launches multiple serverless functions that execute the \texttt{is_inside()} function concurrently, each processing a portion of the input data. Once all tasks complete, \texttt{get_result()} collects the results from the distributed execution and receives them locally, enabling the user to obtain the final estimation seamlessly.
+
+Analogously to how $\pi$ is estimated through the parallel execution of multiple functions, Lithops enables users to apply this approach to a wide range of parallel computing problems, with the same simplicity demonstrated in this example.
+
+\noindent
+\vspace{0.5em} \textbf{Storage API. }
+Lithops not only aims to simplify the experience of executing parallel code on serverless platforms, but also abstracts away data access operations—typically performed over object storage. Whether interacting from the Lithops client or from remote workers, the Storage API provides a unified interface that, like the Futures API, avoids vendor lock-in.
+
+The following snippet shows a minimal working example—writing an object to storage and then reading it back—that operates seamlessly across all cloud providers supported by Lithops
+
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\small, commentstyle=\color{gray}]
+from lithops import Storage
+
+if __name__ == "__main__":
+    st = Storage()
+    st.put_object(bucket='mybucket', key='test.txt', body='Hello World')
+    print(st.get_object(bucket='mybucket', key='test.txt'))
+
+\end{lstlisting}
+
+
+
+\subsection{High-Performance Insights}
+Several features make Lithops particularly well-suited for some high-performance parallel data analytics tasks,
+enabling users not only to execute large-scale computations with minimal effort but also leverage serverless computing upsides. When leveraging the \texttt{map()} primitive, users distribute their data processing tasks across numerous cloud
+functions, that presents key highlights that make it stand out, as presented below:
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{assets/cdf_activation.pdf}\label{fig:cdf}
+\includegraphics[width=0.7\textwidth]{assets/read_write.pdf}\label{fig:rw}
+
+\caption{Lithops performance: invocation latency (a) and bandwidth throughput (b)}
+\end{figure}
+
+\begin{itemize}
+    \item The elasticity of Function-as-a-Service (FaaS) platforms when launching functions is a key performance feature. As shown in Figure~\ref{fig:cdf}\url{a}, we observe that 100 AWS Lambda functions are instantiated and start executing in less than 2 seconds; for 1000 functions, this delay increases only up to 5 seconds. The ability to scale from zero to thousands of vCPUs in such a short amount of time offers a level of burstiness previously unseen in traditional cluster environments.
+
+    \item Once the compute resources (FaaS functions) are instantiated, they typically load their input data from object storage. As depicted in Figure~\ref{fig:rw}, the aggregate bandwidth offered by Amazon S3 reaches up to 100~GB/s for reads and 90~GB/s for writes when accessed concurrently by 1000 functions. This demonstrates the S3 high I/O parallelism, which Lambda functions can efficiently leverage for highly scalable data pull/push operations.
+\end{itemize}
+
+\subsection{Source code}
+The entire Lithops source code is openly accessible to the public via its GitHub repository: \url{https://github.com/lithops-cloud/lithops}.
+
+\section{On the Road to Optimized Partitioning with Dataplug}
+
+Scientific computing in the cloud is becoming increasingly data-driven. The success of large-scale data-parallel workloads depends not only on scalable computation, but also on scalable data access. In this section, we examine the limitations of traditional static data partitioning, introduce the concept of cloud-aware formats, and describe how the Dataplug~\citep{dataplug} framework enables dynamic on-the-fly partitioning of unstructured scientific data. We conclude with an overview of Dataplug operational flow, allowing users to efficiently access and process large unstructured scientific datasets.
+
+\subsection{Static Partitioning}
+
+Static data partitioning is the traditional approach to data distribution in parallel serverless computing. It consists of physically splitting datasets into smaller chunks ahead of time, often based on size (e.g., 1~GB per file), and storing these chunks as individual objects (as shown on top of Figure~\ref{fig:static_vs_dynamic}). This enables distributed execution frameworks like Lithops or Dask to process data in parallel by assigning each file to a separate worker.
+
+While conceptually simple, static partitioning comes with significant limitations:
+
+\begin{enumerate}
+    \item High preprocessing cost: Partitioning usually requires reading, transforming, and re-writing large datasets back to storage. In cloud object storage, where data is immutable, this implies full data duplication, leading to high I/O, storage, and compute costs.
+    \item Inflexibility: Once partitioned, the chunk size is fixed. Adapting to new workloads (e.g., smaller partitions for finer-grained parallelism or larger ones for fewer tasks) requires reprocessing and rewriting the dataset again.
+\end{enumerate}
+
+These limitations become increasingly problematic as scientific datasets grow to the huge scale. In practice, many research teams cannot afford the cost of rewriting legacy datasets just to enable parallel access. Moreover, partitioning choices made early in a project may later hinder performance optimization, preventing effective use of scalable resources.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{assets/static-vs-dynamic.pdf}
+\caption{Static and Dynamic partitioning approaches}
+\label{fig:static_vs_dynamic}
+\end{figure}
+
+\subsection{Cloud-Aware Formats Approach}
+
+One proposed solution to partitioning data is to adopt so-called \emph{cloud-optimized formats}. These are file formats specifically designed to support partial reads (i.e. queries) using HTTP range requests over object storage. Examples include some Cloud-Optimized Formats~\citep{cloudoptimized} as Cloud-Optimized GeoTIFF (COG) and Cloud-Optimized Point Cloud (COPC).
+These formats allow users to access data in parallel without needing to rewrite it, as they can be read directly from object storage using HTTP range requests. This enables efficient data access patterns, such as reading only the required chunks for a specific analysis, without incurring the cost of full dataset duplication.
+
+While effective, this approach has its own challenges. Converting existing datasets to cloud-optimized formats requires a full rewrite of the data, which can be prohibitively expensive for huge-scale archives. Moreover, not all scientific formats support casting to a cloud-optimized format—for example, text-based genomic formats like FASTQ or compressed binary LAS files for spatial data.
+
+So, the alternative head towards a new model: dotate legacy formats with cloud-awareness, enabling dynamic partitioning without rewriting the data. This approach allows users to access and process large datasets in parallel without incurring the high costs of static partitioning.
+
+\subsection{Dataplug: Enabling Dynamic Partitioning in Scientific Formats}
+
+Dataplug is a Python framework that implements cloud-aware, on-the-fly dynamic partitioning model. The key idea is to maintain legacy data blobs without modification while enabling efficient access patterns. Rather than rewriting the data into a new format, Dataplug extracts structural metadata from the raw files via read-only preprocessing and stores this information externally (e.g., in a database or a metadata bucket). This enables parallel access to the original object without modifying it.
+
+There are three essential building blocks that, in turn, compose the three key directives of the Dataplug framework.
+
+\begin{itemize}
+    \item Cloud-aware preprocessing (flow shown in bottom of Figure~\ref{fig:static_vs_dynamic}): Each supported format defines a preprocessing heuristic that analyzes the file structure (e.g., sequence boundaries, block offsets, spatial extents) and generates the metadata. This process is one-time and non-intrusive---it never rewrites the input data.
+
+    \item Partitioning strategies: Once preprocessed, a dataset can be partitioned in multiple ways using user-defined strategies. A partitioning function queries the metadata and defines logical partitions (called slices). For instance, one strategy might divide genomic data into 1 million reads per slice, while another partitions spatial files by bounding box. These strategies are pluggable and workload-specific.
+    
+    \item Lazily-evaluated slices: Each slice represents a logical data partition. When a worker performs the get operation over the slice, it retrieves the corresponding byte ranges from object storage (using HTTP range requests) to the worker memory. This happens entirely at runtime, just-in-time for processing.
+\end{itemize}
+
+The partitioning and getting of slices mechanism is illustrated in Figure~\ref{fig:dataplug_workflow}. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{assets/dataplug.pdf}
+\caption{Dataplug workflow}
+\label{fig:dataplug_workflow}
+\end{figure}
+
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\small, commentstyle=\color{gray}]
+from dataplug import CloudObject
+from dataplug.formats.genomics.fastq import FASTQGZip, partition_reads_batches
+
+# Assign FASTQGZip data type for the object
+co = CloudObject.from_s3(FASTQGZip, "s3://genomics/dataset.fastq.gz")
+
+# Data must be pre-processed first ==> This only needs to be done once per dataset
+co.preprocess()
+
+# Partition the FASTQGZip object into 200 chunks
+# This does not move data around, it only creates data slices from the indexes
+data_slices = co.partition(partition_reads_batches, num_batches=200)
+
+def process_fastq_data(data_slice):
+    # Evaluate the data_slice, which will perform the
+    # actual HTTP GET requests to get the FASTQ partition data
+    fastq_reads = data_slice.get()
+    ...
+
+# Use Lithops to process the data slices in parallel
+from lithops import FunctionExecutor
+with FunctionExecutor() as fexec:
+    # Map the process_fastq_data function to each data slice
+    fexec.map(process_fastq_data, data_slices)
+\end{lstlisting}
+
+At the same time, the entirely workflow explained in previous lines is straightforward to use via Dataplug API. The above code snippet illustrates how to use Dataplug to partition one genomic (FASTQGZip) file into several slices, and then process each slice in parallel using Lithops.
+In a very quick overview, the code above illustrates how to use Dataplug to partition a FASTQGZip file into 200 slices, and then process each slice in parallel using Lithops. First, the \texttt{preprocess()} method generates the required metadata for the FASTQGZip file, then the \texttt{partition()} method creates the slices based on the specified partitioning strategy, and the \texttt{get()} method retrieves the data for each slice when called, in a lazy way.
+
+Dataplug approach offers several key advantages over static partitioning, that make it particularly well-suited for scientific data analytics:
+
+\begin{itemize}
+    \item Zero-cost repartitioning: Because partitioning operates over metadata, the same dataset can be re-sliced on demand with different strategies, without re-reading or re-writing the raw data.
+    \item Efficient resource usage: The metadata is lightweight (often $<1\%$ of the original file size), and slices can be distributed to any number of workers, enabling elastic autoscaling.
+    \item Format extensibility: Support for new formats is added by implementing a preprocessor, a strategy, and a slice handler---without need to modify the core.
+\end{itemize}
+
+\subsection{Source code}
+The entire Dataplug source code is openly accessible to the public via its GitHub repository: \url{https://github.com/CLOUDLAB-URV/dataplug}.
+
+
+\section{PyRun: Simplifying Serverless Environments for Data Science}
+In the same plane as serverless computing, which minimizes the infrastructure management burden, PyRun emerges as a platform that further simplifies the development and execution of applications, particularly in the context of data science and scientific computing. By providing a ready-to-use, browser-based development environment, PyRun eliminates the need for users to configure or manage infrastructure, making it accessible even to those without DevOps experience. With a minimal configuration step, users can quickly set up their cloud environment and start developing applications without the complexities typically associated with cloud computing.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{assets/pyrun.png}
+\label{fig:pyrun}
+\end{figure}
+
+At a glance, PyRun service offers the following features:
+
+\begin{itemize}
+
+\item Ready-to-execute Web IDE: For each PyRun application, users are provided with a fully remote, web-based development environment accessible via browser. This environment is also natively synchronized with GitHub, enabling a seamless development workflow without the need for local installations.
+
+\item Pre-configured frameworks: PyRun currently supports native integration with parallel computing frameworks such as Lithops, Dask and Dataplug, with plans to extend this list in the future. These integrations allow users to access powerful APIs without the overhead of manual pre-configuration, significantly accelerating the development and deployment process.
+
+\item Sharing applications via pipelines: PyRun supports collaborative workflows through its \textit{Public Resources} feature, which enables users to share parallel applications with the broader data science community. This facilitates reproducibility and scientific collaboration.
+
+\item Monitoring: PyRun provides a built-in observability layer for scientific parallel applications. Users have access to a monitoring interface that displays detailed execution metrics, including task status, CPU/memory/network usage, failure reports, and runtime statistics.
+
+\item Simplified AI/ML workflows: PyRun facilitates AI/ML development by offering an integrated environment with automated infrastructure management. It supports widely-used machine learning frameworks such as TensorFlow and PyTorch, with straightforward runtime configuration. Scalable training and data processing can be achieved through Lithops-based distributed execution. Additionally, PyRun includes support for interactive LLM experimentation, allowing users to run models such as LLaMA 3 locally via Ollama within their workspace.
+\end{itemize}
+
+In summary, PyRun is a platform that simplifies the development and execution of serverless and AI/ML applications. For more information, visit \url{https://pyrun.cloud/}.
+
+
+\section{Case Study: Python Serverless Data Analytics Empowering METASPACE Metabolomics Pipelines}
+
+One prominent example of leveraging serverless data analytics in Python is METASPACE~\citep{metaspace}, a cloud platform developed by the European Molecular Biology Laboratory (EMBL) to support spatial metabolomics research. This field aims to identify and localize small molecules—such as metabolites and lipids—within tissue sections using imaging mass spectrometry (MS). These spatial insights are critical for understanding biological processes related to disease, development, and immune response. METASPACE allows researchers to submit MS datasets, automatically annotate detected molecules, and visualize their spatial distribution. It provides standardized quality control, enabling comparisons across experiments, laboratories, and instruments. The platform has evolved into a community-driven knowledge base of spatial metabolomes, supporting open data sharing and collaboration. With over 1,000 users and tens of thousands of processed datasets, METASPACE has become a widely adopted tool in biomedical research, making spatial metabolomics more accessible, reproducible, and scalable.
+
+METASPACE initially relied on a Spark cluster for its computational backend. However, as user numbers grew and workloads became more demanding, the limitations of this setup became increasingly evident. Spark’s static resource allocation and rigid execution model made it difficult to handle large, diverse datasets efficiently. This often led to resource underutilization or performance bottlenecks, restricting the system’s ability to scale effectively.
+
+To address these issues, METASPACE transitioned to a serverless architecture, aiming for greater flexibility and ease of management. By adopting Lithops, the platform gained the ability to scale computing resources dynamically based on workload demands. This move significantly reduced operational overhead while improving performance and cost efficiency. The switch to a serverless model allowed METASPACE to overcome the constraints of its Spark-based infrastructure and provided a more responsive and scalable environment for data processing. In Figure~\ref{fig:wallclock} we can see one the execution timeline of one METASPACE metabolomics pipeline sample, which is a complex workflow that includes multiple steps of parallel computations: the variability in the demand for resources is evident between stages, with some steps requiring much more compute power than others. This variability is a key driver for the adoption of serverless computing, aspect in which Lithops excels, as it allows for dynamic scaling---by providing just the right amount of resources---based on the specific needs of each step in the pipeline.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{assets/wallclock.pdf}
+\caption{METASPACE Metabolomics Pipeline}
+\label{fig:wallclock}
+\end{figure}
+
+Also in the metabolomics field, it is common to work with large datasets that are not cloud-optimized, such as imzML~\citep{imzml} files. The imzML format is a standard for storing mass spectrometry imaging data, but it does not natively support cloud-aware access patterns. To address this challenge, the Dataplug framework implements the required plugin for imzML files, enabling efficient data on-the-fly partitioning. This allows the scientific community to process large imzML files without the need for statically partitioning them into smaller chunks. Dataplug framework extracts the necessary metadata from the imzML files, enabling dynamic partitioning strategies that can adapt to the specific needs of each analysis. This approach significantly reduces the preprocessing time and storage costs associated with traditional static partitioning methods, as shown in Figure~\ref{fig:dataplug_preprocess}\url{a}. Dynamic partitioning also paves the way for researchers to experiment with different partitioning strategies without the need to rewrite the original data, providing greater flexibility and significant ingestion time savings due to parallel data access, that are shown in Figure~\ref{fig:dataplug_downloading}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.675\textwidth]{assets/datamovement.pdf}\label{fig:dataplug_preprocess}
+\includegraphics[width=1\textwidth]{assets/downloading.pdf}\label{fig:dataplug_downloading}
+\caption{Dataplug Performance: Preprocessing and ingestion}
+\end{figure}
+
+In terms of usability, some METASPACE applications have been integrated into PyRun to provide a user-friendly interface for running these serverless data pipelines. PyRun hinders the complexity of managing the environment and its dependencies, allowing researchers to focus on their data analysis tasks without worrying about configuration issues. This integration has made it easier for scientists to leverage the power of serverless computing and dynamic partitioning in their research workflows.
+
+
+\section{Conclusion}
+Ultimately, harnessing the power and advantages of serverless computing for data analytics in Python has transformed how scientists and developers tackle large-scale data processing. With production-ready tools like Lithops, which enables efficient and scalable execution of functions in the cloud; Dataplug, which simplifies partitioning of complex scientific datasets not originally designed for cloud environments; and PyRun, which streamlines development environment setup, a robust ecosystem has emerged that allows users to focus completely on their code, rather than the underlying infrastructure.
