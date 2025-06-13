@@ -192,9 +192,9 @@ Nevertheless, its overall performance supports its suitability for precision agr
 
 Our work began with an eye toward tackling a major challenge in agricultural remote sensing: the need for extensive manual annotation. SAM’s zero-shot segmentation enables accurate object detection without domain-specific training, making it scalable and adaptable for new use cases with minimal setup.
 
-### Benefits of Open-Source
+### Benefits of Open Source
 
-Built entirely on open-source geospatial tools, the workflow offers transparency, reproducibility, and flexibility. It can be tailored for various tasks like plant counting or automated annotation for model training, supporting broader adoption in agriculture and remote sensing.
+Built entirely on open source geospatial tools, the workflow offers transparency, reproducibility, and flexibility. It can be tailored for various tasks like plant counting or automated annotation for model training, supporting broader adoption in agriculture and remote sensing.
 
 ### Practical Impact
 

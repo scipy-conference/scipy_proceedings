@@ -13,6 +13,10 @@ project:
       email: nick@upskilled.consulting
       orcid: 0009-0001-3727-9178
       affiliation: Upskilled Consulting
+      roles:
+        - Conceptualization
+        - Methodology
+        - Investigation
   keywords:
     - object detection
     - spatial localization
@@ -25,11 +29,12 @@ project:
     - rule: doi-exists
       severity: ignore
       keys:
-        - Atr03
-        - terradesert
-        - jupyter
-        - sklearn1
-        - sklearn2
+        - rasterio
+        - opencv
+        - openpyxl
+        - pillow
+        - pytorch
+        - qgis
   exports:
     - id: pdf
       format: typst
