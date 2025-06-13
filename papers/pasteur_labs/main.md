@@ -7,11 +7,24 @@ abstract: |
 
 ## Introduction
 
-Countless problems in science and engineering can be framed as tuning tasks, where parameters of a complex process---such as a physical simulation or a lab experiment---are iteratively tuned to maximize an objective. For such tasks, differentiable programming (DP) has emerged as a powerful tool, due to its ability to automate and accelerate gradient-based operations, enabling "differentiable physics" by codifying the use of gradient information to optimize, correct, or control physical systems. At the core of DP is the technique known as automatic differentiation (autodiff, AD) to compute partial derivatives of computer programs without the need to spell out explicit forms of said derivatives. Autodiff techniques enjoy great success in the fields of artificial intelligence and machine learning (ML) thanks to proliferation of deep learning software frameworks such as TensorFlow, JAX, and PyTorch. However, applications of AD in differentiable physics are largely untested at industrial scale, and ML frameworks are rarely designed for nor tested on practical science and engineering _systems_ (as opposed to single components).
+Countless problems in science and engineering can be framed as tuning tasks, where parameters of a complex process &mdash; such as a physical simulation or a lab experiment &mdash; are iteratively tuned to maximize an objective. For such tasks, differentiable programming (DP) has emerged as a powerful tool, due to its ability to automate and accelerate gradient-based operations, enabling "differentiable physics" by codifying the use of gradient information to optimize, correct, or control physical systems. At the core of DP is the technique known as automatic differentiation (autodiff, AD) to compute partial derivatives of computer programs without the need to spell out explicit forms of said derivatives. Autodiff techniques enjoy great success in the fields of artificial intelligence and machine learning (ML) thanks to proliferation of deep learning software frameworks such as TensorFlow, JAX, and PyTorch [@baydin2018automatic].
 
-We put forth the design, implementation, and validation of a novel system engineering approach to AD-driven physics: "Differentiable Physics Programming" (DPP). DPP resolves the above challenges via autodiff-native software containerization and dataflow-based orchestration, built to be highly modular and interoperable with physics simulation tools and engineering data types, namely computational fluid dynamics (CFD) and computer-aided engineering (CAE) broadly. Such a system enables scientists and engineers of diverse backgrounds to build complex workflows centered around simulation and data-driven surrogate models, and propagate gradients throughout the entire workflow, thus unleashing the potential of AD on end-to-end applications. We demonstrate the DPP system on a non-trivial class of problems: iterative, closed-loop computation with CFD solvers, namely for experiment design and optimization. Furthermore, we highlight the significant synergy between DPP and several emerging simulation technologies, such as surrogate modelling, learned hybrid / solver-in-the-loop models, and online learning of emulators---each of which has already proven its tremendous worth in experimental applications, but hasn't yet managed to percolate into real-world engineering systems.
+However, applications of AD in differentiable physics are largely untested at industrial scale, and ML frameworks are rarely designed for nor tested on practical science and engineering _systems_ (as opposed to single components). Building pipelines that propagate gradients effortlessly across components introduces unique challenges. Real-world pipelines often span diverse technologies, frameworks (e.g., JAX, TensorFlow, PyTorch, Julia), computing environments (local vs. distributed clusters; CPU vs. GPU), and teams with varying expertise. Additionally, legacy systems and non-differentiable components often need to coexist with modern AD-enabled frameworks.
 
-## Parametric Topology Optimization
+Recognising the need for a robust system-level software support of Autodiff-capable pipelines, we put forth the design, implementation, and validation of a novel system engineering approach to AD-driven physics: "Differentiable Physics Programming" (DPP). DPP resolves the above challenges via autodiff-native software containerization and dataflow-based orchestration, built to be highly modular and interoperable with physics simulation tools and engineering data types, namely computational fluid dynamics (CFD) and computer-aided engineering (CAE) broadly. Such a system enables scientists and engineers of diverse backgrounds to build complex workflows centered around simulation and data-driven surrogate models, and propagate gradients throughout the entire workflow, thus unleashing the potential of AD on end-to-end applications.
+
+To demonstrate the DPP system in action we present Tesseract, a software ecosystem that provides pipeline-level AD and unlocks DPP at scale. We give detailed description of Tesseract's software design and functionality, and demonstrate its use on a non-trivial problem of the minimization of compliance of a parametric structure made of a linear elastic material. Our aim in developing Tesseract is present the community with tools necessary to scale up the capabilities of Autodiff-native scientific workflows.
+
+## General intro into tesseracts ecosystem
+Maybe transfer from our docs
+
+## Tessearct core
+Couple of paragraphs about design, API, usage. Nice diagram.
+
+## Tesseract jax
+Couple of paragraphs about design, API, usage. Nice diagram if it exists.
+
+## Use case: Parametric Topology Optimization
 
 ![Figure 1](illustration.png)
 
@@ -31,8 +44,6 @@ We compare our solution with the free form topology optimization solution that i
 
 - **Computing ressources**: Tesseract components can be run on different computing resources, which allows us to easily scale the pipeline and run it on different machines. For example, we could run the finite element solver on a GPU machine and the design space tesseract on a CPU.
 
-
-
 ## Related work
 
 Tesseract offers a unique combination of containerised runtime for scientific computing and native AD capabilities. Considered separately, both these areas are rich with existing tools and frameworks.
@@ -41,7 +52,9 @@ Tesseract offers a unique combination of containerised runtime for scientific co
 
 **Automatic differentiation.** Given how critical is automatic differentiation (AD) to modern scientific workflows [@baydin2018automatic], it is not surprising that there is a wide range of software tools providing AD capabilities. Major deep learning frameworks PyTorch [@paszke2017automatic] and TensorFlow [@abadi2016tensorflow] both implement AD and make extensive use of it for training of ML models. AD is also one of the main features of JAX, Python library for high performance numerical computing [@jax2018github], and its implementation in JAX strongly influenced design of Tesseract's API. Crucially, the majority of these frameworks support AD on a program level, and component-scale AD is not nearly as common. While composite solutions are possible (e.g. combining AD-capable backend with an HTTP service), to the best of our knowledge Tesseract is the first software project that natively supports AD on the component level.
 
+## Conclusions
 
+----- What comes below is the example, to use for markup nits
 
 ## Bibliographies, citations and block quotes
 
