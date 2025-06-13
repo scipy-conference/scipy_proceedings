@@ -22,6 +22,7 @@ project:
     AD: automatic differentiation
     DPP: Differentiable Physics Programming
     CAE: computer-aided engineering
+    API: applicaiton programming interface
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
