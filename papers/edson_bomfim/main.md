@@ -84,34 +84,56 @@ While this categorization is useful for understanding the *impact* of poor data 
 
 Detecting the problems outlined in Section 2 requires a diverse toolkit of methods, ranging from simple, deterministic rules to complex statistical models. Below, we catalogue these methods and discuss some aspects of their application.
 
-### Table 1: Mapping Detection Methods to Data Quality Problems
-
-| Method | Applicable Data Quality Problems Found |
-| :--- | :--- |
-| **Database Constraints** (Not Null, Unique, Primary Key, Foreign Key) | Missing Data, Duplicates, Dangling Data, Schema Violations |
-| **User-Specified Integrity Constraints & Triggers** | Inconsistency, Wrong Data, Wrong Categorical Data, Circularity |
-| **Direct Checks** (for Null, Empty Strings, Dummy Values) | Missing Data, Semi-empty Tuple |
-| **Quantitative & Statistical Metrics** | Missing Data (e.g., completion rate), Distribution Shift |
-| **Comparison & Similarity** (Direct, Distance, String Metrics) | Duplicates, Inconsistency, Misspellings, Non-standardized Data |
-| **Sorted Neighbourhood Method** | Duplicates (approximate) |
-| **Attribute Cardinality Checks** | Duplicates (where cardinality should equal row count) |
-| **Redundancy Analysis** | Redundancy (correlated features) |
-| **Semantic & Rule-Based Testing** (incl. Regex, Set Validation) | Inconsistency, Wrong Data, Misfielded Values, Schema Violations, Non-standardized Data |
-| **Probability-based Metrics & Statistical Tests** | Inconsistency (Semantic), Plausibility |
-| **Association Rule Mining** | Inconsistency, Wrong Data |
-| **Comparison to Reference Data** (Real World, Legal Values) | Wrong / Incorrect Data, Outdated Temporal Data |
-| **Explicit Type Checking & Domain Format Checks** | Schema Violations, Non-standardized Data |
-| **Spell Checker** | Misspellings |
-| **Temporal Constraint Checks** | Outdated Temporal Data |
-| **Distribution Analysis** (L-infinity, Jensen-Shannon, etc.) | Distribution Shift, Outliers |
-| **Outlier Detection Algorithms** (ML, Statistical, Distance-based) | Outliers, Noise |
-| **Clustering Algorithms** | Outliers, Duplicates (by grouping similar records) |
-| **Lookup Tables & Dictionaries** (Thesaurus, Name/Address Dirs) | Non-standardized Data, Ambiguous Data, Misspellings |
-| **Metadata & Schema Evaluation** (Metamodels, DQRs) | Insufficient / Imprecise Metadata, Schema Violations, Name Conflicts |
-| **Cycle Detection Algorithms** | Circularity Among Tuples |
-| **Data Profiling & Human Review** | All (serves as a general-purpose discovery and verification method) |
-
-
+```{list-table} Mapping Detection Methods to Data Quality Problems
+:label: tbl:detection-to-problems
+:header-rows: 1
+* - Method
+  - Applicable Data Quality Problems Found
+* - **Database Constraints** (Not Null, Unique, Primary Key, Foreign Key)
+  - Missing Data, Duplicates, Dangling Data, Schema Violations
+* - **User-Specified Integrity Constraints & Triggers**
+  - Inconsistency, Wrong Data, Wrong Categorical Data, Circularity
+* - **Direct Checks** (for Null, Empty Strings, Dummy Values)
+  - Missing Data, Semi-empty Tuple
+* - **Quantitative & Statistical Metrics**
+  - Missing Data (e.g., completion rate), Distribution Shift
+* - **Comparison & Similarity** (Direct, Distance, String Metrics)
+  - Duplicates, Inconsistency, Misspellings, Non-standardized Data
+* - **Sorted Neighbourhood Method**
+  - Duplicates (approximate)
+* - **Attribute Cardinality Checks**
+  - Duplicates (where cardinality should equal row count)
+* - **Redundancy Analysis**
+  - Redundancy (correlated features)
+* - **Semantic & Rule-Based Testing** (incl. Regex, Set Validation)
+  - Inconsistency, Wrong Data, Misfielded Values, Schema Violations, Non-standardized Data
+* - **Probability-based Metrics & Statistical Tests**
+  - Inconsistency (Semantic), Plausibility
+* - **Association Rule Mining**
+  - Inconsistency, Wrong Data
+* - **Comparison to Reference Data** (Real World, Legal Values)
+  - Wrong / Incorrect Data, Outdated Temporal Data
+* - **Explicit Type Checking & Domain Format Checks**
+  - Schema Violations, Non-standardized Data
+* - **Spell Checker**
+  - Misspellings
+* - **Temporal Constraint Checks**
+  - Outdated Temporal Data
+* - **Distribution Analysis** (L-infinity, Jensen-Shannon, etc.)
+  - Distribution Shift, Outliers
+* - **Outlier Detection Algorithms** (ML, Statistical, Distance-based)
+  - Outliers, Noise
+* - **Clustering Algorithms**
+  - Outliers, Duplicates (by grouping similar records)
+* - **Lookup Tables & Dictionaries** (Thesaurus, Name/Address Dirs)
+  - Non-standardized Data, Ambiguous Data, Misspellings
+* - **Metadata & Schema Evaluation** (Metamodels, DQRs)
+  - Insufficient / Imprecise Metadata, Schema Violations, Name Conflicts
+* - **Cycle Detection Algorithms**
+  - Circularity Among Tuples
+* - **Data Profiling & Human Review**
+  - All (serves as a general-purpose discovery and verification method)
+```
 
 ### Automation and Maintenance:
 
@@ -125,47 +147,150 @@ Just as software testing is an integral part of CI/CD pipelines, data quality te
 To provide a clear, actionable framework, we first present a table mapping individual detection methods to the data quality problems they are primarily used to find. A more strategic approach is to group these methods into broader categories.
 We propose four categories of data quality detection methods, which group the 22 techniques into strategic approaches:
 
-### Table 2: Categories of Data Quality Detection Methods**
 
-| Category | Methods Included |
-| :--- | :--- |
-| **Rule-Based & Constraint Enforcement** | Not Null Constraints, Unique/Primary Key Constraints, General DB Integrity Constraints, Triggers, Rule-based Testing, Regex Pattern Verification, Set Validation, Type Checking/Constraints, Temporal Constraints, Domain Format Checks, Cycle Detection Algorithms, Formal Specifications (DQRs, DPRs). |
-| **Statistical & Machine Learning Analysis** | Quantitative Metrics, Statistical Criterion/Sampling, Redundancy Analysis, Probability-based Metrics, Association Rule Mining, Distribution Analysis (L-infinity, Jensen-Shannon, etc.), All Outlier Detection Methods (ML, Statistical, Distance-based), Clustering, Trimmed Means. |
-| **Data Comparison & Standards** | Direct Comparison, Distance Metrics, String Similarity Metrics, Sorted Neighbourhood, Comparison to Reference Data, Standardization/Normalization, Lookup Tables/Dictionaries, Thesaurus, Name/Address Directories. |
-| **Human & Manual Review** | Identifying Dummy Values, Data Profiling, Metadata Evaluation, Human Verification/Manual Inspection, Domain Expert Intervention. |
+```{list-table} Categories of Data Quality Detection Methods
+:label: tbl:cat-detection
+:header-rows: 1
+* - Category
+  - Methods Included
+* - **Rule-Based & Constraint Enforcement**
+  - Not Null Constraints, Unique/Primary Key Constraints, General DB Integrity Constraints, Triggers, Rule-based Testing, Regex Pattern Verification, Set Validation, Type Checking/Constraints, Temporal Constraints, Domain Format Checks, Cycle Detection Algorithms, Formal Specifications (DQRs, DPRs).
+* - **Statistical & Machine Learning Analysis**
+  - Quantitative Metrics, Statistical Criterion/Sampling, Redundancy Analysis, Probability-based Metrics, Association Rule Mining, Distribution Analysis (L-infinity, Jensen-Shannon, etc.), All Outlier Detection Methods (ML, Statistical, Distance-based), Clustering, Trimmed Means.
+* - **Data Comparison & Standards**
+  - Direct Comparison, Distance Metrics, String Similarity Metrics, Sorted Neighbourhood, Comparison to Reference Data, Standardization/Normalization, Lookup Tables/Dictionaries, Thesaurus, Name/Address Directories.
+* - **Human & Manual Review**
+  - Identifying Dummy Values, Data Profiling, Metadata Evaluation, Human Verification/Manual Inspection, Domain Expert Intervention.
+```
 
 This categorization allows for a structured approach to building a data quality firewall. A team can start with the most automatable category, "Rule-Based & Constraint Enforcement," and progressively add more sophisticated "Statistical & ML Analysis" and "Data Comparison" methods, while reserving "Human & Manual Review" for exceptions and complex cases.
 
+Also we present the @tbl:cat-detection-to-problems which provides a high-level map for practitioners, showing which categories of methods are effective at identifying specific data quality problems.
 
-### Table 3: Linking Data Problems to Detection Method Categories
-
-This table provides a high-level map for practitioners, showing which categories of methods are effective at identifying specific data quality problems.
-
-| Data Quality Problem | Rule-Based & Constraint | Statistical & ML | Data Comparison & Standards | Human & Manual |
-| :--- | :---: | :---: | :---: | :---: |
-| Missing Data / Incompleteness | ✔ | ✔ | | ✔ |
-| Duplicates / Redundancy | ✔ | ✔ | ✔ | ✔ |
-| Inconsistency / Contradictions | ✔ | ✔ | | ✔ |
-| Wrong / Incorrect Data | ✔ | ✔ | ✔ | ✔ |
-| Misspellings | | | ✔ | ✔ |
-| Outdated Temporal Data | ✔ | | ✔ | ✔ |
-| Non-standardized Data | ✔ | | ✔ | ✔ |
-| Ambiguous Data | | | ✔ | ✔ |
-| Embedded / Extraneous Data | ✔ | | | ✔ |
-| Misfielded Values | ✔ | | | ✔ |
-| Outliers / Noise | | ✔ | | ✔ |
-| Insufficient / Imprecise Metadata | | | | ✔ |
-| Schema Violations | ✔ | | | ✔ |
-| Dangling Data / Referential Integrity | ✔ | | | |
-| Concurrency / Transaction Issues | ✔ | | | |
-| Wrong Categorical Data | ✔ | ✔ | | ✔ |
-| Name Conflicts | | | | ✔ |
-| Different Aggregation Levels | | | ✔ | ✔ |
-| Circularity Among Tuples | ✔ | | | |
-| Semi-empty Tuple | ✔ | | | ✔ |
-| Data Miscoding | ✔ | | | ✔ |
-| Distribution Shift / Data Drift | | ✔ | | ✔ |
-| Plausibility | | ✔ | | ✔ |
+```{list-table} Linking Data Problems to Detection Method Categories
+:label: tbl:cat-detection-to-problems
+:header-rows: 1
+* - Data Quality Problem
+  - Rule-Based & Constraint
+  - Statistical & ML
+  - Data Comparison & Standards
+  - Human & Manual
+* - Missing Data / Incompleteness
+  -  ✔
+  -  ✔
+  - 
+  -  ✔
+* - Duplicates / Redundancy
+  -  ✔
+  -  ✔
+  -  ✔
+  -  ✔
+* - Inconsistency / Contradictions
+  -  ✔
+  -  ✔
+  - 
+  -  ✔
+* - Wrong / Incorrect Data
+  -  ✔
+  -  ✔
+  -  ✔
+  -  ✔
+* - Misspellings
+  - 
+  - 
+  -  ✔
+  -  ✔
+* - Outdated Temporal Data
+  -  ✔
+  - 
+  -  ✔
+  -  ✔
+* - Non-standardized Data
+  -  ✔
+  - 
+  -  ✔
+  -  ✔
+* - Ambiguous Data
+  - 
+  - 
+  -  ✔
+  -  ✔
+* - Embedded / Extraneous Data
+  -  ✔
+  - 
+  - 
+  -  ✔
+* - Misfielded Values
+  -  ✔
+  - 
+  - 
+  -  ✔
+* - Outliers / Noise
+  - 
+  -  ✔
+  - 
+  -  ✔
+* - Insufficient / Imprecise Metadata
+  - 
+  - 
+  - 
+  -  ✔
+* - Schema Violations
+  -  ✔
+  - 
+  - 
+  -  ✔
+* - Dangling Data / Referential Integrity
+  -  ✔
+  - 
+  - 
+  - 
+* - Concurrency / Transaction Issues
+  -  ✔
+  - 
+  - 
+  - 
+* - Wrong Categorical Data
+  -  ✔
+  -  ✔
+  - 
+  -  ✔
+* - Name Conflicts
+  - 
+  - 
+  - 
+  -  ✔
+* - Different Aggregation Levels
+  - 
+  - 
+  -  ✔
+  -  ✔
+* - Circularity Among Tuples
+  -  ✔
+  - 
+  - 
+  - 
+* - Semi-empty Tuple
+  -  ✔
+  - 
+  - 
+  -  ✔
+* - Data Miscoding
+  -  ✔
+  - 
+  - 
+  -  ✔
+* - Distribution Shift / Data Drift
+  - 
+  -  ✔
+  - 
+  -  ✔
+* - Plausibility
+  - 
+  -  ✔
+  - 
+  -  ✔
+```
 
 
 ## Conclusions
