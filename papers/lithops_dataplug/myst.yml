@@ -5,24 +5,18 @@ project:
   id: scipy-2025-tex_template
   # Ensure your title is the same as in your `main.tex`
   title: On the Path to Seamless Python Serverless Data Analytics
-  description: This work presents Lithops, Dataplug and PyRun.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Enrique Molina-Giménez
       email: enrique.molina@urv.cat
-      orcid: 0000-0000-0000-0000
+      orcid: 0009-0005-2597-3815
       affiliations:
         - Universitat Rovira i Virgili, Tarragona, Spain
     - name: German T. Eizaguirre
       email: germantelmo.eizaguirre@urv.cat
-      orcid: 0000-0000-0000-0000
+      orcid: 0000-0002-2865-9873
       affiliations:
         - Universitat Rovira i Virgili, Tarragona, Spain
-    - name: Aitor Arjona
-      email: aitor.arjona@qbeast.com
-      orcid: 0000-0000-0000-0000
-      affiliations:
-        - Qbeast, Barcelona, Spain
   keywords:
     - serverless
     - data analytics
@@ -32,6 +26,10 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
+    AWS: Amazon Web Services
+    S3: Simple Storage Service
+    GCP: Google Cloud Platform
+    
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
