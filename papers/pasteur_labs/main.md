@@ -15,6 +15,18 @@ Recognising the need for a robust system-level software support of Autodiff-capa
 
 To demonstrate the DPP system in action we present Tesseract, a software ecosystem that provides pipeline-level AD and unlocks DPP at scale. We give detailed description of Tesseract's software design and functionality, and demonstrate its use on a non-trivial problem of the minimization of compliance of a parametric structure made of a linear elastic material. Our aim in developing Tesseract is present the community with tools necessary to scale up the capabilities of Autodiff-native scientific workflows.
 
+## General intro into tesseracts ecosystem
+Maybe transfer from our docs
+
+## Tessearct core
+Couple of paragraphs about design, API, usage. Nice diagram.
+
+## Tesseract jax
+Couple of paragraphs about design, API, usage. Nice diagram if it exists.
+
+## Use case: topology optimization
+transfer from notebook
+
 ## Related work
 
 Tesseract offers a unique combination of containerised runtime for scientific computing and native AD capabilities. Considered separately, both these areas are rich with existing tools and frameworks.
@@ -23,7 +35,9 @@ Tesseract offers a unique combination of containerised runtime for scientific co
 
 **Automatic differentiation.** Given how critical is automatic differentiation (AD) to modern scientific workflows [@baydin2018automatic], it is not surprising that there is a wide range of software tools providing AD capabilities. Major deep learning frameworks PyTorch [@paszke2017automatic] and TensorFlow [@abadi2016tensorflow] both implement AD and make extensive use of it for training of ML models. AD is also one of the main features of JAX, Python library for high performance numerical computing [@jax2018github], and its implementation in JAX strongly influenced design of Tesseract's API. Crucially, the majority of these frameworks support AD on a program level, and component-scale AD is not nearly as common. While composite solutions are possible (e.g. combining AD-capable backend with an HTTP service), to the best of our knowledge Tesseract is the first software project that natively supports AD on the component level.
 
+## Conclusions
 
+----- What comes below is the example, to use for markup nits
 
 ## Bibliographies, citations and block quotes
 
