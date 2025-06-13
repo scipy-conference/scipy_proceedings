@@ -19,10 +19,11 @@ project:
     - differentiable programming
   # Add the abbreviations that you use in your paper here
   abbreviations:
-    AD: automatic differentiation
+    AD: Automatic Differentiation
     DPP: Differentiable Physics Programming
-    CAE: computer-aided engineering
-    API: applicaiton programming interface
+    CAE: Computer-aided Engineering
+    API: Applicaiton Programming Interface
+    CFD: Computational Fluid Dynamics
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
