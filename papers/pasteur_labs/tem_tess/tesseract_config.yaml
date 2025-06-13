@@ -1,0 +1,29 @@
+name: jax-fem-structure
+version: "0.1.0"
+description: |
+  Tesseract that wraps jax-fem for structural analysis.
+
+build_config:
+  package_data: []
+  # custom_build_steps:
+  #   - USER root
+  #   - ENV PATH="/python-env/bin:$PATH"
+  #   - |
+  #     RUN apt-get update && apt-get install -y --no-install-recommends \
+  #       build-essential \
+  #       python3-dev \
+  #       ca-certificates && \
+  #     rm -rf /var/lib/apt/lists/*
+  #   - RUN pip install setuptools
+  extra_packages : [
+    build-essential,
+    libgl1,
+    libglu1-mesa,
+    libblas-dev,
+    liblapack-dev,
+    libxrender1,
+    libxcursor1,
+    libxft2,
+    libxinerama1,
+    libgomp1
+  ]

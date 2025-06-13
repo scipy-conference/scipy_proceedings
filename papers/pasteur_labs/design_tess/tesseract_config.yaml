@@ -1,0 +1,4 @@
+name: design
+version: "0.1.0"
+description: |
+  Tesseract that wraps a pyvista constructed mesh and provides a FD based vjp endpoints.
