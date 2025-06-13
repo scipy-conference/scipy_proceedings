@@ -1,0 +1,55 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-leslie_yu_chen
+  # Ensure your title is the same as in your `main.md`
+  title: Imprecise uncertainty management with uncertain number to facilitate trustful computations
+  # subtitle:
+  description: This paper demonstrates the framework of uncertain number which allows for a closed computation ecosystem whereby trustful computations can be conducted in a rigorous manner. This paper presents an overview of the main capabilities of the library PyUncertainNumber.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Yu Chen
+      email: lesliechen666@outlook.com
+      orcid: 0000-0001-6617-2946
+      affiliations:
+        - University of Liverpool
+      corresponding: true
+    - name: Scott Ferson
+      email: ferson@liverpool.ac.uk
+      orcid: 0000-0002-2613-0650
+      affiliations:
+        - University of Liverpool
+  keywords:
+    - uncertain number
+    - imprecise probability 
+    - probability bounds analysis
+    - optimisation under uncertainty
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+    CDF: cumulative distribution funcion
+    DSS: Dempster Shafer structure
+    DGM: Data generating mechanism
+    KS: Kolmogorov Smirnov
+    DOE: design of experiments
+    PBA: probability bounds analysis
+    UQ: uncertainty quantification
+    CFD: computational fluid dynamics
+    API: application programming interface
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
