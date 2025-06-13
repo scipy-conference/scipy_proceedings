@@ -599,13 +599,18 @@ The performance of the model on the test set is shown below.
 
 In this section, we will explore how SHAP can be used to interpret the predictions of the CNN model.
 
+The `DeepExplainer` class requires a background dataset for approximating the conditional expectations of the SHAP
+values. However, since the complexity of the method scales linearly with the number of background data samples
+passing in a balanced subset of data is needed. Our dataset has 6 target classes, hence it is important to have a
+good representation for each class.
+
 ```{code-block} python
 :linenos: true
 :caption: Creating a balanced background dataset
 
 def create_balanced_background(x_data: Tensor, y_data: Tensor, n_per_class: int = 20):
     """
-    Create a balanced background dataset with equal representation from each class
+    Construct a balanced background dataset with equal representation from each class
 
     Parameters:
     -----------
@@ -655,6 +660,9 @@ background_data, background_labels = create_balanced_background(
 )
 ```
 
+The next step is to calculate the shap values for the subset of the test set or for the 
+entire test set. 
+
 ```{code-block} python
 :linenos: true
 :caption: Computing SHAP values for the CNN model
@@ -668,7 +676,11 @@ explainer = shap.DeepExplainer(model, background_data)
 shap_values = explainer.shap_values(x_test_seq[:MAX_SAMPLES])
 
 # shap_values shape: (MAX_SAMPLES, num_features, SEQ_LENGTH, num_classes)
+
+# get the value for the last time step
+feature_importances = shap_values[:, :, -1, :]
 ```
+
 
 #### Global
 
@@ -677,12 +689,25 @@ separately in a one-vs-all fashion. For the beeswarm plots below, the positive S
 pushes the model's prediction towards the positive class (the class in question), while the negative SHAP values
 imply the feature reduces the model's predicted value towards the negative class (other classes).
 
+##### Walking
+
 :::{figure} beeswarm_Walking_cnn.png
 :label: fig:beeswarm-walking-cnn
 :width: 70%
 :align: left
 Global SHAP values for the CNN model for the `Walking` class.
 :::
+
+From {numref}`fig:beeswarm-walking-cnn`, one can see that the top feature having the biggest impact is 
+`tGravityAccMag-arCoeff()2`. In this feature name, `t` represents that this is a time domain signal. 
+`GravityAcc` denotes that this is the gravity component of the signal is derived from the accelerometer.
+`Mag` represents the magnitude of the three-dimensional signal calculated using Euclidean norm. 
+`arCoeff()2` represents the second coefficient from an autoregressive (AR) model 
+fitted to this gravity acceleration magnitude signal. Autoregressive coefficients capture how a signal's 
+current value relates to its previous values. consistently produce positive SHAP values, indicating regular 
+and rhythmic gravitational acceleration patterns that strongly correlate with the repetitive motion of walking.
+
+##### Walking Upstairs
 
 :::{figure} beeswarm_WalkingUpstairs_cnn.png
 :label: fig:beeswarm-walking-upstairs-cnn
@@ -691,12 +716,25 @@ Global SHAP values for the CNN model for the `Walking` class.
 Global SHAP values for the CNN model for the `Walking Upstairs` class.
 :::
 
+For the beeswarm plot for `Walking Upstairs` class in {numref}`fig:beeswarm-walking-upstairs-cnn` above, we can 
+notice that most of the positive instances of this class has a high value of the `tGravityAccMag-min()` feature.
+This basically represents the minumum magnitude of gravity component of the accelerometer.
+
+###### Walking Downstairs
+
 :::{figure} beeswarm_WalkingDownstairs_cnn.png
 :label: fig:beeswarm-walking-downstairs-cnn
 :width: 70%
 :align: left
 Global SHAP values for the CNN model for the `Walking Downstairs` class.
 :::
+
+For the `Walking Downstairs` class as shown in {numref}`fig:beeswarm-walking-downstairs-cnn`, 
+the top feature is `tBodyAccJerkMag-mad()`. The larger values of median-absolute-deviation in the jerk‐magnitude 
+of total body acceleration pushes the prediction solidly positive the class. In other words, the sharp, 
+uneven impacts that occur when the body’s weight repeatedly drops down each step are a hallmark of descending.
+
+##### Sitting
 
 :::{figure} beeswarm_Sitting_cnn.png
 :label: fig:beeswarm-sitting-cnn
@@ -705,6 +743,14 @@ Global SHAP values for the CNN model for the `Walking Downstairs` class.
 Global SHAP values for the CNN model for the `Sitting` class.
 :::
 
+For the `Sitting` class, the main features are different from the other `Walking` related classes. As shown in 
+{numref}`fig:beeswarm-sitting-cnn`, the top feature is `angle(X, gravityMean)` which measures how much the 
+device’s X-axis is tilted relative to the average gravity vector. Low values (in blue) of this feature are more
+clustered towards the positive SHAP values. The intuition is that when a person is sitting, the attached device
+on the waist makes a smaller and consistent angle with the vertical compared to other activities.
+
+##### Standing
+
 :::{figure} beeswarm_Standing_cnn.png
 :label: fig:beeswarm-standing-cnn
 :width: 70%
@@ -712,12 +758,30 @@ Global SHAP values for the CNN model for the `Sitting` class.
 Global SHAP values for the CNN model for the `Standing` class.
 :::
 
+In the above {numref}`fig:beeswarm-standing-cnn`, we can see that one of the top feature for the `Standing` class is 
+`tBodyAccJerkMag-mad()` as was the case for the `Walking Downstairs` class. However, the behavior is reversed. 
+The larger values of median-absolute-deviation in the jerk‐magnitude of total body acceleration pushes the 
+prediction solidly negative for the class. A possible explanation is that when a person is standing, 
+the body's weight is distributed more evenly, resulting in smoother movements and lower jerk magnitudes.
+
+###### Laying
+
 :::{figure} beeswarm_Laying_cnn.png
 :label: fig:beeswarm-laying-cnn
 :width: 70%
 :align: left
 Global SHAP values for the CNN model for the `Laying` class.
 :::
+
+For the `Laying` class, the differentiatingfeature behaviors are very different to the other classes. The low 
+values of the top feature `tGravityAcc-max()-X` is much more distributed towards the positive SHAP values for 
+the class. The feature represents the maximum value of the X component of the gravity acceleration. This is
+opposite to what we see in {numref}`fig:beeswarm-sitting-cnn` for the `Sitting` class. 
+Similarly, the second feature `angle(X, gravityMean)` also shows a reversed behavior compared to the `Sitting` class.
+This contrast makes sense, since when a person is laying down, the attached device
+on the waist makes a larger angle with the vertical compared to when the person is sitting.
+Another top feature `tBodyAccJerkMag-mad()` clusters low values towards the positive SHAP values, which signifies
+that the jerk magnitude is lower when a person is laying down compared to other activities.
 
 
 #### Dependency
@@ -728,18 +792,21 @@ We shall look at the top 3 features for the classes `Walking`, `Sitting` and `La
 :::{figure} dep_Walking_cnn.png
 :label: fig:dep-walking-cnn
 :width: 80%
+:align: left
 SHAP dependency plot for the CNN model for the `Walking` class.
 :::
 
 :::{figure} dep_Sitting_cnn.png
 :label: fig:dep-sitting-cnn
 :width: 80%
+:align: left
 SHAP dependency plot for the CNN model for the `Sitting` class.
 :::
 
 :::{figure} dep_Laying_cnn.png
 :label: fig:dep-laying-cnn
 :width: 80%
+:align: left
 SHAP dependency plot for the CNN model for the `Laying` class.
 :::
 
@@ -748,24 +815,28 @@ SHAP dependency plot for the CNN model for the `Laying` class.
 :::{figure} waterfall_Laying_cnn_0.png
 :label: fig:waterfall-laying-cnn
 :width: 70%
+:align: left
 Waterfall plot for the CNN model for the `Laying` class.
 :::
 
 :::{figure} waterfall_Walking_Upstairs_cnn_0.png
 :label: fig:waterfall-walking-upstairs-cnn
 :width: 70%
+:align: left
 Waterfall plot for the CNN model for the `Walking Upstairs` class.
 :::
 
 :::{figure} waterfall_Walking_cnn_20.png
 :label: fig:waterfall-walking-cnn
 :width: 70%
+:align: left
 Waterfall plot for the CNN model for the `Walking` class.
 :::
 
 :::{figure} waterfall_Standing_cnn_20.png
 :label: fig:waterfall-standing-cnn
 :width: 70%
+:align: left
 Waterfall plot for the CNN model for the `Standing` class.
 :::
 
