@@ -11,7 +11,7 @@ project:
       email: fmc2855@uw.edu
       orcid: 0009-0007-3540-192X
       affiliations:
-        - University of Washington, School of Oceanography
+        - School of Oceanography, University of Washington
       corresponding: true
       roles:
       - Methodology
@@ -23,7 +23,7 @@ project:
       email: jtcohen@uw.edu
       orcid: 0009-0006-2438-3626
       affiliations:
-        - University of Washington, School of Oceanography
+        - School of Oceanography, University of Washington
       roles:
       - Methodology
       - Software
@@ -41,13 +41,13 @@ project:
       email: vms16@uw.edu
       orcid: 0000-0002-3412-0364
       affiliations:
-        - University of Washington, eScience Institute
+        - eScience Institute, University of Washington
       roles:
       - Software
       - Writing
     - name: LuAnne Thompson
       email: luanne@uw.edu
-      affiliation: University of Washington, School of Oceanography
+      affiliation: School of Oceanography, University of Washington
       orcid: 0000-0001-8295-0533
       roles:
       - Writing
