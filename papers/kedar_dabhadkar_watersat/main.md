@@ -1,265 +1,118 @@
 ---
 # Ensure that this title is the same as the one in `myst.yml`
-title: "Eyes in the sky: Estimating Inland Water Quality Using Landsat Data"
+title: "Eyes in the Sky: Estimating Inland Water Quality Using Landsat Data"
 abstract: |
-  Algal blooms threaten human health and aquatic ecosystems, making monitoring essential. While Chlorophyll a (Chl-a) effectively indicates algal presence, laboratory analysis is complex. This study utilizes satellite imagery as an alternative, addressing previous research limitations caused by scarce lab data.
+  Algal blooms threaten human health and aquatic ecosystems, making monitoring essential. While Chlorophyll-A (Chl-a) effectively indicates algal presence, laboratory analysis is complex. This study utilizes satellite imagery as an alternative, addressing previous research limitations caused by scarce lab data. Moreover, it also demonstrates how openly available Chl-a measurements obtained from the Water Quality Portal (WQP) can enable communities and organizations of all sizes to measure Chl-a in their waters without access to specialized in-situ water sampling skills or laboratory analysis equipment.
   
-  By combining the extensive Water Quality Portal dataset with Landsat satellite imagery, these models estimate Chl-a levels in New York's inland waters. Training with eight years of data demonstrated a strong correlation between satellite-derived and actual measurements (MAPE: 0.96%; RMSE: 3.2 μg/L), enabling improved spatial and temporal monitoring capabilities.
+  By combining the extensive WQP dataset with Landsat satellite imagery, these models estimate Chl-a levels in New York's inland waters. Training with eight years of data demonstrated a strong correlation between satellite-derived and actual measurements (MAPE: 0.96%; RMSE: 3.2 μg/L), enabling improved spatial and temporal monitoring capabilities.
 ---
 
 ## Introduction
 
-Twelve hundred years ago — in a galaxy just across the hill...
+Harmful algal blooms (HABs) can severely impact both the environment and human health. Environmentally, HABs deplete oxygen in water bodies, leading to fish kills and loss of aquatic biodiversity. They can block sunlight, disrupting aquatic plant growth and altering food webs. Many HABs produce toxins that accumulate in the ecosystem, affecting wildlife and domestic animals. For humans, exposure to these toxins—through drinking water, recreation, or consumption of contaminated fish and shellfish—can cause a range of health issues, including skin irritation, respiratory problems, gastrointestinal illness, and, in severe cases, liver or neurological damage. HABs also threaten water supplies and recreational activities, resulting in economic losses for affected communities. Therefore, detecting and mitigating HABs is an area of continued attention.
 
-This document should be rendered with MyST Markdown [mystmd.org](https://mystmd.org),
-which is a markdown variant inspired by reStructuredText. This uses the `mystmd`
-CLI for scientific writing which can be [downloaded here](https://mystmd.org/guide/quickstart).
-When you have installed `mystmd`, run `myst start` in this folder and
-follow the link for a live preview, any changes to this file will be
-reflected immediately.
+A key indicator of HABs is the concentration of Chlorophyll a (Chl-a) in water. Chl-a is a pigment found in all photosynthetic algae, and its presence is directly correlated with the abundance of algal biomass. Elevated Chl-a levels typically signal increased algal growth, which can indicate the onset or presence of a bloom. Therefore, monitoring Chl-a concentrations provides a reliable proxy for detecting and quantifying HABs in aquatic environments.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+Traditionally, Chl-a is detected by in-situ water samples from sources of drinking water. In-situ sampling must be done by experts trained in methods of sample collection and analyzed by professional chemists in the lab with specialized equipment. This makes the process costly and time-consuming. Satellite remotely sensed multispectral or hyperspectral imagery can be used to build statistical models that can predict the amount of Chl-a in sources of drinking water. This reduces the reliance on in-situ sampling and synthesis, but some sample collection and analysis are still required to train these models. Individuals and organizations like smaller communities without access to specialized skills and equipment cannot easily access water quality data.
 
-## Bibliographies, citations and block quotes
+[](https://doi.org/10.1029/2019WR024883) first proposed using the Water Quality Portal (WQP) ([](https://doi.org/10.1002/2016WR019993)), where organizations can submit surveys of water quality results in the US, along with remotely sensed data, to build water quality measurement models. This study extends Aquasat's approach by using a bigger timeline and focused geometry using the data from the inland waters of New York State. With more than 10,000 inland water bodies, of which nearly 8000 are lakes, ponds and reservoirs, New York is one of the richest states in terms of freshwater supply (@fig:nywater).
 
-Bibliography files and DOIs are automatically included and picked up by `mystmd`.
-These can be added using pandoc-style citations `[@doi:10.1109/MCSE.2007.55]`
-which fetches the citation information automatically and creates: [@doi:10.1109/MCSE.2007.55].
-Additionally, you can use any key in the BibTeX file using `[@citation-key]`,
-as in [@hume48] (which literally is `[@hume48]` in accordance with
-the `hume48` cite-key in the associated `mybib.bib` file).
-Read more about [citations in the MyST documentation](https://mystmd.org/guide/citations).
-
-If you wish to have a block quote, you can just indent the text, as in:
-
-> When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication.
->
-> -- @hume48
-
-Other typography information can be found in the [MyST documentation](https://mystmd.org/guide/typography).
-
-### DOIs in bibliographies
-
-In order to include a DOI in your bibliography, add the DOI to your bibliography
-entry as a string. For example:
-
-```{code-block} bibtex
-:emphasize-lines: 7
-:linenos:
-@book{hume48,
-  author    =  "David Hume",
-  year      = {1748},
-  title     = "An enquiry concerning human understanding",
-  address   = "Indianapolis, IN",
-  publisher = "Hackett",
-  doi       = "10.1017/CBO9780511808432",
-}
-```
-
-### Citing software and websites
-
-Any paper relying on open-source software would surely want to include citations.
-Often you can find a citation in BibTeX format via a web search.
-Authors of software packages may even publish guidelines on how to cite their work.
-
-For convenience, citations to common packages such as
-Jupyter [@jupyter],
-Matplotlib [@matplotlib],
-NumPy [@numpy],
-pandas [@pandas1; @pandas2],
-scikit-learn [@sklearn1; @sklearn2], and
-SciPy [@scipy]
-are included in this paper's `.bib` file.
-
-In this paper we not only terraform a desert using the package terradesert [@terradesert], we also catch a sandworm with it.
-To cite a website, the following BibTeX format plus any additional tags necessary for specifying the referenced content is recommended.
-If you are citing a team, ensure that the author name is wrapped in additional braces `{Team Name}`, so it is not treated as an author's first and last names.
-
-```{code-block} bibtex
-:emphasize-lines: 2
-:linenos:
-@misc{terradesert,
-  author = {{TerraDesert Team}},
-  title  = {Code for terraforming a desert},
-  year   = {2000},
-  url    = {https://terradesert.com/code/},
-  note   = {Accessed 1 Jan. 2000}
-}
-```
-
-## Source code examples
-
-No paper would be complete without some source code.
-Code highlighting is completed if the name is given:
-
-```python
-def sum(a, b):
-    """Sum two numbers."""
-
-    return a + b
-```
-
-Use the `{code-block}` directive if you are getting fancy with line numbers or emphasis. For example, line-numbers in `C` looks like:
-
-```{code-block} c
-:linenos: true
-
-int main() {
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-    return 0;
-}
-```
-
-Or a snippet from the above code, starting at the correct line number, and emphasizing a line:
-
-```{code-block} c
-:linenos: true
-:lineno-start: 2
-:emphasize-lines: 3
-    for (int i = 0; i < 10; i++) {
-        /* do something */
-    }
-```
-
-You can read more about code formatting in the [MyST documentation](https://mystmd.org/guide/code).
-
-## Figures, Equations and Tables
-
-It is well known that Spice grows on the planet Dune [@Atr03].
-Test some maths, for example $e^{\pi i} + 3 \delta$.
-Or maybe an equation on a separate line:
-
-```{math}
-g(x) = \int_0^\infty f(x) dx
-```
-
-or on multiple, aligned lines:
-
-```{math}
-\begin{aligned}
-g(x) &= \int_0^\infty f(x) dx \\
-     &= \ldots
-\end{aligned}
-```
-
-The area of a circle and volume of a sphere are given as
-
-```{math}
-:label: circarea
-
-A(r) = \pi r^2.
-```
-
-```{math}
-:label: spherevol
-
-V(r) = \frac{4}{3} \pi r^3
-```
-
-We can then refer back to Equation {ref}`circarea` or
-{ref}`spherevol` later.
-The `{ref}` role is another way to cross-reference in your document, which may be familiar to users of Sphinx.
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas[^footnote-1] diam turpis, placerat[^footnote-2] at adipiscing ac,
-pulvinar id metus.
-
-[^footnote-1]: On the one hand, a footnote.
-[^footnote-2]: On the other hand, another footnote.
-
-:::{figure} figure1.png
-:label: fig:stream
-This is the caption, sandworm vorticity based on storm location in a pleasing stream plot. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/arrays/streamplot.html).
+:::{figure} nywater.png
+:label: fig:nywater
+Map of New York State showing all inland water bodies. There are nearly 10,000 inland water bodies in the state of New York, including lakes, ponds, swamps, and reservoirs.
 :::
 
-:::{figure} figure2.png
-:label: fig:em
-This is the caption, electromagnetic signature of the sandworm based on remote sensing techniques. Based on example in [matplotlib](https://matplotlib.org/stable/plot_types/stats/hist2d.html).
+## Data sources
+
+### The Water Quality Portal
+
+The Water Quality Portal (WQP) [](https://doi.org/10.1002/2016WR019993) is a collaborative data service developed by the United States Geological Survey (USGS), the Environmental Protection Agency (EPA), and the National Water Quality Monitoring Council (NWQMC). Launched in 2012, the WQP was created to provide a single access point for water quality data collected by federal, state, tribal, and local agencies, as well as non-governmental organizations across the United States. This data is collected using in-situ measurements with probes and lab analytical methods.
+
+The portal aggregates millions of water quality records, including chemical, physical, and biological measurements from rivers, lakes, streams, and other water bodies. By standardizing and integrating data from multiple sources, the WQP enables researchers, policymakers, and the public to easily search, download, and analyze water quality information. This centralized resource supports environmental monitoring, regulatory compliance, scientific research, and informed decision-making related to water resource management. Due to the complexity of data collection and manual steps involved in in-situ sample collection, this data is very infrequent and sometimes unreliable.
+
+:::{figure} wqp.png
+:label: fig:wqp
+Water Quality Portal. https://www.waterqualitydata.us/
 :::
 
-As you can see in @fig:stream and @fig:em, this is how you reference auto-numbered figures.
-To refer to a sub figure use the syntax `@label [a]` in text or `[@label a]` for a parenhetical citation (i.e. @fig:stream [a] vs [@fig:stream a]).
-For even more control, you can simply link to figures using `[Figure %s](#label)`, the `%s` will get filled in with the number, for example [Figure %s](#fig:stream).
-See complete documentation on [cross-references](https://mystmd.org/guide/cross-references).
+### Landsat missions
 
-```{list-table} This is the caption for the materials table.
-:label: tbl:materials
-:header-rows: 1
-* - Material
-  - Units
-* - Stone
-  - 3
-* - Water
-  - 12
-* - Cement
-  - {math}`\alpha`
-```
+The Landsat program is a series of Earth-observing satellite missions jointly managed by NASA and the US Geological Survey (USGS). Since its inception in 1972, Landsat has provided the longest continuous space-based record of Earth's land surfaces. The satellites capture multispectral images at regular intervals, enabling the monitoring of environmental changes, land use, agriculture, forestry, and water resources.
 
-We show the different quantities of materials required in
-@tbl:materials.
+Each Landsat satellite is equipped with sensors that detect reflected and emitted energy from the Earth's surface in visible, near-infrared, and shortwave infrared wavelengths. These data are invaluable for tracking changes in vegetation, surface water, urban development, and natural disasters. The Landsat archive is freely available, making it a critical resource for scientific research and environmental management worldwide. Landsat 7, 8, and 9 missions are Sun-synchronous, near-polar orbit
+satellites that provide near-global coverage, with a swath-width of nearly 185 km and resolution of 15-100 m. Individually, they have a repeat cycle of 16 days, but when two of these are combined, we get a repeat cycle of 8 days. This allows us to evaluate water quality at any given place on Earth once every 8 days, subject to cloud cover. The revisit times at any given place on Earth are fairly constant.
 
-Unfortunately, markdown can be difficult for defining tables, so if your table is more complex you can try embedding HTML:
+For water quality studies, Landsat's spatial and spectral resolution allows for the detection of features such as algal blooms, sediment plumes, and changes in water color, which can be correlated with parameters like Chl-a concentration.
 
-:::{table} Area Comparisons (written in html)
-:label: tbl:areas-html
-
-<table>
-<tr><th rowspan="2">Projection</th><th colspan="3" align="center">Area in square miles</th></tr>
-<tr><th align="right">Large Horizontal Area</th><th align="right">Large Vertical Area</th><th align="right">Smaller Square Area<th></tr>
-<tr><td>Albers Equal Area   </td><td align="right"> 7,498.7   </td><td align="right"> 10,847.3  </td><td align="right">35.8</td></tr>
-<tr><td>Web Mercator        </td><td align="right"> 13,410.0  </td><td align="right"> 18,271.4  </td><td align="right">63.0</td></tr>
-<tr><td>Difference          </td><td align="right"> 5,911.3   </td><td align="right"> 7,424.1   </td><td align="right">27.2</td></tr>
-<tr><td>Percent Difference  </td><td align="right"> 44%       </td><td align="right"> 41%       </td><td align="right">43%</td></tr>
-</table>
+:::{figure} landsat.png
+:label: fig:landsat
+Landsat 9, operational since Sept. 2021, has OLI-2 (visible, NIR, SWIR) and TIRS-2 (thermal) on board.
+Source: https://landsat.gsfc.nasa.gov/.
 :::
 
-or if you prefer LaTeX you can try `tabular` or `longtable` environments:
+## Approach
 
-```{raw} latex
-\begin{table*}
-  \begin{longtable*}{|l|r|r|r|}
-  \hline
-  \multirow{2}{*}{\bf Projection} & \multicolumn{3}{c|}{\bf Area in square miles} \\
-  \cline{2-4}
-   & \textbf{Large Horizontal Area} & \textbf{Large Vertical Area} & \textbf{Smaller Square Area} \\
-  \hline
-  Albers Equal Area   & 7,498.7   & 10,847.3  & 35.8  \\
-  Web Mercator        & 13,410.0  & 18,271.4  & 63.0  \\
-  Difference          & 5,911.3   & 7,424.1   & 27.2  \\
-  Percent Difference  & 44\%      & 41\%      & 43\%  \\
-  \hline
-  \end{longtable*}
+### Data curation
 
-  \caption{Area Comparisons (written in LaTeX) \label{tbl:areas-tex}}
-\end{table*}
-```
+This work follows a sequential process of data curation inspired by [](https://doi.org/10.1029/2019WR024883), with the key objective of matching coincident Landsat data with available WQP measurements for Chl-a in the inland waters of New York State. The entire process is laid out in @fig:workflow.
 
-Perhaps we want to end off with a quote by Lao Tse[^footnote-3]:
+:::{figure} workflow.png
+:label: fig:workflow
+A sequential data curation process involves querying data for Chl-a measurements from WQP for New York State's inland water bodies. This is followed by querying Google Earth Engine (GEE) for corresponding Landsat measurements, filtering our potential sources of noise (cloud cover and pixels around major sources of roads), and matching this data to keep measurements that fall within the major water bodies.
+:::
 
-> Muddy water, let stand, becomes clear.
+Querying the WQP for Chl-a measurements within the bounds of New York State between January 2015 and October 2023 yields a dataset of 68,075 measurements. WQP is not consistent in its nomenclature and data quality checks, so it was essential to specify different ways of referring to Chl-a. Some of those ways are _Chlorophyll_, _Chlorophyll A_, _Chlorophyll a_, _Chlorophyll a (probe relative fluorescence)_, _Chlorophyll a (probe)_, _Chlorophyll a - Periphyton (attached)_, _Chlorophyll a - Phytoplankton (suspended)_, _Chlorophyll a, corrected for pheophytin_, and so on. HyRiver, a Python library published by [](https://doi.org/10.21105/joss.03175), was used to connect to the WQP and export data.
 
-[^footnote-3]: $\mathrm{e^{-i\pi}}$
+To reduce the effect of repeated measurements from the same water body and around the same time, we deduplicate data by removing consecutive values with the same date and time if the relative standard deviation (RSD) of those values was less than 10. Passive remote sensing measurements like Landsat are not sensitive to measuring water quality beyond 100 meters depth. So, we removed all measurements that were reported to be measured beyond 100m in depth. After applying these filters and removing unclean values (where measurement values were not numerical), we are left with 13,717 measurements.
+
+Based on the locations and measurements of each of these values, we find the metadata from Landsat missions 7, 8 and 9 (tier 1 imagery) for +- 1 day of the measurement date using publicly accessible USGS APIs. If no coincident Landsat scenes existed, we discard the measurement. This condition further reduces the number of usable measurements to 8295.
+
+Before querying the actual Landsat data, we further filter out the unnecessary parts from each of these Landsat scenes since we only care about the part that images the area of the water body where the WQP measurement was recorded. We use Google Earth Engine ([](https://doi.org/10.1016/j.rse.2017.06.031)) to write a data query and pull Landsat imaged data into a tabular featurized form. To do that, we start by creating a 200-meter buffer around the point of interest (WQP measurement location) and remove the rest. Next, we remove all bits classified as cloud, cloud shadow, or cirrus. We also remove all pixels within 30 meters of major national roads and rail routes ([TIGER Roads data](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html)). To ensure we do not inadvertently consider any land pixels in our data, we retain pixels corresponding to geographies marked with more than 80% confidence as water in [](https://doi.org/10.1038/nature20584). 4307 measurements remain after applying all these filters.
+
+Finally, we do a spatial join with the USGS NHD dataset to keep measurements corresponding to lakes, ponds, and reservoirs in NY state with an area of more than 0.005 sq. km but less than 1000 sq. km. That leaves us with 428 readings. Each row in this tabular dataset indicate one reading at a unique location and day. The feature values are surface reflectance from different Landsat bandwidths—Blue, Green, Red, Nir, Swir1, and Swir2.
+
+### Statistical modeling
+
+The cleaned dataset of 428 readings was used to train different statistical models with regression—random forest, gradient boosting, Lasso, AdaBoost, and XGBoost. The best model was chosen based on MAE and RMSE scores in a 10-fold cross-validation experiment. The statistical modeling workflow is shown in @fig:ml.
+
+:::{figure} ml.png
+:label: fig:ml
+Training and cross-validation experiment setup
+:::
+
+
+## Results
+
+### Model selection
+
+Based on 10-fold cross-validation results for each algorithm, we find the random forest model performed the best (@table:results). We choose this model for further inferencing on other Landsat water body scenes with no matching WQP measurements for Chl-a. @fig:predvsactual shows a comparison of the values predicted by this model and the actual Chl-a measurements from WQP.
+
+:::{table} Cross-validation results. The regression metrics shown below are for the best set of hyperparameters for the displayed algorithm.
+:label: table:results
+| Algorithm | RMSE (μg/L) | MAE (μg/L) | R2 (adj.) | MAPE (%) |
+|---|---|---|---|---|
+| **Random forest** | **3.18** | **2.22** | **0.90** | **0.93** |
+| Gradient boosting | 8.46 | 6.46 | 0.29 | 2.86 |
+| Lasso | 9.98 | 7.66 | 0.013 | 3.31 |
+| AdaBoost | 8.28 | 6.51 | 0.329 | 3.072 |
+| XGBoost | 3.990 | 2.819 | 0.842 | 1.173 |
+:::
+
+
+:::{figure} predvsactual.png
+:label: fig:predvsactual
+:width: 50%
+Values of Chl-a predicted by the best performance model plotted against actual values.
+:::
+
+Furthermore, using Landsat-based satellite remote sensing insights is scalable and yields more than 30 times as many Chl-a readings as in-situ readings obtained from WQP (@fig:nycomparison).
+
+:::{figure} nycomparison.png
+:label: fig:nycomparison
+The number of remotely sensed Chl-a estimations (B) is more than 30x the number of in-situ measurements obtained from the Water Quality Portal (A) across NY’s 200 biggest lakes and in the same 8-year period (2015-2023).
+:::
+
+
+## Conclusion
+
+This study demonstrates that combining Landsat satellite imagery with in-situ water quality measurements enables accurate estimation of Chl-a concentration in New York's inland waters. The curated dataset and rigorous filtering process ensured high-quality training data, and the random forest regression model achieved strong predictive performance. These results highlight the potential of remote sensing and machine learning to supplement traditional water quality monitoring, offering improved spatial and temporal coverage. Future work could expand this approach to other regions and water quality indicators, further supporting environmental management and public health efforts.

@@ -26,6 +26,16 @@ project:
     RMSE: Root Mean Square Error
     MAE: Mean Absolute Error
     MAPE: Mean Absolute Percentage Error
+    EPA: Environmental Protection Agency
+    USGS: United States Geological Survey
+    NIR: Near Infrared
+    SWIR: Short Wave Infrared
+    RGB: Red Green Blue
+    NDWI: Normalized Difference Water Index
+    HAB: Harmful Algal Bloom
+    Chl-a: Chlorophyll-a
+    GEE: Google Earth Engine
+    NHD: National Hydrography Dataset
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
