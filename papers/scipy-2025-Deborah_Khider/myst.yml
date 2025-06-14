@@ -1,0 +1,61 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-Deborah_Khider
+  # Ensure your title is the same as in your `main.md`
+  title: Empowering Learners - Teaching Reproducible Research with Open-Source Tools
+  # subtitle:
+  description: This paper outlines a strategy to teach scientific analysis using Python, integrated with open science publishing concepts. 
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Deborah Khider
+      email: khider@usc.edu
+      orcid: 0000-0001-7501-8430
+      affiliations:
+        - University of Southern California Information Sciences Institute
+      corresponding: true
+    - name: Julien Emile-Geay
+      email: julieneg@usc.edu
+      orcid: 0000-0001-5920-4751
+      affiliations:
+        - University of Southern California
+    - name: David Edge
+      email: david.edge@nau.edu
+      orcid: 0000-0001-6938-2850
+      affiliations:
+        - Northern Arizona University
+    - name: Nicholas McKay
+      email: nick@nau.edu
+      orcid: 0000-0003-3598-5113
+      affiliation: 
+        - Northern Arizona University
+  keywords:
+    - FAIR principles
+    - reproducible science
+    - open science 
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    FAIR: Findable, Accessible, Interoperable, and Reusable
+    FROGS: Facilitating Reproducible Open Geoscience
+    NSF: National Science Foundation
+    USC: University of Southern California
+    ISI: Information Sciences Institute
+    GPF: Geoscience Paper of the Future
+    PyPi: Python Package Index
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
