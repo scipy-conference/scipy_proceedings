@@ -29,13 +29,87 @@ In this article, we provide an overview of the spline fitting problem, outline i
 
 ## Spline Fitting (WIP)
 
-Splines are a class of piecewise polynomial functions defined over a sequence of intervals (known as knots) that ensure continuity and smoothness at the junctions. In their most common form — cubic splines, each interval is fitted with a third-degree polynomial, with continuity up to the second derivative at the knots.
+Splines are piecewise-defined functions used extensively in numerical analysis, computer-aided geometric design, and data fitting. The fundamental idea behind spline interpolation or approximation is to construct a smooth function that matches a set of data points or satisfies a set of constraints, while preserving computational efficiency and numerical stability.
 
-Mathematically, spline functions can be expressed in terms of basis functions. For a B-spline representation of a spline function S(x), we write:
-<formula>
-where:
- - B_i,k(x) - are the B-spline basis functions of degree k, defined over a non-decreasing knot vector {t_i}
- - c_i - are the spline coefficients (control points)
+
+### Some definitions from a spline theory
+
+
+A spline function $S(x)$ of degree $k$ over an interval $[a, b]$ is a piecewise polynomial function such that:
+
+- On each subinterval $[x_i, x_{i+1}]$, $S(x)$ is a polynomial of degree $k$,
+- $S(x)$ is $C^{k-1}$-continuous on $[a, b]$, i.e., it has continuous derivatives up to order $k-1$.
+
+A commonly used example is the cubic spline ($k = 3$), which ensures $C^2$ continuity.
+
+Splines can be represented in several ways, each suitable for different applications:
+
+- **Piecewise Polynomial Form**: The spline is given explicitly by polynomials on each interval:
+
+```{math}
+S(x) =
+\begin{cases}
+P_1(x), & x_0 \leq x < x_1 \\\\
+P_2(x), & x_1 \leq x < x_2 \\\\
+\vdots \\\\
+P_n(x), & x_{n-1} \leq x \leq x_n
+\end{cases}
+```
+
+- **Hermite Form**: Based on interpolation of function values and derivatives at each knot.
+
+- **Bézier Form**: Uses Bernstein polynomials and control points, typically for single intervals in computer graphics and CAD.
+
+- **B-spline Form**: Offers a powerful and stable representation for splines over multiple intervals, especially in numerical methods and modeling.
+
+
+A distinction must be made between spline functions and parametric spline curves:
+
+- **A spline function** is a scalar-valued function $S(x)$, defined over a single independent variable $x$, typically used in interpolation or regression of scalar data.
+
+- **A parametric spline curve** defines a vector-valued mapping from a scalar parameter $t$ to a multidimensional space:
+
+```{math}
+\mathbf{C}(t) = \left( x(t), y(t), z(t), \dots \right)
+
+```
+where each coordinate function $x(t), y(t), \dots$ is a spline function in $t$. This is the common representation in geometric modeling and computer graphics.
+
+A particularly efficient and widely used spline representation is the B-spline (basis spline). B-splines are defined via a set of control points ${ \mathbf{P}_i }$ and a knot vector ${ t_i }$, and provide local control, numerical stability, and efficient evaluation.
+
+A B-spline curve of degree $k$ is defined as:
+
+```{math}
+\mathbf{C}(t) = \sum_{i=0}^{n} \mathbf{P}_i B_{i,k}(t)
+```
+where $\mathbf{P}_i$ are control points, $B_{i,k}(t)$ are the B-spline basis functions of degree $k$, defined recursively by the Cox–de Boor formula [@doi:10.1093/imamat/10.2.134; @doi:10.1007/978-1-4612-6333-3]:
+
+```{math}
+B_{i,k}(t) =
+\frac{t - t_i}{t_{i+k} - t_i} B_{i,k-1}(t)
++
+\frac{t_{i+k+1} - t}{t_{i+k+1} - t_{i+1}} B_{i+1,k-1}(t)
+```
+
+In (5) possible divisions by zero are resolved by the convention that ‘anything divided by zero is zero’. The function $B_{i,k}=B_{i,k,\mathbf{t}}$ is called a B-spline of degree k (with knots $\mathbf{t}$).
+
+This formulation separates geometry (control points) from basis functions, allowing flexible manipulation and efficient computation of spline curves.
+
+### Applications and Benefits of Parametric Splines
+
+Parametric splines are widely used in computer graphics, computer-aided desig (CAD), and more general geometric modeling, where the goal is to design and manipulate accurate and smooth curves and surfaces in two or three dimensions. Their unique properties provide the following advantages:
+
+- **Geometric Flexibility**. Since parametric curves are not constrained to be functions in the $y = f(x)$ form, they can represent vertical segments, loops, cusps, and other geometries that a function cannot.
+
+- **Smooth Multi-dimensional Representation**. By treating each coordinate as an independent spline, parametric curves offer uniform control over the curve shape in all spatial directions.
+
+- **Local Control**. In representations such as B-splines or NURBS, moving one control point affects only a portion of the curve, enabling precise local edits without changing the global shape.
+
+- **Uniform Parameterization**. The parameter $t$ typically varies over a fixed interval $[t_0, t_n]$, which makes operations like subdivision, evaluation, and rendering more efficient and robust.
+
+These properties make parametric splines ideal for applications in: 3D modeling and animation, font and character design, surface generation (via tensor product surfaces), and industrial design (automotive, aerospace, etc.).
+
+
 
 
 ## Basics of Spline Fitting with SciPy (TODO)
