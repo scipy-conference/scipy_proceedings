@@ -52,6 +52,8 @@ project:
     - Neurophysiology
     - Data standardization
     - Scientific software
+  banner: ./assets/banner.png
+  thumbnail: ./assets/thumbnail.neuroconv_logo_white_bg.png
   # Add the abbreviations that you use in your paper here
   abbreviations:
     NWB: Neurodata Without Borders
