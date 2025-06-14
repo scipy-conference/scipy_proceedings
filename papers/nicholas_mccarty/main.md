@@ -169,7 +169,7 @@ Knowing how many TP (18,736) there are in the benchmark output ultimately allows
 </table>
 :::
 
-Having output geometry with real-world coordinates and QC geometry created based on the empirical observation that empty plant pots tend to be ~64 pixels wide and tall; QC points corresponding to actual pot centroids allowed us to create 64-by-64px boxes to facilitate our IoU calculations (see [code](https://colab.research.google.com/drive/1NqDTYw0V9yRnZtoT6Pc7ZJ3ATe7CTue8?usp=sharing#sandboxMode=true)). These calculations further allow us to assess the relative alignment between the detection output geometry and our "ground truth" geometry.
+It can be observed that empty plant pots tend to be ~64 pixels (px) wide and tall; with QC points corresponding to actual pot centroids, we were able to create 64-by-64px boxes to facilitate our IoU calculations (see [code](https://colab.research.google.com/drive/1NqDTYw0V9yRnZtoT6Pc7ZJ3ATe7CTue8?usp=sharing#sandboxMode=true)). These calculations further allow us to assess the relative alignment between the detection output geometry and our "ground truth" geometry.
 
 This work makes it easy to identify down to the individual QC point ID level which detection centroids deviate from said point by more than 3 cm, which is the tolerance specified by our client. In aggregate, we are able to gain a quantified sense of the mean deviation (in cm) of the output produced by each workflow. However, visual inspection reveals that some QC points flagged as having cooresponding detection centroids that are out-of-tolerance were, in fact, themselves off-center. This is to say the some detections from both the open source workflow and the benchmark workflow were flagged as being out-of-tolerance when they observably were not.
 
