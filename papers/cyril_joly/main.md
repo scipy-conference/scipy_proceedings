@@ -7,7 +7,7 @@ abstract: |
 
 ## Introduction  
 
-Missing data is a common challenge in data analysis, often represented as NaN (Not a Number) values in matrices or DataFrames. Many algorithms and statistical methods require complete datasets, necessitating effective handling of missing values. Traditional approaches include imputation (replacing missing values with estimates) or complete-case analysis (discarding rows/columns with any NaN). However, imputation can introduce bias, while complete-case analysis may discard excessive data, especially when missing values are widespread.  
+Missing data is a common challenge in data analysis, often represented as NaN (Not a Number) values in matrices or DataFrames. Many algorithms and statistical methods require complete datasets, necessitating effective handling of missing values [@little2019statistical; @rubin2004multiple]. Traditional approaches include imputation (replacing missing values with estimates) or complete-case analysis (discarding rows/columns with any NaN) [@schafer1997analysis; @van2018flexible]. However, imputation can introduce bias [@white2011multiple], while complete-case analysis may discard excessive data, especially when missing values are widespread [@enders2010applied].  
 
 An alternative strategy is to identify the largest possible submatrix without missing values, preserving the original data unaltered. This reduces to an optimization task: remove the minimal set of rows and columns to yield a NaN-free submatrix of maximum size (i.e., maximizing the product of its dimensions).  
 
@@ -46,7 +46,7 @@ When handling missing values in a matrix, we must decide whether to remove affec
 
 ### Linear Programming Formulation  
 
-The problem can be formulated using integer linear programming, defining decision variables for removing rows, columns, and individual cells, subject to constraints ensuring all NaN values are handled. The objective is to minimize the total number of effectively removed cells, equivalent to maximizing the area of the remaining NaN-free submatrix.  
+The problem can be formulated using integer linear programming [@wolsey2020integer], defining decision variables for removing rows, columns, and individual cells, subject to constraints ensuring all NaN values are handled. The objective is to minimize the total number of effectively removed cells, equivalent to maximizing the area of the remaining NaN-free submatrix.  
 
 **Given:**  
 
@@ -73,7 +73,7 @@ $$
 \min \sum_{i=1}^{m} \sum_{j=1}^{n} e_{i,j}  
 $$  
 
-This formulation can be solved using integer linear programming solvers (e.g., GLPK, Gurobi, CPLEX), often interfaced via modeling languages like Pyomo or PuLP in Python. However, its primary disadvantage is computational cost: for an $m \times n$ matrix, the formulation uses $m \times n + m + n$ binary variables, which becomes prohibitive for large matrices.  
+This formulation can be solved using integer linear programming solvers (e.g., GLPK [@makhorin2012glpk], Gurobi [@gurobi2023gurobi], CPLEX [@cplex2009v12]), often interfaced via modeling languages like Pyomo [@hart2017pyomo] or PuLP [@mitchell2011pulp] in Python for data science practiotioners. However, its primary disadvantage is computational cost: for an $m \times n$ matrix, the formulation uses $m \times n + m + n$ binary variables, which becomes prohibitive for large matrices.
 
 ## Algorithm  
 
@@ -154,12 +154,17 @@ np.isnan(x[rows, cols]).any()
 # False  
 ```  
 
-This computation takes approximately ~200ms on an average personal computer. The package supports NumPy arrays, pandas DataFrames, and Polars DataFrames, leveraging Numba for speed.
+This computation takes approximately ~200ms on an average personal computer. The package supports NumPy arrays [@harris2020array], pandas DataFrames [@mckinney2010data], and Polars DataFrames [@vink2023polars], leveraging Numba [@lam2015numba] for speed.
 
 ## Conclusion
 
 OptiMask provides a scalable heuristic for finding the largest NaN-free submatrix in large datasets where exact methods like linear programming become computationally impractical. By strategically permuting rows and columns to isolate missing values, it offers a practical solution that preserves maximal data without imputation. The implementation supports common data structures (NumPy, pandas, Polars) and delivers results efficiently even for big matrices.
 
+Future work will explore theoretical guarantees on the approximation quality and extensions to weighted optimization problems. The implementation will continue to be optimized for speed in subsequent versions. Finally, an OptiMask-based algorithm for tabular imputation will be developed and benchmarked against MICE to evaluate whether it can achieve better or faster results.
+
 ## Aknowledgements
 
 This work was funded by Airparif. I'd like to thank Paul Catala (Université de Lorraine) and Alexis Lebeau (RTE) for their assistance and review.
+
+::: {#refs}
+:::
