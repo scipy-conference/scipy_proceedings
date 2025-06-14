@@ -14,7 +14,7 @@ Recent advances in foundation models, such as Meta AI’s Segment Anything Model
 While SAM’s ability to generalize is impressive [@kirillov23; @osco23], its performance on remote sensing imagery and fine-grained features requires careful workflow integration and evaluation [@wu23]. This paper describes a comprehensive, open source workflow for object detection and spatial localization in high-resolution remote sensing imagery, built around SAM and widely used geospatial Python libraries [@gdal; @shapely; @geopandas; @rasterio]. The complete process is delineated, from data loading and preprocessing to mask generation, post-processing, and quantitative accuracy assessment, culminating in a robust comparison with the results produced using the proprietary software (see [code](#code)). Precision, accuracy, F1 score, mean deviation (in cm), and Intersection-over-Union (IoU) are calculated in order to quantify the relative quality of the output produced using each workflow[^footnote-1].
 
 
-[^footnote-1]: Output evaluation details are discussed in [Appendix A](#accuracy-evaluation-methodology).
+[^footnote-1]: Output evaluation details are discussed in [Appendix](#accuracy-evaluation-methodology).
 
 ## Motivation
 
@@ -36,7 +36,7 @@ Our approach integrates SAM’s segmentation strengths with traditional geospati
 - **Mask Generation**: Tiling large images for efficient processing, running SAM’s automatic mask generator (**_ViT-H_** variant) on each tile, and filtering masks by confidence.
 - **Post-Processing**: Converting masks to polygons, filtering by area and compactness, merging overlapping geometry, and extracting centroids.
 - **Accuracy Evaluation**: Calculating point-to-centroid deviations (in centimeters) between detected objects and QC points, compiling results, and generating visual and tabular reports.
-- **Benchmarking**: Quantitatively comparing SAM-based results against the evaluated output using identical evaluation metrics (precision, recall, IoU, etc.; see [Appendix A](#accuracy-evaluation-methodology) for details).
+- **Benchmarking**: Quantitatively comparing SAM-based results against the evaluated output using identical evaluation metrics (precision, recall, IoU, etc.; see [Appendix](#accuracy-evaluation-methodology) for details).
 
 It should be noted that there are no model training or fine-tuning steps included in our workflow, as we are using a foundation model to generate masks. This is analogous to using ChatGPT to generate text, which does not require users to train or fine-tune the underlying foundation model in order to do so.
 
@@ -102,7 +102,7 @@ Data post-processing workflow substeps.
 
 :::{figure} accuracy-evaluation.png
 :label: fig:accuracy-evaluation
-Data post-processing workflow substeps; see [Appendix A](#accuracy-evaluation-methodology) for methodology details.
+Data post-processing workflow substeps; see [Appendix](#accuracy-evaluation-methodology) for methodology details.
 :::
 
 #### Benchmarking
@@ -245,7 +245,7 @@ Data and code required to replicate our approach can be found using the links be
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
-## Appendix A
+## Appendix
 
 ### Accuracy Evaluation Methodology
 
