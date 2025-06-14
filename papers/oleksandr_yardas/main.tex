@@ -1,0 +1,323 @@
+%%
+%% Copyright 2019-2021 Elsevier Ltd
+%%
+%% This file is part of the 'CAS Bundle'.
+%% --------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% The list of all files belonging to the 'CAS Bundle' is
+%% given in the file `manifest.txt'.
+%%
+%% Template article for cas-dc documentclass for
+%% double column output.
+
+\documentclass[a4paper,fleqn]{cas-sc}
+
+% If the frontmatter runs over more than one page
+% use the longmktitle option.
+
+%\documentclass[a4paper,fleqn,longmktitle]{cas-dc}
+
+%\usepackage[numbers]{natbib}
+%\usepackage[authoryear]{natbib}
+\usepackage{natbib}
+\usepackage{glossaries}\usepackage{multirow}
+\usepackage{multirow}
+\usepackage{subfig}
+\usepackage{float}
+\usepackage[version=4]{mhchem}
+\usepackage{hhline}
+%%%Author macros
+\def\tsc#1{\csdef{#1}{\textsc{\lowercase{#1}}\xspace}}
+\tsc{WGM}
+\tsc{QE}
+%%%
+
+\newcommand{\vect}[1]{\mathbf{#1}} % vectors and matrices
+
+% Uncomment and use as if needed
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newdefinition{rmk}{Remark}
+%\newproof{pf}{Proof}
+%\newproof{pot}{Proof of Theorem \ref{thm}}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+% Short title
+\shorttitle{OpenMC transport independent depletion}
+
+% Short author
+\shortauthors{O. Yardas, P. Romano, M. Munk, K. Huff}
+
+% Main title of the paper
+\title [mode = title]{Extension of the OpenMC depletion module for
+transport-independent depletion}
+
+% Title footnote mark
+% eg: \tnotemark[1]
+%\tnotemark[<tnote number>]
+
+% Title footnote 1.
+% eg: \tnotetext[1]{Title footnote text}
+%\tnotetext[<tnote number>]{<tnote text>}
+
+% First author
+%
+% Options: Use if required
+% eg: \author[1,3]{Author Name}[type=editor,
+%       style=chinese,
+%       auid=000,
+%       bioid=1,
+%       prefix=Sir,
+%       orcid=0000-0000-0000-0000,
+%       facebook=<facebook id>,
+%       twitter=<twitter id>,
+%       linkedin=<linkedin id>,
+%       gplus=<gplus id>]
+
+%\author[<aff no>]{<author name>}[<options>]
+\author[1]{Oleksandr Yardas}[orcid=0000-0003-0715-585X]
+
+% Corresponding author indication
+%\cormark[1]
+
+% Footnote of the first author
+%\fnmark[1]
+
+% Email id of the first author
+\ead{oyardas2@illinois.edu}
+
+% URL of the first author
+%\ead[url]{<URL>}
+
+% Credit authorship
+% eg: \credit{Conceptualization of this study, Methodology, Software}
+\credit{Methodology, Software, Validation, Visualization, Writing - original draft}
+
+% Address/affiliation
+\affiliation[1]{organization={Dept. of Nuclear, Plasma, and Radiological Engineering, University of Illinois Urbana-Champaign},
+%            addressline={},
+            city={Urbana},
+%          citysep={}, % Uncomment if no comma needed between city and postcode
+            postcode={61801},
+            state={IL},
+            country={USA}}
+
+%\author[<aff no>]{<author name>}[<options>]
+\author[2]{Paul K. Romano}[orcid=0000-0002-1147-045X]
+
+% Email id of the second author
+%\ead{promano@anl.gov}
+
+% Credit authorship
+\credit{Conceptualization, Methodology, Software, Funding acquisition, Writing - review and editing}
+
+% Address/affiliation
+\affiliation[2]{organization={Argonne National Laboratory},
+            addressline={9700 S. Cass Ave},
+            city={Lemont},
+%          citysep={}, % Uncomment if no comma needed between city and postcode
+            postcode={60439},
+            state={IL},
+            country={USA}}
+
+%\author[<aff no>]{<author name>}[<options>]
+\author[3]{Madicken Munk}[orcid=0000-0003-0117-5366]
+
+
+% Email id of the second author
+%\ead{madicken.munk@oregonstate.edu}
+
+% Credit authorship
+\credit{Funding acquisition, Writing - review and editing}
+
+\affiliation[3]{organization={Dept. of Nuclear Science and Engineering, Oregon
+    State University},
+%            addressline={},
+            city={Corvallis},
+%          citysep={}, % Uncomment if no comma needed between city and postcode
+            postcode={97731},
+            state={OR},
+            country={USA}}
+
+%\author[<aff no>]{<author name>}[<options>]
+\author[1]{Kathryn Huff}[orcid=0000-0002-7075-6802]
+
+% Footnote of the second author
+% Email id of the second author
+%\ead{kdhuff@illinois.edu}
+
+% Credit authorship
+\credit{Funding acquisition, Writing - review and editing}
+
+% Corresponding author text
+\cortext[1]{Corresponding author}
+
+% Footnote text
+\fntext[1]{}
+
+% For a title note without a number/mark
+%\nonumnote{}
+
+% Here goes the abstract
+\begin{abstract}
+    We have added functionality for running depletion simulations independently
+    of neutron transport in OpenMC, an open source Monte Carlo particle
+    transport code with an internal depletion module. Transport-independent
+    depletion uses pre-computed static multigroup cross sections and fluxes to
+    calculate reaction rates for OpenMC's depletion matrix solver. This
+    accelerates the depletion calculation, but removes the spatial coupling
+    between depletion and neutron transport. We used a simple PWR pincell to
+    validate the method against the existing transport-coupled depletion method.
+    Nuclide concentration errors roughly scale with depletion time step size and
+    are inversely proportional to the amount of the nuclide present in a
+    depletable material. The magnitude of concentration error depends on the
+    nuclide of interest. Concentration errors for low-abundance nuclides at
+    longer (30-day) time steps exhibit large negative initial concentration the
+    becomes more positive with time due to overestimation of nuclide production
+    stemming from the lack of spatial coupling to neutron transport. For ten
+    3-day time steps, fission product concentration errors are all under 3\%.
+    Actinide concentration errors range from 10-15\% for \ce{Am} and \ce{Cm},
+    5-7\% for \ce{Pu} and \ce{Np}, and 2\% and less for \ce{U}. Surprisingly,
+    the numbers are similar for 30-day time steps. These results demonstrate the
+    potential of this new method with moderate accuracy and extraordinary time
+    savings for low and medium fidelity simulations. Concentration error
+    characterization on larger models remains an open area of interest.
+\end{abstract}
+
+% Use if graphical abstract is present
+%\begin{graphicalabstract}
+%\includegraphics{}
+%\end{graphicalabstract}
+
+% Research highlights
+%\begin{highlights}
+%\item A new method for running depletion calculations in OpenMC without coupling to a transport solver
+%\item Moderate penalty in actinide nuclide composition error for large reductions in calculation time
+%\item Low fission product composition error across the board
+%\end{highlights}
+
+% Keywords
+% Each keyword is seperated by \sep
+\begin{keywords}
+ Depletion \sep Coupling \sep OpenMC \sep Cross sections
+\end{keywords}
+
+\include{acros}
+\maketitle
+
+% Main text
+\input{1-introduction}
+\input{2-methods}
+\input{3-results}
+\input{4-conclusions}
+
+% Numbered list
+% Use the style of numbering in square brackets.
+% If nothing is used, default style will be taken.
+%\begin{enumerate}[a)]
+%\item
+%\item
+%\item
+%\end{enumerate}
+
+% Unnumbered list
+%\begin{itemize}
+%\item
+%\item
+%\item
+%\end{itemize}
+
+% Description list
+%\begin{description}
+%\item[]
+%\item[]
+%\item[]
+%\end{description}
+
+% Figure
+%\begin{figure}[<options>]
+%	\centering
+%		\includegraphics[<options>]{}
+%	  \caption{}\label{fig1}
+%\end{figure}
+
+
+%\begin{table}[<options>]
+%\caption{}\label{tbl1}
+%\begin{tabular*}{\tblwidth}{@{}LL@{}}
+%\toprule
+%  &  \\ % Table header row
+%\midrule
+% & \\
+% & \\
+% & \\
+% & \\
+%\bottomrule
+%\end{tabular*}
+%\end{table}
+
+% Uncomment and use as the case may be
+%\begin{theorem}
+%\end{theorem}
+
+% Uncomment and use as the case may be
+%\begin{lemma}
+%\end{lemma}
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+% To print the credit authorship contribution details
+\printcredits
+
+\section*{Acknowledgements}
+This work was by the Exascale Computing Project (17-SC-20-SC), a collaborative
+effort of the U.S. Department of Energy Office of Science and the National
+Nuclear Security Administration. This work was additionally supported through
+the NRC Integrated University Grant Program Fellowship. %Huff funding?
+Refactoring of the initial implementation of the \verb.MicroXS. and
+\verb.IndependentOperator. classes to support multi-group cross sections was
+supported by the U.S. Department of Energy Office of Fusion Energy Sciences
+under Award Number DE-SC0022033.
+
+We gratefully acknowledge the computing resources provided on Bebop, a
+high-performance computing cluster operated by the Laboratory Computing Resource
+Center at Argonne National Laboratory.  This research made use of the resources
+of the High Performance Computing Center at Idaho National Laboratory, which is
+supported by the Office of Nuclear Energy of the U.S. Department of Energy and
+the Nuclear Science User Facilities under Contract No. DE-AC07-05ID14517
+
+\section*{Data availability statement}
+The data that support the findings of this study are openly available at the
+following DOI: 10.5281/zenodo.15103379
+
+%% Loading bibliography style file
+%\bibliographystyle{model1-num-names}
+\bibliographystyle{cas-model2-names}
+
+% Loading bibliography database
+\bibliography{bibliography}
+
+% Biography
+%\bio{}
+% Here goes the biography details.
+%\endbio
+
+%\bio{pic1}
+% Here goes the biography details.
+%\endbio
+
+\end{document}
+

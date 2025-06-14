@@ -1,0 +1,73 @@
+\section{Introduction}\label{}
+    %Modeling and simulation codes will play a critical role in licensing
+    %advanced nuclear reactors. In preparation for advanced nuclear technology,
+    %both the \Gls{doene} and the \Gls{nrc} identified several technical gaps in
+    %current \Gls{mns} tools that are necessary for efficient and effective
+    %license application reviews \citep{betzler_modeling_2019,
+    %usnrc_nonlwr_2020-1}. Both \Gls{doene} and the \Gls{nrc} have specifically
+    %identified depletion to be a key modeling feature for advanced nuclear
+    %reactors.
+
+    Accurate simulations of advanced reactors on exascale computing hardware
+    requires state-of-the-art software tools in Monte Carlo transport and
+    heat-coupled computational fluid dynamics
+    ~\citep{romano2021nse,merzari2023sc}.  These methods are computationally
+    expensive, but deliver high confidence in their results. If any component in
+    this tool chain could be simplified or sped up, it would reduce the
+    computational cost on and economic cost from these exascale machines. For
+    Monte Carlo neutron transport, depletion simulations are one of the more
+    expensive simulations. {\it Depletion} is the process by which the nuclide
+    composition changes due to nuclear transmutation and decay reactions
+    occurring in a material subject to irradiation. Depletion capabilities were
+    recently added \citep{ romano_depletion_2021} to OpenMC
+    \citep{romano_openmc_2015}, an open source, community developed Monte Carlo
+    particle transport code. The depletion solver utilizes OpenMC's Python API
+    to iteratively run a transport simulation, calculate transmuation reaction
+    rates, solve the depletion matrix (Eq. \ref{eq:depletion-matrix-t}), and
+    update the material composition. This makes transport-coupled depletion
+    calculations computationally expensive, expecially for large reactor models.
+    
+    In the present work, we describe a new method for running depletion
+    calculations without the need to iteratively run transport calculations by
+    using pre-calculated microscopic cross sections and fluxes for each depletion
+    step. At most, only one transport calculation needs to be run to generate
+    these cross sections and fluxes. Neutron transport and depletion are tightly
+    coupled because the change in material composition can result in changes to
+    the spatial distribution of reaction rates. If few materials are used in a
+    transport-independent depletion calculation, this effectively removes
+    spatial effects of the changing material composition due to the static
+    fluxes and cross sections.
+
+    This limits the practical application of transport-independent depletion to
+    domains where capturing spatial effects are a secondary concern. One
+    such application is in global fuel-cycle analysis where we are more
+    concerned with the overall change in material composition. Fuel cycle
+    simulations typically model many different reactors simultaneously over
+    long time periods. The capabilities described in this paper
+    have been utilized in Cyclus \citep{huff_fundamental_2016} -- an open source
+    fuel cycle simulator -- for coupling depletion to the fuel cycle
+    simulaton \citep{bachmann_os_2024}. Another area of application is in
+    facilities where the coupling between neutron transport and depletion is
+    effectively one-way.  This is often the case for experimental facilities
+    with a neutron source where the source rate is high enough to cause
+    activation of materials but not high enough to produce meaningful burnup of
+    materials. Many proposed fusion energy facilities would fall into this
+    category. For such applications, it is unnecessary to run a fully coupled
+    simulation between neutron transport and depletion; instead, a neutron
+    transport simulation corresponding to the beginning of irradiation can
+    determine reaction rates relative to the neutron source rate, and then the
+    depletion calculation can be performed using the reaction rates scaled by
+    any changes in the neutron source rate over time. For fusion systems, these
+    calculations are often carried out with FISPACT-II~\citep{sublet2017nds};
+    See \citet{eade2020nf} for a recent example. The capabilities described in
+    this paper have also been utilized for a recent study of shutdown dose rate
+    in fusion systems~\citep{peterson2024nf}.
+
+    This paper is organized as follows: In Section \ref{sec:methods}, we describe
+    the methods and algorithms used to calculate reaction rates using the new
+    depletion capabilities. In Section \ref{sec:results}, we describe our
+    simulation and analyze the results. In Section \ref{sec:conclusion}, we
+    summarize our results, and discuss some gaps in the current implementation
+    of the new feature.
+
+

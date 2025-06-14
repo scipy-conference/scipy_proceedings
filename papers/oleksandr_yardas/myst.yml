@@ -1,0 +1,49 @@
+version: 1
+extends: ../papers.yml
+project:
+  # Update this to match `scipy-2025-<folder>` the folder should be `<firstname_surname>`
+  id: scipy-2025-myst_template
+  # Ensure your title is the same as in your `main.md`
+  title: Extension of the OpenMC depletion module for transport-independent depletion
+  # subtitle:
+  description: Add a two sentence description about your article.
+  # Authors should have affiliations, emails and ORCIDs if available
+  authors:
+    - name: Oleksandr Yardas
+      email: oyardas2@illinois.edu
+      orcid: 0000-0003-0715-585X
+      corresponding: true
+      affiliations: Dept. of Nuclear, Plasma, and Radiological Engineering, University of Illinois Urbana-Champaign
+    - name: Paul Romano
+      orcid: 0000-0002-1147-045X
+      affiliations: Argonne National Laboratory
+    - name: Madicken Muk
+      orcid: 0000-0003-0117-5366
+      affiliations: Dept. of Nuclear Science and Engineering, Oregon State University Yet
+    - name: Kathryn Huff
+      orcid: 0000-0002-7075-6802
+      affiliation: Dept. of Nuclear, Plasma, and Radiological Engineering, University of Illinois Urbana-Champaign
+  keywords:
+    - depletion
+    - coupling
+    - OpenMC
+    - Cross sections
+  # Add the abbreviations that you use in your paper here
+  abbreviations:
+    MyST: Markedly Structured Text
+  # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Atr03
+        - terradesert
+        - jupyter
+        - sklearn1
+        - sklearn2
+  exports:
+    - id: pdf
+      format: typst
+      template: https://github.com/curvenote-templates/scipy.git
+      article: main.md
+      output: full_text.pdf
