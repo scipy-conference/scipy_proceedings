@@ -27,12 +27,9 @@ To address these issues, we developed SplineCloud: an open platform that brings 
 In this article, we provide an overview of the spline fitting problem, outline its foundational implementation within SciPy, and introduce SplineCloud — a cloud-based platform for constructing and sharing regression models using parametric splines. We also examine several practical applications to illustrate its capabilities in real-world contexts.
 
 
-## Spline Fitting (WIP)
+## Some Theoretical Background Behind Splines (WIP)
 
 Splines are piecewise-defined functions used extensively in numerical analysis, computer-aided geometric design, and data fitting. The fundamental idea behind spline interpolation or approximation is to construct a smooth function that matches a set of data points or satisfies a set of constraints, while preserving computational efficiency and numerical stability.
-
-
-### Some definitions from a spline theory
 
 
 A spline function $S(x)$ of degree $k$ over an interval $[a, b]$ is a piecewise polynomial function such that:
@@ -110,9 +107,96 @@ Parametric splines are widely used in computer graphics, computer-aided desig (C
 These properties make parametric splines ideal for applications in: 3D modeling and animation, font and character design, surface generation (via tensor product surfaces), and industrial design (automotive, aerospace, etc.).
 
 
+An intuitive visual explanation of splines, different forms of their representation and unique properties is given in the video by Freya Holmér: 
+
+[📺 The Continuity of Splines](https://www.youtube.com/watch?v=jvPPXbo87ds)
 
 
-## Basics of Spline Fitting with SciPy (TODO)
+## Spline Fitting With SciPy (WIP)
+
+SciPy provides a robust and flexible set of spline fitting tools for both **interpolation** and **approximation** through the `scipy.interpolate` module.
+
+In ternm of univariate fitting, SciPy supports several spline fitting methods, including:
+
+- **Interpolating splines** (exact fit to the data)
+- **Smoothing splines** (approximate fit with smoothness penalty)
+- **Least squares splines** (approximate fit with squared residual minimization penalty)
+- **Parametric splines** (e.g., 2D or 3D curves with respect to a parameter)
+
+### Basic Spline Interpolation Example
+
+To fit a spline through a set of points $(x_i, y_i)$ exactly, use the `InterpolatedUnivariateSpline` or `make_interp_spline` functions:
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import make_interp_spline
+
+# Sample data
+x = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+y = np.array([12, 8, 11, 7, 5, 2, 3, 5, 6, 4, 5, 7, 8, 13, 19, 22, 25])
+
+# Create a cubic spline interpolant
+spline = make_interp_spline(x, y, k=3)
+
+# Evaluate spline on a fine grid
+x_spl = np.linspace(x.min(), x.max(), 200)
+y_spl = spline(x_spl)
+
+# Plot
+plt.plot(x, y, 'o', label='Data points')
+plt.plot(x_spl, y_spl, label='Cubic spline')
+plt.legend()
+plt.title("Cubic Spline Interpolation with SciPy")
+plt.show()
+```
+:::{figure} interp_spline_fitting_scipy.png
+:label: fig:stream
+Simple interpolaing cubic spline.
+:::
+
+This constructs a spline $S(x)$ such that:
+
+```{math}
+S(x_i) = y_i \quad \text{for all } i
+```
+and ensures continuity of first and second derivatives ($C^2$ continuity for cubic splines).
+
+
+### Smoothing Splines
+
+When data contains noise, it is often preferable to use a smoothing spline, which balances fidelity to the data with smoothness. SciPy provides UnivariateSpline, which takes a smoothing factor s:
+
+```python
+from scipy.interpolate import UnivariateSpline
+
+# Fit smoothing spline with smoothing factor s
+spline = UnivariateSpline(x, y, s=18)
+
+x_spl = np.linspace(x.min(), x.max(), 200)
+y_spl = spline(x_spl)
+
+plt.plot(x, y, 'o', label='Noisy data')
+plt.plot(x_spl, y_spl, label='Smoothing spline (s=18)')
+plt.legend()
+plt.title("Smoothing Spline Fit")
+plt.show()
+```
+:::{figure} smooth_spline_fitting_scipy.png
+:label: fig:stream
+Simple interpolaing cubic spline.
+:::
+The smoothing spline minimizes the penalized least-squares objective:
+
+```{math}
+\min_S \left\{ \sum_{i=1}^n \left( y_i - S(x_i) \right)^2 + \lambda \int_a^b \left( S''(x) \right)^2 dx \right\}
+```
+where $\lambda$ is a regularization parameter related to s.
+
+
+
+
+
 
 
 ### Critical Pain Points (TODO)
