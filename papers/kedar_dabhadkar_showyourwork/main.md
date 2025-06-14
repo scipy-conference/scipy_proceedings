@@ -2,15 +2,9 @@
 # Ensure that this title is the same as the one in `myst.yml`
 title: "Show your work: Tutorial on building and hosting web applications"
 abstract: |
-  A short version of the long version that is way too long to be written as a
-  short version anyway.  Still, when considering the facts from first
-  principles, we find that the outcomes of this introspective approach is
-  compatible with the guidelines previously established.
+  Work not shown is work lost. Many excellent scientists and engineers are not always adept at showcasing their work. This results in many interesting scientific ideas that have never been seen in the light of day.
 
-  In such an experiment it is then clear that the potential for further
-  development not only depends on previous relationships found but also on
-  connections made during exploitation of this novel new experimental
-  protocol.
+  However, using today's tools, one no longer has to leave the Python ecosystem to create classy, complete prototypes using modern data visualization and web development tools. With over five years of experience building and presenting data solutions at huge science companies, we show it doesn't have to be challenging. We give a walkthrough of the primary web application frameworks and showcase Fast Dash, an open-source Python library we built to solve specific prototyping needs.
 ---
 
 ## Introduction
