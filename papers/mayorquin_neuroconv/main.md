@@ -22,12 +22,31 @@ Automated conversion pipelines address these challenges by eliminating the need 
 :::{table} Key challenges in converting neurophysiology datasets to NWB format.
 :label: tbl:nwb-challenges
 
-<table>
-<tr><th>Challenge</th><th>Description</th></tr>
-<tr><td>Format diversity</td><td>Source data formats span both proprietary and open standards, with many formats existing in multiple versions and internal variations</td></tr>
-<tr><td>Metadata complexity</td><td>Metadata requirements vary substantially across experimental paradigms, with critical information often stored inconsistently or incompletely</td></tr>
-<tr><td>Scale challenges</td><td>Dataset sizes frequently reach hundreds of gigabytes to terabytes, requiring specialized handling for memory-efficient processing</td></tr>
-<tr><td>Multi-modal integration</td><td>Experiments often combine multiple recording systems (electrophysiology, imaging, behavior) each storing data in different formats. This also introduces the problem of data alignment and synchronization across modalities.</td></tr>
+<table style="border-collapse: collapse; width: 100%;">
+<thead>
+<tr style="background-color: #1B5788; color: white;">
+<th style="width: 30%; padding: 12px; text-align: left;">Challenge</th>
+<th style="width: 70%; padding: 12px; text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr style="background-color: rgba(27, 87, 136, 0.15)">
+<td style="padding: 8px; font-weight: 600;">Format diversity</td>
+<td style="padding: 8px;">Source data formats span both proprietary and open standards, with many formats existing in multiple versions and internal variations</td>
+</tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)">
+<td style="padding: 8px; font-weight: 600;">Metadata complexity</td>
+<td style="padding: 8px;">Metadata requirements vary substantially across experimental paradigms, with critical information often stored inconsistently or incompletely</td>
+</tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)">
+<td style="padding: 8px; font-weight: 600;">Scale challenges</td>
+<td style="padding: 8px;">Dataset sizes frequently reach hundreds of gigabytes to terabytes, requiring specialized handling for memory-efficient processing</td>
+</tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)">
+<td style="padding: 8px; font-weight: 600;">Multi-modal integration</td>
+<td style="padding: 8px;">Experiments often combine multiple recording systems (electrophysiology, imaging, behavior) each storing data in different formats. This also introduces the problem of data alignment and synchronization across modalities.</td>
+</tr>
+</tbody>
 </table>
 :::
 
@@ -82,110 +101,110 @@ Currently supporting 47 distinct input formats (@tbl:formats), each DataInterfac
 
 <table style="border-collapse: collapse; width: 100%;">
 <thead>
-<tr style="background-color: #2E5090; color: white;">
-<th style="width: 35%; padding: 12px; text-align: left;">Category</th>
-<th style="width: 25%; padding: 12px; text-align: left;">Subcategory</th>
+<tr style="background-color: #1B5788; color: white;">
+<th style="width: 35%; padding: 12px; text-align: left;">Modality</th>
+<th style="width: 25%; padding: 12px; text-align: left;">Sub-modality</th>
 <th style="width: 40%; padding: 12px; text-align: left;">Format</th>
 </tr>
 </thead>
 <tbody>
 <!-- Extracellular Electrophysiology -->
-<tr style="background-color: #E8F2FF">
-<td rowspan="26" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Extracellular Electrophysiology</strong></td>
-<td rowspan="19" style="padding: 8px; color: #2E5090;"><em>Recording</em></td>
+<tr style="background-color: rgba(27, 87, 136, 0.15)">
+<td rowspan="26" style="padding: 8px; border-right: 2px solid rgba(27, 87, 136, 0.5);"><strong>Extracellular Electrophysiology</strong></td>
+<td rowspan="19" style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Recording</em></td>
 <td style="padding: 8px;">AlphaOmega</td>
 </tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Axona</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Biocam</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Blackrock</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">European Data Format (EDF)</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Intan</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">MaxOne</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">MCSRaw</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">MEArec</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Neuralynx</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">NeuroScope</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">OpenEphys</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Plexon</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Plexon2</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Spike2</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Spikegadgets</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">SpikeGLX</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Tucker-Davis Technologies (TDT)</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">White Matter</td></tr>
-<tr style="background-color: #D6E7FF">
-<td rowspan="7" style="padding: 8px; color: #2E5090;"><em>Sorting</em></td>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Axona</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">Biocam</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Blackrock</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">European Data Format (EDF)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Intan</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">MaxOne</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">MCSRaw</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">MEArec</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Neuralynx</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">NeuroScope</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">OpenEphys</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">Plexon</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Plexon2</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">Spike2</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Spikegadgets</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">SpikeGLX</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Tucker-Davis Technologies (TDT)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">White Matter</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.25)">
+<td rowspan="7" style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Sorting</em></td>
 <td style="padding: 8px;">Blackrock</td>
 </tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Cell Explorer (<cite id="cell_explorer_2021"></cite>)</td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">KiloSort (<cite id="kilosort_2024"></cite>)</td></tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Neuralynx</td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">NeuroScope</td></tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Phy</td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">Plexon</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.20)"><td style="padding: 8px;">Cell Explorer (<cite id="cell_explorer_2021"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.25)"><td style="padding: 8px;">KiloSort (<cite id="kilosort_2024"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.20)"><td style="padding: 8px;">Neuralynx</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.25)"><td style="padding: 8px;">NeuroScope</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.20)"><td style="padding: 8px;">Phy</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.25)"><td style="padding: 8px;">Plexon</td></tr>
 
 <!-- Intracellular Electrophysiology -->
-<tr style="border-top: 3px solid #2E5090;">
-<td style="background-color: #E8F2FF; padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Intracellular Electrophysiology</strong></td>
-<td style="padding: 8px;">—</td>
+<tr style="border-top: 3px solid #1B5788; background-color: rgba(27, 87, 136, 0.15)">
+<td style="padding: 8px; border-right: 2px solid rgba(27, 87, 136, 0.5);"><strong>Intracellular Electrophysiology</strong></td>
+<td style="padding: 8px; font-weight: 600;">—</td>
 <td style="padding: 8px;">ABF</td>
 </tr>
 
 <!-- Optical Physiology -->
-<tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
-<td rowspan="14" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Optical Physiology</strong></td>
-<td rowspan="8" style="padding: 8px; color: #2E5090;"><em>Imaging</em></td>
+<tr style="border-top: 3px solid #1B5788; background-color: rgba(27, 87, 136, 0.15)">
+<td rowspan="14" style="padding: 8px; border-right: 2px solid rgba(27, 87, 136, 0.5);"><strong>Optical Physiology</strong></td>
+<td rowspan="8" style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Imaging</em></td>
 <td style="padding: 8px;">Bruker</td>
 </tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">HDF5</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Micro-Manager</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Miniscope (<cite id="miniscope_2023"></cite>)</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Scanbox</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">ScanImage</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">Thor</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Tiff</td></tr>
-<tr style="background-color: #D6E7FF">
-<td rowspan="5" style="padding: 8px; color: #2E5090;"><em>Segmentation</em></td>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">HDF5</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">Micro-Manager</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Miniscope (<cite id="miniscope_2023"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">Scanbox</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">ScanImage</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">Thor</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Tiff</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.25)">
+<td rowspan="5" style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Segmentation</em></td>
 <td style="padding: 8px;">CaImAn (<cite id="caiman"></cite>)</td></tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">CNMFE (<cite id="cnmfe_e_2016"></cite>)</td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">EXTRACT (<cite id="extract_2017"></cite>)</td></tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Minian (<cite id="minian_2022"></cite>)</td></tr>
-<tr style="background-color: #D6E7FF"><td style="padding: 8px;">Suite2P (<cite id="suite2p"></cite>)</td></tr>
-<tr style="background-color: #E8F2FF">
-<td style="padding: 8px; color: #2E5090;"><em>Fiber Photometry</em></td>
+<tr style="background-color: rgba(27, 87, 136, 0.20)"><td style="padding: 8px;">CNMFE (<cite id="cnmfe_e_2016"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.25)"><td style="padding: 8px;">EXTRACT (<cite id="extract_2017"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.20)"><td style="padding: 8px;">Minian (<cite id="minian_2022"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.25)"><td style="padding: 8px;">Suite2P (<cite id="suite2p"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)">
+<td style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Fiber Photometry</em></td>
 <td style="padding: 8px;">TDT Fiber Photometry</td>
 </tr>
 
 <!-- Behavior -->
-<tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
-<td rowspan="7" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>Behavior</strong></td>
-<td rowspan="5" style="padding: 8px; color: #2E5090;"><em>Motion Tracking</em></td>
+<tr style="border-top: 3px solid #1B5788; background-color: rgba(27, 87, 136, 0.15)">
+<td rowspan="7" style="padding: 8px; border-right: 2px solid rgba(27, 87, 136, 0.5);"><strong>Behavior</strong></td>
+<td rowspan="5" style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Motion Tracking</em></td>
 <td style="padding: 8px;">DeepLabCut (<cite id="deep_lab_cut_2018"></cite>)</td>
 </tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">FicTrac (<cite id="fictrac_2014"></cite>)</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">LightningPose (<cite id="lightning_pose_2024"></cite>)</td></tr>
-<tr style="background-color: #F5F9FF"><td style="padding: 8px;">Neuralynx NVT</td></tr>
-<tr style="background-color: #E8F2FF"><td style="padding: 8px;">SLEAP (<cite id="sleap_2022"></cite>)</td></tr>
-<tr style="background-color: #D6E7FF">
-<td style="padding: 8px; color: #2E5090;"><em>Audio/Video</em></td>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">FicTrac (<cite id="fictrac_2014"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">LightningPose (<cite id="lightning_pose_2024"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.08)"><td style="padding: 8px;">Neuralynx NVT</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.15)"><td style="padding: 8px;">SLEAP (<cite id="sleap_2022"></cite>)</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.25)">
+<td style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Audio/Video</em></td>
 <td style="padding: 8px;">Videos</td>
 </tr>
-<tr style="background-color: #F5F9FF">
-<td style="padding: 8px; color: #2E5090;"><em>Operant Conditioning</em></td>
+<tr style="background-color: rgba(27, 87, 136, 0.08)">
+<td style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Operant Conditioning</em></td>
 <td style="padding: 8px;">MedPC</td>
 </tr>
 
 <!-- General Data -->
-<tr style="border-top: 3px solid #2E5090; background-color: #E8F2FF">
-<td rowspan="3" style="padding: 8px; border-right: 2px solid #B8D4F1;"><strong>General Data</strong></td>
-<td style="padding: 8px; color: #2E5090;"><em>Image</em></td>
+<tr style="border-top: 3px solid #1B5788; background-color: rgba(27, 87, 136, 0.15)">
+<td rowspan="3" style="padding: 8px; border-right: 2px solid rgba(27, 87, 136, 0.5);"><strong>General Data</strong></td>
+<td style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Image</em></td>
 <td style="padding: 8px;">Image (png, jpeg, tiff, etc)</td>
 </tr>
-<tr style="background-color: #D6E7FF">
-<td rowspan="2" style="padding: 8px; color: #2E5090;"><em>Text/Tabular</em></td>
+<tr style="background-color: rgba(27, 87, 136, 0.25)">
+<td rowspan="2" style="padding: 8px; color: #5B9BD5; font-weight: 600;"><em>Text/Tabular</em></td>
 <td style="padding: 8px;">CSV</td>
 </tr>
-<tr style="background-color: #E2EFFF"><td style="padding: 8px;">Excel</td></tr>
+<tr style="background-color: rgba(27, 87, 136, 0.20)"><td style="padding: 8px;">Excel</td></tr>
 </tbody>
 </table>
 
