@@ -4,7 +4,7 @@ project:
   id: scipy-2025-cassiacai
   title: 'Ocetrac: An Object-based Framework for Tracking and Quantifying Climate Events in Gridded Datasets'
   subtitle: Introducing the Measures Submodule
-  description: Add a two sentence description about your article.
+  description: Ocetrac is a Python package for tracking and analyzing spatiotemporal structures in gridded climate data. Building on its core submodule, which detects objects using morphological image processing, Ocetrac’s Measures submodule enables quantification of tracked objects, computing shape, motion, intensity, contextual, and temporal measures.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
     - name: Cassia Cai
