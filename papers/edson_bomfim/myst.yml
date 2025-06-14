@@ -21,6 +21,17 @@ project:
     - software quality
   abbreviations:
     MyST: Markedly Structured Text
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - data-linter
+        - data-quality-info-and-decision-making
+        - problems-methods-data-cleasing
+        - survey-of-data-quality-tools
+        - the-field-matching-problem
+        - formal-definition
+        - comparison-of-string-distances
   exports:
     - id: pdf
       format: typst
