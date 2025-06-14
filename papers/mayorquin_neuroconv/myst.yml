@@ -98,6 +98,7 @@ project:
         - diataxis
         - cost_effective_scientific_datasets_2016
         - share_data_kowlow_2000
+        - fair_paper_2016
   exports:
     - id: pdf
       format: typst
