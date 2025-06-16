@@ -16,6 +16,11 @@ project:
       orcid: 0009-0002-4489-378X
       affiliations:
         - Intuit, Inc.
+      roles:
+        - Conceptualization
+        - Software
+        - Visualization
+        - Writing – original draft
   keywords:
     - explainable AI
     - Shapley values
