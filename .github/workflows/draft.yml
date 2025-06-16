@@ -8,16 +8,41 @@ permissions:
   pull-requests: write
 jobs:
   build-preview:
-    uses: curvenote/actions/.github/workflows/draft.yml@v1
-    with:
-      id-pattern-regex: '^scipy-2025-(?:[a-zA-Z0-9-_]{3,15})$'
-      enforce-single-folder: true
-      venue: scipy
-      collection: '2025'
-      kind: article
-      path: papers/*
-      exclude: papers/myst_template, papers/tex_template
-      label: draft
-    secrets:
-      CURVENOTE: ${{ secrets.CURVENOTE_TOKEN }}
-      GITHUB: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install Typst CLI
+        run: |
+          mkdir -p $HOME/.local/bin
+          curl -Lo typst.tar.gz https://github.com/typst/typst/releases/latest/download/typst-linux-x86_64.tar.gz
+          tar -xvf typst.tar.gz -C $HOME/.local/bin
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          typst --version
+      - name: Run Curvenote Build Preview
+        uses: curvenote/actions/.github/workflows/draft.yml@v1
+        with:
+	  id-pattern-regex: '^scipy-2025-(?:[a-zA-Z0-9-_]{3,15})$'
+          enforce-single-folder: true
+          venue: scipy
+          collection: '2025'
+          kind: article
+          path: papers/*
+          exclude: papers/myst_template, papers/tex_template
+          label: draft
+        secrets:
+          CURVENOTE: ${{ secrets.CURVENOTE_TOKEN }}
+          GITHUB: ${{ secrets.GITHUB_TOKEN }}
+
+
+  
+
+      
+
+
+
+	  
+
+
