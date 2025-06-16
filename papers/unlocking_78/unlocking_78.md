@@ -9,7 +9,7 @@ Building on organisational-learning and DEI literature, we treat inclusion as a 
 
 *Origin of this study.* Preliminary findings were shared at PyData Global 2024 in the talk *“The Missing 78 %”* (5 Dec 2024). Feedback from that session—requests for actionable next steps—directly motivated formation of the *IBM Women in AI (WAI) User Group* two weeks later. The group now serves as a living laboratory to test VIM-aligned interventions, the results of which feed back into this paper.
 
-A skewed contributor pool constrains cognitive diversity, perpetuates algorithmic bias, and threatens the sustainability of volunteer-driven projects. Gender-diverse technical teams outperform homogeneous teams on defect resolution, product novelty, and profitability {cite:p}`lorenzo2018leadership,diaz2013gender,fuentes2023inclusive`. Conversely, uniform developer cohorts embed discriminatory patterns into socio-technical artefacts—from résumé-screening engines to clinical devices {cite:p}`desvaux2007womenmatter,trinkenreich2023diversity`.
+A skewed contributor pool constrains cognitive diversity, perpetuates algorithmic bias, and threatens the sustainability of volunteer-driven projects. Gender-diverse technical teams outperform homogeneous teams on defect resolution, product novelty, and profitability {cite:p}`lorenzo2018leadership,diaz2013gender,fuentes2023inclusive`. Conversely, uniform developer cohorts embed discriminatory patterns into socio-technical artefacts—from résumé-screening engines to clinical devices {cite:p}`desvaux2007womenmatter,trinkenreich2022success`.
 
 ### 1.2 Research Objectives and Questions  
 :::{table} Research questions
