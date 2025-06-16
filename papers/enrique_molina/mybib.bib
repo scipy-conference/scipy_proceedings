@@ -10,30 +10,19 @@
   doi       = {10.1109/MSST.2010.5496972}
 }
 
-@inproceedings{spark,
-  author    = {Zaharia, Matei and Chowdhury, Mosharaf and Das, Tathagata and Dave, Ankur and Ma, Justin and McCauley, Murphy and Franklin, Michael J. and Shenker, Scott and Stoica, Ion},
-  title     = {Resilient distributed datasets: a fault-tolerant abstraction for in-memory cluster computing},
-  year      = {2012},
-  publisher = {USENIX Association},
-  address   = {USA},
-  abstract  = {We present Resilient Distributed Datasets (RDDs), a distributed memory abstraction that lets programmers perform in-memory computations on large clusters in a fault-tolerant manner. RDDs are motivated by two types of applications that current computing frameworks handle inefficiently: iterative algorithms and interactive data mining tools. In both cases, keeping data in memory can improve performance by an order of magnitude. To achieve fault tolerance efficiently, RDDs provide a restricted form of shared memory, based on coarse-grained transformations rather than fine-grained updates to shared state. However, we show that RDDs are expressive enough to capture a wide class of computations, including recent specialized programming models for iterative jobs, such as Pregel, and new applications that these models do not capture. We have implemented RDDs in a system called Spark, which we evaluate through a variety of user applications and benchmarks.},
-  booktitle = {Proceedings of the 9th USENIX Conference on Networked Systems Design and Implementation},
-  pages     = {2},
-  numpages  = {1},
-  location  = {San Jose, CA},
-  series    = {NSDI'12}
+@software{burst,
+  author    = {Barcelona-Pons, Daniel and
+               Arjona, Aitor and
+               Garcia Lopez, Pedro and
+               Molina-Giménez, Enrique and
+               Klymonchuk, Stepan},
+  title     = {Burst Computing Artifact (paper in USENIX ATC'25)},
+  month     = may,
+  year      = 2025,
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.15423616},
+  url       = {https://doi.org/10.5281/zenodo.15423616}
 }
-
-@misc{burst,
-  title         = {FaaS Is Not Enough: Serverless Handling of Burst-Parallel Jobs},
-  author        = {Daniel Barcelona-Pons and Aitor Arjona and Pedro García-López and Enrique Molina-Giménez and Stepan Klymonchuk},
-  year          = {2024},
-  eprint        = {2407.14331},
-  archiveprefix = {arXiv},
-  primaryclass  = {cs.DC},
-  url           = {https://arxiv.org/abs/2407.14331}
-}
-
 
 @article{lithops,
   author   = {Sampé, Josep and Sánchez-Artigas, Marc and Vernik, Gil and Yehekzel, Ido and García-López, Pedro},
@@ -97,11 +86,21 @@
   journal = {Journal of proteomics},
   doi     = {10.1016/j.jprot.2012.07.026}
 }
-
-@misc{cloudoptimized,
-  author       = {Barciauskas, Aimee and Mandel, Alex and Barron, Kyle and Deziel, Zac},
-  title        = {{C}loud-{O}ptimized {G}eospatial {F}ormats {G}uide},
-  howpublished = {\url{https://guide.cloudnativegeo.org/}},
-  year         = {},
-  note         = {[Accessed 13-06-2025]}
+@article{spark,
+  author     = {Zaharia, Matei and Xin, Reynold S. and Wendell, Patrick and Das, Tathagata and Armbrust, Michael and Dave, Ankur and Meng, Xiangrui and Rosen, Josh and Venkataraman, Shivaram and Franklin, Michael J. and Ghodsi, Ali and Gonzalez, Joseph and Shenker, Scott and Stoica, Ion},
+  title      = {Apache Spark: a unified engine for big data processing},
+  year       = {2016},
+  issue_date = {November 2016},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {59},
+  number     = {11},
+  issn       = {0001-0782},
+  url        = {https://doi.org/10.1145/2934664},
+  doi        = {10.1145/2934664},
+  abstract   = {This open source computing framework unifies streaming, batch, and interactive big data workloads to unlock new applications.},
+  journal    = {Commun. ACM},
+  month      = oct,
+  pages      = {56–65},
+  numpages   = {10}
 }
