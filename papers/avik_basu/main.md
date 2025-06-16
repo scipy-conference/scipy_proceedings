@@ -398,7 +398,7 @@ Convolutional Neural Networks (CNNs) are a powerful class of deep learning model
 tasks involving spatial or temporal data, such as image recognition, speech recognition, and time-series 
 classification. CNNs leverage convolutional operations and hierarchical feature extraction to capture 
 intricate patterns within data, making them exceptionally effective for complex datasets 
-[@lecun1998gradient; @krizhevsky2012imagenet].
+[@lecun1998gradient; @Krizhevsky_2017].
 
 However, despite being so effective, CNNs as with most deep learning models, are often treated as black boxes.
 In this section, we will demonstrate how SHAP can be used to interpret the predictions of a one-dimensional CNN model.
@@ -428,7 +428,7 @@ The key details of the dataset are:
 
 ### Model
 
-For this task, we are going to be constructing a 1D convolutional network using PyTorch [@paszke2017automatic].
+For this task, we are going to be constructing a 1D convolutional network using PyTorch [@paszke2019pytorchimperativestylehighperformance].
 Prior to model training, we need to perform some important preprocessing steps.
 
 #### Preprocessing

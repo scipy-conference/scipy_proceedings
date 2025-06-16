@@ -39,11 +39,7 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
-        - numpy
-        - pandas1
-        - pandas2
-        - scipy
-        - pytorch
+        - molnar2025
   exports:
     - id: pdf
       format: typst
