@@ -133,7 +133,7 @@ In this paper, using the `shap` Python library, we will specifically employ Tree
 
 ## SHAP for Decision Trees
 
-Gradient Boosted Decision Trees (GBDTs) [@friedman2001greedy; @DBLP:journals/corr/ChenG16; @ke2017lightgbm] are 
+Gradient Boosted Decision Trees (GBDTs) [@friedman2001greedy; @DBLP:journals/corr/ChenG16; @NIPS2017_6449f44a] are 
 powerful, robust and interpretable models that are widely used in the industry. They are highly effective for 
 structured tabular data, and can handle both numerical and categorical features in a seamless manner. GBDTs in general are 
 interpretable models, and can be interpreted by analyzing the nodes and splits in the decision trees. However, 

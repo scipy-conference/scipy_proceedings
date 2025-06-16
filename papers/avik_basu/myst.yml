@@ -39,7 +39,7 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
-        - ke2017lightgbm
+        - NIPS2017_6449f44a
         - molnar2025
   exports:
     - id: pdf
