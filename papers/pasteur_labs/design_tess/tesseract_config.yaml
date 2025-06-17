@@ -1,4 +1,11 @@
-name: design
+name: design-tube-sdf
 version: "0.1.0"
 description: |
-  Tesseract that wraps a pyvista constructed mesh and provides a FD based vjp endpoints.
+  Tesseract that generates a gridded signed distance function (SDF) for a set of shape parameters.
+
+  Parameters are expected to define the control points and radii of piecewise linear tubes in 3D space.
+
+  Has a VJP endpoint defined that uses finite differences under the hood.
+
+build_config:
+  target_platform: "linux/x86_64"

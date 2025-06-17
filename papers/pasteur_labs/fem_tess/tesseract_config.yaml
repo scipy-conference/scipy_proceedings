@@ -1,29 +1,17 @@
-name: jax-fem-structure
+name: structure-jax-fem
 version: "0.1.0"
 description: |
   Tesseract that wraps jax-fem for structural analysis.
 
+  Accepts a gridded density field as input and computes the compliance of the structure.
+  The density field is expected to be a 3D numpy array with values between 0 and 1, 
+  where 1 represents solid material and 0 represents void.
+
 build_config:
-  package_data: []
-  # custom_build_steps:
-  #   - USER root
-  #   - ENV PATH="/python-env/bin:$PATH"
-  #   - |
-  #     RUN apt-get update && apt-get install -y --no-install-recommends \
-  #       build-essential \
-  #       python3-dev \
-  #       ca-certificates && \
-  #     rm -rf /var/lib/apt/lists/*
-  #   - RUN pip install setuptools
-  extra_packages : [
-    build-essential,
-    libgl1,
-    libglu1-mesa,
-    libblas-dev,
-    liblapack-dev,
-    libxrender1,
-    libxcursor1,
-    libxft2,
-    libxinerama1,
-    libgomp1
-  ]
+  target_platform: "native"
+  # conda-forge has binaries for gmsh and friends, even on ARM64
+  base_image: "condaforge/miniforge3:latest"
+  requirements:
+    provider: conda
+  extra_packages: 
+    - libgl1
