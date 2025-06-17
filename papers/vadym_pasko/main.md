@@ -194,12 +194,29 @@ The smoothing spline minimizes the penalized least-squares objective:
 where $\lambda$ is a regularization parameter related to s.
 
 
+### Pain Points of Pure Programmable Spline Fitting
+
+Despite the described mathematical elegance and flexibility of produced shapes, spline models remain challenging to use for data fitting, especially using traditional programmable interfaces, like those implemented in SciPy. Despite the unique properties of splines, the problems of underfitting/overfitting are still present, and require manual work for iterative trials to find the best fitting parameters.
+
+A mathematical representation of B-splines as a linear combination of basis functions with local support, controlled by knots and coefficients (control points), makes splines highly amenable to interactive editing. In domains such as computer-aided design (CAD) and computer graphics, this interactive nature is fully leveraged by the ability to interactively adjust control polygons (or control points), providing designers with real-time feedback. 
+
+From a mathematical standpoint, manual editing of curves breaks the strict formulation of the optimization problem solved by the automatic fitting algorithms. From the user’s perspective, manual fitting can produce better results -  smoother curves with smaller residuals (better accuracy).
+
+In SciPy, the spline fitting process is encapsulated in automatic, hardcoded optimization routines such as [UnivariateSpline](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.UnivariateSpline.html) or [LSQUnivariateSpline](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.LSQUnivariateSpline.html#scipy.interpolate.LSQUnivariateSpline). While this programmatic design serves well for deterministic batch processing or scriptable pipelines, it limits the native adjustability of spline shapes limiting ability to modify the control polygon and knot vector with visual feedback. Of course, there is always an option to adjust these values in code manually adjucting numbers, but as described in [(Pasko 2015)](http://vadym-pasko.com/blog/2015/03/06/spline-approx-scipy.html), such an approach can be inefficient from a time-consuming standpoint. Another option - write custom scripts that will use optimization algorithms, but this adds a level of complexity to the curve fitting process, not afordable for all users.
+
+Another significant limitation lies in the lack of model portability and reproducibility. Spline objects created in SciPy are tightly coupled with the Python runtime and the local environment. There is an option to export splines as a set of its defining objects: order (int), knot vector (1D array), and coefficients (1D array) or control points (2D array), but recreation of them as objects in code will require users a knowledge of the process and basic understanding of B-spline structure. Another option - serialization of spline objects, may also not be convenient for many cases.
+
+So here we come to the problem of representing fitted models in a shareable and reusable manner. What usually happens - when different users have to process the same data, each repeats the entire fitting process independently, reimplementing the logic, importing the data, and tuning parameters anew. This redundancy is not only inefficient but poses a serious threat to scientific reproducibility.
+
+In the broader context of open science and collaborative engineering, the lack of standardized ways to share spline models presents a significant barrier. Even when data and code are openly available, fitted models often remain tied to the specific environment in which they were created, making them difficult to reuse or apply independently in other projects.
 
 
+To overcome these limitations, it is essential to enable workflows where spline models:
+ - can be adjusted interactively during fitting and analysis by editing control polygons and knot vectors;
+ - are decoupled from raw data and source code;
+ - are sharable and reusable across teams, tools, and applications.
 
-
-
-### Critical Pain Points (TODO)
+These challenges motivated the development of SplineCloud, which augments SciPy’s automatic spline fitting routines with interactivity, transparency, and model lifecycle support. 
 
 
 ## Introducing SplineCloud (TODO)
