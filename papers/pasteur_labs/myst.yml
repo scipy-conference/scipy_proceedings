@@ -25,15 +25,21 @@ project:
     API: Applicaiton Programming Interface
     CFD: Computational Fluid Dynamics
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
-  # error_rules:
-  #   - rule: doi-exists
-  #     severity: ignore
-  #     keys:
-  #       - Atr03
-  #       - terradesert
-  #       - jupyter
-  #       - sklearn1
-  #       - sklearn2
+  error_rules:
+    - rule: doi-exists
+      severity: ignore
+      keys:
+        - Triton_Inference_Server
+        - BentoML
+        - MLServer
+        - baydin2018automatic
+        - abadi2016tensorflow
+        - paszke2017automatic
+        - jax2018github
+        - baker2021peering
+        - rush2024federated
+        - tang2023auto
+        - van2018automatic
   exports:
     - id: pdf
       format: typst
