@@ -6,10 +6,13 @@ project:
   # Ensure your title is the same as in your `main.md`
   title: Pipeline-level differentiable programming for the real world
   # subtitle:
-  description: "We present Tesseract, a software ecosystem that provides pipeline-level automatic differentiation at scale, and demonstrate its utility on a parameteric topology optimisation use case."
+  description: |
+    We present Tesseract, a software ecosystem that provides pipeline-level automatic differentiation
+    and differentiable physics programming at scale, and demonstrate its utility on a parametric shape 
+    optimization problem.
   # Authors should have affiliations, emails and ORCIDs if available
   authors:
-    - name: The Pasteur Labs team
+    - name: The Pasteur Labs Team
       email: hello@simulation.science
       orcid: 0000-0000-0000-0000
       affiliations:
@@ -17,12 +20,23 @@ project:
   keywords:
     - automatic differentiation
     - differentiable programming
+    - differentiable physics
+    - remote procedure calls
+    - distributed computing
+    - computer-aided engineering
+    - containerization
+    - scientific computing
+    - scientific machine learning
+    - simulation
+    - interoperability
+  banner: banner.png
+  thumbnail: thumbnail.png
   # Add the abbreviations that you use in your paper here
   abbreviations:
     AD: Automatic Differentiation
     DPP: Differentiable Physics Programming
     CAE: Computer-aided Engineering
-    API: Applicaiton Programming Interface
+    API: Application Programming Interface
     CFD: Computational Fluid Dynamics
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
