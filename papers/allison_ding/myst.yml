@@ -14,6 +14,10 @@ project:
       email: allisond@nvidia.com
       affiliations:
         - NVIDIA Corporation
+      orcid: 0000-0000-0000-0000
+      roles:
+        - Conceptualization
+        - Methodology 
     # - name: Mark Anthony
     #   email: mark37@rome.it
     #   affiliations:
