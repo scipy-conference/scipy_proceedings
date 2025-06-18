@@ -69,6 +69,22 @@ Tesseract offers a unique combination of containerised runtime for scientific co
 
 **Automatic differentiation.** Given how critical is automatic differentiation (AD) to modern scientific workflows [@baydin2018automatic], it is not surprising that there is a wide range of software tools providing AD capabilities. Major deep learning frameworks PyTorch [@paszke2017automatic] and TensorFlow [@abadi2016tensorflow] both implement AD and make extensive use of it for training of ML models. AD is also one of the main features of JAX, Python library for high performance numerical computing [@jax2018github], and its implementation in JAX strongly influenced design of Tesseract's API. Crucially, the majority of these frameworks support AD on a program level, and component-scale AD is not nearly as common. While composite solutions are possible (e.g. combining AD-capable backend with an HTTP service), to the best of our knowledge Tesseract is the first software project that natively supports AD on the component level.
 
+## Future work
+
+Looking ahead, we plan to expand the capabilities of the Tesseract ecosystem to better support real-world applications of differentiable physics programming (DPP). Our ongoing and future efforts include:
+
+**Distributed and cloud-native automatic differentiation.** We are building support for gradient-based workflows that span multiple machines and heterogeneous environments, including HPC clusters and cloud platforms. This involves enabling remote gradient execution, efficient recomputation strategies, and distributed pipeline orchestration.
+
+**Cross-framework integration.** Many scientific pipelines today mix components from different programming ecosystems. We are developing workflows that support end-to-end gradient propagation across JAX, PyTorch, Julia, and other tools—treating them as composable, AD-aware Tesseract components.
+
+**Wrapping simulations behind unified, differentiable interfaces.** Inspired by platforms like OpenAI Gymnasium, we are designing wrappers for expensive simulations—e.g., CFD solvers, structural mechanics codes—that expose unified APIs along with gradient endpoints. This makes it easy to use classical simulation software within differentiable optimization or reinforcement learning pipelines.
+
+**Interoperability in CAE and beyond.** Many domain-specific tools in CAE are poorly integrated with AD tooling. We are working toward robust support for meshing, geometry processing, and legacy formats in differentiable workflows, allowing users to plug in existing CAE pipelines without compromising gradient flow.
+
+**Validating non-trivial, pipeline-level DPP.** Ultimately, we aim to demonstrate the real-world viability of pipeline-level AD across full scientific workflows. This includes hybrid pipelines that blend simulation and machine learning (e.g., surrogate modeling, control, inverse design), and stress-testing DPP tooling under realistic constraints.        
+
+These directions aim to establish Tesseract as a foundation for scalable, interoperable infrastructure for DPP—making it easier to prototype, deploy, and share gradient-based pipelines across scientific and engineering domains.
+
 ## Conclusions
 
 Tesseract projects are born out of realisation that modern autodiff tooling is limited in its scaling capabilities. Tesseracts demonstrate how this gap can be addressed by elevating the concept of gradient tracking to a system level. We hope the community will recognise this need, and leverage Tesseract concept to improve efficiency and scalability of scientific data pipelines.
