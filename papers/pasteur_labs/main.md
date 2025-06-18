@@ -71,7 +71,7 @@ Tesseract offers a unique combination of containerised runtime for scientific co
 
 ## Future work
 
-Looking ahead, we plan to expand the capabilities of the Tesseract ecosystem to better support real-world applications of differentiable physics programming (DPP). Our ongoing and future efforts include:
+Looking ahead, we plan to expand the capabilities of the Tesseract ecosystem to better support real-world applications of DPP. Our ongoing and future efforts include:
 
 **Distributed and cloud-native automatic differentiation.** We are building support for gradient-based workflows that span multiple machines and heterogeneous environments, including HPC clusters and cloud platforms. This involves enabling remote gradient execution, efficient recomputation strategies, and distributed pipeline orchestration.
 
