@@ -11,9 +11,9 @@ Countless problems in science and engineering can be framed as tuning tasks, whe
 
 Recognising the need for a robust system-level software support of Autodiff-capable pipelines, we put forth the design, implementation, and validation of a novel system engineering approach to AD-driven physics: "Differentiable Physics Programming" (DPP). DPP resolves the above challenges via autodiff-native software containerization and dataflow-based orchestration, built to be highly modular and interoperable with physics simulation tools and engineering data types, namely computational fluid dynamics (CFD) and computer-aided engineering (CAE) broadly. Such a system enables scientists and engineers of diverse backgrounds to build complex workflows centered around simulation and data-driven surrogate models, and propagate gradients throughout the entire workflow, thus unleashing the potential of AD on end-to-end applications.
 
-To demonstrate the DPP system in action we leverage Tesseract, a software ecosystem that provides pipeline-level AD and unlocks DPP at scale. We give an overview of Tesseract's software design and functionality, and demonstrate its intended use on a non-trivial problem of the minimization of compliance of a parametric structure made of a linear elastic material. Our aim in developing Tesseract is present the community with tools necessary to scale up the capabilities of Autodiff-native scientific workflows.
+To demonstrate DPP in action we leverage Tesseract, a software ecosystem that provides pipeline-level AD at real-world scale. We give an overview of Tesseract's software design and functionality, and demonstrate its intended use on a non-trivial problem of the minimization of compliance of a parametric structure made of a linear elastic material. Our aim in developing Tesseract is present the community with tools necessary to scale up the capabilities of autodiff-native scientific workflows, and to build the community that fosters the development of such workflows.
 
-## The state of pipeline-level automatic differentiation
+## The state of pipeline-level differentiable programming
 
 Building pipelines that propagate gradients effortlessly across components introduces unique challenges. Real-world pipelines often span diverse technologies, frameworks, computing environments (local vs. distributed clusters; CPU vs. GPU), and teams with varying expertise. Additionally, legacy systems and non-differentiable components often need to coexist with modern AD-enabled frameworks.
 
@@ -22,7 +22,8 @@ To the best of our knowledge, modern scientific computing tools do not provide n
 We are not the first to recognise this gap, and there are several examples in academic literature of proposed solutions for distributed AD. @baker2021peering proposed a technique for dstributed training of deep neural networks that leverages
 the outer-product structure of the gradient of a network layer. @rush2024federated adopted AD to the context of federated learning of ML models. @tang2023auto considered the problem of differentiating computations expressed in relational databases. Notwithstanding these selected examples, even experimental support for component-level AD is nascent, and it is remarkable that recent surveys on the state of AD do not consider it being an important research direction (@van2018automatic, @baydin2018automatic).
 
-## Tesseracts enable pipeline-level AD and DPP
+## Tesseracts enable differentiable physics programming at scale
+
 ### What is a Tesseract
 
 Tesseracts enable complex scientific workflows at scale. They are components that allow scientists to expose experimental, research-grade software to the world. They are self-contained, self-documenting, and self-executing, via command line and HTTP. They are designed to be easy to create, easy to use, and easy to share, including in a production environment. Crucially, Tesseracts provide built-in support for propagating gradient information at the level of individual components, making it easy to build complex, diverse software pipelines that can be optimized end-to-end.
@@ -31,11 +32,11 @@ In its simplest form, every Tesseract has a single entrypoint `apply`, which wra
 
 :::{figure} tesseract-scipy-1.png
 :label: fig:tesseract-create-serve
-:scale: 80%
+:scale: 50%
 The process of defining, creating, and serving a Tesseract.
 :::
 
-### Scientific pipelines with Tesseracts
+### Scientific pipelines with Tesseract
 
 Since all Tesseracts can be seen as standalone and stateless components that expose a handful of (CLI / HTTP / Python) endpoints, it is trivial to build pipelines connecting multiple Tesseracts, thus creating complex workflows. Multi-step computational workflows are very common across various branches of science. For example, a CAE pipeline might include steps for generating geometry, meshing, simulation. Typical machine learning pipelines include steps for data preprocessing, postprocessing, dataset split, training, and validation of a trained model. Data processing pipelines replace error-prone manual workflows with a structured, automated solution, improving reproducibility, quality, scalability, and collaboration.
 
@@ -47,7 +48,7 @@ Several demonstrations of such pipelines already exist in Tesseract ecosystem:
 
 :::{figure} tesseract-scipy-2.png
 :label: fig:tesseract-pipeline
-:scale: 80%
+:scale: 50%
 The process of defining multi-tesseract pipelines with Tesseract-JAX.
 :::
 
@@ -98,7 +99,7 @@ The Tesseract ecosystem already supports a wide range of scientific and engineer
 
 **Interoperability in CAE and beyond.** Many domain-specific tools in CAE are poorly integrated with AD tooling. Tesseracts are a natural fit to provide robust support for meshing, geometry processing, and legacy formats in differentiable workflows, allowing users to plug in existing CAE pipelines without compromising engineering efficiency.
 
-**Pipeline-level DPP for real-world applications.** Ultimately, we aim to demonstrate the real-world viability of pipeline-level AD across full scientific workflows. This includes hybrid pipelines that blend simulation and machine learning (e.g., surrogate modeling, control, inverse design), and stress-testing DPP tooling under realistic constraints.
+**Pipeline-level DPP for real-world applications.** Ultimately, we aim to demonstrate the real-world viability of DPP across full scientific workflows. This includes hybrid pipelines that blend simulation and machine learning (e.g., surrogate modeling, control, inverse design), and stress-testing DPP tooling under realistic constraints.
 
 These directions aim to establish Tesseract as a foundation for scalable, interoperable infrastructure for DPP—making it easier to prototype, deploy, and share gradient-based pipelines across scientific and engineering domains.
 
