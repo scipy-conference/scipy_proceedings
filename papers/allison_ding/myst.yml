@@ -51,7 +51,6 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
-      keys:
         - nvidia2023nemo
         - rapids2023
         - sdv2020
