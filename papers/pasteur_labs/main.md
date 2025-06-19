@@ -22,7 +22,8 @@ To the best of our knowledge, modern scientific computing tools do not provide n
 We are not the first to recognise this gap, and there are several examples in academic literature of proposed solutions for distributed AD. @baker2021peering proposed a technique for dstributed training of deep neural networks that leverages
 the outer-product structure of the gradient of a network layer. @rush2024federated adopted AD to the context of federated learning of ML models. @tang2023auto considered the problem of differentiating computations expressed in relational databases. Notwithstanding these selected examples, even experimental support for component-level AD is nascent, and it is remarkable that recent surveys on the state of AD do not consider it being an important research direction (@van2018automatic, @baydin2018automatic).
 
-## What is a Tesseract
+## Tesseracts enable pipeline-level AD and DPP
+### What is a Tesseract
 
 Tesseracts enable complex scientific workflows at scale. They are components that allow scientists to expose experimental, research-grade software to the world. They are self-contained, self-documenting, and self-executing, via command line and HTTP. They are designed to be easy to create, easy to use, and easy to share, including in a production environment. Crucially, Tesseracts provide built-in support for propagating gradient information at the level of individual components, making it easy to build complex, diverse software pipelines that can be optimized end-to-end.
 
@@ -30,10 +31,11 @@ In its simplest form, every Tesseract has a single entrypoint `apply`, which wra
 
 :::{figure} tesseract-scipy-1.png
 :label: fig:tesseract-create-serve
+:scale: 80%
 The process of defining, creating, and serving a Tesseract.
 :::
 
-## Scientific pipelines with Tesseracts
+### Scientific pipelines with Tesseracts
 
 Since all Tesseracts can be seen as standalone and stateless components that expose a handful of (CLI / HTTP / Python) endpoints, it is trivial to build pipelines connecting multiple Tesseracts, thus creating complex workflows. Multi-step computational workflows are very common across various branches of science. For example, a CAE pipeline might include steps for generating geometry, meshing, simulation. Typical machine learning pipelines include steps for data preprocessing, postprocessing, dataset split, training, and validation of a trained model. Data processing pipelines replace error-prone manual workflows with a structured, automated solution, improving reproducibility, quality, scalability, and collaboration.
 
@@ -45,10 +47,11 @@ Several demonstrations of such pipelines already exist in Tesseract ecosystem:
 
 :::{figure} tesseract-scipy-2.png
 :label: fig:tesseract-pipeline
+:scale: 80%
 The process of defining multi-tesseract pipelines with Tesseract-JAX.
 :::
 
-## Case study: parametric shape optimization with differentiable FEM simulation
+### Case study: Parametric shape optimization with differentiable FEM simulation
 
 :::{figure} illustration.png
 :label: fig:illustration
