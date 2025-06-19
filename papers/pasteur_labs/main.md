@@ -69,15 +69,15 @@ The core idea is to construct a parametric geometry using a standard 3D geometry
 
 We compare our solution with the free form topology optimization solution that is implemented in the jax-fem library [@xue2023jax]. We observe that our solution constructs a structure that is strikingly similar to the free form topology optimization solution, even though in our case the design space is parametrized by a small number of parameters.
 
-Doing the above without using Tesseract would be infeasible due to the following reasons:
+Doing the above in a world without Tesseract would be significantly more difficult, for a number of reasons:
 
-- **Hetereogeneity of gradient computation**: In this pipeline some components rely on automatic differentiation, while others rely on finite differences. With Tesseracts and Tesseract-JAX, we can define the AD endpoints for each component and then use the standard gradient computation function from JAX to compute the total gradient of the compliance with respect to the design parameters.
+- **Heterogeneity of gradient computation**: In this pipeline some components rely on automatic differentiation, while others rely on finite differences. With Tesseracts and Tesseract-JAX, we can define the AD endpoints for each component and then use the standard gradient computation function from JAX to compute the total gradient of the compliance with respect to the design parameters.
 
 - **Modularity**: The components of the pipeline are implemented as Tesseract components, which allows us to easily swap out components and reuse them in other pipelines. For example, we could replace the design space Tesseract relying on PyVista with a design space Tesseract relying on OpenSCAD.
 
 - **Dependency management**: Tesseract components are containerized, which allows us to easily manage dependencies and ensure that the pipeline runs in a consistent environment, which greatly simplifies working with heavyweight scientific software like differentiable finite element solvers or graphics processing libraries.
 
-- **Computing ressources**: Tesseract components can be run on different computing resources, which allows us to easily scale the pipeline and run it on different machines. For example, we are able to run the finite element solver on a GPU machine and the design space Tesseract on a separate CPU node.
+- **Computing resources**: Tesseract components can be run on different computing resources, which allows us to easily scale the pipeline and run it on different machines. For example, we are able to run the finite element solver on a GPU machine and the design space Tesseract on a separate CPU node.
 
 ## Related work
 

@@ -16,7 +16,7 @@ project:
       email: hello@simulation.science
       orcid: 0000-0000-0000-0000
       affiliations:
-        - Pasteur Labs
+        - Pasteur Labs, Brooklyn, NY, USA
   keywords:
     - automatic differentiation
     - differentiable programming
@@ -34,6 +34,7 @@ project:
   # Add the abbreviations that you use in your paper here
   abbreviations:
     AD: Automatic Differentiation
+    DP: Differentiable Programming
     DPP: Differentiable Physics Programming
     CAE: Computer-aided Engineering
     API: Application Programming Interface
