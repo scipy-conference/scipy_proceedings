@@ -71,11 +71,11 @@ chemical accuracy.
 
 ## Experimental Conditions
 
-Our benchmarking study compares computational performance across SIESTA, PySCF, and GPU4PySCF implementations using identical test systems. The benchmark suite consists of 85 individual input files, each being a 38-atom system containing a chlorinated phosphoric acid structure ($\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}$) with water molecules. These configurations feature varying water molecule distributions around the phosphoric acid structure to represent different water-membrane configurations, providing realistic system sizes for environmentally-friendly materials design with statistical reliability.
+Our benchmarking study compares computational performance across SIESTA, PySCF, and GPU4PySCF implementations using identical test systems. The benchmark suite consists of 85 individual input files, each being a 38-atom system containing a chlorinated phosphoric acid structure ($\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}_2$) with water molecules. These configurations feature varying water molecule distributions around the phosphoric acid structure to represent different water-membrane configurations, providing realistic system sizes for environmentally-friendly materials design with statistical reliability.
 
 All calculations were performed using identical computational setups to ensure fair comparison:
 
-- **System**: 38-atom systems containing $\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}$ structures with water molecules
+- **System**: 38-atom systems containing 2 $\text{C}\text{Cl}_3\text{C}\text{Cl}_2\text{PO}_3\text{H}_2$ structures with 4 $\text{H}_2\text{O}$ molecules
 - **Exchange-correlation functional**: RPBE
 - **Basis set**: DZP (Double-Zeta Polarized)
 - **Convergence criteria**: SCF tolerance of $10^{-6}$ for all calculations
