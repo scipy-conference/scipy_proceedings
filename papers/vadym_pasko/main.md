@@ -151,7 +151,7 @@ plt.title("Cubic Spline Interpolation with SciPy")
 plt.show()
 ```
 :::{figure} interp_spline_fitting_scipy.png
-:label: fig:stream
+:label: fig:1
 Simple interpolaing cubic spline.
 :::
 
@@ -183,7 +183,7 @@ plt.title("Smoothing Spline Fit")
 plt.show()
 ```
 :::{figure} smooth_spline_fitting_scipy.png
-:label: fig:stream
+:label: fig:2
 Simple interpolaing cubic spline.
 :::
 The smoothing spline minimizes the penalized least-squares objective:
@@ -219,8 +219,47 @@ To overcome these limitations, it is essential to enable workflows where spline 
 These challenges motivated the development of SplineCloud, which augments SciPy’s automatic spline fitting routines with interactivity, transparency, and model lifecycle support. 
 
 
-## Introducing SplineCloud (TODO)
+## Introducing SplineCloud
 
+SplineCloud is an open platform for formalized knowledge exchange. It is designed to make technical data, like results of simulations, tests and modeling more accessible and reusable in computer code. The platform has integrated tools that allow formalizing and organizing data in topical repositories. Its architecture and instruments help reduce the routine overhead of data collection, processing, and model reconstruction in code.
+
+SplineCloud’s main features are: plot digitizer, advanced spline fitting tool, open API, and client libraries for Python and MATLAB (support of other languages is planned for future implementation). It addresses all four problems of FAIR data: findability, accessibility, interoperability, and reusability for a specific type of data: experimental, simulation, and statistical results, which can have either tabular or graphical form. 
+
+The philosophy behind the platform is in representing relations in data in the form of spline models, which can be reused in code to omit tedious and repetitive operations on data extraction and fitting, which usually complicate mathematical modeling processes. In this way, SplineCloud can be considered as a repository-based library of functional relations. The typical user journey on the platform is given on the Fig. 3.
+
+:::{figure} workflow_scheme.png
+:label: fig:3
+:width: 500px
+SplineCloud workflow scheme
+:::
+
+The platform’s data structure is given in Fig. 1. This data structure models a hierarchical system for managing technical datasets within user-owned repositories. Each repository contains multiple data files, which serve as sources for datasets; these in turn produce subsets of structured (clean) data used for analysis and transformation. Relationships between columns in subsets are captured as data relations, which can be fitted with spline curves to model underlying patterns.
+
+:::{figure} class_diagram.png
+:label: fig:4
+SplineCloud objects relationship diagram
+:::
+
+Spline fitting tool, a main instrument of the platform, is built on top of SciPy’s interpolate module and provides a visual interface to three main spline fitting methods:
+- Interpolating splines
+- Least Squares splines
+- Smoothing splines
+
+:::{figure} smoothing_spline_SC.png
+:width: 600px
+:label: fig:5
+SplineCloud objects relationship diagram
+:::
+
+The web interface of the spline fitting tool (Fig. 5.) is powered by D3.js and Verb.js - a JavaScript library for NURBS modeling. The RESTful API and an open-source Python client library (splinecloud-scipy) allow the reuse of data objects and spline curves in code. In this way, SplineCloud addresses the key limitations of traditional spline fitting workflows (Section 3.1) by offering the following core capabilities:
+
+ - **Interactive Spline Modeling**. Users can construct spline curves using an interface to the SciPy’s interpolate module. Fine-tuning mode enables manual transformation of knot vectors and control points with real-time feedback to control smoothness, continuity, and fitting tolerance of the curves.
+
+ - **Code Reusability and Interoperability**. Fitted models can be accessed programmatically through the API or client libraries, eliminating the need to rerun fitting scripts for each new use case.
+
+ - **Model Traceability**. The platform tracks authorship, data provenance, and dependencies between objects — helping preserve the context and credibility of published models.
+
+ - **Collaborative Sharing**. Open models and datasets are discoverable and citable (via unique object UID). This supports collaborative workflows and reduces duplication of effort by reusing existing clean subsets and regression models.
 
 ## Interactive Spline Fitting Workflow (TODO)
 
