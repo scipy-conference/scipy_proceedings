@@ -19,7 +19,7 @@ Yet several factors still hinder broad NWB adoption. Converting neurophysiology 
 
 Automated conversion pipelines address these challenges by eliminating the need for laboratories to repeatedly solve the same technical problems. Rather than requiring each research group to develop custom conversion scripts, automated tools provide standardized, tested pathways from diverse source formats to NWB. This approach not only prevents duplicated effort and inconsistent implementations across the field but also democratizes access to data standardization, ensuring that all laboratories can preserve and share their data regardless of available technical expertise. By lowering the barriers to NWB adoption, automated pipelines enable the neuroscience community to sustainably build a collective repository of standardized, reusable experimental data, ultimately accelerating scientific discovery through enhanced data sharing and reproducibility.
 
-:::{table} Key challenges in converting neurophysiology datasets to the NWB format.
+:::{table} Key challenges in building automated conversion pipelines to the NWB format.
 :label: tbl:nwb-challenges
 
 <table style="border-collapse: collapse; width: 100%;">
