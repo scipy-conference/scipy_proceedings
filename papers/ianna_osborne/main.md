@@ -1,7 +1,7 @@
 ---
 title: Advancing High Energy Physics Data Analysis with Julia -- A Case for JuliaHEP
 abstract: |
-  For the past 25 years, the high-energy physics (HEP) community has steadily adopted Python as its primary language for data analysis, supported by compiled-backend libraries like NumPy [@numpy] and [Awkward Array](https://github.com/scikit-hep/awkward), and pure Python tools like [Uproot](https://github.com/scikit-hep/uproot5) for I/O. However, the Julia programming language offers a compelling alternative by addressing the two-language problem with high-performance and ease of use. This paper introduces [JuliaHEP](https://github.com/JuliaHEP/), an initiative to leverage Julia for HEP data analysis, outlining its advantages, ongoing developments, and integration with existing Python-based tools.
+  For the past 25 years, the high-energy physics (HEP) community has steadily adopted Python as its primary language for data analysis, supported by compiled-backend libraries like NumPy [@numpy] and [Awkward Array](https://github.com/scikit-hep/awkward), along with pure Python tools like [Uproot](https://github.com/scikit-hep/uproot5) for I/O. However, the Julia programming language offers a compelling alternative, addressing the two-language problem with C++-comparable performance and Python-like ease of use. This paper introduces [JuliaHEP](https://github.com/JuliaHEP/), an initiative to leverage Julia for HEP data analysis, outlining its advantages, ongoing developments, and integration with existing Python-based tools.
 
 ---
 
