@@ -301,6 +301,49 @@ Dataset and subsets extracted from an image
 After identifying clean subsets, a default data relation will be created by entering a curve fitting mode (or going into the Relations tab).
 
 
+### Automatic Spline Fitting
+
+By adding a first curve, an initial spline fit is generated using one of the SciPy fitting methods. The default choice is often a smoothing spline (implemented via `UnivariateSpline`), where a smoothing factor controls the trade-off between fidelity to the data and smoothness of the resulting curve (Fig. 10). 
+
+:::{figure} smoothing_parameter.png
+:width: 700px
+:label: fig:10
+Dataset and subsets extracted from an image
+:::
+
+The important difference here is that SplineCloud’s smoothness parameter is a relative parameter used to calculate the actual SciPy’s (FITPACK’s) smoothing factor s defined as:
+
+```{math}
+\sum_{i=1}^{n} w_i \left( y_i - S(x_i) \right)^2 \leq s
+```
+
+The transition from the relative smoothing parameter to  the SciPy’s s factor is implemented in three steps:
+1) build the least squares fit with the minimal possible number of knots (zero internal knots);
+2) calculate the actual smoothing factor s_max for this fit using formula (7);
+3) multiply the relative smoothing parameter by this value: $s_{\text{scipy}} = s_{\text{max}} \cdot s_{\text{rel}}$
+
+This approach improves user experience - instead of guessing each time the correct absolute value (which depends on the scale of data points), it is more intuitive to use relative values. By selecting several values for one data range the developed feedback instructs the more appropriate values for another curve of a different scale.
+
+:::{figure} least_squares_method.png
+:width: 700px
+:label: fig:11
+Dataset and subsets extracted from an image
+:::
+
+Least Squares fitting is implemented as an alternative to smoothing splines and is built on top of SciPy’s `LSQUnivariateSpline` method. For simplicity, a uniform knot vector is constructed and passed to the `LSQUnivariateSpline` constructor using the number of internal knots from the user input (Fig 11). However, there is an option to adjust the knot vector interactively and use least squares fitting for the given non-uniform knot vector. This capability is implemented in the fine-tuning mode (see Section 5.3).
+
+:::{figure} interpolating_spline.png
+:width: 700px
+:label: fig:12
+Dataset and subsets extracted from an image
+:::
+
+For the cases when the curve should pass through the data points, SplineCloud has its implementation of the interpolating splines (Fig. 12). This method is also implemented by using SciPy’s UnivariateSpline with hardcoded s=0.
+
+
+### Fine-Tuning. Interactive Adjustments of Control Points and Knot Vector (TODO)
+
+
 ## Reusability and Reproducibility with SplineCloud (TODO)
 
 
