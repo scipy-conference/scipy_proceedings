@@ -14,22 +14,43 @@ project:
       orcid: 0000-0001-7501-8430
       affiliations:
         - University of Southern California Information Sciences Institute
+      roles:
+        - Conceptualization
+        - Formal analysis
+        - Funding acquisition
+        - Investigation
+        - Project administration
+        - Writing - original draft
       corresponding: true
     - name: Julien Emile-Geay
       email: julieneg@usc.edu
       orcid: 0000-0001-5920-4751
       affiliations:
         - University of Southern California
+      roles:
+        - Conceptualization
+        - Formal analysis
+        - Funding acquisition
+        - Investigation
+        - Writing - review & editing 
     - name: David Edge
       email: david.edge@nau.edu
       orcid: 0000-0001-6938-2850
       affiliations:
         - Northern Arizona University
+      roles:
+        - Formal analysis
+        - Investigation 
     - name: Nicholas McKay
       email: nick@nau.edu
       orcid: 0000-0003-3598-5113
       affiliation: 
         - Northern Arizona University
+      oles:
+        - Conceptualization
+        - Formal analysis
+        - Funding acquisition
+        - Investigation
   keywords:
     - FAIR principles
     - reproducible science
@@ -53,6 +74,11 @@ project:
         - jupyter
         - sklearn1
         - sklearn2
+        - trinket
+        - Cartopy
+        - statsmodels
+        - pytorch
+        - brandl2021sphinx
   exports:
     - id: pdf
       format: typst
