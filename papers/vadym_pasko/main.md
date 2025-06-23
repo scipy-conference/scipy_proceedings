@@ -261,7 +261,44 @@ The web interface of the spline fitting tool (Fig. 5.) is powered by D3.js and V
 
  - **Collaborative Sharing**. Open models and datasets are discoverable and citable (via unique object UID). This supports collaborative workflows and reduces duplication of effort by reusing existing clean subsets and regression models.
 
-## Interactive Spline Fitting Workflow (TODO)
+## Interactive Spline Fitting Workflow (WIP)
+
+As it was mentioned in the prior sections, conventional programmatic approaches to curve fitting — such as those available in SciPy’s interpolate module — require iterative selection of fitting parameters. Usually, this means manual parameter tuning and replotting results to assess smoothness and fit quality. Alternatively, custom optimization scripts can be written to run through different combinations of parameters to minimize mean squared error (MSE), root mean squared error (RMSE), or another objective function. However, this complicates the process and does not allow for estimation of possible overfitting and extrapolation issues (Fig 6, 7).
+
+:::{figure} overfitting.png
+:width: 400px
+:label: fig:6
+Typical overfitting issue - RMSE is minimal, but interpolation error is high
+:::
+
+:::{figure} bad_extrapolation.png
+:width: 500px
+:label: fig:7
+Typical extrapolation issue - curve behavior is not following the data trend beyound the given interval
+:::
+
+Interactivity significantly simplifies and speeds up the fitting process, and allows for the identification of possible overfitting and extrapolation issues. And when it comes to parametric spline fitting, interactivity enables fine-tuning of curve shapes, allowing to apply intuitive adjustments.
+
+In this section, we will take a look at how these capabilities are implemented in SplineCloud and how the interactive curve fitting approach can be complementary to the programmatic data processing workflows.
+
+### Data Preparation
+
+According to the workflow presented in Fig. 3, data has to be uploaded to the existing or new repository. It can be a text file, a spreadsheet, or an image containing a plot. In a case of text data, a dataset will be created automatically and a subset of data can be identified by adjusting data loading options (Fig.8). Datasets will be created automatically for each sheet in the spreadsheet source file. An interactive plot digitizer tool will be displayed for the image file to help extract data ranges from plots (Fig.9).
+
+
+:::{figure} tabular_dataset.png
+:width: 750px
+:label: fig:8
+Tabular dataset
+:::
+
+:::{figure} plot_didgitizer.png
+:width: 700px
+:label: fig:9
+Dataset and subsets extracted from an image
+:::
+
+After identifying clean subsets, a default data relation will be created by entering a curve fitting mode (or going into the Relations tab).
 
 
 ## Reusability and Reproducibility with SplineCloud (TODO)
