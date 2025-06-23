@@ -10,19 +10,15 @@ project:
   authors:
     - name: Ianna Osborne
       email: ianna.osborne@cern.ch
-      orcid: 0000-0000-0000-0000
+      orcid: 0000-0002-6955-1033
       affiliations:
         - Princeton University
       corresponding: true
   keywords:
+    - Awkward Array
     - Julia
     - High-Energy Physics
-    - SciPy
     - Data Analysis
-    - Awkward Array
-    - NumPy
-    - ROOT
-    - Parallel Computing
   # Add the abbreviations that you use in your paper here
   abbreviations:
     JIT: Just-in-Time compilation
