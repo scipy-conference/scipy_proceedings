@@ -67,7 +67,7 @@ One of the controversial subject in uncertainty analysis is the aggregation of m
 @fig:aggregation shows an example of the elicitation from a couple of experts with their credibility shown as probability masses. This explains further the provenance of the constructs in @fig:uc_constructs.
 `PyUncertainNumber` supports several aggregation rules (e.g. envelope, mixture, and intersection, etc) enabling diverse level of information to be pooled stochastically or conservatively. 
 
-:::{figure} aggregation_3in_one.pdf
+:::{figure} aggregation_3in_one.png
 :label: fig:aggregation
 Uncertainty aggregation: **(a)** expert knowledge expressed as intervals coupled with their credibility; **(b)** the same uncertain number in @fig:uc_constructs of which the DSS is composed by the aggregation in (a), and the circumscribed p-box is composed by the envelope in (c); **(c)** expert elicitation as precise distributions whereby an envelope operation is taken
 :::
@@ -88,7 +88,7 @@ Further, as a nonparametric comparison, the Kolmogorov Smirnov confidence bands 
 
 where $\hat{F}_{L}$ and $\hat{F}_{R}$ represent the empirical CDF on endpoints of the imprecise dataset, and $D^{\alpha}_{N}$ denotes the Smirnov critical value at significance level $\alpha$.
 
-:::{figure} imprecise_measurements_combo.pdf
+:::{figure} imprecise_measurements_combo.png
 :label: fig:imprecise_measurements
 :width: 800px
 Characterisation of imprecise measurements. **(a)**: fitting an exponential distribution to an interval datum by maximum likelihood estimation; **(b)**: Parametric and nonparamettric characterisation of the whole imprecise data set which includes 15 data points i.i.d (independent and identically distributed) sampled from Exp(0.4) contaminated by a margin of error $\Delta=1.4$
@@ -120,7 +120,7 @@ Similar as the bounding approach applies onto marginal distributions in the face
 :::{figure} bivariate_pbox.png
 :label: fig:bivariate_pbox
 :width: 600px
-A bivariate p-box with marginals $X \sim \mathcal{B}([4, 8], 3)$ and $Y \sim \mathcal{N}([0,2], 2)$, and Gaussian copula parameterised by $\rho_{XY} = -0.8$ [@gray2021probabilityboundsanalysis]. The upper of the plot displays the joint CDF with upper and lower surface and the bottom shows the sampled deviates which are bivariate intervals
+A bivariate p-box with marginals $X \sim \mathcal{B}([4, 8], 3)$ and $Y \sim \mathcal{N}([0,2], 2)$, and Gaussian copula parameterised by $\rho_{XY} = -0.8$. The upper of the plot displays the joint CDF with upper and lower surface and the bottom shows the sampled deviates which are bivariate intervals
 :::
 
 
@@ -138,7 +138,7 @@ Illustration of p-box arithmetic under various dependency structure. The left fo
 :::
 
 
-Probability bounds anlaysis (PBA) combines both interval analysis and probability theory, allowing rigorous bounds of (arithmetic) functions of random variables to be computed even with partial information [@gray2021probabilityboundsanalysis; @ferson2003constructing; @ferson2004arithmetic]. 
+Probability bounds anlaysis (PBA) combines both interval analysis and probability theory, allowing rigorous bounds of (arithmetic) functions of random variables to be computed even with partial information [@ferson2003constructing; @ferson2004arithmetic]. 
 Intuitively, as interval arithmetic enables rigorous calculation for sets of real numbers, PBA accomplish the same for sets of distributions. 
 P-box arithmetic is built upon generalised probability convolutions, which through further extensions cover a wide spectrum of arithmetic operations: unary transformations, binary operations between p-boxes or Dempster-Shafer structures, and general functions composed of a series of base operations. It also covers a wide spectrum of dependency structures which could be fully known (specified copula $C$), partially known (lower bound copula $\underline{C}$), or even unknown ($\text{Fr\'{e}chet}$).
 
@@ -168,7 +168,7 @@ Scientific computing typically involves a mathematical model, for example a coup
 For a comprehensive uncertainty analysis, all uncertainty sources (e.g. model inputs, initial or boundary conditions, model form assumptions, numerical approximation, and model extrapolation) should be appropriately characterised and and have their contributions to the total uncertainty of the system response quantity of interest (QoI) elucidated, such that efficient uncertainty reduction or management can be conducted by decision makers. A notable example that embodies the idea of such uncertainty framework is the NASA UQ challenge [@agrell2024nasa]. 
 
 
-:::{figure} flowchart.pdf
+:::{figure} flowchart.png
 :label: fig:flowchart
 Flowchart of a comprehensive uncertainty analysis pipeline. Various dependency structures are denoted in colored arrows.
 :::
