@@ -71,9 +71,17 @@ all possible coalitions of features.
 
 Formally, the Shapley value for a feature $i$ is defined as:
 
-$$
-\phi_i = \sum_{S \subseteq N \setminus \{i\}} \frac{|S|! \; (|N| - |S| - 1)!}{|N|!} \left[ f_{S \cup \{i\}}(x_{S \cup \{i\}}) - f_{S}(x_{S}) \right]
-$$
+```math
+\phi_i \;=\;
+\sum_{S \subseteq N \backslash \{i\}}
+\frac{|S|!\,\bigl(|N|-|S|-1\bigr)!}{|N|!}\,
+\Bigl[
+  f_{S \cup \{i\}}\!\bigl(x_{S \cup \{i\}}\bigr)
+  \;-\;
+  f_{S}(x_{S})
+\Bigr]
+```
+
 
 where 
 - $N$ is the set of all features
