@@ -1,7 +1,7 @@
 version: 1
 extends: ../../../proceedings.yml
 project:
-  title: 'Introducing JOSE: Journal of Open Source Education'
+  title: "Introducing JOSE: Journal of Open Source Education"
   authors:
     - name: Kyle Niemeyer
       affiliation: Oregon State University
