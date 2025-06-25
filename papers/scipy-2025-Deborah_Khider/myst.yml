@@ -63,7 +63,7 @@ project:
     USC: University of Southern California
     ISI: Information Sciences Institute
     GPF: Geoscience Paper of the Future
-    PyPi: Python Package Index
+    PyPI: Python Package Index
   # It is possible to explicitly ignore the `doi-exists` check for certain citation keys
   error_rules:
     - rule: doi-exists
