@@ -341,7 +341,57 @@ Dataset and subsets extracted from an image
 For the cases when the curve should pass through the data points, SplineCloud has its implementation of the interpolating splines (Fig. 12). This method is also implemented by using SciPy’s UnivariateSpline with hardcoded s=0.
 
 
-### Fine-Tuning. Interactive Adjustments of Control Points and Knot Vector (TODO)
+### Fine-Tuning. Interactive Adjustments of Control Points and Knot Vector (WIP)
+
+A principal enhancement over the automatic fitting approach is SplineCloud’s Fine-Tuning functionality. It provides the ability to visually adjust control points and knot vectors of fitted splines. As proved in many cases, this interface enables users to achieve curve refinements that exceed the capabilities of SciPy’s automatic fitting algorithms in terms of smoothness and accuracy. More of that, the visual interface to knot vectors provides control over curve continuity in the specific regions. This helps in modelling complex data behavior with steep changes in main trends.
+
+In SplineCloud, all spline curves are represented as parametric B-splines or NURBS. As mentioned in section 2, a parametric B-spline curve is defined as a vector-valued function (3). This function, however, can be decomposed into its scalar components:
+
+```{math}
+\begin{aligned}
+
+S^{(x)}(t) &= \sum_{i=0}^{n} c_{i}^{(x)} B_{i,k}(t) \\
+S^{(y)}(t) &= \sum_{i=0}^{n} c_{i}^{(y)} B_{i,k}(t)
+\end{aligned}
+```
+
+In simpler words, parametric spline curves can be defined by two distinct univariate spline functions, x(t) and y(t), sharing a common knot vector (Fig. 13). This representation allows for the modeling of complex geometries, including loops, sharp transitions, and high-curvature regions.
+
+:::{figure} spline_curve_as_two_functions.png
+:width: 600px
+:label: fig:13
+Parametric spline curve as a combination of two spline functions.  *Black triangles along parameter axes represent knots. Control polygons and control points are displayed in green color*
+:::
+
+#### Interactive Editing of Control Points
+
+The beauty of parametric splines is in the ability to have an intuitive control over the curve shape by modifying the control polygon: moving, adding, and removing control points, increasing or decreasing their weights. This is impossible for spline functions, since they are defined through scalar coefficients, not vectors.
+
+However, it is important to mention that for parametric spline curves coordinates of the control points $P_i = [x_i, y_i]$ are mathematically equivalent to the spline coefficients for the component functions $S^{(x)}(t)$ and $S^{(y)}(t)$, so that:
+
+```{math}
+\mathbf{C}(t) = \sum_{i=0}^{n} \mathbf{c}_i \, B_{i,k}(t), \quad \text{where } \mathbf{c}_i = \begin{bmatrix} c_i^{(x)} \\ c_i^{(y)} \end{bmatrix}
+```
+
+Due to the local support property of B-spline basis functions, moving a single control point influences the shape of the curve only within a limited range of the parameter domain, providing localized editing capabilities.
+
+In the Fine-Tune Mode, users can interactively drag control points to reshape the curve (Fig. 14). This mirrors the behavior of spline modeling in professional CAD environments, where designers sculpt geometry directly. The influence of each control point depends not only on its position but also on the associated basis function and, optionally, its weight. For example:
+ - Control points clustered more closely create tighter curvature and sharper transitions;
+ - Distant spacing results in smoother, flatter regions of the curve;
+ - Assigning higher weights to a control point increases its pull on the curve, bringing it closer to the point's location, converting the B-Spline to NURBS.
+
+:::{figure} fine-tune-control-points.png
+:width: 700px
+:label: fig:14
+Adjusting control points of the spline curve in the Fine-Tune mode
+:::
+
+This form of user interaction provides precise control over the spline's shape and is particularly advantageous when fitting complex datasets where automated routines produce unsatisfactory results.
+
+#### Dynamic Knot Vector Adjustment (TODO)
+
+
+### Fitting Errors (TODO)
 
 
 ## Reusability and Reproducibility with SplineCloud (TODO)
