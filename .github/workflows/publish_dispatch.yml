@@ -6,9 +6,9 @@ jobs:
   publish:
     uses: curvenote/actions/.github/workflows/submit.yml@v1
     with:
-      id-pattern-regex: '^scipy-2025-(?:[a-zA-Z0-9-_]{3,25})$'
+      id-pattern-regex: "^scipy-2025-(?:[a-zA-Z0-9-_]{3,25})$"
       venue: scipy
-      collection: '2025'
+      collection: "2025"
       kind: Article
       path: papers/*
       publish: true
