@@ -45,7 +45,7 @@ Example of training model on the LeapFROGS platform. Learners can test their und
 
 The sixth module, *Sharing Reproducible Workflows*, provides information about using [Docker](https://www.docker.com) and [myBinder](https://mybinder.org) to share reproducible science results. 
 
-Finally, the last module, *Packaging your software for sharing* walks through instructions and tutorials on creating Python packages, publishing it on software registries (e.g., The [Python Package Index repository](https://pypi.org), PyPi), on creating documentation using Sphinx [@brandl2021sphinx] and publishing it on [readthedocs.org](https://readthedocs.org), on unit testing, on setting up GitHub actions for continuous integration, and on publishing on PyPi. Most of these tutorials were based on the materials developed by the [PyOpenSci](https://www.pyopensci.org) community. 
+Finally, the last module, *Packaging Your Software for Sharing* walks through instructions and tutorials on creating Python packages, publishing it on software registries (e.g., The [Python Package Index](https://pypi.org), PyPI), on creating documentation using Sphinx [@brandl2021sphinx] and publishing it on [readthedocs.org](https://readthedocs.org), on unit testing, on setting up GitHub actions for continuous integration, and on publishing on PyPI. Most of these tutorials were based on the materials developed by the [PyOpenSci](https://www.pyopensci.org) community. 
 
 ### Training activities
 
