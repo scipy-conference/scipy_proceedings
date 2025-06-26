@@ -27,7 +27,7 @@ To address these issues, we developed SplineCloud: an open platform that brings 
 In this article, we provide an overview of the spline fitting problem, outline its foundational implementation within SciPy, and introduce SplineCloud — a cloud-based platform for constructing and sharing regression models using parametric splines. We also examine several practical applications to illustrate its capabilities in real-world contexts.
 
 
-## Some Theoretical Background Behind Splines (WIP)
+## Some Theoretical Background Behind Splines
 
 Splines are piecewise-defined functions used extensively in numerical analysis, computer-aided geometric design, and data fitting. The fundamental idea behind spline interpolation or approximation is to construct a smooth function that matches a set of data points or satisfies a set of constraints, while preserving computational efficiency and numerical stability.
 
@@ -88,7 +88,7 @@ B_{i,k}(t) =
 \frac{t_{i+k+1} - t}{t_{i+k+1} - t_{i+1}} B_{i+1,k-1}(t)
 ```
 
-In (5) possible divisions by zero are resolved by the convention that ‘anything divided by zero is zero’. The function $B_{i,k}=B_{i,k,\mathbf{t}}$ is called a B-spline of degree k (with knots $\mathbf{t}$).
+In (4) possible divisions by zero are resolved by the convention that ‘anything divided by zero is zero’. The function $B_{i,k}=B_{i,k,\mathbf{t}}$ is called a B-spline of degree k (with knots $\mathbf{t}$).
 
 This formulation separates geometry (control points) from basis functions, allowing flexible manipulation and efficient computation of spline curves.
 
@@ -261,7 +261,7 @@ The web interface of the spline fitting tool (Fig. 5.) is powered by D3.js and V
 
  - **Collaborative Sharing**. Open models and datasets are discoverable and citable (via unique object UID). This supports collaborative workflows and reduces duplication of effort by reusing existing clean subsets and regression models.
 
-## Interactive Spline Fitting Workflow (WIP)
+## Interactive Spline Fitting Workflow
 
 As it was mentioned in the prior sections, conventional programmatic approaches to curve fitting — such as those available in SciPy’s interpolate module — require iterative selection of fitting parameters. Usually, this means manual parameter tuning and replotting results to assess smoothness and fit quality. Alternatively, custom optimization scripts can be written to run through different combinations of parameters to minimize mean squared error (MSE), root mean squared error (RMSE), or another objective function. However, this complicates the process and does not allow for estimation of possible overfitting and extrapolation issues (Fig 6, 7).
 
@@ -285,7 +285,6 @@ In this section, we will take a look at how these capabilities are implemented i
 
 According to the workflow presented in Fig. 3, data has to be uploaded to the existing or new repository. It can be a text file, a spreadsheet, or an image containing a plot. In a case of text data, a dataset will be created automatically and a subset of data can be identified by adjusting data loading options (Fig.8). Datasets will be created automatically for each sheet in the spreadsheet source file. An interactive plot digitizer tool will be displayed for the image file to help extract data ranges from plots (Fig.9).
 
-
 :::{figure} tabular_dataset.png
 :width: 750px
 :label: fig:8
@@ -299,7 +298,6 @@ Dataset and subsets extracted from an image
 :::
 
 After identifying clean subsets, a default data relation will be created by entering a curve fitting mode (or going into the Relations tab).
-
 
 ### Automatic Spline Fitting
 
@@ -340,8 +338,7 @@ Dataset and subsets extracted from an image
 
 For the cases when the curve should pass through the data points, SplineCloud has its implementation of the interpolating splines (Fig. 12). This method is also implemented by using SciPy’s UnivariateSpline with hardcoded s=0.
 
-
-### Fine-Tuning. Interactive Adjustments of Control Points and Knot Vector (WIP)
+### Fine-Tuning. Interactive Adjustments of Control Points and Knot Vector
 
 A principal enhancement over the automatic fitting approach is SplineCloud’s Fine-Tuning functionality. It provides the ability to visually adjust control points and knot vectors of fitted splines. As proved in many cases, this interface enables users to achieve curve refinements that exceed the capabilities of SciPy’s automatic fitting algorithms in terms of smoothness and accuracy. More of that, the visual interface to knot vectors provides control over curve continuity in the specific regions. This helps in modelling complex data behavior with steep changes in main trends.
 
@@ -388,7 +385,33 @@ Adjusting control points of the spline curve in the Fine-Tune mode
 
 This form of user interaction provides precise control over the spline's shape and is particularly advantageous when fitting complex datasets where automated routines produce unsatisfactory results.
 
-#### Dynamic Knot Vector Adjustment (TODO)
+#### Dynamic Knot Vector Adjustment
+
+The knot vector plays a central role in determining the structure and properties of the resulting spline curve. Given a spline of degree k, the knot vector $\{ t_0, t_1, \ldots, t_{m} \}$ is a non-decreasing sequence of real numbers, typically ranging from 0 to 1 (but not necessarily). Each interval $[t_i, t_{i+k+1})$ corresponds to a region over which a particular B-spline basis function $B_{i,k}(t)$ has support, meaning that each basis function is non-zero over at most k+1 knot spans.
+
+The location and multiplicity of knots affect several critical properties of the resulting spline:
+
+- **Continuity**. The number of continuous derivatives at a knot $t_i$ is $k−m_i$​, where $m_i$ is the multiplicity of that knot. Repeated knots reduce the smoothness of the spline at that knot location. Specifically, if a knot has multiplicity $m$, then the continuity of the spline at that knot is reduced to $C^{k - m}$, where $k$ is the degree of the spline. That is, the spline remains $(k - m)$-times continuously differentiable, and all higher derivatives are discontinuous.
+
+- **Flexibility**. Adding more knots increases the local adaptability of the spline, allowing it to better follow variations in the data. In the B-spline formulation, the number of basis functions, and therefore the number of control points $n$ is always $T−k−1$, where $k$ is the spline degree, $T$ is the number of knots. As more interior knots are introduced, the number of basis functions increases, providing additional degrees of freedom for shaping the curve while maintaining the required continuity.
+
+In traditional fitting tools such as `LSQUnivariateSpline` in SciPy, the knot vector must be either provided manually or generated heuristically, which typically requires some kind of iterative approach in finding an optimal (usually quasi-optimal) knot vector. SplineCloud removes this complexity by exposing the knot vector as an editable structure in the Fine-Tune Mode, where users can manipulate knots directly and observe their impact on the spline in real time (Fig. 15).
+
+:::{figure} fine-tuning-knot-vector.png
+:width: 700px
+:label: fig:15
+Adjusting knot vector of the spline curve in the Fine-Tune mode
+:::
+
+In particular, SplineCloud enables users to:
+ - Insert new knots to increase the flexibility of the spline in localized regions.
+ - Remove knots to enforce greater smoothness and reduce overfitting.
+ - Relocate knots to shift the spatial distribution of curve flexibility, optimizing the placement of inflection points or areas of curvature.
+ - Add and remove duplicate knots to control continuity and introduce geometric features such as cusps, kinks, or plateaus.
+
+This level of control is critical for modeling non-uniform data, such as step functions, relations with discontinuities, or empirical data sampled for distinct regimes or environments. However, compared to adjusting control points, manipulating the knot vector is often less intuitive.
+
+Uniformly spaced knot vectors typically produce curves with more predictable and symmetric behavior, which is easier to interpret visually and adjust interactively. In contrast, non-uniform vectors can help in fitting local irregularities with higher precision. For example, a knot vector with tightly spaced knots in a transition zone and widely spaced knots elsewhere can fit complex behavior without sacrificing smoothness in the remaining domain.
 
 
 ### Fitting Errors (TODO)
@@ -420,6 +443,9 @@ If you wish to have a block quote, you can just indent the text, as in:
 > -- @hume48
 
 Other typography information can be found in the [MyST documentation](https://mystmd.org/guide/typography).
+
+
+Tom Lyche and Knut Mørken, Spline Methods (University of Oslo, 2008)
 
 ### DOIs in bibliographies
 
