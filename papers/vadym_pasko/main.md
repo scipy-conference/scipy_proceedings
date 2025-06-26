@@ -414,7 +414,102 @@ This level of control is critical for modeling non-uniform data, such as step fu
 Uniformly spaced knot vectors typically produce curves with more predictable and symmetric behavior, which is easier to interpret visually and adjust interactively. In contrast, non-uniform vectors can help in fitting local irregularities with higher precision. For example, a knot vector with tightly spaced knots in a transition zone and widely spaced knots elsewhere can fit complex behavior without sacrificing smoothness in the remaining domain.
 
 
-### Fitting Errors (TODO)
+### Fitting Errors (WIP)
+
+Comparing the accuracy of different fitted models requires a well-defined error metric that quantifies the discrepancy between the predicted and actual data. The fitting accuracy estimators tell how closely the curve approximates the given data. Out of many different metrics it is worth to mention the most common.
+
+In the context of curve fitting and regression analysis, residuals are defined as the differences between observed data values and the values predicted by a fitted model.
+
+#### Mean Squared Error (MSE)
+
+The mean squared error measures the average of the squared differences between observed values $y_i$​ and corresponding predicted values $\hat{y}_i = S(x_i)$, where $S(x)$ is the fitted spline function. It is defined as:
+
+```{math}
+\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - S(x_i))^2
+```
+
+This metric penalizes larger deviations more heavily, making it sensitive to outliers. It is widely used due to its mathematical convenience and differentiability.
+
+#### Root Mean Squared Error (RMSE)
+
+The root mean squared error is the square root of the MSE and provides an error measure in the same units as the data:
+
+```{math}
+\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - S(x_i))^2}
+```
+
+RMSE is especially useful for interpreting the scale of error in practical terms, such as deviation in physical units or signal magnitude.
+
+#### Weighted Least Squares and Smoothing
+
+In SciPy's spline fitting, smoothing splines can also incorporate weighting of individual data points. The weighted residuals are used in SciPy do estimate fitting errors.
+
+Let $\{(x_i, y_i)\}_{i=1}^n$​ be the observed data points, and let $S(x)$ denote the fitted spline function. If weights $w_i$​ are provided (or implicitly set to 1), the residuals are computed as:
+
+```{math}
+R_i = w_i \left( y_i - S(x_i) \right)^2
+```
+
+The smoothing condition is formulated as:
+
+```{math}
+\sum_{i=1}^{n} R_i \leq s
+```
+
+where $s$ is the smoothing factor. This formulation is used internally by functions such as `UnivariateSpline` and `splrep`, where the goal is to balance curve fidelity with smoothness.
+
+
+#### Estimating Errors in SciPy
+
+SciPy provides tools for evaluating the accuracy of the resulting models. In particular, the `UnivariateSpline` class includes a method called `get_residual()`, which returns the weighted sum of squared residuals used in the spline construction process. 
+
+
+```python
+import numpy as np
+from scipy.interpolate import UnivariateSpline
+
+# Generate synthetic data
+x = np.linspace(0, 10, 100)
+y = np.sin(x) + 0.2 * np.random.randn(100)
+
+# Fit smoothing spline
+spline = UnivariateSpline(x, y, s=5.0)
+
+# Evaluate spline at input points
+y_fit = spline(x)
+
+# RMSE using SciPy's get_residual()
+residual = spline.get_residual()
+rmse_scipy = np.sqrt(residual / len(x))
+
+# RMSE computed manually
+rmse_manual = np.sqrt(np.mean((y - y_fit)**2))
+
+print(f"RMSE (SciPy):  {rmse_scipy:.5f}")
+print(f"RMSE (Manual): {rmse_manual:.5f}")
+```
+
+```bash
+RMSE (SciPy):  0.22361
+RMSE (Manual): 0.22361
+```
+
+#### Estimating fitting errors in SplineCloud
+
+In SplineCloud, the RMSE is calculated automatically for all curves and updates after each curve change (Fig. 16, 17). This allows tracking the change of fitting error while applying different fitting parameters, comparing models, and comparing fine-tuned curves to automatically fitted models.
+
+:::{figure} fit_accuracy.png
+:width: 700px
+:label: fig:16
+RMSE estimation in SplineCloud
+:::
+
+
+:::{figure} fit_accuracy_parametric.png
+:width: 700px
+:label: fig:17
+RMSE estimation in SplineCloud
+:::
 
 
 ## Reusability and Reproducibility with SplineCloud (TODO)
