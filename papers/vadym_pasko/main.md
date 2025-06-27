@@ -414,23 +414,34 @@ This level of control is critical for modeling non-uniform data, such as step fu
 Uniformly spaced knot vectors typically produce curves with more predictable and symmetric behavior, which is easier to interpret visually and adjust interactively. In contrast, non-uniform vectors can help in fitting local irregularities with higher precision. For example, a knot vector with tightly spaced knots in a transition zone and widely spaced knots elsewhere can fit complex behavior without sacrificing smoothness in the remaining domain.
 
 
-### Fitting Errors (WIP)
+### Fitting Errors
 
-Comparing the accuracy of different fitted models requires a well-defined error metric that quantifies the discrepancy between the predicted and actual data. The fitting accuracy estimators tell how closely the curve approximates the given data. Out of many different metrics it is worth to mention the most common.
+Comparison of the different fitted models requires a well-defined error metric that quantifies the discrepancy between the predicted and actual data. The fitting accuracy estimators tell how closely the curve approximates the given data. Out of many different metrics it is worth to mention the most common.
 
-In the context of curve fitting and regression analysis, residuals are defined as the differences between observed data values and the values predicted by a fitted model.
 
-#### Mean Squared Error (MSE)
+**Mean Absolute Error (MAE)**
 
-The mean squared error measures the average of the squared differences between observed values $y_i$​ and corresponding predicted values $\hat{y}_i = S(x_i)$, where $S(x)$ is the fitted spline function. It is defined as:
+The Mean Absolute Error (MAE) is used to evaluate the accuracy of a fitted model by measuring the average magnitude of the errors between predicted and observed values. It is defined as:
+
+```{math}
+\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} \left| y_i - S(x_i) \right|
+```
+
+where $y_i$​ are the actual data values, $S(x_i)$​ are the corresponding predicted values from the curve, $n$ is the total number of data points.
+
+MAE provides an intuitive measure of model performance: it tells how far, on average, the predictions are from the actual observations.  Unlike squared error estimators, MAE is less sensitive to large individual errors (outliers), making it a useful complementary metric for assessing fit quality, especially when robustness is important.
+
+**Mean Squared Error (MSE)**
+
+The mean squared error measures the average of the squared differences between observed values $y_i$​ and corresponding predicted values $S(x_i)$. It is defined as:
 
 ```{math}
 \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - S(x_i))^2
 ```
 
-This metric penalizes larger deviations more heavily, making it sensitive to outliers. It is widely used due to its mathematical convenience and differentiability.
+This metric penalizes larger deviations more heavily, making it sensitive to outliers.
 
-#### Root Mean Squared Error (RMSE)
+**Root Mean Squared Error (RMSE)**
 
 The root mean squared error is the square root of the MSE and provides an error measure in the same units as the data:
 
@@ -438,16 +449,12 @@ The root mean squared error is the square root of the MSE and provides an error 
 \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - S(x_i))^2}
 ```
 
-RMSE is especially useful for interpreting the scale of error in practical terms, such as deviation in physical units or signal magnitude.
+#### Estimating Fitting Errors in SciPy
 
-#### Weighted Least Squares and Smoothing
-
-In SciPy's spline fitting, smoothing splines can also incorporate weighting of individual data points. The weighted residuals are used in SciPy do estimate fitting errors.
-
-Let $\{(x_i, y_i)\}_{i=1}^n$​ be the observed data points, and let $S(x)$ denote the fitted spline function. If weights $w_i$​ are provided (or implicitly set to 1), the residuals are computed as:
+In SciPy's spline fitting, smoothing splines support weighted data points, with fitting errors estimated using the corresponding weighted residuals. If weights $w_i$​ are provided (or implicitly set to 1), the weighted squared residuals are computed as:
 
 ```{math}
-R_i = w_i \left( y_i - S(x_i) \right)^2
+R_i = (w_i \left( y_i - S(x_i) \right))^2
 ```
 
 The smoothing condition is formulated as:
@@ -458,10 +465,7 @@ The smoothing condition is formulated as:
 
 where $s$ is the smoothing factor. This formulation is used internally by functions such as `UnivariateSpline` and `splrep`, where the goal is to balance curve fidelity with smoothness.
 
-
-#### Estimating Errors in SciPy
-
-SciPy provides tools for evaluating the accuracy of the resulting models. In particular, the `UnivariateSpline` class includes a method called `get_residual()`, which returns the weighted sum of squared residuals used in the spline construction process. 
+The `UnivariateSpline` class includes a method called `get_residual()`, which returns the weighted sum of squared residuals used in the spline construction process. Here is the example of estimating the fitting error using built-in `get_residual()` and custom estimator function:
 
 
 ```python
@@ -494,9 +498,9 @@ RMSE (SciPy):  0.22361
 RMSE (Manual): 0.22361
 ```
 
-#### Estimating fitting errors in SplineCloud
+#### Estimating Fitting Errors in SplineCloud
 
-In SplineCloud, the RMSE is calculated automatically for all curves and updates after each curve change (Fig. 16, 17). This allows tracking the change of fitting error while applying different fitting parameters, comparing models, and comparing fine-tuned curves to automatically fitted models.
+In SplineCloud, the RMSE is calculated automatically for all curves. The `Fit accuracy` hint updates after each curve modification (Fig. 16). This allows tracking the change of fitting error while applying different fitting parameters, comparing different models and fine-tuned curves against automatically fitted models.
 
 :::{figure} fit_accuracy.png
 :width: 700px
@@ -504,11 +508,18 @@ In SplineCloud, the RMSE is calculated automatically for all curves and updates 
 RMSE estimation in SplineCloud
 :::
 
+For complex curve shapes, especially those with closed loops (Fig. 17), the error between a data point and the curve should not be measured only along the vertical axis. Instead, the true discrepancy is the Euclidean distance from each data point to the nearest point on the curve. This approach is implemented in SplineCloud to estimate ftting errors of parametric curves that approximate data in non-ascending order via $RMSE_{sd}$ - root mean squared shortest distance error:
+
+```{math}
+\text{RMSE}_{sd} = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (w_i d_i)^2 }
+```
+
+where $d_i$ is the shortest distance between a data point and spline curve. Evaluation of this distance is implemented via SciPy's `optimize` module, and particularly a [direct](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.direct.html) method is used as the one of the most stable and fastest global optimization algorithms (based on the in-house analyses).
 
 :::{figure} fit_accuracy_parametric.png
 :width: 700px
 :label: fig:17
-RMSE estimation in SplineCloud
+RMSE valuated via shortst distance residuals
 :::
 
 
