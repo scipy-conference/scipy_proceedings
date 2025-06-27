@@ -520,7 +520,7 @@ class CNNClassifier(nn.Module):
         )
         self.fc = nn.Linear(256, num_classes)
 
-    def forward(self, x: Tensor):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.layer1(x)
         x = self.layer2(x)
         x = x.view(x.size(0), -1)
@@ -543,7 +543,7 @@ model = CNNClassifier(input_dim=x_train_seq.shape[1], num_classes=6)
    LEARNING_RATE = 1e-3
    
    criterion = nn.CrossEntropyLoss()
-   optimizer = torch.optim.SGD(model.parameters(), lr=LEARNING_RATE)
+   optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
    ```
 
 2. Create data loaders
@@ -583,7 +583,7 @@ model = CNNClassifier(input_dim=x_train_seq.shape[1], num_classes=6)
            epoch_loss += loss.item()
   
        avg_loss = epoch_loss / len(train_loader)
-       print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {avg_loss:.5f}")
+       print(f"Epoch [{epoch}/{num_epochs}], Loss: {avg_loss:.5f}")
    ```
 
 #### Evaluate performance
@@ -593,15 +593,15 @@ The performance of the model on the test set is shown below.
 
 | Class              | Precision | Recall | F1-Score | Support  |
 |--------------------|-----------|--------|----------|----------|
-| Walking            | 0.94      | 0.94   | 0.94     | 496      |
-| Walking Upstairs   | 0.86      | 0.86   | 0.86     | 471      |
-| Walking Downstairs | 0.83      | 0.81   | 0.82     | 420      |
-| Sitting            | 0.81      | 0.82   | 0.82     | 467      |
-| Standing           | 0.85      | 0.91   | 0.88     | 501      |
-| Laying             | 0.95      | 0.88   | 0.91     | 528      |
-| **Accuracy**       |           |        | **0.87** | **2883** |
-| **Macro Avg**      | 0.87      | 0.87   | 0.87     | 2883     |
-| **Weighted Avg**   | 0.88      | 0.87   | 0.87     | 2883     |
+| Walking            | 0.96      | 0.94   | 0.95     | 496      |
+| Walking Upstairs   | 0.94      | 0.93   | 0.93     | 471      |
+| Walking Downstairs | 0.92      | 0.88   | 0.90     | 420      |
+| Sitting            | 0.86      | 0.83   | 0.85     | 467      |
+| Standing           | 0.83      | 0.92   | 0.87     | 501      |
+| Laying             | 0.95      | 0.94   | 0.94     | 528      |
+| **Accuracy**       |           |        | **0.91** | **2883** |
+| **Macro Avg**      | 0.91      | 0.91   | 0.91     | 2883     |
+| **Weighted Avg**   | 0.91      | 0.91   | 0.91     | 2883     |
 
 ### SHAP Explanations
 
@@ -616,9 +616,13 @@ good representation for each class.
 :linenos: true
 :caption: Creating a balanced background dataset
 
-def create_balanced_background(x_data: Tensor, y_data: Tensor, n_per_class: int = 20):
+RNG = np.random.default_rng(42)
+
+def create_balanced_background(
+    x_data: torch.Tensor, y_data: torch.Tensor, n_per_class: int = 20
+) -> tuple[torch.Tensor, torch.Tensor]:
     """
-    Construct a balanced background dataset with equal representation from each class
+    Create a balanced background dataset with equal representation from each class.
 
     Parameters:
     -----------
@@ -634,26 +638,18 @@ def create_balanced_background(x_data: Tensor, y_data: Tensor, n_per_class: int 
     torch.Tensor
         Balanced background dataset
     """
-    # Convert to numpy for easier manipulation
     y_np = y_data.detach().cpu().numpy()
-
-    # Get unique classes
-    unique_classes = np.unique(y_np)
-    print(f"Found {len(unique_classes)} unique classes: {unique_classes}")
-
-    # Create balanced dataset
     balanced_indices = []
 
-    for cls in unique_classes:
-        # Find indices for this class
+    for cls in np.arange(NUM_CLASSES):
         cls_indices = np.where(y_np == cls)[0]
-
-        # If we have enough samples, randomly select n_per_class
         if len(cls_indices) >= n_per_class:
-            selected_indices = np.random.choice(cls_indices, n_per_class, replace=False)
+            # If we have enough samples, randomly select n_per_class
+            selected_indices = RNG.choice(cls_indices, n_per_class, replace=False)
+            # selected_indices = np.random.choice(cls_indices, n_per_class, replace=False)
         else:
             # If not enough samples, use all available with replacement
-            selected_indices = np.random.choice(cls_indices, n_per_class, replace=True)
+            selected_indices = RNG.choice(cls_indices, n_per_class, replace=True)
             print(
                 f"Warning: Class {cls} has only {len(cls_indices)} samples, using with replacement"
             )
@@ -706,31 +702,39 @@ imply the feature reduces the model's predicted value towards the negative class
 Global SHAP values for the CNN model for the `Walking` class.
 :::
 
-From {numref}`fig:beeswarm-walking-cnn`, one can see that the top feature having the biggest impact is 
-`tGravityAccMag-arCoeff()2`. In this feature name, `t` represents that this is a time domain signal. 
-`GravityAcc` denotes that this is the gravity component of the signal is derived from the accelerometer.
-`Mag` represents the magnitude of the three-dimensional signal calculated using Euclidean norm. 
-`arCoeff()2` represents the second coefficient from an autoregressive (AR) model 
-fitted to this gravity acceleration magnitude signal. Autoregressive coefficients capture how a signal's 
-current value relates to its previous values. consistently produce positive SHAP values, indicating regular 
-and rhythmic gravitational acceleration patterns that strongly correlate with the repetitive motion of walking.
+From {numref}`fig:beeswarm-walking-cnn`, we can see that the top feature for the `Walking` class is 
+`angle(tBodyGyroMean, gravityMean)`. The vectors `gravityMean` and `tBodyGyroMean` are 
+obtained by averaging the signals in a signal window sample. The `angle()` function measures the angle between 
+these two vectors. In the context of the `Walking` class, low values of this feature (in blue) are more clustered 
+towards the positive SHAP values. This implies that when a person is walking, the angle between the mean 
+gyroscope signal and the mean gravity signal is smaller.
+Another important feature is `tBodyGyroJerk-arCoeff()-Z,2`, is the second autoregressive coefficient of the
+time-domain Z-axis gyroscope jerk signal which is the derivative of angular velocity. Autoregressive coefficients 
+capture how a signal's current value relates to its previous values. Higher values of this 
+coefficient reflect smoother, more predictable rotation changes and are more likely to occur when a person is 
+walking.
+
 
 ##### Walking Upstairs
 
-:::{figure} beeswarm_WalkingUpstairs_cnn.png
+:::{figure} beeswarm_Walking_Upstairs_cnn.png
 :label: fig:beeswarm-walking-upstairs-cnn
 :width: 70%
 :align: left
 Global SHAP values for the CNN model for the `Walking Upstairs` class.
 :::
 
-For the beeswarm plot for `Walking Upstairs` class in {numref}`fig:beeswarm-walking-upstairs-cnn` above, we can 
-notice that most of the positive instances of this class has a high value of the `tGravityAccMag-min()` feature.
-This basically represents the minumum magnitude of gravity component of the accelerometer.
+For the `Walking Upstairs` class as shown in {numref}`fig:beeswarm-walking-upstairs-cnn`, the top features include 
+`tGravityAcc-mean()-X`, `tGravityAcc-min()-X`, `tGravityAcc-max()-X` which are all related to the X component of 
+the gravity acceleration. Lower values of these features (in blue) are more clustered towards the negative SHAP 
+values. This implies that when a person is walking upstairs, the X component of the gravity acceleration is 
+higher. Intuitively, when walking upstairs, people naturally lean into the slope, 
+so the gravity vector has a strong component along the phone’s X-axis.
+
 
 ###### Walking Downstairs
 
-:::{figure} beeswarm_WalkingDownstairs_cnn.png
+:::{figure} beeswarm_Walking_Downstairs_cnn.png
 :label: fig:beeswarm-walking-downstairs-cnn
 :width: 70%
 :align: left
@@ -738,9 +742,10 @@ Global SHAP values for the CNN model for the `Walking Downstairs` class.
 :::
 
 For the `Walking Downstairs` class as shown in {numref}`fig:beeswarm-walking-downstairs-cnn`, 
-the top feature is `tBodyAccJerkMag-mad()`. The larger values of median-absolute-deviation in the jerk‐magnitude 
-of total body acceleration pushes the prediction solidly positive the class. In other words, the sharp, 
-uneven impacts that occur when the body’s weight repeatedly drops down each step are a hallmark of descending.
+we see the opposite behavior for the `tGravityAcc-mean()-X`, `tGravityAcc-min()-X`, `tGravityAcc-max()-X` features. 
+Higher values of these features (in orange) are more clustered towards the negative SHAP values. While 
+descending stairs, the torso actually tilts backward instead of forward, so the gravity vector’s projection 
+onto the device’s X-axis flips sign.
 
 ##### Sitting
 
@@ -755,7 +760,8 @@ For the `Sitting` class, the main features are different from the other `Walking
 {numref}`fig:beeswarm-sitting-cnn`, the top feature is `angle(X, gravityMean)` which measures how much the 
 device’s X-axis is tilted relative to the average gravity vector. Low values (in blue) of this feature are more
 clustered towards the positive SHAP values. The intuition is that when a person is sitting, the attached device
-on the waist makes a smaller and consistent angle with the vertical compared to other activities.
+on the waist makes a smaller and consistent angle with the vertical compared to other activities, especially 
+compared to when the person is laying down.
 
 ##### Standing
 
@@ -766,11 +772,13 @@ on the waist makes a smaller and consistent angle with the vertical compared to 
 Global SHAP values for the CNN model for the `Standing` class.
 :::
 
-In the above {numref}`fig:beeswarm-standing-cnn`, we can see that one of the top feature for the `Standing` class is 
-`tBodyAccJerkMag-mad()` as was the case for the `Walking Downstairs` class. However, the behavior is reversed. 
-The larger values of median-absolute-deviation in the jerk‐magnitude of total body acceleration pushes the 
-prediction solidly negative for the class. A possible explanation is that when a person is standing, 
-the body's weight is distributed more evenly, resulting in smoother movements and lower jerk magnitudes.
+In the above {numref}`fig:beeswarm-standing-cnn`, we can see that one of the top features for the `Standing` class
+is `tBodyGyroJerk-arCoeff()-Z,2`. As mentioned earlier, the autoregressive coefficients capture how a signal's 
+current value relates to its previous values. Low values of this feature (in blue) are more clustered towards the 
+positive SHAP values. This implies that for standing, the Z-axis gyroscope jerk signal is essentially flat. The 
+higher-order coefficients (like the second one) collapse toward zero because past values have almost no 
+bearing on the current value. This is in contrast to the `Walking` class {numref}`fig:beeswarm-walking-cnn`
+where the gyroscope jerk signal is more dynamic and hence the second autoregressive coefficient is higher.
 
 ###### Laying
 
@@ -781,15 +789,13 @@ the body's weight is distributed more evenly, resulting in smoother movements an
 Global SHAP values for the CNN model for the `Laying` class.
 :::
 
-For the `Laying` class, the differentiatingfeature behaviors are very different to the other classes. The low 
-values of the top feature `tGravityAcc-max()-X` is much more distributed towards the positive SHAP values for 
-the class. The feature represents the maximum value of the X component of the gravity acceleration. This is
-opposite to what we see in {numref}`fig:beeswarm-sitting-cnn` for the `Sitting` class. 
+For the `Laying` class, in {numref}`fig:beeswarm-laying-cnn`, the feature behaviors are very different to the other classes. The low 
+values of the top feature `tGravityAcc-mean()-X`, `tGravityAcc-min()-X`, `tGravityAcc-max()-X` 
+is much more distributed towards the positive SHAP values for the class. 
+This is opposite to what we see in {numref}`fig:beeswarm-sitting-cnn` for the `Sitting` class. 
 Similarly, the second feature `angle(X, gravityMean)` also shows a reversed behavior compared to the `Sitting` class.
 This contrast makes sense, since when a person is laying down, the attached device
 on the waist makes a larger angle with the vertical compared to when the person is sitting.
-Another top feature `tBodyAccJerkMag-mad()` clusters low values towards the positive SHAP values, which signifies
-that the jerk magnitude is lower when a person is laying down compared to other activities.
 
 
 #### Dependency
@@ -820,33 +826,49 @@ SHAP dependency plot for the CNN model for the `Laying` class.
 
 #### Local
 
-:::{figure} waterfall_Laying_cnn_0.png
-:label: fig:waterfall-laying-cnn
+:::{figure} local_Walking_cnn.png
+:label: fig:local-walking-cnn
 :width: 70%
 :align: left
-Waterfall plot for the CNN model for the `Laying` class.
+Local SHAP values for the CNN model for the `Walking` class.
 :::
 
-:::{figure} waterfall_Walking_Upstairs_cnn_0.png
-:label: fig:waterfall-walking-upstairs-cnn
+
+:::{figure} local_Walking_Upstairs_cnn.png
+:label: fig:local-walking-upstairs-cnn
 :width: 70%
 :align: left
-Waterfall plot for the CNN model for the `Walking Upstairs` class.
+Local SHAP values for the CNN model for the `Walking Upstairs` class.
 :::
 
-:::{figure} waterfall_Walking_cnn_20.png
-:label: fig:waterfall-walking-cnn
+:::{figure} local_Walking_Downstairs_cnn.png
+:label: fig:local-walking-downstairs-cnn
 :width: 70%
 :align: left
-Waterfall plot for the CNN model for the `Walking` class.
+Local SHAP values for the CNN model for the `Walking Downstairs` class.
 :::
 
-:::{figure} waterfall_Standing_cnn_20.png
-:label: fig:waterfall-standing-cnn
+:::{figure} local_Sitting_cnn.png
+:label: fig:local-sitting-cnn
 :width: 70%
 :align: left
-Waterfall plot for the CNN model for the `Standing` class.
+Local SHAP values for the CNN model for the `Sitting` class.
 :::
+
+:::{figure} local_Standing_cnn.png
+:label: fig:local-standing-cnn
+:width: 70%
+:align: left
+Local SHAP values for the CNN model for the `Standing` class.
+:::
+
+:::{figure} local_Laying_cnn.png
+:label: fig:local-laying-cnn
+:width: 70%
+:align: left
+Local SHAP values for the CNN model for the `Laying` class.
+:::
+
 
 ## Strengths and Limitations
 
