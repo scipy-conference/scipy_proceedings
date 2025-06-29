@@ -523,7 +523,168 @@ RMSE valuated via shortst distance residuals
 :::
 
 
-## Reusability and Reproducibility with SplineCloud (TODO)
+## Reusability and Reproducibility with SplineCloud
+
+Reusability and reproducibility are closely related concepts in scientific research, both essential for ensuring that data-driven results can be reliably verified, extended, and applied across different contexts and by independent researchers.
+Reusability refers to the capacity of data, models, or computational results to be used beyond their original context, either by the same researcher at a later time or by others pursuing related work. For scientific outputs (data, code, models, etc.) to be reusable, they must be well-documented, accessible in a standardized format, and independent of specific software or environments. In the context of regression models, reusability implies that the model can be extracted, stored, and later reintegrated into different analytical workflows, ideally without the need to rerun the original fitting procedure or reaccess the raw data.
+
+Reproducibility denotes the ability of independent researchers to replicate the results of a study using the same input data, methods, and conditions. In computational science, this typically involves the complete transparency of the modeling pipeline, including data preprocessing, parameter tuning, and evaluation metrics. For regression models, reproducibility requires that all aspects of the fitting process are recorded and available so that the same model output can be regenerated deterministically.
+
+In conventional curve fitting workflows implemented via a programmable interface, fitted models are often tightly coupled with the original data and code used to generate them. While the source data and fitting scripts may be published, the resulting models themselves are rarely stored or shared as independently reusable objects. As a result, anyone wishing to replicate or build upon a previous curve fitting problem must re-execute the entire fitting process, including selecting the method, tuning parameters, and validating the fit.
+
+This leads to three key limitations:
+ - **Redundant effort**. Researchers across teams or domains often repeat fitting procedures for the same datasets.
+ - **Poor reproducibility**. Deviations in fitting parameters and algorithms across various programming environments may cause discrepancies in reproduced models and, as a consequence, discrepancies in modelling results.
+ - **Poor interoperability**. There is no widely adopted convention for serializing and sharing regression models across tools and environments. As a result, transferring models typically requires manual extraction of fitting parameters or curve construction data (like spline parameters). This process is error-prone and demands significant additional effort to reuse models accurately in code.
+
+By extending the principles of FAIR data (Findable, Accessible, Interoperable, Reusable) to regression models, it becomes clear that it is not sufficient to publish raw data and code alone, intermediate or final research outputs such as fitted models, parameterized approximations, or response surace models should also be accessible in standardized, referenceable form. Without this, the fitted model becomes an opaque byproduct rather than a verifiable and citable result.
+
+For example, in engineering simulations, material characterization studies, or system response parameters, fitted with regression models often serve as inputs to downstream models, optimizations, or controllers. If those models are not independently accessible, it becomes difficult to trace their provenance, assess their quality, or adapt them in related studies.
+
+
+### Improving Reusability and Reproducibility of Spline Models
+
+SplineCloud addresses these challenges by decoupling the spline model from the fitting code and treating it as a first-class, shareable object. The platform is open for open data and supports persistent storage of fitted curves as structured entities that include:
+ - Unique IDs and web links;
+ - API links that return spline data and related datasets and subsets;
+ - A metadata layer, including authorship, tags, units, and other associated context (improvements in progress).
+
+Once users create spline models interactively, they become instantly accessible to the broad public, including anonymous users. Reusability and reproducibility are ensured by both the open REST API and client libraries. 
+
+An official Python client, `splinecloud-scipy`, is based on SciPy and allows for fetching spline data using the spline UID and recreating the model in code. Reusable spline model has critical methods for evaluating spline in the form $y=f(x),$ loading underlying data, and assessing fit accuracy (using one of the methods, listed in section 5.4). This enables a new level of interoperability: a spline curve fitted by one researcher can be imported and evaluated in another researcher’s codebase, without accessing the original data and refitting it.
+
+Let’s first take a look at the client library basic usage scenarios and then discuss the library structure and how splines a recreated and evaluated. 
+
+#### Installation and basic usage
+
+The `splinecloud-scipy` library is lightweight and can be installed from the Python Package Index:
+
+```bash
+pip install splinecloud-scipy
+```
+
+As of now, the library provides two main functions: `load_spline()` and `load_subset()`, which should be used to fetch spline models and underlying subsets:
+
+```python
+from splinecloud_scipy import load_spline
+spline = load_spline(<curve_uid>)
+```
+
+The curve UID can be taken from SplineCloud - an API link dropdown on the Curves toolbox (Fig. 18)
+
+:::{figure} curve_api_link.png
+:width: 700px
+:label: fig:18
+Accessing curve API link
+:::
+
+`load_spline()` returns an instance of the `ParametricUnivariateSpline` class, which allows for evaluating the spline as a function of $x$. The structure and usage of this class a given below in section 6.1.2.
+
+```python
+import numpy as np
+X = np.linspace(0, 20, 100)
+Y = spline.eval(X, extrapolate=True)
+```
+
+:::{figure} evaluated_curve.png
+:width: 400px
+:label: fig:19
+Reproduced spline curve
+:::
+
+The `ParametricUnivariateSpline` class also allows for loading underlying data:
+
+```python
+columns, table = spline.load_data()
+```
+
+The same result can be achieved by explicitly loading a corresponding subset via its UID:
+
+```python
+from splinecloud_scipy import load_subset
+columns, table = load_subset(<subset_uid>)
+```
+
+Similarly, the subset UID can be taken from SplineCloud - an API link dropdown on the table header for tabular data, and from the Subsets toolbox for data extracted from plots (Fig. 20)
+
+
+:::{figure} subset_api_link.png
+:width: 700px
+:label: fig:20
+Accessing subset API link
+:::
+
+Both methods return a tuple with a list of column names and an array with subset data.
+
+More information can be found in the library code [repository](https://github.com/nomad-vagabond/splinecloud-scipy) README section.
+
+
+#### The structure of the client library for Python
+
+The `splinecloud-scipy` library is built around two core classes: `ParametricUnivariateSpline` - for the construction of the parametric splines from the curve data (degree, control points, and knot vector) and `PPolyInvertible` - a helper class defined to enable solving the spline curve as a function of $x$ values. Both classes extend SciPy’s classes, namely `interpolate.UnivariateSpline` and `interpolate.PPoly`.
+
+`ParametricUnivariateSpline` is the main class of the `splinecloud-scipy` client library. Its instance is returned by the `load_spline()` function. It defines a 2D parametric spline curve based on two univariate spline functions — one for the $x(t)$ and one for the $y(t)$ dependencies, that share a common knot vector and spline degree.
+
+Such representation allows reusing properties of `UnivariateSpline` and evaluating the inverse relation $t(x)$ by using a piecewise polynomial representation of the spline function $x(t)$.
+
+Initialization of `ParametricUnivariateSpline` takes a tuple or list of the form: `(t: knots, cx: x-coefficients, cy: y-coefficients, k: degree)`
+
+
+The class instance stores: curve degree, knot vector and its normalized version, coefficients for *x-* and *y-splines*. The `ParametricUnivariateSpline` object is callable - it takes a parameter value and returns the corresponding $x$ and y values by calling internal objects `self.spline_x()` and `self.spline_y()` - instances of SciPy’s `UnivariateSpline` class. This part, however, requires refactoring, since it uses private methods to construct `UnivariateSpline` from knot vector, coefficients, and degree:
+
+```python
+ self.spline_x = si.UnivariateSpline._from_tck(tck_x)
+ self.spline_y = si.UnivariateSpline._from_tck(tck_y)
+```
+There is a plan to use the `BSpline` class instead.
+
+
+Evaluation of the spline in the form $y(x)$ is implemented in the `eval()` method. Inside this method, a piecewise polynomial representation of spline functions is used to find the polynomial for the interval containing the *x-value*, then the polynomial is solved for the *t-value*. This parameter value is then used in the spline function $y(t)$ to find the desired *y-value*. 
+
+Polynomial representations are constructed inside the private method `_build_ppolyrep()`, called on the `ParametricUnivariateSpline` initialization.
+
+```python
+  def _build_ppolyrep(self):
+      self.spline_x.ppoly = PPolyInvertible.from_splinefunc(self.spline_x, extrapolate=True)
+      self.spline_y.ppoly = PPolyInvertible.from_splinefunc(self.spline_y, extrapolate=True)
+```
+
+These representations are based on the custom class `PPolyInvertible` that extends SciPy’s `PPoly` class. Its main purpose is to find the corresponding interval for the *x-value* and solve for the *t-value* on this interval. This logic is implemented inside `evalinv()` method called from the `ParametricUnivariateSpline.eval()` method for the *x-spline* function. Inside `evalinv()`, a *t-value* is found using SciPy’s [optimize.brentq](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html) method - a root-finding algorithm that finds a zero of a continuous function within a specified interval.
+
+The `ParametricUnivariateSpline` class also provides a method for evaluating fit accuracy using one of the three methods discussed in section 5.4.
+
+```python
+RMSE = spline.fit_accuracy(table, method="RMSE")
+```
+
+The client library introduces basic capabilities that allow for fetching, recreating, and evaluating spline models in code. Its structure, however, is a bit complicated: conversion to polynomial representation may be omitted, and other approaches may be used to evaluate the inverse relation $t(x)$ or solve the relation $y(x)$ directly. Contribution for this and other improvements is welcome.
+
+Nevertheless, the implemented approach is covered with tests, supports extrapolation, and shows good performance (no reportable benchmarking was performed).
+
+
+### Implications for Reusability and Reproducibility of Spline Models
+
+By transforming spline models and datasets into shareable, code-native objects, and by introducing a client library for Python, SplineCloud eliminates the need to re-run fitting scripts or re-import raw data. From a practical point of view, this means:
+ - **Immediate reuse**. Models can be invoked like native functions in mathematical modeling, numerical analysis, optimization, or visualization processes.
+ - **Traceable origin**. Each model retains provenance information. Spline objects are associated with subsets, datasets, source data files, and authors. This provides transparency and enables attribution.
+ - **Consistent integration and referencing**.  Anyone can retrieve the exact same spline instance and integrate it into their code, leaving the data fitting process outside the main code. Whether in Jupyter notebooks, software libraries, command-line tools, or a scientific article, the same model can be referenced by its unique identifier.
+
+SplineCloud enables the transition of curve fitting from a script-bound operation to a persistent, shareable, and reproducible modeling activity. This approach minimizes redundant work and enhances the reliability and continuity of model-based research outputs.
+The platform and its client library for Python implement principles of FAIR data and reproducible workflows by allowing fitted models to be handled as independent, discoverable entities that can be consistently integrated, reused, and exchanged across various models, analyses, and software packages.
+
+### Limitations
+
+While SplineCloud offers a substantial improvement in the usability, reusability, and reproducibility of spline-based regression models, the platform currently does not support other classes of regression models such as polynomial fits, rational functions, exponential models, or machine learning-based regressors. This limitation is not technical in nature but a deliberate, temporary design decision, rooted in both theoretical and practical considerations.
+
+Spline models, particularly B-splines and their parametric forms, possess a standardized and well-defined mathematical representation. This makes them ideally suited for platform-independent storage, manipulation, and code-level reuse. Their local support, smoothness properties, and flexibility in representing arbitrary empirical relations enable consistent behavior across computational environments and programming languages. These features align with the core objectives of SplineCloud — namely, enabling transparent and reproducible modeling workflows.
+
+In contrast, extending support to arbitrary analytical or statistical regression models would require substantial generalization of the platform’s core architecture. Such models often rely on complex formulations and domain-specific assumptions that are difficult to standardize or serialize reliably. Moreover, handling custom models would require the development of thicker client libraries to support reusability. This, along with significant effort for the platform frontend and backend modifications, constrains their adoption by SplineCloud (at least until proved necessary).
+
+From a pragmatic perspective, spline-based models are especially effective for representing empirical data derived from physical experiments, simulations, and measurements — scenarios where an accurate and differentiable fit is often more valuable than an interpretable analytical expression. SplineCloud is thus particularly suited for constructing surrogate models, processing and interpolating results of numerical simulations (like wind tunnel tests), and reusing such models in downstream analysis, control, or optimization tasks.
+
+However, users requiring analytical model validation (e.g., fitting custom functions to verify physical laws or derive closed-form expressions) will find SplineCloud insufficient for their needs. In such cases, traditional tools, including SciPy, remain more appropriate.
+
+Despite this limitation, SplineCloud introduces the novel capability of building shareable repositories of empirical relations. The catalogs of such relations can serve as reference data and model sources in experimental domains such as fluid dynamics, structural mechanics, or thermodynamics, where precomputed curves and data-driven models are frequently reused. For example, aerodynamic design processes often rely on aggregated wind tunnel results; SplineCloud provides an infrastructure to formalize, store, and exchange such data in a reproducible and programmatically accessible way.
 
 
 ## Use Cases and Applications (TODO)
