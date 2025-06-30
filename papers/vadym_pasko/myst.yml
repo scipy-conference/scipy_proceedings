@@ -18,7 +18,10 @@ project:
   keywords:
     - curve fitting
     - spline fitting
+    - empyrical relations
+    - data analysis
     - reusable models
+    - FAIR
   # Add the abbreviations that you use in your paper here
   abbreviations:
     MyST: Markedly Structured Text
