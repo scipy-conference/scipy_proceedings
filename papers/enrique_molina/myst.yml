@@ -17,6 +17,11 @@ project:
       orcid: 0000-0002-2865-9873
       affiliations:
         - Universitat Rovira i Virgili, Tarragona, Spain
+    - name: Pedro García-López
+      email: pedro.garcia@urv.cat
+      orcid: 0000-0002-9848-1492
+      affiliations:
+        - Universitat Rovira i Virgili, Tarragona, Spain
   keywords:
     - serverless
     - data analytics
