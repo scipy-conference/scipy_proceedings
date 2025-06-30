@@ -204,7 +204,9 @@ Meeting professional-grade tolerance requirements (e.g., < 3 cm) enables real-wo
 
 Our approach to tiling ("chipping") high-resolution orthomosaics, processing 588 individual 1280-by-1280px tiles at an average pace of 11 seconds per tile, required a total processing time of ~110 minutes running on a Colab single `T4` GPU instance. It is important to note that an overlap of 25% (320px) between tiles during processing was required to ensure that geometry was not produced containing "holes" or malformations; merging overlapping polygons after filtering (based on area and compactness calculations, in this case) helped us ensure the overall quality of the geometric output.
 
-Future work will be centered on building a CLI that we can open source, which will allow users to pass orthomosaics as inputs and get geometry meeting desired spatail charactersitics as an output.
+Future work will be centered on building a CLI that we can open source[^footnote-5], which will allow users to pass orthomosaics as inputs and get geometry meeting desired spatail charactersitics as an output.
+
+[^footnote-5]: We have since open-sourced the [`orthomasker`](https://pypi.org/project/orthomasker) Python package.
 
 ## Conclusion
 
