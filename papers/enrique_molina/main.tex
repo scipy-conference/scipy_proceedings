@@ -90,12 +90,11 @@ if __name__ == '__main__':
 \end{lstlisting}
 
 
-The code snippet above illustrates a straightforward example of using the Lithops framework to estimate the value of $\pi$. It uses the Monte Carlo method, where the ratio of random points landing inside a circle versus its bounding square approximates $\pi$/4. This principle holds because the probability of a uniformly random point falling inside the circle is equal to the ratio of the two areas. A point $(x,y)$ is counted as "inside" if its coordinates satisfy the equation $x^2 + y^2 < 1$. Because each point calculation is completely independent, Lithops can run thousands of these trials in parallel across different workers, dramatically speeding up the estimation by simply summing their individual results.
+The code snippet above illustrates a straightforward example of using the Lithops framework to estimate the value of $\pi$, using the Monte Carlo method. It first defines the quarter of a circle with radius 1, specifically that of the first quadrant. The algorithm then randomly generates points within the unit square of this quadrant. We can simply know if a point falls within the circle by checking if the coordinates satisfy the equation $x^2 + y^2 < 1$. As the area of the quarter circle is $\pi/4$, we can expect approximately that proportion of the points to fall within it. Therefore, we can estimate $\pi$ by calculating the ratio of points that fall inside the circle to the total number of points.
 
+Because each point calculation is completely independent, Lithops can run thousands of these trials in parallel across different workers, dramatically speeding up the estimation by simply summing their individual results. First, an instance of \texttt{lithops.FunctionExecutor()} is created. The \texttt{map()} method then launches multiple serverless functions that execute the \texttt{is_inside()} function concurrently, each processing a portion of the input data. Once all tasks complete, \texttt{get_result()} collects the results from the distributed execution and receives them locally, enabling the user to obtain the final estimation seamlessly.
 
-First, an instance of \texttt{lithops.FunctionExecutor()} is created. The \texttt{map()} method then launches multiple serverless functions that execute the \texttt{is_inside()} function concurrently, each processing a portion of the input data. Once all tasks complete, \texttt{get_result()} collects the results from the distributed execution and receives them locally, enabling the user to obtain the final estimation seamlessly.
-
-Analogously to how $\pi$ is estimated through the parallel execution of multiple functions, Lithops enables users to apply this pattern to a wide range of parallel computing problems, as simple as demonstrated in this example.
+Analogously to how $\pi$ is estimated through the parallel execution of multiple functions, Lithops enables users to apply this pattern to a wide range of parallel computing problems, as simple as demonstrated in this example. While the core Lithops framework provides fundamental operators like MapReduce, it is part of a comprehensive software stack that significantly extends its capabilities. As we will explain throughout this work, this stack includes IO abstractions that serve as building blocks for group communication patterns, alongside a public workload registry offering programmatic examples of more complex operations such as joins and sorts.
 
 \noindent
 \vspace{0.5em} \textbf{Storage API. }
@@ -253,7 +252,7 @@ At a glance, PyRun service offers the following features:
 
 \item Pre-configured frameworks: PyRun currently supports native integration with parallel computing frameworks such as Lithops, Das and Dataplug, with plans to extend this list in the future. These integrations allow users to access powerful APIs without the overhead of manual pre-configuration, significantly accelerating the development and deployment process.
 
-\item Sharing applications via pipelines: PyRun supports collaborative workflows through its \textit{Public Resources} feature, which enables users to share parallel applications with the broader data science community. This facilitates reproducibility and scientific collaboration.
+\item Collaborative and Reproducible Workflows: PyRun's \textit{Public Resources} feature promotes scientific collaboration and reproducibility by allowing users to share parallel applications and pipelines with the broader community. These shared resources also serve as a valuable compendium of programmatic patterns, which developers can adapt as building blocks for their own solutions.
 
 \item Monitoring: PyRun provides a built-in observability layer for scientific parallel applications. Users have access to a monitoring interface that displays detailed execution metrics, including task status, CPU/memory/network usage, failure reports, and runtime statistics.
 
