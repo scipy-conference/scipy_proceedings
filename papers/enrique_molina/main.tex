@@ -221,7 +221,7 @@ with FunctionExecutor() as fexec:
     fexec.map(process_fastq_data, data_slices)
 \end{lstlisting}
 
-At the same time, the entirely workflow explained in previous lines is straightforward to use via Dataplug API. The above code snippet illustrates how to use Dataplug to partition one genomic (FASTQGZip) file into several slices, and then process each slice in parallel using Lithops.
+At the same time, the entire workflow explained in previous lines is straightforward to use via Dataplug API. The above code snippet illustrates how to use Dataplug to partition one genomic (FASTQGZip) file into several slices, and then process each slice in parallel using Lithops.
 In a very quick overview, the code above illustrates how to use Dataplug to partition a FASTQGZip file into 200 slices, and then process each slice in parallel using Lithops. First, the \texttt{preprocess()} method generates the required metadata for the FASTQGZip file, then the \texttt{partition()} method creates the slices based on the specified partitioning strategy, and the \texttt{get()} method retrieves the data for each slice when called, in a lazy way.
 
 Dataplug approach offers several key advantages over static partitioning, that make it particularly well-suited for scientific data analytics:
