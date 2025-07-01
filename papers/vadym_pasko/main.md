@@ -30,17 +30,7 @@ In this article, we begin with an overview of the spline fitting problem and its
 
 ## Some Theoretical Background Behind Splines
 
-Splines are piecewise-defined functions used extensively in numerical analysis, computer-aided geometric design, and data fitting. The fundamental idea behind spline interpolation or approximation is to construct a smooth function that matches a set of data points or satisfies a set of constraints, while preserving computational efficiency and numerical stability.
-
-A spline is a piecewise polynomial function that maintains continuity and smoothness constraints at junction points called knots. Formally, let ${t_0 < t_1 < \cdots < t_n}$ be a sequence of knots partitioning an interval $[a,b]$. A spline function $S(t)$ of degree $k$ is defined as:
-
-```{math}
-S(t) = S_i(t), \quad t \in [t_i, t_{i+1}], \quad i = 0, 1, \ldots, n-1
-```
-where each $S_i(t)$ is a polynomial of degree at most $k$. $S(t)$ is $C^{k-1}$-continuous on $[a, b]$, i.e., it has continuous derivatives up to order $k-1$. A commonly used example is the cubic spline ($k = 3$), which ensures $C^2$ continuity.
-
-
-Splines can be represented in several ways, each suitable for different applications:
+Splines are piecewise-defined functions used extensively in numerical analysis, computer-aided geometric design, and data fitting. The fundamental idea behind spline interpolation or approximation is to construct a smooth function that matches a set of data points or satisfies a set of constraints, while preserving computational efficiency and numerical stability. Splines can be represented in several ways, each suitable for different applications:
 
 - **Piecewise Polynomial Form**: The spline is given explicitly by polynomials on each interval.
 
@@ -51,7 +41,6 @@ Splines can be represented in several ways, each suitable for different applicat
 - **B-spline Form**: Offers a powerful and stable representation for splines over multiple intervals, especially in numerical methods and modeling.
 
 - **NURBS (Non-Uniform Rational B-Splines) Form**: Extend B-splines by introducing weights and rational functions.
-
 
 A distinction must be made between spline functions and parametric spline curves:
 
@@ -65,9 +54,7 @@ A distinction must be made between spline functions and parametric spline curves
 ```
 where each coordinate function $x(t), y(t), \dots$ is a spline function in $t$. This is the common representation in geometric modeling and computer graphics.
 
-A particularly efficient and widely used spline representation is the B-spline (basis spline). B-splines are defined via a set of control points ${ \mathbf{P}_i }$ and a knot vector ${ t_i }$, and provide local control, numerical stability, and efficient evaluation.
-
-A B-spline curve of degree $k$ is defined as:
+A particularly efficient and widely used spline representation is the B-spline (basis spline). B-splines are defined via a set of control points ${ \mathbf{P}_i }$ and a knot vector ${ t_i }$, and provide local control, numerical stability, and efficient evaluation. A B-spline curve of degree $k$ is defined as:
 
 ```{math}
 :label: b-spline
@@ -83,9 +70,7 @@ B_{i,k}(t) =
 \frac{t_{i+k+1} - t}{t_{i+k+1} - t_{i+1}} B_{i+1,k-1}(t)
 ```
 
-In {ref}`cox-de-boor` possible divisions by zero are resolved by the convention that ‘anything divided by zero is zero’ [@lyche-morken].
-
-This formulation separates geometry (control points) from basis functions, allowing flexible manipulation and efficient computation of spline curves.
+In {ref}`cox-de-boor` possible divisions by zero are resolved by the convention that ‘anything divided by zero is zero’ [@lyche-morken]. This formulation separates geometry (control points) from basis functions, allowing flexible manipulation and efficient computation of spline curves.
 
 ### Applications and Benefits of Parametric Splines
 
@@ -112,43 +97,7 @@ SciPy provides a robust and flexible set of spline fitting tools for both **inte
 
 In term of univariate fitting, SciPy supports several spline fitting methods, including:
 
-- **Interpolating splines** (exact fit to the data)
-- **Smoothing splines** (approximate fit with smoothness penalty)
-- **Least squares splines** (approximate fit with squared residual minimization penalty)
-- **Parametric splines** (e.g., 2D or 3D curves with respect to a parameter)
-
-### Basic Spline Interpolation Example
-
-To fit a spline through a set of points $(x_i, y_i)$ exactly, use the `InterpolatedUnivariateSpline` or `make_interp_spline` functions:
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.interpolate import make_interp_spline
-
-# Sample data
-x = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
-y = np.array([12, 8, 11, 7, 5, 2, 3, 5, 6, 4, 5, 7, 8, 13, 19, 22, 25])
-
-# Create a cubic spline interpolant
-spline = make_interp_spline(x, y, k=3)
-
-# Evaluate spline on a fine grid
-x_spl = np.linspace(x.min(), x.max(), 200)
-y_spl = spline(x_spl)
-
-# Plot
-plt.plot(x, y, 'o', label='Data points')
-plt.plot(x_spl, y_spl, label='Cubic spline')
-plt.legend()
-plt.title("Cubic Spline Interpolation with SciPy")
-plt.show()
-```
-:::{figure} interp_spline_fitting_scipy.png
-:label: fig:1
-:width: 500px
-Simple interpolaing cubic spline.
-:::
+**Interpolating splines** - exact fit to the data {ref}`fig:1`.
 
 This constructs a spline $S(x)$ such that:
 
@@ -158,30 +107,7 @@ S(x_i) = y_i \quad \text{for all } i
 and ensures continuity of first and second derivatives ($C^2$ continuity for cubic splines).
 
 
-### Smoothing Splines
-
-When data contains noise, it is often preferable to use a smoothing spline, which balances fidelity to the data with smoothness. SciPy provides  [UnivariateSpline](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.UnivariateSpline.html) class, which requires a smoothing factor s as an input:
-
-```python
-from scipy.interpolate import UnivariateSpline
-
-# Fit smoothing spline with smoothing factor s
-spline = UnivariateSpline(x, y, s=18)
-
-x_spl = np.linspace(x.min(), x.max(), 200)
-y_spl = spline(x_spl)
-
-plt.plot(x, y, 'o', label='Noisy data')
-plt.plot(x_spl, y_spl, label='Smoothing spline (s=18)')
-plt.legend()
-plt.title("Smoothing Spline Fit")
-plt.show()
-```
-:::{figure} smooth_spline_fitting_scipy.png
-:label: fig:2
-:width: 500px
-Smoothing cubic spline.
-:::
+**Smoothing splines** - approximate fit with smoothness penalty {ref}`fig:2`.
 
 The smoothing spline minimizes the penalized least-squares objective:
 ```{math}
@@ -189,43 +115,41 @@ The smoothing spline minimizes the penalized least-squares objective:
 ```
 where $\lambda$ is a regularization parameter related to s.
 
-### Least-Squares Splines with User-Defined Knots
+**Least squares splines** - approximate fit with squared residual minimization penalty {ref}`fig:3`. 
 
-[LSQUnivariateSpline](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.LSQUnivariateSpline.html#scipy.interpolate.LSQUnivariateSpline) class offers a more general approach to spline fitting, allowing the user to explicitly specify the placement of interior knots. This gives greater control over the fit structure but requires prior knowledge or assumptions about the appropriate knot locations.
-
-```python
-from scipy.interpolate import LSQUnivariateSpline
-
-# Define interior knots (must lie within the x range)
-knots = [2.5, 5.5, 7.5]
-
-# Fit least-squares spline of degree 3 (default)
-spline = LSQUnivariateSpline(x, y, t=knots)
-
-x_spl = np.linspace(x.min(), x.max(), 200)
-y_spl = spline(x_spl)
-
-plt.plot(x, y, 'o', label='Data points')
-plt.plot(x_spl, y_spl, label='LSQUnivariateSpline')
-plt.plot(knots, spline(knots), '^', ms=6, color='orangered', label='Knots')
-plt.legend()
-plt.title("Least-Squares Spline Fit with Specified Knots")
-plt.show()
-```
-
-:::{figure} lsq_spline_fitting_scipy.png
-:label: fig:3
-:width: 500px
-Least-Squares cubic spline.
-:::
-
-The spline is constructed to minimize the sum of squared residuals:
+LSQ spline is constructed to minimize the sum of squared residuals:
 
 ```{math}
 \min_S \sum_{i=1}^n \left( y_i - S(x_i) \right)^2
 ```
 
 This method is useful when knot positions reflect known features or transitions in the data. It can also be used in a pair with custom algorithms that select the best knot position solving optimization problem to minimize the sum of residuals or another objective function that reflects a measure of the fit quality.
+
+**Parametric splines**. Used to fit looped curve, isolines, or 3D curves.
+
+
+
+::::{grid} 1 1 3 3
+
+:::{figure} interp_spline_fitting_scipy.png
+:label: fig:1
+:height: 220px
+Simple interpolaing cubic spline.
+:::
+
+:::{figure} smooth_spline_fitting_scipy.png
+:label: fig:2
+:height: 220px
+Smoothing cubic spline.
+:::
+
+:::{figure} lsq_spline_fitting_scipy.png
+:label: fig:3
+:height: 220px
+Least-Squares cubic spline.
+:::
+
+::::
 
 
 ### Pain Points of Pure Programmable Spline Fitting
@@ -296,17 +220,22 @@ The web interface of the spline fitting tool ({ref}`fig:6`) is powered by [D3.js
 
 As it was mentioned in the prior sections, conventional programmatic approaches to curve fitting — such as those available in SciPy’s interpolate module — require iterative selection of fitting parameters. Usually, this means manual parameter tuning and replotting results to assess smoothness and fit quality. Alternatively, custom optimization scripts can be written to run through different combinations of parameters to minimize mean squared error (MSE), root mean squared error (RMSE), or another objective function. However, this complicates the process and does not allow for estimation of possible overfitting ({ref}`fig:7`) and extrapolation ({ref}`fig:8`) issues.
 
+
+::::{grid} 1 1 2 2
+
 :::{figure} overfitting.png
-:height: 350px
+:height: 250px
 :label: fig:7
 Typical overfitting issue - RMSE is minimal, but interpolation error is high
 :::
 
 :::{figure} bad_extrapolation.png
-:height: 350px
+:height: 250px
 :label: fig:8
 Typical extrapolation issue - curve behavior is not following the data trend beyound the given interval
 :::
+
+::::
 
 Interactivity in the curve fitting process significantly simplifies and accelerates model construction. It enables users to identify overfitting, discontinuities, or extrapolation issues early, and make real-time adjustments. This is especially valuable in parametric spline fitting, where fine-tuning the curve shape and knot configuration often requires iterative, visual feedback.
 
