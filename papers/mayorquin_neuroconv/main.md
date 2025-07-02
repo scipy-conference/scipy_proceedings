@@ -59,7 +59,7 @@ The challenge of format diversity in neurophysiology extends beyond their sheer 
 
 :::{figure} assets/minimal_conversion_pipeline.png
 :label: fig:assets/minimal_conversion_pipeline
-The process begins with source data (e.g., binary recordings, metadata, and configuration files). A data-specific DataInterface object is instantiated and used to extract metadata via the `interface.get_metadata()` method. The resulting metadata can be optionally edited by the user to fill in missing or corrected fields. The finalized metadata and source data are then passed to the `interface.run_conversion()` method, which writes a complete NWB file compliant with the standard
+The process begins with source data (e.g., binary recordings, metadata, and configuration files). A data-specific DataInterface object is instantiated and used to extract metadata. The resulting metadata can be optionally edited by the user to fill in missing or corrected fields. The finalized metadata and source data are then processed to write a complete NWB file compliant with the standard
 :::
 
 Programmatically, this process can be summarized in a few lines of code, as shown below. The DataInterface handles all format-specific complexities internally, from parsing proprietary binary structures to extracting embedded metadata, while ensuring the output adheres to NWB best practices:
@@ -254,7 +254,7 @@ Neurophysiology experiments typically involve multiple simultaneous data streams
 
 :::{figure} assets/diagram_converter.png
 :label: fig:assets/diagram_converter
-The Converter orchestrates multiple specialized interfaces (A, B, C), each handling different data types (electrophysiology, imaging, and behavior). Individual interfaces extract metadata from their respective data sources, which the Converter combines into a single, user-editable metadata structure through its `converter.get_metadata()` method. The Converter's `converter.run_conversion()` method then coordinates all interfaces to produce a unified NWB file containing all data modalities. This design pattern enables flexible, modular integration of heterogeneous neuroscience data into a single standardized format.
+The Converter orchestrates multiple specialized interfaces (A, B, C), each handling different data types (electrophysiology, imaging, and behavior). Individual interfaces extract metadata from their respective data sources, which the Converter combines into a single, user-editable metadata structure. The Converter then coordinates all interfaces to produce a unified NWB file containing all data modalities. This design pattern enables flexible, modular integration of heterogeneous neuroscience data into a single standardized format.
 :::
 
 The converter pattern enables combining multiple DataInterface instances into a single conversion workflow. This allows users to convert all relevant data streams from an experiment into a single NWB file, ensuring that all data is properly aligned and associated with the correct metadata. The Converter class handles the orchestration of multiple DataInterfaces, managing the order of operations and resolving any conflicts in metadata or data organization. Here's an example of conversion for a multi-modal experimental session:
