@@ -22,7 +22,7 @@ Heuristic methods like OptiMask provide near-optimal solutions efficiently.
 OptiMask is a heuristic method which closely, efficiently approximates these exact solutions.
 It iteratively permutes rows and columns to isolate NaN values along a frontier, simplifying the search for the largest contiguous NaN-free submatrix.
 By combining randomization with multiple restarts, it reliably finds high-quality solutions.
-This paper explores the OptiMask algorithm, theoretical foundations, and practical performance across diverse datasets, including large and structured matrices. It also discusses the `optimask` Python package (https://pypi.org/project/optimask/), which enables applying the algorithm to matrix-like data structures popular with Python programmers.
+This paper explores the OptiMask algorithm, theoretical foundations, and practical performance across diverse datasets, including large and structured matrices. It also discusses the `optimask` Python package (<https://pypi.org/project/optimask/>), which enables applying the algorithm to matrix-like data structures popular with Python programmers.
 
 ## Problem Formalization and Challenges  
 
@@ -35,7 +35,8 @@ Given an $ m \times n $ matrix $ A $ with missing values (NaN), the goal is to f
 
 ### The Fundamental Trade-off  
 
-When handling missing values in a matrix, we must decide whether to remove affected rows, columns, or a combination of both. The optimal choice depends on the matrix's dimensions and NaN distribution:  
+When handling missing values in a matrix, we must decide whether to remove affected rows, columns, or a combination of both.
+The optimal choice depends on the matrix's dimensions and NaN distribution:  
 
 1. **Single NaN Case**:  
    - In tall matrices (rows > columns), removing the problematic row typically preserves more data.  
@@ -55,7 +56,8 @@ When handling missing values in a matrix, we must decide whether to remove affec
 
 ### Linear Programming Formulation  
 
-The problem can be formulated using integer linear programming [@wolsey2020integer], defining decision variables for removing rows, columns, and individual cells, subject to constraints ensuring all NaN values are handled. The objective is to minimize the total number of effectively removed cells, equivalent to maximizing the area of the remaining NaN-free submatrix.  
+The problem can be formulated using integer linear programming [@wolsey2020integer], defining decision variables for removing rows, columns, and individual cells, subject to constraints ensuring all NaN values are handled.
+The objective is to minimize the total number of effectively removed cells, equivalent to maximizing the area of the remaining NaN-free submatrix.  
 
 **Given:**  
 
@@ -82,11 +84,13 @@ $$
 \min \sum_{i=1}^{m} \sum_{j=1}^{n} e_{i,j}  
 $$  
 
-This formulation can be solved using integer linear programming solvers (e.g., GLPK [@makhorin2012glpk], Gurobi [@gurobi2023gurobi], CPLEX [@cplex2009v12]), often interfaced via modeling languages like Pyomo [@hart2017pyomo] or PuLP [@mitchell2011pulp] in Python for data science practiotioners. However, its primary disadvantage is computational cost: for an $m \times n$ matrix, the formulation uses $m \times n + m + n$ binary variables, which becomes prohibitive for large matrices.
+This formulation can be solved using integer linear programming solvers (e.g., GLPK [@makhorin2012glpk], Gurobi [@gurobi2023gurobi], CPLEX [@cplex2009v12]), often interfaced via modeling languages like Pyomo [@hart2017pyomo] or PuLP [@mitchell2011pulp] in Python for data science practioners.
+However, its primary disadvantage is computational cost: for an $m \times n$ matrix, the formulation uses $m \times n + m + n$ binary variables, which becomes prohibitive for large matrices.
 
 ## Algorithm  
 
-OptiMask is a heuristic designed to provide high-quality (and sometimes optimal) solutions to the problem. The core idea is to compute row and column permutations such that the search for the largest non-contiguous NaN-free submatrix reduces to finding a contiguous one.  
+OptiMask is a heuristic designed to provide high-quality (and sometimes optimal) solutions to the problem.
+The core idea is to compute row and column permutations such that the search for the largest non-contiguous NaN-free submatrix reduces to finding a contiguous one.  
 
 ### Core Approach  
 
@@ -163,17 +167,23 @@ np.isnan(x[rows, cols]).any()
 # False  
 ```  
 
-This computation takes approximately ~200ms on an average personal computer. The package supports NumPy arrays [@harris2020array], pandas DataFrames [@mckinney2010data], and Polars DataFrames [@vink2023polars], leveraging Numba [@lam2015numba] for speed.
+This computation takes approximately ~200ms on an average personal computer.
+The package supports NumPy arrays [@harris2020array], pandas DataFrames [@mckinney2010data], and Polars DataFrames [@vink2023polars], leveraging Numba [@lam2015numba] for speed.
 
 ## Conclusion
 
-OptiMask provides a scalable heuristic for finding the largest NaN-free submatrix in large datasets where exact methods like linear programming become computationally impractical. By strategically permuting rows and columns to isolate missing values, it offers a practical solution that preserves maximal data without imputation. The implementation supports common data structures (NumPy, pandas, Polars) and delivers results efficiently even for big matrices.
+OptiMask provides a scalable heuristic for finding the largest NaN-free submatrix in large datasets where exact methods like linear programming become computationally impractical.
+By strategically permuting rows and columns to isolate missing values, it offers a practical solution that preserves maximal data without imputation.
+The implementation supports common data structures (NumPy, pandas, Polars) and delivers results efficiently even for big matrices.
 
-Future work will explore theoretical guarantees on the approximation quality and extensions to weighted optimization problems. The implementation will continue to be optimized for speed in subsequent versions. Finally, an OptiMask-based algorithm for tabular imputation will be developed and benchmarked against MICE to evaluate whether it can achieve better or faster results.
+Future work will explore theoretical guarantees on the approximation quality and extensions to weighted optimization problems.
+The implementation will continue to be optimized for speed in subsequent versions.
+Finally, an OptiMask-based algorithm for tabular imputation will be developed and benchmarked against MICE to evaluate whether it can achieve better or faster results.
 
 ## Aknowledgements
 
-This work was funded by Airparif. I'd like to thank Paul Catala (Université de Lorraine) and Alexis Lebeau (RTE) for their assistance and review.
+This work was funded by Airparif.
+I'd like to thank Paul Catala (Université de Lorraine) and Alexis Lebeau (RTE) for their assistance and review.
 
 ::: {#refs}
 :::
