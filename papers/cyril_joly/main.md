@@ -7,13 +7,22 @@ abstract: |
 
 ## Introduction  
 
-Missing data is a common challenge in data analysis, often represented as NaN (Not a Number) values in matrices or DataFrames. Many algorithms and statistical methods require complete datasets, necessitating effective handling of missing values [@little2019statistical; @rubin2004multiple]. Traditional approaches include imputation (replacing missing values with estimates) or complete-case analysis (discarding rows/columns with any NaN) [@schafer1997analysis; @van2018flexible]. However, imputation can introduce bias [@white2011multiple], while complete-case analysis may discard excessive data, especially when missing values are widespread [@enders2010applied].  
+Missing data is a common challenge in data analysis, often represented as NaN (Not a Number) values in matrices or DataFrames.
+Many algorithms and statistical methods require complete datasets, necessitating effective handling of missing values [@little2019statistical; @rubin2004multiple].
+Traditional approaches include imputation (replacing missing values with estimates) and complete-case analysis (discarding rows/columns with any NaN) [@schafer1997analysis; @van2018flexible].
+However, imputation can introduce bias [@white2011multiple], while complete-case analysis may discard excessive data, especially when missing values are widespread [@enders2010applied].  
 
-An alternative strategy is to identify the largest possible submatrix without missing values, preserving the original data unaltered. This reduces to an optimization task: remove the minimal set of rows and columns to yield a NaN-free submatrix of maximum size (i.e., maximizing the product of its dimensions).  
+An alternative strategy is to identify the largest possible submatrix without missing values, preserving the original data unaltered.
+This reduces to an optimization task: remove the minimal set of rows and columns to yield a NaN-free submatrix of maximum size (i.e., maximizing the product of its dimensions).  
 
-This problem is computationally challenging, as the search space grows exponentially with the number of rows and columns containing NaN. Exact solutions (e.g., linear programming) guarantee optimality but are intractable for large matrices. Heuristic methods like OptiMask provide near-optimal solutions efficiently.  
+This problem is computationally challenging, as the search space grows exponentially with the number of rows and columns containing NaN.
+Exact solutions (e.g., linear programming) guarantee optimality but are prohibitively expensive for large matrices.
+Heuristic methods like OptiMask provide near-optimal solutions efficiently.  
 
-OptiMask iteratively permutes rows and columns to isolate NaN values along a frontier, simplifying the search for the largest contiguous NaN-free submatrix. By combining randomization with multiple restarts, it reliably finds high-quality solutions. This paper explores OptiMask’s algorithm, theoretical foundations, and practical performance across diverse datasets, including large and structured matrices.  
+OptiMask is a heuristic method which closely, efficiently approximates these exact solutions.
+It iteratively permutes rows and columns to isolate NaN values along a frontier, simplifying the search for the largest contiguous NaN-free submatrix.
+By combining randomization with multiple restarts, it reliably finds high-quality solutions.
+This paper explores the OptiMask algorithm, theoretical foundations, and practical performance across diverse datasets, including large and structured matrices. It also discusses the `optimask` Python package (https://pypi.org/project/optimask/), which enables applying the algorithm to matrix-like data structures popular with Python programmers.
 
 ## Problem Formalization and Challenges  
 
